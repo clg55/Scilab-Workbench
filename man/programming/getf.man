@@ -33,6 +33,9 @@ The first line of the file must be as follows:
 function [s1,s2,..,slhs]=macr(e1,e2,...,erhs)  
 .fi
 \fVei\fR are input variables and \fVsi\fR are output variables.
+.SH REMARK
+Last line of  file must be terminated by a newline to be taken
+into account.
 .SH EXAMPLE
 .nf
 	getf('SCI/macros/xdess/plot.sci')

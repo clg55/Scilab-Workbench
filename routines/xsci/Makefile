@@ -44,8 +44,7 @@ distclean::
 
 version.h: version.g $(SCIDIR)/Version.incl
 	@$(RM) version.h
-	@sed -e "s+SCILAB_VERSION+$(SCIVERSION)+" \
-	-e "s+SCILAB_DATE+$(SCIDATE)+" version.g > version.h;
+	@sed -e "s+SCILAB_VERSION+$(SCIVERSION)+" version.g > version.h;
 	@chmod g+w version.h
 	@echo version.h created
 
@@ -59,7 +58,7 @@ test: $(OBJTEST) $(OBJSC) ../sun/zzledt.o ../sun/flags.o ../sun/h_help_data.o ..
 	$(CC) -g -o $@ $(OBJTEST) ../sun/zzledt.o ../sun/flags.o ../sun/h_help_data.o ../sun/tmpdir.o \
 	../sun/men_Sutils.o ../sun/inffic.o ../sun/timer.o \
 	$(OBJSC) $(SCIDIR)/libs/graphics.a $(SCIDIR)/libs/menusX.a \
-	$(SCIDIR)/libs/tksci.a $(CC_LDFLAGS) $(XLIBS) $(TERMCAPLIB) \
+	$(SCIDIR)/ $(CC_LDFLAGS) $(XLIBS) $(TERMCAPLIB) \
 	$(TCLTK_LIBS) -lm
 
 clean::

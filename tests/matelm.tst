@@ -80,7 +80,7 @@ n=2;
 if or(eye(n,2)<>[1 0;0 1]) then pause,end
 if or(eye(2,n)<>[1 0;0 1]) then pause,end
 if or(eye(n,n)<>[1 0;0 1]) then pause,end
-if or(size(eye)<>[-1 -1]) then pause,end
+if or(size(eye())<>[-1 -1]) then pause,end
 a=[1 2;3 4];
 if or(eye(a)<>[1 0;0 1]) then pause,end
 if or(eye(a+0)<>[1 0;0 1]) then pause,end

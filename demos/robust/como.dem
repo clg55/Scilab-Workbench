@@ -340,7 +340,7 @@ r=[1,1];
 Pss=tf2ss(P);
 P12=Pss(1:2,2);P21=Pss(3,1);P22=Pss(3,2);
 sl=p21;
-sm=[s*eye-sl(2),sl(3);sl(4),-sl(5)];
+sm=[s*eye()-sl(2),sl(3);sl(4),-sl(5)];
 detr(sm)       //Poles of G --> Transmission zeros of P21
 [sk,mu]=h_inf(P,r,0,1,20);   //Fails
 
@@ -433,7 +433,7 @@ W1ss=tf2ss(w1);
 Pss=tf2ss(P);
 W2P=W2*P;
 //calcul de cw2;
-www=clean((s*eye-Pss(2))**(-1)*bp);
+www=clean((s*eye()-Pss(2))**(-1)*bp);
 mat=[horner(www,-1),horner(www,1),horner(www,10),horner(www,20)];
 ww=clean(w2p-1);
 f=[horner(ww,-1),horner(ww,1),horner(ww,10),horner(ww,20)];

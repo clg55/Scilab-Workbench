@@ -4,8 +4,9 @@
 ones - matrix made of ones
 .SH CALLING SEQUENCE
 .nf
-[y]=ones(m,n)
-[y]=ones(x)
+y=ones(m,n)
+y=ones(x)
+y=ones()
 .fi
 .SH DESCRIPTION
 Returns a matrix made of ones.
@@ -21,6 +22,8 @@ is also valid for \fVx\fR a \fVsyslin\fR list.
 .LP
 Note that \fVones(3)\fR is \fVones(a)\fR with \fVa=3\fR i.e it is NOT 
 a 3x3 matrix!
+.LP
+ones() is eqivalent to ones(1,1).
 .SH SEE ALSO
 eye, zeros
 

@@ -189,7 +189,7 @@ void Sci_Delsym( ishared)
       if ( EP[i].Nshared == ish )
 	{
 	  int j;
-	  for ( j = NEpoints - 2 ; j >= i ; j-- )
+	  for ( j = i ; j <= NEpoints - 2 ; j++ )
 	    {
 	      EP[j].epoint = EP[j+1].epoint;
 	      EP[j].Nshared = EP[j+1].Nshared;

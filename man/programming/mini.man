@@ -1,4 +1,4 @@
-.TH Minimum G "April 1993" "Scilab Group" "Scilab Function"
+.TH mini G "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
 mini - minimum
@@ -15,7 +15,7 @@ A
 : real vector or matrix.
 .TP 10
 A1,...,An
-: a set of real vectors or matrices, all of the same size.
+: a set of real vectors or matrices, all of the same size or scalar.
 .SH DESCRIPTION
 For \fVA\fR, a real  vector or matrix, \fVmini(A)\fR 
 is the largest element 

@@ -6,7 +6,11 @@ case 'plot' then //normal  position
   graphics=arg1(2); 
   model=arg1(3);
   if model(8)==[] then model(8)=graphics(4)(1),end //compatibility
-  oldfont=xget('font');  xset('font',model(9)(1),model(9)(2))
+  sz=[scs_m(1)(1)(1) scs_m(1)(1)(2)]./[scs_m(1)(1)(5) scs_m(1)(1)(6)]
+  sz=sz.*%rect(1+model(9)(2),:)*.48
+  ksz1=find(sz(1)<%rect(:,1));ksz2=find(sz(2)<%rect(:,2));ksz=[ksz1(:);ksz2(:)]
+if ksz==[] then ssz=size(%rect,'*'); else ssz=min(ksz);end
+  oldfont=xget('font');  xset('font',model(9)(1),ssz-1)
   xstring(graphics(1)(1),graphics(1)(2),model(8))
   xset('font',oldfont(1),oldfont(2))
 case 'getinputs' then
@@ -33,7 +37,7 @@ case 'set' then
       graphics(4)=label
       oldfont=xget('font')
       xset('font',font,siz)
-      r=xstringl(orig(1),orig(2),label(1))
+      r=xstringl(0,0,label(1))
       xset('font',oldfont(1),oldfont(2))
       sz=r(3:4)
       graphics(2)=sz

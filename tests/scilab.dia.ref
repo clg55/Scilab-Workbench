@@ -391,13 +391,13 @@ eye(4,4)
  
 //a+-b*eye a*eye+-b a+-eye*b eye*a+-b
  
--2*eye+[1 2;3 4]+eye*2-[1 2;3 4]
+-2*eye()+[1 2;3 4]+eye()*2-[1 2;3 4]
  ans  =
  
 !   0.    0. !
 !   0.    0. !
  
--2*i*eye+[1 2;3 4]+eye*2*i-[1 2;3 4]
+-2*i*eye()+[1 2;3 4]+eye()*2*i-[1 2;3 4]
  ans  =
  
 !   0    0 !
@@ -586,7 +586,7 @@ rand(3,2)
 !   0.4051954    0.4818509 !
 !   0.9184708    0.2639556 !
  
-rand
+rand()
  ans  =
  
     0.4148104  
@@ -781,27 +781,27 @@ a=rand(4,4);b=rand(5,4);ac=a+i*rand(4,4);bc=b+i*rand(5,4);
  
 //
  
-if abs((1/a)*a-eye)> 10*%eps then bugmes();quit;end
+if abs((1/a)*a-eye())> 10*%eps then bugmes();quit;end
  
-if abs((i/a)*a-i*eye)> 10*%eps then bugmes();quit;end
+if abs((i/a)*a-i*eye())> 10*%eps then bugmes();quit;end
  
-if abs((1/ac)*ac-eye)> 10*%eps then bugmes();quit;end
+if abs((1/ac)*ac-eye())> 10*%eps then bugmes();quit;end
  
-if abs((i/ac)*ac-i*eye)> 10*%eps then bugmes();quit;end
+if abs((i/ac)*ac-i*eye())> 10*%eps then bugmes();quit;end
  
-if abs(a*(a\1)-eye)> 10*%eps then bugmes();quit;end
+if abs(a*(a\1)-eye())> 10*%eps then bugmes();quit;end
  
-if abs(a*(a\i)-i*eye)> 10*%eps then bugmes();quit;end
+if abs(a*(a\i)-i*eye())> 10*%eps then bugmes();quit;end
  
-if abs(ac*(ac\1)-eye)> 10*%eps then bugmes();quit;end
+if abs(ac*(ac\1)-eye())> 10*%eps then bugmes();quit;end
  
-if abs(ac*(ac\i)-eye*i)> 10*%eps then bugmes();quit;end
+if abs(ac*(ac\i)-eye()*i)> 10*%eps then bugmes();quit;end
  
 //
  
-if abs(inv(a)*a-eye)> 10*%eps then bugmes();quit;end
+if abs(inv(a)*a-eye())> 10*%eps then bugmes();quit;end
  
-if abs(inv(ac)*ac-eye)> 10*%eps then bugmes();quit;end
+if abs(inv(ac)*ac-eye())> 10*%eps then bugmes();quit;end
  
 //
  
@@ -837,11 +837,11 @@ if abs(l*u-ac)> 10*%eps then bugmes();quit;end
  
 h1(5,5)=0;for k=1:5,for l=1:5, h1(k,l)=1/(k+l-1);end;end;
  
-if abs(inv(h1)-matrix('hilb',5))> 1.e-7 then bugmes();quit;end
+if abs(inv(h1)-testmatrix('hilb',5))> 1.e-7 then bugmes();quit;end
  
 //
  
-if abs(det(matrix('magic',5))-5070000)> 1.e-7 then bugmes();quit;end
+if abs(det(testmatrix('magic',5))-5070000)> 1.e-7 then bugmes();quit;end
  
 //
  
@@ -1236,11 +1236,11 @@ s=expm(tc);s=triu(s,1)+triu(s,1)'+diag(real(diag(s)));
  
 if norm(logm(s)-tc,1)> 1.e-9 then bugmes();quit;end
  
-if norm(sinm(t)**2+cosm(t)**2-eye,1) > 22*%eps then bugmes();quit;end
+if norm(sinm(t)**2+cosm(t)**2-eye(),1) > 22*%eps then bugmes();quit;end
  
 // jpc --> 20 remplace par 25 pour gc-win32
  
-if norm(sinm(tc)**2+cosm(tc)**2-eye,1) > 25*%eps then bugmes();quit;end
+if norm(sinm(tc)**2+cosm(tc)**2-eye(),1) > 25*%eps then bugmes();quit;end
  
 //poly et root
  
@@ -1256,11 +1256,11 @@ if norm(t^(-1)-inv(t),1) > 200*%eps then bugmes();quit;end
  
 if norm(tc**(-1)-inv(tc),1) > 200*%eps then bugmes();quit;end
  
-x=rand+i*rand;
+x=rand()+i*rand();
  
-if norm((t**x)*(t^(-x))-eye,1) > 200*%eps then bugmes();quit;end
+if norm((t**x)*(t^(-x))-eye(),1) > 200*%eps then bugmes();quit;end
  
-if norm((tc**x)*(tc**(-x))-eye,1) > 200*%eps then bugmes();quit;end
+if norm((tc**x)*(tc**(-x))-eye(),1) > 200*%eps then bugmes();quit;end
  
 //element op
  

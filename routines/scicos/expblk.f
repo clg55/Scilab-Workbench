@@ -11,7 +11,23 @@ c
       integer nipar,nu,ny
 
 c
-      do 15 i=1,nu
-         y(i)=exp(log(rpar(1))*u(i))
- 15   continue
+      if(flag.eq.1) then
+         do 15 i=1,nu
+            if(u(i).gt.0.0d0) then
+               y(i)=exp(log(rpar(1))*u(i))
+            else
+               flag=-2
+               return
+            endif
+ 15      continue
+      endif
+      if(flag.ge.4) then
+         do 20 i=1,nu
+            if(u(i).gt.0.0d0) then
+               y(i)=exp(log(rpar(1))*u(i))
+            endif
+ 20      continue
+      endif
+
       end
+      

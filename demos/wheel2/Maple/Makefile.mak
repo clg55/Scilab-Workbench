@@ -4,7 +4,7 @@ SCIDIR1=..\..\..
 DUMPEXTS="$(SCIDIR1)\bin\dumpexts"
 SCIIMPLIB="$(SCIDIR)\bin\LibScilab.lib"
 F2C="$(SCIDIR1)\bin\f2c"
-TEMP=c:\tmp
+TEMP=c:\windows\temp
 
 !include $(SCIDIR1)\Makefile.incl.mak 
 
@@ -22,7 +22,7 @@ $(TEMP)\wheel.dll : wheel.f
 	@del $*.c 
 	@echo Creation of dll $(TEMP)\wheel.dll  and import lib 
 	@$(DUMPEXTS) -o "$*.def" "wheel.dll" $*.obj
-	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 $(TEMP)\wheelg.dll : wheelg.f 
@@ -31,7 +31,7 @@ $(TEMP)\wheelg.dll : wheelg.f
 	@del $*.c 
 	@echo Creation of dll $(TEMP)\wheelg.dll and import lib 
 	@$(DUMPEXTS) -o "$*.def" "wheelg.dll" $*.obj
-	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 distclean:: clean
 

@@ -17,4 +17,4 @@ DESCRIPTION
   exists.
 
 SEE ALSO
-  metanet, netwindow, show_graph
+  metanet, netclose, netwindow, show_graph

@@ -112,7 +112,6 @@ dnl  $1 : major tcl version number
 dnl  $2 : minor tcl version number
 dnl OUPUTS :
 dnl  TCL_LIB_OK : 1 if link is OK; 0 otherwise
-dnl  TCL_LIB_PATH : path flag to link against tcl (-L/usr/lib f. ex.)
 dnl  TCL_LIB : flag to link against tcl lib
 
 CHK_TCL_MAJ=$1
@@ -120,37 +119,40 @@ CHK_TCL_MIN=$2
 TCL_LIB_OK=0
 
 dirs="$USER_TCL_LIB_PATH /lib /usr/lib /usr/lib/tcl /usr/lib/tcl8.0 /usr/lib/tcl8.1 /shlib /shlib/tcl /shlib/tcl8.0 /shlib/tcl8.1 /usr/shlib /shlib/tcl /usr//shlib/tcl8.0 /usr//shlib/tcl8.1 /usr/local/lib /usr/local/lib/tcl /usr/local/lib/tcl8.0 /usr/local/lib/tcl8.1 /usr/local/shlib /usr/X11/lib/tcl /usr/X11/lib/tcl8.0 /usr/X11/lib/tcl8.1  /usr/lib/X11 /usr/lib/X11/tcl /usr/lib/X11/tcl8.0 /usr/lib/X11/tcl8.1 ../lib ../../lib  /usr/local/tcl /usr/tcl /usr/tcl/lib /usr/local/tcl/lib ."
-libnames="tcl$CHK_TCL_MAJ.$CHK_TCL_MIN tcl.$CHK_TCL_MAJ.$CHK_TCL_MIN tcl$CHK_TCL_MAJ$CHK_TCL_MIN tcl.$CHK_TCL_MAJ$CHK_TCL_MIN "
-for j in $dirs ; do
+libexts="so so.1.0 sl a"
+libnames="tcl$CHK_TCL_MAJ.$CHK_TCL_MIN tcl.$CHK_TCL_MAJ.$CHK_TCL_MIN tcl$CHK_TCL_MAJ$CHK_TCL_MIN tcl.$CHK_TCL_MAJ$CHK_TCL_MIN"
+for e in $libexts; do
+for j in $dirs; do
 for n in $libnames; do
-if test -r $j/lib$n.a -o -r $j/lib$n.so -o -r $j/lib$n.so.1.0 -o -r $j/lib$n.sl; then 
-echo "  found $n in $j"
-
-TCL_LIB_PATH=-L$j
+m="$j/lib$n.$e"
+if test -r $m; then 
+echo "  found $m"
 
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 saved_cppflags="$CPPFLAGS"
-CFLAGS=$CFLAGS" $TCL_INC_PATH" 
-CPPFLAGS=$CPPFLAGS" $TCL_INC_PATH" 
-LDFLAGS=$LDFLAGS" $TCL_LIB_PATH" 
+CFLAGS=$CFLAGS" $TCL_INC_PATH"
+CPPFLAGS=$CPPFLAGS" $TCL_INC_PATH"
+LDFLAGS=$LDFLAGS
 
 # Check for Tcl lib
 echo $ac_n "  ""$ac_c"
-AC_CHECK_LIB($n, Tcl_DoOneEvent, TCL_LIB_OK=1,TCL_LIB_OK=0,[$X_LIBS $X_EXTRA_LIBS $TCLTK_LIBS])
+AC_CHECK_LIB(m, Tcl_DoOneEvent, TCL_LIB_OK=1,TCL_LIB_OK=0,[$m $X_LIBS $X_EXTRA_LIBS $TCLTK_LIBS])
 CFLAGS="$saved_cflags"
 CPPFLAGS="$saved_ldflags"
 LDFLAGS="$saved_cppflags"
 
 fi
 if test $TCL_LIB_OK = 1; then 
-TCL_LIB=$n
-break 2;
+TCL_LIB=$m
+break 3;
 fi
 dnl end of name finding loop
 done
 dnl end of dir finding loop
 done 
+dnl end of extension finding loop
+done
 ])
 
 
@@ -255,7 +257,7 @@ dnl  WITH_TKSCI : =1 if all was OK, 0 otherwise
 dnl  TCL_INC_PATH : flag to give to cpp if one wants to include tcl.h
 dnl  TK_INC_PATH : flag to give to cpp if one wants to include tk.h
 dnl  TCLTK_LIBS : complete line to link tcl/tk with scilab
-dnl    it might be something like "-L/usr/lib -ltk8.0 -L/usr/local/lib -ltcl8.0 -ldl"
+dnl    it might be something like "/usr/lib/tk8.0.so /usr/lib/ltcl8.0.so -ldl"
 dnl  TCL_VERSION : version of the found tcl includes and libs
 dnl  TK_VERSION : version of the found tk includes and libs
 dnl In addition, if the test was OK, the WITH_TK cpp symbol is defined
@@ -278,7 +280,7 @@ AC_CHECK_TCL_LIB($tclmajor, $tclminor)
 fi
 
 if test $TCL_LIB_OK = 1; then 
-  TCLTK_LIBS=" $TCL_LIB_PATH -l$TCL_LIB $TCLTK_LIBS"
+  TCLTK_LIBS=" $TCL_LIB $TCLTK_LIBS"
    break;
 fi
 fi
@@ -302,37 +304,41 @@ dnl Check for tk library file
 CHK_TK_MAJ=$tkmajor
 CHK_TK_MIN=$tkminor
 dirs="$USER_TK_LIB_PATH /lib /usr/lib /usr/lib/tk /usr/lib/tk8.0 /usr/lib/tk8.1 /shlib /shlib/tk /shlib/tk8.0 /shlib/tk8.1 /usr/shlib /shlib/tk /usr//shlib/tk8.0 /usr//shlib/tk8.1 /usr/local/lib /usr/local/lib/tk /usr/local/lib/tk8.0 /usr/local/lib/tk8.1 /usr/local/shlib /usr/X11/lib/tk /usr/X11/lib/tk8.0 /usr/X11/lib/tk8.1  /usr/lib/X11 /usr/lib/X11/tk /usr/lib/X11/tk8.0 /usr/lib/X11/tk8.1 ../lib ../../lib /usr/tk /usr/local/tk /usr/local/tk/lib /usr/tk/lib /usr/local/tcl /usr/tcl /usr/local/tcl/lib /usr/tcl/lib"
-
+libexts="so so.1.0 sl a"
 libnames="tk$CHK_TK_MAJ.$CHK_TK_MIN tk.$CHK_TK_MAJ.$CHK_TK_MIN tk$CHK_TK_MAJ$CHK_TK_MIN tk.$CHK_TK_MAJ$CHK_TK_MIN"
+for e in $libexts; do
 for j in $dirs ; do
 for n in $libnames; do
-if test -r $j/lib$n.a -o -r $j/lib$n.so -o -r $j/lib$n.so.1.0 -o -r $j/lib$n.sl; then 
-echo "  found $n in $j"
+m="$j/lib$n.$e"
+if test -r $m; then 
+echo "  found $m"
 
-TK_LIB_PATH=-L$j
-TK_LIB=$n
 saved_cflags="$CFLAGS"
 saved_ldflags="$LDFLAGS"
 saved_cppflags="$CPPFLAGS"
 CFLAGS=$CFLAGS"  $X_CFLAGS $TK_INC_PATH" 
 CPPFLAGS=$CPPFLAGS" $TK_INC_PATH" 
-LDFLAGS=$LDFLAGS" $X_LDFLAGS $X_LIBS $TK_LIB_PATH" 
+LDFLAGS=$LDFLAGS" $X_LDFLAGS $X_LIBS" 
 
 # Check for Tk lib
 echo $ac_n "  ""$ac_c"
-AC_CHECK_LIB($TK_LIB, Tcl_DoOneEvent, TK_LIB_OK=1, TK_LIB_OK=0,[ -lX11 $X_LIBS $X_EXTRA_LIBS $TCLTK_LIBS ])
+AC_CHECK_LIB(m, Tk_BindEvent, TK_LIB_OK=1, TK_LIB_OK=0,[$m -lX11 $X_LIBS $X_EXTRA_LIBS $TCLTK_LIBS])
 CFLAGS="$saved_cflags"
 CPPFLAGS="$saved_ldflags"
 LDFLAGS="$saved_cppflags"
 
 fi
-if test $TK_LIB_OK = 1; then break 2; fi
+if test $TK_LIB_OK = 1; then 
+TK_LIB=$m
+break 3; 
+fi
+done
 done
 done
 fi
 
 if test $TK_LIB_OK = 1; then 
-  TCLTK_LIBS=" $TK_LIB_PATH -l$TK_LIB $TCLTK_LIBS"
+  TCLTK_LIBS=" $TK_LIB $TCLTK_LIBS"
   WITH_TKSCI=1
   break;
 fi

@@ -1,32 +1,34 @@
-scicos_ver = 'scicos2.3'
+scicos_ver = 'scicos2.4'
 scs_m=list()
-scs_m(1)=list([400,330,0,0],['Events','/usr/local/lib/scilab/macros/scicos/'],[],[],[])
+scs_m(1)=list([400,450,0,0,400,450],..
+['Events','/usr/local/lib/scilab-2.4.1/macros/scicos/'],[],[],' ',list(),..
+tlist(['scsopt','3D','Background','Link','ID','Cmap'],list(%t,33),[8,1],[1,5],..
+list([5,0],[4,0]),[ .8, .8, .8]),[],[],[])
 scs_m(2)=list('Block',..
          list([153.68957,232.94118],[40,40],%t,['0.1';'0.1'],[],[],0,0,..
          ['dt=model(8);';
          'txt=[''Delay'';string(dt)];';
          'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'');']),..
-         list('evtdly',[],[],1,1,[],[],0.1,[],'d',0.1,[%f,%f],' ',list()),' ',..
+         list('evtdly',[],[],1,1,[],[], .1,[],'d', .1,[%f,%f],' ',list()),' ',..
          'EVTDLY_f')
-scs_m(3)=list('Deleted')
-scs_m(4)=list('Block',..
+scs_m(3)=list('Block',..
          list([20,232.94118],[40,40],%t,'0',[],[],[],0,..
          ['tt=model(11);';
          'txt=[''Event at'';''time ''+string(tt)];';
          'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'');']),..
          list('trash',[],[],[],1,[],[],[],[],'d',0,[%f,%f],' ',list()),' ',..
          'EVTGEN_f')
-scs_m(5)=list('Block',..
+scs_m(4)=list('Block',..
          list([20,135.88235],[40,40],%t,' ',0,[],0,[],..
          'xstringb(orig(1),orig(2),''Trash'',sz(1),sz(2),''fill'')'),..
          list('trash',-1,[],1,[],[],[],[],[],'d',[],[%f,%f],' ',list()),' ',..
          'TRASH_f')
-scs_m(6)=list('Block',..
+scs_m(5)=list('Block',..
          list([153.68957,135.88235],[40,40],%t,'0',[],[],0,[],..
          'xstringb(orig(1),orig(2),''STOP'',sz(1),sz(2),''fill'');'),..
          list('hltblk',[],[],1,[],[],0,[],0,'d',[],[%f,%f],' ',list()),' ',..
          'HALT_f')
-scs_m(7)=list('Block',..
+scs_m(6)=list('Block',..
          list([78.095238,232.94118],[40,40],%t,['0.1';'2'],[],[],0,[0;0],..
          ['txt=[''M. freq'';''clock''];';
          'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'')']),..
@@ -38,9 +40,12 @@ scs_m(7)=list('Block',..
               ['txt=[''2freq clock'';''  f/n     f''];';
               'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'')'])
    scs_m_1(3)=list('csuper',[],[],[],[1;1],[],[],..
-              list(list([600,400],' ',[],[],[]),..
+              list(..
+              list([600,450,0,0,600,450],' ',[],[],' ',list(),..
+              tlist(['scsopt','3D','Background','Link','ID','Cmap'],list(%t,33),..
+              [8,1],[1,5],list([5,0],[4,0]),[ .8, .8, .8]),[],[],[]),..
               list('Block',list([334,199],[40,40],%t,['0.1';'2'],[],[],13,[5;4]),..
-              list('mfclck',[],[],1,[1;1],[],0,0.1,5,'d',[-1,0],[%f,%f],' ',..
+              list('mfclck',[],[],1,[1;1],[],0, .1,5,'d',[-1,0],[%f,%f],' ',..
               list()),' ','MFCLCK_f'),..
               list('Block',..
               list([457,161],[16.666667,16.666667],%t,' ',[],[],[5;10;0],6),..
@@ -77,8 +82,8 @@ scs_m(7)=list('Block',..
               [10,-1],[12,2],[8,1])),[],'h',%f,[%f,%f])
    scs_m_1(4)=' '
    scs_m_1(5)='MCLOCK_f'
-scs_m(8)=scs_m_1
-scs_m(9)=list('Block',..
+scs_m(7)=scs_m_1
+scs_m(8)=list('Block',..
          list([241.22137,115.88235],[60,60],%t,[],[],0,[0;0],[],..
          ['txt=[''LOGICAL'';'' '';'' AND ''];';
          'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'');']),..
@@ -89,7 +94,10 @@ scs_m(9)=list('Block',..
    scs_m_1(2)=list([220,20],[60,40],%t,[],[],[],[0;0],0,..
               'xstringb(orig(1),orig(2),''ANDBLK'',sz(1),sz(2),''fill'')')
    scs_m_1(3)=list('csuper',[],[],[1;1],1,[],[],..
-              list(list([600,400,0,0],'ANDBLK',[],[]),..
+              list(..
+              list([600,450,0,0,600,450],'ANDBLK',[],[],' ',list(),..
+              tlist(['scsopt','3D','Background','Link','ID','Cmap'],list(%t,33),..
+              [8,1],[1,5],list([5,0],[4,0]),[ .8, .8, .8]),[],[],[]),..
               list('Block',..
               list([194,133],[60,60],%t,[],[],10,[5;12],[],..
               ['txt=[''LOGICAL'';'' '';'' AND ''];';
@@ -113,8 +121,8 @@ scs_m(9)=list('Block',..
               list([331,137],[60,60],%t,[],10,[],13,[9;0],..
               ['txt=[''If in>=0'';'' '';'' then    else''];';
               'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'');']),..
-              list('ifthel',1,[],1,[1;1],[],[],[],[],'l',[-1,-1],[%f,%f],' ',..
-              list()),' ','IFTHEL_f'),..
+              list(list('ifthel',-1),1,[],1,[1;1],[],[],[],[],'l',[-1,-1],..
+              [%f,%f],' ',list()),' ','IFTHEL_f'),..
               list('Link',[351;351;450],[131.28571;93;93],'drawlink',' ',[0,0],..
               [5,-1],[8,1],[4,1]),..
               list('Link',[262.57143;322.42857],[163;167],'drawlink',' ',[0,0],..
@@ -128,7 +136,7 @@ scs_m(9)=list('Block',..
               'drawlink',' ',[0,0],[5,-1],[11,2],[8,1])),[],'h',%f,[%f,%f])
    scs_m_1(4)=' '
    scs_m_1(5)='ANDBLK'
-scs_m(10)=scs_m_1
+scs_m(9)=scs_m_1
    scs_m_1=list()
    scs_m_1(1)='Block'
    scs_m_1(2)=list([225.9542,232.94118],[40,40],%t,[],[],[],[],0,..
@@ -151,7 +159,10 @@ scs_m(10)=scs_m_1
               'xsegs(xx,yy,scs_color(10));';
               'xset(''thickness'',thick);'],[]))
    scs_m_1(3)=list('csuper',[],[],[],1,[],' ',..
-              list(list([600,400,0,0],'foo',[],[]),..
+              list(..
+              list([600,450,0,0,600,450],'foo',[],[],' ',list(),..
+              tlist(['scsopt','3D','Background','Link','ID','Cmap'],list(%t,33),..
+              [8,1],[1,5],list([5,0],[4,0]),[ .8, .8, .8]),[],[],[]),..
               list('Block',list([399,162],[20,20],%t,'1',[],[],6,[],[]),..
               list('output',[],[],1,[],[],[],[],1,'d',[],[%f,%f],' ',list()),' ',..
               'CLKOUT_f'),..
@@ -160,7 +171,7 @@ scs_m(10)=scs_m_1
               ['dt=model(8);';
               'txt=[''Delay'';string(dt)];';
               'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'');']),..
-              list('evtdly',[],[],1,1,[],[],0.1,[],'d',0.1,[%f,%f],' ',list()),..
+              list('evtdly',[],[],1,1,[],[], .1,[],'d', .1,[%f,%f],' ',list()),..
               ' ','EVTDLY_f'),..
               list('Link',[340;340;380.71066],[226.28571;172;172],'drawlink',' ',..
               [0,0],[5,-1],[3,1],[5,1]),..
@@ -174,4 +185,4 @@ scs_m(10)=scs_m_1
               [5,2],[3,1])),[],'h',%f,[%f,%f])
    scs_m_1(4)=' '
    scs_m_1(5)='CLOCK_f'
-scs_m(11)=scs_m_1
+scs_m(10)=scs_m_1

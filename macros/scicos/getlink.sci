@@ -9,7 +9,7 @@ while %t
   if Cmenu<>[] then
     Cmenu=resume(Cmenu)
   end
-  [kfrom,wh]=getobj(scs_m,[xc1;yc1])
+  [kfrom,wh]=getblocklink(scs_m,[xc1;yc1])
   if kfrom<>[] then o1=scs_m(kfrom);break,end
 end
 scs_m_save=scs_m,nc_save=needcompile

@@ -16,11 +16,11 @@ case 2 then
   if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
     cur_wd = getcwd();
     chdir(SCI+"/demos/npend/Maple");
-    host("nmake /f Makefile.mak ");
+    host("nmake /f Makefile.mak TEMP="+TMPDIR);
     chdir(cur_wd);
-    if ~c_link('npend') then link('c:/tmp/npend.dll','npend');end
-    if ~c_link('ener')  then link('c:/tmp/ener.dll','ener');end
-    if ~c_link('np')  then link('c:/tmp/np.dll','np');end
+    if ~c_link('npend') then link(TMPDIR+'\npend.dll','npend');end
+    if ~c_link('ener')  then link(TMPDIR+'\ener.dll','ener');end
+    if ~c_link('np')  then link(TMPDIR+'\np.dll','np');end
   else 
     host("cd $"+path+"; make ");
     if ~c_link('npend') then link('/tmp/npend.o','npend');end

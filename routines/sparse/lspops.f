@@ -589,16 +589,9 @@ c     get arg2
       elseif(istk(il2).eq.4) then
          l2=il2+3
          nel2=m2*n2
-      elseif(istk(il2).eq.1) then
+      elseif(istk(il2).eq.1.and.m2*n2.eq.0) then
          l2=sadr(il2+4)
          nel2=m2*n2
-         do 81 i=1,nel2
-            if(int(stk(l2-1+i)).eq.0) then
-               istk(il2+2+i)=0
-            else
-               istk(il2+2+i)=1
-            endif
- 81      continue
          istk(il2)=4
          l2=il2+3
       else
@@ -803,17 +796,9 @@ c     get arg3
       elseif(istk(il3).eq.4) then
          nel3=m3*n3
          l3=il3+3
-      elseif(istk(il3).eq.1) then
+      elseif(istk(il3).eq.1.and.m3*n3.eq.0) then
          l3=sadr(il3+4)
          nel3=m3*n3
-c     .  convert to boolean matrix
-         do 91 i=1,nel3
-            if(int(stk(l3-1+i)).ne.0) then
-               istk(il3+2+i)=1
-            else
-               istk(il3+2+i)=0
-            endif
- 91      continue
          istk(il3)=4
          l3=il3+3
       else

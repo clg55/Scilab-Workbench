@@ -1,5 +1,5 @@
 
-Minimum(G)                     Scilab Function                     Minimum(G)
+mini(G)                        Scilab Function                        mini(G)
 NAME
   mini - minimum
 
@@ -13,7 +13,8 @@ PARAMETERS
 
   A         : real vector or matrix.
 
-  A1,...,An : a set of real vectors or matrices, all of the same size.
+  A1,...,An : a set of real vectors or matrices, all of the same size or
+            scalar.
 
 DESCRIPTION
   For A, a real  vector or matrix, mini(A) is the largest element A.

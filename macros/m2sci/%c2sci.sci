@@ -41,7 +41,7 @@ if op(2)=='23' then  // row
     
     stk=list('['+strcat(row,',')+']','0',sr,sc,sk(5))
   else
-    stk=list('['+strcat(row,'+')+']','0',sr,'1','10')
+    stk=list(strcat(row,'+'),'2',sr,'1','10')
   end    
 elseif op(2)=='27' then // column
   ncc=m
@@ -76,7 +76,20 @@ elseif op(2)=='27' then // column
   else
     sr='?'
   end
-  stk=list('['+strcat(col,';')+']','0',sr,sc,sk(5))
+  multi=%f
+  //!multi-lines expressions not handed by other functions than stackp
+  if sum(length(col))>70 then 
+    ii=ilst+1
+    while lst(ii)(1)=='15' then ii=ii+1,end
+    if lst(ii)(1)=='1' then multi=%t,end
+  end
+  if multi then
+      col(1)='['+col(1)
+	  col($)=col($)+']'
+      stk=list(col,'0',sr,sc,sk(5))
+  else
+    stk=list('['+strcat(col,';')+']','0',sr,sc,sk(5))
+  end
 else
 //  nrc=n;ncc=m
   nrc=m;ncc=n
@@ -107,8 +120,20 @@ else
     [w,ll]=mini(length(szr(l,k)))
     sc=addf(sc,szc(l(ll),k))
   end
-  
-  stk=list('['+strcat(col,';')+']','0',sr,sc,sk(5))
+  multi=%f
+  //!multi-lines expressions not handed by other functions than stackp
+  if sum(length(col))>70 then 
+    ii=ilst+1
+    while lst(ii)(1)=='15' then ii=ii+1,end
+    if lst(ii)(1)=='1' then multi=%t,end
+  end
+  if multi then
+    col(1)='['+col(1)
+    col($)=col($)+']'
+    stk=list(col,'0',sr,sc,sk(5))
+  else
+    stk=list('['+strcat(col,';')+']','0',sr,sc,sk(5))
+  end
 end
 top=top1+1
 

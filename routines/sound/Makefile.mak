@@ -25,6 +25,3 @@ Makefile.mak	: Makefile
 $(OBJSC):	st.h 
 
 soundII.obj: ../stack.h
-
-
-

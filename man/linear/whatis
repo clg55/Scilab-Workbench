@@ -20,6 +20,7 @@ glever - inverse of matrix pencil
 gschur - generalized schur form (matrix pencils).  
 gspec - eigenvalues of matrix pencil  
 hess - hessenberg form  
+householder - householder orthogonal reflexion matrix  
 im_inv - inverse image  
 inv - matrix inverse  
 kernel - kernel, nullspace  
@@ -41,7 +42,6 @@ polar - polar form
 proj - projection  
 projspec - spectral operators  
 psmall - spectral projection  
-qr - householder orthogonal reflexion matrix  
 qr - qr decomposition  
 quaskro - quasi-kronecker form  
 randpencil - random pencil  

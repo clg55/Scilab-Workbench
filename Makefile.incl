@@ -72,9 +72,9 @@ XLIBS =  $(XAWLIB) $(XMULIB) -lXt -lXext  -lX11 $(X_EXTRA_LIBS)
 #####################
 # TCL/TK
 #####################
-TK_INC_PATH = -I/usr/local/include
-TCL_INC_PATH = -I/usr/local/include
-TCLTK_LIBS =  -L/usr/local/lib -ltk8.0  -L/usr/local/lib -ltcl8.0 
+TK_INC_PATH = 
+TCL_INC_PATH = 
+TCLTK_LIBS = 
 
 #####################
 # for WIN32 version 

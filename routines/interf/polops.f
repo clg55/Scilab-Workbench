@@ -346,7 +346,21 @@ c
          goto 999
       endif
       indef=0
-      if(mn1*mn2.eq.1.and.(m1.lt.0.or.m2.lt.0)) indef=1
+      if(m1.lt.0) then
+         if(mn2.eq.1) then
+            indef=1
+         else
+            call error(14)
+            return
+         endif
+      elseif(m2.lt.0) then
+         if(mn1.eq.1) then
+            indef=1
+         else
+            call error(14)
+            return
+         endif
+      endif
       m1=abs(m1)
       n1=abs(n1)
       m2=abs(m2)
@@ -1346,6 +1360,10 @@ c     set output variable
 c     
 c extraction
   130 continue
+      if(rhs.lt.2) then
+         call error(227)
+         return
+      endif
       if(rhs.gt.2) goto 132
 c     arg2(arg1)
 c     get arg2

@@ -27,7 +27,7 @@ Spectral characteristics of \fVA\fR at 0.
 .LP
 \fVindex\fR = index of the 0 eigenvalue.
 .LP
-One has \fV(s*eye-A)^(-1) = D^(i-1)/s^i +... + D/s^2 + P/s - S - s*S^2 -...\fR
+One has \fV(s*eye()-A)^(-1) = D^(i-1)/s^i +... + D/s^2 + P/s - S - s*S^2 -...\fR
 around the singularity s=0.  
 .SH EXAMPLE
 .nf
@@ -37,7 +37,7 @@ A=X*A*inv(X);
 [S,P,D,index]=projspec(A);
 index   //size of J-block
 trace(P)  //sum of dimensions of J-blocks
-A*S-(eye-P)
+A*S-(eye()-P)
 norm(D^index,1)
 .fi
 .SH SEE ALSO 

@@ -265,7 +265,7 @@ c     un atome et une expression
       endif
       if(symb.ne.slash.and.
      &     ((n1-idec.eq.1 .and. istk(il1+idec).eq.1).or.
-     &     (n1-idec.eq.3.and.iseye(istk(il1+idec))))) then
+     &     (n1-idec.eq.5.and.iseye(istk(il1+idec))))) then
 c     n1=n1-1
          n1=idec
          if(is1.eq.-1) then
@@ -308,7 +308,7 @@ c     expr et atome
       endif
       if(symb.ne.bslash.and.is2.ge.0
      &     .and.((n2-idec.eq.1.and.istk(il2+idec).eq.1)
-     &     .or.(n2-idec.eq.3.and.iseye(istk(il2+idec))))) then
+     &     .or.(n2-idec.eq.5.and.iseye(istk(il2+idec))))) then
          istk(il+5)=n1+1
          lstk(top+1)=sadr(il1+n1)
          goto 9999
@@ -328,7 +328,7 @@ c     expr et atome
       il1=il1+n1+idec+1
       if(symb.ne.bslash.and.is2.eq.-1.and.
      &     ((n2.eq.2.and.istk(il2+1).eq.1).or.
-     &     (n2.eq.4.and.iseye(istk(il2+1))))) goto 2031
+     &     (n2.eq.6.and.iseye(istk(il2+1))))) goto 2031
       istk(il1)=symb
       il1=il1+1
       if(is2.ne.0) then
@@ -380,7 +380,7 @@ c     atome et atome
      +     is2.eq.-1.and.is1.ge.0) is=minus
       if(symb.ne.slash.and.
      &     ((n1-abs(is1).eq.1.and.istk(il1+abs(is1)).eq.1).or.
-     &     (n1-abs(is1).eq.3.and.iseye(istk(il1+abs(is1))))) ) then
+     &     (n1-abs(is1).eq.5.and.iseye(istk(il1+abs(is1))))) ) then
          if(is.eq.minus) then
             istk(il1)=is
             il1=il1+1
@@ -412,7 +412,7 @@ c     atome et atome
       il1=il1+n1
       if(symb.ne.bslash.and.
      &     ((n2-abs(is2).eq.1.and.istk(il2+abs(is2)).eq.1).or.
-     &     (n2-abs(is2).eq.3.and.iseye(istk(il2+abs(is2)))))) goto 2041
+     &     (n2-abs(is2).eq.5.and.iseye(istk(il2+abs(is2)))))) goto 2041
       istk(il1)=symb
       il1=il1+1
       if(is2.ne.0) then

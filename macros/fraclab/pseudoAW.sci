@@ -66,7 +66,11 @@ case 2
 case 3
   tsmooth = 0 ;
   nargfixed = 4 ;
-case {4,5,6}
+case 4
+  nargfixed = 4 ;
+case 5
+  nargfixed = 4 ;
+case 6
   nargfixed = 4 ;
 case 7
   nargfixed = 7 ;

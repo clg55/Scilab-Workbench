@@ -4,7 +4,7 @@ SCIDIR1=..\..\..
 DUMPEXTS="$(SCIDIR1)\bin\dumpexts"
 SCIIMPLIB="$(SCIDIR)\bin\LibScilab.lib"
 F2C=$(SCIDIR1)\bin\f2c
-TEMP=c:\tmp
+TEMP=c:\windows\temp
 
 !include $(SCIDIR1)\Makefile.incl.mak 
 
@@ -21,7 +21,7 @@ $(TEMP)\ener.dll : ener.f
 	@del $*.c 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "ener.dll" $*.obj
-	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 $(TEMP)\npend.dll : npend.f 
@@ -30,7 +30,7 @@ $(TEMP)\npend.dll : npend.f
 	@del $*.c 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "npend.dll" $*.obj
-	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 $(TEMP)\np.dll : np.f 
 	@$(F2C) -d$(TEMP) np.f 
@@ -38,7 +38,7 @@ $(TEMP)\np.dll : np.f
 	@del $*.c 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "np.dll" $*.obj
-	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 

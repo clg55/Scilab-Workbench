@@ -48,7 +48,7 @@ int ScilabPsToTeX(char orientation,char *filein,char *fileout,double xs,double y
   if ( (fo = fopen(fileout,"w"))== 0 ) 
     {
       sciprint(" Can't open file %s\n",fileout);
-      exit(1);
+      return 1;
     }
 
   fprintf(fo,"%%!PS-Adobe-2.0 EPSF-2.0\n");
@@ -74,7 +74,7 @@ int ScilabPsToTeX(char orientation,char *filein,char *fileout,double xs,double y
       if ( rep == 1) 
 	sciprint("input file doesn't need to be converted to Epsf\n");
       remove(fileout);
-      exit(0);
+      return 0;
     }
   
   if ( flag == 1) 
@@ -110,9 +110,23 @@ int ScilabPsToTeX(char orientation,char *filein,char *fileout,double xs,double y
   if ( (fo = fopen(fileout,"w"))== 0 ) 
     {
       sciprint(" Can't open file %s\n",fileout);
-      exit(1);
+      return 1;
     }
-#ifndef DOC 
+#ifndef DOC
+
+  fprintf(fo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+  fprintf(fo,"%% Usage: -To include a Figure with a caption, insert the TWO following lines\n");
+  fprintf(fo,"%%        in your Latex file:\n");
+  fprintf(fo,"%% \\input{This_file_name} \n");
+  fprintf(fo,"%% \\dessin{The_caption}{The_label}\n");
+  fprintf(fo,"%%         -To include just a picture, insert the lines \n");
+  fprintf(fo,"%%         between \\fbox{\\begin{picture}...  and \\end{picture}} below \n");
+  fprintf(fo,"%%          \n");
+  fprintf(fo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+
+  fprintf(fo," \n");
+
+
   fprintf(fo," \\long\\def\\Checksifdef#1#2#3{%%\n");
   fprintf(fo,"\\expandafter\\ifx\\csname #1\\endcsname\\relax#2\\else#3\\fi}\n");
   fprintf(fo,"\\Checksifdef{Figdir}{\\gdef\\Figdir{}}{}\n");
@@ -120,7 +134,7 @@ int ScilabPsToTeX(char orientation,char *filein,char *fileout,double xs,double y
 #endif
   fprintf(fo,"\\begin{figure}[hbtp]\n");
   fprintf(fo,"\\begin{center}\n");
-  fprintf(fo,"%%If you prefer cm use the followin two lines\n");
+  fprintf(fo,"%%If you prefer cm use the following two lines\n");
   fprintf(fo,"%%\\setlength{\\unitlength}{1mm}\n");
   fprintf(fo,"%%\\fbox{\\begin{picture}(%.2f,%.2f)\n",widecm,highcm);
   fprintf(fo,"\\fbox{\\begin{picture}(%.2f,%.2f)\n",wide,high);

@@ -33,7 +33,6 @@ function [z]=savewave(filename,v,rate,bits)
                 mputstr("data");
                 mput(2*n,"l");
                 m=max(abs(v)); v=v/m*64*256;
-		pause;
                 mput(v,"s");
         else error("Bits must be 8 or 16");
         end

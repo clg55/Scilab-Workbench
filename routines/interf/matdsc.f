@@ -10,6 +10,7 @@ c     Copyright INRIA
 C
       double precision sr,si,powr,powi,t,rmax,eps,tt(1,1)
       logical herm,vect,fail
+      integer iadr,sadr
 C
       sadr(l) = (l/2) + 1
       iadr(l) = l + l - 1

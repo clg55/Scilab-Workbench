@@ -202,13 +202,13 @@ $pictdict begin
 	{ % filling 
 	newpath
 	cx cy moveto 
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add  64 div neg
 	 Ar 4 get 64 div neg  arc closepath
 	gsave glev Setgray eofill grestore}
 	{
 	%drawing with current dash or color unclosed path 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	  stroke} ifelse 
 	Cmsave1 setmatrix } def 
 
@@ -224,7 +224,7 @@ $pictdict begin
 	/t2 exch neg cx add def 
 	[1 0 0 hom t2 t1 ] concat 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	closepath glev Setgray stroke
 	Cmsave1 setmatrix } def 
 
@@ -491,22 +491,20 @@ fillsolid
 0 Setcolor
 750 530 4500 3180 setclipzone
 0 Setcolor
-/Symbol findfont 80 scf mul scalefont setfont
-HardMark 0 16#2b put
- (drawpolymark) 4 [ 0]
+/closeflag false def
+ (drawpoly) 4 [ 0]
 [3450 3645 3450 530 
 ] dogrey 
+0 Setcolor
 /absolu true def
-/Times-Roman findfont 100 scf mul scalefont setfont
 0 Setcolor
 -1 -1 200000 200000 setclipzone
 0 Setcolor
 0 Setcolor
 750 530 4500 3180 setclipzone
-0 Setcolor
-/Symbol findfont 80 scf mul scalefont setfont
-HardMark 0 16#b4 put
- (drawpolymark) 400 [ 0]
+1 Setcolor
+/closeflag false def
+ (drawpoly) 400 [ 0]
 [750 1419 773 1419 795 1419 818 1419 840 1419 863 1419 885 1419 908 1419 930 1419 953 1419 
 975 1419 998 1419 1020 1419 1043 1419 1065 1419 1088 1419 1110 1419 1133 1419 1155 1419 1178 1419 
 1200 1419 1223 1419 1245 1419 1268 1419 1290 1419 1313 1419 1335 1419 1358 1419 1380 1419 1403 1419 
@@ -528,8 +526,8 @@ HardMark 0 16#b4 put
 4800 1419 4823 1419 4845 1419 4868 1419 4890 1419 4913 1419 4935 1419 4958 1419 4980 1419 5003 1419 
 5025 1419 5048 1419 5070 1419 5093 1419 5115 1419 5138 1419 5160 1419 5183 1419 5205 1419 5228 1419 
 ] dogrey 
+1 Setcolor
 /absolu true def
-/Times-Roman findfont 100 scf mul scalefont setfont
 0 Setcolor
 -1 -1 200000 200000 setclipzone
  showpage

@@ -19,7 +19,8 @@ error is reported when a list of command separated by ";" is sent: this is
 not recommended.
 .SH EXAMPLE
 .nf
-unix_x("ls $SCI/demos");
+if MSDOS then unix_x("dir "+WSCI+"\demos");
+else unix_x("ls $SCI/demos"); end
 .fi
 .SH SEE ALSO
 edit, manedit, unix_g, unix_s, unix_w, unix

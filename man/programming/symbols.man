@@ -13,8 +13,8 @@ l l.
  \fV+\fR@plus 
  \fV-\fR@minus
  \fV*\fR,\fV.*\fR@star
- \fV/\fR, \fV./\fR@slash
- \fV\\\\\fR,\fV.\\\\\fR @backslash
+ \fV/\fR, \fV./\fR, \fV/.\fR@slash
+ \fV\\\\\fR,\fV.\\\\\fR ,\fV\\\\.\fR @backslash
  \fV.\fR@dot
  \fV=\fR, \fV==\fR@equal
  \fV<,>,>=,<=,<>\fR@less
@@ -60,4 +60,4 @@ l l.
 .LA {\tt  .*.},{\tt  ./.}, {\tt  .\bs. }  & kron\\ \hfill
 .LA \end{tabular}
 .SH SEE ALSO
-overloading.
+overloading

@@ -1,3 +1,26 @@
+		     Main Changes Scilab 2.4 -> 2.4.1
+		     ================================
+
+Many bugs fixed.
+
+Option "--without-pvm" added to configure to compile Scilab 
+  without PVM library.
+
+NEW MACHINES
+============
+
+Scilab runs now on MAC Mklinux and DEC Alpha Linux.
+
+NEW FUNCTIONALITIES
+===================
+
+The Matlab to Scilab translator has been considerably improved.
+
+After fixing a number of bugs, Scicos is no longer considered a beta release.
+
+Metanet toolbox: Function "netclose" for closing a Metanet window 
+                 has been added.
+
 		      Main Changes Scilab 2.3 -> 2.4
 		      ==============================
 
@@ -15,7 +38,7 @@ m2sci: beta version of a Matlab to Scilab translator.
 
 Fraclab: fractal and wavelet analysis.
 
-Tksci: Tk/Tcl interface.
+Tksci: beta Tcl/Tk interface.
 
 PVM: beta PVM interface (not yet available on Windows).
 

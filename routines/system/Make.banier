@@ -1,8 +1,7 @@
 
 banier.f: banier.g $(SCIDIR)/Version.incl
 	@$(RM) banier.f
-	@sed -e "s+SCILAB_VERSION+$(SCIVERSION)+" \
-	-e "s+SCILAB_DATE+$(SCIDATE)+" banier.g > banier.f
+	@sed -e "s+SCILAB_VERSION+$(SCIVERSION)+" banier.g > banier.f
 	@chmod g+w banier.f
 	@echo banier.f created
 

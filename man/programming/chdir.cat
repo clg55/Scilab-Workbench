@@ -15,8 +15,12 @@ DESCRIPTION
   Change the current Scilab directory to 'path-name'
 
 EXAMPLE
-  chdir("/tmp");
-  unix_w("ls");
+  chdir(TMPDIR);
+  if MSDOS then
+    unix_w("dir");
+  else
+    unix_w("ls");
+  end
 
 SEE ALSO
   getcwd

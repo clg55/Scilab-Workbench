@@ -1,4 +1,4 @@
-#define FSIZE 200
+#define FSIZE 1024
 char     cur_dir[FSIZE];
 char     cur_filename[FSIZE];
 
@@ -167,7 +167,7 @@ void ok_end()
   XtSetSensitive(exec, True);
   XtSetSensitive(load, True);
   XtSetSensitive(getf, True);
-  XtSetSensitive(getfc, True);
+  /**  XtSetSensitive(getfc, True); **/
   XtSetSensitive(linkf, True);
 }
 
@@ -221,7 +221,7 @@ void ok_prep(filemask,dirname,title,flag,err)
   XtSetSensitive(exec, False);
   XtSetSensitive(load, False);
   XtSetSensitive(getf, False);
-  XtSetSensitive(getfc, False);
+  /** XtSetSensitive(getfc, False); **/
   XtSetSensitive(linkf, False);
 }
 
@@ -697,6 +697,8 @@ void create_file_panel(w,description)
 	XtAddEventHandler(getf, ButtonReleaseMask, (Boolean) 0,
 			  (XtEventHandler)do_getf, (XtPointer) NULL);
         FOpAddInfoHandler(getf,"Load scilab functions");
+
+	/**
 	FirstArg(XtNlabel, "Getfc");
 	NextArg(XtNfromHoriz, getf);
 	NextArg(XtNfromVert, below);
@@ -709,8 +711,9 @@ void create_file_panel(w,description)
 	XtAddEventHandler(getfc, ButtonReleaseMask, (Boolean) 0,
 			  (XtEventHandler)do_getfc, (XtPointer) NULL);
         FOpAddInfoHandler(getfc,"Load and compile scilab functions");
+        **/
 	FirstArg(XtNlabel, "Link");
-	NextArg(XtNfromHoriz, getfc);
+	NextArg(XtNfromHoriz, getf);
 	NextArg(XtNfromVert, below);
 	NextArg(XtNvertDistance, 15);
 	NextArg(XtNhorizDistance, 25);

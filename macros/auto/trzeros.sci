@@ -45,14 +45,14 @@ if norm(D,1)<sqrt(%eps)|ld==kd then
  if LHS==1 then nt=nt./dt;dt=[];rk=[];end
  return;
 end
-if ld < kd & norm(D*pinv(D)-eye,1)< 1.d-10
+if ld < kd & norm(D*pinv(D)-eye(),1)< 1.d-10
  //nt=spec(A-B*pinv(D)*C);dt=ones(nt);
  [nt,dt]=tr_zer(A,B,C,D);
  rk=ld;
  if LHS==1 then nt=nt./dt;end;
  return;
 end
-if ld > kd & norm(pinv(D)*D-eye,1)< 1.d-10
+if ld > kd & norm(pinv(D)*D-eye(),1)< 1.d-10
  //nt=spec(A-B*pinv(D)*C);dt=ones(nt);
  [nt,dt]=tr_zer(A,B,C,D);
  rk=kd;

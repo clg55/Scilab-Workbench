@@ -1024,13 +1024,18 @@ static void dos2win32(char *filename,char *filename1)
 
 static void PrintPs(struct BCG *ScilabGC)
 {
+  char *p1;
   char ori;
   /** getting ls flags **/
   ls.use_printer = 1;
   if ( ExportStyle(ScilabGC) == FALSE ) return;
   /** getting filename **/
-  sprintf(filename,"C:/tmp/SD_%d_/scilab-%d",(int)getpid(),
-	  (int) ScilabGC->CurWindow);
+  if ( ( p1 = getenv("TMPDIR"))  == (char *) 0 )
+    {
+      sciprint("Cannot find environment variable TMPDIR\r\n");
+      return ;
+    }
+  sprintf(filename,"%s/scilab-%d",p1, (int) ScilabGC->CurWindow);
   /** sciprint(" file name [%s] color=%d\r\n",filename,ls.colored); **/
   dos2win32(filename,filename1);
   scig_tops( ScilabGC->CurWindow,ls.colored,filename1,"Pos");
@@ -1043,8 +1048,3 @@ static void PrintPs(struct BCG *ScilabGC)
     }
   /** filename is destroyed when we quit scilab **/
 }
-
-
-
-
-

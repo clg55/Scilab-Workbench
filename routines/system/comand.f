@@ -16,7 +16,7 @@ C
       integer cmd(nsiz,cmdl),a,blank,name
       integer id(nsiz),ennd(nsiz),sel(nsiz),while(nsiz),for(nsiz)
       integer iff(nsiz)
-      integer semi,comma,eol,percen,lparen,count,equal,nchar
+      integer semi,comma,eol,percen,lparen,count,equal,nchar,pchar
       logical eqid
       integer iadr
       common/cmds/cmd
@@ -89,6 +89,10 @@ c     form function like call
       fin = 0
       nchar=lin(lpt(4))
       if(char1.eq.comma.or.char1.eq.semi.or.char1.eq.eol) return
+      if(lpt(4).ge.2) then
+         pchar=lin(lpt(4)-2)
+         if(pchar.ne.blank) return
+      endif
  11   continue
       fin=0
       if(char1.eq.lparen.or.char1.eq.equal) return

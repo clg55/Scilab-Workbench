@@ -30,7 +30,7 @@
 
 
 /********************************
- * Set up TK_LIBARY environment variables if 
+ * Set up TCL_LIBRARY and TK_LIBRARY environment variables if 
  * necessary 
  ********************************/
 
@@ -68,6 +68,8 @@ static void SciEnv ()
 #else 
       p = modname + 1;
 #endif 
+      if ( ( p1 = getenv("TCL_LIBRARY"))  == (char *) 0 )
+	{  sprintf(env,"TCL_LIBRARY=%s\\tcl\\tcl8.0",p); putenv(env); }
       if ( ( p1 = getenv("TK_LIBRARY"))  == (char *) 0 )
 	{  sprintf(env,"TK_LIBRARY=%s\\tcl\\tk8.0",p); putenv(env); }
     }

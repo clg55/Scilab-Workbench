@@ -25,19 +25,29 @@ while ilst<nlst then
       opk2=opk(2)
       if expk(2)<>'-1'& expk(2)<>'-2' then
         if opk(2)=='ans' then
-          txt=[txt;expk(1)+';']
+	  expk(1)($)= expk(1)($)+';'
+          txt=[txt;expk(1)(:)]
 	else
-          if funptr(opk2)<>0 then opk2='%'+opk(2),end
-          txt=[txt;opk2+' = '+expk(1)+';']
-        end
-        nv=find(opk(2)==vnms(:,2))
+//	  if funptr(opk2)<>0&exists('sci_'+opk(2))==0 then opk2='%'+opk(2),end
+	  if funptr(opk2)<>0 then opk2='%'+opk(2),end
+	  w=expk(1)(:)
+	  w(1)=opk2+' = '+w(1)
+	  w($)= w($)+';'
+	  w(2:$)=indentsci(w(2:$))
+          txt=[txt;w]
+	end
+	nv=find(opk(2)==vnms(:,2))
         if nv==[] then 
           nv=size(vnms,1)+1,
-//          if funptr(opk2)<>0 then opk2='%'+opk(2),end
         end
         nv=nv($)
         vnms(nv,:)=[opk2,opk(2)]
         vtps(nv)=list(expk(5),expk(3),expk(4),0)
+      else
+	nv=find(opk(2)==vnms(:,2))
+	if nv<>[] then 
+	  vtps(nv)=list(expk(5),expk(3),expk(4),0)
+	end
       end
     else //if size(stk)==1 then
       LHS=[]
@@ -45,6 +55,7 @@ while ilst<nlst then
         expk=stk(k);
         opk=lst(ilst);ilst=ilst+1
         opk2=opk(2)
+//        if funptr(opk2)<>0&exists('sci_'+opk(2))==0 then opk2='%'+opk(2),end
         if funptr(opk2)<>0 then opk2='%'+opk(2),end
         LHS=[opk2,LHS]
         nv=find(opk(2)==vnms(:,2))

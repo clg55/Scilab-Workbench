@@ -14,18 +14,17 @@ RESOURCES= rpoppad.res
 
 $(SCIDIR)/bin/xless.exe: $(OBJS) $(RESOURCES)
 	@echo Linking ../bin/xless.exe
-	@$(LINKER) -nologo -SUBSYSTEM:windows -OUT:"../bin/xless.exe" $(OBJS) \
-	$(RESOURCES)  $(GUILIBS)
+	@$(LINKER) $(LINKER_FLAGS) -SUBSYSTEM:windows -OUT:"../bin/xless.exe" \
+	$(OBJS) $(RESOURCES)  $(GUILIBS)
 	@echo Linking done
 
 clean::
-	$(RM) $(OBJS) 
+	del *.obj
 
 distclean::
-	$(RM) $(OBJS) $(SCIDIR)/bin/xless $(RESOURCES)
+	del *.obj
+	del $(SCIDIR)/bin/xless 
+	del $(RESOURCES)
 
 rpoppad.res : rpoppad.rc poppad.h poppad.ico
 	$(RC) $(RCVARS) /forpoppad.res rpoppad.rc
-
-
-

@@ -28,10 +28,18 @@ export PRINTERS
 VERSION="SCILAB_VERSION"
 export VERSION
 
+if test "$TCL_LIBRARY" = ""; then
+  TCL_LIBRARY=$SCI/tcl/tcl8.0
+  export TCL_LIBRARY
+fi
+if test "$TK_LIBRARY" = ""; then
+  TK_LIBRARY=$SCI/tcl/tk8.0
+  export TK_LIBRARY
+fi
+
 PVM_ROOT=$SCI/pvm3
 PVM_DPATH=$PVM_ROOT/lib/pvmd
 export PVM_ROOT PVM_DPATH
-
 
 do_scilex()
 {
@@ -64,16 +72,11 @@ do_geci_scilex()
 do_help()
 {
 echo "Usage:"
-echo     "	scilab [-ns -nw -display display -f path]"
+echo     "	scilab [-ns -nw -display display -f file]"
 echo     "	scilab -help <key>"
 echo     "	scilab -k <key>"
 echo     "	scilab -xk <key>"
 echo     "	scilab -link <objects>"
-echo     "	scilab -function <function-name>"
-echo     "	scilab -print_p file printer"
-echo     "	scilab -print_l file printer"
-echo     "	scilab -save_p file format"
-echo     "	scilab -save_l file format"
 exit
 }
 

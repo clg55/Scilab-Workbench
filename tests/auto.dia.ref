@@ -7,7 +7,7 @@
  
  s=poly(0,'s'); a=[1 2 3;4 5 6;7 8 9];
  
- [num,den]=coff(a,'s');h1=num/den;h2=(s*eye-a)^(-1);
+ [num,den]=coff(a,'s');h1=num/den;h2=(s*eye()-a)^(-1);
  
  e=h1-h2;if norm(coeff(e(2)))>5000*%eps then bugmes();quit;end
  
@@ -81,7 +81,7 @@ hm=ss2tf(slm);
  
 h=ss2tf(sl);
  
-hh=c*(s*eye-a)^(-1)*b + 0*ones(2,3);
+hh=c*(s*eye()-a)^(-1)*b + 0*ones(2,3);
  
 hh=hh-h;
  

@@ -21,7 +21,8 @@ error is reported when a list of command separated by ";" is sent: this is
 not recommended.
 .SH EXAMPLE
 .nf
-unix_w("ls $SCI/demos");
+if MSDOS then unix_w("dir "+WSCI+"\demos");
+else unix_w("ls $SCI/demos"); end
 .fi
 .SH SEE ALSO
 edit, manedit, unix_g, unix_s, unix_x, unix

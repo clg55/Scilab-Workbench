@@ -49,6 +49,7 @@ min_lcost_flow2 - minimum linear cost flow
 min_qcost_flow - minimum quadratic cost flow  
 min_weight_tree - minimum weight spanning tree  
 neighbors - nodes connected to a node  
+netclose - closes a metanet window  
 netwindow - chooses a metanet window  
 netwindows - gets the numbers of metanet windows  
 node_number - number of nodes of a graph  

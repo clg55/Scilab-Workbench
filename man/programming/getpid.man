@@ -8,6 +8,8 @@ id=getpid()
 .fi
 .SH DESCRIPTION
 Return an the scilab process identificator integer
-.SH Example
-host('ls >/tmp/scilab.'+string(getpid()))
+.SH EXAMPLE
+.nf
+d='SD_'+string(getpid())+'_'
+.fi
 

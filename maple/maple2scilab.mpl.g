@@ -1,6 +1,6 @@
 #****************************************************************************
 #                          Maple to Scilab interface
-#                          Version 1.0 (3 June 1998)
+#                        Version 1.0.1 (18 August 1998)
 #                         Copyright (C) 1997-98 INRIA 
 #
 #                                Claude Gomez				    
@@ -575,7 +575,7 @@ end:
 		`scilab/alg`(op(1,e)^(-op(2,e)));
 		if p < 70 then `scilab/write`(`)`) fi;
 	elif type(op(1,e),'name') and type(op(2,e),'integer') then
-		`scilab/write`( cat(op(1,e),`**`,op(2,e)) )
+		`scilab/write`(cat(convert(op(1,e),string),`**`,op(2,e)) )
 	elif type(op(2,e),'fraction') and op(2,op(2,e))=2 then
 		s := op(1,e)^op(1,op(2,e));
 		`scilab/alg`('sqrt'(s))

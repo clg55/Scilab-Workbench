@@ -1,6 +1,14 @@
 function mfile2sci(fil,res_path,Imode,Recmode)
 // Copyright INRIA
 if exists('m2scilib')==0 then load('SCI/macros/m2sci/lib'),end
+
+[l,mac]=where()
+Reclevel=size(find(mac=='mfile2sci'),'*')
+if Reclevel==1 then
+  nametbl=[]
+end
+
+
 logfile=%io(2) // logical unit of the logfile
 
 [lhs,rhs]=argn(0)
@@ -41,7 +49,8 @@ fnam=part(basename,k($)+1:ke) // name of the file witout extension
 
 //
 if info then write(logfile,'Reading file and comment substitution'),end
-txt=read(fil,-1,1,'(a)')
+//txt=read(fil,-1,1,'(a)')
+txt=readmfile(fil)
 if txt==[] then 
   write(logfile,'Empty file! nothing done'),
   return,
@@ -110,16 +119,20 @@ for k=1:n
   end
 end
 
-
 // replace ' by '' 
 txt=strsubst(txt,dquote,dquote+dquote)
 
 // replace switch by select
-txt=strsubst(txt,'switch','select')
+txt=strsubst(txt,'switch ','select ')
+// replace otherwise by else
+txt=strsubst(txt,'otherwise','else')
+// 1i ,...
+
 
 // replace {..} by (..) or [..]
 //txt=replace_brackets(txt)
 
+txt=i_notation(txt)
 
 // place function definition line at first line
 kc=strindex(txt(first_ncl),'function')
@@ -144,9 +157,10 @@ killed=[]//killfuns()
 
 deff(part(txt(1),kc+8:length(txt(1))),txt(2:$),'n')
 
-
 w=who('get');
 mname=w(1)
+nametbl=[nametbl;mname]
+
 execstr('comp('+mname+',1)')
 //restorefuns(killed)
 if info then disp('                                     '+string(timer())),end
@@ -170,6 +184,7 @@ else
   ext='.sci'
 end
 
+//res=splitlines(res,100)
 scifil=res_path+fnam+ext
 if info then write(logfile,'Writing to '+scifil+' file'),end
 u=file('open',scifil,'unknown')
@@ -196,4 +211,74 @@ if trad<>[] then
   write(u,trad,'(a)')
   file('close',u)
 end
-//disp(timer())
+nametbl($)=[]
+nametbl=resume(nametbl)
+
+function txt=i_notation(txt)
+// Change 1i ,... by 1*i,...
+n=size(txt,1)
+I='i';J='j'
+matches=[string(0:9)+I(ones(1,10)),'.i',string(0:9)+J(ones(1,10)),'.j']
+symbs=['+','-','*','/','\','(','[',' ','^',' ',',',';','=']
+s1=['+','-','*','/','\',',',';',' ','^','.','&','|','''']
+s2=[string(0:9),'d','e','D','E','.']
+for k=1:n
+  tk=txt(k)+' '
+  kc=strindex(tk,matches)
+  for kk=size(kc,'*'):-1:1
+    km=kc(kk)+2
+    if find(part(tk,km)==s1)==[] then kc(kk)=[],end
+  end
+
+  //  if kc<>[] then txt='!'+txt,end
+  kc=[0 kc]
+
+  for kk=size(kc,'*'):-1:2
+    km=kc(kk)
+    num=%t
+    while or(part(tk,km)==s2)
+      km=km-1
+      if km<=kc(kk-1)+1 then km=kc(kk-1);num=%f;break,end
+    end
+    tokill=%f
+    num=part(tk,km+1:kc(kk)-1)
+    ke=strindex(convstr(num),['e','d'])
+    kd=strindex(convstr(num),'.')
+    if size(ke,2)>1|size(kd,2)>1 then
+      tokill=%t
+    elseif size(ke,2)==1&size(kd,2)==1 then
+      if ke<kd then tokill=%t,end
+    end
+    if ~tokill then 
+      if km<>kc(kk-1) then
+	if and(part(tk,km)<>symbs) then tokill=%t,end
+      end
+    end
+    if ~tokill then 
+      km=kc(kk)
+      if ~isinstring(tk,km ) then
+	tk=part(tk,1:km)+'*%'+part(tk,km+1:length(tk))
+      end
+    end  
+  end
+  //if size(kc,2)>1 then txt='!'+txt,end
+  txt(k)=tk
+end
+
+function i_n_test()
+Txt=[
+'x=1+k2i1'
+'x=1.i'
+'[1,2i,3;4.001i 0i 0.i]'
+'1.i'
+'x=2+1.d0i'
+'x=33.4+a0i1+1.d+01i'
+'c=x0i'
+'x=2+d.0i'
+'x=33.4+a0i1+1.d+01i'''
+'x=''33.4+a0i1+1.d+01i'''
+]
+for k=1:size(Txt,1)
+  txt=Txt(k)
+  disp(txt+' --> '+i_notation(txt))
+end

@@ -6,6 +6,7 @@ NAME
 CALLING SEQUENCE
   (expression)
   [...]=func(e1,e2,...)
+  [x1,x2,...]=(e1,e2,...)
   x(i,j)
   v(i)
   [...]=l(i)
@@ -32,6 +33,7 @@ DESCRIPTION
   **    Select elements within vectors, matrices and lists.  see help on
        extraction and insertion for more precisions
 
+  **    [x1,x2,...]=(e1,e2,...) is equivalent to x1=e1, x2=e2, ...
 EXAMPLE
   3^(-1)
   x=poly(0,"x");
@@ -52,8 +54,10 @@ EXAMPLE
   l=list(1,2,3,4)
   [a,b,c,d]=l(:)
   l($+1)='new'
-
+  //
   v=%t([1 1 1 1 1])
+  //
+  [x,y,z]=(1,2,3)
 
 SEE ALSO
   colon, comma, brackets, list, extraction, insertion

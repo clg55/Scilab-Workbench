@@ -3,7 +3,7 @@ Eps=1.e-5
 //        %ODEOPTIONS 
 //       
 rand('seed',0);rand('normal');
-nx=20;A=rand(nx,nx);A=A-4.5*eye;
+nx=20;A=rand(nx,nx);A=A-4.5*eye();
 deff('y=f(t,x)','y=A*x')
 deff('J=j(t,x)','J=A')
 x0=ones(nx,1);t0=0;t=[1,2,3,4,5];
@@ -212,7 +212,7 @@ yy2=ode('stiff',[1;1;1],0,2,f);
 
 clear %ODEOPTIONS;
 rand('seed',0);rand('normal');
-nx=20;A=rand(nx,nx);A=A-4.5*eye;
+nx=20;A=rand(nx,nx);A=A-4.5*eye();
 deff('y=f(t,x)','y=A*x')
 deff('J=j(t,x)','J=A')
 //%ODEOPTIONS(1)=1;

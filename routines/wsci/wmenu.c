@@ -230,7 +230,8 @@ BOOL SciOpenSave(HWND hWndParent,  BYTE **s,  char **d,int *ierr)
   ofn.nMaxFileTitle = MAXSTR;
   ofn.lpstrTitle = szTitle;
   ofn.lpstrInitialDir = (LPSTR)NULL;
-  ofn.Flags = OFN_SHOWHELP | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+  ofn.Flags = OFN_SHOWHELP | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST 
+    | OFN_NOCHANGEDIR ;
   flag = (save ? GetSaveFileName(&ofn) : GetOpenFileName(&ofn));
   if( flag ) {
     nChar = lstrlen(ofn.lpstrFile);

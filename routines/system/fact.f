@@ -11,14 +11,14 @@ c
       integer semi,eol,blank,r,excnt,lparen,rparen,num,name
       integer id(nsiz),eye(nsiz),rand(nsiz),ones(nsiz),op,fun1
       integer star,dstar,comma,quote,cconc,extrac,rconc
-      integer left,right,hat,dot,equal
+      integer left,right,hat,dot,equal,colon
       logical recurs,compil
       integer setgetmode
       
       data star/47/,dstar/62/,semi/43/,eol/99/,blank/40/
       data num/0/,name/1/,comma/52/,lparen/41/,rparen/42/
       data quote/53/,left/54/,right/55/,cconc/1/,extrac/3/,rconc/4/
-      data hat/62/,dot/51/,equal/50/
+      data hat/62/,dot/51/,equal/50/,colon/44/
 c     
       data eye/672014862,nz1*673720360/
       data rand/219613723,nz1*673720360/
@@ -43,6 +43,14 @@ c
       if (sym.eq.num) go to 10
       excnt = 0
       if (sym .eq. name) go to 30
+      if (sym .eq. colon) then
+         call getsym
+c     call eye()
+         fun=6
+         fin=13
+         rhs=0
+         goto 53
+      endif
       id(1) = blank
       if (sym .eq. lparen) go to 36
 
@@ -194,7 +202,11 @@ c     -- check for eye, rand ones function special call
       fun1=fun
       call funs(id)
       if(err.gt.0) return
-      if(fun.eq.6.and.(fin.eq.14.or.fin.eq.13.or.fin.eq.15)) goto 53
+c This test is retained for obsolete syntax eye rand ones
+      if(fun.eq.6.and.(fin.eq.14.or.fin.eq.13.or.fin.eq.15)) then
+        call msgs(8,0)
+        goto 53
+      endif
       if (fun .gt. 0) then
          call putid(ids(1,pt+1),id)
          call error(25)
@@ -219,9 +231,10 @@ c      fin=0
       go to 60
 c     
  36   continue
-c     --- function evaluation or matrix element   x(...)
+c     --- function evaluation or variable element   x(...)
       if ( eptover(1,psiz-1))  return
 c     x(...) :store object or function name
+
       rstk(pt)=0
       pstk(pt)=lhs
       call putid(ids(1,pt),id)
@@ -266,7 +279,7 @@ c     name is a function name check if it is a call or a reference
       endif
 
       excnt = excnt+1
-      if(char1.ne.equal) goto 42
+      if(sym.ne.name.or.char1.ne.equal) goto 42
 c     next lines to manage named arguments (..,a=..)
       fun=fun1
 
@@ -311,6 +324,8 @@ c     argument is a standard expression
 c     *call* expr
       return
  43   excnt = pstk(pt)
+cSS   LIGNE SUIVANTE A AJOUTER POUR GERER [A,B]=(L(1:2)) 
+c      if(ids(1,pt-1).eq.blank) excnt=lhs
       fun=ids(2,pt)
       pt = pt-1
 c

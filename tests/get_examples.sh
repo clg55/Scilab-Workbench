@@ -34,7 +34,7 @@ echo '' >> prov
 
 }
 
-for j in arma control dcd elementary graphics linear metanet nonlinear polynomials programming robust scicos signal sound tdcs translation
+for j in arma comm control dcd elementary graphics linear metanet nonlinear polynomials programming robust scicos signal sound tdcs translation tksci
 do
 	echo -n "Processing man/$j "
 	for f in $SCI/man/$j/*.man

@@ -33,7 +33,7 @@ case 'define' then
   in=1
   label=string(z)
   model=list('dollar',in,in,1,[],[],z,[],[],'d',[],[%f %f],' ',list())
-  gr_i='xstringb(orig(1),orig(2),''$'',sz(1),sz(2),''fill'')'
+  gr_i='xstringb(orig(1),orig(2),''1/z'',sz(1),sz(2),''fill'')'
   x=standard_define([2 2],model,label,gr_i)
 end
 

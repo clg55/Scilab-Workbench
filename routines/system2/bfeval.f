@@ -5,7 +5,7 @@ C     the result is real or complex according to itype value
 c     ==========================================================
 c     Copyright INRIA
       include '../stack.h'
-c     integer sadr,iadr
+      integer sadr,iadr
       character*6 ename
       double precision x1,x2,xres(2)
       common / fevaladr / kfeval,kx1top,kx2top

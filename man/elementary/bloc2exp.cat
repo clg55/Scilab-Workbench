@@ -81,7 +81,7 @@ DESCRIPTION
   l=l+1;syst(l)=list('link','Y',[n_s2,1],[-1],[n_adder,2]);
   //Evaluation call
   w=bloc2exp(syst);
-  The result is the character string: w=-(s2*s1-eye)*s1.
+  The result is the character string: w=-(s2*s1-eye())*s1.
 
   Note that invoked with two output arguments, [str,names]= blocd(syst)
   returns in names the list of symbolic names of named links. This is useful
@@ -106,7 +106,7 @@ DESCRIPTION
   w=bloc2exp(syst);
   In this case the result is a formula equivalent to the usual one:
 
-  P11+P12*invr(eye-K*P22)*K*P21;
+  P11+P12*invr(eye()-K*P22)*K*P21;
 
 SEE ALSO
   bloc2ss

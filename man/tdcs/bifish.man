@@ -21,11 +21,11 @@ and the parameters \fVs\fR evolves to show the bifurcation diagram.
 .nf
 	fishr
 	y=b*exp(-0.1*(xk(1)+xk(2))) 
-	xkp1=[ y 2*y ; s*(1+0.1*(rand-0.5)) 0.0]*xk
+	xkp1=[ y 2*y ; s*(1+0.1*(rand()-0.5)) 0.0]*xk
 
 	fishr2
 	z=exp(-0.1*(xk(1)+xk(2))) 
-	xkp1=[ b*z**(1+0.1*(rand-0.5)) 2*b*z**(1+0.1*(rand-0.5)) ; s 0.0]*xk
+	xkp1=[ b*z**(1+0.1*(rand()-0.5)) 2*b*z**(1+0.1*(rand()-0.5)) ; s 0.0]*xk
 .fi
 The three macros \fVfish, fishr, fishr2\fR are loaded in Scilab when calling \fVbifish\fR.
 .SH SEE ALSO

@@ -16,7 +16,7 @@ PARAMETERS
 
 DESCRIPTION
   If a is a matrix, p is the characteristic polynomial i.e.
-   determinant(x*eye-a), x being the symbolic variable.
+   determinant(x*eye()-a), x being the symbolic variable.
 
   If v  is a vector, poly(v,"x",["roots"])  is the polynomial with roots the
   entries of v and "x" as formal variable.  (In this case,  roots and   poly

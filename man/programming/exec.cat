@@ -26,5 +26,9 @@ DESCRIPTION
 
   77    : stops + prompts + echoes : useful mode for demos.
 
+REMARK
+  Last line of startup file must be terminated by a newline to be taken into
+  account.
+
 SEE ALSO
   getf, comp, mode

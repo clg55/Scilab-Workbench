@@ -23,7 +23,8 @@ if pixmap then xset('pixmap',1),end,xbasc();
 wsiz=palettes(kpal)(1)(1)
 xset('wdim',wsiz(1),wsiz(2))
 Xshift=wsiz(3);Yshift=wsiz(4);
-xsetech([-1 -1 8 8]/6,[Xshift,Yshift,Xshift+wsiz(1),Yshift+wsiz(2)])
+xsetech([-1 -1 8 8]/6,[Xshift,Yshift,Xshift+wsiz(5),Yshift+wsiz(6)])
+options=default_options()
 drawobjs(palettes(kpal))
 if pixmap then xset('wshow'),end
 xinfo('Palette: may be used to copy  blocks or regions')

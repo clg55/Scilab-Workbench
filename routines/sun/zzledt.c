@@ -53,8 +53,10 @@ char Sci_Prompt[10];
 #define B42UNIX
 #define TERMCAP
 #endif
+#ifndef linux
 #ifdef  __alpha
 #define B42UNIX
+#endif
 #endif
 #ifdef linux
 #define ATTUNIX
@@ -849,8 +851,8 @@ set_cbreak()
    arg.c_lflag &= ~ECHO;
    arg.c_iflag &= ~ICRNL;
    arg.c_oflag &= ~OPOST;
-   arg.c_cc [VEOF] = 1;
-   arg.c_cc [VEOL] = 2;
+   arg.c_cc [VMIN] = 1;
+   arg.c_cc [VTIME] = 0;
    ioctl(fd, TCSETAW, &arg);
 #endif
 

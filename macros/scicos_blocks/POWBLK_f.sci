@@ -17,7 +17,7 @@ case 'set' then
   if size(label,'*')==2 then label=label(2),end //compatibility
   while %t do
     [ok,a,label]=getvalue('Set u^a block parameters',..
-	'Basis',list('vec',1),label)
+	'to the power of',list('vec',1),label)
     if ~ok then break,end
     graphics(4)=label
     if a==int(a) then

@@ -34,7 +34,7 @@ end
 nf = maxi(size(w)); nsv = mini(size(d)); j = sqrt(-1);
 svm(nsv,nf) = 0;
 for i = 1:nf
-    svm(:,i) = svd(c*((j*w(i)*eye-a)\b)+d);
+    svm(:,i) = svd(c*((j*w(i)*eye()-a)\b)+d);
 end
 case 'c'
 if nargin == 1
@@ -43,7 +43,7 @@ end
 nf = maxi(size(w)); nsv = mini(size(d)); j = sqrt(-1);
 svm(nsv,nf) = 0;
 for i = 1:nf
-    svm(:,i) = svd(c*((j*w(i)*eye-a)\b)+d);
+    svm(:,i) = svd(c*((j*w(i)*eye()-a)\b)+d);
 end
 case 'd'
 if nargin == 1
@@ -52,7 +52,7 @@ end
 nf = maxi(size(w)); nsv = mini(size(d)); j = sqrt(-1);
 svm(nsv,nf) = 0;
 for i = 1:nf
-    svm(:,i) = svd(c*((exp(j*w(i))*eye-a)\b)+d);
+    svm(:,i) = svd(c*((exp(j*w(i))*eye()-a)\b)+d);
   end
 else T=Sl('dt');
 if nargin == 1
@@ -61,7 +61,7 @@ end
 nf = maxi(size(w)); nsv = mini(size(d)); j = sqrt(-1);
 svm(nsv,nf) = 0;
 for i = 1:nf
-    svm(:,i) = svd(c*((exp(j*w(i)*T)*eye-a)\b)+d);
+    svm(:,i) = svd(c*((exp(j*w(i)*T)*eye()-a)\b)+d);
   end
   
 end

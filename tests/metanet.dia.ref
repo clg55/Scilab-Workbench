@@ -681,7 +681,7 @@ ij=[g('tail')' g('head')']; v=1*ones(g('tail')');
  
 vv=sparse(ij,v,[n n]);
  
-ww=tril(vv+vv')';ww=ww+eye;
+ww=tril(vv+vv')';ww=ww+eye();
  
 ww1=full(ww);
  

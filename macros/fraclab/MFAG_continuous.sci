@@ -57,7 +57,7 @@ xset("window",0);
 xset("use color",1); 
 xset("font",2,0);
 
-% synthesis of the pre-multifractal binomial 1d measure: mu_n
+// synthesis of the pre-multifractal binomial 1d measure: mu_n
 [mu_n,I_n]=binom(p,'meas',n);
 // plot the pre-multifractal binomial 1d measure
 xsetech([0,0,0.5,0.5]);

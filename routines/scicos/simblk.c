@@ -42,7 +42,7 @@ int C2F(simblk)(neq, t, xc, xcdot)
 	       scicos_imp.oord, scicos_imp.zord, 
 	       scicos_imp.critev, scicos_imp.rpar, scicos_imp.rpptr, scicos_imp.ipar, 
 	       scicos_imp.ipptr, scicos_imp.funptr, scicos_imp.funtyp, scicos_imp.outtb, 
-	       &C2F(ierode).iero);
+	       scicos_imp.iwa,&C2F(ierode).iero);
 	    
     }
  

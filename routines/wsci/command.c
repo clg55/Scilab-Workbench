@@ -223,6 +223,10 @@ int winsystem(char *s,int flag)
       /* attempt to run the windows/dos program via windows */
       int res;
       execstr = (char *) malloc(strlen(s) + strlen(comspec) + 6);
+      if (execstr == NULL) {
+	sciprint("Running out of memory\r\n");
+	return 1;
+      }
       if ( s[0] == '/' && s[1] == '/' && s[3] == '/' ) 
 	{
 	  sprintf(execstr,"%c:%s",s[2],s+3);

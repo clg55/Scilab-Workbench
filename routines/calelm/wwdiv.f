@@ -24,17 +24,31 @@ c     c = a/b
       double precision s,d,ars,ais,brs,bis
 c
       ierr=0
-      s = abs(br) + abs(bi)
-      if (s .eq. 0.0d+0) then
-         ierr=1
-         return
+      if(bi.eq.0.0d0) then
+         brs=br
+         cr=ar/brs
+         ci=ai/brs
+      elseif(br.eq.0.0d0) then
+         ais=ai
+         ars=ar
+         bis=bi
+         cr=ais/bis
+         ci=-ars/bis
+      else
+         s = abs(br) + abs(bi)
+         if (s .eq. 0.0d+0) then
+            ierr=1
+            cr=ar/s
+            ci=ai/s
+            return
+         endif
+         ars = ar/s
+         ais = ai/s
+         brs = br/s
+         bis = bi/s
+         d = brs**2 + bis**2
+         cr = (ars*brs + ais*bis)/d
+         ci = (ais*brs - ars*bis)/d
       endif
-      ars = ar/s
-      ais = ai/s
-      brs = br/s
-      bis = bi/s
-      d = brs**2 + bis**2
-      cr = (ars*brs + ais*bis)/d
-      ci = (ais*brs - ars*bis)/d
       return
       end

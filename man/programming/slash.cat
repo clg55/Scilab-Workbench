@@ -17,8 +17,8 @@ DESCRIPTION
 
   Backslash stands for left division.
 
-  System feed back.  S=G/.K evaluates S=G*(eye+K*G)^(-1) this operator avoid
-  simplification problem.
+  System feed back.  S=G/.K evaluates S=G*(eye()+K*G)^(-1) this operator
+  avoid simplification problem.
 
   Remark that G/.5 is interpreted as G/(.5). In such cases dot is part of the
   number, not of the operator.

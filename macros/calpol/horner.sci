@@ -31,4 +31,4 @@ for l=1:m
   end
   r=[r;rk]
 end
-if indef then r=r*eye,end
+if indef then r=r*eye(),end

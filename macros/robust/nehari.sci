@@ -20,7 +20,7 @@ r(3)=r(3)/nn,
 //best approx.
 //------------
 xo=-obs_gram(r),xc=-ctr_gram(r),
-w=inv(eye-xo*xc),
+w=inv(eye()-xo*xc),
 [m,k,n]=size(r),m=m(1),
 [a,b,c]=r(2:4),o=0*ones(a),
 ax=[a,o,o;o,a,-w'*b*b';o,o,-a'-w*xo*b*b'],

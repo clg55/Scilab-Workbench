@@ -19,8 +19,10 @@ DESCRIPTION
   list of command separated by ";" is sent: this is not recommended.
 
 EXAMPLE
-  unix_g("ls $SCI/demos");
-  deff('wd=pwd()','wd=unix_g(''pwd'')')
+  if MSDOS then unix_g('dir '+WSCI+'emos');
+  else unix_g("ls $SCI/demos"); end
+  deff('wd=pwd()','if MSDOS then wd=unix_g(''cd'');..
+                   else wd=unix_g(''pwd''); end')
   wd=pwd()
 
 SEE ALSO

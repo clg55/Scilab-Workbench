@@ -36,8 +36,7 @@ case 'define' then
   in=1;out=1;gain=1
   model=list('gain',in,out,[],[],[],[],gain,[],'c',[],[%t %f],' ',list())
   label=[strcat(sci2exp(gain));strcat(sci2exp(in));strcat(sci2exp(out))]
-  gr_i=['[nin,nout]=model(2:3);';
-      'if nin*nout==1 then gain=string(model(8)),else gain=''Gain'',end';
+  gr_i=['gain=arg1(2)(4);';
       'if orient then'
       '  xx=orig(1)+[0 1 0 0]*sz(1);';
       '  yy=orig(2)+[0 1/2 1 0]*sz(2);';

@@ -46,13 +46,14 @@ $(DLL) : $(OBJS)
 clean:: cleanC cleanF 
 
 cleanC :
-	$(RM) $(OBJSC)
+	del *.obj
 
 cleanF :
-	$(RM) $(OBJSCF)
+	del *.obj
 
 distclean::
-	$(RM) $(OBJS) $(LIBRARY)
+	del *.obj
+	del $(LIBRARY)
 
 # default rule for Fortran Compilation 
 

@@ -44,7 +44,7 @@ int C2F(scichdir)(path,err)
     *err=1;
   } 
   /** a rajouter en XWindow ? pour transmettre l'info au menu 
-    if (get_directory(cur_dir)==0) 
+    if (get_directory()==0) 
     *err=1; **/
   return 0;
 }

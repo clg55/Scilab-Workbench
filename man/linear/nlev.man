@@ -22,7 +22,7 @@ rmax
 computes:
 .IG
 .nf
-(z*eye-A)^(-1) 
+(z*eye()-A)^(-1) 
 .fi
 .FI
 .LA $ (z I -A)^{-1} $
@@ -36,7 +36,7 @@ but still not perfect!
 A=rand(3,3);x=poly(0,'x');
 [NUM,den]=nlev(A,'x')
 clean(den-poly(A,'x'))
-clean(NUM/den-inv(x*eye-A))
+clean(NUM/den-inv(x*eye()-A))
 .fi
 .SH SEE ALSO
 coff, coffg, glever, ss2tf

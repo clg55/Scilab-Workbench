@@ -33,12 +33,12 @@ xkp1=[ y 2*y ; s 0.0]*xk
 
 function xkp1=fishr(k,xk,b,s)
 y=b*exp(-0.1*(xk(1)+xk(2))) 
-xkp1=[ y 2*y ; s*(1+0.1*(rand-0.5)) 0.0]*xk
+xkp1=[ y 2*y ; s*(1+0.1*(rand()-0.5)) 0.0]*xk
 
 
 function xkp1=fishr2(k,xk,b,s)
 z=exp(-0.1*(xk(1)+xk(2))) 
-xkp1=[ b*z**(1+0.1*(rand-0.5)) 2*b*z**(1+0.1*(rand-0.5)) ; s 0.0]*xk
+xkp1=[ b*z**(1+0.1*(rand()-0.5)) 2*b*z**(1+0.1*(rand()-0.5)) ; s 0.0]*xk
 
 
 

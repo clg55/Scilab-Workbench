@@ -11,11 +11,11 @@ end
 
 style=sci2exp(style)
 if rhs==1 then
-  x=tempvar(1)
+  x=gettempvar(1)
   if isname(stk(top)(1)) then
     y=stk(top)(1)
   else
-    y=tempvar(2)
+    y=gettempvar(2)
     txt=y+' = '+stk(top)(1);
   end
   txt=[txt;
@@ -32,14 +32,14 @@ elseif rhs==2 then
   if isname(stk(top)(1)) then
     y=stk(top)(1)
   else
-    y=tempvar(2)
+    y=gettempvar(2)
     txt=[txt;y+' = '+stk(top)(1)];
   end
   if isname(stk(top-1)(1)) then
     x=stk(top-1)(1)
   else
-    y=tempvar(2)
-    txt=[txt;y+' = '+stk(top-1)(1)];
+    x=gettempvar(2)
+    txt=[txt;x+' = '+stk(top-1)(1)];
   end
   if stk(top)(4)=='1' then //y is a column vector 
     txt=[txt;y+' = '+y+'''']

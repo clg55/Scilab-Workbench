@@ -21,5 +21,5 @@
  /////////////////DO NOT REMOVE THIS LINE
  LME=list(X-X',Y-Y');
  LMI=list(-[A*X+B2*L+(A*X+B2*L)'+B1*B1',X*C1'+L'*D12'+B1*D11';...
- (X*C1'+L'*D12'+B1*D11')',-gama^2*eye+D11*D11'],[Y,C2*X+D22*L;(C2*X+D22*L)',X])
+ (X*C1'+L'*D12'+B1*D11')',-gama^2*eye()+D11*D11'],[Y,C2*X+D22*L;(C2*X+D22*L)',X])
  OBJ=trace(Y);

@@ -47,7 +47,7 @@ n=g('node_number');
 aa=graph_2_mat(g);
 ij=[g('tail')' g('head')']; v=1*ones(g('tail')');
 vv=sparse(ij,v,[n n]);
-ww=tril(vv+vv')';ww=ww+eye;
+ww=tril(vv+vv')';ww=ww+eye();
 ww1=full(ww);
 [iperm,mrepi,profile,ierr]=bandwr(ww)
 g2=g;g2('node_name')=string(iperm);

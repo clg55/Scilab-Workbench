@@ -1,7 +1,7 @@
 
 lsslist(1)                     Scilab Function                     lsslist(1)
 NAME
-  lsslist - Scilab linear state space t function definition
+  lsslist - Scilab linear state space function definition
 
 CALLING SEQUENCE
   lsslist()

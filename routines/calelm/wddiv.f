@@ -28,7 +28,7 @@ c
       s=br
       if (br .eq. 0.0d+0) then
          ierr=1
-         return
+c         return
       endif
       cr = ar/s
       ci = ai/s

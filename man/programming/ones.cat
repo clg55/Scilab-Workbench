@@ -4,8 +4,9 @@ NAME
   ones - matrix made of ones
 
 CALLING SEQUENCE
-  [y]=ones(m,n)
-  [y]=ones(x)
+  y=ones(m,n)
+  y=ones(x)
+  y=ones()
 
 DESCRIPTION
   Returns a matrix made of ones.
@@ -20,6 +21,8 @@ DESCRIPTION
        is also valid for x a syslin list.
 
   Note that ones(3) is ones(a) with a=3 i.e it is NOT a 3x3 matrix!
+
+  ones() is eqivalent to ones(1,1).
 
 SEE ALSO
   eye, zeros

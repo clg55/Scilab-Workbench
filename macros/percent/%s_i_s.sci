@@ -13,6 +13,7 @@ if rhs-2>size(dims,'*') then
 end
 dims1=[]
 I=0
+iimp=0
 for k=rhs-2:-1:1
   ik=varargin(k)
   if type(ik)==2 |type(ik)==129 then // size implicit subscript $...
@@ -20,9 +21,18 @@ for k=rhs-2:-1:1
   elseif type(ik)==4 then // boolean subscript
     ik=find(ik)
   elseif mini(size(ik))<0 then // :
-    ik=1:dims(k)
+    if dims(k)<>0 then
+      ik=1:dims(k)
+    else
+      iimp=iimp+1
+      if iimp<=2 then
+	ik=1:size(N,iimp)
+      else
+	ik=1
+      end
+    end
   end
-  dims1(k)=max(max(ik),dims(k))
+  dims1(k)=max([max(ik),dims(k)])
   if size(ik,'*')>1 then
     ik=ik(:)
     if size(I,'*')>1 then

@@ -202,13 +202,13 @@ $pictdict begin
 	{ % filling 
 	newpath
 	cx cy moveto 
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add  64 div neg
 	 Ar 4 get 64 div neg  arc closepath
 	gsave glev Setgray eofill grestore}
 	{
 	%drawing with current dash or color unclosed path 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	  stroke} ifelse 
 	Cmsave1 setmatrix } def 
 
@@ -224,7 +224,7 @@ $pictdict begin
 	/t2 exch neg cx add def 
 	[1 0 0 hom t2 t1 ] concat 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	closepath glev Setgray stroke
 	Cmsave1 setmatrix } def 
 
@@ -468,22 +468,20 @@ fillsolid
 0 Setcolor
 750 530 4500 3180 setclipzone
 0 Setcolor
-/Symbol findfont 80 scf mul scalefont setfont
-HardMark 0 16#2b put
- (drawpolymark) 4 [ 0]
+/closeflag false def
+ (drawpoly) 4 [ 0]
 [825 2219 4875 2219 
 ] dogrey 
+0 Setcolor
 /absolu true def
-/Times-Roman findfont 100 scf mul scalefont setfont
 0 Setcolor
 -1 -1 200000 200000 setclipzone
 0 Setcolor
 0 Setcolor
 750 530 4500 3180 setclipzone
-0 Setcolor
-/Symbol findfont 80 scf mul scalefont setfont
-HardMark 0 16#b4 put
- (drawpolymark) 110 [ 0]
+1 Setcolor
+/closeflag false def
+ (drawpoly) 110 [ 0]
 [825 1027 900 1126 975 1226 1050 1325 1125 1424 1200 1524 1275 1623 1350 1723 1425 1822 1500 1921 
 1575 2021 1650 2120 1725 2219 1800 2319 1875 2418 1950 2518 2025 2617 2100 2716 2175 2816 2250 2915 
 2325 3014 2400 3114 2475 3213 2550 3313 2625 3412 2700 3511 2775 3611 2850 3710 2925 729 3000 828 
@@ -491,17 +489,16 @@ HardMark 0 16#b4 put
 3825 1921 3900 2021 3975 2120 4050 2219 4125 2319 4200 2418 4275 2518 4350 2617 4425 2716 4500 2816 
 4575 2915 4650 3014 4725 3114 4800 3213 4875 3313 
 ] dogrey 
+1 Setcolor
 /absolu true def
-/Times-Roman findfont 100 scf mul scalefont setfont
 0 Setcolor
 -1 -1 200000 200000 setclipzone
 0 Setcolor
 0 Setcolor
 750 530 4500 3180 setclipzone
 0 Setcolor
-/Symbol findfont 80 scf mul scalefont setfont
-HardMark 0 16#2b put
- (drawpolymark) 110 [ 0]
+/closeflag false def
+ (drawpoly) 110 [ 0]
 [825 2207 900 2197 975 2161 1050 2087 1125 1968 1200 1809 1275 1636 1350 1477 1425 1358 1500 1284 
 1575 1247 1650 1232 1725 1227 1800 1226 1875 1226 1950 1226 2025 1229 2100 1237 2175 1262 2250 1316 
 2325 1412 2400 1553 2475 1723 2550 1892 2625 2033 2700 2129 2775 2183 2850 2205 2925 2205 3000 2183 
@@ -509,8 +506,8 @@ HardMark 0 16#2b put
 3825 1226 3900 1226 3975 1226 4050 1227 4125 1232 4200 1247 4275 1284 4350 1358 4425 1477 4500 1636 
 4575 1809 4650 1968 4725 2087 4800 2161 4875 2197 
 ] dogrey 
+0 Setcolor
 /absolu true def
-/Times-Roman findfont 100 scf mul scalefont setfont
 0 Setcolor
 -1 -1 200000 200000 setclipzone
  showpage

@@ -65,9 +65,9 @@ c     .     a() -->a
  03   continue
 
 c
-      goto (10,20,05,30,70,35,05,05,05,40,60,05,60,60,50,50,50) ,vt
+      goto (10,20,05,30,70,35,04,04,04,40,60,04,60,60,50,50,50) ,vt
 c     overloadable ops
-      op=fin
+ 04   op=fin
       goto 90
 
  05   call error(43)

@@ -32,7 +32,7 @@ c
       kount = 1
       if(sym.eq.not) goto 70
       if (sym .eq. colon) call putid(syn(1),eye)
-      if (sym .eq. colon) sym = name
+c      if (sym .eq. colon) sym = name
  03   sign = plus
       if (sym .eq. minus) sign = minus
       if (sym.eq.plus .or. sym.eq.minus) call getsym

@@ -22,19 +22,30 @@ c!
 c     Copyright INRIA
       double precision ar,br,bi,cr,ci
 c     c = a/b
-      double precision s,d,ars,brs,bis
+      double precision s,d,ars,brs,bis,dlamch
 c
       ierr=0
-      s = abs(br) + abs(bi)
-      if (s .eq. 0.0d+0) then
-         ierr=1
-         return
+      ars=ar
+      if(bi.eq.0.0d0) then
+         cr=ars/br
+         ci=0.0d0
+      elseif(br.eq.0.0d0) then
+         ci=-ars/bi        
+         cr=0.0d0
+      else
+         s = abs(br) + abs(bi)
+         if (s .eq. 0.0d+0) then
+            ierr=1
+            cr=ar/s
+            ci=0.0d0
+            return
+         endif
+         ars = ar/s
+         brs = br/s
+         bis = bi/s
+         d = brs**2 + bis**2
+         cr = (ars*brs)/d
+         ci = (-ars*bis)/d
       endif
-      ars = ar/s
-      brs = br/s
-      bis = bi/s
-      d = brs**2 + bis**2
-      cr = (ars*brs)/d
-      ci = (-ars*bis)/d
       return
       end

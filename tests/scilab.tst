@@ -65,8 +65,8 @@ i\[2*i 2 i*4]/i-[-i*2 -2 -4*i]
 //eye
 eye(4,4)
 //a+-b*eye a*eye+-b a+-eye*b eye*a+-b
--2*eye+[1 2;3 4]+eye*2-[1 2;3 4]
--2*i*eye+[1 2;3 4]+eye*2*i-[1 2;3 4]
+-2*eye()+[1 2;3 4]+eye()*2-[1 2;3 4]
+-2*i*eye()+[1 2;3 4]+eye()*2*i-[1 2;3 4]
 // :
 1:10
 1:.1:2
@@ -100,7 +100,7 @@ rand(a)
 rand(c)
 rand(3,3)
 rand(3,2)
-rand
+rand()
 rand('uniform')
 rand('normal')
 rand('seed',5)
@@ -141,17 +141,17 @@ tril(c,-10)
 //test de matlu
 a=rand(4,4);b=rand(5,4);ac=a+i*rand(4,4);bc=b+i*rand(5,4);
 //
-if abs((1/a)*a-eye)> 10*%eps then pause,end
-if abs((i/a)*a-i*eye)> 10*%eps then pause,end
-if abs((1/ac)*ac-eye)> 10*%eps then pause,end
-if abs((i/ac)*ac-i*eye)> 10*%eps then pause,end
-if abs(a*(a\1)-eye)> 10*%eps then pause,end
-if abs(a*(a\i)-i*eye)> 10*%eps then pause,end
-if abs(ac*(ac\1)-eye)> 10*%eps then pause,end
-if abs(ac*(ac\i)-eye*i)> 10*%eps then pause,end
+if abs((1/a)*a-eye())> 10*%eps then pause,end
+if abs((i/a)*a-i*eye())> 10*%eps then pause,end
+if abs((1/ac)*ac-eye())> 10*%eps then pause,end
+if abs((i/ac)*ac-i*eye())> 10*%eps then pause,end
+if abs(a*(a\1)-eye())> 10*%eps then pause,end
+if abs(a*(a\i)-i*eye())> 10*%eps then pause,end
+if abs(ac*(ac\1)-eye())> 10*%eps then pause,end
+if abs(ac*(ac\i)-eye()*i)> 10*%eps then pause,end
 //
-if abs(inv(a)*a-eye)> 10*%eps then pause,end
-if abs(inv(ac)*ac-eye)> 10*%eps then pause,end
+if abs(inv(a)*a-eye())> 10*%eps then pause,end
+if abs(inv(ac)*ac-eye())> 10*%eps then pause,end
 //
 if abs((b/a)*a-b)> 10*%eps then pause,end
 if abs((b/ac)*ac-b)> 10*%eps then pause,end
@@ -169,9 +169,9 @@ if abs(l*u-a)> 10*%eps then pause,end
 if abs(l*u-ac)> 10*%eps then pause,end
 //
 h1(5,5)=0;for k=1:5,for l=1:5, h1(k,l)=1/(k+l-1);end;end;
-if abs(inv(h1)-matrix('hilb',5))> 1.e-7 then pause,end
+if abs(inv(h1)-testmatrix('hilb',5))> 1.e-7 then pause,end
 //
-if abs(det(matrix('magic',5))-5070000)> 1.e-7 then pause,end
+if abs(det(testmatrix('magic',5))-5070000)> 1.e-7 then pause,end
 //
 b=a*a';h=chol(b);
 if abs(h'*h-b)> 10*%eps then pause,end
@@ -369,9 +369,9 @@ s=sqrtm(tc);
 if norm(tc-s*s,1) > 220*%eps then pause,end
 s=expm(tc);s=triu(s,1)+triu(s,1)'+diag(real(diag(s)));
 if norm(logm(s)-tc,1)> 1.e-9 then pause,end
-if norm(sinm(t)**2+cosm(t)**2-eye,1) > 22*%eps then pause,end
+if norm(sinm(t)**2+cosm(t)**2-eye(),1) > 22*%eps then pause,end
 // jpc --> 20 remplace par 25 pour gc-win32 
-if norm(sinm(tc)**2+cosm(tc)**2-eye,1) > 25*%eps then pause,end
+if norm(sinm(tc)**2+cosm(tc)**2-eye(),1) > 25*%eps then pause,end
 //poly et root
 p=rand(5,1);pc=p+i*rand(5,1);x=poly(0,'x');
 if norm(sort(p )-sort(real(roots(poly(p,'x'))))) > 1000*%eps then pause,end
@@ -379,9 +379,9 @@ if norm(sort(imag(pc))-sort(real(roots(poly(imag(pc),'x'))))) > 1000*%eps then p
 //**
 if norm(t^(-1)-inv(t),1) > 200*%eps then pause,end
 if norm(tc**(-1)-inv(tc),1) > 200*%eps then pause,end 
-x=rand+i*rand;
-if norm((t**x)*(t^(-x))-eye,1) > 200*%eps then pause,end 
-if norm((tc**x)*(tc**(-x))-eye,1) > 200*%eps then pause,end
+x=rand()+i*rand();
+if norm((t**x)*(t^(-x))-eye(),1) > 200*%eps then pause,end 
+if norm((tc**x)*(tc**(-x))-eye(),1) > 200*%eps then pause,end
 //element op
 if norm(sin([0 pi/2 pi 3*pi/2])-[0 1 0 -1],1) > 10*%eps then pause,end
 if norm(cos([0 pi/2 pi 3*pi/2])-[1 0 -1 0],1) > 10*%eps then pause,end

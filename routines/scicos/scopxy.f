@@ -9,9 +9,8 @@ c     ipar(3) = buffer size
 c     ipar(4) = dash,color or mark choice
 c     ipar(5) = line or mark size
 c     ipar(6) = mode : animated =0 fixed=1
-c     ipar(7) =
-c     ipar(8:9) = window position
-c     ipar(10:11) = window size
+c     ipar(7:8) = window position
+c     ipar(9:10) = window size
 c
 c     rpar(1)=xmin
 c     rpar(2)=xmax
@@ -108,12 +107,12 @@ c     erase memory
             call dr1('xset'//char(0),'window'//char(0),wid,v,v,v,v,v,
      $           dv,dv,dv,dv)
          endif
-         iwp=8
+         iwp=7
          if(ipar(iwp).ge.0) then
             call dr1('xset'//char(0),'wpos'//char(0),ipar(iwp),
      $           ipar(iwp+1),v,v,v,v,dv,dv,dv,dv)
          endif
-         iwd=10
+         iwd=9
          if(ipar(iwd).ge.0) then
             call dr1('xset'//char(0),'wdim'//char(0),ipar(iwd),
      $           ipar(iwd+1),v,v,v,v,dv,dv,dv,dv)

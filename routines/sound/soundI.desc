@@ -129,3 +129,11 @@ n	int
 
 out	sequence n
 *********************
+mclearerr  [fd -1] 
+fd 	scalar 
+
+mclearerr	fd 
+fd	int
+
+out	empty
+*********************

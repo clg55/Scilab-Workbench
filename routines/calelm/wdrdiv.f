@@ -21,8 +21,8 @@ c     Copyright INRIA
       ierr=0
       if (ia.eq.0) then
          do 10 k=1,n
-            call wddiv(ar(ja),ai(ja),br(jb),rr(jr),ri(jr),ierr)
-            if(ierr.ne.0) then
+            call wddiv(ar(ja),ai(ja),br(jb),rr(jr),ri(jr),ierr1)
+            if(ierr1.ne.0) then
                ierr=k
 c               return
             endif
@@ -35,14 +35,14 @@ c               return
 c            return
          endif
          do 11 k=1,n
-            call wddiv(ar(ja),ai(ja),br(jb),rr(jr),ri(jr),ierr)
+            call wddiv(ar(ja),ai(ja),br(jb),rr(jr),ri(jr),ierr1)
             jr=jr+ir
             ja=ja+ia
  11      continue
       else
          do 12 k=1,n
-            call wddiv(ar(ja),ai(ja),br(jb),rr(jr),ri(jr),ierr)
-            if(ierr.ne.0) then
+            call wddiv(ar(ja),ai(ja),br(jb),rr(jr),ri(jr),ierr1)
+            if(ierr1.ne.0) then
                ierr=k
 c               return
             endif

@@ -1,5 +1,6 @@
 function do_terminate(scs_m,cpr,tcur)
 // Copyright INRIA
+if prod(size(cpr))<2 then return,end
 par=scs_m(1);
 if alreadyran then  
   //terminate current simulation

@@ -31,7 +31,13 @@ void ParseMessage(type,b)
 char *type;
 char *b;
 {
-  if (!strcmp(type,LOAD)) {
+  if (!strcmp(type,CLOSE)) {
+    if (menuId == MODIFY) {
+      return;
+    } else {
+      MetanetQuit(); 
+    }
+  } else if (!strcmp(type,LOAD)) {
     LoadCommGraph(b,0);
   } else if (!strcmp(type,LOAD_S)) {
     LoadCommGraph(b,0);

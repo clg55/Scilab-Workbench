@@ -12,7 +12,7 @@ while %t do
       'Integrator absolute tolerance';
       'Integrator relative tolerance';
       'Tolerance on time'
-      'deltat'],..
+      'max time step for integration'],..
 	  list('vec',1,'vec',1,'vec',1,'vec',1,'vec',1),..
 	  [string([tf;atol;rtol;ttol;deltat])])
   if ~ok then break,end

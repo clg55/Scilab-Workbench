@@ -78,7 +78,7 @@ case 'define' then
   wdim=[600;400]
   wpos=[-1;-1]
   N=2;
-  ipar=[win;1;N;clrs;1;0;1;wpos(:);wdim(:)]
+  ipar=[win;1;N;clrs;siz;1;wpos(:);wdim(:)]
   xmin=-15;xmax=15;ymin=-15;ymax=+15
   rpar=[xmin;xmax;ymin;ymax]
   state=-eye(2*N+1,1)

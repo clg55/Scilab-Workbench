@@ -96,7 +96,7 @@ void HelpActivate(ntopic)
       k++;
     }
   Topic[k] = '\0';
-  buf = (char *) MALLOC((strlen(helpPath) + k + 40) * (sizeof(char)));
+  buf = (char *) MALLOC((2 * strlen(helpPath) + k + 16) * (sizeof(char)));
   if (buf == NULL) 
     {
       printf("Not enough memory to allocate help tables\n");

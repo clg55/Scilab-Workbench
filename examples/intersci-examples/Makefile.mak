@@ -35,7 +35,7 @@ dlls : $(DLLS)
 ex1.dll : ex1fi.obj ex1c.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**   $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**   $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex1fi.obj : ex1fi.desc
 	@$(INTERSCI) $* 
@@ -46,7 +46,7 @@ ex1fi.obj : ex1fi.desc
 ex2.dll : ex2fi.obj ex2f.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex2fi.obj : ex2fi.desc
 	@$(INTERSCI) $* 
@@ -57,7 +57,7 @@ ex2fi.obj : ex2fi.desc
 ex3.dll : ex3fi.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex3fi.obj : ex3fi.desc
 	@$(INTERSCI) $* 
@@ -68,7 +68,7 @@ ex3fi.obj : ex3fi.desc
 ex4.dll : ex4fi.obj ex4f.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex4fi.obj : ex4fi.desc
 	@$(INTERSCI) $* 
@@ -79,7 +79,7 @@ ex4fi.obj : ex4fi.desc
 ex5.dll : ex5fi.obj ex5f.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex5fi.obj : ex5fi.desc
 	@$(INTERSCI) $* 
@@ -91,7 +91,7 @@ ex5fi.obj : ex5fi.desc
 ex6.dll : ex6fi.obj ex6c.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex6fi.obj : ex6fi.desc
 	@$(INTERSCI) $* 
@@ -102,7 +102,7 @@ ex6fi.obj : ex6fi.desc
 ex7.dll : ex7fi.obj ex7f.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex7fi.obj : ex7fi.desc
 	@$(INTERSCI) $* 
@@ -113,7 +113,7 @@ ex7fi.obj : ex7fi.desc
 ex8.dll : ex8fi.obj ex8c.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex8fi.obj : ex8fi.desc
 	@$(INTERSCI) $* 
@@ -124,7 +124,7 @@ ex8fi.obj : ex8fi.desc
 ex9.dll : ex9fi.obj ex9f.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex9fi.obj : ex9fi.desc
 	@$(INTERSCI) $* 
@@ -136,7 +136,7 @@ ex9fi.obj : ex9fi.desc
 ex10.dll : ex10fi.obj ex10f.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex10fi.obj : ex10fi.desc
 	@$(INTERSCI) $* 
@@ -148,7 +148,7 @@ ex10fi.obj : ex10fi.desc
 ex11.dll : ex11fi.obj ex11c.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex11fi.obj : ex11fi.desc
 	@$(INTERSCI) $* 
@@ -159,7 +159,7 @@ ex11fi.obj : ex11fi.desc
 ex12.dll : ex12fi.obj ex12c.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex12fi.obj : ex12fi.desc
 	@$(INTERSCI) $* 
@@ -170,7 +170,7 @@ ex12fi.obj : ex12fi.desc
 ex13.dll : ex13fi.obj ex13c.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex13fi.obj : ex13fi.desc
 	@$(INTERSCI) $* 
@@ -181,7 +181,7 @@ ex13fi.obj : ex13fi.desc
 ex14.dll : ex14fi.obj ex14c.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex14fi.obj : ex14fi.desc
 	@$(INTERSCI) $* 
@@ -192,7 +192,7 @@ ex14fi.obj : ex14fi.desc
 ex15.dll : ex15fi.obj ex15c.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex15fi.obj : ex15fi.desc
 	@$(INTERSCI) $* 
@@ -204,7 +204,7 @@ ex15fi.obj : ex15fi.desc
 ex16.dll : ex16fi.obj ex16c.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex16fi.obj : ex16fi.desc
 	@$(INTERSCI) $* 
@@ -234,7 +234,7 @@ OBJS=ex1c.obj ex2f.obj ex4f.obj ex5f.obj ex6c.obj ex7f.obj ex8c.obj \
 zallfi.dll : zallfi.obj $(OBJS) 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $**  $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 zallfi.obj : zallfi.desc
 	@$(INTERSCI) $* 

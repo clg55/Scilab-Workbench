@@ -9,6 +9,6 @@ s=poly(0,'s');
 BD=[B;D];
 [n,m]=size(BD);
 [U,rk]=rowcomp(BD);U=[U(rk+1:n,:);U(1:rk,:)];
-W=U*([-s*eye+A;C])
+W=U*([-s*eye()+A;C])
 Z=W(1:n-rk,:);
 

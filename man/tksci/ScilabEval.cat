@@ -28,8 +28,8 @@ Description
 
 Example (tcl/tk script)
   # this text must be saved into a file, for instance
-  #  '/tmp/test.tcl'
-  # then launch scilab and type TK_EvalFile('/tmp/test.tcl');
+  #  TMPDIR+'/test.tcl'
+  # then launch scilab and type TK_EvalFile(TMPDIR+'/test.tcl');
   toplevel .w1
   button .w1.b -text "Click here to see a new Scilab Graphic Window"  -command {ScilabEval "xselect()"}
   pack .w1.b

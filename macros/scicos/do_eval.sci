@@ -15,6 +15,8 @@ needcompile1=max(2,needcompile)
 mprt=funcprot()
 funcprot(0) 
 getvalue=setvalue;
+deff('[ok,tt]=FORTR(funam,tt,i,o)','ok=%t')
+deff('[ok,tt]=CFORTR(funam,tt,i,o)','ok=%t')
 deff('[x,y,ok,gc]=edit_curv(x,y,job,tit,gc)','ok=%t')
 deff('[ok,tt,dep_ut]=genfunc1(tt,ni,no,nci,nco,nx,nz,nrp,type_)',..
     'dep_ut=model(12);ok=%t')

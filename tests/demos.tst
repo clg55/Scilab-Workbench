@@ -48,10 +48,13 @@ execstr('message=x_message')
 execstr('dialog=x_dialog')
 I=file('open','SCI/tests/demos.dialogs','old')
 //I=%io(1)
-O=file('open','/dev/null','unknown')
+if MSDOS then
+  O=file('open',TMPDIR+'\sciout','unknown')
+else
+  O=file('open','/dev/null','unknown')
+end
 %IO=[I,O]
 lines(0)
 exec('SCI/demos/alldems.dem')
 file('close',I)
 file('close',O)
-

@@ -4,7 +4,7 @@ function M=%hm_e(varargin)
 [lhs,rhs]=argn(0)
 M=varargin(rhs)
 dims=M('dims')
-v=M('entries');v=v(:)
+v=M('entries')(:)
 
 
 if rhs-1>size(dims,'*') then
@@ -48,9 +48,9 @@ case 0
 case 1
   M=v(I+1)
 case 2
-  M=matrix(v,dims1(1),dims1(2))
+  M=matrix(v(I+1),dims1(1),dims1(2))
 else
-  M=mlist(['hm','dims','entries'],dims1,v)
+  M=mlist(['hm','dims','entries'],dims1,v(I+1))
 end
 
 

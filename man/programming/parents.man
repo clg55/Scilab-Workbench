@@ -6,6 +6,7 @@ parents ( ) - left and right parenthesis
 .nf
 (expression)
 [...]=func(e1,e2,...)
+[x1,x2,...]=(e1,e2,...)
 x(i,j)
 v(i)
 [...]=l(i)
@@ -37,6 +38,9 @@ arguments must be separated by comma.
 .IP *
 Select elements within vectors, matrices and lists.
 see help on extraction and insertion for more precisions
+.IP *
+[x1,x2,...]=(e1,e2,...) is equivalent to x1=e1, x2=e2, ...
+
 .SH EXAMPLE
 .nf
 3^(-1)
@@ -58,8 +62,10 @@ ss2tf(w(:,1))
 l=list(1,2,3,4)
 [a,b,c,d]=l(:)
 l($+1)='new'
-
+//
 v=%t([1 1 1 1 1])
+//
+[x,y,z]=(1,2,3)
 .fi
 .SH SEE ALSO
 colon, comma, brackets, list, extraction, insertion

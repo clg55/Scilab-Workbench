@@ -30,23 +30,24 @@ else // more than one input argument (option or generalized eigen values?)
   if stk(top)(5)<>'1' then
     txt='Eig with 2 rhs args: generalized eigen assumed. Check '
     write(logfile,'Warning: '+txt)
-    txt='//'+txt
+    txt='//!'+txt
   end  
+  m=stk(top-1)(3)
+  n=stk(top-1)(4)
   if lhs==1 then
-    al=gettempvar()
-    be=gettempvar()
-    V=lhsvarsnames()
+    al=gettempvar(1)
+    be=gettempvar(2)
     txt=[txt;
-        lhsargs([al,be,V])+' = gspec'+rhsargs([stk(top-1)(1),stk(top)(1)])+';']
-    stk=list(' ','-2','0','0','0')
+        lhsargs([al,be])+' = gspec'+rhsargs([stk(top-1)(1),stk(top)(1)])+';']
+    stk=list(al+'./'+be,'1',m,'1','1')
   else
     al=gettempvar(1)
     be=gettempvar(2)
     [V,D]=lhsvarsnames()
     txt=[txt;
         lhsargs([al,be,V])+' = gspec'+rhsargs([stk(top-1)(1),stk(top)(1)])+';'
-        D+' = '+al+'./'+be+';']
-    stk=list(list(' ','-2','0','0','0'),list(' ','-2','0','0','0'))
+        D+' = diag('+al+'./'+be+');']
+    stk=list(list(' ','-2',m,n,'1'),list(' ','-2',m,n,'1'))
   end
 end    
 

@@ -49,10 +49,14 @@ for k=1:macrhs
 end,
 
 // add predefined variable in the defined variables
-vnms=[vnms;['%i','i']],
-vtps($+1)=list('1','1','1',0)
-vnms=[vnms;['%i','j']],
-vtps($+1)=list('1','1','1',0)
+if find(vnms(:,2)=='i')==[] then
+  vnms=[vnms;['%i','i']],
+  vtps($+1)=list('1','1','1',0)
+end
+if find(vnms(:,2)=='j')==[] then
+  vnms=[vnms;['%i','j']],
+  vtps($+1)=list('1','1','1',0)
+end
 vnms=[vnms;['%nan','NaN']],
 vtps($+1)=list('1','1','1',0)
 vnms=[vnms;['%nan','nan']],
@@ -61,10 +65,15 @@ vnms=[vnms;['%inf','Inf']],
 vtps($+1)=list('1','1','1',0)
 vnms=[vnms;['%inf','inf']],
 vtps($+1)=list('1','1','1',0)
-vnms=[vnms;['%pi','pi']],
-vtps($+1)=list('1','1','1',0)
-vnms=[vnms;['%eps','eps']],
-vtps($+1)=list('1','1','1',0)
+
+if find(vnms(:,2)=='pi')==[] then
+  vnms=[vnms;['%pi','pi']],
+  vtps($+1)=list('1','1','1',0)
+end
+if find(vnms(:,2)=='eps')==[] then
+  vnms=[vnms;['%eps','eps']],
+  vtps($+1)=list('1','1','1',0)
+end
 
 
 outputs=lst(2)

@@ -12,7 +12,7 @@ x,t
 : real or complex square matrix
 .SH DESCRIPTION
 asinhm is the matrix hyperbolic  inverse sine  of the matrix x.
-Uses the formula \fVt=logm(x+sqrtm(x*x+eye))\fR.
+Uses the formula \fVt=logm(x+sqrtm(x*x+eye()))\fR.
 Results may be not reliable for non-symmetric matrix.
 .SH EXAMPLE
 .nf

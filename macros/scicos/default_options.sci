@@ -6,9 +6,15 @@ if xget('use color')==1 then
   d=xget('colormap');  
   [mc,kk]=mini(abs(d-ones(size(d,1),1)*col3d)*[1;1;1])
   if mc>.0001 then
-    #col3d=size(d,1)+1
-  else
-    #col3d=kk
+    d=[d;col3d]
+    errcatch(9999,'continue')
+    xset('colormap',d);
+    errcatch(-1)
+    if iserror(9999) then
+       errclear(9999)
+    else
+       kk=size(d,1)
+    end
   end
   options('3D')=list(%t,kk)
 else

@@ -30,8 +30,8 @@ case 'set' then
       end
   end
 case 'define' then
-  model=list(list('ifthel',-1),1,[],1,[1;1],[],[],[],[],'l',[-1 -1],[%f %f],' ',list())
-  gr_i=['txt=[''If in>=0'';'' '';'' then    else''];';
+  model=list(list('ifthel',-1),1,[],1,[1;1],[],[],[],[],'l',[-1 -1],[%t %f],' ',list())
+  gr_i=['txt=[''If in>0'';'' '';'' then    else''];';
     'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'');']
 label=string(1);
   x=standard_define([3 3],model,label,gr_i)

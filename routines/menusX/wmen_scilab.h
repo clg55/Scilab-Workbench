@@ -42,7 +42,7 @@ typedef struct {
  *********************************/
 
 #define MAXSTR 512
-extern char dialog_str[MAXSTR];
+extern char *dialog_str;
 
 typedef struct {
   char *description;      /** Title **/

@@ -170,7 +170,8 @@ write(%IO(2),[comment;' ';mat2tab(tochoose)])
 num=-1
 while num<0|num>n  then
   write(%IO(2),'Donnez le numero de votre choix')
-  num=evstr(readline())
+  t=readline()
+  [num,ierr]=evstr(t)
 end
 disp('choose:'+string(num))
 
@@ -192,11 +193,11 @@ function tab=mat2tab(str,del)
 // Copyright INRIA
 [lhs,rhs]=argn(0)
 job=0
-if rhs=1 then 
+if rhs==1 then 
   delc=' ',
 else
   delc=del(1)
-  if prod(size(del))=2 then
+  if prod(size(del))==2 then
     dell=del(2)
     dell=part(dell,1)
     job=1
@@ -208,7 +209,7 @@ blk='                              ';blk=blk+blk+blk
 lmx=[];for col=len,lmx=[lmx,maxi(col)+1],end
 
 ln=sum(lmx)+(n+1)*length(delc)
-if job=1 then
+if job==1 then
   rd=delc
   for l=2:ln-1,rd=rd+dell,end
   rd=rd+delc
@@ -224,7 +225,7 @@ for l=1:m
   end
   ll=ll+part(blk,1:lmx(n)-len(l,n))+delc
   tab=[tab;ll]
-  if job=1 then tab=[tab;rd],end
+  if job==1 then tab=[tab;rd],end
 end 
 
 function [btn,xc,yc,win,Cmenu]=xclick();
@@ -267,7 +268,7 @@ while %t do
     if part(rep,1:k)<>part(blank,1:k) then 
       str=stripblanks(part(rep,1:k-1))
       com=part(rep,k+1:length(rep))
-      if part(str,1:3)='-->' then
+      if part(str,1:3)=='-->' then
 	execstr(part(str,4:length(str)))
       else
 	break
@@ -277,7 +278,7 @@ while %t do
     n=length(rep)
     str=stripblanks(rep)
     com=emptystr()
-    if part(str,1:3)='-->' then
+    if part(str,1:3)=='-->' then
       execstr(part(str,4:length(str)))
     else
       break

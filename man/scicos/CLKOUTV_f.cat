@@ -1,7 +1,7 @@
 
-CLKOUT_f(5)                     Scicos Block                      CLKOUT_f(5)
+CLKOUTV_f(5)                    Scicos Block                     CLKOUTV_f(5)
 NAME
-  CLKOUT_f - Scicos Super Block event output port
+  CLKOUTV_f - Scicos Super Block event output port
 
 DESCRIPTION
   This block must only be used inside Scicos Super Blocks to represent an
@@ -15,4 +15,4 @@ DIALOGUE PARAMETERS
   Port number    : an integer giving the port number.
 
 SEE ALSO
-  IN_f, OUT_f, CLKIN_f
+  IN_f, OUT_f, CLKINV_f

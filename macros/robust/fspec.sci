@@ -1,4 +1,5 @@
-function [gm]=fspec(g) computes a spectral factorization:
+function [gm]=fspec(g) 
+// computes a spectral factorization:
 //        g = gtild(gm)*gm
 //with stable gm and gm^-1  ( gm^-1 = invsyslin(gm) ).
 //-- g: syslin list defining the linear system g

@@ -29,4 +29,4 @@ DESCRIPTION
   Error -28 means: pvm_start_pvmd(): Duplicate host
 
 SEE ALSO
-  pvm_halt, pvm_addhosts, pvm_config, pvm_error
+  pvm_halt, pvm_addhosts, pvm_config

@@ -87,16 +87,17 @@ SciCreateDirectory(
     int error;
 
     if (CreateDirectory(path, NULL) == 0) {
-	error = GetLastError();
-	if (SciWinGetPlatformId() == VER_PLATFORM_WIN32s) {
-	    if ((error == ERROR_ACCESS_DENIED) 
-		    && (GetFileAttributes(path) != (DWORD) -1)) {
-		error = ERROR_FILE_EXISTS;
-	    }
+      error = GetLastError();
+      if (SciWinGetPlatformId() == VER_PLATFORM_WIN32s) {
+	if ((error == ERROR_ACCESS_DENIED) 
+	    && (GetFileAttributes(path) != (DWORD) -1)) {
+	  error = ERROR_FILE_EXISTS;
 	}
-	SciWinConvertError(error);
-	sciprint("Cannot create directory %s\r\n",path);
-	return SCI_ERROR;
+      }
+      SciWinConvertError(error);
+      if (errno == EEXIST) {return SCI_OK;}
+      sciprint("Cannot create directory %s\r\n",path);
+      return SCI_ERROR;
     }   
     return SCI_OK;
 }

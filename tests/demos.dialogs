@@ -322,15 +322,15 @@
         1   //output window
         [122;172]     //output window position
         [600;400]     //output window size
-        -16    //ymin
+        -15    //ymin
         15     //ymax
         30     //refresh period
-        20      //buffer size
+        2      //buffer size
         1      // Accept herited events
         o      //ok
      -2,0,450,-1,'execstr(Simulate_0(4))'//Run
         2//restart
-     -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+     -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
     Exit
   2 // Continuous plant ..
        -2,0,450,-1,'execstr(Object_0(1))' //Open
@@ -339,26 +339,26 @@
     1+s //denominator
     o   //ok
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
     Exit
   3 //Simple demo
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
     Exit
   4 //Bouncing Ball
        -2,0,450,-1,'execstr(Object_0(1))' //Open
        0,253.8,232.4,0,' ' // Block
-       -2,0,450,-1,'execstr(Diagram_1(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_1(16))'//Exit
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
     Exit
   5 //Table Lookup
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
     Exit
   6 //Threshold
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
     Exit
   7 //Scilab Block
        -2,0,450,-1,'execstr(Object_0(1))' //Open
@@ -376,7 +376,7 @@
         o //ok
         z=-z
         o //ok
-        t_evo=(5*rand)^2+t
+        t_evo=(5*rand())^2+t
         o //ok
 
         o //ok
@@ -385,25 +385,25 @@
 
         o //ok
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
        Exit
   8 //Thermostat
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
   9 // Fibonacci
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
   10 // Cont.Disc-Observer
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
        Exit
   11 // Controller
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
        Exit
   12 // system observer
        -2,0,450,-1,'execstr(Simulate_0(4))' //Run
-       -2,0,450,-1,'execstr(Diagram_0(14))'//Exit
+       -2,0,450,-1,'execstr(Diagram_0(16))'//Exit
        Exit
   0 //Exit scicos demo
 27  // sounds
@@ -429,39 +429,38 @@
   1 //Generalized Weierstrass Synthesys and Local Holder Estimation
     1024 //length
     0.2  //Holder: starting value
-    0.8	 //Holder: ending value
-    0	 //smoothness of Holder fnc
-    2	 //lambda
-    1	 //time support
+    0.8  //Holder: ending value
+    0  //smoothness of Holder fnc
+    2  //lambda
+    1  //time support
     slope//limit time
     o //OK
   2 //Binomial Measure Synthesis ans Multifractal Spectrum Est
     0.3 0.7 //weight
-    10	    //number of cascades
+    10     //number of cascades
     1 8 4   //Min scale, max scale, Nb scale
-    dec	    // Scale progression
+    dec     // Scale progression
     cent    //Ball type
-    200	    //Holder sampling rate
+    200     //Holder sampling rate
     o //OK
   3 // fBm Synthesis ans Wavelet transform
-    512	    //Number of time samples
-    0.5	    //Holder exponent
+    512     //Number of time samples
+    0.5     //Holder exponent
     1 5 128 //Min scale, max scale, Nb scale
     Morlet  //Wavelet type
     o //OK
   3 // fBm Synthesis ans Wavelet transform
-    512	    //Number of time samples
-    0.5	    //Holder exponent
+    512     //Number of time samples
+    0.5     //Holder exponent
     1 5 128 //Min scale, max scale, Nb scale
     Mexican  //Wavelet type
     o //OK
   4 //Alpha stable process synthesis and estimation
     1.5  // Characteristic exponent
-    0	 // Skewness parameter
-    0	 // Location parameter
-    1	 // Scale parameter
+    0  // Skewness parameter
+    0  // Location parameter
+    1  // Scale parameter
     5000 // Sample size
     o //OK
-    o //OK    (estimated alpha...)
   0 //exit fractal demo
 0 //EXIT DEMOS

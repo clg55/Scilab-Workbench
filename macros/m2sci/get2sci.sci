@@ -30,6 +30,9 @@ if vn==[] then // variable is not defined yet
       if isanmfile(nam) then
 	// a m_file without parameter
 	stk(top)=list()
+      elseif exists('sci_nam')==1 then
+	// a translated function without parameter
+	stk(top)=list()
       else
 	//a global variable
 	stk(top)=list(nam,'0','0','1','2')

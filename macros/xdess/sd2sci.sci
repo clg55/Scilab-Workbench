@@ -1,6 +1,13 @@
 function txt=sd2sci(sd,zoom,orig)
 // Copyright INRIA
+[l,mac]=where()
+scsmode=find(mac=='scicos')<>[]
 [lhs,rhs]=argn(0)
+pat=33
+thick=1
+fnt=[2 1]
+dash=33
+symb=[0 0]
 if sd(1)<>'sd' then error('first argument has incorrect data type'),end
 if rhs<3 then orig=['0';'0'],end
 if type(orig)==1 then zoom=string(orig),end
@@ -39,7 +46,9 @@ for k=3:size(sd)
       w=string(abs(x1-x2));
       yi=string(max(y1,y2));
       h=string(abs(y1-y2));
-      txt=[txt;'xrects(['+strcat([zsx(xi),zsy(yi),zx(w),zy(h)],';')+'],1);']  
+      color=string(pat)
+      if scsmode then color='scs_color('+color+')',end
+      txt=[txt;'xrects(['+strcat([zsx(xi),zsy(yi),zx(w),zy(h)],';')+'],'+color+');']  
     case 'fleche' then
       x=round(dx*o(2))/dx;y=round(dy*o(3))/dy
       txt=[txt;'xarrows('+zsx(sci2exp(x))+','+zsy(sci2exp(y))+',-1,-1);']
@@ -73,13 +82,21 @@ for k=3:size(sd)
       y=zsy(string(round(dy*z(2))/dy))
       txt=[txt;'xstring('+strcat([x,y,com,'0,0'],',')+');']
     case 'patts' then
-      txt=[txt;'xset(''pattern'','+string(o(2))+')']
+      color=string(o(2))
+      if scsmode then color='scs_color('+color+')',end
+      txt=[txt;'xset(''pattern'','+color+')']
+      pat=o(2)
     case 'thick' then
       txt=[txt;'xset(''thickness'','+string(o(2))+')']  
+      thick=o(2)
     case 'symbs' then
       txt=[txt;'xset(''mark'','+string(o(2))+','+string(o(3))+')']
+      symb=[o(2),o(3)]
     case 'dashs' then
-      txt=[txt;'xset(''dashes'','+string(o(2))+')']
+      color=string(o(2))
+      if scsmode then color='scs_color('+color+')',end
+      txt=[txt;'xset(''dashes'','+color+')']
+      dash=o(2)
     case 'fligne' then
       z=o(2)';
       x=zsx(strcat(sci2exp(round(dx*z(:,1))/dx)))
@@ -101,6 +118,7 @@ for k=3:size(sd)
 
     end
   end
+  
 end
 function t=zx(t)
 if zoom(1)<>'1' then t($)=mulf(t($),zoom(1)),end

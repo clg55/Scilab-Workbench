@@ -9,11 +9,11 @@ function f=%p_m_r(p,f)
 indef=%f
 if l1==-1 then 
   p=p+0;l1=1;m1=1;
-  if l2*m2==1 then indef=%t,end
+  if l2*m2==1 then indef=%t,else error(14),end
 end
 if l2==-1 then 
   n2=n2+0;d2=d2+0;l2=1;m2=1;
-  if l1*m1==1 then indef=%t,end
+  if l1*m1==1 then indef=%t,else error(14),end
 end  
 
 if mini([l1*m1,l2*m2])==1 then
@@ -36,8 +36,8 @@ else
 end
 [num,den]=simp(num,den)
 if indef then
-  num=num*eye
-  den=den*eye
+  num=num*eye()
+  den=den*eye()
 end
 f(2)=num,f(3)=den;
 

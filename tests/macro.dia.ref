@@ -979,7 +979,7 @@ deff('[r]=horner(p,x)',['if type(p)==15|type(p)==16 then';
                         'd=maxi(degree(p));';
                         'r=coeff(p,d);';
                         'for k=1:d,';
-                          'r=r*x+coeff(p,d-k)*eye;';
+                          'r=r*x+coeff(p,d-k)*eye();';
                         'end;'],'n')
 Warning :redefining function: horner                  
  

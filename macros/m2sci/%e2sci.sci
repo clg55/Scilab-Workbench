@@ -17,7 +17,7 @@ if rhs==1 then
     stk=list(sn(1)+'('+s2(1)+')','0','?','1',sn(5))
   else
     v='mtlb_e'+rhsargs([sn(1),s2(1)])
-    txt='// '+v+' may be replaced by '+sn(1)+'('+s2(1)+')'+' if '+sn(1)+' is a vector.'
+    txt='//! '+v+' may be replaced by '+sn(1)+'('+s2(1)+')'+' if '+sn(1)+' is a vector.'
     stk=list(v,'0','?','?',sn(5))
   end
 else

@@ -35,4 +35,5 @@ typedef struct {
   integer *clkptr; /* block types */
   integer *ordptr; /* block types */
   integer *critev; /* block types */
+  integer *iwa; /* integer work space 2*nblk */
 } ScicosImport;

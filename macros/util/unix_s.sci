@@ -16,11 +16,15 @@ function unix_s(cmd)
 if prod(size(cmd))<>1 then   error(55,1),end
 
 if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
-	cmd1= cmd + ' > '+ strsubst(TMPDIR,'/','\')+'\unix.out';
+  tmp=strsubst(TMPDIR,'/','\')+'\unix.out';
+  cmd1= cmd + ' > '+ tmp;
 else 
-	cmd1='('+cmd+')>/dev/null 2>'+TMPDIR+'/unix.err;';
+  cmd1='('+cmd+')>/dev/null 2>'+TMPDIR+'/unix.err;';
 end 
 stat=host(cmd1);
+if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+  host('del '+tmp);
+end
 select stat
 case 0 then
 case -1 then // host failed
@@ -33,4 +37,3 @@ else //sh failed
 	error('unix_s: '+msg(1))
   end 
 end
-

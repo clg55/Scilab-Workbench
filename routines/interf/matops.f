@@ -254,11 +254,16 @@ c     .  cst*a
          sr = stk(l1)
          si=0.0d+0
          if(it1.eq.1) si = stk(l1+1)
-         if (m1.lt.0.and.mn2.eq.1) then
+         if (m1.lt.0) then
+            if(mn2.eq.1) then
 c     .     eye*cst
-            istk(il1+1)=m1
-            istk(il1+2)=n1
-            istk(il1+3)=itr
+               istk(il1+1)=m1
+               istk(il1+2)=n1
+               istk(il1+3)=itr
+            else
+               call error(14)
+               return
+            endif
          else
             istk(il1+1)=m2
             istk(il1+2)=n2
@@ -291,6 +296,10 @@ c     .     la matrice et le scalaire sont complexes
          lstk(top+1)=l1+mn2*(itr+1)
       elseif (mn2 .eq. 1) then
 c     .  a*cst
+         if(m2.lt.0) then
+            call error(14)
+            return
+         endif
          it21=it2+2*it1
          if(it21.eq.0) then
 c     .     la matrice et le scalaire sont reel
@@ -362,6 +371,10 @@ c     .  a/[] or []/a
          goto 999
       endif
       if (mn2 .ne. 1) then
+         if(m1.lt.0) then
+            call error(14)
+            return
+         endif
          if (m2 .eq. n2) fun = 1
          if (m2 .ne. n2) fun = 4
          fin = -1
@@ -369,6 +382,10 @@ c     .  a/[] or []/a
          rhs = 2
       else
 c     .  vector / cst
+         if(m2.lt.0.and.mn1.ne.1) then 
+            call error(14)
+            return
+         endif
          istk(il1+1)=m1
          istk(il1+2)=n1
          istk(il1+3)=itr
@@ -421,6 +438,10 @@ c     .  a\[] or []\a
          goto 999
       endif
       if (m1*n1 .ne. 1) then
+         if(m2.lt.0) then
+            call error(14)
+            return
+         endif
          if (m1 .eq. n1) fun = 1
          if (m1 .ne. n1) fun = 4
          top = top+1
@@ -428,6 +449,10 @@ c     .  a\[] or []\a
          rhs = 2
       else
 c     .  cst \ vector
+         if(m1.lt.0.and.mn2.ne.1) then 
+            call error(14)
+            return
+         endif
          istk(il1+1)=m2
          istk(il1+2)=n2
          istk(il1+3)=itr
@@ -820,6 +845,10 @@ c     [].*a     a.*[]  -->[]
          lstk(top+1)=sadr(il1+4)
          goto 999
       endif
+      if(n1.lt.0.and.mn2.ne.1.or.n2.lt.0.and.mn1.ne.1) then
+         call error(14)
+         return
+      endif
       if(mn1.ne.1.and.mn2.ne.1) then
 c       check dimensions
          if (m1.ne.m2 .or. n1.ne.n2) then
@@ -1108,6 +1137,10 @@ c
 c     extraction
 c     
  78   continue
+      if(rhs.lt.2) then
+         call error(227)
+         return
+      endif
       if(rhs.gt.2) goto 82
 c     arg2(arg1)
       if (istk(il1).eq.0) then
@@ -1388,6 +1421,24 @@ c     .  arg3 is not a vector
          endif
          mr=m3
          nr=n3
+
+c     commented lines for matlab compatibility
+c      elseif (n3.le.1.and.m3.le.1) then
+c         if(n2.le.1) then
+c            mr=max(m3,mxi)
+c            nr=max(n3,1)
+c         else
+c            nr=max(n3,mxi)
+c            mr=max(m3,1)
+c         endif
+c      elseif (n3.le.1) then
+c     .  arg3 and arg2 are  column vectors
+c         mr=max(m3,mxi)
+c         nr=max(n3,1)
+c      elseif (m3.le.1) then
+c     .  row vectors
+c         nr=max(n3,mxi)
+c         mr=max(m3,1)
       elseif (n3.le.1.and.n2.le.1) then
 c     .  arg3 and arg2 are  column vectors
          mr=max(m3,mxi)
@@ -1794,7 +1845,8 @@ c     .  eye op b
          endif
       else if(max(it1,it2).eq.1) then
          if(op.ne.equal.and.op.ne.less+great) then
-            call error(57)
+            fin=-fin
+            top=top0
             return
          endif
          itrue=1
@@ -1818,7 +1870,8 @@ c     .  eye op b
          istk(il1)=4
          if(mn1.eq.0) then
             if(op.ne.equal.and.op.ne.less+great) then
-               call error(57)
+               call error(226)
+               return
             else
                istk(il1+1)=1
                istk(il1+2)=1

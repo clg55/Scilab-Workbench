@@ -10,6 +10,7 @@ bool2s - convert boolean matrix to a zero one matrix.
 boolean - scilab objects, boolean variables and operators & | ~  
 brackets ([,]) - left and right brackets  
 break - keyword to interrupt loops  
+call - fortran or c user routines call  
 case - keyword used in select  
 ceil - rounding up  
 chdir - changes scilab current directory  
@@ -82,7 +83,7 @@ lines - rows and columns used for display
 link - dynamic link  
 list - scilab object and list function definition  
 load - load saved variable  
-lsslist - scilab linear state space t function definition  
+lsslist - scilab linear state space function definition  
 lstcat - list concatenation  
 macro - scilab procedure and scilab object  
 matrices - scilab object, matrices in scilab  
@@ -94,6 +95,7 @@ mini - minimum
 minus (-) - substraction operator, sign changes  
 mode - select a mode in exec file  
 mtlb_mode - switch matlab like operations  
+names - scilab names syntax  
 newfun - add a name in the table of functions  
 not (~) - logical not  
 null - delete an element in a list  
@@ -147,6 +149,7 @@ str2code - return scilab integer codes associated with a character string
 string - conversion to string  
 strings - scilab object, character strings  
 symbols - scilab operator names  
+testmatrix - generate some particular matrices  
 then - keyword in if-then-else  
 tilda (~) - logical not  
 tlist - scilab object and typed list definition.  

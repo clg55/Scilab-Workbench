@@ -14,7 +14,7 @@ path
 loads all function defined in the directory .sci  files 
 .SH EXAMPLE
 .nf
-	getd('SCI/macros/auto')
+getd('SCI/macros/auto')
 .fi
 .SH SEE ALSO
 getf, lib

@@ -7,6 +7,10 @@ deff('[modek]=clearmode()',['modek=xget(''alufunction'')';
   
 deff('[]=modeback(x)','xset(''alufunction'',x);');
 
+[l,mac]=where();scsmode=find(mac=='scicos')<>[]
+alu=xget('alufunction')
+if scsmode then xset('alufunction',6),end
+
 dash=['0        continue';
       '1        {2,5,2,5}';
       '2        {5,2,5,2}';
@@ -19,18 +23,20 @@ dash=['0        continue';
 if rhs<=1,flag=0;end;
 if rhs<=2,noframe=0;end;
 if rhs <=0 then
-     cdef=[0 0 100 100];init=1
-           else
-     select type(sd)
-       case 1 then cdef=sd;init=1
-       case 15 then
-            if sd(1)<>'sd' then
-               error('l''entree n''est pas une liste de type sd'),
-            end
-            cdef=sd(2);init=0
-       else error('incorrect input:'+...
-                   '[xmin,ymin,xmax,ymax] ou list(''sd'',,,)')
-     end
+  cdef=[0 0 100 100];init=1
+else
+  select type(sd)
+  case 1 then 
+    cdef=sd;init=1
+  case 15 then
+    if sd(1)<>'sd' then
+      error('l''entree n''est pas une liste de type sd'),
+    end
+    cdef=sd(2);init=0
+  else 
+    error('incorrect input:'+...
+	'[xmin,ymin,xmax,ymax] ou list(''sd'',,,)')
+  end
 end
 if noframe==1;s_t="010";else s_t="012";end
 plot2d(0,0,[1],s_t,' ',cdef);
@@ -40,7 +46,7 @@ xclip('clipgrf')
 menu_o=['rectangle','frectangle','circle','fcircle','polyline',...
 	'fpolyline','spline','arrow','points','caption']
 menu_s=['dash style','pattern','thickness','mark','clip off','clip on']
-menu_e=['redraw','pause','delete','move','group','Exit']
+menu_e=['redraw','pause','delete','move','Exit']
 menus=list(['Objects','Settings','Edit'],menu_o,menu_s,menu_e)
 w='menus(2)(';rpar=')'
 Objects=w(ones(menu_o))+string(1:size(menu_o,'*'))+rpar(ones(menu_o))
@@ -66,6 +72,7 @@ while %t then
   select Cmenu
   case 'Exit' then
     fin='ok'
+    xset('alufunction',alu)
     break
   case 'rectangle'  then 
     xinfo('rectangle '); 
@@ -177,7 +184,7 @@ while %t then
       sd(ksd+1)=new
     end
   case 'group' then
-    sd=group(sd)
+    sd=sdgroup(sd)
   end  // fin select 
 end, // fin while
 xset("default");

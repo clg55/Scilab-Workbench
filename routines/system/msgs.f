@@ -75,6 +75,8 @@ c---------------------- message d'obsolescence -----------------------------
       call showstack()
       goto 9999
  108  continue
+      call basout(io,wte,' Warning: obsolete use of eye rand or ones')
+      call showstack()
       goto 9999
  109  continue
       goto 9999
@@ -378,9 +380,15 @@ c---------------------- message for intg int2d and int3d---------------
       goto 9999
  189  continue
       goto 9999
+c     message for scicos
+c
  190  continue
+      call basout(io,wte
+     $     ,'Too many input/output ports for hilited block')
       goto 9999
  191  continue
+      call basout(io,wte
+     $     ,'Too many input/output entries for hilited block')
       goto 9999
  192  continue
       goto 9999
@@ -399,6 +407,7 @@ c---------------------- message for intg int2d and int3d---------------
  199  continue
       goto 9999
  200  continue
+      call basout(io,wte,'Undefined display for this data type')
       goto 9999
  201  continue
       goto 9999

@@ -1,10 +1,12 @@
-function [sl]=tf2ss(h)
+function [sl]=tf2ss(h,tol)
 // Transfer function to state-space.
-//Syntax : sl=tf2ss(h)
+//Syntax : sl=tf2ss(h [,tol])
 // h = transfer matrix 
 // sl = linear system in state-space representation (syslin list)
 //!
 // Copyright INRIA
+[lhs,rhs]=argn(0)
+
 if type(h)<=2 then 
   sl=syslin([],[],[],[],h);return;
 end
@@ -43,7 +45,11 @@ if n1<>0 then
   b=b*fact/nrmb;c=c*fact/nrmc;
   [a,u]=balanc(a);c=c*u;b=u\b; 
 
-  [no,u]=contr(a',c');
+  if rhs<2 then 
+    [no,u]=contr(a',c');
+  else
+    [no,u]=contr(a',c',tol);
+  end
   u=u(:,1:no);
   a=u'*a*u;b=u'*b;c=c*u;
   [a,u]=balanc(a);c=c*u;b=u\b; 

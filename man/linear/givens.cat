@@ -6,20 +6,24 @@ NAME
 CALLING SEQUENCE
   U=givens(xy)
   U=givens(x,y)
+  [U,c]=givens(xy)
+  [U,c]=givens(x,y)
 
 PARAMETERS
 
   x,y  : two real or complex numbers
 
-  xy   : 1x2 real or complex matrix
+  xy   :  real or complex size 2 column vector
 
   U    : 2x2 unitary matrix
+
+  c    :  real or complex size 2 column vector
 
 DESCRIPTION
   U = givens(x, y) or U = givens(xy) with xy = [x;y] returns a 2x2 unitary
   matrix U such that:
 
-  U*xy=[r;0].
+  U*xy=[r;0]=c.
 
   Note that givens(x,y) and givens([x;y]) are equivalent.
 

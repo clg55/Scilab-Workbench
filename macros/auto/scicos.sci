@@ -20,12 +20,7 @@ if ~super_block then
   if exists('blockslib')==0 then load('SCI/macros/scicos_blocks/lib'),end
 end
 
-if rhs>1 then 
-  win=xget('window')
-  systshow(scs_m,win),
-  xset('window',win);
-  return,
-end
+
 
 scicos_ver='scicos2.4' // set current version of scicos
 
@@ -34,6 +29,7 @@ newparameters=list()
 enable_undo=%f
 edited=%f
 path='./'
+exp_dir=PWD
 
 
 if ~super_block then // global variables
@@ -69,6 +65,7 @@ if type(scs_m)<>15 then error('first argument must be a scicos list'),end
 
 
 
+
 //Menu definitions
  
 menu_e=['Palettes','Context','Smart Move','Move','Copy','Copy Region',..
@@ -77,8 +74,8 @@ menu_e=['Palettes','Context','Smart Move','Move','Copy','Copy Region',..
 menu_s=['Setup','Compile','Eval','Run']
 menu_f=['Replot','New','Region to Super Block','Purge','Rename','Save','Save As',..
 	'Load','Load as Palette','Save as Palette','Save as Interf. Func.',..
-	'Set Diagram Info','Navigator','Exit']
-menu_b=['Open/Set','Resize','Icon','Color','Label','Get Info','Set block ID']
+	'Set Diagram Info','Navigator','Export','Export All','Exit']
+menu_b=['Open/Set','Resize','Icon','Icon Editor','Color','Label','Get Info','Set block ID']
 menu_v=['Window','Background color','Default link colors','ID fonts','3D aspect',..
 	'Add color','Focus','Shift','Zoom in','Zoom out','Help','Calc']
 
@@ -111,6 +108,18 @@ if ~super_block then
   noldwin=0
   windows=[1 curwin]
   pixmap=xget('pixmap')==1
+//
+oldfont=xget('font')
+
+%rect=[];
+for i=0:5
+  xset('font',oldfont(1),i)
+  ktmp=xstringl(0,0,['this is a test'])
+  %rect=[%rect;[ktmp(3)  ktmp(4)  ]  ]
+end
+//%rect=%rect/%rect(1)
+xset('font',oldfont(1),oldfont(2))
+//
 else
   noldwin=size(windows,1)
   windows=[windows;slevel curwin]
@@ -134,8 +143,9 @@ xbasc();xselect()
 dr=driver();driver('Rec');
 set_background()
 
-wech=[1100/1085 790/705]  // ration between xset and xget wdim
-//wdm=xget('wdim').*wech
+wech=[1.0150115 1.120582]  // ration between xset and xget wdim
+if getenv('WIN32','NO')=='OK' then wech=[1 1];end
+
 wsiz=wpar(1)
 xset('wdim',wsiz(1),wsiz(2))
 if size(wsiz,'*')<5 then wsiz(5)=wsiz(1);wsiz(6)=wsiz(2);end
@@ -146,7 +156,9 @@ xset('alufunction',6)
 
 unsetmenu(curwin,'File',1) //clear
 unsetmenu(curwin,'File',2) //select
-//unsetmenu(curwin,'File',7) //close
+unsetmenu(curwin,'File',3) //print
+unsetmenu(curwin,'File',4) //export
+unsetmenu(curwin,'File',7) //close
 unsetmenu(curwin,'File',6) //load
 unsetmenu(curwin,'3D Rot.')
 
@@ -157,6 +169,8 @@ execstr('Misc_'+string(curwin)+'=Misc')
 execstr('Diagram_'+string(curwin)+'=Diagram')
 
 scs_m(1)(1)(2)=maxi(scs_m(1)(1)(2),450)
+
+
 
 //draw diagram and menus
 drawobjs(scs_m)
@@ -195,7 +209,7 @@ while %t
   case 'Exit' then  // OK
     Cmenu=[]
     wdm12=round(xget('wdim').*wech)
-    if maxi(abs(scs_m(1)(1)(1:2)-wdm12))>10 then
+    if maxi(abs((scs_m(1)(1)(1:2)-wdm12))./wdm12)>0.05 then
       scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
       edited=%t
     end
@@ -248,7 +262,7 @@ while %t
     xinfo(' ')
 //    edited=%t
   case 'Align' then
-    Cmenu=[]
+//    Cmenu=[]
     xinfo('Click on an a port , click on a port of object to be moved')
     scs_m_save=scs_m;nc_save=needcompile;
     scs_m=prt_align(scs_m)
@@ -277,7 +291,7 @@ while %t
     xinfo(' ')
 //    edited=%t
   case 'Undo' then
-    Cmenu=[]
+    Cmenu='Open/Set'
     if enable_undo then
       disablemenus()
       scs_m=scs_m_save;needcompile=nc_save
@@ -295,34 +309,40 @@ while %t
     disablemenus()
     xset('alufunction',3);xbasc();xselect();xset('alufunction',6);
     wdm12=round(xget('wdim').*wech)
-    scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
+    if maxi(abs((scs_m(1)(1)(1:2)-wdm12))./wdm12)>0.05 then
+      scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
+      edited=%t
+    end
     wdm=scs_m(1)(1)
     xsetech([-1 -1 8 8]/6,[wdm(3),wdm(4),wdm(3)+wdm(5),wdm(4)+wdm(6)])
     drawobjs(scs_m),
+    if pixmap then xset('wshow'),end
     enablemenus()
   case 'Window' then
-    Cmenu=[]
+    Cmenu='Open/Set'
     disablemenus()
     wdm12=round(xget('wdim').*wech)
     scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
-    wpar=scs_m(1);wd=wpar(1);
+    wpar=scs_m(1);wdx=wpar(1);
     wpar=do_window(wpar)
     edited=or(wpar<>scs_m(1))
-    if or(wd<>wpar(1)) then
+    if or(wdx<>wpar(1)) then
       xset('alufunction',3);xbasc();xselect();xset('alufunction',6);
       wd=wpar(1)
       xset('wdim',wd(1),wd(2)),
       wdm12=round(xget('wdim').*wech)
       scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
       wdm=scs_m(1)(1)
+      wdm(5:6)=(wd(1:2)./wdx(1:2)).*wdm(5:6)
+      scs_m(1)(1)(5)=wdm(5);scs_m(1)(1)(6)=wdm(6);
       xsetech([-1 -1 8 8]/6,[wdm(3),wdm(4),wdm(3)+wdm(5),wdm(4)+wdm(6)])
       drawobjs(scs_m),
       if pixmap then xset('wshow'),end
     end
-    scs_m(1)=wpar
+//    scs_m(1)=wpar
     enablemenus()
   case 'Setup' then
-    Cmenu=[]
+    Cmenu='Open/Set'
     wpar=do_setup(scs_m(1))
     scs_m(1)=wpar
   case 'Context' then
@@ -332,14 +352,20 @@ while %t
       if ~ok then break,end
       ierr=execstr(context,'errcatch')
       if ierr==0 then 
-	scs_m(1)(5)=context;break,
+	scs_m(1)(5)=context;
+  	disablemenus()
+        [scs_m,cpr,needcompile,ok]=do_eval(scs_m,cpr)
+        if needcompile<>4 then state0=cpr(1),end
+        alreadyran=%f
+        enablemenus()
+  break,
       else
 	message(['Incorrect context definition,';
 	         'see message in Scilab window'])
       end
     end
   case 'Compile' then
-    Cmenu=[]
+    Cmenu='Open/Set'
     [cpr,ok]=do_compile(scs_m)
     if ok then
       newparameters=list()
@@ -351,38 +377,39 @@ while %t
       needcompile=4,
     end
   case 'Run' then
-    Cmenu=[]
+    Cmenu='Open/Set'
     ok=%t
     [ok,tcur,cpr,alreadyran,needcompile,state0]=do_run(cpr)
     if ok then newparameters=list(),end
   case 'Rename' then
-    Cmenu=[]
-    scs_m=do_rename(scs_m) 
+    Cmenu='Open/Set'
+    [scs_m,edited]=do_rename(scs_m) 
   case 'Save' then
-    Cmenu=[]
+    Cmenu='Open/Set'
     wdm12=round(xget('wdim').*wech)
     scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
 
     ok=do_save(scs_m) 
-    if ok then edited=%f,end
+    if ok&~super_block then edited=%f,end
   case 'Save As' then
     wdm12=round(xget('wdim').*wech)
     scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
     disablemenus()
-    Cmenu=[]
-    [scs_m,edited]=do_SaveAs()
+    Cmenu='Open/Set'
+    [scs_m,editedx]=do_SaveAs()
+    if ~super_block then edited=editedx;end
     enablemenus()
   case 'FSave' then
     wdm12=round(xget('wdim').*wech)
     scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
-
-    Cmenu=[]
+    Cmenu='Open/Set'
     ok=do_fsave(fscs_m)
-    edited=edited&~ok
+    if ~super_block then edited=edited&~ok; end
   case 'Load' then
     Cmenu='Open/Set'
     disablemenus()
     [ok,scs_m,cpr,edited]=do_load()
+    if super_block then edited=%t;end
     if ok then
       wpar=scs_m(1);
       options=wpar(7)
@@ -391,11 +418,12 @@ while %t
       end
       wdm=wpar(1)
       xset('alufunction',3);xbasc();xselect();
+      set_background()
       xset('wdim',wdm(1),wdm(2))
       if size(wdm,'*')<5 then wdm(5)=wdm(1);wdm(6)=wdm(2);scs_m(1)(1)=wdm;end
       xsetech([-1 -1 8 8]/6,[wdm(3),wdm(4),wdm(3)+wdm(5),wdm(4)+wdm(6)])
       xselect();
-      set_background()
+
       xset('alufunction',6)
       drawobjs(scs_m),
       execstr(scs_m(1)(5)) ,
@@ -410,8 +438,10 @@ while %t
     end
     enablemenus()
   case 'Purge' then
-    Cmenu=[]
+    Cmenu='Open/Set'
+    disablemenus()
     scs_m=do_purge(scs_m);
+    enablemenus()
     needcompile=4;
     edited=%t
 
@@ -507,8 +537,11 @@ while %t
       end
     end
   case 'Region to Super Block' then
+    Cmenu='Open/Set'
     xinfo(' Click, drag region and click (left to fix, right to cancel)')
+    disablemenus()
     scs_m=do_region2block(scs_m)
+    enablemenus()
   case 'Nyquist' then
     syst=analyse(scs_m)
     sl=bloc2ss(syst)
@@ -571,7 +604,7 @@ while %t
     xinfo(' ')
     edited=%t
   case 'Icon' then
-    Cmenu=[]
+//    Cmenu=[]
     xinfo('Click on block to edit its icon')
     scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
     scs_m=do_block(scs_m)
@@ -600,7 +633,7 @@ while %t
     edited=edited|mod
     xinfo(' ')
   case 'Eval' then
-    Cmenu=[]
+    Cmenu='Open/Set'
     disablemenus()
     [scs_m,cpr,needcompile,ok]=do_eval(scs_m,cpr)
     if needcompile<>4 then state0=cpr(1),end
@@ -627,16 +660,21 @@ while %t
     [palettes,windows]=do_load_as_palette(palettes,windows)
   case 'Save as Palette' then
     Cmenu=[]
+    wdm12=round(xget('wdim').*wech)
+    scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
     spmode=pal_mode
     pal_mode=%t
-    [scs_m,edited]=do_SaveAs()
+    [scs_m,editedx]=do_SaveAs()
+    if ~super_block then edited=editedx,end
     pal_mode=spmode
   case 'FSave as Palette' then
     Cmenu=[]
+    wdm12=round(xget('wdim').*wech)
+    scs_m(1)(1)(1)=wdm12(1);scs_m(1)(1)(2)=wdm12(2);
     spmode=pal_mode
     pal_mode=%t
     ok=do_fsave(scs_m)
-    edited=edited&~ok
+    if ok&~super_block then edited=%f,end
     pal_mode=spmode
   case 'Background color' then
     Cmenu=[]
@@ -686,6 +724,41 @@ while %t
   case 'Navigator' then
     [Tree,windows]=do_navigator(scs_m,windows)
     Cmenu='Open/Set'
+  case 'Export' then
+    do_export(scs_m)
+    Cmenu='Replot'
+  case 'Export All' then
+    lwin=xget('window')
+    oh=%t
+    while oh==%t
+      oh=%f
+      exp_dir=x_dialog('Directory where exported figures are placed',exp_dir)
+      if size(exp_dir,'*')>1 then x_message('Try again');oh=%t;end
+    end
+    if exp_dir<>[] then 
+    systexport(scs_m,exp_dir),
+    if getenv('WIN32','NO')=='OK' then
+      fname=exp_dir+'\'+'navigator'
+    else
+      fname=exp_dir+'/'+'navigator'
+    end
+    [junk,jwin]=do_navigator(scs_m,windows)
+    winc=jwin(find(jwin(:,1)==100000),2)
+    xbasimp(winc,fname)
+    if getenv('WIN32','NO')=='OK' then
+      unix_g(''"'+SCI+'\bin\BEpsf'" -landscape '+fname+'.'+string(winc))
+    else
+      unix_g(SCI+'/bin/BEpsf -landscape '+fname+'.'+string(winc))
+    end
+    xdel(winc)
+//
+    xset('window',lwin)
+    xset('wdim',scs_m(1)(1)(1),scs_m(1)(1)(2))
+    set_background()
+    Cmenu='Replot'
+    else
+    Cmenu=[]
+    end
   else
     Cmenu=[]
   end

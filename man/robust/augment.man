@@ -68,10 +68,10 @@ Note that weighting functions can be introduced by left-multiplying
 Sensitivity functions can be calculated by \fVlft\fR. One has:
 .LP
 For output sensitivity functions [P,r]=augment(P,'SRT'):
-lft(P,r,K)=[inv(eye+G*K);K*inv(eye+G*K);G*K*inv(eye+G*K)];
+lft(P,r,K)=[inv(eye()+G*K);K*inv(eye()+G*K);G*K*inv(eye()+G*K)];
 .LP
 For input sensitivity functions [P,r]=augment(P,'SRT','i'):
-lft(P,r,K)=[inv(eye+K*G);G*inv(eye+K*G);K*G*inv(eye+G*K)];
+lft(P,r,K)=[inv(eye()+K*G);G*inv(eye()+K*G);K*G*inv(eye()+G*K)];
 .SH EXAMPLE
 .nf
 G=ssrand(2,3,2); //Plant
@@ -80,12 +80,14 @@ K=ssrand(3,2,2); //Compensator
 T=lft(P,r,K);   //Complementary sensitivity function
 Ktf=ss2tf(K);Gtf=ss2tf(G);
 Ttf=ss2tf(T);T11=Ttf(1,1);
-Tn=Gtf*Ktf*inv(eye+Gtf*Ktf);
+Oloop=Gtf*Ktf;
+Tn=Oloop*inv(eye(Oloop)+Oloop);
 clean(T11-Tn(1,1));
 //
 [Pi,r]=augment(G,'T','i');
 T1=lft(Pi,r,K);T1tf=ss2tf(T1); //Input Complementary sensitivity function
-T1n=Ktf*Gtf*inv(eye+Ktf*Gtf);
+Oloop=Ktf*Gtf;
+T1n=Oloop*inv(eye(Oloop)+Oloop);
 clean(T1tf(1,1)-T1n(1,1))
 .fi
 .SH SEE ALSO

@@ -8,7 +8,7 @@ if size(b,'*')==0 then a=[],return,end
 [mb,nb]=size(b);
 if mb*nb==1 then 
   a(2)=a(2)/b,
-  if ma==-1|mb==-1 then a(3)=a(3)*eye,end
+  if ma==-1|mb==-1 then a(3)=a(3)*eye(),end
   return,
 end
 na=abs(na);ma=abs(ma)

@@ -27,10 +27,9 @@ Caveats: a function which uses \fVexists\fR may return a result which depends on
 .nf
 deff('foo(x)',..
 ['disp([exists(''a12''),exists(''a12'',''local'')])'
-'disp([exists(''x''),exists(''x'',''local'')])'])
+ 'disp([exists(''x''),exists(''x'',''local'')])'])
 foo(1)
 a12=[];foo(1)
 .fi
 .SH SEE ALSO
 isdef, whereis, type, typeof, macrovar
-

@@ -15,7 +15,7 @@ DESCRIPTION
   lar value of  X  to the smallest.
 
 EXAMPLE
-  A=matrix('hilb',6);
+  A=testmatrix('hilb',6);
   cond(A)
 
 SEE ALSO

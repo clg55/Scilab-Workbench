@@ -47,7 +47,7 @@ if g1(1)=='r' then g=tf2ss(g);end
 //----------------------
        while gu-gl>2*eps*gl,
          x=(gl+gu)/2,
-         r=d'*d-(x*x)*eye,s=d*d'-(x*x)*eye,
+         r=d'*d-(x*x)*eye(),s=d*d'-(x*x)*eye(),
          mx=[a-b/r*d'*c, -x*b/r*b'; ..
              x*c'/s*c,   -a'+c'*d/r*b'],
          mp=abs(real(spec(mx))),mp=mini(mp),

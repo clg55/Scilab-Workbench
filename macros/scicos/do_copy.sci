@@ -12,7 +12,7 @@ while %t
   elseif windows(kc,1)<0 then //click dans une palette
     kpal=-windows(kc,1)
     palette=palettes(kpal)
-    k=getblock(palette,[xc;yc])
+    k=getblocktext(palette,[xc;yc])
     if k<>[] then 
       o=palette(k),
       graphics=o(2)
@@ -24,7 +24,7 @@ while %t
       break,
     end
   elseif win==curwin then //click dans la fenetre courante
-    k=getblock(scs_m,[xc;yc])
+    k=getblocktext(scs_m,[xc;yc])
     if k<>[] then
       o=scs_m(k);graphics=o(2)
       for kk=5:8
@@ -35,7 +35,7 @@ while %t
       break,
     end
     elseif pal_mode&win==lastwin then 
-    k=getblock(scs_m_s,[xc;yc])
+    k=getblocktext(scs_m_s,[xc;yc])
     if k<>[] then
       o=scs_m_s(k);graphics=o(2)
       for kk=5:8
@@ -46,7 +46,7 @@ while %t
       break,
     end
   elseif slevel>1 then
-    execstr('k=getblock(scs_m_'+string(windows(kc,1))+',[xc;yc])')
+    execstr('k=getblocktext(scs_m_'+string(windows(kc,1))+',[xc;yc])')
     if k<>[] then
       execstr('o=scs_m_'+string(windows(kc,1))+'(k)')
       graphics=o(2)

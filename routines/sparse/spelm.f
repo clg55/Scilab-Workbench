@@ -21,8 +21,8 @@ c     1       2       3       4       5        6     7     8
 c     sparse  spget   full    lufact  lusolve  ludel luget spclean
 c     9       10     11    12       13     14      15      16
 c     nnz     spmax  spmin spmatrix spchol readmps fadj2sp spcompack
-c     17      18      19      20       21     22      23
-c     ordmmd  blkfc1i blkslvi inpnvi   sfinit symfcti bfinit   
+c     17      18      19      20       21     22      23      
+c     ordmmd  blkfc1i blkslvi inpnvi   sfinit symfcti bfinit  
 c     
 
       goto (10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,
@@ -150,11 +150,10 @@ c     bfinit
       subroutine intsparse(id)
       include '../stack.h'
       integer id(nsiz),top0,tops
-      integer iadr, sadr, basetype
+      integer iadr, sadr
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
-      basetype(itype)=mod(itype,100)
 c
       rhs = max(0,rhs)
       top0=top+1-rhs
@@ -329,7 +328,7 @@ c
             call dij2sp(m,n,nel,istk(ilij),stk(lv),
      $           istk(lind),mm+nel0,istk(liw),ierr)
          else
-            call wij2sp(m,n,nel,stk(lij),stk(lv),stk(lv+nel0),
+            call wij2sp(m,n,nel,istk(ilij),stk(lv),stk(lv+nel0),
      $           istk(lind),mm+nel0,istk(liw),ierr)
          endif
          if(ierr.eq.2) then
@@ -353,11 +352,20 @@ c
          ilr=il1+5
          l=sadr(ilr+m+nel)
          inc=1
-         if(l.gt.lv) inc=-1
-         call dcopy(nel,stk(lv),inc,stk(l),inc)
-         if(itv.eq.1) then
-            call dcopy(nel,stk(lv+nel0),inc,stk(l+nel),inc)
+         if(l.gt.lv) then
+            inc=-1
+            if(itv.eq.1) then
+               call dcopy(nel,stk(lv+nel0),inc,stk(l+nel),inc)
+            endif
+            call dcopy(nel,stk(lv),inc,stk(l),inc)
+         else
+            inc=1
+            call dcopy(nel,stk(lv),inc,stk(l),inc)
+            if(itv.eq.1) then
+               call dcopy(nel,stk(lv+nel0),inc,stk(l+nel),inc)
+            endif
          endif
+         
          lstk(top+1)=l+nel*(itv+1)
          inc=1
          if(ilr.gt.lind) inc=-1
@@ -1297,16 +1305,17 @@ c
 
       subroutine intspmatrix(id)
       include '../stack.h'
-      integer id(nsiz),top0
+      integer id(nsiz),top0,tops
       integer iadr, sadr
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 
       rhs = max(0,rhs)
+      tops=top
       top0=top+1-rhs
 
-      if (rhs .ne. 3) then
+      if (rhs .lt.2) then
          call error(39)
          return
       endif
@@ -1323,30 +1332,57 @@ c     checking variable ne
          call error(52)
          return
       endif
-      if(istk(il+1)*istk(il+2).ne.1) then
-         err=3
-         call error(60)
-         return
-      endif
-      l=sadr(il+4)
-      nr=stk(l)
+      if(rhs.eq.2) then
+         if(istk(il+3).ne.0) then
+            err=3
+            call error(52)
+            return
+         endif
+         if(istk(il+1)*istk(il+2).eq.1) then
+            mr=int(stk(sadr(il+4)))
+            nr=1
+         elseif(istk(il+1)*istk(il+2).eq.2) then
+            mr=int(stk(sadr(il+4)))
+            nr=int(stk(sadr(il+4)+1))
+         else
+            top=tops
+            call ref2val
+            call funnam(ids(1,pt+1),'matrix',iadr(lstk(top-rhs+1)))
+            fun=-1
+            return
+         endif
+      elseif(rhs.gt.3) then
+            top=tops
+            call ref2val
+            call funnam(ids(1,pt+1),'matrix',iadr(lstk(top-rhs+1)))
+            fun=-1
+            return
+      elseif(rhs.eq.3) then
+         if(istk(il+1)*istk(il+2).ne.1) then
+            err=3
+            call error(60)
+            return
+         endif
+         l=sadr(il+4)
+         nr=stk(l)
 c     checking variable mr
-      top=top-1
-      il=iadr(lstk(top))
-      if(istk(il).ne.1.or.istk(il+3).ne.0) then
-         err=3
-         call error(52)
-         return
+         top=top-1
+         il=iadr(lstk(top))
+         if(istk(il).ne.1.or.istk(il+3).ne.0) then
+            err=3
+            call error(52)
+            return
+         endif
+         if(istk(il+1)*istk(il+2).ne.1) then
+            err=3
+            call error(60)
+            return
+         endif
+         l=sadr(il+4)
+         mr=stk(l)
       endif
-      if(istk(il+1)*istk(il+2).ne.1) then
-         err=3
-         call error(60)
-         return
-      endif
-      l=sadr(il+4)
-      mr=stk(l)
-      top=top-1
 c     checking variable sp
+      top=top-1
       il1 = iadr(lstk(top))
       if (istk(il1) .ne. 5.and.istk(il1) .ne. 6) then
          err = 1
@@ -1355,6 +1391,7 @@ c     checking variable sp
       endif
       m=istk(il1+1)
       n=istk(il1+2)
+
 
       if(m*n.ne.mr*nr) then
          call error(60)
@@ -2347,3 +2384,4 @@ c******************************************************
        if(.not.putlhsvar()) return
 c      .
       end
+

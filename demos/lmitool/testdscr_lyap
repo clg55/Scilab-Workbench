@@ -3,7 +3,7 @@ n=3;
 rand('seed',0)
 rand('normal')
 E=rand(n,1)*rand(1,n)
-A=-rand(n,n)-eye
+A=-rand(n,n)-eye()
 C=rand(n,n);
 getf(SCI+'/demos/lmitool/dscr_lyap.sci','c')
 [X,Y]=dscr_lyap(E,A,C)

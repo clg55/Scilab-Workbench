@@ -122,7 +122,7 @@ scs_m(2)=scs_m_1
               list('Link',[268.57143;317.7665],[226.37131;226.37131],'drawlink',..
               ' ',[0,0],[1,1],[5,1],[9,1]),..
               list('Block',..
-              list([204.06091,78.607595],[40,40],%f,'[eye-K*C,K]',13,14,[],[],..
+              list([204.06091,78.607595],[40,40],%f,'[eye()-K*C,K]',13,14,[],[],..
               list(..
               ['[nin,nout]=model(2:3);';
               'if nin*nout==1 then gain=string(model(8)),else gain=''Gain'',end';

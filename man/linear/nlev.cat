@@ -16,7 +16,7 @@ PARAMETERS
 DESCRIPTION
   [num,den]=nlev(A,z [,rmax]) computes:
 
-  (z*eye-A)^(-1)
+  (z*eye()-A)^(-1)
   by block diagonalization of A followed by Leverrier's algorithm on each
   block.
 
@@ -28,7 +28,7 @@ EXAMPLE
   A=rand(3,3);x=poly(0,'x');
   [NUM,den]=nlev(A,'x')
   clean(den-poly(A,'x'))
-  clean(NUM/den-inv(x*eye-A))
+  clean(NUM/den-inv(x*eye()-A))
 
 SEE ALSO
   coff, coffg, glever, ss2tf

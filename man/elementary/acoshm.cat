@@ -12,8 +12,8 @@ PARAMETERS
 
 DESCRIPTION
   acoshm is the matrix hyperbolic  inverse cosine  of the matrix x.  Uses the
-  formula t=logm(x+(x+eye)*sqrtm((x-eye)/(x+eye))) For non symmetric matrices
-  result may be inaccurate.
+  formula t=logm(x+(x+eye())*sqrtm((x-eye())/(x+eye()))) For non symmetric
+  matrices result may be inaccurate.
 
 EXAMPLE
   A=[1,2;3,4];

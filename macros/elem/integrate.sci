@@ -20,12 +20,12 @@ if imag(x0)<>0 then error('x0 doit etre un scalaire reel'),end
 [m,n]=size(x1),x1=matrix(x1,1,m*n)
 if norm(imag(x1),1)<>0 then error('x1 is not real!'),end
 //
-deff('[ans]=function('+var+')',expr)
+deff('[ans]=func('+var+')',expr,'n')
 x=[]
 select rhs
-case 4 then for xk=x1,x=[x,intg(x0,xk,function)],end,
-case 5 then for xk=x1,x=[x,intg(x0,xk,function,ea)],end,
-case 6 then for xk=x1,x=[x,intg(x0,xk,function,ea,er)],end,
+case 4 then for xk=x1,x=[x,intg(x0,xk,func)],end,
+case 5 then for xk=x1,x=[x,intg(x0,xk,func,ea)],end,
+case 6 then for xk=x1,x=[x,intg(x0,xk,func,ea,er)],end,
 else error(39), end,
 x=matrix(x,m,n)
 

@@ -91,7 +91,7 @@ for numero=lboites
       ni=prod(size(inti))
       ab(l:l1,inti(1))=transfert(:,inti(2:ni))
       ll=0;for iout=outint
-               ab(l-1+iout(2),iout(1))='-eye'
+               ab(l-1+iout(2),iout(1))='-eye()'
                ll=ll+1
       end;
     end;
@@ -99,7 +99,7 @@ for numero=lboites
       ne=prod(size(ext))
       ab(l:l1,nlignes+ext(1))=transfert(:,ext(2:ne))
       ll=0;for iout=outint
-               ab(l-1+iout(2),iout(1))='-eye'
+               ab(l-1+iout(2),iout(1))='-eye()'
                ll=ll+1
       end;
     end;

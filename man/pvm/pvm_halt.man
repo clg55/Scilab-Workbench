@@ -40,4 +40,4 @@ For example:
 .fi
 Error -14 means: pvm_halt(): Can't contact local daemon
 .SH SEE ALSO
-pvm_start, pvm_addhosts, pvm_config, pvm_error
+pvm_start, pvm_addhosts, pvm_config

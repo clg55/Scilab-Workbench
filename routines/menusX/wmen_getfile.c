@@ -75,7 +75,8 @@ int GetFileWindow(filemask,szFile,dirname,flag,ierr,title)
     ofn.lpstrInitialDir = dirname;
   else
     ofn.lpstrInitialDir = (LPSTR)NULL;
-  ofn.Flags = OFN_SHOWHELP | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
+  ofn.Flags = OFN_SHOWHELP | OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST 
+    | OFN_NOCHANGEDIR ;
   rep = GetSaveFileName(&ofn);
   FREE(szTitle);
   FREE(szFilter);

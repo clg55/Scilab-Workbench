@@ -6,7 +6,7 @@ if type(x)<>1 then error(53),end
 if m<>n then 
   error(20)
 else 
-  t=logm(x+(x+eye)*sqrtm((x-eye)/(x+eye)))
+  t=logm(x+(x+eye())*sqrtm((x-eye())/(x+eye())))
 end
 
 

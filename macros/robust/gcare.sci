@@ -6,7 +6,7 @@ function [X,F]=gcare(Sl)
 //FD.
 // Copyright INRIA
 [A,B,C,D]=Sl(2:5);
-S=eye+D'*D;R=eye+D*D';
+S=eye()+D'*D;R=eye()+D*D';
 Si=inv(S);
 Ar=A-B*Si*D'*C;
 H=[Ar,-B*Si*B';

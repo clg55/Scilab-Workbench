@@ -14,9 +14,12 @@ ierr
 Change the current Scilab directory to \fV'path-name'\fR
 .SH EXAMPLE
 .nf
-chdir("/tmp");
-unix_w("ls");
+chdir(TMPDIR);
+if MSDOS then
+  unix_w("dir");
+else
+  unix_w("ls");
+end
 .fi
 .SH SEE ALSO
 getcwd
-

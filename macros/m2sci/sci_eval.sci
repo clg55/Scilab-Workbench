@@ -16,7 +16,7 @@ if lhs==1 then
           'end']
       stk=list(' ','-2','?','?','?')
     elseif lst(ilst+1)(1)=='1' then
-      v=lst(ilst+1)(2)
+      v=lhsvarsnames()
       txt=['if '+'execstr('+v+'='+stk(top-1)(1)+',''errcatch'')'+'<>0 then' 
           '  execstr('+v+'='+stk(top)(1)+')'
           'end']
@@ -25,14 +25,19 @@ if lhs==1 then
     top=top-1
   end
 else
-  LHS=[]
-  for k=1:lhs,   LHS=[LHS,lst(ilst+k)(2)],end
-  if rhs==1 then
-    txt='execstr('+sci2exp(lhsargs(LHS)+' = '+stk(top)(1))+')'
+  LHS=lhsvarsnames()
+  if isname(stk(top)(1)) then
+    v=sci2exp(lhsargs(LHS)+' = '+stk(top)(1))
   else
-
-    txt=['if '+'execstr('+sci2exp(lhsargs(LHS)+' = '+stk(top-1)(1))+',''errcatch'')'+'<>0 then'
-            '  execstr('+sci2exp(lhsargs(LHS)+' = '+stk(top)(1))+')'
+    v=stk(top)(1)
+    if part(v,1)=='''' then v=part(v,2:length(v)),end
+    v=''''+lhsargs(LHS)+' = '+v
+  end
+  if rhs==1 then
+    txt='execstr('+v+')'
+  else
+    txt=['if '+'execstr('+v+',''errcatch'')'+'<>0 then'
+            '  execstr('+v+')'
             'end']
   end
   stk=list()

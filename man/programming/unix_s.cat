@@ -17,7 +17,8 @@ DESCRIPTION
   separated by ";" is sent: this is not recommended.
 
 EXAMPLE
-  unix_s("rm foo");
+  if MSDOS then unix_s("del foo");
+  else unix_s("rm foo"); end
 
 SEE ALSO
   edit, manedit, unix_g, unix_w, unix_x, unix

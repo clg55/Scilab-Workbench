@@ -41,7 +41,7 @@ u=-c(:,seleq)*pinv(b(seleq,:)')
 a=a(sel,sel);b=b(sel,:);c=c(:,sel);
 wo=wo(sel,sel);wc=wc(sel,sel);
  
-Gamma=wc*wo-sigma*sigma*eye
+Gamma=wc*wo-sigma*sigma*eye()
 a=Gamma\(sigma*sigma*a'+wo*a*wc-sigma*c'*u*b')
 b1=Gamma\(wo*b+sigma*c'*u)
 c=c*wc+sigma*u*b';b=b1;

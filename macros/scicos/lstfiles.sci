@@ -19,14 +19,21 @@ if rhs<=1 then opt='file',end
 lst=[]
 for k=1:np
   if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
-    cmd='dir '+path(k);
-    out_f = strsubst(TMPDIR,'/','\')+'\unix.out';
-    host(cmd+'> '+ outf);
-    lst=[lst;read(TMPDIR+'/unix.out',-1,1,'(a)')]
-  else 
+    cmd='dir /b'+path(k);
+    tmp = strsubst(TMPDIR,'/','\')+'\unix.out';
+    host(cmd+'> '+ tmp);
+    lst1=read(tmp,-1,1,'(a)');
+    host('del '+tmp);
+    for k1=1:size(lst1,'*')
+      lst1(k1)=path(k)+lst1(k1)
+    end
+    lst=[lst;lst1]
+  else
     cmd='ls -F -c '+path(k)
-    host(cmd+'>'+TMPDIR+'/unix.out 2>'+TMPDIR+'/unix.err')
-    lst=[lst;read(TMPDIR+'/unix.out',-1,1,'(a)')]
+    tmp=TMPDIR+'/unix.out';
+    host(cmd+'>'+tmp+' 2>'+TMPDIR+'/unix.err')
+    lst=[lst;read(tmp,-1,1,'(a)')]
+    host('rm -f '+tmp);
   end
 end
 if prod(size(lst))==0 then lst=[],end
@@ -48,21 +55,3 @@ if opt=='file' then
 elseif opt=='dir' then
   lst=lst(find(isdir))
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -188,6 +188,13 @@ c     .  -------------
  20   continue
 c     add tab
       alfb(41)=char(9) 
+c     type names
+      call settypnames()
+      if(err.gt.0) then
+         ierr=err
+         return
+      endif
+
 c     
 c     .  Stack
 c     .  -----

@@ -43,8 +43,7 @@ distclean::
 
 version.h: version.g $(SCIDIR)/Version.incl
 	@$(RM) version.h
-	@sed -e "s+SCILAB_VERSION+$(SCIVERSION)+" \
-	-e "s+SCILAB_DATE+$(SCIDATE)+" version.g > version.h;
+	@sed -e "s+SCILAB_VERSION+$(SCIVERSION)+" version.g > version.h;
 	@chmod g+w version.h
 	@echo version.h created
 

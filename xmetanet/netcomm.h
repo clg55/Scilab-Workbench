@@ -6,6 +6,7 @@
 #define CHARSEP '\n'
 #define STRINGSEP "\n"
 
+#define CLOSE     "CLOSE"
 #define LOAD      "LOAD"
 #define LOAD_S    "LOAD_S"
 #define LOAD1     "LOAD1"

@@ -45,93 +45,93 @@ distclean:: clean
 ex1c.dll : ex1cI.obj ex1c.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex1cI.obj ex1c.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex1cI.obj ex1c.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex1f.dll : ex1fi.obj ex1f.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex1fi.obj ex1f.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex1fi.obj ex1f.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 ex2c.dll : ex2cI.obj ex2c.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex2cI.obj ex2c.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex2cI.obj ex2c.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex2f.dll : ex2fi.obj ex2f.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex2fi.obj ex2f.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex2fi.obj ex2f.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex3c.dll : ex3cI.obj ex3c.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex3cI.obj ex3c.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex3cI.obj ex3c.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex3f.dll : ex3fi.obj ex3f.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex3fi.obj ex3f.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex3fi.obj ex3f.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex4c.dll : ex4cI.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex4cI.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex4cI.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 ex4f.dll : ex4fi.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex4fi.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex4fi.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 ex5c.dll : ex5cI.obj ex5c.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex5cI.obj ex5c.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex5cI.obj ex5c.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 
 ex5f.dll : ex5fi.obj ex5f.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex5fi.obj ex5f.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex5fi.obj ex5f.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 
 ex5cm.dll :  ex5cm.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex5cm.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex5cm.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 ex5fm.dll :  ex5fm.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex5fm.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex5fm.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 ex6c.dll : ex6cI.obj ex6c.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex6cI.obj ex6c.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex6cI.obj ex6c.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 ex6f.dll : ex6fi.obj ex6f.obj
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex6fi.obj ex6f.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex6fi.obj ex6f.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 ex7f.dll : ex7fi.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex7fi.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex7fi.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 ex8f.dll : ex8fi.obj 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $**
-	@$(LINKER) $(LINKER_FLAGS) ex8fi.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) ex8fi.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 ##----------------------  test all the example  

@@ -1,7 +1,7 @@
 .TH SELECT_f 5 "Janvier 1996" "Scilab Group" "Scicos Block"
 .so ../sci.an
 .SH NAME
-SELECT_f - Scicos select block
+SELECT_f - Scicos selector block
 .SH DIALOGUE PARAMETERS
 .TP 20
 number of inputs
@@ -12,9 +12,9 @@ initial connected input
 .SH DESCRIPTION
 This block routes one of the regular inputs to the unique regular
 output. the choice of which input is to be routed is done, initially
-by the "initial connected input" parameter. Then, every time an input
-event arrives on the i-th input event port, the i-th regular input
-port is routed to the regular output.
+by the "initial connected input" parameter. Then, every time the block
+is activated through its i-th input activation  port, the i-th regular
+input value port is put to the regular output.
 
 
 

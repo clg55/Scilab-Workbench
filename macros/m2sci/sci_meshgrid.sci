@@ -30,7 +30,6 @@ else
   X=stk(top-2)(1)
   Y=stk(top-1)(1)
   Z=stk(top)(1)
-  txt='// translation of meshgrid('+makeargs([X,Y,Z])+')'
   X='mtlb_meshgrid('+makeargs([X,Y,Z])+')'
   stk=list(list(X,'-1','?','?','1'),list(X,'-1','?','?','1'))
 end

@@ -23,7 +23,7 @@ if m1==-1&m2==-1 then
   // both are eye*x
   [den1,fact]=lcm([den1;den2])
   [num1,den1]=simp([num1,-num2]*fact,den1)
-  f=tlist(['r','num','den','dt'],num1*eye,den1*eye,s1(4)),
+  f=tlist(['r','num','den','dt'],num1*eye(),den1*eye(),s1(4)),
   return
 end
 m1=abs(m1);m2=abs(m2)

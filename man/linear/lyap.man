@@ -18,6 +18,9 @@ matrix equation:
 .nf 
 A'*X + X*A = C       ( flag='c' )
 A'*X*A - X = C       ( flag='d' )
+Note that a unique solution exist if and only if an eigenvalue of A is
+not an eigenvalue of -A (flag='c')  or 1 over an eigenvalue of A 
+(flag='d').
 .fi
 .SH EXAMPLE
 .nf
@@ -28,6 +31,6 @@ X=lyap(A,C,'d');
 A'*X*A - X -C
 .fi
 .SH SEE ALSO
-sylv, ctr_gram
+sylv, ctr_gram, obs_gram
 
 

@@ -56,7 +56,7 @@ Sl=syslin('c',R);
 tf2ss(Sl)
 diary(0)
 diary('d1p12.dia')
-sl1=[Sl;2*Sl+eye]
+sl1=[Sl;2*Sl+eye()]
 size(sl1)
 size(tf2ss(sl1))
 diary(0)

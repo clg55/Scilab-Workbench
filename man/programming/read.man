@@ -56,9 +56,13 @@ is the vector of record numbers to be read (one record per row),
 thus \fVm\fR must be \fVm=prod(size(k))\fR.
 .LP
 To read on the keyboard use \fVread(%io(1),...)\fR.
+.SH REMARK
+Last line of data files must be terminated by a newline to be taken
+into account.
 .SH EXAMPLE
 .nf
-unix('rm -f foo')
+if MSDOS then unix('del foo');
+else unix('rm -f foo'); end
 A=rand(3,5); write('foo',A);
 B=read('foo',3,5)
 B=read('foo',-1,5)

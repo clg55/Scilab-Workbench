@@ -5,8 +5,10 @@ SCIDIR=../..
 SCIDOC=$(SCIDIR)/../$(SCIVERSION)-doc
 include ../../Makefile.incl
 
-FILES = Chap1.tex Chap2.tex Chap3.tex Chap4.tex Chap5.tex Chap6.tex Chap7.tex Chap8.tex \
-	Chap2-1.tex Chap2-2.tex Chap2-3.tex Chap2-4.tex Chap2-5.tex Chap2-6.tex Chap2-7.tex \
+FILES = Chap1.tex Chap2.tex Chap3.tex Chap4.tex Chap5.tex Chap6.tex \
+	Chap7.tex Chap8.tex \
+	Chap2-1.tex Chap2-2.tex Chap2-3.tex Chap2-4.tex Chap2-5.tex \
+	Chap2-6.tex Chap2-7.tex \
 	Chap3-1.tex Chap3-2.tex Chap3-3.tex Chap3-4.tex 
 
 MAN = $(SCIDIR)/man/
@@ -35,14 +37,25 @@ distclean::
 			$(MAKE) $(MFLAGS)  distclean); \
 	done
 
-$(SCIDOC)/Manual.ps: $(TR2TEX) chapters couvert.tex couv2.ps
-	$(LATEX) Docu
-	$(LATEX) Docu
-	$(LATEX) Docu
+$(SCIDOC)/Manual.ps: Tr2tex chapters couvert.tex couv2.ps
+	$(LATEX) Docu.tex
+	$(LATEX) Docu.tex
+	$(LATEX) Docu.tex
 	makeindex -s Docu.isty Docu
-	$(LATEX) Docu
+	$(LATEX) Docu.tex
 	$(RM) $@
 	dvips -o $@ Docu.dvi
+
+pdf: Tr2tex chapters couvert.tex couv2.ps
+	awk '{if ($$1~"documentstyle") \
+	{printf "\\documentstyle[verbatim,tr2latex/troffman,makeidx,hyperref,times]{book}\n"} else {print $$0} }' \
+	Docu.tex > Docu_pdf.tex
+	$(LATEX) Docu_pdf.tex
+	$(LATEX) Docu_pdf.tex
+	$(LATEX) Docu_pdf.tex
+	makeindex -s Docu.isty Docu_pdf
+	$(LATEX) Docu_pdf.tex
+	dvips -z -o Manual_pdf.ps Docu_pdf.dvi
 
 couv2.ps: couv2.tex
 	$(LATEX) couv2
@@ -50,7 +63,7 @@ couv2.ps: couv2.tex
 
 chapters: $(FILES)
 
-$(TR2TEX) : tr2latex/*.c tr2latex/*.h
+Tr2tex : tr2latex/*.c tr2latex/*.h
 	cd tr2latex ; $(MAKE) $(MFLAGS)
 
 Chap1.tex : $(TR2TEX) $(MAN)/programming/*.man
@@ -137,14 +150,14 @@ Chap2-5.tex : $(TR2TEX) $(MAN)/scicos/?*.man
 	$(RM) /tmp/Chap2-5.tex
 
 Chap2-6.tex : $(TR2TEX) $(MAN)/sound/?*.man
-	$(TR2TEX)  -m $(MAN)/sound/?*.man > /tmp/Chap2-4.tex
-	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap2-4.tex > Chap2-4.tex
-	$(RM) /tmp/Chap2-4.tex
+	$(TR2TEX)  -m $(MAN)/sound/?*.man > /tmp/Chap2-6.tex
+	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap2-6.tex > Chap2-6.tex
+	$(RM) /tmp/Chap2-6.tex
 
 Chap2-7.tex : $(TR2TEX) $(MAN)/dcd/?*.man
-	$(TR2TEX)  -m $(MAN)/dcd/?*.man > /tmp/Chap2-4.tex
-	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap2-4.tex > Chap2-4.tex
-	$(RM) /tmp/Chap2-4.tex
+	$(TR2TEX)  -m $(MAN)/dcd/?*.man > /tmp/Chap2-7.tex
+	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap2-7.tex > Chap2-7.tex
+	$(RM) /tmp/Chap2-7.tex
 
 Chap3-1.tex : $(TR2TEX) $(MAN)/fraclab/?*.man
 	$(TR2TEX)  -m $(MAN)/fraclab/?*.man > /tmp/Chap3-1.tex
@@ -165,7 +178,9 @@ Chap3-4.tex : $(TR2TEX) $(MAN)/pvm/?*.man $(MAN)/comm/?*.man
 	$(RM) /tmp/Chap3-4.tex
 
 clean::
-	$(RM) *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg  *.toc *.lot
+	$(RM) *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg  *.toc *.lot \
+	Docu_pdf.* *.tmp Manual_pdf.ps
 
 distclean::
-	$(RM) *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg *.toc *.lot
+	$(RM) *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg *.toc *.lot \
+	Docu_pdf.* *.tmp Manual_pdf.ps

@@ -9,7 +9,7 @@ c
       do 150 j=1,nb+2
          fini=1
          do 100 i=1,nb
-            if(vec(i).eq.j-1) then
+            if((vec(i).eq.j-1).and.(typl(i).ne.-1)) then
                if(j.eq.nb+2) then
                   ok=0
                   nord=0

@@ -8,12 +8,23 @@ if n<>[] then
   elseif s<n then //padd with zeros
     x(n)=0
   end
-  r=fft(x,job)
+  if mini(size(x))==1 then
+    r=fft(x,job)
+  else
+    r=[]
+    for xk=x
+      r=[r fft(xk,job)]
+    end
+  end  
 else
   //column wise fft
-  r=[]
-  for xk=x
-    r=[r fft(xk,job)]
+  if mini(size(x))==1 then
+    r=fft(x,job)
+  else
+    r=[]
+    for xk=x
+      r=[r fft(xk,job)]
+    end
   end
 end
 

@@ -4,35 +4,37 @@
 matrix - reshape a vector or a matrix to a different size matrix
 .SH CALLING SEQUENCE
 .nf
-[y]=matrix(v,n,m)
+y=matrix(v,n,m)
+y=matrix(v,[sizes])
 .fi
 .SH PARAMETERS
 .TP 10
 v
-: vector or a matrix with \fVn\fR x \fVm\fR entries.
+: a vector, a matrix or an hypermatrix
+
 .TP 10
 n,m
 : integers
 .TP 10
+sizes
+: vector of integers
 y
-: \fVn\fR x \fVm\fR matrix
+: a vector  matrix or hypermatrix
 .SH DESCRIPTION
+For a vector or a matrix with \fVn\fR x \fVm\fR entries
+\fVy=matrix(v,n,m)\fR or similarily \fVy=matrix(v,[n,m])\fR.
 transforms the \fVv\fR vector (or matrix) into an \fVnxm\fR matrix by
-stacking columnwise the entries of \fVx\fR.
+stacking columnwise the entries of \fVv\fR.
+
 .LP
-Old stuff:
-.TP 17
-matrix('magi',n)
-: returns a magic square of size \fVn\fR .
-.TP
-matrix('frk',n)
-: returns the Franck matrix :
-.TP
-matrix('hilb',n)
-: is the inverse of the nxn Hilbert matrix 
-\fV (Hij= 1/(i+j-1))\fR.
+
+For an hypermatrix such as
+\fVprod(size(v))==prod(sizes)\fR,\fVy=matrix(v,sizes)\fR (or
+equivalently \fVy=matrix(v,n1,n2,...nm)\fR) transforms
+\fVv\fR  into an  matrix or hypermatrix by 
+stacking columnwise the entries of \fVv\fR. \fVy=matrix(v,sizes)\fR
+results in a regular matrix if sizes is a scalar or a 2-vector.
+
 .SH SEE ALSO
-matrices, ones, zeros, rand, poly, empty
-
-
+matrices, hypermatrices, ones, zeros, rand, poly, empty
 

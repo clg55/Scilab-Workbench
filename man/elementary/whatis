@@ -67,6 +67,7 @@ inttrap - integration of experimental data by trapezoidal interpolation
 isdef - check variable existence  
 isinf - check for infinite entries  
 isnan - check for not a number entries  
+isreal - check if a variable as real or complex entries  
 kron - kronecker product (.*.)  
 ldivf - left symbolic division  
 linspace - linearly spaced vector  

@@ -69,4 +69,3 @@ void C2F(tmpdirc)()
   system(buf);
 #endif 
 }
-

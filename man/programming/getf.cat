@@ -25,6 +25,10 @@ DESCRIPTION
   function [s1,s2,..,slhs]=macr(e1,e2,...,erhs)
   ei are input variables and si are output variables.
 
+REMARK
+  Last line of  file must be terminated by a newline to be taken into
+  account.
+
 EXAMPLE
           getf('SCI/macros/xdess/plot.sci')
 

@@ -15,7 +15,6 @@ while K<>[] do
   if find(DEL==k)==[] then typ=o(1);else typ='Deleted',end
   //typ=o(1)
   DEL=[DEL k]
-
   if typ=='Link' then
     [ct,from,to]=o(7:9)
     //  free connected ports
@@ -26,26 +25,28 @@ while K<>[] do
     if gr==%t then drawobj(o),end
     fromblock=scs_m(from(1));
     toblock=scs_m(to(1));
+    
     if fromblock(5)=='SPLIT_f'|fromblock(5)=='CLKSPLIT_f' then
       //user kills a split  output link, 
-      //we create a unique link with  the split input and remaining output links
-      //and suppress the split block
       connected=get_connected(scs_m,from(1))//get links connected to the split block
       if size(connected,'*')==2 then
+	//we create a unique link with  the split input and remaining output link
+	//and suppress the split block
 	if find(connected(2)==DEL)<>[] then // delete split
 	  K=[from(1) K]
 	else
 	  if gr==%t then drawobj(scs_m(from(1))),end // clear  split block
 	  DEL=[DEL  from(1)]       //suppress split block
-	  //create a unique link
 	  o1=scs_m(connected(1));from1=o1(9);
 	  o2=scs_m(connected(2));
+
+	  //create a unique link
 	  if from1(1)<>from(1) then [o1,o2]=(o2,o1),connected=connected([2 1]);end
 	  from1=o1(9);to2=o2(9);ct2=o2(7)
 	  //the links comes from connected(1) block and goes to connected(2) block
 	  x1=o1(2);y1=o1(3)
 	  if x1($-1)==x1($)&o2(2)(1)==o2(2)(2)|.. // both segs are vertical
-	    y1($-1)==y1($)&o2(3)(1)==o2(3)(2) then // both segs are horizontal
+	      y1($-1)==y1($)&o2(3)(1)==o2(3)(2) then // both segs are horizontal
 	    o1(2)=[x1(1:$-1);o2(2)(2:$)];
 	    o1(3)=[y1(1:$-1);o2(3)(2:$)];
 	  else
@@ -53,10 +54,11 @@ while K<>[] do
 	    o1(3)=[y1(1:$-1);o2(3)];
 	  end
 	  o1(9)=o2(9);
-	  DEL=[DEL connected(2)] // supress one link
-	  DELL=[DELL  connected(2)]
-	  scs_m(connected(1))=o1 //change link
-	  scs_m(to2(1))=mark_prt(scs_m(to2(1)),to2(2),'in',ct2(2),connected(1))
+	  DEL=[DEL connected(1)] // supress one link
+	  DELL=[DELL  connected(1)]
+	  scs_m(connected(2))=o1 //change link
+	  scs_m(to2(1))=mark_prt(scs_m(to2(1)),to2(2),'in',ct2(2),connected(2))
+	  scs_m(o1(8)(1))=mark_prt(scs_m(o1(8)(1)),o1(8)(2),'out',o1(7)(2),connected(2))
 	end
       end
     end

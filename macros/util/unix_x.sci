@@ -16,18 +16,19 @@ function unix_x(cmd)
 if prod(size(cmd))<>1 then   error(55,1),end
 
 if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
-	out_f = strsubst(TMPDIR,'/','\')+'\unix.out';
-	cmd1= cmd + ' > '+ out_f;
+  tmp=strsubst(TMPDIR,'/','\')+'\unix.out';
+  cmd1= cmd + ' > '+ tmp;
 else 
-	cmd1='('+cmd+')>'+TMPDIR+'/unix.out 2>'+TMPDIR+'/unix.err;';
+  tmp=TMPDIR+'/unix.out';
+  cmd1='('+cmd+')>'+ tmp +' 2>'+TMPDIR+'/unix.err;';
 end 
 stat=host(cmd1);
 select stat
 case 0 then
   if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
-  	host(strsubst(SCI,'/','\')+'\bin\xless.exe '+ out_f);
+  	host(""""+strsubst(SCI,'/','\')+'\bin\xless.exe"" '+ tmp);
   else 
-  	host('$SCI/bin/xless '+TMPDIR+'/unix.out & 2>/dev/null;')
+  	host('$SCI/bin/xless '+tmp+' & 2>/dev/null;')
   end
 case -1 then // host failed
   error(85)
@@ -39,4 +40,10 @@ else //sh failed
 	  error('unix_x: '+msg(1))
   end 
 end
-
+// do not delete file because it is possible xless has not yet been
+// launched. CLG
+//if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+//  host('del '+tmp);
+//else
+//  host('rm -f '+tmp);
+//end

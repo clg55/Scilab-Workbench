@@ -1617,3 +1617,11 @@ nsinkv	integer
 
 out	sequence	ntype	m	tail	head	xnod	ynod	cap	cost
 **************************************************
+netclose	window
+window	scalar
+
+netclose	window
+window	integer
+
+out	empty
+************************************************

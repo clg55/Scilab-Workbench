@@ -23,7 +23,7 @@ EXAMPLE
   spec(A)
   //
   x=poly(0,'x');
-  pol=det(x*eye-A)
+  pol=det(x*eye()-A)
   roots(pol)
   //
   [Ab,X,bs]=bdiag(A);

@@ -22,9 +22,9 @@ end
 fs=1/t 
 if rhs==3 then fp=2*%pi*fp;fs=fp/tan(fp/fs/2)/2,end //prewarping
  
-a=2*fs*eye-s(2)
-ad=a\(2*fs*eye+s(2))
-b=(ad+eye)/a*s(3);
+a=2*fs*eye()-s(2)
+ad=a\(2*fs*eye()+s(2))
+b=(ad+eye())/a*s(3);
 d=s(5)+s(4)/a*s(3)
 s1=syslin('c',ad,b,s(4),d,s(6))
 

@@ -25,12 +25,13 @@ case 1 then  //scalars
      tt=part(tt,1:length(tt)-4)+'}}'
    else
        for l=1:m,
-       tt=tt+cstring(a(l,1))
-       for k=2:n,tt=tt+'&'+cstring(a(l,k)),end
+       tt=tt+string(a(l,1))
+       for k=2:n,tt=tt+'&'+string(a(l,k)),end
        tt=tt+'\cr '
      end
      tt=part(tt,1:length(tt)-4)+'}}'
    end
+   tt=strsubst(tt,'%','')
 case 2 then //polynomials
    [m,n]=size(a)
    if m*n<>1 then tt='{\pmatrix{',else tt='{{',end
@@ -43,6 +44,7 @@ case 2 then //polynomials
      tt=part(tt,1:length(tt)-1)+'\cr '
    end
    tt=part(tt,1:length(tt)-4)+'}}'
+   tt=strsubst(tt,'%','')
 case 10 then //strings
   [m,n]=size(a)
   if m*n<>1 then tt='{\pmatrix{',else tt='{{',end
@@ -98,6 +100,3 @@ case 16 then
   end
  
 end
-
-
-

@@ -1,4 +1,4 @@
-.TH hypermatrices 1 "April 1993" "Scilab Group" "Scilab Function"
+.TH hypermat 1 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
 hypermat - initialize an  N dimensional matrices 

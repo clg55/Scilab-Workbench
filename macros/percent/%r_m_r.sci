@@ -8,11 +8,11 @@ function s1=%r_m_r(s1,s2)
 indef=%f
 if l1==-1 then 
   n1=n1+0;d1=d1+0;l1=1;m1=1;
-  if l2*m2==1 then indef=%t,end
+  if l2*m2==1 then indef=%t,else error(14),end
 end
 if l2==-1 then 
   n2=n2+0;d2=d2+0;l2=1;m2=1;
-  if l1*m1==1 then indef=%t,end
+  if l1*m1==1 then indef=%t,else error(14),end
 end  
 if mini([l1*m1,l2*m2])==1 then
   num=n1*n2
@@ -34,8 +34,8 @@ else
 end
 [num,den]=simp(num,den),
 if indef then
-  num=num*eye
-  den=den*eye
+  num=num*eye()
+  den=den*eye()
 end
 s1(2)=num;s1(3)=den;
 

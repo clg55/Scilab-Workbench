@@ -24,6 +24,10 @@ with minimum norm (the minimum norm solution is \fVx=pinv(A)*b\fR).
 \fVA.\\B\fR  is the matrix with \fV(i,j)\fR entry \fVA(i,j)\\B(i,j)\fR.
 If \fVA\fR (or \fVB\fR) is a scalar \fVA.\\B\fR is equivalent to 
 \fVA*ones(B).\\B\fR (or \fVA.\\(B*ones(A))\fR
+
+.LP
+\fVA\\.B\fR  is an operator with no predefined meaning. It may be used
+to define a new operator (see overloading) with  the same precedence as * or /.
 .SH EXAMPLE
 .nf
 A=rand(3,2);b=[1;1;1]; x=A\\b; y=pinv(A)*b;  x-y

@@ -16,4 +16,4 @@ all the Metanet windows and the second element is the number of the
 current Metanet window. This number is equal to 0 if no current Metanet
 window exists.
 .SH SEE ALSO
-metanet, netwindow, show_graph
+metanet, netclose, netwindow, show_graph

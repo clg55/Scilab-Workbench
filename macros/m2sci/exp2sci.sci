@@ -21,10 +21,10 @@ while ilst<nlst&ok then
     case '0' then
  
     case '2' then //stackg
-      if or(op(2)==vnms(:,2))| (op(3)=='-3'&op(4)<>'0') then
+      if or(op(2)==vnms(:,2))|(op(3)=='-3'&op(4)<>'0') then
         [stk,top,vnms,vtps]=get2sci(op(2),stk,top,vnms,vtps)
       elseif op(4)=='0' then
-	if funptr(op(2))<>0 then op(2)='%'+op(2),end
+	if funptr(op(2))<>0&exists('sci_'+op(2))==0 then op(2)='%'+op(2),end
         [stk,top,vnms,vtps]=get2sci(op(2),stk,top,vnms,vtps)
         if stk(top)==list() then
 	  top=top-1

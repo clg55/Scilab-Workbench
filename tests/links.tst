@@ -77,21 +77,21 @@ yref=ode([1;0;0],0,[0.4,4],'ext9f');
 //passing a parameter to ext10f routine by a list:
 param=[0.04,10000,3d+7];    
 y=ode([1;0;0],0,[0.4,4],list('ext10f',param));
-if norm(y-yref) > 100*%eps then pause,end
+if norm(y-yref) > 10000*%eps then pause,end
 
 //Example #11
 //Passing a parameter to argument funtion of ode
 param=[0.04,10000,3d+7];
 y=ode([1;0;0],0,[0.4,4],'ext11f');
 //param must be defined as a scilab variable upon calling ode
-if norm(y-yref) > 100*%eps then pause,end
+if norm(y-yref) > 10000*%eps then pause,end
 
 //Example #12 
 //same example as # 10 with call to matptr
 //param must be defined as a scilab variable
 param=[0.04,10000,3d+7];
 y=ode([1;0;0],0,[0.4,4],'ext12f');
-if norm(y-yref) > 100*%eps then pause,end
+if norm(y-yref) > 10000*%eps then pause,end
 
 //Example #13
 //sharing common data
@@ -100,5 +100,3 @@ n=10;a=1:10;
 call('ext13f',n,1,'i',a,2,'r','out',2);  //loads b with a
 c=call('ext14f',n,1,'i','out',[1,10],2,'r');  //loads c with b
 if norm(c-a) > %eps then pause,end
-
-

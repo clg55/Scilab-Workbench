@@ -11,8 +11,8 @@ DESCRIPTION
    +                plus
    -                minus
    *,.*             star
-   /, ./            slash
-   \,.\             backslash
+   /, ./, /.        slash
+   \,.\ ,\.         backslash
    .                dot
    =, ==            equal
    <,>,>=,<=,<>     less
@@ -30,4 +30,4 @@ DESCRIPTION
    &                and
    .*., ./., .\.    kron
 SEE ALSO
-  overloading.
+  overloading

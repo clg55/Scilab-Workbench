@@ -70,7 +70,7 @@ for n=bs';k1=k:k-1+n;
              for kl=1:n-1,
                 b=h*f,
                 d=-sum(diag(b))/kl,
-                f=b+eye*d,
+                f=b+eye()*d,
              end;
              d=sum(diag(h*f))/n
 //

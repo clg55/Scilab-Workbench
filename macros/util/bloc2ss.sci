@@ -179,7 +179,7 @@ end
 if or(size(d')<>size(k)) then
   error('invalid data')
 end
-sl=syslin(a,b,c,d)/.(-k)
+sl=syslin([],a,b,c,d)/.(-k)
 sl=sl(out,in)
 sl(7)=dom
 

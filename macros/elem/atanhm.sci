@@ -8,6 +8,6 @@ if x==[] then t=[],end
 if m<>n then 
   error(20)
 else 
-  t=logm((eye+x)*sqrtm(eye/(eye-x*x)))
+  t=logm((eye()+x)*sqrtm(eye(x)/(eye()-x*x)))
 end
 

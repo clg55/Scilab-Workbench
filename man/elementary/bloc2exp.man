@@ -96,7 +96,7 @@ l=l+1;syst(l)=list('link','Y',[n_s2,1],[-1],[n_adder,2]);
 w=bloc2exp(syst);
 .fi
 The result is the character string:
-\fVw=-(s2*s1-eye)\s2*s1\fR.
+\fVw=-(s2*s1-eye())\s2*s1\fR.
 .LP
 Note that invoked with two output arguments,
 \fV[str,names]= blocd(syst)\fR returns in \fVnames\fR the list
@@ -124,7 +124,7 @@ w=bloc2exp(syst);
 .fi
 In this case the result is a formula equivalent to the usual one:
 .LP
-\fVP11+P12*invr(eye-K*P22)*K*P21;\fR
+\fVP11+P12*invr(eye()-K*P22)*K*P21;\fR
 .SH SEE ALSO
 bloc2ss
 .SH AUTHOR 

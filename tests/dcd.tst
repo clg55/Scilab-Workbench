@@ -119,11 +119,11 @@ if norm(pnonc-pn) > prec then pause,end
 //=================
 
 shape=2;scale=3;bn=1;
-deff('[y]=gamma(x)','y=bn*(x^(shape-1) * exp(-scale*x))');
-bn=intg(0,10^3,gamma);bn=1/bn;
+deff('[y]=Gamma(x)','y=bn*(x^(shape-1) * exp(-scale*x))');
+bn=intg(0,10^3,Gamma);bn=1/bn;
 x=1:10;
 [P,Q]=cdfgam("PQ",x,shape*ones(x),scale*ones(x));
-P1=[];for xx=x; P1=[P1,intg(0,xx,gamma)];end 
+P1=[];for xx=x; P1=[P1,intg(0,xx,Gamma)];end 
 if norm(P1-P) > prec then pause,end 
 
 shape=2*x;

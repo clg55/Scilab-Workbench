@@ -274,3 +274,57 @@ int *res;
     *res = *s;
   }
 }
+
+void C2F(netclose)(s)
+int *s;
+{
+  char str[MAXNAM];
+
+  if (checkNetconnect() == 0) return;
+
+  if (*s > nNetwindows || *s < 1) {
+    sprintf(str,"Bad window number: %d",*s);
+    cerro(str); 
+    return;
+  }
+
+  if (strcmp(Netwindows[*s - 1],"CLOSED") == 0) {
+    sprintf(str,"Window number %d is closed",*s);
+    cerro(str); 
+    return;
+  }
+  
+  if (theNetwindow != 0 & theNetwindow != *s) {
+    envoyer_message_parametres_var(ID_GeCI,
+				   MSG_DETRUIRE_LIAISON, 
+				   identificateur_appli(),
+				   Netwindows[theNetwindow - 1],NULL);
+    envoyer_message_parametres_var(ID_GeCI,
+				   MSG_DETRUIRE_LIAISON, 
+				   Netwindows[theNetwindow - 1],
+				   identificateur_appli(),NULL);
+
+    envoyer_message_parametres_var(ID_GeCI,
+				   MSG_CREER_LIAISON, 
+				   identificateur_appli(),
+				   Netwindows[*s - 1],NULL);
+    envoyer_message_parametres_var(ID_GeCI,
+				   MSG_CREER_LIAISON, 
+				   Netwindows[*s - 1],
+				   identificateur_appli(),NULL);
+  }
+
+  SendMsg(CLOSE,"");
+
+  if (theNetwindow != 0 & theNetwindow != *s) {
+    envoyer_message_parametres_var(ID_GeCI,
+				   MSG_CREER_LIAISON, 
+				   identificateur_appli(),
+				   Netwindows[theNetwindow - 1],NULL);
+    envoyer_message_parametres_var(ID_GeCI,
+				   MSG_CREER_LIAISON, 
+				   Netwindows[theNetwindow - 1],
+				   identificateur_appli(),NULL);  
+
+  }
+}

@@ -18,7 +18,7 @@ OBJS =  maxi.dia norm.dia matops.dia scilab.dia macro.dia calpol.dia clause.dia 
 	bvode.dia feval.dia auto.dia \
 	odedc.dia sound.dia listinsertion.dia listextraction.dia \
 	links.dia strelm.dia gsort.dia fmlelm.dia odedi.dia dcd.dia \
-	grand.dia grandb.dia
+	grand.dia grandb.dia resume.dia errcatch.dia
 
 all:: info
 
@@ -32,7 +32,7 @@ info:
 tests: $(OBJS)
 
 clean ::
-	$(RM) $(OBJS) examples.tst get_examples.log *.graph so_locations 
+	$(RM) $(OBJS) get_examples.log *.graph so_locations 
 	$(RM) foo* test.wav one_man.tst test_macro_exec asave results *.bin
 
 distclean:: clean 

@@ -118,9 +118,9 @@ if size(a,'*')==0 then t='[]',return,end
 if m<0 then
   t=mat2exp(a+0);
   if t=='1' then
-    t='eye';
+    t='eye()';
   else
-    t='('+t+')*eye';
+    t='('+t+')*eye()';
   end
   return
 end
@@ -137,7 +137,7 @@ if n==1 then
     k1=1
     l=0
     while %t
-      if lx-l<lmax then t=[t;part(x,l+1:lx)],break,end
+      if lx-l<lmax|k1>length(ind) then t=[t;part(x,l+1:lx)],break,end
       k2=k1-1+maxi(find(ind(k1:$)<l+lmax))
       t=[t;part(x,l+1:ind(k2))]
       k1=k2+1
@@ -154,7 +154,7 @@ elseif m==1 then
     k1=1
     l=0
     while %t
-      if lx-l<lmax then t=[t;part(x,l+1:lx)],break,end
+      if lx-l<lmax|k1>length(ind) then t=[t;part(x,l+1:lx)],break,end
       k2=k1-1+maxi(find(ind(k1:$)<l+lmax))
       t=[t;part(x,l+1:ind(k2))+dots]
       k1=k2+1
@@ -166,14 +166,16 @@ else
     x=strcat(a(i,:),',')
     if i<m then x=x+';',end
     lx=length(x)
-    if lmax==0|lx<lmax then
+    if lmax==0 then
+      t=t+x
+    elseif lx<lmax then
       t=[t;x]
     else
       ind=strindex(x,',');
       k1=1
       l=0
       while %t
-	if lx-l<lmax then t=[t;part(x,l+1:lx)],break,end
+	if lx-l<lmax|k1>length(ind) then t=[t;part(x,l+1:lx)],break,end
 	k2=k1-1+maxi(find(ind(k1:$)<l+lmax))
 	t=[t;part(x,l+1:ind(k2))+dots]
 	k1=k2+1
@@ -198,7 +200,7 @@ while part(var,lvar)==' ' then lvar=lvar-1,end
 var=part(var,1:lvar);
 if m<0 then
   t=pol2exp(a+0)
-  t='('+t+')*eye'
+  t='('+t+')*eye()'
   return
 end
 t=[];

@@ -21,8 +21,10 @@ error is reported when a list of command separated by ";" is sent: this is
 not recommended.
 .SH EXAMPLE
 .nf
-unix_g("ls $SCI/demos");
-deff('wd=pwd()','wd=unix_g(''pwd'')')
+if MSDOS then unix_g('dir '+WSCI+'\demos');
+else unix_g("ls $SCI/demos"); end
+deff('wd=pwd()','if MSDOS then wd=unix_g(''cd'');..
+                 else wd=unix_g(''pwd''); end')
 wd=pwd()
 .fi
 .SH SEE ALSO

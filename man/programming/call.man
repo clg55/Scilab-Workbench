@@ -1,14 +1,14 @@
-.TH fort 1 "April 1993" "Scilab Group" "Scilab Function"
+.TH call 1 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-fort - Fortran or C user routines call
+call - Fortran or C user routines call
 .SH CALLING SEQUENCE
 .nf 
 // long form 'out' is present 
-[y1,...,yk]=fort("ident",x1,px1,"tx1",...,xn,pxn,"txn",
+[y1,...,yk]=call("ident",x1,px1,"tx1",...,xn,pxn,"txn",
                  "out",[ny1,my1],py1,"ty1",...,[nyl,myl],pyl,"tyl")
 // short form : no 'out' parameter 
-[y1,....,yk]=fort("ident",x1,...,xn) 
+[y1,....,yk]=call("ident",x1,...,xn) 
 .fi
 .SH PARAMETERS
 .TP 10
@@ -89,7 +89,7 @@ If an output variable coincides with an input variable and one specify
 the dimensions of the output variable \fV[myl,nyl]\fR must follow the
 compatibility condition \fVmxk*nxk >= myl*nyl\fR.
 .LP
-In the case of short syntax , \fV[y1,....,yk]=fort("ident",x1,...,xn)\fR,
+In the case of short syntax , \fV[y1,....,yk]=call("ident",x1,...,xn)\fR,
 the input parameters \fVxi\fR's and the name \fV"ident"\fR are sent to
 the interface routine \fVEx-fort\fR. This interface routine is then 
 very similar to an interface (see the source code in the directory \fVSCIDIR/default/Ex-fort.f\fR).
@@ -114,7 +114,7 @@ a=[1,2,3;4,5,6];b= %pi;
 // m                5     integer
 // Outputs:
 // c is in position 1 and double with size [m,n]
-c=fort("foof",a,2,"d",b,3,"d",n,4,"i",m,5,"i","out",[m,n],1,"d");
+c=call("foof",a,2,"d",b,3,"d",n,4,"i",m,5,"i","out",[m,n],1,"d");
 .fi
 returns the matrix \fVc=2*a+b\fR.
 
@@ -140,7 +140,7 @@ The same example coded in  C:
 link("fooc.o","fooc","C") // note the third argument 
 a=[1,2,3;4,5,6];b= %pi;
 [m,n]=size(a);
-c=fort("fooc",a,2,"d",b,3,"d",m,4,"i",n,5,"i","out",[m,n],1,"d");
+c=call("fooc",a,2,"d",b,3,"d",m,4,"i",n,5,"i","out",[m,n],1,"d");
 .fi
 .SH SEE ALSO
 link, c_link, intersci, addinter

@@ -42,7 +42,7 @@ distclean:: clean
 	@del $*.c 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $*.obj
-	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBS) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
 

@@ -29,17 +29,17 @@ DESCRIPTION
   If flag='d', the eigenvalues of M*A*Q = eigenvalues of A with magnitude >=
   thres.
 
-  If flag='c' and if [Q1,M1] = full rank factorization (fullrf) of eye-Q*M
+  If flag='c' and if [Q1,M1] = full rank factorization (fullrf) of eye()-Q*M
   then eigenvalues of  M1*A*Q1 = eigenvalues of A with real part < thres.
 
-  If flag='d' and if [Q1,M1] = full rank factorization (fullrf) of eye-Q*M
+  If flag='d' and if [Q1,M1] = full rank factorization (fullrf) of eye()-Q*M
   then eigenvalues of  M1*A*Q1 = eigenvalues of A with magnitude < thres.
 
 EXAMPLE
   A=diag([1,2,3]);X=rand(A);A=inv(X)*A*X;
   [Q,M]=pbig(A,1.5,'d');
   spec(M*A*Q)
-  [Q1,M1]=fullrf(eye-Q*M);
+  [Q1,M1]=fullrf(eye()-Q*M);
   spec(M1*A*Q1)
 
 SEE ALSO

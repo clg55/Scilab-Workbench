@@ -61,7 +61,7 @@ EXAMPLE
   // THE GRAPH
   show_graph(g);
   a=graph_2_mat(g,'node-node');
-  ww=tril(a)'+eye;
+  ww=tril(a)'+eye();
   ww1=full(ww);
   xset('window',0)
   hist3d((ww1+tril(ww1',-1)+tril(ww1,-1)'),52,85);

@@ -66,9 +66,13 @@ extern void F2C(mscope)(ARGS_scicos);
 extern void F2C(eselect)(ARGS_scicos);
 extern void F2C(intrp2)(ARGS_scicos);
 extern void F2C(intrpl)(ARGS_scicos);
+extern void F2C(fsv)(ARGS_scicos);
+extern void F2C(memo)(ARGS_scicos);
 extern void selector(ARGS_scicos);
 extern void sum(ARGS_scicos);
 extern void prod(ARGS_scicos);
+extern void switchn(ARGS_scicos);
+extern void relay(ARGS_scicos);
  
 OpTab tabsim[] ={
 {"absblk",(ScicosF) F2C(absblk)},
@@ -91,6 +95,7 @@ OpTab tabsim[] ={
 {"evtdly",(ScicosF) F2C(evtdly)},
 {"expblk",(ScicosF) F2C(expblk)},
 {"forblk",(ScicosF) F2C(forblk)},
+{"fsv",(ScicosF) F2C(fsv)},
 {"gain",(ScicosF) F2C(gain)},
 {"gensin",(ScicosF) F2C(gensin)},
 {"gensqr",(ScicosF) F2C(gensqr)},
@@ -109,6 +114,7 @@ OpTab tabsim[] ={
 {"lsplit",(ScicosF) F2C(lsplit)},
 {"lusat",(ScicosF) F2C(lusat)},
 {"maxblk",(ScicosF) F2C(maxblk)},
+{"memo",(ScicosF) F2C(memo)},
 {"mfclck",(ScicosF) F2C(mfclck)},
 {"minblk",(ScicosF) F2C(minblk)},
 {"mscope",(ScicosF) F2C(mscope)},
@@ -121,6 +127,7 @@ OpTab tabsim[] ={
 {"qzrnd",(ScicosF) F2C(qzrnd)},
 {"qztrn",(ScicosF) F2C(qztrn)},
 {"readf",(ScicosF) F2C(readf)},
+{"relay",(ScicosF) relay},
 {"rndblk",(ScicosF) F2C(rndblk)},
 {"samphold",(ScicosF) F2C(samphold)},
 {"sawtth",(ScicosF) F2C(sawtth)},
@@ -133,6 +140,7 @@ OpTab tabsim[] ={
 {"sum",(ScicosF) sum},
 {"sum2",(ScicosF) F2C(sum2)},
 {"sum3",(ScicosF) F2C(sum3)},
+{"switchn",(ScicosF) switchn},
 {"tanblk",(ScicosF) F2C(tanblk)},
 {"tcslti",(ScicosF) F2C(tcslti)},
 {"tcsltj",(ScicosF) F2C(tcsltj)},
@@ -142,5 +150,5 @@ OpTab tabsim[] ={
 {"zcross",(ScicosF) F2C(zcross)},
 {(char *) 0, (ScicosF) 0}};
  
-int ntabsim= 69 ;
+int ntabsim= 73 ;
 /***********************************/

@@ -39,21 +39,29 @@ case 'Block' then
   if prod(size(fonction)) > 1 then
     if fonction(2) == 0 then
       language = '0 (Scilab function type Scicos 2.2)'
-    elseif fonction(2) == 1 then
+    elseif fonction(2) == 1  then
       language = '1 (Fortran or C code)'
     elseif fonction(2) == 2 then
       language = '2 (C code)'
     elseif fonction(2) == 3 then
       language = '3 (Scilab function)'
+    elseif fonction(2) < 0  then
+      language = '<0 (synchro block)'
+    else
+      language = '>3  (dynamic link or...)'
     end
   else
     language = '0 (Scilab function type Scicos 2.2)'
   end
   //
-  if modele(TYPE) == 'c' then
-    typ = 'continuous'
+  if modele(TYPE) == 'l' then
+    typ= 'synchro'
+  elseif modele(TYPE) == 'z'
+    typ= 'zero-crossing'
+  elseif modele(TYPE) == 'm'
+    typ = 'memory'
   else
-    typ = 'discrete'
+    typ = 'regular'
   end
   //
   if modele(DEPENDANCE)(1) then
@@ -174,11 +182,15 @@ case 'Link' then
       for kp=1:size(super_path,'*'),path(kp)=super_path(kp);end
       path($+1)=from(1)
       ind=cor(path)
-      kl=cpr(2)('outlnk')(cpr(2)('outptr')(ind)+(from(2)-1))
-      beg=cpr(2)('lnkptr')(kl)
-      fin=cpr(2)('lnkptr')(kl+1)-1
-      txt = ['Compiled link memory zone  : ['+..
-		  string(beg)+','+string(fin)+']'; ' ']
+      if type(ind)==1 then
+	kl=cpr(2)('outlnk')(cpr(2)('outptr')(ind)+(from(2)-1))
+	beg=cpr(2)('lnkptr')(kl)
+	fin=cpr(2)('lnkptr')(kl+1)-1
+	txt = ['Compiled link memory zone  : ['+..
+		    string(beg)+','+string(fin)+']'; ' ']
+      else
+	txt = ['Compiled link memory zone  : Not available';' ']
+      end
     end
   else
     txt = ['Compiled link memory zone  : Not available';' ']

@@ -15,6 +15,7 @@ C
       integer fschur,bschur
       external fschur, bschur
       integer top2,tope,topf
+      integer iadr,sadr
       character*(nlgh+1) namef
       common /cschur/ namef
       integer iero

@@ -34,7 +34,7 @@ plot2d(xx,yy,-9,'000')
 xtitle('Navigator window')
 
 
-for k=2:size(xx,1)
+for k=1:size(xx,1)
   xstring(xx(k),yy(k),string(k))
 end
 
@@ -43,8 +43,8 @@ y0=bnds(4)-h;
 kx=1
 xrect(x0(kx),bnds(4),x0(kx+1)-x0(kx),bnds(4)-bnds(2))
 xclip([x0(kx),bnds(4),x0(kx+1)-x0(kx),bnds(4)-bnds(2)])
-for k=2:size(xx,1)
-  path=lp(k-1);
+for k=1:size(xx,1)
+  if k==1 then path=[]; else path=lp(k-1);end
   Path=list();
   for pk=path
     Path=lstcat(Path,pk,3,8);

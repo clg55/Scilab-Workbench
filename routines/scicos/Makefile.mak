@@ -19,9 +19,9 @@ BLOCKSF=intcos.obj coselm.obj \
 	sawtth.obj tcslti.obj tcsltj.obj scopxy.obj evscpe.obj integr.obj readf.obj affich.obj\
 	intpol.obj intplt.obj minblk.obj maxblk.obj dlradp.obj andlog.obj iocopy.obj \
 	sum2.obj sum3.obj delayv.obj mux.obj demux.obj samphold.obj dollar.obj mscope.obj \
-	eselect.obj intrp2.obj   intrpl.obj
+	eselect.obj intrp2.obj   intrpl.obj fsv.obj memo.obj
 
-BLOCKSC=selector.obj sum.obj prod.obj 
+BLOCKSC=selector.obj sum.obj prod.obj switchn.obj relay.obj
 
 OBJSF=sciblk.obj  addevt.obj doit.obj odoit.obj zdoit.obj scicos.obj cosini.obj cossim.obj cosend.obj \
 	 sctree.obj ftree2.obj ftree3.obj ftree4.obj skipvars.obj scierr.obj scifunc.obj \
@@ -55,13 +55,14 @@ distclean::
 
 #--------------dependencies 
 
-callf.obj: blocks.h ../machine.h ../sun/link.h
+callf.obj: blocks.h ../machine.h ../sun/link.h scicos.h
 scifunc.obj : ../stack.h ../callinter.h
 selector.obj: ../machine.h
 import.obj: ../machine.h import.h
 prod.obj: ../machine.h
 sciblk2.obj: ../machine.h
 sum.obj: ../machine.h
+switchn.0: ../machine.h
 
 sciblk.obj : ../stack.h ../callinter.h
 dtosci.obj: ../stack.h

@@ -440,16 +440,24 @@ Print(w, number, client_data)
      XtPointer number;
      XtPointer client_data;
 {
+  char *p1;
   integer win_num = (integer) number ;
   integer colored,orientation,flag=1,ok;
+
   prtdlg(&flag,printer,&colored,&orientation,file,&ok);
   if (ok==1) 
     {
-      sprintf(bufname,"/tmp/SD_%d_/scilab-%d",(int)getpid(),(int)win_num);
+      if ( ( p1 = getenv("TMPDIR"))  == (char *) 0 )
+	{
+	  sciprint("Cannot find environment variable TMPDIR\r\n");
+	  return ;
+	}
+
+      sprintf(bufname,"%s/scilab-%d",p1,(int)win_num);
       scig_tops(win_num,colored,bufname,"Pos");
-      sprintf(bufname,"$SCI/bin/scilab -%s /tmp/SD_%d_/scilab-%d %s",
+      sprintf(bufname,"$SCI/bin/scilab -%s %s/scilab-%d %s",
 	      (orientation == 1) ? "print_l" : "print_p",
-	      (int) getpid(),(int)win_num,printer);
+	      p1,(int)win_num,printer);
       system(bufname);
   }
   return(0);

@@ -16,11 +16,11 @@ PARAMETERS
        $HOME/pvm3/bin/$PVM_ARCH/ .
 
   ntask:
-      integer, specifying the number of copies of the scilab script to start.
+      integer, specifying the number of copies of the executable file to
+      start.
 
-  where: string (optional, default value is NULL), can be a host name such as
-         ``tequila.ens-lyon.fr'' or a PVM architecture class such as
-         ``SUN4''.
+  where: string (optional), can be a host name such as ``tequila.ens-
+         lyon.fr'' or a PVM architecture class such as ``SUN4''.
 
   numt:
        integer, the actual number of tasks started.  Values less than zero
@@ -52,14 +52,14 @@ DESCRIPTION
   which will contain error codes (see below for meaning).  The first numt
   tids in the array are always valid.
 
-  When the argument where is set to NULL a heuristic (round-robin assignment)
-  is used to distribute the ntask processes across the virtual machine.
+  When the argument where is omitted  a heuristic (round-robin assignment) is
+  used to distribute the ntask processes across the virtual machine.
   In the special case where a multiprocessor is specified by where,
   pvm_spawn_independent will start all ntask copies on this single machine
   using the vendor's underlying routines.
 
 EXAMPLE
-  [tids, numt] = pvm_spawn_independent("a.out",2,"loop")
+  [tids, numt] = pvm_spawn_independent("a.out",2)
 
 SEE ALSO
-  pvm, pwm_spawn
+  pvm, pvm_spawn

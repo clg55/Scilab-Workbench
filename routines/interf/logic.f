@@ -294,6 +294,10 @@ c
 c     extraction
 c     
  50   continue
+      if(rhs.lt.2) then
+         call error(227)
+         return
+      endif
       if(rhs.gt.2) goto 55
 c     arg2(arg1)
 c     get arg2
@@ -496,23 +500,13 @@ c     arg3(arg1)=arg2
 c     get arg3
       il3=iadr(lstk(top))
       if(istk(il3).lt.0) il3=iadr(istk(il3+1))
-      if(istk(il3).eq.4) then
-      elseif(istk(il3).eq.1) then
-c     .  convert arg3 to boolean
-         l3=sadr(il3+4)
-         do 61 i=0,istk(il3+1)*istk(il3+2)
-            if(stk(l3+i).eq.0.0d0) then 
-               istk(il3+2+i)=0
-            else
-               istk(il3+2+i)=1
-            endif
- 61      continue
-      else
+      if(istk(il3).ne.4) then
+         if(istk(il3).eq.1.and.istk(il3+1)*istk(il3+2).eq.0) goto 61
          top=top0
          fin=-fin
          return
       endif
-      m3=istk(il3+1)
+ 61   m3=istk(il3+1)
       n3=istk(il3+2)
       mn3=m3*n3
       l3=il3+3
@@ -520,23 +514,13 @@ c     get arg2
       top=top-1
       il2=iadr(lstk(top))
       if(istk(il2).lt.0) il2=iadr(istk(il2+1))
-      if(istk(il2).eq.4) then
-      elseif(istk(il2).eq.1) then
-c     .  convert arg2 to boolean
-         l2=sadr(il2+4)
-         do 62 i=0,istk(il2+1)*istk(il2+2)
-            if(stk(l2+i).eq.0.0d0) then 
-               istk(il2+2+i)=0
-            else
-               istk(il2+2+i)=1
-            endif
- 62      continue
-      else
+      if(istk(il2).ne.4) then
+         if(istk(il2).eq.1.and.istk(il2+1)*istk(il2+2).eq.0) goto 62
          top=top0
          fin=-fin
          return
       endif
-      m2=istk(il2+1)
+ 62   m2=istk(il2+1)
       n2=istk(il2+2)
       mn2=m2*n2
       l2=il2+3
@@ -694,23 +678,13 @@ c     arg4(arg1,arg2)=arg3
 c     get arg4
       il4=iadr(lstk(top))
       if(istk(il4).lt.0) il4=iadr(istk(il4+1))
-      if(istk(il4).eq.4) then
-      elseif(istk(il4).eq.1) then
-c     .  convert arg4 to boolean
-         l4=sadr(il4+4)
-         do 66 i=0,istk(il4+1)*istk(il4+2)
-            if(stk(l4+i).eq.0.0d0) then 
-               istk(il4+2+i)=0
-            else
-               istk(il4+2+i)=1
-            endif
- 66      continue
-      else
+      if(istk(il4).ne.4) then
+         if(istk(il4).eq.1.and.istk(il4+1)*istk(il4+2).eq.0) goto 66
          top=top0
          fin=-fin
          return
       endif
-      m4=istk(il4+1)
+ 66   m4=istk(il4+1)
       n4=istk(il4+2)
       mn4=m4*n4
       l4=il4+3
@@ -718,23 +692,13 @@ c     get arg3
       top=top-1
       il3=iadr(lstk(top))
       if(istk(il3).lt.0) il3=iadr(istk(il3+1))
-      if(istk(il3).eq.4) then
-      elseif(istk(il3).eq.1) then
-c     .  convert arg3 to boolean
-         l3=sadr(il3+4)
-         do 67 i=0,istk(il3+1)*istk(il3+2)
-            if(stk(l3+i).eq.0.0d0) then 
-               istk(il3+2+i)=0
-            else
-               istk(il3+2+i)=1
-            endif
- 67      continue
-      else
+      if(istk(il3).ne.4) then
+         if(istk(il3).eq.1.and.istk(il3+1)*istk(il3+2).eq.0) goto 67
          top=top0
          fin=-fin
          return
       endif
-      m3=istk(il3+1)
+ 67   m3=istk(il3+1)
       n3=istk(il3+2)
       mn3=m3*n3
       l3=il3+3

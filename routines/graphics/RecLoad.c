@@ -1,4 +1,9 @@
-/* Copyright (C) 1998 Chancelier Jean-Philippe */
+/*------------------------------------------------------------------------
+    Graphic library for 2D and 3D plotting 
+    Copyright (C) 1998 Chancelier Jean-Philippe
+    jpc@cergrene.enpc.fr 
+ --------------------------------------------------------------------------*/
+
 #include <string.h> 
 
 #ifdef __STDC__
@@ -543,13 +548,13 @@ int LoadColormap()
   if (LoadLI(&m) == 0) return(0);
   table  = (double *)  MALLOC(3*m*sizeof(double));
   if ( table == NULL) return(0);
-  /**  assert( xdr_vector(rxdrs, (char *) table,3*m,sizeof(float), xdr_float)) ;
+  /**  assert( xdr_vector(rxdrs, (char *) table,3*m,sizeof(float), (xdrproc_t) xdr_float)) ;
   for ( i = 3*m-1 ; i >= 0 ; i--) 
   table[i]= ((float *) table)[i]; **/
 
   for ( i = 0 ; i < 3*m  ; i++ ) 
     {
-      assert( xdr_vector(rxdrs, (char *) &x,1,sizeof(double), xdr_double)) ;
+      assert( xdr_vector(rxdrs, (char *) &x,1,sizeof(double), (xdrproc_t) xdr_double)) ;
       table[i]=x;
       /** sciprint("loading %f\r\n",table[i]); **/
     }
@@ -665,7 +670,7 @@ static int LoadD(x)
 {
   rszof = sizeof(double) ;
   rcount = (u_int) 1;
-  assert( xdr_vector(rxdrs, (char *)x, rcount, rszof, xdr_double)) ;
+  assert( xdr_vector(rxdrs, (char *)x, rcount, rszof, (xdrproc_t) xdr_double)) ;
   return(1);
 }
 
@@ -674,14 +679,14 @@ static int LoadLI(ix)
 {
   rszof = sizeof(int) ;
   rcount = (u_int)1;
-  assert( xdr_vector(rxdrs, (char *)ix, rcount, rszof, xdr_int)) ;
+  assert( xdr_vector(rxdrs, (char *)ix, rcount, rszof, (xdrproc_t) xdr_int)) ;
   return(1);
 }
 	
 static int LoadC(c)
      char *c;
 {
-  assert( xdr_vector(rxdrs,(char *) &rszof,(u_int)1,(u_int) sizeof(u_int), xdr_u_int)) ;
+  assert( xdr_vector(rxdrs,(char *) &rszof,(u_int)1,(u_int) sizeof(u_int), (xdrproc_t) xdr_u_int)) ;
   assert( xdr_opaque(rxdrs,c,rszof));
   return(1);
 }
@@ -691,10 +696,10 @@ static int LoadVectI(nx)
      int **nx;
 { 
   rszof = sizeof(int) ;
-  assert( xdr_vector(rxdrs,(char *) &rcount,(u_int)1,(u_int) sizeof(u_int), xdr_u_int)) ;      
+  assert( xdr_vector(rxdrs,(char *) &rcount,(u_int)1,(u_int) sizeof(u_int), (xdrproc_t) xdr_u_int)) ;      
   *nx = (int *)  MALLOC(rcount*sizeof(int));
   if ( *nx == NULL) return(0);
-  assert( xdr_vector(rxdrs, (char *)*nx, rcount, rszof, xdr_int)) ;
+  assert( xdr_vector(rxdrs, (char *)*nx, rcount, rszof, (xdrproc_t) xdr_int)) ;
   return(1);
 }
 
@@ -705,10 +710,10 @@ static int LoadVectLI(nx)
 { 
   /** Attention integer peut etre un long int **/
   rszof = sizeof(int) ;
-  assert( xdr_vector(rxdrs,(char *) &rcount,(u_int)1,(u_int) sizeof(u_int), xdr_u_int)) ;
+  assert( xdr_vector(rxdrs,(char *) &rcount,(u_int)1,(u_int) sizeof(u_int), (xdrproc_t) xdr_u_int)) ;
   *nx = (integer *)  MALLOC(rcount*sizeof(integer));
   if ( *nx == NULL) return(0);
-  assert( xdr_vector(rxdrs, (char *)*nx, rcount, rszof, xdr_int)) ;
+  assert( xdr_vector(rxdrs, (char *)*nx, rcount, rszof, (xdrproc_t) xdr_int)) ;
   return(1);
 }
 
@@ -716,17 +721,17 @@ static int    LoadVectF(nx)
      double **nx;
 {
   rszof = sizeof(double) ;
-  assert( xdr_vector(rxdrs,(char *) &rcount,(u_int)1,(u_int) sizeof(u_int), xdr_u_int)) ;
+  assert( xdr_vector(rxdrs,(char *) &rcount,(u_int)1,(u_int) sizeof(u_int), (xdrproc_t) xdr_u_int)) ;
   *nx = (double *)  MALLOC(rcount*sizeof(double));
   if ( *nx == NULL) return(0);
-  assert( xdr_vector(rxdrs, (char *) *nx, rcount, rszof, xdr_double)) ;
+  assert( xdr_vector(rxdrs, (char *) *nx, rcount, rszof, (xdrproc_t) xdr_double)) ;
   return(1);
 }
 
 static int LoadVectC(nx)
      char **nx;
 {
-  assert( xdr_vector(rxdrs,(char *) &rszof,(u_int)1,(u_int) sizeof(u_int), xdr_u_int)) ;
+  assert( xdr_vector(rxdrs,(char *) &rszof,(u_int)1,(u_int) sizeof(u_int), (xdrproc_t) xdr_u_int)) ;
   *nx = (char *)  MALLOC(rszof);
   if ( *nx == NULL) return(0);
   assert( xdr_opaque(rxdrs, *nx,rszof));

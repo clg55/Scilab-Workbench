@@ -48,7 +48,7 @@ scs_m(1)(2)=[name,path] // Change the title
 if ext=='cos' then
   save(u,scicos_ver,scs_m,cpr)
 else
-  disablemenus()
+//  disablemenus()
 
   errcatch(-1,'continue')
 
@@ -61,7 +61,7 @@ else
     return
     end
   cos2cosf(u,do_purge(scs_m))
-  enablemenus()
+//  enablemenus()
 end
 file('close',u)
 

@@ -16,7 +16,7 @@ cases dot is part of the operator, not of the number.
 .LP
 Backslash stands for left division.
 .LP
-System feed back.  \fVS=G/.K\fR evaluates \fVS=G*(eye+K*G)^(-1)\fR
+System feed back.  \fVS=G/.K\fR evaluates \fVS=G*(eye()+K*G)^(-1)\fR
 this operator avoid simplification problem.
 .LP
 Remark that \fVG/.5\fR is interpreted as \fVG/(.5)\fR. In such 

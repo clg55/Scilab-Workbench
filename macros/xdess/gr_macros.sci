@@ -418,7 +418,6 @@ function [sd1]=fligne(sd,del)
 if rhs<=0 then // get
   z=xgetpoly(d_seg);
   if z==[], return;end;
-  mm=clearmode();xpoly(z(1,:)',z(2,:)',"lines");modeback(mm)
   sd1=list("fligne",z);
   xfpoly(z(1,:),z(2,:),1);
 elseif rhs==1 then //draw
@@ -426,7 +425,7 @@ elseif rhs==1 then //draw
   xfpoly(z(1,:),z(2,:),1);
 elseif del=='del' then //erase
   z=sd(2);
-  xfpoly(z(1,:),z(2,:),1);
+  xfpoly(z(1,:),z(2,:),1)
 elseif del=='mov' then //move
   z=sd(2);
   x0=xx(1);y0=xx(2);
@@ -496,9 +495,10 @@ for k=3:ksd,
     to=obj(1)
     select to,
     case "rect"    then rect(obj);
+    case "frect"   then frect(obj);  
     case "cercle"  then cerc(obj);
+    case "fcercle" then fcerc(obj);  
     case "fleche"  then fleche(obj);
-    case "cercle"  then cerc(obj);
     case "comm"    then comment(obj);
     case "ligne"   then ligne(obj);
     case "fligne"  then fligne(obj);
@@ -516,6 +516,7 @@ function [x0,y0,x,y,ibutton]=xgetm(m_m)
 // Object aquisition 
 kpd=driver();
 driver("X11");
+alu=xget("alufunction")
 xset("alufunction",6);
 // attente du click 
 [ii,x0,y0]=xclick()
@@ -530,7 +531,7 @@ while ( ibutton==-1)
   m_m(x0,y0,x,y)
   x=rep(1);y=rep(2);
 end
-xset("alufunction",3);
+xset("alufunction",alu);
 //m_m(x0,y0,x,y)
 driver(kpd);
 
@@ -579,15 +580,16 @@ function [z]=xgetpoly(m_m)
 // interactive polyline aquisition m_m is 
 // used to draw between aquisitions 
 kpd=driver();
-driver("X11");
+//driver("X11");
 // attente du click 
 [ii,x0,y0]=xclick(0)
 x=x0;y=y0;
 z=[x0;y0];
 ibutton=1
+alu=xget("alufunction")
+xset("alufunction",6);
 while ibutton<>0
   ibutton=-1
-  xset("alufunction",6);
   while ( ibutton==-1) 
     // dessin 
     m_m(x0,y0,x,y);
@@ -596,13 +598,14 @@ while ibutton<>0
     m_m(x0,y0,x,y)
     x=rep(1);y=rep(2);
   end
-  xset("alufunction",3);
   if ibutton<>0 then 
     m_m(x0,y0,x,y)
     z=[z,[x;y]]
     x0=x;y0=y;
   end 
 end 
+xset("alufunction",alu);
+
 [nn,ll]=size(z);
 if ll==1 then z=[];end
 driver(kpd);
@@ -618,6 +621,7 @@ function [xo,yo]=move_object(inst,xo,yo)
 // Object aquisition 
 xos=xo;yos=yo
 kpd=driver();
+alu=xget("alufunction")
 xset("alufunction",6);
 execstr(inst) //erase
 driver("X11");
@@ -631,7 +635,7 @@ while ( ibutton==-1)
   xo=rep(1);yo=rep(2);
 end
 if ibutton==2 then xo=xos;yo=yos,end
-xset("alufunction",3);
+xset("alufunction",alu);
 driver(kpd);
 execstr(inst) //draw
 

@@ -43,11 +43,11 @@ Slt('num'), Slt('den')
 v=1:5;W=v'*v                 //constant matrix multiplication
 W(1,:)                       //extracting first row
 W(:,$)                       //extracting last column
-Mp'*Mp+eye                   //polynomial matrix
+Mp'*Mp+eye()                   //polynomial matrix
 Mp1=Mp(1,1)+4.5*%i           //complex
-Fi=C*(z*eye-A)^(-1)*B;       //transfer function evaluation
+Fi=C*(z*eye()-A)^(-1)*B;       //transfer function evaluation
 F(:,1)*Fi                    //operations with rationals
-M=[Mp -Mp; Mp' Mp+eye]       //concatenation of polynomial matrices
+M=[Mp -Mp; Mp' Mp+eye()]       //concatenation of polynomial matrices
 [Fi, Fi(:,1)]                // ... or rationals
 F=syslin('c',F);             
 Num=F('num');Den=F('den');           //operation on transfer matrix
@@ -190,9 +190,9 @@ if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
 	unix_s('del foo.c')
 	write('foo.c',foo);
 	WSCI=getenv('WSCI');
-	cmd='nmake /f ""'+WSCI+'\demos\intro\MakeF.mak"" TARGET=foo SCIDIR1=""'+WSCI+'""';
+	cmd='nmake /f ""'+WSCI+'\demos\intro\MakeC.mak"" TARGET=foo SCIDIR1=""'+WSCI+'""';
 	unix_s(cmd)  //Compiling...(needs a compiler);
-	link('foo.dll','foo');   //Linking to Scilab
+	link('foo.dll','foo','C');   //Linking to Scilab
         unix_s('del foo.c')
 else 
 	unix_s('rm -f foo.c');

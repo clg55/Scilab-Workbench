@@ -2,7 +2,7 @@
 // test conversion transfer <---> state-space
 // 1- coff inversion 
  s=poly(0,'s'); a=[1 2 3;4 5 6;7 8 9];
- [num,den]=coff(a,'s');h1=num/den;h2=(s*eye-a)^(-1);
+ [num,den]=coff(a,'s');h1=num/den;h2=(s*eye()-a)^(-1);
  e=h1-h2;if norm(coeff(e(2)))>5000*%eps then pause,end
 // 2-test de tf2ss et ss2tf
  n=[1+s   2+3*s+4*s^2        5; 0        1-s             s];
@@ -46,7 +46,7 @@ slm=minss(sl,eps);//ssprint(slm)
 //
 hm=ss2tf(slm);
 h=ss2tf(sl);
-hh=c*(s*eye-a)^(-1)*b + 0*ones(2,3);
+hh=c*(s*eye()-a)^(-1)*b + 0*ones(2,3);
 hh=hh-h;
 if norm(coeff(hh(2))) > 1.e-5 then pause,end
 [num,den]=coff(a,'s');

@@ -16,9 +16,9 @@ BLOCKSF=intcos.o coselm.o \
 	sawtth.o tcslti.o tcsltj.o scopxy.o evscpe.o integr.o readf.o affich.o\
 	intpol.o intplt.o minblk.o maxblk.o dlradp.o andlog.o iocopy.o \
 	sum2.o sum3.o delayv.o mux.o demux.o samphold.o dollar.o mscope.o \
-	eselect.o intrp2.o   intrpl.o
+	eselect.o intrp2.o   intrpl.o fsv.o memo.o
 
-BLOCKSC=selector.o sum.o prod.o 
+BLOCKSC=selector.o sum.o prod.o switchn.o relay.o
 
 OBJSF=sciblk.o  addevt.o doit.o odoit.o zdoit.o scicos.o cosini.o cossim.o cosend.o \
 	 sctree.o ftree2.o ftree3.o ftree4.o skipvars.o scierr.o scifunc.o \
@@ -52,13 +52,14 @@ distclean::
 
 #--------------dependencies 
 
-callf.o: blocks.h ../machine.h ../sun/link.h
+callf.o: blocks.h ../machine.h ../sun/link.h scicos.h
 scifunc.o : ../stack.h ../callinter.h
 selector.o: ../machine.h
 import.o: ../machine.h import.h
 prod.o: ../machine.h
 sciblk2.o: ../machine.h
 sum.o: ../machine.h
+switchn.0: ../machine.h
 
 sciblk.o : ../stack.h ../callinter.h
 dtosci.o: ../stack.h

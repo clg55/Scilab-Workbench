@@ -31,7 +31,7 @@ case 'set' then
       nout=size(a,'*')
       graphics(4)=label
       model(3)=nout
-      model(6)(1)=rand
+      model(6)(1)=rand()
       model(9)=flag
       model(8)=[a(:);b(:);0]
       model(7)=[0*a(:);0]
@@ -46,7 +46,7 @@ case 'define' then
   dt=0
   out=1
   flag=0
-  model=list('rndblk',[],out,1,[],[],[rand;0*a(:)],[a(:);b(:);dt],flag,'d',[],[%f %f],' ',list())
+  model=list('rndblk',[],out,1,[],[],[rand();0*a(:)],[a(:);b(:);dt],flag,'d',[],[%f %f],' ',list())
   label=[string(flag);sci2exp(a(:));sci2exp(b(:))]
   gr_i=['txt=[''random'';''generator''];';
     'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'')']

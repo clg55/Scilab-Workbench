@@ -30,7 +30,7 @@ Funtab.o : fundef ../machine.h ../fraclab/fundef.fraclab
 $(EXAMPLES) : ../stack.h 
 
 distclean::
-	$(RM) $(OBJS)
+	$(RM) *.o
 
 Ex-fort.o Ex-ode.o Ex-odedc.o msgstxt.o matus2.o matusr.o userf2.o :   ../stack.h
 callinterf.o : ../machine.h  callinterf.h ../sun/addinter.h

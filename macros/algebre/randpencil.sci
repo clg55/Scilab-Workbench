@@ -21,9 +21,9 @@ if RHS<>4 then error('randpencil requires 4 (possibly []) input parameters!');
 end
 select type(fin)
   case 1
-    if diag(fin)<>[] then Fin=%s*eye-diag(fin);else Fin=[];end
+    if diag(fin)<>[] then Fin=%s*eye()-diag(fin);else Fin=[];end
   case 2
-    Fin=%s*eye-companion(fin);
+    Fin=%s*eye()-companion(fin);
 end
 deff('j=%jdrn(n)','j=zeros(n,n);for k=1:n-1;j(k,k+1)=1;end')
 deff('Lk=%eta(k)','Lk=zeros(k+1,k);...
@@ -35,7 +35,7 @@ J=[];
 for kk=infi;
   J=sysdiag(J,%jdrn(kk));
 end
-if J==[] then Infin=[],else Infin=%s*J-eye;end
+if J==[] then Infin=[],else Infin=%s*J-eye();end
 
 flageps=%f;
 Eps=[];

@@ -11,7 +11,7 @@ if type(x)<>1 then error(53),end
 if m<>n then 
   error(20)
 else 
-  t=logm(x+sqrtm(x*x+eye))
+  t=logm(x+sqrtm(x*x+eye()))
 end
 
 

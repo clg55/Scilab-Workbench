@@ -99,10 +99,10 @@ function [sl,U]=ssrand(nout,nin,nstate,flag)
 //         row dimension C2.= row dimension of D2. =rk
 //***************************************************************
 // Copyright INRIA
-deff('[w]=st_able(w,margin)','if w~=[] then w=w-(maxi(real(spec(w)))+margin)*eye;end')
+deff('[w]=st_able(w,margin)','if w~=[] then w=w-(maxi(real(spec(w)))+margin)*eye();end')
 margin=0.5;  //M "stable"  will mean real-part(M) < -margin
 [lhs,rhs]=argn(0)
-rand('seed',0)
+//rand('seed',0)
 rand('normal')
 if rhs==3 then flag=[];end
 select flag(1)
@@ -221,7 +221,7 @@ case 'ui'
   sl=ss2ss(w,U);
 end
 rand('uniform');
-rand('seed',0)
+//rand('seed',0)
 
 function w=imag_axis(ns,nn,nu,flag);
 //w=random block diagonal matrix with ns stable evals
@@ -231,11 +231,11 @@ function w=imag_axis(ns,nn,nu,flag);
 [LHS,RHS]=argn(0);
 if RHS==3 then flag='siu';end
 if flag=='siu' then
-deff('[w]=st_able(w,margin)','if w~=[] then w=w-(maxi(real(spec(w)))+margin)*eye;end')
+deff('[w]=st_able(w,margin)','if w~=[] then w=w-(maxi(real(spec(w)))+margin)*eye();end')
 margin=0.5;  //M "stable"  will mean real-part(M) < -margin
 w=[];k=int(nn/2);
 rand('normal');
-rand('seed',0);
+//rand('seed',0);
 w=sysdiag(w,st_able(rand(ns,ns),margin));
 x=rand(1,k);
 for u=x
@@ -243,14 +243,14 @@ w=sysdiag(w,[u,-2*u;u,-u]);end
 if abs(2*k-nn)>1.d-5 then w=sysdiag(w,0);end
 w=sysdiag(w,-st_able(rand(nu,nu),margin));
 rand('uniform');
-rand('seed',0);
+//rand('seed',0);
 return
 end
 if flag=='uis' then
-deff('[w]=st_able(w,margin)','if w~=[] then w=w-(maxi(real(spec(w)))+margin)*eye;end')
+deff('[w]=st_able(w,margin)','if w~=[] then w=w-(maxi(real(spec(w)))+margin)*eye();end')
 w=[];k=int(nn/2);
 rand('normal');
-rand('seed',0);
+//rand('seed',0);
 w=sysdiag(w,-st_able(rand(nu,nu),margin));
 x=rand(1,k);
 for u=x
@@ -258,7 +258,7 @@ w=sysdiag(w,[u,-2*u;u,-u]);end
 if abs(2*k-nn)>1.d-5 then w=sysdiag(w,0);end
 w=sysdiag(w,st_able(rand(ns,ns),margin));
 rand('uniform');
-rand('seed',0);
+//rand('seed',0);
 end
 
 

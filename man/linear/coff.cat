@@ -17,7 +17,7 @@ PARAMETERS
   d    : polynomial (characteristic polynomial poly(A,'s'))
 
 DESCRIPTION
-  coff computes R=(s*eye-M)^-1 for M a real matrix. R is given by N/d.
+  coff computes R=(s*eye()-M)^-1 for M a real matrix. R is given by N/d.
 
   N = numerator polynomial matrix.
 
@@ -29,7 +29,7 @@ EXAMPLE
   M=[1,2;0,3];
   [N,d]=coff(M)
   N/d
-  inv(%s*eye-M)
+  inv(%s*eye()-M)
 
 SEE ALSO
   coffg, ss2tf, nlev, poly

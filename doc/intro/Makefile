@@ -19,9 +19,11 @@ $(SCIDOC)/Intro.ps: subs  $(INTROFILES)
 	dvips -o $(SCIDOC)/Intro.ps intro.dvi
 
 clean::
-	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc
+	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc \
+	intro_pdf.* *.tmp Intro_pdf.ps
 distclean::
-	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc
+	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc \
+	intro_pdf.* *.tmp Intro_pdf.ps
 
 SUBDIRS = diary figures fort macros
 
@@ -48,3 +50,12 @@ distclean::
 		(cd $$i ; echo "making" distclean "in intro/$$i..."; \
 			$(MAKE) $(MFLAGS) distclean); \
 	done
+
+pdf: subs  $(INTROFILES)
+	awk '{if ($$1~"documentclass") \
+	{printf "%s\n\\usepackage[dvips,colorlinks=true]{hyperref}\\usepackage{times}\n",$$1} else {print $$0} }' \
+	intro.tex > intro_pdf.tex
+	latex intro_pdf
+	makeindex -s intro.isty intro_pdf
+	latex intro_pdf
+	dvips -z -o Intro_pdf.ps intro_pdf.dvi

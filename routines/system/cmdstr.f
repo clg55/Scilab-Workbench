@@ -79,13 +79,16 @@ c     quote delimited string
             call error(31)
             return
          endif
-         if (char1.eq.eol.or.char1.eq.comma.or.char1.eq.semi) last=1
+         if (char1.eq.eol.or.char1.eq.comma.or.char1.eq.semi) then
+            last=1
+            goto 19
+         endif
       else
  16      if (abs(char1) .eq. blank) go to 18
          ln = l+n
          if (char1.eq.eol.or.char1.eq.comma.or.char1.eq.semi) then
             last=1
-            goto 18
+            goto 19
          endif
          if(ln.ge.ilmax) then 
             err=sadr(ln)-lstk(bot)
@@ -99,6 +102,7 @@ c     quote delimited string
       endif
  18   call getch
       if (abs(char1) .eq. blank) go to 18
+ 19   continue
 c     end reading : the string is stored in istk(ln-> ln+(n-1))
 c     Storing size info in data Base
       if(comp(1).ne.0) then 

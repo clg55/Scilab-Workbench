@@ -65,7 +65,7 @@ if rhs==3 then
         p1=syslin(dom,aa,bb,cc,dd)
       end
       if p#1(1)=='r' then
-        p1=d11+d12*p#*invr(eye-d22*p#)*d21;
+        p1=d11+d12*p#*invr(eye()-d22*p#)*d21;
       end
     end
   end   //type(p)=1
@@ -97,7 +97,7 @@ if rhs==3 then
   if pof1(1)=='r' then
     //lft(standard plant in tf form,linear system in tf form)
     [p11,p12,p21,p22]=smga(p,r);
-    p1=p11+p12*p#*invr(eye-p22*p#)*p21
+    p1=p11+p12*p#*invr(eye()-p22*p#)*p21
   end  //p(1)=='lss'
 end  //rhs=3
 if rhs==4 then
@@ -119,8 +119,8 @@ if rhs==4 then
       k2=nl-r#(2)+1:nl;
       d#11=p#(l1,k1);d#12=p#(l1,k2);d#21=p#(l2,k1);d#22=p#(l2,k2);
       
-      g=inv(eye-d22*d#11);
-      g#=inv(eye-d#11*d22);
+      g=inv(eye()-d22*d#11);
+      g#=inv(eye()-d#11*d22);
       
       dd11=d11+d12*g#*d#11*d21;
       dd12=d12*g#*d#12;
@@ -134,8 +134,8 @@ if rhs==4 then
     if p#1(1)=='lss'
       //p# in state form
       [a#,b#1,b#2,c#1,c#2,d#11,d#12,d#21,d#22]=smga(p#,r#);
-      g=inv(eye-d22*d#11);
-      g#=inv(eye-d#11*d22);
+      g=inv(eye()-d22*d#11);
+      g#=inv(eye()-d#11*d22);
       
       aa=a#+b#1*g*d22*c#1;
       
@@ -156,13 +156,13 @@ if rhs==4 then
     if p#1(1)=='r' then
       [j11,j12,j21,j22]=smga(p#,r#);
       
-      g=invr(eye-d22*j11);
-      g#=invr(eye-j11*d22);
+      g=invr(eye()-d22*j11);
+      g#=invr(eye()-j11*d22);
       
       ptfg11=d11+d12*j11*g*d21;
       ptfg12=d12*g#*j12;
       //ptfg21=j21*g*p21;
-      ptfg21=j21*(eye+d22*g#*j11)*d21;
+      ptfg21=j21*(eye()+d22*g#*j11)*d21;
       ptfg22=j22+j21*d22*g#*j12;
       
       p1=[ptfg11,ptfg12;ptfg21,ptfg22];
@@ -184,8 +184,8 @@ if rhs==4 then
       k2=nl-r#(2)+1:nl;
       d#11=p#(l1,k1);d#12=p#(l1,k2);d#21=p#(l2,k1);d#22=p#(l2,k2);
       
-      g=inv(eye-d22*d#11);
-      g#=inv(eye-d#11*d22);
+      g=inv(eye()-d22*d#11);
+      g#=inv(eye()-d#11*d22);
       
       aa=a+b2*g#*d#11*c2;
       
@@ -206,8 +206,8 @@ if rhs==4 then
     else
       //p# in state form
       [a#,b#1,b#2,c#1,c#2,d#11,d#12,d#21,d#22]=smga(p#,r#);
-      g=inv(eye-d22*d#11);
-      g#=inv(eye-d#11*d22);
+      g=inv(eye()-d22*d#11);
+      g#=inv(eye()-d#11*d22);
       
       aa=[a+b2*g#*d#11*c2 b2*g#*c#1;
           b#1*g*c2 a#+b#1*g*d22*c#1];
@@ -239,13 +239,13 @@ if rhs==4 then
     [p11,p12,p21,p22]=smga(p,r);
     [j11,j12,j21,j22]=smga(p#,r#);
     
-    g=invr(eye-p22*j11);
-    g#=invr(eye-j11*p22);
+    g=invr(eye()-p22*j11);
+    g#=invr(eye()-j11*p22);
     
     ptfg11=p11+p12*j11*g*p21;
     ptfg12=p12*g#*j12;
     //ptfg21=j21*g*p21;
-    ptfg21=j21*(eye+p22*g#*j11)*p21;
+    ptfg21=j21*(eye()+p22*g#*j11)*p21;
     ptfg22=j22+j21*p22*g#*j12;
     
     p1=[ptfg11,ptfg12;ptfg21,ptfg22];

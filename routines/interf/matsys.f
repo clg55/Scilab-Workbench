@@ -51,8 +51,8 @@ c     funcprot whereis where   timer havewindow memory stacksize
 c     26         27    28      29       30       31     32
 c     mtlb_mode  link     ulink  c_link addinter  fhelp  fapropos
 c     33         34        35     36    37       38     39
-c     fclear    what    sciargs  chdir getcwd ieee
-c     40         41       42     43     44     45
+c     fclear    what    sciargs  chdir getcwd ieee typename
+c     40         41       42     43     44     45    46
 
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
@@ -66,7 +66,7 @@ c
      +      150,160,190,180,200,210,220,230,240,250,
      +      250,300,320,320,370,380,390,400,410,420,
      +      450,500,510,600,610,620,630,640,650,660,
-     +      670,680,681,682,683),fin
+     +      670,680,681,682,683,684),fin
 c     
 c     debug
  10   if(rhs.le.0) then
@@ -450,10 +450,20 @@ c     resume in a compiled macro
          ids(1,pt0+1)=lc
          pstk(pt0+2)=count
       elseif(rstk(pt0).eq.502) then
+c     resume in an uncompiled macro or an exec or an execstr
          if(rstk(pt0-1).eq.903) then
-            if(rstk(pt0-3).ne.501.and.rstk(pt0-3).ne.201) goto 156
-            if(paus.ne.0.and.rstk(pt0-3).eq.201) then
-               r=rstk(pt0-7)
+c     .  in an execstr, check execstr calling context
+
+            pt0=pt0-2
+ 153        pt0=pt0-1
+            if(pt0.le.0) goto 156
+            if(rstk(pt0).eq.802.or.rstk(pt0).eq.612 .or.
+     &           (rstk(pt0).eq.805.and.eqid(ids(1,pt0),sel)).or.
+     &           (rstk(pt0).eq.616.and.pstk(pt0).eq.10)) count=count+1
+            if(rstk(pt0).ne.501.and.rstk(pt0).ne.502) goto 153
+            if(paus.ne.0.and.rstk(pt0).eq.201) then
+c     .        ???
+               r=rstk(pt0-4)
                if (r.eq.701.or.r.eq.604) goto 156
             endif
 c    .      resume in an execstr, simulate a resume in the calling macro
@@ -461,18 +471,11 @@ c    .      see macro.f code for details
             k = lpt(1) - (13+nsiz)
             lpt(1)=lin(k+1)
             macr=macr-1
-            pt=pt0+1
-            if(rstk(pt0-3).eq.501) then
-c     .        resume in an execstr call by a compiled macro
-c     .        pt points to the beginning of resumed variable names in ids
-               pt0=pt0-3
-            elseif(rstk(pt0-3).eq.201) then
-c     .        resume in an execstr call by an uncompiled macro
-c     .        pt points to the beginning of resumed variable names in ids
-               pt0=pt0-6
-            endif
+
+c     .     get location of lhs var names
+            lvar=pt-3
             rstk(pt0)=502
-            pstk(pt0+1)=pt-1+lhs
+            pstk(pt0+1)=lvar
             pstk(pt0+2)=count+1
          else
 c     .     resume in an uncompiled macro
@@ -1358,6 +1361,9 @@ c     mtlb_mode
       goto 999
  683  call intsieee("ieee")
       goto 999
+ 684  call inttypnam("typnam")
+      goto 999
+
  998  continue
 c     fake calls : only to force the 
 c     linker to load the following functions
@@ -2074,6 +2080,113 @@ C
       endif
       end
       
+      subroutine inttypnam(fname)
+c     --------------------------
+      character*(*) fname
+      logical checkrhs,checklhs
+      include '../../routines/stack.h'
+      logical cremat, getscalar
+c     following common defines the initial database of type names
+      integer maxtyp,nmmax,ptmax
+      parameter (maxtyp=50,nmmax=200)
+      integer tp(maxtyp),ptr(maxtyp),ln(maxtyp),namrec(nmmax)
+      common /typnams/ tp,ptr,ln,namrec,ptmax
+C
+      integer iadr,sadr
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+C
+      nbvars = 0
+      rhs = max(0,rhs)
+      
+      if(rhs.eq.0) then
+         if(.not.checklhs(fname,1,2)) return
+c     compute number of defined types
+         nt=0
+         do 01 it=1,maxtyp
+            if(ln(it).ne.0) nt=nt+1
+ 01      continue
+c     allocate results
+         top=top+1
+c     .  vector of type numbers
+         il=iadr(lstk(top))
+         l=sadr(il+4)
+         iln=iadr(l+nt)
+         lw1=sadr(iln+5+nt+ptmax)
+         err=lw1-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+c
+         istk(il)=1
+         istk(il+1)=nt
+         istk(il+2)=1
+         istk(il+3)=0
+         lstk(top+1)=l+nt
+c
+         top=top+1
+c     .  vector of type names
+         iln=iadr(lstk(top))
+         istk(iln)=10
+         istk(iln+1)=nt
+         istk(iln+2)=1
+         istk(iln+3)=0
+         istk(iln+4)=1
+         ilc=iln+5+nt
 
+         i1=0
 
+         do 02 it=1,maxtyp
+            if(ln(it).ne.0) then
+               stk(l+i1)=tp(it)
+               istk(iln+5+i1)=istk(iln+4+i1)+ln(it)
+               call icopy(ln(it),namrec(ptr(it)),1,istk(ilc),1)
+               ilc=ilc+ln(it)
+               i1=i1+1
+            endif
+ 02      continue
+         lstk(top+1)=sadr(ilc)
+         if(lhs.eq.1) top=top-1
+         return
+      endif
+c
+      if(.not.checkrhs(fname,0,2)) return
+      if(.not.checklhs(fname,0,1)) return
+      if(.not.getscalar(fname,top,top,lr)) return
+      itype=stk(lr)
+      if(itype.le.0) then
+         err=1
+         call error(116)
+         return
+      endif
+      top=top-1
+      il=iadr(lstk(top))
+      if(istk(il).ne.10) then
+         err=1
+         call error(55)
+         return
+      endif
+      if(istk(il+1).ne.1.or.istk(il+2).ne.1) then 
+         err=1
+         call error(60)
+         return
+      endif
+      n=istk(il+5)-1
+      call cvstr(n,istk(il+6),buf,1)
 
+      call addtypename(itype,buf(1:n),ierr)
+      if(ierr.eq.1) then
+         call error(224)
+         return
+      elseif(ierr.eq.2) then
+         call error(225)
+         return
+      elseif(ierr.eq.3) then
+         call error(224)
+         return
+      endif
+      istk(il)=0
+      return
+      end

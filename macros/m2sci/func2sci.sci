@@ -16,6 +16,7 @@ function [stk,txt,top]=func2sci(op,stk)
 lhs=evstr(op(4)) 
 rhs=max(evstr(op(3)) ,0)
 txt=[]
+
 if exists('sci_'+op(2))==1 then // a translation function exists
   execstr('[stkr,txt,top1]=sci_'+op(2)+'()')
 elseif or(op(2)==same) then // identical syntax
@@ -30,8 +31,8 @@ else
     // check if the m-file exists in the given paths
     path=mfile_path(op(2))
     if path==[] then 
-      write(logfile,'Default translation used  for function '+..
-	  op(2)+' at line '+string(lcount))
+      [stkr,txt,top1]=sci_gener(op(2))
+    elseif or(op(2)==nametbl)
       [stkr,txt,top1]=sci_gener(op(2))
     else
       mfile2sci(path,res_path,%f,%t)
@@ -39,8 +40,6 @@ else
       execstr('[stkr,txt,top1]=sci_'+op(2)+'()')
     end
   else  //default translation
-    write(logfile,'Default translation used for function '+..
-	op(2)+' at line '+string(lcount))
     [stkr,txt,top1]=sci_gener(op(2))
   end
 end

@@ -25,7 +25,7 @@ DESCRIPTION
 
   index = index of the 0 eigenvalue.
 
-  One has (s*eye-A)^(-1) = D^(i-1)/s^i +... + D/s^2 + P/s - S - s*S^2 -...
+  One has (s*eye()-A)^(-1) = D^(i-1)/s^i +... + D/s^2 + P/s - S - s*S^2 -...
   around the singularity s=0.
 
 EXAMPLE
@@ -35,7 +35,7 @@ EXAMPLE
   [S,P,D,index]=projspec(A);
   index   //size of J-block
   trace(P)  //sum of dimensions of J-blocks
-  A*S-(eye-P)
+  A*S-(eye()-P)
   norm(D^index,1)
 
 SEE ALSO

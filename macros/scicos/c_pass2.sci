@@ -47,7 +47,7 @@ nblk=size(bllst)
 //take care of the heritage
  
 [bllst,inplnk,outlnk,clkptr,cliptr,inpptr,outptr,..
-    dep_ut,typ_l,typ_r,tblock,typ_cons,ok]=mini_extract_info(bllst,..
+    dep_ut,typ_l,typ_r,typ_m,tblock,typ_cons,ok]=mini_extract_info(bllst,..
     connectmat,clkconnect)
 
 if show_trace then disp('c_pass20:'+string(timer())),end
@@ -64,8 +64,8 @@ if show_trace then disp('c_pass21:'+string(timer())),end
 done=%f
 while ~done
   //replace all synchro (l) blocks recursively
-  [clkptr,cliptr,typ_l,dep_ut]=make_ptr(bllst,clkptr,cliptr,typ_l,..
-      dep_ut)
+  [clkptr,cliptr,typ_l,dep_ut,typ_m]=make_ptr(bllst,clkptr,cliptr,typ_l,..
+      dep_ut,typ_m)
 
   if show_trace then disp('c_pass3001:'+string(timer())),end
   
@@ -73,8 +73,8 @@ while ~done
   
   if show_trace then disp('c_pass3011:'+string(timer())),end
   
-  [ok,done,bllst,connectmat,clkconnect,typ_l,corinv]=paksazi(bllst,..
-      connectmat,clkconnect,corinv,clkptr,cliptr,typ_l,dep_ut)
+  [ok,done,bllst,connectmat,clkconnect,typ_l,typ_m,corinv]=paksazi(bllst,..
+      connectmat,clkconnect,corinv,clkptr,cliptr,typ_l,typ_m,dep_ut)
   
   if show_trace then disp('c_pass300011:'+string(timer())),end
   if ~ok then
@@ -88,7 +88,8 @@ if show_trace then disp('c_pass31:'+string(timer())),end
 //extract various info from bllst
 [lnkptr,inplnk,outlnk,clkptr,cliptr,inpptr,outptr,..
     xptr,zptr,rpptr,ipptr,xc0,xd0,rpar,ipar,dep_ut,..
-    typ_z,typ_s,typ_x,funs,funtyp,initexe,labels,ok]=extract_info(bllst,..
+    typ_z,typ_s,typ_x,typ_m,funs,funtyp,initexe,labels,..
+    bexe,boptr,blnk,blptr,ok]=extract_info(bllst,..
     connectmat,clkconnect)
 
 if ~ok then 
@@ -129,7 +130,7 @@ if show_trace then disp('c_pass501:'+string(timer())),end
 // Set execution scheduling tables 
 [ordptr,ordclk,cord,iord,oord,zord,critev,ok]=scheduler(inpptr,..
     outptr,clkptr,execlk,execlk0,execlk_cons,ordptr1,outoin,outoinptr,..
-    evoutoin,evoutoinptr,typ_z,typ_x);
+    evoutoin,evoutoinptr,typ_z,typ_x,typ_s,bexe,boptr,blnk,blptr);
 
 if ~ok then 
   cpr=list()
@@ -174,7 +175,7 @@ if show_trace then disp('c_pass71:'+string(timer())),end
 function [ordptr2,ordclk,cord,iord,oord,zord,critev,ok]=..
     scheduler(inpptr,..
     outptr,clkptr,execlk,execlk0,execlk_cons,ordptr1,outoin,outoinptr,..
-    evoutoin,evoutoinptr,typ_z,typ_x);
+    evoutoin,evoutoinptr,typ_z,typ_x,typ_s,bexe,boptr,blnk,blptr);
 //
 nblk=size(typ_x,1)
 if execlk0<>[] then
@@ -206,7 +207,7 @@ end
 //
 if ~ok then 
   message('Algebraic loop detected; cannot be compiled.');
-  ordptr=[],ordclk=[],cord=[],iord=[],oord=[],zord=[],critev=[]
+  ordptr2=[],ordclk=[],cord=[],iord=[],oord=[],zord=[],critev=[]
   return,
 end
 
@@ -223,7 +224,7 @@ for o=1:clkptr(nblk+1)-1
   
   if ~ok then 
     message('Algebraic loop detected; cannot be compiled.');
-    ordptr=[],ordclk=[],cord=[],iord=[],oord=[],zord=[],critev=[]
+    ordptr2=[],ordclk=[],cord=[],iord=[],oord=[],zord=[],critev=[]
     return,
   end
   //
@@ -232,16 +233,29 @@ for o=1:clkptr(nblk+1)-1
   ordclk=[ordclk;r]
 end
 
-if ordptr1<>ordptr2 then disp("erororororo");pause;end
+if ordptr1<>ordptr2 then disp("serious bug,report");pause;end
 //ordptr=[ordptr1,ordptr2];
 
 zord=cord
 oord=cord
 n=size(cord,1)
+
+    vec=-ones(1,nblk);
+    vec(cord(:,1))=0;
+    
+    //    [ext_cord,ok]=new_tree3(vec,dep_ut,typ_s);
+typp=zeros(typ_s);typp(typ_s)=1
+    [ext_cord,ok]=new_tree3(vec,dep_ut,typp);
+
+    if ~ok then disp('serious bug, report.');pause;end
+    ext_cord=ext_cord(n+1:$);
+
+
 for iii=n:-1:1
   i=cord(iii,1)
   fl=%f
   fz=%f
+//  if typ_s(i) then fz=%t;fl=%t; end
   for ii=[outoin(outoinptr(i):outoinptr(i+1)-1,1)',..
       evoutoin(evoutoinptr(i):evoutoinptr(i+1)-1,1)']
     //ii est un block affecte par changement de sortie du 
@@ -252,13 +266,13 @@ for iii=n:-1:1
     if fl&fz then break,end
     //si ii est un block integre (continu avec etat) 
     //il faut garder i
-    for l=iii+1:n
+//    for l=iii+1:n
       //si ii est un block qu'on a decide de garder 
       //il faut garder i
-      if ii==zord(l,1) then fz=%t; end
-      if ii==oord(l,1) then fl=%t; end
-      if fl&fz then break,end
-    end
+      if or(ii==[zord(iii+1:$,1)',ext_cord]) then fz=%t; end
+      if or(ii==[oord(iii+1:$,1)',ext_cord]) then fl=%t; end
+//      if fl&fz then break,end
+//    end
     if fl&fz then break; end
   end
   //mettre a zero si block doit etre supprimer
@@ -267,7 +281,7 @@ for iii=n:-1:1
 end
 
 //supprimer les blocks a supprimer
-oord=oord(oord(:,1)<>zeros(oord(:,1)),:)
+oord=oord(oord(:,1)<>zeros(oord(:,1)),:);
 zord=zord(zord(:,1)<>zeros(zord(:,1)),:)
 
 //critev: vecteur indiquant si evenement est important pour tcrit
@@ -305,17 +319,17 @@ nb=size(vec,'*')
 for j=1:nb+2
   fini=%t
   for i=1:nb
-    if vec(i)==j-1 then 
+    if vec(i)==j-1&typ_l(i)<>-1 then 
       if j==nb+2 then 
 	message('algebraic loop detected');ok=%f;ord=[];return;
       end
-      if typ_l(i)==%t then
+      if typ_l(i)==1 then
 	fini=%f;
 	kk=bexe(boptr(i):boptr(i+1)-1)';
       else
 	kk=[];
 	for ii=blnk(blptr(i):blptr(i+1)-1)'
-	  if vec(ii)>-1 & (dep_ut(ii,1) | typ_l(ii)) then
+	  if vec(ii)>-1 & (dep_ut(ii,1) | (typ_l(ii)==1)) then
 	    fini=%f;
 	    kk=[kk ii];
 	  end
@@ -330,9 +344,9 @@ end
 ord(find(k==1))=[];
 
 
-function [okk,done,bllst,connectmat,clkconnect,typ_l,corinv]=..
+function [okk,done,bllst,connectmat,clkconnect,typ_l,typ_m,corinv]=..
     paksazi(bllst,connectmat,clkconnect,corinv,clkptr,cliptr,..
-    typ_l,dep_ut)
+    typ_l,typ_m,dep_ut)
 okk=%t
 nblk=length(bllst)
 nblkorg=nblk
@@ -343,6 +357,14 @@ end
 change=%f
 for lb=find(typ_l)
   indx=find(clkconnect(:,3)==lb) 
+  if indx==[] then 
+     message(['A synchro block is inactive';'cannot be compile']);
+     okk=%f;return
+  end
+  if or(clkconnect(indx,1)==lb) then 
+       message(['Algebraic loop detected';'on activation links']);
+       okk=%f;return
+  end
   nn=size(indx,'*')
   if nn>=2 then
     indxo=find(clkconnect(:,1)==lb)
@@ -425,7 +447,9 @@ for o=0:clkptr($)-1
     vec=-ones(1,nblk);
     vec(texeclki')=zeros(texeclki)';
     
-    [r,ok]=new_tree3(vec,dep_ut,typ_l);
+    //    [r,ok]=new_tree3(vec,dep_ut,typ_l);
+typ_lm=zeros(typ_l);typ_lm(typ_l)=1;typ_lm(typ_m)=-1;
+[r,ok]=new_tree3(vec,dep_ut,typ_lm);
 
     if ~ok then 
       message('Algebraic loop detected; cannot be compiled.');
@@ -587,7 +611,8 @@ if b<>[] then a=sum(b), else a=[], end
 
 function [lnkptr,inplnk,outlnk,clkptr,cliptr,inpptr,outptr,..
     xptr,zptr,rpptr,ipptr,xc0,xd0,rpar,ipar,dep_ut,..
-    typ_z,typ_s,typ_x,funs,funtyp,initexe,labels,ok]=extract_info(bllst,..
+    typ_z,typ_s,typ_x,typ_m,funs,funtyp,initexe,labels,..
+    bexe,boptr,blnk,blptr,ok]=extract_info(bllst,..
     connectmat,clkconnect)
 
 ok=%t
@@ -604,13 +629,11 @@ rpptr=clkptr;ipptr=clkptr;
 xc0=[];xd0=[];rpar=[];ipar=[];
 
 fff=ones(nbl,1)==1
-dep_ut=[fff,fff];typ_z=fff;typ_s=fff;typ_x=fff
+dep_ut=[fff,fff];typ_z=fff;typ_s=fff;typ_x=fff;typ_m=fff;
 
-//dep_ut=[];typ_z=[];typ_s=[];typ_x=[]
 initexe=[];
 funs=list();
 funtyp=zeros(typ_z)
-//funtyp=[];
 labels=[]
 //
 //
@@ -633,18 +656,12 @@ for i=1:nbl
   inpnum=ll(2);outnum=ll(3);cinpnum=ll(4);coutnum=ll(5);
   //
   inpptr(i+1)=inpptr(i)+size(inpnum,'*')
-//  inpptr=[inpptr;inpptr($)+size(inpnum,'*')]
 outptr(i+1)=outptr(i)+size(outnum,'*')
-//  outptr=[outptr;outptr($)+size(outnum,'*')]
 cliptr(i+1)=cliptr(i)+size(cinpnum,'*')
-//  cliptr=[cliptr;cliptr($)+size(cinpnum,'*')]
 clkptr(i+1)=clkptr(i)+size(coutnum,'*')
-//  clkptr=[clkptr;clkptr($)+size(coutnum,'*')]
   //
   xc0=[xc0;ll(6)(:)]
     xptr(i+1)=xptr(i)+size(ll(6),'*')
-//  xptr=[xptr;xptr($)+size(ll(6),'*')]
-  
   
   if funtyp(i,1)==3 then //sciblocks
     xd0k=var2vec(ll(7))
@@ -653,7 +670,6 @@ clkptr(i+1)=clkptr(i)+size(coutnum,'*')
   end
   xd0=[xd0;xd0k]
   zptr(i+1)=zptr(i)+size(xd0k,'*')
-//  zptr=[zptr;zptr($)+size(xd0k,'*')]
   //  
   if funtyp(i,1)==3 then //sciblocks
     rpark=var2vec(ll(8))
@@ -672,6 +688,7 @@ clkptr(i+1)=clkptr(i)+size(coutnum,'*')
   typ_z(i)=ll(10)=='z'
   typ_s(i)=ll(10)=='s'
   typ_x(i)=ll(6)<>[]
+  typ_m(i)=ll(10)=='m'
   dep_ut(i,:)=(ll(12)(:))'
   //
   if ll(5)<>[] then  
@@ -692,6 +709,34 @@ clkptr(i+1)=clkptr(i)+size(coutnum,'*')
     labels=[labels;' ']
   end
 end
+
+clkconnect=clkconnect(find(clkconnect(:,1)<>0),:);
+
+con=clkptr(clkconnect(:,1))+clkconnect(:,2)-1;
+[junk,ind]=sort(-con);con=-junk;
+clkconnect=clkconnect(ind,:);
+//
+bclkconnect=clkconnect(:,[1 3]);
+boptr=1;
+bexe=[];
+for i=1:nbl
+  r=bclkconnect(find(bclkconnect(:,1)==i),2);
+  bexe=[bexe;r];
+  boptr=[boptr;boptr($)+size(r,1)];
+end
+//
+bconnectmat=connectmat(:,[1 3]);
+blptr=1;
+blnk=[];
+
+for i=1:nbl
+  r=bconnectmat(find(bconnectmat(:,1)==i),2);
+  blnk=[blnk;r];
+  blptr=[blptr;blptr($)+size(r,1)];
+end  
+//
+
+
 
 [ok,bllst]=adjust_inout(bllst,connectmat)
 nlnk=size(connectmat,1)
@@ -765,7 +810,8 @@ for i=1:nblk
 end
 
 
-function [clkptr,cliptr,typ_l,dep_ut]=make_ptr(bllst,clkptr,cliptr,typ_l,dep_ut)
+function [clkptr,cliptr,typ_l,dep_ut,typ_m]=..
+                  make_ptr(bllst,clkptr,cliptr,typ_l,dep_ut,typ_m)
 nblk0=size(clkptr,'*')
 nbl=size(bllst)
 if nbl<nblk0 then return; end
@@ -775,7 +821,7 @@ cliptr1=zeros(nbl-nblk0,1);clkptr1=cliptr1;
 cliptr1(1)=cliptr($)+sum(ll(4))
 clkptr1(1)=clkptr($)+sum(ll(5))
 typ_l1=cliptr1==1;dep_ut1=[typ_l1,typ_l1];
-typ_l1(1)=ll(10)=='l';dep_ut1(1,:)=ll(12);
+typ_l1(1)=ll(10)=='l';typ_m1(1)=ll(10)=='m';dep_ut1(1,:)=ll(12);
 j=1
 for i=nblk0+1:nbl
   j=j+1
@@ -783,11 +829,13 @@ for i=nblk0+1:nbl
   cliptr1(j)=cliptr1(j-1)+sum(ll(4))
   clkptr1(j)=clkptr1(j-1)+sum(ll(5))
   typ_l1(j)=ll(10)=='l'
+  typ_m1(j)=ll(10)=='m'
   dep_ut1(j,:)=ll(12)
 end
 cliptr=[cliptr;cliptr1]
 clkptr=[clkptr;clkptr1]
 typ_l=[typ_l;typ_l1]
+typ_m=[typ_m;typ_m1]
 dep_ut=[dep_ut;dep_ut1];
 
 
@@ -1051,7 +1099,7 @@ end
 
 
 function [bllst,inplnk,outlnk,clkptr,cliptr,inpptr,outptr,..
-    dep_ut,typ_l,typ_r,tblock,typ_cons,ok]=mini_extract_info(bllst,..
+    dep_ut,typ_l,typ_r,typ_m,tblock,typ_cons,ok]=mini_extract_info(bllst,..
     connectmat,clkconnect)
 
 ok=%t
@@ -1060,7 +1108,7 @@ clkptr=zeros(nbl+1,1);clkptr(1)=1
 cliptr=clkptr;inpptr=cliptr;outptr=inpptr;
 //clkptr=1;cliptr=1;inpptr=1;outptr=1;
 fff=ones(nbl,1)==1
-dep_ut=[fff,fff];typ_l=fff;typ_r=fff;typ_cons=fff
+dep_ut=[fff,fff];typ_l=fff;typ_r=fff;typ_cons=fff;typ_m=fff;
 tblock=fff
 //dep_ut=[];typ_l=[];typ_r=[];typ_cons=[]
 //tblock=[]  // specifies blocks that must be connected to time event.
@@ -1075,11 +1123,6 @@ for i=1:nbl
     typ_r(i)=~ll(12)(2)
     tblock(i)=ll(12)(2)
     //if block depends on time but has no event input port
-//    if ll(12)(2) then 
-//      typ_r(i)=%f
-//      tblock(i)=%t;
-//    else
-//      tblock(i)=%f;
     if ~ll(12)(2) then 
       //inherits from the inputs
       cinpnum=ones(inpnum)
@@ -1088,26 +1131,14 @@ for i=1:nbl
     //
   else
     tblock(i)=ll(12)(2);typ_r(i)=%f
-//    if ll(12)(2) then 
-//      tblock(i)=%t;typ_r(i)=%f
-//    else
-//      tblock(i)=%f;typ_r(i)=%f
-//    end
   end
-  //
-  //  inpptr=[inpptr;inpptr($)+size(inpnum,'*')]
-  //  outptr=[outptr;outptr($)+size(outnum,'*')]
-  //  cliptr=[cliptr;cliptr($)+size(cinpnum,'*')]
-  //  clkptr=[clkptr;clkptr($)+size(coutnum,'*')]
   inpptr(i+1)=inpptr(i)+size(inpnum,'*')
   outptr(i+1)=outptr(i)+size(outnum,'*')
   cliptr(i+1)=cliptr(i)+size(cinpnum,'*')
   clkptr(i+1)=clkptr(i)+size(coutnum,'*')
   //
-  typ_l(i)=ll(10)=='l';dep_ut(i,:)=(ll(12)(:))';
+  typ_l(i)=ll(10)=='l';typ_m(i)=ll(10)=='m';dep_ut(i,:)=(ll(12)(:))';
   typ_cons(i)=[cinpnum==[]&inpnum==[]&~ll(12)(2)]
-//  typ_l=[typ_l;ll(10)=='l'];dep_ut=[dep_ut;(ll(12)(:))'];
-//  typ_cons=[typ_cons;cinpnum==[]&inpnum==[]]
 //
 end
 if show_trace then disp('c_pass22222222:'+string(timer())),end //'
@@ -1180,8 +1211,8 @@ ok=ok2==1
 
 function  [r,ok]=new_tree3(vec,dep_ut,typ_l)
 dd=zeros(dep_ut);dd(dep_ut)=1;
-ddd=zeros(typ_l);ddd(typ_l)=1; 
-[r2,ok2]=sci_tree3(vec,dd,ddd,bexe,boptr,blnk,blptr)
+//ddd=zeros(typ_l);ddd(typ_l)=1; 
+[r2,ok2]=sci_tree3(vec,dd,typ_l,bexe,boptr,blnk,blptr)
 r=r2'
 ok=ok2==1
 

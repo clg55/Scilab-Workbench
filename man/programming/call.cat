@@ -1,14 +1,14 @@
 
-fort(1)                        Scilab Function                        fort(1)
+call(1)                        Scilab Function                        call(1)
 NAME
-  fort - Fortran or C user routines call
+  call - Fortran or C user routines call
 
 CALLING SEQUENCE
   // long form 'out' is present
-  [y1,...,yk]=fort("ident",x1,px1,"tx1",...,xn,pxn,"txn",
+  [y1,...,yk]=call("ident",x1,px1,"tx1",...,xn,pxn,"txn",
                    "out",[ny1,my1],py1,"ty1",...,[nyl,myl],pyl,"tyl")
   // short form : no 'out' parameter
-  [y1,....,yk]=fort("ident",x1,...,xn)
+  [y1,....,yk]=call("ident",x1,...,xn)
 
 PARAMETERS
 
@@ -73,7 +73,7 @@ DESCRIPTION
   one specify the dimensions of the output variable [myl,nyl] must follow the
   compatibility condition mxk*nxk >= myl*nyl.
 
-  In the case of short syntax , [y1,....,yk]=fort("ident",x1,...,xn), the
+  In the case of short syntax , [y1,....,yk]=call("ident",x1,...,xn), the
   input parameters xi's and the name "ident" are sent to the interface rou-
   tine Ex-fort. This interface routine is then very similar to an interface
   (see the source code in the directory SCIDIR/default/Ex-fort.f).
@@ -97,7 +97,7 @@ DESCRIPTION
   // m                5     integer
   // Outputs:
   // c is in position 1 and double with size [m,n]
-  c=fort("foof",a,2,"d",b,3,"d",n,4,"i",m,5,"i","out",[m,n],1,"d");
+  c=call("foof",a,2,"d",b,3,"d",n,4,"i",m,5,"i","out",[m,n],1,"d");
   returns the matrix c=2*a+b.
 
   If your machine is a DEC Alpha, SUN Solaris or SGI you may have to change
@@ -119,6 +119,6 @@ DESCRIPTION
   link("fooc.o","fooc","C") // note the third argument
   a=[1,2,3;4,5,6];b= %pi;
   [m,n]=size(a);
-  c=fort("fooc",a,2,"d",b,3,"d",m,4,"i",n,5,"i","out",[m,n],1,"d");
+  c=call("fooc",a,2,"d",b,3,"d",m,4,"i",n,5,"i","out",[m,n],1,"d");
 SEE ALSO
   link, c_link, intersci, addinter

@@ -1,26 +1,9 @@
-
 /*------------------------------------------------------------------------
-    Missile 
-    XWindow and Postscript library for 2D and 3D plotting 
+    Graphic library for 2D and 3D plotting 
     Copyright (C) 1998 Chancelier Jean-Philippe
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 1, or (at your option)
-    any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
     jpc@cergrene.enpc.fr 
+ --------------------------------------------------------------------------*/
 
---------------------------------------------------------------------------*/
 /*-------------BEGIN--------------------------------------------------------
 \section{ Partie generale : permettant d'appeller les primitives de dessin 
  qui travaillent en coordonnees relatives}
@@ -539,8 +522,8 @@ void xclick_any_1(fname, str, ibutton, iwin, iflag, x5, x6, x7, x, y, dx3, dx4, 
 { 
   integer x1,y1,n=1,rect[4];
   integer verb=0,cur,na;
-  C2F(dr)("xget","window",&verb,&cur,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)(fname,str,ibutton,&x1,&y1,iwin,iflag,x7,PD0,PD0,PD0,PD0,lx0,lx1);
+  C2F(dr)("xget","window",&verb,&cur,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xset","window",iwin,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(echelle2d)(x,y,&x1,&y1,&n,&n,rect,"i2f",3L);
   C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);

@@ -1,7 +1,7 @@
 
 householder(G)                 Scilab Function                 householder(G)
 NAME
-  qr - Householder orthogonal reflexion matrix
+  householder - Householder orthogonal reflexion matrix
 
 CALLING SEQUENCE
   u=householder(v [,w])
@@ -17,11 +17,11 @@ PARAMETERS
 
 DESCRIPTION
   given 2 column vectors v,  w of same size, householder(v,w) returns a uni-
-  tary column vector u, such that  (eye-2*u*u')*v is proportional to w.
-  (eye-2*u*u') is the orthogonal Householder reflexion matrix .
+  tary column vector u, such that  (eye()-2*u*u')*v is proportional to w.
+  (eye()-2*u*u') is the orthogonal Householder reflexion matrix .
 
-  w default value is  eye(v). In this case vector  (eye-2*u*u')*v is the vec-
-  tor   eye(v)*norm(v).
+  w default value is  eye(v). In this case vector  (eye()-2*u*u')*v is the
+  vector   eye(v)*norm(v).
 
 SEE ALSO
   qr, givens

@@ -38,5 +38,7 @@ TK_EvalStr('toplevel .foo');
 // create a static label
 TK_EvalStr('pack .foo.l');
 // pack the label widget. It appears on the screen.
-TK_SetVar('tvar','This text has been set directly within scilab');.SH See also
+TK_SetVar('tvar','This text has been set directly within scilab');
+.fi
+.SH See also
 ScilabEval, TK_EvalFile, TK_EvalStr, TK_GetVar

@@ -154,7 +154,8 @@ C     .. Scalar Arguments ..
       INTEGER n
 C     ..
 C     .. Local Scalars ..
-      DOUBLE PRECISION al,alv,amaxp,c,f,f1,f2,ffm,fm,g,p,p1,p2,p3,p4,psave,q,qn,r,u,
+      DOUBLE PRECISION al,alv,amaxp,c,f,f1,f2,ffm,fm,g,p,p1,p2,p3,p4,
+     +     psave,q,qn,r,u,
      +     v,w,w2,x,x1,x2,xl,xll,xlr,xm,xnp,xnpq,xr,ynorm,z,z2
       INTEGER i,ix,ix1,k,m,mp,nsave
 C     ..
@@ -163,7 +164,7 @@ C     .. External Functions ..
       EXTERNAL ranf
 C     ..
 C     .. Intrinsic Functions ..
-      INTRINSIC abs,log,amin1,iabs,int,sqrt
+      INTRINSIC abs,log,dmin1,iabs,int,sqrt
 C     JJV ..
 C     JJV .. Save statement ..
       SAVE p,q,m,fm,xnp,xnpq,p1,xm,xl,xr,c,xll,xlr,p2,p3,p4,qn,r,g,
@@ -189,7 +190,7 @@ C     JJV Only remaining problem - if called initially with the
 C     JJV initial values of psave and nsave, it will hang
  10   continue
       psave = pp
-      p = amin1(psave,1.-psave)
+      p = dmin1(psave,1.-psave)
       q = 1. - p
  20   continue
       xnp = n*p

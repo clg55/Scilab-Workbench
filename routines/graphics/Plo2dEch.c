@@ -1,4 +1,10 @@
-/* Copyright (C) 1998 Chancelier Jean-Philippe */
+
+/*------------------------------------------------------------------------
+    Graphic library for 2D and 3D plotting 
+    Copyright (C) 1998 Chancelier Jean-Philippe
+    jpc@cergrene.enpc.fr 
+ --------------------------------------------------------------------------*/
+
 #include <string.h> /* in case of dbmalloc use */
 
 #if defined(THINK_C) || defined (__MWERKS__) || defined(WIN32)
@@ -1138,6 +1144,7 @@ static void C2F(gradua)(xmi,xma,kminr,kmaxr,ar,npr,b)
   if ( x1 == 0.0 )     {      x1a= x0a;}
   if ( x0 == 0.0 )     {      x0a= x1a;}
   loc = Min( floor(x0*exp10((double) -x1a)),((double)DMAX));
+  if ( loc < 0) loc = Max( loc, -((double) DMAX));
   kmin1=(int) loc;
   kmax1=x1k;
   np1= Abs(kmax1-kmin1);

@@ -4,13 +4,13 @@ c     Copyright INRIA
      $     ,outlnk,lnkptr,clkptr,ordptr,nptr
      $     ,ordclk,nordcl,cord,oord,zord,critev,
      $     rpar,rpptr,ipar
-     $     ,ipptr,funptr,funtyp,outtb,urg,ierr) 
+     $     ,ipptr,funptr,funtyp,outtb,urg,ierr,iwa) 
 C     
 C     
 C..   Parameters .. 
 c     maximum number of clock output for one block
       integer nts
-      parameter (nts=100)
+      parameter (nts=100) 
 C     
       integer neq(*)
 C     neq must contain after #states all integer data for simblk and grblk
@@ -22,8 +22,9 @@ C     X must contain after state values all real data for simblk and grblk
       integer ordclk(nordcl,2),nordcl,cord(*),oord(*),zord(*)
       integer critev(*),rpptr(*),ipar(*),ipptr(*),funptr(*),funtyp(*)
       integer ierr
+      integer iwa(*)
 c     
-      logical urg
+      integer urg
       integer i,k,ierr1,iopt,istate,itask,j,jdum,jt,
      &     ksz,flag,keve,kpo,nord,nclock
       double precision t
@@ -44,13 +45,19 @@ c
       common /costol/ atol,rtol,ttol,deltat
 c     
 c     
-      urg=.false.
+      urg=urg-1
       keve = pointi
       pointi=evtspt(keve)
       evtspt(keve)=-1
 c     
       nord=ordptr(keve+1)-ordptr(keve)
       if(nord.eq.0) return
+c
+      do 12 ii=ordptr(keve),ordptr(keve+1)-1
+         kfun=ordclk(ii,1)
+         iwa(kfun)=ordclk(ii,2)
+ 12   continue
+c
 c
       do 60 ii=ordptr(keve),ordptr(keve+1)-1
          kfun=ordclk(ii,1)
@@ -83,18 +90,16 @@ c
             endif
 c     
             if (ntvec.ge.1) then 
-               do 70 i = 1,ntvec
-                  if (tvec(i) .ge. told) then
-                     urg=.true.
-                     call putevs(tevts,evtspt,nevts,pointi,
-     &                    tvec(i),i+clkptr(kfun)-1,ierr1)
-                     if (ierr1 .ne. 0) then
+               if(funtyp(kfun).eq.-1) then
+                  urg=urg+1
+                  call putevs(tevts,evtspt,nevts,pointi,
+     &                 tvec(i),ntvec+clkptr(kfun)-1,ierr1)
+                  if (ierr1 .ne. 0) then
 C     !                 event conflict
-                        ierr = 3
-                        return
-                     endif
+                     ierr = 3
+                     return
                   endif
- 70            continue
+               endif
             endif
          endif
  60   continue
@@ -117,19 +122,12 @@ C     !                 event conflict
  65   continue
       end
 
-
-
-
-
-
-
-
       subroutine odoit(neq,xd,x,xptr,z,zptr,iz,izptr,told
      $     ,tevts,evtspt,nevts,pointi,inpptr,inplnk,outptr
      $     ,outlnk,lnkptr,clkptr,ordptr,nptr
-     $     ,ordclk,nordcl,cord,oord,zord,critev,
-     $     rpar,rpptr,ipar
-     $     ,ipptr,funptr,funtyp,outtb,ierr) 
+     $     ,ordclk,nordcl,cord,oord,zord,critev
+     $     ,rpar,rpptr,ipar
+     $     ,ipptr,funptr,funtyp,outtb,iwa,ierr) 
 C     
 
 C     
@@ -148,9 +146,9 @@ C     X must contain after state values all real data for simblk and grblk
       integer ordclk(nordcl,2),nordcl,cord(*),oord(*),zord(*)
       integer critev(*),rpptr(*),ipar(*),ipptr(*),funptr(*),funtyp(*)
       integer ierr
+      integer iwa(*)
 c     
-      logical urg
-      integer i,k,ierr1,iopt,istate,itask,j,jdum,jt,
+      integer i,k,ierr1,iopt,istate,itask,j,jdum,jt,urg,
      &     ksz,flag,keve,kpo,nord,nclock
       double precision t
       double precision tvec(nts)
@@ -169,7 +167,14 @@ c
       double precision atol,rtol,ttol,deltat
       common /costol/ atol,rtol,ttol,deltat
 c     
-      urg=.false.
+      urg=0
+c      
+      call iset(nblk,-1,iwa,1)
+      do 11 ii=1,noord
+         kfun=oord(ii)
+         iwa(kfun)=oord(ii+noord)
+ 11   continue
+c
       do 19 jj=1,noord
          kfun=oord(jj)
          nclock = oord(jj+noord)
@@ -198,47 +203,50 @@ c
                ierr=5-flag
                return
             endif
-c     
-            do 70 i = 1,ntvec
-               if (tvec(i) .ge. told) then
-                  urg=.true.
+c  
+              if (ntvec.ge.1) then
+               if(funtyp(kfun).eq.-1) then
+                  urg=urg+1
                   call putevs(tevts,evtspt,nevts,pointi,
-     &                 tvec(i),i+clkptr(kfun)-1,ierr1)
+     &                 told,ntvec+clkptr(kfun)-1,ierr1)
                   if (ierr1 .ne. 0) then
 C     !                 event conflict
                      ierr = 3
                      return
                   endif
                endif
- 70         continue
-         endif
- 19   continue
-c
-      do 20 jj=1,noord
-         kfun=oord(jj)
-         nclock = oord(jj+noord)
-c
-         if(xptr(kfun+1)-xptr(kfun).gt.0) then
-            flag=0
-            call callf(kfun,nclock,funptr,funtyp,told,
-     $           xd,x,xptr,z,zptr,iz,izptr,rpar,
-     $           rpptr,ipar,ipptr,tvec,ntvec,inpptr,
-     $           inplnk,outptr,outlnk,lnkptr,outtb,flag) 
-            if (flag .lt. 0) then
-               ierr = 5 - flag
-               return
             endif
          endif
- 20   continue
+  
+ 19   continue
 c
-      if (.not.urg)  return
- 21   call oodoit(neq,xd,x,xptr,z,zptr,iz,izptr,told
-     $     ,tevts,evtspt,nevts,pointi,inpptr,inplnk,outptr
-     $     ,outlnk,lnkptr,clkptr,ordptr,nptr
-     $     ,ordclk,nordcl,cord,oord,zord,critev,
-     $     rpar,rpptr,ipar
-     $     ,ipptr,funptr,funtyp,outtb,urg,ierr) 
-      if (urg) goto 21
-      return
+
+      if (urg.gt.0)  then
+ 21      call oodoit(neq,xd,x,xptr,z,zptr,iz,izptr,told
+     $        ,tevts,evtspt,nevts,pointi,inpptr,inplnk,outptr
+     $        ,outlnk,lnkptr,clkptr,ordptr,nptr
+     $        ,ordclk,nordcl,cord,oord,zord,critev,
+     $        rpar,rpptr,ipar
+     $        ,ipptr,funptr,funtyp,outtb,urg,ierr,iwa) 
+         if (urg.gt.0) goto 21
+      endif
+
+c     .  update states derivatives
+      do 61 kfun=1,nblk
+         if(iwa(kfun).ne.-1) then
+            if(xptr(kfun+1)-xptr(kfun).gt.0) then
+               flag=0
+               nclock=iwa(kfun)
+               call callf(kfun,nclock,funptr,funtyp,told,
+     $              xd,x,xptr,z,zptr,iz,izptr,rpar,
+     $              rpptr,ipar,ipptr,tvec,ntvec,inpptr,
+     $              inplnk,outptr,outlnk,lnkptr,outtb,flag) 
+               if (flag .lt. 0) then
+                  ierr = 5 - flag
+                  return
+               endif
+            endif
+         endif
+ 61   continue
       end
 

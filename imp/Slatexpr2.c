@@ -43,6 +43,20 @@ void WriteTeX(filename,wide,height)
       fprintf (stderr," Can't Create Output file <%s> \n",filename1);
       exit(0);
     }
+
+  fprintf(fdo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+  fprintf(fdo,"%% Usage: -To include a Figure with a caption, insert the TWO following lines\n");
+  fprintf(fdo,"%%        in your Latex file:\n");
+  fprintf(fdo,"%% \\input{This_file_name} \n");
+  fprintf(fdo,"%% \\dessin{The_caption}{The_label}\n");
+  fprintf(fdo,"%%         -To include just a picture, insert the lines \n");
+  fprintf(fdo,"%%         between \\fbox{\\begin{picture}...  and \\end{picture}} below \n");
+  fprintf(fdo,"%%          \n");
+  fprintf(fdo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+
+  fprintf(fdo," \n");
+
+
   fprintf(fdo,"\\long\\def\\Checksifdef#1#2#3{\n");
   fprintf(fdo,"\\expandafter\\ifx\\csname #1\\endcsname\\relax#2\\else#3\\fi}\n");
   fprintf(fdo,"\\Checksifdef{Figdir}{\\gdef\\Figdir{}}{}\n");

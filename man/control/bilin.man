@@ -17,8 +17,8 @@ v
 Given a linear system in state space form, \fVsl=syslin(dom,A,B,C,D)\fR 
 (\fVsyslin\fR list), \fVsl1=bilin(sl,v)\fR  returns in \fVsl1\fR a 
 linear system with matrices \fV[A1,B1,C1,D1]\fR such that
-the transfer function \fVH1(s)=C1*inv(s*eye-A1)*B1+D1\fR is
-obtained from \fVH(z)=C*inv(z*eye-A)*B+D\fR by replacing \fVz\fR
+the transfer function \fVH1(s)=C1*inv(s*eye()-A1)*B1+D1\fR is
+obtained from \fVH(z)=C*inv(z*eye()-A)*B+D\fR by replacing \fVz\fR
 by \fVz=(a*s+b)/(c*s+d)\fR.
 One has \fVw=bilin(bilin(w,[a,b,c,d]),[d,-b,-c,a])\fR
 .SH EXAMPLE

@@ -114,7 +114,7 @@ c
      *        mm,mm1,mp1,nct,nctp1,ncu,nrt,nrtp1
       double precision pythag,wdotcr,wdotci,tr,ti,rr,ri
       double precision b,c,cs,el,emm1,f,g,wnrm2,scale,shift,sl,sm,sn,
-     *                 smm1,t1,test,ztest,small
+     *                 smm1,t1,test,ztest
       logical wantu,wantv
 c
       double precision zdumr,zdumi
@@ -126,9 +126,6 @@ c     MODIFIED ACCORDING TO EISPACK HQR2
 c
       maxit = 30*min(n,p)
 c
-c     small number, roughly machine epsilon, used to avoid underflow
-c
-      small = 1.0d-18
 c
 c     determine what is to be computed.
 c
@@ -406,10 +403,11 @@ c
             l = m - ll
 c        ...exit
             if (l .eq. 0) go to 480
-            test = abs(sr(l)) + abs(sr(l+1))
-            ztest = test + abs(er(l))/2.0d+0
-            if (small*ztest .ne. small*test) go to 460
+            test = pythag(sr(l),si(l)) + pythag(sr(l+1),si(l+1))
+            ztest = test + pythag(er(l),ei(l))
+            if (ztest .ne. test) go to 460
                er(l) = 0.0d+0
+               ei(l) = 0.0d+0
 c        ......exit
                go to 480
   460       continue
@@ -426,11 +424,12 @@ c        ......exit
 c           ...exit
                if (ls .eq. l) go to 520
                test = 0.0d+0
-               if (ls .ne. m) test = test + abs(er(ls))
-               if (ls .ne. l + 1) test = test + abs(er(ls-1))
-               ztest = test + abs(sr(ls))/2.0d+0
-               if (small*ztest .ne. small*test) go to 500
+               if (ls .ne. m) test=test + pythag(er(ls),ei(ls))
+               if (ls .ne. l + 1) test=test + pythag(er(ls-1),ei(ls-1))
+               ztest = test + pythag(sr(ls),si(ls))
+               if (ztest .ne. test) go to 500
                   sr(ls) = 0.0d+0
+                  si(ls) = 0.0d+0
 c           ......exit
                   go to 520
   500          continue
@@ -454,37 +453,43 @@ c        perform the task indicated by kase.
 c
          go to (570, 600, 620, 650), kase
 c
-c        deflate negligible sr(m).
+c        deflate negligible s(m).
 c
   570    continue
             mm1 = m - 1
             f = er(m-1)
             er(m-1) = 0.0d+0
+            ei(m-1) = 0.0d+0
             do 590 kk = l, mm1
                k = mm1 - kk + l
                t1 = sr(k)
                call drotg(t1,f,cs,sn)
                sr(k) = t1
+               si(k) = 0.0d0
                if (k .eq. l) go to 580
                   f = -sn*er(k-1)
                   er(k-1) = cs*er(k-1)
+                  ei(k-1) = cs*ei(k-1)
   580          continue
                if (wantv) call drot(p,vr(1,k),1,vr(1,m),1,cs,sn)
                if (wantv) call drot(p,vi(1,k),1,vi(1,m),1,cs,sn)
   590       continue
          go to 690
 c
-c        split at negligible sr(l).
+c        split at negligible s(l).
 c
   600    continue
             f = er(l-1)
             er(l-1) = 0.0d+0
+            ei(l-1) = 0.0d+0
             do 610 k = l, m
                t1 = sr(k)
                call drotg(t1,f,cs,sn)
                sr(k) = t1
+               si(k) = 0.0d0
                f = -sn*er(k)
                er(k) = cs*er(k)
+               ei(k) = cs*ei(k)
                if (wantu) call drot(n,ur(1,k),1,ur(1,l-1),1,cs,sn)
                if (wantu) call drot(n,ui(1,k),1,ui(1,l-1),1,cs,sn)
   610       continue
@@ -496,8 +501,9 @@ c
 c
 c           calculate the shift.
 c
-            scale = max(abs(sr(m)),abs(sr(m-1)),abs(er(m-1)),
-     *                    abs(sr(l)),abs(er(l)))
+            scale = max(pythag(sr(m),si(m)),pythag(sr(m-1),si(m-1)),
+     *        pythag(er(m-1),ei(m-1)),
+     *        pythag(sr(l),si(l)),pythag(er(l),ei(l)))
             sm = sr(m)/scale
             smm1 = sr(m-1)/scale
             emm1 = er(m-1)/scale
@@ -520,25 +526,34 @@ c
             mm1 = m - 1
             do 640 k = l, mm1
                call drotg(f,g,cs,sn)
-               if (k .ne. l) er(k-1) = f
+               if (k .ne. l) then
+                  er(k-1) = f
+                  ei(k-1) = 0.0d0
+               endif
                f = cs*sr(k) + sn*er(k)
                er(k) = cs*er(k) - sn*sr(k)
+               ei(k) = cs*ei(k) - sn*si(k)
                g = sn*sr(k+1)
                sr(k+1) = cs*sr(k+1)
+               si(k+1) = cs*si(k+1)
                if (wantv) call drot(p,vr(1,k),1,vr(1,k+1),1,cs,sn)
                if (wantv) call drot(p,vi(1,k),1,vi(1,k+1),1,cs,sn)
                call drotg(f,g,cs,sn)
                sr(k) = f
+               si(k) = 0.0d0
                f = cs*er(k) + sn*sr(k+1)
                sr(k+1) = -sn*er(k) + cs*sr(k+1)
+               si(k+1) = -sn*ei(k) + cs*si(k+1)
                g = sn*er(k+1)
                er(k+1) = cs*er(k+1)
+               ei(k+1) = cs*ei(k+1)
                if (wantu .and. k .lt. n)
      *            call drot(n,ur(1,k),1,ur(1,k+1),1,cs,sn)
                if (wantu .and. k .lt. n)
      *            call drot(n,ui(1,k),1,ui(1,k+1),1,cs,sn)
   640       continue
             er(m-1) = f
+            ei(m-1) = 0.0d0
             iter = iter + 1
          go to 690
 c
@@ -550,6 +565,7 @@ c           make the singular value  positive
 c
             if (sr(l) .ge. 0.0d+0) go to 660
                sr(l) = -sr(l)
+               si(l) = -si(l)
              if (wantv) call wrscal(p,-1.0d+0,vr(1,l),vi(1,l),1)
   660       continue
 c
@@ -561,6 +577,9 @@ c           ...exit
                tr = sr(l)
                sr(l) = sr(l+1)
                sr(l+1) = tr
+               tr = si(l)
+               si(l) = si(l+1)
+               si(l+1) = tr
                if (wantv .and. l .lt. p)
      *            call wswap(p,vr(1,l),vi(1,l),1,vr(1,l+1),vi(1,l+1),1)
                if (wantu .and. l .lt. n)

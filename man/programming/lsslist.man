@@ -1,7 +1,7 @@
 .TH lsslist 1 "Jan 1997" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-lsslist - Scilab linear state space t function definition
+lsslist - Scilab linear state space function definition
 .SH CALLING SEQUENCE
 .nf
 lsslist()

@@ -331,7 +331,7 @@ c
       il=iadr(lr)
       ix(1)=istk(lc+1)
       ix(2)=istk(lc+2)
-      maxc=19
+      maxc=17
       isign=1
       if(x.lt.0)  isign=-1
       call fmt(abs(x),maxc,ifmt,n1,n2)

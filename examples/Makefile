@@ -11,8 +11,8 @@ info	:
 	@echo "Type \"make tests\" in examples directory"
 	@echo "  to test link and addinter features"
 
-SUBDIRS = addinter-examples callsci intersci-examples link-examples misc-examples \
-	man-examples macros-examples 
+SUBDIRS = addinter-examples callsci intersci-examples link-examples \
+	misc-examples man-examples macros-examples 
 
 
 distclean::

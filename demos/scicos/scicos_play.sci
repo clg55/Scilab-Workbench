@@ -50,13 +50,19 @@ execstr('message=x_message')
 newfun('x_message',x_mess)
 execstr('dialog=x_dialog')
 I=file('open',fil,'old')
-O=file('open','/dev/null','unknown')
+if getenv('WIN32','NO')=='OK' then
+  O=file('open',TMPDIR+'\null','unknown')
+else
+  O=file('open','/dev/null','unknown')
+end
 %IO=[I,O]
 lines(0)
 scicos();
 file('close',I)
 file('close',O)
-
+if getenv('WIN32','NO')=='OK' then
+  host('del '+TMPDIR+'\null')
+end
 //newfun('x_message',x_mess)
 newfun('x_dialog',x_dia)
 newfun('x_mdialog',x_mdia)

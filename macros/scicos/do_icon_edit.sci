@@ -15,6 +15,8 @@ gr_i=scs_m(K)(2)(9)
 if type(gr_i)<>15 then
   gr_i=list(gr_i,[],list('sd',[0 0 1 1]))
 end
+if length(gr_i)==2 then gr_i(3)=list('sd',[0 0 1 1]);end
+
 oldwin=xget('window')
 win=winsid()
 if win==[] then
@@ -22,6 +24,7 @@ if win==[] then
 else
   win=max(win)+1
 end
+
 xset('window',win)
 xselect()
 coli=gr_i(2)
@@ -41,14 +44,16 @@ gr_i=['thick=xget(''thickness'')';
 xset('window',oldwin)
 
 mac=null();deff('[]=mac()',gr_i,'n')
+
+
 if check_mac(mac) then
   o=scs_m(K)
   drawblock(o)
   o(2)(9)=list(gr_i,coli,sd)
   drawblock(o)
   scs_m(K)=o
-  break
 end
+
 
 
 

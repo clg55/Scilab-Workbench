@@ -23,7 +23,9 @@ available) or the sh return code.
 .nf
 unix("ls $SCI/demos");
 unix("emacs $SCI/demos/wheel2/Makefile");
-deff('wd=pwd()','unix(''pwd>/tmp/path'');wd=read(''/tmp/path'',1,1,''(a)'')')
+deff('wd=pwd()','if MSDOS then unix(''cd>''+TMPDIR+''\path'');..
+                else unix(''pwd>''+TMPDIR+''/path'');end..
+      wd=read(TMPDIR+''/path'',1,1,''(a)'')')
 wd=pwd()
 .fi
 .SH SEE ALSO

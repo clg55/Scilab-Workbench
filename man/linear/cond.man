@@ -15,7 +15,7 @@ Condition number in 2-norm.  \fVcond(X)\fR is the  ratio  of  the
 largest singular value of  \fVX\fR  to the smallest.
 .SH EXAMPLE
 .nf
-A=matrix('hilb',6);
+A=testmatrix('hilb',6);
 cond(A)
 .fi
 .SH SEE ALSO

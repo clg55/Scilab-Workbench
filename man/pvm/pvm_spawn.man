@@ -8,7 +8,7 @@ pvm_spawn - Starts new Scilab processes.
 .fi
 .SH PARAMETERS
 .TP 5
-task : string, which is the file name of the scilab script to be
+task : string, which is the file name of the scilab script (see exec) to be
 started. The Scilab script must already reside on the host on which it
 is to be started.  The name must an absolute path.
 .TP 4
@@ -16,7 +16,7 @@ ntask
 : integer, specifying the number of copies of the  scilab script to start.
 .TP 4
 where
-: string (optional, default value is NULL), can be a host name such as ``tequila.ens-lyon.fr'' or a PVM architecture class such as ``SUN4''. 
+: string (optional), can be a host name such as ``tequila.ens-lyon.fr'' or a PVM architecture class such as ``SUN4''. 
 .TP 5
 numt
 : integer, the actual number of tasks started.
@@ -76,8 +76,7 @@ tids in the array are always valid.
 When
 the argument
 .I where
-is set to NULL 
-a heuristic (round-robin assignment) is used to distribute the
+is omitted a heuristic (round-robin assignment) is used to distribute the
 .I ntask
 processes across the virtual machine.
 .PP
@@ -91,7 +90,11 @@ single machine using the vendor's underlying routines.
 
 .SH EXAMPLE
 .nf
-[tids, numt] = pvm_spawn("foo.sci",2,"loop")
+// create an exec file (script)
+write(TMPDIR+'/foo.sce',['a=1';'plot2d()'])
+// start a new Scilab on the same host to execute the script
+[tids, numt] = pvm_spawn(TMPDIR+'/foo.sce',1)
+pvm_kill(tids) //terminate the new scilab
 .fi
 .SH SEE ALSO
-pvm, pwm_spawn_independent
+pvm, pvm_spawn_independent

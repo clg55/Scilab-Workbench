@@ -12,7 +12,7 @@ function [N,M]=lcf(Sl)
 flag=0;Sl1=Sl(1);
 if Sl1(1)=='r' then Sl=tf2ss(Sl),flag=1;end
 [A,B,C,D]=Sl(2:5);[nw,nb]=size(B);[nc,nw]=size(C);
-R=eye+D*D';
+R=eye()+D*D';
 [Z,H]=gfare(Sl);
 Ar=A+H*C;
 Bn=B+H*D;Bm=H;

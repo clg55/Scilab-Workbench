@@ -149,7 +149,7 @@ deff('[p]=dgbydy(t,y,s)','[-0.04,1.d4*y(3),1.d4*y(2);...
  
 rand('seed',0);rand('normal');
  
-nx=20;A=rand(nx,nx);A=A-4.5*eye;
+nx=20;A=rand(nx,nx);A=A-4.5*eye();
  
 deff('y=f(t,x)','y=A*x')
 Warning :redefining function: f                       
@@ -551,7 +551,7 @@ clear %ODEOPTIONS;
  
 rand('seed',0);rand('normal');
  
-nx=20;A=rand(nx,nx);A=A-4.5*eye;
+nx=20;A=rand(nx,nx);A=A-4.5*eye();
  
 deff('y=f(t,x)','y=A*x')
 Warning :redefining function: f                       
@@ -586,7 +586,7 @@ deff('xd=f(t,x)','xd=A*x+B*sin(3*t)')
 Warning :redefining function: f                       
  
  
-A=rand(10,10)-4.5*eye;B=rand(10,1);
+A=rand(10,10)-4.5*eye();B=rand(10,1);
  
 x=ode(ones(10,1),0,[1,2,3],f);
  

@@ -6,101 +6,182 @@ c     Copyright INRIA
       INCLUDE '../stack.h'
       integer nmax
       parameter (nmax=8)
+c     following common defines the initial database of type names
+      integer maxtyp,nmmax,maxtypf,nmmaxf
+      parameter (maxtyp=50,nmmax=200)
+      integer tp(maxtyp),ptr(maxtyp),ln(maxtyp),namrec(nmmax),ptmax
+      common /typnams/ tp,ptr,ln,namrec,ptmax
       integer name(*)
       integer iadr,sadr
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 c
-      k=1
+      itype=abs(istk(il))
+      if(itype.le.20) then
+c     look for itype in predefined types
+         if(itype.eq.16.or.itype.eq.17) then
+            if(istk(il).lt.0) il=iadr(istk(il+1))
+            n1=istk(il+1)
+            iltyp=iadr(sadr(il+3+n1))
+            nlt=min(nlgh-3,istk(iltyp+5)-1)
+            iltyp=iltyp+5+istk(iltyp+1)*istk(iltyp+2)
+            n=min(nlt,nmax)
+            call icopy(n,istk(iltyp),1,name(1),1)
+            return
+         else
+            n=ln(itype)
+            call icopy(n,namrec(ptr(itype)),1,name,1)
+         endif
+      else
+c     look for itype in dynamically added types
+         it=20
+ 10      it=it+1
+         if(it.gt.maxtyp) goto 9000
+         if(tp(it).ne.itype) goto 10
+         n=ln(it)
+         call icopy(n,namrec(ptr(it)),1,name,1)
+      endif
 c      
-      goto(01,02,9000,04,05,06,9000,9000,9000,10,
-     $     11,9000,13,14,15,16,16),abs(istk(il))
-      if(abs(istk(il)).eq.128) goto 128
-      if(abs(istk(il)).eq.129) goto 129
-      if(abs(istk(il)).gt.256.and.abs(istk(il)).le.384) goto 130
-      goto 9000
-
-
-c     --------------matrix of numbers (s)
- 01   name(1)=28
-      n=1
-      return
-c     --------------matrix of polynomials (p)
- 02   name(1)=25
-      n=1
-      return
-c     --------------booleen (b)
- 04   name(1)=11
-      n=1
-      return
-c     -------------- sparse (sp)
- 05   name(1)=28
-      name(2)=25
-      n=2
-      return
-c     -------------- booleen sparse (spb)
- 06   name(1)=28
-      name(2)=25
-      name(3)=11
-      n=3
-      return
-c     --------------character string (c)
- 10   name(1)=12
-      n=1
-      return
-c     --------------macros non compilee (m)
- 11   name(1)=22
-      n=1
-      return
-c     --------------macros compilee (mc)
- 13   name(1)=22
-      name(2)=12
-      n=2
-      return
-c     --------------libraries (f)
- 14   name(1)=15
-      n=1
-      return
-c     --------------list (l)
- 15   continue
-      name(1)=21
-      n=1
-      return
-c     --------------tlist (tlist(1)(1))
- 16   continue
-      if(istk(il).lt.0) il=iadr(istk(il+1))
-      n1=istk(il+1)
-      iltyp=iadr(sadr(il+3+n1))
-      nlt=min(nlgh-3,istk(iltyp+5)-1)
-      iltyp=iltyp+5+istk(iltyp+1)*istk(iltyp+2)
-      n=min(nlt,nmax)
-      call icopy(n,istk(iltyp),1,name(1),1)
-      return
-c     --------------sparse lu pointer  (ptr)
- 128  continue
-      name(1)=25
-      name(2)=29
-      name(3)=27
-      n=3
-      return
-c     --------------formal implicit vector (ip)
- 129  continue
-      name(1)=18
-      name(2)=25
-      n=2
-      return
-
-c     --------------tropical algebra (talg)
- 130  continue
-      name(1)=29
-      name(2)=10
-      name(3)=21
-      name(4)=16
-      n=4
       return
  9000 continue
       n=0
       return
       end
       
+      subroutine settypnames()
+c     initialize hard coded type names
+
+c     Copyright INRIA
+      INCLUDE '../stack.h'
+c     following common defines the initial database of type names
+      integer maxtyp,nmmax,maxtypf,nmmaxf
+      parameter (maxtyp=50,nmmax=200)
+      integer tp(maxtyp),ptr(maxtyp),ln(maxtyp),namrec(nmmax),ptmax
+      common /typnams/ tp,ptr,ln,namrec,ptmax
+      save /typnams/
+
+      
+      ip=1
+      ptmax=1
+      do 10 i=1,20
+         tp(i)=i
+         ln(i)=0
+         ptr(i)=0
+ 10   continue
+
+
+c     type 1 :s
+      call addtypename(1,'s',ierr)
+      if(ierr.ne.0) goto 99
+c     type 2 : p
+      call addtypename(2,'p',ierr)
+      if(ierr.ne.0) goto 99
+c     type 4 : b
+      call addtypename(4,'b',ierr)
+      if(ierr.ne.0) goto 99
+c     type 5 : sp
+      call addtypename(5,'sp',ierr)
+      if(ierr.ne.0) goto 99
+c     type 6 : spb
+      call addtypename(6,'spb',ierr)
+      if(ierr.ne.0) goto 99
+c     type 10 : c
+      call addtypename(10,'c',ierr)
+      if(ierr.ne.0) goto 99
+c     type 11 : m
+      call addtypename(11,'m',ierr)
+      if(ierr.ne.0) goto 99
+c     type 13 : mc
+      call addtypename(13,'mc',ierr)
+      if(ierr.ne.0) goto 99
+c     type 14 : f
+      call addtypename(14,'f',ierr)
+      if(ierr.ne.0) goto 99
+c     type 15 : l
+      call addtypename(15,'l',ierr)
+      if(ierr.ne.0) goto 99
+c     type 16 : 
+      call addtypename(16,'tl',ierr)
+      if(ierr.ne.0) goto 99
+c     type 17 : 
+      call addtypename(17,'ml',ierr)
+      if(ierr.ne.0) goto 99
+c     type 128 : ptr (lu pointer)
+      call addtypename(128,'ptr',ierr)
+      if(ierr.ne.0) goto 99
+c     type 129 : ip
+      call addtypename(129,'ip',ierr)
+      if(ierr.ne.0) goto 99
+      return
+ 99   if(ierr.eq.1) then
+         call error(224)
+      elseif(ierr.eq.2) then
+         call error(225)
+      elseif(ierr.eq.3) then
+         call error(224)
+      endif
+      return
+      end
+
+      subroutine addtypename(typ,nam,ierr)
+      integer pos,typ,ierr
+      character*(*) nam
+c
+c     Copyright INRIA
+c     following common defines the initial database of type names
+      integer maxtyp,nmmax,maxtypf,nmmaxf
+      parameter (maxtyp=50,nmmax=200)
+      integer tp(maxtyp),ptr(maxtyp),ln(maxtyp),namrec(nmmax),ptmax
+      common /typnams/ tp,ptr,ln,namrec,ptmax
+c
+      ierr=0
+c     
+      n=len(nam)
+      if(n.gt.0) then
+c     add a type
+         if(typ.le.20) then
+            pos=typ
+            if(ln(pos).ne.0) then
+               ierr=2
+               return
+            endif
+         else
+            pos=20
+ 10         pos=pos+1
+            if(pos.gt.maxtyp) then
+               ierr=1
+               return
+            endif
+            if(ln(pos).ne.0) goto 10
+         endif
+         tp(pos)=typ
+         if(ptmax+n.gt.nmmax) then
+            ierr=3
+            return
+         endif
+
+         ln(pos)=n
+         ptr(pos)=ptmax
+         call cvstr(n,namrec(ptmax),nam,0)
+         ptmax=ptmax+n
+      else
+c     supress a type
+         if(typ.le.20) then
+            pos=typ
+            if(ln(pos).eq.0) return
+         else
+            pos=20
+ 20         pos=pos+1
+            if(pos.gt.maxtyp) return
+            if(tp(pos).ne.typ) goto 20
+         endif
+         n=ln(pos)
+         ll=ptmax-(ptr(pos)+n)+1
+         call icopy(ll,namrec(ptr(pos)+n),1,namrec(ptr(pos)),1)
+         ptr(pos)=0
+         ln(pos)=0
+         ptmax=ptmax-n
+      endif
+      return
+      end

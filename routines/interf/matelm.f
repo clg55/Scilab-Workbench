@@ -11,7 +11,7 @@ c
       integer id(nsiz)
 c     
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
+c      sadr(l)=(l/2)+1
 
 c
       if (ddt .eq. 4) then
@@ -24,14 +24,14 @@ c     abs  real imag conj roun int  size sum  prod diag triu tril
 c      1    2    3    4    5    6    7    8    9    10   11   12
 c     eye  rand ones maxi mini sort kron matr sin  cos  atan exp
 c      13   14   15   16   17   18  19-21 22   23   24   25   26
-c     sqrt log   ^  sign clean floor ceil expm cumsum  cumprod 
-c      27   28   29  30   31     32   33   34    35      36
+c     sqrt log   ^  sign clean floor ceil expm cumsum  cumprod testmatrix
+c      27   28   29  30   31     32   33   34    35      36      37
 c!
 c
       goto (10 ,15 ,20 ,25 ,30 ,35 ,40 ,45 ,50 ,60,
      1      61 ,62 ,70 ,72 ,71 ,90 ,91 ,105,110,110,
      2      110,130,140,150,160,170,180,190,200,210,
-     3      220,37 ,39 ,173,46 ,47),fin
+     3      220,37 ,39 ,173,46 ,47, 230,240),fin
 
  10   continue
       call intabs(id)
@@ -213,9 +213,18 @@ c
       call intclean(id)
       goto 900
 
-
 c     
-c  fonctions matricielles gerees par l'appel a une macro
+c     testmatrix
+c     
+ 230  continue
+      call inttestmatrix(id)
+      goto 900
+c     
+c     isreal
+c     
+ 240  continue
+      call intisreal(id)
+      goto 900
 c
  900  return
       end
@@ -235,7 +244,7 @@ c     Interface for rand function
       integer iadr,sadr
 c
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
+c      sadr(l)=(l/2)+1
 c
       tops=top
 c
@@ -416,14 +425,14 @@ c     Interface for maxi and mini
       integer id(nsiz)
       double precision s,sr,si
       logical checkrhs,checklhs,getsmat,getscalar,cremat,getmat
-      logical cresmat2,getrmat
+      logical cresmat2,getrmat,test
       logical getilist,getlistmat,checkval
       integer gettype,itype,topk
       integer iadr,sadr
       double precision x1
 c
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
+c      sadr(l)=(l/2)+1
 c
       type='g'//char(0)
 
@@ -436,7 +445,7 @@ c
       endif
       itype=gettype(topk)
 c     ------list case 
-      if(itype.eq.15) goto 100
+      if(itype.eq.15) goto 200
 c     ------sparse case 
       if(itype.eq.5) then
          call ref2val
@@ -445,7 +454,7 @@ c     ------sparse case
 c        *call* spelm
          return 
       endif
-      if(itype.eq.10.and.rhs.eq.2) goto 80
+      if(itype.eq.10.and.rhs.eq.2) goto 10
 
       if(itype.ne.1) then
 c     ------call macro 
@@ -459,10 +468,10 @@ c     ------call macro
          return
       endif
 
-      if(rhs.gt.1.and.itype.ne.10) goto 96
+      if(rhs.gt.1.and.itype.ne.10) goto 100
 c=====maxi mini (A1)
 c     ------simple case one argument which is a matrix or vector 
- 80   if(rhs.eq.2) then 
+ 10   if(rhs.eq.2) then 
          if(.not.getsmat(fname,topk,top,m2,n2,1,1,lr2,nlr2))return
          if (nlr2.ne.1) then
             buf=fname//' : second argument must be "c" or "r"'
@@ -490,25 +499,25 @@ c     ------simple case one argument which is a matrix or vector
 c     ------------max of each column of a 
          if (.not.cremat(fname,topk,0,1,n,lr,lir)) return
          if (.not.cremat(fname,topk+1,0,1,n,lkr,lkir)) return
-         do 120 j=0,n-1
+         do 20 j=0,n-1
             stk(lr+j)=stk(lr1+m*j)
             stk(lkr+j)=1
             if(fin.eq.17) then 
-               do 130 i=1,m-1
+               do 15 i=1,m-1
                   if ( stk(lr1+i+m*j).lt.stk(lr+j)) then 
                      stk(lr+j)=stk(lr1+i+m*j)
                      stk(lkr+j)=i+1
                   endif
- 130           continue
+ 15           continue
             else
-               do 131 i=1,m-1
+               do 16 i=1,m-1
                   if ( stk(lr1+i+m*j).gt.stk(lr+j)) then 
                      stk(lr+j)=stk(lr1+i+m*j)
                      stk(lkr+j)=i+1
                   endif
- 131           continue
+ 16            continue
             endif
- 120     continue
+ 20     continue
          call copyobj(fname,topk,topk-rhs+1)
          if (lhs.eq.2) then 
             call copyobj(fname,topk+1,topk-rhs+2)
@@ -518,25 +527,25 @@ c     ---------max of each row of a
       else if ( type(1:1).eq.'c') then       
          if (.not.cremat(fname,topk,0,m,1,lr,lir)) return
          if (.not.cremat(fname,topk+1,0,m,1,lkr,lkir)) return
-         do 140 j=0,m-1
+         do 30 j=0,m-1
             stk(lr+j)=stk(lr1+j)
             stk(lkr+j)=1
             if(fin.eq.17) then 
-               do 141 i=1,n-1
+               do 25 i=1,n-1
                   if ( stk(lr1+j+m*i).lt.stk(lr+j)) then 
                      stk(lr+j)=stk(lr1+j+m*i)
                      stk(lkr+j)=i+1
                   endif
- 141           continue
+ 25            continue
             else
-               do 142 i=1,n-1
+               do 26 i=1,n-1
                   if ( stk(lr1+j+m*i).gt.stk(lr+j)) then 
                      stk(lr+j)=stk(lr1+j+m*i)
                      stk(lkr+j)=i+1
                   endif
- 142           continue
+ 26           continue
             endif
- 140     continue
+ 30      continue
          call copyobj(fname,topk,topk-rhs+1)
          if (lhs.eq.2) then 
             call copyobj(fname,topk+1,topk-rhs+2)
@@ -549,22 +558,22 @@ c     ----- general maxi or mini
          x1=stk(k)
          if(fin.eq.17) then 
 c     mini
-            do 93 i=2,m*n
+            do 41 i=2,m*n
                lr1=lr1+1
                if(stk(lr1).lt.x1) then 
                   k=lr1
                   x1=stk(k)
                endif
- 93         continue
+ 41         continue
 c     maxi
          else
-            do 91 i=2,m*n
+            do 42 i=2,m*n
                lr1=lr1+1
                if(stk(lr1).gt.x1) then 
                   k=lr1
                   x1=stk(k)
                endif
- 91         continue
+ 42         continue
          endif
 C     return the max or min 
          if (.not.cremat(fname,topk,0,1,1,l1,li1)) return
@@ -595,28 +604,9 @@ c     for matrices
       endif
       return
 c=====maxi mini (A1,.....,An)
- 96   continue
-      if(.not.getrmat(fname,topk,topk-rhs+1,m,n,lr1)) then
-         top=topk
-         if(fin.eq.17) then
-            call funnam(ids(1,pt+1),'mini',iadr(lstk(top-rhs+1)))
-         else
-            call funnam(ids(1,pt+1),'maxi',iadr(lstk(top-rhs+1)))
-         endif
-         fun=-1
-         return
-      endif
-      if(m*n.le.0) then
-         err=1
-         call error(45)
-         return
-      endif
-      if(.not.cremat(fname,topk+1,0,m,n,lv,lcw)) return
-      if(.not.cremat(fname,topk+2,0,m,n,lind,lcw)) return
-c     maxi mini a plusieurs argument
-      call dset(m*n,1.0d0,stk(lind),1)
-      call dcopy(m*n,stk(lr1),1,stk(lv),1)
-      do 97 i=2,rhs
+ 100   continue
+c     check argument and compute dimension of the result.
+      do 101 i=1,rhs
          if(.not.getrmat(fname,topk,topk-rhs+i,mi,ni,lri)) then
             top=topk
             if(fin.eq.17) then
@@ -627,29 +617,68 @@ c     maxi mini a plusieurs argument
             fun=-1
             return
          endif
-
-         if(mi.ne.m.or.ni.ne.n) then
+         if(mi*ni.le.0) then
             err=i
-            call error(42)
+            call error(45)
             return
+         endif
+         if(i.eq.1) then
+            m=mi
+            n=ni
+         else
+            if(mi.ne.1.or.ni.ne.1) then
+               if(mi.ne.m.or.ni.ne.n) then
+                  if(m*n.ne.1) then
+                     err=i
+                     call error(42)
+                     return
+                  else
+                     m=mi
+                     n=ni
+                  endif
+               endif
+            endif
+         endif
+ 101   continue
+
+
+
+      if(.not.cremat(fname,topk+1,0,m,n,lv,lcw)) return
+      if(.not.cremat(fname,topk+2,0,m,n,lind,lcw)) return
+c     maxi mini a plusieurs argument
+      call dset(m*n,1.0d0,stk(lind),1)
+      test=getrmat(fname,topk,topk-rhs+1,mi,ni,lr1) 
+      if(mi*ni.eq.1) then
+         call dset(m*n,stk(lr1),stk(lv),1)
+      else
+         call dcopy(m*n,stk(lr1),1,stk(lv),1)
+      endif
+      do 120 i=2,rhs
+         test=getrmat(fname,topk,topk-rhs+i,mi,ni,lri)
+         if(mi.eq.1.and.ni.eq.1) then
+            inc=0
+         else
+            inc=1
          endif
          if ( fin.eq.17) then 
 c     mini            
-            do 98 j=0,m*n-1
-               if ( stk(lri+j).lt.stk(lv+j) ) then 
-                  stk(lv+j)= stk(lri+j) 
+            do 111 j=0,m*n-1
+               if ( stk(lri).lt.stk(lv+j) ) then 
+                  stk(lv+j)= stk(lri) 
                   stk(lind+j)= dble(i)
                endif
- 98         continue
+               lri=lri+inc
+ 111         continue
          else
-            do 99 j=0,m*n-1
-               if ( stk(lri+j).gt.stk(lv+j) ) then 
-                  stk(lv+j)= stk(lri+j) 
+            do 112 j=0,m*n-1
+               if ( stk(lri).gt.stk(lv+j) ) then 
+                  stk(lv+j)= stk(lri) 
                   stk(lind+j)= dble(i)
                endif
- 99         continue
+               lri=lri+inc
+ 112         continue
          endif
- 97   continue
+ 120   continue
       call copyobj(fname,topk+1,topk-rhs+1)
       if (lhs.eq.2) then 
          call copyobj(fname,topk+2,topk-rhs+2)
@@ -657,7 +686,7 @@ c     mini
       top=topk-rhs+lhs
       return
 c
- 100  continue
+ 200  continue
 c=====maxi mini of list arguments 
       if(rhs.ne.1) then 
          buf = fname // ': only one argument if it is a list'
@@ -688,7 +717,7 @@ c=====maxi mini of list arguments
       call dcopy(m*n,stk(lr1),1,stk(lrw),1)
 c     test si n1 > 1 
       if ( n1.gt.1) then 
-         do 970 i=2,n1
+         do 215 i=2,n1
             if(.not.getlistmat(fname,topk,topk,i,iti,mi,ni,
      $           lri,lci))           return
             if ( iti.ne.0) then 
@@ -700,21 +729,21 @@ c     test si n1 > 1
             if(.not.checkval(fname,n,ni)) return
             if ( fin.eq.17) then 
 c     mini            
-               do 980 j=0,m*n-1
+               do 211 j=0,m*n-1
                   if ( stk(lri+j).lt.stk(lrw+j)) then 
                      stk(lrw+j)=stk(lri+j)
                      stk(lrkw+j)= i
                   endif
- 980           continue
+ 211           continue
             else
-               do 981 j=0,m*n-1
+               do 212 j=0,m*n-1
                   if ( stk(lri+j).gt.stk(lrw+j)) then 
                      stk(lrw+j)=stk(lri+j)
                      stk(lrkw+j)= i
                   endif
- 981           continue
+ 212           continue
             endif
- 970     continue
+ 215     continue
       endif
       call copyobj(fname,topk+1,topk)
       if (lhs.eq.2) then 
@@ -724,7 +753,7 @@ c     mini
 c=====end of list case 
       return
       end
-
+c%%%%
       subroutine intabs(id)
 c     WARNING : argument of this interface may be passed by reference
       INCLUDE '../stack.h'
@@ -1319,17 +1348,8 @@ c
 c
       sel=-1
       tops=top
-      if(rhs.eq.2) then
-         if(lhs.ne.1) then
-            call error(41)
-            return
-         endif
-         call getorient(top,sel)
-         if(err.gt.0) return
-         top=top-1
-      endif
 c
-      il=iadr(lstk(top))
+      il=iadr(lstk(tops-rhs+1))
       if(istk(il).lt.0) il=iadr(istk(il+1))
       
       if(istk(il).eq.15.or.istk(il).eq.16) then
@@ -1369,9 +1389,19 @@ c
       elseif(istk(il).le.10) then
 c     matrix type variable type
 c     -------------------------
+
          if(lhs.gt.2) then
             call error(41)
             return
+         endif
+         if(rhs.eq.2) then
+            if(lhs.ne.1) then
+               call error(41)
+               return
+            endif
+            call getorient(top,sel)
+            if(err.gt.0) return
+            top=top-1
          endif
          m=istk(il+1)
          n=istk(il+2)
@@ -1460,21 +1490,20 @@ c
       endif
 c
       tops=top
-c     select type of sum to perform
       sel=0
-      if(rhs.eq.2) then
-         call  getorient(top,sel)
-         if(err.gt.0) return
-         top=top-1
-      endif
 c     
-      il0=iadr(lstk(top))
+      il0=iadr(lstk(tops-rhs+1))
       ilr=il0
       if(istk(il0).lt.0) il0=iadr(istk(il0+1))
       ref=ilr.ne.il0
 c
       if(istk(il0).eq.1) then
 c     standard matrix case
+         if(rhs.eq.2) then
+            call  getorient(top,sel)
+            if(err.gt.0) return
+            top=top-1
+         endif
          m=istk(il0+1)
          n=istk(il0+2)
          it=istk(il0+3)
@@ -1553,7 +1582,18 @@ c     matrix of polynomial case
          fun=16
 c     .  *call* polelm
          return
-      elseif(istk(il0).eq.5.and.sel.eq.0) then
+      elseif(istk(il0).eq.5) then
+         if(rhs.eq.2) then
+            call  getorient(top,sel)
+            if(err.gt.0) return
+            top=top-1
+         endif
+         if(sel.ne.0) then
+            top=tops
+            call funnam(ids(1,pt+1),'sum',iadr(lstk(top-rhs+1)))
+            fun=-1
+            return
+         endif
 c     sparse matrix case
          it=istk(il0+3)
          m=istk(il0+1)
@@ -1602,13 +1642,8 @@ c
 c
       sel=0
       tops=top
-      if(rhs.eq.2) then
-         call getorient(top,sel)
-         if(err.gt.0) return
-         top=top-1
-      endif
 c
-      il0=iadr(lstk(top))
+      il0=iadr(lstk(tops-rhs+1))
       ilr=il0
       if(istk(il0).lt.0) il0=iadr(istk(il0+1))
       ref=ilr.ne.il0
@@ -1621,6 +1656,12 @@ c
       endif
 
 c     standard matrix case
+      if(rhs.eq.2) then
+         call getorient(top,sel)
+         if(err.gt.0) return
+         top=top-1
+      endif
+
       m=istk(il0+1)
       n=istk(il0+2)
       it=istk(il0+3)
@@ -1695,13 +1736,8 @@ c
 c
       tops=top
       sel=0
-      if(rhs.eq.2) then
-         call getorient(top,sel)
-         if(err.gt.0) return
-         top=top-1
-      endif
 c
-      il0=iadr(lstk(top))
+      il0=iadr(lstk(tops-rhs+1))
       ilr=il0
       if(istk(il0).lt.0) il0=iadr(istk(il0+1))
 c
@@ -1713,6 +1749,12 @@ c
       endif
 c     
 c     standard matrix case
+      if(rhs.eq.2) then
+         call getorient(top,sel)
+         if(err.gt.0) return
+         top=top-1
+      endif
+
       m=istk(il0+1)
       n=istk(il0+2)
       it=istk(il0+3)
@@ -1795,19 +1837,19 @@ c
 c
       tops=top
       sel=0
-      if(rhs.eq.2) then
-         call getorient(top,sel)
-         if(err.gt.0) return
-         top=top-1
-      endif
 c
-      il0=iadr(lstk(top))
+      il0=iadr(lstk(tops-rhs+1))
       ilr=il0
       if(istk(il0).lt.0) il0=iadr(istk(il0+1))
       ref=ilr.ne.il0
 c
       if(istk(il0).eq.1) then
 c     standard matrix case
+         if(rhs.eq.2) then
+            call getorient(top,sel)
+            if(err.gt.0) return
+            top=top-1
+         endif
          m=istk(il0+1)
          n=istk(il0+2)
          it=istk(il0+3)
@@ -1879,8 +1921,19 @@ c     standard matrix case
             endif
          endif
          lstk(top+1)=l1+mr*nr*(it+1)
-      elseif(istk(il0).eq.5.and.sel.eq.0) then
+      elseif(istk(il0).eq.5) then
 c     sparse matrix case
+         if(rhs.eq.2) then
+            call getorient(top,sel)
+            if(err.gt.0) return
+            top=top-1
+         endif
+         if(sel.ne.0) then
+            top=tops
+            call funnam(ids(1,pt+1),'prod',iadr(lstk(top-rhs+1)))
+            fun=-1
+            return
+         endif
          m=istk(il0+1)
          n=istk(il0+2)
          it=istk(il0+3)
@@ -2857,10 +2910,8 @@ c a est reelle b complexe
       integer id(nsiz)
 
       integer tops,top2
-      integer magi,frk,hilb
       integer iadr,sadr
       logical ref
-      data magi/22/,frk/15/,hilb/17/
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -2871,60 +2922,24 @@ c
          call error(41)
          return
       endif
+      if(rhs.lt.2) then
+         call error(39)
+         return
+      endif
+      if(rhs.gt.3) then
+        top=tops
+         call ref2val
+         call funnam(ids(1,pt+1),'matrix',iadr(lstk(top-rhs+1)))
+         fun=-1
+         return
+      endif
 
       top2=top-rhs+1
       il2=iadr(lstk(top2))
       if(istk(il2).lt.0) il2=iadr(istk(il2+1))
-      if(rhs.ne.2) goto 135
 
-      if(istk(il2).ne.10) then
-         err=1
-         call error(55)
-         return
-      endif
-      kletr=abs(istk(il2+5+istk(il2+1)*istk(il2+2)))
-      il=iadr(lstk(top))
-      if(istk(il).lt.0) il=iadr(istk(il+1))
-      l=sadr(il+4)
-      n=max(int(stk(l)),0)
-c
-      top=top-1
-      il=iadr(lstk(top))
-      istk(il)=1
-      istk(il+1)=n
-      istk(il+2)=n
-      istk(il+3)=0
-      l=sadr(il+4)
-      lstk(top+1)=l+n*n
-      err=lstk(top+1)-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-      if(kletr.eq.magi) goto 131
-      if(kletr.eq.hilb) goto 132
-      if(kletr.eq.frk) goto 133
-c
-c     carre magique
-  131 if (n .eq. 2) n = 0
-      if (n .gt. 0) call magic(stk(l),n,n)
-      istk(il+1)=n
-      istk(il+2)=n
-      lstk(top+1)=l+n*n
-      go to 999
-c
-c     hilbert
- 132  call hilber(stk(l),n,n)
-      go to 999
-c
-c matrice de franck
-  133 continue
-      job=0
-      if (n .gt. 0) call franck(stk(l),n,n,job)
-      go to 999
-c
+
 c changement de dimension d'une matrice
-  135 continue
       il=iadr(lstk(top+1-rhs))
 
       if(abs(istk(il)).eq.5.or.abs(istk(il)).eq.6) then
@@ -2935,45 +2950,77 @@ c changement de dimension d'une matrice
 c        *call* spelm
          return
       endif
-      il=iadr(lstk(top))
-      if(istk(il).lt.0) il=iadr(istk(il+1))
-      if(istk(il).ne.1) then
-         err=3
-         call error(53)
-         return
-      endif
-      if(istk(il+1)*istk(il+2).ne.1) then
-         err=3
-         call error(89)
-         return
-      endif
-      if(istk(il+3).ne.0) then
-         err=3
-         call error(52)
-         return
-      endif
-      n=int(stk(sadr(il+4)))
-c
-      top=top-1
-      il=iadr(lstk(top))
-      if(istk(il).lt.0) il=iadr(istk(il+1))
-      if(istk(il).ne.1) then
-         err=2
-         call error(53)
+
+      ityp=abs(istk(il))
+      if(ityp.ne.1.and.ityp.ne.2
+     $     .and.ityp.ne.4.and.ityp.ne.10) then
+         top=tops
+         call ref2val
+         call funnam(ids(1,pt+1),'matrix',iadr(lstk(top-rhs+1)))
+         fun=-1
          return
       endif
 
-      if(istk(il+1)*istk(il+2).ne.1) then
-         err=2
-         call error(89)
+      il=iadr(lstk(top))
+      if(istk(il).lt.0) il=iadr(istk(il+1))
+      if(istk(il).ne.1) then
+         err=3
+         call error(53)
          return
       endif
-      if(istk(il+3).ne.0) then
-         err=2
-         call error(52)
-         return
+      if(rhs.eq.2) then
+         if(istk(il+3).ne.0) then
+            err=3
+            call error(52)
+            return
+         endif
+         if(istk(il+1)*istk(il+2).eq.1) then
+            m=int(stk(sadr(il+4)))
+            n=1
+         elseif(istk(il+1)*istk(il+2).eq.2) then
+            m=int(stk(sadr(il+4)))
+            n=int(stk(sadr(il+4)+1))
+         else
+            top=tops
+            call ref2val
+            call funnam(ids(1,pt+1),'matrix',iadr(lstk(top-rhs+1)))
+            fun=-1
+            return
+         endif
+      else
+         if(istk(il+1)*istk(il+2).ne.1) then
+            err=3
+            call error(89)
+            return
+         endif
+         if(istk(il+3).ne.0) then
+            err=3
+            call error(52)
+            return
+         endif
+         n=int(stk(sadr(il+4)))
+c     
+         top=top-1
+         il=iadr(lstk(top))
+         if(istk(il).lt.0) il=iadr(istk(il+1))
+         if(istk(il).ne.1) then
+            err=2
+            call error(53)
+            return
+         endif
+
+         if(istk(il+1)*istk(il+2).ne.1) then
+            err=2
+            call error(89)
+            return
+         endif
+         if(istk(il+3).ne.0) then
+            err=2
+            call error(52)
+            return
+         endif
+         m=int(stk(sadr(il+4)))
       endif
-      m=int(stk(sadr(il+4)))
 c
       top=top-1
       il=iadr(lstk(top))
@@ -2990,12 +3037,6 @@ c
       endif
 
 
-      if(istk(il).gt.10) then
-         top=tops
-         call funnam(ids(1,pt+1),'matrix',iadr(lstk(top-rhs+1)))
-         fun=-1
-         return
-      endif
       if(m*n.ne.istk(il+1)*istk(il+2)) then
          call error(60)
          return
@@ -3827,3 +3868,173 @@ c     argument is passed by reference
       return
       end
 
+      subroutine inttestmatrix(id)
+      INCLUDE '../stack.h'
+      integer id(nsiz)
+
+      integer tops,top2
+      integer magi,frk,hilb
+      integer iadr,sadr
+      logical ref
+      data magi/22/,frk/15/,hilb/17/
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      tops=top
+
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+
+      top2=top-rhs+1
+      il2=iadr(lstk(top2))
+      if(istk(il2).lt.0) il2=iadr(istk(il2+1))
+      if(istk(il2).ne.10) then
+         err=1
+         call error(55)
+         return
+      endif
+      kletr=abs(istk(il2+5+istk(il2+1)*istk(il2+2)))
+
+      il=iadr(lstk(top))
+      if(istk(il).lt.0) il=iadr(istk(il+1))
+      l=sadr(il+4)
+      n=max(int(stk(l)),0)
+c
+      top=top-1
+      il=iadr(lstk(top))
+      istk(il)=1
+      istk(il+1)=n
+      istk(il+2)=n
+      istk(il+3)=0
+      l=sadr(il+4)
+      lstk(top+1)=l+n*n
+      err=lstk(top+1)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      if(kletr.eq.magi) goto 131
+      if(kletr.eq.hilb) goto 132
+      if(kletr.eq.frk) goto 133
+c
+c     carre magique
+  131 if (n .eq. 2) n = 0
+      if (n .gt. 0) call magic(stk(l),n,n)
+      istk(il+1)=n
+      istk(il+2)=n
+      lstk(top+1)=l+n*n
+      go to 999
+c
+c     hilbert
+ 132  call hilber(stk(l),n,n)
+      go to 999
+c
+c matrice de franck
+ 133  continue
+      job=0
+      if (n .gt. 0) call franck(stk(l),n,n,job)
+      go to 999
+ 999  return
+      end
+
+      subroutine intisreal(id)
+      INCLUDE '../stack.h'
+      integer id(nsiz)
+      double precision eps,mx
+      integer tops,top2
+      integer iadr,sadr
+c     
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+      if(rhs.ne.1.and.rhs.ne.2) then
+         call error(39)
+         return
+      endif
+      
+      if(rhs.eq.1) then
+c     .  check for  real storage
+         il=iadr(lstk(top))
+         ilr=il
+         if(istk(il).lt.0) il=iadr(istk(il+1))
+         it=istk(il+3)
+         
+         if(istk(il).eq.1.or.istk(il).eq.2.or.istk(il).eq.5) then
+            istk(ilr)=4
+            istk(ilr+1)=1
+            istk(ilr+2)=1
+            istk(ilr+3)=abs(1-it)
+            lstk(top+1)=sadr(ilr+4)
+         else
+            call ref2val
+            call funnam(ids(1,pt+1),'isreal',iadr(lstk(top)))
+            fun=-1
+            return
+         endif
+      else
+c     .  check for zero imaginary part
+         il=iadr(lstk(top))
+         if(istk(il).lt.0) il=iadr(istk(il+1))
+         if(istk(il).ne.1) then
+            err=2
+            call error(53)
+            return
+         endif
+         eps=stk(sadr(il+4))
+         top=top-1
+
+         il=iadr(lstk(top))
+         ilr=il
+         if(istk(il).lt.0) il=iadr(istk(il+1))
+         if(istk(il).ne.1.and.istk(il).ne.2.and.istk(il).ne.5) then
+            top=top+1
+            call ref2val
+            call funnam(ids(1,pt+1),'isreal',iadr(lstk(top)))
+            fun=-1
+            return
+         endif
+         m=istk(il+1)
+         n=istk(il+2)
+         it=istk(il+3)
+         if(it.eq.0) then
+            istk(ilr)=4
+            istk(ilr+1)=1
+            istk(ilr+2)=1
+            istk(ilr+3)=abs(1-it)
+            lstk(top+1)=sadr(ilr+4)
+         else
+            if(istk(il).eq.1) then
+               mn=istk(il+1)*istk(il+2)
+               l=sadr(il+4)+mn
+            elseif(istk(il).eq.2) then
+               mn=istk(il+8+m*n)-1
+               l=sadr(il+9+istk(il+1)*istk(il+2))
+            elseif(istk(il).eq.5) then
+               mn=istk(il+4)
+               l=sadr(ilr+5+m+mn)+mn
+            endif
+
+            mx=0.0d0
+            if(mn.gt.0) then
+               do 10 i=0,mn-1
+                  mx=max(mx,abs(stk(l+i)))
+ 10            continue
+            endif
+            it=1
+            if(mx.le.eps) it=0
+            istk(ilr)=4
+            istk(ilr+1)=1
+            istk(ilr+2)=1
+            istk(ilr+3)=abs(1-it)
+            lstk(top+1)=sadr(ilr+4)
+         endif
+      endif
+      return
+      end

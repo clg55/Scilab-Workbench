@@ -24,8 +24,8 @@ C     X must contain after state values all real data for simblk and grblk
       integer critev(*),rpptr(*),ipar(*),ipptr(*),funptr(*),funtyp(*)
       integer ierr
 c     
-      logical hot,urg
-      integer i,ierr1,flag,keve,nord,nclock
+      logical hot
+      integer i,ierr1,flag,keve,nord,nclock,urg
       double precision tvec(nts)
 c     
       integer         nblk,nordptr,nout,ng,nrwp,niwp,ncord,
@@ -43,7 +43,7 @@ c
       common /costol/ atol,rtol,ttol,deltat
 c     
 c     
-      urg=.false.
+      urg=urg-1
       keve = pointi
       pointi=evtspt(keve)
       evtspt(keve)=-1
@@ -86,7 +86,7 @@ c
 c     
             if (ntvec.ge.1) then
                if(funtyp(kfun).eq.-1) then
-                  urg=.true.
+                  urg=urg+1
                   call putevs(tevts,evtspt,nevts,pointi,
      &                 told,ntvec+clkptr(kfun)-1,ierr1)
                   if (ierr1 .ne. 0) then
@@ -133,8 +133,8 @@ C     X must contain after state values all real data for simblk and grblk
       integer critev(*),rpptr(*),ipar(*),ipptr(*),funptr(*),funtyp(*)
       integer ierr
 c     
-      logical hot,urg
-      integer i,ierr1,flag,nclock
+      logical hot
+      integer i,ierr1,flag,nclock,urg
       double precision t
       double precision tvec(nts)
 c     
@@ -152,7 +152,7 @@ c
       double precision atol,rtol,ttol,deltat
       common /costol/ atol,rtol,ttol,deltat
 c     
-      urg=.false.
+      urg=0
       do 19 jj=1,ncord
          kfun=cord(jj)
          nclock = cord(jj+ncord)
@@ -184,7 +184,7 @@ c
 c     
             if (ntvec.ge.1) then
                if(funtyp(kfun).eq.-1) then
-                  urg=.true.
+                  urg=urg+1
                   call putevs(tevts,evtspt,nevts,pointi,
      &                 told,ntvec+clkptr(kfun)-1,ierr1)
                   if (ierr1 .ne. 0) then
@@ -196,14 +196,14 @@ C     !                 event conflict
             endif
          endif
  19   continue
-      if (.not.urg)  return
+      if (urg.le.0)  return
  20   call doit(neq,x,xptr,z,zptr,iz,izptr,told,tf
      $     ,tevts,evtspt,nevts,pointi,inpptr,inplnk,outptr
      $     ,outlnk,lnkptr,clkptr,ordptr,nptr
      $     ,ordclk,nordcl,cord,iord,niord,oord,zord,critev,
      $     rpar,rpptr,ipar
      $     ,ipptr,funptr,funtyp,outtb,w,hot,urg,ierr) 
-      if (urg) goto 20
+      if (urg.gt.0) goto 20
       return
       end
 
@@ -238,8 +238,8 @@ C     X must contain after state values all real data for simblk and grblk
       integer ierr
 
 c     
-      logical hot,urg
-      integer i,k,ierr1,j,flag,keve,nord,nclock
+      logical hot
+      integer i,k,ierr1,j,flag,keve,nord,nclock,urg
       double precision t
       double precision tvec(nts)
 c     
@@ -258,7 +258,7 @@ c
       common /costol/ atol,rtol,ttol,deltat
 c     
 c     
-      urg=.false.
+      urg=0
       keve = pointi
       pointi=evtspt(keve)
       evtspt(keve)=-1
@@ -308,7 +308,7 @@ c
             if (ntvec.ge.1) then
                if(funtyp(kfun).ne.-1) then
                   do 70 i = 1,ntvec
-                     if (tvec(i) .ge. told) then
+                     if (tvec(i) .gt. told) then
                         call addevs(tevts,evtspt,nevts,pointi,
      &                       tvec(i),i+clkptr(kfun)-1,ierr1)
                         if (ierr1 .ne. 0) then
@@ -319,7 +319,7 @@ C     !                 event conflict
                      endif
  70               continue
                else
-                  urg=.true.
+                  urg=urg+1
                   call putevs(tevts,evtspt,nevts,pointi,
      &                 told,ntvec+clkptr(kfun)-1,ierr1)
                   if (ierr1 .ne. 0) then
@@ -331,14 +331,14 @@ C     !                 event conflict
             endif
          endif
  60   continue
-      if (urg)  then
+      if (urg.gt.0)  then
  43      call edoit(neq,x,xptr,z,zptr,iz,izptr,told,tf
      $        ,tevts,evtspt,nevts,pointi,inpptr,inplnk,outptr
      $        ,outlnk,lnkptr,clkptr,ordptr,nptr
      $        ,ordclk,nordcl,cord,iord,niord,oord,zord,critev,
      $        rpar,rpptr,ipar
      $        ,ipptr,funptr,funtyp,outtb,w,hot,urg,ierr,iwa) 
-         if(urg) goto 43
+         if(urg.gt.0) goto 43
       endif
 
 c     .  update continuous and discrete states on event
@@ -392,8 +392,8 @@ C     X must contain after state values all real data for simblk and grblk
       integer critev(*),rpptr(*),ipar(*),ipptr(*),funptr(*),funtyp(*)
       integer ierr
 c     
-      logical hot,urg
-      integer i,ierr1,flag,keve,nord,nclock
+      logical hot
+      integer i,ierr1,flag,keve,nord,nclock,urg
       double precision tvec(nts)
 c     
       integer         nblk,nordptr,nout,ng,nrwp,niwp,ncord,
@@ -411,7 +411,7 @@ c
       common /costol/ atol,rtol,ttol,deltat
 c     
 c     
-      urg=.false.
+      urg=urg-1
       keve = pointi
       pointi=evtspt(keve)
       evtspt(keve)=-1
@@ -462,7 +462,7 @@ c
             if (ntvec.ge.1) then
                if(funtyp(kfun).ne.-1) then
                   do 70 i = 1,ntvec
-                     if (tvec(i) .ge. told) then
+                     if (tvec(i) .gt. told) then
                         call addevs(tevts,evtspt,nevts,pointi,
      &                       tvec(i),i+clkptr(kfun)-1,ierr1)
                         if (ierr1 .ne. 0) then
@@ -473,7 +473,7 @@ C     !                 event conflict
                      endif
  70               continue
                else
-                  urg=.true.
+                  urg=urg+1
                   call putevs(tevts,evtspt,nevts,pointi,
      &                 told,ntvec+clkptr(kfun)-1,ierr1)
                   if (ierr1 .ne. 0) then

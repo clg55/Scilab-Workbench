@@ -12,7 +12,7 @@ x,t
 : real or complex square matrix
 .SH DESCRIPTION
 acoshm is the matrix hyperbolic  inverse cosine  of the matrix x.
-Uses the formula \fVt=logm(x+(x+eye)*sqrtm((x-eye)/(x+eye)))\fR
+Uses the formula \fVt=logm(x+(x+eye())*sqrtm((x-eye())/(x+eye())))\fR
 For non symmetric matrices result may be inaccurate.
 .SH EXAMPLE
 .nf

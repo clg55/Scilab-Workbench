@@ -33,7 +33,7 @@ Funtab.obj : fundef
 $(EXAMPLES) : ../stack.h 
 
 distclean::
-	$(RM) $(OBJS)
+	del *.obj
 
 # symbols 
 

@@ -31,4 +31,4 @@ DESCRIPTION
   incremented by 1.
 
 SEE ALSO
-  netwindow, netwindows, show_graph
+  netclose, netwindow, netwindows, show_graph

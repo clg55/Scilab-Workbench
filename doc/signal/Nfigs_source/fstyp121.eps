@@ -202,13 +202,13 @@ $pictdict begin
 	{ % filling 
 	newpath
 	cx cy moveto 
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add  64 div neg
 	 Ar 4 get 64 div neg  arc closepath
 	gsave glev Setgray eofill grestore}
 	{
 	%drawing with current dash or color unclosed path 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	  stroke} ifelse 
 	Cmsave1 setmatrix } def 
 
@@ -224,7 +224,7 @@ $pictdict begin
 	/t2 exch neg cx add def 
 	[1 0 0 hom t2 t1 ] concat 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	closepath glev Setgray stroke
 	Cmsave1 setmatrix } def 
 
@@ -493,10 +493,9 @@ fillsolid
 0 Setcolor
 0 Setcolor
 750 530 4500 3180 setclipzone
-0 Setcolor
-/Symbol findfont 80 scf mul scalefont setfont
-HardMark 0 16#c5 put
- (drawpolymark) 432 [ 0]
+2 Setcolor
+/closeflag false def
+ (drawpoly) 432 [ 0]
 [750 3256 768 3256 785 3256 803 3256 820 3256 838 3255 855 3255 873 3255 890 3256 908 3256 
 925 3257 943 3256 960 3256 978 3255 995 3255 1013 3255 1030 3256 1048 3257 1065 3257 1083 3257 
 1100 3256 1118 3254 1135 3253 1153 3254 1170 3256 1188 3258 1205 3259 1223 3258 1240 3256 1258 3253 
@@ -520,15 +519,15 @@ HardMark 0 16#c5 put
 4252 3256 4269 3256 4287 3256 4304 3256 4322 3256 4339 3255 4357 3255 4375 3255 4392 3256 4410 3256 
 4427 3256 4445 3256 4462 3256 4480 3255 4497 3255 4515 3255 
 ] dogrey 
- (drawpolymark) 82 [0]
+ (drawpoly) 82 [0]
 [4532 3256 4550 3256 4567 3256 4585 3256 4602 3256 4620 3255 4637 3255 4655 3255 4672 3256 4690 3256 
 4707 3256 4725 3256 4742 3256 4760 3256 4777 3255 4795 3256 4812 3256 4830 3256 4847 3256 4865 3256 
 4882 3256 4900 3256 4917 3255 4935 3256 4952 3256 4970 3256 4987 3256 5005 3256 5022 3256 5040 3256 
 5057 3255 5075 3256 5092 3256 5110 3256 5127 3256 5145 3256 5162 3256 5180 3256 5197 3255 5215 3256 
 5232 3256 
 ] dogrey 
+2 Setcolor
 /absolu true def
-/Times-Roman findfont 100 scf mul scalefont setfont
 0 Setcolor
 -1 -1 200000 200000 setclipzone
  showpage

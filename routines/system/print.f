@@ -10,7 +10,7 @@ c     Copyright INRIA
 c     
       common / ptkeep / lwk
       integer itype,itypel,gettype
-      integer fl,mode,m,n,it,lr,lc,nlr,lkeep,topk,lname,siz,vol
+      integer fl,mode,m,n,it,lr,lc,nlr,lkeep,topk,lname,siz,vol,tops
       integer namef(nlgh),percent,under,pchar
       logical getmat,ilog,getpoly,typer,clsave,getsimat
       logical crewimat ,islss,getilist,getbmat,eptover
@@ -33,6 +33,7 @@ c
       mode=lct(6)
       ndgt=lct(7)
       if(rstk(pt).eq.1101) goto 96
+      lkeep0=lstk(lk)
 c     
       if (lct(1) .lt. 0) then
          lk=0
@@ -146,19 +147,30 @@ c     get tlist type
       call namstr(id1,namef,nlt+3,0)
 c     look for the function 
       fin=0
+      tops=top
+      top=topk
+      llk=lstk(lk)
+      lstk(lk)=lkeep0
       call funs(id1)
       if(err.gt.0) return
-      if(fun.gt.0) goto 42
-
-      if(fin.eq.0) goto 45
-
+      lstk(lk)=llk
+      if(fun.gt.0) then
+         top=tops
+         goto 42
+      endif
+      if(fin.eq.0) then
+         top=tops
+         goto 45
+      endif
       fin=-1
       call stackg(id1)
-      if(fin.eq.0) goto 45
+      if(fin.eq.0) then
+         goto 45
+      endif
 
 c     copy tlist to top of stack
  42   if(lk.ne.top) then
-         top=top+1
+         top=topk
          ilt1=iadr(lstk(top))
          lt1=sadr(ilt1+3+nw)
          err=lt1+istk(ilw+2+nw)-lstk(bot)
@@ -465,24 +477,44 @@ c     ----------- other variables type (overloaded)
 c     form the requested function name %%%%
       namef(1)=percen
       call typ2cod(iadr(lstk(lk)),namef(2),nlt)
+      if(nlt.eq.0) then
+         call msgs(100,0)
+         goto 48
+      endif
       namef(2+nlt)=under
       namef(3+nlt)=pchar
       call namstr(id1,namef,nlt+3,0)
 c     look for the function 
       fin=0
+      tops=top
+      top=topk
+      llk=lstk(lk)
+      lstk(lk)=lkeep0
       call funs(id1)
       if(err.gt.0) return
-      if(fun.gt.0) goto 76
 
-      if(fin.eq.0) goto 48
+      lstk(lk)=llk
+      if(fun.gt.0) then
+         top=tops
+         goto 76
+      endif
+
+      if(fin.eq.0) then
+         top=tops
+         goto 48
+      endif
 
       fin=-1
+
       call stackg(id1)
-      if(fin.eq.0) goto 48
+      if(fin.eq.0) then
+         goto 48
+      endif
+
 
 c     copy variable  to top of stack
  76   if(lk.ne.top) then
-         top=top+1
+         top=topk
          vol=lstk(lk+1)-lstk(lk)
          call dcopy(vol,stk(lstk(lk)),1,stk(lstk(top)),1)
          lstk(top+1)=lstk(top)+vol
@@ -508,6 +540,7 @@ c     preserve data for recursion
       ids(3,pt)  = nl
       ids(4,pt)  = illist
       ids(5,pt)  = topk
+      ids(6,pt)  = tops
       rstk(pt)   = 1101
       lhs=1
       rhs=1
@@ -526,15 +559,16 @@ c     set back preserved data
       lhs     = ids(1,pt-1)
       rhs     = ids(2,pt-1)
       lk      = pstk(pt)
-      lkeep   = lstk(lk)
+      lkeep  = lstk(lk)
       lstk(lk)= ids(3,pt-1)
       nlist   = ids(1,pt)
       kl      = ids(2,pt)
       nl      = ids(3,pt)
       illist  = ids(4,pt)
       topk    = ids(5,pt)
+      top     = ids(6,pt)
       pt=pt-2
-      if(lk.ne.top) top=top-1
+c      if(lk.ne.top) top=top-1
       goto 48
 
 

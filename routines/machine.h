@@ -34,7 +34,7 @@
 #define HAVE_USLEEP 1
 
 /* Define if have and use TCL/TK */
-#define WITH_TK 1
+/* #undef WITH_TK */
 
 /* Define if have and use PVM */
 #define WITH_PVM 1

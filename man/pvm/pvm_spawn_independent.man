@@ -16,11 +16,11 @@ absolute path.  The default PVM search path is
 $HOME/pvm3/bin/$PVM_ARCH/ .
 .TP 4
 ntask: 
-integer, specifying the number of copies of the scilab script
+integer, specifying the number of copies of the executable file
 to start.
 .TP 7
 where: 
-string (optional, default value is NULL), can be a host name
+string (optional), can be a host name
 such as ``tequila.ens-lyon.fr'' or a PVM architecture class such as
 ``SUN4''.
 .TP 5
@@ -77,7 +77,7 @@ tids in the array are always valid.
 .PP
 When the argument
 .I where
-is set to NULL a heuristic (round-robin assignment) is used to
+is omitted  a heuristic (round-robin assignment) is used to
 distribute the
 .I ntask
 processes across the virtual machine.
@@ -91,7 +91,7 @@ copies on this single machine using the vendor's underlying routines.
 
 .SH EXAMPLE
 .nf
-[tids, numt] = pvm_spawn_independent("a.out",2,"loop")
+[tids, numt] = pvm_spawn_independent("a.out",2)
 .fi
 .SH SEE ALSO
-pvm, pwm_spawn
+pvm, pvm_spawn

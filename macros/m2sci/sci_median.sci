@@ -5,6 +5,8 @@ if rhs==1 then
   if stk(top)(2)=='1'| stk(top)(3)=='1' then
     stk=list('median('+stk(top)(1)+')','0','1','1',stk(top)(5))
   else 
+    write(logfile,'Warning: Not enough information using mtlb_median'+..
+	' instead of median')
     stk=list('mtlb_median('+stk(top)(1)+')','0','1',stk(top)(4),stk(top)(5))
   end
 else

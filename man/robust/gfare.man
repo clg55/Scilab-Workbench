@@ -24,7 +24,7 @@ The GFARE for \fVSl=[A,B,C,D]\fR is:
 .nf
 (A-B*D'*Ri*C)*Z+Z*(A-B*D'*Ri*C)'-Z*C'*Ri*C*Z+B*Si*B'=0
 .fi
-where \fVS=(eye+D'*D)\fR, \fVSi=inv(S)\fR, \fVR=(eye+D*D')\fR, \fVRi=inv(R)\fR
+where \fVS=(eye()+D'*D)\fR, \fVSi=inv(S)\fR, \fVR=(eye()+D*D')\fR, \fVRi=inv(R)\fR
 and \fVH=-(B*D'+Z*C')*Ri\fR is such that \fVA+H*C\fR is stable.
 .SH SEE ALSO
 gcare

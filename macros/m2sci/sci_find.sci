@@ -11,14 +11,11 @@ if lhs==1 then
     stk=list('mtlb_find('+stk(top)(1)+')','0','1','?','1')
   end
 elseif lhs==2 then
-  i=lst(ilst+1)(2)
-  j=lst(ilst+2)(2)
+  [i,j]=lhsvarsnames()
   txt='['+j+','+i+'] = find('+stk(top)(1)+');'+i+' = '+i+'(:);'+j+' = '+j+'(:);'
   stk=list(list('?','-2','1','?','1'),list('?','-2','1','?','1'))
 else
-  i=lst(ilst+1)(2)
-  j=lst(ilst+2)(2)
-  v=lst(ilst+3)(2)
+  [i,j,v]=lhsvarsnames()
   temp=gettempvar()
   txt=[temp+' = '+stk(top)(1)+';'
        '['+j+','+i+'] = find('+temp+');'+i+'='+i+'(:);'+j+'='+j+'(:);'

@@ -21,7 +21,9 @@ DESCRIPTION
 EXAMPLE
   host("ls $SCI/demos");
   host("emacs $SCI/demos/wheel2/Makefile");
-  deff('wd=pwd()','host(''pwd>/tmp/path'');wd=read(''/tmp/path'',1,1,''(a)'')')
+  deff('wd=pwd()','if MSDOS then host(''cd>''+TMPDIR+''ath'');..
+                   else host(''pwd>''+TMPDIR+''/path'');end..
+        wd=read(TMPDIR+''/path'',1,1,''(a)'')')
   wd=pwd()
 
 SEE ALSO

@@ -1,13 +1,11 @@
 /* Copyright INRIA */
 #ifdef WIN32 
 #include "wmen_scilab.h"
-char dialog_str[MAXSTR];
+char *dialog_str = (char *) 0;
 #else
 #include "men_scilab.h"
 char *dialog_str = (char *) 0;
 #endif
-
-
 
 SciDialog ScilabDialog;
 
@@ -72,6 +70,7 @@ void C2F(xdialg)(value,ptrv,nv,desc,ptrdesc,nd,btn,ptrbtn,nb,res,ptrres,nr,ierr)
   else {
     ScilabC2MStr2(res,nr,ptrres,dialog_str,ierr,maxchars,maxlines);
     FREE(dialog_str);/** allocated in DialogOK **/
+    dialog_str = NULL;
   }
 }
 
@@ -96,6 +95,7 @@ void xdialg1(description,valueinit,pButName,value,ok)
     *ok=1;
     strcpy(value,dialog_str);
     FREE(dialog_str);/** allocated in DialogOK **/
+    dialog_str = NULL;
   }
 }
 

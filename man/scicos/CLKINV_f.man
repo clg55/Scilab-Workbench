@@ -1,7 +1,7 @@
-.TH CLKIN_f 5 "Janvier 1996" "Scilab Group" "Scicos Block"
+.TH CLKINV_f 5 "Janvier 1996" "Scilab Group" "Scicos Block"
 .so ../sci.an
 .SH NAME
-CLKIN_f - Scicos Super Block event input port
+CLKINV_f - Scicos Super Block event input port
 .SH DESCRIPTION
 This block must only be used inside Scicos Super Blocks to represent
 an event input port. 
@@ -13,4 +13,4 @@ number of event input ports.
 Port number
 : an integer defining the port number.
 .SH SEE ALSO
-IN_f, OUT_f, CLKOUT_f
+IN_f, OUT_f, CLKOUTV_f

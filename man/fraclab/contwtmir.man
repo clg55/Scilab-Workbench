@@ -1,7 +1,7 @@
 .TH "contwt" 2 " June 6th 1997" "Fractales Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-contwt -  Continuous L2 wavelet transform with mirroring
+contwtmir -  Continuous L2 wavelet transform with mirroring
 .sp
 Author: Paulo Goncalves
 .sp

@@ -7,6 +7,7 @@ function [o,modified,newparameters,needcompile,edited]=clickin(o)
 //  needcompile   : indicates if modification implies a new compilation
 //!
 // Copyright INRIA
+
 modified=%f;newparameters=list();needcompile=0;
 if o(1)=='Block' then
   model=o(3)
@@ -71,7 +72,7 @@ elseif o(1)=='Link' then
       'Type'],..
       list('str','1','vec','1','vec',1),[nam;string(Thick);string(Type)])
   if ok then
-    edited=(o(5)<>nam)|(o(6)<>[Thick,Type]);
+    edited=(o(5)<>nam)|or(o(6)<>[Thick,Type]);
     o(5)=nam;o(6)=[Thick,Type];
   end
 elseif o(1)=='Text' then

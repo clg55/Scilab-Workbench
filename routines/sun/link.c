@@ -42,7 +42,7 @@ typedef struct {
   int      Nshared;           /* number of the shared file */
 } Epoints;
 
-#define TMPL 25
+#define TMPL 64
 
 typedef struct {
   int ok;

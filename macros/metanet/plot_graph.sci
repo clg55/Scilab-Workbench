@@ -110,8 +110,9 @@ for i=1:ma
       xpolys(fr,gr,edgecolor(i));
     end
     // edge name or label or ...
+    towrite=[];
     if ((rep(6)==1)|(rep(7)==1)) then
-      towrite=edname(i);
+      towrite=edname(i);end;
       if(rep(7)==1) then, towrite=edlabel(i);end;
       if(rep(9)==1) then, towrite=edlength(i);end;
       if(rep(10)==1) then, towrite=edcost(i);end;
@@ -120,8 +121,9 @@ for i=1:ma
       if(rep(13)==1) then, towrite=edweight(i);end;
       if(towrite==[]) then, towrite=' ';end;
       xx=x3mm;yy=y3mm;
+      towrite=string(towrite);
       xstring(xx,-yy,towrite);
-    end;
+//    end;
   end
 end;
 //			PLOT OF CURVED ARCS WITH ARROWS
@@ -150,8 +152,9 @@ for i=1:ma
     br(1,1)=-y1;br(2,1)=-y1pp;br(3,1)=-y2pp;br(4,1)=-y2;
     xpolys(ar,br,edgecolor(i));
     // edge name or label or ...
+    towrite=[];
     if ((rep(6)==1)|(rep(7)==1)) then
-      towrite=edname(i);
+      towrite=edname(i);end;
       if(rep(7)==1) then, towrite=edlabel(i);end;
       if(rep(9)==1) then, towrite=edlength(i);end;
       if(rep(10)==1) then, towrite=edcost(i);end;
@@ -160,12 +163,14 @@ for i=1:ma
       if(rep(13)==1) then, towrite=edweight(i);end;
       if(towrite==[]) then, towrite=' ';end;
       xx=x3mm;yy=y3mm;
+      towrite=string(towrite);
       xstring(xx,-yy,towrite);
-    end;
+//    end;
   end
 end
 //			PLOT OF LOOPS
 gona=diag(spp);ii=find(gona<>0);kk=size(ii);
+
 for i=1:kk(2)
   iii=ii(i); imax=gona(iii);
   x1=xnodes(iii);y1=-ynodes(iii); uni=nodediam(iii);
@@ -182,8 +187,9 @@ for i=1:kk(2)
       xpolys(fr,gr,edgecolor(icol));
     end
     // edge name or label or ...
+    towrite=[];
     if ((rep(6)==1)|(rep(7)==1)) then
-      towrite=edname(jj);
+      towrite=edname(jj);end;
       if(rep(7)==1) then, towrite=edlabel(jj);end;
       if(rep(9)==1) then, towrite=edlength(i);end;
       if(rep(10)==1) then, towrite=edcost(i);end;
@@ -192,8 +198,9 @@ for i=1:kk(2)
       if(rep(13)==1) then, towrite=edweight(i);end;
       if(towrite==[]) then, towrite=' ';end;
       xx=x3mm+0.1*uni;yy=y3mm;
+      towrite=string(towrite);
       xstring(xx,yy,towrite);
-    end;
+//    end;
   end
 end
 
@@ -233,7 +240,8 @@ if ((rep(4)==1)|(rep(5)==1)|(rep(8)==1)) then,
     towrite=nodname(i);
     if(rep(5)==1) then, towrite=nodlabel(i);end;
     if(rep(8)==1) then, towrite=string(noddemand(i));end;
-    if(towrite==[]) then, towrite=' ';end;
+  if(towrite==[]) then, towrite=' ';end;
+    towrite=string(towrite);
     xstring(xnodes(i)-ray(i)/2,-ynodes(i)-ray(i)/2,towrite);
   end;
 end;

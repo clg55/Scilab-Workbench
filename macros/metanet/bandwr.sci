@@ -70,7 +70,7 @@ else
 for iisort=1:3;
 b=[];a=[1:n];
 for i=1:n,k=n+1-i;
-ii=int((rand+1./k)*k);
+ii=int((rand()+1./k)*k);
 b=[b a(ii)];a(ii)=[];
 end;
 [ss,sk]=sort(b);

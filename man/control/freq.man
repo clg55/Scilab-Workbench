@@ -21,7 +21,7 @@ x
 \fVx=freq(A,B,C [,D],f)\fR returns a real or complex \fVmxp*t\fR matrix
 such that:
 .LP
-\fVx(:,k*p:(k+1)*p)= C*inv(f(k)*eye-A)*B + D\fR.
+\fVx(:,k*p:(k+1)*p)= C*inv(f(k)*eye()-A)*B + D\fR.
 .LP
 Thus, for \fVf\fR taking values along the imaginary axis or
 on the unit circle \fVx\fR is the continuous or discrete time 

@@ -25,7 +25,7 @@ LIBRSCI = libs/system.a libs/interf.a libs/system2.a libs/optim.a \
 	libs/sparse.a libs/metanet.a libs/sun.a  \
 	libs/intersci.a  libs/@GUILIB@.a libs/graphics.a libs/menusX.a \
 	libs/libcomm.a libs/comm.a libs/sound.a libs/dcd.a libs/rand.a \
-	libs/blas.a libs/fraclab.a libs/pvm.a @XDRLIBNAME@ @TKSCILIB@
+	libs/blas.a libs/fraclab.a @PVMSCILIB@ @XDRLIBNAME@ @TKSCILIB@
 
 LIBR = $(XAW_LOCAL_LIB) $(LIBRSCI) $(DLDLIB) $(PVMGLIB) $(PVMLIB)
 
@@ -69,7 +69,7 @@ scilex-lib::
 	cd routines; echo "making all in routines..."; \
 		$(MAKE) $(MFLAGS) all;
 
-scilex-lib::
+@PVMTARGET@::
 	@cd pvm3; echo "making all in pvm3..."; $(MAKE) $(MFLAGS) "CC=$(CC)";
 
 scilex-lib-world::
@@ -131,7 +131,7 @@ distclean::
 	conftest conftest.c so_locations
 
 
-SCIBASE = scilab-2.4
+SCIBASE = scilab-2.4.1
 
 BINDISTFILES = \
 	$(SCIBASE)/CHANGES $(SCIBASE)/README $(SCIBASE)/ACKNOWLEDGEMENTS \

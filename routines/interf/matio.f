@@ -15,7 +15,7 @@ c
       integer status,access,form,recl,old,new,scratc,unknow
       integer sequen,direct,forma1,unform
       integer clo,rew,bak,ope,ftyp,fmttyp,mode(2),retu(6),comma,eol
-      integer nocomp
+      integer nocomp,top0
       double precision eps,xxx
       logical opened,eptover
       integer iadr,sadr
@@ -40,6 +40,7 @@ c
       endif
 c     
       tops=top
+      top0=top-rhs+1
 c
       if(int(rstk(pt)/100).ne.9) goto 01
       if(rstk(pt).eq.902) goto 12
@@ -196,11 +197,17 @@ c     error control
       ids(2,pt)=errct
       ids(3,pt)=err2
       ids(4,pt)=err1
+      ids(5,pt)=errpt
       if(icheck.eq.0) then
          ids(1,pt)=0
       else
+         errpt=pt
          ids(1,pt)=1
-         errct=-900001
+         imode=1
+         imess=1
+         num=-1
+         errct=(8*imess+imode)*100000+abs(num)
+         if(num.lt.0) errct=-errct
       endif
       icall=5
 c     *call*  macro
@@ -221,6 +228,7 @@ c     return error number
          err1=ids(4,pt)
          fun=0
       else
+         errpt=ids(5,pt)
          il=iadr(lstk(top))
          istk(il)=0
          lstk(top+1)=lstk(top)+1
@@ -342,7 +350,7 @@ c
  32   continue
       l=k
       ilk=iadr(lstk(k))
-      if(istk(ilk).lt.0) l=istk(ilk+1)
+      if(istk(ilk).lt.0) l=istk(ilk+2)
       if(fin.eq.7) call savlod(lunit,idstk(1,k),0,l)
       k = k-1
       if(k.ge.bot.and.rhs.eq.1 .or. k.gt.top.and.rhs.gt.1) goto 32
@@ -524,7 +532,7 @@ c     deff
       lw=lstk(top+1)
       il=iadr(lstk(top))
       call getfun(0)
-      if(err.gt.0) goto 999
+      if(err.gt.0.or.err1.gt.0) goto 999
       if(icomp.eq.1) then
          call dcopy(lstk(top+1)-lstk(top),stk(lstk(top)),1,
      $       stk(lstk(top-1)),1) 
@@ -533,8 +541,10 @@ c     deff
          top=top-1
          job=1
          opened=.true.
+         lunit=0
          goto 56
       endif
+
       call stackp(idstk(1,top),0)
       top=top-1
       il=iadr(lstk(top))
@@ -598,6 +608,7 @@ c     procedure de compilation des macros (copie de ce qui est dans matsys)
       pt=pt+1
       ids(1,pt)=l
       ids(2,pt)=lunit
+      ids(3,pt)=top0
       pstk(pt)=fin
       fin=lstk(top)
       comp(1)=iadr(lstk(top+1))
@@ -608,10 +619,17 @@ c     procedure de compilation des macros (copie de ce qui est dans matsys)
 c     *call* parse  macro
       return
  57   l=ids(1,pt)
+
       pt=pt-1
       if(err1.ne.0) then
          comp(2)=0
          comp(1)=0
+         if(ids(2,pt+1).ne.0) then
+            mode(1)=0
+            mode(2)=0
+            call clunit(-ids(2,pt+1),buf,mode)
+         endif
+         top=ids(3,pt+1)
          il=iadr(lstk(top))
          istk(il)=0
          lhs=0
@@ -1783,13 +1801,17 @@ c     loop on variable to display
       topk=top
  202  call print(id,topk,wte)
       if(topk.eq.0) goto 204
-c     overloaded display call macro
+c     overloaded display 
       if ( eptover(1,psiz)) return
       rstk(pt)=908
       pstk(pt)=i
       ids(1,pt)=rhs
-      icall=5
+      if(fun.eq.0) then
 c     *call* macro
+         icall=5
+      else
+c     *call* matfns
+      endif
       return
  203  continue
       i=pstk(pt)

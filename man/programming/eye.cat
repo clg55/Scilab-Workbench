@@ -4,8 +4,9 @@ NAME
   eye - identity matrix
 
 CALLING SEQUENCE
-  [X]=eye(m,n)
-  [X]=eye(A)
+  X=eye(m,n)
+  X=eye(A)
+  X=eye()
 
 PARAMETERS
 
@@ -23,12 +24,17 @@ DESCRIPTION
   If A is a linear system represented by a syslin list, eye(A) returns an eye
   matrix of appropriate dimension: (number of outputs x number of inputs).
 
+  eye() produces a identity matrix with undefined dimensions. Dimensions will
+  be defined when this identity matrix is added to a mtrix with fixed dimen-
+  sions.
+
 EXAMPLES
   eye(2,3)
   A=rand(2,3);eye(A)
   s=poly(0,'s');A=[s,1;s,s+1];eye(A)
   A=[1/s,1;s,2];eye(A);
   A=ssrand(2,2,3);eye(A)
+  [1 2;3 4]+2*eye()
 
 SEE ALSO
   ones, zeros

@@ -50,7 +50,8 @@ MACROS=clickin.sci draw.sci drawblock.sci drawlink.sci drawobj.sci drawobjs.sci 
 	connected_links.sci s_port_names.sci standard_etiquette.sci \
 	default_options.sci empty_diagram.sci set_cmap.sci set_background.sci \
 	do_focus.sci do_xsetech.sci is_split.sci dist2polyline.sci \
-	do_stupidmove.sci do_navigator.sci build_scs_tree.sci whereintree.sci\
-	do_icon_edit.sci
+	do_stupidmove.sci do_navigator.sci build_scs_tree.sci whereintree.sci \
+	do_icon_edit.sci CFORTR.sci FORTR.sci getblocktext.sci getblocklink.sci \
+	do_export.sci systexport.sci
 
 include ../Make.lib

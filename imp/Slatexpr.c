@@ -235,7 +235,19 @@ double xs,ys;
       sciprint(" Can't open file %s\n",fileout);
       exit(1);
     }
-#ifndef DOC 
+#ifndef DOC
+  fprintf(fo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+  fprintf(fo,"%% Usage: -To include a Figure with a caption, insert the TWO following lines\n");
+  fprintf(fo,"%%        in your Latex file:\n");
+  fprintf(fo,"%% \\input{This_file_name} \n");
+  fprintf(fo,"%% \\dessin{The_caption}{The_label}\n");
+  fprintf(fo,"%%         -To include just a picture, insert the lines \n");
+  fprintf(fo,"%%         between \\fbox{\\begin{picture}...  and \\end{picture}} below \n");
+  fprintf(fo,"%%          \n");
+  fprintf(fo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+
+  fprintf(fo," \n");
+
   fprintf(fo," \\long\\def\\Checksifdef#1#2#3{%%\n");
   fprintf(fo,"\\expandafter\\ifx\\csname #1\\endcsname\\relax#2\\else#3\\fi}\n");
   fprintf(fo,"\\Checksifdef{Figdir}{\\gdef\\Figdir{}}{}\n");
@@ -243,19 +255,23 @@ double xs,ys;
 #endif
   fprintf(fo,"\\begin{figure}[hbtp]\n");
   fprintf(fo,"\\begin{center}\n");
-  fprintf(fo,"%%If you prefer cm use the followin two lines\n");
+  fprintf(fo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+  fprintf(fo,"%%If you prefer cm, uncomment the following two lines\n");
   fprintf(fo,"%%\\setlength{\\unitlength}{1mm}\n");
   fprintf(fo,"%%\\fbox{\\begin{picture}(%.2f,%.2f)\n",widecm,highcm);
+  fprintf(fo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
   fprintf(fo,"\\fbox{\\begin{picture}(%.2f,%.2f)\n",wide,high);
   FileNameChange(filein,fileout,base,"eps");
 #ifdef EPSFIG
   fprintf(fo,"\\epsfig{file=\\Figdir %s.eps,width=%.2fpt,height=%.2fpt}\n",
 	  base,wide,high);
 #else
-  fprintf(fo,"%% if you want to use epsfig uncomment the following line \n");
-  fprintf(fo,"%% and comment the special line \n");
+  fprintf(fo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
+  fprintf(fo,"%% If you want to use epsfig, uncomment the following line \n");
+  fprintf(fo,"%% and comment the \\special line \n");
   fprintf(fo,"%%\\epsfig{file=\\Figdir %s.eps,width=%.2fpt,height=%.2fpt}\n",
 	  base,wide,high);
+  fprintf(fo,"%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n");
   fprintf(fo,"\\special{psfile=\\Figdir %s.eps hscale=%.2f vscale=%.2f}\n",
 	  base,hscale,vscale);
 #endif

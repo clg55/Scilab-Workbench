@@ -109,20 +109,24 @@ if nii+noo>0 then // move a block and connected links
 j=0
 for i=connectedi
   oi=scs_m(i)
+  if rep(3)<>2 then 
   j=j+1
   oi(2)($-1:$)=xmt(:,j)
   oi(3)($-1:$)=ymt(:,j)
   scs_m(i)=oi
+  end
   draw_link_seg(oi,$-1:$) //draw link
   if pixmap then xset('wshow'),end
 end
 
 for i=connectedo
   oi=scs_m(i)
+  if rep(3)<>2 then 
   j=j+1
   oi(2)(1:2)=xmt([2,1],j)
   oi(3)(1:2)=ymt([2,1],j)
   scs_m(i)=oi
+end
   draw_link_seg(oi,1:2) //draw link
   if pixmap then xset('wshow'),end
 end
@@ -183,6 +187,7 @@ while rep(3)==-1 do
   x1(2)=X1(2)-(xc-xc1)
   y1(2)=Y1(2)-(yc-yc1)
 end
+if rep(3)<>2 then
 //[frect1,frect]=xgetech();
 //eps=0.04*min(abs(frect(3)-frect(1)),abs(frect(4)-frect(2)))
 if abs(x1(1)-x1(2))<rela*abs(y1(1)-y1(2)) then
@@ -210,7 +215,7 @@ end
 
 //xpolys(x1,y1,ct(1))//draw moving part of the link
 //xpolys(xx,yy,ct(1)) //erase thin link
-if rep(3)<>2 then
+//if rep(3)<>2 then
   o(2)=xx;o(3)=yy
   scs_m(k)=o
 end

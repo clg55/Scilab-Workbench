@@ -12,9 +12,10 @@ function [hinfnorm,frequency]=h_norm(Sl,rerr)
 //  see also: linfn, linf
 //!
 //  Version 3.2, 09-27-1990
+//  Adapted from 
 //  N.A. Bruinsma   T.U.Delft/Philips Research Eindhoven, see also
-// Systems & Control Letters, vol. 14 pp. 287-293.
-// Copyright INRIA
+//  Systems & Control Letters, vol. 14 pp. 287-293.
+//  Copyright INRIA
 Sl1=Sl(1);
 [lhs,rhs]=argn(0);
 eps=1.d-8;
@@ -34,7 +35,7 @@ l = [];
 // compute starting value
 q = ((imag(eiga) + 0.01 * ones(eiga)) ./ real(eiga)) ./ abs(eiga);
 [q,i] = maxi(q); w = abs(eiga(i));
-svw = norm( c * ((w*aj*eye-a)\b) + d );
+svw = norm( c * ((w*aj*eye()-a)\b) + d );
 sv0 = norm( -c * (a\b) + d );
 svdd = norm(d);
 [lb,i] = maxi([svdd sv0 svw]);l=lb;
@@ -62,7 +63,7 @@ for it = 1:15,
     M =  0.5 * (imev(1:q-1) + imev(2:q)); M = M(1:isiso:q-1);
     sv=[];
     for j = 1:maxi(size(M)),
-      sv = [sv maxi(svd(d + c*((M(j)*aj*eye - a)\b)))];
+      sv = [sv maxi(svd(d + c*((M(j)*aj*eye() - a)\b)))];
     end;
     lb = maxi(sv);l=[l;lb];
   end;
@@ -78,9 +79,9 @@ hinfnorm = 0.5 * (ub+lb); frequency = M;
 
 function gama=dhnorm(Sl,tol,gamamax)
 //discrete-time case (should be tested!!!)
-disp('warning: discrete-time h_norm is not fully tested!')
+//disp('warning: discrete-time h_norm is not fully tested!')
 [lhs,rhs]=argn(0);
-if rhs==1 then tol=0.001;gamamax=4000;end
+if rhs==1 then tol=0.00001;gamamax=10000000;end
 if rhs==2 then gamamax=1000;end
 gamamin=sqrt(%eps);
 n=0;
@@ -96,21 +97,30 @@ end
 function ok=dhtest(Sl,gama)
 //test if discrete hinfinity norm of Sl is < gama
 [A,B,C,D]=Sl(2:5);B=B/sqrt(gama);C=C/sqrt(gama);D=D/gama;
-R=eye-D'*D;
+R=eye()-D'*D;
 [n,n]=size(A);Id=eye(n,n);Z=0*Id;
 Ak=A+B*inv(R)*D'*C;
 e=[Id,-B*inv(R)*B';Z,Ak'];
-Aa=[ak,Z;-c'*inv(eye-D*D')*c,Id];
-[w,k]=gschur(Aa,e,'d');
-if k<>n then ok=%f;return;end
+Aa=[Ak,Z;-C'*inv(eye()-D*D')*C,Id];
+[As,Es,w,k]=gschur(Aa,e,'d');
+//Testing magnitude 1 eigenvalues.
+[al,be]=gspec(As,Es);
+finite=find(abs(be)>0.00000001);
+finite_eigen=al(finite)./be(finite);
+bad=find( abs(abs(finite_eigen)-1) < 0.0000001);
+if bad<>[] then ok=%f;return;end
+//if k<>n then ok=%f;return;end
 ws=w(:,1:n);
 x12=ws(1:n,:);
 phi12=ws(n+1:2*n,:);
 if rcond(x12) > 1.d-6 then
 X=phi12/x12;
-z=eye-b'*X*B
-ok=mini(real(spec(x))) > 0 & mini(real(spec(z))) > 0
+z=eye()-B'*X*B
+ok= mini(real(spec(z))) > -%eps
 else
-warning('dhnorm: bad conditioning');ok=%F;end
+ok=%t;end
+
+
+
 
 

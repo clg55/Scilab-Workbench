@@ -8,7 +8,7 @@ data=[]
 for i=n:-1:2
   k=i
   o=objs(i)
-  if o(1)=='Block'|o(1)=='Text' then
+  if o(1)=='Block' then
     [orig,sz]=o(2)(1:2);dx=xf/7;dy=yf/7
     data=[(orig(1)-dx-x)*(orig(1)+sz(1)+dx-x),..
 	  (orig(2)-dy-y)*(orig(2)+sz(2)+dy-y)]

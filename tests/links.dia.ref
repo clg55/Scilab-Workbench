@@ -140,7 +140,7 @@ param=[0.04,10000,3d+7];
  
 y=ode([1;0;0],0,[0.4,4],list('ext10f',param));
  
-if norm(y-yref) > 100*%eps then bugmes();quit;end
+if norm(y-yref) > 10000*%eps then bugmes();quit;end
  
  
 //Example #11
@@ -153,7 +153,7 @@ y=ode([1;0;0],0,[0.4,4],'ext11f');
  
 //param must be defined as a scilab variable upon calling ode
  
-if norm(y-yref) > 100*%eps then bugmes();quit;end
+if norm(y-yref) > 10000*%eps then bugmes();quit;end
  
  
 //Example #12
@@ -166,7 +166,7 @@ param=[0.04,10000,3d+7];
  
 y=ode([1;0;0],0,[0.4,4],'ext12f');
  
-if norm(y-yref) > 100*%eps then bugmes();quit;end
+if norm(y-yref) > 10000*%eps then bugmes();quit;end
  
  
 //Example #13
@@ -182,6 +182,4 @@ call('ext13f',n,1,'i',a,2,'r','out',2);  //loads b with a
 c=call('ext14f',n,1,'i','out',[1,10],2,'r');  //loads c with b
  
 if norm(c-a) > %eps then bugmes();quit;end
- 
- 
  

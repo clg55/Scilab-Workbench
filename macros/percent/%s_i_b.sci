@@ -3,7 +3,17 @@ function M=%s_i_b(varargin)
 [lhs,rhs]=argn(0)
 M=varargin(rhs)
 N=varargin(rhs-1)//inserted matrix
-M=mlist(['hm','dims','entries'],size(M),M(:))
+if rhs<=4 then
+  M=bool2s(M)
+  if rhs==3 then
+    M(varargin(1))=N
+  else
+    M(varargin(1),varargin(2))=N
+  end
+  return
+end
+  
+M=mlist(['hm','dims','entries'],size(M),bool2s(M(:)))
 dims=M('dims')
 v=M('entries');v=v(:)
 

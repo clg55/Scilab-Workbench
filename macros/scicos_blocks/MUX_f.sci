@@ -18,8 +18,8 @@ case 'set' then
     [ok,in,label]=getvalue('Set MUX block parameters',..
 	'number of input ports',list('vec',1),label)
     if ~ok then break,end
-    if in<2 then
-      message('Block must have at least two input ports')
+    if in<2|in>8then
+      message('Block must have at least two input ports and at most eight')
     else
       [model,graphics,ok]=check_io(model,graphics,-[1:in]',0,[],[])
       if ok then

@@ -25,6 +25,9 @@ The different cases for \fVmode\fR are :
 : stops before each prompt
 .IP 7 
 : stops + prompts + echoes : useful mode for demos.
+.SH REMARK
+Last line of startup file must be terminated by a newline to be taken
+into account.
 .SH SEE ALSO
 getf, comp, mode
 

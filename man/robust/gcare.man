@@ -24,7 +24,7 @@ The GCARE for \fVSl=[A,B,C,D]\fR is:
 .nf
 (A-B*Si*D'*C)'*X+X*(A-B*Si*D'*C)-X*B*Si*B'*X+C'*Ri*C=0
 .fi
-where \fVS=(eye+D'*D)\fR, \fVSi=inv(S)\fR, \fVR=(eye+D*D')\fR, \fVRi=inv(R)\fR 
+where \fVS=(eye()+D'*D)\fR, \fVSi=inv(S)\fR, \fVR=(eye()+D*D')\fR, \fVRi=inv(R)\fR 
 and \fVF=-Si*(D'*C+B'*X)\fR is such that \fVA+B*F\fR is stable.
 .SH SEE ALSO
 gfare

@@ -17,6 +17,7 @@ extern SciDialog ScilabDialog;
 EXPORT int CALLBACK 
 SciDialogDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
 {
+  HWND dlgw;
   switch (wmsg) {
   case WM_INITDIALOG:
     if ( SciMenusRect.left != -1) 
@@ -30,12 +31,31 @@ SciDialogDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
   case WM_COMMAND:
     switch (LOWORD(wparam)) {
     case IDOK:
-      GetDlgItemText(hdlg, DI_TEXT, dialog_str, MAXSTR-1);
-      if (dialog_str[strlen(dialog_str)-1] == '\n') 
-	dialog_str[strlen(dialog_str)-1] = '\0' ;
-      GetWindowRect(hdlg,&SciMenusRect);
-      EndDialog(hdlg, IDOK);
-      return TRUE;
+      dlgw = GetDlgItem(hdlg, DI_TEXT);
+      if ( dlgw != NULL) 
+	{
+	  int l;
+	  l= GetWindowTextLength(dlgw);
+	  /* sciprint("string of size %d \n",l); */
+	  if ( (dialog_str =  MALLOC( (l+2)*(sizeof(char)))) == NULL) 
+	    {
+	      Scistring("Malloc : No more place");
+	      EndDialog(hdlg, IDCANCEL);
+	      return TRUE;
+	    }
+	  GetDlgItemText(hdlg, DI_TEXT, dialog_str, l+1);
+	  /* sciprint("str [%s]\n",dialog_str); */
+	  if (dialog_str[strlen(dialog_str)-1] == '\n') 
+	    dialog_str[strlen(dialog_str)-1] = '\0' ;
+	  GetWindowRect(hdlg,&SciMenusRect);
+	  EndDialog(hdlg, IDOK);
+	  return TRUE;
+	}
+      else 
+	{
+	  EndDialog(hdlg, IDCANCEL);
+	  return TRUE;
+	}
     case IDCANCEL:
       GetWindowRect(hdlg,&SciMenusRect);
       EndDialog(hdlg, IDCANCEL);

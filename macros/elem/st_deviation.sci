@@ -1,26 +1,19 @@
-function y=st_deviation(x,orient)
-// Copyright INRIA
-[lhs,rhs]=argn(0)
-if x==[] then y=%nan;return,end
-if rhs==1 then
-  n=size(x,'*')
-  y=norm(x-sum(x)/n)
-  if n>1 then y = y / sqrt(n-1);end
-elseif orient=='r'|orient==1 then
-  [m,n]=size(x)
-  y=sum(x,'r')/m
-  for l=1:n
-    y(l) = norm(x(:,l)-y(l));
-  end
-  if m>1 then y = y / sqrt(m-1);end
-elseif orient=='c'|orient==2 then
-  [m,n]=size(x)
-  y=sum(x,'c')/n
-  for k=1:m
-    y(k) = norm(x(k,:)-y(k));
-  end  
-  if n>1 then y = y / sqrt(n-1);end
-else  
-  error('mean : second argument must be ''r'', ''c'', 1 or 2')
+function sd=st_deviation(x,cr)
+//Copyright Inria/Enpc 
+//Philippe.Castagliola Ecole des Mines de Nantes
+// 
+[argout,argin]=argn(0);
+if (argin<1)|(argin>2)
+  error('incorrect number of arguments');
 end
-
+if x == [] then sd=%nan;return ;end 
+[m n]=size(x);
+if argin==1
+  sd=sqrt(sum((x-mean(x)).^2)/(m*n-1));
+elseif cr=='c'
+  sd=sqrt(sum((x-mean(x,'c')*ones(x(1,:))).^2,'c')/(n-1));
+elseif cr=='r'
+  sd=sqrt(sum((x-ones(x(:,1))*mean(x,'r')).^2,'r')/(m-1));
+else
+  error('2rd argument cr must be equal to ''c'' or ''r''');
+end

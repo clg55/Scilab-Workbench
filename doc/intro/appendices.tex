@@ -134,9 +134,9 @@ ensor');
 !proc input   !
  sysf      =
  
-!proc*((eye-reg(:,2)*sensor*proc)\(-(-ff-reg(:,1)*model)))  !
+!proc*((eye()-reg(:,2)*sensor*proc)\(-(-ff-reg(:,1)*model)))  !
 !                                                           !
-!(eye-reg(:,2)*sensor*proc)\(-(-ff-reg(:,1)*model))         !
+!(eye()-reg(:,2)*sensor*proc)\(-(-ff-reg(:,1)*model))         !
 \end{verbatim}
 %
 Note that the argument to {\tt bloc2exp} is a list of lists.  The 

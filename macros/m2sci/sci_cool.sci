@@ -11,7 +11,7 @@ else
     n=stk(top)(1)
     txt=[]
   else
-    n=tempvar(2)
+    n=gettempvar(2)
     txt=n+'='+stk(top)(1)+';'
   end
   txt=[txt;

@@ -23,8 +23,7 @@ C     X must contain after state values all real data for simblk and grblk
       integer critev(*),rpptr(*),ipar(*),ipptr(*),funptr(*),funtyp(*)
       integer ierr
 c     
-      logical urg
-      integer i,k,ierr1,iopt,istate,itask,j,jdum,jt,
+      integer i,k,ierr1,iopt,istate,itask,j,jdum,jt,urg,
      &     ksz,flag,keve,kpo,nord,nclock
       double precision t
       double precision tvec(nts)
@@ -44,7 +43,7 @@ c
       common /costol/ atol,rtol,ttol,deltat
 c     
 c     
-      urg=.false.
+      urg=urg-1
       keve = pointi
       pointi=evtspt(keve)
       evtspt(keve)=-1
@@ -84,8 +83,8 @@ c
 c     
             if (ntvec.ge.1) then 
                do 70 i = 1,ntvec
-                  if (tvec(i) .ge. told) then
-                     urg=.true.
+                  if (tvec(i) .gt. told) then
+                     urg=urg+1
                      call putevs(tevts,evtspt,nevts,pointi,
      &                    tvec(i),i+clkptr(kfun)-1,ierr1)
                      if (ierr1 .ne. 0) then
@@ -132,8 +131,7 @@ C     X must contain after state values all real data for simblk and grblk
       integer critev(*),rpptr(*),ipar(*),ipptr(*),funptr(*),funtyp(*)
       integer ierr
 c     
-      logical urg
-      integer i,k,ierr1,iopt,istate,itask,j,jdum,jt,
+      integer i,k,ierr1,iopt,istate,itask,j,jdum,jt,urg,
      &     ksz,flag,keve,kpo,nord,nclock
       double precision t
       double precision tvec(nts)
@@ -152,7 +150,7 @@ c
       double precision atol,rtol,ttol,deltat
       common /costol/ atol,rtol,ttol,deltat
 c     
-      urg=.false.
+      urg=0
       do 19 jj=1,nzord
          kfun=zord(jj)
          nclock = zord(jj+nzord)
@@ -184,7 +182,7 @@ c
 c     
             do 70 i = 1,ntvec
                if (tvec(i) .ge. told) then
-                  urg=.true.
+                  urg=urg+1
                   call putevs(tevts,evtspt,nevts,pointi,
      &                 tvec(i),i+clkptr(kfun)-1,ierr1)
                   if (ierr1 .ne. 0) then
@@ -198,14 +196,14 @@ C     !                 event conflict
  19   continue
 c
 c
-      if (.not.urg)  return
+      if (urg.le.0)  return
  21   call zzdoit(neq,xd,x,xptr,z,zptr,iz,izptr,told
      $     ,tevts,evtspt,nevts,pointi,inpptr,inplnk,outptr
      $     ,outlnk,lnkptr,clkptr,ordptr,nptr
      $     ,ordclk,nordcl,cord,oord,zord,critev,
      $     rpar,rpptr,ipar
      $     ,ipptr,funptr,funtyp,outtb,urg,ierr) 
-      if (urg) goto 21
+      if (urg.gt.0) goto 21
       return
       end
 

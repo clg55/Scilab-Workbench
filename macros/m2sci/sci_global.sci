@@ -9,7 +9,7 @@ for k=1:rhs
   end
 end
 if RHS<>[] then
-  txt=['// global('+makeargs(RHS)+') cannot be properly handled'
+  txt=['//! global('+makeargs(RHS)+') cannot be properly handled'
        '// variables are modified by the function']
   write(logfile,txt)
 end

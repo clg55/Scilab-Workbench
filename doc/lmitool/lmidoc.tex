@@ -199,7 +199,7 @@ the evaluation function.
 function [LME,LMI,OBJ]=sf_sat_eval(XLIST)
  [Q,Y]=XLIST(:)
  LME=Q-Q'
- LMI=list(-A*Q-Q*A'-B*Y-Y'*B',[umax^2*eye(Y*Y'),Y;Y',Q],Q-eye)
+ LMI=list(-A*Q-Q*A'-B*Y-Y'*B',[umax^2*eye(Y*Y'),Y;Y',Q],Q-eye())
  OBJ=[]
 \end{verbatim}
 Note that {\tt OBJ=[]} indicates that
@@ -347,7 +347,7 @@ can be written as follows
 function [LME,LMI,OBJ]=dscr_lyap_eval(XLIST)
 X=XLIST(:)
 LME=E'*X-X'*E
-LMI=list(-A'*X-X'*A-eye,E'*X)
+LMI=list(-A'*X-X'*A-eye(),E'*X)
 OBJ=[]
 \end{verbatim}
 and the problem can be solved by (assuming $E$ and $A$ are
@@ -393,7 +393,7 @@ evaluation function:
  [X,Y,L]=XLIST(:)
  LME=list(X-X',Y-Y');
  LMI=list(-[A*X+B2*L+(A*X+B2*L)'+B1*B1',X*C1'+L'*D12'+B1*D11';...
-               (X*C1'+L'*D12'+B1*D11')',-gamma^2*eye+D11*D11'],...
+               (X*C1'+L'*D12'+B1*D11')',-gamma^2*eye()+D11*D11'],...
                                   [Y,C2*X+D22*L;(C2*X+D22*L)',X])
  OBJ=trace(Y);
 \end{verbatim}

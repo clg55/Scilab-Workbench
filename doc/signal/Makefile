@@ -19,9 +19,11 @@ $(SCIDOC)/Signal.ps: subs $(TEXFILES)
 	dvips -o $(SCIDOC)/Signal.ps Toolbox.dvi
 
 clean::
-	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc
+	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc \
+	Toolbox_pdf.* *.tmp Signal_pdf.ps
 distclean::
-	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc
+	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc \
+	Toolbox_pdf.* *.tmp Signal_pdf.ps
 
 SUBDIRS = Nsource_diary Nfigs_source
 
@@ -48,3 +50,13 @@ distclean::
 		(cd $$i ; echo "making" distclean "in signal/$$i..."; \
 			$(MAKE) $(MFLAGS) distclean); \
 	done
+
+pdf: subs $(TEXFILES)
+	awk '{if ($$1~"documentstyle") \
+	{printf "\\documentstyle[amssymb,11pt,makeidx,times,hyperref]{book}\n"} else {print $$0} }' \
+	Toolbox.tex > Toolbox_pdf.tex
+	latex Toolbox_pdf
+	latex Toolbox_pdf
+	makeindex -s Toolbox.isty Toolbox_pdf
+	latex Toolbox_pdf
+	dvips -z -o Signal_pdf.ps Toolbox_pdf.dvi

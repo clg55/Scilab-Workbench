@@ -31,7 +31,7 @@ DESCRIPTION
 EXAMPLE
   deff('y=FF(x)','y=a*(x-b)+c*x.*x')
   X=[];Y=[];
-  a=34;b=12;c=14;for x=0:.1:3, Y=[Y,FF(x)+100*(rand-.5)];X=[X,x];end
+  a=34;b=12;c=14;for x=0:.1:3, Y=[Y,FF(x)+100*(rand()-.5)];X=[X,x];end
   Z=[Y;X];
   deff('e=G(p,z)','a=p(1),b=p(2),c=p(3),y=z(1),x=z(2),e=y-FF(x)')
   [p,err]=fit_dat(G,[3;5;10],Z)

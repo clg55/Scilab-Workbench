@@ -20,11 +20,11 @@ DESCRIPTION
   fishr2 are constructed as above but with added white noises.
           fishr
           y=b*exp(-0.1*(xk(1)+xk(2)))
-          xkp1=[ y 2*y ; s*(1+0.1*(rand-0.5)) 0.0]*xk
+          xkp1=[ y 2*y ; s*(1+0.1*(rand()-0.5)) 0.0]*xk
 
           fishr2
           z=exp(-0.1*(xk(1)+xk(2)))
-          xkp1=[ b*z**(1+0.1*(rand-0.5)) 2*b*z**(1+0.1*(rand-0.5)) ; s 0.0]*xk
+          xkp1=[ b*z**(1+0.1*(rand()-0.5)) 2*b*z**(1+0.1*(rand()-0.5)) ; s 0.0]*xk
   The three macros fish, fishr, fishr2 are loaded in Scilab when calling bif-
   ish.
 

@@ -202,13 +202,13 @@ $pictdict begin
 	{ % filling 
 	newpath
 	cx cy moveto 
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add  64 div neg
 	 Ar 4 get 64 div neg  arc closepath
 	gsave glev Setgray eofill grestore}
 	{
 	%drawing with current dash or color unclosed path 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	  stroke} ifelse 
 	Cmsave1 setmatrix } def 
 
@@ -224,7 +224,7 @@ $pictdict begin
 	/t2 exch neg cx add def 
 	[1 0 0 hom t2 t1 ] concat 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	closepath glev Setgray stroke
 	Cmsave1 setmatrix } def 
 
@@ -458,9 +458,8 @@ fillsolid
 0 Setcolor
 750 530 4500 3180 setclipzone
 0 Setcolor
-/Symbol findfont 80 scf mul scalefont setfont
-HardMark 0 16#2b put
- (drawpolymark) 402 [ 0]
+/closeflag false def
+ (drawpoly) 402 [ 0]
 [750 3392 772 3392 795 3392 818 3392 840 3392 863 3392 885 3392 908 3392 930 3392 952 3392 
 975 3392 997 3392 1020 3392 1043 3392 1065 3392 1088 3392 1110 3392 1133 3392 1155 3392 1177 3392 
 1200 3392 1223 3392 1245 3392 1268 3392 1290 3392 1313 3392 1335 3392 1358 3392 1380 3392 1403 3392 
@@ -483,8 +482,8 @@ HardMark 0 16#2b put
 5025 3392 5048 3392 5070 3392 5093 3392 5115 3392 5138 3392 5160 3392 5183 3392 5205 3392 5228 3392 
 5250 3392 
 ] dogrey 
+0 Setcolor
 /absolu true def
-/Times-Roman findfont 100 scf mul scalefont setfont
 0 Setcolor
 -1 -1 200000 200000 setclipzone
  showpage

@@ -91,7 +91,7 @@ blck_szs = [blck_szs,1];
 c = [zeros(m,1); 1];
 //Pack Z0 and F
 Z0=pack(Z0,blck_szs);F=pack(F,blck_szs);
-pause;
+//pause;
 [x,Z,ul,info]=semidef(x0,Z0,F,blck_szs,c,[nu,abstol,-1,0,maxiters]);
 nz=prod(size(Z))
 z=Z(nz)

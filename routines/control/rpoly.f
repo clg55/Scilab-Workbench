@@ -113,7 +113,8 @@ c find largest and smallest moduli of coefficients.
         if (x.gt.maxi) maxi = x
         if (x.ne.0. .and. x.lt.mini) mini = x
    70 continue
-      maxi=min(infin,maxi)
+C      maxi=min(infin,maxi) bug "f77 -mieee-with-inexact"
+      if (infin.lt.maxi) maxi=infin
 c scale if there are large or very small coefficients
 c computes a scale factor to multiply the
 c coefficients of the polynomial. the scaling is done
@@ -134,7 +135,9 @@ c the factor is a power of the base
   100 continue
 c compute lower bound on moduli of zeros.
   110 do 120 i=1,nn
-        ptt(i) = min(infin,abs(real(p(i))))
+c        ptt(i) = min(infin,abs(real(p(i)))) bug "f77 -mieee-with-inexact"
+         ptt(i) = abs(real(p(i)))
+         if (infin.lt.abs(real(p(i)))) ptt(i)=infin
   120 continue
       ptt(nn) = -ptt(nn)
 c compute upper estimate of bound

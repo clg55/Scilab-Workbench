@@ -31,10 +31,8 @@ provided in the current Scilab directory.
 and such examples can be found in the directory
 \fVSCIDIR/examples/addinter-examples\fR
 .nf 
-files=G_make(['/tmp/ex1cI.o','/tmp/ex1c.o'],'ex1c.dll');// compilation 
+files=G_make([TMPDIR+'/ex1cI.o',TMPDIR+'/ex1c.o'],'ex1c.dll');// compilation 
 addinter(files,'foobar','foubare'); // link 
 .fi 
 .SH SEE ALSO
-addinter,
-
-
+addinter

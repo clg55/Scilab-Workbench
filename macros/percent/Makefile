@@ -69,7 +69,7 @@ MACROS =%ar_p.sci %b_c_spb.sci %b_f_spb.sci %b_g_s.sci %b_g_spb.sci %b_h_s.sci \
 	%sp_s_sp.sci %sp_y_s.sci %sp_y_sp.sci %sp_z_s.sci %sp_z_sp.sci \
 	%spb_c_b.sci %spb_f_b.sci %spb_g_b.sci %spb_g_spb.sci %spb_h_b.sci \
 	%spb_h_spb.sci  %spb_i_b.sci %spb_e.sci %b_i_spb.sci \
-	%c_f_s.sci \
+	%c_f_s.sci %b_i_s.sci %b_i_b.sci\
 	%hm_a_hm.sci %hm_a_s.sci %hm_abs.sci %hm_c_hm.sci %hm_ceil.sci \
 	%hm_conj.sci %hm_cos.sci %hm_d_hm.sci %hm_d_s.sci %hm_e.sci \
 	%hm_exp.sci %hm_f_hm.sci %hm_floor.sci %hm_imag.sci %hm_int.sci \
@@ -78,11 +78,12 @@ MACROS =%ar_p.sci %b_c_spb.sci %b_f_spb.sci %b_g_s.sci %b_g_spb.sci %b_h_s.sci \
 	%hm_round.sci %hm_s.sci %hm_s_hm.sci %hm_sign.sci %hm_sin.sci \
 	%hm_size.sci %hm_sqrt.sci %hm_x_hm.sci %hm_x_s.sci %s_i_hm.sci \
 	%s_i_s.sci %s_l_hm.sci %s_m_hm.sci %s_q_hm.sci %s_x_hm.sci \
-	%s_a_hm.sci %p_i_hm.sci %hm_degree.sci %b_i_s.sci %b_i_b.sci\
+	%s_a_hm.sci %p_i_hm.sci %hm_i_hm.sci %hm_degree.sci \
 	%hm_1_s.sci %hm_2_s.sci %hm_3_s.sci %hm_4_s.sci %hm_o_s.sci \
 	%hm_n_s.sci %s_1_hm.sci %s_2_hm.sci %s_3_hm.sci %s_4_hm.sci \
-	%s_o_hm.sci %s_n_hm.sci \
+	%s_o_hm.sci %s_n_hm.sci %hm_s_s.sci %s_s_hm.sci %hm_fft.sci\
+	%hm_matrix.sci %s_matrix.sci\
 	%ip_a_s.sci %ip_s_s.sci %ip_m_s.sci %s_a_ip.sci %s_s_ip.sci \
-	%s_m_ip.sci %ip_p.sci
+	%s_m_ip.sci %ip_p.sci %s_i_spb.sci %b_i_sp.sci %c_a_c.sci
 
 include ../Make.lib

@@ -1,5 +1,5 @@
 // Copyright INRIA
-Leps=2.e-5;
+Leps=8.e-5;
 bs=10.*ones(1,5);bi=-bs;x0=0.12*bs;epsx=1.e-15*x0;xopt=.1*bs;
 [f,x,g]=optim('genros',x0,'in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end

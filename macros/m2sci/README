@@ -47,18 +47,20 @@ Scilab list which contains the sequence of "operating codes" in
 Using this list it is then possible to generate a new "pretty print"
 of the code where Matlab function and types are replaced by their
 Scilab equivalents. This is done by the m2sci function. For each
-Matlab function, m2sci calls a translating function named 
-sci_<Matlab_function_name>.
+Matlab function call, m2sci uses a translation function named
+sci_<Matlab_function_name> to replace the Matlab syntax by the
+equivalent Scilab syntax.
 
 As some Matlab functions have different interpretations depending on
 the fact that an argument is a matrix or a vector (max, min,ones,...)
 mfile2sci tries to deduce variable types and dimensions while
-translating the code. If it cannot determine type or dimension
+translating the code. If it cannot determine type or dimension,
 translator replaces the call to the Matlab function by a call to a
 special Scilab function (named mtlb_<function name>) written to
 emulate it in all cases. User may use it directly or replace them by a
-direct call to Scilab equivalent function if he knows the type or dimensions.
-These functions are given in the distributed mtlb directory.
+direct call to Scilab equivalent function if he knows the type or
+dimensions.  These functions are given in the distributed mtlb
+directory.
 
 Each Matlab function (primitive or m-file) is translated by a Scilab
 function named sci_<Matlab function name>. So far Just a part of
@@ -66,11 +68,14 @@ Matlab primitives functions have such a "translating function". See
 "Translating function" below for guideline on how to write new
 "translating functions"
 
-When mfile2sci encounters a call to an "un-translated" function it
-issues a warning message and re-write the original syntax. In such a
-case you may either define the corresponding
+When mfile2sci encounters a call to an function with no explicit
+translation, it issues a warning message and re-write the original
+syntax. In such a case you may either define the corresponding
 sci_<Matlab_function_name> (see the already writen function as
 examples), or translate the Matlab function using mfile2sci.
+
+When translation may be incorrect or may be improved mfile2sci adds a
+comment which began by "//!"
 
 Known bugs
 ==========
@@ -81,22 +86,31 @@ Known bugs
 
 2- eval function instructions passed as strings are not translated.
 
-3- Syntaxes like 2.3i or 0.7j to form imaginary numbers produces an
-      error. replace them by 2.3*i ,0.7*j
-
-4- most of plot function are not yet translated see below
+3- most of plot function are not yet translated see below; hold action
+   may be incorrect when used across functions.
 
 
-5- globals are not translated
+4- globals are not translated
 
-6- if, for, endded by the end of file produce an error, add the closing
+5- if, for, endded by the end of file produce an error, add the closing
       end's
-7- Loop variable of for clause is available afterwards if loops terminates 
+6- Loop variable of for clause is available afterwards if loops terminates 
    normally in matlab; it is cleared  in Scilab generated code.
 
-8- Translation of insertion syntax such as v(:)=x or v(i,:)=x produces a 
-   run time error  when v is an empty vector or matrix. 
-   Use v=x or v(i,1:size(x,'*'))=x instead.
+7- inequality comparison which implies complex numbers produce a run
+   time error such as "undefined variable : %s_2_s". User can define
+   these operation with Matlab meaning with the following function
+   definition:
+    deff('r=%s_1_s(a,b)','r=real(a)<real(b)') 
+    deff('r=%s_2_s(a,b)','r=real(a)>real(b)') 
+    deff('r=%s_3_s(a,b)','r=real(a)<=real(b)')
+    deff('r=%s_4_s(a,b)','r=real(a)>=real(b)')  
+
+8- When i is a vector, Matlab allows insertions like a(i)=v for any
+   v. In scilab v must have the same shape as a(i). This produces run
+   time errors "submatrix incorrectly defined". Rewrite them as a(i)=v.'
+
+
 Translating function
 ====================
 
@@ -151,19 +165,22 @@ typevar  : is a character string which contains the formal variable type of
            - '10': matrix of character strings
            - '16': tlist
 
-Usefull functions to write "translating functions"
+Useful functions to write "translating functions"
 ==================================================
 gettempvar   : var=gettempvar(n) 
                returns in string var a "unique" variable name indexed
                by integer n
 isname       : r=isname(str)
                answers true if str represents a defined variable name
-lhsvarsnames : [x1,x2,...]=lhsvarsnames()
+lhsvarsnames : [x1,x2,...]=lhsvarsnames() 
                returns in x1, x2,... the left hand side variable names
+               LHS =lhsvarsnames() returns in LHS the vector of the left
+               hand side variable names
 rhsargs      : txt=rhsargs(args)
                returns in string txt the input argument list formed by
                the strings contained in vector args
-               rhsargs(['a','2*x',''foo'']) returns  the string '(a,2*x,''foo'')'
+               rhsargs(['a','2*x',''foo'']) returns  the string 
+               '(a,2*x,''foo'')'
 lhsargs      : txt=lhsargs(args)
                returns in string txt the output argument list formed by
                the strings contained in vector args
@@ -186,11 +203,6 @@ debug
 ------
 dbclear.m	dbcont.m	dbdown.m	dbquit.m	dbstack.m
 dbstatus.m	dbstep.m	dbstop.m	dbtype.m	dbup.m
-
-c files
--------
-fclose.m	feof.m		ferror.m	fopen.m		fread.m 
-fseek.m		ftell.m		fwrite.m 
 
 misc
 ----

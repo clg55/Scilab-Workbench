@@ -1,9 +1,20 @@
 function M=%b_i_s(varargin)
 // Copyright INRIA
+
 [lhs,rhs]=argn(0)
 M=varargin(rhs)
-if M<>[] then M=M<>0,end
-N=varargin(rhs-1)//inserted matrix
+//if M<>[] then M=M<>0,end
+
+N=bool2s(varargin(rhs-1))//inserted matrix
+if rhs<=4 then
+  if rhs==3 then
+    M(varargin(1))=N
+  else
+    M(varargin(1),varargin(2))=N
+  end
+  return
+end
+  
 M=mlist(['hm','dims','entries'],size(M),M(:))
 dims=M('dims')
 v=M('entries');v=v(:)

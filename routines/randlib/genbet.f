@@ -51,8 +51,8 @@ C     .. Scalar Arguments ..
       DOUBLE PRECISION aa,bb
 C     ..
 C     .. Local Scalars ..
-      DOUBLE PRECISION a,alpha,b,beta,delta,gamma,k1,k2,olda,oldb,r,s,t,u1,u2,v,w,y,
-     +     z
+      DOUBLE PRECISION a,alpha,b,beta,delta,gamma,k1,k2,olda,oldb,r,s,t,
+     +     u1,u2,v,w,y,z
       LOGICAL qsame
 C     ..
 C     .. External Functions ..

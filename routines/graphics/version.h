@@ -1,1 +1,1 @@
-#define VERSION "Scilab-2.4"
+#define VERSION "Scilab-2.4.1"

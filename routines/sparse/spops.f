@@ -1023,6 +1023,10 @@ c
 c     extraction
 c     
  70   continue
+      if(rhs.lt.2) then
+         call error(227)
+         return
+      endif
       if(rhs.gt.2) goto 75
 c     arg2(arg1)
 c     get arg2
@@ -1871,7 +1875,8 @@ c
 c     comparaisons
       if(max(it1,it2).eq.1) then
          if(op.ne.equal.and.op.ne.less+great) then
-            call error(57)
+            fin=-fin
+            top=top0
             return
          endif
       endif

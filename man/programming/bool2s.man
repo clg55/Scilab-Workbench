@@ -12,11 +12,11 @@ x
 : a boolean vector or a boolean matrix or a constant matrix
 .SH DESCRIPTION
 If \fVx\fR is a boolean matrix,
-\fVfind(x)\fR returns the matrix where "true" values are replaced by 1
+\fVbool2s(x)\fR returns the matrix where "true" values are replaced by 1
 and "false" value by 0.
 .LP
 If \fVx\fR is a "standard" matrix,
-\fVfind(x)\fR returns the matrix where non-zero values are replaced by 1.
+\fVbool2s(x)\fR returns the matrix where non-zero values are replaced by 1.
 
 .SH EXAMPLE
 .nf

@@ -111,9 +111,11 @@ c
        include '../stack.h'
 c
        integer iadr, sadr
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,cresmat2,cremat,getsca
-     $ lar,bufstore
+       integer topk,rhsk,topl,fd,swap
+       logical checkrhs,checklhs,getsmat,checkval,cresmat2,cremat,
+     $      getscalar,bufstore
+       double precision res
+c
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -141,52 +143,50 @@ c
 c       checking variable swap (number 3)
 c       
        if(rhs .le. 2) then
-        top = top+1
-        rhs = rhs+1
-        if(.not.cremat(fname,top,0,1,1,lr3,lc3)) return
-        stk(lr3)= 1
+          swap=1
+       else
+          if(.not.getscalar(fname,top,top-rhs+3,lr3)) return
+          swap=int(stk(lr3))
        endif
-       if(.not.getscalar(fname,top,top-rhs+3,lr3)) return
 c     
 c       cross variable size checking
 c     
-       if(.not.cremat(fname,top+1,0,1,1,lw1,loc1)) return
+c       if(.not.cremat(fname,top+1,0,1,1,lw1,loc1)) return
        if(.not.bufstore(fname,lbuf,lbufi2,lbuff2,lr1,nlr1)) return
        if(.not.bufstore(fname,lbuf,lbufi3,lbuff3,lr2,nlr2)) return
-       call entier(1,stk(lr3),istk(iadr(lr3)))
-       if(.not.cremat(fname,top+2,0,1,1,lw5,loc5)) return
-       call mopen(stk(lw1),buf(lbufi2:lbuff2),buf(lbufi3:lbuff3),istk(ia
-     $ dr(lr3)),stk(lw5),err)
-       if(err .gt. 0) then 
-        buf = fname // ' Internal Error' 
-        call error(999)
-        return
+       call mopen(fd,buf(lbufi2:lbuff2),buf(lbufi3:lbuff3),
+     $      swap,res,ierr)
+       if(ierr .gt. 0) then
+          if(lhs.eq.1) then 
+             if(ierr.eq.1) then
+                buf = fname // ' Too many opened files'
+             else
+                buf = fname // ' Could not open the file!'
+             endif
+             call error(999)
+             return
+          else
+             res=-ierr
+          endif
        endif
+
 c
        topk=top-rhs
-       topl=top+2
+       topl=topk
 c     
        if(lhs .ge. 1) then
 c       --------------output variable: fd
         top=topl+1
         if(.not.cremat(fname,top,0,1,1,lrs,lcs)) return
-        call int2db(1*1,istk(iadr(lw1)),-1,stk(lrs),-1)
+        stk(lrs)=fd
        endif
 c     
        if(lhs .ge. 2) then
 c       --------------output variable: res
         top=topl+2
         if(.not.cremat(fname,top,0,1,1,lrs,lcs)) return
-        call dcopy(1*1,stk(lw5),1,stk(lrs),1)
+        stk(lrs)=res
        endif
-c     Putting in order the stack
-       if(lhs .ge. 1) then
-        call copyobj(fname,topl+1,topk+1)
-       endif
-       if(lhs .ge. 2) then
-        call copyobj(fname,topl+2,topk+2)
-       endif
-       top=topk+lhs
        return
        end
 
@@ -257,8 +257,9 @@ c SCILAB function : mclose, fin = 5
        subroutine intsmclose(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
+       integer topk,rhsk,topl,fd
        logical checkrhs,checklhs,cremat,getscalar
+       double precision res
        include '../stack.h'
 c
        integer iadr, sadr
@@ -266,45 +267,25 @@ c
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
 c
-       topk = top 
-       rhsk = rhs 
        if(.not.checkrhs(fname,0,1)) return
        if(.not.checklhs(fname,1,1)) return
 c       checking variable fd (number 1)
 c       
        if(rhs .le. 0) then
-        top = top+1
-        rhs = rhs+1
-        if(.not.cremat(fname,top,0,1,1,lr1,lc1)) return
-        stk(lr1)= -1
+          fd=-1
+       else
+          if(.not.getscalar(fname,top,top-rhs+1,lr1)) return
+          fd=stk(lr1)
        endif
-       if(.not.getscalar(fname,top,top-rhs+1,lr1)) return
-c     
-c       cross variable size checking
-c     
-       call entier(1,stk(lr1),istk(iadr(lr1)))
-       if(.not.cremat(fname,top+1,0,1,1,lw2,loc2)) return
-       call mclose(istk(iadr(lr1)),stk(lw2))
-       if(err .gt. 0) then 
-        buf = fname // ' Internal Error' 
-        call error(999)
-        return
-       endif
+       call mclose(fd,res)
 c
-       topk=top-rhs
-       topl=top+1
+       top=top-rhs+1
 c     
        if(lhs .ge. 1) then
 c       --------------output variable: res
-        top=topl+1
         if(.not.cremat(fname,top,0,1,1,lrs,lcs)) return
-        call dcopy(1*1,stk(lw2),1,stk(lrs),1)
+        stk(lrs)=res
        endif
-c     Putting in order the stack
-       if(lhs .ge. 1) then
-        call copyobj(fname,topl+1,topk+1)
-       endif
-       top=topk+lhs
        return
        end
 c
@@ -435,12 +416,17 @@ c
        if(.not.cremat(fname,top+1,0,nn2,1,lw2,loc2)) return
        call entier(1,stk(lr1),istk(iadr(lr1)))
        if(.not.bufstore(fname,lbuf,lbufi4,lbuff4,lr2,nlr2)) return
+       err=0
        call mget(istk(iadr(lr3)),stk(lw2),istk(iadr(lr1)),buf(lbufi4:lbu
      $ ff4),err)
        if(err .gt. 0) then 
-        buf = fname // ' Internal Error' 
-        call error(999)
-        return
+          buf = fname // ' Internal Error' 
+          call error(999)
+          return
+       endif
+       if( err.lt.0) then 
+C     nn2 contains now the effectively read data
+          nn2= -err -1
        endif
 c
        topk=top-rhs
@@ -449,8 +435,8 @@ c
        if(lhs .ge. 1) then
 c       --------------output variable: res
         top=topl+1
-        if(.not.cremat(fname,top,0,1,istk(iadr(lr1)),lrs,lcs)) return
-        call dcopy(1*istk(iadr(lr1)),stk(lw2),1,stk(lrs),1)
+        if(.not.cremat(fname,top,0,1,nn2,lrs,lcs)) return
+        call dcopy(nn2,stk(lw2),1,stk(lrs),1)
        endif
 c     Putting in order the stack
        if(lhs .ge. 1) then
@@ -500,22 +486,27 @@ c       cross variable size checking
 c     
        call entier(1,stk(lr2),istk(iadr(lr2)))
        if(.not.crepointer(fname,top+1,lw2)) return
+       nn2= int(stk(lr1))
        call entier(1,stk(lr1),istk(iadr(lr1)))
+       err=0
        call mgetstr(istk(iadr(lr2)),stk(lw2),istk(iadr(lr1)),err)
        if(err .gt. 0) then 
-        buf = fname // ' Internal Error' 
-        call error(999)
-        return
+          buf = fname // ' Internal Error' 
+          call error(999)
+          return
        endif
-c
+       if (err .lt. 0) then 
+C      string is smaller than expected 
+          nn2= -err-1
+       endif
        topk=top-rhs
        topl=top+1
 c     
        if(lhs .ge. 1) then
 c       --------------output variable: res
         top=topl+1
-        if(.not.crestring(fname,top,istk(iadr(lr1)),ilrs)) return
-        call ccharf(istk(iadr(lr1)),stk(lw2),istk(ilrs))
+        if(.not.crestring(fname,top,nn2,ilrs)) return
+        call ccharf(nn2,stk(lw2),istk(ilrs))
        endif
 c     Putting in order the stack
        if(lhs .ge. 1) then
@@ -702,39 +693,85 @@ c     Putting in order the stack
        return
        end
 c
-
+c
+c SCILAB function : mclearerr, fin = 12
+       subroutine intsmclearerr(fname)
+c
+       character*(*) fname
+       include '../stack.h'
+c
+       integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,cremat,getscalar
+       iadr(l)=l+l-1
+       sadr(l)=(l/2)+1
+       rhs = max(0,rhs)
+c
+       topk = top 
+       rhsk = rhs 
+       if(.not.checkrhs(fname,0,1)) return
+       if(.not.checklhs(fname,1,1)) return
+c       checking variable fd (number 1)
+c       
+       if(rhs .le. 0) then
+        top = top+1
+        rhs = rhs+1
+        if(.not.cremat(fname,top,0,1,1,lr1,lc1)) return
+        stk(lr1)= -1
+       endif
+       if(.not.getscalar(fname,top,top-rhs+1,lr1)) return
+c     
+c       cross variable size checking
+c     
+       call entier(1,stk(lr1),istk(iadr(lr1)))
+       call mclearerr(istk(iadr(lr1)))
+       if(err .gt. 0) then 
+        buf = fname // ' Internal Error' 
+        call error(999)
+        return
+       endif
+c
+       topk=top-rhs
+       topl=top+0
+c       no output variable
+       top=topk+1
+       call objvide(fname,top)
+       return
+       end
+c
 c  interface function 
 c   ********************
        subroutine soundI
        include '../stack.h'
        rhs = max(0,rhs)
 c
-       goto (1,2,3,4,5,6,7,8,9,10,11) fin
+       goto (1,2,3,4,5,6,7,8,9,10,11,12) fin
        return
- 1     call intssavewave('savewave')
+1      call intssavewave('savewave')
        return
- 2     call intsloadwave('loadwave')
+2      call intsloadwave('loadwave')
        return
- 3     call intsmopen('mopen')
+3      call intsmopen('mopen')
        return
- 4     call intsmputstr('mputstr')
+4      call intsmputstr('mputstr')
        return
- 5     call intsmclose('mclose')
+5      call intsmclose('mclose')
        return
- 6     call intsmput('mput')
+6      call intsmput('mput')
        return
- 7     call intsmget('mget')
+7      call intsmget('mget')
        return
- 8     call intsmgetstr('mgetstr')
+8      call intsmgetstr('mgetstr')
        return
- 9     call intsmeof('meof')
+9      call intsmeof('meof')
        return
- 10    call intsmseek('mseek')
+10      call intsmseek('mseek')
        return
- 11    call intsmtell('mtell')
+11      call intsmtell('mtell')
+       return
+12      call intsmclearerr('mclearerr')
        return
        end
-
 
 
 

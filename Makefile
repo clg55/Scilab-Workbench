@@ -26,7 +26,7 @@ LIBRSCI = libs/system.a libs/interf.a libs/system2.a libs/optim.a \
 	libs/sparse.a libs/metanet.a libs/sun.a  \
 	libs/intersci.a  libs/xsci.a libs/graphics.a libs/menusX.a \
 	libs/libcomm.a libs/comm.a libs/sound.a libs/dcd.a libs/rand.a \
-	libs/blas.a libs/fraclab.a libs/pvm.a  libs/tksci.a
+	libs/blas.a libs/fraclab.a libs/pvm.a  
 
 LIBR = $(XAW_LOCAL_LIB) $(LIBRSCI) $(DLDLIB) $(PVMGLIB) $(PVMLIB)
 
@@ -132,7 +132,7 @@ distclean::
 	conftest conftest.c so_locations
 
 
-SCIBASE = scilab-2.4
+SCIBASE = scilab-2.4.1
 
 BINDISTFILES = \
 	$(SCIBASE)/CHANGES $(SCIBASE)/README $(SCIBASE)/ACKNOWLEDGEMENTS \

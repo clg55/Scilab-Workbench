@@ -51,9 +51,12 @@ c
       top2=top-rhs+1
       il=iadr(lstk(top2))
       if(istk(il).ne.1) then
-         err=1
-         call error(53)
+         call funnam(ids(1,pt+1),'fft',iadr(lstk(top2)))
+         fun=-1
          return
+c         err=1
+c         call error(53)
+c         return
       endif
       m=istk(il+1)
       n=istk(il+2)

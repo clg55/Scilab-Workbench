@@ -1,7 +1,7 @@
-.TH CLKOUT_f 5 "Janvier 1996" "Scilab Group" "Scicos Block"
+.TH CLKOUTV_f 5 "Janvier 1996" "Scilab Group" "Scicos Block"
 .so ../sci.an
 .SH NAME
-CLKOUT_f - Scicos Super Block event output port
+CLKOUTV_f - Scicos Super Block event output port
 .SH DESCRIPTION
 This block must only be used inside Scicos Super Blocks to represent
 an event output port. 
@@ -13,5 +13,5 @@ number of event output ports.
 Port number
 : an integer giving the port number.
 .SH SEE ALSO
-IN_f, OUT_f, CLKIN_f
+IN_f, OUT_f, CLKINV_f
 

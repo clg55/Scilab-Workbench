@@ -9,5 +9,5 @@ CALLING SEQUENCE
 DESCRIPTION
   Return an the scilab process identificator integer
 
-Example
-  host('ls >/tmp/scilab.'+string(getpid()))
+EXAMPLE
+  d='SD_'+string(getpid())+'_'

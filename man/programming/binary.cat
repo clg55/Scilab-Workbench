@@ -11,6 +11,7 @@ CALLING SEQUENCE
   str=mgetstr([n,fd])         // default values n=1, fd=-1
   [err]=mputstr(str [, fd]);  // default value  fd = -1
   [err]=meof([fd])            // default value  fd = -1
+  mclearerr([fd])     // default value  fd = -1
   mseek(n [,fd, flag])        // default values fd = -1, flag = 'set'
   mtell([fd])                 // default value  fd = -1
 
@@ -31,30 +32,64 @@ DESCRIPTION
                : for reading or writing respectively a long, a short, an
                unsigned long, an unsigned short, a double, a float, a char
                and an unsigned char. The bytes which are read are automati-
-               cally swapped if necessary (by checking little-endian status )
-               in order to produce machine independent binary files.
+               cally swapped if necessary (by checking little-endian status)
+               in order to produce machine independent binary files ( in
+               little-endian mode).
 
   The automatic swap of bytes can be cancelled by adding a third ( with value
   zero ) argument to the mopen function  ( mopen(file,"wb",0)).
 
-  "ull","uls","ubl","ubs"
-       : for reading or writing respectively unsigned little-endian long or
-       short and unsigned big-endian long or short.
+  It is possible not to take care of the swap status and explicitely specify
+  for each data the way to store i.e as little or big endian. This is
+  described now:
 
-  The fd parameter returned by the function mopen is used as a file descrip-
-  tor (it's a positive integer). When specifying the fd parameter, the value
-  -1 refers to the default file ( i.e the last opened file).
+       "ull","uls","ubl","ubs",
+         : can be used for reading or writing respectively unsigned little-
+         endian long or short and unsigned big-endian long or short.
 
-  The mode parameter can be "rb" for read binary or "wb" for write binary.
+       "dx","fx","lx","sx"
+         : with x=b or x=l can be used for reading or writing double, float,
+         long or short as big or little endian.
 
-  The function fseek() sets the position of the next input or output opera-
-  tion on  the stream fd. The new position is at the signed distance given by
-  n bytes from  the  beginning,  from the current position, or from the end
-  of the file, according  to the flag value which can be 'set', 'cur' or
-  'end'.
+  fd   : The fd parameter returned by the function mopen is used as a file
+       descriptor (it's a positive integer). When specifying the fd parame-
+       ter, the value -1 refers to the default file ( i.e the last opened
+       file).
 
-  The function ftell() returns the offset of the current byte  relative  to
-  the beginning of the file associated with the named stream fd.
+  mode : The mode parameter can be "rb" for read binary or "wb" for write
+       binary or "ab" for append.
+
+  mseek
+       : The function mseek() sets the position of the next input or output
+       operation on  the stream fd. The new position is at the signed dis-
+       tance given by n bytes from  the  beginning,  from the current posi-
+       tion, or from the end of the file, according  to the flag value which
+       can be 'set', 'cur' or 'end'.
+
+       mseek() allows the file position indicator to be set  beyond the  end
+       of the existing data in the file.  If data is later written at this
+       point, subsequent reads of data in  the  gap will  return  zero  until
+       data is actually written into the gap.  mseek(), by itself, does not
+       extend the  size  of  the file.
+
+  mtell
+       : The function mtell() returns the offset of the current byte  rela-
+       tive  to the beginning of the file associated with the named stream
+       fd.
+
+  mget : The function mget is used to get n object of type type. If end of
+       file is reached before read completion, only the properly read values
+       will be returned.
+
+  mgetstr
+       : used to get an array of characters. If EOF is reached before read
+       completion only the properly read values will be returned.
+
+  meof,clearerr
+       : The function meof will return a non null value if end of file has
+       been reached in a previous call to mget or mgetstr. The function
+       clearerr is used to resets the error indicator and EOF  indicator to
+       zero.
 
 EXAMPLE
   filen = 'test.bin'
@@ -111,4 +146,10 @@ EXAMPLE
   res=mget(11,'d')
   res1=[1:11]; res1(1)=678;res1($)=932;
   if res1<>res ;write(%io(2),'Bug');end;
+  mseek(0,fd1,'set');
+  // trying to read more than stored data
+  res1=mget(100,'d',fd1);
+  if res1<>res ;write(%io(2),'Bug');end;
+  meof(fd1)
+  mclearerr(fd1)
   mclose(fd1);

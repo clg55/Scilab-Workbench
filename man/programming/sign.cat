@@ -4,10 +4,12 @@ NAME
   sign - sign function
 
 DESCRIPTION
-   X=sign(A) returns the matrix made of the signs of A(i,j).  function.
+   X=sign(A) returns the matrix made of the signs of A(i,j).For complex A,
+  sign(A) = A./abs(A).  function.
 
 EXAMPLE
-  sign(rand(2,3));
+  sign(rand(2,3))
+  sign(1+%i)
 
 SEE ALSO
-  sign
+  abs

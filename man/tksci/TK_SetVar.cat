@@ -31,5 +31,7 @@ EXAMPLE
   TK_EvalStr('toplevel .foo'); // creates a toplevel TK window.
   TK_EvalStr('label .foo.l -textvariable tvar'); // create a static label
   TK_EvalStr('pack .foo.l'); // pack the label widget. It appears on the
-  screen.  TK_SetVar('tvar','This text has been set directly within
-  scilab');.SH See also ScilabEval, TK_EvalFile, TK_EvalStr, TK_GetVar
+  screen.  TK_SetVar('tvar','This text has been set directly within scilab');
+
+See also
+  ScilabEval, TK_EvalFile, TK_EvalStr, TK_GetVar

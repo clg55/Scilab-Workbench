@@ -11,10 +11,10 @@ PARAMETERS
   x    : a boolean vector or a boolean matrix or a constant matrix
 
 DESCRIPTION
-  If x is a boolean matrix, find(x) returns the matrix where "true" values
+  If x is a boolean matrix, bool2s(x) returns the matrix where "true" values
   are replaced by 1 and "false" value by 0.
 
-  If x is a "standard" matrix, find(x) returns the matrix where non-zero
+  If x is a "standard" matrix, bool2s(x) returns the matrix where non-zero
   values are replaced by 1.
 EXAMPLE
   bool2s([%t %t %f %t])

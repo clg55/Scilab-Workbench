@@ -1,6 +1,5 @@
-			  Scilab version 2.4
-                          ******************
-			     12 July 1998
+			  Scilab version 2.4.1
+                          ********************
 
 ******************************************************************************
 			      INSTALLATION GUIDE
@@ -18,7 +17,7 @@ or notice.ps (postscript file). You may email to Scilab@inria.fr.
 ******************************************************************************
 
 In the following, all the paths are relative to the Scilab directory 
-(scilab-2.4 directory).
+(scilab-2.4.1 directory).
 
 I - TO INSTALL SCILAB
 *********************
@@ -32,7 +31,8 @@ I - TO INSTALL SCILAB
  --------------------------------
    This distribution has been tested on the following machines:
    HP9000, SUN Sparcstation (Sun OS and Solaris 5.*), IBM RS6000, 
-   DEC alpha, SGI and PC linux (a.out and ELF).
+   DEC alpha OSF, Dec alpha Linux, SGI, PC linux (a.out and ELF) and
+   Mac Mklinux.
 
    You need X Window (X11R4, X11R5 or X11R6), Athena Widgets libraries, 
    C compiler and fortran compiler.
@@ -52,29 +52,33 @@ I - TO INSTALL SCILAB
 
    Configure options:
    ------------------
-	-enable-debug: compile with "-g" option and do not optimize
+	--enable-debug: compile with "-g" option and do not optimize
 
-	-with-gcc: use gcc C compiler (note that the compilation options
+	--with-gcc: use gcc C compiler (note that the compilation options
           have not been tested on all machines, see C below)
 
-	-with-g77: use g77 fortran compiler (note that the compilations
+	--with-g77: use g77 fortran compiler (note that the compilations
           options have not been tested on all machines, see C below)
 
-	-with-gnu: use gcc C compiler and g77 fortran compiler (note that 
+	--with-gnu: use gcc C compiler and g77 fortran compiler (note that 
           the compilation options have not been tested on all machines, 
           see C below)
 
-        -x-libraries=DIR: X Window library files are in DIR
-        -x-includes=DIR: X Window include files are in DIR
+        --x-libraries=DIR: X Window library files are in DIR
+        --x-includes=DIR: X Window include files are in DIR
 
-	-with-local-Xaw: compile and use Athena Widgets libraries given 
-          with Scilab (don't use then for X11R4); configure chooses local
+	--with-local-Xaw: compile and use Athena Widgets libraries given 
+          with Scilab (do not use then for X11R4); configure chooses local
           Athena Widgets library when needed, so the use of this option is not
           recommanded (see below KNOWN PROBLEMS 3).
 
-        -with-tk: compile with TCL/TK library. You must have libraries of 
-          TCL/TK 8.x and corresponding include files installed in standard
-          directory (configure is looking for them).
+        --without-pvm: compile without PVM library. The default is to compile
+          with PVM library.
+
+        --with-tk: compile with TCL/TK library. The default is to compile
+          without TCL/TK library. You must have libraries of TCL/TK 8.x and 
+          corresponding include files installed in standard directory 
+          (configure is looking for them).
           If your libraries and include files are in customized places, 
           you can specify them by hand with the following arguments:
                -with-tcl-library=TCL_LIB_DIR: Tcl library is in TCL_LIB_DIR
@@ -88,11 +92,11 @@ I - TO INSTALL SCILAB
     compilers, compilation options, linker options, and so on; you can easily 
     do that.
 
-    The main Makefile of Scilab includes "Makefile.incl" and
+    The main "Makefile" of Scilab includes "Makefile.incl" and
     "config/Makefile.<machine>":
       "Makefile.incl" contains all the compilation options
       "config/Makefile.<machine>" is only used for the link of the executable 
-          "scilex" of Scilab
+          "scilex" of Scilab.
 
    The file "Makefile.incl" is included by all the Makefiles of the 
    distribution, so it is THE place where you can change compilation 
@@ -159,7 +163,7 @@ II - KNOWN PROBLEMS AND REMARKS
        If none are found and X Window release is not X11R4, it uses
        local Athena Widgets libraries. Otherwise an error is issued.
        You can impose the use of local Athena Widgets libraries by using
-       the option "-with-local-Xaw" with "configure".
+       the option "--with-local-Xaw" with "configure".
 
        On some IBM RS6000 there exists a compatibility problem between the
        X11-Mit distribution and the IBM version. If your system runs the IBM
@@ -174,7 +178,12 @@ II - KNOWN PROBLEMS AND REMARKS
    5 - For HP workstation, programs to be incrementally linked should
        be compiled with the option "+z" or "+Z".
 
-   6 - If you have any problem or suggestion to improve Scilab
+   6 - With some Linux egcs compilers, compiling the three files
+       "comqr3.f" "dsvdc.f" and "wsvdc.f" (directory "routines/control")
+       with optimization can cause failure when computing some SVD. 
+       If not sure, compile them without optimization.
+
+   7 - If you have any problem or suggestion to improve Scilab
        send an email to:
        
                           Scilab@inria.fr
@@ -204,19 +213,19 @@ IV - DOCUMENTATION
 
 In addition to Scilab online documentation (obtained by typing "help item" or
 "apropos keyword" or clicking on the help button), you will find 
-compressed postscript documentation by anonymous ftp on
+compressed postscript and pdf documentation by anonymous ftp on
 "ftp.inria.fr:/INRIA/Projects/Meta2/Scilab/doc" (internet# 192.93.2.54)
 or from Web site
-"http://www-rocq.inria.fr/scilab".
+"http://www-rocq.inria.fr/scilab":
 
-Comm.ps.Z
-Internals.ps.Z
-Intro.ps.Z
-Lmi.ps.Z
-Manual.ps.Z
-Metanet.ps.Z
-Scicos.ps.Z
-Signal.ps.Z
+Comm.ps.gz, Comm.pdf: Communication Toolbox
+Internals.ps.gz, Internals.pdf: Scilab's internals
+Intro.ps.gz, Intro.pdf: Introduction to Scilab
+Lmi.ps.gz, Lmi.pdf: Linear Matrix Inequalities Optimization Toolbox
+Manual.ps.gz, Manual.pdf: On line Manual
+Metanet.ps.gz, Metanet.pdf: Metanet User's Guide and Tutorial
+Scicos.ps.gz, Scicos.pdf: Scicos: a Dynamic System Builder and Simulator 
+Signal.ps.gz, Signal.pdf: Signal Processing Toolbox
 
 ******************************************************************************
 V - SOME IMPORTANT FILES AND DIRECTORIES
@@ -227,9 +236,9 @@ scilab.star: startup file for Scilab: instructions in this file
              you can also have your own startup file ".scilab"
              in your current directory.
 
-configure.in: file used by "autoconf 2.12" to generate "configure"
+configure.in: file used by "autoconf 2.12" to generate "configure".
 
-configure: file used to configure Scilab
+configure: file used to configure Scilab.
 
 Makefile.incl.in: file used by configure to generate Makefile.incl.
 
@@ -245,7 +254,7 @@ Version.incl: contains the scilab version. It is used by a few Makefile.
 Makefile.in: file used by configure to generate Makefile.
 
 Makefile: the main Makefile to make Scilab. It is automatically generated by
-           configure.
+          configure.
 
 config/   : directory used by configure and by the main Makefile
 
@@ -263,15 +272,15 @@ macros/   : functions directory: this directory is divided into
             (control, polynomials,...). Each subdirectory contains 
             the source code of the macros (files *.sci). 
 
-xmetanet/ : Metanet routines.
+xmetanet/ : XMetanet routines.
 
 geci/     : Geci (interprocess communication tool) routines.
 
 libs/	  : directory of libraries: archives of object files needed 
-             to link Scilab.
+            to link Scilab.
 
 routines/ : directory of fortran or C routines. Divided into subdirectories
-             (see below).
+            (see below).
 
 doc/      : directory of documentation. Usually LaTeX files.
 
@@ -285,7 +294,6 @@ bin/	  : executable code and scripts.
 		scilab  : shell-script to call Scilab and miscellaneous tools
                           execute scilab -help scilab for help.
 		scilex  : executable code of Scilab.
-		minfopr : shell script called by scilab -macro.
 		scilink : shell script called by scilab -link.
                 intersci: generator of interface program between Scilab and 
                           routines.
@@ -295,6 +303,8 @@ intersci/ : Generator of interface program between Scilab and routines.
 maple/    : Maple code to link Maple with Scilab.
 
 pvm3/	  : PVM 3.4 beta 6 for Scilab.
+
+tcl/      : TCL/TK for Scilab.
 
 ******************************************************************************
 			       THAT'S ALL FOLKS

@@ -22,7 +22,7 @@ Fortran programs for a complete description of the variables in
 .SH EXAMPLE
 .nf
 A=sprand(20,20,0.1);
-A=A*A'+eye;  
+A=A*A'+eye();  
 spcho=chfact(A);
 sol=(1:20)';rhs=A*sol;
 spcho=chfact(A);

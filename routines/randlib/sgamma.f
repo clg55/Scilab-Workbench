@@ -54,7 +54,8 @@ C     .. Scalar Arguments ..
       DOUBLE PRECISION a
 C     ..
 C     .. Local Scalars .. (JJV added B0 to fix rare and subtle bug)
-      DOUBLE PRECISION a1,a2,a3,a4,a5,a6,a7,aa,aaa,b,b0,c,d,e,e1,e2,e3,e4,e5,p,q,q0,
+      DOUBLE PRECISION a1,a2,a3,a4,a5,a6,a7,aa,aaa,b,b0,c,d,e,e1,e2,e3,
+     +     e4,e5,p,q,q0,
      +     q1,q2,q3,q4,q5,q6,q7,r,s,s2,si,sqrt32,t,u,v,w,x
 C     ..
 C     .. External Functions ..

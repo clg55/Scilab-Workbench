@@ -1,4 +1,9 @@
-/* Copyright (C) 1998 Chancelier Jean-Philippe */
+/*------------------------------------------------------------------------
+    Graphic library for 2D and 3D plotting 
+    Copyright (C) 1998 Chancelier Jean-Philippe
+    jpc@cergrene.enpc.fr 
+ --------------------------------------------------------------------------*/
+
 #include <string.h> /* in case of dbmalloc use */
 #ifdef __STDC__
 #include <stdlib.h>
@@ -487,7 +492,7 @@ static int SaveD(x)
 {
   szof = sizeof(double) ;
   count = 1;
-  assert( xdr_vector(xdrs, (char *) &x, count, szof, xdr_double)) ;
+  assert( xdr_vector(xdrs, (char *) &x, count, szof, (xdrproc_t) xdr_double)) ;
   return(1);
 }
 
@@ -500,7 +505,7 @@ static int SaveF(x)
   /** 
   szof = sizeof(float) ;
   count = 1;
-  assert( xdr_vector(xdrs, (char *) &x, count, szof, xdr_float)) ;
+  assert( xdr_vector(xdrs, (char *) &x, count, szof, (xdrproc_t) xdr_float)) ;
   sciprint("saving %f\r\n",x);
   **/
   return(1);
@@ -511,7 +516,7 @@ static int SaveLI(ix)
 {
   szof = sizeof(int) ;
   count = 1;
-  assert( xdr_vector(xdrs, (char *)&ix, count, szof, xdr_int)) ;
+  assert( xdr_vector(xdrs, (char *)&ix, count, szof, (xdrproc_t) xdr_int)) ;
   return(1);
 }
 
@@ -520,7 +525,7 @@ static int SaveC(c, lc)
      integer lc;
 {
   szof = lc*sizeof(char);
-  assert( xdr_vector(xdrs,(char *) &szof,(unsigned)1,(unsigned) sizeof(unsigned), xdr_u_int)) ;
+  assert( xdr_vector(xdrs,(char *) &szof,(unsigned)1,(unsigned) sizeof(unsigned), (xdrproc_t) xdr_u_int)) ;
   assert( xdr_opaque(xdrs,c,szof));
   return(1);
 }
@@ -534,14 +539,14 @@ static int SaveVectI(nx,l)
   int nx1=1;
   szof = sizeof(int) ;
   count = (int) l;
-  assert( xdr_vector(xdrs,(char *) &count,(unsigned)1,(unsigned) sizeof(unsigned), xdr_u_int)) ;
+  assert( xdr_vector(xdrs,(char *) &count,(unsigned)1,(unsigned) sizeof(unsigned), (xdrproc_t) xdr_u_int)) ;
   if ( nx == (int *) NULL && l == (integer) 1)
     {
-      assert( xdr_vector(xdrs, (char *)&nx1, count, szof, xdr_int));
+      assert( xdr_vector(xdrs, (char *)&nx1, count, szof, (xdrproc_t) xdr_int));
     }
   else 
     {
-      assert( xdr_vector(xdrs, (char *)nx, count, szof, xdr_int)) ;
+      assert( xdr_vector(xdrs, (char *)nx, count, szof, (xdrproc_t) xdr_int)) ;
     }
   return(1);
 }
@@ -556,14 +561,14 @@ static int SaveVectLI(nx, l)
   /** Attention integer peut etre un long int **/
   szof = sizeof(int) ;
   count = (int) l;
-  assert( xdr_vector(xdrs,(char *) &count,(unsigned)1,(unsigned) sizeof(unsigned), xdr_u_int)) ;
+  assert( xdr_vector(xdrs,(char *) &count,(unsigned)1,(unsigned) sizeof(unsigned), (xdrproc_t) xdr_u_int)) ;
   if ( nx == (integer  *) NULL && l == (integer) 1)
     {
-      assert( xdr_vector(xdrs, (char *)&nx1, count, szof, xdr_int)) ;
+      assert( xdr_vector(xdrs, (char *)&nx1, count, szof, (xdrproc_t) xdr_int)) ;
     }
   else
     {
-      assert( xdr_vector(xdrs, (char *)nx, count, szof, xdr_int)) ;
+      assert( xdr_vector(xdrs, (char *)nx, count, szof, (xdrproc_t) xdr_int)) ;
     }
   return(1);
 }
@@ -575,11 +580,11 @@ static int SaveVectF(nx, l)
   double nx1=0.0;
   szof = sizeof(double) ;
   count = (int) l;
-  assert( xdr_vector(xdrs,(char *) &count,(unsigned)1,(unsigned) sizeof(unsigned), xdr_u_int)) ;
+  assert( xdr_vector(xdrs,(char *) &count,(unsigned)1,(unsigned) sizeof(unsigned), (xdrproc_t) xdr_u_int)) ;
   if ( nx == (double  *) NULL && l == (integer) 1)
-    { assert( xdr_vector(xdrs, (char *)&nx1, count, szof, xdr_double)) ; } 
+    { assert( xdr_vector(xdrs, (char *)&nx1, count, szof, (xdrproc_t) xdr_double)) ; } 
   else
-    { assert( xdr_vector(xdrs, (char *)nx, count, szof, xdr_double)) ; } 
+    { assert( xdr_vector(xdrs, (char *)nx, count, szof, (xdrproc_t) xdr_double)) ; } 
   return(1);
 }
 
@@ -589,7 +594,7 @@ static int SaveVectC(nx, l)
 {
   char nx1='1';
   szof = l*sizeof(char);
-  assert( xdr_vector(xdrs,(char *) &szof,(unsigned)1,(unsigned) sizeof(unsigned), xdr_u_int)) ;
+  assert( xdr_vector(xdrs,(char *) &szof,(unsigned)1,(unsigned) sizeof(unsigned), (xdrproc_t) xdr_u_int)) ;
   if ( nx == (char  *) NULL && l == (integer) 1)
     { assert( xdr_opaque(xdrs, &nx1,szof)); } 
   else 

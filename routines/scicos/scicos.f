@@ -78,9 +78,53 @@ c
       ljroot = liw
       liw = ljroot + ng*2
 c
+
+      call getscsmax(maxsz,maxtb)
       do 10 i=1,nblk
          funtyp(i)=mod(funtyp(i),1000)
+         ni=inpptr(i+1)-inpptr(i)
+         no=outptr(i+1)-outptr(i)
+         if(funtyp(i).eq.1)then
+            if(ni+no.gt.11) then
+c     hard coded maxsize in callf.c
+               call msgs(90,0)
+               kfun=i
+               ierr=1005+i
+               return
+            endif
+         elseif(funtyp(i).eq.2.or.funtyp(i).eq.3) then
+c     hard coded maxsize in scicos.h
+            if(ni+no.gt.maxsz) then
+               call msgs(90,0)
+               kfun=i
+               ierr=1005+i
+               return
+            endif
+         endif
+         mxtb=0
+         if(funtyp(i).eq.0) then
+            if(ni.gt.1) then
+               do 05 j=1,ni
+                  k=inplnk(inpptr(i)-1+j)
+                  mxtb=mxtb+lnkptr(k+1)-lnkptr(k)
+ 05            continue
+            endif
+            if(no.gt.1) then
+               do 06 j=1,no
+                  k=outlnk(outptr(i)-1+j)
+                  mxtb=mxtb+lnkptr(k+1)-lnkptr(k)
+ 06            continue
+            endif
+            if(mxtb.gt.maxtb) then
+                call msgs(91,0)
+               kfun=i
+
+               ierr=1005+i
+               return
+            endif
+         endif
  10   continue
+
 c
 
       call makescicosimport(x,xptr,z,zptr,iz,izptr,
@@ -88,7 +132,7 @@ c
      $     rpar,rpptr,ipar,ipptr,
      $     nblk,outtb,nout,subscr,nsubs,tevts,evtspt,nevts,pointi,
      $     oord,zord,funptr,funtyp,ztyp,cord,ordclk,clkptr,ordptr,
-     $     critev)
+     $     critev,iwa)
 
       if(flag.eq.1) then
 c     initialisation des blocks

@@ -2,19 +2,23 @@ function h=mtlb_plot(X1,X2,X3,X4,X5,X6,X7,X8,X9)
 // Copyright INRIA
 h=[]
 [lhs,rhs]=argn(0)
-
-if rhs==1 then
+if exists('%MTLBHOLD')==0 then %MTLBHOLD=%f,end
+if ~%MTLBHOLD then
   strf='061'
+  xbasc()
+else
+  strf='000'
+end 
+  
+if rhs==1 then
   mtlb_plt1(X1,'k-')
 elseif rhs==2 then
-  strf='061'
   if type(X2)==10 then
     mtlb_plt1(X1,X2)
   else   
     mtlb_plt2(X1,X2)
   end
 elseif rhs==3&type(X3)==10 then
-  strf='061'
   mtlb_plt2(X1,X2,X3)
 else
   k=1
@@ -48,8 +52,13 @@ else
     execstr('ymx=max(ymx,max(X'+string(ky)+'))')
     execstr('ymn=min(ymn,min(X'+string(ky)+'))')
   end
-  xsetech([0,0,1.0,1.0],[xmn,ymn,xmx,ymx])
-  strf='001'
+  if  ~%MTLBHOLD then
+    xsetech([0,0,1.0,1.0],[xmn,ymn,xmx,ymx])
+    strf='001'
+  else
+    strf='000'
+  end
+
   for k=1:nc
     kx=kc(k,1)
     ky=kc(k,2)
@@ -96,8 +105,14 @@ if rhs==3 then
   sclrs=[33 ,22 ,17 ,5  ,11 ,12 ,33 ,1  ]
   mltyp=['.','o','x','+','-','*',':','-.','--']
   sltyp=[0  ,9  ,2,   1,  -1  3   -1  -1   -1]
-  clr=sclrs(find(part(mtlb_style,1)==mclrs))
-  ltyp=sltyp(find(part(mtlb_style,2:length(mtlb_style))==mltyp))
+  for k=1:length(mtlb_style)
+    clr=sclrs(find(part(mtlb_style,k)==mclrs))
+    if clr<>[] then 
+      mtlb_style=part(mtlb_style,1:k-1)+part(mtlb_style,k+1:length(mtlb_style))
+      break,
+    end
+  end
+  ltyp=sltyp(find(mtlb_style==mltyp))
   if ltyp>0 then
     xset('pattern',clr)
     style=-ltyp
@@ -123,6 +138,10 @@ elseif min(size(Y1))==1 then
   if style==[] then style=1,end
   plot2d1('onn',X1(:),Y1,style*ones(1,size(Y1,2)),strf)  
 else
-  plot2d(X1,Y1,style*ones(1,size(Y1,2)),strf)
+  if style==[] then 
+    plot2d(X1,Y1,1:size(Y1,2),strf)
+  else
+    plot2d(X1,Y1,style*ones(1,size(Y1,2)),strf)
+  end
 end
 xset('pattern',p)

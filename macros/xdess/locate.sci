@@ -1,4 +1,4 @@
-function [x]=locate(n,flag)
+function [x,but]=locate(n,flag)
 //[x]=locate(n,flag)
 //fonction permettant d'obtenir les coordonnees  d'un ou plusieurs
 //points designes a l'aide de la souris sur un trace.
@@ -17,6 +17,7 @@ function [x]=locate(n,flag)
 //!
 // Copyright INRIA
 [lhs,rhs]=argn(0)
+but=[]
 xselect();
 if rhs<=1,flag=0;end
 if rhs==0;n=-1;end
@@ -31,15 +32,21 @@ x=[];
 xxx=xget('mark');
 xset('mark',2,xxx(2));
 if n >= 0 then 
-  for i=1:n,[i,x1,y1]=xclick();
+  for i=1:n,
+    [i,x1,y1]=xclick();
     if flag==1,xpoly(x1,y1,'marks',0);end
-    x=[x,[x1;y1]];end
-  else while %t, [i,x1,y1]=xclick(), 
-    if i==0 ,clearmode(flag),return
-    else if flag==1,xpoly(x1,y1,'marks',0);end
     x=[x,[x1;y1]];
+    but=[but,i]
   end
-end
+  else while %t, [i,x1,y1]=xclick(), 
+    if i==0 then
+      clearmode(flag),return
+    elseif flag==1 then
+      xpoly(x1,y1,'marks',0)
+    end
+    x=[x,[x1;y1]];
+    but=[but,i]
+  end
 end
 clearmode(flag);
 

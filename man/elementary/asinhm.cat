@@ -12,7 +12,7 @@ PARAMETERS
 
 DESCRIPTION
   asinhm is the matrix hyperbolic  inverse sine  of the matrix x.  Uses the
-  formula t=logm(x+sqrtm(x*x+eye)).  Results may be not reliable for non-
+  formula t=logm(x+sqrtm(x*x+eye())).  Results may be not reliable for non-
   symmetric matrix.
 
 EXAMPLE

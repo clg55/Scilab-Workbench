@@ -116,6 +116,8 @@ XMETANET=xmetanet
 # objects files in routines/menusX: default is XOBJS for UNIX
 #   for Win32 use WOBJS
 MENUSOBJS=XOBJS
+# use other malloc (in "routines/sun" directory) for some 64 bits machines
+MALLOC=
 
 case "$host" in
   alpha-dec-osf4.*)
@@ -403,6 +405,99 @@ case "$host" in
     fi
     MAKEFILE_TARGET=Makefile.linux
    ;;
+# Alpha Linux
+  alpha-*-linux-gnu)
+    MALLOC=malloc.o
+    CC=cc
+    CC_OPTIONS='-O -mieee-with-inexact -Dlinux -fwritable-strings'
+    CC_LDFLAGS='-ldl -rdynamic -mieee-with-inexact'
+    CC_PICFLAGS=-fPIC
+    # find Fortran compiler
+    # g77 already asked and found: good
+    if test "$G77" = yes; then
+      FC=g77
+    # option with-f2c
+    elif test "$with_f2c" = yes; then
+      AC_CHECK_PROG(F2C,f2c,yes,no)
+      if test "$F2C" = no; then
+        AC_MSG_ERROR("Unable to configure: f2c compiler not found")
+      fi
+      # script shell f77 have bugs, get ours
+      FC='${SCIDIR}/bin/f77-linux'
+    else
+      # first find g77
+      AC_CHECK_PROG(G77,g77,yes,no)
+      if test "$G77" = yes; then
+        FC=g77
+      else
+      # otherwise find f2c
+        AC_CHECK_PROG(F2C,f2c,yes,no)
+        if test "$F2C" = yes; then
+          # script shell f77 have bugs, get ours
+          FC='${SCIDIR}/bin/f77-linux'
+        else
+          AC_MSG_ERROR("Unable to configure: no Fortran compiler found")    
+        fi
+      fi
+    fi
+    FC_OPTIONS='-O -mieee-with-inexact'
+    FC_LDFLAGS='-ldl -rdynamic -mieee-with-inexact'
+    LD=ld
+    LD_LDFLAGS=
+    if test "$enable_debug" = yes; then 
+      CC_OPTIONS='-g -mieee-with-inexact -Dlinux -fwritable-strings'
+      FC_OPTIONS='-g -mieee-with-inexact'
+    fi
+    MAKEFILE_TARGET=Makefile.linux
+   ;;
+# Mklinux PowerPC
+  powerpc-*-linux-gnu)
+    LIEEELIB=
+    AC_CHECK_LIB(ieee,main,
+      [LIEEELIB=-lieee])
+    CC=cc
+    CC_OPTIONS='-O -D_GNU_SOURCE -Dlinux -fwritable-strings'
+    CC_LDFLAGS=$LIEEELIB
+    CC_PICFLAGS=-fPIC
+    # find Fortran compiler
+    # g77 already asked and found: good
+    if test "$G77" = yes; then
+      FC=g77
+    # option with-f2c
+    elif test "$with_f2c" = yes; then
+      AC_CHECK_PROG(F2C,f2c,yes,no)
+      if test "$F2C" = no; then
+        AC_MSG_ERROR("Unable to configure: f2c compiler not found")
+      fi
+      # script shell f77 have bugs, get ours
+      FC='${SCIDIR}/bin/f77-linux'
+    else
+      # first find g77
+      AC_CHECK_PROG(G77,g77,yes,no)
+      if test "$G77" = yes; then
+        FC=g77
+      else
+      # otherwise find f2c
+        AC_CHECK_PROG(F2C,f2c,yes,no)
+        if test "$F2C" = yes; then
+          # script shell f77 have bugs, get ours
+          FC='${SCIDIR}/bin/f77-linux'
+        else
+          AC_MSG_ERROR("Unable to configure: no Fortran compiler found")    
+        fi
+      fi
+    fi
+    FC_OPTIONS=-O
+    FC_LDFLAGS="$LIEEELIB -ldl -rdynamic"
+    FC_PICFLAGS=-fPIC
+    LD=ld
+    LD_LDFLAGS=$LIEEELIB
+    if test "$enable_debug" = yes; then 
+      CC_OPTIONS='-g -Dlinux -D_GNU_SOURCE -fwritable-strings'
+      FC_OPTIONS=-g
+    fi
+    MAKEFILE_TARGET=Makefile.linux
+   ;;
   # MIPS ULTRIX NO LONGER SUPPORTED
   mips-*-ultrix*)
     # standard compilers
@@ -531,7 +626,7 @@ case "$host" in
       fi
     fi
     FC=fort77
-    FC_OPTIONS='+O0 +E4 +Z +DAportable'
+    FC_OPTIONS='+O2 +E4 +Z +DAportable'
     FC_LDFLAGS='-Wl,+vnocompatwarnings,-E /usr/lib/libdld.sl'
     LD=ld
     LD_LDFLAGS=
@@ -781,21 +876,29 @@ fi
 PVMARCH=
 PVMLIB=
 PVMGLIB=
-PVMSCIDIR= 
+PVMSCIDIR=
+PVMSCILIB=
+PVMTARGET=pvm-bidon
+
+if test "$with_pvm" != no; then
+
 AC_CACHE_CHECK("for PVM architecture",ac_cv_PVM_arch,
 [
 ac_cv_PVM_arch=`./pvm3/lib/pvmgetarch`
 ])
 if test "$ac_cv_PVM_arch" = UNKNOWN; then
   AC_MSG_WARN("PVM unable to find architecture: I will not use PVM")
-  PVMARCH="$ac_cv_PVM_arch"
 else
   AC_DEFINE(WITH_PVM)
   PVMARCH="$ac_cv_PVM_arch"
   PVMGLIB="\$(SCIDIR)/pvm3/lib/$ac_cv_PVM_arch/libgpvm3.a"
   PVMLIB="\$(SCIDIR)/pvm3/lib/$ac_cv_PVM_arch/libpvm3.a"
-  PVMSCIDIR="pvm"
-fi 
+  PVMSCIDIR=pvm
+  PVMSCILIB=libs/pvm.a
+  PVMTARGET=scilex-lib
+fi
+
+fi
 
 #################
 ## Tcl/Tk library
@@ -851,7 +954,9 @@ if test $WITH_TKSCI = 1; then
   TKSCILIB=libs/tksci.a
   TKSCIDIR=tksci
 else
- AC_MSG_ERROR("TCL/TK not found") 
+  AC_MSG_ERROR(TCL/TK not found
+
+*** Execute configure again without --with-tk option ***)
 fi
 
 fi
@@ -896,10 +1001,13 @@ AC_SUBST(COMM)
 AC_SUBST(MANVIEWER)
 AC_SUBST(XMETANET)
 AC_SUBST(MENUSOBJS)
+AC_SUBST(MALLOC)
 AC_SUBST(PVMARCH)
 AC_SUBST(PVMLIB)
 AC_SUBST(PVMSCIDIR)
+AC_SUBST(PVMSCILIB)
 AC_SUBST(PVMGLIB)
+AC_SUBST(PVMTARGET)
 AC_SUBST(TK_INC_PATH)
 AC_SUBST(TCL_INC_PATH)
 AC_SUBST(TCLTK_LIBS)

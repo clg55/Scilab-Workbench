@@ -20,6 +20,20 @@ c
          call basout(io,wte,' stackp  '//buf(1:nlgh))
       endif
 c
+      if(macprt.ne.0) then  
+         call funtab(id,ifun,1)
+         if(ifun.gt.0) then
+            if(macprt.eq.2) then  
+               call  putid(ids(1,pt+1),id)
+               call error(223)
+               if(err.gt.0) return
+            elseif(macprt.eq.1) then  
+               call  putid(ids(1,pt+1),id)
+               call msgs(42,vt)
+            endif
+         endif
+      endif
+      
       if(err1.gt.0) return
 c     compilation  stackp: <1,nom(1:4)>
       if (compil(1,id,0,0,0)) then 

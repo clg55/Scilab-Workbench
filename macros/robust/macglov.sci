@@ -12,7 +12,7 @@ if Sl1(1)=='r' then Sl=tf2ss(Sl),flag=1;end
 [A,B,C,D]=Sl(2:5);[n,nb]=size(B);[nc,n]=size(C);
 r=size(D);
 [Z,H]=gfare(Sl);
-R1=eye+D*D';
+R1=eye()+D*D';
 R12=sqrtm(R1);
 Ap=A;
 Bp=[-H*R12,B];

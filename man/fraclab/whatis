@@ -15,7 +15,7 @@ alphagifs - holder function estimation using ifs
 bbch - beneath-beyond concave hull  
 binom - binomial measure synthesis  
 contwt - continuous l2 wavelet transform  
-contwt - continuous l2 wavelet transform with mirroring  
+contwtmir - continuous l2 wavelet transform with mirroring  
 contwtspec - continuous l2 wavelet based legendre spectrum  
 cwt - continuous wavelet transform  
 cwtspec - continuous l1 wavelet based legendre spectrum  

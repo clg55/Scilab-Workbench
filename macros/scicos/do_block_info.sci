@@ -20,13 +20,18 @@ while %t
   end
 end
 if %t then
-  [u,ierr]=file('open',TMPDIR+'/scs_info','unknown')
+  if getenv('WIN32','NO')=='OK' then
+    [u,ierr]=file('open',TMPDIR+'\scs_info','unknown')
+  else
+    [u,ierr]=file('open',TMPDIR+'/scs_info','unknown')
+  end
+  
   if ierr==0 then
     write(u,txt,'(a)')
     file('close',u)
     if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
 	out_f = strsubst(TMPDIR,'/','\')+'\scs_info';
-  	host(strsubst(SCI,'/','\')+'\bin\xless.exe '+ out_f);
+  	host(''"'+strsubst(SCI,'/','\')+'\bin\xless.exe'" '+ out_f);
     else 
         unix_s(SCI+'/bin/xless '+TMPDIR+'/scs_info&')
     end

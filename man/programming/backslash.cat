@@ -20,6 +20,8 @@ DESCRIPTION
 
   A.\B  is the matrix with (i,j) entry A(i,j)\B(i,j).  If A (or B) is a
   scalar A.\B is equivalent to A*ones(B).\B (or A.\(B*ones(A))
+  A\.B  is an operator with no predefined meaning. It may be used to define a
+  new operator (see overloading) with  the same precedence as * or /.
 
 EXAMPLE
   A=rand(3,2);b=[1;1;1]; x=A\b; y=pinv(A)*b;  x-y

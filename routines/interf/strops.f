@@ -80,7 +80,9 @@ c     .  []+b
 c     .  a+[]
          return
       elseif(m1.ne.m2.or.n1.ne.n2) then
-         call error(8)
+         top=top0
+         rhs=rhs1
+         fin=-fin
          return
       endif
       if(istk(il1).ne.istk(il2)) goto 10
@@ -624,6 +626,10 @@ c
 c extraction
 c
   130 continue
+      if(rhs.lt.2) then
+         call error(227)
+         return
+      endif
       if(rhs.gt.2) goto 132
 c     arg2(arg1)
 c     get arg2

@@ -16,6 +16,9 @@ DESCRIPTION
   Lyapunov matrix equation:
   A'*X + X*A = C       ( flag='c' )
   A'*X*A - X = C       ( flag='d' )
+  Note that a unique solution exist if and only if an eigenvalue of A is
+  not an eigenvalue of -A (flag='c')  or 1 over an eigenvalue of A
+  (flag='d').
 
 EXAMPLE
   A=rand(4,4);C=rand(A);C=C+C';
@@ -25,4 +28,4 @@ EXAMPLE
   A'*X*A - X -C
 
 SEE ALSO
-  sylv, ctr_gram
+  sylv, ctr_gram, obs_gram

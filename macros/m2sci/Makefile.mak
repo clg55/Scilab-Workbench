@@ -20,7 +20,7 @@ M2SCI = cla2sci.sci cod2sci.sci exp2sci.sci func2sci.sci \
 	lhsargs.sci rhsargs.sci askfortype.sci num2sci.sci killfuns.sci\
 	warning.sci sciparam.sci gettempvar.sci updatevtps.sci \
 	isname.sci linetype.sci sci_gener.sci  isinstring.sci isanmfile.sci \
-	lhsvarsnames.sci mfile_path.sci
+	lhsvarsnames.sci mfile_path.sci readmfile.sci
 
 FUN=	sci_eig.sci  sci_hess.sci sci_schur.sci sci_chol.sci sci_lu.sci\
 	sci_qr.sci sci_balance.sci \
@@ -57,8 +57,11 @@ FUN=	sci_eig.sci  sci_hess.sci sci_schur.sci sci_chol.sci sci_lu.sci\
 	sci_pwd.sci sci_fzero.sci sci_exist.sci sci_angle.sci sci_break.sci\
 	sci_cd.sci sci_diary.sci sci_dir.sci sci_help.sci sci_finite.sci\
 	sci_magic.sci sci_lookfor.sci sci_qz.sci sci_save.sci sci_who.sci \
-	sci_pow2.sci sci_ss2tf.sci sci_tf2ss.sci
-
+	sci_pow2.sci sci_ss2tf.sci sci_tf2ss.sci sci_planerot.sci\
+	sci_fopen.sci sci_fclose.sci sci_frewind.sci sci_fread.sci \
+	sci_fseek.sci sci_ftell.sci sci_ferror.sci sci_nnz.sci\
+	sci_tic.sci sci_toc.sci sci_gammaln.sci  sci_gamma.sci\
+	sci_erf.sci sci_erfc.sci  sci_erfcx.sci sci_clc.sci sci_echo.sci
 
 DLG=	sci_menu.sci sci_choices.sci
 
@@ -67,7 +70,7 @@ PLOT=	sci_plot.sci sci_line.sci sci_subplot.sci sci_loglog.sci  \
 	sci_title.sci sci_stem.sci sci_stairs.sci sci_colormap.sci sci_gcf.sci\
 	sci_text.sci sci_ginput.sci sci_hot.sci sci_gray.sci sci_cool.sci\
 	sci_flag.sci sci_bone.sci sci_copper.sci sci_pink.sci sci_gtext.sci\
-	sci_meshgrid.sci
+	sci_meshgrid.sci sci_ishold.sci sci_hold.sci
 
 MISC=	sci_clock.sci
 
@@ -77,7 +80,7 @@ OP=	%m2sci.sci mmodlst.sci %a2sci.sci %r2sci.sci %c2sci.sci %e2sci.sci\
 	%g2sci.sci %h2sci.sci %j2sci.sci %02sci.sci %x2sci.sci %d2sci.sci \
 	%p2sci.sci %l2sci.sci %q2sci.sci %52sci.sci
 
-M5=	sci_struct.sci sci_fieldnames.sci sci_cell.sci
+M5=	sci_struct.sci sci_fieldnames.sci sci_cell.sci sci_isreal.sci
 
 MACROS = $(M2SCI) $(FUN) $(OP)  $(PLOT) $(DLG) $(MISC) $(M5)
 

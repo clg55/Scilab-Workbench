@@ -80,7 +80,7 @@ deff('[p]=dgbydy(t,y,s)','[-0.04,1.d4*y(3),1.d4*y(2);...
 //        %ODEOPTIONS tests
 //       
 rand('seed',0);rand('normal');
-nx=20;A=rand(nx,nx);A=A-4.5*eye;
+nx=20;A=rand(nx,nx);A=A-4.5*eye();
 deff('y=f(t,x)','y=A*x')
 deff('J=j(t,x)','J=A')
 x0=ones(nx,1);t0=0;t=[1,2,3,4,5];
@@ -288,7 +288,7 @@ yy2=ode('stiff',[1;1;1],0,2,f);
 
 clear %ODEOPTIONS;
 rand('seed',0);rand('normal');
-nx=20;A=rand(nx,nx);A=A-4.5*eye;
+nx=20;A=rand(nx,nx);A=A-4.5*eye();
 deff('y=f(t,x)','y=A*x')
 deff('J=j(t,x)','J=A')
 //%ODEOPTIONS(1)=1;
@@ -303,7 +303,7 @@ ysf=ode('stiff',ones(nx,1),0,2,f,j);
 ysj=ode('stiff',ones(nx,1),0,2,f,j);
 
 deff('xd=f(t,x)','xd=A*x+B*sin(3*t)')
-A=rand(10,10)-4.5*eye;B=rand(10,1);
+A=rand(10,10)-4.5*eye();B=rand(10,1);
 x=ode(ones(10,1),0,[1,2,3],f);
 //link('fexab.o','fexab')
 if norm(x-ode(ones(10,1),0,[1,2,3],'fexab'),1) > 1.d-10 then pause,end

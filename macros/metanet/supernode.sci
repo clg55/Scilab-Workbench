@@ -59,7 +59,7 @@ a=g('node_color');a(idel)=[];g1('node_color')=a;
 //
 if g('node_diam') <> [] then
   a=g('node_diam');nd1=[g('default_node_diam') a(ivv)];
-  a(ivv)=2.*max(nd1);a(idel)=[];g1('node_diam')=a;]
+  a(ivv)=2.*max(nd1);a(idel)=[];g1('node_diam')=a;
 end;
 //
 if g('node_border') <> [] then

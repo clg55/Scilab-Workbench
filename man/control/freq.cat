@@ -19,7 +19,7 @@ PARAMETERS
 DESCRIPTION
   x=freq(A,B,C [,D],f) returns a real or complex mxp*t matrix such that:
 
-  x(:,k*p:(k+1)*p)= C*inv(f(k)*eye-A)*B + D.
+  x(:,k*p:(k+1)*p)= C*inv(f(k)*eye()-A)*B + D.
 
   Thus, for f taking values along the imaginary axis or on the unit circle x
   is the continuous or discrete time frequency response of (A,B,C,D).

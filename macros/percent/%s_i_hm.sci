@@ -4,7 +4,8 @@ function M=%s_i_hm(varargin)
 [lhs,rhs]=argn(0)
 M=varargin(rhs)
 N=varargin(rhs-1)//inserted matrix
-dims=M('dims')
+dims=M('dims')(:);
+
 v=M('entries');v=v(:)
 if type(v)==4 then
   z=%f
@@ -33,7 +34,7 @@ for k=ndims:-1:1
   elseif mini(size(ik))<0 then // :
     ik=1:dims(k)
   end
-  dims1(k)=max(max(ik),dims(k))
+  dims1(k,1)=max(max(ik),dims(k))
   if size(ik,'*')>1 then
     ik=ik(:)
     if size(I,'*')>1 then
@@ -78,7 +79,6 @@ if del then
   end
   dims1(count)=dims1(count)-nk
 end
-
 
 while  dims1($)==1 then dims1($)=[],end
 select size(dims1,'*')

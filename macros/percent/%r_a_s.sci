@@ -19,9 +19,7 @@ else
   elseif nf<0 then
     [num,den]=simp(num+m.*den,den*ones(m))
   elseif nm<0 then
-    [num,den]=simp(num+m*eye(den).*den,den)
+    [num,den]=simp(num+(m+0)*eye(den).*den,den)
   end
 end
 f(2)=num;f(3)=den
-
-

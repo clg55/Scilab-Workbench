@@ -218,7 +218,7 @@ err=(m1-p2)*(p1-m2);
 if err==0 then
    Kinf=-D1122
 else
-   Kinf=-(D1122+D1121*inv(mu1*eye-D1111'*D1111)*D1111'*D1112);
+   Kinf=-(D1122+D1121*inv(mu1*eye()-D1111'*D1111)*D1111'*D1112);
 end
 
 //Kinf=admissible controller for mu
@@ -235,15 +235,15 @@ if norm(D11) >= gama then write(%io(2),'error : gamma too small');
 
 Teta11=gam2*D11;
 Teta22=gam2*D11';
-W12=eye-gam2*D11*D11';
-W21=eye-gam2*D11'*D11;
+W12=eye()-gam2*D11*D11';
+W21=eye()-gam2*D11'*D11;
 Teta12=(1/gama)*sqrtm(0.5*(W12+W12'));
 Teta21=-(1/gama)*sqrtm(0.5*(W21+W21'));
 
-//Teta*Teta'=(1/gama*gama)*eye
+//Teta*Teta'=(1/gama*gama)*eye()
 
-M=inv(eye-D11*Teta22);
-N=inv(eye-Teta22*D11);
+M=inv(eye()-D11*Teta22);
+N=inv(eye()-Teta22*D11);
 
 A=A+B1*Teta22*M*C1;
 
@@ -303,7 +303,7 @@ mu_test=1/mu;
 
      R1=B1*B1';
      S=D12'*C1;
-     C1#=(eye-D12*D12')*C1;
+     C1#=(eye()-D12*D12')*C1;
      Ax=A-B2*S;
      Qx=-C1#'*C1#;
 
@@ -328,7 +328,7 @@ dx=mini(abs(real(spec(H))));
 
      Q1=C1'*C1;
      L=B1*D21';
-     B1#=B1*(eye-D21'*D21);
+     B1#=B1*(eye()-D21'*D21);
      Ay=A-L*C2;
      Qy=-B1#*B1#';
  
@@ -414,13 +414,13 @@ function [Sk,polesH,polesJ]=h_contr(P,r,mu,U2i,Y2i)
 
      R1=B1*B1';
      S=D12'*C1;
-     C1#=(eye-D12*D12')*C1;
+     C1#=(eye()-D12*D12')*C1;
      Ax=A-B2*S;
      Qx=-C1#'*C1#;
 
      Q1=C1'*C1;
      L=B1*D21';
-     B1#=B1*(eye-D21'*D21);
+     B1#=B1*(eye()-D21'*D21);
      Ay=A-L*C2;
      Qy=-B1#*B1#';
 

@@ -202,13 +202,13 @@ $pictdict begin
 	{ % filling 
 	newpath
 	cx cy moveto 
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add  64 div neg
 	 Ar 4 get 64 div neg  arc closepath
 	gsave glev Setgray eofill grestore}
 	{
 	%drawing with current dash or color unclosed path 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	  stroke} ifelse 
 	Cmsave1 setmatrix } def 
 
@@ -224,7 +224,7 @@ $pictdict begin
 	/t2 exch neg cx add def 
 	[1 0 0 hom t2 t1 ] concat 
 	newpath
-	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	cx cy Ar 2 get 2 div Ar 5 get Ar 4 get add 64 div neg Ar 4 get 64 div neg arc
 	closepath glev Setgray stroke
 	Cmsave1 setmatrix } def 
 
@@ -492,9 +492,8 @@ fillsolid
 0 Setcolor
 750 530 4500 3180 setclipzone
 0 Setcolor
-/Symbol findfont 80 scf mul scalefont setfont
-HardMark 0 16#2b put
- (drawpolymark) 432 [ 0]
+/closeflag false def
+ (drawpoly) 432 [ 0]
 [750 1060 768 1060 785 1060 803 1060 821 1060 838 1060 856 1060 874 1060 891 1060 909 1060 
 926 1060 944 1060 962 1060 979 1060 997 1060 1015 1060 1032 1060 1050 1060 1068 1060 1085 1060 
 1103 1060 1121 1060 1138 1060 1156 1060 1174 1060 1191 1060 1209 1060 1226 1060 1244 1060 1262 1060 
@@ -518,14 +517,14 @@ HardMark 0 16#2b put
 4279 3710 4297 3710 4315 3710 4332 3710 4350 3710 4368 3710 4385 3710 4403 3710 4421 3710 4438 3710 
 4456 3710 4474 3710 4491 3710 4509 3710 4526 3710 4544 3710 
 ] dogrey 
- (drawpolymark) 80 [0]
+ (drawpoly) 80 [0]
 [4562 3710 4579 3710 4597 3710 4615 3710 4632 3710 4650 3710 4668 3710 4685 3710 4703 3710 4721 3710 
 4738 3710 4756 3710 4774 3710 4791 3710 4809 3710 4826 3710 4844 3710 4862 3710 4879 3710 4897 3710 
 4915 3710 4932 3710 4950 3710 4968 3710 4985 3710 5003 3710 5021 3710 5038 3710 5056 3710 5074 3710 
 5091 3710 5109 3710 5126 3710 5144 3710 5162 3710 5179 3710 5197 3710 5215 3710 5232 3710 5250 3710 
 ] dogrey 
+0 Setcolor
 /absolu true def
-/Times-Roman findfont 100 scf mul scalefont setfont
 0 Setcolor
 -1 -1 200000 200000 setclipzone
  showpage

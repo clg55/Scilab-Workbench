@@ -12,6 +12,7 @@ MAKE=nmake /f Makefile.mak
 # the good pathnames for TKLIBS and TCL_INCLUDES.
 TKSCI=libs/tksci.lib 
 TKLIBS=d:\tcl8.0\win\tcl80.lib d:\tk8.0\win\tk80.lib
+TKLIBSBIN="$(SCIDIR1)\bin\tcl80.lib" "$(SCIDIR1)\bin\tk80.lib"
 TCL_INCLUDES=-Id:\tcl8.0\generic -Id:\tk8.0\generic -Id:\tk8.0\xlib
 DTK=-DWITH_TK
 #---------------------
@@ -46,8 +47,9 @@ LINKER_FLAGS=/NOLOGO /DEBUG /Debugtype:cv /machine:ix86
 # standard option for the linker 
 LINKER_FLAGS=/NOLOGO /machine:ix86
 INCLUDES=-I../f2c $(TCL_INCLUDES) $(PVM_INCLUDES)
-# compiler flags 
-CC_COMMON=-D__MSC__ -DWIN32 -c -DSTRICT -nologo $(INCLUDES) $(DTK) $(DPVM) $(DMKL) -MT
+# compiler flags: -MT is only needed if tcl/tk is used 
+USE_MT=-MT
+CC_COMMON=-D__MSC__ -DWIN32 -c -DSTRICT -nologo $(INCLUDES) $(DTK) $(DPVM) $(DMKL) $(USE_MT)
 # debug 
 CC_OPTIONS =  $(CC_COMMON) -Z7 -W3 -Od 
 # standard option (optimization does not work)
@@ -62,10 +64,18 @@ RCVARS=-r -DWIN32
 # Libraries 
 #--------------------
 GUIFLAGS=-SUBSYSTEM:console
-GUILIBS=comctl32.lib wsock32.lib shell32.lib winspool.lib user32.lib gdi32.lib comdlg32.lib kernel32.lib advapi32.lib 
+GUI=comctl32.lib wsock32.lib shell32.lib winspool.lib user32.lib gdi32.lib comdlg32.lib kernel32.lib advapi32.lib 
 
-#XLIBS=$(TKLIBS) $(PVMLIB) $(GUILIBS) libc.lib 
-XLIBS=-NODEFAULTLIB:libc.lib $(TKLIBS) $(PVMLIB) $(GUILIBS) libcmt.lib oldnames.lib
+!IF "$(USE_MT)" == "-MT"
+GUILIBS=-NODEFAULTLIB:libc.lib $(GUI) libcmt.lib oldnames.lib
+!ELSE 
+GUILIBS= $(GUI) libc.lib
+!ENDIF
+
+# XLIBS is used for linking Scilab
+XLIBS=$(TKLIBS) $(PVMLIB) $(GUILIBS)
+# XLIBSBIN is used by the binary version of Scilab for linking examples
+XLIBSBIN=$(TKLIBSBIN) $(PVMLIB) $(GUILIBS)
 
 .c.obj	:
 	@echo ------------- Compile file $< --------------

@@ -18,7 +18,7 @@ x
 : string ("roots", "coeff"), default value is "roots".
 .SH DESCRIPTION
 If \fVa\fR is a matrix, \fVp\fR is the characteristic polynomial i.e.
- \fVdeterminant(x*eye-a)\fR, \fVx\fR being the symbolic variable.
+ \fVdeterminant(x*eye()-a)\fR, \fVx\fR being the symbolic variable.
 .LP
 If \fVv\fR  is a vector, \fVpoly(v,"x",["roots"])\fR  is the polynomial
 with \fVroots\fR the entries of \fVv\fR and \fV"x"\fR as formal variable.

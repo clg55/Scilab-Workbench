@@ -25,6 +25,9 @@ clear t;
 $=poly(0,'$')
 %T=%t;%F=%f;       // boolean variables
 SCI=getenv('SCI')  // path of scilab main directory
+if getenv('WIN32','NO')=='OK' then
+  WSCI=getenv('WSCI')  // path of scilab main directory for Windows
+end
 
 // Load scilab functions libraries
 errcatch(48,'continue');
@@ -55,6 +58,12 @@ PWD = getcwd()
 home= getenv('HOME','ndef');
 if home=='ndef',home=unix_g('cd; pwd');end 
 
+// use MSDOS syntax?
+MSDOS = %f
+if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+  MSDOS = %t
+end
+
 // Protect variable previously defined 
 clear ans
 predef() 
@@ -83,4 +92,3 @@ if  home<>PWD then
      clear startup ierr
   end;
 end
-

@@ -21,8 +21,11 @@ void LAB_set()
   Matrix *Mvalue;
   char *value;
 
- 
-  
+  if (Interf.NbParamIn < 3)
+    {
+      InterfError("Wrong number of input arguments");
+      return;
+    }
   MHandle = (Matrix *)Interf.Param[0];
   if (!MatrixIsReal(MHandle) )
     {

@@ -17,13 +17,14 @@ c     de-activate output control
       lct1=lct(1)
       lct(1)=0
 c
-      if(trace) then
-         if(err1.eq.0.and.err2.eq.0) then
-c     .     locate the error in the current statement
-            call errloc(n)
-c     .     output error message
-            call errmsg(n,errtyp)
-         endif
+      errtyp=0
+      if(err1.eq.0.and.err2.eq.0) then
+c     . locate the error in the current statement
+        if(trace) call errloc(n)
+c     . output error message
+        if(.not.trace) lct(1)=-1
+        call errmsg(n,errtyp)
+        lct(1)=0
       endif
 c
 c     handle the error
@@ -34,7 +35,6 @@ c     re-activate output control
 c
       return
       end
-
 
       subroutine errmgr(n,errtyp)
 c     -------------------------
@@ -49,10 +49,10 @@ c
       integer sadr
 c
       integer num,imess,imode,lunit
-      integer l1,ilk,m,lk,km,k,ll,r,p,mode(2)
-      logical first,trace
+      integer l1,ilk,m,lk,km,k,ll,r,p,mode(2),lpts(6),pt0
+      logical first,trace,pflag,erecmode
 c
-      sadr(l)=(l/2)+1
+c      sadr(l)=(l/2)+1
 c
       ll=lct(5)
       first=.true.
@@ -61,51 +61,66 @@ c
       call errmds(num,imess,imode)
       trace=.not.((num.lt.0.or.num.eq.n).and.imess.ne.0)
 c
-      if(comp(1).ne.0) then
-         p=pt+1
- 1001    p=p-1
-         if(p.eq.0) goto 1005
-         if(rstk(p).eq.904) then
-c     .     fermeture du fichier dans le cas getf(  'c')
-            mode(1)=0
-            call clunit(-ids(2,p),buf,mode)
-c     added 16/04/97
-            pt=p+1
-c     added 16/04/97
-         elseif(rstk(p).eq.901) then
-            if(rstk(p+1).eq.502) then
-c     .       erreur dans comp
-               pt=p+1
-            endif
-         else
-            goto 1001
-         endif
-         errtyp=0
-      endif
- 1005 continue
-      if((num.eq.n.or.num.lt.0).and.imode.ne.0.and.imode.ne.3) then
+      erecmode=(num.eq.n.or.num.lt.0).and.imode.ne.0.and.imode.ne.3
+c     
+      pt0=0
+      if(erecmode) then
+
 c     error recovery mode
          p=pt+1
 c        . looking if error has occured in execstr deff getf or comp
- 1006    p=p-1
-         if(p.le.errpt) goto 1007
-         if(rstk(p).eq.903) then
-c     .     error has occured in execstr
-            errtyp=0
-            pt=p+1
-         elseif(rstk(p).eq.901) then
-c     .     error has occured in deff or getf
-            errtyp=0
-            pt=p+1
-         elseif(rstk(p).eq.904) then
-c     .     error has occured in comp
-            errtyp=0
-            pt=p+1
-         else
-            goto 1006
+ 20      p=p-1
+         if(p.le.errpt) then
+            pt0=pt
+            goto 50
          endif
+         if(rstk(p).eq.502) then 
+            if(rstk(p-1).eq.903) then
+c     .     error has occured in execstr
+               errtyp=0
+               pt0=p
+            elseif(rstk(p-1).eq.904.or.rstk(p-1).eq.901) then
+c     .     error has occured in comp
+               errtyp=0
+               pt0=p
+            else
+               goto 20
+            endif
+         else
+            goto 20
+         endif
+      endif
 
- 1007    if(errtyp.eq.0) then
+
+ 30   continue
+c
+c depilement de l'environnement
+      lct(4)=2
+      pt=pt+1
+ 35   pt=pt-1
+      if(pt.eq.pt0) goto 50
+      r=rstk(pt)
+      goto(36,36,37) r-500
+      if(r.eq.904) then
+         if (ids(2,pt).ne.0) then
+c     .     fermeture du fichier dans le cas getf(  'c')
+            mode(1)=0
+            call clunit(-ids(2,pt),buf,mode)
+         endif
+      endif
+      goto 35
+c     
+c     on depile une fonction
+ 36   call depfun(lunit,trace,first)
+      goto 35
+c     
+c     on depile un exec ou une pause
+ 37   call depexec(lunit,trace,first,pflag)
+      if(.not.pflag) goto 35
+c     
+ 50   continue
+      if(erecmode) then
+         if(errtyp.eq.0) then
 c     .     recoverable error
             top=toperr
             if(err2.eq.0) then
@@ -114,7 +129,6 @@ c     .     recoverable error
                err1=err2
             endif
             err=0
-            goto 1510
          else
             comp(1)=0
             comp(3)=0
@@ -125,174 +139,10 @@ c     .     recoverable error
          comp(3)=0
          err=n
       endif
-c
-c depilement de l'environnement
-      lct(4)=2
-      pt=pt+1
- 1501 pt=pt-1
-      if(pt.eq.0) goto 1510
-      r=rstk(pt)
-      goto(1502,1502,1504) r-500
-      goto 1501
-c
-c     on depile une function
- 1502 k=lpt(1)-(13+nsiz)
-      lpt(1)=lin(k+1)
-      lpt(2)=lin(k+2)
-      lpt(6)=k
-c
-c     recherche du nom de la function correspondant a ce niveau
-      lk=sadr(lin(k+6))
-      if(lk.le.lstk(top+1)) then
-         km=0
-      else
-         km=lin(k+5)-1
-      endif
- 1503 km=km+1
-      if(km.gt.isiz)goto 1513
-      if(lstk(km).ne.lk) goto 1503
-c
- 1513 continue
-      ilk=lin(k+6)
-      if(trace) then
-         if(istk(ilk).ne.10) then
-            if(first) then
-               buf='at line '
-               m=11
-               first=.false.
-               nlc=0
-            else
-               buf='line '
-               m=6
-               call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
-            endif
-            write(buf(m+1:m+5),'(i4)') lct(8)-nlc
-            m=m+4
-            buf(m+1:m+18)=' of function     '
-            m=m+13
-            if (km.le.isiz) call cvname(idstk(1,km),buf(m+1:m+nlgh),1)
-            m=m+nlgh
-         else
-            buf='in  execstr instruction'
-            m=26
-         endif
-         buf(m+1:m+14)=' called by :'
-         m=m+14
-         call basout(io,lunit,buf(1:m))
-         lct(8)=lin(k+12+nsiz)
-c     
-         call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
-         m=ifin-l1+1
-         if(m.gt.ll) then
-            l1=max(l1,lpt(2)-ll/2)
-            m=min(ifin-l1,ll)
-         endif
-
-         if(l1.gt.0.and.m.gt.0.and.m+l1-1.le.lsiz) then
-            call cvstr(m,lin(l1),buf(1:m),1)
-            call basout(io,lunit,buf(1:m))
-         endif
-      endif
-c
-      macr=macr-1
-      if(istk(ilk).ne.10) bot=lin(k+5)
-      goto 1501
-c
-c     on depile un exec ou une pause
- 1504 if(rio.ne.rte) then
-c     exec
-         k=lpt(1)-(13+nsiz)
-         lpt(1)=lin(k+1)
-         lpt(2)=lin(k+4)
-         lpt(6)=k
-c
-         if (trace) then
-            if(first) then
-               buf='at line '
-               m=11
-               first=.false.
-               nlc=0
-            else
-               buf='line '
-               m=6
-            endif
-            write(buf(m+1:m+5),'(i4)') lct(8)-nlc
-            m=m+4
-            buf(m+1:m+29)=' of exec file called by :'
-            m=m+29
-            call basout(io,lunit,buf(1:m))
-            lct(8)=lin(k+12+nsiz)
-c     
-            call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
-            m=ifin-l1+1
-            if(m.gt.ll) then
-               l1=max(l1,lpt(2)-ll/2)
-               m=min(ifin-l1,ll)
-            endif
-            call cvstr(m,lin(l1),buf,1)
-            call basout(io,lunit,buf(1:m))
-         endif
-         mode(1)=0
-         call clunit(-rio,buf,mode)
- 1505    pt=pt-1
-         if(rstk(pt).ne.902) goto 1505
-         rio=pstk(pt)
-         goto 1501
-      else
-c     pause
-         top=ids(2,pt-1)
-         goto 1510
-      endif
-c
- 1510 continue
       if(trace) call basout(io,lunit,' ')
-c
+c     
       return
       end
-
-      subroutine errloc(n)
-c     this routines shows the approximate location of the error in the
-c     current statement
-c!
-      include '../stack.h'
-
-      integer sadr
-
-c
-      character mg*9,bel*1,line*340
-      integer n,ll,m,m1
-      data mg /' !--error'/,bel/' '/
-c
-      sadr(l)=(l/2)+1
-c
-      ll=lct(5)
-
-      lunit = wte
-      m1=lpt(2)-lpt(1)
-      if(m1.lt.1) m1=1
-c
-      if(macr.eq.0.and.rio.eq.rte) goto 1000
-      call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
-      m=ifin-l1+1
-      if(m.gt.ll) then
-         l1=max(l1,lpt(2)-ll/2)
-         m=min(ifin-l1,ll)
-      endif
-      m1=max(0,lpt(2)-l1)
-
-      if(m.gt.0) then
-         call cvstr(m,lin(l1),line,1)
-         call basout(io,lunit,line(1:max(m,1)))
-      endif
- 1000 line=' '
-      line(m1+1:m1+9)=mg
-      write(line(m1+11:m1+15),'(i5)') n
-      line(m1+16:m1+16)=bel
-      call basout(io,lunit,line(1:m1+16))
-      if(hio.gt.0) call basout(io,hio,line(1:m1+15))
-      return
-      end
-
 
       subroutine errmsg(n,errtyp)
 c     -------------------------
@@ -309,7 +159,7 @@ c!
       integer lunit,sadr,nl,io
       character line*340
 c
-      sadr(l)=(l/2)+1
+c      sadr(l)=(l/2)+1
 c
       ll=lct(5)
       lunit=wte
@@ -1112,14 +962,22 @@ c
       call basout(io,lunit,'lusolve not yet implemented for full RHS')
       goto 999
  223  continue
+      call cvname(ids(1,pt+1),buf(1:nlgh),1)
+      ln=lnblnk(buf(1:nlgh))
+      call basout(io,lunit,'It is not possible to redefine the '//
+     &     buf(1:ln)//' primitive this way (see clearfun).')
       goto 999
  224  continue
+      call basout(io,lunit,'Type data base is full')
       goto 999
  225  continue
+      call basout(io,lunit,'This data type is already defined')
       goto 999
  226  continue
+      call basout(io,lunit,'Inequality comparison with empty matrix')
       goto 999
  227  continue
+      call basout(io,lunit,'Missing index')
       goto 999
  228  continue
       goto 999
@@ -1275,3 +1133,177 @@ c
 c
       return
       end
+
+
+      subroutine depfun(lunit,trace,first)
+c     depile une macro pu un execstr
+      include '../stack.h'
+      integer lunit
+      logical trace,first
+      integer sadr,ll
+
+c
+      sadr(l)=(l/2)+1
+c
+      ll=lct(5)
+      k=lpt(1)-(13+nsiz)
+      lpt(1)=lin(k+1)
+      lpt(2)=lin(k+2)
+      lpt(6)=k
+
+c     recherche du nom de la function correspondant a ce niveau
+      lk=sadr(lin(k+6))
+      if(lk.le.lstk(top+1)) then
+         km=0
+      else
+         km=lin(k+5)-1
+      endif
+ 1503 km=km+1
+      if(km.gt.isiz)goto 1513
+      if(lstk(km).ne.lk) goto 1503
+c
+ 1513 continue
+      ilk=lin(k+6)
+      if(trace) then
+         if(istk(ilk).ne.10) then
+            if(first) then
+               buf='at line '
+               m=11
+               first=.false.
+               nlc=0
+            else
+               buf='line '
+               m=6
+               call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
+            endif
+            write(buf(m+1:m+5),'(i4)') lct(8)-nlc
+            m=m+4
+            buf(m+1:m+18)=' of function     '
+            m=m+13
+            if (km.le.isiz) call cvname(idstk(1,km),buf(m+1:m+nlgh),1)
+            m=m+nlgh
+         else
+            buf='in  execstr instruction'
+            m=26
+         endif
+         buf(m+1:m+14)=' called by :'
+         m=m+14
+         call basout(io,lunit,buf(1:m))
+         lct(8)=lin(k+12+nsiz)
+c     
+         call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
+         m=ifin-l1+1
+         if(m.gt.ll) then
+            l1=max(l1,lpt(2)-ll/2)
+            m=min(ifin-l1,ll)
+         endif
+
+         if(l1.gt.0.and.m.gt.0.and.m+l1-1.le.lsiz) then
+            call cvstr(m,lin(l1),buf(1:m),1)
+            call basout(io,lunit,buf(1:m))
+         endif
+      endif
+c
+      macr=macr-1
+      if(istk(ilk).ne.10) bot=lin(k+5)
+      return
+      end
+
+      subroutine depexec(lunit,trace,first,pflag)
+c     pflag ,indique si c'est une pause qui a ete depilee
+      include '../stack.h'
+      logical trace,first,pflag
+      integer mode(2),lunit,ll
+
+      ll=lct(5)
+      if(rio.ne.rte) then
+c     exec
+         k=lpt(1)-(13+nsiz)
+         lpt(1)=lin(k+1)
+         lpt(2)=lin(k+4)
+         lpt(6)=k
+c
+         if (trace) then
+            if(first) then
+               buf='at line '
+               m=11
+               first=.false.
+               nlc=0
+            else
+               buf='line '
+               m=6
+            endif
+            write(buf(m+1:m+5),'(i4)') lct(8)-nlc
+            m=m+4
+            buf(m+1:m+29)=' of exec file called by :'
+            m=m+29
+            call basout(io,lunit,buf(1:m))
+            lct(8)=lin(k+12+nsiz)
+c     
+            call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
+            m=ifin-l1+1
+            if(m.gt.ll) then
+               l1=max(l1,lpt(2)-ll/2)
+               m=min(ifin-l1,ll)
+            endif
+            call cvstr(m,lin(l1),buf,1)
+            call basout(io,lunit,buf(1:m))
+         endif
+         mode(1)=0
+         call clunit(-rio,buf,mode)
+ 1505    pt=pt-1
+         if(rstk(pt).ne.902) goto 1505
+         rio=pstk(pt)
+         pflag=.false.
+      else
+c     pause
+         top=ids(2,pt-1)
+         pflag=.true.
+      endif
+      return
+      end
+
+
+      subroutine errloc(n)
+c     this routines shows the approximate location of the error in the
+c     current statement
+c!
+      include '../stack.h'
+
+      integer sadr
+
+c
+      character mg*9,bel*1,line*340
+      integer n,ll,m,m1
+      data mg /' !--error'/,bel/' '/
+c
+c      sadr(l)=(l/2)+1
+c
+      ll=lct(5)
+
+      lunit = wte
+      m1=lpt(2)-lpt(1)
+      if(m1.lt.1) m1=1
+c
+      if(macr.eq.0.and.rio.eq.rte) goto 1000
+      call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
+      m=ifin-l1+1
+      if(m.gt.ll) then
+         l1=max(l1,lpt(2)-ll/2)
+         m=min(ifin-l1,ll)
+      endif
+      m1=max(0,lpt(2)-l1)
+
+      if(m.gt.0) then
+         call cvstr(m,lin(l1),line,1)
+         call basout(io,lunit,line(1:max(m,1)))
+      endif
+ 1000 line=' '
+      line(m1+1:m1+9)=mg
+      write(line(m1+11:m1+15),'(i5)') n
+      line(m1+16:m1+16)=bel
+      call basout(io,lunit,line(1:m1+16))
+      if(hio.gt.0) call basout(io,hio,line(1:m1+15))
+      return
+      end
+

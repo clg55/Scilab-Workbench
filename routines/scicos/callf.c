@@ -2,7 +2,7 @@
 #include <string.h>
 #include "../machine.h"
 #include "../sun/link.h"
-
+#include "scicos.h"
 /* for sciblks */
 extern struct {
   integer ptr;
@@ -58,9 +58,9 @@ integer *ntvec,*inpptr,*inplnk,*outptr,*outlnk,*lnkptr,*flag;
 double *t,*xd,*x,*z,*rpar,*outtb,*tvec;
 {
     voidf loc ;  
-    double* args[20];
-    integer sz[20];
-    double intabl[100],outabl[100];
+    double* args[SZ_SIZE];
+    integer sz[SZ_SIZE];
+    double intabl[TB_SIZE],outabl[TB_SIZE];
     int ii,i,kf,nx,nz,nrpar,nipar,in,out,ki,ko,ni,no;
     int nin,nout,lprt,szi,funtype;
     ScicosF loc0;
@@ -143,7 +143,8 @@ double *t,*xd,*x,*z,*rpar,*outtb,*tvec;
 	loc1 = (ScicosF) loc;
 	(*loc1)(flag,nclock,t,&(xd[xptr[kf]-1]),&(x[xptr[kf]-1]),&nx,&(z[zptr[kf]-1]),&nz,
 		tvec,ntvec,&(rpar[rpptr[kf]-1]),&nrpar,
-		&(ipar[ipptr[kf]-1]),&nipar,(double *)args[0],&sz[0],
+		&(ipar[ipptr[kf]-1]),&nipar,
+                (double *)args[0],&sz[0],
 		(double *)args[1],&sz[1],(double *)args[2],&sz[2],
 		(double *)args[3],&sz[3],(double *)args[4],&sz[4],
  		(double *)args[5],&sz[5],(double *)args[6],&sz[6],
@@ -153,6 +154,7 @@ double *t,*xd,*x,*z,*rpar,*outtb,*tvec;
     case 0 :			/* concatenated entries and concatened outputs */
 	ni=0;
 	/* catenate inputs if necessary */
+
 	if (nin>1) {
 	    ki=0;
 	    for (in=0;in<nin;in++) {
@@ -183,6 +185,7 @@ double *t,*xd,*x,*z,*rpar,*outtb,*tvec;
 	    for (out=0;out<nout;out++) {
 		lprt=outlnk[outptr[kf]-1+out];
 		szi=lnkptr[lprt]-lnkptr[lprt-1];
+
 		for (ii=0;ii<szi;ii++)  
 		    outabl[ko++]=outtb[lnkptr[lprt-1]-1+ii];
 		no=no+szi;
@@ -262,4 +265,10 @@ integer C2F(funnum)(fname)
     if (loc >= 0) 
       return(ntabsim+(int)loc+1);
     return(0);
+}
+integer C2F(getscsmax)(max_sz,max_tb)
+     integer *max_sz, *max_tb;
+{
+  *max_sz=SZ_SIZE;
+  *max_tb=TB_SIZE;
 }

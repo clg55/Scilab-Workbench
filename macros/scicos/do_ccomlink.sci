@@ -14,8 +14,8 @@ if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
   [a,b]=c_link(funam); while a ; ulink(b);[a,b]=c_link(funam);end  
   cur_wd = getcwd();
   chdir(TMPDIR);
-  cmd_win='nmake /f '+SCI+'\demos\intro\MakeC.mak TARGET=';
-  cmd_win=cmd_win+funam+' SCIDIR1='+strsubst(SCI,'/','\');
+  cmd_win='nmake /f '"'+SCI+'\demos\intro\MakeC.mak'" TARGET=';
+  cmd_win=cmd_win+funam+' SCIDIR1='"'+strsubst(SCI,'/','\')+''"';
   ww=unix_g(cmd_win);
   chdir(cur_wd);
 else
@@ -24,7 +24,7 @@ end
 if ww==emptystr() then 
   ok=%f;x_message('sorry compilation problem');return
 else
-  errcatch(999,'continue')
+  errcatch(-1,'continue')
 if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
   junk=link(TMPDIR+'/'+funam+'.dll',funam,'c');
 else

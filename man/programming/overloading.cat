@@ -57,8 +57,8 @@ DESCRIPTION
    .\.             z
    :               b
    .*              u
-   ./              v
-   .\              w
+   /.              v
+   \.              w
    [a,b]           c
    [a;b]           f
    () extraction   e
@@ -90,7 +90,7 @@ type. When
        called function the definition associated with the input data types.
 
 SEE ALSO
-  tlist, disp
+  tlist, disp, symbols
 
 EXAMPLES
   //DISPLAY

@@ -7,6 +7,11 @@ end
 scs_m_save=scs_m,nc_save=needcompile
 
 [scs_mb,rect,prt]=get_region2(xc,yc,win)
+//superblock should not inherit the context nor the name
+if size(scs_mb(1))>4 then 
+  scs_mb(1)(5)=' ' 
+end
+scs_mb(1)(2)(1)='Untitled'
 
 if rect==[] then return,end
 ox=rect(1);oy=rect(2)+rect(4);w=rect(3),h=rect(4)

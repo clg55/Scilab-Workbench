@@ -14,7 +14,7 @@ DESCRIPTION
   loads all function defined in the directory .sci  files
 
 EXAMPLE
-          getd('SCI/macros/auto')
+  getd('SCI/macros/auto')
 
 SEE ALSO
   getf, lib

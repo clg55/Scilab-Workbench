@@ -1,6 +1,7 @@
 function r=isinstring(str,pos)
 // Copyright INRIA
 str=part(str,1:pos-1)
+quote=''''
 if strindex(str,quote)==[] then
   r=%f
   return

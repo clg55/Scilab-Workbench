@@ -62,6 +62,9 @@ In particular,if \fVa\fR is an nxm matrix,
 \fVx=fft(a,-1)\fR is equivalent to the two instructions:
 .LP
 \fVa1=fft(a,-1,m,1)\fR and \fVx=fft(a1,-1,n,m)\fR.
+.LP
+if a is an hypermatrix (see hypermat) fft(a,flag) performs the N
+dimensional fft of a.
 .SH EXAMPLE 
 .nf
 a=[1;2;3];n=size(a,'*');

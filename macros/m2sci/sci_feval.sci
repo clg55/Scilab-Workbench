@@ -9,8 +9,7 @@ if lhs==1 then
   stk=list('evstr('+stk(top-rhs+1)(1)+'+'+sci2exp(rhsargs(RHS))+')','0','?','?','?')
   top=top-rhs+1
 else
-  LHS=[]
-  for k=1:lhs,   LHS=[LHS,lst(ilst+k)(2)],end
+  LHS=lhsvarsnames()
   fname=stk(top-rhs+1)(1)
   txt='execstr('+sci2exp(lhsargs(LHS)+' = '+fname+rhsargs(RHS))+')'
   stk=list()

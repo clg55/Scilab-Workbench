@@ -34,6 +34,15 @@ txt=[]
 
 //
 RHS=[]
+write(logfile,'Unknown function '+nam+..
+    ',the original calling sequence is used at line '+string(lcount))
+txt='//! Unknown function '+nam+', the original calling sequence is used'
+if funptr(nam)<>0 then
+  nam1='%'+nam
+  write(logfile,'Warning: conflict with a scilab primitive function name changed to '+nam1)
+  txt='//!function name changed from '+nam+' to '+nam1
+  nam=nam1
+end
 for k=1:rhs
   RHS=[stk(top)(1),RHS]
   top=top-1

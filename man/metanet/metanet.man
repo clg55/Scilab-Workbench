@@ -34,4 +34,4 @@ Usually, \fVshow_graph\fR is used and \fVmetanet\fR is seldom used.
 Each time \fVmetanet\fR is executed, a new window is created and its
 number is incremented by 1.
 .SH SEE ALSO
-netwindow, netwindows, show_graph
+netclose, netwindow, netwindows, show_graph

@@ -36,7 +36,7 @@ Bigclosed=BigS/.F;
 W1=Bigclosed(1:2,1:2);   //W1=W (in state-space).
 ss2tf(W1)
 //Inverting
-ss2tf(S1*inv(eye+S2*S1))
+ss2tf(S1*inv(eye()+S2*S1))
 .fi
 .SH SEE ALSO 
 lft, sysdiag, augment, obscont

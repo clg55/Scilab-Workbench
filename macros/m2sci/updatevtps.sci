@@ -1,6 +1,8 @@
 function [vtps_n,vnms_n]=updatevtps(nv_old,vtps_n,vtps_1,vnms_n,vnms_1)
 //add new variables
 // Copyright INRIA
+k=find(vnms_1(1:nv_old,1)<>vnms_n(1:nv_old,1))
+if k<>[] then vnms_n(k,1)=vnms_1(k,1),end
 for k=nv_old+1:size(vtps_1)
   if find(vnms_1(k,1)==vnms_n(:,1))==[] then
     vnms_n=[vnms_n;vnms_1(k,:)]

@@ -8,18 +8,22 @@ if part(path,length(path))<>'/' then path=path+'/',end
 if part(path,1:4)=='SCI/' then path=SCI+part(path,4:length(path)),end
 if part(path,1:2)=='~/' then path=getenv('HOME')+part(path,2:length(path)),end
 if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
-  lst=unix_g('dir '+path+'*.sci')
+  lst=unix_g('dir /b '+strsubst(path,'/','\')+'*.sci')
 else
   lst=unix_g('ls '+path+'*.sci')
 end
 
 nold=size(who('get'),'*')
 prot=funcprot();funcprot(0)
+
 for k=1:size(lst,'*')
-  getf(lst(k))
+  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+    getf(path+lst(k))
+  else
+    getf(lst(k))
+  end
 end
 funcprot(prot)
-
 new=who('get')
 new=new(1:(size(new,'*')-nold-2))
 execstr('['+strcat(new,',')+']=resume('+strcat(new,',')+')')

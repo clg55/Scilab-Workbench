@@ -18,5 +18,5 @@
  [X]=XLIST(:)
  /////////////////DO NOT REMOVE THIS LINE
  LME=E'*X-X'*E
- LMI=list(-A'*X-X'*A-eye,E'*X)
+ LMI=list(-A'*X-X'*A-eye(),E'*X)
  OBJ=[]

@@ -41,7 +41,8 @@ while ilst<nlst
         if size(a1,2)<4 then a1(4)=' ',end
 
         a2=lst(i2)
-        if size(a2,2)<4 then a2(4)=' ',end
+	if size(a2,2)<4 then a2(4)=' ',end
+
         // [a1;a2] contenation 
         if a1(1:2)==['5','27'] then
           // [a1;a2] is [[a;b;...];a2] replaced by [a;b;...;a2 ]
@@ -49,28 +50,34 @@ while ilst<nlst
           lst(ilst)(3)=addf(a1(3),'1');//change rhs of current concat
           top=top-1
           pos(top)=ilst
-        elseif and(a1(1:2)==['5','23']&a2(1:2)==['5','23'])&a1(4)==a2(4) then
+        elseif and(a1(1:2)==['5','23']&a2(1:2)==['5','23'])&a1(3)==a2(3) then
           // [a1;a2] is [[a,b,...];[x,y,..] replaced by [a,b,...;x,y,..]
           lst(i1)=void;to_kill=[to_kill,i1]//ignore concat which forms a1
           lst(i2)=void;to_kill=[to_kill,i2]//ignore concat which forms a2
           lst(ilst)=['5','33','2',a1(3)];// change op
-        elseif (a1(1:2)==['5','33']&a2(1:2)==['5','23'])&a1(3)==a2(3) then
+	  top=top-1
+          pos(top)=ilst
+        elseif and(a1(1:2)==['5','33']&a2(1:2)==['5','23'])&a1(4)==a2(3) then
           // [a1;a2] is [[[a,b,...;x,y,..];a2] replaced by [a,b,...;x,y,..;a2]
-          lst(i1)=void;to_kill=[to_kill,i1];//ignore concat which forms a1
+	  w=lst(i1)
+	  lst(i1)=void;to_kill=[to_kill,i1]//ignore concat which forms a1
           lst(i2)=void;to_kill=[to_kill,i2]//ignore concat which forms a2
+	  lst(ilst)=w
           lst(ilst)(3)=addf(a1(3),'1');//change rhs of current concat 
           top=top-1
           pos(top)=ilst
         else // catenate
           top=top-1
           pos(top)=ilst
-        end
+	end
+
       else
         rhs=abs(evstr(op(3)));lhs=evstr(op(4))
         pos((top-rhs+1):(top-rhs+lhs))=ones(lhs,1)*ilst
         top=top-rhs+lhs
         pos(top+1:$)=[]
       end
+
     elseif opn=='20' then
       rhs=abs(evstr(op(3)));lhs=evstr(op(4))
       pos((top-rhs+1):(top-rhs+lhs))=ones(lhs,1)*ilst

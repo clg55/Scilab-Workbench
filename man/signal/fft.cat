@@ -50,6 +50,9 @@ DESCRIPTION
   instructions:
 
   a1=fft(a,-1,m,1) and x=fft(a1,-1,n,m).
+  if a is an hypermatrix (see hypermat) fft(a,flag) performs the N dimen-
+  sional fft of a.
+
 EXAMPLE
   a=[1;2;3];n=size(a,'*');
   norm(1/n*exp(2*%i*%pi*(0:n-1)'.*.(0:n-1)/n)*a -fft(a,1))

@@ -1,7 +1,7 @@
 
 contwt(2)                      Scilab Function                      contwt(2)
 NAME
-  contwt -  Continuous L2 wavelet transform with mirroring
+  contwtmir -  Continuous L2 wavelet transform with mirroring
 
   Author: Paulo Goncalves
 

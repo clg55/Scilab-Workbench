@@ -20,7 +20,7 @@ DESCRIPTION
 
   The GFARE for Sl=[A,B,C,D] is:
   (A-B*D'*Ri*C)*Z+Z*(A-B*D'*Ri*C)'-Z*C'*Ri*C*Z+B*Si*B'=0
-  where S=(eye+D'*D), Si=inv(S), R=(eye+D*D'), Ri=inv(R) and H=-
+  where S=(eye()+D'*D), Si=inv(S), R=(eye()+D*D'), Ri=inv(R) and H=-
   (B*D'+Z*C')*Ri is such that A+H*C is stable.
 
 SEE ALSO

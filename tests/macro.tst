@@ -482,7 +482,7 @@ deff('[r]=horner(p,x)',['if type(p)==15|type(p)==16 then';
                         'd=maxi(degree(p));';
                         'r=coeff(p,d);';
                         'for k=1:d,';
-                          'r=r*x+coeff(p,d-k)*eye;';
+                          'r=r*x+coeff(p,d-k)*eye();';
                         'end;'],'n')
 deff('[f]=%p_r_p(p1,p2)',['[l,c]=size(p2);';
                         'if l*c <>1 then f=p1*invr(p2),return,end;';

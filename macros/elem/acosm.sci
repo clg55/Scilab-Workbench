@@ -7,7 +7,7 @@ if type(x)<>1 then error(53),end
 if m<>n then 
   error(20)
 else 
-  t=-%i*logm(x+%i*sqrtm(eye-x*x))
+  t=-%i*logm(x+%i*sqrtm(eye()-x*x))
 end
 
 

@@ -17,7 +17,7 @@ function [ac,bc,u,ind]=canon(a,b)
 for kk=k:-1:2,
   k2=k1-ro(kk-1);rows=k1:k0-1;cols=k1:na;intsc=k2:k1-1;
   i=eye(na,na);i(intsc,cols)=-ac(rows,intsc)\ac(rows,cols);
-  im1=2*eye-i;ac=im1*ac*i,bc=im1*bc;u=u*i;k0=k1;k1=k2;
+  im1=2*eye()-i;ac=im1*ac*i,bc=im1*bc;u=u*i;k0=k1;k1=k2;
 end;
 //3: compression of under-the-diagonal blocks
 i=eye(na,na);n=1;m=ro(1)+1;

@@ -44,7 +44,7 @@ int ScilabPsToEps(char orientation,char *filein,char *fileout)
   if ( (fo = fopen(fileout,"w"))== 0 ) 
     {
       sciprint(" Can't open file %s\r\n",fileout);
-      exit(1);
+      return 1;
     }
 
   fprintf(fo,"%%!PS-Adobe-2.0 EPSF-2.0\n");
@@ -70,7 +70,7 @@ int ScilabPsToEps(char orientation,char *filein,char *fileout)
       if ( rep == 1) 
 	sciprint("input file doesn't need to be changed to epsf \r\n");
       remove(fileout);
-      exit(0);
+      return(0);
     }
   
   if ( flag == 1) 

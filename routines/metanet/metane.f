@@ -1,14 +1,13 @@
 c SCILAB function : m6inimet, fin = 1
-c     Copyright INRIA
-      subroutine intsm6inimet(fname)
+       subroutine intsm6inimet(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,getscalar,cremat,bufst
-     $ ore
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getsmat,checkval,getscalar,cremat,bufst
+     $ ore
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -31,12 +30,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        if(.not.cremat(fname,top+1,0,1,1,lw1,loc1)) return
        if(.not.bufstore(fname,lbuf,lbufi2,lbuff2,lr1,nlr1)) return
        call entier(1,stk(lr2),istk(iadr(lr2)))
@@ -44,8 +37,8 @@ c       not implemented yet
        call inimet(stk(lw1),buf(lbufi2:lbuff2),nlr1,istk(iadr(lr2)),istk
      $ (iadr(lr3)))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -70,11 +63,11 @@ c SCILAB function : netwindow, fin = 2
        subroutine intsnetwindow(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -89,17 +82,11 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call netwindow(istk(iadr(lr1)))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -115,11 +102,11 @@ c SCILAB function : netwindows, fin = 3
        subroutine intsnetwindows(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,cremat,listcremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,cremat,listcremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -131,18 +118,12 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        if(.not.cremat(fname,top+1,0,1,1,lw1,loc1)) return
        if(.not.cremat(fname,top+2,0,1,1,lw3,loc3)) return
        call netwindows(stk(lw1),ne1,stk(lw3))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -170,12 +151,12 @@ c SCILAB function : m6loadg, fin = 4
        subroutine intsm6loadg(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,bufstore,crepointer,cr
-     $ emat,listcrestring,listcremat,lcrestringmatfromC
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getsmat,checkval,bufstore,crepointer,cr
+     $ emat,listcrestring,listcremat,lcrestringmatfromC
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -192,12 +173,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        if(.not.bufstore(fname,lbuf,lbufi1,lbuff1,lr1,nlr1)) return
        if(.not.crepointer(fname,top+1,lw3)) return
        if(.not.cremat(fname,top+2,0,1,1,lw5,loc5)) return
@@ -238,8 +213,8 @@ c       not implemented yet
      $ 6),stk(lw27),stk(lw28),stk(lw29),stk(lw30),stk(lw31),stk(lw32),st
      $ k(lw33),stk(lw34),ne13,ne7)
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -381,12 +356,12 @@ c SCILAB function : m6saveg, fin = 5
        subroutine intsm6saveg(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getilist,getlistscalar,getlistvectrow,g
-     $ etlistsimat,getsmat,checkval,getscalar,bufstore,crestringv
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getilist,getlistscalar,getlistvectrow,g
+     $ etlistsimat,getsmat,checkval,getscalar,bufstore,crestringv
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -546,12 +521,6 @@ c
        if(.not.checkval(fname,n1e7,n1e13)) return
        if(.not.checkval(fname,n1e7,n1e14)) return
        if(.not.checkval(fname,n1e7,n1e15)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        if(.not.bufstore(fname,lbuf,lbufi1,lbuff1,lr4,nlr4)) return
        if(.not.bufstore(fname,lbuf,lbufi3,lbuff3,lr2,nlr2)) return
        call entier(1,stk(lr1e3),istk(iadr(lr1e3)))
@@ -588,8 +557,8 @@ c       not implemented yet
      $ ),istk(iadr(lr1e28)),istk(iadr(lr1e29)),istk(iadr(lr1e30)),istk(i
      $ adr(lr1e31)),istk(iadr(lr1e32)),istk(iadr(lr3)))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -605,12 +574,12 @@ c SCILAB function : m6showg, fin = 6
        subroutine intsm6showg(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getilist,getlistscalar,getlistvectrow,g
-     $ etlistsimat,getsmat,checkval,getscalar,bufstore,crestringv
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getilist,getlistscalar,getlistvectrow,g
+     $ etlistsimat,getsmat,checkval,getscalar,bufstore,crestringv
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -793,12 +762,6 @@ c
        if(.not.checkval(fname,n1e7,n1e14)) return
        if(.not.checkval(fname,n1e7,n1e15)) return
        if(.not.checkval(fname,n1e7,n1e33)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        if(.not.bufstore(fname,lbuf,lbufi1,lbuff1,lr2,nlr2)) return
        call entier(1,stk(lr1e3),istk(iadr(lr1e3)))
        call entier(1,stk(lr1e4),istk(iadr(lr1e4)))
@@ -843,8 +806,8 @@ c       not implemented yet
      $ r1e32)),istk(iadr(lr7)),stk(lw1e33),istk(iadr(lr8)),stk(lw1e34),i
      $ stk(iadr(lr3)),istk(iadr(lr4)),istk(iadr(lr5)),stk(lr6))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -860,11 +823,11 @@ c SCILAB function : m6showns, fin = 7
        subroutine intsm6showns(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -882,18 +845,12 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call showns(istk(iadr(lr1)),n1,istk(iadr(lr2)))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -909,11 +866,11 @@ c SCILAB function : m6showp, fin = 8
        subroutine intsm6showp(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -931,18 +888,12 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call showp(istk(iadr(lr1)),n1,istk(iadr(lr2)))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -958,11 +909,11 @@ c SCILAB function : m6prevn2p, fin = 9
        subroutine intsm6prevn2p(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -996,12 +947,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n4,n6)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(n4,stk(lr4),istk(iadr(lr4)))
@@ -1014,8 +959,8 @@ c       not implemented yet
      $ ),istk(iadr(lr5)),istk(iadr(lr6)),istk(iadr(lr7)),istk(iadr(lr3))
      $ ,stk(lw10),ne11)
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1040,11 +985,11 @@ c SCILAB function : m6ns2p, fin = 10
        subroutine intsm6ns2p(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1072,12 +1017,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n2,n4)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        if(.not.cremat(fname,top+1,0,1,1,lw3,loc3)) return
        call entier(n2,stk(lr2),istk(iadr(lr2)))
@@ -1087,8 +1026,8 @@ c       not implemented yet
        call ns2p(istk(iadr(lr1)),n1,stk(lw3),ne9,istk(iadr(lr2)),istk(ia
      $ dr(lr3)),istk(iadr(lr4)),istk(iadr(lr5)))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1113,11 +1052,11 @@ c SCILAB function : m6p2ns, fin = 11
        subroutine intsm6p2ns(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1148,12 +1087,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n2,n4)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        if(.not.cremat(fname,top+1,0,1,1,lw3,loc3)) return
        call entier(n2,stk(lr2),istk(iadr(lr2)))
@@ -1164,8 +1097,8 @@ c       not implemented yet
        call p2ns(istk(iadr(lr1)),n1,stk(lw3),ne10,istk(iadr(lr2)),istk(i
      $ adr(lr3)),istk(iadr(lr4)),istk(iadr(lr5)),n2,istk(iadr(lr6)))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1190,11 +1123,11 @@ c SCILAB function : m6edge2st, fin = 12
        subroutine intsm6edge2st(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1209,18 +1142,12 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        if(.not.cremat(fname,top+1,0,1,1,lw3,loc3)) return
        call edge2st(n1,istk(iadr(lr1)),stk(lw3),ne3)
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1245,11 +1172,11 @@ c SCILAB function : m6prevn2st, fin = 13
        subroutine intsm6prevn2st(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1274,12 +1201,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n2,n4)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        if(.not.cremat(fname,top+1,0,1,1,lw3,loc3)) return
        call entier(n2,stk(lr2),istk(iadr(lr2)))
@@ -1288,8 +1209,8 @@ c       not implemented yet
        call prevn2st(n1,istk(iadr(lr1)),stk(lw3),ne8,istk(iadr(lr2)),ist
      $ k(iadr(lr3)),istk(iadr(lr4)))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1314,11 +1235,11 @@ c SCILAB function : m6compc, fin = 14
        subroutine intsm6compc(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1339,12 +1260,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        if(.not.cremat(fname,top+1,0,1,1,lw1,loc1)) return
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
@@ -1355,8 +1270,8 @@ c       not implemented yet
        call compc(stk(lw1),istk(iadr(lr1)),istk(iadr(lr2)),n2,istk(iadr(
      $ lr3)),stk(lw6),stk(lw7),stk(lw8))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1391,11 +1306,11 @@ c SCILAB function : m6concom, fin = 15
        subroutine intsm6concom(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1413,19 +1328,13 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        if(.not.cremat(fname,top+1,0,1,1,lw4,loc4)) return
        call concom(istk(iadr(lr1)),n2,istk(iadr(lr2)),stk(lw4),ne4)
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1450,11 +1359,11 @@ c SCILAB function : m6compfc, fin = 16
        subroutine intsm6compfc(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1475,12 +1384,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        nn1= int(stk(lr3))
        if(.not.cremat(fname,top+1,0,nn1,1,lw1,loc1)) return
        call entier(n1,stk(lr1),istk(iadr(lr1)))
@@ -1497,8 +1400,8 @@ c       not implemented yet
        call compfc(stk(lw1),istk(iadr(lr1)),istk(iadr(lr2)),n2,istk(iadr
      $ (lr3)),stk(lw6),stk(lw7),stk(lw8),stk(lw9),stk(lw10),stk(lw11))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1533,11 +1436,11 @@ c SCILAB function : m6sconcom, fin = 17
        subroutine intsm6sconcom(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1555,19 +1458,13 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        if(.not.cremat(fname,top+1,0,1,1,lw4,loc4)) return
        call sconcom(istk(iadr(lr1)),n2,istk(iadr(lr2)),stk(lw4),ne4)
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1592,11 +1489,11 @@ c SCILAB function : m6pcchna, fin = 18
        subroutine intsm6pcchna(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1620,12 +1517,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -1636,8 +1527,8 @@ c       not implemented yet
        call pcchna(istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)),n3,is
      $ tk(iadr(lr4)),stk(lw6),stk(lw7),stk(lw8))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1672,11 +1563,11 @@ c SCILAB function : m6fordfulk, fin = 19
        subroutine intsm6fordfulk(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1711,12 +1602,6 @@ c       cross variable size checking
 c     
        if(.not.checkval(fname,n5,n6)) return
        if(.not.checkval(fname,n5,n7)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -1748,8 +1633,8 @@ c       not implemented yet
      $ r7)),stk(lw9),stk(lw10),stk(lw11),stk(lw12),stk(lw13),stk(lw14),s
      $ tk(lw15),stk(lw16),stk(lw17),stk(lw18),stk(lw19))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1794,11 +1679,11 @@ c SCILAB function : m6johns, fin = 20
        subroutine intsm6johns(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1829,12 +1714,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n2,n5)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        nn1= int(stk(lr6))
        if(.not.cremat(fname,top+1,0,nn1,1,lw1,loc1)) return
        call entier(1,stk(lr1),istk(iadr(lr1)))
@@ -1851,8 +1730,8 @@ c       not implemented yet
      $ lr3),istk(iadr(lr4)),istk(iadr(lr5)),n2,istk(iadr(lr6)),stk(lw10)
      $ ,stk(lw11))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1887,11 +1766,11 @@ c SCILAB function : m6dijkst, fin = 21
        subroutine intsm6dijkst(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1922,12 +1801,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n2,n5)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n4,stk(lr4),istk(iadr(lr4)))
@@ -1938,8 +1811,8 @@ c       not implemented yet
        call dijkst(istk(iadr(lr1)),istk(iadr(lr2)),stk(lr3),istk(iadr(lr
      $ 4)),istk(iadr(lr5)),n2,istk(iadr(lr6)),stk(lw8),stk(lw9))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -1974,11 +1847,11 @@ c SCILAB function : m6frang, fin = 22
        subroutine intsm6frang(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -1999,12 +1872,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        if(.not.cremat(fname,top+1,0,1,1,lw1,loc1)) return
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
@@ -2015,8 +1882,8 @@ c       not implemented yet
        call frang(stk(lw1),istk(iadr(lr1)),istk(iadr(lr2)),n2,istk(iadr(
      $ lr3)),stk(lw6),stk(lw7),stk(lw8))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2051,11 +1918,11 @@ c SCILAB function : m6chcm, fin = 23
        subroutine intsm6chcm(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2086,12 +1953,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n2,n4)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -2102,8 +1963,8 @@ c       not implemented yet
        call chcm(stk(lr6),istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)
      $ ),istk(iadr(lr4)),n2,istk(iadr(lr5)),stk(lw8),stk(lw9))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2138,11 +1999,11 @@ c SCILAB function : m6transc, fin = 24
        subroutine intsm6transc(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2163,12 +2024,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        if(.not.cremat(fname,top+1,0,1,1,lw2,loc2)) return
        call entier(n2,stk(lr2),istk(iadr(lr2)))
@@ -2177,8 +2032,8 @@ c       not implemented yet
        call transc(istk(iadr(lr1)),stk(lw2),istk(iadr(lr2)),stk(lw4),n2,
      $ ne8,ne6,istk(iadr(lr3)))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2213,11 +2068,11 @@ c SCILAB function : m6dfs, fin = 25
        subroutine intsm6dfs(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2241,12 +2096,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -2257,8 +2106,8 @@ c       not implemented yet
        call dfs(istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)),n3,istk(
      $ iadr(lr4)),stk(lw6),stk(lw7),stk(lw8))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2293,11 +2142,11 @@ c SCILAB function : m6umtree, fin = 26
        subroutine intsm6umtree(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2325,12 +2174,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n1,n3)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        nn1= int(stk(lr4))
        if(.not.cremat(fname,top+1,0,nn1,1,lw1,loc1)) return
        call entier(n1,stk(lr1),istk(iadr(lr1)))
@@ -2341,8 +2184,8 @@ c       not implemented yet
        call prim(stk(lw1),istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)
      $ ),n5,n1,istk(iadr(lr4)),stk(lw8),stk(lr5))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2367,11 +2210,11 @@ c SCILAB function : m6umtree1, fin = 27
        subroutine intsm6umtree1(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2399,12 +2242,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n1,n3)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        nn1= int(stk(lr4))
        if(.not.cremat(fname,top+1,0,nn1,1,lw1,loc1)) return
        if(.not.cremat(fname,top+2,0,nn1,1,lw2,loc2)) return
@@ -2418,8 +2255,8 @@ c       not implemented yet
        call prim1(stk(lw1),stk(lw2),stk(lw3),istk(iadr(lr1)),istk(iadr(l
      $ r2)),istk(iadr(lr3)),n5,n1,istk(iadr(lr4)),stk(lw10),stk(lr5))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2444,11 +2281,11 @@ c SCILAB function : m6dmtree, fin = 28
        subroutine intsm6dmtree(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2479,12 +2316,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n2,n4)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -2494,8 +2325,8 @@ c       not implemented yet
        call dmtree(istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)),istk(
      $ iadr(lr4)),n2,istk(iadr(lr5)),stk(lw7),stk(lr6))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2520,11 +2351,11 @@ c SCILAB function : m6tconex, fin = 29
        subroutine intsm6tconex(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2549,12 +2380,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n1,n3)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        nn1= int(stk(lr4))
        if(.not.cremat(fname,top+1,0,nn1,1,lw1,loc1)) return
        if(.not.cremat(fname,top+2,0,1,1,lw2,loc2)) return
@@ -2566,8 +2391,8 @@ c       not implemented yet
        call tconex(stk(lw1),stk(lw2),istk(iadr(lr1)),istk(iadr(lr2)),ist
      $ k(iadr(lr3)),n1,istk(iadr(lr4)),stk(lw8))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2592,11 +2417,11 @@ c SCILAB function : m6flomax, fin = 30
        subroutine intsm6flomax(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2643,12 +2468,6 @@ c
        if(.not.checkval(fname,n5,n7)) return
        if(.not.checkval(fname,n5,n8)) return
        if(.not.checkval(fname,n5,n10)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n7,stk(lr7),istk(iadr(lr7)))
        call entier(n8,stk(lr8),istk(iadr(lr8)))
        call entier(n5,stk(lr5),istk(iadr(lr5)))
@@ -2669,8 +2488,8 @@ c       not implemented yet
      $ (lw9),n3,istk(iadr(lr9)),istk(iadr(lr6)),istk(iadr(lr10)),stk(lw1
      $ 4),stk(lw15))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2705,11 +2524,11 @@ c SCILAB function : m6kilter, fin = 31
        subroutine intsm6kilter(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2749,12 +2568,6 @@ c
        if(.not.checkval(fname,n1,n3)) return
        if(.not.checkval(fname,n1,n4)) return
        if(.not.checkval(fname,n1,n8)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -2778,8 +2591,8 @@ c       not implemented yet
      $ dr(lr4)),stk(lw11),stk(lw12),stk(lw13),stk(lw14),stk(lw15),stk(lw
      $ 16),stk(lw17))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2814,11 +2627,11 @@ c SCILAB function : m6busack, fin = 32
        subroutine intsm6busack(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2864,12 +2677,6 @@ c
        if(.not.checkval(fname,n4,n5)) return
        if(.not.checkval(fname,n4,n6)) return
        if(.not.checkval(fname,n4,n10)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n4,stk(lr4),istk(iadr(lr4)))
        call entier(n5,stk(lr5),istk(iadr(lr5)))
        call entier(1,stk(lr1),istk(iadr(lr1)))
@@ -2893,8 +2700,8 @@ c       not implemented yet
      $ n7,istk(iadr(lr9)),istk(iadr(lr6)),stk(lw13),stk(lw14),stk(lw15),
      $ istk(iadr(lr3)),stk(lw17),stk(lw18))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -2939,11 +2746,11 @@ c SCILAB function : m6floqua, fin = 33
        subroutine intsm6floqua(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -2991,12 +2798,6 @@ c
        if(.not.checkval(fname,n2,n5)) return
        if(.not.checkval(fname,n2,n9)) return
        if(.not.checkval(fname,n2,n10)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        if(.not.cremat(fname,top+1,0,n2,1,lw2,loc2)) return
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -3022,8 +2823,8 @@ c       not implemented yet
      $ iadr(lr8)),istk(iadr(lr5)),stk(lr9),stk(lw14),stk(lw15),stk(lw16)
      $ ,stk(lw17),stk(lw18),stk(lw19),stk(lr10),stk(lw21))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3058,11 +2859,11 @@ c SCILAB function : m6relax, fin = 34
        subroutine intsm6relax(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3098,12 +2899,6 @@ c
        if(.not.checkval(fname,n1,n2)) return
        if(.not.checkval(fname,n1,n3)) return
        if(.not.checkval(fname,n1,n4)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr6),istk(iadr(lr6)))
        call entier(1,stk(lr7),istk(iadr(lr7)))
        call entier(n1,stk(lr1),istk(iadr(lr1)))
@@ -3151,8 +2946,8 @@ c       not implemented yet
      $ lw15),stk(lw16),stk(lw17),stk(lw18),stk(lw19),stk(lw20),stk(lw21)
      $ ,stk(lw22),stk(lw23),stk(lw24),stk(lw25),stk(lw26))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3197,11 +2992,11 @@ c SCILAB function : m6findiso, fin = 35
        subroutine intsm6findiso(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3223,12 +3018,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n1,n2)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -3236,8 +3025,8 @@ c       not implemented yet
        call findiso(istk(iadr(lr1)),istk(iadr(lr2)),n1,istk(iadr(lr3)),s
      $ tk(lw5))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3262,11 +3051,11 @@ c SCILAB function : m6ta2lpd, fin = 36
        subroutine intsm6ta2lpd(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3291,12 +3080,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n1,n2)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr4),istk(iadr(lr4)))
@@ -3307,8 +3090,8 @@ c       not implemented yet
        call ta2lpd(istk(iadr(lr1)),istk(iadr(lr2)),n1,istk(iadr(lr4)),st
      $ k(lw5),stk(lw6),stk(lw7))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3353,11 +3136,11 @@ c SCILAB function : m6ta2lpu, fin = 37
        subroutine intsm6ta2lpu(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3385,12 +3168,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n1,n2)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr4),istk(iadr(lr4)))
@@ -3402,8 +3179,8 @@ c       not implemented yet
        call ta2lpu(istk(iadr(lr1)),istk(iadr(lr2)),n1,istk(iadr(lr4)),st
      $ k(lw5),stk(lw6),stk(lw7))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3448,11 +3225,11 @@ c SCILAB function : m6lp2tad, fin = 38
        subroutine intsm6lp2tad(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3477,12 +3254,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n2,n3)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -3492,8 +3263,8 @@ c       not implemented yet
        call lp2tad(istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)),istk(
      $ iadr(lr4)),stk(lw5),stk(lw6))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3528,11 +3299,11 @@ c SCILAB function : m6lp2tau, fin = 39
        subroutine intsm6lp2tau(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3560,12 +3331,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n2,n3)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -3576,8 +3341,8 @@ c       not implemented yet
        call lp2tau(istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)),istk(
      $ iadr(lr4)),stk(lw5),stk(lw6))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3612,11 +3377,11 @@ c SCILAB function : m6metasync, fin = 40
        subroutine intsm6metasync(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3631,18 +3396,12 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        if(.not.cremat(fname,top+1,0,1,1,lw2,loc2)) return
        call metasync(istk(iadr(lr1)),stk(lw2))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3667,11 +3426,11 @@ c SCILAB function : m6dfs2, fin = 41
        subroutine intsm6dfs2(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3695,12 +3454,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -3716,8 +3469,8 @@ c       not implemented yet
      $ (iadr(lr4)),stk(lw6),stk(lw7),stk(lw8),stk(lw9),stk(lw10),stk(lw1
      $ 1))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3752,11 +3505,11 @@ c SCILAB function : m6diam, fin = 42
        subroutine intsm6diam(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3784,12 +3537,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n3,n4)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -3805,8 +3552,8 @@ c       not implemented yet
      $ dr(lr4)),n1,stk(lw6),stk(lw7),stk(lw8),stk(lw9),stk(lw10),stk(lw1
      $ 1))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3861,11 +3608,11 @@ c SCILAB function : m6cent, fin = 43
        subroutine intsm6cent(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getvectrow,getscalar,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3893,12 +3640,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n3,n4)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(n1,stk(lr1),istk(iadr(lr1)))
        call entier(n2,stk(lr2),istk(iadr(lr2)))
        call entier(n3,stk(lr3),istk(iadr(lr3)))
@@ -3914,8 +3655,8 @@ c       not implemented yet
      $ dr(lr4)),n1,stk(lw6),stk(lw7),stk(lw8),stk(lw9),stk(lw10),stk(lw1
      $ 1))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -3950,11 +3691,11 @@ c SCILAB function : m6hullcvex, fin = 44
        subroutine intsm6hullcvex(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getmat,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getmat,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -3976,12 +3717,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        if(.not.cremat(fname,top+1,0,1,1,lw4,loc4)) return
@@ -3992,8 +3727,8 @@ c       not implemented yet
        call hullcvex(istk(iadr(lr1)),istk(iadr(lr2)),stk(lr3),stk(lw4),s
      $ tk(lw5),stk(lw6),stk(lw7),stk(lw8))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -4028,11 +3763,11 @@ c SCILAB function : m6clique, fin = 45
        subroutine intsm6clique(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getmat,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getmat,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -4058,12 +3793,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,m4,n4)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(n4*m4,stk(lr4),istk(iadr(lr4)))
@@ -4078,8 +3807,8 @@ c       not implemented yet
        call clique(istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr4)),stk(l
      $ w4),stk(lw5),stk(lw6),stk(lw7),stk(lw8),stk(lw9),stk(lw10))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -4124,11 +3853,11 @@ c SCILAB function : m6clique1, fin = 46
        subroutine intsm6clique1(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -4161,12 +3890,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -4182,8 +3905,8 @@ c       not implemented yet
      $ (iadr(lr4)),istk(iadr(lr5)),istk(iadr(lr6)),istk(iadr(lr7)),stk(l
      $ w8),stk(lw9),stk(lw10))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -4208,11 +3931,11 @@ c SCILAB function : m6hamil, fin = 47
        subroutine intsm6hamil(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -4245,12 +3968,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -4279,8 +3996,8 @@ c       not implemented yet
      $ ),stk(lw9),stk(lw10),stk(lw11),stk(lw12),stk(lw13),stk(lw14),stk(
      $ lw15),stk(lw16))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -4305,11 +4022,11 @@ c SCILAB function : m6visitor, fin = 48
        subroutine intsm6visitor(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getmat,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getmat,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -4332,12 +4049,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,m2,n2)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(n2*m2,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -4347,8 +4058,8 @@ c       not implemented yet
        call visitor(istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)),stk(
      $ lw4),stk(lw5),stk(lw6))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -4373,11 +4084,11 @@ c SCILAB function : m6bmatch, fin = 49
        subroutine intsm6bmatch(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -4435,12 +4146,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n13,n14)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr6),istk(iadr(lr6)))
@@ -4529,8 +4234,8 @@ c       not implemented yet
      $ (lw38),stk(lw39),stk(lw40),stk(lw41),stk(lw42),stk(lw43),stk(lw44
      $ ),stk(lw45))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -4565,11 +4270,11 @@ c SCILAB function : m6knapsk, fin = 50
        subroutine intsm6knapsk(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -4609,12 +4314,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n6,n7)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -4671,8 +4370,8 @@ c       not implemented yet
      $ ),stk(lw22),stk(lw23),stk(lw24),stk(lw25),stk(lw26),stk(lw27),stk
      $ (lw28),stk(lw29),stk(lw30))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -4707,11 +4406,11 @@ c SCILAB function : m6prfmatch, fin = 51
        subroutine intsm6prfmatch(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -4745,12 +4444,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n5,n6)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -4787,8 +4480,8 @@ c       not implemented yet
      $ lw8),stk(lw9),stk(lw10),stk(lw11),stk(lw12),stk(lw13),stk(lw14),s
      $ tk(lw15),stk(lw16),stk(lw17),stk(lw18),stk(lw19),stk(lw20))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -4823,11 +4516,11 @@ c SCILAB function : m6permuto, fin = 52
        subroutine intsm6permuto(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getmat,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getmat,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -4865,12 +4558,6 @@ c
        if(.not.checkval(fname,m4,n5)) return
        if(.not.checkval(fname,m4,m6)) return
        if(.not.checkval(fname,m4,n6)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -4880,8 +4567,8 @@ c       not implemented yet
        call permuto(istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)),stk(
      $ lr4),stk(lr5),stk(lr6),stk(lw7),stk(lw8),stk(lw9))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -4916,12 +4603,12 @@ c SCILAB function : m6mesh2b, fin = 53
        subroutine intsm6mesh2b(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getmat,checkval,getvectrow,cr
-     $ emat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getmat,checkval,getvectrow,cr
+     $ emat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -4955,12 +4642,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -4975,8 +4656,8 @@ c       not implemented yet
      $ iadr(lr4)),stk(lr5),stk(lw6),stk(lw7),istk(iadr(lr6)),istk(iadr(l
      $ r7)),stk(lw10),stk(lw11))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -5031,11 +4712,11 @@ c SCILAB function : m6deumesh, fin = 54
        subroutine intsm6deumesh(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,checkval,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -5063,12 +4744,6 @@ c
 c       cross variable size checking
 c     
        if(.not.checkval(fname,n4,n5)) return
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -5082,8 +4757,8 @@ c       not implemented yet
        call deumesh(istk(iadr(lr1)),istk(iadr(lr2)),istk(iadr(lr3)),stk(
      $ lr4),stk(lr5),stk(lw6),stk(lw7),stk(lw8),stk(lw9),stk(lw10))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -5148,11 +4823,11 @@ c SCILAB function : m6bandred, fin = 55
        subroutine intsm6bandred(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,getvectrow,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -5185,12 +4860,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -5207,8 +4876,8 @@ c       not implemented yet
      $ (iadr(lr4)),istk(iadr(lr5)),stk(lr6),istk(iadr(lr7)),stk(lw8),stk
      $ (lw9),stk(lw10),stk(lw11))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -5263,11 +4932,11 @@ c SCILAB function : m6meshmesh, fin = 56
        subroutine intsm6meshmesh(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,cremat
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,cremat
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -5336,12 +5005,6 @@ c
 c     
 c       cross variable size checking
 c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
        call entier(1,stk(lr1),istk(iadr(lr1)))
        call entier(1,stk(lr2),istk(iadr(lr2)))
        call entier(1,stk(lr3),istk(iadr(lr3)))
@@ -5396,8 +5059,8 @@ c       not implemented yet
      $ ,istk(iadr(lr16)),stk(lw25),stk(lw26),stk(lw27),stk(lw28),stk(lw2
      $ 9),stk(lw30),stk(lw31),stk(lw32),stk(lw33))
        if(err .gt. 0) then 
-        buf = fname // 'Internal Error' 
-        call error(999)
+c        buf = fname // ' Internal Error' 
+c        call error(999)
         return
        endif
 c
@@ -5488,6 +5151,45 @@ c     Putting in order the stack
        return
        end
 c
+c SCILAB function : netclose, fin = 57
+       subroutine intsnetclose(fname)
+c
+       character*(*) fname
+       include '../stack.h'
+c
+       integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar
+       iadr(l)=l+l-1
+       sadr(l)=(l/2)+1
+       rhs = max(0,rhs)
+c
+       topk = top 
+       rhsk = rhs 
+       if(.not.checkrhs(fname,1,1)) return
+       if(.not.checklhs(fname,1,1)) return
+c       checking variable window (number 1)
+c       
+       if(.not.getscalar(fname,top,top-rhs+1,lr1)) return
+c     
+c       cross variable size checking
+c     
+       call entier(1,stk(lr1),istk(iadr(lr1)))
+       call netclose(istk(iadr(lr1)))
+       if(err .gt. 0) then 
+c        buf = fname // ' Internal Error' 
+c        call error(999)
+        return
+       endif
+c
+       topk=top-rhs
+       topl=top+0
+c       no output variable
+       top=topk+1
+       call objvide(fname,top)
+       return
+       end
+c
 
 c  interface function 
 c   ********************
@@ -5497,7 +5199,7 @@ c   ********************
 c
        goto (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23
      $ ,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,4
-     $ 5,46,47,48,49,50,51,52,53,54,55,56) fin
+     $ 5,46,47,48,49,50,51,52,53,54,55,56,57) fin
        return
 1      call intsm6inimet('m6inimet')
        return
@@ -5610,5 +5312,7 @@ c
 55      call intsm6bandred('m6bandred')
        return
 56      call intsm6meshmesh('m6meshmesh')
+       return
+57      call intsnetclose('netclose')
        return
        end

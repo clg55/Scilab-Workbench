@@ -34,18 +34,18 @@ If \fVflag='d'\fR, the eigenvalues of \fVM*A*Q\fR = eigenvalues
 of \fVA\fR with magnitude >= \fVthres\fR.
 .PP
 If \fVflag='c'\fR and if \fV[Q1,M1]\fR = full rank factorization (\fVfullrf\fR) 
-of \fVeye-Q*M\fR then eigenvalues of  \fVM1*A*Q1\fR = eigenvalues of \fVA\fR 
+of \fVeye()-Q*M\fR then eigenvalues of  \fVM1*A*Q1\fR = eigenvalues of \fVA\fR 
 with real part < \fVthres\fR.
 .LP
 If \fVflag='d'\fR and if \fV[Q1,M1]\fR = full rank factorization (\fVfullrf\fR) 
-of \fVeye-Q*M\fR then eigenvalues of  \fVM1*A*Q1\fR = eigenvalues of \fVA\fR 
+of \fVeye()-Q*M\fR then eigenvalues of  \fVM1*A*Q1\fR = eigenvalues of \fVA\fR 
 with magnitude < \fVthres\fR.
 .SH EXAMPLE
 .nf
 A=diag([1,2,3]);X=rand(A);A=inv(X)*A*X;
 [Q,M]=pbig(A,1.5,'d');
 spec(M*A*Q)
-[Q1,M1]=fullrf(eye-Q*M);
+[Q1,M1]=fullrf(eye()-Q*M);
 spec(M1*A*Q1)
 .fi
 .SH SEE ALSO

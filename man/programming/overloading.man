@@ -81,8 +81,8 @@ l l.
  \fV.\\\\.\fR@z
  \fV:\fR@b
  \fV.*\fR@u
- \fV./\fR@v
- \fV.\\\\\fR@w
+ \fV/.\fR@v
+ \fV\\\\.\fR@w
  \fV[a,b]\fR@c
  \fV[a;b]\fR@f
  \fV()\fR extraction@e
@@ -117,8 +117,8 @@ l l.
 .LA {\tt  .}  & z\\ \hfill
 .LA {\tt  :}  & b\\ \hfill
 .LA {\tt  .*}  & u\\ \hfill
-.LA {\tt  ./}  & v\\ \hfill
-.LA {\tt  .\bs }  & w\\ \hfill
+.LA {\tt  /.}  & v\\ \hfill
+.LA {\tt  \bs . }  & w\\ \hfill
 .LA {\tt [a,b] }  & c\\ \hfill
 .LA {\tt [a;b] }  & f\\ \hfill
 .LA {\tt () } extraction  & e\\ \hfill
@@ -153,7 +153,7 @@ such a function is undefined for a particular data types the function
 this called function the definition associated with the input data
 types.
 .SH SEE ALSO
-tlist, disp
+tlist, disp, symbols
 .SH EXAMPLES
 .nf
 //DISPLAY

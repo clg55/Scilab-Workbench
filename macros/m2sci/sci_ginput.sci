@@ -1,23 +1,30 @@
 function [stk,txt,top]=sci_ginput()
 // Copyright INRIA
 txt=[]
-
-if lhs==2 then
-  xy=gettempvar(1)
-  if rhs<1 then
-    txt=xy+' = locate()';
-  elseif rhs==1 then
-    txt=xy+' = locate('+stk(top)(1)+')';
-  end
-  stk=list(list(xy+'(1,:)''','0','?','1','1'),..
-           list(xy+'(2,:)''','0','?','1','1'))
+if rhs<1 then
+  RHS='-1'
 else
-  if rhs<1 then
-    RHS=emptystr()
-  else
-    RHS=stk(top)(1)
-  end
-  write('logfile','Warning: ginput replaced by mtlb_ginput')
-  r=list('mtlb_ginput('+makeargs(RHS)+')','-1','?','1')
-  stk=list(r,r,r)
+  RHS=stk(top)(1)
+end
+write(logfile,'Warning ginput: Scilab cannot yet handle keybord events')
+txt='//!Scilab cannot yet handle keybord events'
+if lhs==1 then
+    stk=list('locate('+RHS+')''','0','?','2','1')
+elseif lhs==2 then
+  xy=gettempvar()
+  txt=[txt;xy+' = locate('+RHS+')'''];
+  stk=list(list(xy+'(:,1)','-1','?','1','1'),..
+      list(xy+'(:,2)+1','-1','?','1','1'))
+else
+  [x,y,btn]=lhsvarsnames()  
+  xy=gettempvar()
+  txt=[txt;['['+xy+','+btn+'] = locate('+RHS+')';
+      x+' = '+xy+'(1,:)'''
+      y+' = '+xy+'(2,:)'''
+      btn+' = '+btn+'''+1']]
+   
+  stk=list(list(' ','-2','0','?','1','1'),..
+      list(' ','-2','0','?','1','1'),..
+      list(' ','-2','0','?','1','1'))   
+
 end

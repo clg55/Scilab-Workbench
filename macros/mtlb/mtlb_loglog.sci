@@ -2,19 +2,22 @@ function h=mtlb_loglog(X1,X2,X3,X4,X5,X6,X7,X8,X9)
 // Copyright INRIA
 h=[]
 [lhs,rhs]=argn(0)
-
+if exists('%MTLBHOLD')==0 then %MTLBHOLD=%f,end
+if ~%MTLBHOLD then
+  strf='011'
+  xbasc()
+else
+  strf='000'
+end 
 if rhs==1 then
-  strf='021'
   mtlb_pltl1(X1,'k-',strf)
 elseif rhs==2 then
-  strf='021'
   if type(X2)==10 then
     mtlb_pltl1(X1,X2,strf)
   else   
     mtlb_pltl2(X1,X2,'k-',strf)
   end
 elseif rhs==3&type(X3)==10 then
-  strf='021'
   mtlb_pltl2(X1,X2,X3,strf)
 else
   k=1
@@ -48,8 +51,13 @@ else
     execstr('ymx=max(ymx,max(X'+string(ky)+'))')
     execstr('ymn=min(ymn,min(X'+string(ky)+'))')
   end
-  xsetech([0,0,1.0,1.0],[xmn,ymn,xmx,ymx])
-  strf='001'
+  if  ~%MTLBHOLD then
+    xsetech([0,0,1.0,1.0],[xmn,ymn,xmx,ymx])
+    strf='001'
+  else
+    strf='000'
+  end
+  
   for k=1:nc
     kx=kc(k,1)
     ky=kc(k,2)

@@ -172,6 +172,9 @@ c
          if(ipar(iwd).ge.0) then
             call dr1('xset'//char(0),'wdim'//char(0),ipar(iwd),
      $           ipar(iwd+1),v,v,v,v,dv,dv,dv,dv)
+c     to force dimensions update 
+            call dr1('xset'//char(0),'window'//char(0),wid,v,v,v,v,v,
+     $           dv,dv,dv,dv)
          endif
          rect(1)=per*(1+n1)
          rect(2)=ymin

@@ -18,4 +18,4 @@ the Metanet window associated to window number \fVwindow\fR, use
 \fVnetwindow(window)\fR. The numbers of existing windows are given by the 
 function \fVnetwindows\fR.
 .SH SEE ALSO
-metanet, netwindows, show_graph
+metanet, netclose, netwindows, show_graph
