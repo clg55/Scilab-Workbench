@@ -103,7 +103,7 @@ void inc_itg_cont(i, j, val)
 
 
 #ifdef WIN32 
-#ifndef __CYGWIN32__
+#if !(defined __CYGWIN32__) && !(defined __ABSC__)
 #include <float.h>
 #define ISNAN(x) _isnan(x)
 #else 
@@ -525,7 +525,7 @@ static void contourI(func, x, y, z, zCont, N,style, err)
 		}
  for ( c= 0 ; c < ncont ; c++)
    {
-     stylec = ( style != (integer *) 0) ? stylec=style[c] : c;
+     stylec = ( style != (integer *) 0) ? style[c] : c;
      /** itg-cont is a flag array to memorize checked parts of the grid **/
      for ( i = 0 ; i < n1; i++)
        for ( j =0 ; j < n2 ; j++)
@@ -894,8 +894,9 @@ ContStore2d(ival, Cont, xncont, yncont)
     {
       /** a simplifier eventuellement car echelle2d en fait trop **/
       integer IRect[4];
-      C2F(echelle2d)(&xncont,&yncont,&(xcont[cont_size]),&(ycont[cont_size++]),
+      C2F(echelle2d)(&xncont,&yncont,&(xcont[cont_size]),&(ycont[cont_size]),
 		     &n1,&n2,IRect,"f2i",3L);
+      cont_size++;
     }
 }
 

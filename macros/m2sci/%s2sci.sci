@@ -17,7 +17,7 @@ if op(3)=='2' then
    end
    top=top-1
 else
-  stk=list('-'+s2(1),s2(2),s2(3),s2(4),s2(5))
+  stk=list('-'+s2(1),'2',s2(3),s2(4),s2(5))
 end
 
 

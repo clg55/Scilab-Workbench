@@ -51,7 +51,7 @@ void C2F(tksciInterf)()
     if (TK_Started==1)
       (*FuncI[Interf.FuncIndex -1])();
     else 
-      cout("Sorry, TK has not been enabled this the session.\n");
+      Cout("Sorry, TK has not been enabled this the session.\n");
 
     InterfDone();
 }

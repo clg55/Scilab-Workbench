@@ -64,8 +64,13 @@ c
                write(cw(l1:l1+fl-1),form(1)) a
             elseif(typ.eq.-1) then
 c     .        Inf
-               fl=3
-               cw(l1:l1+fl-1)='Inf'
+               if(a.lt.0.0d0) then
+                  fl=4
+                  cw(l1:l1+fl-1)='-Inf'
+               else
+                  fl=3
+                  cw(l1:l1+fl-1)='Inf'
+               endif
             elseif(typ.eq.-2) then
 c     .        Nan
                fl=3

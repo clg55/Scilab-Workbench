@@ -16,7 +16,9 @@ OBJSC = $(OBJSC1) $(OBJSC2)
 OBJSF = 
 
 include ../../Makefile.incl
+
 CFLAGS = $(CC_OPTIONS) -I../ -Wall
+
 FFLAGS = $(FC_OPTIONS)
 
 include ../Make.lib

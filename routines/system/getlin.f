@@ -6,13 +6,13 @@ c
 c     Copyright INRIA
       include '../stack.h'
 c
-      integer lrecl,eol,slash,dot,blank
+      integer lrecl,eol,slash,dot,blank,comma
       integer retu(6)
       integer r,quit(4)
       logical maj,isinstring
       external isinstring
 
-      data eol/99/,dot/51/,blank/40/
+      data eol/99/,dot/51/,blank/40/,comma/52/
       data retu/27,14,29,30,27,23/
       data slash/48/,lrecl/512/
       data quit/26,30,18,29/
@@ -39,6 +39,7 @@ c     next line to preserve end-of-line marks (eol)
       endif
       r=0
       if(pt.gt.0) r=rstk(pt)
+      l0=0
       if(job.lt.0) goto 12
       if(r.eq.503) goto 11
       if(macr.gt.0.and.fin.ne.2) then
@@ -81,10 +82,8 @@ c      do 40 j = 1, n
  21   continue
          k = eol+1
          call xchar(buf(j:j),k)
-         if (k .gt. eol) go to 10
          if (k .eq. eol) go to 45
-         if (k .eq. -1) l = l-1
-         if (k .le. 0) then
+         if (k .eq. 0) then
             call basout(io,wte,
      +           buf(j:j)//' is not a scilab character')
             go to 40
@@ -148,7 +147,11 @@ c     There is no continuation line or syntax error
          endif
    40 goto 17
 c
-   45 continue
+ 45   continue
+      if(l.eq.l0) then
+         lin(l)=blank
+         l=l+1
+      endif
       lin(l) = eol
       lin(l+1)=blank
       lpt(6) = l
@@ -212,11 +215,13 @@ c
       il=il+1
       goto 81
    82 if(istk(il+1).ne.eol) goto 83
+
       lin(l)=eol
       l=l+1
       il=il+1
    83 lin(k+7)=il+1
-      if(ddt .lt. 1 .or. ddt.gt.4) goto 45
+c%%
+      if((ddt .lt. 1 .or. ddt.gt.4).and.mod(lct(4),2) .ne. 1) goto 45
       l2=l1
    84 n=l-l2
       n1=n

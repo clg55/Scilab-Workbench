@@ -8,11 +8,11 @@ function [stk,nwrk,txt,top]=%imp2for(nwrk)
 if forexp==1 then
   s1=stk(top-1);s2=stk(top)
   if op(3)=='2' then
-    stk=list(s1(1)+','+s2(1),'2')
+    stk=list([s1(1),s2(1)],'2')
     top=top-1
   else
     s0=stk(top-2)
-    stk=list(s0(1)+','+s2(1)+','+s1(1),'2')
+    stk=list([s0(1),s2(1),s1(1)],'2')
     top=top-2
   end
   return

@@ -11,8 +11,8 @@ PARAMETERS
   X    : real or complex square matrix
 
 DESCRIPTION
-  rcond(X) is an estimate for the reciprocal of the condition of X in the 1-
-  norm.
+  rcond(X) is an estimate for the reciprocal of the condition of X in the
+  1-norm.
 
   If X is well conditioned, rcond(X) is close to 1.  If not, rcond(X) is
   close to 0.

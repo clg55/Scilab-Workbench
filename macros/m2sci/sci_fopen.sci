@@ -5,12 +5,10 @@ first=stk(top-rhs+1)
 if first(5)=='1' then
   filename=first(1)
 elseif first(5)=='10' then
-  write(logfile,'fopen(fid) has no translation')
-  txt='//!fopen(fid) has no translation'
+  set_infos('fopen(fid) has no translation',2)
   filename=first(1)
 else
-  write(logfile,'fopen(filename,...) assumed')
-  txt='//!fopen(filename,...) assumed'
+  set_infos('fopen(filename,..) assumed',2)
   filename=first(1)
 end
 
@@ -27,13 +25,13 @@ if lhs==1 then
     fid=gettempvar(1),
     err=gettempvar(2)
   end
-  txt=['['+fid+','+err+'] = mopen('+filename+','+permission+')';
+  txt=['['+fid+','+err+'] = mopen('+filename+','+permission+',0)';
       'if '+err+'<0 then '+fid+' = -1;end']
   stk=list(' ','-2','1','1','1')
 else
   [fid,mess]=lhsvarsnames()
   err=gettempvar()
-  txt=['['+fid+','+err+'] = mopen('+filename+','+permission+')';
+  txt=['['+fid+','+err+'] = mopen('+filename+','+permission+',0)';
       'if '+err+'<0 then '+..
 	  fid+' = -1;'+mess+' = ''Cannot open file.'''+..
 	  ';else '+mess+' = '''';end']

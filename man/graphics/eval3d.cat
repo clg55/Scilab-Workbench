@@ -16,7 +16,7 @@ PARAMETERS
   z              : matrix of size (n1,n2).
 
 DESCRIPTION
-  This function returns a matrix z(n1,n2). z(i,j)=fun(x(i),y(j)). If the
+  This function returns a matrix z(n1,n2). z(i,j)=fun(x(i),y(j)).  If the
   function fun doesn't accept arguments of type vector use the primitive
   feval.
 

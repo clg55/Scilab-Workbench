@@ -1,8 +1,8 @@
       subroutine xawelm
 c     =============================================================
-c     Primitives liees aux menus Sciilab 
+c     Primitives for scilab menus 
 c     =============================================================
-c     Copyright INRIA
+c     Copyright ENPC 
       include '../stack.h'
       external setmen, unsmen
       if (ddt .eq. 4) then

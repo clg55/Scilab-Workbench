@@ -1,16 +1,16 @@
 /* Copyright INRIA */
 #include "../machine.h"
 #include "import.h"
-struct {
+extern struct {
     integer nblk, nordptr, nout, ng, nrwp, niwp, ncord, noord, nzord;
 } C2F(cossiz);
 
-struct {
+extern struct {
     integer iero;
 } C2F(ierode);
 
 ScicosImport  scicos_imp;
-struct {
+extern struct {
     integer kfun;
 } C2F(curblk);
 

@@ -11,31 +11,30 @@ Usage
   [param,sd_param]=stable_test(maxr,data)
 
 Input parameters
-       o maxr : integer positive scalar. maximum resolution witch depend on
+       o maxr : integer positive scalar.  maximum resolution witch depend on
          the size of the sample.
        o data : real vector [size,1] corresponding to the data sample (incre-
          ments of the signal).
 Output parameters
        o param : real matrix [maxr,4] corresponding to the four estimated
          parameters  of the fited stable law at each level of resolution.
-         param(i,:), for i=1, ...maxr, gives respectively
-         alpha(characteristic exponent), beta (skewness parameter), mu (loca-
-         tion parameter), gamma (scale parameter) estimated at the resolution
-         i.
+         param(i,:), for i=1, ...maxr, gives respectively alpha(characteris-
+         tic exponent), beta (skewness parameter), mu (location parameter),
+         gamma (scale parameter) estimated at the resolution i.
        o sd_param : real matrix [maxr,4] corresponding to the estimated stan-
          dard deviations of the four previous parameters at each level of
          resolution.  sd_param(i,:), for i=1, ...maxr, gives respectively
          standard deviation of alpha, beta, mu and gamma estimated at the
          resolution i.
 Description
-  The stability test consists on estimating parameters of a fited alpha-
-  satble law at different level of resolution. the variable is said to be
-  stable if the charateristic exponent alpha remains approximatively constant
-  at different resolution, and the scale parameter follows a scaling law with
+  The stability test consists on estimating parameters of a fited alpha-sat-
+  ble law at different level of resolution. the variable is said to be stable
+  if the charateristic exponent alpha remains approximatively constant at
+  different resolution, and the scale parameter follows a scaling law with
   exponent (1/alpha)-1.   .SH Example under scilab type:
-  [proc1_5,inc1_5]=sim_stable(1.5,0,0,1,20000);
-  [param,sd_param]=stable_test(7,inc1_5); alpha=param(:,1); m=(1:7)';
-  lnm=log(m); plot2d(m,alpha,1,'111','alpha',[1,0,7,2]); gamma=param(:,4);
+  [proc1_5,inc1_5]=sim_stable(1.5,0,0,1,20000); [param,sd_param]=sta-
+  ble_test(7,inc1_5); alpha=param(:,1); m=(1:7)'; lnm=log(m);
+  plot2d(m,alpha,1,'111','alpha',[1,0,7,2]); gamma=param(:,4);
   lngamma=log(gamma); plot(lnm,lngamma); [a,b,sig]=reglin(lnm',lngamma');
   slope=a th_slope=1/1.5-1
        o  we generate a standard 1.5-stable motion and its increments.

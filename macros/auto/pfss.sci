@@ -18,8 +18,7 @@ if RHS==2 then
   if type(rmax)==10 then cord=rmax;end
   if type(rmax)==1 then cord=[];end
 end
-//-compat type(S)<>15 retained for list/tlist compatibility
-if type(S)<>15&type(S)<>16 then error(91,1),end
+if type(S)<>16 then error(91,1),end
 [t,f,g,h,dd,dom]=S([1:5,7]);
 if t(1)<>'lss' then error(91,1),end;
 [n,n]=size(f);

@@ -4,27 +4,24 @@
 xs2fig - send graphics to a file in Xfig syntax
 .SH CALLING SEQUENCE
 .nf
-xs2fig(win_num,filen [, color])
+xs2fig(win_num,filen,[color])
 .fi
 .SH PARAMETERS
-.TP 10
+.TP 9
 win_num 
-: an integer scalar or vector 
+: integer scalar or vector .
 .TP 10
 filen 
-: string (file name).
+: string, file name.
 .TP 10
 color
-: an optional integer ( 0 or 1 ).\fV0\fR for black and white and
-\fV1\fR for color. The default value is to use a value compatible 
+: optional integer. 0 means black and white and
+1 means color. The default value is to use a value compatible 
 with the screen status.
 .SH DESCRIPTION
-This function will send the recorded graphics of the
-window \fVwin_num\fR in the file \fVfilen\fR in Xfig syntax 
-This function will work only if the selected 
-driver is \fV"Rec"\fR
-
-
-
-
-
+\fVxs2fig\fR sends the recorded graphics of the
+window \fVwin_num\fR in the file \fVfilen\fR in Xfig syntax.
+This function works only if the selected 
+driver is \fV"Rec"\fR.
+.SH SEE ALSO
+xbasimp

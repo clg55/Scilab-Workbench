@@ -1042,10 +1042,7 @@ text=['aa=1,if a==2 then aa=b(a),end']
  
  aa=1,if a==2 then aa=b(a),end   
  
-fic=file('open','test_macro_exec','unknown')
- fic  =
- 
-    3.  
+fic=file('open','test_macro_exec','unknown');
  
 write(fic,text)
  

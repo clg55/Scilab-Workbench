@@ -1,38 +1,35 @@
 .TH xarc 2 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-xarc - draws a part of an ellipsis 
+xarc - draw a part of an ellipse
 .SH CALLING SEQUENCE
 .nf
 xarc(x,y,w,h,a1,a2)
 .fi
 .SH PARAMETERS
-.TP 15
+.TP 9
 x,y,w,h
-: real (rectangle def)
-.TP 15
+: four real values defining a rectangle.
+.TP
 a1,a2
-: real (angle def)
+: real values defining a sector.
 .SH DESCRIPTION
-Draws a portion of an ellipsis contained in the rectangle \fV(x,y,w,h)\fR
-( Upper-Left point, Width, Height), and in the sector delimited by 
-the angle \fValpha1\fR and the angle \fValpha1+alpha2\fR. \fValpha1\fR and \fValpha2\fR are 
+\fVxarc\fR draws a part of an ellipse contained in the rectangle 
+\fV(x,y,w,h)\fR (upper-left point, width, height), and in the sector 
+defined by 
+the angle \fValpha1\fR and the angle \fValpha1+alpha2\fR. 
+\fValpha1\fR and \fValpha2\fR are 
 given respectively by \fVa1/64\fR degrees and \fVa2/64\fR degrees.
-This function uses the current graphic state and graphic scale.
-which can be set by calling a high level drawing function such as \fVplot2d\fR.
+This function uses the current graphics style and scale.
 .SH EXAMPLE
 .nf
 // isoview scaling 
 plot2d(0,0,-1,"031"," ",[-2,-2,2,2])
-xset("dashes",3);
+xset("dashes",3)
 xarc(-1,1,2,2,0,90*64)
 xarc(-1.5,1.5,3,3,0,360*64)
 .fi
 .SH SEE ALSO
-xarcs, xfarc
+xarcs, xfarc, xfarcs
 .SH AUTHOR
-J.Ph.C..
-
-
-
-
+J.Ph.C.

@@ -26,13 +26,19 @@ nu
 sig 
 : a matrix of size (ny,ny)
 .SH DESCRIPTION
-this function creates a description as a list of an  ARMAX process 
+This function creates a description as a tlist of an  ARMAX process 
 .IG
 .nf
    A(z^-1)y= B(z^-1)u + D(z^-1)sig*e(t)
 .fi
 .FI
 .LA $$   A(z^{-1})y= B(z^{-1})u + D(z^{-1})sig*e(t)$$
+\fVar\fR is defined by 
+.nf
+ar=tlist(['ar','a','b','d','ny','nu','sig'],a,b,d,ny,nu,sig);
+.fi
+and thus the coefficients of \fVar\fR can be retrieved by e.g.
+\fV ar('a') \fR.
 .SH EXAMPLE
 .nf 
 a=[1,-2.851,2.717,-0.865].*.eye(2,2)
@@ -40,9 +46,12 @@ b=[0,1,1,1].*.[1;1];
 d=[1,0.7,0.2].*.eye(2,2);
 sig=eye(2,2);
 ar=armac(a,b,d,2,1,sig)
+// extract polynomial matrices from ar representation 
+[A,B,D]=arma2p(ar);
 .fi
 .SH SEE ALSO
-arma, armax, armax1, arsimul
+arma, armax, armax1, arsimul, arma2p, tlist.
+
 
 
 

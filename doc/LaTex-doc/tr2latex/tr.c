@@ -641,6 +641,7 @@ while (*inbuf != NULL_C)
 			    outbuf = strapp(outbuf,"\\index");
 			    outbuf = strapp(outbuf,tmp);
 			    /* next  lines added to set key references (ss) */
+			    /* slighly modified by jpc since {foo,poo}--> {foo with a missing right} */
 			    outbuf = strapp(outbuf,"\\label");
 			    ii1=0;
 			    while ( (c = tmp[ii1]) != NULL_C && c != ',')  {
@@ -650,8 +651,47 @@ while (*inbuf != NULL_C)
 				    outbuf = strapp(outbuf,tmp3);
 				  };
 			    };
+			    if ( c== ',') { outbuf = strapp(outbuf,"}");}
 			    /* end of (ss) modif */
 			    *outbuf++ = '\n';
+			    /** processing the next lines up to the next .SH or . **/
+   			    outbuf = strapp(outbuf,"\\begin{flushleft}\n");
+			    while ( *inbuf == '\n') inbuf++;
+			    while ( strncmp(inbuf,".SH",3) != 0 && inbuf[0] != '.' )
+			      {
+				/** process the consecutive lines of SH NAME**/
+				while (1) {
+				  inbuf += get_arg(inbuf,ww,1);
+				  if ( strcmp(ww,"-")==0) 
+				    {
+				      outbuf = strapp(outbuf," ");
+				      outbuf = strapp(outbuf,ww);
+				      break;
+				    }
+				  else if ( ww[0] == '\0' )
+				    {
+				      fprintf(stderr,"\nWARNING : missing a `-' char in a .SH NAME section\nPlease change the man file \n");
+				      exit(-1);
+				      break;
+				    }
+				  strcpy(tmp,ww);
+				  ii1=0; while ( (c= tmp[ii1]) != NULL_C )
+				    {
+				      if ( c == ',' ) tmp[ii1]='\0';
+				      ii1++;
+				    }
+				  sprintf(tmp2,"  \\index{%s}\\label{%s} %s",tmp,tmp,ww);
+				  outbuf = strapp(outbuf,tmp2);
+				}
+				inbuf += get_line(inbuf,ww,1); 
+				/** parse : name, ....,name - line **/
+				/** --> name \index{name */
+				outbuf = strapp(outbuf,ww);
+				outbuf = strapp(outbuf,"\\\\\n");
+				/** goble \n */
+				while ( *inbuf == '\n') inbuf++;
+			      }
+   			    outbuf = strapp(outbuf,"\\end{flushleft}\n");
 			  }
 			else if (strcmp(ww,"SEE") == 0 )
 			  {  

@@ -7,6 +7,10 @@
 #include <malloc.h>
 #endif
 
+#ifdef __ABSC__
+#define getpid() getpid_()
+#endif
+
 #include "../machine.h"
 
 #include "../libcomm/libCalCom.h"

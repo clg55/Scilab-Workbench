@@ -32,7 +32,7 @@ extern void C2F(setfbutn)  _PARAMS((char *name,int *rep));
 
   extern int C2F (deletewin) _PARAMS((integer *number));  
   extern void SGDeleteWindow  _PARAMS((Widget w, XEvent *event, String *params, Cardinal *num_params));  
-  extern void CreatePopupWindow  _PARAMS((integer WinNum, Widget button, Window *CWindow, Window *SciGWindow, Pixel *fg, Pixel *bg, Widget *infowidget));  
+
   extern void ChangeBandF  _PARAMS((int win_num, Pixel fg, Pixel bg));  
   extern int C2F (delbtn) _PARAMS((integer *win_num, char *button_name));  
   extern void AddMenu  _PARAMS((integer *win_num, char *button_name, char **entries, integer *ne, integer *typ, char *fname, integer *ierr));  

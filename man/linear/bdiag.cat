@@ -27,7 +27,7 @@ DESCRIPTION
   rmax controls the conditioning of X; the default value is the l1 norm of A.
 
   To get a diagonal form (if it exists) choose a large value for rmax
-  (rmax=1/%eps for example). Generically (for real random A) the blocks are
+  (rmax=1/%eps for example).  Generically (for real random A) the blocks are
   (1x1) and (2x2) and X is the matrix of eigenvectors.
 
 EXAMPLE

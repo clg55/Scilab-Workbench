@@ -2,7 +2,7 @@ function do_help()
 // Copyright INRIA
 
 while %t do
-  [btn,xc,yc,cwin,Cmenu]=getclick(0)
+  [btn,xc,yc,cwin,Cmenu]=cosclick(0)
   if Cmenu<>[] then
     name=Cmenu
     nm=1
@@ -19,10 +19,12 @@ while %t do
     kwin=find(windows(:,2)==cwin)
     pal=palettes(-windows(kwin,1))
     k=getobj(pal,[xc;yc])
-    o=pal(k)
-    name=o(5)
-    nm=0
-    break
+    if k<>[] then
+      o=pal(k)
+      name=o(5)
+      nm=0
+      break
+    end
   end
 end
 if nm==0 then
@@ -111,7 +113,7 @@ case 'Smart Move' then
 	' '
 	' Right click cancel the move action']
 
-case 'Move' then
+case 'Move (m)' then
   mess=[' To move a block in  the active editor Scicos window';
         ' or in edited palette,'
         ' select first the Move menu item, '
@@ -122,7 +124,7 @@ case 'Move' then
 	' Right click cancel the move action']
 
 
-case 'Copy' then
+case 'Copy (c)' then
   mess=['To copy a block in the active editor Scicos window';
          ' select first the Copy menu item, then'
 	 ' click (with left button) on the to-be-copied block'
@@ -170,7 +172,7 @@ case 'Align' then
 	' A connected block cannot be aligned.']
 
 
-case 'Link' then
+case 'Link (l)' then
   mess=[' To connect an output port to an input port,';
         ' select first  the Link menu item, then click on the output';
 	' port, drag, click left on each intermediate points'
@@ -189,7 +191,7 @@ case 'Link' then
 	' '
 	' This menu remains active until user choose an other one']
 
-case 'Delete' then
+case 'Delete (d)' then
   mess=['To delete  blocks or a links, select first the Delete'
         ' menu item, then click successively on the selected objects'
 	'(with left button).';
@@ -216,7 +218,7 @@ case 'Add new block' then
       ' it was search in the current directory. The user may then'
       ' click at the desired position of the block icon ']
 
-case 'Flip' then
+case 'Flip (f)' then
     mess=[' To reverse the positions of the (regular) inputs'
 	  ' and outputs of a block placed on its sides,';
 	  ' select the Flip menu item first and then click on the';
@@ -227,7 +229,7 @@ case 'Flip' then
 	  ' A connected block cannot be flipped.']
 
 
-case  'Undo' then
+case  'Undo (u)' then
   mess=[' Select the Undo menu item to undo the last edit operation.'
         ' It is not possible to undo more!']
 
@@ -278,7 +280,7 @@ case 'Run' then
 	' and continue the simulation with the new values.']
 
 // Diagram menu ---------------------------------------------------
-case 'Replot' then
+case 'Replot (r)' then
   mess=[' Select the Replot menu item to replot the content of'
         ' the graphics window. Graphics window stores complete';
 	' history of the editing session in memory.';
@@ -305,7 +307,7 @@ case 'Rename' then
    mess=[' This menu allows to change the diagram name. An editable'
          '  dialog box opens.']
    
-case 'Save' then
+case 'Save (s)' then
    mess=[' select the save menu item to save the block diagram';
          ' in a binary file already selected by a previous';
 	 ' select the Save As menu item. If you select this';
@@ -370,7 +372,7 @@ case 'Navigator' then
 	 ' Navigator window is usefull to open directly a super-block'
 	 ' every where in the hierarchy.']
      
-case 'Exit' then
+case 'Quit (q)' then
   mess=[' Click on the Exit menu item to close current diagram. '
         ' If current diagram is not a Super block Exit menu item '
         ' leave Scicos and return to Scilab session. Save your diagram ';
@@ -379,7 +381,7 @@ case 'Exit' then
 	' File/Close menu as the same effect']
      
 //Object menu  --------------------------------------------------------
-case 'Open/Set' then     
+case 'Open/Set (o)' then     
  mess=[' To change the parameters of a regular block or link, '
        ' to open a super block, select first ';
        ' this menu item, click next on the desired object.'
@@ -415,19 +417,24 @@ case 'Label' then
        ' the desired label.';
        ' labels are used to import data from a block in an other one'];
  
-case 'Get Info' then     
+case 'Get Info (i)' then     
  mess=[' This menu allows to get information on an object and on '
        ' its connection with other diagram objects.'
        ' '
        ' Select this menu and click on an object'
        ' This menu remains selected']
-case 'Set block ID' then     
+case 'Identification' then     
  mess=[' This menu allows to set an identificator to a link or a block '
        ' block identificators are drawn under the block icon. Super blocks'
        ' input/output ports identificators are replicated over the block'
        ' shape ports. Links identificators are not displayed'
        ' '
        ' Selecting this menu and clicking on a block or links opens an'
+       ' editable dialog box']
+case 'Documentation' then     
+ mess=[' This menu allows to set or get documentation for a block '
+       ' '
+       ' Selecting this menu and clicking on a block  opens an'
        ' editable dialog box']
 
 end

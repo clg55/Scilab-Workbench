@@ -14,8 +14,8 @@ PARAMETERS
 
 DESCRIPTION
    t are cosine inverse of the x matrix. Diagonalization method is used. For
-  nonsymmetric matrices result may be inaccurate.One has t=-
-  %i*logm(x+%i*sqrtm(eye()-x*x))
+  nonsymmetric matrices result may be inaccurate.One has
+  t=-%i*logm(x+%i*sqrtm(eye()-x*x))
 
 EXAMPLE
   A=[1,2;3,4];

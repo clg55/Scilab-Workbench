@@ -14,9 +14,9 @@ PARAMETERS
        : real vector with non negative entries regularly spaced with incre-
        ment equal to one alpha=alpha0+(n1:n2)
 DESCRIPTION
-  bessely(alpha,x) computes K sub ALPHA modified Bessel functions of the
-  second kind, for real, non-negative order alpha and argument x.  alpha  and
-  x may be vectors.  The output is m-by-n with m = size(x,'*'), n =
+  bessely(alpha,x) computes K sub ALPHA modified Bessel functions of the sec-
+  ond kind, for real, non-negative order alpha and argument x.  alpha  and x
+  may be vectors.  The output is m-by-n with m = size(x,'*'), n =
   size(alpha,'*') whose (i,j) entry is bessely(alpha(j),x(i)).
 EXAMPLE
   bessely(0.5:3,1:4)

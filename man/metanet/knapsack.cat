@@ -25,7 +25,7 @@ DESCRIPTION
   m  knapsacks (m >= 1).  profit is the vector of the (integer) profits of
   the n items and weight is the vector of the corresponding (integer)
   weights.  capa is the vector of the (integer) capacities of the m knap-
-  sacks. bck is an optional integer: the maximum number of backtrackings to
+  sacks.  bck is an optional integer: the maximum number of backtrackings to
   be performed, if heuristic solution is required. If the exact solution is
   required bck can be omitted or can have a negative value.  earn is the
   value of the criterium for the "optimal" solution and ind is a vector giv-

@@ -1,3 +1,3 @@
-#define VERSION "Scilab-2.4.1"
+#define VERSION "Scilab-2.5"
 
-#define DEFAULT_MES "Scilab-2.4.1 Scilab Group (Inria, Enpc)"
+#define DEFAULT_MES "Scilab-2.5 Scilab Group (Inria, Enpc)"

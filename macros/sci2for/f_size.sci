@@ -55,10 +55,32 @@ function [stk,nwrk,txt,top]=f_size(nwrk)
 //!
 
 txt=[]
-s=stk(top)
-stk=list(list(s(4),'0','0','1','1'),list(s(5),'0','0','1','1'))
-
-
-
-
+if rhs==1 then
+  s=stk(top)
+  if lhs==1 then
+    [out,nwrk,t1]=outname(nwrk,'0','1','2')
+    if part(out,1:6)=='iwork(' then
+      pti=part(out,7:length(out)-1)
+      txt=[' iwork('+pti+') = '+s(4);
+	  ' iwork('+addf(pti,'1')+') = '+s(5);t1]
+    else
+      txt=[' '+out+'(1) = '+s(4);
+	  ' '+out+'(2) = '+s(5);]
+    end
+    stk=list(out,'-1','0','1','2')
+  else
+    stk=list(list(s(4),'0','0','1','1'),list(s(5),'0','0','1','1'))
+  end
+else
+  s1=stk(top)
+  top=top-1
+  s=stk(top)
+  if s1(1)=='''*''' then
+    stk=list(s(4)+'*'+s(5),'1','0','1','1')
+  elseif s1(1)=='''r'''| s1(1)=='1' then 
+    stk=list(s(4),'1','0','1','1')
+  elseif s1(1)=='''c'''| s1(1)=='2' then 	
+    stk=list(s(5),'1','0','1','1')
+  end
+end
 

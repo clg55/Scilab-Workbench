@@ -10,11 +10,9 @@ c
          return
       endif
       if ((2.0d0*x).eq.dble(int(2.d0*x))) then
-c     for compatibily with others change the two signs below
-c     -----we assume round(0.5)=0 round(-0.5)=0------------
-c     changing the signs gives round(0.5)=1 and round(-0.5)=-1
-         if (x.gt.0.d0) x=x-1.d-10
-         if (x.lt.0.d0) x=x+1.d-10
+c     changing the signs gives round(0.5)=0 round(-0.5)=0
+         if (x.gt.0.d0) x=x+1.d-10
+         if (x.lt.0.d0) x=x-1.d-10
       endif
       z = abs(x)
 c     -----testing Nans 

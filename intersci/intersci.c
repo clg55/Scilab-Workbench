@@ -10,6 +10,10 @@
 extern  char  *getenv();
 #endif
 
+#ifdef __ABSC__
+#define putenv(x) abs_putenv(x)
+#endif
+
 #include "intersci.h"
 
 static char buf[1024];
@@ -3284,24 +3288,36 @@ void WriteDeclaration(f)
   Dealing With Fortran OutPut 
   taking into account indentation and line breaks after column 72
 ***********************************************************/
-
+#ifdef __STDC__
+#include <stdarg.h>
+#else
 #include <varargs.h>
+#endif 
 
 #define MAXBUF 4096 
 char sbuf[MAXBUF];
 
+#ifdef __STDC__ 
+void Fprintf(FILE *f,int indent,char *format,...)
+#else 
 /*VARARGS0*/
 void Fprintf(va_alist) va_dcl
+#endif 
 {
-  int i,indent; 
+  int i; 
   static int count=0;
   va_list ap;
+#ifdef __STDC__
+  va_start(ap,format);
+#else
   FILE *f;
+  int indent;
   char *format;
   va_start(ap);
   f = va_arg(ap, FILE *);
   indent= va_arg(ap, int );
   format = va_arg(ap, char *);
+#endif
   vsprintf(sbuf,format,ap);
   for ( i = 0 ; i < (int) strlen(sbuf); i++) 
     {
@@ -3328,15 +3344,23 @@ void white(f,ind)
 
 
 
+#ifdef __STDC__ 
+void  FCprintf(FILE *f,char *format,...)
+#else
 /*VARARGS0*/
 void  FCprintf(va_alist) va_dcl
+#endif
 {
   va_list ap;
+#ifdef __STDC__
+  va_start(ap,format);
+#else
   FILE *f;
   char *format;
   va_start(ap);
   f = va_arg(ap, FILE *);
   format = va_arg(ap, char *);
+#endif
   vfprintf(f,format,ap);
   va_end(ap);
 }
@@ -3391,6 +3415,3 @@ static void SciEnv ()
     }
 }
 #endif /** WIN32 **/
-
-
-

@@ -8,14 +8,14 @@ c     Copyright INRIA
 c     
       parameter (nz1=nsiz-1,nz2=nsiz-2)
       logical eqid,eptover
-      integer semi,eol,blank,r,excnt,lparen,rparen,num,name
+      integer semi,eol,blank,r,excnt,lparen,rparen,num,name,percen
       integer id(nsiz),eye(nsiz),rand(nsiz),ones(nsiz),op,fun1
       integer star,dstar,comma,quote,cconc,extrac,rconc
       integer left,right,hat,dot,equal,colon
-      logical recurs,compil
+      logical recurs,compil,first,dotsep
       integer setgetmode
       
-      data star/47/,dstar/62/,semi/43/,eol/99/,blank/40/
+      data star/47/,dstar/62/,semi/43/,eol/99/,blank/40/,percen/56/
       data num/0/,name/1/,comma/52/,lparen/41/,rparen/42/
       data quote/53/,left/54/,right/55/,cconc/1/,extrac/3/,rconc/4/
       data hat/62/,dot/51/,equal/50/,colon/44/
@@ -33,6 +33,7 @@ c
      &        buf(5:8)//' sym:'//buf(9:12))
       endif
 c     
+      dotsep=.false.
       ir=r/100
       if(ir.ne.3) goto 01
       goto(25,26,99,29,99,51,43,48,55,62,65,66,41),r-300
@@ -46,6 +47,11 @@ c
       if (sym .eq. colon) then
          call getsym
 c     call eye()
+         if(comp(1).ne.0) then
+            if (compil(21,0,0,0,0)) then 
+               if (err.gt.0) return
+            endif
+         endif
          fun=6
          fin=13
          rhs=0
@@ -178,13 +184,20 @@ c
 c     --- named variable, function evaluation or matrix element   x(...)
 c     
  30   call putid(id,syn(1))
-      call getsym
+ 31   call getsym
+      
       if (sym .eq. lparen) then
 c     .     check for blank separator in matrix definition
          if(abs(lin(lpt(3)-2)).ne.blank.or.rstk(pt-2).ne.301) then
 c     .     it is really x(....)
+            dotsep=.false.
             goto 36
          endif
+      endif
+      if (sym.eq.dot.and.(abs(char1) .lt. blank.or.
+     $     char1.eq.percen)) then
+         dotsep=.true.
+         goto 36
       endif
       fin=0
       rhs = 0
@@ -238,32 +251,63 @@ c     x(...) :store object or function name
       rstk(pt)=0
       pstk(pt)=lhs
       call putid(ids(1,pt),id)
-c modif ss
-
+c     %% added for runtime set rhs args by list extraction (ss)
       fun1=fun
       fun=0
       if(id(1).ne.blank) then
          fin=-2
          call funs(id)
          if (fun .ne. 0) then
-c     name is a function name check if it is a call or a reference
+c     .     name is a function name, check if it is a call or a reference
          else
 c     .     allow indirect reference to variables
             fun=-1
          endif
+         lhs=1
+
+c       %% next lines added  for runtime set rhs args number
+         if(comp(1).ne.0) then
+            if (compil(21,0,0,0,0)) then 
+               if (err.gt.0) return
+            endif
+         endif
       endif
 
-      if(id(1).ne.blank) lhs=1
+
 c     
 c     eval function or variable arguments
  38   call getsym
 c     
-      if(sym.eq.rparen) then
+      if(.not.dotsep.and.sym.eq.rparen) then
 c     .  function has no input parameter
+         if(rstk(pt).lt.0) then
+c     .    a(...)()
+            call error(21)
+            if (err .gt. 0) return
+         endif
          excnt=-1
          goto 45
       endif
-c     
+c
+      if(dotsep) then
+         if (sym.ne.name) then
+            call error(2)
+            if (err .gt. 0) return
+         endif
+c     .  create a string variable containing name syn
+         icount=icount+1
+         if(comp(1).ne.0) then
+            if(compil(23,syn,0,0,0)) then
+               if(err.gt.0) return
+            endif
+         else
+            call name2var(syn)
+         endif
+         dotsep=.false.
+         excnt=excnt+1
+         goto 45
+      endif
+
       fun1=fun
       if(sym.eq.name.and.char1.eq.lparen) then
 c     . check for a function name
@@ -271,7 +315,7 @@ c     . check for a function name
          fin=-2
          call funs(syn)
          if (fun .ne. 0) then
-c     name is a function name check if it is a call or a reference
+c     .     name is a function name, check if it is a call or a reference
 
          else
             fun=fun1
@@ -332,6 +376,7 @@ c
  44   continue
 c     one more argument ?
       if (sym .eq. comma) go to 38
+
 c     end of argument sequence or recursive extraction ?
       if (sym .ne. rparen) then
          call error(3)
@@ -341,9 +386,30 @@ c         if (err .gt. 0) return
 c     
  45   continue
 c     end of argument sequence or recursive extraction 
-      recurs=.false.
       call getsym
-      if(sym.eq.lparen) then
+      recurs=.false.
+      if( sym .eq. dot.and.(abs(char1) .lt. blank.or.
+     $     char1.eq.percen)) then
+         dotsep=.true.
+c     .  recursive extraction
+         if(excnt.gt.1) then
+            if(comp(1).eq.0) then
+c     .     form  list with individual indexes
+               call mkindx(0,excnt)
+               if(err.gt.0) return
+            else
+               if (compil(19,0,excnt,0,0)) then 
+                  if (err.gt.0) return
+               endif
+            endif
+            excnt=1
+            recurs=.true.
+         endif
+         rstk(pt)=rstk(pt)-1
+         excnt=0
+c     .  get one more argument of the recursive extraction
+         goto 38
+      elseif(sym.eq.lparen) then
 c        . check for blank separator in matrix definition
          if(abs(lin(lpt(3)-2)).eq.blank.and.rstk(pt-3).eq.301) then
 c     .     end of argument sequence
@@ -351,8 +417,6 @@ c     .     end of argument sequence
          endif
 c     .  recursive extraction
          if(excnt.gt.1) then
-c            call error(3)
-c            return
             if(comp(1).eq.0) then
 c     .     form  list with individual indexes
                call mkindx(0,excnt)
@@ -517,5 +581,37 @@ c     *call* allops(dstar)
 c     
  99   call error(22)
       if (err .gt. 0) return
+      return
+      end
+
+      subroutine name2var(id)
+c     Copyright INRIA
+      include '../stack.h'
+c     given a variable name code in id, creates a string variable 
+c     on the top of the stack
+      integer id(nsiz)
+      character*(nlgh) name
+      integer iadr,sadr
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+
+      top=top+1
+      il=iadr(lstk(top))
+      err=sadr(il+6+nlgh)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      istk(il)=10
+      istk(il+1)=1
+      istk(il+2)=1
+      istk(il+3)=0
+      ilp=il+4
+      istk(ilp)=1
+      call namstr(id,istk(ilp+2),n,1)
+      istk(ilp+1)=n+1
+      lstk(top+1)=sadr(ilp+2+n)
       return
       end

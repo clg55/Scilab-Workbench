@@ -23,5 +23,5 @@ DESCRIPTION
 
   metanet_sync(1) changes to synchronous mode.
 
-  metanet_sync() returns the current mode (0 = asynchronous, 1 = synchro-
-  nous).
+  metanet_sync() returns the current mode (0 = asynchronous, 1 = syn-
+  chronous).

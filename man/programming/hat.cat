@@ -9,8 +9,8 @@ CALLING SEQUENCE
 DESCRIPTION
   Exponentiation of matrices or vectors by a constant vector.
 
-  If A is a vector or a rectangular matrix the exponentiation is done
-  element-wise, with the usual meaning.
+  If A is a vector or a rectangular matrix the exponentiation is done ele-
+  ment-wise, with the usual meaning.
 
   For square A matrices the exponentiation is done in the matrix sense.
 

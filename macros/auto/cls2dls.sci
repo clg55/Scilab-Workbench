@@ -11,8 +11,7 @@ function [s1]=cls2dls(s,t,fp)
 // Copyright INRIA
 [lhs,rhs]=argn(0)
 
-//-compat type(s)<>15 retained for list/tlist compatibility
-if type(s)<>15&type(s)<>16 then error(91,1),end
+if type(s)<>16 then error(91,1),end
 flag=s(1); 
 if flag(1)<>'lss' then error(91,1),end
 if s(7)==[] then warning('cls2dls: s is assumed continuous time');s(7)='c';end
@@ -26,7 +25,7 @@ a=2*fs*eye()-s(2)
 ad=a\(2*fs*eye()+s(2))
 b=(ad+eye())/a*s(3);
 d=s(5)+s(4)/a*s(3)
-s1=syslin('c',ad,b,s(4),d,s(6))
+s1=syslin('d',ad,b,s(4),d,s(6))
 
 
 

@@ -32,7 +32,7 @@ DESCRIPTION
   See a Fortran book for more precision.
 
   Direct access files : x=write(file_desc,a,k,format).  Here k is the vector
-  of records (one record by row, i.e. m=prod(size(k))
+  of records (one record by row, i.e.  m=prod(size(k))
 
   write(%io(2),....) writes on Scilab's window.
 

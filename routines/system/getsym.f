@@ -97,8 +97,8 @@ c
       if (abs(sym) .ge. csiz) call basout(io,wte, ' eol')
       if (sym .eq. name) call prntid(syn(1),1,wte)
       if (sym .eq. num) then
-         write(buf(1:9),'(1x,g8.2)') syv
-         call basout(io,wte,buf(1:8))
+         write(buf(1:11),'(1x,e10.3))') syv
+         call basout(io,wte,buf(1:11))
       endif
       return
       end

@@ -7,7 +7,7 @@ path=stripblanks(path)
 if part(path,length(path))<>'/' then path=path+'/',end
 if part(path,1:4)=='SCI/' then path=SCI+part(path,4:length(path)),end
 if part(path,1:2)=='~/' then path=getenv('HOME')+part(path,2:length(path)),end
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+if MSDOS then
   lst=unix_g('dir /b '+strsubst(path,'/','\')+'*.sci')
 else
   lst=unix_g('ls '+path+'*.sci')
@@ -17,7 +17,7 @@ nold=size(who('get'),'*')
 prot=funcprot();funcprot(0)
 
 for k=1:size(lst,'*')
-  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+  if MSDOS then
     getf(path+lst(k))
   else
     getf(lst(k))

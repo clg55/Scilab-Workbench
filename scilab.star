@@ -6,7 +6,7 @@ mode(-1);  // silent execution mode
 // clean database when restarted
 predef(0); //unprotect all variables 
 clear  // erase all variables 
-
+clear %helps scicos_pal // explicitly clear %helps scicos_pal variables
 // Set stack size
 newstacksize=1000000;
 old=stacksize()
@@ -20,9 +20,11 @@ write(%io(2),t)
 clear t;
 
 // Special variables definition
-%inf=10000.3^10000.3;%nan=%inf-%inf;
+ieee(2);%inf=1/0;ieee(0);%nan=%inf-%inf;
+
 %s=poly(0,'s');%z=poly(0,'z');
 $=poly(0,'$')
+
 %T=%t;%F=%f;       // boolean variables
 SCI=getenv('SCI')  // path of scilab main directory
 if getenv('WIN32','NO')=='OK' then
@@ -33,6 +35,7 @@ end
 errcatch(48,'continue');
 write(%io(2),'  loading initial environment')
 load('SCI/macros/mtlb/lib')
+load('SCI/macros/int/lib')
 load('SCI/macros/algebre/lib')
 load('SCI/macros/arma/lib')
 load('SCI/macros/auto/lib')
@@ -60,21 +63,51 @@ if home=='ndef',home=unix_g('cd; pwd');end
 
 // use MSDOS syntax?
 MSDOS = %f
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+if getenv('WIN32','NO')=='OK' & (getenv('COMPILER','NO')=='VC++' | getenv('COMPILER','NO')=='ABSOFT') then
   MSDOS = %t
 end
 
+
 // Protect variable previously defined 
 clear ans
-predef() 
+predef('all') 
+
+//Scilab Help Chapters 
+
+%helps =['/man/programming'	,'Scilab Programming';
+	'/man/graphics'		,'Graphic Library';
+	'/man/elementary'	,'Utilities and Elementary Functions';
+	'/man/linear'		,'Linear Algebra';
+	'/man/polynomials'	,'Polynomial calculations';
+	'/man/dcd'		,'Cumulative Distribution Functions; Inverses, grand';
+	'/man/control'		,'General System and Control macros';
+	'/man/robust'		,'Robust control toolbox';
+	'/man/nonlinear'	,'Non-linear tools (optimization and simulation)';
+	'/man/signal'		,'Signal Processing toolbox';
+	'/man/fraclab'		,'Fractal Signal Analysis';
+	'/man/arma'		,'Arma modelisation and simulation toolbox';
+	'/man/metanet'		,'Metanet: graph and network toolbox';
+	'/man/scicos'		,'Scicos: Bloc diagram editor and simulator';
+	'/man/sound'		,'wav file handling';
+	'/man/translation'	,'Language or data translations';
+	'/man/pvm'		,'PVM parallel toolbox';
+	'/man/comm'		,'GECI communication toolbox';
+	'/man/tdcs'		,'TdCs';
+	'/man/tksci'		,'TCL/Tk interface']
+
+%helps=[ SCI+%helps(:,1),%helps(:,2)];
+clear %c_a_c
+
 // Define scicos palettes of blocks
-scicos_pal=['Inputs/Outputs','SCI/macros/scicos/Inputs_Outputs.cosf'
+scicos_pal=['Inputs_Outputs','SCI/macros/scicos/Inputs_Outputs.cosf'
       'Linear','SCI/macros/scicos/Linear.cosf';
-      'Non linear','SCI/macros/scicos/Non_linear.cosf';
+      'Non_linear','SCI/macros/scicos/Non_linear.cosf';
       'Events','SCI/macros/scicos/Events.cosf';
       'Treshold','SCI/macros/scicos/Treshold.cosf';
       'Others','SCI/macros/scicos/Others.cosf';
       'Branching','SCI/macros/scicos/Branching.cosf'];
+// define graphics mode for Scicos (with or without scroll bar) 
+MODE_X = 1 // one meens with
 
 // calling user initialization
 //=============================

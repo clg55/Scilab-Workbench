@@ -1,5 +1,5 @@
 
-GRAYPLOT(2)                    Scilab Function                    GRAYPLOT(2)
+grayplot(2)                    Scilab Function                    grayplot(2)
 NAME
   grayplot - 2D plot of a surface using colors
 
@@ -8,26 +8,30 @@ CALLING SEQUENCE
 
 PARAMETERS
 
-  x,y       : real vectors of size respectively (1,n1) and (1,n2).
+  x,y  : real row vectors of size n1 and n2.
 
-  z         : real matrix of size (n1,n2) (values of f)
+  z    : real matrix of size (n1,n2). z(i,j) is the value of the surface at
+       the point (x(i),y(j)).
 
   strf,rect,nax
-            : optional arguments, ( see plot2d)
+       : see plot2d.
 
 DESCRIPTION
-  The surface is given by values z(i,j)=f(x(i),y(j)) on a grid defined by
-  x,y.  Each rectangle on the grid is filled with a gray level depending on
-  the average value of f on the corners of the rectangle.
+  grayplot makes a 2D plot of the surface given by z on a grid defined by x
+  and y.  Each rectangle on the grid is filled with a gray or color level
+  depending on the average value of z on the corners of the rectangle.
 
   Enter the command grayplot() to see a demo.
 
 EXAMPLE
-  x=-10:10;y=-10:10;m=rand(21,21);
-  grayplot(x,y,m,"111",[-20,-20,20,20]);
+  x=-10:10; y=-10:10;m =rand(21,21);
+  grayplot(x,y,m,"111",[-20,-20,20,20])
+  t=-%pi:0.1:%pi; m=sin(t)'*cos(t);
+  xbasc()
+  grayplot(t,t,m)
 
 SEE ALSO
-  Sgrayplot, Sfgrayplot, fgrayplot
+  fgrayplot, plot2d, Sgrayplot, Sfgrayplot
 
 AUTHOR
-  J.Ph.C..
+  J.Ph.C.

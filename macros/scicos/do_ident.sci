@@ -1,7 +1,7 @@
 function scs_m = do_ident(scs_m)
 // Copyright INRIA
 while %t
-  [btn,xc,yc,win,Cmenu]=getclick()
+  [btn,xc,yc,win,Cmenu]=cosclick()
   if Cmenu<>[] then
     Cmenu=resume(Cmenu)
   end

@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 /* SCILAB - win/wgetfile.c 
  *   Jean-Philippe Chancelier 
  * A terminer 

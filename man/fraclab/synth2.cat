@@ -12,8 +12,8 @@ Usage
 
   [B] = synth2(M,H,core)
 Input parameters
-       o  M  : Positive integer Vertical/Horizontal dimension of the gen-
-         erated field
+       o  M  : Positive integer Vertical/Horizontal dimension of the gener-
+         ated field
        o  H  : Real in [0,1] parameter of the structure function (e.g. :
          Hurst parameter)
        o  core  : string Name of the structure function of type core(x,y,H)

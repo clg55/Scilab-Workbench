@@ -7,12 +7,12 @@ CALLING SEQUENCE
   x=A\b
 
 DESCRIPTION
-  Backslash denotes left matrix division. x=A\b is a solution to A*x=b.
+  Backslash denotes left matrix division.  x=A\b is a solution to A*x=b.
 
   If A is nonsingular x=A\b (uniquely defined) is equivalent to x=inv(A)*b.
 
-  If A is singular, x is a least square solution.  i.e. norm(A*x-b) is
-  minimal. If A is full column rank, the least square solution, x=A\b, is
+  If A is singular, x is a least square solution.  i.e. norm(A*x-b) is mini-
+  mal. If A is full column rank, the least square solution, x=A\b, is
   uniquely defined (there is a unique x which minimizes norm(A*x-b)).  If A
   is not full column rank, then the least square solution is not unique, and
   x=A\b, in general, is not the solution with minimum norm (the minimum norm

@@ -1,4 +1,3 @@
-
 SHELL = /bin/sh
 SCIDIR=../..
 SCIDIR1=..\..
@@ -114,6 +113,8 @@ OBJSF =
 include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS) -I..
+
+FFLAGS = $(FC_OPTIONS)
 
 include ../Make.lib
 
@@ -301,7 +302,18 @@ sim_stable.o: sim_stable.h
 
 
 
-all:: Makefile.mak
+all:: Makefile.mak Makefile.amk
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.amk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
+
+
+
+
+
+
+
+

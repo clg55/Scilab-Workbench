@@ -8,6 +8,7 @@ c
       common/ierode/iero
       common/odecd/nd,iflag
 c     
+      logical allowptr
       double precision t(*), y(*),ydot(*)
       integer vol,tops,nordre
       data nordre/1/,mlhs/1/

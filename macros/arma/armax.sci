@@ -80,7 +80,7 @@ end;
 // la variance du bruit residuel
  sig2= resid*resid'/(n2-t0+1)
 // l'ecart type
- sig=sqrt(sig2);
+ sig=sqrtm(sig2);
  a=[eye(ny,ny),-coef(:,1:r*ny)];
  if b0f==0 then
    b=coef(:,r*ny+1:(s+1)*nu+r*ny);
@@ -109,9 +109,11 @@ if prf==1;
      write(%io(2),"  Standard deviation of the estimator a :");
      form_a='(5x,'+string(nca)+'(f7.5,1x))';
      write(%io(2),la(2)-a,form_a);
-     write(%io(2),"  Standard deviation of the estimator b :");
-     [nlb,ncb]=size(lb(2));
-     write(%io(2),lb(2)-b,'(5x,'+string(ncb)+'(f7.5,1x))');
+     if nu<>0 then 
+       write(%io(2),"  Standard deviation of the estimator b :");
+       [nlb,ncb]=size(lb(2));
+       write(%io(2),lb(2)-b,'(5x,'+string(ncb)+'(f7.5,1x))');
+     end 
    end
 end
 

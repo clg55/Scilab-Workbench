@@ -10,14 +10,6 @@ else
   path=scs_m(1)(2)(2)
 end
 //open file
-
-fname=path+scs_m(1)(2)(1)+'.cos'
-[u,err]=file('open',fname,'unknown','unformatted')
-if err<>0 then
-  message('Directory write access denied')
-  ok=%f
-  return
-end
 if ~super_block&~pal_mode then
   //update cpr data structure to make it coherent with last changes
   if needcompile==4 then
@@ -30,6 +22,13 @@ if ~super_block&~pal_mode then
 else
   cpr=list()
 end
+fname=path+scs_m(1)(2)(1)+'.cos'
+[u,err]=mopen(fname,'wb')
+if err<>0 then
+  message('Directory write access denied')
+  ok=%f
+  return
+end
 //save
 errcatch(49,'continue','nomessage')
 save(u,scicos_ver,scs_m,cpr)
@@ -38,10 +37,10 @@ if iserror(49)==1 then
   message('File write access denied')
   errclear(49)
   ok=%f
-  file('close',u)
+  mclose(u)
   return
 end
-file('close',u)
+mclose(u)
 if pal_mode then update_scicos_pal(path,scs_m(1)(2)(1),fname),end
 ok=%t
 

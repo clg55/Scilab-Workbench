@@ -18,7 +18,9 @@ OBJS =  maxi.dia norm.dia matops.dia scilab.dia macro.dia calpol.dia clause.dia 
 	bvode.dia feval.dia auto.dia \
 	odedc.dia sound.dia listinsertion.dia listextraction.dia \
 	links.dia strelm.dia gsort.dia fmlelm.dia odedi.dia dcd.dia \
-	grand.dia grandb.dia resume.dia errcatch.dia
+	grand.dia grandb.dia resume.dia errcatch.dia arma.dia \
+	msscanf.dia msprintf.dia binary.dia mfprintf.dia mfscanf.dia \
+	fscanfMat.dia global.dia matsys.dia saveload.dia
 
 all:: info
 

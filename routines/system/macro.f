@@ -6,7 +6,7 @@ c
       parameter (nz2=nsiz-2,nz3=nsiz-3)
       double precision val
       integer eol
-      logical eqid,ptover,vargin,vargout
+      logical eqid,ptover,vargin,vargout,exec
       integer blank,r,ival(2),ptr,top1,count,iadr
       integer varargin(nsiz),varargout(nsiz)
       equivalence (ival(1),val)
@@ -38,6 +38,7 @@ c
 c     
       if(istk(ilk).eq.10) then
 c     an execstr
+         exec=.false.
          mrhs=0
          rhs=0
          mlhs=0
@@ -50,6 +51,7 @@ c     an execstr
          endif
       else
 c     a macro
+         exec=rstk(pt).eq.909.or.rstk(pt).eq.903
          wmac=0
          if(nmacs.gt.0) then
             do 15 im=1,nmacs
@@ -61,6 +63,19 @@ c     a macro
  16         continue
          endif
          l=ilk+1
+         if(exec) then
+            vargout=.false.
+            last=isiz-4
+            mlhs=istk(l)
+            l=l + nsiz*mlhs + 1
+            mrhs=istk(l)
+            l=l+1
+            l = l + nsiz*mrhs + 1
+            rhs=0
+            lhs=0
+            goto 17
+c     .    exec(macro)
+         endif
          mrhs=0
          last=bot
 c     set output variable name
@@ -98,7 +113,7 @@ c     set input variable name
          endif
       endif
 c     save line pointers
-      k = lpt(6)
+ 17   k = lpt(6)
       if(k+13+nsiz.gt.lsiz) then
          call error(108)
          return
@@ -139,12 +154,16 @@ c     set line pointers
       lpt(3) = lpt(1)
       lpt(2) = lpt(1)
 c     c_ex lct(1) = 0
-      if (ddt .ne. 2) lct(4)=-1
+      if(.not.exec) then
+         if (ddt .ne. 2) lct(4)=-1
+      else
+         lct(4)=pstk(pt-1)
+      endif
       char1 = blank
       lin(lpt(4)+1)=blank
 c     
 c     save input variables
-      if(comp(1).eq.0) then
+      if(comp(1).eq.0.and..not.exec) then
          if( mrhs.gt.0) then
              if(vargin.and.rhs.ge.mrhs-1) then
                call mklist(rhs-mrhs+1)
@@ -195,7 +214,7 @@ c     handle errcatch
          err1=0
          err2=0
       endif
-
+      exec=rstk(pt-1).eq.909.or.rstk(pt-1).eq.903
 c     restaure  pointers
       k = lpt(1) - (13+nsiz)
       ilk=lin(k+6)
@@ -216,7 +235,7 @@ c
          macr=macr-1
          goto 47
       endif
-      if(istk(ilk).ne.10) then
+      if(istk(ilk).ne.10.and..not.exec) then
 c     recopie des variables de sorties en haut de la pile
          l0=ilk+1
 c     set output variable name
@@ -255,7 +274,7 @@ c     extract required output variables out of varargout
       endif
 c     
       macr=macr-1
-      if(istk(ilk).eq.10) goto 48
+      if(istk(ilk).eq.10.or.exec) goto 48
       bot=lin(k+5)
       if(lhsr.ne.0) then
 c     gestion des variables retournees par resume
@@ -276,6 +295,8 @@ c     .     preserve names stored in the macro if macro is moved
             do 43 i=1,lhsr
                call putid(ids(1,pt+i),istk(lc))
                lc=lc+nsiz+1
+c     .        next line to skip print opcode (test for compatibility)
+               if(istk(lc-1).eq.22) lc=lc+2
  43         continue
             do 44 i=1,lhsr
                call stackp(ids(1,pt+i),0)

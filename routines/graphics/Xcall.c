@@ -30,6 +30,7 @@
 
 #include "periPos.h"
 #include "periFig.h"
+#include "periGif.h"
 
 /*---------------------------------------------------------------
  * The basic graphic driver is X11 
@@ -79,12 +80,14 @@ OpTab keytab_x_[] ={
   {"xget",C2F(MissileGCget)},
   {"xgetdr",GetDriver1},
   {"xgetmouse",C2F(xgetmouse)},
+  {"xgfont",C2F(queryfamily)},
   {"xinfo",C2F(xinfo)},
   {"xinit",C2F(initgraphic)},
   {"xlfont",C2F(loadfamily)},
   {"xlines",C2F(drawpolyline)},
   {"xliness",C2F(fillpolylines)},
   {"xmarks",C2F(drawpolymark)},
+  {"xname", C2F(setpopupname)},
   {"xnum",C2F(displaynumbers)},
   {"xpause", C2F(xpause)},
   {"xpolys", C2F(drawpolylines)},
@@ -121,12 +124,14 @@ OpTab keytabPos[] ={
   {"xget",C2F(scilabgcgetPos)},
   {"xgetdr",GetDriver1},
   {"xgetmouse",C2F(xgetmousePos)},
+  {"xgfont",C2F(queryfamilyPos)},
   {"xinfo",C2F(vide)},
   {"xinit",C2F(initgraphicPos)},
   {"xlfont",C2F(loadfamilyPos)},
   {"xlines",C2F(drawpolylinePos)},
   {"xliness",C2F(fillpolylinesPos)},
   {"xmarks",C2F(drawpolymarkPos)},
+  {"xname", C2F(vide)},
   {"xnum",C2F(displaynumbersPos)},
   {"xpause", C2F(xpausePos)},
   {"xpolys" ,C2F(drawpolylinesPos)},
@@ -146,8 +151,6 @@ OpTab keytabPos[] ={
   {(char *) NULL,C2F(vide)}
 };
 
-
-
 OpTab keytabXfig_[] ={
   {"xarc",C2F(drawarcXfig)},
   {"xarcs", C2F(drawarcsXfig)},
@@ -165,12 +168,14 @@ OpTab keytabXfig_[] ={
   {"xget",C2F(scilabgcgetXfig)},
   {"xgetdr",GetDriver1},
   {"xgetmouse",C2F(xgetmouseXfig)},
+  {"xgfont",C2F(queryfamilyXfig)},
   {"xinfo",C2F(vide)},
   {"xinit",C2F(initgraphicXfig)},
   {"xlfont",C2F(loadfamilyXfig)},
   {"xlines",C2F(drawpolylineXfig)},
   {"xliness",C2F(fillpolylinesXfig)},
   {"xmarks",C2F(drawpolymarkXfig)},
+  {"xname",  C2F(vide)},
   {"xnum",C2F(displaynumbersXfig)},
   {"xpause", C2F(xpauseXfig)},
   {"xpolys" ,C2F(drawpolylinesXfig)},
@@ -190,6 +195,49 @@ OpTab keytabXfig_[] ={
   {(char *) NULL,C2F(vide)}
 };
 
+OpTab keytabGif[] ={
+  {"xarc",C2F(drawarcGif)},
+  {"xarcs", C2F(drawarcsGif)},
+  {"xarea",C2F(fillpolylineGif)},
+  {"xarrow",C2F(drawarrowsGif)},
+  {"xaxis",C2F(drawaxisGif)},
+  {"xclea", C2F(clearareaGif)},
+  {"xclear",C2F(clearwindowGif)},
+  {"xclick",C2F(xclickGif)},
+  {"xclickany",C2F(xclick_anyGif)},
+  {"xend", C2F(xendGif)},
+  {"xfarc",C2F(fillarcGif)},
+  {"xfarcs",C2F(fillarcsGif)},
+  {"xfrect",C2F(fillrectangleGif)},
+  {"xget",C2F(scilabgcgetGif)},
+  {"xgetdr",GetDriver1},
+  {"xgetmouse",C2F(xgetmouseGif)},
+  {"xgfont",C2F(queryfamilyGif)},
+  {"xinfo",C2F(vide)},
+  {"xinit",C2F(initgraphicGif)},
+  {"xlfont",C2F(loadfamilyGif)},
+  {"xlines",C2F(drawpolylineGif)},
+  {"xliness",C2F(fillpolylinesGif)},
+  {"xmarks",C2F(drawpolymarkGif)},
+  {"xname",  C2F(vide)},
+  {"xnum",C2F(displaynumbersGif)},
+  {"xpause", C2F(xpauseGif)},
+  {"xpolys" ,C2F(drawpolylinesGif)},
+  {"xrect",C2F(drawrectangleGif)},
+  {"xrects",C2F(drawrectanglesGif)},
+  {"xreplay",Tape_Replay},
+  {"xreplayna",Tape_ReplayNewAngle},
+  {"xreplaysc",Tape_ReplayNewScale},
+  {"xreplaysh",Tape_Replay_Show},
+  {"xsegs",C2F(drawsegmentsGif)},
+  {"xselect",C2F(xselgraphicGif)},
+  {"xset",C2F(scilabgcsetGif)},
+  {"xsetdr",C2F(SetDriver)},
+  {"xstart",CleanPlots},
+  {"xstring",C2F(displaystringGif)},
+  {"xstringl",C2F(boundingboxGif)},
+  {(char *) NULL,C2F(vide)}
+};
 
 
 static char DriverName[]= "Rec";
@@ -218,6 +266,10 @@ int C2F(dr)(x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4,lx0,lx1)
       C2F(all)(keytabXfig_,x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
       break;
     case 'G':
+      if (DriverName[1] == 'I') {
+          C2F(all)(keytabGif,x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+          break;
+      }
     case 'X':
     case 'W':
     case 'R':
@@ -249,6 +301,10 @@ void C2F(SetDriver)(x0, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
       strcpy(DriverName,"Int"); /* internal : for Win32 */
       break;
     case 'G':
+      if (x0[1] == 'I') {
+          strcpy(DriverName,"GIF");
+          break;
+      }
     case 'X':
     case 'W':
       strcpy(DriverName,"X11");
@@ -397,6 +453,43 @@ void C2F(test_all)(tab,x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4)
   CleanPlots(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
   C2F(displaystringXfig)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
   C2F(boundingboxXfig)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+
+  C2F(drawarcGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(fillarcsGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(drawarcsGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(fillpolylineGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(drawarrowsGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(drawaxisGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(clearareaGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(clearwindowGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(xclickGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(xendGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(fillarcGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(fillrectangleGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(scilabgcgetGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  GetDriver1(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(xgetmouseGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(vide)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(initgraphicGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(loadfamilyGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(drawpolylineGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(fillpolylinesGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(drawpolymarkGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(displaynumbersGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(xpauseGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(drawpolylinesGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(drawrectangleGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(drawrectanglesGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_Replay(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_ReplayNewAngle(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_ReplayNewScale(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(drawsegmentsGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(xselgraphicGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(scilabgcsetGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(SetDriver)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  CleanPlots(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(displaystringGif)(x1,x2,x3, x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  C2F(boundingboxGif)(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
 }
 
 #endif 

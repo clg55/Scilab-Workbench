@@ -3,7 +3,7 @@ function [mod,scs_m]=do_label(scs_m)
 // Copyright INRIA
 mod=%f
 while %t
-  [btn,xc,yc,win,Cmenu]=getclick()
+  [btn,xc,yc,win,Cmenu]=cosclick()
   if Cmenu<>[] then
     Cmenu=resume(Cmenu)
   end

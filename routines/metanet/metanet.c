@@ -20,14 +20,18 @@
 #include "../libcomm/libCom.h"
 #include "netcomm.h"
 
-#ifdef __MSC__ 
+#if (defined __MSC__) || (defined __ABSC__)
 /** gethostname exists metanet not implemented in windows **/
 /**void gethostname(char *str,int len) { 
   strncpy(str,"BUG",len);
 } **/
 #include <winsock2.h>
 /** only used for x=dir[1024] **/
+#ifndef __ABSC__
 #define  getwd(x) _getcwd(x,1024); 
+#else
+#define getwd(x) getcwd_(x,1024)
+#endif
 #endif
 
 #ifdef __MINGW32__ 
@@ -39,7 +43,7 @@ int PASCAL gethostname( char * name,  int namelen  );
 #endif
 
 extern void cerro();
-extern void cout();
+extern void Cout();
 
 extern int isGeci;
 
@@ -258,7 +262,7 @@ int s;
 
   if (theNetwindow == s) {
     sprintf(str,"Warning: current Metanet window %d has been closed",s);
-    cout(str);
+    Cout(str);
     theNetwindow = 0;
   }
 }

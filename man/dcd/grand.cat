@@ -28,9 +28,9 @@ PARAMETERS
        : Generates random deviates from a binomial distribution whose number
        of trials is N and whose  probability of an event in each trial is P.
        N is the number of trials in the binomial distribution from which a
-       random deviate is to be generated. P is the probability of an event in
-       each trial of the binomial distribution from which a random deviate is
-       to be generated. (0.0 <= P <= 1.0)
+       random deviate is to be generated.  P is the probability of an event
+       in each trial of the binomial distribution from which a random deviate
+       is to be generated.  (0.0 <= P <= 1.0)
 
        Method: This is algorithm BTPE from:  Kachitvichyanukul, V. and
        Schmeiser, B. W. Binomial Random Variate Generation. Communications of
@@ -38,8 +38,8 @@ PARAMETERS
 
   Y=grand(m,n,'chi',Df), Y=grand(x,'chi',Df)
        : Generates random deviates from the distribution of a chisquare with
-       DF degrees of freedom random variable. Uses relation between chisquare
-       and gamma.
+       DF degrees of freedom random variable.  Uses relation between
+       chisquare and gamma.
 
   Y=grand(m,n,'def'), Y=grand(x,'def')
        : Returns random floating point numbers from a uniform distribution
@@ -57,7 +57,7 @@ PARAMETERS
   Y=grand(m,n,'f',Dfn,Dfd), Y=grand(x,'f',Dfn,Dfd)
        : Generates random deviates from the F (variance ratio) distribution
        with DFN degrees of freedom in the numerator and DFD degrees of free-
-       dom in the denominator. Method: Directly generates ratio of chisquare
+       dom in the denominator.  Method: Directly generates ratio of chisquare
        variates
 
   Y=grand(m,n,'gam',Shape,Scale), Y=grand(x,'gam',Shape,Scale)
@@ -112,7 +112,7 @@ PARAMETERS
        sition matrix P. Initial state is  given by x0
 
   Y=grand(M,'mul',N,P)
-       Generate M observation from the Multinomial distribution. N is the
+       Generate M observation from the Multinomial distribution.  N is the
        Number of events that will be classified into one of the categories
        1..NCAT P is the vector of probabilities. P(i) is the probability that
        an event will be classified into category i. Thus, P(i) must be [0,1].
@@ -136,7 +136,7 @@ PARAMETERS
   Y=grand(m,n,'nch',Df,Xnon), Y=grand(x,'nch',Df,Xnon)
        : Generates random deviates from the distribution of a noncentral
        chisquare with DF degrees of freedom and noncentrality parameter
-       XNONC. DF is he degrees of freedom of the chisquare (Must be >= 1.0)
+       XNONC.  DF is he degrees of freedom of the chisquare (Must be >= 1.0)
        XNON the Noncentrality parameter of the chisquare  (Must be >= 0.0)
        Uses fact that noncentral chisquare is the sum of a chisquare deviate
        with DF-1 degrees of freedom plus the square of a normal deviate with
@@ -146,16 +146,16 @@ PARAMETERS
        : Generates random deviates from the noncentral F (variance ratio)
        distribution with DFN degrees of freedom in the numerator, and DFD
        degrees of freedom in the denominator, and noncentrality parameter
-       XNONC. DFN is the numerator degrees of freedom  (Must be >= 1.0) DFD
+       XNONC.  DFN is the numerator degrees of freedom  (Must be >= 1.0) DFD
        is the Denominator degrees of freedom (Must be positive) XNON is the
-       Noncentrality parameter (Must be nonnegative) Method:  Directly gen-
-       erates ratio of noncentral numerator chisquare variate
+       Noncentrality parameter (Must be nonnegative) Method:  Directly gener-
+       ates ratio of noncentral numerator chisquare variate
         to central denominator chisquare variate.
 
   Y=grand(m,n,'nor',Av,Sd), Y=grand(x,'nor',Av,Sd)
        : Generates random deviates from a normal distribution with mean, AV,
        and standard deviation, SD.  AV is the mean of the normal distribu-
-       tion. SD is the standard deviation of the normal distribution. For
+       tion.  SD is the standard deviation of the normal distribution.  For
        details see: Ahrens, J.H. and Dieter, U. Extensions of Forsythe's
        Method for Random Sampling from the Normal Distribution. Math. Com-
        put., 27,124 (Oct. 1973), 927 - 937.
@@ -193,13 +193,13 @@ PARAMETERS
        ISEED2. The seeds and states of the other generators remain unchanged.
 
   Y=grand(m,n,'uin',Low,High), Y=grand(x,'uin',Low,High)
-       : Generates integers uniformly distributed between LOW and HIGH. Low
+       : Generates integers uniformly distributed between LOW and HIGH.  Low
        is the low bound (inclusive) on integer value to be generated.  High
        is the high bound (inclusive) on integer value to be generated.  If
        (HIGH-LOW) > 2,147,483,561 prints error message
 
   Y=grand(m,n,'unf',Low,High),Y=grand(x,'unf',Low,High)
-       : Generates reals uniformly distributed between LOW and HIGH. Low is
+       : Generates reals uniformly distributed between LOW and HIGH.  Low is
        the  low bound (exclusive) on real value to be generated High is the
        high bound (exclusive) on real value to be generated
 
@@ -248,7 +248,6 @@ CONCEPTS
   generators.  Each virtual generator contains 2^20 (=1,048,576) blocks   of
   non-overlapping   random  numbers.   Each  block is   2^30 (=1,073,741,824)
   in length.
-
   The state of a generator  is determined by two  integers called seeds.  The
   seeds can be  initialized  by the  user; the initial values of the first
   must lie between 1 and 2,147,483,562, that of the second between 1 and
@@ -286,8 +285,8 @@ TEST EXAMPLE
   for  method one and generator 2  to obtain the  data.  Then reset the state
   to the beginning  of the current  block and do the same  for the second
   method.  This assures that the initial data  for method two is that used by
-  method  one.  When both  have concluded,  advance the block for both gen-
-  erators.
+  method  one.  When both  have concluded,  advance the block for both gener-
+  ators.
 
 INTERFACE
   A random number is obtained either  as a random  integer between 1 and

@@ -1,55 +1,65 @@
 
 contour(2)                     Scilab Function                     contour(2)
 NAME
-  contour - level curves of surface
+  contour - level curves on a 3D surface
 
 CALLING SEQUENCE
-  contour(x,y,z,nz,[theta,alpha,caption,flag,bbox,zlev])
-  contour2d(x,y,z,nz,[style,strf,leg,rect,nax])
+  contour(x,y,z,nz,[theta,alpha,leg,flag,ebox,zlev])
 
 PARAMETERS
 
-  x,y       : two real vectors of size respectively (1,n1) and (1,n2).
+  x,y   : two real row vectors of size n1 and n2.
 
-  z         : real matrix of size (n1,n2) (values)
+  z     : real matrix of size (n1,n2), the values of the function.
 
-  nz        : real vector of size > 1 (the level values)  or an integer ( the
-            number of level curves ).
+  nz    : the level values or the number of levels.
 
-  flag      : is a real vector of size three [mode,type,box]
+        -  If nz is an integer, its value gives the number of level curves
+           equally spaced from zmin to zmax.
 
-  zlev      : real number
+        -  If nz is a vector, nz(i) gives the value of the ith level curve.
 
-  [theta,alpha,caption,flag,bbox,zlev]
-            : see plot3d
+  theta,alpha,leg,flag,ebox
+        : see plot3d.
 
-  [style,strf,leg,rect,nax]
-            : (see plot2d). The argument style gives the dash styles or
-            colors which are to be used for level curves. It must have the
-            same size as the requested level curves. The other arguments fol-
-            lows the rules given in plot2d.
+  zlev  : real number.
 
 DESCRIPTION
-  Draws level curves of a surface z=f(x,y). The level curves can be drawn on
-  a 3D surface or on 2D plot. For level curves on a 2d plot, the function
-  contour2d should be preferred to the function contour since it accepts
-  standard 2d parameters [style,strf,leg,rect,nax]. for level curves on a 3d
-  plot, the optional arguments are the same as for the function plot3d
-  (except zlev ) and their meaning are the same. They control the drawing of
-  level curves on a 3D plot.  Only flag(1)=mode has a special meaning.
+  contour draws level curves of a surface z=f(x,y). The level curves are
+  drawn on a 3D surface. The optional arguments are the same as for the func-
+  tion plot3d (except zlev) and their meanings are the same.  They control
+  the drawing of level curves on a 3D plot.  Only flag(1)=mode has a special
+  meaning.
 
-       mode=0    : the level curves are drawn on the surface defined by
-                 (x,y,z)
+       mode=0  : the level curves are drawn on the surface defined by
+               (x,y,z).
 
-       mode=1    : the level curves are drawn on a 3D plot and on the plan
-                 defined by equation z=zlev
+       mode=1  : the level curves are drawn on a 3D plot and on the plan
+               defined by the equation z=zlev.
 
-       mode=2    : The level curves are drawn on a 2D plot.
+       mode=2  : the level curves are drawn on a 2D plot.
+
+  You can change the format of the floating point number printed on the lev-
+  els by using xset("fpf",string) where string gives the format in C format
+  syntax (for example string="%.3f"). Use string="" to switch back to default
+  format.
+
+  Usually we use contour2d to draw levels curves on a 2D plot.
+
   Enter the command contour() to see a demo.
+
 EXAMPLE
-  contour2d(1:10,1:10,rand(10,10),5,1:5,"011"," ",[0,0,11,11]);
+  t=%pi*[-10:10]/10;
+  deff("[z]=surf(x,y)","z=sin(x)*cos(y)"); z=feval(t,t,surf);
+  rect=[-%pi,%pi,-%pi,%pi,-1,1];
+  contour(t,t,z,10,35,45," ",[0,1,0],rect)
+  // changing the format of the printing of the levels
+  xset("fpf","%.2f")
+  xbasc()
+  contour(t,t,z,10,35,45," ",[0,1,0],rect)
+
 SEE ALSO
-  fcontour, fcontour2d
+  contour2d, fcontour, fcontour2d, plot3d, xset
 
 AUTHOR
-  J.Ph.C..
+  J.Ph.C.

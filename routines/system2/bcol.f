@@ -11,13 +11,17 @@ c     Copyright INRIA
       common / coladr / kfsub,kdfsub,kgsub,kdgsub,kguess,kx,ki,kz
       common / coltyp / itfsub,itdfsub,itgsub,itdgsub,itguess
       integer ii
+      logical allowptr
       data mlhs/1/,mrhs/2/
+
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
+
       if (ddt .eq. 4) then
          write(buf(1:12),'(3i4)') top,r,sym
          call basout(io,wte,' dgsub  top:'//buf(1:4))
       endif
+
       if(itdgsub.eq.10) then
 c       Fortran case 
         call fcoldg(ii,z,dg)
@@ -89,14 +93,19 @@ c ======================================================================
       common / icolnew/  ncomp,mstar
       common / coladr / kfsub,kdfsub,kgsub,kdgsub,kguess,kx,ki,kz
       common / coltyp / itfsub,itdfsub,itgsub,itdgsub,itguess
+      logical allowptr
       integer ii
+
       data mlhs/1/,mrhs/2/
+
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
+
       if (ddt .eq. 4) then
          write(buf(1:12),'(3i4)') top,r,sym
          call basout(io,wte,' gsub  top:'//buf(1:4))
       endif
+
       if(itgsub.eq.10) then
 c       Fortran case 
         call fcolg(ii,z,g)
@@ -167,13 +176,18 @@ c ======================================================================
       common / icolnew/  ncomp,mstar
       common / coladr / kfsub,kdfsub,kgsub,kdgsub,kguess,kx,ki,kz
       common / coltyp / itfsub,itdfsub,itgsub,itdgsub,itguess
+      logical allowptr
+
       data mlhs/1/,mrhs/2/
+
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
+
       if (ddt .eq. 4) then
          write(buf(1:12),'(3i4)') top,r,sym
          call basout(io,wte,' dfsub  top:'//buf(1:4))
       endif
+
       if(itdfsub.eq.10) then
 c       Fortran case 
         call fcoldf(x,z,df)
@@ -245,13 +259,18 @@ c ======================================================================
       common / icolnew/  ncomp,mstar
       common / coladr / kfsub,kdfsub,kgsub,kdgsub,kguess,kx,ki,kz
       common / coltyp / itfsub,itdfsub,itgsub,itdgsub,itguess
+      logical allowptr
+
       data mlhs/1/,mrhs/2/
+
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
+
       if (ddt .eq. 4) then
          write(buf(1:12),'(3i4)') top,r,sym
          call basout(io,wte,' fsub  top:'//buf(1:4))
       endif
+
       if(itfsub.eq.10) then
 c       Fortran case 
         call fcolf(x,z,f)
@@ -323,13 +342,18 @@ c ======================================================================
       common / icolnew/  ncomp,mstar
       common / coladr / kfsub,kdfsub,kgsub,kdgsub,kguess,kx,ki,kz
       common / coltyp / itfsub,itdfsub,itgsub,itdgsub,itguess
+      logical allowptr
+
       data mlhs/2/,mrhs/1/
+
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
+
       if (ddt .eq. 4) then
          write(buf(1:12),'(3i4)') top,r,sym
          call basout(io,wte,' guess  top:'//buf(1:4))
       endif
+
       if(itguess.eq.10) then
 c       Fortran case 
         call fcolgu(x,z,dmval)

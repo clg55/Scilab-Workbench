@@ -1,5 +1,5 @@
 function [scs_m,needcompile]=do_copy_region(scs_m,needcompile)
-[btn,xc,yc,win,Cmenu]=getclick()
+[btn,xc,yc,win,Cmenu]=cosclick()
 if Cmenu<>[] then
   Cmenu=resume(Cmenu)
 end

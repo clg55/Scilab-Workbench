@@ -9,8 +9,7 @@ all:: callsci
 world:: callsci 
 
 include config/Makefile.Top
-
-include config/Makefile
+include config/Makefile 
 
 distclean::
 	$(RM) callsci

@@ -361,14 +361,15 @@ c
 c
 c     real polynomial
       if(it1.eq.0) then
-         err=l1+2*n-lstk(bot)
+         lp=max(lw,l1+2*n)
+         err=lp+n+1-lstk(bot)
          if(err.gt.0) then
             call error(17)
             return
          endif
-         call dcopy(n+1,stk(lc),1,stk(l1),1)
-         call dtild(n+1,stk(l1),1)
-         call rpoly(stk(l1),n,stk(l1),stk(l1+n),fail)
+         call dcopy(n+1,stk(lc),1,stk(lp),1)
+         call dtild(n+1,stk(lp),1)
+         call rpoly(stk(lp),n,stk(l1),stk(l1+n),fail)
          if(fail.eq.1) then
             call error(24)
             return

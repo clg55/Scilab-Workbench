@@ -22,15 +22,13 @@ c!
 c     Copyright INRIA
       double precision ar,ai,br,cr,ci
 c
-      double precision s
-c
       ierr=0
-      s=br
+
       if (br .eq. 0.0d+0) then
          ierr=1
 c         return
       endif
-      cr = ar/s
-      ci = ai/s
+      cr = ar/br
+      ci = ai/br
       return
       end

@@ -10,7 +10,22 @@ function [o,modified,newparameters,needcompile,edited]=clickin(o)
 
 modified=%f;newparameters=list();needcompile=0;
 if o(1)=='Block' then
-  model=o(3)
+  model=o(3)  
+  //find output port location projected on the block
+
+  [xout,yout,typout]=getoutputs(o)
+  if xout<>[] then
+    xxyymax=o(2)(1)(:)+o(2)(2)(:)
+    xout=max(min(xout,xxyymax(1)),o(2)(1)(1))
+    yout=max(min(yout,xxyymax(2)),o(2)(1)(2))
+    // how close to the port is considered a link (/5)
+    if or(abs(xc-xout)<o(2)(2)(1)/5&abs(yc-yout)<o(2)(2)(2)/5) then
+      //we have clicked near a port
+      [Cmenu]=resume('Link (l)')
+    end
+  end
+      
+
   if model(1)=='super' then
     lastwin=curwin
     curwin=get_new_window(windows)
@@ -20,6 +35,7 @@ if o(1)=='Block' then
     //edited variable is returned by SUPER_f
     modified=prod(size(newparameters))>0
     curwin=lastwin
+    if(~(or(curwin==winsid()))) then o=o_n;Cmenu=resume('Open/Set (o)');end
     xset('window',curwin)
     xselect()
   elseif model(1)=='csuper' then
@@ -27,11 +43,14 @@ if o(1)=='Block' then
     modified=prod(size(newparameters))>0
     edited=modified
   else
+    
     execstr('o_n='+o(5)+'(''set'',o)')
+
     edited=or(o<>o_n)
     model=o(3)
     model_n=o_n(3)
-    modified=or(model(6)<>model_n(6))|..
+    modified=or(model(1)<>model_n(1))|..
+	     or(model(6)<>model_n(6))|..
 	     or(model(7)<>model_n(7))|..
 	     or(model(8)<>model_n(8))|..
 	     or(model(9)<>model_n(9))
@@ -63,18 +82,9 @@ if o(1)=='Block' then
   end
   o=o_n
 elseif o(1)=='Link' then
-  [nam,pos,ct]=o(5:7)
-  Thick=pos(1)
-  Type=pos(2)
-  [ok,nam,Thick,Type]=getvalue('Link parameters',..
-      ['Identification';
-      'Thickness';
-      'Type'],..
-      list('str','1','vec','1','vec',1),[nam;string(Thick);string(Type)])
-  if ok then
-    edited=(o(5)<>nam)|or(o(6)<>[Thick,Type]);
-    o(5)=nam;o(6)=[Thick,Type];
-  end
+  
+  [Cmenu]=resume('Link (l)')
+
 elseif o(1)=='Text' then
   execstr('o_n='+o(5)+'(''set'',o)')
   edited=or(o<>o_n)

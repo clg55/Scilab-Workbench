@@ -13,8 +13,8 @@ Usage
 
 Input parameters
        o x : real vector [1,N] or [N,1] Contains the abscissa.
-       o y : real vector [1,N] or [N,1] Contains the function to be
-         transformed.
+       o y : real vector [1,N] or [N,1] Contains the function to be trans-
+         formed.
 Output parameters
        o s : real vector [1,M] Contains the abscissa of the regularized func-
          tion.

@@ -12,7 +12,7 @@ elseif rhs==1 then
     txt=temp+'='+stk(top)(1)
     stk=list('eye('+temp+'(1),'+temp+'(2))','0','?','?','1','?')
   else
-    write(logfile,'Warning: Not enough information using mtlb_eye instead of eye')
+    set_infos('Not enough information using mtlb_eye instead of eye',1)
     stk=list('mtlb_eye('+stk(top)(1)+')','0','?','?','?')
   end
 else

@@ -5,6 +5,7 @@ debug - debugging level
 .SH CALLING SEQUENCE
 .nf
 debug(level-int)
+level-int=debug()
 .fi
 .SH PARAMETERS
 .TP 15

@@ -10,7 +10,7 @@ elseif stk(top)(2)=='2'|stk(top)(2)=='3' then
 end
 if lhs==1 then  
   if stk(top)(3)=='1'|stk(top)(4)=='1' then
-    stk=list('-sort(-'+in+')','0',stk(top)(3),stk(top)(4),'1')
+    stk=list('-sort(-'+in+')','1',stk(top)(3),stk(top)(4),'1')
   else
     if isname(in) then
       if lst(ilst+1)(1)=='1' then
@@ -23,8 +23,8 @@ if lhs==1 then
       txt=[temp+' = '+in]
       out=temp
     end
+    set_infos('next test may  probably be simplified',1)
     txt=[txt;
-	'//! next test may probably be simplified'
 	'if min(size('+temp+'))==1 then '
 	'  '+out+'=-sort(-'+temp+')'
 	'else'
@@ -42,8 +42,8 @@ else
     else
       txt=[temp+' = '+in]
     end
+    set_infos('next test may  probably be simplified',1)
     txt=[txt;
-	  '//! next test may  probably be simplified'
 	  'if min(size('+temp+'))==1 then '
 	  '  ['+y+','+i+']=sort(-'+temp+');'+y+' = -'+y
 	  'else '

@@ -9,19 +9,18 @@ function h=trfmod(h,job)
 // Copyright INRIA
 
 typ=type(h);h1=h(1);
-//-compat next row added for list/tlist compatibility
-if typ==15 then typ=16,end
+
 if typ==16&h1(1)=='r' then
-  if size(h(2))<>[1 1] then
+  if size(h('num'))<>[1 1] then
     error(' SISO plant only')
   end
   flag='r'
 elseif typ==16&h1(1)=='lss' then
-  if size(h(5))<>[1 1] then
+  if size(h('D'))<>[1 1] then
     error('trfmod: SISO plant only')
   end
   flag='lss'
-  den=real(poly(h(2),'s'))
+  den=real(poly(h('A'),'s'))
   na=degree(den)
   c=h(4)
   [m,i]=maxi(abs(c))
@@ -33,9 +32,7 @@ elseif typ==16&h1(1)=='lss' then
   b=t*h(3)
   al(:,i)=ai+b
   num=-(real(poly(al,'s'))-den)*ci
-  //h=tlist('r',num+h(5)*den,den,h(7));
   h=syslin(h(7),num+h(5)*den,den);
-//   h=tlist('r',num,den,h(7))+h(5);
 else
   error('waiting for a transfer function as argument ')
 end
@@ -46,14 +43,14 @@ format('v',15)
 [lhs,rhs]=argn(0)
 if rhs==1 then job='p',end
 //
-if type(h(2))==1 then h(2)=poly(h(2),varn(h(3)),'c'),end
-if type(h(3))==1 then h(3)=poly(h(3),varn(h(2)),'c'),end
+if type(h('num'))==1 then h('num')=poly(h('num'),varn(h('den')),'c'),end
+if type(h('den'))==1 then h('den')=poly(h('den'),varn(h('num')),'c'),end
  
-var=varn(h(2)),nv=length(var);
+var=varn(h('num')),nv=length(var);
 while part(var,nv)==' ' then nv=nv-1,end;var=part(var,1:nv);
  
-fnum=polfact(h(2))
-fden=polfact(h(3))
+fnum=polfact(h('num'))
+fden=polfact(h('den'))
 g=coeff(fnum(1))/coeff(fden(1))
 nn=prod(size(fnum))
 nd=prod(size(fden))
@@ -169,8 +166,8 @@ for id=1:prod(size(tden))
   den=den*f
 end
 x=evstr(tgain)/coeff(den,degree(den))
-h(2)=num*x
-h(3)=den/coeff(den,degree(den))
+h('num')=num*x
+h('den')=den/coeff(den,degree(den))
 format(10)
 if flag=='lss' then h=tf2ss(h),end
 

@@ -64,15 +64,26 @@ while ilst<nlst then
              end
           else
              if v(1)=='?'|v(1)==expk(3) then
-               out=opk(2)
-               vtps(k3)=list(expk(3),expk(4),expk(5),it)
-             else
-               txt=[txt;'C WARNING local variable  :'+vnms(k3,2)+..
-                                                     ' changed its type!']
-             end
-          end
-        end
-
+	       out=opk(2)
+	       vtps(k3)=list(expk(3),expk(4),expk(5),it)
+	     else
+	       if v(1)=='1'&expk(3)=='0' then // int dans double
+		 if isnum(expk(1)) then
+		   if strindex(expk(1),'.')==[] then 
+		     expk(1)=expk(1)+'D0'
+		   end
+		 else
+		   expk(1)='dble('+expk(1)+')'
+		 end
+	       else
+		 txt=[txt;'C WARNING local variable  :'+vnms(k3,2)+..
+			 ' changed its type!']
+		 vtps(k3)=list(expk(3),expk(4),expk(5),it) // added  
+	       end
+	     end
+	   end
+	 end
+	out=opk(2)
         if typ<>'-1' then
           if expk(4)=='1'&expk(5)=='1' then
              txt=[txt;' '+out+' = '+expk(1)]
@@ -97,7 +108,7 @@ while ilst<nlst then
   case '14' then //abort
     txt=[txt;' abort']
   case '15' then ,//eol
-    txt=[txt;'c']
+//    txt=[txt;'c']
 //    write(6,'ligne')
   case '99' then //return
     txt=[txt;' return']

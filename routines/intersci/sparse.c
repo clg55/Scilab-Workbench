@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 #include <string.h>
 
 #ifdef __STDC__

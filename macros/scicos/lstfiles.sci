@@ -18,7 +18,7 @@ if rhs<=1 then opt='file',end
 [np,mp]=size(path);np=np*mp;path=matrix(path,np,1);
 lst=[]
 for k=1:np
-  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+  if MSDOS then 
     cmd='dir /b'+path(k);
     tmp = strsubst(TMPDIR,'/','\')+'\unix.out';
     host(cmd+'> '+ tmp);

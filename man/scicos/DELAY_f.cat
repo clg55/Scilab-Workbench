@@ -1,5 +1,5 @@
 
-DELAY_f(5)                      Scicos Block                       DELAY_f(5)
+DELAY_f(5)                       Scicos Block                      DELAY_f(5)
 NAME
   DELAY_f - Scicos  delay block
 

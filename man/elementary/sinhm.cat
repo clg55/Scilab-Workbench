@@ -11,8 +11,8 @@ PARAMETERS
   x,t       : real or complex square matrix
 
 DESCRIPTION
-  sinhm is the matrix hyperbolic  sine  of the matrix x.  t=(expm(x)-expm(-
-  x))/2
+  sinhm is the matrix hyperbolic  sine  of the matrix x.
+  t=(expm(x)-expm(-x))/2
 
 EXAMPLE
   A=[1,2;2,3]

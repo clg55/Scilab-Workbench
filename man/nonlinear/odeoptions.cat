@@ -1,22 +1,25 @@
 
 odeoptions(G)                  Scilab Function                  odeoptions(G)
 NAME
-  odeoptions - sets options for ode solvers
+  odeoptions - set options for ode solvers
 
 CALLING SEQUENCE
   odeoptions()
 
 DESCRIPTION
-  This functions interactively displays a command which should be executed to
+  This function interactively displays a command which should be executed to
   set various options of ode solvers.  The global variable %ODEOPTIONS sets
-  the options.  CAUTION: the ode function checks if this variable exists and
-  in this case uses it. For using default values you should clear this vari-
-  able. Note that odeoptions does not create this variable. To create it you
-  must execute the command line displayed by odeoptions.
+  the options.
+
+  CAUTION: the ode function checks if this variable exists and in this case
+  it uses it. For using default values you should clear this variable. Note
+  that odeoptions does not create this variable. To create it you must exe-
+  cute the command line displayed by odeoptions.
 
   The variable %ODEOPTIONS is a vector with the following elements:
-  [itask,tcrit,h0,hmax,hmin,jactyp,mxstep,maxordn,maxords,ixpr, ml,mu] The
-  default value is: [1,0,0,%inf,0,2,500,12,5,0,-1,-1].
+  [itask,tcrit,h0,hmax,hmin,jactyp,mxstep,maxordn,maxords,ixpr,ml,mu]
+  The default value is:
+  [1,0,0,%inf,0,2,500,12,5,0,-1,-1]
 
   The meaning of the elements is described below.
 
@@ -40,12 +43,12 @@ DESCRIPTION
     min step size
 
   jactype
-   0 : functional iterations, no jacobian used ('adams' or
-       'stiff' only)
+   0 : functional iterations, no jacobian used ("adams" or
+       "stiff" only)
    1 : user-supplied full jacobian
    2 : internally generated full jacobian
-   3 : internally generated diagonal jacobian ('adams' or
-       'stiff' only))
+   3 : internally generated diagonal jacobian ("adams" or
+       "stiff" only)
    4 : user-supplied banded jacobian (see ml and mu below)
    5 : internally generated banded jacobian (see ml and mu below)
 
@@ -58,14 +61,14 @@ DESCRIPTION
   ixpr
    print level, 0 or 1
 
-  ml, mu
+  ml,mu
    If jactype equals 4 or 5, ml and mu are the lower
-   and upper half-banwidths of the banded jacobian: the band is the
-   i,j's with i-ml <= j <= ny-1
+   and upper half-bandwidths of the banded jacobian: the band is the
+   i,j's with i-ml <= j <= ny-1.
    If jactype equals 4 the jacobian function must return
    a matrix J which is  ml+mu+1 x ny (where ny=dim of y in ydot=f(t,y))
    such that column 1 of J is made of mu zeros followed by
-   df1/dy1, df2/dy1, df3/dy1,... (1+ml possibly non-zero entries)
-   column 2 is made of mu-1 zeros followed by df1/dx2, df2/dx2,etc'
+   df1/dy1, df2/dy1, df3/dy1, ... (1+ml possibly non-zero entries)
+   column 2 is made of mu-1 zeros followed by df1/dx2, df2/dx2, etc
 SEE ALSO
   ode

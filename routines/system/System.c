@@ -1,7 +1,7 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 #include "../machine.h"
 
-/** only used to force the linker to load all calelm functions **/
+/** only used to force the linker to load all system functions **/
 
 System_contents(x) 
      int x;
@@ -20,6 +20,7 @@ C2F(cmdstr)();
 C2F(comand)();
 C2F(compcl)();
 C2F(compil)();
+C2F(copyvar)();
 C2F(cvname)();
 C2F(cvnamel)();
 C2F(cvstr)();
@@ -47,6 +48,7 @@ C2F(isbrk)();
 C2F(israt)();
 C2F(logops)();
 C2F(lspdsp)();
+C2F(lst2vars)();
 C2F(macro)();
 C2F(majmin)();
 C2F(mkindx)();

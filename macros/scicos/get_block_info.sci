@@ -57,7 +57,12 @@ case 'Block' then
     if texte_2==[] then
       texte_2='No  documentation available for the parameters of this block'
     end
-    txt=[txt;'Block Parameters';texte_2]
+    txt=[txt;
+	' '
+	'Block Parameters';
+	'----------------'
+	' '
+	texte_2]
   end
 case 'Link' then
   txt = standard_document(o,k)

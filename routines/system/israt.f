@@ -13,10 +13,10 @@ c
 c     
       israt=.false.
 
-c     check if variable is a tlist
-      if(istk(il).ne.16) return
+c     check if variable is a mlist or tlist (for compatibility)
+      if(istk(il).ne.16.and.istk(il).ne.17) return
 
-c     check if tlist has 4 elements
+c     check if mlist has 4 elements
       if(istk(il+1).ne.4) return
 
 c     check if first element is a character string vector

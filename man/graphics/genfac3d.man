@@ -1,40 +1,39 @@
 .TH genfac3d 2 "October 1995" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-genfac3d - convert 3d datas to four sided facets
+genfac3d - compute facets of a 3D surface
 .SH CALLING SEQUENCE
 .nf
-[xx,yy,zz]=genfac3d(x,y,zmat [,mask])
+[xx,yy,zz]=genfac3d(x,y,z,[mask])
 .fi
 .SH PARAMETERS
-.TP 15
-zmat      
-: a \fV(mxn)\fR matrix.
+.TP 10
+xx,yy,zz 
+: matrices of size (4,n-1xm-1). \fVxx(:,i)\fR ,\fVyy(:,i) and \fVzz(:,i)\fR 
+are respectively the x-axis, y-axis and z-axis coordinates of the 4 points of 
+the ith four sided facet.
 .TP
 x 
-:x axis coordinates vector ( size \fVm\fR )
+: x-axis coordinates vector of size m.
 .TP
 y 
-:y axis coordinates vector ( size \fVn\fR )
+: y-axis coordinates vector of size n.
+.TP
+z      
+: matrix of size (m,n). \fVz(i,j)\fR is the value of the surface at the point
+(x(i),y(j)).
 .TP
 mask     
-: boolean optional matrix with same size as zmat used to select 
-entries of zmat to be represented by facets.
-.TP
-xx,yy,zz 
-: Three \fV4x(n-1xm-1)\fR  matrices. \fVxx(:,i),yy(:,i),zz(:,i)\fR are respectively the 
- x-axis,y-axis and z-axis coordinates of the ith facet
+: boolean optional matrix with same size as \fVz\fR used to select 
+the entries of \fVz\fR to be represented by facets.
 .SH DESCRIPTION
-Converts 3d data ( two vectors \fVx,y\fR and a matrix \fVz\fR which
-code the  surface \fVz(i,j)=f(x(i),y(j))\fR ) to a four sided facets representation.
+\fVgenfac3d\fR computes a four sided facets representation of a 3D surface 
+\fVz=f(x,y)\fR defined by \fVx\fR, \fVy\fR and \fVz\fR.
 .SH EXAMPLE
 .nf
-t = linspace(0,2*%pi,10);
-zmat=sin(t')*cos(t);
-plot3d(t,t,zmat)
-[xx,yy,zz]=genfac3d(t,t,zmat);
+t=[0:0.3:2*%pi]'; z=sin(t)*cos(t');
+[xx,yy,zz]=genfac3d(t,t,z);
 plot3d(xx,yy,zz)
-plot3d([xx xx],[yy yy],[zz 4+zz])
 .fi
 .SH SEE ALSO
-plot3d, eval3dp
+eval3dp, plot3d

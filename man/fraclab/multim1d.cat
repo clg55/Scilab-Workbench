@@ -5,11 +5,11 @@ NAME
 
   Author: Christophe Canus
 
-  This  C_LAB routine   synthesizes  a large range of   pre-multifractal
-  measures  related  to  the    multinomial  1d  measure (deterministic,
-  shuffled, pertubated) and    computes  linked  theoretical   functions
-  (partition   sum   function, Reyni   exponents  function,  generalized
-  dimensions, multifractal spectrum).
+  This  C_LAB routine   synthesizes  a large range of   pre-multifractal mea-
+  sures  related  to  the    multinomial  1d  measure (deterministic, shuf-
+  fled, pertubated) and    computes  linked  theoretical   functions (parti-
+  tion   sum   function, Reyni   exponents  function,  generalized dimen-
+  sions, multifractal spectrum).
 
 Usage
   [varargout,[optvarargout]]=multim1d(b,p,str,varargin,[optvarargin])
@@ -43,8 +43,8 @@ Parameters
   ('meas' for measure, 'cdf' for cumulative distribution function , 'pdf' for
   probability density function, 'part' for partition sum function, 'Reyni'
   for Reyni exponent function , 'spec' for multifractal spectrum) for the
-  deterministic multinomial measure and two prefix strings for related meas-
-  ures ('shuf' for shuffled , 'pert' for pertubated) which can be added to
+  deterministic multinomial measure and two prefix strings for related mea-
+  sures ('shuf' for shuffled , 'pert' for pertubated) which can be added to
   the first ones to form composed strings. For example, 'shufmeas' is for the
   synthesis of a shuffled multinomial 1d pre-multifractal measure. Note that
   all combinaisons of strings are not implemented yet.  When a string con-
@@ -53,7 +53,7 @@ Parameters
   I_n (second optional output argument) of the unit interval. In that case,
   the fourth input argument is a strictly positive real (integer) scalar n
   which contains the resolution of the pre-multifractal measure. The size of
-  the output real vectors mu_n (and I_n if used) is equal to bn (so be aware
+  the output real vectors mu_n (and I_n if used) is equal to b^n (so be aware
   the stack size ;-)). This option is implemented for the deterministic
   ('meas'), shuffled ('shufmeas') and pertubated ('pertmeas') multinomial 1d
   measure.  When a string containing prefix 'shuf' is given as third input,
@@ -69,27 +69,27 @@ Parameters
   This option is implemented only for the multinomial 1d measure ('pert-
   meas').  When replacing suffix string 'meas' with suffix string 'cdf',
   respectively suffix string 'pdf', the cumulative distribution function F_n,
-  respectively the probability density function p_n, related to this pre-
-  multifractal measure is computed (first output argument).  When string
-  'part' is given as third input, the partition sum function znq of mul-
-  tifractal measure is computed as sole output argument. In that case, the
-  fourth input argument is a strictly positive real (integer) vector vn which
-  contains the resolutions, and the fifth input argument is a real vector q
-  which contains the measure exponents. The size of the output real matrix
-  znq is equal to size(q)*size(vn). This option is implemented only for the
-  multinomial 1d measure.  When string 'Reyni' is given as third input, the
-  Reyni exponents function tq (and the generalized dimensions Dq if used) of
-  the multifractal measure is computed as first output argument (and second
-  optional output argument if used). In that case, the fourth input argument
-  is a real vector q which contains the measure's exponents. The size of the
-  output real vector tq is equal to size(q)). This option is implemented only
-  for the multinomial 1d measure.  When string 'spec' is given as third
-  input, the multifractal spectrum f_alpha (second output argument) is syn-
-  thesized on the Hoelder exponents alpha (first output argument). In that
-  case, the fourth input argument is a strictly positive real (integer)
-  scalar N which contains the number of Hoelder exponents. The size of both
-  output real vectors alpha and f_alpha is equal to N. This option is imple-
-  mented only for the multinomial 1d measure.
+  respectively the probability density function p_n, related to this pre-mul-
+  tifractal measure is computed (first output argument).  When string 'part'
+  is given as third input, the partition sum function znq of multifractal
+  measure is computed as sole output argument. In that case, the fourth input
+  argument is a strictly positive real (integer) vector vn which contains the
+  resolutions, and the fifth input argument is a real vector q which contains
+  the measure exponents. The size of the output real matrix znq is equal to
+  size(q)*size(vn). This option is implemented only for the multinomial 1d
+  measure.  When string 'Reyni' is given as third input, the Reyni exponents
+  function tq (and the generalized dimensions Dq if used) of the multifractal
+  measure is computed as first output argument (and second optional output
+  argument if used). In that case, the fourth input argument is a real vector
+  q which contains the measure's exponents. The size of the output real vec-
+  tor tq is equal to size(q)). This option is implemented only for the multi-
+  nomial 1d measure.  When string 'spec' is given as third input, the multi-
+  fractal spectrum f_alpha (second output argument) is synthesized on the
+  Hoelder exponents alpha (first output argument). In that case, the fourth
+  input argument is a strictly positive real (integer) scalar N which con-
+  tains the number of Hoelder exponents. The size of both output real vectors
+  alpha and f_alpha is equal to N. This option is implemented only for the
+  multinomial 1d measure.
 
 Algorithm details
 
@@ -174,6 +174,5 @@ References
   Pietronero, Plenum Press, New York, 1989 pages 3-29.
 
 See also
-  binom, sbinom, multim2d, smultim1d, smultim2d (C_LAB routines).
-  MFAS_measures, MFAS_dimensions, MFAS_spectra (Matlab and/or Scilab demo
-  scripts).
+  binom, sbinom, multim2d, smultim1d, smultim2d (C_LAB routines).  MFAS_mea-
+  sures, MFAS_dimensions, MFAS_spectra (Matlab and/or Scilab demo scripts).

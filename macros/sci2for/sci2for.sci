@@ -1,6 +1,7 @@
-function txt=sci2for(fun,nam,vtps)
+function txt=sci2for(fun,nam,vtps,lvtps)
 //!
 // Copyright INRIA
+[lhs,rhs]=argn()
 if type(fun)==11 then comp(fun),end
 if type(fun)<>13 then 
   error('sci2for: first argument must be a scilab function'),
@@ -18,13 +19,18 @@ vnms=[],for k=1:macrhs,vnms=[vnms;[inputs(k),inputs(k)]],end,
 na=prod(size(vnms))/2
  
 maclhs=prod(size(lst(2)))
+kl=1
 for k=lst(2),
   if find(vnms(:,1)==k)==[] then
     vnms=[vnms;[k,k]],
-    na=na+1;vtps(na)=list('?','0','0',0)
+    na=na+1;
+    if rhs==4 then // output variable type given
+      vtps(na)=lvtps(kl);kl=kl+1
+    else
+      vtps(na)=list('?','0','0',0)
+    end
   end
 end
- 
  
 //stack of variables
 k=1
@@ -46,9 +52,16 @@ while k<=na
 end
  
 bot=na
+
 //
 forexp=0
 [crp,vnms,vtps,nwrk]=ins2for(lst,4,vnms,vtps,nwrk)
+if strindex(strcat(crp),'WARNING local variable')<>[] then
+  nwrk=list(0,[],[],0,[],[],0,list(),1,[],[],[],[],[],[])
+//  pause
+  [crp,vnms,vtps,nwrk]=ins2for(lst,4,vnms,vtps,nwrk)
+end
+
 na=size(vtps)
 if find(vnms(:,1)=='%eps')<>[] then
   crp=[' %eps = d1mach(4)';'c';crp]
@@ -137,7 +150,10 @@ hdr=[' subroutine '+lst(1)+'('+makeargs(v1)+')';
      'c' ]
 //
 //declarations
-argld=[];argli=[],locals=[]
+argld=[];//double precision argument list
+argli=[];// integer argument list
+argls=[];// character argument list
+locals=[]
 for iv=1:na
  // var=vnms(iv,1);
   var=vnms(iv,2);
@@ -166,7 +182,7 @@ for iv=1:na
          nm=nm+'_r'+','+nm+'_i',
         var=var+'(_r,_i)'
       end
-      com=' '
+      com='variable '
     elseif nl=='1' then
       if it==0 then
         nm=var+'('+nc+')'
@@ -174,7 +190,7 @@ for iv=1:na
         nm=var+'_r('+nc+')'+','+var+'_i('+nc+')'
         var=var+'(_r,_i)'
       end
-      com='of size '+nc
+      com='vector of size '+nc
     elseif nc=='1' then
       if it==0 then
         nm=var+'('+nl+')'
@@ -182,7 +198,7 @@ for iv=1:na
         nm=var+'_r('+nl+')'+','+var+'_i('+nl+')'
         var=var+'(_r,_i)'
       end
-      com='of size '+nl
+      com='vector of size '+nl
     else
       if it==0 then
         nm=var+'('+makeargs([nl;nc])+')'
@@ -191,14 +207,17 @@ for iv=1:na
         var=var+'(_r,_i)'
       end  
      
-      com='of size '+nl+','+nc
+      com='vector of size '+nl+','+nc
     end
     if vartyp(1)=='1' then
       argld=[argld;nm]
-      com='c      '+part(var,1:10)+' : double precision variable '+com
-    else
+      com='c      '+part(var,1:10)+' : double precision '+com
+    elseif vartyp(1)=='0' then
       argli=[argli;nm]
-      com='c      '+ part(var,1:10)+' : integer variable '+com
+      com='c      '+ part(var,1:10)+' : integer '+com
+    elseif vartyp(1)=='10' then
+      argls=[argls;nm]
+      com='c      '+ part(var,1:10)+' : string '+com      
     end
     if iv<=bot then
       hdr=[hdr;com],
@@ -211,26 +230,27 @@ end
 if nwrk(3)<>[]|nwrk(10)<>[] then
   if ~isnum(used) then
     nm='work(*)';argld=[argld;nm]
-    hdr=[hdr;'c      work  : working array :';
-	'c              '+used]
+    hdr=[hdr;'c      work       : working array :';
+	'c                 '+used]
   else
     nm='work('+used+')';argld=[argld;nm]
-    hdr=[hdr;'c      work  : working array :'+used]
+    hdr=[hdr;'c      work       : working array :'+used]
   end
 end
 if nwrk(6)<>[]|nwrk(12)<>[] then
   if ~isnum(iused) then
     nm='iwork(*)';argli=[argli;nm]
-    hdr=[hdr;'c      iwork : working array :';
-	'c              '+iused]
+    hdr=[hdr;'c      iwork      : working array :';
+	'c                 '+iused]
   else
     nm='iwork('+iused+')';argli=[argli;nm]
-    hdr=[hdr;'c      iwork : working array :'+iused]
+    hdr=[hdr;'c      iwork      : working array :'+iused]
   end
 end
 if nwrk(7)>0 then
   msgs=nwrk(8)
-  hdr=[hdr;'c      ierr : error ']
+  argli($+1)='ierr'
+  hdr=[hdr;'c      ierr      : error indicator']
   hdr=[hdr;'c             0 :  correct run']
   for k=1:nwrk(7)
     msgk=msgs(k)
@@ -249,13 +269,17 @@ hdr=[hdr;'c!']
 //
 dcl=[]
 if argld<>[] then  dcl=[dcl;' double precision '+makeargs(argld)],end
-if nwrk(15)<>[] then  dcl=[dcl;' double precision '+makeargs(nwrk(15))],end
 if argli<>[] then  dcl=[dcl;' integer '+makeargs(argli)],end
+if argls<>[] then  dcl=[dcl;' character*(*) '+makeargs(argls)],end
+if nwrk(14)<>[]|nwrk(15)<>[] then dcl=[dcl;'c     external functions'],end
 if nwrk(14)<>[] then  dcl=[dcl;' integer '+makeargs(nwrk(14))],end
+if nwrk(15)<>[] then  dcl=[dcl;' double precision '+makeargs(nwrk(15))],end
+
 dcl=[dcl;'c']
  
 txt=[hdr;dcl;pntrs;crp;' end']
-txt=indentfor(indentfor(txt))
+k=find(part(txt,1)==' ')
+txt(k)='     '+txt(k)
  
 kk=1
 while kk<>[] then
@@ -267,9 +291,11 @@ while kk<>[] then
     if part(t1,1)=='c' then
       t1=[part(t1,1:72);
          'c              '+part(t1,73:length(t1))];
-    else
-      t1=[part(t1,1:72);
-         '     & '+part(t1,73:length(t1))];
+   else
+     ksplit=max(strindex(part(t1,1:71),[',','+','-','*','/',' ']))
+     if ksplit==[] then ksplit=72,end
+      t1=[part(t1,1:ksplit);
+         '     & '+part(t1,ksplit+1:length(t1))];
     end
     txt=[txt(1:k1-1);t1;txt(k1+1:prod(size(txt)))]
   end

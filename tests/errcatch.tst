@@ -1,4 +1,5 @@
 clear;
+
 errcatch(4,'continue','nomessage')
 a
 if iserror(4)==1 then errclear(-1),else pause,end
@@ -12,12 +13,12 @@ foo();if iserror(4)==1 then errclear(-1),else pause,end
 deff('foo()','x=a')
 foo();if iserror(4)==1 then errclear(-1),else pause,end
 
-
 deff('b=foo()','x=a;b=1','n')
 b=foo();errclear(-1),if b<>1 then pause,end
 
 
 deff('b=foo()','x=a;b=1');b=foo();errclear(-1)
+
 
 deff('b=foo()',['x=a';'b=1'])
 b=foo();errclear(-1),if b<>1 then pause,end
@@ -45,8 +46,7 @@ ierr=execstr(['b=[]';'for k=1:3';'b(1,k)=k';'end';'a'],'errcatch');
 if ierr<>4|or(b<>(1:3)) then pause,end
 
 clear;errcatch(4,'continue','nomessage')
-execstr('a');if iserror(4)==1 then errclear(-1),else pause,end
-
+execstr('a;if iserror(4)==1 then errclear(-1),else pause,end')
 clear;errcatch(-1)
 
 deff('b=foo()',['b=[]';

@@ -21,13 +21,13 @@ eps=0.0001;         //modify eps here !
 // 
 ls=x(1);flag=0;s=poly(0,'s');
 select ls
-   case 1 then
-// ASSUME x(3) NOT ZERO   (for gev pb. x(3)=0 => eval @ infty)
-   vp=x(2)/x(3);pol=s-vp; //disp(pol);
-   for p=%sel; if almosteq(pol,p,eps) then flag=1;end;end
-   case 2 then
-   pol=s^2-x(2)*s+x(3);  //disp(pol);
-   for p=%sel; if almosteq(pol,p,eps) then flag=1;end;end   
+case 1 then
+  // ASSUME x(3) NOT ZERO   (for gev pb. x(3)=0 => eval @ infty)
+  vp=x(2)/x(3);pol=s-vp; //disp(pol);
+  for p=%sel; if almosteq(pol,p,eps) then flag=1;end;end
+case 2 then
+  pol=s^2-x(2)*s+x(3);  //disp(pol);
+  for p=%sel; if almosteq(pol,p,eps) then flag=1;end;end   
 end
 
 function trfa=almosteq(pol,p,eps)

@@ -25,22 +25,36 @@ opt
 .SH DESCRIPTION
 loads one or several 
 functions defined in the file \fV'file-name'\fR.
-The string \fVopt='c'\fR means that the functions are to be 
-compiled (pre-interpreted) when loaded.
-(see \fVcomp\fR).
-The first line of the file must be as follows:
-.nf
-function [s1,s2,..,slhs]=macr(e1,e2,...,erhs)  
+The string \fVopt='n'\fR means that the functions are not  
+compiled (pre-interpreted) when loaded. This can be useful for some 
+debugging purpose (see \fVcomp\fR). By default, functions are compiled
+when loaded (i.e. \fVopt='c'\fR is used).
+.LP
+In the  file  a function must begin by a "syntax definition" line as follows:
+.nf 
+function [y1,...,yn]=foo(x1,...,xm)
 .fi
-\fVei\fR are input variables and \fVsi\fR are output variables.
+followed by a sequence of scilab instructions.
+.LP
+The "syntax definition" line gives the "full" calling syntax of this
+function. The \fVyi\fR are output variables calculated as functions of
+input variables \fVxi\fR and variables existing in Scilab when the
+function is executed. Shorter input or output argument list may be
+used.
+.LP
+Many functions may be written in the same file. A function is
+terminated by an \fVendfunction\fR keyword, the following
+\fVfunction\fR keyword or the \fVEOF\fR mark.
+.LP
 .SH REMARK
-Last line of  file must be terminated by a newline to be taken
+Last line of  the file must be terminated by a newline to be taken
 into account.
 .SH EXAMPLE
 .nf
 	getf('SCI/macros/xdess/plot.sci')
 .fi
 .SH SEE ALSO
-comp, exec, edit
+genlib, getd, exec, edit, comp
+
 
 

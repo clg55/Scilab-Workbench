@@ -9,7 +9,17 @@
 /********************************************************
  * the functions in this file are called from 
  * callback ( see jpc_SGraph.c ) for the XWindow version 
+ * Nov 1998 : we must be sure that during the evaluation of 
+ *            scig_xxx an other function scig_yyy won't be 
+ *            run. Thi sis possible since during the execution of 
+ *            one scig_xxx function a sciprint can be performed 
+ *            and it will lead to an event check which can 
+ *            produce a call to an other scig_yyy function 
+ *            flag scig_buzy  is used to check for that 
+ *            
  ********************************************************/
+
+static int scig_buzy = 0;
 
 /********************************************************
  * Basic Replay 
@@ -20,6 +30,8 @@ void scig_replay(win_num)
 {
   integer verb=0,cur,na;
   char name[4];
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   GetDriver1(name,PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
   if ( (GetDriver()) != 'R') 
     C2F(SetDriver)("Rec",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
@@ -29,6 +41,7 @@ void scig_replay(win_num)
   C2F(dr)("xreplay","v",&win_num,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xsetdr",name, PI0, PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  scig_buzy = 0;
 }
 
 /********************************************************
@@ -40,6 +53,8 @@ void scig_resize(win_num)
 {
   integer verb=0,cur,na;
   char name[4];
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   GetDriver1(name,PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
   if ( (GetDriver()) !='R') 
     C2F(SetDriver)("Rec",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
@@ -50,6 +65,7 @@ void scig_resize(win_num)
   C2F(dr)("xreplay","v",&win_num,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xsetdr",name, PI0, PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  scig_buzy = 0;
 }
 
 /********************************************************
@@ -61,6 +77,8 @@ void scig_resize_pixmap(win_num)
 {
   integer verb=0,cur,na;
   char name[4];
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   GetDriver1(name,PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
   C2F(SetDriver)("Int",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
   C2F(dr)("xget","window",&verb,&cur,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);  
@@ -68,6 +86,7 @@ void scig_resize_pixmap(win_num)
   CPixmapResize1();
   C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xsetdr",name, PI0, PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  scig_buzy = 0;
 }
 
 
@@ -80,6 +99,8 @@ void  scig_erase(win_num)
 {
   integer verb=0,cur,na;
   char name[4];
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   GetDriver1(name,PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
   if ( (GetDriver()) !='R') 
     C2F(SetDriver)("Rec",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
@@ -89,6 +110,7 @@ void  scig_erase(win_num)
   C2F(dr)("xstart","v",&win_num,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xsetdr",name, PI0, PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  scig_buzy = 0;
 }
 
 /********************************************************
@@ -106,6 +128,8 @@ void scig_tops(win_num,colored,bufname,driver)
   char name[4];
   integer zero=0,un=1;
   integer verb=0,cur,na,screenc;
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   GetDriver1(name,PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
   C2F(dr)("xget","window",&verb,&cur,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);  
   C2F(dr)("xset","window",&win_num,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
@@ -132,6 +156,7 @@ void scig_tops(win_num,colored,bufname,driver)
   C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   /* to force a reset in the graphic scales */
   SwitchWindow(&cur);
+  scig_buzy = 0;
 }
 
 int C2F(xg2psofig)(fname,len,iwin,color,driver,l1,l2)
@@ -156,6 +181,8 @@ void scig_2dzoom(win_num)
      integer win_num;
 {
   char name[4];
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   GetDriver1(name,PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
   if ( (GetDriver()) !='R') 
     {
@@ -170,6 +197,7 @@ void scig_2dzoom(win_num)
       C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
       C2F(dr)("xsetdr",name, PI0, PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     }
+  scig_buzy = 0;
 }
 
 
@@ -182,7 +210,8 @@ void   scig_unzoom(win_num)
 {
   integer verb=0,cur,na;
   char name[4];
-
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   GetDriver1(name,PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
   if ( (GetDriver()) !='R') 
     {
@@ -196,6 +225,7 @@ void   scig_unzoom(win_num)
       C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
       C2F(dr)("xsetdr",name, PI0, PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     }
+  scig_buzy = 0;
 }
 
 /*******************************************************
@@ -207,6 +237,8 @@ void scig_3drot(win_num)
 {
   integer verb=0,cur,na;
   char name[4];
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   GetDriver1(name,PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
   if ( (GetDriver()) !='R') 
     {
@@ -220,6 +252,7 @@ void scig_3drot(win_num)
       C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
       C2F(dr)("xsetdr",name, PI0, PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     }
+  scig_buzy = 0;
 }
 /********************************************************
  * graphic Window selection 
@@ -241,9 +274,12 @@ void scig_loadsg(win_num,filename)
      char *filename;
 {
   integer verb=0,cur,na;
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   C2F(dr)("xget","window",&verb,&cur,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xset","window",&win_num,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(xloadplots)(filename,0L);
   C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  scig_buzy = 0;
 }
 

@@ -1,6 +1,7 @@
 function r=mtlb_ishold()
 [lhs,rhs]=argn(0)
-if exists('%MTLBHOLD')==0 then
+global('%MTLBHOLD')
+if ~%MTLBHOLD|%MTLBHOLD==[] then
   r=%f
 else
   r=%MTLBHOLD

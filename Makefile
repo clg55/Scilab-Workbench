@@ -13,47 +13,16 @@ binary:
 		echo "  you'd better read the README file first."; \
 	fi
 
-SCIDIR=.
+#SCIDIR=.
+include Path.incl
 include Makefile.incl
 
 all:: bin/scilex  
 
 world:: scilex-lib-world bin/scilex
 
-LIBRSCI = libs/system.a libs/interf.a libs/system2.a libs/optim.a \
-	libs/integ.a libs/control.a libs/scicos.a libs/signal.a \
-	libs/poly.a libs/calelm.a libs/lapack.a libs/graphics.a \
-	libs/sparse.a libs/metanet.a libs/sun.a  \
-	libs/intersci.a  libs/xsci.a libs/graphics.a libs/menusX.a \
-	libs/libcomm.a libs/comm.a libs/sound.a libs/dcd.a libs/rand.a \
-	libs/blas.a libs/fraclab.a libs/pvm.a  
-
-LIBR = $(XAW_LOCAL_LIB) $(LIBRSCI) $(DLDLIB) $(PVMGLIB) $(PVMLIB)
-
-DEFAULTS = \
-	routines/default/FTables.o \
-	routines/default/Ex-colnew.o \
-	routines/default/Ex-corr.o \
-	routines/default/Ex-feval.o \
-	routines/default/Ex-fsolve.o \
-	routines/default/Ex-impl.o \
-	routines/default/Ex-intg.o \
-	routines/default/Ex-int2d.o \
-	routines/default/Ex-int3d.o \
-	routines/default/Ex-ode-more.o \
-	routines/default/Ex-ode.o \
-	routines/default/Ex-odedc.o \
-	routines/default/Ex-optim.o \
-	routines/default/Ex-schur.o \
-	routines/default/Ex-fort.o \
-	routines/default/Ex-dasrt.o \
-	routines/default/Ex-dassl.o \
-	routines/default/Ex-fbutn.o \
-	routines/default/mainsci.o \
-	routines/default/matusr.o  routines/default/matus2.o \
-	routines/default/Funtab.o  routines/default/msgstxt.o \
-	routines/default/scimem.o \
-	routines/default/callinterf.o
+# Add the object files that are used to compile Scilex
+include Makefile.OBJ
 
 include config/Makefile.alpha
 
@@ -75,11 +44,11 @@ scilex-lib::
 
 scilex-lib-world::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
-	@cd routines; echo "making world in routines..."; \
+	cd routines; echo "making world in routines..."; \
 		$(MAKE) $(MFLAGS) world;
 
-scilex-lib-world::
-	@cd pvm3; echo "making all in pvm3..."; $(MAKE) $(MFLAGS);
+#scilex-lib-world::
+#	@cd pvm3; echo "making all in pvm3..."; $(MAKE) $(MFLAGS);
 
 all::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
@@ -108,8 +77,8 @@ distclean::
 
 distclean::
 	@cd pvm3; echo "making distclean in pvm3..."; \
-	$(MAKE) $(MFLAGS) clean;
-	$(RM) -r pvm3/lib/ALPHA pvm3/bin/ALPHA
+	$(MAKE) $(MFLAGS) distclean;
+
 
 clean::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
@@ -119,9 +88,9 @@ clean::
 			$(MAKE) $(MFLAGS)  clean); \
 	done
 
-clean::
-	@cd pvm3; echo "making clean in pvm3..."; \
-	$(MAKE) $(MFLAGS)  clean;
+#clean::
+#	@cd pvm3; echo "making clean in pvm3..."; \
+#	$(MAKE) $(MFLAGS)  clean;
 
 tests:
 	@echo "Type \"make tests\" in $(SCIDIR)/tests directory "
@@ -132,33 +101,72 @@ distclean::
 	conftest conftest.c so_locations
 
 
-SCIBASE = scilab-2.4.1
+SCIBASE = scilab-2.5
 
 BINDISTFILES = \
-	$(SCIBASE)/CHANGES $(SCIBASE)/README $(SCIBASE)/ACKNOWLEDGEMENTS \
-	$(SCIBASE)/notice.ps $(SCIBASE)/notice.tex \
-	$(SCIBASE)/scilab.quit $(SCIBASE)/scilab.star \
-	$(SCIBASE)/configure $(SCIBASE)/config $(SCIBASE)/Makefile* \
-	$(SCIBASE)/Version.incl $(SCIBASE)/patchlevel.h \
+	$(SCIBASE)/.binary \
+        $(SCIBASE)/Path.incl \
+        $(SCIBASE)/Makefile.OBJ \
+	$(SCIBASE)/routines/Make.lib \
+	$(SCIBASE)/ACKNOWLEDGEMENTS \
+	$(SCIBASE)/CHANGES \
+	$(SCIBASE)/Makefile \
+	$(SCIBASE)/Makefile.incl \
+	$(SCIBASE)/Makemex \
+	$(SCIBASE)/README \
+	$(SCIBASE)/Version.incl \
+	$(SCIBASE)/configure \
+	$(SCIBASE)/libtool \
+	$(SCIBASE)/notice.ps \
+	$(SCIBASE)/notice.tex \
+	$(SCIBASE)/scilab.quit \
+	$(SCIBASE)/scilab.star \
 	$(SCIBASE)/X11_defaults \
-	$(SCIBASE)/README_Windows.txt $(SCIBASE)/Win95-util \
-	$(SCIBASE)/bin $(SCIBASE)/demos $(SCIBASE)/examples \
-	$(SCIBASE)/imp/NperiPos.ps $(SCIBASE)/macros \
+	$(SCIBASE)/bin \
+	$(SCIBASE)/config \
+	$(SCIBASE)/contrib \
+	$(SCIBASE)/demos \
+	$(SCIBASE)/examples \
+	$(SCIBASE)/imp/NperiPos.ps \
+	$(SCIBASE)/imp/giffonts \
+	$(SCIBASE)/macros \
 	$(SCIBASE)/man \
-	$(SCIBASE)/maple $(SCIBASE)/scripts $(SCIBASE)/util \
-	$(SCIBASE)/routines/*.h \
-	$(SCIBASE)/routines/graphics/Math.h \
-	$(SCIBASE)/routines/graphics/Graphics.h \
-	$(SCIBASE)/routines/sun/link.h $(SCIBASE)/routines/intersci/sparse.h \
-	$(SCIBASE)/pvm3/lib/pvm $(SCIBASE)/pvm3/lib/pvmd \
+	$(SCIBASE)/maple \
+	$(SCIBASE)/pvm3/lib/pvm \
+	$(SCIBASE)/pvm3/lib/pvmd \
 	$(SCIBASE)/pvm3/lib/pvmtmparch \
 	$(SCIBASE)/pvm3/lib/ALPHA/pvmd3 \
 	$(SCIBASE)/pvm3/lib/ALPHA/pvmgs \
+	$(SCIBASE)/routines/*.h \
+	$(SCIBASE)/routines/graphics/Math.h \
+	$(SCIBASE)/routines/graphics/Graphics.h \
+	$(SCIBASE)/routines/intersci/sparse.h \
+	$(SCIBASE)/routines/scicos/scicos.h \
+	$(SCIBASE)/routines/sun/link.h \
+	$(SCIBASE)/routines/default/FCreate \
+	$(SCIBASE)/routines/default/Flist \
+	$(SCIBASE)/routines/default/README \
+	$(SCIBASE)/routines/default/fundef \
+	$(SCIBASE)/routines/default/*.c \
+	$(SCIBASE)/routines/default/*.f \
+	$(SCIBASE)/routines/default/*.h \
+	$(SCIBASE)/scripts \
 	$(SCIBASE)/tcl \
-	$(SCIBASE)/.binary
+	$(SCIBASE)/util
 
 tarbindist:
 	touch .binary
 	strip $(SCIDIR)/bin/scilex
 	cd .. ; tar cvf $(SCIDIR)/$(SCIBASE)-bin.tar $(BINDISTFILES)
 	$(RM) .binary
+
+install:
+	touch .binary
+	strip $(SCIDIR)/bin/scilex
+	cd .. ; tar cvf - $(BINDISTFILES) | (cd ${PREFIX}/share; tar xf -)
+	cd ${PREFIX}/share/scilab-2.5; make
+	rm -f ${PREFIX}/bin/scilab
+	ln -fs ${PREFIX}/share/scilab-2.5/bin/scilab ${PREFIX}/bin/scilab
+	ln -fs ${PREFIX}/bin/xless ${PREFIX}/share/scilab-2.5/bin/xless
+	${BSD_INSTALL_DATA} ${PREFIX}/share/scilab-2.5/X11_defaults/Xscilab ${X11BASE}/lib/X11/app-defaults
+	${BSD_INSTALL_DATA} ${PREFIX}/share/scilab-2.5/X11_defaults/Metanet-color ${X11BASE}/lib/X11/app-defaults

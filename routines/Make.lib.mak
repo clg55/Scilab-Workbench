@@ -7,7 +7,6 @@ FFLAGS = $(FC_OPTIONS)
 
 OBJS = $(OBJSC) $(OBJSF)
 
-F2C=..\..\bin\f2c
 
 world: all
 
@@ -54,12 +53,4 @@ cleanF :
 distclean::
 	del *.obj
 	del $(LIBRARY)
-
-# default rule for Fortran Compilation 
-
-.f.obj	:
-	@echo -----------Compile file $*.f-------------
-	@$(F2C)  $*.f 
-	@$(CC) $(CFLAGS) $*.c 
-	@del $*.c 
 

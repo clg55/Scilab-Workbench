@@ -21,8 +21,8 @@ Output parameters
        o sd_param : real vector [4,1] corresponding to estimated standard
          deviation of the four previous parameters.
 Example
-  [proc1.5,inc1.5]=sim_stable(1.5,0,0,1,10000); generates a standard 1.5-
-  stable motion.  [param,sd_param]=McCulloch(inc1.5); estimates parameters of
+  [proc1.5,inc1.5]=sim_stable(1.5,0,0,1,10000); generates a standard 1.5-sta-
+  ble motion.  [param,sd_param]=McCulloch(inc1.5); estimates parameters of
   the previous simutated 1.5-stable random variable inc1.5 To visualize the
   estimates parameters or their sd-deviations use respectively  param or
   sd_param.  alpha=param(1), beta=param(2), mu=param(3), gamma=param(4).

@@ -26,7 +26,7 @@ DESCRIPTION
   the block. Each of them are stored in the Scicos editor main data struc-
   ture. Index of these in Scicos editor main data structure is given by the
   creation order.
-  For Super blocks model(8) contains a data structure similar to the
-  scicos_main data structure.
+  For Super blocks model(8) contains a data structure similar to the sci-
+  cos_main data structure.
 SEE ALSO
   scicos_graphics, scicos_model

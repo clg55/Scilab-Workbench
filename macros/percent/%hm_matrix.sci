@@ -15,4 +15,8 @@ end
 if prod(a('dims'))<>prod(sz) then
   error('MATRIX: input and output matrices  must have the same number of elements')
 end
-a('dims')=sz(:)
+if size(sz,'*')==2 then
+  a=matrix(a('entries'),sz(1),sz(2))
+else
+  a('dims')=sz(:)
+end

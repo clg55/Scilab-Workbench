@@ -11,6 +11,7 @@ c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     
+      logical allowptr
       common/ierinv/iero
 c     
       double precision al,be,s,p,sflag,x(3)

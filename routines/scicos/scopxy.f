@@ -39,14 +39,7 @@ c
          write(6,'(''Scopxy t='',e10.3,'' flag='',i1,''window='',i3)') t
      $        ,flag,ipar(1) 
       endif
-c     
-      call dr1('xgetdr'//char(0),name,v,v,v,v,v,v,
-     $     dv,dv,dv,dv)
-      if(name(1:3).ne.'Rec') then
-         call dr1('xsetdr'//char(0),'Rec'//char(0),v,v,v,v,v,v,
-     $        dv,dv,dv,dv)
-      endif
-
+c   
 
 c     
       if(flag.eq.2) then
@@ -107,6 +100,8 @@ c     erase memory
             call dr1('xset'//char(0),'window'//char(0),wid,v,v,v,v,v,
      $           dv,dv,dv,dv)
          endif
+         call dr1('xsetdr'//char(0),'Rec'//char(0),v,v,v,v,v,v,
+     $        dv,dv,dv,dv)
          iwp=7
          if(ipar(iwp).ge.0) then
             call dr1('xset'//char(0),'wpos'//char(0),ipar(iwp),
@@ -132,6 +127,8 @@ c     erase memory
      $        dv,dv,dv,dv)
          buf='t@ @input and output'
          strf='011'//char(0)
+         call dr1('xset'//char(0),'thickness'//char(0),1,v,
+     $        v,v,v,v,dv,dv,dv,dv)
          call dr1('xset'//char(0),'dashes'//char(0),0,0,0,
      &        0,0,v,dv,dv,dv,dv)
          call dr1('xset'//char(0),'alufunction'//char(0),3,v,v,v,v,v,
@@ -155,10 +152,17 @@ c first point drawing
          z(1)=0
          
       elseif(flag.eq.5) then
+         wid=ipar(1)
+         N=ipar(3)
+c     
+         call dr1('xget'//char(0),'window'//char(0),verb,cur,na,v,v,v,
+     $        dv,dv,dv,dv)
+         if(cur.ne.wid) then
+            call dr1('xset'//char(0),'window'//char(0),wid,v,v,v,v,v,
+     $           dv,dv,dv,dv)
+         endif
          call dr1('xset'//char(0),'alufunction'//char(0),3,v,v,v,v,v,
      $        dv,dv,dv,dv)
       endif
 
-      call dr1('xsetdr'//char(0),name,v,v,v,v,v,v,
-     $     dv,dv,dv,dv)
       end

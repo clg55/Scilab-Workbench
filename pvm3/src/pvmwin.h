@@ -39,14 +39,16 @@
 #define __fortran __stdcall
 #endif
 #define STRICT
+#ifndef __ABSC__
 #include <sys/timeb.h>
-#include <time.h>
 #include <process.h>
+#include <io.h>
+#endif
+#include <time.h>
 #include <winsock.h>
 #include <windows.h>
 
 #include <stdio.h>
-#include <io.h>
 
 #ifndef HASSTDLIB
 #define HASSTDLIB

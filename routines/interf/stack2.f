@@ -13,7 +13,13 @@ c     Copyright INRIA
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
-
+      if(lhsvar(1).eq.0) then
+         top=top-rhs+lhs
+         call objvide(' ',top)
+         putlhsvarFD=.true.
+         nbvars=0
+         return
+      endif
       nbvars1=0
       do 1 k=1,lhs
          nbvars1=max(nbvars1,lhsvar(k))
@@ -41,6 +47,7 @@ c           to prepare next pass
  100   continue
       top=top-rhs+lhs
       putlhsvarFD=.true.
+      lhsvar(1)=0
       nbvars=0
       return
       end
@@ -60,6 +67,13 @@ c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 
+      if(lhsvar(1).eq.0) then
+         top=top-rhs+lhs
+         call objvide(' ',top)
+         putlhsvar=.true.
+         nbvars=0
+         return
+      endif
       nbvars1=0
       do 1 k=1,lhs
          nbvars1=max(nbvars1,lhsvar(k))
@@ -102,6 +116,7 @@ c         write(06,*) 'je bouge',top-rhs+ivar,'<--',lhsvar(ivar)
  100  continue     
       top=top-rhs+lhs
       putlhsvar=.true.
+      lhsvar(1)=0
       nbvars=0
       return
       end
@@ -184,7 +199,7 @@ c         write(06,*) '   je copie ',top-rhs+i,'-->',itopl
       return
       end
 
-      subroutine cvstr1(n,line,str,job)
+      subroutine cvstr1old(n,line,str,job)
 C     ====================================================================
 C     Like cvstr but \n are kept and the conversion can be done ``on place''
 C     ( line and str points on the same memory zone )
@@ -987,7 +1002,7 @@ c
 c
       fname='getrhsvar'
       nbvars=max(nbvars,number)
-      call cvname(ids(1,pt+1),fname,1)
+      call cvname(ids(1,pt+1),fname,0)
       getrhsvar=.false.
       lw=number+top-rhs
       if(number.gt.rhs) then
@@ -1355,32 +1370,32 @@ c     this object will be copied with a vcopyobj in putlhsvar
       return
       end
 
+      logical function mklistfromvars(pos,n)
+c     ===========================================================
+c     replace the last n variables created at postions pos:pos-1+n
+c     by a list of these variables at poistion pos
+c     ===========================================================
+      include '../stack.h'
+      integer pos,tops
+      tops=top
+      top=(top-rhs)+pos-1+n
+      call mklist(n)
+      top=tops
+      ntypes(pos)=ichar('$')
+      mklistfromvars=.true.
+      return
+      end
 
+ 
       subroutine in2str(n,line,str)
 c     ===========================================================
-c     int to string (cvstr)
-c     line and str can point to the same zone
-c     the conversion is done on place 
-c     and str is null terminated 
-c     used by getrhsvar
+c     conversion from Scilab code --> ascii 
+c     + add a 0 at end of string
 c     =======================================
       include '../stack.h'
-      integer eol,line(*)
-      character str*(*),mc*1
-      data eol/99/
-c     conversion code ->ascii
-      do 30 j=1,n
-         m=line(j)
-         if(abs(m).gt.csiz) m=99
-         if(m.eq.99) goto 10
-         if(m.lt.0) then
-            str(j:j)=alfb(abs(m)+1)
-         else
-            str(j:j)=alfa(m+1)
-         endif
-         goto 30
- 10      str(j:j)='!'
- 30   continue
+      integer line(*)
+      character str*(*)
+      call codetoascii(n,line,str)
       j=n+1
       str(j:j)=char(0)
       return
@@ -1413,6 +1428,7 @@ c     ===========================================================
       integer ptr
       integer mlhs,mrhs
       integer iadr,sadr
+      logical allowptr
 
       common/ierfeval/iero
       iadr(l) = l + l - 1
@@ -1461,6 +1477,278 @@ C+
       iero=1
       return
       end
+
+
+      logical function scistring(ifirst,thestring,mlhs,mrhs)
+c     ===========================================================
+c     executes scilab string (name of a scilab function) with mrhs 
+c     input args and mlhs output variables
+c     input args are supposed to be indexed by ifirst,ifirst+1,...
+c     thestring= string made of the name of a Scilab function
+c     mlhs,mlhs = number of lhs and rhs parameters of the function
+c     ifisrt,thestring,mlhs and mrhs are input parameters.
+c     ===========================================================
+      include "../stack.h"
+c     integer ptr
+      integer mlhs,mrhs
+      integer iadr,sadr
+      character*(*) thestring
+      logical scifunction,scibuiltin,sciops
+      integer id(nsiz)
+      integer op, getopcode,tops
+c     
+      iadr(l)=l+l-1
+c     
+      scistring=.false.
+      nnn=len(thestring)
+      op=0
+      if(nnn.le.2) op=getopcode(thestring)
+      if(op.eq.0) then
+         call cvname(id,thestring(1:nnn),0)
+         fin=0
+         tops=top
+         top=top-rhs+ifirst+mrhs-1
+         call funs(id)
+         top=tops
+         if(fin.eq.0) then
+            buf=thestring//' is not a Scilab function!'
+            call error(9999)
+            return
+         endif
+         if(fun.le.0) then
+            lf=lstk(fin)
+            ils=iadr(lf)+1
+            moutputs=istk(ils)
+            ile=ils+nsiz*moutputs+1
+            ninputs=istk(ile)
+c     ninputs=actual number of inputs, moutputs=actual number of outputs
+c     of thestring: checking mlhs=ninputs and mrhs=moutputs not done.
+            scistring=scifunction(ifirst,lf,mlhs,mrhs)
+         else
+            ifin=fin
+            ifun=fun
+            scistring=scibuiltin(ifirst,ifun,ifin,mlhs,mrhs)
+         endif
+      else
+         scistring=sciops(ifirst,op,mlhs,mrhs)
+      endif
+      return
+      end
+
+      integer function getopcode(string)
+      character*(*) string
+      character*(1) ch
+      integer op
+      op=0
+      ch=string(1:1)
+      if(len(string).ge.2) then
+c     .op  or op.
+         if(ch.eq.'.') ch=string(2:2)
+         op=op+51
+      endif
+      if(ch.eq.'*') then
+         op=op+47
+      elseif (ch.eq.'+')   then
+         op=op+45
+      elseif(ch.eq.'-')    then
+         op=op+46
+      elseif(ch.eq.'''')   then
+         op=op+53
+      elseif(ch.eq.'/')    then
+         op=op+48
+      elseif(ch.eq.'\\')   then
+         op=op+49
+      elseif(ch.eq.'^')   then
+         op=op+62
+      endif
+      getopcode=op
+      return
+      end
+
+      logical function scibuiltin(number,ifun,ifin,mlhs,mrhs)
+c     ===========================================================
+c     same as scifunction: executes scilab built-in function (ifin,ifun)
+c     =(interface-number, function-nmber-in-interface)
+c     for the input parameters located at number, number+1, ....
+c     mlhs,mrhs = # of lhs and rhs parameters of the function.
+c     ===========================================================
+
+      include "../stack.h"
+      integer iadr,sadr,srhs,slhs,pt0
+      logical allowptr
+c
+      iadr(l) = l + l - 1
+      sadr(l) = (l/2) + 1
+C
+      scibuiltin=.false.
+C     
+      intop=top
+      top=top-rhs+number+mrhs-1
+      slhs=lhs
+      srhs=rhs
+      lhs = mlhs
+      rhs = mrhs
+      krec = -1
+      pt0=pt
+      goto 90
+******************************
+
+ 60   call  parse
+      if(fun.eq.99) then
+         fun=0
+         goto 200
+      endif
+      if(err.gt.0) goto 9999
+c     
+
+      if(int(rstk(pt)/100).eq.9) then
+         ir=rstk(pt)-900
+         if(ir.eq.1) then
+c     .     back to matsys
+            k=13
+         elseif(ir.ge.2.and.ir.le.9) then
+c     .     back to matio
+            k=5
+         elseif(ir.eq.10) then
+c     .     end of overloaded function
+            goto 96
+         elseif(ir.gt.40) then
+c     .     back to matus2
+            k=24
+         elseif(ir.gt.20) then
+c     .     back to matusr
+            k=14
+         else
+            goto 89
+         endif
+         iflagint=0
+         goto 95
+      endif
+c
+ 89   if(top.lt.rhs ) then
+         call error(22)
+         goto 9999
+      endif
+
+      if(top-rhs+lhs+1.ge.bot) then
+         call error(18)
+         goto 9999
+      endif
+      goto 91
+c     
+ 90   continue
+      if(err.gt.0) goto 9999
+      if (top-lhs+1.gt.0) call iset(lhs,0,infstk(top-lhs+1),1)
+ 91   k=fun
+      fun=0
+      if(k.eq.krec) then
+        call error(22)
+        goto 9999
+      endif
+      if (k.eq.0 ) then
+         if(pt.gt.pt0) goto 60
+         goto 200
+      endif
+      if (k.eq.2 ) then 
+         il=iadr(lstk(top+1-rhs))
+         iflagint=istk(il+3)
+      endif 
+      if (.not.allowptr(k)) call ref2val
+ 95   call callinterf(k,iflagint)
+      if(icall.ne.0) goto 60
+      if(fun.ge.0) goto 90
+
+c     called interface ask for a scilab function to perform the function (fun=-1)
+c     the function name is given in ids(1,pt+1)
+      call ref2val
+      fun=0
+      call funs(ids(1,pt+1))
+      if(err.gt.0) goto 9999
+      if(fun.gt.0) then
+         goto 91
+      endif
+      if(fin.eq.0) then
+         call error(4)
+         if(err.gt.0) goto 9999
+      endif
+      pt=pt+1
+      fin=lstk(fin)
+      rstk(pt)=910
+      icall=5
+      fun=0
+c     *call*  macro
+      goto 60
+ 96   pt=pt-1
+      goto 90
+
+***************************
+ 200  lhs = slhs
+      rhs = srhs
+      top=intop
+      do 1333 i=1,mlhs
+         lw=top-rhs+number+i-1
+         ntypes(lw)=ichar('$')
+ 1333 continue
+      scibuiltin=.true.
+      return
+ 9999 continue
+      scibuiltin=.false.
+      return
+      end
+
+
+
+      logical function sciops(number,op,mlhs,mrhs)
+c     ===========================================================
+c     same as scibuiltin: executes scilab operation op
+c     for the input parameters located at number, number+1, ....
+c     mlhs,mrhs = # of lhs and rhs parameters of the operation.
+c     ===========================================================
+
+      include "../stack.h"
+      integer iadr,sadr,srhs,slhs,op
+      logical scibuiltin
+
+      iadr(l) = l + l - 1
+      sadr(l) = (l/2) + 1
+C
+      sciops=.false.
+C 
+      fin=op
+      intop=top
+      top=top-rhs+number+mrhs-1
+      slhs=lhs
+      srhs=rhs
+      lhs = mlhs
+      rhs = mrhs
+ 1    call allops
+      if(err.gt.0) goto 9999
+      if(fun.ne.0) then
+         top=intop
+         ifun=fun
+         ifin=fin
+         if(.not.scibuiltin(number,ifun,ifin,mlhs,mrhs)) goto 9999
+         if(err.gt.0) goto 9999
+         goto 1
+      endif
+      lhs = slhs
+      rhs = srhs
+      top=intop
+      do 1333 i=1,mlhs
+         lw=top-rhs+number+i-1
+         ntypes(lw)=ichar('$')
+ 1333 continue
+      fun=0
+      fin=op
+      icall=0
+      sciops=.true.
+      return
+ 9999 continue
+      sciops=.false.
+      return
+      end
+
+
 
       logical function getrhssys(lw,N,M,P,ptrA,ptrB,ptrC,ptrD,ptrX0,h)
 c     test and return linear system (syslin tlist)
@@ -1576,9 +1864,10 @@ c     Sys(7)=h
       subroutine errorinfo(fname,info)
 c     Returns info number in routine fname.
       INCLUDE '../stack.h'
-      character*(nlgh) fname
+      character*(*) fname
       buf=fname//': internal error, info='
-      write(buf(50:53),'(i4)') info
+      n=len(fname)
+      write(buf(n+25:n+29),'(i4)') info
       call error(998)
       end
 
@@ -1617,3 +1906,4 @@ c
       endif
 
       end
+

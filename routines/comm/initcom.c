@@ -1,7 +1,9 @@
 /* Copyright INRIA */
 #include <stdio.h>
+#ifndef __ABSC__
 #include <sys/types.h>
-#ifndef __MSC__
+#endif
+#if !(defined __MSC__) && !(defined __ABSC__)
 #include <netinet/in.h>
 #include <netdb.h>
 #endif

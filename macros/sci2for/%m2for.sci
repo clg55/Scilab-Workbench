@@ -15,6 +15,9 @@ end
 [s1,te1,t1,m1,n1]=s1(1:5);
 [s2,te2,t2,m2,n2]=s2(1:5);
 it1=prod(size(s1))-1;it2=prod(size(s2))-1
+if t1<>t2 then
+  if t2=='0' then t2='1',end
+end
 //
 if m1=='1'&n1=='1'&m2=='1'&n2=='1' then // cas scalaire
   select it1+2*it2

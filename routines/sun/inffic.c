@@ -1,4 +1,6 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
+#include <string.h>
+
 #if defined(THINK_C)||defined(__MWERKS__)
 #include "::graphics:Math.h"
 #else

@@ -10,8 +10,8 @@ CALLING SEQUENCE
 
 PARAMETERS
 
-  v    : real or complex vector/matrix; sparse vector; character string
-       vector/matrix
+  v    : real or complex vector/matrix; sparse vector; character string vec-
+       tor/matrix
 
   s    : real or complex vector or matrix; sparse vector; character string
        vector/matrix
@@ -19,7 +19,7 @@ PARAMETERS
   k    : vector or matrix of integers
 
 DESCRIPTION
-  s=sort(v) sorts v  in decreasing order. If v is a matrix, sorting is done
+  s=sort(v) sorts v  in decreasing order.  If v is a matrix, sorting is done
   columnwise, v being seen as the stacked vector v(:).  [s,k]=sort(v) gives
   in addition the indices of entries of s in v, i.e. v(k(:))  is the vector
   s.

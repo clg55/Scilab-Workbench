@@ -1,4 +1,5 @@
 /* Copyright INRIA */
+#include <X11/Intrinsic.h>
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +8,7 @@
 #include "graph.h"
 #include "metio.h"
 #include "menus.h"
+#include "graphics.h"
 
 extern char* my_basename();
 extern char* dirname();
@@ -19,9 +21,8 @@ extern char *StripGraph();
 
 #define MAXGRAPHS 100
 
-int intDisplay = 0;
-int nodeNameDisplay = 0;
-int arcNameDisplay = 0;
+int arcStrDisplay = NODISP;
+int nodeStrDisplay = NODISP;
 double metaScale = 1.0;
 
 int maxGraphs;

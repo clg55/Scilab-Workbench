@@ -7,10 +7,10 @@ CALLING SEQUENCE
   [a,b,sig]=reglin(x,y)
 
 DESCRIPTION
-  solve the regression problem y=a*x+ b in the least square sense. sig is the
-  standard deviation of the residual. x and y are two matrices of size x(p,n)
-  and y(q,n), so the estimator a is a matrix of size (q,p) and b is a vector
-  of size (q,1)
+  solve the regression problem y=a*x+ b in the least square sense.  sig is
+  the standard deviation of the residual. x and y are two matrices of size
+  x(p,n) and y(q,n), so the estimator a is a matrix of size (q,p) and b is a
+  vector of size (q,1)
 
 EXAMPLE
   // simulation of data for a(3,5) and b(3,1)

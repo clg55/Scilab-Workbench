@@ -20,9 +20,9 @@ PARAMETERS
        tor or matrix of integers
 
 DESCRIPTION
-  gsort is similar to sort with additional properties. The third argument can
-  be used to chose between increasing or decreasing order. The second argu-
-  ment can be used for lexical orders.
+  gsort is similar to sort with additional properties.  The third argument
+  can be used to chose between increasing or decreasing order. The second
+  argument can be used for lexical orders.
 
   [s,k]=gsort(a,'g') and [s,k]=gsort(a,'g','d') are  the same as
   [s,k]=gsort(a). They perform a sort of the entries of matrix a, a being

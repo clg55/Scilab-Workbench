@@ -17,8 +17,8 @@ DESCRIPTION
   pvm_gsize returns the size of the group named group.  If there is an error
   nb will be negative.
 
-  Since groups can change dynamically in PVM 3.0, this routine can only
-  guarantee to return the instantaneous size of a given group.
+  Since groups can change dynamically in PVM 3.0, this routine can only guar-
+  antee to return the instantaneous size of a given group.
 EXAMPLE
   nb_worker = pvm_gsize( "worker" )
 

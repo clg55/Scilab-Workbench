@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 #include "../machine.h"
 
 /** only used to force the linker to load all blas functions **/

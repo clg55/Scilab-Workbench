@@ -3,7 +3,7 @@ C     ---------------------------------------
 C     verifie  que le nombre d'argument rhs est >= imin <= imax
 C      implicit undefined (a-z)
 C     ---------------------------------------
-c     Copyright INRIA
+c     Copyright ENPC/INRIA
       integer imin,imax
       character fname*(*)
       include '../stack.h'
@@ -1071,6 +1071,41 @@ c
       return
       end
 
+      logical function listcresmat(fname,lw,numi,stlw,m,n,nchar,job,
+     x     ilrs)
+c     ----------------------------------------------------------
+c     listcresmat(top,numero,lw,....) 
+c     le  ieme element de la liste en top doit etre une
+c     matrice stockee a partir de lstk(lw) 
+c     doit mettre a jour les pointeurs de la liste 
+c     ainsi que lstk(top+1) si l'element a creer est le dernier  
+c     lw est aussi mis a jour 
+c     
+c     job==1: nchar est la taille de chaque chaine de la  matrice
+c     job==2: nchar est le vecteur des tailles des chaines de la
+c             matrice
+c     job==3: nchar est le vecteur des pointeurs sur les chaines 
+c             de la matrice
+c     
+c     ----------------------------------------------------------
+C     implicit undefined (a-z)
+      character fname*(*)
+      logical cresmatI
+      integer lw,numi,stlw,m,n,ilrs,il,sz
+      integer iadr,sadr
+      include '../stack.h'
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+
+      listcresmat= cresmatI(fname,stlw,m,n,nchar,job,ilrs,sz)
+      if (.not.listcresmat) return 
+      stlw =  sadr(ilrs +sz)
+      il = iadr(lstk(lw))
+      istk(il+2+numi)= stlw - sadr(il+istk(il+1)+3) +1 
+      if (numi.eq.istk(il+1) ) lstk(lw+1)= stlw
+      return 
+      end 
 
       logical function cresmat(fname,lw,m,n,nchar)
 C     ------------------------------------------------------------------
@@ -1125,6 +1160,70 @@ c
       endif
       end
 
+      logical function cresmatI(fname,stlw,m,n,nchar,job,lr,sz)
+c     ---------------------------------------------------------
+C     internal function used by  and listcresmat
+c     la position ou il faut creer la matrice 
+c     est donnee par sa position dans lstk directement 
+c     job==1: nchar est la taille de chaque chaine de la  matrice
+c     job==2: nchar est le vecteur des tailles des chaines de la
+c             matrice
+c     job==3: nchar est le vecteur des pointeurs sur les chaines 
+c             de la matrice
+
+c     ----------------------------------------------------------
+C      implicit undefined (a-z)
+      character fname*(*)
+      integer stlw,m,n,lr,il
+      integer job,nchar(*),sz
+      integer iadr, sadr
+
+      include '../stack.h'
+
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(stlw)
+      sz=0
+      if(job.eq.1) then
+         sz=m*n*nchar(1)
+      elseif(job.eq.2) then
+         do 01 i=1,m*n
+           sz=sz+nchar(i)
+ 01      continue
+      elseif(job.eq.3) then
+         sz=nchar(m*n+1)-1
+      endif
+      err=sadr(il+4+m*n+1+sz)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         cresmatI=.false.
+         return
+      else
+         cresmatI=.true.
+         istk(il)=10
+         istk(il+1)=m
+         istk(il+2)=n
+         istk(il+3)=0
+         ilp=il+4
+         istk(ilp)=1
+         if(job.eq.1) then
+            do 10 kij=ilp+1,m*n+ilp
+               istk(kij)=istk(kij-1)+nchar(1)
+ 10         continue
+         elseif(job.eq.2) then
+            i=0
+            do 11 kij=ilp+1,m*n+ilp
+               i=i+1
+               istk(kij)=istk(kij-1)+nchar(i)
+ 11         continue
+         elseif(job.eq.3) then
+            call icopy(m*n+1,nchar,1,istk(ilp),1)
+         endif
+         lr=ilp+m*n+1
+         return
+      endif
+      end
 
       logical function cresmat1(fname,lw,m,nchar)
 C     ------------------------------------------------------------------
@@ -1181,6 +1280,62 @@ c
          lstk(lw+1)=sadr(ilast+istk(ilast))
          return
       endif
+      end
+
+
+      logical function cresmat3(fname,lw,m,n,nchar,buffer) 
+C     ------------------------------------------------------------------
+C     Try to create a string matrix S of size mxn 
+C     - m is the number of rows of Matrix S 
+C     - n is the number of colums of Matrix S 
+C     - nchar(m*n): S(i,j) is of size nchar(i+j*(m-1)) 
+C     - buffer : a character array wich containe the concatenation 
+C             of all the strings 
+C     - lw  : where to create the matrix on the stack 
+C      implicit undefined (a-z)
+C     ------------------------------------------------------------------
+      character fname*(*),buffer*(*)
+      integer lw,m,nchar(m),il,ilp,kij,ilast,nnchar,i
+      integer iadr,sadr
+      include '../stack.h'
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      if ( lw+1.ge.bot) then
+         call error(18)
+         cresmat3=.false.
+         return
+      endif
+      nnchar=0
+      do 20 i=1,m*n
+         nnchar=nchar(i)+nnchar 
+ 20   continue
+      il=iadr(lstk(lw))
+      err=sadr(il+4+(nnchar+1)*m*n)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         cresmat3=.false.
+         return
+      else
+         cresmat3=.true.
+         istk(il)=10
+         istk(il+1)=m
+         istk(il+2)=n
+         istk(il+3)=0
+         ilp=il+4
+         istk(ilp)=1
+         i=1
+         do 10 kij=ilp+1,ilp+m*n
+            istk(kij)=istk(kij-1)+nchar(i)
+            i=i+1
+ 10      continue
+         ilast=ilp+m*n
+         lstk(lw+1)=sadr(ilast+istk(ilast))
+         lr1 = ilast + istk(ilp)
+         call cvstr(nnchar,istk(lr1),buffer,0)
+      endif
+      return
       end
 
       logical function cresmat2(fname,lw,nchar,lr)
@@ -1551,6 +1706,7 @@ C      implicit undefined (a-z)
          call dcopy(lv,stk(l),1,stk(l1),1)
          lstk(lwd+1)=lstk(lwd)+lv
       endif
+      return 
       end
 
       logical function swapmat(fname,topk,lw,it1,m1,n1
@@ -1797,6 +1953,7 @@ c
          ili=0
       endif
       getilist=.true.
+      return 
       end
 
       subroutine objvide(fname,lw)
@@ -2856,6 +3013,91 @@ C     -------------------------------------------------------------------
       return 
       end
 
+      logical function mspcreate(lw, m, n, nzmax, it)
+c     creates a matlab-like sparse matrix
+      integer iadr,sadr
+      include '../stack.h'
+
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+ 
+      if ( lw+1.ge.bot) then
+         call error(18)
+         mspcreate=.false.
+         return
+      endif      
+      il=iadr(lstk(lw))
+      err=sadr( (il+4)+(n+1)+nzmax ) + (it+1)*nzmax -lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         mspcreate=.false.
+         return
+      else
+         mspcreate=.true.
+         istk(il)=7
+c        si m*n=0 les deux dimensions sont mises a zero.
+         istk(il+1)=min(m,m*n)
+         istk(il+2)=min(n,m*n) 
+         istk(il+3)=it
+         istk(il+4)=nzmax
+         istk(il+5)=0
+         istk(il+5+n)=nzmax
+         jc = il+5
+         ir = jc + n +1 
+c         write(6,*) 'msp: lw,m,n,nzmax,it=', lw, m, n, nzmax, it
+         lstk(lw+1)=sadr( (il+4)+(n+1)+nzmax )+ (it+1)*nzmax +1
+c         write(6,*) 'lstk(lw+1)-lstk(lw)',lstk(lw+1)-lstk(lw)
+         return
+      endif
+      end
 
 
+      logical function cresmat4(fname,lw,m,nchar,lr)
+C     ------------------------------------------------------------------
+C     checks that an [m,1] string matrix can be stored in the
+C     stack.
+C     All chains have the same length nchar
+C     istk(lr) --- beginning of chains
+C      implicit undefined (a-z)
+C     ------------------------------------------------------------------
+      character fname*(*)
+      integer lw,m,nchar,il,ilp,kij,ilast,nnchar,i
+      integer iadr,sadr
+      include '../stack.h'
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
 
+      if ( lw+1.ge.bot) then
+         call error(18)
+         cresmat4=.false.
+         return
+      endif
+      nnchar=0
+      do 20 i=1,m
+         nnchar=nchar+nnchar
+ 20   continue
+      il=iadr(lstk(lw))
+      err=sadr(il+4+(nnchar+1)*m)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         cresmat4=.false.
+         return
+      else
+         cresmat4=.true.
+         istk(il)=10
+         istk(il+1)=m
+         istk(il+2)=1
+         istk(il+3)=0
+         ilp=il+4
+         istk(ilp)=1
+         do 10 kij=ilp+1,ilp+m
+            istk(kij)=istk(kij-1)+nchar
+ 10      continue
+         ilast=ilp+m
+         lstk(lw+1)=sadr(ilast+istk(ilast))
+         lr=ilast+1
+         return
+      endif
+      end

@@ -227,7 +227,7 @@ DeleteWindow(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
-  do_kill(w,(caddr_t) 0, (caddr_t) 0);
+  ClearExit1(0); 
 }
 
 
@@ -245,7 +245,7 @@ KeyboardMapping(w, event, params, num_params)
     }
 }
 
-extern void  SGDeleteWindow();
+/** extern void  SGDeleteWindow(); **/
 
 XtActionsRec actionProcs[] = {
   {"DeleteWindow", DeleteWindow},
@@ -529,7 +529,7 @@ int C2F(clearexit)(n)
 }
 
 /* following include needed for solaris */
-#if defined(sparc) && defined(__STDC__)
+#if defined(solaris) && defined(__STDC__) 
 #include <stropts.h>
 #include <poll.h>
 #endif

@@ -1,3 +1,76 @@
+		     Main Changes Scilab 2.4.1 -> 2.5
+		     ================================
+
+NEW FUNCTIONALITIES
+===================
+Global variables have been introduced
+
+New graphic mode has been added to allow scrollbar handling (panner
+for X Window and scrollbars for Windows). 
+GIF export format is now available for Scilab graphic windows.
+
+Keyboard events and window closing within graphical windows can now be
+captured.
+
+Scicos graphical user interface has been made more intuitive and
+keyboard shortcuts have been added.
+
+Scilab Binary files created by "save" are now system-independent so
+they can be exchanged. In particular (compiled macros) *.bin files and
+*.cos (scicos diagrams) can be exchanged.
+
+It is now possible to dynamically link C++ procedures with Scilab.
+
+A new data type "mlist" has been added.
+
+A new function "genlib" allows users to compile the .sci files in a
+given directory, generate associated library and load it. This
+function is particularly useful under windows if VC++ is not
+available. 
+
+C formatted input output functions (printf, scanf, ..) have been
+interfaced to scilab.
+
+OTHERS IMPROVEMENTS
+===================
+Efficiency has been improved using reference argument passing when
+possible instead of value passing.
+
+Hypermatrix opreations have been accelerated.
+
+On X Window systems 3D Athena Widgets are preferably used instead of
+standard  Athena Widgets for a better look.
+
+The "Matlab 4" to Scilab translator has been completed and considerably
+improved.
+
+
+
+NEW TOOLBOXES
+=============
+True integer data types (1,2 and 4 bytes) with associated operations
+and some functions acting on them have been added. 
+
+A library of procedures has been added to allow the use of Matlab
+mex-files under Scilab.
+
+PORTS
+=====
+Scilab has been successfully compiled with Windows ABSOFT development
+environment.
+
+INCOMPATIBILITIES
+=================
+New Scilab "save"d files cannot be loaded by earlier Scilab versions.
+A new function "oldsave" has been added to save in old format.
+
+Scilab help mechanism has changed. The $MANCHAPTERS/Chapter is no more
+used, instead a Scilab variable "helps" is used.
+
+
+
+
+
 		     Main Changes Scilab 2.4 -> 2.4.1
 		     ================================
 

@@ -24,13 +24,15 @@ include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib.mak
-
-
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
 
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
 
 datatf.obj: ../stack.h
 sigelm.obj: ../stack.h

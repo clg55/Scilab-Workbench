@@ -19,31 +19,44 @@ else
   return
 end
 
+if ~super_block&~pal_mode then
+  //update cpr data structure to make it coherent with last changes
+  if needcompile==4 then
+    cpr=list()
+  else
+    [cpr,state0,needcompile,ok]=do_update(cpr,state0,needcompile)
+    if ~ok then return,end
+    cpr(1)=state0
+  end
+else
+  cpr=list()
+end
 
 // open the selected file
-[u,err]=file('open',fname,'unknown',frmt)
+if frmt=='formatted'
+  [u,err]=file('open',fname,'unknown',frmt)
+else
+  [u,err]=mopen(fname,'wb')
+end
 if err<>0 then
-  message('Directory write access denied')
+  message('File or directory write access denied')
   return
 end
 
-if ~super_block&~pal_mode then
-//update cpr data structure to make it coherent with last changes
-if needcompile==4 then
-  cpr=list()
-else
-  [cpr,state0,needcompile,ok]=do_update(cpr,state0,needcompile)
-  if ~ok then return,end
-  cpr(1)=state0
-end
-else
-  cpr=list()
-end
 
-drawtitle(scs_m(1))  //erase the old title
 scs_m;
 scs_m(1)(2)=[name,path] // Change the title
-
+if pal_mode then
+  scs_m11=scs_m(1)(1)
+  rect=dig_bound(scs_m)
+  if rect<>[] then
+    scs_m;
+    scs_m(1)(1)(3)=rect(1);
+    scs_m(1)(1)(4)=rect(2);
+    scs_m(1)(1)(5)=rect(3)-rect(1);
+    scs_m(1)(1)(6)=rect(4)-rect(2);
+  end
+end
 // save
 if ext=='cos' then
   save(u,scicos_ver,scs_m,cpr)
@@ -58,6 +71,7 @@ else
     errclear(-1)
     x_message('Directory write access denied')
     file('close',u)
+    if  pal_mode then scs_m(1)(1)=scs_m11;end
     return
     end
   cos2cosf(u,do_purge(scs_m))
@@ -69,9 +83,9 @@ drawtitle(scs_m(1))  // draw the new title
 
 edited=%f
 if pal_mode then 
-  graph=path+'/'+name+'.pal'
-  xsave(graph)
-  update_scicos_pal(path,scs_m(1)(2)(1),fname),
+   scs_m(1)(1)=scs_m11
+  scicos_pal=update_scicos_pal(path,scs_m(1)(2)(1),fname),
+  scicos_pal=resume(scicos_pal)
 end
 
 

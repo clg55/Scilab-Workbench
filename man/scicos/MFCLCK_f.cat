@@ -1,5 +1,5 @@
 
-MFCLCK_f(5)                     Scicos Block                      MFCLCK_f(5)
+MFCLCK_f(5)                      Scicos Block                     MFCLCK_f(5)
 NAME
   MFCLCK_f - Scicos basic block for frequency division of event clock
 

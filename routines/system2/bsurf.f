@@ -9,6 +9,7 @@ c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     
+      logical allowptr
       double precision y(ny),gout(ng),t(*)
       common/ierode/iero
 c     

@@ -73,6 +73,8 @@ int PointerInArc();
 int PointerInNode();
 void SetCoordinatesArc();
 
+static float kname = 0.3333;
+
 void ExposeBegin()
 {
 }
@@ -454,6 +456,7 @@ void DrawArc(a)
 arc *a;
 {
   char str[MAXNAM];
+  int xname, yname;
   if (a->x0 == HIDDEN) return;
   theColor = Colors[a->col];
   arcW = ArcWidth(a);
@@ -469,14 +472,51 @@ arc *a;
       DrawLoopArc(a->x0,a->y0,a->x2,a->y2,a->x3,a->y3,a->x1,a->y1);
     if (theGraph->directed)
       DrawArcArrow(a->xa0,a->ya0,a->xa1,a->ya1,a->xa2,a->ya2);
-    if (arcNameDisplay) {
-      if (intDisplay) {
+    xname = a->xmax; yname = a->ymax;
+    if (a->g_type == 0) {
+      xname = a->x0 + (a->x1 - a->x0) * kname; 
+      yname = a->y0 + (a->y1 - a->y0) * kname;
+    }
+    if (arcStrDisplay != NODISP) {
+      switch (arcStrDisplay) {
+      case INT_ARCDISP:
 	sprintf(str,"%d",a->number);
-	DrawArcName(a->xmax,a->ymax,str);
+	DrawArcName(xname,yname,str);
+	break;
+      case NAME_ARCDISP:
+	if (a->name != 0) DrawArcName(xname,yname,a->name);
+	break;
+      case COST_ARCDISP:
+	sprintf(str,"%g",a->unitary_cost);
+	DrawArcName(xname,yname,str);
+	break;
+      case MINCAP_ARCDISP:
+	sprintf(str,"%g",a->minimum_capacity);
+	DrawArcName(xname,yname,str);
+	break;
+      case MAXCAP_ARCDISP:
+	sprintf(str,"%g",a->maximum_capacity);
+	DrawArcName(xname,yname,str);
+	break;
+      case LENGTH_ARCDISP:
+	sprintf(str,"%g",a->length);
+	DrawArcName(xname,yname,str);
+	break;
+      case QWEIGHT_ARCDISP:
+	sprintf(str,"%g",a->quadratic_weight);
+	DrawArcName(xname,yname,str);
+	break;
+      case QORIG_ARCDISP:
+	sprintf(str,"%g",a->quadratic_origin);
+	DrawArcName(xname,yname,str);
+	break;
+      case WEIGHT_ARCDISP:
+	sprintf(str,"%g",a->weight);
+	DrawArcName(xname,yname,str);
+	break;
       }
-      else {if (a->name != 0) DrawArcName(a->xmax,a->ymax,a->name);}
     } 
-    else {if (a->label != 0) DrawArcName(a->xmax,a->ymax,a->label);}
+    else {if (a->label != 0) DrawArcName(xname,yname,a->label);}
   }
 }
 
@@ -500,6 +540,7 @@ void EraseArc(a)
 arc *a;
 {
   char str[MAXNAM];
+  int xname, yname;
   if (a->x0 == HIDDEN) return;
   arcW = ArcWidth(a);
   arcH = ArcHiWidth(a);
@@ -512,14 +553,51 @@ arc *a;
     ClearLoopArc(a->x0,a->y0,a->x2,a->y2,a->x3,a->y3,a->x1,a->y1);
   if (theGraph->directed)
     ClearArcArrow(a->xa0,a->ya0,a->xa1,a->ya1,a->xa2,a->ya2);
-  if (arcNameDisplay) {
-    if (intDisplay) {
-      sprintf(str,"%d",a->number);
-      ClearArcName(a->xmax,a->ymax,str);
-    }
-    else {if (a->name != 0) ClearArcName(a->xmax,a->ymax,a->name);}
+  xname = a->xmax; yname = a->ymax;
+  if (a->g_type == 0) {
+    xname = a->x0 + (a->x1 - a->x0) * kname; 
+    yname = a->y0 + (a->y1 - a->y0) * kname;
   }
-  else {if (a->label != 0) ClearArcName(a->xmax,a->ymax,a->label);}
+  if (arcStrDisplay != NODISP) {
+    switch (arcStrDisplay) {
+    case INT_ARCDISP:
+      sprintf(str,"%d",a->number);
+      ClearArcName(xname,yname,str);
+      break;
+    case NAME_ARCDISP:
+      if (a->name != 0) ClearArcName(xname,yname,a->name);
+      break;
+    case COST_ARCDISP:
+      sprintf(str,"%g",a->unitary_cost);
+      ClearArcName(xname,yname,str);
+      break;
+    case MINCAP_ARCDISP:
+      sprintf(str,"%g",a->minimum_capacity);
+      ClearArcName(xname,yname,str);
+      break;
+    case MAXCAP_ARCDISP:
+      sprintf(str,"%g",a->maximum_capacity);
+      ClearArcName(xname,yname,str);
+      break;
+    case LENGTH_ARCDISP:
+      sprintf(str,"%g",a->length);
+      ClearArcName(xname,yname,str);
+      break;
+    case QWEIGHT_ARCDISP:
+      sprintf(str,"%g",a->quadratic_weight);
+      ClearArcName(xname,yname,str);
+      break;
+    case QORIG_ARCDISP:
+      sprintf(str,"%g",a->quadratic_origin);
+      ClearArcName(xname,yname,str);
+      break;
+    case WEIGHT_ARCDISP:
+      sprintf(str,"%g",a->weight);
+      ClearArcName(xname,yname,str);
+      break;
+    }
+  } 
+  else {if (a->label != 0) ClearArcName(xname,yname,a->label);}
 }
 
 void EraseMovingArc(a)
@@ -542,6 +620,7 @@ void HiliteArc1(a)
 arc *a;
 {
   char str[MAXNAM];
+  int xname, yname;
   if (a->x0 == HIDDEN) return;
   EraseArc(a);
   theColor = Colors[a->col];
@@ -556,14 +635,51 @@ arc *a;
     HiliteLoopArc(a->x0,a->y0,a->x2,a->y2,a->x3,a->y3,a->x1,a->y1);
   if (theGraph->directed)
     HiliteArcArrow(a->xa0,a->ya0,a->xa1,a->ya1,a->xa2,a->ya2);
-  if (arcNameDisplay) {
-    if (intDisplay) {
+  xname = a->xmax; yname = a->ymax;
+  if (a->g_type == 0) {
+    xname = a->x0 + (a->x1 - a->x0) * kname; 
+    yname = a->y0 + (a->y1 - a->y0) * kname;
+  }
+  if (arcStrDisplay != NODISP) {
+    switch (arcStrDisplay) {
+    case INT_ARCDISP:
       sprintf(str,"%d",a->number);
-      DrawArcName(a->xmax,a->ymax,str);
-      }
-    else {if (a->name != 0) HiliteArcName(a->xmax,a->ymax,a->name);}
+      HiliteArcName(xname,yname,str);
+      break;
+    case NAME_ARCDISP:
+      if (a->name != 0) HiliteArcName(xname,yname,a->name);
+      break;
+    case COST_ARCDISP:
+      sprintf(str,"%g",a->unitary_cost);
+      HiliteArcName(xname,yname,str);
+      break;
+    case MINCAP_ARCDISP:
+      sprintf(str,"%g",a->minimum_capacity);
+      HiliteArcName(xname,yname,str);
+      break;
+    case MAXCAP_ARCDISP:
+      sprintf(str,"%g",a->maximum_capacity);
+      HiliteArcName(xname,yname,str);
+      break;
+    case LENGTH_ARCDISP:
+      sprintf(str,"%g",a->length);
+      HiliteArcName(xname,yname,str);
+      break;
+    case QWEIGHT_ARCDISP:
+      sprintf(str,"%g",a->quadratic_weight);
+      HiliteArcName(xname,yname,str);
+      break;
+    case QORIG_ARCDISP:
+      sprintf(str,"%g",a->quadratic_origin);
+      HiliteArcName(xname,yname,str);
+      break;
+    case WEIGHT_ARCDISP:
+      sprintf(str,"%g",a->weight);
+      HiliteArcName(xname,yname,str);
+      break;
+    }
   } 
-  else {if (a->label != 0) HiliteArcName(a->xmax,a->ymax,a->label);}
+  else {if (a->label != 0) HiliteArcName(xname,yname,a->label);}
   DrawNode(a->tail);
   DrawNode(a->head);
 }
@@ -582,18 +698,56 @@ void UnhiliteArc1(a)
 arc *a;
 {  
   char str[MAXNAM];
+  int xname, yname;
   if (a->x0 == HIDDEN) return;
   arcW = ArcWidth(a);
   arcH = ArcHiWidth(a);
   theDrawFont = FontSelect(ArcFontSize(a));
-  if (arcNameDisplay) {
-    if (intDisplay) {
+  xname = a->xmax; yname = a->ymax;
+  if (a->g_type == 0) {
+    xname = a->x0 + (a->x1 - a->x0) * kname; 
+    yname = a->y0 + (a->y1 - a->y0) * kname;
+  }
+  if (arcStrDisplay != NODISP) {
+    switch (arcStrDisplay) {
+    case INT_ARCDISP:
       sprintf(str,"%d",a->number);
-      UnhiliteArcName(a->xmax,a->ymax,str);
+      UnhiliteArcName(xname,yname,str);
+      break;
+    case NAME_ARCDISP:
+      if (a->name != 0) UnhiliteArcName(xname,yname,a->name);
+      break;
+    case COST_ARCDISP:
+      sprintf(str,"%g",a->unitary_cost);
+      UnhiliteArcName(xname,yname,str);
+      break;
+    case MINCAP_ARCDISP:
+      sprintf(str,"%g",a->minimum_capacity);
+      UnhiliteArcName(xname,yname,str);
+      break;
+    case MAXCAP_ARCDISP:
+      sprintf(str,"%g",a->maximum_capacity);
+      UnhiliteArcName(xname,yname,str);
+      break;
+    case LENGTH_ARCDISP:
+      sprintf(str,"%g",a->length);
+      UnhiliteArcName(xname,yname,str);
+      break;
+    case QWEIGHT_ARCDISP:
+      sprintf(str,"%g",a->quadratic_weight);
+      UnhiliteArcName(xname,yname,str);
+      break;
+    case QORIG_ARCDISP:
+      sprintf(str,"%g",a->quadratic_origin);
+      UnhiliteArcName(xname,yname,str);
+      break;
+    case WEIGHT_ARCDISP:
+      sprintf(str,"%g",a->weight);
+      UnhiliteArcName(xname,yname,str);
+      break;
     }
-    else {if (a->name != 0) UnhiliteArcName(a->xmax,a->ymax,a->name);}
   } 
-  else {if (a->label != 0) UnhiliteArcName(a->xmax,a->ymax,a->label);}
+  else {if (a->label != 0) UnhiliteArcName(xname,yname,a->label);}
   
   if (a->g_type == 0)
     UnhiliteStraightArc(a->x0,a->y0,a->x1,a->y1);
@@ -753,12 +907,20 @@ node *n;
       DrawSourceArrow(n->x,n->y);
       break;
     }
-    if (nodeNameDisplay) {
-      if (intDisplay) {
+    if (nodeStrDisplay != NODISP) {
+      switch (nodeStrDisplay) {
+      case INT_NODEDISP:
 	sprintf(str,"%d",n->number);
 	DrawNodeName(n->x,n->y,str);
+	break;
+      case NAME_NODEDISP:
+	if (n->name != 0) DrawNodeName(n->x,n->y,n->name);
+	break;
+      case DEMAND_NODEDISP:
+	sprintf(str,"%g",n->demand);
+	DrawNodeName(n->x,n->y,str);
+	break;
       }
-      else {if (n->name != 0) DrawNodeName(n->x,n->y,n->name);}
     } 
     else {if (n->label != 0) DrawNodeName(n->x,n->y,n->label);}
   }
@@ -806,12 +968,20 @@ node *n;
     ClearSourceArrow(n->x,n->y);
     break;
   }
-  if (nodeNameDisplay) {
-    if (intDisplay) {
+  if (nodeStrDisplay != NODISP) {
+    switch (nodeStrDisplay) {
+    case INT_NODEDISP:
       sprintf(str,"%d",n->number);
       ClearNodeName(n->x,n->y,str);
+      break;
+    case NAME_NODEDISP:
+      if (n->name != 0) ClearNodeName(n->x,n->y,n->name);
+      break;
+    case DEMAND_NODEDISP:
+      sprintf(str,"%g",n->demand);
+      ClearNodeName(n->x,n->y,str);
+      break;
     }
-    else {if (n->name != 0) ClearNodeName(n->x,n->y,n->name);}
   } 
   else {if (n->label != 0) ClearNodeName(n->x,n->y,n->label);} 
 }
@@ -859,12 +1029,20 @@ node *n;
     HiliteSourceArrow(n->x,n->y);
     break;
   }
-  if (nodeNameDisplay) {
-    if (intDisplay) {
+  if (nodeStrDisplay != NODISP) {
+    switch (nodeStrDisplay) {
+    case INT_NODEDISP:
       sprintf(str,"%d",n->number);
       HiliteNodeName(n->x,n->y,str);
+      break;
+    case NAME_NODEDISP:
+      if (n->name != 0) HiliteNodeName(n->x,n->y,n->name);
+      break;
+    case DEMAND_NODEDISP:
+      sprintf(str,"%g",n->demand);
+      HiliteNodeName(n->x,n->y,str);
+      break;
     }
-    else {if (n->name != 0) HiliteNodeName(n->x,n->y,n->name);}
   } 
   else {if (n->label != 0) HiliteNodeName(n->x,n->y,n->label);}
 }
@@ -885,12 +1063,20 @@ node *n;
   nodeDiam = NodeDiam(n);
   nodeW = NodeBorder(n);
   theDrawFont = FontSelect(NodeFontSize(n));
-  if (nodeNameDisplay) {
-    if (intDisplay) {
+  if (nodeStrDisplay != NODISP) {
+    switch (nodeStrDisplay) {
+    case INT_NODEDISP:
       sprintf(str,"%d",n->number);
       UnhiliteNodeName(n->x,n->y,str);
+      break;
+    case NAME_NODEDISP:
+      if (n->name != 0) UnhiliteNodeName(n->x,n->y,n->name);
+      break;
+    case DEMAND_NODEDISP:
+      sprintf(str,"%g",n->demand);
+      UnhiliteNodeName(n->x,n->y,str);
+      break;
     }
-    else {if (n->name != 0) UnhiliteNodeName(n->x,n->y,n->name);}
   } 
   else {if (n->label != 0) UnhiliteNodeName(n->x,n->y,n->label);}
   switch (n->type) {
@@ -906,12 +1092,20 @@ node *n;
     UnhiliteSourceArrow(n->x,n->y);
     break;
   }
-  if (nodeNameDisplay) {
-    if (intDisplay) {
+  if (nodeStrDisplay != NODISP) {
+    switch (nodeStrDisplay) {
+    case INT_NODEDISP:
       sprintf(str,"%d",n->number);
       DrawNodeName(n->x,n->y,str);
+      break;
+    case NAME_NODEDISP:
+      if (n->name != 0) DrawNodeName(n->x,n->y,n->name);
+      break;
+    case DEMAND_NODEDISP:
+      sprintf(str,"%g",n->demand);
+      DrawNodeName(n->x,n->y,str);
+      break;
     }
-    else {if (n->name != 0) DrawNodeName(n->x,n->y,n->name);}
   } 
   else {if (n->label != 0) DrawNodeName(n->x,n->y,n->label);}
 }

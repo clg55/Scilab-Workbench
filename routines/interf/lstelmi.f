@@ -67,6 +67,11 @@ c     arg2(arg1)
 c     get arg2
       il2=iadr(lstk(top))
       if(istk(il2).lt.0) il2=iadr(istk(il2+1))
+      if(istk(il2).lt.15.or.istk(il2).gt.17) then
+         err=1
+         call error(56)
+         return
+      endif
       m2=istk(il2+1)
       id2=il2+3
       l2=sadr(il2+m2+3)
@@ -276,8 +281,9 @@ c     get arg3
       endif
       il3s=il3
       typ3=istk(il3)
-      if(typ3.lt.14.or.typ3.gt.17) then
-         call error(44)
+      if(typ3.lt.15.or.typ3.gt.17) then
+         err=3
+         call error(56)
          return
       endif
       m3=istk(il3+1)

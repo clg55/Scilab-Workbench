@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 
 /* wmessage.c
  * Scilab 
@@ -98,7 +98,7 @@ int  ExposeMessageWindow()
     hwndOwner =  textwin.hWndParent;
   if (DialogBox(hdllInstance, buf,hwndOwner,
 		lpfnSciMessageDlgProc)  == IDOK) 
-    return(TRUE);
+    return(1);
   else 
-    return(FALSE);
+    return(2);
 }

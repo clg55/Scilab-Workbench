@@ -506,7 +506,6 @@ void Xputstring(str,n)
      char *str;
      int n;
 {
-  void Xputchar();
   int i ;
   for ( i =0 ; i < n; i++) Xputchar(str[i]);
 }
@@ -515,9 +514,24 @@ void C2F(xscisncr)(str,n,dummy)
      char *str;
      integer *n,dummy;
 {
-  void Xputchar();
   int i;
   for ( i =0 ; i < *n; i++) {
+    Xputchar(str[i]);
+  }
+}
+
+/** print str on Scilab window \n are changed to \r\n **/
+
+void C2F(xscisrn)(str,n,dummy)
+     char *str;
+     integer *n,dummy;
+{
+  int i;
+  for ( i =0 ; i < *n; i++) {
+    if ( str[i] == '\n' ) 
+      {
+	Xputchar('\r');
+      }
     Xputchar(str[i]);
   }
 }
@@ -527,7 +541,6 @@ void C2F(xscistring)(str,n,dummy)
      int *n;
      long int dummy;
 {
-  void Xputchar();
   int i ;
   for ( i =0 ; i < *n; i++) {
     Xputchar(str[i]);
@@ -626,11 +639,51 @@ void sciprint(va_alist) va_dcl
   va_end(ap);
 }
 
+/* 
+  as sciprint but with an added first argument 
+  which is ignored (used in do_printf) 
+*/
+
+#ifdef __STDC__ 
+int  sciprint2(int iv,char *fmt,...) 
+#else 
+/*VARARGS0*/
+int sciprint2(va_alist) va_dcl
+#endif 
+{
+  int i,retval;
+  integer lstr;
+  va_list ap;
+  char s_buf[1024];
+#ifdef __STDC__
+  va_start(ap,fmt);
+#else
+  int iv;
+  char *fmt;
+  va_start(ap);
+  iv = va_arg(ap,int);
+  fmt = va_arg(ap, char *);
+#endif
+  C2F(xscion)(&i);
+  if (i == 0) 
+    {
+      retval= vfprintf(stdout, fmt, ap );
+    }
+  else 
+    {
+      retval= vsprintf(s_buf, fmt, ap );
+      lstr=strlen(s_buf);
+      C2F(xscisncr)(s_buf,&lstr,0L);
+    }
+  va_end(ap);
+  return retval;
+}
+
 
 /* I/O Function */
 
 void Xputchar(c)
-  int c;
+  unsigned char c;
 {
   char locbuf[2];
   register TScreen *screen = &term->screen;
@@ -642,9 +695,9 @@ void Xputchar(c)
     parsestate = groundtable;
   locbuf[0]=c;
   locbuf[1]='\n';
-  res = parsestate[c];
+  res = parsestate[(int) c];
   switch (res)
-  {
+    {
   case CASE_PRINT:
     dotext(screen, term->flags,
 	   screen->gsets[(int) screen->curgl], locbuf, locbuf+1);

@@ -36,7 +36,7 @@ DESCRIPTION
   is equal to 1.
 
   The bounds of the flows are given by the elements edge_min_cap and
-  edge_max_cap of the graph list. The value of the minimum capacity must be
+  edge_max_cap of the graph list.  The value of the minimum capacity must be
   equal to zero, and the value of the maximum capacity must be non negative
   and must be integer numbers.  If the value of edge_min_cap or edge_max_cap
   is not given (empty row vector []), it is assumed to be equal to 0 on each

@@ -2,21 +2,11 @@
 .so ../sci.an
 .SH NAME
 viewmat -  Vizualisation of a matrix
-.sp
-Author: Paulo Goncalves - Bertrand Guiheneuf
-.sp
-Two dimensional display of a matrix
-.sp
-.sp
 .SH Usage
 .nf
 viewmat(Z [,X,Y])
 .fi
 .SH Input parameters
-
-
-.RS
-
 .TP
 o 
 \fBZ\fP : Real valued matrix \f(CR[\fPny,nx\f(CR]\fP
@@ -93,3 +83,5 @@ X = x(:)*x(:)' ;
 
 viewmat(abs(X))
 .fi
+.SH AUTHOR
+Author: Paulo Goncalves - Bertrand Guiheneuf

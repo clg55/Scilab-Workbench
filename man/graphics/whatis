@@ -1,114 +1,115 @@
-Graphics - graphic library for scilab  
-Matplot - 2d plot of a matrix using colors  
-Sfgrayplot - 2d plot with gray levels  
-Sgrayplot - 2d plot of a surface using gray levels  
-addcolor - add new colors to current colormap  
-black - black's diagram (nichols chart)  
-bode - bode plot  
-champ - draw a 2d vector field  
-champ1 - draw a 2d vector field  
-chart - nichols chart  
-colormap - using colors in scilab  
-contour - level curves of surface  
-contour2d - level curves of surface on a 2d graphics  
-driver - select a driver for plotting  
-edit_curv - interactive graphic curve editor  
-errbar - add error tic on a graphic  
-eval3d - values of a function on a grid  
-eval3dp - computes facets of a 3d parametrized surface  
-evans - evans root locus  
-fac3d - complex 3d surface plotting  
-fchamp - draw a 2d vector field  
-fcontour - level curves  
-fcontour2d - level curves of surface on a 2d graphics  
-fec - contour level of a function defined on a triangular mesh  
-fgrayplot - 2d plot with gray levels  
-fplot2d - 2d plot of a curve defined by an external  
-fplot3d - 3d plot of a surface defined by an external  
-fplot3d1 - gray level plotting of a surface  
-gainplot - magnitude plot  
-genfac3d - convert 3d datas to four sided facets  
-geom3d - projection from 3d on 2d  
-getcolor - dialog to select color(s) in the current colormap  
-getsymbol - dialog to select a symbol an its size  
-gr_menu - simple interactive graphic editor  
-graduate - pretty axis graduations  
-graycolormap - linear gray colormap  
-grayplot - 2d plot of a surface using colors  
-hist3d - 3d representation of an histogram  
-histplot - plot an histogram  
-hotcolormap - yellow to red rgb colormap  
-isoview - set scales for isometric plot  
-locate - mouse selection of a set of points  
-m_circle - m-circle plot  
-milk_drop - test for plot3d  
-nyquist - nyquist plot  
-param3d - set of points or parametric curves in 3-d  
-param3d1 - set of points or parametric curves in 3-d  
-param3di - parametric curves in 3-d with interactive view selection  
-plot - simple plot  
-plot2d - multiple plot of functions  
-plot2d1 - multiple plot of functions  
-plot2d2 - multiple plot of functions (step function)  
-plot2d3 - multiple plot of functions (vertical bars)  
-plot2d4 - multiple plot of functions  
-plot3d - surface plotting  
-plot3d1 - gray or color level plotting of a surface.  
-plotframe - graphic frame with scaling and grids  
-plzr - pole-zero plot  
-printing - printing scilab graphics  
-rotate - geometric rotation of a set of points  
-scaling - affine transform of a set of points  
-sd2sci - gr_menu structure to scilab instruction convertor  
-secto3d - 3d surfaces conversion  
-sgrid - s-plane grid lines.  
-square - sets scales for isometric graphics  
-titlepage - display a matrix of strings  
-winsid - return the list of graphic windows id  
-xarc - draws a part of an ellipsis  
-xarcs - drawing a set of ellipsis  
-xarrows - draw a set of arrows  
-xaxis - draws an axis  
-xbasc - clear a graphic window and erase associated recorded graphics  
-xbasimp - send graphics to a postscript printer or in a file  
-xbasr - redraw a graphic window  
-xchange - coordinates transform  
-xclea - erase a rectangle on a graphic window  
-xclear - clear a graphic window  
-xclick - wait for a mouse click  
-xclip - set a clip zone  
-xdel - delete a graphic window  
-xend - ends a graphic session  
-xfarc - fill a part of an ellipsis  
-xfarcs - filling a set of ellipsis  
-xfpoly - fill a polygon  
-xfpolys - fill a set of polygons of the same size  
-xfrect - fill a rectangle  
-xget - gets current values of the graphic context  
-xgetech - get the current graphic 2d scale  
-xgetmouse - get current position of the mouse  
-xgrid - add a grid on a graphic  
-xinfo - add an info string on a graphic window  
-xinit - initialisation of a graphic driver  
-xlfont - load a font in the graphic context  
-xload - load a saved graphic  
-xnumb - draw numbers on a graphic  
-xpause - suspends scilab  
-xpoly - draw a single polyline  
-xpolys - draw a set of polylines  
-xrect - draw a rectangle  
-xrects - draw or fill a set of rectangles  
-xrpoly - draw a regular polygon  
-xs2fig - send graphics to a file in xfig syntax  
-xsave - save graphics in a (reloadable) file.  
-xsegs - draw unconnected segments  
-xselect - raise the current graphic window  
-xset - set values of the graphic context  
-xsetech - set the sub window of a graphic window to use for graphics  
-xsetm - dialog to set values of the graphic context  
-xstring - display a matrix of strings  
-xstringb - draw a matrix of strings  
-xstringl - computes bounding box of the display of matrix of strings  
-xtape - set up the record process of graphics  
-xtitle - add titles on a graphic window  
-zgrid - zgrid plot  
+Graphics - graphics library overview   @Graphics
+Matplot - 2d plot of a matrix using colors   @Matplot
+Sfgrayplot - smooth 2d plot of a surface defined by a function using colors   @Sfgrayplot
+Sgrayplot - smooth 2d plot of a surface using colors   @Sgrayplot
+addcolor - add new colors to the current colormap   @addcolor
+black - black's diagram (nichols chart)   @black
+bode - bode plot   @bode
+champ - 2d vector field plot   @champ
+champ1 - 2d vector field plot with colored arrows   @champ1
+chart - nichols chart   @chart
+colormap - using colormaps   @colormap
+contour - level curves on a 3d surface   @contour
+contour2d - level curves of a surface on a 2d plot   @contour2d
+driver - select a graphics driver   @driver
+edit_curv - interactive graphic curve editor   @edit_curv
+errbar - add vertical error bars on a 2d plot   @errbar
+eval3d - values of a function on a grid   @eval3d
+eval3dp - compute facets of a 3d surface   @eval3dp
+evans - evans root locus   @evans
+fac3d - 3d plot of a surface (obsolete)   @fac3d
+fchamp - direction field of a 2d first order ode   @fchamp
+fcontour - level curves on a 3d surface defined by a function   @fcontour
+fcontour2d - level curves of a surface defined by a function on a 2d plot   @fcontour2d
+fec - contour level of a function defined on a triangular mesh   @fec
+fgrayplot - 2d plot of a surface defined by a function using colors   @fgrayplot
+fplot2d - 2d plot of a curve defined by a function   @fplot2d
+fplot3d - 3d plot of a surface defined by a function   @fplot3d
+fplot3d1 - 3d gray or color level plot of a surface defined by a function   @fplot3d1
+gainplot - magnitude plot   @gainplot
+genfac3d - compute facets of a 3d surface   @genfac3d
+geom3d - projection from 3d on 2d after a 3d plot   @geom3d
+getcolor - dialog to select colors in the current colormap   @getcolor
+getsymbol - dialog to select a symbol and its size   @getsymbol
+gr_menu - simple interactive graphic editor   @gr_menu
+graduate - pretty axis graduations   @graduate
+graycolormap - linear gray colormap   @graycolormap
+grayplot - 2d plot of a surface using colors   @grayplot
+hist3d - 3d representation of a histogram   @hist3d
+histplot - plot a histogram   @histplot
+hotcolormap - red to yellow colormap   @hotcolormap
+isoview - set scales for isometric plot (do not change the size of the window)   @isoview
+locate - mouse selection of a set of points   @locate
+m_circle - m-circle plot   @m_circle
+milk_drop - milk drop 3d function   @milk_drop
+nyquist - nyquist plot   @nyquist
+param3d - 3d plot of a curve   @param3d
+param3d1 - 3d plot of curves   @param3d1
+plot - simple plot   @plot
+plot2d - 2d plot   @plot2d
+plot2d1 - 2d plot (logarithmic axes)   @plot2d1
+plot2d2 - 2d plot (step function)   @plot2d2
+plot2d3 - 2d plot (vertical bars)   @plot2d3
+plot2d4 - 2d plot (arrows style)   @plot2d4
+plot3d - 3d plot of a surface   @plot3d
+plot3d1 - 3d gray or color level plot of a surface   @plot3d1
+plotframe - plot a frame with scaling and grids   @plotframe
+plzr - pole-zero plot   @plzr
+printing - printing scilab graphics   @printing
+replot - redraw the current graphics window with new boundaries   @replot
+rotate - rotation of a set of points   @rotate
+scaling - affine transformation of a set of points   @scaling
+sd2sci - gr_menu structure to scilab instruction convertor   @sd2sci
+secto3d - 3d surfaces conversion   @secto3d
+sgrid - s-plane grid lines.   @sgrid
+square - set scales for isometric plot (change the size of the window)   @square
+titlepage - add a title in the middle of a graphics window   @titlepage
+winsid - return the list of graphics windows   @winsid
+xarc - draw a part of an ellipse   @xarc
+xarcs - draw parts of a set of ellipses   @xarcs
+xarrows - draw a set of arrows   @xarrows
+xaxis - draw an axis   @xaxis
+xbasc - clear a graphics window and erase the associated recorded graphics   @xbasc
+xbasimp - send graphics to a postscript printer or in a file   @xbasimp
+xbasr - redraw a graphics window   @xbasr
+xchange - transform real to pixel coordinates   @xchange
+xclea - erase a rectangle   @xclea
+xclear - clear a graphics window   @xclear
+xclick - wait for a mouse click   @xclick
+xclip - set a clipping zone   @xclip
+xdel - delete a graphics window   @xdel
+xend - close a graphics session   @xend
+xfarc - fill a part of an ellipse   @xfarc
+xfarcs - fill parts of a set of ellipses   @xfarcs
+xfpoly - fill a polygon   @xfpoly
+xfpolys - fill a set of polygons   @xfpolys
+xfrect - fill a rectangle   @xfrect
+xget - get current values of the graphics context   @xget
+xgetech - get the current graphics scale   @xgetech
+xgetmouse - get the current position of the mouse   @xgetmouse
+xgrid - add a grid on a 2d plot   @xgrid
+xinfo - draw an info string in the message subwindow   @xinfo
+xinit - initialisation of a graphics driver   @xinit
+xlfont - load a font in the graphics context or query loaded font   @xlfont
+xload - load a saved graphics   @xload
+xname - change the name of the current graphics window   @xname
+xnumb - draw numbers   @xnumb
+xpause - suspend scilab   @xpause
+xpoly - draw a polyline or a polygon   @xpoly
+xpolys - draw a set of polylines or polygons   @xpolys
+xrect - draw a rectangle   @xrect
+xrects - draw or fill a set of rectangles   @xrects
+xrpoly - draw a regular polygon   @xrpoly
+xs2fig - send graphics to a file in xfig syntax   @xs2fig
+xsave - save graphics into a file   @xsave
+xsegs - draw unconnected segments   @xsegs
+xselect - raise the current graphics window   @xselect
+xset - set values of the graphics context   @xset
+xsetech - set the sub window of a graphics window for plotting   @xsetech
+xsetm - dialog to set values of the graphics context   @xsetm
+xstring - draw strings   @xstring
+xstringb - draw strings into a box   @xstringb
+xstringl - compute a box which surrounds strings   @xstringl
+xtape - set up the record process of graphics   @xtape
+xtitle - add titles on a graphics window   @xtitle
+zgrid - zgrid plot   @zgrid

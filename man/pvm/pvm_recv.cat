@@ -35,7 +35,7 @@ DESCRIPTION
   before task 2 does a receive, then a wildcard receive will always return
   message A.
 
-  info will be the status code returned by the routine. If some error occurs
+  info will be the status code returned by the routine.  If some error occurs
   then info will be < 0.
 
   pvm_recv is blocking which means the routine waits until a message matching

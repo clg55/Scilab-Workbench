@@ -186,8 +186,9 @@ c
      +     230,231,232,233,234,235,236,237,238,239,
      +     240,241,242,243,244,245,246,247,248,249,
      +     250,251,252,253,254,255,256,257,258,259,
-     +     260),n-199
-
+     +     260,261,262,263,264,265,266,267,268,269,
+     +     270),n-199
+      if(n.ge.10000) return
       goto 998
 c
     1 call basout(io,lunit,'incorrect assignment')
@@ -303,7 +304,8 @@ c
      +   'first argument is incorrect')
       endif
       go to 999
-   37 call basout(io,lunit,'incorrect function ')
+   37 write(buf(1:6),'(i6)') err
+      call basout(io,lunit,'incorrect function at line '//buf(1:6))
       go to 999
    38 call basout(io,lunit,'file name incorrect')
       go to 999
@@ -467,13 +469,15 @@ c
       goto 999
    77 continue
       call cvname(ids(1,pt+1),buf,1)
+      nl=lnblnk(buf(1:nlgh))
       call basout(io,lunit,
-     +     buf(1:nlgh)//' : wrong number of rhs arguments')
+     +     buf(1:nl)//' : wrong number of rhs arguments')
       go to 999
    78 continue
       call cvname(ids(1,pt+1),buf,1)
+      nl=lnblnk(buf(1:nlgh))
       call basout(io,lunit,
-     +     buf(1:nlgh)//' : wrong number of lhs arguments')
+     +     buf(1:nl)//' : wrong number of lhs arguments')
       go to 999
    79 continue
       go to 999
@@ -484,8 +488,9 @@ c
    81 continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +        ' : wrong type argument, expecting a '//
      +        ' real or complex matrix')
 
@@ -493,22 +498,25 @@ c
    82 continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +        ' : wrong type argument, expecting a real matrix')
       goto 999
    83 continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +        ' : wrong type argument, expecting a real vector')
       goto 999
    84 continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +        ' : wrong type argument, expecting a scalar')
 
       goto 999
@@ -687,6 +695,7 @@ c
      $     ' of lhs arguments. No lhs test made for this function; ')
       call basout(io,lunit,
      $     ' please report this bug')
+      call showstack()
       goto 999
  116  continue
       if(err.ne.1) then
@@ -792,112 +801,126 @@ c
  201  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +        ' : wrong type argument,')
       call basout(io,lunit,' expecting a real or complex matrix')
       go to 999
  202  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +        ' : wrong type argument,')
       call basout(io,lunit,' expecting a real matrix')
       goto 999
  203  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +        ' : wrong type argument,')
       call basout(io,lunit,' expecting a real vector')
       goto 999
  204  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +        ' : wrong type argument,')
       call basout(io,lunit,' expecting a scalar')
       goto 999
  205  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       i1=4+nlgh
       write(buf(i1:i1+6),'(i3,'','',i3)') pstk(pt+1),pstk(pt+2)
 
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +     ' : wrong matrix size ('//buf(i1:i1+6)//') expected ')
       goto 999
  206  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       i1=4+nlgh
       write(buf(i1:i1+3),'(i3)') pstk(pt+1)
 
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +     ' : wrong vector size ('//buf(i1:i1+2)//') expected ')
       goto 999
  207  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +     ' : wrong type argument, expecting a matrix of strings')
       goto 999
  208  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +     ' : wrong type argument, expecting a booleen matrix')
 
       goto 999
  209  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +     ' : wrong type argument, expecting a matrix')
       goto 999
  210  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +     ' : wrong type argument, expecting a list')
       goto 999
  211  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +     ' : wrong type argument, expecting a function'
      +       //' or string (external function)')
       goto 999
  212  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +     ' : wrong type argument, expecting a polynomial matrix')
       goto 999
  213  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +     ' : wrong type argument, expecting a working'//
      +     ' integer matrix')
       goto 999
  214  continue
       write(buf(1:3),'(i3)') err
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      nl=lnblnk(buf(4:3+nlgh))
       call basout(io,lunit,
-     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nl)//
      +        ' : wrong type argument,')
       call basout(io,lunit,' expecting a  vector')
       goto 999
@@ -980,6 +1003,9 @@ c
       call basout(io,lunit,'Missing index')
       goto 999
  228  continue
+      call cvname(ids(1,pt+1),buf(1:nlgh),1)
+      call basout(io,wte,'reference to the cleared global variable '//
+     $     buf(1:nlgh))
       goto 999
  229  continue
       goto 999
@@ -1034,10 +1060,15 @@ C     errors from semidef
      &     'must be opened by ''file''')
       goto 999
  243  continue
+      call basout(io,lunit,'C file logical unit not allowed here')
       goto 999
  244  continue
+      call basout(io,lunit,'Fortran file logical unit not allowed here')
       goto 999
  245  continue
+      write(buf(1:3),'(i3)') err
+      call basout(io,lunit,'No input file associated to logical unit '//
+     &     buf(1:3))
       goto 999
  246  continue
       goto 999
@@ -1100,6 +1131,27 @@ C     errors from semidef
       goto 999
  260  continue
       call basout(io,lunit,'bvode: Th colocation matrix is singular')
+      goto 999
+ 261  continue
+      call basout(io,lunit,'Interface property table is full')
+      goto 999
+ 262  continue
+      goto 999
+ 263  continue
+      goto 999
+ 264  continue
+      goto 999
+ 265  continue
+      goto 999
+ 266  continue
+      goto 999
+ 267  continue
+      goto 999
+ 268  continue
+      goto 999
+ 269  continue
+      goto 999
+ 270  continue
       goto 999
 c
 c
@@ -1205,7 +1257,7 @@ c
       endif
 c
       macr=macr-1
-      if(istk(ilk).ne.10) bot=lin(k+5)
+      if(istk(ilk).ne.10.and.rstk(pt-1).ne.909) bot=lin(k+5)
       return
       end
 

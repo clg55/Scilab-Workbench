@@ -1,6 +1,12 @@
-include ../Makefile.incl.mak 
+
 SCIDIR=..
 SCIDIR1=..
+
+include ../Makefile.incl.mak 
+
+FFLAGS = $(FC_OPTIONS) -DFORDLL 
+CFLAGS = $(CC_OPTIONS) -DFORDLL 
+
 DUMPEXTS=$(SCIDIR1)\bin\dumpexts
 SCIIMPLIB=$(SCIDIR)/bin/LibScilab.lib
 
@@ -30,12 +36,7 @@ externals.dll : $(OBJS)
 	@$(LINKER) $(LINKER_FLAGS) $(OBJS) $(GUILIBS) $(SCIIMPLIB) \
 	/subsystem:windows /dll /out:"$*.dll" /implib:"$*.lib" /def:$*.def 
 
-CFLAGS=$(CC_OPTIONS) -I../routines/f2c
 
-.f.obj	:
-	..\bin\f2c  $*.f 
-	$(CC) $(CFLAGS) $*.c 
-	$(RM) $*.c 
 
 
 

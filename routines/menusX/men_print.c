@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 #ifdef WIN32 
 #include "wmen_scilab.h"
 #else
@@ -16,9 +16,10 @@ static char *Print_Formats[] = {
   "Postscript No Preamble",
   "Postscript-Latex",
   "Xfig",
+  "Gif",
 };
 
-static int nF=4;
+static int nF=5;
 
 /******************************************
  * main function 

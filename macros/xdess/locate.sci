@@ -31,14 +31,22 @@ deff('[]=clearmode(flag)',['modek=xget(''alufunction'')';
 x=[];
 xxx=xget('mark');
 xset('mark',2,xxx(2));
+wc=xget('window')
 if n >= 0 then 
   for i=1:n,
-    [i,x1,y1]=xclick();
+    while %t
+      [i,x1,y1,w,m]=xclick();
+      if w==wc then break,end
+    end
     if flag==1,xpoly(x1,y1,'marks',0);end
     x=[x,[x1;y1]];
     but=[but,i]
   end
-  else while %t, [i,x1,y1]=xclick(), 
+else while %t, 
+    while %t
+      [i,x1,y1,w,m]=xclick(), 
+      if w==wc then break,end
+    end
     if i==0 then
       clearmode(flag),return
     elseif flag==1 then

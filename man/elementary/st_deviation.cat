@@ -26,9 +26,9 @@ DESCRIPTION
   wise standard deviation. It returns in each entry of the column vector y
   the standard deviation of each row of x.
 
-  y=st_deviation(x,'c') (or, equivalently, y=st_deviation(x,1)) is the
-  columnwise st_deviation. It returns in each entry of the row vector y the
-  standard deviation of each column  of x.
+  y=st_deviation(x,'c') (or, equivalently, y=st_deviation(x,1)) is the colum-
+  nwise st_deviation. It returns in each entry of the row vector y the stan-
+  dard deviation of each column  of x.
 
 EXAMPLE
   A=[1,2,10;7,7.1,7.01];

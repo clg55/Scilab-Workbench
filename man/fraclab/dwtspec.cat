@@ -18,7 +18,7 @@ Input parameters
        o ChooseReg : 0/1 flag or integer vector [1,N_reg], (N_reg <= N_scale)
          ChooseReg = 0 : full scale range regression ChooseReg = 1 : asks
          online the scale indices setting the range for the linear regression
-         of the partition function. ChooseReg = [n1 ... nN_reg] : scale
+         of the partition function.  ChooseReg = [n1 ... nN_reg] : scale
          indices for the linear regression of the partition function.
 Output parameters
        o alpha : Real vector [1,N_alpha], N_alpha <= N_Q Singularity support

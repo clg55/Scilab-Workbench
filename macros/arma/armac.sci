@@ -11,10 +11,25 @@ function [ar]=armac(a,b,d,ny,nu,sig)
 //!
 // Copyright INRIA
 [na,la]=size(a);
-if na<>ny,write(%io(2),"a(:,1) must be of dimension "+string(ny));end
+if na<>ny then 
+	write(%io(2),"armac: a(:,1) must be of dimension "+string(ny));
+	return;
+end
 [nb,lb]=size(b);
-if nb<>ny,write(%io(2),"b(:,1) must be of dimension "+string(ny));end
+if nb<>0 & nb<>ny then 
+ 	write(%io(2),"armac: b(:,1) must be of dimension "+string(ny));
+	return;
+end;
+if lb<>0 & nu<>0 then 
+ if modulo(lb,nu)<>0 then 
+ 	write(%io(2),"armac: number of columns of b are incompatible with nu');
+	return;
+  end;
+end      
 [nd,ld]=size(d);
-if nd<>ny,write(%io(2),"d(:,1) must be of dimension "+string(ny));end
+if nd<>ny then 
+	write(%io(2),"armac: d(:,1) must be of dimension "+string(ny));
+	return;
+end
 ar=tlist(['ar','a','b','d','ny','nu','sig'],a,b,d,ny,nu,sig);
 

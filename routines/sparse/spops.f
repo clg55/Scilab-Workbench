@@ -14,6 +14,8 @@ c
       integer less,great,equal
       integer insert,extrac
       integer top0
+      logical isany
+      
       data star/47/,dstar/62/,slash/48/
       data bslash/49/,dot/51/,colon/44/,quote/53/
       data less/59/,great/60/,equal/50/
@@ -1042,18 +1044,19 @@ c     get arg2
       top=top-1
 c     get arg1
       il1=iadr(lstk(top))
+      ilrs=il1
       if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
       n1=istk(il1+2)
 c
       if(mn2.eq.0) then 
 c     .  arg2=[]
-         il1=iadr(lstk(top))
-         istk(il1)=1
-         istk(il1+1)=0
-         istk(il1+2)=0
-         istk(il1+3)=0
-         lstk(top+1)=sadr(il1+4)+1
+         ilrs=iadr(lstk(top))
+         istk(ilrs)=1
+         istk(ilrs+1)=0
+         istk(ilrs+2)=0
+         istk(ilrs+3)=0
+         lstk(top+1)=sadr(ilrs+4)+1
          goto 999
       elseif(m2.lt.0) then
 c     .  arg2=eye
@@ -1063,21 +1066,21 @@ c     .  arg2=eye
 c     .  arg2(:), just reshape to column vector
          if(n2.eq.1) then
 c     .     already a column vector
-            il1=iadr(lstk(top))
-            call icopy(5+m2+nel2,istk(il2),1,istk(il1),1)
-            l1=sadr(il1+5+m2+nel2)
+            ilrs=iadr(lstk(top))
+            call icopy(5+m2+nel2,istk(il2),1,istk(ilrs),1)
+            l1=sadr(ilrs+5+m2+nel2)
             call dcopy(nel2*(it2+1),stk(l2),1,stk(l1),1)
             lstk(top+1)=l1+nel2*(it2+1)
          else
 c     .     reshape to column vector
-            il1=iadr(lstk(top))
-            istk(il1)=5
-            istk(il1+1)=mn2
-            istk(il1+2)=1
-            istk(il1+3)=it2
-            istk(il1+4)=nel2
-            irc1=il1+5
-            l1=sadr(il1+5+m2*n2+nel2)
+            ilrs=iadr(lstk(top))
+            istk(ilrs)=5
+            istk(ilrs+1)=mn2
+            istk(ilrs+2)=1
+            istk(ilrs+3)=it2
+            istk(ilrs+4)=nel2
+            irc1=ilrs+5
+            l1=sadr(ilrs+5+m2*n2+nel2)
 
             ircr=iadr(lw)
             iw=ircr+m2*n2+nel2
@@ -1114,12 +1117,12 @@ c     check and convert indices variable
       endif
  72   if(mi.eq.0) then
 c     arg2([])
-         il1=iadr(lstk(top))
-         istk(il1)=1
-         istk(il1+1)=0
-         istk(il1+2)=0
-         istk(il1+3)=0
-         lstk(top+1)=sadr(il1+4)+1
+         ilrs=iadr(lstk(top))
+         istk(ilrs)=1
+         istk(ilrs+1)=0
+         istk(ilrs+2)=0
+         istk(ilrs+3)=0
+         lstk(top+1)=sadr(ilrs+4)+1
          goto 999
       endif
 c     set output sizes
@@ -1165,14 +1168,14 @@ c     get memory for the result
      $        stk(lr),stk(lr+nelr),nelr,istk(irc),istk(lptr),ierr)
       endif
 c     form resulting variable
-      il1=iadr(lstk(top))
-      istk(il1)=5
-      istk(il1+1)=mr
-      istk(il1+2)=nr
-      istk(il1+3)=it2
-      istk(il1+4)=nelr
-      call icopy(m+nelr,istk(irc),1,istk(il1+5),1)
-      l1=sadr(il1+5+mr+nelr)
+      ilrs=iadr(lstk(top))
+      istk(ilrs)=5
+      istk(ilrs+1)=mr
+      istk(ilrs+2)=nr
+      istk(ilrs+3)=it2
+      istk(ilrs+4)=nelr
+      call icopy(m+nelr,istk(irc),1,istk(ilrs+5),1)
+      l1=sadr(ilrs+5+mr+nelr)
       call dcopy(nelr,stk(lr),1,stk(l1),1)
       if(it2.eq.1)  call dcopy(nelr,stk(lr+nel),1,stk(l1+nelr),1)
       lstk(top+1)=l1+nelr*(it2+1)
@@ -1201,17 +1204,18 @@ c     get arg2
       top=top-1
 c     get arg1
       il1=iadr(lstk(top))
+      ilrs=il1
       if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
 
       if(mn3.eq.0) then 
 c     .  arg3=[]
-         il1=iadr(lstk(top))
-         istk(il1)=1
-         istk(il1+1)=0
-         istk(il1+2)=0
-         istk(il1+3)=0
-         lstk(top+1)=sadr(il1+4)+1
+         ilrs=iadr(lstk(top))
+         istk(ilrs)=1
+         istk(ilrs+1)=0
+         istk(ilrs+2)=0
+         istk(ilrs+3)=0
+         lstk(top+1)=sadr(ilrs+4)+1
          goto 999
       elseif(m3.lt.0) then
 c     .arg3=eye
@@ -1247,12 +1251,12 @@ c
       mn=mr*nr
       if(mn.eq.0) then 
 c     .  arg1=[] or arg2=[] 
-         il1=iadr(lstk(top))
-         istk(il1)=1
-         istk(il1+1)=0
-         istk(il1+2)=0
-         istk(il1+3)=0
-         lstk(top+1)=sadr(il1+4)+1
+         ilrs=iadr(lstk(top))
+         istk(ilrs)=1
+         istk(ilrs+1)=0
+         istk(ilrs+2)=0
+         istk(ilrs+3)=0
+         lstk(top+1)=sadr(ilrs+4)+1
          goto 999
       endif
 c     get memory for the result
@@ -1278,14 +1282,14 @@ c     perform extraction
      $        stk(lr),stk(lr+nel),nelr,istk(irc),istk(lptr),ierr)
       endif
 c     form resulting variable
-      il1=iadr(lstk(top))
-      istk(il1)=5
-      istk(il1+1)=mr
-      istk(il1+2)=nr
-      istk(il1+3)=it3
-      istk(il1+4)=nelr
-      call icopy(mr+nelr,istk(irc),1,istk(il1+5),1)
-      l1=sadr(il1+5+mr+nelr)
+      ilrs=iadr(lstk(top))
+      istk(ilrs)=5
+      istk(ilrs+1)=mr
+      istk(ilrs+2)=nr
+      istk(ilrs+3)=it3
+      istk(ilrs+4)=nelr
+      call icopy(mr+nelr,istk(irc),1,istk(ilrs+5),1)
+      l1=sadr(ilrs+5+mr+nelr)
       call dcopy(nelr,stk(lr),1,stk(l1),1)
       if(it3.eq.1) call dcopy(nelr,stk(lr+nel),1,stk(l1+nelr),1)
       lstk(top+1)=l1+nelr*(it3+1)
@@ -1341,6 +1345,7 @@ c     get arg2
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
+      ilrs=il1
       if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
 
@@ -1349,20 +1354,31 @@ c     get arg1
 c     .  arg3(arg1)=[] -->[]
          if(m1.eq.-1) then
 c     .    arg3(:)=[] 
-            istk(il1)=1
-            istk(il1+1)=0
-            istk(il1+2)=0
-            istk(il1+3)=0
-            lstk(top+1)=sadr(il1+4)+1
+            istk(ilrs)=1
+            istk(ilrs+1)=0
+            istk(ilrs+2)=0
+            istk(ilrs+3)=0
+            lstk(top+1)=sadr(ilrs+4)+1
             goto 999
          elseif(m1.eq.0) then
 c     .     arg3([])=[]  --> arg3
-            call icopy(5+m3+nel3,istk(il3),1,istk(il1),1)
-            l=sadr(il1+5+m3+nel3)
+            call icopy(5+m3+nel3,istk(il3),1,istk(ilrs),1)
+            l=sadr(ilrs+5+m3+nel3)
             call dcopy(nel3*(it3+1),stk(l3),1,stk(l),1)
             lstk(top+1)=l+mn3*(it3+1)
             goto 999
          else
+c     .     arg3(arg1)=[]
+            if(istk(il1).eq.4.and.m3.eq.m1.and.n3.eq.n1) then
+               if(.not.isany(il1)) then
+c     .           arg3([])=[]  --> arg3
+                  call icopy(5+m3+nel3,istk(il3),1,istk(ilrs),1)
+                  l=sadr(ilrs+5+m3+nel3)
+                  call dcopy(nel3*(it3+1),stk(l3),1,stk(l),1)
+                  lstk(top+1)=l+mn3*(it3+1)
+                  goto 999
+               endif
+            endif
 c     .     arg3(arg1)=[] -->arg3(compl(arg1),:)
             if(m3.gt.1.and.n3.gt.1) then
 c     .        call macro coded op to reshape and insert
@@ -1395,20 +1411,20 @@ c     .  arg3(:)=arg2 reshape arg2 according to arg3
                fin=-fin
                return
             endif
-            istk(il1)=5
-            istk(il1+1)=m3
-            istk(il1+2)=n3
-            call icopy(2+m2+nel2,istk(il2+3),1,istk(il1+3),1)
-            l1=sadr(il1+5+m2+nel2)
+            istk(ilrs)=5
+            istk(ilrs+1)=m3
+            istk(ilrs+2)=n3
+            call icopy(2+m2+nel2,istk(il2+3),1,istk(ilrs+3),1)
+            l1=sadr(ilrs+5+m2+nel2)
             call dcopy(nel2*(it2+1),stk(l2),1,stk(l1),1)
             lstk(top+1)=l1+nel2*(it2+1)
             return
          elseif(mn2.eq.1) then
-            istk(il1)=1
-            istk(il1+1)=m3
-            istk(il1+2)=n3
-            istk(il1+3)=it2
-            l1=sadr(il1+4)
+            istk(ilrs)=1
+            istk(ilrs+1)=m3
+            istk(ilrs+2)=n3
+            istk(ilrs+3)=it2
+            l1=sadr(ilrs+4)
             call dset(mn3,stk(l2),stk(l1),1)
             if(it2.eq.1) call dset(mn3,stk(l2+1),stk(l1+mn3),1)
             lstk(top+1)=l1+mn3*(it2+1)
@@ -1429,8 +1445,8 @@ c     .  arg3(arg1)=arg2 with arg3 not a vector
 c     .  arg3([])=arg2
          if(mn2.eq.1) then
 c     .  arg3([])=c  --> arg3 
-            call icopy(5+m3+nel3,istk(il3),1,istk(il1),1)
-            l=sadr(il1+5+m3+nel3)
+            call icopy(5+m3+nel3,istk(il3),1,istk(ilrs),1)
+            l=sadr(ilrs+5+m3+nel3)
             call dcopy(nel3*(it3+1),stk(l3),1,stk(l),1)
             lstk(top+1)=l+mn3*(it3+1)
             goto 999
@@ -1535,13 +1551,13 @@ c     .  row vector
          call error(9999)
          return
       endif
-      istk(il1)=5
-      istk(il1+1)=mr
-      istk(il1+2)=nr
-      istk(il1+3)=itr
-      istk(il1+4)=nelr
-      call icopy(mr+nelr,istk(irc),1,istk(il1+5),1)
-      l1=sadr(il1+5+mr+nelr)
+      istk(ilrs)=5
+      istk(ilrs+1)=mr
+      istk(ilrs+2)=nr
+      istk(ilrs+3)=itr
+      istk(ilrs+4)=nelr
+      call icopy(mr+nelr,istk(irc),1,istk(ilrs+5),1)
+      l1=sadr(ilrs+5+mr+nelr)
       call dcopy(nelr,stk(lr),1,stk(l1),1)
       if(itr.eq.1) call dcopy(nelr,stk(lr+nel),1,stk(l1+nelr),1)
       lstk(top+1)=l1+nelr*(itr+1)
@@ -1594,6 +1610,7 @@ c     get arg2
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
+      ilrs=il1
       if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
 
@@ -1601,16 +1618,16 @@ c     get arg1
 c     .  arg4(arg1,arg2)=[]
          if(m1.eq.-1.and.m2.eq.-1) then
 c     .    arg4(:,:)=[] -->[]
-            istk(il1)=1
-            istk(il1+1)=0
-            istk(il1+2)=0
-            istk(il1+3)=0
-            lstk(top+1)=sadr(il1+4)+1
+            istk(ilrs)=1
+            istk(ilrs+1)=0
+            istk(ilrs+2)=0
+            istk(ilrs+3)=0
+            lstk(top+1)=sadr(ilrs+4)+1
             goto 999
          elseif(m1.eq.0.or.m2.eq.0) then
 c     .     arg4([],arg2)=[],  arg4(arg1,[])=[] --> arg4
-            call icopy(5+m4+nel4,istk(il4),1,istk(il1),1)
-            l=sadr(il1+5+m4+nel4)
+            call icopy(5+m4+nel4,istk(il4),1,istk(ilrs),1)
+            l=sadr(ilrs+5+m4+nel4)
             call dcopy(nel4*(it4+1),stk(l4),1,stk(l),1)
             lstk(top+1)=l+mn4*(it4+1)
             goto 999
@@ -1671,15 +1688,22 @@ c     .        arg4(arg1,1:n4)=[]
 c     .        arg2=1:n3
                if(mi.eq.0) then
 c     .           arg4(1:m4,1:n4)=[] 
-                  istk(il1)=1
-                  istk(il1+1)=0
-                  istk(il1+2)=0
-                  istk(il1+3)=0
-                  lstk(top+1)=sadr(il1+4)+1
+                  istk(ilrs)=1
+                  istk(ilrs+1)=0
+                  istk(ilrs+2)=0
+                  istk(ilrs+3)=0
+                  lstk(top+1)=sadr(ilrs+4)+1
                   goto 999
                else
 c     .           arg4(arg1,1:n4)=[] 
-                  lw=lw2
+c     .           replace arg2 by ":"
+                  il2=iadr(lw2)
+                  istk(il2)=1
+                  istk(il2+1)=-1
+                  istk(il2+2)=-1
+                  istk(il2+3)=0
+c     .
+                  lw=lw2+2
                   call indxg(il2,n4,ilj,nj,mxj,lw,11)
                   if(err.gt.0) return
                   if(nj.lt.0) then
@@ -1738,20 +1762,20 @@ c     .  arg4(:,:)=arg3
                return
             endif
 c     .  reshape arg3 according to arg4
-            istk(il1)=5
-            istk(il1+1)=m4
-            istk(il1+2)=n4
-            call icopy(2+m3+nel3,istk(il3+3),1,istk(il1+3),1)
-            l1=sadr(il1+5+m3+nel3)
+            istk(ilrs)=5
+            istk(ilrs+1)=m4
+            istk(ilrs+2)=n4
+            call icopy(2+m3+nel3,istk(il3+3),1,istk(ilrs+3),1)
+            l1=sadr(ilrs+5+m3+nel3)
             call dcopy(nel3*(it3+1),stk(l3),1,stk(l1),1)
             lstk(top+1)=l1+nel3*(it3+1)
             return
          elseif(mn3.eq.1) then
-            istk(il1)=1
-            istk(il1+1)=m4
-            istk(il1+2)=n4
-            istk(il1+3)=it3
-            l1=sadr(il1+4)
+            istk(ilrs)=1
+            istk(ilrs+1)=m4
+            istk(ilrs+2)=n4
+            istk(ilrs+3)=it3
+            l1=sadr(ilrs+4)
             call dset(mn4,stk(l3),stk(l1),1)
             if(it3.eq.1) call dset(mn4,stk(l3+1),stk(l1+mn4),1)
             lstk(top+1)=l1+mn4*(it3+1)
@@ -1780,8 +1804,8 @@ c     .  reshape arg3 according to arg4
 c     .  sizes of arg1 or arg2 dont agree with arg3 sizes
          if(m3*n3.eq.1) then
             if(mr1.eq.0.or.nr1.eq.0) then 
-               call icopy(5+m4+nel4,istk(il4),1,istk(il1),1)
-               l=sadr(il1+5+m4+nel4)
+               call icopy(5+m4+nel4,istk(il4),1,istk(ilrs),1)
+               l=sadr(ilrs+5+m4+nel4)
                call dcopy(nel4*(it4+1),stk(l4),1,stk(l),1)
                lstk(top+1)=l+mn4*(it4+1)
                goto 999
@@ -1849,13 +1873,13 @@ c
          call error(9999)
          return
       endif
-      istk(il1)=5
-      istk(il1+1)=mr
-      istk(il1+2)=nr
-      istk(il1+3)=itr
-      istk(il1+4)=nelr
-      call icopy(mr+nelr,istk(irc),1,istk(il1+5),1)
-      l1=sadr(il1+5+mr+nelr)
+      istk(ilrs)=5
+      istk(ilrs+1)=mr
+      istk(ilrs+2)=nr
+      istk(ilrs+3)=itr
+      istk(ilrs+4)=nelr
+      call icopy(mr+nelr,istk(irc),1,istk(ilrs+5),1)
+      l1=sadr(ilrs+5+mr+nelr)
       call dcopy(nelr,stk(lr),1,stk(l1),1)
       if(itr.eq.1) call dcopy(nelr,stk(lr+nel),1,stk(l1+nelr),1)
       lstk(top+1)=l1+nelr*(itr+1)

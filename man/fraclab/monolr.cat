@@ -7,8 +7,8 @@ NAME
 
   This C_LAB routine provides six different algorithms to proceed linear
   regression on monovariate data:  least square, weighted  least square,
-  penalized least square, multiple least square, maximum likelyhood and
-  Lepskii's adaptive procedure least square, in one sole routine.
+  penalized least square, multiple least square, maximum likelyhood and Lep-
+  skii's adaptive procedure least square, in one sole routine.
 
 Usage
   [a_hat,[b_hat,y_hat,e_hat,sigma2_e_hat,optvarargout]=
@@ -26,9 +26,9 @@ Input parameters
            square is chosen, contains the weights.
          o I : strictly positive real (integer) scalar If penalized least
            square is chosen, contains the number of iterations.
-         o sigma2_j : strictly positive real vector [1,J] or [J,1] If
-           Lepskii's  adaptive procedure least square  is chosen, contains
-           the sequence of variances.
+         o sigma2_j : strictly positive real vector [1,J] or [J,1] If Lep-
+           skii's  adaptive procedure least square  is chosen, contains the
+           sequence of variances.
 
        The fifth parameter can be
          o m : real scalar If penalized least square is chosen, contains the
@@ -78,23 +78,24 @@ Parameters
   square.  The default value for lrstr is 'ls'.  The weights w or the
   sequence  of variances sigma2_j must be strictly positive and of size [1,J]
   or [J,1].  For   the   meaning  of  the     variable  optional input
-  parameters sigma2_j  and  K,   see  lepskiiap (Lepskii's  Adaptive Pro-
-  cedure) C_LAB routine's help.  The number of iterations I must be >=2.  The
+  parameters sigma2_j  and  K,   see  lepskiiap (Lepskii's  Adaptive Proce-
+  dure) C_LAB routine's help.  The number of iterations I must be >=2.  The
   variance of the normal weights s must be strictly positive.  If multiple
   least square,   maximum likelyhood or Lepskii's   adaptive procedure  least
   square is chosen,  the estimated slope a_hat and the ordinate   at   the
   origin  b_hat  are   vectors  of   size [1,J], resp.  the  regressed  ordi-
-  nates  y_hat  and the residuals e_hat vectors  are  of size [1,(J+2)*(J-
-  1)/2] (as they contains results for multiple  linear regression, be aware
-  of that  when vizualising  them :-),  see examples),  otherwise there are
-  scalars,   resp.  vectors   of size     [1,J].  For  maximum likelyhood,
-  multiple least square  linear regressions are proceeded in order to obtain
-  variance estimates.   Then maximum likelyhood  linear regression is
-  proceeded   (corresponding results   are    found in a_hat(1),  b_hat(1),
-  y_hat(1:J),  e_hat(1:J)   and sigma2_e_hat(1), see examples).  For  the
-  meaning   of   the   variable  optional   output  parameters K_star,
-  j_hat,         I_c_j_min,    I_c_j_max, E_c_j_max, and   E_c_j_max,  see
-  lepskiiap  (Lepskii's Adaptive Procedure) C_LAB routine's help.
+  nates  y_hat  and the residuals e_hat vectors  are  of size
+  [1,(J+2)*(J-1)/2] (as they contains results for multiple  linear regres-
+  sion, be aware of that  when vizualising  them :-),  see examples),  other-
+  wise there are scalars,   resp.  vectors   of size     [1,J].  For  maximum
+  likelyhood, multiple least square  linear regressions are proceeded in
+  order to obtain  variance estimates.   Then maximum likelyhood  linear
+  regression is     proceeded   (corresponding results   are    found in
+  a_hat(1),  b_hat(1), y_hat(1:J),  e_hat(1:J)   and sigma2_e_hat(1), see
+  examples).  For  the  meaning   of   the   variable  optional   output
+  parameters K_star,    j_hat,         I_c_j_min,    I_c_j_max, E_c_j_max,
+  and   E_c_j_max,  see  lepskiiap  (Lepskii's Adaptive Procedure) C_LAB rou-
+  tine's help.
 
 Algorithm details
   For   the   details  of  the      Lepskii's  adaptive procedure,   see lep-

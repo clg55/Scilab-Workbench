@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC/Chancelier Jean-Philippe */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>

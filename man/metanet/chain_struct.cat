@@ -23,8 +23,8 @@ PARAMETERS
   fe : row vector of the numbers of the first edges starting from nodes (its
      size is the number of nodes of the graph)
 
-  che : row vector of the numbers of the chained edges (its size is the
-      number of edges of the graph)
+  che : row vector of the numbers of the chained edges (its size is the num-
+      ber of edges of the graph)
 
   fn : row vector of the numbers of the first nodes reached by the edges of
      fe (its size is the number of nodes of the graph)

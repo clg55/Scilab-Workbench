@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC/Chancelier Jean-Philippe */
 
 #ifdef __STDC__
 # include <stdlib.h>

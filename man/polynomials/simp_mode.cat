@@ -12,8 +12,8 @@ PARAMETERS
   mod  : a boolean
 
 DESCRIPTION
-  rational simplification is called after nearly each operations on ration-
-  als. It is possible to toggle simplification on or off using simp_mode
+  rational simplification is called after nearly each operations on ratio-
+  nals. It is possible to toggle simplification on or off using simp_mode
   function.
 
   simp_mod(%t) set rational simplification mode on

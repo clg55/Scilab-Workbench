@@ -5,11 +5,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl,res
        logical checkrhs,checklhs,getsmat,checkval,bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -56,11 +57,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,getsmat,checkval,bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -107,11 +109,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,getsmat,checkval,bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -158,12 +161,13 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,getscalar,bufstore,cre
-     $ mat
+       logical checkrhs,checklhs,getsmat,checkval,getscalar,bufstore
+       logical cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -217,10 +221,11 @@ c
 c
        integer iadr, sadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,getscalar,bufstore,cre
-     $ mat
+       logical checkrhs,checklhs,getsmat,checkval,getscalar
+       logical bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -272,12 +277,13 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,getscalar,bufstore,cre
-     $ mat
+       logical checkrhs,checklhs,getsmat,checkval,getscalar
+       logical bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -331,10 +337,11 @@ c
 c
        integer iadr, sadr, tag, maxsize, n
        integer topk,rhsk,topl, address
-       logical checkrhs,checklhs,getsmat,checkval,getscalar,bufst
-     $ ore,cremat
+       logical checkrhs,checklhs,getsmat,checkval,getscalar
+       logical bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -412,12 +419,13 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,cremat,getscalar,crepointer,listcremat,
-     $ lcrestringmatfromC
+       logical checkrhs,checklhs,cremat,getscalar,crepointer,listcremat
+       logical lcrestringmatfromC
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -498,12 +506,13 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,cremat,crepointer,listcremat,lcrestring
-     $ matfromC
+       logical checkrhs,checklhs,cremat,crepointer,listcremat
+       logical lcrestringmatfromC
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -573,11 +582,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,getsmat,checkval,crestringv,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -623,11 +633,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,getsmat,checkval,crestringv,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -673,11 +684,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -718,11 +730,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,getscalar,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -767,11 +780,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -812,11 +826,9 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,cremat
-       iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -857,11 +869,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -902,11 +915,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -947,11 +961,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,getvectrow,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -996,12 +1011,13 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,getscalar,cresmat2,buf
-     $ store,cremat
+       logical checkrhs,checklhs,getsmat,checkval,getscalar,cresmat2
+       logical bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -1088,12 +1104,13 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,getscalar,cresmat2,buf
-     $ store,cremat
+       logical checkrhs,checklhs,getsmat,checkval,getscalar,cresmat2
+       logical bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -1169,12 +1186,10 @@ c
       character*(*) fname
       include '../stack.h'
 c     
-      integer iadr, sadr, beginvar, tag, tid, is
+      integer beginvar, tag, tid, iis
       integer topk, rhsk
       logical checkrhs, checklhs, getscalar, cremat
 c
-      iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
       rhs = max(0,rhs)
 c     
       topk = top 
@@ -1199,7 +1214,7 @@ c     allowable size
       maxsize=lstk(bot)-beginvar
 c
 c     receive the variable
-      call scipvmrecv(stk(beginvar),maxsize,n,tid,tag,is)
+      call scipvmrecv(stk(beginvar),maxsize,n,tid,tag,iis)
 c     ATTENTION scipvmrecv ne doit pas ecrire plus de maxsize double
 c     dans stk(beginvar)
       if(err .gt. 0) then 
@@ -1225,7 +1240,7 @@ c
 c     create variable status at the top of the returned variables
       if(.not.cremat(fname,top,0,1,1,lrs,lcs)) return
 c     set value of the status variable
-      stk(lrs)=is
+      stk(lrs)=iis
 c     top=top+1
 
 c     clear status variable if lhs is one
@@ -1240,11 +1255,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr, address, tag, n
+       integer iadr, address, tag, n
        integer topk,rhsk,topl
        logical checkrhs,checklhs,getvectrow,getscalar,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -1322,12 +1338,13 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,getscalar,getsmat,checkval,bufstore,cre
-     $ mat
+       logical checkrhs,checklhs,getscalar,getsmat,checkval,bufstore
+       logical cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -1383,12 +1400,13 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,getvectrow,getsmat,checkval,getscalar,b
-     $ ufstore,cremat
+       logical checkrhs,checklhs,getvectrow,getsmat,checkval,getscalar
+       logical bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -1444,12 +1462,13 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,getmat,getscalar,bufst
-     $ ore,cremat
+       logical checkrhs,checklhs,getsmat,checkval,getmat,getscalar
+       logical bufstore,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        lbuf = 1
@@ -1525,11 +1544,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -1570,11 +1590,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,cremat
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 
@@ -1616,11 +1637,12 @@ c
        character*(*) fname
        include '../stack.h'
 c
-       integer iadr, sadr
+       integer iadr
        integer topk,rhsk,topl
        logical checkrhs,checklhs,getscalar,crepointer,crestringmatfromC
+c
        iadr(l)=l+l-1
-       sadr(l)=(l/2)+1
+c
        rhs = max(0,rhs)
 c
        topk = top 

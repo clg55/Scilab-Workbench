@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 /*********************************
  * Link version for SYSV machine 
  *********************************/

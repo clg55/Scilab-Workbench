@@ -37,6 +37,11 @@ ops     =['+',   'a';
          'ext',  'e';
          quote,  't';
          '[]',   'c';
+	 '|',    'g';
+         '&',    'h';
+         '~',    '5';
+         '.^',   'j';
+         '.'+quote '0';
          '[]',   'c'];
 [logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then]=...
 resume(logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then)

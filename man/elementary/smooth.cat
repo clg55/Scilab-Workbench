@@ -10,8 +10,8 @@ PARAMETERS
 
   ptd       : (2xn) real vector
 
-  step      : real (discretization step of abscissae)
-            (default=0.01*magnitude(v))
+  step      : real (discretization step of abscissae) (default=0.01*magni-
+            tude(v))
 
   pt        : (2xn) real vector
 

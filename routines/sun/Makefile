@@ -16,6 +16,8 @@ include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS) $(XFLAGS) 
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib
 
 bashos.o: ../stack.h

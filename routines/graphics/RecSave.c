@@ -333,6 +333,19 @@ int SaveGray1(plot)
 }
 
 
+int SaveGray2(plot)
+     char *plot;
+{
+  struct gray_rec_2 *lplot = (struct gray_rec_2 *) plot;
+  if ( SaveLI(lplot->n1)== 0) return(0);
+  if ( SaveLI(lplot->n2)== 0) return(0);
+  if ( SaveVectC((lplot->name),((int)strlen(lplot->name))+1) == 0) return(0);
+  if ( SaveVectF((lplot->z),(lplot->n1)*(lplot->n2)) == 0) return(0);
+  if ( SaveVectF((lplot->xrect),4L) == 0) return(0);
+  return(1);
+}
+
+
 /*---------------------------------------------------------------------
 \encadre{Le cas des champs de vecteurs}
 ---------------------------------------------------------------------------*/
@@ -364,8 +377,10 @@ Sauvegarde
 #	include "types.h"
 #else /* not macintosh */
 #       ifndef VMS
+#	ifndef __ABSC__
 #   	include <sys/types.h>	/* for <netinet/in.h> on some systems */
-#   	ifndef __MSC__
+#	endif
+#   	if (!defined __MSC__) && !(defined __ABSC__)
 #          include <netinet/in.h>	/* for htonl() */
 #   	endif
 #	endif
@@ -403,6 +418,7 @@ static SaveTable SaveCTable[] ={
     {"fec",SaveFec},
     {"gray",SaveGray},
     {"gray1",SaveGray1},
+    {"gray2",SaveGray2},
     {"param3d",SaveParam3D},
     {"param3d1",SaveParam3D1},
     {"plot2d",SavePlot},

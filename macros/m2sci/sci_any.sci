@@ -3,11 +3,19 @@ function [stk,txt,top]=sci_any()
 txt=[]
 v=stk(top-rhs+1)(1),
 if rhs==1 then
-  if stk(top)(3)=='1'| stk(top)(4)=='1' then
-    stk=list('or('+v+')','0','1','1','4')
-  else 
-    stk=list('mtlb_any('+v+')','0','1',stk(top)(4),'4')
-  end
+  [m,n]=checkdims(stk(top))
+  x=stk(top)(1)
+  if m==-1&n==-1 then
+    set_infos([
+	'mtlb_any('+x+') may be replaced by '
+	' or('+x+')'+' if '+x+'is a vector'
+	' or('+x+',1)'+' if '+x+'is a matrix'],1)
+    stk=list('mtlb_any('+x+')','0','?','?','4')
+  elseif m==1|n==1 then
+    stk=list('or('+x+')','0','1','1','4')
+  else
+    stk=list('or('+x+',1)','0','1',stk(top)(4),'4')
+  end 
 else
   if stk(top)(1)=='1' then
     stk=list('or('+v+',1)','0','1',stk(top-1)(4),'4')

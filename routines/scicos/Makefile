@@ -16,9 +16,10 @@ BLOCKSF=intcos.o coselm.o \
 	sawtth.o tcslti.o tcsltj.o scopxy.o evscpe.o integr.o readf.o affich.o\
 	intpol.o intplt.o minblk.o maxblk.o dlradp.o andlog.o iocopy.o \
 	sum2.o sum3.o delayv.o mux.o demux.o samphold.o dollar.o mscope.o \
-	eselect.o intrp2.o   intrpl.o fsv.o memo.o
+	eselect.o intrp2.o   intrpl.o fsv.o memo.o fscope.o
 
-BLOCKSC=selector.o sum.o prod.o switchn.o relay.o
+BLOCKSC=selector.o sum.o prod.o switchn.o relay.o readc.o writec.o writeau.o \
+	readau.o	
 
 OBJSF=sciblk.o  addevt.o doit.o odoit.o zdoit.o scicos.o cosini.o cossim.o cosend.o \
 	 sctree.o ftree2.o ftree3.o ftree4.o skipvars.o scierr.o scifunc.o \
@@ -33,6 +34,8 @@ include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib
 
 all:: Makefile.mak
@@ -40,6 +43,8 @@ all:: Makefile.mak
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
 
+Makefile.amk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
 
 #---------------Blocks 
 
@@ -76,6 +81,8 @@ scitovv.o: ../stack.h
 skipvars.o: ../stack.h
 vvtosci.o: ../stack.h
 writef.o: ../stack.h
+writeau.o: ../stack.h ../machine.h
+readau.o: ../machine.h
 grblk.o: ../machine.h import.h
 simblk.o: ../machine.h import.h
 coselm.o : ../stack.h

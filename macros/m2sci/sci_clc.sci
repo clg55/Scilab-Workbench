@@ -1,8 +1,7 @@
 function [stk,txt,top]=sci_clc()
 // Copyright INRIA
-txt=['//! clc ignored'
-    '// clc']
-write(logfile,'clc ignored at line '+string(lcount))
+set_infos('clc ignored',1)
+txt=[txt;'// clc']
 stk=list(' ','-2','0','0','1')
 
 

@@ -27,10 +27,10 @@ DESCRIPTION
   an entry value.
 
   [sd]=gr_menu([xmin,ymin,xmax,ymax])
-                 : enters gr_menu with a fixed frame
+                 : enters gr_menu with a given frame
 
   [sd]=gr_menu();
-                 : enters gr_menu with the  fixed frame  [0 0 100 100].
+                 : enters gr_menu with the frame [0 0 100 100].
 
   [sd]=gr_menu(sd)
                  : redraws the graphics stored in sd and enters interactive

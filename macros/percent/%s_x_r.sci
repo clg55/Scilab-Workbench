@@ -5,7 +5,7 @@ function f2=%s_x_r(n1,f2)
 if size(n1,'*')==0 then 
   f2=[]
 else
-  f2(2)=n1.*f2(2)
+  f2('num')=n1.*f2('num')
 end
 
 

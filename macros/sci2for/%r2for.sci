@@ -7,7 +7,7 @@ s2=stk(top);s1=stk(top-1);top=top-1;
 if s1(4)=='1'&s1(5)=='1'&s2(4)=='1'&s2(5)=='1' then
    if s2(2)=='2'|s2(2)=='1' then s2(1)='('+s2(1)+')',end
    if s1(2)=='2' then s1(1)='('+s1(1)+')',end
-   stk=list(s1(1)+'/'+s2(1),'1',s1(3),s1(4),s1(5))
+   stk=list(s1(1)+'/'+s2(1),'1','1',s1(4),s1(5))
 elseif s1(4)=='1'&s1(5)=='1' then
  
   [out,nwrk,txt]=outname(nwrk,s2(3),s2(5),s2(4))
@@ -25,7 +25,7 @@ elseif s1(4)=='1'&s1(5)=='1' then
     txt=[txt;gencall([' dcopy',mulf(s2(4),s2(5)),out,'1',s1(1),'1'])]
     out=s1(1)
   end
-  stk=list(out,'-1',s2(3),s2(4),s2(5))
+  stk=list(out,'-1','1',s2(4),s2(5))
 elseif s2(4)=='1'&s2(5)=='1' then
   [out,nwrk,txt]=outname(nwrk,s2(3),s1(4),s1(5))
   if out<>s1(1) then
@@ -38,7 +38,7 @@ elseif s2(4)=='1'&s2(5)=='1' then
     txt=[txt;gencall(['dcopy',mulf(s1(4),s1(5)),out,'1',s2(1),'1'])]
     out=s2(1)
   end
-  stk=list(out,'-1',s1(3),s1(4),s1(5))
+  stk=list(out,'-1','1',s1(4),s1(5))
 else
   [res,nwrk,t1]=outname(nwrk,s2(3),s2(4),s2(5),[s1(1),s2(1)])
   [mat,nwrk,t2]=getwrk(nwrk,'1',s2(4),s2(4))

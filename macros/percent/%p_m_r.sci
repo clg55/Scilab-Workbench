@@ -3,7 +3,7 @@ function f=%p_m_r(p,f)
 // and f= rational
 //!
 // Copyright INRIA
-[n2,d2]=f(2:3);
+[n2,d2]=f(['num','den']);
 [l1,m1]=size(p);[l2,m2]=size(n2);
 //
 indef=%f
@@ -39,7 +39,6 @@ if indef then
   num=num*eye()
   den=den*eye()
 end
-f(2)=num,f(3)=den;
-
+f=rlist(num,den,f('dt'))
 
 

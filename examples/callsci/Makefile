@@ -9,7 +9,7 @@ include $(SCIDIR)/Makefile.incl
 OBJS=callsci.o
 
 all:: 
-	@Init $(SCIDIR)
+	@./Init $(SCIDIR)
 	@make all -f Makefile.more SCIDIR=$(SCIDIR)
 
 distclean::

@@ -2,7 +2,7 @@ function [scs_m,needcompile]=do_replace(scs_m,needcompile)
 // Copyright INRIA
 while %t
   // get replacement block
-  [btn,xc,yc,win,Cmenu]=getclick()
+  [btn,xc,yc,win,Cmenu]=cosclick()
   if Cmenu<>[] then
     Cmenu=resume(Cmenu)
   end
@@ -35,7 +35,7 @@ if k==[] then return,end
 // get block to replace
 xset('window',curwin);
 while %t do
-  [btn,xc,yc,win,Cmenu]=getclick()
+  [btn,xc,yc,win,Cmenu]=cosclick()
   if Cmenu<>[] then
     Cmenu=resume(Cmenu)
   end

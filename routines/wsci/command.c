@@ -16,7 +16,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#ifndef __CYGWIN32__
+#if !(defined __CYGWIN32__) && !(defined __ABSC__)
 #include <direct.h>		/* for _chdrive() */
 #endif
 

@@ -126,6 +126,14 @@ cd wsci
 echo Making %1 in directory  wsci
  nmake /C /f Makefile.mak %1
 cd ..
+cd gd
+echo Making %1 in directory  gd
+ nmake /C /f Makefile.mak %1
+cd ..
+cd int
+echo Making %1 in directory  int
+ nmake /C /f Makefile.mak %1
+cd ..
 echo on
 goto end
 

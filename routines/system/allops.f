@@ -48,6 +48,11 @@ c
       if(fin.eq.2) then
 c     . insertions
          nt=2
+         vt1=abs(ogettype(top))
+         if(vt1.eq.15.or.vt1.eq.16) then
+c     . every thing can be inserted in a list
+            goto 50
+         endif
       elseif(fin.eq.3) then
 c     .  extraction
          if(rhs.eq.1) then
@@ -60,13 +65,14 @@ c     .     a() -->a
       endif
       do 03 i=1,nt
          vt1=abs(ogettype(top+1-i))
-         if(vt1.eq.129.and.fin.eq.extrac) vt1=2
+c         if(vt1.eq.129.and.fin.eq.extrac) vt1=2
          if(vt1.gt.vt) vt=vt1
  03   continue
 
 c
-      goto (10,20,05,30,70,35,04,04,04,40,60,04,60,60,50,50,50) ,vt
+      goto (10,20,05,30,70,35,04,75,04,40,60,04,60,60,50,50,50) ,vt
 c     overloadable ops
+      if(vt.eq.129.and.fin.eq.3) goto 20
  04   op=fin
       goto 90
 
@@ -89,6 +95,8 @@ c     overloadable ops
  60   call misops
       goto 80
  70   call spops
+      goto 80
+ 75   call intops
       goto 80
 
 c
@@ -118,7 +126,6 @@ c     .  list recursive extraction insertion
 
  90   continue
 c     .  operation macro programmee ?
-      call ref2val
       call mname(op,id)
       if(err.gt.0.or.err1.gt.0) return
 
@@ -129,6 +136,7 @@ c     .  operation macro programmee ?
 c     .  *call* matfns
          return
       else
+c         call ref2val
          fin=lstk(fin)
          if (ptover(1,psiz)) return
          call putid(ids(1,pt),syn(1))

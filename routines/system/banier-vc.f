@@ -15,7 +15,7 @@ c ================================== ( inria    ) =============
          call basout(io,wwte,' ')
          call basout(io,wwte,' ')
          call basout(io,wwte,
-     $'                          Scilab-2.4.1')
+     $'                          Scilab-2.5')
          call basout(io,wwte,
      $'                  Copyright (C) 1989-99 INRIA ')
       endif

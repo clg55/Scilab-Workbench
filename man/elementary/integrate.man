@@ -18,7 +18,10 @@ x0,x1
 : real numbers (bounds of integration)
 .TP 10
 ea,er
-: real numbers (absolute and relative errors)
+: real numbers (absolute  error bound) Default value: 0
+.TP 10
+er
+: real number, (relative error bound) Default value: 1.d-8
 .SH DESCRIPTION
 computes :
 .IG
@@ -31,6 +34,11 @@ computes :
 .fi
 .FI
 .LA $$ x = \int_{x_0}^{x_1} f(v)dv $$
+
+The evaluation hopefully satisfies following claim for accuracy:
+\fVabs(I-x)<= max(ea,er*abs(I))\fR where I stands for the
+exact value of the integral.
+
 .SH EXAMPLE
 .nf
 integrate('sin(x)','x',0,%pi)

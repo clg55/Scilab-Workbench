@@ -23,7 +23,7 @@ PARAMETERS
 
 DESCRIPTION
   sensi computes sensitivity functions. If G and K are given in state-space
-  form, the systems returned are generically minimal. Calculation is made by
+  form, the systems returned are generically minimal.  Calculation is made by
   lft, e.g., Se can be given by the commands
    P = augment(G,'S'), Se=lft(P,K).  If flag = 'i', [Si,Ri,Ti]=sensi(G,K,'i')
   returns the input sensitivity functions.

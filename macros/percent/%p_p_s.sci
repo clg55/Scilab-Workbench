@@ -18,7 +18,8 @@ if ms==1&ns==1 then
     end
   elseif m==n then //square matrix exponentiation p^s
     if s<0 then 
-      f=invr(p),s=-s
+      f=invr(p),
+      s=-s;
       f1=f;for k=2:s,f=f*f1;end
     else
       f=p
@@ -43,6 +44,7 @@ elseif ms==1|ns==1 then // Element wise exponentiation f.^s with f "scalar"
 else
   error(43)
 end
-    
+
+  
 
 

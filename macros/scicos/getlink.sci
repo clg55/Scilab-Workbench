@@ -1,15 +1,26 @@
-function [scs_m,needcompile]=getlink(scs_m,needcompile)
+function [%pt,scs_m,needcompile]=getlink(%pt,scs_m,needcompile)
 //edition of a link from an output block to an input  block
 // Copyright INRIA
 dash=xget('dashes')
+
 //----------- get link origin --------------------------------------
 //------------------------------------------------------------------
 while %t
-  [btn,xc1,yc1,win,Cmenu]=getclick()
-  if Cmenu<>[] then
-    Cmenu=resume(Cmenu)
+  if %pt==[] then
+    [btn,xc1,yc1,win,Cmenu]=cosclick()
+    if Cmenu<>[] then
+      %pt=[]
+      [Cmenu]=resume(Cmenu)
+    elseif btn>31 then
+      Cmenu=%tableau(min(100,btn-31));%pt=[xc1;yc1];
+      if Cmenu==emptystr() then Cmenu=[];%pt=[];end
+      [%win,Cmenu]=resume(win,Cmenu)
+    end
+  else
+    xc1=%pt(1);yc1=%pt(2);win=%win;%pt=[]
   end
   [kfrom,wh]=getblocklink(scs_m,[xc1;yc1])
+
   if kfrom<>[] then o1=scs_m(kfrom);break,end
 end
 scs_m_save=scs_m,nc_save=needcompile
@@ -17,6 +28,11 @@ scs_m_save=scs_m,nc_save=needcompile
 if o1(1)=='Link' then  // add a split block
   pt=[xc1;yc1]
   [xx,yy,ct,from,to]=o1([2 3 7:9]);
+  if (-wh==size(xx,'*')) then  
+    wh=-(wh+1)    
+    // avoid with clicking at the end-point of link
+  end
+
   // get split type
   [xout,yout,typout]=getoutputs(scs_m(from(1)))
   clr=ct(1)
@@ -92,14 +108,14 @@ while %t do //loop on link segments
   while rep(3)==-1 do //get a new point
     rep=xgetmouse(0)
     
-if rep(3)==2 then 
+    if rep(3)==2 then 
       xpoly([xl;xe],[yl;ye],'lines')
       if pixmap then xset('wshow'),end
       xset('dashes',dash)
       driver(dr);
       return
     end
-  
+    
     //erase last link segment
     xpoly([xo;xe],[yo;ye],'lines')
     //plot new position of last link segment
@@ -192,7 +208,6 @@ typ=typo
 to=[kto,port_number]
 nx=prod(size(xl))
 if nx==1 then //1 segment link
-
 
   if fromsplit&(xl<>xc2|yl<>yc2) then
     //try to move split point

@@ -16,7 +16,7 @@ Input parameters
          the direct Fourier-Mellin transform mellin must have been computed
          from fmin to 0.5 cycles per sec.
        o beta : real vector [1,N] Variable of the Mellin transform mellin.
-       o M : positive integer. Number of time samples to be recovered from
+       o M : positive integer.  Number of time samples to be recovered from
          mellin.
 Output parameters
        o x : complex vector [1,M] Inverse Fourier-Mellin transform of mellin.

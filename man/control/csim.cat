@@ -20,8 +20,8 @@ PARAMETERS
   x    : a  matrix such that   x=[x(t(i)], i=1,..,n
 
 DESCRIPTION
-  simulation of the controlled linear system sl.  sl is assumed to be a
-  continuous-time system represented by a syslin list.
+  simulation of the controlled linear system sl.  sl is assumed to be a con-
+  tinuous-time system represented by a syslin list.
 
   u is the control and x0 the initial state.
 

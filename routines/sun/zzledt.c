@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 /***********************************************************************
  * zzledt.c - last line editing routine
  *
@@ -53,13 +53,16 @@ char Sci_Prompt[10];
 #define B42UNIX
 #define TERMCAP
 #endif
-#ifndef linux
+#if !defined(linux) && !defined(netbsd) && !defined(freebsd)
 #ifdef  __alpha
 #define B42UNIX
 #endif
 #endif
 #ifdef linux
 #define ATTUNIX
+#define TERMCAP
+#endif
+#if defined(netbsd) || defined(freebsd)
 #define TERMCAP
 #endif
 
@@ -1102,8 +1105,10 @@ void C2F(setprlev)(pause)
 {
   if ( *pause == 0 ) 
     sprintf(Sci_Prompt,"-->");
-  else 
+  else if ( *pause > 0 )
     sprintf(Sci_Prompt,"-%d->",*pause);
+  else
+    sprintf(Sci_Prompt,">>",*pause);
 }
 
      

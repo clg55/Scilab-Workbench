@@ -8,6 +8,7 @@ c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     
+      logical allowptr
       double precision t(*), y(n),res(n),s(n)
       common/ierode/iero
 c     

@@ -26,7 +26,7 @@ dts=list(1,tlist(['x';'a';'b'],10,[2 3]));
 dts(2)('a')=33
 dts(2)('b')(1,2)=-100
 //
-l=list(1,'qwerw',%s)
+l=list(1,'qwerw',%s);
 l(1)
 [a,b]=l([3 2])
 l($)

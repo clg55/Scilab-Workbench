@@ -4,7 +4,7 @@
 lib - library definition
 .SH CALLING SEQUENCE
 .nf
-[xlib]=lib('lib_path')
+xlib=lib('lib_path')
 .fi
 .SH PARAMETERS
 .TP 10
@@ -50,8 +50,8 @@ A library can now be created with the command:
 .fi
 \fVxlib\fR is then a Scilab variable which can be saved and loaded
 in a future session of Scilab or defined on-line or
-put in the startup file. The functions in this library are known by
+put in the startup (\fV.scilab\fR) file. The functions in this library are known by
 Scilab which automatically loads them when necessary.
 .SH SEE ALSO
-save, deff, getf, whereis
+genlib, save, deff, getf, whereis
 

@@ -1,4 +1,4 @@
-      subroutine getfun(lunit)
+      subroutine getfun(lunit,nlines)
 c
 c ======================================================================     
 c     get a user defined function
@@ -56,6 +56,7 @@ c     acquisition d'une ligne du fichier
       l0=l
       if(ierr.eq.1) goto 60
       if(ierr.eq.2) goto 90
+      nlines=nlines+1
       
 c     elimination des blancs en fin de la ligne
       n = lrecl+1
@@ -79,6 +80,7 @@ c
 C     jpc : cygwin32 b17.1 bug 
 c            backspace(lunit)
             call myback(lunit)
+            nlines=max(0,nlines-1)
             goto 61
          endif
       endif
@@ -99,10 +101,8 @@ c
  20   continue
       k = eol+1
       call xchar(buf(j:j),k)
-      if (k .gt. eol) go to 10
       if (k .eq. eol) go to 11
-      if (k .eq. -1) l = l-1
-      if (k .le. 0) then
+      if (k .eq. 0) then
          call basout(io,wte,
      +        buf(j:j)//' is not a scilab character')
          go to 24
@@ -127,7 +127,8 @@ c     .     // is part of a string
             goto 17
          else
 c     .     // marks beginning of a comment
-            goto 27
+            if(first.eq.1) goto 11
+            goto 28
          endif
       endif
 c
@@ -165,10 +166,11 @@ c     premiere ligne
  24   if(l.gt.lpt(1)) goto 26
       if(buf(m:m+7).eq.'function'.or.buf(m:m+7).eq.'FUNCTION') then
          j=m+6
-c      elseif(k.ne.slash .or. buf(m+1:m+1).ne.buf(m:m)) then
-      else
+      elseif(k.ne.slash .or. buf(m+1:m+1).ne.buf(m:m)) then
          ierr=4
          goto 90
+      else
+         goto 11
       endif
       j=j+1
  25   lin(l)=blank
@@ -427,6 +429,7 @@ c     buffer limit
       return
  93   continue
 c     invalid syntaxe
+      err=nlines
       call error(37)
       return
  94   err=lstk(bot)-sadr(l)

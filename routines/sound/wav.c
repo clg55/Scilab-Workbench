@@ -28,8 +28,11 @@
  * by Graeme W. Gill, 93/5/17
  */
 
+#include <string.h>
+
 #include "st.h"
 #include "wav.h"
+extern void sciprint _PARAMS((char *fmt, ...));
 
 /* Private data for .wav file */
 typedef struct wavstuff 
@@ -47,7 +50,8 @@ static char *wav_format_str();
  *	size and style of samples, 
  *	mono/stereo/quad.
  */
-wavstartread(ft) 
+
+void wavstartread(ft) 
      ft_t ft;
 {
   wav_t	wav = (wav_t) ft->priv;
@@ -55,7 +59,6 @@ wavstartread(ft)
   unsigned len;  
   int	littlendian = 1;
   char	*endptr;
-  char	c;
   
   /* wave file characteristics */
   unsigned short wFormatTag;	/* data format */
@@ -279,7 +282,7 @@ wavstartread(ft)
  * Return number of samples read.
  */
 
-wavread(ft, buf, len) 
+int wavread(ft, buf, len) 
      ft_t ft;
      long *buf, len;
 {
@@ -300,12 +303,13 @@ wavread(ft, buf, len)
  * Do anything required when you stop reading samples.  
  * Don't close input file! 
  */
-wavstopread(ft) 
+
+void wavstopread(ft) 
 ft_t ft;
 {
 }
 
-wavstartwrite(ft) 
+void wavstartwrite(ft) 
 ft_t ft;
 {
   wav_t	wav = (wav_t) ft->priv;
@@ -322,7 +326,7 @@ ft_t ft;
   wavwritehdr(ft);
 }
 
-wavwritehdr(ft) 
+void wavwritehdr(ft) 
      ft_t ft;
 {
   wav_t	wav = (wav_t) ft->priv;
@@ -431,18 +435,16 @@ wavwritehdr(ft)
     sciprint("Finished writing Wave file, %u data bytes\r\n",data_length);
 }
 
-wavwrite(ft, buf, len) 
+void wavwrite(ft, buf, len) 
      ft_t ft;
      long *buf, len;
 {
   wav_t	wav = (wav_t) ft->priv;
-
   wav->samples += len;
   rawwrite(ft, buf, len);
 }
 
-void
-wavstopwrite(ft) 
+void wavstopwrite(ft) 
      ft_t ft;
 {
   /* All samples are already written out. */

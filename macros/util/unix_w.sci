@@ -15,7 +15,7 @@ function unix_w(cmd)
 // Copyright INRIA
 if prod(size(cmd))<>1 then   error(55,1),end
 
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+if MSDOS then 
   tmp=strsubst(TMPDIR,'/','\')+'\unix.out';
   cmd1= cmd + ' > '+ tmp;
 else 
@@ -30,7 +30,7 @@ case -1 then // host failed
   error(85)
 else
 
-  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+  if MSDOS then 
           error('unix_w: shell error');
   else 
 	  msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
@@ -38,7 +38,7 @@ else
   end 
 
 end
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+if MSDOS then
   host('del '+tmp);
 else
   host('rm -f '+tmp);

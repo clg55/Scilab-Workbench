@@ -15,7 +15,7 @@ function unix_x(cmd)
 // Copyright INRIA
 if prod(size(cmd))<>1 then   error(55,1),end
 
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+if MSDOS then 
   tmp=strsubst(TMPDIR,'/','\')+'\unix.out';
   cmd1= cmd + ' > '+ tmp;
 else 
@@ -25,7 +25,7 @@ end
 stat=host(cmd1);
 select stat
 case 0 then
-  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+  if MSDOS then 
   	host(""""+strsubst(SCI,'/','\')+'\bin\xless.exe"" '+ tmp);
   else 
   	host('$SCI/bin/xless '+tmp+' & 2>/dev/null;')
@@ -33,7 +33,7 @@ case 0 then
 case -1 then // host failed
   error(85)
 else //sh failed
-  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+  if MSDOS then 
 	error('unix_x: shell error');
   else 
 	  msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
@@ -42,7 +42,7 @@ else //sh failed
 end
 // do not delete file because it is possible xless has not yet been
 // launched. CLG
-//if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+//if MSDOS then
 //  host('del '+tmp);
 //else
 //  host('rm -f '+tmp);

@@ -11,10 +11,10 @@ PARAMETERS
   tid  : integer, the task identifier of the calling PVM process.  Values
        less than zero indicate an error.
 DESCRIPTION
-  pvm_mytid enrolls this process into PVM on its first call. It also gen-
-  erates a unique tid if this process was not created by pvm_spawn.
-  pvm_mytid returns the tid of the calling process and can be called multiple
-  times in an application.
+  pvm_mytid enrolls this process into PVM on its first call. It also gener-
+  ates a unique tid if this process was not created by pvm_spawn.  pvm_mytid
+  returns the tid of the calling process and can be called multiple times in
+  an application.
 
   Any PVM system call (not just pvm_mytid) will enroll a task in PVM if the
   task is not enrolled before the call.

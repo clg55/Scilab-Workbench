@@ -4,21 +4,24 @@ NAME
   xfrect - fill a rectangle
 
 CALLING SEQUENCE
-  []=xfrect(x,y,w,h)
+  xfrect(x,y,w,h)
 
 PARAMETERS
 
-  x,y,w,h   : real scalars (rectangle def)
+  x,y,w,h  : four real values defining the rectangle.
 
 DESCRIPTION
-  fills  a rectangle [x,y,w,h] (upper-left point, width, height) using
-  current scale and pattern
+  xrect fills a rectangle defined by [x,y,w,h] (upper-left point, width,
+  height) using the current scale and style.
 
 EXAMPLE
   plot2d(0,0,-1,"010"," ",[-2,-2,2,2])
-  xset("pattern",5);
+  xset("pattern",5)
   xfrect(-1,1,2,2)
-  xset("default");
+  xset("default")
+
+SEE ALSO
+  xrect, xrects
 
 AUTHOR
   J.Ph.C.

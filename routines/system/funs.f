@@ -7,8 +7,8 @@ c     Copyright INRIA
       parameter (nz1=nsiz-1,nz2=nsiz-2)
       integer id(nsiz),id1(nsiz),istr(nlgh)
 c
-      logical eqid,loaded
-      integer srhs,percen,blank,fptr,mode(2),eye(nsiz)
+      logical eqid,cresmat
+      integer srhs,percen,blank,fptr,mode(2),eye(nsiz),sfun,slhs
       integer iadr
       data eye/672014862,nz1*673720360/
       data nclas/29/,percen/56/,blank/40/
@@ -86,53 +86,43 @@ c
       fin=l
       return
 c     
- 40   fun=-2
-      fin=l
+ 40   fin=l
 c     
 c     load it in the variables stack
+      
+c     create a variable with the bin file path
       n=nbibn
-      call cvstr(n,istk(lbibn),buf,1)
-      call cvname(id,buf(n+1:n+nlgh),1)
-      n=n+nlgh+1
- 41   n=n-1
-      if(buf(n:n).eq.' ') goto 41
-      buf(n+1:n+4)='.bin'
-      n=n+4
-      lunit=0
-      mode(1)=-101
-      mode(2)= 0
-      call clunit(lunit,buf(1:n),mode)
-      if(err.gt.0) then
-         buf(n+1:)=' '
-         call error(241)
-         return
-      endif
-c
-      loaded=.false.
-c     initialize file (for comptibility)
-      call savlod(lunit,id1,-2,top+1)
- 49   top=top+1
-      job=lstk(bot)-lstk(top)
-c     get all functions defined in the file
-      if(err.gt.0) goto 51
-      id1(1)=blank
-      call savlod(lunit,id1,job,top)
-      if(err.gt.0) goto 51
-      il=iadr(lstk(top))
-      if(istk(il).eq.0) goto 50
+c     get name and its length
+      call  namstr(id,istr,nn,1)
+      top=top+1
+      if(.not.cresmat(' ',top,1,1,nbibn+4+nn)) return
+      call getsimat(fname,top,top,mp,np,1,1,ilp,nlp)
+c     path
+      call icopy(nbibn,istk(lbibn),1,istk(ilp),1)
+c     name
+      call icopy(nn,istr,1,istk(ilp+nbibn),1) 
+c     extension
+      call cvstr(4,istk(ilp+nbibn+nn),'.bin',0)
+c     load variables stored in the given file
       srhs=rhs
-      rhs=0
-      call stackp(id1,1)
-      if(err.gt.0) goto 51
-      if(eqid(id,id1)) loaded=.true.
+      slhs=lhs
+      fun=0
+      rhs=1
+      lhs=1
+      call intload(id,k)
+      if(err.gt.0) return
       rhs=srhs
-      goto 49
- 50   if(.not.loaded) then
+      lhs=slhs
+      top=top-1
+      if(k.eq.0) then
+c     .  requested varible not loaded
          fun=0
          fin=0
+      else
+         fun=-2
+         fin=k
       endif
-      top=top-1
- 51   call  clunit(-lunit,buf,mode)
+
       return
 c
       end

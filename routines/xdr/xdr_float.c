@@ -42,13 +42,15 @@ static char sccsid[] = "@(#)xdr_float.c 1.12 87/08/11 Copyr 1984 Sun Micro";
  */
  
 #include <stdio.h>
+#ifndef __ABSC__
 #include <sys/types.h>
+#endif
 
 #ifdef __MINGW32__
 #define __MSC__
 #endif 
 
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
 #include <sys/param.h>
 #include <rpc/types.h> 
 #include <rpc/xdr.h>

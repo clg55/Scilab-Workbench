@@ -230,6 +230,7 @@ c     recherche du nom de la macro correspondant a ce niveau
      $     ' Not enough memory to perform simplification')
       goto 9999
  144  continue
+      call basout(io,wte,'your global variables are...')
       goto 9999
  145  continue
       goto 9999

@@ -1,20 +1,24 @@
 .TH xclea 2 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-xclea - erase a rectangle on a graphic window
+xclea - erase a rectangle
 .SH CALLING SEQUENCE
 .nf
 xclea(x,y,w,h)
 .fi
 .SH PARAMETERS 
-.TP 15
+.TP 9
 x,y,w,h 
-: four real values (rectangle def)
+: real values defining the rectangle.
 .SH DESCRIPTION
-clears on the current graphic window the rectangle \fV[x,y,w,h]\fR
-( Upper left point , width,height) using the current graphic scale.
+\fVxclea\fR clears the rectangle \fV[x,y,w,h]\fR 
+(upper left point, width, height) in the current graphics 
+window.
+.SH EXAMPLE
+.nf
+x=[0:0.1:2*%pi]';
+plot2d(x,sin(x))
+xclea(1,1,1,1)
+.fi
 .SH AUTHOR
 J.Ph.C.
-
-
-

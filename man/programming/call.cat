@@ -31,7 +31,7 @@ DESCRIPTION
          default/Ex-fort.f, adding the entry point in the file default/Flist
          and then re_linking Scilab with the command make bin/scilex in main
          Scilab directory.
-  There are two forms of calling syntax, a short one and a long one. The
+  There are two forms of calling syntax, a short one and a long one.  The
   short one will give faster code and an easier calling syntax but one has to
   write a small (C or Fortran) interface in order to make the short form pos-
   sible. The long one make it possible to call a Fortran routine (or a C one)
@@ -50,7 +50,6 @@ DESCRIPTION
 
        tx1,...,txn    are their types ("r", "i", "d" and "c" for real (float)
                       , integer, double precision and strings)
-
        "out"          is a keyword used to separate input variables from out-
                       put variables. when this key word is present it is
                       assumes that the long form will be used and when it is
@@ -69,7 +68,7 @@ DESCRIPTION
 
   If an output variable coincides with an input variable (i.e. pyi=pxj ) one
   can pass only its position pyi .  The size and type of yi are then the same
-  as those of xi. If an output variable coincides with an input variable and
+  as those of xi.  If an output variable coincides with an input variable and
   one specify the dimensions of the output variable [myl,nyl] must follow the
   compatibility condition mxk*nxk >= myl*nyl.
 
@@ -120,5 +119,6 @@ DESCRIPTION
   a=[1,2,3;4,5,6];b= %pi;
   [m,n]=size(a);
   c=call("fooc",a,2,"d",b,3,"d",m,4,"i",n,5,"i","out",[m,n],1,"d");
+
 SEE ALSO
   link, c_link, intersci, addinter

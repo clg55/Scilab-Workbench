@@ -3,11 +3,6 @@ FWT(2)                         Scilab Function                         FWT(2)
 NAME
   FWT - 1D Forward Discrete Wavelet Transform
 
-  Author: Bertrand Guiheneuf
-
-  This routine computes discrete wavelet transforms of a 1D real signal. Two
-  transforms are possible : Orthogonal and Biorthogonal
-
 Usage
   [wt,index,length]=FWT(Input,NbIter,f1,[f2])
 
@@ -28,6 +23,9 @@ Output parameters
        o length : real matrix [1,NbIter+1] Contains the dimension of each
          projection
 Description
+  This routine computes discrete wavelet transforms of a 1D real signal. Two
+  transforms are possible : Orthogonal and Biorthogonal
+
 Introduction
   The discrete wavelet transform of Input is a projection on multiresolution
   Spaces.  The number of scales NbIter tells how many convolutions are com-
@@ -49,18 +47,17 @@ Introduction
 Parameters
   Input must be a real unidimensional matrix.  NbIter is the number of scales
   computed. It must be a positive integer greater than one and should be
-  smaller than log2(max(size(Input))) but this is not necessary. f1 is the
-  linear FIR filter used for the analysis and might be  obtained with
-  MakeQMF() or MakeCQF() f2 is the linear FIR filter to use for the recon-
-  struction. It is only necessary if f1 has been obtained with MakeCQF(). wt
-  is the wavelet decomposition structure. The next two parametres must be
-  used to read the wavelet coefficients.  index contains the indexes of the
-  first coefficient of each output.  length contains the dimension  of each
-  output.
+  smaller than log2(max(size(Input))) but this is not necessary.  f1 is the
+  linear FIR filter used for the analysis and might be  obtained with Make-
+  QMF() or MakeCQF() f2 is the linear FIR filter to use for the reconstruc-
+  tion. It is only necessary if f1 has been obtained with MakeCQF().  wt is
+  the wavelet decomposition structure. The next two parametres must be used
+  to read the wavelet coefficients.  index contains the indexes of the first
+  coefficient of each output.  length contains the dimension  of each output.
 
 Algorithm details
   Convolutions are computed through discrete linear convolutions in time
-  domain. No FFT is used. The signal is mirrored at its boundaries. The
+  domain. No FFT is used.  The signal is mirrored at its boundaries.  The
   wavelet structure contains all the informations for the reconstruction:
   wt(1) : size of the original signal wt(2) : Number of iterations wt(3) :
   Number of causal coefficients of the synthesis filter wt(4) : Number of
@@ -68,15 +65,22 @@ Algorithm details
   coefficients and finaly the wavelet coefficient are stored .
 
 Examples
-  a=rand(1,250); q=MakeQMF('daubechies',4); wt,wti,wtl = FWT(a,6,q);
-  M=WTMultires(wt); plot(M(2,:)); Then to suppress the Lowest Frequency com-
-  ponent and then reconstruction: for i=1:wtl(6), wt(wti(6)+i-1)=0; end;
+  a=rand(1,250);
+  q=MakeQMF('daubechies',4);
+  wt,wti,wtl = FWT(a,6,q);
+  M=WTMultires(wt);
+  plot(M(2,:));
+  //Then to suppress the Lowest Frequency component and then reconstruction:
+  for i=1:wtl(6),wt(wti(6)+i-1)=0;end;
   result=IWT(wt);
 
 References
   Meyer Y. : Wavelets, Algorithms & Applications, SIAM.  Meyer Y. :
   Ondelettes et Operateurs (I) : Hermann, Paris Daubechies I. : Ten Lectures
   on Wavelets, CBMS-NSF Regional conference series in applied mathematics.
+
+AUTHOR
+  Author: Bertrand Guiheneuf
 
 See Also
   IWT, MakeQMF, MakeCQF, WTStruct, WTNbScales, WTMultires

@@ -18,8 +18,8 @@ PARAMETERS
 DESCRIPTION
   given a block-diagram representation of a linear system bloc2exp returns
   its symbolic evaluation.  The first element of the list blocd must be the
-  string 'blocd'.  Each other element of this list (blocd(2),blocd(3),...) is
-  itself a list of one the following types :
+  string 'blocd'.  Each other element of this list (blocd(2),blocd(3),...)
+  is itself a list of one the following types :
 
   list('transfer','name_of_linear_system')
 
@@ -42,10 +42,10 @@ DESCRIPTION
   ples)
 
   Case 2 :  the second kind of element in a block-diagram representation is a
-  link.  A link links one output of a block represented by the pair
-  [number_of_upstream_box,upstream_box_port], to different inputs of other
-  blocks. Each such input is represented by the pair
-  [downstream_box_i,downstream_box_i_portnumber].
+  link.  A link links one output of a block represented by the pair [num-
+  ber_of_upstream_box,upstream_box_port], to different inputs of other
+  blocks. Each such input is represented by the pair [downstream_box_i,down-
+  stream_box_i_portnumber].
 
   The different elements of a block-diagram can be defined in an arbitrary
   order.
@@ -81,7 +81,7 @@ DESCRIPTION
   l=l+1;syst(l)=list('link','Y',[n_s2,1],[-1],[n_adder,2]);
   //Evaluation call
   w=bloc2exp(syst);
-  The result is the character string: w=-(s2*s1-eye())*s1.
+  The result is the character string: w=-(s2*s1-eye())s1.
 
   Note that invoked with two output arguments, [str,names]= blocd(syst)
   returns in names the list of symbolic names of named links. This is useful

@@ -18,8 +18,8 @@ PARAMETERS
 
 DESCRIPTION
   subgraph returns the graph g1, built with the numbers given by the the row
-  vector v. If ind is the string 'nodes', g1 is built with the node numbers
-  given by v and the connected edges of these nodes in g. If ind is the
+  vector v.  If ind is the string 'nodes', g1 is built with the node numbers
+  given by v and the connected edges of these nodes in g.  If ind is the
   string 'edges', g1 is built with the edge numbers given by v and the tail-
   head nodes of these edges in g.
 

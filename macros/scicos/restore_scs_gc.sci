@@ -7,9 +7,9 @@ driver(scs_gc(2))
 for i=3:size(scs_gc)
   x=scs_gc(i)
   xx=x(2);
-  select size(x(2)),
+  select size(x(2),'*'),
   case 1 then 
-    xset(x(1),x(2));
+    xset(x(1),xx);
   case 2 then 
     xset(x(1),xx(1),xx(2));
   case 3 then 

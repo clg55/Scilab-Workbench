@@ -37,12 +37,12 @@ DESCRIPTION
 
   sl can be a continuous-time or discrete-time SIMO system (see syslin).  In
   case of multi-output the outputs are plotted with different symbols.
-  The frequencies are given by the bounds fmin,fmax (in Hz) or by a row-
-  vector (or a matrix for multi-output) frq.
+  The frequencies are given by the bounds fmin,fmax (in Hz) or by a row-vec-
+  tor (or a matrix for multi-output) frq.
   step is the ( logarithmic ) discretization step. (see calfrq for the choice
   of default value).
   comments  is a vector of character strings (captions).
-  db,phi are the matrices of modulus (in Db) and phases (in degrees). (One
+  db,phi are the matrices of modulus (in Db) and phases (in degrees).  (One
   row for each response).
   repf  matrix of complex numbers. One row for each response.
   Default values for fmin and fmax are 1.d-3, 1.d+3 if sl is continuous-time

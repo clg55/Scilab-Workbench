@@ -4,42 +4,39 @@ NAME
   xsegs - draw unconnected segments
 
 CALLING SEQUENCE
-  xsegs(nx,ny,[style])
+  xsegs(xv,yv,[style])
 
 PARAMETERS
 
-  nx,ny          : two matrices of the same size 2*n
+  xv,yv  : matrices of the same size.
 
-  style          : a matrix of size n or a scalar. If style is a positive
-                 scalar it gives the dash style to use for all segments, if
-                 it is a negative scalar then current dash style is used, if
-                 it is a vector style[i] gives the style to use for segment
-                 i.
+  style  : vector or scalar. If style is a positive scalar, it gives the dash
+         style to use for all segments. If style is a negative scalar, then
+         current dash style is used. If style is a vector, then style(i)
+         gives the style to use for segment i.
 
 DESCRIPTION
-  this function draws a set of unconnected segments given by nx,ny which are
-  internally considered as vectors ( using the Fortran storage convention).
+  xsegs draws a set of unconnected segments given by xv and yv. If xv and yv
+  are matrices they are considered as vectors by concatenating their columns.
   The coordinates of the two points defining a segment are given by two con-
-  secutive values of nx and ny.
+  secutive values of xv and yv:
 
-  (nx[i],ny[i])-->(nx[i+1],nx[i+2])
+  (xv(i),yv(i))-->(xv(i+1),yv(i+1)).
 
-  Using matrices of size (2,.) the segments can be defined by
-  nx=[ xi_1,xi_
-       xf_1,xf_2,...  ]
+  For instance, using matrices of size (2,n), the segments can be defined by:
+  xv=[xi_1 xi_2 ...;
+      xf_1 xf_2 ...]
 
-  ny=[ yi_1,yi_2,.....;
-      yf_1,yf_2,...  ]
-  the segments are then (xi_k,yi_k)->(xf_k,yf_k)
+  yv=[yi_1 yi_2 ...;
+      yf_1 yf_2 ...]
+  and the segments are (xi_k,yi_k)-->(xf_k,yf_k).
 
 EXAMPLE
   x=2*%pi*(0:9)/8;
-  x1=[sin(x);9*sin(x)];
-  y1=[cos(x);9*cos(x)];
-  plot2d([-10,10],[-10,10],[-1,-1],"022");
-  xset('clipgrf')
-  xsegs(x1,y1,1:10);
-  xset('clipoff')
+  xv=[sin(x);9*sin(x)];
+  yv=[cos(x);9*cos(x)];
+  plot2d([-10,10],[-10,10],[-1,-1],"022")
+  xsegs(xv,yv,1:10)
 
 AUTHOR
-  C. J.Ph
+  J.Ph.C.

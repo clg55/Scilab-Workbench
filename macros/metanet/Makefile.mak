@@ -11,7 +11,7 @@ include ../../Makefile.incl.mak
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = metalib
-NAM = metanet
+NAM = SCI/macros/metanet
 
 MACROS = adj_lists.sci add_edge.sci add_node.sci arc_graph.sci \
 	arc_number.sci articul.sci bandwr.sci \

@@ -1,25 +1,26 @@
 .TH scaling 2 "April 1993" "Scilab Group" "Scilab Function" 
 .so ../sci.an
 .SH NAME
-scaling - affine transform of a set of points  
+scaling - affine transformation of a set of points
 .SH CALLING SEQUENCE
 .nf
-[xy1]=scaling(xy,factor,orig)
+xy1=scaling(xy,factor,[orig])
 .fi
 .SH PARAMETERS 
-.TP 15
-xy,xy1  
-:  matrices of size (2,.)
+.TP 8
+xy1
+: matrice of size (2,.).
+.TP
+xy
+: matrice of size (2,.).
 .TP
 factor 
-: real scalar (linear transform coef)
+: real scalar, coefficient of the linear transformation.
 .TP
 orig 
-: shift vector (default value =[0;0] )
+: shift vector; default value is [0;0].
 .SH DESCRIPTION
-\fVxy1(:,i) = factor *xy(:,i) + orig\fR
+\fVscaling\fR performs an affine transformation on the set of points defined
+by the coordinates \fVxy\fR:
 
-
-
-
-
+\fVxy1(:,i) = factor * xy(:,i) + orig\fR.

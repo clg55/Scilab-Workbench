@@ -5,9 +5,7 @@ if rhs<1 then
   stk=list('halt()','0','0','0','1')
 else
   if stk(top)(5)=='10' then
-    write(logfile,'Warning: pause('+stk(top)(1)+') ignored')
-    txt='//! pause('+stk(top)(1)+') ignored'
-    write(logfile,txt)
+    set_infos('Warning: pause('+stk(top)(1)+') ignored',1)
     stk=list(' ',-2,'0','0','1')
   else
     stk=list('xpause(1000*('+stk(top)(1)+'))','0','0','0','1')

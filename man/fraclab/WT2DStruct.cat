@@ -38,7 +38,7 @@ Parameters
 
 Example
   a=rand(256,256); q=MakeQMF('daubechies',4); wt = FWT2D(a,8,q); (a few days
-  pass...) wti, wtl=WT2DStruct(wt); wtl
+  pass...)  wti, wtl=WT2DStruct(wt); wtl
 
 See Also
   FWT2D, IWT2D, WT2Dext, WT2DVisu

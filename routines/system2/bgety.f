@@ -12,6 +12,7 @@ c     Copyright INRIA
       common / corradr  / kgxtop,kgytop,ksec,kisc
       common / corrtyp /  itxcorr,itycorr
       common/  iercorr /iero
+      logical allowptr
 
       data mlhs/1/
 c

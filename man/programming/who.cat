@@ -5,14 +5,20 @@ NAME
 
 CALLING SEQUENCE
   who
-  names=who('get')
-  [names,mem]=who('get')
+  who()
+  names=who('local')
+  [names,mem]=who('local')
+  names=who('global')
+  [names,mem]=who('global')
 
 DESCRIPTION
   who displays current variable names.
 
-  who('get') Returns current variable names and memory used in double preci-
-  sion worlds.
+  who('local') or who('get')  Returns current variable names and memory used
+  in double precision worlds.
+
+  who('global') returns global  variable names and memory used in double pre-
+  cision worlds.
 
 SEE ALSO
   whos

@@ -11,7 +11,7 @@ include ../../Makefile.incl.mak
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = siglib
-NAM = signal
+NAM = SCI/macros/signal
 
 MACROS = %k.sci %asn.sci %sn.sci analpf.sci bilt.sci \
 	buttmag.sci  casc.sci cheb1mag.sci cheb2mag.sci chepol.sci \

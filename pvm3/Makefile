@@ -15,3 +15,23 @@ default:
 
 clean:
 	PVM_ROOT=$(SCIDIR)/pvm3; export PVM_ROOT; ./lib/aimk $(AIMKSTR) clean
+
+# distclean clean removes *.o and other remaining executables 
+
+distclean:: clean 
+	arch=`./lib/pvmtmparch` ;\
+	$(RM) -rf lib/$$arch bin/$$arch pvmgs/$$arch  
+
+ALL_ARCH = HPPA SGI ALPHA LINUXALPHA LINUX LINUXSPARC SUN4SOL2 SUNMP
+
+# make a distclean on one architecture and removes binaries for other 
+# architectures 
+
+super_distclean:
+	@for arch in $(ALL_ARCH) ;\
+        do \
+	( aimkop="-here -f ./conf/$$arch.def -f ./Makefile.aimk" ;\
+	 PVM_ROOT=`pwd` ; export PVM_ROOT; ./lib/aimk $$aimkop clean ; \
+	 $(RM) -rf lib/$$arch bin/$$arch pvmgs/$$arch  \
+            ); \
+        done

@@ -12,12 +12,6 @@
 #include <malloc.h>
 #endif
 
-#if defined(THINK_C)|| defined(WIN32)
-#define M_PI	3.14159265358979323846
-#else
-#include <values.h>
-#endif
-
 #include <math.h>
 #include <stdio.h>
 #include "Math.h"
@@ -321,7 +315,7 @@ static void C2F(fac3dg)(name, iflag, x, y, z, cvect, p, q, teta, alpha, legend, 
 	sciprint (" index[%d]=%d\r\n",i,locindex[i]);
       locindex[i] = Min(Max(0,locindex[i]),*q-1);
     }
-  polysize=5;
+  polysize=(*p)+1; /* jpc : dec 1999 */
   npoly=1; 
   for ( i = (*q)-1 ; i>= 0 ; i--)
     {

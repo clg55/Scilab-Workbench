@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=REALIT,SSI=0
       subroutine realit(sss, nz, iflag)
 c variable-shift h polynomial iteration for a real
 c zero.
@@ -6,7 +5,7 @@ c sss   - starting iterate
 c nz    - number of zero found
 c iflag - flag to indicate a pair of zero near real
 c         axis.
-      common /global/ p, qp, k, qk, svk, sr, si, u,
+      common /gloglo/ p, qp, k, qk, svk, sr, si, u,
      * v, a, b, c, d, a1, a2, a3, a6, a7, e, f, g,
      * h, szr, szi, lzr, lzi, eta, are, mre, n, nn
       double precision p(101), qp(101), k(101),

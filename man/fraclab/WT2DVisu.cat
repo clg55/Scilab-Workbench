@@ -19,8 +19,8 @@ Output parameter
 Description
 
 Introduction
-  This routine is used to display all the scales and all the frequency com-
-  ponents of a wavelet transform.
+  This routine is used to display all the scales and all the frequency compo-
+  nents of a wavelet transform.
 
 Parameters
   wt must be a real matrix. It's generally obtained with FWT2D.  V the

@@ -48,10 +48,10 @@ DESCRIPTION
   noncentrality  parameter  (PNONC).  Very large  values of this parameter
   can consume immense  computer resources.  This is why the search range is
   bounded by 10,000.
-  The  value  of the  cumulative  noncentral F distribution is not neces-
-  sarily monotone in either degrees  of freedom.  There  thus may be two
-  values that provide a given  CDF value.  This routine assumes monotonicity
-  and will find  an arbitrary one of the two values.
+  The  value  of the  cumulative  noncentral F distribution is not necessar-
+  ily monotone in either degrees  of freedom.  There  thus may be two values
+  that provide a given  CDF value.  This routine assumes monotonicity  and
+  will find  an arbitrary one of the two values.
   From DCDFLIB: Library of Fortran Routines for Cumulative Distribution Func-
   tions, Inverses, and Other Parameters (February, 1994) Barry W. Brown,
   James Lovato and Kathy Russell. The University of Texas.

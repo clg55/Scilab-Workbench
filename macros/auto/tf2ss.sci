@@ -10,7 +10,7 @@ function [sl]=tf2ss(h,tol)
 if type(h)<=2 then 
   sl=syslin([],[],[],[],h);return;
 end
-[num,den]=h(2:3);
+[num,den]=h(['num','den']);
 //
 [nd,md]=size(den)
 a=[];b=[];c=[];d=[];n1=0; // s=[]
@@ -53,7 +53,7 @@ if n1<>0 then
   u=u(:,1:no);
   a=u'*a*u;b=u'*b;c=c*u;
   [a,u]=balanc(a);c=c*u;b=u\b; 
-  sl=syslin(h(4),a,b,c,d);
+  sl=syslin(h('dt'),a,b,c,d);
 else
-  sl=syslin(h(4),[],[],[],d)
+  sl=syslin(h('dt'),[],[],[],d)
 end

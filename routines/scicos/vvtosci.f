@@ -10,11 +10,6 @@ c
       external dcopy, error
       include "../stack.h"
 c 
-      integer  iadr,sadr
-c
-      iadr(l) = l + l - 1
-      sadr(l) = (l/2) + 1
-c
       if (top .ge. bot) then
         call error(18)
       else

@@ -1,5 +1,5 @@
 
-TCLSS_f(5)                      Scicos Block                       TCLSS_f(5)
+TCLSS_f(5)                       Scicos Block                      TCLSS_f(5)
 NAME
   TCLSS_f - Scicos jump continuous-time linear state-space system
 
@@ -10,9 +10,9 @@ DESCRIPTION
   carries the new value of the state which is copied into the state when an
   event arrives at the unique event input port of this block. That means the
   state of the system jumps to the value present on the second input (of size
-  equal to that of the state).  The system is defined by the (A,B,C,D)
-  matrices and the initial state x0. The dimensions must be compatible. The
-  sizes of inputs and outputs are adjusted automatically.
+  equal to that of the state).  The system is defined by the (A,B,C,D) matri-
+  ces and the initial state x0. The dimensions must be compatible. The sizes
+  of inputs and outputs are adjusted automatically.
 
 DIALOGUE PARAMETERS
 

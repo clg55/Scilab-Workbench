@@ -18,11 +18,11 @@ Input parameters
          ple.
 Output parameters
        o theta : real vector corresponding to the the input argument of the
-         estimated spectral measure. Components of the vector theta are vary-
-         ing between 0 and 2*PI.
+         estimated spectral measure.  Components of the vector theta are
+         varying between 0 and 2*PI.
        o sm : real vector corresponding to the estimation of the normalized
          spectral measure of the bivariate vector (data1,data2).
 Example
   for two given signals  S1 and S2, [theta,sm]=stable_sm(S1,S2); estimates
-  the normalized spectral measure of the data vector (S1,S2). To visualize it
-  use plot(theta,sm).
+  the normalized spectral measure of the data vector (S1,S2).  To visualize
+  it use plot(theta,sm).

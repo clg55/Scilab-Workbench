@@ -50,7 +50,6 @@ PARAMETERS
                            ous state vector  of the ith block.
 
             sim('zptr')    : (nblk+1) x 1 vector of integers,
-
                             state('z')(zptr(i):(zptr(i+1)-1)) is the discrete
                            state vector  of the ith block.
 
@@ -70,15 +69,15 @@ PARAMETERS
 
                            outptr(i+1)-outptr(i) gives the number of output
                            ports. outptr(i)th points to the beginning of ith
-                           block outputs  within the indirection table
-                           outlnk.
+                           block outputs  within the indirection table out-
+                           lnk.
 
             sim('outlnk')  : nblink x 1 vector of integers,
 
                             outlnk(outptr(i)-1+j) is the index of the link
                            connected to the  jth output port of the ith
-                           block.  where j goes from 1 to outptr(i+1)-
-                           outptr(i)).
+                           block.  where j goes from 1 to outptr(i+1)-out-
+                           ptr(i)).
 
             sim('lnkptr')  : (nblink+1) x 1 vector of integers,
 

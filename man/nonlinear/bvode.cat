@@ -15,8 +15,8 @@ PARAMETERS
 
   ncomp     number of differential equations   (ncomp <= 20)
 
-  m         a vector of size ncomp. m(j) gives the  order of the j-th dif-
-            ferential equation
+  m         a vector of size ncomp. m(j) gives the  order of the j-th differ-
+            ential equation
 
             ( mstar = m(1) + ... + m(ncomp) <= 40 )
 
@@ -46,6 +46,7 @@ PARAMETERS
                       where
 
                       max m(i) <=  k <= 7 .
+
                       if ipar(2)=0 then bvode sets
 
                       k = max ( max m(i)+1, 5-max m(i) )
@@ -99,7 +100,6 @@ PARAMETERS
                         = 1
                           if the initial mesh is provided by the user.  it is
                           defined in fspace as follows:  the mesh
-
                           aleft=x(1)<x(2)< ... <x(n)<x(n+1)=aright
                           will occupy  fspace(1), ..., fspace(n+1). the user
                           needs to supply only the interior mesh points
@@ -120,8 +120,8 @@ PARAMETERS
 
                       = 2
                         if an initial mesh and approximate solution coeffi-
-                        cients are provided by the user in fspace.  (the
-                        former and new mesh are the same).
+                        cients are provided by the user in fspace.  (the for-
+                        mer and new mesh are the same).
 
                       = 3
                         if a former mesh and approximate solution coeffi-
@@ -132,8 +132,8 @@ PARAMETERS
                       = 4
                         if in addition to a former initial mesh and approxi-
                         mate solution coefficients, a new mesh is provided in
-                        fspace as well.  (see description of output for
-                        further details on iguess = 2, 3, and 4.)
+                        fspace as well.  (see description of output for fur-
+                        ther details on iguess = 2, 3, and 4.)
 
             ipar(10)
 
@@ -141,9 +141,9 @@ PARAMETERS
                         if the problem is regular
 
                       = 1
-                        if the first relax factor is =rstart, and the non-
-                        linear iteration does not rely on past covergence
-                        (use for an extra sensitive nonlinear problem only).
+                        if the first relax factor is =rstart, and the nonlin-
+                        ear iteration does not rely on past covergence (use
+                        for an extra sensitive nonlinear problem only).
 
                       = 2
                         if we are to return immediately upon  (a) two succes-
@@ -156,9 +156,9 @@ PARAMETERS
                       aleft and aright (see description of zeta ) be included
                       as fixed points in fixpnt.
 
-  ltol      an array of dimension ipar(4). ltol(j) = l  specifies that the
-            j-th tolerance in  tol  controls the error in the l-th component
-            of z(u).   also require that
+  ltol      an array of dimension ipar(4). ltol(j) = l  specifies that the j-
+            th tolerance in  tol  controls the error in the l-th component of
+            z(u).   also require that
 
             1<=ltol(1)<ltol(2)< ... <ltol(ntol)<=mstar
 
@@ -166,7 +166,7 @@ PARAMETERS
             the ltol(j) -th component of z(u). thus, the code attempts to
             satisfy for j=1,...,ntol  on each subinterval
 
-                    abs(z(v)-z(u))
+                    abs(z(v)-z(u))       ol(j)*abs(z(u))       +tol(j)
                                   ltol(j)                     ltol(j)
 
             if v(x) is the approximate solution vector.

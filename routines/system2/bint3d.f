@@ -12,6 +12,7 @@ c
       integer numfun
       integer       iero,hsize
       common/ierdcu/iero
+      logical allowptr
 c     
       integer vol,tops,nordre
       data nordre/1/,mlhs/1/

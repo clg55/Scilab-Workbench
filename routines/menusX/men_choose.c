@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 #ifdef WIN32 
 #include "wmen_scilab.h" 
 #else

@@ -9,8 +9,8 @@ DEFINITION
 PARAMETERS
 
   params
-       : Scilab list,
-       params=list(wpar,title,tol,tf,context,void,options,void,void,doc))
+       : Scilab list, params=list(wpar,title,tol,tf,con-
+       text,void,options,void,void,doc))
 
        wpar
          : viewing parameters: [w,h,Xshift,Yshift]

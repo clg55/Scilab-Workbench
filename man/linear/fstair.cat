@@ -53,8 +53,8 @@ PARAMETERS
         rank in the pencil sE(eps,inf)-A(eps,inf)
 
   mnei:
-        integer array of dimension (4). mnei(1) = row dimension of sE(eps)-
-       A(eps)
+        integer array of dimension (4). mnei(1) = row dimension of
+       sE(eps)-A(eps)
 DESCRIPTION
 
   Given a pencil sE-A where matrix E is in column echelon form the function
@@ -63,8 +63,8 @@ DESCRIPTION
   form of the pencil sE-A.  The function  yields also part of the Kronecker
   structure of the given pencil.
 
-  Q,Z are the unitary matrices used to compute the pencil where E is in
-  column echelon form (see ereduc)
+  Q,Z are the unitary matrices used to compute the pencil where E is in col-
+  umn echelon form (see ereduc)
 
 AUTHOR
   Th.G.J. Beelen (Philips Glass Eindhoven). SLICOT

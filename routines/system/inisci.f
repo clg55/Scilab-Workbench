@@ -14,8 +14,8 @@ c     Copyright INRIA
       include '../stack.h'
       parameter (nz1=nsiz-1,nz2=nsiz-2)
 c     
-      integer         nunit,unit(50)
-      common /units / nunit,unit
+c      integer         nunit,unit(50)
+c      common /units / nunit,unit
 c     common for Control-C interruptions
       logical         iflag
       common /basbrk/ iflag
@@ -28,14 +28,17 @@ c
 c     simpmd : rational fraction simplification mode
       integer simpmd
       common /csimp/  simpmd
-c     
+c     ippty: interfaces properties
+      parameter (mxbyptr=40)
+      integer byptr(mxbyptr),nbyptr
+      common /ippty/ byptr,nbyptr
 
       logical first
       double precision dlamch
-      integer i,k,l,nc,mode(2)
+      integer i,k,l,nc,mode(2),vsizg
       integer eps(nsiz),im(nsiz),exp(nsiz),pi(nsiz),bl(nsiz),io(nsiz)
       integer true(nsiz),false(nsiz),dollar(nsiz)
-      integer offset
+      integer offset,goffset
       integer iadr,sadr
 c     
       double precision  iov(2)
@@ -78,9 +81,10 @@ c
       data dollar/673720359,nz1*673720360/
       data first/.true./
       data true/673717560,nz1*673720360/,false/673713976,nz1*673720360/
-      data nunit/20/
+      data nunit/50/
 c     
-      save /units/,/basbrk/,/mprot/
+      save /basbrk/,/mprot/
+c      save /units/
 c     
 
       iadr(l)=l+l-1
@@ -103,7 +107,7 @@ c     .  ------------------------------
 c     
 c     .  standard i/o initialization
 c     .  ----------------------------
-      call iset(nunit,0,unit,1)
+c      call iset(nunit,0,unit,1)
 c     .  rte = unit number for terminal input
       if(ini1.ne.-3) then
          rte = 5
@@ -188,23 +192,40 @@ c     .  -------------
  20   continue
 c     add tab
       alfb(41)=char(9) 
-c     type names
+
+c     .  initial type names
+c     .  ------------------
       call settypnames()
       if(err.gt.0) then
          ierr=err
          return
       endif
-
+c     .  initial interface properties
+c     .  ----------------------------
+      call setippty(0)
 c     
 c     .  Stack
 c     .  -----
 c     
+c     . initial values for number of local and global variables
+      isiz=isizt-128
+
 c     .  memory allocation
       stk(1)=1.0d0
       offset=0
       call scimem(vsizr,offset)
       lstk(1) =   offset+1
 c     . hard predefined variables
+      goffset=0
+      vsizg=1000
+      call scigmem(vsizg,goffset)
+
+      gtop=isiz+1
+      lstk(gtop+1)=goffset+1
+      gbot=isizt
+      lstk(gbot)=lstk(gtop+1)+vsizg-1
+
+
       bot=isiz-8
       bbot=bot
       bot0=bot
@@ -286,6 +307,7 @@ c     debug mode
       wmac    =   0
       mmode   =   0
       simpmd  =   1
+
       return
       end
 

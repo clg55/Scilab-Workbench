@@ -6,6 +6,7 @@ file - file management
 .nf
 [unit [,err]]=file('open', file-name [,status] [,access [,recl]] [,format])
 file(action,unit)
+[units [,typ [,nams]]] =file()
 .fi
 .SH PARAMETERS
 .TP 10
@@ -57,6 +58,15 @@ recl
 unit
 : integer, logical unit descriptor of the opened file
 .TP
+units
+: integer vector, logical unit descriptor of the opened files.
+.TP
+typs
+: Character string vector, type (C or Fortran) of opened files.
+.TP
+nams
+: Character string vector, pathnames of opened files.
+.TP
 err
 : integer, error message number (see error), if open fails. If err is
 omitted an error message is issued.
@@ -66,7 +76,7 @@ action
 .RS
 .TP 13
 "close" 
-: closes the file
+: closes the file(s) given by the logical unit descriptors given in \fVunits\fR
 .TP
 "rewind" 
 : puts the pointer at beginning of file
@@ -87,9 +97,11 @@ get the associated unit number \fVunit\fR. This unit number may be
 used for further actions on this file or as file descriptor in
 \fVread\fR, \fVwrite\fR, \fVreadb\fR, \fVwritb\fR,\fVsave\fR,
 \fVload\fR function calls.
-
+.LP
 \fVfile(action,unit)\fR allows to close the file , or move the current
 file pointer .
+.LP
+\fVfile()\fR returns the logical unit descriptors of the opened files.
 .SH EXAMPLE
 .nf
 u=file('open',TMPDIR+'/foo','unknown')
@@ -100,6 +112,10 @@ end
 file('rewind',u)
 x=read(u,2,4)
 file('close',u)
+//
+file('close',file() ) //closes all opened files (C or Fortran type).
+//
+[units,typs,nams]=file()
 .fi
 .SH SEE ALSO
 save, load, write, read, writb, readb, xgetfile

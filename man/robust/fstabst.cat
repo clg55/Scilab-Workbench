@@ -26,8 +26,8 @@ DESCRIPTION
   r = size of  P22 subsystem, (2,2) block of P
             J =[ J11 J12;
                  J21 J22]
-  K is a stabilizing controller for P (i.e. P22) iff K=lft(J,r,Q) with Q
-  stable.
+  K is a stabilizing controller for P (i.e. P22) iff K=lft(J,r,Q) with Q sta-
+  ble.
 
   The central part of J , J11 is the lqg regulator for P
 

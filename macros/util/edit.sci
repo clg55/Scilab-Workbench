@@ -7,7 +7,7 @@ default_editor="emacs -i -geometry 80x50+427+143  -font 9x15 "
 //
 finded=%f;tmp=%f
 
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+if MSDOS then 
 	write(%io(2),'edit: Not implemented on win32');
 	res=evstr(macroname);
 	return;

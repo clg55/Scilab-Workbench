@@ -172,7 +172,7 @@ for (xargc--,xargv++; xargc; xargc--,xargv++)
 		troff_tex(inbuf,outbuf,0,0);
 		fprintf(out_file,"%%\n%% input file: %s\n%%\n",cptr);
 		/** JPC **/
-		fprintf(stderr,"End of Processing %s file\n",cptr);
+		/* fprintf(stderr,"End of Processing %s file\n",cptr);  */
 		fputs(outbuf,out_file);
 		}
 	else

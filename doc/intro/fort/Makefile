@@ -1,7 +1,7 @@
 SHELL = /bin/sh
 
-include ../../../Path.incl
-include ../../../Version.incl
+#include ../../../Path.incl
+#include ../../../Version.incl
 include ../../../Makefile.incl
 
 OBJS = /tmp/fibb.o

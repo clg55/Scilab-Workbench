@@ -98,12 +98,12 @@ arc *a;
     }
   }
   if (a->name != 0 && !strcmp(a->name,str)) return;
-  if (arcNameDisplay) {
+  if (arcStrDisplay == NAME_ARCDISP) {
     UnhiliteArc(a);
     EraseArc(a);
   }
   ChangeArcName(a,str);
-  if (arcNameDisplay) HiliteArc(a);
+  if (arcStrDisplay == NAME_ARCDISP) HiliteArc(a);
 }
 
 void ChangeArcName(a,str)
@@ -161,12 +161,12 @@ node *nod;
     }
   }
   if (nod->name != 0 && !strcmp(nod->name,str)) return;
-  if (nodeNameDisplay) {
+  if (nodeStrDisplay == NAME_NODEDISP) {
     UnhiliteNode(nod);
     EraseNode(nod);
   }
   ChangeNodeName(nod,str);
-  if (nodeNameDisplay) HiliteNode(nod);
+  if (nodeStrDisplay == NAME_NODEDISP) HiliteNode(nod);
 }
 
 void ChangeNodeName(n,str)

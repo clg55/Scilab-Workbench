@@ -15,6 +15,9 @@
 #include <windows.h>
 #include "dstrings.h"
 #include <errno.h>
+#ifdef __ABSC__
+#include "errno.h"
+#endif
 
 /*
  * The following constants specify the type of callback when

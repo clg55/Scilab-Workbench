@@ -34,8 +34,8 @@ Parameters
 
 Algorithm details
   Convolutions are computed through discrete linear convolutions in time
-  domain. No FFT is used. The signal is mirrored at its boundaries. .SH Exam-
-  ple a=rand(1,256); q=MakeQMF('daubechies',4); wt,wti,wtl = FWT(a,8,q);
+  domain. No FFT is used.  The signal is mirrored at its boundaries. .SH
+  Example a=rand(1,256); q=MakeQMF('daubechies',4); wt,wti,wtl = FWT(a,8,q);
   wt=abs(wt); result=IWT(wt);.SH References Meyer Y. : Wavelets, Algorithms &
   Applications, SIAM.  Meyer Y. : Ondelettes et Operateurs (I) : Hermann,
   Paris Daubechies I. : Ten Lectures on Wavelets, CBMS-NSF Regional confer-

@@ -30,15 +30,18 @@ crit=tc*x1;
 test=eps+1
 count=0
 while test>eps&count<=maxiter
-    count=count+1
-    ax=a*diag(x1);xc=x1.*c
-    y=(ax*ax')\(ax*xc)
-    d=-xc+ax'*y
-    dk=x1.*d
+    count=count+1;
+//    ax=a*diag(x1);
+    ax=a.*(ones(size(a),1)*x1');
+    xc=x1.*c;
+    y=ax'\xc;
+//    y=(ax*ax')\(ax*xc)
+    d=-xc+ax'*y;
+    dk=x1.*d;
     if mini(dk)>0 then error('Unbounded problem!'),end
-    alpha=-Gamma/mini(d)
-    test=alpha*(norm(d)**2)/maxi(1,abs(crit))
-    x1=x1+alpha*dk
-    crit=tc*x1
+    alpha=-Gamma/mini(d);
+    test=alpha*(norm(d)**2)/maxi(1,abs(crit));
+    x1=x1+alpha*dk;
+    crit=tc*x1;
     write(%io(2),[count,crit,test],'(f3.0,3x,e10.3,3x,e10.3)')
 end

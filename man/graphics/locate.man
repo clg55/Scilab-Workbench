@@ -4,40 +4,32 @@
 locate - mouse selection of a set of points 
 .SH CALLING SEQUENCE
 .nf
-[x]=locate([n,flag])
+x=locate([n,flag])
 .fi
 .SH PARAMETERS 
-.TP 15
-n, flag 
-: two integer values
-.TP
+.TP 8
 x
-: vector (2,n1) ( n1=n if the parameter n is given)
+: matrix of size (2,n1). n1=n if the parameter n is given.
+.TP
+n,flag 
+: integer values.
 .LP
 .SH DESCRIPTION
-This function is used to get the coordinates of one or more 
-points selected with the mouse on a graphic window. The coordinates 
-are given using the current graphic scale. 
-.TP 15
-x=locate(n)
-: if n>0, n points are selected and their coordinates are returned in 
-x(2,n)
-.TP 
-x=locate(n)
-: If n<=0 points are selected until the user click with the left button 
-which stands for stop. The last point ( clicked with the left button) is 
-not returned.
-.TP
-x=locate()
-: same as \fVx=locate(-1)\fR
+\fVlocate\fR is used to get the coordinates of one or more 
+points selected with the mouse in a graphics window. The coordinates 
+are given using the current graphics scale. 
+
+If n>0, n points are selected and their coordinates are returned in 
+the matrix \fVx\fR.
+
+If n<=0, points are selected until the user clicks with the left button 
+of the mouse which stands for stop. The last point (clicked with the left 
+button) is not returned.
+
+x=locate() is the same as \fVx=locate(-1)\fR.
 .LP
-If \fVflag = 1\fR a cross is drawn at location point each time the mouse is clicked.
+If \fVflag=1\fR a cross is drawn at the points where the mouse is clicked.
 .SH SEE ALSO
-xclick
+xclick, xgetmouse
 .SH AUTHOR
 S.S. & J.Ph.C
-
-
-
-
-

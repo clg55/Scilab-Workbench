@@ -24,6 +24,10 @@ if rhs==1 then k=0,end
     if ij==[] then 
       d=sparse([],[],[nn,nn])
     else
-      d=sparse([ij,ij+k],v,[nn,nn])
+      if k>0 then
+	d=sparse([ij,ij+k],v,[nn,nn])
+      else
+	d=sparse([ij-k,ij],v,[nn,nn])
+      end
     end
   end

@@ -55,8 +55,10 @@
 #define mem_free(ptr, bsize)	free(ptr)
 
 #ifndef makedev /* ie, we haven't already included it */
+#ifndef __ABSC__
 #include <sys/types.h>
-#ifdef __MSC__ 
+#endif
+#if (defined __MSC__) || (defined __ABSC__)
 #undef FALSE
 #undef TRUE 
 #include <winsock.h>
@@ -64,13 +66,16 @@ typedef char * caddr_t;
 #define bzero(x,n) memset(x,0,n)
 #define bcopy(x,y,n) memcpy(x,y,n)
 #define IEEEFP
-#endif /* __MSC__ */
+#endif /* __MSC__ && __ABSC__ */
 
 #endif /* makedev */
 
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
 #include <sys/time.h>
-#endif 
+#endif
+#ifdef __ABSC__
+#include <time.h>
+#endif
 
 #ifndef INADDR_LOOPBACK
 #define	INADDR_LOOPBACK		(u_long)0x7F000001

@@ -19,11 +19,19 @@ palettes(kpal)=scs_m
 //
 xset('window',curwin),xselect();
 xset('alufunction',3)
+set_background()
 if pixmap then xset('pixmap',1),end,xbasc();
 wsiz=palettes(kpal)(1)(1)
+
+rect=dig_bound(scs_m)
+wsiz=palettes(kpal)(1)(1)
 xset('wdim',wsiz(1),wsiz(2))
+xset('wresize',0)
+
 Xshift=wsiz(3);Yshift=wsiz(4);
 xsetech([-1 -1 8 8]/6,[Xshift,Yshift,Xshift+wsiz(5),Yshift+wsiz(6)])
+
+
 options=default_options()
 drawobjs(palettes(kpal))
 if pixmap then xset('wshow'),end

@@ -1,4 +1,4 @@
-/*
+/*****************************************************
  * Modified code from sox for Scilab to read/write 
  * wav files 
  *
@@ -8,28 +8,47 @@
  * any purpose.  This copyright notice must be maintained. 
  * Lance Norskog And Sundry Contributors are not responsible for 
  * the consequences of using this software.
- * 
- */
+ * 1999 Copyright ENPC 
+ *****************************************************/
 
 #include "st.h"
 #include <string.h>
+#ifndef __ABSC__
 #include <sys/types.h>
 #include <sys/stat.h>
+#endif
 #include <ctype.h>
 #include <errno.h>
-
 #include "../machine.h"
+#include "sox.h" 
 
 #define Abs(x) ( ( (x) >= 0) ? (x) : -( x) )
 #define Min(x,y) ( ( (x) < (y))  ? (x) : (y) )
+extern void sciprint _PARAMS((char *fmt, ...));
 struct soundstream informat;
 ft_t ft;
 
+static void checkformat _PARAMS((ft_t ft));
+static void cleanup  _PARAMS((void));
+static void init  _PARAMS((void));
+#if defined(unix) || defined(AMIGA) || defined(ARM) || defined(aix)
+static int filetype _PARAMS((int fd));
+#endif
 
-C2F(loadwave)(filename,res,size_res,ierr)
+
+/************************************************************
+ * loadwave 
+ * --------
+ * read a wav file and store results in res
+ * if flag == 1, res is read 
+ * if flag == 0, size of res is computed but res is not read
+ ************************************************************/
+
+
+int C2F(loadwave)(filename,res,size_res,flag,ierr)
      char *filename;
      double *res;
-     integer *ierr,*size_res;
+     integer *ierr,*size_res,flag;
 {
   double maxi,sum;
   long i,size_max;
@@ -38,7 +57,7 @@ C2F(loadwave)(filename,res,size_res,ierr)
 #else
   long buf[BUFSIZ];
 #endif
-  int e, f, havedata,olen;
+  int olen;
   double *res1;
   *ierr=0;
   init();
@@ -49,9 +68,9 @@ C2F(loadwave)(filename,res,size_res,ierr)
   if ((ft->fp = fopen(filename, READBINARY)) == NULL)
     {
       sciprint("Can't open input file '%s': %s\r\n", 
-	   filename, strerror(errno));
+	       filename, strerror(errno));
       *ierr=1;
-      return;
+      return 0;
     }
   ft->filename = filename;
 #if defined(DOS) || defined(__OS2__) || defined(WIN32) || defined (__MWERKS__)
@@ -67,19 +86,20 @@ C2F(loadwave)(filename,res,size_res,ierr)
     {
       sciprint("Error while reading \r\n");
       *ierr=1;
-      return;
+      return 0;
     }
   checkformat(&informat);
   if ( ft->ierr > 0 ) 
     {
       sciprint("Error while reading \r\n");
       *ierr=1;
-      return;
+      return 0;
     }
-  sciprint("Input file: using sample rate %lu\r\n\tsize %s, style %s, %d %s\r\n",
-	 informat.info.rate, sizes[informat.info.size], 
-	 styles[informat.info.style], informat.info.channels, 
-	 (informat.info.channels > 1) ? "channels" : "channel");
+  if ( flag == 1) 
+    sciprint("Input file: using sample rate %lu\r\n\tsize %s, style %s, %d %s\r\n",
+	   informat.info.rate, sizes[informat.info.size], 
+	   styles[informat.info.style], informat.info.channels, 
+	   (informat.info.channels > 1) ? "channels" : "channel");
   
   /* read chunk */
   size_max = *size_res ; 
@@ -93,66 +113,63 @@ C2F(loadwave)(filename,res,size_res,ierr)
 	{
 	  sciprint("Error while reading \r\n");
 	  *ierr=1;
-	  return;
+	  return 0;
 	}
       *size_res += olen ;
-      if ( *size_res > size_max ) 
+      if (flag == 1 &&  *size_res > size_max ) 
 	{
 	  sciprint(" Sorry wav file too big \r\n");
-	  return;
+	  return 0;
 	}
       /** sciprint("2 premier nombres du bloc \r\n"); **/
-      for ( i = 0 ; i < olen ; i++ ) 
-	{
-	  /** if (i < 2)
-	    {
-	      sciprint(" %ld \r\n",buf[i]);
-	    }
-	  **/
-	  *res1++ = buf[i];
-	}
+      if (flag == 1) 
+	for ( i = 0 ; i < olen ; i++ ) 
+	  {
+	    *res1++ = buf[i];
+	  }
     }
   
   fclose(informat.fp);
   /** centering data **/
-  /** 
-  sciprint(" Nombre de valeurs lues %d \r\n",*size_res);
-  for (i=0 ; i < Min(*size_res,2) ; i++) 
-    sciprint(" %d -> %f %ld\r\n",i,res[i],(long) res[i]);
-  **/
-  sum = 0.0;
-  for ( i = 0 ; i < *size_res ; i++ ) 
+  if ( flag == 1) 
     {
-      sum += res[i];
-    }
-  sum /= (*size_res);
-  for ( i = 0 ; i < *size_res ; i++ ) 
-    {
-      res[i] -= sum ;
-    }
-  maxi= res[0];
-  for ( i = 0 ; i < *size_res ; i++ ) 
-    {
-
-      if ( Abs(res[i]) > maxi ) maxi = Abs(res[i]);
-    }
-  for ( i = 0 ; i < *size_res ; i++ ) 
-    {
-      res[i] /=  maxi;
+      sum = 0.0;
+      for ( i = 0 ; i < *size_res ; i++ ) 
+	{
+	  sum += res[i];
+	}
+      sum /= (*size_res);
+      for ( i = 0 ; i < *size_res ; i++ ) 
+	{
+	  res[i] -= sum ;
+	}
+      maxi= res[0];
+      for ( i = 0 ; i < *size_res ; i++ ) 
+	{
+	  if ( Abs(res[i]) > maxi ) maxi = Abs(res[i]);
+	}
+      for ( i = 0 ; i < *size_res ; i++ ) 
+	{
+	  res[i] /=  maxi;
+	}
     }
   *ierr= ft->ierr;
-  return ;
+  return 0 ;
 }
 
-C2F(savewave)(filename,res,rate,size_res,ierr)
+/************************************************************
+ * savewave 
+ ************************************************************/
+
+int C2F(savewave)(filename,res,rate,size_res,ierr)
      char *filename;
      double *res;
      integer *ierr,*size_res,*rate ;
 {
   long buf[BUFSIZ];
   long i,size_max;
-  int e, f, havedata,olen,count;
-  double maxi,sum,m,*loc;
+  int count;
+  double m,*loc;
   *ierr=0;
   init();
   /* Get input format options */
@@ -164,7 +181,7 @@ C2F(savewave)(filename,res,rate,size_res,ierr)
       sciprint("Can't open output file '%s': %s\r\n", 
 	   filename, strerror(errno));
       *ierr=1;
-      return;
+      return 0;
     }
 
   ft->filename = filename;
@@ -193,7 +210,7 @@ C2F(savewave)(filename,res,rate,size_res,ierr)
     {
       *ierr= ft->ierr;
       cleanup();
-      return;
+      return 0;
     }
   /* read chunk */
   size_max = *size_res ; 
@@ -219,7 +236,7 @@ C2F(savewave)(filename,res,rate,size_res,ierr)
 	{
 	  *ierr= ft->ierr;
 	  cleanup();
-	  return;
+	  return 0;
 	}
       count = len;
     }
@@ -227,9 +244,11 @@ C2F(savewave)(filename,res,rate,size_res,ierr)
   fclose(informat.fp);
   res[0] = ((double)(size_max))/((double) (*rate));
   *ierr= ft->ierr;
+  return 0;
 }
 
-init() {
+
+void init() {
   /* init files */
   informat.info.rate      = 0;
   informat.info.size      = -1;
@@ -246,10 +265,9 @@ init() {
  * Process input file -> effect table -> output file
  *	one buffer at a time
  */
-
-#if	defined(unix) || defined(AMIGA) || defined(ARM) || defined(aix)
-filetype(fd)
-int fd;
+#if defined(netbsd) || defined(freebsd) || defined(unix) || defined(AMIGA) || defined(ARM) || defined(aix)
+int filetype(fd)
+     int fd;
 {
   struct stat st;
   fstat(fd, &st);
@@ -259,7 +277,7 @@ int fd;
 
 /* called from util.c:fail */
 
-cleanup() 
+void cleanup() 
 {
   if (informat.fp)
     fclose(informat.fp);
@@ -267,7 +285,7 @@ cleanup()
 
 /* check that all settings have been given */
 
-checkformat(ft) 
+static void checkformat(ft) 
      ft_t ft;
 {
   if (ft->info.rate == 0)

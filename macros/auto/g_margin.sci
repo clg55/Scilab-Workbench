@@ -1,7 +1,6 @@
 function [gm,fr]=g_margin(h)
-//-compat type(h)<>15 retained for list/tlist compatibility
 // Copyright INRIA
-if type(h)<>15&type(h)<>16 then error(97,1),end
+if type(h)<>16 then error(97,1),end
 flag=h(1);
 select flag(1)
  case 'r' then ,
@@ -10,7 +9,7 @@ select flag(1)
 end;
 //
 //if h(4)<>'c' then error(93,1),end
-[n,d]=h(2:3);
+[n,d]=h(['num','den']);
 if type(n)==1 then n=poly(n,varn(d),'c'),end
 // get w for which imaginary part is zero
 w=roots( imag(horner(n,%i*poly(0,'w')) *...

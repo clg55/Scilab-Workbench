@@ -11,7 +11,9 @@
 #include <string.h>
 #include <ctype.h>
 #include <time.h>
+#ifndef __ABSC__
 #include <process.h>
+#endif
 
 #define MAXSTR 256     /* maximum file name length and general string length */
 

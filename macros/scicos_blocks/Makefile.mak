@@ -11,7 +11,7 @@ include ../../Makefile.incl.mak
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = blockslib
-NAM = scicos_blocks
+NAM = SCI/macros/scicos_blocks
 
 MACROS=SPLIT_f.sci  GAIN_f.sci IN_f.sci CLKIN_f.sci OUT_f.sci CLKOUT_f.sci \
 	CLKOUTV_f.sci  CLKINV_f.sci CLKSOMV_f.sci  GAINBLK_f.sci \
@@ -30,6 +30,7 @@ MACROS=SPLIT_f.sci  GAIN_f.sci IN_f.sci CLKIN_f.sci OUT_f.sci CLKOUT_f.sci \
 	MUX_f.sci DEMUX_f.sci DELAYV_f.sci SAMPLEHOLD_f.sci ANDBLK.sci \
 	DOLLAR_f.sci AFFICH_f.sci MSCOPE_f.sci NRMSOM_f.sci ISELECT_f.sci \
 	ESELECT_f.sci BIGSOM_f.sci INTRPLBLK_f.sci INTRP2BLK_f.sci SWITCH_f.sci \
-	RELAY_f.sci FSV_f.sci MEMORY_f.sci
+	RELAY_f.sci FSV_f.sci MEMORY_f.sci FSCOPE_f.sci READC_f.sci WRITEC_f.sci \
+	WRITEAU_f.sci READAU_f.sci
 
 include ../Make.lib.mak

@@ -13,8 +13,8 @@ PARAMETERS
 
 DESCRIPTION
   In a function resume stops the execution of the function, [..]=resume(..)
-  stops the execution of the function and put the local variables ai in cal-
-  ling environnement under names xi.
+  stops the execution of the function and put the local variables ai in call-
+  ing environnement under names xi.
   In pause mode, it allows to return to lower level [..]=resume(..) returns
   to lower level and put the local variables ai in calling environnement
   under names xi.

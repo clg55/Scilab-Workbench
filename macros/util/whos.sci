@@ -9,7 +9,7 @@ typnames=['constant matrix';
     'sparse'
     'boolean sparse'
     ' '
-    ' '
+    'int'
     ' '
     'string'
     'function'
@@ -27,17 +27,21 @@ for k=1:n
   sz=' '
   execstr('typ=type('+nams(k)+')')
   if typ<=10 then execstr('sz=size('+nams(k)+');'),end
+
   if typ<=16 then
     typn=typnames(typ)
+    if typn=='int' then
+      execstr('typn=typn+string(8*inttype('+nams(k)+'))')
+    end
     if typ==16 then
       execstr('tt='+nams(k)+'(1)')
       select tt(1)
       case 'r' then 
 	typn='rational';
-	execstr('sz=size('+nams(k)+'(2)+)')
+	execstr('sz=size('+nams(k)+'(2))')
       case 'lss' then 
 	typn='state-space'
-	execstr('sz=size('+nams(k)+'(''D'')+)')
+	execstr('sz=size('+nams(k)+'(''D''))')
       else 
 	typn=tt
 	execstr('sz=size('+nams(k)+')')

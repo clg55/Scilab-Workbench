@@ -272,6 +272,11 @@ C
          if ( itype.eq.1) then 
             if(.not.getscalar(fname,topk,top,lr2))return
             n=int(stk(lr2))
+            if(n.lt.0) then
+               err=2
+               call error(116)
+               return
+            endif
          elseif ( itype.eq.10 ) then 
             if(.not.getsmat(fname,topk,top,mt,nt,1,1,lrt,nlrt))return
             call cvstr(nlrt,istk(lrt),randtype,1)
@@ -293,6 +298,11 @@ C
          elseif ( itype1.eq.1.and.rhs.ge.1.and.itype.eq.1) then 
             if(.not.getscalar(fname,topk,top,lr1))return
             m=int(stk(lr1))
+            if(m.lt.0) then
+               err=1
+               call error(116)
+               return
+            endif
          elseif ( itype1.eq.1.and.rhs.ge.1.and.itype.ne.1) then 
             if(.not.getmat(fname,topk,top,it1,m,n,lr1,lc1))return
          elseif ( itype1.eq.10 ) then 
@@ -427,7 +437,7 @@ c     Interface for maxi and mini
       logical checkrhs,checklhs,getsmat,getscalar,cremat,getmat
       logical cresmat2,getrmat,test
       logical getilist,getlistmat,checkval
-      integer gettype,itype,topk
+      integer gettype,itype,topk,isanan
       integer iadr,sadr
       double precision x1
 c
@@ -481,7 +491,7 @@ c     ------simple case one argument which is a matrix or vector
          call cvstr(nlr2,istk(lr2),type,1)
          top=top-1
       endif
-      if(.not.getrmat(fname,topk,top,m,n,lr1))then
+      if(gettype(top).ne.1) then
          top=topk
          if(fin.eq.17) then
             call funnam(ids(1,pt+1),'mini',iadr(lstk(top-rhs+1)))
@@ -491,8 +501,13 @@ c     ------simple case one argument which is a matrix or vector
          fun=-1
          return
       endif
+      if(.not.getrmat(fname,topk,top,m,n,lr1)) return
       if(m*n.le.0) then
          if (.not.cremat(fname,top,0,0,0,lr,lir)) return
+         if (lhs.eq.2) then
+            top=top+1
+            if (.not.cremat(fname,top,0,0,0,lr,lir)) return
+         endif
          return
       endif
       if ( type(1:1).eq.'r') then 
@@ -504,15 +519,17 @@ c     ------------max of each column of a
             stk(lkr+j)=1
             if(fin.eq.17) then 
                do 15 i=1,m-1
-                  if ( stk(lr1+i+m*j).lt.stk(lr+j)) then 
-                     stk(lr+j)=stk(lr1+i+m*j)
+                  x1=stk(lr1+i+m*j)
+                  if(x1.lt.stk(lr+j).or.isanan(x1).eq.1) then 
+                     stk(lr+j)=x1
                      stk(lkr+j)=i+1
                   endif
  15           continue
             else
                do 16 i=1,m-1
-                  if ( stk(lr1+i+m*j).gt.stk(lr+j)) then 
-                     stk(lr+j)=stk(lr1+i+m*j)
+                  x1=stk(lr1+i+m*j)
+                  if(x1.gt.stk(lr+j).or.isanan(x1).eq.1) then 
+                     stk(lr+j)=x1
                      stk(lkr+j)=i+1
                   endif
  16            continue
@@ -532,15 +549,17 @@ c     ---------max of each row of a
             stk(lkr+j)=1
             if(fin.eq.17) then 
                do 25 i=1,n-1
-                  if ( stk(lr1+j+m*i).lt.stk(lr+j)) then 
-                     stk(lr+j)=stk(lr1+j+m*i)
+                  x1=stk(lr1+j+m*i)
+                  if (x1.lt.stk(lr+j).or.isanan(x1).eq.1) then 
+                     stk(lr+j)=x1
                      stk(lkr+j)=i+1
                   endif
  25            continue
             else
                do 26 i=1,n-1
-                  if ( stk(lr1+j+m*i).gt.stk(lr+j)) then 
-                     stk(lr+j)=stk(lr1+j+m*i)
+                  x1=stk(lr1+j+m*i)
+                  if (x1.gt.stk(lr+j).or.isanan(x1).eq.1) then 
+                     stk(lr+j)=x1
                      stk(lkr+j)=i+1
                   endif
  26           continue
@@ -560,7 +579,7 @@ c     ----- general maxi or mini
 c     mini
             do 41 i=2,m*n
                lr1=lr1+1
-               if(stk(lr1).lt.x1) then 
+               if(stk(lr1).lt.x1.or.isanan(stk(lr1)).eq.1) then 
                   k=lr1
                   x1=stk(k)
                endif
@@ -569,7 +588,7 @@ c     maxi
          else
             do 42 i=2,m*n
                lr1=lr1+1
-               if(stk(lr1).gt.x1) then 
+               if(stk(lr1).gt.x1.or.isanan(stk(lr1)).eq.1) then 
                   k=lr1
                   x1=stk(k)
                endif
@@ -607,7 +626,7 @@ c=====maxi mini (A1,.....,An)
  100   continue
 c     check argument and compute dimension of the result.
       do 101 i=1,rhs
-         if(.not.getrmat(fname,topk,topk-rhs+i,mi,ni,lri)) then
+         if(gettype(topk-rhs+i).ne.1) then
             top=topk
             if(fin.eq.17) then
                call funnam(ids(1,pt+1),'mini',iadr(lstk(topk-rhs+i)))
@@ -617,6 +636,8 @@ c     check argument and compute dimension of the result.
             fun=-1
             return
          endif
+         if(.not.getrmat(fname,topk,topk-rhs+i,mi,ni,lri)) return
+
          if(mi*ni.le.0) then
             err=i
             call error(45)
@@ -663,7 +684,7 @@ c     maxi mini a plusieurs argument
          if ( fin.eq.17) then 
 c     mini            
             do 111 j=0,m*n-1
-               if ( stk(lri).lt.stk(lv+j) ) then 
+               if (stk(lri).lt.stk(lv+j).or.isanan(stk(lri)).eq.1) then 
                   stk(lv+j)= stk(lri) 
                   stk(lind+j)= dble(i)
                endif
@@ -671,7 +692,7 @@ c     mini
  111         continue
          else
             do 112 j=0,m*n-1
-               if ( stk(lri).gt.stk(lv+j) ) then 
+               if (stk(lri).gt.stk(lv+j).or.isanan(stk(lri)).eq.1) then 
                   stk(lv+j)= stk(lri) 
                   stk(lind+j)= dble(i)
                endif
@@ -730,15 +751,17 @@ c     test si n1 > 1
             if ( fin.eq.17) then 
 c     mini            
                do 211 j=0,m*n-1
-                  if ( stk(lri+j).lt.stk(lrw+j)) then 
-                     stk(lrw+j)=stk(lri+j)
+                  x1=stk(lri+j)
+                  if (x1.lt.stk(lrw+j).or.isanan(x1).eq.1) then 
+                     stk(lrw+j)=x1
                      stk(lrkw+j)= i
                   endif
  211           continue
             else
                do 212 j=0,m*n-1
-                  if ( stk(lri+j).gt.stk(lrw+j)) then 
-                     stk(lrw+j)=stk(lri+j)
+                  x1=stk(lri+j)
+                  if (x1.gt.stk(lrw+j).or.isanan(x1).eq.1) then 
+                     stk(lrw+j)=x1
                      stk(lrkw+j)= i
                   endif
  212           continue
@@ -1244,13 +1267,7 @@ c
          return
       endif
       if(it.eq.1) mn=2*mn
-      do 10 i=1,mn
-        i1=i-1
-        t=stk(l+i1)
-        t1=round(t-0.5d0)
-        if(t.gt.0.d0.and.((t-t1).eq.1.0d0)) t1=t
-        stk(lr+i1)=t1
- 10   continue
+      call vfloor(mn,stk(l),1,stk(lr),1)
       lstk(top+1)=lr+mn
       return
       end
@@ -1317,13 +1334,7 @@ c
          return
       endif
       if(it.eq.1) mn=2*mn
-      do 10 i=1,mn
-        i1=i-1
-        t=stk(l+i1)
-        t1=round(t+0.5d0)
-        if(t.gt.0.d0.and.((t-t1).eq.1.0d0)) t1=t
-        stk(lr+i1)=t1
- 10   continue
+      call vceil(mn,stk(l),1,stk(lr),1)
       lstk(top+1)=lr+mn
       return
       end
@@ -2054,7 +2065,7 @@ c
          call error(41)
          return
       endif
-      if(rhs.gt.2) then
+      if(rhs.gt.2.or.rhs.lt.1) then
          call error(42)
          return
       endif
@@ -2999,6 +3010,12 @@ c        *call* spelm
             return
          endif
          n=int(stk(sadr(il+4)))
+         if(n.lt.-1) then
+            err=3
+            call error(116)
+            return
+         endif
+
 c     
          top=top-1
          il=iadr(lstk(top))
@@ -3020,6 +3037,12 @@ c
             return
          endif
          m=int(stk(sadr(il+4)))
+         if(m.lt.-1) then
+            err=2
+            call error(116)
+            return
+         endif
+
       endif
 c
       top=top-1
@@ -3036,6 +3059,13 @@ c
          lstk(top+1)=lstk(top)+lstk(k+1)-lstk(k)
       endif
 
+      mn=istk(il+1)*istk(il+2)
+      if(m.eq.-1.and.n.eq.-1) then
+         call error(42)
+         return
+      endif
+      if(m.eq.-1) m=mn/n
+      if(n.eq.-1) n=mn/m
 
       if(m*n.ne.istk(il+1)*istk(il+2)) then
          call error(60)

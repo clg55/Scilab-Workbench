@@ -1,26 +1,8 @@
 function [h,name]=bloc2exp(syst,sexp)
-//<h [,name]>=bloc2exp(syst[,sexp]) calcule l'expression formelle h du
-//systeme dynamique correspondant a la liste syst de type 'blocd'
-//
-//si  sexp est une matrice vide ou un vecteur de chaines de caracteres
-//representant des expressions scilab, h sera donne par une liste dont
-//le  deuxieme champ est  un vecteur de  chaines definissant  des sous
-//expressions du systeme dynamique et le premier champ  une matrice de
-//chaines definissant l'expression formelle du systeme a partir de ses
-//sous expressions.
-//name est une liste dont le premier champ est le vecteur des noms des
-//variables d'entree et le  second le nom des  variables de  sortie du
-//systeme
-//
-//Voir aussi les macros blocdext, eval, %connect
-//!
-//origine F. Delebecque S. Steer inria   1989
-//
 // Copyright INRIA
 [lhs,rhs]=argn(0)
 
-//-compat type(syst)<>15 retained for list/tlist compatibility
-if type(syst)<>15&type(syst)<>16 then
+if type(syst)<>15 then
   error('argument must be a list describing the blocks')
 end;
 if syst(1)<>'blocd' then
@@ -63,8 +45,7 @@ function [ab,nio,name]=construct(syst)
 //!
 [lhs,rhs]=argn(0)
 
-//-compat type(syst)<>15 retained for list/tlist compatibility
-if type(syst)<>15&type(syst)<>16 then
+if type(syst)<>15 then
   error('input must be a list for block-diagramm representation')
 end;
 if syst(1)<>'blocd' then
@@ -148,16 +129,6 @@ if mini(lsorties)==0 then error('undefined output'),end
 if mini(lentrees)==0 then error('undefined input'),end
 
 function [where_x]=%connect(bloc,lliens,syst)
-//[where_x]=%connect(bloc,lliens,syst) recherche parmi les liens de syst
-//dont les numeros sont donnes dans lliens tous ceux qui arrivent sur
-//la sous systeme dont le numero est donne par bloc
-//where_x est une liste dont chaque element est le vecteur:
-//      [numero_de_lien,[numeros_des_ports_d'arrive]]
-//
-//Voir aussi les macros  bloc2exp, blocdext, eval
-//!
-//origine F. Delebecque s. steer inria 1989
-//
 where_x=list();nw=0
 nliens=prod(size(lliens))
 for l=1:nliens,
@@ -172,13 +143,6 @@ for l=1:nliens,
 end;
 
 function [where_x]=out1(bloc,lliens,syst)
-//<where_x>=out1(bloc,lliens,syst)  recherche parmi  les liens  dont les
-//numeros sont donnes dans lliens ceux qui sont issus du  sous systeme
-//dont le numero est donne par bloc
-//where_x est la matrice : [ [numero_de_lien;numero_du_port_d'origine] ]
-//!
-//origine f. delebecque s. steer inria 1989
-//
 where_x=[];l=0;
 for li=lliens
          lien=syst(li)

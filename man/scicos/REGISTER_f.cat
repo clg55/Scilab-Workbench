@@ -1,5 +1,5 @@
 
-REGISTER_f(5)                   Scicos Block                    REGISTER_f(5)
+REGISTER_f(5)                    Scicos Block                   REGISTER_f(5)
 NAME
   REGISTER_f - Scicos shift register block
 

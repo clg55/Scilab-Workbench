@@ -16,7 +16,7 @@ Input parameters
        ples of the signal to be analyzed.
   o    sigma : Real positive number Standard Deviation of the noise. Its
        default value is null (noisefree)
-  o    voices : Positive integer. number of analyzing voices.  When not
+  o    voices : Positive integer.  number of analyzing voices.  When not
        specified, this parameter is set to 128.
   o    Nmin : Integer in  [2,nt/3] Lower scale bound (lower length) of the
        analysing kernel. When not specified, this parameter is set to 2.
@@ -56,9 +56,9 @@ Description
   of the lengths versus scales.  If sigma is strictly positive, an estimation
   of the lengths without noise is used for the regression. These lengths are
   displayed in red while those of the noisy signal are in black. They should
-  seperate at fine scales.  When one specifies the range regression, the log-
-  log plot of the lengths versus scales appears. Above are either increments
-  (when sigma is null) or a loglog plot of the noise prevalence in the
+  seperate at fine scales.  When one specifies the range regression, the
+  loglog plot of the lengths versus scales appears. Above are either incre-
+  ments (when sigma is null) or a loglog plot of the noise prevalence in the
   lengths. One selects the scale range of the regression. In the case of
   noisefree signals, select a scale region with stable increments. In the
   case of a strictly positive sigma, select  a scale region where the noise
@@ -66,8 +66,8 @@ Description
   approximately linear region for the red estimations.  The number of scales
   (voices) tells how many convolutions are computed. The bigger it is, the
   slower the computation is. The scale axis is geometrically sampled (i.e.
-  its log is arithmetically sampled). The gaussian kernel should give a
-  better result but the rectangle is faster.
+  its log is arithmetically sampled).  The gaussian kernel should give a bet-
+  ter result but the rectangle is faster.
 
 See also:
   cwttrack, cwtspec.

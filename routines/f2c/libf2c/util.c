@@ -1,4 +1,4 @@
-#ifndef NON_UNIX_STDIO
+#if !(defined NON_UNIX_STDIO) && !(defined __ABSC__)
 #include "sys/types.h"
 #include "sys/stat.h"
 #endif

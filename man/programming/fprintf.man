@@ -50,6 +50,3 @@ file('close',u) //close the result file
 .fi
 .SH SEE ALSO
 string, print, write, format, disp, file, printf, sprintf
-
-
-

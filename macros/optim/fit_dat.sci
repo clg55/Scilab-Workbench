@@ -81,8 +81,7 @@ else
   deff('g=DGG(ps,Z)','g=0;for i=1:nz,g=g+2*DG(ps,Z(:,i))''*W*G(ps,Z(:,i)),end')
 end
 deff('[f,g,ind]=costf(p,ind)',['f=GG(p,Z);';
-    'g=DGG(p,Z);';
-    'disp(''error= ''+string(f));'])
+    'g=DGG(p,Z);'])
 
 if ~boun then
   [err,p]=optim(costf,p0)

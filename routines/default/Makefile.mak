@@ -1,6 +1,8 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
+
 include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
@@ -13,11 +15,11 @@ EXAMPLES= Ex-colnew.obj Ex-corr.obj  Ex-feval.obj  Ex-fsolve.obj  Ex-impl.obj  E
 
 
 OBJS =  FTables.obj $(EXAMPLES) mainsci.obj matusr.obj matus2.obj Funtab.obj  msgstxt.obj \
-	scimem.obj  callinterf.obj
+	scimem.obj  callinterf.obj mexlib.obj
 
 # jpc win32 
 OBJS =  FTables.obj $(EXAMPLES) mainwin95.obj matusr.obj matus2.obj Funtab.obj  msgstxt.obj \
-	scimem.obj callinterf.obj
+	scimem.obj callinterf.obj mexlib.obj
 
 world: all
 
@@ -48,12 +50,6 @@ $(DEF) : $(OBJS)
 	@echo Creation of $(DEF)
 	@..\..\bin\dumpexts.exe -o $(DEF) -n scilex.dll $(OBJS)
 
-# default rule for Fortran Compilation 
-
-.f.obj	:
-	@..\..\bin\f2c  $*.f 
-	@$(CC) $(CFLAGS) $*.c 
-	@del $*.c 
 
 matus2.obj matusr.obj msgstxt.obj user2.obj :   ../stack.h
 callinterf.obj : ../machine.h  callinterf.h

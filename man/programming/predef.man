@@ -4,20 +4,30 @@
 predef - variable protection
 .SH CALLING SEQUENCE
 .nf
-predef([n])
+n=predef()
+oldnew=predef(n)
+oldnew=predef('all')
+oldnew=predef('clear')
 .fi
 .SH DESCRIPTION
-Utility function used for defining "predefined" variables.
-Predefined variables are protected and cannot be killed. They are not saved 
-by the \fV'save'\fR command.
+Utility function used for defining "oldest" variables as "protected".
+Protected variables  cannot be killed. They are not saved 
+by the \fV'save'\fR command. The "oldest" are those appearing last in
+the\ fVwho('get')\fR.
 .LP
-\fVpredef()\fR sets all the current variables to predefined ones.
+\fVpredef()\fR gets the number of protected variables
 .LP
-\fVpredef(n)\fR sets the \fVmax(n,7)\fR last defined variables as predefined.
+\fVpredef('a[ll]')\fR sets all the  variables protected, it also return
+the old and new value of protected variables number.
+.LP
+\fVpredef('c[lear]')\fR unprotect all but the last 7 variables, it also return
+the old and new value of protected variables number.
+.LP
+\fVpredef(n)\fR sets the \fVmax(n,7)\fR last defined variables as protected, it also return
+the old and new value of protected variables number.
 .LP
 .SH REMARK
-A number of predefined variables are set in the start-up file \fVscilab.star\fR.
-These variables are seen by typing \fVwho\fR when entering in Scilab.
+A number of protected variables are set in the start-up file \fVscilab.star\fR.
 
 User may in particular set its own predefined variables in user's startup file
 \fVhome/.scilab\fR 

@@ -28,7 +28,7 @@ c
       double precision atol,rtol,ttol,deltat
       common /costol/ atol,rtol,ttol,deltat
 c
-      integer kfun
+      integer kfun,kfun0
       common /curblk/ kfun
 c
       atol = simpar(1)
@@ -142,7 +142,16 @@ c     initialisation des blocks
      $        outlnk,lnkptr,cord,rpar,rpptr,
      $        ipar,ipptr,funptr,funtyp,outtb,
      $        w(louttb),w(lww),ierr) 
-
+         if(ierr.ne.0) then
+            kfun0=kfun
+            call cosend(x,xptr,z,zptr,iz,
+     $           izptr,t0,inpptr,inplnk,outptr,
+     $           outlnk,lnkptr,cord,rpar,rpptr,
+     $           ipar,ipptr,funptr,funtyp,outtb,
+     $           w(lww),ierr0)
+            kfun=kfun0
+         endif
+         
       elseif(flag.eq.2) then
 c     integration
          call cossim(nx,x,xptr,z,zptr,
@@ -154,6 +163,16 @@ c     integration
      $        rpar,rpptr,ipar,ipptr,funptr,
      $        funtyp,w(lrhot),iw(lihot),outtb,iw(ljroot),
      $        w(lww),iwa,ierr)
+         if(ierr.ne.0) then
+            kfun0=kfun
+            call cosend(x,xptr,z,zptr,iz,
+     $           izptr,t0,inpptr,inplnk,outptr,
+     $           outlnk,lnkptr,cord,rpar,rpptr,
+     $           ipar,ipptr,funptr,funtyp,outtb,
+     $           w(lww),ierr0)
+            kfun=kfun0
+         endif
+c   
       elseif(flag.eq.3) then
 c     fermeture des blocks
          call cosend(x,xptr,z,zptr,iz,

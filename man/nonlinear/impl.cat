@@ -30,13 +30,13 @@ DESCRIPTION
   t0 is the initial instant, y0 is the vector of initial conditions Vector
   ydot0 of the time derivative of y at t0 must also be given.  r The input
   res is an external i.e. a function with specified syntax, or the name a
-  Fortran subroutine or a C function (character string) with specified cal-
-  ling sequence or a list.
+  Fortran subroutine or a C function (character string) with specified call-
+  ing sequence or a list.
 
   If res is a function, its syntax must be as follows:
   r = res(t,y,ydot)
   where t is a real scalar (time) and y and ydot are real vector (state and
-  derivative of the state). This function must return r=g(t,y)-A(t,y)*ydot.
+  derivative of the state).  This function must return r=g(t,y)-A(t,y)*ydot.
 
   If res is a character string, it refers to the name of a Fortran subroutine
   or a C function. See SCIDIR/routines/default/Ex-impl.f for an example to do

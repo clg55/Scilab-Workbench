@@ -16,8 +16,8 @@ DESCRIPTION
   First a spanning tree is found by using min_weight_tree and then used to
   find all fundamental cycles with respect to this tree. They are returned as
   a set of cycles, each cycle being represented by a set of edges.  These
-  cycles are returned in a sparse matrix spc: each line of this matrix
-  corresponds to a cycle.
+  cycles are returned in a sparse matrix spc: each line of this matrix corre-
+  sponds to a cycle.
 
   The graph g is supposed to be a simple undirected and connected graph
   (cycle_basis does not check that the graph is simple, use graph_simp before

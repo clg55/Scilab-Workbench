@@ -8,11 +8,13 @@ CALLING SEQUENCE
   x.*.y
 
 DESCRIPTION
-  Kronecker tensor product of two matrices x and y.  Same as x.*.y
+  Kronecker tensor product of two matrices x and y.  Same as x.*.y . x and y
+  can be sparse matrices.
 
 EXAMPLE
   A=[1,2;3,4];
   kron(A,A)
   A.*.A
+  sparse(A).*.sparse(A)
   A(1,1)=%i;
   kron(A,A)

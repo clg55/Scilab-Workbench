@@ -4,9 +4,8 @@ RHS=[]
 for k=1:rhs
   RHS=[RHS stk(top-rhs+k)(1)]
 end
-txt=['//! echo '+strcat(RHS,' ')+' ignored'
-    '// echo '+strcat(RHS,' ')]
-write(logfile,'echo '+strcat(RHS,' ')+' ignored at line '+string(lcount))
+set_infos('//! echo '+strcat(RHS,' ')+' ignored',2)
+txt=[txt;    '// echo '+strcat(RHS,' ')]
 stk=list(' ','-2','0','0','1')
 
 

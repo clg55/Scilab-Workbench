@@ -104,6 +104,8 @@ extern int winsystem(char *,int );
 /* winmain.c */
 
 extern void sciprint(char *fmt, ...);
+extern int sciprint2(int v,char *fmt,...);
+
 extern int Pause(LPSTR mess); 
 extern void WinExit(void);
 EXPORT int CALLBACK ShutDown(void);
@@ -238,6 +240,5 @@ extern int get_is_reading(void);
 extern int C2F(timer)(double *);
 extern int C2F(stimer)(void);
 extern int C2F(sigbas)(integer *);
-extern void sciprint(char *fmt,...);
 
 #endif 

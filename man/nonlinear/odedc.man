@@ -7,9 +7,9 @@ odedc - discrete/continuous ode solver
 yt=odedc(y0,nd,stdel,t0,t,f)
 .fi
 .SH PARAMETERS
-.TP 10
+.TP 7
 y0 
-: real column vector (initial conditions),\fVy0=[y0c;y0d]\fR where
+: real column vector (initial conditions), \fVy0=[y0c;y0d]\fR where
 \fVy0d\fR has \fVnd\fR components.
 .TP
 nd
@@ -23,36 +23,43 @@ t0
 : real scalar (initial time).
 .TP
 t
-: real (row) vector, instants where \fVyt\fR is calculated 
+: real (row) vector, instants where \fVyt\fR is calculated .
 .TP
 f  
-: Scilab "external" i.e. function or character string or list with
-calling sequence: \fVyp=f(t,yc,yd,flag)\fR
+: external i.e. function or character string or list with
+calling sequence: \fVyp=f(t,yc,yd,flag)\fR.
 .SH DESCRIPTION
 .LP
 \fVy=odedc([y0c;y0d],nd,[h,delta],t0,t,f)\fR
 computes the solution of a mixed discrete/continuous system. 
-The discrete system state \fVyd_k\fR is embedded into a  piecewise constant \fVyd(t)\fR time function as follows: \fVyd(t)= yd_k\fV for \fVt\fR in \fV[t_k=delay+k*h,t_(k+1)=delay+(k+1)*h[\fR (with \fVdelay=h*delta\fR).
+The discrete system state \fVyd_k\fR is embedded into a  piecewise constant \fVyd(t)\fR time function as follows: 
+.nf
+yd(t)=yd_k for t in 
+[t_k=delay+k*h,t_(k+1)=delay+(k+1)*h[ (with delay=h*delta).
+.fi
+
 The simulated equations are now:
-.LP
- dyc/dt=f(t,yc(t),yd(t),0) ,  for t in [t_k,t_(k+1)[
- yc(t0)=y0c
-.LP
+.nf
+dyc/dt=f(t,yc(t),yd(t),0),  for t in [t_k,t_(k+1)[
+yc(t0)=y0c
+.fi
 and at instants \fVt_k\fR the discrete variable \fVyd\fR is updated by:
-.LP
+.nf
 yd(t_k+)=f(yc(t_k-),yd(t_k-),1)
-.LP
+.fi
+
 Note that, using the definition of \fVyd(t)\fR the last equation gives 
-.LP
+.nf
 yd_k = f (t_k,yc(t_k-),yd(t_(k-1)),1)  (yc is time-continuous: yc(t_k-)=yc(tk))
-.LP
+.fi
+
 The calling parameters of \fVf\fR are fixed: \fVycd=f(t,yc,yd,flag)\fR;
 this function must return either the derivative of the vector \fVyc\fR if
 \fVflag=0\fR or the update of \fVyd\fR if \fVflag=1\fR. 
 .LP
 \fVycd=dot(yc)\fR must be a vector with same dimension as \fVyc\fR 
 if \fVflag=0\fR and \fVycd=update(yd)\fR must be a vector with same 
-dimension as \fVyd\fR if \fVflag=1\fR
+dimension as \fVyd\fR if \fVflag=1\fR.
 .LP
 \fVt\fR is a vector of instants where the solution \fVy\fR is computed.
 .LP
@@ -60,11 +67,12 @@ dimension as \fVyd\fR if \fVflag=1\fR
 This function can be called with the same optional parameters as the
 \fVode\fR function (provided \fVnd\fR and \fVstdel\fR are given
 in the calling sequence as second and third parameters).
-It particular integration flags, tolerances can be set. Optional
+In particular integration flags, tolerances can be set. Optional
 parameters can be set by the \fVodeoptions\fR function.
 .LP
 An example for calling an external routine is given in directory 
-\fVdefault/fydot2.f\fR 
+\fVSCIDIR/default/fydot2.f\fR 
+
 External routines can be dynamically linked (see \fVlink\fR).
 .SH EXAMPLE
 .nf

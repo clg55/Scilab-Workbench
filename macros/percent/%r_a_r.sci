@@ -3,8 +3,8 @@ function f=%r_a_r(s1,s2)
 //!
 // Copyright INRIA
 [s1,s2]=sysconv(s1,s2),
-[num1,den1]=s1(2:3),
-[num2,den2]=s2(2:3),
+[num1,den1]=s1(['num','den']),
+[num2,den2]=s2(['num','den']),
 [m1,n1]=size(num1)
 [m2,n2]=size(num2)
 
@@ -23,7 +23,7 @@ if m1==-1&m2==-1 then
   // both are eye*x
   [den1,fact]=lcm([den1;den2])
   [num1,den1]=simp([num1,num2]*fact,den1)
-  f=tlist(['r','num','den','dt'],num1*eye(),den1*eye(),s1(4)),
+  f=rlist(num1*eye(),den1*eye(),s1('dt')),
   return
 end
 m1=abs(m1);m2=abs(m2)
@@ -51,6 +51,7 @@ for l=1:m1
   end,
 end,
 [num1,den1]=simp(num1,den1),
-f=tlist(['r','num','den','dt'],num1,den1,s1(4)),
+f=rlist(num1,den1,s1('dt'))
+
 
 

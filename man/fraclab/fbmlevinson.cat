@@ -23,13 +23,13 @@ Output parameters
          of the increment process w[k] = x[k+1] - x[k].
 Algorithm details
   Generates a Fractional Brownian Motion using Levinson algorithm to triangu-
-  larize the covariance matrix. R = E W * W' being the variance/covariance
+  larize the covariance matrix.  R = E W * W' being the variance/covariance
   matrix of the fBm increment W[n ; shift] = X[n+shift] - X[n-shift], R =
   L*L', with L the lower left triangle matrix (Choleski or Levinson
-  factorization). Then, we pose Z = L(-1) * W  <=>  W = L * Z with Rz the
-  var/cov matrix of the process Z, Rz = E { Z * Z' } Rz = E { L(-1) * W * W'
-  * (L(-1))' } Rz = L(-1) * R * (L(-1))' Rz = L(-1) * L * L' * (L(-1))' Rz =
-  I (identity) Thus, Z is a white Gaussian noise with unit variance.
+  factorization). Then, we pose Z = L^(-1) * W  <=>  W = L * Z with Rz the
+  var/cov matrix of the process Z, Rz = E { Z * Z' } Rz = E { L^(-1) * W * W'
+  * (L^(-1))' } Rz = L^(-1) * R * (L^(-1))' Rz = L^(-1) * L * L' * (L^(-1))'
+  Rz = I (identity) Thus, Z is a white Gaussian noise with unit variance.
 See also:
   mbmlevinson
 

@@ -44,7 +44,7 @@ stop
 :  sequence of optional parameters controlling the 
 convergence of the algorithm.
 \fV
-            top=top-1stop=  'ar',nap, [iter [,epsg [,epsf [,epsx]]]]\fR
+            stop=  'ar',nap, [iter [,epsg [,epsf [,epsx]]]]\fR
 .RS
 .TP
 "ar"
@@ -170,4 +170,4 @@ deff('[f,g,ind]=cost(x,ind)','f=0.5*norm(x-xref)^2,g=x-xref');
 [f,xopt,gopt]=optim('genros',[1;2;3])    //Rosenbrock's function
 .fi
 .SH SEE ALSO
-external, quapro, linpro
+external, quapro, linpro, datafit, leastsq

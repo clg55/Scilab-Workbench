@@ -37,8 +37,8 @@ FILTERS
 
   findm          : for elliptic filter design
 
-  frmag          : magnitude of the frequency responses of FIR and IIR
-                 filters.
+  frmag          : magnitude of the frequency responses of FIR and IIR fil-
+                 ters.
 
   fsfirlin       : design of FIR, linear phase (frequency sampling technique)
 
@@ -116,12 +116,10 @@ Transforms
   fft            : fast flourier transform
 
   hilb           : Hilbert transform centred around the origin.
-
   hank           : hankel matrix of the covariance sequence of a vector pro-
                  cess
 
   mfft           : fft for a multi-dimensional signal
-
 identification
 
   lattn,lattp

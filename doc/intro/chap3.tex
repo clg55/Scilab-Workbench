@@ -373,7 +373,9 @@ f(1)
                     
 \end{verbatim}
 
-
+Global variable are defined by the \verb!global! command. They can
+be read and modified inside functions. Enter {\tt help global} for
+details. 
 
 \subsection{Special Function Commands}
 Scilab has several special commands which are used almost exclusively
@@ -450,7 +452,8 @@ the global environment.
 \index{operations!for new data types}
 
 	It is possible to transparently define fundamental operations 
-for new data types in Scilab.
+for new data types in Scilab (enter {\tt help overloading} for 
+a full description of this feature).
 That is, the user can give a sense to multiplication, division, addition, etc.
 on any two data types which exist in Scilab.  As an example, two linear
 systems (represented by lists)

@@ -4,19 +4,21 @@ NAME
   xs2fig - send graphics to a file in Xfig syntax
 
 CALLING SEQUENCE
-  xs2fig(win_num,filen [, color])
+  xs2fig(win_num,filen,[color])
 
 PARAMETERS
 
-  win_num   : an integer scalar or vector
+  win_num  : integer scalar or vector .
 
-  filen     : string (file name).
+  filen     : string, file name.
 
-  color     : an optional integer ( 0 or 1 ).0 for black and white and 1 for
-            color. The default value is to use a value compatible with the
-            screen status.
+  color     : optional integer. 0 means black and white and 1 means color.
+            The default value is to use a value compatible with the screen
+            status.
 
 DESCRIPTION
-  This function will send the recorded graphics of the window win_num in the
-  file filen in Xfig syntax This function will work only if the selected
-  driver is "Rec"
+  xs2fig sends the recorded graphics of the window win_num in the file filen
+  in Xfig syntax.  This function works only if the selected driver is "Rec".
+
+SEE ALSO
+  xbasimp

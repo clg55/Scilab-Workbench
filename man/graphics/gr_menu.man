@@ -29,10 +29,10 @@ The created graphics are saved as a list which
 can be given to \fVgr_menu\fR as an entry value.
 .TP 15
 \fV[sd]=gr_menu([xmin,ymin,xmax,ymax])\fR
-: enters \fVgr_menu\fR with a fixed frame
+: enters \fVgr_menu\fR with a given frame
 .TP 
 \fV[sd]=gr_menu();\fR
-: enters \fVgr_menu\fR with the  fixed frame  [0 0 100 100].
+: enters \fVgr_menu\fR with the frame [0 0 100 100].
 .TP
 \fV[sd]=gr_menu(sd)\fR
 : redraws the graphics stored in sd and enters interactive mode

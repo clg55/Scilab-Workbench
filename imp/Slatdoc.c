@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC/Chancelier Jean-Philippe */
 
 #define DOC
 

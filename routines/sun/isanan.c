@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 #include <stdio.h>
 #include <math.h>
 

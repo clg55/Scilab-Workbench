@@ -15,8 +15,8 @@ PARAMETERS
   U    : unimodolar polynomial matrix
 
 DESCRIPTION
-  Hermite form: U is an unimodular matrix such that A*U is in Hermite tri-
-  angular form:
+  Hermite form: U is an unimodular matrix such that A*U is in Hermite trian-
+  gular form:
 
   The output variable is Ar=A*U.
 

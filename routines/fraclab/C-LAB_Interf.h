@@ -49,7 +49,7 @@ struct {
   int FuncIndex;
   int ReturnIndex;
   char Retour[1000];
-  int Err;
+  int Err1;
   Matrix **Param;
   Matrix **Return;
 } Interf;

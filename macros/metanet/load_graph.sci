@@ -6,7 +6,6 @@ if rhs<>1 then error(39),end
 if type(path)<>10|prod(size(path))<>1 then
   error('Argument must be a string')
 end
-g1=m6loadg(path)
-g=glist()
-for i=2:32, g(i)=g1(i-1), end
-g(33)=[]; g(34)=[]
+g=m6loadg(path)
+g=glist(g(:))
+g($+1)=[]; g($+1)=[]

@@ -29,13 +29,16 @@ include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib.mak
 
 
 ipmpar.obj : ../stack.h
 DcdInterf.obj : ../stack-c.h
 
-
-
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile

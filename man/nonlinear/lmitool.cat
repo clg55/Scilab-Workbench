@@ -16,8 +16,8 @@ PARAMETERS
 
   probname  : a string containing the name of the problem
 
-  varlist   : a string containing the names of the unknown matrices
-            (separated by commas if there are more than one)
+  varlist   : a string containing the names of the unknown matrices (sepa-
+            rated by commas if there are more than one)
 
   datalist  :  a string containing the names of  data matrices (separated by
             commas if there are more than one)
@@ -28,7 +28,7 @@ DESCRIPTION
   lmitool() or lmitool(filename) is used to define interactively a LMI prob-
   lem.  In the non interactive mode, txt=lmitool(probname,varlist,datalist)
   generates a file in the current directory. The name of this file is
-  obtained by adding .sci to the end of probname. This file is the skeleton
+  obtained by adding .sci to the end of probname.  This file is the skeleton
   of a solver function and the corresponding evaluation function needed by
   lmisolver.
 

@@ -21,9 +21,13 @@ PARAMETERS
   sig                 : a matrix of size (ny,ny)
 
 DESCRIPTION
-  this function creates a description as a list of an  ARMAX process
+  This function creates a description as a tlist of an  ARMAX process
 
      A(z^-1)y= B(z^-1)u + D(z^-1)sig*e(t)
+  ar is defined by
+  ar=tlist(['ar','a','b','d','ny','nu','sig'],a,b,d,ny,nu,sig);
+  and thus the coefficients of ar can be retrieved by e.g.
+   ar('a') .
 
 EXAMPLE
   a=[1,-2.851,2.717,-0.865].*.eye(2,2)
@@ -31,6 +35,8 @@ EXAMPLE
   d=[1,0.7,0.2].*.eye(2,2);
   sig=eye(2,2);
   ar=armac(a,b,d,2,1,sig)
+  // extract polynomial matrices from ar representation
+  [A,B,D]=arma2p(ar);
 
 SEE ALSO
-  arma, armax, armax1, arsimul
+  arma, armax, armax1, arsimul, arma2p, tlist.

@@ -19,7 +19,7 @@ DESCRIPTION
   The functions provided in the standard libraries are compiled.
 
   The command: getf('filename') loads the functions in file 'filename' and
-  compiles them. So comp has to be used in very particular cases.
+  compiles them.  So comp has to be used in very particular cases.
 
   The opt==1 option is specific to code analysis purpose (see macr2lst)
 

@@ -4,10 +4,6 @@ function f=%p_r_r(m,f)
 // p2: rational matrix
 //!
 // Copyright INRIA
-if prod(size(f(2)))<>1 then f=m*invr(f),return,end
-[l,c]=size(m);
-[num,den]=f(2:3)
-f(2)=m*den,f(3)=ones(l,c)*num
-
-
+if prod(size(f('num')))<>1 then f=m*invr(f),return,end
+f=rlist(m*f('den'),ones(m)*f('num'),f('dt'))
 

@@ -47,8 +47,15 @@ case %for then
   [lbl,nwrk]=newlab(nwrk)
   tl1=part(string(10*lbl)+'   ',1:6);
   [t1,t2,ilst,vnms,vtps,nwrk]=exp2for(clause(2),1,vnms,vtps,nwrk)
-  t1=t1(1);
-  txt=[t2;' do '+tl1+' '+name+' = '+t1(1)];
+  if size(t1(1)(1),2)>1 then
+    
+    t1=strcat(t1(1)(1),',')
+    txt=[t2;' do '+tl1+' '+name+' = '+t1];
+  else
+    t1=t1(1)
+    txt=[t2;' do '+tl1+' i_'+name+' = 0,'+t1(5)+'-1';
+	    '    call dcopy('+t1(4)+','+t1(1)+'(1+i_'+name+'*'+t1(4)+'),1,'+name+',1)']   ;
+  end
   forexp=0;
   [t1,vnms,vtps,nwrk]=ins2for(clause(3),1,vnms,vtps,nwrk)
   txt=[txt; indentfor(t1);tl1+'continue']

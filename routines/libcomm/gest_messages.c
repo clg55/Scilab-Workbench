@@ -12,10 +12,15 @@
 
 #ifdef __STDC__
 #include <stdlib.h>
+#ifndef __ABSC__
 #include <unistd.h>
+#else
+#define write(x,y,z) _f_write(x,y,z)
+#define read(x,y,z) _f_read(x,y,z)
+#endif
 #endif
 
-#ifdef __MSC__
+#if (defined __MSC__) || (defined __ABSC__)
 int fcntl(int a,int b,int c) { } ;
 /** XXXXX : not defined in vc++ **/
 #define SIGQUIT 0

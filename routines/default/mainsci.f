@@ -14,6 +14,7 @@ c     Copyright INRIA
       path=' '
       nargs = iargc()
       call fgetarg(0,pname)
+      call nofpex()
       i = 0
  10   continue
       i=i+1

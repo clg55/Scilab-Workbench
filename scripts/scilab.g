@@ -37,8 +37,14 @@ if test "$TK_LIBRARY" = ""; then
   export TK_LIBRARY
 fi
 
-PVM_ROOT=$SCI/pvm3
-PVM_DPATH=$PVM_ROOT/lib/pvmd
+if test "$PVM_ROOT" = ""; then
+  PVM_ROOT=$SCI/pvm3
+fi
+if test -x $PVM_ROOT/bin/pvmd; then
+  PVM_DPATH=$PVM_ROOT/bin/pvmd
+else
+  PVM_DPATH=$PVM_ROOT/lib/pvmd
+fi
 export PVM_ROOT PVM_DPATH
 
 do_scilex()
@@ -72,7 +78,7 @@ do_geci_scilex()
 do_help()
 {
 echo "Usage:"
-echo     "	scilab [-ns -nw -display display -f file]"
+echo     "	scilab [-ns -nw -display display -f file -args arguments]"
 echo     "	scilab -help <key>"
 echo     "	scilab -k <key>"
 echo     "	scilab -xk <key>"
@@ -160,15 +166,13 @@ do_man_x()
 
 }
 
-
 do_compile()
 {
 	umask 002
 	rm -f report
 	name=`basename $1 .sci`
 	echo generating $name.bin
-	echo "%u=file('open','$name.bin','unknown','unformatted');predef();\
-	      getf('$name.sci');save(%u),file('close',%u);quit"\
+	echo "predef();getf('$name.sci');save('$name.bin');quit"\
 	      | $SCI/bin/scilex -ns -nw | sed 1,8d 1>report 2>&1
 	if (grep error report 1> /dev/null  2>&1);
 	then cat report;echo " " 
@@ -184,8 +188,7 @@ do_lib()
 {
 	umask 002
 	rm -f report
-	echo "%u=file('open','$2/lib','unknown','unformatted');$1=lib('$2/');\
-	      save(%u,$1);file('close',%u);quit"\
+	echo "$1=lib('$2/');save('$2/lib',$1);quit"\
 	      | $SCI/bin/scilex -ns -nw |sed 1,/--\>/d 1>report 2>&1
 	if (grep error report 1> /dev/null  2>&1);
 	then cat report;echo " " 
@@ -223,6 +226,16 @@ do_save()
 		-landscape)
 			sed -e "2s/Portrait/Landscape/" $2 >$2.fig
 			rm -f $2
+		;;
+		esac
+           	;;
+          Gif)
+		case $1 in
+		-portrait)
+			mv $2 $2.gif
+		;;
+		-landscape)
+			mv $2 $2.gif
 		;;
 		esac
            	;;
@@ -281,6 +294,10 @@ case $# in
             -save_p)
                 do_save -portrait $2 $3
                 ;;
+            -link)
+                shift
+		$SCI/bin/scilink $SCI $*
+                ;;
             *)
 		rest="yes"
                 ;;
@@ -327,6 +344,10 @@ if test "$rest" = "yes"; then
       -f)
           prevarg="start_file"
           ;;
+       -args)
+           prevarg="arguments"
+          ;;
+
       *)
           do_help
           ;;
@@ -343,15 +364,15 @@ if test "$rest" = "yes"; then
 
   if test -n "$nos"; then
      if test -n "$now"; then
-       do_scilex -ns -nw $start_file
+       do_scilex -ns -nw $start_file $arguments
      else
-       do_scilex -ns $display $start_file &
+       do_scilex -ns $display $start_file  $arguments&
      fi
   else
      if test -n "$now"; then
-       do_geci_scilex -nw $start_file
+       do_geci_scilex -nw $start_file $arguments
      else
-       do_geci_scilex $display $start_file &
+       do_geci_scilex $display $start_file  $arguments&
      fi
   fi    
 

@@ -19,11 +19,11 @@ end
 if flag(1)=='lss' then
   h=ss2tf(h)
 end
-[m,n]=size(h(2))
+[m,n]=size(h('num'))
 if  n<>1 then  
   error('SIMO system only!')
 end
-dom=h(4)
+dom=h('dt')
 select dom
 case 'd' then 
   dom=1
@@ -93,7 +93,7 @@ end
 splitf=[]
 if fmin==0 then fmin=min(1d-14,fmax/10);end
 //
-denh=h(3);numh=h(2)
+denh=h('den');numh=h('num')
 l10=log(10)
 
 // Locate singularities to avoid them
@@ -167,9 +167,9 @@ for i=1:2:nfrq-1
   xt=[xt,logspace(log(frqs(i))/log(10),log(frqs(i+1))/log(10),100)]
 end
 if dom=='c' then 
-  rf=freq(h(2),h(3),%i*xt);
+  rf=freq(h('num'),h('den'),%i*xt);
 else
-  rf=freq(h(2),h(3),exp(%i*xt));
+  rf=freq(h('num'),h('den'),exp(%i*xt));
 end
 //
 xmin=mini(real(rf));xmax=maxi(real(rf))
@@ -197,12 +197,12 @@ while i<nfrq
 
   if dom=='c' then //cas continu
     while f0<fmax
-      rf0=freq(h(2),h(3),(%i*f0))
-      rfc=freq(h(2),h(3),%i*f);
+      rf0=freq(h('num'),h('den'),(%i*f0))
+      rfc=freq(h('num'),h('den'),%i*f);
       // compute prediction error
       epsd=pas/100;//epsd=1.d-8
       
-      rfd=(freq(h(2),h(3),%i*(f0+epsd))-rf0)/(epsd);
+      rfd=(freq(h('num'),h('den'),%i*(f0+epsd))-rf0)/(epsd);
       rfp=rf0+pas*rfd
 
       e=maxi([abs(imag(rfp-rfc))/dy;abs(real(rfp-rfc))/dx])
@@ -230,10 +230,10 @@ while i<nfrq
   else  //cas discret
     pas=pas/dom
     while f0<fmax
-      rf0=freq(h(2),h(3),exp(%i*f0))
-      rfd=dom*(freq(h(2),h(3),exp(%i*(f0+pas/100)))-rf0)/(pas/100);
+      rf0=freq(h('num'),h('den'),exp(%i*f0))
+      rfd=dom*(freq(h('num'),h('den'),exp(%i*(f0+pas/100)))-rf0)/(pas/100);
       rfp=rf0+pas*rfd
-      rfc=freq(h(2),h(3),exp(%i*f));
+      rfc=freq(h('num'),h('den'),exp(%i*f));
       e=maxi([abs(imag(rfp-rfc))/dy;abs(real(rfp-rfc))/dx])
       if (e>k) then
 	pasmin=f0*(10^((l10last-log10(f0))/(nptr+1))-1)

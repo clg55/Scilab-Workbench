@@ -27,6 +27,7 @@ if vn==[] then
   end
 else
   typ=vtps(vn)
-  stk(top)=list(vnms(vn,1),'0',typ(1),typ(2),typ(3))
+//  stk(top)=list(vnms(vn,2),'0',typ(1),typ(2),typ(3))
+  stk(top)=list(vnms(vn,2),'0',typ(1),typ(2),typ(3))
 end
 

@@ -5,13 +5,21 @@ who - listing of variables
 .SH CALLING SEQUENCE
 .nf
 who
-names=who('get')
-[names,mem]=who('get')
+who()
+names=who('local')
+[names,mem]=who('local')
+names=who('global')
+[names,mem]=who('global')
+
+
 .fi
 .SH DESCRIPTION
 \fVwho\fR displays current variable names.
 .LP
-\fVwho('get')\fR Returns current variable names and memory used in
-double precision worlds.
+\fVwho('local')\fR or \fVwho('get')\fR  Returns current variable names
+and memory used in double precision worlds.
+.LP
+\fVwho('global')\fR returns global  variable names
+and memory used in double precision worlds.
 .SH SEE ALSO
 whos

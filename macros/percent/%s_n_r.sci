@@ -3,8 +3,8 @@ function [r]=%s_n_r(l1,l2)
 // et l2 une fraction rationnelle 
 //!
 // Copyright INRIA
-r=degree(l2(2))==0&degree(l2(3))==0
-if r then r=coeff(l2(2))./coeff(l2(3))==l1,end
+r=degree(l2('num'))==0&degree(l2('den'))==0
+if r then r=coeff(l2('num'))./coeff(l2('den'))==l1,end
 r=~r
 
 

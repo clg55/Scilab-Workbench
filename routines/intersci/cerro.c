@@ -1,4 +1,5 @@
 /* Copyright INRIA */
+#include <string.h>
 #include "../machine.h"
 #include "cerro.h"
 

@@ -7,7 +7,7 @@ c
 c     
       integer iadr, sadr
       integer topk,rhsk,topl
-      logical checkrhs,checklhs,getvect,getscalar,cremat
+      logical checkrhs,checklhs,getmat,getscalar,cremat
       double precision alpha
 c
       iadr(l)=l+l-1
@@ -18,7 +18,7 @@ c
       if(.not.checklhs(fname,1,1)) return
 c     
 c     checking variable alpha (number 1)
-      if(.not.getvect(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
+      if(.not.getmat(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
       if(m1*n1.eq.0) then
          top=top-rhs+1
          return
@@ -47,7 +47,7 @@ c     checking variable alpha (number 1)
       nb=m1*n1+nb1
 c     
 c     checking variable x (number 2)
-      if(.not.getvect(fname,top,top-rhs+2,it2,m2,n2,lr2,lc2)) return
+      if(.not.getmat(fname,top,top-rhs+2,it2,m2,n2,lr2,lc2)) return
       if(m2*n2.eq.0) then
          top=top-rhs+1
          if(.not.cremat(fname,top,0,0,0,lrs,lcs)) return
@@ -113,7 +113,7 @@ c
 c     
       integer iadr, sadr
       integer topk,rhsk,topl
-      logical checkrhs,checklhs,getvect,getscalar,cremat
+      logical checkrhs,checklhs,getmat,getscalar,cremat
       double precision alpha
 c
       iadr(l)=l+l-1
@@ -124,7 +124,7 @@ c
       if(.not.checklhs(fname,1,1)) return
 c     
 c     checking variable alpha (number 1)
-      if(.not.getvect(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
+      if(.not.getmat(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
       if(m1*n1.eq.0) then
          top=top-rhs+1
          return
@@ -153,7 +153,7 @@ c     checking variable alpha (number 1)
       nb=m1*n1+nb1
 c     
 c     checking variable x (number 2)
-      if(.not.getvect(fname,top,top-rhs+2,it2,m2,n2,lr2,lc2)) return
+      if(.not.getmat(fname,top,top-rhs+2,it2,m2,n2,lr2,lc2)) return
       if(m2*n2.eq.0) then
          top=top-rhs+1
          if(.not.cremat(fname,top,0,0,0,lrs,lcs)) return
@@ -204,7 +204,7 @@ c
 c     
       integer iadr, sadr
       integer topk,rhsk,topl
-      logical checkrhs,checklhs,getvect,getscalar,cremat
+      logical checkrhs,checklhs,getmat,getscalar,cremat
       double precision alpha
 c
       iadr(l)=l+l-1
@@ -215,7 +215,7 @@ c
       if(.not.checklhs(fname,1,1)) return
 c     
 c     checking variable alpha (number 1)
-      if(.not.getvect(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
+      if(.not.getmat(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
       if(m1*n1.eq.0) then
          top=top-rhs+1
          return
@@ -244,7 +244,7 @@ c     checking variable alpha (number 1)
       nb=m1*n1+nb1
 c     
 c     checking variable x (number 2)
-      if(.not.getvect(fname,top,top-rhs+2,it2,m2,n2,lr2,lc2)) return
+      if(.not.getmat(fname,top,top-rhs+2,it2,m2,n2,lr2,lc2)) return
       if(m2*n2.eq.0) then
          top=top-rhs+1
          if(.not.cremat(fname,top,0,0,0,lrs,lcs)) return
@@ -310,7 +310,7 @@ c
 c     
       integer iadr, sadr
       integer topk,rhsk,topl
-      logical checkrhs,checklhs,getvect,getscalar,cremat
+      logical checkrhs,checklhs,getmat,getscalar,cremat
       double precision alpha
 c
       iadr(l)=l+l-1
@@ -321,7 +321,7 @@ c
       if(.not.checklhs(fname,1,1)) return
 c     
 c     checking variable alpha (number 1)
-      if(.not.getvect(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
+      if(.not.getmat(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
       if(m1*n1.eq.0) then
          top=top-rhs+1
          return
@@ -350,7 +350,7 @@ c     checking variable alpha (number 1)
       nb=m1*n1+nb1
 c     
 c     checking variable x (number 2)
-      if(.not.getvect(fname,top,top-rhs+2,it2,m2,n2,lr2,lc2)) return
+      if(.not.getmat(fname,top,top-rhs+2,it2,m2,n2,lr2,lc2)) return
       if(m2*n2.eq.0) then
          top=top-rhs+1
          if(.not.cremat(fname,top,0,0,0,lrs,lcs)) return
@@ -376,7 +376,7 @@ c
       
       do 10 i=0,n2*m2-1
          call rybesl(stk(lr2+i),alpha,nb,stk(lw5),ncalc)
-         if(ncalc.ne.nb) then
+         if(ncalc.lt.nb) then
             call error(24)
             return
          endif
@@ -405,7 +405,7 @@ c
 c     
       integer iadr, sadr
       integer topk,rhsk,topl
-      logical checkrhs,checklhs,getvect,getscalar,cremat
+      logical checkrhs,checklhs,getmat,getscalar,cremat
       double precision dgamma
 c
       iadr(l)=l+l-1
@@ -416,7 +416,7 @@ c
       if(.not.checklhs(fname,1,1)) return
 c     
 c     checking variable x (number 1)
-      if(.not.getvect(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
+      if(.not.getmat(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
       if(m1*n1.eq.0) then
          return
       endif
@@ -441,7 +441,7 @@ c
 c     
       integer iadr, sadr
       integer topk,rhsk,topl
-      logical checkrhs,checklhs,getvect,getscalar,cremat
+      logical checkrhs,checklhs,getmat,getscalar,cremat
       double precision dlgama
 c
       iadr(l)=l+l-1
@@ -452,7 +452,7 @@ c
       if(.not.checklhs(fname,1,1)) return
 c     
 c     checking variable x (number 1)
-      if(.not.getvect(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
+      if(.not.getmat(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
       if(m1*n1.eq.0) then
          return
       endif
@@ -478,7 +478,7 @@ c
 c     
       integer iadr, sadr
       integer topk,rhsk,topl
-      logical checkrhs,checklhs,getvect,getscalar,cremat
+      logical checkrhs,checklhs,getmat,getscalar,cremat
       double precision alpha
 c
       iadr(l)=l+l-1
@@ -489,7 +489,7 @@ c
       if(.not.checklhs(fname,1,1)) return
 c     
 c     checking variable x (number 1)
-      if(.not.getvect(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
+      if(.not.getmat(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
       if(m1*n1.eq.0) then
          top=top-rhs+1
          return
@@ -525,7 +525,7 @@ c
 c     
       integer iadr, sadr
       integer topk,rhsk,topl
-      logical checkrhs,checklhs,getvect,getscalar,cremat
+      logical checkrhs,checklhs,getmat,getscalar,cremat
       double precision psi
 c
       iadr(l)=l+l-1
@@ -536,7 +536,7 @@ c
       if(.not.checklhs(fname,1,1)) return
 c     
 c     checking variable x (number 1)
-      if(.not.getvect(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
+      if(.not.getmat(fname,top,top-rhs+1,it1,m1,n1,lr1,lc1)) return
       if(m1*n1.eq.0) then
          top=top-rhs+1
          return

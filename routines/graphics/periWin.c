@@ -30,9 +30,13 @@
 #include "color.h" 
 #include "Graphics.h"
 
+extern void GPopupResize _PARAMS((struct BCG *ScilabXgc,int *x,int *y));
+extern void SciViewportGet _PARAMS((struct BCG *ScilabXgc,int *x,int *y));
+extern void SciViewportMove _PARAMS((struct BCG *ScilabXgc,int *x,int *y));
+
 #define M_PI	3.14159265358979323846
-#define CoordModePrevious 0
-#define CoordModeOrigin 1
+#define CoordModePrevious 1
+#define CoordModeOrigin 0
 
 /** 
   Warning : the following code won't work if the win.a library is 
@@ -146,6 +150,7 @@ typedef  struct
 } WindowList  ;
 
 static WindowList *The_List  = (WindowList *) NULL;
+static integer deleted_win = -1;
 struct BCG *ScilabXgc = (struct BCG *) 0;
 
 /** functions **/
@@ -230,7 +235,7 @@ void SetGHdc(lhdc,width,height)
       hdc1= hdc ;
       if ( hdc != (HDC) 0) ReleaseWinHdc();
       hdc = lhdc;
-      ScilabXgc->CWindowWidth = width;
+      ScilabXgc->CWindowWidth  = width;
       ScilabXgc->CWindowHeight = height;
     }
   else
@@ -242,8 +247,8 @@ void SetGHdc(lhdc,width,height)
 	  hdc=GetDC(ScilabXgc->CWindow);
 	  /* get back the dimensions   */
 	  GetClientRect(ScilabXgc->CWindow,&rect);
-	  ScilabXgc->CWindowWidth  = rect.right-rect.left;
-	  ScilabXgc->CWindowHeight = rect.bottom-rect.top;
+	  ScilabXgc->CWindowWidthView  = rect.right-rect.left;
+	  ScilabXgc->CWindowHeightView = rect.bottom-rect.top;
 	}
     }
 }
@@ -327,7 +332,7 @@ void C2F(show)(v1, v2, v3, v4)
     {
       HDC hdc1=GetDC(ScilabXgc->CWindow);
       BitBlt (hdc1,0,0,ScilabXgc->CWindowWidth,ScilabXgc->CWindowHeight,
-	      ScilabXgc->hdcCompat,0,0,SRCCOPY);
+	      ScilabXgc->hdcCompat,ScilabXgc->horzsi.nPos,ScilabXgc->vertsi.nPos,SRCCOPY);
       ReleaseDC(ScilabXgc->CWindow,hdc1);
     }
 }
@@ -452,6 +457,11 @@ void C2F(clearwindow)(v1, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
       GetClientRect(ScilabXgc->CWindow, &rect);
       /** verifier ce qui se passe si on est en Xor ? XXXXXXXX **/
       hBrush = CreateSolidBrush(px);
+	  /* on met a jour la couleur de fond */
+	  rect.top    = 0;
+	  rect.left   = 0;
+	  rect.right  = ScilabXgc->CWindowWidth;
+	  rect.bottom = ScilabXgc->CWindowHeight;
       FillRect(hdc, &rect,hBrush );
       DeleteObject(hBrush);
     }
@@ -491,6 +501,34 @@ void C2F(xpause)(str, sec_time, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
   if (ms != 0) Sleep(ms); /* Number of milliseconds to sleep. */
 }
 
+
+
+/*************************************************************
+ * Changes the popupname 
+ *************************************************************/
+
+void Setpopupname(string)
+     char *string;
+{ 
+  /* set the window title if exists */
+  SetWindowText(ScilabXgc->hWndParent, string);
+}
+
+
+void C2F(setpopupname)(x0, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
+     char *x0;
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
+{
+  Setpopupname(x0);
+}
+
+
+extern void sciSendMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
+extern int  sciPeekMessage(MSG *msg);
+
+
+
 /****************************************************************
  Wait for mouse click in graphic window 
    send back mouse location  (x1,y1)  and button number  
@@ -507,92 +545,182 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, iflag, istr, dv1, dv2, dv3, dv
      double *dv3;
      double *dv4;
 {
+  
   WindowList *listptr = The_List;
+  /* 
+   * listptr_tmp est utilise pour recuperer les 
+   * events clavier WM_CHAR 
+   */
+  WindowList *listptr_tmp;
+  POINT Point;
+  HWND hwnd_window_pointed;
+  RECT lpRect;
   Window CW;
   MSG msg;
-  int buttons = 0,win;
+  int buttons = 0,win = 0;
+  integer iwin_tmp = -1;
   integer lstr ;
   win = -1;
   if ( *iflag ==1 && CheckClickQueue(&win,x1,yy1,ibutton) == 1) 
-    {
+  {
       *iwin = win ;
       return;
-    }
-  if ( *iflag ==0 )  ClearClickQueue(-1);
+  }
+  if ( *iflag ==0 )  
+		ClearClickQueue(-1);
 
-  while (buttons == 0) {
-    int ok =0;
-    PeekMessage(&msg, 0, 0, 0, PM_REMOVE);
+  
+  while (buttons == 0) 
+  {
+	int ok =0;
+    if (PeekMessage(&msg, 0, 0, 0,PM_REMOVE) != -1) {
+		/* Attention il faut peut etre prendre PeekMessage mais il y a bug */
+    //if (sciPeekMessage(&msg) != 0) {
+	if (msg.message == WM_QUIT) 
+	{
+		*iwin       = deleted_win;/* utile dans le cas ou une fenetre a ete killee */
+		deleted_win = -1;
+		*x1         = 0;
+		*yy1        = 0;
+		*ibutton    = -100;
+		buttons++;
+		break;
+	}
     if ( CtrlCHit(&textwin) == 1) 
-      {
-	*x1= 0 ;  *yy1= 0;  *ibutton=0; return;
-      }
+    {
+		*x1= 0 ;  *yy1= 0;  *ibutton=0; return ;
+    }
     /** a loop on all the graphics windows **/
     listptr = The_List;
     /** special case the list is empty **/
     if ( listptr == (WindowList *) 0) 
-      {
-	*x1=0;*yy1=0;*ibutton = -100; return ;
-      }
-    while ( listptr != (WindowList  *) 0 ) 
-      {
-	CW = listptr->winxgc.CWindow;
-	*iwin = listptr->winxgc.CurWindow;
-	listptr =  (WindowList *)listptr->next;
-	if ( msg.hwnd == CW ) 
-	  {
-	    ok = 1;
-	    if (  msg.message == WM_LBUTTONDOWN )
-	      {
-		*x1=LOWORD(msg.lParam);
-		*yy1= HIWORD(msg.lParam);
-		*ibutton=0;
-		buttons++;
-		break;
-	      }
-	    else if (  msg.message == WM_MBUTTONDOWN )
-	      {
-		*x1=LOWORD(msg.lParam);
-		*yy1= HIWORD(msg.lParam);
-		*ibutton=1;
-		buttons++;
-		break;
-	      }
-	    else if (  msg.message == WM_RBUTTONDOWN )
-	      {
-		*x1=LOWORD(msg.lParam);
-		*yy1= HIWORD(msg.lParam);
-		*ibutton=2; 
-		buttons++;
-		break;
-	      }
-	    else
-	      {
+    {
+		*x1=0;*yy1=0;*ibutton = -100; return ;
+    }
+    while ( (buttons == 0) && ( listptr != (WindowList  *) 0 ) )
+    {
+		CW = listptr->winxgc.CWindow;
+		*iwin = listptr->winxgc.CurWindow;
+		//listptr =  (WindowList *)listptr->next; relegue a la fin
+		if ( msg.hwnd == CW ) 
+		{
+		    ok = 1;
+		    if (  msg.message == WM_CHAR)
+			{
+				/* ou est le curseur ? */
+				GetCursorPos(&Point);
+				/* sur quelle fenetre */
+				hwnd_window_pointed = WindowFromPoint(Point);
+				/* le curseur est bien sur une fenetre */
+				if (hwnd_window_pointed != NULL)
+				{
+					iwin_tmp = -1;
+					listptr_tmp = The_List;
+					/* si la liste de fenetre est non vide */
+					while (listptr_tmp != (WindowList  *) 0 )
+					{
+						/* si la fenetre pointee est la fenetre courante liste*/
+						if (hwnd_window_pointed == listptr_tmp->winxgc.CWindow)
+						{
+							iwin_tmp = listptr_tmp->winxgc.CurWindow;
+							break;
+						}
+						/* on regarde la fenetre scilab suivante */
+						listptr_tmp =  (WindowList *)listptr_tmp->next;
+					} /* fin while */
+					/* si la fenetre pointee est une fenetre scilab */
+					if ( iwin_tmp != -1 )
+					{
+						/* quelle est la dimension de la fenetre */
+						GetWindowRect(hwnd_window_pointed, &lpRect);
+						/* on calcule la position relative du click */
+						*x1  = Point.x - lpRect.left + listptr_tmp->winxgc.horzsi.nPos;
+						*yy1 = Point.y - lpRect.top  + listptr_tmp->winxgc.vertsi.nPos;
+						*iwin = iwin_tmp;
+						*ibutton = msg.wParam;
+						buttons++;
+					//	break;
+					} /* fi	*/
+				} /* fi (hwnd_window_pointed != NULL)*/
+				//else 					
+				//*ibutton = msg.wParam;
+				//buttons++;
+				//break;
+			} /* fi WM_CHAR */
+			else if (msg.message == WM_CLOSE)
+			{
+				*x1  = 0;
+				*yy1 = 0;
+				*ibutton = -100;
+				buttons++;
+				//break;
+			}
+		    else if (msg.message == WM_DESTROY)
+		    {
+				*x1  = 0;
+				*yy1 = 0;
+				*ibutton = -100;
+				buttons++;
+				//break;
+			}
+		    else if (  msg.message == WM_LBUTTONDOWN )
+			{
+				*x1 = LOWORD(msg.lParam) + listptr->winxgc.horzsi.nPos;
+				*yy1= HIWORD(msg.lParam) + listptr->winxgc.vertsi.nPos;
+				*ibutton = 0;
+				buttons++;
+				//break;
+			}
+		    else if (  msg.message == WM_MBUTTONDOWN )
+		    {
+				*x1 = LOWORD(msg.lParam) + listptr->winxgc.horzsi.nPos;
+				*yy1= HIWORD(msg.lParam) + listptr->winxgc.vertsi.nPos;
+				*ibutton=1;
+				buttons++;
+				//break;
+		    }
+		    else if (  msg.message == WM_RBUTTONDOWN )
+		    {
+				*x1 = LOWORD(msg.lParam) + listptr->winxgc.horzsi.nPos;
+				*yy1= HIWORD(msg.lParam) + listptr->winxgc.vertsi.nPos;
+				*ibutton=2; 
+				buttons++;
+				//break;
+			}
+		    else
+		    {
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		    if ( *istr==1 && C2F(ismenu)()==1 ) 
+		    {
+				int entry;
+				C2F(getmen)(str,&lstr,&entry);
+				*ibutton = -2;
+				*istr=lstr;
+				*x1=0;
+				*yy1=0;
+				*iwin=-1;
+				buttons++;
+				//break;
+			}
+		} /* if ( msg.hwnd == CW ) */
+		if (buttons == 0)
+			listptr =  (WindowList *)listptr->next;
+    }/* while ( (buttons == 0) && ( listptr != (WindowList  *) 0 ) ) */
+    if ( ok != 1) 
+    {
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
-	      }
-	    if ( *istr==1 && C2F(ismenu)()==1 ) 
-	      {
-		int entry;
-		C2F(getmen)(str,&lstr,&entry);
-		*ibutton = -2;
-		*istr=lstr;
-		*x1=0;
-		*yy1=0;
-		*iwin=-1;
-		buttons++;
-		break;
-	      }
-	  }
-      }
-    if ( ok != 1) 
-      {
-	TranslateMessage(&msg);
-	DispatchMessage(&msg);
-      }
-  }
+	}
+    } else sciprint("erreur peek\n"); /* fin de PeekMessage */
+
+  }/* fin de while (buttons == 0) */
+
+
   /* SetCursor(LoadCursor(NULL,IDC_ARROW));  */
 }
+
 
 
 void C2F(xclick)(str, ibutton, x1, yy1, iflag,istr, v7, dv1, dv2, dv3, dv4)
@@ -665,7 +793,12 @@ void SciClick(ibutton,x1,yy1,iflag,getmouse,getrelease,dyn_men,str,lstr)
       *ibutton = -100;     return;
     }
   win = ScilabXgc->CurWindow;
-  if ( *iflag ==1 && CheckClickQueue(&win,x1,yy1,ibutton) == 1) return;
+  if ( *iflag ==1 && CheckClickQueue(&win,x1, yy1,ibutton) == 1)
+  {
+	  *x1  = *x1  + ScilabXgc->horzsi.nPos;
+	  *yy1 = *yy1 + ScilabXgc->vertsi.nPos;
+	  return;
+  }
   if ( *iflag ==0 )  ClearClickQueue(ScilabXgc->CurWindow);
 
   /** Pas necessaire en fait voir si c'est mieux ou moins bien **/
@@ -681,7 +814,7 @@ void SciClick(ibutton,x1,yy1,iflag,getmouse,getrelease,dyn_men,str,lstr)
   SetCursor(LoadCursor(NULL,IDC_CROSS));
   /*  track a mouse click */
   while (buttons == 0) {
-      PeekMessage(&msg, 0, 0, 0, PM_REMOVE);
+      PeekMessage(&msg, ScilabXgc->CWindow, 0, 0, PM_REMOVE);
       /** maybe someone decided to destroy scilab Graphic window **/
       if ( ScilabXgc == (struct BCG *) 0 || ScilabXgc->CWindow == (Window) 0)
 	{
@@ -693,58 +826,58 @@ void SciClick(ibutton,x1,yy1,iflag,getmouse,getrelease,dyn_men,str,lstr)
 	}
       if ( msg.hwnd == ScilabXgc->CWindow ) 
 	{
-	  if (  msg.message == WM_LBUTTONDOWN )
+		if (  msg.message == WM_LBUTTONDOWN )
 	    {
-	      *x1=LOWORD(msg.lParam);
-	      *yy1= HIWORD(msg.lParam);
+	      *x1=LOWORD(msg.lParam) + ScilabXgc->horzsi.nPos;
+	      *yy1= HIWORD(msg.lParam) + ScilabXgc->vertsi.nPos;
 	      *ibutton=0; 
 	      buttons++;
 	      break;
 	    }
 	  else if (  msg.message == WM_MBUTTONDOWN )
 	    {
-	      *x1=LOWORD(msg.lParam);
-	      *yy1= HIWORD(msg.lParam);
+	      *x1 = LOWORD(msg.lParam) + ScilabXgc->horzsi.nPos;
+	      *yy1= HIWORD(msg.lParam) + ScilabXgc->vertsi.nPos;
 	      *ibutton=1; 
 	      buttons++;
 	      break;
 	    }
 	  else if (  msg.message == WM_RBUTTONDOWN )
 	    {
-	      *x1=LOWORD(msg.lParam);
-	      *yy1= HIWORD(msg.lParam);
+	      *x1 = LOWORD(msg.lParam) + ScilabXgc->horzsi.nPos;
+	      *yy1= HIWORD(msg.lParam) + ScilabXgc->vertsi.nPos;
 	      *ibutton=2; 
 	      buttons++;
 	      break;
 	    }
 	  else if ( getmouse == 1 && msg.message == WM_MOUSEMOVE )
 	    {
-	      *x1=LOWORD(msg.lParam);
-	      *yy1= HIWORD(msg.lParam);
+	      *x1 = LOWORD(msg.lParam) + ScilabXgc->horzsi.nPos;
+	      *yy1= HIWORD(msg.lParam) + ScilabXgc->vertsi.nPos;
 	      *ibutton=-1; /** 0 for left button **/
 	      buttons++;
 	      break;
 	    }
 	  else if ( getrelease == 1 &&  msg.message == WM_LBUTTONUP )
 	    {
-	      *x1=LOWORD(msg.lParam);
-	      *yy1= HIWORD(msg.lParam);
+	      *x1 = LOWORD(msg.lParam) + ScilabXgc->horzsi.nPos;
+	      *yy1= HIWORD(msg.lParam) + ScilabXgc->vertsi.nPos;
 	      *ibutton= -5 ; 
 	      buttons++;
 	      break;
 	    }
 	  else if (getrelease == 1 &&  msg.message == WM_MBUTTONUP )
 	    {
-	      *x1=LOWORD(msg.lParam);
-	      *yy1= HIWORD(msg.lParam);
+	      *x1 = LOWORD(msg.lParam) + ScilabXgc->horzsi.nPos;
+	      *yy1= HIWORD(msg.lParam) + ScilabXgc->vertsi.nPos;
 	      *ibutton= -4 ;
 	      buttons++;
 	      break;
 	    }
 	  else if ( getrelease == 1 && msg.message == WM_RBUTTONUP )
 	    {
-	      *x1=LOWORD(msg.lParam);
-	      *yy1= HIWORD(msg.lParam);
+	      *x1 = LOWORD(msg.lParam) + ScilabXgc->horzsi.nPos;
+	      *yy1= HIWORD(msg.lParam) + ScilabXgc->vertsi.nPos;
 	      *ibutton= -3;
 	      buttons++;
 	      break;
@@ -771,6 +904,7 @@ void SciClick(ibutton,x1,yy1,iflag,getmouse,getrelease,dyn_men,str,lstr)
   /** SetCursor(LoadCursor(NULL,IDC_ARROW)); **/
 }
  
+
 
 /*------------------------------------------------
   \encadre{Clear a rectangle }
@@ -844,13 +978,19 @@ void C2F(getwindowdim)(verbose, x, narg,dummy)
      double *dummy;
 {     
   *narg = 2;
+  /* on renvoie la taille de la fenetre virtuelle */
+  /* windows devrait s'occupper de tout afficher correctement */
   x[0]= ScilabXgc->CWindowWidth;
   x[1]= ScilabXgc->CWindowHeight;
   if (*verbose == 1) 
     sciprint("\n CWindow dim :%d,%d\r\n",(int) x[0],(int) x[1]);
 } 
 
-/** To change the window size  **/
+/** To change the window size
+ * on redimensionne la dimension virtuelle
+ * si le resizing et off, la vue (View) et la virtuelle sont egales
+ * voire dans le resize de wgraph.c
+ */
 
 void C2F(setwindowdim)(x, y, v3, v4)
      integer *x;
@@ -859,25 +999,104 @@ void C2F(setwindowdim)(x, y, v3, v4)
      integer *v4;
 {
   RECT rect,rect1;
+  int xof,yof;
+
   if (ScilabXgc->CWindow != (Window) NULL) 
-    {
-      int xof,yof;
+  {
       ScilabXgc->CWindowWidth = Max((int) *x,50);
       ScilabXgc->CWindowHeight =Max((int) *y,50);
+      if ( ScilabXgc->CurResizeStatus == 1) {
+		  ScilabXgc->CWindowWidthView  = ScilabXgc->CWindowWidth;
+		  ScilabXgc->CWindowHeightView = ScilabXgc->CWindowHeight;
+	  }
       if ( ScilabXgc->CurPixmapStatus == 1 )
-	{
-	  CPixmapResize(ScilabXgc->CWindowWidth,ScilabXgc->CWindowHeight);
-	}
+	  {
+	    CPixmapResize(ScilabXgc->CWindowWidth,ScilabXgc->CWindowHeight);
+	  }
       GetWindowRect (ScilabXgc->hWndParent, &rect) ;
       GetWindowRect (ScilabXgc->CWindow, &rect1) ;
       xof = (rect.right-rect.left)- (rect1.right - rect1.left);
       yof = (rect.bottom-rect.top)- (rect1.bottom -rect1.top );
       SetWindowPos(ScilabXgc->hWndParent,HWND_TOP,0,0,
-		   ScilabXgc->CWindowWidth  + xof,
-		   ScilabXgc->CWindowHeight + yof,
+		   ScilabXgc->CWindowWidthView  + xof,
+		   ScilabXgc->CWindowHeightView + yof,
 		   SWP_NOMOVE | SWP_NOZORDER );
-    }
+      /* ajout */
+      ScilabXgc->vertsi.nMax   = ScilabXgc->CWindowHeight;
+      ScilabXgc->vertsi.nPage  = ScilabXgc->CWindowHeightView;
+      ScilabXgc->horzsi.nMax   = ScilabXgc->CWindowWidth;
+      ScilabXgc->horzsi.nPage  = ScilabXgc->CWindowWidthView;
+	  SetScrollInfo(ScilabXgc->CWindow,SB_VERT, &(ScilabXgc->vertsi), TRUE);
+      SetScrollInfo(ScilabXgc->CWindow,SB_HORZ, &(ScilabXgc->horzsi), TRUE);
+  }
 }
+
+/** To get the popup  window size **/
+
+void C2F(getpopupdim)(verbose, x, narg,dummy)
+     integer *verbose;
+     integer *x;
+     integer *narg;
+     double *dummy;
+{
+	x[0]= ScilabXgc->CWindowWidthView; 
+	x[1]= ScilabXgc->CWindowHeightView;
+	*narg = 2;
+	if (*verbose == 1) 
+    sciprint("\n ScilabXgc->CWindow dim :%d,%d\r\n",(int) x[0],(int) x[1]);
+}
+
+
+/** To change the popup window size  **/
+
+void C2F(setpopupdim)(x, y, v3, v4)
+     integer *x;
+     integer *y;
+     integer *v3;
+     integer *v4;
+{
+  int x1= Min((int) *x, ScilabXgc->CWindowWidth);
+  int x2= Min((int) *y, ScilabXgc->CWindowHeight);
+  GPopupResize(ScilabXgc,&x1,&x2);
+}
+
+
+
+/** To change the window view  **/
+
+
+void C2F(setviewport)(x, y, v3, v4)
+     integer *x;
+     integer *y;
+     integer *v3;
+     integer *v4;
+{
+  if ( ScilabXgc->CurResizeStatus == 0) 
+    SciViewportMove(ScilabXgc,*x,*y);
+}
+
+
+/** To get the viewport Upper/Left point Position **/
+
+void C2F(getviewport)(verbose, x, narg,dummy)
+     integer *verbose;
+     integer *x;
+     integer *narg;
+     double *dummy;
+{     
+  *narg = 2;
+  if ( ScilabXgc->CurResizeStatus == 0) 
+    {	
+      SciViewportGet(ScilabXgc,x,x+1);
+    }
+  else 
+    { 
+      x[0]=0;
+      x[1]=0;
+    }
+  if (*verbose == 1) 
+    sciprint("\n Viewport position:%d,%d\r\n",(int) x[0],(int) x[1]);
+} 
 
 /********************************************
  * select window intnum as the current window 
@@ -917,8 +1136,11 @@ void C2F(setcurwin)(intnum, v2, v3, v4)
       /* update the dimensions   */
       RECT rect;
       GetClientRect(ScilabXgc->CWindow,&rect);
-      ScilabXgc->CWindowWidth  = rect.right-rect.left;
-      ScilabXgc->CWindowHeight = rect.bottom-rect.top;
+      ScilabXgc->CWindowWidthView  = rect.right-rect.left;
+      ScilabXgc->CWindowHeightView = rect.bottom-rect.top;
+	  /* ajout pour compatibilite */
+      ScilabXgc->CWindowWidth  = ScilabXgc->CWindowWidth;
+      ScilabXgc->CWindowHeight = ScilabXgc->CWindowHeight;
     }
 }
 
@@ -995,7 +1217,8 @@ void C2F(setclip)(x, y, w, h)
   ScilabXgc->CurClipRegion[1]= *y;
   ScilabXgc->CurClipRegion[2]= *w;
   ScilabXgc->CurClipRegion[3]= *h;
-  SelectClipRgn(hdc,hRgn);
+  /* SelectClipRgn(hdc,hRgn);*/
+  SelectClipRgn(ScilabXgc->CWindow, hRgn);
   DeleteObject(hRgn);
 }
 
@@ -1472,6 +1695,7 @@ void C2F(setpixmapOn)(num, v2, v3, v4)
 	  hbmTemp =CreateCompatibleBitmap (hdc,
 						    ScilabXgc->CWindowWidth,
 						    ScilabXgc->CWindowHeight);
+	  /* ajout */
 	  if (!hbmTemp)
 	    {
 	      sciprint("Seeting pixmap on is impossible \r\n");
@@ -1492,6 +1716,7 @@ void C2F(setpixmapOn)(num, v2, v3, v4)
 	      ResetScilabXgc ();
 	      SetGHdc((HDC)0,ScilabXgc->CWindowWidth,
 		       ScilabXgc->CWindowHeight);
+		  /* ajout */
 	      C2F(show)(PI0,PI0,PI0,PI0);
 	    }
 	}
@@ -1526,6 +1751,52 @@ void C2F(getpixmapOn)(verbose, value, narg,dummy)
   *value=ScilabXgc->CurPixmapStatus;
   *narg =1 ;
   if (*verbose == 1) sciprint("Color %d",(int)*value);
+}
+
+
+/** Change the status of a Graphic Window **/
+/** follow or dont follow the viewport resize  **/
+
+void C2F(setwresize)(num, v2, v3, v4)
+     integer *num;
+     integer *v2;
+     integer *v3;
+     integer *v4;
+{
+  integer num1= Min(Max(*num,0),1);
+  integer temp;
+  if ((ScilabXgc->CurResizeStatus == 0) && (num1 == 1)) {
+	/* on resize la fenetre courante */
+	ScilabXgc->CWindowWidth  = ScilabXgc->CWindowWidthView;
+	ScilabXgc->CWindowHeight = ScilabXgc->CWindowHeightView;
+	/* definition des scroll bars verticalle */
+	ScilabXgc->CWindowWidthView  = ScilabXgc->CWindowWidth;
+	ScilabXgc->CWindowHeightView = ScilabXgc->CWindowHeight;
+	ScilabXgc->vertsi.nMax   = ScilabXgc->CWindowHeight;
+	ScilabXgc->vertsi.nPage  = ScilabXgc->vertsi.nMax;
+	ScilabXgc->vertsi.nPos   = 0;
+	SetScrollInfo(ScilabXgc->CWindow,SB_VERT, &(ScilabXgc->vertsi), TRUE);
+	/* definition des scroll bars horizontalle */
+	ScilabXgc->horzsi.nMax   = ScilabXgc->CWindowWidth;
+	ScilabXgc->horzsi.nPage  = ScilabXgc->horzsi.nMax;
+	ScilabXgc->horzsi.nPos   = 0;
+	SetScrollInfo(ScilabXgc->CWindow,SB_HORZ, &(ScilabXgc->horzsi), TRUE);
+	SetViewportOrgEx(hdc,-ScilabXgc->horzsi.nPos,-ScilabXgc->vertsi.nPos,NULL);
+	UpdateWindow(ScilabXgc->CWindow);
+	InvalidateRect(ScilabXgc->CWindow,NULL,TRUE);
+  }
+  ScilabXgc->CurResizeStatus = num1;
+}
+
+void C2F(getwresize)(verbose, value, narg,dummy)
+     integer *verbose;
+     integer *value;
+     integer *narg;
+     double *dummy;
+{
+  *value=ScilabXgc->CurResizeStatus;
+  *narg =1 ;
+  if (*verbose == 1) sciprint("Resize status %d",(int)*value);
 }
 
 
@@ -1867,7 +2138,7 @@ void C2F(setbackground)(num, v2, v3, v4)
       ScilabXgc->NumBackground = Max(0,Min(*num - 1,ScilabXgc->Numcolors + 1));
       C2F(setalufunction1)(&ScilabXgc->CurDrawFunction,PI0,PI0,PI0);
       px = (ScilabXgc->Colors == NULL) ? DefaultBackground 
-	:  ScilabXgc->Colors[ScilabXgc->NumBackground];
+	         :  ScilabXgc->Colors[ScilabXgc->NumBackground];
       /** A finir XXXX 
 	      if (ScilabXgc->Cdrawable != (Drawable) ScilabXgc->CWindow ) 
 	{
@@ -2035,7 +2306,7 @@ void C2F(gempty)(verbose, v2, v3,dummy)
   if ( *verbose ==1 ) Scistring("\n No operation ");
 }
 
-#define NUMSETFONC 23
+#define NUMSETFONC 26
 
 /** Table in lexicographic order **/
 
@@ -2061,10 +2332,13 @@ MissileGCTab_[] = {
   {"pixmap",C2F(setpixmapOn),C2F(getpixmapOn)},
   {"thickness",C2F(setthickness),C2F(getthickness)},
   {"use color",C2F(usecolor),C2F(getusecolor)},
+  {"viewport", C2F(setviewport), C2F(getviewport)},
   {"wdim",C2F(setwindowdim),C2F(getwindowdim)},
   {"white",C2F(sempty),C2F(getlast)},
   {"window",C2F(setcurwin),C2F(getcurwin)},
+  {"wpdim",C2F(setpopupdim),C2F(getpopupdim)},
   {"wpos",C2F(setwindowpos),C2F(getwindowpos)},
+  {"wresize",C2F(setwresize),C2F(getwresize)},
   {"wshow",C2F(show),C2F(gempty)},
   {"wwpc",C2F(pixmapclear),C2F(gempty)}
   };
@@ -2098,7 +2372,6 @@ C2F(setcurwin)(x1,x2,x3,x4);C2F(getcurwin)(verbose,x1,x2,dv);
 C2F(setwindowpos)(x1,x2,x3,x4);C2F(getwindowpos)(verbose,x1,x2,dv);
 C2F(show)(x1,x2,x3,x4);C2F(gempty)(verbose,x1,x2,dv);
 C2F(pixmapclear)(x1,x2,x3,x4);gempty(verbose,x1,x2,dv);
-
 }
 
 #endif 
@@ -2957,6 +3230,7 @@ void DeleteWindowToList(num)
 	{
 	  /** destroying windows **/
 	  /** XXXX : if there's a pixmap we must free it **/
+	  deleted_win = num;
 	  DestroyWindow(L1->winxgc.hWndParent);
 	  DestroyWindow(L1->winxgc.CWindow);
 	  DestroyWindow(L1->winxgc.Statusbar);
@@ -3133,6 +3407,7 @@ void C2F(initgraphic)(string, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
   static integer EntryCounter = 0;
   integer WinNum;
   static HMENU sysmenu;
+  
   if ( v2 != (integer *) NULL && *v2 != -1 )
     WinNum= *v2;
   else
@@ -3188,14 +3463,31 @@ void C2F(initgraphic)(string, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
   ScilabXgc->CWindowWidth =  rect.right;
   ScilabXgc->CWindowHeight = rect.bottom - ( rect1.bottom - rect1.top);
   ScilabXgc->CWindow = CreateWindow(szGraphClass, winname,
-				    WS_CHILD ,
+				    WS_CHILD | WS_VSCROLL | WS_HSCROLL,
 				    0, graphwin.ButtonHeight,
 				    ScilabXgc->CWindowWidth,
 				    ScilabXgc->CWindowHeight,
 				    ScilabXgc->hWndParent,
 				    NULL, graphwin.hInstance,
 				    NewXgc);
-
+	/* definition des scroll bars verticalle */
+  ScilabXgc->CWindowWidthView  = ScilabXgc->CWindowWidth;
+  ScilabXgc->CWindowHeightView = ScilabXgc->CWindowHeight;
+  ScilabXgc->vertsi.cbSize = sizeof(SCROLLINFO);
+  ScilabXgc->vertsi.fMask  = SIF_RANGE | SIF_PAGE | SIF_POS;
+  ScilabXgc->vertsi.nMin   = 0;
+  ScilabXgc->vertsi.nMax   = ScilabXgc->CWindowHeight;
+  ScilabXgc->vertsi.nPage  = ScilabXgc->CWindowHeightView;
+  ScilabXgc->vertsi.nPos   = 0;
+  SetScrollInfo(ScilabXgc->CWindow,SB_VERT, &(ScilabXgc->vertsi), TRUE);
+	/* definition des scroll bars horizontalle */
+  ScilabXgc->horzsi.cbSize = sizeof(SCROLLINFO);
+  ScilabXgc->horzsi.fMask  = SIF_RANGE | SIF_PAGE | SIF_POS;
+  ScilabXgc->horzsi.nMin   = 0;
+  ScilabXgc->horzsi.nMax   = ScilabXgc->CWindowWidth;
+  ScilabXgc->horzsi.nPage  = ScilabXgc->CWindowWidthView;
+  ScilabXgc->horzsi.nPos   = 0;
+  SetScrollInfo(ScilabXgc->CWindow,SB_HORZ, &(ScilabXgc->horzsi), TRUE);
   if (ScilabXgc->CWindow == (HWND)NULL) 
     {
       MessageBox((HWND)NULL,"Couldn't open graphic window",
@@ -3212,6 +3504,7 @@ void C2F(initgraphic)(string, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
   LoadGraphMacros( ScilabXgc);
   /** Default value is without Pixmap **/
   ScilabXgc->CurPixmapStatus = 0;
+  ScilabXgc->CurResizeStatus = 1;
   ScilabXgc->CurWindow = WinNum;
   /* on fait un SetWinhdc car on vient de creer la fenetre */
   /* le release est fait par Xcall.c */
@@ -3221,6 +3514,8 @@ void C2F(initgraphic)(string, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
   GetClientRect(ScilabXgc->CWindow, &rect);
   SetViewportExtEx(hdc, rect.right, rect.bottom,NULL);
   SetTextAlign(hdc, TA_LEFT|TA_BOTTOM);
+        SetFocus( ScilabXgc->CWindow);
+
   if (EntryCounter == 0)
     {
       C2F(CreatePatterns)();
@@ -3315,6 +3610,7 @@ static void InitMissileXgc (integer *v1,integer *v2,integer *v3,integer *v4)
   C2F(xsetfont)((i=2,&i),(j=1,&j),PI0,PI0);
   C2F(xsetmark)((i=0,&i),(j=0,&j),PI0,PI0);
   ScilabXgc->CurPixmapStatus =0 ;
+  ScilabXgc->CurResizeStatus =1 ;
   C2F(setpixmapOn)((i=0,&i),PI0,PI0,PI0);
   /** trac\'e absolu **/
   i= CoordModeOrigin ;
@@ -3730,6 +4026,33 @@ void C2F(loadfamily)(name, j, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
       i++;
     }
   C2F(loadfamily_n)(name,j);
+}
+
+void C2F(queryfamily)(name, j, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
+     char *name;
+     integer *j;
+     integer *v3;
+     integer *v4;
+     integer *v5;
+     integer *v6;
+     integer *v7;
+     double *dv1;
+     double *dv2;
+     double *dv3;
+     double *dv4;
+{ 
+  integer i ;
+  name[0]='\0';
+  for (i=0;i<FONTNUMBER;i++) {
+    v3[i]=strlen((*FontTab)[i].fname);
+    if (v3[i] > 0)
+      strcat(name,(*FontTab)[i].fname);
+    else {
+      v3[i]=strlen(fonttab[i].Winname);
+       strcat(name,fonttab[i].Winname);
+    }
+  }
+  *j=FONTNUMBER;
 }
 
 /** creates a font **/
@@ -4190,4 +4513,8 @@ integer first_out(n, ideb, vx, vy)
 	}
     }
   return(-1);
+}
+int CheckScilabXgc()
+{
+  return( ScilabXgc != (struct BCG *) 0);
 }

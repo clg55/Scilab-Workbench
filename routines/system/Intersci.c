@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 
 #include "../machine.h"
 
@@ -17,7 +17,7 @@ Intersci_contents(x)
       C2F(cint)();
       C2F(cboolf)();
       C2F(cintf)();
-      cout();
+      Cout();
       C2F(cstringf)();
       C2F(stringc)();
       C2F(int2cint)();

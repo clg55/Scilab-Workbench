@@ -155,10 +155,9 @@ DESCRIPTION
        - a character string associated with a sub-list entry name.
 
 REMARKS
-  For soft coded matrix types such as rational functions and state space
-  linear systems, x(i) syntax may not be used for vector entry insertion due
-  to confusion with list entry insertion. x(1,j) or x(i,1) syntax must be
-  used.
+  For soft coded matrix types such as rational functions and state space lin-
+  ear systems, x(i) syntax may not be used for vector entry insertion due to
+  confusion with list entry insertion. x(1,j) or x(i,1) syntax must be used.
 EXAMPLE
   // MATRIX CASE
   a=[1 2 3;4 5 6]

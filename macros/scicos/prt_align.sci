@@ -2,7 +2,7 @@ function scs_m=prt_align(scs_m)
 // Copyright INRIA
 while %t
   
-  [btn,xc1,yc1,win,Cmenu]=getclick()
+  [btn,xc1,yc1,win,Cmenu]=cosclick()
   if Cmenu<>[] then
     Cmenu=resume(Cmenu)
   end,

@@ -23,8 +23,7 @@ int main(argc,argv)
   fscanf(filei,"%s",nam2);
   /**********************/
   if (NULL == (file = fopen ("genlib", "w"))) return 1;
-  fprintf(file,"%%u=file('open','SCI/macros/%s/lib','unknown','unformatted');\n",nam1);
-  fprintf(file,"%s=lib('SCI/macros/%s/');save(%%u,%s);file('close',%%u);exit\n",nam2,nam1,nam2);
+  fprintf(file,"%s=lib('%s/');save('%s/lib',%s);exit\n",nam2,nam1,nam1,nam2);
   fclose (file) ;
   /**********************/
   if (NULL == (file = fopen ("names", "w"))) return 1;

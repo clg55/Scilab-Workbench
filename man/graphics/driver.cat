@@ -1,7 +1,7 @@
 
 driver(2)                      Scilab Function                      driver(2)
 NAME
-  driver - select a driver for plotting
+  driver - select a graphics driver
 
 CALLING SEQUENCE
   driver(driver_name)
@@ -9,22 +9,27 @@ CALLING SEQUENCE
 
 PARAMETERS
 
-  driver_name    : string (driver to be selected).
+  driver_name  : string, driver to be selected.
 
 DESCRIPTION
-  This function is used to select a graphic driver, or with no arguments to
-  get the current driver name.  Most of the time, a user can ignore this
-  function and change its driver by calling high level functions such as
-  xbasc or xbasimp.  The selected driver can be one of the following :
+  This function is used to select a graphics driver, or with no arguments to
+  get the current graphics driver name.  Most of the time, a user can ignore
+  this function and change the driver by calling high level functions such as
+  xbasc or xbasimp.  The selected driver can be one of the followings:
 
-  "X11"     : an X Window driver.
+  "X11"  : output to the screen of the computer.
 
-  "Pos"     : a Postscript driver.
+  "Pos"  : output into Postscript format.
 
-  "Rec"     : an X Window driver (X11) which also records all the graphic
-            commands. this is the default driver.
+  "Rec"  : output to the screen of the computer with recording of all the
+         graphics commands. This is the default driver.
 
-  "Fig"     : an XFig driver. (Clipping of objects is not provided in XFig).
+  "Fig"  : output into XFig format. Clipping of objects is not provided in
+         XFig.
+
+  "GIF"  : output into Gif format (beta test driver written by Tom Leitner
+         (http://wiis.tu-graz.ac.at/people/tom.html).  Note that line thick-
+         ness is not handled yet.
 
 SEE ALSO
   xtape, xbasc, xbasimp

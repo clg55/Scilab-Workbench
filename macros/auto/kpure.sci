@@ -6,11 +6,11 @@ if type(n)<>16 then error(92,1),end;
 flag=n(1);
 if flag(1)=='lss' then n=ss2tf(n),end
 if flag(1)<>'r' then  error(90,1),end;
-if n(4)<>'c' then error('System must be continuous'),end
-if size(n(2),'*') > 1 then error(95,1),end
+if n('dt')<>'c' then error('System must be continuous'),end
+if size(n('num'),'*') > 1 then error(95,1),end
 
 r=routh_t(n,poly(0,'k')),
-[n,d]=n(2:3)
+[n,d]=n(['num','den'])
 [s,t]=size(r);
 for i=1:s,
   coe=coeff(r(i,:)),

@@ -68,7 +68,7 @@ demolist=[
 end
 
 while %t then
-  num=x_choose(demolist(:,1),['Click to choose a demo';
+  num=x_choose(demolist(:,1),['Click to choose a demo';...
 '(see also in SCIDIR/demos/...)']);
   if num==0 then 
      lines(oldln(1))

@@ -78,7 +78,7 @@ case 'set' then
       model(7)=state;model(8)=rpar;model(9)=ipar
       model(4)=ones(1-heritance,1)
       model(11)=[] //compatibility
-      model(12)=[%t %f] //compatibility
+//      model(12)=[%t %f] //compatibility
       graphics(4)=label;
       x(2)=graphics;x(3)=model
       break

@@ -10,6 +10,7 @@ c     Copyright INRIA
 c     
       double precision y(ny),p(nrowp,ny),t(*)
       common/ierode/iero
+      logical allowptr
 c     
       integer vol,tops,nordre
       data nordre/2/,mlhs/1/

@@ -22,7 +22,7 @@ U
 .SH DESCRIPTION
 \fV[n,[U]]=unobs(A,C,[tol])\fR gives the unobservable form of an \fV(A,C)\fR 
 pair.
-The \fVn\fR first columns of \fVU\fR make a basis for the controllable
+The \fVn\fR first columns of \fVU\fR make a basis for the unobservable
 subspace.
 .LP
 The \fV(2,1)\fR block (made of last \fVnx-n\fR rows and \fVn\fR first 

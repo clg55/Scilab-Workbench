@@ -54,6 +54,8 @@ EXPORT LRESULT CALLBACK  WndGraphProc(HWND hwnd, UINT message, WPARAM wParam, LP
 void ReadGraphIni(struct BCG *ScilabGC);
 void WriteGraphIni(struct BCG *ScilabGC);
 
+static int scig_buzy = 0;
+
 /******************************************
  * delete a graphic window
  ******************************************/
@@ -97,6 +99,8 @@ void NewCopyClip(struct BCG *ScilabGC)
   HANDLE hmf;
   HWND hwnd;
   HDC hdc;
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   lpgw = ScilabGC->lpgw;
   hwnd =  ScilabGC->CWindow;
   /* view the window */
@@ -113,14 +117,15 @@ void NewCopyClip(struct BCG *ScilabGC)
   SetWindowExtEx(hdc, rect.right, rect.bottom, (LPSIZE)NULL); 
   **/
   /** fix hdc in the scilab driver **/
-  Rectangle (hdc, 0, 0, rect.right - rect.left,rect.bottom - rect.top);
+  Rectangle (hdc, 0, 0, ScilabGC->CWindowWidthView ,ScilabGC->CWindowHeightView);
   scig_replay_hdc('C',ScilabGC->CurWindow,hdc,
-		  rect.right - rect.left,rect.bottom - rect.top,1);
+		  ScilabGC->CWindowWidth,ScilabGC->CWindowHeight,1);
   hmf = CloseEnhMetaFile(hdc);
   OpenClipboard(hwnd);
   EmptyClipboard();
   SetClipboardData(CF_ENHMETAFILE,hmf);
   CloseClipboard();
+  scig_buzy =0;
   return;
 }
 
@@ -141,6 +146,8 @@ void CopyClip(struct BCG *ScilabGC)
   LPMETAFILEPICT lpMFP;
   HWND hwnd;
   HDC hdc;
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   lpgw = ScilabGC->lpgw;
   hwnd =  ScilabGC->CWindow;
   /* view the window */
@@ -197,6 +204,7 @@ void CopyClip(struct BCG *ScilabGC)
   SetClipboardData(CF_METAFILEPICT,hGMem);
   SetClipboardData(CF_BITMAP, bitmap);
   CloseClipboard();
+  scig_buzy =0;
   return;
 }
 
@@ -233,6 +241,8 @@ int CopyPrint(struct BCG *ScilabGC)
   HWND hwnd;
   RECT rect;
   PRINT pr;
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
   lpgw = ScilabGC->lpgw;
   hwnd =  ScilabGC->CWindow;
 #ifdef __GNUC__
@@ -269,12 +279,14 @@ int CopyPrint(struct BCG *ScilabGC)
       i=CommDlgExtendedError();
       sciprint("Printer Menu error code %d\r\n",i);
       **/
+      scig_buzy =0;
       return TRUE;
     }
   printer = pd.hDC;
   if (NULL == printer)
     {
       sciprint("Can't print \r\n");
+      scig_buzy =0;
       return TRUE;	/* abort */
     }
 
@@ -295,12 +307,14 @@ int CopyPrint(struct BCG *ScilabGC)
        && GetLastError() != 0) 
     {
       sciprint("Can't print : Error in SetWindowLong");
+      scig_buzy =0;
       return TRUE;
     }
   if ( SetWindowLong(ScilabGC->hWndParent, 4, (LONG)((LPPRINT)&pr)) == 0 
        && GetLastError() != 0) 
     {
       sciprint("Can't print : Error in SetWindowLong");
+      scig_buzy =0;
       return TRUE;
     }
   PrintRegister((LPPRINT)&pr);
@@ -364,6 +378,7 @@ int CopyPrint(struct BCG *ScilabGC)
   SetWindowLong(hwnd, 4, (LONG)(0L));
   SetWindowLong(ScilabGC->hWndParent,4, (LONG)(0L));
   PrintUnregister((LPPRINT)&pr);
+  scig_buzy =0;
   return bError || pr.bUserAbort ;
 }
 
@@ -433,6 +448,99 @@ extern void DebugGW(char *fmt, ...)
   va_end(args);
 #endif
 }
+
+
+
+/*	Function Name: SciViewportMove
+ *	Description: used to move the panner and the viewport interactively 
+ *                   through scilab command.
+ *	Arguments: ScilabXgc : structure associated to a Scilab Graphic window
+ *                 x,y : the x,y point of the graphic window to be moved at 
+ *                 the up-left position of the viewport
+ *	Returns: none.
+ */
+
+void SciViewportMove(ScilabGC,x,y) 
+     struct BCG *ScilabGC;
+     int x,y;
+{
+  if ( ScilabGC != NULL) 
+  {
+	if (ScilabGC->CurResizeStatus == 0)
+	{	
+		ScilabGC->horzsi.nPos = max(ScilabGC->horzsi.nMin,min(ScilabGC->horzsi.nMax,x));
+		SetScrollInfo(ScilabGC->CWindow,SB_HORZ, &(ScilabGC->horzsi), TRUE);
+
+		ScilabGC->vertsi.nPos = min(ScilabGC->vertsi.nMax,max(ScilabGC->vertsi.nMin,y));
+		SetScrollInfo(ScilabGC->CWindow,SB_VERT, &(ScilabGC->vertsi), TRUE);
+		InvalidateRect(ScilabGC->CWindow,(LPRECT) NULL,TRUE);
+		UpdateWindow(ScilabGC->CWindow);
+	}
+  }
+}
+
+
+/*	Function Name: SciViewportGet
+ *	Description: used to get panner position through scilab command.
+ *	Arguments: ScilabXgc : structure associated to a Scilab Graphic window
+ *                 x,y : the returned position 
+ */
+
+void SciViewportGet(ScilabXgc,x,y) 
+     struct BCG *ScilabXgc;
+     int *x,*y;
+{
+  if ( ScilabXgc != NULL) 
+  {
+	*x = ScilabXgc->horzsi.nPos;
+	*y = ScilabXgc->vertsi.nPos;
+  }
+  else
+    {
+      *x=0;*y=0;
+    }
+}
+
+
+
+
+void GPopupResize(ScilabXgc,width,height) 
+     struct BCG *ScilabXgc;
+     int *width,*height;
+{
+  RECT rect, rect1;
+  int xof,yof;
+
+  if (ScilabXgc->CWindow != (Window) NULL) 
+  {
+	ScilabXgc->CWindowWidthView  = *width ;
+	ScilabXgc->CWindowHeightView = *height;
+	/* remise a jour de la fenetre */
+	if ( ScilabXgc->CurPixmapStatus == 1 )
+	{
+		CPixmapResize(ScilabXgc->CWindowWidth,ScilabXgc->CWindowHeight);
+	}
+    GetWindowRect (ScilabXgc->hWndParent, &rect) ;
+    GetWindowRect (ScilabXgc->CWindow, &rect1) ;
+    xof = (rect.right-rect.left)- (rect1.right - rect1.left);
+    yof = (rect.bottom-rect.top)- (rect1.bottom -rect1.top );
+    SetWindowPos(ScilabXgc->hWndParent,HWND_TOP,0,0,
+	  ScilabXgc->CWindowWidthView  + xof,
+	  ScilabXgc->CWindowHeightView + yof,
+	  SWP_NOMOVE | SWP_NOZORDER );
+
+	/* mise a jour de la taille des scroll bars */
+	/* changer l'etat de visibilite des scroll bar  */
+	/* suivant l etat on ou off et ajouter un offset d'affichage */
+	ScilabXgc->vertsi.nMax   = ScilabXgc->CWindowHeight;
+	ScilabXgc->vertsi.nPage  = ScilabXgc->CWindowHeightView;
+	ScilabXgc->horzsi.nMax   = ScilabXgc->CWindowWidth;
+	ScilabXgc->horzsi.nPage  = ScilabXgc->CWindowWidthView;
+	SetScrollInfo(ScilabXgc->CWindow,SB_VERT, &(ScilabXgc->vertsi), TRUE);
+	SetScrollInfo(ScilabXgc->CWindow,SB_HORZ, &(ScilabXgc->horzsi), TRUE);
+  }
+}
+
 
 
 /***********************************************
@@ -529,7 +637,116 @@ int ClearClickQueue(win)
   return(0);
 }
 
+/*************************************************
+ * une petite fonction a la peek moi le message 
+ *************************************************/
 
+typedef struct {
+	MSG msg;
+	integer flag;
+} SCISEND;
+
+SCISEND sciSend;
+
+void sciSendMessage(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	sciSend.msg.lParam  = lParam;
+	sciSend.msg.wParam  = wParam;
+	sciSend.msg.message = message;
+	sciSend.msg.hwnd    = hwnd;
+	sciSend.flag        = 1;
+
+}
+
+int sciPeekMessage(MSG *msg)
+{
+	if (sciSend.flag != 0) {
+		msg->message = sciSend.msg.message;
+		msg->lParam  = sciSend.msg.lParam;
+		msg->wParam  = sciSend.msg.wParam;
+		msg->hwnd    = sciSend.msg.hwnd;
+		sciSend.flag = 0;
+		return (1);
+	}
+	else return (0);
+}
+
+
+/****************************************************
+ * Drawing graphic window 
+ ****************************************************/
+
+static void ScilabPaint(HWND hwnd,struct BCG *ScilabGC)
+{
+  /* static paint = 0;*/
+  HDC hdc;
+  PAINTSTRUCT ps;
+  RECT rect;
+  /* paint++; */
+  /** wininfo("Painting %d",paint); **/
+  /** if we are in pixmap mode ? **/
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
+
+  //hdc = BeginPaint(hwnd, &ps);
+  // suprime par Mat
+  hdc = BeginPaint(ScilabGC->CWindow, &ps);
+  if (  ScilabGC->Inside_init != 1 )
+    {
+      SetMapMode(hdc, MM_TEXT);
+      SetBkMode(hdc,TRANSPARENT);
+      GetClientRect(hwnd, &rect);
+      //SetViewportExtEx(hdc, rect.right, rect.bottom,NULL);
+	  SetViewportExtEx(hdc, ScilabGC->CWindowWidth, ScilabGC->CWindowHeight, NULL);
+      DebugGW("==> paint rect %d %d \n", rect.right, rect.bottom);
+      if ( ScilabGC->CurPixmapStatus == 1)
+	{
+	  scig_replay_hdc('W',ScilabGC->CurWindow,ScilabGC->hdcCompat,
+			  ScilabGC->CWindowWidth, ScilabGC->CWindowHeight,1);
+	  C2F(show)(PI0,PI0,PI0,PI0);
+	}
+	  else
+	  {
+		if (ScilabGC->CurResizeStatus == 0)
+			SetViewportOrgEx(hdc,-ScilabGC->horzsi.nPos,-ScilabGC->vertsi.nPos,NULL);
+		scig_replay_hdc('U',ScilabGC->CurWindow,hdc,ScilabGC->CWindowWidth , ScilabGC->CWindowHeight,1);
+	  }
+  }
+  //EndPaint(hwnd, &ps);
+  // supprime par Mat
+  EndPaint(ScilabGC->CWindow, &ps);
+
+  scig_buzy = 0;
+}
+
+/****************************************************
+ * Resize 
+ ****************************************************/
+
+static void ScilabGResize(HWND hwnd,struct BCG *ScilabGC,WPARAM wParam)
+{
+  HDC hdc;
+  PAINTSTRUCT ps;
+  RECT rect;
+  /* wininfo("Resizing"); */
+  /* sciprint("Resising"); */
+  /** We do not paint just check if we must resize the pixmap  **/
+  if ( scig_buzy  == 1 ) return ;
+  scig_buzy =1;
+  if (  ScilabGC->Inside_init != 1 
+	&& ((wParam == SIZE_MAXIMIZED) || (wParam == SIZE_RESTORED )))
+    {
+      HDC hdc1;
+      /** a resize can occur while we are executing a routine 
+	  inside periWin.c : so we must protect the hdc 
+	  XXXX : not useful with scig_resize_pixmap ? **/
+      hdc1=GetDC(ScilabGC->CWindow); 
+      SetGHdc(hdc1,ScilabGC->CWindowWidthView,ScilabGC->CWindowHeightView);
+      scig_resize_pixmap(ScilabGC->CurWindow);
+      SetGHdc((HDC) 0,0,0); 
+    }
+  scig_buzy =0;
+}
 
 /****************************************************
  * The Event Handler for the graphic windows 
@@ -539,10 +756,12 @@ EXPORT LRESULT CALLBACK
 WndGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
   static paint = 0;
-  HDC hdc;
+  HDC hdc, hdc1;
   PAINTSTRUCT ps;
   RECT rect;
   struct BCG *ScilabGC;
+  int deltax=0;
+  int deltay=0;
   ScilabGC = (struct BCG *)GetWindowLong(hwnd, 0);
   switch(message)
     {
@@ -563,8 +782,6 @@ WndGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	  return 0;
 	}
       break;
-    case WM_SETFOCUS: 
-      return(0);
     case WM_COMMAND:
       if (LOWORD(wParam) < NUMMENU)
 	SendGraphMacro(ScilabGC, LOWORD(wParam));
@@ -595,83 +812,168 @@ WndGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	    return 0;
 	  }
       return 0;
+	case WM_CHAR:
+		//sciSendMessage(hwnd, WM_CHAR, wParam, lParam);
+		return(0);
     case WM_LBUTTONDOWN:
       PushClickQueue(ScilabGC->CurWindow,(int) LOWORD(lParam),HIWORD(lParam),0) ;
-      /** wininfo("mouse %d %d,%d",lastc,(int) LOWORD(lParam),HIWORD(lParam));**/
+	  //sciSendMessage(hwnd, WM_CHAR, wParam, lParam);
       return(0);
     case WM_MBUTTONDOWN:
       PushClickQueue(ScilabGC->CurWindow,(int) LOWORD(lParam),HIWORD(lParam),1) ;
-      /** wininfo("mouse %d,%d",(int) LOWORD(lParam),HIWORD(lParam)); **/
+	  //sciSendMessage(hwnd, WM_CHAR, wParam, lParam);
       return(0);
     case WM_RBUTTONDOWN:
       PushClickQueue(ScilabGC->CurWindow,(int) LOWORD(lParam),HIWORD(lParam),2) ;
-      /** wininfo("mouse %d,%d",(int) LOWORD(lParam),HIWORD(lParam)); **/
+	  //sciSendMessage(hwnd, WM_CHAR, wParam, lParam);
       return(0);
-    case WM_CREATE:
+	case WM_CREATE:
       ScilabGC  = ((CREATESTRUCT *)lParam)->lpCreateParams;
       SetWindowLong(hwnd, 0, (LONG)ScilabGC);
       ScilabGC->CWindow = hwnd;
       if ( ScilabGC->lpgw->lptw 
 	   && (ScilabGC->lpgw->lptw->DragPre!=(LPSTR)NULL) 
 	   && (ScilabGC->lpgw->lptw->DragPost!=(LPSTR)NULL) )
-	DragAcceptFiles(hwnd, TRUE);
+	   DragAcceptFiles(hwnd, TRUE);
       return(0);
     case WM_PAINT:
-      paint++;
-      /** wininfo("Painting %d",paint); **/
-      /** if we are in pixmap mode ? **/
-      hdc = BeginPaint(hwnd, &ps);
-      if (  ScilabGC->Inside_init != 1 )
-	{
-	  SetMapMode(hdc, MM_TEXT);
-	  SetBkMode(hdc,TRANSPARENT);
-	  GetClientRect(hwnd, &rect);
-	  SetViewportExtEx(hdc, rect.right, rect.bottom,NULL);
-	  DebugGW("==> paint rect %d %d \n", rect.right, rect.bottom);
-	  if ( ScilabGC->CurPixmapStatus == 1) 
-	    {
-	      scig_replay_hdc('W',ScilabGC->CurWindow,ScilabGC->hdcCompat,
-			      rect.right,rect.bottom,1);
-	      C2F(show)(PI0,PI0,PI0,PI0);
-	    }
+		if (ScilabGC->CurResizeStatus == 1)
+		{
+			ScilabPaint(hwnd,ScilabGC);
+		}
+		else
+		{  
+			ScilabPaint(hwnd,ScilabGC);
+			/*hdc = BeginPaint(ScilabGC->CWindow, &ps);
+			BitBlt(ps.hdc, 0, 0, ScilabGC->CWindowWidthView, ScilabGC->CWindowHeightView,
+				ScilabGC->hdcCompat,ScilabGC->horzsi.nPos,ScilabGC->vertsi.nPos,
+				SRCCOPY);
+			EndPaint(ScilabGC->CWindow, &ps);*/
+		}
+		break;
+	case WM_SIZE:
+	  if (ScilabGC->CurResizeStatus == 0)
+	  {
+		ScilabGC->horzsi.nPage = LOWORD(lParam);
+		ScilabGC->vertsi.nPage = HIWORD(lParam);
+		GetScrollPos(ScilabGC->CWindow,SB_HORZ, &(ScilabGC->horzsi.nPos), TRUE);
+		GetScrollPos(ScilabGC->CWindow,SB_VERT, &(ScilabGC->vertsi.nPos), TRUE);
+	  }
 	  else
-	    scig_replay_hdc('U',ScilabGC->CurWindow,hdc,rect.right,rect.bottom,1);
-	}
-      EndPaint(hwnd, &ps);
-      return 0;
-    case WM_SIZE:
-      /* wininfo("Resizing"); */
-      /* sciprint("Resising"); */
-      /** We do not paint just check if we must resize the pixmap  **/
-      if (  ScilabGC->Inside_init != 1 
-	    && ((wParam == SIZE_MAXIMIZED) || (wParam == SIZE_RESTORED )))
-	{
-	  HDC hdc1;
-	  /** a resize can occur while we are executing a routine 
-	    inside periWin.c : so we must protect the hdc 
-	    XXXX : not useful with scig_resize_pixmap ? **/
-	  hdc1=GetDC(ScilabGC->CWindow); 
-	  SetGHdc(hdc1,ScilabGC->CWindowWidth,ScilabGC->CWindowHeight);
-	  scig_resize_pixmap(ScilabGC->CurWindow);
-	  SetGHdc((HDC) 0,0,0); 
-	}
-      return 0;
+	  {		
+		  /* Pourquoi  ScilabGResize ??? */
+		if (ScilabGC->CurPixmapStatus == 1)
+		  ScilabGResize(hwnd,ScilabGC,wParam);
+		ScilabGC->horzsi.nMax   = LOWORD(lParam);
+		ScilabGC->vertsi.nMax   = HIWORD(lParam);
+		ScilabGC->horzsi.nPage  = ScilabGC->horzsi.nMax;
+		ScilabGC->vertsi.nPage  = ScilabGC->vertsi.nMax;
+	  }
+	  SetScrollInfo(ScilabGC->CWindow,SB_HORZ, &(ScilabGC->horzsi), TRUE);
+	  SetScrollInfo(ScilabGC->CWindow,SB_VERT, &(ScilabGC->vertsi), TRUE);
+	  /* on force le reclacule les positions des scrollbars
+	  et leur validation */
+	  GetScrollInfo(ScilabGC->CWindow,SB_HORZ, &(ScilabGC->horzsi), TRUE);
+	  GetScrollInfo(ScilabGC->CWindow,SB_VERT, &(ScilabGC->vertsi), TRUE);
       break;
+    case WM_HSCROLL: 
+    { 
+        switch (LOWORD(wParam)) 
+        { 
+		  deltax = 0;
+          case SB_PAGEUP: 
+			deltax = ScilabGC->horzsi.nPos;
+			ScilabGC->horzsi.nPos = max(ScilabGC->horzsi.nMin,ScilabGC->horzsi.nPos-50);
+			deltax = deltax - ScilabGC->horzsi.nPos;
+            break;
+		  case SB_PAGEDOWN: 
+			deltax = ScilabGC->horzsi.nPos;
+			ScilabGC->horzsi.nPos = min(ScilabGC->horzsi.nMax - ScilabGC->horzsi.nPage,
+				ScilabGC->horzsi.nPos+50);
+			deltax = deltax - ScilabGC->horzsi.nPos;
+			break; 
+          case SB_LINEUP: 
+			deltax = ScilabGC->horzsi.nPos;
+			ScilabGC->horzsi.nPos = max(ScilabGC->horzsi.nMin,ScilabGC->horzsi.nPos-5);
+			deltax = deltax - ScilabGC->horzsi.nPos;
+            break; 
+          case SB_LINEDOWN: 
+			deltax = ScilabGC->horzsi.nPos;
+			ScilabGC->horzsi.nPos = min(ScilabGC->horzsi.nMax - ScilabGC->horzsi.nPage,
+				ScilabGC->horzsi.nPos+5);
+			deltax = deltax - ScilabGC->horzsi.nPos;
+            break; 
+          case SB_THUMBTRACK: 
+			deltax = ScilabGC->horzsi.nPos;
+			ScilabGC->horzsi.nPos = max(ScilabGC->horzsi.nMin,min(ScilabGC->horzsi.nMax,
+				HIWORD(wParam)));
+			deltax = deltax - ScilabGC->horzsi.nPos;
+            break; 
+          default: 
+			break;
+        } 
+		SetScrollInfo(ScilabGC->CWindow,SB_HORZ, &(ScilabGC->horzsi), TRUE);
+		InvalidateRect(ScilabGC->CWindow,(LPRECT) NULL,TRUE);
+		UpdateWindow(ScilabGC->CWindow);
+    } 
+    break; 
+    case WM_VSCROLL: 
+    { 
+        switch (LOWORD(wParam)) 
+        { 
+		  deltay = 0;
+          case SB_PAGEUP: 
+			deltay = ScilabGC->vertsi.nPos;
+			ScilabGC->vertsi.nPos = max(ScilabGC->vertsi.nMin,ScilabGC->vertsi.nPos-50);
+			deltay = deltay - ScilabGC->vertsi.nPos;
+            break;
+		  case SB_PAGEDOWN: 
+			deltay = ScilabGC->vertsi.nPos;
+			ScilabGC->vertsi.nPos = min(ScilabGC->vertsi.nMax - ScilabGC->vertsi.nPage,
+				ScilabGC->vertsi.nPos+50);
+			deltay = deltay - ScilabGC->vertsi.nPos;
+			break; 
+          case SB_LINEUP: 
+			deltay = ScilabGC->vertsi.nPos;
+			ScilabGC->vertsi.nPos = max(ScilabGC->vertsi.nMin,ScilabGC->vertsi.nPos-5);
+			deltay = deltay - ScilabGC->vertsi.nPos;
+           break; 
+          case SB_LINEDOWN: 
+			deltay = ScilabGC->vertsi.nPos;
+			ScilabGC->vertsi.nPos = min(ScilabGC->vertsi.nMax - ScilabGC->vertsi.nPage,
+				ScilabGC->vertsi.nPos+5); 
+			deltay = deltay - ScilabGC->vertsi.nPos;
+            break; 
+          case SB_THUMBTRACK: 
+			deltay = ScilabGC->vertsi.nPos;
+			ScilabGC->vertsi.nPos = min(ScilabGC->vertsi.nMax,max(ScilabGC->vertsi.nMin,HIWORD(wParam)));
+			deltay = deltay - ScilabGC->vertsi.nPos;
+            break; 
+          default: 
+			deltay = 0;
+			break;
+        }
+		SetScrollInfo(ScilabGC->CWindow,SB_VERT, &(ScilabGC->vertsi), TRUE);
+		InvalidateRect(ScilabGC->CWindow,(LPRECT) NULL,TRUE);
+		UpdateWindow(ScilabGC->CWindow);
+	} 
+    break;
     case WM_DROPFILES:
       if (ScilabGC->lpgw->lptw)
 	DragFunc(ScilabGC->lpgw->lptw, (HDROP)wParam);
       break;
-    case WM_DESTROY:
-      /** sciprint("[destroy gw]"); */
+   case WM_DESTROY:
+      PostQuitMessage(0);
       DebugGW("Je fais un destroy \n");
-      DragAcceptFiles(hwnd, FALSE);
+	  DragAcceptFiles(hwnd, FALSE);
       return 0;
     case WM_CLOSE:
-      /** sciprint("[close gw]"); **/
       DebugGW("Je fais un close \n");
-      C2F(deletewin)(&(ScilabGC->CurWindow));
-      SetWindowLong(hwnd,0,(LONG) 0L);
-      /** XXXXX : PostQuitMessage(0); **/
+	  //TranslateMessage(&message);
+	  //DispatchMessage(&message);
+      PostQuitMessage(0);
+	  C2F(deletewin)(&(ScilabGC->CurWindow));
+	  SetWindowLong(hwnd,0,(LONG) 0L);
       return 0;
     }
   return DefWindowProc(hwnd, message, wParam, lParam);
@@ -728,7 +1030,7 @@ WndParentGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
   TEXTMETRIC tm;
   HDC hdc;
   PAINTSTRUCT ps;
-  RECT rect;
+  RECT rect, rect1;
   struct BCG *ScilabGC;
   ScilabGC = (struct BCG *)GetWindowLong(hwnd, 0);
   switch(message) {
@@ -746,14 +1048,19 @@ WndParentGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     SendMessage(textwin.hWndText, message, wParam, lParam);
     return(0);
   case WM_SETFOCUS: 
-    /** when focus is set in the graphic window we set it to scilab window**/
-    SendMessage(textwin.hWndText, message, wParam, lParam);
+    /** when focus is set in the graphic window we set it to scilab window **/
+    /*************** Matthieu PHILIPPE
+	je retire cette fonction pour pouvoir recuperer
+	les evevenements clavier et les traiter !!
+	SendMessage(textwin.hWndText, message, wParam, lParam); 
+	********************/
+    SetFocus( ScilabGC->CWindow);
     return(0);
   case WM_KEYDOWN:
-    SendMessage(textwin.hWndText, message, wParam, lParam);
+    /*SendMessage(textwin.hWndText, message, wParam, lParam);*/
     return(0);
   case WM_CHAR :
-    SendMessage(textwin.hWndText, message, wParam, lParam);
+   SendMessage(ScilabGC->CWindow, message, wParam, lParam);
     return(0);
   case WM_GETMINMAXINFO:
     /*** Eventuellement a changer XXXXXXX  **/
@@ -780,6 +1087,14 @@ WndParentGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 		 LOWORD(lParam),HIWORD(lParam) -ScilabGC->lpgw->ButtonHeight
 	         - ( rect.bottom - rect.top) , 
 		 SWP_NOZORDER | SWP_NOACTIVATE);
+    GetWindowRect (ScilabGC->Statusbar, &rect1) ;
+    GetClientRect(ScilabGC->hWndParent, &rect);
+    ScilabGC->CWindowWidthView  = rect.right;
+    ScilabGC->CWindowHeightView = rect.bottom - ( rect1.bottom - rect1.top);
+	if (ScilabGC->CurResizeStatus != 0) {
+		ScilabGC->CWindowWidth  = ScilabGC->CWindowWidthView;
+		ScilabGC->CWindowHeight = ScilabGC->CWindowHeightView;
+	}
     return(0);
   case WM_COMMAND:
     /** pass on menu commands */
@@ -788,7 +1103,7 @@ WndParentGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     SendMessage( ScilabGC->CWindow, message, wParam, lParam); 
     return(0);
   case WM_PAINT:
-    {
+    {/* a quoi ca sertt Matthieu ??*/
       hdc = BeginPaint(hwnd, &ps);
       if (ScilabGC->lpgw->ButtonHeight) {
 	HBRUSH hbrush;
@@ -802,7 +1117,7 @@ WndParentGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	LineTo(hdc, rect.right, ScilabGC->lpgw->ButtonHeight-1);
       }
       EndPaint(hwnd, &ps);
-      return 0;
+      break;
     }
   case WM_DROPFILES:
     DragFunc(ScilabGC->lpgw->lptw, (HDROP)wParam);
@@ -819,13 +1134,12 @@ WndParentGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     }
   break;
   case WM_DESTROY:
-    /** sciprint("[==>Destroy de graph Parent]");**/
+	SendMessage( ScilabGC->CWindow,WM_DESTROY,0,0);
     DragAcceptFiles(hwnd, FALSE);
     break;
   case WM_CLOSE:
-    /** sciprint("[==>Close de graph Parent]"); **/
     /** The Graphic window will do the job **/
-    SendMessage( ScilabGC->CWindow,WM_CLOSE,0,0); 
+    SendMessage( ScilabGC->CWindow,WM_CLOSE,0,0);
     return 0;
   }
   return DefWindowProc(hwnd, message, wParam, lParam);

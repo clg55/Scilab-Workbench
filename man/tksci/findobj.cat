@@ -5,8 +5,8 @@ NAME
 
   Author: Bertrand Guiheneuf
 
-  Allows to find a graphic tksci object testing the value of one of its pro-
-  perties.
+  Allows to find a graphic tksci object testing the value of one of its prop-
+  erties.
 
 Usage
   h=findobj(prop,value)
@@ -22,8 +22,8 @@ Output parameters
   handle of the found object.
 
 Description
-  This routine is currentlyt used to find objects knowing their 'tag' pro-
-  perty. It returns handle of the first found object which property 'prop' is
+  This routine is currentlyt used to find objects knowing their 'tag' prop-
+  erty.  It returns handle of the first found object which property 'prop' is
   equal to 'value'. If such an object does not exist, the function returns a
   void matrix.
 

@@ -2,12 +2,6 @@
 .so ../sci.an
 .SH NAME
 flt -  Fast Legendre transform
-.sp
-Author: Paulo Goncalves
-.sp
-Computes the Legendre transform of \fIy\fP  y\f(CR\(ha*\fP(s) = sup\f(CR_{\fPx in X\f(CR}\fP\f(CR[\fPs.x - y(x)\f(CR]\fP
-.sp
-.sp
 .SH Usage
 .sp
 .ft CR
@@ -18,10 +12,6 @@ Computes the Legendre transform of \fIy\fP  y\f(CR\(ha*\fP(s) = sup\f(CR_{\fPx i
 .ft P
 .sp
 .SH Input parameters
-
-
-.RS
-
 .TP
 o 
 \fBx\fP : real valued vector \f(CR[\fP1,N\f(CR]\fP 
@@ -54,9 +44,9 @@ envelope of \fIy\fP, in general \fIM\fP <= \fIN\fP.
 o 
 \fBs\fP : real valued vector \f(CR[\fP1,M\f(CR]\fP  
 Variable of the Legendre transform of \fIy\fP.
-.RE
 
-.SH See also:
+.SH DESCRIPTION
+Computes the Legendre transform of \fIy\fP  y\f(CR\(ha*\fP(s) = sup\f(CR_{\fPx in X\f(CR}\fP\f(CR[\fPs.x - y(x)\f(CR]\fP
 .SH Example:
 \fI Function synthesis \fP
 .sp
@@ -101,4 +91,5 @@ plot2d(s3,u3,17) ; plot2d(s1,u1,18,'001') ; plot2d(s2,u2,19,'001') ;
 .fi 
 .ec
 .ft P
-.sp
+.SH AUTHOR
+Paulo Goncalves

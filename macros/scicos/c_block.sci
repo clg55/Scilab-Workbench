@@ -58,7 +58,7 @@ case 'define' then
   auto=[]
   rpar=[]
   funam='toto'
-  model=list(list(' ',1001),in,out,clkin,clkout,x0,z0,rpar,0,typ,auto,[%t %f],..
+  model=list(list(' ',2001),in,out,clkin,clkout,x0,z0,rpar,0,typ,auto,[%t %f],..
       ' ',list());
   label=list([sci2exp(in);sci2exp(out);	strcat(sci2exp(rpar));funam],..
 	    list([]))

@@ -16,6 +16,8 @@ if fname<>emptystr() then
   cpr=list()
   scs_m=[]
   [path,name,ext]=splitfilepath(fname)
+
+  errcatch(-1,'continue')
   select ext
   case 'cosf'
     exec(fname,-1)
@@ -29,6 +31,11 @@ if fname<>emptystr() then
     ok=%f
     scs_m=list()
     return
+  end
+  if iserror(-1) then
+    errclear(-1)
+    message(name+' cannot be loaded.') 
+    ok=%f;return
   end
   if scs_m==[] then scs_m=x,end //for compatibility
   scs_m(1)(2)=[scs_m(1)(2)(1),path]

@@ -22,7 +22,7 @@ Output parameter
   None
 
 Description
-  This routine can be used to set a GUI object specified property. Property
+  This routine can be used to set a GUI object specified property.  Property
   name are character strings like 'style', 'position' ....  The type of the
   value field depends on the property one aims at setting. For example, the
   'style' property which represents the kind of Object the UI control is (ie

@@ -24,7 +24,7 @@ DESCRIPTION
   1.
 
   The bounds of the flow are given by the elements edge_min_cap and
-  edge_max_cap of the graph list. The value of the minimum capacity and of
+  edge_max_cap of the graph list.  The value of the minimum capacity and of
   the maximum capacity must be non negative and must be integer numbers.  The
   value of the maximum capacity must be greater than or equal to the value of
   the minimum capacity.  If the value of edge_min_cap or edge_max_cap is not

@@ -12,7 +12,7 @@ c
       integer plus,minus,star,dstar,slash,bslash,dot,colon
       integer quote,equal,less,great,insert,extrac
 c
-      double precision sr,si,e1,st
+      double precision sr,si,e1,e2,st
       integer vol,var1(4),var2(4),var3(4),var4(4),volr,rhs1,top0,op
       integer topin
       logical chkvar
@@ -797,6 +797,7 @@ c     get arg2
       top=top-1
       var2(1)=0
       il2=iadr(lstk(top))
+      if(istk(il2).lt.0) il2=iadr(istk(il2+1))
       if(istk(il2).eq.0) then
          call error(220)
          return
@@ -831,6 +832,8 @@ c     get arg2
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
+      ilrs=il1
+      if(il1.lt.0) il1=iadr(istk(il1))
       if(istk(il1).eq.0) then
          call error(220)
          return
@@ -841,22 +844,22 @@ c
 c     .  arg3(arg1)=[] 
          if(m1.eq.-1) then
 c     .    arg3(:)=[] -->[]
-            istk(il1)=1
-            istk(il1+1)=0
-            istk(il1+2)=0
-            istk(il1+3)=0
-            lstk(top+1)=sadr(il1+4)+1
+            istk(ilrs)=1
+            istk(ilrs+1)=0
+            istk(ilrs+2)=0
+            istk(ilrs+3)=0
+            lstk(top+1)=sadr(ilrs+4)+1
             goto 999
          elseif(m1.eq.0) then
 c     .     arg3([])=[]  --> arg3
             volr=istk(id3+mn3)-1
-            istk(il1)=2
-            istk(il1+1)=m3
-            istk(il1+2)=n3
-            istk(il1+3)=it3
-            call icopy(4,var2,1,istk(il1+4),1)
-            call icopy(mn3+1,istk(id3),1,istk(il1+8),1)
-            l1=sadr(il1+9+mn3)
+            istk(ilrs)=2
+            istk(ilrs+1)=m3
+            istk(ilrs+2)=n3
+            istk(ilrs+3)=it3
+            call icopy(4,var2,1,istk(ilrs+4),1)
+            call icopy(mn3+1,istk(id3),1,istk(ilrs+8),1)
+            l1=sadr(ilrs+9+mn3)
             call dcopy(volr*(it3+1),stk(l3r),1,stk(l1),1)
             lstk(top+1)=l1+volr*(it3+1)
             goto 999
@@ -892,8 +895,8 @@ c     .  copy arg2
          call dcopy(volr,stk(lstk(top+1)),1,stk(lstk(top)),1)
 
 c     .  change dimensions
-         istk(il1+1)=m3
-         istk(il1+2)=n3
+         istk(ilrs+1)=m3
+         istk(ilrs+2)=n3
          lstk(top+1)=lstk(top)+volr
          goto 999
       endif
@@ -904,13 +907,13 @@ c     .  arg3([])=arg2
          if(mn2.eq.1) then
 c     .  arg3([])=c  --> arg3
             volr=istk(id3+mn3)-1
-            istk(il1)=2
-            istk(il1+1)=m3
-            istk(il1+2)=n3
-            istk(il1+3)=it3
-            call icopy(4,var2,1,istk(il1+4),1)
-            call icopy(mn3+1,istk(id3),1,istk(il1+8),1)
-            l1=sadr(il1+9+mn3)
+            istk(ilrs)=2
+            istk(ilrs+1)=m3
+            istk(ilrs+2)=n3
+            istk(ilrs+3)=it3
+            call icopy(4,var2,1,istk(ilrs+4),1)
+            call icopy(mn3+1,istk(id3),1,istk(ilrs+8),1)
+            l1=sadr(ilrs+9+mn3)
             call dcopy(volr*(it3+1),stk(l3r),1,stk(l1),1)
             lstk(top+1)=l1+volr*(it3+1)
             goto 999
@@ -1064,11 +1067,11 @@ c     get arg4
 c     get arg3
       var3(1)=0
       il3=iadr(lstk(top))
+      if(istk(il3).lt.0) il3=iadr(istk(il3+1))
       if(istk(il3).eq.0) then
          call error(220)
          return
       endif
-c      if(istk(il3).lt.0) il3=iadr(istk(il3+1))
       m3=istk(il3+1)
       n3=istk(il3+2)
       it3=istk(il3+3)
@@ -1099,6 +1102,7 @@ c      if(istk(il3).lt.0) il3=iadr(istk(il3+1))
 c     get arg2
       top=top-1
       il2=iadr(lstk(top))
+      if(istk(il2).lt.0) il2=iadr(istk(il2+1))
       if(istk(il2).eq.0) then
          call error(220)
          return
@@ -1107,6 +1111,8 @@ c     get arg2
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
+      ilrs=il1
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       if(istk(il1).eq.0) then
          call error(220)
          return
@@ -1117,22 +1123,22 @@ c     get arg1
 c     .  arg4(arg1,arg2)=[]
          if(m1.eq.-1.and.m2.eq.-1) then
 c     .    arg4(:,:)=[] -->[]
-            istk(il1)=1
-            istk(il1+1)=0
-            istk(il1+2)=0
-            istk(il1+3)=0
-            lstk(top+1)=sadr(il1+4)+1
+            istk(ilrs)=1
+            istk(ilrs+1)=0
+            istk(ilrs+2)=0
+            istk(ilrs+3)=0
+            lstk(top+1)=sadr(ilrs+4)+1
             goto 999
          elseif(m1.eq.0.or.m2.eq.0) then
 c     .     arg4([],arg2)=[],  arg4(arg1,[])=[] --> arg4
             volr=istk(id4+mn4)-1
-            istk(il1)=2
-            istk(il1+1)=m4
-            istk(il1+2)=n4
-            istk(il1+3)=it4
-            call icopy(4,var3,1,istk(il1+4),1)
-            call icopy(mn4+1,istk(id4),1,istk(il1+8),1)
-            l1=sadr(il1+9+mn4)
+            istk(ilrs)=2
+            istk(ilrs+1)=m4
+            istk(ilrs+2)=n4
+            istk(ilrs+3)=it4
+            call icopy(4,var3,1,istk(ilrs+4),1)
+            call icopy(mn4+1,istk(id4),1,istk(ilrs+8),1)
+            l1=sadr(ilrs+9+mn4)
             call dcopy(volr*(it4+1),stk(l4r),1,stk(l1),1)
             lstk(top+1)=l1+volr*(it4+1)
             goto 999
@@ -1179,15 +1185,22 @@ c     .        arg4(arg1,1:n4)=[]
 c     .        arg2=1:n4
                if(mi.eq.0) then
 c     .           arg4(1:m4,1:n4)=[] 
-                  istk(il1)=1
-                  istk(il1+1)=0
-                  istk(il1+2)=0
-                  istk(il1+3)=0
-                  lstk(top+1)=sadr(il1+4)+1
+                  istk(ilrs)=1
+                  istk(ilrs+1)=0
+                  istk(ilrs+2)=0
+                  istk(ilrs+3)=0
+                  lstk(top+1)=sadr(ilrs+4)+1
                   goto 999
                else
 c     .           arg4(arg1,1:n4)=[] 
-                  lw=lw2
+c     .           replace arg2 by ":"
+                  il2=iadr(lw2)
+                  istk(il2)=1
+                  istk(il2+1)=-1
+                  istk(il2+2)=-1
+                  istk(il2+3)=0
+c     .
+                  lw=lw2+2
                   call indxg(il2,n4,ilj,nj,mxj,lw,1)
                   if(err.gt.0) return
                   l3r=l4r
@@ -1233,13 +1246,13 @@ c     .  arg4(:,:)=arg3
          endif
 c     .  reshape arg3 according to arg4
          volr=istk(id3+mn3)-1
-         istk(il1)=2
-         istk(il1+1)=m4
-         istk(il1+2)=n4
-         istk(il1+3)=it3
-         call icopy(4,var3,1,istk(il1+4),1)
-         call icopy(mn3+1,istk(id3),1,istk(il1+8),1)
-         l1=sadr(il1+9+mn3)
+         istk(ilrs)=2
+         istk(ilrs+1)=m4
+         istk(ilrs+2)=n4
+         istk(ilrs+3)=it3
+         call icopy(4,var3,1,istk(ilrs+4),1)
+         call icopy(mn3+1,istk(id3),1,istk(ilrs+8),1)
+         l1=sadr(ilrs+9+mn3)
          call dcopy(volr*(it3+1),stk(l3r),1,stk(l1),1)
          lstk(top+1)=l1+volr*(it3+1)
          goto 999
@@ -1255,13 +1268,13 @@ c     .  sizes of arg1 or arg2 dont agree with arg3 sizes
          if(mn3.eq.1) then
             if(mi.eq.0.or.mj.eq.0) then 
                volr=istk(id4+mn4)-1
-               istk(il1)=2
-               istk(il1+1)=m4
-               istk(il1+2)=n4
-               istk(il1+3)=it4
-               call icopy(4,var3,1,istk(il1+4),1)
-               call icopy(mn4+1,istk(id4),1,istk(il1+8),1)
-               l1=sadr(il1+9+mn4)
+               istk(ilrs)=2
+               istk(ilrs+1)=m4
+               istk(ilrs+2)=n4
+               istk(ilrs+3)=it4
+               call icopy(4,var3,1,istk(ilrs+4),1)
+               call icopy(mn4+1,istk(id4),1,istk(ilrs+8),1)
+               l1=sadr(ilrs+9+mn4)
                call dcopy(volr*(it4+1),stk(l4r),1,stk(l1),1)
                lstk(top+1)=l1+volr*(it4+1)
                goto 999

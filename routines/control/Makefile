@@ -34,11 +34,35 @@ include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib
 
-all:: Makefile.mak
+all:: Makefile.mak Makefile.amk
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
 
+Makefile.amk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
+
+#---------------------------------------------------------
+# we do not use optimize for the following files
+#---------------------------------------------------------
+
+hqror2.o : hqror2.f
+	FFLAGS1=`echo $(FFLAGS) | sed -e "s/-O//"` ; \
+	$(FC) $(FFLAGS1) -c $< -o $@
+
+comqr3.o : comqr3.f
+	FFLAGS1=`echo $(FFLAGS) | sed -e "s/-O//"` ; \
+	$(FC) $(FFLAGS1) -c $< -o $@
+
+tql2.o : tql2.f
+	FFLAGS1=`echo $(FFLAGS) | sed -e "s/-O//"` ; \
+	$(FC) $(FFLAGS1) -c $< -o $@
+
+imtql3.o : imtql3.f
+	FFLAGS1=`echo $(FFLAGS) | sed -e "s/-O//"` ; \
+	$(FC) $(FFLAGS1) -c $< -o $@
 

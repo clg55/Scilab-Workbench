@@ -38,4 +38,5 @@
  extern void  C2F(boundingboxPos)();
  extern void  C2F(drawarrowsPos)(); 
  extern void  C2F(loadfamilyPos)();
+ extern void  C2F(queryfamilyPos)();
 /*----------------------------------END---------------------------*/

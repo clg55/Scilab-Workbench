@@ -44,6 +44,7 @@
 /* This file is part of FracLab, a Fractal Analysis Software         */
 
 #include <stdio.h>
+#include <string.h>
 #include "gif.h"
 #include "imgif_const.h"
 extern errno;

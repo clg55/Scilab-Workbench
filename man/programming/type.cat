@@ -23,6 +23,8 @@ DESCRIPTION
 
   55    :  sparse matrix.
 
+  88    :  matrix of integers stored on 1 2 or 4 bytes
+
   1100   :  matrix of character strings.
 
   1111   :  un-compiled function.

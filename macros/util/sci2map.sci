@@ -44,22 +44,12 @@ case 13 then // fct compilee
   error('Not yet implemented')
 case 15 then //listes
   a1=a(1);
-  select a1(1)
-  //-compat next 2 cases retained for list/tlist compatibility
-case 'r' then //matrice de fractions rationnelles
-  num_=a(2),den_=a(3),
-  t__=[t__ ; frac2map(nom,num_,den_)],
-case 'lss' then // systeme d'etat : passage des matrices
-  t_ind__=[2:size(a)-1],
-  t__=list2map(nom,a,t_ind__),
-else //autre cas
   t__=list2map(nom,a,[1:size(a)]),
-end
 case 16 then //listes
   a1=a(1)
   select a1(1)
   case 'r' then //matrice de fractions rationnelles
-    num_=a(2),den_=a(3),
+    num_=a('num'),den_=a('den'),
     t__=[t__ ; frac2map(nom,num_,den_)],
   case 'lss' then // systeme d'etat : passage des matrices
     t_ind__=[2:size(a)-1],

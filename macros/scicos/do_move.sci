@@ -1,12 +1,21 @@
-function scs_m=do_move(scs_m)
+function [%pt,scs_m]=do_move(%pt,scs_m)
 // get a scicos object to move, and move it with connected objects
 //!
 //get block to move
 // Copyright INRIA
 while %t
-  [btn,xc,yc,win,Cmenu]=getclick()
-  if Cmenu<>[] then
-    Cmenu=resume(Cmenu)
+  if %pt==[] then
+    [btn,xc,yc,win,Cmenu]=cosclick()
+    if Cmenu<>[] then
+      %pt=[]
+      [Cmenu]=resume(Cmenu)
+    elseif btn>31 then
+      Cmenu=%tableau(min(100,btn-31));%pt=[xc;yc];
+      if Cmenu==emptystr() then Cmenu=[];%pt=[];end
+      [%win,Cmenu]=resume(win,Cmenu)
+    end
+  else
+    xc=%pt(1);yc=%pt(2);win=%win;%pt=[]
   end
   [k,wh]=getobj(scs_m,[xc;yc])
   if k<>[] then break,end
@@ -654,7 +663,7 @@ while rep(3)==-1 do
   y1(2)=Y1(2)-(yc-yc1)
 end
 [frect1,frect]=xgetech();
-eps=0.04*min(abs(frect(3)-frect(1)),abs(frect(4)-frect(2)))
+eps=16        //0.04*min(abs(frect(3)-frect(1)),abs(frect(4)-frect(2)))
 if abs(x1(1)-x1(2))<eps then
   x1(2)=x1(1)
 elseif abs(x1(2)-x1(3))<eps then

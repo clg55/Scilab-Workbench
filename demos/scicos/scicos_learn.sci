@@ -69,7 +69,6 @@ deff('num=x_choose(items,title,button)',[
 
 getf('SCI/macros/util/getvalue.sci');
 getf('SCI/macros/auto/scicos.sci')
-getf('SCI/macros/util/getclick.sci')
 
 names=['choosefile';
 'do_addnew';
@@ -88,7 +87,8 @@ names=['choosefile';
 'do_view';
 'getlink';
 'move';
-'prt_align']
+'prt_align';
+'cosclick';]
 for k=1:size(names,'r')
   getf('SCI/macros/scicos/'+names(k)+'.sci');
 end

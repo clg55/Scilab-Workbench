@@ -41,7 +41,7 @@ do_callsci()
     NETHELPDIR=$SCI/X11_defaults
     export NETHELPDIR
     tty -s && stty kill '^U' intr '^C' erase '^H' quit '^\' eof '^D' susp '^Z'
-    callsci $* 
+    ./callsci $* 
 }
 
 do_callsci

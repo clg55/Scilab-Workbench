@@ -79,16 +79,31 @@ c     pause,break,abort,eol
             lc=lc+1
             goto 10
          elseif(op.eq.16) then 
+c     set line number (ignored)
             lc=lc+2
             icount=icount-1
             goto 10
          elseif(op.eq.18) then 
+c     mark named argument
             lc=lc+1+nsiz
-c            icount=icount-1
             goto 10
          elseif(op.eq.19) then 
+c     form recursive extraction list
             lc=lc+3
-c            icount=icount-1
+            goto 10
+         elseif(op.eq.21) then 
+c     begrhs (ignored)
+            lc=lc+1
+            icount=icount-1
+            goto 10
+         elseif(op.eq.22) then 
+c     printmode (ignored)
+            lc=lc+2
+            icount=icount-1
+            goto 10
+         elseif(op.eq.23) then 
+c     name2var
+            lc=lc+1+nsiz
             goto 10
          elseif(op.ge.100) then
 c     matfns

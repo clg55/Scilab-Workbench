@@ -18,8 +18,8 @@ Input parameters
        o x :  row-vector [ry,1] Integration path of y. Default value is
          (1:cy)
 Output parameters
-       o SOM : real valued vector [1,cy]  Finite sum approximating the
-         integral of y w.r.t the integration path x
+       o SOM : real valued vector [1,cy]  Finite sum approximating the inte-
+         gral of y w.r.t the integration path x
 See also:
   integ2d
 

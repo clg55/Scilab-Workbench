@@ -1,6 +1,6 @@
       subroutine lspisp(ma,na,nela,inda,i,ni,j,nj,
-c     Copyright INRIA
      $     mb,nb,nelb,indb,mr,nr,nelr,indr,ptrb,ierr)
+c     Copyright INRIA
 c     extract a submatrix from a sparse boolean matrix
 c!
       integer inda(*),indr(*),i(*),j(*),ptrb(*)

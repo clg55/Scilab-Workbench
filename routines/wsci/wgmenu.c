@@ -21,6 +21,10 @@
 #include <process.h>   /* for getpid */
 #endif 
 
+#ifdef __ABSC__
+#define getpid() getpid_()
+#endif
+
 #ifdef __STDC__
 #include <stdlib.h>
 #else
@@ -435,7 +439,10 @@ errorcleanup:
     for ( i = 0 ; i <  NUMMENU ; i++) 
       {
 	if (ScilabGC->lpmw.macro[i] != (BYTE *) 0)
-	  LocalFree(ScilabGC->lpmw.macro[i]);
+	  {
+	    LocalFree(ScilabGC->lpmw.macro[i]);
+	    ScilabGC->lpmw.macro[i]= (BYTE *)0;
+	  }
       }
     GlobalUnlock(hmacro);
     GlobalFree(hmacro);
@@ -479,7 +486,10 @@ void CloseGraphMacros(struct BCG *ScilabGC)
       if (hglobal) {
 	for ( i = 0 ; i <  NUMMENU ; i++) 
 	  if ( ScilabGC->lpmw.macro[i] != (BYTE*) 0)
-	    LocalFree(  ScilabGC->lpmw.macro[i]);
+	    {
+	      LocalFree(  ScilabGC->lpmw.macro[i]);
+	      ScilabGC->lpmw.macro[i]= (BYTE*)0;
+	    }
 	GlobalUnlock(hglobal);
 	GlobalFree(hglobal);
 	ScilabGC->lpmw.macro = (BYTE  **)NULL;
@@ -677,25 +687,41 @@ static void SciDelMenu(  LPMW lpmw,char *name)
 	      for (j = 0; j < Nums1 ; j++ ) 
 		{
 		  id = GetMenuItemID(hSubMenu,j);
+		  /** menu item without a macro : id < 0 **/
+		  if ( id < 0 || is == 0 ) 
+		    continue;
+		  /** XXXX : we accept to delete predefined menus  
 		  if ( id < lpmw->nCountMenu ) 
 		    {
 		      sciprint("Warning : Can't delete predefined menus\r\n");
 		      continue;
 		    }
+		  **/
 		  if ( lpmw->macro[id] != (BYTE*) 0)
-		    LocalFree(  lpmw->macro[id]);
+		    {
+		      LocalFree(  lpmw->macro[id]);
+		      lpmw->macro[id] = (BYTE*) 0;
+		    }
 		}
 	    }
 	  else
 	    {
 	      id = GetMenuItemID(lpmw->hMenu,i);
+	      /** menu item without a macro : id < 0 **/
+	      if ( id < 0 || is == 0 ) 
+		continue;
+	      /** XXXX : we accept to delete predefined menus  
 	      if ( id < lpmw->nCountMenu ) 
 		{
 		  sciprint("Warning : Can't delete predefined menus\r\n");
 		  continue;
 		}
+	      **/
 	      if ( lpmw->macro[id] != (BYTE*) 0)
-		LocalFree(  lpmw->macro[id]);
+		{
+		  LocalFree(  lpmw->macro[id]);
+		  lpmw->macro[id] = (BYTE*) 0;
+		}
 	    }
 	  DeleteMenu(lpmw->hMenu,i, MF_BYPOSITION);
 	  return;
@@ -859,6 +885,7 @@ static char *Print_Formats[] = {
   "Postscript No Preamble",
   "Postscript-Latex",
   "Xfig",
+  "GIF",
 };
 
 /****************************************************
@@ -886,7 +913,7 @@ ExportStyleDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
 		       ls.land, 0L);
     if ( ls.use_printer == 0) 
       {
-	for ( i = 0 ; i < 4 ; i++ ) 
+	for ( i = 0 ; i < 5 ; i++ ) 
 	  SendDlgItemMessage(hdlg, PS_TYPE, CB_ADDSTRING, 0, 
 			     (LPARAM)((LPSTR) Print_Formats[i]));
 	SendDlgItemMessage(hdlg, PS_TYPE, CB_SETCURSEL, 
@@ -997,6 +1024,12 @@ static void SavePs(struct BCG *ScilabGC)
       SetCursor(LoadCursor(NULL,IDC_WAIT));
       scig_tops(ScilabGC->CurWindow,ls.colored,filename,"Fig");
       wininfo("end of Xfig file generation");      
+      SetCursor(LoadCursor(NULL,IDC_CROSS));  
+      break;
+    case 4:
+      SetCursor(LoadCursor(NULL,IDC_WAIT));
+      scig_tops(ScilabGC->CurWindow,ls.colored,filename,"GIF");
+      wininfo("end of GIF file generation");      
       SetCursor(LoadCursor(NULL,IDC_CROSS));  
       break;
     }

@@ -14,6 +14,8 @@ c                <>0 : b(ierr)=0
 c!
 c     Copyright INRIA
       double precision ar(*),br(*),bi(*),rr(*),ri(*)
+c     wr, wi used because rr, ri may share same mem as ar,ai or br,bi
+      double precision wr,wi
       integer ia,ib,ir,n
       jr=1
       jb=1
@@ -21,7 +23,9 @@ c     Copyright INRIA
       ierr=0
       if (ia.eq.0) then
          do 10 k=1,n
-            call dwdiv(ar(ja),br(jb),bi(jb),rr(jr),ri(jr),ierr1)
+            call dwdiv(ar(ja),br(jb),bi(jb),wr,wi,ierr1)
+            rr(jr)=wr
+            ri(jr)=wi
             if(ierr1.ne.0) then
                ierr=k
 c               return
@@ -35,13 +39,17 @@ c               return
 c            return
          endif
          do 11 k=1,n
-            call dwdiv(ar(ja),br(jb),bi(jb),rr(jr),ri(jr),ierr1)
+            call dwdiv(ar(ja),br(jb),bi(jb),wr,wi,ierr1)
+            rr(jr)=wr
+            ri(jr)=wi
             jr=jr+ir
             ja=ja+ia
  11      continue
       else
          do 12 k=1,n
-            call dwdiv(ar(ja),br(jb),bi(jb),rr(jr),ri(jr),ierr1)
+            call dwdiv(ar(ja),br(jb),bi(jb),wr,wi,ierr1)
+            rr(jr)=wr
+            ri(jr)=wi
             if(ierr1.ne.0) then
                ierr=k
 c               return

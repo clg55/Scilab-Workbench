@@ -36,8 +36,8 @@ DESCRIPTION
   lnum) / (product entries in lden).
 
   If flag is 'c' (resp. 'd'), the roots of pol are refected wrt the imaginary
-  axis (resp. the unit circle), i.e. the factors in lnum are stable polynomi-
-  als.
+  axis (resp. the unit circle), i.e.  the factors in lnum are stable polyno-
+  mials.
 
   Same thing if factors is invoked with a rational arguments: the entries in
   lnum and lden are stable polynomials if flag is given. R2=factors(R1,'c')

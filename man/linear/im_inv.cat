@@ -11,8 +11,8 @@ PARAMETERS
 
   A,B       : two real or complex matrices with equal number of columns
 
-  X         : orthogonal or unitary square matrix of order equal to the
-            number of columns of A
+  X         : orthogonal or unitary square matrix of order equal to the num-
+            ber of columns of A
 
   dim       : integer (dimension of subspace)
 

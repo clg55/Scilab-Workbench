@@ -6,7 +6,8 @@ LIBRARY = $(SCIDIR)/libs/tksci.a
 
 OBJSF = 
 
-OBJSC  = tksci.o TK_ScilabCallback.o \
+OBJSC  = tksci.o tksci_SciInterf.o \
+	TK_ScilabCallback.o \
 	tksci_SciInterf.o \
 	LAB_TK_DoOneEvent.o \
 	LAB_TK_EvalFile.o \
@@ -31,6 +32,8 @@ OBJSC  = tksci.o TK_ScilabCallback.o \
 include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS) $(XFLAGS) $(TK_INC_PATH) $(TCL_INC_PATH) -I. -I../fraclab
+
+FFLAGS = $(FC_OPTIONS)
 
 include ../Make.lib
 

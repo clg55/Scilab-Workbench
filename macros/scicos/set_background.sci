@@ -5,3 +5,4 @@ if options('Background')<>[] then //compatibility
 else
   xset('background',8)
 end
+

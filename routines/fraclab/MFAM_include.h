@@ -63,7 +63,11 @@
 #if defined(_MSC_VER) 
 #include <sys\utime.h>
 #else /* _MSC_VER */
+#ifndef __ABSC__
 #include <sys/time.h>
+#else
+#include <time.h>
+#endif
 #endif /* _MSC_VER */
 
 #endif /* __CYGWIN32__ */

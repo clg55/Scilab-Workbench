@@ -1,5 +1,5 @@
       subroutine scope(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
-     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+     &     rpar,nrpar,ipar,nipar,u,nu)
 c     Copyright INRIA
 c     Scicos block simulator
 c     ipar(1) = win_num
@@ -17,9 +17,9 @@ c     rpar(2)=ymin
 c     rpar(3)=ymax
 c     rpar(4)=periode
 c
-      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*)
       integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
-      integer nipar,nu,ny
+      integer nipar,nu
 
 c
 c
@@ -52,13 +52,6 @@ c     compatibility
          iwd=1+nipar-3
       endif
 c     
-         call dr1('xgetdr'//char(0),name,v,v,v,v,v,v,
-     $        dv,dv,dv,dv)
-         if(name(1:3).ne.'Rec') then
-            call dr1('xsetdr'//char(0),'Rec'//char(0),v,v,v,v,v,v,
-     $           dv,dv,dv,dv)
-         endif
-
 
       if((flag.eq.1.and.nevprt.gt.0).or.(flag.le.2)) then
          dt=rpar(1)
@@ -158,13 +151,10 @@ c
          n1=int(t)/per
          if(t.le.0.0d0) n1=n1-1
          call sciwin()
-         call dr1('xget'//char(0),'window'//char(0),verb,cur,na,v,v,v,
+         call dr1('xset'//char(0),'window'//char(0),wid,v,v,v,v,v,
      $        dv,dv,dv,dv)
-         if(cur.ne.wid) then
-            call dr1('xset'//char(0),'window'//char(0),wid,v,v,v,v,v,
-     $           dv,dv,dv,dv)
-         endif
-
+         call dr1('xsetdr'//char(0),'Rec'//char(0),v,v,v,v,v,v,
+     $        dv,dv,dv,dv)
          if(ipar(iwp).ge.0) then
             call dr1('xset'//char(0),'wpos'//char(0),ipar(iwp),
      $           ipar(iwp+1),v,v,v,v,dv,dv,dv,dv)
@@ -202,7 +192,7 @@ c     to force dimensions update
          wid=ipar(1)
          N=ipar(3)
          K=int(z(1))
-         if(K.le.1) return
+         if(K.lt.1) return
          call dr1('xget'//char(0),'window'//char(0),verb,cur,na,v,v,v,
      $        dv,dv,dv,dv)
          if(cur.ne.wid) then
@@ -216,8 +206,4 @@ c     to force dimensions update
      &           1,K-1,v,z(2),z(2+N+(i-1)*N),dv,dv)
  30      continue
       endif
-      call dr1('xsetdr'//char(0),name,v,v,v,v,v,v,
-     $     dv,dv,dv,dv)
-
-
       end

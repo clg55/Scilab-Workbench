@@ -718,6 +718,33 @@ void StoreGray1(name,  z, n1, n2, strflag, brect, aaint)
 }
 
 
+
+void StoreGray2(name,  z, n1, n2, xrect)
+     char *name;
+     double *z;
+     integer *n1;
+     integer *n2;
+     double *xrect;
+{
+  struct gray_rec_2 *lplot;
+  lplot= ((struct gray_rec_2 *) MALLOC(sizeof(struct gray_rec_2)));
+  if (lplot != NULL)
+    {
+      lplot->n1= *n1;
+      lplot->n2= *n2;
+      if ( 
+	  CopyVectC(&(lplot->name), name,((int)strlen(name))+1) &&
+	  CopyVectF(&(lplot->z), z,(*n1)*(*n2)) &&
+	  CopyVectF(&(lplot->xrect),xrect,4L) 
+	  ) 
+	{
+	  Store(name,(char *) lplot);
+	  return;}
+    }
+  Scistring("\n Store Plot (storegray): No more place \n");
+}
+
+
 /*---------------------------------------------------------------------
 \encadre{Le cas des champs de vecteurs}
 ---------------------------------------------------------------------------*/
@@ -848,7 +875,7 @@ void StoreXgc(winnumber)
 
   C2F(dr)("xget","window",&verbose,&win,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   if ( win != winnumber) 
-      C2F(dr)("xset","window",&verbose,&winnumber,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+      C2F(dr)("xset","window",&winnumber,&narg,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 
   C2F(dr)("xget","font",&verbose,fontid,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr1)("xset","font",fontid,fontid+1,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
@@ -985,6 +1012,15 @@ void ShowGray1(plot)
 
 }
 
+void ShowGray2(plot)
+     char *plot;
+{
+  struct gray_rec_2 *theplot;
+  theplot=(struct gray_rec_2 *) plot;
+  sciprint("%s \r\n",theplot->name);
+
+}
+
 void ShowParam3D(plot)
      char *plot;
 {
@@ -1060,6 +1096,7 @@ static ShowTable ShTable[] ={
     {"fec",ShowFec},
     {"gray",ShowGray},
     {"gray1",ShowGray1},
+    {"gray2",ShowGray2},
     {"param3d",ShowParam3D},
     {"param3d1",ShowParam3D1},
     {"plot2d",Show2D},
@@ -1215,6 +1252,16 @@ void CleanGray(plot)
   FREE(theplot->brect_kp);FREE(theplot->aaint_kp);   
 }
 
+void CleanGray2(plot)
+     char *plot;
+{
+  struct gray_rec_2 *theplot;
+  theplot=(struct gray_rec_2 *) plot;
+  FREE(theplot->name);
+  FREE(theplot->z);
+  FREE(theplot->xrect);
+}
+
 void CleanParam3D(plot)
      char *plot;
 {
@@ -1321,6 +1368,7 @@ static CleanTable CTable[] ={
     {"fec",CleanFec},
     {"gray",CleanGray},
     {"gray1",CleanGray}, /** same for gray and gray1 **/
+    {"gray2",CleanGray2}, 
     {"param3d",CleanParam3D},
     {"param3d1",CleanParam3D1},
     {"plot2d",Clean2D},
@@ -1699,6 +1747,7 @@ static SCTable SCCTable[] ={
   {"fec", SCfec},
   {"gray", SCgray},
   {"gray1",SCgray},
+  {"gray2",SCvoid },
   {"param3d",SCvoid},
   {"param3d1",SCvoid},
   {"plot2d",SC2D},
@@ -1858,6 +1907,7 @@ static UnSCTable UnSCCTable[] ={
   {"fec", UnSCfec},
   {"gray", UnSCgray},
   {"gray1", UnSCgray},
+  {"gray2", UnSCvoid},
   {"param3d",UnSCvoid},
   {"param3d1",UnSCvoid},
   {"plot2d",UnSC2D},
@@ -2156,6 +2206,17 @@ void ReplayGray1(theplot)
 }
 
 
+
+void ReplayGray2(theplot)
+     char *theplot;
+{
+  struct gray_rec_2 *pl3d;
+  pl3d= (struct gray_rec_2 *)theplot;
+  C2F(xgray2)(pl3d->z,&pl3d->n1,&pl3d->n2,
+	     pl3d->xrect);
+}
+
+
 void ReplayParam3D(theplot)
      char *theplot;
 {
@@ -2313,6 +2374,7 @@ static ReplayTable RTable[] ={
     {"fec",ReplayFec},
     {"gray",ReplayGray},
     {"gray1",ReplayGray1},
+    {"gray2",ReplayGray2},
     {"param3d",ReplayParam3D},
     {"param3d1",ReplayParam3D1},
     {"plot2d",Replay2D},
@@ -2336,7 +2398,8 @@ static void GReplay(type, plot)
        if ( j == 0 ) 
 	 { 
 	   (*(RTable[i].replay))(plot);
-	   return;}
+	   return;
+	 }
        else 
 	 { if ( j <= 0)
 	     {

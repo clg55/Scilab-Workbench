@@ -28,7 +28,7 @@ c!
       double precision dlamch
       real slamch
 c
-      common /global/ p, qp, k, qk, svk, sr, si, u,
+      common /gloglo/ p, qp, k, qk, svk, sr, si, u,
      * v, a, b, c, d, a1, a2, a3, a6, a7, e, f, g,
      * h, szr, szi, lzr, lzi, eta, are, mre, n, nn
       double precision p(101), qp(101), k(101),

@@ -143,6 +143,11 @@ struct gray_rec {char *name,*strflag;
 		 char *strflag_kp;
 		 } ;
 
+struct gray_rec_2 {char *name;
+		 double *z,*xrect;
+		 integer   n1,n2;
+		 } ;
+
 /*---------------------------------------------------------------------
 \encadre{Le cas des champs de vecteurs}
 ---------------------------------------------------------------------------*/

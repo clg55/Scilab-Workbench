@@ -212,7 +212,7 @@ x = morlet(0.1,128) ;
 .ft CR
 .nf
 [wtMorlet,scale,f,scaloMorlet] = contwt(x,0.01,0.5,128,8) ;
-viewmat(scaloMorlet,[1 1 24]) ;
+viewmat(scalomor,1:257,1:128);
 .fi 
 .ec
 .ft P
@@ -222,7 +222,7 @@ viewmat(scaloMorlet,[1 1 24]) ;
 .ft CR
 .nf
 [wtMex,scale,f,scaloMex] = contwt(x,0.01,0.5,128,0) ;
-viewmat(scaloMex,[1 1 24]) ;
+viewmat(scaloMex,1:257,1:128);
 .fi 
 .ec
 .ft P

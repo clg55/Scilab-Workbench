@@ -22,4 +22,4 @@ DESCRIPTION
   function.
 
 SEE ALSO
-  file, readb, write, binary, write4b
+  file, readb, write, mput, write4b

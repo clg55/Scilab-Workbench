@@ -52,8 +52,8 @@ static Widget QuitEntry;
 static Widget metanetMenuGraph;
 static Widget CharacteristicsEntry, FindArcEntry, FindNodeEntry; 
 static Widget GraphicsEntry, ModifyGraphEntry;
-static Widget PreferenceInternalEntry, PreferenceNodeNamesEntry;
-static Widget PreferenceArcNamesEntry;
+static Widget PreferenceNodeDisp[3];
+static Widget PreferenceArcDisp[9];
 
 static Widget metanetMenuModify;
 static Widget AttributesEntry, DeleteObjectEntry;
@@ -102,8 +102,8 @@ Widget w;
 XtPointer number, garbage;
 {
   Arg arglist[1];
-  Cardinal num_args = 0;
   int num = (int)number;
+  int i;
 
   switch (num) {
   case 0:
@@ -122,48 +122,247 @@ XtPointer number, garbage;
     ModifyGraph();
     break;
   case 5: 
-    if (intDisplay) {
-      XtSetArg(arglist[num_args], XtNleftBitmap, None);
-      intDisplay = 0;
+    if (nodeStrDisplay == INT_NODEDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      nodeStrDisplay = NODISP;
     }
     else {
-      XtSetArg(arglist[num_args], XtNleftBitmap, mark);
-      intDisplay = 1;
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 3; i++) {
+	if (i != INT_NODEDISP) {
+	  XtSetValues(PreferenceNodeDisp[i], arglist, 1);
+	}
+      }
+      nodeStrDisplay = INT_NODEDISP;
     }
-    num_args++;
-    XtSetValues(w, arglist, num_args);
     ClearDraw();
     DrawGraph(theGraph);
     break;
   case 6:
-    if (arcNameDisplay) {
-      XtSetArg(arglist[num_args], XtNleftBitmap, None);
-      arcNameDisplay = 0;
+    if (nodeStrDisplay == NAME_NODEDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      nodeStrDisplay = NODISP;
     }
     else {
-      XtSetArg(arglist[num_args], XtNleftBitmap, mark);
-      arcNameDisplay = 1;
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 3; i++) {
+	if (i != NAME_NODEDISP) {
+	  XtSetValues(PreferenceNodeDisp[i], arglist, 1);
+	}
+      }
+      nodeStrDisplay = NAME_NODEDISP;
     }
-    num_args++;
-    XtSetValues(w, arglist, num_args);
     ClearDraw();
     DrawGraph(theGraph);
     break;
   case 7:
-    if (nodeNameDisplay) {
-      XtSetArg(arglist[num_args], XtNleftBitmap, None);
-      nodeNameDisplay = 0;
+    if (nodeStrDisplay == DEMAND_NODEDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      nodeStrDisplay = NODISP;
     }
     else {
-      XtSetArg(arglist[num_args], XtNleftBitmap, mark);
-      nodeNameDisplay = 1;
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 3; i++) {
+	if (i != DEMAND_NODEDISP) {
+	  XtSetValues(PreferenceNodeDisp[i], arglist, 1);
+	}
+      }
+      nodeStrDisplay = DEMAND_NODEDISP;
     }
-    num_args++;
-    XtSetValues(w, arglist, num_args);
+
     ClearDraw();
     DrawGraph(theGraph);
     break;
-  }
+  case 8:
+    if (arcStrDisplay == INT_ARCDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      arcStrDisplay = NODISP;
+    }
+    else {
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 9; i++) {
+	if (i != INT_ARCDISP) {
+	  XtSetValues(PreferenceArcDisp[i], arglist, 1);
+	}
+      }
+      arcStrDisplay = INT_ARCDISP;
+    }
+    ClearDraw();
+    DrawGraph(theGraph);
+    break;
+  case 9:
+    if (arcStrDisplay == NAME_ARCDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      arcStrDisplay = NODISP;
+    }
+    else {
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 9; i++) {
+	if (i != NAME_ARCDISP) {
+	  XtSetValues(PreferenceArcDisp[i], arglist, 1);
+	}
+      }
+      arcStrDisplay = NAME_ARCDISP;
+    }
+    ClearDraw();
+    DrawGraph(theGraph);
+    break;
+  case 10:
+    if (arcStrDisplay == COST_ARCDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      arcStrDisplay = NODISP;
+    }
+    else {
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 9; i++) {
+	if (i != COST_ARCDISP) {
+	  XtSetValues(PreferenceArcDisp[i], arglist, 1);
+	}
+      }
+      arcStrDisplay = COST_ARCDISP;
+    }
+    ClearDraw();
+    DrawGraph(theGraph);
+    break;
+  case 11:
+    if (arcStrDisplay == MINCAP_ARCDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      arcStrDisplay = NODISP;
+    }
+    else {
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 9; i++) {
+	if (i != MINCAP_ARCDISP) {
+	  XtSetValues(PreferenceArcDisp[i], arglist, 1);
+	}
+      }
+      arcStrDisplay = MINCAP_ARCDISP;
+    }
+    ClearDraw();
+    DrawGraph(theGraph);
+    break;
+  case 12:
+    if (arcStrDisplay == MAXCAP_ARCDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      arcStrDisplay = NODISP;
+    }
+    else {
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 9; i++) {
+	if (i != MAXCAP_ARCDISP) {
+	  XtSetValues(PreferenceArcDisp[i], arglist, 1);
+	}
+      }
+      arcStrDisplay = MAXCAP_ARCDISP;
+    }
+    ClearDraw();
+    DrawGraph(theGraph);
+    break;
+  case 13:
+    if (arcStrDisplay == LENGTH_ARCDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      arcStrDisplay = NODISP;
+    }
+    else {
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 9; i++) {
+	if (i != LENGTH_ARCDISP) {
+	  XtSetValues(PreferenceArcDisp[i], arglist, 1);
+	}
+      }
+      arcStrDisplay = LENGTH_ARCDISP;
+    }
+    ClearDraw();
+    DrawGraph(theGraph);
+    break;
+  case 14:
+    if (arcStrDisplay == QWEIGHT_ARCDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      arcStrDisplay = NODISP;
+    }
+    else {
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 9; i++) {
+	if (i != QWEIGHT_ARCDISP) {
+	  XtSetValues(PreferenceArcDisp[i], arglist, 1);
+	}
+      }
+      arcStrDisplay = QWEIGHT_ARCDISP;
+    }
+    ClearDraw();
+    DrawGraph(theGraph);
+    break;
+  case 15:
+    if (arcStrDisplay == QORIG_ARCDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      arcStrDisplay = NODISP;
+    }
+    else {
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 9; i++) {
+	if (i != QORIG_ARCDISP) {
+	  XtSetValues(PreferenceArcDisp[i], arglist, 1);
+	}
+      }
+      arcStrDisplay = QORIG_ARCDISP;
+    }
+    ClearDraw();
+    DrawGraph(theGraph);
+    break;
+  case 16:
+    if (arcStrDisplay == WEIGHT_ARCDISP) {
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      XtSetValues(w, arglist, 1);
+      arcStrDisplay = NODISP;
+    }
+    else {
+      XtSetArg(arglist[0], XtNleftBitmap, mark);
+      XtSetValues(w, arglist, 1);
+      XtSetArg(arglist[0], XtNleftBitmap, None);
+      for (i = 0; i < 9; i++) {
+	if (i != WEIGHT_ARCDISP) {
+	  XtSetValues(PreferenceArcDisp[i], arglist, 1);
+	}
+      }
+      arcStrDisplay = WEIGHT_ARCDISP;
+    }
+    ClearDraw();
+    DrawGraph(theGraph);
+    break;
+    }
 }
 
 void ModifySelect(w, number, garbage)
@@ -394,46 +593,191 @@ void CreateMenus()
 			menuGraph, args, iargs);
 
   iargs = 0;
-  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "Use internal numbers as names"); 
+  XtSetArg(args[iargs], XtNlabel, "Node display");
   iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  if (intDisplay) {
+  XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			menuGraph, args, iargs);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "internal number"); iargs++;
+
+  if (nodeStrDisplay == INT_NODEDISP) {
     XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
   }
-  PreferenceInternalEntry = 
+  PreferenceNodeDisp[INT_NODEDISP] = 
     XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
 			  menuGraph, args, iargs);
-  XtAddCallback(PreferenceInternalEntry, XtNcallback, GraphSelect, 
+  XtAddCallback(PreferenceNodeDisp[INT_NODEDISP], XtNcallback, GraphSelect, 
 		(XtPointer) 5); 
 
   iargs = 0;
   XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "Display arc names"); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  if (arcNameDisplay) {
+  XtSetArg(args[iargs], XtNlabel, "name"); iargs++;
+
+  if (nodeStrDisplay == NAME_NODEDISP) {
     XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
   }
-  PreferenceArcNamesEntry = 
+  PreferenceNodeDisp[NAME_NODEDISP] = 
     XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
 			  menuGraph, args, iargs);
-  XtAddCallback(PreferenceArcNamesEntry, XtNcallback, GraphSelect, 
+  XtAddCallback(PreferenceNodeDisp[NAME_NODEDISP], XtNcallback, GraphSelect, 
 		(XtPointer) 6); 
 
   iargs = 0;
   XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "Display node names"); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  if (nodeNameDisplay) {
+  XtSetArg(args[iargs], XtNlabel, "demand"); iargs++;
+
+  if (nodeStrDisplay == DEMAND_NODEDISP) {
     XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
   }
-  PreferenceNodeNamesEntry = 
+  PreferenceNodeDisp[DEMAND_NODEDISP] = 
     XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
 			  menuGraph, args, iargs);
-  XtAddCallback(PreferenceNodeNamesEntry, XtNcallback, GraphSelect, 
+  XtAddCallback(PreferenceNodeDisp[DEMAND_NODEDISP], XtNcallback, GraphSelect, 
 		(XtPointer) 7); 
- 
-  /* Modify Menu */
+
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuGraph, args, iargs);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Arc display");
+  iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			menuGraph, args, iargs);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "internal number"); iargs++;
+
+  if (arcStrDisplay == INT_ARCDISP) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcDisp[INT_ARCDISP] = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcDisp[INT_ARCDISP], XtNcallback, GraphSelect, 
+		(XtPointer) 8); 
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "name"); iargs++;
+
+  if (arcStrDisplay == NAME_ARCDISP) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcDisp[NAME_ARCDISP] = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcDisp[NAME_ARCDISP], XtNcallback, GraphSelect, 
+		(XtPointer) 9); 
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "cost"); iargs++;
+
+  if (arcStrDisplay == COST_ARCDISP) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcDisp[COST_ARCDISP] = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcDisp[COST_ARCDISP], XtNcallback, GraphSelect, 
+		(XtPointer) 10); 
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "minimum capacity"); iargs++;
+
+  if (arcStrDisplay == MINCAP_ARCDISP) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcDisp[MINCAP_ARCDISP] = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcDisp[MINCAP_ARCDISP], XtNcallback, GraphSelect, 
+		(XtPointer) 11); 
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "maximum capacity"); iargs++;
+
+  if (arcStrDisplay == MAXCAP_ARCDISP) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcDisp[MAXCAP_ARCDISP] = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcDisp[MAXCAP_ARCDISP], XtNcallback, GraphSelect, 
+		(XtPointer) 12); 
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "length"); iargs++;
+
+  if (arcStrDisplay == LENGTH_ARCDISP) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcDisp[LENGTH_ARCDISP] = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcDisp[LENGTH_ARCDISP], XtNcallback, GraphSelect, 
+		(XtPointer) 13); 
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "quadratic weight"); iargs++;
+
+  if (arcStrDisplay == QWEIGHT_ARCDISP) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcDisp[QWEIGHT_ARCDISP] = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcDisp[QWEIGHT_ARCDISP], XtNcallback, GraphSelect, 
+		(XtPointer) 14); 
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "quadratic origin"); iargs++;
+
+  if (arcStrDisplay == QORIG_ARCDISP) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcDisp[QORIG_ARCDISP] = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcDisp[QORIG_ARCDISP], XtNcallback, GraphSelect, 
+		(XtPointer) 15); 
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "weight"); iargs++;
+
+  if (arcStrDisplay == WEIGHT_ARCDISP) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcDisp[WEIGHT_ARCDISP] = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcDisp[WEIGHT_ARCDISP], XtNcallback, GraphSelect, 
+		(XtPointer) 16); 
+
+   /* Modify Menu */
 
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, "Modify"); iargs++;

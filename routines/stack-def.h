@@ -6,7 +6,7 @@
 #ifdef FORDLL 
 #define IMPORT  __declspec (dllimport)
 #else 
-#define IMPORT 
+#define IMPORT extern
 #endif
 
 
@@ -14,10 +14,10 @@
 
 #define csiz 63  
 #define bsiz 4096  
-#define isiz 1024
+#define isizt 1200
 #define psiz 256  
 #define nsiz 6  
-#define lsiz 8192 
+#define lsiz 16384 
 #define nlgh nsiz*4  
 #define vsiz 2 
 #define intersiz 60
@@ -28,8 +28,8 @@ IMPORT struct {
 
 
 IMPORT struct {
-    int bot, top, idstk[nsiz*isiz], lstk[isiz], leps, 
-	    bbot, bot0, infstk[isiz];
+    int bot, top, idstk[nsiz*isizt], lstk[isizt], leps, 
+	    bbot, bot0, infstk[isizt], gbot, gtop, isiz;
 } C2F(vstk);
 
 

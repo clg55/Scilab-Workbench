@@ -4,58 +4,56 @@
 xclick - wait for a mouse click
 .SH CALLING SEQUENCE
 .nf
-[c_i,c_x,c_y]=xclick([flag])
-[c_i,c_x,c_y,c_w]=xclick([flag])
 [c_i,c_x,c_y,c_w,c_m]=xclick([flag])
 .fi
 .SH PARAMETERS
-.TP 10
+.TP 9
 c_i
-: integer (button number)
-.TP 15
+: integer, mouse button number.
+.TP
 c_x,c_y
-: real scalars (position) 
+: real scalars, position of the mouse.
 .TP 
 c_w
-: integer (window number)
+: integer, window number.
 .TP 
 c_m
-: Character string (menu callback)
+: string, menu callback.
 .TP
 flag
-: an integer. If present, the click event queue is not cleared when entering xclick
+: integer. If present, the click event queue is not cleared when entering 
+xclick.
 .SH DESCRIPTION
-if called with 3 lhs arguments waits for a mouse click in the current
-graphic window 
+\fVxclick\fR waits for a mouse click in the graphics window.
+
+If it is called with 3 left hand side arguments, it waits for a mouse click 
+in the current graphics window.
 .LP
-if called with 4 or 5 lhs arguments waits for a mouse click in any graphic
-window 
+If it is called with 4 or 5 left hand side arguments, it waits for a mouse 
+click in any graphics window.
 .LP
-returned values:
-.TP
+The returned values are described below.
+.TP 9
 c_i 
-: an integer which gives the number of the mouse button that was pressed [0,1,2] (for [left,middle,right]) or i=-1 in case of problems with xclick.
+: an integer which gives the number of the mouse button that was pressed 
+0, 1 or 2 (for left, middle and right) or -1 in case of problems with xclick.
 .TP
 c_x,c_y
-: the coordinates in the current graphic scale 
-of the position of the mouse click.
+: the coordinates of the position of the mouse click in the current graphics 
+scale.
 .TP 
 c_w
-: the window number where the click has occurred
+: the window number where the click has occurred.
 .TP 
 c_m
-: Character string associated with a dynamic menu. If xclick returns
-due to a click on a menu, \fVc_i\fR, \fVc_x\fR, \fVc_y,\fR \fVc_w\fR take
+: string associated with a dynamic menu. If xclick returns
+due to a click on a menu, \fVc_i\fR, \fVc_x\fR, \fVc_y,\fR and \fVc_w\fR take
 arbitrary values.
 .SH KNOWN TROUBLES
-This function can return the message 
-\fVCan't grab the pointer\fR if the graphic window is iconified when 
-calling the function \fVxclick\fR.
+\fVxclick\fR can return the message 
+"Can't grab the pointer" if the graphics window is iconified when 
+calling it.
 .SH SEE ALSO
-locate
+locate, xgetmouse
 .SH AUTHOR
 J.Ph.C.
-
-
-
-

@@ -47,11 +47,13 @@ OpTab keytab_1[] ={
   {"xget", (func)C2F(dr)},
   {"xgetdr", (func)C2F(dr)},
   {"xgetmouse",xgetmouse_1},
+  {"xgfont",(func)C2F(dr)},
   {"xinit",(func)C2F(dr)},
   {"xlfont",(func)C2F(dr)},
   {"xlines",drawpolyline_1},
   {"xliness",fillpolylines_1},
   {"xmarks",drawpolymark_1},
+  {"xname", (func) C2F(dr)},
   {"xnum",displaynumbers_1},
   {"xpause", (func)C2F(dr)},
   {"xpolys", drawpolylines_1},
@@ -256,9 +258,11 @@ void xset_1(fname, str, x1, x2, x3, x4, x5, x6, dx1, dx2, dx3, dx4, lx0, lx1)
      integer lx0;
      integer lx1;
 {
-  /** Warning : we must not record wdim and wpos and colormap and window **/
+  /** Warning : we must not record : wdim,wpos,colormap,window and viewport **/
   if (GetDriver()=='R' &&strcmp(str,"wdim")!=0 && strcmp(str,"wpos")!=0 && strcmp(str,"colormap") !=0
-      && strcmp(str,"window") != 0) 
+      && strcmp(str,"window") != 0 && strcmp(str,"viewport") != 0 && strcmp(str,"wresize") !=0 
+      && strcmp(str,"wpdim") !=0 
+      ) 
     StoreXcall1(fname,str,x1,1L,x2,1L,x3,1L,x4,1L,x5,1L,x6,1L,dx1,1L,dx2,1L,dx3,1L,dx4,1L);
   if (strcmp(str,"clipping")==0)
     {
@@ -523,10 +527,12 @@ void xclick_any_1(fname, str, ibutton, iwin, iflag, x5, x6, x7, x, y, dx3, dx4, 
   integer x1,y1,n=1,rect[4];
   integer verb=0,cur,na;
   C2F(dr)(fname,str,ibutton,&x1,&y1,iwin,iflag,x7,PD0,PD0,PD0,PD0,lx0,lx1);
-  C2F(dr)("xget","window",&verb,&cur,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-  C2F(dr)("xset","window",iwin,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-  C2F(echelle2d)(x,y,&x1,&y1,&n,&n,rect,"i2f",3L);
-  C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  if (*ibutton>=0){
+    C2F(dr)("xget","window",&verb,&cur,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+    C2F(dr)("xset","window",iwin,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+    C2F(echelle2d)(x,y,&x1,&y1,&n,&n,rect,"i2f",3L);
+    C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  }
 }
 
 

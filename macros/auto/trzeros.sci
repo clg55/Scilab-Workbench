@@ -5,19 +5,24 @@ function [nt,dt,rk]=trzeros(Sl)
 // Copyright INRIA
 [LHS,RHS]=argn(0);
 if type(Sl)==2 then 
-   D=Sl;
-   [m,n]=size(D);
-if m<>n then error('Trzeros: Polynomial matrix--> must be square');return;end
-   chis=det(D);nt=roots(chis);dt=ones(nt);
-   if LHS==1 then nt=nt./dt;dt=[];rk=[];end
-   return;
- end
+  D=Sl;
+  [m,n]=size(D);
+  if m<>n then 
+    error('Trzeros: Polynomial matrix--> must be square');
+    return;
+  end
+  chis=det(D);nt=roots(chis);dt=ones(nt);
+  if LHS==1 then 
+    nt=nt./dt;dt=[];rk=[];
+  end
+  return;
+end
 flag=Sl(1);
 if flag(1)<>'lss'&flag(1)<>'r' then 
 error('Input to trzeros must be a linear system or polynomial matrix');
 end
 if flag(1)=='r' then 
-   if size(Sl)==1 then nt=roots(Sl(2));dt=[];rk=1;return;end
+   if size(Sl)==1 then nt=roots(Sl('num'));dt=[];rk=1;return;end
    Sl=tf2ss(Sl);
 end
 //Sl=minss(Sl);
@@ -42,8 +47,10 @@ end;
 [ld,kd]=size(D);
 if norm(D,1)<sqrt(%eps)|ld==kd then
  [nt,dt,rk]=tr_zer(A,B,C,D);
+ if norm(dt,1) > 1.d-10 then
  if LHS==1 then nt=nt./dt;dt=[];rk=[];end
  return;
+ end
 end
 if ld < kd & norm(D*pinv(D)-eye(),1)< 1.d-10
  //nt=spec(A-B*pinv(D)*C);dt=ones(nt);
@@ -56,7 +63,9 @@ if ld > kd & norm(pinv(D)*D-eye(),1)< 1.d-10
  //nt=spec(A-B*pinv(D)*C);dt=ones(nt);
  [nt,dt]=tr_zer(A,B,C,D);
  rk=kd;
- if LHS==1 then nt=nt./dt;dt=[];rk=[];end;return;
+ if norm(dt,1) > 1.d-10 then
+   if LHS==1 then nt=nt./dt;dt=[];rk=[];end;return;
+ end
 end
 //warning('Trzeros:non-square system with D non zero and not full')
 //By kronecker form

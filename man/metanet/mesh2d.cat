@@ -29,7 +29,7 @@ DESCRIPTION
   the boundary is oriented towards outside. The boundary is given by its con-
   nected components: a component is the part (i1,i2) such that
   front(i1)=front(i2) (the external boundary is defined in the counterclock-
-  wise way, see the examples below). The error cases are the following:
+  wise way, see the examples below).  The error cases are the following:
              err = 0 if no errors were encountered;
              err = 3 all nodes are collinear.
 

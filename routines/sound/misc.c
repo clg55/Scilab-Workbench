@@ -1,15 +1,15 @@
-/*
+/****************************************************************
  * July 5, 1991
  * Copyright 1991 Lance Norskog And Sundry Contributors
  * This source code is freely redistributable and may be used for
  * any purpose.  This copyright notice must be maintained. 
  * Lance Norskog And Sundry Contributors are not responsible for 
  * the consequences of using this software.
- */
+ ****************************************************************/
 
-/*
+/**************************************************************
  * Sound Tools miscellaneous stuff.
- */
+ ****************************************************************/
 
 #include "st.h"
 #include "../machine.h"
@@ -39,8 +39,8 @@ char readerr[] = "Premature EOF while reading sample file.";
 char writerr[] = "Error writing sample file.  You are probably out of disk space.";
 
 /* Utilities */
-
 /* Read short, little-endian: little end first. VAX/386 style. */
+
 unsigned short rlshort(ft)
      ft_t ft;
 {
@@ -51,6 +51,7 @@ unsigned short rlshort(ft)
 }
 
 /* Read short, bigendian: big first. 68000/SPARC style. */
+
 unsigned short rbshort(ft)
      ft_t ft;
 {
@@ -61,7 +62,8 @@ unsigned short rbshort(ft)
 }
 
 /* Write short, little-endian: little end first. VAX/386 style. */
-unsigned short wlshort(ft, us)
+
+void wlshort(ft, us)
      ft_t ft;
      unsigned short us;
 {
@@ -75,8 +77,8 @@ unsigned short wlshort(ft, us)
 }
 
 /* Write short, big-endian: big end first. 68000/SPARC style. */
-unsigned short
-wbshort(ft, us)
+
+void wbshort(ft, us)
      ft_t ft;
      unsigned short us;
 {
@@ -90,6 +92,7 @@ wbshort(ft, us)
 }
 
 /* Read long, little-endian: little end first. VAX/386 style. */
+
 unsigned long
 rllong(ft)
      ft_t ft;
@@ -101,6 +104,7 @@ rllong(ft)
   uc4 = getc(ft->fp);
   return ((long)uc4 << 24) | ((long)uc3 << 16) | ((long)uc2 << 8) | (long)uc;
 }
+
 
 /* Read long, bigendian: big first. 68000/SPARC style. */
 unsigned long
@@ -116,8 +120,7 @@ rblong(ft)
 }
 
 /* Write long, little-endian: little end first. VAX/386 style. */
-unsigned long
-wllong(ft, ul)
+void wllong(ft, ul)
      ft_t ft;
      unsigned long ul;
 {
@@ -138,8 +141,7 @@ wllong(ft, ul)
 }
 
 /* Write long, big-endian: big end first. 68000/SPARC style. */
-unsigned long
-wblong(ft, ul)
+void wblong(ft, ul)
      ft_t ft;
      unsigned long ul;
 {
@@ -175,8 +177,7 @@ rshort(ft)
 }
 
 /* Write short. */
-unsigned short
-wshort(ft, us)
+void wshort(ft, us)
      ft_t ft;
      unsigned short us;
 {
@@ -189,27 +190,26 @@ wshort(ft, us)
     }
 }
 
-/* Read long. */
+/* Read a long. : note that long size is machine dependant  */
 unsigned long
 rlong(ft)
      ft_t ft;
 {
   unsigned long ul;
-  fread(&ul, 4, 1, ft->fp);
+  fread(&ul, sizeof(long), 1, ft->fp);
   if (ft->swap)
     ul = swapl(ul);
   return ul;
 }
 
 /* Write long. */
-unsigned long
-wlong(ft, ul)
+void wlong(ft, ul)
      ft_t ft;
      unsigned long ul;
 {
   if (ft->swap)
     ul = swapl(ul);
-  if (fwrite(&ul, 4, 1, ft->fp) != 1)
+  if (fwrite(&ul,sizeof(long), 1, ft->fp) != 1)
     {
       sciprint("%s\r\n",writerr);
       ft->ierr=1;
@@ -295,9 +295,22 @@ swapw(unsigned short us)
   return ((us >> 8) | (us << 8)) & 0xffff;
 }
 
+/** swapl : swap a long : note that a long size is machine dependant **/
+
 unsigned long
 swapl(ul)
      unsigned long ul;
+{
+  unsigned long  sdf;
+  swapb(&ul, &sdf, sizeof(unsigned long));
+  return (sdf);
+}
+
+/** swap an int assumed to be on 4 bytes **/
+
+unsigned int 
+swapi(ul)
+     unsigned int ul;
 {
   return (ul >> 24) | ((ul >> 8) & 0xff00) | ((ul << 8) & 0xff0000) | (ul << 24);
 }
@@ -312,9 +325,9 @@ swapf(float uf)
 #endif
 {
   union {
-	  unsigned long l;
-	  float f;
-	} u;
+    unsigned long l;  /** we assume here long i s4 bytes **/
+    float f;
+  } u;
 
   u.f= uf;
   u.l= (u.l>>24) | ((u.l>>8)&0xff00) | ((u.l<<8)&0xff0000) | (u.l<<24);
@@ -332,13 +345,13 @@ swapd(df)
 
 
 /* dummy routine for do-nothing functions */
-int nothing() {;}
+/* int nothing() {;} */
      
 /* dummy drain routine for effects */
 
 
 /* here for linear interp.  might be useful for other things */
-gcd(a, b) 
+long gcd(a, b) 
      long a, b;
 {
   if (b == 0)
@@ -347,7 +360,7 @@ gcd(a, b)
     return gcd(b, a % b);
 }
 
-lcm(a, b) 
+long lcm(a, b) 
      long a, b;
 {
   return (a * b) / gcd(a, b);
@@ -377,3 +390,4 @@ char *strerror(errcode)
     }
 }
 #endif
+

@@ -83,7 +83,7 @@ while ilst<nlst
       pos((top-rhs+1):(top-rhs+lhs))=ones(lhs,1)*ilst
       top=top-rhs+lhs
       pos(top+1:$)=[]
-    elseif opn=='2'|opn=='3'|opn=='4'|opn=='6' then
+    elseif opn=='2'|opn=='3'|opn=='4'|opn=='6'|opn=='23' then
       top=top+1
       pos(top)=ilst
       //    else

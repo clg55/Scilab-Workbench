@@ -1,7 +1,7 @@
 /*----------------------
    POPPAD.H header file
   ----------------------*/
-#ifdef __GNUC__
+#if (defined __GNUC__) || (defined __ABSC__)
 #define _MAX_PATH   260 /* max. length of full pathname */
 #define _MAX_DRIVE  3   /* max. length of drive component */
 #define _MAX_DIR    256 /* max. length of path component */

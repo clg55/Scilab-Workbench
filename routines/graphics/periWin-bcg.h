@@ -3,8 +3,7 @@
     Copyright (C) 1998 Chancelier Jean-Philippe
     jpc@cergrene.enpc.fr 
  --------------------------------------------------------------------------*/
-
-
+#include <winuser.h>
 #define Window HWND
 
 struct BCG 
@@ -27,6 +26,7 @@ struct BCG
   int CurPattern;
   int CurColor;
   int CurPixmapStatus;
+  integer CurResizeStatus;
   int CurVectorStyle;
   int CurDrawFunction;
   int ClipRegionSet;
@@ -53,4 +53,8 @@ struct BCG
   LPGW   lpgw; /** to store a pointer to the graphwin structure **/
   int Inside_init; /** a flag to inhibit Graproc actions while in 
 		     initgraphic **/
+  SCROLLINFO vertsi;
+  SCROLLINFO horzsi;
+  int CWindowWidthView ; /** graphic window width **/
+  int CWindowHeightView ; /** graphic window height **/
 }  ;

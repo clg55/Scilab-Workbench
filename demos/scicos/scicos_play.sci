@@ -18,7 +18,6 @@ getf('SCI/macros/util/x_matrix.sci')
 getf('SCI/macros/util/getvalue.sci')
 getf('SCI/macros/xdess/getmenu.sci')
 getf('SCI/macros/auto/scicos.sci')
-getf('SCI/macros/util/getclick.sci')
 
 names=['choosefile';
 'do_addnew';
@@ -37,7 +36,8 @@ names=['choosefile';
 'do_view';
 'getlink';
 'move';
-'prt_align']
+'prt_align';
+'cosclick']
 
 
 for k=1:size(names,'r')

@@ -39,17 +39,17 @@ DESCRIPTION
   [As,Es,Z,dim] = gschur(A,E,'c')
   returns the real generalized Schur form of the pencil s*E-A. In addition,
   the dim first columns of Z span a basis of the right eigenspace  associated
-  with eigenvalues with negative real parts (stable "continuous time" gen-
-  eralized eigenspace).
+  with eigenvalues with negative real parts (stable "continuous time" gener-
+  alized eigenspace).
   [As,Es,Z,dim] = gschur(A,E,'d')
   returns the real generalized Schur form of the pencil s*E-A. In addition,
   the dim first columns of Z make a basis of the right eigenspace  associated
-  with eigenvalues with magnitude lower than 1 (stable "discrete time" gen-
-  eralized eigenspace).
+  with eigenvalues with magnitude lower than 1 (stable "discrete time" gener-
+  alized eigenspace).
 
   General subspace:
   [As,Es,Z,dim] = gschur(A,E,extern)
-  returns the real generalized Schur form of the pencil s*E-A. In addition,
+  returns the real generalized Schur form of the pencil s*E-A.  In addition,
   the dim first columns of Z make a basis of the right eigenspace  associated
   with eigenvalues of the pencil which are selected according to a rule which
   is given by the scilab function extern.  (See schur for definition of this

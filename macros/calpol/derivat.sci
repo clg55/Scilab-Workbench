@@ -20,8 +20,7 @@ if t==2 then
   return
 end;
 
-//-compat t==15 retained for list/tlist compatibility  
-if t==15|t==16 then
+if t==16 then
   p1=p(1);
   if p1(1)=='r' then
     num=p(2);den=p(3)
@@ -33,7 +32,8 @@ if t==15|t==16 then
 	den(i,j)=den(i,j)**2
       end;
     end;
-    p=syslin(p(4),num,den)
+//    p=syslin(p(4),num,den)
+    p(2)=num;p(3)=den;
     return
   end;
 end;

@@ -12,12 +12,7 @@ select type(a)
     [m,n]=size(a)
     if m<>n then error(20,1),end
     [mb,nb]=size(b);if mb<>n then error(60),end
-    
-    //-compat next case retained for list/tlist compatibility
- case 15 then
-    if a(1)<>'lss' then error(91,1),end
-    [a,b]=a([2,3])
-    [n,n]=size(a)
+
  case 16 then
     if a(1)<>'lss' then error(91,1),end
     [a,b]=a([2,3])

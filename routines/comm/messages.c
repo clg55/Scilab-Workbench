@@ -6,6 +6,7 @@
 #include <malloc.h>
 #endif
 #include <stdio.h>
+#include <string.h>
 
 #include "../machine.h"
 #include "../intersci/cerro.h"

@@ -50,6 +50,7 @@
 #define PI0 (integer *) 0
 #define PD0 (double *) 0
 
+extern void SendSGDeleteMessage _PARAMS((int win_num));
 extern void do_kill();
 extern int get_is_reading();
 extern char GetDriver();
@@ -356,6 +357,9 @@ SendCountDelete(widget, closure, callData)
      Widget widget;
      XtPointer closure, callData;
 {
+  /* send a ClientMessage to say that we have 
+   * deleted a graphic window ( used in xclick_any) */
+  SendSGDeleteMessage(lab_count);
   /** fprintf(stderr,"Destruction de la fenetre %d\n",lab_count); **/
   DeleteSGWin(lab_count);
 }

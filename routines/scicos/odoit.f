@@ -93,7 +93,7 @@ c
                if(funtyp(kfun).eq.-1) then
                   urg=urg+1
                   call putevs(tevts,evtspt,nevts,pointi,
-     &                 tvec(i),ntvec+clkptr(kfun)-1,ierr1)
+     &                 told,ntvec+clkptr(kfun)-1,ierr1)
                   if (ierr1 .ne. 0) then
 C     !                 event conflict
                      ierr = 3

@@ -35,7 +35,7 @@ c
  10         continue
          else
             ri=0.0d0
-            rr=1.0d0/ri
+            rr=infinity(ri)
             ierr=2
          endif
       else

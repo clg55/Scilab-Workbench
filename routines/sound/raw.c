@@ -1,43 +1,39 @@
-/*
+/****************************************************************
  * July 5, 1991
  * Copyright 1991 Lance Norskog And Sundry Contributors
  * This source code is freely redistributable and may be used for
  * any purpose.  This copyright notice must be maintained. 
  * Lance Norskog And Sundry Contributors are not responsible for 
  * the consequences of using this software.
+ ****************************************************************
  * jpc : modif for dec alpha on which long int are 64bits long 
- */
+ ****************************************************************/
 
-/*
+/****************************************************************
  * Sound Tools raw format file.
- *
  * Includes .ub, .uw, .sb, .sw, and .ul formats at end
- */
-
-/*
+ *
  * Notes: most of the headerless formats set their handlers to raw
  * in their startread/write routines.  
- *
- */
+ ****************************************************************/
 
 #include "st.h"
 #include "libst.h"
 
+extern void sciprint _PARAMS((char *fmt, ...));
 
-/* Read raw file data, and convert it to */
-/* the sox internal signed long format. */
-/* Warning : on some dec-alpha long x = LEFT(int y,16) 
-   does not give the proper result (first shift then cast ) 
-   but the result seams to be given by first cast then shift which 
-   is not what we want. Thus we have changed 
-   *buf++ = LEFT(datum,XXX) into 
-   *buf++ = datum =  LEFT(datum,XXX) to force the result we want
+/****************************************************************
+ * Read raw file data, and convert it to 
+ * the sox internal signed long format. 
+ * Warning : on some dec-alpha long x = LEFT(int y,16) 
+ *  does not give the proper result (first shift then cast ) 
+ * but the result seams to be given by first cast then shift which 
+ * is not what we want. Thus we have changed 
+ *  *buf++ = LEFT(datum,XXX) into 
+ *  *buf++ = datum =  LEFT(datum,XXX) to force the result we want
+ ****************************************************************/
    
-   */
-
-   
-
-rawread(ft, buf, nsamp) 
+int rawread(ft, buf, nsamp) 
      ft_t ft;
      long nsamp;
 #if defined(__alpha)
@@ -45,7 +41,6 @@ rawread(ft, buf, nsamp)
 #else
      long *buf;
 #endif
-
 {
   int count;
 #if defined(__alpha)
@@ -166,13 +161,16 @@ rawread(ft, buf, nsamp)
   sciprint("Sorry, don't have code to read %s, %s\r\n",
 	   styles[ft->info.style], sizes[ft->info.size]);
   ft->ierr=1;
+  return done;
 }
 
-/* Convert the sox internal signed long format */
-/* to the raw file data, and write it. */
 
-void
-rawwrite(ft, buf, nsamp) 
+/****************************************************************
+ * Convert the sox internal signed long format 
+ * to the raw file data, and write it.
+ ****************************************************************/
+
+void rawwrite(ft, buf, nsamp) 
      ft_t ft;
      long *buf, nsamp;
 {

@@ -507,7 +507,16 @@ void Panic(s, a)
 
 /** copied from wf_fig.h **/
 
-#include "wf_fig.h" /** for sys_errlist **/
+/* #include "wf_fig.h" */ /** for sys_errlist **/
+#ifndef linux 
+#if !defined(__bsdi__) && !defined(__NetBSD__)
+extern int	errno;
+extern int	sys_nerr;
+#if (! (defined(BSD) && (BSD >= 199306))) && !defined(freebsd)
+extern char    *sys_errlist[];
+#endif
+#endif
+#endif 
 
 static char UE[]="unknown error";
 

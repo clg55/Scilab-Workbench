@@ -1,7 +1,7 @@
     An example of calling scilab as a subroutine of a user's main program
 
 
-Usefull files
+Useful files
 ============
 
     * callsci.f: Fortran Example of a usermain program. This main program send matrices 
@@ -14,8 +14,8 @@ Usefull files
 
 Usage
 =====
-	Edit the Makefile and fill the variables SCIDIR variable with the path 
-	of your installed scilab 
+	Under unix/linux systems, edit the Makefile and fill the
+	variables SCIDIR variable with the path of your installed scilab 
 	then type make 
 
 	In order to run the generated callsci program type callsci.sh 
@@ -25,5 +25,5 @@ Usage
 	SCI  : path of main scilab directory (to load libraries if necessary)
 	PRINTERS : available printer names
 	DISPLAY: xwindow output display
-	MANCHAPTERS : path of help Chapters description
 	see <SCIDIR>/bin/scilab for more details
+

@@ -1,5 +1,5 @@
 
-AFFICH_f(5)                     Scicos Block                      AFFICH_f(5)
+AFFICH_f(5)                      Scicos Block                     AFFICH_f(5)
 NAME
   AFFICH_f - Scicos numerical display
 
@@ -13,8 +13,8 @@ DIALOGUE PARAMETERS
 
   Total numer of digits
                  : an integer greater than 3, the maximum number of digits
-                 used to represent the number (sign, integer part and
-                 rational part)
+                 used to represent the number (sign, integer part and ratio-
+                 nal part)
 
   rational part number of digits
                  : an integer greater than or equal 0, the number of digits

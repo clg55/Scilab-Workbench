@@ -20,7 +20,7 @@ DESCRIPTION
   default value is node number 1. This node is meaningless for an undirected
   graph.
 
-  The weights are given by the element edge_weight of the graph list. If its
+  The weights are given by the element edge_weight of the graph list.  If its
   value is not given (empty vector []), it is assumed to be equal to 0 on
   each edge.  Weigths can be positive, equal to 0 or negative. To compute a
   spanning tree without dealing with weights, give to weights a value of 0 on
@@ -28,7 +28,7 @@ DESCRIPTION
 
   min_weight_tree returns the tree t as a row vector of the arc numbers
   (directed graph) or edge numbers (undirected graph) if it exists or the
-  empty vector [] otherwise. If the tree exists, the dimension of t is the
+  empty vector [] otherwise.  If the tree exists, the dimension of t is the
   number of nodes less 1.  If t(i) is the root of the tree:
     - for j < i, t(j) is the number of the arc in the tree after
         node t(j)

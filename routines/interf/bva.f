@@ -1,7 +1,8 @@
       subroutine bva(fname)
 c
 C      implicit undefined (a-z)
-c     Copyright INRIA
+c     Copyright ENPC (Jean-Philippe Chancelier )
+c     -----------------------------------------------------
       include '../stack.h'
       character*(*) fname
       character*(nlgh+1)   efsub,edfsub,egsub,edgsub,eguess

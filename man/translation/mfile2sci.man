@@ -67,28 +67,20 @@ add it. See <SCIDIR>/macros/m2sci/README for more details.
 .SH KNOWN BUGS
 .TP 4
 1- 
-: m_files scripts are translated but sci_<Matlab function name>
-   replaces the call to the m_file by an exec of
-   an exec (.sce) file, the .sce file path may be incorrect.
-.TP
-2-
 : eval function instructions passed as strings are not translated.
 .TP
-3-
+2-
 : most of plot function are not yet translated
 .TP
-4-
-: globals are not translated
-.TP
-5-
+3-
 : if, for, endded by the end of file produce an error, add the closing
 end's 
 .TP
-6- 
+4-
 : Loop variable of for clause is available afterwards if loops terminates 
    normally in matlab; it is cleared  in Scilab generated code.
 .TP
-7- 
+5-
 : inequality comparison which implies complex numbers produce a run
 time error such as "undefined variable : %s_2_s". User can define
 these operation with Matlab meaning with the following function definition:
@@ -101,7 +93,7 @@ deff('r=%s_3_s(a,b)','r=real(a)<=real(b)')
  
 deff('r=%s_4_s(a,b)','r=real(a)>=real(b)')  
 .TP
-8- 
+6- 
 : When i is a vector, Matlab allows insertions like a(i)=v for any
 v. In scilab v must have the same shape as a(i). This produces run
 time errors "submatrix incorrectly defined". Rewrite them as 

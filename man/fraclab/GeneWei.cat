@@ -28,8 +28,10 @@ Input parameters
          0
 Output parameters
        o  x  : real vector  [1,N] Time samples of the Weierstrass function
+
        o  Fj  : real vector [1,N] Holder trajectory of the Weierstrass func-
          tion
+
 See also:
 
 Example:

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=QUAD,SSI=0
       subroutine quad(a, b1, c, sr, si, lr, li)
 c calculate the zeros of the quadratic a*z**2+b1*z+c.
 c the quadratic formula, modified to avoid

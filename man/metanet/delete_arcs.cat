@@ -16,8 +16,8 @@ PARAMETERS
 
 DESCRIPTION
   If g is a directed graph, delete_arcs returns the graph g1 with the arcs
-  defined by matrix ij being deleted.  ij must be a n x 2 matrix of node
-  numbers: the n arcs to be deleted are defined by couples of nodes (ij(i,1),
+  defined by matrix ij being deleted.  ij must be a n x 2 matrix of node num-
+  bers: the n arcs to be deleted are defined by couples of nodes (ij(i,1),
   ij(i,2)).
 
   If g is an undirected graph, the edges corresponding to matrix ij are

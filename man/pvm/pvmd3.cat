@@ -1,5 +1,5 @@
 
-pvmd3(1)                         pvm daemon                          pvmd3(1)
+pvmd3(1)                          pvm daemon                         pvmd3(1)
 NAME
   pvmd3 - PVM  daemon
 
@@ -24,8 +24,8 @@ OPTIONS
   the master pvmd or PVM console:
 
   -    dmask Set pvmd debug mask. Used to debug the pvmd or libpvm (not
-       intended to be used to debug application programs). Mask is a hexade-
-       cimal number which is the sum of the following bits: Bit Information
+       intended to be used to debug application programs). Mask is a hexadec-
+       imal number which is the sum of the following bits: Bit Information
 
        1       Packet routing
 
@@ -163,7 +163,8 @@ OPTIONS
        dx=/usr/local/pvm3/lib/pvmd # borrowed accts, "guest", don't trust fonebone
 
 start it by
-  * lo=guest so=pw sn666.jrandom.com cubie.misc.edu # really painful one, must
+  * lo=guest so=pw sn666.jrandom.com cubie.misc.edu # really painful one,
+       must
             hand and share a homedir & igor.firewall.com lo=guest2 so=ms
             ep=bob/pvm3/bin/$PVM_ARCH
 MANUAL STARTUP

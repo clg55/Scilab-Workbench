@@ -1,5 +1,5 @@
 
-netclose(1)                        Group"                         netclose(1)
+netclose(1)                         Group"                        netclose(1)
 Scilab function                                               Scilab function
 NAME
   netclose - closes a Metanet window

@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 #include <string.h>
 #include "../machine.h"
 #include "men_Sutils.h"

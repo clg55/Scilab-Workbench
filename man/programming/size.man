@@ -34,7 +34,7 @@ Called with LHS=2, returns \fVnr,nc\fR = [number of rows, number of columns].
 2 or 'c' 
 : to get the number of columns
 .TP
-2 or '*' 
+'*' 
 : to get the product of rows and column numbers
 
 .LP

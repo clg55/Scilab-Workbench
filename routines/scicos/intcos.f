@@ -566,6 +566,8 @@ c
               buf='a block has been called with input out of its domain'
            elseif(ierr.eq.7) then
               buf='singularity in a block'
+           elseif(ierr.eq.8) then
+              buf='block produces an internal error'
            elseif(ierr.ge.1000) then
               buf='unknown or erroneous block'
            elseif(ierr.ge.100) then

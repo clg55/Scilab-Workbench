@@ -1,7 +1,7 @@
 
 sincd(1)                       Scilab Function                       sincd(1)
 NAME
-  sincd - sinc function
+  sincd - digital sinc function or Direchlet kernel
 
 CALLING SEQUENCE
   [s]=sincd(n,flag)
@@ -16,7 +16,7 @@ PARAMETERS
   s         : vector of values of the function on a dense grid of frequencies
 
 DESCRIPTION
-  function which calculates the function Sin(N*x)/Sin(x)
+  function which calculates the function Sin(N*x)/N*Sin(x)
 
 EXAMPLE
   plot(sincd(10,1))

@@ -41,30 +41,30 @@ Parameters
   optional output argument) of the unit interval. In that case, the third
   input argument is a strictly positive real (integer) scalar n which con-
   tains the resolution of the pre-multifractal measure. The size of the out-
-  put real vectors mu_n (and I_n if used) is equal to 2n (so be aware the
-  stack size ;-)). This option is implemented for the uniform law ('unif-
-  meas') and the lognormal law ('lognmeas') binomial measures.  When a string
-  containing prefix 'unif' is given as second input, the synthesis or the
-  computation is made for a uniform law binomial measure. In that case, the
-  optional fourth input argument is a strictly positive real scalar epsilon
-  which contains the pertubation around weight .5.  The weight is an indepen-
-  dant random variable identically distributed between epsilon and 1-epsilon
-  which must be >0., <1. The default value for epsilon is 0.  When a string
-  containing prefix 'logn' is given as second input, the synthesis or the
-  computation is made for a lognormal law binomial measure. In that case, the
-  optional fourth input argument is a strictly positive real scalar sigma
-  which contains the standard deviation of the lognormal law.  When replacing
-  suffix string 'meas' with suffix string 'cdf', respectively suffix string
-  'pdf', the cumulative distribution function F_n, respectively the probabil-
-  ity density function p_n, related to this pre-multifractal measure is com-
-  puted (first output argument).  When a string containing suffix string
-  'spec' is given as second input, the multifractal spectrum f_alpha (second
-  output argument) is synthesized on the Hoelder exponents alpha (first out-
-  put argument). In that case, the third input argument is a strictly posi-
-  tive real (integer) scalar N which contains the number of Hoelder
-  exponents. The size of both output real vectors alpha and f_alpha is equal
-  to N.  This option is implemented for the uniform law ('unifspec') and the
-  lognormal law ('lognspec') binomial measures.
+  put real vectors mu_n (and I_n if used) is equal to 2^n (so be aware the
+  stack size ;-)). This option is implemented for the uniform law
+  ('unifmeas') and the lognormal law ('lognmeas') binomial measures.  When a
+  string containing prefix 'unif' is given as second input, the synthesis or
+  the computation is made for a uniform law binomial measure. In that case,
+  the optional fourth input argument is a strictly positive real scalar
+  epsilon which contains the pertubation around weight .5.  The weight is an
+  independant random variable identically distributed between epsilon and
+  1-epsilon which must be >0., <1. The default value for epsilon is 0.  When
+  a string containing prefix 'logn' is given as second input, the synthesis
+  or the computation is made for a lognormal law binomial measure. In that
+  case, the optional fourth input argument is a strictly positive real scalar
+  sigma which contains the standard deviation of the lognormal law.  When
+  replacing suffix string 'meas' with suffix string 'cdf', respectively suf-
+  fix string 'pdf', the cumulative distribution function F_n, respectively
+  the probability density function p_n, related to this pre-multifractal mea-
+  sure is computed (first output argument).  When a string containing suffix
+  string 'spec' is given as second input, the multifractal spectrum f_alpha
+  (second output argument) is synthesized on the Hoelder exponents alpha
+  (first output argument). In that case, the third input argument is a
+  strictly positive real (integer) scalar N which contains the number of
+  Hoelder exponents. The size of both output real vectors alpha and f_alpha
+  is equal to N.  This option is implemented for the uniform law ('unifspec')
+  and the lognormal law ('lognspec') binomial measures.
 
 Algorithm details
 
@@ -120,8 +120,8 @@ References
   Pietronero, Plenum Press, New York, 1989 pages 3-29.  "Limit Lognormal Mul-
   tifractal Measures", Benoit B. MandelBrot. In Frontiers of Physics, Landau
   Memorial Conference, Proceeding of the Tel-Aviv Meeting, 1988. Edited by
-  Errol Asher Gotsman, Yuval Ne'eman and Alexander Voronoi, New York Per-
-  gamon, 1990 pages 309-340.
+  Errol Asher Gotsman, Yuval Ne'eman and Alexander Voronoi, New York Perga-
+  mon, 1990 pages 309-340.
 
 See also
   binom, multim1d, multim2d, smultim1d, smultim2d (C_LAB routines).

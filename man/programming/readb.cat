@@ -26,4 +26,4 @@ DESCRIPTION
   function.
 
 SEE ALSO
-  file, write, writb, binary, read4b
+  file, write, writb, mget, read4b

@@ -45,6 +45,7 @@
 
 
 #include <stdio.h>
+#include <string.h>
 #include "imgif_const.h"
 /*
 #include <inrimage/image.h>

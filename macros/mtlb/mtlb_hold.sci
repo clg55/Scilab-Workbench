@@ -1,7 +1,8 @@
 function mtlb_hold(flag)
 [lhs,rhs]=argn(0)
+global('%MTLBHOLD')
 if rhs==0 then
-  if exists('%MTLBHOLD')==0 then
+  if ~%MTLBHOLD|%MTLBHOLD==[] then
     %MTLBHOLD=%t
   else
     %MTLBHOLD=~%MTLBHOLD
@@ -11,4 +12,3 @@ elseif convstr(flag)=='on' then
 else
   %MTLBHOLD=%f
 end
-%MTLBHOLD=resume(%MTLBHOLD)

@@ -10,7 +10,7 @@ NAME
   jonction with set(), it allows to create button, lists, ....
 
 Usage
-  h=uicontrol([ prop1, val1 ] [,  prop2, val2 ] ...) or h=uicontrol(f, [
+  h=uicontrol([ prop1, val1 ] [,  prop2, val2 ] ...)  or h=uicontrol(f, [
   prop1, val1 ] [,  prop2, val2 ] ...)
 
 Input parameter
@@ -19,8 +19,8 @@ Input parameter
 
   o     prop{1, 2 ...} : character string name of a property to set
 
-  o     val{1, 2 ...} : scilab object value to give to the corresponding pro-
-       perty
+  o     val{1, 2 ...} : scilab object value to give to the corresponding
+       property
 
 Output parameters
   handle of the created object
@@ -40,8 +40,8 @@ Description
   button will be created, and will be transformed to another uicontrol when
   you call the get(h,'style', ... ) instruction.  Scilab and all the graphic
   objects communicate through the property mechanism. Thus, to create adapted
-  uicontrol, one has to know the use of the property fields. Those are des-
-  cibed under:
+  uicontrol, one has to know the use of the property fields. Those are
+  descibed under:
 
 Properties
 BackgroundColor
@@ -75,7 +75,7 @@ ListboxTop
   on the first line of the visible area of the list.
 
 Max
-  scalar Specifies the largest value the 'value' property can be set to. It
+  scalar Specifies the largest value the 'value' property can be set to.  It
   has however differnet meaning on each uicontrol:
 
   o     Check Boxes : Max is the value the 'value' property take when control
@@ -87,7 +87,7 @@ Max
        erwise not.
 
 Max
-  scalar Specifies the lowest value the 'value' property can be set to. It
+  scalar Specifies the lowest value the 'value' property can be set to.  It
   has however differnet meaning on each uicontrol:
 
   o     Check Boxes : Min is the value the 'value' property take when control
@@ -103,12 +103,12 @@ Parent
   a control from a figure to another.
 
 Position
-  [ 1,4] real vector or string This property is used to set or get the
-  geometrical configuration of a control.  It is a real; vector : x y w h
-  where the letters stand for the x location of the left bottom corner, the y
-  location of the left bottom corner, the width and the height of the uicon-
-  trol.  The unit is determined by the 'Unit' property. One can also set this
-  property by giving a string where the fields are separated by a '|', ie
+  [ 1,4] real vector or string This property is used to set or get the geo-
+  metrical configuration of a control.  It is a real; vector : x y w h where
+  the letters stand for the x location of the left bottom corner, the y loca-
+  tion of the left bottom corner, the width and the height of the uicontrol.
+  The unit is determined by the 'Unit' property.  One can also set this prop-
+  erty by giving a string where the fields are separated by a '|', ie
   "x|y|w|h".
 
 SliderStep

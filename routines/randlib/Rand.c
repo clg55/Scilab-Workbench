@@ -1,7 +1,10 @@
-/* Copyright INRIA */
+/* Copyright Enpc/Cergrene */
+
 #include "../../routines/stack-c.h"
+#include "grand.h"
 
 /** external functions to be called through this interface **/
+
 
 /**************************************************
  *  hand written interface for the randlib 
@@ -80,7 +83,7 @@ int RandI(fname)
 	  GetRhsVar(2,"c",&m1,&n1,&l1);
 	  CreateVar(3,"i",&un,&deux,&l2);
 	  
-	  C2F(phrtsd)(cstk(l1),istk(l2),istk(l2+1));
+	  C2F(phrtsd)(cstk(l1),&m1,istk(l2),istk(l2+1),m1);
 	  LhsVar(1) = 3;
 	  PutLhsVar();
 	  return 0;
@@ -144,7 +147,7 @@ int RandI(fname)
 	}
       else 
 	{
-	  sciprint("%s Wrong first argument %s\r\n",fname,cstk(l1));
+	  sciprint("%s Wrong first argument %s\r\n",fname,cstk(ls));
 	  Error(999);
 	  return 0;
 	}      
@@ -187,7 +190,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  double C2F(genbet)();
 	  *stk(lr+i)= C2F(genbet)(stk(la),stk(lb));
 	}
       LhsVar(1) = suite+2;
@@ -210,7 +212,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  double C2F(genf)();
 	  *stk(lr+i)= C2F(genf)(stk(la),stk(lb));
 	}
       LhsVar(1) = suite+2;
@@ -231,13 +232,13 @@ int RandI(fname)
       GetRhsVar(suite, "i", &m1, &n1, &la);
       if ( m1*n1 != 1) { sciprint("N must be scalar\r\n");Error(999);return 0;}
       GetRhsVar(suite+1, "d", &m2, &n2, &lb);
-      if ( n2 != 1) 
+      if ( n2 != 1 ) 
 	{ 
 	  sciprint("P must be a column vector\r\n");
 	  Error(999);return 0;
 	}
       ncat = m2+1;
-      CreateVar(suite+2,"d",&ncat,&nn,&lr);
+      CreateVar(suite+2,"i",&ncat,&nn,&lr);
       if ( *istk(la) < 0 ) 
 	{
 	  sciprint("N < 0 \r\n");
@@ -270,8 +271,7 @@ int RandI(fname)
 	}
       for ( i=0 ; i < nn ; i++) 
 	{
-	  double C2F(genmul)();
-	  C2F(genmul)(istk(la),stk(lb),&ncat,stk(lr+nn*i));
+	  C2F(genmul)(istk(la),stk(lb),&ncat,istk(lr+nn*i));
 	}
       LhsVar(1) = suite+2;
       PutLhsVar();
@@ -292,7 +292,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  double C2F(gengam)();
 	  /** WARNING : order is changed in parameters for 
 	      compatibility between Rand(...'gam',..) and cdfgam 
 	  **/
@@ -317,7 +316,6 @@ int RandI(fname)
 	  sciprint("SD < 0.0 \r\n");Error(999);return 0;}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  double C2F(gennor)();
 	  *stk(lr+i)= C2F(gennor)(stk(la),stk(lb));
 	}
       LhsVar(1) = suite+2;
@@ -340,7 +338,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{	
-	  double C2F(genunf)();
 	  *stk(lr+i)= C2F(genunf)(stk(la),stk(lb));
 	}
       LhsVar(1) = suite+2;
@@ -358,7 +355,6 @@ int RandI(fname)
       CreateVar(suite+2,"d",&ResL,&ResC,&lr);
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  int C2F(ignuin)();
 	  *stk(lr+i)= C2F(ignuin)(istk(la),istk(lb),&ierr);
 	  if (ierr > 0 ) 
 	    {
@@ -380,7 +376,6 @@ int RandI(fname)
       CreateVar(suite,"d",&ResL,&ResC,&lr);
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  int C2F(ignlgi)();
 	  *stk(lr+i)= (double) C2F(ignlgi)();
 	}
       LhsVar(1) = suite;
@@ -435,7 +430,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  integer C2F(ignnbn)();
 	  *stk(lr+i)= (double) C2F(ignnbn)(istk(la),stk(lb));
 	}
       LhsVar(1) = suite+2;
@@ -463,7 +457,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  integer C2F(ignbin)();
 	  *stk(lr+i)= (double) C2F(ignbin)(istk(la),stk(lb));
 	}
       LhsVar(1) = suite+2;
@@ -566,7 +559,6 @@ int RandI(fname)
       icur = *istk(lb)-1;
       for ( i=0 ; i < nn ; i++) 
 	{
-	  double C2F(genunf)();
 	  int niv=0;
 	  double dmi=0.0e0, dma=1.0e0;
 	  double rr = C2F(genunf)(&dmi,&dma);
@@ -589,7 +581,6 @@ int RandI(fname)
       CreateVar(suite,"d",&ResL,&ResC,&lr);
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  double  C2F(ranf)();
 	  *stk(lr+i)= (double) C2F(ranf)();
 	}
       LhsVar(1) = suite;
@@ -613,7 +604,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  double C2F(gennch)();
 	  *stk(lr+i)= C2F(gennch)(stk(la),stk(lb));
 	}
       LhsVar(1) = suite+2;
@@ -638,7 +628,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  double C2F(gennf)();
 	  *stk(lr+i)= C2F(gennf)(stk(la),stk(lb),stk(lc));
 	}
       LhsVar(1) = suite+3;
@@ -661,7 +650,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  double C2F(genchi)();
 	  *stk(lr+i)= C2F(genchi)(stk(la));
 	}
       LhsVar(1) = suite+1;
@@ -683,7 +671,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  integer C2F(ignpoi)();
 	  *stk(lr+i)= (double) C2F(ignpoi)(stk(la));
 	}
       LhsVar(1) = suite+1;
@@ -706,7 +693,6 @@ int RandI(fname)
 	}
       for ( i=0 ; i < ResL*ResC ; i++) 
 	{
-	  double C2F(genexp)();
 	  *stk(lr+i)= C2F(genexp)(stk(la));
 	}
       LhsVar(1) = suite+1;

@@ -1,6 +1,6 @@
 c     Copyright INRIA 
 
-c     this ugly include file contains code relative to interfaces calling. 
+c     this  include file contains code relative to interfaces calling. 
 c     We use
 c     include file instead of subroutine to avoid recursion pbs. This file
 c     must be included in each routine which compute an external
@@ -17,7 +17,7 @@ c
          if(ir.eq.1) then
 c     .     back to matsys
             k=13
-         elseif((ir.ge.2.and.ir.le.4).or.ir.eq.8.or.ir.eq.9) then
+         elseif(ir.ge.2.and.ir.le.9) then
 c     .     back to matio
             k=5
          elseif(ir.eq.10) then
@@ -60,7 +60,11 @@ c
          il=iadr(lstk(top+1-rhs))
          iflagint=istk(il+3)
       endif 
- 95   call callinterf(k,iflagint)
+ 95   continue
+
+      if (.not.allowptr(k)) call ref2val
+
+      call callinterf(k,iflagint)
       if(fun.ge.0) goto 90
 c     called interface ask for a scilab function to perform the function (fun=-1)
 c     the function name is given in ids(1,pt+1)
@@ -74,6 +78,7 @@ c     the function name is given in ids(1,pt+1)
       if(fin.eq.0) then
          call error(4)
          if(err.gt.0) goto 9999
+	 goto 90
       endif
       pt=pt+1
       fin=lstk(fin)

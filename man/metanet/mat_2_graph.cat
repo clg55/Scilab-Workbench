@@ -17,11 +17,11 @@ PARAMETERS
   g : graph list
 
 DESCRIPTION
-  mat_2_graph computes the graph g corresponding to the node-arc or the
-  node-node incidence matrix a.  Note that a checking is made to insure that
-  a is a sparse node-arc or node-node incidence matrix of a directed
-  (directed = 1) or undirected (directed = 0) graph.  If the optional argu-
-  ment mat is omitted or is the string
+  mat_2_graph computes the graph g corresponding to the node-arc or the node-
+  node incidence matrix a.  Note that a checking is made to insure that a is
+  a sparse node-arc or node-node incidence matrix of a directed (directed =
+  1) or undirected (directed = 0) graph.  If the optional argument mat is
+  omitted or is the string
 
 EXAMPLE
   g=load_graph(SCI+'/demos/metanet/colored');

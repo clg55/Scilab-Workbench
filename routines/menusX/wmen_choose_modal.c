@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 /* wchoose.c 
  * Scilab [ gcwin32 and WIN32 ] 
  *   Jean-Philipe Chancelier 

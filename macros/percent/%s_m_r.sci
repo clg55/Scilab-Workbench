@@ -3,7 +3,7 @@ function f2=%s_m_r(n1,f2)
 //operation  f2=n1*f2
 //!
 // Copyright INRIA
-[n2,d2]=f2(2:3);
+[n2,d2]=f2(['num','den']);
 [l1,m1]=size(n1);[l2,m2]=size(n2),
 if l1*m1==0|l2*m2==0 then
   f2=[]
@@ -39,7 +39,6 @@ if indef then
   num=num*eye()
   den=den*eye()
 end
-f2(2)=num,f2(3)=den;
-
+f2=rlist(num,den,f2('dt'))
 
 

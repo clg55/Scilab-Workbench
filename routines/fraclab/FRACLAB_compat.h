@@ -48,7 +48,7 @@
 
 #ifndef INCLUDE_FRACLAB_COMPAT
 #define INCLUDE_FRACLAB_COMPAT
-#if defined(_MSC_VER) || defined(__CYGWIN32__) 
+#if defined(_MSC_VER) || defined(__CYGWIN32__) || (defined __ABSC__)
 /* for window compilation */
 
 
@@ -56,7 +56,7 @@
 #define maxaleatoire RAND_MAX
 #endif 
 
-#if defined(_MSC_VER)
+#if defined(_MSC_VER) || (defined __ABSC__)
 extern double lrand48();
 
 #ifndef __STDC__

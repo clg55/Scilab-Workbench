@@ -106,10 +106,12 @@ for {\tt keyword} in a {\tt whatis} file. This facility is equivalent
 to the Unix 
 {\tt whatis} command. To add a new item or keyword is easy.
 Just create a {\tt .cat} ASCII file describing the item and a 
-{\tt whatis}\index{whatis@{\tt whatis}} file in your directory. Then add your directory path
-(and a title) in the file {\tt SCIDIR/man/Chapters} (see also the README file
-there). You may use the standard format of the scilab manual\index{manual}
-(see the {\tt SCIDIR/man/subdirectories}).
+{\tt whatis}\index{whatis@{\tt whatis}} file in your directory. 
+Then add your directory path
+(and a title) in the variable \verb!%helps! (see also the README file
+there). You can use the standard format of the scilab manual\index{manual}
+(see the {\tt SCIDIR/man/subdirectories} 
+and {\tt SCIDIR/examples/man-examples}).
 The Scilab \LaTeX\   manual is automatically obtained from the
 manual items by a {\tt Makefile}. 
 See the directory {\tt SCIDIR/man/Latex-doc}. Note that the command
@@ -217,5 +219,9 @@ This facility is possible thanks to e.g. the functions \verb!x_dialog!,
 The demos which can be executed by clicking on the {\tt demo} button
 provide simple examples of the use of these functions.
 
-
-
+\section{Tk-Tcl Dialog}
+An interface between Scilab and Tk-Tcl exists. 
+A Graphic User Interface object can be created by the function
+\verb!uicontrol!. Basic primitives are \verb!TK_EvalFile!,
+\verb!TK_EvalStr! and \verb! TK_GetVar, TK_Setvar!. Examples
+are given by invoking the help of these functions.

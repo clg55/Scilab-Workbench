@@ -44,9 +44,9 @@ DESCRIPTION
   mtlb_<function_name>. For efficiency these functions may be replaced by the
   proper scilab equivalent instructions.
 
-  Some other functions like plot, has no straightforward translation in sci-
-  lab. They are also replaced by an emulation function named
-  mtlb_<function_name>.
+  Some other functions like plot, has no straightforward translation in
+  scilab. They are also replaced by an emulation function named mtlb_<func-
+  tion_name>.
 
   When translation may be incorrect or may be improved mfile2sci adds a com-
   ment which began by "//!"
@@ -58,24 +58,18 @@ REMARKS
   add it. See <SCIDIR>/macros/m2sci/README for more details.
 KNOWN BUGS
 
-  1-  : m_files scripts are translated but sci_<Matlab function name>
-         replaces the call to the m_file by an exec of
-         an exec (.sce) file, the .sce file path may be incorrect.
+  1-  : eval function instructions passed as strings are not translated.
 
-  2-  : eval function instructions passed as strings are not translated.
+  2-  : most of plot function are not yet translated
 
-  3-  : most of plot function are not yet translated
-
-  4-  : globals are not translated
-
-  5-  : if, for, endded by the end of file produce an error, add the closing
+  3-  : if, for, endded by the end of file produce an error, add the closing
       end's
 
-  6-  : Loop variable of for clause is available afterwards if loops ter-
-      minates
+  4-  : Loop variable of for clause is available afterwards if loops termi-
+      nates
          normally in matlab; it is cleared  in Scilab generated code.
 
-  7-  : inequality comparison which implies complex numbers produce a run
+  5-  : inequality comparison which implies complex numbers produce a run
       time error such as "undefined variable : %s_2_s". User can define these
       operation with Matlab meaning with the following function definition:
 
@@ -87,7 +81,7 @@ KNOWN BUGS
 
       deff('r=%s_4_s(a,b)','r=real(a)>=real(b)')
 
-  8-  : When i is a vector, Matlab allows insertions like a(i)=v for any v.
+  6-  : When i is a vector, Matlab allows insertions like a(i)=v for any v.
       In scilab v must have the same shape as a(i). This produces run time
       errors "submatrix incorrectly defined". Rewrite them as a(i)=v.' .
 

@@ -16,7 +16,7 @@ Input parameters
          analyzed.
        o sigma : Real positive number Standard Deviation of the noise. Its
          default value is null (noisefree)
-       o voices : Positive integer. number of analyzing voices.  When not
+       o voices : Positive integer.  number of analyzing voices.  When not
          specified, this parameter is set to 128.
        o Nmin : Integer in  [2,nt/3] Lower scale bound (lower width) of the
          analysing kernel. When not specified, this parameter is set to
@@ -32,8 +32,8 @@ Input parameters
          (default: 0).
        o reg : Boolean
 
-         specifies wether the regression is to be done by the user or
-         automatically (default: 0).
+         specifies wether the regression is to be done by the user or auto-
+         matically (default: 0).
        o graphs : Boolean:
 
          specifies wether the regularized graphs have to be displayed
@@ -65,10 +65,10 @@ Description
   mately linear region for the red estimations.  The number of scales
   (voices) tells how many convolutions are computed. The bigger it is, the
   slower the computation is. The scale axis is geometrically sampled (i.e.
-  its log is arithmetically sampled). The gaussian kernel should give a
-  better result but the rectangle is faster.  As a general rule, be careful
-  of the size of the input signal and of the maximal size of the kernel (Nmax
-  x Nmax) to avoid too long computing times.
+  its log is arithmetically sampled).  The gaussian kernel should give a bet-
+  ter result but the rectangle is faster.  As a general rule, be careful of
+  the size of the input signal and of the maximal size of the kernel (Nmax x
+  Nmax) to avoid too long computing times.
 
 See also:
   cwttrack, cwtspec.

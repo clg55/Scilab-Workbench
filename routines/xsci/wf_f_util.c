@@ -10,6 +10,10 @@
  * any purpose.  It is provided "as is" without express or implied warranty."
  */
 
+#if defined(netbsd) || defined(freebsd)
+#include <unistd.h>
+#endif
+
 #include "wf_fig.h"
 #include "wf_resources.h"
 
@@ -65,7 +69,7 @@ change_directory(path)
 int 
 get_directory()
 {
-#if defined(SYSV) || defined(SVR4)
+#if defined(SYSV) || defined(SVR4) || defined(netbsd) || defined(freebsd)
     extern char	   *getcwd();
 
 #else

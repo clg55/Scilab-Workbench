@@ -1,4 +1,8 @@
-/* Copyright INRIA */
+/**************************************
+ * Copyright Jean-Philippe Chancelier 
+ * ENPC 
+ **************************************/
+
 #include <string.h>
 #include "FTables0.h"
 #include "FTables.h"

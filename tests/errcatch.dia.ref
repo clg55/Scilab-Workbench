@@ -1,6 +1,7 @@
  
 clear;
  
+ 
 errcatch(4,'continue','nomessage')
  
 a
@@ -27,7 +28,6 @@ Warning :redefining function: foo
 foo();if iserror(4)==1 then errclear(-1),else bugmes();quit;end
  
  
- 
 deff('b=foo()','x=a;b=1','n')
 Warning :redefining function: foo                     
  
@@ -40,7 +40,6 @@ deff('b=foo()','x=a;b=1');b=foo();errclear(-1)
 Warning :redefining function: foo                     
  
  
- warning: stack problem..., cleared
  
  
 deff('b=foo()',['x=a';'b=1'])
@@ -94,4 +93,31 @@ if ierr<>4|or(b<>(1:3)) then bugmes();quit;end
  
 clear;errcatch(4,'continue','nomessage')
  
-execstr('a');if iserror(4)==1 then errclear(-1),else bugmes();quit;end
+execstr('a;if iserror(4)==1 then errclear(-1),else bugmes();quit;end')
+ 
+clear;errcatch(-1)
+ 
+ 
+deff('b=foo()',['b=[]';
+                'errcatch(4,''continue'',''nomessage'')'
+                'for k=1:3'
+                '  b(1,k)=k'
+                '  a'
+                '  if iserror(4)==1 then errclear(-1),end'
+                'end'],'n')
+ 
+b=foo();if or(b<>(1:3)) then bugmes();quit;end
+ 
+ 
+deff('b=foo()',['b=[]';
+                'errcatch(4,''continue'',''nomessage'')'
+                'for k=1:3'
+                '  b(1,k)=k'
+                '  a'
+                '  if iserror(4)==1 then errclear(-1),end'
+                'end'])
+Warning :redefining function: foo                     
+ 
+ 
+b=foo();if or(b<>(1:3)) then bugmes();quit;end
+ 

@@ -3,7 +3,7 @@ c ====================================================================
 C     dasrt 
 c ====================================================================
 c
-c     Copyright INRIA
+c     Copyright INRIA/ENPC 
       INCLUDE '../stack.h'
 c
       character*(*) fname

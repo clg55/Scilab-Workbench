@@ -37,9 +37,9 @@ DESCRIPTION
   group data base.  A multicast is performed to these tids.  If the group is
   changed during a broadcast the change will not be reflected in the broad-
   cast.  Multicasting is not supported by most multiprocessor vendors.  Typi-
-  cally their native calls only support broadcasting to all the user's
-  processes on a multiprocessor. Because of this omission, pvm_bcast may not
-  be an efficient communication method on some multiprocessors.
+  cally their native calls only support broadcasting to all the user's pro-
+  cesses on a multiprocessor. Because of this omission, pvm_bcast may not be
+  an efficient communication method on some multiprocessors.
 EXAMPLE
   info = pvm_bcast( "worker",[12+%i,4,5;3,4+%i,5],10)
 SEE ALSO

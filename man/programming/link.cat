@@ -40,7 +40,7 @@ DESCRIPTION
   link is a dynamic link facility: this command allows to add new compiled
   Fortran or C routines to Scilab executable code.  Linked routines can be
   called interactively by the function fort.  Linked routines can also be
-  used as "external" for e.g. non linear problem solvers (ode, optim, intg,
+  used as "external" for e.g.  non linear problem solvers (ode, optim, intg,
   dassl...). Here are some examples:
 
   The command link('foo.o','foo','f') links the Fortran object file foo.o
@@ -72,7 +72,7 @@ DESCRIPTION
   even if a warning for unresolved references is issued.
 
   (Experienced) users may also link a new Scilab interface routine to add a
-  set of new functions. See Intersci documentation for interface generation
+  set of new functions.  See Intersci documentation for interface generation
   and addinter function.
 
 REMARKS
@@ -104,9 +104,9 @@ REMARKS
   show:
        The command lst=link('show') will report information about linked
        shared libraries and linked functions.  The return value of the func-
-       tion lst is 1 or 0. If the return value is 1 then the extended calling
-       sequence described as Link extensions for machines using ``dlopen''
-       are accepted.
+       tion lst is 1 or 0.  If the return value is 1 then the extended call-
+       ing sequence described as Link extensions for machines using
+       ``dlopen''  are accepted.
   unlink :
        (dlopen version) If the function f is changed and one wants to link
        the new version, it is necessary to use unlink to get rid of previous

@@ -11,7 +11,7 @@ include ../../Makefile.incl.mak
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = commlib
-NAM = comm
+NAM = SCI/macros/comm
 
 MACROS = ExecScilab.sci ExeclScilab.sci
 

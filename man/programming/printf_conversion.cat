@@ -1,45 +1,42 @@
 
-printf_conversion(1)        Scilab Documentation         printf_conversion(1)
+printf_conversion(1)         Scilab Documentation        printf_conversion(1)
 NAME
   printf_conversion - printf, sprintf, fprintf conversion specifications
 
 DESCRIPTION
-  Each conversion specification in the printf , sprintf , f printfformat
+  Each conversion specification in the printf , sprintf , fprintf format
   parameter has the following syntax:
 
-  -         A % (percent) sign.
+  -    A % (percent) sign.
 
-  -         Zero or more options, which modify the meaning of the conversion
-            specification.  The following list contains the option characters
-            and their meanings:
+  -    Zero or more options, which modify the meaning of the conversion spec-
+       ification.  The following list contains the option characters and
+       their meanings:
 
-            -       : Left align, within the field, the result of the conver-
-                    sion.
+       -       : Left align, within the field, the result of the conversion.
 
-            +       : Begin the result of a signed conversion with a sign (+
-                    or -).
+       +       : Begin the result of a signed conversion with a sign (+ or
+               -).
 
-            "space" : Prefix a space character to the result if the first
-                    character of a signed conversion is not a sign.  If both
-                    the (space) and + options appear, the (space) option is
-                    ignored.
+       "space" : Prefix a space character to the result if the first charac-
+               ter of a signed conversion is not a sign.  If both the (space)
+               and + options appear, the (space) option is ignored.
 
-            #       : Convert the value to an alternate form.  For c, d, i,
-                    s, and u conversions, the # option has no effect.  For o
-                    conversion, # increases the precision to force the first
-                    digit of the result to be a 0 (zero).  For x and X
-                    conversions, a nonzero result has 0x or 0X prefixed to
-                    it.  For e, E, f, g, and G conversions, the result always
-                    contains a decimal point, even if no digits follow it.
-                    For g and G conversions, trailing zeros are not removed
-                    from the result.
+       #       : Convert the value to an alternate form.  For c, d, i, s, and
+               u conversions, the # option has no effect.  For o conversion,
+               # increases the precision to force the first digit of the
+               result to be a 0 (zero).  For x and X conversions, a nonzero
+               result has 0x or 0X prefixed to it.  For e, E, f, g, and G
+               conversions, the result always contains a decimal point, even
+               if no digits follow it.  For g and G conversions, trailing
+               zeros are not removed from the result.
 
-            0       : Pad to the field width, using leading zeros (following
-                    any indication of sign or base) for d, i, o, u, x, X, e,
-                    E, f, g, and G conversions; no space padding is per-
-                    formed.  If the 0 and - (dash) flags both appear, the 0
-                    flag is ignored.  For d, i, o u, x, and X conversions, if
-                    a precision is specified, the 0 flag is also ignored.
+       0       : Pad to the field width, using leading zeros (following any
+               indication of sign or base) for d, i, o, u, x, X, e, E, f, g,
+               and G conversions; no space padding is performed.  If the 0
+               and - (dash) flags both appear, the 0 flag is ignored.  For d,
+               i, o u, x, and X conversions, if a precision is specified, the
+               0 flag is also ignored.
 
   An optional decimal digit string that specifies the minimum field width.
   If the converted value has fewer characters than the field width, the field
@@ -93,16 +90,16 @@ DESCRIPTION
              value to be padded with leading zeros.  An octal value for field
              width is not implied.
 
-       x, X  :Accepts an integer value and converts it to unsigned hexade-
-             cimal notation.  The letters ``abcdef'' are used for the x
-             conversion; the letters ``ABCDEF'' are used for the X conver-
-             sion.  The precision specifies the minimum number of digits to
-             appear.  If the value being converted can be represented in
-             fewer digits, it is expanded with leading zeros.  The default
-             precision is 1.  The result of converting a zero value with a
-             precision of zero is a null string.  Specifying a field width
-             with a zero as the leading character causes the field width
-             value to be padded with leading zeros.
+       x, X  :Accepts an integer value and converts it to unsigned hexadeci-
+             mal notation.  The letters ``abcdef'' are used for the x conver-
+             sion; the letters ``ABCDEF'' are used for the X conversion.  The
+             precision specifies the minimum number of digits to appear.  If
+             the value being converted can be represented in fewer digits, it
+             is expanded with leading zeros.  The default precision is 1.
+             The result of converting a zero value with a precision of zero
+             is a null string.  Specifying a field width with a zero as the
+             leading character causes the field width value to be padded with
+             leading zeros.
 
        f     : Accepts a float or double value and converts it to decimal
              notation in the format %[-]ddd.ddd.  The number of digits after
@@ -131,8 +128,8 @@ DESCRIPTION
              -                             The E conversion character pro-
                                            duces a number with E instead of e
                                            before the exponent.  The exponent
-                                           always contains at least two
-                                           digits.  If the value is zero, the
+                                           always contains at least two dig-
+                                           its.  If the value is zero, the
                                            exponent is zero.
 
        g, G  : Accepts a real  and converts it in the style of the e, E, or f

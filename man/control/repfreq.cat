@@ -38,11 +38,11 @@ DESCRIPTION
   vector of frequencies frq given by:
   frq=[10.^((log10(fmin)):step:(log10(fmax))) fmax];
 
-  If step is not given, the output parameter frq is calculated by
-  frq=calfrq(sys,fmin,fmax).
+  If step is not given, the output parameter frq is calculated by frq=cal-
+  frq(sys,fmin,fmax).
 
   Vector frq is splitted into regular parts with the split vector.
-  frq(splitf(k):splitf(k+1)-1) has no critical frequency. sys has a pole in
+  frq(splitf(k):splitf(k+1)-1) has no critical frequency.  sys has a pole in
   the range [frq(splitf(k)),frq(splitf(k)+1)] and no poles outside.
 
 EXAMPLE

@@ -35,8 +35,7 @@ PARAMETERS
   stop      :  sequence of optional parameters controlling the convergence of
             the algorithm.
 
-                        top=top-1stop=  'ar',nap, [iter [,epsg [,epsf
-            [,epsx]]]]
+                        stop=  'ar',nap, [iter [,epsg [,epsf [,epsx]]]]
 
             "ar"
               : reserved keyword for stopping rule selection defined as fol-
@@ -64,8 +63,8 @@ PARAMETERS
   "imp=iflag"
             : named argument used to set the trace mode. iflag=0 nothing
             (execpt errors) is reported, iflag=1 initial and final reports,
-            iflag=2 adds a report per iteration, iflag>2 add reports on
-            linear search. Warning, most of these reports are written on the
+            iflag=2 adds a report per iteration, iflag>2 add reports on lin-
+            ear search. Warning, most of these reports are written on the
             Scilab standard output.
 
   gradopt   :  gradient of costf at xopt
@@ -106,7 +105,7 @@ DESCRIPTION
   costf(ind,n,x,f,g,ti,tr,td)
 
   ind has the same meaning as above if set to 0,1,2 but the values ind=10 and
-  ind=11 are now valid. These values are used for initializations (see
+  ind=11 are now valid.  These values are used for initializations (see
   below).
 
   n is the dimension of x, x is an n vector, ti,tr,td are working arrays.
@@ -152,4 +151,4 @@ EXAMPLES
   [f,xopt,gopt]=optim('genros',[1;2;3])    //Rosenbrock's function
 
 SEE ALSO
-  external, quapro, linpro
+  external, quapro, linpro, datafit, leastsq

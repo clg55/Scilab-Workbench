@@ -1,6 +1,7 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 
 #include <stdio.h>
+#include <string.h>
 #include "../machine.h"
 
 C2F(ctest)(str,lstr,ilstr)

@@ -40,7 +40,7 @@ else
 	prc = 'lpr -P'+printer
 end 
 if flag==1,
-  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+  if MSDOS then 
 	sci1 = strsubst(SCI,'/','\');
  	host(sci1+'\bin\Blpr.exe ''  '' '+fname+ ' | ' + sci1+'\bin\lpr.exe');
   else 
@@ -48,7 +48,7 @@ if flag==1,
   end 
 end
 if rhs==1,
-  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+  if MSDOS then 
     host('del '+fname);
   else
     host('rm -f '+fname);

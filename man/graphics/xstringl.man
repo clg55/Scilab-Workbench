@@ -1,33 +1,38 @@
 .TH xstringl 2 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-xstringl - computes bounding box of the display of matrix of strings
+xstringl - compute a box which surrounds strings
 .SH CALLING SEQUENCE
 .nf
-[rect]=xstringl(x,y,str)
+rect=xstringl(x,y,str)
 .fi
 .SH PARAMETERS 
-.TP 15
+.TP 6
+rect 
+: vector of 4 real scalars defining the box.
+.TP
 x,y
-: real scalars (point coordinates)
+: real scalars, coordinates of the lower-left point of the strings.
 .TP
 str
-: matrix of strings
-.TP
-rect 
-: vector of 4 real scalars (rectangle def \fV[x,y,w,h]\fR)
+: matrix of strings.
 .SH DESCRIPTION
-returns in \fVrect=[x,y,w,h]\fR ( upper-left point, width, height)
-the size of a rectangle in the current graphic scale. which if drawn 
-would surround the string \fVstr\fR drawn at location \fVx,y\fR.
-.SH REMARK
-The result can be approximative under the Postscript driver
+\fVxstringl\fR returns in \fVrect=[x,y,w,h]\fR 
+(upper-left point, width, height)
+the size of a rectangle in the current graphic scale which
+would surround the strings \fVstr\fR drawn at location \fVx,y\fR
+(lower-left point).
+
+The result can be approximative when using the Postscript driver.
 .SH EXAMPLE
 .nf
-plot2d([0;1],[0;1])
-rect=xstringl(0.5,0.5,["Scilab","is" ; "not","balicS"])
+plot2d([0;1],[0;1],0)
+str=["Scilab" "is";"not" "elisaB"];
+r=xstringl(0.5,0.5,str)
+xrects([r(1) r(2)+r(4) r(3) r(4)]')
+xstring(r(1),r(2),str)
 .fi
 .SH SEE ALSO
-xstring
+titlepage, xstring, xstringl, xtitle
 .SH AUTHOR
-J.Ph.C..
+J.Ph.C.

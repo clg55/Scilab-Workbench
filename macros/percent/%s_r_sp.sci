@@ -9,10 +9,22 @@ if na<>nb then error(11),end
 
 if mb<>nb then a=a*b';b=b*b';end
 
-[h,rk]=lufact(b')
-if rk<mini(mb,nb) then warning('deficient rank: rank = '+string(rk)),end
-x=[]    
-for k=1:ma
-  x=[x;lusolve(h,a(k,:)')']
+if isreal(a)&isreal(b) then
+  [h,rk]=lufact(b')
+  if rk<mini(mb,nb) then warning('deficient rank: rank = '+string(rk)),end
+  x=[]    
+  for k=1:ma
+    x=[x;lusolve(h,a(k,:)')']
+  end
+  ludel(h)
+else
+  b=b';a=a'
+  [h,rk]=lufact([real(b) -imag(b);imag(b) real(b)])
+  if rk<2*mini(mb,nb) then warning('deficient rank: rank = '+string(rk/2)),end
+  x=[]    
+  for k=1:ma
+    x=[x lusolve(h,[real(a(:,k));imag(a(:,k))])]
+  end
+  x=(x(1:$/2,:)+%i*x($/2+1:$,:))'
+  ludel(h)
 end
-ludel(h)

@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC/Chancelier Jean-Philippe */
 
 #include <stdlib.h>
 #include <string.h>
@@ -8,6 +8,13 @@
 #endif 
 #include <stdio.h>
 
+#if defined(netbsd)
+#include <ieeefp.h>
+#endif
+
+#if defined(freebsd)
+#include <floatingpoint.h>
+#endif
 
 #ifdef __STDC__
 #ifndef  _PARAMS
@@ -58,6 +65,9 @@ int main(argc, argv)
   char buf[256];
   int i ;
   FILE *fd;
+#if defined(freebsd) || defined(netbsd)
+  fpsetmask(0);
+#endif
   if (argc <= 2) { int i=0;
 		   while (strcmp(UsageStr[i],"fin")!=0)
 		     { 

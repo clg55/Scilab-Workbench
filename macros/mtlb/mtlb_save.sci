@@ -1,16 +1,15 @@
-function mtlb_save(thefile,varargin)
+function mtlb_save(mtlb_thefile,varargin)
 //save variable under  matlab 4.x .mat binary format files
 //
-
 [lhs,rhs]=argn(0)
-opts=[]
+mtlb_opts=[]
 if rhs==1 then
-  names=who('get')
-  names(1:3)=[] // clear functions variables
-  names($-37:$)=[] // clear predefined variables
+  mtlb_names=who('get')
+  mtlb_names(1:3)=[] // clear functions variables
+  mtlb_names($-37:$)=[] // clear predefined variables
   funcprot(0)
-  for k=size(names,'*'):-1:1
-    execstr('x='+names(k))
+  for k=size(mtlb_names,'*'):-1:1
+    execstr('x='+mtlb_names(k))
     select type(x)
     case 1 then
     case 4 then
@@ -18,41 +17,47 @@ if rhs==1 then
     case 6 then
     case 10 then
     else
-      names(k)=[]
+      mtlb_names(k)=[]
     end
   end
 else
   for k=size(varargin):-1:1
     if part(varargin(k),1)=='-' then 
-      opts=[convstr(varargin(k)),opts],
+      mtlb_opts=[convstr(varargin(k)),mtlb_opts],
     else
       kk=k
       break
     end
   end
-  names=[]
+  mtlb_names=[]
   for k=1:kk
-    names=[names, varargin(k)]
+    mtlb_names=[mtlb_names, varargin(k)]
   end
 end
 
-k=strindex(thefile,'.')
+k=strindex(mtlb_thefile,'.')
 if k==[] then  //no extension given
-  if find(opts=='-ascii')==[] then
-    thefile=thefile+'.mat'
+  if find(mtlb_opts=='-ascii')==[] then
+    mtlb_thefile=mtlb_thefile+'.mat'
   end
 end
 
 
-if names==[] then return,end
+if mtlb_names==[] then return,end
+if mtlb_opts==[] then //binary save
+  [mtlb_fd,err]=mopen(mtlb_thefile,'wb',0)
+  // check name conflicts
+  for k=['mtlb_thefile','varargin','mtlb_names','mtlb_opts','mtlb_fd']
+    if or(mtlb_names==k) then
+      error('Name conflict: it is not possible to save variable with name '+k)
+    end
+  end
+  // clear variable wich are no more used to avoid name conflicts
+  clear('rhs','lhs','kk','k','err','mtlb_thefile','or');
 
-if opts==[] then //binary save
-  [fd,err]=mopen(thefile,'wb',0)
-  M=0; //little Endian
-  O=0;
-  for k=1:size(names,'*')
+  for mtlb_k=1:size(mtlb_names,'*')
     // perform changes on variables
-    execstr('x='+names(k))
+    execstr('x='+mtlb_names(mtlb_k))
     it=0
     select type(x)
     case 1 then
@@ -89,14 +94,15 @@ if opts==[] then //binary save
       T=1
     end
     [m,n]=size(x)
-
+    M = 0 //little endian
+    O = 0
     MOPT=[M O P T]
     
     [m,n]=size(x)
-    head=[MOPT*[1000;100;10;1] m,n,it,length(names(k))+1]
+    head=[MOPT*[1000;100;10;1] m,n,it,length(mtlb_names(mtlb_k))+1]
 
-    head=mput(head,'ull',fd);
-    mput([ascii(names(k)) 0],"c",fd);
+    head=mput(head,'ull',mtlb_fd);
+    mput([ascii(mtlb_names(mtlb_k)) 0],"c",mtlb_fd);
     select P
     case 0 then
       flag='dl'
@@ -113,60 +119,66 @@ if opts==[] then //binary save
     end
     if T==0 then
       if x<>[] then
-	mput(real(x(:).'),flag,fd);
+	mput(real(x(:).'),flag,mtlb_fd);
 	if it==1
-	  mput(imag(x(:).'),flag,fd);
+	  mput(imag(x(:).'),flag,mtlb_fd);
 	end
       end
     elseif T==1
-      v=mput(x(:).',flag,fd);
+      v=mput(x(:).',flag,mtlb_fd);
     elseif T==2 then  //sparse
-      mput(x(:).',flag,fd);
+      mput(x(:).',flag,mtlb_fd);
     end
   end
-  mclose(fd);
+  mclose(mtlb_fd);
 else //ascii save
 
-  if convstr(opts(1))<>'-ascii' then 
-    error('Uknown or misplaced option '+opts(1))
+  if convstr(mtlb_opts(1))<>'-ascii' then 
+    error('Uknown or misplaced option '+mtlb_opts(1))
   end
-    if size(opts,'*')==3 then
+    if size(mtlb_opts,'*')==3 then
     sep=str2code(-40)
   else
     sep=' '
   end
-  if size(opts,'*')==1 then //8 digits save
-    fmt='(1pe14.7'+sep+')'
+  if size(mtlb_opts,'*')==1 then //8 digits save
+    mtlb_fmt='(1pe14.7'+sep+')'
   else
-    fmt='(1pe23.15'+sep+')'
+    mtlb_fmt='(1pe23.15'+sep+')'
   end
 
-  fd=file('open',thefile,'unknown')
-  
-  for k=1:size(names,'*')
+  mtlb_fd=file('open',mtlb_thefile,'unknown')
+  // clear variable wich are no more used to avoid name conflicts
+  for k=['mtlb_thefile','varargin','mtlb_names','mtlb_fmt','mtlb_fd']
+    if or(mtlb_names==k) then
+      error('Name conflict: it is not possible to save variable with name '+k)
+    end
+  end
+  clear('rhs','lhs','kk','err','sep');
+  for mtlb_k=1:size(mtlb_names,'*')
     // perform changes on variables
-    execstr('x='+names(k))
+    execstr('x='+mtlb_names(mtlb_k))
     select type(x)
     case 1 then
-      write(fd,real(x),'('+string(size(x,2))+fmt+')')
+      write(mtlb_fd,real(x),'('+string(size(x,2))+mtlb_fmt+')')
     case 4 then
-      write(fd,bool2s(x),'('+string(size(x,2))+fmt+')')
+      write(mtlb_fd,bool2s(x),'('+string(size(x,2))+mtlb_fmt+')')
     case 5 then
       [ij,x]=spget(real(x));x=[ij x];
-      write(fd,real(x),'(2f8.0,1x'+string(size(x,2))+fmt+')')
+      write(mtlb_fd,real(x),'(2f8.0,1x'+string(size(x,2))+mtlb_fmt+')')
     case 6 then
       [ij,x]=spget(bool2s(x));x=[ij x];
-      write(fd,real(x),'(2f8.0,1x'+string(size(x,2))+fmt+')')
+      write(mtlb_fd,real(x),'(2f8.0,1x'+string(size(x,2))+mtlb_fmt+')')
     case 10 then
       x=part(x(:),1:max(length(x)))
       x1=[]
       for l=1:size(x,1)
 	x1=[x1;ascii(x(l))]
       end
-      write(fd,x1,'('+string(size(x1,2))+fmt+')')
+      write(mtlb_fd,x1,'('+string(size(x1,2))+mtlb_fmt+')')
     end
   end
-  file('close',fd)
+  file('close',mtlb_fd)
 end
 
 

@@ -1,9 +1,9 @@
-      subroutine tradsl(kmac,illist,nlist)
+      subroutine tradsl(ilfun,funnam,illist,nlist)
 c     
 c!but 
 c     convert compiled macros to lst structure
 c!calling sequence
-c     subroutine tradsl(kmac,illist,nlist)
+c     subroutine tradsl(ilfun,id,illist,nlist)
 c     kmac  : variable number of the compiled macro in the scilab stack
 c!    
 c
@@ -11,7 +11,7 @@ c
 c     Copyright INRIA
       include '../stack.h'
 c     
-      integer nops
+      integer nops,funnam(nsiz)
       parameter (nops=32)
       character*40 strg
       character*40 form
@@ -59,13 +59,9 @@ c
       rstk(pt)=0
 c
 
-      lc=iadr(lstk(kmac))
+      lc=ilfun
       ilk=lc
-      if(istk(lc).ne.13) then
-         err=1
-         call error(44)
-         return
-      endif
+
 c
 c     on scrute une premiere fois l'ensemble de la macro pour determiner
 c     sa complexite
@@ -94,14 +90,14 @@ c
 c
 c     nom de la macro
       il=iadr(lr)
-      call basnms(idstk(1,kmac),1,istk(il),ni)
+      call basnms(funnam,1,istk(il),ni)
       l=sadr(il+ni)
       istk(ilr)=istk(ilr-1)+l-lr
       lr=l
       ilr=ilr+1
 
 c     nom des parametres de sortie
-      lc=iadr(lstk(kmac))+1
+      lc=ilk+1
       nc=istk(lc)
       il=iadr(lr)
       call basnms(istk(lc+1),nc,istk(il),ni)
@@ -149,11 +145,16 @@ c     nouvelle 'operation'
 c     
       if(ddt.lt.-1) write(6,'(i7)') op
       goto(20,25,40,42,30,41,45,50,50,60,15,90,90,90,90,100,
-     &     12,101,102,90) ,op
+     &     12,101,102,90,103,104,105) ,op
 c     
 c     
 c     matfns
       if(op.ge.100)   goto 80
+      if(op.eq.0) then
+c     "deleted op"
+         lc=lc+istk(lc+1)
+         goto 10
+      endif
 c     
  12   if(op.ne.99) then
          call error(44)
@@ -268,6 +269,7 @@ c     type 5
       istk(il+5)=2
       l=l+1
 c     op
+      iop=istk(lc+1)
       ii=0
  31   ii=ii+1
       if(ii.gt.nops) then
@@ -275,7 +277,7 @@ c     op
          call error(999)
          return
       endif
-      if(ops(ii).ne.istk(lc+1)) goto 31
+      if(ops(ii).ne.iop) goto 31
       call intstr(ii,istk(l),ni,1)
 c      call intstr(istk(lc+1),istk(l),ni,1)
       istk(il+6)=istk(il+5)+ni
@@ -1033,6 +1035,7 @@ c
 c     
       lc=lc+1+nsiz
       goto 10
+
  102  continue
 c     mkindx
       il=iadr(lr)
@@ -1041,7 +1044,7 @@ c     mkindx
       istk(il+2)=3
       istk(il+3)=0
       istk(il+4)=1
-      l=il+9
+      l=il+8
 c     type 2
       istk(l)=1
       istk(l+1)=9
@@ -1054,7 +1057,7 @@ c     n
       l=l+ni
 c     m
       call intstr(istk(lc+2),istk(l),ni,1)
-      istk(il+8)=istk(il+7)+ni
+      istk(il+7)=istk(il+6)+ni
       l=l+ni
 c
       l=sadr(l)
@@ -1065,7 +1068,43 @@ c
       lc=lc+3
       goto 10
 
-      
+ 103  continue
+c     begrhs
+      lc=lc+1
+      goto 10
+
+ 104  continue
+c     printmode (ignored)
+      lc=lc+2
+      goto 10
+c
+ 105  continue
+c     name2var
+      il=iadr(lr)
+      istk(il)=10
+      istk(il+1)=1
+      istk(il+2)=2
+      istk(il+3)=0
+      istk(il+4)=1
+      l=il+7
+c     type 23
+      istk(l)=2
+      istk(l+1)=3
+      istk(il+5)=3
+      l=l+2
+c     nom de la variable
+      call namstr(istk(lc+1),istk(l),ni,1)
+      istk(il+6)=istk(il+5)+ni
+      l=l+ni
+c     
+      l=sadr(l)
+      istk(ilr)=istk(ilr-1)+l-lr
+      lr=l
+      ilr=ilr+1
+c     
+      lc=lc+1+nsiz
+      goto 10
+c
   120 format('(f',i2,'.',i2,')')
   130 format('(1pd',i2,'.',i2,')')
 

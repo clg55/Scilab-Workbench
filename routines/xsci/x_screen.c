@@ -27,6 +27,8 @@
 
 /* screen.c */
 
+#include "malloc.h"
+
 #include "x_ptyxP.h"
 #include "x_error.h"
 #include "x_data.h"
@@ -34,9 +36,6 @@
 #include "../machine.h"
 #include "All-extern-x.h"
 #include "All-extern.h"
-
-extern Char *calloc(), *malloc(), *realloc();
-extern void free();
 
 /*
    allocates memory for a 2-dimensional array of chars and returns a pointer

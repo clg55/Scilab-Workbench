@@ -4,9 +4,9 @@
 printf_conversion - printf, sprintf, fprintf conversion specifications
 .SH DESCRIPTION
 Each conversion specification in the \fVprintf\fR , \fVsprintf\fR ,
-\fVf printf\fR\fVformat\fR parameter
+\fVfprintf\fR \fVformat\fR parameter
 has the following syntax:
-.TP 10
+.TP
 -
 A % (percent) sign.
 .TP

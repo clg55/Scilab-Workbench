@@ -58,7 +58,7 @@ static void WriteColorRGBDef();
 
 static double *vdouble = 0; /* used when a double argument is needed */
 
-#if defined(__CYGWIN32__) || defined(__MINGW32__)
+#if defined(__CYGWIN32__) || defined(__MINGW32__) || defined(__GNUC__)
 static FILE *file= (FILE *) 0;
 #define FPRINTF(x) ( file != (FILE*) 0) ?  fprintf x  : 0 
 #else 
@@ -1013,7 +1013,7 @@ void C2F(gemptyPos)(verbose, v2, v3,dummy)
   if ( *verbose ==1 ) Scistring("\n No operation ");
 }
 
-#define NUMSETFONC 23
+#define NUMSETFONC 26
 
 /** Table in lexicographic order **/
 
@@ -1038,10 +1038,13 @@ struct bgc { char *name ;
     {"pixmap",C2F(semptyPos),C2F(gemptyPos)},
     {"thickness",C2F(setthicknessPos),C2F(getthicknessPos)},
     {"use color",C2F(usecolorPos),C2F(getusecolorPos)},
+    {"viewport",C2F(semptyPos),C2F(gemptyPos)},
     {"wdim",C2F(setwindowdimPos),C2F(getwindowdimPos)},
     {"white",C2F(semptyPos),C2F(getlastPos)},
     {"window",C2F(setcurwinPos),C2F(getcurwinPos)},
+    {"wpdim",C2F(semptyPos),C2F(gemptyPos)},
     {"wpos",C2F(setwindowposPos),C2F(getwindowposPos)},
+    {"wresize",C2F(semptyPos),C2F(gemptyPos)},
     {"wshow",C2F(setwwhowPos),C2F(gemptyPos)},
     {"wwpc",C2F(semptyPos),C2F(gemptyPos)}
  };
@@ -2169,5 +2172,26 @@ static int C2F(PosQueryFont)(name)
   return(1);
 }
 
+void C2F(queryfamilyPos)(name, j, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
+     char *name;
+     integer *j;
+     integer *v3;
+     integer *v4;
+     integer *v5;
+     integer *v6;
+     integer *v7;
+     double *dv1;
+     double *dv2;
+     double *dv3;
+     double *dv4;
+{ 
+  integer i ;
+  name[0]='\0';
+  for (i=0;i<FONTNUMBER;i++) {
+    strcat(name,FontInfoTabPos[i].fname);
+    v3[i]=strlen(FontInfoTabPos[i].fname);
+  }
+  *j=FONTNUMBER;
+}
 
 /*------------------------END--------------------*/

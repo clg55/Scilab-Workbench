@@ -6,8 +6,8 @@ NAME
   Author: Khalid Daoudi
 
   Replaces at each scale the left (resp. right) nodes of the diadic tree,
-  associated to the GIFS coefficients, that belong to [cmin,cmax] by a cera-
-  tin unique value.
+  associated to the GIFS coefficients, that belong to [cmin,cmax] by a cer-
+  atin unique value.
 
 Usage
   [Ci_new, marks, L]=gifseg(Ci,[cmin,cmax,epsilon])

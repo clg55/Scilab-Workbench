@@ -13,7 +13,7 @@ c
       rhs=n
       fin=1
       lhs=1
-      call ref2val
+c      call ref2val
       call lstelm
       rhs=srhs
       lhs=slhs

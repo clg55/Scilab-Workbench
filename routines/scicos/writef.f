@@ -75,7 +75,7 @@ c     file opening
          z(3)=t
          call dset(nu*N,0.0d0,z(4),1)
       elseif(flag.eq.5) then
-         if(K.gt.1) then
+         if(K.ge.1) then
 c     write on the file
             lfmt=ipar(2)
             if (lfmt.gt.0) then

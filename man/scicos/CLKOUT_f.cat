@@ -1,5 +1,5 @@
 
-CLKOUT_f(5)                     Scicos Block                      CLKOUT_f(5)
+CLKOUT_f(5)                      Scicos Block                     CLKOUT_f(5)
 NAME
   CLKOUT_f - Scicos Super Block event output port
 

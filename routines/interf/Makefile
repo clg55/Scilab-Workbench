@@ -5,23 +5,27 @@ SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/interf.a
 
-OBJSC = Interf.o ctest.o  cs2st.o
+OBJSC = Interf.o ctest.o  cs2st.o date2num.o
 
-OBJSF = lstelm.o lstelmi.o lstops.o matdes.o matdsc.o matdsr.o matelm.o\
+
+OBJSF = lstelm.o lstelmi.o  matdes.o matdsc.o matdsr.o matelm.o\
+	lstops.o intl_e.o intl_i.o \
 	matimp.o matio.o matlu.o matnew.o matode.o matops.o matopt.o\
-	matqr.o matqz.o matric.o matsvd.o matsys.o intclear.o intwhat.o\
+	matqr.o matqz.o matric.o matsvd.o matsys.o \
 	polaut.o polelm.o polops.o strelm.o strops.o fmlelm.o\
 	logic.o logelm.o xawelm.o misops.o stack0.o stack1.o stack2.o\
 	where.o indxg.o defint.o\
 	matodc.o dasrti.o\
 	intg.o int2d.o int3d.o feval.o bva.o comm.o specfun.o\
-	intwrite4b.o intread4b.o
+	intwrite4b.o intread4b.o isany.o followpath.o newsave.o insertfield.o
 
 include ../../Makefile.incl
 
 #CFLAGS = $(CC_OPTIONS) -DNODCD -DNOMETANET -DNOSCICOS -DNOSIGNAL -DNOSOUND -DNOSPARSE
 
 CFLAGS = $(CC_OPTIONS)
+
+FFLAGS = $(FC_OPTIONS)
 
 include ../Make.lib
 
@@ -79,8 +83,12 @@ intwhat.o: ../stack.h
 intwrite4b.o: ../stack.h
 intread4b.o: ../stack.h
 stack0.o stack1.o stack2.o: ../stack.h
+getdate.o: ../machine.h
 
-all:: Makefile.mak
+all:: Makefile.mak Makefile.amk
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.amk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile

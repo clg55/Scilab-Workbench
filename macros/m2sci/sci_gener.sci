@@ -34,13 +34,10 @@ txt=[]
 
 //
 RHS=[]
-write(logfile,'Unknown function '+nam+..
-    ',the original calling sequence is used at line '+string(lcount))
-txt='//! Unknown function '+nam+', the original calling sequence is used'
+set_infos('Unknown function '+nam+' ,the original calling sequence is used',2)
 if funptr(nam)<>0 then
   nam1='%'+nam
-  write(logfile,'Warning: conflict with a scilab primitive function name changed to '+nam1)
-  txt='//!function name changed from '+nam+' to '+nam1
+  set_infos('name conflict: function name changed from '+nam+' to '+nam1',0)
   nam=nam1
 end
 for k=1:rhs

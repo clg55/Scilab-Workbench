@@ -37,9 +37,9 @@ DESCRIPTION
   up and yp define the initial conditions for t < 0 i.e
     up=[u(-d1), ..., u(-1)  ]
     yp=[y(-d1), ...  y(-1)  ]
-  Depending on the relative values of d1 and d2, some of the leftmost com-
-  ponents of up, yp are ignored.  The default values of up and yp are zero:
-  up = 0*ones(m,d1), yp=0*ones(n,d1)
+  Depending on the relative values of d1 and d2, some of the leftmost compo-
+  nents of up, yp are ignored.  The default values of up and yp are zero: up
+  = 0*ones(m,d1), yp=0*ones(n,d1)
 
 EXAMPLE
   z=poly(0,'z');

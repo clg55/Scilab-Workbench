@@ -1,6 +1,7 @@
 function [stk,txt,top]=sci_line()
 // Copyright INRIA
 txt=[]
+options=[]
 if rhs>2 then
   top=top-rhs+2
   rhs=2

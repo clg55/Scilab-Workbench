@@ -9,6 +9,7 @@ c     Copyright INRIA
       integer iadr,sadr
 c     
       common/ierode/iero
+      logical allowptr
 c     
       double precision t, y(*),ydot(*),res(*),rpar(*)
       integer ires,ipar(*)

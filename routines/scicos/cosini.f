@@ -11,7 +11,7 @@ C
       integer cord(*)
       integer rpptr(*),ipar(*),ipptr(*),funptr(*),funtyp(*),ierr
 c
-      integer i,jj,flag,nclock,ntvec
+      integer i,jj,flag,nclock,ntvec,kfune
       double precision tvec(1)
 c
       integer nblk,nordptr,nout,ng,nrwp,
@@ -35,11 +35,15 @@ C     loop on blocks
          call callf(kfun,nclock,funptr,funtyp,told,x,x,xptr,z,zptr,iz,
      $        izptr,rpar,rpptr,ipar,ipptr,tvec,ntvec,inpptr,inplnk,
      $        outptr,outlnk,lnkptr,outtb,flag) 
-         if(flag.lt.0) then
+         if(flag.lt.0.and.ierr.eq.0) then
             ierr=5-flag
-            return
+            kfune=kfun
          endif
  5    continue
+      if(ierr.ne.0) then
+         kfun=kfune
+         return
+      endif
  
 C     initialization (flag 6)
       nclock = 0
@@ -100,4 +104,5 @@ c
          call dcopy(nout,outtb,1,outt,1)
  50   continue
       ierr=20
+      return
       end      

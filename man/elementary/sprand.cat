@@ -22,8 +22,8 @@ DESCRIPTION
   sp=sprand(nrows,ncols,fill) returns a sparse matrix sp with nrows rows,
   ncols columns and approximately fill*nrows*ncols non-zero entries.
 
-  If typ='uniform' uniformly distributed values are generated.  If
-  typ='normal' normally distributed values are generated.
+  If typ='uniform' uniformly distributed values are generated.  If typ='nor-
+  mal' normally distributed values are generated.
 
 EXAMPLE
   W=sprand(100,1000,0.001);

@@ -15,7 +15,7 @@ c     cr, ci: double precision, c real and complex parts.
 c
 c!author
 c
-c     cleve moler.
+c     Serge Steer
 c
 c!
 c     Copyright INRIA
@@ -25,15 +25,11 @@ c     c = a/b
 c
       ierr=0
       if(bi.eq.0.0d0) then
-         brs=br
-         cr=ar/brs
-         ci=ai/brs
+         cr=ar/br
+         ci=ai/br
       elseif(br.eq.0.0d0) then
-         ais=ai
-         ars=ar
-         bis=bi
-         cr=ais/bis
-         ci=-ars/bis
+         cr=ai/bi
+         ci=-ar/bi
       else
          s = abs(br) + abs(bi)
          if (s .eq. 0.0d+0) then

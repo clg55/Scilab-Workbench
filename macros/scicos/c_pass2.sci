@@ -147,7 +147,7 @@ ztyp(typ_z)=1
 simtp=['scs','funs','xptr','zptr','izptr','inpptr','outptr','inplnk',..
     'outlnk','lnkptr','rpar','rpptr',..
     'ipar','ipptr','clkptr','ordptr','execlk','ordclk','cord','oord',..
-    'zord','critev','nb','nblk','ztyp','ndcblk','subscr','funtyp',..
+    'zord','critev','nb','ztyp','nblk','ndcblk','subscr','funtyp',..
     'iord','labels']
 
 subscr=[]
@@ -889,12 +889,24 @@ for hh=1:length(bllst)
       
       ww=find(bllst(connectmat(jj,3))(3)==nin)
       bllst(connectmat(jj,3))(3)(ww)=nout
+      
+      ww=find(bllst(connectmat(jj,3))(3)==0)
+      if (ww<>[]&mini(bllst(connectmat(jj,3))(2)(:))>0) then
+	bllst(connectmat(jj,3))(3)(ww)=sum(bllst(connectmat(jj,3))(2)(:))
+      end
+      
     elseif (nin>0&nout<0) then 
       ww=find(bllst(connectmat(jj,1))(3)==nout)
       bllst(connectmat(jj,1))(3)(ww)=nin
 
       ww=find(bllst(connectmat(jj,1))(2)==nout)
       bllst(connectmat(jj,1))(2)(ww)=nin
+      
+      ww=find(bllst(connectmat(jj,1))(2)==0)
+      if (ww<>[]&mini(bllst(connectmat(jj,1))(3)(:))>0) then 
+	bllst(connectmat(jj,1))(2)(ww)=sum(bllst(connectmat(jj,1))(3))
+      end
+      
 
     elseif (nin==0) then
       ww=bllst(connectmat(jj,3))(3)(:)

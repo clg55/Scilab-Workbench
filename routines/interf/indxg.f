@@ -220,7 +220,6 @@ c
 
       call indxg(il,siz,ilr,mi,mx,lw,1)
       if(err.gt.0) return
-c     computes complement
       ilc=iadr(lw)
       lw=sadr(ilc+siz)
       err=lw-lstk(bot)
@@ -228,21 +227,31 @@ c     computes complement
          call error(17)
          return
       endif
-      k=0
-      do 20 i=1,siz
-         test=.true.
-         do 10 j=1,mi
-            test=test.and.istk(ilr-1+j).ne.i
- 10      continue
-         if(test) then
-            istk(ilc+k)=i
-            k=k+1
-         endif
- 20   continue
-      mx=istk(ilc-1+k)
-      mi=k
+      if(mi.eq.0) then
+         do 05 i=1,siz
+            istk(ilc+i-1)=i
+ 05      continue
+         mx=istk(ilc+siz-1)
+         mi=siz
+      else
+c     computes complement
+         k=0
+         do 20 i=1,siz
+            test=.true.
+            do 10 j=1,mi
+               test=test.and.istk(ilr-1+j).ne.i
+ 10         continue
+            if(test) then
+               istk(ilc+k)=i
+               k=k+1
+            endif
+ 20      continue
+         mx=istk(ilc-1+k)
+         mi=k
+      endif
       ilr=ilc
-c      call icopy(mi,istk(ilc),1,istk(ilr),1)
+c     call icopy(mi,istk(ilc),1,istk(ilr),1)
       lw=sadr(ilr+mi)
+
       return
       end

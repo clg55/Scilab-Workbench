@@ -23,6 +23,8 @@ i
 :  boolean matrix.
 .IP 5
 :  sparse matrix.
+.IP 8
+:  matrix of integers stored on 1 2 or 4 bytes
 .IP 10 
 :  matrix of character strings.
 .IP 11 

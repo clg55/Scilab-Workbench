@@ -13,7 +13,7 @@ DESCRIPTION
 
   Dot is used to mark decimal point for numbers : 3.25 and 0.001
 
-  used in cunjunction with other operator symbols (* /  ^ ') to form
+  used in cunjunction with other operator symbols (* / \ ^ ') to form
         other operators.  Element-by-element multiplicative operations are
         obtained using .* , .^ , ./ , .\ or .'.  For example, C = A ./ B is
         the matrix with elements c(i,j) = a(i,j)/b(i,j). Kronecker product is

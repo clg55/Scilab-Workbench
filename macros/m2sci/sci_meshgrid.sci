@@ -2,30 +2,42 @@ function [stk,txt,top]=sci_meshgrid()
 // Copyright INRIA
 txt=[]
 if rhs==2 then
-  X=stk(top-1)(1)
-  Y=stk(top)(1)
-  txt='// translation of meshgrid('+makeargs([X,Y])+')'
-
-  if ~isname(X) then
-    X=gettempvar(1)
+  X=stk(top-1)(1);[mx,nx]=checkdims(stk(top-1));
+  Y=stk(top)(1);[my,ny]=checkdims(stk(top));
+  txt='// inline translation of meshgrid('+makeargs([X,Y])+')'
+  if lhs==2 then
+    [U,V]=lhsvarsnames()
+    if mx==1 then
+      txt=[txt;U+'='+X]
+    else
+      txt=[txt;
+	  U+'=matrix('+X+',1,-1)']
+    end
+    if ny==1 then
+      txt=[txt;V+'='+Y]
+    else
+      txt=[txt;
+	  V+'=matrix('+Y+',-1,1)']
+    end
+    
     txt=[txt;
-	X+'='+stk(top-1)(1)]
-  end
-  txt=[txt;
-      X+'='+X+'(:)''']
-
-  if ~isname(Y) then
-    Y=gettempvar(2)
+	U+'='+U+'(ones('+U+'),:)'
+	V+'='+V+'(:,ones('+V+'))']
+    stk=list(list(U,'0','?','?','1'),list(V,'0','?','?','1'))
+  else
+    U=lhsvarsnames()
+    if U==[] then U=gettempvar(),end
+    if mx==1 then
+      txt=[txt;U+'='+X]
+    else
+      txt=[txt;
+	  U+'=matrix('+X+',1,-1)']
+    end
+    
     txt=[txt;
-	Y+'='+stk(top)(1)]
+	U+'='+U+'(ones('+U+'),:)']
+    stk=list(U,'0','?','?','1')
   end
-  txt=[txt;
-      Y+'='+Y+'(:)']
-  
-  txt=[txt;
-      X+'='+X+'(ones('+Y+'(:)),:)'
-      Y+'='+Y+'(:,ones('+X+'(1,:)))']
-  stk=list(list(X,'0','?','?','1'),list(Y,'0','?','?','1'))
 else
   X=stk(top-2)(1)
   Y=stk(top-1)(1)

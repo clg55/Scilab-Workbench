@@ -15,9 +15,9 @@ PARAMETERS
 
 DESCRIPTION
   spcho=chfact(A) computes the sparse Cholesky factors of sparse matrix A,
-  assumed symmetric positive definite.  This function is based on the Ng-
-  Peyton programs (ORNL). See the Fortran programs for a complete description
-  of the variables in spcho. This function is to be used with chsolve.
+  assumed symmetric positive definite.  This function is based on the Ng-Pey-
+  ton programs (ORNL). See the Fortran programs for a complete description of
+  the variables in spcho. This function is to be used with chsolve.
 
 SEE ALSO
   chsolve, sparse, lufact, luget, spchol

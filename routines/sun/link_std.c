@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 #include <string.h>
 #include <sys/types.h>
 #include <sys/param.h>

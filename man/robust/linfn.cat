@@ -12,8 +12,8 @@ PARAMETERS
 
   PREC      : desired relative accuracy on the norm
 
-  RELTOL    : relative threshold to decide when an eigenvalue can be con-
-            sidered on the imaginary axis.
+  RELTOL    : relative threshold to decide when an eigenvalue can be consid-
+            ered on the imaginary axis.
 
   options   : available options are 'trace' or 'cond'
 

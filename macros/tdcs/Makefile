@@ -8,7 +8,7 @@ include ../../Makefile.incl
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = tdcslib
-NAM =tdcs
+NAM = SCI/macros/tdcs
 
 MACROS=	artest.sci  boucle.sci comric.sci  \
 	exemple.sci  finit.sci  gaincom.sci gainobs.sci gpeche.sci  \

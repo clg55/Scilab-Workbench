@@ -10,11 +10,11 @@ MAKE=nmake /f Makefile.mak
 #---------------------
 # To compile with TCL/TK interface, uncomment the following lines and give
 # the good pathnames for TKLIBS and TCL_INCLUDES.
-TKSCI=libs/tksci.lib 
-TKLIBS=d:\tcl8.0\win\tcl80.lib d:\tk8.0\win\tk80.lib
-TKLIBSBIN="$(SCIDIR1)\bin\tcl80.lib" "$(SCIDIR1)\bin\tk80.lib"
-TCL_INCLUDES=-Id:\tcl8.0\generic -Id:\tk8.0\generic -Id:\tk8.0\xlib
-DTK=-DWITH_TK
+#TKSCI=libs/tksci.lib 
+#TKLIBS=d:\tcl8.0\win\tcl80.lib d:\tk8.0\win\tk80.lib
+#TKLIBSBIN="$(SCIDIR1)\bin\tcl80.lib" "$(SCIDIR1)\bin\tk80.lib"
+#TCL_INCLUDES=-Id:\tcl8.0\generic -Id:\tk8.0\generic -Id:\tk8.0\xlib
+#DTK=-DWITH_TK
 #---------------------
 # Scilab pvm library
 #---------------------
@@ -46,15 +46,27 @@ LINKER=link
 LINKER_FLAGS=/NOLOGO /DEBUG /Debugtype:cv /machine:ix86
 # standard option for the linker 
 LINKER_FLAGS=/NOLOGO /machine:ix86
-INCLUDES=-I../f2c $(TCL_INCLUDES) $(PVM_INCLUDES)
+# include options 
+INCLUDES=-I$(SCIDIR)/routines/f2c $(TCL_INCLUDES) $(PVM_INCLUDES)
 # compiler flags: -MT is only needed if tcl/tk is used 
-USE_MT=-MT
+#USE_MT=-MT
 CC_COMMON=-D__MSC__ -DWIN32 -c -DSTRICT -nologo $(INCLUDES) $(DTK) $(DPVM) $(DMKL) $(USE_MT)
 # debug 
 CC_OPTIONS =  $(CC_COMMON) -Z7 -W3 -Od 
-# standard option (optimization does not work)
+# standard option ( replace Od->O2 for optimization but note that optimization does not work )
 CC_OPTIONS = $(CC_COMMON) -Od  -GB -Gd -W3
 CC_LDFLAGS = 
+#---------------------
+# Fortran Compiler 
+# default usage is to use f2c 
+#---------------------
+USE_F2C=YES
+# if USE_F2C is set to NO we will use the following Fortran compiler (i.e Visual Fortran)
+!IF "$(USE_F2C)" == "NO"
+FC=df 
+FC_OPTIONS=/debug /nologo /assume:underscore /compile_only /iface:(cref,nomixed_str_len_arg) /names:lowercase 
+LINKER_FLAGS=$(LINKER_FLAGS) /force:multiple
+!ENDIF
 #--------------------
 # resource compiler 
 #--------------------
@@ -81,11 +93,25 @@ XLIBSBIN=$(TKLIBSBIN) $(PVMLIB) $(GUILIBS)
 	@echo ------------- Compile file $< --------------
 	$(CC) $(CFLAGS) $< 
 
+# default rule for Fortran Compilation 
+
+!IF "$(USE_F2C)" == "YES"
+.f.obj	:
+	@echo ----------- Compile file $*.f (using f2c) -------------
+	@$(SCIDIR1)\bin\f2c.exe $(FFLAGS) $*.f 
+	@$(CC) $(CFLAGS) $*.c 
+	@del $*.c 
+!ELSE 
+.f.obj	:
+	@echo -----------Compile file $*.f  (using $(FC)) -------------
+	@$(FC) $(FFLAGS) $<
+!ENDIF 
+
 #--------------------
 # RM only exists if gcwin32 is installed 
 #----------------------------------
 
-RM = rm -f 
+RM = del
 
 #--------------------
 # clean 

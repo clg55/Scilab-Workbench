@@ -1,5 +1,8 @@
 #include <stdio.h>
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
+#if defined(netbsd) || defined(freebsd) 
+#include <sys/types.h>
+#endif
 #include <dirent.h>
 #endif
 #include <string.h>
@@ -9,9 +12,18 @@
 #include <malloc.h>
 #endif
 
-#ifdef __MSC__ 
+#if (defined __MSC__) || (defined __ABSC__) 
 /** only used for x=dir[1024] **/
+#ifndef __ABSC__
 #define  getwd(x) _getcwd(x,1024) 
+#define chdir(x) _chdir(x)
+#else
+#define  getwd(x) getcwd_(x,1024) 
+#endif
+#endif
+
+#if defined(netbsd) || defined(freebsd)
+#include <unistd.h>
 #endif
 
 #include "../machine.h"
@@ -56,7 +68,7 @@ int *default_edge_hi_width,*default_font_size;
 int *ma;
 {
   FILE *f;
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
   DIR *dirp;
 #else
   int it;
@@ -102,10 +114,15 @@ int *ma;
     strcpy(nname,name);
   }
   else {
-#ifdef __MSC__
+#if (defined __MSC__) || (defined __ABSC__)
     getwd(dir);
-    it= _chdir(path);
-    _chdir(dir);
+#ifdef __MSC__  
+    it= chdir(path);
+    chdir(dir);
+#else
+    it= chdir_(path,strlen(path));
+    chdir_(dir,strlen(dir));
+#endif
     if (it == 0) {
       strcpy(dir,path);
     }
@@ -121,7 +138,7 @@ int *ma;
       else strcpy(dir,dirname(path));     
     }
   }
-#ifndef __MSC__  
+#if !(defined __MSC__) && !(defined __ABSC__)
   if ((dirp=opendir(dir)) == NULL) {
     sprintf(description,"Directory \"%s\" does not exist",dir);
     cerro(description);

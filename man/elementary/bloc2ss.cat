@@ -39,10 +39,10 @@ DESCRIPTION
   ples)
 
   Case 2 :  the second kind of element in a block-diagram representation is a
-  link.  A link links one output of a block represented by the pair
-  [number_of_upstream_box,upstream_box_port], to different inputs of other
-  blocks. Each such input is represented by the pair
-  [downstream_box_i,downstream_box_i_portnumber].
+  link.  A link links one output of a block represented by the pair [num-
+  ber_of_upstream_box,upstream_box_port], to different inputs of other
+  blocks. Each such input is represented by the pair [downstream_box_i,down-
+  stream_box_i_portnumber].
 
   The different elements of a block-diagram can be defined in an arbitrary
   order.

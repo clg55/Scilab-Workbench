@@ -1,4 +1,4 @@
-function [X,dims,J,Y,k,Z]=cainv(Sl,alfa,beta)
+function [X,dims,J,Y,k,Z]=cainv(Sl,alfa,beta,flag)
 //CA invariant subspace: dual of abinv
 //Finds orthogonal bases X and Y and output injection J
 //such that the abcd matrices of Sl in bases (X,Y) are displayed as:
@@ -42,17 +42,49 @@ function [X,dims,J,Y,k,Z]=cainv(Sl,alfa,beta)
 // H*W = [0 | *]  (with at least as many columns as above).
 // Copyright INRIA
 [LHS,RHS]=argn(0);
-if RHS==1 then alfa=-1;beta=-1;end
-if RHS==2 then beta=-1;end
-[X,ddims,F,U,k,Z]=abinv(Sl',beta,alfa);
+if RHS==1 then alfa=-1;beta=-1;flag='ge';end
+if RHS==2 then beta=alfa;flag='ge';end
+if RHS==3 then flag='ge';end
+if RHS==4 then 
+if type(flag)~=10 then error('abinv: flag must be a string');end
+end
+[X,ddims,F,U,k,Z]=abinv(Sl',beta,alfa,flag);
+[nx,nx]=size(X);
+select flag
+case 'ge'
 nr=ddims(1);nvg=ddims(2);nv=ddims(3);noc=ddims(4);nos=ddims(5);
-[nx,nx]=size(X);dimS=nx-nv;dimSg=nx-nvg;dimN=nx-nr;nu1=nx-noc;nd1=nx-nos;
-n6=nx-nd1+1:nx;n5=nx-nu1+1:nx-nd1;
-n4=nx-dimS+1:nx-nu1;n3=nx-dimSg+1:nx-dimS;n2=nx-dimN+1:nx-dimSg;n1=1:nx-dimN;
+nd1=nx-nos;nu1=nx-noc;dimS=nx-nv;dimSg=nx-nvg;dimN=nx-nr;
+n6=1+ddims(5):nx;
+n5=1+ddims(4):ddims(5);
+n4=1+ddims(3):ddims(4);
+n3=1+ddims(2):ddims(3);
+n2=1+ddims(1):ddims(2);
+n1=1:ddims(1);
 //nr=1:nr;nzs=nr+1:nr+nvg;nzi=nvg+1:nv;
 X=[X(:,n6),X(:,n5),X(:,n4),X(:,n3),X(:,n2),X(:,n1)];
 J=F';Z=Z';Y=U';Y=[Y(k+1:$,:);Y(1:k,:)];
 dims=[nd1,nu1,dimS,dimSg,dimN];
+return;
+case 'st'
+dims=nx-ddims;dims=dims($:-1:1);
+n5=1+ddims(4):nx;
+n4=1+ddims(3):ddims(4);
+n3=1+ddims(2):ddims(3);
+n2=1+ddims(1):ddims(2);
+n1=1:ddims(1);
+X=[X(:,n5),X(:,n4),X(:,n3),X(:,n2),X(:,n1)];
+J=F';Z=Z';Y=U';Y=[Y(k+1:$,:);Y(1:k,:)];
+return;
+case 'pp'
+dims=nx-ddims;dims=dims($:-1:1);
+n4=1+ddims(3):nx;
+n3=1+ddims(2):ddims(3);
+n2=1+ddims(1):ddims(2);
+n1=1:ddims(1);
+X=[X(:,n4),X(:,n3),X(:,n2),X(:,n1)];
+J=F';Z=Z';Y=U';Y=[Y(k+1:$,:);Y(1:k,:)];
+return;
+end
 
 
 

@@ -21,8 +21,8 @@ PARAMETERS
   tol       : threshold for controllability test.
 
 DESCRIPTION
-  Detectability test for sl, a linear system in state-space representation. U
-  is a basis whose k first columns span the unstable, unobservable subspace
+  Detectability test for sl, a linear system in state-space representation.
+  U is a basis whose k first columns span the unstable, unobservable subspace
   of Sl (intersection of unobservable subspace of (A,C) and unstable subspace
   of A). Detectability means k=0.
 

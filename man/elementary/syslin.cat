@@ -27,8 +27,8 @@ PARAMETERS
 DESCRIPTION
   syslin  defines a linear system as a list and checks consistency of data.
 
-  dom specifies the time domain of the system and can have the following
-  values:
+  dom specifies the time domain of the system and can have the following val-
+  ues:
 
   dom='c' for a continuous time system, dom='d' for a discrete time system, n
   for a sampled system with sampling period n (in seconds).

@@ -3,14 +3,35 @@
 .SH NAME
 arma - Scilab arma library
 .SH DESCRIPTION
+Armax processes can be coded with Scilab tlist of type \fV'ar'\fR. 
+\fVarmac\fR is used to build \fVArmax\fR scilab object. An \fV'ar'\fR 
+tlist contains the fields \fV['a','b','d','ny','nu','sig']\fR. 
 .TP 10
 armac
-: this function creates a description as a list of an  ARMAX process 
+: this function creates a Scilab tlist which code an  Armax process 
    A(z^-1)y= B(z^-1)u + D(z^-1)sig*e(t)
+.nf
+-->ar=armac([1,2],[3,4],1,1,1,sig);
+ 
+-->ar('a')   
+ ans  =
+ 
+!   1.    2. !
+-->ar('sig')
+ ans  =
+ 
+    1.  
+.fi
 .TP
-armap
-: Display in the file out or on the screen the armax equation
-associated with ar
+armap(ar [,out])
+: Display the armax equation associated with \fVar\fR
+.TP
+armap_p(ar [,out])
+: Display the armax equation associated with \fVar\fR 
+using polynomial matrix display.
+.TP
+[A,B,D]=armap2p(ar)
+: extract polynomial matrices from ar representation 
 .TP
 armax 
 : is used to identify the coefficients of a n-dimensional 
@@ -23,7 +44,7 @@ ARX process
    A(z^-1)y= B(z^-1)u + D(z^-1)sig*e(t)
 .TP 
 arsimul
-: armax trajectory simulation 
+: armax trajectory simulation.
 .TP
 arspec
 : Spectral power estimation of armax processes. 

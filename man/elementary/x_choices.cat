@@ -14,9 +14,9 @@ PARAMETERS
   items
        : a list of items items=list(item1,...,itemn), where each item is also
        a list of the following type :
-       item=list('label',default_choice,choices). default_choice is an
-       integer which gives the default toggle on entry and choices is a row
-       vector of strings which gives the possible choices.
+       item=list('label',default_choice,choices). default_choice is an inte-
+       ger which gives the default toggle on entry and choices is a row vec-
+       tor of strings which gives the possible choices.
 
   rep  : an integer vector which gives for each item the number of the
        selected toggle. If user exits dialog with "cancel" button rep is set

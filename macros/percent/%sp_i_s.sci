@@ -3,4 +3,10 @@ function a=%sp_i_s(i,j,b,a)
 // a(i,j)=b
 //!
 // Copyright INRIA
-a(i,j)=full(b)
+[lhs,rhs]=argn(0)
+if rhs==4 then
+  a(i,j)=full(b)
+else
+  a=b;//b=j
+  a(i)=full(j)
+end

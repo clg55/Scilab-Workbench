@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 
 #include "../machine.h"
 #include <stdio.h>
@@ -13,15 +13,39 @@
 extern  char  *getenv();
 #endif
 
-#ifdef __MSC__
+#if (defined __MSC__) || (defined __ABSC__)
 #include <stdlib.h> 
 #ifdef __MINGW32__
 /** XXXXX missing in mingw32 **/
 #define putenv(x) 
 #else 
+#ifdef __ABSC__
+#define putenv(x) abs_putenv(x)
+#define getpid() getpid_()
+#else
 #define putenv(x) _putenv(x)
+#endif
 #endif 
-#endif 
+#endif
+
+#define MAXINTERF 50
+#define INTERFSIZE 25 
+typedef struct 
+{
+  char name[INTERFSIZE]; /** name of interface **/
+  void (*func)();        /** entrypoint for the interface **/
+  int Nshared; /** id of the shared library **/
+  int ok;    /** flag set to 1 if entrypoint can be used **/
+} Iel;
+extern Iel DynInterf[MAXINTERF];
+extern int Call_shl_load;
+
+#ifdef __STDC__
+extern void C2F(setprlev)(int*);
+#else
+extern void C2F(setprlev)();
+#endif
+
 
 static char tmp_dir[20],buf[128];
 
@@ -62,6 +86,10 @@ void C2F(tmpdirc)()
   }
   SciRemoveDirectory(tmp_dir);
 #else 
+#if (defined(hppa))
+  if ((LinkStatus() == 1) && (Call_shl_load))
+      C2F(isciulink)(&DynInterf[0].Nshared);
+#endif
   sprintf(tmp_dir,"/tmp/S*_%d_*",(int) getpid());
   sprintf(buf,"rm -f -r %s >/dev/null  2>/dev/null",tmp_dir);
   system(buf);

@@ -185,16 +185,30 @@ write(%io(2),'ENTER ''resume (or return) or click on resume!!''');
 foo=['void foo(a,b,c)';
      'double *a,*b,*c;';
      '{ *c = *a + *b; }'  ];
-path=getcwd(); chdir(TMPDIR);
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
-	unix_s('del foo.c')
+path=getcwd(); 
+if (MSDOS & getenv('COMPILER','NO') == 'ABSOFT') then
+  chdir(getenv('SCI')+'/demos/intro');
+else
+  chdir(TMPDIR);
+end
+if MSDOS then 
+        unix_s('del /q foo*')
 	write('foo.c',foo);
 	WSCI=getenv('WSCI');
-	cmd='nmake /f ""'+WSCI+'\demos\intro\MakeC.mak"" TARGET=foo SCIDIR1=""'+WSCI+'""';
+	if (getenv('COMPILER','NO')=='VC++')
+	  // compile with VC++
+  	  cmd='nmake /f ""'+WSCI+'\demos\intro\MakeC.mak"" TARGET=foo SCIDIR1=""'+WSCI+'""';
+  	else
+  	  // compile with ABSOFT
+  	  cmd='amake /f '+WSCI+'\demos\intro\MakeC.amk TARGET=foo SCIDIR1='+WSCI;
+  	end
 	unix_s(cmd)  //Compiling...(needs a compiler);
 	link('foo.dll','foo','C');   //Linking to Scilab
-        unix_s('del foo.c')
-else 
+        unix_s('del /q foo*')
+	if (MSDOS & getenv('COMPILER','NO') == 'ABSOFT') then
+	  chdir(TMPDIR);
+	end
+else
 	unix_s('rm -f foo.c');
 	write('foo.c',foo);
 	unix_s('make foo.o')     //Compiling...(needs a compiler)

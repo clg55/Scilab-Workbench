@@ -17,7 +17,7 @@ function [rep,stat]=unix_g(cmd)
 [lhs,rhs]=argn(0)
 if prod(size(cmd))<>1 then   error(55,1),end
 
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+if MSDOS then
   tmp=strsubst(TMPDIR,'/','\')+'\unix.out';
   cmd1= cmd + ' > '+ tmp;
 else
@@ -33,7 +33,7 @@ case -1 then // host failed
   disp('host does not answer...')
   rep=emptystr()
 else
-  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+  if MSDOS then 
 	write(%io(2),'unix_g: shell error');
         rep=emptystr()
   else 
@@ -42,7 +42,7 @@ else
         rep=emptystr()
   end 
 end
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then
+if MSDOS then
   host('del '+tmp);
 else
   host('rm -f '+tmp);

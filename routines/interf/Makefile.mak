@@ -8,23 +8,27 @@ SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/interf.lib
 
-OBJSC = Interf.obj ctest.obj cs2st.obj
+OBJSC = Interf.obj ctest.obj  cs2st.obj date2num.obj
 
-OBJSF = lstelm.obj lstelmi.obj lstops.obj matdes.obj matdsc.obj matdsr.obj matelm.obj\
+
+OBJSF = lstelm.obj lstelmi.obj  matdes.obj matdsc.obj matdsr.obj matelm.obj\
+	lstops.obj intl_e.obj intl_i.obj \
 	matimp.obj matio.obj matlu.obj matnew.obj matode.obj matops.obj matopt.obj\
-	matqr.obj matqz.obj matric.obj matsvd.obj matsys.obj intclear.obj intwhat.obj\
+	matqr.obj matqz.obj matric.obj matsvd.obj matsys.obj \
 	polaut.obj polelm.obj polops.obj strelm.obj strops.obj fmlelm.obj\
 	logic.obj logelm.obj xawelm.obj misops.obj stack0.obj stack1.obj stack2.obj\
 	where.obj indxg.obj defint.obj\
 	matodc.obj dasrti.obj\
 	intg.obj int2d.obj int3d.obj feval.obj bva.obj comm.obj specfun.obj\
-	intwrite4b.obj intread4b.obj
+	intwrite4b.obj intread4b.obj isany.obj followpath.obj newsave.obj insertfield.obj
 
 include ../../Makefile.incl.mak
 
 #CFLAGS = $(CC_OPTIONS) -DNODCD -DNOMETANET -DNOSCICOS -DNOSIGNAL -DNOSOUND -DNOSPARSE
 
 CFLAGS = $(CC_OPTIONS)
+
+FFLAGS = $(FC_OPTIONS)
 
 include ../Make.lib.mak
 
@@ -82,8 +86,10 @@ intwhat.obj: ../stack.h
 intwrite4b.obj: ../stack.h
 intread4b.obj: ../stack.h
 stack0.obj stack1.obj stack2.obj: ../stack.h
-
-
+getdate.obj: ../machine.h
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile

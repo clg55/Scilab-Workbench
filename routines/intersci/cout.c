@@ -1,9 +1,10 @@
 /* Copyright INRIA */
+#include <string.h>
 #include "../machine.h"
 
 extern void C2F(out)();
 
-void cout(str)
+void Cout(str)
 char *str;
 {
   int l;

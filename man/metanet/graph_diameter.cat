@@ -15,10 +15,10 @@ PARAMETERS
   p : integer row vector
 
 DESCRIPTION
-  graph_diameter computes the diameter of the graph g i.e. the largest shor-
-  test path between two nodes. The length of the arcs are supposed to be
-  integer (and the default value is 1). The output is the value d of the
-  length of the diameter and p is the corresponding path.
+  graph_diameter computes the diameter of the graph g i.e. the largest short-
+  est path between two nodes. The length of the arcs are supposed to be inte-
+  ger (and the default value is 1). The output is the value d of the length
+  of the diameter and p is the corresponding path.
 
 EXAMPLE
   ta=[1 1 2 2 2 3 4 5 5 7 8 8 9 10 10 10 10 11 12 13 13 14 15 16 16 17 17];

@@ -1,24 +1,23 @@
 
 xfarc(2)                       Scilab Function                       xfarc(2)
 NAME
-  xfarc - fill a part of an ellipsis
+  xfarc - fill a part of an ellipse
 
 CALLING SEQUENCE
-  []=xfarc(x,y,w,h,a1,a2)
+  xfarc(x,y,w,h,a1,a2)
 
 PARAMETERS
 
-  x,y,w,h        : real scalars (rectangle def)
+  x,y,w,h  : four real values defining a rectangle.
 
-  a1,a2          : real scalars (angle def)
+  a1,a2    : real values defining a sector.
 
 DESCRIPTION
-  Fills a portion of an ellipsis contained in the rectangle (x,y,w,h) (
-  upper-left point, width, height), and in the sector delimited by the angle
-  alpha1 and the angle alpha1+alpha2. alpha1 and alpha2 are given respec-
+  xfarc fills a part of an ellipse contained in the rectangle (x,y,w,h)
+  (upper-left point, width, height), and in the sector defined by the angle
+  alpha1 and the angle alpha1+alpha2.  alpha1 and alpha2 are given respec-
   tively by a1/64 degrees and a2/64 degrees.  This function uses the current
-  graphic state which can be set by calling a high level drawing function
-  such as plot2d.
+  graphics style and scale.
 
 EXAMPLE
   // isoview scaling
@@ -28,7 +27,7 @@ EXAMPLE
   xfarc(0.5,0.5,1,1,0,360*64)
 
 SEE ALSO
-  xarcs, xarc
+  xarc, xarcs, xfarcs
 
 AUTHOR
-  J.Ph.C..
+  J.Ph.C.

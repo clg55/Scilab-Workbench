@@ -28,8 +28,8 @@ DESCRIPTION
   sparse one may add zeros if necessary to squaring down A).
 
   If A is singular, the L matrix is column compressed (with rk independent
-  nonzero columns):  the nonsingular sparse matrix Q'*inv(U) column
-  compresses A.
+  nonzero columns):  the nonsingular sparse matrix Q'*inv(U) column com-
+  presses A.
 
 EXAMPLE
   a=rand(5,2)*rand(2,5);A=sparse(a);

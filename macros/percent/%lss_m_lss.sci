@@ -15,7 +15,7 @@ if maxi(degree(D1))==0 & maxi(degree(D2))==0 then
   return
 end
 //improper systems
-s=poly(0,varn(D1*D2));
+
 J=[A1,B1*C2;
    0*ones(B1*C2)',A2];
 Ls=[C1 D1*C2]'
@@ -26,6 +26,9 @@ if Ms==[]|Ls==[] then
    return;
 end
 //
+if type(D1*D2)~=1 
+s=poly(0,varn(D1*D2));
+end
 deg=maxi(degree(Ms));
 B=coeff(Ms,deg);
 Ps=0*B

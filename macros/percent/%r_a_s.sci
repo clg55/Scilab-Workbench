@@ -3,7 +3,7 @@ function f=%r_a_s(f,m)
 //f: transfer matrix, m : scalar or scalar matrix
 //!
 // Copyright INRIA
-[num,den]=f(2:3)
+[num,den]=f(['num','den'])
 [nf,mf]=size(num)
 [nm,mm]=size(m)
 
@@ -22,4 +22,5 @@ else
     [num,den]=simp(num+(m+0)*eye(den).*den,den)
   end
 end
-f(2)=num;f(3)=den
+f=rlist(num,den,f('dt'))
+

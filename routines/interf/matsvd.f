@@ -506,6 +506,7 @@ c     -------------------------------
       logical checkrhs,checklhs,getsmat,getscalar,cremat,getmat
       logical inf,fro 
       integer gettype,itype,topk,isanan
+      double precision infinity
       double precision p,wnrm2
       double precision dnrm2,dasum,dlamch,dres,t
       ires=0
@@ -586,7 +587,7 @@ c     ==============================vector case
                   dres = dres*t**(1.0d+0/p)
                else
 c     Must return %inf : 
-                  dres = 10000.0d0**1000.0d0
+                  dres = infinity(0.0d0)
                endif
             endif
          endif

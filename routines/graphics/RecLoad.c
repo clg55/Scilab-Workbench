@@ -16,8 +16,10 @@
 #	include "types.h"
 #else /* not macintosh */
 #       ifndef VMS
+#	ifndef __ABSC__
 #   	include <sys/types.h>	/* for <netinet/in.h> on some systems */
-#   	ifndef __MSC__ 
+#       endif
+#   	if !(defined __MSC__) && !(defined __ABSC__)
 #          include <netinet/in.h>	/* for htonl() */
 #   	endif
 #	endif
@@ -492,6 +494,29 @@ int LoadGray1()
   return(1);
 }
 
+int LoadGray2()
+{
+ 
+  struct gray_rec_2 *lplot;
+  lplot= ((struct gray_rec_2 *) MALLOC(sizeof(struct gray_rec_2)));
+  if (lplot != NULL)
+    {
+      if (LoadLI(&lplot->n1) == 0) return(0);
+      if (LoadLI(&lplot->n2) == 0) return(0);
+      if (LoadVectC(&(lplot->name)) == 0) return(0);
+      if (LoadVectF(&(lplot->z)) == 0) return(0);
+      if (LoadVectF(&(lplot->xrect)) == 0) return(0);
+      if (Store(lplot->name,(char *) lplot) == 0) return(0);
+      
+    }
+  else 
+    {
+      Scistring("\nLoad Plot (gray): No more place \n");
+      return(0);
+    }
+  return(1);
+}
+
 
 
 /*---------------------------------------------------------------------
@@ -579,6 +604,7 @@ static LoadTable LoadCTable[] ={
   {"fec",LoadFec},
   {"gray",LoadGray},
   {"gray1",LoadGray1}, 
+  {"gray2",LoadGray2}, 
   {"param3d",LoadParam3D},
   {"param3d1",LoadParam3D1},
   {"plot2d",LoadPlot},

@@ -1,4 +1,7 @@
-!$Header: /usr/sww/src/X11R5/local/clients/xless-1.4/RCS/XLess.ad,v 1.6 1993/03/03 00:50:24 dglo Exp $
+!You can provide here your own print command 
+!default value is contained in xless.h 
+!
+!XLess*printCmd:		enscript -2r 
 
 XLess*standardFont:	fixed
 XLess*textFont:		*-fixed-medium-r-*-*-13-*-*-*-*-*-iso8859-*
@@ -30,3 +33,4 @@ XLess*mf.text.baseTranslations: #override\n\
 	<Key>q:		quit()\n
 
 XLess.frame.height: 600
+XLess.frame.width: 800

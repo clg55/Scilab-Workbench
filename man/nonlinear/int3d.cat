@@ -62,8 +62,8 @@ DESCRIPTION
   until the error request is met or MAXPTS function evaluations have been
   used.
 
-  A 43 point integration rule with all evaluation points inside the
-  tetrahedron is applied. The rule has polynomial degree 8.
+  A 43 point integration rule with all evaluation points inside the tetrahe-
+  dron is applied. The rule has polynomial degree 8.
 
   If the values of the input parameters EPSABS or EPSREL are selected great
   enough, an integration rule is applied over each tetrahedron and the
@@ -81,8 +81,8 @@ DESCRIPTION
   all components. This will generally not be the case when the different com-
   ponents are given separate treatment.
 
-  On the other hand this feature should be used with caution when the dif-
-  ferent components of the integrals require clearly different subdivisions.
+  On the other hand this feature should be used with caution when the differ-
+  ent components of the integrals require clearly different subdivisions.
 EXAMPLES
   X=[0;1;0;0];
   Y=[0;0;1;0];

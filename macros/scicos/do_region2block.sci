@@ -1,12 +1,16 @@
 function scs_m=do_region2block(scs_m)
 // Copyright INRIA
-[btn,xc,yc,win,Cmenu]=getclick()
+[btn,xc,yc,win,Cmenu]=cosclick()
 if Cmenu<>[] then
   Cmenu=resume(Cmenu)
 end
 scs_m_save=scs_m,nc_save=needcompile
 
 [scs_mb,rect,prt]=get_region2(xc,yc,win)
+//rect(4)=max(rect(4),2*rect(3)/3);
+//rect(3)=max(rect(3),3*rect(4)/2);
+
+if scs_mb==list() then return end
 //superblock should not inherit the context nor the name
 if size(scs_mb(1))>4 then 
   scs_mb(1)(5)=' ' 
@@ -18,23 +22,23 @@ ox=rect(1);oy=rect(2)+rect(4);w=rect(3),h=rect(4)
 
 n=0
 W=max(600,rect(3))
-H=max(450,rect(4))
-for k=2:size(scs_mb)
-  o=scs_mb(k)
+H=max(400,rect(4))
+//for k=2:size(scs_mb)
+//  o=scs_mb(k)
   // translate blocks 
-  if o(1)=='Link' then
-    o(2)=o(2)-rect(1)
-    o(3)=o(3)-rect(2)
-  else
-    o(2)(1)(1)=o(2)(1)(1)-rect(1)
-    o(2)(1)(2)=o(2)(1)(2)-rect(2)
-  end
-  scs_mb(k)=o
-end
+//  if o(1)=='Link' then
+//    o(2)=o(2)-rect(1)
+//    o(3)=o(3)-rect(2)
+//  else
+//    o(2)(1)(1)=o(2)(1)(1)-rect(1)
+//    o(2)(1)(2)=o(2)(1)(2)-rect(2)
+//  end
+//  scs_mb(k)=o
+//end
 
-scs_mb(1)(1)=[max(600,rect(3)),max(450,rect(4)),-rect(3)/5,-rect(4)/5,..
-7*rect(3)/5,7*rect(4)/5]
-//max(600,rect(3)),max(450,rect(4))]
+//scs_mb(1)(1)=[max(600,rect(3)),max(400,rect(4)),-rect(3)/5,-rect(4)/5,..
+//7*rect(3)/5,7*rect(4)/5]
+//max(600,rect(3)),max(400,rect(4))]
 sup=SUPER_f('define')
 sup(2)(1)=[rect(1)+rect(3)/2-20,rect(2)+rect(4)/2-20]
 sup(2)(2)=[40 40]
@@ -101,8 +105,8 @@ for k=1:size(prt,1)
     yl=[y(p);yn(pn)]
     from=[prt(k,6),prt(k,7)]
     to=[nn,prt(k,2)]
-    o1(2)(8)(prt(k,2))=nnk+1
-    scs_m(nn)(2)(7)(prt(k,7))=nnk+1
+    o1(2)(8)(prt(k,7))=nnk+1
+    scs_m(nn)(2)(7)(prt(k,2))=nnk+1
   elseif prt(k,1)==4 then //event output port
     [x,y,vtyp]=getinputs(o1)
     [xn,yn,vtypn]=getoutputs(sup),
@@ -131,4 +135,4 @@ for k=1:size(prt,1)
   scs_m(k1)=o1
   nnk=nnk+1
 end
-[scs_m_save,nc_save,enable_undo,edited,needcompile,Cmenu]=resume(scs_m_save,nc_save,%t,%t,4,[])
+[scs_m_save,nc_save,enable_undo,edited,needcompile]=resume(scs_m_save,nc_save,%t,%t,4)

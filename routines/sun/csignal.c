@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 
 #include "../machine.h"
 #include <signal.h>

@@ -13,7 +13,7 @@ PARAMETERS
   f_l  : can be "arnold" or arnold. It is the name of the external for the
        arnold system. If f_l is set to "arnold" a Fortran coded version of
        the arnold system where a(1:6)=1 will be used and if f_l is set to
-       arnold a Scilab coded version will be used . arnold is a Scilab macro
+       arnold a Scilab coded version will be used .  arnold is a Scilab macro
        coding the Arnold system. This macro is loaded when calling artest.
 
   iarf : is used to fix the values of a in the Scilab coded case. a is a vec-

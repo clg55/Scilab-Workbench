@@ -1,7 +1,5 @@
-function f=%r_d_p(f,p)
-// f=f./p
+function r=%r_d_p(r,m)
+// r=r./p
 //!
 // Copyright INRIA
-f(3)=f(3).*p
-f(2)=f(2).*ones(p)
-
+r=rlist(r('num').*ones(m),r('den').*m,r('dt'))

@@ -3,7 +3,7 @@ function s1=%r_m_r(s1,s2)
 //!
 // Copyright INRIA
 [s1,s2]=sysconv(s1,s2),
-[n1,d1]=s1(2:3);[n2,d2]=s2(2:3);
+[n1,d1]=s1(['num','den']);[n2,d2]=s2(['num','den']);
 [l1,m1]=size(n1);[l2,m2]=size(n2),
 indef=%f
 if l1==-1 then 
@@ -37,7 +37,6 @@ if indef then
   num=num*eye()
   den=den*eye()
 end
-s1(2)=num;s1(3)=den;
-
+s1=rlist(num,den,s1('dt'))
 
 

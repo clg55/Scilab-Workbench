@@ -10,8 +10,8 @@ CALLING SEQUENCE
 
 PARAMETERS
 
-  state     : Scilab tlist contains scicosim  initial state. Usually gen-
-            erated by Scicos Compile or Run menus (see scicos_cpr for more
+  state     : Scilab tlist contains scicosim  initial state. Usually gener-
+            ated by Scicos Compile or Run menus (see scicos_cpr for more
             details).
 
   tcur      : initial simulation  time
@@ -40,8 +40,8 @@ DESCRIPTION
 
   2    Save the compiled diagram using Save,SaveAs Scicos menus .
 
-  3    In Scilab, load saved file using load function. You get variables
-       scicos_ver, scs_m, cpr
+  3    In Scilab, load saved file using load function. You get variables sci-
+       cos_ver, scs_m, cpr
 
   scs_m is the diagram Scicos main data structure.
 

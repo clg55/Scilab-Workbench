@@ -50,7 +50,7 @@ static char *rcsid = "$Id: xdr_mem.c,v 1.3 1995/10/22 14:53:55 phk Exp $";
 #define __MSC__
 #endif 
 
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
 #include <netinet/in.h> /** jpc : je met netinet/ avant rpc pour eviter un warning */
 #include <rpc/types.h> 
 #include <rpc/xdr.h>

@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 
 #include "../machine.h"
 
@@ -74,5 +74,71 @@ Lapack_contents(x)
 	C2F(ilaenv)();
 	C2F(lsame)();
 	C2F(slamch)();
-    }
+	C2F(dlansy)();
+	C2F(dgees)(); 
+	C2F(dgehrd)(); 
+	C2F(dorghr)(); 
+	C2F(dhseqr)(); 
+	C2F(dtrsen)(); 
+	C2F(dlahrd)(); 
+	C2F(dgehd2)();
+	C2F(dlahqr)(); 
+	C2F(dlanhs)(); 
+	C2F(dlarfx)(); 
+	C2F(dtrexc)(); 
+	C2F(dtrsyl)(); 
+	C2F(dlanv2)(); 
+	C2F(dlaexc)(); 
+	C2F(dlaln2)(); 
+	C2F(dlasy2)(); 
+	C2F(dladiv)(); 
+	C2F(dgeesx)(); 
+	C2F(dgesvx)(); 
+	C2F(dgeequ)(); 
+	C2F(dlaqge)(); 
+	C2F(dgetrf)(); 
+	C2F(dgecon)(); 
+	C2F(dgetf2)(); 
+	C2F(dsytrf)(); 
+	C2F(dlasyf)(); 
+	C2F(dsytf2)(); 
+	C2F(dsytri)(); 
+	C2F(dlasv2)(); 
+	C2F(dtrti2)(); 
+	C2F(dlapy3)();
+	C2F(dgelsx)();
+	C2F(dgetri)();
+	C2F(dtrtri)();
+	C2F(dgebrd)();
+        C2F(dorgbr)();
+	C2F(dbdsqr)();
+	C2F(dlabrd)();
+	C2F(dgebd2)();
+	C2F(dorglq)();
+	C2F(dlasq1)();
+	C2F(dlas2)();
+	C2F(dorgl2)();
+	C2F(dlasq2)();
+	C2F(dlasq3)();
+	C2F(dlasq4)();
+	C2F(dormhr)();
+	C2F(dpotrf)();
+	C2F(dpocon)();
+	C2F(dsycon)();
+	C2F(dsytrs)();
+	C2F(dsyev)();
+	C2F(dsytrd)();
+	C2F(dorgtr)();
+	C2F(dorgql)();
+	C2F(dpotrs)();
+	C2F(dgeqlf)();
+	C2F(dormql)();
+	C2F(dgghrd)();
+	C2F(dhgeqz)();
+	C2F(dtgevc)();
+	C2F(dgges)();
+	C2F(dgegs)();
+	C2F(dgesvd)();
+	C2F(dormhr)();
+}
 }

@@ -27,6 +27,7 @@
  extern void C2F(fillpolylines)();
  extern void C2F(drawpolylines)();
  extern void C2F(drawpolymark)();
+ extern void C2F(setpopupname)();
  extern void C2F(displaynumbers)();
  extern void C2F(xpause)();
  extern void C2F(drawrectangle)();
@@ -39,6 +40,7 @@
  extern void C2F(boundingbox)();
  extern void C2F(drawarrows)();
  extern void C2F(loadfamily)();
+ extern void  C2F(queryfamily)();
  extern void C2F(xinfo)();
 /*---------------------END------------------------------*/
 

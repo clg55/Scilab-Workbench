@@ -5,10 +5,9 @@ l10=log(10);
 [lhs,rhs]=argn(0)
 //discretization 
 
-//-compat type(sys)<>15 retained for list/tlist compatibility
-if type(sys)<>15&type(sys)<>16 then  error(97,1),end;
+if type(sys)<>16 then  error(97,1),end;
 flag=sys(1);
-if flag(1)=='r' then dom=sys(4),else dom=sys(7),end
+dom=sys('dt')
 if dom==[]|dom==0 then error(96,1),end
 if dom=='d' then dom=1;end
 
@@ -66,7 +65,7 @@ end
 typ=sys(1)
 select typ(1)
 case 'r' then
-  [n,d]=sys(2:3),
+  [n,d]=sys(['num','den']),
   [mn,nn]=size(n)
   if nn<>1 then error(95,1),end
   if dom=='c' then 

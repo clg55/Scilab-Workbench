@@ -26,8 +26,8 @@ DESCRIPTION
                       arranged in m lines with n values in each line.  The
                       result is an m-by-n matrix named fname .
 
-  mtlb_load xxx.yyy   reads the ascii file xxx.yyy, which must contain a rec-
-                      tangular array of numeric data, arranged in m lines
+  mtlb_load xxx.yyy   reads the ascii file xxx.yyy, which must contain a
+                      rectangular array of numeric data, arranged in m lines
                       with n values in each line.  The result is an m-by-n
                       matrix named xxx.
 

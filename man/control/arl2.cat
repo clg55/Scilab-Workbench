@@ -26,8 +26,8 @@ PARAMETERS
   h         : transfer function num/den or transfer matrix (column vector)
             when flag 'all' is given.
 
-  den       : polynomial or vector of polynomials, contains the
-            denominator(s) of the solution(s)
+  den       : polynomial or vector of polynomials, contains the denomina-
+            tor(s) of the solution(s)
 
   num       : polynomial or vector of polynomials, contains the numerator(s)
             of the solution(s)

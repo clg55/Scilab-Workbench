@@ -1,3 +1,4 @@
+/*      Copyright ENPC (Jean-Philippe Chancelier)  */
 
 #include "../machine.h" 
 

@@ -1,4 +1,6 @@
-/* Copyright INRIA */
+/* Copyright Jean-Philippe Chancelier 
+   ENPC */
+
 #include "../../routines/stack-c.h"
 
 /** external functions to be called through this interface **/

@@ -14,7 +14,7 @@ PARAMETERS
 
 DESCRIPTION
   gammaln(x) evaluates the logarithm of gamma function at all the elements of
-  x, avoiding underflow and overflow. x must be real.
+  x, avoiding underflow and overflow.  x must be real.
 EXAMPLE
   gammaln(0.5)
 SEE ALSO

@@ -20,11 +20,11 @@ DESCRIPTION
   utility for building target files and returns the value of files in the
   variable Rfiles. On windows platforms, (i.e when Scilab was compiled with
   Microsoft VisualC++). G_make calls the nmake utility for building target
-  dllname and it returns the value of dllname in the variable Rfiles. Of
+  dllname and it returns the value of dllname in the variable Rfiles.  Of
   course G_make will work if apropriate Makefiles are provided in the current
   Scilab directory.
 
-  G_make can be used to provide OS independant call to addinter. and such
+  G_make can be used to provide OS independant call to addinter.  and such
   examples can be found in the directory SCIDIR/examples/addinter-examples
   files=G_make([TMPDIR+'/ex1cI.o',TMPDIR+'/ex1c.o'],'ex1c.dll');// compilation
   addinter(files,'foobar','foubare'); // link

@@ -1,15 +1,6 @@
-// Copyright INRIA
-
-files=G_make(['/tmp/ex7fi.o'],'ex7f.dll');
-addinter(files,'intex7','pipo');
-
-//pipo(2) ==> error  since g_abs is not defined
-
-deff('z=g_abs(x)','z=abs(x)+a')    //Now g_abs is defined
-
-a=33;
-y=pipo(33)-34;   //goes into Fortran interface ex7fi which calls g_abs
-if y<>32 then pause,end
-
+A=[1,2,3,4];
+B=[10,20,30;40,50,60];
+//Just display A and B
+ex7f(A,B)
 
 

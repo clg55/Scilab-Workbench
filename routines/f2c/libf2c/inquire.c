@@ -8,7 +8,9 @@ integer f_inqu(a) inlist *a;
 #undef min
 #undef max
 #include "string.h"
+#ifndef __ABSC__
 #include "io.h"
+#endif
 #endif
 integer f_inqu(inlist *a)
 #endif

@@ -3,7 +3,9 @@ function [x]=isnum(str)
 // represente un nombre
 //!
 // Copyright INRIA
-x=find(part(str,1)==string(0:9))<>[];
+ [H,ierr]=evstr(str)
+ x=ierr==0
+//x=find(part(str,1)==string(0:9))<>[];
 
 
 

@@ -9,7 +9,8 @@ deff('[]=modeback(x)','xset(''alufunction'',x);');
 
 [l,mac]=where();scsmode=find(mac=='scicos')<>[]
 alu=xget('alufunction')
-if scsmode then xset('alufunction',6),end
+
+
 
 dash=['0        continue';
       '1        {2,5,2,5}';
@@ -41,6 +42,9 @@ end
 if noframe==1;s_t="010";else s_t="012";end
 plot2d(0,0,[1],s_t,' ',cdef);
 curwin=xget('window')
+unsetmenu(curwin,'File',7) //close
+
+
 xclip('clipgrf')
 
 menu_o=['rectangle','frectangle','circle','fcircle','polyline',...
@@ -63,16 +67,18 @@ if init==0 then redraw(sd,s_t); else sd=list('sd',cdef); end,
 //
 if flag==1; xclip();return ;end
 
+if scsmode then xset('alufunction',6),end 
 // boucle principale
 Cmenu1=[]
 while %t then
   ksd=prod(size(sd))
   [btn,xc,yc,win,Cmenu]=getclick()
+ if btn==-100 then Cmenu='Quit';end
   c1=[xc,yc]
   select Cmenu
   case 'Exit' then
-    fin='ok'
-    xset('alufunction',alu)
+    break    
+  case 'Quit' then
     break
   case 'rectangle'  then 
     xinfo('rectangle '); 
@@ -187,4 +193,5 @@ while %t then
     sd=sdgroup(sd)
   end  // fin select 
 end, // fin while
-xset("default");
+if or(curwin==winsid()) then  xset("default");end
+

@@ -14,9 +14,11 @@ PARAMETERS
 DESCRIPTION
   ieee() returns the current floating point exception mode.
 
-  0: floating point exception produce an error
-    1: floating point exception produce a warning 2: floating point exception
-    procudes Inf or Nan
+  0 : floating point exception produce an error
+
+  1 : floating point exception produce a warning
+
+  2 : floating point exception procudes Inf or Nan
 
   ieee(mod) sets the current floating point exception mode.
 

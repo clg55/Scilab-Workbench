@@ -7,7 +7,7 @@ LIBRARY = $(SCIDIR)/libs/sparse.a
 
 
 OBJSC = lu.o spBuild.o spFortran.o spSolve.o spAllocate.o spFactor.o \
-	spOutput.o spUtils.o
+	spOutput.o spUtils.o mspelm.o
 
 OBJSF = lspops.o spelm.o spops.o \
 	dperm.o iperm.o  dspasp.o dspssp.o \
@@ -24,7 +24,8 @@ OBJSF = lspops.o spelm.o spops.o \
 	dij2sp.o wij2sp.o lij2sp.o dspmax.o dspmin.o \
 	dspmat.o wspmat.o lspmat.o sp2col.o spsort.o spord.o wperm.o \
 	spcho1.o spcho2.o blkslv.o blkfct.o inpnv.o symfct.o ordmmd.o \
-	blkfc1.o rdmps1.o spind.o spcompack.o
+	blkfc1.o spind.o spcompack.o \
+	intreadmps.o rdmps1.o rdmpsz.o 
 
 OBJS =  $(OBJSF) $(OBJSC)
 
@@ -32,12 +33,17 @@ include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib
 
-all:: Makefile.mak
+all:: Makefile.mak Makefile.amk
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.amk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
 
 lu.o: spConfig.h spmatrix.h spDefs.h  ../machine.h
 spBuild.o: spConfig.h  spmatrix.h spDefs.h

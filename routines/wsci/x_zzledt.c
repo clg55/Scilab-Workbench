@@ -6,6 +6,7 @@
  ************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #ifndef STRICT
 #define STRICT
@@ -25,17 +26,22 @@ extern char input_line[MAX_LINE_LEN + 1] ;
  * zzledt  for scilab -nw 
  **********************************************************************/
 
-char prompt[10];
+char save_prompt[10];
 
-extern void C2F(zzledt1)(buffer, buf_size, len_line, eof, dummy1)
+
+#ifdef __STDC__
+void C2F(zzledt1)(char * buffer,int * buf_size,int * len_line,int * eof,long int dummy1)
+#else
+void C2F(zzledt1)(buffer, buf_size, len_line, eof, dummy1)
      char *buffer;
      int *buf_size;
      int *len_line;
      int *eof;
      long int dummy1;    /* added by FORTRAN to give buffer length */
+#endif
 {
   set_is_reading(TRUE);
-  read_line(prompt);
+  read_line(save_prompt);
   strncpy(buffer,input_line,*buf_size);
   *len_line = strlen(buffer);
   /** fprintf(stderr,"[%s,%d]\n",buffer,*len_line); **/
@@ -45,17 +51,20 @@ extern void C2F(zzledt1)(buffer, buf_size, len_line, eof, dummy1)
 }
 
 /**** Warning here : eof can be true  ***/
-
-extern void C2F(zzledt)(buffer, buf_size, len_line, eof, dummy1)
+#ifdef __STDC__
+void C2F(zzledt)(char * buffer,int * buf_size,int * len_line,int * eof,long int dummy1)
+#else
+void C2F(zzledt)(buffer, buf_size, len_line, eof, dummy1)
      char *buffer;
      int *buf_size;
      int *len_line;
      int *eof;
      long int dummy1;    /* added by FORTRAN to give buffer length */
+#endif     
 {
   int i;
   set_is_reading(TRUE);
-  i=read_line(prompt);
+  i=read_line(save_prompt);
   strncpy(buffer,input_line,*buf_size);
   *len_line = strlen(buffer);
   /** fprintf(stderr,"[%s,%d]\n",buffer,*len_line); **/
@@ -68,10 +77,9 @@ void C2F(setprlev)(pause)
      int *pause;
 {
   if ( *pause == 0 ) 
-    sprintf(prompt,"-->");
-  else 
-    sprintf(prompt,"-%d->",*pause);
+    sprintf(save_prompt,"-->");
+  else if ( *pause > 0 )
+    sprintf(save_prompt,"-%d->",*pause);
+  else
+    sprintf(save_prompt,">>",*pause);
 }
-
-     
-

@@ -11,7 +11,7 @@ PARAMETERS
   info : scalar
 
 DESCRIPTION
-  pvm_set_timer initialized the timer. info will be 0.  If some error occurs
+  pvm_set_timer initialized the timer.  info will be 0.  If some error occurs
   then info will be -1.
 EXAMPLE
   pvm_set_timer()

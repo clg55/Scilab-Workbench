@@ -15,5 +15,10 @@ PARAMETERS
 DESCRIPTION
   ceil(x) returns an integer matrix made of rounded up elements
 
+EXAMPLE
+  ceil([1.9 -2.5])-[2,-2]
+  ceil(-%inf)
+  x=rand()*10^20;ceil(x)-x
+
 SEE ALSO
   round, floor, int

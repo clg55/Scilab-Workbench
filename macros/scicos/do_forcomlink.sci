@@ -3,18 +3,22 @@ function [ok]=do_forcomlink(funam,txt)
 if stripblanks(funam)==emptystr() then 
   ok=%f;x_message('sorry fortran file name not defined');return
 end
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+if MSDOS then 
 	out_f = strsubst(TMPDIR,'/','\')+'\'+funam+'.f';
   	host('del '+ out_f);
 else 
 	unix_s('\rm -f '+TMPDIR+'/'+funam+'.f');
 end
 write(TMPDIR+'/'+funam+'.f',txt,'(a)')
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+if MSDOS then 
   [a,b]=c_link(funam); while a ; ulink(b);[a,b]=c_link(funam);end
   cur_wd = getcwd();
   chdir(TMPDIR);
-  cmd_win='nmake /f '"'+SCI+'\demos\intro\MakeF.mak'"  TARGET=';
+  if (getenv('COMPILER','NO')=='ABSOFT')
+    cmd_win='amake /f '"'+SCI+'\demos\intro\MakeF.amk'"  TARGET=';
+  else
+    cmd_win='nmake /f '"'+SCI+'\demos\intro\MakeF.mak'"  TARGET=';
+  end
   cmd_win=cmd_win+funam+' SCIDIR1='"'+strsubst(SCI,'/','\')+''"';
 //  disp(cmd_win);
   ww=unix_g(cmd_win);
@@ -26,7 +30,7 @@ if ww==emptystr() then
   ok=%f;x_message('sorry compilation problem');return
 else
   errcatch(-1,'continue')
-if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+if MSDOS then 
   junk=link(TMPDIR+'/'+funam+'.dll',funam);
 else 
   [a,b]=c_link(funam); while a ; ulink(b);[a,b]=c_link(funam);end  

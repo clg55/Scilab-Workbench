@@ -1,24 +1,20 @@
 C****************************************************
 C     ****  RDMPS1 ... READ THE  MPS FILE  ****
 C****************************************************
-C
-      SUBROUTINE rdmps1(RCODE,MAXM,MAXN,MAXNZA,
+      SUBROUTINE rdmps1(RCODE,buffer,MAXM,MAXN,MAXNZA,
      X M,N,NZA,IROBJ,BIG,DLOBND,DUPBND,  
-     X NAMEC,NAMEB,NAMRAN,NAMBND,NAMMPS,FILMPS,ilen,
+     X NAMEC,NAMEB,NAMRAN,NAMBND,NAMMPS,inmps,
      X RWNAME,CLNAME,STAVAR,RWSTAT,
      X HDRWCD,LNKRW,HDCLCD,LNKCL,
      X RWNMBS,CLPNTS,IROW,
      X ACOEFF,RHSB,RANGES,
      X UPBND,LOBND,RELT)
 C
-C
-      include '../stack.h'
-C
 C *** PARAMETERS
       INTEGER*4 RCODE,MAXM,MAXN,MAXNZA,M,N,NZA,IROBJ
       DOUBLE PRECISION BIG,DLOBND,DUPBND
       CHARACTER*(*) NAMEC,NAMEB,NAMRAN,NAMBND,NAMMPS
-      CHARACTER*(*) FILMPS
+      CHARACTER*(*) BUFFER
       CHARACTER*8 RWNAME(MAXM),CLNAME(MAXN)
       INTEGER*4 STAVAR(*),RWSTAT(*),RWNMBS(*)
       INTEGER*4 HDRWCD(*),LNKRW(*)
@@ -81,12 +77,11 @@ C
 C
 C *** LOCAL VARIABLES
       INTEGER*4 LINE,I,INMPS,J,COLLEN,INDEX,IPOS,STATUS,NSTRCT,KCODE
-      INTEGER*4 IMPSOK,mode (2),ilen
+      INTEGER*4 IMPSOK
       DOUBLE PRECISION SMALLA,VAL1,VAL2
       CHARACTER*8 NAME0,NAMRW1,NAMRW2,NAMCLN
       CHARACTER*2 TYPROW,BNDTYP
       CHARACTER*4 NM
-      CHARACTER*100 BUFFER
       CHARACTER*100 RDLINE
       CHARACTER SECT
 C
@@ -127,10 +122,6 @@ C     Date written:  November 15, 1992
 C     Last modified: February 8, 1997
 C
 C
-C
-C
-C
-C
 C *** BODY OF (RDMPS1) ***
 C
       SMALLA=1.0D-10
@@ -138,31 +129,20 @@ C
 C     Format used to read every line of the MPS file.
  1000 FORMAT(A80)
 C
-
-       err = 0
-       mode(1) = 001
-       mode(2) = 0
-       inmps = 0
-       call clunit(inmps,filmps(1:ilen),mode)
-        if (err .gt. 0) then
-          buf = filmps(1:ilen)
-          call error(err)
-          return
-       endif
-       rewind inmps
-C
-C
 C
 C     Initialize.
       M=0
       LINE=0
       IROBJ=-1
 C
+
+
       DO 20 I=1,MAXM
          RWNAME(I)=' '
          RWSTAT(I)=0
    20 CONTINUE
 C
+
 C     Initialize linked lists of rows/cols with the same codes.
       DO 40 I=1,MAXM
          HDRWCD(I)=0
@@ -182,6 +162,7 @@ C     Read the problem name.
       READ(RDLINE,61,ERR=9000) NM,NAMMPS
    61 FORMAT(A4,10X,A8)
       IF(NM.NE.'NAME'.AND.NM.NE.'name') GO TO 60
+
    70 LINE=LINE+1
       READ(INMPS,1000,END=9000) RDLINE
       IF(RDLINE(1:1).EQ.'*') GO TO 70
@@ -191,8 +172,7 @@ C     Read the problem name.
 C
 C
 C
-C
-C
+
 C
 C     Read the ROWS section.
   100 LINE=LINE+1
@@ -205,7 +185,8 @@ C
 C     Here if a constraint has been found. Determine its type.
 C     Check if there is enough space for a new row.
       M=M+1
-      IF(M.GE.MAXM) GO TO 9010
+css      IF(M.GE.MAXM) GO TO 9010
+      IF(M.GT.MAXM) GO TO 9010
 C
       IF(TYPROW.EQ.' E'.OR.TYPROW.EQ.'E '.OR.
      X   TYPROW.EQ.' e'.OR.TYPROW.EQ.'e ') THEN
@@ -261,6 +242,7 @@ C
 C
 C     Read COLUMNS section.
   200 CONTINUE
+
       INDEX=1
 C
 C     ENCODE all row names and create linked lists of rows 
@@ -278,7 +260,7 @@ C     Scan all rows with the same code.
             IF(RWNAME(IPOS).EQ.RWNAME(I)) THEN
                WRITE(BUFFER,206) RWNAME(IPOS)
   206          FORMAT(1X,'RDMPS1 error: Row ',A8,'repeated.')
-               CALL basout(io,wte,BUFFER)
+C               CALL basout(io,wte,BUFFER)
                IMPSOK=0
                GO TO 210
             ENDIF
@@ -329,7 +311,8 @@ C     Check if there are still columns to be read.
 C
 C     Initialize the new column.
          N=N+1
-         IF(N.GE.MAXN) GO TO 9030
+css         IF(N.GE.MAXN) GO TO 9030
+         IF(N.GT.MAXN) GO TO 9030
          NAME0=NAMCLN
          COLLEN=0
          GO TO 260
@@ -384,7 +367,7 @@ C
 C     Read the RHSB section.
 C
       IF(SECT.NE.'R'.AND.SECT.NE.'r') GO TO 9000
-      CALL RDRHS(RCODE,MAXM,M,LINE,
+      CALL RDRHS(RCODE,BUFFER,MAXM,M,LINE,
      X HDRWCD,LNKRW,HDCLCD,LNKCL,
      X NAMEB,RHSB,RWNAME,SECT,INMPS,IOLOG)
 C
@@ -403,7 +386,7 @@ C
 C
 C     Read the RANGES section.
 C
-      CALL RDRHS(RCODE,MAXM,M,LINE,
+      CALL RDRHS(RCODE,BUFFER,MAXM,M,LINE,
      X HDRWCD,LNKRW,HDCLCD,LNKCL,
      X NAMRAN,RANGES,RWNAME,SECT,INMPS,IOLOG)
 C
@@ -592,7 +575,7 @@ C
 C
  6000 CONTINUE
 C     Close the MPS input file.
-      call clunit(-inmps,filmps(1:ilen),mode)
+css      call clunit(-inmps,filmps(1:ilen),mode)
 c      CLOSE(INMPS)
       RETURN
 C
@@ -604,60 +587,60 @@ C     Here when error occurs.
  9000 WRITE(BUFFER,9001) LINE
  9001 FORMAT(1X,'RDMPS1: Error while reading line',I10,
      X     ' of the MPS file.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C
  9010 WRITE(BUFFER,9011)
  9011 FORMAT(1X,'RDMPS1 ERROR: Number of constraints',
      X ' in the MPS file exceeds MAXM.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=21
       GO TO 6000
 C
  9020 WRITE(BUFFER,9021)
  9021 FORMAT(1X,'RDMPS1 ERROR: Number of nonzeros',
      X ' of matrix A exceeds MAXNZA.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=23
       GO TO 6000
 C
  9030 WRITE(BUFFER,9031)
  9031 FORMAT(1X,'RDMPS1 ERROR: Number of variables',
      X ' in the MPS file exceeds MAXN.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=22
       GO TO 6000
 C
  9040 WRITE(BUFFER,9041) LINE
  9041 FORMAT(1X,'RDMPS1 ERROR: Unknown row found',
      X ' at line',I10,' of the MPS file.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C
  9050 WRITE(BUFFER,9051) TYPROW,LINE
  9051 FORMAT(1X,'RDMPS1 ERROR: Unknown row type=',A2,
      X ' at line',I10,' of the MPS file.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C
  9060 WRITE(BUFFER,9061) LINE
  9061 FORMAT(1X,'RDMPS1 ERROR: Unknown column found',
      X ' at line',I10,' of the MPS file.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C
  9070 WRITE(BUFFER,9071) LINE,BNDTYP
  9071 FORMAT(1X,'RDMPS1 ERROR: Line',I10,' in MPS file',
      X ' defines ',A2,' bound')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       WRITE(BUFFER,9072) NAMCLN
  9072 FORMAT(14X,'for variable ',A8,
      X ' that has already been bounded.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C
@@ -668,50 +651,51 @@ C
       WRITE(BUFFER,9082) NAMCLN
  9082 FORMAT(14X,'for variable ',A8,
      X ' that has earlier been declared FREE.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C
  9090 WRITE(BUFFER,9091) LINE
  9091 FORMAT(1X,'RDMPS1 ERROR: Line',I10,' in MPS file',
      X ' declares as  FREE')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       WRITE(BUFFER,9092) NAMCLN
  9092 FORMAT(14X,' variable ',A8,
      X ' that has earlier been bounded.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C
- 9100 WRITE(BUFFER,9101) LINE
+ 9100 WRITE(BUFFER,9101) LINE,NAMCLN
  9101 FORMAT(1X,'RDMPS1 ERROR: Line',I10,' in MPS file',
-     X ' declares as  FIXED')
-      CALL basout(io,wte,BUFFER)
-      WRITE(BUFFER,9102) NAMCLN
- 9102 FORMAT(14X,' variable ',A8,
-     X ' that has earlier been bounded.')
-      CALL basout(io,wte,BUFFER)
+     X     ' declares as  FIXED',14X,' variable ',A8,
+     X     ' that has earlier been bounded.')
+css      CALL basout(io,wte,BUFFER)
+css      WRITE(BUFFER,9102) NAMCLN
+css 9102 FORMAT(14X,' variable ',A8,
+css     X ' that has earlier been bounded.')
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C
  9110 WRITE(BUFFER,9111) LINE,BNDTYP
  9111 FORMAT(1X,'RDMPS1 ERROR: Line',I10,' in MPS file',
      X ' has invalid bound type ',A2)
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C
  9130 WRITE(BUFFER,9131) NAMEC(1:8)
  9131 FORMAT(1X,'RDMPS1 ERROR: Objective row =',A8,
      X ' has no entries.')
-      CALL basout(io,wte,BUFFER)
+css    CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 
 C
  9400 WRITE(BUFFER,9401)
  9401 FORMAT(1X,'RDMPS1 ERROR: Multiple row definition.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=84
       GO TO 6000
 C *** LAST CARD OF (RDMPS1) ***
@@ -769,7 +753,7 @@ C********************************************************************
 C     ******* RDRHS ... READ THE RHS SECTION OF THE MPS FILE *******
 C********************************************************************
 C
-      SUBROUTINE RDRHS(RCODE,MAXM,M,LINE,
+      SUBROUTINE RDRHS(RCODE,BUFFER,MAXM,M,LINE,
      X HDRWCD,LNKRW,HDCLCD,LNKCL,
      X NAMEB,RRHS,RWNAME,SECT,INMPS,IOLOG)
 C
@@ -782,6 +766,7 @@ C *** PARAMETERS
       INTEGER*4 HDRWCD(M+1),LNKRW(M+1)
       INTEGER*4 HDCLCD(M+1),LNKCL(M+1)
       DOUBLE PRECISION RRHS(MAXM)
+      CHARACTER*100 BUFFER
       CHARACTER SECT
 C
 C
@@ -790,7 +775,6 @@ C *** LOCAL VARIABLES
       INTEGER*4 INDEX
       DOUBLE PRECISION VAL1,VAL2
       CHARACTER*8 NAME0,NAMRW1,NAMRW2
-      CHARACTER*100 BUFFER
       CHARACTER*100 RDLINE
 C
 C
@@ -917,14 +901,14 @@ C     Here if an error occurs.
  9000 WRITE(BUFFER,9001) LINE
  9001 FORMAT(1X,'RDRHS ERROR: Unexpected characters found',
      X ' at line',I10,' of the MPS file.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=83
       GO TO 6000
 C
  9010 WRITE(BUFFER,9011) LINE
  9011 FORMAT(1X,'RDRHS ERROR: Unknown row was found',
      X ' at line',I10,' of the MPS file.')
-      CALL basout(io,wte,BUFFER)
+css      CALL basout(io,wte,BUFFER)
       RCODE=83
       GO TO 6000
 C

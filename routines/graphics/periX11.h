@@ -33,7 +33,10 @@
  extern void C2F(boundingbox)();
  extern void C2F(drawarrows)();
  extern void C2F(loadfamily)();
+ extern void C2F(queryfamily)();
  extern void C2F(xinfo)();
+ extern void C2F(setpopupname)(); 
+
 /*---------------------END------------------------------*/
 
 

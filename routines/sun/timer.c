@@ -1,8 +1,8 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 #include <stdio.h>
 
 #if ~defined(THINK_C) && ~defined(__MWERKS__) 
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
 #ifndef  __MINGW32__
 #include <sys/time.h>
 #endif 
@@ -44,7 +44,7 @@ int C2F(timer)(etime)
 #define X_GETTIMEOFDAY(t) 0 
 #else
 #if defined(WIN32)
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
 #ifndef  __MINGW32__
 #define X_GETTIMEOFDAY(t) gettimeofday(t, &tmz )
 static struct timezone tmz;
@@ -72,7 +72,7 @@ int C2F(stimer)()
         YieldToAnyThread();
         return(0);
 #else 
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
 #ifndef __MINGW32__
   struct timeval ctime;
   X_GETTIMEOFDAY(&ctime);

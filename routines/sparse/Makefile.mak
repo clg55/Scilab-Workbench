@@ -10,7 +10,7 @@ LIBRARY = $(SCIDIR)/libs/sparse.lib
 
 
 OBJSC = lu.obj spBuild.obj spFortran.obj spSolve.obj spAllocate.obj spFactor.obj \
-	spOutput.obj spUtils.obj
+	spOutput.obj spUtils.obj mspelm.obj
 
 OBJSF = lspops.obj spelm.obj spops.obj \
 	dperm.obj iperm.obj  dspasp.obj dspssp.obj \
@@ -27,7 +27,8 @@ OBJSF = lspops.obj spelm.obj spops.obj \
 	dij2sp.obj wij2sp.obj lij2sp.obj dspmax.obj dspmin.obj \
 	dspmat.obj wspmat.obj lspmat.obj sp2col.obj spsort.obj spord.obj wperm.obj \
 	spcho1.obj spcho2.obj blkslv.obj blkfct.obj inpnv.obj symfct.obj ordmmd.obj \
-	blkfc1.obj rdmps1.obj spind.obj spcompack.obj
+	blkfc1.obj spind.obj spcompack.obj \
+	intreadmps.obj rdmps1.obj rdmpsz.obj 
 
 OBJS =  $(OBJSF) $(OBJSC)
 
@@ -35,12 +36,15 @@ include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib.mak
-
-
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
 
 lu.obj: spConfig.h spmatrix.h spDefs.h  ../machine.h
 spBuild.obj: spConfig.h  spmatrix.h spDefs.h

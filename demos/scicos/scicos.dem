@@ -13,7 +13,9 @@ demos_name=[
     'Cont.Disc-Observer.cosf'
     'Controller.cosf'
     'System-Observer.cosf'
-    'Live demo']
+//    'Live demo'
+    'sound demo (Unix only)']
+            
 
 while %t do
   n=x_choose(demos_name,'Choose a demo')
@@ -44,8 +46,10 @@ while %t do
     scicos('SCI/demos/scicos/Controller.cosf');
   case 12 then  
     scicos('SCI/demos/scicos/System-Observer.cosf');
-  case 13 then
-    getf('SCI/demos/scicos/scicos_play.sci','n')
-    scicos_play('SCI/demos/scicos/live.dat')
+//  case 13 then
+//    getf('SCI/demos/scicos/scicos_play.sci','n')
+//    scicos_play('SCI/demos/scicos/live.dat')
+  case 13 then  
+    scicos('SCI/demos/scicos/sound.cosf');
   end
 end

@@ -6,6 +6,7 @@ NAME
 CALLING SEQUENCE
   [unit [,err]]=file('open', file-name [,status] [,access [,recl]] [,format])
   file(action,unit)
+  [units [,typ [,nams]]] =file()
 
 PARAMETERS
 
@@ -38,12 +39,19 @@ PARAMETERS
 
   unit      : integer, logical unit descriptor of the opened file
 
+  units     : integer vector, logical unit descriptor of the opened files.
+
+  typs      : Character string vector, type (C or Fortran) of opened files.
+
+  nams      : Character string vector, pathnames of opened files.
+
   err       : integer, error message number (see error), if open fails. If
             err is omitted an error message is issued.
 
   action    : is one of the following strings:
 
-            "close"      : closes the file
+            "close"      : closes the file(s) given by the logical unit
+                         descriptors given in units
 
             "rewind"     : puts the pointer at beginning of file
 
@@ -63,6 +71,8 @@ DESCRIPTION
   file(action,unit) allows to close the file , or move the current file
   pointer .
 
+  file() returns the logical unit descriptors of the opened files.
+
 EXAMPLE
   u=file('open',TMPDIR+'/foo','unknown')
   for k=1:4
@@ -72,6 +82,10 @@ EXAMPLE
   file('rewind',u)
   x=read(u,2,4)
   file('close',u)
+  //
+  file('close',file() ) //closes all opened files (C or Fortran type).
+  //
+  [units,typs,nams]=file()
 
 SEE ALSO
   save, load, write, read, writb, readb, xgetfile

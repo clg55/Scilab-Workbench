@@ -8,7 +8,7 @@ include ../../Makefile.incl
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = percentlib
-NAM = percent
+NAM = SCI/macros/percent
 
 MACROS =%ar_p.sci %b_c_spb.sci %b_f_spb.sci %b_g_s.sci %b_g_spb.sci %b_h_s.sci \
 	%b_h_spb.sci %c_e.sci %c_i_c.sci %c_i_lss.sci %c_i_r.sci \
@@ -26,7 +26,7 @@ MACROS =%ar_p.sci %b_c_spb.sci %b_f_spb.sci %b_g_s.sci %b_g_spb.sci %b_h_s.sci \
 	%lss_r_p.sci %lss_r_r.sci %lss_r_s.sci %lss_s.sci \
 	%lss_s_lss.sci %lss_s_p.sci %lss_s_r.sci %lss_s_s.sci \
 	%lss_t.sci %lss_v_lss.sci %lss_v_p.sci %lss_v_r.sci \
-	%lss_v_s.sci %m_n_l.sci %m_o_l.sci %nochoose.sci \
+	%lss_v_s.sci %m_n_l.sci %m_o_l.sci \
 	%p_a_lss.sci %p_a_r.sci %p_c_lss.sci %p_c_r.sci \
 	%p_d_p.sci %p_d_r.sci %p_d_s.sci %p_e.sci %p_f_lss.sci \
 	%p_f_r.sci %p_i_lss.sci %p_i_p.sci %p_i_r.sci %p_i_s.sci \
@@ -64,7 +64,8 @@ MACROS =%ar_p.sci %b_c_spb.sci %b_f_spb.sci %b_g_s.sci %b_g_spb.sci %b_h_s.sci \
 	%s_v_s.sci %s_x_r.sci %s_y_p.sci %s_y_r.sci %s_y_sp.sci \
 	%s_z_p.sci %s_z_r.sci %s_z_sp.sci %sp_a_s.sci %sp_a_sp.sci \
 	%sp_c_s.sci %sp_d_s.sci %sp_d_sp.sci %sp_e.sci %sp_f_s.sci \
-	%sp_i_s.sci %sp_k_s.sci %sp_k_sp.sci %sp_l_s.sci %sp_l_sp.sci \
+	%sp_i_s.sci %sp_i_sp.sci %sp_k_s.sci %sp_k_sp.sci %sp_l_s.sci \
+	%sp_l_sp.sci \
 	%sp_q_s.sci %sp_q_sp.sci %sp_r_s.sci %sp_r_sp.sci %sp_s_s.sci \
 	%sp_s_sp.sci %sp_y_s.sci %sp_y_sp.sci %sp_z_s.sci %sp_z_sp.sci \
 	%spb_c_b.sci %spb_f_b.sci %spb_g_b.sci %spb_g_spb.sci %spb_h_b.sci \
@@ -84,6 +85,7 @@ MACROS =%ar_p.sci %b_c_spb.sci %b_f_spb.sci %b_g_s.sci %b_g_spb.sci %b_h_s.sci \
 	%s_o_hm.sci %s_n_hm.sci %hm_s_s.sci %s_s_hm.sci %hm_fft.sci\
 	%hm_matrix.sci %s_matrix.sci\
 	%ip_a_s.sci %ip_s_s.sci %ip_m_s.sci %s_a_ip.sci %s_s_ip.sci \
-	%s_m_ip.sci %ip_p.sci %s_i_spb.sci %b_i_sp.sci %c_a_c.sci
+	%s_m_ip.sci %ip_p.sci %s_i_spb.sci %b_i_sp.sci %c_a_c.sci %msp_p.sci\
+	%msp_o_msp.sci %msp_n_msp.sci %ip_n_ip.sci %ip_o_ip.sci 
 
 include ../Make.lib

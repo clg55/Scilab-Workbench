@@ -11,6 +11,7 @@ c
       double precision y(n),s(n),jac(nrowj,n),t(*)
       common/ierode/iero
 c     
+      logical allowptr
       integer vol,tops,nordre
       data nordre/3/,mlhs/1/
 c

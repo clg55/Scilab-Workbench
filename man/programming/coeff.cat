@@ -23,4 +23,4 @@ DESCRIPTION
   row or column vector).
 
 SEE ALSO
-  poly, degree
+  poly, degree, inv_coeff

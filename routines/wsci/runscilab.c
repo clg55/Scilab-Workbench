@@ -28,6 +28,10 @@
 #define putenv(x) _putenv(x)
 #endif 
 
+#ifdef __ABSC__
+#define putenv(x) abs_putenv(x)
+#endif
+
 
 /********************************
  * Set up TCL_LIBRARY and TK_LIBRARY environment variables if 
@@ -94,8 +98,11 @@ WinMain (HINSTANCE hSelf, HINSTANCE hPrev, LPSTR cmdline, int nShow)
   *p = 0;
 
   SciEnv();
-
+#ifdef __ABSC__
+  new_cmdline = malloc (MAX_PATH + strlen (cmdline) + 1);
+#else
   new_cmdline = alloca (MAX_PATH + strlen (cmdline) + 1);
+#endif
   strcpy (new_cmdline, modname+1);
   strcat (new_cmdline, "\\scilex.exe ");
 

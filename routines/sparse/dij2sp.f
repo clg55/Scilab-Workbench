@@ -54,10 +54,11 @@ c     eliminate leading zero entries
                ij(k1,2)=ij(k,2)
                v(k1)=v(k)
             else
-               if(v(k1).ne.v(k)) then
-                  ierr=3
-                  return
-               endif
+               v(k1) = v(k1) + v(k)
+c               if(v(k1).ne.v(k)) then
+c                  ierr=3
+c                  return
+c               endif
             endif
          endif
  08      continue

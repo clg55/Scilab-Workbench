@@ -30,8 +30,8 @@ PARAMETERS
 
             - for cheb2 filters 0<ripple<delta(2) in stopband
 
-            - for ellip filters 1-delta(1)<ripple<1 in passband and
-              0<ripple<delta(2) in stopband
+            - for ellip filters 1-delta(1)<ripple<1 in passband and 0<rip-
+              ple<delta(2) in stopband
 
 DESCRIPTION
   function which designs an iir digital filter using analog filter designs.

@@ -16,8 +16,8 @@ PARAMETERS
 
   romin,romax    : a priori bounds on ro with ro=1/gama^2; (romin=0  usually)
 
-  nmax           : integer, maximum number of iterations in the gama-
-                 iteration.
+  nmax           : integer, maximum number of iterations in the gama-itera-
+                 tion.
 
 DESCRIPTION
   h_inf computes H-infinity optimal controller for the continuous-time plant

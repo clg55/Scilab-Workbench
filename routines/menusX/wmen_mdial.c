@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 /* wmdialog.c
  * Scilab 
  *   Jean-Philipe Chancelier 

@@ -38,8 +38,8 @@ PARAMETERS
            : for list
 
        dimi
-         : defines the size of the ith value it must be a integer or a 2-
-         vector of integer, -1 stands for undefined dimension
+         : defines the size of the ith value it must be a integer or a 2-vec-
+         tor of integer, -1 stands for undefined dimension
 
   ini  : n column vector of strings, ini(i) gives the suggested response for
        the ith required value
@@ -56,8 +56,8 @@ DESCRIPTION
 
 REMARKS
   All valid expressions can be used as answers; for matrices and vectors get-
-  values automatically adds [ ] around the given answer before numeric
-  evaluation.
+  values automatically adds [ ] around the given answer before numeric evalu-
+  ation.
 
 EXAMPLE
   labels=["magnitude";"frequency";"phase    "];

@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC/Chancelier Jean-Philippe */
 
 #include <stdlib.h>
 #include <string.h>
@@ -7,6 +7,14 @@
 #include <malloc.h>
 #endif 
 #include <stdio.h>
+
+#if defined(netbsd)
+#include <ieeefp.h>
+#endif
+
+#if defined(freebsd)
+#include <floatingpoint.h>
+#endif
 
 void readOneLine();
 
@@ -162,6 +170,9 @@ int main(argc, argv)
   int i ;
   FILE *fd;
   FILE *fdo;
+#if defined(freebsd) || defined(netbsd)
+  fpsetmask(0);
+#endif
 #ifdef WIN32 
   SciEnv();
 #endif 

@@ -41,7 +41,7 @@ DESCRIPTION
   edit_curv is an interactive graphic curve editor. To add a new point simply
   click at the desired location, the added point will be connected to the
   nearest end-point. to move a point click on it, drag the mouse to the new
-  position and click to fix the new position
+  position and click to set the new position
 
 AUTHOR
   Serge Steer

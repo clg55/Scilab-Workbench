@@ -1,6 +1,6 @@
 function wdm=do_focus(scs_m)
 // Copyright INRIA
-[btn,xc,yc,win,Cmenu]=getclick()
+[btn,xc,yc,win,Cmenu]=cosclick()
 if Cmenu<>[] then
   Cmenu=resume(Cmenu)
 end

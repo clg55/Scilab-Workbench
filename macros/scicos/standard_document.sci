@@ -84,14 +84,14 @@ end
 
 //- Informations generales 
 if modele(1)=='super'|modele(1)=='csuper' then
-  texte = ['General Informations'; 
+  texte = ['General Information'; 
 	'--------------------';' '
 	'object type                : Super Block';   ..
 	'Identification             : '+identification; ..
 	'Object number in diagram   : '+string(k); ' ';  ..
 	'Drawing function           : '+macro;' ']
 else
-  texte = ['General Informations'; 
+  texte = ['General Information'; 
          '--------------------';' '
 	 'object type                : bloc standard';   ..
 	 'Identification             : '+identification; ..
@@ -102,7 +102,7 @@ else
 	 'Bloc type                  : '+typ;             ..
          'Direct feed through        : '+dependance_u;    ..
          'Time varying               : '+dependance_t]
-  if cpr<>list() then
+  if cpr<>list()&needcompile<>4 then
     cor = cpr(3)
     corinv = cpr(4)
     path=list()
@@ -149,6 +149,32 @@ texte = [texte; 'Input / output';
                 '--------------';
 		' '
 		 tabule(tableau); ' ']
+// Documentation
+if size(modele)>=14 then
+  documentation=modele(14)
+  if type(documentation)==15 then
+    if size(documentation)>=2 then
+      funname=documentation(1);doc=documentation(2)
+      if type(funname)==10 then 
+	ierr=execstr('docfun='+funname,'errcatch')
+	if ierr<>0 then
+	  x_message('function '+funname+' not found')
+	  return
+	end
+      else
+	docfun=funname
+      end
+      ierr=execstr('doc=docfun(''get'',doc)','errcatch')
+      if ierr==0&doc<>[] then
+	texte = [texte; 'Documentation'; 
+	                '-------------';
+			' '
+			doc; ' ']
+      end
+    end
+  end
+end
+
 //= Liaisons 
 case 'Link' then
   //- Initialisation 

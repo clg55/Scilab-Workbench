@@ -1,7 +1,7 @@
       subroutine readmat(name,m,n,scimat)
 c     see creadmat 
 c     ==========================================
-c     Copyright INRIA
+c     Copyright INRIA/ENPC 
       double precision scimat(m,*)
       integer m,n
       logical creadmat,j
@@ -45,6 +45,7 @@ c     ==========================================
 c
       include '../stack.h'
       integer il,it,l,id(nsiz)
+      iadr(l)=l+l-1
       creadmat=.false.
       call str2name(name,id)
 c     read   : from scilab stack -> fortran variable
@@ -56,6 +57,9 @@ c     -------
          call putid(ids(1,pt+1),id)
          call error(4)
          return
+      endif
+      if ( infstk(fin).eq.2) then
+         fin = istk(iadr(lstk(fin))+2)
       endif
       if(.not.getrmat('creadmat',fin,fin,m,n,l))return
       call dmcopy(stk(l),m,scimat,m,m,n)
@@ -81,10 +85,11 @@ c     =========================================
       character*(*) name
       double precision mat(*)
       include '../stack.h'
-      integer id(nsiz),m,n,lr,lc,srhs,l4
+      integer id(nsiz),m,n,lr,lc,srhs,l4,topk
       logical cremat
       cwritemat=.false.
       call str2name(name,id)
+      topk=top
       top=top+1
       if(.not.cremat('cwritemat',top,0,m,n,lr,lc)) return
       call dcopy(m*n,mat,1,stk(lr),1)
@@ -94,7 +99,7 @@ c     =========================================
       lct(4)=-1
       call stackp(id,0)
       lct(4)=l4
-      top=top-1
+      top=topk
       rhs=srhs
       if(err.gt.0) return
       cwritemat=.true.
@@ -109,6 +114,7 @@ c     ==========================================
       j=creadchain(name,itslen,chai)
       return
       end
+
 
 
       logical function creadchain(name,itslen,chai)
@@ -139,7 +145,10 @@ c     ==========================================
       include '../stack.h'
       integer id(nsiz),m1,n1,lr1,nlr1
       logical getsmat
+c
       iadr(l)=l+l-1
+c
+      err=0
       creadchain=.false.
       call str2name(name,id)
       fin=-1
@@ -149,6 +158,9 @@ c     ==========================================
          call putid(ids(1,pt+1),id)
          call error(4)
          return
+      endif
+      if ( infstk(fin).eq.2) then
+         fin = istk(iadr(lstk(fin))+2)
       endif
       if(.not.getsmat('creadchain',fin,fin,m1,n1,1,1,lr1,nlr1)) 
      $     return
@@ -162,6 +174,70 @@ c     ==========================================
       chai(itslen+1:itslen+1)=char(0)
       creadchain=.true.
       end
+
+      logical function creadchains(name,ir,ic,itslen,chai)
+c     ==========================================
+c!but
+c     this routine reads name(ir,ic) in scilab's  memory
+c     and store it into chai 
+c     if ir=ic=-1 on entry then the routines returns in ir,ic
+c     the size of the matrix 
+c!calling sequence
+c
+c     integer       itslen
+c     character*(*) chai,name
+c
+c     name    : character string = name of scilab variable (input)
+c     chai    : chain to be read (output) 
+c               null terminated 
+c     itslen  : (input) maximum number of character that can be stored
+c               in chain 
+c               (output) number of copied characters into chai
+c               
+c               
+c     if Scilab variable x='qwert' exists 
+c     character ch*(10)
+c     l=10
+c     logic= creadchain('x',l,ch) returns l=5 and ch='qwert'
+c
+c     ==========================================
+      character*(*) chai,name
+      include '../stack.h'
+      integer id(nsiz),m1,n1,lr1,nlr1
+      logical getsmat
+c
+      iadr(l)=l+l-1
+c
+      err=0
+      creadchains=.false.
+c
+      call str2name(name,id)
+      fin=-1
+      call stackg(id)
+      if(err.gt.0) return
+      if(fin.eq.0)  then 
+         call putid(ids(1,pt+1),id)
+         call error(4)
+         return
+      endif
+      if ( infstk(fin).eq.2) then
+         fin = istk(iadr(lstk(fin))+2)
+      endif
+      if ( ir.eq.-1.and.ic.eq.-1) then 
+         if(.not.getsmat('creadchain',fin,fin,ir,ic,1,1,lr1,nlr1)) 
+     $        return
+         creadchains=.true.
+         return 
+      else
+         if(.not.getsmat('creadchain',fin,fin,m1,n1,ir,ic,lr1,nlr1)) 
+     $        return
+      endif
+      itslen=min(itslen-1,nlr1)
+      call cvstr(itslen,istk(lr1),chai,1)
+      chai(itslen+1:itslen+1)=char(0)
+      creadchains=.true.
+      end
+
 
       logical function cwritechain(name,m,chai)
 c     =========================================
@@ -181,10 +257,11 @@ c     =========================================
       integer m
       character*(*) name,chai
       include '../stack.h'
-      integer id(nsiz),nlr,lr,srhs,l4
+      integer id(nsiz),nlr,lr,srhs,l4,topk
       logical cresmat2
       cwritechain=.false.
       call str2name(name,id)
+      topk=top
       top=top+1
       if(.not.cresmat2('cwritechain',top,m,lr)) return
       call cvstr(m,istk(lr),chai,0)
@@ -194,7 +271,7 @@ c     =========================================
       lct(4)=-1
       call stackp(id,0)
       lct(4)=l4
-      top=top-1
+      top=topk
       rhs=srhs
       if(err.gt.0) return
       cwritechain=.true.
@@ -242,6 +319,7 @@ c     ==========================================
       include '../stack.h'
       integer id(nsiz)
       logical getrmat 
+      iadr(l)=l+l-1
       cmatptr=.false.
 c     ---- get the id 
       call str2name(name,id)
@@ -256,6 +334,9 @@ c     ---- get the position in fin
          return
       endif
 c     ---- get data 
+      if ( infstk(fin).eq.2) then
+         fin = istk(iadr(lstk(fin))+2)
+      endif
       if(.not.getrmat('creadmat',fin,fin,m,n,lp))return
       cmatptr=.true.
       end
@@ -279,6 +360,36 @@ c     =====================
  200  continue
       call cvname(id,name(1:lon),0)
       return
+      end
+
+      logical function objptr(name,lp)
+c     ==========================================
+c     objptr returns the adress of "name"
+c     in scilab's internal stack
+*      
+c     ==========================================
+      character*(*) name
+      include '../stack.h'
+      integer id(nsiz),iadr
+      iadr(l)=l+l-1
+      objptr=.false.
+      lp=0
+c     ---- get the id 
+      call str2name(name,id)
+c     ---- get the position in fin 
+      fin=-1
+      call stackg(id)
+      if (fin .eq. 0) then
+         call putid(ids(1,pt+1),id)
+c         we juste return false and lp is set to zero
+c         call error(4)
+         return
+      endif
+      lp=lstk(fin)
+      if ( infstk(fin).eq.2) then
+         lp = lstk(istk(iadr(lp)+2))
+      endif
+      objptr=.true.
       end
 
 

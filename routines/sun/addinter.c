@@ -43,19 +43,30 @@ static int LastInterf=0;
 static void SciInterInit();
 static void DynFuntab _PARAMS((int *Scistring,int *ptrstrings,int *nstring,int k1));
 
+int Use_cpp_code;
+char * Use_c_cpp;
+
 /************************************************
  * Dynamically added interface to Scilab 
  ************************************************/
 
-void C2F(addinter)(descla,ptrdescla,nvla,iname,desc,ptrdesc,nv,err)
+void C2F(addinter)(descla,ptrdescla,nvla,iname,desc,ptrdesc,nv,
+		   c_cpp,lib_cpp,err)
      int *desc,*ptrdesc,*nv;         /* ename */
      int *descla,*ptrdescla,*nvla;   /* files */
      char *iname;                    /* interface name */
+     char *c_cpp;                    /* C++ compiler */
+     int *lib_cpp;                   /* for cpp library */
      int *err;
 {
   int ierr,i,rhs=2,ilib=0,inum;
   char **files,*names[2];
   *err=0;
+
+  Use_cpp_code=*lib_cpp;
+  Use_c_cpp = (char *) malloc((strlen(c_cpp) +1) * sizeof(char));
+  strcpy(Use_c_cpp,c_cpp);
+
   ScilabMStr2CM(descla,nvla,ptrdescla,&files,err);
   if ( *err == 1) return;
   names[0]=iname;

@@ -21,7 +21,7 @@ where
 numt
 : integer, the actual number of tasks started.
 Values less than zero indicate a system error.
-.TP4
+.TP 4
 tids
 : row of integers, array of the tids of the PVM processes started 
 by this pvm_spawn call.

@@ -11,8 +11,8 @@ Usage
   [alpha,f_alpha]=mdfl1d(mu_n,N,n)
 
 Input parameters
-       o mu_n : strictly positive real vector [1,nu_n] Contains the pre-
-         multifractal measure.
+       o mu_n : strictly positive real vector [1,nu_n] Contains the pre-mul-
+         tifractal measure.
        o N : strictly positive real (integer) scalar Contains the number of
          Hoelder exponents.
        o n : strictly positive real (integer) scalar Contains the final reso-
@@ -33,9 +33,9 @@ Algorithm details
 
   The discrete partition function is estimated by coarse-graining masses mu_n
   into non-overlapping boxes of increasing diameter (box method). If nu_n is
-  a power of 2, 2n corresponds to the coarser scale.  The reyni exponents are
-  estimated by least square linear regression.  The Legendre transform of the
-  mass exponent function is estimated with the linear-time Legendre
+  a power of 2, 2^n corresponds to the coarser scale.  The reyni exponents
+  are estimated by least square linear regression.  The Legendre transform of
+  the mass exponent function is estimated with the linear-time Legendre
   transform.
 
 See also

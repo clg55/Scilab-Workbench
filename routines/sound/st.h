@@ -1,3 +1,6 @@
+#ifndef SCI_ST 
+#define SCI_ST 
+
 /*
  * July 5, 1991
  * Copyright 1991 Lance Norskog And Sundry Contributors
@@ -6,6 +9,9 @@
  * Lance Norskog And Sundry Contributors are not responsible for 
  * the consequences of using this software.
  */
+#if (defined(netbsd) || defined(freebsd)) && !defined(unix) 
+#define unix
+#endif
 
 #define IMPORT  extern
 #define EXPORT 
@@ -128,23 +134,24 @@ IMPORT char *sizes[], *styles[];
 /* Utilities to read and write shorts and longs little-endian and big-endian */
 unsigned short rlshort(P1(ft_t ft));			/* short little-end */
 unsigned short rbshort(P1(ft_t ft));			/* short big-end    */
-unsigned short wlshort(P2(ft_t ft, unsigned short us));	/* short little-end */
-unsigned short wbshort(P2(ft_t ft, unsigned short us));	/* short big-end    */
+void wlshort(P2(ft_t ft, unsigned short us));	/* short little-end */
+void wbshort(P2(ft_t ft, unsigned short us));	/* short big-end    */
 unsigned long  rllong(P1(ft_t ft));			/* long little-end  */
 unsigned long  rblong(P1(ft_t ft));			/* long big-end     */
-unsigned long  wllong(P2(ft_t ft, unsigned long ul));	/* long little-end  */
-unsigned long  wblong(P2(ft_t ft, unsigned long ul));	/* long big-end     */
+void wllong(P2(ft_t ft, unsigned long ul));	/* long little-end  */
+void wblong(P2(ft_t ft, unsigned long ul));	/* long big-end     */
 /* Read and write words and longs in "machine format".  Swap if indicated.  */
 unsigned short rshort(P1(ft_t ft));			
-unsigned short wshort(P2(ft_t ft, unsigned short us));
+void wshort(P2(ft_t ft, unsigned short us));
 unsigned long  rlong(P1(ft_t ft));		
-unsigned long  wlong(P2(ft_t ft, unsigned long ul));
+void  wlong(P2(ft_t ft, unsigned long ul));
 float          rfloat(P1(ft_t ft));
 void           wfloat(P2(ft_t ft, double f));
 double         rdouble(P1(ft_t ft));
 void           wdouble(P2(ft_t ft, double d));
 
 /* Utilities to byte-swap values */
+unsigned int   swapi(P1(unsigned int us));		/* Swap int */
 unsigned short swapw(P1(unsigned short us));		/* Swap short */
 unsigned long  swapl(P1(unsigned long ul));		/* Swap long */
 float  	       swapf(P1(float f));			/* Swap float */
@@ -213,7 +220,7 @@ IMPORT int soxpreview;	/* Preview mode: be fast and ugly */
 
 #if defined(unix) || defined(__OS2__) || defined(aix)
 #include <errno.h>
-extern errno;
+extern int errno;
 #endif
 
 #ifdef	__OS2__
@@ -225,3 +232,28 @@ extern errno;
 char *version();			/* return version number */
 /* ummmm??? */
 
+#ifdef __STDC__
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)             paramlist
+#endif
+#else
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)             ()
+#endif
+#endif
+
+int wavread _PARAMS((ft_t ft, long int *buf, long int len));
+void  wavstartread _PARAMS((ft_t ft));
+void wavwrite _PARAMS((ft_t ft, long int *buf, long int len));
+void wavstartwrite _PARAMS((ft_t ft));
+void wavstopwrite  _PARAMS((ft_t ft));
+void wavwritehdr  _PARAMS((ft_t ft));
+
+#if defined(__alpha)
+int rawread _PARAMS((ft_t ft,int * buf,long nsamp));
+#else
+int rawread _PARAMS((ft_t ft,long * buf,long nsamp));
+#endif
+void rawwrite _PARAMS((ft_t ft,long *buf, long nsamp) );
+
+#endif 

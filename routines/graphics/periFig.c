@@ -43,11 +43,7 @@
 #include <X11/Xlib.h>
 #include <X11/Intrinsic.h>
 #endif
-#if defined(THINK_C)|| defined(WIN32)
-#define M_PI	3.14159265358979323846
-#else
-#include <values.h>
-#endif
+
 
 #include "Math.h"
 #include "periFig.h"
@@ -79,7 +75,7 @@ static integer  xfig_font[]= { 12,32,0,1,2,3,0};
 static char *sizeXfig_[] = { "08" ,"10","12","14","18","24"};
 static integer  isizeXfig_[] = { 8,10,12,14,18,24};
 
-#if defined(__CYGWIN32__) || defined(__MINGW32__)
+#if defined(__CYGWIN32__) || defined(__MINGW32__) || defined(__GNUC__)
 static FILE *file= (FILE *) 0;
 #define FPRINTF(x) ( file != (FILE*) 0) ?  fprintf x  : 0 
 #else 
@@ -140,7 +136,10 @@ void C2F(xselgraphicXfig)(v1, v2, v3, v4, v5, v6, v7, dx1, dx2, dx3, dx4)
 
 void C2F(xendgraphicXfig)()
 {
-  if (file != stdout) fclose(file);
+  if (file != stdout && file != (FILE*) 0) {
+    fclose(file);
+    file=stdout;
+  }
 }
 
 void C2F(xendXfig)(v1, v2, v3, v4, v5, v6, v7, dx1, dx2, dx3, dx4)
@@ -156,7 +155,7 @@ void C2F(xendXfig)(v1, v2, v3, v4, v5, v6, v7, dx1, dx2, dx3, dx4)
      double *dx3;
      double *dx4;
 {
-  if (file != stdout) fclose(file);
+  C2F(xendgraphicXfig)();
 }
 
 
@@ -1016,7 +1015,7 @@ void C2F(gemptyXfig)(verbose, v2, v3,dummy)
 
 
 
-#define NUMSETFONC 23
+#define NUMSETFONC 26
 
 struct bgc { char *name ;
 	     void  (*setfonc )() ;
@@ -1039,10 +1038,13 @@ struct bgc { char *name ;
    {"pixmap",C2F(semptyXfig),C2F(gemptyXfig)},
    {"thickness",C2F(setthicknessXfig),C2F(getthicknessXfig)},
    {"use color",C2F(usecolorXfig),C2F(getusecolorXfig)},
+   {"viewport",C2F(semptyXfig),C2F(gemptyXfig)},
    {"wdim",C2F(setwindowdimXfig),C2F(getwindowdimXfig)},
    {"white",C2F(semptyXfig),C2F(getlastXfig)},
    {"window",C2F(setcurwinXfig),C2F(getcurwinXfig)},
+   {"wpdim",C2F(semptyXfig),C2F(gemptyXfig)},
    {"wpos",C2F(setwindowposXfig),C2F(getwindowposXfig)},
+   {"wresize",C2F(semptyXfig),C2F(gemptyXfig)},
    {"wshow",C2F(semptyXfig),C2F(gemptyXfig)},
    {"wwpc",C2F(semptyXfig),C2F(gemptyXfig)},
  };
@@ -1782,7 +1784,7 @@ void C2F(initgraphicXfig)(string, v2, v3, v4, v5, v6, v7, dx1, dx2, dx3, dx4)
   if (file == 0) 
     {
       sciprint("Can't open file %s, I'll use stdout\r\n",string1);
-      file =stdout;
+      file = stdout;
     }
   if (EntryCounter == 0)
     { 
@@ -1929,6 +1931,27 @@ void C2F(loadfamilyXfig)(name, j, v3, v4, v5, v6, v7, dx1, dx2, dx3, dx4)
      strcpy(FontInfoTabXfig_[*j].fname,name) ;}
 }
 
+void C2F(queryfamilyXfig)(name, j, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
+     char *name;
+     integer *j;
+     integer *v3;
+     integer *v4;
+     integer *v5;
+     integer *v6;
+     integer *v7;
+     double *dv1;
+     double *dv2;
+     double *dv3;
+     double *dv4;
+{ 
+  integer i ;
+  name[0]='\0';
+  for (i=0;i<FONTNUMBER;i++) {
+    strcat(name,FontInfoTabXfig_[i].fname);
+    v3[i]=strlen(FontInfoTabXfig_[i].fname);
+  }
+  *j=FONTNUMBER;
+}
 /*--------------------------------------------
 \encadre{always answer ok. Must be Finished}
 ---------------------------------------------*/

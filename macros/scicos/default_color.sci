@@ -1,5 +1,6 @@
 function clr=default_color(typ)
 // Copyright INRIA
+
 if typ==-1 then //event links
   clr=options('Link')(2),
 elseif typ==0 then  //text, block shape,

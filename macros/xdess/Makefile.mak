@@ -11,7 +11,7 @@ include ../../Makefile.incl.mak
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = xdesslib
-NAM = xdess
+NAM = SCI/macros/xdess
 
 MACROS = errbar.sci fchamp.sci fcontour.sci fplot2d.sci fplot3d.sci \
 	fgrayplot.sci fplot3d1.sci  locate.sci xbasc.sci \

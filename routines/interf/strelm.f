@@ -491,11 +491,11 @@ c
       ref=il1.ne.ilr1
       if(istk(il1).eq.1) then
          if(istk(il1+1)*istk(il1+2).eq.0) then
-            istk(ilr)=1
-            istk(ilr+1)=0
-            istk(ilr+2)=0
-            istk(ilr+3)=0
-            lstk(top+1)=sadr(ilr+4)
+            istk(ilr1)=1
+            istk(ilr1+1)=0
+            istk(ilr1+2)=0
+            istk(ilr1+3)=0
+            lstk(top+1)=sadr(ilr1+4)
             return
          endif
       endif
@@ -1401,14 +1401,15 @@ c     sort(a,'r')  <=>  sort(a,1)
       if(lhs.eq.1) goto 999
       top=top+1
       il=iadr(lstk(top))
-      istk(il)=1
-      istk(il+1)=m
-      istk(il+2)=n
-      istk(il+3)=0
+
       l=sadr(il+4)
       inc=-1
       if(sadr(lind).gt.l) inc=1
       call int2db(mn,istk(lind),inc,stk(l),inc)
+      istk(il)=1
+      istk(il+1)=m
+      istk(il+2)=n
+      istk(il+3)=0
       lstk(top+1)=l+mn
 
       go to 999

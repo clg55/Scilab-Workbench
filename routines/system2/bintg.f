@@ -12,8 +12,10 @@ c
       integer       iero
       common/ierajf/iero
 c     
+      logical allowptr
       integer vol,tops,nordre
       data nordre/1/,mlhs/1/
+
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1

@@ -1,7 +1,16 @@
-function r=mtlb_rand(a)
+function r=mtlb_rand(a,opt)
 // Copyright INRIA
-if size(a)==[1 1] then
-  r=rand(a,a)
+[lhs,rhs]=argn()
+if rhs==1 then
+  if and(size(a)==[1 1]) then
+    r=rand(a,a)
+  else
+    r=rand(a(1),a(2))
+  end
 else
-  r=rand(a(1),a(2))
+  if and(size(a)==[1 1]) then
+    r=rand(a,a,opt)
+  else
+    r=rand(a(1),a(2),opt)
+  end
 end

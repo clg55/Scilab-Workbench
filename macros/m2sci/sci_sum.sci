@@ -6,11 +6,20 @@ if stk(top-rhs+1)(5)=='4' then
 else 
   v=stk(top-rhs+1)(1),
 end 
+
 if rhs==1 then
-  if stk(top)(3)=='1'| stk(top)(4)=='1' then
-    stk=list('sum('+v+')','0','1','1',stk(top)(5))
-  else 
-    stk=list('mtlb_sum('+v+')','0','1',stk(top)(4),stk(top)(5))
+  [m,n]=checkdims(stk(top))
+  x=stk(top)(1)
+  if m==-1&n==-1 then
+    set_infos([
+	 'mtlb_sum('+x+') may be replaced by '
+	 '    sum('+x+')'+' if '+x+'is a vector'
+	 '    sum('+x+',1)'+' if '+x+'is a matrix'],1)
+    stk=list('mtlb_sum('+x+')','0','?','?','1')
+  elseif m==1|n==1 then
+    stk=list('sum('+x+')','0','1','1','1')
+  else
+    stk=list('sum('+x+',1)','0','1',stk(top)(4),'1')
   end
 else
   if stk(top)(1)=='1' then

@@ -11,7 +11,7 @@ include ../../Makefile.incl.mak
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = utillib
-NAM = util
+NAM = SCI/macros/util
 
 MACROS = sysconv.sci readc_.sci lin.sci halt.sci bloc2exp.sci \
 	pol2tex.sci texprint.sci bloc2ss.sci \
@@ -21,11 +21,11 @@ MACROS = sysconv.sci readc_.sci lin.sci halt.sci bloc2exp.sci \
 	sysdiag.sci syslin.sci syssize.sci trfmod.sci manedit.sci \
 	x_matrix.sci typeof.sci isdef.sci zeros.sci edit.sci \
 	getvalue.sci usermenu.sci macrovar.sci input.sci sci2exp.sci \
-	demos.sci whereami.sci projaff.sci \
+	demos.sci whereami.sci projaff.sci\
 	printf.sci fprintf.sci sprintf.sci scanf.sci fscanf.sci sscanf.sci \
 	xdialog.sci unix_g.sci unix_s.sci unix_x.sci unix_w.sci \
 	x_choices.sci odeoptions.sci whos.sci newest.sci\
-	excel2sci.sci dec2hex.sci hex2dec.sci getd.sci\
+	excel2sci.sci dec2hex.sci hex2dec.sci getd.sci genlib.sci\
 	%b_diag.sci %b_tril.sci %b_triu.sci %c_diag.sci %c_eye.sci\
 	%c_ones.sci %c_rand.sci %c_tril.sci %c_triu.sci\
 	%lss_eye.sci %lss_inv.sci %lss_ones.sci %lss_rand.sci %lss_size.sci\
@@ -38,9 +38,10 @@ MACROS = sysconv.sci readc_.sci lin.sci halt.sci bloc2exp.sci \
 	%sp_real.sci %sp_round.sci %sp_sin.sci %sp_sort.sci\
 	%sp_sqrt.sci %sp_sum.sci %sp_tril.sci %sp_triu.sci\
 	%spb_diag.sci %spb_tril.sci %spb_triu.sci %sp_norm.sci \
-	G_make.sci hypermat.sci adj2sp.sci sp2adj.sci menubar.sci \
-	getclick.sci stripblanks.sci define.sci \
-	mfile2sci.sci translatepaths.sci
+	G_make.sci hypermat.sci menubar.sci \
+	getclick.sci stripblanks.sci define.sci\
+	mfile2sci.sci translatepaths.sci \
+	adj2sp.sci sp2adj.sci mps2linpro.sci date.sci
 
 OLD=g_ones.sci g_rand.sci g_eye.sci g_diag.sci g_triu.sci g_tril.sci \
 	g_size.sci g_inv.sci g_det.sci  g_sort.sci \

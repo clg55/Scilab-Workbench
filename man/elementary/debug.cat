@@ -5,6 +5,7 @@ NAME
 
 CALLING SEQUENCE
   debug(level-int)
+  level-int=debug()
 
 PARAMETERS
 

@@ -55,7 +55,9 @@
 #include <sys/dir.h>
 #endif
 
+#if !defined(freebsd)
 #include <malloc.h>
+#endif
 
 #include "../machine.h"
 #include "All-extern.h"

@@ -30,6 +30,7 @@ c     get from stack  <2 nom fin rhs>
          istk(l+2+nsiz)=val3
          comp(1)=l+3+nsiz
       elseif(code.eq.5) then
+c     allops 
          err=sadr(l+4)-lstk(bot)
          if(err.gt.0) goto 90
          istk(l)=code
@@ -67,6 +68,20 @@ c     form recursive extraction list
          istk(l+1)=val1(1)
          istk(l+2)=val2
          comp(1)=l+3
+      elseif(code.eq.22) then
+c     set print mode
+         err=sadr(l+1)-lstk(bot)
+         if(err.gt.0) goto 90
+         istk(l)=code  
+         istk(l+1)=val1(1)
+         comp(1)=l+2
+      elseif(code.eq.23) then
+c     name2var
+         err=sadr(l+nsiz+1)-lstk(bot)
+         if(err.gt.0) goto 90
+         istk(l)=code  
+         call putid(istk(l+1),val1)
+         comp(1)=l+nsiz+1
       elseif(code.ge.100) then
 c     appel des fonctions <100*fun rhs lhs fin>
          err=sadr(l+(nsiz+3))-lstk(bot)
@@ -77,12 +92,14 @@ c     appel des fonctions <100*fun rhs lhs fin>
          istk(l+3)=val3
          comp(1)=l+4
       else
+c     defmat:<4>
 c     pause :<12>
 c     break :<13>
 c     abort :<14>
 c     seteol:<15>
 c     quit  :<17>
 c     exit  :<20>
+c     begrhs:<21>
 c     return:<99>
          err=sadr(l+2)-lstk(bot)
          if(err.gt.0) goto 90

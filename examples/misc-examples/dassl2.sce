@@ -2,7 +2,7 @@
 
 //   Testing dassl/dasrt for E xdot - A x = 0  (index one)
 //   x(0)=x0;   xdot(0)=xd0
-Eps=1.e-10
+Eps=1.e-9
 rand('seed',0);
 nx=5;
 E=rand(nx,1)*rand(1,nx);A=rand(nx,nx);

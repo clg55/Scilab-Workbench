@@ -1,8 +1,8 @@
       subroutine matdes                                                       
-c ================================== ( Inria    ) =============
-c     Graphique
 c =============================================================
-c     Copyright INRIA
+c     Graphic subroutines 
+c =============================================================
+c     Copyright ENPC (Jean-Philippe Chancelier 
       external plot3d,plot3d1,plot2d1,plot2d2,plot2d3,plot2d4
       external fac3d,fac3d1,champ1,champ,fac3d2,contour2
       external contourif
@@ -11,7 +11,9 @@ C     fun=7
       goto (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
      $     21,22,23,24,25,26,27,28,29,30,
      $     31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
-     $     48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63) fin
+     $     48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,
+     $     65,66)
+     $     fin
       return
  1    call scichamp('champ',champ)
       return
@@ -138,6 +140,13 @@ C     fun=7
  62   call scicontour2d('contour2di',contourif)
       return
  63   call scic2dex('c2dex')
+      return
+ 64   call scigray2plot('Matplot')
+      return 
+ 65   call scixgraduate('xgraduate')
+      return 
+ 66   call scixname('xname')
+      return 
       end
      
       subroutine scichamp(fname,func)
@@ -166,14 +175,30 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+
+      buf='0'//char(0)
+      arfact=1.0d0
+      if (.not.checkrhs(fname,4,7)) return
       if(gettype(top-rhs+1).ne.1) then
          call putfunnam(fname,top-rhs+1)
          fun=-1
          return
       endif
-      buf='0'//char(0)
-      arfact=1.0d0
-      if (.not.checkrhs(fname,4,7)) return
+      if(gettype(top-rhs+2).ne.1) then
+         call putfunnam(fname,top-rhs+2)
+         fun=-1
+         return
+      endif
+      if(gettype(top-rhs+3).ne.1) then
+         call putfunnam(fname,top-rhs+3)
+         fun=-1
+         return
+      endif
+      if(gettype(top-rhs+4).ne.1) then
+         call putfunnam(fname,top-rhs+4)
+         fun=-1
+         return
+      endif
       if (rhs.eq.7) then
          if(.not.getsmat(fname,topk,top,m7,n7,1,1,lr7,nlr7))return
          if (nlr7.ne.3) then
@@ -251,12 +276,24 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+
+      if (.not.checkrhs(fname,4,10)) return
       if(gettype(top-rhs+1).ne.1) then
          call putfunnam(fname,top-rhs+1)
          fun=-1
          return
       endif
-      if (.not.checkrhs(fname,4,10)) return
+      if(gettype(top-rhs+2).ne.1) then
+         call putfunnam(fname,top-rhs+2)
+         fun=-1
+         return
+      endif
+      if(gettype(top-rhs+3).ne.1) then
+         call putfunnam(fname,top-rhs+3)
+         fun=-1
+         return
+      endif
+
       topk=top
       iflag(1)=2
       iflag(2)=2
@@ -380,12 +417,23 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+      if (.not.checkrhs(fname,4,9)) return
       if(gettype(top-rhs+1).ne.1) then
          call putfunnam(fname,top-rhs+1)
          fun=-1
          return
       endif
-      if (.not.checkrhs(fname,4,9)) return
+      if(gettype(top-rhs+2).ne.1) then
+         call putfunnam(fname,top-rhs+2)
+         fun=-1
+         return
+      endif
+      if(gettype(top-rhs+3).ne.1) then
+         call putfunnam(fname,top-rhs+3)
+         fun=-1
+         return
+      endif
+
       topk=top
       buf=' '//char(0)
       strf='061'//char(0)
@@ -521,13 +569,23 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+      buf='X@Y@Z'//char(0)
+      if (.not.checkrhs(fname,3,8)) return
       if(gettype(top-rhs+1).ne.1) then
          call putfunnam(fname,top-rhs+1)
          fun=-1
          return
       endif
-      buf='X@Y@Z'//char(0)
-      if (.not.checkrhs(fname,3,8)) return
+      if(gettype(top-rhs+2).ne.1) then
+         call putfunnam(fname,top-rhs+2)
+         fun=-1
+         return
+      endif
+      if(gettype(top-rhs+3 ).ne.1) then
+         call putfunnam(fname,top-rhs+3)
+         fun=-1
+         return
+      endif
       topk=top
       if (rhs.ge.8) then
          if(.not.getrmat(fname,topk,top,m,n,lr))return
@@ -651,13 +709,23 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+      buf='X@Y@Z'//char(0)
+      if (.not.checkrhs(fname,3,8)) return
       if(gettype(top-rhs+1).ne.1) then
          call putfunnam(fname,top-rhs+1)
          fun=-1
          return
       endif
-      buf='X@Y@Z'//char(0)
-      if (.not.checkrhs(fname,3,8)) return
+      if(gettype(top-rhs+2).ne.1) then
+         call putfunnam(fname,top-rhs+2)
+         fun=-1
+         return
+      endif
+      if(gettype(top-rhs+3).ne.1.and.gettype(top-rhs+3).ne.15) then
+         call putfunnam(fname,top-rhs+3)
+         fun=-1
+         return
+      endif
       topk=top
       if (rhs.ge.8) then
          if(.not.getrmat(fname,topk,top,m,n,lr))return
@@ -824,14 +892,25 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+
+      buf='X@Y@Z'//char(0)
+      if (.not.checkrhs(fname,3,8)) return
       if(gettype(top-rhs+1).ne.1) then
          call putfunnam(fname,top-rhs+1)
          fun=-1
          return
       endif
+      if(gettype(top-rhs+2).ne.1) then
+         call putfunnam(fname,top-rhs+2)
+         fun=-1
+         return
+      endif
+      if(gettype(top-rhs+3).ne.1.and.gettype(top-rhs+3).ne.15) then
+         call putfunnam(fname,top-rhs+3)
+         fun=-1
+         return
+      endif
 
-      buf='X@Y@Z'//char(0)
-      if (.not.checkrhs(fname,3,8)) return
       topk=top
       if (rhs.ge.8) then
          if(.not.getrvect(fname,topk,top,m,n,lr))return
@@ -978,13 +1057,22 @@ c      implicit undefined (a-z)
       buf='X@Y@Z'//char(0)
       strf='061'//char(0)
 
+
+
+      if (.not.checkrhs(fname,1,7)) return
       if(gettype(top-rhs+1).ne.1) then
          call putfunnam(fname,top-rhs+1)
          fun=-1
          return
       endif
+      if(rhs.ge.2) then
+         if(gettype(top-rhs+2).ne.1) then
+            call putfunnam(fname,top-rhs+2)
+            fun=-1
+            return
+         endif
+      endif
 
-      if (.not.checkrhs(fname,1,7)) return
       topk=top
       if (rhs.ge.7) then
          if(.not.getrmat(fname,topk,top,m,n,lr))return
@@ -1115,13 +1203,22 @@ c      implicit undefined (a-z)
       buf='X@Y@Z'//char(0)
       strf='061'//char(0)
 
+
+
+      if (.not.checkrhs(fname,3,8)) return
       if(gettype(top-rhs+2).ne.1) then
          call putfunnam(fname,top-rhs+2)
          fun=-1
          return
       endif
 
-      if (.not.checkrhs(fname,3,8)) return
+      if(gettype(top-rhs+3).ne.1) then
+         call putfunnam(fname,top-rhs+3)
+         fun=-1
+         return
+      endif
+
+
       topk=top
       if (rhs.ge.8) then
          if(.not.getrmat(fname,topk,top,m,n,lr))return
@@ -1247,15 +1344,28 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+
+
+      buf='X@Y@Z'//char(0)
+      strf='061'//char(0)
+      if (.not.checkrhs(fname,3,6)) return
       if(gettype(top-rhs+1).ne.1) then
          call putfunnam(fname,top-rhs+1)
          fun=-1
          return
       endif
+      if(gettype(top-rhs+2).ne.1) then
+         call putfunnam(fname,top-rhs+2)
+         fun=-1
+         return
+      endif
+      if(gettype(top-rhs+3).ne.1) then
+         call putfunnam(fname,top-rhs+3)
+         fun=-1
+         return
+      endif
 
-      buf='X@Y@Z'//char(0)
-      strf='061'//char(0)
-      if (.not.checkrhs(fname,3,6)) return
+
       topk=top
       if (rhs.ge.6) then
          if(.not.getrmat(fname,topk,top,m,n,lr))return
@@ -1336,15 +1446,16 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+
+      buf='X@Y@Z'//char(0)
+      strf='061'//char(0)
+      if (.not.checkrhs(fname,1,4)) return
       if(gettype(top-rhs+1).ne.1) then
          call putfunnam(fname,top-rhs+1)
          fun=-1
          return
       endif
 
-      buf='X@Y@Z'//char(0)
-      strf='061'//char(0)
-      if (.not.checkrhs(fname,1,4)) return
       topk=top
       if (rhs.ge.4) then
          if(.not.getrmat(fname,topk,top,m,n,lr))return
@@ -1388,6 +1499,55 @@ c      implicit undefined (a-z)
       call sciwin()
       call scigerase()
       call xgray1(stk(lr1),m1,n1,strf,rect,nax)
+      call objvide(fname,top)
+      return
+      end
+
+      subroutine scigray2plot(fname)
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getrmat
+      integer gettype
+      integer topk, m1,n1,lr1,m,n,lr
+      double precision rect(4)
+      data rect / 0.0d00,0.0d00,10.0d00,10.0d00/
+
+      if (rhs.lt.0) then
+         buf ='m=[1,2;3,4];Matplot(m);$'
+         call demo(fname,buf,1)
+         return
+      endif
+
+      if (.not.checkrhs(fname,1,2)) return
+
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
+         return
+      endif
+
+      topk=top
+
+      if (rhs.ge.2) then
+         if(.not.getrmat(fname,topk,top,m,n,lr))return
+         if (m*n.ne.4) then
+            buf= fname//' : rect has a wrong size, 4 expected'
+            call error(999)
+            return
+         endif
+         call dcopy(4,stk(lr),1,rect,1)
+         top=top-1
+      endif
+
+      if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
+      if ( m1*n1 .eq.0 )  then 
+         buf=fname // ' empty vectors '
+         call error(999)
+         return
+      endif
+      call sciwin()
+      call xgray2(stk(lr1),m1,n1,rect)
       call objvide(fname,top)
       return
       end
@@ -2115,13 +2275,32 @@ c      implicit undefined (a-z)
       end
 
       subroutine scixlfont(fname)
+C     Warning sz dimensions must be compatible 
+C     with periX11.c FONTNUMBER
       character*(*) fname
 c      implicit undefined (a-z)
       include '../stack.h'
       double precision dv
-      logical checkrhs,getsmat,getscalar
-      integer topk, lr,nlr,m,n,num,v
+      logical checkrhs,getsmat,getscalar,cresmat,w
+      logical cresmat3
+      integer topk, lr,nlr,m,n,num,v,sz(10)
+c      integer iadr,sadr
+
+c      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
       call sciwin()
+      if (rhs.le.0) then
+c     we list the fonts and return their names in a string matrix
+         m=0
+         call dr1('xgfont'//char(0),buf,m,sz,v,v,v,v,dv,dv,dv,dv)
+         if ( m.eq.0) then
+            call objvide(fname,top)
+            return
+         endif
+         top=top+1
+         if (.not.cresmat3(fname,top,m,1,sz,buf)) return 
+         return 
+      endif
       if (.not.checkrhs(fname,2,2)) return
       topk=top
       if (.not.getscalar(fname,topk,top,lr)) return
@@ -2471,7 +2650,7 @@ c      wc=wc+rect(3)/2
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getsmat
-      integer topk,lr,nlr,v,is
+      integer topk,lr,nlr,v,iis
       double precision dv
 cc    <>=xstring(x,y,str,angle,flag)
       integer m,n,ib,m1,n1,i,j
@@ -2484,7 +2663,7 @@ cc    <>=xstring(x,y,str,angle,flag)
       endif
       if (.not.checkrhs(fname,1,3)) return
       topk=top
-      do 100 is=rhs,1,-1
+      do 100 iis=rhs,1,-1
          if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
          ib=1
          do 10 i=1,m
@@ -2498,7 +2677,7 @@ cc    <>=xstring(x,y,str,angle,flag)
             ib=ib+1
  10      continue
          buf(ib:ib)= char(0)
-         call dr1('xstringa'//char(0),buf,is,v,v,v,v,v,dv,dv,dv,dv)
+         call dr1('xstringa'//char(0),buf,iis,v,v,v,v,v,dv,dv,dv,dv)
          top=top-1
  100  continue
       top=topk-rhs+1
@@ -2511,7 +2690,7 @@ cc    <>=xstring(x,y,str,angle,flag)
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getsmat,getscalar
-      integer topk,lr,nlr,v,is
+      integer topk,lr,nlr,v
       double precision x,y,w,h
 cc    <>=xstring(x,y,str,angle,flag)
       integer m,n,ib,m1,n1,i,j,fill
@@ -3304,3 +3483,80 @@ c      double precision dv
       endif
       return 
       end 
+
+ 
+      subroutine scixgraduate(fname)
+      character*(*) fname
+c     implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getscalar,cremat
+      integer topk,lrx,lry,lr,lc
+c     integer iadr
+      double precision xi,xa
+      integer np1,np2,kminr,kmaxr,ar
+c
+c      iadr(l)=l+l-1
+c
+cc    [xi,xa,np1,np2,kminr,kmaxr,ar]=xgraduate(xmi,xma)
+      if (.not.checkrhs(fname,2,2)) return
+      topk=top
+      if (.not.getscalar(fname,topk,top,lry)) return
+      top=top-1
+      if (.not.getscalar(fname,topk,top,lrx)) return
+      call  graduate(stk(lrx),stk(lry),xi,xa,np1,np2,kminr,kmaxr,ar) 
+      top=topk
+      stk(lrx) = xi
+      stk(lry) = xa
+      if ( lhs.le.1) top = top-1 
+      if ( lhs.ge.3) then 
+         top=top+1
+         if (.not.cremat(fname,top,0,1,1,lr,lc)) return
+         stk(lr) = np1
+      endif
+      if ( lhs.ge.4) then 
+         top=top+1
+         if (.not.cremat(fname,top,0,1,1,lr,lc)) return
+         stk(lr) = np2
+      endif
+      if ( lhs.ge.5) then 
+         top=top+1
+         if (.not.cremat(fname,top,0,1,1,lr,lc)) return
+         stk(lr) = kminr
+      endif
+      if ( lhs.ge.6) then 
+         top=top+1
+         if (.not.cremat(fname,top,0,1,1,lr,lc)) return
+         stk(lr) = kmaxr
+      endif
+      if ( lhs.ge.7) then 
+         top=top+1
+         if (.not.cremat(fname,top,0,1,1,lr,lc)) return
+         stk(lr) = ar
+      endif
+      return
+      end
+
+      
+
+
+
+      subroutine scixname(fname)
+C     OK
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getsmat,cresmat
+      integer topk,m,n,lr,nlr,v,drl,m1,n1
+      double precision dv 
+cc    <>=driver(dr_name)
+      if (.not.checkrhs(fname,1,1)) return
+      topk=top
+      if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
+      call  cvstr(nlr,istk(lr),buf,1)
+      buf(nlr+1:nlr+1)=char(0)
+      call sciwin()
+      call  dr1('xname'//char(0),buf,v,v,v,v,v,v,dv,dv,dv,dv)
+      call  objvide(fname,top)
+      return
+      end
+

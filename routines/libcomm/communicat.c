@@ -5,7 +5,13 @@
    d'interface et le systeme de communications.
 */
 
+#ifndef __STDC__
 #include <varargs.h>
+#define Va_start(a,b) va_start(a)
+#else
+#include <stdarg.h>
+#define Va_start(a,b) va_start(a,b)
+#endif
 #include <stdio.h>
 #include <string.h>
 
@@ -19,25 +25,29 @@
 
 static char *creer_trame();
 
-void envoyer_message_parametres_var(va_alist)
-va_dcl
+#ifdef __STDC__
+void envoyer_message_parametres_var(char * first, ...)
+#else /* VARARGS */
+void envoyer_message_parametres_var(va_alist) va_dcl
+#endif
 {
-    va_list liste;
-
-    tableau_avec_taille conversion;
-
-    va_start(liste);
-
-    conversion=convertir_nombre_arbitraire_de_chaines_en_tableau(&liste);
-
-    envoyer_message_tableau(conversion);
-
-    va_end(liste);
-
-    liberer_tableau_de_pointeurs(conversion.tableau,conversion.taille);
-
-    gbd_liberer_mixte(conversion.tableau);
+  va_list liste;
+  tableau_avec_taille conversion;
+    
+#ifdef __STDC__
+  va_start(liste,first);
+#else
+  char *first;
+  va_start(liste);
+  first = va_arg(liste, char *);
+#endif
+  conversion=convertir_nombre_arbitraire_de_chaines_en_tableau(first,&liste);
+  envoyer_message_tableau(conversion);
+  va_end(liste);
+  liberer_tableau_de_pointeurs(conversion.tableau,conversion.taille);
+  gbd_liberer_mixte(conversion.tableau);
 }
+
 
 void envoyer_message_tableau(message)
 Message message;

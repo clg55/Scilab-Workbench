@@ -3,7 +3,11 @@
 
 #include "../machine.h"
 
+#ifndef __STDC__
 #include <varargs.h>
+#else
+#include <stdarg.h>
+#endif
 
 typedef struct Tableau_avec_taille
 {
@@ -24,8 +28,9 @@ extern void strcat_plus_caractere _PARAMS((char *chaine_a_remplir, char *chaine_
 
 
 extern char *concatener_deux_chaines _PARAMS((char *chaine1, char *chaine2));
-extern tableau_avec_taille convertir_nombre_arbitraire_de_chaines_en_tableau _PARAMS((va_list *liste));
-extern char *concatenation_plusieurs_chaines ();
+
+extern tableau_avec_taille convertir_nombre_arbitraire_de_chaines_en_tableau _PARAMS((char *first,  va_list * liste));
+extern char *concatenation_plusieurs_chaines _PARAMS((char * fmt, ...));
 
 /*
     dupliquer_chaine est l'equivalent de strdup mais utilise allouer_type

@@ -3,11 +3,11 @@ function mtlb_load(thefile,opt)
 //
 l_flags=['dl','fl','ll','sl','uls','uc']
 b_flags=['db','fb','lb','sb','ubs','uc']
-
+deff('Error(msg)',['mclose(fd)' ;'error(msg)'])
 [lhs,rhs]=argn(0)
 // look for file type
 if rhs==2 then
-  if constr(opt)=='-ascii' then
+  if convstr(opt)=='-ascii' then
     bin=%f
   else
     error(opt+' : Unknown option')
@@ -117,11 +117,8 @@ else
   if ke==[] then ke=length(thefile),else ke=ke($)-1,end
   kp=strindex(thefile,['/','\'])
   if kp==[] then kp=1,else kp=kp($)+1,end
-  name=part(thefile,ke:kp)
-  execstr(name+'='+resume(read(thefile,-1,1)))
+  name=part(thefile,kp:ke)
+  mat=evstr(read(thefile,-1,1,'(a)'))
+  execstr(name+'= resume(mat)')
 end
 
- 
-function Error(msg)
-mclose(fd)
-error(msg)

@@ -4,7 +4,7 @@
 sci2for - scilab function to Fortran routine conversion
 .SH CALLING SEQUENCE
 .nf
-txt=sci2for(fun,nam,vtps)
+txt=sci2for(fun,nam,vtps [,lvtps])
 .fi
 .SH PARAMETERS
 .TP 10
@@ -17,12 +17,20 @@ nam
 vtps
 : list
 .TP 10
+lvtps
+: list
+.TP 10
 txt
 : string, text of the subroutine Fortran code
 .SH DESCRIPTION
 
 The elements of the list \fVvtps\fR give the type and dimensions 
-of variables of the calling sequence :
+of the input variables of the calling sequence and \fVlvtps\fR
+optionally gives the type and dimensions of the output variables. This
+last parameter is usefull if type and/or dimension inference cannot be
+able to determine the desired values.
+
+These lists are  structured as described below:
 .nf
 vtps(i)=list(typ,row_dim,col_dim)
 .fi

@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 /*
  * Utility functions to build data for 
  * Scilab help browser 
@@ -17,11 +17,31 @@
 extern  char  *getenv();
 #endif
 
+#ifdef __ABSC__ /* For the definition of _stricmp */
+#include <ctype.h>
+
+int
+_stricmp(const char *s1, const char *s2)
+{
+  while (tolower(*s1) == tolower(*s2))
+  {
+    if (*s1 == 0)
+      return 0;
+    s1++;
+    s2++;
+  }
+  return (int)tolower(*s1) - (int)tolower(*s2);
+}
+#endif
+
 #include "../graphics/Math.h"
 #include "h_help.h"
 
 extern void C2F(inffic) _PARAMS((integer * iopt,char *name,integer *nc));
+extern int C2F(creadchains) _PARAMS((char *,int *,int *,int *,char *,long int,long int));
 
+int  InitHelpDatas_With_Chapter _PARAMS((void));
+int  InitHelpDatas_FromScilabVar _PARAMS((void));
 
 /*
  * Help pathname 
@@ -87,15 +107,24 @@ void HelpActivate(ntopic)
       TopicInfo = AP.HelpTopic[ntopic1];
       helpPath  = helpPaths[ AP.Where[ntopic1]];
     }
-  /*** Set Topic to TopicInfo up to the first blank char**/
-  k = 0;
-  ln = strlen(TopicInfo);
-  while (k < ln && TopicInfo[k] != ' ') 
+  Topic[0] = '\0';
+  /* Find Topic after @ */
+  /* New version */
+  sscanf(TopicInfo,"%*[^@\n]@%s",Topic);
+  if (Topic[0] == '\0') {
+    /* Set Topic to TopicInfo up to the first blank char */
+    /* Old version */
+    k = 0;
+    ln = strlen(TopicInfo);
+    while (k < ln && TopicInfo[k] != ' ') 
     {
       Topic[k] = TopicInfo[k];
       k++;
     }
-  Topic[k] = '\0';
+    Topic[k] = '\0';
+  }
+  k=strlen(Topic);
+  /** avril 1999 : Extract Topic from TopicInfo **/
   buf = (char *) MALLOC((2 * strlen(helpPath) + k + 16) * (sizeof(char)));
   if (buf == NULL) 
     {
@@ -154,7 +183,7 @@ int Sci_Help(name)
   if ( aps != 0) strcpy(c_name,AP.name);
   if ( Help_Init() == 1) 
     {
-      sciprint("can't use man\r\n");
+      sciprint("Sorry but I cannot use man\r\n");
       return(1);
     }
   for ( i= 0 ; i < nInfo ; i++ ) 
@@ -200,7 +229,7 @@ int Sci_Apropos(name)
   static char *butn[]= { "Ok","Cancel",NULL};
   int Rep;
   ChooseMenu Ch;
-  int i,k,cti,aps;
+  int i,cti,aps;
   char c_name[MAXTOPIC];
   /** keep tracks of the current status **/
   cti=CurrentTopicInfo ;
@@ -278,6 +307,18 @@ int Help_Init()
 
 int initHelpDatas()
 {
+  /** Help chapters was previously searched in Chapter 
+      we use now Scilab variable %helps 
+      Note that this variable is just read one time.
+  **/
+  
+      
+  /** return initHelpDatas_With_Chapter(); **/
+  return  InitHelpDatas_FromScilabVar();
+}
+
+int InitHelpDatas_With_Chapter()
+{
   static int first=0;
   FILE           *fg;
   char            line[120];
@@ -348,6 +389,81 @@ int initHelpDatas()
   nTopicInfo = 0;
   return (0);
 }
+
+/*********************************************************
+ * Same as initHelpDatas, but the pathnames and titles 
+ * are  found in a Scilab %help variable 
+ *********************************************************/
+
+int InitHelpDatas_FromScilabVar()
+{
+  static int first=0;
+  int  i,ir,ic,itslen= MAX_PATH_STR,Sm;
+  /** Init to zero **/
+  if ( first == 0) 
+    {
+      int i ;
+      for ( i = 0 ; i < MAX_HELP_CHAPTERS ; i++) 
+	{
+	  helpInfo[i] = (char *) 0;
+	  helpPaths[i]= (char *) 0;
+	}
+      first = 1;
+    }
+  ir=ic=-1;/** first call to get size informations **/
+  if ( ! C2F(creadchains)("%helps",&ir,&ic,&itslen,Help,0L,0L))
+    {
+      sciprint("Failed to find %%helps Scilab variable\r\n");
+      nInfo = 0;
+      return 1;
+    }
+  if ( ic != 2 ) 
+    {
+      sciprint("Error: %helps must be (mx2) not (%dx%d)\r\n",ir,ic);
+      nInfo = 0;
+      return 1;
+    }
+  Sm = ir;
+  if ( Sm >= MAX_HELP_CHAPTERS ) 
+    {
+      sciprint("Too many help chapters %d (max=%d),I'll ignore the last ones \r\n",
+	       Sm, MAX_HELP_CHAPTERS-1);
+    }
+  for ( i = 0 ; i < Min(MAX_HELP_CHAPTERS,Sm); i++)
+    {
+      int one=1,two =2,row;
+      row= i+1;
+      itslen= MAX_PATH_STR ;
+      C2F(creadchains)("%helps",&row,&one,&itslen,Help,0L,0L);
+      itslen= MAX_PATH_STR ;
+      C2F(creadchains)("%helps",&row,&two,&itslen,Buf,0L,0L);
+      /** XXXX faire le expand **/
+      if ( NewString(&helpPaths[i],Help) == 1 
+	  ||  NewString(&helpInfo[i],Buf) == 1 )
+	{
+	  int k;
+	  /** Lacking memory for help **/
+	  for (k = 0; k < i ; k++) 
+	    {
+	      FREE(helpInfo[k]);
+	      FREE(helpPaths[k]);
+	    }
+	  nInfo =0;
+	  return 1;
+	  break;
+	}
+    }
+  nInfo = Sm ;
+  helpInfo[i] = NULL;
+  helpPaths[i] = NULL;
+  /** Init Apropos **/
+  AP.nTopic =0;
+  /** Init Topics **/
+  nTopicInfo = 0;
+  return 0;
+}
+
+
     
 /************************************
  * Parses a line as 
@@ -498,7 +614,7 @@ int SetAproposTopics(str)
   FILE           *fg;
   char            line[120];
   int             k, ln, n;
-#ifdef __MSC__
+#if (defined __MSC__) || (defined __ABSC__)
   if ( _stricmp(str,AP.name)== 0) 
 #else 
   if ( strcasecmp(str,AP.name)== 0) 
@@ -583,6 +699,7 @@ static int NewString(hstr,line)
   strcpy(*hstr, line);
   return(0);
 }
+
 
 
 

@@ -25,6 +25,8 @@ include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS) $(XFLAGS) $(TK_INC_PATH) $(TCL_INC_PATH)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib
 
 
@@ -58,7 +60,7 @@ test: $(OBJTEST) $(OBJSC) ../sun/zzledt.o ../sun/flags.o ../sun/h_help_data.o ..
 	$(CC) -g -o $@ $(OBJTEST) ../sun/zzledt.o ../sun/flags.o ../sun/h_help_data.o ../sun/tmpdir.o \
 	../sun/men_Sutils.o ../sun/inffic.o ../sun/timer.o \
 	$(OBJSC) $(SCIDIR)/libs/graphics.a $(SCIDIR)/libs/menusX.a \
-	$(SCIDIR)/ $(CC_LDFLAGS) $(XLIBS) $(TERMCAPLIB) \
+	$(SCIDIR)/$(SCIDIR)/libs/tksci.a $(CC_LDFLAGS) $(XLIBS) $(TERMCAPLIB) \
 	$(TCLTK_LIBS) -lm
 
 clean::

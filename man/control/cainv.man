@@ -4,25 +4,29 @@
 cainv -  Dual of abinv
 .SH CALLING SEQUENCE
 .nf
-[X,dims,J,Y,k,Z]=cainv(Sl,alfa,beta)
+[X,dims,J,Y,k,Z]=cainv(Sl,alfa,beta,flag)
 .fi
 .SH PARAMETERS
 .TP 10
-sl
+Sl
 : \fVsyslin\fR list containing the matrices \fV[A,B,C,D]\fR.
 .TP
 alfa 
 : real number or vector (possibly complex, location of closed loop poles)
 .TP
-alfa 
+beta
 : real number or vector (possibly complex, location of closed loop poles)
+.TP
+flag
+: (optional) character string \fV'ge'\fR (default) or \fV'st'\fR or \fV'pp'\fR
 .TP
 X
 : orthogonal matrix of size nx (dim of state space).
 .TP
 dims
 :
-integer row vector \fVdims=[nd1,nu1,dimS,dimSg,dimN]\fR  (5 entries, nondecreasing order)
+integer row vector \fVdims=[nd1,nu1,dimS,dimSg,dimN]\fR  (5 entries, nondecreasing order).If \fVflag='st'\fR, (resp. \fV'pp'\fR), \fVdims\fR has 4
+(resp. 3) components.
 .TP
 J
 : real matrix (output injection)
@@ -76,7 +80,11 @@ span Sg the maximal "complementary detectability subspace" of \fVSl\fR
 .LP 
 The \fVdimN\fR first columns of \fVX\fR span the maximal
 "complementary observability subspace" of \fVSl\fR. 
-(\fVdimS=0\fR iff B(ker(D))=0).
+(\fVdimS=0\fR if B(ker(D))=0).
+.LP
+If \fVflag='st'\fR is given, a five blocks partition of the matrices is 
+returned and \fRdims\fR has four components. If \fVflag='pp'\fR is 
+given a four blocks partition is returned (see abinv).
 .LP
 This function can be used to calculate an unknown input observer:
 .nf
@@ -86,7 +94,7 @@ This function can be used to calculate an unknown input observer:
 //  Find: dot(w) = Fw + Ey + Ru such that
 //          zhat = Mw + Ny
 //           z-Hx goes to zero at infinity
-//  Solution exists iff Ker H contains Sg(A,C,G) inter KerC
+//  Solution exists iff Ker H contains Sg(A,C,G) inter KerC (assuming detectability)
 //i.e. H is such that:
 // For any W which makes a column compression of [Xp(1:dimSg,:);C]
 // with Xp=X' and [X,dims,J,Y,k,Z]=cainv(syslin('c',A,G,C));
@@ -94,7 +102,8 @@ This function can be used to calculate an unknown input observer:
 // H*W = [0 | *]  (with at least as many aero columns as above).
 .fi
 .SH SEE ALSO
-abinv, dt_ility
+abinv, dt_ility, ui_observer
+
 
 
 

@@ -43,7 +43,7 @@ while ilst<nlst
          elseif a1(1:2)==['5','23']&a2(1:2)==['5','23'] then
              lst(i1)='0'
              lst(i2)='0'
-             op=['5','28','2',a1(3)];lst(ilst)=op;
+             op=['5','33','2',a1(3)];lst(ilst)=op;
          elseif a1(1:2)==['5','28']&a2(1:2)==['5','23'] then
              lst(i1)='0';
              lst(i2)='0'
@@ -64,7 +64,7 @@ while ilst<nlst
        rhs=abs(evstr(op(3)));lhs=evstr(op(4))
        pos((top-rhs+1):(top-rhs+lhs))=ones(lhs,1)*ilst
        top=top-rhs+lhs
-    elseif opn=='2'|opn=='3'|opn=='4'|opn=='6' then
+    elseif opn=='2'|opn=='3'|opn=='4'|opn=='6'|opn=='23' then
        top=top+1
        pos(top)=ilst
 //    else

@@ -5,8 +5,7 @@ if type(u)<>1 then error(53,1),end
 if rhs<=1 then error(39),end
 [nu,mu]=size(u)
 
-//-compat type(sl)<>15 retained for list/tlist compatibility
-if type(sl)<>15&type(sl)<>16 then error(97,2),end
+if type(sl)<>16 then error(97,2),end
 flag=sl(1);
 select flag(1)
   case 'lss' then 
@@ -27,8 +26,8 @@ select flag(1)
     end
    case 'r'  then  
     if lhs>1 then error('flts: invalid lhs'),end
-    [num,den]=sl(2:3);[ns,ne]=size(num)
-       select sl(4)
+    [num,den]=sl(['num','den']);[ns,ne]=size(num)
+       select sl('dt')
         case 'c' then error(94,2),
        end;
     if ne<>nu then error(60), end;

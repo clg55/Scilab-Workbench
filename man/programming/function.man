@@ -9,20 +9,29 @@ in files with an editor and loaded into Scilab by \fVgetf\fR or through
 a library (see \fVlib\fR). 
 .LP
 They can also be defined on-line (see \fVdeff\fR). 
-A file which contains a function must begin as follows:
+.LP
+In a  file  a function must begin by a "syntax definition" line as follows:
 .nf 
 function [y1,...,yn]=foo(x1,...,xm)
 .fi
-The \fVyi\fR are output variables calculated as functions of
-input variables and variables existing in Scilab
-when the function is executed.
+followed by a sequence of scilab instructions.
 .LP
-A function can be compiled for faster execution. Collections
-of functions can be collected in libraries.
-Functions which begin with \fV%\fR sign (e.g. \fV%foo\fR) are often
-used to overload (see \fVoverloading\fR) operations or function for new data type: for example, \fVz=%rmr(x,y)\fR is equivalent
-to \fVz=x*y\fR when \fVx\fR and \fVz\fR are rationals 
-(i.e. \fVx=tlist(['r','num','den','dt'],n,d,[])\fR with \fVn\fR and \fVd\fR polynomials).
+The "syntax definition" line gives the "full" calling syntax of this
+function. The \fVyi\fR are output variables calculated as functions of
+input variables \fVxi\fR and variables existing in Scilab when the
+function is executed. Shorter input or output argument list may be
+used.
+.LP
+Many functions may be written in the same file. A function is
+terminated by an \fVendfunction\fR keyword, the following
+\fVfunction\fR keyword or the \fVEOF\fR mark.
+.LP
+Collections of functions can be collected in libraries.  Functions
+which begin with \fV%\fR sign (e.g. \fV%foo\fR) are often used to
+overload (see \fVoverloading\fR) operations or functions for new data
+type.
+
+.LP
 
 For example if the file myfct.sci contains:
 .nf

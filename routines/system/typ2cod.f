@@ -86,6 +86,12 @@ c     type 5 : sp
 c     type 6 : spb
       call addtypename(6,'spb',ierr)
       if(ierr.ne.0) goto 99
+C     type 7 : msp
+      call addtypename(7,'msp',ierr)
+      if(ierr.ne.0) goto 99
+C     type 8 : i
+      call addtypename(8,'i',ierr)
+      if(ierr.ne.0) goto 99
 c     type 10 : c
       call addtypename(10,'c',ierr)
       if(ierr.ne.0) goto 99
@@ -134,6 +140,7 @@ c     following common defines the initial database of type names
       parameter (maxtyp=50,nmmax=200)
       integer tp(maxtyp),ptr(maxtyp),ln(maxtyp),namrec(nmmax),ptmax
       common /typnams/ tp,ptr,ln,namrec,ptmax
+      character*15 nam1
 c
       ierr=0
 c     
@@ -143,6 +150,12 @@ c     add a type
          if(typ.le.20) then
             pos=typ
             if(ln(pos).ne.0) then
+c     .     check if new type is the same as old type
+               if(ln(pos).eq.len(nam)) then
+                  n=ln(pos)
+                  call cvstr(ln(pos),namrec(ptr(pos)),nam1,1)
+                  if(nam1(1:n).eq.nam(1:n)) return
+               endif
                ierr=2
                return
             endif

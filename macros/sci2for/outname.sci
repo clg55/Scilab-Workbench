@@ -22,27 +22,35 @@ for k=1:nvar
   if op(1)=='1'&and(op(2)<>excluded(k)) then
     k3=find(op(2)==vnms(:,2))
     if k3==[] then
-// la variable n'existe pas il faut lui allouer de la place
+      // la variable n'existe pas il faut lui allouer de la place
       if isnum(n(k))&isnum(m(k)) then
-        //les dimensions sont des nombres l'emplacement sera alloue localement
-        out(k)=op(2)
+	//les dimensions sont des nombres l'emplacement sera alloue localement
+	out(k)=op(2)
       else
-        //dimensions formelles on alloue dans les tableau de travail
-        [o,nwrk,t1]=getlocal(nwrk,op(2),typ(k),m(k),n(k))
-        txt=[txt;t1]
-        out(k)=o;
+	//dimensions formelles on alloue dans les tableau de travail
+	[o,nwrk,t1]=getlocal(nwrk,op(2),typ(k),m(k),n(k))
+	txt=[txt;t1]
+	out(k)=o;
       end
     else
-//  la variable existe deja 
+      //  la variable existe deja 
       out(k)=op(2)
     end
   end
   if out(k)==' ' then
-    [o,nwrk,t]=getwrk(nwrk,typ(k),m(k),n(k))
-    out(k)=o;txt=[txt;t]
+    if isnum(n(k))&isnum(m(k)) then
+      //les dimensions sont des nombres l'emplacement sera alloue localement
+      //(to be done)
+      [o,nwrk,t]=getwrk(nwrk,typ(k),m(k),n(k))
+      out(k)=o;txt=[txt;t]
+    else
+      [o,nwrk,t]=getwrk(nwrk,typ(k),m(k),n(k))
+      out(k)=o;txt=[txt;t]
+    end
+    // mark temporary to be freed at the end of instruction (to be done)
   end
 end
 
-  
-  
+
+
   

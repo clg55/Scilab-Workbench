@@ -14,7 +14,6 @@ deff('[]=mode(x)','x=x')
 deff('[]=halt(  )',' ')
 getf('SCI/macros/util/x_matrix.sci')
 getf('SCI/macros/util/getvalue.sci')
-getf('SCI/macros/util/getclick.sci')
 getf('SCI/macros/auto/scicos.sci')
 getf('SCI/demos/scicos/scicos_play.sci','n')
 names=['choosefile';
@@ -34,6 +33,7 @@ names=['choosefile';
 'do_view';
 'do_exit';
 'getlink';
+'cosclick';
 'move';
 'prt_align']
 for k=1:size(names,'r')

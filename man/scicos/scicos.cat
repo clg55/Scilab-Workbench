@@ -16,10 +16,10 @@ PARAMETERS
        Scicos data structure. These files may have .cos or
 
   menus
-       : a vector of character strings. It allows to select some of the
-       Scicos menus. If menus==[]  Scicos draws the diagram and the contents
-       of each super blocks in separate windows without menu bar. This option
-       is useful to print diagrams.
+       : a vector of character strings. It allows to select some of the Sci-
+       cos menus. If menus==[]  Scicos draws the diagram and the contents of
+       each super blocks in separate windows without menu bar. This option is
+       useful to print diagrams.
 DESCRIPTION
   Scicos is a visual editor for constructing models of hybrid dynamical sys-
   tems. Invoking Scicos with no argument opens up an empty Scicos window.

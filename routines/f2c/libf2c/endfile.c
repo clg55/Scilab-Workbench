@@ -20,7 +20,7 @@ extern char *strcpy();
 #define unlink remove
 #endif
 #else
-#ifdef MSDOS
+#if (defined MSDOS) && !(defined __ABSC__)
 #include "io.h"
 #endif
 #endif

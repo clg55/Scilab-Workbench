@@ -9,7 +9,7 @@
  d=[1+3*s   5-s^3           s+1;1+s     1+s+s^2      3*s-1];
  
  h=syslin('c',n./d);
- [n,d]=simp(n,d);if h<>tlist('r',n,d,'c') then pause,end
+ [n,d]=simp(n,d);if h<>rlist(n,d,'c') then pause,end
  sl=tf2ss(h); e=h-ss2tf(sl);
  if norm(coeff(e(2)))>100000*%eps then pause,end
  

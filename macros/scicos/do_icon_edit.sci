@@ -2,7 +2,7 @@ function scs_m=do_icon_edit(scs_m)
 // do_block - edit a block icon
 // Copyright INRIA
 while %t
-  [btn,xc,yc,win,Cmenu]=getclick()
+  [btn,xc,yc,win,Cmenu]=cosclick()
   if Cmenu<>[] then
     Cmenu=resume(Cmenu)
   end
@@ -30,7 +30,8 @@ xselect()
 coli=gr_i(2)
 sd=gr_i(3)
 
-sd=gr_menu(sd);xdel(win)
+sd=gr_menu(sd);
+if or(win==winsid()) then xdel(win);end
 txt=sd2sci(sd,['sz(1)','sz(2)'],['orig(1)','orig(2)'])
 txt(1)=[]
 gr_i=['thick=xget(''thickness'')';

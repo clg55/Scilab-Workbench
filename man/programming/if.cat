@@ -22,11 +22,10 @@ DESCRIPTION
   group of statements. The line structure given above is not significant, the
   only constraint is that each then keyword must be on the same line line as
   its corresponding if or elseif keyword.
-  -    The only constraint is that each then keyword must be on the same line
-       line as its corresponding if or elseif keyword.
+  The keyword then can be replaced by a carriage return or a comma.
 
-  -    The keyword then can be replaced by a carriage return or a comma.
-
+  Warning: the number of characters used to define the body of any condition-
+  nal instruction (if while for or select/case) must be limited to 16k.
 EXAMPLE
      i=2
      for j = 1:3,

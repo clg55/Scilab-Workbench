@@ -29,8 +29,8 @@ DESCRIPTION
   needed for a graph.
 
   If n is a positive number, graph g has n nodes; this number must be greater
-  than or equal to max(max(tail),max(head)). If it is greater than this
-  number,graph g has isolated nodes. The nodes names are taken as the nodes
+  than or equal to max(max(tail),max(head)). If it is greater than this num-
+  ber,graph g has isolated nodes.  The nodes names are taken as the nodes
   numbers.
 
   If n is equal to 0, graph g has no isolated node and the number of nodes is

@@ -26,11 +26,10 @@ DESCRIPTION
   canonical basis).
 
   afunction is a function with imposed syntax:
-   Y=afunction(X,D)  where  X=list(X1,X2,...,Xp)  is a list of p real
-  matrices, and  Y=list(Y1,...,Yq)  is a list of q real real matrices which
-  depend linearly of the  Xi's. The (optional) input  D contains parameters
-  needed to compute Y as a function of X. (It is generally a list of
-  matrices).
+   Y=afunction(X,D)  where  X=list(X1,X2,...,Xp)  is a list of p real matri-
+  ces, and  Y=list(Y1,...,Yq)  is a list of q real real matrices which depend
+  linearly of the  Xi's. The (optional) input  D contains parameters needed
+  to compute Y as a function of X.  (It is generally a list of matrices).
 
    dimX is a p x 2 matrix: dimX(i)=[nri,nci] is the actual number of rows and
   columns of matrix Xi.  These dimensions determine na, the column dimension

@@ -1,7 +1,6 @@
 #-----------------------------
 # generated from Makefile: DO NOT EDIT
 # -----------------------------
-
 SHELL = /bin/sh
 SCIDIR=../..
 SCIDIR1=..\..
@@ -117,6 +116,8 @@ OBJSF =
 include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS) -I..
+
+FFLAGS = $(FC_OPTIONS)
 
 include ../Make.lib.mak
 
@@ -302,9 +303,16 @@ sim_stable.obj: sim_stable.h
 
 
 
-
-
-
-
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
+
+
+
+
+
+
+
+

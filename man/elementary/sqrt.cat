@@ -11,8 +11,8 @@ PARAMETERS
   x         : real or complex  scalar or vector
 
 DESCRIPTION
-   sqrt(x) is the vector of the square root of the x elements. Result is com-
-  plex if x is negative.
+   sqrt(x) is the vector of the square root of the x elements.  Result is
+  complex if x is negative.
 
 EXAMPLE
   sqrt([2,4])

@@ -39,7 +39,11 @@
 
 ***/
 #include "../machine.h"
+#ifndef __ABSC__
 #include <malloc.h>
+#else
+#include <stdlib.h>
+#endif
 #include <stdio.h>
 #include <string.h>
 

@@ -320,6 +320,8 @@ c     double
       include '../stack.h'
       integer iadr, sadr
       integer kfun
+      integer getscilabel
+      external getscilabel
       common /curblk/ kfun
 c
       iadr(l)=l+l-1
@@ -363,7 +365,12 @@ c
          call error(17)
          return
       endif
-      call getscilabel(kf,istk(l1),n)
+      ierr=getscilabel(kf,istk(l1),n)
+      if(ierr.ne.0) then
+         buf='scicosim is not running'
+         call error(999)
+         return
+      endif
       istk(il1)=10
       istk(il1+1)=1
       istk(il1+2)=1

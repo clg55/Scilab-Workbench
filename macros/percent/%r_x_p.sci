@@ -3,7 +3,7 @@ function f1=%r_x_p(f1,f2)
 //!
 
 // Copyright INRIA
-f1(2)=f1(2).*f2
+f1('num')=f1('num').*f2
 
 
 

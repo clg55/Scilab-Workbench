@@ -34,8 +34,7 @@ function [y,x]=csim(u,dt,sl,x0)
 //
 if rhs<3 then error(39),end
 
-//-compat type(sl)<>15 retained for list/tlist compatibility
-if type(sl)<>15&type(sl)<>16 then error(56,1),end
+if type(sl)<>16 then error(56,1),end
 flag=sl(1)
 select flag(1)
   case 'lss' then ,

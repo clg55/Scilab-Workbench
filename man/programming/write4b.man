@@ -22,4 +22,4 @@ For direct record access, file must have been previously opened using
 \fVfile\fR function to set the record_length. \fVfile-name\fR must be
 the result of the \fVfile\fR function. 
 .SH SEE ALSO
-file, readb, write, binary, read4b
+file, readb, write, mput, read4b

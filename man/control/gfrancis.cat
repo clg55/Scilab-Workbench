@@ -22,7 +22,7 @@ DESCRIPTION
       xm'= A*xm + B*um
       ym = C*xm + D*um
   the goal is for the plant to track the model i.e. e = y - ym ---> 0 while
-  keeping stable the state x(t) of the plant. u is given by feedforward and
+  keeping stable the state x(t) of the plant.  u is given by feedforward and
   feedback
    u = L*xm + M*um + K*(x-T*xm) = [K , L-K*T] *(x,xm) + M*um
   The matrices T,L,M satisfy generalized Francis equations

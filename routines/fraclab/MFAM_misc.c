@@ -45,6 +45,7 @@
 
 /* Christophe Canus 1997-98 */
 
+#include <math.h>
 #include "MFAM_misc.h"
 
 /*****************************************************************************/
@@ -80,10 +81,11 @@ int MFAM_base(int N_n,short* b)
     register int i=2;
     int boolean=1;
     short n=0;
+
     while((i<10)&&boolean)
     { 
       n=(short)ceil(log((double)N_n)/log((double)i));
-      if(pow((double)i,(double)n)==N_n)
+      if(((int) pow((double)i,(double)n))==N_n)
       {
 	boolean=0;
 	*b=i;

@@ -10,6 +10,7 @@ c
 c     
       common/ierode/iero
 c     
+      logical allowptr
       double precision y(ny),gout(ng),t(*)
       double precision rpar(*)
       integer ipar(*)

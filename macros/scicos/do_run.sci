@@ -10,7 +10,10 @@ function [ok,tcur,cpr,alreadyran,needcompile,state0]=do_run(cpr)
 // define user possible choices
 
 // Copyright INRIA
-if needcompile==4 then alreadyran=%f,end
+
+if needcompile==4 then 
+do_terminate(),alreadyran=%f
+end
   
 if alreadyran&needcompile<=1 then
   choix=['Continue';'Restart';'End']
@@ -26,7 +29,7 @@ end
 if ~ok then tcur=[],alreadyran=%f,return,end
 if or(state0_n<>state0) then //initial state has been changed
   state0=state0_n
-  cpr(1)=state0
+//  cpr(1)=state0
   if choix(1)=='Continue' then choix(1)=[],end
 end
   
@@ -43,6 +46,7 @@ if choix<>[] then
     state=state0
   case 'End' then 
     errcatch(-1,'continue')
+    state=cpr(1)
     needstart=%t
     wpar=scs_m(1);tf=wpar(4);tolerances=wpar(3)
     [state,t]=scicosim(cpr(1),tcur,tf,cpr(2),'finish',tolerances)
@@ -71,17 +75,23 @@ if choix<>[] then
   end
 else
   needstart=%t
-  if needcompile<>4 then state=cpr(1),end
+  state=state0
 end
 
 win=xget('window')
+
 if needstart then //scicos initialisation
+  if alreadyran then
+    do_terminate()
+    alreadyran=%f
+  end
   tcur=0
   cpr(1)=state0
   wpar=scs_m(1);tf=wpar(4);tolerances=wpar(3)
-if tf*tolerances==[] then 
-x_message(['Simulation parameters not set';'use setup button']);
-return;end
+  if tf*tolerances==[] then 
+    x_message(['Simulation parameters not set';'use setup button']);
+    return;
+  end
 
   errcatch(-1,'continue')
   [state,t]=scicosim(cpr(1),tcur,tf,cpr(2),'start',tolerances)
@@ -105,6 +115,7 @@ return;end
     ok=%f
     xset('window',curwin)
     unsetmenu(curwin,'stop')
+    enablemenus()
     return
   end
   xset('window',win);
@@ -112,6 +123,7 @@ end
 
 // simulation
 wpar=scs_m(1);tf=wpar(4);tolerances=wpar(3)
+disablemenus()
 setmenu(curwin,'stop')
 timer()
 errcatch(-1,'continue')
@@ -141,6 +153,7 @@ end
 xset('window',curwin)
 disp(timer())
 unsetmenu(curwin,'stop')
+enablemenus()
 
 
 

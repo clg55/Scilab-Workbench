@@ -14,7 +14,7 @@ PARAMETERS
 
 DESCRIPTION
   dlgamma(x) evaluates the derivative  of gammaln function at all the ele-
-  ments of x. x must be real.
+  ments of x.  x must be real.
 EXAMPLE
   dlgamma(0.5)
 SEE ALSO

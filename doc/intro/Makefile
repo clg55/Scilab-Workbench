@@ -2,7 +2,7 @@ SHELL = /bin/sh
 
 include ../../Version.incl
 SCIDIR=../..
-SCIDOC=$(SCIDIR)/../$(SCIVERSION)-doc
+SCIDOC=$(SCIDIR)/../$(SCIVERSION)/doc
 include ../../Makefile.incl
 
 INTROFILES = chap4.tex chap0.tex chap1.tex chap2.tex \

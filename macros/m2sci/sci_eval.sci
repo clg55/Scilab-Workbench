@@ -1,46 +1,62 @@
 function [stk,txt,top]=sci_eval()
 // Copyright INRIA
-txt=[]
-write(logfile,'Warning: eval argument not translated to scilab syntax. Check')
+ARGS=[]
+for k=1:rhs
+  ARGS=[stk(top)(1),ARGS]
+  top=top-1
+end
 if lhs==1 then
+  LHS=lhsargs(lhsvarsnames())
   if rhs==1 then
-    if and(lst(ilst+1)==['1' 'ans']) then
-      stk=list('execstr('+stk(top)(1)+')','0','?','?','?')
+    if LHS<>[] then
+      if LHS<>'ans' then
+	set_infos(['mtlb_eval can be replaced by evstr if '+ARGS
+	    'is a valid scilab instruction'],1)
+      else
+	set_infos(['mtlb_eval can be replaced by '
+	    'evstr if '+ARGS+' is a valid scilab expression'
+	    'execstr if '+ARGS+' is a valid scilab instruction'  ],1)
+      end
     else
-      stk=list('evstr('+stk(top)(1)+')','0','?','?','?')
+      set_infos(['mtlb_eval can be replaced by '
+	  '  evstr if '+ARGS+ 'is a valid scilab expression'
+	  '  execstr if '+ARGS+ 'is a valid scilab instruction'],1)
     end
+    stk=list('mtlb_eval'+rhsargs(ARGS),'0','?','?','?')
   else
-    if and(lst(ilst+1)==['1' 'ans']) then
-      txt=['if '+'execstr('+stk(top-1)(1)+',''errcatch'')'+'<>0 then' 
-          '  execstr('+stk(top)(1)+')'
-          'end']
-      stk=list(' ','-2','?','?','?')
-    elseif lst(ilst+1)(1)=='1' then
-      v=lhsvarsnames()
-      txt=['if '+'execstr('+v+'='+stk(top-1)(1)+',''errcatch'')'+'<>0 then' 
-          '  execstr('+v+'='+stk(top)(1)+')'
-          'end']
-      stk=list(' ','-2','?','?','?')
+    if LHS<>[] then
+      ARGS=sci2exp(LHS+'=')+'+'+ARGS
+      opt='-2'
+      w=' '
+    else
+      w=gettempvar()
+      ARGS=sci2exp(w+'=')+'+'+ARGS
+      opt='0'
     end
-    top=top-1
+    set_infos(['mtlb_eval'+rhsargs(ARGS)+' can be replaced by'
+	'if '+'execstr('+ARGS(1)+',''errcatch'')'+'<>0 then'
+	'  execstr('+ARGS(2)+')'
+	'end'
+	'If '+ARGS(1)+' and '+ARGS(2)+' are valid scilab instructions'],1)
+    txt=[txt;'mtlb_eval'+rhsargs(ARGS)+';']
+    stk=list(w,opt,'?','?','?')
   end
 else
-  LHS=lhsvarsnames()
-  if isname(stk(top)(1)) then
-    v=sci2exp(lhsargs(LHS)+' = '+stk(top)(1))
-  else
-    v=stk(top)(1)
-    if part(v,1)=='''' then v=part(v,2:length(v)),end
-    v=''''+lhsargs(LHS)+' = '+v
-  end
+  LHS=lhsargs(lhsvarsnames())
+  ARGS=sci2exp(LHS+'=')+'+'+ARGS
   if rhs==1 then
-    txt='execstr('+v+')'
+    set_infos(['mtlb_eval can be replaced by execstr if '+ARGS
+	'is a valid scilab instruction'],1)
   else
-    txt=['if '+'execstr('+v+',''errcatch'')'+'<>0 then'
-            '  execstr('+v+')'
-            'end']
+    set_infos(['mtlb_eval'+rhsargs(ARGS)+' can be replaced by'
+	'if '+'execstr('+ARGS(1)+',''errcatch'')'+'<>0 then'
+        '  execstr('+ARGS(2)+')'
+      'end'
+      'If '+ARGS(1)+' and '+ARGS(2)+' are valid scilab instructions'],1)
   end
+  txt=[txt;'mtlb_eval'+rhsargs(ARGS)+';']
+  s=list(' ','-2','?','?','?')
   stk=list()
-  for k=1:lhs,stk(k)=list(' ','-2','0','?','?','?'),end
-  top=top-rhs+1
+  for k=1:lhs,stk(k)=s,end
 end
+

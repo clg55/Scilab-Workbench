@@ -20,7 +20,7 @@ PARAMETERS
 
 DESCRIPTION
   sp=spzeros(nrows,ncols,fill) returns a sparse zero matrix sp with nrows
-  rows, ncols columns. (Equivalent to sparse([],[],[nrow,ncols]))
+  rows, ncols columns.  (Equivalent to sparse([],[],[nrow,ncols]))
 
   sp=spzeros(A) returns a sparse zero matrix with same dimensions as A. If
   [m,n]=size(A), spzeros(m,n) and spzeros(A) are equivalent. In particular

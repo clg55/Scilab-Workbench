@@ -7,6 +7,7 @@ if mp*np<>1 then
   f=invr(p)*m,
 else
   [l,c]=size(m)
+  if m<>[] then m=m+poly(0,varn(p),'c'),end
   if mp==-1&l*c==1|l==-1 then
     f=tlist(['r','num','den','dt'],m,p*eye(),[])
   else

@@ -5,18 +5,31 @@ c vsiz  size of internal scilab stack
 c
 c bsiz  size of internal chain buf 
 c
-c isiz  maximum number of scilab variables
+c isizt  maximum number of scilab variables global and local 
+c isiz maximum number of scilab local variables
 c psiz  defines recursion size
 c lsiz  dim. of vector containing the command line
 c nlgh  length of variable names
 c csiz  used for character coding
+c intersiz used in interfaces
 c*-------------------------------------------------------------------
-      integer   csiz,bsiz,isiz,psiz,nsiz,lsiz
-      parameter (csiz=63,bsiz=4096,isiz=1024,psiz=256,nsiz=6,lsiz=16384)
+C     The next lines are used by visual Fortran 
+C     when building dll's which share common data with Scilab.dll
+c    $ IF DEFINED (FORDLL)
+c    $ ATTRIBUTES DLLIMPORT:: /stack/, /vstk/, /recu/, /iop/
+c    $ ATTRIBUTES DLLIMPORT:: /errgst/, /com/, /adre/ 
+c    $ ATTRIBUTES DLLIMPORT:: /intersci/ ,/cha1/
+c    $ ENDIF
+C     ---------------------------------------------------------------
+      integer   csiz,bsiz,isizt,psiz,nsiz,lsiz
+      parameter (csiz=63,bsiz=4096,isizt=1200,psiz=256,nsiz=6)
+      parameter (lsiz=16384)
       integer   nlgh,vsiz
       parameter (nlgh=nsiz*4,vsiz=2)
       integer   maxdb,maxbpt
       parameter (maxdb=20,maxbpt=100)
+      integer intersiz
+      parameter (intersiz=60)
 c
       double precision stk(vsiz)
       common /stack/ stk
@@ -29,9 +42,10 @@ c
       character cstk*(4*vsiz)
       equivalence (cstk,stk(1))
 
-      integer bot,top,idstk(nsiz,isiz),lstk(isiz),leps,bbot,bot0
-      integer infstk(isiz)
-      common /vstk/ bot,top,idstk,lstk,leps,bbot,bot0,infstk
+      integer bot,top,idstk(nsiz,isizt),lstk(isizt),leps,bbot,bot0,isiz
+      integer gbot,gtop,infstk(isizt)
+      common /vstk/ bot,top,idstk,lstk,leps,bbot,bot0,infstk,
+     $     gbot,gtop,isiz
 
       integer ids(nsiz,psiz),pstk(psiz),rstk(psiz),pt,niv,macr,paus
       integer icall
@@ -53,10 +67,12 @@ c
       integer bptlg(maxbpt)
       common /dbg/ wmac,lcntr,nmacs,macnms,lgptrs,bptlg
 
-      parameter (intersiz=60)
-      common/adre/lbot,ie,is,ipal,nbarg,ladr(intersiz)
-      common/intersci/nbvars,nbrows(intersiz),nbcols(intersiz),
-     $ itflag(intersiz),ntypes(intersiz),lad(intersiz),
-     $ ladc(intersiz),lhsvar(intersiz)
+      integer lbot,ie,is,ipal,nbarg,ladr(intersiz)
+      common/adre/lbot,ie,is,ipal,nbarg,ladr
+      integer nbvars,nbrows(intersiz),nbcols(intersiz),
+     $  itflag(intersiz),ntypes(intersiz),lad(intersiz),
+     $  ladc(intersiz),lhsvar(intersiz)
+      common/intersci/nbvars,nbrows,nbcols,
+     $ itflag,ntypes,lad,ladc,lhsvar
 c*------------------------------------------------------------------
 

@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 
 #ifndef STRICT 
 #define STRICT

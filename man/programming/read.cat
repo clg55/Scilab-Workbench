@@ -28,7 +28,7 @@ DESCRIPTION
   line of file-desc file. Depending on format, a given row of the x matrix
   may be read from more than one line of file-desc file.
 
-  The type of the result will depend on the specified format. If format con-
+  The type of the result will depend on the specified format.  If format con-
   tains only (d,e,f,g)  descriptors the function tries to read numerical data
   (the result is matrix of real numbers).
 

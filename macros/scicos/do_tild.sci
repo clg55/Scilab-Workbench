@@ -1,11 +1,11 @@
 function scs_m=do_tild(scs_m)
 // Copyright INRIA
 while %t
-  [btn,xc,yc,win,Cmenu]=getclick()
+  [btn,xc,yc,win,Cmenu]=cosclick()
   if Cmenu<>[] then
     Cmenu=resume(Cmenu)
   end
-  k=getobj(scs_m,[xc;yc])
+  k=getblock(scs_m,[xc;yc])
   if k<>[] then break,end
 end
 if get_connected(scs_m,k)<>[] then

@@ -22,14 +22,14 @@ Output parameter
 
 Description
   This routine can be used to retrieve a specified property from a GUI
-  object. Property name are character strings like 'style', 'position' ....
+  object.  Property name are character strings like 'style', 'position' ....
   This routine returns the value associated to the specified property.  Obvi-
   ously, the type of the returned object depends on the property one aims at
   querying. For example, the 'style' property which represents the kind of
-  Object the UI control is (ie button, label, list, ..... ) will be
-  represented as a string. On the contrary, the 'position' property, which
-  represents the geometrical aspect of the UI control, will be coded as a
-  [1,4] vector.
+  Object the UI control is (ie button, label, list, ..... ) will be repre-
+  sented as a string. On the contrary, the 'position' property, which repre-
+  sents the geometrical aspect of the UI control, will be coded as a [1,4]
+  vector.
 
 EXAMPLE
   h=uicontrol('string', 'Button');

@@ -28,8 +28,7 @@ for l=2:nsyst
    if tr1(1)=='r' then transfert=tf2ss(transfert);end
    syst(l)=list('transfert',transfert)
    
-   //-compat type(transfert)==15 retained for list/tlist compatibility
-   if type(transfert)==15|type(transfert)==16 then
+   if type(transfert)==16 then
       d=transfert(7)
       if d<>[] then
         if dom==[] then

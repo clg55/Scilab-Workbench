@@ -13,7 +13,7 @@ c     Copyright INRIA
       double precision epsa,epsr,a,b,val,abserr
       logical getexternal, getscalar,type ,cremat
       integer topk,lr,katop,kydot,top2,lra,lrb,lc
-      integer ipal,lpal,lw,liw,lpali,ifail
+      integer iipal,lpal,lw,liw,lpali,ifail
       integer iadr,sadr
       external setfintg
 c
@@ -64,12 +64,12 @@ c     tableau de travail entier necessaire
 c
 c     external scilab
 c
-      ipal=iadr(lstk(top))
-      istk(ipal)=1
-      istk(ipal+1)=ipal+2
-      istk(ipal+2)=kydot
-      istk(ipal+3)=katop
-      lstk(top+1)=sadr(ipal+4)
+      iipal=iadr(lstk(top))
+      istk(iipal)=1
+      istk(iipal+1)=iipal+2
+      istk(iipal+2)=kydot
+      istk(iipal+3)=katop
+      lstk(top+1)=sadr(iipal+4)
       if(type) then 
          call dqag0(fintg,a,b,epsa,epsr,val,abserr,
      +        stk(lpal),lw,stk(lpali),liw,ifail)

@@ -11,6 +11,7 @@ c     Copyright INRIA
 c
       INCLUDE '../stack.h'
       integer iadr
+      logical allowptr
 c
       iadr(l)=l+l-1
 

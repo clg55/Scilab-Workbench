@@ -17,6 +17,8 @@ include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib.mak
 
 erro.obj:       ../stack.h
@@ -36,7 +38,8 @@ int2cint.obj: ../machine.h
 dbl2cdbl.obj: ../machine.h
 freeptr.obj: ../machine.h
 
-
-
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile

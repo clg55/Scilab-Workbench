@@ -1,5 +1,8 @@
 #include <stdio.h>
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
+#if defined(netbsd) || defined(freebsd)
+#include <sys/types.h>
+#endif
 #include <dirent.h>
 #endif
 #include <string.h>
@@ -16,7 +19,7 @@ int CheckGraphName(name,dir)
 char *name;
 char *dir;
 {
-#ifdef __MSC__
+#if (defined __MSC__) || (defined __ABSC__)
   return(0);
 #else 
   DIR *dirp;

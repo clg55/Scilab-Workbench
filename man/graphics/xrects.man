@@ -4,42 +4,41 @@
 xrects - draw or fill a set of rectangles
 .SH CALLING SEQUENCE
 .nf
-[]=xrects(rects,[fill])
+xrects(rects,[fill])
 .fi
 .SH PARAMETERS 
-.TP 15
+.TP 7
 rects 
-: matrix of size (4,n)
+: matrix of size (4,n).
 .TP
 fill
 : vector of size n.
 .SH DESCRIPTION
-draws or fills a set of rectangle. each column of \fVrects\fR describes 
-a rectangle ( Upper Left point, width, height) 
+\fVxrects\fR draws or fills a set of rectangles. 
+Each column of \fVrects\fR describes 
+a rectangle (upper-left point, width, height):
+\fVrects=[x1 y1 w1 h1;x2 y2 w2 h2;...]'\fR.
+
+\fVfill(i)\fR gives the pattern to use for filling or drawing rectangle i:
 .LP
-\fVrects= [ x,y,w,h ; x,y,w,h ;.....] '\fR
-\fVfill(n)\fR gives the pattern to use for filling or drawing the rectangle n.
+if \fVfill(i)<0\fR, rectangle \fVi\fR is drawn using the line style (or
+color) \fV-fill(i)\fR
 .LP
-if \fVfill(n) <0 \fR, the rectangle \fVn\fR is drawn using the line style (or
-color)\fV-fill(n)\fR
+if \fVfill(i)>0\fR, rectangle \fVi\fR is filled using the pattern (or
+color) \fVfill(n)\fR
 .LP
-if \fVfill(n)> 0 \fR, the rectangle \fVn\fR is filled using the pattern (or
-color)\fVfill(n)\fR.
-.LP
-if \fVfill(n)= 0\fR,  the rectangle \fVn\fR is drawn using the current
+if \fVfill(i)=0\fR, rectangle \fVi\fR is drawn using the current
 line style (or color).
 .SH EXAMPLE
 .nf
-plot2d([-100,500],[-50,50],[-1,-1],"022");
+plot2d([-100,500],[-50,50],[-1,-1],"022")
 cols=[-34,-33,-32,-20:5:20,32,33,34];
-step=20;
-x=400*(0:14)/14
-step = (x(2)-x(1))/2
+x=400*(0:14)/14; step=20;
 rects=[x;10*ones(x);step*ones(x);30*ones(x)];
-xrects(rects,cols);
-xnumb(x,15*ones(x),cols);
+xrects(rects,cols)
+xnumb(x,15*ones(x),cols)
 .fi 
+.SH SEE ALSO
+xfrect, xrect
 .SH AUTHOR
-J.Ph.C..
-
-
+J.Ph.C.

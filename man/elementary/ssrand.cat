@@ -39,9 +39,9 @@ DESCRIPTION
   function (in SCIDIR/macros/util).  For example with
   flag=list('co',dim_cont_subs) a non-controllable system is return and
   dim_cont_subs is the dimension of the controllable subspace of Sys.  The
-  character strings 'co','uo','ncno','st','dt','on','ui' stand for "controll-
-  able", "unobservable", "non-controllable-non-observable",
-  "stabilizable","detectable","output-nulling","unknown-input".
+  character strings 'co','uo','ncno','st','dt','on','ui' stand for "control-
+  lable", "unobservable", "non-controllable-non-observable", "stabiliz-
+  able","detectable","output-nulling","unknown-input".
 
 EXAMPLE
   //flag=list('st',dim_cont_subs,dim_stab_subs,dim_stab0)

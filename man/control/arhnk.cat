@@ -15,8 +15,8 @@ PARAMETERS
   tol  : threshold for rank determination in equil1
 
 DESCRIPTION
-  computes slm, the optimal Hankel norm approximant of the stable
-  continuous-time linear system sl with matrices [A,B,C,D].
+  computes slm, the optimal Hankel norm approximant of the stable continuous-
+  time linear system sl with matrices [A,B,C,D].
 
 EXAMPLE
   A=diag([-1,-2,-3,-4,-5]);B=rand(5,1);C=rand(1,5);

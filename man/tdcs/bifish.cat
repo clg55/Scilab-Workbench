@@ -25,8 +25,8 @@ DESCRIPTION
           fishr2
           z=exp(-0.1*(xk(1)+xk(2)))
           xkp1=[ b*z**(1+0.1*(rand()-0.5)) 2*b*z**(1+0.1*(rand()-0.5)) ; s 0.0]*xk
-  The three macros fish, fishr, fishr2 are loaded in Scilab when calling bif-
-  ish.
+  The three macros fish, fishr, fishr2 are loaded in Scilab when calling
+  bifish.
 
 SEE ALSO
   ode

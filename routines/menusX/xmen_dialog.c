@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 #include "men_scilab.h"
 
 /*******************************************************

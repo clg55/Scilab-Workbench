@@ -208,8 +208,8 @@ void ForNameClean _PARAMS((void));
 void InitDeclare  _PARAMS((void));
 void ResetDeclare _PARAMS((void));
 void WriteMain  _PARAMS((FILE *f,char *file));
-void  FCprintf(); /* _PARAMS((FILE*,char *fmt,...)); */
-void  Fprintf() ;/*  _PARAMS((FILE*,int,char *fmt,...)); */
+void  FCprintf _PARAMS((FILE*,char *fmt,...));
+void  Fprintf _PARAMS((FILE*,int,char *format,...));
 void white _PARAMS( (FILE *f, int ind));
 void AddDeclare _PARAMS((int type, char *declaration));
 void InitDeclare _PARAMS((void));

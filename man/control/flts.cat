@@ -38,8 +38,8 @@ DESCRIPTION
 
   Transfer form:
 
-   y=flts(u,sl[,past]). Here sl is a linear system in transfer matrix
-  representation i.e
+   y=flts(u,sl[,past]). Here sl is a linear system in transfer matrix  repre-
+  sentation i.e
   sl=syslin('d',transfer_matrix) (see syslin).
 
       past = [u     ,...,  u   ]

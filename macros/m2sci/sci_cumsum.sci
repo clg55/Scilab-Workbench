@@ -7,10 +7,18 @@ else
   v=stk(top-rhs+1)(1),
 end 
 if rhs==1 then
-  if stk(top)(2)=='1'| stk(top)(3)=='1' then
-    stk=list('cumsum('+v+')','0','1','1',stk(top)(5))
-  else 
-    stk=list('mtlb_cumsum('+v+')','0','1',stk(top)(4),stk(top)(5))
+  [m,n]=checkdims(stk(top))
+  x=stk(top)(1)
+  if m==-1&n==-1 then
+    set_infos([
+	'mtlb_cumsum('+x+') may be replaced by '
+	'cumsum('+x+')'+' if '+x+'is a vector'
+	'cumsum('+x+',1)'+' if '+x+'is a matrix'],1)
+    stk=list('mtlb_cumsum('+x+')','0','?','?','1')
+  elseif m==1|n==1 then
+    stk=list('cumsum('+x+')','0','1','1','1')
+  else
+    stk=list('cumsum('+x+',1)','0','1',stk(top)(4),'1')
   end
 else
   if stk(top)(1)=='1' then

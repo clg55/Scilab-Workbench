@@ -2,7 +2,7 @@ SHELL = /bin/sh
 
 include ../Version.incl
 SCIDIR=..
-SCIDOC=$(SCIDIR)/../$(SCIVERSION)-doc
+SCIDOC=$(SCIDIR)/../$(SCIVERSION)/doc
 
 SUBDIRS = comm internals intro lmitool metanet signal LaTex-doc scicos
 

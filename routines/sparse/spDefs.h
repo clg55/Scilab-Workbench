@@ -90,10 +90,6 @@
 
 
 
-
-
-
-
 /*
  *   MACRO DEFINITIONS
  *
@@ -438,7 +434,9 @@ extern char *malloc(), *calloc(), *realloc();
 #if defined(THINK_C) || defined (__MWERKS__)  
 #include <types.h>
 #else
+#ifndef __ABSC__
 #include <sys/types.h> /* pour le malloc.h de dbmalloc */
+#endif
 #endif
 #ifdef __STDC__
 #include <stdlib.h>

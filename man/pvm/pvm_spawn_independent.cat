@@ -32,10 +32,10 @@ PARAMETERS
 
 DESCRIPTION
   pvm_spawn_independent starts ntask copies of the executable named task.  On
-  systems that support environment, spawn passes selected variables from
-  parent environment to children tasks.  If set, the envar PVM_EXPORT is
-  passed.  If PVM_EXPORT contains other names (separated by ':') they will be
-  passed too.  This is useful for e.g.:
+  systems that support environment, spawn passes selected variables from par-
+  ent environment to children tasks.  If set, the envar PVM_EXPORT is passed.
+  If PVM_EXPORT contains other names (separated by ':') they will be passed
+  too.  This is useful for e.g.:
 
           setenv DISPLAY myworkstation:0.0
           setenv MYSTERYVAR 13

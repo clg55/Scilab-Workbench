@@ -2,7 +2,7 @@ function f=%s_a_r(m,f)
 //f=  m+f
 //!
 // Copyright INRIA
-[num,den]=f(2:3)
+[num,den]=f(['num','den'])
 [nf,mf]=size(f)
 [nm,mm]=size(m)
 
@@ -21,6 +21,7 @@ else
     [num,den]=simp(num+m*eye(den).*den,den)
   end
 end
-f(2)=num;f(3)=den
+f=rlist(num,den,f('dt'))
+
 
 

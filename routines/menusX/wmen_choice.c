@@ -1,8 +1,8 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 /* wmchoice1.c
  * Scilab 
  *   Jean-Philippe Chancelier 
- *   Bugs and mail : Scilab@inria.fr 
+ *   Bugs and mail : Scilab@ENPC.fr 
  */
 
 #include "wmen_scilab.h"

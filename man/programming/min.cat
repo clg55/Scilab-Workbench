@@ -18,7 +18,7 @@ PARAMETERS
 
 DESCRIPTION
 
-  For A, a real  vector or matrix, min(A) is the largest element A.
+  For A, a real  vector or matrix, min(A) is the smallest element A.
   [m,k]=min(A) gives in addition the index of the minimum.  A second argument
   of type string 'r' or 'c' can be used : 'r' is used to get a row vector m
   such that m(j) contains the minimum of the j th column of A (A(:,j)), k(j)
@@ -27,7 +27,7 @@ DESCRIPTION
 
   m=min(A1,A2,...,An), where all the Aj are matrices of the same
   sizes,returns a vector or a matrix m of size size(m)=size(A1) such that
-  m(i)= max( Aj(i)), j=1,...,n. [m,k]=min(A1,A2,...,An) gives in addition the
+  m(i)= min( Aj(i)), j=1,...,n. [m,k]=min(A1,A2,...,An) gives in addition the
   vector or matrix k. for a fixed i, k(i) is the number of the first Aj(i)
   achieving the minimum.
 

@@ -8,19 +8,23 @@ DESCRIPTION
   the save meaning). Usually, they are defined in files with an editor and
   loaded into Scilab by getf or through a library (see lib).
 
-  They can also be defined on-line (see deff). A file which contains a func-
-  tion must begin as follows:
+  They can also be defined on-line (see deff).
+
+  In a  file  a function must begin by a "syntax definition" line as follows:
   function [y1,...,yn]=foo(x1,...,xm)
-  The yi are output variables calculated as functions of input variables and
-  variables existing in Scilab when the function is executed.
+  followed by a sequence of scilab instructions.
 
-  A function can be compiled for faster execution. Collections of functions
-  can be collected in libraries.  Functions which begin with % sign (e.g.
-  %foo) are often used to overload (see overloading) operations or function
-  for new data type: for example, z=%rmr(x,y) is equivalent to z=x*y when x
-  and z are rationals (i.e. x=tlist(['r','num','den','dt'],n,d,[]) with n and
-  d polynomials).
+  The "syntax definition" line gives the "full" calling syntax of this func-
+  tion. The yi are output variables calculated as functions of input vari-
+  ables xi and variables existing in Scilab when the function is executed.
+  Shorter input or output argument list may be used.
 
+  Many functions may be written in the same file. A function is terminated by
+  an endfunction keyword, the following function keyword or the EOF mark.
+
+  Collections of functions can be collected in libraries.  Functions which
+  begin with % sign (e.g. %foo) are often used to overload (see overloading)
+  operations or functions for new data type.
   For example if the file myfct.sci contains:
   function [x,y]=myfct(a,b)
   x=a+b

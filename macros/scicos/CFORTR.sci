@@ -9,16 +9,20 @@ if tt==[] then
       '             ntvec,rpar,nrpar,ipar,nipar']
 
   tete2= '      '
+  decl=''
   for i=1:ni
     tete2=tete2+',u'+string(i)+',nu'+string(i)
+    decl=decl+',*nu'+string(i)
   end
   for i=1:no
     tete2=tete2+',y'+string(i)+',ny'+string(i)
+    decl=decl+',*ny'+string(i)
   end
   tete2=tete2+')'
 
   tete3=['      double *t,xd[],x[],z[],tvec[];';..
-    '      integer *flag,*nevprt,*nx,*nz,*ntvec,*nrpar,ipar[];']
+    '      integer *flag,*nevprt,*nx,*nz,*ntvec,*nrpar,ipar[],*nipar'+decl+';']
+
 
   tete4= '      double rpar[]'
     for i=1:ni
@@ -29,7 +33,10 @@ if tt==[] then
     end
     tetev=[' ';' ']
     
-  textmp=[tete1;tete2;tetev;tete3;tete4+';';'/* modify below this line */';..
+  textmp=[tete1;tete2;tetev;tete3;tete4+';';
+          '/* modify below this line */';
+	  '{'
+	  '}'
 	tetev];
   else
     textmp=tt;

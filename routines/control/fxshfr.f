@@ -6,7 +6,7 @@ c iterations and returns with the number of zeros
 c found.
 c l2 - limit of fixed shift steps
 c nz - number of zeros found
-      common /global/ p, qp, k, qk, svk, sr, si, u,
+      common /gloglo/ p, qp, k, qk, svk, sr, si, u,
      * v, a, b, c, d, a1, a2, a3, a6, a7, e, f, g,
      * h, szr, szi, lzr, lzi, eta, are, mre, n, nn
        double precision p(101), qp(101), k(101),

@@ -246,7 +246,7 @@ integer *type ;/* type of the imported data 0:integer,1:double */
 void 
 C2F(getlabel)(kfun,label,n)
 integer *n, *kfun;  /* length of the label */
-char **label;    
+char *label;    
 {
     int k;
     int job=1;
@@ -254,9 +254,62 @@ char **label;
     k= *kfun;
     *n=(integer)(scicos_imp.izptr[k]-scicos_imp.izptr[k-1]);
     if (*n>0 )
-	F2C(cvstr)(n,&(scicos_imp.iz[scicos_imp.izptr[k-1]-1]),*label,&job,*n);
+	F2C(cvstr)(n,&(scicos_imp.iz[scicos_imp.izptr[k-1]-1]),label,&job,*n);
 }
 void 
+C2F(getblockbylabel)(kfun,label,n)
+integer *n, *kfun;  /* length of the label */
+char **label;    
+{
+    int k,i,i0,nblk,n1;
+    int job=0;
+    int lab[40];
+
+    nblk=(integer)(scicos_imp.nblk);
+    F2C(cvstr)(n,label,lab,&job,*n);
+
+    *kfun=0;
+    for (k=0;k<nblk;k++) {
+      n1=(integer)(scicos_imp.izptr[k]-scicos_imp.izptr[k-1]);
+      if (n1==*n) {
+	i0=scicos_imp.izptr[k-1]-1;
+	i=0;
+	while (lab[i]==scicos_imp.iz[i0+i]&i<n1) i++;
+	if (i==n1) {
+	  *kfun=k+1;
+	  return;
+	}
+      }
+    }
+}
+integer
+C2F(getsciblockbylabel)(kfun,label,n)
+integer *n, *kfun;  /* length of the label */
+integer label[];    
+{
+    int k,i,i0,nblk,n1;
+    int job=0;
+    if (scicos_imp.x==(double *)NULL){
+	return(2); /* undefined import table scicos is not running */
+    }
+    nblk=(integer)(scicos_imp.nblk);
+
+    *kfun=0;
+    for (k=0;k<nblk;k++) {
+      n1=(integer)(scicos_imp.izptr[k]-scicos_imp.izptr[k-1]);
+      if (n1==*n) {
+	i0=scicos_imp.izptr[k-1]-1;
+	i=0;
+	while (label[i]==scicos_imp.iz[i0+i]&i<n1) i++;
+	if (i==n1) {
+	  *kfun=k+1;
+	  return;
+	}
+      }
+    }
+}
+
+integer
 C2F(getscilabel)(kfun,label,n)
 integer *n, *kfun;  /* length of the label */
 integer label[];    
@@ -264,6 +317,9 @@ integer label[];
     int k,i;
     integer *u,*y;
 
+    if (scicos_imp.x==(double *)NULL){
+	return(2); /* undefined import table scicos is not running */
+    }
     k= *kfun;
     *n=(integer)(scicos_imp.izptr[k]-scicos_imp.izptr[k-1]);
     if (*n>0 ) {
@@ -272,9 +328,20 @@ integer label[];
 	for (i=0;i<*n;i++)
 	    *(y++)=*(u++);  
 	}
+    return(0);
 }
 
 integer C2F(getcurblock)()
 {
 return(C2F(curblk).kfun);
     }
+
+void 
+C2F(getouttb)(nsize,nvec,outtc)
+integer *nsize,*nvec;
+double *outtc;
+{
+  integer i;
+  for (i=0;i<*nsize;i++)
+    outtc[i]=(double)scicos_imp.outtb[nvec[i]-1];  
+}

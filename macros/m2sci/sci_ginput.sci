@@ -6,8 +6,6 @@ if rhs<1 then
 else
   RHS=stk(top)(1)
 end
-write(logfile,'Warning ginput: Scilab cannot yet handle keybord events')
-txt='//!Scilab cannot yet handle keybord events'
 if lhs==1 then
     stk=list('locate('+RHS+')''','0','?','2','1')
 elseif lhs==2 then

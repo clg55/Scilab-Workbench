@@ -57,7 +57,7 @@ static char *rcsid = "$Id: xdr_rec.c,v 1.4 1995/10/22 14:53:56 phk Exp $";
 #define __MSC__
 #endif 
 
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
 #include <netinet/in.h> /** jpc : je met netinet/ avant rpc pour eviter un warning */
 #include <rpc/types.h> 
 #include <rpc/xdr.h>
@@ -313,8 +313,8 @@ xdrrec_getpos(xdrs)
 	register RECSTREAM *rstrm = (RECSTREAM *)xdrs->x_private;
 	register long pos;
 
-#ifdef __MSC__
-  /* XXX : no lseek in msvc++ */
+#if (defined __MSC__) || (defined __ABSC__)
+  /* XXX : no lseek in msvc++ && Absoft */
 	fseek((FILE *)(int)rstrm->tcp_handle, (long) 0, 1);
 	pos = ftell((FILE *)(int)rstrm->tcp_handle);
 #else

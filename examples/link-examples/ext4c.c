@@ -22,6 +22,16 @@ int ext4c(n, a, b, c)
   int k;
   char ch[MAXCH];
   int lch=MAXCH;
+
+  /* We search a Scilab Object name YesOrNo 
+   * check that it is a string 
+   * and store the string in ch 
+   * lch is used on entry to give the maximum number 
+   * of characters which can be stored in ch 
+   * After the call lch contains the number of 
+   * copied characters
+   */
+
   ReadString("YesOrNo", &lch, ch);
   /******************************/
   if (strcmp(ch, "yes") == 0) 

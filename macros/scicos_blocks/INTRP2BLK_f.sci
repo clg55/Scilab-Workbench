@@ -35,7 +35,7 @@ case 'set' then
 case 'define' then
   a=[0;1];b=[0;1];c=[0 1;1 2]
   model=list(list('intrp2',1),[1;1],1,[],[],[],[],[a;b;c(:)],[2;2],'c',[],[%t %f],' ',list())
-  label=[strcat(sci2exp(a));strcat(sci2exp(b));strcat(sci2exp(b))]
+  label=[strcat(sci2exp(a));strcat(sci2exp(b));strcat(sci2exp(c,0))]
   gr_i=['xstringb(orig(1),orig(2),''interp2'',sz(1),sz(2),''fill'');']
   x=standard_define([3 2],model,label,gr_i)
 end

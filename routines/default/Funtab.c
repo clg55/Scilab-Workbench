@@ -1,4 +1,9 @@
-/* Copyright INRIA */
+/**************************************
+ * Copyright Jean-Philippe Chancelier 
+ * ENPC 
+ * See Also copyright bellow 
+ **************************************/
+
 #include <string.h>
 #include <stdio.h>
 #ifdef __STDC__

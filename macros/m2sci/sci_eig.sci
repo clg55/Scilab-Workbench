@@ -15,7 +15,7 @@ if rhs==1 then
   end
 else // more than one input argument (option or generalized eigen values?)
   if stk(top)(5)=='10' then  //option
-    write(logfile,'Eig : '''+stk(top)(1)+''' option not translated')
+    set_infos('Eig : '''+stk(top)(1)+''' option not translated',2)
     top=top-1
     if lhs==1 then
       stk=list('spec'+'('+stk(top)(1)+')','0',stk(top)(3),'1','?')
@@ -28,9 +28,7 @@ else // more than one input argument (option or generalized eigen values?)
     return
   end
   if stk(top)(5)<>'1' then
-    txt='Eig with 2 rhs args: generalized eigen assumed. Check '
-    write(logfile,'Warning: '+txt)
-    txt='//!'+txt
+    set_infos('Eig with 2 rhs args: generalized eigen assumed. Check ',2)
   end  
   m=stk(top-1)(3)
   n=stk(top-1)(4)

@@ -62,7 +62,7 @@ case 'set' then
     x=list('Block',graphics,model,arg1(4),arg1(5))
   end
 case 'define' then
-  model=list(arg1,1,1,[],[],[],[],[],[],%f,[%f %f])
+  model=list(arg1,1,1,[],[],[],[],[],[],%f,[%f %f],' ',list())
   x=standard_define([2 2],model,[],[])
 end
 

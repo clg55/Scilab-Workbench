@@ -11,7 +11,8 @@ if RHS==1 then alfa=0;beta=0;end
 flag=0;
 Sl1=Sl(1)
 if Sl1(1)=='r' then
- flag=1;Sl=tf2ss(Sl);end
+  flag=1;Sl=tf2ss(Sl);
+end
 s=poly(0,'s');
 D=Sl(5);
 n=size(D);n1=n(1);n2=n(2);

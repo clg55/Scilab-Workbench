@@ -15,7 +15,7 @@ PARAMETERS
   y         : output of sl
 
 DESCRIPTION
-  Utility function. If [A,B,C,D]=abcd(sl) and x0=sl('X0'), dsimul returns
+  Utility function.  If [A,B,C,D]=abcd(sl) and x0=sl('X0'), dsimul returns
   y=C*ltitr(A,B,u,x0)+D*u i.e.  the time response of sl to the input u.  sl
   is assumed to be in state space form (syslin list).
 

@@ -4,17 +4,24 @@
     jpc@cergrene.enpc.fr 
  --------------------------------------------------------------------------*/
 
+#ifndef __MATH_H__
+#define __MATH_H__
 #include "../machine.h"
 
 #ifdef WIN32 
-#ifndef __CYGWIN32__
+#if !(defined __CYGWIN32__) && !(defined __ABSC__)
 #include <float.h>
 #define finite(x) _finite(x) 
 #endif 
-#ifdef __MINGW32__
+#if (defined __MINGW32__) || (defined __ABSC__)
 /** XXXX _finite not known with mingw32 */
 #undef finite 
-#define finite(x) 1 
+/*#define finite(x) 1 */ /* Following solution is better (See code in "finite.c")*/
+#ifdef __STDC__
+int finite(double);
+#else
+int finite();
+#endif
 #endif 
 #endif /* WIN32 */
 
@@ -61,7 +68,19 @@
 #include <ieeefp.h>
 #endif
 
+
+#if defined(THINK_C)|| defined(WIN32)
+#define M_PI	3.14159265358979323846
+#else
+#if defined(HAVE_VALUES_H)
+#include <values.h>
+#else
+#ifndef M_PI
+#define M_PI    3.14159265358979323846 
+#endif
+#endif
+#endif
+
+
 #include "Graphics.h" 
-
-
-
+#endif

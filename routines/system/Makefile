@@ -7,7 +7,7 @@ include ../../Version.incl
 LIBRARY = $(SCIDIR)/libs/system.a
 
 OBJSC = System.o System2.o Calelm.o Sun.o Intersci.o Blas.o Lapack.o helpap.o \
-	scicurdir.o
+	scicurdir.o 
 
 OBJSF = allops.o  banier.o sascii.o \
 	clause.o comand.o compcl.o   \
@@ -23,18 +23,24 @@ OBJSF = allops.o  banier.o sascii.o \
 	isbrk.o scilab.o sciquit.o bexec.o scilines.o \
 	mrknmd.o mkindx.o mklist.o cmdstr.o setgetmode.o\
 	typ2cod.o israt.o funnam.o dspdsp.o lspdsp.o wspdsp.o \
-	xerbla.o algebre.o
+	xerbla.o algebre.o storeglobal.o setippty.o allowptr.o copyvar.o \
+	lst2vars.o createref.o
 
 include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS) 
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib
 
-all:: Makefile.mak
+all:: Makefile.mak Makefile.amk
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.amk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
 
 include Make.banier
 

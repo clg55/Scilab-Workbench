@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=KRONR,SSI=0
 c     Copyright INRIA
       subroutine kronr(a,ia,ma,na,b,ib,mb,nb,pk,ik)
 c!but
@@ -25,20 +24,20 @@ c
       ka1=1-ia
       kk1=-nb
       do 30 ja=1,na
-      kb=1
-      ka1=ka1+ia
-      kk1=kk1+nb
-      do 20 jb=1,nb
-      ka=ka1
-      kk=1+(jb-1+kk1)*ik
-      do 10 i=1,ma
-      call dcopy(mb,b(kb),1,pk(kk),1)
-      call dscal(mb,a(ka),pk(kk),1)
-      kk=kk+mb
-      ka=ka+1
-   10 continue
-      kb=kb+ib
-   20 continue
-   30 continue
+         kb=1
+         ka1=ka1+ia
+         kk1=kk1+nb
+         do 20 jb=1,nb
+            ka=ka1
+            kk=1+(jb-1+kk1)*ik
+            do 10 i=1,ma
+               call dcopy(mb,b(kb),1,pk(kk),1)
+               call dscal(mb,a(ka),pk(kk),1)
+               kk=kk+mb
+               ka=ka+1
+ 10         continue
+            kb=kb+ib
+ 20      continue
+ 30   continue
       return
       end

@@ -27,8 +27,8 @@ PARAMETERS
 
 DESCRIPTION
   Spectral estimation using the modified periodogram method.  Cross-spectral
-  estimate of x and y is calculated when both x and y are given. Auto-
-  spectral estimate of x is calculated if y is not given.
+  estimate of x and y is calculated when both x and y are given. Auto-spec-
+  tral estimate of x is calculated if y is not given.
 
 EXAMPLE
   rand('normal');rand('seed',0);

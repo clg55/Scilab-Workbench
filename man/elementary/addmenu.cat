@@ -9,7 +9,10 @@ CALLING SEQUENCE
 
 PARAMETERS
 
-  button    : a character string. The button name
+  button    : a character string. The button name. On Windows operating sys-
+            tems (not X_window), an & can be placed before the character in
+            the name to be used for keyboard shortcut; this character will be
+            underlined on the GUI.
 
   submenus  : a vector of character string. The sub_menus items names
 

@@ -21,7 +21,7 @@ DESCRIPTION
   z=feval(x,y,f) returns the matrix z, z(i,j)=f(x(i),y(j))
   f is an external (function or routine) depending on one or two  arguments
   which are supposed to be real.  The result returned by f can be real or
-  complex. In case of a Fortran call, the function  'f'  must be defined in
+  complex.  In case of a Fortran call, the function  'f'  must be defined in
   the subroutine ffeval.f (in directory SCIDIR/routines/default)
 
 EXAMPLE

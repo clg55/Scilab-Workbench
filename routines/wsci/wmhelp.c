@@ -141,19 +141,28 @@ BOOL APIENTRY HelpProc(HWND hwnd, UINT msg, UINT wParam, LONG lParam)
  * if Ilist == 0 the list is supposed to come from SciApropos
  ************************************************************************/
 
+#define TOPICSIZE 256
+
 static void FillHelpsBox(HWND hwnd, DWORD iList)
 {
-  int i;
+  int i,k;
   HWND hwndControl ;
+  char topic[TOPICSIZE];
   SendDlgItemMessage(hwnd,ID_HelpLIST,LB_RESETCONTENT,(WPARAM)0,(LPARAM) 0) ;
   hwndControl = GetDlgItem(hwnd, ID_HelpLIST) ;
   SendMessage(hwndControl, WM_SETREDRAW, FALSE, 0L) ;
-
   if ( iList == 0 )
     {
       for ( i=0 ; i < AP.nTopic  ; i++)
-	SendDlgItemMessage(hwnd, ID_HelpLIST, LB_ADDSTRING,
-			   (WPARAM) 0, (LONG) (LPTSTR) AP.HelpTopic[i]);
+	{
+	  strncpy(topic, AP.HelpTopic[i],TOPICSIZE);
+	  for ( k= strlen(topic) ; k >=0 ; k--) 
+	    {
+	      if ( topic[k]== '@' ) { topic[k]='\0'; break;}
+	    }
+	  SendDlgItemMessage(hwnd, ID_HelpLIST, LB_ADDSTRING,
+			     (WPARAM) 0, (LONG) (LPTSTR) topic);
+	}
     }
   else 
     {
@@ -161,8 +170,15 @@ static void FillHelpsBox(HWND hwnd, DWORD iList)
       if (nTopicInfo > 0)
 	{
 	  for ( i=0 ; i < nTopicInfo  ; i++)
-	    SendDlgItemMessage(hwnd, ID_HelpLIST, LB_ADDSTRING,
-			       (WPARAM) 0, (LONG) (LPTSTR) helpTopicInfo[i]);
+	    {
+	      strncpy(topic, helpTopicInfo[i],TOPICSIZE);
+	      for ( k= strlen(topic) ; k >=0 ; k--) 
+		{
+		  if ( topic[k]== '@' ) { topic[k]='\0'; break;}
+		}
+	      SendDlgItemMessage(hwnd, ID_HelpLIST, LB_ADDSTRING,
+				 (WPARAM) 0, (LONG) (LPTSTR) topic);
+	    }
 	}
     }
   /* Now redraw the Help list */

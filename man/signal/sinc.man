@@ -18,7 +18,7 @@ x
 : samples of the sinc function
 .SH DESCRIPTION
 Calculate n samples of the function \fVsin(2*pi*fl*t)/(pi*t)\fR
-for \fVt=-n/2:n/2\fR (i.e. centred around the origin).
+for \fVt=-(n-1)/2:(n-1)/2\fR (i.e. centred around the origin).
 .SH EXAMPLE
 .nf
 plot(sinc(100,0.1))

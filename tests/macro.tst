@@ -514,7 +514,7 @@ if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))==0 then pause,end
 //
 //
 text=['aa=1,if a==2 then aa=b(a),end']
-fic=file('open','test_macro_exec','unknown')
+fic=file('open','test_macro_exec','unknown');
 write(fic,text)
 file('close',fic)
 deff('[x]=b(a)','x=a,prod([1 1])','n')

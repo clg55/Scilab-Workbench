@@ -11,7 +11,7 @@ include ../../Makefile.incl.mak
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = scicoslib
-NAM = scicos
+NAM = SCI/macros/scicos
 
 
 
@@ -32,7 +32,7 @@ MACROS=clickin.sci draw.sci drawblock.sci drawlink.sci drawobj.sci drawobjs.sci 
 	getportsiz.sci do_block.sci do_load.sci do_SaveAs.sci do_resize.sci \
 	do_version.sci splitfilepath.sci check_mac.sci countblocks.sci \
 	shiftcors.sci  ctree.sci genmac.sci mkvect.sci \
-	do_newblk.sci setvalue.sci do_label.sci cos2txt.sci \
+	do_newblk.sci setvalue.sci do_label.sci \
 	do_color.sci do_save.sci c_pass3.sci hilite_obj.sci \
 	unhilite_obj.sci do_eval.sci do_exit.sci adjust.sci lnkptrcomp.sci\
 	init_agenda.sci do_terminate.sci do_update.sci bad_connection.sci\
@@ -55,6 +55,6 @@ MACROS=clickin.sci draw.sci drawblock.sci drawlink.sci drawobj.sci drawobjs.sci 
 	do_focus.sci do_xsetech.sci is_split.sci dist2polyline.sci \
 	do_stupidmove.sci do_navigator.sci build_scs_tree.sci whereintree.sci \
 	do_icon_edit.sci CFORTR.sci FORTR.sci getblocktext.sci getblocklink.sci \
-	do_export.sci systexport.sci
+	do_export.sci systexport.sci do_doc.sci f_xsetech.sci dig_bound.sci cosclick.sci
 
 include ../Make.lib.mak

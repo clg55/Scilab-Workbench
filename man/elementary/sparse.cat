@@ -24,14 +24,14 @@ DESCRIPTION
    squeezing out any zero elements. (If X is already sparse sp is X).
 
   sp=sparse(ij,v [,mn])  builds an mn(1)-by-mn(2) sparse matrix with
-  sp(ij(k,1),ij(k,2))=v(k). ij and v must have the same column dimension.  If
-  optional mn parameter is not given the sp matrix dimensions are the max
+  sp(ij(k,1),ij(k,2))=v(k).  ij and v must have the same column dimension.
+  If optional mn parameter is not given the sp matrix dimensions are the max
   value of ij(:,1) and ij(:,2) respectively.
 
   Operations (concatenation, addition, etc,) with sparse matrices are made
   using the same syntax as for full matrices.
 
-  Elementary functions are also available (abs,maxi,sum,diag,...) for sparse
+  Elementary functions are also available (abs,maxi,sum,diag,...)  for sparse
   matrices.
 
   Mixed operations (full-sparse) are allowed. Results are full or sparse

@@ -10,9 +10,13 @@ bin/scilex: scilex-lib
 	if test $$x -ne 0; then \
 		$(RM) $@; \
 		echo "linking"; \
-		$(FC) $(FFLAGS) -o $@ $(DEFAULTS) $(FC_LDFLAGS) \
-			$(LIBR) $(TCLTK_LIBS) \
-			$(XLIBS) $(TERMCAPLIB); \
+		$(FC) $(FFLAGS) -o $@ $(DEFAULTS) $(FC_LDFLAGS) $(LIBR)\
+			$(TCLTK_LIBS) $(XLIBS) $(TERMCAPLIB); \
 	else \
 		echo bin/scilex is up to date ; \
 	fi
+
+
+show	:
+	@echo $(FC) $(FFLAGS) -o $@ $(DEFAULTS) $(FC_LDFLAGS) $(LIBR)\
+		$(TCLTK_LIBS) $(XLIBS) $(TERMCAPLIB);

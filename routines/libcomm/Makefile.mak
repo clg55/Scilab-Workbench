@@ -17,6 +17,8 @@ include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib.mak
 
 buf_dynam.obj: gestion_memoire.h listes_chainees.h buffer_dynamiques.h
@@ -30,7 +32,8 @@ gest_messages.obj: utilitaires.h libCom.h formatage_messages.h \
 list_chainees.obj: listes_chainees.h
 utilitaires.obj: gestion_memoire.h buffer_dynamiques.h utilitaires.h
 
-
-
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile

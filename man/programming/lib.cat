@@ -4,7 +4,7 @@ NAME
   lib - library definition
 
 CALLING SEQUENCE
-  [xlib]=lib('lib_path')
+  xlib=lib('lib_path')
 
 PARAMETERS
 
@@ -20,8 +20,8 @@ DESCRIPTION
   Such a binary file, for example foo.bin can be created by Scilab using the
   command save(lib_path+'/foo.bin',foo).
 
-  Standard Scilab libraries are defined using lib on SCIDIR/macros/* sub-
-  directories
+  Standard Scilab libraries are defined using lib on SCIDIR/macros/* subdi-
+  rectories
 
 EXAMPLE
    deff('[z]=myplus(x,y)','z=x+y')
@@ -43,8 +43,8 @@ EXAMPLE
   A library can now be created with the command:
    xlib=lib(lib_path+'/')
   xlib is then a Scilab variable which can be saved and loaded in a future
-  session of Scilab or defined on-line or put in the startup file. The func-
-  tions in this library are known by Scilab which automatically loads them
-  when necessary.
+  session of Scilab or defined on-line or put in the startup (.scilab) file.
+  The functions in this library are known by Scilab which automatically loads
+  them when necessary.
 SEE ALSO
-  save, deff, getf, whereis
+  genlib, save, deff, getf, whereis

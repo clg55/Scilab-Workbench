@@ -27,5 +27,6 @@ where the \fVCi\fR are arranged in increasing order
 \fVC=coeff(Mp,v)\fR returns the matrix of coefficients with 
 degree in \fVv\fR . (\fVv\fR is a row or column vector).
 .SH SEE ALSO
-poly, degree
+poly, degree, inv_coeff
+
 

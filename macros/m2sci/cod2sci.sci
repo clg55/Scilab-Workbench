@@ -12,6 +12,7 @@ while ilst<nlst then
   select op(1)
   case '1' then //stackp
 //    write(6,'stackp '+op(2));
+
     prev=lst(ilst-1)
     if size(prev,'*')==1 then prev=[prev ' '],end
     if prev(1:2)==['5','25']|prev(1)=='20' then
@@ -29,7 +30,7 @@ while ilst<nlst then
           txt=[txt;expk(1)(:)]
 	else
 //	  if funptr(opk2)<>0&exists('sci_'+opk(2))==0 then opk2='%'+opk(2),end
-	  if funptr(opk2)<>0 then opk2='%'+opk(2),end
+          if funptr(opk2)<>0 then opk2='%'+opk(2),end
 	  w=expk(1)(:)
 	  w(1)=opk2+' = '+w(1)
 	  w($)= w($)+';'
@@ -45,13 +46,22 @@ while ilst<nlst then
         vtps(nv)=list(expk(5),expk(3),expk(4),0)
       else
 	nv=find(opk(2)==vnms(:,2))
-	if nv<>[] then 
-	  vtps(nv)=list(expk(5),expk(3),expk(4),0)
+	if nv==[] then 
+	  nv=size(vnms,1)+1,
+	  vnms(nv,:)=[opk2,opk(2)]
 	end
+	vtps(nv)=list(expk(5),expk(3),expk(4),0)
       end
     else //if size(stk)==1 then
       LHS=[]
       for k=1:lhs
+	if size(stk)<lhs then
+	  msg=['Unexpected problem: incompatible number of lhs arguments'
+	        'between function definition ('+string(size(stk))+') '
+		'and function call           ('+string(lhs)+')']
+	  disp(msg)
+	  pause
+	end
         expk=stk(k);
         opk=lst(ilst);ilst=ilst+1
         opk2=opk(2)
@@ -64,7 +74,13 @@ while ilst<nlst then
         end
         nv=nv($)
         vnms(nv,:)=[opk2,opk(2)]
-        if size(expk)<5 then pause,end
+	if size(expk)<5 then 
+	  msg=['Unexpected problem, may be due to an incorrect '
+	      'translation function']
+	  if type(expk(1))==10 then msg=[msg;'context is :'+expk(1)],end
+	  disp(msg)
+	  pause,
+	end
         vtps(nv)=list(expk(5),expk(3),expk(4),0)
       end
       if stk(1)(2)=='-1' then // variable has  not been previously stored

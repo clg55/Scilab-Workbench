@@ -15,5 +15,5 @@ if rhs == 1 then
 elseif rhs==2 then
   epsr=1.d-10;
 end
-tdom=a(4)
-a=simp(clean(a(2),epsa,epsr)./clean(a(3),epsa,epsr));a(4)=tdom 
+tdom=a('dt')
+a=simp(clean(a('num'),epsa,epsr)./clean(a('den'),epsa,epsr));a('dt')=tdom 

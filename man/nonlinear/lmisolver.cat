@@ -39,7 +39,7 @@ DESCRIPTION
   The function evalfun must return in the list LME the matrices
   G1(X),...,Gp(X) (i.e. LME(i)=Gi(X1,...,Xn), i=1,...,p).  evalfun must
   return in the list LMI the matrices H1(X0),...,Hq(X) (i.e.
-  LMI(j)=Hj(X1,...,Xn), j=1,...,q). evalfun must return in OBJ the value of
+  LMI(j)=Hj(X1,...,Xn), j=1,...,q).  evalfun must return in OBJ the value of
   f(X) (i.e. OBJ=f(X1,...,Xn)).
 
   lmisolver  returns in XLISTF, a list of real matrices, i. e.

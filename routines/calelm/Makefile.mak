@@ -7,7 +7,7 @@ SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/calelm.lib
 
-OBJSC = 
+OBJSC = vfloor.obj vceil.obj  finite.obj 
 
 OBJSF = coshin.obj arcosh.obj  dad.obj dadd.obj  ccopy.obj  rcopy.obj ddif.obj \
 	 dmcopy.obj dmmul.obj dset.obj dsort.obj \
@@ -23,11 +23,13 @@ OBJSF = coshin.obj arcosh.obj  dad.obj dadd.obj  ccopy.obj  rcopy.obj ddif.obj \
 	wwdiv.obj wddiv.obj dwdiv.obj ddrdiv.obj wwrdiv.obj dwrdiv.obj wdrdiv.obj\
 	ivimp.obj intp.obj cusum.obj cupro.obj cuproi.obj rcsort.obj wsort.obj vpythag.obj\
 	calerf.obj gamma.obj ribesl.obj rkbesl.obj rjbesl.obj rybesl.obj psi.obj dlgama.obj\
-	dmsum.obj wmsum.obj dmprod.obj wmprod.obj drdiv.obj dcabs1.obj 
+	dmsum.obj wmsum.obj dmprod.obj wmprod.obj drdiv.obj dcabs1.obj infinity.obj
 
 include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
+
+FFLAGS = $(FC_OPTIONS)
 
 include ../Make.lib.mak
 
@@ -36,3 +38,5 @@ include ../Make.lib.mak
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
 
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile

@@ -11,6 +11,7 @@ c
       integer tops,vol
       integer izs(*)
       real rzs(*)
+      logical allowptr
 c+    
       double precision x(n),f(*),g(n),dzs(*)
       double precision xind

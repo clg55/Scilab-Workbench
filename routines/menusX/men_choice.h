@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 
 /* Data structure to deal with a set of choices */
 

@@ -47,10 +47,10 @@ DESCRIPTION
 
              i  Maximum value must be less or equal to size(x,'*').
 
-          *  r=x(i) with x a matrix with one or more columns designs the
-             column vector r such as r(l) (l from 1 to size(i,'*')) designs
-             the int(i(l)) entry of the column vector formed by the
-             concatenation of the x's columns.
+          *  r=x(i) with x a matrix with one or more columns designs the col-
+             umn vector r such as r(l) (l from 1 to size(i,'*')) designs the
+             int(i(l)) entry of the column vector formed by the concatenation
+             of the x's columns.
 
              i  Maximum value must be less or equal to size(x,'*').
        -  the  :  symbol which stands for "all elements".
@@ -132,10 +132,10 @@ DESCRIPTION
        - a character string associated with a sub-list entry name.
 
 REMARKS
-  For soft coded matrix types such as rational functions and state space
-  linear systems, x(i) syntax may not be used for vector element extraction
-  due to confusion with list element extraction. x(1,j) or x(i,1) syntax must
-  be used.
+  For soft coded matrix types such as rational functions and state space lin-
+  ear systems, x(i) syntax may not be used for vector element extraction due
+  to confusion with list element extraction. x(1,j) or x(i,1) syntax must be
+  used.
 
 EXAMPLE
   // MATRIX CASE

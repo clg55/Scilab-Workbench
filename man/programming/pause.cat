@@ -11,9 +11,9 @@ DESCRIPTION
   variable of the function) are available.  To return to lower session enter
   "return"
 
-  In this mode, [...]=return(...) returns the variables of the argument (...)
-  to lower session with names in the output  [...]. Otherwise, the lower-
-  level variables are protected and cannot be modified.
+  In this mode, [...]=return(...)  returns the variables of the argument
+  (...) to lower session with names in the output  [...]. Otherwise, the
+  lower-level variables are protected and cannot be modified.
 
   The pause is extremely useful for debugging purposes.
 

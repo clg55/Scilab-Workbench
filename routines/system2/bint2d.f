@@ -11,6 +11,7 @@ c
       double precision x,y,xx
       integer       iero
       common/iertwo/iero
+      logical allowptr
 c     
       integer vol,tops,nordre
       data nordre/1/,mlhs/1/

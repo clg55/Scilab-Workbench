@@ -16,11 +16,11 @@ PARAMETERS
 
 DESCRIPTION
   convex_hull finds the convex hull of a given set of n points in the plane.
-  xy is the 2 x n matrix of the (x,y) coordinates of the given points.
-  convex_hull returns in nhull the number of the points of the boundary of
-  the convex hull and in ind the row vector (of size nhull) giving the
-  indices in xy of the points of the boundary. The order in ind corresponds
-  to consecutive points on the boundary.
+  xy is the 2 x n matrix of the (x,y) coordinates of the given points. con-
+  vex_hull returns in nhull the number of the points of the boundary of the
+  convex hull and in ind the row vector (of size nhull) giving the indices in
+  xy of the points of the boundary. The order in ind corresponds to consecu-
+  tive points on the boundary.
 
 EXAMPLE
   ta=[27 27 3 12 11 12 27 26 26 25 25 24 23 23 21 22 21 20 19 18 18];

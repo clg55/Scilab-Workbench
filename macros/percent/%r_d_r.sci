@@ -3,8 +3,9 @@ function f=%r_d_r(s1,s2)
 //!
 // Copyright INRIA
 [s1,s2]=sysconv(s1,s2)
-[num,den]=simp(s1(2).*s2(3),s1(3).*s2(2))
-f=tlist(['r','num','den','dt'],num,den,s1(4))
+[num,den]=simp(s1('num').*s2('den'),s1('den').*s2('num'))
+f=rlist(num,den,s1('dt'))
+
 
 
 

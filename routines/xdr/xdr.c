@@ -51,7 +51,7 @@ static char *rcsid = "$Id: xdr.c,v 1.3 1995/10/22 14:53:51 phk Exp $";
 #define __MSC__
 #endif 
 
-#ifndef __MSC__
+#if !(defined __MSC__) && !(defined __ABSC__)
 #include <rpc/types.h> 
 #include <rpc/xdr.h>
 #else

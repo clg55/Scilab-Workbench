@@ -155,7 +155,8 @@ xset('thickness',thick)
 //xset('pattern',pat)
 
 fnt=xget('font')
-deff('c=scs_color(c)','if flag==''background'' then c=coli,end')
+
+deff('c=scs_color(c)','if flag==''background'' then c=coli,end  ')
 flag='foreground'
 if size(o(2))>8 then //compatibility
   gr_i=o(2)(9)
@@ -180,11 +181,13 @@ if With3D&frame then
   orig=orig+e
   sz=sz-e
 end
+//[%frect1,%frect]=xgetech()
 ierr=execstr(gr_i,'errcatch'),
 if ierr<>0 then 
   message(['Error in Icon defintion';
       'See error message in scilab window'])
 end
+//xsetech(%frect1,%frect)
 xset('pattern',pat)
 xset('font',fnt(1),fnt(2))
 xset('thickness',1)

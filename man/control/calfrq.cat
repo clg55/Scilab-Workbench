@@ -18,8 +18,8 @@ PARAMETERS
 
 DESCRIPTION
   frequency response discretization ; frq is the discretization of
-  [fmin,fmax] such that the peaks in the frequency response are well
-  represented.
+  [fmin,fmax] such that the peaks in the frequency response are well repre-
+  sented.
 
   Default values for fmin and fmax are 1.d-3, 1.d+3 if h is continuous-time
   or 1.d-3, 1/(2*h('dt')) if h is discrete-time.

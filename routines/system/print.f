@@ -618,6 +618,7 @@ c     check for typed lists
 c     
       itype=0
       topk=lk
+      if(gettype(lk).eq.15) return
       ilog=getilist("print",lk,lk,nl,1,ilt)
       call mvptr(topk,ilt)
       if (ilt.ne.0) then

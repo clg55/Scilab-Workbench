@@ -11,14 +11,17 @@ c
       equivalence (x,ix(1))
       logical logops,ok,iflag,istrue,ptover,cremat,cresmat,
      $     vcopyobj
-      integer p,lr,nlr,lcc
+      integer p,lr,nlr,lcc,id(nsiz)
+      integer extrac,insert,semi
       common /basbrk/ iflag
       integer otimer,ntimer,stimer,ismenu
       external stimer,ismenu
       save otimer
+      data extrac /3/,insert/2/,semi/43/
       data otimer/0/
       data equal/50/
 c     
+      itime = 10000
       call xscion(inxsci)
       if (ddt .eq. 4) then
          write(buf(1:8),'(2i4)') pt,rstk(pt)
@@ -47,6 +50,10 @@ c
          iflag=.false.
          goto 91
       endif
+      if(err1.ne.0) then
+c     .  errcatch in exec(function,'errrcatch')
+         if(rstk(pt-1).eq.909) return
+      endif
       if(lc-l0.ne.nc) goto 11
       r=rstk(pt)-610
       goto(46,47,52,56,57,61),r
@@ -55,7 +62,8 @@ c     nouvelle 'operation'
  11   continue
       op=istk(lc)
       goto(20, 25, 40, 42, 30, 41, 45, 49, 49, 55,
-     &     15, 90, 95, 100,105,110,120,130,140,150) ,op
+     &     15, 90, 95, 100,105,110,120,130,140,150,
+     &     160,170,180) ,op
 c     matfns
       if(op.ge.100) goto 80
 c     return
@@ -74,12 +82,20 @@ c     de boucle
          goto 998
       endif
 c     
+      if(op.eq.0) then
+c     nop
+         lc=lc+istk(lc+1)
+         goto 11
+      endif
  15   continue
       call error(60)
       return
 c     
  20   continue
       call stackp(istk(lc+1),0)
+c     store info if printing is required see code 22
+      call putid(id,istk(lc+1))
+      kid=fin
       lc=lc+1+nsiz
       goto 10
 c     
@@ -98,7 +114,22 @@ c
          if(fun.eq.0) then
             call error(4)
          else
-            call error(110)
+c     .     referenced name was function at compile time it is now a
+c     .     primitive. Modify the code for further use
+
+c     .     change current  opcode to nop 
+            istk(lc)=0
+            istk(lc+1)=nsiz+3
+            lc=lc+nsiz+3
+c     .     change the following to matfn
+            
+            op=fun*100
+            istk(lc)=op
+            istk(lc+1)=istk(lc+2)-1
+            istk(lc+2)=istk(lc+3)
+            istk(lc+3)=fin
+            goto 80
+c           call error(110)
          endif
          lc=lc+nsiz+3
          goto 10   
@@ -109,11 +140,13 @@ c
       if(fin.gt.0) goto 65
       goto 10
 c     
-c     allops
+c     allops 
  30   fin=istk(lc+1)
       rhs=istk(lc+2)
       lhs=istk(lc+3)
       lc=lc+4
+      
+      if(fin.eq.extrac.or.fin.eq.insert) call adjustrhs
       pt=pt+1
       rstk(pt)=601
       if(istk(lc).eq.1) then
@@ -131,19 +164,24 @@ c     *call* allops
 c     
 c     string
  40   n=istk(lc+1)
-      top=top+1
-      if (cresmat("run",top,1,1,n)) then 
-         call getsimat("run",top,top,mm1,nn1,1,1,lr,nlr)         
-         call icopy(n,istk(lc+2),1,istk(lr),1)
+      if(err1.le.0) then
+         top=top+1
+         if (cresmat("run",top,1,1,n)) then 
+            call getsimat("run",top,top,mm1,nn1,1,1,lr,nlr)         
+            call icopy(n,istk(lc+2),1,istk(lr),1)
+         endif
       endif
       lc=lc+n+2
       goto 10
+c
 c     num
- 41   ix(1)=istk(lc+1)
-      ix(2)=istk(lc+2)
-      top=top+1
-      if (cremat("run",top,0,1,1,lr,lcc)) then 
-         stk(lr)=x
+ 41   if(err1.le.0) then
+         ix(1)=istk(lc+1)
+         ix(2)=istk(lc+2)
+         top=top+1
+         if (cremat("run",top,0,1,1,lr,lcc)) then 
+            stk(lr)=x
+         endif
       endif
       lc=lc+3
       goto 10
@@ -184,7 +222,7 @@ c
       if(pstk(pt).ne.0) then
          lct(8)=ids(2,pt)
          if (inxsci.eq.1) then
-            ntimer=stimer()
+            ntimer=stimer()/itime
             if (ntimer.ne.otimer) then
                call sxevents()
                otimer=ntimer
@@ -327,7 +365,7 @@ c
          ids(2,pt)=nc
          rstk(pt)=616
          if (inxsci.eq.1) then
-            ntimer=stimer()
+            ntimer=stimer()/itime
             if (ntimer.ne.otimer) then
                call sxevents()
                otimer=ntimer
@@ -356,11 +394,9 @@ c     fin if while select/case
 c     
 c     macro
  65   rhs=max(istk(lc+2)-1,0)
-      if(rstk(pt).eq.501) then
-         rhs=rhs+ids(5,pt)
-         ids(5,pt)=0
-      endif
+      call adjustrhs
       lhs=istk(lc+3)
+c
       lc=lc+4
 c     
       if ( ptover(1,psiz)) goto 10 
@@ -378,7 +414,7 @@ c     *call* macro
 c     
  70   continue
       if (inxsci.eq.1) then
-         ntimer=stimer()
+         ntimer=stimer()/itime
          if (ntimer.ne.otimer) then
             call sxevents()
             otimer=ntimer
@@ -416,10 +452,7 @@ c
 c     
  80   fun=op/100
       rhs=istk(lc+1)
-      if(rstk(pt).eq.501) then
-         rhs=rhs+ids(5,pt)
-         ids(5,pt)=0
-      endif
+      call adjustrhs
       lhs=istk(lc+2)
       fin=istk(lc+3)
       lc=lc+4
@@ -536,12 +569,16 @@ c     gestion des points d'arrets dynamiques
             endif
  106      continue
       endif
- 107   continue
+ 107  continue
+c
+      if (mod(lct(4)/2,2).eq.1) then
+         call prompt(lct(4)/4)
+      endif
 c
       lct(8)=lct(8)+1
       lc=lc+1
       if (inxsci.eq.1) then
-         ntimer=stimer()
+         ntimer=stimer()/itime
          if (ntimer.ne.otimer) then
             call sxevents()
             otimer=ntimer
@@ -614,8 +651,33 @@ c
       endif
       fun = 99
       goto 10
-c
 
+c
+c     begrhs
+c
+ 160  continue
+      lc=lc+1
+      pt=pt+1
+      rstk(pt)=617
+      pstk(pt)=0
+      goto 10
+c
+c     printmode
+c
+ 170  continue
+c     print stored variable
+      if(lct(4).ge.0.and.istk(lc+1).ne.semi.and.kid.ne.0) then
+         call print(id,kid,wte)
+      endif
+      lc=lc+2
+      goto 10
+
+ 180  continue
+c     name2var
+      call name2var(istk(lc+1))
+      lc=lc+nsiz+1
+      goto 10
+c
  998  continue
       lhs=0
  999  continue
@@ -626,4 +688,17 @@ c
       fun=0
       return
 c     
+      end
+      subroutine adjustrhs
+      include '../stack.h'
+c     adjust rhs
+      if(rstk(pt).eq.617) then
+         rhs=rhs+pstk(pt)
+         pt=pt-1
+      elseif(rstk(pt).eq.501) then
+c     retained for 2.4.1 compatiblity 
+         rhs=rhs+ids(5,pt)
+         ids(5,pt)=0
+      endif
+      return
       end

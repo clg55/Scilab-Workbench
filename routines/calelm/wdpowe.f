@@ -38,7 +38,7 @@ c
                ri=0.0d+0
             elseif(p.lt.0.0d+0) then
                ri=0.0d+0
-               rr=1.0d0/ri
+               rr=infinity(ri)
                ierr=2
             else
                rr=1.0d+0

@@ -24,14 +24,14 @@ PARAMETERS
 
 DESCRIPTION
   F=stabil(A,B,alfa) returns a gain matrix F such that A+B*F is stable if
-  pair (A,B) is stabilizable. Assignable poles are set to
+  pair (A,B) is stabilizable.  Assignable poles are set to
   alfa(1),alfa(2),....  If (A,B) is not stabilizable a warning is given and
   assignable poles are set to alfa(1),alfa(2),....  If alfa is a number all
   eigenvalues are set to this alfa (default value is alfa=-1).
 
-  K=stabil(Sys,alfa,beta) returns K, a compensator for Sys such that (A,B)-
-  controllable eigenvalues are set to alfa and (C,A)-observable eigenvalues
-  are set to beta.
+  K=stabil(Sys,alfa,beta) returns K, a compensator for Sys such that
+  (A,B)-controllable eigenvalues are set to alfa and (C,A)-observable eigen-
+  values are set to beta.
 
   All assignable closed loop poles (which are given by the eigenvalues of
   Aclosed=h_cl(Sys,K) are set to alfa(i)'s and beta(j)'s.

@@ -24,6 +24,8 @@ include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib.mak
 
 metanet.obj: ../machine.h ../libcomm/libCalCom.h ../libcomm/libCom.h
@@ -37,7 +39,8 @@ transc.obj: ../machine.h
 myhsearch.obj: mysearch.h
 metane.obj : ../stack.h
 
-
-
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile

@@ -13,8 +13,8 @@ PARAMETERS
 
   f_l  : can be "loren" or lorenz. it is the name of the external for the
        Lorenz system.  "loren" will use a Fortran coded version of the lorenz
-       system and arnold will and loren will use a Scilab coded
-       version.lorentz is the Scilab macro which code the lorenz system.
+       system and arnold will and loren will use a Scilab coded ver-
+       sion.lorentz is the Scilab macro which code the lorenz system.
         This macro is loaded when calling lotest.
 
   ilof, ilo

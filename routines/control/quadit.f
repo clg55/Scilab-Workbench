@@ -1,11 +1,10 @@
-C/MEMBR ADD NAME=QUADIT,SSI=0
       subroutine quadit(uu, vv, nz)
 c variable-shift k-polynomial iteration for a
 c quadratic factor converges only if the zeros are
 c equimodular or nearly so.
 c uu,vv - coefficients of starting quadratic
 c nz - number of zero found
-      common /global/ p, qp, k, qk, svk, sr, si, u,
+      common /gloglo/ p, qp, k, qk, svk, sr, si, u,
      * v, a, b, c, d, a1, a2, a3, a6, a7, e, f, g,
      * h, szr, szi, lzr, lzi, eta, are, mre, n, nn
        double precision p(101), qp(101), k(101),

@@ -12,7 +12,7 @@
  * since we  are in scilab 
  * the pointer transmitted to f_ is an istk(il1) it can in fact contain 
  * something as long as a double 
- * Copyright INRIA
+ * Copyright ENPC (Chancelier)
  */
 
 
@@ -143,8 +143,8 @@ char *eMatrix;
   MatrixPtr Matrix = (MatrixPtr) eMatrix;
   if (Matrix->Error == spSINGULAR OR Matrix->Error == spSMALL_PIVOT )
     {      
-	cout("A matrix is singular or ill conditioned ");
-	cout("result will be fine only if b is in Im(A)");
+	Cout("A matrix is singular or ill conditioned ");
+	Cout("result will be fine only if b is in Im(A)");
     }
   return(1);
 }

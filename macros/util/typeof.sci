@@ -6,6 +6,15 @@ case 2 then tf='polynomial';
 case 4 then tf='boolean';
 case 5 then tf='sparse';
 case 6 then tf='boolean sparse';
+case 7 then tf='Matlab sparse';
+case 8 then 
+  it=inttype(object)
+  tf=''
+  if int(it/10)==1 then
+    tf='u'
+    it=modulo(it,10)
+  end
+  tf=tf+'int'+string(8*it)
 case 10 then tf='string';
 case 11 then tf='function';
 case 13 then tf='function';

@@ -9,8 +9,8 @@ F2C=$(SCIDIR1)\bin\f2c
 
 include ../../Makefile.incl.mak 
 
-FFLAGS = $(FC_OPTIONS) 
-CFLAGS = $(CC_OPTIONS) -DFORDLL  -I$(SCIDIR)/routines/f2c
+FFLAGS = $(FC_OPTIONS) -DFORDLL 
+CFLAGS = $(CC_OPTIONS) -DFORDLL 
 
 all:: info
 

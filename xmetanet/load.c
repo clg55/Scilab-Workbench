@@ -77,7 +77,7 @@ void NewGraph ()
 {
   char name[MAXNAM];
 
-  sprintf(Description,"Graph name : ");
+  sprintf(Description,"Graph name: ");
   if (!MetanetDialog("",name,Description)) return;
   if (strcmp(name,"") == 0) return;
   FindGraphNames();

@@ -4,30 +4,29 @@
 Matplot - 2D plot of a matrix using colors 
 .SH CALLING SEQUENCE
 .nf
-Matplot(A,[strf,rect,nax])
+Matplot(a,[strf,rect,nax])
 .fi
 .SH PARAMETERS
-.TP 10
-A
+.TP 3
+a
 : real matrix of size (n1,n2).
 .TP
 strf,rect,nax
-: optional arguments, ( see \fVplot2d\fR) 
+: optional arguments, see \fVplot2d\fR.
 .SH DESCRIPTION
-The entries of matrix \fVint(A)\fR are used as colormap entries in 
+The entries of matrix \fVint(a)\fR are used as colormap entries in 
 the current colormap. The color associated to \fVa(i,j)\fR is used 
-do draw a small square of length 1 and with center at location \fV(x=j,y=(n2-i+1))\fR.
+do draw a small square of length 1 with center at location 
+\fV(x=j,y=(n2-i+1))\fR.
+
 Enter the command \fVMatplot()\fR to see a demo.
 .SH EXAMPLE 
 .nf 
-Matplot([1,2,3;4,5,6])
-// draw the colormap 
+Matplot([1 2 3;4 5 6])
+// draw the current colormap 
 Matplot((1:xget("lastpattern")))
 .fi
 .SH SEE ALSO
-grayplot
+colormap, plot2d
 .SH AUTHOR
-J.Ph.C..
-
-
-
+J.Ph.C.

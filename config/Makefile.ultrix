@@ -20,3 +20,9 @@ bin/scilex: scilex-lib
 	else \
 		echo bin/scilex is up to date ;\
 	fi
+
+show	:
+	@echo 		$(FC) -o $@ $(DEFAULTS) $(LIBR) $(FC_LDFLAGS) $(TCLTK_LIBS) \
+			$(XLIBS) $(TERMCAPLIB)  ;
+
+	

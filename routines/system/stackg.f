@@ -8,6 +8,7 @@ c fin=0  : oui retour de la variable  fin=-1
 c          non fin=0
 c fin=-1 : oui fin=numero de la variable
 c          non fin=0
+c fin=-6 : similaire a fin=-1, pour la fonction global uniquement
 c fin=-2 : extraction ou recherche d'une macro pour execution
 c          oui  retour d'une variable de type indirect fin=-1
 c          non fin=0
@@ -16,18 +17,21 @@ c          uniquement  (insertion)
 c          oui : retour d'une variable de type indirect fin=-1
 c          non : retour d'une matrice vide fin=-1
 c fin=-4 : demande de retour d'une variable de type indirect
+c fin=-5 : recherche dans la zone globale
+c          oui : fin=numero de la variable
+c          non fin=0
 c     =============================================================
 c
 c     Copyright INRIA
       INCLUDE '../stack.h'
       logical compil,vcopyobj
       integer id(nsiz),fun1,vol,vk
+      integer cbot
 c     
       logical eqid,local
-      integer iadr,sadr
+      integer iadr
 c     
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
 c     
       if (ddt .eq. 4) then
          call cvname(id,buf,1)
@@ -46,17 +50,22 @@ c
       endif
 c     
 c     set environnement where variable is searched
+      cbot=bot
       if(fin.eq.-3.and.(macr.ne.0.or.paus.ne.0)) then
          k=lpt(1)-(13+nsiz)
          last=lin(k+5)-1
          local=.true.
-      else
+      elseif(fin.ne.-5) then
          last=isiz-1
+         local=.false.
+      else
+         last=gtop
+         cbot=isiz+2
          local=.false.
       endif
 c     
 c     look for id in the defined variables
-      k=bot-1
+      k=cbot-1
  21   k = k+1
       if(k.gt.last) then
 c     variable has not been found in the variables
@@ -73,7 +82,22 @@ c     variable has not been found in the variables
       if (.not.eqid(idstk(1,k), id)) go to 21
 c
 c     variable has been found in position k
-      if(fin.eq.-1) then
+      if(infstk(k).eq.2) then
+c     .  found a pointer on a global variable
+         kg=istk(iadr(lstk(k))+2)
+c     .  does global variable variable really exists
+         if (kg.gt.gtop.or.(.not.eqid(idstk(1,kg),id))) then
+            if (fin.ne.-6) then
+               call putid(ids(1,pt+1),id)
+               call error(228)
+            endif
+            fin=0
+            return
+         endif
+         if(fin.eq.-3) k=kg
+      endif
+
+      if(fin.eq.-1.or.fin.eq.-5.or.fin.eq.-6) then
          fin=k
          fun=0
          return
@@ -137,26 +161,17 @@ c     if indirect variable copy the variable pointed by
       endif
  25   top = top+1
       if (.not.vcopyobj(' ',k,top)) return
-      infstk(top)=0
+      infstk(top)=infstk(k)
+      if(infstk(top).ne.2) infstk(top)=0
       call putid(idstk(1,top),id)
       go to 99
 c     
  31   continue
 c     return indirect variable
-      top=top+1
-      il=iadr(lstk(top))
-      infstk(top)=0
+      call createref(ilk,k,lstk(k+1)-lstk(k))
+      infstk(top)=infstk(k)
+      if(infstk(top).ne.2) infstk(top)=0
       call putid(idstk(1,top),id)
-      if(istk(ilk).gt.0) then
-         istk(il)=-istk(ilk)
-         istk(il+1)=lk
-         istk(il+2)=k
-      else
-         istk(il)=istk(ilk)
-         istk(il+1)=istk(ilk+1)
-         istk(il+2)=istk(ilk+2)
-      endif
-      lstk(top+1)=sadr(il+3)
       goto 99
 c     
  99   fin = -1

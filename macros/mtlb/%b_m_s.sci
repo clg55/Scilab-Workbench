@@ -1,5 +1,3 @@
 function r=%b_m_s(a,b)
 // Copyright INRIA
-A=zeros(a)
-A(a)=1
-r=A*b
+r=bool2s(a)*b

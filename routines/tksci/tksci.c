@@ -61,7 +61,7 @@ int OpenTksci()
   /* test SCI validity) */
   if (SciPath==NULL)
     {
-      cout("The SCI environment variable is not set.\nTK initialisation failed !\n");
+      Cout("The SCI environment variable is not set.\nTK initialisation failed !\n");
       return(1);
     }
 
@@ -74,7 +74,7 @@ int OpenTksci()
   tmpfile = fopen(TkScriptpath,"r");
   if (tmpfile==NULL) 
   {
-    cout("Unable to find TK initialisation scripts \n. Check your SCI environment variable.\nTK initialisation failed !\n");
+    Cout("Unable to find TK initialisation scripts \n. Check your SCI environment variable.\nTK initialisation failed !\n");
     return(1);
   }
   else fclose(tmpfile);
@@ -83,7 +83,7 @@ int OpenTksci()
   tmpdir=opendir(SciPath);
   if (tmpdir==NULL) 
     {
-      cout("The SCI environment variable is not set properly.\nTK initialisation failed !\n");
+      Cout("The SCI environment variable is not set properly.\nTK initialisation failed !\n");
       return(1);
     }
   else closedir(tmpdir);
@@ -94,7 +94,7 @@ int OpenTksci()
   tmpfile = fopen(TkScriptpath,"r");
   if (tmpfile==NULL) 
   {
-    cout("Unable to find TK initialisation scripts \n. Check your SCI environment variable.\nTK initialisation failed !\n");
+    Cout("Unable to find TK initialisation scripts \n. Check your SCI environment variable.\nTK initialisation failed !\n");
     return(1);
   }
   else fclose(tmpfile);
@@ -136,7 +136,7 @@ int OpenTksci()
 
 
 
-void pipo()
+void tkpipo()
 {
   
   
@@ -145,7 +145,7 @@ void pipo()
 void inittk()
 {
   if (0==1)
-    {pipo();}
+    {tkpipo();}
   if ( OpenTksci()==0 ) TK_Started==1;
 
 }

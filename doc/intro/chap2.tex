@@ -941,7 +941,8 @@ contains the source code of the functions and a set of {\tt .bin} files
 which contains the compiled code of the functions. The Makefile invokes
 {\tt scilab} for compiling the functions and generating the {\tt .bin}
 files. The compiled functions of a library are automatically loaded 
-into Scilab at their first call.
+into Scilab at their first call. To build a library the command {\tt
+genlib} can be used (\verb!help genlib!).
 
 \section{Objects}
 We conclude this chapter by noting that the function {\tt typeof}
@@ -961,6 +962,7 @@ form ({\tt syslin} lists).
 \item{\tt boolean sparse} for sparse boolean matrices.
 \item{\tt list} 	for ordinary lists.
 \item{\tt tlist}        for typed lists.
+\item{\tt tlist}        for mlists.
 \item{\tt state-space (or rational)} for syslin lists.
 \item{\tt library} 	for library definition.
 \end{itemize}
@@ -1026,6 +1028,6 @@ rows and columns or by boolean indices or by using the \verb!$! symbol.
 
 \subsection{Indexing in lists}
 The following session illustrates how to create lists and
-insert/extract entries in {\tt lists} and {\tt tlists}.
+insert/extract entries in {\tt list} and {\tt tlist} or {\tt mlist}.
+Enter {\tt help insertion} and {\tt help extraction} for additinal examples.
 \input{diary/list.dia}
-

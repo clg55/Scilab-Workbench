@@ -666,16 +666,25 @@ errorcleanup:
     for ( i = 0 ; i <  NUMMENU ; i++) 
       {
 	if (lpmw->macro[i] != (BYTE *) 0)
-	  LocalFree(lpmw->macro[i]);
+	  {
+	    LocalFree(lpmw->macro[i]);
+	    lpmw->macro[i]= (BYTE *) 0;
+	  }
       }
     GlobalUnlock(hmacro);
     GlobalFree(hmacro);
     lpmw->macro = (BYTE  **)NULL;
   }
   if (lpmw->szPrompt != (char *)NULL)
-    LocalFree(lpmw->szPrompt);
+    {
+      LocalFree(lpmw->szPrompt);
+      lpmw->szPrompt = (char *) NULL;
+    }
   if (lpmw->szAnswer != (char *)NULL)
-    LocalFree(lpmw->szAnswer);
+    {
+      LocalFree(lpmw->szAnswer);
+      lpmw->szAnswer = (char *) NULL;
+    }
 
 cleanup:
   if (buf != (char *)NULL)    LocalFree(buf);
@@ -700,16 +709,25 @@ void CloseMacros(LPTW lptw)
       if (hglobal) {
 	for ( i = 0 ; i <  NUMMENU ; i++) 
 	  if ( lpmw->macro[i] != (BYTE*) 0)
-	    LocalFree(  lpmw->macro[i]);
+	    {
+	      LocalFree(  lpmw->macro[i]);
+	      lpmw->macro[i]= (BYTE *) 0;
+	    }
 	GlobalUnlock(hglobal);
 	GlobalFree(hglobal);
 	lpmw->macro = (BYTE  **)NULL;
       }
     }
   if (lpmw->szPrompt != (char *)NULL)
-    LocalFree(lpmw->szPrompt);
+    {
+      LocalFree(lpmw->szPrompt);
+      lpmw->szPrompt = (char *)NULL;
+    }
   if (lpmw->szAnswer != (char *)NULL)
-    LocalFree(lpmw->szAnswer);
+    {
+      LocalFree(lpmw->szAnswer);
+      lpmw->szAnswer = (char *)NULL;
+    }
 }
 
 

@@ -1,5 +1,5 @@
       subroutine parab(nn,x1,x2,xres,itype,name) 
-c     Copyright INRIA
+c     Copyright ENPC 
       double precision x1,x2
       double precision xres(2)
       integer itype,nn

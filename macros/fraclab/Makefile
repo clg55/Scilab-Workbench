@@ -8,7 +8,7 @@ include ../../Makefile.incl
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = fraclablib
-NAM = fraclab
+NAM = SCI/macros/fraclab
 
 
 MACROS = \
@@ -56,12 +56,8 @@ MACROS = \
 	mbmlevinson.sci\
 	mexhat.sci\
 	morlet.sci\
-	mtlb_diff.sci\
 	mtlb_fftshift.sci\
-	mtlb_fliplr.sci\
-	mtlb_flipud.sci\
 	mtlb_hilbert.sci\
-	mtlb_isreal.sci\
 	mtlb_log2.sci\
 	mtlb_rem.sci\
 	nextpowQ.sci\

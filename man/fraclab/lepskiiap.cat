@@ -12,8 +12,8 @@ NAME
   when  j increases, bias b_j increases as variance sigma2_j decreases.
 
 Usage
-  [K_star,j_hat,I_c_j_min,I_c_j_max,E_c_j_hat_min,E_c_j_hat_max]=
-  lepskiiap(theta_hat_j,[sigma2_j,K])
+  [K_star,j_hat,I_c_j_min,I_c_j_max,E_c_j_hat_min,E_c_j_hat_max]= lepski-
+  iap(theta_hat_j,[sigma2_j,K])
 
 Input parameters
        o theta_hat_j : real vector [1,J] or [J,1] Contains the sequence of
@@ -73,7 +73,7 @@ Matlab
   plot(f_t);hold on;plot(Y_t);
   title('White noise model Y(t)');
   xlabel('index: t');
-  ylabel('Y(t)=f(t)+gma W(t)');
+  ylabel('Y(t)=f(t)+ma W(t)');
   % estimation for t=t_0=floor(T/2)
   t_0=floor(T/2)+1;
   Y_t=f_t+sigma*W_t;

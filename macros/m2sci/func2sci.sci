@@ -19,9 +19,12 @@ txt=[]
 
 if exists('sci_'+op(2))==1 then // a translation function exists
   execstr('[stkr,txt,top1]=sci_'+op(2)+'()')
+  
 elseif or(op(2)==same) then // identical syntax
   [stkr,txt,top1]=sci_gener(op(2))
-else 
+elseif res_path==[] then
+  [stkr,txt,top1]=sci_gener(op(2))
+else
   sci_file=res_path+'sci_'+op(2)+'.sci'
   ierr=execstr('getf(sci_file)','errcatch')
   if ierr==0 then // a translation function exists
@@ -35,7 +38,12 @@ else
     elseif or(op(2)==nametbl)
       [stkr,txt,top1]=sci_gener(op(2))
     else
-      mfile2sci(path,res_path,%f,%t)
+      fnam=op(2)
+      scipath=res_path+fnam+'.sci'
+      scepath=res_path+fnam+'.sce'
+      if newest(path,scipath)==path&newest(path,scepath)==path then
+	mfile2sci(path,res_path,%f,%t)
+      end
       getf(sci_file)
       execstr('[stkr,txt,top1]=sci_'+op(2)+'()')
     end
@@ -53,5 +61,8 @@ if lhs>1 then
 else
   top=top+1
   stk(top)=stkr
+end
+if op(2)=='global' then
+  [vnms,vtps]=resume(vnms,vtps)
 end
 

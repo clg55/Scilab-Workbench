@@ -230,7 +230,7 @@ if norm(dres1(yy1(1,:),yy1(2:3,:),yy1(4:5,:)),1)>1.d-6 then bugmes();quit;end
  
 yy2=dassl([y0,y0d],t0,t,'dres1',info);   //=yy0
  
-if norm(dres1(yy2(1,:),yy2(2:3,:),yy2(4:5,:)),1)>1.d-6 then bugmes();quit;end
+if norm(dres1(yy2(1,:),yy2(2:3,:),yy2(4:5,:)),1)>1.4d-6 then bugmes();quit;end
  
 // fortran routines dres1 and djac1 in dir. routines/default, with jacobian
  
@@ -288,10 +288,10 @@ if norm(dres1(yy7(1,:),yy7(2:3,:),yy7(4:5,:)),1)>1.d-5 then bugmes();quit;end
  
 //   x(0)=x0;   xdot(0)=xd0
  
-Eps=1.e-10
+Eps=1.e-9
  Eps  =
  
-    1.000D-10  
+    1.000D-09  
  
 rand('seed',0);
  

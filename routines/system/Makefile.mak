@@ -10,7 +10,7 @@ include ../../Version.incl
 LIBRARY = $(SCIDIR)/libs/system.lib
 
 OBJSC = System.obj System2.obj Calelm.obj Sun.obj Intersci.obj Blas.obj Lapack.obj helpap.obj \
-	scicurdir.obj
+	scicurdir.obj 
 
 OBJSF = allops.obj  banier.obj sascii.obj \
 	clause.obj comand.obj compcl.obj   \
@@ -26,18 +26,22 @@ OBJSF = allops.obj  banier.obj sascii.obj \
 	isbrk.obj scilab.obj sciquit.obj bexec.obj scilines.obj \
 	mrknmd.obj mkindx.obj mklist.obj cmdstr.obj setgetmode.obj\
 	typ2cod.obj israt.obj funnam.obj dspdsp.obj lspdsp.obj wspdsp.obj \
-	xerbla.obj algebre.obj
+	xerbla.obj algebre.obj storeglobal.obj setippty.obj allowptr.obj copyvar.obj \
+	lst2vars.obj createref.obj
 
 include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS) 
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib.mak
-
-
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
+
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
 
 include Make.banier.mak
 

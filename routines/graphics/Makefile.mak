@@ -6,13 +6,13 @@ include ../../Version.incl
 
 LIBRARY = $(SCIDIR)/libs/graphics.lib
 
-OBJSC = periWin.obj periPos.obj periFig.obj Xcall.obj Xcall1.obj \
+OBJSC = periWin.obj periPos.obj periFig.obj periGif.obj Xcall.obj Xcall1.obj \
 	Contour.obj Plo3d.obj Math.obj Axes.obj Champ.obj Plo2d.obj \
 	Plo2d1.obj Plo2d2.obj Plo2d3.obj Plo2d4.obj Plo2dEch.obj Rec.obj Gray.obj \
 	Alloc.obj FeC.obj RecLoad.obj RecSave.obj Tests.obj Actions.obj \
-	gsort.obj qsort.obj
+	gsort.obj qsort.obj nues1.obj
 
-OBJSF =
+OBJSF = 
 
 include ../../Makefile.incl.mak
 
@@ -56,3 +56,4 @@ periX11.obj: Math.h periX11.h version.h color.h
 printdlg.obj: ../machine.h
 xwidgets.obj: Math.h
 gsort.obj: Math.h gsort-int.h gsort-double.h
+nues1.obj: Math.h ../machine.h

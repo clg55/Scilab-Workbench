@@ -4,7 +4,7 @@ txt=[]
 if rhs==1 then
   s=stk(top)
   if lhs==1 then
-    write(logfile,'Warning: No scilab eqivalent to qr with only one lhs arg using mtlb_qr')
+    set_infos('No scilab eqivalent to qr with only one lhs arg using mtlb_qr',1)
     stk=list('mtlb_qr('+s(1)+')','0',s(3),s(4),'1')
   elseif lhs==2 then
     stk=list(list('qr('+s(1)+')','-1',s(3),s(3),'1'),..
@@ -16,7 +16,7 @@ if rhs==1 then
 else  //econmy size
   s=stk(top-1)
   if lhs==1 then
-    write(logfile,'Warning: No scilab eqivalent to qr with only one lhs arg using mtlb_qr')
+    set_infos('No scilab eqivalent to qr with only one lhs arg using mtlb_qr',1)
     stk=list('mtlb_qr('+s(1)+')','0',s(3),s(4),'1')
   elseif lhs==2 then
     [q,r]=lhsvarsnames()

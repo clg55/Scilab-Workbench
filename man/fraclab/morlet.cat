@@ -15,7 +15,7 @@ Input parameters
          the wavelet
        o N : Positive integer Half length of the wavelet transform. Default
          value corresponds to a total length of 4.5 periods.
-       o analytic : boolean (0/1) under Matalb or (%F/%T) under Scilab. 0 or
+       o analytic : boolean (0/1) under Matalb or (%F/%T) under Scilab.  0 or
          %F : real Morlet wavelet 1 or %T : analytic Morlet wavelet
 Output parameters
        o wavelet : real or complex vector [1,2*N+1] Morlet wavelet in time.

@@ -242,6 +242,10 @@ extern void Tape_ReplayNewScale  _PARAMS((char *unused, integer *winnumber, inte
  extern void StoreContour  _PARAMS((char *, double *, double *, double *, integer *, integer *, integer *, integer *, double *, double *teta, double *, char *, integer *, double *, double *zlev)); 
  extern void StoreContour2D  _PARAMS((char *, double *, double *, double *, integer *, integer *, integer *, integer *, double *, integer *, char *, char *, double *, integer *)); 
  extern void StoreGray  _PARAMS((char *, double *, double *, double *, integer *, integer *, char *, double *, integer *)); 
+
+ extern void StoreGray1  _PARAMS((char *, double *, integer *, integer *, char *, double *, integer *)); 
+ extern void StoreGray2  _PARAMS((char *, double *, integer *, integer *, double *)); 
+
  extern void StoreChamp  _PARAMS((char *, double *, double *, double *, double *, integer *, integer *, char *, double *, double *)); 
  extern int CopyVectI  _PARAMS((int **, int *, integer )); 
  extern int CopyVectLI  _PARAMS((integer **, integer *, int )); 
@@ -497,6 +501,86 @@ extern void C2F(gemptyPos)  _PARAMS((integer *, integer *, integer *, double *))
  extern void C2F(gethidden3dPos)  _PARAMS((integer *, integer *num, integer *, double *)); 
  extern void C2F(semptyPos)  _PARAMS((integer *, integer *, integer *, integer *)); 
 	
+	/* periGif.c */
+
+extern void C2F(gemptyGif)  _PARAMS((integer *, integer *, integer *, double *)); 
+ extern void C2F(scilabgcgetGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(scilabgcsetGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(ScilabGCGetorSetGif)  _PARAMS((char *, integer flag, integer *, integer *, integer *, integer *, integer *, integer *, integer *, double *)); 
+ extern void C2F(displaystringGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *angle, double *, double *, double *)); 
+ extern void C2F(boundingboxGif)  _PARAMS((char *, integer *, integer *, integer *rect, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(drawlineGif)  _PARAMS((integer *x1, integer *, integer *, integer *)); 
+ extern void C2F(drawsegmentsGif)  _PARAMS((char *, integer *, integer *vy, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(drawarrowsGif)  _PARAMS((char *, integer *, integer *vy, integer *, integer *as, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(xselgraphicGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(drawrectanglesGif)  _PARAMS((char *, integer *vects, integer *fillvect, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(drawrectangleGif)  _PARAMS((char *, integer *, integer *, integer *width, integer *height, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(fillrectangleGif)  _PARAMS((char *, integer *, integer *, integer *width, integer *height, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(fillarcsGif)  _PARAMS((char *, integer *vects, integer *fillvect, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(drawarcsGif)  _PARAMS((char *, integer *vects, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(drawarcGif)  _PARAMS((char *, integer *, integer *, integer *width, integer *height, integer *angle1, integer *angle2, double *, double *, double *, double *)); 
+ extern void C2F(fillarcGif)  _PARAMS((char *, integer *, integer *, integer *width, integer *height, integer *angle1, integer *angle2, double *, double *, double *, double *)); 
+ extern void C2F(xendgraphicGif)  _PARAMS((void)); 
+ extern void C2F(drawpolylinesGif)  _PARAMS((char *, integer *vectsx, integer *vectsy, integer *rawvect, integer *, integer *p, integer *, double *, double *, double *, double *)); 
+ extern void C2F(fillpolylinesGif)  _PARAMS((char *, integer *vectsx, integer *vectsy, integer *fillvect, integer *, integer *p, integer *, double *, double *, double *, double *)); 
+ extern void C2F(xendGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(drawpolylineGif)  _PARAMS((char *, integer *, integer *, integer *vy, integer *closeflag, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(fillpolylineGif)  _PARAMS((char *, integer *, integer *, integer *vy, integer *closeareaflag, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(drawpolymarkGif)  _PARAMS((char *, integer *, integer *, integer *vy, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(initgraphicGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void InitScilabGCGif  _PARAMS((integer *, integer *, integer *, integer *)); 
+ extern void C2F(clearwindowGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(drawaxisGif)  _PARAMS((char *, integer *, integer *nsteps, integer *, integer *initpoint, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(displaynumbersGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(WriteGenericGif)  _PARAMS((char *, integer nobj, integer sizeobj, integer *, integer *vy, integer sizev, integer flag, integer *fvect)); 
+ extern void C2F(WriteGeneric1Gif)  _PARAMS((char *, integer nobjpos, integer objbeg, integer sizeobj, integer *, integer *vy, integer flag, integer *fvect)); 
+ extern void C2F(xpauseGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(Write2VectGif)  _PARAMS((integer *, integer *vy, integer from, integer, char *, integer flag, integer fv)); 
+ extern void C2F(xsetfontGif)  _PARAMS((integer *, integer *, integer *, integer *)); 
+ extern void C2F(xgetfontGif)  _PARAMS((integer *, integer *, integer *, double *)); 
+ extern void C2F(xsetmarkGif)  _PARAMS((integer *, integer *, integer *, integer *)); 
+ extern void C2F(xgetmarkGif)  _PARAMS((integer *, integer *, integer *, double *)); 
+ extern void C2F(xclickGif)  _PARAMS((char *, integer *ibutton, integer *x1, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(loadfamilyGif)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(xclick_anyGif)  _PARAMS((char *, integer *ibutton, integer *x1, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(xgetmouseGif)  _PARAMS((char *, integer *ibutton, integer *x1, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(clearareaGif)  _PARAMS((char *, integer *, integer *, integer *w, integer *h, integer *, integer *, double *, double *, double *, double *)); 
+ extern void C2F(getwindowposGif)  _PARAMS((integer *, integer *, integer *, double *)); 
+ extern void C2F(setwindowposGif)  _PARAMS((integer *, integer *, integer *, integer *)); 
+ extern void C2F(getwindowdimGif)  _PARAMS((integer *, integer *, integer *, double *)); 
+ extern void C2F(setwindowdimGif)  _PARAMS((integer *, integer *, integer *, integer *)); 
+ extern void C2F(setcurwinGif)  _PARAMS((integer *intnum, integer *, integer *, integer *)); 
+ extern void C2F(getcurwinGif)  _PARAMS((integer *, integer *intnum, integer *, double *)); 
+ extern void C2F(setclipGif)  _PARAMS((integer *, integer *, integer *w, integer *h)); 
+ extern void C2F(unsetclipGif)  _PARAMS((integer *, integer *, integer *, integer *)); 
+ extern void C2F(getclipGif)  _PARAMS((integer *, integer *, integer *, double *)); 
+ extern void C2F(setabsourelGif)  _PARAMS((integer *num, integer *, integer *, integer *)); 
+ extern void C2F(getabsourelGif)  _PARAMS((integer *, integer *num, integer *, double *)); 
+ extern void C2F(setalufunctionGif)  _PARAMS((char *)); 
+ extern void C2F(idfromnameGif)  _PARAMS((char *, integer *num)); 
+ extern void C2F(setalufunction1Gif)  _PARAMS((integer *num, integer *, integer *, integer *)); 
+ extern void C2F(getalufunctionGif)  _PARAMS((integer *, integer *value, integer *, double *)); 
+ extern void C2F(setthicknessGif)  _PARAMS((integer *value, integer *, integer *, integer *)); 
+ extern void C2F(getthicknessGif)  _PARAMS((integer *, integer *value, integer *, double *)); 
+ extern void C2F(setpatternGif)  _PARAMS((integer *num, integer *, integer *, integer *)); 
+ extern void C2F(getpatternGif)  _PARAMS((integer *, integer *num, integer *, double *)); 
+ extern void C2F(getlastGif)  _PARAMS((integer *, integer *num, integer *, double *)); 
+ extern void C2F(setdashGif)  _PARAMS((integer *value, integer *, integer *, integer *)); 
+ extern void C2F(setdashstyleGif)  _PARAMS((integer *value, integer *x, integer *n)); 
+ extern void C2F(getdashGif)  _PARAMS((integer *, integer *value, integer *, double *)); 
+ extern void C2F(usecolorGif)  _PARAMS((integer *num, integer *, integer *, integer *)); 
+ extern void C2F(getusecolorGif)  _PARAMS((integer *, integer *num, integer *, double *)); 
+ extern void C2F(setcolormapGif)  _PARAMS((integer *, integer *, integer *, integer *, integer *, integer *, double *a)); 
+ extern void ColorInit  _PARAMS((void)); 
+ extern void C2F(set_cGif)  _PARAMS((integer i)); 
+ extern void C2F(setbackgroundGif)  _PARAMS((integer *num, integer *, integer *, integer *)); 
+ extern void C2F(getbackgroundGif)  _PARAMS((integer *, integer *num, integer *, double *)); 
+ extern void C2F(setforegroundGif)  _PARAMS((integer *num, integer *, integer *, integer *)); 
+ extern void C2F(getforegroundGif)  _PARAMS((integer *, integer *num, integer *, double *)); 
+ extern void C2F(sethidden3dGif)  _PARAMS((integer *num, integer *, integer *, integer *)); 
+ extern void C2F(gethidden3dGif)  _PARAMS((integer *, integer *num, integer *, double *)); 
+ extern void C2F(semptyGif)  _PARAMS((integer *, integer *, integer *, integer *)); 
+	
 	/* periX11.c */
 
 #ifndef WIN32 
@@ -606,8 +690,8 @@ void SwitchWindow _PARAMS((integer *intnum));
  extern void C2F(xgetmouse)  _PARAMS((char *, integer *ibutton, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
  extern void C2F(cleararea)  _PARAMS((char *, integer *, integer *, integer *w, integer *h, integer *, integer *, double *, double *, double *, double *)); 
  extern void C2F(Recenter_GW)  _PARAMS((void)); 
- extern void C2F(getwindowpos)  _PARAMS((integer *, integer *, integer *, double *)); 
- extern void C2F(setwindowpos)  _PARAMS((integer *, integer *, integer *, integer *)); 
+ extern void C2F(getwindowGif)  _PARAMS((integer *, integer *, integer *, double *)); 
+ extern void C2F(setwindowGif)  _PARAMS((integer *, integer *, integer *, integer *)); 
  extern void C2F(getwindowdim)  _PARAMS((integer *, integer *, integer *, double *)); 
  extern void C2F(setwindowdim)  _PARAMS((integer *, integer *, integer *, integer *)); 
  extern void C2F(setcurwin)  _PARAMS((integer *intnum, integer *, integer *, integer *)); 

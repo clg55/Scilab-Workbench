@@ -13,8 +13,8 @@ PARAMETERS
   K, X      : real matrices
 
 DESCRIPTION
-  lqe returns the Kalman gain for the filtering problem in continuous or
-  discrete time.
+  lqe returns the Kalman gain for the filtering problem in continuous or dis-
+  crete time.
 
   P21 is a syslin list representing the system P21=[A,B1,C2,D21]
 

@@ -1,40 +1,44 @@
 .TH xpolys 2 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-xpolys - draw a set of polylines
+xpolys - draw a set of polylines or polygons
 .SH CALLING SEQUENCE
 .nf
-[]=xpolys(xpols,ypols,[draw])
+xpolys(xpols,ypols,[draw])
 .fi
 .SH PARAMETERS 
-.TP 15
-xpols, ypols 
-: matrices of size (p,n)
+.TP 13
+xpols,ypols 
+: matrices of the same size (p,n) (points of the polylines).
 .TP
 draw 
-: vector of size n
+: vector of size n.
 .SH DESCRIPTION
-Draws a set of polyline using marks or dashed lines, each polyline points
- are store in a column of \fVxpols, ypols\fR. \fVxpols =[ xpol1;xpol2;...] '\fR
+\fVxpolys\fR draws a set of polylinse using marks or dashed lines. 
+The coordinates of each polyline
+are stored in a column of \fVxpols\fR and \fVypols\fR.
 .LP
-The style is given by \fVdraw\fR :
-.PP
-If \fVdraw(i)\fR is negative the mark of id \fV-draw(i)\fR is used to
-draw the polyline i ( marks are draw using the current pattern)
-.PP
-If \fVdraw(i)\fR is strictly positive  the line style (or color) of id \fVabs(draw(i))\fR is used to draw the 
-polyline i.
+The style of polyline i is given by \fVdraw(i)\fR:
+.TP 3
+-
+If \fVdraw(i)\fR is negative, the mark with id \fV-draw(i)\fR is used to
+draw polyline i (marks are drawn using the current pattern).
+Use \fVxset()\fR to see the meaning of the ids.
+.TP
+-
+If \fVdraw(i)\fR is strictly positive, the line style (or color) with id 
+\fVabs(draw(i))\fR is used to draw polyline i.
+Use \fVxset()\fR to see the meaning of the ids.
 .LP
 .SH EXAMPLES
 .nf
-plot2d(0,0,[-1],"012"," ",[0,0,1,1]);
-rand('uniform');
-xset('pattern',3)
+plot2d(0,0,-1,"012"," ",[0,0,1,1])
+rand("uniform")
+xset("pattern",3)
 xpolys(rand(3,5),rand(3,5),[-1,-2,0,1,2])
-xset('default')
+xset("default")
 .fi
+.SH SEE ALSO 
+xfpoly, xfpolys, xpoly
 .SH AUTHOR
 J.Ph.C.
-
-
-

@@ -429,7 +429,7 @@
 #else /* NOT defined(__STDC__) */
 
 /* VAX machine constants */
-#ifdef vax
+#if  (defined(vax) && !defined(netbsd)) 
 #   define  MACHINE_RESOLUTION      6.93889e-18
 #   define  LARGEST_REAL            1.70141e+38
 #   define  SMALLEST_REAL           2.938743e-39
@@ -438,7 +438,7 @@
 #endif
 
 /* MIPS machine constants */
-#ifdef mips
+#if (defined(mips) && !defined(netbsd)) 
 #   define  MACHINE_RESOLUTION      6.93889e-18
 #   define  LARGEST_REAL            1.70141e+38
 #   define  SMALLEST_REAL           2.938743e-39
@@ -468,7 +468,7 @@
 #endif
 
 /* Sun machine constants */
-#ifdef sun
+#if (defined(sun) && !defined(netbsd))
 /* These values are rumored to be the correct values. */
 #   define  MACHINE_RESOLUTION      8.9e-15
 #   define  LARGEST_REAL            1.79769313486231e+308
@@ -477,7 +477,7 @@
 #   define  LARGEST_LONG_INTEGER    2147483646
 #endif
 /* DEC alpha machine constant*/
-#ifdef __alpha 
+#if (defined(__alpha) && !defined(netbsd)) 
 #   include <limits.h>
 #   include <float.h>
 #   define  MACHINE_RESOLUTION      DBL_EPSILON
@@ -487,6 +487,15 @@
 #   define  LARGEST_LONG_INTEGER    LONG_MAX
 #endif
 #ifdef linux
+#   include <limits.h>
+#   include <float.h>
+#   define  MACHINE_RESOLUTION      DBL_EPSILON
+#   define  LARGEST_REAL            DBL_MAX
+#   define  SMALLEST_REAL           DBL_MIN
+#   define  LARGEST_SHORT_INTEGER   SHRT_MAX
+#   define  LARGEST_LONG_INTEGER    LONG_MAX
+#endif
+#if defined(netbsd) || defined(freebsd)
 #   include <limits.h>
 #   include <float.h>
 #   define  MACHINE_RESOLUTION      DBL_EPSILON

@@ -128,8 +128,8 @@ function txt=r2str(h)
 dash='-'
 blank=' '
 
-t1=p2str(h(2)) //display of numerator
-t2=p2str(h(3)) //display of denominator
+t1=p2str(h('num')) //display of numerator
+t2=p2str(h('den')) //display of denominator
 
 //add fraction bar and center 
 l1=max(length(t1))

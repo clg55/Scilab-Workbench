@@ -111,7 +111,6 @@ static void GraySquare(x, y, z, n1, n2)
   z[i,j] is used as the color of a square [i-0.5,i+0.5] [j-0.5,j+0.5]
 -------------------------------------------------------*/
 
-
 int C2F(xgray1)(z,n1,n2,strflag,brect,aaint,l1)
      double z[],brect[];
      integer *n1,*n2,aaint[];
@@ -150,6 +149,44 @@ int C2F(xgray1)(z,n1,n2,strflag,brect,aaint,l1)
   return(0);
 }
 
+/**************************************************
+ * like xgray1 : 
+ * but xrect here give the rectangle in which the 
+ * grayplot is to be drawn using the current scale
+ **************************************************/
+
+int C2F(xgray2)(z,n1,n2,xrect)
+     double z[],xrect[];
+     integer *n1,*n2;
+{
+  double xx[2],yy[2];
+  integer xx1[2],yy1[2],nn1=1,nn2=2,rect2[4];
+  static integer *xm,*ym,*zm,err=0;
+  integer j;
+  /** If Record is on **/
+  if (GetDriver()=='R') 
+    StoreGray2("gray2",z,n1,n2,xrect);
+  xx[0]=xrect[0];xx[1]=xrect[2];
+  yy[0]=xrect[1];yy[1]=xrect[3];
+  /** Boundaries of the frame **/
+  C2F(echelle2d)(xx,yy,xx1,yy1,&nn1,&nn2,rect2,"f2i",3L);  
+  Alloc(&xm,&ym,&zm,*n2,*n1,0L,&err);
+  if ( err == 0)
+    {
+      Scistring("Xgray: running out of memory\n");
+      return 0;
+    }
+  for ( j =0 ; j < (*n2+1) ; j++)	 
+    xm[j]= (int) (( xx1[1]*j + xx1[0]*((*n2)-j) )/((double) *n2));
+  for ( j =0 ; j < (*n1+1) ; j++)	 
+    ym[j]= (int) (( yy1[1]*j + yy1[0]*((*n1)-j) )/((double) *n1));
+  C2F(dr)("xset","clipping",&rect2[0],&rect2[1],&rect2[2],&rect2[3],
+	  PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  GraySquare1(xm,ym,z,*n1+1,*n2+1);
+  C2F(dr)("xset","clipoff",PI0,PI0,PI0,PI0, PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  return(0);
+}
+
 
 /*-------------------------------------------------------
   x : of size n1 gives the x-values of the grid 
@@ -167,7 +204,7 @@ static void GraySquare1(x, y, z, n1, n2)
      integer n1;
      integer n2;
 {
-  double zmoy,zmax,zmin,zmaxmin;
+  double zmax,zmin,zmaxmin;
   integer i,j,verbose=0,whiteid,narg,fill[1],cpat,xz[2];
   zmin=Mini(z,(n1-1)*(n2-1));
   zmax=Maxi(z,(n1-1)*(n2-1));

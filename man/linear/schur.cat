@@ -39,8 +39,8 @@ Usual schur form
 Ordered stable form
   [T,dim]=schur(A,'c') returns an unitary matrix T which transforms A into
   schur form.  In addition, the dim first columns of T make a basis of the
-  eigenspace of A associated with eigenvalues with negative real parts
-  (stable "continuous time" eigenspace).
+  eigenspace of A associated with eigenvalues with negative real parts (sta-
+  ble "continuous time" eigenspace).
 
   [T,dim]=schur(A,'d') returns an unitary matrix T which transforms A into
   schur form.  In addition, the dim first columns of T span a basis of the
@@ -48,7 +48,7 @@ Ordered stable form
   (stable "discrete time" eigenspace).
 General eigenspace
   [T,dim]=schur(A,a_function) returns an unitary matrix T which transforms A
-  into schur form. In addition, the dim first columns of T span a basis of
+  into schur form.  In addition, the dim first columns of T span a basis of
   the eigenspace of A associated with the eigenvalues which are selected by
   the function a_function.
 
@@ -80,8 +80,8 @@ Example of function
   scalar ro. And for ro=1 the calling sequence [T,dim]=schur(A,'d') and
   [T,dim]=schur(A,disc) are equivalent.
 
-  Another useful example is %choose (see function code in
-  SCIDIR/macros/percent)
+  Another useful example is %choose (see function code in SCIDIR/macros/per-
+  cent)
 
 EXAMPLE
   A=diag([-0.9,-2,2,0.9]);X=rand(A);A=inv(X)*A*X;

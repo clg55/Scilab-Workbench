@@ -5,8 +5,8 @@ NAME
 
   Author: Paulo Goncalves
 
-  Computes dilated/compressed version of a signal using Fast Mellin
-  transform.
+  Computes dilated/compressed version of a signal using Fast Mellin trans-
+  form.
 
 Usage
   [sscaled,mellin,beta] = dilate(s,a,[fmin,fmax,N])
@@ -21,15 +21,15 @@ Input parameters
        o fmax :  real scalar [0,0.5] and fmax > Upper frequency bound of the
          signal (necessary for the intermediate computation of the Mellin
          transform)
-       o N : positive integer. number of Mellin samples.
+       o N : positive integer.  number of Mellin samples.
 Output parameters
        o sscaled : Real matrix with N_scale columns Each column j (for j = 1
          .. N_scale) contains the dilated/compressed version of s by scale
          a(j). First element of each column gives the effective time support
          for each scaled version of s.
        o mellin : complex vector [1,N] Mellin transform of s.
-       o beta : real vector [1,N] Variable of the Mellin transform mellin.
 
+       o beta : real vector [1,N] Variable of the Mellin transform mellin.
 Description
 
 Parameters
@@ -51,7 +51,7 @@ Algorithm details
   This algorith uses a Fast Mellin Transform (dmt) to diagonalize the Scale
   operator. The algorithm runs as follows
        o  compute the Fourier-Mellin transform of the signal
-       o  Multiply the result by a(-i.beta) (beta is the Mellin variable),
+       o  Multiply the result by a^(-i.beta) (beta is the Mellin variable),
          for each values of scale a
        o  compute the inverse Fourier-Mellin transform to get the a-dilated
          version of s

@@ -13,8 +13,8 @@ PARAMETERS
   p    : fixed dimension of the MA part. If p= -1, the algorithm reduces to
        the classical Levinson recursions.
 
-  cov  : matrix containing the Rk's (d*d matrices for a d-dimensional
-       process).It must be given the following way
+  cov  : matrix containing the Rk's (d*d matrices for a d-dimensional pro-
+       cess).It must be given the following way
 
                               |  R0 |
                               |  R1 |

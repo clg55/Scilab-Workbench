@@ -19,9 +19,10 @@ BLOCKSF=intcos.obj coselm.obj \
 	sawtth.obj tcslti.obj tcsltj.obj scopxy.obj evscpe.obj integr.obj readf.obj affich.obj\
 	intpol.obj intplt.obj minblk.obj maxblk.obj dlradp.obj andlog.obj iocopy.obj \
 	sum2.obj sum3.obj delayv.obj mux.obj demux.obj samphold.obj dollar.obj mscope.obj \
-	eselect.obj intrp2.obj   intrpl.obj fsv.obj memo.obj
+	eselect.obj intrp2.obj   intrpl.obj fsv.obj memo.obj fscope.obj
 
-BLOCKSC=selector.obj sum.obj prod.obj switchn.obj relay.obj
+BLOCKSC=selector.obj sum.obj prod.obj switchn.obj relay.obj readc.obj writec.obj writeau.obj \
+	readau.obj	
 
 OBJSF=sciblk.obj  addevt.obj doit.obj odoit.obj zdoit.obj scicos.obj cosini.obj cossim.obj cosend.obj \
 	 sctree.obj ftree2.obj ftree3.obj ftree4.obj skipvars.obj scierr.obj scifunc.obj \
@@ -36,6 +37,8 @@ include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib.mak
 
 
@@ -43,6 +46,8 @@ include ../Make.lib.mak
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
 
+Makefile.libmk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
 
 #---------------Blocks 
 
@@ -79,6 +84,8 @@ scitovv.obj: ../stack.h
 skipvars.obj: ../stack.h
 vvtosci.obj: ../stack.h
 writef.obj: ../stack.h
+writeau.obj: ../stack.h ../machine.h
+readau.obj: ../machine.h
 grblk.obj: ../machine.h import.h
 simblk.obj: ../machine.h import.h
 coselm.obj : ../stack.h

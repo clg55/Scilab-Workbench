@@ -9,18 +9,6 @@ case 1
    case 4 then ,
    else error('3 or 4 inputs : a,b,c [,tol]')
  end;
-   
- //-compat next case retained for list/tlist compatibility
-case 15
- flag=a(1);
- if flag(1)<>'lss' then error(91,1),end;
- if lhs<>1 then error('1 output argument: sl'),end
- select rhs
-   case 1 then tol=100*%eps
-   case 2 then tol=b
-   else error('1 or 2 inputs: sl [,tol]')
- end;
- [a,b,c,d,x0,dom]=a(2:7)
 case 16
  flag=a(1);
  if flag(1)<>'lss' then error(91,1),end;

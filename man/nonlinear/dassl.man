@@ -57,7 +57,7 @@ r=res(t,y,ydot,x1,x2,...)
 .TP
 string
 : it must refer to the name of
-a fortran subroutine (see source code of \fVfresd.f\fR).
+a fortran subroutine (see source code of of \fVEx-dassl.f\fR in routines/defaut/).
 .RE
 .TP
 jac
@@ -84,7 +84,7 @@ r=jac(t,y,ydot,x1,x2,...)
 .TP
 character string
 : it must refer to the name of a fortran subroutine 
-(see source code of \fVjacdd.f\fR).
+(see source code of \fVEx-dassl.f\fR in routines/defaut/).
 .RE
 .TP
 info

@@ -1,5 +1,5 @@
 
-overloading(1)                 Scilab keyword                  overloading(1)
+overloading(1)                  Scilab keyword                 overloading(1)
 NAME
   overloading - display, functions and operators overloading capabilities
 
@@ -16,8 +16,8 @@ DESCRIPTION
 
   Operators      : Each operator which is not defined for given operands type
                  may be defined. The overloading function must have a single
-                 output argument and one or two inputs according to the
-                 number of operands. The function name is formed as follow:
+                 output argument and one or two inputs according to the num-
+                 ber of operands. The function name is formed as follow:
 
   for binary operators: %<first_operand_type>_<op_code>_<second_operand_type>
 
@@ -47,18 +47,18 @@ DESCRIPTION
    -               s
    *               m
    /               r
-   \               l
+   \\              l
    ^               p
    .*              x
    ./              d
-   .\              q
+   .\\             q
    .*.             k
    ./.             y
-   .\.             z
+   .\\.            z
    :               b
    .*              u
    /.              v
-   \.              w
+   \\.             w
    [a,b]           c
    [a;b]           f
    () extraction   e
@@ -84,7 +84,8 @@ DESCRIPTION
   has the following calling sequence:
   a=%<type_of_a>_i_<type_of_b>(i1,...,in,a,b).
 type. When
-  Functions : Some basic primitive function may also be overloaded for new data
+  Functions : Some basic primitive function may also be overloaded for new
+       data
        such a function is undefined for a particular data types the function
        %<type_of_an_argument>_<function_name> is called. User may add in this
        called function the definition associated with the input data types.

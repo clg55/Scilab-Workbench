@@ -1,8 +1,8 @@
 function [slb,u]=balreal(a)
 // Copyright INRIA
 [lhs,rhs]=argn(0)
-//-compat type(a)<>15 retained for list/tlist compatibility
-if type(a)<>15&type(a)<>16 then error(91,1),end
+
+if type(a)<>16 then error(91,1),end
 ttp=a(1);
 if ttp(1)<>'lss' then error(91,1),end
 [a,b,c,d,x0,dom]=a(2:7);

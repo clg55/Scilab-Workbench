@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 #include "wmen_scilab.h"
 
 extern PrintDial ScilabPrintD;

@@ -6,13 +6,16 @@ case 'plot' then //normal  position
   graphics=arg1(2); 
   model=arg1(3);
   if model(8)==[] then model(8)=graphics(4)(1),end //compatibility
-  sz=[scs_m(1)(1)(1) scs_m(1)(1)(2)]./[scs_m(1)(1)(5) scs_m(1)(1)(6)]
-  sz=sz.*%rect(1+model(9)(2),:)*.48
-  ksz1=find(sz(1)<%rect(:,1));ksz2=find(sz(2)<%rect(:,2));ksz=[ksz1(:);ksz2(:)]
-if ksz==[] then ssz=size(%rect,'*'); else ssz=min(ksz);end
-  oldfont=xget('font');  xset('font',model(9)(1),ssz-1)
+//  sz=[scs_m(1)(1)(1) scs_m(1)(1)(2)]./[scs_m(1)(1)(5) scs_m(1)(1)(6)]
+//  sz=sz.*%rect(min(6,1+model(9)(2)),:)*.48
+//  ksz1=find(sz(1)<%rect(:,1));ksz2=find(sz(2)<%rect(:,2));ksz=[ksz1(:);ksz2(:)]
+//if ksz==[] then ssz=size(%rect,'*'); else ssz=min(ksz);end
+ ppat=xget('pattern')
+ xset('pattern',default_color(1))
+  oldfont=xget('font');  xset('font',model(9)(1),model(9)(2))
   xstring(graphics(1)(1),graphics(1)(2),model(8))
   xset('font',oldfont(1),oldfont(2))
+  xset('pattern',ppat)
 case 'getinputs' then
 case 'getoutputs' then
 case 'getorigin' then

@@ -20,7 +20,7 @@
  
  h=syslin('c',n./d);
  
- [n,d]=simp(n,d);if h<>tlist('r',n,d,'c') then bugmes();quit;end
+ [n,d]=simp(n,d);if h<>rlist(n,d,'c') then bugmes();quit;end
  
  sl=tf2ss(h); e=h-ss2tf(sl);
  

@@ -185,7 +185,9 @@ $Log: pvm3.h,v $
 #include	<sys/time.h>
 #else
 #include "pvmwin.h"
+#ifndef __ABSC__
 #include <sys/timeb.h>
+#endif
 #include <time.h>
 #endif
 

@@ -11,8 +11,9 @@ info	:
 	@echo "Type \"make tests\" in examples directory"
 	@echo "  to test link and addinter features"
 
-SUBDIRS = addinter-examples callsci intersci-examples link-examples \
-	misc-examples man-examples macros-examples 
+SUBDIRS = addinter-examples intersci-examples link-examples \
+	misc-examples man-examples macros-examples mex-examples addinter-lapack \
+	mex-examples
 
 
 distclean::
@@ -31,7 +32,9 @@ clean::
 		$(MAKE) $(MFLAGS) clean); \
 	done
 
-TEST_SUBDIRS = addinter-examples intersci-examples link-examples misc-examples
+TEST_SUBDIRS = addinter-examples intersci-examples link-examples \
+	misc-examples man-examples macros-examples mex-examples addinter-lapack \
+	mex-examples
 
 tests::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \

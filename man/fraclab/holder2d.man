@@ -2,12 +2,6 @@
 .so ../sci.an
 .SH NAME
 holder2d - holder exponents of a measures defined on 2D real signal
-.sp
-Author: Pascal Mignot - Bertrand Guiheneuf
-.sp
-This routine computes \fIholder exponents\fP of a measures defined on 2D real signal. Several measures and capacities are available.
-.sp
-.sp
 .SH Usage
 \f(CR[\fPholder\f(CR]\fP=holder2d(Input,\f(CR[\fPMeas\f(CR]\fP,\f(CR[\fPRes\f(CR]\fP,\f(CR[\fPRef\f(CR]\fP,\f(CR[\fPRefMeas\f(CR]\fP)
 .SH Input parameters
@@ -73,4 +67,7 @@ In the case of a simple measure analysis, the regression is computed with respec
 corresponds to comparing the analysing measure to  the Lebesgue measure.
 Nevertheless, it is possible to compute the regression by comparison with a reference measure given by the
 last two parameters.  
-.SH See Also
+
+.SH AUTHOR
+Author: Pascal Mignot - Bertrand Guiheneuf
+

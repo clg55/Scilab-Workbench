@@ -1,8 +1,10 @@
 /*------------------------------------------------------------------------
-    Graphic library for 2D and 3D plotting 
-    Copyright (C) 1998 Chancelier Jean-Philippe
-    jpc@cergrene.enpc.fr 
- --------------------------------------------------------------------------*/
+ *    Graphic library for 2D and 3D plotting 
+ *   Copyright (C) 1998 Chancelier Jean-Philippe
+ *   jpc@cergrene.enpc.fr 
+ * Axis drawing for 2d plots 
+ *--------------------------------------------------------------------------*/
+
 #include <math.h>
 #include <string.h>
 #ifdef __STDC__
@@ -14,21 +16,23 @@
 #include <stdio.h>
 #include "Math.h"
 
-static void Axis();
-static void FormatPrec();
-static void FormatPrec1();
-static int Fsepare();
-static int Fsepare1();
+
+static void Axis  _PARAMS((char pos, double *size, integer axdir, double min, 
+			   double max, integer *nax, integer *LDPoint, char logflag));
+static void FormatPrec _PARAMS((char *fmt, integer *desres, double xmin, double xmax, 
+				double xpas));
+static void FormatPrec1 _PARAMS((char *fmt, integer *desres, double *xx, integer nx));
+static int Fsepare _PARAMS((char *fmt, integer dec, integer *l, double xmin, double xmax, 
+			    double xpas));
+static int Fsepare1 _PARAMS((char *fmt, integer dec, integer *l, double *xx, integer nx));
 
 /*--------------------------------------------------------------
-//  to draw 
-//  A box + x and y axes + numbers along the axes
-//  xmin,ymin,xmax,ymax : are the boundary values
-//  xnax=[3,7];
-//     on the x axis we'll have 7 big intervals with a number 
-//     to describe them ans each of this big intervals will be 
-//     divided in 3 intervals.
-----------------------------------------------------------------*/
+ *  aplot: used to draw a box + x and y ticks and scales 
+ *  xmin,ymin,xmax,ymax : are the boundary values
+ *  xnax and ynax gives the ticks numbers ex: nax=[3,7];
+ *  will give 8 big ticks (7 intervals) with numbers and 
+ *  each big interval will be divided in 3 small intervals.
+ *----------------------------------------------------------------*/
 
 void C2F(aplot)(Box, xmin, ymin, xmax, ymax, xnax, ynax, logflag)
      integer *Box;
@@ -44,18 +48,26 @@ void C2F(aplot)(Box, xmin, ymin, xmax, ymax, xnax, ynax, logflag)
   integer LDPoint[2];
   { 
     C2F(dr)("xrect","v",&Box[0],&Box[1],&Box[2],&Box[3], PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-    /** left-down pointeger of the frame box **/
+    /** left-down point of the frame box **/
     LDPoint[0]=Box[0];LDPoint[1]=Box[1]+Box[3];
   }
   size[1]=Box[3]/100.0;size[2]=2.0;
   size[0]= ((double ) Box[2])/((double) xnax[0]*xnax[1]);
-  Axis(size,0L,*xmin,*xmax,xnax,LDPoint,logflag[0]);
+  Axis('x',size,0L,*xmin,*xmax,xnax,LDPoint,logflag[0]);
+
   size[1]= -Box[2]/150.0;size[2]=2.0;
   size[0]=((double) Box[3])/ ((double) ynax[0]*ynax[1]);
-  Axis(size,-90L,*ymin,*ymax,ynax,LDPoint,logflag[1]);
+  Axis('l',size,-90L,*ymin,*ymax,ynax,LDPoint,logflag[1]);
+  /** XXX an y right axis **/
+  /** LDPoint[0]=Box[0]+Box[2];
+      LDPoint[1]=Box[1];
+      Axis('r',size,90L,*ymin,*ymax,ynax,LDPoint,logflag[1]);
+  **/
 }
 
-static void Axis(size, axdir, min, max, nax, LDPoint, logflag)
+
+static void Axis(pos,size, axdir, min, max, nax, LDPoint, logflag)
+     char pos;
      double *size;
      integer axdir;
      double min;
@@ -81,7 +93,8 @@ static void Axis(size, axdir, min, max, nax, LDPoint, logflag)
       C2F(dr)("xset","font",fontid,&smallersize,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     }
   for (i=0; i <= nax[1];i++)
-    { double angle=0.0;
+    { 
+      double angle=0.0;
       char foo[100];/*** JPC : must be cleared properly **/
       double lp;
       lp = xp + i*(max-min)/((double)nax[1]);
@@ -89,13 +102,21 @@ static void Axis(size, axdir, min, max, nax, LDPoint, logflag)
       C2F(dr)("xstringl",foo,&xx,&yy,rect,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
       if ( axdir == 0 ) 
 	{
+	  /** xaxis **/
 	  posi[0]=inint(LDPoint[0]+ i*nax[0]*size[0]-rect[2]/2.0);
 	  posi[1]=inint(LDPoint[1]+ rect[3]+ barlength);
 	}
-      else 
+      else if ( axdir == -90 )
 	{
+	  /** yaxis on the left **/
 	  posi[0]=inint(LDPoint[0] - rect[2] +barlength);
 	  posi[1]=inint(LDPoint[1] - i*nax[0]*size[0] + rect[3]/4.0);
+	}
+      else 
+	{
+	  /** y axis on the right **/
+	  posi[0]=inint(LDPoint[0] - barlength);
+	  posi[1]=inint(LDPoint[1] - (i-nax[1])*nax[0]*size[0] + rect[3]/4.0);
 	}
       C2F(dr)("xstring",foo,&(posi[0]),&(posi[1]),PI0,&flag,PI0,PI0,&angle,PD0,PD0,PD0,0L,0L);
       if ( logflag == 'l' )
@@ -112,14 +133,11 @@ static void Axis(size, axdir, min, max, nax, LDPoint, logflag)
 
 
 /*--------------------------------------------
-  choix d'un format qui Fsepare les points 
-  renvoit un format et un nombre qui est le nombre de d\'ecimales 
-  associ\'ees au format 
-  C'est le format que l'on va utiliser pour ecrire des nombres 
-  le long des axes mais le nombre ecrit peut differer de 10% en valeurs 
-  relative (cela depend du 0.1 plus bas ) 
-  ce qui est peut etre trop gros ? 
-------------------------------------------------*/
+ * choose a format (fmt) with precision given in desres. 
+ * The format is searched so as to give distinct values 
+ * for the numeric values xmin + k*xpas in [xmin,xmax] 
+ * and give enough precision. 
+ *------------------------------------------------*/
 
 void ChoixFormatE(fmt, desres, xmin, xmax, xpas)
      char *fmt;
@@ -154,8 +172,8 @@ void ChoixFormatE(fmt, desres, xmin, xmax, xpas)
 }
 
 /* 
- *  regarde si le format qui separe les points est suffisant au niveau precision
- *  si non l'augmente.
+ *  checks if given format gives enough precision 
+ *  if not increase it 
  */
 
 static void FormatPrec(fmt, desres, xmin, xmax, xpas)
@@ -182,14 +200,11 @@ static void FormatPrec(fmt, desres, xmin, xmax, xpas)
 }
 
 /*----------------------------------------------------------
-  regarde si le format fmt qui utilise le nombre de 
-  decimales dec permet de separer
-   les nombres de xmin a xmax avec un pas xpas 
-   le format utilise est du type 
-   retourne aussi la longuer de chaine la plus grande avec 
-   ce format dans l
-------------------------------------------------------*/
-
+ *  checks if format fmt gives different values for numbers 
+ *  from xmin to xmax with step xpas 
+ *  also returns the string length that will result in using the 
+ *  format in l 
+ *------------------------------------------------------*/
 
 static int Fsepare(fmt, dec, l, xmin, xmax, xpas)
      char *fmt;
@@ -219,9 +234,9 @@ static int Fsepare(fmt, dec, l, xmin, xmax, xpas)
 
 
 /*--------------------------------------------
-  Meme Chose que ChoixFormatE mais quand les nombres sont donnes
-  par un vecteur xx[0],...xx[N-1];
-------------------------------------------------*/
+ * same as ChoixFormatE when numbers are given through an 
+ * array xx[0:nx-1];
+ *------------------------------------------------*/
 
 void ChoixFormatE1(fmt, desres, xx, nx)
      char *fmt;
@@ -303,5 +318,13 @@ static int Fsepare1(fmt, dec, l, xx, nx)
     }
   return(1);
 }
+
+
+
+
+
+
+
+
 
 

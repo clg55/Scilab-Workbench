@@ -1,11 +1,11 @@
 
-rational(1)                    Scilab Objects                     rational(1)
+rational(1)                     Scilab Objects                    rational(1)
 NAME
   rational - Scilab objects, rational in Scilab
 
 DESCRIPTION
-  A rational r is a quotient of two polynomials r=num/den.  The internal
-  representation of a rational is a list.
+  A rational r is a quotient of two polynomials r=num/den.  The internal rep-
+  resentation of a rational is a list.
   r=tlist('['r','num','den','dt'],num,den,[]) is the same as r=num/den.  A
   rational matrix can be defined with the usual syntax e.g. [r11,r12;r21,r22]
   is a 2x2 matrix where rij are 1x1 rationals.  A rational matrix can also be

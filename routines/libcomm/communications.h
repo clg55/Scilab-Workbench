@@ -10,7 +10,7 @@
     correctement.
 */
 
-extern void envoyer_message_parametres_var _PARAMS(());
+extern void envoyer_message_parametres_var _PARAMS((char *fmt, ...));
 
 /*
     La fonction envoyer_message_tableau fait la meme chose que

@@ -35,7 +35,7 @@ void InterfError( mesg )
      char *mesg;
 
 {
-  cout("ERROR IN INTERFACE ROUTINE");
+  Cout("ERROR IN INTERFACE ROUTINE");
   cerro(mesg);
   /*  cout( mesg );*/
   
@@ -562,7 +562,7 @@ void MatrixFree( m )
      Matrix *m; /* matrix to be freed */
 
 {
-  free(m);
+  free((void *) m);
 }
 
 

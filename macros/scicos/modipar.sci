@@ -76,6 +76,14 @@ for k=newparameters
     end
     ipptr(kc+1:$)=ipptr(kc+1:$)+nek
     ipar(ipptr(kc):ipptr(kc+1)-1)=ipark,
+    
+    //Change simulation routine
+    sim('funs')(kc)=fun(1);
+    if prod(size(fun))> 1 then 
+      sim('funtyp')(kc)=fun(2);
+    else 
+      sim('funtyp')(kc)==0;
+    end
   end
 end
 

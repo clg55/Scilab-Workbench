@@ -2,23 +2,28 @@ function [stk,txt,top]=sci_median()
 // Copyright INRIA
 txt=[]
 if rhs==1 then
-  if stk(top)(2)=='1'| stk(top)(3)=='1' then
-    stk=list('median('+stk(top)(1)+')','0','1','1',stk(top)(5))
-  else 
-    write(logfile,'Warning: Not enough information using mtlb_median'+..
-	' instead of median')
-    stk=list('mtlb_median('+stk(top)(1)+')','0','1',stk(top)(4),stk(top)(5))
+  [m,n]=checkdims(stk(top))
+  x=stk(top)(1)
+  if m==-1&n==-1 then
+    set_infos([
+	 'mtlb_median('+x+') may be replaced by '
+         '  median('+x+')'+' if '+x+'is a vector'
+	 '  median('+x+',1)'+' if '+x+'is a matrix'],1)
+    stk=list('mtlb_median('+x+')','0','?','?','1')
+  elseif m==1|n==1 then
+    stk=list('median('+x+')','0','1','1','1')
+  else
+    stk=list('median('+x+',1)','0','1',stk(top)(4),'1')
   end
 else
+  x=stk(top-1)(1)
   if stk(top)(1)=='1' then
-    stk=list('median('+stk(top-1)(1)+',1)','0','1',stk(top-1)(4),stk(top-1)(5))
+    stk=list('median('+x+',1)','0','1',stk(top-1)(4),stk(top-1)(5))
   elseif stk(top)(1)=='2' then  
-    stk=list('median('+stk(top-1)(1)+',2)','0',stk(top-1)(3),'1',stk(top-1)(5))
+    stk=list('median('+x+',2)','0',stk(top-1)(3),'1',stk(top-1)(5))
   else  
-    x=stk(top)(1)
-    stk=list('median('+stk(top-1)(1)+','+x+')','0','?','?',stk(top-1)(5))
+    y=stk(top)(1)
+    stk=list('median('+x+','+y+')','0','?','?',stk(top-1)(5))
   end
   top=top-1
 end
-
-

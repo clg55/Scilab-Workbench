@@ -1,5 +1,5 @@
 /* routines/machine.h.  Generated automatically by configure.  */
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 #ifndef MACHINE_H 
 #define MACHINE_H 
 
@@ -34,7 +34,7 @@
 #define HAVE_USLEEP 1
 
 /* Define if have and use TCL/TK */
-/* #undef WITH_TK */
+#define WITH_TK 1
 
 /* Define if have and use PVM */
 #define WITH_PVM 1

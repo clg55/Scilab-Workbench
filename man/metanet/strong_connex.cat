@@ -17,7 +17,7 @@ PARAMETERS
 DESCRIPTION
   strong_connex returns the number nc of strong connected components for the
   graph g and a row vector ncomp giving the number of the strong connected
-  component for each node. For instance, if i is a node number, ncomp[i] is
+  component for each node.  For instance, if i is a node number, ncomp[i] is
   the number of the strong connected component to which node i belongs.
 
 EXAMPLE

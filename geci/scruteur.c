@@ -10,8 +10,17 @@
 #include <sys/time.h>
 #include <errno.h>
 #include <stdio.h>
+#include <string.h>
 #include <signal.h>
 #include <netdb.h>
+
+#if defined(netbsd)
+#include <ieeefp.h>
+#endif
+
+#if defined(freebsd)
+#include <floatingpoint.h>
+#endif
 
 #include "listes_chainees.h"
 #include "utilitaires.h"
@@ -45,7 +54,11 @@ char *argv[];
 #if defined (sun) && defined (SYSV)
   sigset_t set,oset;
 #endif  
-  
+
+#if defined(netbsd) || defined(freebsd)
+  fpsetmask(0);
+#endif
+
   signal(SIGTERM,signal_arret_scruteur);
   signal(SIGQUIT,signal_arret_scruteur);
   signal(SIGINT,signal_arret_scruteur);

@@ -44,8 +44,8 @@ DESCRIPTION
 
   Linear systems are represented by specific typed-list e.g. a linear system
   [A,B,C,D] is represented by the tlist
-  Sys=tlist(['lss';'A';'B';'C';'D';'X0';'dt'],A,B,C,D,x0,'c') and this
-  specific list may be created by the function syslin.
+  Sys=tlist(['lss';'A';'B';'C';'D';'X0';'dt'],A,B,C,D,x0,'c') and this spe-
+  cific list may be created by the function syslin.
 
   Sys(2) or Sys('A') is the state-matrix and Sys('td') is the time domain
   A rational matrix H is represented by the typed-list

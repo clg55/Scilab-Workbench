@@ -3,20 +3,6 @@ function [a,b,c]=minreal(a,b,c,domaine,tol)
 // Copyright INRIA
 [lhs,rhs]=argn(0)
 select type(a)
-  
-//-compat next case retained for list/tlist compatibility
-case 15
-  flag=a(1)
-  if flag(1)<>'lss' then error(91,1),end
-  if lhs<>1 then error('output: sle'),end;
-  select rhs
-  case 1 then istol=0
-  case 2 then istol=1,tol=b,
-  else error('2 inputs to minreal: sl [,tol]'),
-  end;
-  [a,b,c,d,x0,dom]=a(2:7);
-  if dom==[] then error(96,1),end
-  domaine='c';if dom<>'c' then domaine='d',end
 case 16
   flag=a(1)
   if flag(1)<>'lss' then error(91,1),end

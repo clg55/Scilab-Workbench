@@ -17,7 +17,7 @@ Input parameters
        o Holder_funct : Character string Specifies the Holder function you
          want to prescribe. It must have the form of compositions of matlab
          functions of variable t ('2*sqrt(1-t)' for instance). The use of the
-         variable t is crucial. For shake of simplicity, this variable t is
+         variable t is crucial.  For shake of simplicity, this variable t is
          supposed to vary in [0,1].
        o  nbr_iter : integer Number of iteration wanted in the generation
          process of the GIFS attractor.
@@ -44,11 +44,11 @@ Algorithm details
   construct continuous function with prescribed local regularity. More pre-
   cisely, if H(t) is the prescribed Holder function, then for each
   j=1,...,nbr_iter-1, and for each k=0,...,pow(m,j)-1, the GIFS coefficient
-  c_kj is definied as : c_kj = pow(m,H(k*pow(m,-j))), where m+1 is the number
-  of interpolation points.  The resulting attractor is the graph of a con-
-  tinuous function F such that the Holder exponent of F, at each point t, is
-  H(t).  Moreover, if {(t_i, y_i), i=1,...,m+1} is the set of interpolation
-  points, then F(t_i)=y_i for each i=1,...,m+1.
+  c_k^j is definied as : c_k^j = pow(m,H(k*pow(m,-j))), where m+1 is the num-
+  ber of interpolation points.  The resulting attractor is the graph of a
+  continuous function F such that the Holder exponent of F, at each point t,
+  is H(t).  Moreover, if {(t_i, y_i), i=1,...,m+1} is the set of interpola-
+  tion points, then F(t_i)=y_i for each i=1,...,m+1.
 
 See also:
   gifs and alphagifs

@@ -1,14 +1,27 @@
-function scs_m=do_stupidmove(scs_m)
+function [%pt,scs_m]=do_stupidmove(%pt,scs_m)
 // Copyright INRIA
 rela=.1
 // get a scicos object to move, and move it with connected objects
 //!
 //get block to move
 while %t
-  [btn,xc,yc,win,Cmenu]=getclick()
-  if Cmenu<>[] then
-    Cmenu=resume(Cmenu)
+  
+  
+  
+  if %pt==[] then
+    [btn,xc,yc,win,Cmenu]=cosclick()
+    if Cmenu<>[] then
+      %pt=[]
+      [Cmenu]=resume(Cmenu)
+    elseif btn>31 then
+      Cmenu=%tableau(min(100,btn-31));%pt=[xc;yc];
+      if Cmenu==emptystr() then Cmenu=[];%pt=[];end
+      [%win,Cmenu]=resume(win,Cmenu)
+    end
+  else
+    xc=%pt(1);yc=%pt(2);win=%win;%pt=[]
   end
+
   [k,wh,scs_m]=stupid_getobj(scs_m,[xc;yc])
   if k<>[] then break,end
 end
@@ -238,7 +251,7 @@ for i=2:n //loop on objects
     if data(1)<0&data(2)<0 then k=i,break,end
   elseif o(1)=='Link' then
     [frect1,frect]=xgetech();
-    eps=0.01*min(abs(frect(3)-frect(1)),abs(frect(4)-frect(2)))
+    eps=4     //0.01*min(abs(frect(3)-frect(1)),abs(frect(4)-frect(2)))
     xx=o(2);yy=o(3);
     [d,ptp,ind]=stupid_dist2polyline(xx,yy,pt,.85)
     if d<eps then 

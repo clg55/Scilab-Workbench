@@ -24,10 +24,11 @@ If prot==1  scilab issues a warning message when a function is
 redefined (default mode)
 .TP
 *
-  If prot==1 scilab issues an error when a function is
+If prot==2 scilab issues an error when a function is
 redefined
 .RE
 .SH EXAMPLE
+.nf
 funcprot(1)
 deff('[x]=foo(a)','x=a')
 deff('[x]=foo(a)','x=a+1')
@@ -36,3 +37,4 @@ funcprot(0)
 deff('[x]=foo(a)','x=a')
 deff('[x]=foo(a)','x=a+1')
 foo=33
+.fi

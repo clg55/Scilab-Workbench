@@ -22,11 +22,10 @@ available) or the sh return code.
 .SH EXAMPLE
 .nf
 unix("ls $SCI/demos");
-unix("emacs $SCI/demos/wheel2/Makefile");
-deff('wd=pwd()','if MSDOS then unix(''cd>''+TMPDIR+''\path'');..
+deff('wd=dir()','if MSDOS then unix(''cd>''+TMPDIR+''\path'');..
                 else unix(''pwd>''+TMPDIR+''/path'');end..
       wd=read(TMPDIR+''/path'',1,1,''(a)'')')
-wd=pwd()
+wd=dir()
 .fi
 .SH SEE ALSO
 edit, manedit, unix_g, unix_s, unix_w, unix_x, host

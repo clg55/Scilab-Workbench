@@ -11,7 +11,7 @@ include ../../Makefile.incl.mak
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = roblib
-NAM = robust
+NAM = SCI/macros/robust
 
 MACROS = bstap.sci copfac.sci dcf.sci dtsi.sci fstabst.sci leqe.sci \
 	gtild.sci hankelsv.sci linf.sci lqg_ltr.sci nehari.sci riccati.sci \

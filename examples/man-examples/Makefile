@@ -1,73 +1,64 @@
+SHELL = /bin/sh
+
 # This is a template Makefile which can be used if you 
 # want to create your own additional man pages 
 # SCIDIR must be bound to your running Scilab directory 
 
 SCIDIR=../..
 
-include $(SCIDIR)/Makefile.incl 
-
-SHELL = /bin/sh
-
 # You add here all the man directories that you want to add to Scilab 
-# and You must add them in the file Chapters.add
 
-CH1 = Test1
-DIR1 = test1
+DIR1 = $(SCIDIR)/examples/man-examples/helpdir1
+TITLE1 = Title1
 
-CH2 = Test2
-DIR2 = test2
+DIR2 = $(SCIDIR)/examples/man-examples/helpdir2
+TITLE2 = Title2
 
 DIRS = $(DIR1) $(DIR2) 
-
+TITLES = $(TITLE1) $(TITLE2) 
 all	:: allman 
 
-$(CH1):
-	@./formatman $(DIR1)
+#################################
+# Do not change below this line #
+#################################
 
-$(CH2):
-	@./formatman $(DIR2)
-
-
-#############################
-# Do not change bellow this line 
-#############################
-
-UTILITIES=Chapters formatman mkwhatis strip.sed sci.an 
-
-allman : $(UTILITIES)
-	@./formatman $(DIRS)
-	@echo "set the variable MANCHAPTERS to `pwd`/Chapters "
-	@echo "to use the new manual pages"
+allman :
+	$(SCIDIR)/man/formatman $(DIRS)
+	@echo "%helps = [%helps; " > help.sce
+	@echo "\"%s\", \"%s\";\n" > format;
+	@echo $(DIRS) > args;
+	@echo $(TITLES) > args2;
+	@echo help.sce >> file;
+	@$(SCIDIR)/macros/Tomake Xformat Xargs Xargs2 Xfile;
+	@echo "];" >>help.sce
+	@echo "----------------------------------------"
+	@echo "To add help files defined in $(DIRS), enter:"
+	@echo " "
+	@echo "    ....or, equivalently:"
+	@echo " "
+	@echo "exec help.sce"
+	@echo " "
+	@echo "at scilab prompt -->";
+	@echo "----------------------------------------"
+	@rm -f format args args2 file;
 
 world:: all
 
 clean::
-	for i in $(DIRS) ;\
+	@for i in $(DIRS) ;\
 	do \
-		(cd $$i ; echo "making clean in man/$$i..."; \
-		$(RM)  $(FILES_TO_CLEAN)); \
+		(cd $$i ; echo "making clean in $$i..."; \
+		rm -f  *.cat whatis ) ; \
 	done
-	$(RM) $(UTILITIES) 
 
 distclean:: clean 
-	for i in $(DIRS) ;\
-	do \
-		(cd $$i ; echo "making clean in man/$$i..."; \
-		$(RM)  *.cat whatis ) ; \
-	done
 
 
-Chapters : Chapters.add $(SCIDIR)/man/Chapters 
-	@cat $(SCIDIR)/man/Chapters Chapters.add > Chapters 
 
-formatman : $(SCIDIR)/man/formatman 
-	@ln -s $(SCIDIR)/man/formatman  .
 
-mkwhatis : $(SCIDIR)/man/mkwhatis 
-	@ln -s $(SCIDIR)/man/mkwhatis  .
 
-strip.sed : $(SCIDIR)/man/strip.sed 
-	@ln -s $(SCIDIR)/man/strip.sed  .
 
-sci.an : $(SCIDIR)/man/sci.an 
-	@ln -s $(SCIDIR)/man/sci.an  .
+
+
+
+

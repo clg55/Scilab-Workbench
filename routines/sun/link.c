@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright INRIA/ENPC */
 
 /********************************************* 
  *   Scilab link functions    
@@ -42,7 +42,7 @@ typedef struct {
   int      Nshared;           /* number of the shared file */
 } Epoints;
 
-#define TMPL 64
+#define TMPL 256
 
 typedef struct {
   int ok;
@@ -119,11 +119,11 @@ void C2F(iscilink)(descla,ptrdescla,nvla,desc,ptrdesc,nv,strf,ilib,iflag,rhs)
 }
 
 
-#if defined(sun) || defined(__alpha) || defined(sgi) || (!defined(hppa_old) && defined(hppa))
+#if defined(netbsd) || defined(freebsd) || defined(sun) || defined(__alpha) || defined(sgi) || (!defined(hppa_old) && defined(hppa))
 #include "link_SYSV.c"
 #else
 /** no more used on sun */
-#if defined(sun_old) ||  defined(mips) || defined(_IBMR2) || defined(hppa_old)
+#if defined(sun_old) ||  (defined(mips) && !defined(netbsd)) || defined(_IBMR2) || defined(hppa_old)
 #ifdef SUNOSDLD 
 #include "link_linux.c"
 #else 
@@ -144,6 +144,10 @@ void C2F(iscilink)(descla,ptrdescla,nvla,desc,ptrdesc,nv,strf,ilib,iflag,rhs)
   C2F(dynload)() {cerro("Dynamic link not implemented");}
   C2F(dyncall)() {cerro("Dynamic link not implemented");}
   **/
+int LinkStatus()
+{
+  return(0);
+}
 
 void SciLink(iflag,rhs,ilib,files,en_names,strf)
      int iflag,*ilib,*rhs;

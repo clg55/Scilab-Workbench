@@ -19,7 +19,7 @@ Output parameters
 
 Description
   This routine close a tksci figure (toplevel window). If a handle is given,
-  the figure corresponding to this handle is closed. Otherwise, the current
+  the figure corresponding to this handle is closed.  Otherwise, the current
   (active) figure is closed.
 
 EXAMPLE

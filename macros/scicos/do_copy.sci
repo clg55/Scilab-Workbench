@@ -1,9 +1,21 @@
-function [scs_m,needcompile]=do_copy(scs_m,needcompile)
+function [%pt,scs_m,needcompile]=do_copy(%pt,scs_m,needcompile)
 // Copyright INRIA
+
 while %t
-  [btn,xc,yc,win,Cmenu]=getclick()
-  if Cmenu<>[] then
-    Cmenu=resume(Cmenu)
+  if %pt==[] then
+    [btn,xc,yc,win,Cmenu]=cosclick()
+    if Cmenu<>[] then
+      %pt=[];
+      [Cmenu]=resume(Cmenu)
+    elseif btn>31 then
+      Cmenu=%tableau(min(100,btn-31));%pt=[xc;yc];
+      if Cmenu==emptystr() then Cmenu=[];%pt=[];end
+      
+      [%win,Cmenu]=resume(win,Cmenu)
+    end
+  else
+     xinfo('Click where you want object to be placed (right-click to cancel)')
+    xc=%pt(1);yc=%pt(2);win=%win;%pt=[]
   end
   kc=find(win==windows(:,2))
   if kc==[] then
@@ -34,17 +46,17 @@ while %t
       o(2)=graphics
       break,
     end
-    elseif pal_mode&win==lastwin then 
-    k=getblocktext(scs_m_s,[xc;yc])
-    if k<>[] then
-      o=scs_m_s(k);graphics=o(2)
-      for kk=5:8
-	// mark port disconnected
-	graphics(kk)=0*graphics(kk)
-      end
-      o(2)=graphics
-      break,
-    end
+//  elseif pal_mode&win==lastwin then 
+//    k=getblocktext(scs_m_s,[xc;yc])
+//    if k<>[] then
+//      o=scs_m_s(k);graphics=o(2)
+//      for kk=5:8
+//	// mark port disconnected
+//	graphics(kk)=0*graphics(kk)
+//      end
+//      o(2)=graphics
+//      break,
+//    end
   elseif slevel>1 then
     execstr('k=getblocktext(scs_m_'+string(windows(kc,1))+',[xc;yc])')
     if k<>[] then

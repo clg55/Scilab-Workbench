@@ -83,4 +83,8 @@ cd ..
 cd mtlb
 echo Macros compilation mtlb
 nmake /C /f Makefile.mak %1 
+cd ..
+cd int
+echo Macros compilation int
+nmake /C /f Makefile.mak %1 
 cd ..\..

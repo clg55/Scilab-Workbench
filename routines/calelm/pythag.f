@@ -20,11 +20,11 @@ c     --------testing Nans
       endif
 c     --------testing Inf 
       if ( a.ge.dlamch('o').or.-a.ge.dlamch('o')) then 
-         pythag = a 
+         pythag = abs(a)
          return
       endif
       if ( b.ge.dlamch('o').or.-b.ge.dlamch('o')) then 
-         pythag = b 
+         pythag = abs(b)
          return
       endif
 c     --------generic case 

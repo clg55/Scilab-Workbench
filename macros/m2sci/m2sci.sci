@@ -33,8 +33,12 @@ for k=1:macrhs
   if or(inputs(k)==killed(1)) then
     vnms=[vnms;['%'+inputs(k),inputs(k)]],
   else
-    if funptr(inputs(k))<>0 then inputs(k)='%'+inputs(k),end
-    vnms=[vnms;[inputs(k),inputs(k)]],
+    if funptr(inputs(k))<>0 then 
+      vnms=[vnms;['%'+inputs(k),inputs(k)]],
+      inputs(k)='%'+inputs(k),
+    else
+      vnms=[vnms;[inputs(k),inputs(k)]],
+    end
   end
   if Imode then
     r=askfortype(inputs(k))
@@ -78,6 +82,13 @@ end
 
 outputs=lst(2)
 maclhs=size(outputs,2)
+for k=1:maclhs
+  if funptr(outputs(k))<>0 then
+    vnms=[vnms;['%'+outputs(k),outputs(k)]]
+    vtps($+1)=list('?','?','?',0)
+    outputs(k)='%'+outputs(k)
+  end
+end
 bot=size(vtps)
 
 
@@ -112,18 +123,22 @@ end
 //write(%io(2),info,'(a)')
   
 
-
 //add the function header
 hdr='function '+lhsargs(outputs)+'='+nam+rhsargs(vnms(1:macrhs,1));
 txt=[hdr;ini;dcl;crp(1:$-1)]
 
 
 // generate associated translation function
-if nam=='script' then
-  f=fnam+'.sce'
+//if nam=='script' then
+//  f=fnam+'.sce'
+//  trad=[
+//      'function [stk,txt,top]=sci_'+fnam+'()'
+//      'stk=list(''exec('''+sci2exp(f)+''')'',''0'',''?'',''?'',''?'')']
+if batch then
+ 
   trad=[
       'function [stk,txt,top]=sci_'+fnam+'()'
-      'stk=list(''exec('''+sci2exp(f)+''')'',''0'',''?'',''?'',''?'')']
+      'stk=list(''exec('+fnam+')'',''0'',''?'',''?'',''?'')']
 else
   trad=[
       'function [stk,txt,top]=sci_'+nam+'()'
@@ -137,21 +152,33 @@ else
     trad=[trad;
         'stk=list('+sci2exp(nam)+'+rhsargs(RHS),''0'',''?'',''?'',''?'')']
   elseif maclhs==1 then
-    k1=find(outputs(1)==vnms(:,2));k1=k1(1);
-    w=strcat([sci2exp(vtps(k1)(2)),sci2exp(vtps(k1)(3)),sci2exp(vtps(k1)(1))],',')
+    k1=find(outputs(1)==vnms(:,2));
+    if k1<>[] then
+      k1=k1(1);
+      w=strcat([sci2exp(vtps(k1)(2)),sci2exp(vtps(k1)(3)),sci2exp(vtps(k1)(1))],',')
+    else
+      w='''?'',''?'',''?'''
+    end
     trad=[trad;
         'stk=list('+sci2exp(nam)+'+rhsargs(RHS),''0'','+w+')']
   else  
     w=[]
     for k=1:maclhs
-      k1=find(outputs(k)==vnms(:,2));k1=k1(1);
-      w=[w;[sci2exp(vtps(k1)(2)),sci2exp(vtps(k1)(3)),sci2exp(vtps(k1)(1))]];
+      k1=find(outputs(k)==vnms(:,2));
+      if k1<>[] then
+	k1=k1(1);
+	w=[w;strcat([sci2exp(vtps(k1)(2)),sci2exp(vtps(k1)(3)),sci2exp(vtps(k1)(1))],',') ] ;
+      else
+	w=[w;'''?'',''?'',''?''']
+      end
     end  
+    w(1)='w=['+w(1);w($)=w($)+']';
     trad=[trad;
         '//  w(i,1) is the ith output argument type'
         '//  w(i,2) is the ith output argument row dimension'
         '//  w(i,2) is the ith output argument column dimension'
-        sci2exp(w,'w')]
+        w]
+//        sci2exp(w,'w')]
     trad=[trad;
         'if lhs==1 then'
         '  stk=list('+sci2exp(nam)+'+rhsargs(RHS),''0'',w(1,1),w(1,2),w(1,3))'

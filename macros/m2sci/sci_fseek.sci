@@ -18,7 +18,7 @@ case '0' then
 case '1' then
   flag='''end''' 
 else
-  txt='//! Not enough information on '+origin(1)+' to set the proper flag'
+  set_infos('Not enough information on '+origin(1)+' to set the proper flag',1)
   flag='fseek_origin('+origin(1)+')'
 end
 stk=list('mseek'+rhsargs([offset(1),fid(1),flag]),'0','1','1','1')

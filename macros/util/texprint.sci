@@ -8,8 +8,6 @@ function [tt]=texprint(a)
 debut='\begin{array}{l}';fin='\end{array}'
 typ=type(a)
 
-//-compat next row added for list/tlist compatibility
-if typ==15 then typ=16,end
 select typ
 case 1 then  //scalars
   [m,n]=size(a)
@@ -59,7 +57,7 @@ case 16 then
      a1=a(1)//transfer and linear systems
   select a1(1)
     case 'r' then //rationals
-     num=a(2);a=a(3)
+     num=a('num');a=a('den')
      [m,n]=size(a)
      if m*n<>1 then tt='{\pmatrix{',else tt='{{',end
      z=varn(a)

@@ -18,7 +18,7 @@ c     p= il1- iadr(dl1)
 c     we copy from 0 to p-1 ( then istk(il1+k) k>=p
 c     are not scratched and then from n-1 to p 
 c     ===============================
-c     Copyright INRIA
+c     Copyright ENPC/INRIA
       include '../stack.h'
       integer n,il1,dl1 
       integer iadr,sadr

@@ -144,7 +144,7 @@ C
 C
 C     STEP S. SQUEEZE ACCEPTANCE - SUNIF(IR) FOR (0,1)-SAMPLE U
 C
-      fk = float(ignpoi)
+      fk = dble(ignpoi)
       difmuk = mu - fk
       u = ranf()
       IF (d*u.GE.difmuk*difmuk*difmuk) RETURN
@@ -187,7 +187,7 @@ C
       t = 1.8d0 + dsign(e,u)
       IF (t.LE. (-.6744)) GO TO 50
       ignpoi = idint(mu+s*t)
-      fk = float(ignpoi)
+      fk = dble(ignpoi)
       difmuk = mu - fk
 C
 C             'SUBROUTINE' F IS CALLED (KFLAG=1 FOR CORRECT RETURN)
@@ -232,10 +232,12 @@ C     C A S E  B. (START NEW TABLE AND CALCULATE P0 IF NECESSARY)
 C
 C     JJV changed MUPREV assignment from 0.0 to initial value
   120 muprev = -1.0E37
-      IF (mu.EQ.muold) GO TO 130
+C     Jpc 1999: the next lines seams to produce a bug 
+C     and I finaly commented them out 
+C     IF (mu.EQ.muold) GO TO 130
 C     JJV added argument checker here
 C     JJV added line label here
- 125  muold = mu
+C 125  muold = mu
       m = max0(1,idint(mu))
       l = 0
       p = exp(-mu)
@@ -278,3 +280,8 @@ C
       RETURN
 
       END
+
+
+
+
+

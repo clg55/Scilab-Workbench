@@ -4,22 +4,25 @@ NAME
   cainv -  Dual of abinv
 
 CALLING SEQUENCE
-  [X,dims,J,Y,k,Z]=cainv(Sl,alfa,beta)
+  [X,dims,J,Y,k,Z]=cainv(Sl,alfa,beta,flag)
 
 PARAMETERS
 
-  sl        : syslin list containing the matrices [A,B,C,D].
+  Sl        : syslin list containing the matrices [A,B,C,D].
 
   alfa      : real number or vector (possibly complex, location of closed
             loop poles)
 
-  alfa      : real number or vector (possibly complex, location of closed
+  beta      : real number or vector (possibly complex, location of closed
             loop poles)
+
+  flag      : (optional) character string 'ge' (default) or 'st' or 'pp'
 
   X         : orthogonal matrix of size nx (dim of state space).
 
   dims      : integer row vector dims=[nd1,nu1,dimS,dimSg,dimN]  (5 entries,
-            nondecreasing order)
+            nondecreasing order).If flag='st', (resp. 'pp'), dims has 4
+            (resp. 3) components.
 
   J         : real matrix (output injection)
 
@@ -30,9 +33,9 @@ PARAMETERS
   Z         : non-singular linear system (syslin list)
 
 DESCRIPTION
-  cainv finds a bases (X,Y) (of state space and output space resp.) and out-
-  put injection matrix J such that the matrices of Sl in bases (X,Y) are
-  displayed as:
+  cainv finds a bases (X,Y) (of state space and output space resp.)  and out-
+  put injection matrix J such that the matrices of Sl in bases (X,Y) are dis-
+  played as:
 
                     [A11,*,*,*,*,*]                [*]
                     [0,A22,*,*,*,*]                [*]
@@ -43,9 +46,9 @@ DESCRIPTION
 
             Y*C*X = [0,0,C13,*,*,*]          Y*D = [*]
                     [0,0,0,0,0,C26]                [0]
-
   The partition of X is defined by the vector dims=[nd1,nu1,dimS,dimSg,dimN]
   and the partition of Y is determined by k.
+
   Eigenvalues of A11 (nd1 x nd1) are unstable.  Eigenvalues of A22 (nu1-nd1 x
   nu1-nd1) are stable.
 
@@ -63,7 +66,11 @@ DESCRIPTION
   detectability subspace" of Sl
 
   The dimN first columns of X span the maximal "complementary observability
-  subspace" of Sl. (dimS=0 iff B(ker(D))=0).
+  subspace" of Sl.  (dimS=0 if B(ker(D))=0).
+
+  If flag='st' is given, a five blocks partition of the matrices is returned
+  and dims has four components. If flag='pp' is given a four blocks partition
+  is returned (see abinv).
 
   This function can be used to calculate an unknown input observer:
   // DDEP: dot(x)=A x + Bu + Gd
@@ -72,7 +79,7 @@ DESCRIPTION
   //  Find: dot(w) = Fw + Ey + Ru such that
   //          zhat = Mw + Ny
   //           z-Hx goes to zero at infinity
-  //  Solution exists iff Ker H contains Sg(A,C,G) inter KerC
+  //  Solution exists iff Ker H contains Sg(A,C,G) inter KerC (assuming detectability)
   //i.e. H is such that:
   // For any W which makes a column compression of [Xp(1:dimSg,:);C]
   // with Xp=X' and [X,dims,J,Y,k,Z]=cainv(syslin('c',A,G,C));
@@ -80,4 +87,4 @@ DESCRIPTION
   // H*W = [0 | *]  (with at least as many aero columns as above).
 
 SEE ALSO
-  abinv, dt_ility
+  abinv, dt_ility, ui_observer

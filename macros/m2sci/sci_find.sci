@@ -1,14 +1,13 @@
 function [stk,txt,top]=sci_find()
 // Copyright INRIA
 if lhs==1 then
-  if stk(top)(3)=='1' then //row vector
+  [m,n]=checkdims(stk(top))
+  if m==1 then //row vector
     stk=list('find('+stk(top)(1)+')','0','1','?','1')
-  elseif stk(top)(4)=='1' then //column vector
+  elseif n==1 then //column vector
     stk=list('find('+stk(top)(1)+')''','0','1','?','1')
   else
-    txt=['/'+'/  mtlb_find('+stk(top)(1)+') may be replaced by'
-	 '/'+'/  find('+stk(top)(1)+')'' if '+stk(top)(1)+' is not a row vector']
-    stk=list('mtlb_find('+stk(top)(1)+')','0','1','?','1')
+    stk=list('matrix(find('+stk(top)(1)+'),1,-1)','0','1','?','1')
   end
 elseif lhs==2 then
   [i,j]=lhsvarsnames()

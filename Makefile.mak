@@ -48,6 +48,7 @@ LIBRSCI = libs/system.lib libs/interf.lib libs/system2.lib libs/optim.lib \
 	libs/intersci.lib libs/wsci.lib libs/graphics.lib libs/menusX.lib \
 	libs/libcomm.lib libs/comm.lib libs/sound.lib libs/dcd.lib \
 	libs/rand.lib libs/blas.lib libs/xdr.lib  libs/fraclab.lib \
+	libs/gd.lib libs/int.lib \
 	libs/libf2c.lib $(TKSCI) $(PVM)
 
 LIBR = $(XAW_LOCAL_LIB) $(LIBRSCI) $(DLDLIB)
@@ -78,8 +79,7 @@ DEFAULTS = routines/wsci/winmain.obj	\
 	routines/default/Funtab.obj \
 	routines/default/msgstxt.obj \
 	routines/default/scimem.obj \
-	routines/default/callinterf.obj
+	routines/default/callinterf.obj \
+	routines/default/mexlib.obj
 
 include config/Makefile.mak
-
-

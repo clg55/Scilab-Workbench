@@ -22,11 +22,13 @@ c     sparse  spget   full    lufact  lusolve  ludel luget spclean
 c     9       10     11    12       13     14      15      16
 c     nnz     spmax  spmin spmatrix spchol readmps fadj2sp spcompack
 c     17      18      19      20       21     22      23      
-c     ordmmd  blkfc1i blkslvi inpnvi   sfinit symfcti bfinit  
+c     ordmmd  blkfc1i blkslvi inpnvi   sfinit symfcti bfinit 
+c     24              25      26
+c     mtlb_sparse   %mspget   %mspfull
 c     
 
       goto (10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,
-     $     160,170,180,190,200,210,220,230) fin
+     $     160,170,180,190,200,210,220,230,240,250,260) fin
 c     
 c     sparse
  10   continue
@@ -142,6 +144,22 @@ c     symfcti
 c     bfinit
       call intbfinit(id)
       goto 900
+
+ 240  continue
+c     mtlb_sparse, 
+      call intmsparse(id)
+      goto 900
+
+ 250  continue
+c     %msp_get
+      call intmspget(id)
+      goto 900
+
+ 260  continue
+c     %msp_full
+      call intmfull(id)
+      goto 900
+
 
  900  continue
  999  return
@@ -370,7 +388,6 @@ c
          inc=1
          if(ilr.gt.lind) inc=-1
          call icopy(m+nel,istk(lind),inc,istk(ilr),inc)
-         return
       else
          lv=ilv+3
          lind=iadr(max(lw,sadr(il1+5+mm+nel)))
@@ -408,8 +425,8 @@ c
          inc=1
          if(ilr.gt.lind) inc=-1
          call icopy(m+nel,istk(lind),inc,istk(ilr),inc)
-         return
       endif
+      return
       end
 
       subroutine intspget(id)
@@ -571,7 +588,7 @@ c
       il=iadr(lstk(top))
       if(istk(il).eq.1.or.istk(il).eq.2) return
       if(istk(il).ne.5.and.istk(il).ne.6) then
-         call funnam(ids(1,pt+1),'spfull',iadr(lstk(top)))
+         call funnam(ids(1,pt+1),'full',iadr(lstk(top)))
          fun=-1
          return
       endif
@@ -870,13 +887,12 @@ c
          istk(il+3)=it2
          call dcopy(m2*n2*(it2+1),stk(lw3),1,stk(l),1)
          lstk(top+1)=l+m2*n2*(it2+1)
-         return
       else
 c     b is sparse
          call error(222)
          return
       endif
-
+      return
       end
 
       subroutine intludel(id)
@@ -1634,149 +1650,6 @@ c
       return
       end
 
-      subroutine intreadmps(id)
-      logical getrhsvar, createvar, putlhsvar
-      include '../stack.h'
-       nbvars=0
-c*****************************************************
-c      0-Check number of rhs and lhs arguments
-c*****************************************************       
-       minrhs=7
-       maxrhs=7
-       minlhs=22
-       maxlhs=22
-c
-       if(.not.((rhs.ge.minrhs).and.(rhs.le.maxrhs))) then
-          call erro('wrong number of rhs arguments')
-          return
-       endif
-       if(.not.((lhs.ge.minlhs).and.(lhs.le.maxlhs))) then
-          call erro('wrong number of lhs arguments')
-          return
-       endif
-
-c*******************************************************
-c      1-Get rhs parameters and set their Fortran types
-c*******************************************************
-       if(.not.getrhsvar( 1,'c', m1, n1, l1)) return
-       if(.not.getrhsvar( 2,'i', m2, n2, l2)) return
-       if(.not.getrhsvar( 3,'i', m3, n3, l3)) return
-       if(.not.getrhsvar( 4,'i', m4, n4, l4)) return
-       if(.not.getrhsvar( 5,'d', m5, n5, l5)) return
-       if(.not.getrhsvar( 6,'d', m6, n6, l6)) return
-       if(.not.getrhsvar( 7,'d', m7, n7, l7)) return
-
-c*****************************************************
-c      2-If necessary, create additional variables 
-c          (working arrays, default values, ...)
-c*****************************************************
-        k=maxrhs
-        if(.not.createvar(k+ 1,'i',1,1,l8)) return
-        if(.not.createvar(k+ 2,'i',1,1,l9)) return 
-        if(.not.createvar(k+ 3,'i',1,1,l10)) return 
-        if(.not.createvar(k+ 4,'i',1,1,l11)) return 
-        if(.not.createvar(k+ 5,'i',1,1,l12)) return
-        if(.not.createvar(k+ 6,'c',9,1,l13)) return
-        if(.not.createvar(k+ 7,'c',9,1,l14)) return 
-        if(.not.createvar(k+ 8,'c',9,1,l15)) return 
-        if(.not.createvar(k+ 9,'c',9,1,l16)) return
-        if(.not.createvar(k+10,'c',9,1,l17)) return 
-        if(.not.createvar(k+11,'i',1,1,l18)) return 
-        if(.not.createvar(k+12,'c',8,istk(l2),l19)) return
-        if(.not.createvar(k+13,'c',8,istK(l3),l20)) return 
-        if(.not.createvar(k+14,'i',istk(l3),1,l21)) return 
-        if(.not.createvar(k+15,'i',istk(l2),1,l22)) return 
-        if(.not.createvar(k+16,'i',istk(l2)+1,1,l23)) return
-        if(.not.createvar(k+17,'i',istk(l2)+1,1,l24)) return 
-        if(.not.createvar(k+18,'i',istk(l3)+1,1,l25)) return 
-        if(.not.createvar(k+19,'i',istk(l3)+1,1,l26)) return
-        if(.not.createvar(k+20,'i',istk(l4)  ,1,l27)) return 
-        if(.not.createvar(k+21,'i',istk(l3)+1,1,l28)) return
-        if(.not.createvar(k+22,'i',istk(l3),1,l29)) return 
-        if(.not.createvar(k+23,'d',istk(l4),1,l30)) return 
-        if(.not.createvar(k+24,'d',istk(l2),1,l31)) return
-        if(.not.createvar(k+25,'d',istk(l2),1,l32)) return 
-        if(.not.createvar(k+26,'d',istk(l3),1,l33)) return
-        if(.not.createvar(k+27,'d',istk(l3),1,l34)) return 
-        if(.not.createvar(k+28,'d',istk(l3),1,l35)) return
-c******************************************************
-c      3-Routine call
-c      stk  <-> double
-c      sstk <-> real
-c      istk <-> integer
-c      cstk <-> character
-c*****************************************************
-
-        buf=cstk(l1:(l1-1+n1*m1))//'.mps'
-        istk(l12)=n1*m1+4
-       call rdmps1(iflag,istk(l2),istk(l3),istk(l4),
-     $ istk( l8),istk( l9),istk(l10),istk(l11),
-     $  stk(l5), stk(l6), stk(l7),cstk(l13:(l13+8)),
-     $ cstk(l14:(l14+8)),cstk(l15:(l15+8)),cstk(l16:(l16+8)),
-     $ cstk(l17:(l17+8)),buf(1:istk(l12)),istk(l12),
-     $ cstk(l19:l19+8*istk(l2)-1),
-     $ cstk(l20:l20+8*istk(l3)-1),
-     $ istk(l21),istk(l22),istk(l23), 
-     $ istk(l24),istk(l25),istk(l26),istk(l27), 
-     $ istk(l28),istk(l29), stk(l30), stk(l31), stk(l32),
-     $  stk(l33), stk(l34), stk(l35))   
-c******************************************************
-c      4-Display error message(s)
-c******************************************************
-        if(iflag .NE. 0) then 
-         call erro('  error MPS file ')
-         return
-        endif
-c
-c******************************************************
-c      5- Set lhs parameters
-c******************************************************
-c        nbrows(19)=8
-c        nbcols(19)=istk(l8)
-c        nbrows(20)=8
-c        nbcols(20)=istk(l9)
-        lhsvar(1)=8
-        lhsvar(2)=9
-        lhsvar(3)=10
-        lhsvar(4)=11
-        lhsvar(5)=13
-        lhsvar(6)=14
-        lhsvar(7)=15
-        lhsvar(8)=16
-        lhsvar(9)=17
-        nbrows(21)=istk(l9) 
-        lhsvar(10)=21
-        nbrows(22)=istk(l8)
-        lhsvar(11)=22
-        nbrows(23)=istk(l8)+1
-        lhsvar(12)=23
-        nbrows(24)=istk(l8)+1
-        lhsvar(13)=24
-        nbrows(25)=istk(l9)+1
-        lhsvar(14)=25 
-        nbrows(26)=istk(l9)+1
-        lhsvar(15)=26
-        nbrows(27)=istk(l10)
-        lhsvar(16)=27
-        nbrows(28)=istk(l9)+1
-        lhsvar(17)=28
-        nbrows(30)=istk(l10)
-        lhsvar(18)=30
-        nbrows(31)=istk(l8)
-        lhsvar(19)=31 
-        nbrows(32)=istk(l8)
-        lhsvar(20)=32
-        nbrows(33)=istk(l9)
-        lhsvar(21)=33
-        nbrows(34)=istk(l9)
-        lhsvar(22)=34 
-c******************************************************
-c      6-Sending lhs variables to Scilab
-c******************************************************
-      if(.not.putlhsvar()) return
-c
-       return
-      end
 
       subroutine intfadj2sp(id)
       include '../stack.h'
@@ -1888,6 +1761,7 @@ c      6-Sending lhs variables to Scilab
 c******************************************************
        if(.not.putlhsvar()) return
 c
+       return
        end
 
 c SCILAB function ordmmd
@@ -1961,6 +1835,7 @@ c      6-Sending lhs variables to Scilab
 c******************************************************
        if(.not.putlhsvar()) return
 c
+       return
        end
 
 
@@ -2034,6 +1909,7 @@ c      6-Sending lhs variables to Scilab
 c******************************************************
        if(.not.putlhsvar()) return
 c      .
+       return
       end
 
 c SCILAB function blkslvi
@@ -2094,6 +1970,7 @@ c      6-Sending lhs variables to Scilab
 c******************************************************
        if(.not.putlhsvar()) return
 c      .
+       return
       end
 
 c SCILAB function inpnvi
@@ -2161,7 +2038,8 @@ c      6-Sending lhs variables to Scilab
 c******************************************************
        if(.not.putlhsvar()) return
 c      .
-      end
+       return
+       end
 
 c SCILAB function sfinit
       subroutine intsfinit(id)
@@ -2241,6 +2119,7 @@ c      6-Sending lhs variables to Scilab
 c******************************************************
        if(.not.putlhsvar()) return
 c      .
+       return
       end
 c SCILAB function symfcti
       subroutine intsymfcti(id)
@@ -2318,6 +2197,7 @@ c      6-Sending lhs variables to Scilab
 c******************************************************
        if(.not.putlhsvar()) return
 c      .
+       return
       end
 
 c SCILAB function bfinit
@@ -2383,5 +2263,6 @@ c      6-Sending lhs variables to Scilab
 c******************************************************
        if(.not.putlhsvar()) return
 c      .
+       return
       end
 

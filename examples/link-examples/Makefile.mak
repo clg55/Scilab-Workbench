@@ -8,13 +8,8 @@ SCIIMPLIB=$(SCIDIR)/bin/LibScilab.lib
 
 include ../../Makefile.incl.mak 
 
-FFLAGS = $(FC_OPTIONS) 
-CFLAGS = $(CC_OPTIONS) -DFORDLL  -I../../routines/f2c
-
-.f.obj	:
-	@..\..\bin\f2c  $*.f 
-	@$(CC) $(CFLAGS) $*.c 
-	@del $*.c 
+FFLAGS = $(FC_OPTIONS) -DFORDLL 
+CFLAGS = $(CC_OPTIONS) -DFORDLL 
 
 all:: info
 
@@ -42,13 +37,24 @@ test : $(OBJSF) $(OBJSC)
 	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
 
 
-.f.dll : 
-	@..\..\bin\f2c  $*.f 
+!IF "$(USE_F2C)" == "YES"
+.f.dll	:
+	@echo ----------- Compile file $*.f (using f2c) -------------
+	@$(SCIDIR1)\bin\f2c.exe $*.f 
 	@$(CC) $(CFLAGS) $*.c 
 	@del $*.c 
 	@echo Creation of dll $(DLL) and import lib 
 	@$(DUMPEXTS) -o "$*.def" "$*.dll" $*.obj
 	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+!ELSE 
+.f.dll	:
+	@echo -----------Compile file $*.f  (using $(FC)) -------------
+	@$(FC) $(FFLAGS) $<
+	@echo Creation of dll $(DLL) and import lib 
+	@$(DUMPEXTS) -o "$*.def" "$*.dll" $*.obj
+	@$(LINKER) $(LINKER_FLAGS) $*.obj $(SCIIMPLIB) $(XLIBSBIN) $(TERMCAPLIB) /nologo /dll /out:"$*.dll" /implib:"$*.ilib" /def:"$*.def" 
+!ENDIF 
+
 
 distclean:: clean
 

@@ -3,7 +3,7 @@ function f=%r_q_s(f1,n2)
 //!
 // Copyright INRIA
 if size(n2,'*')==0 then f=[],return,end
-f=tlist(f1(1),f1(3).*n2,f1(2).*ones(n2),f1(4))
+f=rlist(f1('den').*n2,f1('num').*ones(n2),f1('dt'))
 
 
 

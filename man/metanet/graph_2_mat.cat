@@ -15,8 +15,8 @@ PARAMETERS
   a : sparse node-arc or node-node incidence matrix
 
 DESCRIPTION
-  graph_2_mat computes the node-arc or the node-node incidence matrix
-  corresponding to the graph g.
+  graph_2_mat computes the node-arc or the node-node incidence matrix corre-
+  sponding to the graph g.
 
   If the optional argument mat is omitted or is the string
 

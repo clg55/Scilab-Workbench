@@ -1,8 +1,12 @@
-/* Copyright INRIA */
+/**************************************
+ * Copyright Jean-Philippe Chancelier 
+ * ENPC 
+ **************************************/
 
 #include "../machine.h"
 #include "../sun/addinter.h" /* for DynInterfStart */
-
+#include <setjmp.h>
+static  jmp_buf jmp_env; 
 extern int  C2F(matdsc) _PARAMS((void));
 extern int  C2F(matdsr) _PARAMS((void));
 extern int  C2F(userlk) _PARAMS((int *));
@@ -48,6 +52,7 @@ typedef  struct  {
 
 #include "callinterf.h"
 
+
 /***********************************************************
  * call the apropriate interface according to the value of k 
  * iflagint is only used inside MatdsRC to switch between 
@@ -57,11 +62,23 @@ typedef  struct  {
 int C2F(callinterf)(k,iflagint)
       int *k,*iflagint;
 {
+  int returned_from_longjump ;
+  static count = 0;
   Iflag=*iflagint;
+  if ( count == 0) 
+    {
+      if (( returned_from_longjump = setjmp(jmp_env)) != 0 )
+	{
+	  count = 0;
+	  return 0;
+	}
+    }
+  count++;
   if (*k > DynInterfStart) 
     C2F(userlk)(k);
   else
     (*(Interfaces[*k-1].fonc))();
+  count--;
   return 0;
 }
 
@@ -88,4 +105,9 @@ int ForceLink()
   System_contents(0);
   Intersci_contents(0);
   return 0;
+}
+
+extern int errjump()
+{
+longjmp(jmp_env,-1); 
 }

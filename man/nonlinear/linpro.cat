@@ -38,9 +38,9 @@ PARAMETERS
 
   f         : optimal value of the cost function (i.e. f=p'*x).
 
-  lagr      : vector of Lagrange multipliers. If lower and upper-bounds ci,cs
-            are provided, lagr has n + mi + md components and lagr(1:n) is
-            the Lagrange vector associated with the bound constraints and
+  lagr      : vector of Lagrange multipliers.  If lower and upper-bounds
+            ci,cs are provided, lagr has n + mi + md components and lagr(1:n)
+            is the Lagrange vector associated with the bound constraints and
             lagr (n+1 : n + mi + md) is the Lagrange vector associated with
             the linear constraints.  (If an upper-bound (resp. lower-bound)
             constraint i is active lagr(i) is > 0 (resp. <0).  If no bounds
@@ -70,11 +70,11 @@ DESCRIPTION
   If no initial point is given the program computes a feasible initial point
   which is a vertex of the region of feasible points if x0='v'.
 
-  If x0='g', the program computes a feasible initial point which is not
-  necessarily a vertex. This mode is advisable when the quadratic form is
-  positive definite and there are a few constraints in the problem or when
-  there are large bounds on the variables that are security bounds and very
-  likely not active at the optimal solution.
+  If x0='g', the program computes a feasible initial point which is not nec-
+  essarily a vertex. This mode is advisable when the quadratic form is posi-
+  tive definite and there are a few constraints in the problem or when there
+  are large bounds on the variables that are security bounds and very likely
+  not active at the optimal solution.
 
 EXAMPLE
   //Find x in R^6 such that:

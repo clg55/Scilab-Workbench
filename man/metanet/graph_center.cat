@@ -18,8 +18,8 @@ DESCRIPTION
   graph_center computes the center of the graph g i.e. the node for which the
   largest of the shortest paths to all the other nodes is minimum. The
   lengths of the arcs are supposed to be integer (and the default value is
-  1). The output is the value rad of the length of the radius and no which is
-  the node number of the center of the graph.
+  1).  The output is the value rad of the length of the radius and no which
+  is the node number of the center of the graph.
 
 EXAMPLE
   ta=[1 1 2 2 2 3 4 5 5 7 8 8 9 10 10 10 10 11 12 13 13 14 15 16 16 17 17];

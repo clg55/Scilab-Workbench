@@ -4,7 +4,7 @@
 scilab  - Major unix script to execute Scilab and miscellaneous tools
 .SH CALLING SEQUENCE
 .nf
-scilab [-ns -nw -display display -f file]
+scilab [-ns -nw -display display -f file -args arguments]
 scilab -help [ <key> ]
 scilab -k <key>
 scilab -xk <key>
@@ -12,11 +12,28 @@ scilab -link <objects>
 .fi
 .SH DESCRIPTION
 .TP
-scilab [-ns -nw -display display -f path]
-: run scilab. If \fV-ns\fR option is present the startup file
-\fVSCI/scilab.star\fR is not executed. If \fV-nw\fR option is present then 
-scilab is not run in an X window. If  \fV-f file\fR is present then
+scilab [-ns -nw -display display -f path -args arguments]
+: run scilab. 
+.RS
+.TP 
+\fV-ns\fR
+:if this option is  present the startup file
+\fVSCI/scilab.star\fR is not executed. 
+.TP
+\fV-nw\fR
+:if this option is present then 
+scilab is not run in an X window. 
+.TP
+\fV-f file\fR
+: if this option is present then Scilab script
 \fVfile\fR is executed first into Scilab. 
+.TP
+\fV-args arguments\fR
+: if this option is present arguments are passed to Scilab. They
+can then be got by sciargs function. For multi arguments passing use a
+quoted, blank separated sequence of words like:
+ \fVscilab -args 'foo1 foo2'\fR
+.RE
 .TP
 scilab -help <key>
 : write on-line documentation about <key> (usually automatically called 

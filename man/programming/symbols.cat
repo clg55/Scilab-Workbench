@@ -12,7 +12,7 @@ DESCRIPTION
    -                minus
    *,.*             star
    /, ./, /.        slash
-   \,.\ ,\.         backslash
+   \\,.\\ ,\\.      backslash
    .                dot
    =, ==            equal
    <,>,>=,<=,<>     less
@@ -28,6 +28,6 @@ DESCRIPTION
    .^               power
    |                or
    &                and
-   .*., ./., .\.    kron
+   .*., ./., .\\.   kron
 SEE ALSO
   overloading

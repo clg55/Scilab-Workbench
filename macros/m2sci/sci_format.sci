@@ -43,7 +43,7 @@ if unk then
     stk=list('mtlb_format('+stk(top)(1)+','+stk(top+1)(1)+')','0','0','0','0')
   end
 elseif ratf|loose|compact|bank|hex then
-  write(logfile,'No equivalent to '+f+' format. Ignored')
+  set_infos('No equivalent to '+f+' format. Ignored',2)
   stk=list(' ','-2','0','0','0','0')
 else
   if rhs1==1 then

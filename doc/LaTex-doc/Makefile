@@ -2,7 +2,7 @@ SHELL = /bin/sh
 
 include ../../Version.incl
 SCIDIR=../..
-SCIDOC=$(SCIDIR)/../$(SCIVERSION)-doc
+SCIDOC=$(SCIDIR)/../$(SCIVERSION)/doc
 include ../../Makefile.incl
 
 FILES = Chap1.tex Chap2.tex Chap3.tex Chap4.tex Chap5.tex Chap6.tex \
@@ -179,8 +179,6 @@ Chap3-4.tex : $(TR2TEX) $(MAN)/pvm/?*.man $(MAN)/comm/?*.man
 
 clean::
 	$(RM) *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg  *.toc *.lot \
-	Docu_pdf.* *.tmp Manual_pdf.ps
+	Docu_pdf.* *.tmp Manual_pdf.ps Warnings
 
-distclean::
-	$(RM) *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg *.toc *.lot \
-	Docu_pdf.* *.tmp Manual_pdf.ps
+distclean:: clean 

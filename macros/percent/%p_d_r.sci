@@ -1,8 +1,7 @@
-function r=%p_d_r(p,r)
-// r=%p_d_r(p,r) <=> r= p./r   polynomial./rational
+function f=%p_d_r(n1,f2)
+// n1./f2
+//!
 // Copyright INRIA
-[n,d]=r(2:3)
-r(2)=d.*p;r(3)=n.*ones(p);
-
+f=rlist(n1.*f2('den'),ones(n1).*f2('num'),f2('dt'))
 
 

@@ -20,8 +20,8 @@ DESCRIPTION
 
   If a process leaves a group by calling either pvm_lvgroup or pvm_exit, and
   later rejoins the same group, the process may be assigned a new instance
-  number. Old instance numbers are reassigned to processes calling
-  pvm_joingroup.
+  number. Old instance numbers are reassigned to processes calling pvm_join-
+  group.
 
 EXAMPLE
   info = pvm_lvgroup( "worker" )

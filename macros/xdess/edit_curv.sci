@@ -100,6 +100,7 @@ curwin=xget('window')
 unsetmenu(curwin,'File',1) //clear
 unsetmenu(curwin,'File',2) //select
 unsetmenu(curwin,'File',6) //load
+unsetmenu(curwin,'File',7) //close
 unsetmenu(curwin,'3D Rot.')
 //
 execstr('Edit_'+string(curwin)+'=Edit')
@@ -125,6 +126,7 @@ while %t then
   [n1,n2]=size(x);npt=n1*n2
   [btn,xc,yc,win,Cmenu]=getclick()
   c1=[xc,yc]
+  if Cmenu=='Quit' then Cmenu='Abort',end
   if Cmenu==[] then Cmenu='edit',end
   if Cmenu=='Exit' then Cmenu='Ok',end
   select Cmenu
@@ -141,8 +143,8 @@ while %t then
     //    -- abort menu
     x=xsav
     y=ysav
-    xset('default')
-    xdel()
+//    xset('default')
+    if or(curwin==winsid()) then xdel(ewin);end
     ok=%f
     return
   case 'Undo' then

@@ -29,12 +29,16 @@ include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS)
 
+FFLAGS = $(FC_OPTIONS)
+
 include ../Make.lib
 
-all:: Makefile.mak
+all:: Makefile.mak Makefile.amk
 
 Makefile.mak	: Makefile
 	$(SCIDIR)/util/Mak2VCMak Makefile
 
+Makefile.amk	: Makefile
+	$(SCIDIR)/util/Mak2ABSMak Makefile
 
 sp.o: spd.h ../machine.h

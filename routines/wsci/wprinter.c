@@ -35,7 +35,9 @@
 #include <commdlg.h>
 #endif
 
+#ifndef __ABSC__
 #include <memory.h>
+#endif
 
 #include "wgnuplib.h"
 #include "wresource.h"

@@ -16,7 +16,7 @@ Input parameters
        o fmin : real scalar in [0,0.5] Lower frequency bound of the signal
        o fmax :  real scalar [0,0.5] and fmax > Upper frequency bound of the
          signal
-       o N : positive integer. number of Mellin samples.
+       o N : positive integer.  number of Mellin samples.
 Output parameters
        o mellin : complex vector [1,N] Mellin transform of s.
        o beta : real vector [1,N] Variable of the Mellin transform mellin.
@@ -24,6 +24,7 @@ Description
 
 Parameters
        o s : signal to be transformed. Real or complex vector.
+
        o fmin : lower frequency bound of the analysis. fmin is real scalar
          comprised in  [0,0.5]
        o fmax : upper frequency bound of the analysis. fmax is a real scalar

@@ -9,7 +9,7 @@ c
       sadr(l)=(l/2)+1
 c
 
-      if(rhs.le.0) return
+      if(rhs.le.0.or.top.lt.rhs) return
 
       vol=0
       ref=.false.

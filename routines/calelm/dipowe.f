@@ -34,7 +34,7 @@ c         endif
             r=v**p
          else
             r=0.0d0
-            r=1.0d0/r
+            r=infinity(r)
             ierr=2
          endif
       else

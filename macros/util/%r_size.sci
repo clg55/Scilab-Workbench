@@ -6,11 +6,11 @@ function [m,n,nx]=%r_size(x,flag)
 x1=x(1);
 if lhs==1 then 
   if rhs==1 then
-    m=size(x(2));
+    m=size(x('num'));
   else
-    m=size(x(2),flag);
+    m=size(x('num'),flag);
   end
 elseif lhs==2 then 
   if rhs<>1 then error(41),end
-  [m,n]=size(x(2));
+  [m,n]=size(x('num'));
 end

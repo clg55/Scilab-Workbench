@@ -6,8 +6,8 @@ NAME
 
   Author: Lotfi Belkacem
 
-  This routine estimates the covariation of two jointly symmetric alpha-
-  stable random variables.
+  This routine estimates the covariation of two jointly symmetric alpha-sta-
+  ble random variables.
 
 Usage
   [cov]=stable_cov(data1,data2)

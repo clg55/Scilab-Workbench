@@ -5,16 +5,14 @@ c     file handling and other i/o
 c     
 c     ====================================================================
 c     
-c     Copyright INRIA
+c     Copyright INRIA/ENPC
       INCLUDE '../stack.h'
       integer    lch
       parameter (lch=1024)
       character chaine*(lch)
 c     
       integer blank,flag,top2,tops,topk,semi,percen,id(nlgh),h(nsiz)
-      integer status,access,form,recl,old,new,scratc,unknow
-      integer sequen,direct,forma1,unform
-      integer clo,rew,bak,ope,ftyp,fmttyp,mode(2),retu(6),comma,eol
+      integer ftyp,fmttyp,mode(2),retu(6),comma,eol
       integer nocomp,top0
       double precision eps,xxx
       logical opened,eptover
@@ -24,10 +22,7 @@ c
       save opened,lunit,job,icomp
 c     
       data blank/40/,semi/43/,percen/56/
-      data old/857368/,new/2100759/,scratc/1707037/,unknow/1316638/
-      data sequen/1707548/,direct/1774093/,forma1/1775631/
-      data unform/988958/
-      data clo/12/,ope/24/,rew/27/,bak/11/,last/21/,nclas/29/
+      data nclas/29/
       data retu/27,14,29,30,27,23/,comma/52/,eol/99/
       data nocomp/23/
 c     
@@ -43,11 +38,8 @@ c
       top0=top-rhs+1
 c
       if(int(rstk(pt)/100).ne.9) goto 01
-      if(rstk(pt).eq.902) goto 12
-      if(rstk(pt).eq.903) goto 24
-      if(rstk(pt).eq.904) goto 57
-      if(rstk(pt).eq.908) goto 203
-      if(rstk(pt).eq.909) goto 16
+      goto(12,24,57,240,250,999,203,16) rstk(pt)-901
+
 c     
 c     functions/fin
 c     
@@ -55,17 +47,17 @@ c     load read  getf exec lib   diary save write print mac  deff rat
 c     1    2     3    4     5     6    7     8     9    10   11   12
 c     file hosts readb writb execstr  disp  getpid getenv read4b write4b
 c     13   14    15    16     17      18     19     20     22      23
-c     
-c     
+c     Save Load
+c     24   25
  01   goto ( 35, 120, 54,10, 130,27, 30,60, 25, 160,
      +       50, 45, 140,170,190,180,20,200,205,210,
-     +       170,220,230),fin
+     +       170,220,230,240,250),fin
 c     
 c     exec
  10   continue
       lw=lstk(top+1)
-      il=iadr(lstk(top))
-      if(rhs.gt.2.or.rhs.lt.1) then
+
+      if(rhs.gt.3.or.rhs.lt.1) then
          call error(42)
          return
       endif
@@ -73,26 +65,68 @@ c     exec
          call error(41)
          return
       endif
-c     opening file
-      top2=top
-      top = top-rhs+1
+
+c     options handling
+c---------------------
+c     default options values
+      flag = 3
+      if (sym .eq. semi) flag = 0
+      icheck=0
+c
+      if(rhs.gt.1) then
+c     . specified options
+         do 11 ir=2,rhs
+            ilopt=iadr(lstk(top))
+            if(istk(ilopt).lt.0) ilopt=iadr(istk(ilopt+1))
+            if(istk(ilopt).eq.1) then
+c     .        mode given
+               flag = int(stk(sadr(ilopt+4)))
+            elseif(istk(ilopt).eq.10) then
+c     .        error control
+               icheck=1
+            else
+               call error(44)
+               return
+            endif
+            top=top-1
+ 11      continue
+      endif
+
+      if(flag.ge.4) then
+         call basout(io,wte,
+     $        'step-by-step mode: enter carriage return to proceed')
+      endif
+
+
+      pt=pt+1
+c     error control
+      ids(2,pt)=errct
+      ids(3,pt)=err2
+      ids(4,pt)=err1
+      ids(5,pt)=errpt
+      if(icheck.eq.0) then
+         ids(1,pt)=0
+      else
+         errpt=pt
+         ids(1,pt)=1
+         imode=1
+         imess=1
+         num=-1
+         errct=(8*imess+imode)*100000+abs(num)
+         if(num.lt.0) errct=-errct
+      endif
+
       il=iadr(lstk(top))
       if(istk(il).eq.11.or.istk(il).eq.13) goto 15
+c     opening file
       mode(1)=-1
       mode(2)=0
       call v2unit(top,mode,lunit,opened,ierr)
       if(ierr.gt.0) return
-c     
-      flag = 3
-      if (sym .eq. semi) flag = 0
-      if(rhs.eq.1) goto 11
-      il2=iadr(lstk(top2))
-      l=sadr(il2+4)
-      flag = int(stk(l))
-      if(flag.ge.4) call basout(io,wte,
-     &     'step-by-step mode: enter carriage return to proceed')
- 11   top=top-1
-      pt=pt+1
+      top=top-1
+
+
+
       pstk(pt)=rio
       rio = lunit
       rstk(pt)=902
@@ -102,34 +136,40 @@ c     *call*  macro
       go to 999
  12   call clunit(-rio,buf,mode)
       rio=pstk(pt)
-      pt=pt-1
       top=top+1
-      il=iadr(lstk(top))
-      istk(il)=0
-      lstk(top+1)=sadr(il+1)
-      goto 999
+      goto 17
 
 c     exec of a function
  15   continue
-      flag = 3
-      if (sym .eq. semi) flag = 0
-      if(rhs.eq.2) then
-         il2=iadr(lstk(top2))
-         l=sadr(il2+4)
-         flag = int(stk(l))
-         if(flag.ge.4) call basout(io,wte,
-     &        'step-by-step mode: enter carriage return to proceed')
-         top=top-1
-      endif
+      fin=lstk(top)
+      pstk(pt)=flag
       rstk(pt)=909
       icall=5
 c     *call*  macro
       go to 999
- 16   pt=pt-1
-      top=top+1
-      il=iadr(lstk(top))
-      istk(il)=0
-      lstk(top+1)=sadr(il+1)
+ 16   lhs=1
+ 17   if(ids(1,pt).eq.1) then
+c     return error number
+         il=iadr(lstk(top))
+         istk(il)=1
+         istk(il+1)=1
+         istk(il+2)=1
+         istk(il+3)=0
+         l=sadr(il+4)
+         stk(l)=err1
+         lstk(top+1)=l+1
+         errct=ids(2,pt)
+         err2=ids(3,pt)
+         err1=ids(4,pt)
+         fun=0
+      else
+         errpt=ids(5,pt)
+         il=iadr(lstk(top))
+         istk(il)=0
+         lstk(top+1)=lstk(top)+1
+         err1=0
+      endif
+      pt=pt-1
       goto 999
 c     
 c     execstr
@@ -319,114 +359,13 @@ c     save
 c     ----
 c     
  30   continue
-      lw=lstk(top+1)
-      il=iadr(lstk(top))
-      if(rhs.lt.1) then
-         call error(42)
-         return
-      endif
-      if(lhs.gt.1) then
-         call error(41)
-         return
-      endif
-
-c     opening file
-      top2 = top
-      top = top-rhs+1
-      il=iadr(lstk(top))
-      mode(1)=100
-      mode(2)=0
-      call v2unit(top,mode,lunit,opened,ierr)
-      if(ierr.gt.0) return
-c     
-      call savlod(lunit,id,-1,top)
-      if(err.gt.0) goto 33
-      if(rhs.ge.2) then
-         k=top2
-      else
-         k=bbot-1
-         if(k.lt.bot) goto 999
-      endif
- 32   continue
-      l=k
-      ilk=iadr(lstk(k))
-      if(istk(ilk).lt.0) l=istk(ilk+2)
-      if(fin.eq.7) call savlod(lunit,idstk(1,k),0,l)
-      k = k-1
-      if(k.ge.bot.and.rhs.eq.1 .or. k.gt.top.and.rhs.gt.1) goto 32
- 33   if(.not.opened) then
-         mode(1)=0
-         mode(2)=0
-         call clunit(-lunit,buf,mode)
-      endif
-      istk(il)=0
+      call oldsave
       go to 999
 c     
 c     load
  35   continue
-      lw=lstk(top+1)
-      il=iadr(lstk(top))
-      if(rhs.lt.1) then
-         call error(42)
-         return
-      endif
-      if(lhs.gt.1) then
-         call error(41)
-         return
-      endif
-
-c     opening file
-      top2 = top
-      top = top-rhs+1
-      il=iadr(lstk(top))
-      mode(1)=-101
-      mode(2)=0
-      call v2unit(top,mode,lunit,opened,ierr)
-      if(ierr.gt.0) return
-      call savlod(lunit,id,-2,top)
-      if(err.gt.0) goto 39
-c     
-      if(rhs.gt.1) goto 40
- 36   job = lstk(bot) - lstk(top)
-      id(1)=blank
-      call savlod(lunit,id,job,top)
-      il=iadr(lstk(top))
-      if(istk(il).eq.0) goto 39
-      sym = semi
-      rhs = 0
-      call stackp(id,1)
-      top = top + 1
-      go to 36
- 39   if(.not.opened) then
-         mode(1)=0
-         mode(2)=0
-         call clunit(-lunit,buf,mode)
-      endif
-      istk(il)=0
+      call oldload
       go to 999
-c     
- 40   top=top2
-      sym=semi
-      m=rhs
-      rhs=0
-      do 44 k=2,m
-         job = lstk(bot) - lstk(top)
-         il=iadr(lstk(top))
-         if(istk(il).ne.10) then
-            err=k
-            call error(55)
-            return
-         endif
-         lc=il+5+istk(il+1)*istk(il+2)
-         nc=min(nlgh,istk(il+5)-1)
-         call namstr(h,istk(lc),nc,0)
-         call savlod(lunit,h,job,top)
-         if(istk(il).eq.0) goto 39
-         call stackp(h,1)
-         if(k.lt.m) rewind(lunit)
- 44   continue
-      il=iadr(lstk(top))
-      goto 39
 c     
 c     rat
  45   continue
@@ -531,7 +470,8 @@ c     deff
       endif
       lw=lstk(top+1)
       il=iadr(lstk(top))
-      call getfun(0)
+      nlines=1
+      call getfun(0,nlines)
       if(err.gt.0.or.err1.gt.0) goto 999
       if(icomp.eq.1) then
          call dcopy(lstk(top+1)-lstk(top),stk(lstk(top)),1,
@@ -583,11 +523,11 @@ c
       else
          icomp=1
       endif
- 55   call getfun(lunit)
+      nline=0
+ 55   call getfun(lunit,nline)
       fun=0
       job=fin
       if(err.gt.0.or.err1.gt.0) then
-
          if(.not.opened) then
             mode(1)=0
             mode(2)=0
@@ -1301,190 +1241,8 @@ c
 c     filemgr
 c     
  140  continue
-      lw=lstk(top+1)
-      il=iadr(lstk(top))
-      if(lhs.gt.2) then
-         call error(41)
-         return
-      endif
-c     action
-      il=iadr(lstk(top+1-rhs))
-      if(istk(il).ne.10) then
-         err=1
-         call error(55)
-         return
-      endif      
-      if(istk(il+1)*istk(il+2).ne.1) then
-         err=1
-         call error(36)
-         return
-      endif
-      l=il+5+istk(il+1)*istk(il+2)
-      itype=abs(istk(l))
-      if(itype.ne.ope) goto 150
-c     
-c     open
- 141  if(rhs.gt.6) then
-         call error(39)
-         return
-      endif
-c     path
-      il=iadr(lstk(top+2-rhs))
-      if(istk(il).ne.10) then
-         err=2
-         call error(55)
-         return
-      endif
-      if(istk(il+1)*istk(il+2).ne.1) then
-         err=2
-         call error(36)
-         return
-      endif
-      l=il+5+istk(il+1)*istk(il+2)
-      mn=istk(il+5)-1
-      buf=' '
-      call cvstr(mn,istk(l),buf,1)
-      rhs=rhs-2
-      status=0
-      access=0
-      form=0
-      recl=0
-      if(rhs.eq.0) goto 145
-      do 143 i=1,rhs
-         il=iadr(lstk(top))
-         if(istk(il).eq.10) then
-            l=il+5+istk(il+1)*istk(il+2)
-            if(istk(il+5)-1.lt.3) then
-               call error(36)
-               return
-            endif
-            itype=abs(istk(l))+256*(abs(istk(l+1))+256*abs(istk(l+2)))
-            if(itype.eq.new) then
-               status=0
-            elseif(itype.eq.old) then
-               status=1
-            elseif(itype.eq.scratc) then
-               status=2
-            elseif(itype.eq.unknow) then
-               status=3
-            elseif(itype.eq.sequen) then
-               access=0
-            elseif(itype.eq.direct) then
-               access=1
-            elseif(itype.eq.forma1) then
-               form=0
-            elseif(itype.eq.unform) then
-               form=1
-            endif
-         elseif(istk(il).eq.1) then
-            recl=int(stk(sadr(il+4)))
-            mode(2)=recl
-         else
-            err=i
-            call error(53)
-            return
-         endif
-         top=top-1
- 143  continue
- 145  mode(1)=status+10*(access+10*(form))
-      lunit=0
-      call clunit(lunit,buf(1:mn),mode)
-      if(err.gt.0) then
-         if(lhs.eq.1) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         else
-           top=top-1
-           il=iadr(lstk(top))
-           istk(il)=1
-           istk(il+1)=0
-           istk(il+2)=0
-           istk(il+3)=0
-           l=sadr(il+4)
-           lstk(top+1)=l+1 
-
-           top=top+1
-           il=iadr(lstk(top))
-           istk(il)=1
-           istk(il+1)=1
-           istk(il+2)=1
-           istk(il+3)=0
-           l=sadr(il+4)
-           stk(l)=err
-           lstk(top+1)=l+1
-           err=0
-           return
-        endif
-      endif
-      top=top-1
-      il=iadr(lstk(top))
-      istk(il)=1
-      istk(il+1)=1
-      istk(il+2)=1
-      istk(il+3)=0
-      l=sadr(il+4)
-      stk(l)=dble(lunit)
-      lstk(top+1)=l+1
-      if(lhs.eq.2) then
-           top=top+1
-           il=iadr(lstk(top))
-           istk(il)=1
-           istk(il+1)=1
-           istk(il+2)=1
-           istk(il+3)=0
-           l=sadr(il+4)
-           stk(l)=0.0d0
-           lstk(top+1)=l+1
-        endif
-
-         
+      call intsfile
       goto 999
-c     
- 150  continue
-      if(lhs.ne.1) then
-         call error(41)
-         return
-      endif
-      if(rhs.ne.2) then
-         call error(36)
-         return
-      endif
-      il1=iadr(lstk(top))
-      if(istk(il1).ne.1) then
-         err=rhs
-         call error(53)
-         return
-      endif
-      lunit=int(stk(sadr(il1+4)))
-      top=top-1
-      if(itype.ne.clo) goto 151
-c     close
-      mode(1)=0
-      call clunit(-lunit,buf,mode)
-      istk(il)=0
-      goto 999
- 151  if(itype.ne.rew) goto 152
-c     rewind
-      rewind(lunit)
-      istk(il)=0
-      goto 999
- 152  if(itype.ne.bak) goto 153
-c     backspace
-      backspace(lunit)
-      istk(il)=0
-      goto 999
-c     last
- 153  if(itype.ne.last) go to 157
- 154  read(lunit,'(a)',err=156,end=155)
-      go to 154
- 155  backspace(lunit)
-      istk(il)=0
-      go to 999
- 156  call error(49)
-      return
- 157  call error(36)
-      return
 c     
 c     macsym
  160  continue
@@ -1871,6 +1629,11 @@ c     read4b
 c     write4b
  230  call intwrite4b
       goto 999
+
+ 240  call intsave
+      goto 999
+ 250  call intload(40,k1)
+      goto 999
 c     --------------
 c     erreur lecture
 c     --------------
@@ -1906,10 +1669,15 @@ c
       if (istk(il).eq.1) then
          lunit = int(stk(sadr(il+4)))
          if (istk(il+1)*istk(il+2).ne.1.or.istk(il+3).ne.0.or.
-     $        lunit .lt. 0) then
+     $        lunit.lt.0) then
             err=1
             ierr=1
             call error(36)
+            return
+         endif
+         call getfileinfo(lunit,ifa,iswap,ltype,mod,buf,lb,info)
+         if(info.eq.0.and.ltype.eq.2) then
+            call error(243)
             return
          endif
          opened=.true.
@@ -1954,35 +1722,603 @@ c
       subroutine intsgetenv(fname)
 c     =============================
 c     getenv('varname' [,'rep'])
-       character*(*) fname
-       logical checkrhs,checklhs,getsmat,checkval,cresmat2,bufstore
-       include '../stack.h'
-       rhs = max(0,rhs)
-       lbuf = 1
-       if(.not.checkrhs(fname,1,2)) return
-       if(.not.checklhs(fname,1,1)) return
-       if(.not.getsmat(fname,top,top-rhs+1,m1,n1,1,1,lr1,nlr1)) return
-       if(.not.checkval(fname,m1*n1,1)) return
-       if(.not.bufstore(fname,lbuf,lbufi1,lbuff1,lr1,nlr1)) return
-       if(rhs.eq.2) then
-          if(.not.getsmat(fname,top,top-rhs+2,m2,n2,1,1,lr2,nlr2)) 
-     $         return
-          top=top-1
-       endif
-       nc =bsiz
-       call getenvc(ierr,buf(lbufi1:lbuff1),buf,nc,0)
-       if(ierr.ne.0) then 
-          if (rhs.eq.1) then
-             buf='Undefined environment variable'
-             call error(999)
-          else
-             call copyobj(fname,top+1,top)             
-          endif
-       else
-          if(.not.cresmat2(fname,top,nc,ilrs)) return
-          call cvstr(nc,istk(ilrs),buf,0)
-       endif
-       return
-       end
+      character*(*) fname
+      logical checkrhs,checklhs,getsmat,checkval,cresmat2,bufstore
+      include '../stack.h'
+      rhs = max(0,rhs)
+      lbuf = 1
+      if(.not.checkrhs(fname,1,2)) return
+      if(.not.checklhs(fname,1,1)) return
+      if(.not.getsmat(fname,top,top-rhs+1,m1,n1,1,1,lr1,nlr1)) return
+      if(.not.checkval(fname,m1*n1,1)) return
+      if(.not.bufstore(fname,lbuf,lbufi1,lbuff1,lr1,nlr1)) return
+      if(rhs.eq.2) then
+         if(.not.getsmat(fname,top,top-rhs+2,m2,n2,1,1,lr2,nlr2)) 
+     $        return
+         top=top-1
+      endif
+      nc =bsiz
+      call getenvc(ierr,buf(lbufi1:lbuff1),buf,nc,0)
+      if(ierr.ne.0) then 
+         if (rhs.eq.1) then
+            buf='Undefined environment variable'
+            call error(999)
+         else
+            call copyobj(fname,top+1,top)             
+         endif
+      else
+         if(.not.cresmat2(fname,top,nc,ilrs)) return
+         call cvstr(nc,istk(ilrs),buf,0)
+      endif
+      return
+      end
 c
 
+      subroutine intsfile
+c     interface for builtin file
+c     Copyright INRIA
+      INCLUDE '../stack.h'
+c     
+      integer status,access,form,recl,old,new,scratc,unknow
+      integer sequen,direct,forma1,unform
+      integer clo,rew,bak,ope,mode(2)
+      integer top0,tops
+
+      integer iadr,sadr
+c     
+      data old/857368/,new/2100759/,scratc/1707037/,unknow/1316638/
+      data sequen/1707548/,direct/1774093/,forma1/1775631/
+      data unform/988958/
+      data clo/12/,ope/24/,rew/27/,bak/11/,last/21/,nclas/29/
+c     
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c     
+
+      tops=top
+      top0=top-rhs+1
+c
+      lw=lstk(top+1)
+      if(rhs.le.0) then
+c     .  enquire
+c
+         if(lhs.gt.3) then
+            call error(41)
+            return
+         endif
+
+c     .  count opened files
+         n=0
+         nb=0
+         i=-1
+ 01      i=i+1
+         call getfileinfo(i,ifa,iswap,ltype,mode,buf,lb,info)
+         if(info.eq.1) goto 02
+         if(info.eq.2) goto 01
+         n=n+1
+         nb=nb+lb
+         goto 01
+ 02      continue
+
+         if(n.eq.0) then
+            err=lstk(top+1)+2*rhs-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            do 05 i=1,lhs
+               top=top+1
+               il=iadr(lstk(top))
+               istk(il)=1
+               istk(il+1)=0
+               istk(il+2)=0
+               istk(il+3)=0
+               lstk(top+1)=sadr(il+4)
+ 05         continue
+            return
+         endif
+         
+c     .  allocate lhs variables
+c
+c     .  vector of units
+         top=top+1
+         ilu=iadr(lstk(top))
+         lu=sadr(ilu+4)
+         lstk(top+1)=lu+n
+         if(lhs.eq.1) goto 12
+c     .  vector of types
+         top=top+1
+         ilt=iadr(lstk(top))
+         lt=ilt+5+n
+         lstk(top+1)=sadr(lt+n)
+         if(lhs.eq.2) goto 12
+c     .  vector of file names
+         top=top+1
+         iln=iadr(lstk(top))
+         ln=iln+5+n
+         lstk(top+1)=sadr(ln+nb)
+
+ 12      err=lstk(top+1)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+c     .  create lhs variable headers
+
+c     .  vector of units
+         istk(ilu)=1
+         istk(ilu+1)=1
+         istk(ilu+2)=n
+         istk(ilu+3)=0
+         if(lhs.eq.1) goto 14
+c     .  vector of types
+         istk(ilt)=10
+         istk(ilt+1)=1
+         istk(ilt+2)=n
+         istk(ilt+3)=0
+         istk(ilt+4)=1
+         do 13 i=1,n
+            istk(ilt+4+i)=i+1
+ 13      continue
+         if(lhs.eq.2) goto 14
+c     .  vector of names
+         istk(iln)=10
+         istk(iln+1)=1
+         istk(iln+2)=n
+         istk(iln+3)=0
+         istk(iln+4)=1
+         iln=iln+4
+c
+ 14      continue
+c     .  get file infos
+         i=-1
+ 15      i=i+1
+         call getfileinfo(i,ifa,iswap,ltype,mode,buf,lb,info)
+         if(info.eq.1) goto 17
+         if(info.eq.2) goto 15
+c     .  unit
+         stk(lu)=i
+         lu=lu+1
+         if(lhs.eq.1) goto 15
+c     .  type
+         if(ltype.eq.2) then
+            istk(lt)=-12
+         else
+            istk(lt)=-15
+         endif
+         lt=lt+1
+         if(lhs.eq.2) goto 15
+c     .  name
+         call cvstr(lb,istk(ln),buf,0)
+         ln=ln+lb
+         istk(iln+1)=istk(iln)+lb
+         iln=iln+1
+         goto 15
+ 17      continue
+         return
+      endif
+
+      il=iadr(lstk(top))
+      if(lhs.gt.2) then
+         call error(41)
+         return
+      endif
+
+c     action
+      il=iadr(lstk(top+1-rhs))
+      if(istk(il).ne.10) then
+         err=1
+         call error(55)
+         return
+      endif      
+      if(istk(il+1)*istk(il+2).ne.1) then
+         err=1
+         call error(36)
+         return
+      endif
+      l=il+5+istk(il+1)*istk(il+2)
+      itype=abs(istk(l))
+c
+
+      if(itype.eq.ope) then
+c     
+c     open
+         if(rhs.gt.6) then
+            call error(39)
+            return
+         endif
+c     path
+         il=iadr(lstk(top+2-rhs))
+         if(istk(il).ne.10) then
+            err=2
+            call error(55)
+            return
+         endif
+         if(istk(il+1)*istk(il+2).ne.1) then
+            err=2
+            call error(36)
+            return
+         endif
+         l=il+5+istk(il+1)*istk(il+2)
+         mn=istk(il+5)-1
+         buf=' '
+         call cvstr(mn,istk(l),buf,1)
+         rhs=rhs-2
+         status=0
+         access=0
+         form=0
+         recl=0
+         if(rhs.eq.0) goto 145
+         do 143 i=1,rhs
+            il=iadr(lstk(top))
+            if(istk(il).eq.10) then
+               l=il+5+istk(il+1)*istk(il+2)
+               if(istk(il+5)-1.lt.3) then
+                  call error(36)
+                  return
+               endif
+               itype=abs(istk(l))+256*(abs(istk(l+1))+256*abs(istk(l+2))
+     $              )
+               if(itype.eq.new) then
+                  status=0
+               elseif(itype.eq.old) then
+                  status=1
+               elseif(itype.eq.scratc) then
+                  status=2
+               elseif(itype.eq.unknow) then
+                  status=3
+               elseif(itype.eq.sequen) then
+                  access=0
+               elseif(itype.eq.direct) then
+                  access=1
+               elseif(itype.eq.forma1) then
+                  form=0
+               elseif(itype.eq.unform) then
+                  form=1
+               endif
+            elseif(istk(il).eq.1) then
+               recl=int(stk(sadr(il+4)))
+               mode(2)=recl
+            else
+               err=i
+               call error(53)
+               return
+            endif
+            top=top-1
+ 143     continue
+ 145     mode(1)=status+10*(access+10*(form))
+         lunit=0
+         call clunit(lunit,buf(1:mn),mode)
+         if(err.gt.0) then
+            if(lhs.eq.1) then
+               buf(mn+1:)=' '
+               call error(err)
+               return
+            else
+               top=top-1
+               il=iadr(lstk(top))
+               istk(il)=1
+               istk(il+1)=0
+               istk(il+2)=0
+               istk(il+3)=0
+               l=sadr(il+4)
+               lstk(top+1)=l+1 
+
+               top=top+1
+               il=iadr(lstk(top))
+               istk(il)=1
+               istk(il+1)=1
+               istk(il+2)=1
+               istk(il+3)=0
+               l=sadr(il+4)
+               stk(l)=err
+               lstk(top+1)=l+1
+               err=0
+               return
+            endif
+         endif
+         top=top-1
+         il=iadr(lstk(top))
+         istk(il)=1
+         istk(il+1)=1
+         istk(il+2)=1
+         istk(il+3)=0
+         l=sadr(il+4)
+         stk(l)=dble(lunit)
+         lstk(top+1)=l+1
+         if(lhs.eq.2) then
+            top=top+1
+            il=iadr(lstk(top))
+            istk(il)=1
+            istk(il+1)=1
+            istk(il+2)=1
+            istk(il+3)=0
+            l=sadr(il+4)
+            stk(l)=0.0d0
+            lstk(top+1)=l+1
+         endif
+      elseif(itype.eq.clo) then
+c     close
+         if(lhs.ne.1) then
+            call error(41)
+            return
+         endif
+         if(rhs.ne.2) then
+            call error(36)
+            return
+         endif
+         il1=iadr(lstk(top))
+         if(istk(il1).ne.1) then
+            err=rhs
+            call error(53)
+            return
+         endif
+         n=istk(il1+1)*istk(il1+2)
+         l=sadr(il1+4)
+
+         top=top-1
+         if(n.gt.0) then
+            mode(1)=0
+            do 151 i=1,n
+               lunit=int(stk(l-1+i))
+               if(lunit.ge.0) then
+                  call getfileinfo(lunit,ifa,isw,ltype,mode(1),buf,lb,
+     $                 info)
+                  if(info.eq.0) then
+                     if(ltype.eq.2) then
+                        call mclose(lunit,stk(lw))
+                     else
+                        call clunit(-lunit,buf,mode)
+                     endif
+                  endif
+               endif
+ 151        continue
+         endif
+         istk(il)=0
+      elseif(itype.eq.rew) then
+c     rewind
+         if(lhs.ne.1) then
+            call error(41)
+            return
+         endif
+         if(rhs.ne.2) then
+            call error(36)
+            return
+         endif
+         il1=iadr(lstk(top))
+         if(istk(il1).ne.1) then
+            err=rhs
+            call error(53)
+            return
+         endif
+         lunit=int(stk(sadr(il1+4)))
+         top=top-1
+
+         if(lunit.ge.0) then
+            call getfileinfo(lunit,ifa,isw,ltype,mode(1),buf,lb,info)
+            if(info.eq.0) then
+               if(ltype.eq.2) then
+                  call mseek(lunit,0,'set'//char(0),err)
+               else
+                  rewind(lunit)
+               endif
+            endif
+         endif
+         istk(il)=0
+         goto 999
+
+      elseif(itype.eq.bak) then
+c     backspace
+         if(lhs.ne.1) then
+            call error(41)
+            return
+         endif
+         if(rhs.ne.2) then
+            call error(36)
+            return
+         endif
+         il1=iadr(lstk(top))
+         if(istk(il1).ne.1) then
+            err=rhs
+            call error(53)
+            return
+         endif
+         lunit=int(stk(sadr(il1+4)))
+         top=top-1
+         if(lunit.ge.0) then
+            call getfileinfo(lunit,ifa,isw,ltype,mode(1),buf,lb,info)
+            if(info.eq.0) then
+               if(ltype.eq.2) then
+                  err=1
+                  call error(36)
+                  return
+               else
+                  backspace(lunit)
+               endif
+            endif
+         endif
+c     
+         istk(il)=0
+      elseif(itype.eq.last) then
+c     last
+         if(lhs.ne.1) then
+            call error(41)
+            return
+         endif
+         if(rhs.ne.2) then
+            call error(36)
+            return
+         endif
+         il1=iadr(lstk(top))
+         if(istk(il1).ne.1) then
+            err=rhs
+            call error(53)
+            return
+         endif
+         lunit=int(stk(sadr(il1+4)))
+         top=top-1
+         if(lunit.ge.0) then
+            call getfileinfo(lunit,ifa,isw,ltype,mode(1),buf,lb,info)
+            if(info.eq.0) then
+               if(ltype.eq.2) then
+                  call mseek(lunit,0,'end'//char(0),err)
+               else
+ 154              read(lunit,'(a)',err=156,end=155)
+                  go to 154
+ 155              backspace(lunit)
+               endif
+            endif
+         endif
+         istk(il)=0
+         return
+ 156     call error(49)
+         return
+      else
+c     incorrect action name
+         err=1
+         call error(36)
+         return
+      endif
+ 999  return
+      end
+
+      subroutine oldload
+c     Copyright INRIA/ENPC
+      INCLUDE '../stack.h'
+c     
+      integer id(nsiz),mode(2)
+      integer top2,job,semi
+      logical opened,eptover
+      integer iadr,sadr
+c
+      data blank/40/,semi/43/
+
+c     
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c     
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
+      if(rhs.lt.1) then
+         call error(42)
+         return
+      endif
+      if(lhs.gt.1) then
+         call error(41)
+         return
+      endif
+
+c     opening file
+      top2 = top
+      top = top-rhs+1
+      il=iadr(lstk(top))
+      mode(1)=-101
+      mode(2)=0
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
+      call savlod(lunit,id,-2,top)
+      if(err.gt.0) goto 39
+c     
+      if(rhs.gt.1) goto 40
+ 36   job = lstk(bot) - lstk(top)
+      id(1)=blank
+      call savlod(lunit,id,job,top)
+      il=iadr(lstk(top))
+      if(istk(il).eq.0) goto 39
+      sym = semi
+      rhs = 0
+      call stackp(id,1)
+      top = top + 1
+      go to 36
+ 39   if(.not.opened) then
+         mode(1)=0
+         mode(2)=0
+         call clunit(-lunit,buf,mode)
+      endif
+      istk(il)=0
+      go to 999
+c     
+ 40   top=top2
+      sym=semi
+      m=rhs
+      rhs=0
+      do 44 k=2,m
+         job = lstk(bot) - lstk(top)
+         il=iadr(lstk(top))
+         if(istk(il).ne.10) then
+            err=k
+            call error(55)
+            return
+         endif
+         lc=il+5+istk(il+1)*istk(il+2)
+         nc=min(nlgh,istk(il+5)-1)
+         call namstr(h,istk(lc),nc,0)
+         call savlod(lunit,h,job,top)
+         if(istk(il).eq.0) goto 39
+         call stackp(h,1)
+         if(k.lt.m) rewind(lunit)
+ 44   continue
+      il=iadr(lstk(top))
+      goto 39
+ 999  return
+      end
+
+      subroutine oldsave
+c     Copyright INRIA/ENPC
+      INCLUDE '../stack.h'
+c     
+      integer id(nsiz),mode(2)
+      integer top2,job,semi
+      logical opened,eptover
+      integer iadr,sadr
+c
+      data blank/40/,semi/43/
+
+c     
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c     
+
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
+      if(rhs.lt.1) then
+         call error(42)
+         return
+      endif
+      if(lhs.gt.1) then
+         call error(41)
+         return
+      endif
+
+c     opening file
+      top2 = top
+      top = top-rhs+1
+      il=iadr(lstk(top))
+      mode(1)=100
+      mode(2)=0
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
+c     
+      call savlod(lunit,id,-1,top)
+      if(err.gt.0) goto 33
+      if(rhs.ge.2) then
+         k=top2
+      else
+         k=bbot-1
+         if(k.lt.bot) goto 999
+      endif
+ 32   continue
+      l=k
+      ilk=iadr(lstk(k))
+      if(istk(ilk).lt.0) l=istk(ilk+2)
+      call savlod(lunit,idstk(1,k),0,l)
+      k = k-1
+      if(k.ge.bot.and.rhs.eq.1 .or. k.gt.top.and.rhs.gt.1) goto 32
+ 33   if(.not.opened) then
+         mode(1)=0
+         mode(2)=0
+         call clunit(-lunit,buf,mode)
+      endif
+      istk(il)=0
+ 999  return
+      end

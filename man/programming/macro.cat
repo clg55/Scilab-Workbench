@@ -8,7 +8,7 @@ DESCRIPTION
   save meaning). Usually, they are defined in files with an editor and loaded
   into Scilab by getf or through a library.
 
-  They can also be defined on-line (see deff). A file which contains a macro
+  They can also be defined on-line (see deff).  A file which contains a macro
   must begin as follows:
   function [y1,...,yn]=foo(x1,...,xm)
   The yi are output variables calculated as functions of input variables and

@@ -4,13 +4,33 @@ NAME
   arma - Scilab arma library
 
 DESCRIPTION
+  Armax processes can be coded with Scilab tlist of type 'ar'.  armac is used
+  to build Armax scilab object. An 'ar' tlist contains the fields
+  ['a','b','d','ny','nu','sig'].
 
-  armac     : this function creates a description as a list of an  ARMAX pro-
+  armac     : this function creates a Scilab tlist which code an  Armax pro-
             cess
                A(z^-1)y= B(z^-1)u + D(z^-1)sig*e(t)
+            -->ar=armac([1,2],[3,4],1,1,1,sig);
 
-  armap     : Display in the file out or on the screen the armax equation
-            associated with ar
+            -->ar('a')
+             ans  =
+
+            !   1.    2. !
+            -->ar('sig')
+             ans  =
+
+                1.
+
+  armap(ar [,out])
+            : Display the armax equation associated with ar
+
+  armap_p(ar [,out])
+            : Display the armax equation associated with ar using polynomial
+            matrix display.
+
+  [A,B,D]=armap2p(ar)
+            : extract polynomial matrices from ar representation
 
   armax     : is used to identify the coefficients of a n-dimensional ARX
             process
@@ -20,17 +40,16 @@ DESCRIPTION
             ARX process
                A(z^-1)y= B(z^-1)u + D(z^-1)sig*e(t)
 
-  arsimul   : armax trajectory simulation
+  arsimul   : armax trajectory simulation.
 
-  arspec    : Spectral power estimation of armax processes. Test of  mese and
-            arsimul
+  arspec    : Spectral power estimation of armax processes.  Test of  mese
+            and arsimul
 
   exar1     : An  Example of ARMAX identification ( K.J. Astrom) The armax
             process is described by :
                 a=[1,-2.851,2.717,-0.865]
                 b=[0,1,1,1]
                 d=[1,0.7,0.2]
-
   exar2     : ARMAX example ( K.J. Astrom). A simulation of a bi dimensional
             version of the example of exar1.
 

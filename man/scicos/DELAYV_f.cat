@@ -1,5 +1,5 @@
 
-DELAYV_f(5)                     Scicos Block                      DELAYV_f(5)
+DELAYV_f(5)                      Scicos Block                     DELAYV_f(5)
 NAME
   DELAYV_f - Scicos time varying delay block
 

@@ -4,17 +4,19 @@ include ../../Version.incl
 
 LIBRARY = $(SCIDIR)/libs/graphics.a
 
-OBJSC = @PERIFILE@ periPos.o periFig.o Xcall.o Xcall1.o \
+OBJSC = @PERIFILE@ periPos.o periFig.o  periGif.o Xcall.o Xcall1.o \
 	Contour.o Plo3d.o Math.o Axes.o Champ.o Plo2d.o \
 	Plo2d1.o Plo2d2.o Plo2d3.o Plo2d4.o Plo2dEch.o Rec.o Gray.o \
 	Alloc.o FeC.o RecLoad.o RecSave.o Tests.o Actions.o \
-	gsort.o qsort.o
+	gsort.o qsort.o nues1.o
 
-OBJSF =
+OBJSF = 
 
 include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS) $(XFLAGS) @WINXFLAGS@
+
+FFLAGS = $(FC_OPTIONS)
 
 include ../Make.lib
 
@@ -50,3 +52,4 @@ periPos.o: periPos.h Math.h color.h ../machine.h
 periX11.o: Math.h periX11.h version.h color.h ../machine.h
 xwidgets.o: Math.h ../machine.h
 gsort.o: Math.h gsort-int.h gsort-double.h gsort-string.h  ../machine.h
+nues1.o: Math.h ../machine.h

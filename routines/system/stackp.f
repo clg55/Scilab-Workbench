@@ -9,7 +9,7 @@ c     Copyright INRIA
       common /mprot/ macprt
       integer id(nsiz)
 c
-      logical eqid,new,compil
+      logical eqid,new,compil,w
       integer macmod
       integer v,vk,vt,vtk,pntr
 c
@@ -37,6 +37,7 @@ c
       if(err1.gt.0) return
 c     compilation  stackp: <1,nom(1:4)>
       if (compil(1,id,0,0,0)) then 
+         w=compil(22,sym,0,0,0)
          fin=0
          return
       endif
@@ -72,14 +73,21 @@ c
 c
       call putid(idstk(1,bot-1),id)
       k = last
-   05 k = k-1
+ 05   k = k-1
       if (.not.eqid(idstk(1,k),id)) go to 05
-      if (k .eq. bot-1) go to 06
+      if (k .eq. bot-1) go to 10
 c
-      ilk=iadr(lstk(k))
+      if(infstk(k).eq.2.and.vt.gt.0) then
+c     .  check if k always point to a valid global variable
+         kg=istk(iadr(lstk(k))+2)
+         if (kg.gt.gtop.or.(.not.eqid(idstk(1,kg),id))) goto 06
+         call storeglobal(id,k)
+         return
+      endif
+ 06   ilk=iadr(lstk(k))
       vtk=istk(ilk)
       vk=lstk(k+1)-lstk(k)
-   06 continue
+ 10   continue
 c
 c
       v=lstk(pntr+1)-lstk(pntr)
@@ -98,10 +106,10 @@ c
          if(stk(l1+i).ne.stk(l2+i)) goto 12
  11   continue
       goto 15
-   12 call error(13)
+ 12   call error(13)
       return
 c
-   15 continue
+ 15   continue
 c
 c     preserve macros
       if(vtk.eq.13.or.vtk.eq.11) then
@@ -154,13 +162,26 @@ c     shift storage
       ll = ls + vk
       call dcopy(lstk(k)-lstk(bot),stk(ls),-1,stk(ll),-1)
       km1 = k-1
-      do 21 ib = bot, km1
+      do 22 ib = bot, km1
         i = bot+km1-ib
         call putid(idstk(1,i+1),idstk(1,i))
         infstk(i+1)=infstk(i)
         lstk(i+1) = lstk(i)+vk
- 21   continue
+ 22   continue
 c
+c     list and update "reference" variables on the top of the stack
+      if(top-1.gt.0) then
+         do 21 kt=1,top-1
+            ilt=iadr(lstk(kt))
+            if (istk(ilt).lt.0) then
+               if(istk(ilt+2).lt.k) then
+                  istk(ilt+2)=istk(ilt+2)+1
+                  istk(ilt+1)=istk(ilt+1)+vk
+               endif
+            endif
+ 21      continue
+      endif
+
 c     destroy old variable
    25 bot = bot+1
       new=.false.

@@ -45,10 +45,12 @@ c     eliminate leading zero entries
                vr(k1)=vr(k)
                vi(k1)=vi(k)
             else
-               if(vr(k1).ne.vr(k).or.vi(k1).ne.vi(k)) then
-                  ierr=3
-                  return
-               endif
+               vr(k1) = vr(k1) + vr(k)
+               vi(k1) = vi(k1) + vi(k)
+c               if(vr(k1).ne.vr(k).or.vi(k1).ne.vi(k)) then
+c                  ierr=3
+c                  return
+c               endif
             endif
          endif
  08      continue

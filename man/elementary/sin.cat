@@ -11,7 +11,7 @@ PARAMETERS
   x         : real or complex vector or  matrix
 
 DESCRIPTION
-  For a vector or a matrix, sin(x) is the sine of its elements . For matrix
+  For a vector or a matrix, sin(x) is the sine of its elements .  For matrix
   sine use  sinm(X) function.
 
 EXAMPLE

@@ -19,7 +19,7 @@ PARAMETERS
   rk        : integer (rank of A)
 
 DESCRIPTION
-  Row compression of A. Ac = W*A is a row compressed matrix: i.e. Ac=[Af;0]
+  Row compression of A. Ac = W*A is a row compressed matrix: i.e.  Ac=[Af;0]
   with Af full row rank.
 
   flag and tol are optional parameters: flag='qr' or 'svd' (default 'svd').

@@ -42,14 +42,14 @@ Parameters
          each step j of the attractor generation, the variance of the chosen
          law would be 1/pow(j,var).
        o [x,y] contains the resulting attractor.
-       o Ci is a real vector containing all the coefficients of the so gen-
-         erated GIFS.
+       o Ci is a real vector containing all the coefficients of the so gener-
+         ated GIFS.
 Algorithm details
   Semi-Generalized Iterated Functions Systems (SGIFS) are a generalization of
   the usual IFS. This generalization consists in allowing the contarations to
-  change at each step (scale) of the attractor generation process. Here, we
+  change at each step (scale) of the attractor generation process.  Here, we
   use GIFS to construct stocastical SGIFS. More precisely, at each scale j,
-  the GIFS coefficients c_kj, for k even (resp. odd), are a random variable
+  the GIFS coefficients c_k^j, for k even (resp. odd), are a random variable
   of law law_type, of mean coefs(1) (resp. coefs(2)) and of variance
   1/pow(j,var) Moreover, if {(t_i, y_i), i=1,...,n+1} is the set of interpo-
   lation points, then any realisation of the attractor is the graph of a con-

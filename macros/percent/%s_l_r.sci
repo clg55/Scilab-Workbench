@@ -3,24 +3,22 @@ function b=%s_l_r(a,b)
 //!
 // Copyright INRIA
 if  size(a,'*')==0  then b=[],return,end
-[num,den]=b(2:3);
-[mb,nb]=size(num);mb=abs(mb);nb=abs(nb);
-[ma,na]=size(a);na=abs(na);ma=abs(ma);
+if size(a,1)==-1 then a=a+0,end
+
+[ma,na]=size(a);
 if ma==1&na==1 then 
-  b(2)=a\b(2),
-  return,
-end
-if mb==1 then
-  num=a\num
-  den=ones(na,ma)*den
-  b(2)=num;b(3)=den
+  b('num')=a\b('num'),
+elseif size(b('num'),1)==1 then
+  b=rlist(a\b('num'),ones(na,ma)*b('den'),b('dt'))
 else
+  [num,den]=b(['num','den']);
+
   dd=[];nn=[]
-  for j=1:nb,
+  for j=1:size(num,2)
     [y,fact]=lcm(den(:,j)),
     nn=[nn,a\(num(:,j).*fact)];
     dd=[dd y]
   end
   [num,den]=simp(nn,ones(na,1)*dd)
-  b(2)=num;b(3)=den
+  b=rlist(num,den,b('dt'))
 end

@@ -50,9 +50,9 @@ DESCRIPTION
        value larger than one or less than or equal to zero.  This value
        should be increased and the matrix resolved if growth is found to be
        excessive.  Changing the pivot threshold does not improve performance
-       on matrices where growth is low, as is often the case with ill-
-       conditioned matrices.  reps was choosen for use with nearly diagonally
-       dominant matrices such as node- and modified-node admittance matrices.
+       on matrices where growth is low, as is often the case with ill-condi-
+       tioned matrices.  reps was choosen for use with nearly diagonally dom-
+       inant matrices such as node- and modified-node admittance matrices.
        For these matrices it is usually best to use diagonal pivoting.  For
        matrices without a strong diagonal, it is usually best to use a larger
        threshold, such as 0.01 or 0.1.

@@ -14,8 +14,8 @@ DESCRIPTION
   The colon notation can also be used to pick out selected rows, columns and
   elements of vectors and matrices.
 
-  A(:)      is the vector of all the elements of A  regarded as a single
-            column.
+  A(:)      is the vector of all the elements of A  regarded as a single col-
+            umn.
 
   A(:,j)    is the j-th column of A
 

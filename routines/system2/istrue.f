@@ -3,6 +3,8 @@ c     Copyright INRIA
       logical istrue
 c
       include '../stack.h'
+      integer iadr,sadr
+
 c      
       sadr(l)=(l/2)+1
       iadr(l)=l+l-1

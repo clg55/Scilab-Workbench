@@ -41,14 +41,14 @@ c---  matrices scalaires
       if (m.eq.-3) then
 C        boucle implicite 
          x = stk(lr) + (j - 1)*stk(lr + 1)
-         if( stk(lr+1) * (x - stk(lr+2)) .gt. 0) then
-            if(abs(x-stk(lr+2)).gt.
+         if( stk(lr+1) * (x - stk(lr+2)) .gt. 0.0d0) then
+            if(abs(x-stk(lr+2)).ge.
      $           abs(stk(lr+1)*dlamch('p'))) goto 50
          endif
          if (j.gt.1) then
 c     .     check if loop variable has moved since previous j
             k=idstk(1,top-1)
-            if(eqid(id,idstk(1,k))) then
+            if(k.ge.bot.and.eqid(id,idstk(1,k))) then
 c     .        No, loop variable is updated in place
                lr1=sadr(iadr(lstk(k))+4)
                stk(lr1)=x
@@ -62,7 +62,7 @@ c     .        No, loop variable is updated in place
          if (j .gt. n .or. m.eq.0) go to 50
          if (j.gt.1) then
             k=idstk(1,top-1)
-            if(eqid(id,idstk(1,k))) then
+            if(k.ge.bot.and.eqid(id,idstk(1,k))) then
 c     .        loop variable is updated in place
                lr1=sadr(iadr(lstk(k))+4)
                call dcopy(m,stk(lr+(j-1)*m),1,stk(lr1),1)
@@ -98,7 +98,8 @@ c---- listes
       if (j.gt.1) then
          k=idstk(1,top-1)
          v=lstk(top+1)-lstk(top)
-         if(eqid(id,idstk(1,k)).and.v.eq.lstk(k+1)-lstk(k)) then
+         if(k.ge.bot.and.eqid(id,idstk(1,k))
+     $        .and.v.eq.lstk(k+1)-lstk(k)) then
             call dcopy(v,stk(lstk(top)),-1,stk(lstk(k)),-1)
             top=top-1
             return

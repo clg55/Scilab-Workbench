@@ -1,5 +1,5 @@
 
-exit(1)                        Scilab Command                         exit(1)
+exit(1)                         Scilab Command                        exit(1)
 NAME
   exit -  Ends the current Scilab session
 

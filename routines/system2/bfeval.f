@@ -11,6 +11,8 @@ c     Copyright INRIA
       common / fevaladr / kfeval,kx1top,kx2top
       common / fevaltyp / itfeval
       common/ierfeval/iero
+      logical allowptr
+
       data mlhs/1/
 c
       iadr(l)=l+l-1
@@ -20,6 +22,7 @@ c
          write(buf(1:12),'(3i4)') top,r,sym
          call basout(io,wte,' bydot  top:'//buf(1:4))
       endif
+c
       mrhs=nn
       if(itfeval.eq.10) then
          call ffeval(nn,x1,x2,xres,itype,ename)
@@ -63,7 +66,7 @@ c
       fun=0
 c     
       icall=5
-      krec=12
+      krec=31
       include '../callinter.h'
 cxxx
 c     

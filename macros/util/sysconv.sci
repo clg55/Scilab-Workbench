@@ -37,19 +37,15 @@ s11=s1(1);s21=s2(1);
 if s11(1)<>s21(1) then // conversion ss<-->tf
   if s11(1)=='r' then s1=tf2ss(s1),else s2=tf2ss(s2),end
   s11=s1(1);s21=s2(1);
-  //if s11(1)=='lss' then s1=ss2tf(s1),else s2=tf2ss(s2),end
 end;
-if s11(1)=='r' then n1=4;end
-if s21(1)=='r' then n2=4;end
-if s11(1)=='lss' then n1=7;end
-if s21(1)=='lss' then n2=7;end
-select s1(n1)
+
+select s1('dt')
  case 'c' then t1=0
  case 'd' then t1=1
  case []  then t1=3
  else t1=2
 end;
-select s2(n2)
+select s2('dt')
  case 'c' then t2=0
  case 'd' then t2=1
  case [] then t2=3
@@ -58,23 +54,23 @@ end;
 select t1+4*t2
 case 0 then,
 case 1 then  warning('time domains are not compatible')
-case 2 then  s2=dscr(s2,s1(n1))
-case 3 then  s1(n1)='c'
+case 2 then  s2=dscr(s2,s1('dt'))
+case 3 then  s1('dt')='c'
 case 4 then  warning('time domains are not compatible')
 case 5 then,
-case 6 then  s2(n2)=s1(n1)
-case 7 then  s1(n1)='d'
-case 8 then  s1=dscr(s1,s2(n2))
-case 9 then  s1(n1)=s2(n2)
+case 6 then  s2('dt')=s1('dt')
+case 7 then  s1('dt')='d'
+case 8 then  s1=dscr(s1,s2('dt'))
+case 9 then  s1('dt')=s2('dt')
 case 10 then
-             if s1(n1)<>s2(n2) then
-                 warning('time domains are not compatible')
-              end;
-case 11 then s1(n1)=s2(n2)
-case 12 then s2(n2)='c'
-case 13 then s2(n2)='d'
-case 14 then s2(n2)=s1(n1)
-end;
+  if s1('dt')<>s2('dt') then
+    warning('time domains are not compatible')
+  end
+case 11 then s1('dt')=s2('dt')
+case 12 then s2('dt')='c'
+case 13 then s2('dt')='d'
+case 14 then s2('dt')=s1('dt')
+end
 
 
 

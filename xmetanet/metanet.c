@@ -45,7 +45,7 @@ extern void GetFonts();
 extern XFontStruct *FontSelect();
 
 char metanetName[MAXNAM];
-char *Version = "3.0.2";
+char *Version = "3.0.3";
 
 int isServeur;
 int theWindow;

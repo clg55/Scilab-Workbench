@@ -13,10 +13,15 @@ flag1=x_choose(['Read a precomputed trajectory';
 select flag1,
 case 2 then 
   mode(1)
-  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+  if MSDOS then
+    TMPDIR=getenv('TMPDIR')
     cur_wd = getcwd();
     chdir(SCI+"/demos/npend/Maple");
-    host("nmake /f Makefile.mak TEMP="+TMPDIR);
+    if (getenv('COMPILER','NO') == 'VC++')
+      host("nmake /f Makefile.mak TEMP="+TMPDIR);
+    else
+      host("amake /f Makefile.amk TEMP="+TMPDIR);
+    end
     chdir(cur_wd);
     if ~c_link('npend') then link(TMPDIR+'\npend.dll','npend');end
     if ~c_link('ener')  then link(TMPDIR+'\ener.dll','ener');end

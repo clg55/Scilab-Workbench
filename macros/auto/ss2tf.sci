@@ -22,8 +22,7 @@ if type(sl)==1|type(sl)==2 then
   return
 end
 flag=sl(1);
-//-compat type(sl)<>15 retained for list/tlist compatibility
-if (type(sl)<>15&type(sl)<>16)|flag(1)<>'lss' then
+if (type(sl)<>16)|flag(1)<>'lss' then
   error('First argument must be in state-space form')
 end
 if sl(3)==[] then h=sl(5);num=sl(5);den=eye(sl(5));return;end

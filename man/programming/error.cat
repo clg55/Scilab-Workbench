@@ -8,8 +8,8 @@ CALLING SEQUENCE
   error(m)
 
 DESCRIPTION
-  prints the character string 'string' in an error message and stops the
-  current instruction.
+  prints the character string 'string' in an error message and stops the cur-
+  rent instruction.
 
   If n is given, it is associated to the number of the error. n should be
   larger than 10000 (default value).

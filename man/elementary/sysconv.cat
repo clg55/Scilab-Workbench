@@ -11,8 +11,8 @@ PARAMETERS
 
 DESCRIPTION
   Converts s1 and s2 into common representation in order that system inter-
-  connexion operations can be applied. Utility function for experts. The
-  conversion rules in given in the following table.
+  connexion operations can be applied. Utility function for experts. The con-
+  version rules in given in the following table.
 
   "c"     : continuous time system
 

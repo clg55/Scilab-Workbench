@@ -58,7 +58,7 @@ case 'define' then
   model=list('dlradp',[1;1],1,1,[],[],[last_u;last_y],rpar,ipar,'d',[],[%t %f],' ',list())
   label=[sci2exp(p);
 	sci2exp(rn);
-	sci2exp(rd);
+	sci2exp(rd,0);
 	sci2exp(g);
 	sci2exp(last_u);
 	sci2exp(last_y)]

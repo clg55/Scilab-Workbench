@@ -10,7 +10,8 @@ NAME
 
 Usage
   [alpha,fgc_alpha,[pc_alpha,epsilon_star,eta,alpha_eta_x]]=
-  mcfg1d(mu_n,[S_min,S_max,J],progstr,ballstr,N,epsilon,contstr,adapstr,kernstr,normstr,I_n])
+  mcfg1d(mu_n,[S_min,S_max,J],progstr,ballstr,N,epsilon,contstr,adapstr,kern-
+  str,normstr,I_n])
 
 Input parameters
        o mu_n : strictly positive real vector [1,N_n] or [N_n,1] Contains the
@@ -55,8 +56,8 @@ Parameters
   account  the resolution of the 1d measure mu_n.  The minimum size S_min
   sets the equivalent size eta_1 in the unit interval at which the first
   spectrum is estimated.  eta_1 is equal to  S_min*eta_n    where  eta_n is
-  related    to  the resolution of the  1d measure (eta_n=N_n{-1}  when all
-  intervals are of    equal  size else it is    max(|I_n|{-1}).   It must be
+  related    to  the resolution of the  1d measure (eta_n=N_n^{-1}  when all
+  intervals are of    equal  size else it is    max(|I_n|^{-1}).   It must be
   >=1.  The default value for S_min is 1.  The maximum size S_max sets the
   equivalent size eta_J in the unit interval at which the  last spectrum is
   estimated.  eta_J is equal to S_max*eta_n.  It must be >=S_min.  The
@@ -66,39 +67,39 @@ Parameters
   string  progstr specifies the type of scale discretization.  It can be
   'dec' for decimated,  'log' for logarithmic or 'lin'  for  linear scale.
   The default value  for progstr is 'dec'.  The   ball   string    ballstr
-  specifies  the      type  of ball B_eta(x). It can be 'asym'  for asym-
-  metric, 'cent'  for centered or 'star' for three  times bigger asymmetric
-  ball.   The default value for ballstr is 'asym'.  The   number N sets the
-  discretization   of the Hoelder exponents interval.   They  are linearly
-  spaced between alpha_eta_min and alpha_eta_max  which are the   minimum and
-  maximum  values of the coarse grain Hoelder  exponents  at size eta.  The
-  bigger N is, the  slower the computation is.   It must be >=1. The default
-  value for N is 100.  The  precision vector epsilon  sets the  precisions at
-  which  the spectrum  is estimated.    It  must  be  of size   [1,N]  or
-  [N,1].   When no precision vector  is given as input or when it is uni-
-  formly  equal to  0,  the  algorithm determines  the  optimal precisions
-  vector    epsilon_star.    The  default   value  for epsilon is zeros(1,N).
-  The continuous    string contstr  specifies   the   definition of continu-
-  ous spectrum.  It can be equal to 'hnokern' for definition without preci-
-  sion   and  kernel or  'hkern'  for  definition with precision   and  ker-
-  nel.  The default       value    for  contstr is 'hkern'.  The  precision
-  adaptation   string  adapstr specifies  the local adaptation  of the preci-
-  sion  w.r.t. the Hoelder exponents alpha.  It     can  be  equal to   'max-
-  dev'    for  maximum  deviation or 'maxadaptdev' for  maximum adaptive
-  deviation.  The default value for adapstr is 'maxdev'.  The kernel string
-  kernstr specifies the  kernel. It can be equal to  'box' for boxcar,  'tri'
-  for  triangle, 'mol'  for mollifier,  'epa'  for epanechnikhov  or  'gau'
-  for gaussian kernel.  The default value for kernstr is 'gau'.  The normali-
-  zation string    normstr specifies the type   of pdf's normalization  con-
-  ducted  before double log-normalization.   It can be equal to 'nonorm' for
-  no normalization  conducted, 'suppdf' for normalization  w.r.t the
-  supremum of pdf's,  'infsuppdf' for normalization  w.r.t  the  infimum and
-  the   supremum  of pdf's.   The default value for normstr is 'suppdf'.  The
-  intervals vector I_n can   be useful  when the intervals  on which the
-  pre-multifractal 1d measure is defined are not of equal size (not imple-
-  mented yet).  The  pdf  of the  coarse grain   Hoelder  exponents  matrix
-  or vector pc_alpha,   the     optimal   precisions      matrix   or  vector
-  epsilon_star, the  sizes vector  eta and the   coarse grain Hoelder
+  specifies  the      type  of ball B_eta(x). It can be 'asym'  for
+  asymmetric, 'cent'  for centered or 'star' for three  times bigger asymmet-
+  ric ball.   The default value for ballstr is 'asym'.  The   number N sets
+  the discretization   of the Hoelder exponents interval.   They  are lin-
+  early   spaced between alpha_eta_min and alpha_eta_max  which are the
+  minimum and maximum  values of the coarse grain Hoelder  exponents  at size
+  eta.  The  bigger N is, the  slower the computation is.   It must be >=1.
+  The default value for N is 100.  The  precision vector epsilon  sets the
+  precisions at which  the spectrum  is estimated.    It  must  be  of size
+  [1,N]  or [N,1].   When no precision vector  is given as input or when it
+  is uniformly  equal to  0,  the  algorithm determines  the  optimal preci-
+  sions   vector    epsilon_star.    The  default   value  for epsilon is
+  zeros(1,N).  The continuous    string contstr  specifies   the   definition
+  of continuous spectrum.  It can be equal to 'hnokern' for definition with-
+  out precision   and  kernel or  'hkern'  for  definition with precision
+  and  kernel.  The default       value    for  contstr is 'hkern'.  The
+  precision  adaptation   string  adapstr specifies  the local adaptation  of
+  the precision  w.r.t. the Hoelder exponents alpha.  It     can  be  equal
+  to   'maxdev'    for  maximum  deviation or 'maxadaptdev' for  maximum
+  adaptive deviation.  The default value for adapstr is 'maxdev'.  The kernel
+  string  kernstr specifies the  kernel. It can be equal to  'box' for box-
+  car,  'tri'  for  triangle, 'mol'  for mollifier,  'epa'  for epanechnikhov
+  or  'gau' for gaussian kernel.  The default value for kernstr is 'gau'.
+  The normalization string    normstr specifies the type   of pdf's normal-
+  ization  conducted  before double log-normalization.   It can be equal to
+  'nonorm' for  no normalization  conducted, 'suppdf' for normalization
+  w.r.t the  supremum of pdf's,  'infsuppdf' for normalization  w.r.t  the
+  infimum and the   supremum  of pdf's.   The default value for normstr is
+  'suppdf'.  The  intervals vector I_n can   be useful  when the intervals
+  on which the pre-multifractal 1d measure is defined are not of equal size
+  (not implemented yet).  The  pdf  of the  coarse grain   Hoelder  exponents
+  matrix  or vector pc_alpha,   the     optimal   precisions      matrix   or
+  vector epsilon_star, the  sizes vector  eta and the   coarse grain Hoelder
   exponents matrix or vector alpha_eta_x can be obtained as outputs parame-
   ters.
 
@@ -106,8 +107,8 @@ Algorithm details
   The coarse Hoelder exponents are estimated on each point x of the unit
   interval  discretization by   summing  interval measures  into  a sliding
   window of  size eta containing x (which  corresponds to ball B_eta(x)).
-  The probability density function pc_alpha is obtained by integrating hor-
-  izontal sections.
+  The probability density function pc_alpha is obtained by integrating hori-
+  zontal sections.
 
 Examples
 

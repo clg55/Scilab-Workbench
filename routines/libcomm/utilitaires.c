@@ -1,4 +1,10 @@
+#ifndef __STDC__
 #include <varargs.h>
+#define Va_start(a,b) va_start(a)
+#else
+#include <stdarg.h>
+#define Va_start(a,b) va_start(a,b)
+#endif
 #include <stdio.h>
 #include <string.h>
 #include "gestion_memoire.h"
@@ -42,7 +48,13 @@ char caractere;
     concat_caractere(chaine_a_remplir,caractere);
 }
 
-tableau_avec_taille convertir_nombre_arbitraire_de_chaines_en_tableau(liste)
+/* 
+ * stores the set of strings coded in first + liste 
+ * in a dynamically allocated array 
+ */
+
+tableau_avec_taille convertir_nombre_arbitraire_de_chaines_en_tableau(first,liste)
+     char *first;
      va_list *liste;
 {
     tableau_avec_taille resultat;
@@ -52,19 +64,28 @@ tableau_avec_taille convertir_nombre_arbitraire_de_chaines_en_tableau(liste)
     resultat.tableau=gbd_creer_buffer_dynamique_type(char *,TAILLE_INIT_TABLEAU,allouer,reallouer,liberer,NULL);
     resultat.tableau=gbd_augmenter_buffer_dynamique(resultat.tableau,1);
 
-    while((chaine=va_arg(*liste,char *)) != NULL)
-    {
+    chaine = first;
+    while( chaine  != NULL)
+      {
 	resultat.tableau[resultat.taille++]=dupliquer_chaine(chaine);
 	resultat.tableau=gbd_augmenter_buffer_dynamique(resultat.tableau,1);
-    }
+	chaine=va_arg(*liste,char *);
+      }
     resultat.tableau[resultat.taille]=NULL;
 
     return resultat;
 }
 
+/* 
+ * unused function ....
+ * 
+ */ 
 
-char *concatenation_plusieurs_chaines(va_alist)
-     va_dcl
+#ifdef __STDC__
+char *concatenation_plusieurs_chaines_unused (char * first, ...)
+#else
+char *concatenation_plusieurs_chaines_unused (va_alist) va_dcl
+#endif
 {
     va_list liste;
 
@@ -72,12 +93,17 @@ char *concatenation_plusieurs_chaines(va_alist)
     tableau_avec_taille temporaire;
     int nb_caracteres;
     int compteur;
-
+#ifdef __STDC__
+    va_start(liste,first);
+#else
+    char *first;
     va_start(liste);
+    first = va_arg(liste, char *);
+#endif
 
     nb_caracteres=0;
 
-    temporaire=convertir_nombre_arbitraire_de_chaines_en_tableau(&liste);
+    temporaire=convertir_nombre_arbitraire_de_chaines_en_tableau(first,&liste);
     for(compteur=0;compteur<temporaire.taille;compteur++)
 	nb_caracteres+=strlen(temporaire.tableau[compteur]);
 

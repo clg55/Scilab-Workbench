@@ -15,27 +15,31 @@ else
   z=0
 end
 ndims=rhs-2
-if ndims>size(dims,'*') then
-  dims(size(dims,'*')+1:ndims)=0
-elseif ndims<size(dims,'*') then
-  for k=1:size(dims,'*')-ndims
-    varargin(ndims+1)=1
-    ndims=ndims+1
-  end
-end  
+nd=size(dims,'*')
+if ndims>nd then dims(nd+1:ndims)=0;end  
 count=[]
 dims1=[]
 I=0;I1=0
 for k=ndims:-1:1
   ik=varargin(k)//the kth subscript
-  if type(ik)==2 |type(ik)==129 then // size implicit subscript $...
+  if type(ik)==2 |type(ik)==129 then // size implicit subscript $
     ik=horner(ik,dims(k)) // explicit subscript
+    dims1(k,1)=max(max(ik),dims(k))
   elseif type(ik)==4 then // boolean subscript
     ik=find(ik)
+    dims1(k,1)=max(max(ik),dims(k))
   elseif mini(size(ik))<0 then // :
     ik=1:dims(k)
+    dims1(k,1)=max(max(ik),dims(k))
+    if k==ndims then
+      if k<nd then
+	ik=1:prod(dims(k:$))
+	dims1(k:nd,1)=dims(k:nd)
+      end
+    end
+  else
+    dims1(k,1)=max(max(ik),dims(k))
   end
-  dims1(k,1)=max(max(ik),dims(k))
   if size(ik,'*')>1 then
     ik=ik(:)
     if size(I,'*')>1 then
@@ -47,6 +51,7 @@ for k=ndims:-1:1
     I=dims1(k)*I+ik-1
   end
 end
+
 if or(dims1>dims) then
   I1=0
   for k=size(dims1,'*'):-1:1
@@ -66,6 +71,7 @@ if or(dims1>dims) then
   v1=zeros(prod(dims1),1)
   v1(I1+1)=v;v=v1
 end
+
 //if prod(dims1)>size(v,'*') then v(prod(dims1))=z,end
 v(I+1)=N('entries')(:)
 

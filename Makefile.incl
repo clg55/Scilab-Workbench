@@ -36,7 +36,7 @@ CC_PICFLAGS =
 # typically, for compiling use: FFLAGS = $(FC_OPTIONS)
 # and for linking: $(FC) -o $(PROGRAM) $(OBJS) $(FC_LDFLAGS)
 ##################
-FC = DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
+FC = f77
 FC_OPTIONS = -O -fpe3 -switch nosqrt_recip
 FC_LDFLAGS = 
 FC_PICFLAGS = 
@@ -72,9 +72,9 @@ XLIBS =  $(XAWLIB) $(XMULIB) -lXt -lXext  -lX11 $(X_EXTRA_LIBS)
 #####################
 # TCL/TK
 #####################
-TK_INC_PATH = 
-TCL_INC_PATH = 
-TCLTK_LIBS = 
+TK_INC_PATH = -I/usr/local/include
+TCL_INC_PATH = -I/usr/local/include
+TCLTK_LIBS =   -ltk8.1    -ltcl8.1 
 
 #####################
 # for WIN32 version 

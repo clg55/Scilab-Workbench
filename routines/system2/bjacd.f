@@ -11,6 +11,7 @@ c
 c     
       common/ierode/iero
 c     
+      logical allowptr
       double precision t, y(*),ydot(*),res(*),rpar(*),cj
       integer ipar(*)
       integer vol,tops,nordre

@@ -16,9 +16,10 @@ PARAMETERS
 DESCRIPTION
   Given a linear system in state space form, sl=syslin(dom,A,B,C,D) (syslin
   list), sl1=bilin(sl,v)  returns in sl1 a linear system with matrices
-  [A1,B1,C1,D1] such that the transfer function H1(s)=C1*inv(s*eye()-
-  A1)*B1+D1 is obtained from H(z)=C*inv(z*eye()-A)*B+D by replacing z by
-  z=(a*s+b)/(c*s+d).  One has w=bilin(bilin(w,[a,b,c,d]),[d,-b,-c,a])
+  [A1,B1,C1,D1] such that the transfer function
+  H1(s)=C1*inv(s*eye()-A1)*B1+D1 is obtained from H(z)=C*inv(z*eye()-A)*B+D
+  by replacing z by z=(a*s+b)/(c*s+d).  One has
+  w=bilin(bilin(w,[a,b,c,d]),[d,-b,-c,a])
 
 EXAMPLE
   s=poly(0,'s');z=poly(0,'z');

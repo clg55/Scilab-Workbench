@@ -35,7 +35,6 @@
 #include <commctrl.h>
 #endif
 
-
 #ifdef __STDC__
 #include <stdlib.h>
 #else
@@ -45,6 +44,10 @@
 #ifdef __MSC__
 #define putenv(x) _putenv(x)
 #endif 
+
+#ifdef __ABSC__
+#define putenv(x) abs_putenv(x)
+#endif
   
 #include <stdio.h>
 #include <stdlib.h>
@@ -225,6 +228,9 @@ static void SciEnv ()
 #ifdef __CYGWIN32__ 
       putenv("COMPILER=gcc");
 #endif 
+#ifdef __ABSC__
+      putenv("COMPILER=ABSOFT");
+#endif
       putenv("WIN32=OK");
     }
 }
@@ -247,20 +253,29 @@ int  SciWinGetPlatformId()
  * The WinMain function 
  ***************************************/
 
+#ifndef __ABSC__
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		   PSTR szCmdLine, int iCmdShow)
+#else		   
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+		   LPSTR szCmdLine, int iCmdShow)
+#endif
 {
   LPSTR tail;
   int nowin=0,argcount=0,lpath =0;
   char *path = NULL;
   OSVERSIONINFO os;
-#ifdef __GNUC__  /* arguments are in szCmdline */
+#if (defined __GNUC__) || (defined __ABSC__)  /* arguments are in szCmdline */
 #define MAXCMDTOKENS 128
   int     _argc=-1;
   LPSTR   _argv[MAXCMDTOKENS];
   _argv[++_argc] = strtok( szCmdLine, " ");
+//  fprintf(stderr,"argv[%d] = %s\n",_argc,_argv[_argc]);
   while (_argv[_argc] != NULL)
+  {
     _argv[++_argc] = strtok( NULL, " ");
+ //   fprintf(stderr,"argv[%d] = %s\n",_argc,_argv[_argc]);
+  }
 #else
   /** VC++  doesn't give us _argc and _argv[] so ...   */
 #define MAXCMDTOKENS 128
@@ -406,8 +421,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 int MAIN__()
 {
+#ifndef __ABSC__
   HANDLE x = GetModuleHandleA(0);
   WinMain (x, 0, GetCommandLineA(), 1);
+#else
+  HMODULE x = GetModuleHandle(0);
+  WinMain (x, 0, GetCommandLine(), 1);
+#endif
+
   return(0);
 }
 #endif 
@@ -601,6 +622,34 @@ void sciprint(char *fmt, ...)
   va_end(args);
   /** return count; **/
 }
+
+/* 
+  as sciprint but with an added first argument 
+  which is ignored (used in do_printf) 
+*/
+
+int  sciprint2(int iv,char *fmt,...) 
+{
+  int i,count;
+  integer lstr;
+  va_list ap;
+  char s_buf[1024];
+  va_start(ap,fmt);
+  C2F(xscion)(&i);
+  if (i == 0) 
+    {
+      count = vfprintf(stdout, fmt, ap );
+    }
+  else 
+    {
+      count= vsprintf(s_buf, fmt, ap );
+      TextPutS(&textwin,s_buf);
+    }
+  va_end(ap);
+  return count;
+}
+
+
 
 size_t MyFWrite(const void *ptr, size_t size, size_t n, FILE *file)
 {

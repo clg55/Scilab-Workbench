@@ -21,8 +21,8 @@ DESCRIPTION
   useful here).
 
   If other values are needed by the external function these variables can be
-  defined in the environment. Also, they can be put in a list.  For
-  example,the external function
+  defined in the environment. Also, they can be put in a list.  For exam-
+  ple,the external function
   [f,g,ind]=costfunc(x,ind,a,b,c)
   is valid for optim if the external is list(costfunc,a,b,c) and the call to
   optim is then:

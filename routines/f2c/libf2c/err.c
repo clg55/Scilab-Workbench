@@ -1,4 +1,4 @@
-#ifndef NON_UNIX_STDIO
+#if !(defined NON_UNIX_STDIO) && !(defined __ABSC__)
 #include "sys/types.h"
 #include "sys/stat.h"
 #endif
@@ -16,6 +16,7 @@ extern char *malloc();
 #include "stdlib.h"
 #endif
 #endif
+
 
 /*global definitions*/
 unit f__units[MXUNIT];	/*unit table*/

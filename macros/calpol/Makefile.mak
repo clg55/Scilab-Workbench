@@ -11,7 +11,7 @@ include ../../Makefile.incl.mak
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = polylib
-NAM = calpol
+NAM = SCI/macros/calpol
 
 MACROS = cmndred.sci coffg.sci colcompr.sci \
 	denom.sci derivat.sci determ.sci detr.sci \
@@ -19,6 +19,7 @@ MACROS = cmndred.sci coffg.sci colcompr.sci \
 	hrmt.sci htrianr.sci invr.sci lcm.sci \
 	numer.sci pdiv.sci pol2des.sci \
 	pol2str.sci polfact.sci routh_t.sci rowcompr.sci \
-	sylm.sci systmat.sci pfactors.sci factors.sci lcmdiag.sci
+	sylm.sci systmat.sci pfactors.sci factors.sci lcmdiag.sci \
+	inv_coeff.sci
 
 include ../Make.lib.mak

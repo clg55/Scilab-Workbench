@@ -1,20 +1,30 @@
 
 fplot3d1(2)                    Scilab Function                    fplot3d1(2)
 NAME
-  fplot3d1 - gray level plotting of a surface
+  fplot3d1 - 3D gray or color level plot of a surface defined by a function
 
 CALLING SEQUENCE
-  fplot3d1(xr,yr,f [,theta,alpha,leg,flag,ebox])
+  fplot3d1(xr,yr,f,[theta,alpha,leg,flag,ebox])
 
 PARAMETERS
-  ( ) : see fplot3d
+
+  xr        : row vector of size n1.
+
+  yr        : row vector of size n2.
+
+  f         : external of type z=f(x,y).
+
+  theta,alpha,leg,flag,ebox
+            : see plot3d1.
 
 DESCRIPTION
-  This routines plots a surface defined by an external f.  the value of f on
-  the grid defined by xr.yr is first computed using feval, then control is
-  passed to the primitive plot3d1.
+  fplot3d1 plots a 3D gray or color level plot of a surface defined by the
+  external function f on the grid defined by xr and yr.
 
-  Enter the command fplot3d1() to see a demo.
+  Enter the command  fplot3d1() to see a demo.
+
+SEE ALSO
+  plot3d1
 
 AUTHOR
   J.Ph.C.

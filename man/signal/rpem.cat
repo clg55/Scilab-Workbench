@@ -35,9 +35,9 @@ PARAMETERS
   y(t0),y(t0+1),..,y(t0+k-1)
 
 DESCRIPTION
-  Recursive estimation of parameters in an ARMAX model.  Uses Ljung-
-  Soderstrom recursive prediction error method.  Model considered is the fol-
-  lowing:
+  Recursive estimation of parameters in an ARMAX model.  Uses Ljung-Soder-
+  strom recursive prediction error method.  Model considered is the follow-
+  ing:
   y(t)+a(1)*y(t-1)+...+a(n)*y(t-n)=
   b(1)*u(t-1)+...+b(n)*u(t-n)+e(t)+c(1)*e(t-1)+...+c(n)*e(t-n)
 
@@ -50,10 +50,10 @@ Optional parameters
 
   lambda    : optional parameter (forgetting constant) choosed close to 1 as
             convergence occur:
-
   lambda=[lambda0,alfa,beta] evolves according to :
   lambda(t)=alfa*lambda(t-1)+beta
   with lambda(0)=lambda0
+
   k : contraction factor to be chosen close to 1 as convergence occurs.
 
   k=[k0,mu,nu] evolves according to:

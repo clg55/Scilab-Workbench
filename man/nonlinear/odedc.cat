@@ -8,58 +8,56 @@ CALLING SEQUENCE
 
 PARAMETERS
 
-  y0        : real column vector (initial conditions),y0=[y0c;y0d] where y0d
-            has nd components.
+  y0     : real column vector (initial conditions), y0=[y0c;y0d] where y0d
+         has nd components.
 
-  nd        : integer, dimension of y0d
+  nd     : integer, dimension of y0d
 
-  stdel     : real vector with one or two entries, stdel=[h, delta] (with
-            delta=0 as default value).
+  stdel  : real vector with one or two entries, stdel=[h, delta] (with
+         delta=0 as default value).
 
-  t0        : real scalar (initial time).
+  t0     : real scalar (initial time).
 
-  t         : real (row) vector, instants where yt is calculated
+  t      : real (row) vector, instants where yt is calculated .
 
-  f         : Scilab "external" i.e. function or character string or list
-            with calling sequence: yp=f(t,yc,yd,flag)
+  f      : external i.e. function or character string or list with calling
+         sequence: yp=f(t,yc,yd,flag).
 
 DESCRIPTION
 
   y=odedc([y0c;y0d],nd,[h,delta],t0,t,f) computes the solution of a mixed
-  discrete/continuous system. The discrete system state yd_k is embedded into
-  a  piecewise constant yd(t) time function as follows: yd(t)= yd_k for t in
-  [t_k=delay+k*h,t_(k+1)=delay+(k+1)*h[ (with delay=h*delta).  The simulated
-  equations are now:
+  discrete/continuous system.  The discrete system state yd_k is embedded
+  into a  piecewise constant yd(t) time function as follows:
+  yd(t)=yd_k for t in
+  [t_k=delay+k*h,t_(k+1)=delay+(k+1)*h[ (with delay=h*delta).
 
-   dyc/dt=f(t,yc(t),yd(t),0) ,  for t in [t_k,t_(k+1)[
-   yc(t0)=y0c
-
+  The simulated equations are now:
+  dyc/dt=f(t,yc(t),yd(t),0),  for t in [t_k,t_(k+1)[
+  yc(t0)=y0c
   and at instants t_k the discrete variable yd is updated by:
-
   yd(t_k+)=f(yc(t_k-),yd(t_k-),1)
 
   Note that, using the definition of yd(t) the last equation gives
-
-  yd_k = f (t_k,yc(t_k-),yd(t_(k-1)),1)  (yc is time-continuous: yc(t_k-
-  )=yc(tk))
+  yd_k = f (t_k,yc(t_k-),yd(t_(k-1)),1)  (yc is time-continuous: yc(t_k-)=yc(tk))
 
   The calling parameters of f are fixed: ycd=f(t,yc,yd,flag); this function
   must return either the derivative of the vector yc if flag=0 or the update
   of yd if flag=1.
 
   ycd=dot(yc) must be a vector with same dimension as yc if flag=0 and
-  ycd=update(yd) must be a vector with same dimension as yd if flag=1
+  ycd=update(yd) must be a vector with same dimension as yd if flag=1.
 
   t is a vector of instants where the solution y is computed.
-
   y is the vector y=[y(t(1)),y(t(2)),...].  This function can be called with
   the same optional parameters as the ode function (provided nd and stdel are
-  given in the calling sequence as second and third parameters).  It particu-
+  given in the calling sequence as second and third parameters).  In particu-
   lar integration flags, tolerances can be set. Optional parameters can be
   set by the odeoptions function.
 
   An example for calling an external routine is given in directory
-  default/fydot2.f External routines can be dynamically linked (see link).
+  SCIDIR/default/fydot2.f
+
+  External routines can be dynamically linked (see link).
 
 EXAMPLE
   //Linear system with switching input

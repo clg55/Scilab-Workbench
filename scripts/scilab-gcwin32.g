@@ -100,40 +100,19 @@ do_man_nw()
 		echo No manual entry for $1
 	fi 
 }
-
 do_compile()
 {
 	umask 002
 	rm -f report
 	name=`basename $1 .sci`
 	echo generating $name.bin
-	echo "%u=file('open','$name.bin','unknown','unformatted');predef();\
-	      getf('$name.sci','c');save(%u),file('close',%u);quit"\
-	      | $SCI/bin/scilex -ns -nw | sed 1,/--\>/d 1>report 2>&1
+	echo "predef();getf('$name.sci');save('$name.bin');quit"\
+	      | $SCI/bin/scilex -ns -nw | sed 1,8d 1>report 2>&1
 	if (grep error report 1> /dev/null  2>&1);
 	then cat report;echo " " 
 	   echo see `pwd`/report for more informations
 	   grep libok report>/dev/null; 
 	else rm -f report;
-	fi
-	umask 022
-	exit 0
-}
-
-
-do_compile_test ()
-{
-	umask 002
-	rm -f report
-	name=`basename $1 .sci`
-	echo generating $name.bin
-	echo "%u=file('open','$name.bin','unknown','unformatted');predef();\
-	      getf('$name.sci','c');save(%u),file('close',%u);quit"\
-	      | $SCI/bin/scilex -ns -nw | cat  1>report 2>&1
-	if (grep error report 1> /dev/null  2>&1);
-	then cat report;echo " " 
-	   echo see `pwd`/report for more informations
-	   grep libok report>/dev/null; 
 	fi
 	umask 022
 	exit 0
@@ -143,14 +122,32 @@ do_lib()
 {
 	umask 002
 	rm -f report
-	echo "%u=file('open','$2/lib','unknown','unformatted');$1=lib('$2/');\
-	      save(%u,$1);file('close',%u);quit"\
+	echo "$1=lib('$2/');save('$2/lib',$1);quit"\
 	      | $SCI/bin/scilex -ns -nw |sed 1,/--\>/d 1>report 2>&1
 	if (grep error report 1> /dev/null  2>&1);
 	then cat report;echo " " 
 		echo see `pwd`/report for more informations
 		grep libok report>/dev/null; 
 	else rm -f report;
+	fi
+	umask 022
+	exit 0
+}
+
+
+
+do_compile_test ()
+{
+	umask 002
+	rm -f report
+	name=`basename $1 .sci`
+	echo generating $name.bin
+	echo "predef();getf('$name.sci','c');save('$name.bin');quit"\
+	      | $SCI/bin/scilex -ns -nw | cat  1>report 2>&1
+	if (grep error report 1> /dev/null  2>&1);
+	then cat report;echo " " 
+	   echo see `pwd`/report for more informations
+	   grep libok report>/dev/null; 
 	fi
 	umask 022
 	exit 0
@@ -182,6 +179,16 @@ do_save()
 		-landscape)
 			sed -e "2s/Portrait/Landscape/" $2 >$2.fig
 			rm -f $2
+		;;
+		esac
+           	;;
+          Gif)
+		case $1 in
+		-portrait)
+			mv $2 $2.gif
+		;;
+		-landscape)
+			mv $2 $2.gif
 		;;
 		esac
            	;;

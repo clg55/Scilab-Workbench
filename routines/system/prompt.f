@@ -5,10 +5,12 @@ c ================================== ( Inria    ) =============
 c     Copyright INRIA
       include '../stack.h'
       integer pause
-      call basout(io,wte,' ')
-      call setprlev(paus)
+      if (pause .ne. 1) then
+         call basout(io,wte,' ')
+         call setprlev(paus)
+      else
 C     version with pause ( mode(7) )
-      if (pause .eq. 1) then 
+         call setprlev(-1)
          call basin(ierr,rte,buf,'*')
       endif
       return

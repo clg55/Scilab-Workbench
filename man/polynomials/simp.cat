@@ -33,8 +33,8 @@ DESCRIPTION
 
   -for complex data, simp returns its input(s).
 
-  -rational simplification is called after nearly each operations on ration-
-  als. It is possible to toggle simplification on or off using simp_mode
+  -rational simplification is called after nearly each operations on ratio-
+  nals. It is possible to toggle simplification on or off using simp_mode
   function.
 
 EXAMPLES

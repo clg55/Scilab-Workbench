@@ -20,7 +20,7 @@ elseif s1(5)=='10' then
 end
 
 //
-if te2=='2'|te2=='3' then e2='('+e2+')',end
+if te2=='1'|te2=='2'|te2=='3' then e2='('+e2+')',end
 if te1=='2'|te1=='3' then e1='('+e1+')',end
 
 if s1(3)=='1'&s1(4)=='1' then

@@ -30,16 +30,16 @@ Parameters
   struction. It is only necessary if the analysis filter had been obtained
   with MakeCQF() and the reconstruction filter had not been passed to FWT2D.
   If not specified the filter given in the synthesis is used. (See FWT2D).
-  result is the reconstructed signal. It has the same dimensions as the ori-
-  ginal one.
+  result is the reconstructed signal. It has the same dimensions as the orig-
+  inal one.
 Algorithm details
   Convolutions are computed through discrete linear convolutions in time
-  domain. No FFT is used. The signal is mirrored at its boundaries. .SH Exam-
-  ple a=rand(256,256); q=MakeQMF('daubechies',4); wt,wti,wtl = FWT2D(a,8,q);
-  wt=abs(wt); result=IWT2D(wt);.SH References Meyer Y. : Wavelets, Algorithms
-  & Applications, SIAM.  Meyer Y. : Ondelettes et Operateurs (I) : Hermann,
-  Paris Daubechies I. : Ten Lectures on Wavelets, CBMS-NSF Regional confer-
-  ence series in applied mathematics.
+  domain. No FFT is used.  The signal is mirrored at its boundaries. .SH
+  Example a=rand(256,256); q=MakeQMF('daubechies',4); wt,wti,wtl =
+  FWT2D(a,8,q); wt=abs(wt); result=IWT2D(wt);.SH References Meyer Y. :
+  Wavelets, Algorithms & Applications, SIAM.  Meyer Y. : Ondelettes et
+  Operateurs (I) : Hermann, Paris Daubechies I. : Ten Lectures on Wavelets,
+  CBMS-NSF Regional conference series in applied mathematics.
 
 See Also
   FWT2D, MakeQMF, MakeCQF, WT2Dext, WT2DVisu

@@ -14,7 +14,7 @@ Usage
 Input parameters
        o  N  : Positive integer Sample size of the fBm
        o  H  : Real vector [1,N] of character string H real vector: contains
-         the Holder exponents at each time. Each element in [0,1]. H charac-
+         the Holder exponents at each time. Each element in [0,1].  H charac-
          ter string: analytic expression of the Holder function (e.g.
          'abs(0.5 * ( 1 + sin(16 t) ) )')
        o  seed  : real scalar Random seed generator

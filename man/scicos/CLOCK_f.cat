@@ -1,5 +1,5 @@
 
-CLOCK_f(5)                      Scicos Block                       CLOCK_f(5)
+CLOCK_f(5)                       Scicos Block                      CLOCK_f(5)
 NAME
   CLOCK_f - Scicos periodic event generator
 

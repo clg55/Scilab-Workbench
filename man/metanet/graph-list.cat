@@ -4,8 +4,8 @@ NAME
   graph-list - description of graph list
 
 DESCRIPTION
-  A graph in Scilab is represented by a Scilab typed list. We call it a graph
-  list.
+  A graph in Scilab is represented by a Scilab typed list.  We call it a
+  graph list.
 
   You will find below the complete description of the list.  Each element is
   described by one or more lines.  The first line gives the name of the ele-
@@ -27,9 +27,9 @@ DESCRIPTION
   g('name')='toto';
 
   Moreover, you can get the number of edges and the number of arcs of the
-  graph by using edge_number(g) and arc_number(g) (these names do not
-  correspond to elements of the list). For compatibility, node_number(g) can
-  also be used instead of g('node_number').
+  graph by using edge_number(g) and arc_number(g) (these names do not corre-
+  spond to elements of the list). For compatibility, node_number(g) can also
+  be used instead of g('node_number').
 
   A graph list can be syntactically correct but not represent a good graph.
   You can use the function check_graph to check it.  Moreover it is a good
@@ -44,8 +44,8 @@ DESCRIPTION
         - it is a string with a maximum of 80 characters
   directed: - flag giving the type of the graph
 
-            - it is equal to 1 (graph directed) or equal to 0 (graph
-              undirected)
+            - it is equal to 1 (graph directed) or equal to 0 (graph undi-
+              rected)
   node_number: - number of nodes
   tail: - row vector of the tail node numbers
   head: - row vector of the head node numbers

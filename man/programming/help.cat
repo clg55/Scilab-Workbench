@@ -9,14 +9,14 @@ CALLING SEQUENCE
 DESCRIPTION
   To each documented word corresponds a word.cat ascii file. these files are
   organised within directories (chapters). Each chapter must contain *.cat
-  files and a whatis file with one line for each documented word in the
-  chapter. Each line must have the following format :
+  files and a whatis file with one line for each documented word in the chap-
+  ter. Each line must have the following format :
 
   word - quick description
 
   List of chapter directories is given in a file (whose path is given in the
-  $MANCHAPTERS environment variable) with the following format for each
-  chapter:
+  $MANCHAPTERS environment variable) with the following format for each chap-
+  ter:
 
   chapter_path    chapter_title
 

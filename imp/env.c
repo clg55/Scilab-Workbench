@@ -1,14 +1,18 @@
-/* Copyright INRIA */
+/* Copyright ENPC/Chancelier Jean-Philippe */
 
 /********************************
  * Set up environment variables if 
  * necessary 
  ********************************/
 
-#ifdef _WIN32 
+#if (defined(_WIN32)||defined(__ABSC__))
 #include <windows.h>
 #include <stdio.h>
+/* #endif */
 
+#ifdef __ABSC__
+#define putenv(x) abs_putenv(x)
+#endif
 
 void SciEnv ()
 {

@@ -12,9 +12,9 @@ Usage
   [xup2Q,powQ] = nextpowQ(x[,Q])
 Input parameters
        o x : Real positive number
-       o Q : Positive integer. Default value is Q = 2
+       o Q : Positive integer.  Default value is Q = 2
 Output parameters
        o xup2Q : Positive integer x rounded to the closest power of Q
-       o powQ :  Positive integer xup2Q = powQQ.
+       o powQ :  Positive integer xup2Q = powQ^Q.
 See also:
   log, log2

@@ -1,5 +1,5 @@
 
-CLKSPLIT_f(5)                   Scicos Block                    CLKSPLIT_f(5)
+CLKSPLIT_f(5)                    Scicos Block                   CLKSPLIT_f(5)
 NAME
   CLKSPLIT_f - Scicos event split block
 
@@ -8,7 +8,7 @@ DIALOGUE PARAMETERS
 
 DESCRIPTION
   This block is an event split block with an input and two outputs. The out-
-  puts reproduces the event the input port on each output ports. Strictly
+  puts reproduces the event the input port on each output ports.  Strictly
   speaking, CLKSPLIT is not a Scicos block because it is discarded at the
   compilation phase. This block is automatically created when creating a new
   link issued from a link.

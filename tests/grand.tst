@@ -171,7 +171,7 @@ Rdev=grand(1,N,'chi',A);
 RdevS=sort(Rdev);RdevS=RdevS($:-1:1)';
 PS=(1:N)'/N;
 //plot2d(RdevS,PS);
-// theorical result 
+// theoretical result 
 [P]=cdfchi("PQ",RdevS,A*ones(RdevS));
 //plot2d(RdevS,P,2,"000")
 if norm(P-PS) > prec then pause,end
@@ -183,7 +183,7 @@ Rdev=grand(1,N,'poi',A);
 RdevS=sort(Rdev);RdevS=RdevS($:-1:1)';
 PS=(1:N)'/N;
 //plot2d(RdevS,PS);
-// theorical result 
+// theoretical result 
 [P]=cdfpoi("PQ",RdevS,A*ones(RdevS));
 //plot2d(RdevS,P,2,"000")
 // idem need an other test P is piecewize linear and PS 

@@ -163,6 +163,13 @@ void AxisDraw(FRect, IRect, Xdec, Ydec, aaint, scx, scy, xofset, yofset, strflag
 {
   integer verbose=0,narg,xz[10],fg;
   C2F(dr)("xget","foreground",&verbose,&fg,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  /** xget/xset is used here to adapt font /size to current window size **/
+  /** XXXX : jpc 1998 NOv **/
+  /**
+     ,fontid[2];
+     C2F(dr)("xget","font",&verbose,fontid,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+     C2F(dr)("xset","font",fontid,fontid+1,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  **/
   C2F(dr)("xget","dashes",&verbose,xz,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xset","dashes",&fg,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   if ((int)strlen(strflag) >= 3 && strflag[2] == '1')
@@ -325,68 +332,71 @@ void Legends(IRect, style, n1, legend)
      integer *n1;
      char *legend;
 {
-char *leg,*loc;
-double xi,yi,xoffset,yoffset;  
-int i;
-loc=(char *) MALLOC( (strlen(legend)+1)*sizeof(char));
-if ( loc != 0)
-  {
-    integer verbose=0,narg,xz[10],fg;
-    C2F(dr)("xget","foreground",&verbose,&fg,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-    C2F(dr)("xget","dashes",&verbose,xz,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-    C2F(dr)("xset","dashes",&fg,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  char *leg,*loc;
+  double xi,yi,xoffset,yoffset;  
+  int i;
+  loc=(char *) MALLOC( (strlen(legend)+1)*sizeof(char));
+  if ( loc != 0)
+    {
+      integer verbose=0,narg,xz[10],fg;
+      C2F(dr)("xget","foreground",&verbose,&fg,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+      C2F(dr)("xget","dashes",&verbose,xz,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+      C2F(dr)("xset","dashes",&fg,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 
-    strcpy(loc,legend);
-    xoffset= IRect[2]/12.0;
-    yoffset= IRect[3]/40.0;
-    xi= IRect[0];
-    for ( i = 0 ; i < *n1 && i < 6 ; i++)
-      {  
-	integer xs,ys,flag,polyx[2],polyy[2],lstyle[1],ni;
-	double angle;
-	if (*n1 == 1) ni=Max(Min(5,style[1]-1),0);else ni=i;
-	if (ni >= 3)
-	  { xi=IRect[0]+IRect[2]/2;
+      strcpy(loc,legend);
+      xoffset= IRect[2]/12.0;
+      yoffset= IRect[3]/40.0;
+      xi= IRect[0];
+      for ( i = 0 ; i < *n1 && i < 6 ; i++)
+	{  
+	  integer xs,ys,flag,polyx[2],polyy[2],lstyle[1],ni;
+	  double angle;
+	  if (*n1 == 1) ni=Max(Min(5,style[1]-1),0);else ni=i;
+	  if (ni >= 3)
+	    { xi=IRect[0]+IRect[2]/2;
 	    yi=IRect[1]+IRect[3]+(ni-3)*yoffset+4*yoffset;}
-	else
-	  { yi=IRect[1]+IRect[3]+(ni)*yoffset+4*yoffset;
-	  }
-	xs=inint(xi+1.2*xoffset),ys=inint(yi+yoffset/4),angle=0.0;flag=0;
-	if ( i==0) leg=strtok(loc,"@"); else leg=strtok((char *)0,"@");
-	 if (leg != 0) 
-	   {
-	     C2F(dr)("xstring",leg,&xs,&ys,PI0,&flag
-		     ,PI0,PI0,&angle,PD0,PD0,PD0,0L,0L);
-	     if (style[i] > 0)
-	       { 
-		 integer n,p;
-		 polyx[0]=inint(xi);polyx[1]=inint(xi+xoffset);
-		 polyy[0]=inint(yi);polyy[1]=inint(yi);
-		 lstyle[0]=style[i];
-		 p=2;n=1;
-		 C2F(dr)("xpolys","v",polyx,polyy,lstyle,&n,&p
-		     ,PI0,PD0,PD0,PD0,PD0,0L,0L);
-	       }
-	     else
-	       { 
-		 integer n,p;
-		 polyx[0]=inint(xi+xoffset);
-		 polyy[0]=inint(yi);
-		 lstyle[0]=style[i];
-		 p=1;n=1;
-		 C2F(dr)("xpolys","v",polyx,polyy,lstyle,&n,&p
-		     		     ,PI0,PD0,PD0,PD0,PD0,0L,0L);
-	       }
-	   }
-       }
-    FREE(loc);
-    C2F(dr)("xset","dashes",xz,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-  }
-else
-  {
-    Scistring("Legends : No more Place to store Legends\n");
-  }
+	  else
+	    { yi=IRect[1]+IRect[3]+(ni)*yoffset+4*yoffset;
+	    }
+	  xs=inint(xi+1.2*xoffset),ys=inint(yi+yoffset/4),angle=0.0;flag=0;
+	  if ( i==0) leg=strtok(loc,"@"); else leg=strtok((char *)0,"@");
+	  if (leg != 0) 
+	    {
+	      C2F(dr)("xstring",leg,&xs,&ys,PI0,&flag
+		      ,PI0,PI0,&angle,PD0,PD0,PD0,0L,0L);
+	      if (style[i] > 0)
+		{ 
+		  integer n,p;
+		  polyx[0]=inint(xi);polyx[1]=inint(xi+xoffset);
+		  polyy[0]=inint(yi);polyy[1]=inint(yi);
+		  lstyle[0]=style[i];
+		  p=2;n=1;
+		  C2F(dr)("xpolys","v",polyx,polyy,lstyle,&n,&p
+			  ,PI0,PD0,PD0,PD0,PD0,0L,0L);
+		}
+	      else
+		{ 
+		  integer n,p;
+		  polyx[0]=inint(xi+xoffset);
+		  polyy[0]=inint(yi);
+		  lstyle[0]=style[i];
+		  p=1;n=1;
+		  C2F(dr)("xpolys","v",polyx,polyy,lstyle,&n,&p
+			  ,PI0,PD0,PD0,PD0,PD0,0L,0L);
+		}
+	    }
+	}
+      FREE(loc);
+      C2F(dr)("xset","dashes",xz,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+    }
+  else
+    {
+      Scistring("Legends : No more Place to store Legends\n");
+    }
 }
+
+
+
 
 
 

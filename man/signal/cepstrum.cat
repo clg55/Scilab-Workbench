@@ -16,8 +16,8 @@ PARAMETERS
 
 DESCRIPTION
   fresp = cepstrum(w,mag) returns a frequency response fresp(i) whose magni-
-  tude at frequency w(i) equals mag(i)  and such that the phase of freq
-  corresponds to a stable and minimum phase system. w needs not to be sorted,
+  tude at frequency w(i) equals mag(i)  and such that the phase of freq cor-
+  responds to a stable and minimum phase system. w needs not to be sorted,
   but  minimal entry should not be close to zero and all the entries of w
   should be different.
 

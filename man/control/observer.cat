@@ -25,13 +25,13 @@ PARAMETERS
             able (pp) subspace)
 
 DESCRIPTION
-  Obs=observer(Sys,J) returns the observer Obs=syslin(td,A+J*C,[B+J*D,-
-  J],eye(A)) obtained from Sys by a J output injection. (td is the time
-  domain of Sys).  More generally, observer returns in Obs an observer for
-  the observable part of linear system Sys: dotx=A x + Bu, y=Cx + Du
-  represented by a syslin list.  Sys has nx state variables, nu inputs and ny
-  outputs.  Obs is a linear system with matrices [Ao,Bo,Identity], where Ao
-  is no x no, Bo is no x (nu+ny),  Co is no x no and no=nx-m.
+  Obs=observer(Sys,J) returns the observer Obs=sys-
+  lin(td,A+J*C,[B+J*D,-J],eye(A)) obtained from Sys by a J output injection.
+  (td is the time domain of Sys).  More generally, observer returns in Obs an
+  observer for the observable part of linear system Sys: dotx=A x + Bu, y=Cx
+  + Du  represented by a syslin list.  Sys has nx state variables, nu inputs
+  and ny outputs.  Obs is a linear system with matrices [Ao,Bo,Identity],
+  where Ao is no x no, Bo is no x (nu+ny),  Co is no x no and no=nx-m.
 
   Input to Obs is [u,y] and output of Obs is:
 
@@ -50,10 +50,10 @@ DESCRIPTION
   If H satifies the constraint: H*U(:,1:m)=0  (ker(H) contains unobs-subsp.
   of Sys) one has H*U=[0,H2] and the observer for z=H*x is H2*Obs with
   H2=H*U(:,m+1:nx) i.e. Co, the C-matrix of the observer for H*x, is Co=H2.
-
   In the particular case where the pair (A,C) of Sys is observable, one has
   m=0 and the linear system U*Obs (resp.  H*U*Obs) is an observer for x
-  (resp. Hx). The error spectrum is alpha(1),alpha(2),...,alpha(nx).
+  (resp. Hx).  The error spectrum is alpha(1),alpha(2),...,alpha(nx).
+
 EXAMPLE
   nx=5;nu=1;ny=1;un=3;us=2;Sys=ssrand(ny,nu,nx,list('dt',us,us,un));
   //nx=5 states, nu=1 input, ny=1 output,

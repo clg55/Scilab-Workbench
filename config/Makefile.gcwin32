@@ -21,3 +21,7 @@ bin/scilex: scilex-lib  routines/wsci/Rscilab.o
 	fi
 
 
+show	:
+	@echo	$(CC) $(CFLAGS) -o $@.exe $(DEFAULTS) $(RESOURCES) $(LIBR) \
+		$(CC_LDFLAGS) \
+		$(LINKEROPT) $(WINLIBS)  ; 

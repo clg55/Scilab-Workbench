@@ -6,7 +6,11 @@ c     Copyright INRIA
       include '../stack.h'
 c
       integer plus,minus,comma,rparen
+      external allowptr
+      logical allowptr
       data plus/45/,minus/46/,comma/52/,rparen/42/
+
+
 
       imode=0
       if(sym.eq.plus.or.sym.eq.minus) then
@@ -29,9 +33,7 @@ c     name is followed by a , or a )
 c     variable is an argument of a function
  32   continue
       ifun=ids(1,ip)
-      if (ifun.eq.6.or.ifun.eq.16.or.ifun.eq.21.or.ifun.eq.41.or.
-     $     ifun.lt.0) then
-c       if(ifun.lt.0) then
+      if (allowptr(ifun).or.ifun.lt.0) then
          if(ddt.ge.4) then
             call cvname(id,buf,1)
             write(buf(nlgh+1:nlgh+16),'(2i8)') ifun,rstk(ip)
@@ -43,3 +45,4 @@ c       if(ifun.lt.0) then
  33   setgetmode=imode
       return
       end
+

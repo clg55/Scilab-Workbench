@@ -21,7 +21,7 @@ PARAMETERS
   nw : integer
 
 DESCRIPTION
-  show_graph displays the graph g in the current Metanet window. If there is
+  show_graph displays the graph g in the current Metanet window.  If there is
   no current Metanet window, a Metanet window is created.  The return value
   nw is the number of the Metanet window where the graph is displayed.
 

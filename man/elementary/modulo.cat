@@ -10,10 +10,10 @@ PARAMETERS
   n,m: integers
 
 DESCRIPTION
-  computes i= n (modulo m) i.e. remainder of n divided by m (n and m
-  integers).
+  computes i= n (modulo m) i.e. remainder of n divided by m (n and m inte-
+  gers).
 
-  i= n - m .* int
+   i = n - m .* int (n ./ m)
 
 EXAMPLE
   n=[1,2,10,15];m=[2,2,3,5];

@@ -334,19 +334,19 @@ void PrintGraph(g, level)
 graph *g;
 int level;
 {
-  sprintf(Description,"Graph %s :\n",g->name);
+  sprintf(Description,"Graph %s:\n",g->name);
   AddText(Description);
-  if (g->directed) sprintf(Description,"  Arcs : \n");
-  else sprintf(Description,"  Edges : \n");
+  if (g->directed) sprintf(Description,"  Arcs: \n");
+  else sprintf(Description,"  Edges: \n");
   AddText(Description);
   PrintArcList(g->arcs,level);
-  sprintf(Description,"  Nodes : \n");
+  sprintf(Description,"  Nodes: \n");
   AddText(Description);
   PrintNodeList(g->nodes,level);
-  sprintf(Description,"  Sources : \n");
+  sprintf(Description,"  Sources: \n");
   AddText(Description);
   PrintNodeList(g->sources,level);
-  sprintf(Description,"  Sinks : \n");
+  sprintf(Description,"  Sinks: \n");
   AddText(Description);
   PrintNodeList(g->sinks,level);
   sprintf(Description,"\n");
@@ -364,23 +364,23 @@ int level;
   else {
     sprintf(Description,"Node %s\n",n->name);
     AddText(Description);
-    sprintf(Description,"  Internal number %d\n",n->number);
+    sprintf(Description,"  Internal number: %d\n",n->number);
     AddText(Description);
-    if (theGraph->directed) sprintf(Description,"  Connected Arcs : ");
-    else sprintf(Description,"  Connected Edges : ");
+    if (theGraph->directed) sprintf(Description,"  Connected Arcs: ");
+    else sprintf(Description,"  Connected Edges: ");
     AddText(Description);
     PrintArcList(n->connected_arcs,0);
-    if (theGraph->directed) sprintf(Description,"  Loop Arcs : ");
-    else sprintf(Description,"  Loop Edges : ");
+    if (theGraph->directed) sprintf(Description,"  Loop Arcs: ");
+    else sprintf(Description,"  Loop Edges: ");
     AddText(Description);
     PrintArcList(n->loop_arcs,0);
     if (level >= 2) {
-      sprintf(Description,"  Type : %d\n",n->type);
+      sprintf(Description,"  Type: %d\n",n->type);
       AddText(Description);
     }
-    sprintf(Description,"  X : %d, Y : %d  \n",n->x,n->y);
+    sprintf(Description,"  X: %d, Y: %d  \n",n->x,n->y);
     AddText(Description);
-    sprintf(Description,"  Demand : %g  \n",n->demand);  
+    sprintf(Description,"  Demand: %g  \n",n->demand);  
     AddText(Description);
   }
 }
@@ -517,32 +517,32 @@ int level;
     AddText(Description);
   }
   else {
-    if (theGraph->directed) sprintf(Description,"Arc %s :\n",a->name);
-    else sprintf(Description,"Edge %s :\n",a->name);
+    if (theGraph->directed) sprintf(Description,"Arc %s\n",a->name);
+    else sprintf(Description,"Edge %s\n",a->name);
     AddText(Description);
-    sprintf(Description,"  Internal number %d\n",a->number);
+    sprintf(Description,"  Internal number: %d\n",a->number);
     AddText(Description);
-    sprintf(Description,"  Tail node %s\n",a->tail->name);
+    sprintf(Description,"  Tail node: %s\n",a->tail->name);
     AddText(Description);
-    sprintf(Description,"  Head node %s\n",a->head->name);
+    sprintf(Description,"  Head node: %s\n",a->head->name);
     AddText(Description);
     if (level >= 2) {
-      sprintf(Description,"  G_type %d\n",a->g_type);
+      sprintf(Description,"  G_type: %d\n",a->g_type);
       AddText(Description);
     }
-    sprintf(Description,"  Unitary Cost : %g  ",a->unitary_cost);
+    sprintf(Description,"  Unitary Cost: %g\n",a->unitary_cost);
     AddText(Description);
-    sprintf(Description,"  Minimum Capacity : %g  ",a->minimum_capacity);
+    sprintf(Description,"  Minimum Capacity: %g\n",a->minimum_capacity);
     AddText(Description);
-    sprintf(Description,"  Maximum Capacity : %g\n ",a->maximum_capacity);
+    sprintf(Description,"  Maximum Capacity: %g\n ",a->maximum_capacity);
     AddText(Description);
-    sprintf(Description,"  Length : %g ",a->length);
+    sprintf(Description,"  Length: %g\n",a->length);
     AddText(Description);
-    sprintf(Description,"  Quadratic Weight : %g  ",a->quadratic_weight);
+    sprintf(Description,"  Quadratic Weight: %g\n",a->quadratic_weight);
     AddText(Description);
-    sprintf(Description,"  Quadratic Origin : %g\n",a->quadratic_origin);
+    sprintf(Description,"  Quadratic Origin: %g\n",a->quadratic_origin);
     AddText(Description);
-    sprintf(Description,"  Weight : %g\n",a->weight);
+    sprintf(Description,"  Weight: %g\n",a->weight);
     AddText(Description);
   }
 }

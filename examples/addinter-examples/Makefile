@@ -1,133 +1,141 @@
 SHELL = /bin/sh
 
-SCIDIR=../..
-include ../../Makefile.incl
+SCIDIR = ../..
 
-all:: info
+LIBRARY = examples.a
 
-world: info
+OTHERLIBS = 
 
-info:
-	@echo "Type \"make test\" to compile all programs (in /tmp)"
-	@echo "Type \"make /tmp/pgm.o\" to compile pgm program"
+#########################################################################
+#    To each .o interface (C or Fortran) is associated one scilab function
+#    CAUTION : CINTERFACES and CFUNCTIONS must have the same # of items
+#########################################################################
 
+CINTERFACES = intex1c.o intex2c.o intex3c.o intex4c.o intex5c.o intex6c.o intex7c.o intex8c.o intex9c.o intex10c.o intex11c.o intex12c.o intex13c.o intex14c.o intex15c.o intex16c.o intex17c.o intex17f.o
 
-FFLAGS = $(FC_OPTIONS) $(FC_PICFLAGS)
+CFUNCTIONS = ex1c ex2c ex3c ex4c ex5c ex6c ex7c ex8c ex9c ex10c ex11c ex12c ex13c ex14c ex15c ex16c ex17c ex17f
 
-CFLAGS = $(CC_OPTIONS) $(CC_PICFLAGS)
+OTHERCOBJS = pgmsc.o pgmsf.o as2osc.o ex17c.o 
 
-OBJSF = /tmp/ex1f.o /tmp/ex1fi.o /tmp/ex2f.o /tmp/ex2fi.o \
-	/tmp/ex3f.o /tmp/ex3fi.o  /tmp/ex4fi.o \
-	/tmp/ex6f.o /tmp/ex6fi.o /tmp/ex5f.o /tmp/ex5fm.o
+FORTRANINTERFACES = intex1f.o intex2f.o intex3f.o intex4f.o intex5f.o intex6f.o intex7f.o intex8f.o intex9f.o intex10f.o intex11f.o intex12f.o intex13f.o intex14f.o intex15f.o intex16f.o 
 
-OBJSC = /tmp/ex1c.o /tmp/ex1cI.o /tmp/ex2c.o /tmp/ex2cI.o \
-	/tmp/ex3c.o /tmp/ex3cI.o /tmp/ex4cI.o \
-	/tmp/ex5cI.o /tmp/ex5c.o /tmp/ex5cm.o /tmp/ex6c.o /tmp/ex6cI.o \
-	/tmp/ex5fI.o
+FFUNCTIONS = ex1f ex2f ex3f ex4f ex5f ex6f ex7f ex8f ex9f ex10f ex11f ex12f ex13f ex14f ex15f ex16f
 
-test : $(OBJSF) $(OBJSC)
+OTHERFOBJS = as2osf.o ex17f.o 
+################ do not edit below this line ############################
 
-/tmp/ex1f.o: ex1f.f
-	$(FC) $(FFLAGS) -c ex1f.f  -o /tmp/ex1f.o
+GATEWAY = $(LIBRARY:.a=)
 
-/tmp/ex1fi.o: ex1fi.f
-	$(FC) $(FFLAGS) -c ex1fi.f  -o /tmp/ex1fi.o
+STARTUP = $(LIBRARY:.a=)
 
-/tmp/ex1c.o: ex1c.c
-	$(CC) $(CFLAGS) -c ex1c.c  -o /tmp/ex1c.o
+#CFUNCTIONS = $(CINTERFACES:.o=) 
+#Functions and interfaces share the same name
 
-/tmp/ex1cI.o: ex1cI.c
-	$(CC) $(CFLAGS) -c ex1cI.c  -o /tmp/ex1cI.o
+include $(SCIDIR)/Makefile.incl
 
-/tmp/ex2f.o: ex2f.f
-	$(FC) $(FFLAGS) -c ex2f.f  -o /tmp/ex2f.o
+CFLAGS = $(CC_OPTIONS) $(CC_PICFLAGS) -I$(SCIDIR)/routines
+FFLAGS = $(FC_OPTIONS) $(FC_PICFLAGS) -I$(SCIDIR)/routines
 
-/tmp/ex2fi.o: ex2fi.f
-	$(FC) $(FFLAGS) -c ex2fi.f  -o /tmp/ex2fi.o
+FUNCTIONS = $(CFUNCTIONS) $(FFUNCTIONS)
 
-/tmp/ex2c.o: ex2c.c
-	$(CC) $(CFLAGS) -c ex2c.c  -o /tmp/ex2c.o
+OBJSF = $(FORTRANINTERFACES) $(OTHERFOBJS)
 
-/tmp/ex2cI.o: ex2cI.c
-	$(CC) $(CFLAGS) -c ex2cI.c  -o /tmp/ex2cI.o
+OBJSC = $(CINTERFACES) $(OTHERCOBJS)
 
-/tmp/ex3f.o: ex3f.c
-	$(CC) $(CFLAGS) -c ex3f.c  -o /tmp/ex3f.o
+f3f.o : 
 
-/tmp/ex3fi.o: ex3fi.f
-	$(FC) $(FFLAGS) -c ex3fi.f  -o /tmp/ex3fi.o
+f3c.o :
 
-/tmp/ex3c.o: ex3c.c
-	$(CC) $(CFLAGS) -c ex3c.c  -o /tmp/ex3c.o
+all:: rmold $(LIBRARY) $(GATEWAY)_gateway.c $(GATEWAY)_gateway.o $(STARTUP).sce message
 
-/tmp/ex3cI.o: ex3cI.c
-	$(CC) $(CFLAGS) -c ex3cI.c  -o /tmp/ex3cI.o
+include $(SCIDIR)/routines/Make.lib
 
-/tmp/ex4fi.o: ex4fi.f
-	$(FC) $(FFLAGS) -c ex4fi.f  -o /tmp/ex4fi.o
+rmold:
+	$(RM) $(STARTUP).sce $(GATEWAY)_gateway.c 
 
-/tmp/ex4cI.o: ex4cI.c
-	$(CC) $(CFLAGS) -c ex4cI.c  -o /tmp/ex4cI.o
-
-/tmp/ex5c.o: ex5c.c
-	$(CC) $(CFLAGS) -c ex5c.c  -o /tmp/ex5c.o
-
-/tmp/ex5cm.o: ex5cm.c
-	$(CC) $(CFLAGS) -c ex5cm.c  -o /tmp/ex5cm.o
-
-/tmp/ex5cI.o: ex5cI.c
-	$(CC) $(CFLAGS) -c ex5cI.c  -o /tmp/ex5cI.o
-
-/tmp/ex5fI.o: ex5fI.c
-	$(CC) $(CFLAGS) -c ex5fI.c  -o /tmp/ex5fI.o
-
-/tmp/ex5f.o: ex5f.f
-	$(FC) $(FFLAGS) -c ex5f.f  -o /tmp/ex5f.o
-
-/tmp/ex5fm.o: ex5fm.f
-	$(FC) $(FFLAGS) -c ex5fm.f  -o /tmp/ex5fm.o
-
-
-/tmp/ex6f.o: ex6f.f
-	$(FC) $(FFLAGS) -c ex6f.f  -o /tmp/ex6f.o
-
-/tmp/ex6fi.o: ex6fi.f
-	$(FC) $(FFLAGS) -c ex6fi.f  -o /tmp/ex6fi.o
-
-/tmp/ex6c.o: ex6c.c
-	$(CC) $(CFLAGS) -c ex6c.c  -o /tmp/ex6c.o
-
-/tmp/ex6cI.o: ex6cI.c
-	$(CC) $(CFLAGS) -c ex6cI.c  -o /tmp/ex6cI.o
-
-/tmp/ex7fi.o: ex7fi.f
-	$(FC) $(FFLAGS) -c ex7fi.f  -o /tmp/ex7fi.o
-
-/tmp/ex8fi.o: ex8fi.f
-	$(FC) $(FFLAGS) -c ex8fi.f  -o /tmp/ex8fi.o
-
-clean::
-	@echo Cleaning addinter-examples
-	@$(RM) $(OBJSF) $(OBJSC)
-
-distclean:: clean
+$(GATEWAY)_gateway.c:
+	@echo "-- Generating the C function $(GATEWAY)_gateway.c";
+	@echo "#include \"mex.h\" " > $(GATEWAY)_gateway.c;
+	@echo " " >> $(GATEWAY)_gateway.c;
+	@echo "extern Gatefunc %s;\n" > format;
+	@echo $(CINTERFACES:.o=) >> args;
+	@echo $(GATEWAY)_gateway.c > file;
+	@$(SCIDIR)/macros/Tomake Xformat Xargs Xfile;
+	@$(RM) format args file;
+	@echo "extern Gatefunc C2F(%s);\n" > format;
+	@echo $(FORTRANINTERFACES:.o=) >> args;
+	@echo $(GATEWAY)_gateway.c > file;
+	@$(SCIDIR)/macros/Tomake Xformat Xargs Xfile;
+	@$(RM) format args file;
+	@echo " " >> $(GATEWAY)_gateway.c;
+	@echo "static GenericTable Tab[]={"  >> $(GATEWAY)_gateway.c;
+	@echo "{(Myinterfun)sci_gateway, %s,\"error msg\"},\n" > format;
+	@echo $(CINTERFACES:.o=) > args;
+	@echo $(GATEWAY)_gateway.c > file;
+	@$(SCIDIR)/macros/Tomake  Xformat Xargs Xfile;
+	@$(RM) format args file;
+	@echo "{(Myinterfun)sci_gateway, C2F(%s),\"error msg\"},\n" > format;
+	@echo $(FORTRANINTERFACES:.o=) > args;
+	@echo $(GATEWAY)_gateway.c > file;
+	@$(SCIDIR)/macros/Tomake  Xformat Xargs Xfile;
+	@$(RM) format args file;
+	@echo "	 };" >> $(GATEWAY)_gateway.c;
+	@echo " " >> $(GATEWAY)_gateway.c;
+	@echo "int C2F($(GATEWAY)_gateway)()" >> $(GATEWAY)_gateway.c;
+	@echo "{  Rhs = Max(0, Rhs);" >> $(GATEWAY)_gateway.c;
+	@echo "(*(Tab[Fin-1].f))(Tab[Fin-1].name,Tab[Fin-1].F);" >>  $(GATEWAY)_gateway.c;
+	@echo "  return 0;" >> $(GATEWAY)_gateway.c;
+	@echo "}" >>  $(GATEWAY)_gateway.c;
+	@echo " " >> $(GATEWAY)_gateway.c;
 
 
-##----------------------  test all the example  
+$(STARTUP).sce: 
+	@echo "-- Generating the Scilab script $(STARTUP).sce";
+	@echo "scilab_functions =[..." > $(STARTUP).sce;
+	@echo "\"%s\";\n" > format;
+	@echo $(FUNCTIONS) > args;
+	@echo $(STARTUP).sce > file; 
+	@$(SCIDIR)/macros/Tomake Xformat Xargs Xfile;
+	@$(RM) format args file;
+	@echo "           ];" >> $(STARTUP).sce;
+	@echo "auxiliary=\"$(OTHERLIBS)\";"  >> $(STARTUP).sce;
+	@echo "files=G_make([\"$(GATEWAY)_gateway.o\",\"$(LIBRARY)\", auxiliary],\"void(Win)\");"  >>$(STARTUP).sce;
+	@echo "addinter(files,\"$(GATEWAY)_gateway\",scilab_functions);" >> $(STARTUP).sce;
 
-EXAMPLES=ex1c.sce ex1f.sce ex2c.sce ex2f.sce ex3c.sce \
-	ex3f.sce ex4c.sce ex4f.sce ex5c.sce ex6c.sce ex6f.sce ex7f.sce ex8f.sce
 
-tests	:
-	@$(RM) zlink.dia	
-	@cat $(EXAMPLES) > zlink.tst 		
-	@$(SCIDIR)/util/scidem $(SCIDIR) zlink.tst zlink.dia
+message:
+	@echo "------------------------------------------";
+	@echo "To load $(FUNCTIONS)";
+	@echo "        functions, at Scilab prompt, enter:";
+	@echo "-->exec $(STARTUP).sce";
+	@echo "------------------------------------------";
 
 clean	::
-	@$(RM) zlink.dia zlink.tst 
+	$(RM) *.o *~ so_locations
+	$(RM) $(GATEWAY)_gateway.c $(STARTUP).sce
+	$(RM) *.dia
+	$(RM) examples.tst
+	$(RM) format file args
 
-distclean::
-	@$(RM) zlink.dia zlink.tst $(OBJSC) $(OBJSF) 
+distclean	::
+	$(RM) *.o *~ so_locations
+	$(RM) $(GATEWAY)_gateway.c $(STARTUP).sce
+	$(RM) *.dia
+	$(RM) examples.tst
+	$(RM) format file args
 
+EXAMPLES = ex1c.sce ex2c.sce ex3456c.sce ex7c.sce ex8c.sce ex9c.sce ex10c.sce \
+	ex11c.sce ex12c.sce ex13c.sce ex14c.sce ex15c.sce ex16c.sce ex17c.sce \
+	ex1f.sce ex2f.sce ex3456f.sce ex7f.sce ex8f.sce ex9f.sce ex10f.sce \
+	ex11f.sce ex12f.sce ex13f.sce ex14f.sce ex15f.sce ex16f.sce ex17f.sce
+
+tests	: examples.dia
+
+examples.dia	: examples.tst all
+	@$(SCIDIR)/util/scidem $(SCIDIR) examples.tst examples.dia
+
+examples.tst :
+	@echo "exec(\"examples.sce\",-1);" > examples.tst
+	@cat $(EXAMPLES) >> examples.tst 		
 
 

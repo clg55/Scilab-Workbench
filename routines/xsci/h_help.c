@@ -207,13 +207,22 @@ int CopyListForWidget( help_c,help,ntopic)
     return(1);
   }
   for ( k = 0 ; k < ntopic ; k++)
-    if ( NewString(&(*help_c)[k],help[k]) == 1) 
-      {
-	int j;
-	for ( j = 0 ; j < k ; j++ ) FREE((*help_c)[j]);
-	sciprint("Not enough memory to allocate help tables\r\n");
-	return(1);
-      }
+    {
+      char *str;
+      int k2;
+      if ( NewString(&(*help_c)[k],help[k]) == 1) 
+	{
+	  int j;
+	  for ( j = 0 ; j < k ; j++ ) FREE((*help_c)[j]);
+	  sciprint("Not enough memory to allocate help tables\r\n");
+	  return(1);
+	}
+      str = (*help_c)[k]; 
+      for ( k2 = strlen(str) ; k2 > 0 ; k2--) 
+	{
+	  if ( str[k2]=='@' ) str[k2] ='\0';
+	}
+    }
   (*help_c)[ntopic]= (char *) 0;
   return(0);
 }
@@ -332,7 +341,6 @@ getWidgetString(widget)
 {
   Arg             args[1];
   char           *s;
-
   XtSetArg(args[0], XtNstring, &s);
   XtGetValues(widget, args, 1);
   return (s);

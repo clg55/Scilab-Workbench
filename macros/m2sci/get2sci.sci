@@ -1,7 +1,8 @@
-function [stk,top,vnms,vtps]=get2sci(nam,stk,top,vnms,vtps)
+function [stk,top,vnms,vtps,txt]=get2sci(nam,stk,top,vnms,vtps)
 // Translate the named variable acquisition
 //!
 // Copyright INRIA
+txt=[]
 top=top+1
 vn=find(nam==vnms(:,2))
 if vn==[] then // variable is not defined yet
@@ -30,15 +31,11 @@ if vn==[] then // variable is not defined yet
       if isanmfile(nam) then
 	// a m_file without parameter
 	stk(top)=list()
-      elseif exists('sci_nam')==1 then
+      elseif exists('sci_'+nam)==1 then
 	// a translated function without parameter
 	stk(top)=list()
       else
-	//a global variable
-	stk(top)=list(nam,'0','0','1','2')
-	vnms=[vnms;[nam,nam]]
-	vtps($+1)=list('?','?','?',0)
-	write(logfile,'Warning: '+nam+' assumed as an external variable')
+	[vnms,vtps,stk,txt]=get_unknown(nam)
       end
     end
   else

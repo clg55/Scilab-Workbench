@@ -38,8 +38,8 @@ PARAMETERS
             4 : iteration is not making good progress.
 
 DESCRIPTION
-  find a zero of a system of n nonlinear functions in n variables by a modif-
-  ication of the powell hybrid method. Jacobian may be provided.
+  find a zero of a system of n nonlinear functions in n variables by a modi-
+  fication of the powell hybrid method. Jacobian may be provided.
   0 = fct(x) w.r.t x.
   fct is an "external".  This external returns v=fct(x) given x.
 

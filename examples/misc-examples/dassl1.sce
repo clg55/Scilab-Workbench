@@ -20,7 +20,7 @@ yy1=dassl([y0,y0d],t0,t,dres1,djac1,info);
 if norm(dres1(yy1(1,:),yy1(2:3,:),yy1(4:5,:)),1)>1.d-6 then pause,end
 // fortran routine dres1 in dir. routines/default, without jocabian
 yy2=dassl([y0,y0d],t0,t,'dres1',info);   //=yy0
-if norm(dres1(yy2(1,:),yy2(2:3,:),yy2(4:5,:)),1)>1.d-6 then pause,end
+if norm(dres1(yy2(1,:),yy2(2:3,:),yy2(4:5,:)),1)>1.4d-6 then pause,end
 // fortran routines dres1 and djac1 in dir. routines/default, with jacobian
 yy3=dassl([y0,y0d],t0,t,'dres1','djac1',info);  //=yy1
 if norm(dres1(yy3(1,:),yy3(2:3,:),yy3(4:5,:)),1)>1.d-6 then pause,end

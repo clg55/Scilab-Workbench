@@ -8,7 +8,7 @@ include ../../Makefile.incl
 .SUFFIXES: .sci .bin $(SUFFIXES)
 
 NAME = alglib
-NAM = algebre
+NAM = SCI/macros/algebre
 
 MACROS = coff.sci colcomp.sci companion.sci \
 	givens.sci im_inv.sci randpencil.sci \

@@ -8,8 +8,8 @@ CALLING SEQUENCE
 
 DESCRIPTION
   returns as a character string the name of the library containing the func-
-  tion function-name. The path of the library is returned by typing
-  "librname".
+  tion function-name.  The path of the library is returned by typing "libr-
+  name".
 
 SEE ALSO
   lib

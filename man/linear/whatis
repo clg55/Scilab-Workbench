@@ -1,64 +1,64 @@
-aff2ab - linear (affine) function to a,b conversion  
-balanc - matrix or pencil balancing  
-bdiag - block diagonalization, generalized eigenvectors  
-chfact - sparse cholesky factorization  
-chol - cholesky factorization  
-chsolve - sparse cholesky solver  
-coff - resolvent (cofactor method)  
-colcomp - column compression, kernel, nullspace  
-companion - companion matrix  
-cond - condition number  
-det - determinant  
-ereduc - computes matrix column echelon form by qz transformations  
-exp - element-wise exponential  
-expm - square matrix exponential  
-fstair - computes pencil column echelon form by qz transformations  
-fullrf - full rank factorization  
-fullrfk - full rank factorization of a^k  
-givens - givens transformation  
-glever - inverse of matrix pencil  
-gschur - generalized schur form (matrix pencils).  
-gspec - eigenvalues of matrix pencil  
-hess - hessenberg form  
-householder - householder orthogonal reflexion matrix  
-im_inv - inverse image  
-inv - matrix inverse  
-kernel - kernel, nullspace  
-kroneck - kronecker form of matrix pencil  
-linsolve - linear equation solver  
-lu - lu factors of gaussian elimination  
-ludel - utility function used with lufact  
-lufact - sparse lu factorization  
-luget - sparse lu factorization  
-lusolve - sparse linear system solver  
-lyap - lyapunov equation  
-nlev - leverrier's algorithm  
-orth - orthogonal basis  
-pbig - eigen-projection  
-pencan - canonical form of matrix pencil  
-penlaur - laurent coefficients of matrix pencil  
-pinv - pseudoinverse  
-polar - polar form  
-proj - projection  
-projspec - spectral operators  
-psmall - spectral projection  
-qr - qr decomposition  
-quaskro - quasi-kronecker form  
-randpencil - random pencil  
-range - range (span) of a^k  
-rank - rank  
-rcond - inverse condition number  
-rowcomp - row compression, range  
-rowshuff - shuffle algorithm  
-rref - computes matrix row echelon form by lu transformations  
-schur - [ordered] schur decomposition  
-spaninter - subspace intersection  
-spanplus - sum of subspaces  
-spantwo - sum and intersection of subspaces  
-spchol - sparse cholesky factorization  
-spec - eigenvalues  
-sqroot - w*w' hermitian factorization  
-sva - singular value approximation  
-svd - singular value decomposition  
-sylv - sylvester equation.  
-trace - trace  
+aff2ab - linear (affine) function to a,b conversion   @aff2ab
+balanc - matrix or pencil balancing   @balanc
+bdiag - block diagonalization, generalized eigenvectors   @bdiag
+chfact - sparse cholesky factorization   @chfact
+chol - cholesky factorization   @chol
+chsolve - sparse cholesky solver   @chsolve
+coff - resolvent (cofactor method)   @coff
+colcomp - column compression, kernel, nullspace   @colcomp
+companion - companion matrix   @companion
+cond - condition number   @cond
+det - determinant   @det
+ereduc - computes matrix column echelon form by qz transformations   @ereduc
+exp - element-wise exponential   @exp
+expm - square matrix exponential   @expm
+fstair - computes pencil column echelon form by qz transformations   @fstair
+fullrf - full rank factorization   @fullrf
+fullrfk - full rank factorization of a^k   @fullrfk
+givens - givens transformation   @givens
+glever - inverse of matrix pencil   @glever
+gschur - generalized schur form (matrix pencils).   @gschur
+gspec - eigenvalues of matrix pencil   @gspec
+hess - hessenberg form   @hess
+householder - householder orthogonal reflexion matrix   @householder
+im_inv - inverse image   @im_inv
+inv - matrix inverse   @inv
+kernel - kernel, nullspace   @kernel
+kroneck - kronecker form of matrix pencil   @kroneck
+linsolve - linear equation solver   @linsolve
+lu - lu factors of gaussian elimination   @lu
+ludel - utility function used with lufact   @ludel
+lufact - sparse lu factorization   @lufact
+luget - sparse lu factorization   @luget
+lusolve - sparse linear system solver   @lusolve
+lyap - lyapunov equation   @lyap
+nlev - leverrier's algorithm   @nlev
+orth - orthogonal basis   @orth
+pbig - eigen-projection   @pbig
+pencan - canonical form of matrix pencil   @pencan
+penlaur - laurent coefficients of matrix pencil   @penlaur
+pinv - pseudoinverse   @pinv
+polar - polar form   @polar
+proj - projection   @proj
+projspec - spectral operators   @projspec
+psmall - spectral projection   @psmall
+qr - qr decomposition   @qr
+quaskro - quasi-kronecker form   @quaskro
+randpencil - random pencil   @randpencil
+range - range (span) of a^k   @range
+rank - rank   @rank
+rcond - inverse condition number   @rcond
+rowcomp - row compression, range   @rowcomp
+rowshuff - shuffle algorithm   @rowshuff
+rref - computes matrix row echelon form by lu transformations   @rref
+schur - [ordered] schur decomposition   @schur
+spaninter - subspace intersection   @spaninter
+spanplus - sum of subspaces   @spanplus
+spantwo - sum and intersection of subspaces   @spantwo
+spchol - sparse cholesky factorization   @spchol
+spec - eigenvalues   @spec
+sqroot - w*w' hermitian factorization   @sqroot
+sva - singular value approximation   @sva
+svd - singular value decomposition   @svd
+sylv - sylvester equation.   @sylv
+trace - trace   @trace

@@ -5,23 +5,28 @@ NAME
 
 CALLING SEQUENCE
   mode(k)
+  k=mode()
 
 DESCRIPTION
-  Used inside an exec-file with the following values for k
+  Used inside an exec-file or a scilab function mode(k) allows to change the
+  information displayed during the execution, depending on the value of k:
 
-  k=0  : no echo, no prompt, no stop.
+  k=0  : The new variable values are displayed if required (see help on semi
+       or comma).
 
-  k=-1 : nothing is printed.
+  k=-1 : the exec file or scilab function executes silently. (this is the
+       default value for scilab functions)
 
-  k=1  : an echo is received after each command line.
+  k=1 or k=3
+       : each line of instructions is echoed preceded of the prompt. The new
+       variable values are displayed if required. This is the default for
+       exec files.
 
-  k=2  : prompt --> is printed.
+  k=7  : The new variable values are displayed if required, each line of
+       instructions is echoed (if possible) and a prompt (>>) is issued after
+       each line waiting for a carriage return.
 
-  k=3  : there are echoes, prompts, but no stops.
-
-  k=4  : stops before each prompt and waits for a new command line
-
-  k=7  : there are stops, prompts and echoes.
+  line display is disable for compiled scilab function (see getf or comp)
 
 SEE ALSO
-  exec
+  exec, getf, semi, comma

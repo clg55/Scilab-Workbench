@@ -7,10 +7,6 @@
 
 #include <string.h> /* in case of dbmalloc use */
 
-#if defined(THINK_C) || defined (__MWERKS__) || defined(WIN32)
-#define M_PI	3.14159265358979323846
-#endif
-
 #if __STDC__
 #include <stdlib.h>
 #else
@@ -20,6 +16,8 @@
 #include <stdio.h>
 #include <math.h>
 #include "Math.h"
+
+extern double exp10 _PARAMS((double));
 
 /*-----------------------
  \encadre{List of Window Scale}
@@ -43,7 +41,7 @@ WCScaleList  Cscale =
   {0.0,0.0,1.0,1.0},
   {0.0,0.0,1.0,1.0},
   75.0,53.0,450.0,318.0,
-  "nn",
+  {'n','n'},
   {75,53,450,318},
   {2,10,2,10},
   {{1.0,0.0,0.0},{0.0,1.0,0.0},{0.0,0.0,1.0}},
@@ -60,7 +58,7 @@ static WCScaleList  Defscale =
   {0.0,0.0,1.0,1.0},
   {0.0,0.0,1.0,1.0},
   75.0,53.0,450.0,318.0,
-  "nn",
+  {'n','n'},
   {75,53,450,318},
   {2,10,2,10},
   {{1.0,0.0,0.0},{0.0,1.0,0.0},{0.0,0.0,1.0}},
@@ -844,8 +842,8 @@ void Gr_Rescale(logf, FRectI, Xdec, Ydec, xnax, ynax)
 }
 
 /* 
-  cadre + graduation 
-*/
+ *   frame and graduations.
+ */
 
 void C2F(aplot1)(FRect, IRect, Xdec, Ydec, npx, npy, logflag, scx, scy, xofset, yofset)
      double *FRect;
@@ -862,20 +860,20 @@ void C2F(aplot1)(FRect, IRect, Xdec, Ydec, npx, npy, logflag, scx, scy, xofset, 
 {
   C2F(dr)("xrect","v",&IRect[0],&IRect[1],&IRect[2],&IRect[3], PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   Axis1(0L,npx,Xdec[0],Xdec[1],Xdec[2],logflag[0],FRect,scx,scy,xofset,yofset);
-  Axis1(-90L,npy,Ydec[0],Ydec[1],Ydec[2],logflag[1],FRect,scx,scy,xofset,yofset);
+  Axis1(-90L,npy,Ydec[0],Ydec[1],Ydec[2],logflag[1],FRect,scx,scy,xofset,yofset);  
 }
 
 #define YMTrans(y) ( scy*(-(y)+FRect[3]) +yofset)
 #define XMTrans(x) ( scx*((x) -FRect[0]) + xofset)
 
 /* 
-  trace un axe gradue en nax[1] grand intervalles avec les nombres 
-  x_i= (kminr + i*(kmaxr-kminr) / *np2)*10^ar 
-  ecrits pour chaque intervalles chacun des np2 intervalles etant 
-  recoupe en np1 intervalles.
-  FRect,scx,scy,xofset,yofset : donnent les parametres de changement 
-  d'echelle entre coordonnees reelles et coordonnnees pixels.
-*/
+ * trace un axe gradue en nax[1] grand intervalles avec les nombres 
+ * x_i= (kminr + i*(kmaxr-kminr) / *np2)*10^ar 
+ * ecrits pour chaque intervalles chacun des np2 intervalles etant 
+ * recoupe en np1 intervalles.
+ * FRect,scx,scy,xofset,yofset : donnent les parametres de changement 
+ * d'echelle entre coordonnees reelles et coordonnnees pixels.
+ */
 
 
 static void Axis1(axdir, nax, kminr, kmaxr, ar, logflag, FRect, scx, scy, xofset, yofset)
@@ -896,20 +894,26 @@ static void Axis1(axdir, nax, kminr, kmaxr, ar, logflag, FRect, scx, scy, xofset
   double size1[3];
   integer flag=0,xx=0,yy=0,posi[2],smallersize;
   integer i,barlength,logrect[4],fontid[2],narg,verbose=0;
-  if ( axdir == 0 ) 
-    {
-      size1[1]= scx*(FRect[2]-FRect[0])/150.0;
-      size1[2]=2.0;
-      size1[0]= scx*( (FRect[2]-FRect[0])/((double) nax[0]*nax[1]));
-    }
-  else 
-    {
-      size1[1]= scy*((FRect[1]-FRect[3])/100.0);
-      size1[2]=2.0;
-      size1[0]= scy*( (FRect[3]-FRect[1])/((double) nax[0]*nax[1]));
-    }
   LDPoint1[0] = inint(XMTrans(FRect[0]));
   LDPoint1[1] = inint(YMTrans(FRect[1]));
+  switch (axdir) {
+  case 0:
+      size1[1]= scy*(FRect[3]-FRect[1])/100.0;
+      size1[2]= 2.0;
+      size1[0]= scx*( (FRect[2]-FRect[0])/((double) nax[0]*nax[1]));
+      break;
+  case -90:
+      size1[1]= - scx*((FRect[2]-FRect[0])/150.0);
+      size1[2]=2.0;
+      size1[0]= scy*( (FRect[3]-FRect[1])/((double) nax[0]*nax[1]));
+      break;
+  case 90: 
+    LDPoint1[0] = inint(XMTrans(FRect[2]));
+    LDPoint1[1] = inint(YMTrans(FRect[3]));
+    size1[1]= - scx*((FRect[2]-FRect[0])/150.0);
+    size1[2]=2.0;
+    size1[0]= scy*( (FRect[3]-FRect[1])/((double) nax[0]*nax[1]));
+    }
   C2F(dr)("xaxis","void",&axdir,nax,PI0,LDPoint1,PI0,PI0, size1,PD0,PD0,PD0,0L,0L);
   barlength=inint(1.2*(size1[1]*size1[2]));
   if (logflag == 'l' )
@@ -919,27 +923,31 @@ static void Axis1(axdir, nax, kminr, kmaxr, ar, logflag, FRect, scx, scy, xofset
       smallersize=fontid[1]-2;
       C2F(dr)("xset","font",fontid,&smallersize,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     }
-  /* c'est dividible par constrution de nax[1] */
+  /* nax[1] was build to divide kmaxr-kminr */
   ipas =(kmaxr-kminr)/nax[1] ;
   for (i=kminr ; i <= kmaxr ; i+= ipas )
     { 
+      integer iz1,iz2;
       double angle=0.0;
       char foo[100];
       NumberFormat(foo,i,ar);
       C2F(dr)("xstringl",foo,&xx,&yy,rect,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-      if ( axdir == 0 ) 
-	{
-	  integer iz1;
-	  iz1= inint(XMTrans(((double) i)* exp10((double) ar)));
-	  posi[0]=iz1 -rect[2]/2;
-	  posi[1]=LDPoint1[1] + rect[3]+ barlength;
-	}
-      else 
-	{
-	  integer iz2;
-	  iz2= inint(YMTrans(((double) i)* exp10((double) ar)));
-	  posi[0]=LDPoint1[0] - rect[2] +barlength;
-	  posi[1]=iz2 + rect[3]/4;
+      switch (axdir) {
+      case 0:
+	iz1= inint(XMTrans(((double) i)* exp10((double) ar)));
+	posi[0]=iz1 -rect[2]/2;
+	posi[1]=LDPoint1[1] + rect[3]+ barlength;
+	break;
+      case -90 :
+	iz2= inint(YMTrans(((double) i)* exp10((double) ar)));
+	posi[0]=LDPoint1[0] - rect[2] +barlength;
+	posi[1]=iz2 + rect[3]/4;
+	break;
+      case 90 : 
+	iz2= inint(YMTrans(((double) i)* exp10((double) ar)));
+	posi[0]=LDPoint1[0] - barlength;
+	posi[1]=iz2 + rect[3]/4;
+	break;
 	}
       C2F(dr)("xstring",foo,&(posi[0]),&(posi[1]),PI0,&flag,PI0,PI0,&angle,PD0,PD0,PD0,0L,0L); 
       if ( logflag == 'l' )
@@ -981,23 +989,21 @@ static void NumberFormat(str, k, a)
 
 
 /* 
-  La ryine qui suit : pour [ xmi,xma] donn\'e
-  cherche a trouver (xi,xa,np1,np2) tels que
-  xi <= xmi <= xmax <= xa ou l'intervalle [xi,xa] 
-  ou xi et xa sont de la forme kminr 10^ar et kmaxr 10^ar.
-  l'intervalle [xi,xa] se gradue de facon simple en *np2 intervalles
-  ( kminr-kmaxr est divisible par *np2 ) 
-  x_i= (kminr + i*(kmaxr-kminr)/ (*np2))*10^ar;
-  i=0:(*np2)
-  chacun des np2 intervalles peut-etre a son tour coupe 
-  en np1 intervalles sans graduation.
-  [np1,np2] sont comme les parametres nax de plot2d.
-  
-  on ne veut pas un nombre d'intervalle trop grand ( *np2 <=10 ) 
-  et on veut que [xi,xa] soit aussi voisin que possible de l'intervalle 
-  d'origine [xmi,xma]
-  Attention il faut que xmi <= xma 
-*/
+ * graduate : for [xmi,xma] given seeks (xi,xa,np1,np2)
+ * such that  xi <= xmi <= xmax <= xa 
+ * with xi et xa  numbers of type  kminr 10^ar and kmaxr 10^ar.
+ * then the interval [xi,xa] can be splited in *np2 sub-intervals
+ *  ( kminr-kmaxr can be divided by *np2 ) 
+ *  x_i= (kminr + i*(kmaxr-kminr)/ (*np2))*10^ar;
+ * i=0:(*np2)
+ * ecah of the  np2 intervals can in turn be splited in np1 ungraduated 
+ * subintervals 
+ * [np1,np2] follow the nax parameters of plot2d.
+ *  
+ *  We also want to keep np2 small ( *np2 <=10 ) 
+ *  and we want [xi,xa] to be as close as possible to the interval  
+ *  [xmi,xma]
+ */
 
 int C2F(graduate)(xmi,xma,xi,xa,np1,np2,kminr,kmaxr,ar)
      double *xmi,*xma,*xi,*xa;

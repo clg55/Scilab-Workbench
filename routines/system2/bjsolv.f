@@ -11,6 +11,7 @@ c
       integer n,iflag
       double precision x(n),fvec(n),fjac(ldfjac,n)
 
+      logical allowptr
       integer vol,tops,nordre
       data nordre/1/,mlhs/1/
 c

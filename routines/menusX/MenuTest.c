@@ -1,4 +1,4 @@
-/* Copyright INRIA */
+/* Copyright ENPC */
 
 #include <stdio.h>
 #include "../machine.h"
