@@ -56,25 +56,46 @@ c for a different run-abort command, change the statement following
 c statement 100 at the end.
 c!
 c-----------------------------------------------------------------------
+      include '../stack.h'
       common /eh0001/ mesflg, lunit
+      integer         iero
+      common /ierode/ iero
+      character*80 str
 c-----------------------------------------------------------------------
       if (mesflg .eq. 0) go to 100
 c get logical unit number. ---------------------------------------------
-      lun = lunit
+
+cstd      lun = lunit
+      lun = wte
 c get number of words in message. --------------------------------------
       nch = min(len(msg),80)
 c write the message. ---------------------------------------------------
-      write (lun, 10) (msg(i:i),i=1,nch)
- 10   format(1x,80a1)
-      if (ni .eq. 1) write (lun, 20) i1
- 20   format(6x,'where i1 is : ',i10)
-      if (ni .eq. 2) write (lun, 30) i1,i2
- 30   format(6x,'where i1 is : ',i10,3x,' and i2 : ',i10)
-      if (nr .eq. 1) write (lun, 40) r1
- 40   format(6x,'where i1 is : ',d21.13)
-      if (nr .eq. 2) write (lun, 50) r1,r2
- 50   format(6x,'where i1 is : ',d21.13,3x,'and r2 : ',d21.13)
+cstd      write (lun, 10) (msg(i:i),i=1,nch)
+cstd 10   format(1x,80a1)
+      call basout(io,lun,msg(1:nch))
+      if (ni .eq. 1) then
+cstd         write (lun, 20) i1
+         write (str, 20) i1
+ 20      format(6x,'where i1 is : ',i10)
+         call basout(io,lun,str)
+      elseif (ni .eq. 2) then
+cstd         write (lun, 30) i1,i2
+         write (str, 30) i1,i2
+ 30      format(6x,'where i1 is : ',i10,3x,' and i2 : ',i10)
+         call basout(io,lun,str)
+      endif
+      if (nr .eq. 1) then
+cstd         write (lun, 40) r1
+         write (str, 40) r1
+ 40      format(6x,'where r1 is : ',d21.13)
+         call basout(io,lun,str)
+      elseif (nr .eq. 2) then
+cstd         write (lun, 50) r1,r2
+         write (str, 50) r1,r2
+ 50      format(6x,'where r1 is : ',d21.13,3x,'and r2 : ',d21.13)
+         call basout(io,lun,str)
+      endif
 c abort the run if iert = 2. -------------------------------------------
  100  if (iert .ne. 2) return
-      stop
+      iero = 1
       end

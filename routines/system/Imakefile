@@ -11,7 +11,7 @@ OBJS= adr.o allops.o  banier.o sascii.o \
 	stackp.o terme.o xchar.o  matla0.o \
 	majmin.o apropo.o basmsg.o whatln.o \
 	seteol.o setlnb.o skpins.o msgs.o userlk.o prntid.o \
-	cvname.o cvstr.o compil.o ptover.o ptrback.o sevents.o \
+	cvname.o cvstr.o compil.o ptover.o ptrback.o \
 	isbrk.o 
 
 FSRCS= $(OBJS:.o=.f)

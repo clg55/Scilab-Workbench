@@ -26,7 +26,7 @@
 
 # platform: osf1.cf
 
-# Operating system:  1/1 3.0
+# Operating system:  1/1 1.3
 
    	SHAREDSWITCH =
 
@@ -48,7 +48,6 @@
   BOOTSTRAPCFLAGS =
                CC = cc $(SHAREDSWITCH)
             LOCCC = cc
-        LOCSHARCC = LocShareCcCmd
                AS = as
 
          COMPRESS = compress
@@ -83,7 +82,7 @@
 
     PROTO_DEFINES = -DFUNCPROTO=3
 
-     INSTPGMFLAGS = -s
+     INSTPGMFLAGS =
 
      INSTBINFLAGS = -m 0755
      INSTUIDFLAGS = -m 4755
@@ -93,7 +92,7 @@
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4755
 
-      CDEBUGFLAGS = -O2 -Olimit 2000
+      CDEBUGFLAGS = -O2
         CCOPTIONS =
      LOCCCOPTIONS =
 
@@ -145,15 +144,12 @@
            INCDIR = $(INCROOT)/X11
            ADMDIR = /usr/adm
            LIBDIR = $(USRLIBDIR)/X11
-           VARDIR = /usr/var/X11
         CONFIGDIR = $(LIBDIR)/config
        LINTLIBDIR = $(USRLIBDIR)/lint
 
           FONTDIR = $(LIBDIR)/fonts
-      USERFONTDIR = $(VARDIR)/fonts/user
-            FSDIR = $(VARDIR)/fs
          XINITDIR = $(LIBDIR)/xinit
-           XDMDIR = $(VARDIR)/xdm
+           XDMDIR = $(LIBDIR)/xdm
            TWMDIR = $(LIBDIR)/twm
           MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
@@ -211,12 +207,8 @@
       XTESTLIBSRC = $(EXTENSIONSRC)/lib/xtest
       XTRAPLIBSRC = $(EXTENSIONSRC)/lib/xtrap
       PHIGSLIBSRC = $(EXTENSIONSRC)/lib/PEX
-       XIELIBSRC  = $(EXTENSIONSRC)/lib/XIE
-
-        EXTINCSRC = $(TOP)/X11/extensions
 
       USRSHLIBDIR = /usr/shlib
-        XSHLIBDIR = /usr/shlib/X11
 
        SHLIBFLAGS = -check_registry $(CROSSBASE)/usr/shlib/so_locations 	-L$(CROSSBASE)/usr/shlib -L$(CROSSBASE)/usr/ccs/lib
 
@@ -238,9 +230,6 @@
         DEPXAWLIB = $(USRSHLIBDIR)/libXaw.so
            XAWLIB = -lXaw
 
-       DEPXXIELIB = $(USRSHLIBDIR)/libXIE.so
-          XXIELIB = -lXIE
-
         DEPXILIB = $(USRSHLIBDIR)/libXi.a
            XILIB = -lXi
 
@@ -249,7 +238,6 @@
         SOXLIBREV = SharedXlibRev
           SOXTREV = SharedXtRev
          SOXAWREV = SharedXawRev
-         SOXIEREV = SharedXIERev
         SOOLDXREV = SharedOldXRev
          SOXMUREV = SharedXmuRev
         SOXEXTREV = SharedXextRev
@@ -271,12 +259,6 @@
         DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
            PHIGSLIB = 			 -lphigs
 
-    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
-       ACCESSXLIB = 			 -lAccessx
-
-    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
-       ACCESSXLIB = 			 -lAccessx
-
        DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
           XBSDLIB = 			 -lXbsd
 
@@ -285,7 +267,6 @@
           LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
         LINTXTOOL = $(LINTLIBDIR)/llib-lXt.ln
           LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
-         LINTXXIE = $(LINTLIBDIR)/llib-lXIE.ln
            LINTXI = $(LINTLIBDIR)/llib-lXi.ln
         LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
 
@@ -309,7 +290,6 @@
    MRESOURCESRC = $(MLIBSRC)/Mrm
      MCLIENTSRC = $(TOP)/motif/clients
          UILSRC = $(MCLIENTSRC)/uil
-    MINCLUDESRC = $(INCLUDESRC)
 
             UIL = uil
 
@@ -337,9 +317,9 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
            CDADIR = $(USRLIBDIR)/cda
 
            DXMSRC = $(MLIBSRC)/DXm
-           DPSSRC = $(EXTENSIONSRC)/DPSII/lib/dps
-         DPSTKSRC = $(EXTENSIONSRC)/DPSII/lib/dpstk
-         PSRESSRC = $(EXTENSIONSRC)/DPSII/lib/psres
+           DPSSRC = $(EXTENSIONSRC)/DPS/lib/dps
+         DPSTKSRC = $(EXTENSIONSRC)/DPS/lib/dpstk
+         PSRESSRC = $(EXTENSIONSRC)/DPS/lib/psres
            XIESRC = $(EXTENSIONSRC)/lib/xie
            IDSSRC = $(MLIBSRC)/ids
            BKRSRC = $(MLIBSRC)/bkr
@@ -349,8 +329,6 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
        DEPDXMLIB = $(USRSHLIBDIR)/libDXm.so
           DXMLIB = -lDXm
-
-       MDXMLIB = $(DXMLIB)
 
         DEPDPSLIB = $(USRSHLIBDIR)/libdps.so
            DPSLIB = -ldps
@@ -402,7 +380,7 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
 # -------------------------------------------------------------------------
 # DEC-Specific System Build Rules
-# $Id: Dec.rules,v 1.1.2.8 92/12/08 19:29:22 Leela_Obilichetti Exp $
+# $Id: Dec.rules,v 1.1.2.8 1992/12/08 19:29:22 Leela_Obilichetti Exp $
 
 # -------------------------------------------------------------------------
 # start of Imakefile
@@ -416,8 +394,8 @@ CCOPTIONS=
 CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 
-SCIVERSION = Scilab-2.1
-SCIDATE = 10 February 1995
+SCIVERSION = Scilab-2.1.1
+SCIDATE = 11 April 1995
 
 EXTRA_INCLUDES = -I$(SCIDIR)/routines
 
@@ -507,15 +485,19 @@ includes::
 # DO NOT DELETE
 
 message.o: scilab_d.h /usr/include/stdio.h /usr/include/standards.h
-message.o: /usr/include/string.h /usr/include/sys/types.h
-message.o: /usr/include/malloc.h /usr/include/X11/Xatom.h
-message.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+message.o: /usr/include/string.h /usr/include/malloc.h
+message.o: /usr/include/X11/Xatom.h /usr/include/X11/Intrinsic.h
+message.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 message.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 message.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-message.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-message.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-message.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-message.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
+message.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
+message.o: /usr/include/X11/Xmd.h /usr/include/limits.h
+message.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
+message.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+message.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
+message.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+message.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+message.o: /usr/include/X11/StringDefs.h
 message.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
 message.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 message.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
@@ -544,15 +526,19 @@ message.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 message.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h
 message.o: ../machine.h
 choose.o: scilab_d.h /usr/include/stdio.h /usr/include/standards.h
-choose.o: /usr/include/string.h /usr/include/sys/types.h
-choose.o: /usr/include/malloc.h /usr/include/X11/Xatom.h
-choose.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+choose.o: /usr/include/string.h /usr/include/malloc.h
+choose.o: /usr/include/X11/Xatom.h /usr/include/X11/Intrinsic.h
+choose.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 choose.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 choose.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-choose.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-choose.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-choose.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-choose.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
+choose.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
+choose.o: /usr/include/X11/Xmd.h /usr/include/limits.h
+choose.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
+choose.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+choose.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
+choose.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+choose.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+choose.o: /usr/include/X11/StringDefs.h
 choose.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
 choose.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 choose.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
@@ -580,15 +566,19 @@ choose.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
 choose.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 choose.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h ../machine.h
 dialog.o: scilab_d.h /usr/include/stdio.h /usr/include/standards.h
-dialog.o: /usr/include/string.h /usr/include/sys/types.h
-dialog.o: /usr/include/malloc.h /usr/include/X11/Xatom.h
-dialog.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+dialog.o: /usr/include/string.h /usr/include/malloc.h
+dialog.o: /usr/include/X11/Xatom.h /usr/include/X11/Intrinsic.h
+dialog.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 dialog.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 dialog.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-dialog.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-dialog.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-dialog.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-dialog.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
+dialog.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
+dialog.o: /usr/include/X11/Xmd.h /usr/include/limits.h
+dialog.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
+dialog.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+dialog.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
+dialog.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+dialog.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+dialog.o: /usr/include/X11/StringDefs.h
 dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
 dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
@@ -616,15 +606,19 @@ dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
 dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h ../machine.h
 mdialog.o: scilab_d.h /usr/include/stdio.h /usr/include/standards.h
-mdialog.o: /usr/include/string.h /usr/include/sys/types.h
-mdialog.o: /usr/include/malloc.h /usr/include/X11/Xatom.h
-mdialog.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+mdialog.o: /usr/include/string.h /usr/include/malloc.h
+mdialog.o: /usr/include/X11/Xatom.h /usr/include/X11/Intrinsic.h
+mdialog.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 mdialog.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 mdialog.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-mdialog.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-mdialog.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-mdialog.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-mdialog.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
+mdialog.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
+mdialog.o: /usr/include/X11/Xmd.h /usr/include/limits.h
+mdialog.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
+mdialog.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+mdialog.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
+mdialog.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+mdialog.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+mdialog.o: /usr/include/X11/StringDefs.h
 mdialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
 mdialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 mdialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
@@ -654,15 +648,18 @@ mdialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h
 mdialog.o: ../machine.h
 string.o: ../machine.h scilab_d.h /usr/include/stdio.h
 string.o: /usr/include/standards.h /usr/include/string.h
-string.o: /usr/include/sys/types.h /usr/include/malloc.h
-string.o: /usr/include/X11/Xatom.h /usr/include/X11/Intrinsic.h
-string.o: /usr/include/X11/Xlib.h /usr/include/X11/X.h
+string.o: /usr/include/malloc.h /usr/include/X11/Xatom.h
+string.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+string.o: /usr/include/sys/types.h /usr/include/X11/X.h
 string.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-string.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
-string.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
-string.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-string.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-string.o: /usr/include/X11/StringDefs.h
+string.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
+string.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
+string.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
+string.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
+string.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+string.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+string.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+string.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
 string.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
 string.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 string.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
@@ -690,15 +687,19 @@ string.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
 string.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 string.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h
 testfrac.o: scilab_d.h /usr/include/stdio.h /usr/include/standards.h
-testfrac.o: /usr/include/string.h /usr/include/sys/types.h
-testfrac.o: /usr/include/malloc.h /usr/include/X11/Xatom.h
-testfrac.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+testfrac.o: /usr/include/string.h /usr/include/malloc.h
+testfrac.o: /usr/include/X11/Xatom.h /usr/include/X11/Intrinsic.h
+testfrac.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 testfrac.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 testfrac.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-testfrac.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-testfrac.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-testfrac.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-testfrac.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
+testfrac.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
+testfrac.o: /usr/include/X11/Xmd.h /usr/include/limits.h
+testfrac.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
+testfrac.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+testfrac.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
+testfrac.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+testfrac.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+testfrac.o: /usr/include/X11/StringDefs.h
 testfrac.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
 testfrac.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 testfrac.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
@@ -726,15 +727,19 @@ testfrac.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
 testfrac.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 testfrac.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h
 matdialog.o: scilab_d.h /usr/include/stdio.h /usr/include/standards.h
-matdialog.o: /usr/include/string.h /usr/include/sys/types.h
-matdialog.o: /usr/include/malloc.h /usr/include/X11/Xatom.h
-matdialog.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+matdialog.o: /usr/include/string.h /usr/include/malloc.h
+matdialog.o: /usr/include/X11/Xatom.h /usr/include/X11/Intrinsic.h
+matdialog.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 matdialog.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 matdialog.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-matdialog.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-matdialog.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-matdialog.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-matdialog.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
+matdialog.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
+matdialog.o: /usr/include/X11/Xmd.h /usr/include/limits.h
+matdialog.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
+matdialog.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+matdialog.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
+matdialog.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+matdialog.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+matdialog.o: /usr/include/X11/StringDefs.h
 matdialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
 matdialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 matdialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
@@ -763,15 +768,19 @@ matdialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 matdialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h
 matdialog.o: ../machine.h
 idialog.o: scilab_d.h /usr/include/stdio.h /usr/include/standards.h
-idialog.o: /usr/include/string.h /usr/include/sys/types.h
-idialog.o: /usr/include/malloc.h /usr/include/X11/Xatom.h
-idialog.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+idialog.o: /usr/include/string.h /usr/include/malloc.h
+idialog.o: /usr/include/X11/Xatom.h /usr/include/X11/Intrinsic.h
+idialog.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 idialog.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 idialog.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-idialog.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-idialog.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-idialog.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-idialog.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
+idialog.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
+idialog.o: /usr/include/X11/Xmd.h /usr/include/limits.h
+idialog.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
+idialog.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+idialog.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
+idialog.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+idialog.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+idialog.o: /usr/include/X11/StringDefs.h
 idialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
 idialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 idialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h

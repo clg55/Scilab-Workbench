@@ -28,11 +28,11 @@ err
 \fVnum\fR by \fVden\fR approximate (with a minimal l2 norm) the vector \fVy\fR:
 .LP
 \fVldiv(num,den,ny)\fR is approximately \fV[y(1),y(2),...,y(ny)]\fR
-\"LaTeX \ignore{	
+.IG	
 If y(z)  =  y(1)(1/z)+y(2)(1/z^2)+ ...+ y(ny)(1/z^ny) 
-\"LaTeX }
-\"LaTeX If~:\[ y(z)= y(1)({ 1 \over z})+y(2)({ 1 \over z})^2+\dots
-\"LaTeX  + y(ny)({ 1 \over z})^ny \]
+.FI
+.LA If~:$$ y(z)= y(1)({ 1 \over z})+y(2)({ 1 \over z})^2+\dots
+.LA  + y(ny)({ 1 \over z})^ny $$
 then l2-norm of \fVnum/den - y(z)\fR is \fVerr\fR.
 .LP
 \fVn\fR is the degree of the polynomial \fVden\fR.

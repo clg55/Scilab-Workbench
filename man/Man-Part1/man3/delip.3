@@ -9,13 +9,13 @@ delip - elliptic integral
 .SH DESCRIPTION
 returns the value of the elliptic integral
 with parameter \fVck\fR :
-\"LaTeX \ignore{
+.IG
 .nf
 r=integral from 0 to x {dt / sqrt((1-t^2)*(1-ck^2*t^2))}
 .fi
-\"LaTeX }
+.FI
 \" This is for LaTeX 
-\"LaTeX  \[ r=\int_0^x { 1 \over \sqrt{(1-t^2)(1-{ck}^2 t^2)}} dx  \]
+.LA  $$ r=\int_0^x { 1 \over \sqrt{(1-t^2)(1-{ck}^2 t^2)}} dx  $$
 \fVx\fR real and positive.
 When called with \fVx\fR a real vector \fVr\fR is evaluated at each
 coordinate of \fVx\fR.

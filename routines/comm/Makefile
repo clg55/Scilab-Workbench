@@ -26,7 +26,7 @@
 
 # platform: osf1.cf
 
-# Operating system:  1/1 3.0
+# Operating system:  1/1 1.3
 
    	SHAREDSWITCH =
 
@@ -48,7 +48,6 @@
   BOOTSTRAPCFLAGS =
                CC = cc $(SHAREDSWITCH)
             LOCCC = cc
-        LOCSHARCC = LocShareCcCmd
                AS = as
 
          COMPRESS = compress
@@ -83,7 +82,7 @@
 
     PROTO_DEFINES = -DFUNCPROTO=3
 
-     INSTPGMFLAGS = -s
+     INSTPGMFLAGS =
 
      INSTBINFLAGS = -m 0755
      INSTUIDFLAGS = -m 4755
@@ -93,7 +92,7 @@
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4755
 
-      CDEBUGFLAGS = -O2 -Olimit 2000
+      CDEBUGFLAGS = -O2
         CCOPTIONS =
      LOCCCOPTIONS =
 
@@ -145,15 +144,12 @@
            INCDIR = $(INCROOT)/X11
            ADMDIR = /usr/adm
            LIBDIR = $(USRLIBDIR)/X11
-           VARDIR = /usr/var/X11
         CONFIGDIR = $(LIBDIR)/config
        LINTLIBDIR = $(USRLIBDIR)/lint
 
           FONTDIR = $(LIBDIR)/fonts
-      USERFONTDIR = $(VARDIR)/fonts/user
-            FSDIR = $(VARDIR)/fs
          XINITDIR = $(LIBDIR)/xinit
-           XDMDIR = $(VARDIR)/xdm
+           XDMDIR = $(LIBDIR)/xdm
            TWMDIR = $(LIBDIR)/twm
           MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
@@ -211,12 +207,8 @@
       XTESTLIBSRC = $(EXTENSIONSRC)/lib/xtest
       XTRAPLIBSRC = $(EXTENSIONSRC)/lib/xtrap
       PHIGSLIBSRC = $(EXTENSIONSRC)/lib/PEX
-       XIELIBSRC  = $(EXTENSIONSRC)/lib/XIE
-
-        EXTINCSRC = $(TOP)/X11/extensions
 
       USRSHLIBDIR = /usr/shlib
-        XSHLIBDIR = /usr/shlib/X11
 
        SHLIBFLAGS = -check_registry $(CROSSBASE)/usr/shlib/so_locations 	-L$(CROSSBASE)/usr/shlib -L$(CROSSBASE)/usr/ccs/lib
 
@@ -238,9 +230,6 @@
         DEPXAWLIB = $(USRSHLIBDIR)/libXaw.so
            XAWLIB = -lXaw
 
-       DEPXXIELIB = $(USRSHLIBDIR)/libXIE.so
-          XXIELIB = -lXIE
-
         DEPXILIB = $(USRSHLIBDIR)/libXi.a
            XILIB = -lXi
 
@@ -249,7 +238,6 @@
         SOXLIBREV = SharedXlibRev
           SOXTREV = SharedXtRev
          SOXAWREV = SharedXawRev
-         SOXIEREV = SharedXIERev
         SOOLDXREV = SharedOldXRev
          SOXMUREV = SharedXmuRev
         SOXEXTREV = SharedXextRev
@@ -271,12 +259,6 @@
         DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
            PHIGSLIB = 			 -lphigs
 
-    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
-       ACCESSXLIB = 			 -lAccessx
-
-    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
-       ACCESSXLIB = 			 -lAccessx
-
        DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
           XBSDLIB = 			 -lXbsd
 
@@ -285,7 +267,6 @@
           LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
         LINTXTOOL = $(LINTLIBDIR)/llib-lXt.ln
           LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
-         LINTXXIE = $(LINTLIBDIR)/llib-lXIE.ln
            LINTXI = $(LINTLIBDIR)/llib-lXi.ln
         LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
 
@@ -309,7 +290,6 @@
    MRESOURCESRC = $(MLIBSRC)/Mrm
      MCLIENTSRC = $(TOP)/motif/clients
          UILSRC = $(MCLIENTSRC)/uil
-    MINCLUDESRC = $(INCLUDESRC)
 
             UIL = uil
 
@@ -337,9 +317,9 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
            CDADIR = $(USRLIBDIR)/cda
 
            DXMSRC = $(MLIBSRC)/DXm
-           DPSSRC = $(EXTENSIONSRC)/DPSII/lib/dps
-         DPSTKSRC = $(EXTENSIONSRC)/DPSII/lib/dpstk
-         PSRESSRC = $(EXTENSIONSRC)/DPSII/lib/psres
+           DPSSRC = $(EXTENSIONSRC)/DPS/lib/dps
+         DPSTKSRC = $(EXTENSIONSRC)/DPS/lib/dpstk
+         PSRESSRC = $(EXTENSIONSRC)/DPS/lib/psres
            XIESRC = $(EXTENSIONSRC)/lib/xie
            IDSSRC = $(MLIBSRC)/ids
            BKRSRC = $(MLIBSRC)/bkr
@@ -349,8 +329,6 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
        DEPDXMLIB = $(USRSHLIBDIR)/libDXm.so
           DXMLIB = -lDXm
-
-       MDXMLIB = $(DXMLIB)
 
         DEPDPSLIB = $(USRSHLIBDIR)/libdps.so
            DPSLIB = -ldps
@@ -402,7 +380,7 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
 # -------------------------------------------------------------------------
 # DEC-Specific System Build Rules
-# $Id: Dec.rules,v 1.1.2.8 92/12/08 19:29:22 Leela_Obilichetti Exp $
+# $Id: Dec.rules,v 1.1.2.8 1992/12/08 19:29:22 Leela_Obilichetti Exp $
 
 # -------------------------------------------------------------------------
 # start of Imakefile
@@ -416,8 +394,8 @@ CCOPTIONS=
 CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 
-SCIVERSION = Scilab-2.1
-SCIDATE = 10 February 1995
+SCIVERSION = Scilab-2.1.1
+SCIDATE = 11 April 1995
 
 EXTRA_INCLUDES = -I$(SCIDIR)/routines
 
@@ -496,30 +474,27 @@ includes::
 buf_dynam.o: /usr/include/stdio.h /usr/include/standards.h
 buf_dynam.o: /usr/include/stdlib.h gestion_memoire.h listes_chainees.h
 buf_dynam.o: buffer_dynamiques.h
-communicat.o: /usr/include/varargs.h /usr/include/va_list.h
-communicat.o: /usr/include/stdio.h /usr/include/standards.h
-communicat.o: /usr/include/string.h /usr/include/sys/types.h
+communicat.o: /usr/include/varargs.h /usr/include/stdio.h
+communicat.o: /usr/include/standards.h /usr/include/string.h
 communicat.o: gestion_memoire.h formatage_messages.h utilitaires.h libCom.h
 communicat.o: gestion_messages.h communications.h
 format_mess.o: /usr/include/string.h /usr/include/standards.h
-format_mess.o: /usr/include/sys/types.h gestion_memoire.h buffer_dynamiques.h
-format_mess.o: utilitaires.h /usr/include/varargs.h /usr/include/va_list.h
-format_mess.o: formatage_messages.h libCom.h
+format_mess.o: gestion_memoire.h buffer_dynamiques.h utilitaires.h
+format_mess.o: /usr/include/varargs.h formatage_messages.h libCom.h
 gest_memoire.o: /usr/include/stdio.h /usr/include/standards.h
 gest_memoire.o: /usr/include/stdlib.h gestion_memoire.h
 gest_messages.o: /usr/include/stdio.h /usr/include/standards.h
-gest_messages.o: /usr/include/string.h /usr/include/sys/types.h
-gest_messages.o: /usr/include/signal.h /usr/include/machine/signal.h
-gest_messages.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h utilitaires.h
-gest_messages.o: /usr/include/varargs.h /usr/include/va_list.h libCom.h
-gest_messages.o: formatage_messages.h gestion_memoire.h gestion_messages.h
+gest_messages.o: /usr/include/string.h /usr/include/signal.h
+gest_messages.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h
+gest_messages.o: /usr/include/sys/types.h utilitaires.h
+gest_messages.o: /usr/include/varargs.h libCom.h formatage_messages.h
+gest_messages.o: gestion_memoire.h gestion_messages.h
 initcom.o: /usr/include/stdio.h /usr/include/standards.h
 initcom.o: /usr/include/sys/types.h /usr/include/netinet/in.h
 initcom.o: /usr/include/netdb.h /usr/include/rpc/netdb.h ../machine.h
 initcom.o: libCalCom.h libCom.h
 list_chainees.o: /usr/include/stdio.h /usr/include/standards.h
 list_chainees.o: listes_chainees.h
-utilitaires.o: /usr/include/varargs.h /usr/include/va_list.h
-utilitaires.o: /usr/include/stdio.h /usr/include/standards.h
-utilitaires.o: /usr/include/string.h /usr/include/sys/types.h
+utilitaires.o: /usr/include/varargs.h /usr/include/stdio.h
+utilitaires.o: /usr/include/standards.h /usr/include/string.h
 utilitaires.o: gestion_memoire.h buffer_dynamiques.h utilitaires.h

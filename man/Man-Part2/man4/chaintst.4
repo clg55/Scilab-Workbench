@@ -5,9 +5,11 @@ chaintest - a three-species food chain model
 .SH CALLING SEQUENCE
 .nf
 chaintest([f_l,b1,odem,xdim,npts])
-chain(t,x)
-f1(u),f2(u)
 .fi
+.SH PARAMETERS
+.TP
+odem,xdim,npts
+: See portr3d
 .SH DESCRIPTION
 Phase portrait of  a three-species food chain model given by:
 .nf
@@ -24,9 +26,8 @@ and
 	f2(u)z2=0.1*u/(1+2*u)
 .fi
 The default value for b1 is 3.0.
-.TP
-odem,xdim,npts
-: See portr3d
+.LP
+The Scilab macros \fVchain(t,x)\fR,\fVf1(u),f2(u)\fR code the dynamical system
 .SH SEE ALSO
 portr3d,ode 
 

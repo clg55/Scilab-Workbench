@@ -24,7 +24,7 @@ linear system).
 \fVdom\fR character string giving the time domain : \fV"d"\fR for a
 discrete time system and \fV"c"\fR for continuous time (default case).
 .LP
-\"LaTeX \ignore{ 
+.IG 
 .nf
                   /+inf                             ---+inf
                   [  At  ' A't                      \   k      k
@@ -32,11 +32,11 @@ discrete time system and \fV"c"\fR for continuous time (default case).
                   ]                                 /
                  /0                                 ---0
 .fi
-\"LaTeX }
-\"LaTeX  \[ 
-\"LaTeX  Gc = \int_0^{\infty} e^{At}BB'e^{A't}dt 
-\"LaTeX  \qquad Gc = \sum_{0}^{\infty} A^k B B'{A'}^k
-\"LaTeX  \]
+.FI
+.LA  $$ 
+.LA  Gc = \int_0^{\infty} e^{At}BB'e^{A't}dt 
+.LA  \qquad Gc = \sum_{0}^{\infty} A^k B B'{A'}^k
+.LA  $$
 .SH SEE ALSO
  cont_mat, cont_frm, contrss
 .SH AUTHOR

@@ -40,8 +40,8 @@
 
             SHELL = /bin/sh
 
-              TOP = ../.
-      CURRENT_DIR = ./data
+              TOP = .
+      CURRENT_DIR = .
 
                AR = ar cqls
             LOCAR = ar clq
@@ -385,7 +385,7 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 # -------------------------------------------------------------------------
 # start of Imakefile
 
-all:
+all::
 
 distclean::
 	$(RM) *.metanet

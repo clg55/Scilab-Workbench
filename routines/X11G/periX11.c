@@ -2066,7 +2066,7 @@ My2draw(j,vx,vy)
   /** The segment is out but can cross the box **/
   int vxn[2],vyn[2],flag,npts=2;
   clip_line(vx[j-1],vy[j-1],vx[j],vy[j],&vxn[0],&vyn[0],&vxn[1],&vyn[1],&flag);
-  if (flag == 3 && store_points_(npts,vxn,vyn,0));
+  if (flag == 3 && store_points_(npts,vxn,vyn,0))
   {
     XDrawLines (dpy, CWindow, gc, ReturnPoints_(),npts,
 		MissileXgc.CurVectorStyle);

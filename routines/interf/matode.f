@@ -446,9 +446,14 @@ c
             call lsrgk(bydot,ny,stk(ly),t0,t1,itol,stk(lr),
      1           stk(la),itask,istate,iopt,stk(lc),lrw,istk(ilc),
      2           liw,bjac,mf)
+            if(iero.eq.-1) then
+               write(buf,'(e10.3)') t1
+               call msgs(70,0)
+            endif
          endif         
          if(err.gt.0) return
          if(istate.lt.0) then
+            if(mf.eq.50) call msgs(71,0)
             call msgs(4,ierr)
             nn=k-1
             goto 500

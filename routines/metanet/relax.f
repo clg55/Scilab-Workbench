@@ -27,9 +27,9 @@ C     ***** Set initial dual prices to zero *****
 C     ***** Display previous optimal cost *****
       IF (REPEAT) WRITE(6,1000)TCOST
 1000  FORMAT(' ','PREVIOUS OPTIMAL COST=',F14.2)
-      TCOST=DFLOAT(0)
+      TCOST=0.0d0
       DO 330 I=1,NA
-330     TCOST=TCOST+DFLOAT(X(I)*C(I))
+330     TCOST=TCOST+DBLE(X(I)*C(I))
       END
 C
 C     ****************************************************

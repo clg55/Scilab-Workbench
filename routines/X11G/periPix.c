@@ -1933,7 +1933,7 @@ int AllocVectorStorage_pix_()
 
 XPoint *ReturnPoints_pix_() { return(points); }
 
-/** Clipping functions **/
+/** Pix Clipping functions **/
 
 
 static int xleft,xright,ybot,ytop;
@@ -2089,7 +2089,7 @@ static int My2draw(j,vx,vy)
 {
   int vxn[2],vyn[2],flag,npts=2;
   clip_line(vx[j-1],vy[j-1],vx[j],vy[j],&vxn[0],&vyn[0],&vxn[1],&vyn[1],&flag);
-  if (store_points_pix_(npts,vxn,vyn,0));
+  if (flag == 3 && store_points_pix_(npts,vxn,vyn,0))
   {
     XDrawLines (dpy, Cpixmap, gc, ReturnPoints_pix_(),npts,
 		MissileXgc.CurVectorStyle);

@@ -29,7 +29,7 @@ c            of c
 c            indc(m+i) 1<=i<=nelb column index of each non zero element
 c     ierr : if non zero initial value of nelc is to small
 c     !
-      double precision a(*),b(*)
+      double precision a(*),b(*),t
       integer op,nela,inda(*),nelb,indb(*),nelc,indc(*),ierr
 c     
       integer jc,ka,kb,jb,i,ja,j1,j2

@@ -573,6 +573,7 @@ c     procedure de compilation des macros (copie de ce qui est dans matsys)
       l = l + nsiz*mrhs + 2
       pt=pt+1
       ids(1,pt)=l
+      ids(2,pt)=lunit
       pstk(pt)=fin
       fin=lstk(top)
       comp(1)=iadr(lstk(top+1))
@@ -1501,13 +1502,13 @@ c     opening file
       mode(1)=-101
       mode(2)=0
       if (istk(il).eq.1) then
-	lunit = int(stk(sadr(il+4)))
-        if(lunit .lt. 0) then
-           err=1
-           call error(36)
-           return
-        endif
-        opened=.true.
+         lunit = int(stk(sadr(il+4)))
+         if(lunit .lt. 0) then
+            err=1
+            call error(36)
+            return
+         endif
+         opened=.true.
       elseif(istk(il).eq.10) then
          mn=istk(il+5)-1
          call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)

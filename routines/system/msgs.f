@@ -16,7 +16,9 @@ c
      &     131,132,133,134,135,136,137,138,139,140,
      &     141,142,143,144,145,146,147,148,149,150,
      &     151,152,153,154,155,156,157,158,159,160,
-     &     161),n
+     &     161,162,163,164,165,166,167,168,169,170,
+     &     171,172,173),n 
+
  101  continue
       call  basout(io,wte,' Warning:')
       call basout(io,wte,'  Non convergence in the QZ algorithm.')
@@ -260,6 +262,35 @@ c     recherche du nom de la macro correspondant a ce niveau
       call basout(io,wte,
      $     'Warning : Impossible to load variable '//line(1:nlgh))
 
+      goto 9999
+ 162  continue
+      goto 9999
+ 163  continue
+      goto 9999
+ 164  continue
+      goto 9999
+ 165  continue
+      goto 9999
+ 166  continue
+      goto 9999
+ 167  continue
+      goto 9999
+ 168  continue
+      goto 9999
+ 169  continue
+      goto 9999
+c     Message for ODE....
+ 170  continue
+      call basout(io,wte,
+     &      'at time :'//buf(1:10)//
+     $     ',Too many iteration to achieve required precision')
+      goto 9999
+ 171  continue
+      call basout(io,wte,'stepsize not significant in rkqc.')
+      goto 9999
+ 172  continue
+      goto 9999
+ 173  continue
       goto 9999
 c     
  9999 continue

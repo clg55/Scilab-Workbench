@@ -41,6 +41,7 @@
 " plot3d1 ",
 " plot3di ",
 " plot3di1 ",
+" plotframe ",
 " plzr ",
 " printing ",
 " rotate ",

@@ -69,14 +69,14 @@ char *argv[];
 	      ,x,y,w,h);
       Sed(argv[i],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
 	  buf," showpage","grestore",
-	  " clear end saved restore","%clear end saved restore");
+	  " end saved restore","% end saved restore");
     }
   ComputeSize(argc-2,argc-2,&x,&y,&w,&h);      
   sprintf(buf,"gsave [1 0 0 -1 0 0] concat %5.2f %5.2f %5.2f %5.2f DesPosi"
 	  ,x,y,w,h);
   Sed(argv[argc-1],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
       buf, " showpage"," grestore showpage",
-      " clear end saved restore"," clear end saved restore");
+      " end saved restore"," end saved restore");
   return(0);
 }
 

@@ -17,6 +17,11 @@ c
       integer id(nsiz),ans(nsiz),ennd(nsiz),else(nsiz),retu(nsiz)
       integer pts,psym,excnt,p,r
       integer pcount,strcnt,bcount,qcount
+c
+      integer otimer,ntimer,stimer
+      external stimer
+      save otimer
+      data otimer/0/
 c     
       data blank/40/,semi/43/,equal/50/,eol/99/,comma/52/,colon/44/
       data lparen/41/,rparen/42/,left/54/,right/55/,less/59/,great/60/
@@ -28,6 +33,7 @@ c
       save job
 
 c
+      call xscion(inxsci)
  01   r = 0
       if(pt.gt.0) r=rstk(pt)
       if(ddt.eq.4) then
@@ -97,11 +103,13 @@ c
 c     debut d'un nouveau statement , clause , expr ou command
 c------------------------------------------------------------
  15   continue
-      if(sevents()) then
-         fun=99
-         return
-      endif 
-
+      if (inxsci.eq.1) then
+         ntimer=stimer()
+         if (ntimer.ne.otimer) then
+            call sxevents()
+            otimer=ntimer
+         endif
+      endif
       r = 0
       if(pt.gt.0) r=rstk(pt)
       if(ddt.eq.4) then
@@ -238,10 +246,10 @@ c     looking for equal
             goto 98
          endif
       else if(pcount.eq.0) then
-         if(bcount.ne.0) then
-            call error(2)
-            goto 98
-         endif
+c         if(bcount.ne.0) then
+c            call error(2)
+c            goto 98
+c         endif
          if(sym.eq.equal) then
             if(char1.eq.equal) then
                call getsym

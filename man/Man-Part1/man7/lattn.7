@@ -29,9 +29,9 @@ following way
                        |Rnlag|
 .fi
 .FI
-.LA \[ cov = \left[ \begin{array}{c} R_0 \\ R_1 \\ R_2\\ 
-.LA \vdots \\ R_{nlag} \end{array} 
-.LA  \right] \]
+.LA $$ cov = \left[ \matrix{ R_0 \cr R_1 \cr R_2\cr
+.LA \vdots \cr R_{nlag}}
+.LA  \right] $$
 .TP
 la
 : list-type variable, giving the successively calculated
@@ -53,13 +53,13 @@ the AR part (poles) of a vector ARMA(n,p) process
                        |Rp+1-n.   . . . . . Rp    |
 .fi
 .FI
-.LA \[ \left( \begin{array}{ccccc} I & -A_1 & -A_2 & \ldots & -A_n
-.LA         \end{array} \right)
-.LA  \left( \begin{array}{cccc} R_{p+1} & R_{p+2} & \ldots & R_{p+n} \\
-.LA		R_p & R_{p+1} & \ldots & R_{p+n-1} \\
-.LA		\vdots & \vdots & \ldots & \vdots \\
-.LA		R_{p+1-n} & R_{p+2-n} & \ldots & R_{p} \\
-.LA	   \end{array} \right) = 0	\]
+.LA $$ \left( \matrix{ I & -A_1 & -A_2 & \ldots & -A_n
+.LA         } \right)
+.LA  \left( \matrix{ R_{p+1} & R_{p+2} & \ldots & R_{p+n} \cr
+.LA		R_p & R_{p+1} & \ldots & R_{p+n-1} \cr
+.LA		\vdots & \vdots & \ldots & \vdots \cr
+.LA		R_{p+1-n} & R_{p+2-n} & \ldots & R_{p} \cr
+.LA	   } \right) = 0	$$
 where {\fVRk;k=1,nlag\fR} is the sequence of empirical covariances
 .SH AUTHOR
 G. Le V.

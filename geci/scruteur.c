@@ -39,7 +39,7 @@ char *argv[];
   fd_set r_readfds, r_writefds, r_exceptfds;
   application *application_scrutee;
   Message message, message_recu;
-  static struct timeval duree_blocage={1,0}; /* on bloque pas plus de 1 sec dans le select */
+  static struct timeval duree_blocage; 
 #if defined (sun) && defined (SYSV)
   sigset_t set,oset;
 #endif  
@@ -88,6 +88,9 @@ char *argv[];
     application_scrutee = ldc_rechercher_objet(liste_applications,NULL);
     
     while(application_scrutee != NULL) {
+      /* Don't wait more than 1 second in select */
+      duree_blocage.tv_sec = 1;
+      duree_blocage.tv_usec = 0;
       resultat=select(FD_SETSIZE,&r_readfds,&r_writefds,&r_exceptfds,&duree_blocage);
       application_suivante=ldc_objet_suivant(liste_applications, application_scrutee -> identificateur_appli);
       /* DEBUT IF */

@@ -28,7 +28,7 @@ system \fVsl\fR (\fVsyslin\fR list).
 "d" 
 :  discrete system
 .LP
-\"LaTeX \ignore{	
+.IG	
 .nf
                   /+inf                             ---+inf
                   [  A't    At                      \\   k      k
@@ -36,11 +36,11 @@ system \fVsl\fR (\fVsyslin\fR list).
                   ]                                 /
                  /0                                 ---0
 .fi
-\"LaTeX 	}
-\"LaTeX  \[ 
-\"LaTeX  Go = \int_0^{\infty} e^{A't}C'Ce^{At}dt 
-\"LaTeX  \qquad Go = \sum_{0}^{\infty} {A'}^k C'C{A}^k
-\"LaTeX  \]
+.IG
+.LA  $$ 
+.LA  Go = \int_0^{\infty} e^{A't}C'Ce^{At}dt 
+.LA  \qquad Go = \sum_{0}^{\infty} {A'}^k C'C{A}^k
+.LA  $$
 .SH SEE ALSO
  contrss, ctr_gram, obsvss, obs_mat
 

@@ -30,6 +30,7 @@ C      implicit undefined (a-z)
       parameter (maxstp=10000,nmax=10,two=2.0,zero=0.0,tiny=1.e-30)
       double precision x1,x2,eps,h1,hmin,xsav,hdid,hnext
       double precision ystart(nvar),yscal(nmax),y(nmax),dydx(nmax)
+      character*80 messag
       common /path/ kmax,kount,dxsav,xp,yp
       integer iero
       common/ierode/iero
@@ -64,6 +65,7 @@ C      implicit undefined (a-z)
         endif
         if((x+h-x2)*(x+h-x1).gt.zero) h=x2-x
         call rkqc(y,dydx,nvar,x,h,eps,yscal,hdid,hnext,derivs)
+        if(iero.gt.0) return
         if(hdid.eq.h)then
           nok=nok+1
         else
@@ -82,12 +84,16 @@ C      implicit undefined (a-z)
           endif
           return
         endif
-        if(abs(hnext).lt.hmin) print *, 'stepsize',hnext,
-     $       ' smaller than minimum.'
+        if(abs(hnext).lt.hmin) then
+           write(messag, 17) hnext,hmin
+           hnext=hmin
+        endif
         h=hnext
 16    continue
-      print *, 'Trop d''iterations a faire pour la precision demandee.'
+      iero=-1
+c      print *, 'Trop d''iterations a faire pour la precision demandee.'
       return
+ 17   format('stepsize ',e10.3,' smaller than minimum ',e10.3)
       end
 
       subroutine rk4(y,dydx,n,x,h,yout,derivs)
@@ -155,7 +161,7 @@ C      implicit undefined (a-z)
       call rk4(ytemp,dydx,n,x,hh,y,derivs)
       x=xsav+h
       if(x.eq.xsav) then 
-         print *, 'stepsize not significant in rkqc.'
+c         print *, 'stepsize not significant in rkqc.'
          iero=1
          return
       endif

@@ -2,12 +2,11 @@
 .so man1/sci.an
 .SH NAME
 armac - Scilab description of an armax process
-.SH DESCRIPTION
+.SH CALLING SEQUENCE
+.nf
 [ar]=armac(a,b,d,ny,nu,sig)
-
-this function creates a description as a list of an  ARMAX process 
-   A(z^-1)y= B(z^-1)u + D(z^-1)sig*e(t)
-
+.fi
+.SH PARAMETERS
 .TP 20
 a=[Id,a1,..,a_r]
 : is a matrix of size (ny,r*ny)
@@ -26,6 +25,14 @@ nu
 .TP 
 sig 
 : a matrix of size (ny,ny)
+.SH DESCRIPTION
+this function creates a description as a list of an  ARMAX process 
+.IG
+.nf
+   A(z^-1)y= B(z^-1)u + D(z^-1)sig*e(t)
+.fi
+.FI
+.LA $$   A(z^{-1})y= B(z^{-1})u + D(z^{-1})sig*e(t)$$
 .SH EXAMPLE
 .nf 
 a=[1,-2.851,2.717,-0.865].*.eye(2,2)

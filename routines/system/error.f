@@ -9,7 +9,7 @@ c
 
 c
       character mg*9,blh*1,bel*1,line*340
-      integer errtyp,n,ll,r,eol
+      integer errtyp,n,ll,r,eol,p
       logical first
       data mg /' !--error'/,blh/' '/,bel/' '/
       data eol/99/
@@ -872,8 +872,18 @@ c---------------------------------------------------------------------
 c     message d'erreur soft
       call basout(io,lunit,buf(1:80))
 c
+ 999  continue
+      if(comp(1).ne.0) then
+c     fermeture du fichier dans le cas getf(  'c')
+         p=pt+1
+ 1001    p=p-1
+         if(p.eq.0) goto 1005
+         if(rstk(p).ne.904) goto 1001
+         call clunit(-ids(2,p),buf,0)
+      endif
+ 1005 continue
 c     gestion de la recuperation des erreurs
- 999  if((num.eq.n.or.num.lt.0).and.imode.ne.0.and.imode.ne.3
+      if((num.eq.n.or.num.lt.0).and.imode.ne.0.and.imode.ne.3
      &                         .and.errtyp.eq.0) then
          top=toperr
          if(err2.eq.0) then
@@ -882,7 +892,7 @@ c     gestion de la recuperation des erreurs
             err1=err2
          endif
          err=0
-         goto 1010
+         goto 1510
       else
          comp(1)=0
          err=n
@@ -891,14 +901,14 @@ c
 c depilement de l'environnement
       lct(4)=2
       pt=pt+1
- 1001 pt=pt-1
-      if(pt.eq.0) goto 1010
+ 1501 pt=pt-1
+      if(pt.eq.0) goto 1510
       r=rstk(pt)
-      goto(1002,1002,1004) r-500
-      goto 1001
+      goto(1502,1502,1504) r-500
+      goto 1501
 c
 c     on depile une macro
- 1002 k=lpt(1)-(13+nsiz)
+ 1502 k=lpt(1)-(13+nsiz)
       lpt(1)=lin(k+1)
       lpt(2)=lin(k+2)
       lpt(6)=k
@@ -910,11 +920,11 @@ c     recherche du nom de la macro correspondant a ce niveau
       else
          km=lin(k+5)-1
       endif
- 1003 km=km+1
-      if(km.gt.isiz)goto 1013
-      if(lstk(km).ne.lk) goto 1003
+ 1503 km=km+1
+      if(km.gt.isiz)goto 1513
+      if(lstk(km).ne.lk) goto 1503
 c
- 1013 continue
+ 1513 continue
       ilk=lin(k+6)
       if(istk(ilk).ne.10) then
          if(first) then
@@ -954,10 +964,10 @@ c
 c
       macr=macr-1
       if(istk(ilk).ne.10) bot=lin(k+5)
-      goto 1001
+      goto 1501
 c
 c     on depile un exec ou une pause
- 1004 if(rio.ne.rte) then
+ 1504 if(rio.ne.rte) then
 c     exec
          k=lpt(1)-(13+nsiz)
          lpt(1)=lin(k+1)
@@ -988,17 +998,17 @@ c
          call cvstr(m,lin(l1),buf,1)
          call basout(io,lunit,buf(1:m))
          call clunit(-rio,buf,0)
- 1005    pt=pt-1
-         if(rstk(pt).ne.902) goto 1005
+ 1505    pt=pt-1
+         if(rstk(pt).ne.902) goto 1505
          rio=pstk(pt)
-         goto 1001
+         goto 1501
       else
 c     pause
          top=ids(2,pt-1)
-         goto 1010
+         goto 1510
       endif
 c
- 1010 continue
+ 1510 continue
       if(imess.eq.0) call basout(io,lunit,' ')
 c
       return

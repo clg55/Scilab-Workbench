@@ -204,7 +204,7 @@ int Xorgetchar()
 	   wait for I/O to be possible. */
 	select_mask = Select_mask;
 	write_mask  = Write_mask;
-	select_timeout.tv_sec = 0;
+	select_timeout.tv_sec = 1;
 	select_timeout.tv_usec = 0;
 	i = select(max_plus1, (fd_set *)&select_mask, (fd_set *) &write_mask, (fd_set *)NULL,
 		   QLength(the_dpy) ? &select_timeout
@@ -235,11 +235,8 @@ int Xorgetchar()
 
 /** Dealing with X11 Events on the queue **/
 
-extern void GetMsg();
-extern int isGeci;
 C2F(xevents)()
 {
-  if (isGeci) GetMsg();  
   if (INXscilab==1) 
     {
       xevents1();
@@ -259,6 +256,24 @@ C2F(xevents)()
     }
 }
 
-
-
-
+/** Dealing with X11 Events on the queue when computing in Scilab **/
+C2F(sxevents)()
+{
+  if (INXscilab==1) 
+    {
+      xevents1();
+    }
+  else 
+    {
+      XEvent event;
+      if (BasicScilab) return;
+      if ( the_dpy == (Display *) NULL)  return;
+      if (!XPending (the_dpy))
+	/* protect against events/errors being swallowed by us or Xlib */
+	return;
+      do {
+	XNextEvent (the_dpy, &event);
+	XtDispatchEvent(&event);
+      } while (QLength(the_dpy) > 0);
+    }
+}

@@ -73,14 +73,14 @@ char *argv[];
 	      ,x,y,w,h);
       Sed(argv[i],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
 	  buf," showpage","grestore",
-	  " clear end saved restore","%clear end saved restore",fdo);
+	  " end saved restore","% end saved restore",fdo);
     }
   ComputeSize(argc-2,argc-2,&x,&y,&w,&h,&wt,&ht)      ;   
   sprintf(buf,"gsave [1 0 0 -1 0 0] concat %5.2f %5.2f %5.2f %5.2f DesPosi"
 	  ,x,y,w,h);
   Sed(argv[argc-1],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
       buf, " showpage"," grestore ",
-      " clear end saved restore"," clear end saved restore",fdo);
+      " end saved restore"," end saved restore",fdo);
   close(fdo);
   /** ecriture du fichier TeX associe **/
   WriteTeX(argv[1],wt,ht);
@@ -97,7 +97,7 @@ WriteTeX(filename,wide,height)
   int i ;
   FILE *fdo;
   sprintf(filename1,"%s.tex",filename);
-  fdo=fopen(filename,"w");
+  fdo=fopen(filename1,"w");
   if (fdo == 0 ) 
     {
       fprintf (stderr," Can't Create Output file <%s> \n",filename1);

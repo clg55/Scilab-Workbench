@@ -8,7 +8,7 @@ c
       common / ptkeep / lwk
       integer itype,itypel,gettype
       integer fl,mode,rat,blank,m,n,it,lr,lc,nlr,lkeep,topk,lname
-      logical getmat,ilog,getpoly,typer,clsave,getsimat
+      logical getmat,ilog,getpoly,typer,clsave
       logical crewimat ,islss,getilist,getbmat
       character*4 name
 c$$$      character*(nlgh) mmname
@@ -109,7 +109,7 @@ c     -------sparse boolean matrices
      $        lineln,lunit,buf)
       goto 45 
 c     -------matrices of string 
- 30   ilog=getsimat("print",lk,lk,m,n,1,1,lr,nlr)
+ 30   call getsimat("print",lk,lk,m,n,1,1,lr,nlr)
 C     working area 
       if (.not.crewimat("print",topk,1,n,lw)) return
       call strdsp(istk(lr),istk(lr-m*n-1),m,n,lineln,lunit,istk(lw),buf)

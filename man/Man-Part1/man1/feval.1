@@ -41,7 +41,7 @@ feval(1:10,1:5,f)
 feval(1:10,1:5,'parab')   //See ffeval.f file
 feval(1:10,'parab')
 //For dynamic link (see example ftest in ffeval.f)
-unix('make ftest.o');link('ftest.o','ftest); ftest(1:10,1:5,'ftest') 
+unix('make ftest.o');link('ftest.o','ftest); feval(1:10,1:5,'ftest') 
 .fi
 .SH SEE ALSO
 evstr, horner, execstr, external

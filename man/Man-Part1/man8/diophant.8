@@ -20,7 +20,12 @@ x
 \fV diophant\fR solves the bezout equation:
 .LP
 \fVp1*x1+p2*x2=b\fR with  \fVp1p2\fR a polynomial vector.
-If the equation is not solvable \fVerr=||p1*x1+p2*x2-b||/||b||\fR
+If the equation is not solvable 
+.IG
+.nf
+err=||p1*x1+p2*x2-b||/||b||
+.fi
+.LA $ err= ||p1 x1+p2 x2-b||/||b||$
 else \fVerr=0\fR
 .SH EXAMPLE 
 .nf

@@ -2,8 +2,10 @@
 .so man1/sci.an
 .SH NAME
 erfc -  The complementary error function.
-.SH SYNTAX
+.SH CALING SEQUENCE
+.nf
  y = erfc(x)
+.fi
 .SH PARAMETERS
 .TP
 x
@@ -13,6 +15,7 @@ y
 : real vector (of same size)
 .SH DESCRIPTION
  \fVerfc\fR computes the complementary error function:
+.IG
 .nf
                       /inf
      y = 2/sqrt(pi) *|  exp(-t^2) dt
@@ -20,8 +23,11 @@ y
 
      y= 1 - erf(x)
 .fi
+.FI
+.LA $$ y = 2/\sqrt(\pi) \int_x^{\infty} exp(-t^2)dt $$
+.LA $$ y = 1-erf(x) $$
 .SH SEE ALSO
-erf erfcx calerf
+erf, erfcx, calerf.
 
 
 

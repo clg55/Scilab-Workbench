@@ -52,11 +52,17 @@ StorePlot("plot2d2",xf,x,y,n1,n2,style,strflag,legend,brect,aint);
 /** Boundaries of the frame **/
 if ((int)strlen(strflag) >= 2)
   {
+    int verbose=0,narg,xz[2],wmax,hmax;
+    double hx,hy,hx1,hy1;
     switch ( strflag[1])
-      {char c;
-      case '1' : xmin=brect[0];xmax=brect[2];ymin= -brect[3];ymax= -brect[1];
+      {
+	char c;
+      case '1' : 
+      case '3' : 
+	xmin=brect[0];xmax=brect[2];ymin= -brect[3];ymax= -brect[1];
 	break;
       case '2' : 
+      case '4' : 
 	if ( (int)strlen(xf) < 1) c='g' ; else c=xf[0];
 	switch ( c )
 	  {
@@ -71,8 +77,28 @@ if ((int)strlen(strflag) >= 2)
 	  }
 	ymax=  (double) - Mini(y,(*n1)*(*n2));
 	ymin=  (double) - Maxi(y,(*n1)*(*n2));
-	break;
+       break;
       }
+    if ( strflag[1] == '3' || strflag[1] == '4')
+      {
+	C2F(dr)("xget","wdim",&verbose,xz,&narg, IP0, IP0,IP0,0,0);
+	wmax=xz[0];hmax=xz[1];
+	hx=xmax-xmin;
+	hy=ymax-ymin;
+	if ( hx/(double)wmax  <hy/(double) hmax ) 
+	  {
+	    hx1=wmax*hy/hmax;
+	    xmin=xmin-(hx1-hx)/2.0;
+	    xmax=xmax+(hx1-hx)/2.0;
+	  }
+	else 
+	  {
+	    hy1=hmax*hx/wmax;
+	    ymin=ymin-(hy1-hy)/2.0;
+	    ymax=ymax+(hy1-hy)/2.0;
+	  }
+      }
+
   }
 /** Log Axes : must add tests **/
 /* Log axis  */

@@ -27,7 +27,7 @@ differential equation
 ( mstar = m(1) + ... + m(ncomp) .le. 40 )
 .fi
 .FI
-.LA \[ \sciverb{mstar} = \sum_{i=1}^{\sciverb{ncomp}} \sciverb{m}(i) \le 40\]
+.LA $$ \sciverb{mstar} = \sum_{i=1}^{\sciverb{ncomp}} \sciverb{m}(i) \le 40$$
 .TP
 aleft
 left end of interval
@@ -101,8 +101,8 @@ choose ipar(5) according to the formula
                         (2*mstar-nrec) * 2*mstar.
 .fi
 .FI
-.LA  \[ \sciverb{ipar}(5) \ge  \sciverb{nmax} n_s \quad \mbox{where} \quad n_s = 4 +
-.LA  3 \sciverb{mstar} + (5+k_d) k_dm + (2\sciverb{mstar}-\sciverb{nrec}) 2 \sciverb{mstar} \]
+.LA  $$ \sciverb{ipar}(5) \ge  \sciverb{nmax} n_s \quad \mbox{where} \quad n_s = 4 +
+.LA  3 \sciverb{mstar} + (5+k_d) k_dm + (2\sciverb{mstar}-\sciverb{nrec}) 2 \sciverb{mstar} $$
 .TP
 ipar(6) 
 = dimension of ispace ( = ndimi )an integer work array.
@@ -119,8 +119,8 @@ ipar(6)  .ge.  nmax*nsizei
                 nrec = no. of right end boundary conditions.
 .fi
 .FI
-.LA \[ \sciverb{ipar}(6) \ge  \sciverb{nmax} n_i  \quad \mbox{where} n_i = 3 + k_dm
-.LA          \quad k_dm = k_d + \sciverb{mstar} \quad  k_d = k  \sciverb{ncomp} \]
+.LA $$ \sciverb{ipar}(6) \ge  \sciverb{nmax} n_i  \quad \mbox{where} n_i = 3 + k_dm
+.LA          \quad k_dm = k_d + \sciverb{mstar} \quad  k_d = k  \sciverb{ncomp} $$
 .TP
 ipar(7) 
 output control ( = iprint )
@@ -155,7 +155,7 @@ is defined in fspace as follows:  the mesh
 aleft=x(1).lt.x(2).lt. ... .lt.x(n).lt.x(n+1)=aright
 .fi
 .FI
-.LA \[ \sciverb{aleft}=x(1)<x(2)< \ldots< x(n)< x(n+1)=\sciverb{aright} \]
+.LA $$ \sciverb{aleft}=x(1)<x(2)< \ldots< x(n)< x(n+1)=\sciverb{aright} $$
 will occupy  \fVfspace(1), ..., fspace(n+1)\fR. the
 user needs to supply only the interior mesh
 points  \fVfspace(j) = x(j), j = 2, ..., n.\fR
@@ -230,7 +230,7 @@ in the l-th component of \fVz(u)\fR.   also require that
 1.le.ltol(1).lt.ltol(2).lt. ... .lt.ltol(ntol).le.mstar
 .fi
 .FI 
-.LA \[1\le \sciverb{ltol}(1)<\sciverb{ltol}(2)< ... <\sciverb{ltol}(ntol)\le mstar \]
+.LA $$1\le \sciverb{ltol}(1)<\sciverb{ltol}(2)< ... <\sciverb{ltol}(ntol)\le mstar $$
 .TP
 tol
 an array of dimension \fVipar(4)\fR. \fVtol(j)\fR is the
@@ -243,8 +243,8 @@ for j=1,...,ntol  on each subinterval
                       ltol(j)                     ltol(j)
 .fi
 .FI
-.LA  \[ {|z(v)-z(u)|}_{ltol(j)} \le
-.LA \sciverb{tol}(j)*{|z(u)|}_{\sciverb{ltol}(j)} + \sciverb{tol}(j) \]
+.LA  $$ {|z(v)-z(u)|}_{ltol(j)} \le
+.LA \sciverb{tol}(j)*{|z(u)|}_{\sciverb{ltol}(j)} + \sciverb{tol}(j) $$
 if \fVv(x)\fR is the approximate solution vector.
 .TP
 fixpnt
@@ -270,7 +270,7 @@ name of subroutine for evaluating
                      1      ncomp
 .fi
 .FI
-.LA \[  f(x,z(u(x))) =  (f_1 ,\ldots,f_{\sciverb{ncomp}} )^t \]
+.LA $$  f(x,z(u(x))) =  (f_1 ,\ldots,f_{\sciverb{ncomp}} )^t $$
 at a point x in \fV(aleft,aright)\fR.
 it should have the heading  \fV[f]=fsub(x,z)\fR 
 where \fVf\fR is the vector containing the value of \fVfi(x,z(u))\fR
@@ -281,7 +281,7 @@ in the i-th component and
           z(u(x))=(z(1),...,z(mstar))
 .fi 
 .FI
-.LA  \[  z(u(x))=(z_1,\ldots,z_{\sciverb{mstar}})^t \]
+.LA  $$  z(u(x))=(z_1,\ldots,z_{\sciverb{mstar}})^t $$
 is defined as above under  purpose .
 .TP
 dfsub
@@ -297,8 +297,8 @@ f, viz, for a particular call one calculates
                            j=1,...,mstar.
 .fi
 .FI
-.LA \[df(i,j) = df_i / dz_j,\quad  i=1,\ldots,\sciverb{ncomp}\quad
-.LA j=1,\ldots,\sciverb{mstar}.\]
+.LA $$df(i,j) = df_i / dz_j,\quad  i=1,\ldots,\sciverb{ncomp}\quad
+.LA j=1,\ldots,\sciverb{mstar}.$$
 .TP
 gsub
 name of subroutine for evaluating the i-th component of
@@ -308,7 +308,7 @@ name of subroutine for evaluating the i-th component of
                           i
 .fi
 .FI
-.LA \[           g(x,z(u(x))) = g_i (zeta(i),z(u(zeta(i))))  \] 
+.LA $$           g(x,z(u(x))) = g_i (zeta(i),z(u(zeta(i))))  $$ 
 at a point \fVx = zeta(i)\fR  where 
 .IG 
 \fV1.le.i.le.mstar.\fR
@@ -331,7 +331,7 @@ of g, viz, for a particular call one calculates
       dg(i,j) = dgi / dzj,  j=1,...,mstar.
 .fi
 .FI
-.LA \[dg(i,j) = dg_i / dz_j,\quad  j=1,\ldots,\sciverb{mstar}.\]
+.LA $$dg(i,j) = dg_i / dz_j,\quad  j=1,\ldots,\sciverb{mstar}.$$
 .TP
 guess
 name of subroutine to evaluate the initial
@@ -381,17 +381,17 @@ where
                             used to represent a boundary condition.
 .fi
 .FI
-.LA \[ u_i^{(m(i))} = f ( x; z(u(x)) )\quad  i = 1,\ldots,\sciverb{ncomp} \quad 
-.LA     \sciverb{aleft} < x < \sciverb{aright} \]
+.LA $$ u_i^{(m(i))} = f ( x; z(u(x)) )\quad  i = 1,\ldots,\sciverb{ncomp} \quad 
+.LA     \sciverb{aleft} < x < \sciverb{aright} $$
 
-.LA \[ g_j  ( zeta(j); z(u(zeta(j))) ) = 0 \quad  j = 1,\ldots ,\sciverb{mstar}
-.LA      \quad    \sciverb{mstar} = \sum_{i=1}^{\sciverb{ncomp}} m(i) \]
+.LA $$ g_j  ( zeta(j); z(u(zeta(j))) ) = 0 \quad  j = 1,\ldots ,\sciverb{mstar}
+.LA      \quad    \sciverb{mstar} = \sum_{i=1}^{\sciverb{ncomp}} m(i) $$
 
 .LA where $u = (u_1 , u_2 , \ldots ,u_{\sciverb{ncomp}})^t$ is the exact solution vector
 .LA $u_i^{(m(i))}$ is the mi=m(i) th  derivative of $u_i$.
 
-.LA \[ z(u(x)) = ( u_1(x),u_1^{(1)}(x),\ldots,u_1^{(m_1-1)}(x),
-.LA       \ldots,u_{\sciverb{ncomp}}^{(m_{\sciverb{ncomp}}-1)}(x) ) \]
+.LA $$ z(u(x)) = ( u_1(x),u_1^{(1)}(x),\ldots,u_1^{(m_1-1)}(x),
+.LA       \ldots,u_{\sciverb{ncomp}}^{(m_{\sciverb{ncomp}}-1)}(x) ) $$
 
 .LA $f_i (x,z(u))$   is a (generally) nonlinear function of $z(u)=z(u(x))$.
 .LA $g_j (zeta(j);z(u))$  is a (generally) nonlinear function
@@ -402,8 +402,8 @@ the boundary points satisfy
             aleft .le. zeta(1) .le. .. .le. zeta(mstar) .le. aright
 .fi
 .FI
-.LA   \[     \sciverb{aleft} \le \sciverb{zeta}(1) \le \ldots
-.LA   \le \sciverb{zeta}(\sciverb{mstar}) \le \sciverb{aright}\]
+.LA   $$     \sciverb{aleft} \le \sciverb{zeta}(1) \le \ldots
+.LA   \le \sciverb{zeta}(\sciverb{mstar}) \le \sciverb{aright}$$
 the orders mi of the differential equations satisfy 
 .IG
 \fV1.le.m(i).le.4\fR.

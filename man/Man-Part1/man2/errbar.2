@@ -20,12 +20,11 @@ Used to add vertical error bars on a 2D plot.
 enter the command \fVerrbar()\fR to see a demo 
 .LP
 Another simple example :
-.TP
+.nf
 x=0:0.1:2*%pi;
-.TP 
 y=[sin(x);cos(x)]';x=[x;x]';plot2d(x,y);
-.TP
 errbar(x,y,0.05*ones(x),0.03*ones(x));
+.fi
 .SH AUTHOR
 J.Ph.C..
 

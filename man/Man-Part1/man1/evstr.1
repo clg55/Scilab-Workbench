@@ -32,11 +32,9 @@ returns
 .LP
 Here, \fVZ\fR is a list with two elements;
 the second element of \fVZ\fR is a vector \fVV\fR of character strings;
-\fVevstr\fR evaluates the first element of \fVZ\fR ; the components
-of \fVV\fR are represented by 
-.Vb %(1), %(2),... 
-in the first element of \fVZ\fR. Here \fVevstr\fR returns 
-.Vb [a+1, (a+1) - (b+1)]
+\fVevstr\fR returns the evaluation of the first element of \fVZ\fR. In 
+this first element \fV%(i)\fR stands for the ith element of \fVV\fR
+consequently \fVevstr\fR returns \fV[a+1,(a+1)-(b+1)]=[2,-1]\fR.
 .LP
 .Vb evstr('a=1') 
 is not valid (use \fVexecstr\fR ).

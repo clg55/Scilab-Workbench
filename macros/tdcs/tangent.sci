@@ -23,7 +23,7 @@ end
 newm=0;
 [yy,xx]=fff(xe,ue);
 if norm(xx) >= 1.e-4,
-  write(%io(2),' Votre point n''est pas un point d''equilibre !!');
+  error(' Votre point n''est pas un point d''equilibre !!');
   return
 end
 [f,g,h,void]=lin(fff,xe,ue);

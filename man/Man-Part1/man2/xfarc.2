@@ -20,6 +20,14 @@ the angle \fValpha1\fR and the angle \fValpha1+alpha2\fR. \fValpha1\fR and \fVal
 given respectively by \fVa1/64\fR degrees and \fVa2/64\fR degrees.
 This function uses the current graphic state
 which can be set by calling a high level drawing function such as \fVplot2d\fR.
+.SH EXAMPLE
+.nf
+// isoview scaling 
+plot2d(0,0,-1,"031"," ",[-2,-2,2,2])
+xfarc(-0.5,0.5,1,1,0,90*64)
+xset("pattern",2)
+xfarc(0.5,0.5,1,1,0,360*64)
+.fi
 .SH SEE ALSO
 xarcs,xarc.
 .SH AUTHOR

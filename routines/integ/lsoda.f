@@ -1466,7 +1466,7 @@ c-----------------------------------------------------------------------
 c the maximum number of steps was taken before reaching tout. ----------
  500  call xerrwv('lsoda--  at t (=r1), mxstep (=i1) steps   ',
      1   50, 201, 1, 0, 0, 0, 0, 0.0d+0, 0.0d+0)
-      call xerrwv('needed before reaching totu',
+      call xerrwv('needed before reaching tout',
      1   50, 201, 1, 1, mxstep, 0, 1, tn, 0.0d+0)
       istate = -1
       go to 580

@@ -239,7 +239,7 @@
 "Xscilab*dialogShell.dialogForm.dialogAscii.font:*-fixed-medium-r-*-*-13-*-*-*-*-*-iso8859-*",
 "Xscilab*dialogShell.dialogForm.dialogCommand.borderWidth:	0",
 "Xscilab*dialogShell.dialogForm.dialogCommand.fromVert:		dialogAscii",
-"Xscilab*dialogShell.dialogFormd.dialogCommand.cancelCommand.fromHoriz:	okCommand",
+"Xscilab*dialogShell.dialogForm.dialogCommand.cancelCommand.fromHoriz:	okCommand",
 "Xscilab*scigForm.showGrip:False",
 "Xscilab*scigForm.min:20",
 "Xscilab*scigForm.Clear.Label:Clear ",

@@ -1318,7 +1318,7 @@ in_put()
      * for I/O to be possible. */
 
     select_mask = X_mask;
-    select_timeout.tv_sec = 0;
+    select_timeout.tv_sec = 1;
     select_timeout.tv_usec = 0;
     i = select(max_plus1, (fd_set *)&select_mask, (fd_set *) NULL, (fd_set *) NULL,
 	       QLength(screen->display) ? &select_timeout

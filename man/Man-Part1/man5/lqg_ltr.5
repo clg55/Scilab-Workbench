@@ -27,21 +27,22 @@ returns the Kalman gains for:
 .fi
 Cost function:
 .IG
-                _inf
-      J    = E(/ [z(t)'*z(t) + ro^2*u(t)'*u(t)]dt)
-       lqg    /
-            -0
+		/+oo
+               |
+      J    = E(| [z(t)'*z(t) + ro^2*u(t)'*u(t)]dt)
+       lqg     |
+               / 0
 .FI
-.LA \[ J_{lqg}= E ( \int_0^{\infty} [z(t)'*z(t) + ro^2*u(t)'*u(t)] dt) \]
+.LA $$ J_{lqg}= E ( \int_0^{\infty} [z(t)'*z(t) + ro^2*u(t)'*u(t)] dt) $$
 The lqg/ltr approach looks for \fVL,mu,H,ro\fR such that:
 J(lqg) = J(freq) where
 .IG
-               _+oo       *  *           *
-      J    =  / tr[S  W  W  S ] + tr[T  T]dw
-       freq  /
-            -0
+              /+oo        *  *           *
+      J    =  | tr[S  W  W  S ] + tr[T  T]dw
+       freq   |
+              /0
 .FI
-.LA \[J_{freq}=\int_0^{\infty} tr[S W W^{\star} S^{\star}]+tr[T T^{\star}]dw \]
+.LA $$J_{freq}=\int_0^{\infty} tr[S W W^{\star} S^{\star}]+tr[T T^{\star}]dw $$
 and
 .nf 
  S = (I + G*K)^(-1)  

@@ -5,8 +5,8 @@ c     ====================================================================
       include '../stack.h'
       integer id(nsiz),id1(nsiz),istr(nlgh)
 c
-      logical sciv1
-      common /compat/ sciv1
+      logical sciv1,first
+      common /compat/ sciv1,first
 
       logical eqid,loaded
       integer srhs,percen,blank,fptr,mode(2)

@@ -124,8 +124,15 @@ int *ldatanet;
   sleep(1);
 }
 
+/* checkNetconnect and checkTheNetwindow must be called before using XMetanet
+   typically you put at the beginning of each function speaking to XMetanet:
+   if (!checkNetconnect() || !checkTheNetwindow()) return;
+*/
+
 int checkNetconnect()
 {
+  /* checking for closed Metanet windows */
+  GetMsg();
   if (nNetwindows == 0) {
     cerro("You must first execute Metanet");
     return 0;

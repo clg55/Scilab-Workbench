@@ -10,13 +10,14 @@ function [at,bt,ct,dt]=gtild(a,b,c,d)
 select rhs,
  case 1 then
     if typeof(a)='rational' then
-          v=varn(a(2)),s=poly(0,v),
-          at=horner(a,-s),at=syslin('c',at'),
+          v=varn([a(2),a(3)]),s=poly(0,v),
+          at=horner(a,-s),
+          if typeof(at)=='usual' then at=at'; else at=syslin('c',at'),end
           return,
     end,
     if typeof(a)='polynomial'
           v=varn(a),s=poly(0,v),
-          at=horner(a,-s);
+          at=horner(a,-s)';
           return, 
     end
     if typeof(a)='usual'

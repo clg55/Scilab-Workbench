@@ -2154,6 +2154,7 @@ C
       RETURN
 C-----------END OF SUBROUTINE DDASSL------------------------------------
       END
+
       SUBROUTINE DDASTP (X, Y, YPRIME, NEQ, RES, JAC, H, WT, JSTART,
      +   IDID, RPAR, IPAR, PHI, DELTA, E, WM, IWM, ALPHA, BETA, GAMMA,
      +   PSI, SIGMA, CJ, CJOLD, HOLD, S, HMIN, UROUND, IPHASE, JCALC,
@@ -2910,9 +2911,19 @@ C   900206  Routine changed from user-callable to subsidiary.  (WRB)
 C   900510  Changed calling sequence to delete length of char string
 C           Changed subroutine name from XERABT to XERHLT.  (RWC)
 C***END PROLOGUE  XERHLT
+C     3 NEXT LINES ADDED FOR SCILAB INTERFACE
+      include '../stack.h'
+      integer         iero
+      common /ierode/ iero
+C
       CHARACTER*(*) MESSG
+
 C***FIRST EXECUTABLE STATEMENT  XERHLT
-      STOP
+C     3 NEXT LINES ADDED FOR SCILAB INTERFACE
+      CALL BASOUT(IO,WTE,MESSG)
+      iero = 1
+      return
+CSTD  STOP
       END
 C*DECK XERMSG
       SUBROUTINE XERMSG (LIBRAR, SUBROU, MESSG, NERR, LEVEL)
@@ -3295,6 +3306,8 @@ C   891013  REVISED TO CORRECT ERROR IN CALCULATING PREFIX LENGTH.
 C   891214  Prologue converted to Version 4.0 format.  (WRB)
 C   900510  Added code to break messages between words.  (RWC)
 C***END PROLOGUE  XERPRN
+C     NEXT LINE ADDED FOR SCILAB INTERFACE
+      include '../stack.h'
       CHARACTER*(*) PREFIX, MESSG
       INTEGER NPREF, NWRAP
       CHARACTER*148 CBUFF
@@ -3344,9 +3357,11 @@ C       IF THE MESSAGE IS ALL BLANKS, THEN PRINT ONE BLANK LINE.
 C
       IF (LENMSG .EQ. 0) THEN
          CBUFF(LPREF+1:LPREF+1) = ' '
-         DO 40 I=1,NUNIT
-            WRITE(IU(I), '(A)') CBUFF(1:LPREF+1)
-   40    CONTINUE
+C     THREE NEXT LINES REPLACED FOR SCILAB INTERFACE
+CSTD          DO 40 I=1,NUNIT
+CSTD             WRITE(IU(I), '(A)') CBUFF(1:LPREF+1)
+CSTD    40    CONTINUE
+         CALL BASOUT(IO,WTE,CBUFF(1:LPREF+1))
          RETURN
       ENDIF
 C
@@ -3440,9 +3455,11 @@ C
 C
 C       PRINT
 C
-      DO 60 I=1,NUNIT
-         WRITE(IU(I), '(A)') CBUFF(1:LPREF+LPIECE)
-   60 CONTINUE
+C     THREE NEXT LINES REPLACED FOR SCILAB INTERFACE
+CSTD      DO 60 I=1,NUNIT
+CSTD          WRITE(IU(I), '(A)') CBUFF(1:LPREF+LPIECE)
+CSTD    60 CONTINUE
+         CALL BASOUT(IO,WTE,CBUFF(1:LPREF+LPIECE))
 C
       IF (NEXTC .LE. LENMSG) GO TO 50
       RETURN

@@ -36,24 +36,24 @@ following linear system
   y[t] = C x[t] + D u[t]
 .fi
 or, more generally, if \fVD\fR is a polynomial matrix (\fVp = degree(D(z))\fR) :
-\"LaTeX \ignore{	
+.IG	
 .nf
   D(z)=D_0 + z D_1 + z^2 D_2 +..+ z^p D_p
   y[t] = C x[t] + D_0 u[t] + D_1 u[t+1] +..+ D_[p] u[t+p]
 .fi
-\"LaTeX }
-\"LaTeX \[  D(z)=D_0 + z D_1 + z^2 D_2 +..+ z^p D_p \]
-\"LaTeX \[ y_{t} = C x_{t} + D_0 u_{t} + D_1 u_{t+1} +..+ D_{p}u_{t+p} \]
-\"LaTeX \ignore{ 
+.FI
+.LA $$  D(z)=D_0 + z D_1 + z^2 D_2 +..+ z^p D_p $$
+.LA $$ y_{t} = C x_{t} + D_0 u_{t} + D_1 u_{t+1} +..+ D_{p}u_{t+p} $$
+.IG 
 .nf
   u=[u0,u1,... un]  (input)
   y=[y0,y1,... yn-p]  (output)
   x=x[n-p+1]  (final state, used as \fVx0\fR at next call to flts)
 .fi
-\"LaTeX }
-\"LaTeX  \[ u=[u_0,u_1,... u_n]  (input) \]
-\"LaTeX  \[ y=[y_0,y_1,... y_{n-p}]  (output) \]
-\"LaTeX  \[ x=x_{n-p+1} \] (final state, used as x0 at next call to flts)
+.FI
+.LA  $$ u=[u_0,u_1,... u_n]  (input) $$
+.LA  $$ y=[y_0,y_1,... y_{n-p}]  (output) $$
+.LA  $$ x=x_{n-p+1} $$ (final state, used as x0 at next call to flts)
 .PP 
 \fBTransfer form:\fR
 .LP
@@ -61,20 +61,20 @@ or, more generally, if \fVD\fR is a polynomial matrix (\fVp = degree(D(z))\fR) :
 transfer matrix  representation i.e 
 .LP
 \fVsl=syslin('d',transfer_matrix)\fR (see \fVsyslin\fR).
-\"LaTeX \ignore{	
+.IG	
 .nf
     past = [u     ,...,  u   ]
            [ -nd           -1]
            [y     ,...,  y   ]
            [ -nd           -1]
 .fi
-\"LaTeX } %end of ignore 
-\"LaTeX 	
-\"LaTeX \[ past = \left[ \begin{array}{ccc}
-\"LaTeX  		u_{-nd} & \ldots & u_{-1} \\
-\"LaTeX  		y_{-nd} & \ldots & u_{-1}
-\"LaTeX 		\end{array} \right] \]
-\"LaTeX 	
+.FI 
+.LA 	
+.LA $$ past = \left[ \matrix{
+.LA  		u_{-nd} & \ldots & u_{-1} \cr
+.LA  		y_{-nd} & \ldots & u_{-1}
+.LA 		} \right] $$
+.LA 	
 is the matrix of past values of u and y.
 .LP
 nd is the maximum of degrees of lcm's of each row of the denominator

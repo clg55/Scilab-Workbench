@@ -2,21 +2,25 @@
 .so man1/sci.an
 .SH NAME
 recur - a bilinear recurrent equation 
-.SH DESCRIPTION
+.SH CALLING SEQUENCE
 .nf
 [y]=recur(x0,var,k,n)
+[integr]=logr(k,var)
 .fi
-a bilinear recurrent equation 
+.SH DESCRIPTION
+computes solutions of a bilinear recurrent equation 
+.nf
 x(i+1)=-x(i)*(k + sqrt(var)*br(i))
-with initial value  x0 and driven by a white noise 
-of variance var.
+.fi
+with initial value \fVx0\fR and driven by a white noise 
+of variance \fVvar\fR.
 
 Trajectories are drawn and the empirical Lyapunov exponant 
 is returned 
-( x(i) is not to much different from  exp(y*i) )
-.SH LOGR
+( \fVx(i)\fR is not to much different from \fVexp(y*i)\fR )
+
+A theorical computation of the Lyapunov exponant 
+is given by 
 .nf
 [integr]=logr(k,var)
 .fi
-A theorical computation of the Lyapunov exponant 
-

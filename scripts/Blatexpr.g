@@ -9,15 +9,19 @@
 #--------------------------------------------------------------------
 set SCI="SCILAB_DIRECTORY"
 set IMP=$SCI/imp/NperiPos.ps
-set base=$3:r
-set base=$base:r
+set orig=$3
+set base=$orig:r
+#set base=$base:r
+if ( $orig == $base.epsf ) then 
+	mv $orig $base.ps 
+endif 
 if ( $#argv != 3) then 
 	echo "Usage : Blatexpr xscale yscale filename.ps" 
 	echo "  example : Blatexpr 1.0 1.0 filename.ps "
 else 
 	echo "%\!PS-Adobe-2.0 EPSF-2.0" >! /tmp/Missile$$
 	echo "%%BoundingBox: 0 0 300 212" >> /tmp/Missile$$
-	cat $IMP  $3 | grep -v "%\!PS-ADOBE" >> $base.epsf
+	cat $IMP  $orig | grep -v "%\!PS-ADOBE" >>! $base.epsf
 	set wide=`echo " 300  $1 * p"|dc `
 	set high=`echo " 212  $2 * p"|dc `
 	set widecm=`echo "$wide 2.835 / p"|dc`

@@ -142,7 +142,10 @@ c
       nd1=istk(id1+k)-istk(id1+k-1)
       nd2=istk(id2+k)-istk(id2+k-1)
       nd3=istk(id3+k)-istk(id3+k-1)
-      call residu(stk(l1r),nd1-1,stk(l2r),nd2-1,stk(l3r),nd3-1,v,
+      nd11=nd1-1
+      nd21=nd2-1
+      nd31=nd3-1
+      call residu(stk(l1r),nd11,stk(l2r),nd21,stk(l3r),nd31,v,
      1             eps,ierr)
       if(ierr.gt.0) then
          call error(27)
@@ -201,8 +204,11 @@ c
       nd1=istk(id1+k)-istk(id1+k-1)
       nd2=istk(id2+k)-istk(id2+k-1)
       nd3=istk(id3+k)-istk(id3+k-1)
-      call wesidu(stk(l1r),stk(l1i),nd1-1,stk(l2r),stk(l2i),nd2-1,
-     &         stk(l3r),stk(l3i),nd3-1,stk(lr+k-1),stk(lr+mn1+k-1),
+      nd11=nd1-1
+      nd21=nd2-1
+      nd31=nd3-1
+      call wesidu(stk(l1r),stk(l1i),nd11,stk(l2r),stk(l2i),nd21,
+     &         stk(l3r),stk(l3i),nd31,stk(lr+k-1),stk(lr+mn1+k-1),
      &         eps,ierr)
       if(ierr.gt.0) then
          call error(27)

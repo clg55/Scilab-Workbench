@@ -30,13 +30,13 @@ resolve the Yule-Walker equations
       |r(N-1) r(N-2) ...  r(0) ||a(N-1)| |  0   |
 .fi
 .FI
-.LA \[ \left( \begin{array}{cccc} r_0 & r_1 & \ldots & r_{N-1} \\
-.LA		r_1 & r_0 & \ldots & r_{N-2} \\
-.LA		\vdots & \vdots & \ldots & \vdots \\
-.LA		r_{N-1} & r_{N-2} & \ldots & r_{0} \\
-.LA	   \end{array} \right) \vector{ a_1 \\ a_2 \\ \vdots \\
+.LA $$ \left( \matrix{ r_0 & r_1 & \ldots & r_{N-1} \cr
+.LA		r_1 & r_0 & \ldots & r_{N-2} \cr
+.LA		\vdots & \vdots & \ldots & \vdots \cr
+.LA		r_{N-1} & r_{N-2} & \ldots & r_{0} \cr
+.LA	   } \right) \vector{ a_1 \cr a_2 \cr \vdots \cr
 .LA	a_{N-1}}
-.LA	= \vector{ \sigma_2 \\ 0 \\ \vdots \\ 0}	\]
+.LA	= \vector{ \sigma_2 \cr 0 \cr \vdots \cr 0}	$$
 using Levinson's algorithm.
 .SH AUTHOR
 C. B.

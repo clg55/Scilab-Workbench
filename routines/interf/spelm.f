@@ -1127,6 +1127,8 @@ c     checking variable sp
                endif
                call icopy(nel+m,istk(il1+5),1,istk(ils),1)
             endif
+c  was    subroutine lspmat(ma,na,nela,inda,mr,indr,iw)
+c  changed to  subroutine lspmat(ma,na,a,nela,inda,mr,indr,iw)
             call lspmat(m,n,stk(ls),nel,istk(ils),mr,istk(il1+5),
      $           istk(iw))
             lstk(top+1)=sadr(il1+5+mr+nel)

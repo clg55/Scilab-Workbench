@@ -21,7 +21,6 @@ of a polygon (i.e \fVypols\fR).
 .LP
 \fVfill(i)\fR gives the 
 id of the pattern for filling the polygon number i
-.RS
 .TP
 -
 if \fVfill(i) < xget("white")+1\fR,   the polygon is filled with pattern 
@@ -34,8 +33,15 @@ if \fVfill(i) >= xget("white")+1\fR,  the polyline is only drawn.
 if \fVfill(i) >= xget("white")+2\fR,  the polygon is filled with the pattern id
 \fVfill(i)+2*WID +2\fR (WID is the id of the white pattern ). Then its contour 
 is drawn and closed if necessary 
-.RE
-.LP
+.SH EXAMPLE
+.nf
+plot2d(0,0,[-1],"012"," ",[0,-10,210,40]);
+x1=[0,10,20,30,20,10,0];
+y1=[15,30,30,15,0,0,15];
+xpols=[x1;x1;x1;x1]';xpols=xpols + [0,60,120,180].*.ones(x1)';
+ypols=[y1;y1;y1;y1]';
+xfpolys(xpols,ypols,[1,2,3,4]);
+.fi 
 .SH AUTHOR
 J.Ph.C.
 

@@ -20,12 +20,12 @@ rmax
 .SH DESCRIPTION
 .Vb [num,den]=nlev(A,z [,rmax])
 computes:
-\"Latex \ignore{
+.IG
 .nf
 (z*eye-A)^(-1) 
 .fi
-\"Latex }
-\"Latex $ (z I -A)^{-1} $
+.FI
+.LA $ (z I -A)^{-1} $
 by block diagonalization of A followed by Leverrier's algorithm
 on each block.
 .SH Remark

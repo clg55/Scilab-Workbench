@@ -1,7 +1,6 @@
 %!PS-ADOBE
-%%Missile File : J.Ph Chancelier 1991
+%%Scilab Postscript File (1995 J.Ph Chancelier)
 %%EndComments
-
 /saved save def 
 /$pictdict 100 dict def
 $pictdict begin
@@ -138,7 +137,7 @@ $pictdict begin
 	/cx Ar 0 get Ar 2 get 2 div add def 
 	/cy Ar 1 get Ar 3 get 2 div add def 
 	/hom Ar 3 get Ar 2 get div def 
-	/Cmsave1 matrix def Cmsave1 currentmatrix 
+	/Cmsave1 matrix def Cmsave1 currentmatrix pop
 	%-- on change de transformation pour faire homothetie en (x,y) 
 	cx cy [1 0 0 hom 0 0 ] transform
 	/t1 exch neg cy add def 
@@ -153,7 +152,7 @@ $pictdict begin
 	{newpath
 	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
 	closepath 0 Setgray stroke} ifelse 
-	Cmsave1 setmatrix clear} def 
+	Cmsave1 setmatrix } def 
 
 %------------------------------------------------------
 % centred hard mark 
@@ -201,7 +200,9 @@ $pictdict begin
 	/sina ang sin def /cosa ang cos def 
 	/-sina 0 sina sub def 
 	[cosa -sina sina cosa 0 0 ] CtmModif
-	str show CtmRestore } def 
+	str show 
+	CtmRestore 
+} def 
 
 /HardMark (0) def 
 
@@ -222,7 +223,7 @@ $pictdict begin
 %---------------------------------------------------------
 
 /drawaxis {/XX exch def /Arsize exch def /Arsep exch def /ang exch def 
-	/Cmsave1 matrix def Cmsave1 currentmatrix 
+	/Cmsave1 matrix def Cmsave1 currentmatrix pop
 	/sina ang sin def /cosa ang cos def /-sina sina neg def 
 	/x XX 0 get def /y XX 1 get def
 	%-- on change de transformation pour tourner autour de (x,y) 
@@ -233,12 +234,18 @@ $pictdict begin
 	newpath x y moveto 0 Arsize 1 get Arsize 2 get mul rlineto
 	stroke 
 	0 1 Arsep 1 get 1 sub
-	{newpath 
+	{
+	 % i don't want the value of the for indice 
+	 pop
+	newpath 
 	x y moveto 
 	0 1 Arsep 0 get 1 sub
-		{Arsize 0 get 0  rlineto
+		{
+		 % i don't want the value of the for indice 
+		 pop
+		 Arsize 0 get 0  rlineto
 		 0 Arsize 1 get rlineto 
-	 	0 Arsize 1 get  neg rlineto}
+	 	0 Arsize 1 get  neg rlineto }
 		for 
 	currentpoint /y exch def /x exch def 
 	stroke 
@@ -247,17 +254,17 @@ $pictdict begin
 	for 
 	Cmsave1 setmatrix } def 
 
-
-
 %---------------------------------------------------------
 % change and restore CTM
 %---------------------------------------------------------
 
-/CtmModif {/arg exch def 
+/CtmModif {
+	/arg exch def 
 	/Cmsave matrix def 
-	Cmsave currentmatrix 
+	Cmsave currentmatrix pop
 	[1 0 0 -1 0 0 ] concat 
-	arg concat } def 
+	arg concat 
+} def 
 
 /CtmRestore { Cmsave setmatrix } def 
 
@@ -304,4 +311,3 @@ $pictdict begin
 % upper left point (XP,YP) wide :XW Height: YW
 % the coordinates are given in centimeter and 
 % are the (0,0) point is the down-left point of the paper 
-

@@ -96,7 +96,7 @@ xendgraphic_pos_()
 {
   if (file != stdout) {
     fprintf(file,"\n showpage\n");
-    fprintf(file,"\n clear end saved restore \n");
+    fprintf(file,"\n end saved restore \n");
     fclose(file);
     file=stdout;}
 }
@@ -1088,8 +1088,7 @@ WriteGeneric1_pos_(string,nobjpos,objbeg,sizeobj,vx,vy,flag,fvect)
   else 
     {  from= (objbeg*sizeobj)/2;
        n= (nobjpos*sizeobj);}
-  fprintf(file,"\n/localsave save def ");
-  fprintf(file,"\nclear (%s) %d [",string,Min(sizeobj,MAXSIZE));
+  fprintf(file,"\n (%s) %d [",string,Min(sizeobj,MAXSIZE));
   for ( i =objbeg  ; i < (nobjpos+objbeg) ; i++)
     fprintf(file," %d",fvect[i]);
   fprintf(file,"]\n");
@@ -1123,7 +1122,7 @@ Write2Vect_pos_(vx,vy,from,n,string,flag,fv)
   while( i < n)
     {
       if ( i > 0) 
-	fprintf(file,"\n/localsave save def \nclear (%s) %d [%d]\n",
+	fprintf(file,"\n (%s) %d [%d]\n",
 		string,Min(MAXSIZE,nco-(co-1)*MAXSIZE),fv);
       co = co +1;
       j =0;
@@ -1141,7 +1140,7 @@ Write2Vect_pos_(vx,vy,from,n,string,flag,fv)
 		{k=k+1;i=i+1;j=j+1;}}
 	  fprintf(file,"\n");
 	}
-      fprintf(file,"] dogrey localsave restore");
+      fprintf(file,"] dogrey ");
     }
 }
 

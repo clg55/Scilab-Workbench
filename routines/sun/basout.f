@@ -56,6 +56,7 @@ c
          call xscion(iflag)
          if (iflag.eq.0) then 
             write(lunit,'(a,$)') string
+            if(lunit.eq.wte.and.wio.ne.0) write(wio,'(a,$)') string
          else
             buf = string//char(0)
             call xscisncr(buf)

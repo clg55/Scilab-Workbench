@@ -6,11 +6,11 @@ c
 c ====================================================================
 c
       INCLUDE '../stack.h'
-      double precision s,sr,si,t,x,x1
+      double precision s,sr,si,t,x,x1,eps,epsr,epsa
 c
       integer id(nsiz)
       integer semi,unifor,normal,seed,magi,frk,top2,hilb
-      double precision dsum,pythag,round,urand
+      double precision dsum,pythag,round,urand,norm
       integer iadr,sadr
       data semi/43/
       data unifor/30/,normal/23/,seed/28/,magi/22/,frk/15/

@@ -92,18 +92,42 @@ C2F(plot2d)(x,y,n1,n2,style,strflag,legend,brect,aaint,lstr1,lstr2)
   /** Boundaries of the frame **/
   if ((int)strlen(strflag) >= 2)
     {
+      int verbose=0,narg,xz[2],wmax,hmax;
+      double hx,hy,hx1,hy1;
       switch ( strflag[1])
-      {
-      case '1' : xmin=brect[0];xmax=brect[2];ymin= -brect[3];ymax= -brect[1];
-	break;
-      case '2' : 
-	xmax=  (double) Maxi(x,(*n1)*(*n2));
-	xmin=  (double) Mini(x,(*n1)*(*n2));
-	ymax=  (double) - Mini(y,(*n1)*(*n2));
-	ymin=  (double) - Maxi(y,(*n1)*(*n2));
-	break;
-      }
-  }
+	{
+	case '1' :
+	case '3' :
+	  xmin=brect[0];xmax=brect[2];ymin= -brect[3];ymax= -brect[1];
+	  break;
+	case '2' : 
+	case '4' :
+	  xmax=  (double) Maxi(x,(*n1)*(*n2));
+	  xmin=  (double) Mini(x,(*n1)*(*n2));
+	  ymax=  (double) - Mini(y,(*n1)*(*n2));
+	  ymin=  (double) - Maxi(y,(*n1)*(*n2));
+	  break;
+	}
+      if ( strflag[1] == '3' || strflag[1] == '4')
+	{
+	  C2F(dr)("xget","wdim",&verbose,xz,&narg, IP0, IP0,IP0,0,0);
+	  wmax=xz[0];hmax=xz[1];
+	  hx=xmax-xmin;
+	  hy=ymax-ymin;
+	  if ( hx/(double)wmax  <hy/(double) hmax ) 
+	    {
+	      hx1=wmax*hy/hmax;
+	      xmin=xmin-(hx1-hx)/2.0;
+	      xmax=xmax+(hx1-hx)/2.0;
+	    }
+	  else 
+	    {
+	      hy1=hmax*hx/wmax;
+	      ymin=ymin-(hy1-hy)/2.0;
+	      ymax=ymax+(hy1-hy)/2.0;
+	    }
+	}
+    }
 /* FRect gives the plotting boundaries xmin,ymin,xmax,ymax */
 
 FRect[0]=xmin;FRect[1]= -ymax;FRect[2]=xmax;FRect[3]= -ymin;

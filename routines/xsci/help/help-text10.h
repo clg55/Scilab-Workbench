@@ -28,7 +28,7 @@
 "  netwindows   - get Metanet windows numbers ",
 "  ns2p   - path from a node sequence ",
 "  p2ns   - node sequence of a path ",
-"  concomp   - node set of a strong connected component   ",
+"  sconcomp   - node set of a strong connected component   ",
 "  sconnex   - strong connected components  ",
 "  showns   - highlight a set of nodes ",
 "  showp   - highlight a set of arcs  ",

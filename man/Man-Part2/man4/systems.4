@@ -10,19 +10,17 @@ systems  - a collection of dynamical system
 A call to this function will load into Scilab a set of macros which
 describes dynamical systems. Their parameters can be initiated by 
 calling the routine tdinit().
-.IP \fBBIOREACT
+.SH BIOREACT
 .nf
 [ydot]=biorecat(t,x)
 .fi
 a bioreactor model, 
-.RS 
 .TP 
 x(1)
 is the biomass concentration
 .TP
 x(2)
 is the sugar concentration
-.RE
 .nf
                     xdot(1)=mu_td(x(2))*x(1)- debit*x(1);
                     xdot(2)=-k*mu_td(x(2))*x(1)-debit*x(2)+debit*x2in;
@@ -31,7 +29,7 @@ where mu_td is given by
 .nf
                     mu_td(x)=x/(1+x);
 .fi
-.IP \fBCOMPET
+.SH COMPET
 .nf
 [xdot]=compet(t,x [,u])
 .fi
@@ -43,7 +41,6 @@ xdot=0*ones(2,1);
 xdot(1) = ppr*x(1)*(1-x(1)/ppk) - u*ppa*x(1)*x(2) ,
 xdot(2) = pps*x(2)*(1-x(2)/ppl) - u*ppb*x(1)*x(2) ,
 .fi
-.RS 
 .IP "The macro \fV[xe]=equilcom(ue)\fR"
 computes an equilibrium point of the competition model and a fixed 
 level of the resource ue ( default value is 1)
@@ -53,8 +50,7 @@ around the equilibrium point xe=equilcom(ue).
 This macro returns [f,g,h] the three matrices of the linearized system.
 and linsy which is a Scilab macro [ydot]=linsy(t,x) which computes the 
 dynamics of the linearized system
-.RE
-.IP \fBCYCLlIM
+.SH CYCLlIM
 .nf
 [xdot]=cycllim(t,x)
 .fi
@@ -62,30 +58,29 @@ a model with a limit cycle
 .nf
   xdot=a*x+qeps(1-||x||**2)x
 .fi
-.IP \fBLINEAR
+.SH LINEAR
 .nf
 [xdot]=linear(t,x)
 .fi
 a linear system 
-.IP \fBLINPER
+.SH BLINPER
 .nf
 [xdot]=linper(t,x)
 .fi
 a linear system with quadratic perturbations.
-.IP \fBPOP
+.SH POP
 .nf
 [xdot]=pop(t,x)
 .fi
-// dynamique de la population de poissons
+a fish population model
 .nf
 xdot= 10*x*(1-x/K)- peche(t)*x
 .fi
-.IP \fBPROIE
+.SH PROIE
 a Predator prey model with external insecticide.
 .nf
 [xdot]=p_p(t,x,[u]
 .fi 
-.RS
 .TP
 x(1) 
 The prey ( that we want to kill ) 
@@ -94,15 +89,13 @@ x(2)
 the predator ( that we want to preserve ) 
 .TP
 u
-taux de mortalite du a l'insecticide
-qui agit a la fois sur la proie et le predateur
-par defaut u=0 (pas d'insecticide)
-.RE
+mortality rate du to insecticide which 
+destroys both pray and predator
+( default value u=0)
 .nf
 xdot(1) = ppr*x(1)*(1-x(1)/ppk) - ppa*x(1)*x(2) - u*x(1);
 xdot(2) = -ppm*x(2)             + ppb*x(1)*x(2) - u*x(2);
 .fi
-.nf
 
 The macro \fV[xe]=equilpp([ue])\fR computes the equilibrium point of
 the \fVp_p\fR system for the value \fVue\fR of the command. The
@@ -111,7 +104,7 @@ default value for \fVue\fR is 0.
                     xe(1) =  (ppm+ue)/ppb;
                     xe(2) =  (ppr*(1-xe(1)/ppk)-ue)/ppa;
 .fi
-.IP \fBLINCOM
+.SH LINCOM
 .nf 
 [xdot]=lincom(t,x,k)
 .fi
@@ -119,6 +112,14 @@ linear system with a feedback
 .nf
 	xdot= a*x +b*(-k*x)
 .fi
+.SH SEE ALSO
+tdinit.
+
+
+
+
+
+
 
 
 

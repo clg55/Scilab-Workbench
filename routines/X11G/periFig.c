@@ -135,7 +135,7 @@ viderbuff_xfig_(){}
 /** To get the window size **/
 /** The default fig box    **/
 /** for line thickness etc \ldots **/
-static int prec_fact =8;
+static int prec_fact =16;
 
 getwindowdim_xfig_(verbose,x,narg)
   int *verbose,*x,*narg;
@@ -370,7 +370,7 @@ setthickness_xfig_(value)
   int *value ;
 { 
   ScilabGC_xfig_.CurLineWidth =Max(1, *value);
-  fprintf(file,"# %d Thickness\r\n",Max(1,*value));
+  fprintf(file,"# %d Thickness\n",Max(1,*value));
 }
 
 /** to get the thicknes value **/
@@ -687,20 +687,34 @@ displaystring_xfig_(string,x,y,angle,flag)
   int *x,*y ,*flag;
      double *angle;
   char string[] ;
-{     int rect[4] ;
+{     int rect[4], font=-1,font_flag=2;
       boundingbox_xfig_(string,x,y,rect);
       if (string[0]== '$') 
-	fprintf(file,"4 0 %d %d 0 %d 0 %5.2f 2 %d %d %d %d %s\1\n",
-		0,
-		isize_xfig_[ScilabGC_xfig_.CurHardFontSize]*prec_fact,
-		ScilabGC_xfig_.CurColor,
-		(M_PI/180.0)*(*angle),rect[3],rect[2],*x,*y,string);
+	{
+	  font=-1;
+	  font_flag=2;
+	}
       else 
-	fprintf(file,"4 0 %d %d 0 %d 0 %5.2f 4 %d %d %d %d %s\1\n",
-	     xfig_font[ScilabGC_xfig_.CurHardFont],
-	     isize_xfig_[ScilabGC_xfig_.CurHardFontSize]*prec_fact,
-		ScilabGC_xfig_.CurColor,
-	     (M_PI/180.0)*(*angle),rect[3],rect[2],*x,*y,string);
+	{
+	  font =  xfig_font[ScilabGC_xfig_.CurHardFont],
+	  font_flag= 4; 
+	};
+      fprintf(file,"4 0 %d 0 0 %d %d %5.2f %d %5.2f %5.2f %d %d %s\\001\n",
+	      ScilabGC_xfig_.CurColor,
+	      font,
+	      isize_xfig_[ScilabGC_xfig_.CurHardFontSize],/**prec_fact,*/
+	      (M_PI/180.0)*(*angle),
+	      font_flag,
+	      (double) rect[3],
+	      (double) rect[2],
+	      *x,
+	      *y,
+	      string);
+      if ( *flag == 1) 
+	{
+	  rect[0]=rect[0]-4;rect[2]=rect[2]+6;
+	  drawrectangle_xfig_(string,rect,rect+1,rect+2,rect+3);
+	}
 }
 
 int bsize_xfig_[6][4]= {{ 0,-7,4.63,9  },
@@ -1019,16 +1033,13 @@ initgraphic_xfig_(string)
 FileInit_xfig_(filen)
      FILE *filen;
 {
-  /** Just send Postscript commands to define scales etc....**/
   int x[2],verbose,narg;
   verbose = 0; 
   getwindowdim_xfig_(&verbose,x,&narg);
-  fprintf(filen,"#FIG 2.1\n");
-  fprintf(filen,"80 2\n");
-  fprintf(filen,"2 2 0 0 -1 0 0 0 0.000 0 0 0\n");
-  fprintf(filen," %d %d %d %d %d %d %d %d %d %d  9999 9999",
+  fprintf(filen,"#FIG 3.0\nPortrait\nCenter\nInches\n1200 2\n");
+  fprintf(filen,"2 2 0 0 -1 -1 0 0 -1 0.000 0 0 0 0 0 5\n");
+  fprintf(filen," %d %d %d %d %d %d %d %d %d %d \n",
 	  0,0,x[0],0,x[0],x[1],0,x[1],0,0);
-
   InitScilabGC_xfig_()	;
 }
 
@@ -1139,31 +1150,33 @@ drawaxis_xfig_(str,alpha,nsteps,size,initpoint)
       yi = initpoint[1]+i*size[0]*sinal;
       xf = xi - ( size[1]*sinal);
       yf = yi + ( size[1]*cosal);
-      fprintf(file,"2 1 0 %d %d 0 0 0 0.000 0 0 0\n",
-	        ScilabGC_xfig_.CurLineWidth*prec_fact/2,
-	      ScilabGC_xfig_.CurColor);
-      fprintf(file," %d %d %d %d ",(int) xi,(int) yi,(int) xf,(int)yf);
-      fprintf(file," 9999 9999\n");	  
+      fprintf(file,"2 1 0 %d %d %d 0 0 -1 0.000 0 0 0 0 0 2\n",
+	      ScilabGC_xfig_.CurLineWidth*prec_fact/16,
+	      ScilabGC_xfig_.CurColor,
+	      ScilabGC_xfig_.CurColor
+	      );
+      fprintf(file," %d %d %d %d \n",(int) xi,(int) yi,(int) xf,(int)yf);
     }
   for (i=0; i <= nsteps[1]; i++)
     { xi = initpoint[0]+i*nsteps[0]*size[0]*cosal;
       yi = initpoint[1]+i*nsteps[0]*size[0]*sinal;
       xf = xi - ( size[1]*size[2]*sinal);
       yf = yi + ( size[1]*size[2]*cosal);
-      fprintf(file,"2 1 0 %d %d 0 0 0 0.000 0 0 0\n",
-	        ScilabGC_xfig_.CurLineWidth*prec_fact/2,
-	      ScilabGC_xfig_.CurColor);
-      fprintf(file," %d %d %d %d ",(int) xi,(int) yi,(int) xf,(int)yf);
-      fprintf(file," 9999 9999\n");	  
+      fprintf(file,"2 1 0 %d %d %d 0 0 -1 0.000 0 0 0 0 0 2\n",
+	      ScilabGC_xfig_.CurLineWidth*prec_fact/16,
+	      ScilabGC_xfig_.CurColor,
+	      ScilabGC_xfig_.CurColor
+	      );
+      fprintf(file," %d %d %d %d \n",(int) xi,(int) yi,(int) xf,(int)yf);
     }
   xi = initpoint[0]; yi= initpoint[1];
   xf = initpoint[0]+ nsteps[0]*nsteps[1]*size[0]*cosal;
   yf = initpoint[1]+ nsteps[0]*nsteps[1]*size[0]*sinal;
-  fprintf(file,"2 1 0 %d %d 0 0 0 0.000 0 0 0\n",
-	        ScilabGC_xfig_.CurLineWidth*prec_fact/2,
+  fprintf(file,"2 1 0 %d %d %d 0 0 -1 0.000 0 0 0 0 0 2\n",
+	  ScilabGC_xfig_.CurLineWidth*prec_fact/16,
+	  ScilabGC_xfig_.CurColor,
 	  ScilabGC_xfig_.CurColor);
-  fprintf(file," %d %d %d %d ",(int) xi,(int) yi,(int) xf,(int)yf);
-  fprintf(file," 9999 9999\n");	  
+  fprintf(file," %d %d %d %d \n",(int) xi,(int) yi,(int) xf,(int)yf);
   fprintf(file,"# End Of Axis \n");
 }
 
@@ -1180,7 +1193,8 @@ displaynumbers_xfig_(str,x,y,z,alpha,n,flag)
 { int i ;
   char buf[20];
   for (i=0 ; i< *n ; i++)
-    { sprintf(buf,ScilabGC_xfig_.CurNumberDispFormat,z[i]);
+    { 
+      sprintf(buf,ScilabGC_xfig_.CurNumberDispFormat,z[i]);
       displaystring_xfig_(buf,&(x[i]),&(y[i]),&(alpha[i]),flag)      ;
     }
 }
@@ -1216,10 +1230,10 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 	  if (fvect[i] <= ScilabGC_xfig_.IDWhitePattern )
 	    /** use pattern **/
 	   {
-	     areafill = Max(Min(21, (-10*fvect[i]+157)/7),1);
+	     areafill = Max(Min(20, (-10*fvect[i]+157)/7),0);
 	     if ( use_color ==1) 
 	       {
-		 set_c_xfig_(areafill);areafill=21;
+		 set_c_xfig_(areafill);areafill=20;
 	       }
 	     type = 3;
 	   }
@@ -1227,26 +1241,30 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 	    {
 	      if (fvect[i] == ScilabGC_xfig_.IDWhitePattern+1 )
 		  /** only draws **/
-		  areafill=0;
+		  areafill=-1;
 	      else 
 		/** fill with pattern  and draw **/
 		{ 
-		  areafill = Max(Min(21,(-10*(fvect[i]-(ScilabGC_xfig_.IDWhitePattern+1))+157)/7),1);
+		  areafill = Max(Min(20,(-10*(fvect[i]-(ScilabGC_xfig_.IDWhitePattern+1))+157)/7),0);
 		  if ( use_color ==1) 
 		    {
-		      set_c_xfig_(areafill);areafill=21;
+		      set_c_xfig_(areafill);areafill=20;
 		    }
 		  type=3;}
 	    }
 	  lg=sizeobj/2;
 	  fprintf(file,"# Object : %d %s -<%d>- \n",i,string,fvect[i]);
-	  fprintf(file,"2 %d %d %d %d 0 0 %d %d.00 -1 0 0\n",
-		  type,Min( ScilabGC_xfig_.CurDashStyle,1),
-		  ScilabGC_xfig_.CurLineWidth*prec_fact/2,
-		  ScilabGC_xfig_.CurColor,areafill,
-		  8* ScilabGC_xfig_.CurDashStyle);
+	  fprintf(file,"2 %d %d %d %d %d 0 0 %d %d.00 0 0 -1 0 0 %d\n",
+		  type,
+		  Min( ScilabGC_xfig_.CurDashStyle,1),
+		  ScilabGC_xfig_.CurLineWidth*prec_fact/16,
+		  ScilabGC_xfig_.CurColor,
+		  ScilabGC_xfig_.CurColor,
+		  areafill,
+		  8* ScilabGC_xfig_.CurDashStyle,
+		  lg
+		  );
 	  Write2Vect_xfig_(&vx[i*lg],&vy[i*lg],lg,flag);
-	  fprintf(file," 9999 9999\n");
 	}
     }
   else 
@@ -1256,13 +1274,15 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 	{
 	  int deb,areafill;
 	  if (fvect[i] >= ScilabGC_xfig_.IDWhitePattern+1 )
-	    areafill = 0;
+	    areafill = -1;
 	  else 
-	    areafill = Max(Min(21, (-10*fvect[i]+157)/7),1);
+	    areafill = Max(Min(20, (-10*fvect[i]+157)/7),0);
 	  fprintf(file,"# Object : %d %s -<%d>- \n",i,string,fvect[i]);
-	  fprintf(file,"2 2 0 %d %d 0 0 %d 0.000 0 0 0\n",
-		  ScilabGC_xfig_.CurLineWidth*prec_fact/2,
-		    ScilabGC_xfig_.CurColor,areafill);
+	  fprintf(file,"2 2 0 %d %d %d 0 0 %d 0.000 0 0 0 0 0 5\n",
+		  ScilabGC_xfig_.CurLineWidth*prec_fact/16,
+		  ScilabGC_xfig_.CurColor,
+		  ScilabGC_xfig_.CurColor,
+		  areafill);
 	  deb=i*sizeobj;
 	  fprintf(file," %d %d %d %d %d %d %d %d %d %d \n",
 		  vx[deb],vx[1+deb],
@@ -1270,7 +1290,6 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 		  vx[deb]+vx[2+deb],vx[1+deb]+vx[3+deb],
 		  vx[deb]           ,vx[1+deb]+vx[3+deb],
 		  vx[deb],vx[1+deb]);
-	  fprintf(file," 9999 9999\n");
 	}
     }
   else if ( strcmp(string,"drawsegs")==0)      
@@ -1278,12 +1297,13 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
       for ( i =0 ; i < sizev/2 ; i++)
 	{
 	  fprintf(file,"# Object : %d %s -<%d>- \n",i,string,fvect[0]);
-	  fprintf(file,"2 1 0 %d %d 0 0 0 0.000 0 0 0\n",
-	        ScilabGC_xfig_.CurLineWidth*prec_fact/2,
-		    ScilabGC_xfig_.CurColor);
-	  fprintf(file," %d %d %d %d ",
+	  fprintf(file,"2 1 0 %d %d %d 0 0 -1 0.000 0 0 0 0 0 2\n",
+		  ScilabGC_xfig_.CurLineWidth*prec_fact/16,
+		  ScilabGC_xfig_.CurColor,
+		  ScilabGC_xfig_.CurColor
+		  );
+	  fprintf(file," %d %d %d %d \n",
 		  vx[2*i],vy[2*i],vx[2*i+1],vy[2*i+1]);
-	  fprintf(file," 9999 9999\n");	  
 	}
     }
   else if ( strcmp(string,"drawarrows")==0)      
@@ -1291,14 +1311,15 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
       for ( i = 0 ; i < sizev/2 ; i++)
 	{
 	  fprintf(file,"# Object : %d %s -<%d>-\n",i,string,fvect[0]);
-	  fprintf(file,"2 1 0 %d %d 0 0 0 0.000 0 1 0\n",
-	        ScilabGC_xfig_.CurLineWidth*prec_fact/2,
-		    ScilabGC_xfig_.CurColor);
+	  fprintf(file,"2 1 0 %d %d %d 0 0 -1 0.000 0 0 0 1 0 2\n",
+		  ScilabGC_xfig_.CurLineWidth*prec_fact/16,
+		  ScilabGC_xfig_.CurColor,
+		  ScilabGC_xfig_.CurColor
+		  );
 	  fprintf(file,"    0 0 %d %d %d\n",
-		  1*prec_fact,3*prec_fact,6*prec_fact);
-	  fprintf(file," %d %d %d %d ",
+		  1*prec_fact/16,3*prec_fact,6*prec_fact);
+	  fprintf(file," %d %d %d %d \n",
 		  vx[2*i],vy[2*i],vx[2*i+1],vy[2*i+1]);
-	  fprintf(file," 9999 9999\n");	  
 	}
     }
   else if ( strcmp(string,"drawarc")==0)      
@@ -1307,13 +1328,14 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 	{
 	  int areafill;
 	  if (fvect[i] >= ScilabGC_xfig_.IDWhitePattern+1 )
-	    areafill = 0;
+	    areafill = -1;
 	  else 
-	    areafill = Max(Min(21, (-10*fvect[i]+157)/7),1);
+	    areafill = Max(Min(20, (-10*fvect[i]+157)/7),0);
 	  fprintf(file,"# Object : %d %s -<%d>-\n",i,string,fvect[0]);
 	  fprintf(file,
-		  "1 2 0 %d %d 0 0 %d 0.000 1 0.00 %d %d %d %d %d %d %d %d \n",
-		  ScilabGC_xfig_.CurLineWidth*prec_fact/2,
+		  "1 2 0 %d %d %d 0 0 %d 0.000 1 0.00 %d %d %d %d %d %d %d %d \n",
+		  ScilabGC_xfig_.CurLineWidth*prec_fact/16,
+		  ScilabGC_xfig_.CurColor,
 		  ScilabGC_xfig_.CurColor,
 		  areafill,vx[6*i]+vx[6*i+2]/2,vx[6*i+1]+vx[6*i+3]/2,
 		  vx[6*i+2]/2,vx[6*i+3]/2,
@@ -1328,13 +1350,18 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
       fprintf(file,"# Object : %d %s -<%d>- \n",0,string,fvect[0]);
       for ( i =0 ; i < sizev ; i++)
 	{
-	  fprintf(file,"4 0 %d %d 0 %d 0 %5.2f 4 %d %d %d %d %c\1\n",
-		  32,
-		  isize_xfig_[ScilabGC_xfig_.CurHardSymbSize]*prec_fact,
+	  fprintf(file,"4 0 %d 0 0 %d %d %5.2f %d %5.2f %5.2f %d %d \\%o\\001\n",
 		  ScilabGC_xfig_.CurColor,
-		  0.0,rect[3],rect[2],vx[i],vy[i],
-		  Char2Int( symb_list_xfig_[ScilabGC_xfig_.CurHardSymb]));
-
+		  32, /* Postscript font */
+		  isize_xfig_[ScilabGC_xfig_.CurHardFontSize], /**prec_fact,*/
+		  0.0,
+		  4,  
+		  (double) rect[3],
+		  (double) rect[2],
+		  vx[i],
+		  vy[i],
+		  Char2Int( symb_list_xfig_[ScilabGC_xfig_.CurHardSymb])
+		  );
 	}
     }
   else

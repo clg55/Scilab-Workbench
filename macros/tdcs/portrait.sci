@@ -8,6 +8,8 @@ lines(0);
 // minimal calling sequence 
 if rhs<=1,odem='default';end
 // Interactive version 
+if odem = 'discrete'; style_d=x_choose(['trait continu','points'],['option de dessin']);
+	style_d=maxi(style_d-2,-1);end
 if rhs <= 2,
   if ~isdef('p_xdim');p_xdim=['-1';'-1';'1';'1'];end
   p_xdim=x_mdialog('Graphic boundaries',...
@@ -33,6 +35,8 @@ if res==1;
   nx=xdim(1)*(ones(nx)-nx)+xdim(3)*nx;
   ny=xdim(2)*(ones(ny)-ny)+xdim(4)*ny;
   fchamp(fch,0,nx,ny);
+else 
+  p_nxx=['10';'10'];
 end
 plot2d([xdim(1);xdim(1);xdim(3)],[xdim(2);xdim(4);xdim(4)])
 if rhs<=3,
@@ -93,7 +97,7 @@ function [res]=desorb(odem,x0,n1,fch,farrow,xdim);
 //!
 res=0
 [nn1,n2]=size(x0);
-if odem='discret', style=[0], else style=-1;end
+if odem='discrete', style=style_d;end
 for i=1:n2,
     ftest=1;
     if x0(1,i) > xdim(3), ftest=0;end

@@ -77,7 +77,7 @@
 "  sum   - sum  of vector/matrix entries ",
 "  sysconv   - system conversion ",
 "  sysdiag   - block diagonal system connection ",
-"  Scilab object: syslin   - linear system definition ",
+"  syslin   - linear system definition ",
 "  tan   - tangent ",
 "  tanh   - hyperbolic tangent ",
 "  texprint   - TeX output of Scilab object ",

@@ -24,16 +24,16 @@ N,M,XT,YT,NT,MT,X,Y
 .SH DESCRIPTION
 returns eight stable systems \fV(N,M,X,Y,NT,MT,XT,YT) \fR
 for the doubly coprime factorization
-\"LaTeX \ignore{	
+.IG	
 .nf
                  !XT  -YT! ! M  Y !
                  !       !*!      ! = eye
                  !-NT  MT! ! N  X !
 .fi
-\"LaTeX }
-\"LaTeX \[ \left( \begin{array}{cc} XT & -YT \\ -NT & MT \end{array}\right)
-\"LaTeX * \left( \begin{array}{cc} M & Y \\ M & X \end{array}\right)
-\"LaTeX 	= eye \]
+.FI
+.LA $$ \left( \matrix{ XT & -YT \cr -NT & MT }\right)
+.LA * \left( \matrix{ M & Y \cr M & X }\right)
+.LA 	= eye $$
 \fVG\fR must be stabilizable and detectable.
 .SH SEE ALSO
 copfac

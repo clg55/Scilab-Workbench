@@ -29,7 +29,7 @@
 "  hank   - hankel matrix ",
 "  hilb   - Hilbert transform ",
 "  iir   - iir digital filter ",
-"  iirlp   - group delay Lp IIR filter optimization ",
+"  iirgroup   - group delay Lp IIR filter optimization ",
 "  iirlp   - Lp IIR filter optimization ",
 "  intdec   - Changes  sampling rate of a signal ",
 "  jmat   - row or column block permutation ",

@@ -23,7 +23,6 @@ compht (1)		- from adjacency vectors to head-tail vectors
 compl2 (1)		- from directed to undirected adjacency vectors
 compla (1)		- from adjacency pointer and node arrays to arc array
 concomp (1)		- node set of a connected component  
-concomp (1)		- node set of a strong connected component  
 cond (1)		- condition number
 connex (1)		- connected components
 createg (1)		- new graph from a graph list
@@ -32,7 +31,7 @@ epsfin (1)		- reduced pencil
 exar1 (1)		- armax identification example 
 exar2 (1)		- armax identification example 
 exar3 (1)		- armax identification example 
-exp (G) 		- exponential, matrix exponential
+exp (G)			- exponential, matrix exponential
 fineta (1)		- reduced pencil
 fullrf (1)		- full rank factorization
 fullrfk (1)		- full rank factorization of A^k
@@ -49,12 +48,12 @@ gspec (G)		- eigenvalues of matrix pencil
 guide (1)		- list of objects and commands of Metanet 
 hess (G)		- Hessenberg form
 im_inv (1)		- inverse image
-inv (G) 		- matrix inverse
+inv (G)			- matrix inverse
 isconnex (1)		- connectivity test  
 kernel (1)		- kernel, nullspace
 kroneck (1)		- Kronecker form of matrix pencil
 l2adj (1)		- from adjacency vectors to adjacency matrix
-l2g (1) 		- graph from an adjacency description
+l2g (1)			- graph from an adjacency description
 leverrier (1)		- Leverrier's algorithm
 linsolve (1)		- linear equation solver
 loadg (1)		- load an existing graph  
@@ -105,6 +104,7 @@ reglin (1)		- Linear regression
 rowcomp (1)		- row compression, range
 rowshuff (1)		- shuffle algorithm
 schur (G)		- [ordered] Schur decomposition
+sconcomp (1)		- node set of a strong connected component  
 sconnex (1)		- strong connected components 
 showns (1)		- highlight a set of nodes
 showp (1)		- highlight a set of arcs 
@@ -114,10 +114,10 @@ spantwo (1)		- sum and intersection of subspaces
 spclean (G)		- sparse matrix utility
 spec (G)		- eigenvalues
 sqroot (2)		- square root
-sva (1) 		- singular value approximation
+sva (1)			- singular value approximation
 svd  (G)		-  singular value decomposition
 sylv (G)		- Sylvester equation.
-systems  (1)		- a collection of dynamical system 
+systems	 (1)		- a collection of dynamical system 
 tangent (1)		- linearization of a dynamical system at an equiibrium point 
 tdinit (1)		- interactive initialization of the tdcs dynamical systems
 trace  (2)		- trace

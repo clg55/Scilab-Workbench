@@ -46,7 +46,7 @@ if type(macr_f) <> 15,
   fch_v=feval(fch_xr,fch_yr,mmm);
 else
   mmm1=macr_f(1)
-  deff('[yy]=mmm(x1,x2)',['xx=mmm1(fch_t,[x1,x2],macr_f(2));';
+  deff('[yy]=mmm(x1,x2)',['xx=mmm1(fch_t,[x1;x2],macr_f(2));';
                           'yy=xx(1)+%i*xx(2);']);
   comp(mmm);
   fch_v=feval(fch_xr,fch_yr,mmm);

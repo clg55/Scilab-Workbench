@@ -8,14 +8,17 @@ c
       double precision x
       integer op,equal,less,great,r,ix(2)
       equivalence (x,ix(1))
-      logical logops,ok,iflag,istrue,ptover,cremat,getsimat,cresmat,
+      logical logops,ok,iflag,istrue,ptover,cremat,cresmat,
      $     vcopyobj,ilog
       integer p,lr,nlr,lcc
-      logical sevents
-      external sevents
       common /basbrk/ iflag
+      integer otimer,ntimer,stimer
+      external stimer
+      save otimer
+      data otimer/0/
       data equal/50/,less/54/,great/55/
 c     
+      call xscion(inxsci)
       if (ddt .eq. 4) then
          write(buf(1:8),'(2i4)') pt,rstk(pt)
          call basout(io,wte,' run pt:'//buf(1:4)//' rstk(pt):'
@@ -130,7 +133,7 @@ c     string
  40   n=istk(lc+1)
       top=top+1
       if (cresmat("run",top,1,1,n)) then 
-         ilog=getsimat("run",top,top,mm1,nn1,1,1,lr,nlr)         
+         call getsimat("run",top,top,mm1,nn1,1,1,lr,nlr)         
          call icopy(n,istk(lc+2),1,istk(lr),1)
       endif
       lc=lc+n+2
@@ -174,10 +177,13 @@ c
       call nextj(istk(l0-nsiz),pstk(pt))
       if(pstk(pt).ne.0) then
          lct(8)=ids(2,pt)
-         if(sevents()) then
-            fun=99
-            return
-         endif 
+         if (inxsci.eq.1) then
+            ntimer=stimer()
+            if (ntimer.ne.otimer) then
+               call sxevents()
+               otimer=ntimer
+            endif
+         endif
          goto 10
       endif
 c     fin for
@@ -309,10 +315,13 @@ c
          ids(1,pt)=l0
          ids(2,pt)=nc
          rstk(pt)=616
-         if(sevents()) then
-            fun=99
-            return
-         endif 
+         if (inxsci.eq.1) then
+            ntimer=stimer()
+            if (ntimer.ne.otimer) then
+               call sxevents()
+               otimer=ntimer
+            endif
+         endif
          goto 10
       else
          if(istk(pstk(pt)).eq.9) goto 62
@@ -351,10 +360,13 @@ c     *call* macro
       goto 70
 c     
  70   continue
-      if(sevents()) then
-         fun=99
-         return
-      endif 
+      if (inxsci.eq.1) then
+         ntimer=stimer()
+         if (ntimer.ne.otimer) then
+            call sxevents()
+            otimer=ntimer
+         endif
+      endif
       r=rstk(pt)-610
       goto(74,71,72,73,73,73) ,r
       goto 10
@@ -507,11 +519,13 @@ c     gestion des points d'arrets dynamiques
 c
       lct(8)=lct(8)+1
       lc=lc+1
-      if(sevents()) then
-         fun=99
-         return
-      endif 
-      
+      if (inxsci.eq.1) then
+         ntimer=stimer()
+         if (ntimer.ne.otimer) then
+            call sxevents()
+            otimer=ntimer
+         endif
+      endif
       goto 10
 c     
 c     set line number. Au debut de chaque expression liee a un then et a 

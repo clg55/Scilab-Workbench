@@ -2,29 +2,31 @@
 .so man1/sci.an
 .SH NAME
 obs_cont - a controlled-observed system
-.SH DESCRIPTION
+.SH CALLING SEQUENCE
 .nf
 [macr]=obscont(sysn)
 .fi
-cette macro renvoit le systeme observe-commande
-construit a partir du systeme sysn linearise autour de (xe,ue)
+.SH PARAMETERS
 .TP
 sysn 
-: chaine de caractere donnant le nom du systeme a commander
+: A scilab string which gives the name of the controled system.
 .TP
 gaincom,gainobs 
-: vecteurs colonnes des gains demandes
+: column vectors giving the requested gains 
 .TP
 macr
-: une nouvelle macro donnant le syst\`eme observe-commande
+: a new Scilab macrs which simulates the controled observed system.
+.nf
 [x1dot]=macr(t,x1,abruit,pas,n)
 x1=[x;xchap],
-.LP
-pour l'appel il faudra creer un vecteur de bruit de nom br
-d'autre part la macro cr\'ee va chercher dans l'environnement
-global les valeurs de (xe,ue) le point d'equilibre
-f,g,h les matrices du systeme linearise
-l et k  les deux matrices de gain
+.fi 
+.SH DESCRIPTION 
+Thi macros return a new macro which computes the controled observed version 
+of a linearised system around the \fV(xe,ue)\fR point.
+
+before calling this macro, a noise vector \fVbr\fR should be created.
+the equilibrium point \fV(xe,ue)\fR should be given as a global Scilab.
+ the linearised system $f,g,h$ and the two  gain matrices \fVl,k\fR are returned as global Scilab data.
 .SH EXAMPLE
 .nf
     pas=10;n=200;
