@@ -120,7 +120,7 @@ struct BCG
 xselgraphic_()
 {
   SelectWindow(CWindow);
-};
+}
 
 /** End of graphic (do nothing)  **/
 
@@ -144,7 +144,7 @@ clearwindow_()
   EraseRect(&CWindow->portRect);
   DrawGrowIcon(CWindow);
   EndUpdate(CWindow);
-};
+}
 
 /*-----------------------------------------------------------
   \encadre{To generate a pause, in seconds}
@@ -155,7 +155,7 @@ xpause_(sec_time)
 {
   /* unsigned int useconds; XSync(dpy,0); useconds=(unsigned) sec_time; if
    * (useconds != 0)  usleep(useconds); */
-};
+}
 
 /*-----------------------------------------------------------
   \encadre{ Wait for mouse click in graphic window
@@ -186,7 +186,7 @@ cleararea_(str, x, y, w, h)
   Rect MyRect;
   SetRect(&MyRect, *x, *y, *x + *w, *y + *h);
   EraseRect(&MyRect);
-};
+}
 
 /*---------------------------------------------------------------------
   \section{Function for graphic context modification}
@@ -202,7 +202,7 @@ getwindowpos_(verbose, x, narg)
   x[1] = CWindow->portRect.top;
   if (*verbose == 1)
     SciF2d( "\n CWindow position :%d,%d\r\n", x[0], x[1]);
-};
+}
 
 /** to set the window upper-left point position on the screen **/
 
@@ -210,7 +210,7 @@ setwindowpos_(x, y)
   int *x, *y;
 {
   MoveWindow(CWindow, *x, *y, FALSE);
-};
+}
 
 /** To get the window size **/
 #define SBARWIDTH 16
@@ -223,7 +223,7 @@ getwindowdim_(verbose, x, narg)
   x[1] = (CWindow->portRect).bottom - (CWindow->portRect).top - SBARWIDTH;
   if (*verbose == 1)
     SciF2d( "\n CWindow dim :%d,%d\r\n", x[0], x[1]);
-};
+}
 
 /** To change the window size  **/
 
@@ -231,7 +231,7 @@ setwindowdim_(x, y)
   int *x, *y;
 {
   SizeWindow(CWindow, *x, *y, TRUE);
-};
+}
 
 
 /** To select a graphic Window  **/
@@ -249,8 +249,8 @@ setcurwin_(intnum)
     for (i = 0; i <= *intnum; i++)
       if (GetWindowNumber_(*intnum) == (Window) NULL)
 	initgraphic_("");
-  };
-};
+  }
+}
 
 /** Get the id number of the Current Graphic Window **/
 
@@ -261,7 +261,7 @@ getcurwin_(verbose, intnum, narg)
   *intnum = MissileXgc.CurWindow;
   if (*verbose == 1)
     SciF1d( "\nCurrent Graphic Window :%d", *intnum);
-};
+}
 
 /** Set a clip zone (rectangle ) **/
 
@@ -276,7 +276,7 @@ setclip_(x, y, w, h)
   MissileXgc.CurClipRegion[3] = *h;
   SetRect(&MyRect, *x, *y, *x + *w, *y + *h);
   ClipRect(&MyRect);
-};
+}
 
 /** Get the boundaries of the current clip zone **/
 
@@ -302,7 +302,7 @@ getclip_(verbose, x, narg)
 	      MissileXgc.CurClipRegion[3]);
     else
       Scistring( "\nNo Clip Region");
-};
+}
 
 /*----------------------------------------------------------
   \encadre{For the drawing functions dealing with vectors of
@@ -319,7 +319,7 @@ setabsourel_(num)
     MissileXgc.CurVectorStyle = CoordModeOrigin;
   else
     MissileXgc.CurVectorStyle = CoordModePrevious;
-};
+}
 
 /** to get information on absolute or relative mode **/
 
@@ -333,7 +333,7 @@ getabsourel_(verbose, num, narg)
       Scistring( "\nTrace Absolu");
     else
       Scistring( "\nTrace Relatif");
-};
+}
 
 /** The alu function for drawing : Works only with X11 **/
 /** Not in Postscript **/
@@ -346,8 +346,8 @@ setalufunction_(string)
   if (value != -1)
   {
     MissileXgc.CurDrawFunction = value;
-  };
-};
+  }
+}
 /** All the possibilities : Read The Mac manual to get more informations **/
 
 struct alinfo
@@ -373,7 +373,7 @@ struct alinfo
   "GXorInverted", GXorInverted, " NOT src OR dst ",
   "GXnand", GXnand, " NOT src OR NOT dst ",
   "GXset", GXset, " 1 "
-};
+}
 
 
 setalufunction1_(num)
@@ -389,8 +389,8 @@ setalufunction1_(num)
   if (value != -1)
   {
     MissileXgc.CurDrawFunction = value;
-  };
-};
+  }
+}
 
 idfromname(name1, num)
   char name1[];
@@ -407,8 +407,8 @@ idfromname(name1, num)
     for (i = 0; i < 16; i++)
       SciF2s("\nkey %s   -> %s\r\n", AluStruc_[i].name,
 	      AluStruc_[i].info);
-  };
-};
+  }
+}
 
 /** To get the value of the alufunction **/
 
@@ -423,7 +423,7 @@ getalufunction_(verbose, value, narg)
 	    AluStruc_[*value].name,
 	    AluStruc_[*value].info);
   }
-};
+}
 
 
 /** to set the thickness of lines : 0 is a possible value **/
@@ -449,7 +449,7 @@ getthickness_(verbose, value, narg)
   if (*verbose == 1)
     SciF1d( "\nLine Width:%d\r\n",
 	    MissileXgc.CurLineWidth);
-};
+}
 
 /** To set grey level for filing areas **/
 /** from black (*num =0 ) to white     **/
@@ -457,30 +457,30 @@ getthickness_(verbose, value, narg)
 #define GREYNUMBER 17
 
 static unsigned char Tabpix_[GREYNUMBER][8] = {
-  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
-  {0x00, 0x00, 0x44, 0x00, 0x00, 0x00, 0x44, 0x00},
-  {0x00, 0x44, 0x00, 0x22, 0x08, 0x40, 0x01, 0x20},
-  {0x00, 0x92, 0x00, 0x25, 0x00, 0x92, 0x00, 0xa4},
-  {0x55, 0x00, 0xaa, 0x00, 0x55, 0x00, 0xaa, 0x00},
-  {0xad, 0x00, 0x5b, 0x00, 0xda, 0x00, 0x6d, 0x00},
-  {0x6d, 0x02, 0xda, 0x08, 0x6b, 0x10, 0xb6, 0x20},
-  {0x6d, 0x22, 0xda, 0x0c, 0x6b, 0x18, 0xb6, 0x24},
-  {0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa},
-  {0x92, 0xdd, 0x25, 0xf3, 0x94, 0xe7, 0x49, 0xdb},
-  {0x92, 0xfd, 0x25, 0xf7, 0x94, 0xef, 0x49, 0xdf},
-  {0x52, 0xff, 0xa4, 0xff, 0x25, 0xff, 0x92, 0xff},
-  {0xaa, 0xff, 0x55, 0xff, 0xaa, 0xff, 0x55, 0xff},
-  {0xff, 0x6d, 0xff, 0xda, 0xff, 0x6d, 0xff, 0x5b},
-  {0xff, 0xbb, 0xff, 0xdd, 0xf7, 0xbf, 0xfe, 0xdf},
-  {0xff, 0xff, 0xbb, 0xff, 0xff, 0xff, 0xbb, 0xff},
-  {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+  {(char)0x00, (char)0x00, (char)0x00, (char)0x00, (char)0x00, (char)0x00, (char)0x00, (char)0x00},
+  {(char)0x00, (char)0x00, (char)0x44, (char)0x00, (char)0x00, (char)0x00, (char)0x44, (char)0x00},
+  {(char)0x00, (char)0x44, (char)0x00, (char)0x22, (char)0x08, (char)0x40, (char)0x01, (char)0x20},
+  {(char)0x00, (char)0x92, (char)0x00, (char)0x25, (char)0x00, (char)0x92, (char)0x00, (char)0xa4},
+  {(char)0x55, (char)0x00, (char)0xaa, (char)0x00, (char)0x55, (char)0x00, (char)0xaa, (char)0x00},
+  {(char)0xad, (char)0x00, (char)0x5b, (char)0x00, (char)0xda, (char)0x00, (char)0x6d, (char)0x00},
+  {(char)0x6d, (char)0x02, (char)0xda, (char)0x08, (char)0x6b, (char)0x10, (char)0xb6, (char)0x20},
+  {(char)0x6d, (char)0x22, (char)0xda, (char)0x0c, (char)0x6b, (char)0x18, (char)0xb6, (char)0x24},
+  {(char)0x55, (char)0xaa, (char)0x55, (char)0xaa, (char)0x55, (char)0xaa, (char)0x55, (char)0xaa},
+  {(char)0x92, (char)0xdd, (char)0x25, (char)0xf3, (char)0x94, (char)0xe7, (char)0x49, (char)0xdb},
+  {(char)0x92, (char)0xfd, (char)0x25, (char)0xf7, (char)0x94, (char)0xef, (char)0x49, (char)0xdf},
+  {(char)0x52, (char)0xff, (char)0xa4, (char)0xff, (char)0x25, (char)0xff, (char)0x92, (char)0xff},
+  {(char)0xaa, (char)0xff, (char)0x55, (char)0xff, (char)0xaa, (char)0xff, (char)0x55, (char)0xff},
+  {(char)0xff, (char)0x6d, (char)0xff, (char)0xda, (char)0xff, (char)0x6d, (char)0xff, (char)0x5b},
+  {(char)0xff, (char)0xbb, (char)0xff, (char)0xdd, (char)0xf7, (char)0xbf, (char)0xfe, (char)0xdf},
+  {(char)0xff, (char)0xff, (char)0xbb, (char)0xff, (char)0xff, (char)0xff, (char)0xbb, (char)0xff},
+  {(char)0xff, (char)0xff, (char)0xff, (char)0xff, (char)0xff, (char)0xff, (char)0xff, (char)0xff},
 };
 
 CreatePatterns_(whitepixel, blackpixel)
   unsigned long whitepixel, blackpixel;
 {
   /* Nothing to do */
-};
+}
 
 
 setpattern_(num)
@@ -489,7 +489,7 @@ setpattern_(num)
   i= Max(0,Min(*num,GREYNUMBER-1));
   MissileXgc.CurPattern = i;
   if ( use_color ==1) set_c(i);
-  };
+  }
 
 /** To get the id of the current pattern  **/
 
@@ -501,7 +501,7 @@ getpattern_(verbose, num, narg)
   if (*verbose == 1)
     SciF1d( "\n Pattern : %d\r\n",
 	    MissileXgc.CurPattern);
-};
+}
 
 /** To get the id of the white pattern **/
 
@@ -512,7 +512,7 @@ getwhite_(verbose, num, narg)
   if (*verbose == 1)
     SciF1d( "\n Id of White Pattern %d \r\n", *num);
   *narg = 1;
-};
+}
 /*--------------------------------------
   \encadre{Line style }
   ---------------------------------------*/
@@ -536,7 +536,7 @@ setdash_(value)
   if ( use_color ==1) set_c(*value-1);
   else
     setdashstyle_(value,DashTab[Max(0,l3)],&l2);
-};
+}
 
 /** To change The X11-default dash style **/
 /** if *value == 0, use a solid line, if *value != 0 **/
@@ -558,7 +558,7 @@ setdashstyle_(value, xx, n)
     for (i = 0; i < *n; i++)
       buffdash[i] = xx[i];
     /* A FAIRE  XSetDashes(buffdash,*n); */
-  };
+  }
   /* A FAIRE XSetLineAttributes(MissileXgc.CurLineWidth,dashok); */
 }
 
@@ -588,7 +588,7 @@ getdash_(verbose, value, narg)
       Scistring( ">\n");
     }
   }
-};
+}
 
 /*-----------------------------------------------------------
   \encadre{general routines accessing the  set<> or get<>
@@ -602,7 +602,7 @@ empty_(verbose)
 {
   if (*verbose == 1)
     Scistring( "\n No operation ");
-};
+}
 
 #define NUMSETFONC 13
 
@@ -638,7 +638,7 @@ MissileGCget_(str, verbose, x1, x2, x3, x4, x5)
 
 {
   MissileGCGetorSet_(str, 1, verbose, x1, x2, x3, x4, x5);
-};
+}
 
 MissileGCset_(str, x1, x2, x3, x4, x5)
   char str[];
@@ -673,11 +673,11 @@ MissileGCGetorSet_(str, flag, verbose, x1, x2, x3, x4, x5)
       {
 	SciF1s( "\nUnknow X operator <%s>\r\n", str);
 	return;
-      };
-    };
-  };
+      }
+    }
+  }
   SciF1s( "\n Unknow X operator <%s>\r\n", str);
-};
+}
 
 /*-------------------------------------------------------
   \section{Functions for drawing}
@@ -712,7 +712,7 @@ displaystring_(string, x, y, angle, flag)
       rect[0] = rect[0] - 4;
       rect[2] = rect[2] + 6;
       drawrectangle_(string, rect, rect + 1, rect + 2, rect + 3);
-    };
+    }
   } else
     DispStringAngle_(x, y, string, angle);
 
@@ -732,7 +732,7 @@ DispStringAngle_(x0, y0, string, angle)
   y = *y0;
   sina = sin((*angle) * M_PI / 180.0);
   cosa = cos((*angle) * M_PI / 180.0);
-  for (i = 0; i < strlen(string); i++)
+  for (i = 0; i < (int)strlen(string); i++)
   {
     str1[0] = string[i];
 
@@ -740,7 +740,7 @@ DispStringAngle_(x0, y0, string, angle)
     DrawChar(string[i]);
     boundingbox_(str1, &x, &y, rect);
     /** drawrectangle_(string,rect,rect+1,rect+2,rect+3); **/
-    if (cosa <= 0.0 && i < strlen(string) - 1)
+    if (cosa <= 0.0 && i < (int)strlen(string) - 1)
     {
       char str2[2];
       /** si le cosinus est negatif le deplacement est a calculer **/
@@ -748,7 +748,7 @@ DispStringAngle_(x0, y0, string, angle)
       str2[1] = '\0';
       str2[0] = string[i + 1];
       boundingbox_(str2, &x, &y, rect);
-    };
+    }
     if (Abs(cosa) >= 1.e-8)
     {
       if (Abs(sina / cosa) <= Abs(((double) rect[3]) / ((double) rect[2])))
@@ -759,8 +759,8 @@ DispStringAngle_(x0, y0, string, angle)
       l = Abs(rect[3] / sina);
     x += cosa * l * 1.1;
     y += sina * l * 1.1;
-  };
-};
+  }
+}
 
 /** To get the bounding rectangle of a string **/
 
@@ -776,7 +776,7 @@ boundingbox_(string, x, y, rect)
   PtoCstr(string);
   rect[3] = info.ascent + info.descent;
   rect[1] = *y - rect[3] + info.leading;
-};
+}
 
 /*------------------------------------------------
   subsection{ Segments and Arrows }
@@ -793,7 +793,7 @@ XDrawLine(xi, yi, xf, yf)
 {
   MoveTo(xi, yi);
   LineTo(xf, yf);
-};
+}
 
 
 /** Draw a set of segments **/
@@ -810,9 +810,9 @@ drawsegments_(str, vx, vy, n)
   {
     XDrawLine(vx[2 * i], vy[2 * i], vx[2 * i + 1], vy[2 * i + 1]);
 
-  };
+  }
 
-};
+}
 
 /** Draw a set of arrows **/
 /** arrows are defined by (vx[i],vy[i])->(vx[i+1],vy[i+1]) **/
@@ -848,10 +848,10 @@ drawarrows_(str, vx, vy, n, as)
       polyy[1] = nint(polyy[0] + sin20 * dx - cos20 * dy);
       polyy[2] = nint(polyy[0] - sin20 * dx - cos20 * dy);
       fillpolylines_("v", polyx, polyy, (fillvect[0] = 0, fillvect), &n, &p);
-    };
-  };
+    }
+  }
 
-};
+}
 
 /*----------------------
   \subsection{Rectangles}
@@ -885,7 +885,7 @@ drawrectangles_(str, vects, fillvect, n)
     }
   }
   setpattern_(&(cpat));
-};
+}
 
 /** Draw one rectangle with current line style **/
 
@@ -908,7 +908,7 @@ fillrectangle_(str, x, y, width, height)
   Pattern thePat;
   SetRect(&MyRect, *x, *y, *x + *width, *y + *height);
   FillRect(&MyRect, Tabpix_[GREYNUMBER - 1 - MissileXgc.CurPattern]);
-};
+}
 
 /*----------------------
   \subsection{Circles and Ellipsis }
@@ -948,7 +948,7 @@ drawarcs_(str, vects, fillvect, n)
     }
   }
   setpattern_(&(cpat));
-};
+}
 
 /** Draw a single ellipsis or part of it **/
 
@@ -1002,12 +1002,12 @@ drawpolylines_(str, vectsx, vectsy, drawvect, n, p)
       setdash_(&NDvalue);
       close = 0;
       drawpolyline_(str, p, vectsx + (*p) * i, vectsy + (*p) * i, &close);
-    };
-  };
+    }
+  }
   /** back to default values **/
   setdash_(Dvalue);
   xsetmark_(symb, symb + 1);
-};
+}
 
 /** fill a set of polygons each of which is defined by
   (*p) points (*n) is the number of polygons
@@ -1047,7 +1047,7 @@ fillpolylines_(str, vectsx, vectsy, fillvect, n, p)
     }
   }
   setpattern_(&(cpat));
-};
+}
 
 /** Only draw one polygon  with current line style **/
 /** according to *closeflag : it's a polyline or a polygon **/
@@ -1067,8 +1067,8 @@ drawpolyline_(str, n, vx, vy, closeflag)
   if (n1 >= 2)
   {
     MacLines(vx, vy, *n, *closeflag);
-  };
-};
+  }
+}
 
 MacLines(vx, vy, n, closeflag)
   int vx[], vy[], n, closeflag;
@@ -1097,7 +1097,7 @@ fillpolyline_(str, n, vx, vy, closeflag)
   int n1;
   XPoint *ReturnPoints_();
   MacFillLines(vx, vy, *n, *closeflag);
-};
+}
 
 MacFillLines(vx, vy, n, closeflag)
   int vx[], vy[], n, closeflag;
@@ -1138,8 +1138,8 @@ drawpolymark_(str, n, vx, vy)
     for (i = 0; i < *n; i++)
       DrawMark_(vx + i, vy + i);
     xsetfont_(&keepid, &keepsize);
-  };
-};
+  }
+}
 
 /*-----------------------------------------
   \encadre{List of Window id}
@@ -1161,7 +1161,7 @@ AddNewWindowToList_(wind, num)
   int num;
 {
   AddNewWindow_(&The_List_, wind, num);
-};
+}
 
 AddNewWindow_(listptr, wind, num)
   MWindowList **listptr;
@@ -1181,14 +1181,14 @@ AddNewWindow_(listptr, wind, num)
     }
   } else
     AddNewWindow_((MWindowList **) & ((*listptr)->next), wind, num);
-};
+}
 
 Window GetWindowNumber_(i)
   int i;
 {
   Window GetWin_();
   return (GetWin_(The_List_, Max(0, i)));
-};
+}
 
 Window GetWin_(listptr, i)
   MWindowList *listptr;
@@ -1202,8 +1202,8 @@ Window GetWin_(listptr, i)
       return (listptr->win);
     else
       return ((Window) GetWin_((MWindowList *) listptr->next, i));
-  };
-};
+  }
+}
 
 /*--------------------------------------------------------------
   \encadre{Routine for initialisation : string is a display name }
@@ -1223,7 +1223,7 @@ set_c(i)
      int i;
 {
   Scistring("Color not implemented yet\n");
-} ;
+}
 
 
 int arrowcursor, normalcursor;
@@ -1246,7 +1246,7 @@ initgraphic_(string)
     endflag_ = 0;
     clearwindow_();
     return (0);
-  };
+  }
   /** Initialisation \`a ne faire qu'une fois et pas \`a chaque cr\'eation **/
   /** fen\^etre **/
   if (EntryCounter == 0)
@@ -1269,7 +1269,7 @@ initgraphic_(string)
      * XCreateFontCursor ( 2); */
     windowcount = 0;
     /* SetUpMenus(); */
-  };
+  }
   sprintf(winname, "\pBG%d", EntryCounter);
   /** Explicit creation of a graphic window **/
   dragRect = screenBits.bounds;
@@ -1289,14 +1289,14 @@ initgraphic_(string)
   if (EntryCounter == 0)
   {
     InitMissileXgc();
-  };
+  }
   EntryCounter = EntryCounter + 1;
   return (0);
-};
+}
 
 void Ignore_Err()
 {
-};
+}
 
 /*--------------------------------------------------------
   \encadre{Initialisation of the graphic context. Used also
@@ -1323,7 +1323,7 @@ InitMissileXgc()
   MissileXgc.CurVectorStyle = CoordModeOrigin;
   setpattern_((i = 0, &i));
   strcpy(MissileXgc.CurNumberDispFormat, "%-5.2g");
-};
+}
 
 /*------------------------------------------------------
   Draw an axis whith a slope of alpha degree (clockwise)
@@ -1363,7 +1363,7 @@ drawaxis_(str, alpha, nsteps, size, initpoint)
     xf = xi - (size[1] * sinal);
     yf = yi + (size[1] * cosal);
     XDrawLine(nint(xi), nint(yi), nint(xf), nint(yf));
-  };
+  }
   for (i = 0; i <= nsteps[1]; i++)
   {
     xi = initpoint[0] + i * nsteps[0] * size[0] * cosal;
@@ -1371,14 +1371,14 @@ drawaxis_(str, alpha, nsteps, size, initpoint)
     xf = xi - (size[1] * size[2] * sinal);
     yf = yi + (size[1] * size[2] * cosal);
     XDrawLine(nint(xi), nint(yi), nint(xf), nint(yf));
-  };
+  }
   xi = initpoint[0];
   yi = initpoint[1];
   xf = initpoint[0] + nsteps[0] * nsteps[1] * size[0] * cosal;
   yf = initpoint[1] + nsteps[0] * nsteps[1] * size[0] * sinal;
   XDrawLine(nint(xi), nint(yi), nint(xf), nint(yf));
 
-};
+}
 
 /*-----------------------------------------------------
   \encadre{Display numbers z[i] at location (x[i],y[i])
@@ -1397,9 +1397,9 @@ displaynumbers_(str, x, y, z, alpha, n, flag)
   {
     sprintf(buf, MissileXgc.CurNumberDispFormat, z[i]);
     displaystring_(buf, &(x[i]), &(y[i]), &(alpha[i]), flag);
-  };
+  }
 
-};
+}
 
 
 /*---------------------------------------------------------------------
@@ -1438,8 +1438,8 @@ int xsetfont_(fontid, fontsize)
     MissileXgc.FontXID = FontsList_[i][fsiz];
     TextFont(i);
     TextSize(isize_[fsiz]);
-  };
-};
+  }
+}
 
 /** To get the  id and size of the current font **/
 
@@ -1455,8 +1455,8 @@ int xgetfont_(verbose, font, nargs)
 	    MissileXgc.FontId,
 	    FontInfoTab_[MissileXgc.FontId].fname,
 	    size_[MissileXgc.FontSize]);
-  };
-};
+  }
+}
 
 /** To set the current mark **/
 xsetmark_(number, size)
@@ -1479,7 +1479,7 @@ xgetmark_(verbose, symb, narg)
   if (*verbose == 1)
     fprintf(stderr, "\nMark : %d at size %s pts", MissileXgc.CurHardSymb,
 	    size_[MissileXgc.CurHardSymbSize]);
-};
+}
 
 /** Load in X11 a font at size  08 10 12 14 18 24 **/
 /** uses  /usr/lib/X11/fonts/75dpi/fonts.alias **/
@@ -1515,11 +1515,11 @@ loadfamily_(name, j)
       fprintf(stderr, "\n Unknown font : %s", name1);
       Scistring( "\n I'll use font: times ");
       FontsList_[*j][i] = 20;
-    };
-  };
+    }
+  }
   FontInfoTab_[*j].ok = 1;
   strcpy(FontInfoTab_[*j].fname, name);
-};
+}
 
 LoadFonts()
 {
@@ -1530,7 +1530,7 @@ LoadFonts()
   loadfamily_("TimI", (fnum = 3, &fnum));
   loadfamily_("TimB", (fnum = 4, &fnum));
   loadfamily_("TimBI", (fnum = 5, &fnum));
-};
+}
 
 /** We use the Symbol font  for mark plotting **/
 /** so we want to be able to center a Symbol character at a specified point **/
@@ -1569,11 +1569,11 @@ LoadSymbFonts()
 	(ListOffset_[i].xoffset)[j] = CharWidth(Marks[j]) / 2;
 	(ListOffset_[i].yoffset)[j] = lineHeight / 2;
       }
-    };
-  };
+    }
+  }
   TextSize(12);
   TextFont(0);
-};
+}
 
 /** The two next functions send the x and y offsets to center the current **/
 /** symbol at point (x,y) **/
@@ -1596,4 +1596,4 @@ DrawMark_(x, y)
   str = Marks[MissileXgc.CurHardSymb];
   MoveTo(*x + CurSymbXOffset_(), *y + CurSymbYOffset_());
   DrawChar(str);
-};
+}

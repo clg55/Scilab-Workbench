@@ -34,3 +34,10 @@
 
 #define Min(x,y)	(((x)<(y))?(x):(y))
 #define Max(x,y)	(((x)>(y))?(x):(y))
+
+#define         char_height(font) \
+                ((font)->max_bounds.ascent + (font)->max_bounds.descent)
+
+#define         char_width(font) ((font)->max_bounds.width)
+
+

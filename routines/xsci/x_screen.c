@@ -517,10 +517,10 @@ ScreenResize(screen, width, height, flags)
 
   /* round so that it is unlikely the screen will change size on  */
   /* small mouse movements.					 */
-  rows = (height + FontHeight(screen) / 2 - border) /
-    FontHeight(screen);
-  cols = (width + FontWidth(screen) / 2 - border - screen->scrollbar) /
-    FontWidth(screen);
+  rows = ((height + FontHeight(screen) / 2 - border) /
+    FontHeight(screen))-1; 
+  cols = ((width + FontWidth(screen) / 2 - border - screen->scrollbar) /
+    FontWidth(screen))-1;
   if (rows < 1)
     rows = 1;
   if (cols < 1)

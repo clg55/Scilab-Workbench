@@ -47,7 +47,7 @@ C        Esta subrutina trabaja en doble precision via una sentencia
 C     "implicit":
 C                Implicit double precision (a-h,o-z)
 C
-C     SUBPROGRAMAS AUXILIARES: ddot,d1mach
+C     SUBPROGRAMAS AUXILIARES: ddot,dlamch
 C     FUNCIONES FORTRAN INTRINSECAS: abs,mod
 C
 C
@@ -65,7 +65,7 @@ CXC
 CXC     Se calcula un parametro para detectar la posible singularidad de
 CXC     la matriz de coeficientes
 CXC
-CX      epsmch=d1mach(4)**0.9
+CX      epsmch=dlamch('p')**0.9
 C
 C     Se comienza la resolucion del sistema segun sea el indicador
 C

@@ -1,6 +1,5 @@
 " bezout ",
 " clean ",
-" cleanp ",
 " cmndred ",
 " coffg ",
 " colcompr ",

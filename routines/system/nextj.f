@@ -5,7 +5,7 @@ C     of the stack
 c     ==============================================================
       include '../stack.h'
 c
-      double precision d1mach
+      double precision dlamch
       integer id(nsiz),j,vt,semi
 c
       integer ogettype,lr,lc,lr1,lc1
@@ -41,10 +41,10 @@ C        boucle implicite
          stk(lr1) = stk(lr) + (j - 1)*stk(lr + 1)
          if( stk(lr+1) * (stk(lr1) - stk(lr+2)) .gt. 0) then
             if(abs(stk(lr1)-stk(lr+2)).gt.
-     $           abs(stk(lr+1)*d1mach(4))) goto 50
+     $           abs(stk(lr+1)*dlamch('p'))) goto 50
          endif
       else
-         if (j .gt. n) go to 50
+         if (j .gt. n .or. m.eq.0) go to 50
          if (.not.cremat("nextj",top,it,m,1,lr1,lc1)) return
          call dcopy(m,stk(lr+(j-1)*m),1,stk(lr1),1)
          if(it.eq.1) call dcopy(m,stk(lc+(j-1)*m),1,stk(lc1),1)

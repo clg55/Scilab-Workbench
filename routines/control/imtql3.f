@@ -3,7 +3,7 @@ c
       integer i,j,k,l,m,n,ii,nm,mml,ierr
       double precision d(n),e(n),z(nm,n)
       double precision b,c,f,g,p,r,s,machep
-      double precision d1mach
+      double precision dlamch
 c
 c!purpose
 c     this subroutine finds the eigenvalues and eigenvectors
@@ -72,7 +72,7 @@ c     ------------------------------------------------------------------
 c
 c     :::::::::: machep is a machine dependent parameter specifying
 c                the relative precision of floating point arithmetic.
-      machep=d1mach(4)
+      machep=dlamch('p')
 c
       ierr = 0
       if (n .eq. 1) go to 1001

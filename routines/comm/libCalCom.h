@@ -1,6 +1,8 @@
 #ifndef _LIBCALCOM_
 #define _LIBCALCOM_
 
+#define MAXHOSTLEN 128
+
 /*********************************************************************
  * Header file utilitaires.h
  */

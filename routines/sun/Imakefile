@@ -14,7 +14,7 @@ SUN_FORTRAN=  bashos.o basin.o basout.o \
 	getpro.o fgetarg.o sync.o
 #endif
 
-SUN_CSTS= d1mach.o i1mach.o r1mach.o
+SUN_CSTS= slamch.o dlamch.o lsame.o
 
 SUN_C= getenvc.o link.o systemc.o zzledt.o  csignal.o getpidc.o timer.o \
 	flags.o

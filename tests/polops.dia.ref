@@ -1,5 +1,5 @@
  
--->mode(5)
+mode(5)
 s=poly(0,'s');
 //polynomial operations
 p1=1+1.5*s;

@@ -1,4 +1,4 @@
-      subroutine print(id,lk)
+       subroutine print(id,lk,lunit)
 c     ====================================================================
 c     print object of id id(nsiz) stored at position lk in the stack
 c     ====================================================================
@@ -11,24 +11,27 @@ c
       logical getmat,ilog,getpoly,typer,clsave,getsimat
       logical crewimat ,islss,getilist,getbmat
       character*4 name
-      character*(nlgh) mmname
+c$$$      character*(nlgh) mmname
       character*10 form
       character*200 ligne
       integer nclas,adr
       integer comma,left,right,rparen,lparen,equal,eol,mactop
+      integer iadr, sadr
       data comma/52/
       data left/54/,right/55/,rparen/42/,lparen/41/,equal/50/
       data rat/27/,blank/40/,eol/99/,nclas/29/
 c     
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
       islss=.false.
       lineln=lct(5)
       mode=lct(6)
       ndgt=lct(7)
 c     
-      lunit=wte
       if (lct(1) .lt. 0) return
 c     
-      if(id(1).ne.0) call prntid(id,-1)
+      if(id(1).ne.0) call prntid(id,-1,lunit)
  01   nlist=0
 C     topk : free stack zone for working areas 
       topk=top+1
@@ -39,7 +42,7 @@ C     topk : free stack zone for working areas
       mactop=0
       if (abs(itype).eq.11.or.abs(itype).eq.13) mactop=1
 c     
- 05   goto (20,10,06,70,06,06,06,06,06,30,80,06,80,90,40),abs(itype)
+ 05   goto (20,10,06,70,25,26,06,06,06,30,80,06,80,90,40),abs(itype)
  06   call msgs(33,lunit)
       goto 45
 c     
@@ -79,6 +82,31 @@ C     working area
          call wmdsp(stk(lr),stk(lc),m,m,n,ndgt,mode,lineln,lunit,
      &        buf,istk(lw))
       endif
+      goto 45 
+c     -------sparse scalar matrices 
+ 25   il=iadr(lstk(lk))
+      m=istk(il+1)
+      n=istk(il+2)
+      it=istk(il+3)
+      ne=istk(il+4)
+      irc=il+5
+      lr=sadr(irc+m+ne)
+      if(it.eq.0) then
+         call dspdsp(ne,istk(irc),stk(lr),m,n,ndgt,mode,
+     $        lineln,lunit,buf)
+      else
+         call wspdsp(ne,istk(irc),stk(lr),stk(lr+ne),m,n,ndgt,mode,
+     $        lineln,lunit,buf)
+      endif
+      goto 45 
+c     -------sparse boolean matrices 
+ 26   il=iadr(lstk(lk))
+      m=istk(il+1)
+      n=istk(il+2)
+      ne=istk(il+4)
+      irc=il+5
+      call lspdsp(ne,istk(irc),m,n,ndgt,mode,
+     $        lineln,lunit,buf)
       goto 45 
 c     -------matrices of string 
  30   ilog=getsimat("print",lk,lk,m,n,1,1,lr,nlr)
@@ -361,7 +389,7 @@ C     [14,n,codagedupath(n),nombre-de-nom,nclas+1 cases,suite des noms]
       illib=illib+n
       n=istk(illib)
       illib=illib+nclas+2
-      call prntid(istk(illib),n)
+      call prntid(istk(illib),n,lunit)
       goto 45
 c     -----------end
  99   continue

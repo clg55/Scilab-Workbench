@@ -49,13 +49,15 @@ c
             top=top+1
             ilbtn=iadr(lstk(top))
             istk(ilbtn)=10
-            istk(ilbtn+1)=1
+            istk(ilbtn+1)=2
             istk(ilbtn+2)=1
             istk(ilbtn+3)=0
             istk(ilbtn+4)=1
             istk(ilbtn+5)=3
-            call cvstr(2,istk(ilbtn+6),'Ok',0)
-            lstk(top+1)=sadr(ilbtn+8)
+            istk(ilbtn+6)=9
+            call cvstr(2,istk(ilbtn+7),'Ok',0)
+            call cvstr(6,istk(ilbtn+9),'Cancel',0)
+            lstk(top+1)=sadr(ilbtn+15)
             rhs=rhs+1
          else
             ilbtn=iadr(lstk(top))
@@ -64,7 +66,7 @@ c
                call error(55)
                return
             endif
-            if(istk(ilbtn+1)*istk(ilbtn+2).ne.1) then
+            if(istk(ilbtn+1)*istk(ilbtn+2).ne.2) then
                err=3
                call error(60)
                return
@@ -106,7 +108,7 @@ c
          ierr=iadr(lstk(bot))-ilw
          err=-sadr(ierr)
          call xdialg(istk(ilini+5+ni),istk(ilini+4),ni,istk(ilmes+5+n),
-     $        istk(ilmes+4),n,istk(ilbtn+6),istk(ilbtn+4),1,
+     $        istk(ilmes+4),n,istk(ilbtn+7),istk(ilbtn+4),2,
      $        istk(ilw),istk(ilmes+4),nrep,ierr)
          if(ierr.eq.3) then
             call error(113)
@@ -378,7 +380,7 @@ C===================================================================
 cc    implicit undefined (a-z)
       include '../stack.h'
       logical getsmat,cresmat,cremat,cresmat1
-      integer lr1,nlr1,nrtot,lr,nlr,lrk,m,n,mm,adr,il
+      integer lr1,nlr1,nrtot,lr,nlr,lrk,m,n,mm,adr,il,m1,n1
       nrtot=0
       if(.not.getsmat(fname,top,objpos,m,n,1,1,lr1,nlr1))return
       if (m*n.ne.1.or.(m.eq.1.and.istk(lr1+nlr1-1).ne.99)) then 
@@ -393,7 +395,7 @@ C     ======================from vector to string with \n
             nrtot=nrtot+nlr1
  10      continue
          if (.not.cresmat(fname,lww,1,1,nrtot+m)) return
-         call getsimat(fname,lww,lww,1,1,1,1,lr,nlr)
+         call getsimat(fname,lww,lww,m1,n1,1,1,lr,nlr)
          lrk=lr
          do 20 i=1,m
             call getsimat(fname,top,objpos,mm,n,i,1,lr1,nlr1)

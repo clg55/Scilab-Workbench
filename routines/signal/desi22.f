@@ -17,7 +17,7 @@ c
       double precision spr(*),spi(*)
       double precision pren(*),pimn(*)
 c
-      flmi=2.0d+0*d1mach(4)
+      flmi=2.0d+0*dlamch('p')
       if (acx.lt.999.0d+0) go to 20
       if ((ogc-ugc).lt.flmi) go to 10
       if (iapro.eq.2) q = 1.0d+0/adelta

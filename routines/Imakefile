@@ -2,11 +2,12 @@
 #include "../Imake.incl"
 
 #define IHaveSubdirs
-#define PassCDebugFlags CDEBUGFLAGS=$(CDEBUGFLAGS) FDEBUGFLAGS=$(FDEBUGFLAGS) 
+#define PassCDebugFlags CDEBUGFLAGS='$(CDEBUGFLAGS)' FDEBUGFLAGS='$(FDEBUGFLAGS)'
 
 
 SCIDIRS=X11G system default interf system2 optim integ control signal\
-	poly calelm sparse sun xwindow  metanet intersci xsci comm 
+	poly calelm sparse sun xwindow  metanet intersci xsci comm \
+	lapack
 
 #if defined(WithLocalXaw)
 XAWDIRS=X11

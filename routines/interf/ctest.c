@@ -15,7 +15,7 @@ C2F(ctest)(str,lstr,ilstr)
   strncpy(str,"A returned\n string\n",*lstr);
   fprintf(stderr,"and now [%s],%d\n",str,strlen(str));
   *lstr=strlen(str);
-};
+}
 
 
 C2F(cvs2c)(n,line,str,csiz,alfa,alfb,lstr,lalfa,lalfb)
@@ -32,8 +32,8 @@ C2F(cvs2c)(n,line,str,csiz,alfa,alfb,lstr,lalfa,lalfb)
 	str[j]= '\n';
       else
 	str[j]= ( m < 0) ? alfb[-m] : alfa[m];
-    };
-};
+    }
+}
 
 C2F(cvc2s)(n,line,str,csiz,alfa,alfb,lstr,lalfa,lalfb)
      int *n,line[],*csiz;
@@ -52,11 +52,11 @@ C2F(cvc2s)(n,line,str,csiz,alfa,alfb,lstr,lalfa,lalfb)
 	  else  
 	    if ( mc == alfb[k] ) 
 	      {
-		line[j] = -(k); flag=1;break;};
-	};
+		line[j] = -(k); flag=1;break;}
+	}
       if (flag==0) line[j]= eol;
-    };
-};
+    }
+}
 
 
 

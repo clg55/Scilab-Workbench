@@ -31,7 +31,7 @@ mumax=mini(mu_inf,mumax)
 //    Gama-iteration P6 = transformed P2 with D11 removed
 [P6,Finf,mu,Uc#i,Yc#i]=h_iter(P2,r,mumin,mumax,nmax)
 if mu=0 then 
-write(%io(2),[mumin,mumax],'(1x,''no feasible ro in bounds: '',2(f10.5,2x))');
+write(%io(2),[mumin,mumax],'(1x,''no feasible ro in bounds: '',2(e10.3,2x))');
 rk=[];Sk=[];
 return,end
 //

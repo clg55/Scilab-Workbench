@@ -51,7 +51,7 @@ c     .. local scalars ..
      * tol2,tol3
       integer i, ib2, ib, ie, ind, k1, k2, k3, limexp, newelm, num
 c     .. function references ..
-      double precision d1mach
+      double precision dlamch
 c     ..
 c
 c            machine dependent constants
@@ -61,8 +61,8 @@ c            table can contain. if this number is reached, the upper
 c            diagonal of the epsilon table is deleted.
 c
       data limexp /50/
-      epmach=d1mach(4)
-      oflow=d1mach(2)
+      epmach=dlamch('p')
+      oflow=dlamch('o')
 c
 c           list of major variables
 c           -----------------------

@@ -703,9 +703,31 @@ c     link dynamique
 c     
  190  continue
       if(rhs.le.0) goto 195
-      if(rhs.ne.2) then
+      if(rhs.ne.2.and.rhs.ne.3) then
          call error(39)
          return
+      endif
+      isfor=1
+      if(rhs.eq.3) then
+          if(istk(il).ne.10) then
+             err=3
+             call error(55)
+             return
+          endif
+          if(istk(il+1)*istk(il+2).ne.1) then
+             err=3
+             call error(36)
+             return
+          endif
+          n=istk(il+5)-1
+          il=il+6
+          if(abs(istk(il)).eq.15) then
+             isfor=1
+          else
+             isfor=0
+          endif
+          top=top-1
+          il=iadr(lstk(top))
       endif
 c     nom du sous programme a lier
       if(istk(il).ne.10) then
@@ -738,10 +760,8 @@ c     nom du sous programme a lier
          call error(36)
          return
       endif
-      call cvstr(n,istk(ild),nmsub(2:n+1),1)
-      nmsub(1:1)='_'
-      nmsub(n+2:n+2)='_'
-      ln=n+2
+      call cvstr(n,istk(ild),nmsub(1:n),1)
+      ln=n
       top=top-1
 c     
 c     nom des fichiers
@@ -783,13 +803,13 @@ c
          return
       endif
 c     
-      call dynstr(nlink,linkfl(1:n),n,nmsub(1:ln),ln,err)
+      call dynstr(isfor,nlink,linkfl(1:n),n,nmsub(1:ln),ln,err)
       if(err.gt.0) then
          call error(73)
          return
       endif
       nlink=nlink+1
-      tablin(nlink)=nmsub(2:ln-1)
+      tablin(nlink)=nmsub(1:ln)
       goto 999
 c     
 c     table des programmes linkes
@@ -1321,7 +1341,28 @@ c     where
       return
  410  continue
 c     timer
-      call scitimer('timer')
+      if (rhs .gt. 0) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+      top=top+1
+      il=iadr(lstk(top))
+      err=lstk(top+5)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      istk(il)=1
+      istk(il+1)=1
+      istk(il+2)=1
+      istk(il+3)=0
+      l=sadr(il+4)
+      call timer(stk(l))
+      lstk(top+1)=l+1
       return
  420  continue
 c     notify
@@ -1355,18 +1396,7 @@ c
  999  return
       end
      
-      subroutine scitimer(fname)
-      character*(*) fname
-c      implicit undefined (a-z)
-      include '../stack.h'
-      logical checkrhs
-      if (.not.checkrhs(fname,-1,-1)) return
-      call  timer()
-      call  objvide(fname,top)
-      return
-      end
-
-
+c      
       subroutine scilines(nl,nc)
       include '../stack.h'
       integer nl,nc

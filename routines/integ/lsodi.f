@@ -1105,10 +1105,10 @@ c  dgbfa and dgbsl   are routines from linpack for solving banded
 c           linear systems.
 c  daxpy, dscal, idamax, and ddot   are basic linear algebra modules
 c           (blas) used by the above linpack routines.
-c  d1mach   computes the unit roundoff in a machine-independent manner.
+c  dlamch   computes the unit roundoff in a machine-independent manner.
 c  xerrwv, xsetun, and xsetf   handle the printing of all error
 c           messages and warnings.  xerrwv is machine-dependent.
-c note..  vnorm, idamax, ddot, and d1mach are function routines.
+c note..  vnorm, idamax, ddot, and dlamch are function routines.
 c all the others are subroutines.
 c
 c the intrinsic and external routines used by lsodi are..  abs,
@@ -1147,7 +1147,7 @@ c-----------------------------------------------------------------------
      1   ccmax, el0, h, hmin, hmxi, hu, rc, tn, uround
       double precision atoli, ayi, big, ewti, h0, hmax, hmx, rh, rtoli,
      1   tcrit, tdist, tnext, tol, tolsf, tp, size, sum, w0,
-     2   d1mach, vnorm
+     2   dlamch, vnorm
       dimension mord(2)
       logical ihit
 c-----------------------------------------------------------------------
@@ -1302,7 +1302,7 @@ c it contains all remaining initializations, the call to ainvg
 c (if istate = 1), and the calculation of the initial step size.
 c the error weights in ewt are inverted after being loaded.
 c-----------------------------------------------------------------------
- 100  uround = d1mach(4)
+ 100  uround = dlamch('p')
       tn = t
       if (itask .ne. 4 .and. itask .ne. 5) go to 105
       tcrit = rwork(1)

@@ -1,6 +1,5 @@
 "  bezout   - Bezout equation for polynomials ",
-"  clean   - cleans a polynomial or rational matrix ",
-"  cleanp   - cleans a polynomial matrix ",
+"  clean   - cleans matrices (round to zero small entries)   ",
 "  cmndred   - common denominator form ",
 "  coffg   - inverse of polynomial matrix ",
 "  colcompr   - column compression of polynomial matrix ",

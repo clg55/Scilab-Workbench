@@ -80,7 +80,7 @@ Scale2D(job,FRect,IRect,scx,scy,xofset,yofset,xm,ym,n,err)
     case 0 :
       /** On utilise le scale de l'appel pr\'ec\'edent a Scale2D **/
       *scx = scx1; *scy = scy1; *xofset= xofset1; *yofset= yofset1;
-      for (i=0; i < 4 ; i++) { IRect[i]=IRect1[i];FRect[i]=FRect1[i];};
+      for (i=0; i < 4 ; i++) { IRect[i]=IRect1[i];FRect[i]=FRect1[i];}
       break;
     case 1 :
       /** Utilise FRect,  Irect <- valeurs par defaut **/
@@ -94,7 +94,7 @@ Scale2D(job,FRect,IRect,scx,scy,xofset,yofset,xm,ym,n,err)
       IRect[3] = nint(*scy);
       scx1 =  IRect[2]; scy1 = IRect[3];
       *xofset=xofset1= IRect[0]; *yofset=yofset1= IRect[1];
-      for (i=0; i < 4 ; i++) { IRect1[i]=IRect[i];FRect1[i]=FRect[i];};
+      for (i=0; i < 4 ; i++) { IRect1[i]=IRect[i];FRect1[i]=FRect[i];}
       *scx=scx1 =(Abs(FRect[0]-FRect[2])<=SMDOUBLE) ?
 	scx1/SMDOUBLE:scx1/Abs(FRect[0]-FRect[2]);
       *scy=scy1 =(Abs(FRect[1]-FRect[3])<=SMDOUBLE)?
@@ -103,21 +103,21 @@ Scale2D(job,FRect,IRect,scx,scy,xofset,yofset,xm,ym,n,err)
     case 2:
       scx1 =  IRect[2]; scy1 = IRect[3];
       *xofset=xofset1= IRect[0]; *yofset=yofset1= IRect[1];
-      for (i=0; i < 4 ; i++) { IRect1[i]=IRect[i];FRect1[i]=FRect[i];};
+      for (i=0; i < 4 ; i++) { IRect1[i]=IRect[i];FRect1[i]=FRect[i];}
       *scx=scx1 =(Abs(FRect[0]-FRect[2])<=SMDOUBLE) ?
 	scx1/SMDOUBLE:scx1/Abs(FRect[0]-FRect[2]);
       *scy=scy1 =(Abs(FRect[1]-FRect[3])<=SMDOUBLE)?
 	scy1/SMDOUBLE:scy1/Abs(FRect[1]-FRect[3]);
       break;
-    };
+    }
   /** Allocation  **/
   Alloc(xm,ym,&zm,n,n,0,err);
   if ( *err == 0)
     {
       Scistring("Scale2D : No more Place\n");
       return;
-    };
-};
+    }
+}
 
 /**
   setscale2d_(WRect,FRect) 
@@ -144,9 +144,9 @@ C2F(setscale2d)(WRect,FRect)
   for ( i=0; i < 4 ; i++) 
     {
         W1Rect[i]=WRect[i];
-    };
+    }
   Scale2D(1,FRect,IRect,&scx,&scy,&xofset,&yofset,&xm,&ym,0,&err);
-};
+}
 
 C2F(getscale2d)(WRect,FRect)
      double FRect[4],WRect[4];
@@ -158,8 +158,8 @@ C2F(getscale2d)(WRect,FRect)
     {
       FRect[i]=F1Rect[i];
       WRect[i]=W1Rect[i];
-    };
-};
+    }
+}
 
 
 /*--------------------------------------------------------------------
@@ -200,7 +200,7 @@ C2F(echelle2d)(x,y,x1,yy1,n1,n2,rect,dir,lstr)
 	{
 	  x1[i]=nint( scx1*( x[i]-FRect1[0]) + xofset1);
 	  yy1[i]=nint( scy1*(-y[i]+FRect1[3]) + yofset1);
-	};
+	}
     }
   else 
     {
@@ -210,13 +210,13 @@ C2F(echelle2d)(x,y,x1,yy1,n1,n2,rect,dir,lstr)
 	    {
 	      x[i]=FRect1[0] + (1.0/scx1)*( x1[i]- xofset1);
 	      y[i]=FRect1[3] - (1.0/scy1)*( yy1[i]- yofset1);
-	    };
+	    }
 	}
       else 
 	SciF1s(" Wrong dir %s argument in echelle2d\r\n",dir);
-    };
+    }
   for (i=0;i<4;i++) rect[i]=IRect1[i];
-};
+}
 
 /** meme chose mais pour transformer des longueurs **/
 
@@ -233,7 +233,7 @@ echelle2dl_(x,y,x1,yy1,n1,n2,rect,dir)
 	{
 	  x1[i]=nint( scx1*( x[i]));
 	  yy1[i]=nint( scy1*( y[i]));
-	};
+	}
     }
   else 
     {
@@ -243,13 +243,13 @@ echelle2dl_(x,y,x1,yy1,n1,n2,rect,dir)
 	    {
 	      x[i]=x1[i]/scx1;
 	      y[i]=yy1[i]/scy1;
-	    };
+	    }
 	}
       else 
 	SciF1s(" Wrong dir %s argument in echelle2d\r\n",dir);
-    };
+    }
   for (i=0;i<4;i++) rect[i]=IRect1[i];
-};
+}
 
 
 /** meme chose mais pour transformer des ellipses **/
@@ -271,7 +271,7 @@ ellipse2d_(x,x1,n,dir)
 	  x1[i+3]=nint( scy1*( x[i+3]));
 	  x1[i+4]=nint( x[i+4]);
 	  x1[i+5]=nint( x[i+5]);
-	};
+	}
     }
   else 
     {
@@ -285,12 +285,12 @@ ellipse2d_(x,x1,n,dir)
 	      x[i+3]=x1[i+3]/scy1;
 	      x[i+4]=x1[i+4];
 	      x[i+5]=x1[i+5];
-	    };
+	    }
 	}
       else 
 	SciF1s(" Wrong dir %s argument in echelle2d\r\n",dir);
-    };
-};
+    }
+}
 
 
 /** meme chose mais pour transformer des rectangles **/
@@ -310,7 +310,7 @@ rect2d_(x,x1,n,dir)
 	  x1[i+1]=nint( scy1*(-x[i+1]+FRect1[3]) + yofset1);
 	  x1[i+2]=nint( scx1*( x[i+2]));
 	  x1[i+3]=nint( scy1*( x[i+3]));
-	};
+	}
     }
   else 
     {
@@ -322,10 +322,10 @@ rect2d_(x,x1,n,dir)
 	      x[i+1]=FRect1[3] - (1.0/scy1)*( x1[i+1]- yofset1);
 	      x[i+2]=x1[i+2]/scx1;
 	      x[i+3]=x1[i+3]/scy1;
-	    };
+	    }
 	}
       else 
 	SciF1s(" Wrong dir %s argument in echelle2d\r\n",dir);
-    };
-};
+    }
+}
  

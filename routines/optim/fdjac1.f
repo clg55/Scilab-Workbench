@@ -81,7 +81,7 @@ c         not referenced.
 c
 c     subprograms called
 c
-c       minpack-supplied ... d1mach
+c       minpack-supplied ... dlamch
 c
 c       fortran-supplied ... dabs,dmax1,dsqrt
 c
@@ -91,12 +91,12 @@ c
 c     **********
       integer i,j,k,msum
       double precision eps,epsmch,h,temp,zero
-      double precision d1mach
+      double precision dlamch
       data zero /0.0d0/
 c
 c     epsmch is the machine precision.
 c
-      epsmch = d1mach(4)
+      epsmch = dlamch('p')
 c
       eps = dsqrt(dmax1(epsfcn,epsmch))
       msum = ml + mu + 1

@@ -115,7 +115,8 @@ c
          call error(51)
          if(err.gt.0) return
       endif 
-      if(char1.ge.a .and. char1.lt.blank.or.char1.eq.percen) go to 27
+      ic=abs(char1)
+      if(ic.ge.a .and. ic.lt.blank.or.char1.eq.percen) go to 27
       if(char1.ne.eol.and.char1.ne.semi.and.char1.ne.comma) then
          call error(16)
          if(err.gt.0) return
@@ -158,19 +159,35 @@ c
  32   fin = -13
       go to 999
  33   fin = -14
-      if(abs(rstk(pt)).ne.805) goto 42
+      if(pt.eq.0) then
+         goto 42
+      elseif(abs(rstk(pt)).ne.805) then
+         goto 42
+      endif
       go to 999
  35   fin = -10
-      if(abs(rstk(pt)).ne.805.and.abs(rstk(pt)).ne.802.and.
-     $     abs(rstk(pt)).ne.806) goto 42
+      if(pt.eq.0) then
+         goto 42
+      elseif(abs(rstk(pt)).ne.805.and.abs(rstk(pt)).ne.802.and.
+     $     abs(rstk(pt)).ne.806) then
+         goto 42
+      endif
       go to 999
  36   fin = -15
       go to 999
  37   fin = -16
-      if(abs(rstk(pt)).ne.805.or..not.eqid(ids(1,pt),sel)) goto 42
+      if(pt.eq.0) then
+         goto 42
+      elseif(abs(rstk(pt)).ne.805.or..not.eqid(ids(1,pt),sel)) then
+         goto 42
+      endif
       go to 999
  38   fin = -17
-      if(abs(rstk(pt)).ne.805) goto 42
+      if(pt.eq.0) then
+         goto 42
+      elseif(abs(rstk(pt)).ne.805) then
+         goto 42
+      endif
       go to 999
 c
  42   call error(34)
@@ -241,7 +258,7 @@ c
          if(err.gt.0) return
       endif 
       call msgs(38,0)
-      call prntid(idstk(1,bot),isiz-bot+1)
+      call prntid(idstk(1,bot),isiz-bot+1,wte)
       l = lstk(isiz)-lstk(bot)+1
       write(buf,'(4i7)') l,lstk(isiz),isiz-bot,isiz-1
       call msgs(39,0)
@@ -261,7 +278,7 @@ c      call msgs(40,0)
 c     comandes
       fin=1
       call msgs(41,0)
-      call prntid(cmd,cmdl)
+      call prntid(cmd,cmdl,wte)
       go to 998
 c     
 c     ----

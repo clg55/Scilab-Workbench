@@ -70,7 +70,7 @@ c         can coincide with rdiag.
 c
 c     subprograms called
 c
-c       minpack-supplied ... d1mach,enorm
+c       minpack-supplied ... dlamch,enorm
 c
 c       fortran-supplied ... dmax1,dsqrt,min0
 c
@@ -80,12 +80,12 @@ c
 c     **********
       integer i,j,jp1,k,kmax,minmn
       double precision ajnorm,epsmch,one,p05,sum,temp,zero
-      double precision d1mach,enorm
+      double precision dlamch,enorm
       data one,p05,zero /1.0d0,5.0d-2,0.0d0/
 c
 c     epsmch is the machine precision.
 c
-      epsmch = d1mach(4)
+      epsmch = dlamch('p')
 c
 c     compute the initial column norms and initialize several arrays.
 c

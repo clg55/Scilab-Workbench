@@ -130,7 +130,7 @@ c     string
  40   n=istk(lc+1)
       top=top+1
       if (cresmat("run",top,1,1,n)) then 
-         ilog=getsimat("run",top,top,1,1,1,1,lr,nlr)         
+         ilog=getsimat("run",top,top,mm1,nn1,1,1,lr,nlr)         
          call icopy(n,istk(lc+2),1,istk(lr),1)
       endif
       lc=lc+n+2

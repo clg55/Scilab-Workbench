@@ -26,7 +26,7 @@
 
 # platform: osf1.cf
 
-# Operating system:  1/1 1.3
+# Operating system:  1/1 3.0
 
    	SHAREDSWITCH =
 
@@ -48,6 +48,7 @@
   BOOTSTRAPCFLAGS =
                CC = cc $(SHAREDSWITCH)
             LOCCC = cc
+        LOCSHARCC = LocShareCcCmd
                AS = as
 
          COMPRESS = compress
@@ -82,7 +83,7 @@
 
     PROTO_DEFINES = -DFUNCPROTO=3
 
-     INSTPGMFLAGS =
+     INSTPGMFLAGS = -s
 
      INSTBINFLAGS = -m 0755
      INSTUIDFLAGS = -m 4755
@@ -92,7 +93,7 @@
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4755
 
-      CDEBUGFLAGS = -O2
+      CDEBUGFLAGS = -O2 -Olimit 2000
         CCOPTIONS =
      LOCCCOPTIONS =
 
@@ -144,12 +145,15 @@
            INCDIR = $(INCROOT)/X11
            ADMDIR = /usr/adm
            LIBDIR = $(USRLIBDIR)/X11
+           VARDIR = /usr/var/X11
         CONFIGDIR = $(LIBDIR)/config
        LINTLIBDIR = $(USRLIBDIR)/lint
 
           FONTDIR = $(LIBDIR)/fonts
+      USERFONTDIR = $(VARDIR)/fonts/user
+            FSDIR = $(VARDIR)/fs
          XINITDIR = $(LIBDIR)/xinit
-           XDMDIR = $(LIBDIR)/xdm
+           XDMDIR = $(VARDIR)/xdm
            TWMDIR = $(LIBDIR)/twm
           MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
@@ -207,8 +211,12 @@
       XTESTLIBSRC = $(EXTENSIONSRC)/lib/xtest
       XTRAPLIBSRC = $(EXTENSIONSRC)/lib/xtrap
       PHIGSLIBSRC = $(EXTENSIONSRC)/lib/PEX
+       XIELIBSRC  = $(EXTENSIONSRC)/lib/XIE
+
+        EXTINCSRC = $(TOP)/X11/extensions
 
       USRSHLIBDIR = /usr/shlib
+        XSHLIBDIR = /usr/shlib/X11
 
        SHLIBFLAGS = -check_registry $(CROSSBASE)/usr/shlib/so_locations 	-L$(CROSSBASE)/usr/shlib -L$(CROSSBASE)/usr/ccs/lib
 
@@ -230,6 +238,9 @@
         DEPXAWLIB = $(USRSHLIBDIR)/libXaw.so
            XAWLIB = -lXaw
 
+       DEPXXIELIB = $(USRSHLIBDIR)/libXIE.so
+          XXIELIB = -lXIE
+
         DEPXILIB = $(USRSHLIBDIR)/libXi.a
            XILIB = -lXi
 
@@ -238,6 +249,7 @@
         SOXLIBREV = SharedXlibRev
           SOXTREV = SharedXtRev
          SOXAWREV = SharedXawRev
+         SOXIEREV = SharedXIERev
         SOOLDXREV = SharedOldXRev
          SOXMUREV = SharedXmuRev
         SOXEXTREV = SharedXextRev
@@ -259,6 +271,12 @@
         DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
            PHIGSLIB = 			 -lphigs
 
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
        DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
           XBSDLIB = 			 -lXbsd
 
@@ -267,6 +285,7 @@
           LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
         LINTXTOOL = $(LINTLIBDIR)/llib-lXt.ln
           LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
+         LINTXXIE = $(LINTLIBDIR)/llib-lXIE.ln
            LINTXI = $(LINTLIBDIR)/llib-lXi.ln
         LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
 
@@ -290,6 +309,7 @@
    MRESOURCESRC = $(MLIBSRC)/Mrm
      MCLIENTSRC = $(TOP)/motif/clients
          UILSRC = $(MCLIENTSRC)/uil
+    MINCLUDESRC = $(INCLUDESRC)
 
             UIL = uil
 
@@ -317,9 +337,9 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
            CDADIR = $(USRLIBDIR)/cda
 
            DXMSRC = $(MLIBSRC)/DXm
-           DPSSRC = $(EXTENSIONSRC)/DPS/lib/dps
-         DPSTKSRC = $(EXTENSIONSRC)/DPS/lib/dpstk
-         PSRESSRC = $(EXTENSIONSRC)/DPS/lib/psres
+           DPSSRC = $(EXTENSIONSRC)/DPSII/lib/dps
+         DPSTKSRC = $(EXTENSIONSRC)/DPSII/lib/dpstk
+         PSRESSRC = $(EXTENSIONSRC)/DPSII/lib/psres
            XIESRC = $(EXTENSIONSRC)/lib/xie
            IDSSRC = $(MLIBSRC)/ids
            BKRSRC = $(MLIBSRC)/bkr
@@ -329,6 +349,8 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
        DEPDXMLIB = $(USRSHLIBDIR)/libDXm.so
           DXMLIB = -lDXm
+
+       MDXMLIB = $(DXMLIB)
 
         DEPDPSLIB = $(USRSHLIBDIR)/libdps.so
            DPSLIB = -ldps
@@ -380,33 +402,32 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
 # -------------------------------------------------------------------------
 # DEC-Specific System Build Rules
-# $Id: Dec.rules,v 1.1.2.8 1992/12/08 19:29:22 Leela_Obilichetti Exp $
+# $Id: Dec.rules,v 1.1.2.8 92/12/08 19:29:22 Leela_Obilichetti Exp $
 
 # -------------------------------------------------------------------------
 # start of Imakefile
 
 include ../../Path.incl
 
-FFOPTIONS = -C -fpe1 -switch nosqrt_recip -check nounderflow
-FDEBUGFLAGS =
-CDEBUGFLAGS =
-CCOPTIONS=
 FC=DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
+FFOPTIONS =  -fpe3 -switch nosqrt_recip
+FDEBUGFLAGS = -O
+CCOPTIONS=
+CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 
-SCIVERSION=Scilab-2.0
-SCIDATE=31 October 1994
+SCIVERSION = Scilab-2.1
+SCIDATE = 10 February 1995
 
-EXTRA_INCLUDES=-I$(SCIDIR)/routines
-
-FLOCAL_LDFLAGS=  -non_shared
+EXTRA_INCLUDES = -I$(SCIDIR)/routines
 
 LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS) $(LOCAL_LDFLAGS)
 
 FFLAGS = $(FDEBUGFLAGS) $(FFOPTIONS)
 
 FLDOPTIONS = $(FDEBUGFLAGS) $(FFOPTIONS) $(FLOCAL_LDFLAGS)
-LLDOPTIONS = $(FDEBUGFLAGS) $(FLOCAL_LDFLAGS)
+
+LLDOPTIONS = $(LLOCAL_LDFLAGS)
 
 PATHSP=$(SCIDIR)/routines
 PATHO=$(SCIDIR)/libs
@@ -418,7 +439,7 @@ TERMCAPLIB = -ltermcap
 NAME=percentlib
 NAM=percent
 
-MACROS= %a2for.sci %c2for.sci %cc2for.sci %ce.sci %cic.sci	%cnl.sci %col.sci %e2for.sci %i2for.sci %imp2for.sci	%lnc.sci %lnl.sci %lnm.sci %lnp.sci %lns.sci	%loc.sci %log2for.sci %lol.sci %lom.sci %lop.sci	%los.sci %lssalss.sci %lssap.sci %lssar.sci %lssas.sci	%lssclss.sci %lsscp.sci %lsscr.sci %lsscs.sci %lsse.sci	%lssflss.sci %lssfp.sci %lssfr.sci %lssfs.sci %lssilss.sci	%lssip.sci %lssir.sci %lssis.sci %lssllss.sci %lsslp.sci	%lsslr.sci %lssls.sci %lssmlss.sci %lssmp.sci %lssmr.sci	%lssms.sci %lssnlss.sci %lssnp.sci %lssnr.sci %lssns.sci	%lssolss.sci %lssop.sci %lssor.sci %lssos.sci %lssrlss.sci	%lssrp.sci %lssrr.sci %lssrs.sci %lsss.sci %lssslss.sci	%lsssp.sci %lsssr.sci %lssss.sci %lsst.sci %lssvlss.sci	%lssvp.sci %lssvr.sci %lssvs.sci %m2for.sci %mnl.sci	%mol.sci %palss.sci %pap.sci %par.sci %pas.sci	%pclss.sci %pcr.sci %pdp.sci %pdr.sci %pe.sci	%pflss.sci %pfr.sci %pilss.sci %pip.sci %pir.sci	%pis.sci %pllss.sci %plp.sci %plr.sci %pls.sci	%pmlss.sci %pmr.sci %pnl.sci %pnlss.sci %pnr.sci	%pol.sci %polss.sci %por.sci %pps.sci %pqp.sci	%pqr.sci %pqs.sci %prlss.sci %prp.sci %prr.sci	%pslss.sci %psr.sci %pvlss.sci %pvp.sci %pvr.sci	%pvs.sci %pxr.sci %r2for.sci %ralss.sci %rap.sci	%rar.sci %ras.sci %rc2for.sci %rclss.sci %rcp.sci	%rcr.sci %rcs.sci %rdp.sci %rdr.sci %rds.sci	%re.sci %rflss.sci %rfp.sci %rfr.sci %rfs.sci	%rilss.sci %rip.sci %rir.sci %ris.sci %rllss.sci	%rlp.sci %rlr.sci %rls.sci %rmlss.sci %rmp.sci	%rmr.sci %rms.sci %rnlss.sci %rnp.sci %rnr.sci	%rns.sci %rolss.sci %rop.sci %ror.sci %ros.sci	%rps.sci %rqp.sci %rqr.sci %rqs.sci %rrlss.sci	%rrp.sci %rrr.sci %rrs.sci %rs.sci %rslss.sci	%rsp.sci %rsr.sci %rss.sci %rt.sci %rvlss.sci	%rvp.sci %rvr.sci %rvs.sci %rxp.sci %rxr.sci	%rxs.sci %s2for.sci %salss.sci %sap.sci %sar.sci	%sclss.sci %scr.sci %sdp.sci %sdr.sci %se.sci	%sflss.sci %sfr.sci %sic.sci %silss.sci %sip.sci	%sir.sci %sis.sci %sllss.sci %slr.sci %smlss.sci	%smr.sci %snl.sci %snlss.sci %snr.sci %sol.sci	%solss.sci %sor.sci %sqr.sci %srlss.sci %srp.sci	%srr.sci %sslss.sci %ssr.sci %svlss.sci %svp.sci	%svr.sci %svs.sci %sxr.sci %t2for.sci
+MACROS= %a2for.sci %c2for.sci %cc2for.sci %ce.sci %cic.sci	%cnl.sci %col.sci %e2for.sci %i2for.sci %imp2for.sci	%lnc.sci %lnl.sci %lnm.sci %lnp.sci %lns.sci	%loc.sci %log2for.sci %lol.sci %lom.sci %lop.sci	%los.sci %lssalss.sci %lssap.sci %lssar.sci %lssas.sci	%lssclss.sci %lsscp.sci %lsscr.sci %lsscs.sci %lsse.sci	%lssflss.sci %lssfp.sci %lssfr.sci %lssfs.sci %lssilss.sci	%lssip.sci %lssir.sci %lssis.sci %lssllss.sci %lsslp.sci	%lsslr.sci %lssls.sci %lssmlss.sci %lssmp.sci %lssmr.sci	%lssms.sci %lssnlss.sci %lssnp.sci %lssnr.sci %lssns.sci	%lssolss.sci %lssop.sci %lssor.sci %lssos.sci %lssrlss.sci	%lssrp.sci %lssrr.sci %lssrs.sci %lsss.sci %lssslss.sci	%lsssp.sci %lsssr.sci %lssss.sci %lsst.sci %lssvlss.sci	%lssvp.sci %lssvr.sci %lssvs.sci %m2for.sci %mnl.sci	%mol.sci %palss.sci %pap.sci %par.sci %pas.sci	%pclss.sci %pcr.sci %pdp.sci %pdr.sci %pe.sci	%pflss.sci %pfr.sci %pilss.sci %pip.sci %pir.sci	%pis.sci %pllss.sci %plp.sci %plr.sci %pls.sci	%pmlss.sci %pmr.sci %pnl.sci %pnlss.sci %pnr.sci	%pol.sci %polss.sci %por.sci %pps.sci %pqp.sci	%pqr.sci %pqs.sci %prlss.sci %prp.sci %prr.sci	%pslss.sci %psr.sci %pvlss.sci %pvp.sci %pvr.sci	%pvs.sci %pxr.sci %r2for.sci %ralss.sci %rap.sci	%rar.sci %ras.sci %rc2for.sci %rclss.sci %rcp.sci	%rcr.sci %rcs.sci %rdp.sci %rdr.sci %rds.sci	%re.sci %rflss.sci %rfp.sci %rfr.sci %rfs.sci	%rilss.sci %rip.sci %rir.sci %ris.sci %rllss.sci	%rlp.sci %rlr.sci %rls.sci %rmlss.sci %rmp.sci	%rmr.sci %rms.sci %rnlss.sci %rnp.sci %rnr.sci	%rns.sci %rolss.sci %rop.sci %ror.sci %ros.sci	%rps.sci %rqp.sci %rqr.sci %rqs.sci %rrlss.sci	%rrp.sci %rrr.sci %rrs.sci %rs.sci %rslss.sci	%rsp.sci %rsr.sci %rss.sci %rt.sci %rvlss.sci	%rvp.sci %rvr.sci %rvs.sci %rxp.sci %rxr.sci	%rxs.sci %s2for.sci %salss.sci %sap.sci %sar.sci	%sclss.sci %scr.sci %sdp.sci %sdr.sci %se.sci	%sflss.sci %sfr.sci %sic.sci %silss.sci %sip.sci	%sir.sci %sis.sci %sllss.sci %slr.sci %smlss.sci	%smr.sci %snl.sci %snlss.sci %snr.sci %sol.sci	%solss.sci %sor.sci %sqr.sci %srlss.sci %srp.sci	%srr.sci %sslss.sci %ssr.sci %svlss.sci %svp.sci	%svr.sci %svs.sci %sxr.sci %t2for.sci	%bcspb.sci %bfspb.sci %bgspb.sci %bhspb.sci %sasp.sci	%scsp.sci %sfsp.sci %spas.sci %spbcb.sci %spbfb.sci	%spbgb.sci %spbgspb.sci %spbhb.sci %spbhspb.sci	%spbib.sci %spcs.sci %spfs.sci %spis.sci %spss.sci %sssp.sci	%sib.sci %spls.sci %splsp.sci %slsp.sci %sprs.sci %srsp.sci %sprsp.sci
 
 OBJ=$(MACROS:.sci=.bin)
 MACROSN=$(MACROS:.sci=)

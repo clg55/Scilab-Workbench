@@ -14,7 +14,7 @@ W1=[Iy,Oyu,Oyy;
 W2=[Iy,-G;
     Ouy,Iu;
     Iy,Oyu];
-SRT=LFT(W1*W2,Sk);
+SRT=lft(W1*W2,Sk);
 Se=SRT(1:ny,:);
 R=SRT((ny+1):(ny+nu),:);
 T=SRT((nu+ny+1):(nu+ny+ny),:);

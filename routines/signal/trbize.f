@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=TRBIZE,SSI=0
       subroutine trbize(nmaxi,maxdeg,nzm,nzero,sm,zm,zzr,zzi)
 c!purpose
 c bilinear transformation of the zeros and the locations of the extrema
@@ -8,9 +7,11 @@ c
       dimension nzm(*)
       dimension sm(maxdeg,*), nzero(*)
       double precision zm(maxdeg,*), zzr(*), zzi(*)
+      external slamch, dlamch
+      real slamch
 c
-      flma=2.0d+0**(i1mach(16)-2)
-      flmi=2.0d+0*d1mach(4)
+      flma=2.0d+0**(int(slamch('l'))-2)
+      flmi=2.0d+0*dlamch('p')
       fa = 1.0d+0
         do 50 j=1,4
         me = nzm(j)

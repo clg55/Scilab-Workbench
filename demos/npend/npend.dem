@@ -3,12 +3,12 @@ tt=0:0.05:10;
 //tt=0:0.1:1;
 
 path="SCI/demos/npend";
-
+mode(-1);
 getf(path+'/macros.sci','c');
 getf(path+'/dessin.sci','c');
 xbasc();
 flag1=x_choose(['Read a precomputed trajectory';
-        'Simulation with ode (needs f77 and link)'],...
+        'Simulation with ode (needs f77 and link. may fail. see help link)'],...
          'Simulation or Visualisation ? (click below)');
 
 select flag1,

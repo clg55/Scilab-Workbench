@@ -8,7 +8,7 @@ c      du + j*dv = sqrt ( dx + j*dy )
 c!
 c
       implicit double precision (a-h,o-z)
-      domi=2.0d+0*d1mach(4)
+      domi=2.0d+0*dlamch('p')
       dq = dx
       dp = dy
       dv = 0.50d+0*dq
@@ -17,9 +17,9 @@ c
       du = 0.50d+0*du
       dv = du - dv
       du = dv + dq
-      if (abs(du).le.3.0d+0*d1mach(3)) du = 0.0d+0
+      if (abs(du).le.3.0d+0*dlamch('e')) du = 0.0d+0
       du = sqrt(du)
-      if (abs(dv).le.3.0d+0*d1mach(3)) dv = 0.0d+0
+      if (abs(dv).le.3.0d+0*dlamch('e')) dv = 0.0d+0
       dv = sqrt(dv)
       if (dp.lt.(-domi)) du = -du
       return

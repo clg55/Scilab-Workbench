@@ -27,12 +27,12 @@ double Mini(vect,n)
      double vect[];int n;
 {
   int i;
-  double mini;
-  mini= vect[0];
+  double vmin;
+  vmin= vect[0];
   for (i =0 ; i < n ; i++)
-    if (vect[i] < mini) mini=vect[i];
-  return(mini);
-};
+    if (vect[i] < vmin) vmin=vect[i];
+  return(vmin);
+}
 
 
 double Maxi(vect,n)
@@ -44,6 +44,6 @@ double Maxi(vect,n)
   for (i =0 ; i < n ; i++)
     if (vect[i] > maxi) maxi=vect[i];
   return(maxi);
-};
+}
 
 

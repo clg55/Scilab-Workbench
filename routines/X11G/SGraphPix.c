@@ -54,38 +54,29 @@ AddNewWin(popup,popupcount,drawbox)
      int popupcount;
 {
   Widget outer,command2,command3;
-  static Arg boxArgs[4];
+  static Arg args[1];
   Cardinal n=0;
-  outer = XtCreateManagedWidget( "paned", formWidgetClass, popup,
-				  boxArgs,n);
+  outer = XtCreateManagedWidget( "scigForm", formWidgetClass,popup,
+				  args,n);
   XtAddEventHandler(outer,StructureNotifyMask,False,
 		    (XtEventHandler)ResizeWindow, 
 		    (XtPointer) popupcount);
-  n=0;
-  XtSetArg(boxArgs[n], XtNresize, (XtArgVal) False); n++; 
-  XtSetArg(boxArgs[n], XtNwidth , strlen("Clear")*13);n++;
-  XtSetArg(boxArgs[n], XtNheight , 15);n++;
   command2 = XtCreateManagedWidget("Clear",
-				   commandWidgetClass,outer,boxArgs,n);
+				   commandWidgetClass,outer,args,n);
   XtAddCallback(command2, XtNcallback,(XtCallbackProc) Efface, 
 		(XtPointer) popupcount); 
-/** No print for the Pixmap Window **/
-/**  n=0;
-  XtSetArg(boxArgs[n], XtNfromHoriz, command2);n++;
-  XtSetArg(boxArgs[n], XtNresize, (XtArgVal) False); n++; 
-  XtSetArg(boxArgs[n], XtNwidth , strlen("Print")*13);n++;
-  XtSetArg(boxArgs[n], XtNheight , 15);n++;
+  /** No print for the Pixmap Window **/
+  /* 
   command3 = XtCreateManagedWidget("Print",
-				   commandWidgetClass,outer,boxArgs,n);
+				   commandWidgetClass,outer,args,n);
   XtAddCallback(command3, XtNcallback,(XtCallbackProc)  PrintPix,
 		(XtPointer) popupcount); 
-**/
+  */
+  /* I use a label in order to have foreground and background */
   n=0;
-  XtSetArg(boxArgs[n], XtNheight , 400);n++;
-  XtSetArg(boxArgs[n], XtNwidth , 600);n++;
-  XtSetArg(boxArgs[n], XtNfromVert , command2);n++;
-  *drawbox= XtCreateManagedWidget("scigraphic",boxWidgetClass, outer,
-				 boxArgs,n);
+  XtSetArg(args[n], XtNlabel," ");n++;
+  *drawbox= XtCreateManagedWidget("scigraphic",labelWidgetClass, outer,
+				 args,n);
   /* EventProc Must select the client Message Events */
   XtAddEventHandler(outer,NoEventMask,True,(XtEventHandler) EventProc,
 		    (XtPointer) popupcount);  
@@ -93,7 +84,7 @@ AddNewWin(popup,popupcount,drawbox)
 		    KeyPressMask,True,
 		    (XtEventHandler) EventProc, (XtPointer) popupcount);
   /* AddNewMenu(outer,*drawbox); */
-};
+}
 
 /* 
  * Checking events in the Graphic Window 
@@ -112,7 +103,7 @@ EventProc(widget, number , event)
     {
      default:
       return;
-    };
+    }
 }
 /*
  * The ResizeWindow handler for the drawbox
@@ -137,8 +128,8 @@ static XtEventHandler ResizeWindow(w, number, e)
     C2F(dr)("xclear","v",IP0,IP0,IP0,IP0,IP0,IP0,0,0);
     C2F(dr)("xset","window",&cur,IP0,IP0,IP0,IP0,IP0,0,0);
     C2F(dr)("xsetdr",name, IP0, IP0,IP0,IP0,IP0,IP0,0,0);
-  };
-};
+  }
+}
 
 
 /*
@@ -180,7 +171,7 @@ PrintPix(w, number, client_data)
   int verb=0,cur,na;
   /** xclear(win_num) **/
   Scistring("To be done \n");
-};
+}
 
 /*	Function Name: CreatePopupWindow
  *	Description: Creates and pops up the New Graphic Window
@@ -193,7 +184,7 @@ CreatePopupWindowPix(button, CWindow,SciGWindow,fg,bg)
      unsigned long *fg,*bg;
 {
     Arg		args[5];
-    Widget	popup,drawbox,look;
+    Widget	popup,drawbox;
     Position	x, y;
     Cardinal	n;
     XColor x_fg_color,x_bg_color;
@@ -211,7 +202,7 @@ CreatePopupWindowPix(button, CWindow,SciGWindow,fg,bg)
     XtPopup(popup, XtGrabNone);
     SetHints(popup);
 
-    sprintf(winname,"BG%d",popupcount);
+    sprintf((char *)winname,"BG%d",popupcount);
     XChangeProperty(XtDisplay(drawbox), XtWindow(drawbox), XA_WM_NAME, XA_STRING, 8, 
 		    PropModeReplace, winname, 5);
     attributes.backing_store = Always;
@@ -223,15 +214,12 @@ CreatePopupWindowPix(button, CWindow,SciGWindow,fg,bg)
     *CWindow=XtWindow(drawbox);
     *SciGWindow=XtWindow(popup);
 
-    XtSetArg(args[0],XtNlabel,"");
-    look = XtCreateWidget("look", labelWidgetClass, popup, args, 1);
+    /*  Getting the values of foreground and background */
     XtSetArg(args[0],XtNforeground, &x_fg_color.pixel);
     XtSetArg(args[1],XtNbackground, &x_bg_color.pixel);
-    XtGetValues(look,args,2);
+    XtGetValues(drawbox,args,2);
     *fg = x_fg_color.pixel;
     *bg = x_bg_color.pixel;
-    XtDestroyWidget(look);
-
 }
 
 

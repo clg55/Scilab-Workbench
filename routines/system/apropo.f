@@ -17,6 +17,8 @@ c     ====================================================================
          else
 C     argument is a string 
             if (sym.eq.0) sym = dot
+            call cvstr(1,sym,h,1)
+            nstr=1
             if (sym.eq.quote) then 
                call getstr
                if(err.gt.0) return

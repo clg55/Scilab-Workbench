@@ -320,7 +320,7 @@ C!    SUBPROGRAMAS AUXILIARES:
 C                anfm01,anfm02,anfm03,anfm04,anfm05,anfm06
 C                anrs01,anrs02,auxo01,aux003,dadd,daxpy,dcopy,ddif,ddot,
 C                desr03,dimp03,dipvtf,dmmul,dnrm0,dnrm2,dscal,dswap,
-C                d1mach,idamax,nvkt03,optr01,opvf03,pasr03,tol03,zthz
+C                dlamch,idamax,nvkt03,optr01,opvf03,pasr03,tol03,zthz
 C     FUNCIONES FORTRAN INTRINSECAS: abs,max,min,mod,sign,sqrt
 C! ORIGEN:
 C***********************************************************************
@@ -355,10 +355,10 @@ C
 C
 C     Se toman algunos parametros de trabajo
 C
-      epsmch=d1mach(4)
+      epsmch=dlamch('p')
       eps=epsmch**0.75
       eps0=epsmch**0.9
-      gigant=d1mach(2)
+      gigant=dlamch('o')
       gig1=sqrt(gigant)
 C
 C     Se comprueba que los vectores  CI,CS,IRE toman valores correctos

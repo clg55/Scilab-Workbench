@@ -35,7 +35,11 @@
 
 #include <stdio.h>
 #include <X11/Xos.h>
+#ifdef SYSV
+#include <dirent.h>
+#else
 #include <sys/dir.h>
+#endif
 #include <sys/stat.h>
 
 /* X include files */
@@ -77,7 +81,7 @@
 #define INPUT_HEIGHT	6
 
 /* handle differences between K&R and ANSI C */
-#if __STDC__
+#ifdef __STDC__
 #define ARGS(a)	a
 #else
 #define ARGS(a)	()

@@ -26,13 +26,13 @@ c     cw : chaine de caracteres de travail de longueur au moins ll
 c     iw : tableau de travail entier de taille au moins egale a
 c          m*n + 2*n
 c!
-      double precision x(*),a,a1,a2,fact,eps,d1mach
+      double precision x(*),a,a1,a2,fact,eps,dlamch
       integer iw(*),maxc,mode,fl,s,typ
       character cw*(*),sgn*1,dl*1
       character*10 form(2)
 c
 c      eps=10.0d+0**(-maxc+3)
-      eps=d1mach(4)
+      eps=dlamch('p')
       cw=' '
       write(form(1),130) maxc,maxc-7
       dl=' '
@@ -49,7 +49,7 @@ c
       l=l+nx
       do 05 i=1,m
       a=abs(x(l+i))
-      if(a.eq.0.0d+0.or.a.gt.d1mach(2)) goto 05
+      if(a.eq.0.0d+0.or.a.gt.dlamch('o')) goto 05
       a1=max(a1,a)
       a2=min(a2,a)
    05 continue

@@ -8,7 +8,7 @@ c     double precision x,ck,res
 c!
       implicit double precision (a-h,o-z)
       dpi=4.0d+0*atan(1.0d+00)
-      domi=2.0d+0*d1mach(4)
+      domi=2.0d+0*dlamch('p')
       if (x) 20, 10, 20
   10  res = 0.0d+0
       return

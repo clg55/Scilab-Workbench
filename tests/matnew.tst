@@ -1,6 +1,4 @@
-//JPC 
-//eps=10000*%eps;
-eps=100000*%eps;
+eps=200000*%eps;
 //      controlability...
 a=[rand(3,3),rand(3,2);0*ones(2,3),rand(2,2)];b=[rand(3,2);0*ones(2,2)];
 t=rand(5,5);a=inv(t)*a*t;b=inv(t)*b;

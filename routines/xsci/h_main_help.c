@@ -1,3 +1,4 @@
+
 /*
  * xarchie : An X browser interface to Archie
  *
@@ -70,12 +71,7 @@ static Cursor busyCursor;
  */
 static XtAppContext appContext;
 Widget toplevel,realToplevel;
-Widget fileButton,settingsButton;
-Widget queryButton,abortButton;
-Widget helpButton;
-Widget statusText;
-Widget searchText;
-Widget hostText,locationText,fileText,sizeText,modesText,dateText;
+
 
 /*
  * Other global data
@@ -159,12 +155,12 @@ char **argv;
     initColors();
     initActions();
     /* Then the main panel widgets */
-    initWidgets();
+    popupHelpPanel();
     /* Now we realize so the toplevel window is available */
-    XtRealizeWidget(realToplevel);
+    /* XtRealizeWidget(realToplevel); */
     /* Other initializations that need to go now */
-    initHelpPanel();
-    XtMapWidget(realToplevel);
+    /* initHelpPanel(); */
+    /* XtMapWidget(realToplevel); */
     /* Do it */
     XtAppMainLoop(appContext);
     /*NOTREACHED*/
@@ -182,7 +178,7 @@ int ret;
 /* Initialization routines */
 
 static String fallbackResources[] = {
-#include "h_help.ad.h"
+#include "Xscilab.ad.h"
     NULL
 };
 
@@ -234,7 +230,6 @@ static void
 initColors()
 {
     Visual *visual;
-
     /* The default is no extra widget (ie. mono) */
     toplevel = realToplevel;
     /* See if the user specified a type */
@@ -283,31 +278,6 @@ PopupHelpPanel (w, number, client_data)
 }
 
 
-/*
- * initWidgets: Initialize the widgets and set globals variables.
- */
-
-static void
-initWidgets()
-{
-    Widget outerPaned,buttonForm;
-    Widget stringForm;
-    char name[32];
-    int i;
-    outerPaned = XtCreateManagedWidget("outerPaned",panedWidgetClass,
-				       toplevel,NULL,0);
-    /* Button Form */
-    buttonForm = XtCreateManagedWidget("buttonForm",formWidgetClass,
-				       outerPaned,NULL,0);
-    /* fileButton = XtCreateManagedWidget("fileButton",menuButtonWidgetClass,
-				       buttonForm,NULL,0);*/
-
-    helpButton = XtCreateManagedWidget("helpButton",commandWidgetClass,
-				       buttonForm,NULL,0);
-    XtAddCallback(helpButton, XtNcallback, PopupHelpPanel,0);
-}
-
-
 /*	-	-	-	-	-	-	-	-	*/
 /* The following functions attempt to provide information in the event of
  * a crash. If you have trouble compiling them because of UNIX-isms in
@@ -352,37 +322,6 @@ int sig;
 
 /*	-	-	-	-	-	-	-	-	*/
 /* Misc. routines */
-
-void
-setBusyStatus(state)
-Boolean state;
-{
-    setWindowBusyStatus(XtWindow(realToplevel),state);
-}
-
-static void
-setWindowBusyStatus(window,state)
-Window window;
-Boolean state;
-{
-    Window root,parent,*children;
-    unsigned int numChildren;
-    int i;
-
-    /* Do the window */
-    if (state)
-	XDefineCursor(display,window,busyCursor);
-    else
-	XUndefineCursor(display,window);
-    /* And all the children... */
-    if (XQueryTree(display,window,&root,&parent,&children,&numChildren) != 0) {
-	for (i=0; i < numChildren; i++) {
-	    setWindowBusyStatus(*(children+i),state);
-	}
-	if (numChildren > 0)
-	    XFree((char *)children);
-    }
-}
 		
 /*	-	-	-	-	-	-	-	-	*/
 

@@ -69,7 +69,7 @@ C        Esta subrutina trabaja en doble precision via una sentencia
 C     "implicit":
 C                Implicit double precision (a-h,o-z)
 C
-C     SUBPROGRAMAS AUXILIARES: daxpy,dcopy,ddot,dnrm2,dscal,d1mach
+C     SUBPROGRAMAS AUXILIARES: daxpy,dcopy,ddot,dnrm2,dscal,dlamch
 C     FUNCIONES FORTRAN INTRINSECAS: mod,sign,sqrt
 C
 C
@@ -113,7 +113,7 @@ C     Se averigua si la nueva columna es linealmente dependiente de las
 C     que ya forman la matriz
 C
       rnorma=dnrm2(nm,w,1)
-      eps=d1mach(4)**0.9
+      eps=dlamch('p')**0.9
       if(rnorma.lt.eps) then
          ind=-1
          return

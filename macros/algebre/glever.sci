@@ -6,7 +6,7 @@ function [Bfs,Bis,chis]=glever(E,A,s)
 // chis = characteristic polynomial (up to a multiplicative constant)
 // Bfs  = polynomial matrix
 // Bis  = polynomial matrix ( - expansion of (s*E-A)^-1 at infinity).
-// Caveat: uses cleanp to simplify Bfs,Bis and chis !
+// Caveat: uses clean to simplify Bfs,Bis and chis !
 // See also shuffle, determ, invr, coffg
 // F.D. (1988)
 //!
@@ -36,10 +36,10 @@ P=eye(A);
  
 for nu=1:index+1,
    P=AAD*P;
-   Bis=cleanp(Bis+Pi*P,1.d-10);
+   Bis=clean(Bis+Pi*P,1.d-10);
 end
-Bfs=cleanp(Bfs,1.d-10);
-chis=cleanp(chis,1.d-10);
+Bfs=clean(Bfs,1.d-10);
+chis=clean(chis,1.d-10);
  
 
 

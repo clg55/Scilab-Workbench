@@ -11,7 +11,7 @@ c!
       double precision dellk
       double precision spr(*),spi(*)
       data de /1.0d+0/
-      flmi=2.0d+0*d1mach(4)
+      flmi=2.0d+0*dlamch('p')
       dpi=4.00d+0*atan(1.0d+00)
 C  if acx not defined, compute a symmetrical usage of the tolerance
 C  scheme

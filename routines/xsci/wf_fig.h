@@ -237,9 +237,8 @@ extern char *getenv();
 #endif /* X_NOT_STDC_ENV */
 #endif /* defined(SYS) && defined(SYSV386) */
 
-#if defined(SYSV) || defined(SVR4) || defined(__osf__) || defined(USE_DIRENT)
+#if defined(SYSV) || defined(SVR4) || defined(__osf__)
 #define u_int uint
-#define USE_DIRENT
 #define DIRSTRUCT	struct dirent
 #else
 #define DIRSTRUCT	struct direct

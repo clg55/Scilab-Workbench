@@ -107,15 +107,17 @@ static void CreateMessageWindow(parent)
 Widget parent;
 {
     Arg 	args[MAXARGS];
-    Cardinal 	n;
-
-    n = 0;
-    XtSetArg(args[n], XtNlabel, (XtArgVal) DEFAULT_MES);	n++;
-    XtSetArg(args[n], XtNjustify, (XtArgVal) XtJustifyLeft);          	n++;
-    /*  XtSetArg(args[n], XtNshowGrip, (XtArgVal) False);			n++;**/
-    XtSetArg(args[n], XtNmin, (XtArgVal) 20);        		n++;
-    messageWindow = XtCreateManagedWidget("messageWindow", labelWidgetClass,
+    Widget      fm;
+    Cardinal 	n=0;
+    fm = XtCreateManagedWidget("msWindow",formWidgetClass,
 					  parent, args, n);
+    n = 0;
+    XtSetArg(args[n], XtNlabel, (XtArgVal) VERSION); n++;
+    XtCreateManagedWidget("logoWindow",labelWidgetClass,
+					  fm, args, n);
+    XtSetArg(args[n], XtNlabel, (XtArgVal) DEFAULT_MES); n++;
+    messageWindow = XtCreateManagedWidget("messageWindow",labelWidgetClass,
+					  fm, args, n);
 }
 
 void DefaultMessageWindow()
@@ -153,9 +155,10 @@ Widget parent;
   XtSetArg(args[n], XtNiconPixmap, xbas_icon); n++;
   XtSetValues(parent, args, n);
   n=0;
+/** mis en ressources  jpc 23 nov 94
   XtSetArg(args[n], XtNwidth, (XtArgVal) 650);        		n++;  
   XtSetArg(args[n], XtNheight, (XtArgVal) 500);        		n++;
-
+**/
   vpane = XtCreateManagedWidget("vpane", panedWidgetClass, parent, args, n);
   AddAcceptMessage(parent);
   CreateMessageWindow(vpane);
@@ -180,9 +183,8 @@ XClientMessageEvent *e;
 	  fprintf(stderr,"It was a Client Message Of the Good Type \n");
 	  fprintf(stderr,"I Need to Create Window %d",e->data.l[0]);
 	*/
-      };
-
-};
+      }
+}
 
 static Widget WidgetUseMessage ;
 
@@ -191,24 +193,24 @@ AddAcceptMessage(parent)
 {
   WidgetUseMessage=parent ;
   XtAddEventHandler(parent,ClientMessage, True, (XtEventHandler) UseMessage,NULL);  
-};
+}
 
 ReAcceptMessage()
 {
   XtAddEventHandler(WidgetUseMessage,ClientMessage, True, (XtEventHandler) UseMessage,NULL);  
-};
+}
 
 XtermWidget CreateTermWindow(parent)
 Widget parent;
 {
   XtermWidget term;
   Arg 	args[MAXARGS];
-  Cardinal 	n;
-  n = 0;
-  XtSetArg(args[n], XtNmin, (XtArgVal) 200);        		n++;
-  term = (XtermWidget) XtCreateManagedWidget(
-		     "vt100", xtermWidgetClass, parent, args,n);
-  /* this causes the initialize method to be called */
+  Cardinal 	n=0;
+  /** 
+    mis en ressources : jpc 1994
+    XtSetArg(args[n], XtNmin, (XtArgVal) 200);n++;
+    **/
+  term = (XtermWidget) XtCreateManagedWidget("Vtsci", xtermWidgetClass, parent, args,n);
   return(term);
 }
 
@@ -222,7 +224,6 @@ char *string;
 {
     Arg 	args[MAXARGS];
     Cardinal 	n;
-
     n = 0;
     XtSetArg(args[n], XtNlabel, (XtArgVal) string);        		n++;
     XtSetValues(fileLabel, args, n);

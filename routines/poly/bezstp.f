@@ -4,9 +4,9 @@
       double precision w(*),best(*),errr
       double precision dt0,z,fact
       double precision c,s,errd,mm,eps,erri
-      double precision d1mach,ddot
+      double precision dlamch,ddot
 c
-      eps=d1mach(4)
+      eps=dlamch('p')
       n0=max(n1,n2)+1
       m1=max(n1-n2,0)
       m2=max(n2-n1,0)

@@ -39,18 +39,26 @@ end;
    comp(f_hist);
    y=feval((1:n-1)',f_hist);
    y=[y;y(n-1)]/maxi(y);
+   nx=maxi(min(15,prod(size(x))-1),1);
+   if rhs <= 5 then 
+     rect=[mini(x),mini(y),maxi(x),maxi(y)];
+     if rect(2)=rect(4) then rect(2)=0.0;rect(4)=1.1; end
+     if q=1 then 
+  	rect(1)= rect(1)-abs(x(2)-x(1));rect(3)=rect(3)+abs(x(2)-x(1));nx=nx+2;
+     end
+   end
   select rhs
    case 7 then plot2d2("gnn",x,y,style,strf,leg,rect,nax);
                plot2d3("gnn",x,y,style,"000");
-   case 6 then plot2d2("gnn",x,y,style,strf,leg,rect);
+   case 6 then plot2d2("gnn",x,y,style,strf,leg,rect,[1,nx,2,10]);
                plot2d3("gnn",x,y,style,"000");
-   case 5 then plot2d2("gnn",x,y,style,strf,leg);
+   case 5 then plot2d2("gnn",x,y,style,strf,leg,rect,[1,nx,2,10]);
                plot2d3("gnn",x,y,style,"000");
-   case 4 then plot2d2("gnn",x,y,style,strf);
+   case 4 then plot2d2("gnn",x,y,style,strf,' ',rect,[1,nx,2,10]);
                plot2d3("gnn",x,y,style,"000");
-   case 3 then plot2d2("gnn",x,y,style);
+   case 3 then plot2d2("gnn",x,y,style,"011",' ',rect,[1,nx,2,10]);
                plot2d3("gnn",x,y,style,"000");
-   case 2 then plot2d2("gnn",x,y);
+   case 2 then plot2d2("gnn",x,y,[-1],"011",' ',rect,[1,nx,2,10]);
                plot2d3("gnn",x,y,[-1,1],"000");
   end
 //end

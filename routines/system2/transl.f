@@ -18,7 +18,8 @@ c
 c     
       integer nops,nlogic
       parameter (nops=30,nlogic=6)
-      character*40 form,strg
+      character*40 strg
+      character*40 form
       double precision x
       integer op,ix(2),fptr
       equivalence (x,ix(1))
@@ -39,7 +40,7 @@ c
 c                            +  -  * .*  *. .*.  / ./  /. ./.  
       data (ops(i),i=1,10) /45,46,47,98,200,149,48,99,201,150/
 c                            \ .\   \. .\. ** =  <  >  <=  >=  <>
-      data (ops(i),i=11,21)/49,100,202,151,58,50,59,60,109,110,119/
+      data (ops(i),i=11,21)/49,100,202,151,62,50,59,60,109,110,119/
 c                             : [,] ins ext  '  [;]  |  &   ~
       data (ops(i),i=22,nops) /44,01, 02 ,03 ,53, 04, 57, 58, 61/
 c
@@ -334,9 +335,29 @@ c
       il=iadr(lr)
       ix(1)=istk(lc+1)
       ix(2)=istk(lc+2)
-      call fmt(x,19,2,n1,n2)
-      write(form,'(''(f'',i2,''.'',i2,'')'')') n1,n2
-      write(strg,form) x
+      maxc=19
+      isign=1
+      if(x.lt.0)  isign=-1
+      call fmt(abs(x),maxc,ifmt,n1,n2)
+      if(ifmt.eq.1) then
+         nf=1
+         ifl=maxc
+         n2=1
+         write(form,130) maxc,maxc-7
+         write(strg,form) x
+      elseif(ifmt.ge.0) then
+         nf=2
+         write(form,120) n1,n2
+         write(strg,form) x
+      elseif(ifmt.eq.-1) then
+c     Inf
+         ifl=3
+         strg='Inf'
+      elseif(ifmt.eq.-2) then
+c     Nan
+         ifl=3
+         strg='Nan'
+      endif
       i1=0
  410  i1=i1+1
       if(strg(i1:i1).eq.' ') goto 410
@@ -969,7 +990,8 @@ c     info sur numero de lignes
       lc=lc+2
       goto 10
       
+  120 format('(f',i2,'.',i2,')')
+  130 format('(1pd',i2,'.',i2,')')
+
 c     
       end
-
-      

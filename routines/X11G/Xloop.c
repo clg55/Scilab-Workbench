@@ -12,6 +12,10 @@
 #include <errno.h>
 #include <stdio.h>
 
+#ifdef aix
+#include <sys/select.h>
+#endif
+
 #define NUMCOLORS 17
 
 typedef struct res {
@@ -61,8 +65,7 @@ static XtResource app_resources[] = {
 XtAppContext app_con;
 
 static String bgfallback_resources[] = {
-    "*allowShellResize:                 True",
-    "*font:                             9x15",
+#include "../xsci/Xscilab.ad.h"
     NULL,
   };
 
@@ -106,13 +109,13 @@ DisplayInit(string,dpy,toplevel)
   static Widget toplevel1;
   static int count=0;
   int argc=0;
-  char *argv;
+  char *argv = 0;
   if ( count > 0) 
     {
       *dpy=dpy1;
       *toplevel=toplevel1;
       return;
-    };
+    }
   count++;
   Xscilab(dpy,toplevel);
   if ( *toplevel != (Widget) NULL)
@@ -125,7 +128,7 @@ DisplayInit(string,dpy,toplevel)
   else
     {
       int Xsocket,pty=0,fd ;
-      *toplevel=toplevel1=XtAppInitialize (&app_con,"XScilab",optionDescList,
+      *toplevel=toplevel1=XtAppInitialize (&app_con,"Xscilab",optionDescList,
 				       0,&argc, (String *)argv,
 				       bgfallback_resources, NULL, 0);
       XtGetApplicationResources(toplevel1, &the_res, app_resources,
@@ -139,10 +142,10 @@ DisplayInit(string,dpy,toplevel)
       Select_mask = pty_mask | X_mask;  
       Write_mask = 1 << fileno(stdout);
       max_plus1 = (fd < Xsocket) ? (1 + Xsocket) : (1 + fd);
-    };
+    }
   XSync(dpy1,0);
   /** xutl_(*dpy); **/
-};
+}
 
 /*****************
 Remarque : cette fonction est appelles par la fonction au dessus 
@@ -170,11 +173,11 @@ xutl_(dpy)
     {
       xcolor.pixel = the_res.color[i];
       XQueryColor(dpy, DefaultColormapOfScreen(scr), &xcolor);
-      tabc[i].r = xcolor.red / 65535.0   ;
-      tabc[i].g = xcolor.green / 65535.0 ;
-      tabc[i].b = xcolor.blue /  65535.0 ;
+      tabc[i].r = (int)xcolor.red / 65535.0   ;
+      tabc[i].g = (int)xcolor.green / 65535.0 ;
+      tabc[i].b = (int)xcolor.blue /  65535.0 ;
   }
-};
+}
 
 /* 
  * zzledt is used while in the scilab -nw mode 
@@ -203,7 +206,7 @@ int Xorgetchar()
 	write_mask  = Write_mask;
 	select_timeout.tv_sec = 0;
 	select_timeout.tv_usec = 0;
-	i = select(max_plus1, &select_mask, &write_mask, (int *)NULL,
+	i = select(max_plus1, (fd_set *)&select_mask, (fd_set *) &write_mask, (fd_set *)NULL,
 		   QLength(the_dpy) ? &select_timeout
 		   : (struct timeval *) NULL);
 	if (i < 0) {
@@ -212,9 +215,9 @@ int Xorgetchar()
 			    Scistring("Error\n");
 			    exit(0);/* SysError(ERROR_SELECT); */
 			    continue;
-			  };
+			  }
 	} 
-	if (write_mask & Write_mask) {	  fflush(stdout);};
+	if (write_mask & Write_mask) {	  fflush(stdout);}
 
 	/* if there's something to read */
 
@@ -228,7 +231,7 @@ int Xorgetchar()
 	if (QLength(the_dpy) || (select_mask & X_mask)) 
 	  { C2F(xevents)();	}
     }
-};
+}
 
 /** Dealing with X11 Events on the queue **/
 
@@ -254,7 +257,7 @@ C2F(xevents)()
 	XtDispatchEvent(&event);
       } while (QLength(the_dpy) > 0);
     }
-};
+}
 
 
 

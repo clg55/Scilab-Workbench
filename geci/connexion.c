@@ -4,6 +4,10 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+#if defined (sun) && defined (SYSV)
+#define bcopy(b1,b2,len) memmove(b2, b1, (size_t)(len))
+#endif
+
 #include "connexion.h"
 
 int connexion(machine)
@@ -42,7 +46,7 @@ char *machine;
     nom.sin_port=htons(PORT);  
     
      /* Demande de connexion au demon */
-    if (connect(desc,&nom,sizeof(nom))== -1){
+    if (connect(desc,(struct sockaddr *)&nom,sizeof(nom))== -1){
       fprintf(stderr,"erreur de connection\n");
       return -1;
     }

@@ -26,7 +26,7 @@
 
 # platform: osf1.cf
 
-# Operating system:  1/1 1.3
+# Operating system:  1/1 3.0
 
    	SHAREDSWITCH =
 
@@ -48,6 +48,7 @@
   BOOTSTRAPCFLAGS =
                CC = cc $(SHAREDSWITCH)
             LOCCC = cc
+        LOCSHARCC = LocShareCcCmd
                AS = as
 
          COMPRESS = compress
@@ -82,7 +83,7 @@
 
     PROTO_DEFINES = -DFUNCPROTO=3
 
-     INSTPGMFLAGS =
+     INSTPGMFLAGS = -s
 
      INSTBINFLAGS = -m 0755
      INSTUIDFLAGS = -m 4755
@@ -92,7 +93,7 @@
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4755
 
-      CDEBUGFLAGS = -O2
+      CDEBUGFLAGS = -O2 -Olimit 2000
         CCOPTIONS =
      LOCCCOPTIONS =
 
@@ -144,12 +145,15 @@
            INCDIR = $(INCROOT)/X11
            ADMDIR = /usr/adm
            LIBDIR = $(USRLIBDIR)/X11
+           VARDIR = /usr/var/X11
         CONFIGDIR = $(LIBDIR)/config
        LINTLIBDIR = $(USRLIBDIR)/lint
 
           FONTDIR = $(LIBDIR)/fonts
+      USERFONTDIR = $(VARDIR)/fonts/user
+            FSDIR = $(VARDIR)/fs
          XINITDIR = $(LIBDIR)/xinit
-           XDMDIR = $(LIBDIR)/xdm
+           XDMDIR = $(VARDIR)/xdm
            TWMDIR = $(LIBDIR)/twm
           MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
@@ -207,8 +211,12 @@
       XTESTLIBSRC = $(EXTENSIONSRC)/lib/xtest
       XTRAPLIBSRC = $(EXTENSIONSRC)/lib/xtrap
       PHIGSLIBSRC = $(EXTENSIONSRC)/lib/PEX
+       XIELIBSRC  = $(EXTENSIONSRC)/lib/XIE
+
+        EXTINCSRC = $(TOP)/X11/extensions
 
       USRSHLIBDIR = /usr/shlib
+        XSHLIBDIR = /usr/shlib/X11
 
        SHLIBFLAGS = -check_registry $(CROSSBASE)/usr/shlib/so_locations 	-L$(CROSSBASE)/usr/shlib -L$(CROSSBASE)/usr/ccs/lib
 
@@ -230,6 +238,9 @@
         DEPXAWLIB = $(USRSHLIBDIR)/libXaw.so
            XAWLIB = -lXaw
 
+       DEPXXIELIB = $(USRSHLIBDIR)/libXIE.so
+          XXIELIB = -lXIE
+
         DEPXILIB = $(USRSHLIBDIR)/libXi.a
            XILIB = -lXi
 
@@ -238,6 +249,7 @@
         SOXLIBREV = SharedXlibRev
           SOXTREV = SharedXtRev
          SOXAWREV = SharedXawRev
+         SOXIEREV = SharedXIERev
         SOOLDXREV = SharedOldXRev
          SOXMUREV = SharedXmuRev
         SOXEXTREV = SharedXextRev
@@ -259,6 +271,12 @@
         DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
            PHIGSLIB = 			 -lphigs
 
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
        DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
           XBSDLIB = 			 -lXbsd
 
@@ -267,6 +285,7 @@
           LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
         LINTXTOOL = $(LINTLIBDIR)/llib-lXt.ln
           LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
+         LINTXXIE = $(LINTLIBDIR)/llib-lXIE.ln
            LINTXI = $(LINTLIBDIR)/llib-lXi.ln
         LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
 
@@ -290,6 +309,7 @@
    MRESOURCESRC = $(MLIBSRC)/Mrm
      MCLIENTSRC = $(TOP)/motif/clients
          UILSRC = $(MCLIENTSRC)/uil
+    MINCLUDESRC = $(INCLUDESRC)
 
             UIL = uil
 
@@ -317,9 +337,9 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
            CDADIR = $(USRLIBDIR)/cda
 
            DXMSRC = $(MLIBSRC)/DXm
-           DPSSRC = $(EXTENSIONSRC)/DPS/lib/dps
-         DPSTKSRC = $(EXTENSIONSRC)/DPS/lib/dpstk
-         PSRESSRC = $(EXTENSIONSRC)/DPS/lib/psres
+           DPSSRC = $(EXTENSIONSRC)/DPSII/lib/dps
+         DPSTKSRC = $(EXTENSIONSRC)/DPSII/lib/dpstk
+         PSRESSRC = $(EXTENSIONSRC)/DPSII/lib/psres
            XIESRC = $(EXTENSIONSRC)/lib/xie
            IDSSRC = $(MLIBSRC)/ids
            BKRSRC = $(MLIBSRC)/bkr
@@ -329,6 +349,8 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
        DEPDXMLIB = $(USRSHLIBDIR)/libDXm.so
           DXMLIB = -lDXm
+
+       MDXMLIB = $(DXMLIB)
 
         DEPDPSLIB = $(USRSHLIBDIR)/libdps.so
            DPSLIB = -ldps
@@ -380,33 +402,32 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
 # -------------------------------------------------------------------------
 # DEC-Specific System Build Rules
-# $Id: Dec.rules,v 1.1.2.8 1992/12/08 19:29:22 Leela_Obilichetti Exp $
+# $Id: Dec.rules,v 1.1.2.8 92/12/08 19:29:22 Leela_Obilichetti Exp $
 
 # -------------------------------------------------------------------------
 # start of Imakefile
 
 include ../../Path.incl
 
-FFOPTIONS = -C -fpe1 -switch nosqrt_recip -check nounderflow
-FDEBUGFLAGS =
-CDEBUGFLAGS =
-CCOPTIONS=
 FC=DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
+FFOPTIONS =  -fpe3 -switch nosqrt_recip
+FDEBUGFLAGS = -O
+CCOPTIONS=
+CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 
-SCIVERSION=Scilab-2.0
-SCIDATE=31 October 1994
+SCIVERSION = Scilab-2.1
+SCIDATE = 10 February 1995
 
-EXTRA_INCLUDES=-I$(SCIDIR)/routines
-
-FLOCAL_LDFLAGS=  -non_shared
+EXTRA_INCLUDES = -I$(SCIDIR)/routines
 
 LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS) $(LOCAL_LDFLAGS)
 
 FFLAGS = $(FDEBUGFLAGS) $(FFOPTIONS)
 
 FLDOPTIONS = $(FDEBUGFLAGS) $(FFOPTIONS) $(FLOCAL_LDFLAGS)
-LLDOPTIONS = $(FDEBUGFLAGS) $(FLOCAL_LDFLAGS)
+
+LLDOPTIONS = $(LLOCAL_LDFLAGS)
 
 PATHSP=$(SCIDIR)/routines
 PATHO=$(SCIDIR)/libs
@@ -419,9 +440,11 @@ MW=$(SCIDIR)/man/scripts/makewhatis-dec
 
 MW=$(SCIDIR)/man/scripts/makewhatis-alpha
 
-all:: whatis
+WHATIS=whatis
 
-whatis	:
+all:: $(WHATIS)
+
+$(WHATIS)	:
 	@echo "Updating whatis database"
 	$(MW) `pwd`
 
@@ -431,7 +454,7 @@ depend::
 distclean::clean
 
 clean::
-	$(RM) man*?/?*.[0-9].~ man*?/"#"*
+	$(RM) man*?/?*.[0-9].~ man*?/"#"* check.log
 
 check	:
 	@echo "Warning : files in wrong directory" > check.log
@@ -477,4 +500,4 @@ includes::
 # -------------------------------------------------------------------------
 # dependencies generated by makedepend
 
-whatis :man1/and.1  man1/ans.1  man1/apropos.1  man1/argn.1  man1/backslash.1  man1/boolean.1  man1/brackets.1  man1/break.1  man1/case.1  man1/ceil.1  man1/clear.1  man1/clearfun.1  man1/code2str.1  man1/coeff.1  man1/colon.1  man1/comma.1  man1/comments.1  man1/comp.1  man1/deff.1  man1/degree.1  man1/delbpt.1  man1/diary.1  man1/disp.1  man1/dispbpt.1  man1/else.1  man1/elseif.1  man1/end.1  man1/equal.1  man1/errcatch.1  man1/errclear.1  man1/error.1  man1/evstr.1  man1/exec.1  man1/exists.1  man1/exit.1  man1/external.1  man1/eye.1  man1/feval.1  man1/file.1  man1/find.1  man1/fix.1  man1/floor.1  man1/for.1  man1/format.1  man1/fort.1  man1/fprintf.1  man1/fscanf.1  man1/function.1  man1/funptr.1  man1/getenv.1  man1/getf.1  man1/getpid.1  man1/hat.1  man1/help.1  man1/host.1  man1/if.1  man1/imag.1  man1/int.1  man1/iserror.1  man1/keyboard.1  man1/left.1  man1/length.1  man1/less.1  man1/lib.1  man1/lines.1  man1/link.1  man1/list.1  man1/load.1  man1/macro.1  man1/matrices.1  man1/matrix.1  man1/max.1  man1/maxi.1  man1/min.1  man1/mini.1  man1/minus.1  man1/mode.1  man1/newfun.1  man1/null.1  man1/ones.1  man1/or.1  man1/parents.1  man1/part.1  man1/pause.1  man1/percent.1  man1/plus.1  man1/poly.1  man1/power.1  man1/predef.1  man1/print.1  man1/printf.1  man1/quit.1  man1/quote.1  man1/rand.1  man1/rational.1  man1/read.1  man1/readb.1  man1/real.1  man1/resume.1  man1/return.1  man1/round.1  man1/save.1  man1/scanf.1  man1/sci.an  man1/scilab.1  man1/scilink.1  man1/select.1  man1/semicolumn.1  man1/setbpt.1  man1/sign.1  man1/size.1  man1/slash.1  man1/sprintf.1  man1/sscanf.1  man1/star.1  man1/startup.1  man1/str2code.1  man1/string.1  man1/strings.1  man1/tilda.1  man1/type.1  man1/unix.1  man1/unix_g.1  man1/unix_s.1  man1/unix_w.1  man1/unix_x.1  man1/user.1  man1/varn.1  man1/what.1  man1/where.1  man1/whereami.1  man1/whereis.1  man1/while.1  man1/who.1  man1/writb.1  man1/write.1  man2/Graphics.2  man2/black.2  man2/bode.2  man2/champ.2  man2/chart.2  man2/contour.2  man2/driver.2  man2/errbar.2  man2/eval3d.2  man2/eval3dp.2  man2/evans.2  man2/fac3d.2  man2/fac3di.2  man2/fchamp.2  man2/fcontour.2  man2/fgrayplot.2  man2/fplot2d.2  man2/fplot3d.2  man2/fplot3d1.2  man2/gainplot.2  man2/geom3d.2  man2/gr_menu.2  man2/graduate.2  man2/grayplot.2  man2/hist3d.2  man2/histplot.2  man2/isoview.2  man2/locate.2  man2/m_circle.2  man2/milk_drop.2  man2/nyquist.2  man2/param3d.2  man2/param3di.2  man2/plot.2  man2/plot2d.2  man2/plot2d1.2  man2/plot2d2.2  man2/plot2d3.2  man2/plot2d4.2  man2/plot3d.2  man2/plot3d1.2  man2/plot3di.2  man2/plot3di1.2  man2/plzr.2  man2/rotate.2  man2/scaling.2  man2/secto3d.2  man2/square.2  man2/titlepag.2  man2/xarc.2  man2/xarcs.2  man2/xarrows.2  man2/xaxis.2  man2/xbasc.2  man2/xbasimp.2  man2/xbasr.2  man2/xchange.2  man2/xclea.2  man2/xclear.2  man2/xclick.2  man2/xclip.2  man2/xend.2  man2/xfarc.2  man2/xfpoly.2  man2/xfpolys.2  man2/xfrect.2  man2/xget.2  man2/xgetech.2  man2/xgetmouse.2  man2/xgrid.2  man2/xinit.2  man2/xlfont.2  man2/xnumb.2  man2/xpause.2  man2/xpoly.2  man2/xpolys.2  man2/xrect.2  man2/xrects.2  man2/xrpoly.2  man2/xs2fig.2  man2/xsegs.2  man2/xselect.2  man2/xset.2  man2/xsetech.2  man2/xstring.2  man2/xstringb.2  man2/xstringl.2  man2/xtape.2  man2/xtitle.2  man2/zgrid.2  man3/abs.3  man3/acos.3  man3/acosh.3  man3/addf.3  man3/amell.3  man3/asin.3  man3/asinh.3  man3/atan.3  man3/atanh.3  man3/bloc2exp.3  man3/bloc2ss.3  man3/c_link.3  man3/cmb_lin.3  man3/conj.3  man3/convstr.3  man3/cos.3  man3/cosh.3  man3/cotg.3  man3/coth.3  man3/debug.3  man3/delip.3  man3/demos.3  man3/diag.3  man3/edit.3  man3/emptystr.3  man3/eval.3  man3/execstr.3  man3/getvalue.3  man3/halt.3  man3/havewindow.3  man3/input.3  man3/integrate.3  man3/interp.3  man3/interpln.3  man3/isdef.3  man3/kron.3  man3/ldivf.3  man3/linspace.3  man3/log.3  man3/logspace.3  man3/mac2for.3  man3/macr2lst.3  man3/macrovar.3  man3/macrovars.sci  man3/manedit.3  man3/modulo.3  man3/mulf.3  man3/norm.3  man3/pen2ea.3  man3/pertrans.3  man3/pol2tex.3  man3/prod.3  man3/rdivf.3  man3/readc_.3  man3/sci2exp.3  man3/sci2map.3  man3/sin.3  man3/sinh.3  man3/smooth.3  man3/solve.3  man3/sort.3  man3/sparse.3  man3/splin.3  man3/sqrt.3  man3/ssprint.3  man3/ssrand.3  man3/strcat.3  man3/subf.3  man3/sum.3  man3/sysconv.3  man3/sysdiag.3  man3/syslin.3  man3/tan.3  man3/tanh.3  man3/texprint.3  man3/timer.3  man3/toeplitz.3  man3/trfmod.3  man3/trianfml.3  man3/tril.3  man3/trisolve.3  man3/triu.3  man3/typeof.3  man3/x_choose.3  man3/x_dialog.3  man3/x_matrix.3  man3/x_mdialog.3  man3/x_message.3  man3/zeros.3  man4/abcd.4  man4/arhnk.4  man4/arl2.4  man4/balreal.4  man4/calfrq.4  man4/canon.4  man4/cls2dls.4  man4/colregul.4  man4/cont_frm.4  man4/cont_mat.4  man4/contr.4  man4/contrss.4  man4/csim.4  man4/ctr_gram.4  man4/des2tf.4  man4/dscr.4  man4/dsimul.4  man4/dt_ility.4  man4/equi.4  man4/equil.4  man4/equil1.4  man4/feedback.4  man4/flts.4  man4/frep2tf.4  man4/freq.4  man4/freson.4  man4/g_margin.4  man4/imrep2ss.4  man4/invsysli.4  man4/lin.4  man4/lqe.4  man4/lqg.4  man4/lqg2stan.4  man4/lqr.4  man4/ltitr.4  man4/markp2ss.4  man4/minreal.4  man4/minss.4  man4/obs_gram.4  man4/obscont.4  man4/obsv_mat.4  man4/obsvss.4  man4/p_margin.4  man4/pfss.4  man4/phasemag.4  man4/ppol.4  man4/projsl.4  man4/repfreq.4  man4/ricc.4  man4/rowregul.4  man4/rtitr.4  man4/sm2des.4  man4/sm2ss.4  man4/specfact.4  man4/ss2des.4  man4/ss2ss.4  man4/ss2tf.4  man4/st_ility.4  man4/svplot.4  man4/tf2ss.4  man4/time_id.4  man4/trzeros.4  man4/unobs.4  man4/zeropen.4  man5/augment.5  man5/bstap.5  man5/ccontrg.5  man5/colinout.5  man5/copfac.5  man5/dcf.5  man5/des2ss.5  man5/dhnorm.sci  man5/dtsi.5  man5/fourplan.5  man5/fspecg.5  man5/fstabst.5  man5/gamitg.5  man5/gcare.5  man5/gfare.5  man5/gtild.5  man5/h2norm.5  man5/h_cl.5  man5/h_inf.5  man5/h_inf_st.5  man5/h_norm.5  man5/hankelsv.5  man5/lcf.5  man5/leqr.5  man5/lft.5  man5/linf.5  man5/linfn.5  man5/lqg_ltr.5  man5/macglov.5  man5/musolve.5  man5/nehari.5  man5/parrot.5  man5/ric_desc.5  man5/riccati.5  man5/rowinout.5  man5/sensi.5  man5/tf2des.5  man6/colnew.6  man6/dassl.6  man6/fsolve.6  man6/impl.6  man6/intc.6  man6/intg.6  man6/intl.6  man6/karmarkar.6  man6/linpro.6  man6/nemirov.6  man6/ode.6  man6/optim.6  man6/quapro.6  man7/%K.7  man7/%asn.7  man7/%sn.7  man7/Signal.7  man7/analpf.7  man7/buttmag.7  man7/casc.7  man7/cheb1mag.7  man7/cheb2mag.7  man7/chepol.7  man7/convol.7  man7/corr.7  man7/cspect.7  man7/czt.7  man7/dft.7  man7/ell1mag.7  man7/eqfir.7  man7/eqiir.7  man7/faurre.7  man7/ffilt.7  man7/fft.7  man7/filter.7  man7/find_freq.7  man7/findm.7  man7/frmag.7  man7/fsfirlin.7  man7/fwiir.7  man7/group.7  man7/hank.7  man7/hilb.7  man7/iir.7  man7/iirgroup.7  man7/iirlp.7  man7/intdec.7  man7/jmat.7  man7/kalm.7  man7/lattn.7  man7/lattp.7  man7/lev.7  man7/levin.7  man7/lgfft.7  man7/lindquist.7  man7/mese.7  man7/mfft.7  man7/phc.7  man7/pspect.7  man7/remez.7  man7/remezb.7  man7/rpem.7  man7/sinc.7  man7/sincd.7  man7/srfaur.7  man7/srkf.7  man7/sskf.7  man7/system.7  man7/trans.7  man7/wfir.7  man7/wiener.7  man7/wigner.7  man7/window.7  man7/zpbutt.7  man7/zpch1.7  man7/zpch2.7  man7/zpell.7  man8/bezout.8  man8/clean.8  man8/cleanp.8  man8/cmndred.8  man8/coffg.8  man8/colcompr.8  man8/denom.8  man8/derivat.8  man8/determ.8  man8/detr.8  man8/diophant.8  man8/factors.8  man8/factors.sci  man8/gcd.8  man8/hermit.8  man8/horner.8  man8/hrmt.8  man8/htrianr.8  man8/invr.8  man8/lcm.8  man8/ldiv.8  man8/numer.8  man8/pdiv.5  man8/pdiv.8  man8/pol2des.8  man8/pol2str.8  man8/polfact.8  man8/residu.8  man8/roots.8  man8/routh_t.8  man8/rowcompr.8  man8/sfact.8  man8/simp.8  man8/sylm.8  man8/systmat.8   
+whatis :man1/and.1  man1/ans.1  man1/apropos.1  man1/argn.1  man1/backslash.1  man1/boolean.1  man1/brackets.1  man1/break.1  man1/case.1  man1/ceil.1  man1/clear.1  man1/clearfun.1  man1/code2str.1  man1/coeff.1  man1/colon.1  man1/comma.1  man1/comments.1  man1/comp.1  man1/deff.1  man1/degree.1  man1/delbpt.1  man1/diary.1  man1/disp.1  man1/dispbpt.1  man1/else.1  man1/elseif.1  man1/empty.1  man1/end.1  man1/equal.1  man1/errcatch.1  man1/errclear.1  man1/error.1  man1/evstr.1  man1/exec.1  man1/exists.1  man1/exit.1  man1/external.1  man1/eye.1  man1/feval.1  man1/file.1  man1/find.1  man1/fix.1  man1/floor.1  man1/for.1  man1/format.1  man1/fort.1  man1/fprintf.1  man1/fscanf.1  man1/function.1  man1/funptr.1  man1/getenv.1  man1/getf.1  man1/getpid.1  man1/hat.1  man1/help.1  man1/host.1  man1/if.1  man1/imag.1  man1/int.1  man1/iserror.1  man1/keyboard.1  man1/left.1  man1/length.1  man1/less.1  man1/lib.1  man1/lines.1  man1/link.1  man1/list.1  man1/load.1  man1/macro.1  man1/matrices.1  man1/matrix.1  man1/max.1  man1/maxi.1  man1/min.1  man1/mini.1  man1/minus.1  man1/mode.1  man1/newfun.1  man1/null.1  man1/ones.1  man1/or.1  man1/parents.1  man1/part.1  man1/pause.1  man1/percent.1  man1/plus.1  man1/poly.1  man1/power.1  man1/predef.1  man1/print.1  man1/printf.1  man1/quit.1  man1/quote.1  man1/rand.1  man1/rational.1  man1/read.1  man1/readb.1  man1/real.1  man1/resume.1  man1/return.1  man1/round.1  man1/save.1  man1/scanf.1  man1/sci.an  man1/scilab.1  man1/scilink.1  man1/select.1  man1/semicolumn.1  man1/setbpt.1  man1/sign.1  man1/size.1  man1/slash.1  man1/sprintf.1  man1/sscanf.1  man1/star.1  man1/startup.1  man1/str2code.1  man1/string.1  man1/strings.1  man1/tilda.1  man1/type.1  man1/unix.1  man1/unix_g.1  man1/unix_s.1  man1/unix_w.1  man1/unix_x.1  man1/user.1  man1/varn.1  man1/what.1  man1/where.1  man1/whereami.1  man1/whereis.1  man1/while.1  man1/who.1  man1/writb.1  man1/write.1  man2/Graphics.2  man2/black.2  man2/bode.2  man2/champ.2  man2/chart.2  man2/contour.2  man2/driver.2  man2/errbar.2  man2/eval3d.2  man2/eval3dp.2  man2/evans.2  man2/fac3d.2  man2/fac3di.2  man2/fchamp.2  man2/fcontour.2  man2/fgrayplot.2  man2/fplot2d.2  man2/fplot3d.2  man2/fplot3d1.2  man2/gainplot.2  man2/geom3d.2  man2/gr_menu.2  man2/graduate.2  man2/grayplot.2  man2/hist3d.2  man2/histplot.2  man2/isoview.2  man2/locate.2  man2/m_circle.2  man2/milk_drop.2  man2/nyquist.2  man2/param3d.2  man2/param3di.2  man2/plot.2  man2/plot2d.2  man2/plot2d1.2  man2/plot2d2.2  man2/plot2d3.2  man2/plot2d4.2  man2/plot3d.2  man2/plot3d1.2  man2/plot3di.2  man2/plot3di1.2  man2/plzr.2  man2/printing.2  man2/rotate.2  man2/scaling.2  man2/secto3d.2  man2/square.2  man2/titlepag.2  man2/xarc.2  man2/xarcs.2  man2/xarrows.2  man2/xaxis.2  man2/xbasc.2  man2/xbasimp.2  man2/xbasr.2  man2/xchange.2  man2/xclea.2  man2/xclear.2  man2/xclick.2  man2/xclip.2  man2/xend.2  man2/xfarc.2  man2/xfpoly.2  man2/xfpolys.2  man2/xfrect.2  man2/xget.2  man2/xgetech.2  man2/xgetmouse.2  man2/xgrid.2  man2/xinit.2  man2/xlfont.2  man2/xnumb.2  man2/xpause.2  man2/xpoly.2  man2/xpolys.2  man2/xrect.2  man2/xrects.2  man2/xrpoly.2  man2/xs2fig.2  man2/xsegs.2  man2/xselect.2  man2/xset.2  man2/xsetech.2  man2/xstring.2  man2/xstringb.2  man2/xstringl.2  man2/xtape.2  man2/xtitle.2  man2/zgrid.2  man3/abs.3  man3/acos.3  man3/acosh.3  man3/addf.3  man3/amell.3  man3/asin.3  man3/asinh.3  man3/atan.3  man3/atanh.3  man3/bloc2exp.3  man3/bloc2ss.3  man3/c_link.3  man3/calerf.3  man3/cmb_lin.3  man3/conj.3  man3/convstr.3  man3/cos.3  man3/cosh.3  man3/cotg.3  man3/coth.3  man3/debug.3  man3/delip.3  man3/demos.3  man3/diag.3  man3/edit.3  man3/emptystr.3  man3/erf.3  man3/erfc.3  man3/erfcx.3  man3/eval.3  man3/execstr.3  man3/full.3  man3/getvalue.3  man3/halt.3  man3/havewindow.3  man3/input.3  man3/integrate.3  man3/interp.3  man3/interpln.3  man3/isdef.3  man3/kron.3  man3/ldivf.3  man3/linspace.3  man3/log.3  man3/logspace.3  man3/mac2for.3  man3/macr2lst.3  man3/macrovar.3  man3/macrovars.sci  man3/manedit.3  man3/modulo.3  man3/mulf.3  man3/norm.3  man3/pen2ea.3  man3/pertrans.3  man3/pol2tex.3  man3/prod.3  man3/rdivf.3  man3/readc_.3  man3/sci2exp.3  man3/sci2map.3  man3/sin.3  man3/sinh.3  man3/smooth.3  man3/solve.3  man3/sort.3  man3/sparse.3  man3/speye.3  man3/spget.3  man3/splin.3  man3/sprand.3  man3/spzeros.3  man3/sqrt.3  man3/ssprint.3  man3/ssrand.3  man3/strcat.3  man3/subf.3  man3/sum.3  man3/sysconv.3  man3/sysdiag.3  man3/syslin.3  man3/tan.3  man3/tanh.3  man3/texprint.3  man3/timer.3  man3/toeplitz.3  man3/trfmod.3  man3/trianfml.3  man3/tril.3  man3/trisolve.3  man3/triu.3  man3/typeof.3  man3/x_choose.3  man3/x_dialog.3  man3/x_matrix.3  man3/x_mdialog.3  man3/x_message.3  man3/zeros.3  man4/abcd.4  man4/arhnk.4  man4/arl2.4  man4/balreal.4  man4/calfrq.4  man4/canon.4  man4/cls2dls.4  man4/colregul.4  man4/cont_frm.4  man4/cont_mat.4  man4/contr.4  man4/contrss.4  man4/csim.4  man4/ctr_gram.4  man4/des2tf.4  man4/dscr.4  man4/dsimul.4  man4/dt_ility.4  man4/equi.4  man4/equil.4  man4/equil1.4  man4/feedback.4  man4/flts.4  man4/frep2tf.4  man4/freq.4  man4/freson.4  man4/g_margin.4  man4/imrep2ss.4  man4/invsyslin.4  man4/lin.4  man4/lqe.4  man4/lqg.4  man4/lqg2stan.4  man4/lqr.4  man4/ltitr.4  man4/markp2ss.4  man4/minreal.4  man4/minss.4  man4/obs_gram.4  man4/obscont.4  man4/obsv_mat.4  man4/obsvss.4  man4/p_margin.4  man4/pfss.4  man4/phasemag.4  man4/ppol.4  man4/projsl.4  man4/repfreq.4  man4/ricc.4  man4/rowregul.4  man4/rtitr.4  man4/sm2des.4  man4/sm2ss.4  man4/specfact.4  man4/ss2des.4  man4/ss2ss.4  man4/ss2tf.4  man4/st_ility.4  man4/svplot.4  man4/tf2ss.4  man4/time_id.4  man4/trzeros.4  man4/unobs.4  man4/zeropen.4  man5/augment.5  man5/bstap.5  man5/ccontrg.5  man5/colinout.5  man5/copfac.5  man5/dcf.5  man5/des2ss.5  man5/dhnorm.sci  man5/dtsi.5  man5/fourplan.5  man5/fspecg.5  man5/fstabst.5  man5/gamitg.5  man5/gcare.5  man5/gfare.5  man5/gtild.5  man5/h2norm.5  man5/h_cl.5  man5/h_inf.5  man5/h_inf_st.5  man5/h_norm.5  man5/hankelsv.5  man5/lcf.5  man5/leqr.5  man5/lft.5  man5/linf.5  man5/linfn.5  man5/lqg_ltr.5  man5/macglov.5  man5/nehari.5  man5/parrot.5  man5/ric_desc.5  man5/riccati.5  man5/rowinout.5  man5/sensi.5  man5/tf2des.5  man6/97  man6/colnew.6  man6/dassl.6  man6/fsolve.6  man6/impl.6  man6/intc.6  man6/intg.6  man6/intl.6  man6/karmarkar.6  man6/linpro.6  man6/lmisolver.6  man6/lmitool.6  man6/ode.6  man6/optim.6  man6/phase1.6  man6/quapro.6  man6/semidef.6  man7/%K.7  man7/%asn.7  man7/%sn.7  man7/Signal.7  man7/analpf.7  man7/buttmag.7  man7/casc.7  man7/cheb1mag.7  man7/cheb2mag.7  man7/chepol.7  man7/convol.7  man7/corr.7  man7/cspect.7  man7/czt.7  man7/dft.7  man7/ell1mag.7  man7/eqfir.7  man7/eqiir.7  man7/faurre.7  man7/ffilt.7  man7/fft.7  man7/filter.7  man7/find_freq.7  man7/findm.7  man7/frmag.7  man7/fsfirlin.7  man7/fwiir.7  man7/group.7  man7/hank.7  man7/hilb.7  man7/iir.7  man7/iirgroup.7  man7/iirlp.7  man7/intdec.7  man7/jmat.7  man7/kalm.7  man7/lattn.7  man7/lattp.7  man7/lev.7  man7/levin.7  man7/lgfft.7  man7/lindquist.7  man7/mese.7  man7/mfft.7  man7/phc.7  man7/pspect.7  man7/remez.7  man7/remezb.7  man7/rpem.7  man7/sinc.7  man7/sincd.7  man7/srfaur.7  man7/srkf.7  man7/sskf.7  man7/system.7  man7/trans.7  man7/wfir.7  man7/wiener.7  man7/wigner.7  man7/window.7  man7/zpbutt.7  man7/zpch1.7  man7/zpch2.7  man7/zpell.7  man8/bezout.8  man8/clean.8  man8/cmndred.8  man8/coffg.8  man8/colcompr.8  man8/denom.8  man8/derivat.8  man8/determ.8  man8/detr.8  man8/diophant.8  man8/factors.8  man8/factors.sci  man8/gcd.8  man8/hermit.8  man8/horner.8  man8/hrmt.8  man8/htrianr.8  man8/invr.8  man8/lcm.8  man8/ldiv.8  man8/numer.8  man8/pdiv.8  man8/pol2des.8  man8/pol2str.8  man8/polfact.8  man8/residu.8  man8/roots.8  man8/routh_t.8  man8/rowcompr.8  man8/sfact.8  man8/simp.8  man8/sylm.8  man8/systmat.8   

@@ -127,7 +127,7 @@ c     .. local scalars ..
 c     .. local arrays ..
       double precision res3la(3), rlist2(52)
 c     .. function references ..
-      double precision d1mach
+      double precision dlamch
 c     .. subroutine references ..
 c     order, epsalg, quarul
 c     ..
@@ -138,9 +138,9 @@ c            the dimension of /rlist2/ is determined by
 c            data /limexp/ in subroutine epsalg (/rlist2/
 c            should be of dimension (limexp+2) at least).
 c
-      epmach=d1mach(4)
-      uflow=d1mach(1)
-      oflow=d1mach(2)
+      epmach=dlamch('p')
+      uflow=dlamch('u')
+      oflow=dlamch('o')
       iero=0
 c
 c            list of major variables

@@ -491,14 +491,8 @@ c      implicit undefined (a-z)
       integer nax(4),m,n,lr,lc,lr5,nlr5,lr4,nlr4,i,il1
       double precision rect(4)
       character*(4) strf
-      nax(1)=2
-      nax(2)=10
-      nax(3)=2
-      nax(4)=10
-      rect(1)=0.0d00
-      rect(2)=0.0d00
-      rect(3)=10.0d00
-      rect(4)=10.0d00
+      data nax / 2,10,2,10/
+      data rect / 0.0d00,0.0d00,10.0d00,10.0d00/
       if (rhs.lt.0) then
          buf='  x=0:0.1:2*%pi,'
      $        //'  plot2d([x;x;x]'',[sin(x);sin(2*x);sin(3*x)]'''
@@ -518,6 +512,9 @@ c      implicit undefined (a-z)
             return
          endif
          call entier(4,stk(lr),nax)
+         do 10 i=1,4
+            nax(i)=max(nax(i),1)
+ 10      continue
          top=top-1
       endif
       if (rhs.ge.6) then
@@ -594,14 +591,8 @@ c      implicit undefined (a-z)
       double precision rect(4)
       character*(4) strf,str
       external func
-      nax(1)=2
-      nax(2)=10
-      nax(3)=2
-      nax(4)=10
-      rect(1)=0.0d00
-      rect(2)=0.0d00
-      rect(3)=10.0d00
-      rect(4)=10.0d00
+      data nax / 2,10,2,10/
+      data rect / 0.0d00,0.0d00,10.0d00,10.0d00/
       if (rhs.lt.0) then
          buf='  x=0:0.1:2*%pi;'// fname
      $        //'(''gnn'',[x;x;x]'',[sin(x);sin(2*x);sin(3*x)]'''
@@ -621,6 +612,9 @@ c      implicit undefined (a-z)
             return
          endif
          call entier(4,stk(lr),nax)
+         do 10 i=1,4
+            nax(i)=max(nax(i),1)
+ 10      continue
          top=top-1
       endif
       if (rhs.ge.7) then
@@ -759,7 +753,7 @@ c      implicit undefined (a-z)
       character*(*) chaine,fname
 c      implicit undefined (a-z)
       include '../stack.h'
-      integer lr,flag,nchar,i,nlr
+      integer lr,flag,nchar,i,nlr,m1,n1
       logical cresmat
 C     fait executer la chaine chaine par scilab
 C     en appellant execstr 517
@@ -776,15 +770,14 @@ C     au cas particulier ou rhs.lt.0.
      $   'string transmited to demo')
       return
  20   if (.not.cresmat(fname,top,1,1,nchar)) return
-      call getsimat(fname,top,top,1,1,1,1,lr,nlr)
+      call getsimat(fname,top,top,m1,n1,1,1,lr,nlr)
       call cvstr(nchar,istk(lr),chaine,0)
       rhs=1
       fun=5
       fin=17
-      buf= " Demo of "//fname 
-      if (flag.eq.1)  call basout(io,wte,buf(1:9+len(fname)))
-c?      buf= " Demo of "//fname 
-c?      call basout(io,wte,buf(1:9+len(fname)))
+      buf(nchar+1:nchar+9+len(fname))= " Demo of "//fname 
+      if (flag.eq.1) call basout(io,wte,buf(nchar+1:nchar+9+len(fname)))
+      call basout(io,wte,buf(1:nchar))
       return
       end
 
@@ -794,7 +787,7 @@ C     OK
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getsmat,cresmat
-      integer topk,m,n,lr,nlr,v,drl
+      integer topk,m,n,lr,nlr,v,drl,m1,n1
       drl=3
 cc    <>=driver(dr_name)
       if (.not.checkrhs(fname,-1,1)) return
@@ -802,7 +795,7 @@ cc    <>=driver(dr_name)
          call  dr1('xgetdr'//char(0),buf,v,v,v,v,v,v)
          top = top+1
          if (.not.cresmat(fname,top,1,1,drl)) return
-         call getsimat(fname,top,top,1,1,1,1,lr,nlr)
+         call getsimat(fname,top,top,m1,n1,1,1,lr,nlr)
          call cvstr(drl,istk(lr),buf,0)
       else
          topk=top
@@ -891,21 +884,23 @@ C     xarcs ou xrects
 
      
      
+
       subroutine sciarrows(fname)
       character*(*) fname
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getscalar,getrmat,matsize
-      integer topk, arsize,m1,n1,lr1,m2,n2,lr2,lr,v,mn2
+      integer topk, m1,n1,lr1,m2,n2,lr2,lr,v,mn2
+      double precision arsize
       call sciwin()
       if (.not.checkrhs(fname,2,3)) return
       topk=top
       if (rhs.eq.3) then
          if (.not.getscalar(fname,topk,top,lr)) return
-         arsize=int(stk(lr))*10
+         arsize=stk(lr)
          top=top-1
       else
-         arsize=50
+         arsize=-1.0
       endif
       if (.not.getrmat(fname,topk,top,m2,n2,lr2)) return
       top=top-1
@@ -917,6 +912,7 @@ c      implicit undefined (a-z)
       call  objvide(fname,top)
       return
       end
+     
      
       subroutine scixsegs(fname)
       character*(*) fname
@@ -932,6 +928,10 @@ c      implicit undefined (a-z)
       if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
       if (.not.matsize(fname,topk,top,m2,n2)) return
       mn2=m2*n2
+      if (mn2.eq.0) then 
+          call basout(io,wte,'xsegs Warning : call with empty arrays')
+          return
+       endif
       call  dr1('xsegs'//char(0),'v'//char(0),stk(lr1),
      $     stk(lr2),mn2,v,v,v)
       call  objvide(fname,top)
@@ -1709,18 +1709,10 @@ c      implicit undefined (a-z)
       integer nax(4),m,n,lr,lr5,nlr5,lr4,nlr4
       double precision rect(4)
       character*(4) strf
-      nax(1)=2
-      nax(2)=10
-      nax(3)=2
-      nax(4)=10
-      rect(1)=0.0d00
-      rect(2)=0.0d00
-      rect(3)=10.0d00
-      rect(4)=10.0d00
+      data nax / 2,10,2,10/
+      data rect / 0.0d00,0.0d00,10.0d00,10.0d00/
       if (rhs.lt.0) then
-         buf='  x=0:0.1:2*%pi,'
-     $        //'  plot2d([x;x;x]'',[sin(x);sin(2*x);sin(3*x)]'''
-     $        //',[-1,-2,3],''111'',''L1@L2@L3'',[0,-2,2*%pi,2]);$'
+         buf=' exec("SCI/demos/fec/fec.ex1");$'
          call demo(fname,buf,1)
          return
       endif
@@ -1736,6 +1728,9 @@ c      implicit undefined (a-z)
             return
          endif
          call entier(4,stk(lr),nax)
+         do 10 i=1,4
+            nax(i)=max(nax(i),1)
+ 10      continue
          top=top-1
       endif
       if (rhs.ge.7) then
@@ -1775,6 +1770,11 @@ C        valeur de la fonction sur les Noeuds
          top=top-1
 C        matrice des triangles 
          if (.not.getrmat(fname,topk,top,m3,n3,lr3)) return
+         if (n3.ne.5) then 
+            buf=fname//'triangles must have 5 columns'
+            call error(999)
+            return
+         endif
          top=top-1
 C        y des noeuds 
          if (.not.getrvect(fname,topk,top,m2,n2,lr2)) return

@@ -120,6 +120,6 @@ if mnc>0 then
     y0=y0+dy
     if count==3 then x0=x0+dx;y0=0.7,end
   end
-  xset('dashes',dash)
+  xset('dashes',dash(1))
 end
 xsetech(ffr,bds);

@@ -5,9 +5,9 @@ count=0;level=0;nwrk=list(0,[],[],0,[],[],0,list(),1,[],[],[],[],[],[])
 forparam()
 //
 
-input=lst(3)
+inputs=lst(3)
 macrhs=size(vtps)
-vnms=[],for k=1:macrhs,vnms=[vnms;[input(k),input(k)]],end,
+vnms=[],for k=1:macrhs,vnms=[vnms;[inputs(k),inputs(k)]],end,
 
 na=prod(size(vnms))/2
  

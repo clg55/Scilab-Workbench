@@ -246,25 +246,42 @@ RealNumber LargestInCol, FindLargestInCol();
     CountMarkowitz( Matrix, RHS, Step );
     MarkowitzProducts( Matrix, Step );
     Matrix->MaxRowCountInLowerTri = -1;
-
+/* Initialize numerical Rank */
+    Matrix->NumRank= Matrix->Size;
 /* Perform reordering and factorization. */
     for (; Step <= Size; Step++)
     {   pPivot = SearchForPivot( Matrix, Step, DiagPivoting );
-        if (pPivot == NULL) return MatrixIsSingular( Matrix, Step );
-        ExchangeRowsAndCols( Matrix, pPivot, Step );
-
-        if (Matrix->Complex)
-            ComplexRowColElimination( Matrix, pPivot );
-        else
-            RealRowColElimination( Matrix, pPivot );
-
-        if (Matrix->Error >= spFATAL) return Matrix->Error;
-        UpdateMarkowitzNumbers( Matrix, pPivot );
-
+        if (pPivot != NULL && ELEMENT_MAG(pPivot) > Matrix->AbsThreshold)
+                  /*JPC  return MatrixIsSingular( Matrix, Step ); */
+	  {
+	    ExchangeRowsAndCols( Matrix, pPivot, Step );
+	    
+	    if (Matrix->Complex)
+	      ComplexRowColElimination( Matrix, pPivot );
+	    else
+	      RealRowColElimination( Matrix, pPivot );
+	    
+	    if (Matrix->Error >= spFATAL) return Matrix->Error;
+	    UpdateMarkowitzNumbers( Matrix, pPivot );
+	    
 #if ANNOTATE == FULL
-        WriteStatus( Matrix, Step );
+	    WriteStatus( Matrix, Step );
 #endif
+	  }
+	else 
+	  {
+	    Matrix->NumRank=Step-1;
+#if ANNOTATE == FULL
+	    if (pPivot==NULL) 
+	      fprintf(stderr,"//Matrix is Singular Returning LU ");
+	    else 
+	      fprintf(stderr,"//Matrix is Singular at level prec [%f] I return LU\n",ELEMENT_MAG(pPivot));
+#endif
+	     break;
+
+	    }
     }
+   /* Changing the diag elements in order to have L in the matrix */
 
 Done:
     Matrix->NeedsOrdering = NO;
@@ -327,7 +344,8 @@ RealNumber Mult;
 
     if (Matrix->NeedsOrdering)
     {   return spOrderAndFactor( eMatrix, (RealVector)NULL,
-                                 0.0, 0.0, DIAG_PIVOTING_AS_DEFAULT );
+                                 0.0, -1.0, DIAG_PIVOTING_AS_DEFAULT );
+	/*jpc I put -1.0 for AbsThresold in order to use the Matrix stored Thresold see lu.c */
     }
     if (NOT Matrix->Partitioned) spPartition( eMatrix, spDEFAULT_PARTITION );
 #if spCOMPLEX
@@ -338,7 +356,7 @@ RealNumber Mult;
     Size = Matrix->Size;
 
     if (Matrix->Diag[1]->Real == 0.0) return ZeroPivot( Matrix, 1 );
-    Matrix->Diag[1]->Real = 1.0 / Matrix->Diag[1]->Real;
+/*jpc     Matrix->Diag[1]->Real = 1.0 / Matrix->Diag[1]->Real;*/
 
 /* Start factorization. */
     for (Step = 2; Step <= Size; Step++)
@@ -372,7 +390,7 @@ RealNumber Mult;
 
 /* Check for singular matrix. */
             if (Dest[Step] == 0.0) return ZeroPivot( Matrix, Step );
-            Matrix->Diag[Step]->Real = 1.0 / Dest[Step];
+/*jpc 	    Matrix->Diag[Step]->Real = 1.0 / Dest[Step];*/
         }
         else
         {   /* Update column using indirect addressing scatter-gather. */
@@ -398,7 +416,7 @@ RealNumber Mult;
 /* Check for singular matrix. */
             if (Matrix->Diag[Step]->Real == 0.0)
                 return ZeroPivot( Matrix, Step );
-            Matrix->Diag[Step]->Real = 1.0 / Matrix->Diag[Step]->Real;
+/*jpc            Matrix->Diag[Step]->Real = 1.0 / Matrix->Diag[Step]->Real;  */
         }
     }
 
@@ -1884,11 +1902,12 @@ RealNumber  FindLargestInCol();
 
     if (ChosenPivot != NULL) return ChosenPivot;
 
+
     if (LargestElementMag == 0.0)
     {   Matrix->Error = spSINGULAR;
         return NULL;
     }
-
+    
     Matrix->Error = spSMALL_PIVOT;
     return pLargestElement;
 }
@@ -2708,13 +2727,14 @@ extern ElementPtr  CreateFillin();
     {   (void)MatrixIsSingular( Matrix, pPivot->Row );
         return;
     }
-    pPivot->Real = 1.0 / pPivot->Real;
+/*jpc    pPivot->Real = 1.0 / pPivot->Real; */
 
     pUpper = pPivot->NextInRow;
     while (pUpper != NULL)
     {
 /* Calculate upper triangular element. */
-        pUpper->Real *= pPivot->Real;
+/*jpc        pUpper->Real *= pPivot->Real; */
+      pUpper->Real /= pPivot->Real;
 
         pSub = pUpper->NextInCol;
         pLower = pPivot->NextInCol;

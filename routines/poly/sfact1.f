@@ -27,9 +27,9 @@ c!origine
 c     V Kucera : Discrete Linear control (john Wiley& Sons) 1979
 c!
       dimension b(n+1),w(*)
-      double precision b,b0,w,a0,temp,b00,s,d1mach,eps,best
+      double precision b,b0,w,a0,temp,b00,s,dlamch,eps,best
 c
-      eps=d1mach(4)*10.0d+0
+      eps=dlamch('p')*10.0d+0
 c
       lb=n+1
       ierr=0

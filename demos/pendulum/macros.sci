@@ -43,7 +43,7 @@ xsegs([xg,xg+lb*sin(teta)],[y2,y2+lb*cos(teta)]),
 xarc(x1+lc/10-2.5,y1-2.5+2.5,5,5,0,360*64);
 xarc(x2-5+lc/10-2.5,y1-2.5+2.5,5,5,0,360*64);
 xsegs([10 90],[y1-5 y1-5]); 
-xarrows([x2 x2+10],[yg yg],10.0);
+xarrows([x2 x2+10],[yg yg],3.0);
 xstring(x2+20,yg,'u (force)',0,0);
 xset("dashes",1);xsegs([xg xg],[y2 y2+lb]);xstring(xg,y2+lb,' teta',0,0);
 xset("default");

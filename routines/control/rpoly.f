@@ -24,8 +24,9 @@ c for scaling, bounds and error calculations. all
 c calculations for the iterations are done in double
 c precision.
 c!
-      external  d1mach,r1mach
-      real      r1mach
+      external dlamch,slamch
+      double precision dlamch
+      real slamch
 c
       common /global/ p, qp, k, qk, svk, sr, si, u,
      * v, a, b, c, d, a1, a2, a3, a6, a7, e, f, g,
@@ -35,7 +36,7 @@ c
      * a1, a2, a3, a6, a7, e, f, g, h, szr, szi,
      * lzr, lzi
       double precision op(*), temp(101),
-     * zeror(*), zeroi(*), t, aa, bb, cc,factor,d1mach
+     * zeror(*), zeroi(*), t, aa, bb, cc,factor
       real ptt(101), lo, maxi, mini, xx, yy, cosr,
      * sinr, xxx, x, sc, bnd, xm, ff, df, dx, infin,
      * smalno, base,eta,are,mre
@@ -58,13 +59,10 @@ c         double precision then smalno and infin
 c         should indicate the smaller range.
 c base    the base of the floating-point number
 c         system used.
-c      base = 10.*r1mach(5)
-      smalno=r1mach(1)
-      infin=r1mach(2)
-      base=i1mach(7)
-      eta=real(d1mach(4))
-c      infin=d1mach(2)
-c      smalno=d1mach(1)
+      smalno=slamch('u')
+      infin=slamch('o')
+      base=slamch('b')
+      eta=real(dlamch('p'))
 c are and mre refer to the unit error in + and *
 c respectively. they are assumed to be the same as
 c eta.

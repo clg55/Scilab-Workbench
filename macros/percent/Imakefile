@@ -44,7 +44,12 @@ MACROS= %a2for.sci %c2for.sci %cc2for.sci %ce.sci %cic.sci\
 	%smr.sci %snl.sci %snlss.sci %snr.sci %sol.sci\
 	%solss.sci %sor.sci %sqr.sci %srlss.sci %srp.sci\
 	%srr.sci %sslss.sci %ssr.sci %svlss.sci %svp.sci\
-	%svr.sci %svs.sci %sxr.sci %t2for.sci
+	%svr.sci %svs.sci %sxr.sci %t2for.sci\
+	%bcspb.sci %bfspb.sci %bgspb.sci %bhspb.sci %sasp.sci\
+	%scsp.sci %sfsp.sci %spas.sci %spbcb.sci %spbfb.sci\
+	%spbgb.sci %spbgspb.sci %spbhb.sci %spbhspb.sci\
+	%spbib.sci %spcs.sci %spfs.sci %spis.sci %spss.sci %sssp.sci\
+	%sib.sci %spls.sci %splsp.sci %slsp.sci %sprs.sci %srsp.sci %sprsp.sci
 
 OBJ=$(MACROS:.sci=.bin)
 MACROSN=$(MACROS:.sci=)

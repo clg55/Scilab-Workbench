@@ -26,7 +26,7 @@
 
 # platform: osf1.cf
 
-# Operating system:  1/1 1.3
+# Operating system:  1/1 3.0
 
    	SHAREDSWITCH =
 
@@ -48,6 +48,7 @@
   BOOTSTRAPCFLAGS =
                CC = cc $(SHAREDSWITCH)
             LOCCC = cc
+        LOCSHARCC = LocShareCcCmd
                AS = as
 
          COMPRESS = compress
@@ -82,7 +83,7 @@
 
     PROTO_DEFINES = -DFUNCPROTO=3
 
-     INSTPGMFLAGS =
+     INSTPGMFLAGS = -s
 
      INSTBINFLAGS = -m 0755
      INSTUIDFLAGS = -m 4755
@@ -92,7 +93,7 @@
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4755
 
-      CDEBUGFLAGS = -O2
+      CDEBUGFLAGS = -O2 -Olimit 2000
         CCOPTIONS =
      LOCCCOPTIONS =
 
@@ -144,12 +145,15 @@
            INCDIR = $(INCROOT)/X11
            ADMDIR = /usr/adm
            LIBDIR = $(USRLIBDIR)/X11
+           VARDIR = /usr/var/X11
         CONFIGDIR = $(LIBDIR)/config
        LINTLIBDIR = $(USRLIBDIR)/lint
 
           FONTDIR = $(LIBDIR)/fonts
+      USERFONTDIR = $(VARDIR)/fonts/user
+            FSDIR = $(VARDIR)/fs
          XINITDIR = $(LIBDIR)/xinit
-           XDMDIR = $(LIBDIR)/xdm
+           XDMDIR = $(VARDIR)/xdm
            TWMDIR = $(LIBDIR)/twm
           MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
@@ -207,8 +211,12 @@
       XTESTLIBSRC = $(EXTENSIONSRC)/lib/xtest
       XTRAPLIBSRC = $(EXTENSIONSRC)/lib/xtrap
       PHIGSLIBSRC = $(EXTENSIONSRC)/lib/PEX
+       XIELIBSRC  = $(EXTENSIONSRC)/lib/XIE
+
+        EXTINCSRC = $(TOP)/X11/extensions
 
       USRSHLIBDIR = /usr/shlib
+        XSHLIBDIR = /usr/shlib/X11
 
        SHLIBFLAGS = -check_registry $(CROSSBASE)/usr/shlib/so_locations 	-L$(CROSSBASE)/usr/shlib -L$(CROSSBASE)/usr/ccs/lib
 
@@ -230,6 +238,9 @@
         DEPXAWLIB = $(USRSHLIBDIR)/libXaw.so
            XAWLIB = -lXaw
 
+       DEPXXIELIB = $(USRSHLIBDIR)/libXIE.so
+          XXIELIB = -lXIE
+
         DEPXILIB = $(USRSHLIBDIR)/libXi.a
            XILIB = -lXi
 
@@ -238,6 +249,7 @@
         SOXLIBREV = SharedXlibRev
           SOXTREV = SharedXtRev
          SOXAWREV = SharedXawRev
+         SOXIEREV = SharedXIERev
         SOOLDXREV = SharedOldXRev
          SOXMUREV = SharedXmuRev
         SOXEXTREV = SharedXextRev
@@ -259,6 +271,12 @@
         DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
            PHIGSLIB = 			 -lphigs
 
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
        DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
           XBSDLIB = 			 -lXbsd
 
@@ -267,6 +285,7 @@
           LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
         LINTXTOOL = $(LINTLIBDIR)/llib-lXt.ln
           LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
+         LINTXXIE = $(LINTLIBDIR)/llib-lXIE.ln
            LINTXI = $(LINTLIBDIR)/llib-lXi.ln
         LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
 
@@ -290,6 +309,7 @@
    MRESOURCESRC = $(MLIBSRC)/Mrm
      MCLIENTSRC = $(TOP)/motif/clients
          UILSRC = $(MCLIENTSRC)/uil
+    MINCLUDESRC = $(INCLUDESRC)
 
             UIL = uil
 
@@ -317,9 +337,9 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
            CDADIR = $(USRLIBDIR)/cda
 
            DXMSRC = $(MLIBSRC)/DXm
-           DPSSRC = $(EXTENSIONSRC)/DPS/lib/dps
-         DPSTKSRC = $(EXTENSIONSRC)/DPS/lib/dpstk
-         PSRESSRC = $(EXTENSIONSRC)/DPS/lib/psres
+           DPSSRC = $(EXTENSIONSRC)/DPSII/lib/dps
+         DPSTKSRC = $(EXTENSIONSRC)/DPSII/lib/dpstk
+         PSRESSRC = $(EXTENSIONSRC)/DPSII/lib/psres
            XIESRC = $(EXTENSIONSRC)/lib/xie
            IDSSRC = $(MLIBSRC)/ids
            BKRSRC = $(MLIBSRC)/bkr
@@ -329,6 +349,8 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
        DEPDXMLIB = $(USRSHLIBDIR)/libDXm.so
           DXMLIB = -lDXm
+
+       MDXMLIB = $(DXMLIB)
 
         DEPDPSLIB = $(USRSHLIBDIR)/libdps.so
            DPSLIB = -ldps
@@ -380,33 +402,32 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
 # -------------------------------------------------------------------------
 # DEC-Specific System Build Rules
-# $Id: Dec.rules,v 1.1.2.8 1992/12/08 19:29:22 Leela_Obilichetti Exp $
+# $Id: Dec.rules,v 1.1.2.8 92/12/08 19:29:22 Leela_Obilichetti Exp $
 
 # -------------------------------------------------------------------------
 # start of Imakefile
 
 include ../Path.incl
 
-FFOPTIONS = -C -fpe1 -switch nosqrt_recip -check nounderflow
-FDEBUGFLAGS =
-CDEBUGFLAGS =
-CCOPTIONS=
 FC=DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
+FFOPTIONS =  -fpe3 -switch nosqrt_recip
+FDEBUGFLAGS = -O
+CCOPTIONS=
+CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 
-SCIVERSION=Scilab-2.0
-SCIDATE=31 October 1994
+SCIVERSION = Scilab-2.1
+SCIDATE = 10 February 1995
 
-EXTRA_INCLUDES=-I$(SCIDIR)/routines
-
-FLOCAL_LDFLAGS=  -non_shared
+EXTRA_INCLUDES = -I$(SCIDIR)/routines
 
 LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS) $(LOCAL_LDFLAGS)
 
 FFLAGS = $(FDEBUGFLAGS) $(FFOPTIONS)
 
 FLDOPTIONS = $(FDEBUGFLAGS) $(FFOPTIONS) $(FLOCAL_LDFLAGS)
-LLDOPTIONS = $(FDEBUGFLAGS) $(FLOCAL_LDFLAGS)
+
+LLDOPTIONS = $(LLOCAL_LDFLAGS)
 
 PATHSP=$(SCIDIR)/routines
 PATHO=$(SCIDIR)/libs
@@ -421,6 +442,7 @@ DEPLIBS = $(DEPXAWLIB) $(DEPXMULIB) $(DEPXTOOLLIB) $(DEPXLIB) $(LOCAL_DEPLIBS)
 
 XAWLIB =  ../libs/libXaw.a
 XMULIB = ../libs/libXmu.a
+XMULIBONLY = ../libs/libXmu.a
 
 SYS_LIBRARIES = $(XAWLIB) $(XMULIB) $(XTOOLLIB) $(XLIB)
 
@@ -451,17 +473,17 @@ IM=../Imake.incl ../Path.incl
 all:: $(SCIDIR)/X11_defaults/xless.help
 
 $(SCIDIR)/X11_defaults/xless.help :  xless.help
-	$(INSTALL) -c xless.help $(SCIDIR)/X11_defaults/xless.help
+	cp xless.help $(SCIDIR)/X11_defaults/xless.help
 
 all:: $(SCIDIR)/X11_defaults/XLess
 
 $(SCIDIR)/X11_defaults/XLess : XLess.ad
-	$(INSTALL) -c XLess.ad $(SCIDIR)/X11_defaults/XLess
+	cp XLess.ad $(SCIDIR)/X11_defaults/XLess
 
 all:: $(SCIDIR)/X11_defaults/XLess-color
 
 $(SCIDIR)/X11_defaults/XLess-color :  XLess-co.ad
-	$(INSTALL) -c XLess-co.ad $(SCIDIR)/X11_defaults/XLess-color
+	cp XLess-co.ad $(SCIDIR)/X11_defaults/XLess-color
 
 clean::
 	rm -f $(SCIDIR)/X11_defaults/XLess-color
@@ -506,340 +528,317 @@ help.o: xless.h /usr/include/stdio.h /usr/include/standards.h
 help.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 help.o: /usr/include/sys/types.h /usr/include/string.h /usr/include/fcntl.h
 help.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-help.o: /usr/include/sys/access.h /usr/include/time.h /usr/include/sys/time.h
+help.o: /usr/include/sys/access.h /usr/include/sys/time.h
 help.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+help.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
 help.o: /usr/include/sys/dir.h /usr/include/sys/param.h
-help.o: /usr/include/machine/machparam.h /usr/include/machine/endian.h
+help.o: /usr/include/sys/machine/machparam.h /usr/include/machine/endian.h
 help.o: /usr/include/machine/machlimits.h /usr/include/dirent.h
 help.o: /usr/include/sys/stat.h /usr/include/sys/mode.h /usr/include/X11/X.h
 help.o: /usr/include/X11/Xatom.h /usr/include/X11/StringDefs.h
 help.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 help.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
-help.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-help.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-help.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-help.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-help.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
-help.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-help.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-help.o: /usr/include/X11/Shell.h /usr/include/X11/cursorfont.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-help.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
+help.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+help.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+help.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+help.o: /usr/include/X11/RectObj.h /usr/include/X11/Shell.h
+help.o: /usr/include/X11/cursorfont.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+help.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
 help.o: /usr/include/malloc.h XLessHelp.icon
 init.o: xless.h /usr/include/stdio.h /usr/include/standards.h
 init.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 init.o: /usr/include/sys/types.h /usr/include/string.h /usr/include/fcntl.h
 init.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-init.o: /usr/include/sys/access.h /usr/include/time.h /usr/include/sys/time.h
+init.o: /usr/include/sys/access.h /usr/include/sys/time.h
 init.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+init.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
 init.o: /usr/include/sys/dir.h /usr/include/sys/param.h
-init.o: /usr/include/machine/machparam.h /usr/include/machine/endian.h
+init.o: /usr/include/sys/machine/machparam.h /usr/include/machine/endian.h
 init.o: /usr/include/machine/machlimits.h /usr/include/dirent.h
 init.o: /usr/include/sys/stat.h /usr/include/sys/mode.h /usr/include/X11/X.h
 init.o: /usr/include/X11/Xatom.h /usr/include/X11/StringDefs.h
 init.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 init.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
-init.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-init.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-init.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-init.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-init.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
-init.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-init.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-init.o: /usr/include/X11/Shell.h /usr/include/X11/cursorfont.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-init.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
+init.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+init.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+init.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+init.o: /usr/include/X11/RectObj.h /usr/include/X11/Shell.h
+init.o: /usr/include/X11/cursorfont.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+init.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
 init.o: /usr/include/malloc.h
 popup.o: xless.h /usr/include/stdio.h /usr/include/standards.h
 popup.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 popup.o: /usr/include/sys/types.h /usr/include/string.h /usr/include/fcntl.h
 popup.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-popup.o: /usr/include/sys/access.h /usr/include/time.h
-popup.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-popup.o: /usr/include/sys/signal.h /usr/include/sys/dir.h
-popup.o: /usr/include/sys/param.h /usr/include/machine/machparam.h
-popup.o: /usr/include/machine/endian.h /usr/include/machine/machlimits.h
-popup.o: /usr/include/dirent.h /usr/include/sys/stat.h
-popup.o: /usr/include/sys/mode.h /usr/include/X11/X.h
+popup.o: /usr/include/sys/access.h /usr/include/sys/time.h
+popup.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+popup.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
+popup.o: /usr/include/sys/dir.h /usr/include/sys/param.h
+popup.o: /usr/include/sys/machine/machparam.h /usr/include/machine/endian.h
+popup.o: /usr/include/machine/machlimits.h /usr/include/dirent.h
+popup.o: /usr/include/sys/stat.h /usr/include/sys/mode.h /usr/include/X11/X.h
 popup.o: /usr/include/X11/Xatom.h /usr/include/X11/StringDefs.h
 popup.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 popup.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
-popup.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-popup.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-popup.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-popup.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-popup.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
-popup.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-popup.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-popup.o: /usr/include/X11/Shell.h /usr/include/X11/cursorfont.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-popup.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
-popup.o: /usr/include/malloc.h /usr/include/varargs.h
+popup.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+popup.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+popup.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+popup.o: /usr/include/X11/RectObj.h /usr/include/X11/Shell.h
+popup.o: /usr/include/X11/cursorfont.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+popup.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
+popup.o: /usr/include/malloc.h /usr/include/varargs.h /usr/include/va_list.h
 util.o: xless.h /usr/include/stdio.h /usr/include/standards.h
 util.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 util.o: /usr/include/sys/types.h /usr/include/string.h /usr/include/fcntl.h
 util.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-util.o: /usr/include/sys/access.h /usr/include/time.h /usr/include/sys/time.h
+util.o: /usr/include/sys/access.h /usr/include/sys/time.h
 util.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+util.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
 util.o: /usr/include/sys/dir.h /usr/include/sys/param.h
-util.o: /usr/include/machine/machparam.h /usr/include/machine/endian.h
+util.o: /usr/include/sys/machine/machparam.h /usr/include/machine/endian.h
 util.o: /usr/include/machine/machlimits.h /usr/include/dirent.h
 util.o: /usr/include/sys/stat.h /usr/include/sys/mode.h /usr/include/X11/X.h
 util.o: /usr/include/X11/Xatom.h /usr/include/X11/StringDefs.h
 util.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 util.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
-util.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-util.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-util.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-util.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-util.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
-util.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-util.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-util.o: /usr/include/X11/Shell.h /usr/include/X11/cursorfont.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-util.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
+util.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+util.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+util.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+util.o: /usr/include/X11/RectObj.h /usr/include/X11/Shell.h
+util.o: /usr/include/X11/cursorfont.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+util.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
 util.o: /usr/include/malloc.h /usr/include/pwd.h
 callbacks.o: xless.h /usr/include/stdio.h /usr/include/standards.h
 callbacks.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 callbacks.o: /usr/include/sys/types.h /usr/include/string.h
 callbacks.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h
 callbacks.o: /usr/include/unistd.h /usr/include/sys/access.h
-callbacks.o: /usr/include/time.h /usr/include/sys/time.h
-callbacks.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
-callbacks.o: /usr/include/sys/dir.h /usr/include/sys/param.h
-callbacks.o: /usr/include/machine/machparam.h /usr/include/machine/endian.h
-callbacks.o: /usr/include/machine/machlimits.h /usr/include/dirent.h
-callbacks.o: /usr/include/sys/stat.h /usr/include/sys/mode.h
-callbacks.o: /usr/include/X11/X.h /usr/include/X11/Xatom.h
-callbacks.o: /usr/include/X11/StringDefs.h /usr/include/X11/Intrinsic.h
-callbacks.o: /usr/include/X11/Xlib.h /usr/include/X11/Xfuncproto.h
-callbacks.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-callbacks.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-callbacks.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-callbacks.o: /usr/include/X11/extensions/smt.h
-callbacks.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-callbacks.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
-callbacks.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-callbacks.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-callbacks.o: /usr/include/X11/Shell.h /usr/include/X11/cursorfont.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-callbacks.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
+callbacks.o: /usr/include/sys/time.h /usr/include/sys/limits.h
+callbacks.o: /usr/include/sys/signal.h /usr/include/sys/machine/signal.h
+callbacks.o: /usr/include/sys/time.h /usr/include/sys/dir.h
+callbacks.o: /usr/include/sys/param.h /usr/include/sys/machine/machparam.h
+callbacks.o: /usr/include/machine/endian.h /usr/include/machine/machlimits.h
+callbacks.o: /usr/include/dirent.h /usr/include/sys/stat.h
+callbacks.o: /usr/include/sys/mode.h /usr/include/X11/X.h
+callbacks.o: /usr/include/X11/Xatom.h /usr/include/X11/StringDefs.h
+callbacks.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+callbacks.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
+callbacks.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+callbacks.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+callbacks.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+callbacks.o: /usr/include/X11/RectObj.h /usr/include/X11/Shell.h
+callbacks.o: /usr/include/X11/cursorfont.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+callbacks.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
 callbacks.o: /usr/include/malloc.h
 window.o: xless.h /usr/include/stdio.h /usr/include/standards.h
 window.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 window.o: /usr/include/sys/types.h /usr/include/string.h /usr/include/fcntl.h
 window.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-window.o: /usr/include/sys/access.h /usr/include/time.h
-window.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-window.o: /usr/include/sys/signal.h /usr/include/sys/dir.h
-window.o: /usr/include/sys/param.h /usr/include/machine/machparam.h
-window.o: /usr/include/machine/endian.h /usr/include/machine/machlimits.h
-window.o: /usr/include/dirent.h /usr/include/sys/stat.h
-window.o: /usr/include/sys/mode.h /usr/include/X11/X.h
-window.o: /usr/include/X11/Xatom.h /usr/include/X11/StringDefs.h
-window.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
-window.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
-window.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-window.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-window.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-window.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+window.o: /usr/include/sys/access.h /usr/include/sys/time.h
+window.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+window.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
+window.o: /usr/include/sys/dir.h /usr/include/sys/param.h
+window.o: /usr/include/sys/machine/machparam.h /usr/include/machine/endian.h
+window.o: /usr/include/machine/machlimits.h /usr/include/dirent.h
+window.o: /usr/include/sys/stat.h /usr/include/sys/mode.h
+window.o: /usr/include/X11/X.h /usr/include/X11/Xatom.h
+window.o: /usr/include/X11/StringDefs.h /usr/include/X11/Intrinsic.h
+window.o: /usr/include/X11/Xlib.h /usr/include/X11/Xfuncproto.h
+window.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 window.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
 window.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
 window.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
 window.o: /usr/include/X11/Shell.h /usr/include/X11/cursorfont.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-window.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+window.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
 window.o: /usr/include/malloc.h XLessWin.icon
 main.o: xless.h /usr/include/stdio.h /usr/include/standards.h
 main.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 main.o: /usr/include/sys/types.h /usr/include/string.h /usr/include/fcntl.h
 main.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-main.o: /usr/include/sys/access.h /usr/include/time.h /usr/include/sys/time.h
+main.o: /usr/include/sys/access.h /usr/include/sys/time.h
 main.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+main.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
 main.o: /usr/include/sys/dir.h /usr/include/sys/param.h
-main.o: /usr/include/machine/machparam.h /usr/include/machine/endian.h
+main.o: /usr/include/sys/machine/machparam.h /usr/include/machine/endian.h
 main.o: /usr/include/machine/machlimits.h /usr/include/dirent.h
 main.o: /usr/include/sys/stat.h /usr/include/sys/mode.h /usr/include/X11/X.h
 main.o: /usr/include/X11/Xatom.h /usr/include/X11/StringDefs.h
 main.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 main.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
-main.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-main.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-main.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-main.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-main.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
-main.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-main.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-main.o: /usr/include/X11/Shell.h /usr/include/X11/cursorfont.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-main.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
+main.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+main.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+main.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+main.o: /usr/include/X11/RectObj.h /usr/include/X11/Shell.h
+main.o: /usr/include/X11/cursorfont.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+main.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
 main.o: /usr/include/malloc.h XLessTop.icon
 actions.o: xless.h /usr/include/stdio.h /usr/include/standards.h
 actions.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 actions.o: /usr/include/sys/types.h /usr/include/string.h
 actions.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h
 actions.o: /usr/include/unistd.h /usr/include/sys/access.h
-actions.o: /usr/include/time.h /usr/include/sys/time.h
-actions.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
-actions.o: /usr/include/sys/dir.h /usr/include/sys/param.h
-actions.o: /usr/include/machine/machparam.h /usr/include/machine/endian.h
-actions.o: /usr/include/machine/machlimits.h /usr/include/dirent.h
-actions.o: /usr/include/sys/stat.h /usr/include/sys/mode.h
-actions.o: /usr/include/X11/X.h /usr/include/X11/Xatom.h
-actions.o: /usr/include/X11/StringDefs.h /usr/include/X11/Intrinsic.h
-actions.o: /usr/include/X11/Xlib.h /usr/include/X11/Xfuncproto.h
-actions.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-actions.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-actions.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-actions.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
+actions.o: /usr/include/sys/time.h /usr/include/sys/limits.h
+actions.o: /usr/include/sys/signal.h /usr/include/sys/machine/signal.h
+actions.o: /usr/include/sys/time.h /usr/include/sys/dir.h
+actions.o: /usr/include/sys/param.h /usr/include/sys/machine/machparam.h
+actions.o: /usr/include/machine/endian.h /usr/include/machine/machlimits.h
+actions.o: /usr/include/dirent.h /usr/include/sys/stat.h
+actions.o: /usr/include/sys/mode.h /usr/include/X11/X.h
+actions.o: /usr/include/X11/Xatom.h /usr/include/X11/StringDefs.h
+actions.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+actions.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
 actions.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
 actions.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 actions.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
 actions.o: /usr/include/X11/RectObj.h /usr/include/X11/Shell.h
 actions.o: /usr/include/X11/cursorfont.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-actions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+actions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
 actions.o: /usr/include/malloc.h
 functions.o: xless.h /usr/include/stdio.h /usr/include/standards.h
 functions.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 functions.o: /usr/include/sys/types.h /usr/include/string.h
 functions.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h
 functions.o: /usr/include/unistd.h /usr/include/sys/access.h
-functions.o: /usr/include/time.h /usr/include/sys/time.h
-functions.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
-functions.o: /usr/include/sys/dir.h /usr/include/sys/param.h
-functions.o: /usr/include/machine/machparam.h /usr/include/machine/endian.h
-functions.o: /usr/include/machine/machlimits.h /usr/include/dirent.h
-functions.o: /usr/include/sys/stat.h /usr/include/sys/mode.h
-functions.o: /usr/include/X11/X.h /usr/include/X11/Xatom.h
-functions.o: /usr/include/X11/StringDefs.h /usr/include/X11/Intrinsic.h
-functions.o: /usr/include/X11/Xlib.h /usr/include/X11/Xfuncproto.h
-functions.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-functions.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-functions.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-functions.o: /usr/include/X11/extensions/smt.h
-functions.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-functions.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
-functions.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-functions.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-functions.o: /usr/include/X11/Shell.h /usr/include/X11/cursorfont.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-functions.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
+functions.o: /usr/include/sys/time.h /usr/include/sys/limits.h
+functions.o: /usr/include/sys/signal.h /usr/include/sys/machine/signal.h
+functions.o: /usr/include/sys/time.h /usr/include/sys/dir.h
+functions.o: /usr/include/sys/param.h /usr/include/sys/machine/machparam.h
+functions.o: /usr/include/machine/endian.h /usr/include/machine/machlimits.h
+functions.o: /usr/include/dirent.h /usr/include/sys/stat.h
+functions.o: /usr/include/sys/mode.h /usr/include/X11/X.h
+functions.o: /usr/include/X11/Xatom.h /usr/include/X11/StringDefs.h
+functions.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+functions.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
+functions.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+functions.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+functions.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+functions.o: /usr/include/X11/RectObj.h /usr/include/X11/Shell.h
+functions.o: /usr/include/X11/cursorfont.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+functions.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
 functions.o: /usr/include/malloc.h

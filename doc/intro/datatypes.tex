@@ -6,7 +6,7 @@
  Scalar objects are constants, booleans, polynomials, strings and 
 rationals (quotients of polynomials). These objects in turn allow to 
 define matrices which admits these scalars as entries.
-Other basic objects are lists and macros.
+Other basic objects are lists and functions.
 %
 The objective of this chapter is to describe the use of each of 
 these data types.
@@ -48,23 +48,35 @@ scalars can be assigned to variable names chosen by the user.
     5. + 2.i  
  
 --> B=-2+%i;
+
+--> b=4-3*%i
+ b  =
+ 
+    4. - 3.i 
  
 --> a*b
- ans       =
+ ans  =
+ 
+    26. - 7.i  
+ 
+-->a*B
+ ans  =
  
   - 12. + i    
  
 --> c=a+b;
  
---> c
- c         =
+-->c
+ c  =
  
-    3. + 3.i  
+    9. - i    
+ 
 \end{verbatim}
 Notice that $\Psi$lab evaluates immediately lines that
 end with a carriage return.  Instructions that end in a semi-colon
-are evaluated but are not displayed at the terminal. Lower-case
-and Upper-case letters are equivalent, except in character strings.
+are evaluated but are not displayed at the terminal. $\Psi$lab is case 
+sensitive (note this change wrt the 2.0 version where lower-case and 
+upper-case letters were equivalent; previous user macros need to be checked). 
 
 \paragraph{Vectors}\index{vectors}
 The usual way of creating vectors is with brackets
@@ -253,7 +265,7 @@ Concatenation of chains is performed by the {\tt +} operation.
 Matrices of character chains are constructed as ordinary matrices,
 e.g. using brackets.
 A very important feature of matrices of character chains is
-the capacity to manipulate and create macros.  Furthermore,
+the capacity to manipulate and create functions.  Furthermore,
 symbolic manipulation of mathematical objects can be implemented
 using matrices of character chains.  The following illustrates
 some of these features. 
@@ -288,7 +300,7 @@ The value of the resulting symbolic matrix can be obtained by
 using {\tt evstr}.  
 
 	A very important aspect of character chains is that they
-can be used to automatically create new macros (for more on macros
+can be used to automatically create new functions (for more on functions
 see Section~\ref{s4.2}).  An example of automatically creating a 
 macro is illustrated in the following $\Psi$lab session where it is
 desired to study a polynomial of two variables {\tt s} and {\tt t}.
@@ -357,7 +369,7 @@ function [str]=makestr(p)
 Here the macro {\tt makemacro} takes the list {\tt p} and creates the
 macro {\tt pst}.  Inside of {\tt makemacro} there is a call to another 
 macro {\tt makestr} which makes the string which represents each 
-term of the new two variable polynomial.  The macros {\tt addf} and
+term of the new two variable polynomial.  The functions {\tt addf} and
 {\tt mulf} are for adding and multiplying strings (i.e., 
 {\tt addf(x,y)} yields the string {\tt x+y}).  Finally, the 
 essential command for creating the new macro 
@@ -485,11 +497,11 @@ perform the logical {\tt or} and {\tt and}.
 
 	$\Psi$lab has a list data type.  The list is a collection of data
 objects not necessarily of the same type.  A list can contain any of
-the already discussed data types as well as other lists, macros, and
+the already discussed data types as well as other lists, functions, and
 libraries.  Lists are useful for defining structured data objects.
 For example, in $\Psi$lab linear systems are treated as lists.
-The basic macro which is used for defining linear systems is {\tt syslin}.
-This macro receives as parameters the constant matrices which
+The basic function which is used for defining linear systems is {\tt syslin}.
+This function receives as parameters the constant matrices which
 define a linear system in state-space form or, in the case of
 system in transfer form its input must be a rational matrix.
 To be more specific, the calling sequence of {\tt syslin} is
@@ -718,7 +730,7 @@ Figure~\ref{f3.2}. Note that feedback interconnection is performed by
 
 	The representation of linear systems can be in state-space
 form or in transfer function form.  These two representations can
-be interchanged by using the macros 
+be interchanged by using the functions 
 {\tt tf2ss}\index{linear systems!{\tt tf2ss}}\index{tf2ss@{\tt tf2ss}} and 
 {\tt ss2tf}\index{linear systems!{\tt ss2tf}}\index{ss2tf@{\tt ss2tf}}
 which change the representations of systems from transfer function
@@ -793,7 +805,7 @@ This primitive was used to label the systems in this example
 as being continuous (as opposed to
 being discrete).  The primitive {\tt tf2ss} is used to convert one of the
 two transfer functions to its equivalent state-space representation
-which is in list form (Note that the macro {\tt ssprint} creates a more
+which is in list form (Note that the function {\tt ssprint} creates a more
 readable format for the state-space linear system).
 The following multiplication of the two systems yields their
 series inter-connection.  Notice that the inter-connection 
@@ -803,21 +815,22 @@ The resulting inter-connection is given in state-space form.
 Finally, the primitive {\tt ss2tf} is used to convert the resulting
 inter-connected systems to the equivalent transfer function representation.
 
-\section{Macros}
+\section{Functions (Macros)}
 \label{s2.6}
-\index{data types!macros}
+\index{data types!functions}
 \index{macros}
 
-	Macros are a very useful aspect of $\Psi$lab.  Macros
+	Functions (also called macros) are a very useful aspect 
+of $\Psi$lab.  Functions
 are collections of commands which are executed in a
-new environment thus isolating macro variables from the original
-environments variables.  Macros
+new environment thus isolating function variables from the original
+environments variables.  Functions
 can be created and executed in a number of different ways.
-Furthermore, macros can pass arguments, have programming features
+Furthermore, functions can pass arguments, have programming features
 such as conditionals and loops, and can be recursively called.
-Macros can be arguments
-to other macros and can be elements in lists.  The most useful
-way of creating macros is by using a text editor, however, macros
+Functions can be arguments
+to other functions and can be elements in lists.  The most useful
+way of creating functions is by using a text editor, however, functions
 can be created directly in the $\Psi$lab environment using the 
 {\tt deff}\index{deff@{\tt deff}}\index{macros!{\tt deff}} primitive.
 \begin{verbatim}
@@ -834,10 +847,10 @@ can be created directly in the $\Psi$lab environment using the
  
   - 1.  
 \end{verbatim}
-Usually macros are defined in a file using an editor and loaded
+Usually functions are defined in a file using an editor and loaded
 into $\Psi$lab with {\tt getf('filename')} or {\tt getf('filename','c')}.
 This can be done also by clicking in the {\tt File operation} button.
-This latter syntax loads the macro(s) in {\tt filename} and compiles
+This latter syntax loads the function(s) in {\tt filename} and compiles
 them.
 The first line of {\tt filename} must be as follows:
 \begin{verbatim}
@@ -846,24 +859,24 @@ function [y1,...,yn]=macname(x1,...,xk)
 where the {\tt yi}'s are output variables and the {\tt xi}'s the
 input variables.
 
-For more on the use and creation of macros see Section~\ref{s4.2}.
+For more on the use and creation of functions see Section~\ref{s4.2}.
 
 \section{Libraries}
 \label{s2.7}
 \index{data types!libraries}
 \index{libraries}
 
-	Libraries are collections of macros which can be either loaded
+	Libraries are collections of functions which can be either loaded
 into the $\Psi$lab environment automatically at the moment that 
 $\Psi$lab is called or loaded at a moment desired by the user.  
 Libraries are created by the {\tt lib} command. Examples of librairies
 are given in the {\tt SCIDIR/macros} directory. Note that in these
 directory there is a ASCII file ``names'' which contains the names
-of each macro of the library, a set of {\tt .sci} files which
-contain the source code of the macros and a set of {\tt .bin} files
-which contained the compiled code of the macros. The Makefile invokes
-{\tt scilab} for compiling the macros and generating the {\tt .bin}
-files. The compiled macros of a library are automatically loaded 
+of each function of the library, a set of {\tt .sci} files which
+contain the source code of the functions and a set of {\tt .bin} files
+which contained the compiled code of the functions. The Makefile invokes
+{\tt scilab} for compiling the functions and generating the {\tt .bin}
+files. The compiled functions of a library are automatically loaded 
 into $\Psi$lab at their first call.
 
 \section{Objects}
@@ -876,7 +889,7 @@ are defined:
 real or complex.
 \item{\tt boolean} For boolean matrices.
 \item{\tt character} For matrices of character strings.
-\item{\tt uncompiled macro} For un-compiled macros.
+\item{\tt uncompiled macro} For un-compiled macros (functions).
 \item{\tt macro} For compiled macros.
 \item{\tt rational} For rational matrices (or linear systems in
 transfer matrix representation ({\tt syslin} lists)

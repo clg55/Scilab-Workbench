@@ -26,8 +26,7 @@ c
       save /units/
 c
       logical first
-      double precision d1mach
-      integer i1mach
+      double precision dlamch
       integer i,k,l,lecbuf,nc
       integer eps(nsiz),im(nsiz),exp(nsiz),pi(nsiz),bl(nsiz),io(nsiz)
       integer inf(nsiz),nan(nsiz),true(nsiz),false(nsiz)
@@ -172,7 +171,7 @@ c -------------------------------------------
    11 continue
 c rte = unit number for terminal input
       if(ini1.ne.-3) then
-         rte = i1mach(1)
+         rte = 5
          call clunit(rte,buf,0)
          if(err.gt.0) then
             call error(48)
@@ -186,7 +185,7 @@ c rte = unit number for terminal input
       if(lecbuf.eq.1) rio = -1
 c wte = unit number for terminal output
       if(ini1.ne.-3) then
-         wte = i1mach(2)
+         wte = 6
          call clunit(wte,buf,1)
          if(err.gt.0) then
             call error(48)
@@ -257,7 +256,7 @@ c     %f   : variable logique fausse
       call crebmatvar(false,k,1,1,0)
       k=k+1
 c     %eps : precision machine
-      call crematvar(eps,k,0,1,1,d1mach(4),0.0d0)
+      call crematvar(eps,k,0,1,1,dlamch('p'),0.0d0)
       leps=sadr( iadr(lstk(k)) +4)
       k=k+1
 c     %io : entree/sorties ecran

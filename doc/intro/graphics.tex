@@ -51,7 +51,7 @@ buttons or with the use of the functions \verb+xset+ or \verb+xselect+.
 
 \def\Figdir{figures/}
 \subsection{A first example}
-\def\exemple{d7.1}
+\def\exemple{d7-1}
 
 \verbatok{figures/\exemple.code}
 \end{verbatim}
@@ -62,13 +62,13 @@ This first example plots the function $f(t)\equiv \cos(t)$. The sampled values
 are specified by two column vectors $t$ and $cos(t)$. 
 Some parameters of the graphics are controlled by a graphic context 
 ( for example the line thickness) and other are controlled thru
-graphics arguments. In this first example (Figure~(\ref{d7.1})),
+graphics arguments. In this first example (Figure~(\ref{d7-1})),
 we use all the default arguments.
 
 \subsection{Superposing curves}
 Suppose now that we want to specify the graphics boundaries, and that
-we want to superpose two curves by calling \verb+plot2d+ twice (Figure~(\ref{d7.2}))~:
-\def\exemple{d7.2}
+we want to superpose two curves by calling \verb+plot2d+ twice (Figure~(\ref{d7-2}))~:
+\def\exemple{d7-2}
 \verbatok{figures/\exemple.code}
 \end{verbatim}
 \input{\Figdir \exemple.tex}
@@ -93,9 +93,9 @@ One can also modify the graphic boundaries by calling the function
 \verb+xgetech+. The basic graphics primitives also use the default 
 boundaries. In the following example graphic boundaries are fixed with
 a first call to \verb+plot2d+ and then a set of graphic primitives are
-showed (Figure~(\ref{d7.9})).
+showed (Figure~(\ref{d7-9})).
 
-\def\exemple{d7.9}
+\def\exemple{d7-9}
 \verbatok{figures/\exemple.code}
 \end{verbatim}
 \input{\Figdir \exemple.tex}
@@ -107,16 +107,16 @@ When one uses 3D plotting function default graphic boundaries are
 fixed, but in $R^3$. If one wants to use graphic primitives 
 to add informations on 3D graphics the \verb+geom3d+ function can be
 used to convert 3D coordinates to 2D-graphics coordinates. The
-figure~(\ref{d7.10}) illustrates that feature.
+figure~(\ref{d7-10}) illustrates that feature.
 
-\def\exemple{d7.10}
+\def\exemple{d7-10}
 \verbatok{figures/\exemple.code}
 \end{verbatim}
 \input{\Figdir \exemple.tex}
 \dessin{\exemple}{\exemple}
 
 \subsection{Multiple plotting in one call}
-\def\exemple{d7.3}
+\def\exemple{d7-3}
 
 In fact \verb+plot2d+ can be directly used to plot multiple curves 
 in one call. This is achieved by using matrix arguments and the 
@@ -128,7 +128,7 @@ the next example (Figure~(\ref{\exemple})) shows this possibility~:
 \dessin{\exemple}{\exemple}
 
 \subsection{Sub-windows}
-\def\exemple{d7.8}
+\def\exemple{d7-8}
 
 It's also possible to make multiple plotting in the same 
 graphic window (Figure~\ref{\exemple}).
@@ -139,7 +139,7 @@ graphic window (Figure~\ref{\exemple}).
 \dessin{Use of xsetech}{\exemple}
 
 \subsection{A Set of figures}
-\def\exemple{d7.11}
+\def\exemple{d7-11}
 
 In This next example we give a brief summary of different plotting
 functions for 2D or 3D graphics. The figure~(\ref{\exemple}) is 
@@ -216,7 +216,7 @@ by side.
 \begin{verbatim}
   Blatexpr2 Fileres file1.ps file2.ps 
 \end{verbatim}
-\def\exemple{d7.12}
+\def\exemple{d7-12}
 \input{\Figdir \exemple.tex}
 \dessin{Blatexp2 Example}{\exemple}
 

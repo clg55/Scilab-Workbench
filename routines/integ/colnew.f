@@ -795,11 +795,11 @@ C**********************************************************************
 C
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION XI(1), XIOLD(1), Z(1), DMZ(1), RHS(1)
-      DIMENSION G(1), W(1), V(1), VALSTR(1), SLOPE(1), ACCUM(1)
-      DIMENSION DELZ(1), DELDMZ(1), DQZ(1), DQDMZ(1) , FIXPNT(1)
-      DIMENSION DUMMY(1), SCALE(1), DSCALE(1)
-      DIMENSION INTEGS(1), IPVTG(1), IPVTW(1)
+      DIMENSION XI(*), XIOLD(*), Z(*), DMZ(*), RHS(*)
+      DIMENSION G(*), W(*), V(*), VALSTR(*), SLOPE(*), ACCUM(*)
+      DIMENSION DELZ(*), DELDMZ(*), DQZ(*), DQDMZ(*) , FIXPNT(*)
+      DIMENSION DUMMY(1), SCALE(*), DSCALE(*)
+      DIMENSION INTEGS(*), IPVTG(*), IPVTW(*)
 C
       COMMON /COLOUT/ PRECIS, IOUT, IPRINT
       COMMON /COLORD/ K, NCOMP, MSTAR, KD, MMAX, M(20)
@@ -1261,8 +1261,8 @@ C**********************************************************************
 C
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION Z(MSTAR,1), SCALE(MSTAR,1), DSCALE(KD,1)
-      DIMENSION XI(1), BASM(5)
+      DIMENSION Z(MSTAR,*), SCALE(MSTAR,*), DSCALE(KD,*)
+      DIMENSION XI(*), BASM(5)
 C
       COMMON /COLORD/ K, NCOMP, ID1, ID2, MMAX, M(20)
 C
@@ -1714,7 +1714,7 @@ C**********************************************************************
 C
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION RHO(7), COEF(K,1), CNSTS1(28), CNSTS2(28), DUMMY(1)
+      DIMENSION RHO(7), COEF(K,*), CNSTS1(28), CNSTS2(28), DUMMY(1)
 C
       COMMON /COLORD/ KDUM, NCOMP, MSTAR, KD, MMAX, M(20)
       COMMON /COLBAS/ B(28), ACOL(28,7), ASAVE(28,4)
@@ -1855,7 +1855,7 @@ C
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
       DIMENSION ERR(40), ERREST(40), DUMMY(1)
-      DIMENSION XI(1), Z(1), DMZ(1), VALSTR(1)
+      DIMENSION XI(*), Z(*), DMZ(*), VALSTR(*)
 C
       COMMON /COLOUT/ PRECIS, IOUT, IPRINT
       COMMON /COLORD/ K, NCOMP, MSTAR, KD, MMAX, M(20)
@@ -1995,9 +1995,9 @@ C
 C*********************************************************************
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION  Z(1), DMZ(1), DELZ(1), DELDMZ(1), XI(1), XIOLD(1)
-      DIMENSION  G(1), W(1), V(1),  RHS(1) , DMZO(1), DUMMY(1)
-      DIMENSION  INTEGS(3,1), IPVTG(1), IPVTW(1)
+      DIMENSION  Z(*), DMZ(*), DELZ(*), DELDMZ(*), XI(*), XIOLD(*)
+      DIMENSION  G(*), W(*), V(*),  RHS(*) , DMZO(*), DUMMY(1)
+      DIMENSION  INTEGS(3,*), IPVTG(*), IPVTW(*)
       DIMENSION  ZVAL(40), F(40), DGZ(40), DMVAL(20), DF(800), AT(28)
 C
       COMMON /COLOUT/ PRECIS, IOUT, IPRINT
@@ -2347,7 +2347,7 @@ C
 C**********************************************************************
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION GI(NROW,1), ZVAL(1), DGZ(1), DG(40)
+      DIMENSION GI(NROW,*), ZVAL(*), DGZ(*), DG(40)
       EXTERNAL DGSUB
 C
       COMMON /COLORD/ KDUM, NDUM, MSTAR, KD, MMAX, M(20)
@@ -2423,8 +2423,8 @@ C
 C**********************************************************************
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION WI(KD,1), VI(KD,1), ZVAL(1), DMZO(1), DF(NCOMP,1)
-      DIMENSION IPVTW(1),  HA(7,4), ACOL(7,4), BASM(5)
+      DIMENSION WI(KD,*), VI(KD,*), ZVAL(*), DMZO(*), DF(NCOMP,*)
+      DIMENSION IPVTW(*),  HA(7,4), ACOL(7,4), BASM(5)
       EXTERNAL DFSUB
 C
       COMMON /COLORD/ K, NCDUM, MSTAR, KDUM, MMAX, M(20)
@@ -2557,8 +2557,8 @@ C**********************************************************************
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
       DIMENSION HB(7,4), BASM(5)
-      DIMENSION GI(NROW,1), WI(1), VI(KD,1)
-      DIMENSION RHSZ(1), RHSDMZ(1), IPVTW(1)
+      DIMENSION GI(NROW,*), WI(*), VI(KD,*)
+      DIMENSION RHSZ(*), RHSDMZ(*), IPVTW(*)
 C
       COMMON /COLORD/  K, NCOMP, MSTAR, KDUM, MMAX, M(20)
       COMMON /COLBAS/ B(7,4), ACOL(28,7), ASAVE(28,4)
@@ -2690,8 +2690,8 @@ C**********************************************************************
 C
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION ZVAL(1), DMVAL(1), XI(1), M(1), A(7,1), DM(7)
-      DIMENSION Z(1), DMZ(1), BM(4), COEF(1)
+      DIMENSION ZVAL(*), DMVAL(*), XI(*), M(*), A(7,*), DM(7)
+      DIMENSION Z(*), DMZ(*), BM(4), COEF(*)
 C
       COMMON /COLOUT/ PRECIS, IOUT, IPRINT
 C
@@ -2803,7 +2803,7 @@ C**********************************************************************
 C
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION COEF(K,1), RKB(7,1), DM(1), T(10)
+      DIMENSION COEF(K,*), RKB(7,*), DM(*), T(10)
 C
       IF ( K .EQ. 1 )                            GO TO 70
       KPM1 = K + M - 1
@@ -2885,7 +2885,7 @@ C**********************************************************************
 C
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION UHIGH(1), DMZ(1)
+      DIMENSION UHIGH(*), DMZ(*)
 C
       COMMON /COLLOC/ RHO(7), COEF(49)
 C
@@ -2920,7 +2920,7 @@ C**********************************************************************
 C
 C      IMPLICIT REAL*8 (A-H,O-Z)
       IMPLICIT DOUBLE PRECISION (A-H,O-Z)
-      DIMENSION V(KD,1), DMZ(KD,1), Z(1)
+      DIMENSION V(KD,*), DMZ(KD,*), Z(*)
 C
       JZ = 1
       DO 30 I = 1, N
@@ -2974,9 +2974,9 @@ C            = n if the pivot element in the nth gauss step is zero.
 C
 C**********************************************************************
 C
-      INTEGER INTEGS(3,NBLOKS),IPIVOT(1),INFO, I,INDEX,INDEXN,LAST,
+      INTEGER INTEGS(3,NBLOKS),IPIVOT(*),INFO, I,INDEX,INDEXN,LAST,
      1        NCOL,NROW
-      DOUBLE PRECISION BLOKS(1),SCRTCH(1)
+      DOUBLE PRECISION BLOKS(*),SCRTCH(*)
       INFO = 0
       INDEXX = 1
       INDEXN = 1
@@ -3200,9 +3200,9 @@ C               on output: the solution vector
 C
 C*********************************************************************
 C
-      INTEGER INTEGS(3,NBLOKS),IPIVOT(1), I,INDEX,INDEXX,J,LAST,
+      INTEGER INTEGS(3,NBLOKS),IPIVOT(*), I,INDEX,INDEXX,J,LAST,
      1        NBP1,NCOL,NROW
-      DOUBLE PRECISION BLOKS(1), X(1)
+      DOUBLE PRECISION BLOKS(*), X(*)
 C
 C...  forward substitution pass
 C

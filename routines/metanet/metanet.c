@@ -1,7 +1,11 @@
 #include "../machine.h"
 
 #include <errno.h>
+#ifdef SYSV
+#include <string.h>
+#else
 #include <strings.h>
+#endif
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -33,11 +37,11 @@ int *ldatanet;
   char command[2 * MAXNAM];
   char warg[MAXNAM];
   char* env;
-  char server[20];
+  char server[MAXHOSTLEN];
 
   datanet[*ldatanet] = '\0';
 
-  gethostname(server,20);
+  gethostname(server,MAXHOSTLEN);
   
   nNetwindows++;
 

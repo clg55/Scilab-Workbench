@@ -5,7 +5,7 @@ c
       double precision a(nm,n),b(nm,n),z(nm,n),q(nm,n)
       double precision r,s,t,a1,a2,a3,ep,sh,u1,u2,u3,v1,v2,v3,ani,
      x       a11,a12,a21,a22,a33,a34,a43,a44,bni,b11,b12,b22,b33,b34,
-     x       b44,epsa,epsb,eps1,anorm,bnorm,d1mach
+     x       b44,epsa,epsb,eps1,anorm,bnorm,dlamch
       logical matz,matq,notlas
 c
 c
@@ -123,7 +123,7 @@ c
       ep = eps1
       if (ep .gt. 0.0d0) go to 50
 c     .......... use roundoff level if eps1 is zero ..........
-      ep = d1mach(4)
+      ep = dlamch('p')
    50 epsa = ep * anorm
       epsb = ep * bnorm
 c     :::::::::: reduce a to quasi-triangular form, while

@@ -6,7 +6,7 @@ c!
       implicit double precision (a-h,o-z)
       double precision sm(maxdeg,*)
       double precision spr(*),spi(*),zpr(*),zpi(*)
-      flmi=2.0d+0*d1mach(4)
+      flmi=2.0d+0*dlamch('p')
       zfa = sfa*sm(nmaxi-1,1)
       do 20 i=1,nj
         qr = spr(i)

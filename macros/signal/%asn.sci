@@ -1,5 +1,4 @@
-//<y>=%asn(x,m)
-//<y>=%asn(x,m)
+function [y]=%asn(x,m)
 //Calculates the elliptic integral:
 //  y = integral from 0 to x of
 //       [1/(((1-t*t)^(1/2))(1-m*t*t)^(1/2))]
@@ -10,11 +9,10 @@
 //
 //!
 //Author F.D.
- 
-   [n1,n2]=size(x);
-   n=n1*n2;
-   y=delip(x,sqrt(m));
- 
-//end
+m=real(m);
+if m<0 then error('m must be positive');end 
+if m>1 then error('m must be lower than 1');end 
+y=delip(x,sqrt(m));
+
 
 

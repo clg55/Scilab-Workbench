@@ -75,7 +75,7 @@ matDialogOk(w,nv,callData)
     XtGetValues(dialoglist[i],args,iargs);
     ns=strlen(str1);
     p=(char *) malloc((unsigned)(ns+1)*sizeof(char));
-    if (p == 0) { Scistring("Malloc : No more place");return;};
+    if (p == 0) { Scistring("Malloc : No more place");return;}
     strcpy(p,str1);
     ind = ns - 1 ;
     if (p[ind] == '\n' ) p[ind] = '\0' ;

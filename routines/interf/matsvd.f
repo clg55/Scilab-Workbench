@@ -8,7 +8,7 @@ c
       logical fro,inf
       double precision p,s,t,tol,eps
       double precision pythag,wnrm2,wasum
-      double precision ddot,dnrm2,dasum,d1mach
+      double precision ddot,dnrm2,dasum,dlamch
       integer rang,froben,infini
       integer iadr,sadr
       data froben/15/,infini/18/
@@ -73,6 +73,10 @@ c
 c     cond
 c
    10 continue
+      if(mn.le.0) then
+        k=1
+        goto 78
+      endif
       ld = l + mn*(it+1)
       l1 = ld + m1*(it+1)
       l2 = l1 + n*(it+1)
@@ -94,7 +98,7 @@ c
       ld = ld + min(m,n) - 1
       t = stk(ld)
       if (t .eq. 0.0d+0) then
-         t=d1mach(2)
+         t=dlamch('o')
       else
          t=s/t
       endif
@@ -107,7 +111,14 @@ c
 c
 c     vector norm
 c
-   30 p = 2.0d+0
+   30 continue
+c        empty matrix
+      if(mn.eq.0) then
+      err=1
+      call error(45)
+      return
+      endif
+      p = 2.0d+0
       inf = .false.
       if (rhs .ne. 2) go to 32
       iln=il
@@ -131,7 +142,7 @@ c
  32   continue
       if (m .gt. 1 .and. n .gt. 1) go to 40
       if (m*n.eq.0) then
-c     cas d'une matrice vice
+c     empty matrix
          istk(il)=1
          istk(il+1)=0
          istk(il+2)=0
@@ -219,6 +230,46 @@ c
 c     svd
 c
    50 continue
+      if(mn.le.0) then
+c          empty matrix
+c           svd([])=[]          
+      if(lhs.eq.1) return 
+c          [u,s,v]=svd([]) -> u=[],v=[],s=[]
+      if(lhs.ge.3) then
+      istk(il)=1
+      istk(il+1)=0
+      istk(il+2)=0
+      istk(il+3)=0
+      lstk(top+1)=sadr(il+4)
+c
+      top = top+1
+      il=iadr(lstk(top))
+      istk(il)=1
+      istk(il+1)=0
+      istk(il+2)=0
+      istk(il+3)=0
+      lstk(top+1)=sadr(il+4)
+c
+      top = top+1
+      il=iadr(lstk(top))
+      istk(il)=1
+      istk(il+1)=0
+      istk(il+2)=0
+      istk(il+3)=0
+      lstk(top+1)=sadr(il+4)
+      if(lhs.eq.3) return
+      top=top+1
+      il=iadr(lstk(top))
+      l=sadr(il+4)
+      istk(il)=1
+      istk(il+1)=1
+      istk(il+2)=1
+      istk(il+3)=0
+      stk(l)=0.d0
+      lstk(top+1)=l+1
+      return
+      endif     
+      endif
       if (lhs .lt. 3) go to 52
       k = m
       if (rhs .eq. 2 .and. lhs .ne. 4) k = min(m,n)
@@ -325,8 +376,9 @@ c
    70 continue
       if (mn.le.0 ) then
         if (fin.eq.2) then
-           err=1
-           call error(45)
+c           pinv([])=[]
+c           err=1
+c           call error(45)
            return
         endif
         k=0

@@ -761,11 +761,11 @@ C      implicit undefined (a-z)
       err=lstk(lwd)+lv-lstk(bot)
       if(err.gt.0) then
          call error(17)
-         if(err.gt.0) return
+      else
+         vcopyobj=.true.
+         call dcopy(lv,stk(l),1,stk(l1),1)
+         lstk(lwd+1)=lstk(lwd)+lv
       endif
-      vcopyobj=.true.
-      call dcopy(lv,stk(l),1,stk(l1),1)
-      lstk(lwd+1)=lstk(lwd)+lv
       end
 
       logical function getbmat(fname,topk,lw,m,n,lr)
@@ -1144,9 +1144,12 @@ C     test particulier decouvert ds logic.f
          it=istk(il+3)
          namel=4
          call cvstr(namel,istk(il+4),name,1)
- 11      if ( name(namel:namel).eq.' ') then 
-            namel=namel-1
-            goto 11
+ 11      continue
+         if(namel.gt.0) then
+            if ( name(namel:namel).eq.' ') then 
+               namel=namel-1
+               goto 11
+            endif
          endif
          ilp=il+8
          lr=adr(ilp+m*n+1,1)-1

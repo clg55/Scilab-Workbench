@@ -8,12 +8,14 @@ c     double precision dk,dellk
 c!
       double precision dpi, domi,dellk
       double precision de, dgeo, dk, dri, dari, dtest
-      double precision d1mach,flma
+      external slamch, dlamch
+      double precision dlamch,flma
+      real slamch
 c
       data de /1.0d+0/
-      flma=2.0d+0**(i1mach(16)-2)
+      flma=2.0d+0**(int(slamch('l'))-2)
       dpi=4.0d+0*atan(1.0d+0)
-      domi=2.0d+0*d1mach(4)
+      domi=2.0d+0*dlamch('p')
       dgeo = de - dk*dk
       if (dgeo) 10, 10, 20
   10  dellk = flma

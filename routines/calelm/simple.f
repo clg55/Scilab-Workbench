@@ -1,10 +1,9 @@
-C/MEMBR ADD NAME=SIMPLE,SSI=0
       subroutine simple(n,d,s)
 c!
       double precision d(*)
-      real s(*),rmax,r1mach
+      real s(*),rmax,slamch
 c
-      rmax=r1mach(2)
+      rmax=slamch('o')
 c
       do 10 i=1,n
       if(abs(d(i)).gt.rmax) then

@@ -1,25 +1,25 @@
  
--->getf('SCI/tests/colnew.sci','c')
+getf('SCI/tests/colnew.sci','c')
  
---> 
--->[z,zf]=col1();
  
--->if maxi(abs(z-zf))>1.e-5 then bugmes();quit;end
+[z,zf]=col1();
  
---> 
--->[z,zf]=col2(0);
+if maxi(abs(z-zf))>1.e-5 then bugmes();quit;end
  
--->// Fortran Coded version
  
--->if maxi(abs(z-zf))>1.e-2 then bugmes();quit;end
+[z,zf]=col2(0);
  
---> 
--->[z,zf]=col2(1);
+// Fortran Coded version
  
--->// Scilab coded version
+if maxi(abs(z-zf))>1.e-2 then bugmes();quit;end
  
--->if maxi(abs(z-zf))>1.e-2 then bugmes();quit;end
  
---> 
---> 
---> 
+[z,zf]=col2(1);
+ 
+// Scilab coded version
+ 
+if maxi(abs(z-zf))>1.e-2 then bugmes();quit;end
+ 
+ 
+ 
+ 

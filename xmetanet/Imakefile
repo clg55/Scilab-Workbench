@@ -2,7 +2,7 @@
 #include "../Imake.incl"
 
 #define IHaveSubdirs
-#define PassCDebugFlags CDEBUGFLAGS=$(CDEBUGFLAGS) FDEBUGFLAGS=$(FDEBUGFLAGS)
+#define PassCDebugFlags CDEBUGFLAGS='$(CDEBUGFLAGS)' FDEBUGFLAGS='$(FDEBUGFLAGS)'
 
 SUBDIRS = gengraph src
 

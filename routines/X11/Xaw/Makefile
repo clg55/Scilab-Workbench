@@ -26,7 +26,7 @@
 
 # platform: osf1.cf
 
-# Operating system:  1/1 1.3
+# Operating system:  1/1 3.0
 
    	SHAREDSWITCH =
 
@@ -48,6 +48,7 @@
   BOOTSTRAPCFLAGS =
                CC = cc $(SHAREDSWITCH)
             LOCCC = cc
+        LOCSHARCC = LocShareCcCmd
                AS = as
 
          COMPRESS = compress
@@ -82,7 +83,7 @@
 
     PROTO_DEFINES = -DFUNCPROTO=3
 
-     INSTPGMFLAGS =
+     INSTPGMFLAGS = -s
 
      INSTBINFLAGS = -m 0755
      INSTUIDFLAGS = -m 4755
@@ -92,7 +93,7 @@
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4755
 
-      CDEBUGFLAGS = -O2
+      CDEBUGFLAGS = -O2 -Olimit 2000
         CCOPTIONS =
      LOCCCOPTIONS =
 
@@ -144,12 +145,15 @@
            INCDIR = $(INCROOT)/X11
            ADMDIR = /usr/adm
            LIBDIR = $(USRLIBDIR)/X11
+           VARDIR = /usr/var/X11
         CONFIGDIR = $(LIBDIR)/config
        LINTLIBDIR = $(USRLIBDIR)/lint
 
           FONTDIR = $(LIBDIR)/fonts
+      USERFONTDIR = $(VARDIR)/fonts/user
+            FSDIR = $(VARDIR)/fs
          XINITDIR = $(LIBDIR)/xinit
-           XDMDIR = $(LIBDIR)/xdm
+           XDMDIR = $(VARDIR)/xdm
            TWMDIR = $(LIBDIR)/twm
           MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
@@ -207,8 +211,12 @@
       XTESTLIBSRC = $(EXTENSIONSRC)/lib/xtest
       XTRAPLIBSRC = $(EXTENSIONSRC)/lib/xtrap
       PHIGSLIBSRC = $(EXTENSIONSRC)/lib/PEX
+       XIELIBSRC  = $(EXTENSIONSRC)/lib/XIE
+
+        EXTINCSRC = $(TOP)/X11/extensions
 
       USRSHLIBDIR = /usr/shlib
+        XSHLIBDIR = /usr/shlib/X11
 
        SHLIBFLAGS = -check_registry $(CROSSBASE)/usr/shlib/so_locations 	-L$(CROSSBASE)/usr/shlib -L$(CROSSBASE)/usr/ccs/lib
 
@@ -230,6 +238,9 @@
         DEPXAWLIB = $(USRSHLIBDIR)/libXaw.so
            XAWLIB = -lXaw
 
+       DEPXXIELIB = $(USRSHLIBDIR)/libXIE.so
+          XXIELIB = -lXIE
+
         DEPXILIB = $(USRSHLIBDIR)/libXi.a
            XILIB = -lXi
 
@@ -238,6 +249,7 @@
         SOXLIBREV = SharedXlibRev
           SOXTREV = SharedXtRev
          SOXAWREV = SharedXawRev
+         SOXIEREV = SharedXIERev
         SOOLDXREV = SharedOldXRev
          SOXMUREV = SharedXmuRev
         SOXEXTREV = SharedXextRev
@@ -259,6 +271,12 @@
         DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
            PHIGSLIB = 			 -lphigs
 
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
        DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
           XBSDLIB = 			 -lXbsd
 
@@ -267,6 +285,7 @@
           LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
         LINTXTOOL = $(LINTLIBDIR)/llib-lXt.ln
           LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
+         LINTXXIE = $(LINTLIBDIR)/llib-lXIE.ln
            LINTXI = $(LINTLIBDIR)/llib-lXi.ln
         LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
 
@@ -290,6 +309,7 @@
    MRESOURCESRC = $(MLIBSRC)/Mrm
      MCLIENTSRC = $(TOP)/motif/clients
          UILSRC = $(MCLIENTSRC)/uil
+    MINCLUDESRC = $(INCLUDESRC)
 
             UIL = uil
 
@@ -317,9 +337,9 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
            CDADIR = $(USRLIBDIR)/cda
 
            DXMSRC = $(MLIBSRC)/DXm
-           DPSSRC = $(EXTENSIONSRC)/DPS/lib/dps
-         DPSTKSRC = $(EXTENSIONSRC)/DPS/lib/dpstk
-         PSRESSRC = $(EXTENSIONSRC)/DPS/lib/psres
+           DPSSRC = $(EXTENSIONSRC)/DPSII/lib/dps
+         DPSTKSRC = $(EXTENSIONSRC)/DPSII/lib/dpstk
+         PSRESSRC = $(EXTENSIONSRC)/DPSII/lib/psres
            XIESRC = $(EXTENSIONSRC)/lib/xie
            IDSSRC = $(MLIBSRC)/ids
            BKRSRC = $(MLIBSRC)/bkr
@@ -329,6 +349,8 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
        DEPDXMLIB = $(USRSHLIBDIR)/libDXm.so
           DXMLIB = -lDXm
+
+       MDXMLIB = $(DXMLIB)
 
         DEPDPSLIB = $(USRSHLIBDIR)/libdps.so
            DPSLIB = -ldps
@@ -380,7 +402,7 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
 # -------------------------------------------------------------------------
 # DEC-Specific System Build Rules
-# $Id: Dec.rules,v 1.1.2.8 1992/12/08 19:29:22 Leela_Obilichetti Exp $
+# $Id: Dec.rules,v 1.1.2.8 92/12/08 19:29:22 Leela_Obilichetti Exp $
 
 # -------------------------------------------------------------------------
 # start of Imakefile
@@ -394,29 +416,28 @@ _NULLCMD_ = @ echo -n
 
          CC = cc $(SHAREDSWITCH)
   CCOPTIONS =
-STD_DEFINES = -DDEC -DR5_XLIB -DSMT
-CDEBUGFLAGS = -O2
+STD_DEFINES = -DDEC -DR5_XLIB -DSMT -Wf,-readonly_strings
+CDEBUGFLAGS = -O2 -Olimit 2000
 
-FFOPTIONS = -C -fpe1 -switch nosqrt_recip -check nounderflow
-FDEBUGFLAGS =
-CDEBUGFLAGS =
-CCOPTIONS=
 FC=DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
+FFOPTIONS =  -fpe3 -switch nosqrt_recip
+FDEBUGFLAGS = -O
+CCOPTIONS=
+CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 
-SCIVERSION=Scilab-2.0
-SCIDATE=31 October 1994
+SCIVERSION = Scilab-2.1
+SCIDATE = 10 February 1995
 
-EXTRA_INCLUDES=-I$(SCIDIR)/routines
-
-FLOCAL_LDFLAGS=  -non_shared
+EXTRA_INCLUDES = -I$(SCIDIR)/routines
 
 LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS) $(LOCAL_LDFLAGS)
 
 FFLAGS = $(FDEBUGFLAGS) $(FFOPTIONS)
 
 FLDOPTIONS = $(FDEBUGFLAGS) $(FFOPTIONS) $(FLOCAL_LDFLAGS)
-LLDOPTIONS = $(FDEBUGFLAGS) $(FLOCAL_LDFLAGS)
+
+LLDOPTIONS = $(LLOCAL_LDFLAGS)
 
 PATHSP=$(SCIDIR)/routines
 PATHO=$(SCIDIR)/libs
@@ -694,57 +715,46 @@ AllWidgets.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 AllWidgets.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 AllWidgets.o: /usr/include/standards.h /usr/include/X11/X.h
 AllWidgets.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-AllWidgets.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-AllWidgets.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-AllWidgets.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-AllWidgets.o: /usr/include/X11/extensions/smt.h
-AllWidgets.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+AllWidgets.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 AllWidgets.o: /usr/include/X11/Xresource.h /usr/include/string.h
 AllWidgets.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 AllWidgets.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
 AllWidgets.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 AllWidgets.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 AllWidgets.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-AllWidgets.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/WidgetNode.h
+AllWidgets.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/WidgetNode.h
 AsciiSink.o: /usr/include/stdio.h /usr/include/standards.h
 AsciiSink.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 AsciiSink.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 AsciiSink.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-AsciiSink.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-AsciiSink.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-AsciiSink.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-AsciiSink.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-AsciiSink.o: /usr/include/X11/Xatom.h /usr/include/X11/IntrinsicP.h
-AsciiSink.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xresource.h
-AsciiSink.o: /usr/include/string.h /usr/include/X11/Core.h
-AsciiSink.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-AsciiSink.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-AsciiSink.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-AsciiSink.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-AsciiSink.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSinkP.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSinkP.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextP.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrcP.h
-AsciiSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrcP.h
+AsciiSink.o: /usr/include/X11/Xutil.h /usr/include/X11/Xatom.h
+AsciiSink.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
+AsciiSink.o: /usr/include/X11/Xresource.h /usr/include/string.h
+AsciiSink.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+AsciiSink.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+AsciiSink.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+AsciiSink.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+AsciiSink.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+AsciiSink.o: /usr/include/X11/StringDefs.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSinkP.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSinkP.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrcP.h
+AsciiSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrcP.h
 AsciiSrc.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 AsciiSrc.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 AsciiSrc.o: /usr/include/standards.h /usr/include/X11/X.h
 AsciiSrc.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-AsciiSrc.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-AsciiSrc.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-AsciiSrc.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-AsciiSrc.o: /usr/include/X11/extensions/smt.h
-AsciiSrc.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+AsciiSrc.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 AsciiSrc.o: /usr/include/X11/Xresource.h /usr/include/string.h
 AsciiSrc.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 AsciiSrc.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -755,60 +765,53 @@ AsciiSrc.o: /usr/include/stdio.h /usr/include/ctype.h /usr/include/errno.h
 AsciiSrc.o: /usr/include/X11/StringDefs.h /usr/include/X11/Xos.h
 AsciiSrc.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h
 AsciiSrc.o: /usr/include/unistd.h /usr/include/sys/access.h
-AsciiSrc.o: /usr/include/time.h /usr/include/sys/time.h
-AsciiSrc.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
-AsciiSrc.o: /usr/include/X11/Xfuncs.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrcP.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrcP.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextP.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
-AsciiSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
+AsciiSrc.o: /usr/include/sys/time.h /usr/include/sys/limits.h
+AsciiSrc.o: /usr/include/sys/signal.h /usr/include/sys/machine/signal.h
+AsciiSrc.o: /usr/include/sys/time.h /usr/include/X11/Xfuncs.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrcP.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrcP.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
+AsciiSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
 AsciiText.o: /usr/include/stdio.h /usr/include/standards.h
 AsciiText.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 AsciiText.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 AsciiText.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 AsciiText.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-AsciiText.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-AsciiText.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-AsciiText.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-AsciiText.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-AsciiText.o: /usr/include/X11/Xresource.h /usr/include/string.h
-AsciiText.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-AsciiText.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-AsciiText.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-AsciiText.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-AsciiText.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-AsciiText.o: /usr/include/X11/StringDefs.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiTextP.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextP.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-AsciiText.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
+AsciiText.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+AsciiText.o: /usr/include/string.h /usr/include/X11/Core.h
+AsciiText.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+AsciiText.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+AsciiText.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+AsciiText.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+AsciiText.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiTextP.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+AsciiText.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
 Box.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Box.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Box.o: /usr/include/standards.h /usr/include/X11/X.h
 Box.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Box.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Box.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h /usr/include/limits.h
-Box.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Box.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+Box.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 Box.o: /usr/include/X11/Xresource.h /usr/include/string.h
 Box.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 Box.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -816,320 +819,278 @@ Box.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 Box.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 Box.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
 Box.o: /usr/include/X11/StringDefs.h
-Box.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
-Box.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Box.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/BoxP.h
-Box.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Box.h
-Box.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
+Box.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
+Box.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Box.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/BoxP.h
+Box.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Box.h
+Box.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 Clock.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Clock.o: /usr/include/standards.h /usr/include/X11/X.h
 Clock.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Clock.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Clock.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Clock.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Clock.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Clock.o: /usr/include/X11/StringDefs.h /usr/include/X11/IntrinsicP.h
-Clock.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xutil.h
-Clock.o: /usr/include/X11/Xresource.h /usr/include/string.h
-Clock.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-Clock.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-Clock.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-Clock.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-Clock.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-Clock.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Clock.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/ClockP.h
+Clock.o: /usr/include/stddef.h /usr/include/X11/StringDefs.h
+Clock.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
+Clock.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Clock.o: /usr/include/string.h /usr/include/X11/Core.h
+Clock.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+Clock.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+Clock.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+Clock.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+Clock.o: /usr/include/X11/RectObjP.h
+Clock.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Clock.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/ClockP.h
 Clock.o: /usr/include/X11/Xos.h /usr/include/fcntl.h /usr/include/sys/fcntl.h
-Clock.o: /usr/include/unistd.h /usr/include/sys/access.h /usr/include/time.h
+Clock.o: /usr/include/unistd.h /usr/include/sys/access.h
 Clock.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-Clock.o: /usr/include/sys/signal.h
-Clock.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Clock.h
-Clock.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Clock.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-Clock.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
+Clock.o: /usr/include/sys/signal.h /usr/include/sys/machine/signal.h
+Clock.o: /usr/include/sys/time.h
+Clock.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Clock.h
+Clock.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Clock.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+Clock.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
 Command.o: /usr/include/stdio.h /usr/include/standards.h
 Command.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Command.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Command.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 Command.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-Command.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-Command.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-Command.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Command.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-Command.o: /usr/include/X11/Xresource.h /usr/include/string.h
-Command.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-Command.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-Command.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-Command.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-Command.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-Command.o: /usr/include/X11/StringDefs.h
-Command.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
-Command.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Command.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/CommandP.h
-Command.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-Command.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-Command.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Command.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Command.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/LabelP.h
-Command.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
+Command.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Command.o: /usr/include/string.h /usr/include/X11/Core.h
+Command.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+Command.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+Command.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+Command.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+Command.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+Command.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
+Command.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Command.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/CommandP.h
+Command.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+Command.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+Command.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Command.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Command.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/LabelP.h
+Command.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 Dialog.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Dialog.o: /usr/include/standards.h /usr/include/X11/X.h
 Dialog.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Dialog.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Dialog.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Dialog.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Dialog.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Dialog.o: /usr/include/X11/Xos.h /usr/include/string.h /usr/include/fcntl.h
-Dialog.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-Dialog.o: /usr/include/sys/access.h /usr/include/time.h
-Dialog.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-Dialog.o: /usr/include/sys/signal.h /usr/include/X11/IntrinsicP.h
-Dialog.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xutil.h
-Dialog.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
-Dialog.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-Dialog.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-Dialog.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-Dialog.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-Dialog.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/DialogP.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Dialog.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/FormP.h
-Dialog.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
+Dialog.o: /usr/include/stddef.h /usr/include/X11/Xos.h /usr/include/string.h
+Dialog.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h /usr/include/unistd.h
+Dialog.o: /usr/include/sys/access.h /usr/include/sys/time.h
+Dialog.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+Dialog.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
+Dialog.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
+Dialog.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Dialog.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+Dialog.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+Dialog.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+Dialog.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+Dialog.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+Dialog.o: /usr/include/X11/StringDefs.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/DialogP.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Dialog.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/FormP.h
+Dialog.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
 Form.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Form.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Form.o: /usr/include/standards.h /usr/include/X11/X.h
 Form.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Form.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Form.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Form.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Form.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Form.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-Form.o: /usr/include/string.h /usr/include/X11/Core.h
-Form.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-Form.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-Form.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-Form.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-Form.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-Form.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Form.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
-Form.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Form.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/FormP.h
-Form.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
+Form.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+Form.o: /usr/include/X11/Xresource.h /usr/include/string.h
+Form.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+Form.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+Form.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+Form.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+Form.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+Form.o: /usr/include/X11/StringDefs.h
+Form.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Form.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
+Form.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Form.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/FormP.h
+Form.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
 Grip.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Grip.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Grip.o: /usr/include/standards.h /usr/include/X11/X.h
 Grip.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Grip.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Grip.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Grip.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Grip.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Grip.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-Grip.o: /usr/include/string.h /usr/include/X11/Core.h
-Grip.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-Grip.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-Grip.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-Grip.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-Grip.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-Grip.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Grip.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/GripP.h
-Grip.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Grip.h
-Grip.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Grip.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Grip.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
+Grip.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+Grip.o: /usr/include/X11/Xresource.h /usr/include/string.h
+Grip.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+Grip.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+Grip.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+Grip.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+Grip.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+Grip.o: /usr/include/X11/StringDefs.h
+Grip.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Grip.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/GripP.h
+Grip.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Grip.h
+Grip.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Grip.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Grip.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 Label.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Label.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Label.o: /usr/include/standards.h /usr/include/X11/X.h
 Label.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Label.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Label.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Label.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Label.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Label.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-Label.o: /usr/include/string.h /usr/include/X11/Core.h
-Label.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-Label.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-Label.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-Label.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-Label.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-Label.o: /usr/include/X11/Xos.h /usr/include/fcntl.h /usr/include/sys/fcntl.h
-Label.o: /usr/include/unistd.h /usr/include/sys/access.h /usr/include/time.h
-Label.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-Label.o: /usr/include/sys/signal.h
-Label.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Label.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/LabelP.h
-Label.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-Label.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Label.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Label.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-Label.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Drawing.h
+Label.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+Label.o: /usr/include/X11/Xresource.h /usr/include/string.h
+Label.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+Label.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+Label.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+Label.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+Label.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+Label.o: /usr/include/X11/StringDefs.h /usr/include/X11/Xos.h
+Label.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h /usr/include/unistd.h
+Label.o: /usr/include/sys/access.h /usr/include/sys/time.h
+Label.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+Label.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
+Label.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Label.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/LabelP.h
+Label.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+Label.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Label.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Label.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+Label.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Drawing.h
 Label.o: /usr/include/stdio.h /usr/include/ctype.h
 List.o: /usr/include/stdio.h /usr/include/standards.h /usr/include/ctype.h
 List.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 List.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h /usr/include/X11/X.h
 List.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-List.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-List.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-List.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-List.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-List.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-List.o: /usr/include/string.h /usr/include/X11/Core.h
-List.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-List.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-List.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-List.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-List.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-List.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Drawing.h
-List.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-List.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/ListP.h
-List.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-List.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-List.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-List.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/List.h
+List.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+List.o: /usr/include/X11/Xresource.h /usr/include/string.h
+List.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+List.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+List.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+List.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+List.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+List.o: /usr/include/X11/StringDefs.h
+List.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Drawing.h
+List.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+List.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/ListP.h
+List.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+List.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+List.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+List.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/List.h
 Logo.o: /usr/include/X11/StringDefs.h /usr/include/X11/IntrinsicP.h
 Logo.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 Logo.o: /usr/include/sys/types.h /usr/include/standards.h
 Logo.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 Logo.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-Logo.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-Logo.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-Logo.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Logo.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-Logo.o: /usr/include/X11/Xresource.h /usr/include/string.h
-Logo.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-Logo.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-Logo.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-Logo.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-Logo.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-Logo.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Logo.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/LogoP.h
-Logo.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Logo.h
-Logo.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-Logo.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Logo.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
+Logo.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Logo.o: /usr/include/string.h /usr/include/X11/Core.h
+Logo.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+Logo.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+Logo.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+Logo.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+Logo.o: /usr/include/X11/RectObjP.h
+Logo.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Logo.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/LogoP.h
+Logo.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Logo.h
+Logo.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+Logo.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Logo.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 Logo.o: /usr/include/X11/extensions/shape.h
 Mailbox.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Mailbox.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Mailbox.o: /usr/include/standards.h /usr/include/X11/X.h
 Mailbox.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Mailbox.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Mailbox.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Mailbox.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Mailbox.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Mailbox.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-Mailbox.o: /usr/include/string.h /usr/include/X11/Core.h
-Mailbox.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-Mailbox.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-Mailbox.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-Mailbox.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-Mailbox.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-Mailbox.o: /usr/include/X11/cursorfont.h /usr/include/sys/stat.h
-Mailbox.o: /usr/include/sys/mode.h /usr/include/stdio.h /usr/include/pwd.h
-Mailbox.o: /usr/include/sys/wait.h /usr/include/X11/bitmaps/mailfull
+Mailbox.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+Mailbox.o: /usr/include/X11/Xresource.h /usr/include/string.h
+Mailbox.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+Mailbox.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+Mailbox.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+Mailbox.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+Mailbox.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+Mailbox.o: /usr/include/X11/StringDefs.h /usr/include/X11/cursorfont.h
+Mailbox.o: /usr/include/sys/stat.h /usr/include/sys/mode.h
+Mailbox.o: /usr/include/stdio.h /usr/include/pwd.h /usr/include/sys/wait.h
+Mailbox.o: /usr/include/X11/bitmaps/mailfull
 Mailbox.o: /usr/include/X11/bitmaps/mailempty
-Mailbox.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Mailbox.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/MailboxP.h
-Mailbox.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Mailbox.h
-Mailbox.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-Mailbox.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Mailbox.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Mailbox.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Drawing.h
+Mailbox.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Mailbox.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/MailboxP.h
+Mailbox.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Mailbox.h
+Mailbox.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+Mailbox.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Mailbox.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Mailbox.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Drawing.h
 Mailbox.o: /usr/include/X11/extensions/shape.h
 MenuButton.o: /usr/include/stdio.h /usr/include/standards.h
 MenuButton.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 MenuButton.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 MenuButton.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 MenuButton.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-MenuButton.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-MenuButton.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-MenuButton.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-MenuButton.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-MenuButton.o: /usr/include/X11/Xresource.h /usr/include/string.h
-MenuButton.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-MenuButton.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-MenuButton.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-MenuButton.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-MenuButton.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-MenuButton.o: /usr/include/X11/StringDefs.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/MenuButtoP.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/MenuButton.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/CommandP.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/LabelP.h
-MenuButton.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
+MenuButton.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+MenuButton.o: /usr/include/string.h /usr/include/X11/Core.h
+MenuButton.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+MenuButton.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+MenuButton.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+MenuButton.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+MenuButton.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/MenuButtoP.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/MenuButton.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/CommandP.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/LabelP.h
+MenuButton.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 Paned.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Paned.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Paned.o: /usr/include/standards.h /usr/include/X11/X.h
 Paned.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Paned.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Paned.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Paned.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Paned.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Paned.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-Paned.o: /usr/include/string.h /usr/include/X11/Core.h
-Paned.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-Paned.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-Paned.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-Paned.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-Paned.o: /usr/include/X11/RectObjP.h /usr/include/X11/cursorfont.h
-Paned.o: /usr/include/X11/StringDefs.h
-Paned.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
-Paned.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Paned.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Paned.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Grip.h
-Paned.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Paned.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/PanedP.h
-Paned.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Paned.h
+Paned.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+Paned.o: /usr/include/X11/Xresource.h /usr/include/string.h
+Paned.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+Paned.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+Paned.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+Paned.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+Paned.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+Paned.o: /usr/include/X11/cursorfont.h /usr/include/X11/StringDefs.h
+Paned.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
+Paned.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Paned.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Paned.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Grip.h
+Paned.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Paned.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/PanedP.h
+Paned.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Paned.h
 Paned.o: /usr/include/ctype.h
 Panner.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Panner.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Panner.o: /usr/include/standards.h /usr/include/X11/X.h
 Panner.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Panner.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Panner.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Panner.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Panner.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Panner.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-Panner.o: /usr/include/string.h /usr/include/X11/Core.h
-Panner.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-Panner.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-Panner.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-Panner.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-Panner.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-Panner.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
-Panner.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Panner.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/PannerP.h
-Panner.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Panner.h
-Panner.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-Panner.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-Panner.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Panner.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Panner.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
+Panner.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+Panner.o: /usr/include/X11/Xresource.h /usr/include/string.h
+Panner.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+Panner.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+Panner.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+Panner.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+Panner.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+Panner.o: /usr/include/X11/StringDefs.h
+Panner.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
+Panner.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Panner.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/PannerP.h
+Panner.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Panner.h
+Panner.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+Panner.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+Panner.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Panner.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Panner.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
 Panner.o: /usr/include/ctype.h /usr/include/math.h
 Porthole.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Porthole.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Porthole.o: /usr/include/standards.h /usr/include/X11/X.h
 Porthole.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Porthole.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Porthole.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Porthole.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Porthole.o: /usr/include/X11/extensions/smt.h
-Porthole.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+Porthole.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 Porthole.o: /usr/include/X11/Xresource.h /usr/include/string.h
 Porthole.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 Porthole.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1137,20 +1098,16 @@ Porthole.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 Porthole.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 Porthole.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
 Porthole.o: /usr/include/X11/StringDefs.h
-Porthole.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Porthole.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/PortholeP.h
-Porthole.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Porthole.h
-Porthole.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-Porthole.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
+Porthole.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Porthole.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/PortholeP.h
+Porthole.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Porthole.h
+Porthole.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+Porthole.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
 Repeater.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Repeater.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Repeater.o: /usr/include/standards.h /usr/include/X11/X.h
 Repeater.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Repeater.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Repeater.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Repeater.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Repeater.o: /usr/include/X11/extensions/smt.h
-Repeater.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+Repeater.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 Repeater.o: /usr/include/X11/Xresource.h /usr/include/string.h
 Repeater.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 Repeater.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1158,25 +1115,21 @@ Repeater.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 Repeater.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 Repeater.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
 Repeater.o: /usr/include/X11/StringDefs.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/RepeaterP.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/CommandP.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/LabelP.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-Repeater.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Repeater.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/RepeaterP.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/CommandP.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/LabelP.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+Repeater.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Repeater.h
 Scrollbar.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Scrollbar.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Scrollbar.o: /usr/include/standards.h /usr/include/X11/X.h
 Scrollbar.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Scrollbar.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Scrollbar.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Scrollbar.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Scrollbar.o: /usr/include/X11/extensions/smt.h
-Scrollbar.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+Scrollbar.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 Scrollbar.o: /usr/include/X11/Xresource.h /usr/include/string.h
 Scrollbar.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 Scrollbar.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1184,71 +1137,60 @@ Scrollbar.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 Scrollbar.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 Scrollbar.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
 Scrollbar.o: /usr/include/X11/StringDefs.h
-Scrollbar.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Scrollbar.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/ScrollbarP.h
-Scrollbar.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Scrollbar.h
-Scrollbar.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Scrollbar.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-Scrollbar.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Scrollbar.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Drawing.h
+Scrollbar.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Scrollbar.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/ScrollbarP.h
+Scrollbar.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h
+Scrollbar.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Scrollbar.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+Scrollbar.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Scrollbar.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Drawing.h
 Simple.o: /usr/include/stdio.h /usr/include/standards.h
 Simple.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Simple.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Simple.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 Simple.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-Simple.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-Simple.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-Simple.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Simple.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-Simple.o: /usr/include/X11/Xresource.h /usr/include/string.h
-Simple.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-Simple.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-Simple.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-Simple.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-Simple.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-Simple.o: /usr/include/X11/StringDefs.h
-Simple.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Simple.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-Simple.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Simple.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Simple.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Drawing.h
+Simple.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Simple.o: /usr/include/string.h /usr/include/X11/Core.h
+Simple.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+Simple.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+Simple.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+Simple.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+Simple.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+Simple.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Simple.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+Simple.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Simple.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Simple.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Drawing.h
 SimpleMenu.o: /usr/include/stdio.h /usr/include/standards.h
 SimpleMenu.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 SimpleMenu.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 SimpleMenu.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 SimpleMenu.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-SimpleMenu.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-SimpleMenu.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-SimpleMenu.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-SimpleMenu.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-SimpleMenu.o: /usr/include/X11/Xresource.h /usr/include/string.h
-SimpleMenu.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-SimpleMenu.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-SimpleMenu.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-SimpleMenu.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-SimpleMenu.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-SimpleMenu.o: /usr/include/X11/StringDefs.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleMenP.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleMenu.h
+SimpleMenu.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+SimpleMenu.o: /usr/include/string.h /usr/include/X11/Core.h
+SimpleMenu.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+SimpleMenu.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+SimpleMenu.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+SimpleMenu.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+SimpleMenu.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleMenP.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleMenu.h
 SimpleMenu.o: /usr/include/X11/Shell.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SmeP.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Sme.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SmeP.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Sme.h
 SimpleMenu.o: /usr/include/X11/ShellP.h /usr/include/X11/VendorP.h
 SimpleMenu.o: /usr/include/X11/Vendor.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SmeBSB.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Initer.h
-SimpleMenu.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SmeBSB.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Initer.h
+SimpleMenu.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
 Sme.o: /usr/include/stdio.h /usr/include/standards.h
 Sme.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Sme.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h /usr/include/X11/X.h
 Sme.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Sme.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Sme.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h /usr/include/limits.h
-Sme.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Sme.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+Sme.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 Sme.o: /usr/include/X11/Xresource.h /usr/include/string.h
 Sme.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 Sme.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1256,131 +1198,111 @@ Sme.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 Sme.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 Sme.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
 Sme.o: /usr/include/X11/StringDefs.h
-Sme.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Sme.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SmeP.h
-Sme.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Sme.h
-Sme.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
+Sme.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Sme.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SmeP.h
+Sme.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Sme.h
+Sme.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
 SmeBSB.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 SmeBSB.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 SmeBSB.o: /usr/include/standards.h /usr/include/X11/X.h
 SmeBSB.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-SmeBSB.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-SmeBSB.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-SmeBSB.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-SmeBSB.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-SmeBSB.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-SmeBSB.o: /usr/include/string.h /usr/include/X11/Core.h
-SmeBSB.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-SmeBSB.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-SmeBSB.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-SmeBSB.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-SmeBSB.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-SmeBSB.o: /usr/include/X11/Xos.h /usr/include/fcntl.h
-SmeBSB.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-SmeBSB.o: /usr/include/sys/access.h /usr/include/time.h
-SmeBSB.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-SmeBSB.o: /usr/include/sys/signal.h
-SmeBSB.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Drawing.h
-SmeBSB.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-SmeBSB.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleMenu.h
+SmeBSB.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+SmeBSB.o: /usr/include/X11/Xresource.h /usr/include/string.h
+SmeBSB.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+SmeBSB.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+SmeBSB.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+SmeBSB.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+SmeBSB.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+SmeBSB.o: /usr/include/X11/StringDefs.h /usr/include/X11/Xos.h
+SmeBSB.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h /usr/include/unistd.h
+SmeBSB.o: /usr/include/sys/access.h /usr/include/sys/time.h
+SmeBSB.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+SmeBSB.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
+SmeBSB.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Drawing.h
+SmeBSB.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+SmeBSB.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleMenu.h
 SmeBSB.o: /usr/include/X11/Shell.h
-SmeBSB.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-SmeBSB.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SmeBSBP.h
-SmeBSB.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SmeP.h
-SmeBSB.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Sme.h
-SmeBSB.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SmeBSB.h
-SmeBSB.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
+SmeBSB.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+SmeBSB.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SmeBSBP.h
+SmeBSB.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SmeP.h
+SmeBSB.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Sme.h
+SmeBSB.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SmeBSB.h
+SmeBSB.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
 SmeBSB.o: /usr/include/stdio.h
 SmeLine.o: /usr/include/stdio.h /usr/include/standards.h
 SmeLine.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 SmeLine.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 SmeLine.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 SmeLine.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-SmeLine.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-SmeLine.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-SmeLine.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-SmeLine.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-SmeLine.o: /usr/include/X11/Xresource.h /usr/include/string.h
-SmeLine.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-SmeLine.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-SmeLine.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-SmeLine.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-SmeLine.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-SmeLine.o: /usr/include/X11/StringDefs.h
-SmeLine.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-SmeLine.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SmeLineP.h
-SmeLine.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SmeP.h
-SmeLine.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Sme.h
-SmeLine.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SmeLine.h
-SmeLine.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-SmeLine.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
+SmeLine.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+SmeLine.o: /usr/include/string.h /usr/include/X11/Core.h
+SmeLine.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+SmeLine.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+SmeLine.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+SmeLine.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+SmeLine.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+SmeLine.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+SmeLine.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SmeLineP.h
+SmeLine.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SmeP.h
+SmeLine.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Sme.h
+SmeLine.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SmeLine.h
+SmeLine.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+SmeLine.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
 StripChart.o: /usr/include/stdio.h /usr/include/standards.h
 StripChart.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 StripChart.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 StripChart.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 StripChart.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-StripChart.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-StripChart.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-StripChart.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-StripChart.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-StripChart.o: /usr/include/X11/Xresource.h /usr/include/string.h
-StripChart.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-StripChart.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-StripChart.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-StripChart.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-StripChart.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-StripChart.o: /usr/include/X11/StringDefs.h
-StripChart.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-StripChart.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/StripCharP.h
-StripChart.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/StripChart.h
-StripChart.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-StripChart.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-StripChart.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
+StripChart.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+StripChart.o: /usr/include/string.h /usr/include/X11/Core.h
+StripChart.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+StripChart.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+StripChart.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+StripChart.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+StripChart.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+StripChart.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+StripChart.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/StripCharP.h
+StripChart.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/StripChart.h
+StripChart.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+StripChart.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+StripChart.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 StripChart.o: /usr/include/X11/Xfuncs.h
 Text.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Text.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Text.o: /usr/include/standards.h /usr/include/X11/X.h
 Text.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Text.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Text.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Text.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Text.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Text.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-Text.o: /usr/include/string.h /usr/include/X11/Core.h
-Text.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-Text.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-Text.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-Text.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-Text.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-Text.o: /usr/include/X11/Shell.h /usr/include/X11/Xatom.h
-Text.o: /usr/include/stdio.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Atoms.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/StdSel.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Scrollbar.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextP.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-Text.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
+Text.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+Text.o: /usr/include/X11/Xresource.h /usr/include/string.h
+Text.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+Text.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+Text.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+Text.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+Text.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+Text.o: /usr/include/X11/StringDefs.h /usr/include/X11/Shell.h
+Text.o: /usr/include/X11/Xatom.h /usr/include/stdio.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Atoms.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/StdSel.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+Text.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
 Text.o: /usr/include/X11/Xfuncs.h
 TextSink.o: /usr/include/stdio.h /usr/include/standards.h
 TextSink.o: /usr/include/ctype.h /usr/include/X11/IntrinsicP.h
 TextSink.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 TextSink.o: /usr/include/sys/types.h /usr/include/X11/X.h
 TextSink.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-TextSink.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-TextSink.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-TextSink.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-TextSink.o: /usr/include/X11/extensions/smt.h
-TextSink.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+TextSink.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 TextSink.o: /usr/include/X11/Xresource.h /usr/include/string.h
 TextSink.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 TextSink.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1388,55 +1310,47 @@ TextSink.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 TextSink.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 TextSink.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
 TextSink.o: /usr/include/X11/StringDefs.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSinkP.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextP.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-TextSink.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrcP.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSinkP.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+TextSink.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrcP.h
 TextSrc.o: /usr/include/stdio.h /usr/include/standards.h /usr/include/ctype.h
 TextSrc.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 TextSrc.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 TextSrc.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 TextSrc.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-TextSrc.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-TextSrc.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-TextSrc.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-TextSrc.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-TextSrc.o: /usr/include/X11/Xresource.h /usr/include/string.h
-TextSrc.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-TextSrc.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-TextSrc.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-TextSrc.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-TextSrc.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-TextSrc.o: /usr/include/X11/StringDefs.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrcP.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextP.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-TextSrc.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
+TextSrc.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+TextSrc.o: /usr/include/string.h /usr/include/X11/Core.h
+TextSrc.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+TextSrc.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+TextSrc.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+TextSrc.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+TextSrc.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrcP.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+TextSrc.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
 TextAction.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 TextAction.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 TextAction.o: /usr/include/standards.h /usr/include/X11/X.h
 TextAction.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-TextAction.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-TextAction.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-TextAction.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-TextAction.o: /usr/include/X11/extensions/smt.h
-TextAction.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+TextAction.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 TextAction.o: /usr/include/X11/Xresource.h /usr/include/string.h
 TextAction.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 TextAction.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1444,130 +1358,112 @@ TextAction.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 TextAction.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 TextAction.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
 TextAction.o: /usr/include/X11/StringDefs.h /usr/include/X11/Xatom.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextP.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-TextAction.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+TextAction.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 TextAction.o: /usr/include/stdio.h /usr/include/ctype.h
 TextPop.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 TextPop.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 TextPop.o: /usr/include/standards.h /usr/include/X11/X.h
 TextPop.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-TextPop.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-TextPop.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-TextPop.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-TextPop.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-TextPop.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
-TextPop.o: /usr/include/string.h /usr/include/X11/Core.h
-TextPop.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
-TextPop.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
-TextPop.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-TextPop.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-TextPop.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-TextPop.o: /usr/include/X11/Shell.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextP.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Text.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSink.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TextSrc.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSrc.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiSink.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/AsciiText.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Toggle.h
-TextPop.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
+TextPop.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+TextPop.o: /usr/include/X11/Xresource.h /usr/include/string.h
+TextPop.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
+TextPop.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
+TextPop.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
+TextPop.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+TextPop.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+TextPop.o: /usr/include/X11/StringDefs.h /usr/include/X11/Shell.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextP.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Text.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSink.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TextSrc.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSrc.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiSink.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/AsciiText.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Toggle.h
+TextPop.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
 TextPop.o: /usr/include/stdio.h /usr/include/X11/Xos.h /usr/include/fcntl.h
 TextPop.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-TextPop.o: /usr/include/sys/access.h /usr/include/time.h
-TextPop.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-TextPop.o: /usr/include/sys/signal.h /usr/include/errno.h
+TextPop.o: /usr/include/sys/access.h /usr/include/sys/time.h
+TextPop.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+TextPop.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
+TextPop.o: /usr/include/errno.h
 Toggle.o: /usr/include/stdio.h /usr/include/standards.h
 Toggle.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Toggle.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Toggle.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 Toggle.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-Toggle.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-Toggle.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-Toggle.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Toggle.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-Toggle.o: /usr/include/X11/Xresource.h /usr/include/string.h
-Toggle.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-Toggle.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-Toggle.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-Toggle.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-Toggle.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-Toggle.o: /usr/include/X11/StringDefs.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/ToggleP.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Toggle.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Command.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Label.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Simple.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/CommandP.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/LabelP.h
-Toggle.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/SimpleP.h
+Toggle.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Toggle.o: /usr/include/string.h /usr/include/X11/Core.h
+Toggle.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+Toggle.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+Toggle.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+Toggle.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+Toggle.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/ToggleP.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Toggle.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Command.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Label.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Simple.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/CommandP.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/LabelP.h
+Toggle.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/SimpleP.h
 Tree.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 Tree.o: /usr/include/sys/types.h /usr/include/standards.h
 Tree.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 Tree.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-Tree.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-Tree.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-Tree.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Tree.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-Tree.o: /usr/include/X11/Xresource.h /usr/include/string.h
-Tree.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-Tree.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-Tree.o: /usr/include/X11/RectObj.h /usr/include/X11/IntrinsicP.h
-Tree.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
-Tree.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
-Tree.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
-Tree.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Tree.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
-Tree.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/TreeP.h
-Tree.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Tree.h
-Tree.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
+Tree.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Tree.o: /usr/include/string.h /usr/include/X11/Core.h
+Tree.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+Tree.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+Tree.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/CoreP.h
+Tree.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
+Tree.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+Tree.o: /usr/include/X11/StringDefs.h
+Tree.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Tree.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
+Tree.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/TreeP.h
+Tree.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Tree.h
+Tree.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 Vendor.o: /usr/include/stdio.h /usr/include/standards.h
 Vendor.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Vendor.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Vendor.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 Vendor.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-Vendor.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-Vendor.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-Vendor.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Vendor.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-Vendor.o: /usr/include/X11/Xresource.h /usr/include/string.h
-Vendor.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-Vendor.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-Vendor.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-Vendor.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-Vendor.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
-Vendor.o: /usr/include/X11/StringDefs.h /usr/include/X11/Shell.h
-Vendor.o: /usr/include/X11/ShellP.h /usr/include/X11/VendorP.h
-Vendor.o: /usr/include/X11/Vendor.h
-Vendor.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Vendor.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Editres.h
+Vendor.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Vendor.o: /usr/include/string.h /usr/include/X11/Core.h
+Vendor.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+Vendor.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+Vendor.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+Vendor.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+Vendor.o: /usr/include/X11/RectObjP.h /usr/include/X11/StringDefs.h
+Vendor.o: /usr/include/X11/Shell.h /usr/include/X11/ShellP.h
+Vendor.o: /usr/include/X11/VendorP.h /usr/include/X11/Vendor.h
+Vendor.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Vendor.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Editres.h
 Viewport.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 Viewport.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Viewport.o: /usr/include/standards.h /usr/include/X11/X.h
 Viewport.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Viewport.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Viewport.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Viewport.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Viewport.o: /usr/include/X11/extensions/smt.h
-Viewport.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+Viewport.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 Viewport.o: /usr/include/X11/Xresource.h /usr/include/string.h
 Viewport.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 Viewport.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1575,25 +1471,22 @@ Viewport.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 Viewport.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 Viewport.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
 Viewport.o: /usr/include/X11/StringDefs.h
-Viewport.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
-Viewport.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Misc.h
-Viewport.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Scrollbar.h
-Viewport.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-Viewport.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/ViewportP.h
-Viewport.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Viewport.h
-Viewport.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Form.h
-Viewport.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Reports.h
-Viewport.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/FormP.h
+Viewport.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h
+Viewport.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Misc.h
+Viewport.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Scrollbar.h
+Viewport.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+Viewport.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/ViewportP.h
+Viewport.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Viewport.h
+Viewport.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Form.h
+Viewport.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Reports.h
+Viewport.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/FormP.h
 XawInit.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 XawInit.o: /usr/include/sys/types.h /usr/include/standards.h
 XawInit.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 XawInit.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-XawInit.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-XawInit.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-XawInit.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-XawInit.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-XawInit.o: /usr/include/X11/Xresource.h /usr/include/string.h
-XawInit.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-XawInit.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-XawInit.o: /usr/include/X11/RectObj.h /usr/include/X11/Vendor.h
-XawInit.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/XawInit.h
+XawInit.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+XawInit.o: /usr/include/string.h /usr/include/X11/Core.h
+XawInit.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+XawInit.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+XawInit.o: /usr/include/X11/Vendor.h
+XawInit.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/XawInit.h

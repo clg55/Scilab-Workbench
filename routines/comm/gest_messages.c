@@ -43,14 +43,32 @@ int p_out;
 {
     char *trame;
     Message message;
+#if defined (sun) && defined (SYSV)
+    sigset_t set,oset;
+#endif  
     
     tb_messages=table;
     pipe_in=p_in;
     pipe_out=p_out;
 
+#if defined (sun) && defined (SYSV)
+    sigemptyset(&set);
+    sigemptyset(&oset);
+    sigaddset(&set,SIGTERM);
+    sigprocmask(SIG_BLOCK,&set,&oset);
+    sigemptyset(&set);
+    sigemptyset(&oset);
+    sigaddset(&set,SIGQUIT);
+    sigprocmask(SIG_BLOCK,&set,&oset);
+    sigemptyset(&set);
+    sigemptyset(&oset);
+    sigaddset(&set,SIGINT);
+    sigprocmask(SIG_BLOCK,&set,&oset);
+#else
     sigblock(SIGTERM);
     sigblock(SIGQUIT);
     sigblock(SIGINT);
+#endif
 
     while((trame=lire_trame()) ==  NULL)
 	;

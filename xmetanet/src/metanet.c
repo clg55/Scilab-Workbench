@@ -151,6 +151,8 @@ int menu;
   XtSetValues(toplevel,args,iargs);
 }
 
+static String fallback_resources[] = { NULL,NULL};
+
 int main(argc, argv)
 unsigned int argc;
 char **argv;
@@ -183,8 +185,12 @@ char **argv;
   char *iniG;
   int igeci = -1;
   int idata = -1;
-  static String fallback_resources[] = 
-    {"Metanet.geometry:1000x1000+1000+1000",NULL};
+  static char metanetgeom[200];
+
+  sprintf(metanetgeom,"Metanet.geometry:%dx%d+%d+%d",
+          metaWidth,metaHeight,
+          X + DX * theWindow,Y + DY * theWindow);
+  fallback_resources[0]=metanetgeom;
 
   iniG = NULL;
   strcpy(datanet,"");

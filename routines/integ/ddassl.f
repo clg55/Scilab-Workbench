@@ -1385,7 +1385,7 @@ C
 C***REFERENCES  A DESCRIPTION OF DASSL: A DIFFERENTIAL/ALGEBRAIC
 C                 SYSTEM SOLVER, L. R. PETZOLD, SAND82-8637,
 C                 SANDIA NATIONAL LABORATORIES, SEPTEMBER 1982.
-C***ROUTINES CALLED  D1MACH, DDAINI, DDANRM, DDASTP, DDATRP, DDAWTS,
+C***ROUTINES CALLED  DLAMCH, DDAINI, DDANRM, DDASTP, DDATRP, DDAWTS,
 C                    XERMSG
 C***REVISION HISTORY  (YYMMDD)
 C   830315  DATE WRITTEN
@@ -1486,8 +1486,8 @@ C
 C
 C     Declare externals.
 C
-      EXTERNAL  D1MACH, DDAINI, DDANRM, DDASTP, DDATRP, DDAWTS, XERMSG
-      DOUBLE PRECISION  D1MACH, DDANRM
+      EXTERNAL  DLAMCH, DDAINI, DDANRM, DDASTP, DDATRP, DDAWTS, XERMSG
+      DOUBLE PRECISION  DLAMCH, DDANRM
 C
 C     Declare local variables.
 C
@@ -1661,7 +1661,7 @@ C     SET ERROR WEIGHT VECTOR WT
 305      CONTINUE
 C
 C     COMPUTE UNIT ROUNDOFF AND HMIN
-      UROUND = D1MACH(4)
+      UROUND = DLAMCH('P')
       RWORK(LROUND) = UROUND
       HMIN = 4.0D0*UROUND*MAX(ABS(T),ABS(TOUT))
 C
@@ -3279,7 +3279,7 @@ C         been adjusted to fall between 0 and 16 and NWRAP has been
 C         adjusted to fall between 16 and 132.
 C
 C***REFERENCES  (NONE)
-C***ROUTINES CALLED  I1MACH, XGETUA
+C***ROUTINES CALLED  XGETUA
 C***REVISION HISTORY  (YYMMDD)
 C   880621  DATE WRITTEN
 C   880708  REVISED AFTER THE SLATEC CML SUBCOMMITTEE MEETING OF
@@ -3305,10 +3305,10 @@ C***FIRST EXECUTABLE STATEMENT  XERPRN
       CALL XGETUA(IU,NUNIT)
 C
 C       A ZERO VALUE FOR A LOGICAL UNIT NUMBER MEANS TO USE THE STANDARD
-C       ERROR MESSAGE UNIT INSTEAD.  I1MACH(4) RETRIEVES THE STANDARD
+C       ERROR MESSAGE UNIT INSTEAD.  
 C       ERROR MESSAGE UNIT.
 C
-      N = I1MACH(4)
+      N = 6
       DO 10 I=1,NUNIT
          IF (IU(I) .EQ. 0) IU(I) = N
    10 CONTINUE
@@ -3471,8 +3471,7 @@ C     Description of Parameters
 C      --Output--
 C        IUNIT - an array of one to five unit numbers, depending
 C                on the value of N.  A value of zero refers to the
-C                default unit, as defined by the I1MACH machine
-C                constant routine.  Only IUNIT(1),...,IUNIT(N) are
+C                default unit.  Only IUNIT(1),...,IUNIT(N) are
 C                defined by XGETUA.  The values of IUNIT(N+1),...,
 C                IUNIT(5) are not defined (for N .LT. 5) or altered
 C                in any way by XGETUA.

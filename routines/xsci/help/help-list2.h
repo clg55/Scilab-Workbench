@@ -42,6 +42,7 @@
 " plot3di ",
 " plot3di1 ",
 " plzr ",
+" printing ",
 " rotate ",
 " scaling ",
 " secto3d ",

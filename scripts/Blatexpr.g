@@ -9,20 +9,22 @@
 #--------------------------------------------------------------------
 set SCI="SCILAB_DIRECTORY"
 set IMP=$SCI/imp/NperiPos.ps
-
+set base=$3:r
+set base=$base:r
 if ( $#argv != 3) then 
 	echo "Usage : Blatexpr xscale yscale filename.ps" 
 	echo "  example : Blatexpr 1.0 1.0 filename.ps "
 else 
-	cat $IMP  $3 >! /tmp/Missile$$
-	sed -e "s/ showpage/%showpage/" /tmp/Missile$$ >! $3.n
+	echo "%\!PS-Adobe-2.0 EPSF-2.0" >! /tmp/Missile$$
+	echo "%%BoundingBox: 0 0 300 212" >> /tmp/Missile$$
+	cat $IMP  $3 | grep -v "%\!PS-ADOBE" >> $base.epsf
 	set wide=`echo " 300  $1 * p"|dc `
 	set high=`echo " 212  $2 * p"|dc `
 	set widecm=`echo "$wide 2.835 / p"|dc`
 	set highcm=`echo "$high 2.835 / p"|dc`
 	set hscale=`echo "$1 100 * p"|dc`
 	set vscale=`echo "$2 100 * p"|dc`
-	cat <<END >! $3:r.tex
+	cat <<END >! $base.tex
 	\long\def\Checksifdef#1#2#3{%
 	   \expandafter\ifx\csname #1\endcsname\relax#2\else#3\fi}
 	\Checksifdef{Figdir}{\gdef\Figdir{}}{}
@@ -33,7 +35,7 @@ else
 	%\setlength{\unitlength}{1mm}
 	%\fbox{\begin{picture}($widecm,$highcm)
 	\fbox{\begin{picture}($wide,$high)
-	\special{psfile=\Figdir $3.n hscale=$hscale vscale=$vscale}
+	\special{psfile=\Figdir $base.epsf hscale=$hscale vscale=$vscale}
 	\end{picture}}
 	\end{center}
 	\caption{\label{#2}#1}

@@ -10,6 +10,7 @@
 #include "scr_liaisons.h"
 
 #define NB_MACHINES 30
+#define MAXHOSTLEN 128
 
 typedef struct Application {
     char *identificateur_appli;

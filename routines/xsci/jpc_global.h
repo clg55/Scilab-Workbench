@@ -168,7 +168,7 @@ extern void 		UpdateMessageWindow();	/* update xdbx message */
 extern Display	*display;
 extern XtAppContext 	app_con;
 extern Widget	toplevel, fileWindow, 
-        	sourceForm, sourceWindow, messageWindow, commandWindow, 
+        	sourceForm, sourceWindow, messageWindow, 
 		dialogWindow, searchWindow, separator;
 
 extern Cursor	watch;			/* XC_watch cursor */

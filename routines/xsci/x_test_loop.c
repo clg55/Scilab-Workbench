@@ -45,6 +45,11 @@ F2C(scilab)(nostartup)
 	    C2F(xevents)();
 	  };
 	} 
+      else if ( strcmp(buf,"message")==0)
+	{ 
+	  int j=1;
+	  ExposeMessageWindow("1\npipo\npoo\nfoo",&j);
+	} 
       else if ( strcmp(buf,"click")==0) 
 	{int i,x,y;
 	 check_win();
@@ -148,3 +153,17 @@ plot()
   C2F(plot2d)(x,y,&n1,&n2,style,"021"," ",brect,aint,0L,0L);
 };
 
+
+void cerro(str)
+char *str;
+{
+  fprintf(stderr,"%s",str);
+}
+
+void cout(str)
+char *str;
+{
+  fprintf(stdout,"%s",str);
+}
+
+void cvstr_(){};

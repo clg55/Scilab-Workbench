@@ -8,6 +8,7 @@ demolist=[
 'Graphics Misc.','graphics/divers.dem';
 'Graphics : X primitives','graphics/xdemo.dem';
 'Graphics : Animation','anim/anim.dem';
+'Graphics : Finite Elements ','fec/fec.dem';
 'Inverted pendulum','pendulum/pendule.dem';
 'n-pendulum','npend/npend.dem';
 'Car parking','flat/flat.dem';
@@ -20,7 +21,8 @@ demolist=[
 'ODE''S','ode/ode.dem';
 'Arma','arma/arma.dem';
 'Tracking','tracking/track.dem';
-'Robust control','robust/rob.dem'];
+'Robust control','robust/rob.dem';
+'LMITOOL','lmitool/lmi.dem'];
 
 while %t then
   num=x_choose(demolist(:,1),'Click to choose a demo');

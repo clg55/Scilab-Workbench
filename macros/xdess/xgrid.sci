@@ -27,12 +27,12 @@ xxx=xget('dashes');
 xset('dashes',style);
 [irect,frect]=xgetech();nx=nax(1);ny=nax(2);
 xmin=frect(1);xmax=frect(3);ymin=frect(2);ymax=frect(4);
-if nx>=1 then
+if nx>1 then
   xx=(1/nx)*(1:nx-1);
   xsegs([ xmin*xx+xmax*(ones(xx)-xx); xmin*xx+xmax*(ones(xx)-xx)],...
       [ ymin*ones(xx);ymax*ones(xx)]);
 end
-if ny>=1 then
+if ny>1 then
   xx=(1/ny)*(1:ny-1);
   xsegs([ xmin*ones(xx);xmax*ones(xx)],...
       [ ymin*xx+ymax*(ones(xx)-xx); ymin*xx+ymax*(ones(xx)-xx)]);
@@ -41,7 +41,7 @@ end
 if part(strlog,1)='l' then 
   if prod(size(xmin:(xmax-1))) > 20 then 
     write(%io(2),'Well are you sure you have log scale on x-axis');
-    xset('dashes',xxx);
+    xset('dashes',xxx(1));
     return
   end
   zz=(1:9)',zz=exp(log(10)*(xmin:(xmax-1))).*.zz;
@@ -52,11 +52,11 @@ end
 if part(strlog,2)='l' then 
   if prod(size(ymin:(ymax-1))) > 20 then 
     write(%io(2),'Well are you sure you have log scale on y-axis');
-    xset('dashes',xxx);
+    xset('dashes',xxx(1));
     return
   end
   zz=(1:1:9)',zz=exp(log(10)*(ymin:(ymax-1))).*.zz;
   n=prod(size(zz));zz=matrix(zz,n,1)';
   xsegs([xmin*ones(zz);xmax*ones(zz)],[log(zz)/log(10);log(zz)/log(10)]);
 end
-xset('dashes',xxx);
+xset('dashes',xxx(1));

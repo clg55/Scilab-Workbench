@@ -2,24 +2,7 @@
     Missile 
     XWindow and Postscript library for 2D and 3D plotting 
     Copyright (C) 1990 Chancelier Jean-Philippe
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation; either version 1, or (at your option)
-    any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-    jpc@arletty.enpc.fr 
-    Phone : 43.04.40.98 poste : 3327 
-
+    jpc@cergrene.enpc.fr 
 --------------------------------------------------------------------------*/
 #ifdef THINK_C
 #include <stdlib.h>
@@ -61,7 +44,6 @@
        n1 ==1  with hidden parts 
        n1 >=2 without hidden part, ( if flag > 2  the surface is grey )
        n1 <=0 only the shape of the surface is painted (with white if 0)
-
      flag[1]=0  ( the current scale are used, for superpose mode )
      flag[1]=1  ( bbox is used to fix the box of plot3d )
      flag[2]=0  ( No box around the plot3d )
@@ -75,11 +57,15 @@
 -------------------------------------------------------------------------*/
 
 extern char GetDriver_();
+
+/* 
+ * Current geometric transformation and scales 
+ * which are used or set according to the value of flag[1]
+ *
+ */
 static double scx=1,scy=1,FRect[4];
 static double m[3][3],tr[2];
-/* The current bounding box */
 static double bbox1[6]={0.0,1.0,0.0,1.0,0.0,1.0};
-
 
 plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
      double x[],y[],z[],bbox[];
@@ -100,7 +86,6 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
   /** If Record is on **/
   if (GetDriver_()=='R') 
     StorePlot3D(name,x,y,z,p,q,teta,alpha,legend,flag,bbox);
-  /** if flag[1] ==0 then superpose mode **/
   if (flag[1]!=1 && flag[1] != 0)
     {
       bbox[0]=x[0];bbox[1]=x[*p-1];
@@ -112,7 +97,7 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
     SetEch3d(xbox,ybox,zbox,bbox,teta,alpha);
   else
     SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,0);
-  /** Calcule l' Enveloppe Convexe de la boite **/
+  /** Calcule l' Enveloppe Convex de la boite **/
   /** ainsi que les triedres caches ou non **/
   Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox);
   /** Le triedre cach\'e **/
@@ -131,7 +116,7 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
     {
       Scistring("plot3dg_ : malloc No more Place\n");
       return;
-    };
+    }
 /** Le plot 3D **/
 
   C2F(dr)("xget","white",&verbose,&whiteid,&narg,IP0,IP0,IP0,0,0);
@@ -149,7 +134,7 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
 	    (*func)(polyx,polyy,fill,whiteid,zmin,zmax,x,y,z,i,j,j,p);
 	  C2F(dr)("xliness","str",polyx,polyy,fill,&npoly,&polysize
 	      ,IP0,0,0);
-	};
+	}
       break;
     case 1 : 
       for ( i =0 ; i < (*p)-1 ; i++)
@@ -157,7 +142,7 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
 	    (*func)(polyx,polyy,fill,whiteid,zmin,zmax,x,y,z,i,j,(*q)-2-j,p);
 	 C2F(dr)("xliness","str",polyx,polyy,fill,&npoly,&polysize
 	     ,IP0,0,0);
-	  };
+	  }
       break;
     case 2 : 
       for ( i =(*p)-2 ; i >=0  ; i--)
@@ -166,7 +151,7 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
 	    (*func)(polyx,polyy,fill,whiteid,zmin,zmax,x,y,z,i,j,(*q)-2-j,p);
 	    C2F(dr)("xliness","str",polyx,polyy,fill,&npoly,&polysize
 		,IP0,0,0);
-	  };
+	  }
       break;
     case 3 : 
       for ( i =(*p)-2 ; i >=0  ; i--)
@@ -175,7 +160,7 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
 	    (*func)(polyx,polyy,fill,whiteid,zmin,zmax,x,y,z,i,j,j,p);
 	  C2F(dr)("xliness","str",polyx,polyy,fill,&npoly,&polysize
 	      ,IP0,0,0);
-	};
+	}
       break;
     }
   /* jpc   if (flag[1] != 0 && flag[2] >=3 ) */
@@ -186,8 +171,8 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
 	DrawAxis(xbox,ybox,InsideU);
       else 
 	DrawAxis(xbox,ybox,InsideD);
-    };
-};
+    }
+}
 
 /*-------------------------------------------------------------------
    Renvoit dans polyx et polyy le polygone d'une facette 
@@ -213,7 +198,7 @@ DPoints1(polyx,polyy,fill,whiteid,zmin,zmax,x,y,z,i,j,jj1,p)
 				 z[i+(*p)*(j+1)]+ z[i+1+(*p)*(j+1)])-zmin)
 			 /(zmax-zmin)))+whiteid+2;
   
-};
+}
 
 DPoints(polyx,polyy,fill,whiteid,zmin,zmax,x,y,z,i,j,jj1,p)
      int polyx[],polyy[],fill[],i,j,jj1,*p;
@@ -233,7 +218,7 @@ DPoints(polyx,polyy,fill,whiteid,zmin,zmax,x,y,z,i,j,jj1,p)
   polyy[3 +5*jj1]=GEOY(x[i+1],y[j]  ,z[(i+1)+(*p)*j]);
   polyx[4 +5*jj1]=GEOX(x[i]  ,y[j]  ,z[i+(*p)*j]);
   polyy[4 +5*jj1]=GEOY(x[i]  ,y[j]  ,z[i+(*p)*j]);
-};
+}
 
 C2F(plot3d)(x,y,z,p,q,teta,alpha,legend,flag,bbox,lstr)
      double x[],y[],z[],bbox[];
@@ -244,7 +229,7 @@ C2F(plot3d)(x,y,z,p,q,teta,alpha,legend,flag,bbox,lstr)
      long int lstr;
 {
   plot3dg_("plot3d",DPoints,x,y,z,p,q,teta,alpha,legend,flag,bbox);
-};
+}
 
 C2F(plot3d1)(x,y,z,p,q,teta,alpha,legend,flag,bbox,lstr)
      double x[],y[],z[],bbox[];
@@ -255,7 +240,7 @@ C2F(plot3d1)(x,y,z,p,q,teta,alpha,legend,flag,bbox,lstr)
      long int lstr;
 {
   plot3dg_("plot3d1",DPoints1,x,y,z,p,q,teta,alpha,legend,flag,bbox);
-};
+}
 
 /*---------------- Param3d.c  -----------*/
 
@@ -284,9 +269,9 @@ C2F(param3d)(x,y,z,n,teta,alpha,legend,flag,bbox,lstr)
       bbox[0]=(double) Mini(x,*n);bbox[1]=(double) Maxi(x,*n);
       bbox[2]=(double) Mini(y,*n);bbox[3]=(double) Maxi(y,*n);
       bbox[4]=(double) Mini(z,*n);bbox[5]=(double) Maxi(z,*n);
-    };
+    }
   if ( flag[1] !=0)
-    SetEch3d(xbox,ybox,zbox,bbox,teta,alpha);
+    SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,1);
   else 
     SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,0);
   /** Calcule l' Enveloppe Convexe de la boite **/
@@ -308,7 +293,7 @@ C2F(param3d)(x,y,z,n,teta,alpha,legend,flag,bbox,lstr)
     {
       Scistring("Param3d : malloc  No more Place\n");
       return;
-    };
+    }
   for ( j =0 ; j < (*n) ; j++)	 
     {
       xm[  j]=GEOX(x[j],y[j],z[j]);
@@ -316,7 +301,7 @@ C2F(param3d)(x,y,z,n,teta,alpha,legend,flag,bbox,lstr)
     }
   C2F(dr)("xpolys","v",xm,ym,style,(npoly=1,&npoly),n,
       IP0,0,0);
-/*  if (flag[1] != 0 && flag[2] >=3 ) */
+  /*  if (flag[1] != 0 && flag[2] >=3 ) */
   if (flag[2] >=3 ) 
     {
       /** Le triedre que l'on doit voir **/
@@ -324,9 +309,9 @@ C2F(param3d)(x,y,z,n,teta,alpha,legend,flag,bbox,lstr)
 	DrawAxis(xbox,ybox,InsideU);
       else 
 	DrawAxis(xbox,ybox,InsideD);
-    };
+    }
   C2F(dr)("xset","dashes",xz,IP0,IP0,IP0,IP0,IP0,0,0);
-};
+}
 
 /*-------------------fonction geom3d  */
 
@@ -343,7 +328,7 @@ C2F(geom3d)(x,y,z,n)
       y[j]=TRY(x[j],y[j],z[j]);
       x[j]=x1;
     }
-};
+}
 
 /*---------------- Partie Commune -----------
  Gestion des echelles */
@@ -353,18 +338,19 @@ SetEch3d(xbox,ybox,zbox,bbox,teta,alpha)
      double xbox[8],ybox[8],zbox[8],bbox[6];
 {
   SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,1);
-};
+}
 
 GetEch3d()
 {
   int IRect[4],*xm,*ym,err=0;
   Scale2D(0,FRect,IRect,&scx,&scy,&tr[0],&tr[1],&xm,&ym,0,&err);
-};
+}
 
-/* si flag vaut 1 : on fixe les scale 
+/* 
+   si flag vaut 1 : on fixe les scale 
    sinon on ne fait que prendre en compte les changements d'angles
    sans changer les echelles 
-   */
+ */
 
 SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,flag)
      double *teta,*alpha;
@@ -384,7 +370,13 @@ SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,flag)
   /** Coordonn\'ees apr\`es transformation g\'eometrique de la **/
   /** boite qui entoure le plot3d                              **/
   /** le plan de projection est defini par x et y              **/
-  for (ib=0;ib<6 ;ib++) bbox1[ib]=bbox[ib];
+  for (ib=0;ib<6 ;ib++) 
+    { 
+      if (flag==0) 
+	bbox[ib]=bbox1[ib];
+      else 
+	bbox1[ib]=bbox[ib];
+    }
   xbox[0]=TRX(bbox[0],bbox[2],bbox[4]);
   ybox[0]=TRY(bbox[0],bbox[2],bbox[4]);
   zbox[0]=TRZ(bbox[0],bbox[2],bbox[4]);
@@ -421,8 +413,8 @@ SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,flag)
       /** on calcule X1=m*X , puis X2=(scx*(x1-FRect[0])+tr[0],
 	scy*(-y1+FRect[3])+tr[1],z1)**/
       /** et (x2,y2) est dessine a l'ecran **/
-    };
-};
+    }
+}
 
 GetEch3d1(m1,tr1,FRect1,scx1,scy1)
      double *scx1,*scy1,FRect1[4];
@@ -433,7 +425,7 @@ GetEch3d1(m1,tr1,FRect1,scx1,scy1)
     for (j=0 ; j < 3 ; j++)
       m1[i][j]=m[i][j];
   Scale2D(0,FRect1,IRect,scx1,scy1,&tr1[0],&tr1[1],&xm,&ym,0,&err);
-};
+}
 
 /*----------------------------------------------------------------
 Trace un triedre : Indices[4] donne les indices des points qui 
@@ -455,7 +447,7 @@ DrawAxis(xbox,ybox,Indices)
   ixbox[3]=GX(xbox[Indices[2]]);iybox[3]=GY(ybox[Indices[2]]);
   ixbox[5]=GX(xbox[Indices[3]]);iybox[5]=GY(ybox[Indices[3]]);
   C2F(dr)("xsegs","v",ixbox,iybox,&npoly,IP0, IP0,IP0,0,0);
-};
+}
 
 /*---------------------------------------------------------------------
 Trace l'enveloppe convexe de la boite contenant le dessin 
@@ -496,13 +488,13 @@ Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox)
 	  {
 	    xind[0]=ind;
 	    break;
-	  };
-    };
+	  }
+    }
   if (ind < 0 || ind > 8) 
     {
       Scistring("xind out of bounds");
       xind[0]=0;
-    };
+    }
   UpNext(xind[0],&ind2,&ind3);
   if (ybox[ind2] > ybox[ind3]) 
     {
@@ -563,7 +555,7 @@ AxesStrings(axflag,ixbox,iybox,xind,legend,bbox)
     {
       Scistring("AxesString : No more Place to store Legends\n");
       return;
-    };
+    }
   strcpy(loc,legend);
   legx=strtok(loc,"@");legy=strtok((char *)0,"@");legz=strtok((char *)0,"@");
   /** le cot\'e gauche ( c'est tjrs un axe des Z **/
@@ -582,7 +574,7 @@ AxesStrings(axflag,ixbox,iybox,xind,legend,bbox)
       BBoxToval(&fx,&fy,&fz,xind[2],bbox);
       BBoxToval(&lx,&ly,&lz,xind[3],bbox);
       TDAxis(1,fz,lz,xnax,FPoint,LPoint,Ticsdir);
-    };
+    }
   if (legz != 0)
     {
       C2F(dr)("xstringl",legz,&x,&y,rect,IP0,IP0,IP0,0,0);
@@ -605,7 +597,7 @@ AxesStrings(axflag,ixbox,iybox,xind,legend,bbox)
 	  BBoxToval(&fx,&fy,&fz,xind[3],bbox);
 	  BBoxToval(&lx,&ly,&lz,xind[4],bbox);
 	  TDAxis(2,fx,lx,xnax,FPoint,LPoint,Ticsdir);
-	};
+	}
       if (legx != 0)
 	{
 
@@ -628,7 +620,7 @@ AxesStrings(axflag,ixbox,iybox,xind,legend,bbox)
 	  BBoxToval(&fx,&fy,&fz,xind[3],bbox);
 	  BBoxToval(&lx,&ly,&lz,xind[4],bbox);
 	  TDAxis(2,fy,ly,xnax,FPoint,LPoint,Ticsdir);
-	};
+	}
       if (legy != 0)
 	{
 
@@ -636,7 +628,7 @@ AxesStrings(axflag,ixbox,iybox,xind,legend,bbox)
 	  C2F(dr)("xstring",legy,(x=x-rect[2],&x),&y,(int *) &ang,&flag
 	      ,IP0,IP0,0,0);
 	}
-    };
+    }
   /** le cot\'e en bas a droite **/
   x=(ixbox[4]+ixbox[5])/2+iof;y=((2/3.0)*iybox[4]+(1/3.0)*iybox[5])+iof;
   if ( xind[4]+xind[5] == 3)
@@ -653,7 +645,7 @@ AxesStrings(axflag,ixbox,iybox,xind,legend,bbox)
 	  BBoxToval(&fx,&fy,&fz,xind[4],bbox);
 	  BBoxToval(&lx,&ly,&lz,xind[5],bbox);
 	  TDAxis(3,fx,lx,xnax,FPoint,LPoint,Ticsdir); 
-	};
+	}
       if (legx != 0) 
 	{
 	  C2F(dr)("xstring",legx,&x,&y,(int *)&ang,&flag,IP0,IP0,0,0);
@@ -673,14 +665,14 @@ AxesStrings(axflag,ixbox,iybox,xind,legend,bbox)
 	  BBoxToval(&fx,&fy,&fz,xind[4],bbox);
 	  BBoxToval(&lx,&ly,&lz,xind[5],bbox);
 	  TDAxis(3,fy,ly,xnax,FPoint,LPoint,Ticsdir); 
-	};
+	}
       if (legy != 0) 
 	{
 	  C2F(dr)("xstring",legy,&x,&y,(int *)&ang,&flag,IP0,IP0,0,0);
 	}
-    };
+    }
   free(loc);
-};
+}
 
 MaxiInd(vect,n,ind,maxi)
      double vect[],maxi;
@@ -690,8 +682,8 @@ MaxiInd(vect,n,ind,maxi)
   if ( *ind+1 < n)
     for (i = *ind+1 ; i < n ; i++)
       if ( vect[i] >= maxi)
-	{ *ind=i; break;};
-};
+	{ *ind=i; break;}
+}
 
 /* renvoit les indices des points voisins de ind1 sur la face haute 
    de la boite  */
@@ -703,7 +695,7 @@ UpNext(ind1,ind2,ind3)
   *ind3 = ind1-1;
   if (*ind2 == 8) *ind2 = 4;
   if (*ind3 == 3) *ind3 = 7;
-};
+}
 
 DownNext(ind1,ind2,ind3)
      int ind1,*ind2,*ind3;
@@ -712,7 +704,7 @@ DownNext(ind1,ind2,ind3)
   *ind3 = ind1-1;
   if (*ind2 == 4) *ind2 = 0;
   if (*ind3 == -1) *ind3 = 3;
-};
+}
 
 
 TDAxis(flag,FPval,LPval,nax,FPoint,LPoint,Ticsdir)
@@ -754,9 +746,9 @@ TDAxis(flag,FPval,LPval,nax,FPoint,LPoint,Ticsdir)
 	  if ( i== nax[1]) posi[1] -= rect[3]/2;
 	  break;
 	case 2: posi[0] -= rect[2];break;
-	};
+	}
       C2F(dr)("xstring",foo,&(posi[0]),&(posi[1]),(int *)&angle,&flag1,IP0,IP0,0,0);
-    };
+    }
 }
 
 
@@ -780,8 +772,8 @@ TDdrawaxis_(size,FPval,LPval,nax,FPoint,LPoint,Ticsdir)
       x[1] =nint(x[0]+ ticsx*size);
       y[1] =nint(y[0]+ ticsy*size);
       C2F(dr)("xsegs","v",x,y,&siz,IP0, IP0,IP0,0,0);
-    };
-};
+    }
+}
 
 
 /** Returns the [x,y,z] values of a point given its xbox or ybox indices **/
@@ -800,12 +792,12 @@ BBoxToval(x,y,z,ind,bbox)
     case 5:	*x=bbox[0],*y=bbox[3],*z=bbox[5];break;
     case 6:	*x=bbox[1],*y=bbox[3],*z=bbox[5];break;
     case 7:	*x=bbox[1],*y=bbox[2],*z=bbox[5];break;
-    };
-};
+    }
+}
 
-/*---------------------
-  intercative rotation of a 3d plot 
-----------------------*/
+/*-------------------------------------
+  interactive rotation of a 3d plot 
+--------------------------------------*/
 
 void loc3DRsci(str,xi,yyi,xf,yyf)
      char *str;
@@ -817,7 +809,7 @@ void loc3DRsci(str,xi,yyi,xf,yyf)
   flag[0]=0;flag[1]=1;flag[2]=4;
   theta=theta+5.0*i;i++;
   C2F(plot3d)(&x,&y,&z,&p,&q,&theta,&alpha,"X@Y@Z", flag,bbox1,0L);
-};
+}
 
 
 #define XN3D 21

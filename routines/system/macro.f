@@ -73,7 +73,10 @@ c     set input variable name
          l=l+1
          l1=l+nsiz*(rhs-1)
          l = l + nsiz*mrhs + 1
-         if(mrhs.eq.0.and.rhs.le.1) rhs=0
+         if(mrhs.eq.0.and.rhs.le.1) then
+            if(comp(1).eq.0.and.rhs.eq.1) top=top-1
+            rhs=0
+         endif
          if(mrhs.lt.rhs) then
             pstk(pt)=l1-(rhs-1)*nsiz
             rhs=mrhs

@@ -168,29 +168,46 @@ void SolveComplexMatrix();
 /* Forward elimination. Solves Lc = b.*/
     for (I = 1; I <= Size; I++)
     {   
+      
 /* This step of the elimination is skipped if Temp equals zero. */
         if ((Temp = Intermediate[I]) != 0.0)
-        {   pPivot = Matrix->Diag[I];
-            Intermediate[I] = (Temp *= pPivot->Real);
-
-            pElement = pPivot->NextInCol;
-            while (pElement != NULL)
-            {   Intermediate[pElement->Row] -= Temp * pElement->Real;
-                pElement = pElement->NextInCol;
-            }
+        {   
+	  pPivot = Matrix->Diag[I];
+	  if ( pPivot != 0 && ELEMENT_MAG(pPivot) >  Matrix->AbsThreshold )
+	    {
+	      /*jpc    Intermediate[I] = (Temp *= pPivot->Real);*/
+	      Intermediate[I] = (Temp /= pPivot->Real);
+	      
+	      pElement = pPivot->NextInCol;
+	      while (pElement != NULL)
+		{   Intermediate[pElement->Row] -= Temp * pElement->Real;
+		    pElement = pElement->NextInCol;
+		  }
+	    }
+	  else
+	    Intermediate[I]= 0.0;
         }
-    }
+      }
 
 /* Backward Substitution. Solves Ux = c.*/
-    for (I = Size; I > 0; I--)
+/* modification for singular matrix a diagonal element can be a null pointer */
+
+    for (I = Size ; I > 0; I--)
     {   Temp = Intermediate[I];
-        pElement = Matrix->Diag[I]->NextInRow;
-        while (pElement != NULL)
-        {   Temp -= pElement->Real * Intermediate[pElement->Col];
-            pElement = pElement->NextInRow;
-        }
-        Intermediate[I] = Temp;
-    }
+	if ( Matrix->Diag[I] == 0) /* test for nul pointer */
+	  {
+	    Intermediate[I]=0.0;
+	  }
+	else 
+	  {
+	    pElement = Matrix->Diag[I]->NextInRow;
+	    while (pElement != NULL)
+	      {   Temp -= pElement->Real * Intermediate[pElement->Col];
+		  pElement = pElement->NextInRow;
+		}
+	    Intermediate[I] = Temp;
+	  }
+      }
 
 /* Unscramble Intermediate vector while placing data in to Solution vector. */
     pExtOrder = &Matrix->IntToExtColMap[Size];

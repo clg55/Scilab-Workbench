@@ -211,19 +211,16 @@ c     opening file
          return
       endif
 c     
-      k = wte
       l = lct(2)
       if(lunit.ne.wte) then
          lct(2) = 0
-         wte = lunit
       endif
       top=top2
       do 26 i=2,rhs
-         call print(idstk(1,top),top)
+         call print(idstk(1,top),top,lunit)
          top=top-1
  26   continue
       lct(2) = l
-      wte = k
       istk(il)=0
       if(.not.opened) call clunit(-lunit,buf,0)
       go to 999
@@ -770,6 +767,7 @@ c     ecriture des chaines de caracteres
          return
       endif
       n=istk(il+2)*istk(il+1)
+      m=istk(il+1)
       il=il+4
       l=il+n+1
       if(iacces.ne.0) then
@@ -1186,7 +1184,7 @@ c     tri dans l'ordre alphabetique
       il1=il
       do 133 i=1,m
          call namstr(istk(il),id,nn,1)
-         ic=id(1)
+         ic=abs(id(1))
          if(ic.eq.percen) then
             ic=abs(id(2))
          endif
@@ -1642,7 +1640,7 @@ c     ----
       endif
       id(1)=0
       do 201 i=1,rhs
-         call print(id,top)
+         call print(id,top,wte)
          top=top-1
  201  continue
       top=top+1

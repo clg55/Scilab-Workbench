@@ -88,7 +88,7 @@ can be passed as the arguments of primitives or other macros.
 In addition $\Psi$lab supports a character chain data type 
 which, in particular, allows the automatic creation of macros.
 Matrices of character strings are also manipulated with the same
-syntax or ordinary matrices.
+syntax as ordinary matrices.
 	Finally, $\Psi$lab is easily interfaced with Fortran or C 
 subprograms (see Chapter~\ref{intersci}).  This permits use of standardized 
 packages and libraries in the interpreted environment of $\Psi$lab.
@@ -114,11 +114,12 @@ $\Psi$lab functions is also available.
 
 \section{Sample Session}
 
-$\Psi$lab is called by typing {\tt scilab} (or {\tt scilab}).
-These shell scripts  (in the directory {\tt SCIDIR/bin}) run $\Psi$lab 
-in an X-window environment or in a pure Unix-environment respectively.
+$\Psi$lab is called by typing {\tt scilab}.
+This shell script  (in the directory {\tt SCIDIR/bin}) runs $\Psi$lab 
+in an X-window environment (Ttis script file can be invoked with
+specific parameters).
 
-A first contact with $\Psi$lab can be made by clicking on ``demos''
+A first contact with $\Psi$lab can be made by clicking on ``demo''
 and running the introduction demo.
 
 	To give the user an idea of some of the capabilities of $\Psi$lab
@@ -126,12 +127,17 @@ we give the following sample session in $\Psi$lab.\\
 \bigskip
 {\tt scilab}
 \begin{verbatim}
-
-     ===========
-     S C I L A B        31-DEC-1990 at 23:28:13 
-     ===========
-
- Scilab Version 1.0 (01-01-1990) Copyright (C) INRIA
+                           ===========
+                           S c i l a b
+                           ===========
+ 
+ 
+                  Scilab-2.1  ( 10 February 1995 ) 
+                  Copyright (C) 1989-95 INRIA 
+ 
+ 
+Startup execution:
+  loading initial environment
    
  -->
 
@@ -196,17 +202,17 @@ is a complex vector.
                2  
     1 + 2s + 3s   
  
--->//p is the polynomial in z with coefficients 1,2,3.
+-->//p is the polynomial in s with coefficients 1,2,3.
 \end{verbatim}
 A command a little more complicated which creates a polynomial.  The
 chain of characters which follow the {\tt //} is not interpreted by
-$\Psi$lab.
+$\Psi$lab (it is a comment line).
 
 \noindent.\dotfill.
 \begin{verbatim}
 
 -->M=[p, p-1; p+1 ,2]
-m         =
+M         =
  
 !              2             2    !
 !   1 + 2s + 3s       2s + 3s     !
@@ -215,7 +221,7 @@ m         =
 !   2 + 2s + 3s         2         !
  
 
--->det(m)
+-->det(M)
 
 ans      =
 
@@ -226,7 +232,7 @@ ans      =
 Definition of a polynomial matrix. The syntax for polynomial matrices
 is the same as that for matrices of constants. Calculation of the
 determinant of the polynomial matrix by the {\tt det} function. 
-Note that {\tt scilab} is not case-sensitive.
+Note that {\tt scilab} is case-sensitive.
 
 \noindent.\dotfill.
 \begin{verbatim}
@@ -251,6 +257,7 @@ Note that {\tt scilab} is not case-sensitive.
 Definition of a matrix of rational polynomials.  The internal representation
 of {\tt f} is as a list {\tt list('r',num,den)} where {\tt num} and 
 {\tt den} are two matrix polynomials.  
+
 \noindent.\dotfill.
 \begin{verbatim}
  
@@ -275,14 +282,14 @@ by using {\tt return}\index{return@{\tt return}}.
 Use of {\tt return} without an argument 
 destroys all the variables created in the new environment before returning
 to the old environment. The {\tt pause} facility is very useful 
-for debugging macros.
+for debugging functions.
 
 \noindent.\dotfill.
 \begin{verbatim}
  
 -->f21=f(2,1);v=0:0.01:%pi;frequencies=exp(%i*v);
  
--->response=freq(f21(2),f21(3),frequencies);
+-->response=freq(numer(f12),denom(f12),frequencies);
  
 -->plot2d(v',abs(response)',[-1],'011',' ',[0,0,3.5,0.7],[5,4,5,7]);
  
@@ -293,8 +300,8 @@ Definition of a rational polynomial by extraction of an element
 of the matrix {\tt f} defined above.  This is followed by the evaluation
 of the rational polynomial at the vector of complex frequency values defined
 by {\tt frequencies}.  The evaluation of the polynomial is done by
-the primitive {\tt freq}. {\tt f21(2)} is the numerator
-polynomial and {\tt f21(3)} is the denominator polynomial.
+the primitive {\tt freq}. {\tt numer(f12)} is the numerator
+polynomial and {\tt denom(f21)} is the denominator polynomial.
 The  visualization of the resulting evaluation
 is made by using the command {\tt plot2d} (see Figure~\ref{f1.1}).
 
@@ -318,8 +325,8 @@ is made by using the command {\tt plot2d} (see Figure~\ref{f1.1}).
                2  
     6 - 4z + 2z   
 \end{verbatim}  
-The macro {\tt horner} allows the
-user to make a change of variables for a polynomial (for example, to
+The function {\tt horner} allows the
+user to make a (possibly symbolic) change of variables for a polynomial (for example, to
 perform the bilinear transformation as seen above).
 
 \noindent.\dotfill.
@@ -348,7 +355,7 @@ The macro {\tt syslin} defines here the continuous time ({\tt 'c'}) system
 -->s=poly(0,'s');
  
 -->R=[1/s,s/(1+s),s^2]
- r         =
+ R        =
  
 !                    2 !
 !   1       s       s  !
@@ -357,7 +364,7 @@ The macro {\tt syslin} defines here the continuous time ({\tt 'c'}) system
  
 -->Sl=syslin('c',R);
  
--->tf2ss(sl)
+-->tf2ss(Sl)
  ans       =
  
  
@@ -398,7 +405,7 @@ Definition of the rational matrix {\tt R}. {\tt Sl} is the
 continuous-time linear system with (improper) transfer matrix
 R. {\tt tf2ss} puts {\tt Sl} in state-space representation with a
 polynomial {\tt D} matrix. Note that linear systems are represented
-by lists.
+by specific lists (with 7 entries).
 
 \noindent.\dotfill.
 \begin{verbatim}
@@ -482,7 +489,7 @@ the eigen-values of a matrix.
 
 -->save('myfile')
 \end{verbatim}
-Saves the environment in a file named {\tt mufile}.
+Saves the environment in a file named {\tt myfile}.
 
 \noindent.\dotfill.
 \begin{verbatim}
@@ -580,7 +587,7 @@ not implemented in scilab....
 !(sin(a))*(a)+(c)*(cos(b))  (sin(a))*(sin(a))+(c)*(c)  !
  
 \end{verbatim}
-Definition of a matrix containing character chains. The 
+Definition of a matrix containing character chains. By default, the 
 operation of symbolic multiplication of two matrices of character
 strings is not defined in $\Psi$lab.  The (on-line)
 macro definition for {\tt \%cmc} defines the multiplication of 
@@ -625,16 +632,16 @@ or manipulated as other objects such as matrices or lists.
 Exit from $\Psi$lab.
 
 \noindent.\dotfill.
-\input{\Figdir d1.7.tex}
+\input{\Figdir d1-7.tex}
 \dessin{A Simple Response}{f1.1}
 
-\input{\Figdir d1.14.tex}
+\input{\Figdir d1-14.tex}
 \dessin{Phase Plot}{f1.2}
 
 \section{Software Organization}
 
 $\Psi$lab is divided into a set of directories. The main directory
-\verb!SCIDIR! contains the files scilab.star (startup file), the
+\verb!SCIDIR! contains the files {\tt scilab.star} (startup file), the
 copyright file notice.tex, and the file \verb!Imake.incl! (see(\ref{install})).
 The subdirectories are the following:
 \begin{itemize}
@@ -645,12 +652,12 @@ which contain Toolboxes for control, signal processing, etc..}
 
 \item{{\tt demos} is the directory of $\Psi$lab demos. The file 
 {\tt alldems.dem} allows to add a new demo which can be run by 
-clicking in ``demos''.}
+clicking in ``demo''.}
 
 \item{{\tt man} is the manual (Unix manual), divided into submanuals.
 The manual is given in Latex format. The \LaTeX code is produced by a 
 translation of the Unix format $\Psi$lab manual (see the subdirectory
-{\tt Man-General}).
+{\tt Man-General}).}
 To get information about an item enter {\tt help item} in $\Psi$lab
 or use the help window facility obtained with help button.
 To get functions corresponding to a key word enter {\tt apropos
@@ -662,7 +669,8 @@ or use apropos filed of the help window facility.
 the numerical routines. The subdirectory {\tt default} contains the
 source code of routines which are useful to customize $\Psi$lab.}
 In particular ``external'' routines for ODE solvers or optimization
-should be included here (see e.g. thee file {\tt fydot.f}.
+should be included here (see e.g. the file {\tt fydot.f}, interface
+Scilab-Fortran for ode simulation).
 \item{{\tt intersci} is the facility provided to add new Fortran or C 
 primitives to $\Psi$lab.}
 
@@ -689,6 +697,6 @@ print.
 \section{Installing $\Psi$lab}
 \label{install}
 $\Psi$lab is given in source code format, with a collection
-of {\tt Imakefile} to compile and install it.
-The files {\tt Imake.incl , Path.incl} should be adapted to your machine \index{install}.  .
-See the README file in main Scilab directory.
+of {\tt Makefile} to compile and install it.
+The files {\tt Imake.incl , Path.incl} should be adapted to your
+machine \index{install}. See the README file in main Scilab directory.

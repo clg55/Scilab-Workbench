@@ -7,6 +7,10 @@ MW=$(SCIDIR)/man/scripts/makewhatis-dec
 MW=$(SCIDIR)/man/scripts/makewhatis-sun
 #endif 
 
+#if defined(SunArchitecture) && defined(SYSV)
+MW=$(SCIDIR)/man/scripts/makewhatis-solaris
+#endif 
+
 #if defined(MipsArchitecture)
 MW=$(SCIDIR)/man/scripts/makewhatis-dec 
 #endif
@@ -23,18 +27,28 @@ MW=$(SCIDIR)/man/scripts/makewhatis-aix
 MW=$(SCIDIR)/man/scripts/makewhatis-alpha
 #endif
 
+#if defined(SGIArchitecture)
+MW=$(SCIDIR)/man/scripts/makewhatis-sgi
+#endif
+
 #if defined(LinuxArchitecture)
 MW=echo
 #endif
 
-AllTarget(whatis)
+WHATIS=whatis
+
+#if defined(SunArchitecture) && defined(SystemV)
+WHATIS=windex
+#endif
+
+AllTarget($(WHATIS))
 WhatisRule(NullParameter)
 WhatisDependTarget()
 
 distclean::clean 
 
 clean::
-	$(RM) man*?/?*.[0-9].~ man*?/"#"*
+	$(RM) man*?/?*.[0-9].~ man*?/"#"* check.log
 
 /* Check if the man files are properly placed */
 

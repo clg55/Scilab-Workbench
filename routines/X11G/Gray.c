@@ -22,6 +22,7 @@
 
 --------------------------------------------------------------------------*/
 
+#define PI0 (int *) 0
 
 #include <stdio.h>
 #include <math.h>
@@ -68,7 +69,7 @@ C2F(xgray)(x,y,z,n1,n2)
   C2F(dr)("xset","clipping",&x1,&yy1,&w1,&h1,IP0,IP0,0,0);
   C2F(dr)("xrect","v",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
       ,IP0,IP0,0,0);
-};
+}
 
 /*-------------------------------------------------------
   x : of size n1 gives the x-values of the grid 
@@ -82,7 +83,7 @@ GraySquare_(x,y,z,n1,n2)
      int n1,n2;
 {
   double zmoy,zmax,zmin,zmaxmin;
-  int i,j,verbose=0,whiteid,narg,fill[1],ncont;
+  int i,j,verbose=0,whiteid,narg,fill[1],ncont,cpat;
   int xcont[4],ycont[4],cont_size=4;
   zmin=Mini(z,(n1)*(n2));
   zmax=Maxi(z,(n1)*(n2));
@@ -90,18 +91,19 @@ GraySquare_(x,y,z,n1,n2)
   if (zmaxmin <= SMDOUBLE) zmaxmin=SMDOUBLE;
   C2F(dr)("xget","white",&verbose,&whiteid,&narg,
       IP0,IP0,IP0,0,0);
-  
-  for (i = 0 ; i < (n1)-1; i++)
-  for (j=0 ; j < (n2)-1 ; j++)
+  C2F(dr)("xget","pattern",&verbose,&cpat,&narg,PI0,PI0,PI0,0,0);
+  for (i = 0 ; i < (n1)-1 ; i++)
+  for (j = 0 ; j < (n2)-1 ; j++)
     {
-      xcont[0]=x[i];ycont[0]=y[j];
-      xcont[1]=x[i+1];ycont[1]=y[j];
-      xcont[2]=x[i+1];ycont[2]=y[j+1];
-      xcont[3]=x[i];ycont[3]=y[j+1];
+      int w,h;
       zmoy=1/4.0*(z[i+n1*j]+z[i+n1*(j+1)]+z[i+1+n1*j]+z[i+1+n1*(j+1)]);
       fill[0]=nint(whiteid*(zmoy-zmin)/(zmaxmin));
-      C2F(dr)("xliness","str",xcont,ycont,fill,(ncont=1,&ncont),&cont_size,
-	  IP0,0,0);
-    };
-};
+      C2F(dr)("xset","pattern",&(fill[0]),PI0,PI0,PI0,PI0,PI0,0,0);
+      w=Abs(x[i+1]-x[i]);h=Abs(y[j+1]-y[j]);
+      if ( w != 0 && h != 0) 
+	C2F(dr)("xfrect","v",&x[i],&y[j+1],&w,&h);
+    }
+  C2F(dr)("xset","pattern",&cpat,PI0,PI0,PI0,PI0,PI0,0,0);
+}
+
 

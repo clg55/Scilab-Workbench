@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DESI11,SSI=0
       subroutine desi11(nmaxi,maxdeg,vsn,ndeg,gd1,gd2,adelta,nzm,sm
      *,nzero,pren,pimn,ugc,ogc,nj,nh)
 c!purpose
@@ -7,9 +6,12 @@ c computation of the zeros and locations of the extrema
 c!
 c
       implicit double precision (a-h,o-z)
+      external slamch
+      real slamch
       dimension  nzm(*),sm(maxdeg,4),nzero(*),pren(*),pimn(*)
+c
       pi=4.0d+0*atan(1.0d+0)
-      flma=2.0d+0**(i1mach(16)-2)
+      flma=2.0d+0**(int(slamch('l'))-2)
 c
       adelta = vsn**ndeg
 c

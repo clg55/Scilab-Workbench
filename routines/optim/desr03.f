@@ -77,14 +77,14 @@ C     "implicit":
 C                Implicit double precision (a-h,o-z)
 C
 C     SUBPROGRAMAS AUXILIARES:  anrs01,anrs02,daxpy,dcopy,ddot,dnrm2,
-C                               dscal,d1mach
+C                               dscal,dlamch
 C     FUNCIONES FORTRAN INTRINSECAS: abs,mod,sqrt
 C
 C
       implicit double precision(a-h,o-z)
       dimension z(iz,*),r(ir,*),g(*),w(*),d(*),ipvt(*)
       id=0
-      eps=d1mach(4)**0.75
+      eps=dlamch('p')**0.75
       n1=n+1
 C
 C     Se calcula el gradiente proyectado cambiado de signo (si IND >= 0)

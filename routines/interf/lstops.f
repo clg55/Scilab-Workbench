@@ -7,13 +7,14 @@ c
 c
 c
       integer plus,minus,star,dstar,slash,bslash,dot,colon,concat
-      integer quote
-      integer rhs1,vol1,vol2,typ2,op,iadr,sadr
+      integer quote,et,ou,non
+      integer rhs1,vol1,vol2,typ2,op,iadr,sadr,top0
 c
 c
-      data plus/45/,minus/46/,star/47/,dstar/58/,slash/48/
+      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
       data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
       data insert/2/,extrac/3/
+      data ou/57/,et/58/,non/61/
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -28,6 +29,7 @@ c
 c
       lw=lstk(top+1)
       rhs1=rhs
+      top0=top
       if(op.eq.insert) rhs=rhs-2
       if(op.eq.extrac) rhs=rhs-1
 c
@@ -55,6 +57,12 @@ c
    11 rhs=rhs1-1
       top=top-1
       ilcol=iadr(lstk(top))
+      if(istk(ilcol).eq.10) then
+         top=top0
+         fin=-fin
+         rhs=rhs1
+         return
+      endif
       if(istk(ilcol).ne.1.or.istk(ilcol+3).ne.0) then
          call error(21)
          return
@@ -107,6 +115,11 @@ c
       goto 99
 c
    20 l=lstk(top)
+      if(m1.ne.lhs) then
+         call error(41)
+         return
+      endif
+
       if(top+1+m1.ge.bot) then
          call error(18)
          return
@@ -132,6 +145,12 @@ c
 c
       top=top-1
       ilcol=iadr(lstk(top))
+      if(istk(ilcol).eq.10) then
+         top=top0
+         fin=-fin
+         rhs=rhs1
+         return
+      endif
       if(istk(ilcol).ne.1.or.istk(ilcol+3).ne.0) then
          call error(21)
          return

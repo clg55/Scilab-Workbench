@@ -3,8 +3,8 @@
 NAME=optlib
 NAM=optim
 
-MACROS= linpro.sci quapro.sci karmarkar.sci       
-
+MACROS= linpro.sci quapro.sci karmarkar.sci pack.sci unpack.sci lmitool.sci \
+	lmisolver.sci vec2list.sci list2vec.sci
 
 OBJ=$(MACROS:.sci=.bin)
 MACROSN=$(MACROS:.sci=)

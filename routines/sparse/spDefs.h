@@ -418,13 +418,12 @@
 #endif
 
 
-
-
-
-
 /*
  * MEMORY ALLOCATION
  */
+
+/* JPC : ne vaut-il pas mieux mettre un malloc.h pour tout le monde 
+   c'est imperatif si on veut ensuite utiliser dbmalloc sans toucher a rien
 
 extern char *malloc(), *calloc(), *realloc();
 #ifdef ultrix
@@ -435,10 +434,17 @@ extern char *malloc(), *calloc(), *realloc();
     extern abort();
 #endif
 
+*/
+
+#include <sys/types.h> /* pour le malloc.h de dbmalloc */
+#include <malloc.h>
+
+
 #define ALLOC(type,number)  ((type *)malloc((unsigned)(sizeof(type)*(number))))
 #define REALLOC(ptr,type,number)  \
            ptr = (type *)realloc((char *)ptr,(unsigned)(sizeof(type)*(number)))
-#define FREE(ptr) { if ((ptr) != NULL) free((char *)(ptr)); (ptr) = NULL; }
+
+#define FREE(ptr) { if ((ptr) != NULL) {free((void *)(ptr)); (ptr) = NULL;}}
 
 
 /* Calloc that properly handles allocating a cleared vector. */
@@ -821,7 +827,9 @@ struct FillinListNodeStruct
 
 /* Begin `MatrixFrame'. */
 struct  MatrixFrame
-{   RealNumber                   AbsThreshold;
+{ 
+  int                            NumRank ; /* the numerical Rank of the matrix */
+    RealNumber                   AbsThreshold;
     int                          AllocatedSize;
     int                          AllocatedExtSize;
     BOOLEAN                      Complex;

@@ -1,13 +1,15 @@
-C/MEMBR ADD NAME=DELLK,SSI=0
       double precision function dellk(dk)
 c!purpose
 C  calculate complete elliptic integral of first kind
 c!
       implicit double precision (a-h,o-z)
+      external slamch, dlamch
+      real slamch
+c
       data de /1.0d+0/
-      flma=2.0d+0**(i1mach(16)-2)
+      flma=2.0d+0**(int(slamch('l'))-2)
       dpi=4.0d+0*atan(1.0d+00)
-      domi=2.0d+0*d1mach(4)
+      domi=2.0d+0*dlamch('p')
       dgeo = de - dk*dk
       if (dgeo) 10, 10, 20
   10  dellk = flma

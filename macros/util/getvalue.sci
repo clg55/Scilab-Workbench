@@ -103,13 +103,13 @@ while %t do
     execstr('x'+string(k)+'=v')
   end
   if nok>0 then 
-    message(['la reponse donnee pour '+labels(nok);
-             'est de dimension incorrecte: ';
-             'la dimension attendue est '+ssz])
+    x_message(['answer given for  '+labels(nok);
+             'has invalid dimension: ';
+             'waiting for dimension  '+ssz])
     ini=str
   elseif nok<0 then
-    message(['la reponse donne pour '+labels(-nok);
-             'est de type incorrect :'+ typ(-2*nok-1)])
+    x_message(['answer given for  '+labels(-nok);
+             'has incorrect type :'+ typ(-2*nok-1)])
     ini=str
   else
     break

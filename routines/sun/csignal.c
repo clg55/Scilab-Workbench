@@ -2,7 +2,7 @@
 #include "../machine.h"
 #include <signal.h>
 
-controlC_handler (sig)
+void controlC_handler (sig)
      int sig;
 {
   int j;

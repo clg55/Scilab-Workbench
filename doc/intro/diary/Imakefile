@@ -16,13 +16,6 @@ distclean::
 .code.dia : 
 	@$(RM) x.dat
 	@if [ $* != d4.7 -a $* != d1.15 ]; then \
-		$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab $*.code $*.dia ;\
-	else 	$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab $*.code $*.dia 1 ; \
+		$(SCIDIR)/util/scidem $(SCIDIR) $*.code $*.dia ;\
+	else 	$(SCIDIR)/util/scidem $(SCIDIR) $*.code $*.dia 1 ; \
 	fi;
-
-	
-
-
-
-
-

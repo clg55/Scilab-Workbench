@@ -21,7 +21,7 @@ c        matlab
       integer   csiz,bsiz,isiz,psiz,nsiz,lsiz
       parameter (csiz=63,bsiz=4096,isiz=500,psiz=256,nsiz=6,lsiz=8192)
       integer   nlgh,vsiz
-      parameter (nlgh=nsiz*4,vsiz=900000)
+      parameter (nlgh=nsiz*4,vsiz=2000000)
       integer   nftn,maxlnk
       parameter (nftn=20,maxlnk=50)
       integer   maxdb,maxbpt

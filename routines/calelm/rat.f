@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=RAT,SSI=0
       subroutine rat(x,eps,n,d,fail)
 c!but
 c     ce sous programme approximme un reel x par un rationnel n/d
@@ -22,7 +21,8 @@ c!
 c
       double precision x,eps,z,err,dz,xn,xd,ax
       integer n,d,nmax,n0,d0,n1,d1,bm,fail
-      nmax=i1mach(9)
+c possibly the largest integer (hum ???)
+      nmax=2147483647
       fail=0
       n0=0
       d0=1

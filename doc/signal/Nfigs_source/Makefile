@@ -26,7 +26,7 @@
 
 # platform: osf1.cf
 
-# Operating system:  1/1 1.3
+# Operating system:  1/1 3.0
 
    	SHAREDSWITCH =
 
@@ -48,6 +48,7 @@
   BOOTSTRAPCFLAGS =
                CC = cc $(SHAREDSWITCH)
             LOCCC = cc
+        LOCSHARCC = LocShareCcCmd
                AS = as
 
          COMPRESS = compress
@@ -82,7 +83,7 @@
 
     PROTO_DEFINES = -DFUNCPROTO=3
 
-     INSTPGMFLAGS =
+     INSTPGMFLAGS = -s
 
      INSTBINFLAGS = -m 0755
      INSTUIDFLAGS = -m 4755
@@ -92,7 +93,7 @@
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4755
 
-      CDEBUGFLAGS = -O2
+      CDEBUGFLAGS = -O2 -Olimit 2000
         CCOPTIONS =
      LOCCCOPTIONS =
 
@@ -144,12 +145,15 @@
            INCDIR = $(INCROOT)/X11
            ADMDIR = /usr/adm
            LIBDIR = $(USRLIBDIR)/X11
+           VARDIR = /usr/var/X11
         CONFIGDIR = $(LIBDIR)/config
        LINTLIBDIR = $(USRLIBDIR)/lint
 
           FONTDIR = $(LIBDIR)/fonts
+      USERFONTDIR = $(VARDIR)/fonts/user
+            FSDIR = $(VARDIR)/fs
          XINITDIR = $(LIBDIR)/xinit
-           XDMDIR = $(LIBDIR)/xdm
+           XDMDIR = $(VARDIR)/xdm
            TWMDIR = $(LIBDIR)/twm
           MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
@@ -207,8 +211,12 @@
       XTESTLIBSRC = $(EXTENSIONSRC)/lib/xtest
       XTRAPLIBSRC = $(EXTENSIONSRC)/lib/xtrap
       PHIGSLIBSRC = $(EXTENSIONSRC)/lib/PEX
+       XIELIBSRC  = $(EXTENSIONSRC)/lib/XIE
+
+        EXTINCSRC = $(TOP)/X11/extensions
 
       USRSHLIBDIR = /usr/shlib
+        XSHLIBDIR = /usr/shlib/X11
 
        SHLIBFLAGS = -check_registry $(CROSSBASE)/usr/shlib/so_locations 	-L$(CROSSBASE)/usr/shlib -L$(CROSSBASE)/usr/ccs/lib
 
@@ -230,6 +238,9 @@
         DEPXAWLIB = $(USRSHLIBDIR)/libXaw.so
            XAWLIB = -lXaw
 
+       DEPXXIELIB = $(USRSHLIBDIR)/libXIE.so
+          XXIELIB = -lXIE
+
         DEPXILIB = $(USRSHLIBDIR)/libXi.a
            XILIB = -lXi
 
@@ -238,6 +249,7 @@
         SOXLIBREV = SharedXlibRev
           SOXTREV = SharedXtRev
          SOXAWREV = SharedXawRev
+         SOXIEREV = SharedXIERev
         SOOLDXREV = SharedOldXRev
          SOXMUREV = SharedXmuRev
         SOXEXTREV = SharedXextRev
@@ -259,6 +271,12 @@
         DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
            PHIGSLIB = 			 -lphigs
 
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
        DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
           XBSDLIB = 			 -lXbsd
 
@@ -267,6 +285,7 @@
           LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
         LINTXTOOL = $(LINTLIBDIR)/llib-lXt.ln
           LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
+         LINTXXIE = $(LINTLIBDIR)/llib-lXIE.ln
            LINTXI = $(LINTLIBDIR)/llib-lXi.ln
         LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
 
@@ -290,6 +309,7 @@
    MRESOURCESRC = $(MLIBSRC)/Mrm
      MCLIENTSRC = $(TOP)/motif/clients
          UILSRC = $(MCLIENTSRC)/uil
+    MINCLUDESRC = $(INCLUDESRC)
 
             UIL = uil
 
@@ -317,9 +337,9 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
            CDADIR = $(USRLIBDIR)/cda
 
            DXMSRC = $(MLIBSRC)/DXm
-           DPSSRC = $(EXTENSIONSRC)/DPS/lib/dps
-         DPSTKSRC = $(EXTENSIONSRC)/DPS/lib/dpstk
-         PSRESSRC = $(EXTENSIONSRC)/DPS/lib/psres
+           DPSSRC = $(EXTENSIONSRC)/DPSII/lib/dps
+         DPSTKSRC = $(EXTENSIONSRC)/DPSII/lib/dpstk
+         PSRESSRC = $(EXTENSIONSRC)/DPSII/lib/psres
            XIESRC = $(EXTENSIONSRC)/lib/xie
            IDSSRC = $(MLIBSRC)/ids
            BKRSRC = $(MLIBSRC)/bkr
@@ -329,6 +349,8 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
        DEPDXMLIB = $(USRSHLIBDIR)/libDXm.so
           DXMLIB = -lDXm
+
+       MDXMLIB = $(DXMLIB)
 
         DEPDPSLIB = $(USRSHLIBDIR)/libdps.so
            DPSLIB = -ldps
@@ -380,33 +402,32 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
 # -------------------------------------------------------------------------
 # DEC-Specific System Build Rules
-# $Id: Dec.rules,v 1.1.2.8 1992/12/08 19:29:22 Leela_Obilichetti Exp $
+# $Id: Dec.rules,v 1.1.2.8 92/12/08 19:29:22 Leela_Obilichetti Exp $
 
 # -------------------------------------------------------------------------
 # start of Imakefile
 
 include ../../../Path.incl
 
-FFOPTIONS = -C -fpe1 -switch nosqrt_recip -check nounderflow
-FDEBUGFLAGS =
-CDEBUGFLAGS =
-CCOPTIONS=
 FC=DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
+FFOPTIONS =  -fpe3 -switch nosqrt_recip
+FDEBUGFLAGS = -O
+CCOPTIONS=
+CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 
-SCIVERSION=Scilab-2.0
-SCIDATE=31 October 1994
+SCIVERSION = Scilab-2.1
+SCIDATE = 10 February 1995
 
-EXTRA_INCLUDES=-I$(SCIDIR)/routines
-
-FLOCAL_LDFLAGS=  -non_shared
+EXTRA_INCLUDES = -I$(SCIDIR)/routines
 
 LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS) $(LOCAL_LDFLAGS)
 
 FFLAGS = $(FDEBUGFLAGS) $(FFOPTIONS)
 
 FLDOPTIONS = $(FDEBUGFLAGS) $(FFOPTIONS) $(FLOCAL_LDFLAGS)
-LLDOPTIONS = $(FDEBUGFLAGS) $(FLOCAL_LDFLAGS)
+
+LLDOPTIONS = $(LLOCAL_LDFLAGS)
 
 PATHSP=$(SCIDIR)/routines
 PATHO=$(SCIDIR)/libs
@@ -466,14 +487,14 @@ distclean::
 clean::
 
 .code.tex:
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab $*.code $*.dia
+	@$(SCIDIR)/util/scidem $(SCIDIR) $*.code $*.dia
 	@$(BLATEXPR) 0.8 0.8 $*.ps
 	@$(RM) $*.ps
 
 fir.5.tex fir.2.tex fir.3.tex fir.4.tex : fir.2_5
 
 fir.2_5	: fir.2_5.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab fir.2_5.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) fir.2_5.code \
 		fir.2_5.dia
 	@$(BLATEXPR) 0.8 0.8 fir.5.ps
 	@$(BLATEXPR) 0.8 0.8 fir.2.ps
@@ -485,7 +506,7 @@ fir.2_5	: fir.2_5.code
 intdec.1.tex intdec.2.tex intdec.3.tex intdec.4.tex : intdec.1_4
 
 intdec.1_4	: intdec.1_4.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab intdec.1_4.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) intdec.1_4.code \
 		intdec.1_4.dia
 	@$(BLATEXPR) 0.8 0.8 intdec.1.ps
 	@$(BLATEXPR) 0.8 0.8 intdec.2.ps
@@ -497,7 +518,7 @@ intdec.1_4	: intdec.1_4.code
 intdec.5.tex intdec.6.tex intdec.7.tex intdec.8.tex intdec.9.tex intdec.10.tex : intdec.5_10
 
 intdec.5_10	: intdec.5_10.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab intdec.5_10.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) intdec.5_10.code \
 		intdec.5_10.dia
 	@$(BLATEXPR) 0.8 0.8 intdec.5.ps
 	@$(BLATEXPR) 0.8 0.8 intdec.6.ps
@@ -511,7 +532,7 @@ intdec.5_10	: intdec.5_10.code
 group.1.tex group.2.tex group.3.tex group.4.tex group.5.tex : group.1_5
 
 group.1_5	: group.1_5.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab group.1_5.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) group.1_5.code \
 		group.1_5.dia
 	@$(BLATEXPR) 0.8 0.8 group.1.ps
 	@$(BLATEXPR) 0.8 0.8 group.2.ps
@@ -524,7 +545,7 @@ group.1_5	: group.1_5.code
 group.6.tex group.7.tex group.8.tex  : group.6_8
 
 group.6_8	: group.6_8.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab group.6_8.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) group.6_8.code \
 		group.6_8.dia
 	@$(BLATEXPR) 0.8 0.8 group.6.ps
 	@$(BLATEXPR) 0.8 0.8 group.7.ps
@@ -535,7 +556,7 @@ group.6_8	: group.6_8.code
 remez.2.tex remez.3.tex remez.4.tex : remez.2_4
 
 remez.2_4	: remez.2_4.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab remez.2_4.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) remez.2_4.code \
 		remez.2_4.dia
 	@$(BLATEXPR) 0.8 0.8 remez.2.ps
 	@$(BLATEXPR) 0.8 0.8 remez.3.ps
@@ -546,7 +567,7 @@ remez.2_4	: remez.2_4.code
 remez.6.tex remez.7.tex remez.5.tex  : remez.5_7
 
 remez.5_7	: remez.5_7.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab remez.5_7.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) remez.5_7.code \
 		remez.5_7.dia
 	@$(BLATEXPR) 0.8 0.8 remez.5.ps
 	@$(BLATEXPR) 0.8 0.8 remez.6.ps
@@ -557,7 +578,7 @@ remez.5_7	: remez.5_7.code
 mem.1.tex mem.2.tex mem.3.tex  : mem.1_3
 
 mem.1_3	: mem.1_3.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab mem.1_3.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) mem.1_3.code \
 		mem.1_3.dia
 	@$(BLATEXPR) 0.8 0.8 mem.1.ps
 	@$(BLATEXPR) 0.8 0.8 mem.2.ps
@@ -568,7 +589,7 @@ mem.1_3	: mem.1_3.code
 iir.2.tex iir.3.tex  : iir.2_3
 
 iir.2_3	: iir.2_3.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab iir.2_3.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) iir.2_3.code \
 		iir.2_3.dia
 	@$(BLATEXPR) 0.8 0.8 iir.2.ps
 	@$(BLATEXPR) 0.8 0.8 iir.3.ps
@@ -578,7 +599,7 @@ iir.2_3	: iir.2_3.code
 spect.2.tex spect.3.tex spect.4.tex  : spect.2_4
 
 spect.2_4	: spect.2_4.code
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab spect.2_4.code \
+	@$(SCIDIR)/util/scidem $(SCIDIR) spect.2_4.code \
 		spect.2_4.dia
 	@$(BLATEXPR) 0.8 0.8 spect.2.ps
 	@$(BLATEXPR) 0.8 0.8 spect.3.ps

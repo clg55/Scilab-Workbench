@@ -157,8 +157,14 @@ OBJS = \
 
 LibraryObjectRule()
 
+/* Modified by CLG
 SpecialLibObjectRule(CvtStdSel.o,$(ICONFIGFILES),$(CSSDEFS))
 SpecialLibObjectRule(LocBitmap.o,$(ICONFIGFILES),$(BITDEFS))
+*/
+
+SpecialLibObjectRule(CvtStdSel.o,,$(CSSDEFS))
+SpecialLibObjectRule(LocBitmap.o,,$(BITDEFS))
+
 #if DoSharedLib && SharedDataSeparation
 SpecialObjectRule(sharedlib.o,,$(SHLIBDEF))
 #endif

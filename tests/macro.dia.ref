@@ -1,95 +1,95 @@
  
--->// simple
+// simple
  
--->//
+//
  
--->deff('[x,y]=t1(a,b)','x=a+b,y=a-b')
+deff('[x,y]=t1(a,b)','x=a+b,y=a-b')
  
--->[u,v]=t1(1,2);
+[u,v]=t1(1,2);
  
--->if u<> 3 then bugmes();quit;end
+if u<> 3 then bugmes();quit;end
  
--->if v<>-1 then bugmes();quit;end
+if v<>-1 then bugmes();quit;end
  
--->//
+//
  
--->//with arguments
+//with arguments
  
--->b=2;
+b=2;
  
--->if t1(1)<>t1(1,2) then bugmes();quit;end
+if t1(1)<>t1(1,2) then bugmes();quit;end
  
--->t2=t1;
+t2=t1;
  
--->//
+//
  
--->//compile
+//compile
  
--->comp(t1)
+comp(t1)
  
--->[u,v]=t1(1,2);
+[u,v]=t1(1,2);
  
--->if u<> 3 then bugmes();quit;end
+if u<> 3 then bugmes();quit;end
  
--->if v<>-1 then bugmes();quit;end
+if v<>-1 then bugmes();quit;end
  
--->b=2;
+b=2;
  
--->if t1(1)<>t1(1,2) then bugmes();quit;end
+if t1(1)<>t1(1,2) then bugmes();quit;end
  
--->//
+//
  
--->//resume
+//resume
  
--->//
+//
  
--->deff('[x,y]=t3(a,b)','x=a+b,y=a-b,z=resume(a*a)')
+deff('[x,y]=t3(a,b)','x=a+b,y=a-b,z=resume(a*a)')
  
--->[u,v]=t3(1,2);
+[u,v]=t3(1,2);
  
--->if u<> 3 then bugmes();quit;end
+if u<> 3 then bugmes();quit;end
  
--->if v<>-1 then bugmes();quit;end
+if v<>-1 then bugmes();quit;end
  
--->if z<>1 then bugmes();quit;end
+if z<>1 then bugmes();quit;end
  
--->b=2;
+b=2;
  
--->clear z
+clear z
  
--->if t3(1)<>t3(1,2) then bugmes();quit;end
+if t3(1)<>t3(1,2) then bugmes();quit;end
  
--->if z<>1 then bugmes();quit;end
+if z<>1 then bugmes();quit;end
  
--->t4=t3;
+t4=t3;
  
--->//compiled
+//compiled
  
--->comp(t3)
+comp(t3)
  
--->[u,v]=t3(1,2);
+[u,v]=t3(1,2);
  
--->if u<> 3 then bugmes();quit;end
+if u<> 3 then bugmes();quit;end
  
--->if v<>-1 then bugmes();quit;end
+if v<>-1 then bugmes();quit;end
  
--->if z<>1 then bugmes();quit;end
+if z<>1 then bugmes();quit;end
  
--->clear z
+clear z
  
--->b=2;
+b=2;
  
--->if t3(1)<>t3(1,2) then bugmes();quit;end
+if t3(1)<>t3(1,2) then bugmes();quit;end
  
--->if z<>1 then bugmes();quit;end
+if z<>1 then bugmes();quit;end
  
--->//
+//
  
--->// macro + clauses
+// macro + clauses
  
--->//
+//
  
--->text = ['if n>0 then x=1'
+text = ['if n>0 then x=1'
                                 'y=0;for k=1:n,y=y+k,end'
                             'else x=-1'
                                  'if n=4 then y=''yes'' '
@@ -103,91 +103,91 @@
                     'case -1 then x=''neg'' ,'
                     'end'];
  
--->//
+//
  
--->deff('[x,y]=t5(n)',text)
+deff('[x,y]=t5(n)',text)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->// en compile maintenant
+// en compile maintenant
  
--->clear u v tt
+clear u v tt
  
--->comp(t5)
+comp(t5)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->//
+//
  
--->// complex clauses
+// complex clauses
  
--->//
+//
  
--->text = ['if n>0 then x=1'
+text = ['if n>0 then x=1'
                                 'y=0;for k=1:b(n),y=y+b(k),end'
                             'else x=-1'
                                  'if n=4 then y=b(''yes'') '
@@ -201,791 +201,791 @@
                     'case b(-1) then x=b(''neg'') ,'
                     'end'];
  
--->deff('[x]=b(a)','x=a,prod([1 1])')
+deff('[x]=b(a)','x=a,prod([1 1])')
  
--->deff('[x,y]=t5(n)',text)
+deff('[x,y]=t5(n)',text)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->// en compile maintenant
+// en compile maintenant
  
--->clear u v tt
+clear u v tt
  
--->comp(t5)
+comp(t5)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->//compiled b
+//compiled b
  
--->comp(b)
+comp(b)
  
--->deff('[x,y]=t5(n)',text)
+deff('[x,y]=t5(n)',text)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->//
+//
  
--->clear u v tt
+clear u v tt
  
--->comp(t5)
+comp(t5)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->//more complex
+//more complex
  
--->deff('[x]=b(a)','if a=1 then x=1,else x=a,prod([1 1]),end')
+deff('[x]=b(a)','if a=1 then x=1,else x=a,prod([1 1]),end')
  
--->//
+//
  
--->deff('[x,y]=t5(n)',text)
+deff('[x,y]=t5(n)',text)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->//compile
+//compile
  
--->clear u v tt
+clear u v tt
  
--->comp(t5)
+comp(t5)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->//
+//
  
--->comp(b)
+comp(b)
  
--->deff('[x,y]=t5(n)',text)
+deff('[x,y]=t5(n)',text)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->//
+//
  
--->clear u v tt
+clear u v tt
  
--->comp(t5)
+comp(t5)
  
--->[u,v]=t5(5);
+[u,v]=t5(5);
  
--->if u<>'pos' then bugmes();quit;end
+if u<>'pos' then bugmes();quit;end
  
--->if v<>15 then bugmes();quit;end
+if v<>15 then bugmes();quit;end
  
--->if tt<>'ok' then bugmes();quit;end
+if tt<>'ok' then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->[u,v]=t5(-1);
+[u,v]=t5(-1);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if v<>'no' then bugmes();quit;end
+if v<>'no' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->clear tt v
+clear tt v
  
--->u=t5(-2);
+u=t5(-2);
  
--->if u<>-1 then bugmes();quit;end
+if u<>-1 then bugmes();quit;end
  
--->if tt<>-2 then bugmes();quit;end
+if tt<>-2 then bugmes();quit;end
  
--->clear tt
+clear tt
  
--->u=t5(-4);
+u=t5(-4);
  
--->if u<>'neg' then bugmes();quit;end
+if u<>'neg' then bugmes();quit;end
  
--->if exists('tt')=1 then bugmes();quit;end
+if exists('tt')=1 then bugmes();quit;end
  
--->// resume
+// resume
  
--->deff('[]=t6(a)','x=resume(a)')
+deff('[]=t6(a)','x=resume(a)')
  
--->clear ans x
+clear ans x
  
--->t6(15)
+t6(15)
  
--->if x<>15 then bugmes();quit;end
+if x<>15 then bugmes();quit;end
  
--->if exists('ans')=1 then bugmes();quit;end
+if exists('ans')=1 then bugmes();quit;end
  
--->//
+//
  
--->comp(t6)
+comp(t6)
  
--->clear ans x
+clear ans x
  
--->t6(15)
+t6(15)
  
--->if x<>15 then bugmes();quit;end
+if x<>15 then bugmes();quit;end
  
--->if exists('ans')=1 then bugmes();quit;end
+if exists('ans')=1 then bugmes();quit;end
  
--->//
+//
  
--->//
+//
  
--->//
+//
  
--->deff('[ydot]=simul(t,y,a)','ydot=a')
+deff('[ydot]=simul(t,y,a)','ydot=a')
  
--->a=2;
+a=2;
  
--->//appel le plus imple
+//appel le plus imple
  
--->y=ode(0,0,1:2,simul)
+y=ode(0,0,1:2,simul)
  y         =
  
 !   2.    4. !
  
--->if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
+if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
  
--->//idem en compile
+//idem en compile
  
--->comp(simul)
+comp(simul)
  
--->y=ode(0,0,1:2,simul)
+y=ode(0,0,1:2,simul)
  y         =
  
 !   2.    4. !
  
--->if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
+if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
  
--->//appel avec passage d'arguments supplementaires
+//appel avec passage d'arguments supplementaires
  
--->deff('[ydot]=simul(t,y,a)','ydot=a')
+deff('[ydot]=simul(t,y,a)','ydot=a')
  
--->y=ode(0,0,1:2,list(simul,a))
+y=ode(0,0,1:2,list(simul,a))
  y         =
  
 !   2.    4. !
  
--->if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
+if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
  
--->//idem en compile
+//idem en compile
  
--->comp(simul)
+comp(simul)
  
--->y=ode(0,0,1:2,list(simul,a))
+y=ode(0,0,1:2,list(simul,a))
  y         =
  
 !   2.    4. !
  
--->if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
+if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
  
--->//
+//
  
--->//non linear
+//non linear
  
--->//
+//
  
--->text=['for k=1:n,'
+text=['for k=1:n,'
      'y=ode(a*(k-1),k-1,k,simul),'
      'x=[x,y],'
      'end'];
  
--->//
+//
  
--->deff('[x]=calcul(n)',text)
+deff('[x]=calcul(n)',text)
  
--->deff('[ydot]=simul(t,y,a)','ydot=a')
+deff('[ydot]=simul(t,y,a)','ydot=a')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(simul)
+comp(simul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(calcul)
+comp(calcul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->deff('[ydot]=simul(t,y,a)','ydot=a')
+deff('[ydot]=simul(t,y,a)','ydot=a')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->//
+//
  
--->text(2)='y=ode(a*(k-1),k-1,k,list(simul,a)),';
+text(2)='y=ode(a*(k-1),k-1,k,list(simul,a)),';
  
--->deff('[x]=calcul(n)',text)
+deff('[x]=calcul(n)',text)
  
--->deff('[ydot]=simul(t,y,a)','ydot=a')
+deff('[ydot]=simul(t,y,a)','ydot=a')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(simul)
+comp(simul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(calcul)
+comp(calcul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->deff('[ydot]=simul(t,y,a)','ydot=a')
+deff('[ydot]=simul(t,y,a)','ydot=a')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->//resume in external
+//resume in external
  
--->deff('[ydot]=simul(t,y,a)','ydot=a,tt=resume([tt,t])')
+deff('[ydot]=simul(t,y,a)','ydot=a,tt=resume([tt,t])')
  
--->tt=[]
+tt=[]
  tt        =
  
      []
  
--->deff('[x]=calcul(n)',text)
+deff('[x]=calcul(n)',text)
  
--->deff('[ydot]=simul(t,y,a)','ydot=a')
+deff('[ydot]=simul(t,y,a)','ydot=a')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(simul)
+comp(simul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(calcul)
+comp(calcul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->deff('[ydot]=simul(t,y,a)','ydot=a')
+deff('[ydot]=simul(t,y,a)','ydot=a')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->//
+//
  
--->//external calls a macro
+//external calls a macro
  
--->//
+//
  
--->deff('[x]=b(a)','if a=1 then x=a,prod([1 1]),else x=a,prod([1 1]),end')
+deff('[x]=b(a)','if a=1 then x=a,prod([1 1]),else x=a,prod([1 1]),end')
  
--->text=['for k=1:n,'
+text=['for k=1:n,'
      'y=ode(a*(k-1),k-1,k,simul),'
      'x=[x,y],'
      'end'];
  
--->//
+//
  
--->deff('[x]=calcul(n)',text)
+deff('[x]=calcul(n)',text)
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(simul)
+comp(simul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(calcul)
+comp(calcul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->//
+//
  
--->text(2)='y=ode(a*(k-1),k-1,k,list(simul,a)),';
+text(2)='y=ode(a*(k-1),k-1,k,list(simul,a)),';
  
--->deff('[x]=calcul(n)',text)
+deff('[x]=calcul(n)',text)
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(simul)
+comp(simul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(calcul)
+comp(calcul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->//
+//
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a),tt=resume([tt,t])')
+deff('[ydot]=simul(t,y,a)','ydot=b(a),tt=resume([tt,t])')
  
--->tt=[]
+tt=[]
  tt        =
  
      []
  
--->deff('[x]=calcul(n)',text)
+deff('[x]=calcul(n)',text)
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(simul)
+comp(simul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(calcul)
+comp(calcul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(b)
+comp(b)
  
--->text=['for k=1:n,'
+text=['for k=1:n,'
      'y=ode(a*(k-1),k-1,k,simul),'
      'x=[x,y],'
      'end'];
  
--->//
+//
  
--->deff('[x]=calcul(n)',text)
+deff('[x]=calcul(n)',text)
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(simul)
+comp(simul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(calcul)
+comp(calcul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->//
+//
  
--->text(2)='y=ode(a*(k-1),k-1,k,list(simul,a)),';
+text(2)='y=ode(a*(k-1),k-1,k,list(simul,a)),';
  
--->deff('[x]=calcul(n)',text)
+deff('[x]=calcul(n)',text)
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(simul)
+comp(simul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(calcul)
+comp(calcul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->//
+//
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a),tt=resume([tt,t])')
+deff('[ydot]=simul(t,y,a)','ydot=b(a),tt=resume([tt,t])')
  
--->tt=[]
+tt=[]
  tt        =
  
      []
  
--->deff('[x]=calcul(n)',text)
+deff('[x]=calcul(n)',text)
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(simul)
+comp(simul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->comp(calcul)
+comp(calcul)
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
--->x=[];
+x=[];
  
--->x=calcul(3);
+x=calcul(3);
  
--->if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
+if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
--->//
+//
  
--->//macro defining ,compiling and executing a macro
+//macro defining ,compiling and executing a macro
  
--->//
+//
  
--->text=['deff(''[x]=b(a)'',''if a=1 then x=1,else x=a,prod([1 1]),end''),'
+text=['deff(''[x]=b(a)'',''if a=1 then x=1,else x=a,prod([1 1]),end''),'
       'comp(b),'
       'x=b(n),']
  text      =
@@ -996,31 +996,31 @@
 !                                                              !
 !x=b(n),                                                       !
  
--->deff('[x]=t8(n)',text')
+deff('[x]=t8(n)',text')
  
--->y=t8(10);
+y=t8(10);
  
--->if y<>10 then bugmes();quit;end
+if y<>10 then bugmes();quit;end
  
--->comp(t8)
+comp(t8)
  
--->y=t8(10);
+y=t8(10);
  
--->if y<>10 then bugmes();quit;end
+if y<>10 then bugmes();quit;end
  
--->//
+//
  
--->//
+//
  
--->s=poly(0,'s');z=poly(0,'z');
+s=poly(0,'s');z=poly(0,'z');
  
--->deff('[ok]=cplist(l1,l2)',['ok=1;'
+deff('[ok]=cplist(l1,l2)',['ok=1;'
                  'if size(l1)<>size(l2) then ok=0,return,end'
                  'for k=1:size(l1),'
                     'if l1(k)<>l2(k) then ok=0,return,end;'
                  'end'])
  
--->deff('[r]=horner(p,x)',['if type(p)=15 then';
+deff('[r]=horner(p,x)',['if type(p)=15 then';
                            'r=horner(p(2),x)./horner(p(3),x),';
                            'return,';
                         'end;';
@@ -1032,7 +1032,7 @@
 Warning :redefining macro: horner  
  
  
--->deff('[f]=%prp(p1,p2)',['[l,c]=size(p2);';
+deff('[f]=%prp(p1,p2)',['[l,c]=size(p2);';
                         'if l*c <>1 then f=p1*invr(p2),return,end;';
                         '[l,c]=size(p1);';
                         '[p1 p2]=simp(p1,p2*ones(l,c));';
@@ -1040,77 +1040,77 @@ Warning :redefining macro: horner
 Warning :redefining macro: %prp    
  
  
---> 
---> 
---> 
--->horn=horner;
  
--->h=1/s;
  
--->if cplist(h,list('r',1,s,[]))=0 then bugmes();quit;end
  
--->h1=(z-1)/(z+1);
+horn=horner;
  
--->hrn=horner(h,h1);
+h=1/s;
  
--->if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(h,list('r',1,s,[]))=0 then bugmes();quit;end
  
--->//
+h1=(z-1)/(z+1);
  
--->comp(horner)
+hrn=horner(h,h1);
  
--->hrn=horner(h,h1);
+if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
  
--->if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
+//
  
--->//
+comp(horner)
  
--->comp(%prp);
+hrn=horner(h,h1);
  
--->h=1/s;
+if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
  
--->if cplist(h,list('r',1,s,[]))=0 then bugmes();quit;end
+//
  
--->h1=(z-1)/(z+1);
+comp(%prp);
  
--->hrn=horn(h,h1);
+h=1/s;
  
--->if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(h,list('r',1,s,[]))=0 then bugmes();quit;end
  
--->//
+h1=(z-1)/(z+1);
  
--->comp(horn)
+hrn=horn(h,h1);
  
--->hrn=horn(h,h1);
+if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
  
--->if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
+//
  
--->//
+comp(horn)
  
--->//
+hrn=horn(h,h1);
  
--->//
+if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
  
--->text=['aa=1,if a=2 then aa=b(a),end']
+//
+ 
+//
+ 
+//
+ 
+text=['aa=1,if a=2 then aa=b(a),end']
  text      =
  
  aa=1,if a=2 then aa=b(a),end   
  
--->fic=file('open','test_macro_exec','unknown')
+fic=file('open','test_macro_exec','unknown')
  fic       =
  
     3.  
  
--->write(fic,text)
+write(fic,text)
  
--->file('close',fic)
+file('close',fic)
  
--->deff('[x]=b(a)','x=a,prod([1 1])')
+deff('[x]=b(a)','x=a,prod([1 1])')
  
  
--->y=t9(2)
+y=t9(2)
  
--->aa=1,if a=2 then aa=b(a),end
+aa=1,if a=2 then aa=b(a),end
  aa        =
  
     1.  
@@ -1118,19 +1118,19 @@ Warning :redefining macro: %prp
  
     2.  
  
---> y         =
+ y         =
  
     2.  
  
--->if y<>2 then bugmes();quit;end
+if y<>2 then bugmes();quit;end
  
--->file('rewind',fic)
+file('rewind',fic)
  
--->comp(t9)
+comp(t9)
  
--->y=t9(2)
+y=t9(2)
  
--->aa=1,if a=2 then aa=b(a),end
+aa=1,if a=2 then aa=b(a),end
  aa        =
  
     1.  
@@ -1138,20 +1138,20 @@ Warning :redefining macro: %prp
  
     2.  
  
---> y         =
+ y         =
  
     2.  
  
--->if y<>2 then bugmes();quit;end
+if y<>2 then bugmes();quit;end
  
--->//
+//
  
--->comp(b)
+comp(b)
  
  
--->y=t9(2)
+y=t9(2)
  
--->aa=1,if a=2 then aa=b(a),end
+aa=1,if a=2 then aa=b(a),end
  aa        =
  
     1.  
@@ -1159,17 +1159,17 @@ Warning :redefining macro: %prp
  
     2.  
  
---> y         =
+ y         =
  
     2.  
  
--->if y<>2 then bugmes();quit;end
+if y<>2 then bugmes();quit;end
  
--->comp(t9)
+comp(t9)
  
--->y=t9(2)
+y=t9(2)
  
--->aa=1,if a=2 then aa=b(a),end
+aa=1,if a=2 then aa=b(a),end
  aa        =
  
     1.  
@@ -1177,10 +1177,10 @@ Warning :redefining macro: %prp
  
     2.  
  
---> y         =
+ y         =
  
     2.  
  
--->if y<>2 then bugmes();quit;end
+if y<>2 then bugmes();quit;end
  
---> 
+ 

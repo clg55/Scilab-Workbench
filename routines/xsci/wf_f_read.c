@@ -44,20 +44,20 @@ static XtActionsRec	file_msg_actions[] =
 
 DeclareStaticArgs(10);
 
-/* VARARGS1 */
-file_msg(format, arg1, arg2, arg3, arg4, arg5)
+/* modif jpc */
+file_msg(format, arg1)
     char	   *format;
-    int		    arg1, arg2, arg3, arg4, arg5;
+     char *arg1;
 {
     XawTextBlock block;
     popup_file_msg();
     if (first_file_msg)
 	{
 	first_file_msg = False;
-	file_msg("---------------------");
+	file_msg("---------------------",(char *) NULL);
 	file_msg("File %s:",read_file_name);
 	}
-    sprintf(tmpstr, format, arg1, arg2, arg3, arg4, arg5);
+    sprintf(tmpstr, format, arg1);
     strcat(tmpstr,"\n");
     /* append this message to the file message widget string */
     block.firstPos = 0;

@@ -147,12 +147,12 @@ c---------------------- message de  -----------------------------
       call basout(ir,wte,' sorry, no help for '//buf(1:nlgh))
       goto 9999
  130  continue
-      call basout(io,wte,' warning: recursion problem')
-      call basout(io,wte,' will be cleared with next error...')
+      call basout(io,wte,' warning: recursion problem..., cleared')
+c      call basout(io,wte,' will be cleared with next error...')
       goto 9999
  131  continue
-      call basout(io,wte,' warning: stack problem')
-      call basout(io,wte,' will be cleared with next error...')
+      call basout(io,wte,' warning: stack problem..., cleared')
+c      call basout(io,wte,' will be cleared with next error...')
 c      call error(-1)
       goto 9999
  132  continue

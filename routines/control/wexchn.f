@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WEXCHN,SSI=0
       subroutine wexchn(ar, ai, vr, vi, n, l, fail, na, nv)
 c!purpose
 c
@@ -95,7 +94,7 @@ c
          tr = vr(i,l1)
          ti = vi(i,l1)
          vr(i,l) = pr*sr + qr*tr - pi*si - qi*ti
-         vr(i,l1) = pi*sr + qi*tr + pr*si + qr*ti
+         vi(i,l) = pi*sr + qi*tr + pr*si + qr*ti
          vr(i,l1) = pr*tr + pi*ti - qr*sr - qi*si
          vi(i,l1) = pr*ti - pi*tr - qr*si + qi*sr
    30 continue

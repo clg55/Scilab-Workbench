@@ -34,16 +34,16 @@ that the variables {\tt x} and
 The command {\tt save} without any variable arguments saves the entire 
 $\Psi$lab environment.  Similarly,
 the command {\tt clear} used
-without any arguments clears all of the variables, macros, and libraries
+without any arguments clears all of the variables, functions, and libraries
 in the environment.
 
-	Macros which exist in files can be loaded by using 
+	Functions which exist in files can be loaded by using 
 {\tt getf}\index{getf@{\tt getf}}.  
 
-Libraries of macros are loaded
+Libraries of functions are loaded
 using {\tt lib}\index{lib@{\tt lib}}\index{libraries}.  
 
-The list of macros available in the library can be had by using {\tt disp}.
+The list of functions available in the library can be had by using {\tt disp}.
 
 \subsection{Startup Commands by the User}
 \label{s5.2}
@@ -51,14 +51,14 @@ The list of macros available in the library can be had by using {\tt disp}.
 \index{starup.sci@{\tt startup.sci}}
 
 	When $\Psi$lab is called the user can automatically load
-into the environment macros, libraries, variables, and perform
+into the environment functions, libraries, variables, and perform
 commands using the the file {\tt .scilab} in the home directory.  
 This is particularly useful when the user wants to run $\Psi$lab programs
 in the background (such as in batch mode).  Another useful aspect
-of the {\tt .scilab} file is when the certain macros or libraries
+of the {\tt .scilab} file is when the certain functions or libraries
 are often used.  In this case the command {\tt getf} can be used
 in the {\tt .scilab} file to automatically load the desired 
-macros and libraries whenever $\Psi$lab is invoked.
+functions and libraries whenever $\Psi$lab is invoked.
 
 \subsection{Input and Output}
 \label{s5.3}
@@ -102,9 +102,7 @@ name of a macro or primitive). The help facility is based on the
 Unix {\tt xman} command. {\tt apropos item} looks for {\tt item} 
 in the {\tt whatis} file. This facility is equivalent to the Unix 
 {\tt whatis} command. To add a new item in the manual is easy: just
-look at the {\tt SCIDIR/man/Man-General} directory. Note that
-the directory {\tt SCIDIR/man/Man-Contrib} is for the inclusion
-of new help item contributions. 
+look at the {\tt SCIDIR/man} subdirectories.
 The $\Psi$lab \LaTeX  manual is automatically obtained from the
 manual items by a {\tt Makefile}. 
 See the directory {\tt SCIDIR/man/Latex-doc}. Note that the command
@@ -122,11 +120,11 @@ or optimization.
 \index{optimization}
 \subsection{Externals}
 \index{external}
-An "external" is a macro or Fortran routine which is used as an argument
+An "external" is a function or Fortran routine which is used as an argument
 of some high-level primitives (such as {\tt ode}, {\tt optim}...).
-The calling sequence of the external (macro or routine) is imposed by
+The calling sequence of the external (function or routine) is imposed by
 the high-level primitive which sets the arguments of the external.
-For example the external macro {\tt costfunc} is an argument of 
+For example the external function {\tt costfunc} is an argument of 
 the {\tt optim} primitive. Its calling sequence must be: 
 {\tt [f,g,ind]=costfunc(x,ind)} as imposed by the {\tt optim} primitive.
 The following non-linear primitives in $\Psi$lab need externals: 
@@ -207,15 +205,15 @@ $\dot{\theta}_2=0$.
 The result of the above session is plotted in Figure~\ref{f6.1}.
 Note that {\tt ode} takes four arguments: a vector initial condition
 {\tt z0}, the initial time {\tt t0}, a vector of times {\tt t}
-for which the integrated values {\tt z} are desired, and the macro
+for which the integrated values {\tt z} are desired, and the function
 name {\tt dpend} which exists in the environment of $\Psi$lab and which
 calculates the value of the derivative {\tt zd} give the time {\tt t} 
 and the value of {\tt z} at this time.
 
-\input{\Figdir d6.1.tex}
+\input{\Figdir d6-1.tex}
 \dessin{Simulation of a Double Pendulum}{f6.1}
 
-Note that the {\tt dpend} macro calculates the derivative of
+Note that the {\tt dpend} function calculates the derivative of
 the state of the double pendulum following (\ref{e6.1}).
 
 \begin{verbatim}
@@ -244,7 +242,7 @@ function []=pp(z)
 
 \end{verbatim}
 
-	The $\Psi$lab ``external'' macro which calculates the derivative
+	The $\Psi$lab ``external'' function which calculates the derivative
 (in this example {\tt dpend}) must have a certain format.
 This format is as follows
 \begin{verbatim}
@@ -303,7 +301,7 @@ a function of the derivative of $d$
 \label{e6.3}
 \end{equation}
 where $d_p$ is the partial of $d$ with respect to $p$.  The following
-$\Psi$lab macros make the calculations in (\ref{e6.2}) and (\ref{e6.3}).
+$\Psi$lab functions make the calculations in (\ref{e6.2}) and (\ref{e6.3}).
 \begin{verbatim}
 function [t,t_p,ind]=swim(p,ind)
    [d,d_p]=dpfun(p);
@@ -317,8 +315,8 @@ function [d,d_p]=dpfun(p);
    d=1.75-exp(log(1.55)*p);
    d_p=-log(1.55)*exp(log(1.55)*p);
 \end{verbatim}
-where the functions $d$ and $d_p$ are calculated by the macro {\tt dpfun}.
-These two macros are used in the following $\Psi$lab session by the
+where the functions $d$ and $d_p$ are calculated by the function {\tt dpfun}.
+These two functions are used in the following $\Psi$lab session by the
 primitive {\tt optim} to find the optimum point $p$.
 \begin{verbatim}
  
@@ -345,7 +343,7 @@ primitive {\tt optim} to find the optimum point $p$.
 \end{verbatim}
 Here it can be seen that the primitive {\tt optim} takes two 
 arguments and returns three values.  The first argument is the
-name of the $\Psi$lab macro which calculates the value of time (the cost)
+name of the $\Psi$lab function which calculates the value of time (the cost)
 and the derivative of the time with respect to the value of $p$.
 The second argument is a first guess for the value of $p$.
 The returned values are, respectively, the optimal cost {\tt ts}
@@ -358,7 +356,7 @@ Figure~\ref{f6.2}.  The curved line represents the shape of the
 shoreline and the dotted line represents the lifeguards optimal
 path.
 %
-\input{\Figdir d6.2.tex}
+\input{\Figdir d6-2.tex}
 \dessin{Optimal Lifeguard Path}{f6.2}
 %
 
@@ -455,11 +453,11 @@ $\Psi$lab variables (see the routine {\tt matz.f}
 in the directory {\tt SCIDIR/routines/system2}).
 \section{X-window dialog}
 It may be convenient to open a specific X-window window for entering
-interactively parameters inside a macro or for a demo.
-This facility is possible thanks to e.g. the macros \verb!x_dialog!,
+interactively parameters inside a function or for a demo.
+This facility is possible thanks to e.g. the functions \verb!x_dialog!,
 \verb!x_choose!, \verb!x_mdialog!, \verb!x_matrix! and \verb!x_message!.
 The demos which can be executed by clicking on the {\tt demo} button
-provide simple examples of the use of these macros.
+provide simple examples of the use of these functions.
 
 \section{Maple interface}
 The Maple procedure {\tt maple2scilab} allows to numerically evaluate
@@ -467,9 +465,9 @@ any Maple expression in $\Psi$lab.
 On input this procedure takes a Maple matrix made of symbolic
 expressions. When {\tt maple2scilab} is invoked in Maple,
 a Fortran program is automatically generated by Maple 
-(via {\tt Macrofort}) together with a $\Psi$lab macro which 
+(via {\tt Macrofort}) together with a $\Psi$lab function which 
 allows to (dynamically) call this subroutine.
-The parameters of the macro are the Maple symbols and thus the Maple
+The parameters of the function are the Maple symbols and thus the Maple
 matrix can be evaluated numerically in $\Psi$lab. The use of Fortran
 is for speed purposes since the formal Maple expression can be
 extremely complicated.
@@ -481,7 +479,7 @@ The example shows how $\Psi$lab can be used to symbolically represent
 the inter-connection of multiple systems which in turn can 
 then be used to numerically evaluate the performance of the
 inter-connected systems.  The symbolic representation of the
-inter-connected systems is done with a macro called {\tt bloc2exp}
+inter-connected systems is done with a function called {\tt bloc2exp}
 \index{bloc2exp@{\tt bloc2exp}}
 and the evaluation of the resulting system is done with
 {\tt evstr}\index{evstr@{\tt evstr}}.
@@ -545,14 +543,14 @@ block which filters the input signal, {\tt U} to the {\tt Proc}
 block.  The outputs of the system are {\tt Y} and {\tt UP}.
 
 	The system illustrated in Figure~\ref{fa.1} can
-be represented in $\Psi$lab by using the macro {\tt bloc2exp}.
+be represented in $\Psi$lab by using the function {\tt bloc2exp}.
 The use of {\tt bloc2exp} is illustrated in the following $\Psi$lab
 session.
 There a two kinds of objects: 'transfer' and 'links'. The example
 considered here admits 5 transfers and 7 links.
 First the transfer are defined in a symbolic manner. Then links
 are defined and an 'interconnected system' is defined as
-a specific list. The macro {\tt bloc2exp} evaluates symbolically
+a specific list. The function {\tt bloc2exp} evaluates symbolically
 the global transfer and {\tt evstr} evaluates numerically
 the global transfer function once the systems are given ``values'', i.e.
 are defined as $\Psi$lab linear systems.
@@ -634,11 +632,11 @@ blocks).  If an inter-connection is not attached to anything the value
 of the block number is negative (as for example the inter-connection
 labeled {\tt 'input'} or is omitted.
 
-	The result of the {\tt bloc2exp} macro is a list of names
+	The result of the {\tt bloc2exp} function is a list of names
 which give the unassigned inputs and outputs of the system and
 the symbolic transfer function of the system given by {\tt sysf}.
 The symbolic names in {\tt sysf} can be associated to polynomials
-and evaluated using the macro {\tt evstr}.  This illustrated in the
+and evaluated using the function {\tt evstr}.  This illustrated in the
 following $\Psi$lab session.
 %
 \begin{verbatim}
@@ -673,7 +671,7 @@ of {\tt evstr} is the rational polynomial matrix {\tt sys}
 whereas the output of {\tt bloc2exp} is a matrix of character chains.
 
 The symbolic evaluation which is given here is not very efficient
-with large interconnected systems. The macro {\tt bloc2ss}
+with large interconnected systems. The function {\tt bloc2ss}
 performs the previous calculation in state-space format.
 Each system is given now in state-space 
 as a {\tt syslin} list or simply as a gain (constant matrix). 
@@ -682,14 +680,14 @@ is not done by the user. Each system must be given a value before
 bloc2ss is called. All the calculations are made in state-space
 representation even if the linear systems are given in transfer form.
 
-\section{Converting $\Psi$lab macros to Fortran routines}
+\section{Converting $\Psi$lab functions to Fortran routines}
 
-$\Psi$lab provides a compiler to transform some $\Psi$lab macros
+$\Psi$lab provides a compiler to transform some $\Psi$lab functions
 into Fortran subroutines. The routines which are thus obtained
 make use of the routines which are in the Fortran libraries.
 All the basic matrix operations are available.
 
-Let us consider the following $\Psi$lab macro:
+Let us consider the following $\Psi$lab function:
 \begin{verbatim}
 
 function [x]=macr(a,b,n)
@@ -715,7 +713,7 @@ x=[a b;-b' a']
 
 \end{verbatim}
 
-It is translated into Fortran by the macro {\tt mac2for}.
+It is translated into Fortran by the function {\tt mac2for}.
 Each input parameter of the subroutine is described by a list
 which contains its type and its dimensions. Here, we have 3
 input variables {\tt a,b,c} which are, say, {\tt integer,

@@ -189,7 +189,6 @@ initHelpWidgets()
     Widget form;
     char buf[64];
     Arg args[1];
-    XSizeHints	size_hints;
     helpShell = XtCreatePopupShell("helpShell",topLevelShellWidgetClass,
 				   toplevel,NULL,0);
     form = XtCreateManagedWidget("helpForm",formWidgetClass,
@@ -222,15 +221,7 @@ initHelpWidgets()
                                          form,NULL,0);
     XtRealizeWidget(helpShell);
     (void)XSetWMProtocols(XtDisplay(helpShell),XtWindow(helpShell), &wm_delete_window,1);
-    size_hints.width	= 650;
-    size_hints.height	= 300;
-    size_hints.min_width = size_hints.max_width = size_hints.width ;
-    size_hints.min_height = size_hints.max_height = size_hints.height ;
-    size_hints.flags = USPosition | USSize | PMinSize;
-    XSetNormalHints(XtDisplay(helpShell),XtWindow(helpShell), &size_hints);
-
-
-};
+}
 
 #define APROPOSMAX 100
 
@@ -242,17 +233,17 @@ initHelpWidgets()
 		  { \
 		    Scistring("\n Can't create apropos : No more Memory "); \
 		    return; \
-		  }; \
+		  } \
 		strcpy(helpTopicApropos[ii],listtop[j]); \
 		helpStringsApropos[ii] =(char *) malloc( (sizeof(char))*(strlen(listref[j])+1));\
 		if ( helpStringsApropos[ii] == ( char *) 0) \
 		  { \
 		    Scistring("\n Can't create apropos : No more Memory ");\
 		    return; \
-		  }; \
+		  } \
 		strcpy(helpStringsApropos[ii],listref[j]);\
 		ii++; \
-	      }; 
+	      } 
 
 #define	TopicSearchW(LTop,LStr,str) \
 	j=0; \
@@ -260,7 +251,7 @@ initHelpWidgets()
 	  { \
 	    TopicSearch(LTop,LStr,str)  \
 	    j++; \
-	  }; 
+	  } 
 
 void 
 changeHelpList(i)
@@ -293,8 +284,8 @@ changeHelpList(i)
       XawListChange(helpList,helpTopicInfo11, XtNumber(helpTopicInfo11),0,True);break;
     case 12 :
       XawListChange(helpList,helpTopicInfo12, XtNumber(helpTopicInfo12),0,True);break;
-    };
-};
+    }
+}
 
 void
 setHelpShellState(state)
@@ -343,7 +334,7 @@ XtPointer call_data;    /* returnStruct */
     case 13: SCIMAN(helpStringsApropos);
     default: 
       return;
-    };
+    }
   system(buf);
 
 }
@@ -403,8 +394,8 @@ ACTION_PROC(queryAproposAction)
   else 
    {
      SciApropos(apropos);
-   };
-};
+   }
+}
 
 
 
@@ -418,14 +409,14 @@ SciApropos(str)
     {
       Scistring("\n Can't create apropos : No more Memory ");
       return;
-    };
+    }
   if ( helpStringsApropos ==  (char **) 0)
     helpStringsApropos = (char **) malloc( (sizeof(char *))*APROPOSMAX);
   if ( helpStringsApropos ==  (char **) 0)
     {
       Scistring("\n Can't create apropos : No more Memory ");
       return;
-    };
+    }
   TopicSearchW(helpTopicInfo1,helpStrings1,str) ;
   TopicSearchW(helpTopicInfo2,helpStrings2,str) ;
   TopicSearchW(helpTopicInfo3,helpStrings3,str) ;
@@ -442,8 +433,8 @@ SciApropos(str)
     {
       Scistring("\nNo Info on this topic ");
       return;
-    };
+    }
   XawListChange(helpList,helpTopicApropos,ii,0,True);
   CurHelp =13;
-};
+}
 

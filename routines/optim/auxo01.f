@@ -71,7 +71,7 @@ C     Esta subrutina trabaja en doble precision via una sentencia
 C     "implicit":
 C                -Implicit double precision (a-h,o-z)
 C
-C     SUBPROGRAMAS AUXILIARES: ddot,d1mach
+C     SUBPROGRAMAS AUXILIARES: ddot,dlamch
 C     FUNCIONES FORTRAN INTRINSECAS: abs,mod,sqrt
 C
 C
@@ -79,8 +79,8 @@ C
       dimension c(ic,*),ci(*),cs(*),b(*),x(*),w(*),ire(*)
       if(ind.eq.1) fun=0
       iv=0
-      eps=d1mach(4)**0.75
-      gigant=d1mach(2)
+      eps=dlamch('p')**0.75
+      gigant=dlamch('o')
       gig1=sqrt(gigant)
       if(ind.eq.1) then
          do 5 i=1,n

@@ -204,11 +204,11 @@ WindowInfo *wi;
     XtDestroyWidget(wi->chgfile_popup);
 
   /* free text memory */
-  free(wi->memory);
+  free((void *)wi->memory);
 
   /* free filename string if it was malloc'd */
   if (wi->flag & XLessFreeFilename)
-    free(wi->file);
+    free((void *)wi->file);
 
   /* remove from windowlist chain */
   if (windowlist == wi)

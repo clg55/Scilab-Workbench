@@ -51,12 +51,12 @@ C     "implicit":
 C                Implicit double precision (a-h,o-z)
 C
 C     SUBPROGRAMAS AUXILIARES:  anfm01,daxpy,dcopy,ddot,dnrm2,dscal,
-C                               d1mach
+C                               dlamch
 C     FUNCIONES FORTRAN INTRINSECAS:  abs,mod,sign,sqrt
 C
       implicit double precision(a-h,o-z)
       dimension a(ia,*),x(*),b(*),q(iq,*),r(ir,*),w(*),ire(*),ipvt(*)
-      eps=d1mach(4)**0.75
+      eps=dlamch('p')**0.75
       mf=midf+1
       info=1
       do 10 i=1,mif

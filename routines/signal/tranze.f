@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=TRANZE,SSI=0
       subroutine tranze(nmaxi,maxdeg,ityp,ndeg,nzm,a,vd,sm,nzero)
 c!purpose
 c reactance transformation of the zeros and the locations of the
@@ -7,13 +6,15 @@ c!
 c
       implicit double precision (a-h,o-z)
 c
+      external slamch
+      real slamch
       dimension nzm(*),nzero(*)
       double precision sm(maxdeg,*)
 c
       dimension  msm(4)
 c
-      flma=2.0d+0**(i1mach(16)-2)
-      flmi=2.0d+0*d1mach(4)
+      flma=2.0d+0**(int(slamch('l'))-2)
+      flmi=2.0d+0*dlamch('p')
       fa = 1.0d+0
       if (ityp.eq.1) go to 190
        if (ityp.eq.3) go to 60

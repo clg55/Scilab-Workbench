@@ -75,7 +75,7 @@ UpdateCWindow()
   		SetPort(savePort);
   		Scistring("UpdateCWindow Out \n");
   	}
-};
+}
 
 /* Called when a window Needs update */
 
@@ -91,7 +91,7 @@ UpdateWindow(theWindow)
   DrawContents(theWindow);
   EndUpdate(theWindow);
   SetPort(savePort);
-};
+}
 
 /** No effect **/
 
@@ -196,7 +196,7 @@ DrawContents(WindowPtr win)
       /* C2F(dr)("xset","window",&i,IP0,IP0,IP0,IP0,IP0,0,0);*/
       Tape_Replay("v", &winnumber);
       /*C2F(dr)("xset","window",&win1,IP0,IP0,IP0,IP0,IP0,0,0);*/
-    };
+    }
 }
 
 /* print click-Exit message in most recently active window */

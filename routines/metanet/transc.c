@@ -5,19 +5,20 @@
 void C2F(transc)(lp1,lpft,ls1,lsft,m,lsftdim,lpftdim,n)
 int *lp1,**lpft,*ls1,**lsft,*m,*lsftdim,*lpftdim,*n;
 {
-  int n1,sdim;
-  int *cfcl,*cfcp,*cw,*inf,nc,*nfcomp,*ninf,*nn,*num,
+  int n1,sdim,mftdim;
+  int *cfcl,*cfcp,*cw,*inf,nc,*nfcomp,*nn,*num,
   *p,*p1,*pile,*s,*som,*suc;
   int isize = sizeof(int);
 
   n1 = *n + 1;
   sdim = (*n * (*n - 1))/2 + 1;
+  mftdim = (*n * (*n - 1)) + 1;
 
   if ((*lpft = (int *)malloc(n1 * isize)) == NULL) {
     cerro("Running out of memory");
     return;
   }
-  if ((*lsft = (int *)malloc(sdim * isize)) == NULL) {
+  if ((*lsft = (int *)malloc(mftdim * isize)) == NULL) {
     cerro("Running out of memory");
     return;
   }
@@ -39,10 +40,6 @@ int *lp1,**lpft,*ls1,**lsft,*m,*lsftdim,*lpftdim,*n;
     return;
   }
   if ((nfcomp = (int *)malloc(*n * isize)) == NULL) {
-    cerro("Running out of memory");
-    return;
-  }
-  if ((ninf = (int *)malloc(*n * isize)) == NULL) {
     cerro("Running out of memory");
     return;
   }
@@ -80,11 +77,11 @@ int *lp1,**lpft,*ls1,**lsft,*m,*lsftdim,*lpftdim,*n;
   }
   
   F2C(frmtrs)(cfcl,cfcp,cw,inf,lp1,*lpft,ls1,*lsft,m,
-	  &sdim,n,&nc,nfcomp,ninf,nn,num,p,p1,pile,s,
+	  &mftdim,n,&nc,nfcomp,nn,num,p,p1,pile,s,
 	  &sdim,som,suc);
 
-  free(cfcl); free(cfcp); free(cw); free(inf); free(nfcomp);
-  free(ninf); free(nn); free(num); free(p); free(p1); 
+  free(inf); free(cw); free(nfcomp);free(cfcp); 
+  free(cfcl); free(nn); free(num); free(p); free(p1); 
   free(pile); free(s); free(som); free(suc);
 
   *lpftdim = n1;

@@ -27,6 +27,8 @@ load('SCI/macros/xdess/lib')
 //
 SCI=getenv('SCI')
 TMPDIR='/tmp/.scilab_'+string(getpid())
+%T=%t
+%F=%f
 host('umask 000;if test ! -d '+TMPDIR+'; then mkdir '+TMPDIR+'; fi ')
 predef()
 //

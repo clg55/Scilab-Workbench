@@ -34,7 +34,7 @@ SOFTWARE.
 #include "x_menu.h"
 #include <X11/StringDefs.h>
 #include <X11/Shell.h>
-
+#include <X11/Xaw/Form.h>
 #include <X11/Xos.h>
 #include <X11/cursorfont.h>
 #include <X11/Xaw/SimpleMenu.h>
@@ -119,7 +119,9 @@ static struct _resource {
     Boolean noWindow;
     Boolean noStartup;
     Boolean useInsertMode;
+    String	visualType;
 } resource;
+
 
 /* used by VT (charproc.c) */
 
@@ -144,21 +146,12 @@ static struct _resource {
 	offset(tty_modes), XtRString, (caddr_t) NULL},
     {"useInsertMode", "UseInsertMode", XtRBoolean, sizeof (Boolean),
         offset(useInsertMode), XtRString, "false"},
+    { "visualType", "VisualType", XtRString, sizeof(String),
+	offset(visualType), XtRImmediate, (XtPointer)"" }
 };
 
 static char *fallback_resources[] = {
-  "Xscilab*SimpleMenu*menuLabel.vertSpace: 100",
-  "Xscilab*SimpleMenu*HorizontalMargins: 16",
-  "Xscilab*SimpleMenu*Sme.height: 16",
-  "Xscilab*SimpleMenu*Cursor: left_ptr",
-  "Xscilab*mainMenu.Label:  Main Options (no app-defaults)",
-  "Xscilab*vtMenu.Label:  VT Options (no app-defaults)",
-  "Xscilab*fontMenu.Label:  VT Fonts (no app-defaults)",
-  "Xscilab*VT100.font:		9x15",
-  "Xscilab*VT100.font1:		9x13",
-  "Xscilab*VT100.saveLines:	1024",
-  "Xscilab*VT100.scrollBar:	on",
-#include "h_help.ad.h"
+#include "Xscilab.ad.h"
     NULL
 };
 
@@ -166,7 +159,7 @@ static char *fallback_resources[] = {
    pass over the remaining options after XrmParseCommand is let loose. */
 
 static XrmOptionDescRec optionDescList[] = {
-{"-geometry",	"*vt100.geometry",XrmoptionSepArg,	(caddr_t) NULL},
+{"-geometry",	"*vtsci.geometry",XrmoptionSepArg,	(caddr_t) NULL},
 {"-tm",		"*ttyModes",	XrmoptionSepArg,	(caddr_t) NULL},
 {"-tn",		"*termName",	XrmoptionSepArg,	(caddr_t) NULL},
 {"-nw",		"*noWindow", XrmoptionNoArg,	(caddr_t) "on"},
@@ -246,6 +239,7 @@ int number_ourTopLevelShellArgs = 2;
 	
 XtAppContext app_con;
 Widget toplevel = (Widget) NULL;
+Widget realToplevel = (Widget) NULL;
 
 extern void do_hangup();
 extern void do_kill();
@@ -294,7 +288,7 @@ int Xscilab(dpy,topwid)
   *topwid=toplevel;
   if ( toplevel != (Widget) NULL) *dpy=XtDisplay(toplevel);
   return(1);
-};
+}
 
 
 Atom wm_delete_window;
@@ -315,7 +309,7 @@ strip_blank(source)
       if(*p != ' ') break;
       *p = '\0';
    }
-};
+}
 
 C2F(mainsci) (pname,nos,now,idisp,display,dummy1,dummy2)
      int *nos,*now,*idisp;
@@ -331,7 +325,7 @@ C2F(mainsci) (pname,nos,now,idisp,display,dummy1,dummy2)
     {
       argv[argc++]="-display";
       strip_blank(display);argv[argc++]=display;
-    };
+    }
   if ( *nos == 1) 
       argv[argc++]="-ns";
   if ( *now == 1) 
@@ -342,7 +336,62 @@ C2F(mainsci) (pname,nos,now,idisp,display,dummy1,dummy2)
       exit(0);
     }
   main_sci(argc,argv);
-};
+}
+
+
+/*
+ * initColors: To allow resources to be specfied separately for color
+ *	and mono displays, we add a dummy Form widget below realToplevel
+ *	in appropriate circumstances.
+ */
+
+#define ADDTOPLEVEL(NAME) \
+	toplevel = XtCreateManagedWidget(NAME,formWidgetClass, \
+					 realToplevel,NULL,0);
+
+initColors()
+{
+    Screen *Xscreen;
+    Visual *visual;
+    /* The default is no extra widget (ie. mono) */
+    toplevel = realToplevel;
+    Xscreen = XtScreen(realToplevel);
+    /* See if the user specified a type */
+    if (strcmp(resource.visualType,"mono") == 0) {
+	return;
+    } else if (strcmp(resource.visualType,"color") == 0) {
+	ADDTOPLEVEL("color");
+	return;
+    } else if (strcmp(resource.visualType,"gray") == 0) {
+	ADDTOPLEVEL("gray");
+	return;
+    }
+    /* Otherwise we try to figure it out */
+    if ((visual=XDefaultVisualOfScreen(Xscreen)) == NULL) {
+	fprintf(stderr,"Scilab : can't get info about visual!\n");
+	return;
+    }
+    if (visual->map_entries > 2) {
+	switch (visual->class) {
+	  case StaticColor:
+	  case PseudoColor:
+	  case TrueColor:
+	  case DirectColor:
+	    ADDTOPLEVEL("color");
+	    break;
+	  case StaticGray:
+	  case GrayScale:
+	    ADDTOPLEVEL("gray");
+	    break;
+	  default:
+	    toplevel = realToplevel;
+	}
+    } else {
+	toplevel = realToplevel;
+    }
+}
+
+
 
 main_sci(argc, argv)
      int argc;
@@ -356,7 +405,7 @@ main_sci(argc, argv)
   int xerror(), xioerror();
   ProgramName = argv[0];
   /* Init the Toolkit. */
-  toplevel = XtAppInitialize (&app_con, "Xscilab", 
+  realToplevel = toplevel = XtAppInitialize (&app_con, "Xscilab", 
 			      optionDescList, XtNumber(optionDescList), 
 			      &argc, argv, fallback_resources, NULL, 0);
   XtGetApplicationResources(toplevel, (XtPointer) &resource,
@@ -364,6 +413,7 @@ main_sci(argc, argv)
 			    XtNumber(application_resources), NULL, 0);
 
   XtAppAddActions(app_con, actionProcs, XtNumber(actionProcs));
+  initColors();
   SetXsciOn();
   xterm_name = resource.xterm_name;
   if (strcmp(xterm_name, "-") == 0) xterm_name = "xterm";
@@ -380,7 +430,7 @@ main_sci(argc, argv)
 	Syntax (*argv);
       }
       break;
-    };
+    }
   XawSimpleMenuAddGlobalActions (app_con);
   XtRegisterGrabAction (HandlePopupMenu, True,
 			(ButtonPressMask|ButtonReleaseMask),
@@ -425,8 +475,8 @@ main_sci(argc, argv)
 
   /* avoid double MapWindow requests */
   XtSetMappedWhenManaged( XtParent(term), False );
-  wm_delete_window = XInternAtom(XtDisplay(toplevel),"WM_DELETE_WINDOW",False);
-  VTInit1(toplevel);
+  wm_delete_window = XInternAtom(XtDisplay(realToplevel),"WM_DELETE_WINDOW",False);
+  VTInit1(realToplevel);
   Xsocket = ConnectionNumber(screen->display);
   pty = screen->respond;
   mode = 1;
@@ -448,6 +498,12 @@ Exit(n)
 {
   exit(n);
 }
+
+/* following include needed for solaris */
+#if defined(sparc) && defined(__STDC__)
+#include <stropts.h>
+#include <poll.h>
+#endif
 
 int GetBytesAvailable (fd)
     int fd;

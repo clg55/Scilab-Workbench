@@ -680,7 +680,7 @@ C
 C THE GENERATOR REQUIRES A MACHINE WITH AT LEAST 32 BITS OF PRECISION.  
 C THE SEED (ISEED) MUST BE IN THE RANGE (1,(2**31)-1).                  
 C***********************************************************************
-      COMMON /RAN/ MULT,MODUL,I15,I16,JRAN    
+      COMMON /NETRAN/ MULT,MODUL,I15,I16,JRAN    
       COMMON /NEW/ LUIN,LUOUT                                                               
       IF(ISEED.LT.1) then
          write(luout,8006)
@@ -703,7 +703,7 @@ C***********************************************************************
 C IRAN GENERATES AN INTEGER RANDOM NUMBER BETWEEN ILOW AND IHIGH.       
 C IF ILOW.GT.IHIGH THEN IRAN RETURNS IRAN=IHIGH.                        
 C***********************************************************************
-      COMMON /RAN/ MULT,MODUL,I15,I16,JRAN                              
+      COMMON /NETRAN/ MULT,MODUL,I15,I16,JRAN                              
       IXHI=JRAN/I16                                                     
       IXLO=JRAN-IXHI*I16                                                
       IXALO=IXLO*MULT                                                   

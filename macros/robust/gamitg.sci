@@ -351,7 +351,7 @@ function [bool]=str_member(c,s)
 // returns %T (true) if it does, %F (false) otherwise.
  
 for i=1:length(s),
-  if part(s,i)=c then bool=%T; return; end
+  if part(s,i)=c then bool=%t; return; end
 end
-bool=%F;
+bool=%f;
 

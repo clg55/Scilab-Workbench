@@ -26,7 +26,7 @@
 " freson ",
 " g_margin ",
 " imrep2ss ",
-" invsysli ",
+" invsyslin ",
 " lin ",
 " lqe ",
 " lqg ",

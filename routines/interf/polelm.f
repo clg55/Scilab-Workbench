@@ -8,7 +8,7 @@ c
       INCLUDE '../stack.h'
       integer iadr, sadr
 c     
-      double precision t,sr,si,eps,er,epsa,epsr,norm
+      double precision t,sr,si,eps,er,epsa,epsr
       integer id(4),blank,v2,vol,volr,racine,coeff,ipb(6)
       logical roots
       integer fail 
@@ -1070,42 +1070,25 @@ c     clean(p,epsa)
             ilea=iadr(lstk(top))
             lea=sadr(ilea+4)
             top=top-1
-            epsr=0.d0
+            epsr=1.d-10
             epsa=stk(lea)
          else if(rhs.eq.1) then
-            epsr=0.d0
-            epsa=0.d0
+            epsr=1.d-10
+            epsa=1.d-10
          endif
-         if (istk(il1).eq.1) then
-            m=istk(il1+1)
-            n=istk(il1+2)
-            it=istk(il1+3)
-            l=sadr(il1+4)
-            lmin=l
-            lmax=lmin+m*n+m*n*it-1
-            norm=0.d0
-            do 112 kk=lmin,lmax
-               norm=norm+abs(stk(kk))
- 112        continue
-            eps=max(epsa,epsr*norm)
-            do 111 kk=lmin,lmax
-               if (abs(stk(kk)).le.eps) stk(kk)=0.d0
- 111        continue
+         id2=iadr(lstk(top+1))
+         err=sadr(id2+mn1+1)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         if(it1.eq.0) then
+            call dmpcle(stk(l1),istk(id1),m1,n1,istk(id2),epsr,epsa)
+            lstk(top+1)=l1+istk(id1+m1*n1)-1
          else
-            id2=iadr(lstk(top+1))
-            err=sadr(id2+mn1+1)-lstk(bot)
-            if(err.gt.0) then
-               call error(17)
-               return
-            endif
-            if(it1.eq.0) then
-               call dmpcle(stk(l1),istk(id1),m1,n1,istk(id2),epsr,epsa)
-               lstk(top+1)=l1+istk(id1+m1*n1)-1
-            else
-               call wmpcle(stk(l1),stk(l1+vol),istk(id1),m1,n1,
-     &              istk(id2),epsr,epsa)
-               lstk(top+1)=l1+(istk(id1+m1*n1)-1)*2
-            endif
+            call wmpcle(stk(l1),stk(l1+vol),istk(id1),m1,n1,
+     &           istk(id2),epsr,epsa)
+            lstk(top+1)=l1+(istk(id1+m1*n1)-1)*2
          endif
          goto 999
 c     

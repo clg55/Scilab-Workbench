@@ -26,7 +26,7 @@
 
 # platform: osf1.cf
 
-# Operating system:  1/1 1.3
+# Operating system:  1/1 3.0
 
    	SHAREDSWITCH =
 
@@ -48,6 +48,7 @@
   BOOTSTRAPCFLAGS =
                CC = cc $(SHAREDSWITCH)
             LOCCC = cc
+        LOCSHARCC = LocShareCcCmd
                AS = as
 
          COMPRESS = compress
@@ -82,7 +83,7 @@
 
     PROTO_DEFINES = -DFUNCPROTO=3
 
-     INSTPGMFLAGS =
+     INSTPGMFLAGS = -s
 
      INSTBINFLAGS = -m 0755
      INSTUIDFLAGS = -m 4755
@@ -92,7 +93,7 @@
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4755
 
-      CDEBUGFLAGS = -O2
+      CDEBUGFLAGS = -O2 -Olimit 2000
         CCOPTIONS =
      LOCCCOPTIONS =
 
@@ -144,12 +145,15 @@
            INCDIR = $(INCROOT)/X11
            ADMDIR = /usr/adm
            LIBDIR = $(USRLIBDIR)/X11
+           VARDIR = /usr/var/X11
         CONFIGDIR = $(LIBDIR)/config
        LINTLIBDIR = $(USRLIBDIR)/lint
 
           FONTDIR = $(LIBDIR)/fonts
+      USERFONTDIR = $(VARDIR)/fonts/user
+            FSDIR = $(VARDIR)/fs
          XINITDIR = $(LIBDIR)/xinit
-           XDMDIR = $(LIBDIR)/xdm
+           XDMDIR = $(VARDIR)/xdm
            TWMDIR = $(LIBDIR)/twm
           MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
@@ -207,8 +211,12 @@
       XTESTLIBSRC = $(EXTENSIONSRC)/lib/xtest
       XTRAPLIBSRC = $(EXTENSIONSRC)/lib/xtrap
       PHIGSLIBSRC = $(EXTENSIONSRC)/lib/PEX
+       XIELIBSRC  = $(EXTENSIONSRC)/lib/XIE
+
+        EXTINCSRC = $(TOP)/X11/extensions
 
       USRSHLIBDIR = /usr/shlib
+        XSHLIBDIR = /usr/shlib/X11
 
        SHLIBFLAGS = -check_registry $(CROSSBASE)/usr/shlib/so_locations 	-L$(CROSSBASE)/usr/shlib -L$(CROSSBASE)/usr/ccs/lib
 
@@ -230,6 +238,9 @@
         DEPXAWLIB = $(USRSHLIBDIR)/libXaw.so
            XAWLIB = -lXaw
 
+       DEPXXIELIB = $(USRSHLIBDIR)/libXIE.so
+          XXIELIB = -lXIE
+
         DEPXILIB = $(USRSHLIBDIR)/libXi.a
            XILIB = -lXi
 
@@ -238,6 +249,7 @@
         SOXLIBREV = SharedXlibRev
           SOXTREV = SharedXtRev
          SOXAWREV = SharedXawRev
+         SOXIEREV = SharedXIERev
         SOOLDXREV = SharedOldXRev
          SOXMUREV = SharedXmuRev
         SOXEXTREV = SharedXextRev
@@ -259,6 +271,12 @@
         DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
            PHIGSLIB = 			 -lphigs
 
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
        DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
           XBSDLIB = 			 -lXbsd
 
@@ -267,6 +285,7 @@
           LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
         LINTXTOOL = $(LINTLIBDIR)/llib-lXt.ln
           LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
+         LINTXXIE = $(LINTLIBDIR)/llib-lXIE.ln
            LINTXI = $(LINTLIBDIR)/llib-lXi.ln
         LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
 
@@ -290,6 +309,7 @@
    MRESOURCESRC = $(MLIBSRC)/Mrm
      MCLIENTSRC = $(TOP)/motif/clients
          UILSRC = $(MCLIENTSRC)/uil
+    MINCLUDESRC = $(INCLUDESRC)
 
             UIL = uil
 
@@ -317,9 +337,9 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
            CDADIR = $(USRLIBDIR)/cda
 
            DXMSRC = $(MLIBSRC)/DXm
-           DPSSRC = $(EXTENSIONSRC)/DPS/lib/dps
-         DPSTKSRC = $(EXTENSIONSRC)/DPS/lib/dpstk
-         PSRESSRC = $(EXTENSIONSRC)/DPS/lib/psres
+           DPSSRC = $(EXTENSIONSRC)/DPSII/lib/dps
+         DPSTKSRC = $(EXTENSIONSRC)/DPSII/lib/dpstk
+         PSRESSRC = $(EXTENSIONSRC)/DPSII/lib/psres
            XIESRC = $(EXTENSIONSRC)/lib/xie
            IDSSRC = $(MLIBSRC)/ids
            BKRSRC = $(MLIBSRC)/bkr
@@ -329,6 +349,8 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
        DEPDXMLIB = $(USRSHLIBDIR)/libDXm.so
           DXMLIB = -lDXm
+
+       MDXMLIB = $(DXMLIB)
 
         DEPDPSLIB = $(USRSHLIBDIR)/libdps.so
            DPSLIB = -ldps
@@ -380,7 +402,7 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
 # -------------------------------------------------------------------------
 # DEC-Specific System Build Rules
-# $Id: Dec.rules,v 1.1.2.8 1992/12/08 19:29:22 Leela_Obilichetti Exp $
+# $Id: Dec.rules,v 1.1.2.8 92/12/08 19:29:22 Leela_Obilichetti Exp $
 
 # -------------------------------------------------------------------------
 # start of Imakefile
@@ -398,29 +420,28 @@ _NULLCMD_ = @ echo -n
 
          CC = cc $(SHAREDSWITCH)
   CCOPTIONS =
-STD_DEFINES = -DDEC -DR5_XLIB -DSMT
-CDEBUGFLAGS = -O2
+STD_DEFINES = -DDEC -DR5_XLIB -DSMT -Wf,-readonly_strings
+CDEBUGFLAGS = -O2 -Olimit 2000
 
-FFOPTIONS = -C -fpe1 -switch nosqrt_recip -check nounderflow
-FDEBUGFLAGS =
-CDEBUGFLAGS =
-CCOPTIONS=
 FC=DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
+FFOPTIONS =  -fpe3 -switch nosqrt_recip
+FDEBUGFLAGS = -O
+CCOPTIONS=
+CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 
-SCIVERSION=Scilab-2.0
-SCIDATE=31 October 1994
+SCIVERSION = Scilab-2.1
+SCIDATE = 10 February 1995
 
-EXTRA_INCLUDES=-I$(SCIDIR)/routines
-
-FLOCAL_LDFLAGS=  -non_shared
+EXTRA_INCLUDES = -I$(SCIDIR)/routines
 
 LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS) $(LOCAL_LDFLAGS)
 
 FFLAGS = $(FDEBUGFLAGS) $(FFOPTIONS)
 
 FLDOPTIONS = $(FDEBUGFLAGS) $(FFOPTIONS) $(FLOCAL_LDFLAGS)
-LLDOPTIONS = $(FDEBUGFLAGS) $(FLOCAL_LDFLAGS)
+
+LLDOPTIONS = $(LLOCAL_LDFLAGS)
 
 PATHSP=$(SCIDIR)/routines
 PATHO=$(SCIDIR)/libs
@@ -574,14 +595,14 @@ clean::
 	$(_NULLCMD_)
 	$(_NULLCMD_)
 
-CvtStdSel.o: $(ICONFIGFILES)
+CvtStdSel.o:
 	$(_NULLCMD_)
 	$(_NULLCMD_)
 	$(_NULLCMD_)
 	$(RM) $@
 	$(CC) -c $(CFLAGS) $(CSSDEFS) $*.c
 
-LocBitmap.o: $(ICONFIGFILES)
+LocBitmap.o:
 	$(_NULLCMD_)
 	$(_NULLCMD_)
 	$(_NULLCMD_)
@@ -680,116 +701,78 @@ AllCmap.o: /usr/include/stdio.h /usr/include/standards.h
 AllCmap.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 AllCmap.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 AllCmap.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-AllCmap.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-AllCmap.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-AllCmap.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-AllCmap.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xatom.h
-AllCmap.o: /usr/include/X11/Xutil.h
-AllCmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/StdCmap.h
+AllCmap.o: /usr/include/X11/Xatom.h /usr/include/X11/Xutil.h
+AllCmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/StdCmap.h
 Atoms.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 Atoms.o: /usr/include/sys/types.h /usr/include/standards.h
 Atoms.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 Atoms.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-Atoms.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-Atoms.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-Atoms.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Atoms.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-Atoms.o: /usr/include/X11/Xresource.h /usr/include/string.h
-Atoms.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-Atoms.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-Atoms.o: /usr/include/X11/RectObj.h Atoms.h
+Atoms.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Atoms.o: /usr/include/string.h /usr/include/X11/Core.h
+Atoms.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+Atoms.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h Atoms.h
 ClientWin.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 ClientWin.o: /usr/include/standards.h /usr/include/X11/X.h
 ClientWin.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-ClientWin.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-ClientWin.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-ClientWin.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-ClientWin.o: /usr/include/X11/extensions/smt.h
-ClientWin.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xatom.h
+ClientWin.o: /usr/include/stddef.h /usr/include/X11/Xatom.h
 CloseHook.o: /usr/include/stdio.h /usr/include/standards.h
 CloseHook.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 CloseHook.o: /usr/include/sys/types.h /usr/include/string.h
 CloseHook.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h
 CloseHook.o: /usr/include/unistd.h /usr/include/sys/access.h
-CloseHook.o: /usr/include/time.h /usr/include/sys/time.h
-CloseHook.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
-CloseHook.o: /usr/include/X11/Xlib.h /usr/include/X11/X.h
-CloseHook.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
-CloseHook.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-CloseHook.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-CloseHook.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-CloseHook.o: /usr/include/X11/extensions/ip.h
-CloseHook.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CloseHook.h
+CloseHook.o: /usr/include/sys/time.h /usr/include/sys/limits.h
+CloseHook.o: /usr/include/sys/signal.h /usr/include/sys/machine/signal.h
+CloseHook.o: /usr/include/sys/time.h /usr/include/X11/Xlib.h
+CloseHook.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
+CloseHook.o: /usr/include/stddef.h
+CloseHook.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CloseHook.h
 CmapAlloc.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 CmapAlloc.o: /usr/include/standards.h /usr/include/X11/X.h
 CmapAlloc.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-CmapAlloc.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-CmapAlloc.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-CmapAlloc.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-CmapAlloc.o: /usr/include/X11/extensions/smt.h
-CmapAlloc.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xatom.h
+CmapAlloc.o: /usr/include/stddef.h /usr/include/X11/Xatom.h
 CmapAlloc.o: /usr/include/X11/Xutil.h /usr/include/stdio.h
 CrCmap.o: /usr/include/stdio.h /usr/include/standards.h
 CrCmap.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 CrCmap.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 CrCmap.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-CrCmap.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-CrCmap.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-CrCmap.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-CrCmap.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+CrCmap.o: /usr/include/X11/Xutil.h
 CrPixFBit.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 CrPixFBit.o: /usr/include/sys/types.h /usr/include/standards.h
 CrPixFBit.o: /usr/include/string.h /usr/include/fcntl.h
 CrPixFBit.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-CrPixFBit.o: /usr/include/sys/access.h /usr/include/time.h
-CrPixFBit.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-CrPixFBit.o: /usr/include/sys/signal.h /usr/include/X11/Xlib.h
-CrPixFBit.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
-CrPixFBit.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-CrPixFBit.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-CrPixFBit.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-CrPixFBit.o: /usr/include/X11/extensions/smt.h
-CrPixFBit.o: /usr/include/X11/extensions/ip.h
+CrPixFBit.o: /usr/include/sys/access.h /usr/include/sys/time.h
+CrPixFBit.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+CrPixFBit.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
+CrPixFBit.o: /usr/include/X11/Xlib.h /usr/include/X11/X.h
+CrPixFBit.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
 CursorName.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 CursorName.o: /usr/include/sys/types.h /usr/include/standards.h
 CursorName.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 CursorName.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-CursorName.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-CursorName.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-CursorName.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-CursorName.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-CursorName.o: /usr/include/X11/Xresource.h /usr/include/string.h
-CursorName.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-CursorName.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-CursorName.o: /usr/include/X11/RectObj.h
-CursorName.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
-CursorName.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CurUtil.h
+CursorName.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+CursorName.o: /usr/include/string.h /usr/include/X11/Core.h
+CursorName.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+CursorName.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+CursorName.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
+CursorName.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CurUtil.h
 CursorName.o: /usr/include/X11/cursorfont.h
 CvtCache.o: /usr/include/stdio.h /usr/include/standards.h
 CvtCache.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 CvtCache.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 CvtCache.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-CvtCache.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-CvtCache.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-CvtCache.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-CvtCache.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xos.h
-CvtCache.o: /usr/include/string.h /usr/include/fcntl.h
+CvtCache.o: /usr/include/X11/Xos.h /usr/include/string.h /usr/include/fcntl.h
 CvtCache.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-CvtCache.o: /usr/include/sys/access.h /usr/include/time.h
-CvtCache.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-CvtCache.o: /usr/include/sys/signal.h
-CvtCache.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CvtCache.h
-CvtCache.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/DisplayQue.h
-CvtCache.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CloseHook.h
+CvtCache.o: /usr/include/sys/access.h /usr/include/sys/time.h
+CvtCache.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+CvtCache.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
+CvtCache.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CvtCache.h
+CvtCache.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/DisplayQue.h
+CvtCache.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CloseHook.h
 CvtStdSel.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 CvtStdSel.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 CvtStdSel.o: /usr/include/standards.h /usr/include/X11/X.h
 CvtStdSel.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-CvtStdSel.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-CvtStdSel.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-CvtStdSel.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-CvtStdSel.o: /usr/include/X11/extensions/smt.h
-CvtStdSel.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+CvtStdSel.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 CvtStdSel.o: /usr/include/X11/Xresource.h /usr/include/string.h
 CvtStdSel.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 CvtStdSel.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -804,77 +787,54 @@ CvtStdSel.o: /usr/include/sys/socket.h /usr/include/sys/uio.h Atoms.h
 CvtStdSel.o: StdSel.h SysUtil.h /usr/include/X11/Xfuncs.h
 CvtStdSel.o: /usr/include/X11/Xos.h /usr/include/fcntl.h
 CvtStdSel.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-CvtStdSel.o: /usr/include/sys/access.h /usr/include/time.h
-CvtStdSel.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-CvtStdSel.o: /usr/include/sys/signal.h
+CvtStdSel.o: /usr/include/sys/access.h /usr/include/sys/time.h
+CvtStdSel.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+CvtStdSel.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
 DefErrMsg.o: /usr/include/stdio.h /usr/include/standards.h
 DefErrMsg.o: /usr/include/X11/Xlibint.h /usr/include/X11/Xlib.h
 DefErrMsg.o: /usr/include/sys/types.h /usr/include/X11/X.h
 DefErrMsg.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-DefErrMsg.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-DefErrMsg.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-DefErrMsg.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-DefErrMsg.o: /usr/include/X11/extensions/smt.h
-DefErrMsg.o: /usr/include/X11/extensions/ip.h /usr/include/errno.h
+DefErrMsg.o: /usr/include/stddef.h /usr/include/X11/Xproto.h
+DefErrMsg.o: /usr/include/X11/Xmd.h /usr/include/limits.h
+DefErrMsg.o: /usr/include/X11/Xprotostr.h /usr/include/errno.h
 DefErrMsg.o: /usr/include/X11/Xfuncs.h /usr/include/stdlib.h
 DefErrMsg.o: /usr/include/string.h /usr/include/X11/smtXlibint.h
 DefErrMsg.o: /usr/include/X11/extensions/smtstr.h
+DefErrMsg.o: /usr/include/X11/extensions/smt.h
+DefErrMsg.o: /usr/include/X11/extensions/ip.h
 DelCmap.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 DelCmap.o: /usr/include/standards.h /usr/include/X11/X.h
 DelCmap.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-DelCmap.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-DelCmap.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-DelCmap.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-DelCmap.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-DelCmap.o: /usr/include/X11/Xutil.h
+DelCmap.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 DisplayQue.o: /usr/include/stdio.h /usr/include/standards.h
 DisplayQue.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 DisplayQue.o: /usr/include/sys/types.h /usr/include/string.h
 DisplayQue.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h
 DisplayQue.o: /usr/include/unistd.h /usr/include/sys/access.h
-DisplayQue.o: /usr/include/time.h /usr/include/sys/time.h
-DisplayQue.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
-DisplayQue.o: /usr/include/X11/Xlib.h /usr/include/X11/X.h
-DisplayQue.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
-DisplayQue.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-DisplayQue.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-DisplayQue.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-DisplayQue.o: /usr/include/X11/extensions/ip.h
-DisplayQue.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/DisplayQue.h
-DisplayQue.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CloseHook.h
+DisplayQue.o: /usr/include/sys/time.h /usr/include/sys/limits.h
+DisplayQue.o: /usr/include/sys/signal.h /usr/include/sys/machine/signal.h
+DisplayQue.o: /usr/include/sys/time.h /usr/include/X11/Xlib.h
+DisplayQue.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
+DisplayQue.o: /usr/include/stddef.h
+DisplayQue.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/DisplayQue.h
+DisplayQue.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CloseHook.h
 Distinct.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Distinct.o: /usr/include/standards.h /usr/include/X11/X.h
 Distinct.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Distinct.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Distinct.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Distinct.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Distinct.o: /usr/include/X11/extensions/smt.h
-Distinct.o: /usr/include/X11/extensions/ip.h
+Distinct.o: /usr/include/stddef.h
 DrawLogo.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 DrawLogo.o: /usr/include/standards.h /usr/include/X11/X.h
 DrawLogo.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-DrawLogo.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-DrawLogo.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-DrawLogo.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-DrawLogo.o: /usr/include/X11/extensions/smt.h
-DrawLogo.o: /usr/include/X11/extensions/ip.h
+DrawLogo.o: /usr/include/stddef.h
 DrRndRect.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 DrRndRect.o: /usr/include/standards.h /usr/include/X11/X.h
 DrRndRect.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-DrRndRect.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-DrRndRect.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-DrRndRect.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-DrRndRect.o: /usr/include/X11/extensions/smt.h
-DrRndRect.o: /usr/include/X11/extensions/ip.h
+DrRndRect.o: /usr/include/stddef.h
 EditresCom.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 EditresCom.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 EditresCom.o: /usr/include/standards.h /usr/include/X11/X.h
 EditresCom.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-EditresCom.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-EditresCom.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-EditresCom.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-EditresCom.o: /usr/include/X11/extensions/smt.h
-EditresCom.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+EditresCom.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 EditresCom.o: /usr/include/X11/Xresource.h /usr/include/string.h
 EditresCom.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 EditresCom.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -886,118 +846,86 @@ EditresCom.o: /usr/include/X11/Shell.h /usr/include/X11/VendorP.h
 EditresCom.o: /usr/include/X11/Vendor.h /usr/include/X11/Xatom.h
 EditresCom.o: /usr/include/X11/Xos.h /usr/include/fcntl.h
 EditresCom.o: /usr/include/sys/fcntl.h /usr/include/unistd.h
-EditresCom.o: /usr/include/sys/access.h /usr/include/time.h
-EditresCom.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-EditresCom.o: /usr/include/sys/signal.h
-EditresCom.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
-EditresCom.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/EditresP.h
+EditresCom.o: /usr/include/sys/access.h /usr/include/sys/time.h
+EditresCom.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
+EditresCom.o: /usr/include/sys/machine/signal.h /usr/include/sys/time.h
+EditresCom.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
+EditresCom.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/EditresP.h
 EditresCom.o: /usr/include/stdio.h
 FToCback.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 FToCback.o: /usr/include/sys/types.h /usr/include/standards.h
 FToCback.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 FToCback.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-FToCback.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-FToCback.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-FToCback.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-FToCback.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-FToCback.o: /usr/include/X11/Xresource.h /usr/include/string.h
-FToCback.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-FToCback.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-FToCback.o: /usr/include/X11/RectObj.h
+FToCback.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+FToCback.o: /usr/include/string.h /usr/include/X11/Core.h
+FToCback.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+FToCback.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
 GrayPixmap.o: /usr/include/stdio.h /usr/include/standards.h
 GrayPixmap.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 GrayPixmap.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 GrayPixmap.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 GrayPixmap.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-GrayPixmap.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-GrayPixmap.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-GrayPixmap.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-GrayPixmap.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-GrayPixmap.o: /usr/include/X11/Xresource.h /usr/include/string.h
-GrayPixmap.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-GrayPixmap.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-GrayPixmap.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
-GrayPixmap.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
-GrayPixmap.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
+GrayPixmap.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+GrayPixmap.o: /usr/include/string.h /usr/include/X11/Core.h
+GrayPixmap.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+GrayPixmap.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+GrayPixmap.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
+GrayPixmap.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
+GrayPixmap.o: /usr/include/X11/RectObjP.h
 Initer.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 Initer.o: /usr/include/sys/types.h /usr/include/standards.h
 Initer.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 Initer.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-Initer.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-Initer.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-Initer.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-Initer.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-Initer.o: /usr/include/X11/Xresource.h /usr/include/string.h
-Initer.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-Initer.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-Initer.o: /usr/include/X11/RectObj.h
-Initer.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Initer.h
+Initer.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+Initer.o: /usr/include/string.h /usr/include/X11/Core.h
+Initer.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+Initer.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+Initer.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Initer.h
 LocBitmap.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 LocBitmap.o: /usr/include/standards.h /usr/include/X11/X.h
 LocBitmap.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-LocBitmap.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-LocBitmap.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-LocBitmap.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-LocBitmap.o: /usr/include/X11/extensions/smt.h
-LocBitmap.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xresource.h
+LocBitmap.o: /usr/include/stddef.h /usr/include/X11/Xresource.h
 LocBitmap.o: /usr/include/X11/Xutil.h
-LocBitmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CvtCache.h
-LocBitmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/DisplayQue.h
-LocBitmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CloseHook.h
-LocBitmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Drawing.h
-LocBitmap.o: /usr/include/sys/param.h /usr/include/sys/limits.h
-LocBitmap.o: /usr/include/machine/machparam.h /usr/include/machine/endian.h
-LocBitmap.o: /usr/include/machine/machlimits.h
+LocBitmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CvtCache.h
+LocBitmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/DisplayQue.h
+LocBitmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CloseHook.h
+LocBitmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Drawing.h
+LocBitmap.o: /usr/include/limits.h /usr/include/sys/param.h
+LocBitmap.o: /usr/include/sys/limits.h /usr/include/sys/machine/machparam.h
+LocBitmap.o: /usr/include/machine/endian.h /usr/include/machine/machlimits.h
 Lookup.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 Lookup.o: /usr/include/standards.h /usr/include/X11/X.h
 Lookup.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-Lookup.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-Lookup.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-Lookup.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-Lookup.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-Lookup.o: /usr/include/X11/Xutil.h /usr/include/X11/keysymdef.h
+Lookup.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
+Lookup.o: /usr/include/X11/keysymdef.h
 LookupCmap.o: /usr/include/stdio.h /usr/include/standards.h
 LookupCmap.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 LookupCmap.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 LookupCmap.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-LookupCmap.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-LookupCmap.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-LookupCmap.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-LookupCmap.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xatom.h
-LookupCmap.o: /usr/include/X11/Xutil.h
-LookupCmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/StdCmap.h
+LookupCmap.o: /usr/include/X11/Xatom.h /usr/include/X11/Xutil.h
+LookupCmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/StdCmap.h
 Lower.o: /usr/include/X11/keysymdef.h
-Lower.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
+Lower.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
 Lower.o: /usr/include/X11/Xfuncproto.h
 RdBitF.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 RdBitF.o: /usr/include/sys/types.h /usr/include/standards.h
 RdBitF.o: /usr/include/string.h /usr/include/fcntl.h /usr/include/sys/fcntl.h
-RdBitF.o: /usr/include/unistd.h /usr/include/sys/access.h /usr/include/time.h
+RdBitF.o: /usr/include/unistd.h /usr/include/sys/access.h
 RdBitF.o: /usr/include/sys/time.h /usr/include/sys/limits.h
-RdBitF.o: /usr/include/sys/signal.h /usr/include/X11/Xlib.h
+RdBitF.o: /usr/include/sys/signal.h /usr/include/sys/machine/signal.h
+RdBitF.o: /usr/include/sys/time.h /usr/include/X11/Xlib.h
 RdBitF.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
-RdBitF.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-RdBitF.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-RdBitF.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-RdBitF.o: /usr/include/X11/extensions/smt.h /usr/include/X11/extensions/ip.h
-RdBitF.o: /usr/include/X11/Xutil.h /usr/include/stdio.h /usr/include/ctype.h
+RdBitF.o: /usr/include/stddef.h /usr/include/X11/Xutil.h /usr/include/stdio.h
+RdBitF.o: /usr/include/ctype.h
 ScrOfWin.o: /usr/include/stdio.h /usr/include/standards.h
 ScrOfWin.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 ScrOfWin.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 ScrOfWin.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-ScrOfWin.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-ScrOfWin.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-ScrOfWin.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-ScrOfWin.o: /usr/include/X11/extensions/ip.h
 ShapeWidg.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 ShapeWidg.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 ShapeWidg.o: /usr/include/standards.h /usr/include/X11/X.h
 ShapeWidg.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-ShapeWidg.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-ShapeWidg.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-ShapeWidg.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-ShapeWidg.o: /usr/include/X11/extensions/smt.h
-ShapeWidg.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+ShapeWidg.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 ShapeWidg.o: /usr/include/X11/Xresource.h /usr/include/string.h
 ShapeWidg.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 ShapeWidg.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1009,47 +937,33 @@ StdCmap.o: /usr/include/stdio.h /usr/include/standards.h
 StdCmap.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 StdCmap.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 StdCmap.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-StdCmap.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-StdCmap.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-StdCmap.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-StdCmap.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xatom.h
-StdCmap.o: /usr/include/X11/Xutil.h
-StdCmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/StdCmap.h
+StdCmap.o: /usr/include/X11/Xatom.h /usr/include/X11/Xutil.h
+StdCmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/StdCmap.h
 StrToBS.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 StrToBS.o: /usr/include/sys/types.h /usr/include/standards.h
 StrToBS.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 StrToBS.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-StrToBS.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-StrToBS.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-StrToBS.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-StrToBS.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-StrToBS.o: /usr/include/X11/Xresource.h /usr/include/string.h
-StrToBS.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-StrToBS.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-StrToBS.o: /usr/include/X11/RectObj.h Converters.h CharSet.h
+StrToBS.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+StrToBS.o: /usr/include/string.h /usr/include/X11/Core.h
+StrToBS.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+StrToBS.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h Converters.h
+StrToBS.o: CharSet.h
 StrToBmap.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 StrToBmap.o: /usr/include/sys/types.h /usr/include/standards.h
 StrToBmap.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 StrToBmap.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-StrToBmap.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-StrToBmap.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-StrToBmap.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-StrToBmap.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-StrToBmap.o: /usr/include/X11/Xresource.h /usr/include/string.h
-StrToBmap.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-StrToBmap.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-StrToBmap.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
-StrToBmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-StrToBmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Drawing.h
+StrToBmap.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+StrToBmap.o: /usr/include/string.h /usr/include/X11/Core.h
+StrToBmap.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+StrToBmap.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+StrToBmap.o: /usr/include/X11/StringDefs.h
+StrToBmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+StrToBmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Drawing.h
 StrToCurs.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 StrToCurs.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 StrToCurs.o: /usr/include/standards.h /usr/include/X11/X.h
 StrToCurs.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-StrToCurs.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-StrToCurs.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-StrToCurs.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-StrToCurs.o: /usr/include/X11/extensions/smt.h
-StrToCurs.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+StrToCurs.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 StrToCurs.o: /usr/include/X11/Xresource.h /usr/include/string.h
 StrToCurs.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 StrToCurs.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1057,82 +971,61 @@ StrToCurs.o: /usr/include/X11/RectObj.h /usr/include/X11/CoreP.h
 StrToCurs.o: /usr/include/X11/CompositeP.h /usr/include/X11/ConstrainP.h
 StrToCurs.o: /usr/include/X11/ObjectP.h /usr/include/X11/RectObjP.h
 StrToCurs.o: /usr/include/X11/StringDefs.h
-StrToCurs.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
-StrToCurs.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Drawing.h
-StrToCurs.o: /usr/include/sys/param.h /usr/include/sys/limits.h
-StrToCurs.o: /usr/include/machine/machparam.h /usr/include/machine/endian.h
-StrToCurs.o: /usr/include/machine/machlimits.h
+StrToCurs.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
+StrToCurs.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Drawing.h
+StrToCurs.o: /usr/include/limits.h /usr/include/sys/param.h
+StrToCurs.o: /usr/include/sys/limits.h /usr/include/sys/machine/machparam.h
+StrToCurs.o: /usr/include/machine/endian.h /usr/include/machine/machlimits.h
 StrToGrav.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 StrToGrav.o: /usr/include/sys/types.h /usr/include/standards.h
 StrToGrav.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 StrToGrav.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-StrToGrav.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-StrToGrav.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-StrToGrav.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-StrToGrav.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-StrToGrav.o: /usr/include/X11/Xresource.h /usr/include/string.h
-StrToGrav.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-StrToGrav.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-StrToGrav.o: /usr/include/X11/RectObj.h
-StrToGrav.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/Converters.h
+StrToGrav.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+StrToGrav.o: /usr/include/string.h /usr/include/X11/Core.h
+StrToGrav.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+StrToGrav.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+StrToGrav.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/Converters.h
 StrToJust.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 StrToJust.o: /usr/include/sys/types.h /usr/include/standards.h
 StrToJust.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 StrToJust.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-StrToJust.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-StrToJust.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-StrToJust.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-StrToJust.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-StrToJust.o: /usr/include/X11/Xresource.h /usr/include/string.h
-StrToJust.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-StrToJust.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-StrToJust.o: /usr/include/X11/RectObj.h Converters.h CharSet.h
+StrToJust.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+StrToJust.o: /usr/include/string.h /usr/include/X11/Core.h
+StrToJust.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+StrToJust.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+StrToJust.o: Converters.h CharSet.h
 StrToLong.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 StrToLong.o: /usr/include/sys/types.h /usr/include/standards.h
 StrToLong.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 StrToLong.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-StrToLong.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-StrToLong.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-StrToLong.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-StrToLong.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-StrToLong.o: /usr/include/X11/Xresource.h /usr/include/string.h
-StrToLong.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-StrToLong.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-StrToLong.o: /usr/include/X11/RectObj.h Converters.h
+StrToLong.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+StrToLong.o: /usr/include/string.h /usr/include/X11/Core.h
+StrToLong.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+StrToLong.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+StrToLong.o: Converters.h
 StrToOrnt.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 StrToOrnt.o: /usr/include/sys/types.h /usr/include/standards.h
 StrToOrnt.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 StrToOrnt.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-StrToOrnt.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-StrToOrnt.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-StrToOrnt.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-StrToOrnt.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-StrToOrnt.o: /usr/include/X11/Xresource.h /usr/include/string.h
-StrToOrnt.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-StrToOrnt.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-StrToOrnt.o: /usr/include/X11/RectObj.h /usr/include/X11/StringDefs.h
-StrToOrnt.o: Converters.h CharSet.h
+StrToOrnt.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+StrToOrnt.o: /usr/include/string.h /usr/include/X11/Core.h
+StrToOrnt.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+StrToOrnt.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+StrToOrnt.o: /usr/include/X11/StringDefs.h Converters.h CharSet.h
 StrToShap.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
 StrToShap.o: /usr/include/sys/types.h /usr/include/standards.h
 StrToShap.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 StrToShap.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-StrToShap.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-StrToShap.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-StrToShap.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-StrToShap.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
-StrToShap.o: /usr/include/X11/Xresource.h /usr/include/string.h
-StrToShap.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
-StrToShap.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
-StrToShap.o: /usr/include/X11/RectObj.h Converters.h CharSet.h
+StrToShap.o: /usr/include/X11/Xutil.h /usr/include/X11/Xresource.h
+StrToShap.o: /usr/include/string.h /usr/include/X11/Core.h
+StrToShap.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
+StrToShap.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
+StrToShap.o: Converters.h CharSet.h
 StrToWidg.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
 StrToWidg.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 StrToWidg.o: /usr/include/standards.h /usr/include/X11/X.h
 StrToWidg.o: /usr/include/X11/Xfuncproto.h /usr/include/X11/Xosdefs.h
-StrToWidg.o: /usr/include/stddef.h /usr/include/X11/extensions/smtstr.h
-StrToWidg.o: /usr/include/X11/Xproto.h /usr/include/X11/Xmd.h
-StrToWidg.o: /usr/include/limits.h /usr/include/X11/Xprotostr.h
-StrToWidg.o: /usr/include/X11/extensions/smt.h
-StrToWidg.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+StrToWidg.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 StrToWidg.o: /usr/include/X11/Xresource.h /usr/include/string.h
 StrToWidg.o: /usr/include/X11/Core.h /usr/include/X11/Composite.h
 StrToWidg.o: /usr/include/X11/Constraint.h /usr/include/X11/Object.h
@@ -1144,43 +1037,33 @@ UpdMapHint.o: /usr/include/stdio.h /usr/include/standards.h
 UpdMapHint.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 UpdMapHint.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 UpdMapHint.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-UpdMapHint.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-UpdMapHint.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-UpdMapHint.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-UpdMapHint.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+UpdMapHint.o: /usr/include/X11/Xutil.h
 VisCmap.o: /usr/include/stdio.h /usr/include/standards.h /usr/include/math.h
 VisCmap.o: /usr/include/X11/Xlib.h /usr/include/sys/types.h
 VisCmap.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
 VisCmap.o: /usr/include/X11/Xosdefs.h /usr/include/stddef.h
-VisCmap.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-VisCmap.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-VisCmap.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-VisCmap.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xatom.h
-VisCmap.o: /usr/include/X11/Xutil.h
-VisCmap.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/StdCmap.h
+VisCmap.o: /usr/include/X11/Xatom.h /usr/include/X11/Xutil.h
+VisCmap.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/StdCmap.h
 WidgetNode.o: /usr/include/stdio.h /usr/include/standards.h
 WidgetNode.o: /usr/include/X11/Xos.h /usr/include/X11/Xosdefs.h
 WidgetNode.o: /usr/include/sys/types.h /usr/include/string.h
 WidgetNode.o: /usr/include/fcntl.h /usr/include/sys/fcntl.h
 WidgetNode.o: /usr/include/unistd.h /usr/include/sys/access.h
-WidgetNode.o: /usr/include/time.h /usr/include/sys/time.h
-WidgetNode.o: /usr/include/sys/limits.h /usr/include/sys/signal.h
-WidgetNode.o: /usr/include/X11/IntrinsicP.h /usr/include/X11/Intrinsic.h
-WidgetNode.o: /usr/include/X11/Xlib.h /usr/include/X11/X.h
-WidgetNode.o: /usr/include/X11/Xfuncproto.h /usr/include/stddef.h
-WidgetNode.o: /usr/include/X11/extensions/smtstr.h /usr/include/X11/Xproto.h
-WidgetNode.o: /usr/include/X11/Xmd.h /usr/include/limits.h
-WidgetNode.o: /usr/include/X11/Xprotostr.h /usr/include/X11/extensions/smt.h
-WidgetNode.o: /usr/include/X11/extensions/ip.h /usr/include/X11/Xutil.h
+WidgetNode.o: /usr/include/sys/time.h /usr/include/sys/limits.h
+WidgetNode.o: /usr/include/sys/signal.h /usr/include/sys/machine/signal.h
+WidgetNode.o: /usr/include/sys/time.h /usr/include/X11/IntrinsicP.h
+WidgetNode.o: /usr/include/X11/Intrinsic.h /usr/include/X11/Xlib.h
+WidgetNode.o: /usr/include/X11/X.h /usr/include/X11/Xfuncproto.h
+WidgetNode.o: /usr/include/stddef.h /usr/include/X11/Xutil.h
 WidgetNode.o: /usr/include/X11/Xresource.h /usr/include/X11/Core.h
 WidgetNode.o: /usr/include/X11/Composite.h /usr/include/X11/Constraint.h
 WidgetNode.o: /usr/include/X11/Object.h /usr/include/X11/RectObj.h
 WidgetNode.o: /usr/include/X11/CoreP.h /usr/include/X11/CompositeP.h
 WidgetNode.o: /usr/include/X11/ConstrainP.h /usr/include/X11/ObjectP.h
 WidgetNode.o: /usr/include/X11/RectObjP.h
-WidgetNode.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xaw/Cardinals.h
-WidgetNode.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/CharSet.h
-WidgetNode.o: /usr/local/lib/distrib/scilab-2.0/routines/X11/Xmu/WidgetNode.h
+WidgetNode.o: /usr/local/lib/scilab-2.1/routines/X11/Xaw/Cardinals.h
+WidgetNode.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/CharSet.h
+WidgetNode.o: /usr/local/lib/scilab-2.1/routines/X11/Xmu/WidgetNode.h
 Xct.o: /usr/include/X11/Xfuncs.h /usr/include/X11/Xosdefs.h Xct.h
 Xct.o: /usr/include/X11/Xfuncproto.h /usr/include/stdio.h
 Xct.o: /usr/include/standards.h

@@ -20,7 +20,7 @@ c     n1,n2 : entiers definissant les champs des formats
 c!origine
 c     Serge Steer INRIA
 c!
-      double precision a,a1,ent,dec,round,d1mach
+      double precision a,a1,ent,dec,round,dlamch
       integer typ,n1,n2,maxc
       logical v,t1,t2
 c
@@ -35,7 +35,7 @@ c     test des NaN
       if(v) then
          typ=-2
          return
-      elseif(a.gt.d1mach(2)) then
+      elseif(a.gt.dlamch('o')) then
          typ=-1
          return
       endif

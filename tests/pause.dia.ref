@@ -1,41 +1,41 @@
  
--->a=1;
+a=1;
  
--->deff('[x]=tata(y)','x=-y,write(%io(2),''enter quit''),pause,x=+20')
+deff('[x]=tata(y)','x=-y,write(%io(2),''enter quit''),pause,x=+20')
  
--->xx=tata(10);
+xx=tata(10);
 enter quit
  
--1->quit;
+quit;
  
--->if 10+xx<>0 then bugmes();quit;end
+if 10+xx<>0 then bugmes();quit;end
  
--->b=2;
+b=2;
  
--->deff('[x]=tata(y)',['x=-y'
+deff('[x]=tata(y)',['x=-y'
                  'write(6,''enter return'')'
                  'pause'
                  'x=+20'])
  
--->xx=tata(0);
+xx=tata(0);
 enter return
  
--1->return
+return
  
--->if 20-xx<>0 then bugmes();quit;end
+if 20-xx<>0 then bugmes();quit;end
  
--->deff('[x]=tata(y)','x=-y,write(6,''type x=resume(0)''),pause')
+deff('[x]=tata(y)','x=-y,write(6,''type x=resume(0)''),pause')
  
--->xx=tata(40);
+xx=tata(40);
 type x=resume(0)
  
--1->x=resume(0)
+x=resume(0)
  
--->if xx<>0 then bugmes();quit;end
+if xx<>0 then bugmes();quit;end
  
--->clear x
+clear x
  
--->text=['after quit '
+text=['after quit '
       'undefined variable x']
  text      =
  
@@ -43,18 +43,18 @@ type x=resume(0)
 !                      !
 !undefined variable x  !
  
--->deff('[x]=toto(n)',['v=100'
+deff('[x]=toto(n)',['v=100'
                     'write(%io(2),text)'
                     'pause'
                      'x=n'])
  
--->write(%io(2),'enter abort (after receiving this message:)')
+write(%io(2),'enter abort (after receiving this message:)')
 enter abort (after receiving this message:)
  
--->toto(0);
+toto(0);
 after quit 
 undefined variable x
  
--1->abort
+abort
  
---> 
+ 

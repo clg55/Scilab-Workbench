@@ -382,8 +382,13 @@ c
          return
       endif
       if(mn.le.0) then
-         err=rhs
-         call error(45)
+c         err=rhs
+c         call error(45)
+      istk(il+1)=1
+      istk(il+2)=1
+      lstk(top+1)=l+it+1
+      stk(l)=1.0d+0
+      if (it.eq.1) stk(l+1)=0.0d+0
          return
       endif
       l3 = l + nn*(it+1)
@@ -546,6 +551,12 @@ c     rref
          call error(42)
          return
       endif
+      il=iadr(lstk(top-rhs+1))
+      m=istk(il+1)
+      n=istk(il+2)
+      it=istk(il+3)
+      l=sadr(il+4)
+      mn=m*n
       if(mn.le.0) return
       if(it.eq.1) call wrref(stk(l),stk(l+m*n),m,m,n,eps)
       if(it.eq.0) call drref(stk(l),m,m,n,eps)

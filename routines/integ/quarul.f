@@ -54,7 +54,7 @@ c     .. local scalars ..
 c     .. local arrays ..
       double precision fv1(10), fv2(10), wg(10), wgk(11), xgk(11)
 c     .. function references ..
-      double precision d1mach
+      double precision dlamch
 c     ..
 c
 c            the abscissae and weights are given for the
@@ -102,8 +102,8 @@ c
      *0.21908636251598204399553493420d+00,0.0d+0,
      *0.26926671930999635509122692160d+00,0.0d+0,
      *0.29552422471475287017389299470d+00/
-      epmach=d1mach(4)
-      uflow=d1mach(1)
+      epmach=dlamch('p')
+      uflow=dlamch('u')
 c
 c           list of major variables
 c           ----------------------

@@ -488,7 +488,7 @@ while (*inbuf != NULL)
 				inbuf += len;
 				len = get_arg(inbuf,eqn_no,0);
 				}
-			if ((strlen(eqn_no)) > 0)
+			if (((int)strlen(eqn_no)) > 0)
 				inbuf += len;
 			len = get_arg(inbuf,tmp,0);
 			if (strcmp(tmp,"I") == 0 || strcmp(tmp,"L") == 0)
@@ -770,7 +770,9 @@ I can only do very simple ones. You may need to check what I've done\n");
 				}
 			else if (strcmp(w,"CF") == 0)
 				{
-				if (index(ww,'%') == 0)
+/*				if (index(ww,'%') == 0)
+                                index replaced by strchr. CLG */
+				if (strchr(ww,'%') == 0)
 					{
 					sprintf(tmp,"\\footer{%s}",ww);
 					outbuf = strapp(outbuf,tmp);

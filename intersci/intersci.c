@@ -129,7 +129,7 @@ FILE *f;
     if (words[0][0] == '*') return(1);
     if (line1 == 1) {
       /* SCILAB function description */
-      if (strlen(words[0]) > 24) {
+      if ((int)strlen(words[0]) > 24) {
 	printf("SCILAB function name too long: \"%s\"\n",words[0]);
 	exit(1);
       }
@@ -2328,7 +2328,7 @@ int interf;
   fout = fopen(filout,"w");
   for (i = 0; i < nFun; i++) {
     fprintf(fout,"%s",funNames[i]);
-    for (j = 0; j < 25 - strlen(funNames[i]); j++) fprintf(fout," ");
+    for (j = 0; j < 25 - (int)strlen(funNames[i]); j++) fprintf(fout," ");
     fprintf(fout,"%.2d%.2d   3\n",interf,i+1);
   }
   printf("\nfile \"%s\" has been created\n",filout);

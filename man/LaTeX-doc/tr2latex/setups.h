@@ -6,12 +6,17 @@
 
 #include        <stdio.h>
 #include        <ctype.h>
+#ifdef SYSV
+#include        <string.h>
+#include	<stdlib.h>	/* for type declarations */
+#else
 #ifdef MSC
 #include        <string.h>
 #include	<stdlib.h>	/* for type declarations */
 #include	<io.h>		/* for type declarations */
 #else
 #include        <strings.h>
+#endif
 #endif
 
 #if HAVE_SGTTY
@@ -24,7 +29,7 @@
 #define	MAXLINE	500		/* maximum line length */
 #define	MAXDEF	200		/* maximum number of defines */
 
-extern char *malloc();
+#include <malloc.h>
 #ifdef IN_TR		/* can only declare globals once */
 #else
 extern

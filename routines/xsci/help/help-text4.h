@@ -26,7 +26,7 @@
 "  freson   - peak frequencies ",
 "  g_margin   - gain margin ",
 "  imrep2ss   - impulse response to state-space conversion ",
-"  invsysli   - system inversion ",
+"  invsyslin   - system inversion ",
 "  lin   - linearization ",
 "  lqe   - linear quadratic estimator (Kalman Filter) ",
 "  lqg   - LQG compensator ",

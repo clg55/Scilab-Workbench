@@ -26,7 +26,7 @@
 
 # platform: osf1.cf
 
-# Operating system:  1/1 1.3
+# Operating system:  1/1 3.0
 
    	SHAREDSWITCH =
 
@@ -48,6 +48,7 @@
   BOOTSTRAPCFLAGS =
                CC = cc $(SHAREDSWITCH)
             LOCCC = cc
+        LOCSHARCC = LocShareCcCmd
                AS = as
 
          COMPRESS = compress
@@ -82,7 +83,7 @@
 
     PROTO_DEFINES = -DFUNCPROTO=3
 
-     INSTPGMFLAGS =
+     INSTPGMFLAGS = -s
 
      INSTBINFLAGS = -m 0755
      INSTUIDFLAGS = -m 4755
@@ -92,7 +93,7 @@
      INSTDATFLAGS = -m 0444
     INSTKMEMFLAGS = -m 4755
 
-      CDEBUGFLAGS = -O2
+      CDEBUGFLAGS = -O2 -Olimit 2000
         CCOPTIONS =
      LOCCCOPTIONS =
 
@@ -144,12 +145,15 @@
            INCDIR = $(INCROOT)/X11
            ADMDIR = /usr/adm
            LIBDIR = $(USRLIBDIR)/X11
+           VARDIR = /usr/var/X11
         CONFIGDIR = $(LIBDIR)/config
        LINTLIBDIR = $(USRLIBDIR)/lint
 
           FONTDIR = $(LIBDIR)/fonts
+      USERFONTDIR = $(VARDIR)/fonts/user
+            FSDIR = $(VARDIR)/fs
          XINITDIR = $(LIBDIR)/xinit
-           XDMDIR = $(LIBDIR)/xdm
+           XDMDIR = $(VARDIR)/xdm
            TWMDIR = $(LIBDIR)/twm
           MANPATH = /usr/man
     MANSOURCEPATH = $(MANPATH)/man
@@ -207,8 +211,12 @@
       XTESTLIBSRC = $(EXTENSIONSRC)/lib/xtest
       XTRAPLIBSRC = $(EXTENSIONSRC)/lib/xtrap
       PHIGSLIBSRC = $(EXTENSIONSRC)/lib/PEX
+       XIELIBSRC  = $(EXTENSIONSRC)/lib/XIE
+
+        EXTINCSRC = $(TOP)/X11/extensions
 
       USRSHLIBDIR = /usr/shlib
+        XSHLIBDIR = /usr/shlib/X11
 
        SHLIBFLAGS = -check_registry $(CROSSBASE)/usr/shlib/so_locations 	-L$(CROSSBASE)/usr/shlib -L$(CROSSBASE)/usr/ccs/lib
 
@@ -230,6 +238,9 @@
         DEPXAWLIB = $(USRSHLIBDIR)/libXaw.so
            XAWLIB = -lXaw
 
+       DEPXXIELIB = $(USRSHLIBDIR)/libXIE.so
+          XXIELIB = -lXIE
+
         DEPXILIB = $(USRSHLIBDIR)/libXi.a
            XILIB = -lXi
 
@@ -238,6 +249,7 @@
         SOXLIBREV = SharedXlibRev
           SOXTREV = SharedXtRev
          SOXAWREV = SharedXawRev
+         SOXIEREV = SharedXIERev
         SOOLDXREV = SharedOldXRev
          SOXMUREV = SharedXmuRev
         SOXEXTREV = SharedXextRev
@@ -259,6 +271,12 @@
         DEPPHIGSLIB = $(USRLIBDIR)/libphigs.a
            PHIGSLIB = 			 -lphigs
 
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
+    DEPACCESSXLIB = $(USRLIBDIR)/libAccessX.a
+       ACCESSXLIB = 			 -lAccessx
+
        DEPXBSDLIB = $(USRLIBDIR)/libXbsd.a
           XBSDLIB = 			 -lXbsd
 
@@ -267,6 +285,7 @@
           LINTXMU = $(LINTLIBDIR)/llib-lXmu.ln
         LINTXTOOL = $(LINTLIBDIR)/llib-lXt.ln
           LINTXAW = $(LINTLIBDIR)/llib-lXaw.ln
+         LINTXXIE = $(LINTLIBDIR)/llib-lXIE.ln
            LINTXI = $(LINTLIBDIR)/llib-lXi.ln
         LINTPHIGS = $(LINTLIBDIR)/llib-lphigs.ln
 
@@ -290,6 +309,7 @@
    MRESOURCESRC = $(MLIBSRC)/Mrm
      MCLIENTSRC = $(TOP)/motif/clients
          UILSRC = $(MCLIENTSRC)/uil
+    MINCLUDESRC = $(INCLUDESRC)
 
             UIL = uil
 
@@ -317,9 +337,9 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
            CDADIR = $(USRLIBDIR)/cda
 
            DXMSRC = $(MLIBSRC)/DXm
-           DPSSRC = $(EXTENSIONSRC)/DPS/lib/dps
-         DPSTKSRC = $(EXTENSIONSRC)/DPS/lib/dpstk
-         PSRESSRC = $(EXTENSIONSRC)/DPS/lib/psres
+           DPSSRC = $(EXTENSIONSRC)/DPSII/lib/dps
+         DPSTKSRC = $(EXTENSIONSRC)/DPSII/lib/dpstk
+         PSRESSRC = $(EXTENSIONSRC)/DPSII/lib/psres
            XIESRC = $(EXTENSIONSRC)/lib/xie
            IDSSRC = $(MLIBSRC)/ids
            BKRSRC = $(MLIBSRC)/bkr
@@ -329,6 +349,8 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
        DEPDXMLIB = $(USRSHLIBDIR)/libDXm.so
           DXMLIB = -lDXm
+
+       MDXMLIB = $(DXMLIB)
 
         DEPDPSLIB = $(USRSHLIBDIR)/libdps.so
            DPSLIB = -ldps
@@ -380,33 +402,32 @@ LINTXMWIDGETLIB = $(MWIDGETSRC)/llib-l/Xm.ln
 
 # -------------------------------------------------------------------------
 # DEC-Specific System Build Rules
-# $Id: Dec.rules,v 1.1.2.8 1992/12/08 19:29:22 Leela_Obilichetti Exp $
+# $Id: Dec.rules,v 1.1.2.8 92/12/08 19:29:22 Leela_Obilichetti Exp $
 
 # -------------------------------------------------------------------------
 # start of Imakefile
 
 include ../../Path.incl
 
-FFOPTIONS = -C -fpe1 -switch nosqrt_recip -check nounderflow
-FDEBUGFLAGS =
-CDEBUGFLAGS =
-CCOPTIONS=
 FC=DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
+FFOPTIONS =  -fpe3 -switch nosqrt_recip
+FDEBUGFLAGS = -O
+CCOPTIONS=
+CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 
-SCIVERSION=Scilab-2.0
-SCIDATE=31 October 1994
+SCIVERSION = Scilab-2.1
+SCIDATE = 10 February 1995
 
-EXTRA_INCLUDES=-I$(SCIDIR)/routines
-
-FLOCAL_LDFLAGS=  -non_shared
+EXTRA_INCLUDES = -I$(SCIDIR)/routines
 
 LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS) $(LOCAL_LDFLAGS)
 
 FFLAGS = $(FDEBUGFLAGS) $(FFOPTIONS)
 
 FLDOPTIONS = $(FDEBUGFLAGS) $(FFOPTIONS) $(FLOCAL_LDFLAGS)
-LLDOPTIONS = $(FDEBUGFLAGS) $(FLOCAL_LDFLAGS)
+
+LLDOPTIONS = $(LLOCAL_LDFLAGS)
 
 PATHSP=$(SCIDIR)/routines
 PATHO=$(SCIDIR)/libs
@@ -419,9 +440,11 @@ MW=$(SCIDIR)/man/scripts/makewhatis-dec
 
 MW=$(SCIDIR)/man/scripts/makewhatis-alpha
 
-all:: whatis
+WHATIS=whatis
 
-whatis	:
+all:: $(WHATIS)
+
+$(WHATIS)	:
 	@echo "Updating whatis database"
 	$(MW) `pwd`
 
@@ -431,7 +454,7 @@ depend::
 distclean::clean
 
 clean::
-	$(RM) man*?/?*.[0-9].~ man*?/"#"*
+	$(RM) man*?/?*.[0-9].~ man*?/"#"* check.log
 
 check	:
 	@echo "Warning : files in wrong directory" > check.log
@@ -477,4 +500,4 @@ includes::
 # -------------------------------------------------------------------------
 # dependencies generated by makedepend
 
-whatis :man1/balanc.1  man1/bdiag.1  man1/chol.1  man1/coff.1  man1/colcomp.1  man1/cond.1  man1/det.1  man1/epsfin.1  man1/exp.1  man1/fineta.1  man1/fullrf.1  man1/fullrfk.1  man1/givens.1  man1/glever.1  man1/gschur.1  man1/gspec.1  man1/hess.1  man1/im_inv.1  man1/inv.1  man1/kroneck.1  man1/leverrier.1  man1/lu.1  man1/ludel.1  man1/lufact.1  man1/lusolve.1  man1/lyap.1  man1/nlev.1  man1/orth.1  man1/pbig.1  man1/pencan.1  man1/penlaur.1  man1/pinv.1  man1/polar.1  man1/proj.1  man1/projspec.1  man1/psmall.1  man1/qr.1  man1/quaskro.1  man1/range.1  man1/rank.1  man1/rcond.1  man1/rowcomp.1  man1/rowshuff.1  man1/schur.1  man1/sci.an  man1/spaninter.1  man1/spanplus.1  man1/spantwo.1  man1/spec.1  man1/sqroot.1  man1/sva.1  man1/svd.1  man1/sylv.1  man2/TAGS  man2/adj2l.2  man2/anpath.2  man2/anshp.2  man2/circuit.2  man2/compht.2  man2/compl2.2  man2/compla.2  man2/concomp.2  man2/connex.2  man2/createg.2  man2/gmaxflow.2  man2/graph.wait  man2/graph_list.2  man2/guide.wait  man2/isconnex.2  man2/l2adj.2  man2/l2g.2  man2/loadg.2  man2/lshp.2  man2/makeund.2  man2/maxcpp.2  man2/maxflow.2  man2/metanet.2  man2/mincf0.2  man2/mincfr.2  man2/minicf.2  man2/minqflow.2  man2/mintree.2  man2/netwindow.2  man2/netwindows.2  man2/ns2p.2  man2/p2ns.2  man2/sconcomp.2  man2/sconnex.2  man2/showns.2  man2/showp.2  man2/transclo.2  man3/arma.3  man3/armac.3  man3/armap.3  man3/armax.3  man3/armax1.3  man3/arsimul.3  man3/arspec.3  man3/exar1.3  man3/exar2.3  man3/exar3.3  man3/gbruit.3  man3/narsimul.3  man3/odedi.3  man3/prbs_a.3  man3/reglin.3  man3/sci.an  man3/vp.3  man4/artest.4  man4/bifish.4  man4/boucle.4  man4/chaintst.4  man4/fishing.4  man4/fusee.4  man4/mine.4  man4/obs_cont.4  man4/portr3d.4  man4/portrait.4  man4/recur.4  man4/systems.4  man4/tangent.4  man4/tdinit.4   
+whatis :man1/aff2ab.1  man1/balanc.1  man1/bdiag.1  man1/chol.1  man1/coff.1  man1/colcomp.1  man1/cond.1  man1/det.1  man1/epsfin.1  man1/exp.1  man1/fineta.1  man1/fullrf.1  man1/fullrfk.1  man1/givens.1  man1/glever.1  man1/gschur.1  man1/gspec.1  man1/hess.1  man1/im_inv.1  man1/inv.1  man1/kernel.1  man1/kroneck.1  man1/leverrier.1  man1/linsolve.1  man1/lu.1  man1/ludel.1  man1/lufact.1  man1/luget.1  man1/lusolve.1  man1/lyap.1  man1/nlev.1  man1/orth.1  man1/pbig.1  man1/pencan.1  man1/penlaur.1  man1/pinv.1  man1/polar.1  man1/proj.1  man1/projspec.1  man1/psmall.1  man1/qr.1  man1/quaskro.1  man1/range.1  man1/rank.1  man1/rcond.1  man1/rowcomp.1  man1/rowshuff.1  man1/schur.1  man1/sci.an  man1/spaninter.1  man1/spanplus.1  man1/spantwo.1  man1/spclean.1  man1/spec.1  man1/sqroot.1  man1/sva.1  man1/svd.1  man1/sylv.1  man1/trace.1  man2/adj2l.2  man2/anpath.2  man2/anshp.2  man2/circuit.2  man2/compht.2  man2/compl2.2  man2/compla.2  man2/concomp.2  man2/connex.2  man2/createg.2  man2/gmaxflow.2  man2/graph.wait  man2/graph_list.2  man2/guide.wait  man2/isconnex.2  man2/l2adj.2  man2/l2g.2  man2/loadg.2  man2/lshp.2  man2/makeund.2  man2/maxcpp.2  man2/maxflow.2  man2/metanet.2  man2/mincf0.2  man2/mincfr.2  man2/minicf.2  man2/minqflow.2  man2/mintree.2  man2/netwindow.2  man2/netwindows.2  man2/ns2p.2  man2/p2ns.2  man2/sconcomp.2  man2/sconnex.2  man2/showns.2  man2/showp.2  man2/transclo.2  man3/arma.3  man3/armac.3  man3/armap.3  man3/armax.3  man3/armax1.3  man3/arsimul.3  man3/arspec.3  man3/exar1.3  man3/exar2.3  man3/exar3.3  man3/gbruit.3  man3/narsimul.3  man3/odedi.3  man3/prbs_a.3  man3/reglin.3  man3/sci.an  man3/vp.3  man4/artest.4  man4/bifish.4  man4/boucle.4  man4/chaintst.4  man4/fishing.4  man4/fusee.4  man4/mine.4  man4/obs_cont.4  man4/portr3d.4  man4/portrait.4  man4/recur.4  man4/systems.4  man4/tangent.4  man4/tdinit.4   

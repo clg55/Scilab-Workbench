@@ -5,7 +5,7 @@ a=1               //constant
 1==1              //boolean
 'string'          //character string
 z=poly(0,'z')     // polynomial with variable 'z' and with one root at zero
-p=1+3*z+4.5*z^2  //polynomial 
+p=1+3*z+4.5*z^2   //polynomial 
 r=z/p             //rational
 
 //                2. MATRICES
@@ -44,6 +44,12 @@ f=syslin('c',f);
 num=f(2);den=f(3);           //operation on transfer matrix
 
 //                  SOME NUMERICAL PRIMITIVES
+inv(a)                       //Inverse
+inv(mp)                      //Inverse
+inv(sl*sl')                  //Product of two linear systems and inverse
+w=ss2tf(ans)                 //Transfer function representation
+inv(ss2tf(sl)*ss2tf(sl'))    //Product of two transfer functions and inverse
+clean(w-ans)                 
 n=contr(a,b)                 //Controllability
 k=ppol(a,b,[-1-%i -1+%i -1])        //Pole placement
 poly(a-b*k,'z')-poly([-1-%i -1+%i -1],'z')    //Check...
@@ -151,7 +157,7 @@ E=rand(3,2)*rand(2,3);
 A=rand(3,2)*rand(2,3);
 s=poly(0,'s');
 
-w=determ(s*E-A,8)   //determinant
+w=det(s*E-A)   //determinant
 [al,be]=gspec(A,E);
 al./(be+%eps*ones(be))
 roots(w)
@@ -174,6 +180,10 @@ foo=['      subroutine foo(a,b,c)';
 unix_s('\rm foo.f')
 write('foo.f',foo);
 unix_s('make foo.o')     //Compiling...(needs fortran compiler)
+//..................WARNING.......................
+//NEXT COMMAND LINE WILL DO THE LINK OF THE ROUTINE foo WITH SCILAB
+//THIS COMMAND MAY FAIL FOR SystemV COMPILED VERSIONS OF SCILAB 
+//BECAUSE LINK NEEDS THE LIBRARIES (SEE THE HELP OF "LINK" COMMAND)
 link('foo.o','foo')    //Linking to Scilab
 //5+7 by fortran
 fort('foo',5,1,'r',7,2,'r','out',[1,1],3,'r')

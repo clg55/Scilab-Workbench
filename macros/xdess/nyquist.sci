@@ -125,6 +125,6 @@ xset("mark",xgeti(1),xgeti(2));
 xpoly([rect(1),rect(3)],[0,0],'lines');
 xpoly([0,0],[rect(2),rect(4)],'lines');
 t=(0:0.1:2*%pi)';
-plot2d(sin(t),cos(t),[-(mn+1) mnc],'100','Unit Circle')
+//plot2d(sin(t),cos(t),[-(mn+1) mnc],'100','Unit Circle')
 xclip();
 xtitle('Nyquist plot ','Re(h(2i*pi*f))','Im(h(2i*pi*f))');

@@ -1,5 +1,5 @@
  
--->deff('[y]=t(x)',[
+deff('[y]=t(x)',[
 'y=0'
 'if x>0 then'
 '  if x=1 then '
@@ -24,23 +24,23 @@
 '  end'
 'end'])
  
--->//
+//
  
--->if t(0)<>0 then bugmes();quit;end
+if t(0)<>0 then bugmes();quit;end
  
--->if t(1)<>0 then bugmes();quit;end
+if t(1)<>0 then bugmes();quit;end
  
--->if t(-1)<>1 then bugmes();quit;end
+if t(-1)<>1 then bugmes();quit;end
  
--->//
+//
  
--->t1=t;
+t1=t;
  
--->comp(t1)
+comp(t1)
  
--->if t(0)-t1(0)<>0 then bugmes();quit;end
+if t(0)-t1(0)<>0 then bugmes();quit;end
  
--->if t(1)-t1(1)<>0 then bugmes();quit;end
+if t(1)-t1(1)<>0 then bugmes();quit;end
  
--->if t(-1)-t1(-1)<>0 then bugmes();quit;end
+if t(-1)-t1(-1)<>0 then bugmes();quit;end
  

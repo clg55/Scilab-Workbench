@@ -7,6 +7,7 @@ DEPLIBS =
 #if defined(WithLocalXaw)
 XAWLIB = ../../libs/libXaw.a 
 XMULIB = ../../libs/libXmu.a
+XMULIBONLY = ../../libs/libXmu.a
 #endif
 
 LOCAL_LIBRARIES = XawClientLibs
@@ -34,7 +35,7 @@ DependTarget()
 
 $(XMETANET_DEFAULT): Metanet-color.ad
 	rm -f $(SCIDIR)/X11_defaults/Metanet-color
-	$(INSTALL) -c Metanet-color.ad $(XMETANET_DEFAULT)
+	cp Metanet-color.ad $(XMETANET_DEFAULT)
 
 distclean:: clean 
 

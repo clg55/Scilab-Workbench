@@ -56,7 +56,7 @@ aplot_(Box,xmin,ymin,xmax,ymax,xnax,ynax,logflag)
   size[1]= -Box[2]/150.0;size[2]=2.0;
   size[0]=((double) Box[3])/ ((double) ynax[0]*ynax[1]);
   Axis(size,-90,*ymin,*ymax,ynax,LDPoint,logflag[1]);
-};
+}
 
 Axis(size,axdir,min,max,nax,LDPoint,logflag)
      double size[],min,max;
@@ -94,7 +94,7 @@ Axis(size,axdir,min,max,nax,LDPoint,logflag)
 	{
 	  posi[0]=LDPoint[0] - rect[2] +barlength;
 	  posi[1]=LDPoint[1] - i*nax[0]*size[0] + rect[3]/4;
-	};
+	}
       C2F(dr)("xstring",foo,&(posi[0]),&(posi[1]),(int *)&angle,&flag,IP0,IP0,0,0);
       if ( logflag == 'l' )
 	{
@@ -103,8 +103,8 @@ Axis(size,axdir,min,max,nax,LDPoint,logflag)
 		  (posi[1] += logrect[3],&posi[1]),
 		  (int *)&angle,&flag,IP0,IP0,0,0);
 	  C2F(dr)("xset","font",&fontid,&smallerfont,IP0,IP0,IP0,IP0,0,0);
-	};
-    };
+	}
+    }
   if ( logflag == 'l' ) C2F(dr)("xset","font",&fontid,&fontsiz,IP0,IP0,IP0,IP0,0,0);
 }
 
@@ -126,7 +126,7 @@ ChoixFormatE(fmt,desres,xmin,xmax,xpas)
   for ( des = 0 ; des < 5 ; des++)
     {
       if (Fsepare("%.*f",des,&len,xmin,xmax,xpas)) break;
-    };
+    }
   if ( des < 5 && len <= 6)
     {
       strcpy(fmt,"%.*f"); 
@@ -138,7 +138,7 @@ ChoixFormatE(fmt,desres,xmin,xmax,xpas)
 	{
 	  sprintf(buf,".%de",des);
 	  if (Fsepare("%.*e",des,&len,xmin,xmax,xpas)) break;
-	};
+	}
       strcpy(fmt,"%.*e"); 
       *desres= des;
     }
@@ -166,8 +166,8 @@ FormatPrec(fmt,desres,xmin,xmax,xpas)
       if (  Abs((x2-x1 -xpas) /xpas) >= 0.1)  *desres += 1;
       if (  Abs((x1- yy1)/xpas) >= 0.1) *desres +=1;
       i++;
-    };
-};
+    }
+}
 
 /*----------------------------------------------------------
   regarde si le format fmt qui utilise le nombre de 
@@ -196,12 +196,12 @@ int Fsepare(fmt,dec,l,xmin,xmax,xpas)
     { x += xpas;
       strcpy(buf2,buf1);
       sprintf(buf1,fmt,dec,x);
-      *l = ((strlen(buf1) >= *l) ? strlen(buf1) : *l) ;
+      *l = (((int)strlen(buf1) >= *l) ? strlen(buf1) : *l) ;
       if ( strcmp(buf1,buf2) == 0) return(0);
-    };
+    }
   return(1);
 }
-;
+
 
 /*--------------------------------------------
   Meme Chose que ChoixFormatE mais quand les nombres sont donnes
@@ -219,7 +219,7 @@ ChoixFormatE1(fmt,desres,xx,nx)
   for ( des = 0 ; des < 5 ; des++)
     {
       if (Fsepare1("%.*f",des,&len,xx,nx)) break;
-    };
+    }
   if ( des < 5 && len <= 6)
     {
       strcpy(fmt,"%.*f"); 
@@ -231,7 +231,7 @@ ChoixFormatE1(fmt,desres,xx,nx)
 	{
 	  sprintf(buf,".%de",des);
 	  if (Fsepare1("%.*e",des,&len,xx,nx)) break;
-	};
+	}
       strcpy(fmt,"%.*e"); 
       *desres= des;
     }
@@ -258,10 +258,10 @@ FormatPrec1(fmt,desres,xx,nx)
 	{
 	  if (Abs((x2-x1 - xpas) /xpas) >= 0.1)  *desres += 1;
 	  if (Abs((x1-xx[i])/xpas) >= 0.1) *desres +=1;
-	};
+	}
       i++;
-    };
-};
+    }
+}
 
 int Fsepare1(fmt,dec,l,xx,nx)
      char fmt[];
@@ -279,9 +279,9 @@ int Fsepare1(fmt,dec,l,xx,nx)
   for ( i=1 ; i < nx ; i++)
     { strcpy(buf2,buf1);
       sprintf(buf1,fmt,dec,xx[i]);
-      *l = ((strlen(buf1) >= *l) ? strlen(buf1) : *l) ;
+      *l = (((int)strlen(buf1) >= *l) ? strlen(buf1) : *l) ;
       if ( strcmp(buf1,buf2) == 0) return(0);
-    };
+    }
   return(1);
 }
-;
+

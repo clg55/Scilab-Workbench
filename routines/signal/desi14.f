@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DESI14,SSI=0
       subroutine desi14(nmaxi,maxdeg,ndeg,vsn,gd1,gd2,adelta,nzm,
      *sm,nzero,dsk,ugc,ogc,ack,nj,nh,dk,dks,dcap02,dcap04)
 c!purpose
@@ -10,9 +9,12 @@ c
       double precision dsk(*)
       dimension nzero(*),sm(maxdeg,*),nzm(*)
 c
+      external slamch
+      real slamch
+c
       data de /1.0d+00/
       dpi=4.0d+0*atan(1.0d+00)
-      flma=2.0d+0**(i1mach(16)-2)
+      flma=2.0d+0**(int(slamch('l'))-2)
 c
       dcap02 = de/vsn
       dcap01 = sqrt(dcap02)

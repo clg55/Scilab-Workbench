@@ -1,15 +1,16 @@
 path="SCI/demos/wheel2";
-
+mode(-1);
 getf(path+'/show.sci','c');
 xbasc();
 flag1=x_choose(['Reading a precomputed trajectory';
- 'Simulation with ode (needs f77 and link)'],...
+ 'Simulation with ode (needs f77 and link. may fail, see help link)'],...
 'Simulation or Visualisation ? (click below)');
 
 select flag1,
  case 2 then host("cd $"+path+"; make ");
-	if ~c_link('wheel') then link('/tmp/wheel.o -lm','wheel');end
-	if ~c_link('wheelg') then link('/tmp/wheelg.o -lm','wheelg');end
+mode(0);
+	if ~c_link('wheel') then link('/tmp/wheel.o ','wheel');end
+	if ~c_link('wheelg') then link('/tmp/wheelg.o ','wheelg');end
 	wheelg=wheelgf;
 	tmin=0.0;tmax=15;nn=300;
 	times=(0:(nn-1));

@@ -28,12 +28,12 @@ c!origine
 c     s Steer INRIA
 c!
       double precision pm1(*),pm2(*),pm3(*),eps,w
-      double precision d1mach
+      double precision dlamch
       integer d1(*),d2(*),d3(*),m,n,l1,l2
 c
       integer n1,n2,n3,mn,i,k
 c
-      eps=d1mach(4)
+      eps=dlamch('p')
       mn=m*n
       d3(1)=1
 c

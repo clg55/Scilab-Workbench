@@ -61,7 +61,7 @@ c         sing is set false.
 c
 c     subprograms called
 c
-c       minpack-supplied ... d1mach
+c       minpack-supplied ... dlamch
 c
 c       fortran-supplied ... dabs,dsqrt
 c
@@ -73,12 +73,12 @@ c     **********
       integer i,j,jj,l,nmj,nm1
       double precision cos,cotan,giant,one,p5,p25,sin,tan,tau,temp,
      *                 zero
-      double precision d1mach
+      double precision dlamch
       data one,p5,p25,zero /1.0d0,5.0d-1,2.5d-1,0.0d0/
 c
 c     giant is the largest magnitude.
 c
-      giant = d1mach(2)
+      giant = dlamch('o')
 c
 c     initialize the diagonal element pointer.
 c

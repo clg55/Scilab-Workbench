@@ -25,7 +25,7 @@ for i=45:5:80,xset("wwpc");
 	end	
 	xset("wshow");
 end
-xset("dashes",ds);
+xset("dashes",ds(1));
 driver(k_dr);
 
 

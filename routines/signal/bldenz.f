@@ -11,7 +11,7 @@ c!
       implicit double precision (a-h,o-z)
       double precision zpr(*),zpi(*)
       double precision c1(*),c0(*)
-      flmi=2.0d+0*d1mach(4)
+      flmi=2.0d+0*dlamch('p')
       nb = (ndeg+1)/2
       n = 0
       fact = zfa

@@ -136,47 +136,47 @@ static char RCSid[] =
 /*
  *  Routine Renaming
  */
-
-#define sfCreate                sfcreate
-#define sfStripFills            sfstripfills
-#define sfDestroy               sfdestroy
-#define sfClear                 sfzero
-#define sfGetElement            sfgetelement
-#define sfGetAdmittance         sfgetadmittance
-#define sfGetQuad               sfgetquad
-#define sfGetOnes               sfgetones
-#define sfAdd1Real              sfadd1real
-#define sfAdd1Imag              sfadd1imag
-#define sfAdd1Complex           sfadd1complex
-#define sfAdd4Real              sfadd4real
-#define sfAdd4Imag              sfadd4imag
-#define sfAdd4Complex           sfadd4complex
-#define sfOrderAndFactor        sforderandfactor
-#define sfFactor                sffactor
-#define sfPartition             sfpartition
-#define sfSolve                 sfsolve
-#define sfSolveTransposed       sfsolvetransposed
-#define sfPrint                 sfprint
-#define sfFileMatrix            sffilematrix
-#define sfFileVector            sffilevector
-#define sfFileStats             sffilestats
-#define sfMNA_Preorder          sfmna_preorder
-#define sfScale                 sfscale
-#define sfMultiply              sfmultiply
-#define sfDeterminant           sfdeterminant
-#define sfError                 sferror
-#define sfWhereSingular         sfwheresingular
-#define sfGetSize               sfgetsize
-#define sfSetReal               sfsetreal
-#define sfSetComplex            sfsetcomplex
-#define sfFillinCount           sffillincount
-#define sfElementCount          sfelementcount
-#define sfDeleteRowAndCol       sfdeleterowandcol
-#define sfPseudoCondition       sfpseudocondition
-#define sfCondition             sfcondition
-#define sfNorm                  sfnorm
-#define sfLargestElement        sflargestelement
-#define sfRoundoff              sfroundoff
+#include "../machine.h"
+#define sfCreate                C2F(sfcreate)
+#define sfStripFills            C2F(sfstripfills)
+#define sfDestroy               C2F(sfdestroy)
+#define sfClear                 C2F(sfclear)
+#define sfGetElement            C2F(sfgetelement)
+#define sfGetAdmittance         C2F(sfgetadmittance)
+#define sfGetQuad               C2F(sfgetquad)
+#define sfGetOnes               C2F(sfgetones)
+#define sfAdd1Real              C2F(sfadd1real)
+#define sfAdd1Imag              C2F(sfadd1imag)
+#define sfAdd1Complex           C2F(sfadd1complex)
+#define sfAdd4Real              C2F(sfadd4real)
+#define sfAdd4Imag              C2F(sfadd4imag)
+#define sfAdd4Complex           C2F(sfadd4complex)
+#define sfOrderAndFactor        C2F(sforderandfactor)
+#define sfFactor                C2F(sffactor)
+#define sfPartition             C2F(sfpartition)
+#define sfSolve                 C2F(sfsolve)
+#define sfSolveTransposed       C2F(sfsolvetransposed)
+#define sfPrint                 C2F(sfprint)
+#define sfFileMatrix            C2F(sffilematrix)
+#define sfFileVector            C2F(sffilevector)
+#define sfFileStats             C2F(sffilestats)
+#define sfMNA_Preorder          C2F(sfmna_preorder)
+#define sfScale                 C2F(sfscale)
+#define sfMultiply              C2F(sfmultiply)
+#define sfDeterminant           C2F(sfdeterminant)
+#define sfError                 C2F(sferror)
+#define sfWhereSingular         C2F(sfwheresingular)
+#define sfGetSize               C2F(sfgetsize)
+#define sfSetReal               C2F(sfsetreal)
+#define sfSetComplex            C2F(sfsetcomplex)
+#define sfFillinCount           C2F(sffillincount)
+#define sfElementCount          C2F(sfelementcount)
+#define sfDeleteRowAndCol       C2F(sfdeleterowandcol)
+#define sfPseudoCondition       C2F(sfpseudocondition)
+#define sfCondition             C2F(sfcondition)
+#define sfNorm                  C2F(sfnorm)
+#define sfLargestElement        C2F(sflargestelement)
+#define sfRoundoff              C2F(sfroundoff)
 
 
 
@@ -1097,9 +1097,6 @@ long *Matrix, *Reordered, *Data, *Header;
                          (int)*Reordered, (int)*Data, (int)*Header );
 }
 #endif /* DOCUMENTATION */
-
-
-
 
 
 

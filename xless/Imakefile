@@ -16,6 +16,7 @@ DEPLIBS = XawClientDepLibs $(LOCAL_DEPLIBS)
 #if defined(WithLocalXaw)
 XAWLIB =  ../libs/libXaw.a
 XMULIB = ../libs/libXmu.a
+XMULIBONLY = ../libs/libXmu.a
 #endif
 
 SYS_LIBRARIES = XawClientLibs
@@ -39,12 +40,12 @@ IM=../Imake.incl ../Path.incl
 all:: $(SCIDIR)/X11_defaults/xless.help
 
 $(SCIDIR)/X11_defaults/xless.help :  xless.help 
-	$(INSTALL) -c xless.help $(SCIDIR)/X11_defaults/xless.help
+	cp xless.help $(SCIDIR)/X11_defaults/xless.help
 
 all:: $(SCIDIR)/X11_defaults/XLess
 
 $(SCIDIR)/X11_defaults/XLess : XLess.ad
-	$(INSTALL) -c XLess.ad $(SCIDIR)/X11_defaults/XLess
+	cp XLess.ad $(SCIDIR)/X11_defaults/XLess
 
 #if ProjectX >= 5
 /*
@@ -53,7 +54,7 @@ $(SCIDIR)/X11_defaults/XLess : XLess.ad
 all:: $(SCIDIR)/X11_defaults/XLess-color
 
 $(SCIDIR)/X11_defaults/XLess-color :  XLess-co.ad
-	$(INSTALL) -c XLess-co.ad $(SCIDIR)/X11_defaults/XLess-color
+	cp XLess-co.ad $(SCIDIR)/X11_defaults/XLess-color
 
 clean::
 	rm -f $(SCIDIR)/X11_defaults/XLess-color

@@ -28,7 +28,7 @@ c     istr : tableau donnant la structure de str
 c
 c ================================== ( Inria    ) =============
 c
-      double precision x(*),a,eps,d1mach
+      double precision x(*),a,eps,dlamch
       integer maxc,mode,fl,typ
       integer str(*),istr(*),ipt
       character*256 cw
@@ -36,7 +36,7 @@ c
       character*10 form(2)
       data ipt /46/
 c
-      eps=d1mach(4)
+      eps=dlamch('p')
       write(form(1),130) maxc,maxc-7
 c
       lstr=1

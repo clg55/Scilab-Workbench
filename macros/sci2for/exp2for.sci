@@ -1,4 +1,4 @@
-//[stk,txt,ilst,vnms,vtps,nwrk]=exp2for(lst,ilst,vnms,vtps,nwrk)
+function [stk,txt,ilst,vnms,vtps,nwrk]=exp2for(lst,ilst,vnms,vtps,nwrk)
 //
 //!
 nlst=size(lst)
@@ -21,7 +21,13 @@ while ilst<nlst&ok then
     case '0' then
  
     case '2' then //stackg
-      [stk,top,vnms,vtps]=get2f(op(2),stk,top,vnms,vtps)
+      if whereis(op(2))==[] then
+        [stk,top,vnms,vtps]=get2f(op(2),stk,top,vnms,vtps)
+      else //appel des macros
+        [stk,nwrk,t1,top]=func2f(op,stk,nwrk)
+        txt=[txt;t1]
+        ilst=ilst+1
+      end
     case '3' then //string
       [stk,top]=str2f(op(2),stk)
     case '4' then //matrice vide
@@ -76,6 +82,5 @@ end
 nwrk(1)=1;nwrk(2)=[]
 nwrk(4)=1;nwrk(5)=[]
 
-//end
 
 

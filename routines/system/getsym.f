@@ -81,7 +81,7 @@ c
    99 if (ddt .lt. 3) return
       if (sym.gt.name .and. sym.lt.csiz) call basout(io,wte,alfa(sym+1))
       if (abs(sym) .ge. csiz) call basout(io,wte, ' eol')
-      if (sym .eq. name) call prntid(syn(1),1)
+      if (sym .eq. name) call prntid(syn(1),1,wte)
       if (sym .eq. num) then
          write(buf(1:9),'(1x,g8.2)') syv
          call basout(io,wte,buf(1:8))

@@ -35,16 +35,26 @@ char *argv[];
 {
   int resultat;
   int statusp, i, w;
-  char machine_hote[100];
+  char machine_hote[MAXHOSTLEN];
   fd_set r_readfds, r_writefds, r_exceptfds;
   application *application_scrutee;
   Message message, message_recu;
   static struct timeval duree_blocage={1,0}; /* on bloque pas plus de 1 sec dans le select */
+#if defined (sun) && defined (SYSV)
+  sigset_t set,oset;
+#endif  
   
   signal(SIGTERM,signal_arret_scruteur);
   signal(SIGQUIT,signal_arret_scruteur);
   signal(SIGINT,signal_arret_scruteur);
+#if defined (sun) && defined (SYSV)
+  sigemptyset(&set);
+  sigemptyset(&oset);
+  sigaddset(&set,SIGPIPE);
+  sigprocmask(SIG_BLOCK,&set,&oset);
+#else
   sigblock(SIGPIPE);
+#endif
   
   FD_ZERO (&readfds);
   FD_ZERO (&writefds);
@@ -55,7 +65,7 @@ char *argv[];
     exit(5);
   }
   
-  gethostname(machine_hote,20) ;
+  gethostname(machine_hote,MAXHOSTLEN) ;
   if(!strcmp(argv[1], "-local")) {
     socket_com = -1;
     executer_application(ID_XGeCI,machine_hote,argc-2,argv+2,1);

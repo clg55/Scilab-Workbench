@@ -52,7 +52,7 @@ typedef  struct  {
   char *name;
   int  (*fonc)();} OpTab ;
 
-int vide_() {};
+int vide_() {}
 extern int Tape_Replay();
 extern int Tape_ReplayNewAngle();
 extern int CleanPlots();
@@ -235,8 +235,8 @@ C2F(dr)(x0,x1,x2,x3,x4,x5,x6,x7,lx0,lx1)
     default:
       Scistring("\n Wrong driver name");
       break;
-    };
-};
+    }
+}
 
 SetDriver_(x0)
      char x0[];
@@ -262,8 +262,8 @@ SetDriver_(x0)
       Scistring("\n Wrong driver name I'll use X11");
       strcpy(drname_,"X11");
       break;
-    };  
-};
+    }  
+}
 
 int GetDriver1_(str)
      char str[];
@@ -271,7 +271,7 @@ int GetDriver1_(str)
   strcpy(str,drname_);
 }
 
-char GetDriver_() {return(drname_[0]);};
+char GetDriver_() {return(drname_[0]);}
 
 all_(tab,x0,x1,x2,x3,x4,x5,x6,x7)
    char x0[],x1[];
@@ -293,10 +293,10 @@ all_(tab,x0,x1,x2,x3,x4,x5,x6,x7)
 	       return;
 	     }
 	   else i++;
-	 };
-     };
+	 }
+     }
   SciF1s("\n Unknow X operator <%s>\r\n",x0);
-};
+}
 
 C2F(inttest)(x1)
      int *x1;

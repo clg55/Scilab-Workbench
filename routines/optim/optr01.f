@@ -221,7 +221,7 @@ C                        -Implicit double precision (a-h,o-z)
 C
 C     SUBPROGRAMAS AUXILIARES:   anfm01,anfm02,anrs01,auxo01,dadd,daxpy
 C                        dcopy,ddif,ddot,dmmul,dnrm0,dnrm2,dscal,dswap,
-C                        d1mach
+C                        dlamch
 C     FUNCIONES FORTRAN INTRINSECAS: abs,min,mod,sign,sqrt
 C
       implicit double precision (a-h,o-z)
@@ -244,10 +244,10 @@ C
 C
 C     Se toman algunos parametros de trabajo
 C
-      gigant=d1mach(2)
+      gigant=dlamch('o')
       gig1=sqrt(gigant)
       test0=gigant**0.25
-      eps=d1mach(4)**0.75
+      eps=dlamch('p')**0.75
 C
 C     Se comprueba que los vectores CI,CS,IRE  toman valores correctos
 C

@@ -216,14 +216,15 @@ c     on cree une nouvelle variable
   108 continue
       ld=l+nn*2
       le=ld+n
-      lw=le+n
+      le2=le+n
+      lw=le2+n
       err=lw+2*n-lstk(bot)
       if(err.gt.0) then
          call error(17)
          return
       endif
       if(vect) call dcopy(nn*2,stk(lv),1,stk(l),1)
-      call htridi(n,n,stk(l),stk(l+nn),stk(ld),stk(le),stk(le)
+      call htridi(n,n,stk(l),stk(l+nn),stk(ld),stk(le),stk(le2)
      1  ,stk(lw))
       if(fin.ne.1) goto 120
 c fin hess

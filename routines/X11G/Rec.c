@@ -79,14 +79,14 @@ StoreXcall1(fname,string,x1,n1,c1,x2,n2,c2,x3,n3,c3,x4,n4,c4,x5,n5,c5,x6,n6,c6)
 		fprintf(stderr,"Argument-5, taille %d type %c\n",n5,c5);
 		if ( (x6) != (char *) 0){
 		  fprintf(stderr,"Argument-6, taille %d type %c\n",n6,c6);
-		};
-	      };
-	    };
-	  };
-	};
-      };
+		}
+	      }
+	    }
+	  }
+	}
+      }
       fprintf(stderr,"That's over\n");
-    };
+    }
   lplot= ((struct xcall1_rec *) malloc((unsigned) sizeof(struct xcall1_rec)));
   if (lplot != NULL)
     {
@@ -114,10 +114,10 @@ StoreXcall1(fname,string,x1,n1,c1,x2,n2,c2,x3,n3,c3,x4,n4,c4,x5,n5,c5,x6,n6,c6)
 	  ) 
 	{
 	  Store("xcall1",(char *) lplot);
-	  return;};
-    };
-  Scistring("\nStore Plot : No more place \n");
-};
+	  return;}
+    }
+  Scistring("\nStore Plot (xcall1): No more place \n");
+}
 
 int CopyVectG(pstr,str,n,type)
      char **pstr;
@@ -131,8 +131,8 @@ int CopyVectG(pstr,str,n,type)
 	{
 	case 'f' : return(CopyVectF((double **) pstr,(double *)str,n));
 	case 'i' : return(CopyVectI((int **) pstr,(int *)str,n));
-	};
-    };
+	}
+    }
   return(1);
 }
 
@@ -144,8 +144,7 @@ int CopyVectG(pstr,str,n,type)
 
 struct scale_rec { char *name; double *Wrect,*Frect; } ;
 
-/* Store the plot2d  in the plot list 
-   same arguments as plot2d */
+/* Store the scale */
 
 StoreEch(name,WRect,FRect)
      double WRect[4],FRect[4];
@@ -163,10 +162,10 @@ StoreEch(name,WRect,FRect)
 	  ) 
 	{
 	  Store("scale",(char *) lplot);
-	  return;};
-    };
-  Scistring("\n Store Plot : No more place \n");
-};
+	  return;}
+    }
+  Scistring("\n Store Plot (storeEch): No more place \n");
+}
 
   
 /*---------------------------------------------------------------------
@@ -199,7 +198,7 @@ StorePlot(name,xf,x,y,n1,n2,style,strflag,legend,brect,aint)
 	case 'g': n=(*n1)*(*n2);break;
 	case 'e': n=0;break;
 	case 'o': n=(*n2);break;
-	};
+	}
       lplot->n1= *n1;
       lplot->n2= *n2;
       if ( 
@@ -215,10 +214,10 @@ StorePlot(name,xf,x,y,n1,n2,style,strflag,legend,brect,aint)
 	  ) 
 	{
 	  Store("plot2d",(char *) lplot);
-	  return;};
-    };
-  Scistring("\n Store Plot : No more place \n");
-};
+	  return;}
+    }
+  Scistring("\n Store Plot (storeplot): No more place \n");
+}
 
 
 /*---------------------------------------------------------------------
@@ -261,10 +260,10 @@ StoreParam3D(name,x,y,z,n,teta,alpha,legend,flag,bbox)
 	  ) 
 	{
 	  Store(name,(char *) lplot);
-	  return;};
-    };
-  Scistring("\n Store Plot : No more place \n");
-};
+	  return;}
+    }
+  Scistring("\n Store Plot (storeparam3d): No more place \n");
+}
 
 
 /*---------------------------------------------------------------------
@@ -308,10 +307,56 @@ StorePlot3D(name,x,y,z,p,q,teta,alpha,legend,flag,bbox)
 	  ) 
 	{
 	  Store(name,(char *) lplot);
-	  return;};
-    };
-  Scistring("\n Store Plot : No more place \n");
-};
+	  return;}
+    }
+  Scistring("\n Store Plot (storeplot3d): No more place \n");
+}
+
+/*---------------------------------------------------------------------
+\encadre{Le cas des fec}
+---------------------------------------------------------------------------*/
+
+
+struct fec_rec {char *name;
+		   double *x,*y,*triangles,*func;
+		   int   Nnode,Ntr;
+		   double *brect,*aaint;
+		   char  *legend,*strflag;
+		 } ;
+/* Store the plot in the plot list 
+   same arguments as fec */
+
+StoreFec(name,x,y,triangles,func,Nnode,Ntr,strflag,legend,brect,aaint)
+     double x[],y[],triangles[],func[];
+     int *Nnode,*Ntr;
+     double brect[];
+     int  aaint[];
+     char legend[],strflag[],name[];
+{
+  int CopyVect();
+  struct fec_rec *lplot;
+  lplot= ((struct fec_rec *) malloc((unsigned) sizeof(struct fec_rec)));
+  if (lplot != NULL)
+    {
+      lplot->Nnode= *Nnode;
+      lplot->Ntr= *Ntr;
+      if ( 
+	  CopyVectC(&(lplot->name), name,((int)strlen(name))+1) &&
+	  CopyVectF(&(lplot->x), x,*Nnode) &&
+	  CopyVectF(&(lplot->y), y,*Nnode) &&
+	  CopyVectF(&(lplot->triangles), triangles,(*Ntr)*5) &&
+	  CopyVectF(&(lplot->func), func,*Nnode ) && 
+	  CopyVectF(&(lplot->brect), brect,4) &&
+	  CopyVectI(&(lplot->aaint), aaint,4) &&
+	  CopyVectC(&(lplot->strflag),strflag,((int)strlen(strflag))+1) &&
+	  CopyVectC(&(lplot->legend),legend,((int)strlen(legend))+1)  
+	  ) 
+	{
+	  Store(name,(char *) lplot);
+	  return;}
+    }
+  Scistring("\n Store Plot (storefec): No more place \n");
+}
 
 
 /*---------------------------------------------------------------------
@@ -365,10 +410,10 @@ StoreContour(name,x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev)
 	  ) 
 	{
 	  Store(name,(char *) lplot);
-	  return;};
-    };
-  Scistring("\n Store Plot : No more place \n");
-};
+	  return;}
+    }
+  Scistring("\n Store Plot (storecontour): No more place \n");
+}
 
 
 /*---------------------------------------------------------------------
@@ -402,10 +447,10 @@ StoreGray(name,x,y,z,n1,n2)
 	  ) 
 	{
 	  Store(name,(char *) lplot);
-	  return;};
-    };
-  Scistring("\n Store Plot : No more place \n");
-};
+	  return;}
+    }
+  Scistring("\n Store Plot (storegray): No more place \n");
+}
 
 
 /*---------------------------------------------------------------------
@@ -440,10 +485,10 @@ StoreChamp(name,fx,fy,n1,n2,strflag,vrect,arfact)
 	  ) 
 	{
 	  Store("champ",(char *) lplot);
-	  return;};
-    };
-  Scistring("\n Store Plot : No more place \n");
-};
+	  return;}
+    }
+  Scistring("\n Store Plot (storechamp): No more place \n");
+}
 
 /*---------------------------------------------------------------------
 \encadre{Routines de recopie de Vecteurs avec alocation dynamique}
@@ -459,7 +504,7 @@ int CopyVectI(nx,x,l)
   if ( *nx == NULL) return(0);
   for ( i=0 ; i < l ; i++) (*nx)[i]= x[i];
   return(1);
-};
+}
 
 int CopyVectF(nx,x,l)
      double **nx,*x;
@@ -470,7 +515,7 @@ int CopyVectF(nx,x,l)
   if ( *nx == NULL) return(0);
   for ( i=0 ; i < l ; i++) (*nx)[i]= x[i];
   return(1);
-};
+}
 
 int CopyVectC(nx,x,l)
      char **nx,*x;
@@ -481,7 +526,7 @@ int CopyVectC(nx,x,l)
   if ( *nx == NULL) return(0);
   for ( i=0 ; i < l ; i++) (*nx)[i]= x[i];
   return(1);
-};
+}
 
 /*---------------------------------------------------------------------
 \encadre{Gestion d'une liste de graphiques}
@@ -533,8 +578,8 @@ CleanPlots(unused,winnumber)
 	}
       else 
 	list=list->ptrplot;
-    };
-};
+    }
+}
 
 #define FREE(x) if (x  != NULL) free((char *) x);
 
@@ -546,7 +591,19 @@ Clean3D(plot)
   FREE(theplot->name);FREE(theplot->x);FREE(theplot->y);
   FREE(theplot->z);FREE(theplot->legend);FREE(theplot->flag);
   FREE(theplot->bbox);
-};
+}
+
+
+CleanFec(plot)
+     char *plot;
+{
+  struct fec_rec *theplot;
+  theplot=(struct fec_rec *) plot;
+  FREE(theplot->name);FREE(theplot->x);FREE(theplot->y);
+  FREE(theplot->triangles);  FREE(theplot->func);
+  FREE(theplot->legend);FREE(theplot->strflag);
+  FREE(theplot->brect);  FREE(theplot->aaint);
+}
 
 CleanContour(plot)
      char *plot;
@@ -556,7 +613,7 @@ CleanContour(plot)
   FREE(theplot->name);FREE(theplot->x);FREE(theplot->y);
   FREE(theplot->z);FREE(theplot->zz);FREE(theplot->legend);FREE(theplot->flag);
   FREE(theplot->bbox);
-};
+}
 
 CleanGray(plot)
      char *plot;
@@ -565,7 +622,7 @@ CleanGray(plot)
   theplot=(struct gray_rec *) plot;
   FREE(theplot->name);FREE(theplot->x);FREE(theplot->y);
   FREE(theplot->z);
-};
+}
 
 CleanParam3D(plot)
      char *plot;
@@ -575,7 +632,7 @@ CleanParam3D(plot)
   FREE(theplot->name);FREE(theplot->x);FREE(theplot->y);
   FREE(theplot->z);FREE(theplot->legend);FREE(theplot->flag);
   FREE(theplot->bbox);
-};
+}
 
 Clean2D(plot)
      char *plot;
@@ -587,7 +644,7 @@ Clean2D(plot)
   FREE(theplot->xf);FREE(theplot->y);     
   FREE(theplot->style);FREE(theplot->strflag);
   FREE(theplot->legend);FREE(theplot->brect);FREE(theplot->aint);   
-};
+}
 
 CleanEch(plot)
      char *plot;
@@ -597,7 +654,7 @@ CleanEch(plot)
   FREE(theplot->name);    
   FREE(theplot->Wrect);
   FREE(theplot->Frect);     
-};
+}
 
 
 CleanX1(plot)
@@ -613,7 +670,7 @@ CleanX1(plot)
   FREE(theplot->x4);
   FREE(theplot->x5);
   FREE(theplot->x6);
-};
+}
 
 CleanChamp(plot)
      char *plot;
@@ -623,7 +680,7 @@ CleanChamp(plot)
   FREE(theplot->name);    
   FREE(theplot->fx);FREE(theplot->fy);     
   FREE(theplot->strflag);FREE(theplot->vrect);
-};
+}
 
 typedef  struct  {
   char *name;
@@ -632,6 +689,7 @@ typedef  struct  {
 static CleanTable CTable[] ={
     "champ",CleanChamp,
     "contour",CleanContour,
+    "fec",CleanFec,
     "gray",CleanGray,
     "param3d",CleanParam3D,
     "plot2d",Clean2D,
@@ -661,10 +719,10 @@ CleanPlot(type,plot)
 	       return;
 	     }
 	   else i++;
-	 };
-     };
+	 }
+     }
   SciF1s("Unknow Plot type <%s>\r\n",type);
-};
+}
 
 
 /*-------------------------------------------------------------------------
@@ -686,8 +744,8 @@ NAPlots(unused,winnumber,theta,alpha)
       if (list->window == *winnumber && list->theplot != NULL) 
 	    NAPlot(list->type,list->theplot,theta,alpha);
       list =list->ptrplot;
-    };
-};
+    }
+}
 
 NA3D(plot,theta,alpha)
      char *plot;
@@ -697,7 +755,7 @@ NA3D(plot,theta,alpha)
   theplot=(struct plot3d_rec *) plot;
   theplot->teta=*theta;
   theplot->alpha=*alpha;
-};
+}
 
 NAContour(plot,theta,alpha)
      char *plot;
@@ -707,13 +765,13 @@ NAContour(plot,theta,alpha)
   theplot=(struct contour_rec *) plot;
   theplot->teta=*theta;
   theplot->alpha=*alpha;
-};
+}
 
 NAGray(plot,theta,alpha)
      char *plot;
      double *theta,*alpha;
 {
-};
+}
 
 NAParam3D(plot,theta,alpha)
      char *plot;
@@ -723,28 +781,33 @@ NAParam3D(plot,theta,alpha)
   theplot=(struct param3d_rec *) plot;
   theplot->teta=*theta;
   theplot->alpha=*alpha;
-};
+}
 
 NA2D(plot,theta,alpha)
      char *plot;
      double *theta,*alpha;
-{};
+{}
 
 NAEch(plot,theta,alpha)
      char *plot;
      double *theta,*alpha;
-{};
+{}
 
 
 NAX1(plot,theta,alpha)
      char *plot;
      double *theta,*alpha;
-{};
+{}
 
 NAChamp(plot,theta,alpha)
      char *plot;
      double *theta,*alpha;
-{};
+{}
+
+NAFec(plot,theta,alpha)
+     char *plot;
+     double *theta,*alpha;
+{}
 
 typedef  struct  {
   char *name;
@@ -753,6 +816,7 @@ typedef  struct  {
 static NATable NACTable[] ={
     "champ",NAChamp,
     "contour",NAContour,
+    "fec",NAFec,
     "gray",NAGray,
     "param3d",NAParam3D,
     "plot2d",NA2D,
@@ -783,10 +847,10 @@ NAPlot(type,plot,alpha,theta)
 	       return;
 	     }
 	   else i++;
-	 };
-     };
+	 }
+     }
   SciF1s("Unknow Plot type <%s>\r\n",type);
-};
+}
 
 
 /*---------------------------------------------------------------------
@@ -802,7 +866,7 @@ Tape_ReplayNewAngle(unused,winnumber,theta,alpha)
 { 
   NAPlots(unused,winnumber,theta,alpha);
   Tape_Replay(first,winnumber);
-};
+}
 
 /*---------------------------------------------------------------------
 \encadre{Redessine \`a nouveau les dessin stock\'es}
@@ -821,8 +885,8 @@ Tape_Replay(unused,winnumber)
 	  C2F(dr)("xsetdr","X11",IP0,IP0,IP0,IP0,IP0,IP0,0,0);
       Tape_Replay1(first,*winnumber);
       C2F(dr)("xsetdr",name, IP0, IP0,IP0,IP0,IP0,IP0,0,0);
-    };
-};
+    }
+}
 
 Tape_Replay1(list,winnumber)
      struct listplot *list;
@@ -830,7 +894,7 @@ Tape_Replay1(list,winnumber)
 {
   if (list->window == winnumber) GReplay(list->type,list->theplot);
   if (list->ptrplot != NULL) Tape_Replay1(list->ptrplot,winnumber);
-};
+}
 
 Replay3D(theplot)
      char *theplot;
@@ -842,6 +906,16 @@ Replay3D(theplot)
 	  &pl3d->alpha,pl3d->legend,pl3d->flag,pl3d->bbox,0L);
 }
 
+ReplayFec(theplot)
+     char *theplot;
+
+{
+  struct fec_rec *plfec;
+  plfec= (struct fec_rec *)theplot;
+  C2F(fec)(plfec->x,plfec->y,plfec->triangles,plfec->func,
+	   &plfec->Nnode,&plfec->Ntr,
+	   plfec->strflag,plfec->legend,plfec->brect,plfec->aaint,0L,0L);
+}
 
 ReplayContour(theplot)
      char *theplot;
@@ -888,7 +962,7 @@ typedef  struct  {
   char *name;
   int  (*fonc)();} OpTab ;
 
-static int fnvide_() {};
+static int fnvide_() {}
 extern int C2F(plot2d1)(),C2F(plot2d2)(),C2F(plot2d3)(),C2F(plot2d4)();
 
 OpTab plottab[] ={
@@ -923,10 +997,10 @@ Replay2D(theplot)
 	       return;
 	     }
 	   else i++;
-	 };
-     };
+	 }
+     }
       SciF1s("\n Unknow  operator <%s>\r\n",pl2d->name);
-};
+}
 
 ReplayEch(theplot)
      char *theplot;
@@ -934,7 +1008,7 @@ ReplayEch(theplot)
   struct scale_rec *plch;
   plch= (struct scale_rec *)theplot;
   C2F(setscale2d)(plch->Wrect,plch->Frect);
-};
+}
 
 ReplayChamp(theplot)
      char *theplot;
@@ -943,7 +1017,7 @@ ReplayChamp(theplot)
   plch= (struct champ_rec *)theplot;
   C2F(champ)(plch->fx,plch->fy,&(plch->n1),&(plch->n2),
 	   plch->strflag,plch->vrect,&(plch->arfact),0L);
-};
+}
 
 
 ReplayX1(theplot)
@@ -954,7 +1028,7 @@ ReplayX1(theplot)
   C2F(dr1)(plch->fname,plch->string,(int *) plch->x1,(int *) plch->x2,
        (int *) plch->x3,(int *) plch->x4,(int *) plch->x5,
        (int *) plch->x6,0,0);
-};
+}
 
 
 typedef  struct  {
@@ -965,6 +1039,7 @@ typedef  struct  {
 static ReplayTable RTable[] ={
     "champ",ReplayChamp,
     "contour",ReplayContour,
+    "fec",ReplayFec,
     "gray",ReplayGray,
     "param3d",ReplayParam3D,
     "plot2d",Replay2D,
@@ -994,10 +1069,10 @@ GReplay(type,plot)
 	       return;
 	     }
 	   else i++;
-	 };
-     };
+	 }
+     }
   SciF1s("\n Unknow Plot type <%s>\r\n",type);
-};
+}
 
 
 /*---------------------------------------------------------------------
@@ -1023,7 +1098,7 @@ Store(type,plot)
 	    first->previous=NULL;
 	  }
 	else
-	  Scistring("Store : malloc No more Place");
+	  Scistring("Store (store-1): malloc No more Place");
       }
   else 
     {
@@ -1037,7 +1112,7 @@ Store(type,plot)
 	{
 	  if (CopyVectC(&(list->ptrplot->type),type,((int)strlen(type))+1)==0)
 	    { list=NULL;
-	      Scistring("Store : No more Place \n");
+	      Scistring("Store (store-2): No more Place \n");
 	      return;}
 	  list->ptrplot->theplot=plot;
 	  list->ptrplot->previous=list;
@@ -1045,8 +1120,8 @@ Store(type,plot)
 	  list->ptrplot->ptrplot=NULL;
 	}
       else 
-	Scistring("Store No more Place\n");
-    };
-} ;
+	Scistring("Store (store-3):No more Place\n");
+    }
+}
 
 /*------------------------END--------------------*/

@@ -38,13 +38,14 @@ char *argv[];
 		       fprintf(stderr,"%s",UsageStr[i]),i++;
 		     }
 		   exit(0);
-		 };
-  fdo=fopen(sprintf(filename1,"%s.ps",argv[1]),"w");
+		 }
+  sprintf(filename1,"%s.ps",argv[1]);
+  fdo=fopen(filename1,"w");
   if (fdo == 0 ) 
     {
       fprintf (stderr," Can't Create Output file <%s> \n",filename1);
       exit(0);
-    };
+    }
   env = getenv("SCI");
   if (env == NULL) {
     fprintf(stderr,"Environment variable SCI must be defined\n");
@@ -73,7 +74,7 @@ char *argv[];
       Sed(argv[i],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
 	  buf," showpage","grestore",
 	  " clear end saved restore","%clear end saved restore",fdo);
-    };
+    }
   ComputeSize(argc-2,argc-2,&x,&y,&w,&h,&wt,&ht)      ;   
   sprintf(buf,"gsave [1 0 0 -1 0 0] concat %5.2f %5.2f %5.2f %5.2f DesPosi"
 	  ,x,y,w,h);
@@ -84,7 +85,7 @@ char *argv[];
   /** ecriture du fichier TeX associe **/
   WriteTeX(argv[1],wt,ht);
   return(0);
-};
+}
 
 WriteTeX(filename,wide,height)
      float wide,height;
@@ -95,12 +96,13 @@ WriteTeX(filename,wide,height)
   float x,y,w,h;
   int i ;
   FILE *fdo;
-  fdo=fopen(sprintf(filename1,"%s.tex",filename),"w");
+  sprintf(filename1,"%s.tex",filename);
+  fdo=fopen(filename,"w");
   if (fdo == 0 ) 
     {
       fprintf (stderr," Can't Create Output file <%s> \n",filename1);
       exit(0);
-    };
+    }
   fprintf(fdo,"\\long\\def\\Checksifdef#1#2#3{\n");
   fprintf(fdo,"\\expandafter\\ifx\\csname #1\\endcsname\\relax#2\\else#3\\fi}\n");
   fprintf(fdo,"\\Checksifdef{Figdir}{\\gdef\\Figdir{}}{}\n");
@@ -114,7 +116,7 @@ WriteTeX(filename,wide,height)
   fprintf(fdo,"\\end{center}\n\\caption{\\label{#2}#1}\n\\end{figure}}");
   close(fdo);
   return(0);
-};
+}
 
 /*---------------------------------------------------
  remplace strin<i> par strout<i> en lisant le contenu de 
@@ -145,9 +147,9 @@ Sed(file,strin1,strout1,strin2,strout2,strin3,strout3,fdo)
 		     fprintf(fdo,"%s\n",strout3);
 		   else
 		     fprintf(fdo,"%s",buff);
-		 };
-	     };
-	 };
+		 }
+	     }
+	 }
       fclose(fd);
     }
   else 
@@ -155,7 +157,7 @@ Sed(file,strin1,strout1,strin2,strout2,strin3,strout3,fdo)
       fprintf(stderr,"file %s not found ",file);
       return;
     }
-};
+}
 
 /*-----------------------------------------------
   lit une ligne dans fd et la stocke dans buff
@@ -168,8 +170,8 @@ readOneLine(buff,stop,fd)
 { int i ,c ;
   for ( i = 0 ;  (c =getc(fd)) !=  '\n' && c != EOF ; i++) buff[i]= c ;
   buff[i]='\n';buff[i+1]='\0';
-  if ( c == EOF) {*stop = 1;};
-} ;
+  if ( c == EOF) {*stop = 1;}
+}
 
 /*-----------------------------------------------
   calcule la taille pour un dessin suivant le nombre de dessin a 
@@ -191,6 +193,6 @@ ComputeSize(num,i,x,y,w,h,wt,ht)
       /** 2 figures dans upleft(0,20,h=20,w=15) **/
       *x=(7.5)*(i-1);*y=(5);*h=5;*w=7.5;
       break;
-    };
-};
+    }
+}
 

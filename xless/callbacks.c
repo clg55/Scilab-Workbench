@@ -103,8 +103,8 @@ XtPointer callData;
   if ((file = fopen(wi->file, "r")) == NULL)
     CouldntOpen(wi->base, wi->file);
   else {
-    new_data = InitData(file);
-    free(wi->memory);
+    new_data = (char *)InitData(file);
+    free((void *)wi->memory);
     SetReadText(wi->text, new_data);
     wi->memory = new_data;
   }
@@ -160,7 +160,7 @@ XtPointer callData;
   FILE *file;
   char *new_data;
   const char *filename;
-  XLessFlag flag;
+  XLessFlag flag = XLessClearFlag;
   Arg args[1];
 
   XtPopdown((Widget)wi->chgfile_popup);
@@ -184,10 +184,10 @@ XtPointer callData;
   else {
 
     /* read in new file */
-    new_data = InitData(file);
-    free(wi->memory);
+    new_data = (char *)InitData(file);
+    free((void *)wi->memory);
     if (wi->flag & XLessFreeFilename) {
-      free(wi->file);
+      free((void *)wi->file);
       wi->flag &= ~XLessFreeFilename;
     }
     SetReadText(wi->text, new_data);

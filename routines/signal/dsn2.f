@@ -13,7 +13,7 @@ c!
       data de, dz /1.d00,2.d00/ 
   
       dpi=4.0d0*atan(1.0d00)
-      domi=2.0d0*d1mach(4)
+      domi=2.0d0*dlamch('p')
      
       dpi2 = dpi/dz 
       if (abs(dq).ge.de) go to 30

@@ -17,7 +17,7 @@ int ReAllocVectorX(xm,n)
   if (xm1 == 0) return (0);
   *xm=xm1;
   return(1);
-};
+}
 
 int AllocVectorX(xm)
      int **xm  ;
@@ -26,7 +26,7 @@ int AllocVectorX(xm)
   *xm=xm1 = (int *) malloc ( (unsigned)nx * sizeof (int)); 
   if (xm1 == 0) return(0);
   else return(1);
-};
+}
 
 int ReAllocVectorY(ym,n)
      int n,**ym  ;
@@ -36,7 +36,7 @@ int ReAllocVectorY(ym,n)
   if (ym1 == 0) return (0);
   *ym=ym1;
   return(1);
-};
+}
 
 int AllocVectorY(ym)
      int **ym  ;
@@ -45,7 +45,7 @@ int AllocVectorY(ym)
   *ym=ym1 = (int *) malloc ( (unsigned)ny * sizeof (int)); 
   if (ym1 == 0) return(0);
   else return(1);
-};
+}
 
 int ReAllocVectorZ(zm,n)
      int n,**zm  ;
@@ -55,7 +55,7 @@ int ReAllocVectorZ(zm,n)
   if (zm1 == 0) return (0);
   *zm=zm1;
   return(1);
-};
+}
 
 int AllocVectorZ(zm)
      int **zm  ;
@@ -64,7 +64,7 @@ int AllocVectorZ(zm)
   *zm=zm1 = (int *) malloc ( (unsigned)nz * sizeof (int)); 
   if (zm1 == 0) return(0);
   else return(1);
-};
+}
 
 
 Alloc(xm,ym,zm,xn,yn,zn,err)
@@ -82,13 +82,13 @@ Alloc(xm,ym,zm,xn,yn,zn,err)
 	    {
 	      xfirstentry=0;
 	      *err=ReAllocVectorX(xm,xn);
-	    };
+	    }
 	}
       else 
 	{
 	  *err=ReAllocVectorX(xm,xn);
 	}
-    };
+    }
   if ( yn != 0) 
     {
       if ( yfirstentry )
@@ -98,13 +98,13 @@ Alloc(xm,ym,zm,xn,yn,zn,err)
 	    {
 	      yfirstentry=0;
 	      *err=ReAllocVectorY(ym,yn);
-	    };
+	    }
 	}
       else 
 	{
 	  *err=ReAllocVectorY(ym,yn);
 	}
-    };
+    }
   if ( zn != 0) 
     {
       if ( zfirstentry )
@@ -114,14 +114,14 @@ Alloc(xm,ym,zm,xn,yn,zn,err)
 	    {
 	      zfirstentry=0;
 	      *err=ReAllocVectorZ(zm,zn);
-	    };
+	    }
 	}
       else 
 	{
 	  *err=ReAllocVectorZ(zm,zn);
 	}
-    };
-};
+    }
+}
 
 /*------------------------END--------------------*/
 

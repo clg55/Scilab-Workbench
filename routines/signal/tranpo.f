@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=TRANPO,SSI=0
       subroutine tranpo(nmaxi,maxdeg,ityp,vd,sm,a,ndeg,sfa,spr,spi,nj)
 c!purpose
 c  reactance transformation of the poles
@@ -6,8 +5,11 @@ c!
       implicit double precision (a-h,o-z)
       double precision sm (maxdeg,*)
       double precision spr(*),spi(*)
-      flmi=2.0d+0*d1mach(4)
-      flma=2.0d+0**(i1mach(16)-2)
+      external slamch, dlamch
+      real slamch
+c
+      flmi=2.0d+0*dlamch('p')
+      flma=2.0d+0**(int(slamch('l'))-2)
       if (ityp.eq.1) go to 90
        if (ityp.eq.3) go to 40
       do 30 i=1,nj

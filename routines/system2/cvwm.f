@@ -21,13 +21,13 @@ c     str : tableau contenant apres execution la suite des codes scilab
 c     des caracteres.taille >= m*n*maxc
 c     istr : tableau donnant la structure de str
 c!    
-      double precision xr(*),xi(*),a,eps,d1mach
+      double precision xr(*),xi(*),a,eps,dlamch
       integer maxc,mode,fl,typ
       integer str(*),istr(*)
       character cw*256,sgn*1
       character*10 form(2)
 c     
-      eps=d1mach(4)
+      eps=dlamch('p')
       write(form(1),130) maxc,maxc-7
 c     
       lstr=1

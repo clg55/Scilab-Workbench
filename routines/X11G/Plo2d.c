@@ -90,7 +90,7 @@ C2F(plot2d)(x,y,n1,n2,style,strflag,legend,brect,aaint,lstr1,lstr2)
   if (GetDriver_()=='R') 
     StorePlot("plot2d1","gnn",x,y,n1,n2,style,strflag,legend,brect,aaint);
   /** Boundaries of the frame **/
-  if (strlen(strflag) >= 2)
+  if ((int)strlen(strflag) >= 2)
     {
       switch ( strflag[1])
       {
@@ -103,18 +103,18 @@ C2F(plot2d)(x,y,n1,n2,style,strflag,legend,brect,aaint,lstr1,lstr2)
 	ymin=  (double) - Maxi(y,(*n1)*(*n2));
 	break;
       }
-  };
+  }
 /* FRect gives the plotting boundaries xmin,ymin,xmax,ymax */
 
 FRect[0]=xmin;FRect[1]= -ymax;FRect[2]=xmax;FRect[3]= -ymin;
-if ( strlen(strflag) >=2 && strflag[1]=='0') job=0;
+if ( (int)strlen(strflag) >=2 && strflag[1]=='0') job=0;
 Scale2D(job,FRect,IRect,&scx,&scy,&xofset,&yofset,&xm,&ym,(*n1)*(*n2),&err);
   if ( err == 0) return;
 
 C2F(echelle2d)(x,y,xm,ym,n1,n2,IRect,"f2i",3L);
 /** Draw Axis or only rectangle **/
 
-if (strlen(strflag) >= 3 && strflag[2] == '1')
+if ((int)strlen(strflag) >= 3 && strflag[2] == '1')
     {
       double xmin1,xmax1, ymin1,ymax1;
       aplot_(IRect,(xmin1=FRect[0],&xmin1),(ymin1=FRect[1],&ymin1),
@@ -123,10 +123,10 @@ if (strlen(strflag) >= 3 && strflag[2] == '1')
     }
 else 
   {
-    if (strlen(strflag) >= 3 && strflag[2] == '2')
+    if ((int)strlen(strflag) >= 3 && strflag[2] == '2')
       C2F(dr)("xrect","v",&IRect[0],&IRect[1],&IRect[2],&IRect[3],
 	  IP0,IP0,0,0);
-  };
+  }
 
 /** Drawing the curves **/
 
@@ -139,9 +139,9 @@ C2F(dr)("xset","clipping",&IRect1[0],&IRect1[1],&IRect1[2],&IRect1[3]
     ,IP0,IP0,0,0);
 
 /** Drawing the Legends **/
-if (strlen(strflag) >=1  && strflag[0] == '1')
+if ((int)strlen(strflag) >=1  && strflag[0] == '1')
     Legends(IRect,style,n1,legend);
-};
+}
 
 /*----------------------------------------------------
   legend="leg1@leg2@leg3@...."             
@@ -199,11 +199,11 @@ if ( loc != 0)
 		     		     ,IP0,0,0);
 	       }
 	   }
-       };
+       }
     free(loc);
   }
 else
   {
     Scistring("Legends : No more Place to store Legends\n");
   }
-};
+}

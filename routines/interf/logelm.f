@@ -1,10 +1,10 @@
-C/MEMBR ADD NAME=LOGELM,SSI=0
       subroutine logelm
 c ================================== ( Inria    ) =============
 c evaluation des fonctions elementaires sur les booleens
 c =============================================================
 c
       include '../stack.h'
+      double precision tv
 c
       integer sadr,iadr
 c
@@ -32,9 +32,10 @@ c
          return
       endif
       il1=iadr(lstk(top))
+      if(istk(il1).eq.6) goto 20
       if(istk(il1).ne.4) then
          err=1
-         call error(55)
+         call error(215)
          return
       endif
 c
@@ -80,6 +81,54 @@ c
          stk(l1+k)=stk(l1+k)-(stk(l2+k)-1.0d+0)*m1
  12   continue
       goto 999
+c
+ 20   continue
+c     sparse matrix find
+
+      m1=istk(il1+1)
+      n1=istk(il1+2)
+      nel1=istk(il1+4)
+c
+      li=sadr(il1+4)
+      ilj=iadr(li+nel1)
+      lj=sadr(ilj+4)
+      lw=max(lw,lj+nel1)
+      ilr=iadr(lw)
+      lw=sadr(ilr+m1+nel1)
+      err=lw-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      call icopy(m1+nel1,istk(il1+5),1,istk(ilr),1)
+      call int2db(nel1,istk(ilr+m1),1,stk(lj),1)
+      i1=0
+      do 30 i=0,m1-1
+         if(istk(ilr+i).ne.0) then
+            tv=i+1
+            call dset(istk(ilr+i),tv,stk(li+i1),1)
+            i1=i1+istk(ilr+i)
+         endif
+ 30   continue
+      istk(il1)=1
+      istk(il1+1)=1
+      istk(il1+2)=nel1
+      istk(il1+3)=0
+      lstk(top+1)=li+nel1
+      if(lhs.eq.1) then
+         do 31 i=0,nel1-1
+            stk(li+i)=stk(li+i)+(stk(lj+i)-1.0d0)*m1
+ 31      continue
+      else
+         top=top+1
+         istk(ilj)=1
+         istk(ilj+1)=1
+         istk(ilj+2)=nel1
+         istk(ilj+3)=0
+         lstk(top+1)=lj+nel1
+      endif
+      goto 999
+         
 c
   999 return
       end

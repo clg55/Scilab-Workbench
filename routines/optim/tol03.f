@@ -62,14 +62,14 @@ C        Esta subrutina trabaja en doble precision via una sentencia
 C     "implicit":
 C                Implicit double precision (a-h,o-z)
 C
-C     SUBPROGRAMAS AUXILIARES:  anrs01,dadd,ddot,dmmul,d1mach
+C     SUBPROGRAMAS AUXILIARES:  anrs01,dadd,ddot,dmmul,dlamch
 C     FUNCIONES FORTRAN INTRINSECAS:  abs,mod
 C
 C
       implicit double precision (a-h,o-z)
       dimension q(iq,*),r(ir,*),c(ic,*),d(*),a(ia,*),b(*),ci(*),cs(*),
      &          x(*),w(*),ipvt(*)
-      eps=d1mach(4)**0.75
+      eps=dlamch('p')**0.75
       ind=0
       m1=m+1
       do 10 i=1,mi1

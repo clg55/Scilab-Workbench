@@ -3,7 +3,7 @@ c
       integer i,j,k,l,m,n,en,ll,mm,na,nm,
      x        igh,itn,its,low,mp2,enm2,ierr,job
       double precision h(nm,n),wr(n),wi(n),z(nm,n)
-      double precision p,q,r,s,t,w,x,y,zz,norm,tst1,tst2,machep,d1mach
+      double precision p,q,r,s,t,w,x,y,zz,norm,tst1,tst2,machep,dlamch
       logical notlas
 c
 c     this subroutine is a translation of the algol procedure hqr2,
@@ -85,7 +85,7 @@ c
       jx=job/10
       jy=job-10*jx
 c
-      machep=d1mach(4)
+      machep=dlamch('p')
 c
       ierr = 0
       norm = 0.0d0

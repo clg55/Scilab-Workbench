@@ -4,7 +4,11 @@
 
 #include <varargs.h>
 #include <stdio.h>
+#ifdef SYSV
+#include <string.h>
+#else
 #include <strings.h>
+#endif
 
 #include "libCom.h"
 #include "formatage_messages.h"

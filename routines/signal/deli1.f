@@ -11,7 +11,7 @@ c!
       dimension resv(n),xv(n)
 c
       dpi=4.0d+0*atan(1.0d+00)
-      domi=2.0d+0*d1mach(4)
+      domi=2.0d+0*dlamch('p')
 c
       do 200 k=1,n
       x=xv(k)

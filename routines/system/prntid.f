@@ -1,4 +1,4 @@
-      subroutine prntid(id,argcnt)
+      subroutine prntid(id,argcnt,lunit)
 c
 c     print variable names
 c
@@ -25,7 +25,7 @@ c     a  =
          if(buf(l1:l1).eq.' ') goto 02
          l=l1+1
          buf(l1+1:l1+3) = '  '//alfa(equal+1)
-         call basout(io,wte,buf(1:l1+3))
+         call basout(io,lunit,buf(1:l1+3))
  03      continue
       else
 c     display d'une liste de noms
@@ -51,7 +51,7 @@ c     display d'une liste de noms
          ll1=n1*(base+esp)
          if(l+ll1.gt.lct(5)) then
             if(l.gt.2) then
-               call basout(io,wte,buf(1:l-1))
+               call basout(io,lunit,buf(1:l-1))
                printed=.true.
                if(io.eq.-1)  return
                l=2
@@ -61,7 +61,7 @@ c     display d'une liste de noms
          l=l+ll1
          printed=.false.
          goto 10
- 20      if(.not.printed) call basout(io,wte,buf(1:l-1))
+ 20      if(.not.printed) call basout(io,lunit,buf(1:l-1))
       endif
       return
       end

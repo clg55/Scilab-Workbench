@@ -3,13 +3,13 @@
 \index{programming}
 
 	One of the most useful features of $\Psi$lab is its ability
-to create and use macros.  This allows the development of specialized
+to create and use functions.  This allows the development of specialized
 programs which can be integrated into the $\Psi$lab package in a simple and
 modular way through the use of libraries.  In this chapter we 
 treat the following subjects.
 \begin{itemize}
 	\item Programming Tools
-	\item Defining and Using Macros
+	\item Defining and Using Functions
         \item Definition of Operators for New Data Types
 	\item{Debbuging}
 \end{itemize}	
@@ -20,7 +20,7 @@ Creation of libraries is discussed in a later chapter.
 	$\Psi$lab supports a full list of programming tools
 including looping, conditional branching, case selection,
 and creation of new environments.  Most programming tasks
-should be accomplished in the environment of a macro.
+should be accomplished in the environment of a function.
 Here we explain what programming tools are available.
 
 \subsection{Comparison Operators}\index{programming!comparison operators}
@@ -155,36 +155,34 @@ instructions following the first case which equals the initial expression.
  
     i    
 \end{verbatim}
-It is possible to include and {\tt else} statement for the condition
+It is possible to include an {\tt else} statement for the condition
 where none of the cases are satisfied.
 
-\section{Defining and Using Macros}
+\section{Defining and Using Macros (functions)}
 \label{s4.2}
 \index{programming!macros}
 \index{macros}
 \index{macros!definition}
 
-	It is possible to define a macro directly in
+	It is possible to define a function directly in
 the $\Psi$lab environment, however, the most convenient mode
-is to create a file containing the macro
+is to create a file containing the function
 with a text editor.  In this section we describe the
-structure of a macro and several $\Psi$lab commands which are
-used almost exclusively in a macro environment.
+structure of a function and several $\Psi$lab commands which are
+used almost exclusively in a function environment.
 
-\subsection{Macro Structure}
-Macro structure must obey the following format
+\subsection{Function Structure}
+Function structure must obey the following format
 \begin{verbatim}
 function [y1,...,yn]=foo(x1,...,xm)
    .
    .
    .
 \end{verbatim}
-where {\tt foo} is the macro name, the {\tt xi} are the m input arguments
-to the macro,  the {\tt yj} are the n output arguments from the macro, and
+where {\tt foo} is the function name, the {\tt xi} are the m input arguments
+to the function,  the {\tt yj} are the n output arguments from the function, and
 the three vertical dots represent the list of instructions performed by
-the macro.  Inside the text file which contains the macro the first line
-containing the macro syntax and the last line which contains the {\tt end}
-statement must begin with the {\tt //} characters.  An example of a macro
+the function.  An example of a function
 which calculates $k!$ is as follows\index{macros!{\tt getf}}\index{getf@{\tt getf}}
 \begin{verbatim}
 function [x]=fact(k)
@@ -197,7 +195,7 @@ function [x]=fact(k)
      x=x*j;
   end,
 \end{verbatim}
-If this macro is contained in a file called {\tt fact.sci} the macro
+If this function is contained in a file called {\tt fact.sci} the function
 is loaded into the $\Psi$lab environment and is used as follows.
 \begin{verbatim}
 --> exists('fact')
@@ -222,14 +220,14 @@ is loaded into the $\Psi$lab environment and is used as follows.
 In the above $\Psi$lab session the commands 
 {\tt exists}\index{macros!{\tt exists}}\index{exists@{\tt exists}} indicates that
 {\tt fact} is not in the environment (by the $0$ response).  The
-macro is loaded into the environment using {\tt getf} and now {\tt exists}
-indicates that the macro is there (the $1$ response).  The example 
-calculates $5!$. Finally, the macro
+function is loaded into the environment using {\tt getf} and now {\tt exists}
+indicates that the function is there (the $1$ response).  The example 
+calculates $5!$. Finally, the function
 is compiled using {\tt comp} for faster execution.
 
-\subsection{Special Macro Commands}
+\subsection{Special Function Commands}
 $\Psi$lab has several special commands which are used almost exclusively
-in macros.  These are the commands 
+in functions.  These are the commands 
 {\tt argn}\index{argn@{\tt argn}}, 
 {\tt error}\index{error@{\tt error}}, 
 {\tt warning}\index{warning@{\tt warning}}, 
@@ -237,15 +235,15 @@ in macros.  These are the commands
 {\tt break}\index{break@{\tt braek}}, and
 {\tt return}\index{return@{\tt return}}.  
 The command {\tt argn} yields the number of input
-and output arguments for the macro.  The command {\tt error}
-is used to suspend the operation of a macro, to print an error message,
+and output arguments for the function.  The command {\tt error}
+is used to suspend the operation of a function, to print an error message,
 and to return to the
 previous level of environment when an error is detected.  
-The command {\tt pause} temporarily suspends the operation of a macro.
+The command {\tt pause} temporarily suspends the operation of a function.
 The {\tt resume} or {\tt return} command is used to return to 
 the calling environment and to pass local
-variables from the macro environment to the calling environment. 
-The following example loads a macro called {\tt foo} into $\Psi$lab which 
+variables from the function environment to the calling environment. 
+The following example loads a function called {\tt foo} into $\Psi$lab which 
 illustrates these commands.
 \begin{verbatim}
  
@@ -260,7 +258,7 @@ illustrates these commands.
 error('division by zero');
                           !--error 10000 
 division by zero                                                                
-at line       4 of macro    foo      called by :  
+at line       4 of function    foo      called by :  
  z=foo(0,1)
  
  
@@ -278,20 +276,20 @@ at line       4 of macro    foo      called by :
  
 \end{verbatim}
 In the example we load {\tt foo.sci} and display the contents of the
-macro.  The first call to {\tt foo} passes an argument which cannot
-be used in the calculation of the macro.  The macro discontinues operation
+function.  The first call to {\tt foo} passes an argument which cannot
+be used in the calculation of the function.  The function discontinues operation
 and indicates the nature of the error to the user.  The second call
-to the macro suspends operation after the calculation of {\tt slope}.
-Here the user can examine values calculated inside of the macro,
+to the function suspends operation after the calculation of {\tt slope}.
+Here the user can examine values calculated inside of the function,
 perform plots, and, in fact perform any operations desired which are
 allowed by $\Psi$lab.  The {\tt -1->} prompt indicates that the current
 environment created by the {\tt pause} command is the environment 
-of the macro and not that of the calling environment.  Control is 
-returned to the macro by the command {\tt return}.  Operation of the
-macro can be discontinued by the command {\tt quit} or {\tt abort}.
-Finally the macro terminates its calculation returning the
+of the function and not that of the calling environment.  Control is 
+returned to the function by the command {\tt return}.  Operation of the
+function can be discontinued by the command {\tt quit} or {\tt abort}.
+Finally the function terminates its calculation returning the
 value of {\tt z}.  Also available in the environment is the variable
-{\tt s} which is a local variable from the macro which is passed to
+{\tt s} which is a local variable from the function which is passed to
 the global environment.
 
 \section{Definition of Operations on New Data Types}
@@ -305,13 +303,13 @@ on any two data types which exist in $\Psi$lab.  As an example, two linear
 systems (represented by lists)
 can be added together to represent their parallel inter-connection
 or can be multiplied together to represent their series inter-connection.
-$\Psi$lab performs these user defined operations by searching for macros
+$\Psi$lab performs these user defined operations by searching for functions
 (written by the user) which follow a special naming convention described
 below.
 
 	The naming convention $\Psi$lab uses to recognize operators 
 defined by the user is determined by the following conventions.  The name
-of the user defined macro is composed of four (or possibly three)
+of the user defined function is composed of four (or possibly three)
 fields.  The first field is always the symbol {\tt \%}.  
 The third field is one of the characters in the following table
 which represents the type of operation to be performed between the
@@ -369,7 +367,7 @@ SYMBOL & OPERATION
 The second
 and fourth fields represent the type of the first and second data objects,
 respectively, 
-to be treated by the macro and are represented by the symbols given
+to be treated by the function and are represented by the symbols given
 in the following table.
 
 \begin{center}
@@ -388,7 +386,7 @@ SYMBOL & VARIABLE TYPE
 
 \verb!c! & character chain   \\ \hline
 
-\verb!m! & macro  \\ \hline
+\verb!m! & macro (function) \\ \hline
 
 \verb!xxx! & list (typed)  \\ \hline 
 \end{tabular}
@@ -402,11 +400,11 @@ representing a linear system has the form
 {\tt list('lss',a,b,c,d,x0,'c')} and, thus, the {\tt xxx}
 above is {\tt lss}.
 
-	An example of the macro name which multiplies two
+	An example of the function name which multiplies two
 linear systems together (to represent their series inter-connection)
 is {\tt \%lssmlss}.  Here the first field is \%, the second field is 
-{\tt lss} (linear state-space), the third field is {\tt m} multiply
-and the fourth one is {\tt lss}. A possible user macro which performs
+{\tt lss} (linear state-space), the third field is {\tt m} ``multiply''
+and the fourth one is {\tt lss}. A possible user function which performs
 this multiplication is as follows
 \begin{verbatim}
 function [s]=%lssmlss(s1,s2)
@@ -416,7 +414,7 @@ B1C2=B1*C2,
 s=list('lss',[A1,B1C2;0*B1C2' ,A2],...
        [B1*D2;B2],[C1,D1*C2],D1*D2,[x1;x2],dom1),
 \end{verbatim}
-An example of the use of this macro after having loaded it into
+An example of the use of this function after having loaded it into
 $\Psi$lab (using for example {\tt getf} or inserting it in a library) 
 is illustrated in the following $\Psi$lab session
 \begin{verbatim}
@@ -460,24 +458,24 @@ Notice that the use of {\tt \%lssmss} is totally transparent in
 that the multiplication of the two lists {\tt s1} and {\tt s2}
 is performed using the usual multiplication operator, {\tt *}.
 
-The directory {\tt SCIDIR/macros/percent} contains all the macros
+The directory {\tt SCIDIR/macros/percent} contains all the functions
 (a very large number...) which perform operations on linear systems
 and transfer matrices. Conversions are automatically performed.
-For example the code for the macro {\tt \%lssmlss} is there (note
+For example the code for the function {\tt \%lssmlss} is there (note
 that it is much more complicated that the code given here!).
 \section{Debbuging}
-The simplest way to debug a $\Psi$lab macro is to introduce
-a {\tt pause} command in the macro.
-When executed the macro stops at this point and prompts {\tt -1->}.
+The simplest way to debug a $\Psi$lab function is to introduce
+a {\tt pause} command in the function.
+When executed the function stops at this point and prompts {\tt -1->}.
 The user can then display all the current variables present in $\Psi$lab,
-which are inside or outside the macro i.e. local in the macro
-or belonging to the calling environment. The execution of the macro
+which are inside or outside the function i.e. local in the function
+or belonging to the calling environment. The execution of the function
 is resumed by the command {\tt return} or {\tt resume}.
-The execution of the macro can be interrupted by {\tt abort}.
+The execution of the function can be interrupted by {\tt abort}.
 %and the current loop is terminated by {\tt break}.
 
-It is also possible to insert breakpoints in macros. See the commands
+It is also possible to insert breakpoints in functions. See the commands
 {\tt setbpt}, {\tt delbpt}, {\tt disbpt}.
 Finally, note that it is also possible to trap errors during the 
-execution of a macro: 
+execution of a function: 
 see the commands {\tt errclear} and {\tt errcatch}.

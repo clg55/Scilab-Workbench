@@ -157,8 +157,8 @@ C
       else if(ind.eq.-34) then
          write(io,1000) car,'INCORRECT VECTOR IRE.'
       else if(ind.lt.-10) then
-         write(io,1000) car,   'OPTR01 HAS NOT FOUND A FEASIBLE POINT.
-     &IND OF','OPTR01=',ind+10
+         write(io,1000) car,'OPTR01 HAS NOT FOUND A FEASIBLE POINT.'//
+     &'IND OF','OPTR01=',ind+10
       else if(ind.eq.-1) then
          write(io,1000) car, 'PROBLEM UNBOUNDED FROM BELOW'
       else if(ind.eq.-2) then

@@ -106,7 +106,7 @@ struct BCG
 
 /** To select the graphic Window  **/
 
-xselgraphic_xfig_(){};
+xselgraphic_xfig_(){}
 
 /** End of graphic (close the file)  **/
 
@@ -126,7 +126,7 @@ xend_xfig_()
 
 clearwindow_xfig_() 
 {
-};
+}
 
 /** Flush out the X11-buffer  **/
 
@@ -145,14 +145,14 @@ getwindowdim_xfig_(verbose,x,narg)
   x[1]= 424*prec_fact;
   if (*verbose == 1) 
     SciF2d("\n CWindow dim :%d,%d\r\n",x[0],x[1]);
-}; 
+} 
 
 /** To change the window dimensions : do Nothing in Postscript  **/
 
 setwindowdim_xfig_(x,y)
      int *x,*y;
 {
-};
+}
 
 /** to get the window upper-left point coordinates return 0,0 **/
 
@@ -163,14 +163,14 @@ getwindowpos_xfig_(verbose,x,narg)
   x[0]= x[1]=0;
   if (*verbose == 1) 
     SciF2d("\n CWindow position :%d,%d\r\n",x[0],x[1]);
- };
+ }
 
 /** to set the window upper-left point position (Void) **/
 
 setwindowpos_xfig_(x,y)
      int *x,*y;
 {
-};
+}
 
 
 /** To generate a pause : Empty here **/
@@ -178,19 +178,19 @@ setwindowpos_xfig_(x,y)
 xpause_xfig_(str,sec_time)
      char str[];
      int *sec_time;
-{};
+{}
 
 /** Wait for mouse click in graphic window : Empty here **/
 
 waitforclick_xfig_(str,ibutton,xx1,yy1)
      char str[];
   int *ibutton,*xx1,*yy1 ;
-{ };
+{ }
 
 xgetmouse_xfig_(str,ibutton,xx1,yy1)
      char str[];
   int *ibutton,*xx1,*yy1 ;
-{ };
+{ }
 
 /** Clear a rectangle **/
 
@@ -199,7 +199,7 @@ cleararea_xfig_(str,x,y,w,h)
      int *x,*y,*w,*h;
 {
   fprintf(file,"# %d %d %d %d clearzone\n");
-};
+}
 
 /*------------------------------------------------
 \encadre{Functions to modify the graphic state}
@@ -209,7 +209,7 @@ cleararea_xfig_(str,x,y,w,h)
 
 setcurwin_xfig_(intnum)
      int *intnum;
-{};
+{}
 
 /** Get the id number of the Current Graphic Window **/
 
@@ -220,7 +220,7 @@ getcurwin_xfig_(verbose,intnum,narg)
   *intnum = ScilabGC_xfig_.CurWindow ;
   if (*verbose == 1) 
     Scistring("\nJust one graphic page at a time ");
-};
+}
 
 /** Set a clip zone (rectangle ) **/
 
@@ -233,7 +233,7 @@ setclip_xfig_(x,y,w,h)
   ScilabGC_xfig_.CurClipRegion[2]= *w;
   ScilabGC_xfig_.CurClipRegion[3]= *h;
   fprintf(file,"# %d %d %d %d setclipzone\n",*x,*y,*w,*h);
-};
+}
 
 /** Get the boundaries of the current clip zone **/
 
@@ -259,7 +259,7 @@ getclip_xfig_(verbose,x,narg)
 	      ScilabGC_xfig_.CurClipRegion[3]);
   else 
     Scistring("\nNo Clip Region");
-};
+}
 
 /*----------------------------------------------------------
 \encadre{For the drawing functions dealing with vectors of 
@@ -275,7 +275,7 @@ absourel_xfig_(num)
     ScilabGC_xfig_.CurVectorStyle =  CoordModeOrigin;
   else 
     ScilabGC_xfig_.CurVectorStyle =  CoordModePrevious ;
-};
+}
 
 /** to get information on absolute or relative mode **/
 
@@ -289,7 +289,7 @@ getabsourel_xfig_(verbose,num,narg)
     Scistring("\nTrace Absolu");
   else 
     Scistring("\nTrace Relatif");
-  };
+  }
 
 
 /** The alu function for drawing : Works only with X11 **/
@@ -304,8 +304,8 @@ setalufunction_xfig_(string)
   if ( value != -1)
     {ScilabGC_xfig_.CurDrawFunction = value;
      fprintf(file,"# %d setalufunction\n",value);
-      };
-};
+      }
+}
 
 /** All the possibilities : Read The X11 manual to get more informations **/
 
@@ -346,9 +346,9 @@ idfromname_xfig_(name1,num)
        {
 	 SciF1s("\nkey %s ",AluStruc_xfig_[i].name);
 	 SciF1s("-> %s\r\n",AluStruc_xfig_[i].info);
-       };
-   };
-};
+       }
+   }
+}
 /** To get the value of the alufunction **/
 
 getalufunction_xfig_(verbose,value,narg)
@@ -360,8 +360,8 @@ getalufunction_xfig_(verbose,value,narg)
      { 
        SciF1s("\nThe Alufunction is %s",AluStruc_xfig_[*value].name);
        SciF1s("-> <%s>\r\n", AluStruc_xfig_[*value].info);
-     };
-};
+     }
+}
 
 /** to set the thickness of lines :min is 1 is a possible value **/
 /** give the thinest line **/
@@ -371,7 +371,7 @@ setthickness_xfig_(value)
 { 
   ScilabGC_xfig_.CurLineWidth =Max(1, *value);
   fprintf(file,"# %d Thickness\r\n",Max(1,*value));
-};
+}
 
 /** to get the thicknes value **/
 
@@ -382,7 +382,7 @@ getthickness_xfig_(verbose,value,narg)
   *value = ScilabGC_xfig_.CurLineWidth ;
   if (*verbose ==1 ) 
     SciF1d("\nLine Width:%d\r\n", ScilabGC_xfig_.CurLineWidth ) ;
-};
+}
      
 
 #define GREYNUMBER 17
@@ -403,7 +403,7 @@ setpattern_xfig_(num)
     fprintf(file,"# fillsolid\n");
   else 
     fprintf(file,"# %d Setgray\n",i);
-};
+}
 
 /** To get the id of the current pattern  **/
 
@@ -414,7 +414,7 @@ getpattern_xfig_(verbose,num,narg)
   *num = ScilabGC_xfig_.CurPattern ;
   if (*verbose == 1) 
       SciF1d("\n Pattern : %d\r\n",ScilabGC_xfig_.CurPattern);
-};
+}
 
 /** To set the current font id of font and size **/
 
@@ -432,8 +432,8 @@ xsetfont_xfig_(fontid,fontsize)
      fprintf(file,"#/%s findfont %d scalefont setfont\n",
      	     FontInfoTab_xfig_[i].fname,
 	     isize_xfig_[fsiz]*prec_fact);
-   };
-};
+   }
+}
 
 /** To get the values id and size of the current font **/
 
@@ -449,8 +449,8 @@ xgetfont_xfig_(verbose,font,nargs)
       SciF1s("--> %s at size",
 	     FontInfoTab_xfig_[ScilabGC_xfig_.CurHardFont].fname);
       SciF1s("%s pts\r\n",size_xfig_[ScilabGC_xfig_.CurHardFontSize]);
-    };
-};
+    }
+}
 
 /** To set dash-style : **/
 /**  use a table of dashes and set default dashes to **/
@@ -476,7 +476,7 @@ setdash_xfig_(value)
     {
       setdashstyle_fig_(value,DashTab_fig[Max(0,l3)],&l2);
       ScilabGC_xfig_.CurDashStyle= l3 + 1 ;
-    };
+    }
 }
 
 /** To change The Pos-default dash style **/
@@ -495,8 +495,8 @@ setdashstyle_fig_(value,xx,n)
       for (i=0;i<*n;i++)
 	fprintf(file,"%d ",xx[i]*prec_fact);
       fprintf(file,"] 0 setdash\n");
-    };
-};
+    }
+}
 
 /** to get the current dash-style **/
 
@@ -509,7 +509,7 @@ getdash_xfig_(verbose,value,narg)
    {
      if (*verbose == 1) SciF1d("Color %d",*value);
      return;
-   };
+   }
  if ( *value == 0) 
    { if (*verbose == 1) Scistring("\nLine style = Line Solid");}
  else 
@@ -525,7 +525,7 @@ getdash_xfig_(verbose,value,narg)
 	 Scistring(">\n");
        }
    }
-};
+}
 
 
 /** To set the current mark : using the symbol font of adobe **/
@@ -553,8 +553,8 @@ getcursymbol_xfig_(verbose,symb,narg)
     SciF1d("\nMark : %d",ScilabGC_xfig_.CurHardSymb);
     SciF1s("at size %s pts\r\n",
 	  size_xfig_[ScilabGC_xfig_.CurHardSymbSize]);
-  };
-};
+  }
+}
 
 /** To get the id of the white pattern **/
 
@@ -565,7 +565,7 @@ getwhite_xfig_(verbose,num,narg)
   if (*verbose==1) 
     SciF1d("\n Id of White Pattern %d \r\n",*num);
   *narg=1;
-};
+}
 
 
 #define NUMCOLORS 17
@@ -579,8 +579,8 @@ usecolor_xfig_(num)
       use_color= *num;
       setdash_xfig_(&i);
       setpattern_xfig_(&i);
-    };
-};
+    }
+}
 
 set_c_xfig_(i)
      int i;
@@ -589,7 +589,7 @@ set_c_xfig_(i)
   j=Max(Min(i,NUMCOLORS-1),0);
   ScilabGC_xfig_.CurColor=j;
   fprintf(file,"\n# %d Setcolor\n",i);
-} ;
+}
 
 
 /*--------------------------------------------------------
@@ -603,7 +603,7 @@ empty_xfig_(verbose)
      int *verbose;
 {
   if ( *verbose ==1 ) Scistring("\n No operation ");
-};
+}
 
 #define NUMSETFONC 14
 
@@ -632,7 +632,7 @@ scilabgcget_xfig_(str,verbose,x1,x2,x3,x4,x5)
      char str[];
 {
  ScilabGCGetorSet_xfig_(str,1,verbose,x1,x2,x3,x4,x5);
-};
+}
 
 scilabgcset_xfig_(str,x1,x2,x3,x4,x5)
      int *x1,*x2,*x3,*x4,*x5;
@@ -664,11 +664,11 @@ ScilabGCGetorSet_xfig_(str,flag,verbose,x1,x2,x3,x4,x5)
 	     {
 	       SciF1s("\nUnknow Postscript operator <%s>\r\n",str);
 	       return;
-	     };
-	 };
-     };
+	     }
+	 }
+     }
   SciF1s("\n Unknow Postscript operator <%s>\r\n",str);
-};
+}
 
 /*-----------------------------------------------------------
 \encadre{Functions for drawing}
@@ -720,9 +720,9 @@ boundingbox_xfig_(string,x,y,rect)
  xgetfont_xfig_(&verbose,font,&nargs);
  rect[0]= *x+bsize_xfig_[font[1]][0]*((double) prec_fact);
  rect[1]= *y+bsize_xfig_[font[1]][1]*((double) prec_fact);
- rect[2]= bsize_xfig_[font[1]][2]*strlen(string)*((double) prec_fact);
+ rect[2]= bsize_xfig_[font[1]][2]*(int)strlen(string)*((double) prec_fact);
  rect[3]= bsize_xfig_[font[1]][3]*((double) prec_fact);
-};
+}
 
 /** Draw a single line in current style **/
 /** Unused in fact **/ 
@@ -731,7 +731,7 @@ drawline_xfig_(x1,yy1,x2,y2)
     int *x1, *x2, *yy1, *y2 ;
   {
     fprintf(file,"# %d %d %d %d L\n",*x1,*yy1,*x2,*y2);
-  };
+  }
 
 /** Draw a set of segments **/
 /** segments are defined by (vx[i],vy[i])->(vx[i+1],vy[i+1]) **/
@@ -744,7 +744,7 @@ drawsegments_xfig_(str,vx,vy,n)
   int fvect[1];
   fvect[0]= ScilabGC_xfig_.CurPattern;
   WriteGeneric_xfig_("drawsegs",1,(*n)*2,vx,vy,*n,1,fvect);
-};
+}
 
 /** Draw a set of arrows **/
 
@@ -756,7 +756,7 @@ drawarrows_xfig_(str,vx,vy,n,as)
   int fvect[1];
   fvect[0]= ScilabGC_xfig_.CurPattern;
   WriteGeneric_xfig_("drawarrows",1,(*n)*2,vx,vy,*n,1,fvect);
-};
+}
 
 /** Draw one rectangle **/
 
@@ -771,7 +771,7 @@ drawrectangle_xfig_(str,x,y,width,height)
   vects[3]= *height;
   fvect[0] = ScilabGC_xfig_.IDWhitePattern +1  ;
   drawrectangles_xfig_(str,vects,fvect,&i);
-  };
+  }
 
 /** Draw a filled rectangle **/
 
@@ -786,7 +786,7 @@ drawfilledrect_xfig_(str,x,y,width,height)
   vects[3]= *height ; 
   fvect[0] = ScilabGC_xfig_.CurPattern ;
   drawrectangles_xfig_(str,vects,fvect,&i);    
-};
+}
 
 /** Draw or fill a set of rectangle **/
 /** rectangles are defined by (vect[i],vect[i+1],vect[i+2],vect[i+3]) **/
@@ -805,7 +805,7 @@ drawrectangles_xfig_(str,vects,fillvect,n)
   getpattern_xfig_(&verb,&cpat,&num);
   WriteGeneric_xfig_("drawbox",*n,4,vects,vects,4*(*n),0,fillvect);
   setpattern_xfig_(&(cpat));
-};
+}
 
 /** Draw or fill a set of ellipsis or part of ellipsis **/
 /** Each is defined by 6-parameters, **/
@@ -821,7 +821,7 @@ drawarcs_xfig_(str,vects,fillvect,n)
   getpattern_xfig_(&verb,&cpat,&num);
   WriteGeneric_xfig_("drawarc",*n,6,vects,vects,6*(*n),0,fillvect);
   setpattern_xfig_(&(cpat));
-};
+}
 
 /** Draw a single ellipsis or part of it **/
 /** caution angle=degreAngle*64          **/
@@ -837,7 +837,7 @@ drawarc_xfig_(str,x,y,width,height,angle1,angle2)
   vects[3]= *height;vects[4]= *angle1;vects[5]= *angle2;
   fvect[0] = ScilabGC_xfig_.IDWhitePattern  +1;
   drawarcs_xfig_(str,vects,fvect,&i);
-};
+}
 
 /** Fill a single elipsis or part of it **/
 /** with current pattern **/
@@ -853,7 +853,7 @@ drawfilledarc_xfig_(str,x,y,width,height,angle1,angle2)
   vects[3]= *height;vects[4]= *angle1;vects[5]= *angle2;
   fvect[0] = ScilabGC_xfig_.CurPattern ;
   drawarcs_xfig_(str,vects,fvect,&i);
- };
+ }
 
 /** Draw a set of  current mark centred at points defined **/
 /** by vx and vy (vx[i],vy[i]) **/
@@ -869,11 +869,14 @@ drawpolymark_xfig_(str,n, vx, vy)
   xsetfont_xfig_(&i,&(ScilabGC_xfig_.CurHardSymbSize));
   displaysymbols_xfig_(str,n,vx,vy);
   xsetfont_xfig_(&keepid,&keepsize);
-};
+}
 
 char symb_list_xfig_[] = {
- /*., +,X,*,diamond(filled),diamond,triangle up,triangle down,trefle,circle*/
-  0xb7,0x2b,0xb4,0xc5,0xa8,0xe0,0x44,0xd1,0xa7,0x4f};
+  /*
+     0x2e : . alors que 0xb7 est un o plein trop gros 
+     ., +,X,*,diamond(filled),diamond,triangle up,triangle down,trefle,circle*/
+  (char)0x2e,(char)0x2b,(char)0xb4,(char)0xc5,(char)0xa8,
+  (char)0xe0,(char)0x44,(char)0xd1,(char)0xa7,(char)0x4f};
 
 displaysymbols_xfig_(str,n,vx,vy)
      char str[];
@@ -887,7 +890,7 @@ displaysymbols_xfig_(str,n,vx,vy)
       Char2Int( symb_list_xfig_[ScilabGC_xfig_.CurHardSymb]));
   WriteGeneric_xfig_("drawpolymark",1,(*n)*2,vx,vy,*n,1,fvect);
   fprintf(file,"#/absolu true def\n");
-};
+}
 
 /** Draw a set of *n polylines (each of which have (*p) points) **/
 /** with lines or marks **/
@@ -915,12 +918,12 @@ morlpolylines_xfig_(str,vectsx,vectsy,drawvect,n,p)
 	  setdash_xfig_(&NDvalue);
 	  close = 0;
 	  drawpolyline_xfig_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,&close);
-	};
-    };
+	}
+    }
 /** back to default values **/
   setdash_xfig_(Dvalue);
   setcursymbol_xfig_(symb,symb+1);
-};
+}
 
 /** fill a set of polygons each of which is defined by **/
 /** (*p) points (*n) is the number of polygons **/
@@ -943,7 +946,7 @@ drawpolylines_xfig_(str,vectsx,vectsy,fillvect,n,p)
 			fillvect);
   setpattern_xfig_(&(cpat));
   fprintf(file,"#/absolu true def\n");
-};
+}
 
 /** Only draw one polygon with current line style **/
 /** according to *closeflag : it's a polyline or a polygon **/
@@ -960,7 +963,7 @@ drawpolyline_xfig_(str,n, vx, vy,closeflag)
   else 
     fprintf(file,"#/closeflag false def\n");
   drawpolylines_xfig_(str,vx,vy,fvect,&i,n);
-};
+}
 
 /** Fill the polygon **/
 
@@ -997,7 +1000,7 @@ initgraphic_xfig_(string)
     {
       SciF1s("Can't open file %s, I'll use stdout\r\n",string1);
       file =stdout;
-    };
+    }
   if (EntryCounter == 0)
     { 
       fnum=0;      loadfamily_xfig_("Courier",&fnum); 
@@ -1007,11 +1010,11 @@ initgraphic_xfig_(string)
       fnum=4;      loadfamily_xfig_("Times-Bold",&fnum);
       fnum=5;      loadfamily_xfig_("Times-BoldItalic",&fnum); 
 
-    };
+    }
   FileInit_xfig_(file);
   ScilabGC_xfig_.CurWindow =EntryCounter;
   EntryCounter =EntryCounter +1;
-};
+}
 
 FileInit_xfig_(filen)
      FILE *filen;
@@ -1027,7 +1030,7 @@ FileInit_xfig_(filen)
 	  0,0,x[0],0,x[0],x[1],0,x[1],0,0);
 
   InitScilabGC_xfig_()	;
-};
+}
 
 /*--------------------------------------------------------
 \encadre{Initialisation of the graphic context. Used also 
@@ -1057,7 +1060,7 @@ InitScilabGC_xfig_()
   setpattern_xfig_(&i);
   setthickness_xfig_(&i);
   strcpy(ScilabGC_xfig_.CurNumberDispFormat,"%-5.2g");
-};
+}
 
 
 /*-------------------------------------------------------
@@ -1073,13 +1076,13 @@ loadfamily_xfig_(name,j)
   for ( i = 0; i < FONTMAXSIZE ; i++)
     {
       FontsList_xfig_[*j][i] = FigQueryFont_(name);
-    };
+    }
   if  (FontsList_xfig_[*j][0] == 0 )
 	  SciF1s("\n unknown font family : %s\r\n",name);
   else 
     {FontInfoTab_xfig_[*j].ok = 1;
      strcpy(FontInfoTab_xfig_[*j].fname,name) ;}
-};
+}
 
 /*--------------------------------------------
 \encadre{always answer ok. Must be Finished}
@@ -1087,7 +1090,7 @@ loadfamily_xfig_(name,j)
 
 int FigQueryFont_(name)
      char name[];
-{ return(1);};
+{ return(1);}
 
 
 /*------------------------------------------------------
@@ -1130,7 +1133,7 @@ drawaxis_xfig_(str,alpha,nsteps,size,initpoint)
 	 cosal= cos( M_PI * (*alpha)/180.0);
 	 sinal= sin( M_PI * (*alpha)/180.0);
        }
-   };
+   }
   for (i=0; i <= nsteps[0]*nsteps[1]; i++)
     { xi = initpoint[0]+i*size[0]*cosal;
       yi = initpoint[1]+i*size[0]*sinal;
@@ -1141,7 +1144,7 @@ drawaxis_xfig_(str,alpha,nsteps,size,initpoint)
 	      ScilabGC_xfig_.CurColor);
       fprintf(file," %d %d %d %d ",(int) xi,(int) yi,(int) xf,(int)yf);
       fprintf(file," 9999 9999\n");	  
-    };
+    }
   for (i=0; i <= nsteps[1]; i++)
     { xi = initpoint[0]+i*nsteps[0]*size[0]*cosal;
       yi = initpoint[1]+i*nsteps[0]*size[0]*sinal;
@@ -1152,7 +1155,7 @@ drawaxis_xfig_(str,alpha,nsteps,size,initpoint)
 	      ScilabGC_xfig_.CurColor);
       fprintf(file," %d %d %d %d ",(int) xi,(int) yi,(int) xf,(int)yf);
       fprintf(file," 9999 9999\n");	  
-    };
+    }
   xi = initpoint[0]; yi= initpoint[1];
   xf = initpoint[0]+ nsteps[0]*nsteps[1]*size[0]*cosal;
   yf = initpoint[1]+ nsteps[0]*nsteps[1]*size[0]*sinal;
@@ -1162,7 +1165,7 @@ drawaxis_xfig_(str,alpha,nsteps,size,initpoint)
   fprintf(file," %d %d %d %d ",(int) xi,(int) yi,(int) xf,(int)yf);
   fprintf(file," 9999 9999\n");	  
   fprintf(file,"# End Of Axis \n");
-};
+}
 
 
 /*-----------------------------------------------------
@@ -1179,8 +1182,8 @@ displaynumbers_xfig_(str,x,y,z,alpha,n,flag)
   for (i=0 ; i< *n ; i++)
     { sprintf(buf,ScilabGC_xfig_.CurNumberDispFormat,z[i]);
       displaystring_xfig_(buf,&(x[i]),&(y[i]),&(alpha[i]),flag)      ;
-    };
-};
+    }
+}
 
 /*-------------------------------------------------------
 \encadre{General routine for generating Postscript Code 
@@ -1217,7 +1220,7 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 	     if ( use_color ==1) 
 	       {
 		 set_c_xfig_(areafill);areafill=21;
-	       };
+	       }
 	     type = 3;
 	   }
 	  else 
@@ -1232,9 +1235,9 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 		  if ( use_color ==1) 
 		    {
 		      set_c_xfig_(areafill);areafill=21;
-		    };
+		    }
 		  type=3;}
-	    };
+	    }
 	  lg=sizeobj/2;
 	  fprintf(file,"# Object : %d %s -<%d>- \n",i,string,fvect[i]);
 	  fprintf(file,"2 %d %d %d %d 0 0 %d %d.00 -1 0 0\n",
@@ -1244,7 +1247,7 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 		  8* ScilabGC_xfig_.CurDashStyle);
 	  Write2Vect_xfig_(&vx[i*lg],&vy[i*lg],lg,flag);
 	  fprintf(file," 9999 9999\n");
-	};
+	}
     }
   else 
   if ( strcmp(string,"drawbox")==0)
@@ -1268,7 +1271,7 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 		  vx[deb]           ,vx[1+deb]+vx[3+deb],
 		  vx[deb],vx[1+deb]);
 	  fprintf(file," 9999 9999\n");
-	};
+	}
     }
   else if ( strcmp(string,"drawsegs")==0)      
     {
@@ -1281,7 +1284,7 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 	  fprintf(file," %d %d %d %d ",
 		  vx[2*i],vy[2*i],vx[2*i+1],vy[2*i+1]);
 	  fprintf(file," 9999 9999\n");	  
-	};
+	}
     }
   else if ( strcmp(string,"drawarrows")==0)      
     {
@@ -1296,7 +1299,7 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 	  fprintf(file," %d %d %d %d ",
 		  vx[2*i],vy[2*i],vx[2*i+1],vy[2*i+1]);
 	  fprintf(file," 9999 9999\n");	  
-	};
+	}
     }
   else if ( strcmp(string,"drawarc")==0)      
     {
@@ -1316,7 +1319,7 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 		  vx[6*i+2]/2,vx[6*i+3]/2,
 		  vx[6*i]+vx[6*i+2]/2,vx[6*i+1],
 		  vx[6*i]+vx[6*i+2]/2,vx[6*i+1]);
-	};
+	}
     }
   else if ( strcmp(string,"drawpolymark")==0)      
     {
@@ -1336,7 +1339,7 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
     }
   else
     SciF1s("Can't translate %s\r\n",string);
-};
+}
 
 
 Write2Vect_xfig_(vx,vy,n,flag)
@@ -1356,9 +1359,9 @@ Write2Vect_xfig_(vx,vy,n,flag)
 	      k += 2;i++;}
 	  else 
 	    {k++;i++;}
-	};
+	}
       fprintf(file,"\n");
-    };
-};
+    }
+}
 
 /*------------------------END--------------------*/

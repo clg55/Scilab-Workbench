@@ -98,7 +98,7 @@ C        Esta subrutina trabaja en doble precision via una sentencia
 C     "implicit":
 C                Implicit double precision (a-h,o-z)
 C
-C     SUBPROGRAMAS AUXILIARES: ddot,d1mach,dnrm0,idamax
+C     SUBPROGRAMAS AUXILIARES: ddot,dlamch,dnrm0,idamax
 C     FUNCIONES FORTRAN INTRINSECAS: abs,min,mod,sqrt
 C
 C
@@ -114,8 +114,8 @@ C
       nd=nd0+1
       icd0=nd0+n
       iad0=icd0+md
-      eps=d1mach(4)**0.75
-      gigant=d1mach(2)
+      eps=dlamch('p')**0.75
+      gigant=dlamch('o')
       gig1=sqrt(gigant)
       ind1=0
       if(id.ge.100) then

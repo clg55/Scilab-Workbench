@@ -18,10 +18,10 @@ ScilabStr2C(n,Scistring,strh,ierr)
 {
   int job=1;
   *strh =(char *) malloc((unsigned) (*n)+1);
-  if ((*strh) == NULL)    {*ierr=1;     return;};
+  if ((*strh) == NULL)    {*ierr=1;     return;}
   F2C(cvstr)(n,Scistring,*strh,&job,*n);
   (*strh)[*n]='\0';
-};
+}
 
 /*
  * Converts a Scilab array of 
@@ -57,13 +57,15 @@ ScilabMStr2CM(Scistring,nstring,ptrstrings,strh,ierr)
     }
   strings[*nstring]=NULL;
   *strh=strings;
-};
+}
 
 /*
  * Converts a Scilab array of 
  * String coded as integer array [ a crazy old feature]
  * into a C  string where all the Scilab strings are
  * separated by '\n'
+ * desc,nd,ptrdesc : scilab string info 
+ * strh : the C coded string 
  */
 
 
@@ -86,7 +88,7 @@ ScilabMStr2C(desc,nd,ptrdesc,strh,ierr)
       SciS += ni;
       p[ni]= '\n';
       li=ptrdesc[i];
-    };
+    }
   description[ln-2]='\0';
   *strh=description;
 }
@@ -120,8 +122,8 @@ ScilabC2MStr2(res,nr,ptrres,str,ierr,maxchars,maxlines)
 	      li += ni+1;
 	      ni= -1;
 	      *nr += 1;
-	      if (*nr>maxlines) { *ierr=3; return;};
-	    };
+	      if (*nr>maxlines) { *ierr=3; return;}
+	    }
 	}
     }
   else  *ierr=2;

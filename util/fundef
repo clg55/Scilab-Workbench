@@ -10,7 +10,6 @@ bezout                   1613   2
 bva                      1205   2
 champ                     701   2
 chol                      106   2
-cleanp                   1617   2
 clearfun                 1320   3
 coeff                    1604   0
 comp                     1306   1
@@ -97,7 +96,6 @@ min                       617   0
 mini                      617   0
 mode                     1308   1
 mulf                     2203   0
-nemirov                  1103   2
 newfun                   1319   3
 norm                      304   0
 notify                   1330   0
@@ -206,6 +204,16 @@ xsetech                   741   2
 xstring                   738   2
 xstringl                  739   2
 xtape                     740   2
+sparse                   2701   3
+spget                    2702   3
+full                     2703   3
+lufact                   2704   3
+lusolve                  2705   3
+ludel                    2706   3
+luget                    2707   3
+nnz                      2709   3
+semidef                  1103   3
+clean                     631   3
 inimet                   1501   3
 netwindow                1502   3
 netwindows               1503   3

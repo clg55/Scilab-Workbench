@@ -26,7 +26,6 @@
 "  linfn   - infinity norm ",
 "  lqg_ltr   - LQG with loop transform recovery ",
 "  Macglov   - Mac Farlane Glover problem ",
-"  musolve   - structured singular value, mu, ssv ",
 "  nehari   - Nehari approximant ",
 "  parrot   - Parrot's problem ",
 "  ric_desc   - Riccati equation ",

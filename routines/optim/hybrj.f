@@ -139,7 +139,7 @@ c     subprograms called
 c
 c       user-supplied ...... fcn
 c
-c       minpack-supplied ... dogleg,d1mach,enorm,
+c       minpack-supplied ... dogleg,dlamch,enorm,
 c                            qform,qrfac,r1mpyq,r1updt
 c
 c       fortran-supplied ... dabs,dmax1,dmin1,mod
@@ -154,14 +154,14 @@ c     **********
       double precision actred,delta,epsmch,fnorm,fnorm1,one,pnorm,
      *                 prered,p1,p5,p001,p0001,ratio,sum,temp,xnorm,
      *                 zero
-      double precision d1mach,enorm
+      double precision dlamch,enorm
       external fcn
       data one,p1,p5,p001,p0001,zero
      *     /1.0d0,1.0d-1,5.0d-1,1.0d-3,1.0d-4,0.0d0/
 c
 c     epsmch is the machine precision.
 c
-      epsmch = d1mach(4)
+      epsmch = dlamch('p')
 c
       info = 0
       iflag = 0

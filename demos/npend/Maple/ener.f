@@ -3,8 +3,8 @@ c     SUBROUTINE ener
 c      
       subroutine ener(th,e)
         parameter (n=10)
-        doubleprecision th(2*n),thd(n),et(1,1),r(n),j(n),m(n)
         implicit doubleprecision (t)
+        doubleprecision th(2*n),thd(n),et(1,1),r(n),j(n),m(n)
         integer i 
         data g / 9.81/
         data r / n*1.0/

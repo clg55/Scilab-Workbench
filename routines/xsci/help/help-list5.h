@@ -26,7 +26,6 @@
 " linfn ",
 " lqg_ltr ",
 " macglov ",
-" musolve ",
 " nehari ",
 " parrot ",
 " ric_desc ",

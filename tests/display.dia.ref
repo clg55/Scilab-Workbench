@@ -1,18 +1,18 @@
  
--->//FICHIER_DE_TEST ADD NAME=DISPLAY.TST,SSI=0
+//FICHIER_DE_TEST ADD NAME=DISPLAY.TST,SSI=0
  
--->//
+//
  
--->z=poly(0,'z')
+z=poly(0,'z')
  z  =
  
     z   
  
--->//lines(20,60)
+//lines(20,60)
  
--->format('v',10)
+format('v',10)
  
--->num=[ (((((1)*z-2.6533333)*z+2.6887936)*z-1.2916784)*z+0.2911572)*...
+num=[ (((((1)*z-2.6533333)*z+2.6887936)*z-1.2916784)*z+0.2911572)*...
      z-0.0243497
       (((((1)*z-2.6533333)*z+2.6887936)*z-1.2916784)*z+0.2911572)*...
      z-0.0243497
@@ -35,7 +35,7 @@
 !                                                                      !
 !   0                                                                  !
  
--->den = [ ((((1)*z-1.536926)*z+0.8067352)*z-0.1682810)*z+0.0113508
+den = [ ((((1)*z-1.536926)*z+0.8067352)*z-0.1682810)*z+0.0113508
 ((((1)*z-1.536926)*z+0.8067352)*z-0.1682810)*z+0.0113508
 ((1)*z )*z
 1]
@@ -52,7 +52,7 @@
 !                                                       !
 !   1                                                   !
  
--->num',den'
+num',den'
  ans  =
  
  
@@ -84,7 +84,7 @@
 !                                     2           3   4     2       !
 !   0.0113508 - 0.168281z + 0.8067352z - 1.536926z + z     z     1  !
  
--->[num;den]
+[num;den]
  ans  =
  
 !                                      2            3            4     !
@@ -113,7 +113,7 @@
 !                                                                      !
 !   1                                                                  !
  
--->[num den]
+[num den]
  ans  =
  
  
@@ -145,7 +145,7 @@
 !                                                       !
 !   1                                                   !
  
--->r=num./den
+r=num./den
  r  =
  
 !                                      2            3            4     !
@@ -174,7 +174,7 @@
 !   -                                                                  !
 !   1                                                                  !
  
--->r'
+r'
  ans  =
  
  
@@ -204,43 +204,43 @@
 !      2         !
 !     z       1  !
  
--->//
+//
  
--->digits='abcdefghijklmnopqrstuvwxyz'
+digits='abcdefghijklmnopqrstuvwxyz'
  digits  =
  
  abcdefghijklmnopqrstuvwxyz   
  
--->numbers='1234567890'
+numbers='1234567890'
  numbers  =
  
  1234567890   
  
--->majuscules='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+majuscules='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
  majuscules  =
  
  ABCDEFGHIJKLMNOPQRSTUVWXYZ   
  
--->symbols=',./;''[] \ =-!\$%^&*()_+~:""[]| @'
+symbols=',./;''[] \ =-!\$%^&*()_+~:""[]| @'
  symbols  =
  
  ,./;'[] \ =-!\$%^&*()_+~:"[]| @   
  
--->[numbers;digits]
+[numbers;digits]
  ans  =
  
 !1234567890                  !
 !                            !
 !abcdefghijklmnopqrstuvwxyz  !
  
--->[numbers digits;digits numbers]
+[numbers digits;digits numbers]
  ans  =
  
 !1234567890                  abcdefghijklmnopqrstuvwxyz  !
 !                                                        !
 !abcdefghijklmnopqrstuvwxyz  1234567890                  !
  
--->[numbers digits+digits+digits]
+[numbers digits+digits+digits]
  ans  =
  
  
@@ -251,9 +251,9 @@
 !abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr!
 !     stuvwxyz                                                         !
  
--->ans';
+ans';
  
--->[ans ans]
+[ans ans]
  ans  =
  
  

@@ -141,7 +141,7 @@ C        Esta subrutina trabaja en doble precision via una sentencia
 C     "implicit":
 C                Implicit double precision (a-h,o-z)
 C
-C     SUBPROGRAMAS AUXILIARES: anfm03,dcopy,ddot,dipvtf,dswap,d1mach,
+C     SUBPROGRAMAS AUXILIARES: anfm03,dcopy,ddot,dipvtf,dswap,dlamch,
 C                              zthz
 C     FUNCIONES FORTRAN INTRINSECAS: abs,max,mod,sqrt
 C
@@ -160,7 +160,7 @@ C
 C     Se inicializan algnunas variables de trabajo
 C
       n1=n+1
-      epsmch=d1mach(4)
+      epsmch=dlamch('p')
       if(ind.eq.n1) then
          ind=ind-1
          return

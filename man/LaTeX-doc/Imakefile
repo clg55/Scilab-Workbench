@@ -18,7 +18,7 @@ info:
 doc :Docu.ps.Z
 
 #define IHaveSubdirs
-#define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
+#define PassCDebugFlags CDEBUGFLAGS='$(CDEBUGFLAGS)'
 
 SUBDIRS=tr2latex Test Sample 
 

@@ -15,15 +15,15 @@ main(argc,argv)
 	"third list entry",
 	"fourth list entry",
 	NULL
-    };
+    }
   inix1_(argc,argv);
   SetDriver_("X11"); dr_("xinit","unix:0.0");
   ExposeChooseWindow(strings,description);
   xselgraphic_();
-};
+}
 
     
-cvstr_(){};
+cvstr_(){}
 
 #include <math.h>
 #define XN 63

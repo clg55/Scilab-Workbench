@@ -10,13 +10,13 @@ pixmapclear_()
   XGetWindowAttributes(dpy,CWindow,&war); 
   XFillRectangle(dpy, Cpixmap, gc, 0, 0, war.width,war.height);
   XSetForeground(dpy,gc,foreground);
-};
+}
 
 show_()
 {
    XClearWindow(dpy,CWindow);
    XFlush(dpy);
-};
+}
 
 
 /** ResiZe the pixmap associated to CWindow and store it back in the window List **/
@@ -31,7 +31,7 @@ CPixmapResize(x,y)
   XFillRectangle(dpy, Cpixmap, gc, 0, 0,Max(x,400),Max(y,300));
   XSetForeground(dpy,gc,foreground);
   XSetWindowBackgroundPixmap(dpy, CWindow, Cpixmap);
-};
+}
 
 
 CPixmapResize1()
@@ -39,4 +39,4 @@ CPixmapResize1()
   XWindowAttributes war;
   XGetWindowAttributes(dpy,CWindow,&war); 
   CPixmapResize(war.width,war.height);
-};
+}

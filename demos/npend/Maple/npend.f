@@ -3,10 +3,11 @@ c     SUBROUTINE npend
 c      
       subroutine npend(neq,t,th,ydot)
         parameter (n=10)
+        implicit doubleprecision (t)
         doubleprecision t,th(2*n),ydot(2*n),r(n),j(n),m(n)
         doubleprecision me3s(n,n),cc3s(n,n),const(n,1)
         doubleprecision w(3*n),rcond	
-        implicit doubleprecision (t)
+
         integer i,k,neq,ierr
         data g / 9.81/
         data r / n*1.0/

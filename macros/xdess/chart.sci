@@ -57,9 +57,7 @@ for teta=angl,
   end;
   w=[-170*ratio:0.03:last last]'
   n=prod(size(w));
-  k=sin(teta)/cos(teta)//
-  //module=real(20*log((sin(w)-k*cos(w))/k)/l10)
-  module=real(20*log((sin(w)/k-cos(w)))/l10)
+  module=real(20*log((sin(w)*cos(teta)/sin(teta)-cos(w)))/l10)
   w=w/ratio
   plot2d([w,-360*ones(w)-w(n:-1:1)],[module,module(n:-1:1)],[-1,-1],"000");
 end;

@@ -293,8 +293,8 @@ c messages de roogp
       if(ifich.eq.60) then
          call basout(ifl,nwf,'Rootgp :On ne trouve pas de valeur de'//
      $        ' Beta possible ')
-         call basout(ifl,nwf,'        dans la recherche de '//'
-     $        l''intersection avec la face complexe.')
+         call basout(ifl,nwf,'        dans la recherche de '//
+     $        'l''intersection avec la face complexe.')
          call basout(ifl,nwf,'        ARRET DE L''EXECUTION ')
       endif
       return

@@ -162,7 +162,7 @@ C!     SUBPROGRAMAS AUXILIARES:
 C                anfm01,anfm02,anfm03,anfm04,anfm05,anfm06
 C                anfm07,anrs01,anrs02,auxo01,aux003,dadd,daxpy,dcopy,
 C                ddif,ddot,desr03,dimp03,dipvtf,dmmul,dnrm2,dscal,dswap,
-C                d1mach,idamax,nvtk03,optr01,optr03,opvf03,pasr03,zthz
+C                dlamch,idamax,nvtk03,optr01,optr03,opvf03,pasr03,zthz
 C     FUNCIONES FORTRAN INTRINSECAS: abs,max,min,mod,sign,sqrt
 C
 C

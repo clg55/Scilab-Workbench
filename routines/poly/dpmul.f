@@ -14,13 +14,13 @@ c auteur: c. klimann.
 c date: 22 fevrier 1985.
 c &&var
       implicit double precision (a-h,o-z)
-      double precision d1mach,ddot
+      double precision dlamch,ddot
       double precision p1(*),p2(*),p3(*)
       integer d1,d2,d3
       integer dmax,dmin,dsum
       integer i, k, j, l
       integer e1, e2
-      eps=d1mach(4)
+      eps=dlamch('p')
 c &&ker
       dsum = d1 + d2
 c fixation de dmax et dmin

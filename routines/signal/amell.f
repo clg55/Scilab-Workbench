@@ -15,13 +15,13 @@ c
       double precision dpi, domi,dsn2
       double precision de, dz, dpi2, dq, dm, du, dk, dc, dqq, dh, dq1,
      *    dq2 ,ddk ,dkprim,dsn22,du1
-      double precision d1mach
+      double precision dlamch
       dimension du(n),dsn2(n)
       logical neg
 c
       data de, dz /1.0d+0,2.0d+0/
 c
-      domi=2.0d+0*d1mach(4)
+      domi=2.0d+0*dlamch('p')
       dpi=4.0d+0*atan(1.0d+0)
       call compel(dk,ddk)
       call compel(sqrt(1.0d+0-dk*dk),dkprim)

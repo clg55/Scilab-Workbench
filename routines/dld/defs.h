@@ -23,7 +23,11 @@
 #include <ar.h>
 #include <stdio.h>
 #include <sys/types.h>
+#ifdef SYSV
+#include <string.h>
+#else
 #include <strings.h>
+#endif
 #include <sys/stat.h>
 #include <sys/file.h>
 #include <sys/param.h>

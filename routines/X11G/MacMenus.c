@@ -58,7 +58,7 @@ CleanWinTape()
       C2F(dr)("xclear","v",PI0,PI0,PI0,PI0,PI0,PI0,0,0);
       C2F(dr)("xstart","v",&ww,PI0,PI0,PI0,PI0,PI0,0,0);
 
- };
+ }
 
 
 HandleMenu (mSelect)

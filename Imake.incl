@@ -1,5 +1,5 @@
 /* 
-Scilab needs Athena Widget Libaries libXaw.a and libXmu.a.
+Scilab needs Athena Widget Libraries libXaw.a and libXmu.a.
 If you run X11R5, these libraries are given with Scilab distribution
 for convenience.
 If you run X11R4 you ***NEED*** to have them and to comment the following line.
@@ -15,63 +15,86 @@ If you run X11R4 you ***NEED*** to have them and to comment the following line.
  *****************************************************************************
 */
 
-/* Override C compilation options */
-/* CCOPTIONS = */
-/* CDEBUGFLAGS = */
+/* uncomment the following line if you want static linking */
+/* #define STATIC_LINK */
 
-/* Fortran compilation options */
+/* Fortran and C compilation options for various architectures 
+	FFOPTIONS
+	FDEBUGFLAGS
+	CCOPTIONS
+	CDEBUGFLAGS
+	EXTRA_LOAD_FLAGS
+*/
 
+/* For SUN running SunOS 4.1.3 or Solaris 5.x */
 #if defined(SparcArchitecture)
-FFOPTIONS = 
+FFOPTIONS =
 FDEBUGFLAGS = -O
-/* Flag for static compilation on Sun architecture */
-/* #undef STATICCOMP */
-#define STATICCOMP
-/* If you have and you want to use f2c instead of the fortran compiler */
-/* FC=fc-gcc 	*/
-/* CC=gcc -traditional */
+CCOPTIONS =
+CDEBUGFLAGS = -O
+EXTRA_LOAD_FLAGS =
+#if defined(SYSV)
+EXTRA_LOAD_FLAGS = -ldl
+#endif
 #endif
 
 /* slackware distribution with gcc 
 	f77 exists on the distribution and performs f2c + gcc
 */
-
+/* For PC running Linux */
 #if defined(LinuxArchitecture)
 FFOPTIONS = 
 FDEBUGFLAGS = -O
+CCOPTIONS =
 CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -lieee
 #endif
 
-
-#if defined(MipsArchitecture)
-FFOPTIONS = -C -fpe1
-FDEBUGFLAGS = -O0  
+/* For DEC Mips */
+#if defined(UltrixArchitecture)
+FFOPTIONS =  -fpe1
+FDEBUGFLAGS = -O0
+CCOPTIONS =
+CDEBUGFLAGS = -O0
 EXTRA_LOAD_FLAGS = 
 #endif
 
+/* For SGI running IRIX 5.2 */
+#if defined(SGIArchitecture)
+FFOPTIONS =  -Nl999 -Nn15000
+FDEBUGFLAGS = -O
+CCOPTIONS = -cckr
+CDEBUGFLAGS = -O
+EXTRA_LOAD_FLAGS = 
+#endif
+
+/* For DEC Alpha running OSF/1 1.3, 2.0 and still better 3.0 */
 #if defined(AlphaArchitecture)
-FFOPTIONS = -C -fpe1 -switch nosqrt_recip -check nounderflow
-FDEBUGFLAGS = 
-CDEBUGFLAGS = 
-CCOPTIONS=
 FC=DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
+FFOPTIONS =  -fpe3 -switch nosqrt_recip
+FDEBUGFLAGS = -O
+CCOPTIONS=
+CDEBUGFLAGS = -O
 EXTRA_LOAD_FLAGS = -ldnet_stub
 #endif
 
+/* For HP 9000-7xx running HP-UX 9.01 */
 #if defined(HPArchitecture)
-FFOPTIONS = +E4 
-FDEBUGFLAGS = 
-CDEBUGFLAGS = +O0
-EXTRA_LOAD_FLAGS = -lm
-/* For dynamic linking I need a static version of Xaw and Xmu libs od Xwindows*/
 FC = fort77
+FFOPTIONS = +E4 
+FDEBUGFLAGS = -O +Obb1200
+CCOPTIONS=
+CDEBUGFLAGS = -O
+EXTRA_LOAD_FLAGS =
 #endif
 
+/* For IBM RS6000 */
 #if defined(AIXArchitecture)
 FFOPTIONS = -qcharlen=4096
-FDEBUGFLAGS =
-CFLAGS = $(CCOPTIONS) -Daix $(CDEBUGFLAGS) $(ALLDEFINES)
+FDEBUGFLAGS = 
+CCOPTIONS = -Daix
+CDEBUGFLAGS = 
+EXTRA_LOAD_FLAGS =
 #endif
 
 /*
@@ -81,27 +104,39 @@ CFLAGS = $(CCOPTIONS) -Daix $(CDEBUGFLAGS) $(ALLDEFINES)
  *                                                                           *
  *****************************************************************************
 */
-SCIVERSION=Scilab-2.0
-SCIDATE=31 October 1994
+
+SCIVERSION = Scilab-2.1
+SCIDATE = 10 February 1995
 
 #if defined(WithLocalXaw)
-EXTRA_INCLUDES=-I$(SCIDIR)/routines
+EXTRA_INCLUDES = -I$(SCIDIR)/routines
 #endif
 
-/* option for static linking on Sun computers */
+/* options for static linking */
+#if defined(STATIC_LINK)
 #if defined(SunArchitecture)
-#if defined(STATICCOMP) 
-FLOCAL_LDFLAGS=  -Bstatic
+#if !defined(SYSV) 
+FLOCAL_LDFLAGS = -Bstatic
+LLOCAL_LDFLAGS = -Bstatic
 #if HasGcc
-LOCAL_LDFLAGS=  -static
+LOCAL_LDFLAGS = -static
 #else
-LOCAL_LDFLAGS=  -Bstatic
+LOCAL_LDFLAGS = -Bstatic
 #endif
 #endif
 #endif
 #if defined(AlphaArchitecture)
-FLOCAL_LDFLAGS=  -non_shared
+FLOCAL_LDFLAGS = -non_shared
+LOCAL_LDFLAGS = -non_shared
+LLOCAL_LDFLAGS = -non_shared
 #endif
+#if defined(HPArchitecture)
+FLOCAL_LDFLAGS = -Wl,-a,archive
+LOCAL_LDFLAGS = -Wl,-a,archive
+LLOCAL_LDFLAGS = -a archive
+#endif
+#endif
+
 /* C options */
 #if AlternateUsrLibDir && defined(UseInstalled)
 LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS) $(LOCAL_LDFLAGS) -L$(USRLIBDIR)
@@ -113,10 +148,15 @@ LDOPTIONS = $(CDEBUGFLAGS) $(CCOPTIONS) $(LOCAL_LDFLAGS)
 FFLAGS = $(FDEBUGFLAGS) $(FFOPTIONS)
 #if AlternateUsrLibDir && defined(UseInstalled)
 FLDOPTIONS = $(FDEBUGFLAGS) $(FFOPTIONS) $(FLOCAL_LDFLAGS) -L$(USRLIBDIR)
-LLDOPTIONS = $(FDEBUGFLAGS) $(FLOCAL_LDFLAGS) -L$(USRLIBDIR)
 #else
 FLDOPTIONS = $(FDEBUGFLAGS) $(FFOPTIONS) $(FLOCAL_LDFLAGS)
-LLDOPTIONS = $(FDEBUGFLAGS) $(FLOCAL_LDFLAGS)
+#endif
+
+/* Linker options */
+#if AlternateUsrLibDir && defined(UseInstalled)
+LLDOPTIONS = $(LLOCAL_LDFLAGS) -L$(USRLIBDIR)
+#else
+LLDOPTIONS = $(LLOCAL_LDFLAGS)
 #endif
 
 PATHSP=$(SCIDIR)/routines
@@ -151,10 +191,10 @@ TERMCAPLIB = TermcapLibrary
  * multiple programs in the same Imakefile.
  */
 #ifndef FortranProgramTarget
-#define	FortranProgramTarget(program,objects,deplibs,defa,locallibs,syslibs)	@@\
-program: objects deplibs						@@\
+#define	FortranProgramTarget(program,objects)				@@\
+program: objects							@@\
 	RemoveTargetProgram($@)						@@\
-	$(FC) -o $@ objects defa $(FLDOPTIONS) locallibs $(LDLIBS) syslibs $(EXTRA_LOAD_FLAGS) @@\
+	$(FC) -o $@ objects $(FLDOPTIONS) $(LDLIBS) $(EXTRA_LOAD_FLAGS) @@\
 									@@\
 clean::									@@\
 	$(RM) program 							@@\
@@ -231,7 +271,7 @@ distclean:: clean 							@@\
  */
 #ifndef WhatisRule
 #define WhatisRule(objects)				@@\
-whatis	:  	objects					@@\
+$(WHATIS)	:  	objects				@@\
 	@echo "Updating whatis database"		@@\
 	$(MW) `pwd`					@@\
 
@@ -261,6 +301,8 @@ depend::								@@\
 #define SEDGLOBALSCRIPT(source,program) \
 	-e "s+SCILAB_DIRECTORY+$(SCIDIR)+" \		@@\
 	-e "s+SCILAB_VERSION+$(SCIVERSION)+" \		@@\
+	-e "s+Ccompiler+$(CC)+" \			@@\
+	-e "s+Fcompiler+$(FC)+" \			@@\
 	-e "s+SCILAB_DATE+$(SCIDATE)+" source > program;
 
 #if defined(HPArchitecture)
@@ -381,7 +423,7 @@ distclean:: clean 							@@\
 #if defined(HPArchitecture)
 #ifndef ScilexProgramTarget
 #define	ScilexProgramTarget(program,objects,deplibs,defa,locallibs,syslibs)	@@\
-LDD=ld -x -a archive -o $@ /lib/crt0.o 					@@\
+LDD=ld -x -o $@ /lib/crt0.o 					@@\
 LDDLF= -lU77 -lm -lcl -lisamstub -lc 					@@\
 									@@\
 program: objects deplibs						@@\
@@ -391,7 +433,7 @@ program: objects deplibs						@@\
 	if [ $$x -ne 0 ] ; then \					@@\
 	RemoveTargetProgram($@)	;\					@@\
 			echo "linking";\				@@\
-	$(LDD) objects defa $(FLDOPTIONS) locallibs  $(LDLIBS) syslibs $(EXTRA_LOAD_FLAGS) $(LDDLF) ;\ @@\
+	$(LDD) objects defa $(LLDOPTIONS) locallibs  $(LDLIBS) syslibs $(EXTRA_LOAD_FLAGS) $(LDDLF) ;\ @@\
 	else \								@@\
 			echo program is up to date ;\			@@\
 	fi								@@\
@@ -420,7 +462,7 @@ program: objects deplibs						@@\
 	if [ $$x -ne 0 ] ; then \					@@\
 	RemoveTargetProgram($@)	;\					@@\
 			echo "linking";\				@@\
-	$(FC) -o $@ objects defa $(FFOPTIONS) $(FLOCAL_LDFLAGS) -L$(USRLIBDIR) locallibs  $(LDLIBS) syslibs $(EXTRA_LOAD_FLAGS) $(LDDLF) ;\ @@\
+	$(FC) -o $@ objects defa $(FLDOPTIONS) locallibs  $(LDLIBS) syslibs $(EXTRA_LOAD_FLAGS) $(LDDLF) ;\ @@\
 	else \								@@\
 			echo program is up to date ;\			@@\
 	fi								@@\
@@ -433,6 +475,39 @@ distclean:: clean 							@@\
 
 #endif /* ScilexProgramTarget */
 #endif /* Linuxarch */
+
+/*
+ * ScilexProgramTarget for Dec MIPS 
+ */
+
+#if defined(UltrixArchitecture)
+#ifndef ScilexProgramTarget
+#define	ScilexProgramTarget(program,objects,deplibs,defa,locallibs,syslibs)	@@\
+program: objects deplibs						@@\
+	@x=1;if [ -f $@ ] ; then  \					@@\
+	x=`find $(DEFAULTS) $(LIBR)  \( -name '*.a' -o -name '*.o' \) -newer $@ -print | wc -l `; \ @@\
+	fi;\								@@\
+	if [ $$x -ne 0 ] ; then \					@@\
+			RemoveTargetProgram($@); \			@@\
+			echo "linking";\				@@\
+			$(FC) -o $@ objects defa $(FLDOPTIONS) locallibs $(LDLIBS) syslibs $(EXTRA_LOAD_FLAGS) ;\ @@\
+			nm $@ > $@.nm;\ @@\
+			grep ' T ' $@.nm > $@.txtnm;\ @@\
+			grep ' [A-SU-Z] ' $@.nm > $@.datnm;\ @@\
+			rm $@.nm;\ @@\
+	else \								@@\
+			echo program is up to date ;\			@@\
+	fi								@@\
+									@@\
+									@@\
+clean::									@@\
+	$(RM) program 							@@\
+									@@\
+distclean:: clean 							@@\
+									@@\
+
+#endif /* ScilexProgramTarget */
+#endif /* Dec MIPS */
 
 
 /*
@@ -502,9 +577,3 @@ distclean:: clean 							@@\
 									@@\
 
 #endif /* ScilexProgramTarget */
-
-
-
-
-
-

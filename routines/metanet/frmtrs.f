@@ -1,17 +1,17 @@
       subroutine frmtrs(cfcl,cfcp,cw,inf,lp1,lpft,ls1,lsft,m,
-     &     mftdim,n,nc,nfcomp,ninf,nn,num,p,p1,pile,s,
+     &     mftdim,n,nc,nfcomp,nn,num,p,p1,pile,s,
      &     sdim,som,suc)
       implicit integer (a-z)
       dimension lp1(*),cfcp(*),ls1(m)
       dimension p(n),nn(n),nfcomp(n)
-      dimension pile(n),num(n),inf(n),ninf(n),cfcl(n)
+      dimension pile(n),num(n),inf(n),cfcl(n)
       dimension som(*),suc(m),p1(*),s(sdim),cw(n)
       dimension lpft(*),lsft(mftdim)
       n1=n+1
       do 10 i=1,n1
          cfcp(i)=1
  10   continue
-      call compfc(inf,lp1,ls1,m,n,nc,nfcomp,ninf,nn,
+      call compfc(inf,lp1,ls1,m,n,nc,nfcomp,nn,
      &     num,p,pile)
       do 20 i=1,nc
  20      som(i)=0

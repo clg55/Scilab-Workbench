@@ -197,7 +197,7 @@ int  AllocatedSize;
     Matrix->FillinsRemaining = 0;
 
     RecordAllocation( Matrix, (char *)Matrix );
-    if (Matrix->Error == spNO_MEMORY) goto MemoryError;
+    if (Matrix->Error == spNO_MEMORY) goto MemoryError; 
 
 /* Take out the trash. */
     Matrix->TrashCan.Real = 0.0;
@@ -656,13 +656,29 @@ register  AllocationListPtr  ListPtr, NextListPtr;
     FREE( Matrix->DoRealDirect );
     FREE( Matrix->Intermediate );
 
+
 /* Sequentially step through the list of allocated pointers freeing pointers
  * along the way. */
+
     ListPtr = Matrix->TopOfAllocationList;
-    while (ListPtr != NULL)
-    {   NextListPtr = ListPtr->NextRecord;
-        FREE( ListPtr->AllocatedPtr );
-        ListPtr = NextListPtr;
+    while (ListPtr != NULL )
+    { 
+      char *LocPtr;
+      /* dans certain cas le pointeur ds la zone a desalouer
+	 se trouve lui meme ds la dite zone en fait quand 
+	 ( ListPtr ==  ListPtr->AllocatedPtr )
+	 donc un free(x) suivit de x=0 
+	 fait que l'on essaye d'ecrire ds une zone que l'on vient de desalouer
+	 ce qui plante sur linux 
+	 fprintf(stderr,"Warning bad FREE\n");
+	 je regle le probleme en mettant a zero avant le free !
+	 */
+      NextListPtr = ListPtr->NextRecord;
+      /* BUGUED : FREE( ListPtr->AllocatedPtr) */
+      LocPtr=ListPtr->AllocatedPtr;
+      ListPtr->AllocatedPtr= NULL;
+      if ( LocPtr != NULL) free(LocPtr);
+      ListPtr = NextListPtr;
     }
     return;
 }

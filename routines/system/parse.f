@@ -39,6 +39,8 @@ c
 c     
       if(icall.eq.5) goto 88
       if(pt.gt.0) goto 86
+      if(err.gt.0) goto 98
+
 c     initialisation
 c-------------------
  05   sym = eol
@@ -70,8 +72,14 @@ c-------------------------------------
             call prompt(lct(4)/4)
             lct(1)=0
             if(paus.eq.0.and.rio.eq.rte) then
-               if(pt.ne.0) call msgs(30,0)
-               if(top.ne.0) call msgs(31,0)
+               if(pt.ne.0) then
+                  call msgs(30,0)
+                  pt=0
+               endif
+               if(top.ne.0) then
+                  call msgs(31,0)
+                  top=0
+               endif
             endif
          endif
       endif
@@ -357,9 +365,9 @@ c     print if required
 c----------------------
       if(lct(4).lt.0.or.fin.eq.0) goto 73
       if(sym.ne.semi.and.lct(3).eq.0) then
-         call print(ids(1,pt),fin)
+         call print(ids(1,pt),fin,wte)
       else if(sym.eq.semi.and.lct(3).eq.1) then
-         call print(ids(1,pt),fin)
+         call print(ids(1,pt),fin,wte)
       endif
       if (err .gt. 0) goto 98
 c     

@@ -7,8 +7,13 @@ typedef char Name[256];
 static function epoints[20];
 static Name nom_functions[20];
 static int lastlink=0;
+#if defined(__STDC__)
 extern void getpro_(char *,long int);
 extern char * dld_strerror(int code);
+#else 
+extern void getpro_();
+extern char * dld_strerror();
+#endif 
 
 #ifdef DEBUG
 #define DEBUGprintf(x,y) printf(x,y)
@@ -24,6 +29,7 @@ int dyninit_()
 {
   static int err=0;
   static int initialised=0;
+  char str[1000];
   /* required initialization. */
   if (!initialised) 
     {
@@ -34,8 +40,10 @@ int dyninit_()
       printf(" %s\n",dld_find_executable(prog));
       if(!err) 
 	initialised=1;
-      else 
-	printf("dld_init error %s\n",dld_strerror(err));
+      else {
+	  sprintf(str,"dld_init error %s\n",dld_strerror(err));
+	  Scistring(str);
+      }
     };
   return err;
 }
@@ -43,31 +51,38 @@ int dyninit_()
 /* print out all the undefined symbols */
 
 void list_undefined () {
+    char str[1000];
     char **list = dld_list_undefined_sym ();
     if (list) {
 	register int i;
 	    
-	printf ("There are a total of %d undefined symbols:\n",
+	sprintf (str,"There are a total of %d undefined symbols:\n",
 		dld_undefined_sym_count);
+	Scistring(str);
 	for (i = 0; i < dld_undefined_sym_count; i++)
-	    printf ("%d: %s\n", i+1, list[i]);
+	    sprintf (str,"%d: %s\n", i+1, list[i]);Scistring(str);
     } else
-	printf ("No undefined symbols\n");
+	sprintf (str,"No undefined symbols\n");Scistring(str);
 }
 
 #define MAXCHAR 256
-
-void dynload_(int *ii,char ename[],char loaded_files[],int *err)
+#if defined(__STDC__)
+void dynload_(int *ii,char ename1[],char loaded_files[],int *err)
+#else 
+void dynload_(ii,ename1,loaded_files,err)
+int *ii;char ename1[],loaded_files[];int *err;
+#endif
 {
+  char str[1000];
   function func;
   char current_object_file[MAXCHAR];
-  char ename1[50];
   int i,j;
   char current_char;
-  for (i=0;i< strlen(ename)-1;i++) ename1[i]=ename[i+1];
-  ename1[strlen(ename)-1]='\0';
+
+
   DEBUGprintf("ename1 [%s]\n",ename1);
-  printf ("linking  \"%s\" defined in \"%s\"\n", ename,loaded_files);
+  sprintf (str,"linking  \"%s\" defined in \"%s\"\n", ename1,loaded_files);
+  Scistring(str);
   *err = 0;
   if ( (*err = dyninit_())) return; /* Error on init */
   /* on scane et on charge the objects files */
@@ -97,7 +112,7 @@ void dynload_(int *ii,char ename[],char loaded_files[],int *err)
       if ( j > MAXCHAR ) 
 	{
 	  *err=1 ;
-	  printf("filename too long");
+	  sprintf(str,"filename too long");Scistring(str);
 	};
     };
   /* loading */
@@ -109,12 +124,14 @@ void dynload_(int *ii,char ename[],char loaded_files[],int *err)
 	  current_object_file[j] = '\0';
 	  if(strlen(current_object_file)>0){
 	    /** if this file was previously linked i must unlink it **/
-	    printf("lastlink %d,%d\n",lastlink,*ii);
+	    sprintf(str,"lastlink %d,%d\n",lastlink,*ii);Scistring(str);
 	    DEBUGprintf("loading : \"%s\"\n",current_object_file);
 	    *err = dld_link (current_object_file);
 	    if(*err){
-	      printf("problem when loading : \"%s\"\n",current_object_file);
-	      printf("dld_link error %s \n",dld_strerror (*err));
+	      printf(str,"problem when loading : \"%s\"\n",current_object_file);
+	      Scistring(str);
+	      sprintf(str,"dld_link error %s \n",dld_strerror (*err));
+	      Scistring(str);
 	      return;
 	    };
 	  };
@@ -129,7 +146,8 @@ void dynload_(int *ii,char ename[],char loaded_files[],int *err)
       if ( j > MAXCHAR ) 
 	{
 	  *err=1 ;
-	  printf("filename too long");
+	  sprintf(str,"filename too long");
+	  Scistring(str);
 	};
     };
   
@@ -139,8 +157,10 @@ void dynload_(int *ii,char ename[],char loaded_files[],int *err)
         func = (function) dld_get_func (ename1);
         if ( func  == (function) 0)
 	  {
-	    printf("error when finding \"%s\" in \"%s\"\n",ename1,loaded_files);
-	    printf("dld_get_func error %s\n",dld_strerror (*err));
+	    sprintf(str,"error when finding \"%s\" in \"%s\"\n",ename1,loaded_files);
+	    Scistring(str);
+	    sprintf(str,"dld_get_func error %s\n",dld_strerror (*err));
+	    Scistring(str);
 	    *err=1;
 	    return;
 	  };
@@ -151,19 +171,13 @@ void dynload_(int *ii,char ename[],char loaded_files[],int *err)
       }
     else 
       {
-	printf("error [%s] not executable \n",ename1);
+	sprintf(str,"error [%s] not executable \n",ename1);
+	Scistring(str);
 	list_undefined ();
 	*err=1;
       };
   };
 
-void dynstr_(int *i,char fname[],int *lf,char spname[],int *ls,int *err)
-{
-  fname[*lf]='\0';
-  spname[*ls]='\0';
-  dynload_(i,spname,fname,err) ;
-  return;
-}
 
 /*
   Lancement dynamique de l'execution d'un sous programme liee

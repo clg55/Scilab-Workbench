@@ -56,7 +56,7 @@ DependTarget()
 
 /* ScilabTestTarget() */
 .code.dia :
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab $*.code $*.dia
+	@$(SCIDIR)/util/scidem $(SCIDIR) $*.code $*.dia
 
 clean ::
 
@@ -68,5 +68,5 @@ spfact2.dia 	spfact4.dia 	spfact3.dia 	spfact1.dia :spfactg.dia
 
 spfactg.dia :	
 	@$(RM) spfact[1-4].dia
-	@$(SCIDIR)/util/scidem $(SCIDIR)/bin/scilab spfact.code spfact.dia
+	@$(SCIDIR)/util/scidem $(SCIDIR) spfact.code spfact.dia
 	@ echo " " > spfactg.dia

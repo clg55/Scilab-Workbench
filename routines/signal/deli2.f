@@ -22,7 +22,7 @@ c     .. local scalars ..
      * lolim,mu, rscale, rtx, rty, rtz, uplim, xn, yn, zn
       integer ind
 c     .. function references ..
-      double precision d1mach
+      double precision dlamch
       data acc/8.50d-4/
 c
 c     order x,y,z into xn,yn,zn  st. xn.le.yn.le.zn
@@ -53,8 +53,8 @@ c     test for valid arguments
 c
 c     valid call
       rscale = 1.0d+0
-      lolim=d1mach(1)*16.0d+0
-      uplim=0.06250d+0*d1mach(2)
+      lolim=dlamch('u')*16.0d+0
+      uplim=0.06250d+0*dlamch('o')
 c
 c     for extreme arguments scale to avoid under and overflows
       if (zn.le.uplim) go to 120

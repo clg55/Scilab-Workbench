@@ -14,7 +14,7 @@ c
       double precision sr,si,e1,st
       integer vol,var1(4),var2(4),volr,rhs1,top0,op,iadr,sadr,topin
 c
-      data plus/45/,minus/46/,star/47/,dstar/58/,slash/48/
+      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
       data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
       data equal/50/,less/59/,great/60/,insert/2/,extrac/3/
 c
@@ -320,17 +320,21 @@ c
       m3=m1
       n3=n2
       vol=0
-      do 45 i=1,m3
-      j1=id2-m2
-      do 45 j=1,n3
-      j1=j1+m2
-      k1=id1-m1
-      mx=0
-      do 44 k=1,n1
-      k1=k1+m1
-      mx=max(mx,istk(i+k1)-istk(i-1+k1)+istk(k+j1)-istk(k-1+j1))
-   44 continue
-   45 vol=vol+mx-1
+      do 46 i=1,m3
+         j1=id2-m2
+         do 45 j=1,n3
+            j1=j1+m2
+            k1=id1-m1
+            mx=0
+            do 44 k=1,n1
+               k1=k1+m1
+               ll1=istk(i+k1)-istk(i-1+k1)
+               ll2=istk(k+j1)-istk(k-1+j1)
+               mx=max(mx,ll1+ll2)
+ 44         continue
+            vol=vol+mx-1
+ 45      continue
+ 46   continue
 c
    50 continue
       id3=iadr(l3r)
@@ -365,7 +369,8 @@ c
       l1r=sadr(id1+m3*n3+1)
       call icopy(m3*n3+1,istk(id3),1,istk(id1),1)
       vol=istk(id1+m3*n3)-1
-      call dcopy(vol*(it3+1),stk(l3r),1,stk(l1r),1)
+      call dcopy(vol,stk(l3r),1,stk(l1r),1)
+      call dcopy(vol,stk(l3i),1,stk(l1r+vol),1)
       lstk(top+1)=l1r+vol*(it3+1)
       istk(il1)=2
       istk(il1+1)=m3

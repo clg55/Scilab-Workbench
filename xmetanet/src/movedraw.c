@@ -10,7 +10,8 @@ Widget w;
 Position top;
 Dimension length, total;
 {
-  XawScrollbarSetThumb(w, (float) top / total, (float) length / total );
+  XawScrollbarSetThumb(w, (float) top / (float) total, 
+		       (float) length / (float) total );
 }
 
 void RedrawThumbs(w)
@@ -36,10 +37,10 @@ Position x, y;
   register Widget clip = w->viewport.clip;
 
   /* make sure we never move past right/bottom borders */
-  if (x + clip->core.width > child->core.width)
+  if ((int) (x + clip->core.width) > (int) child->core.width)
     x = child->core.width - clip->core.width;
 
-  if (y + clip->core.height > child->core.height)
+  if ((int) (y + clip->core.height) > (int ) child->core.height)
     y = child->core.height - clip->core.height;
 
   /* make sure we never move past left/top borders */

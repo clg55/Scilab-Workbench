@@ -4,6 +4,8 @@
 # Set the SCI environment variable
 SCI="SCILAB_DIRECTORY"
 MYMANPATH=
+CCOMPILER="Ccompiler"
+FCOMPILER="Fcompiler"
 #############################################################################
 #                                                                           #
 #                       DO NOT MODIFY BELOW THIS LINE                       #

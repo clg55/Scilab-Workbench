@@ -1,6 +1,4 @@
-C/MEMBR ADD NAME=FFT842,SSI=0
       subroutine fft842(in, n, x, y,err)
-c!but
 c          programe de transformee de fourier rapide pour n=2**m
 c             -  algorithme de cooley-tukey   -
 c!entrees
@@ -17,7 +15,6 @@ c
 c          si la dimension (suite de nombres complexes n'est pas de
 c          dimension 2**n tel que  0<n<15 )err est positionne a 1 .
 c
-c!
 c
       integer ij,ji,m,nt,n2pow,fn,n8pow,nxtlt,lengt
       integer err
@@ -29,12 +26,6 @@ c
      & (l11,l(5)),(l10,l(6)),(l9,l(7)),(l8,l(8)),(l7,l(9)),
      & (l6,l(10)),(l5,l(11)),(l4,l(12)),(l3,l(13)),(l2,l(14)),
      & (l1,l(15))
-c
-c
-c iw  depend de la configuration systeme( lie a i1mach(2))
-c
-c
-c     iw=1
 c
       pi2=8.0d+0*atan(1.0d+0)
       pi=acos(-1.0d+0)

@@ -58,56 +58,30 @@ AddNewWin(popup,popupcount,drawbox)
      int popupcount;
 {
   Widget outer,command2,command3,command1;
-  static Arg boxArgs[5],args[1] ;
+  static Arg args[1] ;
   Cardinal n=0;
-  outer = XtCreateManagedWidget( "paned", formWidgetClass, popup,
+  outer = XtCreateManagedWidget( "scigForm", formWidgetClass,popup,
 				  args,n);
   XtAddEventHandler(outer, StructureNotifyMask , False, (XtEventHandler)ResizeWindow, 
 		    (XtPointer) popupcount);
-  n=0;
-  XtSetArg(boxArgs[n], XtNresize, (XtArgVal) False); n++; 
-  XtSetArg(boxArgs[n], XtNwidth , strlen("Clear")*13);n++;
-  XtSetArg(boxArgs[n], XtNheight , 15);n++;
   command2 = XtCreateManagedWidget("Clear",
-				   commandWidgetClass,outer,boxArgs,n);
-  XtAddCallback(command2, XtNcallback,(XtCallbackProc) Efface, 
-		(XtPointer) popupcount); 
+				   commandWidgetClass,outer,args,n);
+  XtAddCallback(command2, XtNcallback,(XtCallbackProc) Efface,(XtPointer) popupcount); 
+  command3 = XtCreateManagedWidget("Print", commandWidgetClass,outer,args,n);
+  XtAddCallback(command3, XtNcallback,(XtCallbackProc)  Print,(XtPointer) popupcount);
+  /* I use a label in order to have foreground and background */
   n=0;
-  XtSetArg(boxArgs[n], XtNfromHoriz, command2);n++;
-  XtSetArg(boxArgs[n], XtNresize, (XtArgVal) False); n++; 
-  XtSetArg(boxArgs[n], XtNwidth , strlen("Print")*13);n++;
-  XtSetArg(boxArgs[n], XtNheight , 15);n++;
-  command3 = XtCreateManagedWidget("Print",
-				   commandWidgetClass,outer,boxArgs,n);
-  XtAddCallback(command3, XtNcallback,(XtCallbackProc)  Print,
-		(XtPointer) popupcount); 
-  /* Just for testing 
-  n=0;
-  XtSetArg(boxArgs[n], XtNfromHoriz, command3);n++;
-  XtSetArg(boxArgs[n], XtNresize, (XtArgVal) False); n++; 
-  XtSetArg(boxArgs[n], XtNwidth , strlen("Test")*13);n++;
-  XtSetArg(boxArgs[n], XtNheight , 15);n++;
-  command1 = XtCreateManagedWidget("Test",
-				   commandWidgetClass,outer,boxArgs,n);
-  XtAddCallback(command1, XtNcallback,(XtCallbackProc) Test,
-		(XtPointer) popupcount); 
-  */
-  n=0;
-  XtSetArg(boxArgs[n], XtNheight , 400);n++;
-  XtSetArg(boxArgs[n], XtNwidth , 600);n++;
-  XtSetArg(boxArgs[n], XtNfromVert , command2);n++;
-  *drawbox= XtCreateManagedWidget("scigraphic",boxWidgetClass, outer,
-				 boxArgs,n);
+  XtSetArg(args[n], XtNlabel," ");n++;
+  *drawbox= XtCreateManagedWidget("scigraphic",labelWidgetClass, outer, args,n);
   /* EventProc Must select the client Message Events */
   XtAddEventHandler(outer,NoEventMask,True,(XtEventHandler) EventProc,
 		    (XtPointer) popupcount);  
   XtAddEventHandler(*drawbox,  ButtonPressMask|PointerMotionMask|
 		    KeyPressMask,True,
 		    (XtEventHandler) EventProc, (XtPointer) popupcount);
+  /* For Graphic demo */
   /* AddNewMenu(outer,*drawbox); */
-
-  
-};
+}
 
 /* 
  * Checking events in the Graphic Window 
@@ -140,7 +114,7 @@ EventProc(widget, number , event)
     default:
 	/*	    SciF1d("Je suis ds EventProc fenetre %d\r\n",num);*/
 	return;
-	};
+	}
 }
 /*
  * The ResizeWindow handler for the drawbox
@@ -165,8 +139,8 @@ static XtEventHandler ResizeWindow(w, number, e)
     C2F(dr)("xreplay","v",&win_num,IP0,IP0,IP0,IP0,IP0,0,0);
     C2F(dr)("xset","window",&cur,IP0,IP0,IP0,IP0,IP0,0,0);
     C2F(dr)("xsetdr",name, IP0, IP0,IP0,IP0,IP0,IP0,0,0);
-  };
-};
+  }
+}
 
 /*
  *
@@ -225,15 +199,15 @@ Print(w, number, client_data)
   GetDriver1_(name);
   C2F(dr)("xget","window",&verb,&cur,&na,IP0,IP0,IP0,0,0);  
   C2F(dr)("xsetdr","Pos",IP0,IP0,IP0,IP0,IP0,IP0,0,0);
-  sprintf(bufname,"/tmp/scipos.pos.%d",getpid());
+  sprintf(bufname,"/tmp/.scilab_%d/scilab.ps.%d",getpid(),win_num);
   C2F(dr)("xinit",bufname,&win_num,IP0,IP0,IP0,IP0,IP0,0,0);
   C2F(dr)("xreplay","v",&win_num,IP0,IP0,IP0,IP0,IP0,0,0);
   C2F(dr)("xend","v",IP0,IP0,IP0,IP0,IP0,IP0,0,0);
   C2F(dr)("xsetdr",name, IP0, IP0,IP0,IP0,IP0,IP0,0,0);
   C2F(dr)("xset","window",&cur,IP0,IP0,IP0,IP0,IP0,0,0);
-  sprintf(bufname,"$SCI/bin/scilab -print /tmp/scipos.pos.%d",getpid()); 
+  sprintf(bufname,"$SCI/bin/scilab -print /tmp/.scilab_%d/scilab.ps.%d",getpid(),win_num);
   system(bufname);
-};
+}
 
 /*	Function Name: CreatePopupWindow
  *	Description: Creates and pops up the New Graphic Window
@@ -246,7 +220,7 @@ CreatePopupWindow(button, CWindow,SciGWindow,fg,bg)
      unsigned long *fg,*bg;
 {
     Arg		args[5];
-    Widget	popup,drawbox,look;
+    Widget	popup,drawbox;
     Position	x, y;
     Cardinal	n;
     XColor x_fg_color,x_bg_color;
@@ -264,7 +238,7 @@ CreatePopupWindow(button, CWindow,SciGWindow,fg,bg)
     XtPopup(popup, XtGrabNone);
     SetHints(popup);
 
-    sprintf(winname,"BG%d",popupcount);
+    sprintf((char *)winname,"BG%d",popupcount);
     XChangeProperty(XtDisplay(drawbox), XtWindow(drawbox), XA_WM_NAME, XA_STRING, 8, 
 		    PropModeReplace, winname, 5);
     attributes.backing_store = Always;
@@ -275,16 +249,13 @@ CreatePopupWindow(button, CWindow,SciGWindow,fg,bg)
     XSync(XtDisplay(popup),0);
     *CWindow=XtWindow(drawbox);
     *SciGWindow=XtWindow(popup);
-
-    XtSetArg(args[0],XtNlabel,"");
-    look = XtCreateWidget("scigraphic", labelWidgetClass, popup, args, 1);
+    
+    /*  Getting the values of foreground and background */
     XtSetArg(args[0],XtNforeground, &x_fg_color.pixel);
     XtSetArg(args[1],XtNbackground, &x_bg_color.pixel);
-    XtGetValues(look,args,2);
+    XtGetValues(drawbox,args,2);
     *fg = x_fg_color.pixel;
     *bg = x_bg_color.pixel;
-    XtDestroyWidget(look);
-
 }
 
 

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DFFTBI,SSI=0
       subroutine dfftbi(a, b, nseg, n, nspn, isn,ierr,lout,lnow,
      +      lused,lmax,lbook,rstak,istak)
 c!
@@ -60,10 +59,7 @@ c
       nspan = abs(nf*nspn)
       ntot = abs(nspan*nseg)
       if (isn*ntot.ne.0) go to 20
-c      ierr = i1mach(4)
-c      write (ierr,9999) nseg, n, nspn, isn
       ierr=1
-c9999  format (31h error - zero in fft parameters, 4i10)
       return
 c
   10  m = m + 1
@@ -127,12 +123,6 @@ c xxxxxxxxxxxxxxxxxxxxxxxxxxx
 c
  1010 continue
       ierr=-i
-c      ierr = i1mach(4)
-c      write (ierr,9999) i
-c9999  format (1h , 39hoverflow of common array istak --- need, i10)
-c      write (ierr,9998) (istak(j),j=1,10), istak(lnow-1), istak(lnow)
-c9998  format (1x, i5, 11i6)
-c      stop
       return
  1300 continue
       j=istkgt
@@ -155,12 +145,6 @@ c     xxxxxxxxxxxxxxxxxxxxxxxxxx
 c
   11  continue
       ierr=-i
-c      ierr = i1mach(4)
-c      write (ierr,9999) i
-c9999  format (1h , 39hoverflow of common array istak --- need, i10)
-c      write (ierr,9998) (istak(j),j=1,10), istak(lnow-1), istak(lnow)
-c9998  format (1x, i5, 11i6)
-c      stop
       return
  1400 continue
       k=istkgt
@@ -179,10 +163,6 @@ c
      *    13
       ierr = 3
       return
-c      write (ierr,9999)
-c9999  format (53h warning...istak(2),istak(3),istak(4) or istak(5) hit)
-c      write (ierr,9997) (istak(j),j=1,10), istak(lnow-1), istak(lnow)
-cc
   13  if (in.le.0) goto 1500
       if (lbook.gt.istak(lnow) .or. istak(lnow).ge.lnow-1) go to 21
       lout = lout - 1
@@ -192,19 +172,10 @@ cc
 c
   21  ierr = 4
       return
-c      write (ierr,9998)
-c9998  format (45h warning...pointer at istak(lnow) overwritten/11x,
-c     *    27hde-allocation not completed)
-c      write (ierr,9997) (istak(j),j=1,10), istak(lnow-1), istak(lnow)
-c9997  format (1x, i5, 11i6)
  1500 continue
       return
 c
   120 continue
-c      ierr=i1mach(4)
-c      write (ierr,9998) n
-c9998  format (50h error - fft parameter n has more than 15 factors-,
-c     *    i20)
       ierr=2
       return
       end

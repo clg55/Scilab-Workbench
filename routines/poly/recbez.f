@@ -26,17 +26,17 @@ c          dans best ( voir ci-dessus)
 c     w: tableau de travail  w(7*n0+3*n0*n0) ou n0=max(n1,n2)+1
 c     err : estimee de l'erreur d'equation
 c! sous programmes appeles
-c     dest dcopy bezstp d1mach
+c     dest dcopy bezstp dlamch
 c!origine
 c S Steer INRIA 1989
 c!
       double precision  p1(n1+1),p2(n2+1),w(*),best(*),err
-      double precision  d1mach
+      double precision  dlamch
       integer ipb(6)
 c
       integer nn1,nn2
 c
-      err=d1mach(2)
+      err=dlamch('o')
       ia=1
       nn1=n1
       nn2=n2

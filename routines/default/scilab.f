@@ -1,5 +1,6 @@
       Program main
-      character*40 arg,display,pname
+      character*40 arg,display
+      character*256 pname 
       integer nos,now,idisp
       integer p1,p2
       data nos,now,idisp /0,0,0/

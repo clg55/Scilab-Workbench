@@ -16,7 +16,7 @@
 #include <X11/Xaw/Form.h>
 #include <X11/Xaw/Label.h>
 #include <X11/Xaw/List.h>
-#include <X11/Xaw/Logo.h>
+/* #include <X11/Xaw/Logo.h> */
 #include <X11/Xaw/MenuButton.h>
 #include <X11/Xaw/Scrollbar.h>
 #include <X11/Xaw/SimpleMenu.h>
@@ -63,11 +63,11 @@ test2DD()
       for ( i=0 ; i < 4 ; i++)
 	{
 	  Frect[i]=Wrect[i];
-	};
+	}
       C2F(setscale2d)(Wrect,Frect);
       C2F(plot2d)(x,y,&n1,&n2,style,"021"," ",brect,aint,0L,0L);
     }
-};
+}
 
 
 #define XN2DD 2
@@ -96,7 +96,7 @@ static int test2D()
   C2F(dr1)("xpause","v",&sec,&v,&v,&v,&v,&v,0,0);
   C2F(plot2d)(x,y,&n1,&n2,style,"021"," ",brect,aint,0L,0L);
   C2F(dr1)("xset","wshow",&v,&v,&v,&v,&v,&v,0,0);
-};
+}
 
 #define XN2D2 200
 #define NCURVES2D2 1
@@ -123,7 +123,7 @@ static int test2D2()
 		   " y=sin(x/10)@y=sin(2*x/10)",brect,aint,0L,0L,0L);
       C2F(dr1)("xset","wshow",PI0,PI0,PI0,PI0,PI0,PI0,0,0);
       C2F(dr1)("xset","wwpc",PI0,PI0,PI0,PI0,PI0,PI0,0,0);
-    };
+    }
 }
 
 
@@ -300,9 +300,9 @@ static int test3DA()
       C2F(plot3d1)(x,y,z,&p,&q,&teta,&alpha,"X@Y@Z",flag,bbox,0L);
       C2F(dr1)("xset","wshow",PI0,PI0,PI0,PI0,PI0,PI0,0,0);
       C2F(dr1)("xset","wwpc",PI0,PI0,PI0,PI0,PI0,PI0,0,0);
-    };
+    }
   C2F(dr)("xsetdr","Rec",PI0,PI0,PI0,PI0,PI0,PI0,0,0);
-};
+}
 
 
 #define XN3D1 21
@@ -360,7 +360,7 @@ static int testArrows()
       alpha=36*j;
       polyx[2*j+1]=250+ cos(3.14116*alpha/180.0)*dx;
       polyy[2*j+1]=250 -sin(3.14116*alpha/180.0)*dx;
-    };
+    }
   DR1("xarrow","str",polyx,polyy,&narrowx2,&arsizex10,PI0,PI0,0,0);
 }
 
@@ -372,8 +372,9 @@ static int TestC(ii)
      int ii;
 {
   double z[XNC*YNC],x[XNC],y[YNC];
-  double *zz,bbox[6],zlev=10.0;
+  double zz,bbox[6],zlev=10.0;
   int p,q,i,j,nz,flagnz=0,teta=35,alpha=45,flag[3];
+  zz=1;
   for ( i=0 ; i < XNC ; i++) x[i]=10*i;
   for ( j=0 ; j < YNC ; j++) y[j]=10*j;
   for ( i=0 ; i < XNC ; i++)
@@ -383,13 +384,13 @@ static int TestC(ii)
   flag[0]=ii;
   flag[1]=2;
   flag[2]=3;
-  C2F(contour)(x,y,z,&p,&q,&flagnz,&nz,zz,&teta,&alpha, "X@Y@Z",
+  C2F(contour)(x,y,z,&p,&q,&flagnz,&nz,&zz,&teta,&alpha, "X@Y@Z",
 	   flag,bbox,&zlev);
 }
 
-static int testC1() { TestC(2);};
-static int testC2() { TestC(0);};
-static int testC3() { TestC(1);};
+static int testC1() { TestC(2);}
+static int testC2() { TestC(0);}
+static int testC3() { TestC(1);}
 
 
 #define XNCh 21
@@ -408,7 +409,7 @@ static int testCh()
 	fx[i+XNCh*j]= y;
 	fy[i+XNCh*j]= -x +(1-x*x)*y;
 	
-      };
+      }
   vrect[0]=vrect[1]= -1 ,vrect[2]=vrect[3]=1;
   arfact=1.0;
   C2F(champ)(fx,fy,(i=XNCh,&i),(j=YNCh,&j),&fax,vrect,&arfact);
@@ -522,7 +523,7 @@ transl(x,n,val)
 {
   int i;
   for (i=0 ; i < n ; i++)    x[i]=x[i]+val;
-};
+}
 
 
 corps()
@@ -541,7 +542,7 @@ corps()
       boxes[4*i+2]=30.000;
       boxes[4*i+3]=30.000;
       pats[i]=whiteid+1;
-    };
+    }
   DR1("xrects","v",boxes,pats,&n,PI0,PI0,PI0,0,0);
   for (i=0; i < 7; i++) boxes[4*i+1]=45.000;
   pats[0]=0;pats[1]=4;pats[2]=8;pats[3]=12;
@@ -555,14 +556,14 @@ corps()
       arcs[6*i+3]=30.000;
       arcs[6*i+4]=0.000;
       arcs[6*i+5]=64.0*180.000;
-    };
+    }
   DR1("xarcs","v",arcs,pats,&n,PI0,PI0,PI0,0,0);
   for (i=0; i < 7; i++)
     {
       arcs[6*i+1]=135.000;
       arcs[6*i+5]=64*360.000;
       pats[i]=whiteid+1;
-    };
+    }
   DR1("xarcs","v",arcs,pats,&n,PI0,PI0,PI0,0,0);
   x[0]=x[6]=0.0;x[5]=x[1]=10.0,x[4]=x[2]=20.0;x[3]=30.0;
   y[0]=15.0;y[1]=y[2]=30.0;y[3]=15.0;y[4]=y[5]=0.0;y[6]=15.0;
@@ -574,7 +575,7 @@ corps()
 	  xpols[i+j*7]=x[i]+40*j;
 	  ypols[i+j*7]=y[i];
 	}
-    };
+    }
    DR1("xliness","v",xpols,ypols,pats,&n,&n,PI0,0,0);
   pats[0]=0;pats[1]=4;pats[2]=8;pats[3]=12;
   pats[4]=15;pats[5]=whiteid;pats[6]=0;
@@ -598,14 +599,14 @@ corps()
       xpols[2*i+1]=xpols[2*i]+30.0;
       ypols[2*i]=360.0+40.0;
       ypols[2*i+1]=360.0+70.0;
-    };
+    }
   n=14;
   DR1("xsegs","v",xpols,ypols,&n,PI0,PI0,PI0,0,0);
   for (i=0; i < 7; i++)
     {
       ypols[2*i]=360.0+70.0;
       ypols[2*i+1]=360.0+100.0;
-    };
+    }
   arsize=50;
   DR1("xarrow","v",xpols,ypols,&n,&arsize,PI0,PI0,0,0);
   x[0]=0;x[1]=100;x[2]=200;
@@ -619,7 +620,7 @@ corps()
   iflag=0;
   DR1("xnum","v",x,y,xpols,ypols,&n,&iflag,0,0);
 
-  };
+  }
 
 
 
@@ -704,7 +705,7 @@ fixbounds(xmin,xmax,ymin,ymax)
   n1=NCU;n2=NF;
   aint[0]=aint[2]=2;aint[1]=aint[3]=10;
   C2F(plot2d)(x,y,&n1,&n2,style,"022"," ",brect,aint,0L,0L);
-};
+}
   
 
 
@@ -729,13 +730,13 @@ polycorps()
   x[0]=x[6]=0.0;x[5]=x[1]=10.0,x[4]=x[2]=20.0;x[3]=30.0;
   y[0]=15.0;y[1]=y[2]=30.0;y[3]=15.0;y[4]=y[5]=0.0;y[6]=15.0;
   DR1("xlines","v",&n,x,y,&cf,PI0,PI0,0,0);
-};
+}
 
 typedef  struct  {
   char *name;
   int  (*fonc)();} OpTab ;
 
-static int vide() {};
+static int vide() {}
 
 OpTab testtab[] ={
  "test2D", test2D,
@@ -795,7 +796,7 @@ XtPointer junk, garbage;
       int num=0;
       C2F(dr)("xclear","v",PI0,PI0,PI0,PI0,PI0,PI0,0,0);
       C2F(dr)("xstart","v",&num,PI0,PI0,PI0,PI0,PI0,0,0);
-    };
+    }
 
     if (streq(XtName(w), "test2D")) test2D();
     if (streq(XtName(w), "test2D2")) test2D2();
@@ -847,7 +848,7 @@ AddNewMenu(parent,drawbox)
 				    args, ZERO);
        XtAddCallback(entry,XtNcallback,MenuSelect,NULL);
        i++;
-     };
-};
+     }
+}
 
 

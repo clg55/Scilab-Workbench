@@ -3,7 +3,7 @@ function [p,lp]=lshp(i,j,g)
 if ( i<0 | i>g_nodnum(g) | j<0 | j>g_nodnum(g)) then 
   error('bad internal node number') 
 end
-lneg=find(alenght(g)<0)
+lneg=find(g_alen(g)<0)
 if lneg<>[] then 
   [l,v]=ford(i,g)
 else   

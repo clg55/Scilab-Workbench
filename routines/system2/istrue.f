@@ -16,19 +16,21 @@ c
          do 10 i=1,m
             if(istk(il+2+i).eq.0) goto 20
  10      continue
-         return
+      elseif(istk(il).eq.6) then
+         m=istk(il+1)*istk(il+2)
+         nel=istk(il+4)
+         if(nel.ne.m) goto 20
       elseif(istk(il).eq.1.and.istk(il+3).eq.0) then
          m=istk(il+1)*istk(il+2)
          l=sadr(il+4)
          do 11 i=0,m-1
             if(stk(l+i).eq.0.0d+0) goto 20
  11      continue
-         return
       else
          err=1
          call error(44)
-         return
       endif
+      return
 
  20   istrue=.false.
       return

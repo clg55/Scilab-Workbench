@@ -55,7 +55,7 @@
  *  Arithmetic Precision
  *      The precision of the arithmetic used by Sparse can be set by
  *      changing changing the spREAL macro.  This macro is
- *      contained in the file spMatrix.h.  It is strongly suggested to
+*      contained in the file spMatrix.h.  It is strongly suggested to
  *      used double precision with circuit simulators.  Note that
  *      because C always performs arithmetic operations in double
  *      precision, the only benefit to using single precision is that
@@ -261,8 +261,8 @@
 #define  STABILITY                      YES
 #define  CONDITION                      YES
 #define  PSEUDOCONDITION                YES
-#define  FORTRAN                        NO
-#define  DEBUG                          YES
+#define  FORTRAN                        YES
+#define  DEBUG                          NO
 
 /*
  *  The following options affect Sparse exports and so are exported as a
@@ -521,3 +521,7 @@
 
 #endif /* spINSIDE_SPARSE */
 #endif /* spCONFIG_DEFS */
+
+
+
+

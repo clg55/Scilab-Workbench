@@ -44,7 +44,7 @@ OBJS = wf_w_dir.o wf_w_file.o wf_w_util.o wf_w_cursor.o \
 SRCS=$(OBJS:.o=.c)
 
 XSCILAB_DEFAULT1 = $(SCIDIR)/X11_defaults/Xscilab
-XSCILAB_DEFAULT2 = $(SCIDIR)/X11_defaults/Xscilab-color
+
 AllTarget($(XSCILAB_DEFAULT1) $(XSCILAB_DEFAULT2))
 
 LibraryTarget($(PATHO)/xsci.a,$(OBJS))
@@ -52,11 +52,7 @@ DependTarget()
 
 $(XSCILAB_DEFAULT1): Xscilab.ad
 	rm -f $(XSCILAB_DEFAULT1)
-	$(INSTALL) -c Xscilab.ad $(XSCILAB_DEFAULT1)
-
-$(XSCILAB_DEFAULT2): Xscilab-color.ad
-	rm -f $(XSCILAB_DEFAULT2)
-	$(INSTALL) -c Xscilab-color.ad $(XSCILAB_DEFAULT2)
+	cp Xscilab.ad $(XSCILAB_DEFAULT1)
 
 OBJTEST=x_test_loop.o  
 SRCTEST=x_test_loop.c 
@@ -74,14 +70,18 @@ ScriptsTarget(version.h,version.g,$(IM))
 
 x_main.o x_menu.o jpc_windows.o h_help.o : version.h 
 
-x_main.o h_main_help.o	: h_help.ad.h
+x_main.o h_main_help.o	: Xscilab.ad.h 
+
+Xscilab.ad.h : Xscilab.ad
+	./ad2c.script Xscilab.ad > Xscilab.ad.h
 
 #if defined(WithLocalXaw)
 XAWLIB = ../../libs/libXaw.a 
 XMULIB = ../../libs/libXmu.a
+XMULIBONLY = ../../libs/libXmu.a
 #endif
 
-NormalProgramTarget(test,$(OBJTEST) ../sun/zzledt.o ../sun/sync.o ../sun/flags.o $(OBJS),NullParameter, $(SCIDIR)/libs/X11G.a $(SCIDIR)/libs/comm.a XawClientLibs ,$(TERMCAPLIB) $(PTYLIB) -lm)
+NormalProgramTarget(test,$(OBJTEST) ../sun/zzledt.o ../sun/sync.o ../sun/flags.o $(OBJS),NullParameter, $(SCIDIR)/libs/xwindow.a $(SCIDIR)/libs/X11G.a $(SCIDIR)/libs/comm.a $(SCIDIR)/libs/metanet.a  XawClientLibs ,$(TERMCAPLIB) $(PTYLIB) -lm)
 
 NormalProgramTarget(wf_test,$(OBJWFTEST) $(OBJS),NullParameter,XawClientLibs,-lm)
 

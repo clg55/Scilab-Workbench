@@ -73,7 +73,8 @@ c
       goto (
      +     200,201,202,203,204,205,206,207,208,209,
      +     210,211,212,213,214,215,216,217,218,219,
-     +     220,221,222,223,224,225,226,227,228,229),n-199
+     +     220,221,222,223,224,225,226,227,228,229,
+     +     230,231,232,233,234,235,236,237,238,239),n-199
 
       goto 998
 c
@@ -117,9 +118,9 @@ c
    17 lb = lstk(isiz) - lstk(bot) + 1
       lt = err + lstk(bot)
       call basout(io,lunit,'memory size exceeded!')
-      write(buf(1:21),'(3i7)') lb,lt,lstk(isiz)
-      call basout(io,lunit,' '//buf(1:7)//' variables'//buf(8:14)//
-     &            'intermediate ones'//buf(15:21)//' are available')
+      write(buf(1:27),'(3i9)') lb,lt,lstk(isiz)
+      call basout(io,lunit,' '//buf(1:9)//' variables'//buf(10:18)//
+     &            ' intermediate ones'//buf(19:27)//' are available')
       go to 999
    18 call basout(io,lunit,'too many names!')
       go to 999
@@ -238,7 +239,7 @@ c
    50 call basout(io,lunit,'subroutine not found : '//buf(1:32))
       goto 999
    51 call basout(io,lunit,
-     &     'This command cannot cannot be compiled : '//buf(1:nlgh))
+     &     'This command cannot be compiled : '//buf(1:nlgh))
       goto 999
    52 if(err.ne.1) then
          write(buf(1:3),'(i3)') err
@@ -252,28 +253,28 @@ c
    53 if(err.ne.1) then
          write(buf(1:3),'(i3)') err
          call basout(io,lunit,buf(1:3)//
-     +        'th argument must be a scalar')
+     +        'th argument type must be scalar')
       else
          call basout(io,lunit,
-     +        'argument must be a scalar')
+     +        'argument type must be  scalar')
       endif
       goto 999
    54 if(err.ne.1) then
          write(buf(1:3),'(i3)') err
          call basout(io,lunit,buf(1:3)//
-     +        'th argument must be a polynomial')
+     +        'th argument type must be polynomial')
       else
          call basout(io,lunit,
-     +        'argument must be a polynomial')
+     +        'argument type must be polynomial')
       endif
       goto 999
    55 if(err.ne.1) then
          write(buf(1:3),'(i3)') err
          call basout(io,lunit,buf(1:3)//
-     +        'th argument must be a character string')
+     +        'th argument type must be character string')
       else
          call basout(io,lunit,
-     +        'argument must be a character string')
+     +        'argument type must be  character string')
       endif
       goto 999
    56 if(err.ne.1) then
@@ -296,7 +297,7 @@ c
               call basout(io,lunit,
      &       'incorrect number of arguments in macro call...')
               call basout(io,lunit,'arguments are :')
-              call prntid(istk(pstk(pt)),rhs)
+              call prntid(istk(pstk(pt)),rhs,wte)
       endif
       goto 999
    59 continue
@@ -307,7 +308,7 @@ c
          call basout(io,lunit,
      &        'incorrect # of outputs in the macro')
          call basout(io,lunit,'arguments are :')
-         call prntid(istk(pstk(pt)),lhs)
+         call prntid(istk(pstk(pt)),lhs,wte)
       endif
       goto 999
    60 call basout(io,lunit,'argument with incompatible dimensions')
@@ -771,14 +772,54 @@ c
       call basout(io,lunit,' expecting a  vector')
       goto 999
  215  continue
+      if(err.ne.1) then
+         write(buf(1:3),'(i3)') err
+         call basout(io,lunit,buf(1:3)//
+     +        'th argument type must be boolean')
+      else
+         call basout(io,lunit,
+     +        'argument type must be boolean')
+      endif
       goto 999
- 216  continue
+ 216  continue 
+      if(err.ne.1) then
+         write(buf(1:3),'(i3)') err
+         call basout(io,lunit,buf(1:3)//
+     +        'th argument type must be boolean or scalar')
+      else
+         call basout(io,lunit,
+     +        'argument type must be boolean or scalar')
+      endif
       goto 999
  217  continue
+      if(err.ne.1) then
+         write(buf(1:3),'(i3)') err
+         call basout(io,lunit,buf(1:3)//
+     +        'th argument  must be a sparse matrix of scalars')
+      else
+         call basout(io,lunit,
+     +        'argument type must be a sparse matrix of scalars')
+      endif
       goto 999
  218  continue
+      if(err.ne.1) then
+         write(buf(1:3),'(i3)') err
+         call basout(io,lunit,buf(1:3)//
+     +        'th argument  must be a  handle to sparse lu factors')
+      else
+         call basout(io,lunit,
+     +        'argument type must be a  handle to sparse lu factors')
+      endif
       goto 999
  219  continue
+      if(err.ne.1) then
+         write(buf(1:3),'(i3)') err
+         call basout(io,lunit,buf(1:3)//
+     +        'th argument  must be a sparse or full scalar matrix')
+      else
+         call basout(io,lunit,
+     +        'argument type must be a sparse or full scalar matrix')
+      endif
       goto 999
  220  continue
       goto 999
@@ -799,6 +840,28 @@ c
  228  continue
       goto 999
  229  continue
+      goto 999
+C     errors from semidef
+ 230  continue
+         call basout(io,lunit,'semidef fails')
+      goto 999
+ 231  continue
+      goto 999
+ 232  continue
+      goto 999
+ 233  continue
+      goto 999
+ 234  continue
+      goto 999
+ 235  continue
+      goto 999
+ 236  continue
+      goto 999
+ 237  continue
+      goto 999
+ 238  continue
+      goto 999
+ 239  continue
       goto 999
 
 

@@ -43,7 +43,7 @@
 #include "wf_w_dir.h"
 #include "wf_w_setup.h"
 #include "wf_w_drawprim.h"		/* for char_height */
-#ifdef USE_DIRENT
+#ifdef SYSV
 #include <dirent.h>
 #else
 #include <sys/dir.h>
@@ -288,7 +288,7 @@ create_dirinfo(parent, below, ret_beside, ret_below,
     FirstArg(XtNstring, &dirmask);
     GetValues(*mask_w);
     if (MakeFileList(cur_dir, dirmask, &dir_list, &file_list) == False)
-	file_msg("No files in directory?");
+	file_msg("No files in directory?",(char *) NULL);
 
     FirstArg(XtNlabel, "Current Directory:");
     NextArg(XtNborderWidth, 0);

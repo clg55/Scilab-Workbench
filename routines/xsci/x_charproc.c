@@ -49,6 +49,10 @@
 #include <setjmp.h>
 #include <ctype.h>
 
+#ifdef aix
+#include <sys/select.h>
+#endif
+
 /** JPC **/
 #ifndef XtRGravity
 #define XtRGravity "Gravity"
@@ -495,7 +499,7 @@ int
 XEvorgetchar()
 {
   return (in_put());
-};
+}
 
 
 void Xputstring(str,n)
@@ -505,7 +509,7 @@ void Xputstring(str,n)
   void Xputchar();
   int i ;
   for ( i =0 ; i < n; i++) Xputchar(str[i]);
-};
+}
 
 void C2F(xscisncr)(str,dummy)
      char *str;
@@ -516,8 +520,8 @@ void C2F(xscisncr)(str,dummy)
   n=strlen(str);
   for ( i =0 ; i < n; i++) {
     Xputchar(str[i]);
-  };
-};
+  }
+}
 
 void C2F(xscistring)(str,n,dummy)
      char *str;
@@ -528,9 +532,9 @@ void C2F(xscistring)(str,n,dummy)
   int i ;
   for ( i =0 ; i < *n; i++) {
     Xputchar(str[i]);
-  };
+  }
   Xputstring("\r\n",2);
-};
+}
 
 #define MORESTR "[More (y or n ) ?] "
 
@@ -543,10 +547,10 @@ void C2F(xscimore)(n)
       Xputstring(MORESTR,strlen(MORESTR));
       *n=XEvorgetchar();
       Xputstring("\r\n",2);
-      if ( *n == 110 ) { *n=1;break;};
-      if ( *n == 121 ) { *n=0;break;};
+      if ( *n == 110 ) { *n=1;break;}
+      if ( *n == 121 ) { *n=0;break;}
     }
-};
+}
 
 /* I/O Function for C routines : test for xscion */
 
@@ -573,7 +577,7 @@ void Scistring(str)
       n=strlen(str);
       C2F(xscistring)(str,&n);
   }
-};
+}
 
 static char s_buf[512];
 
@@ -588,8 +592,8 @@ void SciF1s(form,str)
     {
       (void) sprintf(s_buf,form,str);
       C2F(xscisncr)(s_buf,0);
-    };
-};
+    }
+}
 
 void SciF2s(form,str1,str2)
      char *form,*str1,*str2;
@@ -602,8 +606,8 @@ void SciF2s(form,str1,str2)
     {
       (void) sprintf(s_buf,form,str1,str2);
       C2F(xscisncr)(s_buf,0);
-    };
-};
+    }
+}
 
 void SciF1d(form,d1)
      char *form;
@@ -617,8 +621,8 @@ void SciF1d(form,d1)
     {
       (void) sprintf(s_buf,form,d1);
       C2F(xscisncr)(s_buf,0);
-    };
-};
+    }
+}
 
 
 void SciF2d(form,d1,d2)
@@ -633,8 +637,8 @@ void SciF2d(form,d1,d2)
     {
       (void) sprintf(s_buf,form,d1,d2);
       C2F(xscisncr)(s_buf,0);
-    };
-};
+    }
+}
 
 void SciF4d(form,d1,d2,d3,d4)
      char *form;
@@ -648,8 +652,8 @@ void SciF4d(form,d1,d2,d3,d4)
     {
       (void) sprintf(s_buf,form,d1,d2,d3,d4);
       C2F(xscisncr)(s_buf,0);
-    };
-};
+    }
+}
 
 
 /* I/O Function */
@@ -661,7 +665,7 @@ void Xputchar(c)
   register TScreen *screen = &term->screen;
   register int *parsestate = groundtable;
   register unsigned char *cp;
-  register int row, col, top, bot, scstype;
+  register int row, col, top, bot, scstype=0;
   extern int TrackMouse();
   int res;
   if (setjmp(vtjmpbuf))
@@ -1204,7 +1208,7 @@ void Xputchar(c)
     parsestate = groundtable;
     break;
   }
-};
+}
 
 
 /* Write data to the pty as typed by the user, pasted with the mouse,
@@ -1224,7 +1228,7 @@ v_write(f, d, len)
     {
       fprintf(stderr,"In v_write : Data too long to be stored \n");
       return;
-    };
+    }
   for (i = 0; i < len; i++)
     /* buffer[bcnt + i] = d[i]; */
     bptr[bcnt+i] =d[i];
@@ -1256,8 +1260,8 @@ xevents1()
       if (ctrl_action(buffer[bcnt1])==1)
 	{
 	  bcnt = bcnt1;
-	};
-    };
+	}
+    }
 }
 
 
@@ -1270,7 +1274,7 @@ in_put()
     {
       bcnt--;
       return (*bptr++);
-    };
+    }
   for (;;)
   {
     if (cok > 0)
@@ -1316,7 +1320,7 @@ in_put()
     select_mask = X_mask;
     select_timeout.tv_sec = 0;
     select_timeout.tv_usec = 0;
-    i = select(max_plus1, &select_mask, (int *) NULL, (int *) NULL,
+    i = select(max_plus1, (fd_set *)&select_mask, (fd_set *) NULL, (fd_set *) NULL,
 	       QLength(screen->display) ? &select_timeout
 	       : (struct timeval *) NULL);
     if (i < 0)
@@ -2029,7 +2033,7 @@ VTRun(nostartup)
   {
     /** An interaction Loop */
     F2C(scilab)(&nostartup);
-  };
+  }
   HideCursor();
   screen->cursor_set = OFF;
 }
@@ -2109,15 +2113,13 @@ VTInit1(parent)
 {
   XSizeHints size_hints;
   register TScreen *screen = &term->screen;
-  size_hints.width = 400;
-  size_hints.height = 300;
-  size_hints.min_width = size_hints.max_width = size_hints.width;
-  size_hints.min_height = size_hints.max_height = size_hints.height;
-  size_hints.flags = USPosition | USSize | PMinSize;
   XtRealizeWidget(parent);
   XtOverrideTranslations(parent, XtParseTranslationTable(xterm_trans));
   (void) XSetWMProtocols(XtDisplay(parent), XtWindow(parent),
 			 &wm_delete_window, 1);
+  size_hints.min_width = 400;
+  size_hints.min_height = 300;
+  size_hints.flags =  PMinSize;
   XSetNormalHints(XtDisplay(parent), XtWindow(parent), &size_hints);
   if (screen->allbuf == NULL)
     VTallocbuf();

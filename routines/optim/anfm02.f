@@ -53,7 +53,7 @@ C        Esta subrutina trabaja en doble precision via una sentencia
 C     "implicit":
 C                Implicit double precision (a-h,o-z)
 C
-C     SUBPROGRAMAS AUXILIARES: daxpy, dcopy,ddot,dscal,d1mach
+C     SUBPROGRAMAS AUXILIARES: daxpy, dcopy,ddot,dscal,dlamch
 C     FUNCIONES FORTRAN INTRINSECAS: mod,sign
 C
 C
@@ -75,7 +75,7 @@ C
 C
 C     Se modifican adecuadamente las ultimas columnas de R y la matriz Q
 C
-      epsmch=d1mach(4)
+      epsmch=dlamch('p')
       do 15 i=icol+1,m
          if(r(i,i).ne.0.0d+0) then
             i1=i-1

@@ -74,7 +74,7 @@ C2F(champ)(fx,fy,n1,n2,strflag,vrect,arfact,lstr)
   /** The arrowsize acording to the windowsize **/
   n=2*(*n1)*(*n2);
   FRect[0]=vrect[0];FRect[1]=vrect[1];FRect[2]=vrect[2];FRect[3]=vrect[3];
-  if ( strlen(strflag) >=1 && strflag[0]=='2') job=0;
+  if ( (int)strlen(strflag) >=1 && strflag[0]=='2') job=0;
   Scale2D(job,FRect,IRect,&scx,&scy,&xofset,&yofset,&xm,&ym,n,&err);
   if ( err == 0) return;
   nx=((double) IRect[2])/((double)(*n1)-1);
@@ -85,21 +85,21 @@ C2F(champ)(fx,fy,n1,n2,strflag,vrect,arfact,lstr)
       xm[2*(i +(*n1)*j)]= nint(nx*i + xofset);
       ym[2*(i +(*n1)*j)]= nint(ny*(*n2-j-1) + yofset);
     
-    };
+    }
   /** Scaling **/
 
   for (i = 0 ; i < (*n1)*(*n2) ; i++)
     {
       fx[i] = IRect[2]*fx[i]/Abs(FRect[2]-FRect[0]);
       fy[i] = IRect[3]*fy[i]/Abs(-FRect[1]+FRect[3]);;
-    };
+    }
   sc= fx[0]*fx[0]+fy[0]*fy[0];
   for (i = 1;  i < (*n1)*(*n2) ; i++)
     {
       double maxx;
       maxx =  fx[i]*fx[i]+fy[i]*fy[i];
       if ( maxx > sc) sc=maxx;
-    };
+    }
   sc = ( sc < SMDOUBLE) ? SMDOUBLE : sqrt(sc) ;
 
   for (i = 0 ; i < (*n1)*(*n2) ; i++)
@@ -108,7 +108,7 @@ C2F(champ)(fx,fy,n1,n2,strflag,vrect,arfact,lstr)
       nn=sqrt(nx*nx+ny*ny);
       fx[i] = nn*fx[i]/sc;
       fy[i] = nn*fy[i]/sc; 
-    };
+    }
   /** size of arrow **/
   arsize1= ((double) IRect[2])/(5*(*n1));
   arsize2= ((double) IRect[3])/(5*(*n2));
@@ -120,7 +120,7 @@ C2F(champ)(fx,fy,n1,n2,strflag,vrect,arfact,lstr)
       xm[2*i]  = -fx[i]/2+xm[2*i];
       ym[1+2*i]= -fy[i]/2+ym[2*i];
       ym[2*i]  =fy[i]/2+ym[2*i];
-    };
+    }
   if ( strflag[0] != '0' ) 
     { 
       double xmin1,xmax1, ymin1,ymax1;
@@ -135,7 +135,7 @@ C2F(champ)(fx,fy,n1,n2,strflag,vrect,arfact,lstr)
   else 
     {
       C2F(dr)("xrect","v",&IRect[0],&IRect[1],&IRect[2],&IRect[3],IP0,IP0,0,0);
-    };
+    }
   C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3],IP0,IP0,0,0);
   n=2*(*n1)*(*n2);
   C2F(dr)("xarrow","v",xm,ym,&n,&arsize,IP0,IP0,0,0);
@@ -143,6 +143,6 @@ C2F(champ)(fx,fy,n1,n2,strflag,vrect,arfact,lstr)
   C2F(dr)("xset","clipping",&IRect1[0],&IRect1[1],&IRect1[2],&IRect1[3],
       IP0,IP0,0,0);
     
-};
+}
 
 

@@ -2,9 +2,9 @@
 #include "../Imake.incl"
 
 #define IHaveSubdirs
-#define PassCDebugFlags CDEBUGFLAGS=$(CDEBUGFLAGS) FDEBUGFLAGS=$(FDEBUGFLAGS)
+#define PassCDebugFlags CDEBUGFLAGS='$(CDEBUGFLAGS)' FDEBUGFLAGS='$(FDEBUGFLAGS)'
 
-SUBDIRS = intro signal
+SUBDIRS = intro signal lmitool
 
 AllTarget(info)
 

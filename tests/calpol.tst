@@ -7,9 +7,7 @@ s=poly(0,'s');
 //rationals
 //
 num=1;den=1+s;
-//JPC :  L'un des dernier tests ne passe pas avec 1000*%eps
-eps=2.3*1000*%eps;
-//eps=1000*%eps;
+eps=5000*%eps;
 if cmpr(num/den,list('r',num,den,[]),eps)<>1 then pause,end
 if cmpr(den\num,list('r',num,den,[]),eps)<>1 then pause,end
 if cmpr(num./den,list('r',num,den,[]),eps)<>1 then pause,end

@@ -1,7 +1,7 @@
  
--->//FICHIER_DE_TEST ADD NAME=bezout.tst,SSI=0
+//FICHIER_DE_TEST ADD NAME=bezout.tst,SSI=0
  
--->mode(5)
+mode(5)
 //test
 un=poly(1,'s','c');
 zer=0*un;

@@ -395,3 +395,12 @@ extern Cursor make_colored_cursor();
 extern int GetBytesAvailable();
 extern void first_map_occurred();
 extern int kill_process_group();
+
+#if defined(sun) && defined(SYSV)
+#include <X11/Xos.h>
+#include <string.h>
+ 
+#define bcopy(b1,b2,len) memmove(b2, b1, (size_t)(len))
+#define bzero(b,len) memset(b, 0, (size_t)(len))
+#define bcmp(b1,b2,len) memcmp(b1, b2, (size_t)(len))
+#endif

@@ -29,77 +29,83 @@ DialogOk(w, client_data, call_data)
   ok_Flag_sci= 1;
 }
 
-#define X 147
-#define Y 33
+static XtCallbackProc 
+DialogCancel(w,client_data,callData)
+     Widget w;
+     XtPointer client_data, callData;	
+{ 
+  ok_Flag_sci = -1;
+}
 
-static
-void DialogWindow(description,valueinit,nd,nv,buttonname)
+void 
+DialogWindow(description,valueinit,nd,nv,buttonname)
      char * description;
      char * valueinit;
      char **buttonname;
      int * nv;
-     int *nd;
+     int * nd;
   {
     Arg args[10];
     int iargs = 0;
-    int width,i,height,n,ni,li;
-    XFontStruct *font;
-    Widget shell,dialog,dialogbox,port,label,okbutton;
+    XFontStruct     *temp_font;
+    int width,i,height,n,ni,li,max_width;
+    Widget shell,dialog,dialogform,port,label,okbutton,wid,box;
     static Display *dpy = (Display *) NULL;
 
     DisplayInit("",&dpy,&toplevel);
 
-    font = XLoadQueryFont(dpy,XWMENUFONT);
-    height=font->ascent+font->descent;
-
-    iargs=0;
-    XtSetArg(args[iargs], XtNx, X + 10); iargs++ ;
-    XtSetArg(args[iargs], XtNy, Y + DIALOGHEIGHT +10); iargs++;
-    XtSetArg(args[iargs], XtNallowShellResize, True); iargs++;
-
-    shell = XtCreatePopupShell("dialogshell",
+    shell = XtCreatePopupShell("dialogShell",
 			       transientShellWidgetClass,toplevel,
 			       args,iargs);
 
     iargs = 0;
-    XtSetArg(args[iargs], XtNheight, height); iargs++;
-    XtSetArg(args[iargs], XtNresizable , TRUE) ; iargs++;
-    dialogbox = XtCreateManagedWidget("dialogbox",boxWidgetClass,
+    dialogform = XtCreateManagedWidget("dialogForm",formWidgetClass,
 				      shell,args,iargs);
+    iargs=0;
+    XtSetArg(args[iargs], XtNlabel,  description); iargs++; 
+    label=XtCreateManagedWidget("dialogLabel",labelWidgetClass,dialogform,args,
+			  iargs);
+    iargs=0;
+    XtSetArg(args[0],XtNfont, &temp_font);  iargs++;
+    XtGetValues(label, args, iargs);
+    height=Min(*nv+1,30)*(char_height(temp_font) + 2);
+    /* width of valueinit */
+    width=0 ;
+    max_width=1;
+    for (i = 0 ; i < (int)strlen(valueinit);i++)
+      {
+	width++;
+	if ( valueinit[i]=='\n' || i == strlen(valueinit)  -1)
+	  {
+	    max_width= (max_width > width ) ?  max_width : width;
+	    width=0;
+	  }
+      }
+    width=(max_width+2)*Max(char_width(temp_font),1);
+    iargs = 0;
+    XtSetArg(args[iargs], XtNheight, height);               iargs++;
+    XtSetArg(args[iargs], XtNwidth, width);   iargs++;
+    XtSetArg(args[iargs], XtNstring, valueinit);            iargs++;
+    dialog = XtCreateManagedWidget("dialogAscii",asciiTextWidgetClass,
+				       dialogform, args, iargs);
 
     iargs=0;
-    XtSetArg(args[iargs], XtNfont, font); iargs++;
-    XtSetArg(args[iargs], XtNlabel,  description); iargs++; 
-    XtSetArg(args[iargs], XtNresizable , TRUE) ; iargs++;
-    label=XtCreateManagedWidget("labelmessage",labelWidgetClass,dialogbox,args,
-			  iargs);
-
-    height=Min(*nv+2,30)*(height+1);
-    iargs = 0;
-    XtSetArg(args[iargs], XtNstring, valueinit);            iargs++;
-    XtSetArg(args[iargs], XtNresizable, True);              iargs++;
-    XtSetArg(args[iargs], XtNresize, XawtextResizeWidth);   iargs++;
-    XtSetArg(args[iargs], XtNeditType, XawtextEdit);        iargs++;
-    XtSetArg(args[iargs], XtNscrollVertical, XawtextScrollWhenNeeded);        iargs++;
-    XtSetArg(args[iargs], XtNfromVert, label);              iargs++;
-    XtSetArg(args[iargs], XtNleft, XtChainLeft);            iargs++;
-    XtSetArg(args[iargs], XtNheight, height);               iargs++;
-    XtSetArg(args[iargs], XtNright, XtChainRight);          iargs++;
-    XtSetArg(args[iargs], XtNfont, font); iargs++;
-    dialog = XtCreateManagedWidget("value",asciiTextWidgetClass,
-				       dialogbox, args, iargs);
-
+    box=XtCreateManagedWidget("dialogCommand",formWidgetClass,dialogform,args,iargs);
     iargs = 0;
     XtSetArg(args[iargs], XtNlabel, buttonname[0] ); iargs++;
-    XtSetArg(args[iargs], XtNfont, font); iargs++;
-    okbutton=XtCreateManagedWidget("ok button",commandWidgetClass,
-				   dialogbox,args,iargs);
+    okbutton=XtCreateManagedWidget("okCommand",commandWidgetClass,
+				   box,args,iargs);
     XtAddCallback(okbutton, XtNcallback,(XtCallbackProc)DialogOk ,
 		  (XtPointer) dialog); 
+    iargs = 0;
+    XtSetArg(args[iargs], XtNlabel, buttonname[1] ); iargs++;
+    wid=XtCreateManagedWidget("cancelCommand",commandWidgetClass,
+			      box,args,iargs);
+    XtAddCallback(wid, XtNcallback,(XtCallbackProc)DialogCancel ,NULL);  
 
     XtMyLoop(shell,dpy);
+    if (ok_Flag_sci == -1) *nv=0;
 }
-
 
 XtMyLoop(w,dpy)
      Widget w;
@@ -108,7 +114,7 @@ XtMyLoop(w,dpy)
   Atom	 wmDeleteWindow;
   XEvent event;
   ok_Flag_sci= 0;
-/*  XtPopup(w,XtGrabExclusive);*/
+  /*  XtPopup(w,XtGrabExclusive);*/
   XtPopup(w,XtGrabNone); 
   /* On ignore les delete envoyes par le Window Manager */
   wmDeleteWindow = XInternAtom(XtDisplay(w),"WM_DELETE_WINDOW", False);
@@ -121,8 +127,7 @@ XtMyLoop(w,dpy)
   XtDestroyWidget(w);  
   XFlush(dpy);
   XSync(dpy,0);
-};
-
+}
 
 void C2F(xdialg)(value,ptrv,nv,desc,ptrdesc,nd,btn,ptrbtn,nb,res,ptrres,nr,ierr)
      int *value,*ptrv,*nv,*desc,*ptrdesc,*nd,*btn,*nb,*ptrbtn,*res,*ptrres,*nr,*ierr;
@@ -144,6 +149,29 @@ void C2F(xdialg)(value,ptrv,nv,desc,ptrdesc,nd,btn,ptrbtn,nb,res,ptrres,nr,ierr)
   free(valueinit);
   for (i=0 ; i < *nb ; i++ )free((char*)buttonname[i]);
   free(buttonname);
-  ScilabC2MStr2(res,nr,ptrres,str,ierr,maxchars,maxlines);
-  free(str);/** allocated in DialogOK **/
+  if (*nv==0)
+      *nr=0;
+  else {
+      ScilabC2MStr2(res,nr,ptrres,str,ierr,maxchars,maxlines);
+      free(str);/** allocated in DialogOK **/
+  }
 }
+
+/* 
+   Pour forcer les taille max : ca ne marche pas a la creation 
+   si le popup est trop grand c'est donc inutile car on peut specifier 
+   ce qui suit en resources
+
+ */
+
+ForceMaxSize(w)
+Widget w;
+{
+    XSizeHints	size_hints;
+    size_hints.min_width  =20;
+    size_hints.max_width = 800;
+    size_hints.min_height =50;
+    size_hints.max_height =800;
+    size_hints.flags =  PMinSize | PMaxSize;
+    XSetWMNormalHints(XtDisplay(w),XtWindow(w), &size_hints);
+  } 

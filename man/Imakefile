@@ -2,7 +2,7 @@
 #include "../Imake.incl"
 
 #define IHaveSubdirs
-#define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
+#define PassCDebugFlags CDEBUGFLAGS='$(CDEBUGFLAGS)'
 
 SUBDIRS = Man-Part1 Man-Part2 LaTeX-doc
 

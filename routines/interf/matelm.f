@@ -31,8 +31,8 @@ c     abs  real imag conj roun ent  size sum  prod diag triu tril
 c      1    2    3    4    5    6    7    8    9    10   11   12
 c     eye  rand ones maxi mini sort kron matr sin  cos  atan exp
 c      13   14   15   16   17   18  19-21 22   23   24   25   26
-c     sqrt log   ^  sign
-c      27   28   29  30
+c     sqrt log   ^  sign clean 
+c      27   28   29  30   31
 c
       if(rstk(pt).eq.905) goto 310
 c
@@ -49,19 +49,25 @@ c
       il=iadr(lstk(top))
       if(istk(il).gt.10) goto 05
       m=istk(il+1)
-
       n=istk(il+2)
       it=istk(il+3)
-      l=sadr(il+4)
-      mn=m*n
-      if(istk(il).ne.2) goto 05
-      l=sadr(il+9+mn)
-      mn=istk(il+8+mn)-1
-      id1=il+8
+
+      if(istk(il).eq.5) then
+         mn=istk(il+4)
+         l=sadr(il+5+m+mn)
+      elseif(istk(il).eq.1) then
+         l=sadr(il+4)
+         mn=m*n
+      elseif(istk(il).eq.2) then
+         l=sadr(il+9+m*n)
+         mn=istk(il+8+m*n)-1
+         id1=il+8
+      endif
+
       lw=lstk(top+1)
 c
    05 goto (10,15,20,25,30,35,40,45,50,60,60,60,70,70,70,90,90,105,
-     1       110,110,110,130,140,150,160,170,180,190,200,210),fin
+     1       110,110,110,130,140,150,160,170,180,190,200,210,220),fin
 c
 c    abs
 c
@@ -175,15 +181,18 @@ c     size
       goto 999
 c
 c     sum
-   45 if(istk(il).ne.1) goto 900
+   45 if(istk(il).ne.1.and.istk(il).ne.5) goto 900
+      istk(il)=1
       istk(il+1)=1
       istk(il+2)=1
-      stk(l)=dsum(mn,stk(l),1)
-      if(it.eq.1) stk(l+1)=dsum(mn,stk(l+mn),1)
-      lstk(top+1)=l+(it+1)
+      istk(il+3)=0
+      l1=sadr(il+4)
+      stk(l1)=dsum(mn,stk(l),1)
+      if(it.eq.1) stk(l1+1)=dsum(mn,stk(l+mn),1)
+      lstk(top+1)=l1+(it+1)
       go to 999
 c
-c    prod
+c     prod
    50 if(istk(il).ne.1) goto 900
       istk(il+1)=1
       istk(il+2)=1
@@ -210,19 +219,25 @@ c    prod
 c
 c     diag, triu, tril
    60 k = 0
-      if(istk(il).ne.1) goto 900
+      il=iadr(lstk(top+1-rhs))
+      if(istk(il).ne.1) then
+         if(istk(il).eq.2) then
+c           *call* polelm
+            fun=16
+            return
+         else
+            if(fin.eq.10) then
+               call cvname(id,'g_diag        ',0)
+            elseif(fin.eq.11) then
+               call cvname(id,'g_triu        ',0)
+            else
+               call cvname(id,'g_tril        ',0)
+            endif
+            goto 300
+         endif
+      endif
       if (rhs .ne. 2) go to 61
       il=iadr(lstk(top-1))
-      if(istk(il).ne.1) then
-         if(istk(il).ne.2) then
-            err=1
-            call error(54)
-            return
-         endif
-c        *call* polelm
-         fun=16
-         return
-      endif
       k = int(stk(l))
       top = top-1
       m=istk(il+1)
@@ -235,13 +250,14 @@ c        *call* polelm
 c     diag(a,k)
       if (k.ge.0) mn=min(m,n-k)
       if (k.lt.0) mn=min(m+k,n)
-      if(mn.gt.0) goto 62
-      istk(il+1)=0
-      istk(il+2)=0
-      istk(il+3)=0
-      lstk(top+1)=sadr(il+4)+1
-      goto 999
-   62 istk(il+1)=mn
+      if(mn.eq.0) then
+         istk(il+1)=0
+         istk(il+2)=0
+         istk(il+3)=0
+         lstk(top+1)=sadr(il+4)+1
+         goto 999
+      endif
+      istk(il+1)=mn
       istk(il+2)=1
       istk(il+3)=it
       lstk(top+1)=l+istk(il+1)*(it+1)
@@ -324,7 +340,7 @@ c     rand sans argument
          endif
       elseif(rhs.eq.1) then
          if(fin.eq.14 .and. istk(il).eq.10) goto 80
-         if(istk(il).ne.1.and.istk(il).ne.2) then
+         if(istk(il).gt.10) then
             if(fin.eq.15) then
                call cvname(id,'g_ones   ',0)
             elseif(fin.eq.13) then
@@ -394,7 +410,7 @@ c
 c eye
       m=abs(m)
       call dset(mn,0.0d+0,stk(l),1)
-      call dset(m,1.0d+0,stk(l),m+1)
+      call dset(min(m,abs(n)),1.0d+0,stk(l),m+1)
       goto 999
 c ones
    73 call dset(mn,1.0d+0,stk(l),1)
@@ -442,6 +458,20 @@ c
 c maxi mini
 c
    90 if(istk(il).eq.15) goto 100
+      if(istk(il).eq.5) then
+         fin=fin-6
+         call spelm
+         if(err.gt.0) return
+         goto 999
+      endif
+      if(istk(il).ne.1) then
+         if(fin.eq.16) then
+            call cvname(id,'g_maxi    ',0)
+         else
+            call cvname(id,'g_mini    ',0)
+         endif
+         goto 300
+      endif
       if(rhs.gt.1) goto 96
       if(rhs.ne.1) then
          call error(39)
@@ -788,6 +818,12 @@ c matrice de franck
 c
 c changement de dimension d'une matrice
   135 continue
+      il=iadr(lstk(top+1-rhs))
+      if(istk(il).eq.5.or.istk(il).eq.6) then
+         fin=12
+         call spelm
+         return
+      endif
       il=iadr(lstk(top))
       if(istk(il).ne.1) then
          err=3
@@ -849,7 +885,7 @@ c     sin
 c
  140  continue
       if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
+      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
          call cvname(id,'msin    ',0)
          goto 300
       endif
@@ -871,7 +907,7 @@ c     cos
 c
  150  continue
       if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
+      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
          call cvname(id,'mcos    ',0)
          goto 300
       endif
@@ -898,7 +934,7 @@ c
          call  error(53)
          return
       endif
-      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
+      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
          call cvname(id,'matan   ',0)
          goto 300
       endif
@@ -950,7 +986,7 @@ c     exp
 c
  170  continue
       if(mn.eq.0) goto 999
-      if(istk(il).ne.1) then
+      if(istk(il).ne.1.or.(istk(il).ne.1.and.istk(il).ne.5)) then
          call cvname(id,'mexp   ',0)
          goto 300
       endif
@@ -1008,7 +1044,7 @@ c     sqrt
 c
  180  continue
       if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
+      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
          call cvname(id,'msqrt   ',0)
          goto 300
       endif
@@ -1049,7 +1085,7 @@ c     log
 c
  190  continue
       if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
+      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
          call cvname(id,'mlog    ',0)
          goto 300
       endif
@@ -1103,7 +1139,7 @@ c     sign
 c
  210  continue
       if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
+      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
          call cvname(id,'msign    ',0)
          goto 300
       endif
@@ -1121,6 +1157,58 @@ c
          err=1
          call error(52)
       endif
+      goto 999
+c
+c     clean
+c
+ 220  continue
+      ilp=iadr(lstk(top+1-rhs))
+      if(istk(ilp).eq.2) then
+         fin=17
+         call polelm
+         return
+      elseif(istk(ilp).eq.5) then
+         fin=8
+         call spelm
+         return
+      elseif(istk(ilp).ne.1) then
+         call cvname(id,'g_clean         ',0)
+         goto 300
+      endif
+      if (rhs.eq.3) then
+c     clean(p,epsa,epsr)
+         iler=iadr(lstk(top))
+         ler=sadr(iler+4)
+         ilea=iadr(lstk(top-1))
+         lea=sadr(ilea+4)
+         epsr=stk(ler)
+         epsa=stk(lea)
+         top=top-2
+      else if (rhs.eq.2) then
+c     clean(p,epsa)
+         ilea=iadr(lstk(top))
+         lea=sadr(ilea+4)
+         top=top-1
+         epsr=1.0d-10
+         epsa=stk(lea)
+      else if(rhs.eq.1) then
+         epsr=1.0d-10
+         epsa=1.0d-10
+      endif
+      m=istk(ilp+1)
+      n=istk(ilp+2)
+      it=istk(ilp+3)
+      l=sadr(ilp+4)
+      if(it.eq.1) then
+         norm=dasum(m*n,stk(l),1)
+      else
+         norm=wasum(m*n,stk(l),stk(l+m*n),1)
+      endif
+      eps=max(epsa,epsr*norm)
+      do 201 kk=0,m*n*(it+1)
+         if (abs(stk(l+kk)).le.eps) stk(l+kk)=0.d0
+ 201  continue
+
       goto 999
 
 c

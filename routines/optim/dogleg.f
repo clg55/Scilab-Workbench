@@ -51,7 +51,7 @@ c       wa1 and wa2 are work arrays of length n.
 c
 c     subprograms called
 c
-c       minpack-supplied ... d1mach,enorm
+c       minpack-supplied ... dlamch,enorm
 c
 c       fortran-supplied ... dabs,dmax1,dmin1,dsqrt
 c
@@ -62,12 +62,12 @@ c     **********
       integer i,j,jj,jp1,k,l
       double precision alpha,bnorm,epsmch,gnorm,one,qnorm,sgnorm,sum,
      *                 temp,zero
-      double precision d1mach,enorm
+      double precision dlamch,enorm
       data one,zero /1.0d0,0.0d0/
 c
 c     epsmch is the machine precision.
 c
-      epsmch = d1mach(4)
+      epsmch = dlamch('p')
 c
 c     first, calculate the gauss-newton direction.
 c

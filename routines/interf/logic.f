@@ -8,13 +8,14 @@ c
       INCLUDE '../stack.h'
 c     
       integer plus,minus,star,dstar,slash,bslash,dot,colon,concat
-      integer quote,extrac,insert,less,great,equal
+      integer quote,extrac,insert,less,great,equal,et,ou,non
 c     
       integer iadr,sadr,op,top0
 c     
-      data plus/45/,minus/46/,star/47/,dstar/58/,slash/48/
+      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
       data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
       data less/59/,great/60/,equal/50/,extrac/3/,insert/2/
+      data ou/57/,et/58/,non/61/
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -115,8 +116,8 @@ c
 c     
 c          :  +   -  * /  \
       goto(15,15,15,15,15,15,130,06,06,70,130,130) op+1-colon
-      if(op.eq.57.or.op.eq.58) goto 20
-      if(op.eq.61) goto 30
+      if(op.eq.ou.or.op.eq.et) goto 20
+      if(op.eq.non) goto 30
 c     
       
  06   if(op.gt.3*dot) goto 15
@@ -137,7 +138,7 @@ c     ou/et logique
          return
       endif
       if(istk(il1).ne.4) then
-         err=2
+         err=1
          call error(44)
          return
       endif
@@ -172,7 +173,7 @@ c     ou/et logique
       endif
       istk(il1+1)=m1
       istk(il1+2)=n1
-      if(fin.eq.58) then
+      if(fin.eq.et) then
          do 21 k=0,n1*m1-1
             istk(il1+3+k)=istk(l1+k)*istk(l2+k)
  21      continue  
@@ -395,7 +396,13 @@ c     un des vecteurs d'indice est vide
 c     
 c     insertion
 c     a(vl,vc)=m  a(v)=u
- 85   m=-1
+ 85   ili=iadr(lstk(top0-1))
+      if (istk(ili+1)*istk(ili+2).eq.0) then
+         top=top0
+         fin=-fin
+         return
+      endif
+      m=-1
       n=-1
       goto (86,88),rhs-2
 c     

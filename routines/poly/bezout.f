@@ -45,11 +45,11 @@ c
       double precision a(*),b(*),f(*),v(*)
       integer da,db,df(2),dv(2,2),ip
 c
-      double precision dasum,x(2),lambda,fact,c(2),eps,d1mach
+      double precision dasum,x(2),lambda,fact,c(2),eps,dlamch
       double precision xs(2)
       integer jv(2),jf(2),inc,k,k1,k2,na,nb,n,l1,l2,i
 c
-      eps=d1mach(4)*10.0d+0
+      eps=dlamch('p')*10.0d+0
       ip=0
       xs(1)=dasum(da+1,a,1)
       xs(2)=dasum(db+1,b,1)

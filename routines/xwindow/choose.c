@@ -29,70 +29,36 @@ static void DoChoose(widget,shell,callData)
   ok_Flag_sci = CHOOSE;
 }
 
-static void  ExposeChooseWindow(strings,description,buttonname)
+
+
+void  ExposeChooseWindow(strings,description,buttonname)
      char **strings;
      char *description;
      char **buttonname;
 {
-    Widget choosebox,wid,list,shell,chooseport,chooselabel;
+    Widget chooseform,wid,list,shell,chooseviewport,chooselabel;
     Arg args[10];
     int iargs = 0;
-    int width,i,height;
-    XFontStruct *font;
+    int width,i,temp_height;
+    XFontStruct *temp_font;
     static Display *dpy = (Display *) NULL;
 
     DisplayInit("",&dpy,&toplevel);
-    font = XLoadQueryFont(dpy,XWMENUFONT);
-    height=font->ascent+font->descent;
-
-    XtSetArg(args[iargs], XtNx, X + 10); iargs++;
-    XtSetArg(args[iargs], XtNy, Y + DIALOGHEIGHT + 10); iargs++;
-    shell = XtCreatePopupShell("chooseshell",transientShellWidgetClass,toplevel,
-			       args,iargs);
-    choosebox = XtCreateManagedWidget("choosebox",boxWidgetClass,
-				      shell,(Arg *) NULL,(int)ZERO);
-
-
+    shell = XtCreatePopupShell("chooseShell",transientShellWidgetClass,toplevel, args,iargs);
+    chooseform = XtCreateManagedWidget("chooseForm",formWidgetClass,shell,(Arg *) NULL,(int)ZERO);
     iargs = 0;
-    XtSetArg(args[iargs], XtNfont, font); iargs++;
     XtSetArg(args[iargs], XtNlabel, description); iargs++;
-    chooselabel = XtCreateManagedWidget("labelchoose",labelWidgetClass,
-					choosebox,args,iargs);
+    chooselabel = XtCreateManagedWidget("chooseLabel",labelWidgetClass,chooseform,args,iargs);
     iargs = 0;
-    XtSetArg(args[iargs], XtNfont, font); iargs++;
-    XtSetArg(args[iargs], XtNlabel, buttonname[0]); iargs++;
-    wid=XtCreateManagedWidget("cancelcommand",commandWidgetClass,
-			      choosebox,args,iargs);
-    XtAddCallback(wid, XtNcallback,(XtCallbackProc)CancelChoose , NULL);  
-
-
-    width = 0; i = 0;
-    while(strings[i] != NULL) {
-	width = Max(width,XTextWidth(font,strings[i],strlen(strings[i])));
-	i++;
-    }
-    width = width + 20;
-    height=Min(i+2,30)*(height+1);
-    
+    chooseviewport = XtCreateManagedWidget("chooseViewport",viewportWidgetClass,chooseform,args,iargs);
     iargs = 0;
-    XtSetArg(args[iargs], XtNallowVert, TRUE); iargs++;
-    XtSetArg(args[iargs], XtNheight, height); iargs++;
-    XtSetArg(args[iargs], XtNwidth, width); iargs++;
-    XtSetArg(args[iargs], XtNfromHoriz, NULL); iargs++;
-    XtSetArg(args[iargs], XtNfromVert, chooselabel); iargs++;
-    XtSetArg(args[iargs], XtNtop, XtChainTop); iargs++;
-    chooseport = XtCreateManagedWidget("chooseport",viewportWidgetClass,
-				       choosebox,args,iargs);
-    
-    iargs = 0;
-    XtSetArg(args[iargs], XtNfont, font); iargs++;
     XtSetArg(args[iargs], XtNlist, strings); iargs++;
-    XtSetArg(args[iargs], XtNcolumnSpacing, 0); iargs++;
-    XtSetArg(args[iargs], XtNdefaultColumns, 1); iargs++;
-    
-    list=XtCreateManagedWidget("choose",listWidgetClass,chooseport,args,iargs);
+    list=XtCreateManagedWidget("chooseList",listWidgetClass,chooseviewport,args,iargs);
     XtAddCallback(list, XtNcallback,(XtCallbackProc)DoChoose , NULL);  
-    
+    iargs = 0;
+    XtSetArg(args[iargs], XtNlabel, buttonname[0]); iargs++;
+    wid=XtCreateManagedWidget("cancelCommand",commandWidgetClass,chooseform,args,iargs);
+    XtAddCallback(wid, XtNcallback,(XtCallbackProc)CancelChoose , NULL);  
     XtMyLoop(shell,dpy);
 }
 
@@ -117,5 +83,5 @@ void C2F(xchoose)(desc,ptrdesc,nd,basstrings,nstring,ptrstrings,btn,ptrbtn,nb,nr
   if ( ok_Flag_sci == CHOOSE) 
     *nrep=(1+numChoix);
   else *nrep=0;
-};
+}
 

@@ -1,13 +1,10 @@
 /**/include ../Path.incl
 #include "../Imake.incl"
 
-NP=NullParameter
-FSRCS=newfun.f
+PROGRAM = ../bin/newfun
 
-all	::
-	chmod a+x fdepend wdepend scicomp scidem 
-
-FortranProgramTarget(../bin/newfun,newfun.f,$(NP),$(NP),$(NP),$(NP))
+AllTarget($(PROGRAM))
+FortranProgramTarget($(PROGRAM),newfun.f)
 FortranDependTarget()
 
 $(SCIDIR)/routines/default/funtab.f :  ../bin/newfun fundef 
@@ -19,8 +16,3 @@ $(SCIDIR)/routines/default/funtab.f :  ../bin/newfun fundef
 		$(SCIDIR)/routines/default/funtab.f-old
 	mv funtab.f.new $(SCIDIR)/routines/default/funtab.f 
 	rm -f $(SCIDIR)/util/funtab.f
-
-
-
-
-

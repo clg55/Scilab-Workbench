@@ -27,7 +27,7 @@ ws=w(:,1:n);
 X12=ws(1:n,:);
 phi12=ws(n+1:2*n,:);
 u12=ws(2*n+1:2*n+nu,:);
-if rcond(X12)< 1.d-5 then warning('lqr: bad contionning!');end
+if rcond(X12)< 1.d-5 then warning('lqr: bad conditionning!');end
 K=u12/X12;
 X=phi12/X12;
 return
@@ -47,7 +47,7 @@ ws=w(:,1:n);
 X12=ws(1:n,:);
 phi12=ws(n+1:2*n,:);
 u12=ws(2*n+1:2*n+nu,:);
-if rcond(X12)< 1.d-5 then warning('lqr: bad contionning!');end
+if rcond(X12)< 1.d-5 then warning('lqr: bad conditionning!');end
 K=u12/X12;
 X=phi12/X12;
 return

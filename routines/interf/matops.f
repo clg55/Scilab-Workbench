@@ -5,17 +5,18 @@ c
       include '../stack.h'
       integer op
 c     
-      double precision ddot,d1mach
+      double precision ddot,dlamch
       double precision cstr,csti
       integer vol,iadr,sadr
 c     
       double precision sr,si,e1,st,e2,powr,powi,e1r,e1i,e2r,e2i
       integer plus,minus,star,dstar,slash,bslash,dot,colon,concat
-      integer quote,extrac,insert,less,great,equal
+      integer quote,extrac,insert,less,great,equal,ou,et,non
       integer top0
-      data plus/45/,minus/46/,star/47/,dstar/58/,slash/48/
+      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
       data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
       data extrac/3/,insert/2/,less/59/,great/60/,equal/50/
+      data ou/57/,et/58/,non/61/
 c     
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -231,11 +232,13 @@ c
  12   continue
 c     a*cst
       sr = stk(l2)
+      si=0.0d+0
       if(it2.eq.1) si = stk(l2+1)
       go to 14
  13   continue
 c     cst*a
       sr = stk(l1)
+      si=0.0d+0
       if(it1.eq.1) si = stk(l1+1)
       call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
       m1=m2
@@ -541,7 +544,7 @@ c     check for clause
       endif
       l=l1
  52   if (st*(stk(l)-e2).gt.0.0d+0) then
-         if (abs(stk(l)-e2).lt.abs(st*d1mach(4))) n=n+1
+         if (abs(stk(l)-e2).lt.abs(st*dlamch('p'))) n=n+1
          go to 53
       endif
       n = n+1
@@ -665,24 +668,24 @@ c       check dimensions
           goto 999
           endif
           if(it1.eq.0.and.it2.eq.1) then
-          istk(il1+3)=it2
-          err=l1+2*mn1-lstk(bot)
-              if(err.gt.0) then
-              call error(17)
-              return
-              endif
-          lstk(top+1)=l1+2*mn1
-          do 551 i=1,mn1
-          sr=stk(l1+i-1)
-          e1=abs(sr)+abs(si)
-            if(sr.eq.0.0d+0) then
-             call error(27)
-             return
-            endif
-          stk(l1+i-1)=cstr/sr
-          stk(l1+mn1+i-1)=csti/sr
- 551      continue
-          goto 999
+             istk(il1+3)=it2
+             err=l1+2*mn1-lstk(bot)
+             if(err.gt.0) then
+                call error(17)
+                return
+             endif
+             lstk(top+1)=l1+2*mn1
+             do 551 i=1,mn1
+                sr=stk(l1+i-1)
+                e1=abs(sr)
+                if(sr.eq.0.0d+0) then
+                   call error(27)
+                   return
+                endif
+                stk(l1+i-1)=cstr/sr
+                stk(l1+mn1+i-1)=csti/sr
+ 551         continue
+             goto 999
           endif
           if(it1.eq.1.and.it2.eq.0) then
           do 552 i=1,mn1
@@ -1100,7 +1103,12 @@ c     un des vecteurs d'indice est vide
          call error(21)
          return
       endif
-      if(m2.lt.0) then
+      if(mn2.eq.0) then 
+         istk(il1+1)=0
+         istk(il1+2)=0
+         lstk(top+1)=l1+1
+         goto 999
+      elseif(m2.lt.0) then
          call error(14)
          return
       endif
@@ -1152,7 +1160,12 @@ c     un des vecteurs d'indice est vide
          call error(21)
          return
       endif
-      if(m3.lt.0) then
+      if(mn3.eq.0) then 
+         istk(il1+1)=0
+         istk(il1+2)=0
+         lstk(top+1)=l1+1
+         goto 999
+      elseif(m3.lt.0) then
          call error(14)
          return
       endif

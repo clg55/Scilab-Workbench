@@ -197,9 +197,9 @@ static void desallouer_application(objet)
 ldc_objet_liste objet;
 {
     application *application_a_detruire = (application *)objet;
-    char machine_hote[25];    
+    char machine_hote[MAXHOSTLEN];    
     
-    gethostname(machine_hote,20) ;
+    gethostname(machine_hote,MAXHOSTLEN) ;
     
     /* Meme machine */
     if(!strcmp(application_a_detruire -> nom_machine, machine_hote))  {
@@ -234,11 +234,11 @@ ldc_element_correspondance correspondance;
 void detruire_applications_scruteur()
 {
     application *application_restante;
-    char machine_hote[25];
+    char machine_hote[MAXHOSTLEN];
     Message message;
     int i, desc;
     
-    gethostname(machine_hote,20) ;
+    gethostname(machine_hote,MAXHOSTLEN) ;
     
     while((application_restante = ldc_rechercher_objet(liste_applications,NULL)) != NULL) {
 	/* Meme machine */
@@ -274,10 +274,10 @@ void lancer_appli_actmsg(message)
 Message message;
 {
     int compteur=0;
-    char machine_hote[25];
+    char machine_hote[MAXHOSTLEN];
     
-    gethostname(machine_hote,20) ;
-    
+    gethostname(machine_hote,MAXHOSTLEN) ;
+   
     /* Meme machine */
     if(!strcmp(message.tableau[4], machine_hote)) {
 	executer_application(message.tableau[3],message.tableau[4],
@@ -320,11 +320,11 @@ void quitter_appli_actmsg(message)
 Message message;
 {
     application *recherche_appli_a_detruire;
-    char machine_hote[25];
+    char machine_hote[MAXHOSTLEN];
     Message nouveau_message;
     int i, desc;
     
-    gethostname(machine_hote,20);
+    gethostname(machine_hote,MAXHOSTLEN);
 
     recherche_appli_a_detruire = ldc_rechercher_objet(liste_applications,message.tableau[3]);
     

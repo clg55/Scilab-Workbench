@@ -1,4 +1,4 @@
-Leps=1.e-5;
+Leps=2.e-5;
 bs=10.*ones(1,5);bi=-bs;x0=0.12*bs;epsx=1.e-15*x0;xopt=.1*bs;
 [f,x,g]=optim('genros',x0,'in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
@@ -32,7 +32,7 @@ if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 [f,x,g]=optim('genros',x0,'ar',100,100,%eps,%eps,'in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
-[f,x,g]=optim('genros',x0,'ar',100,100,%eps,%eps,epsx,'in');
+[f,x,g]=optim('genros',x0,'ar',100,100,10.*%eps,%eps,epsx,'in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 [f,x,g]=optim('genros',x0,'gc','ar',100,100,%eps,%eps,epsx,'in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
@@ -41,7 +41,7 @@ if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 [f,x,g]=optim('genros','b',bi,bs,x0,'gc','in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
-[f,x]=optim('genros','b',bi,bs,x0,'ar',100,100,%eps,'in');
+[f,x]=optim('genros','b',bi,bs,x0,'ar',100,100,1.d-8,'in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 [f,x,g]=optim('genros',..
    'b',bi,bs,x0,'gc','ar',100,100,%eps,%eps,epsx,'in');

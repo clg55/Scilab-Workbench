@@ -207,7 +207,7 @@ void mbar_()
   void mbar1();
   float x1=200.0,x2=897;
   mbar1("pipo",&x1,&x2);
-};
+}
 
 void mbar1(description,min,max)
      char * description;

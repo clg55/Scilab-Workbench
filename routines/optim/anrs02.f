@@ -52,7 +52,7 @@ C        Esta subrutina trabaja en doble precision via una sentencia
 C     "implicit":
 C                implicit double precision (a-h,o-z)
 C
-C     SUPROGRAMAS AUXILIARES: anrs01,ddot,d1mach
+C     SUPROGRAMAS AUXILIARES: anrs01,ddot,dlamch
 C     FUNCIONES FORTRAN INTRINSECAS: abs,mod
 C
 C

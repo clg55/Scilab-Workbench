@@ -42,7 +42,7 @@ char *argv[];
 		       fprintf(stderr,"%s",UsageStr[i]),i++;
 		     }
 		   exit(0);
-		 };
+		 }
   env = getenv("SCI");
   if (env == NULL) {
     fprintf(stderr,"Environment variable SCI must be defined\n");
@@ -70,7 +70,7 @@ char *argv[];
       Sed(argv[i],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
 	  buf," showpage","grestore",
 	  " clear end saved restore","%clear end saved restore");
-    };
+    }
   ComputeSize(argc-2,argc-2,&x,&y,&w,&h);      
   sprintf(buf,"gsave [1 0 0 -1 0 0] concat %5.2f %5.2f %5.2f %5.2f DesPosi"
 	  ,x,y,w,h);
@@ -78,7 +78,7 @@ char *argv[];
       buf, " showpage"," grestore showpage",
       " clear end saved restore"," clear end saved restore");
   return(0);
-};
+}
 
 
 /*---------------------------------------------------
@@ -109,9 +109,9 @@ Sed(file,strin1,strout1,strin2,strout2,strin3,strout3)
 		     fprintf(stdout,"%s\n",strout3);
 		   else
 		     fprintf(stdout,"%s",buff);
-		 };
-	     };
-	 };
+		 }
+	     }
+	 }
       fclose(fd);
     }
   else 
@@ -119,7 +119,7 @@ Sed(file,strin1,strout1,strin2,strout2,strin3,strout3)
       fprintf(stderr,"file %s not found ",file);
       return;
     }
-};
+}
 
 /*-----------------------------------------------
   lit une ligne dans fd et la stocke dans buff
@@ -132,8 +132,8 @@ readOneLine(buff,stop,fd)
 { int i ,c ;
   for ( i = 0 ;  (c =getc(fd)) !=  '\n' && c != EOF ; i++) buff[i]= c ;
   buff[i]='\n';buff[i+1]='\0';
-  if ( c == EOF) {*stop = 1;};
-} ;
+  if ( c == EOF) {*stop = 1;}
+}
 
 /*-----------------------------------------------
   calcule la taille pour un dessin suivant le nombre de dessin a 
@@ -167,7 +167,7 @@ ComputeSize(num,i,x,y,w,h)
       break ;
     case 5 :
     case 6 :
-      if (i <= 2) *y=26;else { if ( i <= 4) *y=26-8.5; else *y=26-2*8.5;};
+      if (i <= 2) *y=26;else { if ( i <= 4) *y=26-8.5; else *y=26-2*8.5;}
       if ( (i % 2 ) == 0 ) 
 	{ *x= 2+8.5;*h=7.5;*w=8;}
       else 
@@ -176,7 +176,7 @@ ComputeSize(num,i,x,y,w,h)
     case 7 :
     case 8 :
     case 9 :
-      if (i <= 3) *y=26;else { if ( i <= 6) *y=26-8.5; else *y=26-2*8.5;};
+      if (i <= 3) *y=26;else { if ( i <= 6) *y=26-8.5; else *y=26-2*8.5;}
       if ( (i % 3 ) == 0 ) 
 	{ *x= 1.5+2*6;*h=7.5;*w=5.5;}
       else 
@@ -185,7 +185,7 @@ ComputeSize(num,i,x,y,w,h)
 	    { *x= 1.5;*h=7.5;*w=5.5;}
 	  else 
 	    {*x= 1.5+6 ;*h=7.5;*w=5.5;}
-	};
+	}
       break ;
     case 10 :
     case 11 :
@@ -195,8 +195,8 @@ ComputeSize(num,i,x,y,w,h)
       else { 
 	if ( i <= 6) *y=27-6.5;
 	else {
-	  if (i <= 9 ) *y=27-2*6.5; else *y=27-3*6.5;};
-      };
+	  if (i <= 9 ) *y=27-2*6.5; else *y=27-3*6.5;}
+      }
       if ( (i % 3 ) == 0 ) 
 	{ *x= 1.5+2*6;*h=6;*w=5.5;}
       else 
@@ -205,8 +205,8 @@ ComputeSize(num,i,x,y,w,h)
 	    { *x= 1.5;*h=6;*w=5.5;}
 	  else 
 	    {*x= 1.5+6 ;*h=6;*w=5.5;}
-	};
+	}
       break ;
-    };
-};
+    }
+}
 

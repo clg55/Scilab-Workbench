@@ -9,7 +9,7 @@ c
       implicit double precision (a-h,o-z)
       double precision spr(*), spi(*)
       double precision pren(*), pimn(*)
-      flmi=2.0d+0*d1mach(4)
+      flmi=2.0d+0*dlamch('p')
 c
 c computation of constant c and reduced tolerance scheme
 c

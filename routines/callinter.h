@@ -3,11 +3,11 @@ c     include file instead of subroutine to avoid recursion pb's. This file
 c     must be included in each routine which compute an external
 c
  60   call  parse
-      if(err.gt.0) goto 9999
       if(fun.eq.99) then
          fun=0
          goto 200
       endif
+      if(err.gt.0) goto 9999
 c     
       ir=rstk(pt)-900
       goto(104,96,96,96,97,91),ir
@@ -29,7 +29,7 @@ c
         goto 9999
       endif
       goto(91,92,94,95,96,97,98,99,100,101,102,103,104,105,106,
-     &     107,108,109,110,111,112,113,114,115,116,117) k
+     &     107,108,109,110,111,112,113,114,115,116,117,118) k
       if(k.eq.0) goto 60
       call userlk(k)
       goto 90
@@ -89,4 +89,6 @@ c
  116  call xawelm
       goto 90
  117  call matimp
+      goto 90
+ 118  call spelm
       goto 90

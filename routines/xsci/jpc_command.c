@@ -42,7 +42,7 @@
 #define	 REVERSE	0
 #define	 FORWARD	1
 
-Widget		commandWindow;			/* command panel with buttons */
+
 Boolean		PopupMode = False;
 static Widget	AddButton();
 static Widget	button[30];
@@ -132,23 +132,22 @@ XtPointer client_data;		/* callback registered data */
     Widget 	button;
     Arg 	args[MAXARGS];
     Cardinal 	n;
-
     n = 0;
+    /** mis en resource : jpc  23 juin 1994 **/
     /* XtSetArg(args[n], XtNresize, (XtArgVal) True); n++; */
-    /* must be improved : Id'like the command button to check himself its size */
-    XtSetArg(args[n], XtNwidth, strlen(name)*11); n++;
+    /* XtSetArg(args[n], XtNwidth, strlen(name)*11); n++; */
+    /*
 #ifdef XtNcursorname
     XtSetArg(args[n], XtNcursorName, "left_ptr"); n++;
 #else
-    /* for X11R4 */
+    / * for X11R4 * /
     XtSetArg(args[n], XtNcursor, XCreateFontCursor(XtDisplay(parent),XC_left_ptr)); n++;
 #endif
+*/
     button = XtCreateManagedWidget(name, commandWidgetClass, parent, args, n);
     XtAddCallback(button, XtNcallback, function, client_data);
     return (button);
 }
-
-
 
 /**************************************************************************
  * help message associated to buttons
@@ -164,7 +163,6 @@ info_handler(w, client_data, event)
   else if (event->type == EnterNotify) UpdateMessageWindow(client_data);
 } 
 
-
 static void
 AddInfoHandler(widget, message)
 Widget widget;
@@ -176,7 +174,6 @@ char *message;
 		    (XtEventHandler)info_handler,
 		    (caddr_t) message);
 }
-
 
 static void CreateButtons (parent)
 Widget parent;
@@ -193,7 +190,7 @@ Widget parent;
   AddInfoHandler(button[i-1],"Stop execution");
   button[i++] = AddButton (parent, "File Operations", FileG1, (char *) 0);
   AddInfoHandler(button[i-1],"Getf, Exec, Load and Save operations");
-  button[i++] = AddButton (parent, "Demo", DoIt,
+  button[i++] = AddButton (parent, "Demos", DoIt,
 			   ";exec(\"SCI/demos/alldems.dem\");\n");
   AddInfoHandler(button[i-1],"Exec demos");
   button[i++] = AddButton (parent, "Quit", DoIt, "quit\n");
@@ -209,7 +206,7 @@ Widget parent;
   AddInfoHandler(button[i-1],"User defined Menu");
   button[i++] = NULL;
 
-};
+}
 
 
 /*	Function Name: Count
@@ -291,62 +288,32 @@ XtPointer closure, callData;
 
 }
 
-/*--------buttons with increment or decrement a value stored in a label
-  Creates a Form widget for the Graphic Window Management 
+/*
+ *
+ * buttons with increment or decrement a value stored in a label
+ * Creates a Form widget for the Graphic Window Management 
  */
 
-#ifdef XtNcursorname
-#define XtSetCursor()     XtSetArg(args[n], XtNcursorName, "left_ptr"); n++;
-#else
-    /* for X11R4 */
-#define XtSetCursor()     XtSetArg(args[n], XtNcursor, XCreateFontCursor(XtDisplay(parent),XC_left_ptr)); n++;
-#endif
-
 static void
-  CreateFormWithButtons(parent)
+CreateFormWithButtons(parent)
 Widget parent;
 {
   Widget form, label, button,button1,button2,button3;
-  int n;
-  Arg args[2];
-  form = XtCreateManagedWidget( "form", formWidgetClass, parent,
+  int n=0;
+  Arg args[1];
+  form = XtCreateManagedWidget("GwinForm", formWidgetClass, parent,
 			       NULL, ZERO );
-  n=0;
-  XtSetCursor()
-  button1 = XtCreateManagedWidget("Set (Create) Window ",commandWidgetClass, form,args,n);
+  button1 = XtCreateManagedWidget("SetwinCommand",commandWidgetClass,form,args,n);
   AddInfoHandler(button1,"Set the selected graphic window as the current window and create it if necessary");
-  n=0;
-  XtSetArg(args[n], XtNfromHoriz, button1);n++;
-  XtSetCursor()
-  button2 = XtCreateManagedWidget("Raise (Create) Window",commandWidgetClass, form,args,n);
+  button2 = XtCreateManagedWidget("RaisewinCommand",commandWidgetClass,form,args,n);
   AddInfoHandler(button2,"Raise the selected graphic window and create it if necessary");
-  n=0;
-  /** Temporary commented out it doesn't work properly
-  XtSetArg(args[n], XtNfromHoriz, button2);n++;
-  XtSetCursor()
-  button3 = XtCreateManagedWidget("Hide Window",commandWidgetClass, 
-				  form,args,n);
-  AddInfoHandler(button3,"Hides the  Graphic Window");
-  **/
-  n=0;
-  XtSetArg(args[n], XtNfromHoriz, button2);n++;
-  label = XtCreateManagedWidget(" 0 ",labelWidgetClass,form,args,n); 
+  label = XtCreateManagedWidget("WinLabel",labelWidgetClass,form,args,n); 
   XtAddCallback( button1, XtNcallback, SendCountSet, (XtPointer) label );
   XtAddCallback( button2, XtNcallback, SendCountRaise, (XtPointer) label );
-  /** Temporary commented out it doesn't work properly
-  XtAddCallback( button3, XtNcallback, SendCountHide, (XtPointer) label ); **/
-  n=0;
-  XtSetArg(args[n], XtNfromHoriz, label); n++;
-  XtSetCursor()
-  button = XtCreateManagedWidget("+",commandWidgetClass,form,args,n);
+  button = XtCreateManagedWidget("PlusCommand",commandWidgetClass,form,args,n);
   XtAddCallback( button, XtNcallback, Countp, (XtPointer) label );
-  n=0;
-  XtSetArg(args[n], XtNfromHoriz, button); n++;
-  XtSetCursor()
-  button = XtCreateManagedWidget("-", commandWidgetClass, form,args,n);
+  button = XtCreateManagedWidget("MinusCommand", commandWidgetClass, form,args,n);
   XtAddCallback( button, XtNcallback, Countm, (XtPointer) label );
-  /* fin du form Widget */
-
 }
 
 /**************************************************************************
@@ -356,17 +323,12 @@ Widget parent;
 void CreateCommandPanel(parent)
 Widget parent;
 {
-    Arg args[10];
-    Cardinal n;
-    n = 0;
-    /* fixing a minimum value for the command widget inside the paned */
-    XtSetArg(args[n], XtNmin, (XtArgVal) 100);        		n++;
-    XtSetArg(args[n], XtNshowGrip, (XtArgVal) False);			n++;
-    commandWindow = XtCreateManagedWidget("commandWindow", boxWidgetClass, 
-					  parent, args, n);
-    CreateButtons(commandWindow);
-    CreateFormWithButtons(commandWindow);
-    /** Creating a first graphic Popup Window **/
+  Widget commandWindow;
+  Cardinal n=0;
+  commandWindow = XtCreateManagedWidget("commandWindow", formWidgetClass, 
+					parent,(Arg *) NULL, n);
+  CreateButtons(commandWindow);
+  CreateFormWithButtons(parent);
 }
 
 

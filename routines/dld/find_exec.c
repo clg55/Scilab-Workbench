@@ -24,7 +24,11 @@
 
 #include <sys/file.h>
 #include <sys/param.h>
+#ifdef SYSV
+#include <string.h>
+#else
 #include <strings.h>
+#endif
 
 #ifdef linux
 #include <sys/stat.h>

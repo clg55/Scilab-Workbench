@@ -20,6 +20,11 @@ c
       common/csolve/namef,namej
       logical jac
       external bsolv,bjsolv
+c     for semidef
+      double precision abstol,reltol,nu,tv
+      integer sz,upsz
+c
+
       integer iadr, sadr
 c     
       data coin,coar,coti,cotd,cosi,cosd,nfac
@@ -33,8 +38,8 @@ c
          call basout(io,wte,' matopt '//buf(1:4))
       endif
 c     
-c     optim   quapro   nemirov fsolve
-c     1        2        3       4
+c     optim   quapro   semidef fsolve
+c     1        2        3        4
 c     
       goto(01,400,500,600 ) fin
 c     
@@ -330,6 +335,13 @@ c     chaine 'in'
          return
       endif
       if(abs(istk(il+6))+256*abs(istk(il+7)).eq.coin) then
+         if(isim.ne.1) then
+            buf='''in'' not allowed with simulator defined '//
+     $           'by a function'
+            call error(9999)
+            return
+         endif
+
 c     on initialise nizs,nrzs,ndzs
          indsim=10
          if(isim.eq.1) then
@@ -1283,36 +1295,20 @@ c     Remise en place de la pile
       return
 c     
  500  continue
-c     function : nemirov
-c     [xout [,t [,info] ]=nemirov(A,b,Q,p,m,tmin [,lst(tmax,xin)] [params])
+c     
+c     SCILAB function : semidef
 c     --------------------------
-c     default values
-      ipin(1)=20
-      ipin(2)=5
-      ipin(3)=10
-      ipin(4)=1
-      ipin(5)=-1
-      ipin(6)=17
-      ipin(9)=0
-      ipin(10)=0
-      rpin(1)=1.d-6
-      rpin(2)=1.d-10
-      rpin(3)=1.d-12
-      rpin(4)=10000000
-c     
-      setpar=0
-c     
       lw = lstk(top+1)
       l0 = lstk(top+1-rhs)
-      if (rhs .lt. 6 .or. rhs .gt. 8) then
+      if (rhs .ne. 6) then
          call error(39)
          return
       endif
-      if (lhs .gt. 3) then
+      if (lhs .gt. 4) then
          call error(41)
          return
       endif
-c     checking variable a (number 1)
+c     checking variable x (number 1)
 c     
       il1 = iadr(lstk(top-rhs+1))
       if (istk(il1) .ne. 1) then
@@ -1320,9 +1316,9 @@ c
          call error(53)
          return
       endif
-      m1 = istk(il1+2)*istk(il1+1)
+      m = istk(il1+1)*istk(il1+2)
       l1 = sadr(il1+4)
-c     checking variable b (number 2)
+c     checking variable Z (number 2)
 c     
       il2 = iadr(lstk(top-rhs+2))
       if (istk(il2) .ne. 1) then
@@ -1330,9 +1326,9 @@ c
          call error(53)
          return
       endif
-      m2 = istk(il2+2)*istk(il2+1)
+      m2 = istk(il2+1)*istk(il2+2)
       l2 = sadr(il2+4)
-c     checking variable q (number 3)
+c     checking variable F (number 3)
 c     
       il3 = iadr(lstk(top-rhs+3))
       if (istk(il3) .ne. 1) then
@@ -1340,9 +1336,9 @@ c
          call error(53)
          return
       endif
-      m3 = istk(il3+2)*istk(il3+1)
+      m3 = istk(il3+1)*istk(il3+2)
       l3 = sadr(il3+4)
-c     checking variable p (number 4)
+c     checking variable ind (number 4)
 c     
       il4 = iadr(lstk(top-rhs+4))
       if (istk(il4) .ne. 1) then
@@ -1350,9 +1346,9 @@ c
          call error(53)
          return
       endif
-      m4 = istk(il4+2)*istk(il4+1)
+      m4 = istk(il4+1)*istk(il4+2)
       l4 = sadr(il4+4)
-c     checking variable m (number 5)
+c     checking variable c (number 5)
 c     
       il5 = iadr(lstk(top-rhs+5))
       if (istk(il5) .ne. 1) then
@@ -1360,19 +1356,9 @@ c
          call error(53)
          return
       endif
-      m5 = istk(il5+2)*istk(il5+1)
+      m5 = istk(il5+1)*istk(il5+2)
       l5 = sadr(il5+4)
-      mm=0
-      msum=0
-      mmax=0
-      do 501 j=0,m5-1
-         i=stk(l5+j)
-         msum=msum+i
-         mmax=max(mmax,i)
-         mm=mm+(i*(i+1))/2
- 501  continue
-c     
-c     checking variable tmin (number 6)
+c     checking variable pars (number 6)
 c     
       il6 = iadr(lstk(top-rhs+6))
       if (istk(il6) .ne. 1) then
@@ -1380,219 +1366,127 @@ c
          call error(53)
          return
       endif
-      if (istk(il6+1)*istk(il6+2).ne.1) then
+      m6 = istk(il6+1)*istk(il6+2)
+      if (m6 .ne. 5) then
+         err = 6
          call error(89)
          return
       endif
-      
-      rpin(5)=stk(sadr(il6+4))
-      
-      if(rhs.eq.6) goto 505
-c     checking variable 7 list(tmax,xin) or params 
+      l6 = sadr(il6+4)
+      nu=stk(l6)
+      abstol=stk(l6+1)
+      reltol=stk(l6+2)
+      tv=stk(l6+3)
+      iters=stk(l6+4)
 c     
-      il7 = iadr(lstk(top-rhs+7))
-      if (istk(il7) .eq. 1) then
-c     params=[printflg #iter rtol utol ptol #psteps #dsteps projflg cholflg]
-         setpar=1
-         n7 = istk(il7+1)*istk(il7+2)
-         if (n7 .ge. 10) then
-            err = 8
-            call error(89)
-            return
-         endif
-         l7 = sadr(il7+4)
-         if(n7.ge.1) ipin(5)=stk(l7)
-         if(n7.ge.2) ipin(1)=stk(l7+1)
-         if(n7.ge.3) rpin(1)=stk(l7+2)
-         if(n7.ge.4) rpin(2)=stk(l7+3)
-         if(n7.ge.5) rpin(3)=stk(l7+4)
-         if(n7.ge.6) ipin(2)=stk(l7+5)
-         if(n7.ge.7) ipin(3)=stk(l7+6)
-         if(n7.ge.8) ipin(9)=stk(l7+7)
-         if(n7.ge.9) ipin(10)=stk(l7+8)
-      elseif (istk(il7) .eq. 15) then
-c     list(tmax,xin)
-         if (istk(il7+1) .ne. 2) then
-            err=7
-            call error(89)
-            return
-         endif
-         l=sadr(il7+5)
-         iltmax=iadr(l)
-         if (istk(iltmax) .ne. 1) then
-            err=7
-            call error(44)
-            return
-         endif
-         if (istk(iltmax+1)*istk(iltmax+2) .ne. 1) then
-            err=7
-            call error(89)
-            return
-         endif
-         rpin(4)=stk(sadr(iltmax+4))
-         l=l+(istk(il7+3)-1)
-         ilxin=iadr(l)
-         if (istk(ilxin) .ne. 1) then
-            err=7
-            call error(44)
-            return
-         endif
-         nxin=istk(ilxin+1)*istk(ilxin+2)
-         lxin=sadr(ilxin+4)
-         ipin(4)=0
-      else
-         err = 7
-         call error(53)
-         return
-      endif
-      
-      if(rhs.eq.7) goto 505
-c     checking variable params (number 8)
+c     cross variable size checking
 c     
-      if (setpar.eq.1) then
+      if (m .ne. m5) then
          call error(42)
          return
       endif
-c     
-      il8 = iadr(lstk(top-rhs+8))
-      if (istk(il8) .ne. 1) then
-         err=8
-         call error(53)
-         return
-      endif
-c     params=[printflg #iter rtol utol ptol #psteps #dsteps projflg cholflg]
-      setpar=1
-      n8 = istk(il8+1)*istk(il8+2)
-      if (n8 .ge. 10) then
-         err = 8
-         call error(89)
-         return
-      endif
-      l8 = sadr(il8+4)
-      if(n8.ge.1) ipin(5)=stk(l8)
-      if(n8.ge.2) ipin(1)=stk(l8+1)
-      if(n8.ge.3) rpin(1)=stk(l8+2)
-      if(n8.ge.4) rpin(2)=stk(l8+3)
-      if(n8.ge.5) rpin(3)=stk(l8+4)
-      if(n8.ge.6) ipin(2)=stk(l8+5)
-      if(n8.ge.7) ipin(3)=stk(l8+6)
-      if(n8.ge.8) ipin(9)=stk(l8+7)
-      if(n8.ge.9) ipin(10)=stk(l8+8)
-c     
-c     cross variable size checking      
- 505  continue
-      if (m1 .ne. m3) then
-         call error(42)
-         return
-      endif
-      nx=m1/mm
-      if(ipin(4).eq.0) then
-         if(nx.ne.nxin) then
-            call error(42)
-            return
-         endif
-      endif
-      if (m2 .ne. m4 .or. m2 .ne. mm) then
-         call error(42)
-         return
-      endif
-c     cross equal output variable checking
-c     not implemented yet
-      call entier(m5,stk(l5),istk(iadr(l5)))
-      nn11=4
-      lw11=lw
-      lw=lw+nn11
-      lw12=lw
-      lw=lw+nn11
-      lw13=lw
-      lw=lw+nx
-      nn14=6*m5
-      lw15=lw
-      nn15=24*mm+(9*nx*nx+47*nx)/2+18+mmax*(mmax+5)+4*msum
-c     nn15=10*m2sum+19*msum+mmax*(mmax+5)+(21*nx*nx+59*nx)/2+18
-      lw=lw+nn15
+      call entier(m4,stk(l4),istk(iadr(l4)))
+      nn8=2
+      lw8=lw
+      lw=lw+nn8
+      n=0
+      sz=0
+      upsz=0
+      maxn=0
+      lind=iadr(l4)
+      do 10 i=0,m4-1
+         indi=istk(lind+i)
+         n=n+indi
+         sz=sz+indi*(indi+1)/2
+         upsz=upsz+indi*indi
+         maxn=max(maxn,indi)
+ 10   continue
+c     optimal block size for dgels ????
+      nb=32
+      lwork=(m+2)*sz+upsz+2*n+max(m+sz*nb,3*maxn+maxn*(maxn+1),3*m)
+      nn14=lwork
       lw14=lw
       lw=lw+nn14
+      ilw15=iadr(lw)
+      lw=sadr(ilw15+m)
       err=lw-lstk(bot)
       if (err .gt. 0) then
          call error(17)
          return
       endif
-      ipin(7)=nn15
-      ipin(8)=nn14
-c     subroutine prfr(n,k,m,A,b,Q,p,ipin,rpin,xin,ipout,rpout,xout,war,iwar)
-      
-      call prfr(nx,m5,istk(iadr(l5)),stk(l1),stk(l2),stk(l3),stk(l4),
-     &     ipin,rpin,stk(lxin),istk(iadr(lw11)),stk(lw12),
-     &     stk(lw13),stk(lw15),stk(lw14))
-      ilpout=iadr(lw11)
+c     call sp(m, L,  F,     ind,           c,      x,      Z,
+      call spf(m,m4,stk(l3),istk(iadr(l4)),stk(l5),stk(l1),stk(l2),
+c     ul,      nu,abstol,reltol,tv,iters,work,     lwork,info)
+     &     stk(lw8),nu,abstol,reltol,tv,iters,stk(lw14),lwork,
+     &     istk(ilw15),info)
+      if(info.lt.0) then
+         call error(230)
+         return
+      endif
+
 c     
       top=top-rhs
       lw0=lw
       mv=lw0-l0
 c     
-c     Variable de sortie: xout
+      if(lhs .ge. 1) then
 c     
-      top=top+1
-      ilw=iadr(lw)
-      err=lw+4+nx-lstk(bot)
-      if (err .gt. 0) then
-         call error(17)
-         return
+c     output variable: x
+c     
+         top=top+1
       endif
-      istk(ilw)=1
-      istk(ilw+1)=nx
-      istk(ilw+2)=1
-      istk(ilw+3)=0
-      lw=sadr(ilw+4)
-      call dcopy(nx,stk(lw13),1,stk(lw),1)
-      lw=lw+nx
-      lstk(top+1)=lw-mv
+      if(lhs .ge. 2) then
 c     
-      if(lhs.eq.1) goto 510
-      
-c     Variable de sortie: t
+c     output variable: Z
 c     
-      top=top+1
-      ilw=iadr(lw)
-      err=lw+4+1-lstk(bot)
-      if (err .gt. 0) then
-         call error(17)
-         return
+         top=top+1
       endif
-      istk(ilw)=1
-      istk(ilw+1)=1
-      istk(ilw+2)=1
-      istk(ilw+3)=0
-      lw=sadr(ilw+4)
-      stk(lw)=stk(lw12)
-      lw=lw+1
-      lstk(top+1)=lw-mv
-      
-      if(lhs.eq.2) goto 510
-c     Variable de sortie: info
+      if(lhs .ge. 3) then
 c     
-      top=top+1
-      ilw=iadr(lw)
-      err=lw+4+2-lstk(bot)
-      if (err .gt. 0) then
-         call error(17)
-         return
+c     output variable: ul
+c     
+         top=top+1
+         lw=lstk(top)
+         err=lw+4+nn8-lstk(bot)
+         if (err .gt. 0) then
+            call error(17)
+            return
+         endif
+         ilw=iadr(lw)
+         istk(ilw)=1
+         istk(ilw+1)=1
+         istk(ilw+2)=nn8
+         istk(ilw+3)=0
+         lw=sadr(ilw+4)
+         call dcopy(nn8,stk(lw8),1,stk(lw),1)
+         lw=lw+nn8
+         lstk(top+1)=lw
       endif
-      istk(ilw)=1
-      istk(ilw+1)=2
-      istk(ilw+2)=1
-      istk(ilw+3)=0
-      lw=sadr(ilw+4)
-      stk(lw)=istk(ilpout+1)
-      stk(lw+1)=istk(ilpout+2)
-      lw=lw+2
-      lstk(top+1)=lw-mv
 c     
-c     Remise en place de la pile
- 510  call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)
+      if(lhs .ge. 4) then
+c     
+c     output variable: [info iters]
+c     
+         top=top+1
+         lw=lstk(top)
+         err=lw+4+2-lstk(bot)
+         if (err .gt. 0) then
+            call error(17)
+            return
+         endif
+         ilw=iadr(lw)
+         istk(ilw)=1
+         istk(ilw+1)=1
+         istk(ilw+2)=2
+         istk(ilw+3)=0
+         lw=sadr(ilw+4)
+         stk(lw)=info
+         stk(lw+1)=iters
+         lw=lw+2
+         lstk(top+1)=lw
+      endif
       return
-c     
+c
 c     fsolve
 c     
  600  continue

@@ -15,7 +15,6 @@ c
      &                   ' rstk(pt):'//buf(9:12))
       endif
 c
-      if(err1.gt.0) return
 c     compilation allops :<5 fin rhs lhs>
       if ( compil(5,fin,rhs,lhs,0)) then
          if (err.gt.0) return
@@ -33,13 +32,14 @@ c
          endif
          return
       endif
+      if(err1.gt.0) return
       vt=0
       do 03 i=1,rhs
          vt1=abs(ogettype(top+1-i))
          if(vt1.gt.vt) vt=vt1
  03   continue
 c
-      goto (10,20,05,30,05,05,05,05,05,40,70,05,70,70,50) ,vt
+      goto (10,20,05,30,70,35,05,05,05,40,60,05,60,60,50) ,vt
  05   call error(43)
       return
  10   call matops
@@ -48,12 +48,17 @@ c
       goto 80
  30   call logic
       goto 80
+ 35   call lspops
+      goto 80
  40   call strops
       goto 80
  50   call lstops
       goto 80
- 70   call misops
+ 60   call misops
       goto 80
+ 70   call spops
+      goto 80
+
 c
  80   if(err.gt.0) return
       if(fun.ne.0) then 

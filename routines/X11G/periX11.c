@@ -98,7 +98,7 @@ xselgraphic_()
   if (CBGWindow == (Window ) NULL) initgraphic_("");
   XRaiseWindow(dpy,CBGWindow);
   XFlush(dpy);
-};
+}
 
 /** End of graphic (do nothing)  **/
 
@@ -117,11 +117,15 @@ clearwindow_()
 {
   XClearWindow(dpy, CWindow);
   XFlush(dpy);
-};
+}
 
 /*-----------------------------------------------------------
  \encadre{To generate a pause, in seconds}
 ------------------------------------------------------------*/
+
+#if defined (sparc) && defined(__STDC__)
+#define usleep(x) x
+#endif 
 
 xpause_(str,sec_time)
      char str[];
@@ -143,7 +147,7 @@ xpause_(str,sec_time)
 #endif
 #endif
 
-};
+}
 
 /****************************************************************
  Wait for mouse click in graphic window 
@@ -180,8 +184,8 @@ xclick_(str,ibutton,x1,yy1)
     else 
       {
 	XtDispatchEvent(&event);
-      };
-  };
+      }
+  }
   XDefineCursor(dpy, CWindow ,arrowcursor);
   XSync (dpy, 0);
 }
@@ -215,7 +219,7 @@ xgetmouse_(str,ibutton,x1,y1)
 	buttons++;
       }
     else      XtDispatchEvent(&event);
-  };
+  }
   XDefineCursor(dpy, CWindow ,arrowcursor);
   XSync (dpy, 0);
 }
@@ -231,7 +235,7 @@ cleararea_(str,x,y,w,h)
 {
   XClearArea(dpy,CWindow,*x,*y,*w,*h,True);
   XFlush(dpy);
-};
+}
 
 /*---------------------------------------------------------------------
 \section{moves graphic window for it to be inside the root window}
@@ -252,7 +256,7 @@ Recenter_GW_()
       y=Max(0, war1.height -war.height);
   if ( x != ul[0] || y != ul[1])
     XMoveWindow(dpy,CBGWindow,x,y);
-};
+}
 
 /*---------------------------------------------------------------------
 \section{Function for graphic context modification}
@@ -270,7 +274,7 @@ getwindowpos_(verbose,x,narg)
   XTranslateCoordinates(dpy,CBGWindow,root,war.x,war.y,&(x[0]),&(x[1]),&CHR);
   if (*verbose == 1) 
     SciF2d("\n CWindow position :%d,%d\r\n",x[0],x[1]);
-};
+}
 
 /** to set the window upper-left point position on the screen **/
 
@@ -279,7 +283,7 @@ setwindowpos_(x,y)
 {
   if (CBGWindow == (Window) NULL) initgraphic_("");
   XMoveWindow(dpy,CBGWindow,*x,*y);
-};
+}
 
 /** To get the window size **/
 
@@ -293,7 +297,7 @@ getwindowdim_(verbose,x,narg)
   x[1]= war.height;
   if (*verbose == 1) 
     SciF2d("\n CWindow dim :%d,%d\r\n",x[0],x[1]);
-}; 
+} 
 
 /** To change the window size  **/
 
@@ -303,7 +307,7 @@ setwindowdim_(x,y)
   if (CBGWindow != (Window) NULL) 
 	XResizeWindow(dpy,CBGWindow,Max(*x,400),Max(*y,300));
   XFlush(dpy);
-};
+}
 
 /** To select a graphic Window  **/
 
@@ -320,8 +324,8 @@ setcurwin_(intnum)
       int i;
       for (i=0;i <= *intnum;i++)
 	    if ( GetWindowNumber_(*intnum)== (Window) NULL) initgraphic_("");
-    };
-};
+    }
+}
 
 /** Get the id number of the Current Graphic Window **/
 
@@ -332,7 +336,7 @@ getcurwin_(verbose,intnum,narg)
   *intnum = MissileXgc.CurWindow ;
   if (*verbose == 1) 
     SciF1d("\nCurrent Graphic Window :%d\r\n",*intnum);
-};
+}
 
 /** Set a clip zone (rectangle ) **/
 
@@ -352,7 +356,7 @@ setclip_(x,y,w,h)
   MissileXgc.CurClipRegion[2]= rects[0].width;
   MissileXgc.CurClipRegion[3]= rects[0].height;
   XSetClipRectangles(dpy,gc,0,0,rects,1,Unsorted);
-};
+}
 
 /** Get the boundaries of the current clip zone **/
 
@@ -378,7 +382,7 @@ getclip_(verbose,x,narg)
 	      MissileXgc.CurClipRegion[3]);
     else 
       Scistring("\nNo Clip Region");
-};
+}
 
 /*----------------------------------------------------------
   \encadre{For the drawing functions dealing with vectors of 
@@ -395,7 +399,7 @@ setabsourel_(num)
     MissileXgc.CurVectorStyle =  CoordModeOrigin;
   else 
     MissileXgc.CurVectorStyle =  CoordModePrevious ;
-};
+}
 
 /** to get information on absolute or relative mode **/
 
@@ -409,7 +413,7 @@ getabsourel_(verbose,num,narg)
       Scistring("\nTrace Absolu");
     else 
       Scistring("\nTrace Relatif");
-};
+}
 
 /** The alu function for drawing : Works only with X11 **/
 /** Not in Postscript **/
@@ -424,8 +428,8 @@ setalufunction_(string)
     {MissileXgc.CurDrawFunction = value;
      gcvalues.function = value;
      XChangeGC(dpy, gc, GCFunction, &gcvalues);
-   };
-};
+   }
+}
 /** All the possibilities : Read The X11 manual to get more informations **/
 
 struct alinfo { 
@@ -477,10 +481,10 @@ setalufunction1_(num)
 	  gcvalues.foreground = foreground;
 	  gcvalues.background = background;
 	  break;
-      };
+      }
       XChangeGC(dpy,gc,(GCForeground | GCBackground | GCFunction),&gcvalues);
-    };
-};
+    }
+}
 
 idfromname(name1,num)
      char name1[];
@@ -496,8 +500,8 @@ idfromname(name1,num)
      for ( i=0 ; i < 16 ; i++)
        SciF2s("\nkey %s   -> %s\r\n",AluStruc_[i].name,
 	       AluStruc_[i].info);
-   };
-};
+   }
+}
 
 /** To get the value of the alufunction **/
 
@@ -511,7 +515,7 @@ getalufunction_(verbose,value,narg)
       SciF2s("\nThe Alufunction is %s -> <%s>\r\n",
 	      AluStruc_[*value].name,
 	      AluStruc_[*value].info);}
-};
+}
 
 
 /** to set the thickness of lines : 0 is a possible value **/
@@ -536,7 +540,7 @@ getthickness_(verbose,value,narg)
   *value = MissileXgc.CurLineWidth ;
   if (*verbose ==1 ) 
     SciF1d("\nLine Width:%d\r\n",  MissileXgc.CurLineWidth ) ;
-};
+}
 
 /** To set grey level for filing areas **/
 /** from black (*num =0 ) to white     **/
@@ -545,23 +549,23 @@ getthickness_(verbose,value,narg)
 Pixmap  Tabpix_[GREYNUMBER];
 
 static char grey0[GREYNUMBER][8]={
-  {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
-  {0x00, 0x00, 0x44, 0x00, 0x00, 0x00, 0x44, 0x00},
-  {0x00, 0x44, 0x00, 0x22, 0x08, 0x40, 0x01, 0x20},
-  {0x00, 0x92, 0x00, 0x25, 0x00, 0x92, 0x00, 0xa4},
-  {0x55, 0x00, 0xaa, 0x00, 0x55, 0x00, 0xaa, 0x00},
-  {0xad, 0x00, 0x5b, 0x00, 0xda, 0x00, 0x6d, 0x00},
-  {0x6d, 0x02, 0xda, 0x08, 0x6b, 0x10, 0xb6, 0x20},
-  {0x6d, 0x22, 0xda, 0x0c, 0x6b, 0x18, 0xb6, 0x24},
-  {0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa},
-  {0x92, 0xdd, 0x25, 0xf3, 0x94, 0xe7, 0x49, 0xdb},
-  {0x92, 0xfd, 0x25, 0xf7, 0x94, 0xef, 0x49, 0xdf},
-  {0x52, 0xff, 0xa4, 0xff, 0x25, 0xff, 0x92, 0xff},
-  {0xaa, 0xff, 0x55, 0xff, 0xaa, 0xff, 0x55, 0xff},
-  {0xff, 0x6d, 0xff, 0xda, 0xff, 0x6d, 0xff, 0x5b},
-  {0xff, 0xbb, 0xff, 0xdd, 0xf7, 0xbf, 0xfe, 0xdf},
-  {0xff, 0xff, 0xbb, 0xff, 0xff, 0xff, 0xbb, 0xff},
-  {0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
+  {(char)0x00, (char)0x00, (char)0x00, (char)0x00, (char)0x00, (char)0x00, (char)0x00, (char)0x00},
+  {(char)0x00, (char)0x00, (char)0x44, (char)0x00, (char)0x00, (char)0x00, (char)0x44, (char)0x00},
+  {(char)0x00, (char)0x44, (char)0x00, (char)0x22, (char)0x08, (char)0x40, (char)0x01, (char)0x20},
+  {(char)0x00, (char)0x92, (char)0x00, (char)0x25, (char)0x00, (char)0x92, (char)0x00, (char)0xa4},
+  {(char)0x55, (char)0x00, (char)0xaa, (char)0x00, (char)0x55, (char)0x00, (char)0xaa, (char)0x00},
+  {(char)0xad, (char)0x00, (char)0x5b, (char)0x00, (char)0xda, (char)0x00, (char)0x6d, (char)0x00},
+  {(char)0x6d, (char)0x02, (char)0xda, (char)0x08, (char)0x6b, (char)0x10, (char)0xb6, (char)0x20},
+  {(char)0x6d, (char)0x22, (char)0xda, (char)0x0c, (char)0x6b, (char)0x18, (char)0xb6, (char)0x24},
+  {(char)0x55, (char)0xaa, (char)0x55, (char)0xaa, (char)0x55, (char)0xaa, (char)0x55, (char)0xaa},
+  {(char)0x92, (char)0xdd, (char)0x25, (char)0xf3, (char)0x94, (char)0xe7, (char)0x49, (char)0xdb},
+  {(char)0x92, (char)0xfd, (char)0x25, (char)0xf7, (char)0x94, (char)0xef, (char)0x49, (char)0xdf},
+  {(char)0x52, (char)0xff, (char)0xa4, (char)0xff, (char)0x25, (char)0xff, (char)0x92, (char)0xff},
+  {(char)0xaa, (char)0xff, (char)0x55, (char)0xff, (char)0xaa, (char)0xff, (char)0x55, (char)0xff},
+  {(char)0xff, (char)0x6d, (char)0xff, (char)0xda, (char)0xff, (char)0x6d, (char)0xff, (char)0x5b},
+  {(char)0xff, (char)0xbb, (char)0xff, (char)0xdd, (char)0xf7, (char)0xbf, (char)0xfe, (char)0xdf},
+  {(char)0xff, (char)0xff, (char)0xbb, (char)0xff, (char)0xff, (char)0xff, (char)0xbb, (char)0xff},
+  {(char)0xff, (char)0xff, (char)0xff, (char)0xff, (char)0xff, (char)0xff, (char)0xff, (char)0xff},
 };
 
 CreatePatterns_(whitepixel,blackpixel)
@@ -570,7 +574,7 @@ CreatePatterns_(whitepixel,blackpixel)
   for ( i=0 ; i < GREYNUMBER ; i++)
     Tabpix_[i] =XCreatePixmapFromBitmapData(dpy, root,grey0[i] ,8,8,whitepixel
 		     ,blackpixel,XDefaultDepth (dpy,DefaultScreen(dpy)));
-};
+}
 
 
 setpattern_(num)
@@ -585,8 +589,8 @@ setpattern_(num)
       XSetFillStyle(dpy,gc,FillSolid);
     else 
       XSetFillStyle(dpy,gc,FillTiled);
-  };
-};
+  }
+}
 
 /** To get the id of the current pattern  **/
 
@@ -598,7 +602,7 @@ getpattern_(verbose,num,narg)
   if (*verbose == 1) 
     SciF1d("\n Pattern : %d\r\n",
 	    MissileXgc.CurPattern);
-};
+}
 
 /** To get the id of the white pattern **/
 
@@ -609,7 +613,7 @@ getwhite_(verbose,num,narg)
   if (*verbose == 1) 
     SciF1d("\n Id of White Pattern %d\r\n",*num);
   *narg=1;
-};
+}
 
 
 /*--------------------------------------
@@ -640,9 +644,9 @@ setdash_(value)
     {
       setdashstyle_(value,DashTab[Max(0,l3)],&l2);
       MissileXgc.CurDashStyle= l3 + 1 ;
-    };
+    }
 
-};
+}
 
 /** To change The X11-default dash style **/
 /** if *value == 0, use a solid line, if *value != 0 **/
@@ -659,7 +663,7 @@ setdashstyle_(value,xx,n)
       int i; char buffdash[18];
       for ( i =0 ; i < *n ; i++) buffdash[i]=xx[i];
       XSetDashes(dpy,gc,0,buffdash,*n);
-    };
+    }
   XSetLineAttributes(dpy,gc,MissileXgc.CurLineWidth,dashok,CapButt,JoinMiter);
 }
 
@@ -674,7 +678,7 @@ getdash_(verbose,value,narg)
    {
      if (*verbose == 1) SciF1d("Color %d",*value);
      return;
-   };
+   }
  if ( *value == 0) 
    { if (*verbose == 1) Scistring("\nLine style = Line Solid");}
  else 
@@ -690,7 +694,7 @@ getdash_(verbose,value,narg)
 	 Scistring(">\n");
        }
    }
-};
+}
 
 
 usecolor_(num)
@@ -702,8 +706,8 @@ usecolor_(num)
       use_color= *num;
       setdash_(&i);
       setpattern_(&i);
-    };
-};
+    }
+}
 
 /*-----------------------------------------------------------
   \encadre{general routines accessing the  set<> or get<>
@@ -716,7 +720,7 @@ empty_(verbose)
      int *verbose;
 {
   if ( *verbose == 1 ) Scistring("\n No operation ");
-};
+}
 
 #define NUMSETFONC 14
 
@@ -747,7 +751,7 @@ MissileGCget_(str,verbose,x1,x2,x3,x4,x5)
      char str[];
      int *verbose,*x1,*x2,*x3,*x4,*x5;
      
-{ MissileGCGetorSet_(str,1,verbose,x1,x2,x3,x4,x5);};
+{ MissileGCGetorSet_(str,1,verbose,x1,x2,x3,x4,x5);}
 
 MissileGCset_(str,x1,x2,x3,x4,x5)
      char str[];
@@ -778,11 +782,11 @@ MissileGCGetorSet_(str,flag,verbose,x1,x2,x3,x4,x5)
 	    {
 	      SciF1s("\nUnknow X operator <%s>\r\n",str);
 	      return;
-	    };
-	};
-    };
+	    }
+	}
+    }
   SciF1s("\n Unknow X operator <%s>\r\n",str);
-};
+}
 
 /*-------------------------------------------------------
 \section{Functions for drawing}
@@ -811,7 +815,7 @@ displaystring_(string,x,y,angle,flag)
 	 boundingbox_(string,x,y,rect);
 	 rect[0]=rect[0]-4;rect[2]=rect[2]+6;
 	 drawrectangle_(string,rect,rect+1,rect+2,rect+3);
-       };
+       }
     }
   else 
     DispStringAngle_(x,y,string,angle);
@@ -832,19 +836,19 @@ DispStringAngle_(x0,yy0,string,angle)
   y= *yy0;
   sina= sin(*angle * M_PI/180.0);
   cosa= cos(*angle * M_PI/180.0);
-  for ( i = 0 ; i < strlen(string); i++)
+  for ( i = 0 ; i < (int)strlen(string); i++)
     { 
       str1[0]=string[i];
       XDrawString(dpy,CWindow,gc, x,y ,str1,1);
       boundingbox_(str1,&x,&y,rect);
       /** drawrectangle_(string,rect,rect+1,rect+2,rect+3); **/
-      if ( cosa <= 0.0 && i < strlen(string)-1)
+      if ( cosa <= 0.0 && i < (int)strlen(string)-1)
 	{ char str2[2];
 	  /** si le cosinus est negatif le deplacement est a calculer **/
 	  /** sur la boite du caractere suivant **/
 	  str2[1]='\0';str2[0]=string[i+1];
 	  boundingbox_(str2,&x,&y,rect);
-	};
+	}
       if ( Abs(cosa) >= 1.e-8 )
 	{
 	  if ( Abs(sina/cosa) <= Abs(((double)rect[3])/((double)rect[2])))
@@ -856,8 +860,8 @@ DispStringAngle_(x0,yy0,string,angle)
 	l = Abs(rect[3]/sina);
       x +=  cosa*l*1.1;
       y +=  sina*l*1.1;
-    };
-};
+    }
+}
 
 /** To get the bounding rectangle of a string **/
 
@@ -872,7 +876,7 @@ boundingbox_(string,x,y,rect)
   rect[1]= *y-asc;
   rect[2]= charret.width;
   rect[3]= asc+dsc;
-};
+}
 
 /*------------------------------------------------
 subsection{ Segments and Arrows }
@@ -899,9 +903,9 @@ drawsegments_(str,vx,vy,n)
     {
       XDrawLine(dpy,CWindow,gc,vx[2*i],vy[2*i],vx[2*i+1],vy[2*i+1]);
       XFlush(dpy);
-    };
+    }
   XFlush(dpy);
-};
+}
 
 /** Draw a set of arrows **/
 /** arrows are defined by (vx[i],vy[i])->(vx[i+1],vy[i+1]) **/
@@ -935,10 +939,10 @@ drawarrows_(str,vx,vy,n,as)
 	  polyy[1]= nint(polyy[0] + sin20*dx -cos20*dy) ;
 	  polyy[2]= nint(polyy[0] - sin20*dx - cos20*dy) ;
 	  fillpolylines_("v",polyx,polyy,(fillvect[0]=0,fillvect),&nn,&p);
-	  };
-    };
+	  }
+    }
       XFlush(dpy);
-};
+}
 
 /*----------------------
 \subsection{Rectangles}
@@ -973,7 +977,7 @@ drawrectangles_(str,vects,fillvect,n)
 	}
     }
   setpattern_(&(cpat));
-};
+}
 
 /** Draw one rectangle with current line style **/
 
@@ -992,7 +996,7 @@ fillrectangle_(str,x,y,width,height)
 { 
   XFillRectangle(dpy, CWindow, gc, *x, *y, *width, *height); 
   XFlush(dpy);
-};
+}
 
 /*----------------------
 \subsection{Circles and Ellipsis }
@@ -1031,7 +1035,7 @@ drawarcs_(str,vects,fillvect,n)
 	}
     }
   setpattern_(&(cpat));
-};
+}
 
 /** Draw a single ellipsis or part of it **/
 
@@ -1081,12 +1085,12 @@ drawpolylines_(str,vectsx,vectsy,drawvect,n,p)
 	  setdash_(&NDvalue);
 	  close = 0;
 	  drawpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,&close);
-	};
-    };
+	}
+    }
   /** back to default values **/
   setdash_( Dvalue);
   xsetmark_(symb,symb+1);
-};
+}
 
 /** fill a set of polygons each of which is defined by 
  (*p) points (*n) is the number of polygons 
@@ -1127,7 +1131,7 @@ fillpolylines_(str,vectsx,vectsy,fillvect,n,p)
 	}
     }
   setpattern_(&(cpat));
-};
+}
 
 /** Only draw one polygon  with current line style **/
 /** according to *closeflag : it's a polyline or a polygon **/
@@ -1153,7 +1157,7 @@ drawpolyline_(str,n, vx, vy,closeflag)
       XFlush(dpy);
       */
     }
-};
+}
 
 /** Fill the polygon or polyline **/
 /** according to *closeflag : the given vector is a polyline or a polygon **/
@@ -1169,7 +1173,7 @@ fillpolyline_(str,n, vx, vy,closeflag)
   if (store_points_(*n, vx, vy,*closeflag)){
     XFillPolygon (dpy, CWindow, gc, ReturnPoints_(), n1,
 		  Complex, MissileXgc.CurVectorStyle);
-  };
+  }
   XFlush(dpy);
 }
 
@@ -1196,8 +1200,8 @@ drawpolymark_(str,n, vx, vy)
       xsetfont_(&i,&(MissileXgc.CurHardSymbSize));
       for ( i=0; i< *n ;i++) DrawMark_(vx+i,vy+i);
       xsetfont_(&keepid,&keepsize);
-    };
-};
+    }
+}
 
 /*-----------------------------------------
  \encadre{List of Window id}
@@ -1215,7 +1219,7 @@ WindowList *The_List_ ;
 AddNewWindowToList_(wind,bgwind,num)
      Window wind,bgwind;
      int num;
-{AddNewWindow_(&The_List_,wind,bgwind,num);};
+{AddNewWindow_(&The_List_,wind,bgwind,num);}
 
 AddNewWindow_(listptr,wind,bgwind,num)
      WindowList **listptr;
@@ -1234,20 +1238,20 @@ AddNewWindow_(listptr,wind,bgwind,num)
    }
   else
     AddNewWindow_((WindowList **) &((*listptr)->next),wind,bgwind,num);
-};
+}
 
 Window GetWindowNumber_(i)
      int i ;
 { Window GetWin_();
   return( GetWin_(The_List_,Max(0,i)));
-};
+}
 
 
 Window GetBGWindowNumber_(i)
      int i ;
 { Window GetBGWin_();
   return( GetBGWin_(The_List_,Max(0,i)));
-};
+}
 
 Window GetWin_(listptr,i)
      WindowList *listptr;
@@ -1260,8 +1264,8 @@ Window GetWin_(listptr,i)
 	return( listptr->win);
     else 
       return((Window )GetWin_((WindowList *) listptr->next,i));
-    };
-};
+    }
+}
 
 Window GetBGWin_(listptr,i)
      WindowList *listptr;
@@ -1274,8 +1278,8 @@ Window GetBGWin_(listptr,i)
 	return( listptr->bgwin);
     else 
       return((Window )GetBGWin_((WindowList *) listptr->next,i));
-    };
-};
+    }
+}
 
 /*--------------------------------------------------------------
   \encadre{Routine for initialisation : string is a display name }
@@ -1306,7 +1310,7 @@ set_c(i)
      int i;
 {
   XSetForeground(dpy, gc, the_res.color[Max(Min(i,NUMCOLORS-1),0)] );  
-} ;
+}
 
 
 /** Initialyze the dpy connection and creates graphic windows **/
@@ -1331,16 +1335,16 @@ initgraphic_(string)
       depth = XDefaultDepth (dpy, screen);
       LoadFonts();
       crosscursor = XCreateFontCursor(dpy, XC_crosshair);
-      arrowcursor  = XCreateFontCursor (dpy, 0x2e);
+      arrowcursor  = XCreateFontCursor (dpy, (char)0x2e);
       normalcursor = XCreateFontCursor (dpy, XC_X_cursor);
       windowcount = 0;
-    };
+    }
   CreatePopupWindow(toplevel,&CWindow,&CBGWindow,&foreground,&background);
   /* SciF2d("[fg,bg]=%d,%d\r\n",foreground,background); */
   if (EntryCounter == 0)
     {
       CreatePatterns_(background,foreground);
-    };
+    }
   AddNewWindowToList_(CWindow,CBGWindow,EntryCounter);
   MissileXgc.CurWindow =EntryCounter;
   if (EntryCounter == 0)
@@ -1355,11 +1359,11 @@ initgraphic_(string)
       InitMissileXgc();
       XSetErrorHandler(X_error_handler);
       XSetIOErrorHandler((XIOErrorHandler) X_error_handler);
-   }; 
+   } 
   EntryCounter++;
   XSync(dpy,0);
   return(0);
-};
+}
 
 
 /*
@@ -1408,7 +1412,7 @@ Window Window_With_Name( top, name,j,ResList0,ResList1,ResList2)
     {
       DbugInfo0("XQuery Tree failed \n");
       return((Window) 0);
-    };
+    }
   if ( nchildren == 0 )  return((Window) 0);
   DbugInfo1("Number of children %d \n",nchildren);
   for (i= (int) nchildren-1; i >= 0 ; i--) 
@@ -1436,13 +1440,13 @@ Window Window_With_Name( top, name,j,ResList0,ResList1,ResList2)
 		  DbugInfo1("father was %s\n",window_name);
 		  if (window_name) XFree(window_name);
 		  break;
-		};
-	    };
+		}
+	    }
 	  if (window_name) XFree(window_name);
-	};
-    };
+	}
+    }
   return((Window) w);
-};
+}
 
 
 static char *ResList[]={ VERSION,"BG","ScilabGraphic"};
@@ -1498,7 +1502,7 @@ Ignore_Err(d, err_ev)
     Display        *d;
     XErrorEvent    *err_ev;
 {DbugInfo0("Ignoring Error");
- longjmp(my_env,1);};
+ longjmp(my_env,1);}
 
 int 
 CheckWin(w)
@@ -1520,8 +1524,8 @@ CheckWin(w)
       XGetGeometry (dpy, w, &root_ret, &x, &y, &width, &height, &bw, &idepth);
       XSync (dpy, 0);
       XSetErrorHandler((XErrorHandler) curh);
-      return(1);};
-};
+      return(1);}
+}
 
 
 /*--------------------------------------------------------
@@ -1548,7 +1552,7 @@ InitMissileXgc ()
   MissileXgc.CurVectorStyle = CoordModeOrigin ;
   setpattern_((i=0,&i));
   strcpy(MissileXgc.CurNumberDispFormat,"%-5.2g");
-};
+}
 
 /*------------------------------------------------------
   Draw an axis whith a slope of alpha degree (clockwise)
@@ -1586,20 +1590,20 @@ drawaxis_(str,alpha,nsteps,size,initpoint)
       xf = xi - ( size[1]*sinal);
       yf = yi + ( size[1]*cosal);
       XDrawLine(dpy,CWindow,gc,nint(xi),nint(yi),nint(xf),nint(yf));
-    };
+    }
   for (i=0; i <= nsteps[1]; i++)
     { xi = initpoint[0]+i*nsteps[0]*size[0]*cosal;
       yi = initpoint[1]+i*nsteps[0]*size[0]*sinal;
       xf = xi - ( size[1]*size[2]*sinal);
       yf = yi + ( size[1]*size[2]*cosal);
       XDrawLine(dpy,CWindow,gc,nint(xi),nint(yi),nint(xf),nint(yf));
-    };
+    }
   xi = initpoint[0]; yi= initpoint[1];
   xf = initpoint[0]+ nsteps[0]*nsteps[1]*size[0]*cosal;
   yf = initpoint[1]+ nsteps[0]*nsteps[1]*size[0]*sinal;
   XDrawLine(dpy,CWindow,gc,nint(xi),nint(yi),nint(xf),nint(yf));
   XFlush(dpy);
-};
+}
 
 /*-----------------------------------------------------
   \encadre{Display numbers z[i] at location (x[i],y[i])
@@ -1616,9 +1620,9 @@ displaynumbers_(str,x,y,z,alpha,n,flag)
   for (i=0 ; i< *n ; i++)
     { sprintf(buf,MissileXgc.CurNumberDispFormat,z[i]);
       displaystring_(buf,&(x[i]),&(y[i]),&(alpha[i]),flag) ;
-    };
+    }
   XFlush(dpy);
-};
+}
 
 bitmap_(string,w,h)
      char string[];
@@ -1706,13 +1710,13 @@ int xsetfont_(fontid,fontsize)
 	  Scistring(" use xlfont to set it \n");
 	  return;
 	}
-    };
+    }
   MissileXgc.FontId = i;
   MissileXgc.FontSize = fsiz;
   MissileXgc.FontXID=FontsList_[i][fsiz]->fid;
   XSetFont(dpy,gc,FontsList_[i][fsiz]->fid);
   XFlush(dpy);
-};
+}
 
 /** To get the  id and size of the current font **/
 
@@ -1728,8 +1732,8 @@ int xgetfont_(verbose,font,nargs)
       SciF2s("--> %s at size %s pts\r\n",
 	     FontInfoTab_[MissileXgc.FontId].fname,
 	     size_[MissileXgc.FontSize]);
-    };
-};
+    }
+}
 
 /** To set the current mark **/
 xsetmark_(number,size)
@@ -1752,8 +1756,8 @@ xgetmark_(verbose,symb,narg)
     {
       SciF1d("\nMark : %d ",MissileXgc.CurHardSymb);
       SciF1s("at size %s pts\r\n", size_[MissileXgc.CurHardSymbSize]);
-    };
-};
+    }
+}
 
 /** Load in X11 a font at size  08 10 12 14 18 24 **/
 /**  TimR08 TimR10 TimR12 TimR14 TimR18 TimR24 **/ 
@@ -1789,7 +1793,7 @@ loadfamily_(name,j)
 	      return;
 	    }
 	  i++;
-	};
+	}
       /** Using X11 Table of aliases **/
       for ( i = 0; i < FONTMAXSIZE ; i++)
 	{
@@ -1806,16 +1810,16 @@ loadfamily_(name,j)
 		{
 		  SciF1s("\n Unknown font : %s\r\n","fixed");
 		  Scistring("Please call an X Wizard !");
-		};
-	    };
-	};
+		}
+	    }
+	}
       FontInfoTab_[*j].ok = 1;
       if (flag != 0) 
 	strcpy(FontInfoTab_[*j].fname,name);
       else
 	strcpy(FontInfoTab_[*j].fname,"fixed");
-    };
-};
+    }
+}
 
 static char *size_n_[] = { "8" ,"10","12","14","18","24"};
 
@@ -1838,15 +1842,15 @@ loadfamily_n_(name,j)
 	    {
 	      SciF1s("\n Unknown font : %s\r\n","fixed");
 	      Scistring("  Please call an X Wizard !");
-	    };
-	};
-    };
+	    }
+	}
+    }
   FontInfoTab_[*j].ok = 1;
   if (flag != 0) 
     strcpy(FontInfoTab_[*j].fname,name);
   else
     strcpy(FontInfoTab_[*j].fname,"fixed");
-};
+}
 
 
 LoadFonts()
@@ -1862,7 +1866,7 @@ LoadFonts()
   loadfamily_("TimBI",(fnum=5,&fnum)); 
   See xsetfont
 */
-};
+}
 
 /** We use the Symbol font  for mark plotting **/
 /** so we want to be able to center a Symbol character at a specified point **/
@@ -1873,7 +1877,8 @@ typedef  struct { int xoffset[SYMBOLNUMBER];
 static Offset ListOffset_[FONTMAXSIZE];
 static char Marks[] = {
   /*., +,X,*,diamond(filled),diamond,triangle up,triangle down,trefle,circle*/
-  0xb7,0x2b,0xb4,0xc5,0xa8,0xe0,0x44,0xd1,0xa7,0x4f};
+  (char)0x2e,(char)0x2b,(char)0xb4,(char)0xc5,(char)0xa8,
+  (char)0xe0,(char)0x44,(char)0xd1,(char)0xa7,(char)0x4f};
 
 LoadSymbFonts()
 { XCharStruct xcs;
@@ -1887,7 +1892,7 @@ LoadSymbFonts()
      for the font i 
      n1=FontsList_[i]->min_char_or_byte2
      info on char coded as  oxyy are stored in 
-     FontsList_[i]->per_char[0xyy-n1]
+     FontsList_[i]->per_char[(char)0xyy-n1]
      
      */
   /** if symbol font was not found me must stop **/
@@ -1901,10 +1906,10 @@ LoadSymbFonts()
 		 xcs= FontsList_[1][i]->per_char[Char2Int(Marks[j])-k];
 		 (ListOffset_[i].xoffset)[j] = (xcs.rbearing+xcs.lbearing)/2;
 		 (ListOffset_[i].yoffset)[j] = (xcs.ascent+xcs.descent)/2;
-	       };
-	   };
-       };
-};
+	       }
+	   }
+       }
+}
 
 /** The two next functions send the x and y offsets to center the current **/
 /** symbol at point (x,y) **/
@@ -1927,7 +1932,7 @@ DrawMark_(x,y)
   str[0]=Marks[MissileXgc.CurHardSymb];
   XDrawString(dpy,CWindow,gc,*x+CurSymbXOffset_(),*y+CurSymbYOffset_(),str,1);
   XFlush(dpy);
-};
+}
 
 /*-------------------------------------------------------------------
 \subsection{Allocation and storing function for vectors of X11-points}
@@ -1957,7 +1962,7 @@ int store_points_(n, vx, vy,onemore)
       return(1);
     }
   else return(0);
-};
+}
 
 int ReallocVector_(n)
      int n  ;
@@ -1972,7 +1977,7 @@ int ReallocVector_(n)
       }
   }
   return(1);
-};
+}
 
 int AllocVectorStorage_()
 {
@@ -1980,9 +1985,9 @@ int AllocVectorStorage_()
   points = (XPoint *) malloc (nbpoints * sizeof (XPoint)); 
   if ( points == 0) { perror(MESSAGE4);return(0);}
   else return(1);
-};
+}
 
-XPoint *ReturnPoints_() { return(points); };
+XPoint *ReturnPoints_() { return(points); }
 
 /*------------------------END--------------------*/
 
@@ -2022,18 +2027,18 @@ int analyze_points_(n, vx, vy,onemore)
 #endif 
 	MyDraw(iib,n-1,vx,vy);
 	break;
-      };
+      }
 #ifdef DEBUG
       SciF2d("Analysed : [%d,%d]\r\n",iib,iif);
 #endif 
       MyDraw(iib,iif,vx,vy);
       ideb=iif;
-    };
+    }
   if (onemore == 1) {
     vxl[0]=vx[n-1];vxl[1]=vx[0];vyl[0]=vy[n-1];vyl[1]=vy[0];
     analyze_points_(2,vxl,vyl,0);
-  };
-};
+  }
+}
 
 MyDraw(iib,iif,vx,vy)
      int iib,iif,vx[],vy[];
@@ -2044,7 +2049,7 @@ MyDraw(iib,iif,vx,vy)
   if ( iib > 0) 
     {
       clip_line(vx[iib-1],vy[iib-1],vx[iib],vy[iib],&x1n,&y1n,&x2n,&y2n,&flag1);
-    };
+    }
   clip_line(vx[iif-1],vy[iif-1],vx[iif],vy[iif],&x11n,&y11n,&x2n,&y2n,&flag2);
   if (store_points_(npts, &vx[Max(0,iib-1)], &vy[Max(0,iib-1)],0));
   {
@@ -2052,8 +2057,8 @@ MyDraw(iib,iif,vx,vy)
     if (flag2==2 || flag2==3) change_points(npts-1,x2n,y2n);
     XDrawLines (dpy, CWindow, gc, ReturnPoints_(),npts,
 		MissileXgc.CurVectorStyle);
-  };
-};
+  }
+}
 
 My2draw(j,vx,vy)
      int j,vx[],vy[];
@@ -2065,14 +2070,14 @@ My2draw(j,vx,vy)
   {
     XDrawLines (dpy, CWindow, gc, ReturnPoints_(),npts,
 		MissileXgc.CurVectorStyle);
-  };
-};
+  }
+}
 
 change_points(i,x,y)
      int i,x,y;
 {
   points[i].x=(short)x;   points[i].y=(short)y;
-};
+}
 
 /* 
  *  returns the first (vx[.],vy[.]) point inside 
@@ -2093,10 +2098,10 @@ int first_in(n,ideb,vx,vy)
 	  SciF4d("first in %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
 #endif
 	  return(i);
-	};
-    };
+	}
+    }
   return(-1);
-};
+}
 
 /* 
  *  returns the first (vx[.],vy[.]) point outside
@@ -2117,10 +2122,10 @@ int first_out(n,ideb,vx,vy)
 	  SciF4d("first out %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
 #endif
 	  return(i);
-	};
-    };
+	}
+    }
   return(-1);
-};
+}
 
 /* Test a single point to be within the xleft,xright,ybot,ytop bbox.
  * Sets the returned integers 4 l.s.b. as follows:
@@ -2135,10 +2140,10 @@ int x, y;
 {
     int ret_val = 0;
 
-    if (x < xleft) ret_val |= 0x01;
-    if (x > xright) ret_val |= 0x02;
-    if (y < ybot) ret_val |= 0x04;
-    if (y > ytop) ret_val |= 0x08;
+    if (x < xleft) ret_val |= (char)0x01;
+    if (x > xright) ret_val |= (char)0x02;
+    if (y < ybot) ret_val |= (char)0x04;
+    if (y > ytop) ret_val |= (char)0x08;
 
     return ret_val;
 }
@@ -2236,9 +2241,9 @@ int clip_line(x1, yy1, x2, y2, x1n, yy1n, x2n, y2n, flag)
 		    *flag=2;return;
 		}
 	      }
-	  };
-      };
-  };
+	  }
+      }
+  }
 
 
 

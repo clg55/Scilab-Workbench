@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DESI12,SSI=0
       subroutine desi12(nmaxi,maxdeg,iapro,ndeg,vsn,gd1,gd2,adelta,
      *nzm,sm,nzero,pren,pimn,ugc,ack,nj,nh)
 c!purpose
@@ -12,8 +11,11 @@ c
       implicit double precision (a-h,o-z)
       dimension nzm(*),sm(maxdeg,*),nzero(*),pren(*),pimn(*)
 c
+      external slamch
+      real slamch
+c
       pi=4.0d+0*atan(1.0d+0)
-      flma=2.0d+0**(i1mach(16)-2)
+      flma=2.0d+0**(int(slamch('l'))-2)
       adelta = cosh(real(ndeg)*arcosh(vsn))
 c
         fa = 1.0d+0

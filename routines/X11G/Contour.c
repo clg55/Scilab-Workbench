@@ -62,7 +62,7 @@ double phi_cont(i,j)
      int i,j;
 {
   return(GZ[i+Gn1*j]);
-  };
+  }
 
 
 /*---------return the coordinates between  [xi,xj] along one axis 
@@ -90,13 +90,13 @@ int get_itg_cont(i,j)
      int i,j;
 {
   return( itg_cont[i+Gn1*j]);
-};
+}
 
 inc_itg_cont(i,j,val)
      int i,j,val ;
 {
   itg_cont[i+Gn1*j] += val;
-};
+}
 
 
 int not_same_sign(val1,val2)
@@ -109,7 +109,7 @@ int not_same_sign(val1,val2)
   else 
     {
       if ( val2 >= 0.0) return(1) ; else return(0);}
-};
+}
 
 int oddp(i)
      int i;
@@ -181,7 +181,7 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
     case 0:   func=ContStore; break;
     case 1:   func=ContStore1;ZC= *zlev; break;
     case 2:   func=ContStore2; break;
-    };
+    }
   zmin=(double) Mini(z,*n1*(*n2)); 
   zmax=(double) Maxi(z,*n1*(*n2));
   if (flag[0] == 2)
@@ -208,7 +208,7 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
 	   bbox[0]=x[0];bbox[1]=x[*n1-1];
 	   bbox[2]=y[0];bbox[3]=y[*n2-1];
 	   bbox[4]=zmin;bbox[5]=zmax;
-	 };
+	 }
        if ( flag[1] !=0)
 	 SetEch3d(xbox,ybox,zbox,bbox,teta,alpha);
        else
@@ -228,7 +228,7 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
 	   if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideU);
 	 }
        GetEch3d1(m,tr,FRect,&scx,&scy);
-     };
+     }
   if (*flagnz==0)
     {
       if (firstentry)
@@ -240,7 +240,7 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
 	{
 	  zconst =(double *) realloc((char *)zconst,
 				     ((unsigned) (*nz)*sizeof(double)));
-	};
+	}
       for ( i =0 ; i < *nz ; i++)
 	zconst[i]=zmin + i*(zmax-zmin)/(*nz);
       N[0]= *n1;N[1]= *n2;N[2]= *nz;
@@ -250,7 +250,7 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
     {
       N[0]= *n1;N[1]= *n2;N[2]= *nz;
       contourI_(func,x,y,z,zz,N,&err);
-    };
+    }
   if (flag[0]!=2 &&  flag[2] >=3 )
     {
       /** Le triedre que l'on doit voir **/
@@ -258,11 +258,11 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
 	DrawAxis(xbox,ybox,InsideU);
       else 
 	DrawAxis(xbox,ybox,InsideD);
-    };
+    }
   IRect[0]=IRect[1]= -1;IRect[2]=IRect[3]=200000;
   C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
     ,IP0,IP0,0,0);
-};
+}
 
 /*-------------------------------------------------------
   The function f is given on a grid and we want the level curves 
@@ -291,28 +291,28 @@ contourI_(func,x,y,z,zCont,N,err)
     {
       Scistring("contourI_ : No more Place\n");
       return;
-    };
+    }
   /* just a parametrization of the boundary points */
   for ( i = 0 ; i <  n2 ; i++)
 	{
 		ybd_cont[i] = i ;
 		xbd_cont[i] = 0 ;
-		};
+		}
   for ( i = 1 ; i <  n1 ; i++)
 	{
 		ybd_cont[n2+i-1] = n2-1 ;
 		xbd_cont[n2+i-1] = i  ;
-		};
+		}
   for ( i = n2-2;  i >= 0  ; i--)
 	{
 		ybd_cont[2*n2 +n1-3-i] = i ;
 		xbd_cont[2*n2 +n1-3-i] = n1-1  ;
-		};
+		}
   for ( i = n1-2 ; i >= 0 ; i--)
 	{
 		ybd_cont[2*n2 +2*n1-4-i] = 0 ;
 		xbd_cont[2*n2 +2*n1-4-i] = i  ;
-		};
+		}
  for ( c= 0 ; c < ncont ; c++)
    {
      /** itg-cont is a flag array to memorize checked parts of the grid **/
@@ -336,7 +336,7 @@ contourI_(func,x,y,z,zCont,N,err)
 	   look(func,i,j,i,j-1,2,zCont[c]);
      
    }
-};
+}
 
 /*--------------------------------------------------------------------
   the level curve is crossing the segment (i,j) (ib,jb)
@@ -360,7 +360,7 @@ look(func,i,j,ib,jb,qq,Cont)
     if ( ib == im ) flag = 2 ;
     else  {
       if ( jb == jp ) flag = 3 ;
-      else  if ( ib == ip ) flag = 4;};};
+      else  if ( ib == ip ) flag = 4;}}
   switch  (  flag)
     {
     case  1 :
@@ -412,7 +412,7 @@ look(func,i,j,ib,jb,qq,Cont)
 	    {
 	    case 1 : i=ip ; break ;
 	    case 2 : i=ip;j=jm; break ;
-	    };
+	    }
 	  break ;
 	case 2  :
 	  inc_itg_cont(im,j,1);
@@ -420,7 +420,7 @@ look(func,i,j,ib,jb,qq,Cont)
 	  switch ( ent)
 	    { case 2 : j = jm ;break ;
 	    case  3  : i=im;j=jm; break ;
-	    };
+	    }
 	  break ;
 	case 3 :
 	  inc_itg_cont(i,j,2);
@@ -428,7 +428,7 @@ look(func,i,j,ib,jb,qq,Cont)
 	  switch ( ent)
 	    { case 3 : i=im; break ;
 	    case 4 : i=im;j=jp; break ;
-	    };
+	    }
 	  break ;
 	case 4 :
 	  inc_itg_cont(i,j,1);
@@ -436,9 +436,9 @@ look(func,i,j,ib,jb,qq,Cont)
 	  switch ( ent)
 	    {case 4 :j=jp;break ;
 	    case 1 :i=ip;j=jp;break ;
-	    };
+	    }
 	  break ;
-	};
+	}
       /** le nouveau segment  est au bord du domaine **/
       if ( zds == 1) 
 	{
@@ -448,10 +448,10 @@ look(func,i,j,ib,jb,qq,Cont)
 	    case 2 : inc_itg_cont(i-1,j,1);  break ; 
 	    case 3 : inc_itg_cont(i,j,2); break ; 
 	    case 4 : inc_itg_cont(i,j,1); break ; 
-	    };
+	    }
 	  /* il faut sortir du while */
 	  wflag = 0 ;
-	  };
+	  }
       /**  le point de depart etait a l'interieur du domaine **/
       if ( qq == 2) 
 	{
@@ -461,11 +461,11 @@ look(func,i,j,ib,jb,qq,Cont)
 	    case 2 : if  ( oddp(get_itg_cont(i-1,j))) wflag = 0 ; break ; 
 	    case 3 : if  ( get_itg_cont(i,j) > 1)     wflag = 0 ; break ; 
 	    case 4 : if  ( oddp(get_itg_cont(i,j)))   wflag = 0 ; break ; 
-	    };
-	};
-    };
+	    }
+	}
+    }
   ContourTrace(Cont);
-};
+}
 
 
 /*-----------------------------------------------------------------------
@@ -503,7 +503,7 @@ int ffnd (func, i1,i2,i3,i4,jj1,jj2,jj3,jj4,ent,qq,Cont,zds)
       i3=i2; jj3= jj2; i2=l1; jj2= k1;
       phi = phi1; phi1 = phi4; phi4= phi;
       phi = phi3; phi3 = phi2; phi2= phi;
-    } ;
+    }
   /* on stocke un nouveau point  */
   (*func)(1,Cont,f_intercept(0.0,phi1,x_cont(i1),phiav,xav),
 	    f_intercept(0.0,phi1,y_cont(jj1),phiav,yav));
@@ -554,7 +554,7 @@ int ReallocContour(n)
 	}
     }
   return(1);
-};
+}
 static first = 0 ;
 
 int AllocContour()
@@ -570,10 +570,10 @@ int AllocContour()
 	{
 	  first =1 ;
 	  return(1);
-	};
-    };
+	}
+    }
   return(1);
-};
+}
 
 static cont_size ;
 
@@ -591,7 +591,7 @@ ContStore(ival,Cont,xncont,yncont)
       xcont[cont_size]=GEOX(xncont,yncont,Cont);
       ycont[cont_size++]=GEOY(xncont,yncont,Cont);
     }
-};
+}
 
 /* Calcul d'un contour ds une geometrie 3d projete sur une hauteur ZC */
 
@@ -610,7 +610,7 @@ ContStore1(ival,Cont,xncont,yncont)
       xcont[cont_size]=GEOX(xncont,yncont,ZC);
       ycont[cont_size++]=GEOY(xncont,yncont,ZC);
     }
-};
+}
 /* Calcul d'un contour ds une geometrie 2d */
 
 ContStore2(ival,Cont,xncont,yncont)
@@ -628,7 +628,7 @@ ContStore2(ival,Cont,xncont,yncont)
       xcont[cont_size]=nint(xncont);
       ycont[cont_size++]=nint(yncont);
     }
-};
+}
 
 /** Trace le contour de valeur Cont, c est l'indice de la courbe de niveau 
   dans les ncont que l'on doit tracer **/
@@ -644,7 +644,7 @@ ContourTrace(Cont)
   sprintf(str,ContNumFormat,ContNumPrec,Cont);
   C2F(dr)("xstring",str, &xcont[cont_size / 2],&ycont[cont_size /2],
       (int *) &angle,&flag,IP0,IP0,0,0);
-};
+}
 
 
 
