@@ -110,7 +110,7 @@ while (Lnode(Depart)==-1|Lnode(Arrivee)==-1),
 	end
       end
 g=load_graph(SCI+'/demos/metanet/paris');
-gg=load_graph(SCI+'/demos/metanet/Paris');
+gg=load_graph(SCI+'/demos/metanet/paris2');
 show_graph(gg,'rep');
 la1=g(7);lp1=g(8);ls1=g(9);
 NodeN=lp1(Lnode(Depart)+1)-lp1(Lnode(Depart))+1;
@@ -158,7 +158,7 @@ ppp=nodes_2_path(ttt,gg);
 //show_arcs(ppp);
 //for i=1:5, show_nodes(ttt);show_arcs(ppp);end;
 show_arcs(ppp);show_nodes(ttt,'sup');
-name=g(7);
+name=g('node_name');
 road=name(ttt)';
 kk=size(road);
 clic='.'; v=[1];
@@ -190,20 +190,25 @@ end
 thick=xget("thickness")
 xset("thickness",3);
 xbasc();
-plot_graph(g); 
-kk=size(routef);xnodes=g(9);ynodes=g(10);
+repo=2*ones(1,13);repo(1)=1;
+plot_graph(gg,repo); 
+kk=size(routef);xnodes=gg(9);ynodes=gg(10);
 for i=1:kk(1), 
   x1=xnodes(TTT(i)); y1=ynodes(TTT(i));
   xstring(x1,-y1,mamat(TTT(i)));
 end;
 ichoi=x_choose(['yes','no'],'Zoom of the path?');
 if ichoi==1 then
+  repo(1)=2;
   xbasc();
   if TTT<>[] then
     ah=min(xnodes(TTT));bh=max(xnodes(TTT));
     av=min(ynodes(TTT));bv=max(ynodes(TTT));
-    plot_graph(g,ah,-bv,bh-ah,bv-av);
-    kk=size(routef);xnodes=g(9);ynodes=g(10);
+    repoo=[ah,-bv,bh-ah,bv-av];
+xset("wdim",900,650);
+xset("font",4,4); 
+    plot_graph(gg,repo,repoo);
+    kk=size(routef);xnodes=gg(9);ynodes=gg(10);
     for i=1:kk(1), 
       x1=xnodes(TTT(i)); y1=ynodes(TTT(i));
       xstring(x1,-y1,mamat(TTT(i)));
@@ -221,3 +226,6 @@ iter=x_choose(['yes','no'],'Another travel?');
 TTT=[];routef=[];road=[];
 end
 xset("thickness",thick);
+xset("font",2,1);
+xset("wdim",610,460);
+

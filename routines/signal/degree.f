@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DEGREE,SSI=0
       subroutine degree(iapro,vsn,acap12,adeg)
 c!but
 c computation of the minimum filter degree (adeg)

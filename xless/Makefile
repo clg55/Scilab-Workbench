@@ -24,17 +24,20 @@ distclean::
 all:: $(SCIDIR)/X11_defaults/xless.help
 
 $(SCIDIR)/X11_defaults/xless.help: xless.help
-	$(INSTALL) -m 644 xless.help $(SCIDIR)/X11_defaults/xless.help
+	$(RM) $@
+	cp xless.help $(SCIDIR)/X11_defaults/xless.help
 
 all:: $(SCIDIR)/X11_defaults/XLess
 
 $(SCIDIR)/X11_defaults/XLess : XLess.ad
-	$(INSTALL) -m 644 XLess.ad $(SCIDIR)/X11_defaults/XLess
+	$(RM) $@
+	cp XLess.ad $(SCIDIR)/X11_defaults/XLess
 
 all:: $(SCIDIR)/X11_defaults/XLess-color
 
 $(SCIDIR)/X11_defaults/XLess-color: XLess-co.ad
-	$(INSTALL) -m 644 XLess-co.ad $(SCIDIR)/X11_defaults/XLess-color
+	$(RM) $@
+	cp XLess-co.ad $(SCIDIR)/X11_defaults/XLess-color
 
 distclean::
 	$(RM) $(SCIDIR)/X11_defaults/xless.help

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=COMPEL,SSI=0
       subroutine compel(dk, dellk)
 c!purpose
 c  calculate complete elliptic integral of first kind

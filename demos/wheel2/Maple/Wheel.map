@@ -1,3 +1,11 @@
+if SearchText(`Release 3`,interface(version))<>0 then
+	matadd:=add;
+elif SearchText(`Release 4`,interface(version))<>0 then
+	1;
+else
+  ERROR(`Unknown Release`)
+fi;
+
 read(`Euler.map`);
 #----------------------------------------------------------------------------
 # AND NOW THE WHEEL
@@ -7,7 +15,7 @@ read(`Euler.map`);
 # TeX Notations for my problem 
 #-----------------------------------------------------------------------------
 
-ll:= {x = `x`  , y = `y` , z= `z`,theta = `\\theta`, phi = `\\phi`,psi = `\\psi`,param =`\\alpha`, t = `\\eta` , LL = `\\LL` } :
+ll:= {x = `x`  , y = `y` , z= `z`,theta = `\\theta`, phi = `\\phi`,psi = `\\psi`,param =`\\alpha`, t = `\\eta` , LL = `\\LL`, _t = `\\lambda` } :
 addnotations(ll):
 
 #----------------------------------------------------------------------------
@@ -34,8 +42,8 @@ Bx:=vector([1,0,0]):
 By:=vector([0,1,0]):
 Bz:=vector([0,0,1]):
 Bu1:=vector([cos(theta),sin(theta),0]):
-Bu:= add(Bu1,Bz,cos(phi),-sin(phi)):
-Bw:= add(Bu1,Bz,sin(phi),cos(phi)):
+Bu:= matadd(Bu1,Bz,cos(phi),-sin(phi)):
+Bw:= matadd(Bu1,Bz,sin(phi),cos(phi)):
 Bv:=crossprod(Bw,Bu):
 Bv:=map((i)->factor(combine(i,trig)),Bv):
 
@@ -44,7 +52,7 @@ Rinv:=map((i)->factor(combine(i,trig)),inverse(R)):
 
 # Omega in the (x,y,z) base 
 
-OmegaX:= add(Bz,add(Bv,Bw,phid,psid),thetad,1):
+OmegaX:= matadd(Bz,matadd(Bv,Bw,phid,psid),thetad,1):
 
 # Omega in the (u,v,w) base
 
@@ -63,7 +71,7 @@ sorties(`systeme.tex`,`Lagrangian`,L):
 # Lhs of Euler equations 
 
 EL:=euler_equations(L,q,qd,qdd):
-E:=map((i)->rhs(i),EL):
+EE:=map((i)->rhs(i),EL):
 
 # don't forget the LL macro in all.tex 
 
@@ -77,7 +85,7 @@ sortiesM(`systeme.tex`,`Lhs of Euler Equations`,[seq(EL[i,1],i=1..nops(q))]):
 # Computation of ME,CE,RE 
 #-----------------------------------------------------
 
-XX:=CEuler(E,q,qd,qdd):
+XX:=CEuler(EE,q,qd,qdd):
 
 # simplifying notations for output
 
@@ -97,7 +105,7 @@ hc:=[q[3]-param[4]*sin(q[5])]:
 # dynamic constraints ( contains the derivative of geometric constraint )
 # v_g + crossprod(OmegaX,Bu)=0
 
-gg:=add(vector([qd[1],qd[2],qd[3]]),crossprod(OmegaX,Bu),1,r):
+gg:=matadd(vector([qd[1],qd[2],qd[3]]),crossprod(OmegaX,Bu),1,r):
 gg:=map((i)->simplify(expand(i)),gg):
 
 nhc:=convert(gg,list):
@@ -146,7 +154,7 @@ sorties(`systeme.tex`,`$\\dot{q}=S(q)\\eta$ Kernel of $A(q)'$~:`,S):
 # in the Euler equations 
 #-----------------------------------------------------
 
-E1:=multiply(transpose(S),E):
+E1:=multiply(transpose(S),EE):
 
 # sortiesM(`systeme.tex`,`$S(q)^T E$`,E1);
 
@@ -244,7 +252,7 @@ flist:=[subroutinem,`wheel`,[`neq`,`t`,`z`,`zdot`],
 	    [ callf , `dlslv`,[`me3s,kn,kn,Const,kn,1,w, rcond,ierr,1`]],
 	    [ if_then_m,ierr<>0,[
 		[writef,6,ff_w,[]],
-		[formatf,ff_w,[`'Matrice mal conditionnee'`]]]],
+		[formatf,ff_w,[`'Ill conditioned matrix!'`]]]],
 	    [ dom , `i ` ,1,`kn `,1,[ equalf,`zdot(kn+i)`,`const(i,1)`]],
 	    [ equalf, zdot(7),SSF[1,1]],
 	    [ equalf, zdot(8),SSF[2,1]],
@@ -272,7 +280,7 @@ ffvar:= {theta= xx[1,i2],phi=xx[2,i2],psi=xx[3,i2],t[1]=xx[4,i2],
 
 
 Z:=multiply(R,vector([uf,vf,wf])):
-Z:=add(vector([x,y,r*sin(phi)]),Z,1,r):
+Z:=matadd(vector([x,y,r*sin(phi)]),Z,1,r):
 ZF:=subs(ffvar,eval(Z)):
 
 fffvar:={ cos(xx[1,i2])=cs1,cos(xx[2,i2])=cs2,sin(xx[1,i2])=si1,sin(xx[2,i2])=si2}:

@@ -13,7 +13,11 @@ function r=horner(p,x)
 
 //-compat type(p)==15 retained for list/tlist compatibility
 if type(p)==15|type(p)==16 then r=horner(p(2),x)./horner(p(3),x),return,end
+if type(p)==129 then
+  p=horner(p(:),x);p=p(1):p(2):p(3)
+end
 [m,n]=size(p)
+if m==-1 then indef=%t,m=1,n=1,p=p+0;else indef=%f,end
 r=[]
 for l=1:m
   rk=[]
@@ -28,4 +32,4 @@ for l=1:m
   end
   r=[r;rk]
 end
-
+if indef then r=r*eye,end

@@ -31,6 +31,10 @@
 #include "x_error.h"
 #include "x_data.h"
 
+#include "../machine.h"
+#include "All-extern-x.h"
+#include "All-extern.h"
+
 extern Char *calloc(), *malloc(), *realloc();
 extern void free();
 
@@ -69,7 +73,7 @@ ScrnBuf Allocate(nrow, ncol, addr)
  *  (Return value only necessary with SouthWestGravity.)
  */
 
-static Reallocate(sbuf, sbufaddr, nrow, ncol, oldrow, oldcol)
+static int Reallocate(sbuf, sbufaddr, nrow, ncol, oldrow, oldcol)
      ScrnBuf *sbuf;
      Char **sbufaddr;
      int nrow, ncol, oldrow, oldcol;
@@ -139,7 +143,7 @@ static Reallocate(sbuf, sbufaddr, nrow, ncol, oldrow, oldcol)
   return move_down ? move_down / 2 : -move_up / 2;	/* convert to rows */
 }
 
-ScreenWrite(screen, str, flags, length)
+void ScreenWrite(screen, str, flags, length)
 /*
    Writes str into buf at row row and column col.  Characters are set to match
    flags.
@@ -167,7 +171,7 @@ ScreenWrite(screen, str, flags, length)
     *attrs++ = flags;
 }
 
-ScrnInsertLine(sb, last, where, n, size)
+void ScrnInsertLine(sb, last, where, n, size)
 /*
    Inserts n blank lines at sb + where, treating last as a bottom margin.
    Size is the size of each entry in sb.
@@ -205,7 +209,7 @@ ScrnInsertLine(sb, last, where, n, size)
 }
 
 
-ScrnDeleteLine(sb, last, where, n, size)
+void ScrnDeleteLine(sb, last, where, n, size)
 /*
    Deletes n lines at sb + where, treating last as a bottom margin.
    Size is the size of each entry in sb.
@@ -236,7 +240,7 @@ ScrnDeleteLine(sb, last, where, n, size)
 }
 
 
-ScrnInsertChar(sb, row, col, n, size)
+void ScrnInsertChar(sb, row, col, n, size)
  /* Inserts n blanks in sb at row, col.  Size is the size of each row. */
   ScrnBuf sb;
   int row, size;
@@ -264,7 +268,7 @@ ScrnInsertChar(sb, row, col, n, size)
 }
 
 
-ScrnDeleteChar(sb, row, col, n, size)
+void ScrnDeleteChar(sb, row, col, n, size)
  /* Deletes n characters in sb at row, col. Size is the size of each row. */
   ScrnBuf sb;
   register int row, size;
@@ -284,7 +288,7 @@ ScrnDeleteChar(sb, row, col, n, size)
 }
 
 
-ScrnRefresh(screen, toprow, leftcol, nrows, ncols, force)
+void ScrnRefresh(screen, toprow, leftcol, nrows, ncols, force)
 /*
    Repaints the area enclosed by the parameters.
    Requires: (toprow, leftcol), (toprow + nrows, leftcol + ncols) are
@@ -440,7 +444,7 @@ ScrnRefresh(screen, toprow, leftcol, nrows, ncols, force)
   }
 }
 
-ClearBufRows(screen, first, last)
+void ClearBufRows(screen, first, last)
 /*
    Sets the rows first though last of the buffer of screen to spaces.
    Requires first <= last; first, last are rows of screen->buf.
@@ -470,7 +474,8 @@ ClearBufRows(screen, first, last)
   7. Clears origin mode and sets scrolling region to be entire screen.
   8. Returns 0
   */
-ScreenResize(screen, width, height, flags)
+
+int ScreenResize(screen, width, height, flags)
   register TScreen *screen;
   int width, height;
   unsigned *flags;
@@ -574,10 +579,10 @@ ScreenResize(screen, width, height, flags)
 
 
 #define SCITRW ";lines(%3d,%3d);\n"
-#include "../machine.h"
 
 /* JPC */
-Size2Scilab(rows, cols)
+
+void Size2Scilab(rows, cols)
   int rows, cols;
 {
   /**  Changement : on appelle cette fonction des la premiere entree 

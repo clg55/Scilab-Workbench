@@ -103,7 +103,7 @@ z=colnew(res,ncomp,m,aleft,aright,zeta,ipar,ltol,tol,fixpnt,...
 	fsub1,dfsub1,gsub1,dgsub1,guess1)
 else 
 z=colnew(res,ncomp,m,aleft,aright,zeta,ipar,ltol,tol,fixpnt,...
-	'f','df','g','dg','gu')
+	'cnf','cndf','cng','cndg','cngu')
 end
 zf=[   0.00        0.00000D+00    0.20414D+01    0.10225D-31   -0.90397D+00
        0.05        0.10207D+00    0.20414D+01   -0.45265D-01   -0.90794D+00

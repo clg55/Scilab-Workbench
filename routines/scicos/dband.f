@@ -1,28 +1,21 @@
-      subroutine dband(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),u(*),rpar(*),out(*),z(*)
-      integer ipar(*),flag
-c     Dead Band, Alvaro:17-5-95
-c     Continous block, MIMO
-c     Dead Band=rpar(1;nu)
-c     if u(i)<0 ,out(i)=min(0,u+DB/2)
-c     else       out(i)=max(0,u-DB/2)
+      subroutine dband(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
+c     Dead Band,
+c     if u(i)<0 ,y(i)=min(0,u+DB(i)/2)
+c     else       y(i)=max(0,u-DB(i)/2)
+c     DB(i)=rpar(i)
 c
-      goto(10,20,20) flag
-c flag=1
- 10   do 15 i=1,nu
-            if (u(i).lt.0)then
-               out(i)=min(0.0d0,u(i)+rpar(i)/2.0d0)
-            else if(u(i).ge.0)then
-               out(i)=max(0.0d0,u(i)-rpar(i)/2.0d0)
-            endif
- 15   continue
-      return
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
 
-c flag=2
- 20   continue
-c ERROR
-      write(*,'(''ERROR; block dband flag:'',i2,'' t '',e10.3)') flag,t
-      flag=-1
-      return
+c     
+ 10   do 15 i=1,nu
+         if (u(i).lt.0)then
+            y(i)=min(0.0d0,u(i)+rpar(i)/2.0d0)
+         else if(u(i).ge.0)then
+            y(i)=max(0.0d0,u(i)-rpar(i)/2.0d0)
+         endif
+ 15   continue
       end

@@ -3,7 +3,7 @@ function [a]=graph_2_mat(g)
 if rhs<>1 then error(39), end
 // g
 check_graph(g)
-ma=g('edge_number')
+ma=prod(size(g('tail')))
 n=g('node_number')
 ta=g('tail')'; he=g('head')';
 if g('directed') == 1 then

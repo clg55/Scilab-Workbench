@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DESI24,SSI=0
       subroutine desi24(ndeg,adelp,adels,adelta,dsk,ugc,ogc,ack,
      *nj,nh,dk,dks,dcap02,dcap04,acx,ac,rdelp,rdels,sfa,spr,spi)
 c!purpose

@@ -1,6 +1,6 @@
 function h=%rvs(h1,h2)
-// %rvs(h1,h2) calcule (I+h1*h2)\h1. h1: matrice de fractions rationnelles
-// h2 matrice de scalaires
+// %rvs(h1,h2)=(I+h1*h2)\h1. h1: rational
+// h2 constant
 //!
 [m1,n1]=size(h1(2))
 [m2,n2]=size(h2)

@@ -2,6 +2,8 @@
 #include "../machine.h"
 #include <signal.h>
 
+extern int   C2F(sigbas)(); /*  _PARAMS((integer *));*/
+
 void controlC_handler (sig)
      int sig;
 {
@@ -10,7 +12,8 @@ void controlC_handler (sig)
   C2F(sigbas)(&j);
 }
 
-C2F(csignal)()
+int C2F(csignal)()
 {
   signal (SIGINT, controlC_handler);
+  return(0);
 }

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WGEFA,SSI=0
       subroutine wgefa(ar,ai,lda,n,ipvt,info)
       integer lda,n,ipvt(*),info
       double precision ar(lda,*),ai(lda,*)

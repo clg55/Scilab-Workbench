@@ -5,38 +5,27 @@ SCIDIR=../..
 SCIDOC=$(SCIDIR)/../$(SCIVERSION)-doc
 include ../../Makefile.incl
 
-INTROFILES = basicprimitives.tex chap0.tex chap1.tex datatypes.tex \
-	graphics.tex intersci.tex intro.tex programming.tex \
-	demosession.tex maple2scilab.tex intro.tex
+INTROFILES = chap4.tex chap0.tex chap1.tex chap2.tex \
+	chap5.tex intro.tex chap3.tex \
+	appendices.tex chap6.tex intro.tex
 
-INTERNALFILES = compl0.tex compl1.tex intersci.tex chap8.tex
+all:: $(SCIDOC)/Intro.ps
 
-all:: subs $(SCIDOC)/Intro.ps.Z $(SCIDOC)/Internals.ps.Z
-
-$(SCIDOC)/Intro.ps.Z: subs  $(INTROFILES)
-	olatex209 intro
+$(SCIDOC)/Intro.ps: subs  $(INTROFILES)
+	latex intro
 	makeindex -s intro.isty intro
-	olatex209 intro
+	latex intro
+	$(RM) $@
 	dvips -o $(SCIDOC)/Intro.ps intro.dvi
-	$(RM) $(SCIDOC)/Intro.ps.Z
-	compress $(SCIDOC)/Intro.ps
-
-$(SCIDOC)/Internals.ps.Z: $(INTERNALFILES)
-	olatex209 compl
-	makeindex -s compl.isty compl
-	olatex209 compl
-	dvips -o $(SCIDOC)/Internals.ps compl.dvi
-	$(RM) $(SCIDOC)/Internals.ps.Z
-	compress $(SCIDOC)/Internals.ps
 
 clean::
 	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc
 distclean::
 	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc
 
-SUBDIRS = diary figures fort
+SUBDIRS = diary figures fort macros
 
-subs::
+subs:
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
 	for i in $(SUBDIRS) ;\
 	do \

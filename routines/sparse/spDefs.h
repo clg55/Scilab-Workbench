@@ -435,10 +435,16 @@ extern char *malloc(), *calloc(), *realloc();
 #endif
 
 */
-
+#if defined(THINK_C) || defined (__MWERKS__)  
+#include <types.h>
+#else
 #include <sys/types.h> /* pour le malloc.h de dbmalloc */
+#endif
+#ifdef __STDC__
+#include <stdlib.h>
+#else
 #include <malloc.h>
-
+#endif
 
 #define ALLOC(type,number)  ((type *)malloc((unsigned)(sizeof(type)*(number))))
 #define REALLOC(ptr,type,number)  \

@@ -34,7 +34,7 @@ xset("window",0);xselect();xclear();
        while ftest=1,
 //          addtitle(fch);
           plot2d([xdim(1);xdim(1);xdim(3)],[xdim(2);xdim(4);xdim(4)])
-          plot2d([xe(1)],[xe(2)],[2,4],"111",...
+          plot2d([xe(1)],[xe(2)],[-2,-4],"111",...
               "Point d''equilibre pour ue='+string(ue),xdim);
           write(%io(2),'Utilisez la souris : ');
           write(%io(2),' -] Bouton de droite pour quiter ');
@@ -73,15 +73,15 @@ comcom=-k*(xxx(3:4,:)-xe*ones(1,nn2));
 //dessin de l'evolution conjointe de la deuxieme
 //composante de l'etat et de son estimee (observateur)
 xset("window",1);xclear();
-plot2d([tcal;tcal]',xxx([2,4],:)',[-1,-2],"111",...
+plot2d([tcal;tcal]',xxx([2,4],:)',[1,2],"111",...
        "x2(t) @observateur de x2(t)",[0,xdim(2),n1(1)*n1(2),xdim(4)])
 xset("window",2);xclear();
 //dessin de la commande lineaire
-plot2d([tcal]',[comcom]',[-1],"121",...
+plot2d([tcal]',[comcom]',[1],"121",...
        "commande lineaire en fonction du temps (ecart par rapport a ue)")
 xset("window",0);xclear();
 //portrait de phase
-plot2d(xxx([1,3],:)',xxx([2,4],:)',[-1,-2],"111","(x1,x2)@observateur ",...
+plot2d(xxx([1,3],:)',xxx([2,4],:)',[1,2],"111","(x1,x2)@observateur ",...
 xdim);
 
 

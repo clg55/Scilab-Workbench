@@ -6,7 +6,7 @@ C     id(nsiz) coded name of the comand
       include '../stack.h'
       logical compil
 C     
-      integer lunit
+      integer lunit,mode(2)
 C     
       integer cmdl
       parameter (cmdl = 22)
@@ -78,7 +78,7 @@ C     mots cles if  then else for do  while end case selec
 C     
       goto (50,50,45,80,65,60,20,25,45,16,16,90,120,130,38) k-7
  16   call error(16)
-      if (err .gt. 0) return
+      return
 C     
 C     -----
 C     pause
@@ -87,7 +87,7 @@ C
  20   continue
       if (char1.ne.eol .and. char1.ne.comma .and. char1.ne.semi) then
         call error(16)
-        if (err .gt. 0) return
+        return
       endif
 C     compilation de pause:<12>
       if (compil(12,0,0,0,0)) return
@@ -107,7 +107,7 @@ C
       if (ic.ge.a.and.ic.lt.blank .or. char1.eq.percen) goto 27
       if (char1.ne.eol .and. char1.ne.semi .and. char1.ne.comma) then
         call error(16)
-        if (err .gt. 0) return
+        return
       endif
       bot = bbot
       if (macr.eq.0 .and. paus.eq.0) goto 998
@@ -241,7 +241,12 @@ C     ---
 C     who
 C     ---
 C     
- 60   if (comp(1) .ne. 0) then
+ 60   if (char1 .eq. lparen) then
+C     who avec rhs  --> fonction et non commande
+        fin = 0
+        goto 999
+      endif
+      if (comp(1) .ne. 0) then
         call error(51)
         if (err .gt. 0) return
       endif
@@ -329,8 +334,9 @@ c     .     abort dans une pause
             bot = lin(k+5)
           else
 c     .     abort dans un exec
-            call clunit(-rio,buf,0)
-            rio = pstk(pt-1)
+             mode(1)=0
+             call clunit(-rio,buf,mode)
+             rio = pstk(pt-1)
           endif
         endif
       endif

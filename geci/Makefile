@@ -42,3 +42,10 @@ scruteur.o: listes_chainees.h utilitaires.h gestion_memoire.h \
 scruteur.o: libCom.h scr_liaisons.h scr_messages.h scr_applications.h \
 	scruteur.h
 utilitaires.o: gestion_memoire.h buffer_dynamiques.h utilitaires.h
+
+gecid: gecid.c
+	$(RM) gecid
+	$(CC) -o gecid gecid.c $(CC_LDFLAGS)
+
+distclean::
+	$(RM) gecid

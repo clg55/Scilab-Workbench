@@ -112,7 +112,7 @@ on the other hand, the filter length and the window type.
 \subsection{Filter Types}
 \label{s2}
 
-The $\Psi$Lab function {\tt wfir} designs four different types
+The Scilab function {\tt wfir} designs four different types
 of FIR linear phase filters: low pass, high pass,
 band pass, and stop band filters.  The impulse response of the three
 latter filters can be obtained from the low pass filter by
@@ -816,7 +816,7 @@ posed here can be viewed as an overspecified system
 of linear equations in the  $N+1$ unknowns, $a_n$, where the
 number of equations is uncountably infinite.  The Remez
 algorithm seeks to solve this overspecified system of linear equations
-in the minimax sense.  The next section describes the $\Psi$Lab
+in the minimax sense.  The next section describes the Scilab
 function {\tt remezb} and how it can be used to design FIR filters.
 
 \subsection{Function {\tt remezb}}
@@ -853,7 +853,7 @@ $H(f)$.
 
 	To obtain the coefficients of the corresponding
 FIR filter it suffices to create a vector {\tt hn}
-using the $\Psi$Lab commands:
+using the Scilab commands:
 \verbatok{\Diary remez8.code}
 \end{verbatim}
 
@@ -902,7 +902,7 @@ $\mtt{ ddf}=\mtt{ df}/\cos(\pi f)$ and $\mtt{ wwf}=\mtt{ wf}\cos(\pi f)$.
 Caution must be used in choosing the values of {\tt fg} since
 for $f=.5$ the division of {\tt df} by $\cos(\pi f)=0$ is not acceptable.
 The output, {\tt an}, of the function can be converted to the filter coefficients
-{\tt hn} by using the $\Psi$Lab commands
+{\tt hn} by using the Scilab commands
 \verbatok{\Diary remez2.code}
 \end{verbatim}
 
@@ -964,7 +964,7 @@ acceptable than that in Figure~\ref{f5.1}.
      A third and final example using the function {\tt remezb}
 is illustrated below.  In this example the desired function
 is triangular in shape.  The input data was created using 
-the following $\Psi$Lab commands
+the following Scilab commands
 \verbatok{\Diary remez6.dia}
 \end{verbatim}
 The resulting frequency magnitude response  is illustrated 
@@ -981,7 +981,7 @@ response.
 {f5.3}
 %
 
-\subsection{$\Psi$Lab function {\tt eqfir}}
+\subsection{Scilab function {\tt eqfir}}
 \index{function syntax!eqfir@{\tt eqfir}}
 \index{optimal FIR filter design!function syntax}
 
@@ -994,7 +994,7 @@ examples are designs for a stopband filter.  The third example is for
 a design of a high pass filter.
 
 	The first design for the stop band filter uses the following
-$\Psi$Lab commands to create the input to the function {\tt eqfir}:
+Scilab commands to create the input to the function {\tt eqfir}:
 \verbatok{\Diary eqfir1.dia}
 \end{verbatim}
 \noindent The resulting magnitude response  of the filter

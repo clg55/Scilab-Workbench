@@ -261,6 +261,9 @@ c-----------------------------------------------------------------------
       call f (neq, tn, y, savf)
       if(iero.gt.0) return
       nfe = nfe + 1
+      if (tn.gt.64.7) then
+         iero=0
+      endif
       if (ipup .le. 0) go to 250
 c-----------------------------------------------------------------------
 c if indicated, the matrix p = i - h*el(1)*j is reevaluated and

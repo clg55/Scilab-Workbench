@@ -1,6 +1,6 @@
 path="SCI/demos/wheel2";
 mode(-1);
-getf(path+'/show.sci','c');
+getf(path+'/show.sci');
 xbasc();
 flag1=x_choose(['Reading a precomputed trajectory';
  'Simulation with ode (needs f77 and link. may fail, see help link)'],...

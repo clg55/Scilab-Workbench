@@ -47,7 +47,7 @@ time=1:nstep:nn;
 
 //[4] plotting frame
   t=t*180/%pi,p=p*180/%pi,
-  plot3d([xmin,xmax],[ymin,ymax],zmin*ones(2,2),t,p," ",[1,1,0],rect)
+  plot3d([xmin,xmax],[ymin,ymax],zmin*ones(2,2),t,p," ",[0,1,0],rect)
 
 //[4'] I want to plot the rays with xpoly so i first use geom3d
   [xr,yr]=geom3d(xr,yr,zr);
@@ -67,31 +67,31 @@ time=1:nstep:nn;
   end
   wheeld(n2-1);
   xset("alufunction",3);
-//end
+
 
 function []=wheeld(i)
 	xpoly(xu(:,i),yu(:,i),"lines");
         xpoly(matrix(xr(:,i),2,4),matrix(yr(:,i),2,4),"lines");
-//end
+
 
 
 function []=wheeld(i)
 	xfpoly(xu(:,i),yu(:,i),1);
         xpoly(matrix(xr(:,i),2,4),matrix(yr(:,i),2,4),"lines");
-//end
+
 
 
 function [xxu,yyu,zzu]=wheelgf(n,t,xu,yu,zu,xx)
 //
 [xxu,yyu,zzu]=fort('wheelg',n,1,'i',t,2,'i',xu,3,'d',yu,4,'d',zu,5,'d',...
 	xx,6,'d','sort',3,4,5);
-//end
+
 
 function [y]=test_wheel(n,t,x)
 //
 y=x
 [y]=fort('wheel',n,1,'i',t,2,'d',x,3,'d',y,4,'d','sort',4);
-//end
+
 
 
 
@@ -112,5 +112,5 @@ function [xxu,yyu,zzu]=wheelgs(n,t,xu,yu,zu,xx)
     yyu(i1,:) =xx(8,:)+r*(cs2.*si1.*xu(i1,:)+cs1.*yu(i1,:)+si2.*si1.*zu(i1,:));
     zzu(i1,:) =	   r*si2 +r*( -si2.*xu(i1,:)+cs2.*zu(i1,:));
 end
-//end
+
 

@@ -7,15 +7,15 @@ include ../../Makefile.incl
 
 TEXFILES = scicos.tex 
 
-all:: $(SCIDOC)/Scicos.ps.Z
+all:: $(SCIDOC)/Scicos.ps
 
 
-$(SCIDOC)/Scicos.ps.Z: $(TEXFILES)
-	olatex209 scicos
-	olatex209 scicos
+$(SCIDOC)/Scicos.ps: $(TEXFILES)
+	latex scicos
+	latex scicos
+	latex scicos
+	$(RM) $(SCIDOC)/Scicos.ps
 	dvips -o $(SCIDOC)/Scicos.ps scicos.dvi
-	$(RM) $(SCIDOC)/Scicos.ps.Z
-	compress $(SCIDOC)/Scicos.ps
 
 clean::
 	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc

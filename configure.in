@@ -8,9 +8,19 @@ AC_CONFIG_HEADER(routines/machine.h)
 dnl Get system type
 AC_CANONICAL_HOST
 
-######################
-## get SCIDIR pathname
-######################
+#################################
+## check this is a source version
+#################################
+
+if test -f .binary; then
+  echo "Humm... this is a binary version";
+  echo "  you'd better read the README file first."
+  exit
+fi
+
+###############################
+## creating Path.incl if needed
+###############################
 
 if test -f Path.incl; then
   PATH_INCL=`cat Path.incl`
@@ -27,7 +37,7 @@ fi
 ########################
 
 RM='rm -f'
-FILES_TO_CLEAN='*.CKP *.ln *.BAK *.bak core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut \#* .*~ *.trace'
+FILES_TO_CLEAN='*.CKP *.ln *.BAK *.bak core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut .*~ *.trace so_locations'
 
 ##################
 ## making archives
@@ -67,23 +77,62 @@ fi
 ## Compilers and options according to machine
 #############################################
 
-SCILAB_G=g
+# use for making scripts in script directory
+#   different for MIPS Ultrix
 SCILAB_GS=sh
+# scilab script file in script directory: default is "scilab.g" for UNIX
+#   for gcwin32 use "scilab-gcwin32.g"
+SCILABSCRIPT=scilab.g
+# Fortran program in routines/sun: default is "fgetarg.f" 
+#   for HPUX use "fgetarg-hpux.f"
 FGETARG=fgetarg
+# For old Hp computer (9.x), used in routines/sun/Makefile.in 
+#   for choosing the good file between link_std.c and link_SYSV.c
+HPPA_OLD=
+# Scilab main file: default is mainsci.o for UNIX
+MAIN='mainsci.o'
+# for graphics: default is X11
+#   different for Win32
+PERIFILE=periX11.o
+# specific scilab dirs for graphics: default is xsci for X11
+#   different for Win32
+GUILIB=xsci 
+# specific scilab dirs for xdr :  default is void for X11
+#   xdr for Win32
+XDRLIB=
+XDRLIBNAME=
+# communication module: default is geci for UNIX
+#   does not exist on Win32
+COMM=geci
+# man viewer: default is xless for UNIX
+#   does not exist on Win32
+MANVIEWER=xless
+# graphics Metanet program: default is xmetanet for UNIX
+#   does not exist on Win32
+XMETANET=xmetanet
+# objects files in routines/menusX: default is XOBJS for UNIX
+#   for Win32 use WOBJS
+MENUSOBJS=XOBJS
 
 case "$host" in
   alpha-*-*)
     # standard compilers
     CC=cc
-    CC_OPTIONS=-O
-    CC_LDFLAGS=
+    CC_OPTIONS='-O -ieee_with_inexact'
+    CC_LDFLAGS='-ieee_with_inexact'
+    if test "$G77" != yes; then    
+      AC_CHECK_PROG(F77,f77,yes,no)
+      if test "$F77" = no; then
+        AC_MSG_ERROR("Unable to configure: Fortran f77 compiler not found")
+      fi
+    fi
     FC='DECFORT_DEBUG=T;export DECFORT_DEBUG;f77'
     FC_OPTIONS='-O -fpe3 -switch nosqrt_recip'
     FC_LDFLAGS=
     LD=ld
     LD_LDFLAGS=
     if test "$enable_debug" = yes; then 
-      CC_OPTIONS=-g
+      CC_OPTIONS='-g -ieee_with_inexact'
       FC_OPTIONS='-g -fpe3 -switch nosqrt_recip'
     fi
     # GNU compilers
@@ -108,6 +157,12 @@ case "$host" in
     CC=cc
     CC_OPTIONS='-Daix -DSYSV'
     CC_LDFLAGS=
+    if test "$G77" != yes; then    
+      AC_CHECK_PROG(F77,f77,yes,no)
+      if test "$F77" = no; then
+        AC_MSG_ERROR("Unable to configure: Fortran f77 compiler not found")
+      fi
+    fi
     FC=f77
     FC_OPTIONS='-qcharlen=4096'
     FC_LDFLAGS=
@@ -139,6 +194,12 @@ case "$host" in
     CC=cc
     CC_OPTIONS=-O
     CC_LDFLAGS=-Bstatic
+    if test "$G77" != yes; then    
+      AC_CHECK_PROG(F77,f77,yes,no)
+      if test "$F77" = no; then
+        AC_MSG_ERROR("Unable to configure: Fortran f77 compiler not found")
+      fi
+    fi
     FC=f77
     FC_OPTIONS=-O
     FC_LDFLAGS=-Bstatic
@@ -162,6 +223,7 @@ case "$host" in
       if test "$enable_debug" = yes; then 
         FC_OPTIONS=-g
       fi
+      FC_LDFLAGS='-Xlinker -Bstatic'
     fi
     MAKEFILE_TARGET=Makefile.sunos
     ;;
@@ -170,6 +232,12 @@ case "$host" in
     CC=cc
     CC_OPTIONS='-O -DSVR4 -DSYSV'
     CC_LDFLAGS=
+    if test "$G77" != yes; then    
+      AC_CHECK_PROG(F77,f77,yes,no)
+      if test "$F77" = no; then
+        AC_MSG_ERROR("Unable to configure: Fortran f77 compiler not found")
+      fi
+    fi
     FC=f77
     FC_OPTIONS=-O
     FC_LDFLAGS=
@@ -182,9 +250,9 @@ case "$host" in
     # GNU compilers
     if test "$GCC" = yes; then
       CC=gcc
-      CC_OPTIONS=-O
+      CC_OPTIONS='-O -DSVR4 -DSYSV'
       if test "$enable_debug" = yes; then 
-        CC_OPTIONS=-g
+        CC_OPTIONS='-g -DSVR4 -DSYSV'
       fi
     fi
     if test "$G77" = yes; then
@@ -197,52 +265,111 @@ case "$host" in
     MAKEFILE_TARGET=Makefile.solaris
     ;;
 # Linux a.out
-  *-*-linuxaout)
+  *-pc-linux-gnuaout)
+    LIEEELIB=
+    AC_CHECK_LIB(ieee,main,
+      [LIEEELIB=-lieee])
     CC=cc
     CC_OPTIONS='-O -Dlinux -D_POSIX_SOURCE -fwritable-strings'
-    CC_LDFLAGS=-lieee
-    # script shell f77 have bugs, get ours
-    FC=$SCIDIR/bin/f77-linux
+    CC_LDFLAGS=$LIEEELIB
+    # find Fortran compiler
+    # g77 already asked and found: good
+    if test "$G77" = yes; then
+      FC=g77
+    # option with-f2c
+    elif test "$with_f2c" = yes; then
+      AC_CHECK_PROG(F2C,f2c,yes,no)
+      if test "$F2C" = no; then
+        AC_MSG_ERROR("Unable to configure: f2c compiler not found")
+      fi
+      # script shell f77 have bugs, get ours
+      FC='${SCIDIR}/bin/f77-linux'
+    else
+      # first find g77
+      AC_CHECK_PROG(G77,g77,yes,no)
+      if test "$G77" = yes; then
+        FC=g77
+      else
+      # otherwise find f2c
+        AC_CHECK_PROG(F2C,f2c,yes,no)
+        if test "$F2C" = yes; then
+          # script shell f77 have bugs, get ours
+          FC='${SCIDIR}/bin/f77-linux'
+        else
+          AC_MSG_ERROR("Unable to configure: no Fortran compiler found")    
+        fi
+      fi
+    fi
     FC_OPTIONS=-O
-    FC_LDFLAGS=-lieee
+    FC_LDFLAGS=$LIEEELIB
     LD=ld
-    LD_LDFLAGS=-lieee
+    LD_LDFLAGS=$LIEEELIB
     if test "$enable_debug" = yes; then 
       CC_OPTIONS='-g -Dlinux -D_POSIX_SOURCE -fwritable-strings'
       FC_OPTIONS=-g
     fi
-    if test "$G77" = yes; then
-      FC=g77
-    fi
-    DLDLIB='$(SCIDIR)/libs/libdld.a'
+    DLDLIB='${SCIDIR}/libs/libdld.a'
     DLD_SUBDIR=dld
     MAKEFILE_TARGET=Makefile.linux
    ;;
 # Linux ELF
-  *-*-linux)
+  *-pc-linux-gnu)
+    LIEEELIB=
+    AC_CHECK_LIB(ieee,main,
+      [LIEEELIB=-lieee])
     CC=cc
     CC_OPTIONS='-O -Dlinux -D_POSIX_SOURCE -fwritable-strings'
-    CC_LDFLAGS=-lieee
-    # script shell f77 have bugs, get ours
-    FC=$SCIDIR/bin/f77-linux
+    CC_LDFLAGS=$LIEEELIB
+    # find Fortran compiler
+    # g77 already asked and found: good
+    if test "$G77" = yes; then
+      FC=g77
+    # option with-f2c
+    elif test "$with_f2c" = yes; then
+      AC_CHECK_PROG(F2C,f2c,yes,no)
+      if test "$F2C" = no; then
+        AC_MSG_ERROR("Unable to configure: f2c compiler not found")
+      fi
+      # script shell f77 have bugs, get ours
+      FC='${SCIDIR}/bin/f77-linux'
+    else
+      # first find g77
+      AC_CHECK_PROG(G77,g77,yes,no)
+      if test "$G77" = yes; then
+        FC=g77
+      else
+      # otherwise find f2c
+        AC_CHECK_PROG(F2C,f2c,yes,no)
+        if test "$F2C" = yes; then
+          # script shell f77 have bugs, get ours
+          FC='${SCIDIR}/bin/f77-linux'
+        else
+          AC_MSG_ERROR("Unable to configure: no Fortran compiler found")    
+        fi
+      fi
+    fi
     FC_OPTIONS=-O
-    FC_LDFLAGS='-lieee -ldl -rdynamic'
+    FC_LDFLAGS="$LIEEELIB -ldl -rdynamic"
     LD=ld
-    LD_LDFLAGS=-lieee
+    LD_LDFLAGS=$LIEEELIB
     if test "$enable_debug" = yes; then 
       CC_OPTIONS='-g -Dlinux -D_POSIX_SOURCE -fwritable-strings'
       FC_OPTIONS=-g
     fi
-    if test "$G77" = yes; then
-      FC=g77
-    fi
     MAKEFILE_TARGET=Makefile.linux
    ;;
+  # MIPS ULTRIX NO LONGER SUPPORTED
   mips-*-ultrix*)
-    # standard compilers, no longer supported
+    # standard compilers
     CC=cc
     CC_OPTIONS=-O0
     CC_LDFLAGS=
+    if test "$G77" != yes; then    
+      AC_CHECK_PROG(F77,f77,yes,no)
+      if test "$F77" = no; then
+        AC_MSG_ERROR("Unable to configure: Fortran f77 compiler not found")
+      fi
+    fi
     FC=f77
     FC_OPTIONS='-O0 -fpe1'
     FC_LDFLAGS=
@@ -252,7 +379,6 @@ case "$host" in
       CC_OPTIONS=-g
       FC_OPTIONS='-g -fpe1'
     fi
-    SCILAB_G=ultrix
     SCILAB_GS=sh5
     # GNU compilers
     if test "$GCC" = yes; then
@@ -276,6 +402,12 @@ case "$host" in
     CC=cc
     CC_OPTIONS='-O -cckr -DSYSV -DSVR4'
     CC_LDFLAGS=
+    if test "$G77" != yes; then    
+      AC_CHECK_PROG(F77,f77,yes,no)
+      if test "$F77" = no; then
+        AC_MSG_ERROR("Unable to configure: Fortran f77 compiler not found")
+      fi
+    fi
     FC=f77
     FC_OPTIONS='-O -Nl999 -Nn15000'
     FC_LDFLAGS=
@@ -302,11 +434,19 @@ case "$host" in
     fi
     MAKEFILE_TARGET=Makefile.sgi
     ;;
-  *-*-hpux*)
+  # OLD HP
+  *-*-hpux9.*)
     # standard compilers
+    HPPA_OLD=-Dhppa_old
     CC=cc
     CC_OPTIONS='-O -DSYSV -Dhpux'
     CC_LDFLAGS='-Wl,-a,archive'
+    if test "$G77" != yes; then    
+      AC_CHECK_PROG(F77,fort77,yes,no)
+      if test "$F77" = no; then
+        AC_MSG_ERROR("Unable to configure: Fortran fort77 compiler not found")
+      fi
+    fi
     FC=fort77
     FC_OPTIONS='-O +Obb1200 +E4'
     FC_LDFLAGS='-Wl,-a,archive'
@@ -331,9 +471,77 @@ case "$host" in
         FC_OPTIONS=-g
       fi
     fi
-    MAKEFILE_TARGET=Makefile.hpux
-    SCILAB_G=hpux
+    MAKEFILE_TARGET=Makefile.hpux9
     FGETARG=fgetarg-hpux
+    ;;
+  *-*-hpux*)
+    # standard compilers
+    CC=cc
+    CC_OPTIONS='-O -DSYSV -Dhpux +z'
+    CC_LDFLAGS='-Wl,+vnocompatwarnings,-E /usr/lib/libdld.sl'
+    if test "$G77" != yes; then    
+      AC_CHECK_PROG(F77,fort77,yes,no)
+      if test "$F77" = no; then
+        AC_MSG_ERROR("Unable to configure: Fortran fort77 compiler not found")
+      fi
+    fi
+    FC=fort77
+    FC_OPTIONS='+O0 +E4 +z'
+    FC_LDFLAGS='-Wl,+vnocompatwarnings,-E /usr/lib/libdld.sl'
+    LD=ld
+    LD_LDFLAGS=
+    if test "$enable_debug" = yes; then 
+      CC_OPTIONS='-g -DSYSV -Dhpux'
+      FC_OPTIONS='-g +E4'
+    fi
+    # GNU compilers
+    if test "$GCC" = yes; then
+      CC=gcc
+      CC_OPTIONS=-O
+      if test "$enable_debug" = yes; then 
+        CC_OPTIONS=-g
+      fi
+    fi
+    if test "$G77" = yes; then
+      FC=g77
+      FC_OPTIONS=-O
+      if test "$enable_debug" = yes; then 
+        FC_OPTIONS=-g
+      fi
+    fi
+    MAKEFILE_TARGET=Makefile.hpux
+    FGETARG=fgetarg-hpux
+    ;;
+  *-*-cygwin32)
+    SCILABSCRIPT=scilab-gcwin32.g
+    PERIFILE=periWin.o
+    MAIN='mainwin95.o'
+    GUILIB='wsci'
+    XDRLIB='xdr'
+    XDRLIBNAME='libs/xdr.a'
+    MENUSOBJS=WOBJS
+    COMM=
+    MANVIEWER=wless
+    XMETANET=
+    CC=gcc 
+    CC_OPTIONS='-O -DWIN32 -fwritable-strings  -Wall'
+      if test "$enable_debug" = yes; then 
+	CC_OPTIONS='-g -DWIN32 -fwritable-strings  -Wall'
+      fi
+    CC_LDFLAGS=
+    FC=f77
+    if test "$G77" = yes; then
+      FC=g77
+    fi 
+    FC_OPTIONS='-O'
+      if test "$enable_debug" = yes; then 
+        FC_OPTIONS=-g
+      fi
+    FC_LDFLAGS=
+    LD=gcc
+    LD_LDFLAGS=
+    WINXFLAGS='-I../xdr'
+    MAKEFILE_TARGET=Makefile.gcwin32
     ;;
   *)
     AC_MSG_ERROR("Unable to configure for host $host")
@@ -348,22 +556,28 @@ CFLAGS=$CC_OPTIONS
 ############################
 
 AC_PROG_RANLIB
-AC_PROG_INSTALL
 
 ####################
 ## test for X Window
 ####################
-
+if test "$PERIFILE" = periX11.o; then 
 AC_PATH_XTRA
+
+# fixing a bug for SunOs
+if test "$X_LIBS" = ' -L/usr/lib'; then
+  X_LIBS=
+fi
 
 if test "$no_x" = yes; then
   AC_MSG_ERROR("X Window not found")
 fi
+fi 
 
 ###################
 ## find X11 release
 ###################
 
+if test "$PERIFILE" = periX11.o; then 
 AC_CACHE_CHECK("for X11 release",ac_cv_X11_release,
 [
 cat << EOF > testX11.c
@@ -386,11 +600,11 @@ eval "$CC $X_CFLAGS -o testX11 testX11.c > /dev/null 2>&1"
 ac_cv_X11_release=`./testX11`
 $RM testX11.c testX11
 ])
-
+fi 
 ######################################
 ## test for Xaw and Xmu Athena widgets
 ######################################
-
+if test "$PERIFILE" = periX11.o; then 
 if test "$with_local_Xaw" = yes; then
   if test "$ac_cv_X11_release" = R4; then
     AC_MSG_ERROR("Local Xaw and Xmu Libraries cannot be used with X11R4")
@@ -426,7 +640,7 @@ else
     XMULIB=-lXmu
   fi
 fi
-
+fi
 #######################
 ## test for underscores
 #######################
@@ -437,7 +651,9 @@ cat << EOF > pipof.f
        end
 EOF
 
-eval "$FC -c pipof.f > /dev/null 2>&1"
+dnl expand possible $SCIDIR in $FC (wizard command...)
+eval "FC1=\"$FC\""
+eval "$FC1 -c pipof.f > /dev/null 2>&1"
 
 FC_LEADING_UNDERSCORE=no
 FC_TRAILING_UNDERSCORE=no
@@ -488,6 +704,7 @@ AC_TRY_COMPILE([#define C2F(name) name##_],
 AC_CHECK_LIB(m,main)
 AC_CHECK_FUNCS(exp10)
 AC_CHECK_FUNCS(getwd)
+AC_CHECK_FUNCS(strerror)
 
 ##################
 ## termcap library
@@ -504,15 +721,16 @@ if test "$TERMCAPLIB" = no; then
   [TERMCAPLIB=-lcurses])
 fi
 
-if test "$TERMCAPLIB" = no; then
-  AC_MSG_ERROR("no termcap library found")
+if test "$TERMCAPLIB" != no; then
+  AC_DEFINE(HAVE_TERMCAP)
+else
+  TERMCAPLIB=
 fi
 
 #########################
 ## substituting variables
 #########################
 
-AC_SUBST(SCIDIR)
 AC_SUBST(RM)
 AC_SUBST(AR)
 AC_SUBST(FILES_TO_CLEAN)
@@ -524,9 +742,10 @@ AC_SUBST(FC_OPTIONS)
 AC_SUBST(FC_LDFLAGS)
 AC_SUBST(LD)
 AC_SUBST(LD_LDFLAGS)
-AC_SUBST(SCILAB_G)
 AC_SUBST(SCILAB_GS)
+AC_SUBST(SCILABSCRIPT)
 AC_SUBST(FGETARG)
+AC_SUBST(HPPA_OLD)
 AC_SUBST(DLDLIB)
 AC_SUBST(DLD_SUBDIR)
 AC_SUBST(XAWLIB)
@@ -535,6 +754,16 @@ AC_SUBST(XAW_LOCAL_SUBDIR)
 AC_SUBST(XAW_LOCAL_INCLUDES)
 AC_SUBST(XAW_LOCAL_LIB)
 AC_SUBST(TERMCAPLIB)
+AC_SUBST(MAIN)
 AC_SUBST(MAKEFILE_TARGET)
+AC_SUBST(PERIFILE)
+AC_SUBST(GUILIB)
+AC_SUBST(XDRLIB)
+AC_SUBST(XDRLIBNAME)
+AC_SUBST(WINXFLAGS)
+AC_SUBST(COMM)
+AC_SUBST(MANVIEWER)
+AC_SUBST(XMETANET)
+AC_SUBST(MENUSOBJS)
 
-AC_OUTPUT(Makefile.incl Makefile scripts/Makefile routines/sun/Makefile)
+AC_OUTPUT(Makefile.incl Makefile scripts/Makefile routines/Makefile routines/default/Makefile routines/sun/Makefile routines/graphics/Makefile routines/menusX/Makefile)

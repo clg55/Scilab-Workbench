@@ -48,9 +48,9 @@ if s1==[] then  // insertion d'une matrice vide
     s2=s2(i1,:)
   end
 else
-  s1=tlist('lss',[],[],[],s1,[],[])
+  s1=tlist(['lss','A','B','C','D','X0','dt'],[],[],[],s1,[],[])
   s2(i,j)=s1
 end
-//end
+
 
 

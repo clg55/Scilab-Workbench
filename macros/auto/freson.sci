@@ -1,4 +1,4 @@
-function [fr,g]=freson(h,selec)
+function fr=freson(h)
 [lhs,rhs]=argn(0)
 [n,d]=h(2:3);
 if type(n)=1 then n=poly(n,varn(d),'c'),end
@@ -12,24 +12,17 @@ niw=horner(n,%i*poly(0,'w'));
 diw=horner(d,%i*poly(0,'w'))
 niw=real(niw*conj(niw));diw=real(diw*conj(diw));
 modul_d=derivat(niw/diw);w=roots(modul_d(2));
-//roots >0 
-eps=1.e-7
-fr=[];g=[];for i=w',
-        if abs(imag(i))<eps then
-           if real(i)>0 then
-             mod2=abs(freq(niw,diw,real(i)))
-             if mod2>ar0 then
-                fr=[fr;real(i)],g=[g;mod2],
-             end;
-           end;
-        end,
-end;
-if fr=[] then return,end
-fr=fr/(2*%pi);
-if rhs=1 then
-      g=sqrt(g/ar0)
+
+// get extreme points
+k=find(imag(w)==0&real(w)>=0)
+if k==[] then fr=[],g=[],return,end
+w=real(w(k))
+
+//find maximums
+wx=maxi(w)+0.5
+if horner(modul_d,wx)<0 then
+  w=w($:-2:1)
 else
-      if part(selec(1),1)='f' then g=sqrt(g/ar0)
-                              else g=10*log(g)/log(10)
-      end;
-end;
+  w=w($-1:-2:1)
+end
+fr=w/(2*%pi)

@@ -584,9 +584,9 @@ realization is known for numerical stability.
 
 %
 
-\subsection{Appendix: $\Psi$Lab Code Used to Generate Examples}
+\subsection{Appendix: Scilab Code Used to Generate Examples}
 
-	The following listing of $\Psi$Lab code was used to
+	The following listing of Scilab code was used to
 generate the examples of the this section.
 
 \verbatok{\Figdir group1_5.code}
@@ -917,7 +917,7 @@ then resampling.  In practice, however, this is impractical.  It is
 much more convenient to keep all operations in the digital domain
 once one already has a discrete-time signal.
 
-	The $\Psi$Lab function {\tt intdec} accomplishes
+	The Scilab function {\tt intdec} accomplishes
 a sampling rate change by interpolation and decimation.
 The interpolation takes the input signal and produces an 
 output signal which is sampled at a rate $L$ (an integer) times more 
@@ -1014,7 +1014,7 @@ must be at $\pi/(MT)$.
 quantity it suffices to perform a combination of the interpolation
 and decimation operations.  Since both operations use a low-pass filter they
 can be combined as illustrated in the block diagram of Figure~\ref{f44.1}.
-The $\Psi$Lab function {\tt intdec} begins by designing a low-pass filter for the 
+The Scilab function {\tt intdec} begins by designing a low-pass filter for the 
 diagram illustrated in the figure.  It accomplishes this by using
 the {\tt wfir} filter design function.  This is followed by taking the
 Fourier transform of both the input signal and the low-pass filter
@@ -1141,7 +1141,7 @@ of finite length discrete time sequences.
 requires order $N^2$ multiplications whereas the FFT requires
 order $N\log_2N$ multiplications.
 In this section we discuss several uses of the DFT and some examples
-of its calculation using the FFT primitive in $\Psi$Lab.
+of its calculation using the FFT primitive in Scilab.
 
 	We begin with the definition of the DFT
 for a finite length sequence, $x(n)$, of length $N$,
@@ -1319,7 +1319,7 @@ The more prime factors $N$ has the greater computational efficiency
 can be obtained in using the FFT.  In fact, it may be useful in some
 applications to artificially extend the length of a sequence (by adding on
 zeros) in order that the length of the sequence will be more factorable.
-The FFT primitive in $\Psi$Lab automatically accounts for the prime
+The FFT primitive in Scilab automatically accounts for the prime
 factorization of the sequence length. 
 
 \subsection{Examples Using the {\tt fft} Primitive}
@@ -1502,7 +1502,7 @@ the two sequences so that the circular convolution accomplished by
 the DFT is equivalent to a linear convolution.
 
 	The convolution of two finite length sequences can be
-calculated by the $\Psi$Lab function {\tt convol}.
+calculated by the Scilab function {\tt convol}.
 
 \subsection{Use of the {\tt convol} function}
 \index{function syntax!convol@{\tt convol}}

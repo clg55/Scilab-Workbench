@@ -10,12 +10,8 @@
  * any purpose.  It is provided "as is" without express or implied warranty."
  */
 
-
-typedef Widget	TOOL;
-typedef Widget	TOOLSW;
-
 extern Cursor	cur_wf_cursor,arrow_wf_cursor,wait_wf_cursor;
-extern TOOL	w_toplevel;
+extern Widget 	w_toplevel;
 extern XtAppContext app_con;
 extern Display *tool_d;
 extern Screen  *tool_s;

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DADD,SSI=0
       subroutine  dadd(n,dx,incx,dy,incy)
 c!but
 c
@@ -20,10 +19,6 @@ c
 c     dy: vecteur double precision contenant y
 c
 c     incx, incy: increments entre les composantes des vecteurs.
-c
-c!auteur
-c
-c     S Steer ,Inria
 c
 c!
 c

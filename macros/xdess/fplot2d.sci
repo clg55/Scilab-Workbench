@@ -1,5 +1,4 @@
-//[]=fplot2d(xr,f,style,strf,leg,rect,nax)
-//[]=fplot2d(xr,f,[style,strf,leg,rect,nax])
+function []=fplot2d(xr,f,style,strf,leg,rect,nax)
 // Dessin d'une courbe 2D d\'efinie par un external f 
 // on trace un aproximation lin\'eaire par morceaux de la courbe
 // y=f(x), passant par les points (xr(i),f(xr(i)))
@@ -25,5 +24,4 @@ if rhs < 6,rect=[0,0,10,10],end
 if rhs < 7,nax=[2,10,2,10],end
 [p1,p2]=size(xr);
 if p1=1 , xr=xr';[p1,p2]=size(xr);end
-plot2d(xr,feval(xr,f),style,strf,leg,rect,nax),
-//end
+plot2d(xr,feval(xr,f),style,strf,leg,rect,nax)

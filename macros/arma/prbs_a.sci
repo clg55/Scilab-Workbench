@@ -1,4 +1,4 @@
-//<u>=prbs_a(n,nc,ids)
+function [u]=prbs_a(n,nc,ids)
 //<u>=prbs_a(n,nc,[ids])
 // Tirage de PRBS
 // tirage de u=<u0,u1,...,u_(n-1)>;
@@ -25,6 +25,6 @@ for i=1:n2-1,
         u(ids(i+1):ids(i))=val*ones(ids(i+1):ids(i));val=-1*val;
        end
 end
-//end
+
 
 

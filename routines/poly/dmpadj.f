@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DMPADJ,SSI=0
       subroutine dmpadj(pm1,d1,m,n)
 c!but
 c     cette subroutine determine les degres effectifs (en eliminant les
@@ -6,10 +5,7 @@ c     monomes nuls de plus haut degre ) des polynomes d'une  matrice de
 c     polynome.
 c!liste d'appel
 c
-c     subroutine dmpad(pm1,d1,l1,pm2,d2,l2,pm3,d3,m,n)
-c     double precision pm1(*),pm2(*),pm3(*)
-c     integer d1(l1*n+1),d2(l2*n+1),d3(m*n+1),m,n,l1,l2
-c
+c     subroutine dmpadj(pm1,d1,m,n)
 c     pm1 : tableau reel contenant les coefficients des polynomes,
 c        le coefficient de degre k du polynome pm1(i,j) est range
 c        dans pm1( d1(i + (j-1)*l1 + k) )

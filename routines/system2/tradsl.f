@@ -1,16 +1,10 @@
       subroutine tradsl(kmac,illist,nlist)
 c     
 c!but 
-c     traduction des macros compilees pour changement de syntaxe
-c     subroutine inspiree de run
-c!listed'appel
-c     
-c     tradsl prend la macro compilee dans la pile scilab
-c     entree :
-c     lunit  : etiquette logique du fichier dans le quel on veut ecrire
-c     le nouveau texte de la macro
-c     kmak  : numero de la variable scilab qui contient le code de la macro
-c     variable scilab 
+c     convert compiled macros to lst structure
+c!calling sequence
+c     subroutine tradsl(kmac,illist,nlist)
+c     kmac  : variable number of the compiled macro in the scilab stack
 c!    
 c
 c

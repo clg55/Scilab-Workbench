@@ -1,8 +1,7 @@
-//[r]=%polss(s1,s2)
-//%polss(s1,s2) effectue le test d'egalite entre polynome et systemes d'etat
-//correspond a l'operation s1==s2
+function [r]=%polss(s1,s2)
+//r=%polss(s1,s2) <=> r=(s1==s2) polynomail==state-space syslin list
 //!
 r=%f
-//end
+
 
 

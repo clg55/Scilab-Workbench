@@ -1,7 +1,7 @@
 function d=projaff(x,y,pt)
-// projaff - projection d'un point sur une droite 
+// projaff - projection d'un point sur une droite
 //%Syntaxe
-// d=projaff(x,y,pt) 
+// d=projaff(x,y,pt)
 //%Parametres
 // x: vecteur des abscisses des 2 points definissant la droite
 // y: vecteur des ordonnes des 2 points definissant la droite
@@ -12,12 +12,15 @@ function d=projaff(x,y,pt)
 //celle de la normale passant par le point:
 //(x2-x1)*(x-xp)+(y2-y1)*(y-yp)=0
 //
-//%origine 
+//%origine
 // S Steer INRIA 91
 //!
 dx=x(2)-x(1);dy=y(2)-y(1)
 m=[dy -dx;dx dy]
 d=m\ [m(1,:)*[x(1);y(1)];m(2,:)*[pt(1);pt(2)]]
-//end
+
+
+
+
 
 

@@ -4,22 +4,13 @@ c     basic signal processing routines
       include '../stack.h'
 c
       double precision adelp,adels,fact,zzi(16),zzr(16),zpi(16),zpr(16)
-      double precision alpha,beta,yyy,u,y,eps,eps1,v
+      double precision alpha,beta,u,y,eps,eps1,v
       double precision kappa,lambda,mu,nu
       integer ordre,lw,lt,li,lr,lo,lf,lg
-      integer i,top2,tope
+      integer i,top2
       integer iadr,sadr
 c
-      logical vect,macro,fort,arma
-      integer fini,update
-c
-      external dgetx,dgety
-      external bgetx,bgety
-      character*6 namex,namey
-      common/cmps/mx,my
-      common/pse2/namex,namey
-c
-      data fini/15/,update/30/
+      logical vect,arma
 c
 c functions
 c
@@ -174,315 +165,7 @@ c
 c
       return
  40   continue
-c     calcul de correlations
-      tope=top
-      top2=top-rhs+1
-      il1=iadr(lstk(top2))
-      if(istk(il1).eq.10) then
-         ich=il1+5+istk(il1+1)*istk(il1+2)
-         ich=istk(ich)
-         if(ich.eq.fini) goto 41
-         if(ich.eq.update) goto 42
-      endif
-      il=iadr(lstk(top))
-      l=sadr(il+4)
-      lag=int(stk(l))
-      lcxy=lstk(top+1)
-      lrxy=lcxy+lag
-      lbot=lrxy+2
-      err=lbot-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-      if(rhs.eq.3) then
-         top=top-1
-         ily=iadr(lstk(top))
-         ly=sadr(ily+4)
-         ny=istk(ily+1)*istk(ily+2)
-         top=top-1
-         ilx=iadr(lstk(top))
-         lx=sadr(ilx+4)
-         nx=istk(ilx+1)*istk(ilx+2)
-         if(nx.ne.ny) then
-            call error(60)
-            return
-         endif
-      endif
-      if(rhs.eq.2) then
-         top=top-1
-         ily=iadr(lstk(top))
-         ly=sadr(ily+4)
-         ilx=ily
-         lx=ly
-         nx=istk(ily+1)*istk(ily+2)
-      endif
-      call tscccf(stk(lx),stk(ly),nx,stk(lcxy),stk(lrxy),lag,ierr)
-      if(ierr.eq.-1) then
-         buf='too many coefficients are required'
-         call error(999)
-         return
-      endif
-      istk(ilx+1)=1
-      istk(ilx+2)=lag
-      istk(ilx+3)=0
-      call dcopy(lag,stk(lcxy),1,stk(lx),1)
-      lstk(top+1)=lx+lag
-      if(lhs.eq.2) then
-         ly=lstk(top+1)
-         ily=iadr(ly)
-         istk(ily)=1
-         istk(ily+1)=1
-         istk(ily+2)=rhs-1
-         istk(ily+3)=0
-         ly=sadr(ily+4)
-         call dcopy(rhs-1,stk(lrxy),1,stk(ly),1)
-         top=top+1
-         lstk(top+1)=ly+lag
-      endif
-      return
- 41   continue
-      macro=.false.
-      fort=.false.
-c     methode de la fft
-      if(rhs.ne.5.and.rhs.ne.4) then
-         call error(39)
-         return
-      endif
-c     calcul de lag
-      il=iadr(lstk(top))
-      m=istk(il+1)
-      n=istk(il+2)
-      l=sadr(il+4)
-      lag=int(stk(l))
-      mm=2*lag
-      if(rhs.eq.4.and.m*n.ne.1) then
-         err=4
-         call error(89)
-         return
-      endif
-c     calcul de n
-      il=iadr(lstk(top-1))
-      m=istk(il+1)
-      n=istk(il+2)
-      kntop=top-1
-      if(m*n.ne.1) then
-         err=rhs-1
-         call error(89)
-         return
-      endif
-      l=sadr(il+4)
-      n=int(stk(l))
-c     pointeurs sur x (et y eventuellement)
-      top2=top2+1
-      kgxtop=top2
-c 2ieme arg
-      ilx=iadr(lstk(top2))
-      macro=istk(ilx).eq.11.or.istk(ilx).eq.13
-      fort=istk(ilx).eq.10
-      if(fort) then
-         nb=istk(ilx+5)-1
-         nb=max(nb,6)
-         call cvstr(nb,istk(ilx+6),namex,1)
-      endif
-      mx=top2
-      my=mx
-      mode=2
-      if(rhs.eq.5) then
-         top2=top2+1
-         kgytop=top2
-         ily=iadr(lstk(top2))
-         if(fort) then
-            if(istk(ily).ne.10) then
-               err=3
-               call error(55)
-               return
-            endif
-            nb=istk(ily+5)-1
-            nb=max(nb,6)
-            call cvstr(nb,istk(ily+6),namey,1)
-         endif
-         my=top2
-         mode=3
-      endif
-c     calculs des adresses des tableaux de travail
-      lxa=lstk(top+1)
-      ilw1=iadr(lxa)
-      lxa=lxa+10
-      lxr=lxa+mm
-      lxi=lxr+mm
-      lzr=lxi+mm
-      lzi=lzr+sadr(mm)
-      lzfin=lzi+sadr(mm)
-      err=lzfin-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-      top=top+1
-      lstk(top+1)=lzfin
-      if(fort) then
-         call cmpse2(mm,n,mode,dgetx,dgety,stk(lxa),stk(lxr),
-     1        stk(lxi),stk(lzr),stk(lzi),ierr)
-         if(ierr.gt.0) then
-            buf='fft call : needs power of two!'
-            call error(999)
-            return
-         endif
-      endif
-      if(macro) then
-c     external
-         istk(ilw1)=mode-1
-         istk(ilw1+1)=ilw1+3
-         istk(ilw1+2)=ilw1+6
-         istk(ilw1+3)=kgxtop
-         istk(ilw1+4)=kntop
-         istk(ilw1+5)=kntop
-         istk(ilw1+6)=kgytop
-         istk(ilw1+7)=kntop
-         istk(ilw1+8)=kntop
-c
-         call cmpse2(mm,n,mode,bgetx,bgety,stk(lxa),stk(lxr),
-     1        stk(lxi),stk(lzr),stk(lzi),ierr)
-         if(ierr.gt.0) then
-            buf='fft call : needs a power of 2'
-            call error(999)
-            return
-         endif
-      endif
-      top=tope-rhs+1
-      il=il1
-      istk(il)=1
-      istk(il+1)=1
-      istk(il+2)=lag
-      istk(il+3)=0
-      l=sadr(il+4)
-      call dcopy(lag,stk(lxa),1,stk(l),1)
-      lstk(top+1)=l+lag
-      if(lhs.eq.1) return
-      top=top+1
-      il=iadr(lstk(top))
-      istk(il)=1
-      istk(il+1)=1
-      istk(il+2)=rhs-3
-      istk(il+3)=0
-      l=sadr(il+4)
-      call dcopy(rhs-3,stk(lxr),1,stk(l),1)
-      lstk(top+1)=l+2
-      return
- 42   continue
-      tope=top
-      ichaud=0
-      mode=0
-c     correlations par updates
-c     pointeurs sur x et y eventuellement
-      top2=top2+1
-      ilx=iadr(lstk(top2))
-      mx=istk(ilx+1)
-      nx=istk(ilx+2)
-      itx=istk(ilx+3)
-      mnx=mx*nx
-      lx=sadr(ilx+4)
-      if(itx.ne.0) then
-         err=2
-         call error(52)
-         return
-      endif
-c     cross corr si on passe y
-      top2=top2+1
-      ily=iadr(lstk(top2))
-      ny=istk(ily+1)
-      my=istk(ily+2)
-      mny=ny*my
-      if(mny.eq.mnx) then
-         mode=1
-         ly=sadr(ily+4)
-      endif
-c     calcul de mfft
-      if(mode.eq.1) top2=top2+1
-      il=iadr(lstk(top2))
-      mz=istk(il+1)
-      nz=istk(il+2)
-      it=istk(il+3)
-      lzr=sadr(il+4)
-      mfft=mz*nz
-      lzi=lzr+mfft
-      if (it.eq.0) then
-         call dset(mfft,0.d0,stk(lzi),1)
-      endif
-c     x residuel
-      if(mode.eq.1.and.rhs.eq.5) ichaud=1
-      if(mode.eq.0.and.rhs.eq.4) ichaud=1
-c     calculs des adresses des tableaux de travail
-      lxr=lzi+mfft
-      if(ichaud.eq.1) then
-         top2=top2+1
-         il=iadr(lstk(top2))
-         mx0=istk(il+1)
-         nx0=istk(il+2)
-         mnx0=mx0*nx0
-         nbx=mnx0
-         lx0=sadr(il+4)
-      endif
-      if(ichaud.eq.1) then
-         call dcopy(mnx0,stk(lx0),1,stk(lxr),1)
-         call dset(mfft-mnx0,0.d0,stk(lxr+mnx0),1)
-      endif
-      lxi=lxr+mfft
-      lfin=lxi+mfft
-      err=lfin-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-      if(mode.eq.1) then
-         call cmpse3(mfft,mnx,mode,stk(lx),stk(ly),stk(lxr),stk(lxi),
-     1        stk(lzr),stk(lzi),ierr,ichaud,nbx)
-      endif
-      if(mode.eq.0) then
-         call cmpse3(mfft,mnx,mode,stk(lx),yyy,stk(lxr),stk(lxi),
-     1        stk(lzr),stk(lzi),ierr,ichaud,nbx)
-      endif
-      if(ierr.gt.0) then
-         buf='fft call: needs a power of 2'
-         call error(999)
-         return
-      endif
-      if(lhs.eq.1) then
-         top=tope-rhs+1
-         il=il1
-         istk(il)=1
-         istk(il+1)=mz
-         istk(il+2)=nz
-         istk(il+3)=1
-         l=sadr(il+4)
-         call dcopy(mfft,stk(lzr),1,stk(l),1)
-         call dcopy(mfft,stk(lzi),1,stk(l+mfft),1)
-         lstk(top+1)=l+mfft*2
-         return
-      endif
-      if(lhs.eq.2) then
-         top=tope-rhs+1
-         ilw=il1
-         istk(ilw)=1
-         istk(ilw+1)=mz
-         istk(ilw+2)=nz
-         istk(ilw+3)=1
-         lw=sadr(ilw+4)
-         lstk(top+1)=lw+2*mfft
-         top=top+1
-         ilxu=iadr(lstk(top))
-         lxu=sadr(ilxu+4)
-         call dcopy(nbx,stk(lx+mnx-nbx),1,stk(lxr),1)
-         call dcopy(mfft,stk(lzr),1,stk(lw),1)
-         call dcopy(mfft,stk(lzi),1,stk(lw+mfft),1)
-         call dcopy(nbx,stk(lxr),1,stk(lxu),1)
-         istk(ilxu)=1
-         istk(ilxu+1)=1
-         istk(ilxu+2)=nbx
-         istk(ilxu+3)=itx
-         lstk(top+1)=lxu+nbx
-      endif
+      call scicorr("corr")
       return
 c
  50   continue
@@ -798,30 +481,30 @@ c     call entier(1,stk(l4),stk(l4))
 c     call entier(1,stk(l5),stk(l5))
       ityp=stk(l5)
       lw1=lstk(top+1)
-      lw2=lw1+16
-      lw3=lw2+16
-      lw4=lw3+16
-      lw5=lw4+16
-      lw6=lw5+16
-      lw7=lw6+32
-      lw8=lw7+32
-      lw9=lw8+32
-      lw10=lw9+32
-      lw11=lw10+32
-      lw12=lw11+32
-      lw13=lw12+32
-      lw14=lw13+32
-      lw15=lw14+128
-      lw16=lw15+128
-      lw17=lw16+4
-      lw18=lw17+32
-      lw19=lw18+32
+      lw2=lw1+32
+      lw3=lw2+32
+      lw4=lw3+32
+      lw5=lw4+32
+      lw6=lw5+32
+      lw7=lw6+64
+      lw8=lw7+64
+      lw9=lw8+64
+      lw10=lw9+64
+      lw11=lw10+64
+      lw12=lw11+64
+      lw13=lw12+64
+      lw14=lw13+64
+      lw15=lw14+256
+      lw16=lw15+256
+      lw17=lw16+16
+      lw18=lw17+64
+      lw19=lw18+64
       err=lw19-lstk(bot)
       if(err.gt.0)then
          call error(17)
          return
       endif
-      maxdeg=32
+      maxdeg=64
       call syredi(maxdeg,ityp,iapro,stk(l3),adelp,adels,
      *     ndeg,nb,
      *     fact,stk(lw1),stk(lw2),stk(lw3),stk(lw4),stk(lw5),
@@ -840,9 +523,19 @@ c     dimension b2,b1,b0,c1,c0 :nb
 c     dimension zzr,zzi,zpr,zpi,spr,spi :maxdeg
 c     dimension pren,pimn,nzero,nze :maxdeg
 c     dimension zm,sm :maxdeg x 4
+      if(ierr.eq.-7) then
+         buf='specs=>invalid order filter'
+         call error(9999)
+         return
+      endif
+      if(ierr.eq.-9) then
+         buf='specs=>too high order filter'
+         call error(9999)
+         return
+      endif
       if(ierr.ne.0)then
-         buf='syredi: fortran error'
-         call error(999)
+         buf='error in built in fct syredi'
+         call error(9999)
          return
       endif
       top=top-4
@@ -908,7 +601,7 @@ c     dimension zm,sm :maxdeg x 4
       j=0
       k=0
       do 1001 i=1,nb
-         if(stk(lw7+i-1).eq.0)then
+         if(stk(lw7+i-1).eq.0.0d0)then
             j=j+1
             zzr(j)=stk(lw6+i-1)
             zzi(j)=0
@@ -920,7 +613,7 @@ c     dimension zm,sm :maxdeg x 4
             zzr(j)=stk(lw6+i-1)
             zzi(j)=-stk(lw7+i-1)
          endif
-         if(stk(lw9+i-1).eq.0)then
+         if(stk(lw9+i-1).eq.0.0d0)then
             k=k+1
             zpr(k)=stk(lw8+i-1)
             zpi(k)=0
@@ -935,14 +628,14 @@ c     dimension zm,sm :maxdeg x 4
  1001 continue
       if(j.lt.ndeg)then
          do 1002 i=j+1,ndeg
-            zzr(i)=0
-            zzi(i)=0
+            zzr(i)=0.d0
+            zzi(i)=0.d0
  1002    continue
       endif
       if(k.lt.ndeg)then
          do 1003 i=k+1,ndeg
-            zpr(i)=0
-            zpi(i)=0
+            zpr(i)=0.0d0
+            zpi(i)=0.0d0
  1003    continue
       endif
       top=top+1
@@ -955,8 +648,6 @@ c     dimension zm,sm :maxdeg x 4
       lo=sadr(ilo+4)
       call dcopy(length,zzr(1),1,stk(lo),1)
       call dcopy(length,zzi(1),1,stk(lo+length),1)
-c     call dcopy(length,stk(lw6),1,stk(lo),1)
-c     call dcopy(length,stk(lw7),1,stk(lo+length),1)
       lstk(top+1)=lo+2*length
       top=top+1
       ilo=iadr(lstk(top))
@@ -968,8 +659,237 @@ c     call dcopy(length,stk(lw7),1,stk(lo+length),1)
       lo=sadr(ilo+4)
       call dcopy(length,zpr(1),1,stk(lo),1)
       call dcopy(length,zpi(1),1,stk(lo+length),1)
-c     call dcopy(length,stk(lw8),1,stk(lo),1)
-c     call dcopy(length,stk(lw9),1,stk(lo+length),1)
       lstk(top+1)=lo+2*length
       return
       end
+
+      subroutine scicorr(fname)
+c     implicit undefined (a-z)
+      include '../stack.h'
+      character*(*) fname
+      logical checkrhs,getrmat,getsmat,getscalar
+      logical cremat,getexternal,getmat
+      integer m1,n1,lr1,m2,n2,lr2,lr,top2, iadr,sadr
+      integer topk,topw,gettype
+      double precision yyy
+c
+      logical fort,type
+      integer fini,update
+c
+      external dgetx,dgety,setdgetx,setdgety
+      external bgetx,bgety
+      character*24 namex,namey
+      common / corrname / namex,namey
+      common / corradr  / kgxtop,kgytop,ksec,kisc
+      common / corrtyp /  itxcorr,itycorr
+      common/  iercorr /iero
+c
+      data fini/15/,update/30/
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c     calcul de correlations
+      iero=0
+      topk=top
+      topw=top+1
+      top2=top-rhs+1
+      il1=iadr(lstk(top2))
+      if(istk(il1).eq.10) then
+         ich=il1+5+istk(il1+1)*istk(il1+2)
+         ich=istk(ich)
+         if(ich.eq.fini) goto 41
+         if(ich.eq.update) goto 42
+      endif
+C     usual case [cov,mean]=corr(x,[y],nlags) 
+C     ------------------------------------------
+      if (.not.checkrhs(fname,2,3)) return
+C     getting nlags (last argument)
+      if(.not.getscalar(fname,topk,top,lr))return
+      lag=int(stk(lr))
+      if (.not.cremat(fname,topk+1,0,1,lag,lcxy,lc)) return
+      if (.not.cremat(fname,topk+2,0,1,2,lrxy,lc)) return
+      if(rhs.eq.3) then
+         top=top-1
+         if (.not.getrmat(fname,topk,top,m2,n2,lr2)) return
+         ny= m2*n2
+         top=top-1
+         if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
+         nx= m1*n1
+         if(nx.ne.ny) then
+            call error(60)
+            return
+         endif
+      endif
+      if(rhs.eq.2) then
+         top=top-1
+         if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
+         nx= m1*n1
+         lr2=lr1
+      endif
+      call tscccf(stk(lr1),stk(lr2),nx,stk(lcxy),stk(lrxy),
+     $     lag,ierr)
+      if(ierr.eq.-1) then
+         buf='too many coefficients are required'
+         call error(999)
+         return
+      endif
+      top=topk-rhs+1
+      call copyobj(fname,topk+1,top)
+      if(lhs.eq.2) then
+         top=top+1
+         if (.not.cremat(fname,top,0,1,rhs-1,lr,lc)) return
+         call dcopy(rhs-1,stk(lrxy),1,stk(lr),1)
+      endif
+      return
+C     ----------------------
+C     Special case using fft 
+C       [cov,mean]=corr('fft',xmacro,[ymacro],n,sect)
+C     ----------------------
+ 41   continue
+c     methode de la fft
+      if (.not.checkrhs(fname,4,5)) return
+c     -------last argument (sect)
+      if(.not.getscalar(fname,topk,top,lr))return
+      lag=int(stk(lr))
+      mm=2*lag
+c     --------total size 
+      kntop=top-1
+      if(.not.getscalar(fname,topk,kntop,lr))return
+      n=int(stk(lr))
+c     -------external for xmacro 
+      kgxtop= top-rhs+2 
+      itxcorr=gettype(kgxtop)
+      if (.not.getexternal(fname,topk,kgxtop,namex,fort,
+     $     setdgetx)) return
+      mode=2
+c     -------external for ymacro 
+      if(rhs.eq.5) then
+         kgytop= top-rhs+3
+         itycorr=gettype(kgytop)
+         if (.not.getexternal(fname,topk,kgytop,namey,type,
+     $     setdgety)) return
+         if( type.neqv.fort) then
+            err=3
+            call error(55)
+            return
+         endif
+         mode=3
+      endif
+c     Working areas 
+      if (.not.cremat(fname,top+1,0,1,mm,lxa,lc)) return
+      if (.not.cremat(fname,top+2,0,1,mm,lxr,lc)) return
+      if (.not.cremat(fname,top+3,0,1,mm,lxi,lc)) return
+      if (.not.cremat(fname,top+4,0,1,sadr(mm),lzr,lc)) return
+      if (.not.cremat(fname,top+5,0,1,sadr(mm),lzi,lc)) return
+      top=top+6
+      ksec=top
+      if (.not.cremat(fname,ksec,0,1,1,lr,lc))return
+      kisc=top+1
+      if (.not.cremat(fname,kisc,0,1,1,lr,lc))return
+      if(fort) then
+         call cmpse2(mm,n,mode,dgetx,dgety,stk(lxa),stk(lxr),
+     1        stk(lxi),stk(lzr),stk(lzi),ierr)
+         if(ierr.gt.0) then
+            buf='fft call : needs power of two!'
+            call error(999)
+            return
+         endif
+      else
+         call cmpse2(mm,n,mode,bgetx,bgety,stk(lxa),stk(lxr),
+     1        stk(lxi),stk(lzr),stk(lzi),ierr)
+         if(ierr.gt.0) then
+            buf='fft call : needs a power of 2'
+            call error(999)
+            return
+         endif
+      endif
+      top=topk-rhs+1
+      if (.not.cremat(fname,top,0,1,lag,lr,lc)) return
+      call dcopy(lag,stk(lxa),1,stk(lr),1)
+      if(lhs.eq.1) return
+      top=top+1
+      if (.not.cremat(fname,top,0,1,rhs-3,lr,lc)) return
+      call dcopy(rhs-3,stk(lxr),1,stk(lr),1)
+      return
+ 42   continue
+C     ------------------------
+C     special case with Updates 
+C     [w,xu]=corr('updt',x1,[y1],w0) etc....
+      ichaud=0
+      mode=0
+c     -------------x1 value 
+      top2=top2+1
+      if (.not.getrmat(fname,topk,top2,mx,nx,lx)) return
+      mnx=mx*nx
+c     --------------y1 value or w0
+      top2=top2+1
+      if (.not.getmat(fname,topk,top2,it,my,ny,ly,lyc)) return 
+      mny=ny*my
+      if(mny.eq.mnx) then
+         mode=1
+         if ( it.eq.1) then 
+            buf= fname // ' y1 should be a real matrix'
+            call error(999)
+            return
+         endif
+      endif
+c     --------------third or second argument 
+      if(mode.eq.1) top2=top2+1
+      if (.not.getmat(fname,topk,top2,it,mz,nz,lzr,lzi)) return 
+      mfft=mz*nz
+C     if w0 is real we add space for storing an imag part 
+      if (it.eq.0) then
+         if (.not.cremat(fname,topw,0,1,mfft,lzi,lc)) return
+         topw=topw+1
+         call dset(mfft,0.d0,stk(lzi),1)
+      endif
+      if(mode.eq.1.and.rhs.eq.5) ichaud=1
+      if(mode.eq.0.and.rhs.eq.4) ichaud=1
+c     -----------last argument + working areas 
+      if (.not.cremat(fname,topw,1,1,mfft,lwr,lwi)) return
+      call dset(2*mfft,0.d0,stk(lwr),1)
+      if(ichaud.eq.1) then
+         top2=top2+1
+         if (.not.getmat(fname,topk,top2,it,mx0,nx0,
+     $        lxr,lxi))   return 
+         nbx=mx0*nx0
+         if ( nbx.gt.mfft) then 
+            buf = fname // 'last argument has wrong size '
+            call error(999)
+            return
+         endif
+         call dcopy(nbx,stk(lxr),1,stk(lwr),1)
+      endif
+C     ---------calling the function 
+      if(mode.eq.1) then
+         call cmpse3(mfft,mnx,mode,stk(lx),stk(ly),stk(lwr),stk(lwi),
+     1        stk(lzr),stk(lzi),ierr,ichaud,nbx)
+      endif
+      if(mode.eq.0) then
+         call cmpse3(mfft,mnx,mode,stk(lx),yyy,stk(lwr),stk(lwi),
+     1        stk(lzr),stk(lzi),ierr,ichaud,nbx)
+      endif
+C     ---------back to Scilab
+      if(ierr.gt.0) then
+         buf='fft call: needs a power of 2'
+         call error(999)
+         return
+      endif
+      if (lhs.eq.2) then 
+C        keep this in a safe place before the copy for lhs1
+         call dcopy(nbx,stk(lx+mnx-nbx),1,stk(lwr),1)
+      endif
+      if(lhs.ge.1) then
+         top=topk-rhs+1
+         if (.not.cremat(fname,top,1,mz,nz,lres,lresi)) return
+         call dcopy(mfft,stk(lzr),1,stk(lres),1)
+         call dcopy(mfft,stk(lzi),1,stk(lresi),1)
+      endif
+      if(lhs.eq.2) then
+         top=top+1
+         if (.not.cremat(fname,top,0,1,nbx,lres,lresi)) return
+         call dcopy(nbx,stk(lwr),1,stk(lres),1)         
+      endif
+      return
+      end
+
+

@@ -336,7 +336,9 @@ c---------------------- message for ODE -----------------------------
       goto 9999
  179  continue
       goto 9999
+c     ==============================================================
  180  continue
+      call basout(io,wte,' Warning: function is already compiled')
       goto 9999
 
 

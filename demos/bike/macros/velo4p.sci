@@ -1,4 +1,4 @@
-//[]=velo4p()
+function []=velo4p()
 // version with full wheels with  xgeom & xfpoly
 // ( geom performs the geometric calculations)
 t= t*180/%pi;
@@ -24,17 +24,17 @@ deff('[]=traj(i)',['j=i-1;';
    'param3d(xprear(1,j:i),xprear(2,j:i),xprear(3,j:i),t,p,'" "',[0,0])';
    'param3d(xpfront(1,j:i),xpfront(2,j:i),xpfront(3,j:i),t,p,'" "',[0,0])']);
 
-comp(velod);comp(traj);
+
 //Caution: start at i=2
 for i=2:1:n2;velod(i);
 //traj();
 velod(i);end
 velod(n2);
 xset("alufunction",3);
-//end
 
 
-//[]=poteau(xcenter,ycenter,xep,yep)
+
+function []=poteau(xcenter,ycenter,xep,yep)
 // rajoute un poteau de centre xcenter,ycenter)
 // d'epaisseur xep et yp 
 //!
@@ -46,10 +46,10 @@ zmat(2:3,2:3)=zmax*ones(2,2);
 // grise du poteau 
 potg=10
 plot3d(xc,yc,zmat,t,p," ",[potg,0,0]);
-//end
 
 
-//[]=arbre(xcenter,ycenter,xep,yep)
+
+function []=arbre(xcenter,ycenter,xep,yep)
 // rajoute un poteau de centre xcenter,ycenter)
 // d'epaisseur xep et yp 
 //!
@@ -70,4 +70,4 @@ y=[ycenter*ones(1,100);ycenter*ones(1,100)+r*cos(teta).*sin(phi)];
 z=[zmax*ones(1,100);zmax*ones(1,100)+r*sin(teta)];
 [x,y]=geom3d(x,y,z);
 xsegs(x,y);
-//end
+

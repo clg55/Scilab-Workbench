@@ -1,10 +1,41 @@
-The Fortran routine newfun.f
-    generates the source code of the scilab routine
-    funtab.f .
-    newfun takes the two files fundef and funtab.f and from these
-    two files it makes the file funtab.f.new which is the new source code
-    of funtab.f. This new funtab.f manages all the primitives defined
-    in fundef. 
-    fundef is a three columns table: first column = name
-    of a primitive  second column = internal coding in scilab third column=
-    type of primitive (0 low-level, 1 system function, 2 macro-like primitive)
+Some built-in functions, such as ode or optim, require a
+specific function as argument. 
+Example: ode(x0,t0,t,fydot).
+fydot is the specific argument function.
+This function can be a either Scilab function or an external
+function written in C or Fortran.
+In both cases, the argument function must obey a specific
+syntax.
+
+If your argument function is written in C or Fortran, there
+are two ways to call it:
+1-Use dynamic link
+  link('myfydot.o','myfydot')  or link('myfydot.o','myfydot','C')
+  ode(x0,t0,t,'myfydot')
+2-Use the interface in this directory.
+make all in Scilab directory
+  ode(x0,t0,t,'myfydot')
+
+The code in this directory concerns your argument functions
+written in C or Fortran. Re-making Scilab will make a new 
+scilab which will include these argument functions.
+
+This directory contains your own argument functions
+used for the following scilab functions: 
+ ode, odedc, intg, corr, impl,  schur, optim, fsolve, 
+ dassl, dassrt, feval, colnew, addmenu.
+
+***************************************************************
+* To add a new function, two files should be updated:         *
+* - the file "Flist"                                          *
+* - and one Ex-. file                                         *
+* (e.g. Ex-ode is the file associated with the ode function). *
+***************************************************************
+
+Flist : list of entry points. Just add the name of your function
+in the appropriate list of functions.
+
+Ex-ode: source code for argument functions. Add your function here.
+
+Built-in functions added to scilab by Ex-fort should also
+appear in Flist.

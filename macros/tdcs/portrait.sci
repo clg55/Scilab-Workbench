@@ -36,11 +36,14 @@ if res==1;
   ny=(0:(ny-1))/(ny-1)
   nx=xdim(1)*(ones(nx)-nx)+xdim(3)*nx;
   ny=xdim(2)*(ones(ny)-ny)+xdim(4)*ny;
-  fchamp(fch,0,nx,ny);
+  fchamp(fch,0,nx,ny,1.0,xdim);
+  style="000";
 else 
   p_nxx=['10';'10'];
+  style="051";
 end
-plot2d([xdim(1);xdim(1);xdim(3)],[xdim(2);xdim(4);xdim(4)])
+//pause;
+plot2d(0,0,0,style," ",xdim);
 if rhs<=3,
   if ~isdef('p_npts');p_npts=['100';'0.1'];end;
   rep=x_mdialog('Requested points and step ',...
@@ -133,9 +136,9 @@ for i=1:n2,
        kf=mini(k11,k22);
        if kf=1, kf=n1(1),end
        if farrow='t',
-          plot2d4("gnn",y(1,1:kf)',y(2,1:kf)',style,"111"," ",xdim);
+          plot2d4("gnn",y(1,1:kf)',y(2,1:kf)',style,"000"," ",xdim);
        else
-          plot2d(y(1,1:kf)',y(2,1:kf)',style,"111"," ",xdim);
+          plot2d(y(1,1:kf)',y(2,1:kf)',style,"000"," ",xdim);
        end,
        ylast=y(:,kf);
     end

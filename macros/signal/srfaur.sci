@@ -19,7 +19,7 @@ function [p,s,t,l,rt,tt]=srfaur(h,f,g,r0,n,p,s,t,l)
       if rhs=5,
 //initializations
    r0=.5*(r0+r0');
-   s=sqrt(r0);
+   s=sqrtm(r0);
    t=(g/s)';s=s';
    l=-%i*t;
    p=l'*l;
@@ -38,7 +38,6 @@ function [p,s,t,l,rt,tt]=srfaur(h,f,g,r0,n,p,s,t,l)
    end;
       rt=r0-h*p*h';
    tt=(g-f*p*h')*inv(rt);
-//end
 
 
 

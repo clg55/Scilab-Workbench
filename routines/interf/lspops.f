@@ -9,10 +9,12 @@ c
 c     
       integer star,dstar,dot,colon
       integer less,great,equal,ou,et,non
+      integer insert,extrac
       integer top0
       data star/47/,dstar/62/,dot/51/,colon/44/
       data less/59/,great/60/,equal/50/
       data ou/57/,et/58/,non/61/
+      data insert/2/,extrac/3/
 c     
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -26,6 +28,9 @@ c
 c     
       top0=top
       lw=lstk(top+1)+1
+      if(op.eq.extrac) goto 70
+      if(op.eq.insert) goto 80
+
       it2=0
       goto (04,03,02,01) rhs
       call error(39)
@@ -103,11 +108,12 @@ c
 c     
       fun = 0
 c     
-c     cconc  extrac insert rconc
-      goto(75  ,  85  ,  80   ,78) op
-c     
+c     column concatenation
+      if(op.eq.1) goto 65
+c     row concatenation
+      if(op.eq.4) goto 66
 c           :  +  -  * /  \  =          '
-      goto(07,07,07,07,07,07,130,05,05,70) op+1-colon
+      goto(07,07,07,07,07,07,130,05,05,60) op+1-colon
       if(op.eq.ou.or.op.eq.et) goto 20
       if(op.eq.non) goto 30
 c     
@@ -172,20 +178,43 @@ c     ou/et logique
 
 c NOT
  30   continue
-      top=top+1
-      il=iadr(lstk(top))
-      istk(il)=4
-      istk(il+1)=1
-      istk(il+2)=1
-      istk(il+3)=0
-      lstk(top+1)=sadr(il+4)
-      op=less+great
-      goto 130
+      lw=iadr(lstk(top+1))
+      err=sadr(lw+m1*n1-nel1+m1)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+
+      istk(il1+4)=m1*n1-nel1
+      ij2=lw
+      ij1=irc1+m1
+c     may be improved
+      do 35 i=0,m1-1
+         do 31 j=1,n1
+            istk(ij2+j-1)=j
+ 31      continue
+         do 32 j=1,istk(irc1+i)
+            istk(ij2+istk(ij1+j-1)-1)=0
+ 32      continue
+         j1=0
+         do 33 j=1,n1
+            if(istk(ij2+j-1).ne.0) then
+               j1=j1+1
+               istk(ij2+j1-1)=istk(ij2+j-1)
+            endif
+ 33      continue
+         ij2=ij2+j1
+         ij1=ij1+istk(irc1+i)
+         istk(irc1+i)=n1-istk(irc1+i)
+ 35   continue
+      call icopy(ij2-lw,istk(lw),1,istk(irc1+m1),1)
+      lstk(top+1)=sadr(irc1+m1+ij2-lw)
+      goto 999
 
 c     
 c     
 c     transposition
- 70   istk(il1+1)=n1
+ 60   istk(il1+1)=n1
       istk(il1+2)=m1
       if(nel1.eq.0) then
          lw=sadr(il1+5+n1)
@@ -208,9 +237,9 @@ c     transposition
          return
       endif
       istk(ia)=1
-      do 71 i=1,m1
+      do 61 i=1,m1
          istk(ia+i)=istk(ia+i-1)+istk(irc1+i-1)
- 71   continue
+ 61   continue
       call lspt(m1,n1,nel1,istk(irc1),istk(ia),
      $     istk(iat),istk(irc))
       call icopy(n1+nel1,istk(irc),1,istk(irc1),1)
@@ -219,7 +248,7 @@ c     transposition
       goto 999
 c     
 c     concatenation [a b]
- 75   continue
+ 65   continue
       if(m1.lt.0.or.m2.lt.0) then
          call error(14)
          return
@@ -261,7 +290,7 @@ c
       return
 c     
 c     concatenation [a;b]
- 78   continue
+ 66   continue
       if(n1.lt.0.or.n2.lt.0) then
          call error(14)
          return
@@ -305,73 +334,101 @@ c     concatenation [a;b]
 c     
 c     extraction
 c     
- 80   continue
-c     extraction
-c     
-      if(rhs.gt.2) goto 82
-c     vect(arg)
-      if(mn1.eq.0) then
-c     un des vecteurs d'indice est vide
+ 70   continue
+      if(rhs.gt.2) goto 75
+c     arg2(arg1)
+c     get arg2
+      il2=iadr(lstk(top))
+      if(istk(il2).lt.0) il2=iadr(istk(il2+1))
+      m2=istk(il2+1)
+      n2=istk(il2+2)
+      it2=istk(il2+3)
+      nel2=istk(il2+4)
+      irc2=il2+5
+      l2=sadr(irc2+m2+nel2)
+      mn2=m2*n2
+      top=top-1
+c     get arg1
+      il1=iadr(lstk(top))
+      m1=istk(il1+1)
+c
+      if(mn2.eq.0) then 
+c     .  arg2=[]
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
-         lstk(top+1)=l1+1
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)+1
          goto 999
-      endif
-      if(m1.gt.1.and.n1.gt.1.or.it1.ne.0) then
-         call error(21)
-         return
-      endif
-      if(m2.lt.0) then
+      elseif(m2.lt.0) then
+c     .  arg2=eye
          call error(14)
          return
-      endif
-c     
-      if(istk(il1+1).lt.0) then
-c         vect(:)
+      elseif(m1.lt.0) then
+c     .  arg2(:), just reshape to column vector
          if(n2.eq.1) then
             call icopy(5+m2+nel2,istk(il2),1,istk(il1),1)
             l1=sadr(il1+5+m2+nel2)
             lstk(top+1)=l1
          else
+c     .     reshape to column vector
             istk(il1)=6
-            istk(il1+1)=m2*n2
+            istk(il1+1)=mn2
             istk(il1+2)=1
             istk(il1+3)=0
             istk(il1+4)=nel2
             irc1=il1+5
-            call sp2col(m2,n2,istk(irc2),nel2,istk(irc1))
             l1=sadr(il1+5+m2*n2+nel2)
-            call iset(nel2,1,istk(irc1+m2*n2+1),1)
+
+            ircr=iadr(lw)
+            iw=ircr+m2*n2+nel2
+            lw=sadr(iw+3*nel2)
+            err=lw-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return 
+            endif
+            call lspmat(m2,n2,nel2,istk(irc2),m2*n2,istk(ircr),istk(iw))
+            call icopy(m2*n2+nel2,istk(ircr),1,istk(irc1),1)
             lstk(top+1)=l1
          endif
          return
-      endif
-      mm=max(m2,n2)
-      li1=iadr(l1)
-      do 81 j=0,mn1-1
-         istk(li1+j)=stk(l1+j)
-         if(istk(li1+j).lt.0.or.istk(li1+j).gt.mm) then
-            call error(21)               
-            return
-         endif
- 81   continue
-      if(m2.eq.1) then
-c     vecteur ligne
-         m=-1
-         n=mn1
-         mr=n
-      elseif(n2.eq.1) then
-c     vecteur colonne
-         m=mn1
-         n=-1
-         mr=m
-      else
-c     matrice, on retourne un vecteur colonne
-         call error(43)
+      elseif(m2.gt.1.and.n2.gt.1) then
+c     .  call macro coded operation
+         top=top0
+         fin=-fin
          return
       endif
-
+c     check and convert indices variable
+      call indxg(il1,mn2,ilr,mi,mx,lw,1)
+      if(err.gt.0) return
+      if(mx.gt.mn2) then
+         call error(21)
+         return
+      endif
+ 72   if(mi.eq.0) then
+c     arg2([])
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)+1
+         goto 999
+      endif
+c     set output sizes
+      if (m2 .gt. 1.or.m1.lt.0) then
+c     .  column vector
+         m=mi
+         n=-1
+         mr = mi
+         nr = 1
+      else
+c     .  row vector
+         m=-1
+         n=mi
+         nr = mi
+         mr = 1
+      endif
       lptr=iadr(lw)
       irc=lptr+m2+1
       lw=sadr(irc+mr)
@@ -385,7 +442,7 @@ c     matrice, on retourne un vecteur colonne
       nel=nelr
 
       call lspe2(m2,n2,nel2,istk(irc2),
-     $        istk(li1),m,istk(li1),n,mr,nr,
+     $        istk(ilr),m,istk(ilr),n,mr,nr,
      $        nelr,istk(irc),istk(lptr),ierr)
       istk(il1)=6
       istk(il1+1)=mr
@@ -397,203 +454,261 @@ c     matrice, on retourne un vecteur colonne
       lstk(top+1)=l1
       go to 999
 
-c
-c     matrix(arg,arg)
- 82   continue
-      if(rhs.gt.4) then
+c     
+c     arg3(arg1,arg2)
+ 75   if(rhs.gt.3) then
          call error(36)
          return
       endif
-      if(mn1*mn2.eq.0) then
-c     un des vecteurs d'indice est vide
-         istk(il1)=1
-         istk(il1+1)=0
-         istk(il1+2)=0
-         lstk(top+1)=l1+1
-         goto 999
-      endif
+c     get arg3
+      il3=iadr(lstk(top))
+      if(istk(il3).lt.0) il3=iadr(istk(il3+1))
+      m3=istk(il3+1)
+      n3=istk(il3+2)
+      it3=istk(il3+3)
+      nel3=istk(il3+4)
+      irc3=il3+5
+      l3=sadr(irc3+m3+nel3)
+      mn3=m3*n3
+      top=top-1
+c     get arg2
+      il2=iadr(lstk(top))
+      m2=istk(il2+1)
+      top=top-1
+c     get arg1
+      il1=iadr(lstk(top))
+      m1=istk(il1+1)
+
       if(mn3.eq.0) then 
+c     .  arg3=[]
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
-         lstk(top+1)=l1+1
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)+1
          goto 999
       elseif(m3.lt.0) then
+c     .arg3=eye
          call error(14)
          return
       endif
+c     check and convert indices variables
+      call indxg(il1,m3,ili,mi,mxi,lw,1)
+      if(err.gt.0) return
+      call indxg(il2,n3,ilj,nj,mxj,lw,1)
+      if(err.gt.0) return
 c
-      li1=iadr(l1)
-      if(istk(il1+1).lt.0) then
-         m=-1
-      else
-         m=mn1
-         do 83 j=0,mn1-1
-            istk(li1+j)=stk(l1+j)
-            if(istk(li1+j).lt.0.or.istk(li1+j).gt.m3) then
-               call error(21)
-               return
-            endif
- 83      continue
+ 76   continue
+      mn=mi*nj
+      if(mn.eq.0) then 
+c     .  arg1=[] or arg2=[] 
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)+1
+         goto 999
       endif
-c.
-      li2=iadr(l2)
-      if(istk(il2+1).lt.0) then
-         n=-1
-      else
-         n=mn2
-         do 84 j=0,mn2-1
-            istk(li2+j)=stk(l2+j)
-            if(istk(li2+j).lt.0.or.istk(li2+j).gt.n3) then
-               call error(21)
-               return
-            endif
- 84      continue
-      endif
-c
       lptr=iadr(lw)
       irc=lptr+m3+1
-      lw=sadr(irc+m)
+      lw=sadr(irc+mi)
       nelr=iadr(lstk(bot))-iadr(lw)
       if(nelr.le.0) then
          err=lw-lstk(bot)
          call error(17)
          return
       endif
-      lw=sadr(irc+m+nelr)
+      lw=sadr(irc+mi+nelr)
       nel=nelr
-      call lspe2(m3,n3,nel3,istk(irc3),istk(li1),m,
-     $        istk(li2),n,mr,nr,nelr,istk(irc),istk(lptr),ierr)
+      call lspe2(m3,n3,nel3,istk(irc3),istk(ili),mi,
+     $        istk(ilj),nj,mi,nj,nelr,istk(irc),istk(lptr),ierr)
 
       istk(il1)=6
-      istk(il1+1)=mr
-      istk(il1+2)=nr
+      istk(il1+1)=mi
+      istk(il1+2)=nj
       istk(il1+3)=0
       istk(il1+4)=nelr
-      call icopy(m+nelr,istk(irc),1,istk(il1+5),1)
-      l1=sadr(il1+5+m+nelr)
+      call icopy(mi+nelr,istk(irc),1,istk(il1+5),1)
+      l1=sadr(il1+5+mi+nelr)
       lstk(top+1)=l1
       go to 999
-      
+c      
 c     insert
- 85   if(rhs.eq.4) goto 90
+ 80   continue
+      if(rhs.eq.4) goto 90
+c     arg3(arg1)=arg2
+c     get arg3      
+      il3=iadr(lstk(top))
+      if(istk(il3).lt.0) il3=iadr(istk(il3+1))
+      m3=istk(il3+1)
+      n3=istk(il3+2)
+      it3=istk(il3+3)
+      if(istk(il3).eq.6) then
+         nel3=istk(il3+4)
+         irc3=il3+5
+         l3=sadr(irc3+m3+nel3)
+      else
+         top=top0
+         fin=-fin
+         return
+      endif
+      mn3=m3*n3
 
-c     vector case : arg3(arg1)=arg2
+c     get arg2
+      top=top-1
+      il2=iadr(lstk(top))
+      m2=istk(il2+1)
+      n2=istk(il2+2)
+      it2=istk(il2+3)
+      if(istk(il2).eq.6) then
+         nel2=istk(il2+4)
+         irc2=il2+5
+         l2=sadr(irc2+m2+nel2)
+      elseif(istk(il2).eq.4) then
+         l2=il2+3
+         nel2=m2*n2
+      elseif(istk(il2).eq.1) then
+         l2=sadr(il2+4)
+         nel2=m2*n2
+         do 81 i=1,nel2
+            if(int(stk(l2-1+i)).eq.0) then
+               istk(il2+2+i)=0
+            else
+               istk(il2+2+i)=1
+            endif
+ 81      continue
+         istk(il2)=4
+         l2=il2+3
+      else
+         top=top0
+         fin=-fin
+         return
+      endif
+      mn2=m2*n2
+
+c     get arg1
+      top=top-1
+      il1=iadr(lstk(top))
+      m1=istk(il1+1)
+
+
+      if (m2.eq.0) then
+c     .  arg3(arg1)=[] -->[]
+         if(m1.eq.-1) then
+c     .    arg3(:)=[] 
+            istk(il1)=1
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)+1
+            goto 999
+         elseif(m1.eq.0) then
+c     .     arg3([])=[]  --> arg3
+            call icopy(5+m3+nel3,istk(il3),1,istk(il1),1)
+            l=sadr(il1+5+m3+nel3)
+            lstk(top+1)=l
+            goto 999
+         else
+c     .     arg3(arg1)=[] -->arg3(compl(arg1),:)
+            if(m3.gt.1.and.n3.gt.1) then
+c     .        call macro coded op to reshape and insert
+               top=top0
+               fin=-fin
+               return
+            else
+               call indxgc(il1,mn3,ilr,mi,mx,lw)
+               if(err.gt.0) return
+               l2=l3
+               n2=n3
+               m2=m3
+               mn2=m2*n2
+               it2=it3
+               nel2=nel3
+               irc2=irc3
+c     .     call extraction
+               goto 72
+            endif
+         endif
+      elseif(m2.lt.0.or.m3.lt.0) then
+c     .  arg3=eye,arg2=eye
+         call error(14)
+         return
+      elseif(m1.lt.0) then
+c     .  arg3(:)=arg2 reshape arg2 according to arg3
+         if(mn2.ne.mn3) then
+            call error(15)
+            return
+         endif
+         if(m2.ne.m3) then
+            top=top0
+            fin=-fin
+            return
+         endif
+         istk(il1)=6
+         istk(il1+1)=m3
+         istk(il1+2)=n3
+         call icopy(2+m2+nel2,istk(il2+3),1,istk(il1+3),1)
+         l1=sadr(il1+5+m2+nel2)
+         lstk(top+1)=l1
+         return
+      elseif(m3.gt.1.and.n3.gt.1) then
+c     .  arg3(arg1)=arg2 with arg3 not a vector
+         top=top0
+         fin=-fin
+         return
+      endif
+      call indxg(il1,mn3,ili,mi,mxi,lw,1)
+      if(err.gt.0) return
+      if(mi.eq.0) then
+c     .  arg3([])=arg2
+         call error(15)
+         return
+      endif
+      if(mi.ne.mn2) then
+         call error(15)
+         return
+      endif
 c     
-      if(it1.ne.0) then
-         call error(21)
-         return
-      endif
-c
-      if(istk(il3).ne.6) then
-         top=top0
-         fin=-fin
-         return
-      endif
-c
-      if(m2.ne.0.and.istk(il2).ne.4.and.istk(il2).ne.6) then
-         top=top0
-         fin=-fin
-         return
-      endif
-      imax=0
-      li1=iadr(l1)
-      if(m1.gt.0) then
-         do 87 i = 0, m1*n1-1
-            istk(li1+i)=stk(l1+i)
-            if(istk(li1+i).lt.0) then
-               call error(21)
-               return
-            endif
-            imax=max(imax,istk(li1+i))
- 87      continue
-      endif
-      if(m2.ne.0.and.m3.gt.1.and.n3.gt.1) then
-c     matrix(:)=vector
-         call error(43)
-         return
+      if (n3.gt.1.and.m3.gt.1) then
+c     .  arg3 is not a vector
+         if(n2.gt.1.and.m2.gt.1) then
+            call error(15)
+            return
+         endif
+         if(mxi.gt.m3*n3) then
+            call error(21)
+            return
+         endif
+         mr=m3
+         nr=n3
       elseif (n3.le.1.and.n2.le.1) then
-c     column vector 
-         m=isign(mn1,m1)
-         n=-1
-         nr=1
-         if(m.lt.0) then
-            if(mn2.eq.0) then
-c     v(:)=[]
-               istk(il1)=1
-               istk(il1+1)=0
-               istk(il1+2)=0
-               istk(il1+3)=0
-               lstk(top+1)=sadr(il1+4)
-               return
-            elseif(mn2.ne.mn3) then
-               call error(15)
-               return
-            else
-c     v(:)=u
-               mr=m3
-            endif
-         else
-            if(mn2.eq.0) then
-c     v(i)=[]
-               mr=m3-mn1
-               if(mr.le.0) then
-                  istk(il1)=1
-                  istk(il1+1)=0
-                  istk(il1+2)=0
-                  istk(il1+3)=0
-                  lstk(top+1)=sadr(il1+4)
-                  return
-               endif
-            elseif(mn1.ne.mn2) then
-               call error(15)
-               return
-            else
-c     v(i)=u
-               mr=max(m3,imax)
-            endif
-         endif
-      elseif (m3.le.1.or.m2.le.1) then
-c     row vecteur 
-         m=-1
-         n=isign(mn1,m1)
-         mr=1
-         if(n.lt.0) then
-            if(mn2.eq.0) then
-c     v(:)=[]
-               istk(il1)=1
-               istk(il1+1)=0
-               istk(il1+2)=0
-               istk(il1+3)=0
-               lstk(top+1)=sadr(il1+4)
-               return
-            elseif(mn2.ne.mn3) then
-               call error(15)
-               return
-            else
-               nr=n3
-            endif
-         else
-            if(mn2.eq.0) then
-c     v(i)=[]
-               nr=n3-mn1
-               if(nr.le.0) then
-                  istk(il1)=1
-                  istk(il1+1)=0
-                  istk(il1+2)=0
-                  istk(il1+3)=0
-                  lstk(top+1)=sadr(il1+4)
-                  return
-               endif
-            elseif(mn1.ne.mn2) then
-               call error(15)
-               return
-            else
-               nr=max(n3,imax)
-            endif
-         endif
+c     .  arg3 and arg2 are  column vectors
+         mr=max(m3,mxi)
+         nr=max(n3,1)
+      elseif (m3.le.1.and.m2.le.1) then
+c     .  row vectors
+         nr=max(n3,mxi)
+         mr=max(m3,1)
+      else
+c     .  arg3 and arg2 dimensions dont agree
+         call error(15)
+         return
       endif
 
+c     set output sizes
+      if (m3 .gt. 1.or.m1.lt.0) then
+c     .  column vector
+         m=mi
+         n=-1
+         mr = mi
+         nr = 1
+      else
+c     .  row vector
+         m=-1
+         n=mi
+         nr = mi
+         mr = 1
+      endif
 c     
       lptr=iadr(lw)
       irc=lptr+m3+1
@@ -607,16 +722,12 @@ c
       nel=nelr
       if(istk(il3).eq.6) then
          if(istk(il2).eq.6) then
-            call lspisp(m3,n3,nel3,istk(irc3),
-     $              istk(li1),m,istk(li1),n,
-     $              m2,n2,nel2,istk(irc2),
-     $              mr,nr,nelr,istk(irc),istk(lptr),ierr)
-         elseif(istk(il2).eq.4.or.istk(il2).eq.1) then
-            l2=il2+3
-            call lspis(m3,n3,nel3,istk(irc3),
-     $              istk(li1),m,istk(li1),n,
-     $              m2,n2,istk(l2),
-     $              mr,nr,nelr,istk(irc),ierr) 
+            call lspisp(m3,n3,nel3,istk(irc3),istk(ili),m,istk(ili),n,m2
+     $           ,n2,nel2,istk(irc2),mr,nr,nelr,istk(irc),istk(lptr)
+     $           ,ierr)
+         elseif(istk(il2).eq.4) then
+            call lspis(m3,n3,nel3,istk(irc3),istk(ili),m,istk(ili),n,m2
+     $           ,n2,istk(l2),mr,nr,nelr,istk(irc),ierr) 
          endif
       endif
       if(ierr.ne.0) then
@@ -634,85 +745,209 @@ c
       lstk(top+1)=l1
       go to 999
 c     
-c     matrix case : arg4(arg1,arg2)=arg3
  90   continue
-c     
-      if(it1+it2.ne.0) then
-         call error(21)
-         return
-      endif
-c
-      m=-1
-      if(m1.ge.0) m=mn1
-      n=-1
-      if(m2.ge.0) n=mn2
-      if(mn4.eq.0.and.(m.lt.0.or.n.lt.0)) then
-         call error(15)
-         return
-      endif
-      if(m3*n3.eq.0.and.m.ge.0.and.n.ge.0) then
-         call error(15)
-         return
-      endif
-      if(m.lt.0.or.n.lt.0) then
-         if(m.lt.0.and.m4.ne.m3) then
-            call error(15)
-            return
-         endif
-         if(n.lt.0.and.n4.ne.n3) then
-            call error(15)
-            return
-         endif
-      endif
-c    
-
-      mr=m4
-      if(istk(il4).ne.6.or.istk(il3).ne.4.and.istk(il3).ne.6) then
+c     arg4(arg1,arg2)=arg3
+c     get arg4      
+      il4=iadr(lstk(top))
+      if(istk(il4).lt.0) il4=iadr(istk(il4+1))
+      m4=istk(il4+1)
+      n4=istk(il4+2)
+      it4=istk(il4+3)
+      if(istk(il4).eq.6) then
+         nel4=istk(il4+4)
+         irc4=il4+5
+         l4=sadr(irc4+m4+nel4)
+      else
          top=top0
          fin=-fin
          return
       endif
-
-      if (m .ge. 0) then
-         if(m3.ne.0.and.m.ne.m3) then
-            call error(15)
-            return
-         endif
-         li1=iadr(l1)
-         do 91 i = 0, m-1
-            istk(li1+i)=stk(l1+i)
-            if(istk(li1+i).lt.0) then
-               call error(21)
-               return
+      mn4=m4*n4
+c     get arg3
+      top=top-1
+      il3=iadr(lstk(top))
+      m3=istk(il3+1)
+      n3=istk(il3+2)
+      it3=istk(il3+3)
+      if(istk(il3).eq.6) then
+         nel3=istk(il3+4)
+         irc3=il3+5
+         l3=sadr(irc3+m3+nel3)
+      elseif(istk(il3).eq.4) then
+         nel3=m3*n3
+         l3=il3+3
+      elseif(istk(il3).eq.1) then
+         l3=sadr(il3+4)
+         nel3=m3*n3
+c     .  convert to boolean matrix
+         do 91 i=1,nel3
+            if(int(stk(l3-1+i)).ne.0) then
+               istk(il3+2+i)=1
+            else
+               istk(il3+2+i)=0
             endif
-            mr=max(mr,istk(li1+i))
  91      continue
+         istk(il3)=4
+         l3=il3+3
       else
-         mr = max(mr,m3)
+         top=top0
+         fin=-fin
+         return
       endif
-      mr = max(mr,m3)
-c     
-      nr=n4
-      if (n .ge. 0) then 
-         if(n3.ne.0.and.n.ne.n3) then
+      mn3=m3*n3
+c     get arg2
+      top=top-1
+      il2=iadr(lstk(top))
+      m2=istk(il2+1)
+c     get arg1
+      top=top-1
+      il1=iadr(lstk(top))
+      m1=istk(il1+1)
+
+      if (m3.eq.0) then
+c     .  arg4(arg1,arg2)=[]
+         if(m1.eq.-1.and.m2.eq.-1) then
+c     .    arg4(:,:)=[] -->[]
+            istk(il1)=1
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)+1
+            goto 999
+         elseif(m1.eq.0.or.m2.eq.0) then
+c     .     arg4([],arg2)=[],  arg4(arg1,[])=[] --> arg4
+            call icopy(5+m4+nel4,istk(il4),1,istk(il1),1)
+            l=sadr(il1+5+m4+nel4)
+            lstk(top+1)=l
+            goto 999
+         elseif(m2.eq.-1) then
+c     .     arg3(arg1,:)=[] --> arg3(compl(arg1),:)
+            call indxgc(il1,m4,ili,mi,mxi,lw)
+            if(err.gt.0) return
+            call indxg(il2,n4,ilj,nj,mxj,lw,1)
+            if(err.gt.0) return
+            l3=l4
+            n3=n4
+            m3=m4
+            mn3=m3*n3
+            it3=it4
+            irc3=irc4
+            nel3=nel4
+c     .     call extraction
+            goto 76
+         elseif(m1.eq.-1) then
+c     .     arg3(:,arg2)=[] --> arg3(:,compl(arg2))
+            call indxgc(il2,n4,ilj,nj,mxj,lw)
+            if(err.gt.0) return
+            call indxg(il1,m4,ili,mi,mxi,lw,1)
+            if(err.gt.0) return
+            l3=l4
+            n3=n4
+            m3=m4
+            mn3=m3*n3
+            it3=it4
+            irc3=irc4
+            nel3=nel4
+c     .     call extraction
+            goto 76
+         else
+c     .     arg4(arg1,arg2)=[] 
+            lw1=lw
+            call indxgc(il2,n4,ilj,nj,mxj,lw)
+            if(err.gt.0) return
+            if(nj.eq.0) then
+c     .        arg4(arg1,1:n4)=[] 
+               lw2=lw
+               call indxgc(il1,m4,ili,mi,mxi,lw)
+               if(err.gt.0) return
+c     .        arg2=1:n4
+               if(mi.eq.0) then
+c     .           arg4(1:m4,1:n4)=[] 
+                  istk(il1)=1
+                  istk(il1+1)=0
+                  istk(il1+2)=0
+                  istk(il1+3)=0
+                  lstk(top+1)=sadr(il1+4)+1
+                  goto 999
+               else
+c     .           arg4(arg1,1:n4)=[] 
+                  lw=lw2
+                  call indxg(il2,n4,ilj,nj,mxj,lw,1)
+                  if(err.gt.0) return
+                  l3=l4
+                  n3=n4
+                  m3=m4
+                  it3=it4
+                  mn3=m3*n3
+                  irc3=irc4
+                  nel3=nel4
+c     .           call extraction
+                  goto 76
+               endif
+            else
+               lw=lw1
+               call indxgc(il1,m4,ili,mi,mxi,lw)
+               if(err.gt.0) return
+               if(mi.eq.0) then
+c     .           arg4(1:m4,arg2)=[] 
+                  call indxg(il1,m4,ili,mi,mxi,lw,1)
+                  if(err.gt.0) return
+                  l3=l4
+                  n3=n4
+                  m3=m4
+                  it3=it4
+                  mn3=m3*n3
+                  irc3=irc4
+                  nel3=nel4
+c     .           call extraction
+                  goto 76
+               else
+                  call error(15)
+                  return
+               endif
+            endif
+         endif
+      elseif(m3.lt.0.or.m4.lt.0) then
+c     .  arg3=eye , arg4=eye
+         call error(14)
+         return
+      elseif(m1.eq.-1.and.m2.eq.-1) then
+c     .  arg4(:,:)=arg3
+         if(mn3.ne.mn4) then
             call error(15)
             return
          endif
-         li2=iadr(l2)
-         do 93 i = 0, n-1
-            istk(li2+i)=stk(l2+i)
-            if(istk(li2+i).lt.0) then
-               call error(21)
-               return
-            endif
-            nr=max(nr,istk(li2+i))
- 93      continue
-      else
-         nr = max(nr,n3)
+         if(m3.ne.m4) then
+            top=top0
+            fin=-fin
+            return
+         endif
+c     .  reshape arg3 according to arg4
+         istk(il1)=6
+         istk(il1+1)=m4
+         istk(il1+2)=n4
+         call icopy(2+m3+nel3,istk(il3+3),1,istk(il1+3),1)
+         l1=sadr(il1+5+m3+nel3)
+         lstk(top+1)=l1
+         return
       endif
-      nr = max(nr,n3)
-c     
-c     scalar matrix case
+
+      call indxg(il1,m4,ili,mi,mxi,lw,1)
+      if(err.gt.0) return
+      call indxg(il2,n4,ilj,mj,mxj,lw,1)
+      if(err.gt.0) return
+      if(mi.eq.0.or.mj.eq.0) then
+         call error(15)
+         return
+      endif
+      if(mi.ne.m3.or.mj.ne.n3) then
+c     .  sizes of arg1 or arg2 dont agree with arg3 sizes
+         call error(15)
+         return
+      endif
+      mr=max(m4,mxi)
+      nr=max(n4,mxj)
+c
       lptr=iadr(lw)
       irc=lptr+m4+1
       nelr=iadr(lstk(bot))-irc-mr
@@ -725,16 +960,13 @@ c     scalar matrix case
       nel=nelr
       if(istk(il4).eq.6) then
          if(istk(il3).eq.6) then
-            call lspisp(m4,n4,nel4,istk(irc4),
-     $              istk(li1),m,istk(li2),n,
-     $              m3,n3,nel3,istk(irc3),
-     $              mr,nr,nelr,istk(irc),istk(lptr),ierr)
+            call lspisp(m4,n4,nel4,istk(irc4),istk(ili),mi,istk(ilj),mj,
+     $           m3,n3,nel3,istk(irc3),mr,nr,nelr,istk(irc),istk(lptr)
+     $           ,ierr)
          elseif(istk(il3).eq.4) then
             l3=il3+3
-            call lspis(m4,n4,nel4,istk(irc4),
-     $              istk(li1),m,istk(li2),n,
-     $              m3,n3,istk(l3),
-     $              mr,nr,nelr,istk(irc),ierr) 
+            call lspis(m4,n4,nel4,istk(irc4),istk(ili),mi,istk(ilj),mj
+     $           ,m3,n3,istk(l3),mr,nr,nelr,istk(irc),ierr) 
          endif
       endif
       if(ierr.ne.0) then
@@ -784,8 +1016,8 @@ c     comparaisons
             endif
          endif
       endif
-      if(istk(il1).ne.4.and.istk(il1).ne.6.or.
-     $     istk(il2).ne.4.and.istk(il2).ne.6) then
+      if(istk(il1).ne.4.and.istk(il1).ne.6.or.istk(il2).ne.4.and
+     $     .istk(il2).ne.6) then
          top=top0
          fin=-fin
          return
@@ -808,8 +1040,8 @@ c
       nel=nelmx
       if(istk(il1).eq.4) then
          l1=il1+3
-         call lsosp(op,m1,n1,istk(l1),m2,n2,nel2,
-     $        istk(irc2),nel,istk(irc),ierr)
+         call lsosp(op,m1,n1,istk(l1),m2,n2,nel2,istk(irc2),nel,istk(irc
+     $        ),ierr)
       elseif(istk(il2).eq.4) then
          l2=il2+3
          call lspos(op,m1,n1,nel1,istk(irc1),

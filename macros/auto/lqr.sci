@@ -5,7 +5,8 @@ function [K,X]=lqr(P12)
 //      |I   0   0|   | A    0   B  |      |I   0   0|   | A    0    B  |
 //     z|0   A'  0| - |-C'C  I   -S'|    s |0   I   0| - |-C'C -A'  -S' |
 //      |0   B'  0|   | S    0   D'D|      |0   0   0|   | S   -B'   D'D|
-if P12(1)<>'lss' then error('lqr: state-space only!');end
+flag=P12(1)
+if flag(1)<>'lss' then error('lqr: state-space only!');end
 [A,B2,C1,D12]=P12(2:5);
 [n,nu]=size(B2);
 [ny,n]=size(C1);

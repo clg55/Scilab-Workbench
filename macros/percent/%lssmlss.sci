@@ -9,7 +9,7 @@ function [SS]=%lssmlss(S1,S2)
 if maxi(degree(D1))==0 & maxi(degree(D2))==0 then
   D1=coeff(D1);D2=coeff(D2);
   B1C2=B1*C2
-  SS=tlist('lss',[A1,B1C2;0*B1C2' ,A2],[B1*D2;B2],...
+  SS=tlist(['lss','A','B','C','D','X0','dt'],[A1,B1C2;0*B1C2' ,A2],[B1*D2;B2],...
                             [C1,D1*C2],D1*D2,[x1;x2],dom1),
   return
 end
@@ -21,7 +21,7 @@ Ls=[C1 D1*C2]'
 Ms=[B1*D2;B2]
 
 if Ms==[]|Ls==[] then
-   SS=tlist('lss',[],[],[],D1*D2,[x1;x2],dom1)
+   SS=tlist(['lss','A','B','C','D','X0','dt'],[],[],[],D1*D2,[x1;x2],dom1)
    return;
 end
 //
@@ -46,4 +46,4 @@ D=pps'*B+Ls'*Ps+D1*D2;
 Dg=maxi(degree(D));
 if Dg==0 then D=coeff(D);end
 
-SS=tlist('lss',J',B,C,D,[x1;x2],dom1);
+SS=tlist(['lss','A','B','C','D','X0','dt'],J',B,C,D,[x1;x2],dom1);

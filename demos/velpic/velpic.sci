@@ -1,4 +1,4 @@
-//[vel,regionlist,linelist,seedlist,velolist]=velpic(nz,nx,sext)
+function [vel,regionlist,linelist,seedlist,velolist]=velpic(nz,nx,sext)
 //[vel,regionlist,linelist,seedlist]=velpic(nz,nx)
 //Macro which interactively defines regions of a matrix.
 //Closed surfaces inside the frame are not allowed.
@@ -66,7 +66,7 @@
    [ssl,isl]=sort(seedlist(3,:));//sort seeds and velocities to regions
    [sr,sc]=size(seedlist);
    velolist=seedlist(4,isl(sc:-1:1));
-   rlist=seedlist(3,isl(sc:-1:1));
+   rolist=seedlist(3,isl(sc:-1:1));
    seedlist=seedlist(1:3,isl(sc:-1:1));
 
 //Load velocity matrix with velocities by region.
@@ -79,7 +79,7 @@
    for k=1:nor,
       i1=i2+1;i2=i1-1;
       for j=1:nov,
-         if rlist(j)=k then, i2=i2+1; end,
+         if rolist(j)=k then, i2=i2+1; end,
       end,
       rk=regionlist(k);
       rv=(rk(1,:)-ones(rk(1,:)))*nz+rk(2,:);
@@ -96,9 +96,7 @@
 
    lines(nrnc(2));
 
-//end
-
-//[]=helpme(msn)
+function []=helpme(msn)
 //[]=helpme(msn)
 //macro containing help messages
 // msn :message number
@@ -179,9 +177,8 @@ hm3=[' ';
 
 hmt=list(hm1,hm2,hm3);
 x_message(hmt(msn));
-//end
 
-//[seedlist]=sow(nz,nx,slide,bnames,buttons,regionlist,linelist);
+function [seedlist]=sow(nz,nx,slide,bnames,buttons,regionlist,linelist);
 //[seedlist]=sow(nz,nx,slide,bnames,buttons,regionlist,linelist);
 //Interactively identify the various regions by clicking
 //the mouse in each region
@@ -281,7 +278,7 @@ x_message(hmt(msn));
                   text=string(seedlist(4,sc));
                   dess(36)=15;
                   xset("alufunction",6);
-                    plot2d(s1',s2',[3,0],"000");
+                    plot2d(s1',s2',[-3,0],"000");
                     xstring(s1+toff,s2+toff,text,0,0);
                   xset("alufunction",3);
                   seedlist=seedlist(:,1:sc-1);
@@ -307,16 +304,16 @@ x_message(hmt(msn));
 //calculate velocity rounded to nearest rnd
 //plot bar indicator and give velocity value
             xset("alufunction",6);           
-            plot2d(vbar(1,:)',vbar(2,:)',[-1],"000");
+            plot2d(vbar(1,:)',vbar(2,:)',[1],"000");
             xset("alufunction",3);           
             if nx<=nz then,
                vel=rnd*round((sl5+(sl6-sl5)*(v2-sl3)/(sl4-sl3))/rnd);
                vbar=[b1 b2 b2 b1 b1;v2-b3 v2-b3 v2+b4 v2+b4 v2-b3];
-               plot2d(vbar(1,:)',vbar(2,:)',[-1],"000"),
+               plot2d(vbar(1,:)',vbar(2,:)',[1],"000"),
             else,
                vel=rnd*round((sl5+(sl6-sl5)*(v1-sl1)/(sl2-sl1))/rnd);
                vbar=[v1-b1 v1+b2 v1+b2 v1-b1 v1-b1;b3 b3 b4 b4 b3];
-               plot2d(vbar(1,:)',vbar(2,:)',[-1],"000"),
+               plot2d(vbar(1,:)',vbar(2,:)',[1],"000"),
             end,
             write(%io(2),vel,'(f10)'),
          end,end,
@@ -345,7 +342,7 @@ x_message(hmt(msn));
 
 //plot seed and add to seedlist
                mrgn=.05*maxi([nx,nz])/3;
-               plot2d(v1',v2',[3,0],"000");
+               plot2d(v1',v2',[-3,0],"000");
                xstring(v1+mrgn,v2+mrgn,string(vel),0,0);
                seedlist=[seedlist,[v;sregion;vel]];
                veloflag='off';
@@ -356,9 +353,8 @@ x_message(hmt(msn));
       end,
    end,
 
-//end
 
-//[linelist]=makehorizons(nz,nx,bnames,buttons)
+function [linelist]=makehorizons(nz,nx,bnames,buttons)
 //[linelist]=makehorizons(nz,nx,bnames,buttons)
 //macro which creates a frame with control buttons and
 //interactively draws lines (i.e., horizons)
@@ -401,9 +397,8 @@ x_message(hmt(msn));
       end,
    end,
 
-//end
 
-//[buttons,slides]=makeframe(nz,nx,btextlist);
+function [buttons,slides]=makeframe(nz,nx,btextlist);
 //[buttons,slides]=makeframe(nz,nx,btextlist);
 //macro which makes a frame and buttons
 // nz        :Number of rows in frame
@@ -422,21 +417,21 @@ x_message(hmt(msn));
 //and that the remaining elements are for centering properly
 //the box (i.e., mrgn and the 1).
 
-   max=maxi([nz,nx]);
-   mrgn=.05*(max-1);
-   xmin=1-mrgn-max+nx;xmax=max+4*mrgn;
-   ymin=1-mrgn-max+nz;ymax=max+4*mrgn;
+   maxx=maxi([nz,nx]);
+   mrgn=.05*(maxx-1);
+   xmin=1-mrgn-maxx+nx;xmax=maxx+4*mrgn;
+   ymin=1-mrgn-maxx+nz;ymax=maxx+4*mrgn;
    if nx>nz+4*mrgn then,
-      xmin=1-mrgn-max+nx;xmax=max+mrgn;
-      ymin=1-mrgn-max+nz;ymax=max+mrgn;
+      xmin=1-mrgn-maxx+nx;xmax=maxx+mrgn;
+      ymin=1-mrgn-maxx+nz;ymax=maxx+mrgn;
    end,
    if nx<nz-4*mrgn
-      xmin=1-mrgn-max+nx;xmax=max+4*mrgn;
-      ymin=1-mrgn-max+nz;ymax=max+mrgn;
+      xmin=1-mrgn-maxx+nx;xmax=maxx+4*mrgn;
+      ymin=1-mrgn-maxx+nz;ymax=maxx+mrgn;
    end,
    rect=[xmin,ymin,xmax,ymax];
-   plot2d(0,0,[-1],"012",' ',rect);
-   plot2d([1;1;nx;nx;1],[nz;1;1;nz;nz],[-1],"000"),
+   plot2d(0,0,[1],"012",' ',rect);
+   plot2d([1;1;nx;nx;1],[nz;1;1;nz;nz],[1],"000"),
 //make buttons and slides
    dess4=10
    dess6=10
@@ -499,9 +494,8 @@ x_message(hmt(msn));
    makeslide(xbmin,xbmax,ybmin,ybmax,dx,dy,text,smin,smax);
    slides=[xbmin,xbmax,ybmin,ybmax,smin,smax];
 
-//end
 
-//[]=makebutton(xbmin,xbmax,ybmin,ybmax,dx,dy,text)
+function []=makebutton(xbmin,xbmax,ybmin,ybmax,dx,dy,text)
 //[]=makebutton(xbmin,xbmax,ybmin,ybmax,dx,dy,text)
 //make to make a button
 // xbmin :min x coordinate of button
@@ -517,9 +511,9 @@ x_message(hmt(msn));
 //make button box
    xstringb(xbmin,ybmin,text,xbmax-xbmin,ybmax-ybmin);
    xrect(xbmin,ybmax,xbmax-xbmin,ybmax-ybmin);
-//end
 
-//[]=makeslide(xbmin,xbmax,ybmin,ybmax,dx,dy,text,smin,smax)
+
+function []=makeslide(xbmin,xbmax,ybmin,ybmax,dx,dy,text,smin,smax)
 //[]=makeslide(xbmin,xbmax,ybmin,ybmax,dx,dy,text)
 //make to make a button
 // xbmin :min x coordinate of button
@@ -562,7 +556,7 @@ x_message(hmt(msn));
    texty=(ybmin+ybmax-dy*ch/wcf)/2;//text y position
    dess(51)=2;//turn labelling on
    dess(50)=textx;dess(52)=texty;//positions of text
-   plot2d(xvec',yvec',[-1],"000");
+   plot2d(xvec',yvec',[1],"000");
    xstring(textx,texty,text,0,0),
 
 //label min value of slide
@@ -605,9 +599,8 @@ x_message(hmt(msn));
    dess(50)=textx;dess(52)=texty;//positions of text
    xstring(textx,texty,text,0,0),
 
-//end
 
-//[line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
+function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
 //[line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
 //interactively draw a line
 // nz       :number of columns of matrix
@@ -666,7 +659,7 @@ x_message(hmt(msn));
                   lk=linelist(ls);
                   [lkr,lkc]=size(lk);
                   xset("alufunction",6);
-                  plot2d(lk(1,yf+1:lkc-yl)',lk(2,yf+1:lkc-yl)',[-1],"000"),
+                  plot2d(lk(1,yf+1:lkc-yl)',lk(2,yf+1:lkc-yl)',[1],"000"),
                   xset("alufunction",3);
                   ltemp=list();
                   for k=1:ls-1,
@@ -691,7 +684,7 @@ x_message(hmt(msn));
 
    yext=[];
    while testflag='off',   
-      plot2d(x1',x2',[3,1],"000");//make a start circle
+      plot2d(x1',x2',[-3,-1],"000");//make a start circle
       [i_i,y1,y2]=xclick();
 
 //check for a button
@@ -757,7 +750,7 @@ x_message(hmt(msn));
             btemp=xsec(1:2,:)-[x1;x2]*ones(1,xc);
             [val,in]=maxi([1 1]*(btemp.*btemp));//longest intersection
              xset("alufunction",6);
-             plot2d(x1',x2',[3,1],"000");//undo start circle
+             plot2d(x1',x2',[-3,-1],"000");//undo start circle
              xset("alufunction",3);
             x=xsec(1:2,in);//new x
             x1=x(1);x2=x(2);
@@ -776,22 +769,22 @@ x_message(hmt(msn));
       end,end,
       if inflag='off' then,//case where y is not in the frame
              xset("alufunction",6);
-             plot2d(x1',x2',[3,1],"000");//undo start circle
+             plot2d(x1',x2',[-3,-1],"000");//undo start circle
              xset("alufunction",3);
          x1=y1;x2=y2;
-             plot2d(x1',x2',[3,1],"000");//undo start circle
+             plot2d(x1',x2',[-3,-1],"000");//undo start circle
       end,
       if testflag='off' then,//case where x-y does not cross a line
              xset("alufunction",6);
-             plot2d(x1',x2',[3,1],"000");//undo start circle
+             plot2d(x1',x2',[-3,-1],"000");//undo start circle
              xset("alufunction",3);
          x1=y1;x2=y2;
-             plot2d(x1',x2',[3,1],"000");//undo start circle
+             plot2d(x1',x2',[-3,-1],"000");//undo start circle
       end,
    end,
 
    if flag='on' then,
-      plot2d([x1;y1],[x2;y2],[-1,1],"000"),
+      plot2d([x1;y1],[x2;y2],[1,-1],"000"),
       line=[yext,[x1;x2],[y1;y2]];
       x1=y1;x2=y2;
    end,
@@ -819,7 +812,7 @@ x_message(hmt(msn));
             case 'stop' then,//totally undo current line
                [lr,lc]=size(line);
                xset("alufunction",6);
-               plot2d(line(1,yecf+1:lc)',line(2,yecf+1:lc)',[-1,1],"000"),
+               plot2d(line(1,yecf+1:lc)',line(2,yecf+1:lc)',[1,-1],"000"),
                xset("alufunction",3);
                flag='off';
                yecl=0;
@@ -836,7 +829,7 @@ x_message(hmt(msn));
             case 'undo' then,//undo line segment
                [lr,lc]=size(line);
                xset("alufunction",6);
-               plot2d(line(1,lc-1:lc)',line(2,lc-1:lc)',[-1,1],"000"),
+               plot2d(line(1,lc-1:lc)',line(2,lc-1:lc)',[1,-1],"000"),
                xset("alufunction",3);
                flag='off';
                if lc>yecf+2 then,
@@ -914,7 +907,7 @@ x_message(hmt(msn));
 
 //plot line segment
 
-         plot2d([x1;y1],[x2;y2],[-1,1],"000"),
+         plot2d([x1;y1],[x2;y2],[1,-1],"000"),
          line=[line,[y1;y2],yext];
          x1=y1;x2=y2;
       end,
@@ -925,9 +918,8 @@ x_message(hmt(msn));
    end,
    write(%io(2),'Done With Current Line'),
    
-//end
 
-//[flag,bav]=testpt(p1,p2,line)
+function [flag,bav]=testpt(p1,p2,line)
 //[flag,bav]=testpt(p1,p2,line)
 //macro which tests whether the line segment defined by the
 //two points p1 and p2 intersects any of the line segments
@@ -964,9 +956,9 @@ x_message(hmt(msn));
 
    bav=bav(:,1:noi);
    if flag=1 then, flag='on'; else, flag='off'; end,
-//end
 
-//[]=redraw(linelist,seedlist,velolist)
+
+function []=redraw(linelist,seedlist,velolist)
 //[]=redraw(linelist[,seedlist[,velolist]])
 //Macro which redraws the lines drawn by velpic
 //and gives the locations and velocities chosen
@@ -987,17 +979,17 @@ x_message(hmt(msn));
    nc=maxi(l1(2,:));
 
 //draw frame
-    plot2d(0,0,[-1],"012",' ',[1,1,nr,nc]);
+    plot2d(0,0,[1],"012",' ',[1,1,nr,nc]);
 
 //draw the lines (the first line from velpic is the 
 //exterior line)
 
    for k=1:nol,
       lk=linelist(k);
-      plot2d(lk(1,:)',lk(2,:)',[-1],"000"),
+      plot2d(lk(1,:)',lk(2,:)',[1],"000"),
    end,
    if rhs=2 then,
-      plot2d(seedlist(1,:)',seedlist(2,:)',[3,0],"000"),
+      plot2d(seedlist(1,:)',seedlist(2,:)',[-3,0],"000"),
    end,
    if rhs=3 then,
       [vr,vc]=size(velolist);
@@ -1006,13 +998,13 @@ x_message(hmt(msn));
          text=string(velolist(k));
          s1=seedlist(1,k);s2=seedlist(2,k);
          dess(50)=s1+toff;dess(52)=s2+toff;//positions of text
-         plot2d(s1',s2',[3,0],"000");
+         plot2d(s1',s2',[-3,0],"000");
          xstring(s1+toff,s2+toff,text,0,0);
       end,
    end,
-//end
 
-//[ind,indexlist]=id_rgn(indexlist,linelist,seed);
+
+function [ind,indexlist]=id_rgn(indexlist,linelist,seed);
 //[ind,indexlist]=id_region(indexlist,linelist,seed);
 //Macro which determines all the indices of the matrix of dimension
 //(nz X nx) which are in the region defined by the seed and the 
@@ -1062,10 +1054,9 @@ x_message(hmt(msn));
    ind=ind(:,1:noi);
    indexlist=nlist(:,1:non);
 
-//end
 
 
-//[]=makegrill(nx,nz,gopt)
+function []=makegrill(nx,nz,gopt)
 //Plot a grill in the region [1 nx] x [1 nz]
 // nx   :Number of x positions
 // nz   :Number of z positions
@@ -1077,12 +1068,11 @@ x_message(hmt(msn));
 // Change JPC 2 mars 1992
 //   dess;
    if gopt <>'on' then,xset("alufunction",6);end
-   for k=2:nx-1, plot2d([k;k],[1;nz],[-2],"000"), end,
-   for k=2:nz-1, plot2d([1;nx],[k;k],[-2],"000"), end
+   for k=2:nx-1, plot2d([k;k],[1;nz],[2],"000"), end,
+   for k=2:nz-1, plot2d([1;nx],[k;k],[2],"000"), end
    xset("alufunction",3);
-//end
 
-//[vi]=velcalc(indexlist,seedlist,velolist)
+function [vi]=velcalc(indexlist,seedlist,velolist)
 //Create velocity field for a region defined by indexlist
 //where velocity varies linearly between control points
 //defined by the seedlist sl and its associated velocities
@@ -1112,4 +1102,4 @@ x_message(hmt(msn));
       vi=vi+mini(maxi(gr,0*gr),ones(gr))*dv;
    end,
 
-//end
+

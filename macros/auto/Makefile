@@ -25,21 +25,4 @@ MACROS = calfrq.sci svplot.sci abcd.sci sm2ss.sci sm2des.sci \
 	obscont.sci tf2ss.sci trzeros.sci colregul.sci rowregul.sci \
 	time_id.sci zeropen.sci specfact.sci abinv.sci cainv.sci
 
-OBJ = $(MACROS:.sci=.bin)
-MACROSN = $(MACROS:.sci=)
-
-all:: $(OBJ) lib
-
-lib: $(OBJ) names
-	@echo generating lib and names
-	@$(SCIDIR)/bin/scilab -lib $(NAME) SCI/macros/$(NAM)
-
-names: $(OBJ)
-	@$(RM) names;touch names;
-	@for i in $(MACROSN); do  (echo $$i >> names );done
-
-distclean::
-	$(RM) lib names *.bin
-
-.sci.bin:
-	@$(SCIDIR)/bin/scilab -comp  $*.sci
+include ../Make.lib

@@ -1,20 +1,19 @@
-      subroutine absblk(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),z(*),u(*),rpar(*),out(*)
-      integer ipar(*),flag
-c     ABSBLK, Alvaro:17-5-95
-c     Continous block, MIMO
-c     Absolute Value
-c     if in(i).lt.0 then out(i)=-in(i)c     else out(i)=in(i)
+      subroutine absblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
+c     returns Absolute value of the input
+c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
 
-      if(flag.eq.1) then
-c     flag=1
-         do 15 i=1,nu
-            out(i)=abs(u(i))
- 15      continue
-      else
-c     flag=2 or 3 --> ERROR
-         write(*,'(''ERROR; block abs flag:'',i2,'' t '',e10.3)') flag,t
-         flag=-1
+      common /dbcos/ idb
+c
+      if(idb.eq.1) then
+         write(6,'(''absblk t='',e10.3,'' flag='',i1)') t,flag
       endif
+c
+      do 15 i=1,nu
+         y(i)=abs(u(i))
+ 15   continue
       end

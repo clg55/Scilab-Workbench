@@ -1,31 +1,43 @@
-function [f]=%pmr(p,f)
+function f=%pmr(p,f)
 // r=%pmr(p,f)  <=> r= p*f with p=polynomial matrix
 // and f= rational
 //!
 [n2,d2]=f(2:3);
-[l1,m1]=size(p);[l2,m2]=size(n2)
+[l1,m1]=size(p);[l2,m2]=size(n2);
 //
-if mini([l1*m1,l2*m2])=1 then
+indef=%f
+if l1==-1 then 
+  p=p+0;l1=1;m1=1;
+  if l2*m2==1 then indef=%t,end
+end
+if l2==-1 then 
+  n2=n2+0;d2=d2+0;l2=1;m2=1;
+  if l1*m1==1 then indef=%t,end
+end  
+
+if mini([l1*m1,l2*m2])==1 then
   num=p*n2,
   den=ones(l1,m1)*d2,
-  [num,den]=simp(num,den),
-  f(2)=num,
-  f(3)=den,
-  return,
-end;
-if m1<>l2 then error(10),end
-//
-for j=1:m2,
-   y=lcm(d2(:,j))
-   for i=1:l1,
-    x=0;
+else
+
+  if m1<>l2 then error(10),end
+  //
+  for j=1:m2,
+    y=lcm(d2(:,j))
+    for i=1:l1,
+      x=0;
       for k=1:m1,
-        x=x+p(i,k)*pdiv(y,d2(k,j))*n2(k,j),
-      end,
-    num(i,j)=x,den(i,j)=y,
-  end,
-end,
+	x=x+p(i,k)*pdiv(y,d2(k,j))*n2(k,j),
+      end
+      num(i,j)=x,den(i,j)=y,
+    end
+  end
+end
 [num,den]=simp(num,den)
+if indef then
+  num=num*eye
+  den=den*eye
+end
 f(2)=num,f(3)=den;
 
 

@@ -108,6 +108,3 @@ bru=rtitr(num,den,br,ep,0*ones(ep));
 //
 // z(k) = y(k) + bru(k)
 z=y+bru
-//end
-
-

@@ -2,7 +2,9 @@
       include '../stack.h'
       character*1 type
       common/ibfu/ibuf(200)
-      common/adre/lbot,ie,is,ipal,nbarg,ll(30)
+c
+      iadr(l)=l+l-1
+c
 c
       if(no.gt.30) then
       call error(70)
@@ -12,6 +14,7 @@ c
       if(type.eq.'r') itype=27
       if(type.eq.'i') itype=18
       if(type.eq.'d') itype=13
+      if(type.eq.'c') itype=12
       is1=3*ie+1
       is=is+1
       is2=is1+3*is
@@ -25,8 +28,8 @@ c
       ibuf(k+1)=ivol
       ibuf(k+2)=itype
 c
-      if(ll(no).eq.0) then
-           ll(no)=ipal
+      if(ladr(no).eq.0.or.ladr(no).eq.(lbot-1)) then
+           ladr(no)=ipal
            ipal=ipal+ivol
            err=ipal-lbot
            if(err.gt.0) call error(17)
@@ -34,10 +37,15 @@ c
       endif
 c
       if(type.eq.'r') then
-      call simple(ivol,stk(ll(no)),stk(ll(no)))
+      call simple(ivol,stk(ladr(no)),stk(ladr(no)))
       endif
       if(type.eq.'i') then
-      call entier(ivol,stk(ll(no)),stk(ll(no)))
+      call entier(ivol,stk(ladr(no)),stk(ladr(no)))
+      endif
+      if(type.eq.'c') then
+      lll=ladr(no)
+      call entier(ivol,stk(lll),stk(lll))
+      call cvstr(ivol,istk(iadr(lll)),istk(iadr(lll)),1)
       endif
       return
       end

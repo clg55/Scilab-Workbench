@@ -1,4 +1,4 @@
-//[]=velo4()
+function []=velo4()
 // version with full wheels with  xgeom & xfpoly
 // ( geom performs the geometric calculations)
 t= t*180/%pi;
@@ -20,10 +20,9 @@ deff('[]=traj(i)',['j=i-1;';
    'param3d(xprear(1,j:i),xprear(2,j:i),xprear(3,j:i),t,p,'" "',[0,0])';
    'param3d(xpfront(1,j:i),xpfront(2,j:i),xpfront(3,j:i),t,p,'" "',[0,0])']);
 
-comp(velod);comp(traj);
 // Attention demarrer a i=2
 for i=2:1:n2,traj();velod(i);velod(i);end
 velod(n2);
 xset("alufunction",3);
-//end
+
 

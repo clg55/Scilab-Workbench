@@ -1,8 +1,12 @@
-function drawobjs(x)
-nx=size(x)
+function drawobjs(scs_m)
+nx=size(scs_m)
 for i=2:nx
-  drawobj(x(i))
+  drawobj(scs_m(i))
 end
-drawtitle(x(1))
+drawtitle(scs_m(1))
+
+
+
+
 
 

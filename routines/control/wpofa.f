@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WPOFA,SSI=0
       subroutine wpofa(ar,ai,lda,n,info)
 c!
       double precision ar(lda,*),ai(lda,*)

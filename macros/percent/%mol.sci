@@ -1,8 +1,7 @@
-//[r]=%mol(l1,l2)
-//%mol(l1,l2) correspond a l'operation logique l1==l2 avec l2 une liste
-//et l1 une macro
+function [r]=%mol(l1,l2)
+//r=%mol(l1,l2) <=> l1==l2  l2: list  l1: function
 //!
 r=%f
-//end
+
 
 

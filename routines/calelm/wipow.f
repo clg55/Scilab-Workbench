@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WIPOW,SSI=0
       subroutine wipow(n,vr,vi,iv,ipow,ierr)
 c!but
 c     eleve a une puissance entiere les elements d'un vecteur de flottants

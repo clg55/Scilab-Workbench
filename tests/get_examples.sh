@@ -33,21 +33,10 @@ fi
 echo '' >> prov
 }
 
-for j in 1 2 3 4 5 6 7 8
+for j in arma control elementary graphics linear nonlinear polynomials programming robust signal tdcs scicos metanet
 do
-	echo -n "Processing Man-Part1/man$j "
-	for f in $SCI/man/Man-Part1/man$j/*.$j
-	do
-		echo -n '.'
-		do_example $f
-	done
-	echo ""
-done
-
-for j in 1 2 3 4 5
-do
-	echo -n "Processing Man-Part2/man$j "
-	for f in $SCI/man/Man-Part2/man$j/*.$j
+	echo -n "Processing man/$j "
+	for f in $SCI/man/$j/*.man
 	do
 		echo -n '.'
 		do_example $f

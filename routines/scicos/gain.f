@@ -1,12 +1,18 @@
-      subroutine gain(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),z(*),u(*),rpar(*),out(*)
-      integer ipar(*),flag
+      subroutine gain(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
+c     input to output Gain
+c     rpar=gain matrix
+c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+
+c
       common /dbcos/ idb
 c
       if(idb.eq.1) then
          write(6,'(''Gain     t='',e10.3,'' flag='',i1)') t,flag
       endif
-      call dmmul(rpar,nout,u,nu,out,nout,nout,nu,1)
-      return
+      call dmmul(rpar,ny,u,nu,y,ny,ny,nu,1)
       end

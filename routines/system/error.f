@@ -9,7 +9,7 @@ c
 
 c
       character mg*9,bel*1,line*340
-      integer errtyp,n,ll,r,p
+      integer errtyp,n,ll,r,p,mode(2)
       logical first
       data mg /' !--error'/,bel/' '/
 c
@@ -25,8 +25,8 @@ c     set bel to ctrl-g if possible
         num=-1
         imode=-errct/10000
       endif
-      imess=imode/4
-      imode=imode-4*imess
+      imess=imode/8
+      imode=imode-8*imess
       errtyp=0
 c
       ll=lct(5)
@@ -78,11 +78,12 @@ c
      +     210,211,212,213,214,215,216,217,218,219,
      +     220,221,222,223,224,225,226,227,228,229,
      +     230,231,232,233,234,235,236,237,238,239,
-     +     240,241,242,243,244,245,246,247,248,249),n-199
+     +     240,241,242,243,244,245,246,247,248,249,
+     +     250),n-199
 
       goto 998
 c
-    1 call basout(io,lunit,'incorrect multiple assignation')
+    1 call basout(io,lunit,'incorrect multiple assignment')
       go to 999
     2 call basout(io,lunit,'invalid factor')
       errtyp=1
@@ -546,7 +547,7 @@ c
       goto 999
  108  continue
       call basout(io,lunit,'too complex for scilab, may be a too long'
-     $     //'instruction')
+     $     //'control instruction')
       goto 999
  109  continue
       call basout(io,lunit,'too large, can''t be displayed')
@@ -575,13 +576,23 @@ c
       call basout(io,lunit,
      $     ' a primitive function has been called with wrong number')
       call basout(io,lunit,
-     $     ' of lhs arguments. No lhs test made for thisfunction; ')
+     $     ' of lhs arguments. No lhs test made for this function; ')
       call basout(io,lunit,
      $     ' please report this bug')
       goto 999
  116  continue
+      if(err.ne.1) then
+         write(buf(1:3),'(i3)') err
+         call basout(io,lunit,buf(1:3)//
+     +        'th argument has incorrect value')
+      else
+         call basout(io,lunit,
+     +        'first argument has incorrect value')
+      endif
       goto 999
  117  continue
+      write(buf(1:6),'(i6)') err
+      call basout(io,lunit,'List element' //buf(1:6)//' is Undefined')
       goto 999
  118  continue
       goto 999
@@ -824,10 +835,14 @@ c
       endif
       goto 999
  220  continue
+      call basout(io,lunit,'null variable cannot be used here')
       goto 999
  221  continue
+      call basout(io,lunit,'A sparse matrix entry is defined with' //
+     &     ' two differents values')
       goto 999
  222  continue
+      call basout(io,lunit,'lusolve not yet implemented for full RHS')
       goto 999
  223  continue
       goto 999
@@ -878,6 +893,8 @@ C     errors from semidef
      &     'read access denied ')
       goto 999
  242  continue
+      call basout(io,lunit,'binary direct acces files '//
+     &     'must be opened by ''file''')
       goto 999
  243  continue
       goto 999
@@ -892,8 +909,20 @@ C     errors from semidef
  248  continue
       goto 999
  249  continue
+      if(err.ne.1) then
+         write(buf(1:3),'(i3)') err
+         call basout(io,lunit,buf(1:3)//
+     +        'th argument must not be an empty string')
+      else
+         call basout(io,lunit,
+     +        'argument must not be an empty string')
+      endif
       goto 999
 
+ 250  continue
+      call basout(io,lunit
+     $     ,'Recursive extraction is not valid in this context')
+      goto 999
 c
 c
 c---------------------------------------------------------------------
@@ -903,25 +932,54 @@ c     message d'erreur soft
 c
  999  continue
       if(comp(1).ne.0) then
-c     fermeture du fichier dans le cas getf(  'c')
          p=pt+1
  1001    p=p-1
          if(p.eq.0) goto 1005
-         if(rstk(p).ne.904) goto 1001
-         call clunit(-ids(2,p),buf,0)
+         if(rstk(p).eq.904) then
+c     .     fermeture du fichier dans le cas getf(  'c')
+            mode(1)=0
+            call clunit(-ids(2,p),buf,mode)
+c     added 16/04/97
+            pt=p+1
+c     added 16/04/97
+         elseif(rstk(p).eq.901) then
+            if(rstk(p+1).eq.502) then
+c     .       erreur dans comp
+               pt=p+1
+            endif
+         else
+            goto 1001
+         endif
+         errtyp=0
       endif
  1005 continue
-c     gestion de la recuperation des erreurs
-      if((num.eq.n.or.num.lt.0).and.imode.ne.0.and.imode.ne.3
-     &                         .and.errtyp.eq.0) then
-         top=toperr
-         if(err2.eq.0) then
-            err1=n
+      if((num.eq.n.or.num.lt.0).and.imode.ne.0.and.imode.ne.3) then
+c     error recovery mode
+         p=pt+1
+c        . looking if error has occured in execstr
+ 1006    p=p-1
+         if(p.eq.0) goto 1007
+         if(rstk(p).eq.903) then
+c     .     yes error has occured in execstr
+            errtyp=0
+            pt=p+1
          else
-            err1=err2
+            goto 1006
          endif
-         err=0
-         goto 1510
+ 1007    if(errtyp.eq.0) then
+c     .     recoverable error
+            top=toperr
+            if(err2.eq.0) then
+               err1=n
+            else
+               err1=err2
+            endif
+            err=0
+            goto 1510
+         else
+            comp(1)=0
+            err=n
+         endif
       else
          comp(1)=0
          err=n
@@ -1026,7 +1084,8 @@ c
          endif
          call cvstr(m,lin(l1),buf,1)
          call basout(io,lunit,buf(1:m))
-         call clunit(-rio,buf,0)
+         mode(1)=0
+         call clunit(-rio,buf,mode)
  1505    pt=pt-1
          if(rstk(pt).ne.902) goto 1505
          rio=pstk(pt)

@@ -13,12 +13,15 @@ case 2 then
   
 //-compat next case retained for list/tlist compatibility
 case 15 then
-  if r(1)<>'r' then error(92,1),end
+  r1=r(1);
+  if r1(1)<>'r' then error(92,1),end
   den=r(3)
 case 16 then
-  if r(1)<>'r' then error(92,1),end
+  r1=r(1);
+  if r1(1)<>'r' then error(92,1),end
   den=r(3)
 else
   error(92,1)
 end
+
 

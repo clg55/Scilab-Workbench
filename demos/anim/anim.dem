@@ -2,7 +2,7 @@ mode(0);
 xbasc();
 
 path='SCI/demos/anim/';
-
+deff('[]=demoexc(fil)','exec(path+fil)')
 demolist=['Plot3d1';
 	'param 3d';
 	'param 3d lorentz curve';
@@ -16,6 +16,6 @@ while go_on then
   if num=0 then go_on=%f;
   else
      xbasc();
-     exec(path+'anim'+string(num)+'.dem');
+     demoexc('anim'+string(num)+'.dem');
   end,
 end

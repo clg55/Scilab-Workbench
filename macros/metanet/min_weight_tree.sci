@@ -1,17 +1,16 @@
 function t=min_weight_tree(i,g)
 [lhs,rhs]=argn(0)
-l=34
 select rhs
 case 1
-  if type(i)==16&size(i)==l&i(1)=='graph' then
+  if type(i)==16 then
     g=i
     i=1
   else
-    error('min_weigth_tree: first argument must be a number or a graph-list')
+    error('First argument must be a number or a graph list')
   end
 case 2 then
   if prod(size(i))<>1 then
-    error('min_weigth_tree: first argument must be a number')
+    error('First argument must be a number')
   end
 else
   error(39)
@@ -20,11 +19,11 @@ end
 check_graph(g)
 // compute lp, la and ls
 n=g('node_number')
-ma=g('edge_number')
+ma=prod(size(g('tail')))
 if g('directed')==1 then
-  [lp,la,ls]=ta2lpd(g('tail'),g('head'),n+1,n)
+  [lp,la,ls]=m6ta2lpd(g('tail'),g('head'),n+1,n)
 else
-  [lp,la,ls]=ta2lpu(g('tail'),g('head'),n+1,n,2*ma)
+  [lp,la,ls]=m6ta2lpu(g('tail'),g('head'),n+1,n,2*ma)
 end
 // value of weight
 if g('edge_weight')==[] then
@@ -34,13 +33,13 @@ else
 end
 // compute minimal spanning tree
 if g('directed')==1 then
-  alf=dmtree(i,la,lp,ls,n,w)
-  t=prevn2st(alf,la,lp,ls)
+  alf=m6dmtree(i,la,lp,ls,n,w)
+  t=m6prevn2st(alf,la,lp,ls)
 else 
   if ma<0.5*n*n then 
-    alf=umtree1(la,lp,ls,n,w)
+    alf=m6umtree1(la,lp,ls,n,w)
   else 
-    alf=umtree(la,lp,ls,n,w)
+    alf=m6umtree(la,lp,ls,n,w)
   end
-  t=edge2st(alf) 
+  t=m6edge2st(alf) 
 end

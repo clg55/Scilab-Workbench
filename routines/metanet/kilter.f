@@ -93,17 +93,17 @@
       goto 410
  407  if(type(u).ne.9)goto 408
       if((piv(ex(u))-piv(or(u))).gt.gamma(u))goto 408
-      eps1=min(eps1,dble(float(b(u)-phimi(u))))
+      eps1=min(eps1,dble(b(u)-phimi(u)))
       goto 409
- 408  eps1=min(eps1,dble(float(c(u)-phimi(u))))
+ 408  eps1=min(eps1,dble(c(u)-phimi(u)))
  409  jj=or(u)
       goto 400
  410  continue
       if(type(u).ne.10)goto 412
       if((piv(ex(u))-piv(or(u))).lt.gamma(u))goto 412
-      eps2=min(eps2,dble(float(phimi(u)-c(u))))
+      eps2=min(eps2,dble(phimi(u)-c(u)))
       goto 415
- 412  eps2=min(eps2,dble(float(phimi(u)-b(u))))
+ 412  eps2=min(eps2,dble(phimi(u)-b(u)))
  415  jj=ex(u)
       goto 400
  420  continue

@@ -1,7 +1,25 @@
-function [f]=%par(m,f)
-// %par(m,f)  <=> f=m+p 
+function f=%par(m,f)
+//f=  m+f
 //!
-if prod(size(m))==1 then f=tlist(f(1),f(2)+m*f(3),f(3),f(4));return;end
-f=tlist(f(1),f(2)+m.*f(3),f(3),f(4))
+[num,den]=f(2:3)
+[nf,mf]=size(f)
+[nm,mm]=size(m)
+
+if nf>=0&nm>=0 then
+  if size(num,'*')==1&size(m,'*')>1 then
+    den=den*ones(m)
+  end
+  [num,den]=simp(num+m.*den,den)
+else
+  //at least one matrix is eye*x
+  if nf<0&nm<0 then
+    [num,den]=simp(num+m.*den,den)
+  elseif nf<0 then
+    [num,den]=simp(num+m.*den,den*ones(m))
+  elseif nm<0 then
+    [num,den]=simp(num+m*eye(den).*den,den)
+  end
+end
+f(2)=num;f(3)=den
 
 

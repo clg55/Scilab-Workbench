@@ -2,7 +2,8 @@ function st=statgain(sl)
 
 //-compat type(sl)<>15 retained for list/tlist compatibility
 if type(sl)<>15&type(sl)<>16 then error(97,1),end
-select sl(1)
+flag=sl(1);
+select flag(1)
  case 'lss'
    dom=sl(7);
    [m,p]=size(sl(2));

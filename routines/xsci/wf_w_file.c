@@ -26,10 +26,16 @@ char     cur_filename[FSIZE];
 
 #include <malloc.h>
 
-extern void Rescan();
+#include "../machine.h"
+#include "All-extern.h"
+#include "../menusX/men_scilab.h"
+
 extern Boolean	file_msg_is_popped;
 extern Widget	file_msg_popup;
 Boolean	warnexist=True;
+
+static void file_panel_dismiss  _PARAMS((void));  
+static void file_panel_cancel  _PARAMS((Widget w, XButtonEvent *ev));  
 
 /* don't allow newlines in text until we handle multiple line texts */
 String		text_translations =
@@ -142,16 +148,14 @@ do_exec(w, ev)
  * Used with the primitive C2F(xgetfile)
  ***********************************/
 
-int
-ok_file(dir,file)
+void ok_file(dir,file)
      char           *file;
      char *dir;
 {
   write_getfile(dir,file);
-  return(0);
 }
 
-ok_end()
+void ok_end()
 {
   /* Accelerators to their default values */
   XtOverrideTranslations(file_selfile,
@@ -169,7 +173,7 @@ ok_end()
 static String	file_name_translations1 =
 	"<Key>Return: ok()\n";
 
-ok_prep(filemask,dirname,flag,err)
+void ok_prep(filemask,dirname,flag,err)
      char *filemask;
      char *dirname;
      int flag,*err;
@@ -202,7 +206,7 @@ ok_prep(filemask,dirname,flag,err)
 	{
 	  strcpy(newdir,dirname);
 	}
-      if ( DoChangeDir(newdir) == 1) { *err=1; return;} 
+      DoChangeDir(newdir); 
     }
   XtSetSensitive(ok,True);
   XtSetSensitive(exec, False);
@@ -214,10 +218,9 @@ ok_prep(filemask,dirname,flag,err)
 
 /* make the full path from SCI/partialpath */
 
-parsescipath(path,longpath)
-  char *path,*longpath;
+void parsescipath(path,longpath)
+     char *path,*longpath;
 {
-  char *p;
   strcpy(longpath,getenv("SCI"));
   if (strlen(path)==3)		/* nothing after the SCI, we have the full path */
     return;
@@ -245,14 +248,16 @@ do_ok(w, ev)
 	if (emptyname_msg(fval, "OK"))
 	    return;
 
-	if (change_directory(dval) == 0) {
-	    if (ok_file(dval,fval) == 0) {
-		FirstArg(XtNlabel, fval);
-		SetValues(cfile_text);		/* set the current filename */
-		if (fval != cur_filename)
-			update_cur_filename(fval);	/* and update cur_filename */
-		file_panel_dismiss();
-	    }
+	if (change_directory(dval) == 0) 
+	  {
+	    ok_file(dval,fval);
+	    /** if (ok_file(dval,fval) == 0) { **/
+	      FirstArg(XtNlabel, fval);
+	      SetValues(cfile_text);		/* set the current filename */
+	      if (fval != cur_filename)
+		update_cur_filename(fval);	/* and update cur_filename */
+	      file_panel_dismiss();
+	    /* } */
 	}
     } else {
 	(void) ok_file("",cur_filename);
@@ -514,7 +519,7 @@ file_panel_cancel(w, ev)
 
 
 
-popup_file_panel(w)
+void popup_file_panel(w)
     Widget	    w;
 {
     extern Atom     wm_delete_window;
@@ -536,7 +541,7 @@ popup_file_panel(w)
     reset_wf_cursor();
 }
 
-create_file_panel(w)
+void create_file_panel(w)
 	Widget		   w;
 {
   int ch;

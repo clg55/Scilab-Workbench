@@ -1,11 +1,6 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/interf.a
 
@@ -13,31 +8,26 @@ OBJSC = ctest.o
 
 OBJSF = datatf.o lstelm.o lstops.o matdes.o matdsc.o matdsr.o matelm.o\
 	matimp.o matio.o matlu.o matnew.o matode.o matops.o matopt.o\
-	matqr.o matqz.o matric.o matsvd.o matsys.o metane.o \
-	polaut.o polelm.o polops.o sigelm.o strelm.o strops.o fmlelm.o \
-	logic.o logelm.o xawelm.o misops.o stack.o stack-more.o colnew-int.o where.o \
-	spelm.o lspops.o spops.o intcos.o matodc.o dasrti.o
+	matqr.o matqz.o matric.o matsvd.o matsys.o metane.o\
+	polaut.o polelm.o polops.o sigelm.o strelm.o strops.o fmlelm.o\
+	logic.o logelm.o xawelm.o misops.o stack.o \
+	where.o indxg.o intcos.o \
+	spelm.o lspops.o spops.o  coselm.o matodc.o dasrti.o\
+	intg.o feval.o bva.o comm.o
 
-OBJS = $(OBJSC) $(OBJSF)
+include ../../Makefile.incl
 
-all:: $(LIBRARY)
+CFLAGS = $(CC_OPTIONS)
 
-world: all
+include ../Make.lib
 
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)
 
 colnew-int.o: ../stack.h
+dasrti.o: ../stack.h
 datatf.o: ../stack.h
 fmlelm.o: ../stack.h
+indxg.o: ../stack.h
+intcos.o: ../stack.h
 logelm.o: ../stack.h
 logic.o: ../stack.h
 lspops.o: ../stack.h
@@ -51,6 +41,7 @@ matimp.o: ../stack.h
 matio.o: ../stack.h
 matlu.o: ../stack.h
 matnew.o: ../stack.h
+matodc.o: ../stack.h
 matode.o: ../stack.h
 matops.o: ../stack.h
 matopt.o: ../stack.h
@@ -67,11 +58,11 @@ polops.o: ../stack.h
 sigelm.o: ../stack.h
 spelm.o: ../stack.h
 spops.o: ../stack.h
-stack.o: ../stack.h
 stack-more.o: ../stack.h
+stack.o: ../stack.h
 strelm.o: ../stack.h
 strops.o: ../stack.h
 where.o: ../stack.h
 xawelm.o: ../stack.h
-
 ctest.o: ../machine.h
+coselm.o: ../stack.h

@@ -6,11 +6,11 @@ To print a copy of if
 
 	uncompress -c Toolbox.ps.Z | lpr 
 
-To View the document ( if you have ghostview 
+To View the document (needs postscript previewer) 
 
 	uncompress -c Toolbox.ps.Z | ghostview -
 
-You can latex the file Toolbox.tex to get a dvi document ( See Imakefile ) 
+You can latex the file Toolbox.tex to get a dvi document.
 
 
 

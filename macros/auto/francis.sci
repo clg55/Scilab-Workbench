@@ -21,7 +21,7 @@ if r>mm then error('Francis: ny > nu!');end
 Id=eye(d,d);
 Mat=[Id.*.A-F'.*.eye(n,n), Id.*.B2;
      Id.*.C2   ,   Id.*.D22];
-rhs=[0*ones(n*d,1);matrix(G,prod(size(G)),1)];
+rhs=[0*ones(n*d,1);matrix(G,size(G,'*'),1)];
 TL=Mat\rhs;
 T=Tl(1:n*d);T=matrix(T,n,d);
 L=TL(n*d+1:n*d+mm*d);L=matrix(L,mm,d);

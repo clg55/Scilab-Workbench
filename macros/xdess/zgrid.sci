@@ -1,4 +1,4 @@
-//<>=zgrid()
+function []=zgrid()
 //
 xselect();
 square(-1.1,-1.1,1.1,1.1);
@@ -15,8 +15,8 @@ raci=exp(raci);[mr,nr]=size(raci);
 for l=1:nr,
     xstring(real(raci(mr-10,l)),-imag(raci(mr-10,l)),' '+string(xsi(l)),0,0);
 end;
-  plot2d(real(raci),imag(raci),-1*ones(1,nr),"001");
-  plot2d(real(raci),-imag(raci),-1*ones(1,nr),"001");
+  plot2d(real(raci),imag(raci),1*ones(1,nr),"001");
+  plot2d(real(raci),-imag(raci),1*ones(1,nr),"001");
 //
 w0=(0:0.1:1)*%pi; //
 e_itheta=exp(%i*(%pi/2:0.05:%pi)')
@@ -25,8 +25,7 @@ for l=1:nz,
     xstring(real(zw(1,l)),imag(zw(1,l)),' '+string(w0(l)/(2*%pi)),0,0);
 end;
 //-- the curves 
-   plot2d(real(zw),imag(zw),-1*ones(1,nr),"001");
-   plot2d(real(zw),-imag(zw),-1*ones(1,nr),"001");
-//end
+   plot2d(real(zw),imag(zw),1*ones(1,nr),"001");
+   plot2d(real(zw),-imag(zw),1*ones(1,nr),"001");
 
 

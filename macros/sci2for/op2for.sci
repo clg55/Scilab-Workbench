@@ -1,4 +1,4 @@
-//[stk,txt,ilst,vnms,vtps,nwrk,lbl]=op2for(op,stk,vnms,vtps,nwrk,lbl)
+function [stk,txt,ilst,vnms,vtps,nwrk,lbl]=op2for(op,stk,vnms,vtps,nwrk,lbl)
 //
 //!
 txt=[]
@@ -8,6 +8,6 @@ stk(top)=stkr
 s1=list()
 for k=1:top,s1(k)=stk(k);end
 stk=s1
-//end
+
 
 

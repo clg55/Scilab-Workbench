@@ -40,6 +40,9 @@ button.c	Handles button events in the terminal emulator.
 #include "x_error.h"
 #include "x_menu.h"
 
+#include "../machine.h"
+#include "All-extern-x.h"
+
 #include <string.h> /* in case of dbmalloc */
 #include <malloc.h> 
 
@@ -59,19 +62,6 @@ button.c	Handles button events in the terminal emulator.
 #define	Coordinate(r,c)		((r) * (term->screen.max_col+1) + (c))
 
 extern char *xterm_name;
-
-static void PointToRowCol();
-static void SelectionReceived();
-static void TrackDown();
-static void ComputeSelect();
-static void EditorButton();
-static void ExtendExtend();
-static void ReHiliteText();
-static void SelectSet();
-static void StartSelect();
-static int Length();
-static char *SaveText();
-
 extern XtermWidget term;
 
 /* Selection/extension variables */
@@ -106,6 +96,34 @@ static SelectUnit selectUnit;
 
 /* Send emacs escape code when done selecting or extending? */
 static int replyToEmacs;
+
+/******/
+
+static void do_select_end  _PARAMS((Widget w, XEvent *, String *, Cardinal *, int ));  
+static void _GetSelection  _PARAMS((Widget w, Time time, String *, Cardinal ));  
+static void SelectionReceived  _PARAMS((Widget,XtPointer,Atom *,Atom *, XtPointer, long unsigned int *,int *));  
+static void SetSelectUnit  _PARAMS((long unsigned int buttonDownTime, SelectUnit));  
+static void do_select_start  _PARAMS((Widget w, XEvent *, int startrow, int startcol));  
+static void TrackDown  _PARAMS((register XButtonEvent *));  
+static void StartSelect  _PARAMS((int startrow, int startcol));  
+static void EndExtend  _PARAMS((Widget w, XEvent *, String *, Cardinal , int ));  
+static void SelectSet  _PARAMS((Widget w, XEvent *, String *, Cardinal ));  
+static void do_start_extend  _PARAMS((Widget w, XEvent *, String *, Cardinal *, int ));  
+static void ExtendExtend  _PARAMS((int row, int col));  
+static void PointToRowCol  _PARAMS((register int y, register int x, int *r, int *c));  
+static int LastTextCol  _PARAMS((register int row));  
+static void ComputeSelect  _PARAMS((int startRow, int startCol, int endRow, int endCol, int extend));  
+static void ReHiliteText  _PARAMS((register int frow, register int fcol, register int trow, register int tcol));  
+static void SaltTextAway  _PARAMS((int crow, int ccol, int row, int col, String *, Cardinal ));  
+static Boolean ConvertSelection  _PARAMS((Widget,Atom *,Atom *,Atom *,XtPointer *, long unsigned int *, int *));  
+static void LoseSelection  _PARAMS((Widget w, Atom *));  
+static void SelectionDone  _PARAMS((Widget w, Atom *, Atom *target));  
+static void _OwnSelection  _PARAMS((register XtermWidget termw, String *, Cardinal count));  
+static int Length  _PARAMS((register TScreen *screen, register int row, register int scol, register int));  
+static char *SaveText  _PARAMS((TScreen *screen, int row, int scol, int ecol, register char *lp, int *));  
+static void EditorButton  _PARAMS((register XButtonEvent *));  
+
+/******/
 
 
 Boolean SendMousePosition(w, event)
@@ -428,8 +446,8 @@ TrackDown(event)
 			else if (x >= screen->max_row) \
 			    x = screen->max_row;
 
-TrackMouse(func, startrow, startcol, firstrow, lastrow)
-int func, startrow, startcol, firstrow, lastrow;
+void TrackMouse(func, startrow, startcol, firstrow, lastrow)
+     int func, startrow, startcol, firstrow, lastrow;
 {
 	TScreen *screen = &term->screen;
 
@@ -664,9 +682,9 @@ Cardinal *num_params;		/* unused */
 
 
 
-ScrollSelection(screen, amount)
-register TScreen* screen;
-register int amount;
+void ScrollSelection(screen, amount)
+     register TScreen* screen;
+     register int amount;
 {
     register int minrow = -screen->savedlines;
 
@@ -717,7 +735,7 @@ register int amount;
 
 
 /*ARGSUSED*/
-ResizeSelection (screen, rows, cols)
+void ResizeSelection (screen, rows, cols)
     TScreen *screen;
     int rows, cols;
 {
@@ -965,7 +983,7 @@ ComputeSelect(startRow, startCol, endRow, endCol, extend)
 }
 
 
-TrackText(frow, fcol, trow, tcol)
+void TrackText(frow, fcol, trow, tcol)
     register int frow, fcol, trow, tcol;
     /* Guaranteed (frow, fcol) <= (trow, tcol) */
 {
@@ -1046,7 +1064,6 @@ ReHiliteText(frow, fcol, trow, tcol)
 	}
 }
 
-static _OwnSelection();
 
 static void
 SaltTextAway(crow, ccol, row, col, params, num_params)
@@ -1239,14 +1256,14 @@ static void LoseSelection(w, selection)
 
 /* ARGSUSED */
 static void SelectionDone(w, selection, target)
-Widget w;
-Atom *selection, *target;
+     Widget w;
+     Atom *selection, *target;
 {
-    /* empty proc so Intrinsics know we want to keep storage */
+  /* empty proc so Intrinsics know we want to keep storage */
 }
 
 
-static /* void */ _OwnSelection(termw, selections, count)
+static  void  _OwnSelection(termw, selections, count)
     register XtermWidget termw;
     String *selections;
     Cardinal count;
@@ -1300,7 +1317,7 @@ static /* void */ _OwnSelection(termw, selections, count)
 }
 
 /* void */
-DisownSelection(termw)
+void DisownSelection(termw)
     register XtermWidget termw;
 {
     Atom* atoms = termw->screen.selection_atoms;

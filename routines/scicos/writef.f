@@ -1,9 +1,7 @@
-      subroutine writef(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
+      subroutine writef(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
 c     write input to a binary or formatted file
-      include '../stack.h'
-      double precision t,x(*),z(*),u(*),rpar(*),out(*)
-      integer ipar(*),flag
 c     ipar(1) = lfil : file name length
 c     ipar(2) = lfmt : format length (0) if binary file
 c     ipar(3)          unused
@@ -11,6 +9,12 @@ c     ipar(4) = N : buffer length
 c     ipar(5:4+lfil) = character codes for file name
 c     ipar(5+lfil:4+lfil+lfmt) = character codes for format if any
 c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+
+
+      include '../stack.h'
       integer i,n
       integer mode(2)
       common /dbcos/ idb
@@ -19,12 +23,11 @@ c
          write(6,'(''writef t='',e10.3,'' flag='',i1)') t ,flag
       endif
 c     
+      N=ipar(4)
+      K=int(z(1))
+      lunit=int(z(2))
+c
       if(flag.eq.2) then
-         N=ipar(4)
-         K=int(z(1))
-         lunit=int(z(2))
-
-
 c     add new point to the buffer
          K=K+1
          z(2+K)=t
@@ -51,7 +54,6 @@ c     .     unformatted write
       elseif(flag.eq.4) then
 c     file opening
          lfil=ipar(1)
-         N=ipar(4)
          call cvstr(lfil,ipar(5),buf,1)
          lfmt=ipar(2)
          lunit=0
@@ -71,9 +73,6 @@ c     file opening
          z(3)=t
          call dset(nu*N,0.0d0,z(4),1)
       elseif(flag.eq.5) then
-         N=ipar(4)
-         K=int(z(1))
-         lunit=int(z(2))
          if(K.gt.1) then
 c     write on the file
             lfmt=ipar(2)
@@ -90,6 +89,7 @@ c     .        unformatted write
  21            continue
             endif
          endif
+         lfil=ipar(1)
          call clunit(-lunit,buf(1:lfil),mode)
          if(err.gt.0) goto 100
          z(2)=0.0d0

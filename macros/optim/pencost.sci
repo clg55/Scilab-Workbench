@@ -41,8 +41,6 @@ function [fpen,gpen,ind]=pencost(x,ind,fncts,ne,nc,cpen);
 //        grds=[1,-1,x(1);...
 //              1,0,x(2)]')
 //
-//comp(myproblem)
-//
 // 2-call scilab's optim function (after loading pencost.sci (this file));
 // getf('pencost.sci','c') 
 // ne=0;nc=2;x0=[4;7];

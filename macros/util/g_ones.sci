@@ -9,15 +9,17 @@ case 2 then
   
 //-compat next case retained for list/tlist compatibility
 case 15 then
-  if a(1)=='r' then
+  a1=a(1)
+  if a1(1)=='r' then
     x=ones(a(2));
-  elseif a(1)='lss' then
+  elseif a1(1)='lss' then
     x=ones(a(5))
   end
 case 16 then
-  if a(1)=='r' then
+  a1=a(1)
+  if a1(1)=='r' then
     x=ones(a(2));
-  elseif a(1)='lss' then
+  elseif a1(1)='lss' then
     x=ones(a(5))
   end  
 case 10 then

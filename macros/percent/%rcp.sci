@@ -1,9 +1,7 @@
-//<f>=%rcp(f,p)
-// %rcp(f,p) calcule la concatenation en ligne de la matrice de fractions
-//rationnelles f avec la matrice de polynomes p [f,p]
-//!
+function f=%rcp(f,p)
+// f=%rcp(f,p) <=> f=[f,p]  [rational, polynomial]
 f(3)=[f(3),ones(p)]
 f(2)=[f(2),p]
-//end
+
 
 

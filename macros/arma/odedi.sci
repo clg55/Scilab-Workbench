@@ -1,5 +1,4 @@
-//<>=odedi()
-//<>=odedi()
+function odedi()
 // Tests simples de ode et arsimul
 // Test de l'option discrete de ode
 // x_{n+1}=n*x_{n}, x_{1}=1;
@@ -36,7 +35,5 @@ else
    write(%io(2),"[4]problem with ode and option discret");ero_n=ero_n+1
 end
 if ero_n=0,write(%io(2),"No detected errors");end
-
-//end
 
 

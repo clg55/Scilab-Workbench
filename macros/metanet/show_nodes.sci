@@ -9,11 +9,11 @@ end
 s=size(ns)
 if s(1)*s(2) == 0 then return end
 if s(1)<>1 then
-  error('show_nodes: first argument must be a row vector')
+  error('First argument must be a row vector')
 end
 // sup
 if type(sup)<>10|prod(size(sup))<>1 then
-  error('show_nodes: second argument must be a string')
+  error('Second argument must be a string')
 end
 select sup
 case 'pas de sup' then
@@ -21,6 +21,6 @@ case 'pas de sup' then
 case 'sup' then 
   isup=1
 else
-  error('show_nodes: unknown argument ""'+sup+'""')  
+  error('Unknown argument ""'+sup+'""')  
 end
-showns(ns,isup)
+m6showns(ns,isup)

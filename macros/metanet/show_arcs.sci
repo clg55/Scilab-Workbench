@@ -9,7 +9,7 @@ end
 s=size(p)
 if s(1)*s(2) == 0 then return end
 if s(1)<>1 then
-  error('show_arcs: first argument must be a row vector')
+  error('First argument must be a row vector')
 end
 // sup
 select sup
@@ -18,6 +18,6 @@ case 'pas de sup' then
 case 'sup' then 
   isup=1
 else
-  error('show_arcs: unknown argument ""'+sup+'""')  
+  error('Unknown argument ""'+sup+'""')  
 end
-showp(p,isup)
+m6showp(p,isup)

@@ -21,10 +21,11 @@ case 5 then //sparse matrix
   ludel(hand);
   return
 case 16 then
-  if a(1)=='r' then
+  a1=a(1);
+  if a1(1)=='r' then
     x=invr(a);return
   end
-  if a(1)='lss' then
+  if a1(1)='lss' then
     d=a(5);
     [m,n]=size(d);
     polyn=(type(d)==2);constant=(type(d)==1);

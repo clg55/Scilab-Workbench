@@ -1,17 +1,26 @@
 #!/bin/SCILABGS
 # Warning : some old versions of sh dont allow inline function definitions
 # like do_scilex()... . In this case use a system V sh (sh5)
-# Set the SCI environment variable if not already set
-if test "$SCI" = ""; then
-  SCI="SCILAB_DIRECTORY"
+if test "$PRINTERS" = ""; then
+  PRINTERS="lp:LaserHP:SalleBal:Secretariat:ColorPS:Color12"
 fi
-PRINTERS="lp:LaserHP:SalleBal:LaserLabo|labo:Secretariat:ColorPS"
 #############################################################################
 #                                                                           #
 #                       DO NOT MODIFY BELOW THIS LINE                       #
 #                                                                           #
 #############################################################################
+if test "$SCI" = ""; then
+  SCI="SCILAB_DIRECTORY"
+fi
 export SCI
+if test "$DISPLAY" = ""; then
+  DISPLAY="unix:0.0"
+fi
+export DISPLAY
+if test "$MANCHAPTERS" = ""; then
+  MANCHAPTERS=$SCI/man/Chapters
+fi
+export  MANCHAPTERS
 export PRINTERS
 VERSION="SCILAB_VERSION"
 export VERSION
@@ -46,10 +55,11 @@ do_geci_scilex()
 
 do_help()
 {
-echo "Usage  :"
+echo "Usage:"
 echo     "	scilab [-ns -nw -display display]"
 echo     "	scilab -help <key>"
 echo     "	scilab -k <key>"
+echo     "	scilab -xk <key>"
 echo     "	scilab -link <objects>"
 echo     "	scilab -function <function-name>"
 echo     "	scilab -print_p file printer"
@@ -60,28 +70,84 @@ echo     "	scilab -save_l file format"
 
 do_mank()
 {
-	f1=`grep -i $1 $SCI/man/Man-Part1/whatis 2> /dev/null`
-	f2=`grep -i $1 $SCI/man/Man-Part2/whatis 2> /dev/null`
-	if  test -n "$f1$f2" 
+	tst=""
+	chapters=`cat $MANCHAPTERS | awk '{print " " $1 }'` 
+	for i in $chapters
+	do
+		eval "mpath=\"$i\""
+		f=`grep -i $1 $mpath/whatis  2> /dev/null`
+		if  test -n "$f"
+		then 
+			grep -i $1 $mpath/whatis 2> /dev/null |sed -e "s/^.*://"
+			tst="found"
+		fi 
+	done  
+	if [ "$tst" != "found" ]
 	then
-		grep -i $1 $SCI/man/Man-Part1/whatis 2> /dev/null
-		grep -i $1 $SCI/man/Man-Part2/whatis 2> /dev/null
-	else
 		echo $1: nothing appropriate
 	fi
 }
 
+do_mank_x()
+{
+    do_mank $1 > /tmp/Sci_mankx 
+    f=`grep nothing appropriate /tmp/Sci_mankx 2> /dev/null`
+    if test -n "$f"
+    then 
+	exit 19
+    else
+	( $SCI/bin/xless /tmp/Sci_mankx ;rm -f  /tmp/Sci_mankx  ) &
+    fi 
+}
+
 do_man()
 {
-	MAN=$SCI/man
-	f=`ls $MAN/*/cat*/$1.* 2> /dev/null`
-	if  test -n "$f"
-	then 
-		cat $f
-	else
+	tst=""
+	chapters=`cat $MANCHAPTERS | awk '{print " " $1 }'` 
+	for i in $chapters
+	do
+		eval "mpath=\"$i\""
+		f=`ls  $mpath/$1.cat 2> /dev/null`
+		if  test -n "$f"
+		then 
+			cat $mpath/$1.cat
+			tst="found"
+			break
+		fi 
+	done  
+	if [ "$tst" != "found" ]
+	then
 		echo No manual entry for $1
-	fi 
+	fi
+
 }
+
+
+do_man_x()
+{
+	tst=""
+	XAPPLRESDIR=$SCI/X11_defaults
+	export XAPPLRESDIR
+	chapters=`cat $MANCHAPTERS | awk '{print " " $1 }'` 
+	for i in $chapters
+	do
+		eval "mpath=\"$i\""
+		f=`ls  $mpath/$1.cat 2> /dev/null`
+		if  test -n "$f"
+		then 
+			$SCI/bin/xless $mpath/$1.cat &
+			tst="found"
+			break
+		fi 
+	done  
+	if [ "$tst" != "found" ]
+	then
+		#echo No manual entry for $1
+		exit 19
+	fi
+
+}
+
 
 do_compile()
 {
@@ -90,8 +156,8 @@ do_compile()
 	name=`basename $1 .sci`
 	echo generating $name.bin
 	echo "%u=file('open','$name.bin','unknown','unformatted');predef();\
-	      getf('$name.sci','c');save(%u),file('close',%u);quit"\
-	      | $SCI/bin/scilex -ns -nw | sed 1,/--\>/d 1>report 2>&1
+	      getf('$name.sci');save(%u),file('close',%u);quit"\
+	      | $SCI/bin/scilex -ns -nw | sed 1,8d 1>report 2>&1
 	if (grep error report 1> /dev/null  2>&1);
 	then cat report;echo " " 
 	   echo see `pwd`/report for more informations
@@ -167,7 +233,7 @@ case $# in
 	     -help)
 		do_man scilab|more
 		;;
-             -link|-function|-k)
+             -link|-function|-k|-xk)
 		do_help
                  ;;
              *)
@@ -191,16 +257,22 @@ case $# in
 		do_geci_scilex $* 
 		;;
              -display)
-		do_geci_scilex $*
+		do_geci_scilex $* &
 		;;
             -help)
 		do_man $2|more
+                ;;
+            -xhelp)
+		do_man_x $2
                 ;;
             -comp)
 		do_compile $2
                 ;;
 	    -k)
 		do_mank $2
+		;;
+	    -xk)
+		do_mank_x $2 
 		;;
             -link)
                 shift

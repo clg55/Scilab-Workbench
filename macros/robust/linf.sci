@@ -7,7 +7,8 @@ function [n]=linf(g,eps,tol)
 //-- tol threshold for imaginary axis poles.
 // See also: h_norm
 //!
-if g(1)='r' then g=tf2ss(g);end
+g1=g(1);
+if g1(1)='r' then g=tf2ss(g);end
       if type(g)=1,if norm(g)=0,n=0,return,end,end,
       if g(7)='d' then
          error('system must be continuous')

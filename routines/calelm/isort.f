@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=ISORT,SSI=0
       subroutine isort(count,n,index)
 c
 c!purpose

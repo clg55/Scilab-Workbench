@@ -17,6 +17,8 @@
 #include "scr_applications.h"
 #include "scr_messages.h"
 
+extern char machine_hote[MAXHOSTLEN];
+
 static void ajouter_liaison();
 static void supprimer_liaison();
 
@@ -81,7 +83,6 @@ Message message;
     application *application_source, *application_destinataire;
     liaison_dest liaison;
     int i,desc;
-    char machine_hote[MAXHOSTLEN];
     
     if ((application_source = ldc_rechercher_objet(liste_applications, message.tableau[0])) == NULL)
 	    Erreur_scruteur(concatenation_plusieurs_chaines("<poster_liste_elemnt>: non existent application: ",message.tableau[0],NULL));
@@ -99,7 +100,6 @@ Message message;
 	if ((application_destinataire = ldc_rechercher_objet(liste_applications, liaison)) == NULL)
 		Erreur_scruteur(concatenation_plusieurs_chaines("<poster_liste_elemnt>: non existent application: ", liaison,NULL));
 	
-	gethostname(machine_hote,MAXHOSTLEN) ;
 	if(strcmp(application_destinataire->nom_machine, machine_hote)) { /* Autre machine */
 	    for (i=0; i<nb_machines; i++) {
 		if(!strcmp(application_destinataire->nom_machine,
@@ -123,13 +123,10 @@ Message message;
     }
 }
 
-
-
 void creer_liaison_actmsg(message)
 Message message;
 {
     application *application_courante;
-    char machine_hote[MAXHOSTLEN];
     int i,desc;
     
     if ((application_courante = ldc_rechercher_objet(liste_applications,message.tableau[3])) == NULL) {
@@ -147,7 +144,6 @@ Message message;
 	    Erreur_scruteur(concatenation_plusieurs_chaines("<detruire_liaison>: non existent application: ",message.tableau[4],NULL));
     
     /* Autre machine */
-    gethostname(machine_hote,MAXHOSTLEN) ;
     if(strcmp(application_courante->nom_machine, machine_hote)) {
 	for (i=0; i<nb_machines; i++) {
 	    if(!strcmp(application_courante->nom_machine, liste_machines[i].nom_machine)) {
@@ -168,7 +164,6 @@ void detruire_liaison_actmsg(message)
 Message message;
 {
     application *application_source, *application_destinataire;
-    char machine_hote[MAXHOSTLEN];
     liaison_dest liaison;
     char i, desc;
     
@@ -186,7 +181,6 @@ Message message;
 	if ((application_destinataire = ldc_rechercher_objet(liste_applications, liaison)) == NULL)
 		Erreur_scruteur(concatenation_plusieurs_chaines("<poster_liste_elemnt>: non existent application: ", liaison,NULL));
 	
-	gethostname(machine_hote,MAXHOSTLEN) ;
 	if(strcmp(application_destinataire->nom_machine, machine_hote)) { /* Autre machine */
 	    for (i=0; i<nb_machines; i++) {
 		if(!strcmp(application_destinataire->nom_machine, liste_machines[i].nom_machine)) {

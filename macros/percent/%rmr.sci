@@ -4,28 +4,39 @@ function s1=%rmr(s1,s2)
 [s1,s2]=sysconv(s1,s2),
 [n1,d1]=s1(2:3);[n2,d2]=s2(2:3);
 [l1,m1]=size(n1);[l2,m2]=size(n2),
-if mini([l1*m1,l2*m2])=1 then,
-  [n1,d1]=simp(n1*n2,d1*d2),
-  s1(2)=n1;s1(3)=d1;
-  return,
-end;
-if m1<>l2 then 
-  error(10)
-end,
-for i=1:l1, pp(i)=lcm(d1(i,:)),end,
-for j=1:m2,
-  y=lcm(d2(:,j)),
-  for i=1:l1,
-    yij=y*pp(i),
-    x=0;
-    for k=1:m1,
-      x=x+n1(i,k)*n2(k,j)*pppdiv(y,d2(k,j))*pppdiv(pp(i),d1(i,k)),
-    end,
-    num(i,j)=x,den(i,j)=yij,
-  end,
-end,
+indef=%f
+if l1==-1 then 
+  n1=n1+0;d1=d1+0;l1=1;m1=1;
+  if l2*m2==1 then indef=%t,end
+end
+if l2==-1 then 
+  n2=n2+0;d2=d2+0;l2=1;m2=1;
+  if l1*m1==1 then indef=%t,end
+end  
+if mini([l1*m1,l2*m2])=1 then
+  num=n1*n2
+  den=d1*d2
+else
+  if m1<>l2 then error(10),end
+  for i=1:l1, pp(i)=lcm(d1(i,:)),end,
+  for j=1:m2,
+    y=lcm(d2(:,j)),
+    for i=1:l1,
+      yij=y*pp(i),
+      x=0;
+      for k=1:m1,
+	x=x+n1(i,k)*n2(k,j)*pppdiv(y,d2(k,j))*pppdiv(pp(i),d1(i,k)),
+      end
+      num(i,j)=x,den(i,j)=yij,
+    end
+  end
+end
 [num,den]=simp(num,den),
+if indef then
+  num=num*eye
+  den=den*eye
+end
 s1(2)=num;s1(3)=den;
-//end
+
 
 

@@ -11,13 +11,14 @@ function [J]=fstabst(Stplant,r)
 //               j21 j22]
 // K is a stablizing controller iff K=LFT(J,r,Q) with Q stable
 //!
-flag='ss';if Stplant(1)='r' then flag='tf';Stplant=tf2ss(Stplant);end
+Stplant1=Stplant(1);
+flag='ss';if Stplant1(1)='r' then flag='tf';Stplant=tf2ss(Stplant);end
 [LHS,RHS]=argn(0);
     [a,b1,b2,c1,c2,d11,d12,d21,d22]=smga(Stplant,r),
     Rd1=d12'*d12,
-    R12=sqrt(Rd1);
+    R12=sqrtm(Rd1);
     Rd2=d21*d21',
-    R22=sqrt(Rd2);
+    R22=sqrtm(Rd2);
     p=r(2),r=r(1);
    //-------------
     [s1,s2,t]=size(Stplant);

@@ -1,7 +1,14 @@
-      subroutine hltblk(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),z(*),u(*),rpar(*),out(*)
-      integer ipar(*),flag
+      subroutine hltblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
+c     Notify simulation to stop  when called 
+c     ipar(1) : stop reference
+c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+
+c
       integer halt
       common /coshlt/ halt
       common /dbcos/ idb
@@ -19,5 +26,4 @@ c
             z(1)=0.0d0
          endif
       endif
-      return
       end

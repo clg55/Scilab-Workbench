@@ -11,12 +11,14 @@ case 4 then
   [m,n]=size(a)
   if m>1&n>1 then
     if k<=0 then
-      mn=mini(m,n-k)
+      mn=mini(m+k,n)
+      i0=-k+1
     else
-      mn=min(m+k,n)
+      mn=min(m,n-k)
+      i0=k*m+1
     end
     a=matrix(a,m*n,1)
-    i=(1:mn)+((1:mn)+(k-1))*m
+    i=i0+((0:mn-1)*(m+1))
     d=a(i)
   else
     nn = max(m,n)+abs(k)
@@ -31,12 +33,15 @@ case 5 then
   if m>1&n>1 then
     l=find(ij(:,1)==(ij(:,2)-k))
     if k<=0 then
-      mn=mini(m,n-k)
+      mn=mini(m+k,n)
+      i0=-k
     else
-      mn=min(m+k,n)
+      mn=min(m,n-k)
+      i0=0
     end
     kk=abs(k)
-    d=sparse([ij(l,1),ones(ij(l,1))],v(l),[mn,1])
+    if l==[] then d=sparse([],[],[mn,1]);return;end
+    d=sparse([ij(l,1)-i0,ones(ij(l,1))],v(l),[mn,1])
   else
     nn = max(m,n)+abs(k)
     if ij==[] then 
@@ -68,13 +73,15 @@ case 6 then
   
 //-compat next case retained for list/tlist compatibility
 case 15 then
-  if a(1)=='r' then
+  a1=a(1);
+  if a1(1)=='r' then
     d=a;
-    d=tlist('r',diag(a(2),k),diag(a(3),k),a(4))
+    d=syslin(a(4),diag(a(2),k),diag(a(3),k))
   end
 case 16 then
-  if a(1)=='r' then
+  a1=a(1);
+  if a1(1)=='r' then
     d=a;
-    d=tlist('r',diag(a(2),k),diag(a(3),k),a(4))
+    d=syslin(a(4),diag(a(2),k),diag(a(3),k))
   end  
 end

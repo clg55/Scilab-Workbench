@@ -17,10 +17,12 @@ for i=2:n
     xx=o(2);yy=o(3);
     x=x;y=y;
     n=prod(size(xx))
-    t=((yy(1:n-1)-yy(2:n))*x+(xx(2:n)-xx(1:n-1))*y+..
-	                  xx(1:n-1).*yy(2:n)-xx(2:n).*yy(1:n-1))...
-			  ./sqrt((xx(2:n)-xx(1:n-1))^2+..
-			  (yy(2:n)-yy(1:n-1))^2)  
+    d=sqrt((xx(2:n)-xx(1:n-1))^2+(yy(2:n)-yy(1:n-1))^2)
+    n=((yy(1:n-1)-yy(2:n))*x+(xx(2:n)-xx(1:n-1))*y+..
+	                  xx(1:n-1).*yy(2:n)-xx(2:n).*yy(1:n-1))
+    kz=find(d==0)
+    d(kz)=[];n(kz)=[]
+    t=n./d
     l=find(abs(t)<eps)
     for j=1:prod(size(l))
       lj=l(j)
@@ -34,4 +36,7 @@ for i=2:n
     if data(1)<0&data(2)<0 then k=i,break,end
   end
 end
+
+
+
 

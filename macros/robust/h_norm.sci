@@ -1,4 +1,4 @@
-//[hinfnorm,frequency]=h_norm(Sl,rerr)
+function [hinfnorm,frequency]=h_norm(Sl,rerr)
 // produces the infinitynorm  of a state-space system 
 // (the maximum over all frequencies of the maximum singular value).
 //      [hinfnorm [,frequency]]=h_norm(Sl,rerr)
@@ -12,12 +12,12 @@
 //  see also: linfn, linf
 //!
 //  Version 3.2, 09-27-1990
-//  N.A. Bruinsma       T.U.Delft/Philips Research Eindhoven, see also
+//  N.A. Bruinsma   T.U.Delft/Philips Research Eindhoven, see also
 // Systems & Control Letters, vol. 14 pp. 287-293.
-
+Sl1=Sl(1);
 [lhs,rhs]=argn(0);
 eps=1.d-8;
-flag='ss';if Sl(1)='r' then Sl=tf2ss(Sl);end
+flag='ss';if Sl1(1)='r' then Sl=tf2ss(Sl);end
 if Sl(7)=='d' then hinfnorm=dhnorm(Sl);frequency=[];return;end
 [a,b,c,d]=Sl(2:5);
 eiga=spec(a);

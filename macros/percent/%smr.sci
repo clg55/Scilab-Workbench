@@ -1,10 +1,23 @@
-function [f2]=%smr(n1,f2)
+function f2=%smr(n1,f2)
 // %smr(n1,f2)  
 //operation  f2=n1*f2
 //!
 [n2,d2]=f2(2:3);
 [l1,m1]=size(n1);[l2,m2]=size(n2),
-if mini([l1*m1,l2*m2])=0 then, f2=[];return;end
+if l1*m1==0|l2*m2==0 then
+  f2=[]
+  return
+end
+indef=%f
+if l1==-1 then 
+  n1=n1+0;l1=1;m1=1;
+  if l2*m2==1 then indef=%t,end
+end
+if l2==-1 then 
+  n2=n2+0;d2=d2+0;l2=1;m2=1;
+  if l1*m1==1 then indef=%t,end
+end  
+
 //
 if mini([l1*m1,l2*m2])=1 then,
   num=n1*n2,
@@ -21,6 +34,10 @@ else,
   end,
 end,
 [num,den]=simp(num,den),
+if indef then
+  num=num*eye
+  den=den*eye
+end
 f2(2)=num,f2(3)=den;
 
 

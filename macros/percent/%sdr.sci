@@ -1,7 +1,7 @@
 function f=%sdr(n1,f2)
-// %sdr(M,r) calcule la division element par element de la matrice de
-//scalaires M par la matrice de fractions rationnelles r. (M./r)
+// %sdr(M,r) =M./r
 //!
-f=tlist('r',n1.*f2(3),f2(2),f2(4))
+if size(n1,'*')==0 then f=[],return,end
+f=tlist(['r','num','den','dt'],n1.*f2(3),ones(n1).*f2(2),f2(4))
 
 

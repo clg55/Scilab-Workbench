@@ -1,9 +1,13 @@
-function [S]=tf2des(G)
+function [S]=tf2des(G,flag)
 //[S]=tf2des(G) 
-// Transfer function to descriptor form: S=list('d',A,B,C,0,E)
+// Transfer function to descriptor form: S=list('d',A,B,C,D,E)
 //  E*dx=A*x+B*u
 //  y=C*x+D*u
+//  with flag="withD" a maximal rank D matrix is returned
 //!
+[LHS,RHS]=argn(0);
+if RHS==1 then flag=[];end
+if RHS==2&flag<>"withD" then warning("tf2des: unknown flag");end
 Num=G(2);Den=G(3);
 %s=poly(0,varn(Den));
 [n,m]=size(Num);
@@ -20,8 +24,13 @@ for l=1:n,
 end;
  
 sp=tf2ss(pro);
+D=zeros(Num);
+
+if flag=="withD" then
+  D=coeff(pol,0);pol=pol-D;
+end;
 spol=tf2ss(horner(pol,1/%s)/%s);
- 
+
 [n1,n1]=size(sp(2));
 [n2,n2]=size(spol(2));
 A=[sp(2),0*ones(n1,n2);
@@ -31,7 +40,7 @@ E=[eye(n1,n1),0*ones(n1,n2);
 B=[sp(3);
    spol(3)];
 C=[sp(4),-spol(4)];
-S=list('des',A,B,C,0*C*B,E)
+S=list('des',A,B,C,D,E)
 
 
 

@@ -3,13 +3,13 @@ c ================================== ( Inria    ) =============
 c     Graphique
 c =============================================================
       external plot3d,plot3d1,plot2d1,plot2d2,plot2d3,plot2d4
-      external fac3d,fac3d1,champ1,champ
+      external fac3d,fac3d1,champ1,champ,fac3d2
 C     fun=7
       include '../stack.h'
       goto (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
      $     21,22,23,24,25,26,27,28,29,30,
      $     31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
-     $     48,49,50,51,52,53) fin
+     $     48,49,50,51,52,53,54,55,56,57,58,59) fin
       return
  1    call scichamp('champ',champ)
       return
@@ -17,9 +17,9 @@ C     fun=7
       return
  3    call sciparam3d('param3d')
       return
- 4    call sciplot3d('plot3d',plot3d,fac3d)
+ 4    call sciplot3d('plot3d',plot3d,fac3d,fac3d2)
       return
- 5    call sciplot3d('plot3d1',plot3d1,fac3d1)
+ 5    call sciplot3d('plot3d1',plot3d1,fac3d1,fac3d2)
       return
  6    call sciplot2d('plot2d')
       return
@@ -116,6 +116,19 @@ C     fun=7
  52   call scichamp('champ1',champ1)
       return
  53   call scidelw('xdel')
+      return
+ 54   call scicontour2d('contour2d')
+      return
+ 55   call scixg2psofig('xg2ps','Pos'//char(0))
+      return
+ 56   call scixg2psofig('xg2fig','Fig'//char(0))
+      return
+ 57   call scixsort('gsort') 
+      return
+ 58   call sciwinsid('winsid')
+      return
+ 59   call sciparam3d1('param3d1')
+      return
       end
      
       subroutine scichamp(fname,func)
@@ -131,7 +144,7 @@ c      implicit undefined (a-z)
       double precision rect(4),arfact
       character*(4) strf
       external func
-      strf='021'//char(0)
+      strf='061'//char(0)
       topk=top
       rect(1)=0.0d00
       rect(2)=0.0d00
@@ -191,6 +204,11 @@ c      implicit undefined (a-z)
             call error(999)
             return
          endif
+      endif
+      if ( m3*n3 .eq.0 )  then 
+         buf=fname // ' empty vectors '
+         call error(999)
+         return
       endif
       call sciwin()
       call func(stk(lr1),stk(lr2),stk(lr3),stk(lr4),
@@ -303,8 +321,150 @@ c      implicit undefined (a-z)
          flag=1
          nz=m4*n4
       endif
+      if ( m3*n3 .eq.0 )  then 
+         buf=fname // ' empty vectors '
+         call error(999)
+         return
+      endif
+      call sciwin()
       call contour(stk(lr1),stk(lr2),stk(lr3),m3,n3,flag,nz,stk(lr4),
      $     theta,alpha, buf,iflag,ebox,zlev)
+      call objvide(fname,top)
+      return
+      end
+
+      subroutine scicontour2d(fname)
+cc    interface de la macro contour2d
+cc	<>=contour(x,y,z,nz)
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getrmat,getrvect,getsmat
+      logical cremat
+      integer nax(4)
+      double precision rect(4)
+      character*(4) strf
+      integer m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,m4,n4,lr4
+      integer m5,n5,lr5,lr6,nlr6,lr7,lr,m,n,nlr7
+      integer topk, nz ,iadr
+      iadr(l)=l+l-1
+      data nax / 2,10,2,10/
+      data rect / 0.0d00,0.0d00,10.0d00,10.0d00/
+      if (rhs.le.0) then
+         buf='  contour2d(1:5,1:10,rand(5,10),5);$'
+         call demo(fname,buf,1)
+         return
+      endif
+      if (.not.checkrhs(fname,4,9)) return
+      topk=top
+      buf=' '//char(0)
+      strf='061'//char(0)
+      topk=top
+      if (rhs.ge.9) then
+         if(.not.getrmat(fname,topk,top,m,n,lr))return
+         if (m*n.ne.4) then
+            buf= fname//' : nax has a wrong size, 4 expected'
+            call error(999)
+            return
+         endif
+         call entier(4,stk(lr),nax)
+         do 10 i=1,4
+            nax(i)=max(nax(i),1)
+ 10      continue
+         top=top-1
+      endif
+      if (rhs.ge.8) then
+         if(.not.getrmat(fname,topk,top,m,n,lr))return
+         if (m*n.ne.4) then
+            buf= fname//' : rect has a wrong size, 4 expected'
+            call error(999)
+            return
+         endif
+         call dcopy(4,stk(lr),1,rect,1)
+         top=top-1
+      endif
+      if (rhs.ge.7) then
+         if(.not.getsmat(fname,topk,top,m,n,1,1,lr7,nlr7))return
+         if (nlr7.eq.0) then
+            buf=fname//' : legend is an empty string'
+            call error(999)
+            return
+         endif
+         call cvstr(nlr7,istk(lr7),buf,1)
+         buf(nlr7+1:nlr7+1)=char(0)
+         top=top-1
+      endif
+      if (rhs.ge.6) then
+         if(.not.getsmat(fname,topk,top,m,n,1,1,lr6,nlr6))return
+         if (nlr6.ne.3) then
+            buf=fname//' : strf has a wrong size, 3 expected'
+            call error(999)
+            return
+         endif
+         call cvstr(nlr6,istk(lr6),strf,1)
+         top=top-1
+      endif
+      if (rhs.ge.5) then
+         if (.not.getrvect(fname,topk,top,m5,n5,lr5)) return
+         il5=iadr(lr5)        
+         top=top-1
+      endif
+      if(.not.getrmat(fname,topk,top,m4,n4,lr4))return
+      top=top-1
+      if(.not.getrmat(fname,topk,top,m3,n3,lr3))return
+      top=top-1
+      if(.not.getrvect(fname,topk,top,m2,n2,lr2))return
+      top=top-1
+      if(.not.getrvect(fname,topk,top,m1,n1,lr1))return
+      if(m3.eq.1.or.n3.eq.1) then
+         buf=fname// ' : third argument is a vector, I expect a matrix'
+         call error(999)
+         return
+      endif
+      if (m1*n1.ne.m3) then
+         buf=fname//' : first and third arguments '
+     $        //'have incompatible sizes'
+         call error(999)
+         return
+      endif
+      if (m2*n2.ne.n3) then
+         buf=fname//' : second and third arguments '
+     $     //'have incompatible sizes'
+         call error(999)
+         return
+      endif
+C     number of level curves 
+      if (m4*n4.eq.1) then
+         flag=0
+         nz=int(stk(lr4))
+      else
+         flag=1
+         nz=m4*n4
+      endif
+C     check style parameter 
+      if (rhs.eq.4) then
+         if (.not.cremat(fname,top+4,0,1,max(nz,2),lr5,lc)) return
+         il5=iadr(lr5)
+         do 12 i=1,nz
+            istk(il5+i-1) = i
+ 12      continue
+         if (nz.eq.1) istk(il5+1)=1
+      else
+         if (m5*n5.lt.nz) then
+            buf=fname // ' style is too small'
+            call error(999)
+            return
+         endif
+         call entier(m5*n5,stk(lr5),istk(il5))
+      endif
+      if ( m3*n3 .eq.0 )  then 
+         buf=fname // ' empty vectors '
+         call error(999)
+         return
+      endif
+      call sciwin()
+      call contour2(stk(lr1),stk(lr2),stk(lr3),m3,n3,flag,nz,stk(lr4),
+     $     istk(il5),strf,buf,rect,nax)
       call objvide(fname,top)
       return
       end
@@ -383,9 +543,138 @@ c      implicit undefined (a-z)
          if (.not.getrvect(fname,topk,top,m1,n1,lr1)) return
          if (.not.matsize(fname,topk,top,m3,n3)) return
       endif
+      if ( m1*n1 .eq.0 )  then 
+         buf=fname // ' empty vectors '
+         call error(999)
+         return
+      endif
       call sciwin()
       call param3d(stk(lr1),stk(lr2),stk(lr3),m1*n1,theta,alpha,
      $     buf,iflag,ebox)
+      call objvide(fname,top)
+      return
+      end
+
+
+      subroutine sciparam3d1(fname)
+cc	<>=param3d(x,y,z,[teta,alpha,leg,flag,ebox])
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getrmat,getsmat,getscalar,matsize
+      logical getlistmat
+      integer gettype
+      integer m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,lr3n,m3n,n3n
+      integer topk, iflag(3),m,n,lr,lr6,nlr6,lr5,lr4,iadr
+      double precision ebox(6),alpha,theta
+      iadr(l)=l+l-1
+      iflag(1)=1
+      iflag(2)=2
+      iflag(3)=4
+      alpha=35.0
+      theta=45.0
+      if (rhs.lt.0) then
+         buf='  t=0:0.1:5*%pi;'
+     $   //'  param3d1(sin(t),cos(t),t/10,35,45,''X@Y@Z'',[2,4]);$'
+         call demo(fname,buf,1)
+         return
+      endif
+      buf='X@Y@Z'//char(0)
+      if (.not.checkrhs(fname,3,8)) return
+      topk=top
+      if (rhs.ge.8) then
+         if(.not.getrmat(fname,topk,top,m,n,lr))return
+         if (m*n.ne.6) then
+            buf= fname//' : ebox has a wrong size, 6 expected'
+            call error(999)
+            return
+         endif
+         call dcopy(6,stk(lr),1,ebox,1)
+         top=top-1
+      endif
+      if (rhs.ge.7) then
+         if(.not.getrmat(fname,topk,top,m,n,lr))return
+         if (m*n.ne.2) then
+            buf= fname//' : flag has a wrong size, 2 expected'
+            call error(999)
+            return
+         endif
+         iflag(2)=int(stk(lr))
+         iflag(3)=int(stk(lr+1))
+         top=top-1
+      endif
+      if (rhs.ge.6) then
+         if(.not.getsmat(fname,topk,top,m,n,1,1,lr6,nlr6))return
+         if (nlr6.le.0) then
+            buf=fname//' : legend is an empty string'
+            call error(999)
+            return
+         endif
+         call cvstr(nlr6,istk(lr6),buf,1)
+         buf(nlr6+1:nlr6+1)=char(0)
+         top=top-1
+      endif
+      if (rhs.ge.5) then
+         if(.not.getscalar(fname,topk,top,lr5))return
+         alpha=(stk(lr5))
+         top=top-1
+      endif
+      if (rhs.ge.4) then
+         if(.not.getscalar(fname,topk,top,lr4))return
+         theta=(stk(lr4))
+         top=top-1
+      endif
+      if (rhs.ge.3) then
+         itype=gettype(top) 
+         if ( itype.eq.1) then 
+            if (.not.getrmat(fname,topk,top,m3,n3,lr3)) return
+            izcol=0
+         else 
+            if (itype.eq.15) then 
+               izcol=1
+               if(.not.getlistmat(fname,topk,top,1,it3,m3,
+     $              n3,lr3, lc3 )) return
+               if(.not.getlistmat(fname,topk,top,2,it3n,m3n,
+     $              n3n,lr3n, lc3n )) return
+               if ( m3n*n3n.ne.n3) then  
+                  buf=fname//' third argument : color '
+     $                 //'specification has wrong size'
+                  call error(999)
+                  return
+               endif
+               call entier(m3n*n3n,stk(lr3n),istk(iadr(lr3n)))
+            else 
+               buf=fname//' third argument has wrong type'
+               call error(999)
+               return
+            endif   
+         endif
+         top=top-1
+         if (.not.getrmat(fname,topk,top,m2,n2,lr2)) return
+         if (.not.matsize(fname,topk,top,m3,n3)) return
+         top=top-1
+         if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
+         if (.not.matsize(fname,topk,top,m3,n3)) return
+      endif
+      if ( m1*n1 .eq.0 )  then 
+         buf=fname // ' empty vectors '
+         call error(999)
+         return
+      endif
+      if ( m1.eq.1.and.n1.gt.1) then 
+         m1=n1
+         n1=1
+      endif
+      call sciwin()
+      if ( izcol.eq.0) then 
+         call param3d1(stk(lr1),stk(lr2),stk(lr3),m1,n1,
+     $        izcol,iv,theta,alpha,
+     $        buf,iflag,ebox)
+      else
+         call param3d1(stk(lr1),stk(lr2),stk(lr3),m1,n1,
+     $        izcol,istk(iadr(lr3n)),theta,alpha,
+     $        buf,iflag,ebox)
+      endif
       call objvide(fname,top)
       return
       end
@@ -413,6 +702,9 @@ c      implicit undefined (a-z)
       top=top-1
       if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
       if (.not.matsize(fname,topk,top,m3,n3)) return
+      if ( m1*n1 .eq.0 )  then 
+         return
+      endif
       call sciwin()
       call geom3d(stk(lr1),stk(lr2),stk(lr3),m1*n1)
       top=top+(lhs-1)
@@ -420,18 +712,22 @@ c      implicit undefined (a-z)
       end
 
 
-      subroutine sciplot3d(fname,func,func1)
+      subroutine sciplot3d(fname,func,func1,func2)
 cc    func doit valoir plot3d ou plot3d1
 cc    comme param3d sauf pour flag
 cc    <>=plot3d(x,y,z,teta,alpha,leg,flag,ebox)
       character*(*) fname
-      external func,func1
+      external func,func1,func2
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getsmat,getscalar,getrvect
-      integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3
-      integer iflag(3),m,n,lr,lr6,nlr6,lr5,lr4
+      logical getlistmat
+      integer itype,gettype
+      integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,lc3,it3
+      integer m3n,n3n,lr3n,lc3n,it3n,iadr
+      integer iflag(3),m,n,lr,lr6,nlr6,lr5,lr4,izcol
       double precision ebox(6),alpha,theta
+      iadr(l)=l+l-1
       iflag(1)=2
       iflag(2)=2
       iflag(3)=4
@@ -491,7 +787,32 @@ c      implicit undefined (a-z)
          top=top-1
       endif
       if (rhs.ge.3) then
-         if (.not.getrmat(fname,topk,top,m3,n3,lr3)) return
+c     third argument can be a matrix z or a list list(z,zcol)
+c     
+         itype=gettype(top) 
+         if ( itype.eq.1) then 
+            if (.not.getrmat(fname,topk,top,m3,n3,lr3)) return
+            izcol=0
+         else 
+            if (itype.eq.15) then 
+               izcol=1
+               if(.not.getlistmat(fname,topk,top,1,it3,m3,
+     $              n3,lr3, lc3 )) return
+               if(.not.getlistmat(fname,topk,top,2,it3n,m3n,
+     $              n3n,lr3n, lc3n )) return
+               if ( m3n*n3n.ne.n3) then  
+                  buf=fname//' third argument : color '
+     $                 //'specification has wrong size'
+                  call error(999)
+                  return
+               endif
+               call entier(m3n*n3n,stk(lr3n),istk(iadr(lr3n)))
+            else 
+               buf=fname//' third argument has wrong type'
+               call error(999)
+               return
+            endif   
+         endif
          top=top-1
          if (.not.getrmat(fname,topk,top,m2,n2,lr2)) return
          top=top-1
@@ -519,10 +840,20 @@ c      implicit undefined (a-z)
             endif
          endif
       endif
+      if ( m1*n1.eq.0.or.m2*n2.eq.0.or.m3*n3.eq.0 )  then 
+         buf=fname // ' empty vectors '
+         call error(999)
+         return
+      endif
       call sciwin()
       if ( m1*n1.eq.m3*n3.and.m1*n1.eq.m2*n2.and.m1*n1.ne.1) then 
-         call func1(stk(lr1),stk(lr2),stk(lr3),m3,n3,theta,alpha,
-     $        buf,iflag,ebox)
+         if ( izcol.eq.0) then 
+            call func1(stk(lr1),stk(lr2),stk(lr3),iv,
+     $           m3,n3,theta,alpha,  buf,iflag,ebox)
+         else 
+            call func2(stk(lr1),stk(lr2),stk(lr3),istk(iadr(lr3n)),
+     $           m3,n3,theta,alpha,  buf,iflag,ebox)
+         endif
       else
          call func(stk(lr1),stk(lr2),stk(lr3),m3,n3,theta,alpha,
      $        buf,iflag,ebox)
@@ -548,13 +879,13 @@ c      implicit undefined (a-z)
       if (rhs.lt.0) then
          buf='  x=0:0.1:2*%pi,'
      $        //'  plot2d([x;x;x]'',[sin(x);sin(2*x);sin(3*x)]'''
-     $        //',[-1,-2,3],''111'',''L1@L2@L3'',[0,-2,2*%pi,2]);$'
+     $        //',[-1,-2,3],''151'',''L1@L2@L3'',[0,-2,2*%pi,2]);$'
          call demo(fname,buf,1)
          return
       endif
       buf='X@Y@Z'//char(0)
-      strf='021'//char(0)
-      if (.not.checkrhs(fname,2,7)) return
+      strf='061'//char(0)
+      if (.not.checkrhs(fname,1,7)) return
       topk=top
       if (rhs.ge.7) then
          if(.not.getrmat(fname,topk,top,m,n,lr))return
@@ -611,11 +942,30 @@ c      implicit undefined (a-z)
          if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
          if (.not.matsize(fname,topk,top,m2,n2)) return
       endif
-      if (rhs.eq.2) then
+      if (rhs.eq.1) then 
+         if (.not.getrmat(fname,topk,top,m2,n2,lr2)) return
+         if (.not.cremat(fname,top+1,0,m2,n2,lr1,lc)) return
+         m1=m2
+         n1=n2
+      endif
+      if (m2.eq.1.and.n2.gt.1) then 
+         m2= n2 
+         n2= 1
+         m1= n1
+         n1=1
+      endif
+      if (rhs.eq.1) then 
+         do 11 i=1,m2
+            do 100 j=1,n2
+            stk(lr1+i-1+m2*(j-1)) = dble(i)
+ 100     continue
+ 11      continue
+      endif
+      if (rhs.le.2) then
          if (.not.cremat(fname,top+2,0,1,max(n1,2),lr3,lc)) return
          il1=iadr(lr3)
          do 12 i=1,n1
-            istk(il1+i-1) = -i
+            istk(il1+i-1) = i
  12      continue
          if (n1.eq.1) istk(il1+1)=1
       else
@@ -625,6 +975,21 @@ c      implicit undefined (a-z)
             return
          endif
          call entier(m3*n3,stk(lr3),istk(il1))
+      endif
+c     check empty matrix arguments 
+      if ( m1*n1.eq.0 )  then 
+         if ( rhs.lt.5 ) then 
+            buf=fname // ' empty vectors '
+            call error(999)
+            return
+         else
+            if (strf(2:2).eq.'2'.or. 
+     $           strf(2:2).eq.'4'.or.strf(2:2).eq.'6') then 
+               buf=fname // ' empty vectors '
+               call error(999)
+               return
+            endif
+         endif
       endif
       call sciwin()
       call plot2d(stk(lr1),stk(lr2),n1,m1,istk(il1),strf,buf,rect,nax)
@@ -649,12 +1014,12 @@ c      implicit undefined (a-z)
       if (rhs.lt.0) then
          buf='  x=0:0.1:2*%pi;'// fname
      $        //'(''gnn'',[x;x;x]'',[sin(x);sin(2*x);sin(3*x)]'''
-     $        //',[-1,-2,3],''111'',''L1@L2@L3'',[0,-2,2*%pi,2])$;'
+     $        //',[-1,-2,3],''151'',''L1@L2@L3'',[0,-2,2*%pi,2])$;'
          call demo(fname,buf,1)
          return
       endif
       buf='X@Y@Z'//char(0)
-      strf='021'//char(0)
+      strf='061'//char(0)
       if (.not.checkrhs(fname,3,8)) return
       topk=top
       if (rhs.ge.8) then
@@ -723,7 +1088,7 @@ c      implicit undefined (a-z)
          if (.not.cremat(fname,top+3,0,1,max(n2,2),lr3,lc)) return
          il1=iadr(lr3)
          do 12 i=1,n2
-            istk(il1+i-1) = -i
+            istk(il1+i-1) = i
  12      continue
          if (n2.eq.1) istk(il1+1)=1
       else
@@ -751,6 +1116,21 @@ C     premier argument
             return
          endif
       endif
+c     check empty matrix arguments 
+      if ( m2*n2.eq.0 )  then 
+         if ( rhs.lt.6 ) then 
+            buf=fname // ' empty vectors '
+            call error(999)
+            return
+         else
+            if (strf(2:2).eq.'2'.or. 
+     $           strf(2:2).eq.'4'.or.strf(2:2).eq.'6') then 
+               buf=fname // ' empty vectors '
+               call error(999)
+               return
+            endif
+         endif
+      endif
       call sciwin()
       call func(str,stk(lr1),stk(lr2),n2,m2,istk(il1),
      $     strf,buf,rect,nax)
@@ -776,7 +1156,7 @@ c      implicit undefined (a-z)
          return
       endif
       buf='X@Y@Z'//char(0)
-      strf='021'//char(0)
+      strf='061'//char(0)
       if (.not.checkrhs(fname,3,6)) return
       topk=top
       if (rhs.ge.6) then
@@ -826,6 +1206,11 @@ c      implicit undefined (a-z)
       if (m1*n1.ne.m3) then
          buf=fname//' first and third arguments '//
      $        'have incompatible length'
+         call error(999)
+         return
+      endif
+      if ( m3*n3 .eq.0 )  then 
+         buf=fname // ' empty vectors '
          call error(999)
          return
       endif
@@ -930,7 +1315,8 @@ cc    xarc ou xfarc
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getrvect,cremat
-      integer topk, m,n,lr1,lr,lc,il1,i,verb,iwp,na,v,iadr
+      integer topk,lc,i,verb,v,iadr
+      integer m1,n1,lr1,m2,n2,lr2,il2
       double precision dv
       iadr(l)=l+l-1
       verb=0
@@ -939,35 +1325,40 @@ C     xarcs ou xrects
       if (.not.checkrhs(fname,1,2)) return
       topk=top
       if (rhs.eq.2) then
-         if (.not.getrvect(fname,topk,top,m,n,lr)) return
+         if (.not.getrvect(fname,topk,top,m2,n2,lr2)) return
          top=top-1
-         il1=iadr(lr)
-         call  entier(m*n,stk(lr),istk(il1))
+         il2=iadr(lr2)
+         call  entier(m2*n2,stk(lr2),istk(il2))
       endif
-      if (.not.getrmat(fname,topk,top,m,n,lr1)) return
+      if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
       if (fname.eq.'xarcs') then
-         if (m.ne.6) then 
+         if (m1.ne.6) then 
             buf= fname //' arcs has a wrong size (6,n) expected'
             call  error(999)
             return
          endif
       else
-         if (m.ne.4) then 
+         if (m1.ne.4) then 
             buf= fname //' rects has a wrong size (4,n) expected'
             call  error(999)
             return
          endif
       endif
       if (rhs.ne.2) then
-         if (.not.cremat(fname,top+1,0,1,n,lr,lc)) return
-         il1=iadr(lr)
-         call  dr1('xget'//char(0),'white'//char(0),verb,iwp,na,
-     $        v,v,v, dv,dv,dv,dv)
-         do 10 i=0,n-1
-            istk(il1+i)=iwp+1
+         if (.not.cremat(fname,top+1,0,1,n1,lr2,lc)) return
+         il2=iadr(lr2)
+         do 10 i=0,n1-1
+            istk(il2+i)=0
  10      continue
+      else
+         if ( m2*n2.ne.n1) then 
+            buf= fname //' second and third arguments have'
+     $           // 'incompatible sizes'
+            call  error(999)
+            return
+         endif
       endif
-      call  dr1(ffname,'v'//char(0),v,istk(il1),n,v,v,v,
+      call  dr1(ffname,'v'//char(0),v,istk(il2),n1,v,v,v,
      $     stk(lr1),dv,dv,dv)
       call  objvide(fname,top)
       return
@@ -978,7 +1369,7 @@ C     xarcs ou xrects
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getrvect,cremat
-      integer topk, m,n,lr1,lr,lc,il1,i,verb,iwp,na,v,iadr
+      integer topk, m,n,lr1,lr,lc,il1,i,verb,v,iadr
       double precision dv
       iadr(l)=l+l-1
       verb=0
@@ -1001,8 +1392,6 @@ C     xarcs ou xrects
       if (rhs.ne.2) then
          if (.not.cremat(fname,top+1,0,1,n,lr,lc)) return
          il1=iadr(lr)
-         call  dr1('xget'//char(0),'white'//char(0),verb,iwp,na,
-     $        v,v,v, dv,dv,dv,dv)
          do 10 i=0,n-1
             istk(il1+i)=i
  10      continue
@@ -1292,13 +1681,18 @@ c      implicit undefined (a-z)
       double precision  x,y,dv
       integer i
       if (.not.checklhs(fname,1,4)) return
+      if (rhs.ge.1 ) then 
+         iflag = 1
+      else
+         iflag =0
+      endif
       call sciwin()
       if(lhs.eq.4) then
          call dr1('xclickany'//char(0),'xv'//char(0),
      $        i,iw,v,v,v,v,x,y,dv,dv)
       else
          call dr1('xclick'//char(0),'xv'//char(0),
-     $        i,v,v,v,v,v,x,y,dv,dv)
+     $        i,iflag,v,v,v,v,x,y,dv,dv)
       endif
       if (top.eq.0.or.rhs.lt.0)  top=top+1
 c      if (top.eq.1) lstk(top)=1
@@ -1396,15 +1790,14 @@ c      implicit undefined (a-z)
       call  objvide(fname,top)
       return
       end
-     
-     
+          
       subroutine scixfpolys (fname)
       character*(*) fname
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrvect,matsize,getrmat,cremat
       integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,lc3,i
-      integer iwp,il3,na,verb,v,iadr
+      integer il3,verb,v,iadr
       double precision dv
       iadr(l)=l+l-1
       verb=0
@@ -1423,11 +1816,9 @@ c      implicit undefined (a-z)
       if (.not.matsize(fname,topk,top,m2,n2)) return
       if (rhs.ne.3) then
          if (.not.cremat(fname,top+2,0,1,n2,lr3,lc3)) return
-         call  dr1('xget'//char(0),'white'//char(0),verb,iwp,na
-     $        ,v,v,v,dv,dv,dv,dv)
          il3=iadr(lr3)
          do 10 i=1,n2
-            istk(il3+i-1)= iwp+1
+            istk(il3+i-1)= 0
  10      continue
       else
          if (m3*n3.lt.n2) then
@@ -1469,11 +1860,21 @@ cc    <x1>=xget(str,flag)
       if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
       call  cvstr(nlr,istk(lr),buf,1)
       buf(nlr+1:nlr+1)=char(0)
-      call dr1('xget'//char(0),buf,flag,x1,x2,v,v,v,dv,dv,dv,dv)
-      if (.not.cremat(fname,top,0,1,x2,lr,lc)) return
-      do 10 i=1,x2
-         stk(lr+i-1)=dble(x1(i))
- 10   continue
+C     special case for colormap : must allocate space 
+      if (buf(1:nlr).eq.'colormap') then
+         if (.not.cremat(fname,top,0,256,3,lr,lc)) return
+         stk(lr)=11.99
+         stk(lr+1)=22.88
+         call dr1('xget'//char(0),buf,flag,x1,x2,v,v,v,stk(lr),
+     $        dv,dv,dv)
+         if (.not.cremat(fname,top,0,x1,3,lr,lc)) return
+      else 
+         call dr1('xget'//char(0),buf,flag,x1,x2,v,v,v,dv,dv,dv,dv)
+         if (.not.cremat(fname,top,0,1,x2,lr,lc)) return
+         do 10 i=1,x2
+            stk(lr+i-1)=dble(x1(i))
+ 10      continue
+      endif
       return
       end
      
@@ -1634,9 +2035,8 @@ c      implicit undefined (a-z)
       double precision dv
       logical checkrhs,getrmat,matsize,cremat,getrvect
       integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,lc3,il3
-      integer i,iwp,verb,na,v,iadr
+      integer i,v,iadr
       iadr(l)=l+l-1
-      verb=0
       call sciwin()
       if (.not.checkrhs(fname,2,3)) return
       topk=top
@@ -1652,11 +2052,9 @@ c      implicit undefined (a-z)
       if (.not.matsize(fname,topk,top,m2,n2)) return
       if (rhs.eq.2) then
          if (.not.cremat(fname,top+2,0,1,n2,lr3,lc3)) return
-         call  dr1('xget'//char(0),'white'//char(0),verb,iwp,na,
-     $        v,v,v,dv,dv,dv,dv)
          il3=iadr(lr3)
          do 10 i=1,n2
-            istk(il3+i-1)= -1
+            istk(il3+i-1)= 1
  10      continue
       else
          if (m3*n3.lt.n2) then
@@ -1690,11 +2088,12 @@ c      implicit undefined (a-z)
       character*(*) fname
 c      implicit undefined (a-z)
       include '../stack.h'
-      logical checkrhs,getscalar,getsmat
-      integer topk, lr,nlr,i,m,n,v
+      logical checkrhs,getsmat,getrmat
+      integer topk, lr,nlr,i,m,n,v,lrkp,isdc
 cc    <>=xset(str,x1,x2,x3,x4,x5)
-      integer x(5)
+      integer x(5),xm(5),xn(5),iadr
       double precision xx(5),dv
+      iadr(l)=l+l-1
       x(1)=0
       xx(1)=0
       if (rhs.le.0) then
@@ -1706,9 +2105,16 @@ cc    <>=xset(str,x1,x2,x3,x4,x5)
       topk=top
       do 10 i=5,1,-1
          if (rhs.ge.(i+1)) then
-            if (.not.getscalar(fname,topk,top,lr)) return
-            x(i)=int(stk(lr))
-            xx(i)=stk(lr)
+            if(.not.getrmat(fname,topk,top,xm(i),xn(i),lr))return
+c           special case for colormap : should be improved 
+            if(xm(i)*xn(i).ne.1) then 
+               lrkp=lr
+c               il1 = iadr(lr)
+c               call entier(xm(i)*xn(i),stk(lr),istk(il1))
+            else
+               x(i)=int(stk(lr))
+               xx(i)=stk(lr)
+            endif
             top=top-1
          endif
  10   continue
@@ -1716,14 +2122,30 @@ cc    <>=xset(str,x1,x2,x3,x4,x5)
       call  cvstr(nlr,istk(lr),buf,1)
       buf(nlr+1:nlr+1)=char(0)
 c     initialisation of a window if argument is not xset('window')
-      if (buf(1:nlr).ne.'window')  call sciwin()
+c     with special cases if xset('colormap') or xset('default') 
+c     and window does not exists we want to get into set_default_colormap
+c     only onc 
+      isdc=0
+      if (buf(1:nlr).eq.'colormap'.or.buf(1:nlr).eq.'default') 
+     $     call sedeco(isdc) 
+      if (buf(1:nlr).ne.'window') call sciwin()
+      isdc=1
+      if (buf(1:nlr).eq.'colormap'.or.buf(1:nlr).eq.'default') 
+     $     call sedeco(isdc) 
       if (buf(1:nlr).eq.'clipping') then
          call dr1('xset'//char(0),buf,v,v,v,v,
      $        v,v,xx(1),xx(2),xx(3),xx(4))
       else
-         call dr1('xset'//char(0),buf,x(1),x(2),x(3),x(4),x(5),
-     $        v,dv,dv,dv,dv)
+         if (buf(1:nlr).eq.'colormap') then
+            
+            call dr1('xset'//char(0),buf,xm(1),
+     $           xn(1),v,v,v,v,stk(lrkp),dv,dv,dv)
+         else
+            call dr1('xset'//char(0),buf,x(1),x(2),x(3),x(4),x(5),
+     $           v,dv,dv,dv,dv)
+         endif
       endif
+      if (err.gt.0.or.err1.gt.0) return
       call objvide(fname,top)
       return
       end
@@ -1763,6 +2185,7 @@ cc    <>=xstring(x,y,str,angle,flag)
       top=top-1
       if (.not.getscalar(fname,topk,top,lr)) return
       x=stk(lr)
+c     to keep the size of the largest line 
       wc=0.0d00
       do 10 i=m,1,-1
          ib=1
@@ -1773,24 +2196,30 @@ cc    <>=xstring(x,y,str,angle,flag)
             buf(ib-1:ib-1)= ' '
  20      continue
          buf(ib:ib)=char(0)
-         call dr1('xstring'//char(0),buf,v,v,v,0,v,v,x,y,angle,dv) 
+         iv=0
+         call dr1('xstring'//char(0),buf,v,v,v,iv,v,v,x,y,angle,dv) 
          call dr1('xstringl'//char(0),buf,v,v,v,v,v,v,x,y,rect,dv)
          wc=max(wc,rect(3))
-C         y=y+2*rect(4)
-         y=y+1.2*rect(4)
+         if ( i.ne.1) then
+            y=y+1.2*rect(4)
+         else
+            y=y+rect(4)
+         endif
  10   continue
-      y =y-rect(4)/2.0d00
-      yi=yi-rect(4)/2.0d00
-      call dr1('xstringl'//char(0),'x'//char(0),v,v,v,v,v,v,
-     $     x,y,rect,dv)
-      x=x-rect(3)/2.0d00
-      wc=wc+rect(3)
-      if (flag.eq.1) call  dr1('xrect','v'//char(0),v,v,v,v,
-     $     v,v,x,y,wc,y-yi)
+c     the whole strings are displayed in the rectangle 
+C     yi-> y, we increase this rectangle by a 1/4  of the 
+C     height of the current font 
+c      y =y + rect(4)/4.0d00
+c      yi=yi-rect(4)/4.0d00
+c     call dr1('xstringl'//char(0),'x'//char(0),v,v,v,v,v,v,
+c     $     x,y,rect,dv)
+c      x=x-rect(3)/4.0d00
+c      wc=wc+rect(3)/2
+      if (flag.eq.1) call  dr1('xrect'//char(0),'v'//char(0),
+     $     v,v,v,v, v,v,x,y,wc,y-yi)
       call objvide(fname,top)
       return
       end        
-
 
       subroutine scixtitle(fname)
       character*(*) fname
@@ -1867,14 +2296,12 @@ cc    <rect>=xstringl(x,y,str)
          call dr1('xstringl'//char(0),buf,v,v,v,v,v,v,
      $        x,y,rect,dv)
          wc=max(wc,rect(3))
-         y=y+1.2*rect(4)
+         if ( i.ne.1) then 
+            y=y+1.2*rect(4)
+         else
+            y=y+rect(4)
+         endif
  10   continue
-      y =y-rect(4)/2.0d00
-      yi=yi-rect(4)/2.0d00
-      call dr1('xstringl'//char(0),'x'//char(0),v,v,v,
-     $     v,v,v,x,y,rect,dv)
-      x=x-rect(3)/2.0d00
-      wc=wc+rect(3)
       stk(lr)=x
       stk(lr+1)=y
       stk(lr+2)=wc
@@ -1997,6 +2424,9 @@ C     le premier argument est une chaine de caractere
       elseif (buf(1:nlr).eq.'replayna') then
          call dr('xreplayna'//char(0),'v'//char(0),num,v,v,
      $        iflag,flag,v,theta,alpha,stk(lr7),dv)
+      elseif (buf(1:nlr).eq.'replaysh') then
+         call dr('xreplaysh'//char(0),'v'//char(0),num,v,v,
+     $        iflag,flag,v,theta,alpha,stk(lr7),dv)
       elseif (buf(1:nlr).eq.'replaysc') then
          call dr('xreplaysc'//char(0),'v'//char(0),num,iscflag,v,
      $        aint,v,v, stk(lrr),dv,dv,dv)
@@ -2088,7 +2518,7 @@ c      implicit undefined (a-z)
       integer topk, lr1,lc1,lr2,lc2,m1,n1,lr,nlr
       character*(2) logf
       call sciwin()
-      if (.not.checklhs(fname,2,3)) return
+      if (.not.checklhs(fname,1,3)) return
       topk=top
       if (top.eq.0.or.rhs.lt.0)  top=top+1
 c      if (top.eq.1) lstk(top)=1
@@ -2101,6 +2531,9 @@ c      if (top.eq.1) lstk(top)=1
          if (.not.cresmat(fname,top,1,1,2)) return
          call getsimat(fname,top,top,m1,n1,1,1,lr,nlr)
          call cvstr(2,istk(lr),logf,0)
+      endif
+      if (lhs.eq.1) then 
+         top = top-1
       endif
       return
       end
@@ -2141,7 +2574,7 @@ c      implicit undefined (a-z)
          return
       endif
       buf='X@Y@Z'//char(0)
-      strf='021'//char(0)
+      strf='061'//char(0)
       if (.not.checkrhs(fname,4,8)) return
       topk=top
       if (rhs.ge.8) then
@@ -2208,6 +2641,11 @@ C        x des noeuds
          if (.not.getrvect(fname,topk,top,m1,n1,lr1)) return
          if (.not.matsize(fname,topk,top,m2,n2)) return
       endif
+      if ( m1*n1 .eq.0.or.m3.eq.0 )  then 
+         buf=fname // ' empty vectors '
+         call error(999)
+         return
+      endif
       call sciwin()
       call fec(stk(lr1),stk(lr2),stk(lr3),stk(lr4),m1*n1,m3
      $     ,strf,buf,rect,nax)
@@ -2223,9 +2661,14 @@ c      implicit undefined (a-z)
       integer topk, lr,lc,v
       double precision  x,y,dv
       integer i
+      if (rhs.ge.1) then 
+         iflag=1
+      else
+         iflag=0
+      endif
       call sciwin()
-      call dr1('xgetmouse'//char(0),'xv'//char(0),i,v,v,v,v,v,
-     $     x,y,dv,dv)
+      call dr1('xgetmouse'//char(0),'xv'//char(0),i,iflag
+     $     ,v,v,v,v,x,y,dv,dv)
       if (top.eq.0.or.rhs.lt.0)  top=top+1
 c      if (top.eq.1) lstk(top)=1
       if (.not.checklhs(fname,1,1)) return
@@ -2313,3 +2756,221 @@ cc    <>=driver(dr_name)
       call objvide(fname,top)
       return
       end
+
+      subroutine scixg2psofig(fname,dr)
+      character*(*) fname
+      character*(*) dr
+cc    []=xg2ps(win-num,file-name,flag) 
+cc    implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getscalar,getsmat
+      integer topk, flag,lr,nlr, m,n,iwin
+      flag=-1
+      if (.not.checkrhs(fname,2,3)) return
+      topk=top
+      if (rhs.ge.3) then
+         if (.not.getscalar(fname,topk,top,lr)) return
+         flag=int(stk(lr))
+         top=top-1
+      endif
+      if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
+      if ( m*n .ne.1 ) then 
+         buf=fname//' : second argument must be a string'
+         call error(999)
+         return
+      endif
+      call  cvstr(nlr,istk(lr),buf(1:1+nlr),1)
+      buf(1+nlr:1+nlr)= char(0)
+      top=top-1
+      if (.not.getscalar(fname,topk,top,lr)) return
+      iwin = int(stk(lr))
+      call xg2psofig(buf,nlr,iwin,flag,dr)
+      call objvide(fname,top)
+      return
+      end        
+
+
+      subroutine scixsort(fname)
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getrmat,getsmat,cremat
+      integer topk, m1,n1,lr1,lr2,close,m,n,nlr,lr,iadr
+      integer iflag ,iv,gettype
+      double precision dv
+      character*(2) iord
+      character*(10) type
+      data iflag /0/
+      iadr(l)=l+l-1
+      iord='d'//char(0)
+      type='g'//char(0)
+cc    [s,v]= gsort(x,[str1,str2]) str1 = 'g','r','c', str2 = 'i' | 'd' 
+      if (.not.checkrhs(fname,1,3)) return
+      topk=top
+      close=0
+      itype = gettype(top-rhs+1)
+      if ( itype .eq.10) then 
+         call scissort(fname)
+         return
+      endif
+      if (rhs.ge.3) then
+         if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
+         call cvstr(1,istk(lr),iord,1)
+         iord(2:2)=char(0)
+         top=top-1
+      endif
+      if (rhs.ge.2) then
+         if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
+         if ( nlr.lt.10) then 
+            call  cvstr(nlr,istk(lr),type,1)
+            type(nlr+1:nlr+1)=char(0)
+         else 
+            buf=fname // ' : 2nd argument too long'
+            call error(999)
+            return
+         endif
+         top=top-1
+      endif
+      if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
+      if (type(1:1).ne.'r'.and.type(1:1).ne.'c'.and.type(1:1).ne.'g'
+     $     .and.type(1:1).ne.'l')   then
+         buf=fname // ' : 2nd argument r,c,g,lr,lc '
+         call error(999)
+         return
+      endif
+      if (lhs.eq.2) then 
+         top=top+1
+         iflag=1
+         if ( type(1:1).eq.'l') then 
+            if (type(2:2).eq.'r') then 
+               if (.not.cremat(fname,top,0,m1,1,lr2,lc2)) return
+            else
+               if (.not.cremat(fname,top,0,1,n1,lr2,lc2)) return
+            endif
+            call entier(m1*n1,stk(lr1),istk(iadr(lr1)))
+            call gsort(istk(iadr(lr1)),dv,istk(iadr(lr2)),iflag,
+     $           m1,n1,type,iord)
+            call entier2d(m1*n1,stk(lr1),istk(iadr(lr1)))
+         else
+            if (.not.cremat(fname,top,0,m1,n1,lr2,lc2)) return
+            call gsort(iv,stk(lr1),istk(iadr(lr2)),iflag,
+     $           m1,n1,type,iord)
+         endif
+         call entier2d(m1*n1,stk(lr2),istk(iadr(lr2)))
+      else
+         iflag=0
+         if ( type(1:1).eq.'l') then 
+            call entier(m1*n1,stk(lr1),istk(iadr(lr1)))
+            call gsort(istk(iadr(lr1)),dv,iv,iflag,
+     $           m1,n1,type,iord)
+            call entier2d(m1*n1,stk(lr1),istk(iadr(lr1)))
+         else
+            call gsort(iv,stk(lr1),iv,iflag,m1,n1,type,iord)
+         endif
+      endif
+      return
+      end
+     
+
+      subroutine scissort(fname)
+      character*(*) fname
+c      implicit undefined (a-z)
+c     string version 
+      include '../stack.h'
+      logical checkrhs,getsmat,cremat,getwsmat
+      integer topk, m1,n1,lr2,close,m,n,nlr,lr,iadr
+      integer iflag ,iv
+c      double precision dv
+      character*(2) iord
+      character*(10) type
+      data iflag /0/
+      iadr(l)=l+l-1
+      iord='d'//char(0)
+      type='g'//char(0)
+cc    [s,v]= gsort(x,[str1,str2]) str1 = 'g','r','c', str2 = 'i' | 'd' 
+      if (.not.checkrhs(fname,1,3)) return
+      topk=top
+      close=0
+      if (rhs.ge.3) then
+         if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
+         call cvstr(1,istk(lr),iord,1)
+         iord(2:2)=char(0)
+         top=top-1
+      endif
+      if (rhs.ge.2) then
+         if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
+         if ( nlr.lt.10) then 
+            call  cvstr(nlr,istk(lr),type,1)
+            type(nlr+1:nlr+1)=char(0)
+         else 
+            buf=fname // ' : 2nd argument too long'
+            call error(999)
+            return
+         endif
+         top=top-1
+      endif
+      if (.not.getwsmat(fname,topk,top,m1,n1,il1,ild1)) return
+      ilres=iadr(lstk(top))
+      ierr=iadr(lstk(top+1))- (ilres+4+m1*n1+1)
+      if (type(1:1).ne.'r'.and.type(1:1).ne.'c'.and.type(1:1).ne.'g'
+     $     .and.type(1:1).ne.'l')   then
+         buf=fname // ' : 2nd argument r,c,g,lr,lc '
+         call error(999)
+         return
+      endif
+      if (lhs.eq.2) then 
+         top=top+1
+         iflag=1
+         if ( type(1:1).eq.'l') then 
+            if (type(2:2).eq.'r') then 
+               if (.not.cremat(fname,top,0,m1,1,lr2,lc2)) return
+            else
+               if (.not.cremat(fname,top,0,1,n1,lr2,lc2)) return
+            endif
+         else
+            if (.not.cremat(fname,top,0,m1,n1,lr2,lc2)) return
+         endif
+         call gsorts(istk(il1),istk(ild1),m1,n1,istk(il1),
+     $        istk(ild1),ierr,istk(iadr(lr2)),iflag,type,iord)
+         call entier2d(m1*n1,stk(lr2),istk(iadr(lr2)))
+      else
+         iflag=0
+         call gsorts(istk(il1),istk(ild1),m1,n1,istk(il1),
+     $        istk(ild1),ierr,iv,iflag,type,iord)
+      endif
+      if(ierr .gt. 0) then 
+         call error(999)
+         return
+      endif
+      return
+      end
+
+
+      subroutine sciwinsid(fname)
+C     OK
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,cremat
+      integer iadr
+c      double precision dv 
+      iadr(l)=l+l-1
+      if (.not.checkrhs(fname,-1,0)) return
+      iflag=0
+      call getwins(num,ids,iflag)
+      top = top+1
+      if (.not.cremat(fname,top,0,1,num,lr1,lc1)) return
+      iflag = 1
+      call getwins(num,istk(iadr(lr1)),iflag)
+      call entier2d(num,stk(lr1),istk(iadr(lr1)))
+      return
+      end
+
+
+
+
+
+
+
+
+

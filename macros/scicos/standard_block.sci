@@ -18,7 +18,7 @@ function [x,y,typ]=standard_block(job,arg1,arg2)
 //                    x  : y coordinates of block origin
 // job=='set'        : block parameters acquisition
 //                    arg1 is block data structure
-//                    x is returned block data structure 
+//                    x is returned block data structure
 // job=='define'     : corresponding block data structure initialisation
 //                    arg1: name of block parameters acquisition macro (init)
 //                    x   : block data structure
@@ -61,6 +61,8 @@ case 'set' then
     x=list('Block',graphics,model,arg1(4),arg1(5))
   end
 case 'define' then
-  model=list(arg1,1,1,0,0,[],[],[],[],%f,[%f %f])
-  x=standard_define([2 2],model)
+  model=list(arg1,1,1,[],[],[],[],[],[],%f,[%f %f])
+  x=standard_define([2 2],model,[],[])
 end
+
+

@@ -1,14 +1,15 @@
 function [P,r]=augment(G,flag)
 // Augmented plants P
 //!
-[LHS,RHS]=argn(0)
+[LHS,RHS]=argn(0);
+G1=G(1);
 if RHS==1 then flag='SRT';end
 r=size(G);
  [ny,nu]=size(G);Iu=eye(nu,nu);Iy=eye(ny,ny);
  Ouy=zeros(nu,ny);Oyu=zeros(ny,nu);Ouu=zeros(nu,nu);
  Oyy=zeros(ny,ny);
 ssflag=0;
-if G(1)='r' then ssflag=1;end
+if G1(1)='r' then ssflag=1;end
 long=length(flag);
 select long
 case 3 then

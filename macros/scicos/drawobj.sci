@@ -7,7 +7,10 @@ elseif o(1)=='Link' then
   xset('dashes',c)
   xpoly(o(2),o(3),'lines')
   xset('dashes',d)
-elseif o(1)=='Text' then  
+elseif o(1)=='Text' then
   execstr(o(5)+'(''plot'',o)')
 end
+
+
+
 

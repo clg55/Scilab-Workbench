@@ -49,7 +49,7 @@ c
  02   call getsym
       if (sym .ne. name) then
          call error(34)
-         if (err .gt. 0) return
+         return
       endif
       rstk(pt+1)=0
       if ( eptover(2,psiz))  return
@@ -57,7 +57,7 @@ c
       call getsym
       if (sym .ne. equal) then
          call error(34)
-         if (err .gt. 0) return
+         return
       endif
       call getsym
       if(comp(1).ne.0) then
@@ -82,7 +82,7 @@ c     *call* expr
          pstk(pt) = lpt(4)
       else
          call error(34)
-         if (err .gt. 0) return
+         return
       endif
 c     on recherche le "end" pour s'assurer que toutes les lignes relatives 
 c     sont chargee (pb des matrices sur plusieurs lignes)
@@ -204,7 +204,7 @@ c     *call* allops(==)
          sym = semi
       else
          call error(35)
-         if (err .gt. 0) return
+         return
       endif
       if(comp(1).ne.0) goto 48
 c     comparaison ...
@@ -219,14 +219,14 @@ c     comparaison ...
          if(eqid(syn,elsif)) then
             if(.not.eqid(iff,ids(1,pt))) then
                call error(34)
-               if(err.gt.0) return
+               return
             endif
             goto 36
          endif
          if(eqid(syn,cas)) then
             if(.not.eqid(sel,ids(1,pt))) then
                call error(34)
-               if(err.gt.0) return
+               return
             endif
             goto 42
          endif

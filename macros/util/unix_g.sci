@@ -14,16 +14,14 @@ function rep=unix_g(cmd)
 // host unix_x unix_s
 //!
 if prod(size(cmd))<>1 then   error(55,1),end
-host('('+cmd+')>'+TMPDIR+'/unix.out 2>'+TMPDIR+'/unix.err;echo $?>'+TMPDIR+'/unix.status')
-errcatch(241,'continue','nomessage')
-status=read(TMPDIR+'/unix.status',1,1)
-errcatch(-1);
-if iserror(241)==0 then
-  if status==1 then
-    msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
-    error('unix_g: '+msg(1))
-  end
+stat=host('('+cmd+')>'+TMPDIR+'/unix.out 2>'+TMPDIR+'/unix.err;')
+select stat
+case 0 then
+  rep=read(TMPDIR+'/unix.out',-1,1,'(a)')
+  if size(rep,'*')==0 then rep=[],end
+case -1 then // host failed
+  error(85)
 else
-  errclear(241)
+  msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
+  error('unix_g: '+msg(1))
 end
-rep=read(TMPDIR+'/unix.out',-1,1,'(a)')

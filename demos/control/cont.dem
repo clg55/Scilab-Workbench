@@ -1,14 +1,15 @@
+deff('[]=demoexc(fil)','exec(''SCI/demos/control/''+fil)')
 while %t do
   n=x_choose(['LQG','Mixed-sensitivity','PID'],'Select a demo');
   select n
   case 0
     break
   case 1
-    exec(SCI+'/demos/control/lqg.dem')
+    demoexc('lqg.dem')
   case 2
-    exec(SCI+'/demos/control/mixed.dem')
+    demoexc('mixed.dem')
   case 3
-    exec(SCI+'/demos/control/pid.dem')
+    demoexc('pid.dem')
   end
 end
 

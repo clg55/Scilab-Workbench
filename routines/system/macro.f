@@ -36,6 +36,7 @@ c
          rhs=0
          mlhs=0
          l=ilk+5+istk(ilk+1)*istk(ilk+2)
+         lf=l+istk(ilk+4+istk(ilk+1)*istk(ilk+2))-1
          last=isiz-4
          if(macr.ne.0.or.paus.ne.0) then
             k=lpt(1)-(13+nsiz)
@@ -73,6 +74,7 @@ c     set input variable name
          l=l+1
          l1=l+nsiz*(rhs-1)
          l = l + nsiz*mrhs + 1
+         lf= l+istk(l-1)+1
          if(mrhs.eq.0.and.rhs.le.1) then
             if(comp(1).eq.0.and.rhs.eq.1) top=top-1
             rhs=0
@@ -109,6 +111,7 @@ c
       if ( ptover(1,psiz-1)) return
       ids(1,pt) = rhs
       ids(2,pt) = lhs
+      ids(3,pt)=lf
       pstk(pt)=lct(4)
 c     
       macr=macr+1
@@ -129,7 +132,11 @@ c     save input variables
          mrhs=rhs
          rhs=0
          do 20 j=1,mrhs
-            call stackp(istk(l1),0)
+            if(infstk(top).ne.1) then
+               call stackp(istk(l1),0)
+            else
+               call stackp(idstk(1,top),0)
+            endif
             l1=l1-nsiz
  20      continue
       endif
@@ -313,7 +320,6 @@ c     fin exec
       if(rio.eq.rte.and.paus.gt.0) then
          bot=lin(k+5)
          paus=paus-1
-         call stsync(1)
       endif
       wmac=pstk(pt)
       pt=pt-1

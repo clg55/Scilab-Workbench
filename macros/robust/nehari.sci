@@ -5,8 +5,9 @@ function [x]=nehari(r,tol)
 //    || R - X ||oo = min || R - Y ||oo
 //                  Y in Hoo
 //!
-[lhs,rhs]=argn(0),
-if r(1)<>'lss' then error('State-space only!'),end
+[lhs,rhs]=argn(0);
+r1=r(1);
+if r1(1)<>'lss' then error('State-space only!'),end
 if r(7)='d' then error('Continuous-time only!'),end
 r(7)='c'
 //

@@ -9,16 +9,16 @@ function [zdot]=dpend(time,z)
    res=mat\vec;
    th1dd=res(1);th2dd=res(2);
    zdot=[th1d;th2d;th1dd;th2dd];
-//end
 
 function []=pp(z)
-   th1=z(1,:);th2=z(2,:);
-   rc1=r1*cos(th1);rc2=r2*cos(th2);
-   rs1=r1*sin(th1);rs2=r2*sin(th2);
-   rs12=rs1+rs2;rc12=rc1+rc2;
-   rect=[-2.1,-3.1,2.1,1.1];
-   for k=1:maxi(size(th1));
-      plot2d([0 rs1(k) rs12(k)]',-[0 rc1(k) rc12(k)]',...
-		[-1],"011",' ',rect,[10,3,10,3]);
-   end,
-//end
+th1=z(1,:);th2=z(2,:);
+rc1=r1*cos(th1);rc2=r2*cos(th2);
+rs1=r1*sin(th1);rs2=r2*sin(th2);
+rs12=rs1+rs2;rc12=rc1+rc2;
+rect=[-2.1,-3.1,2.1,1.1];
+for k=1:maxi(size(th1));
+    plot2d([0 rs1(k) rs12(k)]',-[0 rc1(k) rc12(k)]',...
+    [-1],"011",' ',rect,[10,3,10,3]);
+end;
+
+

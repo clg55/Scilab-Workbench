@@ -14,3 +14,7 @@ all.tex : include systeme.tex which gives in TeX the computations of Maple
 
 Makefile : 
 	a makefile for Fortran compilation : type make 
+
+
+WARNING : If you are using MapleV.4 yopu should change the add function into 
+	matadd in npend.map and Euler.map 

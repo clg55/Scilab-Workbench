@@ -9,9 +9,7 @@ t=1:10;t0=0;y0=[1;0];y0d=[-10;0];
 info=list([],0,[],[],[],0,0);
 //    Calling Scilab functions
 deff('[r,ires]=dres1(t,y,ydot)','r=[ydot(1)+10*y(1);y(2)+y(1)-1];ires=0')
-comp(dres1);
 deff('pd=djac1(t,y,ydot,cj)','pd=[cj+10,0;1,1]')
-comp(djac1);
 //   scilab function, without jacobian
 yy0=dassl([y0,y0d],t0,t,dres1,info);
 //   scilab functions, with jacobian
@@ -42,7 +40,7 @@ nx=5;
 E=rand(nx,1)*rand(1,nx);A=rand(nx,nx);
 //         Index 1
 [Si,Pi,Di,o]=penlaur(E,A);pp=Si*E;[q,m]=fullrf(pp);x0=q(:,1);x0d=pinv(E)*A*x0;
-deff('[r,ires]=g(t,x,xdot)','r=E*xdot-A*x;ires=0');comp(g);
+deff('[r,ires]=g(t,x,xdot)','r=E*xdot-A*x;ires=0');
 t=[1,2,3];t0=0;info=list([],0,[],[],[],0,0);
 x=dassl([x0,x0d],t0,t,g,info);x1=x(2:nx+1,:);
 if norm(pp*x1-x1,1)>1.d-5 then pause,end
@@ -51,7 +49,7 @@ t=1.5409711;ww=dassl([x0,x0d],t0,t,g,info);
 if abs(ww(5)-1)>0.001 then pause,end
 deff('[rt]=surface(t,y,yd)','rt=y(4)-1');nbsurf=1;
 [yyy,nnn]=dasrt([x0,x0d],t0,t,g,nbsurf,surface,info);
-deff('pd=j(t,y,ydot,cj)','pd=cj*E-A');comp(j);
+deff('pd=j(t,y,ydot,cj)','pd=cj*E-A');
 x=dassl([x0,x0d],t0,t,g,j,info);x2=x(2:nx+1,1);
 if norm(x2-ww(2:nx+1,1),1)>0.0001 then pause,end
 [yyy1,nnn]=dasrt([x0,x0d],t0,t,g,j,nbsurf,surface,info);
@@ -99,7 +97,6 @@ if abs(nn(1)-2.53)>0.001 then pause,end
 
 deff('[delta,ires]=res1(t,y,ydot)','ires=0;delta=ydot-((2*log(y)+8)/t-5)*y')
 deff('[rts]=gr1(t,y,yd)','rts=[((2*log(y)+8)/t-5)*y;log(y)-2.2491]')
-comp(res1);comp(gr1);
 
 y0=1;t=2:6;t0=1;y0d=3;
 info=list([],0,[],[],[],0,0);

@@ -1,4 +1,4 @@
-//[]=black(sl,fmin,fmax,pas,comments)
+function []=black(sl,fmin,fmax,pas,comments)
 //Black's diagram (Nichols chart) for a linear system sl.
 //sl can be a continuous-time, discrete-time or sampled SIMO system
 //Syntax:
@@ -34,7 +34,6 @@
 //See also:
 //  bode nyquist  abaque freq repfreq 
 //!
-xbasc()
 [lhs,rhs]=argn(0);
 pas_def='auto' //
 //
@@ -45,7 +44,7 @@ typ=type(sl)
 if typ==15 then typ=16,end
 select typ
 case 16 then  // sl,fmin,fmax [,pas] [,comments]
-  typ=sl(1)
+  typ=sl(1);typ=typ(1);
   if typ<>'lss'&typ<>'r' then
     error(97,1)
   end
@@ -122,7 +121,7 @@ rect=[-360;mini(d);0;maxi(d)]
 rect=[xmn,ymn,xmx,ymx]
 leg=strcat(comments,'@')
 
-plot2d(phi',d',-(1:mn),strf,leg,rect,[10,npx,10,npy]);
+plot2d(phi',d',(1:mn),strf,leg,rect,[10,npx,10,npy]);
 kf=1
 phi1=phi+5*ones(phi);
 xgeti=xget("mark");
@@ -162,5 +161,5 @@ npts=100;
 crcl=exp(%i*(-%pi:(2*%pi/npts):%pi));
 lgmt=log(-r*crcl+r*lmda*ones(crcl));
 plot2d([180*(imag(lgmt)/%pi-ones(lgmt))]',[(20/log(10)*real(lgmt))]',...
-     [-2,mnc+1],"100",'2.3db curve'),
+     [2,-(mnc+1)],"100",'2.3db curve'),
 xset("mark",xgeti(1),xgeti(2));

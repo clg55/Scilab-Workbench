@@ -253,6 +253,7 @@ c
          call error(20)
          return
       endif
+      n=abs(n)
       if(mn.le.0) return
       l3 = l + nn*(it+1)
       err = l3+n*(it+1)+sadr(n) - lstk(bot)
@@ -290,6 +291,14 @@ c       matrice est quasi singuliere ou mal normalisee')
 c
  40   continue
 c     det
+      if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .gt. 2) then
+         call error(41)
+         return
+      endif
 c
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
@@ -322,45 +331,68 @@ c
       if(it.eq.0) call dgefa(stk(l),m,n,istk(ilp),info)
       if(it.eq.0) call dgedi(stk(l),m,n,istk(ilp),dtr,sr,10)
       k = int(dtr(2))
-      ka = abs(k)+2
-      t = 1.0d+0
-      do 41 i = 1, ka
-         t = t/10.0d+0
-         if (t .eq. 0.0d+0) go to 42
- 41   continue
-      stk(l) = dtr(1)*10.0d+0**k
-      if(it.eq.1) stk(l+1) = dti(1)*10.0d+0**k
-      istk(il+1)=1
-      istk(il+2)=1
-      lstk(top+1)=l+it+1
-      go to 99
- 42   if (it .eq. 0) then
-         write(buf(1:11),'(f7.4,i4)') dtr(1),k
-         call basout(io,wte,' det = '//buf(1:7)//' * 10**'//buf(8:11))
+
+      if(lhs.eq.1) then
+         stk(l) = dtr(1)*10.0d+0**int(dtr(2))
+         if(it.eq.1) stk(l+1) = dti(1)*10.0d+0**int(dtr(2))
+         istk(il+1)=1
+         istk(il+2)=1
+         lstk(top+1)=l+it+1
       else
-         write(buf(1:18),'(2f7.4,i4)') dtr(1),dti(2),k
-         call basout(io,wte,' det = ('//buf(1:7)//' + '//buf(8:14)//
-     &        ') * 10**'//buf(15:18))
+         stk(l) = dtr(2)
+         istk(il+1)=1
+         istk(il+2)=1
+         istk(il+3)=0
+         lstk(top+1)=l+1
+         top=top+1
+         il=iadr(lstk(top))
+         istk(il)=1
+         istk(il+1)=1
+         istk(il+2)=1
+         istk(il+3)=it
+         l=sadr(il+4)
+         stk(l)=dtr(1)
+         if(it.eq.1) stk(l+1)=dti(1)
+         lstk(top+1)=l+(it+1)
       endif
-      stk(l) = dtr(1)
-      stk(l+2) = dti(1)
-      stk(l+1) = dtr(2)
-      stk(l+3) = 0.0d+0
-      istk(il+1)=1
-      istk(il+2)=2
-      lstk(top+1)=l+2*(it+1)
       go to 99
 c cas de la matrice vide
    47 continue
-      istk(il+1)=1
-      istk(il+2)=1
-      lstk(top+1)=l+it+1
-      stk(l)=1.0d+0
-      if (it.eq.1) stk(l+1)=0.0d+0
+      if(lhs.eq.1) then
+         istk(il+1)=1
+         istk(il+2)=1
+         lstk(top+1)=l+it+1
+         stk(l)=1.0d+0
+         if (it.eq.1) stk(l+1)=0.0d+0
+      else
+         stk(l) = 0.0d0
+         istk(il+1)=1
+         istk(il+2)=1
+         istk(il+2)=0
+         lstk(top+1)=l+1
+         top=top+1
+         il=iadr(lstk(top))
+         istk(il)=1
+         istk(il+1)=1
+         istk(il+2)=1
+         istk(il+3)=it
+         l=sadr(il+4)
+         stk(l)=1.0d+0
+         if (it.eq.1) stk(l+1)=0.0d+0
+         lstk(top+1)=l+(it+1)
+      endif
       go to 99
 c
  50   continue
 c     rcond
+      if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
 c
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
@@ -418,6 +450,14 @@ c         call error(45)
 c
  60   continue
 c     lu
+      if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 2) then
+         call error(41)
+         return
+      endif
 c
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
@@ -437,10 +477,7 @@ c
          call error(20)
          return
       endif
-      if(lhs.ne.2) then
-         call error(41)
-         return
-      endif
+
       if (top+2 .ge. bot) then
          call error(18)
          return
@@ -514,6 +551,15 @@ c cas de la matrice vide
 c
  80   continue
 c     cholesky
+      if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
          err=rhs
@@ -545,9 +591,15 @@ c     cholesky
          if(it.eq.1) call dcopy(m-j,0.0d+0,0,stk(ll+mn),1)
  81   continue
       go to 99
+
 c     rref
- 85   if(rhs.gt.1) then
-         call error(42)
+ 85   continue
+      if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
          return
       endif
       il=iadr(lstk(top-rhs+1))

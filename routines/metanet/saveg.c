@@ -1,6 +1,13 @@
 #include <stdio.h>
+#ifndef __MSC__
 #include <dirent.h>
+#endif
 #include <string.h>
+#ifdef __STDC__
+#include <stdlib.h>
+#else
+#include <malloc.h>
+#endif
 
 #include "../machine.h"
 
@@ -13,7 +20,13 @@ extern char* dirname();
 extern int CheckGraphName();
 extern char *StripGraph();
 
-static char description[2*MAXNAM];
+typedef int (*PF)();
+
+static int CompString(s1, s2)
+char **s1, **s2;
+{
+  return strcmp((char*)*s1,(char*)*s2);
+}
 
 void C2F(saveg)(path,lpath,name,lname,directed,node_number,tail,head,
   node_name,node_type,node_x,node_y,node_color,node_diam,node_border,
@@ -37,13 +50,44 @@ int *default_node_diam,*default_node_border,*default_edge_width;
 int *default_edge_hi_width,*default_font_size;
 int *ma;
 {
+#ifdef __MSC__
+  return(0);
+#else 
   FILE *f;
   DIR *dirp;
   char fname[2*MAXNAM];
   char description[2*MAXNAM];
   char dir[1024], nname[2*MAXNAM];
   int i;
+  char **lar;
 
+ /* check uniqueness of node names */
+  if (*node_number != 1) {
+    if ((lar = (char **)malloc(sizeof(char *) * *node_number)) == NULL) {
+      cerro("Running out of memory");
+      return;
+    }
+    for (i = 0; i < *node_number; i++) lar[i] = (*node_name)[i];
+    qsort((char*)lar,*node_number,sizeof(char*),(PF)CompString);
+    for (i = 0; i < *node_number - 1; i++) {
+      if (!strcmp(lar[i],lar[i+1])) {
+	sprintf(description,
+		"Bad graph file. Node \"%s\" is duplicated",lar[i]);
+	cerro(description);
+	free(lar);
+	return;
+      }
+    }
+    if (!strcmp(lar[*node_number - 2],lar[*node_number - 1])) {
+      sprintf(description,
+	      "Bad graph file. Node \"%s\" is duplicated",lar[*node_number - 2]);
+      cerro(description);
+      free(lar);
+      return;
+    }
+    free(lar);
+  }
+ 
   path[*lpath] = '\0';
   name[*lname] = '\0';
 
@@ -148,4 +192,5 @@ int *ma;
   }
 
   fclose(f);
+#endif /*  __MSC__ */
 }

@@ -19,16 +19,16 @@ ct=-cos(t);cp=cos(p);st=-sin(t);sp=sin(p);
  
 //Window definition
     isoview(xb(1),xb(2),yb(1),yb(2))
-    plot2d(all(1,1:5)',all(2,1:5)',[-1,1],"000")
+    plot2d(all(1,1:5)',all(2,1:5)',[1,-1],"000")
 // ground trajectory
  
 //plot2d((ct*xprear(1,:)-st*xprear(2,:))',...
 //     (cp*(st*xprear(1,:)+ct*xprear(2,:))+sp*xprear(3,:))',...
-//     [-1,1],"000");
+//     [1,-1],"000");
  
 //plot2d((ct*xpfront(1,:)-st*xpfront(2,:))',...
 //     (cp*(st*xpfront(1,:)+ct*xpfront(2,:))+sp*xpfront(3,:))',...
-//     [-1,1],"000");
+//     [1,-1],"000");
  
 [n1,n2]=size(xfrontar);
 xset("alufunction",6)
@@ -36,10 +36,10 @@ for i=1:n2-1,velod(i);velod(i);
 ww=i:i+1;
 plot2d((ct*xprear(1,ww)-st*xprear(2,ww))',...
      (cp*(st*xprear(1,ww)+ct*xprear(2,ww))+sp*xprear(3,ww))',...
-     [-1,1],"000");
+     [1,-1],"000");
 plot2d((ct*xpfront(1,ww)-st*xpfront(2,ww))',...
      (cp*(st*xpfront(1,ww)+ct*xpfront(2,ww))+sp*xpfront(3,ww))',...
-     [-1,1],"000");
+     [1,-1],"000");
 end
 velod(n2-1);
 xset("alufunction",3);

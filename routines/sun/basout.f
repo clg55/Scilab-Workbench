@@ -12,7 +12,7 @@ c        Sortie sur la sortie standard
          if(lct(1).eq.-1) return
          if(lct(2).gt.0) then
 c           Gestion de la pagination
-            if(lct(1)+2.gt.lct(2)) then
+            if(lct(1)+3.gt.lct(2)) then
 c              nombre maxi de ligne atteint,gestion du more
                lct(1)=0
                if (iflag.eq.0) then 

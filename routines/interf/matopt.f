@@ -1,7 +1,5 @@
       subroutine matopt
       INCLUDE '../stack.h'
-      real fstk(2*vsiz)
-      equivalence (fstk(1),stk(1))
 c     
       double precision zero,df0,zng,dxmin
       double precision epsg,epsg1,epsf,dzs
@@ -13,11 +11,8 @@ c
       external foptim,boptim,fuclid,ctonb,ctcab
       integer coin,coar,coti,cotd,cosi,cosd,nfac
 c     
-      double precision tol
-      character*6 namef,namej
+      character*24 namef,namej
       common/csolve/namef,namej
-      logical jac
-      external bsolv,bjsolv
 c     for semidef
       double precision abstol,reltol,nu,tv
       integer sz,upsz
@@ -96,6 +91,13 @@ c     cas simul=liste
          nomsub(1:80)= ' '
          call cvstr(nc,istk(il+6),nomsub,1)
          if(err.gt.0) return
+         nomsub(nc+1:nc+1)=char(0)
+         call setfoptim(nomsub,irep)
+         if ( irep.eq.1) then 
+            buf = nomsub
+            call error(50)
+            return
+         endif
          isim=1
       endif
 c     cas simul=macro ou liste
@@ -344,7 +346,7 @@ c     on initialise nizs,nrzs,ndzs
          indsim=10
          if(isim.eq.1) then
             call foptim(indsim,nx,stk(lx),stk(lf),stk(lg),
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          else
             call boptim(indsim,nx,stk(lx),stk(lf),stk(lg),
      &           izs,rzs,dzs)
@@ -371,7 +373,7 @@ c     stockage de izs,rzs,dzs dans la pile
          lstk(top+1)=ldisp
          if(isim.eq.1) then
             call  foptim(indsim,nx,stk(lx),stk(lf),stk(lg),
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          endif
          if(indsim.le.0) then
             if(indsim.eq.0) indopt=0
@@ -526,10 +528,10 @@ c
          lstk(top+1)=ldisp
          if(isim.eq.1) then
             call foptim(indsim,nx,stk(lx),stk(lf),stk(lg),
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          else
             call boptim(indsim,nx,stk(lx),stk(lf),stk(lg),
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          endif
          if(err.gt.0)return
          if(indsim.le.0) then
@@ -572,11 +574,11 @@ c
          if(isim.eq.1) then
             call n1qn1(foptim,nx,stk(lx),stk(lf),stk(lg),
      &           stk(lvar),epsg,mode,itmax,napm,imp,io,stk(ltv),
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          else
             call n1qn1(boptim,nx,stk(lx),stk(lf),stk(lg),
      &           stk(lvar),epsg,mode,itmax,napm,imp,io,stk(ltv),
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          endif
          if(err.gt.0) return
 c     affectation de indopt
@@ -622,17 +624,17 @@ c
          if(isim.eq.1) then
             indsim=4
             call foptim(indsim,nx,stk(lx),stk(lf),stk(lg),
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
             call n1qn3(foptim,fuclid,ctonb,ctcab,nx,stk(lx),stk(lf),
      $           stk(lg),dxmin,df0,epsg,imp,io,mode,itmax,napm,
-     &           stk(Ltv),Ntv,istk(lizs),fstk(lrzs),stk(ldzs) )
+     &           stk(Ltv),Ntv,istk(lizs),sstk(lrzs),stk(ldzs) )
          else
             indsim=4
             call boptim(indsim,nx,stk(lx),stk(lf),stk(lg),
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
             call n1qn3(boptim,fuclid,ctonb,ctcab,nx,stk(lx),stk(lf),
      &           stk(lg),dxmin,df0,epsg,imp,io,mode,itmax,napm,
-     &           stk(ltv),ntv,istk(lizs),fstk(lrzs),stk(ldzs) )
+     &           stk(ltv),ntv,istk(lizs),sstk(lrzs),stk(ldzs) )
          endif
          if (err.gt.0) return
          indopt=9
@@ -673,12 +675,12 @@ c     optimiseur n1fc1 (non smooth)
          if (isim.eq.1) then
             call n1fc1(foptim,fuclid,nx,stk(lx),stk(lf),stk(lg),
      &           stk(lepsx),df0,epsf,zero,imp,io,mode,itmax,napm,mmx,
-     &           istk(litv),stk(ltv1),stk(ltv2),istk(lizs),fstk(lrzs),
+     &           istk(litv),stk(ltv1),stk(ltv2),istk(lizs),sstk(lrzs),
      $           stk(ldzs))
          else
             call n1fc1(boptim,fuclid,nx,stk(lx),stk(lf),stk(lg),
      &           stk(lepsx),df0,epsf,zero,imp,io,mode,itmax,napm,mmx,
-     &           istk(litv),stk(ltv1),stk(ltv2),istk(lizs),fstk(lrzs),
+     &           istk(litv),stk(ltv1),stk(ltv2),istk(lizs),sstk(lrzs),
      $           stk(ldzs))
          endif
          if (err.gt.0) return
@@ -738,13 +740,13 @@ c     optimiseur qnbd
      &           stk(lg),imp,io,zero,napm,itmax,epsf,epsg,
      &           stk(lepsx),df0,stk(lbi),stk(lbs),nfac,
      &           stk(ltv),ntv,istk(litv),nitv,
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          else
             call qnbd(indopt,boptim,nx,stk(lx),stk(lf),
      &           stk(lg),imp,io,zero,napm,itmax,epsf,epsg,
      &           stk(lepsx),df0,stk(lbi),stk(lbs),nfac,
      &           stk(ltv),ntv,istk(litv),nitv,
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          endif
          if(err.gt.0) return
          go to 300
@@ -779,13 +781,13 @@ c     optimiseur gcbd
      &           stk(lf),stk(lg),imp,io,zero,napm,itmax,epsf,epsg,
      &           stk(lepsx),df0,stk(lbi),stk(lbs),nfac,
      &           stk(ltv),ntv,istk(litv),nitv,
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          else
             call gcbd(indopt,boptim,nomsub,nx,stk(lx),stk(lf),
      &           stk(lg),imp,io,zero,napm,itmax,epsf,epsg,
      &           stk(lepsx),df0,stk(lbi),stk(lbs),nfac,
      &           stk(ltv),ntv,istk(litv),nitv,
-     &           istk(lizs),fstk(lrzs),stk(ldzs))
+     &           istk(lizs),sstk(lrzs),stk(ldzs))
          endif
          if(err.gt.0) return
          go to 300
@@ -1494,116 +1496,94 @@ c
 c
 c     fsolve
 c     
- 600  continue
-      lbuf = 1
-      iskip=0
-      jac=.false.
-      lw = lstk(top+1)
-      l0 = lstk(top+1-rhs)
-      if (rhs .lt. 2.or.rhs.gt.4) then
-         call error(39)
-         return
-      endif
-      if (lhs .gt. 3) then
-         call error(41)
-         return
-      endif
+ 600  call scisolv("fsolve")
+      return
+      end
+
+
+      subroutine scisolv(fname)
+c     ----------------------------
+c     Scilab fsolve function 
+c     ---------------------------
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      integer topk,kres,kjac,kx,m1,n1,lr1,lr,lw,gettype
+      logical checklhs,checkrhs,getrmat,getexternal,cremat,jac
+      logical type,getscalar
+      double precision tol
+      external bsolv,bjsolv,setfsolvf,setfsolvj
+      character*24 namef,namej
+      common/csolve/namef,namej
+      integer iadr, sadr
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+      topk = top
+      if (.not.checkrhs(fname,2,4)) return
+      if (.not.checklhs(fname,1,3)) return
 c     checking variable x (number 1)
 c     
       kx=top-rhs+1
-      il1 = iadr(lstk(top-rhs+1))
-      if (istk(il1) .ne. 1) then
-         err = 1
-         call error(53)
-         return
-      endif
-      m1 = istk(il1+1)*istk(il1+2)
-      l1 = sadr(il1+4)
+      if(.not.getrmat(fname,topk,kx,m1,n1,lr1))return
+      mn1=m1*n1
 c     checking variable fcn (number 2)
 c     
       kres=top-rhs+2
-      il2 = iadr(lstk(top-rhs+2))
-      if (istk(il2) .eq. 10) then
-         if (istk(il2+1)*istk(il2+2) .ne. 1) then
-            err = 2
-            call error(89)
-            return
-         endif
-         n2 = min(istk(il2+5)-1,6)
-         l2 = il2+2
-         namef=' '
-         call cvstr(n2,istk(l2),namef,1)
-      endif
+      if (.not.getexternal(fname,topk,kres,namef,type,
+     $     setfsolvf)) return
+c     
+c     checking variable jac (number 3)
 c     
       jac=.false.
       kjac=0
-      tol=1.d-10
-      if(rhs.eq.2) goto 610
-      
-c     checking variable jac (number 3)
-c     
-      il3 = iadr(lstk(top-rhs+3))
-      if (istk(il3) .eq. 10) then
-         if (istk(il3+1)*istk(il3+2) .ne. 1) then
-            err = 3
-            call error(89)
-            return
+      iskip=0
+      if (rhs.ge.3) then 
+         itype=gettype(top-rhs+3) 
+         if (itype.eq.13.or.itype.eq.10.or.itype.eq.11.or.
+     $        itype.eq.15) then 
+            jac=.true.
+            kjac=top-rhs+3
+            if (.not.getexternal(fname,topk,kjac,namej,
+     $           type,setfsolvj)) return
+         else
+            iskip=1
          endif
-         n3 = min(istk(il3+5)-1,6)
-         l3 = il3+2
-         namej=' '
-         call cvstr(n3,istk(l3),namej,1)
-         jac=.true.
-         kjac=top-rhs+3
-      elseif(istk(il3).eq.13.or.istk(il3).eq.11.or.
-     $        istk(il3).eq.15) then
-         jac=.true.
-         kjac=top-rhs+3
-      else
-         iskip=1
       endif
 c     checking variable tol (number 4)
 c     
       if(rhs.eq.4-iskip) then
-         il4 = iadr(lstk(top))
-         if (istk(il4) .ne. 1) then
-            err = 4-iskip
-            call error(53)
-            return
-         endif
-         if (istk(il4+1)*istk(il4+2) .ne. 1) then
-            err = 4-iskip
-            call error(89)
-            return
-         endif
-         l4=sadr(il4+4)
-         tol=stk(l4)
+         if(.not.getscalar(fname,topk,top,lr4))return
+         tol=stk(lr4)
+      else
+         tol=1.d-10
       endif
 c     
-c     structure d'info pour les externals
- 610  top=top+1
-      lstk(top)=lw
+c     An Ugly feature to keep track of externals 
+C     -------------------------------------------
+      top=top+1
+      lw = lstk(top)
       ilext=iadr(lw)
       istk(ilext)=2
       istk(ilext+1)=ilext+4
       istk(ilext+2)=ilext+7
       istk(ilext+3)=ilext+10
       istk(ilext+4)=kres
-      istk(ilext+5)=m1
+      istk(ilext+5)=mn1
       istk(ilext+6)=kx
       istk(ilext+7)=kjac
-      istk(ilext+8)=m1
+      istk(ilext+8)=mn1
       istk(ilext+9)=kx
+c     Working areas 
+C     -------------------------------------------
       lw=sadr(ilext+10)
-c     
       lw4=lw
-      lw=lw4+m1
+      lw=lw4+mn1
       lw6=lw
       lw=lw+1
       if(jac) then
-         nn7=(m1*(m1+13))/2+m1*m1
+         nn7=(mn1*(mn1+13))/2+mn1*mn1
       else
-         nn7=(m1*(3*m1+13))/2
+         nn7=(mn1*(3*mn1+13))/2
       endif
       lw7=lw
       lw=lw+nn7
@@ -1613,13 +1593,11 @@ c
          return
       endif
       lstk(top+1)=lw
-      
-c     
       if(jac) then
-         call hybrj1(bjsolv,m1,stk(l1),stk(lw4),stk(lw7),
-     $        m1,tol,info,stk(lw7+m1*m1),nn7)
+         call hybrj1(bjsolv,mn1,stk(lr1),stk(lw4),stk(lw7),
+     $        mn1,tol,info,stk(lw7+mn1*mn1),nn7)
       else
-         call hybrd1(bsolv,m1,stk(l1),stk(lw4),tol,info,
+         call hybrd1(bsolv,mn1,stk(lr1),stk(lw4),tol,info,
      $        stk(lw7),nn7)
       endif 
       if(err.gt.0) return
@@ -1630,14 +1608,8 @@ c
          goto 999
       endif
       top=top-rhs+2
-      il=iadr(lstk(top))
-      istk(il)=1
-      istk(il+1)=istk(il1+1)
-      istk(il+2)=istk(il1+2)
-      istk(il+3)=0
-      l=sadr(il+4)
-      call dcopy(m1,stk(lw4),1,stk(l),1)
-      lstk(top+1)=l+m1
+      if (.not.cremat(fname,top,0,m1,n1,lr,lc)) return
+      call dcopy(mn1,stk(lw4),1,stk(lr),1)
       if(lhs.eq.3) then
 c     info = 0   improper input parameters.
 c     info = 1   algorithm estimates that the relative error
@@ -1648,18 +1620,18 @@ c     info = 3   tol is too small. no further improvement in
 c     the approximate solution x is possible.
 c     info = 4   iteration is not making good progress.
          top=top+1
-         il=iadr(lstk(top))
-         istk(il)=1
-         istk(il+1)=1
-         istk(il+2)=1
-         istk(il+3)=0
-         l=sadr(il+4)
-         stk(l)=info
-         lstk(top+1)=l+1
+         if (.not.cremat(fname,top,0,1,1,lr,lc)) return
+         stk(lr)=info
       endif
       goto 999
       
 c     
  999  continue
+      return
       end
       
+
+
+
+
+

@@ -46,7 +46,7 @@ c$$$      if(err1.ne.0) then
 c$$$        if(err2.eq.0) err2=err1
 c$$$        err1=0
 c$$$        imode=abs(errct/10000)
-c$$$        if(imode-4*int(imode/4).eq.2) iflag=.true.
+c$$$        if(imode-8*int(imode/8).eq.2) iflag=.true.
 c$$$      endif
       if(iflag) then
          iflag=.false.
@@ -60,7 +60,7 @@ c     nouvelle 'operation'
  11   continue
       op=istk(lc)
       goto(20,25,40,42,30,41,45,49,49,55,15,90,95,100,105,110,
-     $     120) ,op
+     $     120,130,140) ,op
 c     matfns
       if(op.ge.100) goto 80
 c     return
@@ -71,6 +71,7 @@ c     de boucle
  12      p=p-1
          if(rstk(p).eq.612) then
             top=top-1
+            goto 12
          else if(rstk(p).ne.501) then
             goto 12
          endif
@@ -120,6 +121,10 @@ c     allops
       lc=lc+4
       pt=pt+1
       rstk(pt)=601
+      if(istk(lc).eq.1) then
+c     if next op is stackp put name in ids for insertion
+         call putid(ids(1,pt),istk(lc+1))
+      endif
       icall=4
       pstk(pt)=lc
 c     *call* allops
@@ -447,7 +452,6 @@ c     *call* macro
       top=ids(2,pt)
       rio=pstk(pt)
       pt=pt-1
-      call stsync(1)
       goto 70
 c     
 c     break
@@ -508,7 +512,7 @@ c     de fin d'instruction dans les macros
         if(err2.eq.0) err2=err1
         err1=0
         imode=abs(errct/10000)
-        if(imode-4*int(imode/4).eq.2) iflag=.true.
+        if(imode-8*int(imode/8).eq.2) iflag=.true.
       endif
 
 c     gestion des points d'arrets dynamiques
@@ -532,6 +536,7 @@ c
          if (ntimer.ne.otimer) then
             call sxevents()
             otimer=ntimer
+            if (ismenu().eq.1) goto 115
          endif
       endif
       goto 10
@@ -550,7 +555,7 @@ c     gestion des evements asynchrones "interpretes"
 c
  115  continue
       call getmen(buf,lb,nentry)
-      call bexec(buf(1:lb),lb,nentry,ierr)
+      call bexec(buf(1:lb),lb,ierr)
       if(ierr.ne.0) goto 10
       pt=pt+1
       ids(1,pt)=lc
@@ -574,7 +579,22 @@ c
  120  continue 
       fun=99
       return
-
+c
+c     named variable
+c
+ 130  continue
+      infstk(top)=1
+      call putid(idstk(1,top),istk(lc+1))
+      lc=lc+1+nsiz
+      goto 10
+c
+c     form recursive extraction list
+c
+ 140  continue
+      call mkindx(istk(lc+1),istk(lc+2))
+      lc=lc+3
+      goto 10
+c     
  998  continue
       lhs=0
  999  continue

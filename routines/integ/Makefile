@@ -1,11 +1,5 @@
 SHELL = /bin/sh
-
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/integ.a
 
@@ -18,22 +12,11 @@ OBJSF = ainvg.o bnorm.o cfode.o  ewset.o fnorm.o intdy.o lsoda.o lsode.o \
 	rgk4.o lsdisc.o lsodar.o rscar1.o svcar1.o rchek.o roots.o ddassl.o \
 	colnew.o ddasrt.o rkf45.o rksimp.o
 
-OBJS = $(OBJSC) $(OBJSF)
+include ../../Makefile.incl
 
-all:: $(LIBRARY)
+CFLAGS = $(CC_OPTIONS)
 
-world: all
-
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)
+include ../Make.lib
 
 ddassl.o: ../stack.h
 lsdisc.o: ../stack.h

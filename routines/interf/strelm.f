@@ -8,10 +8,14 @@ c
       INCLUDE '../stack.h'
 c
       logical lgq
-      integer blank,eol,vol
+      integer blank,eol,vol,sel,row,col,star
 c
       integer iadr,sadr
+      external strord
+      integer strord
       data    blank/40/,eol/99/,nclas/29/
+      data row/27/,col/12/,star/47/
+
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -22,11 +26,14 @@ c
       endif
 c
 c     functions/fin
-c     1       2       3       4       5           6       7       8
-c   length    part   string  convstr  emptystr str2code code2str
+c     1       2       3       4       5           6       7       8   
+c   length    part   string  convstr  emptystr str2code code2str sort
+c     9       10       11
+c   strcat    strindex strsubst
+
 c
 c
-      goto (10,20,25,50,60,70,80) fin
+      goto (10,20,25,50,60,70,80,90,100,110,120) fin
 c
 c     length
 c
@@ -59,15 +66,20 @@ c     length(list)=size(list)
          n1=istk(il1+2)
          mn1=m1*n1
          id1=il1+4
-         l1=sadr(id1+mn1+1)
-         vol=istk(id1+mn1)-1
-         lw=lstk(top+1)
+         l1=id1+mn1+1
 c
          l=sadr(il1+4)
+         ll=sadr(l1)
+         err=ll+mn1-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+c
          do 11 k=1,mn1
-            stk(l1-1+k)=dble(istk(id1+k)-istk(id1+k-1))
+            stk(ll-1+k)=dble(istk(id1+k)-istk(id1+k-1))
  11      continue
-         call dcopy(mn1,stk(l1),1,stk(l),1)
+         call dcopy(mn1,stk(ll),1,stk(l),1)
          lstk(top+1)=l+mn1
          istk(il1)=1
          istk(il1+3)=0
@@ -564,15 +576,528 @@ c
       call dcopy(n1,stk(l1),-1,stk(l1+2),-1)
       istk(il1+4)=1
       istk(il1+5)=n1+1
-      do 71 i=1,n1
+      do 81 i=1,n1
          istk(il1+5+i)=stk(l1+1+i)
- 71   continue
+ 81   continue
       istk(il1)=10
       istk(il1+1)=1
       istk(il1+2)=1
       istk(il1+3)=0
       lstk(top+1)=sadr(il1+6+n1)
       goto 999
+c
+c     sort
+ 90   continue
+      if(rhs.gt.2) then
+         call error(42)
+         return
+      endif
+
+      sel=0
+      if(rhs.eq.2) then
+         top=top-1
+         if(lhs.ge.3) then
+            call error(41)
+            return
+         endif
+c     row or column op
+         il=iadr(lstk(top+1))
+         if(istk(il).eq.1) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            sel=stk(sadr(il+4))
+            if(sel.ne.1.and.sel.ne.2) then
+               err=2
+               call error(44)
+               return
+            endif
+         elseif (istk(il).eq.10) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            if(istk(il+6).eq.row) then
+               sel=1
+            elseif(istk(il+6).eq.col) then
+               sel=2
+            elseif(istk(il+6).eq.star) then
+               sel=0
+            else
+               err=2
+               call error(44)
+               return
+            endif
+         else
+            err=2
+            call error(44)
+            return
+         endif
+      endif
+      if(sel.eq.2) then
+c     sort(a,'c')   <=>  sort(a,2)
+         call error(43)
+         return
+c         top=top+1
+c         call cvname(id,'str_sort     ',0)
+c         goto 300
+      endif
+      il1=iadr(lstk(top))
+      m=istk(il1+1)
+      n=istk(il1+2)
+      mn=m*n
+      id1=il1+4
+      l1=id1+mn+1
+      vol=istk(id1+mn)-1
+
+c
+      lw=iadr(lstk(top+1))
+      lsz=lw
+      ls=lsz+mn
+      lind=ls+vol
+      ls=lind+mn
+      lw=ls+vol
+      err=sadr(lw)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      call icopy(vol,istk(l1),1,istk(ls),1)
+      do 91 i=0,mn-1
+         istk(lsz+i)=istk(id1+i+1)-istk(id1+i)
+ 91   continue
+      l2=l1
+c     
+      if(sel.eq.0) then
+c     sort(a) <=> sort(a,'*')
+         call rcsort(strord,istk(lsz),istk(id1),istk(ls),mn,istk(lind))
+      elseif(sel.eq.1) then
+c     sort(a,'r')  <=>  sort(a,1)
+         lszi=lsz
+         idi=id1
+         lindi=lind
+         do 95 i=0,m-1
+            call rcsort(strord,istk(lszi),istk(idi),istk(ls),m,
+     $           istk(lindi))
+            lszi=lszi+m
+            idi=idi+m
+            lindi=lindi+m
+ 95      continue   
+      endif
+      do 93 i=0,mn-1
+         call icopy(istk(lsz+i),istk(ls-1+istk(id1+i)),1,istk(l2),1)
+         l2=l2+istk(lsz+i)
+ 93   continue
+      istk(id1)=1
+      do 94 i=0,mn-1
+         istk(id1+i+1)=istk(id1+i)+istk(lsz+i)
+ 94   continue
+      if(lhs.eq.1) goto 999
+      top=top+1
+      il=iadr(lstk(top))
+      istk(il)=1
+      istk(il+1)=m
+      istk(il+2)=n
+      istk(il+3)=0
+      l=sadr(il+4)
+      call int2db(mn,istk(lind),1,stk(l),1)
+      lstk(top+1)=l+mn
+
+      go to 999
+c
+ 100  continue
+c     strcat(str [,ins])
+      call instrcat
+      goto 999
+ 110  continue
+c     strindex(str1,str2)
+      call instrindex
+      goto 999
+c
+ 120  continue 
+c     strsubst(str1,str2,str3)
+      call intstrsubst
+      goto 999
 c     
   999 return
       end
+
+      integer function strord(r1,l1,r2,l2)
+      integer r1(*),r2(*),c1,c2
+      integer blank
+      data blank/40/
+c
+      iord=0
+      if(l1.eq.0) then
+         if(l2.gt.0) then
+            strord=-1
+            return
+         else
+            strord=0
+            return
+         endif
+      else
+         if(l2.eq.0) then
+            strord=1
+            return
+         endif
+      endif
+      ll=min(l1,l2)
+      do 10 i=1,max(l1,l2)
+         if(i.le.l1) then
+            c1=r1(i)
+         else
+            c1=blank
+         endif
+         if(i.le.l2) then
+            c2=r2(i)
+         else
+            c2=blank
+         endif
+         if(c1.ge.0) c1=256-c1
+         if(c2.ge.0) c2=256-c2
+         if(c1.gt.c2) then
+            strord=1
+            return
+         elseif(c1.lt.c2) then
+            strord=-1
+            return
+         endif
+ 10   continue
+      strord=0
+      return
+      end
+
+      subroutine instrcat
+      INCLUDE '../stack.h'
+c
+      integer vol
+c
+      integer iadr,sadr
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+c     strcat(str [,ins])
+c
+      if(rhs.ne.1.and.rhs.ne.2) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+c     
+      lw = iadr(lstk(top+1))
+c
+      if(rhs.eq.2) then
+         il2=iadr(lstk(top))
+         if(istk(il2).ne.10) then 
+            err=2
+            call error(55)
+            return
+         endif
+         if(istk(il2+1)*istk(il2+2).ne.1) then
+            err=2
+            call error(36)
+            return
+         endif
+         l2=il2+6
+         nv2=istk(il2+5)-1
+         top=top-1
+      endif
+c
+      il1=iadr(lstk(top))
+      if(istk(il1).eq.1) then
+         if(istk(il1+1)*istk(il1+2).eq.0) then
+            istk(il1)=10
+            istk(il1+1)=1
+            istk(il1+2)=1
+            istk(il1+3)=0
+            istk(il1+4)=1
+            istk(il1+5)=1
+            lstk(top+1)=sadr(il1+6)
+            return
+         endif
+      endif
+      if(istk(il1).ne.10) then
+         err=1
+         call error(55)
+         return
+      endif
+      m1=istk(il1+1)
+      n1=istk(il1+2)
+      mn1=m1*n1
+      id1=il1+4
+      l1=id1+mn1+1
+      vol=istk(id1+mn1)-1
+c
+      if(rhs.eq.1) then
+         istk(il1+1)=1
+         istk(il1+2)=1
+         istk(id1+1)=1+vol
+         l=id1+2
+         call icopy(vol,istk(l1),1,istk(l),1)
+         lstk(top+1)=sadr(l+vol)
+      else
+         err=sadr(lw+vol+mn1*nv2)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         ll1=l1
+         ll2=lw
+         do 10 i=1,mn1
+            ln=istk(id1+i)-istk(id1-1+i)
+            call icopy(ln,istk(ll1),1,istk(ll2),1)
+            ll1=ll1+ln
+            ll2=ll2+ln
+            call icopy(nv2,istk(l2),1,istk(ll2),1)
+            ll2=ll2+nv2
+ 10      continue
+         vol=vol+(mn1-1)*nv2
+         istk(il1+1)=1
+         istk(il1+2)=1
+         istk(id1+1)=1+vol
+         l=id1+2
+         call icopy(vol,istk(lw),1,istk(l),1)
+         lstk(top+1)=sadr(l+vol)
+      endif
+      end
+
+      subroutine instrindex
+      INCLUDE '../stack.h'
+c
+      integer vol
+c
+      integer iadr,sadr
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+c     strindex(str1,str2)
+c
+      if(rhs.ne.2) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+c     
+      lw = iadr(lstk(top+1))
+c     
+
+      il2=iadr(lstk(top))
+      if(istk(il2).ne.10) then 
+         err=2
+         call error(55)
+         return
+      endif
+      if(istk(il2+1)*istk(il2+2).ne.1) then
+         err=2
+         call error(36)
+         return
+      endif
+      l2=il2+6
+      nv2=istk(il2+5)-1
+      if(nv2.eq.0) then
+         err=2
+         call error(249)
+         return
+      endif
+      top=top-1
+
+c     
+      il1=iadr(lstk(top))
+      if(istk(il1).eq.1) then
+         if(istk(il1+1)*istk(il1+2).eq.0) then
+            istk(il1)=1
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)
+            return
+         endif
+      endif
+      if(istk(il1).ne.10) then
+         err=1
+         call error(55)
+         return
+      endif
+      if(istk(il1+1)*istk(il1+2).ne.1) then
+         err=1
+         call error(36)
+         return
+      endif
+      mn1=1
+      id1=il1+4
+      l1=id1+mn1+1
+      vol=istk(id1+mn1)-1
+c
+      mc=0
+      if(vol.le.0) goto 36
+      ll1=l1-1
+ 10   ll1=ll1+1
+      if(ll1-l1.ge.vol+1-nv2) goto 35
+      if(istk(ll1).ne.istk(l2)) goto 10
+c     first character matches
+      k=0
+ 15   k=k+1
+      if(k.ge.nv2) goto 30
+      if(istk(ll1+k).eq.istk(l2+k)) goto 15
+      goto 10
+ 30   continue
+c     a match found
+      mc=mc+1
+      istk(il1+3+mc)=ll1-l1+1
+      ll1=ll1+k-1
+      goto 10
+ 35   continue
+c     end of string str1 reached
+ 36   if(mc.eq.0) then
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)
+      else
+         istk(il1)=1
+         istk(il1+1)=1
+         istk(il1+2)=mc
+         istk(il1+3)=0
+         l=sadr(il1+4)
+         call int2db(mc,istk(il1+4),-1,stk(l),-1)
+         lstk(top+1)=l+mc
+      endif
+      return
+      end
+
+      subroutine intstrsubst
+      INCLUDE '../stack.h'
+c
+      integer vol
+c
+      integer iadr,sadr
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+c     strsubst(str1,str2,str3)
+c
+      if(rhs.ne.3) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+c     
+      lw = iadr(lstk(top+1))
+c     
+      il3=iadr(lstk(top))
+      if(istk(il3).ne.10) then 
+         err=3
+         call error(55)
+         return
+      endif
+      if(istk(il3+1)*istk(il3+2).ne.1) then
+         err=3
+         call error(36)
+         return
+      endif
+      l3=il3+6
+      nv3=istk(il3+5)-1
+      top=top-1
+
+      il2=iadr(lstk(top))
+      if(istk(il2).ne.10) then 
+         err=2
+         call error(55)
+         return
+      endif
+      if(istk(il2+1)*istk(il2+2).ne.1) then
+         err=2
+         call error(36)
+         return
+      endif
+      l2=il2+6
+      nv2=istk(il2+5)-1
+      if(nv2.eq.0) then
+         err=2
+         call error(249)
+         return
+      endif
+      top=top-1
+
+c     
+      il1=iadr(lstk(top))
+      if(istk(il1).eq.1) then
+         if(istk(il1+1)*istk(il1+2).eq.0) then
+            istk(il1)=1
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)
+            return
+         endif
+      endif
+      if(istk(il1).ne.10) then
+         err=1
+         call error(55)
+         return
+      endif
+      mn1=istk(il1+1)*istk(il1+2)
+      id1=il1+4
+      l1=id1+mn1+1
+c
+      ilr=lw
+      ilr0=ilr
+      vol=istk(id1+1)-istk(id1)
+c
+      do 40 ij=1,mn1
+         mc=0
+         if(vol.eq.0) goto 36
+         ll0=l1
+         ll1=l1-1
+ 10      ll1=ll1+1
+         if(ll1-l1.ge.vol+1-nv2) goto 35
+         if(istk(ll1).ne.istk(l2)) goto 10
+c     first character matches
+         k=0
+ 15      k=k+1
+         if(k.ge.nv2) goto 30
+         if(istk(ll1+k).eq.istk(l2+k)) goto 15
+         goto 10
+ 30      continue
+c     a match found
+         mc=mc+1
+         call icopy(ll1-ll0,istk(ll0),1,istk(ilr),1)
+         ilr=ilr+ll1-ll0
+         ll0=ll1+nv2
+
+         call icopy(nv3,istk(l3),1,istk(ilr),1)
+         ilr=ilr+nv3
+         ll1=ll1+nv2-1
+         goto 10
+ 35      continue
+c     end of string reached
+         call icopy(vol-(ll0-l1),istk(ll0),1,istk(ilr),1)
+         ilr=ilr+vol-(ll0-l1)
+         l1=l1+vol
+ 36      vol=istk(id1+ij+1)-istk(id1+ij)
+         istk(id1+ij)=istk(id1+ij-1)+ilr-ilr0
+         ilr0=ilr
+ 40   continue
+      call icopy(ilr-lw,istk(lw),1,istk(id1+mn1+1),1)
+      lstk(top+1)=sadr(l1+ilr-lw)
+
+      return
+      end
+

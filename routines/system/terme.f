@@ -29,7 +29,7 @@ c     *call* factor
    10 op = 0
       if (sym .eq. dot) op = dot
       if (sym .eq. dot) call getsym
-      if (sym.eq.star .or. sym.eq.slash .or. sym.eq.bslash) go to 20
+      if (sym.eq.star .or. sym.eq.slash .or. sym.eq.bslash ) go to 20
       return
 c
 c     facteurs suivants

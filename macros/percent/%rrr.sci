@@ -1,13 +1,11 @@
-//<s1>=%rrr(s1,s2)
-// %rrr(s1,s2) calcule la division a droite de la matrice de fractions
-//rationnelles s1 et de la matrice de fractions rationnelles s2.
-//Cette macro correpond a l'operation  s1/s2
+function s1=%rrr(s1,s2)
+// %rrr(s1,s2) <=> s1/s2    for rationals
 //!
 [s1,s2]=sysconv(s1,s2),
 [n,m]=size(s2(2))
 if n<>m then error(43),end
 if n*m=1 then
-  s1=%rmr(s1,tlist('r',s2(3),s2(2),s2(4)) ),
+  s1=%rmr(s1,tlist(['r','num','den','dt'],s2(3),s2(2),s2(4)) ),
 else
  p=s2(2)
  s2=s2(3)
@@ -18,6 +16,6 @@ else
  end
  s1=s1*invr(p)
 end
-//end
+
 
 

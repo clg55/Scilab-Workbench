@@ -24,7 +24,6 @@ c    10 by 10 matrix of character string.
 c
       integer lda,m,n,job
       character*(*) chai(lda,*),name
-      character*8 h
       include '../stack.h'
       integer iadr,sadr
 c
@@ -39,9 +38,8 @@ c
       if(job.ge.10) it=1
       lec=job-10*it
 c
-      nc=min(8,len(name))
-      h=name(1:nc)
-      call cvname(id,h,0)
+      nc=min(nlgh,len(name))
+      call cvname(id,name(1:nc),0)
       srhs=rhs
       rhs=0
 c

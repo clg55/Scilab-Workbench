@@ -1,20 +1,43 @@
 #include <stdio.h>
 #include <string.h>
+
+#ifdef __STDC__
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 
 #include "../machine.h"
 
-#include "../comm/libCalCom.h"
-#include "../comm/libCom.h"
+#include "../libcomm/libCalCom.h"
+#include "../libcomm/libCom.h"
 
-extern void SendMsg();
+#include "netcomm.h"
+
+extern Message attendre_reponse();
+extern void cerro();
 extern int checkNetconnect();
 extern int checkTheNetwindow();
+extern void SendMsg();
+
+extern int metanetSync;
+extern char *Netwindows[];
+extern int theNetwindow;
+
+typedef int (*PF)();
+
+static int CompString(s1, s2)
+char **s1, **s2;
+{
+  return strcmp((char*)*s1,(char*)*s2);
+}
 
 #define mystrcat(s1,s2) istr=0;while(s2[istr]!='\0'){s1[ib++]=s2[istr++];}s1[ib++]=CHARSEP;
 
 #define MAXNAM 80
 #define MAXISIZE 16 /* estimated maximum number of digits in an int */
+
+static char description[2*MAXNAM];
 
 void C2F(showp)(p,psize,sup)
 int *p;
@@ -41,14 +64,26 @@ int *sup;
   }
   g[ib] = '\0';
 
-  if (*sup) SendMsg(SHOWP1,g); else SendMsg(SHOWP,g);
+  if (metanetSync) {
+    if (*sup) SendMsg(SHOWP1_S,g); else SendMsg(SHOWP_S,g);
+  }
+  else {
+    if (*sup) SendMsg(SHOWP1,g); else SendMsg(SHOWP,g);
+  }
 
   free(g);
+
+  if (metanetSync) {
+    attendre_reponse(Netwindows[theNetwindow-1],
+		     MSG_DISTRIB_LISTE_ELMNT,
+		     NBP_DISTRIB_LISTE_ELMNT);
+  }
 }
 
 void C2F(showns)(ns,nsize,sup)
 int *ns;
 int *nsize;
+
 int *sup;
 {
   char *g;
@@ -71,9 +106,20 @@ int *sup;
   }
   g[ib] = '\0';
 
-  if (*sup) SendMsg(SHOWNS1,g); else SendMsg(SHOWNS,g);
+  if (metanetSync) {
+    if (*sup) SendMsg(SHOWNS1_S,g); else SendMsg(SHOWNS_S,g);
+  }
+  else {
+    if (*sup) SendMsg(SHOWNS1,g); else SendMsg(SHOWNS,g);
+  }
 
   free(g);
+
+  if (metanetSync) {
+    attendre_reponse(Netwindows[theNetwindow-1],
+		     MSG_DISTRIB_LISTE_ELMNT,
+		     NBP_DISTRIB_LISTE_ELMNT);
+  }
 }
 
 void C2F(showg)(
@@ -112,6 +158,34 @@ double *scale;
   int dsize = sizeof(double);
   int csize = sizeof(char);
   int pid;
+  char **lar;
+
+ /* check uniqueness of node names */
+  if (*node_number != 1) {
+    if ((lar = (char **)malloc(sizeof(char *) * *node_number)) == NULL) {
+      cerro("Running out of memory");
+      return;
+    }
+    for (i = 0; i < *node_number; i++) lar[i] = (*node_name)[i];
+    qsort((char*)lar,*node_number,sizeof(char*),(PF)CompString);
+    for (i = 0; i < *node_number - 1; i++) {
+      if (!strcmp(lar[i],lar[i+1])) {
+	sprintf(description,
+		"Bad graph file. Node \"%s\" is duplicated",lar[i]);
+	cerro(description);
+	free(lar);
+	return;
+      }
+    }
+    if (!strcmp(lar[*node_number - 2],lar[*node_number - 1])) {
+      sprintf(description,
+	      "Bad graph file. Node \"%s\" is duplicated",lar[*node_number - 2]);
+      cerro(description);
+      free(lar);
+      return;
+    }
+    free(lar);
+  }
 
   pid = getpid();
 
@@ -273,7 +347,18 @@ double *scale;
   mystrcat(b,str1);
   b[ib] = '\0';
 
-  if (*sup) SendMsg(LOAD1,b); else SendMsg(LOAD,b);
-
+  if (metanetSync) {
+    if (*sup) SendMsg(LOAD1_S,b); else SendMsg(LOAD_S,b);
+  }
+  else {
+    if (*sup) SendMsg(LOAD1,b); else SendMsg(LOAD,b);
+  }
+  
   free(b);
+
+  if (metanetSync) {
+    attendre_reponse(Netwindows[theNetwindow-1],
+		     MSG_DISTRIB_LISTE_ELMNT,
+		     NBP_DISTRIB_LISTE_ELMNT);
+  }
 }

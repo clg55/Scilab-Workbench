@@ -1,45 +1,56 @@
-//[stk,nwrk,txt,top]=f_ent(nwrk)
-// stk : liste dont les elements sont des listes et qui joue  plus ou
-//       moins un role similaire a celui de la partie haute  la pile scilab
-//       (contient la description) des variables sur lesquelles on travaille
-//       comme dans la pile scilab stk(top) est la derniere variable definie
+function [stk,nwrk,txt,top]=f_ent(nwrk)
+//!purpose
+//  Scilab ent function translation
+//!parameters
+// - stk :
+//      On entry stk is a global variable of type list
+//      entries indexed from top-1+rhs:top give the definition of the rhs
+//      function input variables 
 //
-//       chaque element de stk a la structure suivante:
-//       stk(k)=list(definition,type_expr,type_var,nb_ligne,nb_col)
+//      After execution stk(1:lhs) must contain the definition of the
+//      lhs returned variables
 //
-//      *definition peut etre soit:
-//         - une expression fortran a+2*b-3*c(1) si sa valeur est scalaire
-//         - une reference a la premiere adresse d'un tableau fortran:
-//                 a   si a est une matrice qui est definie
-//                 work(iwn) si la variable est stockee dans un tableau de
-//                           travail double precision
-//                 iwork(iiwn) si la variable est stockee dans un tableau de
-//                           travail entier
-//      *type_expr code le type de l'expression et sert essentiellement a
-//          determiner comment parentheser
-//          '2' : somme de termes
-//          '1' : produits de facteurs
-//          '0' : atome
-//          '-1': valeur stockee dans un tableau fortran pas besoin de
-//                parentheser
-//      *type_var code le type fortran de la variable
+//      stk entries have the following structure:
+//      stk(k)=list(definition,type_expr,type_var,nb_lig,nb_col)
+//
+//      *definition may be:
+//         - a character string containing a Fortran  expression with
+//           a scalar value ex:'a+2*b-3*c(1);
+//         - a character string containing a reference to the first
+//           entry of a Fortran array
+//                 'a'           if a is a defined matrix
+//                 'work(iwn)'   if  variable is stored in the  double
+//	                         precision working array work
+//                 'iwork(iiwn)' if  variable is stored in the integer
+//	                         working array iwork
+//      remark: complex array are defined by a definition part
+//                  with 2 elements (real and imaginary parts definition)
+//      *type_expr a character string: the expression type code (used
+//            to indicate need of parenthesis )
+//          '2' : the expression is a sum of terms
+//          '1' : the expression is a product of factors
+//          '0' : the expression is an atome
+//          '-1': the value is stored in a Fortran array
+//      *type_var a character string: codes the variable fortran type:
 //          '1' : double precision
-//          '0' : entier
-//          '10': caractere
-//          remarques: pour le moment les complexes sont determines par
-//                     un champ definition a 2 composantes : partie R et
-//                     partie I
-//      *nb_ligne , nb_col : nombre de ligne et de colonne, ce sont aussi
-//          des chaines de caracteres
-// ATTENTION: stk entre par le contexte et l'on ne ressort que la valeur
-//            courante
+//          '0' : integer
+//          '10': character
 //
-//  nwrk : variable qui contient les infos sur les tableaux de travail,
-//         les indicateurs d'erreur, ce tableau est manipule par les macro
+//      *nb_lig (, nb_col) : character strings:number of rows
+//              (columns) of the matrix		
+//          des chaines de caracteres
+
+//
+//  nwrk : this variable contain information on working arrays, error
+//         indicators. It only may be modified by call to scilab functions
 //         outname adderr getwrk
 //
-//  txt  : est la portion de texte fortran genere pour realiser la fonction
-//         si besoin est (calcul matriciel)
+//  txt  : is a column vector of character string which contain the
+//         fortran code associated to the function translation if
+//         necessary.
+//  top  : an integer 
+//         global variable on entry
+//         after execution top must be equal to top-rhs+lhs
 //!
 txt=[]
 s2=stk(top)
@@ -51,7 +62,6 @@ else
   txt=[txt;gencall(['db2int',mulf(s2(4),s2(5)),s2(1),'1',out,'1'])]
   stk=list(out,'-1',0,s2(4),s2(5))
 end
- 
-//end
+
 
 

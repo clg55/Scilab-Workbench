@@ -123,6 +123,12 @@ c     [m,n] given
             endif
             top=top-1
             lw=lstk(top+1)
+         else
+            il=iadr(lstk(top))
+            if(istk(il+1)*istk(il+2).eq.0) then
+               top=top-1
+               return
+            endif
          endif
          
          ilij=iadr(lstk(top-1))
@@ -175,18 +181,23 @@ c
                call error(17)
                return
             endif
+            nel0=nel
             if(itv.eq.0) then
                call dij2sp(m,n,nel,istk(ilij),stk(lv),
-     $              istk(lind),mm+nel,istk(liw),ierr)
+     $              istk(lind),mm+nel0,istk(liw),ierr)
             else
-               call wij2sp(m,n,nel,stk(lij),stk(lv),stk(lv+nel),
-     $              istk(lind),mm+nel,istk(liw),ierr)
+               call wij2sp(m,n,nel,stk(lij),stk(lv),stk(lv+nel0),
+     $              istk(lind),mm+nel0,istk(liw),ierr)
             endif
             if(ierr.eq.2) then
                buf='not enough memory'
                call error(9999)
+               return
             elseif(ierr.eq.1) then
                call error(42)
+               return
+            elseif(ierr.eq.3) then
+               call error(221)
                return
             endif
             top=top-1
@@ -200,7 +211,10 @@ c
             l=sadr(ilr+m+nel)
             inc=1
             if(l.gt.lv) inc=-1
-            call dcopy(nel*(itv+1),stk(lv),inc,stk(l),inc)
+            call dcopy(nel,stk(lv),inc,stk(l),inc)
+            if(itv.eq.1) then
+               call dcopy(nel,stk(lv+nel0),inc,stk(l+nel),inc)
+            endif
             lstk(top+1)=l+nel*(itv+1)
             inc=1
             if(ilr.gt.lind) inc=-1
@@ -216,13 +230,18 @@ c
                call error(17)
                return
             endif
+            nel0=nel
             call lij2sp(m,n,nel,istk(ilij),istk(lv),
      $              istk(lind),mm+nel,istk(liw),ierr)
             if(ierr.eq.2) then
                buf='not enough memory'
                call error(9999)
+               return
             elseif(ierr.eq.1) then
                call error(42)
+               return
+            elseif(ierr.eq.3) then
+               call error(221)
                return
             endif
             top=top-1
@@ -658,8 +677,7 @@ c
             return
          else
 c     b is sparse
-            buf='lusolve not yet implemented for full RHS'
-            call error(999)
+            call error(222)
             return
          endif
 
@@ -825,13 +843,22 @@ c
          it=istk(il1+3)
          nel=istk(il1+4)
          l=sadr(il1+5+m+nel)
-         if(it.ne.0) then
-            call error(220)
+         ilind=iadr(lw)
+         lw=sadr(ilind+m+nel)
+         err=lw-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
             return
          endif
-         call dspcle(m,n,stk(l),nel,istk(il1+5),stk(l),nelr,istk(il1+5),
-     $        abstol,reltol)
+         if(it.eq.0) then
+            call dspcle(m,n,stk(l),nel,istk(il1+5),stk(l),nelr,
+     $           istk(ilind),abstol,reltol)
+         else
+            call  wspcle(m,n,stk(l),stk(l+nel),nel,istk(il1+5),stk(l),
+     $           stk(l+nel),nelr,istk(ilind),abstol,reltol)
+         endif
          if(nelr.eq.nel) return
+         call icopy(m+nelr,istk(ilind),1,istk(il1+5),1)
          l1=sadr(il1+5+m+nelr)
          call dcopy(nelr,stk(l),1,stk(l1),1)
          if(it.eq.1) call dcopy(nelr,stk(l+nel),1,stk(l1+nelr),1)
@@ -1143,10 +1170,7 @@ c     checking variable sp
                endif
                call icopy(nel+m,istk(il1+5),1,istk(ils),1)
             endif
-c  was    subroutine lspmat(ma,na,nela,inda,mr,indr,iw)
-c  changed to  subroutine lspmat(ma,na,a,nela,inda,mr,indr,iw)
-            call lspmat(m,n,stk(ls),nel,istk(ils),mr,istk(il1+5),
-     $           istk(iw))
+            call lspmat(m,n,nel,istk(ils),mr,istk(il1+5),istk(iw))
             lstk(top+1)=sadr(il1+5+mr+nel)
          endif
          istk(il1+1)=mr

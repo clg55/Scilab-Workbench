@@ -6,7 +6,8 @@ c ====================================================================
       integer iadr,sadr
 c
 c     common de lsode,lsoda,lsodar
-      double precision xxxx,yyyy,rlsr,ilsr
+      double precision xxxx,yyyy,rlsr
+      integer ilsr
       common/ls0001/xxxx(219),iiii(39)
       common/lsa001/yyyy(22),jjjj(9)
       common/lsr001/ rlsr(5),ilsr(9)
@@ -15,7 +16,7 @@ c     common de lsode,lsoda,lsodar
 c
 c     commons avec bydot,bjac,....
 c
-      character*6 namef,namej,names
+      character*24 namef,namej,names
       common/cydot/namef
       common/cjac/namej
       common/csurf/names
@@ -136,19 +137,6 @@ c     lc=adresse of lsod* real work space
          endif
          lc=sadr(il+4)
          lrwp=istk(il+1)*istk(il+2)
-c         if(meth.le.3) then
-c     check for input hot start table consistency
-c            if(lrwp.ne.lrw+nsizd) then
-c               buf=' Real hot start table has incorrect size'
-c               call error(9999)
-c               return
-c            endif
-c            if(liwp.ne.liw+nsizi) then
-c               buf=' Input hot start table has incorrect size'
-c               call error(9999)
-c               return
-c            endif
-c         endif
       endif
 c
       top2=top-rhs+1
@@ -221,8 +209,15 @@ c     on recupere le simulateur des equations des surfaces
             return
          endif
          if(istk(ilsurf).eq.10) then
-            namej=' '
+            names=' '
             call cvstr(istk(ilsurf+5)-1,istk(ilsurf+6),names,1)
+            names(istk(ilsurf+5):istk(ilsurf+5))=char(0)
+            call setfsurf(names,irep)
+            if ( irep.eq.1) then 
+               buf = names
+               call error(50)
+               return
+            endif
          endif
          ksurf=top1
          top1=top1-1
@@ -259,6 +254,13 @@ c     JACOBIAN IS GIVEN (variable top1)
          if(islj.eq.10) then
             namej=' '
             call cvstr(istk(ilj+5)-1,istk(ilj+6),namej,1)
+            namej(istk(ilj+5):istk(ilj+5))=char(0)
+            call setfjac(namej,irep)
+            if ( irep.eq.1) then 
+               buf = namej
+               call error(50)
+               return
+            endif
          endif
          if (meth.ge.4) then
             call msgs(75,0)
@@ -310,6 +312,13 @@ c     rhs
       if(islf.eq.10) then
          namef=' '
          call cvstr(istk(ilf+5)-1,istk(ilf+6),namef,1)
+         namef(istk(ilf+5):istk(ilf+5))=char(0)
+         call setfydot(namef,irep)
+         if ( irep.eq.1) then 
+            buf = namef
+            call error(50)
+            return
+         endif
 c    test list('fex',w)
       elseif(islf.eq.15) then
         le1=sadr(ilf+istk(ilf+1)+3)
@@ -328,6 +337,13 @@ c     next line just to tell to bydot that external is in fortran
         nblett=istk(illl-1)-1
         namef=' '
         call cvstr(istk(ilf+11)-1,istk(ilf+12),namef,1)
+        namef(istk(ilf+11):istk(ilf+11))=char(0)
+        call setfydot(namef,irep)
+        if ( irep.eq.1) then 
+           buf = namef
+           call error(50)
+           return
+        endif
         ll1=sadr(ilf+5)
         ll2=ll1+long1-1
         il2=iadr(ll2)
@@ -372,7 +388,7 @@ c     list('fex',w)
             return
          endif
          top=top+1
-         kynew=top
+c         kynew=top
          ily=iadr(lstk(top))
          err=sadr(ily+4)+ny+nbw-lstk(bot)
          if(err.gt.0) then
@@ -557,6 +573,19 @@ c
 c     hot start
 c
       if(achaud) then
+         if(meth.le.3) then
+c     check for input hot start table consistency
+            if(lrwp.ne.lrw+nsizd) then
+               buf=' Real hot start table has incorrect size'
+               call error(9999)
+               return
+            endif
+            if(liwp.ne.liw+nsizi) then
+               buf=' Input hot start table has incorrect size'
+               call error(9999)
+               return
+            endif
+         endif
          istate=2
 c     commons retrieval from hot start tables
          if(meth.eq.0) then
@@ -689,8 +718,8 @@ c   lsode
      $        'i3,'' ml = '',i3,'' mu = '',i3,'' iopt = '',i3)') 
      $           itask,meth,jactyp,ml,mu,iopt
          call basout(io,wte,buf(1:80))
-      write(buf,'(''tcrit= '',e9.4,'' h0= '',e9.4, '' hmax= '',
-     $       e9.4,'' hmin = '',e9.4)')
+      write(buf,'(''tcrit= '',e9.4,'' h0= '',e9.4, '' hmax= '','//
+     $       'e9.4,'' hmin = '',e9.4)')
      $    tcrit,stk(lc+4),stk(lc+5),stk(lc+6)
          call basout(io,wte,buf(1:80)) 
       endif
@@ -741,9 +770,19 @@ c     --------------
                   buf='illegal input'
                   call error(9999)
                   return
-                endif
+               endif
+            elseif(meth.eq.5) then
+               call msgs(71,0)
+            elseif(meth.eq.4) then
+               if(istate.eq.-3) then
+                  buf ='ode discrete : a requested k is smaller '
+     $                 // ' than initial one'
+                  call error(999)
+                  return
+               else
+                  return
+               endif
             endif
-            if(meth.eq.5) call msgs(71,0)
             call msgs(4,ierr)
             nn=k-1
             goto 500
@@ -975,224 +1014,12 @@ c     fin de ode.....
 c
 c     intg
 c
- 120  call intg('intg')
+ 120  call intg
       return
-c     feval; evaluation d'une macro f(x1) ou f(x1,x2)
-c
- 130  call feval('feval')
+ 130  call feval
       return
- 140  call bva('bva')
+ 140  call bva
       return
       end
 
-      subroutine intg(fname)
-c      implicit undefined (a-z)
-      character*(*) fname
-      character*6   namef
-      include '../stack.h'
-      integer iero 
-      common/ierajf/iero
-      common/cintg/namef
-      external bintg,fintg
-      double precision epsa,epsr,a,b,val,abserr
-      logical getexternal, getscalar,type ,cremat
-      integer topk,lr,katop,kydot,top2,lra,lrb,lc
-      integer ipal,lpal,lw,liw,lpali,ifail
-      integer iadr,sadr
-c
-      iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
-      if(rhs.lt.3) then
-         call error(39)
-         return
-      endif
-      type=.false.
-      top2=top
-      topk=top
-      if(rhs.eq.5) then
-         if (.not.getscalar(fname,topk,top,lr)) return
-         epsr=stk(lr)
-         top=top-1
-      else
-         epsr=1.0d-8
-      endif
-      if (rhs.ge.4) then 
-         if (.not.getscalar(fname,topk,top,lr)) return
-         epsa=stk(lr)
-         top=top-1
-      else
-         epsa=0.0d+0
-      endif
-c     cas standard
-      if (.not.getexternal(fname,topk,top,namef,type)) return
-      kydot=top
-      top=top-1
-      if (.not.getscalar(fname,topk,top,lrb)) return
-      b=stk(lrb)
-      top=top-1
-      katop=top
-      if (.not.getscalar(fname,topk,top,lra)) return
-      a=stk(lra)
-c     tableaux de travail 
-      top=top2+1
-      lw=3000
-      if (.not.cremat(fname,top,0,1,lw,lpal,lc)) return
-      top=top+1
-c     tableau de travail entier necessaire 
-      liw=3000/8+2
-      if (.not.cremat(fname,top,0,1,iadr(liw)+1,lpali,lc)) return
-      top=top+1
-c
-c     external scilab
-c
-      ipal=iadr(lstk(top))
-      istk(ipal)=1
-      istk(ipal+1)=ipal+2
-      istk(ipal+2)=kydot
-      istk(ipal+3)=katop
-      lstk(top+1)=sadr(ipal+4)
-      if(type) then 
-         call dqag0(fintg,a,b,epsa,epsr,val,abserr,
-     +        stk(lpal),lw,stk(lpali),liw,ifail)
-      else
-         call dqag0(bintg,a,b,epsa,epsr,val,abserr,
-     +        stk(lpal),lw,stk(lpali),liw,ifail)
-      endif
-      if(err.gt.0)return
-      if(ifail.gt.0) then
-         call error(24)
-         return
-      endif
-      top=top2-rhs+1
-      stk(lra)=val
-      if(lhs.eq.2) then
-         top=top+1
-         stk(lrb)=abserr
-         return
-      endif
-      return
-      end
-
-      subroutine feval(fname)
-C     feval(x1,x2,external) -> external(x1(i),x2(j))
-C     feval(x1,external)    -> external(x1(i))
-c      implicit undefined (a-z)
-      include '../stack.h'
-      character*(*) fname
-      character*6   ename
-      integer m1,n1,lb,m2,n2,la,i,j,nn,lr,lc,lb1,lbc1,lrr,lcr
-      integer topk,itype,kx1top,kx2top,lr1,iero,kfeval,gettype
-      double precision x1,x2,fval(2)
-      logical type,getexternal,getrmat,cremat
-C     External names (colname), Position in stack (coladr), type (coltyp)
-      common / fevalname / ename
-      common / fevaladr / kfeval,kx1top,kx2top
-      common / fevaltyp / itfeval
-      common/  ierfeval/iero
-      if(rhs.lt.2) then
-         call error(39)
-         return
-      endif
-      itype=0
-      type=.false.
-      kfeval=top
-      topk=top
-      if (.not.getexternal(fname,topk,top,ename,type)) return
-      itfeval=gettype(top)
-      top=top-1
-      if (.not.getrmat(fname,topk,top,m1,n1,lb))  return
-      x2=stk(lb)
-      nn=1
-      if (rhs.eq.3) then 
-         nn=2
-         top=top-1
-         if (.not.getrmat(fname,topk,top,m2,n2,la))  return
-         x1=stk(la)
-      endif
-C     place pour le resultat si on a deux arguments 
-      top=topk+1
-      if (nn.eq.2) then 
-         if (.not.cremat(fname,top,1,m1*n1,m2*n2,lr,lc)) return
-      else
-         if (.not.cremat(fname,top,0,m1,n1,lb1,lbc1)) return
-      endif
-c     external scilab
-C     une variable de taille 1 qui permet de gerer le type d'argument
-      top=top+1
-      kx1top=top
-      if (.not.cremat(fname,top,0,1,1,lrr,lcr)) return
-      if (nn.eq.2) then 
-         top=top+1
-         kx2top=top
-         if (.not.cremat(fname,top,0,1,1,lrr,lcr)) return
-      endif
-      iero=0
-      if(type) then 
-         if (nn.eq.2) then 
-            do 182 i=1,m2*n2
-               do 192 j=1,m1*n1
-                  call ffeval(nn,stk(la+i-1),stk(lb+j-1),
-     $                 fval,itype,ename)
-                  if(err.gt.0) return
-                  if(iero.gt.0) then
-                     call error(24)
-                     Return
-                  endif
-                  stk(lr+i-1+m2*n2*(j-1))=fval(1)
-                  if (itype.eq.1) stk(lc+i-1+m2*n2*(j-1))=fval(2)
- 192           continue
- 182        continue
-         else
-            do 183 i=1,m1*n1
-               call ffeval(nn,stk(lb+i-1),1.0d0,fval,itype,ename)
-               if(err.gt.0) return
-               if(iero.gt.0) then
-                  call error(24)
-                  Return
-               endif
-               stk(lb+i-1)=fval(1)
-               if (itype.eq.1) stk(lb1+i-1)=fval(2)
- 183        continue
-         endif
-      else
-         if (nn.eq.2) then 
-            do 172 i=1,m2*n2
-               do 174 j=1,m1*n1
-                  call bfeval(nn,stk(la+i-1),stk(lb+j-1),
-     $                 fval,itype,ename)
-                  if(err.gt.0) return
-                  if(iero.gt.0) then
-                     call error(24)
-                     Return
-                  endif
-                  stk(lr+i-1+m2*n2*(j-1))=fval(1)
-                  if (itype.eq.1) stk(lc+i-1+m2*n2*(j-1))=fval(2)
- 174           continue
- 172        continue
-         else
-            do 173 i=1,m1*n1
-               call bfeval(nn,stk(lb+i-1),1.0D0,fval,itype,ename)
-               if(err.gt.0) return
-               if(iero.gt.0) then
-                  call error(24)
-                  Return
-               endif
-               stk(lb+i-1)=fval(1)
-               if (itype.eq.1) stk(lb1+i-1)=fval(2)
- 173        continue
-         endif
-      endif
- 162  continue
-      top=topk-rhs+1
-      if (nn.eq.2) then 
-         if (.not.cremat(fname,top,itype,m2*n2,m1*n1,lr1,lc)) return
-         call dcopy(m1*n1*m2*n2*(itype+1),stk(lr),1,stk(lr1),1)
-      else
-         if (itype.eq.1)then 
-            if (.not.cremat(fname,top,itype,m1,n1,lr,lc)) return
-            call dcopy(m1*n1,stk(lb1),1,stk(lc),1)
-         endif
-      endif
-      return
-      end
 

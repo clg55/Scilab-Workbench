@@ -25,8 +25,6 @@ p(3,1)=1.d0,...
 p(3,2)=1.d0,...
 p(3,3)=1.d0')
  
-comp(resid);comp(aplusp);comp(dgbydy);
- 
 //         calling scilab
  
 //

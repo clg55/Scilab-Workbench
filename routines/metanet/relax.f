@@ -1,3 +1,4 @@
+C  *****************************************************************
       subroutine relax(na,n,startn,endn,c,u,dfct,
      $rc,label,prdcsr,fou,nxtou,fin,nxtin,save,scan,mark,
      $tfstou,tnxtou,tfstin,tnxtin,ddpos,ddneg,x,tcost,flag)
@@ -10,6 +11,7 @@
       DIMENSION TFSTOU(n),TNXTOU(na),TFSTIN(n),TNXTIN(na)
       DIMENSION DDPOS(na),DDNEG(na)
       DOUBLEPRECISION TCOST
+      character*60 tampon
       logical repeat
       flag=1
       LARGE=20000000
@@ -26,15 +28,18 @@ C     ***** Set initial dual prices to zero *****
      $     N,NA,LARGE,REPEAT,
      $     TFSTOU,TNXTOU,TFSTIN,TNXTIN,DDPOS,DDNEG,flag)
 C     ***** Display previous optimal cost *****
-      IF (REPEAT) WRITE(6,1000)TCOST
+      IF (REPEAT)  then 
+         write(tampon,1000) TCOST
+         call out(tampon)
+C         WRITE(6,1000)TCOST
+      endif
 1000  FORMAT(' ','PREVIOUS OPTIMAL COST=',F14.2)
       TCOST=DFLOAT(0)
       DO 330 I=1,NA
 330     TCOST=TCOST+DFLOAT(X(I)*C(I))
       END
 C
-C     ****************************************************
-C
+C  *****************************************************************
       SUBROUTINE INIDAT(STARTN,ENDN,TEMPIN,TEMPOU,
      $     FOU,NXTOU,FIN,NXTIN,N,NA)
 C     ***** This subroutine uses the data arrays STARTN and ENDN
@@ -80,10 +85,7 @@ C     ******* construct data structure required by RELAx *************
       END
 C relaxtII.f
 C **********************************************************************
-C
-C                            SUBROUTINE RELAXT 2.1
-C                            RELEASED SEPT. 1987
-C
+C       SUBROUTINE RELAXT 2.1  RELEASED SEPT. 1987
 C **********************************************************************
 C
 C     This subroutine solves the minimum (linear) cost ordinary
@@ -119,7 +121,6 @@ C     arcs that are not balanced:  it turns out to be cheaper to purge
 C     arcs that have become unbalanced only when their end nodes are being 
 C     scanned, as opposed to always maintaining an exact set of balanced arcs.
 C
-C   *****************************************************************
 C
 C     The user must supply the following inputs to the subroutine:
 C     ( See also the documentation.)
@@ -154,7 +155,6 @@ C        and reduced cost vector. If favorable arrays X, U, and RC are
 C       known they can be passed to the routine directly. This requires 
 C        that the initialization portion of the routine be skipped.
 C     ********************************************************************
-C
       SUBROUTINE RELAXT(startn,endn,u,x,rc,dfct,
      $     label,PRDCSR,FOU,NXTOU,FIN,NXTIN,SAVE,SCAN,MARK,
      $     N,NA,LARGE,REPEAT,
@@ -184,16 +184,15 @@ C     only used after the tree comes into use.
 C
       DIMENSION   DDPOS(1),DDNEG(1)
 C
-C
 C    Reduce arc capacity as much as possible w/out changing the problem 
 C    If this is a sensitivity run via routine SENSTV skip the 
 C    initialization by setting REPEAT to .TRUE. in the calling program.
 C
-C     The initialization (from here up to line 70) 
-C      can be skipped (by setting REPEAT to .TRUE.) if the calling program
-C      places in common user-chosen values for the arc flows, residual arc 
-C      capacities, nodal deficits and reduced costs. It is mandatory that arc flows 
-C      and residual costs satisfy complementary slackess, on each arc, 
+C     The initialization (from here up to line 70) can be skipped 
+C     (by setting REPEAT to .TRUE.) if the calling program places in common
+C     user-chosen values for the arc flows, residual arc capacities, nodal  
+C     deficits and reduced costs. It is mandatory that arc flows and residual
+C     costs satisfy complementary slackess, on each arc, 
 C      and that the DFCT  array properly correspond to the initial arc flows
 C
       IF (REPEAT) GO TO 75
@@ -236,11 +235,10 @@ C
         END IF
 44      CAPIN=MIN0(LARGE,SCAPIN-DFCT(NODE))
         IF (CAPIN.LT.0) THEN
-C
 C  *** PROBLEM IS INFEASIBLE - EXIT
-C
        call out('EXIT DURING INITIALIZATION')
        write(sortie,1000)node
+       call out(sortie)
        CALL PRINTFLOWS(NODE,
      $     STARTN,ENDN,U,X,DFCT,FOU,NXTOU,FIN,NXTIN)
        GO TO 400
@@ -534,16 +532,10 @@ C        ascent direction.  If so, keep going.
             DELPRC = NXTBRK
             GOTO 360
          END IF
-
        END IF
-
       END IF
-
 300   CONTINUE
-
 390   CONTINUE
-
-
 C     ******* initialize the tree ************************************
       DO 50 I=1,N
         TFSTOU(I)=0
@@ -558,11 +550,8 @@ C     ******* initialize the tree ************************************
           TFSTIN(ENDN(I))=I
         END IF
 51    CONTINUE
-
 C
 C     *********** Initialize other variables ***********
-C
-
 75    FEASBL=.TRUE.
       NDFCT=N
       NUMNONZERO=0
@@ -572,20 +561,15 @@ C
         SCAN(I)=0
 76    CONTINUE
       NLABEL=0
-
 C     ******* Set threshold for SWITCH *******************************
 C     RELAX uses an adaptive strategy for deciding whether to
 C     continue the scanning process after a price change.
 C     The threshold parameters tp and ts that control
 C     this strategy are set in the next few lines.
-C
       TP=10
       TS=INT(N/15)
-C
 C     **** start relaxation algorithm **************
-C
 80    CONTINUE
-C
         DO 100 NODE=1,N
           DEFCIT=DFCT(NODE)
           IF (DEFCIT.EQ.0) THEN
@@ -594,20 +578,14 @@ C
             POSIT = (DEFCIT .GT. 0)
             NUMNONZERO=NUMNONZERO+1
           END IF
-C
 C         ***** ATTEMPT A SINGLE NODE ITERATION FROM NODE ****
-C
       IF (POSIT) THEN
-C
 C    ************* CASE OF NODE W/ POSITIVE DEFICIT ********
-C
       PCHANGE = .FALSE.
       INDEF=DEFCIT
       DELX=0
       NB=0
-C
 C     Check outgoing (probably) balanced arcs from NODE.
-C
       ARC=TFSTOU(NODE)
 500   IF (ARC .GT. 0) THEN
          IF ((RC(ARC) .EQ. 0) .AND. (X(ARC) .GT. 0)) THEN
@@ -618,9 +596,7 @@ C
          ARC = TNXTOU(ARC)
          GOTO 500
       END IF
-C
 C     Check incoming arcs now.
-C
       ARC = TFSTIN(NODE)
 501   IF (ARC .GT. 0) THEN
          IF ((RC(ARC) .EQ. 0) .AND. (U(ARC) .GT. 0)) THEN
@@ -631,20 +607,14 @@ C
          ARC = TNXTIN(ARC)
          GOTO 501
       END IF
-C
-C   ***** end of initial node scan *******
-C
+C     ***** end of initial node scan *******
 18     CONTINUE
-C
-C    ********* IF no price change is possible exit **********
-C
+C     ********* IF no price change is possible exit **********
       IF (DELX.GT.DEFCIT) THEN
         QUIT = (DEFCIT .LT. INDEF)
         GO TO 16
       END IF
-C
 C     Now compute distance to next breakpoint.
-C
       DELPRC = LARGE
       ARC = FOU(NODE)
 502   IF (ARC .GT. 0) THEN
@@ -664,21 +634,15 @@ C
          ARC = NXTIN(ARC)
          GOTO 503
       END IF
-C
 C     ******* check if the problem is infeasible *******
-C
       IF ((DELX.LT.DEFCIT).AND.(DELPRC.EQ.LARGE)) THEN
-C       ***** The dual cost can be decreased without bound  *****
+C     ***** The dual cost can be decreased without bound  *****
         GO TO 400
       END IF
-C
-C    **** SKIP FLOW ADJUSTEMT IF THERE IS NO FLOW TO MODIFY ***
-C
+C     **** SKIP FLOW ADJUSTEMT IF THERE IS NO FLOW TO MODIFY ***
       IF (DELX.EQ.0) GO TO 14
-C
 C     *****  Adjust the flow on balanced arcs incident of NODE to
 C     maintain complementary slackness after the price change *****
-C
       DO 13 J=1,NB
         ARC=SAVE(J)
         IF (ARC.GT.0) THEN
@@ -701,11 +665,9 @@ C
         QUIT=.TRUE.
         GO TO 19
       END IF
-C
 C     ***** NODE corresponds to a dual ascent direction.  Decrease
 C     the price of NODE by DELPRC and compute the stepsize to the
 C     next breakpoint in the dual cost *****
-C
 14    NB=0
       PCHANGE = .TRUE.
       DP=DELPRC
@@ -737,13 +699,9 @@ C
         ARC=NXTIN(ARC)
         GOTO 505
       END IF
-C
-C   ***** return to check if another price change is possible ******
-C
+C     ***** return to check if another price change is possible ******
       GO TO 18
-C
 C     ******* perform flow augmentation at NODE ****
-C
 16    DO 11 J=1,NB
         ARC=SAVE(J)
         IF (ARC.GT.0) THEN
@@ -808,10 +766,8 @@ C
              ARC = NXTARC
              GOTO 507
           END IF
-C
 C         *** Now add the currently balanced arcs to the list for this node ***
 C         *** (which is now empty), and the appropriate adjacent ones.      ***
-C
           DO 508 J=1,NB
              ARC = SAVE(J)
              IF (ARC.LE.0) ARC=-ARC
@@ -824,15 +780,10 @@ C
                 TFSTIN(ENDN(ARC)) = ARC
              END IF
 508       CONTINUE
-
        END IF
-C
 C   *** end of single node iteration for a positive deficit node ***
-C
       ELSE
-C
 C     ******* single node iteration for a negative deficit node ******
-C
       PCHANGE = .FALSE.
       DEFCIT=-DEFCIT
       INDEF=DEFCIT
@@ -865,9 +816,7 @@ C
         QUIT = (DEFCIT .LT. INDEF)
         GO TO 26
       END IF
-C
 C     Now compute distance to next breakpoint.
-C
       DELPRC = LARGE
       ARC = FIN(NODE)
 511   IF (ARC .GT. 0) THEN
@@ -887,13 +836,11 @@ C
          ARC = NXTOU(ARC)
          GOTO 512
       END IF
-
 C     ******* check if problem is infeasible ************************
       IF ((DELX.LT.DEFCIT).AND.(DELPRC.EQ.LARGE)) THEN
         GO TO 400
       END IF
       IF (DELX.EQ.0) GO TO 24
-C
 C     ******* flow augmentation is possible *************************
       DO 23 J=1,NB
         ARC=SAVE(J)
@@ -917,7 +864,6 @@ C     ******* flow augmentation is possible *************************
         QUIT=.TRUE.
         GO TO 29
       END IF
-
 C     ******* price increase at NODE is possible ********************
 24    NB=0
       PCHANGE = .TRUE.
@@ -951,9 +897,7 @@ C     ******* price increase at NODE is possible ********************
         GOTO 514
       END IF
       GO TO 28
-C
 C     ******* perform flow augmentation at NODE ****
-C
 26    DO 21 J=1,NB
         ARC=SAVE(J)
         IF (ARC.GT.0) THEN
@@ -988,13 +932,10 @@ C         *** -ARC is an outgoing arc from NODE *********************
         END IF
 21     CONTINUE
 29     DFCT(NODE)=-DEFCIT
-C
 C      Reconstruct the list of balanced arcs adjacent to this node.
 C      First, the list at this node is now totally different.  Eat 
 C      the old lists of incoming and outgoing balanced arcs.       
-
        IF (PCHANGE) THEN
-
           ARC = TFSTOU(NODE)
           TFSTOU(NODE) = 0
 515       IF (ARC .GT. 0) THEN
@@ -1029,34 +970,23 @@ C
 517       CONTINUE
 
        END IF
-C
 C    ***** end of single node iteration for a negative deficit node ***
-C
        END IF
-C
        IF (QUIT) GO TO 100
-C
 C      ******* do a multi-node operation from NODE *****************
-C
        SWITCH = (NDFCT .LT. TP)
-C
 C      ******* UNMARK NODES LABELED EARLIER *******
-C
           DO 90 J=1,NLABEL
             NODE2=LABEL(J)
             MARK(NODE2)=0
             SCAN(NODE2)=0
 90        CONTINUE
-C
 C      ******* INITIALIZE LABELING ******
-C
           NLABEL=1
           LABEL(1)=NODE
           MARK(NODE)=1
           PRDCSR(NODE)=0
-C
 C      ******** SCAN STARTING NODE *********
-C
           SCAN(NODE)=1
           NSCAN=1
           DM=DFCT(NODE)
@@ -1377,6 +1307,7 @@ C     ******* problem is found to be infeasible *********************
       END
 
 
+C  *****************************************************************
 
       SUBROUTINE PRINTFLOWS(NODE,
      $     STARTN,ENDN,U,X,DFCT,FOU,NXTOU,FIN,NXTIN)
@@ -1388,7 +1319,7 @@ C     for more general diagnostic purposes. *****
 C
 C
       IMPLICIT INTEGER (A-Z)
-      character sortie*100
+      character sortie*60
 C
 C
       DIMENSION STARTN(1),ENDN(1),U(1),X(1),DFCT(1)
@@ -1422,8 +1353,6 @@ C
         END IF
       END IF
 C
-C  *****************************************************************
-C
       IF (FIN(NODE).EQ.0) THEN
         call out('NO INCOMING ARCS')
       ELSE
@@ -1440,13 +1369,9 @@ C
         END IF
       END IF
 C
-C  *****************************************************************
-C
       RETURN
       END
-
-
-      
+C  *****************************************************************
       SUBROUTINE AUGFL1(AUGNOD,
      $    STARTN,ENDN,U,X,DFCT,PRDCSR)
 C
@@ -1505,6 +1430,7 @@ C
 
 
 
+C  *****************************************************************
 
       SUBROUTINE ASCNT1(DM,DELX,NLABEL,AUGNOD,FEASBL,SWITCH,
      $     NSCAN,QUIT,
@@ -1811,6 +1737,7 @@ C
       END
 
 
+C  *****************************************************************
       
       SUBROUTINE AUGFL2(AUGNOD,
      $    STARTN,ENDN,U,X,DFCT,PRDCSR)
@@ -1857,6 +1784,7 @@ C
       END IF 
       RETURN
       END
+C  *****************************************************************
 C
       SUBROUTINE ASCNT2(DM,DELX,NLABEL,AUGNOD,FEASBL,SWITCH,
      $     NSCAN,QUIT,

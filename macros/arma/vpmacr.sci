@@ -1,4 +1,4 @@
-//<dx,du,resid>=vpmacr(sys,sysn,pas,Tmax,uequ,umac)
+function [dx,du,resid]=vpmacr(sys,sysn,pas,Tmax,uequ,umac)
 // sys  : systeme dynamique
 // sysn : nom du systeme donne sous forme de chaine de caratere
 // pas  : pas d'integration
@@ -21,20 +21,16 @@ for i=1:n2,
     for t=0:0.1:Tmax,du=[du,umac_m(t)],end
     [la,lb,sig,resid]=narmax(1,1,dx,du,1,1);
 end
-//end
 
 
-//<xdot>=sys1(t,x,u)
+function [xdot]=sys1(t,x,u)
 xdot=-(1+u)*(1/2*x**2-u)
-//end
 
-//<xdot>=sys2(t,x,u)
+function [xdot]=sys2(t,x,u)
 xdot=-(1+u)*(1/3*x**3-u)
-//end
 
-//<xdot>=sys3(t,x,u)
+function [xdot]=sys3(t,x,u)
 xdot=-( (2)**(1/2)*x-2*u)
-//end
 
 
 

@@ -10,12 +10,13 @@ function elts=pfss(S,cord)
 //!
 flag=0;
 [LHS,RHS]=argn(0);
-if S(1)=='r' then flag=1;S=tf2ss(S);end
+FLAG=S(1)
+if FLAG(1)=='r' then flag=1;S=tf2ss(S);end
 
 //-compat type(S)<>15 retained for list/tlist compatibility
 if type(S)<>15&type(S)<>16 then error(91,1),end
 [t,f,g,h,dd,dom]=S([1:5,7]);
-if t<>'lss' then error(91,1),end;
+if t(1)<>'lss' then error(91,1),end;
 [n,n]=size(f);
 [f,x,bs]=bdiag(f);h=h*x;g=x\g;
 k=1;ll=0;
@@ -31,7 +32,7 @@ end;
 if RHS==2  then
 select cord
 case 'c'
-  nb=prod(size(bs));
+  nb=size(bs,'*');
   class=[];
     for k=1:nb
      oneortwo=bs(k);ss=elts(k);A=ss(2);
@@ -45,7 +46,7 @@ case 'c'
      for k=1:size(elts);
         elts(k)=elts1(indi(k));end
 case 'd'
-  nb=prod(size(bs));
+  nb=size(bs,'*');
   class=[];
     for k=1:nb
      oneortwo=bs(k);ss=elts(k);A=ss(2);
@@ -69,7 +70,8 @@ end
 if flag==1 then
    k=size(elts);
    for kk=1:k,elts(kk)=ss2tf(elts(kk));end
-end
+ end
+
 
 
 

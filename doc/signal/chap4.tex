@@ -989,7 +989,7 @@ is displayed in Figure~\ref{f.iir4}
 	The second example is of a band-pass filter designed from
 a third order analog elliptic filter with cut-frequencies $\omega_l=.15$
 and $\omega_h=.25$ and ripples in the pass and stop bands, respectively,
-as $\delta_p=.08$ and $\delta_s=.03$.  The call to $\Psi$Lab looks like
+as $\delta_p=.08$ and $\delta_s=.03$.  The call to Scilab looks like
 \verbatok{\Diary iir10.dia}
 \end{verbatim}
 and the resulting magnitude of the transfer function is illustrated in
@@ -1009,7 +1009,7 @@ obtain the desired result.
 \index{function syntax!eqiir@{\tt eqiir}}
 \index{IIR filter design!function code}
 
-The {\tt eqiir} function is an interface between $\Psi$Lab and the Fortran routine {\tt syredi} which is a modification of the well known {\tt eqiir} code \cite{ieee}. 
+The {\tt eqiir} function is an interface between Scilab and the Fortran routine {\tt syredi} which is a modification of the well known {\tt eqiir} code \cite{ieee}. 
 The {\tt eqiir} function allows one to  design four different types of filters, namely lowpass, highpass, symmetric stopband, and symmetric passband filters.  The algorithm is based on the bilinear transform of analog filters as described in the previous sections.  The filter obtained is a product of second order cells.
 The order of the filter is computed automatically to meet the filter specifications.
 

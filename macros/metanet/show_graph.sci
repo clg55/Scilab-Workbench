@@ -1,20 +1,33 @@
-function []=show_graph(g,rep,scale)
+function [cw]=show_graph(g,smode,scale,winsize)
 [lhs,rhs]=argn(0)
 select rhs
 case 1 then
-  rep='pas de rep'
+  smode='rep'
   scale=-1
+  winsize=[1000 1000]
 case 2 then
-  if type(rep)==10 then scale=-1
-  else scale=rep, rep='pas de rep', end
+  if type(smode)==10 then scale=-1
+  else scale=smode, smode='rep', end
+  winsize=[1000 1000]
+case 3 then
+  if smode=='new' then
+    if prod(size(scale))<>1 then
+      winsize=scale
+      scale=-1
+    else
+      winsize=[1000 1000]
+    end
+  end
+case 4 then
+  if smode<>'new' then error(39),  end
 else
-  if rhs<>3 then error(39), end
+  error(39)
 end
 // g
 check_graph(g)
 // making defaults
 n=g('node_number')
-ma=g('edge_number')
+ma=prod(size(g('tail')))
 // node_name
 if size(g('node_name'))==0 then
   g('node_name')=string(1:n)
@@ -133,28 +146,26 @@ if size(g('edge_label'))==0 then
 end
 // scale
 if prod(size(scale))<>1 then
-  error('show_graph: scale argument must be a scalar')
+  error('Third argument must be a scalar')
 end
 if scale<=0 then scale=-1, end
-// rep
-if type(rep)<>10|prod(size(rep))<>1 then
-  error('show_graph: second argument must be a string')
+// smode
+if type(smode)<>10|prod(size(smode))<>1 then
+  error('Second argument must be a string')
 end
-select rep
-case 'pas de rep' then
-  irep=0
+select smode
 case 'rep' then 
   irep=1
 case 'new' then
-  // if rep is 'new' create a new window without question
+  // if smode is 'new' create a new window without question
   irep=0
-  inimet(' ')
+  m6inimet(' ',winsize(1),winsize(2))
 else
-  error('show_graph: unknown argument ""'+rep+'""')  
+  error('Unknown argument ""'+smode+'""')  
 end
 // Is there a current metanet window?
 r=netwindows(); cw=r(2)
 if cw==0 then 
-  cw=inimet(' ')
+  cw=m6inimet(' ',winsize(1),winsize(2))
 end
-showg(g,g('name'),ma,cw,irep,scale,is_nlabel,is_elabel)
+m6showg(g,g('name'),ma,cw,irep,scale,is_nlabel,is_elabel)

@@ -1,7 +1,5 @@
 function f=%pir(i,j,f2,f)
-// %pir(i,j,f2,f) insere la sous matrice de polynomes f2 dans la
-//matrice de fractions rationnelles f1 aux lignes (colonnes)
-// designees par i (j). Cette macro correspond a la syntaxe; f(i,j)=f2.
+// %pir(i,j,f2,f) <=> f(i,j)=f2   for polynomial matrices
 //!
 if type(i)==10 then  // s2('num'),s2('den'),sl('dt')
   [lhs,rhs]=argn(0)

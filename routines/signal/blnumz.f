@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=BLNUMZ,SSI=0
       subroutine blnumz(nzm,nzero,zzr,zzi,b2,b1,b0,nze)
 c!but
 c build numerator blocks of second order

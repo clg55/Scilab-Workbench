@@ -22,3 +22,5 @@ for l=1:m
     txt(l,k)=part(t,l1:l2)
   end
 end
+
+

@@ -1,9 +1,5 @@
-//[r]=%mnl(l1,l2)
-// %mnl(l1,l2) correspond a l'operation logique l1==l2 avec l2 une liste
-//et l1 une macro
-//!
+function [r]=%mnl(l1,l2)
+// r= %mnl(l1,l2) <=> l1==l2    l2:list l1:function
 r=%t
- 
-//end
 
 

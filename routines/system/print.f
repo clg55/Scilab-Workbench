@@ -7,7 +7,7 @@ c     ====================================================================
 c     
       common / ptkeep / lwk
       integer itype,itypel,gettype
-      integer fl,mode,m,n,it,lr,lc,nlr,lkeep,topk,lname
+      integer fl,mode,m,n,it,lr,lc,nlr,lkeep,topk,lname,siz
       logical getmat,ilog,getpoly,typer,clsave,getsimat
       logical crewimat ,islss,getilist,getbmat
       character*4 name
@@ -133,7 +133,7 @@ C     list ( we must deal with recursion )
       else
          li1=li2
       endif
-      ligne(li1+1:li1+1)='>'  
+      ligne(li1+1:li1+1)='('  
       if(islss) ligne(li1+1:li1+1)='('
       li1=li1+2
       kl=0
@@ -148,6 +148,8 @@ c la valeur stockee dans ptkeep est ecrasee au secon appel de mvptr et le secon 
 c ne retourne pas la premiere valeur sauvee mais la seconde..... et pourtant ca marche ?????
       call mvptr(topk,illist)
       ilog=getilist("print",topk,topk,nl,kl,ilk)
+      il=iadr(lstk(topk))
+      siz=istk(il+2+kl)-istk(il+2+(kl-1))
       call ptrback(topk)
       lstk(lk)=ilk
       itype=gettype(lk)
@@ -209,10 +211,16 @@ c         ligne(1:li2)=' '
          call basout(io,lunit,' ')
          endif
       else
+         ligne(li2+1:li2+1)=')'
+         li2=li2+1
          call basout(io,lunit,buf(1:nlist+6)//ligne(1:li2))
          call basout(io,lunit,' ')
       endif
       if(io.eq.-1) goto 99
+      if(siz.le.0) then
+         call basout(io,lunit,'    Undefined')
+         goto 45
+      endif
       goto 05
 c     end for list 
  47   continue

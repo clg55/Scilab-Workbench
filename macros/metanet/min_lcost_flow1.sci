@@ -4,7 +4,7 @@ if rhs<>1 then error(39), end
 // check g
 check_graph(g)
 // check capacities
-ma=g('edge_number')
+ma=prod(size(g('tail')))
 n=g('node_number')
 mincap=g('edge_min_cap')
 maxcap=g('edge_max_cap')
@@ -16,21 +16,21 @@ if maxcap==[] then
 end
 verif=find(mincap<0) 
 if verif<>[] then 
-  error('min_lcost_flow1: minimum capacities must be non negative')
+  error('Minimum capacities must be non negative')
 end
 verif=find(maxcap<0) 
 if verif<>[] then 
-  error('min_lcost_flow1: maximum capacities must be non negative')
+  error('Maximum capacities must be non negative')
 end
 verif=find(mincap>maxcap)
 if verif<>[] then
-  error('min_lcost_flow1: maximum capacities must be greater than minimal capacities')
+  error('Maximum capacities must be greater than minimal capacities')
 end
 if or(mincap<>round(mincap)) then
-  error('min_lcost_flow1: minimum capacities must be integer')
+  error('Minimum capacities must be integer')
 end
 if or(maxcap<>round(maxcap)) then
-  error('min_lcost_flow1: maximum capacities must be integer')
+  error('Maximum capacities must be integer')
 end
 // check costs
 costs=g('edge_cost')
@@ -39,7 +39,7 @@ if costs==[] then
 end
 verif=find(costs<0) 
 if verif<>[] then 
-  error('min_lcost_flow1: costs must be non negative')
+  error('Costs must be non negative')
 end
 // check demand
 demand=g('node_demand')
@@ -48,11 +48,11 @@ if demand==[] then
 end
 verif=find(demand<>0)
 if verif<>[] then 
-  error('min_lcost_flow1: demands must be equal to zero')
+  error('Demands must be equal to zero')
 end
 // compute lp, la and ls
 // always consider the graph as undirected!
-[lp,la,ls]=ta2lpu(g('tail'),g('head'),n+1,n,2*ma)
+[lp,la,ls]=m6ta2lpu(g('tail'),g('head'),n+1,n,2*ma)
 // compute linear min cost flow by out-of-kilter algorithm
-[phi,flag]=kilter(mincap,maxcap,g('head'),g('tail'),la,lp,n,costs)
+[phi,flag]=m6kilter(mincap,maxcap,g('head'),g('tail'),la,lp,n,costs)
 c=costs*phi'

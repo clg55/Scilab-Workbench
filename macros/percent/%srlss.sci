@@ -1,8 +1,7 @@
-//[sr]=%srlss(p,s)
+function [sr]=%srlss(p,s)
 // sr=%srlss(p,s) ou sr=p/s
-// s : representation d'etat d'un systeme lineaire
-// p : matrice de scalaires
+// s : syslin list
+// p : constant matrix
 //!
 //origine S Steer INRIA 1992
-sr=tlist('lss',[],[],[],p,[],[])/s
-//end
+sr=tlist(['lss','A','B','C','D','X0','dt'],[],[],[],p,[],[])/s

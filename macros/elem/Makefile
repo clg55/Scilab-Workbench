@@ -8,30 +8,17 @@ include ../../Makefile.incl
 NAME = elemlib
 NAM = elem
 
-MACROS = acos.sci acosh.sci asin.sci asinh.sci atanh.sci cosh.sci \
-	cotg.sci coth.sci  smooth.sci log10.sci \
-	null.sci sinh.sci fix.sci \
-	tan.sci tanh.sci toeplitz.sci pertrans.sci \
-	g_clean.sci modulo.sci interpln.sci and.sci or.sci \
+MACROS = acos.sci acosm.sci acosh.sci acoshm.sci asin.sci asinm.sci \
+	asinh.sci asinhm.sci atanh.sci atanhm.sci cosh.sci coshm.sci\
+	cotg.sci coth.sci cothm.sci log10.sci sinh.sci sinhm.sci \
+	tan.sci tanm.sci tanh.sci tanhm.sci \
+	logm.sci  atanm.sci cosm.sci signm.sci sinm.sci sqrtm.sci\
+	null.sci fix.sci smooth.sci \
+	toeplitz.sci pertrans.sci \
+	modulo.sci interpln.sci and.sci or.sci \
 	intl.sci intc.sci integrate.sci \
 	calerf.sci erf.sci erfc.sci erfcx.sci \
-	speye.sci spzeros.sci sprand.sci
+	speye.sci spzeros.sci sprand.sci \
+	intsplin.sci inttrap.sci GLoad.sci
 
-OBJ = $(MACROS:.sci=.bin)
-MACROSN = $(MACROS:.sci=)
-
-all:: $(OBJ) lib
-
-lib: $(OBJ) names
-	@echo generating lib and names
-	@$(SCIDIR)/bin/scilab -lib $(NAME) SCI/macros/$(NAM)
-
-names: $(OBJ)
-	@$(RM) names;touch names;
-	@for i in $(MACROSN); do  (echo $$i >> names );done
-
-distclean::
-	$(RM) lib names *.bin
-
-.sci.bin:
-	@$(SCIDIR)/bin/scilab -comp  $*.sci
+include ../Make.lib

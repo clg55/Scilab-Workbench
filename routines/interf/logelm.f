@@ -11,6 +11,10 @@ c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 c
+      if (ddt .eq. 4) then
+         write(buf(1:4),'(i4)') fin
+         call basout(io,wte,' logelm '//buf(1:4))
+      endif
 
 c     functions/fin
 c     1      
@@ -33,7 +37,20 @@ c
       endif
       il1=iadr(lstk(top))
       if(istk(il1).eq.6) goto 20
-      if(istk(il1).ne.4) then
+      if(istk(il1).eq.1) then
+         mn1=istk(il1+1)*istk(il1+2)
+         if(mn1.eq.0) goto 999
+         l1=sadr(il1+4)
+         l=l1
+         do 11 k=0,mn1-1
+            if(stk(l1+k).ne.0.0d0) then
+               stk(l)=float(k+1)
+               l=l+1
+            endif
+ 11      continue
+         nt=l-l1
+         goto 14
+      elseif(istk(il1).ne.4) then
          err=1
          call error(215)
          return
@@ -53,16 +70,16 @@ c
       l1=sadr(il1+4)
       if(mn1.gt.0) then
          l=l1
-         do 11 k=0,mn1-1
-            if(istk(il+k).ne.1) goto 11
+         do 13 k=0,mn1-1
+            if(istk(il+k).ne.1) goto 13
             stk(l)=float(k+1)
             l=l+1
- 11      continue
+ 13      continue
          nt=l-l1
       else
          nt=0
       endif
-      istk(il1+1)=min(1,nt)
+ 14   istk(il1+1)=min(1,nt)
       istk(il1+2)=nt
       istk(il1+3)=0
       lstk(top+1)=l1+nt
@@ -76,10 +93,10 @@ c
       l2=sadr(il2+4)
       lstk(top+1)=l2+nt
       if(nt.eq.0) goto 999
-      do 12 k=0,nt-1
+      do 15 k=0,nt-1
          stk(l2+k)=float(int((stk(l1+k)-1.0d0)/m1)+1)
          stk(l1+k)=stk(l1+k)-(stk(l2+k)-1.0d+0)*m1
- 12   continue
+ 15   continue
       goto 999
 c
  20   continue

@@ -4,14 +4,14 @@ function []=nyquist(sl,fmin,fmax,pas,comments)
 [lhs,rhs]=argn(0);
 pas_def='auto' //valeur du pas par defaut
 //---------------------
-xbasc()
+//xbasc()
 ilf=0
 typ=type(sl)
 //-compat next line added for list/tlist compatibility
 if typ==15 then typ=16,end
 select typ
 case 16 then  // sl,fmin,fmax [,pas] [,comments]
-  typ=sl(1)
+  typ=sl(1);typ=typ(1);
   if typ<>'lss'&typ<>'r' then
     error(97,1)
   end
@@ -94,9 +94,9 @@ mxy=maxi(repi);
 rect=[mnx,mny,mxx,mxy]
 axis=[5 npx 5 npy]
 if mnc==1 then
-  plot2d(repf',repi',-(1:mn),"011",' ',rect,axis);
+  plot2d(repf',repi',(1:mn),"011",' ',rect,axis);
 else
- plot2d(repf',repi',-(1:mn),"111",strcat(comments,'@'),rect,axis);
+ plot2d(repf',repi',(1:mn),"111",strcat(comments,'@'),rect,axis);
 end
 xgrid();
 xgeti=xget("mark");
@@ -128,6 +128,6 @@ xset("mark",xgeti(1),xgeti(2));
 xpoly([rect(1),rect(3)],[0,0],'lines');
 xpoly([0,0],[rect(2),rect(4)],'lines');
 t=(0:0.1:2*%pi)';
-//plot2d(sin(t),cos(t),[-(mn+1) mnc],'100','Unit Circle')
+//plot2d(sin(t),cos(t),[(mn+1) -mnc],'100','Unit Circle')
 xclip();
 xtitle('Nyquist plot ','Re(h(2i*pi*f))','Im(h(2i*pi*f))');

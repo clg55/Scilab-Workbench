@@ -1,11 +1,14 @@
 SHELL = /bin/sh
 
+include ../../../Path.incl
 include ../../../Version.incl
 include ../../../Makefile.incl
 
 OBJS = /tmp/wheel.o /tmp/wheelg.o
 
 all:: $(OBJS)
+
+FFLAGS = $(FC_OPTIONS)
 
 /tmp/wheel.o: wheel.f
 	$(FC) $(FFLAGS) -c wheel.f -o /tmp/wheel.o

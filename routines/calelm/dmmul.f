@@ -1,21 +1,19 @@
       subroutine dmmul(a,na,b,nb,c,nc,l,m,n)
-c!but
-c     ce sous programme effectue le produit matriciel:
+c!
+c     
 c     c=a*b .
-c!liste d'appel
+c!
 c
 c     subroutine dmmul(a,na,b,nb,c,nc,l,m,n)
 c     double precision a(na,m),b(nb,n),c(nc,n)
 c     integer na,nb,nc,l,m,n
 c
-c     a            tableau de taille na*m contenant la matrice a
-c     na           nombre de lignes du tableau a dans le programme appel
-c     b,nb,c,nc    definitions similaires a celles de a,na
-c     l            nombre de ligne des matrices a et c
-c     m            nombre de colonnes de a et de lignes de b
-c     n            nombre de colonnes de b et c
-c!sous programmes utilises
-c     neant
+c     a            workspace of size na*m containing a
+c     na           number of rows of array a in calling program
+c     b,nb,c,nc    idem for b and c
+c     l            # of rows of matrix  a and c
+c     m            # of columns of a and rows of b
+c     n            # of columns of b and c
 c!
       double precision a(*),b(*),c(*)
       double precision ddot

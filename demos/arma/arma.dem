@@ -26,8 +26,8 @@ zd=narsimul(a,b,d,1.0,u);
 // simulation without noise 
 z=narsimul(a,b,d,0.0,u);
 xselect();xbasc();
-plot2d2("enn",1,zd',[-1,1],"121","Simulated output");
-plot2d2("enn",1,1000*u',[-1,4],"100","Input [scaled]");
+plot2d2("enn",1,zd',[1,1],"121","Simulated output");
+plot2d2("enn",1,1000*u',[3,4],"100","Input [scaled]");
 halt();
 write(%io(2),"Identification ARX (least square):");
 [la,lb,sig,resid]=armax(3,3,zd,u,1,1);
@@ -79,5 +79,5 @@ xtitle('Spectral power','frequency','spectral estimate')
 plot2d([fr;fr;fr]',[20*log(sm/sm(1))/log(10);...
   20*log(res/res(1))/log(10);...
   20*log(res1/res1(1))/log(10)]',...
- [-2,-1,1],"111",leg, [0,-70,0.5,60]);
+ [2,1,-1],"111",leg, [0,-70,0.5,60]);
 

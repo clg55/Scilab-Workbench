@@ -7,17 +7,19 @@ case 1 then
 case 2 then 
   x=rand(a)
   
-//-compat next case retained for list/tlist compatibility
+// for list/tlist compatibility
 case 15 then
-  if a(1)=='r' then
+  a1=a(1)
+  if a1(1)=='r' then
     x=rand(a(2));
-  elseif a(1)='lss' then
+  elseif a1(1)='lss' then
     x=rand(a(5))
   end
 case 16 then
-  if a(1)=='r' then
+  a1=a(1)
+  if a1(1)=='r' then
     x=rand(a(2));
-  elseif a(1)='lss' then
+  elseif a1(1)='lss' then
     x=rand(a(5))
   end  
 case 10 then

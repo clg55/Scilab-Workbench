@@ -1,7 +1,7 @@
 C/MEMBR ADD NAME=DDIF,SSI=0
       subroutine ddif(n,a,na,b,nb)
 c!but
-c     ddif effectue l'operation vectorielle b=a-b
+c     ddif effectue l'operation vectorielle b=b-a
 c!liste d'appel
 c     subroutine ddif(n,a,na,b,nb)
 c     double precision a(*),b(*)

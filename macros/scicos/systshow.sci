@@ -1,22 +1,28 @@
-function win=systshow(x,win)
+function win=systshow(scs_m,win)
 [lhs,rhs]=argn(0)
 if rhs<2 then win=xget('window'),end
 xset('window',win);xbasc()
-wpar=x(1)
+wpar=scs_m(1)
 wsiz=wpar(1)
+Xshift=wsiz(3)
+Yshift=wsiz(4)
+
 xset('wdim',wsiz(1),wsiz(2))
 [frect1,frect]=xgetech()
-wdm=xget('wdim')
-xsetech([-1 -1 8 8]/6,[0 0 wdm(1) wdm(2)])
-drawobjs(x)
-nx=size(x)
+xset('wdim',wsiz(1),wsiz(2))
+xsetech([-1 -1 8 8]/6,[Xshift,Yshift ,Xshift+wsiz(1),Yshift+wsiz(2)])
+
+drawobjs(scs_m)
+nx=size(scs_m)
 for k=2:nx
-  o=x(k)
+  o=scs_m(k)
   if o(1)=='Block' then
     model=o(3)
     if model(1)=='super' then
       win=win+1
       win=systshow(model(8),win)
     end
-  end      
+  end
 end
+
+

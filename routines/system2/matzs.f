@@ -5,7 +5,6 @@ c
 c!
       integer lda,m,n,job
       character*(*) name
-      character*8 h
       real ar(lda,*),ai(lda,*)
 c
       include '../stack.h'
@@ -20,9 +19,8 @@ c
       if(job.ge.10) it=1
       lec=job-10*it
 c
-      nc=min(8,len(name))
-      h=name(1:nc)
-      call cvname(id,h,0)
+      nc=min(nlgh,len(name))
+      call cvname(id,name(1:nc),0)
       srhs=rhs
       rhs=0
 c

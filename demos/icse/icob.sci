@@ -1,4 +1,4 @@
-//<ytob>=icob(dtv)
+function ytob=icob(dtv)
 //<ytob>=icob(dtv)
 //extraction de l'etat aux instants de mesure
 //variables d'entree:
@@ -11,6 +11,6 @@ ytob(ny,ntob)=0.d0;
 lob=ndtu+ny+ntob+nob*ny+nex*ntob*nob+2*nu+ntob*nob+ny*(nti+ntf+..
 1+ny+nuc+nuv+1);
 ytob=matrix(dtv(lob+1:lob+ny*ntob),ny,ntob)
-//end
+
 
 

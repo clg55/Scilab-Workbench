@@ -1,8 +1,5 @@
 function f=%pe(i,j,f)
-// %pe(i,j,f) extrait la sous matrice, definie par les indices de lignes
-// donnes dans le vecteur i et les indices de colonnes donnes dans le
-//vecteur j, de la matrice de scalaire f. i et j peuvent etre des vecteur
-// de booleens f(i,j) est alors f(find(i),find(j))
+// f=%pe(i,j,f) <=> f=f(i,j) , i,j integers (or booleans f(i,j) is f(find(i),find(j))
 //!
 [lhs,rhs]=argn(0)
 if rhs==2 then
@@ -13,7 +10,5 @@ else
   if type(j)==4 then j=find(j),end
   f=f(i,j)
 end
-
-//end
 
 

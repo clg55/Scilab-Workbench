@@ -29,15 +29,8 @@ C           argument is a string
             endif
          endif
       endif
-      call xscion(iflag)
-      if(iflag.eq.0) then
-         buf='$SCI/bin/scilab -help "'//h(1:nstr)//'"    '
-         call bashos(buf,26+nstr,ls,ierr)
-      else
-         buf='$SCI/bin/scilab -help "'//h(1:nstr)//
-     $        '" | $SCI/bin/xless &   '
-         call bashos(buf,53+nstr,ls,ierr)
-      endif
+      h(nstr+1:nstr+1)= char(0)
+      call iscihelp(buf,h(1:nstr+1),ierr)
       if(ierr.ne.0) then
          call error(85)
          return

@@ -1,6 +1,36 @@
+#include <stdio.h>
+#include <setjmp.h>
+#include <signal.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "../machine.h"
-#include <stdio.h>
+#include "../menusX/men_scilab.h" 
+#include "All-extern-x1.h" 
+#include "All-extern.h" 
+     
+extern int main  _PARAMS((int argc, char **argv));  
+extern int C2F (dsort) _PARAMS((void));  
+extern void test_plot  _PARAMS((void));  
+extern void test_apropos  _PARAMS((void));  
+extern void test_menu  _PARAMS((void));  
+extern void test_quit  _PARAMS((void));  
+extern void test_loop  _PARAMS((void));  
+extern void test_message  _PARAMS((void));  
+extern void test_click  _PARAMS((void));  
+extern void test_events  _PARAMS((void));  
+extern void test_xinfo  _PARAMS((void));  
+extern void test_xgc  _PARAMS((void));  
+extern void LTest  _PARAMS((char *x0));  
+extern void C2F (sigbas) _PARAMS((int *i));  
+extern void check_win  _PARAMS((void));  
+extern void C2F (setfbutn) _PARAMS((char *name, int *rep));  
+extern int C2F (scilines) _PARAMS((int *nl, int *nc));  
+extern int C2F (sciquit) _PARAMS((void));  
+extern void plot  _PARAMS((void));  
+extern void cerro  _PARAMS((char *str));  
+extern void cout  _PARAMS((char *str));  
+extern void C2F (cvstr) _PARAMS((int *n, int *line, char *str, int *job, long int lstr));  
 
 #define PI0 (integer *) 0
 #define PD0 (double *)  0
@@ -11,12 +41,11 @@ extern int demo_menu_activate;
 #include <malloc.h>
 
 
-main(argc, argv)
+int main(argc, argv)
      int argc;
      char **argv;
 {
   int i,nowindow=0,nostartup=0;
-  char *p;
   demo_menu_activate=1;
   for (i=argc-1 ; i >=0  ; i-- )
     {
@@ -30,72 +59,100 @@ main(argc, argv)
   return(0);
 };
 
-C2F(dsort)() {};
-C2F(fbutn)() {};
+void C2F(fbutn)() {};
 
 #define PROMPT "[loop test]-->"
 
 typedef  struct  {
   char *name;
-  int  (*fonc)(); } TestOpTab ;
+  void (*fonc)(); } TestOpTab ;
 
-static int vide_() {}
+static void vide_() {}
      
 static char buf[1000];
 
 
-test_plot()
+void test_plot()
 {
   integer win=0;
   check_win();
   plot();
-  C2F(xsaveplots)(&win);
-  C2F(xloadplots)(&win);
+  C2F(xsaveplots)(&win,"pipo.sav",0L);
+  C2F(xloadplots)("pipo.sav",0L);
 }
 
-test_menu()
+jmp_buf env;
+
+void inter(int an_int)
 {
-  integer win_num=0,ne=3,ierr=0;
+  fprintf(stderr,"Signal Reached");
+  longjmp(env, 1);		 /* return to prompt  */
+}
+
+
+void test_interupt()
+{
+  int i=0;
+  (void) signal(SIGINT, inter);
+  (void) signal(SIGKILL, inter);
+  if (!setjmp(env)) 
+    {
+      /* first time */
+    } 
+  else 
+    {	
+      fprintf(stderr,"OOOOOps");
+      return;
+    }
+  while (1) { printf("%d\r\n",i++);};
+}
+
+
+void test_menu()
+{
+  integer win_num=0,ne=3,ierr=0,typ=0;
   static char * entries[]={
     "Un ","Deux","Trois",NULL};
-  AddMenu(&win_num,"test button",entries,&ne,&ierr);
+  AddMenu(&win_num,"test button",entries,&ne,&typ,"poo",&ierr);
 }
 
-test_quit() {
-  C2F(clearexit)(0);
+void test_quit() {
+  ClearExit(0);
 };
 
-test_loop() {
+void test_loop() {
   while (1) {
-    C2F(xevents)();
+    C2F(sxevents)();
   };
 } 
 
-test_message() 
+void test_message() 
 {
   TestMatrixDialogWindow();
   TestChoose();
-  TestMessage();
+  TestMessage(1);
   TestDialog() ;
   TestmDialogWindow();
   TestChoice();
 }
 
-test_click() {
-  integer i;
+void test_click() {
+  integer i,iw=0;
   double x,y;
   check_win();
-  C2F(dr1)("xclick","void",&i,PI0,PI0,PI0,PI0, PI0,&x,&y,PD0,PD0,0L,0L);
+  C2F(dr1)("xclick","void",&i,&iw,PI0,PI0,PI0, PI0,&x,&y,PD0,PD0,0L,0L);
   sprintf(buf,"-->[%d,%f,%f]",i,x,y);
   Xputstring(buf,strlen(buf));
 }
 
-test_events() 
+void test_events() 
 {
   int i;
   for ( i=0 ; i < 1000; i++) 
     {
+#ifdef sun
       unsigned usec=20;
+#endif
       xevents1();
 #ifdef sun
       usleep(usec);
@@ -104,36 +161,50 @@ test_events()
   Scistring("Quittting enevent loop");
 };
 
-test_xinfo() 
+void test_xinfo() 
 {
   xinfo_("Xinfo Tester",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
 };
 
 
-test_xgc() {
+void test_xgc() {
   integer num=0;
   /** need ../xgc dir to work **/
   /** xgc(); **/
-  DeleteWindowToList_(num);
+  DeleteWindowToList(num);
 }
 
+void test_help() {
+  Sci_Help("ode");
+}
+
+void test_apropos() {
+  Sci_Apropos("ode");
+}
+
+
+
 static TestOpTab testTab[] ={
-  "add menu",test_menu,
-  "click", test_click,
-  "events",test_events,
-  "loop",test_loop,
-  "menus",test_message,
-  "plot",test_plot,
-  "quit",test_quit,
-  "xgc",test_xgc,
-  "xinfo",test_xinfo,
-  (char *) NULL,vide_
+  {"add menu",test_menu},
+  {"apropos",test_apropos},
+  {"click", test_click},
+  {"events",test_events},
+  {"help",test_help},
+  {"interupt",test_interupt},
+  {"loop",test_loop},
+  {"menus",test_message},
+  {"plot",test_plot},
+  {"quit",test_quit},
+  {"xgc",test_xgc},
+  {"xinfo",test_xinfo},
+  {(char *) NULL,vide_}
   };
 
-LTest(x0) 
+void LTest(x0) 
      char * x0;
 {
   int i=0;
+  if ( strcmp("quit",x0) == 0) exit(0);
   while ( testTab[i].name != (char *) NULL)
      {
        int j;
@@ -162,7 +233,7 @@ LTest(x0)
     }
 }
 
-F2C(scilab)(nostartup)
+int F2C(scilab)(nostartup)
      int *nostartup;
 {
   int siz=1000,len_line,eof,i;
@@ -183,27 +254,36 @@ F2C(scilab)(nostartup)
       fprintf(stdout,"\r\n");
       LTest(buf) ;
     };
+  return(0);
 };
 
 
-C2F(sigbas)(i)
+void C2F(sigbas)(i)
      int *i;
 {
   fprintf(stderr,"CTRL_C activated \n");
 };
 
 
-check_win()
+void check_win()
 {
   integer verb=0,win,na;
   C2F(dr1)("xget","window",&verb,&win,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr1)("xset","window",&win,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 };
 
+void C2F(setfbutn)(name,rep)
+     char *name;
+     int *rep;
+{
+  
+}
+
+int C2F(dsort)(){};
 
 int C2F(scilines)(nl,nc)
      int *nl, *nc;
-{};
+{return(0);};
 
 int C2F(sciquit)()
 {
@@ -215,9 +295,9 @@ int C2F(sciquit)()
 #define XN2DD 2
 #define NCURVES2DD  1
 
-plot()
+void plot()
 {
-  long int style[NCURVES2DD],aaint[4],n1,n2;
+  integer style[NCURVES2DD],aaint[4],n1,n2;
   double x[NCURVES2DD*XN2DD],y[NCURVES2DD*XN2DD],brect[4];
   int i,j;
   for ( j =0 ; j < NCURVES2DD ; j++)

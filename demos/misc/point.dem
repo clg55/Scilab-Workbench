@@ -16,23 +16,23 @@ mode(1)
    s=poly(0,'s');
    halt()
 //
-// systeme 1  ->  feedback le plus interne
+// system 1  ->  feedback le plus interne
 // ---------
    h1=(1/(r+l*s)*ga*g)/.r
    halt()
 //
-// systeme 2  ->  deuxieme feedback
+// system 2  ->  deuxieme feedback
 // ---------
    h2=(h1*kr*(1/(c+j*s*s)))/.(g4*g5*s)
    halt()
  
 //
-// systeme 3  ->  premier feedback
+// system 3  ->  premier feedback
 // ---------
    h3=(g1+g2/(tau*s))*gb
    halt()
 //
-// systeme sans le retard
+// system sans le retard
 // ----------------------
    h=2*h2*h3,
  
@@ -73,7 +73,7 @@ mode(1)
 // discretisation du systeme lineaire
 // ----------------------------------
    m=[a,b;0*b',0]*td
-   m=exp(m)
+   m=expm(m)
    [nl,nc]=size(a);
    ad=m(1:nl,1:nl); bd=m(1:nl,nl+1); cd=c;
    halt()
@@ -91,7 +91,7 @@ mode(1)
 //
 // appel pour un echelon de 100mrd
 // -------------------------------
-   e=100.d-6*ones(1,400);comp(ddls_sim);
+   e=100.d-6*ones(1,400);
    [tetae,x]=ddls_sim(ad,bd,c,tr,td,e);
    xbasc();
    plot2d1("onn",(1:400)'*td,[e;tetae]');
@@ -114,5 +114,4 @@ mode(1)
    xbasc();
    plot2d1("onn",(1:600)'*td,[s2;tetas2]');
    xtitle(['sinus input 3mrd 300hz';'response']);
-
 //

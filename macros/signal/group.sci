@@ -18,7 +18,7 @@ function [tg,fr]=group(npts,a1i,a2i,b1i,b2i)
 //In the coefficient polynomial form the tranfer funtion is
 //formulated by the following expression:
 //
-//       h(z)=prod(a1i+a2i*z+z**2)/prod(b1i+b2i*z+z**2)
+//       h(z)=prod(a1i+a2i*z+z**2)/prod(b1i+b2i*z+z^2)
 //
 //!
 //author: C. Bunks  date: 2 March 1988
@@ -51,7 +51,7 @@ function [tg,fr]=group(npts,a1i,a2i,b1i,b2i)
          hs=maxi(size(h));
          z=poly(0,'z');
          h=poly(h,'z','c');
-         h=gtild(h)*(1/z**(hs-1));
+         h=gtild(h,'d')*(1/z^(hs-1));
          ht=16;
       end,
  

@@ -8,7 +8,7 @@ function [xk,ukp1]=gpeche(uk,pasg)
 tk=(1/(npts-1))*(0:(npts-1));
 xset("window",1)
 if xget("window")=0 , xinit('unix:0.0'),xset("window",1),end
-plot2d(tk',uk',[-1,1],"121","commande");
+plot2d(tk',uk',[1,-1],"121","commande");
 x0=30;
 gcout = sum( uk.*xk-c*uk);
 ppenco= gcout-ppen*(xk(npts)-x0)**2;

@@ -1,11 +1,6 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/optim.a
 
@@ -29,21 +24,10 @@ OBJSF =	ajour.o bfgsd.o calbx.o calmaj.o fmulb1.o fmuls1.o fpq2.o \
 	fmlag1.o nlis0.o fcube.o fmc11a.o fmc11b.o fmc11e.o \
 	n1qn3.o n1qn3a.o ddd2.o dcube.o ctonb.o ctcab.o
 
-OBJS = $(OBJSC) $(OBJSF)
+include ../../Makefile.incl
 
-all:: $(LIBRARY)
+CFLAGS = $(CC_OPTIONS)
 
-world: all
+include ../Make.lib
 
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)
-
-sp.o: sp.h ../machine.h
+sp.o: spd.h ../machine.h

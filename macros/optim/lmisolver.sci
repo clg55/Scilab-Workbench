@@ -21,11 +21,11 @@ end
 
 
 %x0=list2vec(%Xinit);
-%nvars=prod(size(%x0))
+%nvars=size(%x0,'*')
 
 //Testing feasibility of initial guess
 [%b,%F_0,%linobj0]=%evalfunc(vec2list(%x0,%dim_X,%ind_X));
-if prod(size(%linobj0))==0 then
+if size(%linobj0,'*')==0 then
   %Val=aplat(%F_0)
   %sm=100;
   for %w=%Val
@@ -93,7 +93,7 @@ for  %ja=1:%lX
   end
 end
 
-if prod(size(%Ncstr))==0 then
+if size(%Ncstr,'*')==0 then
    %Ncstr=speye(%nvars,%nvars);
  else
 disp('Basis Construction')
@@ -128,7 +128,7 @@ if %fm<%m then
 end
 
 //Testing rank deficiency
-if prod(size(%F_is))<>0 then
+if size(%F_is,'*')<>0 then
   %P=speye(%m,%m);
   [%ptr,%rk]=lufact([%F_is spzeros(%fm,%fm-%m)]',[%tol,0.001]);
   if %rk<%m then
@@ -137,7 +137,7 @@ if prod(size(%F_is))<>0 then
     warning(' rank deficient problem');
     ludel(%ptr);
     //Testing to see if linobj in the range of F_is
-    if prod(size(%linobj)) <> 0 then
+    if size(%linobj,'*') <> 0 then
       [%ptr,%rk2]=lufact([[%F_is;%linobj] spzeros(%fm+1,%fm+1-%m)]',[%tol,0.001]);
       if %rk<%rk2 then
         error(' solution unbounded');
@@ -155,7 +155,7 @@ end
 
 
 //Testing to see if solution or the LMI value is unique
-if prod(size(%F_is))==0 then
+if size(%F_is,'*')==0 then
   %Val=vec2list(%F_0,%dim_F);
   %flag=%t
   for %w=%Val
@@ -179,7 +179,7 @@ for %w=%Val
    end
 end     
 
-if %sm>=-%tol & prod(size(%linobj))==0 then
+if %sm>=-%tol & size(%linobj,'*')==0 then
           %Xlist=vec2list(%x0,%dim_X,%ind_X);return; 
 end
 
@@ -191,7 +191,7 @@ if ~(%sm>%to) then
 
 	// mineigF is the smallest eigenvalue of F_0
 	%mineigF = 0.0;
-	%blck_szs=matrix(%blck_szs,1,prod(size(%blck_szs)));
+	%blck_szs=matrix(%blck_szs,1,size(%blck_szs,'*'));
 	%ka=0; 
         for %n=%blck_szs,
 	   %mineigF = mini(%mineigF, mini(real(spec(matrix(%F_0(%ka+[1:%n^2]),%n,%n)))));
@@ -270,7 +270,7 @@ else
 end
 
 
-if prod(size(%linobj))<>0 then
+if size(%linobj,'*')<>0 then
 
 disp('      OPTIMIZATION PHASE.') 
 
@@ -338,7 +338,7 @@ if ind=-1 then r=r(:);return;end
 nr=size(r)
 ma=0
 for k=nr:-1:1
-   mm=prod(size(ind(k)))
+   mm=size(ind(k),'*');
    if ma<=mm then ma=mm;ki=k; end
 end
 
@@ -351,7 +351,7 @@ while vj=vi
   k=k+1
   if k>nr then break; end
   vv=ind(k);
-  if prod(size(vv))==ma then vj=vv(1:ma-1); else vj=[]; end
+  if size(vv,'*')==ma then vj=vv(1:ma-1); else vj=[]; end
 end
 kj=k-1
 rt=list(r(ki))

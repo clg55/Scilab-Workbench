@@ -31,7 +31,7 @@ c
 c
       if(istk(ils).eq.10) then
 c     fortran external
-         call fydot(n,t,y,ydot)
+         call fydot2(n,t,y,ydot)
          return
       endif
 c     
@@ -122,7 +122,7 @@ c
       pt=pt+1
       if(pt.gt.psiz) then
          call  error(26)
-         if(err.gt.0) goto 9999
+         goto 9999
       endif
       ids(1,pt)=lhs
       ids(2,pt)=rhs

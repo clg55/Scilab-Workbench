@@ -16,7 +16,7 @@ D=0*rand(C*B);
 xx0=0*ones(nw,1);
 Model=syslin('c',A,B,C,D,xx0);
 // Input to Model (t is a vector), nuu components
-deff('[ut]=uu(t)','ut=[sin(3*t);cos(0.5*t)]');comp(uu);
+deff('[ut]=uu(t)','ut=[sin(3*t);cos(0.5*t)]');
 // Signal to track
 dt=0.05;tmax=60;
 instants=0:dt:tmax;
@@ -28,7 +28,6 @@ xbasc();
 //    Stabilizing the plant
 K=-ppol(F,G,-0.3*ones(1,nx));
 
-//[K,L,M,err]=deskre(Plant,Model,-0.3,-0.5,100);T=0*T;
 // Bigsyst= closed loop system: um --> [yplant;ymodel]. 
 // full state gain is [K, L - K*T] * (xplant, xmodel) + M * umodel
 BigA=[F+G*K,G*(L-K*T);
@@ -46,7 +45,7 @@ Bigsyst=dscr(syslin('c',BigA,BigB,BigC,BigD,BigX0),dt);
 
 
 z=flts(uu(instants),Bigsyst);
-//plot2d(instants',z(1,:)',-1,'000');
+//plot2d(instants',z(1,:)',1,'000');
 xbasc(0);xset("window",0);
 plot2d([instants',instants'],[totrack(1,:)',z(1,:)']);xtitle('tracking');
 //xbasc(1);driver("Rec");xset("window",1);//xselect();

@@ -1,4 +1,4 @@
-//[ar]=armac(a,b,d,ny,nu,sig)
+function [ar]=armac(a,b,d,ny,nu,sig)
 // Renvoit une liste Scilab qui decrit un systeme ARMACX
 //   A(z^-1)y= B(z^-1)u + D(z^-1)sig*e(t)
 //   a=<Id,a1,..,a_r>; matrice (ny,r*ny)
@@ -16,6 +16,6 @@ if nb<>ny,write(%io(2),"b(:,1) must be of dimension "+string(ny));end
 [nd,ld]=size(d);
 if nd<>ny,write(%io(2),"d(:,1) must be of dimension "+string(ny));end
 ar=list('ar',a,b,d,ny,nu,sig)
-//end
+
 
 

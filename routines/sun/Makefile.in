@@ -1,42 +1,21 @@
 SHELL = /bin/sh
-
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS) $(XFLAGS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/sun.a
 
-SUN_FORTRAN = bashos.o basin.o basout.o \
-	cluni0.o clunit.o ctrlc.o dbasin.o  \
-	@FGETARG@.o getpro.o inffic.o inibrk.o sigbas.o \
-	sync.o
+OBJSF = bashos.o basin.o basout.o \
+	clunit.o ctrlc.o dbasin.o  \
+	@FGETARG@.o getpro.o inibrk.o sigbas.o 
 
-SUN_C = getenvc.o link.o systemc.o zzledt.o  csignal.o getpidc.o timer.o \
-	flags.o
+OBJSC  = getenvc.o link.o systemc.o zzledt.o  csignal.o getpidc.o timer.o \
+	flags.o men_Sutils.o addinter.o h_help_data.o tmpdir.o cluni0.o \
+	inffic.o 
 
-OBJSC = $(SUN_C)
+include ../../Makefile.incl
 
-OBJSF = $(SUN_FORTRAN)
+CFLAGS = $(CC_OPTIONS) $(XFLAGS) @HPPA_OLD@
 
-OBJS = $(OBJSC) $(OBJSF)
-
-all:: $(LIBRARY)
-
-world: all
-
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)
+include ../Make.lib
 
 bashos.o: ../stack.h
 basin.o: ../stack.h
@@ -47,7 +26,7 @@ sigbas.o: ../stack.h
 sync.o: ../stack.h
 
 getenvc.o: ../machine.h
-link.o: ../machine.h linux_link.c SYSV_link.c std_link.c
+link.o: ../machine.h link_linux.c link_SYSV.c link_std.c link_W95.c
 systemc.o: ../machine.h
 zzledt.o: ../machine.h
 csignal.o: ../machine.h

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WQRSL,SSI=0
       subroutine wqrsl(xr,xi,ldx,n,k,qrauxr,qrauxi,yr,yi,qyr,qyi,qtyr,
      *                 qtyi,br,bi,rsdr,rsdi,xbr,xbi,job,info)
       integer ldx,n,k,job,info

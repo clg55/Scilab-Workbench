@@ -12,6 +12,10 @@ c
       integer id(4),blank,v2,vol,volr,racine,coeff,ipb(6)
       logical roots
       integer fail 
+c
+      integer simpmd
+      common/csimp/ simpmd
+c
       data blank/40/,racine/27/,coeff/12/
 c     
       iadr(l)=l+l-1
@@ -27,8 +31,8 @@ c     functions/fin
 c     1       2       3       4       5       6       7       8
 c     poly     roots  degre   coeff   eval    pdiv  simp     sum
 c     
-c     9       10      11      12      13      14     15      16
-c     prod    diag    triu     tril    bezout sfact         varn
+c     9       10      11      12      13      14     15        16
+c     prod    diag    triu     tril    bezout sfact simp_mode  varn
 c     
 c     17
 c     cleanp
@@ -37,10 +41,11 @@ c
          call error(18)
          return
       endif
-      if(rhs.le.0) then
+      if(fin.ne.15.and.rhs.le.0) then
          call error(39)
          return
       endif
+      if(fin.eq.15) goto 120
 c     
       eps=stk(leps)
 c     
@@ -67,7 +72,7 @@ c
       endif
       lw=lstk(top+1)
 c     
-      goto (10,20,30,40,50,60,73,55,58,25,27,27,70,85,999,100,110) fin
+      goto (10,20,30,40,50,60,73,55,58,25,27,27,70,83,120,100,110) fin
 c     
 c     poly
 c     
@@ -230,6 +235,7 @@ c
          istk(il1)=1
          istk(il1+1)=n
          istk(il1+2)=1
+         if(n.eq.0) istk(il1+2)=0
          istk(il1+3)=1
          lstk(top+1)=l1+2*n
          goto 999
@@ -391,6 +397,7 @@ c
          return
       endif
       l=sadr(il1+4)
+      if(mn1.eq.0) return
       if(istk(il1).ne.2) goto 33
       do 31 k=1,mn1
          stk(l1-1+k)=dble(istk(id1+k)-istk(id1+k-1)-1)
@@ -494,7 +501,9 @@ c
       top=top-1
       n=int(stk(sadr(il+4)))
       if(n.eq.0) goto 999
+      istk(il1+3)=0
       call dset(mn1,0.0d+0,stk(l1),1)
+      lstk(top+1)=l1+mn1
       goto 999
 c     
 c     eval
@@ -572,11 +581,7 @@ c     denominateur
          call error(89)
          return
       endif
-      if(istk(ild+3).ne.0) then
-         err=2
-         call error(52)
-         return
-      endif
+      itd=istk(ild+3)
       if(istk(ild).eq.1) then
          ld=sadr(ild+4)
          nd=0
@@ -597,8 +602,13 @@ c     denominateur
          ld=sadr(ild+10)
       endif
 c     test degre du denominateur
+      v2=istk(ild+9)-1
  64   continue
-      if(stk(ld+nd).ne.0.0d+0) goto 65
+      if(itd.eq.0) then
+         if(stk(ld+nd).ne.0.0d+0) goto 65
+      else
+         if(abs(stk(ld+nd))+abs(stk(ld+v2+nd)).ne.0.0d+0) goto 65
+      endif
       nd=nd-1
       if(nd.lt.0) then
          call error(27)
@@ -611,68 +621,159 @@ c
          call error(89)
          return
       endif
-      if(istk(il1+3).ne.0) then
-         err=1
-         call error(52)
-         return
-      endif
+      it1=istk(il1+3)
       if(istk(il1).eq.1) then
          nn=0
       else
          nn=istk(id1+1)-2
       endif
 c     
-      if(nn.lt.nd) goto 69
-      call dpodiv(stk(l1),stk(ld),nn,nd)
-c     preparation de l'implantation du reste
-      nr=nd
- 66   nr=nr-1
-      if(nr.lt.0) goto 67
-      if(stk(l1+nr).eq.0.0d+0) goto 66
+      if(nn.lt.nd) then
+c        . No division to perform
+         if(lhs.eq.2) then
+            istk(ild)=1
+            ld=sadr(ild+4)
+            stk(ld)=0.0d+0
+            lstk(top+1)=ld+1
+         else
+            top=top-1
+            istk(il1)=1
+            stk(l1)=0.0d+0
+            lstk(top+1)=l1+1
+         endif
+         goto 999
+      endif
+c
+      if(it1.eq.0) then
+         if (itd.eq.0) then
+            call dpodiv(stk(l1),stk(ld),nn,nd)
+         else
+            l1i=lw
+            lw=l1i+nn+1
+            err=lw-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            ldi=ld+v2
+            call dset(nn+1,0.0d0,stk(l1i),1)
+            call wpodiv(stk(l1),stk(l1i),stk(ld),stk(ldi),nn,nd,ierr)
+         endif
+      else
+         l1i=l1+nn+1
+         if (itd.eq.0) then
+            ldi=lw
+            lw=ldi+nd+1
+            err=lw-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            call dset(nd+1,0.0d0,stk(ldi),1)
+            call wpodiv(stk(l1),stk(l1i),stk(ld),stk(ldi),nn,nd,ierr)
+         else
+            ldi=ld+v2
+            call wpodiv(stk(l1),stk(l1i),stk(ld),stk(ldi),nn,nd,ierr)
+         endif
+      endif
 c     
- 67   if(nr.gt.0) then
-         istk(id1+1)=nr+2
-         lstk(top)=l1+nr+1
-      else
-         istk(il1)=1
-         istk(il1+1)=1
-         istk(il1+2)=1
-         istk(il1+3)=0
-         lr=sadr(il1+4)
-         stk(lr)=stk(l1)
-         lstk(top)=lr+1
-      endif
-c     quotient
-      if(lhs.eq.1) then
-         top=top-1
-      endif
+      itr=max(it1,itd)
       nq=nn-nd
-      ilq=iadr(lstk(top))
-      lq=sadr(ilq+10)
-      inc=1 
-      if (l1+nd.lt.lq) inc=-1
-      call dcopy(nn-nd+1,stk(l1+nd),inc,stk(lq),inc)
-      if(lhs.eq.2.and.nr.lt.0) stk(lr)=0.0d+0
-      istk(ilq)=2
-      istk(ilq+1)=1
-      istk(ilq+2)=1
-      istk(ilq+3)=0
-      call icopy(4,id,1,istk(ilq+4),1)
-      idq=ilq+8
-      istk(idq)=1
-      istk(idq+1)=nn-nd+2
-      lstk(top+1)=lq+nn-nd+1
-      goto 999
- 69   if(lhs.eq.2) then
-         istk(ild)=1
-         ld=sadr(ild+4)
-         stk(ld)=0.0d+0
-         lstk(top+1)=ld+1
-      else
+
+      if(lhs.eq.1) then
+c     .  only q is returned
          top=top-1
-         istk(il1)=1
-         stk(l1)=0.0d+0
-         lstk(top+1)=l1+1
+c     .  set type
+         istk(il1+3)=itr
+c     .  set length
+         istk(il1+9)=nq+2
+c     .  install real and imaginary part
+         call dcopy(nq+1,stk(l1+nd),1,stk(l1),1)
+         if(itr.eq.1) call dcopy(nq+1,stk(l1i+nd),1,stk(l1+nq+1),1)
+      else
+c     .  computes remainder degree
+         nr=nd
+ 66      nr=nr-1
+         if(nr.lt.0) goto 67
+         if (itr.eq.0) then
+            if(stk(l1+nr).eq.0.0d+0) goto 66
+         else
+            if(stk(l1+nr).eq.0.0d+0.and.stk(l1i+nr).eq.0.0d+0) goto 66
+         endif
+ 67      continue
+
+c
+         if(itr.eq.0) then
+c     .     real result
+            if(nr.gt.0) then
+c     .        remainder is a polynomial
+               istk(id1+1)=nr+2
+               lstk(top)=l1+(nr+1)
+            else
+c     .        remainder is a scalar
+               istk(il1)=1
+               istk(il1+1)=1
+               istk(il1+2)=1
+               lr=sadr(il1+4)
+               stk(lr)=stk(l1)
+c????               stk(lr+1)=stk(l1i)
+               lstk(top)=lr+1
+            endif
+            ilq=iadr(lstk(top))
+            lq=sadr(ilq+10)
+            inc=1 
+            if (l1+nd.lt.lq) inc=-1
+            call dcopy(nq+1,stk(l1+nd),inc,stk(lq),inc)
+            if(nr.lt.0) stk(lr)=0.0d+0
+            istk(ilq)=2
+            istk(ilq+1)=1
+            istk(ilq+2)=1
+            istk(ilq+3)=0
+            call icopy(4,id,1,istk(ilq+4),1)
+            idq=ilq+8
+            istk(idq)=1
+            istk(idq+1)=nq+2
+            lstk(top+1)=lq+nq+1
+            goto 999
+         else
+c     .     complex result
+c     .     preserve quotient coeff
+            lqs=lw
+            lw=lqs+sadr(10)+(nq+1)*2
+            err=lw-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            call dcopy(nq+1,stk(l1+nd),1,stk(lqs),1)
+            call dcopy(nq+1,stk(l1i+nd),1,stk(lqs+nq+1),1)
+
+c     .     set remainder
+            if(nr.ge.0) then
+               istk(il1+3)=1
+               call dcopy(nr+1,stk(l1i),1,stk(l1+nr+1),1)
+               istk(id1+1)=nr+2
+               lstk(top)=l1+(nr+1)*2
+            else
+               istk(il1+3)=0
+               stk(l1)=0.0d0
+               istk(id1+1)=2
+               lstk(top)=l1+1
+            endif
+c     .     set quotient
+            ilq=iadr(lstk(top))
+            istk(ilq)=2
+            istk(ilq+1)=1
+            istk(ilq+2)=1
+            istk(ilq+3)=1
+            call icopy(4,id,1,istk(ilq+4),1)
+            idq=ilq+8
+            istk(idq)=1
+            istk(idq+1)=nq+2
+            lq=sadr(ilq+10)
+            call dcopy(2*(nq+1),stk(lqs),1,stk(lq),1)
+            lstk(top+1)=lq+(nq+1)*2
+         endif
       endif
       goto 999
 c     
@@ -757,6 +858,7 @@ c
 c     simp
 c     
  73   continue
+
       lw=lstk(top+1)
       if(rhs.eq.1) then
          if(lhs.ne.1) then 
@@ -781,12 +883,7 @@ c     -compat istk(il1).ne.15 retained for list/tlist compatibility
             call error(90)
             return
          endif
-         if(istk(ill+1)*istk(ill+2).ne.1) then
-            err=1
-            call error(90)
-            return
-         endif
-         if(abs(istk(ill+6)).ne.27) then
+         if(abs(istk(ill+5+istk(ill+1)*istk(ill+2))).ne.27) then
             err=1
             call error(90)
             return
@@ -833,14 +930,7 @@ c
          call error(60)
          return
       endif
-      if(istk(ila+3).ne.0) then 
-         err=1
-         call error(52)
-         return
-      endif
-      if(istk(ilb+3).ne.0) then 
-         err=min(2,rhs)
-         call error(52)
+      if(istk(ila+3).ne.0.or.istk(ilb+3).ne.0.or.simpmd.eq.0) then 
          return
       endif
 c     
@@ -953,8 +1043,8 @@ c     on recopie le 4ieme champ de la liste
 c     
 c     sfact
 c     
- 85   continue
-      if(lhs.eq.1) then
+ 83   continue
+      if(lhs.ne.1) then
          call error(41)
          return
       endif
@@ -965,15 +1055,32 @@ c
       endif
       maxit=100
       if(mn1.ne.1) goto 86
-      n=1+(istk(id1+1)-2)/2
+      n1=istk(id1+1)-2
+      if (2*int(n1/2).ne.n1) then
+         call error(88)
+         return
+      endif
+      n=1+n1/2
+      do 81 i=0,n-1
+         if(stk(l1+i).ne.stk(l1+n1-i)) then
+            call error(88)
+            return
+         endif
+ 81   continue
       lw=lstk(top+1)
       err=lw+6*n-lstk(bot)
       if(err.gt.0) then
          call error(17)
          return
       endif
+      
       call sfact1(stk(l1),n-1,stk(lw),maxit,ierr)
-      if(ierr.ge.1) then
+      if(ierr.eq.2) then
+         write(buf,82) n-1
+ 82      format('No real solution: degree ',i2,' entry is negative!')
+         call error(999)
+         return
+      else if(ierr.eq.1) then
          call error(24)
          return
       else if(ierr.lt.0) then
@@ -1114,6 +1221,39 @@ c     clean(p,epsa)
          call wmpcle(stk(l1),stk(l1+vol),istk(id1),m1,n1,
      &        istk(id2),epsr,epsa)
          lstk(top+1)=l1+(istk(id1+m1*n1)-1)*2
+      endif
+      goto 999
+c
+c     simp_mode
+ 120  continue
+      if(rhs.gt.1) then
+         call error(39)
+         return
+      endif
+      if(rhs.le.0) then
+         top=top+1
+         il=iadr(lstk(top))
+         istk(il)=4
+         istk(il+1)=1
+         istk(il+2)=1
+         istk(il+3)=simpmd
+         lstk(top+1)=sadr(il+4)
+         goto 999
+      else
+         il=iadr(lstk(top))
+         if(istk(il).ne.4) then
+            err=1
+            call error(208)
+            return
+         endif
+         if(istk(il+1)*istk(il+2).ne.1) then
+            err=1
+            call error(36)
+            return
+         endif
+         simpmd=istk(il+3)
+         istk(il)=0
+         lstk(top+1)=sadr(il+1)
       endif
       goto 999
 c     

@@ -13,7 +13,7 @@ d2=s2;
 b2(1:n1,j)=b1
 c2(i,1:n1)=c1
 d2(i,j)=d1;
-s=tlist('lss',a1,b2,c2,d2,x1,dom1)
+s=tlist(['lss','A','B','C','D','X0','dt'],a1,b2,c2,d2,x1,dom1)
 
 
 

@@ -37,6 +37,7 @@ c     on ne sait pas encore combien il y en a
             return
          endif
          top=top+1
+         infstk(top)=0
          call putid(idstk(1,top),bl)
          if (.not.cresmat("getstr",top,1,1,1)) return
          ln=iadr(lstk(top))+6

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DELIP,SSI=0
       subroutine delip(n,resr,resi,x,ck)
 c!purpose
 c  vector valued elliptic integral :
@@ -14,6 +13,7 @@ c     double precision resr(n),resi(n),x(n),ck
 c!
       double precision resr(n),resi(n),x(n)
       double precision ck,r,xx,compk,compk1,yy,m,m1,ck1
+      double precision xxxxx
       m=ck*ck
       m1=1.0d+0-m
       ck1=sqrt(m1)
@@ -27,7 +27,8 @@ c!
       resi(k)=0.0d+0
       goto 100
       endif
-      if(xx.gt.1.0d+0.and.xx.lt.(1.0d+0/ck)) then
+      xxxxx=1.0d+0/ck-xx
+      if(xx.gt.1.0d+0.and.xx.le.(1.0d+0/ck)) then
 c      change of variable : integral from 1 to xx of
 c      dt/sqrt((1-mt^2)(t^2-1)) = integral from o to yy of
 c      dt/sqrt((1-t^2)(1-m1t^2))  with m1=1-m and
@@ -39,7 +40,8 @@ c      yy = (1/sqrt(m1))*sqrt((x^2-1)/x^2)
       goto 100
       endif
       if(xx.ge.(1.0d+0/ck)) then
-      call deli2(1,r,1.0d+0/(ck*xx),ck)
+      xxxxx=1.0d+0/(ck*xx)
+      call deli2(1,r,xxxxx,ck)
       resi(k)=compk1
       resr(k)=r
       goto 100

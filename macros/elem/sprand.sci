@@ -3,10 +3,10 @@ function a=sprand(m,n,density,typ)
 if rhs<4 then typ='uniform',end
 
 if type(typ)<>10 then
-  error('typ argument of sparand must be ''uniform'' or ''normal''')
+  error('typ argument of sprand must be ''uniform'' or ''normal''')
 end
 if part(typ,1)<>'u'&part(typ,1)<>'n' then
-  error('typ argument of sparand must be ''uniform'' or ''normal''')
+  error('typ argument of sprand must be ''uniform'' or ''normal''')
 end 
 if m*n==0 then a=[],end
 density=maxi(mini(density,1),0)
@@ -19,14 +19,15 @@ rand('uniform')
 ij=int(1+2*(mdist-1)*rand(1,1.2*nel))
 // sum the increments
 ij=rtitr(1,poly([-1 1],'z','c'),ij);
-nel1=prod(size(ij))
+nel1=size(ij,'*')
 if nel1<=1 then a=sparse([],[],[m,n]),return,end
 k=find(ij>m*n)
 if k<>[] then nel1=k(1)-1,end
 if nel1<=1 then a=sparse([],[],[m,n]),return,end
-ij=matrix(ij(2:nel1),nel1-1,1)
-j=int((ij-1)/m)
-i=ij-j*m
-j=j+1
-rand(typ)
-a=sparse([i j],rand(nel1-1,1),[m,n])
+ij=matrix(ij(2:nel1),nel1-1,1);
+j=int((ij-1)/m);
+i=ij-j*m;
+j=j+1;
+rand(typ);
+a=sparse([i j],rand(nel1-1,1),[m,n]);
+

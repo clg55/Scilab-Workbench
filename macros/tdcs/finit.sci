@@ -52,11 +52,11 @@ write(%io(2),xk(1,tf),'(''hauteur a tf  : '',f20.2)');
 write(%io(2),xk(2,tf),'(''vitesse a tf  : '',f20.2)');
 xset("window",0);
 tt=1:tf;
-plot2d(tt',xk(1,:)',[-1],"111","Trajectoire",[1,0,tf,5200]);
+plot2d(tt',xk(1,:)',[1],"111","Trajectoire",[1,0,tf,5200]);
 xset("window",1);
-plot2d(tt',xk(3,:)',[-1],"111","Evolution de la masse",[1,mcap,tf,100]);
+plot2d(tt',xk(3,:)',[1],"111","Evolution de la masse",[1,mcap,tf,100]);
 xset("window",2);
-plot2d(tt',ukp1',[-1],"111","Commande",[1,-1,tf,2]);
+plot2d(tt',ukp1',[1],"111","Commande",[1,-1,tf,2]);
 end
 
 function [c,xk,pk,ukp1]=fcout(tf,uk,pasg)
@@ -179,12 +179,12 @@ xclear();
 h1=0*ones(h);
 //h1(ialu:q2)=maxi(h)*ones(1,q2-ialu+1);
 //
-plot2d([t]',[h]',[-1;1],"111","distance par rapport au sol",...
+plot2d([t]',[h]',[1;-1],"111","distance par rapport au sol",...
     [0,0,tf,maxi(h)])
 xset("window",1)
 if xget("window")=0 , xinit('unix:0.0'),xset("window",1),end
 xclear();
-plot2d([t;t]',[v;0*v]',[-1;-1],"121",...
+plot2d([t;t]',[v;0*v]',[1;1],"121",...
        "vitesse de la fusee (si + v ascent.)@0");
 //recherche de la date d'arrivee au sol
 

@@ -1,7 +1,7 @@
 mode(0)
 xselect();xbasc();
 //
-getf('SCI/demos/pendulum/macros.sci','c')
+getf('SCI/demos/pendulum/macros.sci')
 //
 x_message('the cart')
 // ----------------
@@ -142,7 +142,7 @@ x_message('non linear simulation')
  xsetech([0,0,0.5,0.5]);
  plot2d(t1',(kr*yd(5:8,:))');xtitle(' ','time','control');
  xsetech([0.5,0,0.5,0.5]);
- plot2d([t1;t1]',yd([3,7],:)',[-1,-2],"121",'theta@theta estimated');
+ plot2d([t1;t1]',yd([3,7],:)',[1,2],"121",'theta@theta estimated');
  xsetech([0,0.5,1.0,0.5]);
  anim(yd(1,:),yd(3,:),1)
  xsetech(xxr);

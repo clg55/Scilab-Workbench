@@ -1,230 +1,280 @@
-function [x,newparameters,needcompile]=scicos(x,job)
+function [scs_m,newparameters,needcompile]=scicos(scs_m,menus)
 // scicos - block diagram graphic editor
 //%SYNTAX
-// x=scicos(x,job)
+// scs_m=scicos(scs_m,job)
 //%PARAMETERS
-// x   : scilab list, 
-//      x(1) contains system name
-//      x(i+1) contains description of ith block diagram element 
-// job :
+// scs_m    : scilab list, scicos main data structure
+//      scs_m(1) contains system name and other infos
+//      scs_m(i+1) contains description of ith block diagram element
+// menus : vector of character strings,optional parameter giving usable menus 
 //!
-[lhs,rhs]=argn(0)
+scicos_ver='scicos2.3' // set current version of scicos
 
 //check if superblock editing mode
 [l,mac]=where()
 slevel=prod(size(find(mac=='scicos')))
 super_block=slevel>1
 
-if ~super_block then
-  tolerances=[1.d-4,1.d-6,1.d-10];tf=100000;sim_mode=1;
+[lhs,rhs]=argn(0)
+if rhs>=1 then
+  if type(scs_m)==10 then //diagram is given by its filename
+    fil=scs_m
+    alreadyran=%f
+    [ok,scs_m,cpr]=do_load(fil)
+    if ~ok then return,end
+    if size(cpr)==0 then
+      needcompile=4
+      state0=list()
+    else
+      state0=cpr(1);
+      needcompile=0
+    end
+  else //diagram is given by its data structure
+    if ~super_block then 
+      cpr=list();needcompile=4;alreadyran=%f,state0=list()
+    end
+  end
 else
-  tolerances=[];tf=[];sim_mode=[];
+  cpr=list();needcompile=4;alreadyran=%f;state0=list()
 end
 
-if rhs<1 then x=list(list([600,400],'Untitled',tolerances,tf,sim_mode)),end
-if type(x)<>15 then error('first argument must be a scicos list'),end
+
+if ~super_block then
+  // global variables
+  pal_mode=%f // Palette edition mode
+  newblocks=[] // table of added functions in pal_mode
+  super_path=[] // path to the currently opened superblock
+  addcolor([255 255 0;
+      173 216 230]/255) // add menubar colors 
+end
+context=[];
+tf=100000
+tolerances=[1.d-4,1.d-6,1.d-10,tf+1];
+
+if rhs<1 then
+  Xshift=0
+  Yshift=0
+  scs_m=list(list([600,450,Xshift,Yshift],'Untitled',tolerances,tf,context)),
+end
+if type(scs_m)<>15 then error('first argument must be a scicos list'),end
+scs_m(1)(1)(2)=maxi(scs_m(1)(1)(2),450) //compatibility
+
+
+wpar=scs_m(1)
+wsiz=wpar(1)
 //next line for compatiblity
-if size(x(1))<5 then par=x(1),par(5)=sim_mode,x(1)=par,end
+if size(wsiz,'*')<4 then wsiz(3)=0;wsiz(4)=0;wpar(1)=wsiz;end
 
-if rhs<=1 then job='edit',end
-if job<>'edit' then  
-  win=xget('window')
-  systshow(x,win),
-  xset('window',win);
-  return,
+//Menu definitions
+if ~super_block then
+  menu_p=['Help','Edit..','Simulate..','File..','Block..','Pal editor..','View','Exit']
+  menu_e=['Help','Window','Palettes','Context','Move','Copy','Replace','Align',..
+               'Link','Delete','Flip','Save','Undo','Replot','View',..
+	       'Calc','Back']
+  menu_s=['Help','Setup','Compile','Context','Eval','Run','Calc','Save','Back']
+  menu_f=['Help','New','Purge','Rename','Save','Save As','FSave','Load','Back']
+  menu_b=['Help','Resize','Icon','Color','Label','Back']
+else
+  menu_f=['Help','New','Purge','Rename','Newblk','Save','Save As','FSave','Load','Back']
+  menu_p=['Help','Edit..','File..','Block..','View','Exit']
 end
+
+if rhs<=1 then 
+  menus=menu_p  
+else
+  if menus==[] then
+    win=xget('window')
+    systshow(scs_m,win),
+    xset('window',win);
+    return,
+  else
+    menus=menus(:)'
+    all=[menu_p,menu_e,menu_s,menu_f,menu_b]
+    pb=[]
+    for k=1:size(menus,'*')
+      if find(menus(k)==all)==[] then pb=[pb,k],end
+    end
+    if pb<>[] then
+      message(['Some required menus are undefined :';menus(pb)'])
+      return
+    end
+  end
+end
+
 
 //Initialisation
-//viewport 
-Xshift=0
-Yshift=0
+//viewport
+Xshift=wsiz(3)
+Yshift=wsiz(4)
+
 
 newparameters=list()
 eps=0.1
 gridvalues=[0,0,1,1]
 enable_undo=%f
-edited=%f 
+edited=%f
 path='./'
-if exists('user_pal_dir')==0 then user_pal_dir=[],end
-//
-//Menu definitions
-if ~super_block then
-  menu_p=['Help','Edit..','Simulate..','File..','View','Exit']
-else
-  menu_p=['Help','Edit..','File..','Setup','View','Exit']
-end
-menu_e=['Help','Palettes','Move','Copy','Align','Link','Delete','Flip',..
-               'Save','Undo','Replot','View','Back']
-menu_s=['Help','Setup','Compile','Run','Back']
-menu_f=['Help','New','Save','Save As','FSave','Newblk','Load','Back']
 
 if ~super_block then
-  xset('window',0);xset('dashes',0);
+  xset('window',0);
   curwin=xget('window');
-  objs=list();
-  needcompile=%t
+  palettes=list();
   noldwin=0
   windows=[1 curwin]
-  pal_names=set_palette()
-else 
+else
   noldwin=size(windows,1)
   windows=[windows;slevel curwin]
-  needcompile=%f
-  objs=objs;
+  palettes=palettes;
 end
 
-menus=menu_p
+
+
 //initialize graphics
-wpar=x(1)
-xset('window',curwin);xbasc();xselect()
+xset('window',curwin);
+xset('default')
+xset('pattern',1)
+xset('dashes',1)
+xbasc();xselect()
 dr=driver();
 pixmap=xget('pixmap')==1
 wsiz=wpar(1)
-if wsiz<>[] then xset('wdim',wsiz(1),wsiz(2)),end
+xset('wdim',wsiz(1),wsiz(2))
 xsetech([-1 -1 8 8]/6,[Xshift,Yshift ,Xshift+wsiz(1),Yshift+wsiz(2)])
 xset('alufunction',6)
 
+
 if ~super_block then
   delmenu(curwin,'stop')
-  addmenu(curwin,'stop',list(1,'halt_scicos'))
+  addmenu(curwin,'stop',list(1,'haltscicos'))
   unsetmenu(curwin,'stop')
 end
 unsetmenu(curwin,'File',1) //clear
-unsetmenu(curwin,'File',6) //close
-unsetmenu(curwin,'File',5) //load
+unsetmenu(curwin,'File',2) //select
+unsetmenu(curwin,'File',7) //close
+unsetmenu(curwin,'File',6) //load
 unsetmenu(curwin,'3D Rot.')
 
-//draw scheme and menus
-drawobjs(x)
+scs_m(1)(1)(2)=maxi(scs_m(1)(1)(2),450)
+
+//draw diagram and menus
+drawobjs(scs_m)
 datam=drawmbar(menus,'v')
 if pixmap then xset('wshow'),end
 
+//set context (variable definition...)
+if size(scs_m(1))>4 then 
+  if type(scs_m(1)(5))==10 then
+    execstr(scs_m(1)(5)) ,
+  else
+    scs_m(1)(5)=' ' 
+  end
+end
 
 n=0
-while %t 
+while %t
   while %t do
-    if n==0 then 
+    if n==0 then
       [btn,xc,yc]=xclick();
       pt=[xc,yc]
       [n,pt,btn]=getmenu(datam,pt)
     end
     if n>0 then
-      //write(33,strcat(string([btn,xc,yc]),',')+' /'+'/'+menus(n))
-      n_sel=n; n=0
+      n_sel=n; n=0;
       hilitemenu(n_sel,datam)
       if pixmap then xset('wshow'),end
       Cmenu=menus(n_sel);break
     else
-      //write(33,strcat(string([btn,xc,yc]),',')+' /'+'/ Block')
       n_sel=0
-      k=getobj(x,[xc;yc])
+      k=getobj(scs_m,[xc;yc])
       if k<>[] then Cmenu='Edit_Object',break,end
     end
   end
   select Cmenu
-  case 'Exit' then  // OK      
-    r=1
-    if edited&~super_block then
-      r=x_message(['Diagram has not been saved';
-	         'Really exit?'],['Yes';'No'])
-    end
-    if r==1 then
-      xset('window',curwin)
-      erasemenubar(datam)
-      if pixmap then xset('wshow'),end
-      xset('alufunction',3)
-      setmenu(curwin,'3D Rot.')
-      setmenu(curwin,'File',1) //clear
-      setmenu(curwin,'File',5) //load
-      setmenu(curwin,'File',6) //close
-      if ~super_block then 
-	delmenu(curwin,'stop'),
-	xset('window',curwin),xsetech([0 0 1 1])
+  case 'Exit' then  // OK
+    ok=do_exit()
+    if ok then 
+      if pal_mode then 
+	if edited then scs_m=list(),end
+	newparameters=newblocks,
+	needcompile=~edited|size(scs_m)>1
       end
-      for win=windows(size(windows,1):-1:noldwin+1,2)',xbasc(win),xdel(win);end
       break
     else
       unhilitemenu(n_sel,datam)
     end
   case 'Palettes' then
-    kpal=x_choose(pal_names,'Choose a Palette')
-    if kpal<>0 then
-      winpal=find(windows(:,1)==-kpal)
-      lastwin=curwin
-      if winpal==[] then
-	wfree=find(windows(:,1)==0)
-	if wfree<>[] then
-	  curwin=wfree(1)
-	else
-	  curwin=maxi(windows(:,2))+1
-	end
-	windows=[windows;[-kpal curwin]]
-      else
-	curwin=windows(winpal,2)
-      end
-      xset('alufunction',3)
-      no=size(objs)
-      for k=no+1:kpal-1, objs(k)=list(),end
-      xset('window',curwin),xselect();
-      if pixmap then xset('pixmap',1),end,xbasc();
-      objs(kpal)=drawpal(set_palette(pal_names(kpal)))
-      if pixmap then xset('wshow'),end
-      no=size(objs)
-      curwin=lastwin
-      xset('window',curwin)
-      xset('alufunction',6)
-    end
+    [palettes,windows]=do_palettes(palettes,windows)
     unhilitemenu(n_sel,datam)
   case 'New' then
     r=1
     if edited then
-      r=x_message(['Diagram has not been saved';
+      r=message(['Diagram has not been saved';
 	  'Really exit?'],['Yes';'No'])
     end
     if r==1 then
-      x=list(list([600,400],'Untitled',tolerances,tf))
-      wpar=x(1);wsiz=wpar(1)
+      if alreadyran then do_terminate(),end  //terminate current simulation
       Xshift=0;Yshift=0
+      scs_m=list(list([600,450,Xshift,Yshift],'Untitled',tolerances,tf))
+      wpar=scs_m(1);wsiz=wpar(1)
       xsetech([-1 -1 8 8]/6,[Xshift,Yshift ,Xshift+wsiz(1),Yshift+wsiz(2)])
-      xbasc();drawobjs(x)
+      xbasc();drawobjs(scs_m)
       datam=drawmbar(menus,'v')
       edited=%f
     end
   case 'Move' then  // Move
-    x_save=x;nc_save=needcompile;enable_undo=%t
-    x=do_move(x)
+    xinfo('Click object to move, drag to new position and click')
+    scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
+    scs_m=do_move(scs_m)
+    xinfo(' ')
     unhilitemenu(n_sel,datam)
     edited=%t
   case 'Copy' then  // Copy
-    x_save=x;nc_save=needcompile;enable_undo=%t
-    [x,needcompile]=do_copy(x,needcompile);
+    xinfo('Click left on the object to copy or right for a region')
+    scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
+    [scs_m,needcompile]=do_copy(scs_m,needcompile);
+    xinfo(' ')
+    unhilitemenu(n_sel,datam)
+    edited=%t
+  case 'Replace' then  // Replace
+    xinfo('Click on new object , click on object to be replaced')
+    scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
+    [scs_m,needcompile]=do_replace(scs_m,needcompile);
+    xinfo(' ')
     unhilitemenu(n_sel,datam)
     edited=%t
   case 'Align' then
-    x_save=x;nc_save=needcompile;
-    x=prt_align(x)
+    xinfo('Click on an a port , click on a port of object to be moved')
+    scs_m_save=scs_m;nc_save=needcompile;
+    scs_m=prt_align(scs_m)
+    xinfo(' ')
     unhilitemenu(n_sel,datam)
     edited=%t
   case 'Link' then  // Link
-    x_save=x;nc_save=needcompile;enable_undo=%t
-    [x,needcompile]=getlink(x,needcompile);
+    xinfo('Click on the link origin , drag, click on final or intermediate point')
+    scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
+    [scs_m,needcompile]=getlink(scs_m,needcompile);
+    xinfo(' ')
     unhilitemenu(n_sel,datam)
     edited=%t
   case 'Delete' then  // Delete
-    x_save=x;nc_save=needcompile;enable_undo=%t
-    [x,needcompile]=do_delete(x,needcompile);
+    xinfo('Click left on the object to delete or right for a region')
+    scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
+    [scs_m,needcompile]=do_delete(scs_m,needcompile);
+    xinfo(' ')
     unhilitemenu(n_sel,datam)
     edited=%t
   case 'Flip' then
-    x_save=x;nc_save=needcompile;enable_undo=%t
-    x=do_tild(x)
+    xinfo('Click on block to be flipped')
+    scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
+    scs_m=do_tild(scs_m)
+    xinfo(' ')
     unhilitemenu(n_sel,datam)
     edited=%t
   case 'Undo' then
     if enable_undo then
-      x=x_save;needcompile=nc_save
+      scs_m=scs_m_save;needcompile=nc_save
       xset('alufunction',3);xbasc();xselect();xset('alufunction',6);
-      drawobjs(x),
+      drawobjs(scs_m),
       xset('alufunction',6);
       datam=drawmbar(menus,'v')
       hilitemenu(n_sel,datam)
@@ -236,207 +286,190 @@ while %t
     xset('alufunction',3);xbasc();xselect();xset('alufunction',6);
     wdm=xget('wdim').*[1.016 1.12]
     xsetech([-1 -1 8 8]/6,[Xshift,Yshift ,Xshift+wdm(1),Yshift+wdm(2)])
-    drawobjs(x),
+    drawobjs(scs_m),
     datam=drawmbar(menus,'v')
-  case 'Setup' then
-    wpar=x(1);wd=wpar(1);
-    wpar=do_setup(wpar)
+  case 'Window' then
+    wpar=scs_m(1);wd=wpar(1);
+    wpar=do_window(wpar)
     if or(wd<>wpar(1)) then
       xset('alufunction',3);xbasc();xselect();xset('alufunction',6);
-      wd=wpar(1)
+      wd=wpar(1)(1:2)
       xset('wdim',wd(1),wd(2)),
       xsetech([-1 -1 8 8]/6,[Xshift,Yshift ,Xshift+wd(1),Yshift+wd(2)])
+      drawobjs(scs_m),
       datam=drawmbar(menus,'v')
       hilitemenu(n_sel,datam)
-      drawobjs(x),
       if pixmap then xset('wshow'),end
     end
-    x(1)=wpar
+    scs_m(1)=wpar
+    unhilitemenu(n_sel,datam)
+  case 'Setup' then
+    wpar=do_setup(scs_m(1))
+    scs_m(1)=wpar
+    unhilitemenu(n_sel,datam)
+  case 'Context' then
+    while %t do
+      [context,ok]=do_context(scs_m(1)(5))
+      if ~ok then break,end
+      ierr=execstr(context,'errcatch')
+      if ierr==0 then 
+	scs_m(1)(5)=context;break,
+      else
+	message(['Incorrect context definition,';
+	         'see message in Scilab window'])
+      end
+    end
     unhilitemenu(n_sel,datam)
   case 'Compile' then
-    [state,sim,cor,corinv,ok]=do_compile(x)
+    [cpr,ok]=do_compile(scs_m)
     if ok then
       newparameters=list()
       tcur=0 //temps courant de la simulation
-      needcompile=%f
       alreadyran=%f
-      state0=state;
+      state0=cpr(1);
+      needcompile=0;
+    else
+      needcompile=4,
     end
     unhilitemenu(n_sel,datam)
   case 'Run' then
     ok=%t
-    [ok,tcur,state,sim,cor,corinv,needcompile,alreadyran,state0]=do_run()
+    [ok,tcur,cpr,alreadyran,needcompile,state0]=do_run(cpr)
+    if ok then newparameters=list(),end
     unhilitemenu(n_sel,datam)
+  case 'Rename' then
+    scs_m=do_rename(scs_m) 
+    unhilitemenu(n_sel,datam)    
   case 'Save' then
-    fname=path+get_tree_elt(x,[1 2])+'.cos'
-    errcatch(240,'continue','nomessage')
-    u=file('open',fname,'unknown','unformatted')
-    errcatch(-1)
-    if iserror(240)==1 then
-      x_message('Directory write access denied')
-      errclear(240)
-    else
-      save(u,x)
-      file('close',u)
-      edited=%f
-    end
+    ok=do_save(scs_m) 
+    if ok then edited=%f,end
     unhilitemenu(n_sel,datam)
   case 'Save As' then
-    fname=xgetfile('*.cos')
-    if fname<>emptystr() then
-      [path,name,ext]=splitfilepath(fname)
-      select ext
-      case 'cos' then
-	ok=%t
-      else
-	x_message('Only *.cos binary files allowed');
-        ok=%f
-      end
-      if ok then 
-	drawtitle(x(1))
-	x=change_tree_elt(x,[1 2],name)
-	errcatch(240,'continue','nomessage')
-	u=file('open',fname,'unknown','unformatted')
-	errcatch(-1)
-	if iserror(240)==1 then
-	  x_message('Directory write access denied')
-	  errclear(240)
-	else
-	  save(u,x)
-	  file('close',u)
-	  edited=%f
-	  drawtitle(x(1))
-	end
-      end
-    end
+    [scs_m,edited]=do_SaveAs()
     unhilitemenu(n_sel,datam)
   case 'FSave' then
-    fname=xgetfile('*.cosf')
-    if fname<>emptystr() then
-      [path,name,ext]=splitfilepath(fname)
-      select ext
-      case 'cosf' then
-	ok=%t
-      else
-	x_message('Only *.cosf  files allowed');
-        ok=%f
-      end
-      if ok then 
-	x=change_tree_elt(x,[1 2],name)
-	errcatch(240,'continue','nomessage')
-	u=file('open',fname,'unknown')
-	errcatch(-1)
-	if iserror(240)==1 then
-	  x_message('Directory write access denied')
-	  errclear(240)
-	else
-	  write(u,sci2exp(x,'x'),'(a)')
-	  file('close',u)
-	  edited=%f
-	end
-      end
-    end
+    ok=do_fsave(scs_m)
+    edited=edited&~ok
     unhilitemenu(n_sel,datam)
   case 'Load' then
-    fname=xgetfile('*.cos*')
-    if fname<>emptystr() then
-      [path,name,ext]=splitfilepath(fname)
-      select ext
-      case 'cosf'
-	exec(fname,-1)
-	ok=%t
-      case 'cos' then
-	load(fname),
-	ok=%t
+    [ok,scs_m,cpr]=do_load()
+    if ok then
+      wpar=scs_m(1)
+      wdm=wpar(1)
+      Xshift=wdm(3);Yshift=wdm(4);
+      xset('alufunction',3);xbasc();xselect();
+      xset('wdim',wdm(1),wdm(2))
+      xsetech([-1 -1 8 8]/6,[Xshift,Yshift ,Xshift+wdm(1),Yshift+wdm(2)])
+      xselect();
+      xset('alufunction',6)
+      drawobjs(scs_m),
+      datam=drawmbar(menus,'v')
+      execstr(scs_m(1)(5)) ,
+      hilitemenu(n_sel,datam)
+      if size(cpr)==0 then
+	needcompile=4
+	alreadyran=%f
       else
-	x_message(['Only *.cos binary files or *.cosf formatted file';
-	  'allowed'])
-        ok=%f
-      end
-      if ok then
-	//next line for compatiblity
-	wpar=x(1)
-	if size(wpar)<5 then wpar(5)=sim_mode,x(1)=wpar,end
-	wdm=wpar(1)
-	Xshift=0;Yshift=0;
-	xset('alufunction',3);xbasc();xselect();
-	xset('wdim',wdm(1),wdm(2)) 
-	xsetech([-1 -1 8 8]/6,[Xshift,Yshift ,Xshift+wdm(1),Yshift+wdm(2)])
-	xselect();
-	xset('alufunction',6)
-	drawobjs(x),
-	datam=drawmbar(menus,'v')
-	hilitemenu(n_sel,datam)
-	needcompile=%t
+	state0=cpr(1)
+	needcompile=0
+	alreadyran=%f
       end
     end
     unhilitemenu(n_sel,datam)
+  case 'Purge' then
+    scs_m=do_purge(scs_m);
+    needcompile=4;
+    edited=%t
+    unhilitemenu(n_sel,datam)
   case 'View' then
-    wpar=x(1);wdm=wpar(1)
-    [btn,xc,yc]=xclick() //get center of new view
-    oxc=Xshift+(wdm(1)-80)/2
-    oyc=Yshift+(wdm(2))/2
-    Xshift=Xshift+(xc-oxc)
-    Yshift=Yshift+(yc-oyc)
-    xset('alufunction',3);xbasc();xselect();
-    xsetech([-1 -1 8 8]/6,[Xshift,Yshift ,Xshift+wdm(1),Yshift+wdm(2)])
-    xset('alufunction',6)
-    drawobjs(x),
+    xinfo('Click on the point you want to put in the middle of the window')
+    wdm=do_view(scs_m)
+    wpar=scs_m(1)
+    wpar(1)=wdm;scs_m(1)=wpar
+    Xshift=wdm(3);Yshift=wdm(4)
+    drawobjs(scs_m),
+    xinfo(' ')
     datam=drawmbar(menus,'v')
     if pixmap then xset('wshow'),end
+    edited=%t
+  case 'Calc' then
+    xinfo('You may enter any Scilab instruction. enter return to terminate')
+    scs_gc=save_scs_gc()
+    erasemenubar(datam)
+    pause
+    xinfo(' ')
+    restore_scs_gc(scs_gc);scs_gc=null()
+    datam=drawmbar(menus,'v')
   case 'Newblk' then
-    nup=size(user_pal_dir,'*')
-    if nup==0 then pal_dir=emptystr(),else pal_dir=user_pal_dir(nup),end
-    [ok,pal_dir]=getvalue('Enter user palette path','path',list('str',1),..
-	pal_dir)
-    if ok then 
-      save_csuper(x,pal_dir)
-      if and(pal_dir<>user_pal_dir) then 
-	user_pal_dir=[user_pal_dir;pal_dir]
-      end
+    [ok,dir]=getvalue(['Enter path of the directory';
+	'where to write the block GUI function'] ,'path',list('str',1),' ')
+    if ok then
+      path=save_csuper(scs_m,dir)
+      if path<>[] then getf(path),end
     end
     unhilitemenu(n_sel,datam)
   case 'Nyquist' then
-    syst=analyse(x)
+    syst=analyse(scs_m)
     sl=bloc2ss(syst)
     xset('window',curwin+1);xbasc()
     nyquist(sl)
     xset('window',curwin);
     unhilitemenu(n_sel,datam)
   case 'Edit_Object' then
-    [o,modified,newparametersb,needcompileb]=clickin(x(k))
-    needcompile=needcompile|needcompileb
-    //note if block parameters have been modified 
-    if modified then  //&~needcompile
+    super_path=[super_path,k] 
+    [o,modified,newparametersb,needcompileb]=clickin(scs_m(k))
+    super_path($)=[]
+    if ~pal_mode then
+      needcompile=max(needcompile,needcompileb)
+    end
+    scs_m=update_redraw_obj(scs_m,k,o)
+    //note if block parameters have been modified
+    if modified&~pal_mode  then
       model=o(3)
-      if model(1)=='super'|model(1)=='csuper'
-	for npb=newparametersb
-	  ok=%t;
-	  for np=newparameters
-	    if np==[k npb] then 
-	      ok=%f;break,
-	    end
-	  end
-	  if ok then 
-	    newparameters(size(newparameters)+1)=[k npb];
-	  end
-	end
-      else
-	ok=%t
-	for np=newparameters
-	  if np==k then 
-	    ok=%f;break;
-	  end
-	end
-	if ok then 
-	  newparameters(size(newparameters)+1)=k
-	end
-      end
+      newparameters=mark_newpars(k,newparametersb,newparameters)
       edited=%t
     end
-    x(k)=o,
+  case 'Resize' then
+    xinfo('Click block to resize')
+    scs_m=do_resize(scs_m)
+    xinfo(' ')
+    unhilitemenu(n_sel,datam)
+    edited=%t
+  case 'Icon' then
+    xinfo('Click block to edit')
+    scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
+    scs_m=do_block(scs_m)
+    xinfo(' ')
+    unhilitemenu(n_sel,datam)
+    edited=%t
+  case 'Color' then
+    xinfo('Click on block to paint')
+    scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
+    scs_m=do_color(scs_m)
+    xinfo(' ')
+    unhilitemenu(n_sel,datam)
+    edited=%t
+  case 'Label' then
+    xinfo('Click block to label')
+    scs_m_save=scs_m;nc_save=needcompile;enable_undo=%t
+    [mod,scs_m]=do_label(scs_m)
+    edited=edited|mod
+    xinfo(' ')
+    unhilitemenu(n_sel,datam)
+  case 'Eval' then
+    [scs_m,cpr,needcompile,ok]=do_eval(scs_m,cpr)
+    if needcompile<>4 then state0=cpr(1),end
+    alreadyran=%f
+    unhilitemenu(n_sel,datam)
   case 'Help' then
     do_help()
+    unhilitemenu(n_sel,datam)
+  case 'AddNew' then
+    [scs_m,fct]=do_addnew(scs_m)
+    if fct<>[] then 
+      getf(fct),
+      newblocks=[newblocks;fct]
+    end
     unhilitemenu(n_sel,datam)
   case 'Edit..' then
     unhilitemenu(n_sel,datam)
@@ -453,44 +486,31 @@ while %t
     menus=menu_f
     erasemenubar(datam)
     datam=drawmbar(menus,'v')
-  case 'Back' then 
-     unhilitemenu(n_sel,datam)
-     menus=menu_p
-     erasemenubar(datam)
-     datam=drawmbar(menus,'v')
+  case 'Block..' then
+    unhilitemenu(n_sel,datam)
+    menus=menu_b
+    erasemenubar(datam)
+    datam=drawmbar(menus,'v')
+  case 'Pal editor..' then
+    unhilitemenu(n_sel,datam)
+    erasemenubar(datam)
+    [newblocks,pals_changed]=do_edit_pal()
+    if pals_changed then exec('~/scicos_pal.exe',-1),end
+    drawmbar(menus,'v');
+  case 'Back' then
+    unhilitemenu(n_sel,datam)
+   
+    menus=menu_p
+    erasemenubar(datam)
+    datam=drawmbar(menus,'v')
   end
   if pixmap then xset('wshow'),end
 end
-function [path,name,ext]=splitfilepath(fname)
-l=length(fname)
-//getting the extension part
-n=l
-while n>0
-  cn=part(fname,n)
-  if cn=='.'|cn=='/' then break,end
-  n=n-1
-end
-if n==0 then 
-  ext=emptystr()
-elseif cn=='/' then
-  ext=emptystr()
-  n=l
-else
-  ext=part(fname,n+1:l)
-  n=n-1
-end
-//getting the name part
-l=n
-n=l
-while n>0
-  cn=part(fname,n)
-  if cn=='/' then break,end
-  n=n-1
-end
-if n==0 then 
-  name=part(fname,1:l)
-  path='./'
-else
-  name=part(fname,n+1:l)
-  path=part(fname,1:n)
-end
+
+
+
+
+
+
+
+

@@ -1,18 +1,19 @@
 function fac3d(x,y,z,T,A,leg,flags,ebox)
 //!
 [lhs,rhs]=argn(0)
+write(%io(2),'WARNING : fac3d is obsolete see plot3d plot3d1 instead');
 if rhs<=0 then  //demo
   s_mat=['deff(''[x,y,z]=sph(alp,tet)'',[''x=r*cos(alp).*cos(tet)+orig(1)*ones(tet)'';';
                       '''y=r*cos(alp).*sin(tet)+orig(2)*ones(tet)'';';
                       '''z=r*sin(alp)+orig(3)*ones(tet)'']);';
   'r=1;orig=[0 0 0];';
-  '[x1,y1,z1]=eval3dp(sph,[-%pi:0.2:%pi %pi],[0:0.2:%pi %pi]);';
+  '[x1,y1,z1]=eval3dp(sph,linspace(-%pi/2,%pi/2,40),linspace(0,%pi*2,20));';
   '[n1,m1]=size(x1);';
   'r=1/2;orig=[-1 0 0];';
-  '[x2,y2,z2]=eval3dp(sph,[-%pi:0.2:%pi %pi],[0:0.2:%pi %pi]) ;';
+  '[x2,y2,z2]=eval3dp(sph,linspace(-%pi/2,%pi/2,40),linspace(0,%pi*2,20));';
   '[n2,m2]=size(x2);';
   'x=[x1 x2];y=[y1 y2];z=[z1 z2];';
-  'fac3d(x,y,z);';]
+  'plot3d(x,y,z);';]
   write(%io(2),s_mat);execstr(s_mat);
   return;end
 select rhs 

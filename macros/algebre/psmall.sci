@@ -16,7 +16,7 @@ deff('[flag]=%csmall(x)',[...
    'case 2 then flag= x(2) < thres/2;';
    'end;';
    'if flag then flag=1;else flag=-1;end']);
-comp(%csmall);
+
 deff('[flag]=%dsmall(x)',[...
    'ls=x(1);';
    'select ls;';
@@ -24,7 +24,7 @@ deff('[flag]=%dsmall(x)',[...
    'case 2 then flag =(abs(x(3)) < thres*thres);';
    'end;';
    'if flag then flag=1;else flag=-1;end']);
-//comp(%dsmall);
+
 deff('[flag]=%cbigeig(x)',[...
      'ls=x(1);';
      'select ls;';
@@ -32,7 +32,7 @@ deff('[flag]=%cbigeig(x)',[...
      'case 2 then flag= x(2) >= thres/2 ;';
      'end;';
      'if flag then flag=1;else flag=-1;end']);
-comp(%cbigeig);
+
 deff('[flag]=%dbigeig(x)',[...
      'ls=x(1);';
      'select ls;';
@@ -40,7 +40,7 @@ deff('[flag]=%dbigeig(x)',[...
      'case 2 then flag= (abs(x(3)) >= thres*thres) ;';
      'end;';
      'if flag then flag=1;else flag=-1;end']);
-comp(%dbigeig);
+
  [n,n]=size(A);
  thres=real(thres);
 if flag='c' then %smallei=%csmall;%bigeig=%cbigeig;end

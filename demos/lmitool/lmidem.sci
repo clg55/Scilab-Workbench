@@ -11,8 +11,10 @@ if RHS ~=3 then
     tt=read(PROBNAME,-1,1,'(a)');
     tt=stripblanks(tt);
     mat=str2vec(tt);
+
     [q1,p1]=find(mat'=='[');
-        [q2,p2]=find(mat'==']');
+    [q2,p2]=find(mat'==']');
+
     XNAME1=mat(p1(1),q1(1)+1:q2(1)-1);
     XNAME1=strcat(XNAME1);
     [q1,p1]=find(mat'=='(');
@@ -34,8 +36,8 @@ if RHS ~=3 then
 //        '3- Names of data matrices or list of data matrices.'],labels,...
 //        list('str',1,'str',1,'str',1),...
 //        [PROBNAME1+'            ',XNAME1+'           ',DNAME1+'         ']);
-ok=%t
-PROBNAME=PROBNAME1;XNAME=XNAME1;DNAME=DNAME1;
+  ok=%t
+  PROBNAME=PROBNAME1;XNAME=XNAME1;DNAME=DNAME1;
     if ok=%f then 
         txtdo='Try again';return;
       end

@@ -8,6 +8,7 @@ function fname=choosefile(path,comm,errmess)
 // fname  :  character string : selected file name or empty matrix if none
 //!
 
+
 [lhs,rhs]=argn(0)
 select rhs
 case 0 then
@@ -21,7 +22,7 @@ case 2 then
   errmess=%t
 end
 lst=lstfiles(path)
-if lst==[]&errmess then x_message('No such file exists'),end
+if lst==[]&errmess then message('No such file exists'),end
 if prod(size(lst))>0 then
   n=x_choose(lst,comm,'Cancel')
   if n<>0 then
@@ -32,4 +33,9 @@ if prod(size(lst))>0 then
 else
   fname=[]
 end
+
+
+
+
+
 

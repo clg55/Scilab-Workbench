@@ -1,4 +1,8 @@
 /* routines/machine.h.  Generated automatically by configure.  */
+
+#ifndef MACHINE_H 
+#define MACHINE_H 
+
 /* Define for using dld for sunos */
 /* #undef SUNOSDLD */
 
@@ -16,6 +20,20 @@
 
 /* Define if have getwd */
 #define HAVE_GETWD 1
+
+/* Define if have strerror: used in sound/misc.c */
+#define HAVE_STRERROR 1
+
+/* Define if have termcap library: used in sun/zzledt.c */
+#define HAVE_TERMCAP 1
+
+/* CNAME(x,y) ==> xy **/
+
+#if defined(USE_SHARP_SIGN)
+#define CNAME(name1,name2) name1##name2
+#else 
+#define CNAME(name1,name2) name1/**/name2
+#endif
 
 /* Define  C2F and F2C entry point conversion */
 #if defined(WTU)
@@ -41,14 +59,19 @@
 #define getwd(x) getcwd(x,1024) /* you must define char x[1024] */
 #endif
 
-/* A completer pour les diverses architecture */
-/* c'est important pour interfacer C et Fortran */
-/* Fortran integer -> C integer */
-/* avec C integer = int sur alpha */
-/* avec C integer = long int sur sun 4.1.3 */
+/* 
+   Define integer C type which must fit Fortran integer
+   For Scilab to work, the rule is: 
+          size of Fortran double precision = 2 * size of Fortran integer
 
-#if defined(__alpha)
+   At the present time, we suppose:
+       size of Fortran integer = 4 bytes
+       size of Fortran double precision = 8 bytes
+       size of C int = 4 bytes
+*/
+
 typedef int integer;
-#else 
-typedef long int integer;
-#endif
+
+#include "params.h"
+
+#endif MACHINE_H 

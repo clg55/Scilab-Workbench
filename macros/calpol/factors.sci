@@ -10,3 +10,4 @@ if type(P)==2 then [lnum,lden]=pfactors(P,flag);return;end
 [lnum,gn]=pfactors(P(2),flag);
 [lden,gd]=pfactors(P(3),flag);g=gn/gd;
 
+

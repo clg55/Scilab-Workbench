@@ -13,6 +13,10 @@ c systems of first order ode-s,
 c     dy/dt = f(t,y) ,  or, in component form,
 c     dy(i)/dt = f(i) = f(i,t,y(1),y(2),...,y(neq)) (i = 1,...,neq).
 c
+c
+c This version has been modified by L. LOTH on 91
+c       see Comments noted "cLOTH"
+c
 c this a variant version of the lsode package.
 c it switches automatically between stiff and nonstiff methods.
 c this means that the user does not have to determine whether the
@@ -1310,7 +1314,7 @@ c-----------------------------------------------------------------------
       tnext = tn + h*(1.0d+0 + 4.0d+0*uround)
       if ((tnext - tcrit)*h .le. 0.0d+0) go to 250
       h = (tcrit - tn)*(1.0d+0 - 4.0d+0*uround)
-c correction L Loth 91
+cLOTH 91
 c      if (istate .eq. 2) jstart = -2
 
       if (istate .eq. 2.and.jstart.ne.-1) jstart = -2
@@ -1412,7 +1416,7 @@ c itask = 4.  see if tout or tcrit was reached.  adjust h if necessary.
       tnext = tn + h*(1.0d+0 + 4.0d+0*uround)
       if ((tnext - tcrit)*h .le. 0.0d+0) go to 250
       h = (tcrit - tn)*(1.0d+0 - 4.0d+0*uround)
-c     modif L Loth 91
+cLOTH 91
 c     jstart = -2
       if(jstart.ne.-1) jstart = -2
       go to 250

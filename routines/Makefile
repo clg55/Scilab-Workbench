@@ -1,10 +1,11 @@
+# Generated automatically from Makefile.in by configure.
 SHELL = /bin/sh
 
 include ../Makefile.incl
 
-SCIDIRS = X11G calelm comm control default integ interf intersci lapack \
-	metanet optim poly signal sparse sun system system2 xsci xwindow \
-	scicos
+SCIDIRS = graphics calelm comm control default integ interf intersci lapack \
+	libcomm metanet optim poly signal sparse sun system system2 \
+	menusX scicos sound xsci 
 
 SUBDIRS = $(XAW_LOCAL_SUBDIR) $(DLD_SUBDIR) $(SCIDIRS)
 
@@ -26,7 +27,7 @@ world::
 
 distclean::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
-	for i in $(SUBDIRS) ;\
+	for i in X11 dld $(SCIDIRS) ;\
 	do \
 		(cd $$i ; echo "making distclean in routines/$$i..."; \
 		$(MAKE) $(MFLAGS)  distclean); \
@@ -39,3 +40,14 @@ clean::
 		(cd $$i ; echo "making clean in routines/$$i..."; \
 		$(MAKE) $(MFLAGS) clean); \
 	done
+
+f2cclean::
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+	for i in $(SUBDIRS) ;\
+	do \
+		(cd $$i ; echo "making f2cclean in routines/$$i..."; \
+		$(MAKE) $(MFLAGS) f2cclean); \
+	done
+
+
+	

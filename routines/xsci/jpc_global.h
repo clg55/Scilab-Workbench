@@ -63,7 +63,21 @@
  *    Contain extern declarations of variables and functions.
  */
 
+
+#ifdef __STDC__
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)		paramlist
+#endif
+#else	
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)		()
+#endif
+#endif
+
+#include "../machine.h"
 #include "jpc_defs.h"
+
+#include "All-extern.h"
 
 /* calldbx.c */
 

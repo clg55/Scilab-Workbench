@@ -1,4 +1,4 @@
-function [x,dim]=im_inv(a,b,tol)
+function [X,dim,Y]=im_inv(A,B,tol)
 //[X,dim]=im_inv(A,B [,tol]) computes (A^-1)(B) i.e vectors whose
 // image through A are in range(B).
 // The dim first columns de X span (A^-1) (B)
@@ -7,24 +7,24 @@ function [x,dim]=im_inv(a,b,tol)
 // F.D.
 //!
 [lhs,rhs]=argn(0);
-[na,ma]=size(a);[nb,mb]=size(b);
-if rhs=2 then tol=100*%eps*ma*na*nb*mb,end;
-if na<>nb then error ('uncompatible dimensions!'),return,end
-// basis for im(b)
-[xp,rb]=rowcomp(b);u=xp'
+[nA,mA]=size(A);[nB,mB]=size(B);
+if rhs=2 then tol=100*%eps*mA*nA*nB*mB,end;
+if nA<>nB then error ('im_inv: uncompatible dimensions!'),return,end
+// basis for im(B)
+[Y,rB]=rowcomp(B);//u=Y'
 //Trivial cases
-if rb >= na then x=eye(ma,ma);,dim=ma,return;end;
-if rb =0 then [x,k1]=colcomp(a),dim=ma-k1,return,end
+if rB >= nA then X=eye(mA,mA);dim=mA,return;end;
+if rB =0 then [X,k1]=colcomp(A);dim=mA-k1,return,end
 //
-up=1:rb;low=rb+1:na;
-a=xp*a;   //update 
+up=1:rB;low=rB+1:nA;
+A=Y*A;   //update 
 //vectors with image in B
-[x,r1]=colcomp(a(low,:))
-a1=a*x;    //update
-aup=a1(up,:);
-alow=a1(low,:);    //alow(:,1:ma-r1)=0 by construction
-if norm(alow,1) <= tol*norm(aup,1) then dim=ma,return,end
-dim=ma-r1;
+[X,r1]=colcomp(A(low,:))
+A1=A*X;    //update
+Aup=A1(up,:);
+Alow=A1(low,:);    //Alow(:,1:ma-r1)=0 by construction
+if norm(Alow,1) <= tol*norm(Aup,1) then dim=mA,return,end
+dim=mA-r1;
 
 
 

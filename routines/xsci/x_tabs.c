@@ -29,6 +29,9 @@
 
 #include "x_ptyxP.h"
 
+#include "../machine.h"
+#include "All-extern-x.h"
+
 /*
  * This file presumes 32bits/word.  This is somewhat of a crock, and should
  * be fixed sometime.
@@ -37,7 +40,8 @@
 /*
  * places tabstops at only every 8 columns
  */
-TabReset(tabs)
+
+void TabReset(tabs)
 Tabs	tabs;
 {
 	register int i;
@@ -53,7 +57,8 @@ Tabs	tabs;
 /*
  * places a tabstop at col
  */
-TabSet(tabs, col)
+
+void TabSet(tabs, col)
     Tabs	tabs;
     int		col;
 {
@@ -63,7 +68,7 @@ TabSet(tabs, col)
 /*
  * clears a tabstop at col
  */
-TabClear(tabs, col)
+void TabClear(tabs, col)
     Tabs	tabs;
     int		col;
 {
@@ -75,7 +80,7 @@ TabClear(tabs, col)
  * (or MAX_TABS - 1 if there are no more).
  * A tabstop at col is ignored.
  */
-TabNext (tabs, col)
+int TabNext (tabs, col)
     Tabs	tabs;
     int		col;
 {
@@ -96,7 +101,8 @@ TabNext (tabs, col)
 /*
  * clears all tabs
  */
-TabZonk (tabs)
+
+void TabZonk (tabs)
 Tabs	tabs;
 {
 	register int i;

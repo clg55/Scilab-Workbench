@@ -6,10 +6,11 @@ c ======================================================================
 c     
       include '../stack.h'
 c     
-      integer lrecl,id(nsiz),retu(6),ennd(3),id1(3),icount
+      integer lrecl,id(nsiz),retu(6),icount
       integer slash,dot,blank,equal,lparen,rparen
       integer comma,semi,less,great,left,right
       integer name,eol
+      integer ssym,schar
       integer first,ierr
       integer iadr,sadr
       logical maj
@@ -17,8 +18,8 @@ c
       data slash/48/,dot/51/,blank/40/,equal/50/,lparen/41/,rparen/42/
       data comma/52/,semi/43/,less/59/,great/60/,left/54/,right/55/
       data name/1/,eol/99/,lrecl/512/
-      data retu/27,14,29,30,27,23/,ennd/14,23,13/
-c     
+      data retu/27,14,29,30,27,23/
+c     ennd/14,23,13/
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 c
@@ -37,6 +38,9 @@ c
       lpt(1)=l6+1
       lpt(5)=lpt(3)
 c     
+      ssym=sym
+      schar=char1
+c
       n=1
       first=1
  10   l = lpt(1)
@@ -65,12 +69,15 @@ c     elimination des blancs en debut de ligne
  16   m=m+1
       if(buf(m:m).eq.' ') goto 16
 c
+
       if(buf(m:m+7).eq.'function'.or.buf(m:m+7).eq.'FUNCTION') then
          if(first.eq.1) then
             j=m+7
             goto 231            
          else
-            backspace(lunit)
+C     jpc : cygwin32 b17.1 bug 
+c            backspace(lunit)
+            call myback(lunit)
             goto 61
          endif
       endif
@@ -135,7 +142,8 @@ c     premiere ligne
  23   if(l.gt.lpt(1)) goto 24
       if(buf(m:m+7).eq.'function'.or.buf(m:m+7).eq.'FUNCTION') then
          j=m+6
-      else  if(k.ne.slash .or. buf(m+1:m+1).ne.buf(m:m)) then
+c      elseif(k.ne.slash .or. buf(m+1:m+1).ne.buf(m:m)) then
+      else
          ierr=4
          goto 90
       endif
@@ -154,13 +162,13 @@ c     premiere ligne
 c     
 c     fin de conversion de la ligne
  25   if(first.eq.1) goto 40
-      if(k.eq.slash.and.j.eq.1) then
-         call cvstr(3,id1,buf(j+2:j+4),0)
-         do 26 ie=1,3
-            if(abs(id1(ie)).ne.ennd(ie)) goto 27
- 26      continue
-         goto 61
-      endif
+c      if(k.eq.slash.and.j.eq.1) then
+c         call cvstr(3,id1,buf(j+2:j+4),0)
+c         do 26 ie=1,3
+c            if(abs(id1(ie)).ne.ennd(ie)) goto 27
+c 26      continue
+c         goto 61
+c      endif
  27   l=l-1
       if(istk(l).eq.blank) goto 27
       l=l+1
@@ -375,6 +383,8 @@ c
       lpt(2)=l2
       char1=semi
       sym=semi
+c      char1=schar
+c      sym=ssym
       fin=job
       return
 

@@ -1,9 +1,8 @@
-//[sr]=%pvlss(p,s)
-// Mise en feedback sr=(eye+p*s)\p
-//s=%pvlss(p,s) ou sr=p/.s
-// p : matrice de polynomes
-// s : representation d'etat d'un systeme lineaire
+function [sr]=%pvlss(p,s)
+//  feedback sr=(eye+p*s)\p
+//s=%pvlss(p,s) <=> sr=p/.s
+// p : polynomial matrix
+// s : state-space syslin list
 //!
-//origine S Steer INRIA 1992
-sr=tlist('lss',[],[],[],p,[],[])/.s
-//end
+sr=tlist(['lss','A','B','C','D','X0','dt'],[],[],[],p,[],[])/.s
+

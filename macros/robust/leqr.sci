@@ -8,7 +8,8 @@ function [k,x,err]=leqr(p12,vx)
 //   |0   b'  0|   | s'   0   d'd|       |0   0   0|   | s'   -b'   d'd|
 //
 [lhs,rhs]=argn(0);
-if p12(1)<>'lss' then error('leqr: state-space only!');end
+p121=p12(1);
+if p121(1)<>'lss' then error('leqr: state-space only!');end
 [a,b2,c1,d12]=p12(2:5);
 [n,nu]=size(b2);
 [ny,n]=size(c1);

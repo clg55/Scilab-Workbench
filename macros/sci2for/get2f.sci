@@ -1,8 +1,8 @@
-//[stk,top,vnms,vtps]=get2f(nam,stk,top,vnms,vtps)
+function [stk,top,vnms,vtps]=get2f(nam,stk,top,vnms,vtps)
 // realise la traduction fortran de l'acquisition d'une variable (stackg)
 //!
 top=top+1
-vn=find(nam=vnms(:,2))
+vn=find(nam==vnms(:,2))
 if vn==[] then
   op1=lst(ilst+1)
   if op1(1)<>'5'|op1(2)<>'24' then
@@ -28,4 +28,4 @@ else
   typ=vtps(vn)
   stk(top)=list(vnms(vn,1),'0',typ(1),typ(2),typ(3))
 end
-//end
+

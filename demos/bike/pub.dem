@@ -1,4 +1,4 @@
 mode(0);
 xbasc();
 path=SCI+'/demos/bike/';
-getf(path+'bike_pub.sci','c');pub();
+getf(path+'bike_pub.sci');pub();

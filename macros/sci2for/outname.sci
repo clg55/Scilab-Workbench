@@ -1,4 +1,4 @@
-//[out,nwrk,txt]=outname(nwrk,typ,m,n,excluded)
+function [out,nwrk,txt]=outname(nwrk,typ,m,n,excluded)
 //cette macro regarde si l'operation suivante est une affectation,
 // si oui et si cette affectation ne se fait pas sur une des variables listees
 //    dans le vecteur de chaine excluded, la macro retourne dans out
@@ -41,7 +41,7 @@ for k=1:nvar
     out(k)=o;txt=[txt;t]
   end
 end
-//end
+
   
   
   

@@ -17,7 +17,7 @@ xset("alufunction",6)
 deff('[]=velod(i)',['xpoly(xnt(:,i),ynt(:,i),''lines'')';
       'xpoly(xnr(:,i),ynr(:,i),''lines'')';
       'xpoly(xnf(:,i),ynf(:,i),''lines'');velodp(i);']);
-comp(velod);
+
 for i=1:1:n2,velod(i);velod(i);end
 velod(n2);
 xset("alufunction",3);

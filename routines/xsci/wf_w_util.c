@@ -17,9 +17,12 @@
 #include "wf_w_util.h"
 #include "wf_w_setup.h"
 
+#include "../machine.h"
+#include "All-extern.h"
+
 /* manually flush out X events */
 
-app_flush()
+void app_flush()
 {
     while (XtAppPending(app_con)) {
 	XEvent		event;

@@ -1,6 +1,4 @@
 
-
-
 /***********************************************************************
  * zzledt.c - last line editing routine
  *
@@ -18,10 +16,23 @@
  * all the io stuffs are done by X11
  **********************************************************************/
 
+#include <string.h>
+
+#ifdef __STDC__
+#include <stdlib.h>
+#endif
+
 #include <stdio.h>
 #include <ctype.h>
-#include "../machine.h"
 #include <signal.h>
+
+#include "../machine.h"
+#include "../sun/Sun.h"
+
+/** from : All-extern-x.h: */
+
+extern int XEvorgetchar  _PARAMS((void));  
+extern void Xputchar  _PARAMS((int c));  
 
 #define MAX(a, b) (a > b ? a : b)
 
@@ -95,7 +106,7 @@ static int  search_line_backward(),search_line_forward();
 void  set_echo_mode(),set_is_reading();
 int   get_echo_mode();
 
-
+extern char Sci_Prompt[10];
 /***********************************************************************
  * line editor
  **********************************************************************/
@@ -117,7 +128,8 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
    int keystroke;
    int character_count;
    char wk_buf[WK_BUF_SIZE + 1];
-   /*    printf("SCI>");*/
+
+   sciprint(Sci_Prompt);
                             /* empty work buffer */
    set_is_reading(TRUE);
 
@@ -126,9 +138,14 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
                             /* main loop to read keyboard input */
    while(1) {
                             /* get next keystroke (no echo) */
-      keystroke = gchar_no_echo();
- 
-      if(iscntrl(keystroke) || keystroke > 0x0100 ) {
+     keystroke = gchar_no_echo();
+     if ( keystroke ==  CTRL_C )
+       {
+	 int j = SIGINT;
+	 C2F(sigbas)(&j);
+	 keystroke = '\n';
+       };
+     if(iscntrl(keystroke) || keystroke > 0x0100 ) {
 
                             /* stroke is line editing command */
          switch(keystroke) {
@@ -203,6 +220,7 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
 		    
 	 case CTRL_C:
 	      {
+		/** we never get there CTRL_C is explored above **/
 		int j = SIGINT;
 		C2F(sigbas)(&j);
 	      };
@@ -546,10 +564,10 @@ char *source;
 /***********************************************************************
  * display_string - display string starting at current cursor position
  **********************************************************************/
+
 static void
 display_string(string)
-/**********************************************************************/
-char *string;
+     char *string;
 {
    while(*string != NUL) {
       Xputchar(*string++);
@@ -557,12 +575,12 @@ char *string;
 }
 /***********************************************************************
  * get_line()
-/**********************************************************************/
+ **********************************************************************/
+
 static void
 get_line(line_index, source)
-/**********************************************************************/
-int  line_index;
-char *source;
+     int  line_index;
+     char *source;
 {
    char *p;
                             /* pointer to line in save buffer */
@@ -844,3 +862,4 @@ char *source;
      return(0);
    }
 }
+

@@ -99,3 +99,5 @@ select n
   end
 end
 end
+clear s z n str rep Plant P22 ny nu nx Qx Qu bigQ Rx Ry bigR  Plqg r 
+clear Klqg Slqg Rlqg Tlqg resp title dttmax dt t n1 defv Tmax n2 u 

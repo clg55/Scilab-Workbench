@@ -2,35 +2,32 @@ function z=arsimul(a,b,d,sig,u,up,yp,ep)
 //z=arsimul(a,b,d,sig,u,[up,yp,ep])
 //            ou
 //z=arsimul(ar,u,[up,yp,ep])
-// Simule un ARMAX multidimensionnel
-// Le modele est donne par :
+// Simulation of multidimensionnal ARMAX
+// Model :
 //   A(z^-1) z(k)= B(z^-1)u(k) + D(z^-1)*sig*e(k)
-//      (z^-1) est l'operateur retard a1(z^-i) y_k= y_{k-i}
+//      (z^-1) :delay  a1(z^-i) y_k= y_{k-i}
 //   A(z)= Id+a1*z+...+a_r*z^r;  ( r=0  => A(z)=Id)
 //   B(z)= b0+b1*z+...+b_s z^s;  ( s=-1 => B(z)=0)
 //   D(z)= Id+d1*z+...+d_t z^t;  ( t=0  => D(z)=Id)
-// z et e sont a valeurs dans dans R^n et u dans R^m
+// z and e in R^n,  u in R^m
 //
-// En entree :
-//   a est la matrice <Id,a1,...,a_r>     dimension (n,(r+1)*n)
-//   b est la matrice <b0,......,b_s>     dimension (n,(s+1)*m)
-//   d est la matrice <Id,d_1,......,d_t> dimension (n,(t+1)*n)
-//   u est une matrice (m,N), donnant la chronique d'entree pour u
+// Inputs :
+//   a matrix <Id,a1,...,a_r>     dimension (n,(r+1)*n)
+//   b matrix <b0,......,b_s>     dimension (n,(s+1)*m)
+//   d matrix <Id,d_1,......,d_t> dimension (n,(t+1)*n)
+//   u matrix (m,N), 
 //         u(:,j)=u_j
-//   sig est une matrice (n,n), e_{k} est une suite de v.a gaussiennes
-//   n-dimensionnelles de variance 1
-//   up et yp : sont optionnels et servent a d\'ecrire le pass\'e
-//      dont on a besoin pour calculer la sortie y(1),....y(N)
+//   sig matrix (n,n), e_{k} gaussian r.v
+//
+//   up, yp :  optionial args: past values
 //      up=< u_0,u_{-1},...,u_{s-1}>;
 //      yp=< y_0,y_{-1},...,y_{r-1}>;
 //      ep=< e_0,e_{-1},...,e_{r-1}>;
-//      s'ils ne sont pas donnes on leur donne la valeur 0
-// En sortie on obtient :
+//      default=)
+// Output :
 //      y(1),....,y(N)
 //
-// Methode : on contruit une representation d'etat
-// et l'on utilise La version modifie de ode avec
-// l'option 'discret' qui simule un syst\`eme discret
+// Method : State-space approach
 // Auteur : J-Ph. Chancelier ENPC Cergrene
 //!
 //
@@ -72,7 +69,7 @@ for j=2:nn,d_fff= [ d_fff ; d1(:,1+(j-1)*al:j*al)];end
 d_fff=d_fff+a_fff(:,1)
 //
 deff('[xdot]=fff(t,x)',['xdot=a_fff*x+b_fff*u(:,t)+d_fff*br(:,t)']);
-comp(fff);
+
 // simulation de e(n) le bruit
 rand('normal');
 br=sig*rand(al,Nu);
@@ -124,6 +121,6 @@ else
    z=ode('discret',y1,1,2:Nu,fff);z=[y1,z];
    z=z(1:al,:)+b(1:al,1:mmu)*u(:,:)+d(1:al,1:al)*br(:,:);
 end
-//end
+
 
 

@@ -106,8 +106,8 @@ rand('normal')
 if rhs==3 then flag=[];end
 select flag(1)
 case []
-   sl=list('lss',rand(nstate,nstate),rand(nstate,nin),rand(nout,nstate),..
- zeros(nout,nin),zeros(nstate,1),'c');U=eye(nstate,nstate);
+   sl=syslin('c',rand(nstate,nstate),rand(nstate,nin),rand(nout,nstate),..
+ zeros(nout,nin),zeros(nstate,1));U=eye(nstate,nstate);
 case 'fullV'
 //C^(-1)(D) = X  
   rd=flag(2)  //rank(D)   needs rd<nin

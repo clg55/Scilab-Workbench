@@ -1,8 +1,12 @@
-//<f>=%sdp(p1,p2)
-// %sdp(M,p) calcule le resultat de la division element par element de
-//la matrice de scalaire M par la matrice de polynome p. (M./P)
+function f=%sdp(p1,p2)
+// %sdp(M,p)=M.*p
 //!
-f=tlist('r',p1,p2,[])
-//end
+if size(p1,'*')==1 then
+  p1=p1*ones(p2)
+elseif size(p2,'*')==1 then
+  p2=p2*ones(p1)
+end
+f=tlist(['r','num','den','dt'],p1,p2,[])
+
 
 

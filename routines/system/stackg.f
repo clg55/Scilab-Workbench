@@ -67,6 +67,7 @@ c
 c     chargement de la variable au sommet de la pile
       top = top+1
       if (.not.vcopyobj(' ',k,top)) return
+      infstk(top)=0
       call putid(idstk(1,top),idstk(1,k))
       go to 99
 c

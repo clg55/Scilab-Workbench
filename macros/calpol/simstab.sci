@@ -1,30 +1,27 @@
-//<punst,lambda>=simstab(p0,p,moeb)
-//<punst,lambda>=simstab(p0,p,moeb)  teste la stabilite  d'une famille
-//de polynomes  p0+sum(li*p(i)) pour 0<=li<1
-//Si pour tout li la famille est stable, alors punst=[];lambda=[].
-//Sinon  punst  est un  polynome  instable de la famille et  lambda le
-//vecteur des li tels que punst=p0+sum(li*p(i))
+function [punst,lambda]=simstab(p0,p,moeb)
+//[punst,lambda]=simstab(p0,p,moeb)  tests stability
+//of a family of polynomials  p0+sum(li*p(i)) for  0<=li<1
+//If for all li family is stable, then punst=[];lambda=[].
+//If not  punst is an unstable polynomial in the family and lambda=
+//vector of li such that punst=p0+sum(li*p(i))
 //
-//entrees : p0   polynome stable
-//          p    vecteur colonne de polynomes
-//          moeb matrice de  scalaires 2x2  permettant de specifier le
-//               type de stabilite desiree.
-//               moeb=eye(2)     pour la stabilite  au sens continu et
-//               moeb=[1 1;1 -1] au sens discret
+//inputs : p0   stable polynomial
+//          p    column vector of polynomials
+//          moeb 2x2  matrix for defining the type of stability
+//               required.
+//               moeb=eye(2)     continuous time stab.
+//               moeb=[1 1;1 -1] discrete time stab.
 //!
-//origine
 //
-//definition de la macro angle
+//
 deff('[teta]=angle(z)',['teta=atan(imag(z),real(z));';
                         'n=prod(size(z));';
                         'for k=1:n,';
                         'if abs(teta(k)+%pi)<%eps then';
                         'teta(k)=teta(k)+2*%pi,end,';
                         'end'])
-comp(angle)
 //
-plt=0;  //pas de graphique (pour obtenir les graphiques plt=1)
-//
+plt=0;  
 punst=[];lambda=[];
 [m,W]=size(p)
 lp=maxi(degree(p))+1
@@ -33,13 +30,9 @@ rts=roots(p0);
 zp0=(moeb(2,2)*rts-moeb(1,2)*ones(rts))...
      ./(-moeb(2,1)*rts+moeb(1,1)*ones(rts));
 if maxi(real(zp0))>=0 then
-    error("le polynome p0 n''est pas stable"),
+    error("p0 not stable"),
 end;
 //--------
-if plt=1 then
-    dess(2)=0;dess(56)=1;plot(0,0);
-    dess(54)=1;dess(56)=0;
-end;
 //--------
 wstp=mini(abs(zp0))
 k=0;aw=0;waw=[0;0];
@@ -93,9 +86,9 @@ scale(j)=maxi(abs(piw))
 xpiw=conj([piw, piw(1)]')/scale(j)
 //
 if plt=1 then
-            plot2d(real(xpiw)',imag(xpiw)',[3,1])
+            plot2d(real(xpiw)',imag(xpiw)',[-3,-1])
             plot2d(real(p0w(j))'/scale(j),imag(p0w(j))'/scale(j),...
-            [2,2],"000");
+            [-2,-2],"000");
 end;
 //
 [hi,ihi]=maxi(angle(piwc/p0w(j)))
@@ -114,8 +107,8 @@ lambda=nl'*[0*ones(1,m);ldhi;ldlo]/sum(nl)
 punst=p0
 punst=punst+lambda*p
 if plt=1 then
-  plot2d(real(p0w./scale)',imag(p0w./scale)',[4,3],"100",...
-      'Le parametre lambda donne un polynome instable punst');
+  plot2d(real(p0w./scale)',imag(p0w./scale)',[-4,-3],"100",...
+      'parameter lambda gives an unstable polynomial punst');
 end;
 return,
 end;
@@ -133,12 +126,12 @@ if j=nn
     nn=nn+1
     w(nn)=w(nn-1)*2-w(nn-2)
     else
-  if plt=1 then plot2d(real(p0w)./scale',imag(p0w)./scale',[5,3],...
+  if plt=1 then plot2d(real(p0w)./scale',imag(p0w)./scale',[-5,-3],...
                    "100", 'The family is stable'),end
   return
 end;
 end;
 end;
-//end
+
 
 

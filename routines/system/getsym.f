@@ -12,12 +12,12 @@ c*------------------------------------------------------------------
       include '../stack.h'
       double precision syv,s
       integer blank,dot,d,e,plus,minus,name,num,sign,chcnt,eol,achar1
-      integer star,slash,bslash,ss,percen
+      integer star,slash,bslash,ss,percen,hat
       integer io
       integer namecd(nlgh)
       data blank/40/,dot/51/,d/13/,e/14/,eol/99/,plus/45/
       data minus/46/,name/1/,num/0/,star/47/,slash/48/,bslash/49/
-      data percen/56/
+      data percen/56/,hat/62/
       fin=1
    10 if (char1 .ne. blank) go to 20
       call getch
@@ -37,9 +37,10 @@ c     is dot part of number or operator
       syv = 0.0d+0
       achar1=abs(char1)
       if (achar1 .le. 9) go to 55
-      if (achar1.eq.star .or. achar1.eq.slash .or. achar1.eq.bslash) 
-     $     goto 90
-      if (ss.eq.star .or. ss.eq.slash .or. ss.eq.bslash) go to 90
+      if (achar1.eq.star .or. achar1.eq.slash .or. achar1.eq.bslash
+     $     .or. achar1.eq.hat) goto 90 
+      if (ss.eq.star .or. ss.eq.slash .or. ss.eq.bslash
+     $     .or. ss.eq.hat) go to 90
       go to 55
 c
 c     name

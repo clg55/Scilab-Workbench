@@ -1,9 +1,7 @@
-//<r>=%pdr(p,r)
-// %pdr(p,r) calcule le quotient element par element d'une matrice de
-//polynomes p par une matrice de fractions rationnelles r (operation ./)
-//!
+function r=%pdr(p,r)
+// r=%pdr(p,r) <=> r= p./r   polynomial./rational
 [n,d]=r(2:3)
-r(2)=d.*p;r(3)=n;
-//end
+r(2)=d.*p;r(3)=n.*ones(p);
+
 
 

@@ -44,12 +44,14 @@ function result=calerf(x,jint)
 //  UNIVAC 1108    26.582      5.37D+8     8.98D+307
 //  VAX D-Format    9.269      1.90D+8     1.70D+38
 //  VAX G-Format   26.569      6.71D+7     8.98D+307
+[mx,nx]=size(x);x=matrix(x,1,mx*nx);
 thresh=0.46875; //
 sqrpi=5.6418958354775628695d-1;
 xmin=2.23D-308;xinf=1.79D+308;xneg=-26.628;
 xsmall=%eps //argument below which erf(x) may be represented by
 //            2*x/sqrt(pi)  and above which  x*x  will not underflow.
 xbig=26.543;xhuge=6.71D+7;xmax=2.53D+307
+
 
 
 //------------------------------------------------------------------
@@ -107,14 +109,15 @@ if k<>[] then
 
   y=abs(x(k))
   result(k) = 0*y
-  skip(prod(size(k)))=%f
+    skip(size(k,'*'))=%f
   k1=find(y>=xbig)
   if k1<>[] then
     k2=find(jint<>2|y>=xmax)
-    t=%t;skip(k2)=t(ones(prod(size(k2))))
+    t=%t;
+    skip(k2)=t(ones(size(k2,'*'),1))
     k2=find(y>=xhuge)
     if k2<>[] then
-      result(k2)=sqrpi/y(k2);skip(k2)=t(ones(prod(size(k2))))
+      result(k2)=sqrpi/y(k2);skip(k2)=t(ones(size(k2,'*'),1))
     end
   end
   kskip=find(~skip)
@@ -152,3 +155,4 @@ else
     end 
   end
 end 
+result=matrix(result,mx,nx);

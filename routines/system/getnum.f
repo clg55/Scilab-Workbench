@@ -19,6 +19,7 @@ c     compilation getnum :<6 num>
       endif
       top = top+1
       call putid(idstk(1,top),bl)
+      infstk(top)=0
       if (.not.cremat(' ',top,0,1,1,lr,lc)) return  
       stk(lr)=x 
       return

@@ -135,9 +135,10 @@ cc_ex      lct(1) = 0
 c
    50 if (rio .eq. rte) go to 52
       call icopy(6,retu,1,lin(l),1)
-      if(job.eq.1) call error(47)
-      if(err.gt.0) return
-c     call clunit(-rio,buf,0)
+      if(job.eq.1) then
+         call error(47)
+         return
+      endif
 c     rio=rte
       l = l + 6
       go to 45
@@ -161,12 +162,26 @@ c
       goto 45
 c
    80 k=lpt(1)-(13+nsiz)
+      ilk=lin(k+6)
+      if(istk(ilk).eq.10) then
+         mn=istk(ilk+1)*istk(ilk+2)
+         lf=ilk+4+mn+istk(ilk+4+mn)
+      else
+         mlhs=istk(ilk+1)
+         mrhs=istk(ilk+1+nsiz*mlhs+1)
+         ll=ilk+4+nsiz*(mlhs+mrhs)
+         lf= ll+istk(ll-1)+1
+      endif
       il=lin(k+7)
+      if(il.gt.lf)  goto 45
+
    81 if(istk(il).eq.eol) goto 82
       lin(l)=istk(il)
       l=l+1
-      if(l.gt.lsiz) call error(26)
-      if(err.gt.0) return
+      if(l.gt.lsiz) then
+         call error(26)
+         return
+      endif
       il=il+1
       goto 81
    82 if(istk(il+1).ne.eol) goto 83
@@ -179,13 +194,13 @@ c
    84 n=l-l2
       n1=n
       if(n.le.lct(5)) then
-               call cvstr(n,lin(l2),buf,1)
-                      else
-               n=lct(5)
-               n1=n-3
-               call cvstr(n1,lin(l2),buf,1)
-               buf(n1+1:n1+3)='...'
-               n1=n1-1
+         call cvstr(n,lin(l2),buf,1)
+      else
+         n=lct(5)
+         n1=n-3
+         call cvstr(n1,lin(l2),buf,1)
+         buf(n1+1:n1+3)='...'
+         n1=n1-1
       endif
       call basout(io,wte,buf(1:n))
       l2=l2+n1+1

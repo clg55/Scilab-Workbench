@@ -49,7 +49,7 @@ if RHS==2 then
    Obs=syslin(td,A+J*C,[B+J*D,-J],eye(A));U=[];m=[];return;  //Ao
 end
 if RHS==3 then
-  if prod(size(alfa))==1 then alfa=alfa*ones(1,nx);end
+  if size(alfa,'*')==1 then alfa=alfa*ones(1,nx);end
 end
 select flag
 case 'pp'

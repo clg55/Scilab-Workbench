@@ -2,6 +2,7 @@ function [d]=detr(h)
 //[d]=detr(h)  computes de determinant of a polynomial or 
 //rational function matrix h
 //!
+h1=h(1);
 if type(h)< 3 then
    [m,n]=size(h);
    if m<>n then error(20),end
@@ -13,7 +14,7 @@ if type(h)< 3 then
    end
    d=-sum(diag(h*f))/n;
               else //
-   if h(1)<> 'r' then error(44),end
+   if h1(1)<> 'r' then error(44),end
    [m,n]=size(h(2));
    if m<>n then error(20),end
    f=eye(n,n);

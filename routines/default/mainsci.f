@@ -3,8 +3,10 @@
       character*256 pname 
       integer nos,now,idisp,mem
       integer p1,p2
+      integer lpname, ldisp
       common /comnos/nos,mem
       data now,idisp /0,0/
+      data lpname,ldisp /256,40/
       nos=0
       mem=0
       nargs = iargc()
@@ -39,9 +41,10 @@
       goto 10
  11   continue
       mem=max(mem,180000)
+      if ( nos.eq.0 ) call settmpdir()
       if(now.eq.1) then
          call scilab(nos)
       else
-         call winsci(pname,nos,idisp,display)
+         call winsci(pname,nos,idisp,display,lpname,ldisp)
       endif
       end

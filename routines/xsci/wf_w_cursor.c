@@ -16,7 +16,7 @@
 
 Cursor		cur_wf_cursor,arrow_wf_cursor, wait_wf_cursor;
 
-init_wf_cursor()
+void init_wf_cursor()
 {
     register Display *d = tool_d;
     cur_wf_cursor		= arrow_wf_cursor;  /* current cursor */
@@ -24,21 +24,22 @@ init_wf_cursor()
     wait_wf_cursor		= XCreateFontCursor(d, XC_watch);
 }
 
-reset_wf_cursor()
+void reset_wf_cursor()
 {
     XDefineCursor(tool_d, tool_win, cur_wf_cursor);
 }
 
-set_temp_wf_cursor(cursor)
+void set_temp_wf_cursor(cursor)
     Cursor	    cursor;
 {
     XDefineCursor(tool_d, tool_win, cursor);
 }
 
-set_wf_cursor(cursor)
+void set_wf_cursor(cursor)
     Cursor	    cursor;
 {
     cur_wf_cursor = cursor;
     XDefineCursor(tool_d, tool_win, cursor);
 }
+
 

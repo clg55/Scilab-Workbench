@@ -1,4 +1,3 @@
-
 function []=delete(sd)
  //destruction d'un objet
    xx=locate(1);eps=0.2
@@ -127,7 +126,7 @@ d_arrow(o1,o2);
 function [sd1]=comment(sd,del)
 [lhs,rhs]=argn(0),sd1=[];
 if rhs<=0 then ,
-	[i,z1,z2]=xclick();z=[z1;z2];
+	[i,z1,z2]=xclick(0);z=[z1;z2];
 	com=x_dialog("Enter string"," ");
 	sd1=list("comm",z,com)
 else
@@ -188,6 +187,21 @@ else
 end;
 xpoly(z(1,:)',z(2,:)',"marks");
 
+function [sd1]=grclipoff(sd,del)
+[lhs,rhs]=argn(0),sd1=[];
+if rhs<=0 then ,
+	sd1=list("clipoff")
+end;
+xclip();
+
+function [sd1]=grclipon(sd,del)
+[lhs,rhs]=argn(0),sd1=[];
+if rhs<=0 then ,
+	sd1=list("clipon")
+end;
+xclip('clipgrf');
+
+
 function []=redraw(sd,s_t)
 ksd=size(sd)
 plot2d(0,0,[-1],s_t," ",sd(2));
@@ -208,6 +222,8 @@ for k=3:ksd,
       case "symbs"   then symbs(obj);
       case "dashs"   then dashs(obj);
       case "patts"   then patts(obj);
+      case "clipon"  then grclipon(obj);
+      case "clipoff" then grclipoff(obj);
      end
   end
 end
@@ -225,7 +241,7 @@ function [x0,y0,x,y,ibutton]=xgetm(m_m)
   while ( ibutton==-1) 
    // dessin 
    m_m(x0,y0,x,y);
-   rep=xgetmouse();
+   rep=xgetmouse(0);
    ibutton = rep(3)
    m_m(x0,y0,x,y)
    x=rep(1);y=rep(2);
@@ -252,7 +268,7 @@ function []=d_circle(c1,c2,x1,x2)
 function []=d_arrow(c1,c2,x1,x2)
   [lhs,rhs]=argn(0);
   if rhs==2 then x1=c1(2);c1=c1(1);x2=c2(2);c2=c2(1);end
-  xarrows([c1;x1],[c2;x2],2);
+  xarrows([c1;x1],[c2;x2],-1);
 
 function [z]=xgetpoly(m_m) 
 // interactive polyline aquisition m_m is 
@@ -260,7 +276,7 @@ function [z]=xgetpoly(m_m)
   kpd=driver();
   driver("X11");
   // attente du click 
-  [ii,x0,y0]=xclick()
+  [ii,x0,y0]=xclick(0)
   x=x0;y=y0;
   z=[x0;y0];
   ibutton=1
@@ -270,7 +286,7 @@ function [z]=xgetpoly(m_m)
 	while ( ibutton==-1) 
 	   // dessin 
 	   m_m(x0,y0,x,y);
-	   rep=xgetmouse();
+	   rep=xgetmouse(0);
 	   ibutton = rep(3)
 	   m_m(x0,y0,x,y)
 	   x=rep(1);y=rep(2);

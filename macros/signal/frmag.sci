@@ -51,8 +51,6 @@ function [xm,fr]=frmag(num,den,npts)
       end,
       end,
    end,
-   end,
- 
-//end
+   end
 
 

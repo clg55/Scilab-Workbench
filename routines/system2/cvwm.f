@@ -21,7 +21,7 @@ c     str : tableau contenant apres execution la suite des codes scilab
 c     des caracteres.taille >= m*n*maxc
 c     istr : tableau donnant la structure de str
 c!    
-      double precision xr(*),xi(*),a,eps,dlamch
+      double precision xr(*),xi(*),ar,ai,eps,dlamch
       integer maxc,mode,fl,typ
       integer str(*),istr(*)
       character cw*256,sgn*1
@@ -38,16 +38,16 @@ c
          do 20 l=1,m
 c     
 c     traitement du coeff (l,k)
-            a=xr(lp+l)
+            ar=xr(lp+l)
+            if(m*n.gt.1.and.abs(ar).lt.eps.and.mode.ne.0) ar=0.0d+0
+            ai=xi(lp+l)
+            if(m*n.gt.1.and.abs(ai).lt.eps.and.mode.ne.0) ai=0.0d+0
             l1=1
             l0=1
-c     
-            lb=0
-            do 15 i=1,2
-               if(m*n.gt.1.and.abs(a).lt.eps.and.mode.ne.0) a=0.0d+0
-c     determination du format devant representer a
+            if (ar.ne.0.0d0) then
+c     .        non zero real part
                typ=1
-               if(mode.eq.1) call fmt(abs(a),maxc,typ,n1,n2)
+               if(mode.eq.1) call fmt(abs(ar),maxc,typ,n1,n2)
                if(typ.ne.2) then
                   nf=1
                   fl=maxc
@@ -56,28 +56,95 @@ c     determination du format devant representer a
                   nf=2
                   write(form(nf),120) fl,n2
                endif
-c     
-               write(cw(l1:l1+fl-1),form(nf)) a
+               if (ar.lt.0.0d0) then
+                  cw(l1:l1)='-'
+                  l1=l1+1
+               endif
+               write(cw(l1:l1+fl-1),form(nf)) abs(ar)
+               if (cw(l1:l1).eq.' ') then
+                  cw(l1:l1+fl-2)=cw(l1+1:l1+fl-1)
+                  cw(l1+fl-1:l1+fl-1)=' '
+                  fl=fl-1
+               endif
                l1=l1+fl
                if(n2.eq.0) l1=l1-1
-               if(i.eq.1) then
-                  if(a.ge.0.0d+0) l0=2
-                  a=xi(lp+l)
-                  if(abs(a).le.eps) goto 16
+               if (ai.ne.0.0d0) then
+c     .           non zero imaginary part
                   sgn='+'
-                  if(a.lt.0) sgn='-'
-                  a=abs(a)
+                  if(ai.lt.0) sgn='-'
+                  ai=abs(ai)
                   cw(l1:l1+3)=sgn//'%i*'
                   l1=l1+4
-                  lb=l1
+                  typ=1
+                  if(mode.eq.1) call fmt(abs(ai),maxc,typ,n1,n2)
+                  if(typ.ne.2) then
+                     nf=1
+                     fl=maxc
+                  else
+                     fl=n1
+                     nf=2
+                     write(form(nf),120) fl,n2
+                  endif
+                  l11=l1
+                  write(cw(l1:l1+fl-1),form(nf)) ai
+                  if (cw(l1:l1).eq.' ') then
+                     cw(l1:l1+fl-2)=cw(l1+1:l1+fl-1)
+                     cw(l1+fl-1:l1+fl-1)=' '
+                     fl=fl-1
+                  endif
+                  l1=l1+fl
+                  if(n2.eq.0) then
+                     l1=l1-1
+                     cw(l1:l1)=' '
+                  endif
+                  if (cw(l11:l1-1).eq.'1') then
+                     cw(l11-1:l1-1)=' '
+                     l1=l11-1
+                  endif
                endif
- 15         continue
-c     
- 16         continue
-            if(lb.gt.0 .and. cw(lb:lb).eq.' ') then
-               l1=l1-1
-               cw(lb:l1-1)=cw(lb+1:l1)
-               cw(l1:l1)=' '
+            else
+               if (ai.ne.0.0d0) then
+c     .        imaginary case
+
+                  if(ai.lt.0) then
+                     ai=abs(ai)
+                     cw(l1:l1+3)='-%i*'
+                     l1=l1+4
+                  else
+                     cw(l1:l1+2)='%i*'
+                     l1=l1+3
+                  endif
+                  typ=1
+                  if(mode.eq.1) call fmt(abs(ai),maxc,typ,n1,n2)
+                  if(typ.ne.2) then
+                     nf=1
+                     fl=maxc
+                  else
+                     fl=n1
+                     nf=2
+                     write(form(nf),120) fl,n2
+                  endif
+                  write(cw(l1:l1+fl-1),form(nf)) abs(ai)
+                  if (cw(l1:l1).eq.' ') then
+                     cw(l1:l1+fl-2)=cw(l1+1:l1+fl-1)
+                     cw(l1+fl-1:l1+fl-1)=' '
+                     fl=fl-1
+                  endif
+                  l11=l1
+                  l1=l1+fl
+                  if(n2.eq.0) then
+                     l1=l1-1
+                     cw(l1:l1)=' '
+                  endif
+                  if (cw(l11:l1-1).eq.'1') then
+                     cw(l11-1:l1-1)=' '
+                     l1=l11-1
+                  endif
+               else
+c     .           zero case
+                  cw(l1:l1)='0'
+                  l1=l1+1
+               endif
             endif
             call cvstr(l1-l0,str(lstr),cw(l0:l1-1),0)
             lstr=lstr+l1-l0

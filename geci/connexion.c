@@ -4,9 +4,11 @@
 #include <netinet/in.h>
 #include <netdb.h>
 
+/*
 #if defined (sun) && defined (SYSV)
 #define bcopy(b1,b2,len) memmove(b2, b1, (size_t)(len))
 #endif
+*/
 
 #include "connexion.h"
 
@@ -36,12 +38,13 @@ char *machine;
     /* Recherche de l'adresse Internet du serveur a partir du nom de la 
        machine */
     if ((hp=gethostbyname(machine))==NULL){
-	fprintf(stderr,"Unknown host address\n");
+	fprintf(stderr,"Unknown host address: %s\n",machine);
 	return -1;
     }
-  
+
     /* Preparation de l'adresse de la socket destinataire */
-    bcopy(hp->h_addr,&nom.sin_addr,hp->h_length);
+    /* bcopy(hp->h_addr,&nom.sin_addr,hp->h_length); */
+    strncpy(&nom.sin_addr,hp->h_addr,hp->h_length);
     nom.sin_family=AF_INET;
     nom.sin_port=htons(PORT);  
     

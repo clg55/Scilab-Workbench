@@ -1,4 +1,4 @@
-function [x,y,ok]=edit_curv(x,y,job,tit)
+function [x,y,ok,gc]=edit_curv(x,y,job,tit,gc)
 //   mod_curv  - Edition  de courbe interactive
 //%Syntaxe
 //  [x,y,ok]=mod_curv(xd,yd,job,tit)
@@ -35,13 +35,19 @@ function [x,y,ok]=edit_curv(x,y,job,tit)
 //!
 //origine: serge Steer, Habib Jreij INRIA 1993
 [lhs,rhs]=argn(0)
-[mx,nx]=size(x);x=matrix(x,mx*nx,1)
-[my,ny]=size(y);y=matrix(y,my*ny,1)
-xsav=x;ysav=y;xs=x;ys=y;
 xset('default')
+
 ok=%t
+if rhs==0 then x=[];y=[],end;
+if rhs==1 then y=x;x=(1:size(y,'*'))',end
 if rhs<3  then job='axy',end
 if rhs<4 then tit=[' ',' ',' '],end
+if size(tit,'*')<3 then tit(3)=' ',end
+//
+[mx,nx]=size(x);x=x(:)
+[my,ny]=size(y);y=y(:)
+xsav=x;ysav=y;xs=x;ys=y;
+//
 lj=length(job)
 add=0;modx=0;mody=0
 for k=1:lj
@@ -56,31 +62,44 @@ end
 eps=0.03
 symbsiz=0.2
 // bornes initiales du graphique
-if mx<>0 then
-  xmx=maxi(x);xmn=mini(x)
-  ymx=maxi(y);ymn=mini(y)
-  dx=xmx-xmn;dy=ymx-ymn
-  if dx==0 then dx=maxi(xmx/2,1),end
-  xmn=xmn-dx/10;xmx=xmx+dx/10
-  if dy==0 then dy=maxi(ymx/2,1),end;
-  ymn=ymn-dy/10;ymx=ymx+dy/10;
+if rhs<5 then
+  if mx<>0 then
+    xmx=maxi(x);xmn=mini(x)
+    ymx=maxi(y);ymn=mini(y)
+    dx=xmx-xmn;dy=ymx-ymn
+    if dx==0 then dx=maxi(xmx/2,1),end
+    xmn=xmn-dx/10;xmx=xmx+dx/10
+    if dy==0 then dy=maxi(ymx/2,1),end;
+    ymn=ymn-dy/10;ymx=ymx+dy/10;
+  else
+    xmn=0;ymn=0;xmx=1;ymx=1;dx=1;dy=1
+  end
+  rect=[xmn,ymn,xmx,ymx];
+  axisdata=[2 10 2 10]
+  gc=list(rect,axisdata)
 else
-  xmn=0;ymn=0;xmx=1;ymx=1;dx=1;dy=1
+  [rect,axisdata]=gc(1:2)
+  xmn=rect(1);ymn=rect(2);xmx=rect(3);ymx=rect(4)
+  dx=xmx-xmn;dy=ymx-ymn
 end
-rect=[xmn,ymn,xmx,ymx];
-axisdata=[2 10 2 10]
 xbasc()
 auto=%t
 // -- trace des menus
 menus=['Ok','Abort','Undo','Size','Grids','Clear','Read','Save','Replot']
 xselect()
 xset('alufunction',3)
+xset('dashes',1)
+xset('pattern',1)
 // -- premier trace de la courbe
 
-plot2d(x,y,-1,'011',' ',rect,axisdata);
+if x<>[]&y<>[] then 
+  plot2d(x,y,-1,'011',' ',rect,axisdata);
+else
+  plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
+end
 
 xset('alufunction',6)
-plot2d(x,y,1,'000',' ')
+if x<>[]&y<>[] then plot2d(x,y,1,'000',' ');end
 datas=drawmbar(menus,'v',1/6);xgrid(4)
 
 // -- boucle principale
@@ -95,6 +114,7 @@ while %t then
     case 1 then 
 //    -- ok menu
       xset('default')
+      gc=list(rect,axisdata)
       return
     case 2 then 
 //    -- abort menu
@@ -105,9 +125,10 @@ while %t then
       return
     case 3 then
 //    -- undo menu
-      plot2d(x,y,-1,'000',' ');plot2d(x,y,1,'000',' ')
+      if x<>[]&y<>[] then plot2d(x,y,-1,'000',' ');plot2d(x,y,1,'000',' ');end
       x=xs;y=ys
-      plot2d(x,y,-1,'000',' ');plot2d(x,y,1,'000',' ')
+      if x<>[]&y<>[] then plot2d(x,y,-1,'000',' ');plot2d(x,y,1,'000',' ');end
+      x=xs;y=ys
     case 4 then
 //    -- size menu
       while %t
@@ -134,9 +155,14 @@ while %t then
 //   -- trace des menus
 
         xset('alufunction',3)
-	plot2d(x,y,-1,'011',' ',rect,axisdata);
-	xset('alufunction',6)
-	plot2d(x,y,1,'000',' ')
+	if x<>[]&y<>[] then 
+	  plot2d(x,y,-1,'011',' ',rect,axisdata);
+	  xset('alufunction',6)
+	  plot2d(x,y,1,'000',' ')
+	else
+	  plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
+	  xset('alufunction',6)
+	end
 	datas=drawmbar(menus,'v',1/6);xgrid(4)
 
       end
@@ -152,17 +178,23 @@ while %t then
         rect=[xmn,ymn,xmx,ymx];
         xbasc()
         auto=%f
-        
-	plot2d(x,y,-1,'011',' ',rect,axisdata);
-	xset('alufunction',6)
-	plot2d(x,y,1,'000',' ')
+	if x<>[]&y<>[] then 
+	  plot2d(x,y,-1,'011',' ',rect,axisdata);
+	  xset('alufunction',6)
+	  plot2d(x,y,1,'000',' ')
+	else
+	  plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
+	  xset('alufunction',6)
+	end
 	datas=drawmbar(menus,'v',1/6);xgrid(4)
       end
     case 6 then
 //   -- clear menu
-      plot2d(x,y,-1,'000',' ');plot2d(x,y,1,'000',' ')
-      x=[];y=[];
-      plot2d(x,y,-1,'000',' ');
+      if x<>[]&y<>[] then 
+	plot2d(x,y,-1,'000',' ');plot2d(x,y,-1,'000',' ')
+	x=[];y=[];
+//	plot2d(x,y,-1,'000',' ');
+      end
     case 7 then
 //   -- read menu
       [x,y]=readxy()
@@ -179,9 +211,14 @@ while %t then
       rect=[xmn,ymn,xmx,ymx];
       xbasc()
       xset('alufunction',3)
-      plot2d(x,y,-1,'011',' ',rect,axisdata);
-      xset('alufunction',6)
-      plot2d(x,y,1,'000',' ')
+      if x<>[]&y<>[] then 
+	plot2d(x,y,-1,'011',' ',rect,axisdata);
+	xset('alufunction',6)
+	plot2d(x,y,1,'000',' ')
+      else
+	plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
+	xset('alufunction',6)
+      end
       datas=drawmbar(menus,'v',1/6);xgrid(4)
     case 8 then
 //   -- save menu
@@ -213,7 +250,6 @@ while %t then
     end
   end
 end
-//end
 
 function [x,y]=addpt(c1,x,y)
 //permet de rajouter un point de cassure
@@ -304,11 +340,10 @@ while rep(3)==-1 do
   plot2d(x(pts),y(pts),-1,'000',' ')
   plot2d(x(pts),y(pts),1,'000',' ')
 end
-//end
 
 function [x,y]=readxy()
 fn=xgetfile('*.xy')
-if fn<>' ' then 
+if fn<>emptystr() then 
   errcatch(49,'continue','nomessage')
   load(fn);
   errcatch(-1)
@@ -320,13 +355,13 @@ if fn<>' ' then
     x=xy(:,1);y=xy(:,2)
   end
 else
-  x=[]
-  y=[]
+  x=x
+  y=y
 end
 
 function savexy(x,y)
 fn=xgetfile('*.xy')
-if fn<>' ' then 
+if fn<>emptystr()  then 
   xy=[x y];
   fil=fn+'.xy'
   errcatch(-1,'continue')

@@ -11,6 +11,21 @@
  * All rights reserved
  *
  **********************************************************************/
+
+#include <string.h>
+
+#ifndef WIN32 
+/** The win32 version is defined in the wsci directory **/
+
+
+#ifdef __STDC__
+#include <stdlib.h>
+#endif
+
+int gchar_no_echo();
+extern int  Xorgetchar();
+char Sci_Prompt[10];
+
 #ifdef aix
 #define ATTUNIX
 #endif
@@ -40,10 +55,18 @@
 #ifdef  __alpha
 #define B42UNIX
 #endif
+#ifdef linux
+#define ATTUNIX
+#define TERMCAP
+#endif
 
 #include <stdio.h>
 #include <ctype.h>
 #include "../machine.h"
+
+#ifndef HAVE_TERMCAP
+#undef TERMCAP
+#endif
 
 #ifdef B42UNIX
 
@@ -189,16 +212,18 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
 
    set_is_reading(TRUE);
 
-                            /* if not an interactive terminal */
+   /* if not an interactive terminal */
    if(!tty) {
-                            /* read a line into the buffer, but not too
-			     * big */
-      *eof = (fgets(buffer, *buf_size, stdin) == NULL);
-      *len_line = strlen(buffer);
-			    /* remove newline character if there */
-      if(buffer[*len_line - 1] == '\n')
-	 (*len_line)--;
-      return;
+     /* read a line into the buffer, but not too
+      * big */
+     /** fputs("[file]",stdout); **/
+     fputs("-->",stdout);
+     *eof = (fgets(buffer, *buf_size, stdin) == NULL);
+     *len_line = strlen(buffer);
+     /* remove newline character if there */
+     if(buffer[*len_line - 1] == '\n')
+       (*len_line)--;
+     return;
    }
 
 #ifdef KEYPAD 
@@ -207,7 +232,7 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
 #endif
 
                             /* write prompt */
-/*    printf("ACSL>");*/
+   printf(Sci_Prompt);
                             /* empty work buffer */
     wk_buf[0] = NUL;
 
@@ -558,6 +583,7 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
    else {
        strcpy(buffer, wk_buf);
        *len_line = strlen(wk_buf);
+       putchar('\r'); /** jpc avril 97 **/
        putchar('\n');
    }
 #ifdef KEYPAD
@@ -607,10 +633,10 @@ char *source;
 /***********************************************************************
  * display_string - display string starting at current cursor position
  **********************************************************************/
+
 static void
 display_string(string)
-/**********************************************************************/
-char *string;
+     char *string;
 {
    while(*string != NUL) {
       putchar(*string++);
@@ -618,12 +644,12 @@ char *string;
 }
 /***********************************************************************
  * get_line()
-/**********************************************************************/
+ **********************************************************************/
+
 static void
 get_line(line_index, source)
-/**********************************************************************/
-int  line_index;
-char *source;
+     int  line_index;
+     char *source;
 {
    char *p;
                             /* pointer to line in save buffer */
@@ -782,8 +808,7 @@ char *source;
 /***********************************************************************
  * get sungle character with no echo
  **********************************************************************/
-int
-gchar_no_echo()
+int gchar_no_echo()
 /**********************************************************************/
 {
    int i;
@@ -1068,3 +1093,15 @@ char *source;
    }
 }
 
+
+void C2F(setprlev)(pause)
+     int *pause;
+{
+  if ( *pause == 0 ) 
+    sprintf(Sci_Prompt,"-->");
+  else 
+    sprintf(Sci_Prompt,"-%d->",*pause);
+}
+
+     
+#endif /** WIN32 **/

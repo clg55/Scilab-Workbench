@@ -1,24 +1,23 @@
-//[n]=np()
+function [n]=np()
 // Return the size  of the Fortran pendulum 
 n=1;
 n=fort('np',n,1,'i','sort',1);
-//end
 
-//[ydot]=npend ( t, th)
+function [ydot]=npend ( t, th)
 // Fortran version 
 //      data r  / 1.0, 1.0, 1.0, 1.0 /
 //      data m  / 1.0, 1.0, 1.0, 1.0 /
 //      data j  / 0.3, 0.3, 0.3, 0.3 /
 ydot=ones(6,1)
 ydot=fort('npend',3,1,'i',t,2,'d',th,3,'d',ydot,4,'d','sort',4);
-//end
 
-//[E]=ener( th)
+
+function [E]=ener( th)
 E=0.0;
 E=fort('ener',th,1,'d',E,2,'d','sort',2);
-//end
 
-//[ydot]=npend3 ( t, th)
+
+function [ydot]=npend3 ( t, th)
 // Scilab version of the three link pendulum 
 n=3
       t1 = -th(3)
@@ -60,10 +59,10 @@ n=3
   ydot(1:n,1)=th((n+1):2*n)
   const= const+ cc3S*( th((n+1):2*n,1).* th((n+1):2*n,1));
   ydot((n+1):2*n,1)= -me3s\const
-//end
+
 
   
-//[E]=ener3(yt)
+function [E]=ener3(yt)
 // Scilab version for th three link pendulum 
 th=yt(1:n);
 thd=yt((n+1):2*n);
@@ -80,4 +79,4 @@ thd=yt((n+1):2*n);
       t39 = thd(2)**2
       E= m(1)*(t1*t3*t4+t1*t8*t4)/2+J(1)*t4/2+m(1)*g*t16+m(2)*(t27+t3...
      5)/2+J(2)*t39/2+m(2)*g*(2*t16+r(2)*t22)
-//end
+

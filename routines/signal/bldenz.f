@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=BLDENZ,SSI=0
       subroutine bldenz(ndeg,nj,zfa,zpr,zpi,nb,fact,c1,c0)
 c!purpose
 c  build denominator blocks of second order  --  z-domain

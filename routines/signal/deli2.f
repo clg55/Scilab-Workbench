@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DELI2,SSI=0
       subroutine deli2(nn,resv,xxv,ck)
 c!purpose
 c      calculates an approximate value for the elliptic integral of
@@ -26,6 +25,7 @@ c     .. function references ..
       data acc/8.50d-4/
 c
 c     order x,y,z into xn,yn,zn  st. xn.le.yn.le.zn
+c      write(6,*) nn,resv(1),xxv(1),ck
       do 201 kk=1,nn
       xx=xxv(kk)
       x=1.0d+0-xx*xx
@@ -47,7 +47,9 @@ c     order x,y,z into xn,yn,zn  st. xn.le.yn.le.zn
 c
 c     test for valid arguments
    60 ind = 1
-      if (xn.lt.0.0d+0) go to 180
+      if (xn.lt.0.0d+0) then
+         xn=0.d0
+      endif
       ind = 2
       if (yn.le.0.0d+0) go to 180
 c

@@ -28,5 +28,6 @@ arcs=[ -r ,r,2*r,2*r,0,64*360].*.ones(n,1);
 arcs=[ p, 0*ones(n,4)] + arcs;
 xarcs(arcs');
 xset("thickness",4);
-xpolys([p(1:(n-1),1),p(2:n,1)]',[p(1:(n-1),2),p(2:n,2)]',-(1:n));
+colors=1:n;colors(8)=n+1;
+xpolys([p(1:(n-1),1),p(2:n,1)]',[p(1:(n-1),2),p(2:n,2)]',colors);
 xset("thickness",th);

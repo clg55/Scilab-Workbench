@@ -1,16 +1,22 @@
-      subroutine readf(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-c     write input to a binary or formatted file
+      subroutine readf(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
+c     write read from a binary or formatted file
       include '../stack.h'
-      double precision t,x(*),z(*),u(*),rpar(*),out(*)
-      integer ipar(*),flag
 c     ipar(1) = lfil : file name length
 c     ipar(2) = lfmt : format length (0) if binary file
 c     ipar(3) = ievt  : 1 if each data have a an associated time
 c     ipar(4) = N : buffer length
 c     ipar(5:4+lfil) = character codes for file name
 c     ipar(5+lfil:4+lfil+lfmt) = character codes for format if any
-c     ipar(5+lfil+lfmt:5+lfil+lfmt+nout+ievt) = reading mask
+c     ipar(5+lfil+lfmt:5+lfil+lfmt+ny+ievt) = reading mask
+
+c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+
+c
 c
       integer n
       integer mode(2)
@@ -22,35 +28,34 @@ c
       endif
 c
       if(flag.eq.1) then
-c     output
-         N=ipar(4)
-         K=int(z(1))
+         n=ipar(4)
+         k=int(z(1))
          ievt=ipar(3)
-         call dcopy(nout,z(3+N*ievt+K),N,out,1)
+         kmax=int(z(2))
+         lunit=int(z(3))
+c     output
+         call dcopy(ny,z(3+n*ievt+k),n,y,1)
+         if(k.eq.kmax.and.kmax.lt.n) then
+            tvec(1)=t-1.0d0
+         else
+            tvec(1)=z(3+k)
+         endif
       elseif(flag.eq.2) then
 c     discrete state
-         N=ipar(4)
-         K=int(z(1))
-         KMAX=int(z(2))
+         n=ipar(4)
+         k=int(z(1))
+         ievt=ipar(3)
+         kmax=int(z(2))
          lunit=int(z(3))
-         if(K+1.gt.KMAX.and.KMAX.eq.N) then
-c     read a new buffer
+         if(k+1.gt.kmax.and.kmax.eq.n) then
+c     .     read a new buffer
             no=(nz-3)/N
             call bfrdr(lunit,ipar,z(4),no,kmax,ierr)
             if(ierr.ne.0) goto 110
-            z(1)=1
+            z(1)=1.0d0
             z(2)=kmax
-         elseif(K.lt.KMAX) then
-            z(1)=z(1)+1
-         endif
-      elseif(flag.eq.3) then
-         N=ipar(4)
-         K=int(z(1))
-         KMAX=int(z(2))
-         if(K.eq.KMAX.and.KMAX.lt.N) then
-            out(1)=t-1.0d0
-         else
-            out(1)=z(3+K)
+         elseif(k.lt.kmax) then
+            z(1)=z(1)+1.0d0
          endif
       elseif(flag.eq.4) then
 c     file opening
@@ -76,9 +81,10 @@ c     buffer initialisation
          no=(nz-3)/N
          call bfrdr(lunit,ipar,z(4),no,kmax,ierr)
          if(ierr.ne.0) goto 110
-         z(1)=1
+         z(1)=1.0d0
          z(2)=kmax
       elseif(flag.eq.5) then
+         lfil=ipar(1)
          N=ipar(4)
          K=int(z(1))
          lunit=int(z(3))
@@ -89,6 +95,7 @@ c     buffer initialisation
       return
  100  continue
       err=0
+      lfil=ipar(1)
       call basout(io,wte,'File '//buf(1:lfil)//' Cannot be opened')
       flag=-1
       return
@@ -109,10 +116,12 @@ c     buffered and masked read
       double precision z(*)
       double precision tmp(100)
 c
+      ievt=ipar(3)
       N=ipar(4)
 c      no=(nz-3)/N
 c     maximum number of value to read
       imask=5+ipar(1)+ipar(2)
+      if(ievt.eq.0) imask=imask+1
       mm=0
       do 10 i=0,no-1
          mm=max(mm,ipar(imask+i))

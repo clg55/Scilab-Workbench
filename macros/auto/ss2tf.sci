@@ -20,14 +20,14 @@ if type(sl)==1|type(sl)==2 then
   h=sl
   return
 end
-
+flag=sl(1);
 //-compat type(sl)<>15 retained for list/tlist compatibility
-if (type(sl)<>15&type(sl)<>16)|sl(1)<>'lss' then
+if (type(sl)<>15&type(sl)<>16)|flag(1)<>'lss' then
   error('First argument must be in state-space form')
 end
 if sl(3)=[] then h=sl(5);num=sl(5);den=eye(sl(5));return;end
 if sl(4)=[] then h=sl(5);num=sl(5);den=eye(sl(5));return;end
-if prod(size(sl(2)))==0 then
+if size(sl(2),'*')==0 then
   h=sl(5)
   return
 end 
@@ -82,10 +82,10 @@ end;
 if lhs==3 then h=sl(5),num=sl(4)*m*diag(v)*(x\sl(3));return;end
 m=sl(4)*m*diag(v)*(x \ sl(3))+sl(5)*den;
 [m1,n1]=size(m);[m,den]=simp(m,den*ones(m1,n1))
-h=tlist('r',m,den,domaine)
+h=syslin(domaine,m,den)
 case 'p' then
-  den=real(poly(sl(2),var))
-  na=degree(den)
+  Den=real(poly(sl(2),var))
+  na=degree(Den);den=[];
   [m,n]=size(sl(5))
   c=sl(4)
   for l=1:m
@@ -98,13 +98,16 @@ case 'p' then
       al=t*al;ai=al(:,i),
       b=t*sl(3)
       for k=1:n
-        al(:,i)=ai+b(:,k)
-        num(l,k)=-(real(poly(al,var))-den)*ci
+        al(:,i)=ai+b(:,k);
+	[nlk,dlk]=simp(real(poly(al,var)),Den)
+	den(l,k)=dlk;
+        num(l,k)=-(nlk-dlk)*ci
       end
     else
-      num(l,1:n)=0*ones(1,n)
+      num(l,1:n)=0*ones(1,n);
+      den(l,1:n)=ones(1,n);
     end
   end
 if lhs==3 then h=sl(5);return;end
-  h=(num+sl(5)*den)/den;h(4)=domaine
+ h=syslin(domaine,num./den+sl(5));
 end

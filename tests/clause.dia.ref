@@ -22,7 +22,7 @@ deff('[y]=t(x)',[
 '      y=u,'
 '    end'
 '  end'
-'end'])
+'end'],'n')
  
 //
  

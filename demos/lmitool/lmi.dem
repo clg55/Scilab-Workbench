@@ -1,4 +1,4 @@
-getf(SCI+'/demos/lmitool/lmidem.sci','c');
+getf(SCI+'/demos/lmitool/lmidem.sci');
 mode(0);
 x_message(['      ';
 'LMITOOL is a Scilab package for LMI optimization';
@@ -32,7 +32,7 @@ case 0
   error('LMI demo STOPS!');
 case 1
    lmidem(SCI+'/demos/lmitool/normopt.sci');
-   getf(SCI+'/demos/lmitool/normopt.sci','c');
+   getf(SCI+'/demos/lmitool/normopt.sci');
    x_message(['Let''s try a simple example with 3 states';...
               'Edit below A,B,C,D matrices']);
    [ok,A,B,C,D]=getvalue('Enter A, B, C, D matrices',['A';'B';'C';'D'],...
@@ -48,7 +48,7 @@ case 1
 end
 case 2
    lmidem(SCI+'/demos/lmitool/of.sci');
-   getf(SCI+'/demos/lmitool/of.sci','c');
+   getf(SCI+'/demos/lmitool/of.sci');
    x_message(['Let''s try a simple example with 3 states';...
    'Enter A,B,C matrices']);
    [ok,A,B,C]=getvalue('Edit below A, B, C matrices',['A';'B';'C'],...
@@ -62,7 +62,7 @@ case 2
    end
 case 3
    lmidem(SCI+'/demos/lmitool/sylvester.sci');
-   getf(SCI+'/demos/lmitool/sylvester.sci','c');
+   getf(SCI+'/demos/lmitool/sylvester.sci');
    x_message(['Let''s try a simple example with 3 states';...
    'Enter A,B,C matrices']);
    [ok,A,B,C]=getvalue('Edit below A, B, C matrices',['A';'B';'C'],...
@@ -72,3 +72,4 @@ case 3
    disp(X, 'X found is:')
    disp(A*X+X*B-C ,'Check: A*X+X*B-C =')
 end   
+

@@ -9,14 +9,15 @@ include ../Makefile.incl
 	@$(SCIDIR)/util/scidem $(SCIDIR) $*.tst $*.dia
 
 OBJS =  matops.dia scilab.dia macro.dia calpol.dia clause.dia \
-	logops.dia sparse.dia lsparse.dia lstops.dia polops.dia \
-	fmlelm.dia elemlib.dia \
+	sparse.dia lsparse.dia lstops.dia polops.dia \
 	break.dia breakpoints.dia pause.dia \
-	sprintf.dia sscanf.dia display.dia dmrdsp.dia \
-	intg.dia matnew.dia matode.dia matopt.dia matqz.dia \
-	matric.dia metanet.dia matimp.dia dassldasrt.dia \
-	bezout.dia corr.dia evans.dia flts.dia fort.dia \
-	colnew.dia feval.dia auto.dia pow.dia residu.dia rtitr.dia
+	sprintf.dia sscanf.dia display.dia \
+	matode.dia matopt.dia \
+	metanet.dia matimp.dia dassldasrt.dia \
+	fort.dia \
+	colnew.dia feval.dia auto.dia \
+	odedc.dia sound.dia listinsertion.dia listextraction.dia \
+	links.dia strelm.dia
 
 all:: info
 
@@ -30,8 +31,23 @@ info:
 tests: $(OBJS)
 
 clean ::
-	$(RM) $(OBJS) examples.tst get_examples.log *.graph so_locations \
-	foo*
+	$(RM) $(OBJS) examples.tst get_examples.log *.graph so_locations 
+	$(RM) foo* test.wav one_man.tst test_macro_exec asave results *.bin
+
+distclean:: clean 
+
+FFLAGS = $(FC_OPTIONS)
+
+OBJSF = externals.o
+
+linktest : $(OBJSF)
+
+externals.o: externals.f
+	$(FC) $(FFLAGS) -c externals.f  -o externals.o
+
+clean::
+	$(RM) externals.o
 distclean::
-	$(RM) $(OBJS) examples.tst get_examples.log *.graph so_locations \
-	foo*
+	$(RM) externals.o
+
+

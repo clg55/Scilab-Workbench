@@ -8,7 +8,9 @@ end
 typ='c';if dom<>'c' then typ='d',end
 [na,na]=size(a);[nw,nb]=size(b);
 // controllable part
-if rhs=1 then [a,b,u,n]=contr(a,b)
+if rhs=1 then 
+  if [a,b]~=[] then reltol=1.d-10*norm([a,b],1);else reltol=0;end
+  [a,b,u,n]=contr(a,b,[reltol,1.d-10])
          else [a,b,u,n]=contr(a,b,tol)
 end;
 n=sum(n);nc=n;
@@ -30,7 +32,7 @@ if n<>na then
   end;
 end;
 //
-if lhs==4 then sl=tlist('lss',a,b,c,d,x0,dom),end
+if lhs==4 then sl=syslin(dom,a,b,c,d,x0),end
 
 
 

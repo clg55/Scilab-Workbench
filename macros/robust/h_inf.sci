@@ -23,6 +23,7 @@ function [Sk,rk,mu]=h_inf(P,r,mumin,mumax,nmax)
 // mu_inf upper bound on mu = gama^-2
 //P2 = normalized P.
 //
+P1=P(1);
 [P2,mu_inf,Uci,Yci,D22]=h_init(P,r)
 if mu_inf < mumax then 
     write(%io(2),mu_inf,'(3x,''romax too big: max romax= '',f10.5)');end
@@ -53,11 +54,11 @@ Dk21=Dk21*Yci;
 if LHS<3 then Sk=Sk(1:r(2),1:r(1));rk=mu;
 //    Case D22 different from zero
  if norm(coeff(D22),1) <> 0 then Sk=Sk/.D22;end
-   if P(1)='r' then Sk=ss2tf(Sk);end;
+   if P1(1)='r' then Sk=ss2tf(Sk);end;
    return;
 end
 if LHS==3 then rk=r;
-   if P(1)='r' then Sk=ss2tf(Sk);end;
+   if P1(1)='r' then Sk=ss2tf(Sk);end;
 end
 
 
@@ -71,7 +72,8 @@ function [P2,mu_inf,Uci,Yci,D22]=h_init(P,r)
 //   [C1 D12]'*[C1 D12] = Q = [Q1 S;S' Q2]
 //   [B1;D21] *[B1;D21]'= R = [R1 L';L R2]
 //!
-if P(1)='r' then P=tf2ss(P);end
+P1=P(1);
+if P1(1)='r' then P=tf2ss(P);end
      [A,B1,B2,C1,C2,D11,D12,D21,D22]=smga(P,r);
      [na,na]=size(A);
      [p1,m2]=size(D12),
@@ -99,7 +101,7 @@ if nd=0 then write(%io(2),'P22 is detectable');end
 // rank P21=[A,B2,C1,D12] = m2 ?
      P12=syslin('c',A,B2,C1,D12);
      [nt,dt]=trzeros(P12),rzt=real(nt./dt),
-     if prod(size(nt)) > 0 then
+     if size(nt,'*') > 0 then
        if mini(abs(rzt)) < sqrt(%eps) then 
      write(%io(2),'Warning P12 has a zero on/close the imaginary axis'),
        end,
@@ -108,7 +110,7 @@ if nd=0 then write(%io(2),'P22 is detectable');end
 // rank P21=[A,B1,C2,D21] = p2 ?
      P21=syslin('c',A,B1,C2,D21);
      [nt,dt]=trzeros(P21),rzt=real(nt./dt),
-     if prod(size(nt))>0 then
+     if size(nt,'*')>0 then
         if mini(abs(rzt)) < sqrt(%eps) then 
     write(%io(2),'Warning: P21 has a zero on/close the imaginary axis'),
         end,
@@ -235,8 +237,8 @@ Teta11=gam2*D11;
 Teta22=gam2*D11';
 W12=eye-gam2*D11*D11';
 W21=eye-gam2*D11'*D11;
-Teta12=(1/gama)*sqrt(0.5*(W12+W12'));
-Teta21=-(1/gama)*sqrt(0.5*(W21+W21'));
+Teta12=(1/gama)*sqrtm(0.5*(W12+W12'));
+Teta21=-(1/gama)*sqrtm(0.5*(W21+W21'));
 
 //Teta*Teta'=(1/gama*gama)*eye
 

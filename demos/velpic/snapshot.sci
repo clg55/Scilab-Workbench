@@ -1,4 +1,4 @@
-//[pk]=snapshot(pt,view,frames,pmode)
+function [pk]=snapshot(pt,view,frames,pmode)
 //[pk]=snapshot(pt[,view][,frames][,pmode])
 //Plot sequence of matrices from a cube (representing snapshots) 
 //where the structure of the cube is represented by a matrix 
@@ -126,6 +126,4 @@
       else,
          contour(1:pc,1:pc,pk,10),pause,xbasc();
       end,
-   end,
-
-//end
+    end;

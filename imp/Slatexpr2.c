@@ -1,8 +1,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#ifndef __STDC__
 #include <malloc.h>
+#endif 
 #include <stdio.h>
+
+void readOneLine();
 
 /*---------------------------------------------------------
   Blatexprs fileres file1 .... filen  
@@ -20,81 +24,11 @@ char * UsageStr[]={
 
 char entete[160];
 
-main(argc, argv)
-int argc;
-char *argv[];
-
-{
-  char *env;
-  char filename1[255];
-  float x,y,w,h,wt,ht;
-  char buf[256];
-  int i ;
-  FILE *fd;
-  FILE *fdo;
-  if (argc !=4 ) { int i=0;
-		   while (strcmp(UsageStr[i],"fin")!=0)
-		     { 
-		       fprintf(stderr,"%s",UsageStr[i]),i++;
-		     }
-		   exit(0);
-		 }
-  sprintf(filename1,"%s.ps",argv[1]);
-  fdo=fopen(filename1,"w");
-  if (fdo == 0 ) 
-    {
-      fprintf (stderr," Can't Create Output file <%s> \n",filename1);
-      exit(0);
-    }
-  env = getenv("SCI");
-  if (env == NULL) {
-    fprintf(stderr,"Environment variable SCI must be defined\n");
-    exit(0);
-  }
-  sprintf(entete,"%s/imp/NperiPos.ps",env);
-  fd=fopen(entete,"r");
-  if (fd != 0)
-    { int c;
-      while ( (c=getc(fd)) != EOF)
-	{
-	  putc((char) c,fdo);
-	}
-      fclose(fd);
-    }
-  else 
-    {
-      fprintf(stderr,"file %s not found ",entete);
-      return;
-    }
-  for ( i = 2 ; i < argc-1 ; i++)
-    { 
-      ComputeSize(argc-2,i-1,&x,&y,&w,&h,&wt,&ht)      ;
-      sprintf(buf,"gsave [1 0 0 -1 0 0] concat %5.2f %5.2f %5.2f %5.2f DesPosi"
-	      ,x,y,w,h);
-      Sed(argv[i],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
-	  buf," showpage","grestore",
-	  " end saved restore","% end saved restore",fdo);
-    }
-  ComputeSize(argc-2,argc-2,&x,&y,&w,&h,&wt,&ht)      ;   
-  sprintf(buf,"gsave [1 0 0 -1 0 0] concat %5.2f %5.2f %5.2f %5.2f DesPosi"
-	  ,x,y,w,h);
-  Sed(argv[argc-1],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
-      buf, " showpage"," grestore ",
-      " end saved restore"," end saved restore",fdo);
-  close(fdo);
-  /** ecriture du fichier TeX associe **/
-  WriteTeX(argv[1],wt,ht);
-  return(0);
-}
-
-WriteTeX(filename,wide,height)
-     float wide,height;
+void WriteTeX(filename,wide,height)
+     double wide,height;
      char filename[];
 {
   char filename1[255];
-  double xs=1.0,ys=1.0;
-  float x,y,w,h;
-  int i ;
   FILE *fdo;
   sprintf(filename1,"%s.tex",filename);
   fdo=fopen(filename1,"w");
@@ -114,8 +48,7 @@ WriteTeX(filename,wide,height)
 	  filename);
   fprintf(fdo,"\\end{picture}}\n");
   fprintf(fdo,"\\end{center}\n\\caption{\\label{#2}#1}\n\\end{figure}}");
-  close(fdo);
-  return(0);
+  fclose(fdo);
 }
 
 /*---------------------------------------------------
@@ -123,7 +56,7 @@ WriteTeX(filename,wide,height)
  file et en ecrivant sur fdo
 -------------------------------------------------------*/
 
-Sed(file,strin1,strout1,strin2,strout2,strin3,strout3,fdo)
+void Sed(file,strin1,strout1,strin2,strout2,strin3,strout3,fdo)
      FILE *fdo;
      char file[],strin1[],strout1[],strout3[];
      char strin2[],strout2[],strin3[];
@@ -163,7 +96,7 @@ Sed(file,strin1,strout1,strin2,strout2,strin3,strout3,fdo)
   lit une ligne dans fd et la stocke dans buff
 ---------------------------------------------------*/
 
-readOneLine(buff,stop,fd)
+void readOneLine(buff,stop,fd)
      char buff[];
      int *stop;
      FILE *fd;
@@ -182,17 +115,84 @@ readOneLine(buff,stop,fd)
   (*wt et *ht sont la hauteur totale et la argeur totale)
 -----------------------------------------------------*/
 
-ComputeSize(num,i,x,y,w,h,wt,ht)
+void ComputeSize(num,i,x,y,w,h,wt,ht)
      int num,i;
-     float *x,*y,*w,*h,*wt,*ht;
+     double *x,*y,*w,*h,*wt,*ht;
 {
   switch (num)
     {
     case 2 :
-      *wt=15;*ht=5;
+      *wt=15.0;*ht=5.0;
       /** 2 figures dans upleft(0,20,h=20,w=15) **/
-      *x=(7.5)*(i-1);*y=(5);*h=5;*w=7.5;
+      *x=(7.5)*(i-1);*y=(5.0);*h=5.0;*w=7.5;
       break;
     }
 }
 
+
+
+int main(argc, argv)
+     int argc;
+     char *argv[];
+{
+  char *env;
+  char filename1[255];
+  double x,y,w,h,wt,ht;
+  char buf[256];
+  int i ;
+  FILE *fd;
+  FILE *fdo;
+  if (argc !=4 ) { int i=0;
+		   while (strcmp(UsageStr[i],"fin")!=0)
+		     { 
+		       fprintf(stderr,"%s",UsageStr[i]),i++;
+		     }
+		   exit(0);
+		 }
+  sprintf(filename1,"%s.ps",argv[1]);
+  fdo=fopen(filename1,"w");
+  if (fdo == 0 ) 
+    {
+      fprintf (stderr," Can't Create Output file <%s> \n",filename1);
+      exit(0);
+    }
+  env = getenv("SCI");
+  if (env == NULL) {
+    fprintf(stderr,"Environment variable SCI must be defined\n");
+    exit(0);
+  }
+  sprintf(entete,"%s/imp/NperiPos.ps",env);
+  fd=fopen(entete,"r");
+  if (fd != 0)
+    { int c;
+      while ( (c=getc(fd)) != EOF)
+	{
+	  putc((char) c,fdo);
+	}
+      fclose(fd);
+    }
+  else 
+    {
+      fprintf(stderr,"file %s not found ",entete);
+      return(1);
+    }
+  for ( i = 2 ; i < argc-1 ; i++)
+    { 
+      ComputeSize(argc-2,i-1,&x,&y,&w,&h,&wt,&ht)      ;
+      sprintf(buf,"gsave [1 0 0 -1 0 0] concat %5.2f %5.2f %5.2f %5.2f DesPosi"
+	      ,x,y,w,h);
+      Sed(argv[i],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
+	  buf," showpage","grestore",
+	  " end saved restore","% end saved restore",fdo);
+    }
+  ComputeSize(argc-2,argc-2,&x,&y,&w,&h,&wt,&ht)      ;   
+  sprintf(buf,"gsave [1 0 0 -1 0 0] concat %5.2f %5.2f %5.2f %5.2f DesPosi"
+	  ,x,y,w,h);
+  Sed(argv[argc-1],"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
+      buf, " showpage"," grestore ",
+      " end saved restore"," end saved restore",fdo);
+  fclose(fdo);
+  /** ecriture du fichier TeX associe **/
+  WriteTeX(argv[1],wt,ht);
+  return(0);
+}

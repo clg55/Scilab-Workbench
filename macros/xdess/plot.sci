@@ -28,7 +28,7 @@ select rhs,
          end;
   case 3 then xbasc();
          if type(y)=10,
-           plot2d1("enn",1,matrix(x,prod(size(x)),1));
+           plot2d1("enn",1,matrix(x,prod(size(x)),-1));
            xtitle(' ',y,legx);
          else 
            plot2d(matrix(x,prod(size(x)),1),matrix(y,prod(size(y)),1));

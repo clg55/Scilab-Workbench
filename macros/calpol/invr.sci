@@ -1,7 +1,8 @@
 function f=invr(h)
 //if h is a scalar, polynomial or rational fonction matrix, invr
-//computes h**(-1).
+//computes h^(-1).
 //!
+h1=h(1);
 if type(h)==1 then f=inv(h);return;end
 if type(h) == 2 then
 [m,n]=size(h);
@@ -12,7 +13,7 @@ ndeg=maxi(degree(h));
          if norm(E-eye(E),1) < 100*%eps then
          [num,den]=coff(A,varn(h));f=num/den;
          return
-         end
+       end
       [Bfs,Bis,chis]=glever(E,A,varn(h));
       f=Bfs/chis - Bis;
       return;
@@ -31,7 +32,7 @@ f=eye(n,n);
  
 //-compat type(h)==15 retained for list/tlist compatibility
 if type(h)==15|type(h)==16 then
-   if h(1)<> 'r' then error(44),end
+   if h1(1)<> 'r' then error(44),end
    [m,n]=size(h(2));
    if m<>n then error(20),end
    f=eye(n,n);

@@ -1,4 +1,4 @@
-//[co,u,g,itv,dtv,cof]=icsua(u,simu,nap,imp)
+function [co,u,g,itv,dtv,cof]=icsua(u,simu,nap,imp)
 //Calcul du controle optimal avec ponderation du controle initial
 //et ponderation arithmetique des poids des observations.
 //Une mise a l'echelle ramene toutes les composantes du controle
@@ -37,6 +37,6 @@ ob=don;
             nob,4,'i',yob,5,'d',ob,6,'d','sort',[1,nob*ntob],7,'d');
 [co,u,g,itv,dtv]=icsegen(u,simu,nap,imp)
 u=ech.*u
-//end
+
 
 

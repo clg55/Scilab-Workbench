@@ -25,6 +25,8 @@ c
          call basout(io,wte,' matsvd '//buf(1:4))
       endif
 c
+      if(rstk(pt).eq.907) goto 310
+
       if(rhs.le.0) then
          call error(39)
          return
@@ -34,38 +36,6 @@ c
          return
       endif
 c
-      il=iadr(lstk(top+1-rhs))
-      if(istk(il).ne.1) then
-         err=1
-         call error(53)
-         return
-      endif
-c
-      tol = -1.0d+0
-      if ((rhs.eq.2).and.(fin.le.2.or.fin.ge.5)) then
-      il1=iadr(lstk(top))
-      if(istk(il1).ne.1) then
-         err=2
-         call error(53)
-         return
-      endif
-      if(istk(il1+3).ne.0) then
-         err=2
-         call error(52)
-         return
-      endif
-      l1=sadr(il1+4)
-      tol=stk(l1)
-      top = top-1
-      endif
-c
-      m=istk(il+1)
-      n=istk(il+2)
-      it=istk(il+3)
-      l=sadr(il+4)
-      mn = m*n
-      m1=min(m+1,n)
-c
       eps=stk(leps)
 c
       go to (50,70,10,30,70,80), fin
@@ -73,6 +43,18 @@ c
 c     cond
 c
    10 continue
+      il=iadr(lstk(top+1-rhs))
+      if(istk(il).ne.1) then
+         err=1
+         call error(53)
+         return
+      endif
+      m=istk(il+1)
+      n=istk(il+2)
+      it=istk(il+3)
+      l=sadr(il+4)
+      mn = m*n
+      m1=min(m+1,n)
       if(mn.le.0) then
         k=1
         goto 78
@@ -112,12 +94,24 @@ c
 c     vector norm
 c
    30 continue
-c        empty matrix
-      if(mn.eq.0) then
-      err=1
-      call error(45)
-      return
+      il=iadr(lstk(top+1-rhs))
+      if(istk(il).ne.1) then
+         call cvname(id,'g_norm   ',0)
+         goto 300
       endif
+      m=istk(il+1)
+      n=istk(il+2)
+      it=istk(il+3)
+      l=sadr(il+4)
+      mn = m*n
+      m1=min(m+1,n)
+      if(mn.eq.0) then
+c        empty matrix
+         err=1
+         call error(45)
+         return
+      endif
+
       p = 2.0d+0
       inf = .false.
       if (rhs .ne. 2) go to 32
@@ -230,45 +224,77 @@ c
 c     svd
 c
    50 continue
-      if(mn.le.0) then
-c          empty matrix
-c           svd([])=[]          
-      if(lhs.eq.1) return 
-c          [u,s,v]=svd([]) -> u=[],v=[],s=[]
-      if(lhs.ge.3) then
-      istk(il)=1
-      istk(il+1)=0
-      istk(il+2)=0
-      istk(il+3)=0
-      lstk(top+1)=sadr(il+4)
-c
-      top = top+1
-      il=iadr(lstk(top))
-      istk(il)=1
-      istk(il+1)=0
-      istk(il+2)=0
-      istk(il+3)=0
-      lstk(top+1)=sadr(il+4)
-c
-      top = top+1
-      il=iadr(lstk(top))
-      istk(il)=1
-      istk(il+1)=0
-      istk(il+2)=0
-      istk(il+3)=0
-      lstk(top+1)=sadr(il+4)
-      if(lhs.eq.3) return
-      top=top+1
-      il=iadr(lstk(top))
+      il=iadr(lstk(top+1-rhs))
+      if(istk(il).ne.1) then
+         err=1
+         call error(53)
+         return
+      endif
+      m=istk(il+1)
+      n=istk(il+2)
+      it=istk(il+3)
       l=sadr(il+4)
-      istk(il)=1
-      istk(il+1)=1
-      istk(il+2)=1
-      istk(il+3)=0
-      stk(l)=0.d0
-      lstk(top+1)=l+1
-      return
-      endif     
+      mn = m*n
+      m1=min(m+1,n)
+c
+      tol = -1.0d+0
+      if (rhs.eq.2) then
+         il1=iadr(lstk(top))
+         if(istk(il1).ne.1) then
+            err=2
+            call error(53)
+            return
+         endif
+         if(istk(il1+3).ne.0) then
+            err=2
+            call error(52)
+            return
+         endif
+         l1=sadr(il1+4)
+         tol=stk(l1)
+         top = top-1
+      endif
+
+
+      if(mn.le.0) then
+c     empty matrix
+c     svd([])=[]          
+         if(lhs.eq.1) return 
+c     [u,s,v]=svd([]) -> u=[],v=[],s=[]
+         if(lhs.ge.3) then
+            istk(il)=1
+            istk(il+1)=0
+            istk(il+2)=0
+            istk(il+3)=0
+            lstk(top+1)=sadr(il+4)
+c     
+            top = top+1
+            il=iadr(lstk(top))
+            istk(il)=1
+            istk(il+1)=0
+            istk(il+2)=0
+            istk(il+3)=0
+            lstk(top+1)=sadr(il+4)
+c     
+            top = top+1
+            il=iadr(lstk(top))
+            istk(il)=1
+            istk(il+1)=0
+            istk(il+2)=0
+            istk(il+3)=0
+            lstk(top+1)=sadr(il+4)
+            if(lhs.eq.3) return
+            top=top+1
+            il=iadr(lstk(top))
+            l=sadr(il+4)
+            istk(il)=1
+            istk(il+1)=1
+            istk(il+2)=1
+            istk(il+3)=0
+            stk(l)=0.d0
+            lstk(top+1)=l+1
+            return
+         endif     
       endif
       if (lhs .lt. 3) go to 52
       k = m
@@ -302,17 +328,17 @@ c
       if(rhs.eq.1) tol=dble(max(m,n))*eps*stk(lsv)
       rang=0
       do 51 j = 1, n
-      do 51 i = 1, k
-        ll = ld+i-1+(j-1)*k
-        ls = lsv+i-1
-        if (i.eq.j) then
-                        stk(ll) = stk(ls)
-                        if(stk(ls).gt.tol) rang=i
-                    else
-                        stk(ll)=0.0d+0
-        endif
-   51 continue
-c
+         do 51 i = 1, k
+            ll = ld+i-1+(j-1)*k
+            ls = lsv+i-1
+            if (i.eq.j) then
+               stk(ll) = stk(ls)
+               if(stk(ls).gt.tol) rang=i
+            else
+               stk(ll)=0.0d+0
+            endif
+ 51      continue
+c     
 c     set headers for lhs
       istk(il+1)=m
       istk(il+2)=k
@@ -374,6 +400,38 @@ c
 c     pinv and rank
 c
    70 continue
+      il=iadr(lstk(top+1-rhs))
+      if(istk(il).ne.1) then
+         if(fin.eq.5) then
+            call cvname(id,'g_rank   ',0)
+            goto 300
+         endif
+         call error(53)
+         return
+      endif
+      m=istk(il+1)
+      n=istk(il+2)
+      it=istk(il+3)
+      l=sadr(il+4)
+      mn = m*n
+      m1=min(m+1,n)
+      tol = -1.0d+0
+      if (rhs.eq.2) then
+         il1=iadr(lstk(top))
+         if(istk(il1).ne.1) then
+            err=2
+            call error(53)
+            return
+         endif
+         if(istk(il1+3).ne.0) then
+            err=2
+            call error(52)
+            return
+         endif
+         l1=sadr(il1+4)
+         tol=stk(l1)
+         top = top-1
+      endif
       if (mn.le.0 ) then
         if (fin.eq.2) then
 c           pinv([])=[]
@@ -454,6 +512,37 @@ c
 c sva
 c
    80 continue
+      il=iadr(lstk(top+1-rhs))
+      if(istk(il).ne.1) then
+         err=1
+         call error(53)
+         return
+      endif
+      m=istk(il+1)
+      n=istk(il+2)
+      it=istk(il+3)
+      l=sadr(il+4)
+      mn = m*n
+      m1=min(m+1,n)
+c
+      tol = -1.0d+0
+      if (rhs.eq.2) then
+         il1=iadr(lstk(top))
+         if(istk(il1).ne.1) then
+            err=2
+            call error(53)
+            return
+         endif
+         if(istk(il1+3).ne.0) then
+            err=2
+            call error(52)
+            return
+         endif
+         l1=sadr(il1+4)
+         tol=stk(l1)
+         top = top-1
+      endif
+c
       if(lhs.ne.3) then
          call error(41)
          return
@@ -530,5 +619,35 @@ c
       istk(il+3)=it
       lstk(top+1)=lvn+n*rang*(it+1)
       go to 99
+c
+c
+c  fonctions matricielles gerees par l'appel a une macro
+c
+ 300  fin=0
+      call funs(id)
+      if(err.gt.0) return
+      if(fun.gt.0) then
+         buf='primitive call'
+         call error(9999)
+         return
+      endif
+      if(fin.eq.0) then
+         call putid(ids(1,pt+1),id)
+         call error(4)
+         if(err.gt.0) return
+      endif
+      pt=pt+1
+      fin=lstk(fin)
+      rstk(pt)=907
+      icall=5
+      fun=0
+c     *call*  macro
+      return
+ 310  continue
+      pt=pt-1
+      goto 99
+
    99 return
+
+
       end

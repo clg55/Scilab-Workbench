@@ -91,14 +91,14 @@
  
 //plot frame, real state (x), and estimates (xf, and xs)
    rect=[a,c,b,d];
-   plot2d(x(1,:)',x(2,:)',[-1,1],"111",'real state ',rect),
-   plot2d(xf(1,:)',xf(2,:)',[-2,2],"111",'estimates xf ',rect),
-   plot2d(xs(1,:)',xs(2,:)',[-3,3],"111",'estimates xs ',rect),
+   plot2d(x(1,:)',x(2,:)',[1,-1],"111",'real state ',rect),
+   plot2d(xf(1,:)',xf(2,:)',[2,-2],"111",'estimates xf ',rect),
+   plot2d(xs(1,:)',xs(2,:)',[3,-3],"111",'estimates xs ',rect),
  
 //mark data points (* for real data, o for estimates)
  
-   plot2d(x(1,:)',x(2,:)',[2,4],"011",' ',rect),
-   plot2d(xf(1,:)',xf(2,:)',[3,5],"011",' ',rect),
-   plot2d(xs(1,:)',xs(2,:)',[4,6],"011",' ',rect),
+   plot2d(x(1,:)',x(2,:)',[-2,-4],"011",' ',rect),
+   plot2d(xf(1,:)',xf(2,:)',[-3,-5],"011",' ',rect),
+   plot2d(xs(1,:)',xs(2,:)',[-4,-6],"011",' ',rect),
 
 

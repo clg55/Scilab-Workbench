@@ -15,9 +15,9 @@ c ================================== ( inria    ) =============
          call basout(io,wwte,' ')
          call basout(io,wwte,' ')
          call basout(io,wwte,
-     $'                  Scilab-2.2  ( 29 February 1996 ) ')
+     $'                  Scilab-2.3  ( May 1, 1997 ) ')
          call basout(io,wwte,
-     $'                  Copyright (C) 1989-96 INRIA ')
+     $'                  Copyright (C) 1989-97 INRIA ')
       endif
       return 
       end

@@ -6,6 +6,7 @@ function [Sm]=systmat(Sl);
 // To get the zeros use determ or detr (for square systems)
 //!
 ty=Sl(1);
+ty=ty(1);
 if ty=='lss' then
 if Sl(7)=='d' then
      s=poly(0,'z');

@@ -4,7 +4,7 @@ c
       double precision t,eps
       logical fail,macro
       integer top0,top2,iadr,sadr
-      character*6 namef
+      character*24 namef
       common/cschur/namef
       external fschur,bschur
       integer         iero
@@ -329,6 +329,13 @@ c--------------------------------------------------------
          nc=istk(ilcd+5)-1
          namef=' '
          call cvstr(nc,istk(ilcd+6),namef,1)
+         namef(nc+1:nc+1)=char(0)
+         call setfschur(namef,irep)
+         if ( irep.eq.1) then 
+            buf = namef
+            call error(50)
+            return
+         endif
          top=top-1
          icd=abs(istk(ilcd+6))
       else

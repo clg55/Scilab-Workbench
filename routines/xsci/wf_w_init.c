@@ -2,6 +2,9 @@
 #include "wf_figx.h"
 #include "wf_resources.h"
 
+#include "../machine.h"
+#include "All-extern.h"
+
 Display	       *tool_d;
 Screen	       *tool_s;
 int		tool_sn;
@@ -17,7 +20,8 @@ static XtActionsRec text_panel_actions[] =
 
 
 Widget   w_toplevel;
-w_init(w)
+
+void w_init(w)
      Widget w;
 {
   w_toplevel=w;

@@ -1,8 +1,25 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#ifndef __STDC__
 #include <malloc.h>
+#endif 
 #include <stdio.h>
+
+
+#ifdef __STDC__
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)		paramlist
+#endif
+#else	
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)		()
+#endif
+#endif
+
+static void Sed _PARAMS((char *,char *,char *,char *,char *,char *,char *));
+static void readOneLine _PARAMS((char *buff,int *stop,FILE *fd));
+static void ComputeSize _PARAMS((int num,int i,double *,double *,double *,double *));
 
 /*---------------------------------------------------------
 
@@ -26,13 +43,12 @@ char * UsageStr[]={
 
 char entete[160];
 
-main(argc, argv)
-int argc;
-char *argv[];
-
+int main(argc, argv)
+     int argc;
+     char *argv[];
 {
   char *env;
-  float x,y,w,h;
+  double x,y,w,h;
   char buf[256];
   int i ;
   FILE *fd;
@@ -58,9 +74,9 @@ char *argv[];
   else 
     {
       fprintf(stderr,"file %s not found ",entete);
-      return;
+      return(1);
     }
-  fprintf(stdout,"/Times-Roman findfont 14 scalefont setfont\n");
+  fprintf(stdout,"/Times-Roman findfont 14 scf mul scalefont setfont\n");
   fprintf(stdout,"100 780 moveto ( %s ) show\n",argv[1]);
   for ( i = 2 ; i < argc-1 ; i++)
     { 
@@ -86,7 +102,7 @@ char *argv[];
  file et en ecrivant sur stdout
 -------------------------------------------------------*/
 
-Sed(file,strin1,strout1,strin2,strout2,strin3,strout3)
+static void Sed(file,strin1,strout1,strin2,strout2,strin3,strout3)
      char file[],strin1[],strout1[],strout3[];
      char strin2[],strout2[],strin3[];
 {
@@ -125,7 +141,7 @@ Sed(file,strin1,strout1,strin2,strout2,strin3,strout3)
   lit une ligne dans fd et la stocke dans buff
 ---------------------------------------------------*/
 
-readOneLine(buff,stop,fd)
+static void readOneLine(buff,stop,fd)
      char buff[];
      int *stop;
      FILE *fd;
@@ -143,40 +159,40 @@ readOneLine(buff,stop,fd)
   dans (*w,*h)
 -----------------------------------------------------*/
 
-ComputeSize(num,i,x,y,w,h)
+static void ComputeSize(num,i,x,y,w,h)
      int num,i;
-     float *x,*y,*w,*h;
+     double *x,*y,*w,*h;
 {
   switch (num)
     {
     case 1 :
-      *x=3;*y=24;*h=20;*w=15;
+      *x=3.0;*y=24.0;*h=20.0;*w=15.0;
       break;
     case 2 :
-      *x=3;*y=(24-(i-1)*11);*h=10;*w=15;
+      *x=3.0;*y=(24-(i-1)*11);*h=10.0;*w=15.0;
       break;
     case 3 :
-      *x=3;*y=(26.5-(i-1)*8.5);*h=8;*w=15;
+      *x=3.0;*y=(26.5-(i-1)*8.5);*h=8.0;*w=15.0;
       break;
     case 4 :
-      if (i <= 2) *y=24;else *y=24-11;
+      if (i <= 2) *y=24.0;else *y=24-11.0;
       if ( (i % 2 ) == 0 ) 
-	{ *x= 2+8.5;*h=8;*w=8;}
+	{ *x= 2+8.5;*h=8.0;*w=8.0;}
       else 
-	{*x= 2;*h=8;*w=8;}
+	{*x= 2.0;*h=8.0;*w=8.0;}
       break ;
     case 5 :
     case 6 :
-      if (i <= 2) *y=26;else { if ( i <= 4) *y=26-8.5; else *y=26-2*8.5;}
+      if (i <= 2) *y=26.0;else { if ( i <= 4) *y=26-8.5; else *y=26-2*8.5;}
       if ( (i % 2 ) == 0 ) 
-	{ *x= 2+8.5;*h=7.5;*w=8;}
+	{ *x= 2+8.5;*h=7.5;*w=8.0;}
       else 
-	{*x= 2 ;*h=7.5;*w=8;}
+	{*x= 2.0;*h=7.5;*w=8.0;}
       break ;
     case 7 :
     case 8 :
     case 9 :
-      if (i <= 3) *y=26;else { if ( i <= 6) *y=26-8.5; else *y=26-2*8.5;}
+      if (i <= 3) *y=26.0;else { if ( i <= 6) *y=26-8.5; else *y=26-2*8.5;}
       if ( (i % 3 ) == 0 ) 
 	{ *x= 1.5+2*6;*h=7.5;*w=5.5;}
       else 
@@ -191,7 +207,7 @@ ComputeSize(num,i,x,y,w,h)
     case 11 :
     case 12 :
     default :
-      if (i <= 3) *y=27;
+      if (i <= 3) *y=27.0;
       else { 
 	if ( i <= 6) *y=27-6.5;
 	else {
@@ -202,9 +218,9 @@ ComputeSize(num,i,x,y,w,h)
       else 
 	{
 	  if ( (i % 3 ) == 1 ) 
-	    { *x= 1.5;*h=6;*w=5.5;}
+	    { *x= 1.5;*h=6.0;*w=5.5;}
 	  else 
-	    {*x= 1.5+6 ;*h=6;*w=5.5;}
+	    {*x= 1.5+6 ;*h=6.0;*w=5.5;}
 	}
       break ;
     }

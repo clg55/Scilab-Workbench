@@ -24,7 +24,7 @@ if rhs <=0 then
 end;
 [nr,nc]=size(zmat)
 indy=(ones(1,nc-1).*.[0;1;1;0]+(1:nc-1).*.[1;1;1;1]).*.ones(1,nr-1);
-indx=ones(1,nr-1).*.(ones(1,nc-1).*.[0;0;1;1]+(1:nc-1).*.[1;1;1;1]);
+indx=ones(1,nc-1).*.(ones(1,nr-1).*.[0;0;1;1]+(1:nr-1).*.[1;1;1;1]);
 [nrl,nrc]=size(indx)
 indx=matrix(indx,nrl*nrc,1);
 indy=matrix(indy,nrl*nrc,1);

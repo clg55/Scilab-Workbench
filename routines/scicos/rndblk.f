@@ -1,18 +1,24 @@
-      subroutine rndblk(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),z(*),u(*),rpar(*),out(*)
-      double precision urand,sr,si,t1
-      integer ipar(*),flag
-      integer halt
-      common /coshlt/ halt
-      common /dbcos/ idb
+      subroutine rndblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
 c
 c     ipar(1) 
 c            0 : uniform
 c            1 : normal
-c     rpar(1:nout)=mean
-c     rpar(nout+1:2*nout)=deviation
-c     rpar(2*nout+1)=dt 
+c     rpar(1:ny)=mean
+c     rpar(ny+1:2*ny)=deviation
+c     rpar(2*ny+1)=dt 
+c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+
+c
+      double precision urand,sr,si,t1
+
+      integer halt
+      common /coshlt/ halt
+      common /dbcos/ idb
 c
       if(idb.eq.1) then
          write(6,'(''rndblk     t='',e10.3,'' flag='',i1)') t,flag
@@ -20,9 +26,9 @@ c
 
 c     
       if(flag.eq.1) then
-         do 10 i=1,nout
-            out(i)=rpar(i)+rpar(nout+i)*z(i+1)
- 10      continue
+      do 10 i=1,ny
+         y(i)=rpar(i)+rpar(ny+i)*z(i+1)
+ 10   continue
       elseif(flag.eq.2.or.flag.eq.4) then
 c     uniform
          if(ipar(1).eq.0) then
@@ -42,8 +48,7 @@ c     normal
  30         continue
          endif
          z(1)=iy
-      elseif(flag.eq.3) then
-         out(1)=t+rpar(2*(nz-1)+1)
+c         if(ntvec.eq.1) tvec(1)=t+rpar(2*(nz-1)+1)
       endif
       return
       end

@@ -1,8 +1,7 @@
-//[r]=%loc(l1,l2)
-//%loc(l1,l2) correspond a l'operation logique l1==l2 avec l1 une liste
-//et l2 une matrice de caracteres
+function r=%loc(l1,l2)
+//%loc(l1,l2) is l1==l2 , l1 list  l2 string
 //!
 r=%f
-//end
+
 
 

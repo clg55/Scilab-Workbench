@@ -7,5 +7,5 @@ function [s]=%lssmp(s1,d2)
 //!
 // origine s. steer inria 1992
 //
-s=s1*tlist('lss',[],[],[],d2,[],[])
+s=s1*tlist(['lss','A','B','C','D','X0','dt'],[],[],[],d2,[],[])
 

@@ -1,28 +1,32 @@
-function save_csuper(x,fpath)
-// given a super block definition x save_super creates a file which contains 
+function path=save_csuper(scs_m,fpath)
+// given a super block definition x save_super creates a file which contains
 // this super block  handling  macro definition
-x1=x(1);nam=x1(2);
-nin=0;nout=0;clkin=0;clkout=0;
+path=[]
+x1=scs_m(1);nam=x1(2)(1);
+nam=strsubst(nam,' ','_')
+in=[];out=[];clkin=[];clkout=[];
 bl='  '
 com='/'+'/'
-for k=2:size(x)
-  o=x(k)
+for k=2:size(scs_m)
+  o=scs_m(k)
   if o(1)=='Block' then
+    model=o(3)
     select o(5)
     case 'IN_f' then
-      nin=nin+1
+      in=[in;model(3)]
     case 'OUT_f' then
-      nout=nout+1
+      out=[out;model(2)]
     case 'CLKIN_f' then
-      clkin=clkin+1
+      clkin=[clkin;model(5)]
     case 'CLKOUT_f' then
-      clkout=clkout+1
+      clkout=[clkout;model(4)];
     end
   end
 end
-model=list('csuper',nin,nout,clkin,clkout,[],[],..
-      x,[],'h',%f,[%f %f])
-ppath=getparpath(x,[])
+model=list('csuper',in,out,clkin,clkout,[],[],..
+      scs_m,[],'h',%f,[%f %f])
+ppath=getparpath(scs_m,[])
+
 
 // form text of the macro
 txt=[
@@ -51,31 +55,33 @@ if size(ppath)>0 then
        '    execstr(''xxn=''+xx(5)+''(''''set'''',xx)'')'
        '    if ~and(xxn==xx) then '
        '      '+com+' parameter or states changed'
-       '      arg1=change_tree_elt(arg1,spath,xxn)'+com+' Update' 
+       '      arg1=change_tree_elt(arg1,spath,xxn)'+com+' Update'
        '      newpar(size(newpar)+1)=path'+com+' Notify modification'
        '    end'
        '  end';
        '  x=arg1'
-       '  y=%f';
+       '  y=0';
        '  typ=newpar']
 end
 model(1)='csuper'
 t1=sci2exp(model,'model');
 txt=[
-   txt;
+    txt;
 'case ''define'' then'
    bl(ones(size(t1,1),1))+t1;
-'  x=standard_define([2 2],model,'''+nam+''')';
+'  gr_i=''xstringb(orig(1),orig(2),'''''+nam+''''',sz(1),sz(2),''''fill'''')'';'
+'  x=standard_define([2 2],model,[],gr_i)';
 'end']
-u=file('open',fpath+'/'+nam+'.sci','unknown')
+path=stripblanks(fpath)+'/'+nam+'.sci'
+[u,err]=file('open',path,'unknown')
+if err<>0 then
+  message(path+': Directory or file write access denied')
+  return
+end
 write(u,txt,'(a)')
 file('close',u)
-u=file('open',fpath+'/blocknames','unknown')
-content=read(fpath+'/blocknames',-1,1,'(a)');
-content=stripblanks(content);
-fl=%f;for jj=content';if jj==nam then fl=%t;end;end
-if ~fl then content=[content;nam];
-write(u,content)
-end
-file('close',u)
+
+
+
+
 

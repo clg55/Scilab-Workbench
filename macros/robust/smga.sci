@@ -1,8 +1,8 @@
 function [a,b1,b2,c1,c2,d11,d12,d21,d22]=smga(slp,r)
 //Matrix extractions (for use with h_inf,lft and other);
 // Utility function
-//!
-if slp(1)='lss' then
+slp1=slp(1);
+if slp1(1)='lss' then
   p=r(2),r=r(1),
   [s1,s2,t]=size(slp);
   [a,b,c,d]=slp(2:5),
@@ -13,7 +13,7 @@ if slp(1)='lss' then
   d21=coeff(d(s1-r+1:s1,1:s2-p),0),
   d22=coeff(d(s1-r+1:s1,s2-p+1:s2),0)
 end
-if slp(1)='r' then
+if slp1(1)='r' then
   [nl,nk]=size(slp);
   k1=1:nl-r(1);
   k2=nl-r(1)+1:nl;

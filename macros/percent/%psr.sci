@@ -1,11 +1,25 @@
-//<f2>=%psr(n1,f2)
-// %psr(n1,f2) calcule la soustraction de la matrice de polynome n1 et
-//de la matrice de fractions rationnelles f2.
-//Cette macro correspond a l'operation   n1-f2
+function f=%psr(m,f)
+//f=%psr(m,f) <=> f=  m-f
 //!
-[n2,d2]=f2(2:3),
-[n2,d2]=simp(n1.*d2-n2,d2)
-f2(2)=n2;f2(3)=d2;
-//end
+[num,den]=f(2:3)
+[nf,mf]=size(f)
+[nm,mm]=size(m)
+
+if nf>=0&nm>=0 then
+  if size(num,'*')==1&size(m,'*')>1 then
+    den=den*ones(m)
+  end
+  [num,den]=simp(-num+m.*den,den)
+else
+  //at leat one matrix is eye*x
+  if nf<0&nm<0 then
+    [num,den]=simp(-num+m.*den,den)
+  elseif nf<0 then
+    [num,den]=simp(-num+m.*den,den*ones(m))
+  elseif nm<0 then
+    [num,den]=simp(-num+m*eye(den).*den,den)
+  end
+end
+f(2)=num;f(3)=den
 
 

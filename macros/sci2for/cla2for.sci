@@ -1,4 +1,4 @@
-//[txt,vnms,vtps,nwrk]=cla2for(clause,vnms,vtps,nwrk)
+function [txt,vnms,vtps,nwrk]=cla2for(clause,vnms,vtps,nwrk)
 // traduit une clause (if while for select)
 //!
 typ=clause(1)
@@ -6,8 +6,9 @@ typ=clause(1)
 
 select typ(1)
 case %if then
+
   ncl=size(clause)
-  ncas=(ncl-3)/2
+  ncas=(ncl-2)/2
   [t1,t2,ilst,vnms,vtps,nwrk]=exp2for(clause(2),1,vnms,vtps,nwrk)
   t1=t1(1);
   txt=[t2;' '+%if+'('+t1(1)+') '+%then]
@@ -15,7 +16,7 @@ case %if then
   txt=[txt;indentfor(t1)];
   for ic=2:ncas
     [t1,t2,ilst,vnms,vtps,nwrk]=exp2for(clause(2*ic),1,vnms,vtps,nwrk)
-    txt=[txt;t2;' '+%elseif+'('+t1(1)+') '+%then];
+    txt=[txt;t2;' '+%elseif+'('+t1(1)(1)+') '+%then];
     [t1,vnms,vtps,nwrk]=ins2for(clause(1+2*ic),1,vnms,vtps,nwrk)
     txt=[txt;indentfor(t1)];
   end;
@@ -73,6 +74,5 @@ case %select then
   txt=[txt;' endif']
 end
 //write(6,txt)
-//end
 
 

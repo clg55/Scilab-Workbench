@@ -17,6 +17,9 @@ case 16 then
   else
     error(43)
   end
+case 5
+  [ij,v,mn]=spget(a)
+  x=sparse(ij,imag(v),mn)
 else
   error(43)
 end

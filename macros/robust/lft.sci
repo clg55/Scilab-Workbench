@@ -10,7 +10,8 @@ function [p1,r1]=lft(p,r,p#,r#)
 //!
 //f.d.
 if type(p)==1 then p=syslin([],[],[],[],p);end
-if p(1)='lss' then dom=p(7);else dom=p(4);end
+p1=p(1);
+if p1(1)='lss' then dom=p(7);else dom=p(4);end
 [lhs,rhs]=argn(0);
 if rhs=2 then
   rhs=3;p#=r;
@@ -52,7 +53,8 @@ if rhs=3 then
       p1=dd;
     else
       // p# is not a gain
-      if p#(1)='lss' then
+      p#1=p#1(1)
+      if p#1(1)='lss' then
         [ak,bk,ck,dk]=p#(2:5);
         id=inv(eye(d22*dk)-d22*dk),
         aa= ak+bk*id*d22*ck,
@@ -61,13 +63,13 @@ if rhs=3 then
         dd=d11+d12*dk*id*d21;
         p1=syslin(dom,aa,bb,cc,dd)
       end
-      if p#(1)='r' then
+      if p#1(1)='r' then
         p1=d11+d12*p#*invr(eye-d22*p#)*d21;
       end
     end
   end   //type(p)=1
-  
-  if p(1)='lss' then
+  p1=p(1);
+  if p1(1)='lss' then
     // lft(standard in ss form,linear system in ss form)
     [a,b1,b2,c1,c2,d11,d12,d21,d22]=smga(p,r);
     if type(p#)=1 then
@@ -91,7 +93,7 @@ if rhs=3 then
       p1=syslin(dom,aa,bb,cc,dd)
     end
   end
-  if p(1)='r' then
+  if p1(1)='r' then
     //lft(standard plant in tf form,linear system in tf form)
     [p11,p12,p21,p22]=smga(p,r);
     p1=p11+p12*p#*invr(eye-p22*p#)*p21
@@ -127,7 +129,8 @@ if rhs=4 then
       p1=[dd11,dd12;dd21,dd22];
       r1=size(dd22);
     end
-    if p#(1)='lss'
+    p#1=p#(1);
+    if p#1(1)='lss'
       //p# in state form
       [a#,b#1,b#2,c#1,c#2,d#11,d#12,d#21,d#22]=smga(p#,r#);
       g=inv(eye-d22*d#11);
@@ -149,7 +152,7 @@ if rhs=4 then
       p1=syslin(dom,aa,[bb1,bb2],[cc1;cc2],[dd11,dd12;dd21,dd22]);
       r1=size(dd22);
     end
-    if p#(1)='r' then
+    if p#1(1)='r' then
       [j11,j12,j21,j22]=smga(p#,r#);
       
       g=invr(eye-d22*j11);
@@ -166,8 +169,8 @@ if rhs=4 then
       
     end
   end  //type(p)=1
-  
-  if p(1)='lss' then
+  p1=p(1);
+  if p1(1)='lss' then
     //lft(standard plant in ss form,standard plant in ss form)
     [a ,b1,b2,c1,c2,d11,d12,d21,d22]=smga(p,r);
     
@@ -229,8 +232,8 @@ if rhs=4 then
       r1=size(dd22);
     end // type(p#)=1
   end  //p(1)='lss'
-  
-  if p(1)='r' then
+  p1=p(1);
+  if p1(1)='r' then
     //lft(standard plant in tf form,standard plant in tf form)
     [p11,p12,p21,p22]=smga(p,r);
     [j11,j12,j21,j22]=smga(p#,r#);

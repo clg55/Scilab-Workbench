@@ -1,7 +1,5 @@
 function [f1,f2,f3,f4,f5]=%re(i,j,f)
-// %re(i,j,f) extrait la sous matrice, definie par les indices de lignes
-// donnes dans le vecteur i et les indices de colonnes donnes dans le
-//vecteur j, de la matrice de fractions rationnelles f.
+// %re(i,j,f) extraction f(i,j) in a rational matrix
 //!
 if type(i)==10 then
   [lhs,rhs]=argn(0)
@@ -16,7 +14,10 @@ if type(i)==10 then
 end
 if type(i)==4 then i=find(i),end
 if type(j)==4 then j=find(j),end
-if i==[]|j==[] then f=[],return,end
+
+if type(i)<>1 then i=horner(i,size(f(2),1)),end
+if type(j)<>1 then j=horner(j,size(f(2),2)),end
+if size(i,'*')==0|size(j,'*')==0 then f1=[],return,end
 f1=f;
 [n,d]=f1(2:3)
 f1(2)=n(i,j);f1(3)=d(i,j)

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WATAN,SSI=0
       subroutine watan(xr,xi,yr,yi)
 c!but
 c     watan calcule l'arctangente d'un complexe

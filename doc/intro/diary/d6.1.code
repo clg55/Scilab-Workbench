@@ -4,7 +4,5 @@
  t=0:.1:1.5;
  z0=[%pi/2;%pi/2;0;0];
  getf('../macros/dpend.sci');
- comp(dpend);
- comp(pp);
  z=ode(z0,t0,t,dpend);
  pp(z)

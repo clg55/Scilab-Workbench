@@ -1,4 +1,4 @@
-//[nwrk]=dclfun(nwrk,nam,typ)
+function [nwrk]=dclfun(nwrk,nam,typ)
 //permet de declarer le type fortran du resultat d'une fonction
 //!
 select typ
@@ -7,4 +7,4 @@ case '0' then
 case '1' then
   if find(nam==nwrk(15))==[] then  nwrk(15)=[nwrk(15);nam],end
 end
-//end
+

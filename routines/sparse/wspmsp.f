@@ -144,8 +144,7 @@ c  extract control information in required form for indc.
         indc(i) = ic(i+1) - ic(i)
         if(indc(i).gt.1) then
            call isort1(indc(p+ic(i)),indc(i),xb,1)
-           call dperm(cr(ic(i)),indc(i),xb)
-           call dperm(ci(ic(i)),indc(i),xb)
+           call wperm(cr(ic(i)),ci(ic(i)),indc(i),xb)
         endif
    90 continue
       nelc  = ip - 1

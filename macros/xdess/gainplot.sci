@@ -4,17 +4,17 @@ function []=gainplot(sl,fmin,fmax,pas,comments)
 //---------------------
 pas_def='auto' // default
 //
-xbasc()
 ilf=0
 flag=type(sl);
 if flag==15 then flag=16;end
 select flag
 case 16 then  // sl,fmin,fmax [,pas] [,comments]
-  typ=sl(1)
+  typ=sl(1);typ=typ(1);
   if typ<>'lss'&typ<>'r' then
     error(97,1)
   end
-  if sl(1)='r' then dom=sl(4),else dom=sl(7),end
+  sl1=sl(1);
+  if sl1(1)='r' then dom=sl(4),else dom=sl(7),end
   if dom==[] then error(96,1),end
   if dom=='d' then dom=1;end
   select rhs
@@ -89,12 +89,11 @@ xmn=mini(frq),xmx=maxi(frq),npx=10
 //Magnitude
 [ymn,ymx,npy]=graduate(mini(d),maxi(d))
 rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
-
 if ilf==0 then
-     	plot2d1("oln",frq',d',-[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
+     	plot2d1("oln",frq',d',[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
 	xgrid()
 else
-     	plot2d1("gln",frq',d',-[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
+     	plot2d1("gln",frq',d',[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
 	xgrid()
 end
 xtitle(' ','Hz','db');

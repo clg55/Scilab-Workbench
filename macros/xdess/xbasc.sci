@@ -9,6 +9,5 @@ function xbasc(win_num)
 if rhs=0,win_num=xget("window");end
 [n1,n2]=size(win_num);
 for xxx=win_num,xclear(xxx);xtape('clear',xxx);end
-//end
 
 

@@ -4,3 +4,4 @@ fr=0:.1:15;
 hf=freq(hs(2),hs(3),%i*fr);
 hm=abs(hf);
 plot(fr,hm),
+

@@ -1,33 +1,40 @@
-      subroutine powblk(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),u(*),rpar(*),out(*),z(*)
-      integer ipar(*),flag
-c     POWBLK, Alvaro:17-5-95
-c     Continous block, MIMO
+      subroutine powblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
 c     rpar(1) is power
+c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+
+c
       common /dbcos/ idb
 c
       if(idb.eq.1) then
          write(6,'(''powblk     t='',e10.3,'' flag='',i1)') t,flag
       endif
-      if(flag.eq.1) then
-c     flag=1
-         if (nrpar.eq.1) then
+
+      
+c     
+      if (nrpar.eq.1) then
          do 15 i=1,nu
-            if(u(i).le.0.d0) then
+            if(u(i).lt.0.d0) then
+               flag=-2
+               return
+            elseif(u(i).eq.0.d0.and.rpar(1).le.0) then
                flag=-2
                return
             endif
-            out(i)=u(i)**rpar(1)
+            y(i)=u(i)**rpar(1)
  15      continue
       else
          do 25 i=1,nu
-            out(i)=u(i)**ipar(1)
+            if(ipar(1).le.0.and.u(i).eq.0.0d0) then
+               flag=-2
+               return
+            endif
+            y(i)=u(i)**ipar(1)
  25      continue
       endif
-      else
-c     flag=2 or 3 --> ERROR
-         write(*,'(''ERROR; block pow flag:'',i2,'' t '',e10.3)') flag,t
-         flag=-1
-      endif
+      
       end

@@ -5,15 +5,15 @@ path='SCI/demos/bike/';
 
 x=read(path+'data/'+'x1.dat',46,368,"(e10.4)");
 
-getf(path+'macros/'+'velo1.sci','c');
-getf(path+'macros/'+'velo2.sci','c');
-getf(path+'macros/'+'velo3.sci','c');
-getf(path+'macros/'+'velo4.sci','c');
-getf(path+'macros/'+'velo4p.sci','c');
-getf(path+'macros/'+'velo5.sci','c');
-getf(path+'macros/'+'velod.sci','c');
-getf(path+'macros/'+'velodp.sci','c');
-getf(path+'macros/'+'show.sci','c');
+getf(path+'macros/'+'velo1.sci');
+getf(path+'macros/'+'velo2.sci');
+getf(path+'macros/'+'velo3.sci');
+getf(path+'macros/'+'velo4.sci');
+getf(path+'macros/'+'velo4p.sci');
+getf(path+'macros/'+'velo5.sci');
+getf(path+'macros/'+'velod.sci');
+getf(path+'macros/'+'velodp.sci');
+getf(path+'macros/'+'show.sci');
 demolist=['bike-1: xpoly (full wheels)';
             'bike-2: param3d';
             'bike-3';

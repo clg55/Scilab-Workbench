@@ -1,4 +1,4 @@
-//[pt,dx,dz,dt]=acoustic(vel,tf,fc,spos,dx,dz,dt)
+function [pt,dx,dz,dt]=acoustic(vel,tf,fc,spos,dx,dz,dt)
 //[pt[,dx,dz,dt]]=acoustic(vel,tf,fc,spos[,dx,dz][,dt])
 //////////////////////////////////////////////////////
 //                                                  //
@@ -142,9 +142,8 @@
 //   pt=readb(unit,nr*maxi(size(t)),nc);
 //   file('close',unit);
 
-//end
 
-//[utp1]=integrate(t,ut,utm1,src,spos)
+function [utp1]=integrate(t,ut,utm1,src,spos)
 //[utp1]=integrate(t,ut,utm1,src,spos)
 //compute second order time update of acoustic wave equation
 //(with absorbing boundaries)
@@ -196,9 +195,7 @@
    sz=spos(1);sx=spos(2);
    utp1(sz,sx)=utp1(sz,sx)+dt**2*src;
 
-//end
-
-//[dg]=shot(t,fc)
+function [dg]=shot(t,fc)
 //[dg]=shot(t,fc)
 //calculate shot values as a function of time
 //as the derivative of a gaussian:
@@ -229,9 +226,8 @@
    g=exp(-(t-m)**2/(2*sig2))/sqrt(2*%pi*sig2);
    dg=-g*(t-m)/sig2;
 
-//end
 
-//[pt]=get_data(ntbl,entry)
+function [pt]=get_data(ntbl,entry)
 //Search for a data file written on disk
 // ntbl  :table of file names (first two entries give 
 //       :data dimensions)
@@ -253,5 +249,5 @@
       write(%io(2),' '),
    end,
 
-//end
+
 

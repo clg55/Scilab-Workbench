@@ -1,11 +1,11 @@
 // test conversion transfer <---> state-space
 // 1- coff inversion 
  s=poly(0,'s'); a=[1 2 3;4 5 6;7 8 9];
- [num,den]=coff(a,'s');h1=num/den;h2=(s*eye-a)**(-1);
+ [num,den]=coff(a,'s');h1=num/den;h2=(s*eye-a)^(-1);
  e=h1-h2;if norm(coeff(e(2)))>5000*%eps then pause,end
 // 2-test de tf2ss et ss2tf
- n=[1+s   2+3*s+4*s**2        5; 0        1-s             s];
- d=[1+3*s   5-s**3           s+1;1+s     1+s+s**2      3*s-1];
+ n=[1+s   2+3*s+4*s^2        5; 0        1-s             s];
+ d=[1+3*s   5-s^3           s+1;1+s     1+s+s^2      3*s-1];
  
  h=syslin('c',n./d);
  [n,d]=simp(n,d);if h<>tlist('r',n,d,'c') then pause,end
@@ -39,20 +39,20 @@ spec(a);
 xbasc();xselect();
 plzr(sl)
 //
-slc=contrss(sl,eps);ssprint(slc)
-slo=obsvss(sl,eps);ssprint(slo)
-slm=minss(sl,eps);ssprint(slm)
+slc=contrss(sl,eps);//ssprint(slc)
+slo=obsvss(sl,eps);//ssprint(slo)
+slm=minss(sl,eps);//ssprint(slm)
 //
 hm=ss2tf(slm);
 h=ss2tf(sl);
-hh=c*(s*eye-a)**(-1)*b + 0*ones(2,3);
+hh=c*(s*eye-a)^(-1)*b + 0*ones(2,3);
 hh=hh-h;
 if norm(coeff(hh(2))) > 1.e-5 then pause,end
 [num,den]=coff(a,'s');
 hh=c*real(num)*b/real(den) + 0*ones(2,3);
 hh=hh-h;
 if norm(coeff(hh(2))) > 1.e-5 then pause,end
-slh=tf2ss(hm)       //was tf2ss(h)
+slh=tf2ss(hm);       //was tf2ss(h)
 //
 u=eye(3,60);
 xbasc();
@@ -77,7 +77,7 @@ c=[0 0 0 0 0 1];
 tech=0.2;t=0:tech:15; //
 deff('[y]=u(t)','if t=0 then y=0;else y=1,end') //step
  
-// avec csim
+// with csim
 if type(csim)<>13 then comp(csim);end
 sl=syslin('c',a,b,c);
 //comparison 

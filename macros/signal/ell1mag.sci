@@ -1,5 +1,4 @@
 function [v]=ell1mag(eps,m1,z)
-//<v>=ell1mag(eps,m1,z)
 //Function used for squared magnitude of an elliptic filter
 //Usually m1=eps*eps/(a*a-1);
 //  eps     :Passband ripple=1/(1+eps**2)
@@ -8,10 +7,9 @@ function [v]=ell1mag(eps,m1,z)
 //  v       :Elliptic filter values at sample points
 //
 //!
- 
-   s=%sn(z,m1);
-   un=ones(z);
-   v=real(un./(un+eps*eps*s.*s))
+s=%sn(z,m1);un=ones(z);
+v=real(un./(un+eps*eps*s.*s))
+
  
 
 

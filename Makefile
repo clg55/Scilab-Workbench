@@ -10,44 +10,47 @@ binary:
 	else \
 		echo "Humm... this is a source version,"; \
 		echo "  you'd better read the README file first."; \
-		echo " "; \
-		echo "If you really want to make Scilab, do \"make all\"."; \
 	fi
 
 SCIDIR=.
 include Makefile.incl
 
-all:: bin/scilex
+all:: bin/scilex  
 
 world:: scilex-lib-world bin/scilex
 
 LIBRSCI = libs/system.a libs/interf.a libs/system2.a libs/optim.a \
 	libs/integ.a libs/control.a libs/scicos.a libs/signal.a \
-	libs/poly.a libs/calelm.a libs/lapack.a libs/X11G.a \
-	libs/sparse.a libs/metanet.a libs/sun.a \
-	libs/intersci.a libs/xwindow.a libs/xsci.a libs/comm.a
+	libs/poly.a libs/calelm.a libs/lapack.a libs/graphics.a \
+	libs/sparse.a libs/metanet.a libs/sun.a libs/system.a libs/sun.a \
+	libs/intersci.a  libs/xsci.a libs/sun.a libs/graphics.a libs/menusX.a \
+	libs/libcomm.a libs/comm.a libs/sound.a 
 
 LIBR = $(XAW_LOCAL_LIB) $(LIBRSCI) $(DLDLIB)
 
-DEFAULTS = routines/default/interf.o routines/default/bidon.o \
-	routines/default/fydot.o routines/default/fjac.o \
-	routines/default/fydotd.o \
-	routines/default/ffeval.o  \
-	routines/default/foptim.o  \
-	routines/default/fsolvf.o routines/default/fsolvj.o \
-	routines/default/fintg.o \
-	routines/default/fschur.o \
-	routines/default/dgetx.o routines/default/dgety.o \
-	routines/default/fres.o routines/default/fadda.o \
-	routines/default/fj2.o \
-	routines/default/fsurf.o routines/default/fsurfd.o \
-	routines/default/fresd.o routines/default/fjacd.o \
-	routines/default/fcol.o routines/default/fbutn.o\
-	routines/default/mainsci.o routines/default/scimem.o\
-	routines/default/matusr.o routines/default/matus2.o \
-	routines/default/funtab.o routines/default/msgstxt.o
+DEFAULTS = \
+	routines/default/FTables.o \
+	routines/default/Ex-colnew.o \
+	routines/default/Ex-corr.o \
+	routines/default/Ex-feval.o \
+	routines/default/Ex-fsolve.o \
+	routines/default/Ex-impl.o \
+	routines/default/Ex-intg.o \
+	routines/default/Ex-ode-more.o \
+	routines/default/Ex-ode.o \
+	routines/default/Ex-odedc.o \
+	routines/default/Ex-optim.o \
+	routines/default/Ex-schur.o \
+	routines/default/Ex-fort.o \
+	routines/default/Ex-dasrt.o \
+	routines/default/Ex-dassl.o \
+	routines/default/Ex-fbutn.o \
+	routines/default/mainsci.o \
+	routines/default/matusr.o  routines/default/matus2.o \
+	routines/default/Funtab.o  routines/default/msgstxt.o \
+	routines/default/scimem.o
 
-include Makefile.alpha
+include config/Makefile.alpha
 
 distclean::
 	$(RM) bin/scilex
@@ -106,17 +109,26 @@ tests:
 distclean::
 	$(RM) config.cache config.log config.status .binary foo.f foo.o so_locations
 
-SCIBASE = scilab-2.2
+examples/callsci/Makefile: examples/callsci/Makefile.g
+	@sed -e "s|SCI_DIR|`pwd`|" \
+	-e "s|SCI_LIBR|$(LIBRSCI/*/SCI_DIR\/&) SCI_DIR/libs/system.a|" \
+	-e "s|SCI_DEF|$(DEFAULTS/*/SCI_DIR\/&)|" \
+	-e "s|SCI_DIR\/routines/default/mainsci.o||"\
+	-e "s|SCI_DIR|$$\(SCIDIR\)|g" examples/callsci/Makefile.g >examples/callsci/Makefile
+
+
+SCIBASE = scilab-2.3
+
 BINDISTFILES = \
-	$(SCIBASE)/CHANGES $(SCIBASE)/README \
+	$(SCIBASE)/CHANGES $(SCIBASE)/README $(SCIBASE)/README.win32 \
 	$(SCIBASE)/notice.ps $(SCIBASE)/notice.tex \
 	$(SCIBASE)/scilab.quit $(SCIBASE)/scilab.star \
 	$(SCIBASE)/configure $(SCIBASE)/config $(SCIBASE)/Makefile* \
 	$(SCIBASE)/Version.incl $(SCIBASE)/patchlevel.h \
 	$(SCIBASE)/X11_defaults \
-	$(SCIBASE)/bin $(SCIBASE)/demos \
+	$(SCIBASE)/bin $(SCIBASE)/demos $(SCIBASE)/examples \
 	$(SCIBASE)/imp/NperiPos.ps $(SCIBASE)/macros \
-	$(SCIBASE)/man/Man-Part1 $(SCIBASE)/man/Man-Part2 \
+	$(SCIBASE)/man \
 	$(SCIBASE)/maple $(SCIBASE)/scripts $(SCIBASE)/util \
 	$(SCIBASE)/.binary
 

@@ -6,6 +6,7 @@
 #include <sys/time.h>
 #include <stdio.h>
 #include <fcntl.h>
+#include <netdb.h>
 
 #include "gestion_memoire.h"
 
@@ -16,6 +17,8 @@
 #include "scr_liaisons.h"
 #include "scr_applications.h"
 #include "connexion.h"
+
+extern char machine_hote[MAXHOSTLEN];
 
 static int rechercher_application();
 static int rechercher_machine();
@@ -92,11 +95,12 @@ int flag_communication;
 		execvp(argv[0],argv);
 	
 	perror(NULL);
-	Erreur_scruteur(concatener_deux_chaines("<executer_application>: impossible to execute ",argv[0]));
+	/* Erreur_scruteur(concatener_deux_chaines("impossible to execute ",argv[0])); */
+	/* trap error, see id below (CLG) */
+	fprintf(stderr,"Impossible to execute: %s\n",argv[0]);
     }
     
-    if (id != -1)  { /* GeCI */
-	
+    if (id != -1 && id != 0)  { /* GeCI: id != 0 added (CLG) */
 	if (flag_communication) {
 	    close(pipe_vers_appli[0]);
 	    close(pipe_vers_scruteur[1]);
@@ -108,8 +112,6 @@ int flag_communication;
     }
     return -1;
 }
-
-
 
 int executer_application_a_distance(message)
 Message message;
@@ -201,9 +203,6 @@ static void desallouer_application(objet)
 ldc_objet_liste objet;
 {
     application *application_a_detruire = (application *)objet;
-    char machine_hote[MAXHOSTLEN];    
-    
-    gethostname(machine_hote,MAXHOSTLEN) ;
     
     /* Meme machine */
     if(!strcmp(application_a_detruire -> nom_machine, machine_hote))  {
@@ -238,11 +237,8 @@ ldc_element_correspondance correspondance;
 void detruire_applications_scruteur()
 {
     application *application_restante;
-    char machine_hote[MAXHOSTLEN];
     Message message;
     int i, desc;
-    
-    gethostname(machine_hote,MAXHOSTLEN) ;
     
     while((application_restante = ldc_rechercher_objet(liste_applications,NULL)) != NULL) {
 	/* Meme machine */
@@ -278,10 +274,13 @@ void lancer_appli_actmsg(message)
 Message message;
 {
     int compteur=0;
-    char machine_hote[MAXHOSTLEN];
-    
-    gethostname(machine_hote,MAXHOSTLEN) ;
-   
+    struct hostent *h;
+
+    /* canonize host name */
+    h = gethostbyname(message.tableau[4]);
+    liberer(message.tableau[4]);
+    message.tableau[4] = dupliquer_chaine(h->h_name);
+
     /* Meme machine */
     if(!strcmp(message.tableau[4], machine_hote)) {
 	executer_application(message.tableau[3],message.tableau[4],
@@ -324,12 +323,9 @@ void quitter_appli_actmsg(message)
 Message message;
 {
     application *recherche_appli_a_detruire;
-    char machine_hote[MAXHOSTLEN];
     Message nouveau_message;
     int i, desc;
     
-    gethostname(machine_hote,MAXHOSTLEN);
-
     recherche_appli_a_detruire = ldc_rechercher_objet(liste_applications,message.tableau[3]);
     
     if (recherche_appli_a_detruire == NULL)

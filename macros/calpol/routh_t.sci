@@ -6,14 +6,15 @@ function r=routh_t(h,k)
 //k, formal expression of the Routh table.
 //r=routh_t(d) computes Routh table of h.
 //!
-[lhs,rhs]=argn(0)
+[lhs,rhs]=argn(0);
+h1=h(1);
 if rhs=2 then
   
   //-compat type(h)<>15 retained for list/tlist compatibility
    if type(h)<>15&type(h)<>16 then
      error('first argument must be rational')
    end;
-   if h(1)<>'r' then
+   if h1(1)<>'r' then
      error('first argument must be rational')
    end;
    [n,d]=h(2:3)

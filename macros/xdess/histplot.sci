@@ -1,20 +1,20 @@
 function histplot(n,data,style,strf,leg,rect,nax)
 // histplot(n,data,[style,strf,leg,rect,nax])
-// dessine l'histogramme des elements de data repartis en n classes
-// equidistantes de valeurs,
-//
+// draws histogram of entries in  data put into n classes
+// 
 // histplot(xi,data,[style,strf,leg,rect,nax])
-// genere l'histogramme des elements de data repartis dans les classes
-// definies par les intervalles ]xi(k) xi(k+1)] .
-// xi est suppose strictement  croissant
+// generates the histogram of entries in data put into classes
+// ]xi(k) xi(k+1)] .
+// xi's are assumed st. increasing
 //
-// [style,strf,leg,rect,nax] ont le meme sens que pour plot2d
-// Exemple : taper histplot() pour voir un exemple 
+// [style,strf,leg,rect,nax] same as plot2d
+// Example : enter histplot()
 //! 
 [lhs,rhs]=argn(0)
 if rhs<=0, s_mat=['rand(''normal'');';
-         'histplot([-6:0.2:6],rand(1,2000),[-1,1],''011'','' '',';
-         '[-6,0,6,1.1],[2,12,2,11]);';
+   'histplot([-6:0.2:6],rand(1,2000),[1,-1],''011'','' '',[-6,0,6,0.5],[2,12,2,11]);';
+	 'deff(''[y]=f(x)'',''y=exp(-x.*x/2)/sqrt(2*%pi);'');';
+         'x=-6:0.1:6;x=x'';plot2d(x,f(x),1,'"000'");';
          'titre= ''macro histplot : Histogram plot'';';
          'xtitle(titre,''Classes'',''N(C)/Nmax'');'];
          write(%io(2),s_mat);execstr(s_mat);
@@ -35,10 +35,10 @@ end;
      x=matrix(n,q,1)
    end,
    n=prod(size(x));
-   deff('[y]=f_hist(k)','y=prod(size(find(data>x(k)&data<=x(k+1))))');
-   comp(f_hist);
+   deff('[y]=f_hist(k)',['y=prod(size(find(data>x(k)&data<=x(k+1))))';
+			'y=y/(p*(x(k+1)-x(k)));']);
    y=feval((1:n-1)',f_hist);
-   y=[y;y(n-1)]/maxi(y);
+   y=[y;y(n-1)];
    nx=maxi(min(15,prod(size(x))-1),1);
    if rhs <= 5 then 
      rect=[mini(x),mini(y),maxi(x),maxi(y)];
@@ -58,10 +58,9 @@ end;
                plot2d3("gnn",x,y,style,"000");
    case 3 then plot2d2("gnn",x,y,style,"011",' ',rect,[1,nx,2,10]);
                plot2d3("gnn",x,y,style,"000");
-   case 2 then plot2d2("gnn",x,y,[-1],"011",' ',rect,[1,nx,2,10]);
-               plot2d3("gnn",x,y,[-1,1],"000");
+   case 2 then plot2d2("gnn",x,y,[1],"011",' ',rect,[1,nx,2,10]);
+               plot2d3("gnn",x,y,[1,-1],"000");
   end
-//end
 
 
 

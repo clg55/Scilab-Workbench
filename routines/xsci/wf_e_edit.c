@@ -23,16 +23,17 @@
 #include <malloc.h>  /* in case of dmalloc */ 
 
 DeclareArgs(1);
-int
-panel_set_value(widg, val)
-    Widget	    widg;
-    char	   *val;
+
+int panel_set_value(widg, val)
+     Widget	    widg;
+     char	   *val;
 {
     FirstArg(XtNstring, val);
     /* I don't know why this doesn't work? */
     /* NextArg(XtNinsertPosition, strlen(val)); */
     SetValues(widg);
     XawTextSetInsertionPoint(widg, (XawTextPosition) strlen(val));
+    return(0);
 }
 
 char           *

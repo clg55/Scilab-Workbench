@@ -104,7 +104,7 @@ and $\lambda$ is a real number belonging to $[0,1]$ that reflects the
 importance of the specifications on the magnitude relative to that 
 on the group delay\index{group delay} in a straightforward fashion.
 One seek after a vector $\phi^{*}$ such that $E(\phi^{*})$ is 
-minimum: this problem is easily solved in $\Psi$Lab with the help 
+minimum: this problem is easily solved in Scilab with the help 
 of the function {\tt optim} the purpose of which is the resolution 
 of general nonlinear optimization problems . 
 We refer the reader to
@@ -112,7 +112,7 @@ the relevant documentation \cite{delebecque} for a detailed explanation
 of its use.
 The {\tt optim} function needs some 
 input parameters, the main of which being what is called a {\em simulator}: 
-it may be given as a $\Psi$lab function and its purpose is to give the cost function\index{cost function} 
+it may be given as a Scilab function and its purpose is to give the cost function\index{cost function} 
 of the relevant problem as well as its gradient relative to the 
 specified parameters. For the minimum ${\Bbb L}_p$ design problem, the 
 simulator is named {\tt iirlp} and makes use of two other macros: 
@@ -125,7 +125,7 @@ with normalized cut-off frequency 0.25, transition\index{transition}
 bandwidth equal to
 0.15, ripple in the passband of 0.1 
 and ripple in the stopband of 0.01 (i.e. 40dB of attenuation); 
-with the $\Psi$lab function 
+with the Scilab function 
 {\tt eqiir} we have obtained a filter of the fourth order together 
 with its zeros and poles. 
 
@@ -147,7 +147,7 @@ an unconstrained optimization procedure has been applied because the
 initial values are unknown (hence may be far away from the 
 optimal solution, if any) and the order is unknown too. Instead, as 
 indicated in \cite{ieee}, the 
-$\Psi$lab function {\tt optim} will be applied several times and 
+Scilab function {\tt optim} will be applied several times and 
 when some pole or zero goes outside the unit circle, it will be 
 replaced by the symmetric (with respect to the unit circle) complex 
 number and a new optimization runned. To see the results obtained with 

@@ -8,15 +8,15 @@ include ../../Makefile.incl
 TEXFILES = bibli.tex chap0.tex chap1.tex chap2.tex chap3.tex chap4.tex \
 	chap5.tex chap6.tex chap7.tex chap8.tex chap9.tex
 
-all:: subs $(SCIDOC)/Signal.ps.Z
+all:: $(SCIDOC)/Signal.ps
 
-$(SCIDOC)/Signal.ps.Z: subs $(TEXFILES)
-	olatex209 Toolbox
+$(SCIDOC)/Signal.ps: subs $(TEXFILES)
+	latex Toolbox
+	latex Toolbox
 	makeindex -s Toolbox.isty Toolbox
-	olatex209 Toolbox
+	latex Toolbox
+	$(RM) $(SCIDOC)/Signal.ps
 	dvips -o $(SCIDOC)/Signal.ps Toolbox.dvi
-	$(RM) $(SCIDOC)/Signal.ps.Z
-	compress $(SCIDOC)/Signal.ps
 
 clean::
 	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc
@@ -25,7 +25,7 @@ distclean::
 
 SUBDIRS = Nsource_diary Nfigs_source
 
-subs::
+subs:
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
 	for i in $(SUBDIRS) ;\
 	do \

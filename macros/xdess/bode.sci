@@ -3,14 +3,13 @@ function []=bode(sl,fmin,fmax,pas,comments)
 [lhs,rhs]=argn(0);
 //---------------------
 pas_def='auto' // default
-xbasc()
 ilf=0
 typ=type(sl)
 //-compat next line added for list/tlist compatibility
 if typ==15 then typ=16,end
 select typ
 case 16 then  // sl,fmin,fmax [,pas] [,comments]
-  typ=sl(1)
+  typ=sl(1);typ=typ(1);
   if typ<>'lss'&typ<>'r' then
     error(97,1)
   end
@@ -89,24 +88,15 @@ if comments=' ' then
 end;
 
 [ffr,bds]=xgetech();
-xmn=mini(frq),xmx=maxi(frq),npx=10
-//Magnitude
-[ymn,ymx,npy]=graduate(mini(d),maxi(d))
-rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
-
+//magnitude
 xsetech([0,0,1.0,hx*0.95]);
-plot2d1("oln",frq',d',-[1,3:mn+1],"011",' ',rect,axis);
+plot2d1("oln",frq',d',[1,3:mn+1],"061")
 xgrid();
 xtitle('Magnitude ',' Hz','db');
 
 //phase
-ymn=floor((mini(phi)-1)/90)*90
-ymx=ceil((maxi(phi)+1)/90)*90
-npy=modulo((ymx-ymn)/90-1,10)+1;
-//[ymn,ymx,npy]=graduate(mini(phi)-1,maxi(phi)+1)
-rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
 xsetech([0,hx,1.0,hx*0.95]);
-plot2d1("oln",frq',phi',-[1,3:mn+1],"011",' ',rect,axis)
+plot2d1("oln",frq',phi',[1,3:mn+1],"061")
 xgrid();
 xtitle('Phase ',' Hz','degrees');
 if mnc>0 then

@@ -15,6 +15,6 @@ c
       if (ln.le.0) goto 100
       if(ligne(1:ln).eq.' ') goto 100
       buf=ligne(1:ln)// char(0)
-      call systemc(buf)
+      call systemc(buf,ierr)
   100 continue
       end

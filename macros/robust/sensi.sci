@@ -1,9 +1,10 @@
 function [Se,R,T]=sensi(G,Sk)
 // [Se,R,T]=sensi(G,Sk) computes sensitivity functions  
 //!
+G1=G(1);Sk1=Sk(1);
 flag=0;
-if G(1)='r' then G=tf2ss(G);flag=1;end
-if Sk(1)='r' then Sk=tf2ss(Sk);flag=flag+1;end
+if G1(1)='r' then G=tf2ss(G);flag=1;end
+if Sk1(1)='r' then Sk=tf2ss(Sk);flag=flag+1;end
 [ny,nu]=size(G);Iu=eye(nu,nu);Iy=eye(ny,ny);
 Ouy=zeros(nu,ny);Oyu=zeros(ny,nu);Ouu=zeros(nu,nu);
 Oyy=zeros(ny,ny);

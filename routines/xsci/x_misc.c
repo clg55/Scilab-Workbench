@@ -46,6 +46,8 @@
 #include "x_error.h"
 #include "x_menu.h"
 
+#include "All-extern-x.h"
+
 #ifndef X_NOT_STDC_ENV
 #include <stdlib.h>
 #else
@@ -60,11 +62,10 @@ char *malloc();
 static void DoSpecialEnterNotify();
 static void DoSpecialLeaveNotify();
 
-x_events()
+void x_events()
 {
   XEvent event;
   register TScreen *screen = &term->screen;
-  extern XtAppContext app_con;
   if (screen->scroll_amt)
     FlushScroll(screen);
   if (!XPending(screen->display))
@@ -263,7 +264,7 @@ void HandleFocusChange(w, eventdata, event)
 
 
 
-selectwindow(screen, flag)
+void selectwindow(screen, flag)
   register TScreen *screen;
   register int flag;
 {
@@ -277,7 +278,7 @@ selectwindow(screen, flag)
   return;
 }
 
-unselectwindow(screen, flag)
+void unselectwindow(screen, flag)
   register TScreen *screen;
   register int flag;
 {
@@ -294,7 +295,7 @@ unselectwindow(screen, flag)
 
 static long lastBellTime;	/* in milliseconds */
 
-Bell()
+void Bell()
 {
   extern XtermWidget term;
   register TScreen *screen = &term->screen;
@@ -342,7 +343,7 @@ Bell()
 }
 
 
-VisualBell()
+void VisualBell()
 {
   extern XtermWidget term;
   register TScreen *screen = &term->screen;
@@ -385,7 +386,7 @@ void HandleBellPropertyChange(w, data, ev, more)
   }
 }
 
-Redraw()
+void Redraw()
 {
   extern XtermWidget term;
   register TScreen *screen = &term->screen;
@@ -410,7 +411,7 @@ Redraw()
   }
 }
 
-do_osc(func)
+void do_osc(func)
   int (*func) ();
 {
   register int mode, c;
@@ -462,7 +463,7 @@ do_osc(func)
     }
 }
 
-static ChangeGroup(attribute, value)
+static void ChangeGroup(attribute, value)
   String attribute;
   XtArgVal value;
 {
@@ -473,13 +474,13 @@ static ChangeGroup(attribute, value)
   XtSetValues(toplevel, args, 1);
 }
 
-Changename(name)
+void Changename(name)
   register char *name;
 {
   ChangeGroup(XtNiconName, (XtArgVal) name);
 }
 
-Changetitle(name)
+void Changetitle(name)
   register char *name;
 {
   ChangeGroup(XtNtitle, (XtArgVal) name);
@@ -488,7 +489,7 @@ Changetitle(name)
 #ifndef DEBUG
 /* ARGSUSED */
 #endif
-Panic(s, a)
+void Panic(s, a)
   char *s;
   int a;
 {
@@ -513,7 +514,7 @@ char *SysErrorMsg(n)
 }
 
 
-SysError(i)
+void SysError(i)
   int i;
 {
   int oerrno;
@@ -525,7 +526,7 @@ SysError(i)
   Cleanup(i);
 }
 
-Error(i)
+void Error(i)
   int i;
 {
   fprintf(stderr, "%s: Error %d\n", xterm_name, i);
@@ -536,7 +537,8 @@ Error(i)
 /*
  * cleanup by sending SIGHUP to client processes
  */
-Cleanup(code)
+
+void Cleanup(code)
   int code;
 {
   extern XtermWidget term;
@@ -547,7 +549,7 @@ Cleanup(code)
   {
     (void) kill_process_group((int) screen->pid, SIGHUP);
   }
-  C2F(clearexit)(code);
+  ClearExit(code);
 }
 
 
@@ -572,17 +574,17 @@ char *strindex(s1, s2)
 }
 
 /*ARGSUSED*/
-xerror(d, ev)
+void xerror(d, ev)
   Display *d;
   register XErrorEvent *ev;
 {
   fprintf(stderr, "%s:  warning, error event receieved:\n", xterm_name);
   (void) XmuPrintDefaultErrorMessage(d, ev, stderr);
-  C2F(clearexit)(ERROR_XERROR);
+  ClearExit(ERROR_XERROR);
 }
 
 /*ARGSUSED*/
-xioerror(dpy)
+void xioerror(dpy)
   Display *dpy;
 {
   (void)
@@ -590,9 +592,10 @@ xioerror(dpy)
 	    "%s:  fatal IO error %d (%s) or KillClient on X server \"%s\"\r\n",
 	    xterm_name, errno, SysErrorMsg(errno),
 	    DisplayString(dpy));
-  C2F(clearexit)(ERROR_XIOERROR);
+  ClearExit(ERROR_XIOERROR);
 }
 
+/**
 static void withdraw_window(dpy, w, scr)
   Display *dpy;
   Window w;
@@ -602,7 +605,7 @@ static void withdraw_window(dpy, w, scr)
   XWithdrawWindow(dpy, w, scr);
   return;
 }
-
+**/
 
 void set_vt_visibility(on)
   Boolean on;

@@ -93,15 +93,15 @@
       if(i.eq.is) goto 220
       u=p(i)
       if(i.eq.or(u)) goto 215
-      eps=min(eps,dble(float(c(u)-phimim(u))))
+      eps=min(eps,dble(c(u)-phimim(u)))
       i=or(u)
       goto 210
  215  continue
-      eps=min(eps,dble(float(phimim(u))))
+      eps=min(eps,dble(phimim(u)))
       i=ex(u)
       goto 210
  220  continue
-      eps=min(eps,dble(float(v-valflo)))
+      eps=min(eps,dble(v-valflo))
       i=it
  230  continue
       if(i.eq.is) goto 240

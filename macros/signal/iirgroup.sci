@@ -1,9 +1,9 @@
 function [lt,grad]=iirgroup(p,r,theta,omega,wt,td)
-//    p===> critere Lp
-//    r=module des poles et zeros des filtres
-//theta=argument des  "    "   "    "    "
-//omega=frequences ou sont donnees les specifications des filtres
-//wt=fonction de ponderation pour le retard de groupe
+//    p===> Lp
+//    r=magnitude of poles and zeros of filters
+//theta=phase   "    "   "    "    "
+//omega=frequencies corresponding to filters specs.
+//wt=weighting function for group delay
 //!
 //
 [m,n]=size(td);if m>n,td=td';end;
@@ -38,7 +38,7 @@ grtgrp=(n5.*sin1)./k1-(n5.*sin2)./k2;
 grtgrp(1:m,:)=-grtgrp(1:m,:);
 //
 //CRITERE D'ERREUR EN LE RETARD DE GROUPE ET SON GRADIENT
-t=grp-td;t1=t**(2*p);t1=t1.*wt;lt=sum(t1);
+t=grp-td;t1=t^(2*p);t1=t1.*wt;lt=sum(t1);
 t1=(t1./a)*2*p;
 grad=[grrgrp*t1' grtgrp*t1'];
 

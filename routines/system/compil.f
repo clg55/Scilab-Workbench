@@ -51,6 +51,21 @@ c     set line number
          istk(l)=code  
          istk(l+1)=val1(1)
          comp(1)=l+2
+      elseif(code.eq.18) then
+c     mark named argument
+         err=sadr(l+nsiz+1)-lstk(bot)
+         if(err.gt.0) goto 90
+         istk(l)=code  
+         call putid(istk(l+1),val1)
+         comp(1)=l+nsiz+1
+      elseif(code.eq.19) then
+c     form recursive extraction list
+         err=sadr(l+3)-lstk(bot)
+         if(err.gt.0) goto 90
+         istk(l)=code  
+         istk(l+1)=val1(1)
+         istk(l+2)=val2
+         comp(1)=l+3
       elseif(code.ge.100) then
 c     appel des fonctions <100*fun rhs lhs fin>
          err=sadr(l+(nsiz+3))-lstk(bot)

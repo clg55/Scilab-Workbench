@@ -63,7 +63,7 @@ c
 c
 c  compute the norm one of a.
 c
-      anorm = 1.0d+0
+      anorm = 0.0d+0
       do 20 j=1,n
          alpha = zero
          do 10 i=1,n
@@ -71,6 +71,15 @@ c
    10    continue
          if (alpha.gt.anorm) anorm = alpha
    20 continue
+      if (anorm.eq.0.0d0) then
+c     null matrix special case (Serge Steer 96)
+         do 21 j=1,n
+            call dset(n,0.0d+0,ea(j,1),iea)
+            ea(j,j)=1.0d0
+ 21      continue
+         return
+      endif
+      anorm=max(anorm,1.0d0)
 c
 c call bdiag whith rmax equal to the norm one of matrix a.
 c

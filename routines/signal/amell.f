@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=AMELL,SSI=0
       subroutine amell(du, dk, dsn2 ,n)
 c!purpose
 c calculation of the jacobi's elliptic function am(u,k)

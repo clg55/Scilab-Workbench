@@ -1,3 +1,17 @@
+with(share):
+
+if SearchText(`Release 3`,interface(version))<>0 then
+	matadd:=add;
+	readshare(tex):
+	readshare(macrofor,numerics):
+elif SearchText(`Release 4`,interface(version))<>0 then
+	readshare(tex,system):
+	readshare(macrofor,numerics):
+else
+  ERROR(`Unknown Release`)
+fi;
+
+
 #----------------------------------------------------------------------------
 #     GENERAL PART
 #----------------------------------------------------------------------------
@@ -11,6 +25,7 @@
 #-----------------------------------------------------------------------------
 
 addnotations:=proc(varlist)
+	global texsub;
 	local x,nots:
 	nots:={};
 	for x in varlist do
@@ -30,7 +45,8 @@ sorties:=proc(filename,comment,exp)
 	appendto(filename);
 	lprint(comment);
 	lprint(` `);
-	mtex(exp);
+	mtex(exp,latex);
+	lprint(` `);
 	writeto(terminal);
 end:
 
@@ -44,11 +60,11 @@ sortiesM:=proc(filename,comment,expr)
 	appendto(filename);
 	lprint(comment);
 	lprint(` `);
-	map(x -> mtex(x),expr);
+	map(x -> mtex(x,latex),expr);
+	lprint(` `);
 	writeto(terminal);
 end:
 
-readlib(tex):
 texwid:=120;
 sortieinit(`systeme.tex`);
 
@@ -84,7 +100,7 @@ euler_equations:=proc(L,q,qd,qdd)
 
 
 time_diff:=proc(phi,q,qd,qdd)
-	local phi_copy,k,ttvar:
+	local phi_copy,k,ttvar,diff_phi:
 	# subtitution to specify that q,qd ,qdd depends on time 
 	phi_copy:=phi:
 	phi_copy:=subs(map( xx-> xx=xx(t),[op(q),op(qd)]),phi_copy):
@@ -158,8 +174,8 @@ CCE:=proc(E,q,qd,qdd)
 
 RRE:=proc(E,ME,CE,q,qd,qdd)
 	local MM:
-	MM:=add(	E,
-		add(multiply(ME,matrix(nops(q),1,qdd)),
+	MM:=matadd(	E,
+		matadd(multiply(ME,matrix(nops(q),1,qdd)),
 	     	multiply(CE,matrix(nops(q),1,map(x->x**2,qd)))),
 		1,-1);
 	MM:=map((x)-> simplify(x),eval(MM)):
@@ -169,9 +185,9 @@ RRE:=proc(E,ME,CE,q,qd,qdd)
 #-----------------------------------------------------
 # FORTRAN GENERATION 
 #-----------------------------------------------------
-read ``.libname.`/macrofort.m`;
 
 Gener:=proc(filename,fortranlist)
+	global optimized ;
 	init_genfor();
 	optimized:=true:
 	writeto(filename):

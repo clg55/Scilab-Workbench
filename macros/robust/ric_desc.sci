@@ -1,4 +1,4 @@
-//[X1,X2,zero]=ric_desc(H,E)
+function [X1,X2,zero]=ric_desc(H,E)
 //[X1,X2,zero]=ric_desc(H [,E])  Descriptor Riccati solver with
 // hamiltonian matrices as inputs.
 //        (see also riccati)
@@ -60,7 +60,7 @@ if RHS=2 then
    [UV,n]=gschur(H,E,'d');
    X2=UV(1:n,1:n);X1=UV(n+1:2*n,1:n);
 if LHS=3 then
-   A=H(1:n1,1:n1);G=E(1:n,n+1:2*n);C=-H(n+1:2*n,1:n);B=real(sqrt(G));R=eye(A);
+   A=H(1:n1,1:n1);G=E(1:n,n+1:2*n);C=-H(n+1:2*n,1:n);B=real(sqrtm(G));R=eye(A);
    X=X1/X2;zero=A'*X*A-(A'*X*B/(R+B'*X*B))*(B'*X*A)+C-X; 
 end
 end

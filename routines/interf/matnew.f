@@ -13,7 +13,7 @@ c
       integer iadr,sadr
 c
 c         fin    1     2      3      4       5     6
-c              cont   ppol  tzer    freq  ltitr  rtitr
+c              contr   ppol  tzer    freq  ltitr  rtitr
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1

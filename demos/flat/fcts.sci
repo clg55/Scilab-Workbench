@@ -213,7 +213,7 @@ xy_car = ....
 //  
 xpoly(xy_car(1,1:7),xy_car(2,1:7),'lines') ;
 // The 4 wheels
-xpolys(matrix(xy_car(1,8:15),2,4),matrix(xy_car(2,8:15),2,4))
+xpolys(matrix(xy_car(1,8:15),2,4),matrix(xy_car(2,8:15),2,4),[1 1 1 1])
 
 
 function ptcr2T(state)
@@ -266,15 +266,15 @@ xy_T2 = diag([x,y])*ones(2,11)+ ...
 //  Car 
 xpoly(xy_car(1,1:7),xy_car(2,1:7),'lines') ;
 //   The 4 wheels
-xpolys(matrix(xy_car(1,8:15),2,4),matrix(xy_car(2,8:15),2,4))
+xpolys(matrix(xy_car(1,8:15),2,4),matrix(xy_car(2,8:15),2,4),[1 1 1 1])
 
 // trailer 1 
 xpoly(xy_T1(1,1:5),xy_T1(2,1:5),'lines') ;
 // hitch and wheels
-xpolys(matrix(xy_T1(1,6:11),2,3),matrix(xy_T1(2,6:11),2,3));
+xpolys(matrix(xy_T1(1,6:11),2,3),matrix(xy_T1(2,6:11),2,3),[1 1 1 1]);
 
 //
 // trailer 2 
 xpoly(xy_T2(1,1:5),xy_T2(2,1:5),'lines') ;
 // hitch and wheels
-xpolys(matrix(xy_T2(1,6:11),2,3),matrix(xy_T2(2,6:11),2,3));
+xpolys(matrix(xy_T2(1,6:11),2,3),matrix(xy_T2(2,6:11),2,3),[1 1 1 1]);

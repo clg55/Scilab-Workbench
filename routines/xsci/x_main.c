@@ -64,7 +64,6 @@ SOFTWARE.
 #include <sys/resource.h>
 #endif	/* !SYSV */
 
-
 #include <stdio.h>
 #include <errno.h>
 
@@ -74,7 +73,6 @@ SOFTWARE.
 #include <local/openpty.h>
 int	Ptyfd;
 #endif /* PUCC_PTYD */
-
 
 #ifndef X_NOT_POSIX
 #include <unistd.h>
@@ -103,7 +101,11 @@ char *malloc(), *realloc(), *calloc();
 
 
 extern char *strindex ();
-extern void HandlePopupMenu();
+
+/** for function prototypes **/
+
+#include "All-extern-x.h"
+#include "All-extern.h"
 
 char *ProgramName;
 
@@ -119,15 +121,14 @@ static struct _resource {
     Boolean noWindow;
     Boolean noStartup;
     Boolean useInsertMode;
-    String	visualType;
+    String visualType;
 } resource;
-
 
 /* used by VT (charproc.c) */
 
 #define offset(field)	XtOffsetOf(struct _resource, field)
 
- XtResource application_resources[] = {
+XtResource application_resources[] = {
     {"noWindow", "NoWindow", XtRBoolean, sizeof(Boolean),
 	offset(noWindow), XtRString, "false"},
     {"noStartup", "NoStartup",XtRBoolean, sizeof(Boolean),
@@ -146,8 +147,20 @@ static struct _resource {
 	offset(tty_modes), XtRString, (caddr_t) NULL},
     {"useInsertMode", "UseInsertMode", XtRBoolean, sizeof (Boolean),
         offset(useInsertMode), XtRString, "false"},
-    { "visualType", "VisualType", XtRString, sizeof(String),
+    {"visualType", "VisualType", XtRString, sizeof(String),
 	offset(visualType), XtRImmediate, (XtPointer)"" }
+};
+
+
+struct _color {
+  char *c1;
+}; /**  colors; **/
+
+
+XtResource app_colors[] = {
+  {"xscilab.color*Command.background", "Xscilab*Command.Background", 
+     XtRString, sizeof(String),
+     XtOffsetOf(struct _color, c1), NULL,NULL}
 };
 
 static char *fallback_resources[] = {
@@ -183,51 +196,11 @@ static char *message[] = {
 "Options that start with a plus sign (+) restore the default.",
 NULL};
 
-static void Syntax (badOption)
-    char *badOption;
-{
-    struct _options *opt;
-    int col;
 
-    fprintf (stderr, "%s:  bad command line option \"%s\"\r\n\n",
-	     ProgramName, badOption);
+static void Syntax  _PARAMS((char *badOption));  
+static void Help  _PARAMS((void));  
+static void strip_blank  _PARAMS((char *source));  
 
-    fprintf (stderr, "usage:  %s", ProgramName);
-    col = 8 + strlen(ProgramName);
-    for (opt = options; opt->opt; opt++) {
-	int len = 3 + strlen(opt->opt);	 /* space [ string ] */
-	if (col + len > 79) {
-	    fprintf (stderr, "\r\n   ");  /* 3 spaces */
-	    col = 3;
-	}
-	fprintf (stderr, " [%s]", opt->opt);
-	col += len;
-    }
-
-    fprintf (stderr, "\r\n\nType %s -help for a full description.\r\n\n",
-	     ProgramName);
-    exit (1);
-}
-
-static void Help ()
-{
-    struct _options *opt;
-    char **cpp;
-
-    fprintf (stderr, "usage:\n        %s [-options ...] \n\n",
-	     ProgramName);
-    fprintf (stderr, "where options include:\n");
-    for (opt = options; opt->opt; opt++) {
-	fprintf (stderr, "    %-28s %s\n", opt->opt, opt->desc);
-    }
-    putc ('\n', stderr);
-    for (cpp = message; *cpp; cpp++) {
-	fputs (*cpp, stderr);
-	putc ('\n', stderr);
-    }
-    putc ('\n', stderr);
-    exit (0);
-}
 
 extern WidgetClass xtermWidgetClass;
 
@@ -276,9 +249,9 @@ KeyboardMapping(w, event, params, num_params)
 extern void  SGDeleteWindow();
 
 XtActionsRec actionProcs[] = {
-    "DeleteWindow", DeleteWindow,
-    "SGDeleteWindow", SGDeleteWindow,
-    "KeyboardMapping", KeyboardMapping,
+  {"DeleteWindow", DeleteWindow},
+  {"SGDeleteWindow", SGDeleteWindow},
+  {"KeyboardMapping", KeyboardMapping}
 };
 
 
@@ -296,50 +269,37 @@ int Xscilab(dpy,topwid)
 
 Atom wm_delete_window;
 
-/* For Fortran call */
-
-/**********************************************************************/
-static void
-strip_blank(source)
-     char *source;
-{
-   char *p;
-   p = source;
-   /* look for end of string */
-   while(*p != '\0') p++;
-   while(p != source) {
-      p--;
-      if(*p != ' ') break;
-      *p = '\0';
-   }
-}
-
-C2F(winsci) (pname,nos,idisp,display,dummy1,dummy2)
+int C2F(winsci) (pname,nos,idisp,display,lpname,ldisp)
      int *nos,*idisp;
-     long int dummy1,dummy2;
-     char display[];
-     char pname[];
+     int *lpname,*ldisp;
+     char *display;
+     char *pname;
 {
   char *argv[10];
   int argc=1;
+  char dpy[128];
+  pname[*lpname]='\0';
   strip_blank(pname);
   argv[0]=pname;
   if ( *idisp == 1) 
     {
       argv[argc++]="-display";
+      display[*ldisp]='\0';
       strip_blank(display);argv[argc++]=display;
+      sprintf(dpy,"DISPLAY=%s",display);
+      putenv(dpy);
     }
   if ( *nos == 1) 
       argv[argc++]="-ns";
-
   argv[argc++]="-name";
   argv[argc++]="Scilab";
   main_sci(argc,argv);
+  return(0);
 }
 
 
 /*
- * initColors: To allow resources to be specfied separately for color
+ * initColors: To allow resources to be specified separately for color
  *	and mono displays, we add a dummy Form widget below realToplevel
  *	in appropriate circumstances.
  */
@@ -348,51 +308,70 @@ C2F(winsci) (pname,nos,idisp,display,dummy1,dummy2)
 	toplevel = XtCreateManagedWidget(NAME,formWidgetClass, \
 					 realToplevel,(ArgList)0 ,(Cardinal)0);
 
-initColors()
+static int screencolor = 1 ; /* default screen color status */
+
+/* return the current screencolor */
+
+void getcolordef(screenc)
+     integer *screenc;
 {
-    Screen *Xscreen;
-    Visual *visual;
-    /* The default is no extra widget (ie. mono) */
-    toplevel = realToplevel;
-    Xscreen = XtScreen(realToplevel);
-    /* See if the user specified a type */
-    if (strcmp(resource.visualType,"mono") == 0) {
-	return;
-    } else if (strcmp(resource.visualType,"color") == 0) {
-	ADDTOPLEVEL("color");
-	return;
-    } else if (strcmp(resource.visualType,"gray") == 0) {
-	ADDTOPLEVEL("gray");
-	return;
-    }
-    /* Otherwise we try to figure it out */
-    if ((visual=XDefaultVisualOfScreen(Xscreen)) == NULL) {
-	fprintf(stderr,"Scilab : can't get info about visual!\n");
-	return;
-    }
-    if (visual->map_entries > 2) {
-	switch (visual->class) {
-	  case StaticColor:
-	  case PseudoColor:
-	  case TrueColor:
-	  case DirectColor:
-	    ADDTOPLEVEL("color");
-	    break;
-	  case StaticGray:
-	  case GrayScale:
-	    ADDTOPLEVEL("gray");
-	    break;
-	  default:
-	    toplevel = realToplevel;
-	}
-    } else {
-	toplevel = realToplevel;
-    }
+  *screenc= screencolor;
+}
+
+void setcolordef(screenc)
+     int screenc;
+{
+  screencolor = screenc;
 }
 
 
+void initColors()
+{
+  Screen *Xscreen;
+  Visual *visual;
+  /* The default is no extra widget (ie. mono) */
+  toplevel = realToplevel;
+  Xscreen = XtScreen(realToplevel);
+  /* See if the user specified a type */
+  if (strcmp(resource.visualType,"mono") == 0) {
+    return;
+  } else if (strcmp(resource.visualType,"color") == 0) {
+    ADDTOPLEVEL("color");
+    return;
+  } else if (strcmp(resource.visualType,"gray") == 0) {
+    ADDTOPLEVEL("gray");
+    return;
+  }
+  /* Otherwise we try to figure it out */
+  if ((visual=XDefaultVisualOfScreen(Xscreen)) == NULL) {
+    fprintf(stderr,"Scilab: can't get info about visual!\n");
+    return;
+  }
+  if (visual->map_entries > 2) {
+    switch (visual->class) {
+    case StaticColor:
+    case PseudoColor:
+    case TrueColor:
+    case DirectColor:
+      ADDTOPLEVEL("color");
+      screencolor = 1;
+      break;
+    case StaticGray:
+    case GrayScale:
+      ADDTOPLEVEL("gray");
+      screencolor = 0;
+      break;
+    default:
+      screencolor = 0;
+      toplevel = realToplevel;
+    }
+  } else {
+      screencolor = 0;
+      toplevel = realToplevel;
+  }
+}
 
-main_sci(argc, argv)
+void main_sci(argc, argv)
      int argc;
      char **argv;
 {
@@ -401,24 +380,31 @@ main_sci(argc, argv)
   register TScreen *screen;
   register int  pty;
   int Xsocket;
-  int xerror(), xioerror();
   ProgramName = argv[0];
   /* Init the Toolkit. */
-  realToplevel = toplevel = XtAppInitialize (&app_con, "Xscilab", 
-					     optionDescList, XtNumber(optionDescList), 
-					     &argc, argv, fallback_resources, 
-					     (ArgList) 0,(Cardinal) 0);					     
+  realToplevel = toplevel = 
+    XtAppInitialize(&app_con, "Xscilab", 
+		    optionDescList, XtNumber(optionDescList), 
+		    &argc, argv, fallback_resources, 
+		    (ArgList) 0,(Cardinal) 0);				     
   XtGetApplicationResources(toplevel, (XtPointer) &resource,
 			    application_resources,
 			    XtNumber(application_resources), 
 			    (ArgList) 0,(Cardinal) 0);
-
+  /** 
+  XtGetApplicationResources(toplevel, (XtPointer) &colors, 
+			    app_colors,
+			    XtNumber(app_colors), 
+			    (ArgList) 0,(Cardinal) 0);
+  printf("Color: %s\n",colors.c1);
+  **/
   XtAppAddActions(app_con, actionProcs, XtNumber(actionProcs));
-  initColors();
+  initColors(); 
   SetXsciOn();
   xterm_name = resource.xterm_name;
   if (strcmp(xterm_name, "-") == 0) xterm_name = "xterm";
-  XtSetValues (toplevel, ourTopLevelShellArgs,(Cardinal)  number_ourTopLevelShellArgs);
+  XtSetValues (toplevel, ourTopLevelShellArgs,
+	       (Cardinal)  number_ourTopLevelShellArgs);
   /* Parse the rest of the command line */
   for (argc--, argv++ ; argc > 0 ; argc--, argv++) 
     {
@@ -483,16 +469,17 @@ main_sci(argc, argv)
   X_mask = 1 << Xsocket;
   Select_mask = pty_mask | X_mask;
   max_plus1 = (pty < Xsocket) ? (1 + Xsocket) : (1 + pty); 
-  XSetErrorHandler(xerror);
-  XSetIOErrorHandler(xioerror);
-  signal(SIGINT,do_kill);
-  signal(SIGKILL,do_kill);
+  XSetErrorHandler((XErrorHandler)xerror);
+  XSetIOErrorHandler((XIOErrorHandler)xioerror);
+  signal(SIGINT,do_kill1);
+  signal(SIGKILL,do_kill1);
   {
     VTRun(nostartup);
   }
 }
 
 #ifdef sun 
+#ifndef SYSV
 #include <sys/ieeefp.h>
 clear_ieee_warnings()
 {
@@ -500,14 +487,37 @@ clear_ieee_warnings()
   ieee_flags("clearall","exeption","all", &out);
 }
 #endif 
+#endif 
 
-C2F(clearexit)(n)
+/**********************
+ * Exit function called by some 
+ * X11 functions 
+ * call sciquit which call clearexit
+ ************************/
+
+void ClearExit(n)
      integer n;
 {
+  /** try to clean scilab **/
+  /** then call clearexit **/
+  C2F(sciquit)();
+}
+
+extern void   C2F(tmpdirc)();
+
+int C2F(clearexit)(n)
+     int *n;
+{
+  /** clean tmpfiles **/
+  C2F(tmpdirc)();
+  /** clean ieee **/
 #ifdef sun 
+#ifndef SYSV
   clear_ieee_warnings();
+#endif 
 #endif
-  exit(n);
+  exit(*n);
+  return(0);
 }
 
 /* following include needed for solaris */
@@ -532,8 +542,10 @@ int GetBytesAvailable (fd)
 #endif
 }
 
-/* Utility function to try to hide system differences from
-   everybody who used to call killpg() */
+/**********************************************************************
+ * Utility function to try to hide system differences from
+ * everybody who used to call killpg() 
+ **********************************************************************/
 
 int
 kill_process_group(pid, sig)
@@ -543,3 +555,75 @@ kill_process_group(pid, sig)
     return kill (-pid, sig);
 }
 
+/**********************************************************************
+ * Syntax 
+ **********************************************************************/
+
+static void Syntax (badOption)
+    char *badOption;
+{
+    struct _options *opt;
+    int col;
+
+    fprintf (stderr, "%s:  bad command line option \"%s\"\r\n\n",
+	     ProgramName, badOption);
+
+    fprintf (stderr, "usage:  %s", ProgramName);
+    col = 8 + strlen(ProgramName);
+    for (opt = options; opt->opt; opt++) {
+	int len = 3 + strlen(opt->opt);	 /* space [ string ] */
+	if (col + len > 79) {
+	    fprintf (stderr, "\r\n   ");  /* 3 spaces */
+	    col = 3;
+	}
+	fprintf (stderr, " [%s]", opt->opt);
+	col += len;
+    }
+
+    fprintf (stderr, "\r\n\nType %s -help for a full description.\r\n\n",
+	     ProgramName);
+    exit (1);
+}
+
+/**********************************************************************
+ * Help utility function 
+ **********************************************************************/
+
+static void Help ()
+{
+    struct _options *opt;
+    char **cpp;
+
+    fprintf (stderr, "usage:\n        %s [-options ...] \n\n",
+	     ProgramName);
+    fprintf (stderr, "where options include:\n");
+    for (opt = options; opt->opt; opt++) {
+	fprintf (stderr, "    %-28s %s\n", opt->opt, opt->desc);
+    }
+    putc ('\n', stderr);
+    for (cpp = message; *cpp; cpp++) {
+	fputs (*cpp, stderr);
+	putc ('\n', stderr);
+    }
+    putc ('\n', stderr);
+    exit (0);
+}
+
+/**********************************************************************
+ * For Fortran call 
+ **********************************************************************/
+
+static void
+strip_blank(source)
+     char *source;
+{
+   char *p;
+   p = source;
+   /* look for end of string */
+   while(*p != '\0') p++;
+   while(p != source) {
+      p--;
+      if(*p != ' ') break;
+      *p = '\0';
+   }
+}

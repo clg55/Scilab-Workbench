@@ -1,11 +1,6 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/poly.a
 
@@ -21,21 +16,12 @@ OBJSF = bezout.o blktit.o\
 	wdmpad.o wdmpmu.o wmdsp.o wmpad.o wmpcnc.o wmpins.o \
 	wmpmu.o wmptld.o wmptra.o wpmul.o wpmul1.o wpodiv.o wprxc.o \
 	mpdegr.o dmp2pm.o recbez.o dmpadj.o wmpadj.o bezstp.o \
-	dmpcle.o wmpcle.o
+	dmpcle.o wmpcle.o ddmpev.o
 
 OBJS = $(OBJSC) $(OBJSF)
 
-all:: $(LIBRARY)
+include ../../Makefile.incl
 
-world: all
+CFLAGS = $(CC_OPTIONS)
 
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)
+include ../Make.lib

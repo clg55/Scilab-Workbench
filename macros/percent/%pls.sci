@@ -1,12 +1,16 @@
-//<f>=%pls(p,m)
-// %pls(p,m) calcule la division a gauche de la matrice de scalaires m
-//par la matrice de polynome ou le polynome p. Cette macro correspond
-//a l'operation p\m.
+function f=%pls(p,m)
+// f=%pls(p,m) <=>f= p\m.
 //!
-[l,c]=size(p)
-if l*c <> 1 then f=invr(p)*m,return,end
-[l,c]=size(m)
-f=tlist('r',m,p*ones(l,c),[])
-//end
+[mp,np]=size(p)
+if mp*np<>1 then 
+  f=invr(p)*m,
+else
+  [l,c]=size(m)
+  if mp==-1&l*c==1|l=-1 then
+    f=tlist(['r','num','den','dt'],m,p*eye,[])
+  else
+    f=tlist(['r','num','den','dt'],m,p*ones(l,c),[])
+  end
+end
 
 

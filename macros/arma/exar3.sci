@@ -1,4 +1,4 @@
-//<>=exar3(m)
+function exar3(m)
 //<>=exar3(m)
 // Estimation de la puissance spectrale d'un processus
 // ARMA
@@ -36,6 +36,6 @@ leg="log(p) : estimee macro mese @ valeur theorique@log(p) : arma"
 plot2d([fr;fr;fr]',[20*log(sm/sm(1))/log(10);...
   20*log(res/res(1))/log(10);...
   20*log(res1/res1(1))/log(10)]',...
- [-2,-1,1],"111",leg, [0,-70,0.5,60]);
-//end
+ [2,1,-1],"111",leg, [0,-70,0.5,60]);
+
 

@@ -1,4 +1,4 @@
-//[m,x]=secto3d(seclist,npas)
+function [m,x]=secto3d(seclist,npas)
 //Etant donnee une surface 3D decrite par une liste (seclist) de sections
 // dans le plan  (x,z),  [m [,x]]=secto3d(seclist [,npas]) retourne une
 // matrice m  contenant une discretisation reguliere de la surface:
@@ -46,6 +46,5 @@ for k=1:n
   sec=[[x(1);sec(2,1)],sec,[x(nx);sec(2,ns)]]
   m(k,:)=interpln(sec,x);
 end
-//end
 
 

@@ -21,7 +21,7 @@ deff('[y]=t(x)',[
 '      y=u,'
 '    end'
 '  end'
-'end'])
+'end'],'n')
 //
 if t(0)<>0 then pause,end
 if t(1)<>0 then pause,end

@@ -123,7 +123,7 @@ PW(n,\nu_l)&=&2\sum_{k=-N+1}^{N-1}e^{-i2k\pi(l/N)}|h_N(k)|^2x(n+k)x^{*}(n-k) \\
 &=&2(2Re\{\sum_{k=0}^{N-1}e^{-i2k\pi(l/N)}|h_N(k)|^2x(n+k)x^{*}(n-k)\}-|x(n)|^2) \nonumber
 \label{e.wigner.12}
 \end{eqnarray}
-and this expression may be easily computed via the FFT with the $\Psi$lab 
+and this expression may be easily computed via the FFT with the Scilab 
 function {\tt wigner}.
 
 \paragraph{Example 1}: The following example is taken from \cite{flandrin}: the signal is a finite 
@@ -140,7 +140,7 @@ unit step function, $h_N$ is the $64$-point rectangular window; the time
 and frequency increments are respectively equal to $12$ and $\pi/128$; $M$ 
 has been set to one (unsmoothed estimator). The signal generation and wigner 
 spectrum computation are then as follows:
-\verbatok{\Diary spfact.dia}
+\verbatok{\Diary wigner1.dia}
 \end{verbatim}
 %%%%%%%%%%%
 \input{\Figdir wigner1.tex}

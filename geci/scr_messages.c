@@ -18,6 +18,8 @@
 #include "scr_applications.h"
 #include "scr_messages.h"
 
+#define LONG 11
+
 typedef struct Actions_messages{
     char *source;
     char *type_message;
@@ -41,7 +43,6 @@ actions_messages tb_messages[]={
 {NULL, MSG_CREER_LIAISON, NBP_CREER_LIAISON, creer_liaison_actmsg},
 {NULL, MSG_DETRUIRE_LIAISON, NBP_DETRUIRE_LIAISON, detruire_liaison_actmsg},
 {NULL, MSG_POSTER_LISTE_ELMNT, NBP_POSTER_LISTE_ELMNT, poster_liste_elemnt_actmsg},
-{NULL, MSG_ENVOYER_LISTE_ELMNT, NBP_ENVOYER_LISTE_ELMNT, poster_liste_elemnt_actmsg},
 {NULL, MSG_CHANGER_CHEMIN, NBP_CHANGER_CHEMIN, changer_repertoire_actmsg},
 {NULL, NULL, 0, erreur_message_actmsg}};
 
@@ -52,37 +53,37 @@ actions_messages tb_messages[]={
 void interpreter_message(message)
 Message message;
 {
-    int i;
+  int i;
+  
+  i=0;
+  while(tb_messages[i].nb_parametres != 0) {
     
-    i=0;
-    while(tb_messages[i].nb_parametres != 0) {
+    if (message.taille >= 3)
+      
+      if (tb_messages[i].source == NULL || 
+	  !strcmp(tb_messages[i].source,message.tableau[0]))
 	
-	if (message.taille >= 3)
+	if (tb_messages[i].type_message == NULL || 
+	    !strcmp(tb_messages[i].type_message,message.tableau[2])) {
+	  
+	  if (!strcmp(message.tableau[1],Identificateur_application)) {
+	    
+	    if (tb_messages[i].nb_parametres >= 0) {
+	      
+	      if (message.taille == tb_messages[i].nb_parametres)
 		
-		if (tb_messages[i].source == NULL || 
-                    !strcmp(tb_messages[i].source,message.tableau[0]))
-			
-			if (tb_messages[i].type_message == NULL || 
-			    !strcmp(tb_messages[i].type_message,message.tableau[2])) {
-			    
-			    if (!strcmp(message.tableau[1],Identificateur_application)) {
-				
-				if (tb_messages[i].nb_parametres >= 0) {
-				    
-				    if (message.taille == tb_messages[i].nb_parametres)
-					   
-					    break;
-				}
-				else {
-				    if (message.taille >= -tb_messages[i].nb_parametres)
-					    break;
-				}
-			    }
-			}
-	i++;
-    }
-
-    (*tb_messages[i].action)(message);
+		break;
+	    }
+	    else {
+	      if (message.taille >= -tb_messages[i].nb_parametres)
+		break;
+	    }
+	  }
+	}
+    i++;
+  }
+  
+  (*tb_messages[i].action)(message);
 }
 
 void envoyer_message_var(va_alist)
@@ -96,7 +97,7 @@ void envoyer_message_var(va_alist)
     message=convertir_nombre_arbitraire_de_chaines_en_tableau(&parametres);
     
     va_end(parametres);
-    
+
     envoyer_message(message);
     
     liberer_message(message);
@@ -115,7 +116,8 @@ Message message;
     for(compteur=0;compteur<message.taille;compteur++)
 	    nouveau_message.tableau[compteur+1]=message.tableau[compteur];
     nouveau_message.taille=message.taille+1;
-    
+
+
     envoyer_message_brut(nouveau_message);
     
     liberer(nouveau_message.tableau[0]);
@@ -129,21 +131,23 @@ Message message;
     long longueur_trame;
     char *trame,*noyau_trame;
     application *recherche_appli_destination;
-    
+    char chaine_num[LONG];
+  
     noyau_trame=coller_chaines(message);
     
     trame=concatenation_plusieurs_chaines(DEBUT_DE_TRAME," ",noyau_trame," ",FIN_DE_TRAME,NULL);
-    
+   
     liberer(noyau_trame);
     
     recherche_appli_destination = ldc_rechercher_objet(liste_applications,message.tableau[1]);
     
     if (recherche_appli_destination == NULL)
-	    Erreur_scruteur(concatener_deux_chaines("<rechercher_application>: bad parameters: ",message.tableau[1]));
+      Erreur_scruteur(concatener_deux_chaines("<rechercher_application>: bad parameters: ",message.tableau[1]));
     
     longueur_trame=strlen(trame)+1;
-    
-    write(recherche_appli_destination->pipe_vers_appli,&longueur_trame,sizeof(longueur_trame));
+    sprintf(chaine_num,"%010d",longueur_trame);
+    chaine_num[LONG]='\0';
+    write(recherche_appli_destination->pipe_vers_appli,chaine_num,LONG);
     write(recherche_appli_destination->pipe_vers_appli,trame,longueur_trame);
     
     liberer(trame);
@@ -155,16 +159,19 @@ int destinataire;
 {
     long longueur_trame;
     char *trame,*noyau_trame;
-    
+    char chaine_num[LONG];
+
     noyau_trame=coller_chaines(message);
-    
+
     trame=concatenation_plusieurs_chaines(DEBUT_DE_TRAME," ",noyau_trame," ",FIN_DE_TRAME,NULL);
     
     liberer(noyau_trame);
     
     longueur_trame=strlen(trame)+1;
-    
-    write(destinataire,&longueur_trame,sizeof(longueur_trame));
+
+    sprintf(chaine_num,"%d",longueur_trame);
+    chaine_num[LONG]='\0';
+    write(destinataire,chaine_num,LONG);   
 
     write(destinataire,trame,longueur_trame);
    
@@ -177,9 +184,13 @@ Message *message;
 {
     char *trame;
     long longueur;
-
-    if (lire_buffer_sur_pipe(descripteur,&longueur,sizeof(longueur)) == 0) return 0;
+    char chaine_num[LONG];
+        
+    if (lire_buffer_sur_pipe(descripteur,chaine_num,LONG) == 0) return 0;
+ 
+    longueur=atol(chaine_num);
     trame=allouer_type(char,longueur+1);
+
     if (lire_buffer_sur_pipe(descripteur,trame,longueur) == 0) return 0;
     trame[longueur]='\0';
     *message=decouper_trame(trame);
@@ -192,14 +203,15 @@ int descripteur;
 void *buffer;
 long taille;
 {
-    long caracteres_lus = 0;
-    long caracteres_a_lire;
-    long longueur_paquet;
-    
-    do  {
-	caracteres_a_lire = taille - caracteres_lus;
-	while((longueur_paquet = read(descripteur,((char *)buffer)+caracteres_lus,caracteres_a_lire)) == -1)
-		;
+ 
+  long caracteres_lus = 0;
+  long caracteres_a_lire;
+  long longueur_paquet;
+  
+  do  {
+    caracteres_a_lire = taille - caracteres_lus;
+    while((longueur_paquet = read(descripteur,((char *)buffer)+caracteres_lus,caracteres_a_lire)) == -1)
+      ;
 	if (longueur_paquet == 0) return 0;
 	caracteres_lus += longueur_paquet;
     }

@@ -48,11 +48,32 @@ char	       *re_comp();
 #define streq(a, b)	(! strcmp((a), (b)))
 
 extern Widget	popup_dir_text;
-extern void	create_dirinfo();
 
 /* Xdir function declarations. */
 
-Boolean		MakeFileList();
-char	       *SaveString();
-void		MakeFullPath();
-Boolean		IsDirectory();
+
+#ifdef __STDC__
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)		paramlist
+#endif
+#else	
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)		()
+#endif
+#endif
+
+extern void FileSelected  _PARAMS((Widget w, XtPointer client_data, XtPointer ret_val));  
+extern void DirSelected  _PARAMS((Widget w, XtPointer client_data, XtPointer ret_val));  
+extern void GoHome  _PARAMS((Widget w, XtPointer client_data, XtPointer ret_val));  
+extern void GoScilab  _PARAMS((Widget w, XtPointer client_data, XtPointer ret_val));  
+extern void SetDir  _PARAMS((Widget widget, XEvent *event, String *params, Cardinal *num_params));  
+extern void create_dirinfo  _PARAMS((Widget parent, Widget below, Widget *ret_beside, Widget *ret_below, Widget *mask_w, Widget *dir_w, Widget *flist_w, Widget *dlist_w));  
+extern Boolean MakeFileList  _PARAMS((char *dir_name, char *mask, char ***dir_list1, char ***file_list1));  
+extern void DoChangeDir  _PARAMS((char *dir));  
+extern void CallbackRescan  _PARAMS((Widget widget, XtPointer closure, XtPointer call_data));  
+extern void Rescan  _PARAMS((Widget widget, XEvent *event, String *params, Cardinal *num_params));  
+extern void NewList  _PARAMS((Widget listwidget, String *list));  
+extern char *SaveString  _PARAMS((char *string));  
+extern Boolean IsDirectory  _PARAMS((char *root, char *path));  
+extern void MakeFullPath  _PARAMS((char *root, char *filename, char *pathname));  
+extern int wild_match  _PARAMS((char *string, char *pattern));  

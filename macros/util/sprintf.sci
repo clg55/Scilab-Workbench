@@ -327,6 +327,7 @@ else
  if e<0 then e=e-1,end  
  m=x*10^(-e)
 end
+
 function x=dec2hex(a)
 d=[string(0:9) 'a' 'b' 'c' 'd','e','f']
 x=emptystr(1)

@@ -45,6 +45,7 @@
 #include "x_ptyx.h"
 #include "x_data.h"
 #include "jpc_global.h"
+#include "version.h"
 
 extern Widget realToplevel;
 
@@ -52,48 +53,54 @@ Widget	fileWindow,			/* parent of fileLabel and lineLabel */
 	messageWindow,			/* window for displaying messages */
 	separator;			/* separator in vpane */
 
+/** Unused 
+static void CreateFileLabel  _PARAMS((Widget parent));  
+static void CreateLineLabel  _PARAMS((Widget parent));  
+static void CreateFileWindow  _PARAMS((Widget parent));  
+**/
+static void CreateMessageWindow  _PARAMS((Widget parent));  
+
 static Widget 	fileLabel,		/* filename of displayed text */
 		lineLabel;		/* line number of caret position */
 
 /*
  *  Private routines for creating various subwindows for xdbx.
  */
-
+/**
 static void CreateFileLabel(parent)
-Widget parent;
+     Widget parent;
 {
-    Arg 	args[MAXARGS];
-    Cardinal 	n;
-
-    n = 0;
-    XtSetArg(args[n], XtNlabel, (XtArgVal) "No Source File");           n++;
-    XtSetArg(args[n], XtNborderWidth, (XtArgVal) 0);           		n++;
-    fileLabel = XtCreateManagedWidget("fileLabel", labelWidgetClass, 
-				      parent, args, n);
+  Arg 	args[MAXARGS];
+  Cardinal 	n;
+  n = 0;
+  XtSetArg(args[n], XtNlabel, (XtArgVal) "No Source File");           n++;
+  XtSetArg(args[n], XtNborderWidth, (XtArgVal) 0);           		n++;
+  fileLabel = XtCreateManagedWidget("fileLabel", labelWidgetClass, 
+				    parent, args, n);
 }
-
+**/
+/** 
 static void CreateLineLabel(parent)
-Widget parent;
+     Widget parent;
 {
-    Arg 	args[MAXARGS];
-    Cardinal 	n;
-
-    n = 0;
-    XtSetArg(args[n], XtNlabel, (XtArgVal) "");           		n++;
-    XtSetArg(args[n], XtNborderWidth, (XtArgVal) 0);           		n++;
-    XtSetArg(args[n], XtNfromHoriz, (XtArgVal) fileLabel);          	n++;
-    XtSetArg(args[n], XtNhorizDistance, (XtArgVal) 0);          	n++;
-    lineLabel = XtCreateManagedWidget("lineLabel", labelWidgetClass, 
-				      parent, args, n);
+  Arg 	args[MAXARGS];
+  Cardinal 	n;
+  
+  n = 0;
+  XtSetArg(args[n], XtNlabel, (XtArgVal) "");           		n++;
+  XtSetArg(args[n], XtNborderWidth, (XtArgVal) 0);           		n++;
+  XtSetArg(args[n], XtNfromHoriz, (XtArgVal) fileLabel);          	n++;
+  XtSetArg(args[n], XtNhorizDistance, (XtArgVal) 0);          	n++;
+  lineLabel = XtCreateManagedWidget("lineLabel", labelWidgetClass, 
+				    parent, args, n);
 }
-
-
+**/
+/**** 
 static void CreateFileWindow(parent)
-Widget parent;
+     Widget parent;
 {
     Arg 	args[MAXARGS];
     Cardinal 	n;
-
     n = 0;
     XtSetArg(args[n], XtNshowGrip, (XtArgVal) False);			n++;
     fileWindow = XtCreateManagedWidget("fileWindow", formWidgetClass, 
@@ -101,9 +108,7 @@ Widget parent;
     CreateFileLabel(fileWindow);
     CreateLineLabel(fileWindow);
 }
-
-
-#include "version.h"
+**/
 
 
 static void CreateMessageWindow(parent)
@@ -147,7 +152,6 @@ Widget parent;
   Cardinal n=0;
   XtermWidget CreateTermWindow();
   Widget	vpane;	 /* outer widget containing various subwindows */
-  set_scilab_icon(parent);
   vpane = XtCreateManagedWidget("vpane", panedWidgetClass, parent, args, n);
   AddAcceptMessage(parent);
   CreateMessageWindow(vpane);
@@ -159,78 +163,42 @@ Widget parent;
  * icon 
  *****************/
 
-/** #define USE_XPM_ICON **/
-
-#ifdef USE_XPM_ICON
-#include <X11/xpm.h>
-#endif /* USE_XPM_ICON */
-
 #include "x_xbas.icon.X" 
 
-Pixmap	sci_icon;
-
-set_scilab_icon(parent)
-     Widget parent;
+void set_scilab_icon()
 {
-  int colored_sci =1;
-  Arg 	args[MAXARGS];
-  Cardinal 	n;
-#ifdef USE_XPM_ICON
-  /* use the XPM color icon for color display */
-  /* see xmain parent(toplevel) != realtoplevel on colorDisplay or Gray levels */
-  if ( realToplevel != parent ) {
-    XpmAttributes    xsci_icon_attr;
-    Pixmap		dum;
-    Window		iconWindow;
-    int		status;
-    /*  make a window for the icon */
-    iconWindow = XCreateSimpleWindow(XtDisplay(realToplevel), DefaultRootWindow(XtDisplay(realToplevel)),
-				     0, 0, 1, 1, 0,
-				     BlackPixelOfScreen(XtScreen(realToplevel)),
-				     BlackPixelOfScreen(XtScreen(realToplevel)));
-    xsci_icon_attr.valuemask = XpmReturnPixels ;
-    /* flag whether or not to free colors when quitting xsci */
-    xsci_icon_attr.npixels = 0;
-    status = XpmCreatePixmapFromData(XtDisplay(realToplevel), iconWindow,
-				     xpm_sci_icon, &sci_icon, &dum, &xsci_icon_attr);
-    /* if all else fails, use standard monochrome bitmap for icon */
-    if (status == XpmSuccess) {
-      XResizeWindow(XtDisplay(realToplevel), iconWindow,
-		    xsci_icon_attr.width,
-		    xsci_icon_attr.height);
-      XSetWindowBackgroundPixmap(XtDisplay(realToplevel), iconWindow, sci_icon);
-      XtVaSetValues(realToplevel, XtNiconWindow, iconWindow, NULL);
-    } else {
-      sci_icon = XCreateBitmapFromData(XtDisplay(realToplevel),RootWindow(XtDisplay(realToplevel),
-								    DefaultScreen(XtDisplay(realToplevel))),
-				       (char *) sci_bits, sci_width, sci_height);
-    }
-  } else {
-#endif /* USE_XPM_ICON */
-    sci_icon = XCreateBitmapFromData(XtDisplay(realToplevel), RootWindow(XtDisplay(realToplevel),
-					       DefaultScreen(XtDisplay(realToplevel))),
+  /** Arg args[MAXARGS];
+  Cardinal n; **/
+  XWMHints wm_hints;
+  Pixmap	sci_icon;
+  
+  sci_icon = XCreateBitmapFromData
+    (XtDisplay(realToplevel),
+     RootWindow(XtDisplay(realToplevel),
+		DefaultScreen(XtDisplay(realToplevel))),
+     (char *) sci_bits, sci_width, sci_height);
+  
+  /*  n = 0;
+      XtSetArg(args[n], XtNiconPixmap, sci_icon); n++;
+      XtSetValues(realToplevel, args, n);*/
 
-				     (char *) sci_bits, sci_width, sci_height);
-#ifdef USE_XPM_ICON
-  }
-#endif /* USE_XPM_ICON */
-  n = 0;
-  XtSetArg(args[n], XtNiconPixmap, sci_icon); n++;
-  XtSetValues(realToplevel, args, n);
+  wm_hints.icon_pixmap = sci_icon;
+  wm_hints.flags = IconPixmapHint;
+  XSetWMHints (XtDisplay(realToplevel), XtWindow(realToplevel), 
+		     &wm_hints);
 }
 
 
 /** we want Xscilab to accept messages : NewGraphWindowMessageAtom **/
 
-Atom		NewGraphWindowMessageAtom;
+Atom   NewGraphWindowMessageAtom;
 
 XtEventHandler UseMessage(w, child, e)
-Widget w;
-Widget child;
-
-XClientMessageEvent *e;
+     Widget w;
+     Widget child;
+     XClientMessageEvent *e;
 {
-    if (e->type == ClientMessage 
+  if (e->type == ClientMessage 
       && e->message_type == NewGraphWindowMessageAtom)
       {
 	/*
@@ -238,18 +206,19 @@ XClientMessageEvent *e;
 	  fprintf(stderr,"I Need to Create Window %d",e->data.l[0]);
 	*/
       }
+  return(0);
 }
 
 static Widget WidgetUseMessage ;
 
-AddAcceptMessage(parent)
+void AddAcceptMessage(parent)
      Widget parent;
 {
   WidgetUseMessage=parent ;
   XtAddEventHandler(parent,ClientMessage, True, (XtEventHandler) UseMessage,(XtPointer) 0);  
 }
 
-ReAcceptMessage()
+void ReAcceptMessage()
 {
   XtAddEventHandler(WidgetUseMessage,ClientMessage, True, (XtEventHandler) UseMessage,(XtPointer) 0);  
 }

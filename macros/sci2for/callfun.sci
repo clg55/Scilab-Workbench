@@ -1,4 +1,4 @@
-//[txt]=callfun(arg,typ)
+function t=callfun(arg,typ)
 //permet de generer le code fortran relatif a l'appel d'une fonction et
 //gere la table des fonctions dont il faut specifier le type dans les 
 //declarations
@@ -23,4 +23,4 @@ if rhs==3 then
    end
 end
 nwrk=resume(nwrk)
-//end
+

@@ -1,4 +1,4 @@
-//[go,xo]=par(a,b,c,rx,cx);
+function [go,xo]=par(a,b,c,rx,cx);
 //
 // [go,xo]=par(a,b,c,rx,cx) solves the minimization problem:
 //
@@ -63,7 +63,6 @@ else
    xo=-c*vnz*s'*unz'*b;
  
 end
- 
-//end
+
 
 

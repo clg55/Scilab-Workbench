@@ -973,7 +973,7 @@ C  LRW -- Set it to the declared length of the RWORK array.
 C               You must have
 C                    LRW .GE. 40+(MAXORD+4)*NEQ+NEQ**2
 C               for the full (dense) JACOBIAN case (when INFO(6)=0), or
-C                    LRW .GE. 40+(MAXORD+4)*NEQ+(2*ML+MU+1)*NEQ
+C                    LRW .GE. 40+(MAXORfD+4)*NEQ+(2*ML+MU+1)*NEQ
 C               for the banded user-defined JACOBIAN case
 C               (when INFO(5)=1 and INFO(6)=1), or
 C                     LRW .GE. 40+(MAXORD+4)*NEQ+(2*ML+MU+1)*NEQ

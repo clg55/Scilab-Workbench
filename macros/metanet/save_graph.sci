@@ -10,7 +10,7 @@ end
 check_graph(g)
 // making defaults
 n=g('node_number')
-ma=g('edge_number')
+ma=prod(size(g('tail')))
 // node_name
 if size(g('node_name'))==0 then
   g('node_name')=string(1:n)
@@ -117,6 +117,6 @@ if size(g('default_font_size'))==0 then
 end
 // data
 if type(data)<>10|prod(size(data))<>1 then
-  error('save_graph: second argument must be a string')
+  error('Second argument must be a string')
 end
-saveg(g,g('name'),ma,data)
+m6saveg(g,g('name'),ma,data)

@@ -3,7 +3,7 @@ xbasc();xselect()
 rect=[0,0,10,10];
 xbasc();
 isoview(0,11,0,11)
-//plot2d([],[],[-1],"010"," ",rect);
+//plot2d([],[],[1],"010"," ",rect);
 
 deff('[x,y]=circle(amp,vx,vy)',['nn=.1';..
 's=0:nn:2*%pi;x=vx*ones(s)+amp*sin(s);y=vy*ones(s)+amp*cos(s)']);

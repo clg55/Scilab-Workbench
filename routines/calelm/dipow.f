@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DIPOW,SSI=0
       subroutine dipow(n,v,iv,ipow,ierr)
 c!but
 c     eleve a une puissance entiere les elements d'un vecteur de flottants
@@ -28,37 +27,37 @@ c
 c
       if(ipow.eq.1) return
       if(ipow.eq.0) then
-c puissance 0
-      ii=1
-      do 10 i=1,n
-        if(v(ii).ne.0.0d+0) then
-                          v(ii)=1.0d+0
-                          ii=ii+iv
-                      else
-                          ierr=1
-                          return
-        endif
-   10 continue
+c     puissance 0
+         ii=1
+         do 10 i=1,n
+            if(v(ii).ne.0.0d+0) then
+               v(ii)=1.0d+0
+               ii=ii+iv
+            else
+               ierr=1
+               return
+            endif
+ 10      continue
       else if(ipow.lt.0) then
-c puissance negative
-      ii=1
-      do 20 i=1,n
-        if(v(ii).ne.0.0d+0) then
-                          v(ii)=v(ii)**ipow
-                          ii=ii+iv
-                      else
-                          ierr=2
-                          return
-        endif
-   20 continue
+c     puissance negative
+         ii=1
+         do 20 i=1,n
+            if(v(ii).ne.0.0d+0) then
+               v(ii)=v(ii)**ipow
+               ii=ii+iv
+            else
+               ierr=2
+               return
+            endif
+ 20      continue
       else
-c puissance  positive
-      ii=1
-      do 30 i=1,n
-                          v(ii)=v(ii)**ipow
-                          ii=ii+iv
-   30 continue
+c     puissance  positive
+         ii=1
+         do 30 i=1,n
+            v(ii)=v(ii)**ipow
+            ii=ii+iv
+ 30      continue
       endif
-c
+c     
       return
       end

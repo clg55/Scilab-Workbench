@@ -15,7 +15,8 @@ case 1 then
   
 //-compat next case retained for list/tlist compatibility
 case 15 then
-  select sys(1)
+  sys1=sys(1)
+  select sys1(1)
   case 'lss' then
     io=size(sys(5)),
     [s,s]=size(sys(2))
@@ -25,8 +26,9 @@ case 15 then
     if lhs=2 then  sys=tf2ss(sys);[s,s]=sys(2),end
    else error(97,1)
    end;
-case 16 then
-  select sys(1)
+ case 16 then
+  sys1=sys(1)
+  select sys1(1)
   case 'lss' then
     io=size(sys(5)),
     [s,s]=size(sys(2))

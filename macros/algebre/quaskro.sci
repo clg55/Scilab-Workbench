@@ -24,9 +24,15 @@ if RHS==2 then
 end
 [na,ma]=size(A);
 Q=eye(na,na);Z=eye(ma,ma);
-[E,Q,Z,stair,rk]=ereduc(E,1000*%eps+tol*norm(E))
+if E~=[] then nE=norm(E);else nE=0;end
+[E,Q,Z,stair,rk]=ereduc(E,1000*%eps+tol*nE)
 A=Q*A*Z;
-tol=tol*maxi([norm(A,'fro'),norm(E,'fro')])+10*tol;
+
+if A~=[] then
+  tol=tol*maxi([norm(A,'fro'),norm(E,'fro')])+10*tol;
+else
+  tol=0
+end
 [Ac,Ec,Q,Z,nlbcks,muk,nuk,muk0,nuk0,mnei]=fstair(A,E,Q,Z,stair,rk,tol)
 numbeps=muk0(1:nlbcks)-nuk0(1:nlbcks);
 Qd=[mnei(1),mnei(3),na-mnei(1)-mnei(3)];

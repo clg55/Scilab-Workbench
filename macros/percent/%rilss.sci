@@ -1,8 +1,5 @@
 function s2=%rilss(i,j,s1,s2)
-//%rilss(i,j,s1,s2) calcule l'insertion d'un sous systeme lineaire
-// decrit par une fonction de transfertdans un systeme decrit par 
-// une representation d'etat  
-//Cette macro correspond a l'operation  s2(i,j)=s1
+//%rilss(i,j,s1,s2) <=> s2(i,j)=s1
 //!
 // origine s. steer inria 1992
 //

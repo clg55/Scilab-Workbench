@@ -13,6 +13,9 @@ c lsodar.. livermore solver for ordinary differential equations, with
 c          automatic method switching for stiff and nonstiff problems,
 c          and with root-finding.
 c
+c This version has been modified by scilab group on Feb 97 following Dr
+c      Hindmarsh direction see Comments noted "cSCI"
+c
 c this version is in double precision.
 c
 c lsodar solves the initial value problem for stiff or nonstiff
@@ -1483,7 +1486,10 @@ c
       tnext = tn + h*(1.0d0 + 4.0d0*uround)
       if ((tnext - tcrit)*h .le. 0.0d0) go to 250
       h = (tcrit - tn)*(1.0d0 - 4.0d0*uround)
-      if (istate .eq. 2) jstart = -2
+cSCI
+cSCI  if (istate .eq. 2) jstart = -2
+cSCI  replaced by:
+      if (istate .eq. 2 .and. jstart .ge. 0) jstart = -2
 c-----------------------------------------------------------------------
 c block e.
 c the next block is normally executed for all calls and contains
@@ -1596,7 +1602,10 @@ c itask = 4.  see if tout or tcrit was reached.  adjust h if necessary.
       tnext = tn + h*(1.0d0 + 4.0d0*uround)
       if ((tnext - tcrit)*h .le. 0.0d0) go to 250
       h = (tcrit - tn)*(1.0d0 - 4.0d0*uround)
-      jstart = -2
+cSCI
+cSCI  jstart = -2
+cSCI  replaced by:
+      if (jstart .ge. 0) jstart = -2
       go to 250
 c itask = 5.  see if tcrit was reached and jump to exit. ---------------
  350  hmx = dabs(tn) + dabs(h)

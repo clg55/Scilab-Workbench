@@ -35,9 +35,7 @@ c
       itout=int(tout)
       iero=0	
       if ( itout.lt.it) then 
-         buf ='ode discrete : a requested k is smaller '
-     $   // ' than initial one'
-         call error(999)
+         istate=-3
          return
       else if ( itout.eq.it) then 
          istate=2
@@ -46,7 +44,10 @@ c
          do 10 j=it,itout-1
             tt=dble(j)
             call f (neq,tt, y, rwork)
-            if(iero.gt.0) return
+            if(iero.gt.0) then
+               istate=-4
+               return
+            endif
             call dcopy(neq,rwork,1,y,1)
  10      continue
          t=tout

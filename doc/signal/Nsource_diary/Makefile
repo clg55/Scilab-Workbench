@@ -30,7 +30,7 @@ CHAP7 = optiir2.dia  optiir1.dia  optiir3.dia  optiir4.dia  optiir5.dia
 
 CHAP8 = spfact.dia simul1.dia simul3.dia
 
-CHAP9 = spfact1.dia
+CHAP9 = wigner1.dia
 
 all:: chapters
 

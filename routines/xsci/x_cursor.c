@@ -29,6 +29,9 @@
 
 #include "x_ptyxP.h"		/* also gets Xlib.h */
 
+#include "../machine.h"
+#include "All-extern-x.h"
+
 static void _CheckSelection(screen)
 register TScreen *screen;
 {
@@ -48,10 +51,12 @@ register TScreen *screen;
  * (this includes scrolling regions)
  * The origin is considered to be 0, 0 for this procedure.
  */
+
+void 
 CursorSet(screen, row, col, flags)
-register TScreen	*screen;
-register int	row, col;
-unsigned	flags;
+     register TScreen	*screen;
+     register int	row, col;
+     unsigned	flags;
 {
 	register int maxr;
 
@@ -71,6 +76,8 @@ unsigned	flags;
 /*
  * moves the cursor left n, no wrap around
  */
+
+void
 CursorBack(screen, n)
 register TScreen	*screen;
 int		n;
@@ -100,6 +107,8 @@ int		n;
 /*
  * moves the cursor forward n, no wraparound
  */
+
+void 
 CursorForward(screen, n)
 register TScreen	*screen;
 int		n;
@@ -115,6 +124,8 @@ int		n;
  * moves the cursor down n, no scrolling.
  * Won't pass bottom margin or bottom of screen.
  */
+
+void
 CursorDown(screen, n)
 register TScreen	*screen;
 int		n;
@@ -135,6 +146,8 @@ int		n;
  * moves the cursor up n, no linestarving.
  * Won't pass top margin or top of screen.
  */
+
+void
 CursorUp(screen, n)
 register TScreen	*screen;
 int		n;
@@ -155,6 +168,8 @@ int		n;
  * Moves cursor down amount lines, scrolls if necessary.
  * Won't leave scrolling region. No carriage return.
  */
+
+void
 Index(screen, amount)
 register TScreen	*screen;
 register int	amount;
@@ -179,6 +194,8 @@ register int	amount;
  * Moves cursor up amount lines, reverse scrolls if necessary.
  * Won't leave scrolling region. No carriage return.
  */
+
+void
 RevIndex(screen, amount)
 register TScreen	*screen;
 register int	amount;
@@ -200,6 +217,8 @@ register int	amount;
 /*
  * Moves Cursor To First Column In Line
  */
+
+void
 CarriageReturn(screen)
 register TScreen *screen;
 {
@@ -211,6 +230,7 @@ register TScreen *screen;
 /*
  * Save Cursor and Attributes
  */
+void
 CursorSave(term1, sc)
      register XtermWidget term1;
      register SavedCursor *sc;
@@ -228,6 +248,8 @@ CursorSave(term1, sc)
 /*
  * Restore Cursor and Attributes
  */
+
+void
 CursorRestore(term1, sc)
 register XtermWidget term1;
 register SavedCursor *sc;

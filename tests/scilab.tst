@@ -360,16 +360,17 @@ if norm(u*s*u'-tc,1 ) > 200*%eps then pause,end
 if norm(s-schur(tc),1 ) > 200*%eps then pause,end
 if norm(diag(s)-spec(tc),1) > 200*%eps then pause,end
 // fonctions matricielles
-s=sqrt(t);
+s=sqrtm(t);
 if norm(t-s*s,1) > 200*%eps then pause,end
-s=log(t);
-if norm(t-exp(s)) > 200*%eps then pause,end
-s=sqrt(tc);
+s=logm(t);
+if norm(t-expm(s)) > 200*%eps then pause,end
+s=sqrtm(tc);
 if norm(tc-s*s,1) > 220*%eps then pause,end
-s=exp(tc);s=triu(s,1)+triu(s,1)'+diag(real(diag(s)));
-if norm(log(s)-tc,1)> 1.e-9 then pause,end
-if norm(sin(t)**2+cos(t)**2-eye,1) > 22*%eps then pause,end
-if norm(sin(tc)**2+cos(tc)**2-eye,1) > 20*%eps then pause,end
+s=expm(tc);s=triu(s,1)+triu(s,1)'+diag(real(diag(s)));
+if norm(logm(s)-tc,1)> 1.e-9 then pause,end
+if norm(sinm(t)**2+cosm(t)**2-eye,1) > 22*%eps then pause,end
+// jpc --> 20 remplace par 25 pour gc-win32 
+if norm(sinm(tc)**2+cosm(tc)**2-eye,1) > 25*%eps then pause,end
 //poly et root
 p=rand(5,1);pc=p+i*rand(5,1);x=poly(0,'x');
 if norm(sort(p )-sort(real(roots(poly(p,'x'))))) > 1000*%eps then pause,end
@@ -434,3 +435,229 @@ x=[1,2,3];y='afs';
 clear x y,if exists('x')==1| exists('y')==1 then pause,end
 X=[1,2,3];Y='afs';
 clear X Y,if exists('X')==1| exists('Y')==1 then pause,end
+
+
+//test with scalar vector and matrices
+
+// REAL VECTORS
+x1=1:3;
+x0=0:2;
+if or(x1^2<>[1 4 9]) then pause,end
+if or(x0^2<>[0 1 4]) then pause,end
+if or(x1^0<>[1 1 1]) then pause,end
+
+if norm(x1^(2*(1+%eps))-x1^2)>100*%eps then pause,end
+if norm(x0^(2*(1+%eps))-x0^2)>100*%eps then pause,end
+
+if norm(x1^(-2)-[1 0.25 1/9])>100*%eps then pause,end
+if norm(x1^(-2*(1+%eps))-[1 0.25 1/9])>100*%eps then pause,end
+
+// COMPLEX CASE
+p=2+%eps*%i;
+if norm(x1^p-x1^2)>100*%eps then pause,end
+if norm(x0^p-x0^2)>100*%eps then pause,end
+if norm(x1^(-p)-x1^(-2))>100*%eps then pause,end
+
+y=%eps*%eps*ones(1,3);x1=x1+y;x0=x0+y;
+if norm(x1^2-[1 4 9])>100*%eps then pause,end
+if norm(x0^2-[0 1 4])>100*%eps then pause,end
+
+x1^2.000000001;x0^2.000000001;
+if norm(x1^2-[1 4 9])>100*%eps then pause,end
+if norm(x0^2-[0 1 4])>100*%eps then pause,end
+
+if norm(x1^(-2)-[1 0.25 1/9])>100*%eps then pause,end
+if norm(x1^(-2*(1+%eps))-[1 0.25 1/9])>100*%eps then pause,end
+if norm(x1^p-x1^2)>100*%eps then pause,end
+if norm(x0^p-x0^2)>100*%eps then pause,end
+if norm(x1^(-p)-x1^(-2))>100*%eps then pause,end
+
+// .^ TEST WITH  REAL VECTORS
+
+x1=1:3;
+x0=0:2;
+if or(x1.^2<>[1 4 9]) then pause,end
+if or(x0.^2<>[0 1 4]) then pause,end
+if or(x1.^0<>[1 1 1]) then pause,end
+
+if norm(x1.^(2*(1+%eps))-x1.^2)>100*%eps then pause,end
+if norm(x0.^(2*(1+%eps))-x0.^2)>100*%eps then pause,end
+
+if norm(x1.^(-2)-[1 0.25 1/9])>100*%eps then pause,end
+if norm(x1.^(-2*(1+%eps))-[1 0.25 1/9])>100*%eps then pause,end
+
+// .^ TEST WITH  COMPLEX VECTORS
+
+p=2+%eps*%i;
+if norm(x1.^p-x1.^2)>100*%eps then pause,end
+if norm(x0.^p-x0.^2)>100*%eps then pause,end
+if norm(x1.^(-p)-x1.^(-2))>100*%eps then pause,end
+
+y=%eps*%eps*ones(1,3);x1=x1+y;x0=x0+y;
+if norm(x1.^2-[1 4 9])>100*%eps then pause,end
+if norm(x0.^2-[0 1 4])>100*%eps then pause,end
+
+x1.^2.000000001;x0.^2.000000001;
+if norm(x1.^2-[1 4 9])>100*%eps then pause,end
+if norm(x0.^2-[0 1 4])>100*%eps then pause,end
+
+if norm(x1.^(-2)-[1 0.25 1/9])>100*%eps then pause,end
+if norm(x1.^(-2*(1+%eps))-[1 0.25 1/9])>100*%eps then pause,end
+if norm(x1.^p-x1.^2)>100*%eps then pause,end
+if norm(x0.^p-x0.^2)>100*%eps then pause,end
+if norm(x1.^(-p)-x1.^(-2))>100*%eps then pause,end
+//
+// EMPTY MATRIX
+//=============
+if []^1 <> [] then pause,end
+if []^[1 2 3] <> [] then pause,end
+if [1 2 3]^[] <> [] then pause,end
+if []^[] <> [] then pause,end
+
+// SQUARE MATRIX
+//==============
+
+x1=[1 2;3 4];
+if or(x1^1<>x1) then pause,end
+if or(x1^(-1)<>inv(x1)) then pause,end
+if or(x1^2<>x1*x1) then pause,end
+if or(x1^(-2)<>inv(x1)^2) then pause,end
+
+x1(1,1)=x1(1,1)+%i;
+if or(x1^2<>x1*x1) then pause,end
+if or(x1^(-2)<>inv(x1)^2) then pause,end
+if or(x1^1<>x1) then pause,end
+if or(x1^(-1)<>inv(x1)) then pause,end
+
+if or(rand(4,4)^0<>eye(4,4)) then pause,end
+
+
+x1=[1 2;2 3];x2=x1^(1/2);
+if norm(x2^(2)-x1)>100*%eps then pause,end
+x2=x1^(-1/2);
+if norm(x2^(-2)-x1)>100*%eps then pause,end
+
+x1=[1 2+%i;2-%i 3];
+x2=x1^(1/2);
+if norm(x2^(2)-x1)>100*%eps then pause,end
+x2=x1^(-1/2);
+if norm(x2^(-2)-x1)>100*%eps then pause,end
+
+//TEST WITH POLYNOMIAL VECTOR AND MATRICES
+//---------------------------------------
+s=poly(0,'s');
+if or(coeff(s^3+1)<>[1 0 0 1]) then pause,end
+
+
+x1=[1 s+1 s^3+1];
+if or(x1^2<>[1 1+2*s+s^2  1+2*s^3+s^6]) then pause,end
+if or(coeff(x1^0)<>[1 1 1]) then pause,end
+if or(x1^3<>[1,1+3*s+3*s^2+s^3,1+3*s^3+3*s^6+s^9]) then pause,end
+if or((x1^(-1)-[1 1/(1+s)  1/(1+s^3)])<>0) then pause,end
+
+x1=[1 s+1 s.^3+1];
+if or(x1.^2<>[1 1+2*s+s.^2  1+2*s.^3+s.^6]) then pause,end
+if or(coeff(x1.^0)<>[1 1 1]) then pause,end
+if or(x1.^3<>[1,1+3*s+3*s^2+s^3,1+3*s^3+3*s^6+s^9]) then pause,end
+if or((x1.^(-1)-[1 1/(1+s)  1/(1+s.^3)])<>0) then pause,end
+
+
+
+
+x1=[s+1 2*s;3+4*s^2 4];
+if or(x1^1<>x1) then pause,end
+if or(x1^(-1)<>inv(x1)) then pause,end
+if or(x1^2<>x1*x1) then pause,end
+if or(x1^(-2)<>inv(x1)^2) then pause,end
+
+x1(1,1)=x1(1,1)+%i;
+if or(x1^2<>x1*x1) then pause,end
+//if or(x1^(-2)<>inv(x1)^2) then pause,end  //simp complexe non implemented
+if or(x1^1<>x1) then pause,end
+//if or(x1^(-1)<>inv(x1)) then pause,end //simp complexe non implemented
+
+
+//simple ops
+if 1==0 then pause,end
+if 1<0 then pause,end
+if 1<=0 then pause,end
+if 1==1 then,else pause,end
+if ~(1==1) then pause,end
+if 0>1 then pause,end
+if 0>=1 then pause,end
+if 1<>1 then pause,end
+if 0<>1 then,else pause,end
+if '1'=='0' then pause,end
+if '1'<>'1' then pause,end
+
+%s=poly(0,'s');
+if %s==0 then pause,end
+if 0==%s then pause,end
+if %s==%s then,else pause,end
+if %s<>%s then pause,end
+if %s==%s+1 then pause,end
+if %s+1==%s then pause,end
+
+if 1/%s==0 then pause,end
+if 0==1/%s then pause,end
+if 1/%s==1/%s then,else pause,end
+if 1/%s<>1/%s then pause,end
+if 1/%s==1/%s+1 then pause,end
+if 1/%s+1==1/%s then pause,end
+if 1/%s<>1/%s+1 then , else  pause,end
+if 1/%s+1<>1/%s then , else  pause,end
+
+l=list(1,[1 23],'adssa')
+l1=list(123,'sdwqqwq')
+if l==0 then pause,end
+if 0==l then pause,end
+if l==l then,else pause,end
+if l<>l then pause,end
+if l==l1 then pause,end
+if l1==l then pause,end
+if l<>l1 then , else pause,end
+if l1<>l then , else pause,end
+
+
+if %t&1==2 then pause,end
+if %t|1==2 then, else pause,end
+if %t&-1==2 then pause,end
+if %t|-1==2 then, else pause,end
+if 1<2&1==2 then pause,end
+if 1<2|1==2 then, else pause,end
+if 1<2&-1==2 then pause,end
+if 1<2|-1==2 then, else pause,end
+if 2>1&1==2 then pause,end
+if 2>1|1==2 then, else pause,end
+if 2>1&-1==2 then pause,end
+if 2>1|-1==2 then, else pause,end
+if 1==1&1==2 then pause,end
+if 1==1|1==2 then, else pause,end
+if 1==1&-1==2 then pause,end
+if 1==1|-1==2 then, else pause,end
+if 1<>2&1==2 then pause,end
+if 1<>2|1==2 then, else pause,end
+if 1<>2&-1==2 then pause,end
+if 1<>2|-1==2 then, else pause,end
+
+if %t&1>2 then pause,end
+if %t|1>2 then, else pause,end
+if %t&-1>2 then pause,end
+if %t|-1>2 then, else pause,end
+if 1<2&1>2 then pause,end
+if 1<2|1>2 then, else pause,end
+if 1<2&-1>2 then pause,end
+if 1<2|-1>2 then, else pause,end
+if 2>1&1>2 then pause,end
+if 2>1|1>2 then, else pause,end
+if 2>1&-1>2 then pause,end
+if 2>1|-1>2 then, else pause,end
+if 1==1&1>2 then pause,end
+if 1==1|1>2 then, else pause,end
+if 1==1&-1>2 then pause,end
+if 1==1|-1>2 then, else pause,end
+if 1<>2&1>2 then pause,end
+if 1<>2|1>2 then, else pause,end
+if 1<>2&-1>2 then pause,end
+if 1<>2|-1>2 then, else pause,end
+

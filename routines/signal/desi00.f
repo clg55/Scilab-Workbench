@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DESI00,SSI=0
       subroutine desi00(ityp,om,norma,edeg,ndeg,adeg,
      *vsn,vd,a)
 c!purpose

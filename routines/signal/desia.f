@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DESIA,SSI=0
       subroutine desia(nmaxi,maxdeg,ityp,iapro,om,norma,
      *edeg,ndeg,adelp,adels,
      *nbn,nzero,nzm,vsn,a,adelta,adeg,

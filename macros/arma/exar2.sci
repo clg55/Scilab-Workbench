@@ -1,4 +1,4 @@
-//<z,zd,u,ar>=exar2()
+function [z,zd,u,ar]=exar2()
 //<z,zd,u,ar>=exar2()
 //
 // Exemple de processus ARMAX ( K.J. Astrom)
@@ -17,6 +17,6 @@ zd=narsimul(a,b,d,sig,u);
 z=narsimul(a,b,d,0.0*sig,u);
 write(%io(2),"Least square identification ARX :");
 [la,lb,sig,resid]=armax(3,3,zd,u,1,1);
-//end
+
 
 

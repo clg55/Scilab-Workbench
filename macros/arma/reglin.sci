@@ -1,4 +1,4 @@
-//[a,b,sig]=reglin(x,y,dflag)
+function [a,b,sig]=reglin(x,y,dflag)
 // Solves a linear regression 
 // y=a(p,q)*x+b(p,1) + epsilon 
 // x : matrix (q,n) and y matrix (p,n) 
@@ -21,4 +21,4 @@ ymoy=[];for i=1:p1;ymoy=[ymoy,sum(y(i,:))/n2];end
 [la,lb,sig]=armax(0,0,y-ymoy'*ones(1,n2),x-xmoy'*ones(1,n2),0,dflag);
 if n1=1;a=lb(1);else a=lb;end
 b=ymoy'-a*xmoy';
-//end
+

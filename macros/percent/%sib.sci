@@ -1,10 +1,11 @@
 function s=%sib(i,j,s1,s2)
-// see %sip.sci
+// s2(i,j)=s1 for boolean indices or s1==[]
 [lhs,rhs]=argn(0)
 if rhs==3 then 
   if type(i)==4 then s=s1;s(find(i))=j,return,end //indice booleen
   if size(i)=[-1 -1] then s=[],return,end
   s=s1
+  if i==[] then return,end
   mn=prod(size(s))
   i1=[]
   for ii=1:mn
@@ -20,6 +21,7 @@ else
     return
   end
   //s1 est suppose egal a []
+  if i==[]|j==[] then s=s2,return,end
   row=%f
   col=%f
   s=s2

@@ -1,14 +1,14 @@
 function [cout,grad,ind]=iirlp(x,ind,p,flag,lambda,omega,ad,wa,td,wt)
 //
-//optimisation de filtres IIR avec critere Lp pour l'amplitude
-//                                      et/ou le retard de groupe
+//optimization of IIR filters IIR with  Lp criterium for magnitude
+//                                      and/or group delay
 //     -cf Rabiner & Gold pp270-273-
 //
 //auteur : G. Le Vey
 //
 //   p ===> critere Lp
 //
-//    r=module des poles et zeros des filtres
+//r=module des poles et zeros des filtres
 //theta=argument des  "    "   "    "    "
 //omega=frequences ou sont donnees les specifications des filtres
 //wa,wt=fonctions de ponderation pour l'amplitude et le

@@ -14,7 +14,7 @@ C
       integer fschur,bschur
       external fschur, bschur
       integer top2,tope,topf
-      character*6 namef
+      character*24 namef
       common /cschur/ namef
       integer iero
       common /ierinv/ iero
@@ -29,7 +29,7 @@ C
 C
 C     functions/fin
 C        1       2       3       4       5       6       7       8
-C     0 hess    schur  spectre  bdiag         balanc
+C     0 hess    schur  spec  bdiag         balanc
       if (top+lhs-rhs .ge. bot) then
         call error(18)
         return
@@ -88,6 +88,13 @@ C
         nc = istk(il+5) - 1
         namef = ' '
         call cvstr(nc,istk(il+5+mn2),namef,1)
+        namef(nc+1:nc+1)=char(0)
+        call setfschur(namef,irep)
+        if ( irep.eq.1) then 
+           buf = namef
+           call error(50)
+           return
+        endif
         top = top - 1
       endif
  5    continue
@@ -327,7 +334,13 @@ C     on cree une variable
       l = sadr(il+4)
       lstk(top+1) = l + nn
 C
- 101  ld = l + nn
+ 101  if(vect) then
+         job=1
+      else
+         lv=l1
+         job=0
+      endif
+      ld = l + nn
       le = ld + n
       err = le + n - lstk(bot)
       if (err .gt. 0) then
@@ -346,7 +359,7 @@ C fin hess
 C
 C calcul de la forme diagonale
  120  continue
-      call tql2(n,n,stk(ld),stk(le),stk(lv),ierr)
+      call tql2(n,n,stk(ld),stk(le),stk(lv),job,ierr)
 C
       if (ierr .gt. 1) call msgs(2,ierr)
       mn = n
@@ -552,28 +565,24 @@ C     equilibrage
         call error(17)
         return
       endif
-      call reduc2(n,n,stk(l1),n,stk(l),low,igh,stk(lcs),stk(lw))
-      call scaleg(n,n,stk(l1),n,stk(l),low,igh,stk(lcs),stk(lcp),stk(lw)
-     &           )
-      do 321 i = low-1,igh-1
-        stk(lcs+i) = 2.0d0**int(stk(lcs+i))
-        stk(lw+i) = 2.0d0**int(stk(lw+i))
- 321  continue
+c   l1-->E
+c   l -->A
+c  SUBROUTINE DGGBAL('B', N, E, LDE, A, LDA, LOW, IGH, LSCALE,
+c$                   RSCALE, WORK, INFO )
+      call dggbal('B',n,stk(l1),n,stk(l),n,low,igh,stk(lcs),
+     &             stk(lcp),stk(lw),info)
+c SUBROUTINE DGGBAK('B','R', N, LOW, IGH, LSCALE, RSCALE, N, V,
+c$                   LDV, INFO )
       call dset(nn,0.0d+0,stk(lv2),1)
       call dset(n,1.0d+0,stk(lv2),n+1)
-      call balbak(n,n,low,igh,stk(lcs),n,stk(lv2))
+      call dggbak('B','R',n,low,igh,stk(lcs),stk(lcp),n,stk(lv2),
+     &             n,info)
+c     lv2--->Y
       call dset(nn,0.0d+0,stk(lv1),1)
       call dset(n,1.0d+0,stk(lv1),n+1)
-      call balbak(n,n,low,igh,stk(lw),n,stk(lv1))
-      if (n .gt. 1) then
-        do 323 i = 1,n-1
-          do 322 j = i+1,n
-            sr = stk(lv1+(i-1)+(j-1)*n)
-            stk(lv1+(i-1)+(j-1)*n) = stk(lv1+(j-1)+(i-1)*n)
-            stk(lv1+(j-1)+(i-1)*n) = sr
- 322      continue
- 323    continue
-      endif
+      call dggbak('B','L',n,low,igh,stk(lcs),stk(lcp),n,stk(lv1),
+     &             n,info)
+c     lv1--->X
       istk(ilv1) = 1
       istk(ilv1+1) = n
       istk(ilv1+2) = n

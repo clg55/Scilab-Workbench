@@ -43,7 +43,7 @@ c     !cycle thru edges till xsection occurs
                   lln(1,ll-noe1+1)=linelist(1,ll)
                   lln(2,ll-noe1+1)=linelist(2,ll)
  20            continue
-               call testpt(p1,float(seed),noe2-noe1+1,lln,flag,ix,bav)
+               call testpt(p1,seed,noe2-noe1+1,lln,flag,ix,bav)
                if(flag.eq.1)then 
 c     !intersection occurred
                   ncount=ncount+1

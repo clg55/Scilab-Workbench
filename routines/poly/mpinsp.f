@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=MPINSP,SSI=0
       subroutine mpinsp(dep1,lig1,col1,v1,d1,v2,d2,dep2,
      & lig2,col2,depr,ligr,colr,ierr)
 c!but
@@ -58,160 +57,222 @@ c
       ierr=0
       volr=0
       if (d1.eq.0.or.d2.eq.0) return
-c
-c     cas ou d1 ou d2 sont negatifs
-c
+
       if(d1.gt.0.or.d2.gt.0) goto 10
-      if(lig1.ne.lig2.or.col1.ne.col2) goto 50
+c
+c     cas  (:,:)
+c
+      if(lig1.ne.lig2.or.col1.ne.col2) then
+         if(lig2*col2.eq.1) then
+            ir=lig1*col1+1
+            do 04 i=1,ir
+               depr(i+1)=-1
+ 04         continue
+            volr=(dep2(2)-dep2(1))*lig1*col1
+            goto 999
+         else
+            ierr=1
+            return
+         endif
+      endif
 c
       ir=lig1*col1+1
       do 05 i=1,ir
-   05 depr(i+1)=-i
+         depr(i+1)=-i
+ 05   continue
       volr=dep2(ir)-dep2(1)
       goto 999
 c
    10 if(d1.lt.0) then
-      if(max(1,lig1).ne.lig2) goto 50
-c
-c   toutes les lignes pour un choix de colonnes
-c
-      kr=1
-      volr=0
-      do 16 jr=1,colr
-c la colonne jr est elle a modifier ?
-      id2=0
-      do 11 i=1,d2
-   11 if(v2(i).eq.jr) id2=i
-      if(id2.eq.0) goto 13
-c oui
-      k2=lig2*(id2-1)
-      do 12 ir=1,ligr
-      kr=kr+1
-      depr(kr)=-(k2+ir)
-   12 continue
-      volr=volr+dep2(k2+ligr+1)-dep2(k2+1)
-      go to 16
-c non
-   13 if(jr.le.col1) then
-c la colonne designee existe dans mat1
-      k1=(jr-1)*lig1
-      do 14 ir=1,ligr
-      kr=kr+1
-   14 depr(kr)=(k1+ir)
-      volr=volr+dep1(k1+ligr+1)-dep1(k1+1)
-      goto 16
-      endif
+c     cas (:,.)
+         inc2=1
+         if(max(1,lig1).ne.lig2) then
+            if(lig2.eq.1.and.col2.eq.1) then
+               inc2=0
+            else
+               ierr=1
+               return
+            endif
+         endif
+c     
+c     toutes les lignes pour un choix de colonnes
+c     
+         kr=1
+         volr=0
+         do 19 jr=1,colr
+c     la colonne jr est elle a modifier ?
+            id2=0
+            do 11 i=1,d2
+               if(v2(i).eq.jr) id2=i
+ 11         continue
+            if(id2.eq.0) goto 14
+c     oui
+            if(inc2.eq.1) then
+               k2=lig2*(id2-1)
+               do 12 ir=1,ligr
+                  kr=kr+1
+                  depr(kr)=-1
+ 12            continue
+               volr=volr+ligr*(dep2(2)-dep2(1))
+            else
+               do 13 ir=1,ligr
+                  kr=kr+1
+                  depr(kr)=-(k2+ir)
+ 13            continue
+               volr=volr+dep2(k2+ligr+1)-dep2(k2+1)
+            endif
+            go to 19
+c     non
+ 14         if(jr.le.col1) then
+c     la colonne designee existe dans mat1
+               k1=(jr-1)*lig1
+               do 17 ir=1,ligr
+                  kr=kr+1
+                  depr(kr)=(k1+ir)
+ 17            continue
+               volr=volr+dep1(k1+ligr+1)-dep1(k1+1)
+               goto 19
+            endif
 c     si non, inserer un string vide
-      do 15 ir=1,ligr
-      kr=kr+1
-   15 depr(kr)=0
-      volr=volr+ligr
-   16 continue
-      goto 999
+            do 18 ir=1,ligr
+               kr=kr+1
+               depr(kr)=0
+ 18         continue
+            volr=volr+ligr
+ 19      continue
+         goto 999
       endif
 c
       if(d2.lt.0) then
-      if(col1.ne.max(1,col2)) goto 50
-c
-c toutes les colonnes pour un choix de lignes
-c
-      do 26 ir=1,ligr
-      kr=ir+1-ligr
-c la ligne ir est elle a modifier ?
-      id1=0
-      do 21 i=1,d1
-   21 if(v1(i).eq.ir) id1=i
-      if(id1.eq.0) goto 23
-c oui
-      k2=id1-lig2
-      do 22 jr=1,colr
-      kr=kr+ligr
-      k2=k2+lig2
-      depr(kr)=-k2
-      volr=volr+dep2(k2+1)-dep2(k2)
-   22 continue
-      go to 26
-c non
-   23 if(ir.le.lig1) then
-c la ligne designee existe dans mat1
-      k1=ir-lig1
-      do 24 jr=1,colr
-      kr=kr+ligr
-      k1=k1+lig1
-      volr=volr+dep1(k1+1)-dep1(k1)
-   24 depr(kr)=k1
-      goto 26
-      endif
+c     cas (.,:)
+         inc2=1
+         if(col1.ne.max(1,col2)) then
+            if(lig2.eq.1.and.col2.eq.1) then
+               inc2=0
+            else
+               ierr=1
+               return
+            endif
+         endif
+c     
+c     toutes les colonnes pour un choix de lignes
+c     
+         do 29 ir=1,ligr
+            kr=ir+1-ligr
+c     la ligne ir est elle a modifier ?
+            id1=0
+            do 21 i=1,d1
+               if(v1(i).eq.ir) id1=i
+ 21         continue
+            if(id1.eq.0) goto 24
+c     oui
+            if(inc2.eq.1) then
+               k2=id1-lig2
+               do 22 jr=1,colr
+                  kr=kr+ligr
+                  k2=k2+lig2
+                  depr(kr)=-k2
+                  volr=volr+dep2(k2+1)-dep2(k2)
+ 22            continue
+            else
+               do 23 jr=1,colr
+                  kr=kr+ligr
+                  depr(kr)=-1
+                  volr=volr+colr*(dep2(2)-dep2(1))
+ 23            continue
+            endif
+            go to 29
+c     non
+ 24         if(ir.le.lig1) then
+c     la ligne designee existe dans mat1
+               k1=ir-lig1
+               do 27 jr=1,colr
+                  kr=kr+ligr
+                  k1=k1+lig1
+                  volr=volr+dep1(k1+1)-dep1(k1)
+                  depr(kr)=k1
+ 27            continue
+               goto 29
+            endif
 c     si non, inserer des zeros
-      do 25 jr=1,colr
-      kr=kr+ligr
-   25 depr(kr)=0
-      volr=volr+colr
-   26 continue
-      goto 999
+            do 28 jr=1,colr
+               kr=kr+ligr
+               depr(kr)=0
+ 28         continue
+            volr=volr+colr
+ 29      continue
+         goto 999
       endif
 c
-c cas general
+c     cas general
 c
       kr=2
+      inc2=1
+      if(lig2.eq.1.and.col2.eq.1) inc2=0
       do 40 jr=1,colr
-c la colonne jr est elle a modifier ?
-      id2=0
-      do 30 i=1,d2
-      if(v2(i).eq.jr) id2=i
-   30 continue
+c     la colonne jr est elle a modifier ?
+         id2=0
+         do 30 i=1,d2
+            if(v2(i).eq.jr) id2=i
+ 30      continue
+c     
+         if(id2.eq.0) goto 35
+c     
+         do 34 ir=1,ligr
+c     la ligne ir est-elle a modifier
+            id1=0
+            do 31 i=1,d1
+               if(v1(i).eq.ir) id1=i
+ 31         continue
+c     
+            if(id1.eq.0) goto 32
+c     
+            if(inc2.eq.1) then
+               k2=id1+lig2*(id2-1)
+               depr(kr)=-k2
+               volr=volr+dep2(k2+1)-dep2(k2)
+            else
+               depr(kr)=-1
+               volr=volr+dep2(2)-dep2(1)
+            endif
+            kr=kr+1
+            go to 34
+c     
+ 32         if(ir.gt.lig1.or.jr.gt.col1) goto 33
+            k1=ir+lig1*(jr-1)
+            depr(kr)=k1
+            kr=kr+1
+            volr=volr+dep1(k1+1)-dep1(k1)
+            goto 34
+c     
+ 33         depr(kr)=0
+            kr=kr+1
+            volr=volr+1
+ 34      continue
+         goto 40
+c     non
+c     toutes les lignes de la colonne designee
+ 35      if(jr.gt.col1) goto 38
+         k1=(jr-1)*lig1
+         do 36 ir=1,lig1
+            depr(kr)=k1+ir
+            kr=kr+1
+ 36      continue
+         volr=volr+dep1(k1+lig1+1)-dep1(k1+1)
+         if(lig1.ge.ligr) goto 40
+         do 37 ir=lig1+1,ligr
+            depr(kr)=0
+            kr=kr+1
+ 37      continue
+         volr=volr+ligr-lig1
+         goto 40
+ 38      do 39 ir=1,ligr
+            depr(kr)=0
+            kr=kr+1
+ 39      continue
+         volr=volr+ligr
+ 40   continue
 c
-      if(id2.eq.0) goto 35
-c
-      do 34 ir=1,ligr
-c la ligne ir est-elle a modifier
-      id1=0
-      do 31 i=1,d1
-      if(v1(i).eq.ir) id1=i
-   31 continue
-c
-      if(id1.eq.0) goto 32
-c
-      k2=id1+lig2*(id2-1)
-      depr(kr)=-k2
-      kr=kr+1
-      volr=volr+dep2(k2+1)-dep2(k2)
-      go to 34
-c
-   32 if(ir.gt.lig1.or.jr.gt.col1) goto 33
-      k1=ir+lig1*(jr-1)
-      depr(kr)=k1
-      kr=kr+1
-      volr=volr+dep1(k1+1)-dep1(k1)
-      goto 34
-c
-   33 depr(kr)=0
-      kr=kr+1
-      volr=volr+1
-   34 continue
-      goto 40
-c non
-c toutes les lignes de la colonne designee
-   35 if(jr.gt.col1) goto 38
-      k1=(jr-1)*lig1
-      do 36 ir=1,lig1
-      depr(kr)=k1+ir
-   36 kr=kr+1
-      volr=volr+dep1(k1+lig1+1)-dep1(k1+1)
-      if(lig1.ge.ligr) goto 40
-      do 37 ir=lig1+1,ligr
-      depr(kr)=0
-   37 kr=kr+1
-      volr=volr+ligr-lig1
-      goto 40
-   38 do 39 ir=1,ligr
-      depr(kr)=0
-   39 kr=kr+1
-      volr=volr+ligr
-   40 continue
-c
-  999 depr(1)=volr
-      return
-   50 ierr=1
+ 999  depr(1)=volr
       return
       end

@@ -1,5 +1,4 @@
-//<>=armap(ar,out)
-//<>=armap(ar,[out])
+function armap(ar,out)
 //Imprime dans un ficher out ou a l'ecran les equations d'un ARMAX
 //!
 [lhs,rhs]=argn(0)
@@ -19,7 +18,7 @@ deff('[ta]=%cv(x)',['[m,n]=size(x);';
                     '        aa=part(aa+blank,1:n),';
                     '        ta=ta+aa+part(blank,1),';
                     'end;ta=ta+t;'])
-comp(%cv)
+
 // D(x)=Ax + Bu
 //-------------
 write(out,' ')
@@ -36,7 +35,8 @@ for i=1:3;
   if i=2,nli=int((lna/ar(6)));end;
   blank=[];for k=1:na,blank=[blank;'           '],end
   blank1=part(blank,1:8)
-  blank1([na/2,na/2+1])=['        ';'  '+M(i)+'(s)= ']
+//  blank1([na/2,na/2+1])=['  '+M(i)+'(s)= ']
+  blank1([int(na/2)+1])=['  '+M(i)+'(s)= ']
   t=blank1;
   nna=na;
   if i=2;nna=ar(6);end
@@ -46,7 +46,8 @@ for i=1:3;
     str='s**'+string(j-1)
     if length(str)=4,str=str+' ';end
     if j<>nli;str=str+' + ';else str=str+'   ';end
-    blank1([na/2,na/2+1])=['        ';str];
+//    blank1([na/2,na/2+1])=['        ';str];
+    blank1([int(na/2)+1])=[str];
     t=t+blank1
     if length(t(1))>=50,write(out,t),write(out," ");t=[];end
   end
@@ -59,12 +60,13 @@ write(out," ");
   [na,lna]=size(a)
   blank=[];for k=1:na,blank=[blank;'           '],end
   blank1=part(blank,1:8)
-  blank1([na/2,na/2+1])=['        ';'  Sig=  ']
+//  blank1([na/2,na/2+1])=['        ';'  Sig=  ']
+  blank1([int(na/2)+1])=['  Sig=  ']
   t=blank1;
   ta=a;
   t=t+%cv(ta);
 write(out,t);
 write(out," ");
-//end
+
 
 

@@ -6,7 +6,8 @@ if rhs<=1 then error(39),end
 
 //-compat type(sl)<>15 retained for list/tlist compatibility
 if type(sl)<>15&type(sl)<>16 then error(97,2),end
-select sl(1)
+flag=sl(1);
+select flag(1)
   case 'lss' then 
     if rhs=2 then x0=sl(6),end
     [nb,mb]=size(sl(3))

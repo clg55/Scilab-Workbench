@@ -32,14 +32,16 @@ function [s1,s2]=sysconv(s1,s2)
 //d(s)     -> conversion to discrete (time domain is 'd')
 //e(s,n)   -> conversion to samples system with period n
 //!
-if s1(1)<>s2(1) then // conversion ss<-->tf
-  if s1(1)='r' then s1=tf2ss(s1),else s2=tf2ss(s2),end
-  //if s1(1)='lss' then s1=ss2tf(s1),else s2=tf2ss(s2),end
+s11=s1(1);s21=s2(1);
+if s11(1)<>s21(1) then // conversion ss<-->tf
+  if s11(1)='r' then s1=tf2ss(s1),else s2=tf2ss(s2),end
+  s11=s1(1);s21=s2(1);
+  //if s11(1)='lss' then s1=ss2tf(s1),else s2=tf2ss(s2),end
 end;
-if s1(1)=='r' then n1=4;end
-if s2(1)=='r' then n2=4;end
-if s1(1)=='lss' then n1=7;end
-if s2(1)=='lss' then n2=7;end
+if s11(1)=='r' then n1=4;end
+if s21(1)=='r' then n2=4;end
+if s11(1)=='lss' then n1=7;end
+if s21(1)=='lss' then n2=7;end
 select s1(n1)
  case 'c' then t1=0
  case 'd' then t1=1

@@ -61,14 +61,15 @@ if rhs <=0 then
      end
 end
 if noframe=1;s_t="010";else s_t="012";end
-plot2d(0,0,[-1],s_t,' ',cdef);
+plot2d(0,0,[1],s_t,' ',cdef);
 xclip('clipgrf')
 //
 // Trace des bouttons
    tmenu=['rectangle','circle','polyline','fpolyline',...
 	  'spline','arrow',...
           'points','caption',...
-          'dash style','pattern','mark','redraw','pause','delete','exit']
+          'dash style','pattern','mark','redraw','pause','delete',...
+	  'clip off','clip on','exit']
 //
 if init=0 then redraw(sd,s_t); else sd=list('sd',cdef); end,
 //
@@ -102,6 +103,8 @@ while fin<>'ok' then
    case 'redraw'     then redraw(sd,s_t);
    case 'pause'      then pause;
    case 'delete'     then delete(sd);
+   case 'clip off'   then sd(ksd+1)=grclipoff();
+   case 'clip on'    then sd(ksd+1)=grclipon();
    case 'exit' then fin='ok',
 //
 end, // fin select x

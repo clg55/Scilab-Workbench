@@ -3,20 +3,22 @@ c
 c     operations matricielles
 c     
       include '../stack.h'
+      common /mtlbc/ mmode
       integer op
 c     
       double precision ddot,dlamch
       double precision cstr,csti
       integer vol,iadr,sadr
 c     
-      double precision sr,si,e1,st,e2,powr,powi,e1r,e1i,e2r,e2i
+      double precision sr,si,e1,st,e2,e1r,e1i,e2r,e2i
+      double precision dasum
       integer star,dstar,slash,bslash,dot,colon
-      integer less,great,equal
+      integer less,great,equal,et,ou,non
       integer top0
       data star/47/,dstar/62/,slash/48/
       data bslash/49/,dot/51/,colon/44/
       data less/59/,great/60/,equal/50/
-
+      data ou/57/,et/58/,non/61/
 c     
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -80,45 +82,60 @@ c
       fun = 0
 c     
 c     cconc  extrac insert rconc
-      goto(75  ,  85  ,  80   ,78) op
+      goto(75  ,  95  ,  78   ,76) op
 c     
 c           :  +  -  * /  \  =          '
       goto(50,07,08,10,20,25,130,06,06,70) op+1-colon
 c     
- 06   if(op.eq.dstar) goto 30
+ 06   if(op.eq.dstar) goto 31
+      if(op.eq.dstar+dot) goto 30
       if(op.ge.3*dot+star) goto 65
       if(op.ge.2*dot+star) goto 120
       if(op.ge.less+equal) goto 130
       if(op.ge.dot+star) goto 55
+      if(op.eq.et.or.op.eq.ou.or.op.eq.non) goto 140
       if(op.ge.less) goto 130
+      top=top0
+      fin=-fin
+      return
+    
 c     
 c     addition
  07   continue
-c       []+a
       if (mn1.eq.0) then
-         call icopy(4,istk(il2),1,istk(il1),1)
-         call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
-         lstk(top+1)=l1+mn2*(it2+1)
-         goto 999
-      elseif(mn2.eq.0) then
-c       a+[]
-         goto 999
-      endif
-      if (m1 .lt. 0) go to 40
-      if (m2 .lt. 0) go to 41
-      if (mn2.eq.1) then
-c        a+cst
+         if (mmode.eq.1) then
+c     .     Matlab like []+a=[]
+         else
+c     .     []+a=a
+            call icopy(4,istk(il2),1,istk(il1),1)
+            call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
+            lstk(top+1)=l1+mn2*(it2+1)
+         endif
+      elseif (mn2.eq.0) then
+         if (mmode.eq.1) then
+c     .     Matlab like a+[]=[]
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)
+         else
+c     .     a+[]=a
+         endif
+      elseif (m1 .lt. 0) then
+c     .  eye+vector
+         go to 40
+      elseif (m2 .lt. 0) then
+c     .  vector+eye
+         go to 41
+      elseif (mn2.eq.1) then
+c     .   vector+const
          call dadd(mn1,stk(l2),0,stk(l1),1)
-         if(it2+2*it1.eq.1) call dcopy(mn1,stk(l2+mn2),0,
-     &                                 stk(l1+mn1),1)
-         if(it1*it2.eq.1) call dadd(mn1,stk(l2+mn2),0,
-     &                              stk(l1+mn1),1)
+         if(it2+2*it1.eq.1) call dcopy(mn1,stk(l2+mn2),0,stk(l1+mn1),1)
+         if(it1*it2.eq.1) call dadd(mn1,stk(l2+mn2),0,stk(l1+mn1),1)
          lstk(top+1)=l1+mn1*(itr+1)
          istk(il1+3)=itr
-         goto 999
-      endif
-      if (mn1.eq.1) then
-c        cst+a
+      elseif (mn1.eq.1) then
+c     .  cst+vector
          cstr=stk(l1)
          csti=stk(l1+1)
          call dcopy((it2+1)*mn2,stk(l2),1,stk(l1),1)
@@ -129,241 +146,372 @@ c        cst+a
          istk(il1+1)=m2
          istk(il1+2)=n2
          istk(il1+3)=itr
-         goto 999
+      else
+c     .  vector+vector
+         if (m1 .ne. m2.or.n1 .ne. n2) then
+            call error(8)
+            return
+         endif
+         call dadd(mn1,stk(l2),1,stk(l1),1)
+         if(it2+2*it1.eq.1) then
+            call dcopy(mn1,stk(l2+mn1),1,stk(l1+mn1),1)
+         endif
+         if(it1*it2.eq.1) then
+            call dadd(mn1,stk(l2+mn1),1,stk(l1+mn1),1)
+         endif
+         lstk(top+1)=l1+mn1*(itr+1)
+         istk(il1+3)=itr
       endif
-      if (m1 .ne. m2.or.n1 .ne. n2) then
-      call error(8)
-      return
-      endif
-      call dadd(mn1,stk(l2),1,stk(l1),1)
-      if(it2+2*it1.eq.1) call dcopy(mn1,stk(l2+mn1),1,stk(l1+mn1),1)
-      if(it1*it2.eq.1) call dadd(mn1,stk(l2+mn1),1,stk(l1+mn1),1)
-      lstk(top+1)=l1+mn1*(itr+1)
-      istk(il1+3)=itr
       go to 999
 c     
 c     soustraction
- 08   if(rhs.eq.2) goto 09
-      if(mn1.le.0) goto 999
-      call dscal(mn1*(it1+1),-1.0d+0,stk(l1),1)
-      goto 999
- 09   continue
-      if (mn1.eq.0) then
-c        []-a
-         call icopy(4,istk(il2),1,istk(il1),1)
-         call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
-         call dscal(mn2*(it2+1),-1.0d0,stk(l1),1)
-         lstk(top+1)=l1+mn2*(it2+1)
-         goto 999
+ 08   if(rhs.eq.1) then
+c     .  unary minus
+         if(mn1.gt.0) then
+            call dscal(mn1*(it1+1),-1.0d+0,stk(l1),1)
+         endif
+      elseif (mn1.eq.0) then
+         if (mmode.eq.1) then
+c     .     Matlab like []-a=[]
+         else
+c     .     []-a=-a
+            call icopy(4,istk(il2),1,istk(il1),1)
+            call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
+            call dscal(mn2*(it2+1),-1.0d0,stk(l1),1)
+            lstk(top+1)=l1+mn2*(it2+1)
+         endif
       elseif(mn2.eq.0) then
-c         a-[]
-         goto 999
-      endif
-      if (mn2.eq.1) then
-c        a-cst
-         stk(l2)=-stk(l2)
-         if(it2.eq.1) stk(l2+1)=-stk(l2+1)
-         goto 07
-      endif
-      if (mn1.eq.1) then
-c        cst-a
+         if (mmode.eq.1) then
+c     .     Matlab like a-[]=[]
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)
+         else
+c     .     a-[]=a
+         endif
+      elseif (m1 .lt. 0) then
+c     .  a*eye-vector
+         go to 42
+      elseif (m2 .lt. 0) then
+c     .  vector-a*eye
+         go to 45
+      elseif (mn2.eq.1) then
+c     .   vector-const
+         call dadd(mn1,-stk(l2),0,stk(l1),1)
+         if(it2+2*it1.eq.1) call dcopy(mn1,-stk(l2+mn2),0,stk(l1+mn1),1)
+         if(it1*it2.eq.1) call dadd(mn1,-stk(l2+mn2),0,stk(l1+mn1),1)
+         lstk(top+1)=l1+mn1*(itr+1)
+         istk(il1+3)=itr
+      elseif (mn1.eq.1) then
+c     .  cst-vector
+         cstr=stk(l1)
+         csti=stk(l1+1)
          call dscal((it2+1)*mn2,-1.0d0,stk(l2),1)
-         goto 07
+         call dcopy((it2+1)*mn2,stk(l2),1,stk(l1),1)
+         if(it1.eq.1.and.it2.eq.0) call dset(mn2,0.d0,stk(l1+mn2),1)
+         call dadd(mn2,cstr,0,stk(l1),1)
+         if(it1.eq.1) call dadd(mn2,csti,0,stk(l1+mn2),1)
+         lstk(top+1)=l1+mn2*(itr+1)
+         istk(il1+1)=m2
+         istk(il1+2)=n2
+         istk(il1+3)=itr
+      else
+c     .  vector-vector
+         if (m1 .ne. m2.or.n1 .ne. n2) then
+            call error(9)
+            return
+         endif
+         call ddif(mn1,stk(l2),1,stk(l1),1)
+         if(itr.eq.0) goto 999
+         if(it1.eq.0) then
+            call dscal (mn1,-1.0d+0,stk(l2+mn1),1)
+            call dcopy(mn1,stk(l2+mn1),1,stk(l1+mn1),1)
+         endif
+         if(it1*it2.eq.1) call ddif(mn1,stk(l2+mn1),1,stk(l1+mn1),1)
+         lstk(top+1)=l1+mn1*(itr+1)
+         istk(il1+3)=itr
       endif
-      if (m1 .lt. 0) go to 42
-      if (m2 .lt. 0) go to 45
-c       check dimensions
-      if (m1 .ne. m2.or.n1 .ne. n2) then
-      call error(9)
-      return
-      endif
-      call ddif(mn1,stk(l2),1,stk(l1),1)
-      if(itr.eq.0) goto 999
-      if(it1.eq.0) call dscal (mn1,-1.0d+0,stk(l2+mn1),1)
-      if(it1.eq.0) call dcopy(mn1,stk(l2+mn1),1,stk(l1+mn1),1)
-      if(it1*it2.eq.1) call ddif(mn1,stk(l2+mn1),1,stk(l1+mn1),1)
-      lstk(top+1)=l1+mn1*(itr+1)
-      istk(il1+3)=itr
       go to 999
 c     
 c     multiplication
- 10   if (m2*mn2 .eq. 1) go to 12
-      if (mn1 .eq. 1) go to 13
-      if (mn2 .eq. 1) go to 12
+ 10   continue
       if(mn1.eq.0.or.mn2.eq.0) then
+c     .  []*a , a*[]
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
          lstk(top+1)=sadr(il1+4)+1
-         goto 999
-      endif
-      if (n1 .ne. m2) then
-         call error(10)
-         return
-      endif
-c     
-      istk(il1+2)=n2
-      istk(il1+3)=itr
-      lstk(top+1)=l1+m1*n2*(itr+1)
-c     
-      mnr=m1*n2*(itr+1)
-      lr=l1+mnr
-      vol=lstk(top+2)-lstk(top)
-      err=lr+vol-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-      call dcopy(vol,stk(l1),-1,stk(lr),-1)
-      l2=l2+mnr
-c     
-      if(it1*it2.eq.1) goto 11
-      call dmmul(stk(lr),m1,stk(l2),m2,stk(l1),m1,m1,n1,n2)
-      if(it1.eq.1) call dmmul(stk(lr+mn1),m1,stk(l2),m2,stk(l1+m1*n2),
-     1     m1,m1,n1,n2)
-      if(it2.eq.1) call dmmul(stk(lr),m1,stk(l2+mn2),m2,stk(l1+m1*n2),
-     1     m1,m1,n1,n2)
-      goto 999
-c     a et a2 sont complexes
- 11   call wmmul(stk(lr),stk(lr+mn1),m1,stk(l2),
-     1     stk(l2+mn2),m2,stk(l1),stk(l1+m1*n2),m1,m1,n1,n2)
-      go to 999
-c     
- 12   continue
-c     a*cst
-      sr = stk(l2)
-      si=0.0d+0
-      if(it2.eq.1) si = stk(l2+1)
-      go to 14
- 13   continue
-c     cst*a
-      sr = stk(l1)
-      si=0.0d+0
-      if(it1.eq.1) si = stk(l1+1)
-      call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
-      m1=m2
-      n1=n2
-      mn1=it1
-      it1=it2
-      it2=mn1
-      mn1=mn2
-c     
- 14   continue
-      istk(il1+1)=m1
-      istk(il1+2)=n1
-      istk(il1+3)=itr
-      lstk(top+1)=l1+mn1*(itr+1)
-c     
-      err=lstk(top+1)-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-c     
-      goto (15,16,17),it2+2*it1
-c     la matrice et le scalaire sont reel
-      call dscal(mn1,sr,stk(l1),1)
-      goto 999
- 15   continue
-c     la matrice est reelle le scalaire est complexe
-      call dcopy(mn1,stk(l1),1,stk(l1+mn1),1)
-      call dscal(mn1,si,stk(l1+mn1),1)
-      call dscal(mn1,sr,stk(l1),1)
-      goto 999
- 16   continue
-c     la matrice est complexe, le scalaire est reel
-      call dscal(mn1,sr,stk(l1),1)
-      call dscal(mn1,sr,stk(l1+mn1),1)
-      goto 999
- 17   continue
-c     la matrice et le scalaire sont complexes
-      call wscal(mn1,sr,si,stk(l1),stk(l1+mn1),1)
-      goto 999
-c     
-c     division a droite
- 20   if (mn2 .eq. 1) go to 21
-      if (m2 .eq. n2) fun = 1
-      if (m2 .ne. n2) fun = 4
-      fin = -1
-      top = top+1
-      rhs = 2
-      go to 999
- 21   continue
-      sr=stk(l2)
-      si=0.0d+0
-      if(it2.eq.1) si=stk(l2+1)
- 22   e1=max(abs(sr),abs(si))
-      if(e1.ge.dlamch('o')) then
-      sr=0.d0
-      goto 14
-      endif
-c
-      if(e1.eq.0.0d+0) then
-         call error(27)
-         return
-      endif
-      sr=sr/e1
-      si=si/e1
-      e1=e1*(sr*sr+si*si)
-      sr=sr/e1
-      si=-si/e1
-      goto 14
-c     on appele la multiplication avec l'inverse du scalaire
-c     
-c     division a gauche
- 25   if (m1*n1 .eq. 1) go to 26
-      if (m1 .eq. n1) fun = 1
-      if (m1 .ne. n1) fun = 4
-      top = top+1
-      fin = -2
-      rhs = 2
-      go to 999
- 26   continue
-      m1=m2
-      n1=n2
-      sr=stk(l1)
-      si=0.0d+0
-      if(it1.eq.1) si=stk(l1+1)
-      call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
-      m1=m2
-      n1=n2
-      mn1=it1
-      it1=it2
-      it2=mn1
-      mn1=mn2
-      goto 22
-c     
-c     puissance
- 30   continue
-      if (mn2 .ne. 1) then
-         call error(30)
-         return
-      endif
-      if(m1.eq.n1.and.m1*n1.gt.1) goto 31
-c     element wise
-      err=l1+mn1*2-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-
-      if(it2.eq.0) then
-         powr=stk(l2)
-         if(it1.eq.0) then
-            call ddpow(mn1,stk(l1),stk(l1+mn1),1,powr,err,itr)
+      elseif (mn1 .eq. 1) then
+c     .  cst*a
+         sr = stk(l1)
+         si=0.0d+0
+         if(it1.eq.1) si = stk(l1+1)
+         if (m1.lt.0.and.mn2.eq.1) then
+c     .     eye*cst
+            istk(il1+1)=m1
+            istk(il1+2)=n1
+            istk(il1+3)=itr
          else
-            call wdpow(mn1,stk(l1),stk(l1+mn1),1,
-     &           powr,err)
+            istk(il1+1)=m2
+            istk(il1+2)=n2
+            istk(il1+3)=itr
+         endif
+         call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
+         it21=it2+2*it1
+         if(it21.eq.0) then
+c     .     le scalaire et la matrice sont reel
+            call dscal(mn2,sr,stk(l1),1)
+         elseif(it21.eq.1) then
+c     .     la matrice est complexe le scalaire est reel
+            call dscal(mn2,sr,stk(l1),1)
+            call dscal(mn2,sr,stk(l1+mn2),1)
+         elseif(it21.eq.2) then
+c     .     la matrice est reelle, le scalaire est complexe
+            lstk(top+1)=l1+mn2*(itr+1)
+            err=lstk(top+1)-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            call dcopy(mn2,stk(l1),1,stk(l1+mn2),1)
+            call dscal(mn2,sr,stk(l1),1)
+            call dscal(mn2,si,stk(l1+mn2),1)
+         elseif(it21.eq.3) then
+c     .     la matrice et le scalaire sont complexes
+            call wscal(mn2,sr,si,stk(l1),stk(l1+mn2),1)
+         endif
+         lstk(top+1)=l1+mn2*(itr+1)
+      elseif (mn2 .eq. 1) then
+c     .  a*cst
+         it21=it2+2*it1
+         if(it21.eq.0) then
+c     .     la matrice et le scalaire sont reel
+            call dscal(mn1,stk(l2),stk(l1),1)
+         elseif(it21.eq.1) then
+c     .     la matrice est reelle le scalaire est complexe
+            sr = stk(l2)
+            si = stk(l2+1)
+            lstk(top+1)=l1+mn1*(itr+1)
+            err=lstk(top+1)-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            call dcopy(mn1,stk(l1),1,stk(l1+mn1),1)
+            call dscal(mn1,si,stk(l1+mn1),1)
+            call dscal(mn1,sr,stk(l1),1)
+            istk(il1+3)=itr
+         elseif(it21.eq.2) then
+c     .     la matrice est complexe, le scalaire est reel
+            sr = stk(l2)
+            call dscal(mn1,sr,stk(l1),1)
+            call dscal(mn1,sr,stk(l1+mn1),1)
+         elseif(it21.eq.3) then
+            sr = stk(l2)
+            si = stk(l2+1)
+c     .     la matrice et le scalaire sont complexes
+            call wscal(mn1,sr,si,stk(l1),stk(l1+mn1),1)
          endif
       else
-         powr=stk(l2)
-         powi=stk(l2+1)
-         if(it1.eq.0) then
-            call dwpow(mn1,stk(l1),stk(l1+mn1),1,
-     &           powr,powi,err)
+c     .  matrix*matrix
+         if (n1 .ne. m2) then
+            call error(10)
+            return
+         endif
+         lr=l2+mn2*(it2+1)
+         err=lr+m1*n2*(itr+1)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         if(it1*it2.ne.1) then
+            call dmmul(stk(l1),m1,stk(l2),m2,stk(lr),m1,m1,n1,n2)
+            if(it1.eq.1) call dmmul(stk(l1+mn1),m1,stk(l2),m2
+     $           ,stk(lr+m1*n2),m1,m1,n1,n2)
+            if(it2.eq.1) call dmmul(stk(l1),m1,stk(l2+mn2),m2
+     $           ,stk(lr+m1*n2),m1,m1,n1,n2)
          else
-            call wwpow(mn1,stk(l1),stk(l1+mn1),1,
-     &           powr,powi,err)
+c     .     a et a2 sont complexes
+            call wmmul(stk(l1),stk(l1+mn1),m1,stk(l2),stk(l2
+     $           +mn2),m2,stk(lr),stk(lr+m1*n2),m1,m1,n1,n2)
+         endif
+         call dcopy(m1*n2*(itr+1),stk(lr),1,stk(l1),1)
+         istk(il1+2)=n2
+         istk(il1+3)=itr
+         lstk(top+1)=l1+m1*n2*(itr+1)
+      endif
+      go to 999
+c     
+c     division a droite
+ 20   continue
+      if (mn1.eq.0.or.mn2.eq.0) then
+c     .  a/[] or []/a
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)
+         goto 999
+      endif
+      if (mn2 .ne. 1) then
+         if (m2 .eq. n2) fun = 1
+         if (m2 .ne. n2) fun = 4
+         fin = -1
+         top = top+1
+         rhs = 2
+      else
+c     .  vector / cst
+         istk(il1+1)=m1
+         istk(il1+2)=n1
+         istk(il1+3)=itr
+         lstk(top+1)=l1+mn1*(itr+1)
+c     
+         err=lstk(top+1)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         it21=it2+2*it1
+         if(it21.eq.0) then
+c     .     real / real
+            call ddrdiv(stk(l1),1,stk(l2),0,stk(l1),1,mn1,ierr)
+         elseif(it21.eq.1) then
+c     .     real / complex
+            sr=stk(l2)
+            si=stk(l2+1)
+            call dwrdiv(stk(l1),1,sr,si,0,stk(l1),stk(l1+mn1),1,
+     $           mn1,ierr)
+         elseif(it21.eq.2) then 
+c     .     complex / real
+            call wdrdiv(stk(l1),stk(l1+mn1),1,stk(l2),0,stk(l1)
+     $           ,stk(l1+mn1),1,mn1,ierr)
+         elseif(it21.eq.3) then  
+c     .     complex / complex
+            call wwrdiv(stk(l1),stk(l1+mn1),1,stk(l2),stk(l2+1)
+     $           ,0,stk(l1),stk(l1+mn1),1,mn1,ierr)
+         endif
+         if(ierr.ne.0) then
+            call error(27)
+            return
+         endif
+      endif
+      go to 999
+c     
+c     division a gauche
+ 25   continue
+      if (mn1.eq.0.or.mn2.eq.0) then
+c     .  a\[] or []\a
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)
+         goto 999
+      endif
+      if (m1*n1 .ne. 1) then
+         if (m1 .eq. n1) fun = 1
+         if (m1 .ne. n1) fun = 4
+         top = top+1
+         fin = -2
+         rhs = 2
+      else
+c     .  cst \ vector
+         istk(il1+1)=m2
+         istk(il1+2)=n2
+         istk(il1+3)=itr
+         lstk(top+1)=l1+mn2*(itr+1)
+c     
+         err=lstk(top+1)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+
+         sr=stk(l1)
+         it21=it2+2*it1
+         if(it21.eq.0) then
+c     .     real \ real
+            call ddrdiv(stk(l2),1,sr,0,stk(l1),1,mn2,ierr)
+         elseif(it21.eq.1) then
+c     .     real \ complex = complex/real
+            call wdrdiv(stk(l2),stk(l2+mn2),1,sr,0,stk(l2)
+     $           ,stk(l2+mn2),1,mn2,ierr)
+            call dcopy(2*mn2,stk(l2),1,stk(l1),1)
+         elseif(it21.eq.2) then 
+c     .     complex \ real =real / complex
+            si=stk(l1+1)
+            call dcopy(mn2,stk(l2),1,stk(l1),1)
+            call dwrdiv(stk(l1),1,sr,si,0,stk(l1),stk(l1+mn2),1
+     $           ,mn2,ierr)
+         elseif(it21.eq.3) then  
+c     .     complex \ complex
+            si=stk(l1+1)
+            call dcopy(2*mn2,stk(l2),1,stk(l1),1)
+            call wwrdiv(stk(l1),stk(l1+mn2),1,sr,si,0,stk(l1)
+     $           ,stk(l1+mn2),1,mn2,ierr)
+         endif
+         if(ierr.ne.0) then
+            call error(27)
+            return
+         endif
+      endif
+      go to 999
+         
+c     
+c     puissance  element wise .^
+ 30   continue
+      if (mn1.eq.0) then
+         return
+      endif
+      if (mn2.eq.0) then
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)+1
+         return
+      endif
+      if (mn2 .gt. 1) then
+         m=m2
+         n=n2
+         inc2=1
+         if (mn1 .eq.1) then
+            inc1=0
+         elseif(m1.eq.m2.and.n1.eq.n2) then
+            inc1=1
+         else
+            call error(30)
+            return
+         endif
+      else
+         inc2=0
+         inc1=1
+         m=m1
+         n=n1
+      endif
+      mn=m*n
+      err=lw+mn*2-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      itr=max(it1,it2)
+      if(it2.eq.0) then
+         if(it1.eq.0) then
+            call ddpow1(mn,stk(l1),inc1,stk(l2),inc2,
+     $           stk(lw),stk(lw+mn),1,err,itr)
+         else
+            call wdpow1(mn,stk(l1),stk(l1+mn1),inc1,stk(l2),inc2,
+     $           stk(lw),stk(lw+mn),1,err)
+         endif
+      else
+         if(it1.eq.0) then
+            call dwpow1(mn,stk(l1),inc1,stk(l2),stk(l2+mn2),inc2,
+     &           stk(lw),stk(lw+mn),1,err)
+         else
+            call wwpow1(mn,stk(l1),stk(l1+mn1),inc1,stk(l2),stk(l2+mn2),
+     &           inc2,stk(lw),stk(lw+mn),1,err)
          endif
       endif
       if(err.eq.1) then
@@ -374,12 +522,35 @@ c     element wise
          call error(27)
          return
       endif
+      istk(il1+1)=m
+      istk(il1+2)=n
       istk(il1+3)=itr
-      lstk(top+1)=l1+mn1*(itr+1)
+      call dcopy(mn*(itr+1),stk(lw),1,stk(l1),1)
+      lstk(top+1)=l1+mn*(itr+1)
       goto 999
 c     
 c     elevation d'une matrice carree a une puissance
- 31   nexp = nint(stk(l2))
+ 31   continue
+      if(mn1.eq.0) then
+         return
+      endif
+      if(mn2.eq.0) then
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)+1
+         return
+      endif
+      if(mn1.eq.1) goto 30
+      if(mn2.gt.1) goto 39
+      if(m1.ne.n1) then
+         if(mn2.eq.1.and.(m1.eq.1.or.n1.eq.1)) goto 30
+         err=1
+         call error(20)
+         return
+      endif
+      nexp = nint(stk(l2))
       if (it2 .ne. 0) go to 39
       if (stk(l2) .ne. dble(nexp)) go to 39
       if (nexp.eq.1) go to 999
@@ -391,16 +562,20 @@ c     elevation d'une matrice carree a une puissance
             call error(17)
             return
          endif
-         if(it1.eq.0) then
-            call dgeco(stk(l1),m1,m1,istk(ipvt),sr,stk(lw))
-         else
-            call wgeco(stk(l1),stk(l1+mn1),m1,m1,istk(ipvt),
-     &           sr,stk(lw),stk(lw+m1))
-         endif
-         if(1.0d+0+sr.eq.1.0d+0) then
-            call error(19)
+         if (dasum(m1*n1*(it1+1),stk(l1),1).eq.0.0d0) then
+            call error(30)
             return
          endif
+c         if(it1.eq.0) then
+c            call dgeco(stk(l1),m1,m1,istk(ipvt),sr,stk(lw))
+c         else
+c            call wgeco(stk(l1),stk(l1+mn1),m1,m1,istk(ipvt),
+c     &           sr,stk(lw),stk(lw+m1))
+c         endif
+c         if(1.0d+0+sr.eq.1.0d+0) then
+c            call error(19)
+c            return
+c         endif
          call dset(mn1,0.0d+0,stk(l1),1)
          call dset(m1,1.0d+0,stk(l1),m1+1)
          istk(il1+3)=0
@@ -520,7 +695,9 @@ c
       istk(il1+3)=itr
 c     
       if(itr.eq.1.and.it1.eq.0) call dset(mn1,0.0d+0,stk(l1+mn1),1)
-      do 47 i = 1, max(n1,m1)
+      m1=abs(m1)
+      n1=abs(n1)
+      do 47 i = 1, min(n1,m1)
          ll = l1 + (i-1)*(m1+1)
          stk(ll) = stk(ll)+sr
          if(itr.ne.0) stk(ll+mn1) = stk(ll+mn1)+si
@@ -528,21 +705,54 @@ c
       go to 999
 c     
 c     boucle implicite
- 50   e2 = stk(l2)
-      st = 1.0d+0
-      n = 0
-      if (rhs .lt. 3) go to 51
-      e2=stk(l3)
-      st = stk(l2)
+ 50   continue
+      if(mn1.ne.1) then
+         err=1
+         call cvname(ids(1,pt+1),''':''',0)
+         call error(204)
+         return
+      endif
+      e1 = stk(l1)
+c
+      if(mn2.ne.1) then
+         err=2
+         call cvname(ids(1,pt+1),''':''',0)
+         call error(204)
+         return
+      endif
+      e2 = stk(l2)
+c
+      if (rhs .eq. 3) then
+         if(mn3.ne.1) then
+            err=3
+            call cvname(ids(1,pt+1),''':''',0)
+            call error(204)
+            return
+         endif
+         e2=stk(l3)
+         st = stk(l2)
+
+      else
+         st = 1.0d+0
+      endif
       if (st .eq. 0.0d+0) go to 53
- 51   e1 = stk(l1)
+
 c     check for clause
       if (rstk(pt-1) .eq. 801.or.rstk(pt).eq.611) go to 54
-      err = l1 + max(3,int((e2-e1)/st)) - lstk(bot)
-      if (err .gt. 0) then
+      if(rstk(pt-1).eq.611.and.rstk(pt).eq.601) then
+c     : in compiled for, next line to differentiate from extraction
+         if(istk(pstk(pt)).eq.16) goto  54
+      endif
+c
+c     floating point used to avoid integer overflow
+      e1r=l1 + max(3,int((e2-e1)/st)) - lstk(bot)
+      if (e1r .gt. 0.0d0) then
+         err=e1r
          call error(17)
          return
       endif
+c
+      n = 0
       l=l1
  52   if (st*(stk(l)-e2).gt.0.0d+0) then
          if (abs(stk(l)-e2).lt.abs(st*dlamch('p'))) n=n+1
@@ -569,7 +779,7 @@ c     for clause
       lstk(top+1)=l1+3
       go to 999
 c     
-c     operations elements a elements
+c     element wise operations
  55   continue
       i1=1
       i2=1
@@ -583,389 +793,146 @@ c     [].*a     a.*[]  -->[]
          lstk(top+1)=sadr(il1+4)+1
          goto 999
       endif
-      if(mn1.eq.1.and.op.eq.star) goto 13
-      if(mn2.eq.1.and.op.eq.star) goto 12
       if(mn1.ne.1.and.mn2.ne.1) then
 c       check dimensions
-      if (m1.ne.m2 .or. n1.ne.n2) then
-         buf='inconsistent element-wise operation'
-         call error(9999)
+         if (m1.ne.m2 .or. n1.ne.n2) then
+            buf='inconsistent element-wise operation'
+            call error(9999)
+            return
+         endif
+      endif
+      lstk(top+1)=l1+max(mn1,mn2)*(itr+1)
+      err=lstk(top+1)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
          return
       endif
-      endif
-      lstk(top+1)=l1+mn1*(itr+1)
       istk(il1+3)=itr
-      if(mn2.eq.1) then
-       if(op.eq.slash) then
-       cstr=stk(l2)
-        if(it2.eq.1) csti=stk(l2+1)
-           if(it1*it2.eq.1) then
-           sr=cstr
-           si=csti
-           e1=abs(sr)+abs(si)
-            if(e1.eq.0.0d+0) then
-            call error(27)
-            return
+
+      if(op.eq.star) then
+c     multiplication .*
+         if(mn1.eq.1.or.mn2.eq.1) goto 10
+         if(it1*it2.ne.1) then
+            if(it1.eq.1) call dvmul(mn1,stk(l2),i2,stk(l1
+     $           +mn1),i1)
+            if(it2.eq.1) call dvmul(mn1,stk(l1),i1,stk(l2
+     $           +mn2),i2)
+            call dvmul(mn1,stk(l2),i2,stk(l1),i1)
+            if(it2.eq.1) call dcopy(mn1,stk(l2+mn2),i2
+     $           ,stk(l1+mn1),i1)
+         else
+            call wvmul(mn1,stk(l2),stk(l2+mn2),i2,stk(l1)
+     $           ,stk(l1+mn1),i1)
+         endif
+      elseif(op.eq.slash) then
+         it21=it2+2*it1
+         if(mn2.eq.1) then
+c     .     vector ./ cst
+            goto 20
+         elseif(mn1.eq.1) then
+c     .     cst ./ vector
+            istk(il1+1)=m2
+            istk(il1+2)=n2
+            sr=stk(l1)
+            if(it21.eq.0) then
+c     .     real ./ real
+               call ddrdiv(sr,0,stk(l2),1,stk(l1),1,mn2,ierr)
+            elseif(it21.eq.1) then
+c     .     real ./ complex
+               call dcopy(2*mn2,stk(l2),1, stk(l1),1)
+               call dwrdiv(sr,0,stk(l1),stk(l1+mn2),1,stk(l1)
+     $              ,stk(l1+mn2),1,mn2,ierr)
+            elseif(it21.eq.2) then 
+c     .     complex ./ real
+               si=stk(l1+mn1)
+               call dcopy(mn2,stk(l2),1, stk(l1),1)
+               call wdrdiv(sr,si,0,stk(l1),1,stk(l1),stk(l1+mn2)
+     $              ,1,mn2,ierr)
+            elseif(it21.eq.3) then 
+c     .     complex ./ complex
+               si=stk(l1+mn1)
+               call dcopy(2*mn2,stk(l2),1, stk(l1),1)
+               call wwrdiv(sr,si,0,stk(l1),stk(l1+mn2),1,stk(l1)
+     $              ,stk(l1+mn2),1,mn2,ierr)
             endif
-           sr=sr/e1
-           si=si/e1
-           e1=e1*(sr*sr+si*si)
-           sr=sr/e1
-           si=-si/e1
-           call wvmul(mn1,sr,si,0,stk(l1),stk(l1+mn1),1)
-           goto 999
-           endif
-        if(it1.eq.0.and.it2.eq.0) then
-           if (cstr.eq.0.d0) then
-           call error(27)
-           return
-           endif
-           call dvmul(mn1,1.0d0/cstr,0,stk(l1),1)
-           goto 999
-        endif
-        if(it1.eq.0.and.it2.eq.1) then
-           err=l1+2*mn1-lstk(bot)
-           if(err.gt.0) then
-           call error(17)
-           return
-           endif
-           lstk(top+1)=l1+2*mn1
-           istk(il1+3)=it2
-           sr=cstr
-           si=csti
-           e1=abs(sr)+abs(si)
-            if(e1.eq.0.0d+0) then
-             call error(27)
-             return
+         else
+c     .     vector ./ vector
+            if(it21.eq.0) then
+c     .     real ./ real
+               call ddrdiv(stk(l1),1,stk(l2),1,stk(l1),1,mn2
+     $              ,ierr)
+            elseif(it21.eq.1) then
+c     .     real ./ complex
+               call dwrdiv(stk(l1),1,stk(l2),stk(l2+mn1),1
+     $              ,stk(l1),stk(l2),1,mn2,ierr)
+               call dcopy(mn2,stk(l2),1,stk(l1+mn2),1)
+            elseif(it21.eq.2) then 
+c     .     complex ./ real
+               call wdrdiv(stk(l1),stk(l1+mn1),1,stk(l2),1
+     $              ,stk(l1),stk(l1+mn2),1,mn2,ierr)
+            elseif(it21.eq.3) then 
+c     .     complex ./ complex
+               call wwrdiv(stk(l1),stk(l1+mn1),1,stk(l2)
+     $              ,stk(l2+mn2),1,stk(l1),stk(l1+mn2),1,mn2,ierr)
             endif
-           sr=sr/e1
-           si=si/e1
-           e1=e1*(sr*sr+si*si)
-           sr=sr/e1
-           si=-si/e1
-           call dset(mn1,0.d0,stk(l1+mn1),1)
-           call wvmul(mn1,sr,si,0,stk(l1),stk(l1+mn1),1)
-           goto 999
-        endif
-        if(it1.eq.1.and.it2.eq.0) then
-           if(cstr.eq.0.d0) then
-           call error(27) 
-           return
-           endif
-           call dvmul(2*mn1,1.0d0/cstr,0,stk(l1),1)
-           goto 999
-        endif
-       endif
-       if(op.eq.bslash) then
-       cstr=stk(l2)
-       if(it2.eq.1) csti=stk(l2+1)
-          if(it1.eq.0.and.it2.eq.0) then
-          do 550 ii=1,mn1
-          if(stk(l1+ii-1).eq.0.d0) then
-          call error(27)
-          endif
-          stk(l1+ii-1)=cstr/stk(l1+ii-1)
- 550      continue
-          goto 999
-          endif
-          if(it1.eq.0.and.it2.eq.1) then
-             istk(il1+3)=it2
-             err=l1+2*mn1-lstk(bot)
-             if(err.gt.0) then
-                call error(17)
-                return
-             endif
-             lstk(top+1)=l1+2*mn1
-             do 551 i=1,mn1
-                sr=stk(l1+i-1)
-                e1=abs(sr)
-                if(sr.eq.0.0d+0) then
-                   call error(27)
-                   return
-                endif
-                stk(l1+i-1)=cstr/sr
-                stk(l1+mn1+i-1)=csti/sr
- 551         continue
-             goto 999
-          endif
-          if(it1.eq.1.and.it2.eq.0) then
-          do 552 i=1,mn1
-          sr=stk(l1+i-1)
-          si=stk(l1+mn1+i-1)
-          e1=abs(sr)+abs(si)
-            if(e1.eq.0.0d+0) then
-             call error(27)
-             return
-            endif
-          sr=sr/e1
-          si=si/e1
-          e1=e1*(sr*sr+si*si)
-          sr=sr/e1
-          si=-si/e1
-          stk(l1+i-1)=cstr*sr
-          stk(l1+mn1+i-1)=cstr*si
- 552      continue
-          goto 999
-          endif
-          if(it1.eq.1.and.it2.eq.1) then
-          do 553 i=1,mn1
-          sr=stk(l1+i-1)
-          si=stk(l1+mn1+i-1)
-          e1=abs(sr)+abs(si)
-            if(e1.eq.0.0d+0) then
-             call error(27)
-             return
-            endif
-          sr=sr/e1
-          si=si/e1
-          e1=e1*(sr*sr+si*si)
-          sr=sr/e1
-          si=-si/e1
-          stk(l1+i-1)=sr*cstr-si*csti
-          stk(l1+mn1+i-1)=cstr*si+sr*csti
- 553      continue
-          goto 999
-          endif
-       endif
-      endif
-c              
-      if(mn1.eq.1) then
-       if(op.eq.slash) then
-       cstr=stk(l1)
-       if(it1.eq.1) csti=stk(l1+1)
-           if(it1.eq.0.and.it2.eq.0) then
-           istk(il1+1)=m2
-           istk(il1+2)=n2
-           lstk(top+1)=l1+mn2
-           do 554 i=1,mn2
-           sr=stk(l2+i-1)
-            if(sr.eq.0.d0) then
-            call error(27)
-            return
-            endif
-           stk(l1+i-1)=cstr/sr
- 554       continue
-           goto 999
-           endif
-           if(it1.eq.0.and.it2.eq.1) then
-           err=l1+2*mn2-lstk(bot)
-            if(err.gt.0) then
-            call error(17)
-            return
-            endif
-           istk(il1+1)=m2
-           istk(il1+2)=n2
-           istk(il1+3)=it2
-           lstk(top+1)=l1+2*mn2
-           do 555 i=1,mn2
-           sr=stk(l2+i-1)
-           si=stk(l2+mn2+i-1)
-           e1=abs(sr)+abs(si)
-            if(e1.eq.0.0d+0) then
-            call error(27)
-            return
-            endif
-           sr=sr/e1
-           si=si/e1
-           e1=e1*(sr*sr+si*si)
-           sr=sr/e1
-           si=-si/e1
-           stk(l2+i-1)=sr*cstr
-           stk(l2+mn2+i-1)=cstr*si
- 555       continue
-           call dcopy(2*mn2,stk(l2),1,stk(l1),1)
-           goto 999
-           endif
-           if(it1.eq.1.and.it2.eq.1) then
-           istk(il1+1)=m2
-           istk(il1+2)=n2
-           lstk(top+1)=l1+2*mn2
-           do 556 i=1,mn2
-           sr=stk(l2+i-1)
-           si=stk(l2+mn2+i-1)
-           e1=abs(sr)+abs(si)
-            if(e1.eq.0.0d+0) then
-             call error(27)
-             return
-            endif
-           sr=sr/e1
-           si=si/e1
-           e1=e1*(sr*sr+si*si)
-           sr=sr/e1
-           si=-si/e1
-           stk(l2+i-1)=sr*cstr-si*csti
-           stk(l2+mn2+i-1)=cstr*si+csti*sr
- 556       continue
-           call dcopy(2*mn2,stk(l2),1,stk(l1),1)
-           goto 999
-           endif
-           if(it1.eq.1.and.it2.eq.0) then
-           err=l1+2*mn2-lstk(bot)
-            if(err.gt.0) then
-            call error(17)
-            return
-            endif
-           istk(il1+1)=m2
-           istk(il1+2)=n2
-           lstk(top+1)=l1+2*mn2
-           do 557 i=1,mn2
-           sr=stk(l2+i-1)
-            if(sr.eq.0.0d+0) then
-             call error(27)
-             return
-            endif
-           stk(l2+i-1)=cstr/sr
-           stk(l2+mn2+i-1)=csti/sr
- 557       continue
-           call dcopy(2*mn2,stk(l2),1,stk(l1),1)
-           goto 999
-           endif
-       endif
-       if(op.eq.bslash) then
-       cstr=stk(l1)
-       if(it1.eq.1) csti=stk(l1+1)
-           if(it1.eq.0.and.it2.eq.0) then
-            if(cstr.eq.0.d0) then
-            call error(17)
-            return
-            endif
-           istk(il1+1)=m2
-           istk(il1+2)=n2
-           lstk(top+1)=l1+mn2
-           do 558 i=1,mn2
-           sr=stk(l2+i-1)
-           stk(l1+i-1)=sr/cstr
- 558       continue
-           goto 999
-           endif
-           if(it1.eq.1.and.it2.eq.0) then
-           err=l2+2*mn2-lstk(bot)
-            if(err.gt.0) then
-            call error(17)
-            return
-            endif
-           sr=cstr
-           si=csti
-           e1=abs(sr)+abs(si)
-            if(e1.eq.0.0d+0) then
-            call error(27)
-            return
-            endif
-           sr=sr/e1
-           si=si/e1
-           e1=e1*(sr*sr+si*si)
-           sr=sr/e1
-           si=-si/e1
-           cstr=sr
-           csti=si
-           istk(il1+1)=m2
-           istk(il1+2)=n2
-           lstk(top+1)=l1+2*mn2
-           do 559 i=1,mn2
-           sr=stk(l2+i-1)
-           stk(l2+i-1)=sr*cstr
-           stk(l2+mn2+i-1)=sr*csti
- 559       continue
-           call dcopy(2*mn2,stk(l2),1,stk(l1),1)
-           goto 999
-           endif
-           if(it1.eq.0.and.it2.eq.1) then
-            if(cstr.eq.0.d0) then
-            call error(27)
-            return
-            endif
-           istk(il1+1)=m2
-           istk(il1+2)=n2
-           istk(il1+3)=it2
-           lstk(top+1)=l1+2*mn2
-           do 560 i=1,mn2
-           stk(l2+i-1)=stk(l2+i-1)/cstr
-           stk(l2+mn2+i-1)=stk(l2+mn2+i-1)/cstr
- 560       continue
-           call dcopy(2*mn2,stk(l2),1,stk(l1),1)
-           goto 999
-           endif
-           if(it1.eq.1.and.it2.eq.1) then
-           istk(il1+1)=m2
-           istk(il1+2)=n2
-           istk(il1+3)=it2
-           lstk(top+1)=l1+2*mn2
-           sr=cstr
-           si=csti
-           e1=abs(sr)+abs(si)
-            if(e1.eq.0.0d+0) then
-            call error(27)
-            return
-            endif
-           sr=sr/e1
-           si=si/e1
-           e1=e1*(sr*sr+si*si)
-           sr=sr/e1
-           si=-si/e1
-           cstr=sr
-           csti=si
-           do 561 i=1,mn2
-           sr=stk(l2+i-1)
-           si=stk(l2+mn2+i-1)
-           stk(l2+i-1)=sr*cstr-si*csti
-           stk(l2+mn2+i-1)=sr*csti+si*cstr
- 561       continue
-           call dcopy(2*mn2,stk(l2),1,stk(l1),1)
-           goto 999
-           endif
-       endif
-      endif
-      if(op.ne.star) goto 60
-c     multiplication
- 56   if(it1*it2.eq.1) goto 58
-      if(it1.eq.1) call dvmul(mn1,stk(l2),i2,stk(l1+mn1),i1)
-      if(it2.eq.1) call dvmul(mn1,stk(l1),i1,stk(l2+mn2),i2)
-      call dvmul(mn1,stk(l2),i2,stk(l1),i1)
-      if(it2.eq.1) call dcopy(mn1,stk(l2+mn2),i2,stk(l1+mn1),i1)
-      goto 999
-c     a et a2 complexes
- 58   call wvmul(mn1,stk(l2),stk(l2+mn2),i2,stk(l1),stk(l1+mn1),i1)
-      goto 999
-c     
-c     division a droite et a gauche
-c     
- 60   lstk(top+1)=l1+mn1*(itr+1)
-      istk(il1+3)=itr
-      ll=l2-1
-      it=it2
-      if(op.eq.slash) goto 61
-      ll=l1-1
-      it=it1
- 61   if(it.eq.1) goto 63
-c     la matrice diviseur est reelle
-      do 62 i=1,mn1
-         if(stk(ll+i).eq.0.0d+0) then
+         endif
+         if(ierr.ne.0) then
             call error(27)
             return
          endif
-         stk(ll+i)=1.0d+0/stk(ll+i)
- 62   continue
-      if(mn1.eq.1) goto 13
-      goto 56
-c     la matrice diviseur est complexe
- 63   do 64 i=1,mn1
-         sr=stk(ll+i)
-         si=stk(ll+mn1+i)
-         e1=abs(sr)+abs(si)
-         if(e1.eq.0.0d+0) then
+      elseif(op.eq.bslash) then
+         it21=it2+2*it1
+         if(mn1.eq.1) then
+c     .     cst .\ vector
+            goto 25
+         elseif(mn2.eq.1) then
+c     .     vector .\ cst
+            sr=stk(l2)
+            if(it21.eq.0) then
+c     .     real .\ real
+               call ddrdiv(sr,0,stk(l1),1,stk(l1),1,mn1,ierr)
+            elseif(it21.eq.2) then
+c     .     complex .\ real
+               call dwrdiv(sr,0,stk(l1),stk(l1+mn1),1,stk(l1)
+     $              ,stk(l1+mn1),1,mn1,ierr)
+            elseif(it21.eq.1) then 
+c     .     real .\ complex
+               si=stk(l2+mn2)
+               call wdrdiv(sr,si,0,stk(l1),1,stk(l1),stk(l1+mn1),1
+     $              ,mn1,ierr)
+            elseif(it21.eq.3) then 
+c     .     complex .\ complex
+               si=stk(l2+mn2)
+               call wwrdiv(sr,si,0,stk(l1),stk(l1+mn1),1,stk(l1)
+     $              ,stk(l1+mn1),1,mn1,ierr)
+            endif
+         else
+c     .     vector .\ vector
+            if(it21.eq.0) then
+c     .     real .\ real
+               call ddrdiv(stk(l2),1,stk(l1),1,stk(l1),1,mn1
+     $              ,ierr)
+            elseif(it21.eq.2) then
+c     .     complex .\ real
+               call dwrdiv(stk(l2),1,stk(l1),stk(l1+mn1),1
+     $              ,stk(l1),stk(l1+mn1),1,mn1,ierr)
+            elseif(it21.eq.1) then 
+c     .     real .\ complex = complex /. real
+               call wdrdiv(stk(l2),stk(l2+mn2),1,stk(l1),1
+     $              ,stk(l1),stk(l2),1,mn1,ierr)
+               call dcopy(mn1,stk(l2),1,stk(l1+mn1),1)
+            elseif(it21.eq.3) then 
+c     .     complex .\ complex
+               call wwrdiv(stk(l2),stk(l2+mn2),1,stk(l1)
+     $              ,stk(l1+mn1),1,stk(l1),stk(l1+mn1),1,mn1,ierr)
+            endif
+         endif
+         if(ierr.ne.0) then
             call error(27)
             return
          endif
-         sr=sr/e1
-         si=si/e1
-         e1=e1*(sr*sr+si*si)
-         sr=sr/e1
-         si=-si/e1
-         stk(ll+i)=sr
-         stk(ll+mn1+i)=si
- 64   continue
-      if(mn1.eq.1) goto 13
-      goto 56
+      endif
+      goto 999
 c     
 c     kronecker
  65   fin = op - 3*dot - star + 19
@@ -976,24 +943,27 @@ c     kronecker
 c     
 c     
 c     transposition
- 70   if(mn1 .eq. 0.or.istk(il1).eq.0) goto 999
-      vol=mn1*(it1+1)
-      ll = l1+vol
-      err = ll+vol - lstk(bot)
-      if (err .gt. 0) then
-         call error(17)
-         return
+ 70   if(mn1 .eq. 0.or.istk(il1).eq.0) then
+         goto 999
+      elseif(abs(m1).eq.1.or.abs(n1).eq.1) then
+         if(it1.eq.1) call dscal(mn1,-1.0d0,stk(l1+mn1),1)
+      else
+         vol=mn1*(it1+1)
+         ll = l1+vol
+         err = ll+vol - lstk(bot)
+         if (err .gt. 0) then
+            call error(17)
+            return
+         endif
+         call dcopy(vol,stk(l1),1,stk(ll),1)
+         call mtran(stk(ll),m1,stk(l1),n1,m1,n1)
+         if(it1.eq.1) then
+            call mtran(stk(ll+mn1),m1,stk(l1+mn1),n1,m1,n1)
+            call dscal(mn1,-1.0d+0,stk(l1+mn1),1)
+         endif
       endif
-c     
       istk(il1+1)=n1
       istk(il1+2)=m1
-c     
-      call dcopy(vol,stk(l1),1,stk(ll),1)
-      call mtran(stk(ll),m1,stk(l1),n1,m1,n1)
-      if(it1.eq.0) goto 999
-      call mtran(stk(ll+mn1),m1,stk(l1+mn1),n1,m1,n1)
-      call dscal(mn1,-1.0d+0,stk(l1+mn1),1)
-c     
       goto 999
 c     
 c     concatenation [a b]
@@ -1004,8 +974,8 @@ c     concatenation [a b]
       if(m2.eq.0) then
          return
       elseif(m1.eq.0)then
-         call dcopy(lstk(top+2)-lstk(top+1),stk(lstk(top+1)),1,
-     &        stk(lstk(top)),1)
+         call dcopy(lstk(top+2)-lstk(top+1),stk(lstk(top+1))
+     $        ,1,stk(lstk(top)),1)
          lstk(top+1)=lstk(top)+lstk(top+2)-lstk(top+1)
          return
       elseif(m1.ne.m2) then
@@ -1026,12 +996,18 @@ c
             call dcopy(mn2*(it2+1),stk(l2),-1,stk(lw),-1)
             l2=lw
          endif
-         if(it1.eq.1) call dcopy(mn1,stk(l1+mn1),-1,stk(l1+mn1+mn2),-1)
+         if(it1.eq.1) call dcopy(mn1,stk(l1+mn1),-1,stk(l1
+     $        +mn1+mn2),-1)
          call dcopy(mn2,stk(l2),1,stk(l1+mn1),1)
-         if(it1.eq.0) call dset(mn1,0.0d+0,stk(l1+mn1+mn2),1)
-         if(it1.eq.0) call dcopy(mn2,stk(l2+mn2),1,stk(l1+2*mn1+mn2),1)
-         if(it2.eq.0) call dset(mn2,0.0d+0,stk(l1+2*mn1+mn2),1)
-         if(it2.eq.1) call dcopy(mn2,stk(l2+mn2),1,stk(l1+2*mn1+mn2),1)
+         if(it1.eq.0) then
+            call dset(mn1,0.0d+0,stk(l1+mn1+mn2),1)
+            call dcopy(mn2,stk(l2+mn2),1,stk(l1+2*mn1+mn2),1)
+         endif
+         if(it2.eq.0) then
+            call dset(mn2,0.0d+0,stk(l1+2*mn1+mn2),1)
+         else
+            call dcopy(mn2,stk(l2+mn2),1,stk(l1+2*mn1+mn2),1)
+         endif
       endif
       n=n1+n2
       istk(il1+1)=m1
@@ -1041,15 +1017,16 @@ c
       goto 999
 c     
 c     concatenation [a;b]
- 78   if(n1.lt.0.or.n2.lt.0) then
+ 76   if(n1.lt.0.or.n2.lt.0) then
          call error(14)
          return
-      endif
-      if(n2.eq.0) then
+      elseif(n2.eq.0) then
+c     .  [a;[]]
          goto 999
       elseif(n1.eq.0)then
-         call dcopy(lstk(top+2)-lstk(top+1),stk(lstk(top+1)),1,
-     &        stk(lstk(top)),1)
+c     .  [[];b]
+         call dcopy(lstk(top+2)-lstk(top+1),stk(lstk(top+1))
+     $        ,1,stk(lstk(top)),1)
          lstk(top+1)=lstk(top)+lstk(top+2)-lstk(top+1)
          goto 999
       elseif(n1.ne.n2) then
@@ -1077,9 +1054,11 @@ c     concatenation [a;b]
 c     
       if(itr.eq.1) call dset(mn,0.0d+0,stk(l1+(mn1+mn2)),1)
       call dmcopy(stk(lw1),m1,stk(l1),m,m1,n1)
-      if(it1.eq.1) call dmcopy(stk(lw1+mn1),m1,stk(l1+mn),m,m1,n1)
+      if(it1.eq.1) call dmcopy(stk(lw1+mn1),m1,stk(l1+mn),m
+     $     ,m1,n1)
       call dmcopy(stk(lw2),m2,stk(l1+m1),m,m2,n1)
-      if(it2.eq.1) call dmcopy(stk(lw2+mn2),m2,stk(l1+mn+m1),m,m2,n1)
+      if(it2.eq.1) call dmcopy(stk(lw2+mn2),m2,stk(l1+mn+m1)
+     $     ,m,m2,n1)
       istk(il1+1)=m
       istk(il1+2)=n1
       istk(il1+3)=itr
@@ -1088,351 +1067,557 @@ c
 c     
 c     extraction
 c     
- 80   continue
-c     extraction
-c     
+ 78   continue
       if(rhs.gt.2) goto 82
-c     vect(arg)
-      if(mn1.eq.0) then
-c     un des vecteurs d'indice est vide
-         istk(il1+1)=0
-         istk(il1+2)=0
-         lstk(top+1)=l1+1
-         goto 999
-      endif
-      if(m1.gt.1.and.n1.gt.1.or.it1.ne.0) then
-         call error(21)
+c     arg2(arg1)
+      if (istk(il1).eq.0) then
+         call error(220)
          return
       endif
+      if(istk(il2).eq.129) then
+c     implied polynomials vector extraction
+         top=top+1
+         call polops
+         goto 999
+      endif
+
+      l1=sadr(il1+4)
       if(mn2.eq.0) then 
+c     .  arg2=[]
+         istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
+         istk(il1+3)=0
          lstk(top+1)=l1+1
          goto 999
       elseif(m2.lt.0) then
+c     .  arg2=eye
          call error(14)
          return
+      elseif(m1.lt.0) then
+c     .  arg2(:), just reshape to column vector
+         istk(il1)=1
+         istk(il1+1)=mn2
+         istk(il1+2)=1
+         istk(il1+3)=istk(il2+3)
+         call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
+         lstk(top+1)=l1+mn2*(it2+1)
+         goto 999
       endif
-c     
-      if(m1.lt.0) mn1=mn2
-      err=l1+(it2+1)*mn1-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
+c     check and convert indices variable
+      call indxg(il1,mn2,ilr,mi,mx,lw,1)
+      if(err.gt.0) return
+      if(mx.gt.mn2) then
+         call error(21)
          return
       endif
-c     
-      do 81 i = 0, mn1-1
-         ll = l1+i
-         ls = l2+i
-         if (m1 .gt. 0) then
-            ls = l2 + int(stk(ll)) - 1
-            if (ls .lt. l2 .or. ls .ge. l2+mn2) then
-               call error(21)
-               return
-            endif
-         endif
-         stk(ll) = stk(ls)
-         if(it2.eq.1) stk(ll+mn1) = stk(ls+mn2)
- 81   continue
-      m = 1
-      n = 1
-      if (m2 .gt. 1) m = mn1
-      if (m2 .eq. 1) n = mn1
-      if (m1.lt.0) then
-         m=mn1
-         n=1
+ 79   if(mi.eq.0) then
+c     arg2([])
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=l1+1
+         goto 999
       endif
+c     get memory for the result
+      if(sadr(ilr-1).le.l1+(it2+1)*mi) then
+         lr=lw
+         lw=lr+(it2+1)*mi
+         err=lw-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+      else
+         lr=l1
+      endif
+c     perform extraction
+      do 81 i = 0, mi-1
+         ind=istk(ilr+i)-1
+         stk(lr+i) = stk(l2+ind)
+         if(it2.eq.1) stk(lr+mi+i) = stk(l2+mn2+ind)
+ 81   continue
+c     set output sizes
+      if (m2.eq.1.and.n2.eq.1.and.m1.gt.0) then
+         m = m1
+         n = min(n1,mi)
+      elseif (m2 .gt. 1.or.m1.lt.0) then
+         m = mi
+         n = 1
+      else
+         n = mi
+         m = 1
+      endif
+c     form resulting variable
       istk(il1)=1
       istk(il1+1)=m
       istk(il1+2)=n
       istk(il1+3)=it2
-      lstk(top+1)=l1+m*n*(it2+1)
+      l1=sadr(il1+4)
+      if(lr.ne.l1) call dcopy(mi*(it2+1),stk(lr),1,stk(l1),1)
+      lstk(top+1)=l1+mi*(it2+1)
       go to 999
 c     
-c     matrix(arg,arg)
- 82   if(rhs.gt.4) then
+c     arg3(arg1,arg2)
+ 82   if(rhs.gt.3) then
          call error(36)
          return
       endif
-      if(mn1*mn2.eq.0) then
-c     un des vecteurs d'indice est vide
-         istk(il1+1)=0
-         istk(il1+2)=0
-         lstk(top+1)=l1+1
-         goto 999
-      endif
-      if(it1+it2.ne.0) then
-         call error(21)
-         return
-      endif
+      l1=sadr(il1+4)
       if(mn3.eq.0) then 
+c     .  arg3=[]
+         istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
+         istk(il1+3)=0
          lstk(top+1)=l1+1
          goto 999
       elseif(m3.lt.0) then
+c     .arg3=eye
          call error(14)
          return
       endif
-      m=mn1
-      if(istk(il1+1).lt.0) m=istk(il3+1)
-c     
-      n=mn2
-      if(istk(il2+1).lt.0) n=istk(il3+2)
-c     
-      l=lstk(top+2)
-      mn = m*n
-      err=l+(it3+1)*mn-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
+c     check and convert indices variables
+      call indxg(il1,m3,ili,mi,mxi,lw,1)
+      if(err.gt.0) return
+      if(mxi.gt.m3) then
+         call error(21)
          return
       endif
-      do 84 j = 1, n
-         do 83 i = 1, m
-            li = l1+i-1
-            if (istk(il1+1) .gt. 0) li = l1 + int(stk(li)) - 1
-            lj = l2+j-1
-            if (istk(il2+1) .gt. 0) lj = l2 + int(stk(lj)) - 1
-            ls = l3 + li-l1 + (lj-l2)*m3
-            if (ls.lt.l3 .or. ls.ge.l3+mn3) then
-               call error(21)
-               return
-            endif
-            ll = l + i-1 + (j-1)*m
-            stk(ll) = stk(ls)
-            if(it3.eq.1) stk(ll+mn) = stk(ls+mn3)
- 83      continue
- 84   continue
-      call dcopy(mn*(it3+1),stk(l),1,stk(l1),1)
-      istk(il1+1)=m
-      istk(il1+2)=n
-      istk(il1+3)=it3
-      lstk(top+1)=l1+mn*(it3+1)
-      go to 999
-      
-c     insert
-c     a(vl,vc)=m arg4(arg1,arg2)=arg3 ou  a(v)=u (arg3(arg1)=arg2)
- 85   ili=iadr(lstk(top0-1))
-      if (istk(ili+1)*istk(ili+2).eq.0) then
-         top=top0
-         fin=-fin
-         return
-      endif
-      m=-1
-      n=-1
-      goto (86,88),rhs-2
-c     
-c     narg3(arg1)=arg2
-c     
- 86   mk=m3
-      nk=n3
-      itk=it3
-      lk=l3
-      md=m2
-      nd=n2
-      itd=it2
-      ld=l2
-c     
-      if(it1.ne.0) then
+      call indxg(il2,n3,ilj,nj,mxj,lw,1)
+      if(err.gt.0) return
+      if(mxj.gt.n3) then
          call error(21)
          return
       endif
 c
-      if (n3.gt.1.and.m3.gt.1) then
-c     arg3(arg1)=arg2 with arg3 a matrix
-         if(n2.gt.1.and.m2.gt.1) then
-            call error(15)
-            return
-         endif
-         m3=n3*m3
-         n3=1
-         md=md*nd
-         nd=1
-         if(n1.lt.0) then
-c     .     arg3(:)=arg2 with arg3 a matrix
-            if (mn2.ne.mk*nk) then
-               call error(21)
-               return
-            endif
-            istk(il1)=1
-            istk(il1+1)=mk
-            istk(il1+2)=nk
-            istk(il1+3)=it2
-            call dcopy((it2+1)*mn2,stk(l2),1,stk(l1),1)
-            lstk(top+1)=l1+mn2*(it2+1)
-            return
-         else
-            m=0
-            do 87 i = 1, m1*n1
-               ls=int(stk(l1+i-1))
-               if(ls.le.0) then
-                  call error(21)
-                  return
-               endif
-               m=max(m,ls)
- 87         continue
-            if (m.gt.m3) then
-               call error(21)
-               return
-            endif
-            mr=mk
-            nr=nk
-            goto 94
-         endif
+ 90   mn=mi*nj
+      if(mn.eq.0) then 
+c     .  arg1=[] or arg2=[] 
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=l1+1
+         goto 999
       endif
-c
-      if (n3.le.1.and.n2.le.1) then
-c     vecteur colonne
-         m=isign(mn1,m1)
-         if(m.ge.0) goto 90
-         if(mn2.ne.mn3) then
-            call error(15)
+c     get memory for the result
+      if(sadr(ili-1).le.l1+(it3+1)*mi*nj) then
+         lr=lw
+         lw=lr+(it3+1)*mi*nj
+         err=lw-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
             return
          endif
       else
-c     vecteur ligne
-         if (m3.gt.1.or.m2.gt.1) then
-c             matrix(:)=vector
-              if(mn2.ne.mn3) then
-              call error(15)
-              return
-              endif
+c     .  the result may be installed at its final place
+         lr=l1
+      endif
+c     perform extraction
+      l=lr
+      do 94 j = 0, nj-1
+         do 93 i = 0, mi-1
+            ind=istk(ili+i)-1+(istk(ilj+j)-1)*m3
+            stk(l) = stk(l3+ind)
+            if(it3.eq.1) stk(l+mn) = stk(l3+mn3+ind)
+            l=l+1
+ 93      continue
+ 94   continue
+c     form the resulting variable
+      istk(il1)=1
+      istk(il1+1)=mi
+      istk(il1+2)=nj
+      istk(il1+3)=it3
+      if(lr.ne.l1) call dcopy(mn*(it3+1),stk(lr),1,stk(l1),1)
+      lstk(top+1)=l1+mn*(it3+1)
+      go to 999
+c      
+c     insertion
+c     
+ 95   continue
+      if(rhs.eq.4) goto 100
+c     arg3(arg1)=arg2
+c     
+      if (istk(il2)*istk(il1).eq.0) then
+         call error(220)
+         return
+      endif
+      if (m2.eq.0) then
+c     .  arg3(arg1)=[] -->[]
+         if(m1.eq.-1) then
+c     .    arg3(:)=[] 
+            istk(il1)=1
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)+1
+            goto 999
+         elseif(m1.eq.0) then
+c     .     arg3([])=[]  --> arg3
+            call icopy(4,istk(il3),1,istk(il1),1)
+            l=sadr(il1+4)
+            call dcopy(mn3*(it3+1),stk(l3),1,stk(l),1)
+            lstk(top+1)=l+mn3*(it3+1)
+            goto 999
+         else
+c     .     arg3(arg1)=[] -->arg3(compl(arg1),:)
+            call indxgc(il1,mn3,ilr,mi,mx,lw)
+            if(err.gt.0) return
+            l2=l3
+            n2=n3
+            m2=m3
+            mn2=m2*n2
+            it2=it3
+c     .     call extraction
+            goto 79
+         endif
+      elseif(m2.lt.0.or.m3.lt.0) then
+c     .  arg3=eye,arg2=eye
+         call error(14)
+         return
+      elseif(m1.lt.0) then
+c     .  arg3(:)=arg2
+         if(mn2.eq.mn3) then
             istk(il1)=1
             istk(il1+1)=m3
             istk(il1+2)=n3
             istk(il1+3)=it2
+            l1=sadr(il1+4)
             call dcopy((it2+1)*mn2,stk(l2),1,stk(l1),1)
             lstk(top+1)=l1+mn2*(it2+1)
             return
-         endif
-         n=isign(mn1,m1)
-         l2=l1
-         
-         if(n.ge.0) goto 90
-         if(mn2.ne.mn3) then
+         elseif(mn2.eq.1) then
+            istk(il1)=1
+            istk(il1+1)=m3
+            istk(il1+2)=n3
+            istk(il1+3)=it2
+            l1=sadr(il1+4)
+            call dset(mn3,stk(l2),stk(l1),1)
+            if(it2.eq.1) call dset(mn3,stk(l2+1),stk(l1+mn3),1)
+            lstk(top+1)=l1+mn3*(it2+1)
+            return
+         else
             call error(15)
             return
          endif
       endif
-      go to 90
-c     
-c     m est une matrice
-c     arg4(arg1,arg2)=arg3
- 88   mk=m4
-      nk=n4
-      itk=it4
-      lk=l4
-      md=m3
-      nd=n3
-      itd=it3
-      ld=l3
-c     
-      if(it1+it2.ne.0) then
-         call error(21)
-         return
+      call indxg(il1,mn3,ili,mi,mxi,lw,1)
+      if(err.gt.0) return
+      if(mi.eq.0) then
+c     .  arg3([])=arg2
+         if(mn2.eq.1) then
+c     .  arg3([])=c  --> arg3
+            call icopy(4,istk(il3),1,istk(il1),1)
+            l=sadr(il1+4)
+            call dcopy(mn3*(it3+1),stk(l3),1,stk(l),1)
+            lstk(top+1)=l+mn3*(it3+1)
+            goto 999
+         else
+            call error(15)
+            return
+         endif  
       endif
-c
-      if(m1.ge.0) m=mn1
-      if(m2.ge.0) n=mn2
-      if(mn4.eq.0.and.(m.lt.0.or.n.lt.0)) then
-         call error(15)
-         return
-      endif
-      if(m.ge.0.and.n.ge.0) goto 90
-      if(m.lt.0.and.m4.ne.m3) then
-         call error(15)
-         return
-      endif
-      if(n.lt.0.and.n4.ne.n3) then
-         call error(15)
-         return
-      endif
-      go to 90
-c     
- 90   mr=mk
-      if (m .ge. 0) then
-         if(m.ne.md) then
+      inc2=1
+      if(mi.ne.mn2) then
+         if(mn2.eq.1) then
+            inc2=0
+         else
             call error(15)
             return
          endif
-         do 91 i = 1, m
-            ls=int(stk(l1+i-1))
-            if(ls.le.0) then
-               call error(21)
-               return
-            endif
-            mr=max(mr,ls)
- 91      continue
+      endif
+c     
+      if (n3.gt.1.and.m3.gt.1) then
+c     .  arg3 is not a vector
+         if(n2.gt.1.and.m2.gt.1) then
+            call error(15)
+            return
+         endif
+         if(mxi.gt.m3*n3) then
+            call error(21)
+            return
+         endif
+         mr=m3
+         nr=n3
+      elseif (n3.le.1.and.n2.le.1) then
+c     .  arg3 and arg2 are  column vectors
+         mr=max(m3,mxi)
+         nr=max(n3,1)
+      elseif (m3.le.1.and.m2.le.1) then
+c     .  row vectors
+         nr=max(n3,mxi)
+         mr=max(m3,1)
       else
-         mr = max(mr,md)
+c     .  arg3 and arg2 dimensions dont agree
+         call error(15)
+         return
       endif
-cSS96      mr = max(mr,md) ( v=1,v([1 1]=[3 4] --> [4 0])
-c     
-      nr=nk
-      if (n .ge. 0) then 
-         if(n.ne.nd) then
-            call error(15)
-            return
-         endif
-         do 93 i = 1, n
-            ls=int(stk(l2+i-1))
-            if(ls.le.0) then
-               call error(21)
-               return
-            endif
-            nr=max(nr,ls)
- 93      continue
-      else
-         nr = max(nr,nd)
-      endif
-cSS96      nr = max(nr,nd) ( v=1,v([1 1]=[3 4] --> [4 0])
-c     
-c     scalar matrix case
- 94   mnk=mk*nk
-      mnd=md*nd
+
+      lr=l3
       mnr=mr*nr
-      itr=max(itk,itd)
-      if(mnr*(itr+1).ne.mnk*(itk+1) ) then
+      itr=max(it2,it3)
+      if(mnr*(itr+1).ne.mn3*(it3+1) ) then
+c     .  resulting matrix is bigger than original
          lr=lw
-         err = lr + mnr*(itr+1) - lstk(bot)
+         lw=lr + mnr*(itr+1)
+         err = lw - lstk(bot)
          if (err .gt. 0) then
             call error(17)
             return
          endif
-c     initialisation de r a 0
+c     .  initialise result r to 0
          call dset(mnr*(itr+1),0.0d+0,stk(lr),1)
-c     on reecrit a dans R
-         if(mnk.ge.1) then
-            call dmcopy(stk(lk),mk,stk(lr),mr,mk,nk)
-            if(itk.eq.1) then
-               call dmcopy(stk(lk+mnk),mk,stk(lr+mnr),mr,mk,nk)
+c     .  write arg3 in r
+         if(mn3.ge.1) then
+            call dmcopy(stk(l3),m3,stk(lr),mr,m3,n3)
+            if(it3.eq.1) then
+               call dmcopy(stk(l3+mn3),m3,stk(lr+mnr),mr,m3,n3)
             endif
          endif
-      else
-         lr=lk
       endif
+c     write arg2 in r
+      do 98 i = 0, mi-1
+         ll = lr+istk(ili+i) - 1
+         ls = l2+i*inc2
+         stk(ll) = stk(ls)
+         if(it2.eq.1) then
+            stk(ll+mnr)=stk(ls+mn2)
+         elseif(itr.eq.1) then
+            stk(ll+mnr)=0.0d0
+         endif
+ 98   continue
 c     
-c     on implante les coeff de M dans R
-      do 99 j = 1, nd
-         do 98 i = 1, md
-            li = i-1
-            if (m .gt. 0) li =   int(stk(l1+i-1)) - 1
-            lj = j-1
-            if (n .gt. 0) lj =  int(stk(l2+j-1)) - 1
-            ll = lr+li+lj*mr
-            ls = ld+i-1+(j-1)*md
-            stk(ll) = stk(ls)
-            if(itd.eq.1) stk(ll+mnr)=stk(ls+mnd)
-            if(itr.eq.1.and.itd.eq.0) stk(ll+mnr)=0.0d+0
- 98      continue
- 99   continue
-c     
-      if(lr.ne.lk) then
+      if(lr.ne.l3) then
          call dcopy(mnr*(itr+1),stk(lr),1,stk(l1),1)
          istk(il1)=1
          istk(il1+1)=mr
          istk(il1+2)=nr
          istk(il1+3)=itr
+         l1=sadr(il1+4)
+         lstk(top+1)=l1+mnr*(itr+1)
+      else
+c     la matrice a ete modifie sur place 
+         k=istk(iadr(lstk(top0))+2)
+         istk(il1)=-1
+         istk(il1+1)=-1
+         istk(il1+2)=k
+         lstk(top+1)=lstk(top)+3
+      endif
+      goto 999
+
+ 100  continue
+c     
+c     arg4(arg1,arg2)=arg3
+      if (istk(il3)*istk(il1)*istk(il2).eq.0) then
+         call error(220)
+         return
+      endif
+      if (m3.eq.0) then
+c     .  arg4(arg1,arg2)=[]
+         if(m1.eq.-1.and.m2.eq.-1) then
+c     .    arg4(:,:)=[] -->[]
+            istk(il1)=1
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)+1
+            goto 999
+         elseif(m1.eq.0.or.m2.eq.0) then
+c     .     arg4([],arg2)=[],  arg4(arg1,[])=[] --> arg4
+            call icopy(4,istk(il4),1,istk(il1),1)
+            l=sadr(il1+4)
+            call dcopy(mn4*(it4+1),stk(l4),1,stk(l),1)
+            lstk(top+1)=l+mn4*(it4+1)
+            goto 999
+         elseif(m2.eq.-1) then
+c     .     arg4(arg1,:)=[] --> arg4(compl(arg1),:)
+            call indxgc(il1,m4,ili,mi,mxi,lw)
+            if(err.gt.0) return
+            call indxg(il2,n4,ilj,nj,mxj,lw,1)
+            if(err.gt.0) return
+            l3=l4
+            n3=n4
+            m3=m4
+            mn3=m3*n3
+            it3=it4
+c     .     call extraction
+            goto 90
+         elseif(m1.eq.-1) then
+c     .     arg4(:,arg2)=[] --> arg4(:,compl(arg2))
+            call indxgc(il2,n4,ilj,nj,mxj,lw)
+            if(err.gt.0) return
+            call indxg(il1,m4,ili,mi,mxi,lw,1)
+            if(err.gt.0) return
+            l3=l4
+            n3=n4
+            m3=m4
+            mn3=m3*n3
+            it3=it4
+c     .     call extraction
+            goto 90
+         else
+c     .     arg4(arg1,arg2)=[] 
+            lw1=lw
+            call indxgc(il2,n4,ilj,nj,mxj,lw)
+            if(err.gt.0) return
+            if(nj.eq.0) then
+c     .        arg4(arg1,1:n4)=[] 
+               lw2=lw
+               call indxgc(il1,m4,ili,mi,mxi,lw)
+               if(err.gt.0) return
+
+               if(mi.eq.0) then
+c     .           arg4(1:m4,1:n4)=[] 
+                  istk(il1)=1
+                  istk(il1+1)=0
+                  istk(il1+2)=0
+                  istk(il1+3)=0
+                  lstk(top+1)=sadr(il1+4)+1
+                  goto 999
+               else
+c     .           arg4(arg1,1:n4)=[] 
+                  lw=lw2
+                  call indxg(il2,n4,ilj,nj,mxj,lw,1)
+                  if(err.gt.0) return
+                  l3=l4
+                  n3=n4
+                  m3=m4
+                  it3=it4
+                  mn3=m3*n3
+c     .           call extraction
+                  goto 90
+               endif
+            else
+               lw=lw1
+               call indxgc(il1,m4,ili,mi,mxi,lw)
+               if(err.gt.0) return
+               if(mi.eq.0) then
+c     .           arg4(1:m4,arg2)=[] 
+                  call indxg(il1,m4,ili,mi,mxi,lw,1)
+                  if(err.gt.0) return
+                  l3=l4
+                  n3=n4
+                  m3=m4
+                  it3=it4
+                  mn3=m3*n3
+c     .           call extraction
+                  goto 90
+               else
+                  call error(15)
+                  return
+               endif
+            endif
+         endif
+      elseif(m3.lt.0.or.m4.lt.0) then
+c     .  arg3=eye , arg4=eye
+         call error(14)
+         return
+      elseif(m1.eq.-1.and.m2.eq.-1) then
+c     .  arg4(:,:)=arg3
+         if(mn3.eq.mn4) then
+c     .     reshape arg3 according to arg4
+            istk(il1)=1
+            istk(il1+1)=m4
+            istk(il1+2)=n4
+            istk(il1+3)=it3
+            l1=sadr(il1+4)
+            call dcopy((it3+1)*mn4,stk(l3),1,stk(l1),1)
+            lstk(top+1)=l1+mn4*(it3+1)
+            return
+         elseif(mn3.eq.1) then
+c     .     set all elements of arg4 to arg3
+            istk(il1)=1
+            istk(il1+1)=m4
+            istk(il1+2)=n4
+            istk(il1+3)=it3
+            l1=sadr(il1+4)
+            call dset(mn4,stk(l3),stk(l1),1)
+            if(it3.eq.1) call dset(mn4,stk(l3+1),stk(l1+mn4),1)
+            lstk(top+1)=l1+mn4*(it3+1)
+            return
+         else
+            call error(15)
+            return
+         endif
+      endif
+
+      call indxg(il1,m4,ili,mi,mxi,lw,1)
+      if(err.gt.0) return
+      call indxg(il2,n4,ilj,mj,mxj,lw,1)
+      if(err.gt.0) return
+      inc3=1
+      if(mi.ne.m3.or.mj.ne.n3) then
+c     .  sizes of arg1 or arg2 dont agree with arg3 sizes
+         if(m3*n3.eq.1) then
+            if(mi.eq.0.or.mj.eq.0) then
+               call icopy(4,istk(il4),1,istk(il1),1)
+               l=sadr(il1+4)
+               call dcopy(mn4*(it4+1),stk(l4),1,stk(l),1)
+               lstk(top+1)=l+mn4*(it4+1)
+               goto 999
+            endif
+            inc3=0
+         else
+            call error(15)
+            return
+         endif
+      else
+         if(mi.eq.0.or.mj.eq.0) then
+            call error(15)
+            return
+         endif
+      endif
+      mr=max(m4,mxi)
+      nr=max(n4,mxj)
+c
+
+      mnr=mr*nr
+      itr=max(it4,it3)
+      if(mnr*(itr+1).ne.mn4*(it4+1) ) then
+         lr=lw
+         lw=lr + mnr*(itr+1)
+         err = lw - lstk(bot)
+         if (err .gt. 0) then
+            call error(17)
+            return
+         endif
+c     .  set result r to 0
+         call dset(mnr*(itr+1),0.0d+0,stk(lr),1)
+c     .  copy arg4 in r
+         if(mn4.ge.1) then
+            call dmcopy(stk(l4),m4,stk(lr),mr,m4,n4)
+            if(it4.eq.1) then
+               call dmcopy(stk(l4+mn4),m4,stk(lr+mnr),mr,m4,n4)
+            endif
+         endif
+      else
+         lr=l4
+      endif
+c     
+c     copy arg3 elements in r
+      do 115 j = 0, mj-1
+         ljj =  istk(ilj+j) - 1
+         do 114 i = 0, mi-1
+            ll = lr+istk(ili+i)-1+ljj*mr
+            ls = l3+(i+j*m3)*inc3
+            stk(ll) = stk(ls)
+            if(it3.eq.1) then
+               stk(ll+mnr)=stk(ls+mn3)
+            elseif(itr.eq.1) then
+               stk(ll+mnr)=0.0d0
+            endif
+ 114     continue
+ 115  continue
+c     
+      if(lr.ne.l4) then
+         call dcopy(mnr*(itr+1),stk(lr),1,stk(l1),1)
+         istk(il1)=1
+         istk(il1+1)=mr
+         istk(il1+2)=nr
+         istk(il1+3)=itr
+         l1=sadr(il1+4)
          lstk(top+1)=l1+mnr*(itr+1)
       else
 c     la matrice a ete modifie sur place 
@@ -1457,7 +1642,47 @@ c
          goto 999
       endif
 c     comparaisons
-      if(mn1.eq.1.and.mn2.gt.1) then
+      if(m1.eq.-1) then
+c     .  eye op b
+         err=lw+mn2*(it1+1)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         if(m2.eq.-1) then
+            m2=1
+            n2=1
+         elseif(mn2.gt.0) then
+            call dset(mn2,0.0d0,stk(lw),1)
+            call dset(min(m2,n2),stk(l1),stk(lw),m2+1)
+            if(it1.eq.1) then
+               call dset(mn2,0.0d0,stk(lw+mn2),1)
+               call dset(min(m2,n2),stk(l1+1),stk(lw+mn2),m2+1)
+            endif
+            l1=lw
+         endif
+         m1=m2
+         n1=n2
+         mn1=mn2
+         istk(il1+1)=m1
+         istk(il1+2)=n1
+      elseif(m2.eq.-1) then
+         err=lw+mn1*(it2+1)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         call dset(mn1,0.0d0,stk(lw),1)
+         call dset(min(m1,n1),stk(l2),stk(lw),m1+1)
+         if(it1.eq.1) then
+             call dset(mn1,0.0d0,stk(lw+mn1),1)
+            call dset(min(m1,n1),stk(l2+1),stk(lw+mn1),m1+1)
+         endif
+         l2=lw
+         mn2=mn1
+         m2=m1
+         n2=n1
+      elseif(mn1.eq.1.and.mn2.gt.1) then
          err=lw+mn2*(it1+1)-lstk(bot)
          if(err.gt.0) then
             call error(17)
@@ -1483,20 +1708,31 @@ c     comparaisons
          mn2=mn1
          m2=m1
          n2=n1
-      elseif(mn2.eq.0.and.mn1.eq.0) then
+      endif
+      if(mn2.eq.0.or.mn1.eq.0) then
          if(op.eq.equal.or.op.eq.less+great) then
+            itrue=0
+            if(mn2.eq.0.and.mn1.eq.0) itrue=1
+            if(op.eq.less+great) itrue=1-itrue
             istk(il1)=4
             istk(il1+1)=1
             istk(il1+2)=1
-            istk(il1+3)=1
-            if(op.eq.less+great) istk(il1+3)=0
+            istk(il1+3)=itrue
             lstk(top+1)=sadr(il1+4)
             goto 999
          else
-            call error(60)
-            return
+            if(mn1.eq.1.or.mn2.eq.1) then
+               istk(il1)=1
+               istk(il1+1)=0
+               istk(il1+2)=0
+               istk(il1+3)=0
+               lstk(top+1)=sadr(il1+4)
+               goto 999
+            else
+               call error(60)
+               return
+            endif
          endif
-
       endif
       if(n1.ne.n2.or.m1.ne.m2) then
          if(op.eq.equal.or.op.eq.less+great) then
@@ -1561,6 +1797,22 @@ c     comparaisons
             endif
  132     continue
          lstk(top+1)=sadr(il1+3+mn1)
+      endif
+      goto 999
+c
+ 140  continue
+      if((op.eq.non.and.mn1.eq.0).or.((op.eq.et.or.op.eq.ou)
+     &     .and.(mn1.eq.0.or.mn2.eq.0))) then
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=sadr(il1+4)
+         goto 999
+      else
+         top=top0
+         fin=-fin
+         return
       endif
 c     
       

@@ -1,34 +1,25 @@
-c---------------------------------------------------------------------------
-c---------------------------------------------------------------------------
-      subroutine qzcel(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),u(*),rpar(*),out(*),z(*)
-      integer ipar(*),flag
-c     QZCEL, Alvaro:9-6-95
-c     Continous block, MIMO
+      subroutine qzcel(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
+c
 c     Gives quantized signal by ceiling method
 c     rpar(i) quantization step used for i input
-c     out=rpar*(floor(u/rpar))
 c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+
+
       integer i
       common /dbcos/ idb
 c
       if(idb.eq.1) then
          write(6,'(''qzcel    t='',e10.3,'' flag='',i1)') t,flag
       endif
-      goto(10,20,20) flag
-
-c flag=1
-      
- 10   continue
       
       do 15 i=1,nu
-        out(i)=rpar(i)*ANINT(u(i)/rpar(i)-0.5)
+        y(i)=rpar(i)*ANINT(u(i)/rpar(i)-0.5d0)
  15   continue
       return
-c flag=2 OR 3
- 20   continue
-c ERROR
-      write(*,'(''ERROR; block ceil flag:'',i2,'' t '',e10.3)') flag,t
-      return
+
       end

@@ -6,7 +6,7 @@ function [y,x]=csim(u,dt,sl,x0)
 // u is the control and x0 the initial state.
 //
 //u can be:
-// - a macro 
+// - a function 
 //    [inputs]=u(t)
 // - a list
 //    list(ut,parameter1,....,parametern) such that
@@ -35,14 +35,16 @@ if rhs<3 then error(39),end
 
 //-compat type(sl)<>15 retained for list/tlist compatibility
 if type(sl)<>15&type(sl)<>16 then error(56,1),end
-select sl(1)
+flag=sl(1)
+select flag(1)
   case 'lss' then ,
   case  'r'  then sl=tf2ss(sl)
   else  error(97,1),
 end;
-if sl(7)<>'c' then error(93,1),end
+if sl(7)<>'c' then warning('csim: time domain is assumed continuous'),end
 //
-[a,b,c,d]=sl(2:5)
+[a,b,c,d]=sl(2:5);
+if type(d)==2&degree(d)>0 then d=coeff(d,0);warning('D set to constant');end
 [ma,mb]=size(b);
 //
 imp=0;text='if t=0 then y=0, else y=1,end'
@@ -57,7 +59,7 @@ select type(u)
                d=0*d;
            end;
     end;
-    deff('[y]=u(t)',text);comp(u);
+    deff('[y]=u(t)',text);
  case 11,comp(u)
  case 13,
  case 15 then
@@ -71,22 +73,20 @@ end;
 //
 if rhs=3 then x0=sl(6),end
 if imp=1 then x0=0*x0,end
-nt=prod(size(dt));x=0*ones(ma,nt)
-[a,v,bs]=bdiag(a,1);b=v\b;c=c*v;x0=v\x0
+nt=size(dt,'*');x=0*ones(ma,nt)
+[a,v,bs]=bdiag(a,1);b=v\b;c=c*v;x0=v\x0;
 //
 if type(u)<>15 then
-  deff('[ydot]=%sim2(%tt,%y)','ydot=ak*%y+bk*u(%tt)');comp(%sim2)
+  deff('[ydot]=%sim2(%tt,%y)','ydot=ak*%y+bk*u(%tt)');
   ut=ones(mb,nt);for k=1:nt, ut(:,k)=u(dt(k)),end
 else
   %sim2=u
   tx=' ';for l=2:size(u), tx=tx+',%'+string(l-1);end;
   deff('[ydot]=sk(%tt,%y,u'+tx+')','ydot=ak*%y+bk*u(%tt'+tx+')');
-  comp(sk)
   %sim2(0)=sk;u=u(1)
   deff('[ut]=uu(t)',...
      ['['+part(tx,3:length(tx))+']=%sim2(3:'+string(size(%sim2))+')';
       'ut=ones(mb,nt);for k=1:nt, ut(:,k)=u(t(k)'+tx+'),end'])
-  comp(uu);
 ut=uu(dt);
 end;
 //simulation

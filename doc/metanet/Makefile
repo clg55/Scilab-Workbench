@@ -5,16 +5,15 @@ SCIDIR=../..
 SCIDOC=$(SCIDIR)/../$(SCIVERSION)-doc
 include ../../Makefile.incl
 
-all:: $(SCIDOC)/Metanet.ps.Z
+all:: $(SCIDOC)/Metanet.ps
 
-$(SCIDOC)/Metanet.ps.Z: metanet.tex
+$(SCIDOC)/Metanet.ps: metanet.tex
 	touch metanet.ind
 	latex metanet
 	makeindex metanet
 	latex metanet
+	$(RM) $(SCIDOC)/Metanet.ps
 	dvips -o $(SCIDOC)/Metanet.ps metanet.dvi
-	$(RM) $(SCIDOC)/Metanet.ps.Z
-	compress $(SCIDOC)/Metanet.ps
 
 clean::
 	$(RM) *.aux *.log  *.dvi *.idx *.ind *.ilg *.lof *.lot *.toc

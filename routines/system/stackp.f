@@ -10,7 +10,7 @@ c
 c
       logical eqid,new,compil
       integer macmod
-      integer v,vk,vt,pntr
+      integer v,vk,vt,vtk,pntr
 c
       iadr(l)=l+l-1
 c
@@ -80,8 +80,8 @@ c
       l1=lstk(pntr)-1
       l2=lstk(k)-1
       do 11 i=1,v
-      if(stk(l1+i).ne.stk(l2+i)) goto 12
-   11 continue
+         if(stk(l1+i).ne.stk(l2+i)) goto 12
+ 11   continue
       goto 15
    12 call error(13)
       return
@@ -119,10 +119,10 @@ c     les macros sont elle identiques ?
                goto 20
 c     ce n'est pas la meme macro
  19            call  putid(ids(1,pt+1),id)
-               if(macprt.eq.1) then  
+               if(macprt.eq.2) then  
                   call error(111)
                   if(err.gt.0) return
-               else
+               elseif(macprt.eq.1) then  
                   call msgs(42,vt)
                endif
  20            continue
@@ -142,6 +142,7 @@ c     shift storage
       do 21 ib = bot, km1
         i = bot+km1-ib
         call putid(idstk(1,i+1),idstk(1,i))
+        infstk(i+1)=infstk(i)
         lstk(i+1) = lstk(i)+vk
  21   continue
 c
@@ -160,11 +161,11 @@ c     create new variable
          call funs(id)
          fun=0
          if(fin.gt.0) then
-            if(macprt.eq.1) then
+            if(macprt.eq.2) then
                call putid(ids(1,pt+1),id)
                call  error(111)
                if(err.gt.0) return
-            else
+            elseif(macprt.eq.1) then
                call putid(ids(1,pt+1),id)
                call msgs(42,vt)
             endif
@@ -172,6 +173,7 @@ c     create new variable
       endif
       k = bot-1
       call putid(idstk(1,k), id)
+      infstk(k)=0
 c
 c     store
    35  lstk(k) = lstk(k+1) - v

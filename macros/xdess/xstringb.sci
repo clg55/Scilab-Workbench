@@ -3,7 +3,7 @@ function xstringb(x,y,str,w,h,option)
 [lhs,rhs]=argn(0)
 if rhs<=5, option='no';end
 if rhs=0 then
-  s_mat=['plot2d(0,0,[-1,1],''012'','' '',[0,0,1,1]);';
+  s_mat=['plot2d(0,0,[1,-1],''012'','' '',[0,0,1,1]);';
       'mat=[''Scilab'',''is'';''not'',''Basile''];';
       'xstringb(0,0.5,mat,1,0.5);xrect(0,1.0,1,0.5);';
       'xstringb(0,0,mat,1,0.5,''fill'');xrect(0,0.5,1,0.5);'];

@@ -9,7 +9,7 @@ case 4 then
   k=find(a==%f)
 case 6 then
   k=find(a)
-  if prod(size(k))==prod(size(a)) then x=%t,return,end
+  if size(k,'*')==size(a,'*') then x=%t,return,end
 else
   error('input must be boolean or real matrix!')
 end

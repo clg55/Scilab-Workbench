@@ -1,4 +1,4 @@
-//[Kopt,gamaopt]=parrot(D,r)
+function [Kopt,gamaopt]=parrot(D,r)
 //Given a matrix D partionned as [D11 D12
 //                                D21 D22]
 //where size(D22)=r=[r1,r2]
@@ -20,6 +20,5 @@ D22=D(l2,k2);
 D1=[D11,D12];D2=[D11;D21];
 gamaopt=maxi(maxi(svd(D1),svd(D2)));
 Kopt=-D22-D21*inv(gamaopt*gamaopt*eye-D11'*D11)*D11'*D12;
-//end
 
 

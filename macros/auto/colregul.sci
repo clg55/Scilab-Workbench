@@ -8,7 +8,8 @@ function [Stmp,Ws]=colregul(Sl,alfa,beta);
 [LHS,RHS]=argn(0);
 if RHS=1 then alfa=0;beta=0;end
 flag=0;
-if Sl(1)='r' then
+Sl1=Sl(1)
+if Sl1(1)='r' then
  flag=1;Sl=tf2ss(Sl);end
 s=poly(0,'s');
 D=Sl(5);

@@ -6,7 +6,7 @@ c!liste d'appel
 c     double precision function pythag(a,b)
 c     double precision a,b
 c!
-      double precision a,b
+      double precision a,b,dlamch
       double precision p,q,r,s,t
       logical v
 c     test des NaN
@@ -22,6 +22,14 @@ c     test des NaN
             pythag=b
             return
          endif
+      endif
+      if ( a.ge.dlamch('o').or.-a.ge.dlamch('o')) then 
+         pythag = a 
+         return
+      endif
+      if ( b.ge.dlamch('o').or.-b.ge.dlamch('o')) then 
+         pythag = b 
+         return
       endif
       p = max(abs(a),abs(b))
       q = min(abs(a),abs(b))

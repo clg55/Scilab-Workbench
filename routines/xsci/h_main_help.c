@@ -34,7 +34,7 @@ extern void abort();
 
 #include "h_display.h"
 
-#include "h_help.h"
+#include "../sun/h_help.h"
 
 /*	-	-	-	-	-	-	-	-	*/
 /*

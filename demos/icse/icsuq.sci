@@ -1,4 +1,4 @@
-//[co,u,g,itv,dtv,cof]=icsuq(u,simu,nap,imp,obs,ytob)
+function [co,u,g,itv,dtv,cof]=icsuq(u,simu,nap,imp,obs,ytob)
 //  Calcul du controle optimal avec ponderation du controle initial
 //  et ponderation geometrique des poids des observations.
 //  Une mise a l'echelle ramene toutes les composantes du controle
@@ -45,6 +45,5 @@ ob=don;
             nob,4,'i',yob,5,'d',ob,6,'d','sort',[1,nob*ntob],7,'d');
 [co,u,g,itv,dtv]=icsegen(u,simu,nap,imp)
 u=ech.*u
-//end
 
 

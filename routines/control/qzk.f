@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=QZK,SSI=0
       subroutine qzk(q,a,n,kmax,c)
 c ce sous programme determine les coefficients constant ck du quotient
 c de la division euclidienne q*z**k/a pour k variant de 1 a kmax

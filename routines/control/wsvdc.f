@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WSVDC,SSI=0
       subroutine wsvdc(xr,xi,ldx,n,p,sr,si,er,ei,ur,ui,ldu,vr,vi,ldv,
      *                 workr,worki,job,info)
       integer ldx,n,p,ldu,ldv,job,info

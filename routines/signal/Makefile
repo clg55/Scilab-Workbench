@@ -1,11 +1,6 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/signal.a
 
@@ -21,19 +16,8 @@ OBJSF = chebc.o cmpse3.o dfftbi.o fft842.o freque.o kaiser.o r2tx.o rpem.o \
 	romeg.o sn.o snell.o syredi.o tranpo.o transn.o tranze.o trbipo.o  \
 	trbize.o  dsn2.o
 
-OBJS = $(OBJSC) $(OBJSF)
+include ../../Makefile.incl
 
-all:: $(LIBRARY)
+CFLAGS = $(CC_OPTIONS)
 
-world: all
-
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)
+include ../Make.lib

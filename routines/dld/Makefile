@@ -1,11 +1,5 @@
 SHELL = /bin/sh
-
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/libdld.a
 
@@ -13,22 +7,13 @@ OBJSC = dld.o find_exec.o define.o get_func.o get_symbol.o \
 	list_undef.o mk_dummy.o ref.o ul_file.o ul_symbol.o \
 	remove.o error.o
 
-OBJS = $(OBJSC) $(OBJSF)
+OBJSF = 
 
-all:: $(LIBRARY)
+include ../../Makefile.incl
 
-world: all
+CFLAGS = $(CC_OPTIONS)
 
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)
+include ../Make.lib
 
 define.o: defs.h dld.h
 dld.o: defs.h dld.h

@@ -6,8 +6,8 @@ function [dim,x]=unobs(A,C,tol)
 // X'*A*X = [0,*]
 // 
 //    C*X = [0,*]
-[p,p]=size(A);
-[n,w]=contr(A',C');
+[p,p]=size(A);tol=1.d-10;
+[n,w]=contr(A',C',tol);
 x=[w(:,n+1:p),w(:,1:n)];
 dim=p-n;
 

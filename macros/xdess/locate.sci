@@ -1,4 +1,4 @@
-//[x]=locate(n,flag)
+function [x]=locate(n,flag)
 //[x]=locate(n,flag)
 //fonction permettant d'obtenir les coordonnees  d'un ou plusieurs
 //points designes a l'aide de la souris sur un trace.

@@ -3,13 +3,14 @@ function [ok,mac,txt]=genfunc(txt)
 if rhs<1 then txt=' ',end
 mac=[]
 while %t do
-  txt=x_dialog(['Set Function Block';
+  txt=dialog(['Set Function Block';
       ' '
       'Enter Scilab instructions defining'
       'y as a function of u'],txt)
-  
-  if txt==[] then ok=%f,return,end  
-  // check if txt defines y from u  
+
+
+  if txt==[] then ok=%f,return,end
+  // check if txt defines y from u
   deff('[]=mac()',txt)
   vars=macrovar(mac)
   if or(vars(3)=='u')&or(vars(5)=='y') then break,end
@@ -22,7 +23,7 @@ deff('[%_1,%_2]=mac(%_model,%_x,%_z,u,%_clock,%_flag,%_rpar,%_ipar)',..
       txt
       '%_1=y';
       'case -1 then ';
-      '  %_model=list(%_model(1),1,1,0,0,[],[],[],[],''c'',%f,[%t %f])';
+      '  %_model=list(%_model(1),1,1,[],[],[],[],[],[],''c'',%f,[%t %f])';
       '  %_1=list(%_model,'' '')';
       'case -2 then ';
       '  txt=%_model(9)';
@@ -34,5 +35,8 @@ deff('[%_1,%_2]=mac(%_model,%_x,%_z,u,%_clock,%_flag,%_rpar,%_ipar)',..
       '  end'
       'end'])
 
-comp(mac)
+
+
+
+
 

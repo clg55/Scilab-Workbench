@@ -1,10 +1,16 @@
 function s=%sic(i,j,s1,s2)
-// see %sip.sci
+
+// s2(i,j)=s1 for boolean indices or s1==[]
 [lhs,rhs]=argn(0)
 if rhs==3 then 
+  //s1(i)=j
+  if type(j)<>10&j<>[] then error(43),end
   if type(i)==4 then s=s1;s(find(i))=j,return,end
+
   if size(i)=[-1 -1] then s=[],return,end
   s=s1
+  if i==[] then return,end
+  
   mn=prod(size(s))
   i1=[]
   for ii=1:mn
@@ -12,6 +18,8 @@ if rhs==3 then
   end
   s=s(i1)
 else
+  // s2(i,j)=s1
+  if type(s1)<>10&s1<>[] then error(43),end
   if type(i)==4|type(j)==4 then
     if type(i)==4 then i=find(i),end
     if type(j)==4 then j=find(j),end
@@ -19,6 +27,7 @@ else
     s(i,j)=s1
     return
   end
+  if i==[]|j==[] then s=s2,return,end
   row=%f
   col=%f
   s=s2

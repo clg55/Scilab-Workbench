@@ -1,6 +1,10 @@
 SHELL = /bin/sh
 
-SUBDIRS = intro lmitool metanet signal scicos
+include ../Version.incl
+SCIDIR=..
+SCIDOC=$(SCIDIR)/../$(SCIVERSION)-doc
+
+SUBDIRS = comm internals intro lmitool metanet signal LaTex-doc scicos
 
 all::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
@@ -27,3 +31,6 @@ clean::
 		(cd $$i ; echo "making clean in doc/$$i..."; \
 		$(MAKE) $(MFLAGS) clean); \
 	done
+
+veryclean: distclean
+	$(RM) $(SCIDOC)/*

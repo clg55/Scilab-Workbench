@@ -41,9 +41,16 @@
 #include "wf_figx.h"
 #include "wf_resources.h"
 #include "wf_mode.h"
+
+
+
+
+
+
 #include "wf_w_dir.h"
 #include "wf_w_setup.h"
 #include "wf_w_drawprim.h"		/* for char_height */
+
 #ifdef SYSV
 #include <dirent.h>
 #else
@@ -51,6 +58,15 @@
 #endif
 
 #include <malloc.h>
+
+#include "../machine.h"
+#include "All-extern.h"
+
+/* External variables */
+
+extern Widget	file_panel, export_panel;
+extern Widget	exp_selfile, file_selfile, exp_dir, file_dir, exp_flist,
+		file_flist, exp_dlist, file_dlist, exp_mask, file_mask;
 
 /* Static variables */
 
@@ -68,21 +84,12 @@ static char   **file_list, **dir_list;
 static char   **filelist, **dirlist;
 static char    *dirmask;
 
-/* External variables */
-
-extern Widget	file_panel, export_panel;
-extern Widget	exp_selfile, file_selfile, exp_dir, file_dir, exp_flist,
-		file_flist, exp_dlist, file_dlist, exp_mask, file_mask;
-
 /* Functions */
 
-void		DoChangeDir();
 
-void		SetDir(),
-		Rescan(),
-		CallbackRescan();
-
-static void	ParentDir();
+static int star  _PARAMS((char *string, char *pattern));  
+static void ParentDir  _PARAMS((Widget w, XEvent *event, String *params, Cardinal *num_params));
+static int SPComp  _PARAMS((char **s1, char **s2));  
 
 /* Function:	FileSelected() is called when the user selects a file.
  *		Set the global variable "CurrentSelectionName"
@@ -185,8 +192,10 @@ SetDir(widget, event, params, num_params)
 
 
 /* make the full path from ~/partialpath */
+
+void
 parseuserpath(path,longpath)
-char *path,*longpath;
+     char *path,*longpath;
 {
     char *p;
     struct passwd *who;
@@ -251,7 +260,7 @@ create_dirinfo(parent, below, ret_beside, ret_below,
     filelist = (char **) calloc((unsigned)file_entry_cnt, sizeof(char *));
     dirlist = (char **) calloc((unsigned)dir_entry_cnt, sizeof(char *));
 
-    get_directory(cur_dir);
+    get_directory(); /** (cur_dir); **/
 
     FirstArg(XtNlabel, "     Alternatives:");
     NextArg(XtNfromVert, below);
@@ -511,10 +520,10 @@ ParentDir(w, event, params, num_params)
 
 void 
 DoChangeDir(dir)
-    char	   *dir;
+     char	   *dir;
 {
-    char	   *p;
-    char	    ndir[PATH_MAX], tmpdir[PATH_MAX];
+  char	   *p;
+  char	    ndir[PATH_MAX], tmpdir[PATH_MAX];
     strcpy(ndir, cur_dir);
     if (dir != NULL && dir[0] != '/') 
       { /* relative path, prepend current dir */
@@ -594,12 +603,12 @@ Rescan(widget, event, params, num_params)
 static String null_entry = " ";
 static String *null_list = { &null_entry };
 
-NewList(listwidget, list)
+void NewList(listwidget, list)
     Widget    listwidget;
     String   *list;
 {
-	XawListChange(listwidget, null_list, 1, 0, True);
-	XawListChange(listwidget, list, 0, 0, True);
+  XawListChange(listwidget, null_list, 1, 0, True);
+  XawListChange(listwidget, list, 0, 0, True);
 }
 
 

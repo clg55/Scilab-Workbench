@@ -1,4 +1,4 @@
-//[out,nwrk,txt]=getlocal(nwrk,nam,typ,m,n)
+function [out,nwrk,txt]=getlocal(nwrk,nam,typ,m,n)
 //Cette macro alloue une variable locale de taille m*n de type fortran typ
 //et de nom scilab nam dans le
 //    tableau de travail correspondant (modifie en consequence nwrk)
@@ -37,6 +37,6 @@ else
   end
   out='iwork(iiw'+nam+')'
 end
-//end
+
 
 

@@ -1,7 +1,7 @@
 mode(7)
 //               SCILAB OBJECTS
 //               1. SCALARS
-a=1               //constant
+a=1               //real constant
 1==1              //boolean
 'string'          //character string
 z=poly(0,'z')     // polynomial with variable 'z' and with one root at zero
@@ -9,75 +9,81 @@ p=1+3*z+4.5*z^2   //polynomial
 r=z/p             //rational
 
 //                2. MATRICES
-a=[a+1 2 3
+A=[a+1 2 3
      0 0 atan(1)
-     5 9 -1]      //constant matrix
+     5 9 -1]      //3 x 3 constant matrix
 
-b=[%t,%f]         //boolean matrix
+b=[%t,%f]         //1 x 2 boolean matrix
 
-mc=['this','is';
-    'a' ,'matrix']   //matrix of strings
+Mc=['this','is';
+    'a' ,'matrix']   //2 x 2 matrix of strings
 
-mp=[p,1-z;
-    1,z*p]        //polynomial matrix
+Mp=[p,1-z;
+    1,z*p]        //2 x 2 polynomial matrix
 
-mp=[p 1-z]
-mp=[mp;1 1+z*p]   //matrix polynomial
+F=Mp/poly([1+%i 1-%i 1],'z')   //rational matrix
 
-f=mp/poly([1+%i 1-%i 1],'z')   //rational matrix
+Sp=sparse([1,2;4,5;3,10],[1,2,3])   //sparse matrix
+
+Sp(1,10)==Sp(1,1)                   //boolean sparse matrix
 
 //                 3. LISTS
-l=list(a,-(1:5), mp,['this','is';'a','list'])   //list
-b=[1 0;0 1;0 0];c=[1 -1 0];d=0*c*b;x0=[0;0;0];
-sl=syslin('c',a,b,c,d,x0)    //Linear system in state-space representation.
-slt=ss2tf(sl)                // Transfer matrix
-
+L=list(a,-(1:5), Mp,['this','is';'a','list'])   //list
+L(2)(3)     //sub-entry in list
+Lt=tlist(['mylist','color','position','weight'],'blue',[0,1],10)  //typed-list
+Lt('color')      //extracting
+Lt('weight')     //extracting
+A=diag([2,3,4]);B=[1 0;0 1;0 0];C=[1 -1 0];D=0*C*B;x0=[0;0;0];
+Sl=syslin('c',A,B,C,D,x0)    //Standard state-space linear system 
+Sl("A"), Sl("C")             //Retrieving elements of a typed list
+Slt=ss2tf(Sl)                // Transfer matrix
+Slt('num'), Slt('den')
 //                  OPERATIONS
-v=1:5;v*v'                   //constant matrix
-mp'*mp+eye                   //polynomial matrix
-mp1=mp(1,1)+4.5*%i           //complex
-fi=c*(z*eye-a)^(-1)*b;       //transfer function evaluation
-f(:,1)*fi                    //rationals
-m=[mp -mp; mp' mp+eye]       //usual Matlab syntax for polynomials
-[fi, fi(:,1)]                // ... or rationals
-f=syslin('c',f);             
-num=f(2);den=f(3);           //operation on transfer matrix
+v=1:5;W=v'*v                 //constant matrix multiplication
+W(1,:)                       //extracting first row
+W(:,$)                       //extracting last column
+Mp'*Mp+eye                   //polynomial matrix
+Mp1=Mp(1,1)+4.5*%i           //complex
+Fi=C*(z*eye-A)^(-1)*B;       //transfer function evaluation
+F(:,1)*Fi                    //operations with rationals
+M=[Mp -Mp; Mp' Mp+eye]       //concatenation of polynomial matrices
+[Fi, Fi(:,1)]                // ... or rationals
+F=syslin('c',F);             
+Num=F('num');Den=F('den');           //operation on transfer matrix
 
 //                  SOME NUMERICAL PRIMITIVES
-inv(a)                       //Inverse
-inv(mp)                      //Inverse
-inv(sl*sl')                  //Product of two linear systems and inverse
+inv(A)                       //Inverse
+inv(Mp)                      //Inverse
+inv(Sl*Sl')                  //Product of two linear systems and inverse
 w=ss2tf(ans)                 //Transfer function representation
-inv(ss2tf(sl)*ss2tf(sl'))    //Product of two transfer functions and inverse
-clean(w-ans)                 
-n=contr(a,b)                 //Controllability
-k=ppol(a,b,[-1-%i -1+%i -1])        //Pole placement
-poly(a-b*k,'z')-poly([-1-%i -1+%i -1],'z')    //Check...
+w1=inv(ss2tf(Sl)*ss2tf(Sl'))    //Product of two transfer functions and inverse
+clean(w-w1)                 
+A=rand(3,3);;B=rand(3,1);n=contr(A,B)                 //Controllability
+K=ppol(A,B,[-1-%i -1+%i -1])        //Pole placement
+poly(A-B*K,'z')-poly([-1-%i -1+%i -1],'z')    //Check...
 
 s=sin(0:0.1:5*%pi);
 ss=fft(s(1:128),-1);        //FFT
 xbasc();
 plot2d3("enn",1,abs(ss)');      //simple plot
 
-x=lyap(a,diag([1 2 3]),'cont')   //Lyapunov equation
 
-
-//              ON LINE DEFINITION OF MACRO
+//              ON LINE DEFINITION OF FUNCTION
 deff('[x]=fact(n)','if n=0 then x=1,else x=n*fact(n-1),end')
 10+fact(5)
 //                    OPTIMIZATION
 deff('[f,g,ind]=rosenbro(x,ind)', 'a=x(2)-x(1)^2 , b=1-x(2) ,...
 f=100.*a^2 + b^2 , g(1)=-400.*x(1)*a , g(2)=200.*a -2.*b ');
-comp(rosenbro);[f,x,g]=optim(rosenbro,[2;2],'qn')
+[f,x,g]=optim(rosenbro,[2;2],'qn')
 
 //                   SIMULATION
 a=rand(3,3)
-e=exp(a)
-deff('[ydot]=f(t,y)','ydot=a*y');comp(f)
+e=expm(a)
+deff('[ydot]=f(t,y)','ydot=a*y');
 e(:,1)-ode([1;0;0],0,1,f)
 
 //                  SYSTEM DEFINITION
-s=poly(0,'s')
+s=poly(0,'s');
 h=[1/s,1/(s+1);1/s/(s+1),1/(s+2)/(s+2)]
 w=tf2ss(h);
 ss2tf(w)
@@ -91,7 +97,6 @@ y=csim('step',instants,sl);
 xbasc();plot2d(instants',y')
 //             Delayed step response
 deff('[in]=u(t)','if t<3 then in=0;else in=1;end');
-comp(u);
 y1=csim(u,instants,sl);plot2d(instants',y1');
 
 //             Impulse response;
@@ -124,9 +129,9 @@ horner(h,(1-z)/(1+z))  //bilinear transform
 
 //                 PRIMITIVES
 H=[1.    1.    1.    0.;
-   2.  - 1.    0.    1;
+   2.   -1.    0.    1;
    1.    0.    1.    1.;
-   0.    1.    2.  - 1];
+   0.    1.    2.   -1];
 
 ww=spec(H)
 
@@ -138,7 +143,9 @@ X'*H*X
 X'*H*X
 
 //Selection of user-defined eigenvalues (# 3 and 4 here);
-deff('[flg]=sel(x)','flg=0,ev=x(2)/x(3),if abs(ev-ww(3))<0.0001|abs(ev-ww(4))<0.00001 then flg=1,end')
+deff('[flg]=sel(x)',...
+'flg=0,ev=x(2)/x(3),...
+ if abs(ev-ww(3))<0.0001|abs(ev-ww(4))<0.00001 then flg=1,end')
 [X,d]=schur(H,sel)
 
 X'*H*X
@@ -164,8 +171,8 @@ roots(w)
 [Ns,d]=coffg(s*E-A);    //inverse of polynomial matrix;
 clean(Ns/d*(s*E-A))
 [Q,M,i1]=pencan(E,A);   // Canonical form;
-M*E*Q
-M*A*Q
+clean(M*E*Q)
+clean(M*A*Q)
 
 //           PAUSE-RESUME
 write(%io(2),'pause command...');
@@ -174,17 +181,13 @@ write(%io(2),'ENTER ''resume (or return) or click on resume!!''');
 //pause;
 
 //           CALLING EXTERNAL ROUTINE
-foo=['      subroutine foo(a,b,c)';
-     '      c=a+b';
-     '      end'  ];
-unix_s('rm -f foo.f')
-write('foo.f',foo);
-unix_s('make foo.o')     //Compiling...(needs fortran compiler)
-//..................WARNING.......................
-//NEXT COMMAND LINE WILL DO THE LINK OF THE ROUTINE foo WITH SCILAB
-//THIS COMMAND MAY FAIL FOR SystemV COMPILED VERSIONS OF SCILAB 
-//BECAUSE LINK NEEDS THE LIBRARIES (SEE THE HELP OF "LINK" COMMAND)
-link('foo.o','foo')    //Linking to Scilab
-//5+7 by fortran
-fort('foo',5,1,'r',7,2,'r','out',[1,1],3,'r')
+foo=['void foo(a,b,c)';
+     'double *a,*b,*c;';
+     '{ *c = *a + *b; }'  ];
+unix_s('rm -f foo.c')
+write('foo.c',foo);
+unix_s('make foo.o')     //Compiling...(needs a compiler)
+link('foo.o','foo','C')    //Linking to Scilab
+//5+7 by C function
+fort('foo',5,1,'d',7,2,'d','out',[1,1],3,'d')
 

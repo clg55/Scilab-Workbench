@@ -1,4 +1,4 @@
-//[la,lb,sig,resid]=armax(r,s,y,u,b0f,prf)
+function [la,lb,sig,resid]=armax(r,s,y,u,b0f,prf)
 //[la,lb,sig,resid]=armax(r,s,y,u,[b0f,prf])
 // Identification ARX
 // Calcule les coefficients d'un ARX n-dimensionnel
@@ -107,4 +107,4 @@ if prf=1;
      write(%io(2),lb(2)-b,'(5x,'+string(ncb)+'(f7.5,1x))');
    end
 end
-//end
+

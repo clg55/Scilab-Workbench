@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WGECO,SSI=0
       subroutine wgeco(ar,ai,lda,n,ipvt,rcond,zr,zi)
       integer lda,n,ipvt(*)
       double precision ar(lda,*),ai(lda,*),zr(*),zi(*)

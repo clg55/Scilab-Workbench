@@ -1,5 +1,4 @@
-//[]=fplot3d1(xr,yr,f,teta,alpha,leg,flag,ebox)
-//[]=fplot3d1(xr,yr,f,teta,alpha,leg,[flag,ebox])
+function []=fplot3d1(xr,yr,f,teta,alpha,leg,flag,ebox)
 // Trace la surface d\'efinie par un external f ( ex macro [z]=f(x,y))
 // on calcule d'abord f sur la grille definie par xr.yr
 // xr et yr sont des vecteurs implicites donnant les
@@ -24,6 +23,3 @@ if rhs<7,flag=[2,2,3],end;
 if rhs<8,ebox=0*ones(1,6),end;
 if type(f)=11 then comp(f),end;
 plot3d1(xr,yr,feval(xr,yr,f),teta,alpha,leg,flag,ebox),
-//end
-
-

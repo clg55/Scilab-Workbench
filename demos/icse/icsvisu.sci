@@ -1,4 +1,4 @@
-//[yobt,yob]=icsvisu(vue)
+function [yobt,yob]=icsvisu(vue)
 //Visualisation de l'observation de l'etat
 //Syntaxe
 //[yobt,yob]=icsvisu(vue)
@@ -18,6 +18,6 @@ tobt=[t0,tobt];
 yobt=obs*[y0',ytot];
 yob=obs*[y0',ytob];
 for i=vue plot(tobt,yobt(i,:)); plot(tob1,yob(i,:));end;
-//end
+
 
 

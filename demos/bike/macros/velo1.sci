@@ -20,13 +20,12 @@ deff('[]=velod(i)',['xnr=ct*xfrontar(:,i)-st*yfrontar(:,i);';
       'xpoly(xnt,ynt,''lines'')';
       'xfpoly(xnr,ynr)';
       'xfpoly(xnf,ynf)']);
-comp(velod);
 
 xset('thickness',2); 
 for i=1:n2-1,velod(i);ww=i:i+1;
 plot2d((ct*xprear(1,ww)-st*xprear(2,ww))',...
      (cp*(st*xprear(1,ww)+ct*xprear(2,ww))+sp*xprear(3,ww))',...
-     [-1,1],"000");
+     [1,-1],"000");
 velod(i);
 end
 velod(n2-1);

@@ -49,7 +49,7 @@ deff('[]=lig()',[
 'while i<10,';
 'i=i+1,if i=2 then break,end,shlig(47),';
 'end,shlig(48) ,' //break-point
-])
+],'n')
 deff('[]=shlig(n)','write(%io(2),''ligne ''+string(n))')
 
 //definition des points d'arrets

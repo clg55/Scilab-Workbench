@@ -7,14 +7,13 @@ include ../../Makefile.incl
 
 TEXFILES = lmidoc.tex
 
-all:: $(SCIDOC)/Lmi.ps.Z
+all:: $(SCIDOC)/Lmi.ps
 
-$(SCIDOC)/Lmi.ps.Z: $(TEXFILES)
-	olatex209 lmidoc
-	olatex209 lmidoc
+$(SCIDOC)/Lmi.ps: $(TEXFILES)
+	latex lmidoc
+	latex lmidoc
+	$(RM) $@
 	dvips -o $(SCIDOC)/Lmi.ps lmidoc.dvi
-	$(RM) $(SCIDOC)/Lmi.ps.Z
-	compress $(SCIDOC)/Lmi.ps
 
 clean::
 	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc

@@ -18,7 +18,7 @@ for nli=1:mf
   c1=f_tra(:,1);
   lc=length(c1);[lc,klc]=sort(lc);
   pivot='0';l=mf_tra+1;
-  while (pivot='0'&l>1),
+  while (pivot=='0'&l>1),
   l=l-1; 
          if c1(klc(l))<>'0' then pivot=c1(klc(l)),end,
   end

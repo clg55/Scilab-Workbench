@@ -1,17 +1,21 @@
 /*
-
-  procedure chargee de lancer une commande systeme dans un
-  environnement unix quand le call system pose probleme.
-
-  version hp9000 sun unigraph
-*/
+  Interface with system C function
+  */
 #include<stdio.h>
 #include "../machine.h"
-C2F(systemc)(command)
-char * command;
+
+#ifdef __STDC__
+#include <stdlib.h>
+#else
+int  system();
+#endif
+
+int C2F(systemc)(command,stat)
+     char * command;
+     integer * stat;
 {
-  int  system();
   int status;
   status=system(command);
-  return;
+  *stat=(integer)status;
+  return(0);
 }

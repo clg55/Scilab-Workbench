@@ -1,4 +1,4 @@
-//[]=basparam()
+function []=basparam()
 //utility
 //!
 %else='else',%end='end';%elseif='elseif';%if='if';%for='for';
@@ -38,7 +38,6 @@ ops     =['+','2','  ';
          '~','2',' r'];
 [logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then]=...
 resume(logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then)
- 
-//end
+
 
 

@@ -1,56 +1,60 @@
-function plotframe(rect,axisdata,flags,legs) 
-// plotframe - trace les echelles et le quadrillage d'un  graphique
-//%Syntaxe
-//  plotframe(rect,axisdata,flags,legs) 
-//%Parametres
-//  rect    : vecteur [xmin,ymin,xmax,ymax] contenant bornes minimales 
-//            du graphique souhaite
-//  axisdata: vecteur [nx,mx,ny,my] ou mx, my  sont respectivement  le 
-//            nombre d'intervalles decoupant l'axe des abscisse et des
-//            ordonnees, nx,ny sont les nombres de sous-intervalles 
-//            correspondant.
-//  flags   : vecteur [quad,bounds] ou quad est un boolean qui indique
-//            si l'on souhaite des quadrillages et bounds un booleen qui
-//            indique si l'on autorise la modification des bornes donnees
-//            dans rect pour obtenir des graduation plus simple. (dans ce
-//            cas axisdata est ignore
+function plotframe(rect,axisdata,flags,legs,subwindow) 
+// plotframe - fixes scales, tics and grid on a graphic,
+//%Syntax
+//  plotframe(rect,axisdata [,flags or leg or subwindow, ...)
+//%Parameters
+//  rect    : [xmin,ymin,xmax,ymax] data boudaries 
+//  axisdata: [nx,mx,ny,my]  mx and my x and y tics, nx,ny : x and y subtics
+//  flags   : [quad,bounds] ou quad is a boolean if %t a grid is added
+//	      bounds a booleen also : if bounds is %t then rect can be modified
+//	      in order to have better scales on both axes which contains the 
+//	      rect initial data.
+//  subwindow : see xsetech (wrect)
 //!
 [lhs,rhs]=argn(0)
-if rhs<=2 then
-  flags=[%f %f]
-  nleg=0
-elseif rhs==3 then
-  if type(flags)==1 then
-    nleg=0
-  else
-    legs=flags
-    nleg=prod(size(legs))
-    flags=[%f %f]
-  end
-else
-  nleg=prod(size(legs))
+f_subwin=%f,f_flags=%f,f_legs=%f;
+r_flags=[%f,%f];
+if rhs == 5 then
+  select type(subwindow),
+	case 1 , r_subwin=subwindow, f_subwin=%t;
+	case 4 , r_flags =subwindow, f_flags =%t;
+	case 10, r_legs = subwindow, f_legs= %t;
+  end 
 end
-if nleg <3 then 
-  for i=nleg+1:3,legs(i)=' ',end
+if rhs >= 4 then
+  select type(legs),
+	case 1 , r_subwin=legs, f_subwin=%t;
+	case 4 , r_flags =legs, f_flags =%t;
+	case 10, r_legs = legs, f_legs= %t;
+  end 
 end
-if type(flags)==1 then flags=flags<>0,end
-if prod(size(flags))==1 then flags(2)=%f;end
+if rhs >= 3 then
+  select type(flags),
+	case 1 , r_subwin=flags, f_subwin=%t;
+	case 4 , r_flags =flags, f_flags =%t;
+	case 10, r_legs = flags, f_legs= %t;
+  end 
+end
+if rhs <= 1 then 
+	error('Wrong number of arguments ');
+	return;
+end
+if f_subwin then 
+	xsetech(r_subwin,rect);
+end
 // -- trace du cadre et des echelles
-if flags(2) then
-  [xmn,xmx,npx]=graduate(rect(1),rect(3),2,axisdata(2))
-  [ymn,ymx,npy]=graduate(rect(2),rect(4),2,axisdata(4))
-  rect=[xmn,ymn,xmx,ymx]
-  axisdata(2)=npx;axisdata(4)=npy
+if r_flags(2) then
+	plot2d(0,0,0,'051',' ',rect,axisdata)
+else
+	plot2d(0,0,0,'011',' ',rect,axisdata)
 end
-plot2d(0,0,-1,'011',' ',rect,axisdata)
-if nleg>0 then 
 // -- trace des legendes d'axes et du titre
-  xtitle(legs(1),legs(2),legs(3)),
+if f_legs then 
+	select prod(size(r_legs)),
+	case 1, xtitle(r_legs(1)),
+	case 2, xtitle(r_legs(1),r_legs(2)),
+	case 3, xtitle(r_legs(1),r_legs(2),r_legs(3));
+	end 
 end
+if r_flags(1) then  xgrid(); end
 
-if flags(1) then
-// -- trace du quadrillage
-  ix=axisdata(2)
-  iy=axisdata(4)
-  xgrid();
-end

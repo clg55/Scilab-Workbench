@@ -1,370 +1,251 @@
       subroutine matimp
 c ====================================================================
-c
-c     simulation  de systeme algebrico-differentiel
-c
+c     impl dassl dasrt : simulation  de systeme algebrico-differentiel
 c ====================================================================
-c
       INCLUDE '../stack.h'
-c
-      character*6 namadd,namres,namjac
-      common/cadd/namadd
-      common/cres/namres
-      common/cjac/namjac
-      integer iadr,sadr
-c
-      double precision atol,rtol,t0,t1,tj,tf,tf1
-      integer top2,tope,hsize
-      logical jaco,type,achaud
-      external bresid,badd,bj2
-      external fres,fadda,fj2
-      integer adams,raide
-      integer info(15)
-      logical hotstart
-      double precision tout,tstop,maxstep,stepin
-      character*6 namer,namej,names
-      common /dassln/ namer,namej,names
-      external bresd,bjacd
-      common/ierode/iero
-c     
-      data atol/1.d-7/,rtol/1.d-9/
-      data adams/10/,raide/27/
-c     
-      iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
-c     
 c     impl     dassl     dasrt
 c     1         2          3
-c     
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
          call basout(io,wte,' matimp '//buf(1:4))
       endif
 c     
       goto(10,100,1000) fin
-c     
- 10   if(rhs.lt.6) then
-         call error(39)
-         return
-      endif
-      if(lhs.ne.1.and.lhs.ne.3) then
-         call error(39)
-         return
-      endif
+      return
+c     impl part 
+ 10   call sciimpl("impl")
+      return
+ 100  call dassli("dassl")
+      return
+ 1000 call dasrti("dasrt")
+      return
+      end
+      
+      subroutine sciimpl(fname)
+c     ==================================================
+      INCLUDE '../stack.h'
 c
+      character*(*) fname
+      integer iadr,sadr
+c
+      double precision atol,rtol,t0,t1
+      integer topk,topw
+      logical jaco,achaud
+      external bresid,badd,bj2
+      external fres,fadda,fj2
+      integer gettype
+      logical getexternal,getrvect,vcopyobj
+      logical checkrhs,checklhs,getrmat,cremat,getscalar
+      logical typej,typea,typer,getsmat,vectsize
+      character*24 namres,namadd,namjac
+      character*1 strf
+      common/cjac/namjac
+      external setfres,setfadda,setfj2
+      common/ierode/iero
+c     
+      data atol/1.d-7/,rtol/1.d-9/
+c     
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+      if (.not.checkrhs(fname,6,10)) return
+C     XXXXXX : pour l'instant 
+      if (.not.checklhs(fname,1,3)) return
+c     ---------------------------------
       iero=0
-c     
-c     lw=premiere case libre dans la pile
-      itype=raide
-      tope=top
-      lw=lstk(top+1)
-      lw1=lw
-      lw=lw+16
-c     
-c     test demarrage a chaud
-      ifin=iadr(lstk(top))
-      achaud=istk(ifin).eq.1
-      if(achaud) then
-c     ilc=adresse de  iw
-         top=top-2
-         il=iadr(lstk(top+2))
-         if(istk(il).ne.1) then
-            err=rhs-2
-            call error(53)
-            return
-         endif
-         liwp=istk(il+2)*istk(il+1)
-         lci=sadr(il+4)
-         ilc=iadr(lci)
-c     lc=adresse de  w
-         il=iadr(lstk(top+1))
-         if(istk(il).ne.1) then
-            err=rhs-1
-            call error(53)
-            return
-         endif
-         lc=sadr(il+4)
-         lrwp=istk(il+1)*istk(il+2)
-      endif
-      top2=top-rhs+1
-      if(achaud) top2=top2+2
-      ile=iadr(lstk(top2))
-      type=istk(ile).eq.10
-      if(type) then
-c     type fourni: mf=10 dans lsodi si adams
-         top2=top2+1
-         itype=abs(istk(ile+6))
-         if(itype.ne.adams.and.itype.ne.raide) then
+      topk=top
+      topw=top+1
+      iskip=1
+      mf=20
+c     first argument (check for string )
+c     ----------------------------
+      if(gettype(topk-rhs+1).eq.10) then
+         iskip=0
+         if(.not.getsmat(fname,topk,topk-rhs+1,
+     $        m1,n1,1,1,lr1,nlr1))return
+         call cvstr(1,istk(lr1),strf,1)
+         if ( strf.eq.'a') mf = 10
+         if ( strf.eq.'s') mf = 20
+         if(strf.ne.'a'.and.strf.ne.'s') then
             call error(42)
             return
          endif
       endif
-c     type non fourni methode raide a priori
-      ilj=iadr(lstk(top))
-      islj=istk(ilj)
-      tj=stk(sadr(ilj+4))
-      if(islj.lt.10.or.islj.gt.15.or.islj.eq.12) then
-         err=rhs-(tope-top)
-         call error(44)
+c     Initial condition : y0 arg 2 - iskip
+c     -------------------
+      kynew=topk-rhs+2-iskip
+      if(.not.getrvect(fname,topk,kynew,ny,my,ly))return
+      neq=ny*my
+c     
+c     Initial derivative condition : y0dot arg 3 - iskip
+c     -------------------
+      kydtop=topk-rhs+3-iskip
+      if(.not.getrvect(fname,topk,kydtop,nyd,myd,lyd))return
+      if(.not.vectsize(fname,topk,kydtop,ny*my)) return
+c     t0 arg 4 - iskip
+c     ----------------------------
+      kttop=topk-rhs+4-iskip 
+      if(.not.getscalar(fname,topk,kttop,lr4))return
+      t0=stk(lr4)
+c     t1 arg 5 - iskip
+c     ---------------------------
+      kt1=topk-rhs+5-iskip 
+      if(.not.getrmat(fname,topk,kt1,m5,n5,lt5))return
+      nn=m5*n5
+c     checking variable rtol (number 6 - iskip)
+c     -----------------------------------
+      itype = gettype(topk-rhs+6-iskip)
+      if ( itype .ne. 1) then
+         if (.not.cremat(fname,topw,0,1,1,latol,lc)) return
+         topw=topw+1
+         if (.not.cremat(fname,topw,0,1,1,lrtol,lc)) return
+         topw=topw+1
+         stk(latol)=atol
+         stk(lrtol)=rtol
+         na=1
+         nr=1
+         iskip = iskip+2
+         goto 11105
+      endif
+      kr=top-rhs+6-iskip
+      if(.not.getrvect(fname,topk,kr,m6,n6,lrtol))return
+      nr = m6*n6
+      if(nr.ne.1.and.nr.ne.neq) then
+         err= 6-iskip 
+         call error(89)
          return
       endif
-      ilf1=iadr(lstk(top-1))
-      islf1=istk(ilf1)
-      tf1=stk(sadr(ilf1+4))
-      if(islf1.lt.10.or.islf1.gt.15.or.islf1.eq.12) then
-         err=rhs-(tope-top)
-         call error(44)
+
+c     checking variable rtol (number 7 - iskip )
+c     --------------------------------
+      itype = gettype(topk-rhs+7-iskip)
+      if (itype .ne. 1) then
+         if (.not.cremat(fname,topw,0,1,1,lrtol,lc)) return
+         topw=topw+1
+         stk(lrtol)=rtol
+         nr=1
+         iskip = iskip +1
+         goto 11105
+      endif
+      kr= top-rhs+7-iskip
+      if(.not.getrvect(fname,topk,kr,m7,n7,latol))return
+      na = m7*n7
+      if(na.ne.1.and.na.ne.neq) then
+         err= 7-iskip 
+         call error(89)
          return
       endif
-      ilf=iadr(lstk(top-2))
-      islf=istk(ilf)
-      tf=stk(sadr(ilf+4))
-      if(islf.lt.10.or.islf.gt.15.or.islf.eq.12)   then
-c     jacobien non fourni
-         jaco=.false.
-         kytop=top
-         jt=2
-c     mf= 12 ou 22: jacobien non fourni a lsodi
-         if(itype.eq.adams) mf=12
-         if(itype.eq.raide) mf=22
-         il=iadr(lstk(top))
-         kf1=top
-         kf=top-1
-         jobj=1
-         jobf=1
-         ilf=ilf1
-         islf=islf1
-         ilf1=ilj
-         islf1=islj
-         if(islf.eq.10) jobf=3
-      else
-c     jacobien fourni
-         jaco=.true.
-         jt=1
-         kytop=top-1
-c     mf=21: jacobien fourni a lsodi
-         if(itype.eq.adams) mf=11
-         if(itype.eq.raide) mf=21
-         kjac=top
-         kf=top-2
-         kf1=top-1
-         jobj=0
-         jobf=0
-         if(islj.ge.11) jobj=1
-         if(islj.eq.10) jobj=3
-         if(islf.ge.11.and.islf1.ge.11) jobf=1
-         if(islf.eq.10.and.islf1.eq.10) jobf=3
-         if(jobf.eq.0.or.jobj.eq.0) then
-            call error(42)
-            return
-         endif
-      endif
-c     jobj et jobf sont initialises
-c     jobf et jobj valent 2 ou 3
-c     
-      if(jobj.eq.3) then
-         ncj=istk(ilj+5)-1
-         namjac=' '
-         call cvstr(ncj,istk(ilj+6),namjac,1)
-      endif
-c     
-      if(jobf.eq.3) then
-         ncf=istk(ilf+5)-1
-         ncf1=istk(ilf1+5)-1
-         namres=' '
-         call cvstr(ncf,istk(ilf+6),namres,1)
-         namadd=' '
-         call cvstr(ncf1,istk(ilf1+6),namadd,1)
-      endif
-c     
-c     jaco,type et mf sont initialises...
-c     top2 pointe sur y0
-c     
-c     y0
-      kynew=top2
-      il=iadr(lstk(top2))
-c     
-      if(istk(il).eq.1) then
-         hsize=4
-         ny=istk(il+1)*istk(il+2)*(istk(il+3)+1)
-      elseif(istk(il).eq.2) then
-         mn=istk(il+1)*istk(il+2)
-         hsize=9+mn
-         ny=(istk(il+8+mn)-1)*(istk(il+3)+1)
-      else
-         err=rhs-(tope-top2)
-         call error(44)
-         return
-      endif
-      it=istk(il+3)
-      if(it.eq.1) nys2=ny/2
-      ly=sadr(il+hsize)
-c     
-c     y0dot
-      top2=top2+1
-      kydtop=top2
-      il=iadr(lstk(top2))
-c     
-      if(istk(il).eq.1) then
-         lyd=sadr(il+4)
-         nny=istk(il+1)*istk(il+2)*(istk(il+3)+1)
-      elseif(istk(il).eq.2) then
-         mn=istk(il+1)*istk(il+2)
-         lyd=iadr(il+9+mn)
-         nny=(istk(il+8+mn)-1)*(istk(il+3)+1)
-      else
-         err=rhs-(tope-top2)
-         call error(44)
-         return
-      endif
-      if(nny.ne.ny) then
-         call error(60)
-         return
-      endif
-c     
-c     t0
-      top2=top2+1
-      kttop=top2
-      il=iadr(lstk(top2))
-      if(istk(il).ne.1) then
-         err=rhs-(tope-top2)
-         call error(53)
-         return
-      endif
-      l=sadr(il+4)
-      t0=stk(l)
-c     t1
-      top2=top2+1
-      il=iadr(lstk(top2))
-      if(istk(il).ne.1) then
-         err=rhs-(tope-top2)
-         call error(53)
-         return
-      endif
-      nn=istk(il+1)*istk(il+2)
-c     nn=nombre de points demandes
-      lt1=sadr(il+4)
-c     
-c     parametres optionnels rtol et atol
-      top2=top2+1
-      rtol=1.0d-7
-      atol=1.0d-9
-      nr=1
-      na=1
-      jobtol=kytop-top2
-c     jobtol=(rien,rtol seul,rtol et atol)
-c     
-      if(jobtol.eq.1) then
-c     tolerances par defaut
-         lr=lw
-         la=lr+1
-         stk(la)=atol
-         stk(lr)=rtol
-      else
-c     rtol fourni
-         lr=lw
-c     rtol
-         il=iadr(lstk(top2))
-         if(istk(il).ne.1) then
-            err=rhs-(tope-top2)
-            call error(53)
-            return
-         endif
-         nr=istk(il+1)*istk(il+2)
-         if(nr.ne.1.and.nr.ne.ny) then
-            err=rhs-(tope-top2)
-            call error(89)
-            return
-         endif
-         lrt=sadr(il+4)
-         call dcopy(nr,stk(lrt),1,stk(lr),1)
-         la=lr+nr
-c     atol
-         if(jobtol.eq.2) then
-            stk(la)=atol
-         else
-            top2=top2+1
-            il=iadr(lstk(top2))
-            if(istk(il).ne.1) then
-               err=rhs-(tope-top2)
-               call error(53)
-               return
-            endif
-            na=istk(il+1)*istk(il+2)
-            if(na.ne.1.and.na.ne.ny) then
-               err=rhs-(tope-top2)
-               call error(89)
-               return
-            endif
-            lat=sadr(il+4)
-            call dcopy(na,stk(lat),1,stk(la),1)
-         endif
-      endif
-c     
-      lw=la+na
-c     top pointe sur sa valeur a l'entree
-c     
-      if(nr.eq.1.and.na.eq.1) itol=1
+c     ----------------------------------
+11105 if(nr.eq.1.and.na.eq.1) itol=1
       if(nr.eq.1.and.na.gt.1) itol=2
       if(nr.gt.1.and.na.eq.1) itol=3
       if(nr.gt.1.and.na.gt.1) itol=4
-c     
-c     parametres supplementaires
+c     les externaux : res,adda et jac 
+c     -----------------------------------
+c     checking variable res (number 8 - iskip )
+      kres=topk-rhs+8-iskip
+      if (.not.getexternal(fname,topk,kres,namres,typer,
+     $     setfres)) return
+
+c     checking variable number 9 - iskip
+c     -----------------------------
+      kadd=topk-rhs+9-iskip
+      if (.not.getexternal(fname,topk,kadd,namadd,typea,
+     $     setfadda)) return
+      if ( typea.neqv.typer) then 
+         buf = fname // ': res and adda must have same type '
+         call error(999)
+      endif
+c     checking variable number 10 - iskip
+c     -----------------------------
+      achaud=gettype(topk).eq.1
+      kjac=topk-rhs+10-iskip
+      if ( kjac.eq.topk.or.(achaud.and.kjac.eq.topk-2)) then 
+         if (.not.getexternal(fname,topk,kjac,namjac,typej,
+     $        setfj2)) return
+         mf = mf+1
+         jaco=.true.
+      else
+         jaco=.false.
+         typej=.false.
+         mf = mf + 2
+      endif
+
+c     other parameters 
+c     -----------------
       itask=1
       istate=1
       iopt=0
-c     
-c     demarrage a chaud
-c     
-      if(achaud) then
-         istate=2
-c     restauration des commons
-         lsavs=lc+lrwp-219
-         lsavi=lci+liwp-41
-         liwp1=liwp-41
-         call rscom1(stk(lsavs),stk(lsavi))
-c     restauration du tableau entier
-         do 40 k=1,liwp1
-            istk(ilc+k-1)=int(stk(lci+k-1))
- 40      continue
-      endif
-c     
-c     calcul des pointeurs ili,lyp
-c     tableaux  de travail:w reel   debut lw  taille lrw
-c     w entier debut ili (pile istk) taille liw entiers
-c     lsodi
-      if(mf.gt.10) lrw=22+16*ny+ny*ny
-      if(mf.gt.20) lrw=22+9*ny+ny*ny
-      liw=20+ny
+c     hot restart case 
+c     hot restart is detected when last argument is a matrix
+c     ---------------------
+C     space for result 
+      if(.not.cremat(fname,topw,0,neq,nn,lres,lc)) return
+      kresu=topw
+      topw=topw+1
       nsizd=219
       nsizi=41
-      if(lhs.gt.1) then
-         lrw=lrw+nsizd
-         liw=liw+nsizi
+      if(achaud) then
+c        iwork 
+         if (.not.vcopyobj(fname,topk,topw)) return
+         topw=topw+1
+         if(.not.getrmat(fname,topk,topw-1,ml,nl,lci))return
+         liwp= ml*nl
+         ilc=iadr(lci)
+         do 400 k= liwp -nsizi+1 , liwp
+            write(06,*) k,'avant sauv iw',stk(lci+k-1)
+ 400     continue
+c        rwork 
+         if (.not.vcopyobj(fname,topk-1,topw)) return
+         topw=topw+1
+         if(.not.getrmat(fname,topk,topw-1,ml,nl,lrwp))return
+         ilrw = ml*nl
+         istate=2
+c        restauration des commons
+         lsavs=lrwp+ilrw- nsizd
+         lsavi=lci+liwp- nsizi
+         liwp1=liwp- nsizi
+         call rscom1(stk(lsavs),stk(lsavi))
+c        restauration du tableau entier
+c        the end was used to restore the common 
+         do 40 k=1,liwp
+            istk(ilc+k-1)=int(stk(lci+k-1))
+ 40      continue
+         
+      else
+c         ----create Work space 
+         ilrw=0
+         if(mf.gt.10) ilrw=22+16*neq+neq*neq
+         if(mf.gt.20) ilrw=22+9*neq+neq*neq
+         liwp=20+neq
+         if(lhs.gt.1) then
+            ilrw=ilrw+nsizd
+            liwp=liwp+nsizi
+         endif
+         if(.not.cremat(fname,topw,0,1,liwp,li,lc)) return
+         topw=topw+1
+         ilc=iadr(li)
+         do 1 k=1,liwp
+            istk(ilc+k-1) =0
+ 1       continue
+         if(.not.cremat(fname,topw,0,1,ilrw,lrwp,lc)) return
+         do 11 k=1,liwp
+            stk(lrwp+k-1) =0
+ 11      continue
+         topw=topw+1
       endif
-      li=lw+lrw
-      ili=iadr(li)
-      lyp=li+liw
-c     top pointe sur la zone de travail
-      top=top+1
-      lstk(top+1)=lw+lrw+liw+nn*ny
-      err=lstk(top+1)-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-c     
       if(jaco) then
-         ilw1=iadr(lw1)
+         top=topw
+         lw=lstk(top)
+         ilw1=iadr(lw)
          istk(ilw1)=3
          istk(ilw1+1)=ilw1+4
          istk(ilw1+2)=ilw1+8
          istk(ilw1+3)=ilw1+12
-         istk(ilw1+4)=kf
+         istk(ilw1+4)=kres
          istk(ilw1+5)=kttop
          istk(ilw1+6)=kynew
          istk(ilw1+7)=kydtop
-         istk(ilw1+8)=kf1
+         istk(ilw1+8)=kadd
          istk(ilw1+9)=kttop
          istk(ilw1+10)=kynew
          istk(ilw1+11)=kydtop
@@ -372,56 +253,55 @@ c
          istk(ilw1+13)=kttop
          istk(ilw1+14)=kynew
          istk(ilw1+15)=kydtop
+         lstk(top+1)=sadr(ilw1+17)
       else
-         ilw1=iadr(lw1)
+         top=topw
+         lw=lstk(top)
+         ilw1=iadr(lw)
          istk(ilw1)=2
          istk(ilw1+1)=ilw1+3
          istk(ilw1+2)=ilw1+7
-         istk(ilw1+3)=kf
+         istk(ilw1+3)=kres
          istk(ilw1+4)=kttop
          istk(ilw1+5)=kynew
          istk(ilw1+6)=kydtop
-         istk(ilw1+7)=kf1
+         istk(ilw1+7)=kadd
          istk(ilw1+8)=kttop
          istk(ilw1+9)=kynew
          istk(ilw1+10)=kydtop
+         lstk(top+1)=sadr(ilw1+11)
       endif
 c     
       call xsetf(1)
       call xsetun(wte)
 c     
-      if(.not.achaud) then
-         lc=lw
-         ilc=ili
-      endif
-c     
 c     appel de l'integrateur
       do 50 k=1,nn
-         t1=stk(lt1+k-1)
-c     test sur le type des fonctions fournies
-         if(jobf.eq.1) then
-            if(jobj.eq.1) then
-c     f macro j macro
-               call lsodi(bresid,badd,bj2,ny,stk(ly),stk(lyd),t0,t1,
-     1              itol,stk(lr),stk(la),itask,istate,iopt,stk(lc),lrw,
-     2              istk(ilc),liw,mf)
+         t1=stk(lt5 +k-1)
+c        test sur le type des fonctions fournies
+         if(typea) then
+            if(typej) then
+c     f fortran j fortran
+               call lsodi(fres,fadda,fj2,neq,stk(ly),stk(lyd),t0,t1,
+     1              itol,stk(lrtol),stk(latol),itask,istate,iopt,
+     2              stk(lrwp),ilrw,istk(ilc),liwp,mf)
             else
-c     f macro j fortran
-               call lsodi(bresid,badd,fj2,ny,stk(ly),stk(lyd),t0,t1,
-     1              itol,stk(lr),stk(la),itask,istate,iopt,stk(lc),lrw,
-     2              istk(ilc),liw,mf)
+c     f fortran j macro 
+               call lsodi(fres,fadda,bj2,neq,stk(ly),stk(lyd),t0,t1,
+     1              itol,stk(lrtol),stk(latol),itask,istate,iopt,
+     2              stk(lrwp),ilrw,istk(ilc),liwp,mf)
             endif
          else
-            if(jobj.eq.1) then
-c     f fortran j macro 
-               call lsodi(fres,fadda,bj2,ny,stk(ly),stk(lyd),t0,t1,
-     1              itol,stk(lr),stk(la),itask,istate,iopt,stk(lc),lrw,
-     2              istk(ilc),liw,mf)
+            if(typej) then
+c     f macro j fortran
+               call lsodi(bresid,badd,fj2,neq,stk(ly),stk(lyd),t0,t1,
+     1              itol,stk(lrtol),stk(latol),itask,istate,iopt,
+     2              stk(lrwp),ilrw,istk(ilc),liwp,mf)
             else
-c     f fortran j fortran
-               call lsodi(fres,fadda,fj2,ny,stk(ly),stk(lyd),t0,t1,
-     1              itol,stk(lr),stk(la),itask,istate,iopt,stk(lc),lrw,
-     2              istk(ilc),liw,mf)
+c     f macro j macro
+               call lsodi(bresid,badd,bj2,neq,stk(ly),stk(lyd),t0,t1,
+     1              itol,stk(lrtol),stk(latol),itask,istate,iopt,
+     2              stk(lrwp),ilrw,istk(ilc),liwp,mf)
             endif
          endif
          if(err.gt.0) return
@@ -429,72 +309,54 @@ c     f fortran j fortran
             call error(24)
             return
          endif
-         if(it.eq.0) then
-            lys=lyp+(k-1)*ny
-            call dcopy(ny,stk(ly),1,stk(lys),1)
-         else
-            lys=lyp+(k-1)*nys2
-            call dcopy(nys2,stk(ly),1,stk(lys),1)
-            call dcopy(nys2,stk(ly+nys2),1,stk(lys+nn*nys2),1)
-         endif
+         call dcopy(neq,stk(ly),1,stk(lres+(k-1)*neq),1)
  50   continue
-c     
-c     sortie des resultats
-      ils=iadr(lstk(kynew))
-      top=tope-rhs+1
-      call icopy(hsize,istk(ils),1,istk(ile),1)
-      nel=istk(ile+1)*istk(ile+2)
-      istk(ile+2)=istk(ile+2)*nn
-      ly=sadr(ile+hsize)
-      if(istk(ile).eq.2) ly=sadr(ile+9+nel*nn)
-      inc=1
-      if(ly.gt.lyp) inc=-1
-      call dcopy(ny*nn,stk(lyp),inc,stk(ly),inc)
-      lstk(top+1)=ly+ny*nn
-      if(istk(ile).eq.2) then
-c     on defini la table des pointeurs
-         il=ile+7
-         do 52 i=2,nn
-            do 51 j=1,nel
-               istk(il+nel+j+1)=istk(ile+8+j)-1+istk(il+nel+1)
- 51         continue
-            il=il+nel
- 52      continue
-      endif
+      top= topk-rhs+1
+      call copyobj(fname,kresu,topk-rhs+1)
       if(lhs.eq.1) return
 c     w
+      if (lhs.ne.3) then 
+         buf = fname // ' lhs can only be 1 or 2 '
+         call error(999)
+      endif
       top=top+1
-      il=iadr(lstk(top))
-      istk(il)=1
-      istk(il+1)=1
-      istk(il+2)=lrw
-      istk(il+3)=0
-      l=sadr(il+4)
-      lstk(top+1)=l+lrw
-      call dcopy(lrw-nsizd,stk(lc),1,stk(l),1)
-      lsvs=l+lrw-nsizd
+      if (.not.cremat(fname,top,0,1,ilrw,lr,lc)) return
+      call dcopy(ilrw-nsizd,stk(lrwp),1,stk(lr),1)
+      lsvs=lr+ilrw-nsizd
 c     iw
       top=top+1
-      il=iadr(lstk(top))
-      istk(il)=1
-      istk(il+1)=1
-      istk(il+2)=liw
-      istk(il+3)=0
-      l=sadr(il+4)
-      lstk(top+1)=l+liw
-      do 60 k=1,liw-nsizi
-         stk(l+k-1)=dble(istk(ilc+k-1))
+      if (.not.cremat(fname,top,0,1,liwp,lr,lc)) return
+      do 60 k=1,liwp-nsizi
+         stk(lr+k-1)=dble(istk(ilc+k-1))
  60   continue
-      lsvi=l+liw-nsizi
+      lsvi=lr+liwp-nsizi
       call svcom1(stk(lsvs),stk(lsvi))
-c     fin de impl...
-c     
-      fin=2
       return
+      end
+
+      subroutine dassli(fname)
+      character*(*) fname
+c     ============================================
+      INCLUDE '../stack.h'
+c
+      integer iadr,sadr
+      integer topk,topw, info(15),gettype
+      logical hotstart,getexternal,getrvect,type
+      logical checkrhs,checklhs,getrmat,cremat,getscalar
+      double precision tout,tstop,maxstep,stepin
+      double precision atol,rtol,t0
+      character*24 namer,namej,names
+      character*24 namjac
+      external bresd,bjacd
+      external setfresd,setfjacd
+      common /dassln/ namer,namej,names
+      common/ierode/iero
+      common/cjac/namjac
 c     
-cc    dassl
+      data atol/1.d-7/,rtol/1.d-9/
 c     
- 100  continue
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
 c     
 c     SCILAB function : dassl
 c     --------------------------
@@ -503,39 +365,22 @@ c     [,hotdata])
       iero=0
       maxord=5
       lbuf = 1
-      lw = lstk(top+1)
+      topk=top
+      topw=top+1
+      lw = lstk(topw)
       l0 = lstk(top+1-rhs)
-      if (rhs .lt. 5 .or. rhs .gt.9) then
-         call error(39)
-         return
-      endif
-      if (lhs .ne. 2 .and. lhs .ne. 1) then
-         call error(41)
-         return
-      endif
+      if (.not.checkrhs(fname,5,9)) return
+      if (.not.checklhs(fname,1,2)) return
 c     checking variable y0 (number 1)
-c     
+c     -------------------------------
       ky=top-rhs+1
-      il1 = iadr(lstk(top-rhs+1))
-      if (istk(il1) .ne. 1) then
-         err = 1
-         call error(53)
-         return
-      endif
-      n1 = istk(il1+1)
+      if(.not.getrmat(fname,topk,ky,n1,m1,l1))return
       neq=n1
-      m1 = istk(il1+2)
-      l1 = sadr(il1+4)
       lydot=l1+n1
       info(11)=0
       if (m1 .eq.1) then
-         lydot=lw
-         lw=lw+n1
-         err=lw-lstk(bot)
-         if(err.gt.0) then
-            call error(17)
-            return
-         endif
+         if (.not.cremat(fname,topw,0,n1,1,lydot,lc)) return
+         topw=topw+1
          info(11)=1
          call dset(n1,0.0d0,stk(lydot),1)
       elseif(m1.ne.2) then
@@ -543,71 +388,49 @@ c
          call error(89)
          return
       else 
+         il1 = iadr(lstk(top-rhs+1))
          istk(il1+2)=1
       endif
 c     checking variable t0 (number 2)
-c     
+c     -------------------------------
       kt0=top-rhs+2
-      il2 = iadr(lstk(top-rhs+2))
-      if (istk(il2) .ne. 1) then
-         err = 2
-         call error(53)
-         return
-      endif
-      if (istk(il2+1)*istk(il2+2) .ne. 1) then
-         err = 2
-         call error(89)
-         return
-      endif
-      t0 = stk(sadr(il2+4))
+      if(.not.getscalar(fname,topk,kt0,lr2))return
+      t0=stk(lr2)
 c     checking variable t1 (number 3)
-c     
-      il3 = iadr(lstk(top-rhs+3))
-      if (istk(il3) .ne. 1) then
-         err = 3
-         call error(53)
-         return
-      endif
-      m3 = istk(il3+1)*istk(il3+2)
-      nt=m3
-      l3 = sadr(il3+4)
+c     -------------------------------
+      if(.not.getrmat(fname,topk,top-rhs+3,m3,n3,l3))return
+      nt=m3*n3
 c     
 c     checking variable atol (number 4)
-c     
+c     -------------------------------
       iskip=0
-      il4 = iadr(lstk(top-rhs+4))
-      if (istk(il4) .ne. 1) then
-         latol=lw
-         lrtol=lw+1
-         lw=lw+2
+      itype = gettype(top-rhs+4)
+      if ( itype .ne. 1) then
+         if (.not.cremat(fname,topw,0,1,1,latol,lc)) return
+         topw=topw+1
+         if (.not.cremat(fname,topw,0,1,1,lrtol,lc)) return
+         topw=topw+1
          stk(latol)=atol
          stk(lrtol)=rtol
          info(2)=0
          iskip=iskip+2
          goto 105
       endif
-      m4 = istk(il4+1)*istk(il4+2)
-      l4 = sadr(il4+4)
-      latol=l4
-      if(m4.ne.1.and.m4.ne.n1) then
-         err=4
-         call error(89)
-         return
-      endif
+      if(.not.getrvect(fname,topk,top-rhs+4,m4,n4,latol))return
+      m4 = m4*n4
 c     checking variable rtol (number 5)
-c     
-      il5 = iadr(lstk(top-rhs+5))
-      if (istk(il5) .ne. 1) then
-         lrtol=lw
-         lw=lw+1
-         stk(lrtol)=1.0d-7
+c     --------------------------------
+      itype = gettype(top-rhs+5)
+      if (itype .ne. 1) then
+         if (.not.cremat(fname,topw,0,1,1,lrtol,lc)) return
+         topw=topw+1
+         stk(lrtol)=lrtol
          info(2)=0
          iskip=iskip+1
          goto 105
       endif
-      m5 = istk(il5+1)*istk(il5+2)
-      l5 = sadr(il5+4)
-      lrtol=l5
+      if(.not.getrvect(fname,topk,top-rhs+5,m5,n5,lrtol))return
+      m5 = m5*n5
       if(m5.ne.m4) then
          call error(60)
          return
@@ -617,49 +440,26 @@ c
       else
          info(2)=1
       endif
-      
 c     checking variable res (number 6)
 c     
  105  kres=top-rhs+6-iskip
-      il6=iadr(lstk(kres))
-      if (istk(il6) .eq. 10) then
-         if (istk(il6+1)*istk(il6+2) .ne. 1) then
-            err = 6-iskip
-            call error(89)
-            return
-         endif
-         n6 = min(istk(il6+5)-1,6)
-         l6 = il6+6
-         namer=' '
-         call cvstr(n6,istk(l6),namer,1)
-      endif
-      
-      
+      if (.not.getexternal(fname,topk,kres,namer,type,
+     $     setfresd)) return
 c     checking variable jac (number 7)
 c     
       kjac=top-rhs+7-iskip
-      il7=iadr(lstk(kjac))
       if(kjac.eq.top.or.
      $     kjac.eq.top-1.and.istk(iadr(lstk(top))).eq.1) then
          iskip=iskip+1
          info(5)=0
       else
          info(5)=1
-         if (istk(il7) .eq. 10) then
-            if (istk(il7+1)*istk(il7+2) .ne. 1) then
-               err = 7-iskip
-               call error(89)
-               return
-            endif
-            n7 = min(istk(il7+5)-1,6)
-            l7 = il7+6
-            namej=' '
-            call cvstr(n7,istk(l7),namej,1)
-         endif
+         if (.not.getexternal(fname,topk,kjac,namej,type,
+     $        setfjacd)) return
       endif
 c     
 c     checking variable info (number 8)
-c     
+c     ---------------------------------
       il8 = iadr(lstk(top-rhs+8-iskip))
       if (istk(il8) .ne. 15) then
          err = 8-iskip
@@ -757,19 +557,13 @@ c
          call error(39)
          return
       endif
-      
 c     
-c     cross formal parameter checking
-c     not implemented yet
-c     
-c     cross equal output variable checking
-c     not implemented yet
-c     
-      nn15=0
-      lw15=lw
-      lw=lw+nn15
-      lw17=lw
-      lw=lw+nn15
+c     --------------------Work Tables 
+      if (.not.cremat(fname,topw,0,1,1,lw15,lc)) return
+      topw=topw+1      
+      if (.not.cremat(fname,topw,0,1,1,lw17,lc)) return
+      topw=topw+1      
+      il17=iadr(lw17)
       if(info(6).eq.0) then
 C     for the full (dense) JACOBIAN case 
          lrw = 40+(maxord+4)*neq+neq**2
@@ -782,10 +576,10 @@ C     for the banded finite-difference-generated JACOBIAN case
       endif
       liw=20+neq
       if(.not.hotstart) then
-         lrwork=lw
-         lw=lrwork+lrw
-         liwork=lw
-         lw=liwork+sadr(liw)+1
+         if (.not.cremat(fname,topw,0,1,lrw,lrwork,lc)) return
+         topw=topw+1
+         if (.not.cremat(fname,topw,0,1,sadr(liw)+1,liwork,lc)) return
+         topw=topw+1
       else
          if(lrw+liw.gt.n9) then
             err=9-iskip
@@ -795,11 +589,6 @@ C     for the banded finite-difference-generated JACOBIAN case
          lrwork=lhot
          liwork=lhot+lrw
          call entier(liw,stk(liwork),istk(iadr(liwork)))
-      endif
-      err=lw-lstk(bot)
-      if (err .gt. 0) then
-         call error(17)
-         return
       endif
 c     
       if(info(4).eq.1) then
@@ -816,8 +605,8 @@ c
          istk(iadr(liwork+1))=mu
       endif
 c     structure d'info pour les externals
-      top=top+1
-      lstk(top)=lw
+      top=topw
+      lw=lstk(top)
       ilext=iadr(lw)
       istk(ilext)=2
       istk(ilext+1)=ilext+4
@@ -832,8 +621,6 @@ c     structure d'info pour les externals
       istk(ilext+10)=kt0
       istk(ilext+11)=ky
       lw=sadr(ilext)+12
-      
-      
       lw0=lw
       ilyr=iadr(lw)
       istk(ilyr)=1
@@ -869,7 +656,7 @@ c     not enough memory
          call ddassl(bresd,n1,t0,stk(l1),stk(lydot),
      &        stk(lyri),info,stk(lrtol),stk(latol),idid,
      &        stk(lrwork),lrw,istk(iadr(liwork)),liw,stk(lw15),
-     &        stk(lw17),bjacd)
+     &        istk(il17),bjacd)
          if(err.gt.0)  return
          if(idid.eq.1) then
 C     A step was successfully taken in the intermediate-output mode. 
@@ -963,7 +750,7 @@ C     when invalid input is detected.
          info(1)=1
  120  continue
 c     
- 125  top=top-rhs-1
+ 125  top=topk-rhs
       mv=lw0-l0
 c     
 c     Variable de sortie: y0
@@ -998,12 +785,5 @@ c
 c     Remise en place de la pile
  150  call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)
       return
-      
- 1000 continue
-      call dasrti
-      return      
-c     
-      
       end
-
 

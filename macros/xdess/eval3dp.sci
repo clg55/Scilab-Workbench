@@ -37,20 +37,15 @@ n2=prod(size(p2))
 p1=[];p2=[];
  
 //on genere les facettes
-ind=ones(1,n1-1).*.[0 1 n1+1 n1]+ (1:n1-1).*.[1 1 1 1]
+ind=ones(1,n1-1).*.[0 1 n1+1 n1]+ (1:n1-1).*.[1 1 1 1];
 // ind=[1,2,n1+2,n1+1 , 2,3,n1+3,n1+2, ....  ,n1-1,n1,2n1,2n1-1
- 
-x=[];y=[];z=[];n=n1*n2
-for l=1:n2-1
-  x=[x vx(ind)];vx=vx(n1+1:n)
-  y=[y vy(ind)];vy=vy(n1+1:n)
-  z=[z vz(ind)];vz=vz(n1+1:n)
-  n=n-n1
-end
-nx=prod(size(x))
-x=matrix(x,4,nx/4)
-y=matrix(y,4,nx/4)
-z=matrix(z,4,nx/4)
-//end
+
+ind2=ones(1,n2-1).*.ind+((0:n2-2)*n1).*.ones(ind);
+
+nx=prod(size(ind2))
+x=matrix(vx(ind2),4,nx/4);
+y=matrix(vy(ind2),4,nx/4);
+z=matrix(vz(ind2),4,nx/4);
+
 
 

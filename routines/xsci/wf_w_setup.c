@@ -15,6 +15,9 @@
 #include "wf_w_setup.h"
 #include "wf_w_util.h"
 
+#include "../machine.h"
+#include "All-extern.h"
+
 int		CMDPANEL_WD;
 int		MODEPANEL_WD;
 int		MODEPANEL_SPACE;
@@ -28,7 +31,7 @@ int		TOPRULER_WD, TOPRULER_HT;
 int		SIDERULER_WD, SIDERULER_HT;
 int		SW_PER_ROW, SW_PER_COL;
 
-setup_sizes(new_canv_wd, new_canv_ht)
+void setup_sizes(new_canv_wd, new_canv_ht)
     int		    new_canv_wd, new_canv_ht;
 {
     int		    NUM_CMD_SW;

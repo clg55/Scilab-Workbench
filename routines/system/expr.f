@@ -25,7 +25,7 @@ c
 c     
  01   if(sym.ge.ou.and.sym.le.great) then
          call error(40)
-         if (err .gt. 0) return
+         return
       endif
  02   continue
       kount = 1
@@ -64,7 +64,7 @@ c     *call* allops(minus)
  20   if (rstk(pt) .ne. 301) go to 21
 c     blank is delimiter inside angle brackets
       ls = lpt(3) - 2
-      if (lin(ls) .eq. blank) go to 50
+      if (lin(ls) .eq. blank.and.lin(lpt(3)).ne.blank) go to 50
  21   op = sym
       call getsym
       pt = pt+1

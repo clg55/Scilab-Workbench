@@ -1,6 +1,7 @@
 function [Slmin]=minss(Sl,tol)
 [lhs,rhs]=argn(0)
- if Sl(1)<>'lss' then error(91,1),end
+flag=Sl(1);
+ if flag(1)<>'lss' then error(91,1),end
  select rhs
    case 1 then tol=[]
    case 2 then tol=tol
@@ -10,18 +11,20 @@ function [Slmin]=minss(Sl,tol)
 //
 if tol<>[] then
    [nc,u1]=contr(a',c',tol)
-else
-   [nc,u1]=contr(a',c')
+ else
+   if [a;c]==[] then reltol=0;else reltol=1.d-10*norm([a;c],1);end
+   [nc,u1]=contr(a',c',[reltol,1.d-10])
 end
 u=u1(:,1:nc)
 c=c*u;a=u'*a*u;b=u'*b,x0=u'*x0;
 if tol<>[] then
   [no,u2]=contr(a,b,tol)
 else
-  [no,u2]=contr(a,b)
+  if [a,b]==[] then reltol=0;else reltol=1.d-10*norm([a,b],1);end
+  [no,u2]=contr(a,b,[reltol,1.d-10])
 end
 u=u2(:,1:no)
 a=u'*a*u;b=u'*b;c=c*u
-if lhs=1 then Slmin=tlist('lss',a,b,c,d,u'*x0,dom),end
+if lhs=1 then Slmin=syslin(dom,a,b,c,d,u'*x0),end
 //Would be nice to return U=U1*U2
 

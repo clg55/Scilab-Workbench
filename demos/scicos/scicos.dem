@@ -1,12 +1,18 @@
 mode(-1)
 demos_name=[
-    'Thermostat'
+    'Simple Thermostat'
     'Continuous Plant discrete controller'
     'Simple demo'
     'Bouncing ball'
     'Table lookup example'
     'Threshold'
-    'Scilab Block']
+    'Scilab Block'
+    'Thermostat'
+    'Fibonacci'
+    'Cont.Disc-Observer.cosf'
+    'Controller.cosf'
+    'System-Observer.cosf'
+    'Live demo']
 
 while %t do
   n=x_choose(demos_name,'Choose a demo')
@@ -14,32 +20,31 @@ while %t do
   case 0 then 
     break
   case 1 then  
-    exec('SCI/demos/scicos/demo1.cosf',-1)
-    scicos(x);
+    scicos('SCI/demos/scicos/demo1.cosf');
   case 2 then  
-    exec('SCI/demos/scicos/demo2.cosf',-1)
-    scicos(x);
+    scicos('SCI/demos/scicos/demo2.cosf');
   case 3 then  
-    exec('SCI/demos/scicos/demo3.cosf',-1)
-    scicos(x);
+    scicos('SCI/demos/scicos/demo3.cosf');
   case 4 then  
-    exec('SCI/demos/scicos/demo4.cosf',-1)
-    scicos(x);
+    scicos('SCI/demos/scicos/demo4.cosf');	
   case 5 then  
-    exec('SCI/demos/scicos/demo5.cosf',-1)
-    scicos(x);
+    scicos('SCI/demos/scicos/demo5.cosf');	
   case 6 then  
-    xset('window',10)
-    p10=xget('wpos')
-    xset('wpos',p10(1),0)
-    p10=xget('wpos')
-    d10=xget('wdim')
-    xset('window',11)
-    xset('wpos',p10(1),d10(2))
-    exec('SCI/demos/scicos/demo6.cosf',-1)
-    scicos(x);
+    scicos('SCI/demos/scicos/demo6.cosf');	
   case 7 then  
-    exec('SCI/demos/scicos/demo7.cosf',-1)
-    scicos(x);
+    scicos('SCI/demos/scicos/demo7.cosf');	
+  case 8 then  
+    scicos('SCI/demos/scicos/Temp.cosf');	
+  case 9 then  
+    scicos('SCI/demos/scicos/fibo.cosf');
+  case 10 then  
+    scicos('SCI/demos/scicos/Cont.Disc-Observer.cosf');
+  case 11 then  
+    scicos('SCI/demos/scicos/Controller.cosf');
+  case 12 then  
+    scicos('SCI/demos/scicos/System-Observer.cosf');
+  case 13 then
+    getf('SCI/demos/scicos/scicos_play.sci','n')
+    scicos_play('SCI/demos/scicos/live.dat')
   end
 end

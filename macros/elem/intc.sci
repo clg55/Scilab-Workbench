@@ -11,6 +11,5 @@ if type(f)=11 then comp(f),end;
 //parametrization of the line a-b.
 deff('<r>=real1(t,a,b,f)','r=real(f((1-t)*a+t*b)*(b-a))')
 deff('<r>=imag1(t,a,b,f)','r=imag(f((1-t)*a+t*b)*(b-a))')
-comp(real1),comp(imag1)
 r=intg(0,1,list(real1,a,b,f))+%i*intg(0,1,list(imag1,a,b,f))
 

@@ -65,7 +65,7 @@ DeleteWindow(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
-  C2F(clearexit)(0);
+  ClearExit(0);
 }
 
 XtActionsRec actionProcs[] = {

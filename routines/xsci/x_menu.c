@@ -25,19 +25,41 @@ without express or implied warranty.
 #include <stdio.h>
 #include <signal.h>
 
-extern void FindFontSelection();
+#include "../machine.h"
+#include "All-extern-x.h"
+
 
 Arg menuArgs[2] = {{ XtNleftBitmap, (XtArgVal) 0 },
 		   { XtNsensitive, (XtArgVal) 0 }};
 
-static void  do_visualbell(), 
-    do_redraw(), do_quit(), do_scrollbar(), do_jumpscroll(),
-    do_reversevideo(), do_autowrap(), do_reversewrap(), do_autolinefeed(),
-    do_appcursor(), do_appkeypad(), do_scrollkey(), do_scrollttyoutput(),
-    do_allow132(), do_cursesemul(), do_marginbell(),
-    do_altscreen(), do_softreset(), do_hardreset(), do_clearsavedlines(),
-    do_vtshow(),
-    do_vtfont();
+
+static int domenu  _PARAMS((Widget w, XEvent *, String *, Cardinal *));  
+static Widget create_menu  _PARAMS((XtermWidget xtw, Widget toplevelw, 
+				    char *, struct _MenuEntry *, Cardinal));  
+static void handle_send_signal  _PARAMS((Widget gw, int sig));  
+static void do_visualbell  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_redraw  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_quit  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_scrollbar  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_jumpscroll  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_reversevideo  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_autowrap  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_reversewrap  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_autolinefeed  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_appcursor  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_appkeypad  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_scrollkey  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_scrollttyoutput  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_allow132  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_cursesemul  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_marginbell  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_altscreen  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_softreset  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_hardreset  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_clearsavedlines  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void do_vtfont  _PARAMS((Widget gw, caddr_t , caddr_t));  
+static void handle_toggle _PARAMS(( void(*proc)(),int , String *, 
+				   Cardinal , Widget w, caddr_t , caddr_t));  
 
 
 /*
@@ -272,7 +294,13 @@ static void do_redraw (gw, closure, data)
     Redraw ();
 }
 
+/** for signal **/
 
+void do_kill1(i)
+     int i;
+{
+  handle_send_signal (NULL, SIGKILL);
+}
 
 void do_kill (gw, closure, data)
     Widget gw;

@@ -1,7 +1,7 @@
 # Generated automatically from Makefile.incl.in by configure.
 RM = rm -f
 AR = ar cq
-FILES_TO_CLEAN = *.CKP *.ln *.BAK *.bak core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut \#* .*~ *.trace
+FILES_TO_CLEAN = *.CKP *.ln *.BAK *.bak core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut .*~ *.trace so_locations
 
 all::
 
@@ -11,8 +11,6 @@ distclean::
 	$(RM) $(FILES_TO_CLEAN)
 
 RANLIB = ranlib
-
-INSTALL = /usr/bin/installbsd -c
 
 TERMCAPLIB = -ltermcap
 
@@ -28,8 +26,8 @@ TERMCAPLIB = -ltermcap
 # and for linking: $(CC) -o $(PROGRAM) $(OBJS) $(CC_LDFLAGS)
 ###########
 CC = cc
-CC_OPTIONS = -O
-CC_LDFLAGS = 
+CC_OPTIONS = -O -ieee_with_inexact
+CC_LDFLAGS = -ieee_with_inexact
 
 ##################
 # Fortran compiler
@@ -64,3 +62,20 @@ XAW_LOCAL_LIB =
 XFLAGS =  
 X_EXTRA_LIBS =  -ldnet_stub
 XLIBS =  $(XAWLIB) $(XMULIB) -lXt -lXext  -lX11 $(X_EXTRA_LIBS)
+#####################
+# for WIN32 version 
+# win32 libraries for gcwin32 
+WIN32LIBS=-mwindows -lwsock32 -lshell32 -lcomctl32  -lwinspool -lm 
+WINLIBS = -lf2c $(WIN32LIBS)
+# Ressource compiler 
+#
+RC=/msdev/bin/rc.exe
+RCVARS=-r -DWIN32
+# an other free resource compiler 
+#
+#RC=/softs/lccpub/bin/lrc 
+#RCVARS=/iC:/softs/lccpub/include
+# from .res to .o  
+CVTRES= /SOFTS/gnuwin32/b18/H-i386-cygwin32/bin/cvtres.exe
+# link options 
+LINKEROPT=-Wl,-subsystem,console

@@ -20,10 +20,6 @@ c     dy: double precision, vecteur "recepteur".
 c
 c     incx, incy: increments entre les composantes des vecteurs.
 c
-c!auteur
-c
-c     jack dongarra, linpack, 3/11/78.
-c
 c!
 c
       real dx(*)

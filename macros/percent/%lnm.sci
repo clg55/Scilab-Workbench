@@ -1,8 +1,7 @@
-//[r]=%lnm(l1,l2)
-//%lnm(l1,l2) correspond a l'operation logique l1==l2 avec l1 une liste
-//et l2 une macro
+function [r]=%lnm(l1,l2)
+//%lnm(l1,l2) <=>l1==l2 l1 list l2 function
 //!
 r=%t
-//end
+
 
 

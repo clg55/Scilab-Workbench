@@ -13,16 +13,15 @@
 #include "wf_fig.h"
 #include "wf_figx.h"
 #include "wf_resources.h"
-static  TOOLSW	msg_form, msg_panel, name_panel;
+static  Widget	msg_form, msg_panel, name_panel;
 #include "wf_mode.h"
 #include "wf_w_util.h"
 #include "wf_w_setup.h"
+
+#include "../machine.h"
+#include "All-extern.h"
+
 #include <varargs.h>
-
-/********************* EXPORTS *******************/
-
-int		put_msg();
-int		init_msgreceiving();
 
 /************************  LOCAL ******************/
 
@@ -31,9 +30,9 @@ static char	prompt[BUF_SIZE];
 
 DeclareStaticArgs(12);
 
-int
-init_msg(tool,vert_w, ch,filename)
-     TOOL	    tool,vert_w;
+
+void init_msg(tool,vert_w, ch,filename)
+     Widget	    tool,vert_w;
      int ch;
     char	   *filename;
 {
@@ -76,7 +75,7 @@ init_msg(tool,vert_w, ch,filename)
  * width of the name_panel to get the new width of the message panel
  */
 
-update_cur_filename(newname)
+void update_cur_filename(newname)
 	char	*newname;
 {
 	Dimension namwid;
@@ -105,7 +104,7 @@ update_cur_filename(newname)
 }
 
 /*VARARGS0*/
-int put_msg(va_alist) va_dcl
+void  put_msg(va_alist) va_dcl
 {
     va_list ap;
     char *format;
@@ -118,7 +117,7 @@ int put_msg(va_alist) va_dcl
     SetValues(msg_panel);
 }
 
-clear_message()
+void clear_message()
 {
     FirstArg(XtNstring, "\0");
     SetValues(msg_panel);

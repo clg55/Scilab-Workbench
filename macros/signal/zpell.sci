@@ -12,11 +12,11 @@ function [ze,po,gain]=zpell(epsilon,A,omegac,omegar)
 //
 //!
 //Author F.Delebecque INRIA 1989
- 
+//Revised by C. Bunks Oct. 24, 1996  
    m1=(epsilon*epsilon)/(A*A-1);
    K1=%asn(1,m1);
    K1t=imag(%asn(1/sqrt(m1),m1));
-   m=(omegac/omegar)**2;
+   m=(omegac/omegar)^2;
    K=%asn(1,m);
    Kt=imag(%asn(1/sqrt(m),m));
    n=(K1t*K)/(K1*Kt);
@@ -39,11 +39,10 @@ function [ze,po,gain]=zpell(epsilon,A,omegac,omegar)
    if order<>even then,
       po=[po,%i*omegac*%sn(-%i*u0,m)];
    end,
-   gain=real(prod(po))/real(prod(ze));
+    gain=abs(real(prod(po))/real(prod(ze)));
    if order=even then,
-      gain=gain/sqrt(1+epsilon**2);
+      gain=gain/sqrt(1+epsilon^2);
    end;
- 
-//end
+
 
 

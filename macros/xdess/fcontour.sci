@@ -45,6 +45,5 @@ if rhs<9,bbox=0*ones(1,6),end;
 if rhs<10,zlev=0;end
 if type(f)=11 then comp(f),end;
 contour(xr,yr,feval(xr,yr,f),nz,teta,alpha,leg,flag,bbox,zlev);
-//end
 
 

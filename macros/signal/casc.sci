@@ -24,13 +24,13 @@ function cels=casc(x,z)
 //  !              2               2               2 !
 //  !   7 + 10z + z     8 + 11z + z     9 + 12z + z  !
 //!
-//author: F. Delebecque  date: August 1988
+//author: F. D.  date: August 1988
  
-   cels=[];
-   for col=x,
+cels=[];
+for col=x,
       nf=[col(1:2);1];
       nd=[col(3:4);1];
-      cels=[cels,tlist('r',poly(nf,'z','c'),poly(nd,'z','c'),[])];
-   end,
+      cels=[cels,syslin([],poly(nf,'z','c'),poly(nd,'z','c'))];
+end,
  
 

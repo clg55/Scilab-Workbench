@@ -1,10 +1,12 @@
-      subroutine selblk(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-c     delay
-c     delay=nx*dt
-c!
-      double precision t,x(*),z(*),u(*),rpar(*),out(*)
-      integer ipar(*),flag
+      subroutine selblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
+c     Selector block
+c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+c
       common /dbcos/ idb
 c
       if(idb.eq.1) then
@@ -12,9 +14,18 @@ c
       endif
 
 c
-      if(flag.eq.1) then
-         out(1)=u(int(z(1)))
-      elseif(flag.eq.2) then
-         z(1)=dble(nclock)
+      if(flag.eq.2.and.nevprt.gt.0) then
+         ic=0
+         nev=nevprt
+ 10      continue
+         if(nev.ge.1) then
+            ic=ic+1
+            nev=nev/2
+            goto 10
+         endif
+         z(1)=dble(ic)
+      elseif(flag.eq.1) then
+      y(1)=u(int(z(1)))
       endif
       end
+

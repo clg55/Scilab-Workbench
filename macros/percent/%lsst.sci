@@ -1,12 +1,8 @@
-//<s>=%lsst(s)
-//<s>=%lsst(s)  calcule le dual d'un systeme lineaire decrit par repre-
-//sentation d'etat s.
-//Cette macro correspond a l'operation  s'
+function s=%lsst(s)
+//s=%lsst(s)  <=> s=s'  in state-space
 //!
-// origine s. steer inria 1987
-//
 [a,b,c,d,x,dom]=s(2:7)
-s=tlist('lss',a',c',b',d',x,dom)
-//end
+s=tlist(['lss','A','B','C','D','X0','dt'],a',c',b',d',x,dom)
+
 
 

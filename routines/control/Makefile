@@ -1,11 +1,5 @@
 SHELL = /bin/sh
-
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/control.a
 
@@ -35,19 +29,9 @@ OBJSF =  bezous.o cerr.o coef.o dclmat.o dexpm1.o \
 	rpoly.o split.o tql2.o tred2.o wbalin.o wbdiag.o wexchn.o \
 	wshrsl.o fstair.o
 
-OBJS = $(OBJSC) $(OBJSF)
+include ../../Makefile.incl
 
-all:: $(LIBRARY)
+CFLAGS = $(CC_OPTIONS)
 
-world: all
+include ../Make.lib
 
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)

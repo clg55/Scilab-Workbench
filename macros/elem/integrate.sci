@@ -14,13 +14,12 @@ function x=integrate(expr,var,x0,x1,ea,er)
 //
 //!
 [lhs,rhs]=argn(0)
-if prod(size(x0))<>1 then error('x0 must be a real scalar number'),end
+if size(x0,'*')<>1 then error('x0 must be a real scalar number'),end
 if imag(x0)<>0 then error('x0 doit etre un scalaire reel'),end
 [m,n]=size(x1),x1=matrix(x1,1,m*n)
-if norm(imag(x1),1)<>0 then error('x1 n''est pas reel'),end
+if norm(imag(x1),1)<>0 then error('x1 is not real!'),end
 //
 deff('[ans]=function('+var+')',expr)
-comp(function)
 x=[]
 select rhs
 case 4 then for xk=x1,x=[x,intg(x0,xk,function)],end,
@@ -28,6 +27,6 @@ case 5 then for xk=x1,x=[x,intg(x0,xk,function,ea)],end,
 case 6 then for xk=x1,x=[x,intg(x0,xk,function,ea,er)],end,
 else error(39), end,
 x=matrix(x,m,n)
-//end
+
 
 

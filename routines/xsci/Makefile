@@ -2,11 +2,6 @@ SHELL = /bin/sh
 
 SCIDIR=../..
 include ../../Version.incl
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS) $(XFLAGS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/xsci.a
 
@@ -14,30 +9,22 @@ OBJSC = wf_w_dir.o wf_w_file.o wf_w_util.o wf_w_cursor.o \
 	wf_f_util.o wf_f_read.o \
 	wf_w_msgpanel.o wf_w_setup.o wf_e_edit.o wf_w_init.o \
 	jpc_windows.o jpc_command.o  jpc_utils.o jpc_inter.o   \
+	jpc_SGraph.o jpc_Xloop.o jpc_xwidgets.o \
+	jpc_coloredit.o \
 	x_button.o x_charproc.o x_cursor.o \
 	x_data.o x_input.o \
 	x_main.o x_menu.o x_misc.o x_screen.o \
 	x_scrollbar.o x_tabs.o \
 	x_util.o x_VTPrsTbl.o x_zzledt.o \
-	h_help.o
+	h_help.o 
 
-all:: $(LIBRARY)
+OBJSF  = 
 
-world: help-headers all
+include ../../Makefile.incl
 
-$(LIBRARY): $(OBJSC)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJSC)
-	@$(RANLIB) $@
+CFLAGS = $(CC_OPTIONS) $(XFLAGS)
 
-clean::
-	$(RM) $(OBJSC)
-	cd help; $(MAKE) $(MFLAGS) clean
-
-distclean:: clean
-	$(RM) $(OBJSC) $(LIBRARY)
-	cd help; $(MAKE) $(MFLAGS) distclean
+include ../Make.lib
 
 XSCILAB_DEFAULT = $(SCIDIR)/X11_defaults/Xscilab
 
@@ -48,10 +35,7 @@ Xscilab.ad.h: Xscilab.ad
 
 $(XSCILAB_DEFAULT): Xscilab.ad
 	$(RM) $(XSCILAB_DEFAULT)
-	$(INSTALL) -m 644 Xscilab.ad $(XSCILAB_DEFAULT)
-
-help-headers:
-	cd help; $(MAKE) $(MFLAGS) all
+	cp Xscilab.ad $(XSCILAB_DEFAULT)
 
 distclean::
 	$(RM) $(XSCILAB_DEFAULT)
@@ -67,11 +51,12 @@ OBJTEST = x_test_loop.o
 
 # $(SCIDIR)/libs/xgc.a 
 
-test: $(OBJTEST) ../sun/zzledt.o ../sun/sync.o ../sun/flags.o $(OBJSC)
-	cd ../X11G; make ;cd ../xsci
+test: $(OBJTEST) $(OBJSC) ../sun/zzledt.o ../sun/flags.o ../sun/h_help_data.o ../sun/men_Sutils.o ../sun/tmpdir.o
+	cd ../graphics; make ;cd ../xsci
 	$(RM) $@
-	$(CC) -g -o $@ $(OBJTEST) ../sun/zzledt.o ../sun/sync.o ../sun/flags.o \
-	$(OBJSC) $(SCIDIR)/libs/X11G.a $(SCIDIR)/libs/xwindow.a \
+	$(CC) -g -o $@ $(OBJTEST) ../sun/zzledt.o ../sun/flags.o ../sun/h_help_data.o ../sun/tmpdir.o \
+	../sun/men_Sutils.o ../sun/inffic.o \
+	$(OBJSC) $(SCIDIR)/libs/graphics.a $(SCIDIR)/libs/menusX.a \
 	$(CC_LDFLAGS) $(XLIBS) $(TERMCAPLIB) -lm
 
 clean::
@@ -90,7 +75,7 @@ clean::
 distclean::
 	$(RM) $(OBJWFTEST) wf_test
 
-h_main_help.o: Xscilab.ad.h
+h_main_help.o: Xscilab.ad.h h_display.h
 
 help_test: h_main_help.o h_help.o
 	$(RM) $@
@@ -121,32 +106,27 @@ wf_w_setup.o: wf_w_util.h
 wf_e_edit.o: wf_fig.h wf_figx.h wf_resources.h wf_mode.h wf_w_drawprim.h \
 	wf_w_util.h
 wf_w_init.o: wf_fig.h wf_figx.h wf_resources.h
+jpc_Xloop.o: ../graphics/Math.h
 jpc_windows.o: x_ptyx.h x_data.h jpc_global.h jpc_defs.h x_xbas.icon.X \
 	version.h
-jpc_command.o: ../machine.h jpc_global.h jpc_defs.h
+jpc_command.o: ../machine.h jpc_global.h jpc_defs.h ../sun/h_help.h
 jpc_utils.o: jpc_global.h jpc_defs.h 
-jpc_inter.o: x_ptyx.h x_data.h ../machine.h
-x_button.o: x_ptyx.h x_data.h x_error.h x_menu.h
-x_charproc.o: ../machine.h x_ptyx.h x_VTparse.h x_data.h x_error.h x_menu.h \
+jpc_inter.o: x_ptyxP.h x_ptyx.h x_data.h ../machine.h
+x_button.o: x_ptyxP.h x_ptyx.h x_data.h x_error.h x_menu.h
+x_charproc.o: ../machine.h x_ptyx.h x_ptyxP.h x_VTparse.h x_data.h x_error.h x_menu.h \
 	x_main.h 
-x_cursor.o: x_ptyx.h 
-x_data.o: x_ptyx.h x_data.h
-x_input.o: x_ptyx.h 
-x_main.o: version.h ../machine.h x_ptyx.h x_data.h x_error.h x_menu.h \
+x_cursor.o: x_ptyx.h x_ptyxP.h 
+x_data.o: x_ptyx.h x_ptyxP.h x_data.h
+x_input.o: x_ptyx.h x_ptyxP.h 
+x_main.o: version.h ../machine.h x_ptyx.h x_ptyxP.h x_data.h x_error.h x_menu.h \
 	Xscilab.ad.h
-x_menu.o: x_ptyx.h x_data.h x_menu.h
-x_misc.o: x_ptyx.h x_data.h x_error.h x_menu.h 
-x_screen.o: x_ptyx.h x_error.h x_data.h ../machine.h
-x_scrollbar.o: x_ptyx.h x_data.h x_error.h x_menu.h
-x_tabs.o: x_ptyx.h 
-x_util.o: x_ptyx.h x_data.h x_error.h x_menu.h
+x_menu.o: x_ptyx.h x_ptyxP.h x_data.h x_menu.h
+x_misc.o: x_ptyx.h x_ptyxP.h x_data.h x_error.h x_menu.h 
+x_screen.o: x_ptyx.h x_ptyxP.h x_error.h x_data.h ../machine.h
+x_scrollbar.o: x_ptyx.h x_ptyxP.h x_data.h x_error.h x_menu.h
+x_tabs.o: x_ptyx.h x_ptyxP.h 
+x_util.o: x_ptyx.h x_data.h x_ptyxP.h x_error.h x_menu.h
 x_VTPrsTbl.o: x_VTparse.h
-h_help.o: help/help-list1.h help/help-list2.h help/help-list3.h \
-	help/help-list4.h help/help-list5.h help/help-list6.h \
-	help/help-list7.h help/help-list8.h help/help-list9.h \
-	help/help-list10.h help/help-list11.h help/help-list12.h \
-	help/help-text1.h help/help-text2.h help/help-text3.h \
-	help/help-text4.h help/help-text5.h help/help-text6.h \
-	help/help-text7.h help/help-text8.h help/help-text9.h \
-	help/help-text10.h help/help-text11.h help/help-text12.h \
-	version.h
+
+h_help.o: version.h ../machine.h  ../sun/h_help.h
+h_main_help.o : ../sun/h_help.h

@@ -4,7 +4,7 @@ c     Call unix:  scihelp -k symbol
 c     ====================================================================
       include '../stack.h'
       character*80 h
-      integer name,eol,ls,quote
+      integer name,eol,quote
       data name/1/,eol/99/,quote/53/,dot/51/
       if (char1 .eq. eol) then 
          h='apropos'
@@ -29,14 +29,8 @@ C     argument is a string
             endif
          endif
       endif
-      call xscion(iflag)
-      if(iflag.eq.0) then
-         buf='$SCI/bin/scilab -k "'//h(1:nstr)//'"    '
-         call bashos(buf,23+nstr,ls,ierr)
-      else
-         buf='$SCI/bin/scilab -k "'//h(1:nstr)//'" | $SCI/bin/xless & '
-         call bashos(buf,40+nstr,ls,ierr)
-      endif
+      h(nstr+1:nstr+1)= char(0)
+      call isciap(buf,h(1:nstr+1),ierr)
       if(ierr.ne.0) then
          call error(85)
          return

@@ -10,11 +10,12 @@ if m<>n then error('Trzeros: Polynomial matrix--> must be square');return;end
    chis=determ(D);nt=roots(chis);dt=ones(nt);
    if LHS==1 then nt=nt./dt;dt=[];rk=[];end
    return;
-end
-if Sl(1)<>'lss'&Sl(1)<>'r' then 
+ end
+flag=Sl(1);
+if flag(1)<>'lss'&flag(1)<>'r' then 
 error('Input to trzeros must be a linear system or polynomial matrix');
 end
-if Sl(1)='r' then 
+if flag(1)='r' then 
    if size(Sl)==1 then nt=roots(Sl(2));dt=[];rk=1;return;end
    Sl=tf2ss(Sl);
 end
@@ -27,7 +28,7 @@ if m<>n then error('Trzeros: Polynomial D matrix -->must be square');return;end
    if LHS==1 then nt=nt./dt;dt=[];rk=[];end
    return;
 end
-if prod(size(A))=0 then 
+if size(A,'*')=0 then 
     if type(D)=1 then nt=[];dt=[];return;end;
     if type(D)=2 then 
        [m,n]=size(D);

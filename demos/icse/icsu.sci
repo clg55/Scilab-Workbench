@@ -1,4 +1,4 @@
-//[co,u,g,itv,dtv]=icsu(u,simu,nap,imp)
+function [co,u,g,itv,dtv]=icsu(u,simu,nap,imp)
 //Calcul du controle optimal avec ponderation du controle initial
 //Une mise a l'echelle ramene toutes les composantes du controle
 //initial a 1.Les composantes initialement nulles le resteront.
@@ -32,6 +32,6 @@ u=ones(1,nu);
 cof=ones(1,ntob*nob);
 [co,u,g,itv,dtv]=icsegen(u,simu,nap,imp)
 u=ech.*u;
-//end
+
 
 

@@ -1,4 +1,4 @@
-//[]=plotdb(f,gain,thetaphi,modxy)
+function []=plotdb(f,gain,thetaphi,modxy)
 //plotdb(f), plotdb(f,gain), plotdb(f,modxy), plotdb(f,gain,tetaphi)
 //plotdb(f,gain,modxy), plotdb (f,gain,tetaphi,modxy)
 //% description
@@ -108,19 +108,19 @@ end
 dx=0.04*(xmax-xmin)
 dy=0.04*(ymax-ymin)
 
-plot2d(0,0,[-1],"012",' ',[xmin-dx,ymin-dy,xmax+dx,ymax+dy])
+plot2d(0,0,[1],"012",' ',[xmin-dx,ymin-dy,xmax+dx,ymax+dy])
 //plot matrix in both directions
 if part(modxy,1)='x' then
    for k=1:nr,
       plot2d([ct*x-st*y(k)*ones(x)]',...
-             [cp*(st*x+ct*y(k)*ones(x))+sp*f(k,:)]',[-1],"000");
+             [cp*(st*x+ct*y(k)*ones(x))+sp*f(k,:)]',[1],"000");
    end,
 end
 if part(modxy,length(modxy))='y' then
    for k=1:nc,
      plot2d([ct*x(k)*ones(y)-st*y]',...
-            [cp*(st*x(k)*ones(y)+ct*y)+sp*f(:,k)]',[-1],"000");
+            [cp*(st*x(k)*ones(y)+ct*y)+sp*f(:,k)]',[1],"000");
    end,
 end
-//end
+
 

@@ -30,16 +30,21 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <malloc.h>
-#include <X11/Xatom.h>
+#ifdef __STDC__
+#include <stdlib.h>
+#endif
 
+#include <X11/Xatom.h>
 #include <X11/StringDefs.h>
 #include <X11/Shell.h>
-
 #include <X11/Xaw/Scrollbar.h>
 
 #include "x_data.h"
 #include "x_error.h"
 #include "x_menu.h"
+
+#include "../machine.h"
+#include "All-extern-x.h"
 
 /* Event handlers */
 
@@ -202,7 +207,7 @@ static void RealizeScrollBar (sbw, screen)
 }
 
 
-ScrollBarReverseVideo(scrollWidget)
+void ScrollBarReverseVideo(scrollWidget)
 	register Widget scrollWidget;
 {
 	Arg args[4];
@@ -228,7 +233,7 @@ ScrollBarReverseVideo(scrollWidget)
 
 
 
-ScrollBarDrawThumb(scrollWidget)
+void ScrollBarDrawThumb(scrollWidget)
 	register Widget scrollWidget;
 {
 	register TScreen *screen = &term->screen;
@@ -244,7 +249,7 @@ ScrollBarDrawThumb(scrollWidget)
 	
 }
 
-ResizeScrollBar(scrollWidget, x, y, height)
+void ResizeScrollBar(scrollWidget, x, y, height)
 	register Widget scrollWidget;
 	int x, y;
 	unsigned height;
@@ -254,7 +259,7 @@ ResizeScrollBar(scrollWidget, x, y, height)
 	ScrollBarDrawThumb(scrollWidget);
 }
 
-WindowScroll(screen, top)
+void WindowScroll(screen, top)
 	register TScreen *screen;
 	int top;
 {
@@ -302,7 +307,7 @@ WindowScroll(screen, top)
 }
 
 
-ScrollBarOn (xw, init, doalloc)
+void ScrollBarOn (xw, init, doalloc)
     XtermWidget xw;
     int init, doalloc;
 {
@@ -367,7 +372,7 @@ ScrollBarOn (xw, init, doalloc)
 	}
 }
 
-ScrollBarOff(screen)
+void ScrollBarOff(screen)
 	register TScreen *screen;
 {
 	if(!screen->scrollbar)

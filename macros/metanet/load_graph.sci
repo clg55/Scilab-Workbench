@@ -3,9 +3,9 @@ function [g]=load_graph(path)
 if rhs<>1 then error(39),end
 // path
 if type(path)<>10|prod(size(path))<>1 then
-  error('load_graph: argument must be a string')
+  error('Argument must be a string')
 end
-g1=loadg(path)
-g=tlist('graph')
+g1=m6loadg(path)
+g=glist()
 for i=2:32, g(i)=g1(i-1), end
 g(33)=[]; g(34)=[]

@@ -5,7 +5,7 @@ function [resn,g]=pfactors(pol,flag)
 // if flag='c' unstable roots are reflected vs the imaginary axis 
 // if flag='d' unstable roots are reflected vs unit circle 
 w=roots(pol);
-n=prod(size(w));
+n=size(w,'*');
 if n=0 then resn=list();g=coeff(pol);return;end
 co=coeff(pol);g=co(n+1);
 resn=list();

@@ -12,17 +12,17 @@ nwrk6=nwrk(6)
 //
 ok=%t
 while ilst<nlst&ok then
+  t1=[]
   lhs=1
   ilst=ilst+1
   op=lst(ilst)
   if type(op)=10 then
-    //write(6,'exp2f '+op(1)+'   '+op(2))//,pause
     select op(1)
     case '0' then
  
     case '2' then //stackg
       if whereis(op(2))==[] then
-        [stk,top,vnms,vtps]=get2f(op(2),stk,top,vnms,vtps)
+	[stk,top,vnms,vtps]=get2f(op(2),stk,top,vnms,vtps)
       else //appel des macros
         [stk,nwrk,t1,top]=func2f(op,stk,nwrk)
         txt=[txt;t1]
@@ -38,6 +38,7 @@ while ilst<nlst&ok then
       iop=evstr(op(2))
       top1=top
       execstr('[stkr,nwrk,t1,top]=%'+ops(iop,2)+'2for(nwrk)')
+
       for ktp=top:top1,ss=stk(top);nwrk=freewrk(nwrk,ss(1));end
       stk(top)=stkr
       txt=[txt;t1]

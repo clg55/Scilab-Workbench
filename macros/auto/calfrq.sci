@@ -7,11 +7,12 @@ tol=0.001 //tolerance pour test des imaginaires purs
 
 if type(h)<>15&type(h)<>16 then 
   error('first arg. to calfrq : waiting for syslin list'),
-end
-if h(1)<>'lss'&h(1)<>'r' then 
+  end
+flag=h(1);
+if flag(1)<>'lss'&h(1)<>'r' then 
   error('first arg. to calfrq : waiting for syslin list'),
 end
-if h(1)='lss' then
+if flag(1)='lss' then
   h=ss2tf(h)
 end
 [m,n]=size(h(2))
@@ -39,7 +40,7 @@ deff('[f]=%sel(r,fmin,fmax,dom,tol)',['f=[],';
   '    end;';
   '    f=f(find((f>fmin)&(f<fmax)))';
   '  end';
-  'end']);comp(%sel)
+  'end']);
 
 //
 denh=h(3);numh=h(2)
@@ -56,7 +57,7 @@ for i=1:m
   sing=[sing;%sel(roots(denh(i)),fmin,fmax,dom,tol)]
   zers=[zers;%sel(roots(numh(i)),fmin,fmax,dom,tol)]
 end
-pp=sort([sing' zers']);npp=prod(size(pp));
+pp=sort([sing' zers']);npp=size(pp,'*');
 if npp>0 then
   pp=pp(npp:-1:1)
   f1=fmin;xt=[]
@@ -88,11 +89,11 @@ if dx==0 then dx=1,end
 if dy==0 then dy=1,end
 
 if pp<>[] then
-  frqs=[fmin real(matrix([0.999*pp;1.001*pp],2*prod(size(pp)),1)') fmax]
+  frqs=[fmin real(matrix([0.999*pp;1.001*pp],2*size(pp,'*'),1)') fmax]
 else
   frqs=[fmin fmax]
 end
-nfrq=prod(size(frqs))
+nfrq=size(frqs,'*');
 //
 frq=[]
 i=1,
@@ -152,6 +153,7 @@ while i<nfrq
   end
   i=i+2
 end
-frq(prod(size(frq)))=fmax
-frq=frq/c
+frq( size(frq,'*') )=fmax
+frq=frq/c;
+
 

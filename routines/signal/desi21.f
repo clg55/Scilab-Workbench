@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DESI21,SSI=0
       subroutine desi21(ndeg,adelp,adels,adelta,pren,pimn,
      *ugc,ogc,nj,acx,ac,rdelp,rdels,sfa,spr,spi)
 c!purpose

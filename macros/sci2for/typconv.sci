@@ -1,4 +1,4 @@
-//[s,nwrk,txt]=typconv(s,nwrk,typ)
+function [s,nwrk,txt]=typconv(s,nwrk,typ)
 //[s1,te1,t1,m1,n1]=s(1:5);
 //!
 txt=[]
@@ -47,7 +47,7 @@ elseif typ='0'&s(3)='1' then
 
   end
 end
-//end
+
 
 
 

@@ -71,7 +71,7 @@ if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 //
 bs=[5 5];bi=-bs;x0=1.05*[1 1];xopt=[1 1];
 deff('[f,g,ind]=rose(x,ind)', 'a=x(2)-x(1)^2 , b=1-x(2) ,...
-f=50.*a**2 + b**2 , g(1)=-400.*x(1)*a , g(2)=200.*a -2.*b ');
+f=50.*a^2 + b^2 , g(1)=-400.*x(1)*a , g(2)=200.*a -2.*b ');
 comp(rose);
 //[f,x,g,tr]=optim(rose,x0,'qn','ar',50);if abs(f+norm(x-xopt)) > Leps then pause,end
 //[f,x,g]=optim(rose,x0,tr,'ar',50);if abs(f+norm(x-xopt)) > Leps then pause,end
@@ -114,20 +114,20 @@ comp(sipn);
               'b',bi,bs,[1 1],'ar',20,20,1.e-15);
 if norm(x-[0.5 0.5]) + norm(g) > 0.1 then pause,end
 //********************************************************************
-deff('[f,g,ind]=ndsim(x,ind)', 'y=a*x-b;f=norm(y,2)^2;g=2*a''*y')
-a=rand(2,2);b=eye(a);
-[f,x,g]=optim(ndsim,eye(2,2));
-if norm(x-inv(a))>Leps then pause,end
+deff('[f,g,ind]=ndsim(x,ind)', 'y=A*x-b;f=norm(y,2)^2;g=2*A''*y')
+A=rand(2,2);b=eye(A);
+[f,X,g]=optim(ndsim,eye(2,2));
+if norm(X-inv(A))>Leps then pause,end
 
-deff('[f,g,ind]=ndsim(x,ind)', 'y=a*x-b;f=sum(abs(y));g=a''*sign(y)')
-a=rand(2,2);b=[1;0];ai=inv(a);
+deff('[f,g,ind]=ndsim(x,ind)', 'y=A*x-b;f=sum(abs(y));g=A''*sign(y)')
+A=rand(2,2);b=[1;0];Ai=inv(A);
 [f,x,g]=optim(ndsim,[1;0],'nd');
-if norm(x-ai(:,1))>Leps then pause,end
+if norm(x-Ai(:,1))>Leps then pause,end
 
-//deff('[f,g,ind]=ndsim(x,ind)', [
-//'y=a*x-b;f=max(abs(y)),sel=abs(y)==f'
-//'g=a(sel,:)''*sign(y(sel))'])
-//a=rand(2,2);b=[1;0];ai=inv(a);
+deff('[f,g,ind]=ndsim(x,ind)', [
+'y=A*x-b;f=max(abs(y)),sel=abs(y)==f'
+'g=A(sel,:)''*sign(y(sel))']);
+//A=rand(2,2);b=[1;0];Ai=inv(A);
 //[f,x,g]=optim(ndsim,[1;0],'nd');
-//if norm(x-ai(:,1))>Leps then pause,end
+//if norm(x-Ai(:,1))>Leps then pause,end
 

@@ -1,5 +1,12 @@
 #include <string.h>
+
+#ifdef __STDC__
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
+
+extern void cerro();
 
 #include "../machine.h"
 

@@ -7,17 +7,17 @@ function h=trfmod(h,job)
 //!
 
 
-typ=type(h)
+typ=type(h);h1=h(1);
 //-compat next row added for list/tlist compatibility
 if typ==15 then typ=16,end
-if typ==16&h(1)=='r' then
+if typ==16&h1(1)=='r' then
   if size(h(2))<>[1 1] then
     error(' SISO plant only')
   end
   flag='r'
-elseif typ==16&h(1)=='lss' then
+elseif typ==16&h1(1)=='lss' then
   if size(h(5))<>[1 1] then
-    error('SISO plant only')
+    error('trfmod: SISO plant only')
   end
   flag='lss'
   den=real(poly(h(2),'s'))
@@ -32,7 +32,9 @@ elseif typ==16&h(1)=='lss' then
   b=t*h(3)
   al(:,i)=ai+b
   num=-(real(poly(al,'s'))-den)*ci
-  h=tlist('r',num,den,h(7))+h(5);
+  //h=tlist('r',num+h(5)*den,den,h(7));
+  h=syslin(h(7),num+h(5)*den,den);
+//   h=tlist('r',num,den,h(7))+h(5);
 else
   error('waiting for a transfer function as argument ')
 end

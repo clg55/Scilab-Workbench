@@ -27,13 +27,15 @@ case 6 then
   
 //-compat next case retained for list/tlist compatibility
 case 15 then
-  if a(1)=='r' then
+  a1=a(1);
+  if a1(1)=='r' then
     d=a;
-    d=tlist('r',tril(a(2),k),tril(a(3),k),a(4))
+    d=syslin(a(4),tril(a(2),k),tril(a(3),k))
   end
 case 16 then
-  if a(1)=='r' then
+  a1=a(1);
+  if a1(1)=='r' then
     d=a;
-    d=tlist('r',tril(a(2),k),tril(a(3),k),a(4))
+    d=syslin(a(4),tril(a(2),k),tril(a(3),k))
   end
 end

@@ -18,7 +18,13 @@ if type(i)==10 then  // s2('num'),s2('den'),sl('dt')
   s2(kf)=j
   return
 end
+if type(i)==4 then i=find(i),end
+if type(j)==4 then j=find(j),end
+[m,n]=size(s2(2))
+if type(i)<>1 then i=horner(i,l),end
+if type(j)<>1 then j=horner(j,c),end
 if s1==[] then  // insertion d'une matrice vide
+  if i==[]|j==[] then s=s2,return,end
   row=%f
   col=%f
   [m,n]=size(s2(2))
@@ -52,7 +58,7 @@ else
   if l>ld then d(ld+1:l,:)=ones(l-ld,cd),ld=l,end
   if c>cd then d(:,cd+1:c)=ones(ld,c-cd),end
   n(i,j)=s1,[l,c]=size(s1),d(i,j)=ones(l,c)
-  s2=tlist('r',n,d,s2(4))
+  s2=tlist(['r','num','den','dt'],n,d,s2(4))
 end
 
 

@@ -1,4 +1,4 @@
-//[co,u,g,itv,dtv]=icsegen(u,simu,nap,imp,ech,cof)
+function [co,u,g,itv,dtv]=icsegen(u,simu,nap,imp,ech,cof)
 //Calcul du controle optimal avec mise a l'echelle du controle et 
 //ponderation des observations
 //Syntaxe
@@ -31,6 +31,6 @@ debug(imp);
 [co,u,g,itv,dtv]=optim(simu,'b',binf,bsup,u, alg, df0, 'ar',nap,...
                        'ti',itv,'td',dtv,'si','sd')
 debug(0);
-//end
+
 
 

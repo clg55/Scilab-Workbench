@@ -1,4 +1,4 @@
-//[txt]=lin2for(lst,ln)
+function [txt]=lin2for(lst,ln)
 //si lst est une liste representant une macro compilee,mac2for)
 //restourne le code ascii de la macro
 //!
@@ -11,6 +11,6 @@ end
 setparam()
  
 txt=ins2for(lst,1)
-//end
+
 
 

@@ -4,7 +4,9 @@ function [sl]=tf2ss(h)
 // h = transfer matrix 
 // sl = linear system in state-space representation (syslin list)
 //!
-if type(h)=2 then sl=tlist('lss',[],[],[],h,[],[]);return;end
+if type(h)=2 then 
+  sl=syslin([],[],[],[],h);return;
+end
 [num,den]=h(2:3);
 //
 [nd,md]=size(den)
@@ -44,9 +46,7 @@ if n1<>0 then
   u=u(:,1:no);
   a=u'*a*u;b=u'*b;c=c*u;
   [a,u]=balanc(a);c=c*u;b=u\b; 
-
-  
-  sl=tlist('lss',a,b,c,d,0*ones(no,1),h(4));
+  sl=syslin(h(4),a,b,c,d);
 else
-  sl=tlist('lss',[],[],[],d,[],h(4))
+  sl=syslin(h(4),[],[],[],d)
 end

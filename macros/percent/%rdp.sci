@@ -1,8 +1,6 @@
-//<f>=%rdp(f,p)
-// %rdp(r,p) calcule la division element par element de la matrice  de
-// fractions rationnelles r par la matrice de polynomes p
+function f=%rdp(f,p)
+// f=f./p
 //!
 f(3)=f(3).*p
-//end
-
+f(2)=f(2).*ones(p)
 

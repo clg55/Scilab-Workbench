@@ -79,7 +79,6 @@ ad(itrans)=zz(1:nbech)';
 rp=bi+zz(1:nbech)'*ai;
 rp=rp(1:n);
 att=zz(nbech+1);
-//end
 
 function [bidon]=dirich(n,p,q)
 bidon=0.5;

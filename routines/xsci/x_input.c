@@ -28,18 +28,25 @@
 /* input.c */
 
 #include "x_ptyxP.h"		/* gets Xt headers, too */
+
+#include "../machine.h"
+#include "All-extern-x.h"
+
 #include <X11/keysym.h>
 #include <X11/DECkeysym.h>
 #include <X11/Xutil.h>
 #include <stdio.h>
+
+extern Boolean sunFunctionKeys;
 
 static XComposeStatus compose_status = {NULL, 0};
 static char *kypd_num = " XXXXXXXX\tXXX\rXXXxxxxXXXXXXXXXXXXXXXXXXXXX*+,-./0123456789XXX=";
 static char *kypd_apl = " ABCDEFGHIJKLMNOPQRSTUVWXYZ??????abcdefghijklmnopqrstuvwxyzXXX";
 static char *cur = "DACB";
 
-static int funcvalue(), sunfuncvalue();
-extern Boolean sunFunctionKeys;
+static void AdjustAfterInput  _PARAMS((register TScreen *screen));  
+static int funcvalue  _PARAMS((int keycode));  
+static int sunfuncvalue  _PARAMS((int keycode));  
 
 static void
 AdjustAfterInput (screen)
@@ -63,7 +70,7 @@ register TScreen *screen;
 	}
 }
 
-Input (keyboard, screen, event, eightbit)
+void Input (keyboard, screen, event, eightbit)
     register TKeyboard	*keyboard;
     register TScreen	*screen;
     register XKeyEvent *event;
@@ -169,7 +176,7 @@ Input (keyboard, screen, event, eightbit)
 	return;
       }
 
-StringInput (screen, string, nbytes)
+void StringInput (screen, string, nbytes)
     register TScreen	*screen;
     register char *string;
     int nbytes;

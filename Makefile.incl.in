@@ -11,8 +11,6 @@ distclean::
 
 RANLIB = @RANLIB@
 
-INSTALL = @INSTALL@
-
 TERMCAPLIB = @TERMCAPLIB@
 
 ##################################################################
@@ -63,3 +61,20 @@ XAW_LOCAL_LIB = @XAW_LOCAL_LIB@
 XFLAGS = @X_CFLAGS@ @XAW_LOCAL_INCLUDES@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 XLIBS = @X_LIBS@ $(XAWLIB) $(XMULIB) -lXt -lXext @X_PRE_LIBS@ -lX11 $(X_EXTRA_LIBS)
+#####################
+# for WIN32 version 
+# win32 libraries for gcwin32 
+WIN32LIBS=-mwindows -lwsock32 -lshell32 -lcomctl32  -lwinspool -lm 
+WINLIBS = -lf2c $(WIN32LIBS)
+# Ressource compiler 
+#
+RC=/msdev/bin/rc.exe
+RCVARS=-r -DWIN32
+# an other free resource compiler 
+#
+#RC=/softs/lccpub/bin/lrc 
+#RCVARS=/iC:/softs/lccpub/include
+# from .res to .o  
+CVTRES= /SOFTS/gnuwin32/b18/H-i386-cygwin32/bin/cvtres.exe
+# link options 
+LINKEROPT=-Wl,-subsystem,console

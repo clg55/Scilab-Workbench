@@ -7,8 +7,9 @@ function [nh]=h2norm(g,tol)
 //                 /-00
 if type(g)=1,if norm(g)=0,nh=0,return,end,end,
 [lhs,rhs]=argn(0),
-if rhs=1 then tol=1000*%eps,end,
-if g(1)='lss' then
+if rhs=1 then tol=1000*%eps,end;
+g1=g(1);
+if g1(1)='lss' then
 if norm(g(5))>0 then
 error('non zero D'),end,
 sp=spec(g(2)),

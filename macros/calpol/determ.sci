@@ -8,7 +8,9 @@ function [res]=determ(W,k)
 // See also detr
 //F.D.!
 [lhs,rhs]=argn(0);
+if W==[] then res=1;return;end;
 [n1,n1]=size(W);maj=n1*maxi(degree(W))+1;
+if n1==0 then res=1;return;end
 if rhs==1 then 
   k=1;
   while k < maj

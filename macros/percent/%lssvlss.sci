@@ -9,8 +9,8 @@ function [s]=%lssvlss(s1,s2)
 e12=1/(eye+d2*d1)
 e21=eye-d1*e12*d2;b21=b2*e21;e12=b1*e12
 a=[a1-e12*d2*c1 , -e12*c2 ; b21*c1 , a2-b21*d1*c2]
-s=tlist('lss',a,[e12;b21*d1],e21*[c1 -d1*c2],e21*d1,...
-            [x1;x2],dom1)
+s=tlist(['lss','A','B','C','D','X0','dt'],a,[e12;b21*d1],e21*[c1 -d1*c2],...
+            e21*d1,[x1;x2],dom1)
 
 
 

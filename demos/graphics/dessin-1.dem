@@ -6,7 +6,8 @@ str_l(1)=['t=(0:0.1:6*%pi);';
       'halt();xgrid();'];
 
 str_l(2)=['plot2d1(''enl'',1,(1:10:10000)'');';
-      'xtitle(''plot2d1 log scale'',''t'',''y  log scale'');'];
+      'xtitle(''plot2d1 log scale'',''t'',''y  log scale'');';
+	'halt();xgrid(3);'];
      
 str_l(3)=['n=32-1;t=(0:n)/n;';
      'u=sin(80*%pi*t)+sin(100*%pi*t);';
@@ -16,7 +17,7 @@ str_l(3)=['n=32-1;t=(0:n)/n;';
 str_l(4)=['rand(''normal'');';
      'v=(1:20)+(1:20).*rand(1,20);';
      'plot2d1(''enn'',1,v'');';
-     'plot2d1(''enn'',1,(1:20)'',[-2,2],''100'',''estimated'');';
+     'plot2d1(''enn'',1,(1:20)'',[2,-2],''100'',''estimated'');';
      'xtitle(''plot2d1 '','' '','' '');'];
 
 str_l(5)='histplot()';
@@ -29,8 +30,7 @@ str_l(7)=['param3d();';
 str_l(8)=['t=-50*%pi:0.1:50*%pi;';
       'x=t.*sin(t);y=t.*cos(t);z=t.*abs(t)/(50*%pi);';
       'param3d(x,y,z,45,60);';
-      'title=[''param3d : parametric curves in R3'',';
-      ''' (t.sin(t),t.cos(t),t.|t|/50.%pi)''];';
+      'title=[''param3d : parametric curves in R3 (t.sin(t),t.cos(t),t.|t|/50.%pi)''];';
       'xtitle(title,'' '','' '');'];
 
 str_l(9)=['plot3d();';
@@ -83,7 +83,7 @@ str_l(21)='zgrid();';
 str_l(22)=['r=(%pi):-0.01:0;x=r.*cos(10*r);y=r.*sin(10*r);';
           'deff(''[z]=surf(x,y)'',''z=sin(x)*cos(y)'');';
           't=%pi*(-10:10)/10;';
-          'fplot3d(t,t,surf,35,45,''X@Y@Z'',[2,2,3]);';
+          'fplot3d(t,t,surf,35,45,''X@Y@Z'',[6,2,3]);';
           '        z=sin(x).*cos(y);';
           'write(%io(2),'"Adding 2d graphics on 3d graphic"');';
           'z=sin(x).*cos(y);';
@@ -98,7 +98,7 @@ str_l(22)=['r=(%pi):-0.01:0;x=r.*cos(10*r);y=r.*sin(10*r);';
 str_l(23)=['r=(%pi):-0.01:0;x=r.*cos(10*r);y=r.*sin(10*r);';
           'deff(''[z]=surf(x,y)'',''z=sin(x)*cos(y)'');';
           't=%pi*(-10:10)/10;';
-          'fplot3d(t,t,surf,35,45,''X@Y@Z'',[-1,2,3]);';
+          'fplot3d(t,t,surf,35,45,''X@Y@Z'',[-12,2,3]);';
           '        z=sin(x).*cos(y);';
           'write(%io(2),'"Adding 2d graphics on 3d graphic"');';
           'z=sin(x).*cos(y);';

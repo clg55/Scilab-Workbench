@@ -25,7 +25,7 @@
 
 -2- compile (f77) the file mysim.f 
 
--3- for machines with dynamic link (Sun, Dec,..) link mysim with scilab :
+-3- Link mysim with scilab :
     link('mysim.o',mysim)
 
     Otherwise you have to link your program as follows:

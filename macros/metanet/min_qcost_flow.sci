@@ -3,16 +3,16 @@ function [c,phi,flag]=min_qcost_flow(eps,g)
 if rhs<>2 then error(39), end
 // check eps
 if prod(size(eps))<>1 then
-  error('min_qcost_flow: first argument must be a scalar')
+  error('First argument must be a scalar')
 end
 if eps<=0 then
-  error('min_qcost_flow: first argument must be strictly positive')  
+  error('First argument must be strictly positive')  
 end
 p=-log(eps)/log(2)
 // check g
 check_graph(g)
 // check capacities
-ma=g('edge_number')
+ma=prod(size(g('tail')))
 n=g('node_number')
 mincap=g('edge_min_cap')
 maxcap=g('edge_max_cap')
@@ -24,7 +24,11 @@ if maxcap==[] then
 end
 verif=find(mincap>maxcap)
 if verif<>[] then
-  error('min_qcost_flow: maximum capacities must be greater than minimal capacities')
+  error('Maximum capacities must be greater than minimal capacities')
+end
+verif=find(mincap<>maxcap)
+if verif==[] then
+  error('Maximum capacities must not be all equal to minimal capacities')
 end
 // check quadratic costs
 qorig=g('edge_q_orig')
@@ -42,11 +46,11 @@ if demand==[] then
 end
 verif=find(demand<>0)
 if verif<>[] then 
-  error('min_qcost_flow: demands must be equal to zero')
+  error('Demands must be equal to zero')
 end
 // compute lp, la and ls
 // always consider the graph as undirected!
-[lp,la,ls]=ta2lpu(g('tail'),g('head'),n+1,n,2*ma)
+[lp,la,ls]=m6ta2lpu(g('tail'),g('head'),n+1,n,2*ma)
 // compute min quadratic cost flow
-[phi,flag]=floqua(p,mincap,maxcap,g('head'),g('tail'),la,lp,n,qorig,qweight)
+[phi,flag]=m6floqua(p,mincap,maxcap,g('head'),g('tail'),la,lp,n,qorig,qweight)
 c=sum(qweight.*(phi-qorig).*(phi-qorig))/2

@@ -87,7 +87,6 @@ c-------------------------------------
          endif
       endif
  13   continue
-      call stsync(1)
       call getlin(job)
       if(fin .eq. -1) then
 c     gestion des lignes suite dans le cas "de l'appel par fortran"
@@ -256,6 +255,8 @@ c         endif
             endif
          endif
          if(sym.eq.eol .or. sym.eq.comma .or. sym.eq.semi) goto 50
+c     .  next line for recursive index
+         if(sym.eq.lparen) goto 31
       else if(sym.eq.eol) then
          if(bcount.eq.0) then
             call error(3)
@@ -273,18 +274,22 @@ c         endif
       goto 31
 c     
  32   lpt(4)=lpt(5)
+      icount=0
       char1=lparen
       call getsym
  33   call getsym
       excnt = excnt+1
       if ( eptover(1,psiz)) goto 98
       call putid(ids(1,pt), id)
-      pstk(pt) = excnt
+      pstk(pt) = excnt+1000*icount
       rstk(pt) = 702
 c     *call* expr
       goto 81
- 35   call putid(id,ids(1,pt))
-      excnt = pstk(pt)
+ 35   continue
+
+      call putid(id,ids(1,pt))
+      icount=int(pstk(pt)/1000)
+      excnt = pstk(pt)-1000*icount
       pt = pt-1
       if (sym .eq. comma) goto 33
       if (sym .ne. rparen) then
@@ -292,6 +297,29 @@ c     *call* expr
          if (err .gt. 0) goto 98
       endif
       if (sym .eq. rparen) call getsym
+c     next lines for recursive index
+      if(sym.eq.lparen) then
+         if(excnt.gt.1) then
+            call error(3)
+            return
+         endif
+         excnt=0
+         icount=icount+1
+         goto 33
+      endif
+      if(icount.gt.0) then
+         if(comp(1).eq.0) then
+c     .     form  list with individual indexesx
+            call mkindx(icount+1,excnt)
+            if(err.gt.0) return
+         else
+            if (compil(19,icount+1,excnt,0,0)) then 
+               if (err.gt.0) return
+            endif
+         endif
+         excnt=1
+      endif
+c     end of code for recursive index
       goto 60
 c     
 c     multiple lhs
@@ -334,21 +362,27 @@ c-----------------------
 c     
 c     lhs finished, start rhs
  60   if (sym .eq. equal) call getsym
-c     call funtab(id,fin,1)
-c     if(fin.ne.0) then
-c     call putid(ids(1,pt+1),id)
-c     call error(25)
-c     return
-c     endif
       if ( eptover(1,psiz))  goto 98
       call putid(ids(1,pt),id)
       pstk(pt) = excnt
       rstk(pt) = 703
 c     *call* expr
       goto 81
- 65   if (sym.eq.semi .or. sym.eq.comma .or. sym.eq.eol) goto 70
+ 65   continue
+      if (rstk(pt-lhs).eq.313) then
+c     store  new variable as "named" at the top of the stack
+         if (sym.eq.rparen .or. sym.eq.comma) then
+            call mrknmd()
+            if(err.gt.0) goto 98
+            goto 83
+         else
+            call error(40)
+            goto 98
+         endif
+      endif
+      if (sym.eq.semi .or. sym.eq.comma .or. sym.eq.eol) goto 70
       call error(40)
-      if (err .gt. 0) goto 98
+      goto 98
 c     
 c     store results
 c-------------------
@@ -380,6 +414,7 @@ c
  73   pt = pt-1
       lhs = lhs-1
       if (lhs .gt. 0) goto 70
+
 c     
 c     finish statement
 c---------------------
@@ -397,10 +432,14 @@ c---------------------
      +        ' paus:'//buf(21:22))
       endif
       if(err1.ne.0) then
+         if(rstk(pt).eq.502.and.rstk(pt-1).eq.903) then
+c     catched and continue on error in an execstr instruction
+            goto 88
+         endif
          if(err2.eq.0) err2=err1
          err1=0
          imode=abs(errct/10000)
-         if(imode-4*int(imode/4).eq.2) iflag=.true.
+         if(imode-8*int(imode/8).eq.2) iflag=.true.
       endif
       toperr=top
 c     fin instruction
@@ -431,7 +470,7 @@ c     fin d'une instruction dans une clause
          k=lpt(6)
          if(lin(k-1).eq.eol.and.lin(k).eq.eol) then
             call error(47)
-            if (err .gt. 0) goto 98
+            goto 98
          endif
       endif
       if(lpt(4).eq.lpt(6))  then
@@ -479,8 +518,18 @@ c
 c     
  85   icall=0
       if(err1.ne.0) then
-         if(int(rstk(pt)/100).eq.9) pt=pt-1
-         goto 86
+         if(int(rstk(pt)/100).eq.9) then
+c added 14/04/97
+            if(rstk(pt).eq.901.or.rstk(pt).eq.904) then
+c              *call* matfns
+               return
+            endif
+c end addition 14/04/97
+            if(rstk(pt).ne.903) then
+               pt=pt-1
+               goto 86
+            endif
+         endif
       endif
 c     compilation matfns: <100*fun rhs lhs fin>
       if (compil(100*fun,rhs,lhs,fin,0)) then 
@@ -531,15 +580,15 @@ c
  96   continue
 c     gestion des evements asynchrones "interpretes"
       call getmen(buf,lb,nentry)
+      call bexec(buf(1:lb),lb,ierr)
+      if(ierr.ne.0) goto 15
       pt=pt+1
       pstk(pt)=top
-      call bexec(buf(1:lb),lb,nentry,ierr)
-      if(ierr.ne.0) goto 15
       rstk(pt)=706
 
 c     *call* macro
       goto 88
- 97   top=pstk(pt)
+ 97   top=pstk(pt)-1
       pt=pt-1
       goto 15
       
@@ -547,7 +596,7 @@ c     *call* macro
 c     recuperation des erreurs
 c-----------------------------
       imode=abs(errct)/10000
-      imode=imode-4*int(imode/4)
+      imode=imode-8*int(imode/8)
       if(imode.eq.3) then
          fun=99
          return
@@ -559,6 +608,11 @@ c     erreur lors d'une pause
          if(rstk(pt).eq.503.and.rio.eq.rte) then
             comp(1)=0
             goto 12
+         endif
+c     added 16/04/97
+         if(err1.ne.0.and.rstk(pt).eq.502) then
+c     catched error while compiling
+            goto 88
          endif
       endif
 c     erreur dans un external

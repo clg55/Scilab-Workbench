@@ -33,13 +33,13 @@ end
 //
 select size(flags)
 case 0 then
-  flags=list(0,1,-1,-2)
+  flags=list(0,-1,1,2)
 case 1 then
-  flags=list(flags(1),1,-1, -2)
+  flags=list(flags(1),-1,1, 2)
 case 2 then
-  flags=list(flags(1),flags(2), -1, -2)
+  flags=list(flags(1),flags(2), 1, 2)
 case 3 then
-  flags(4)=-2
+  flags(4)=2
 end
 //
 rect=[-360,-50,0,40];

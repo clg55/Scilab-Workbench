@@ -13,16 +13,13 @@ function unix_w(cmd)
 // host unix_x unix_s unix_g
 //!
 if prod(size(cmd))<>1 then   error(55,1),end
-host('('+cmd+')>'+TMPDIR+'/unix.out 2>'+TMPDIR+'/unix.err;echo $?>'+TMPDIR+'/unix.status')
-errcatch(241,'continue','nomessage')
-status=read(TMPDIR+'/unix.status',1,1)
-errcatch(-1);
-if iserror(241)==0 then
-  if status==1 then
-    msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
-    error('unix_w: '+msg(1))
-  end
+stat=host('('+cmd+')>'+TMPDIR+'/unix.out 2>'+TMPDIR+'/unix.err;')
+select stat
+case 0 then
+  write(%io(2),read(TMPDIR+'/unix.out',-1,1,'(a)'))
+case -1 then // host failed
+  error(85)
 else
-  errclear(241)
+  msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
+  error('unix_w: '+msg(1))
 end
-write(%io(2),read(TMPDIR+'/unix.out',-1,1,'(a)'))

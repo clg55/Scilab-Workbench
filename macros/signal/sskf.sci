@@ -12,12 +12,11 @@ function [xe]=sskf(y,f,h,q,r,x0)
  
 //get steady-state Kalman gain
  
-   k=ricc(f,h,q,'disc')
-   k=k';
- 
-//estimate state
- 
-   kfd=(eye(f)-k*h)*f;
-   [xe]=ltitr(kfd,k,y,x0);
- 
+x=ricc(f',h'/r*h,q,'disc') // steady state err cov
+ k=x*h'/(h*x*h'+r)
+
+ // estimate state
+ kfd=(eye(f)-k*h)*f;
+ [xe]=ltitr(kfd,k,y,x0);
+
 

@@ -1,4 +1,10 @@
+#if defined(THINK_C)||defined(__MWERKS__)||defined(WIN32)
+#define True 1
+#define False 0
+#else
 #include <X11/Xlib.h>
+#endif
+
 
 static int echo_mode = True;
 static int reading = False;

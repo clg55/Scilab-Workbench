@@ -6,7 +6,8 @@ c ====================================================================
       integer iadr,sadr
 c
 c     common de lsode,lsoda,lsodar
-      double precision xxxx,yyyy,rlsr,ilsr
+      double precision xxxx,yyyy,rlsr
+      integer ilsr
       common/ls0001/xxxx(219),iiii(39)
       common/lsa001/yyyy(22),jjjj(9)
       common/lsr001/ rlsr(5),ilsr(9)
@@ -15,11 +16,10 @@ c     common de lsode,lsoda,lsodar
 c
 c     commons avec bydot,bjac,....
 c
-      character*6 namef,namej,names
+      character*24 namef,namej,names
       common/cydot/namef
       common/cjac/namej
       common/csurf/names
-      integer       iero
       common/ierajf/iero
       common/odecd/nd,iflag
 c
@@ -226,8 +226,15 @@ c     on recupere le simulateur des equations des surfaces
             return
          endif
          if(istk(ilsurf).eq.10) then
-            namej=' '
+            names=' '
             call cvstr(istk(ilsurf+5)-1,istk(ilsurf+6),names,1)
+            names(istk(ilsurf+5):istk(ilsurf+5))=char(0)
+            call setfsurf(names,irep)
+            if ( irep.eq.1) then 
+               buf = names
+               call error(50)
+               return
+            endif
          endif
          ksurf=top1
          top1=top1-1
@@ -264,6 +271,13 @@ c     JACOBIAN IS GIVEN (variable top1)
          if(islj.eq.10) then
             namej=' '
             call cvstr(istk(ilj+5)-1,istk(ilj+6),namej,1)
+            namej(istk(ilj+5):istk(ilj+5))=char(0)
+            call setfjac(namej,irep)
+            if ( irep.eq.1) then 
+               buf = namej
+               call error(50)
+               return
+            endif
          endif
          if (meth.ge.4) then
             call msgs(75,0)
@@ -315,6 +329,13 @@ c     rhs
       if(islf.eq.10) then
          namef=' '
          call cvstr(istk(ilf+5)-1,istk(ilf+6),namef,1)
+         namef(istk(ilf+5):istk(ilf+5))=char(0)
+         call setfydot2(namef,irep)
+         if ( irep.eq.1) then 
+            buf = namef
+            call error(50)
+            return
+         endif
 c    test list('fex',w)
       elseif(islf.eq.15) then
         le1=sadr(ilf+istk(ilf+1)+3)
@@ -326,24 +347,31 @@ c     next line just to tell to bydot that external is in fortran
            buf='wrong list passed: needs two elts in list'
            call error(9999)
            return
-      endif
+        endif
         long1=istk(ilf+3)
         lf=lstk(top1)
         illl=iadr(lf+istk(ilf+3))
         nblett=istk(illl-1)-1
         namef=' '
         call cvstr(istk(ilf+11)-1,istk(ilf+12),namef,1)
+        namef(istk(ilf+11):istk(ilf+11))=char(0)
+        call setfydot2(namef,irep)
+        if ( irep.eq.1) then 
+           buf = namef
+           call error(50)
+           return
+        endif
         ll1=sadr(ilf+5)
         ll2=ll1+long1-1
         il2=iadr(ll2)
         nbw=istk(il2+1)*istk(il2+2)
         if(istk(il2+3).ne.0) then
-          buf='working array must be real'
-          call error(9999)
-          return
+           buf='working array must be real'
+           call error(9999)
+           return
         endif
-      lww=sadr(il2+4)
-c    lww = adr w , nbw = size (w) 
+        lww=sadr(il2+4)
+c     lww = adr w , nbw = size (w) 
       endif
       endif
 c
@@ -379,7 +407,7 @@ c     list('fex',w)
             return
          endif
          top=top+1
-         kynew=top
+c         kynew=top
          ily=iadr(lstk(top))
          err=sadr(ily+4)+ny+nbw-lstk(bot)
          if(err.gt.0) then
@@ -768,7 +796,7 @@ c     set continuuous integration time
          tright=hf
          tcrit=hf
          stk(lc)=tcrit
-c     integrate continuuous part
+c     integrate continuous part
          if(meth.eq.0) then
             call lsoda(bydot2,ny,stk(ly),tleft,tright,itol
      $           ,stk(lr),stk(la),itask,istate,iopt,stk(lc),lrw
@@ -870,7 +898,7 @@ c     store intermediate result
                write(buf,'(''tf-hf = '',e10.3)') tf-hf
                call basout(io,wte,buf(1:20))
             endif
-c     set continuuous integration time
+c     set continuous integration time
             if(abs(tf-hf).le.1.d-12) then
                tright=hf
                nhpass=nhpass+1
@@ -1090,3 +1118,13 @@ c      subroutine pristk(il,n)
 c      include '../stack.h'
 c      write(6,*) (istk(il+i),i=0,n-1)
 c      end
+
+
+C     For C function who need to read odedc common
+      subroutine getcodc(nd1,iflag1)
+      integer nd1,iflag1
+      common/odecd/nd,iflag
+      nd1=nd
+      iflag1=iflag
+      return
+      end

@@ -1,18 +1,26 @@
-      subroutine scopxy(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),z(*),u(*),rpar(*),out(*)
-      integer ipar(*),flag
+      subroutine scopxy(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
 c     ipar(1) = win_num
 c     ipar(2) = 0/1 color flag
 c     ipar(3) = buffer size
 c     ipar(4) = dash,color or mark choice
 c     ipar(5) = line or mark size
 c     ipar(6) = mode : animated =0 fixed=1
+c     ipar(7) =
+c     ipar(8:9) = window position
+c     ipar(10:11) = window size
 c
 c     rpar(1)=xmin
 c     rpar(2)=xmax
 c     rpar(3)=ymin
 c     rpar(4)=ymax
+c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+
+c
 c
       double precision xmin,xmax,ymin,ymax,rect(4)
       integer n,verb,cur,na,v,wid,nax(4)
@@ -22,7 +30,7 @@ c
       character*(4) logf
       common /dbcos/ idb
       data frect / 0.00d0,0.00d0,1.00d0,1.00d0/
-      data cur/0/
+      data cur/0/,verb/0/
 
 c     
       if(idb.eq.1) then
@@ -43,7 +51,7 @@ c
 c     erase first point
          if(ipar(6).eq.0) then
             z(1)=z(1)+1.0d0
-            if(ipar(4).gt.0) then
+            if(ipar(4).lt.0) then
                call dr1('xpolys'//char(0),'v'//char(0),v,v,ipar(4),
      &              1,1,v,z(2),z(2+N),dv,dv)
             else
@@ -57,7 +65,7 @@ c     shift buffer left
          call dcopy(N-1,z(N+3),1,z(N+2),1)
          z(2*N+1)=u(2)
 c     draw new point
-         if(ipar(4).gt.0) then
+         if(ipar(4).lt.0) then
             call dr1('xpolys'//char(0),'v'//char(0),v,v,ipar(4),
      &           1,1,v,z(1+N),z(1+2*N),dv,dv)
          else
@@ -88,9 +96,24 @@ c     erase memory
             call dr1('xset'//char(0),'window'//char(0),wid,v,v,v,v,v,
      $           dv,dv,dv,dv)
          endif
-         logf='nn'//char(0)
-         call  setscale2d(frect,frect,logf)
+         iwp=8
+         if(ipar(iwp).ge.0) then
+            call dr1('xset'//char(0),'wpos'//char(0),ipar(iwp),
+     $           ipar(iwp+1),v,v,v,v,dv,dv,dv,dv)
+         endif
+         iwd=10
+         if(ipar(iwd).ge.0) then
+            call dr1('xset'//char(0),'wdim'//char(0),ipar(iwd),
+     $           ipar(iwd+1),v,v,v,v,dv,dv,dv,dv)
+         endif
+         rect(1)=xmin
+         rect(2)=ymin
+         rect(3)=xmax
+         rect(4)=ymax
+         call  setscale2d(frect,rect,'nn'//char(0))
          call dr1('xset'//char(0),'use color'//char(0),ipar(2),0,0,
+     &        0,0,v,dv,dv,dv,dv)
+         call dr1('xset'//char(0),'alufunction'//char(0),3,0,0,
      &        0,0,v,dv,dv,dv,dv)
          call dr1('xclear'//char(0),'v'//char(0),v,v,v,v,v,v,
      $        dv,dv,dv,dv)
@@ -98,11 +121,6 @@ c     erase memory
      $        dv,dv,dv,dv)
          buf='t@ @input and output'
          strf='011'//char(0)
-         rect(1)=xmin
-         rect(2)=ymin
-         rect(3)=xmax
-         rect(4)=ymax
-         call  setscale2d(frect,rect,'nn'//char(0))
          call dr1('xset'//char(0),'dashes'//char(0),0,0,0,
      &        0,0,v,dv,dv,dv,dv)
          call dr1('xset'//char(0),'alufunction'//char(0),3,v,v,v,v,v,
@@ -110,8 +128,9 @@ c     erase memory
          call plot2d(rect(1),rect(2),1,1,-1,strf,buf,rect,nax)
          call dr1('xset'//char(0),'alufunction'//char(0),6,v,v,v,v,v,
      $        dv,dv,dv,dv)
+         call sxevents()
 c first point drawing
-         if(ipar(4).gt.0) then
+         if(ipar(4).lt.0) then
             call dr1('xset'//char(0),'mark'//char(0),ipar(4),ipar(5),
      $        v,v,v,v,dv,dv,dv,dv)
             call dr1('xpolys'//char(0),'v'//char(0),v,v,ipar(4),

@@ -25,40 +25,58 @@
  *    CreateFormWithButtons(parent) : Special set of buttons button 
  *    AddButton() :		Add a command button into the command window
  *    Command callbacks for the command buttons:
- *
- *    Command queue manipulation routines:
- *	send_command():		send a command to dbx and record in the queue
- *	get_command():		read command off head of queue
- *	insert_command():	insert command at the head of queue
- *	delete_command():	delete command from head of queue
  */
 
-#include "../machine.h" 
-#include "h_help.h" 
 #include <signal.h>
 #include <ctype.h>
 #include <sys/wait.h>
+
+#ifdef __STDC__
+#include <stdlib.h>
+#else
+#include <malloc.h>
+#endif
+
 #include "jpc_global.h"
+#include "../sun/h_help.h" 
+#include "../sun/Sun.h" 
+#include "All-extern-x1.h" 
+#include "../graphics/Graphics.h" 
+
 #include <X11/cursorfont.h>
 #define	 REVERSE	0
 #define	 FORWARD	1
 #define PI0 (integer *) 0
 #define PD0 (double *) 0
 
-
-
-static void CreateFormWithButtons();
-
-char GetDriver_();
-
-Boolean		PopupMode = False;
-
+extern void do_kill();
 extern int get_is_reading();
+extern char GetDriver();
+
 #ifdef BSD
 static char	savedCommand[LINESIZ] = ""; 
 #endif
 
+static void DoIt  _PARAMS((Widget w, XtPointer command, XtPointer ));  
+static void Do_Kill  _PARAMS((Widget w, XtPointer command, XtPointer ));  
+static void Do_Stop  _PARAMS((Widget w, XtPointer command, XtPointer ));  
+static void Do_Help  _PARAMS((Widget w, XtPointer command, XtPointer ));  
+static void info_handler  _PARAMS((Widget w, caddr_t , XEvent *));  
+static void AddInfoHandler  _PARAMS((Widget , char *));  
+static void CreateButtons  _PARAMS((Widget parent));  
+static void Countp  _PARAMS((Widget , XtPointer , XtPointer ));  
+static void Countm  _PARAMS((Widget , XtPointer , XtPointer ));  
+static void SendCountSet  _PARAMS((Widget , XtPointer , XtPointer ));  
+static void SendCountRaise  _PARAMS((Widget , XtPointer , XtPointer ));  
+static void SendCountDelete  _PARAMS((Widget , XtPointer , XtPointer ));  
+static void CreateFormWithButtons  _PARAMS((Widget parent));  
+static Widget AddButton _PARAMS((Widget, char *, void (*function)( ), XtPointer ));  
+static Widget AddInMenu _PARAMS((Widget, char *, void (*function) ( ), XtPointer ));  
+
+char *Startup= (char *) 0, *Demos= (char *) 0;
+Boolean		PopupMode = False;
 Widget commandWindow;
+
 
 /*  Execute the command specifed in client_data  */
 
@@ -72,15 +90,14 @@ static void DoIt (w, command, call_data)
 }
 
 
-extern void do_kill();
+
 
 static void Do_Kill (w, command, call_data)
     Widget w;
     XtPointer command;
     XtPointer call_data;
 {
-  C2F(sciquit)();
-  C2F(clearexit)(1);
+  ClearExit(1);
 }
 
 static void Do_Stop (w, command, call_data)
@@ -179,7 +196,7 @@ static Widget menubut0= 0;
 
 /* on en a besoin ds getfile.c */
 
-getMenuBut0(w) 
+void getMenuBut0(w) 
      Widget *w;
 {
   *w = menubut0;
@@ -188,10 +205,11 @@ getMenuBut0(w)
 static void CreateButtons (parent)
      Widget parent;
 {
-  Widget menu0,menubut,menuentry;
+  Widget menu0,menuentry;
   Widget menu1,menubut1;
   Cardinal iargs=0;
   Arg args[1];
+  integer iopt,nc;
 
   iargs=0;
   XtSetArg(args[iargs], XtNmenuName, "MenuS"); iargs++;
@@ -215,14 +233,20 @@ static void CreateButtons (parent)
   /* AddInfoHandler(menuentry,"Continue Scilab execution after pause or stop"); */
   menuentry = AddInMenu(menu1, "Abort", DoIt, "abort\n");
   /* AddInfoHandler(menuentry,"Abort Scilab execution after pause or stop"); */
-  menuentry = AddInMenu(menu1, "Restart", DoIt, 
-			   "abort;\n exec('SCI/scilab.star');\n");
+
+  iopt=2;C2F(infficl)(&iopt,&nc);
+  Startup=(char *) malloc( (7+nc+2)*(sizeof(char)));
+  strcpy(Startup,"abort;\n");
+  C2F(inffic)(&iopt, &(Startup[7]),&nc);strcat(Startup,"\n");
+  menuentry = AddInMenu(menu1, "Restart", DoIt,(XtPointer)Startup); 
   /*  AddInfoHandler(menuentry,"Clear everything"); */
   menuentry = AddInMenu(menu1, "Stop", Do_Stop, " ");
   /* AddInfoHandler(menuentry,"Stop execution"); */
 
-  menuentry = AddButton (parent, "Demos", DoIt,
-			   ";exec(\"SCI/demos/alldems.dem\");\n");
+  iopt=3;C2F(infficl)(&iopt,&nc);
+  Demos=(char *) malloc( (nc+2)*(sizeof(char)));
+  C2F(inffic)(&iopt,Demos,&nc);strcat(Demos,"\n");
+  menuentry = AddButton (parent, "Demos", DoIt, Demos);
   AddInfoHandler(menuentry,"Exec demos");
 
   CreateFormWithButtons(parent);
@@ -244,24 +268,36 @@ static void CreateButtons (parent)
  */
 
 
+
 static integer lab_count = 0;
 static char gwin_name[100];
 static Widget GWinButMenu = (Widget) 0;
 
-MenuFixCurrentWin(ivalue)
-     int ivalue;
+void MenuFixCurrentWin(ivalue)
+int ivalue;
 {
+  static int firstentry=0;
   int  i;
-  C2F(xscion)(&i);
-  if (i==1)
+  if ( firstentry == 0) 
     {
-      Arg arg[1];
-      lab_count = ivalue;
-      sprintf( gwin_name, "Graphic Window %d ", (int) lab_count );
-      XtSetArg( arg[0], XtNlabel, gwin_name );
-      XtSetValues(GWinButMenu, arg, ONE );
+      strcpy(gwin_name, "Graphic Window 0");
+      firstentry++;
+    }
+  if ( lab_count != ivalue )
+    {
+      C2F(xscion)(&i);
+      if (i==1)
+	{
+	  Arg arg[1];
+	  lab_count = ivalue;
+	  sprintf( gwin_name, "Graphic Window %d", (int) ivalue );
+	  XtSetArg( arg[0], XtNlabel, gwin_name );
+	  XtSetValues(GWinButMenu, arg, ONE );
+	}
     }
 }
+
+
 
 static void 
 Countp(widget, closure, callData)
@@ -293,7 +329,7 @@ SendCountSet(widget, closure, callData)
      XtPointer closure, callData;
 {
   char c ;
-  if ((c=GetDriver_())=='R' || c == 'X' || c == 'W')
+  if ((c=GetDriver())=='R' || c == 'X' || c == 'W')
     {
       C2F(dr)("xset","window",&lab_count,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     };
@@ -306,7 +342,7 @@ SendCountRaise(widget, closure, callData)
      XtPointer closure, callData;
 {
   char c ;
-  if ((c=GetDriver_())=='R' || c == 'X' || c == 'W')
+  if ((c=GetDriver())=='R' || c == 'X' || c == 'W')
     {
       /* C2F(dr)("xsetdr","Rec",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);*/
       C2F(dr)("xset","window",&lab_count,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
@@ -334,7 +370,7 @@ static void
 CreateFormWithButtons(parent)
 Widget parent;
 {
-  Widget form,menu,menuentry1,menuentry2,menuentry3,buttonm,buttonp;
+  Widget menu,menuentry1,menuentry2,menuentry3,buttonm,buttonp;
   Cardinal iargs=0;
   Arg args[2];
   iargs = 0;

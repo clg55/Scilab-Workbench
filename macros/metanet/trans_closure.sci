@@ -1,29 +1,27 @@
 function g1=trans_closure(g)
 [lhs,rhs]=argn(0)
 if rhs<>1 then error(39), end
-// check g
-check_graph(g)
+// check g and connectivity (checking of g made in is_connex)
+if is_connex(g)<>1 then
+  error('The graph must be connected')
+end
 // compute lp, la and ls
 n=g('node_number')
-ma=g('edge_number')
+ma=prod(size(g('tail')))
 if g('directed')==1 then
-  [lp,la,ls]=ta2lpd(g('tail'),g('head'),n+1,n)
+  [lp,la,ls]=m6ta2lpd(g('tail'),g('head'),n+1,n)
 else
-  error('trans_closure: the graph must be directed')
-end
-// check connectivity
-if is_connex(g)<>1 then
-  error('trans_closure: the graph must be connected')
+  error('The graph must be directed')
 end
 // compute lp1 and ls1 for the transitive closure
-[lp1,ls1]=transc(lp,ls,n)
+[lp1,ls1]=m6transc(lp,ls,n)
 // compute tail1 and head1 (without checking) for the transitive closure
 n1=prod(size(lp1))-1
 m1=prod(size(ls1))
 la1=1:m1
-[tail1,head1]=lp2tad(lp1,la1,ls1,n1)
+[tail1,head1]=m6lp2tad(lp1,la1,ls1,n1)
 // compute transitive closure graph
-g1=tlist('graph',g('name')+'_trans_closure',g('directed'),n1,tail1,head1,..
+g1=glist(g('name')+'_trans_closure',g('directed'),n1,tail1,head1,..
 g('node_name'),g('node_type'),g('node_x'),g('node_y'),g('node_color'),..
 g('node_diam'),g('node_border'),g('node_font_size'),g('node_demand'),..
 [],[],[],[],[],[],[],[],[],[],[],[],..

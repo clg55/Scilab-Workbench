@@ -11,6 +11,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <signal.h>
+#include <netdb.h>
 
 #include "listes_chainees.h"
 #include "utilitaires.h"
@@ -28,6 +29,7 @@ static void signal_arret_scruteur();
 
 fd_set readfds, writefds, exceptfds;
 int socket_com;
+char machine_hote[MAXHOSTLEN];
 
 main(argc,argv)
 int argc;
@@ -35,7 +37,7 @@ char *argv[];
 {
   int resultat;
   int statusp, i, w;
-  char machine_hote[MAXHOSTLEN];
+  struct hostent *h;
   fd_set r_readfds, r_writefds, r_exceptfds;
   application *application_scrutee;
   Message message, message_recu;
@@ -66,6 +68,9 @@ char *argv[];
   }
   
   gethostname(machine_hote,MAXHOSTLEN) ;
+  h=gethostbyname(machine_hote);
+  strcpy(machine_hote,h->h_name);
+
   if(!strcmp(argv[1], "-local")) {
     socket_com = -1;
     executer_application(ID_XGeCI,machine_hote,argc-2,argv+2,1);
@@ -164,9 +169,3 @@ char *message_erreur;
     detruire_applications_scruteur();
     exit(1);
 }
-
-
-
-
-
-

@@ -1,37 +1,47 @@
 function f=%pps(p,s)
-// %pps(p,s)  calcule la puissance  s_ieme  d'une matrice
-//de polynomes.
-//l'exposant s doit etre entier.
-//les puissances entieres positives sont definies en fortran.
+// %pps(p,s)  computes p^s for p polynomial matrix in special cases
 //!
-if int(s)<>s then error('%pps: integer power only'),end
+if s==[] then f=[],return,end
+if  or(imag(s)<>0)|or(int(s)<>s) then error('%pps: integer power only'),end
 [m,n]=size(p)
-
-if m<>n then 
-  if s<0 then
-    f=ones(p)./p
-    f1=f;for k=2:-s,f=f*f1;end
-  end
-else
-  if s<0 then
-    //algorithme de leverrier
-    num=eye(n,n)
-    for k=1:n-1,
-      b=p*num,
-      den=-sum(diag(b))/k,
-      num=b+eye*den,
-    end;
-    den=sum(diag(p*num))/n
-    //
-    [num,den]=simp(num,den*ones(m,n))
-    f=tlist('r',num,den,[])
-    if s=-1 then return,end
-    f1=f;
-    for k=2:-s,f=f*f1;end
+[ms,ns]=size(s)
+if ms==1&ns==1 then
+  if m==1|n==1 then //Element wise exponentiation p.^s with p vector
+    if s<0 then 
+      if or(abs(coeff(p(:)))*ones(maxi(degree(p))+1,1)==0) then
+	error(27)
+      end
+      f=tlist(['r','num','den','dt'],ones(p),p.^(-s),[])
+    else // this case is in fact hard coded
+      f=p.^s
+    end
+  elseif m==n then //square matrix exponentiation p^s
+    if s<0 then 
+      f=invr(p),s=-s
+      f1=f;for k=2:s,f=f*f1;end
+    else
+      f=p
+      for k=2:s,f=f*p;end
+    end
   else
-    f=p;
-    for k=2:s,f=f*p;end
+    error(20,1)
   end
+elseif ms==1|ns==1 then // Element wise exponentiation f.^s with f "scalar"
+  if m<>1|n<>1 then error(43),end
+   
+  kp=find(s>=0)
+  kn=find(s<0)
+  num=ones(s)
+  den=ones(s)
+  num(kp)=p.^s(kp)
+  if abs(coeff(p))*ones(degree(p)+1,1)==0 then
+    error(27)
+  end
+  den(kn)=p.^(-s(kn))
+  f=tlist(['r','num','den','dt'],num,den,[])
+else
+  error(43)
 end
+    
 
 

@@ -16,14 +16,14 @@ Leps=1.e-6;
 deff('[ydot]=f(t,y)',...
    'f1=-0.04*y(1)+1e4*y(2)*y(3),...
     f3=3e7*y(2)*y(2),...
-    ydot=[f1;-f1-f3;f3]')
+    ydot=[f1;-f1-f3;f3]','n')
  
 //     jacobian
  
 deff('[jac]=j(t,y)',...
 'jac(1,1)=-0.04;jac(1,2)=1.e4*y(3);jac(1,3)=1.e4*y(2),...
  jac(3,1)=0;jac(3,2)=6.e7*y(2);jac(3,3)=0;...
- jac(2,1)=-jac(1,1);jac(2,2)=-jac(1,2)-jac(3,2);jac(2,3)=-jac(1,3);')
+ jac(2,1)=-jac(1,1);jac(2,2)=-jac(1,2)-jac(3,2);jac(2,3)=-jac(1,3);','n')
  
 //
  
@@ -106,13 +106,11 @@ if (y6-yref) > 2*0.00001 then bugmes();quit;end
  
 //
  
-a=rand(3,3);ea=exp(a);
+a=rand(3,3);ea=expm(a);
  
 deff('[ydot]=f(t,y)','ydot=a*y')
 Warning :redefining function: f                       
  
- 
-comp(f);
  
 t1=1;y=ode('adams',eye(a),t0,t1,f);
  
@@ -145,8 +143,6 @@ deff('[p]=dgbydy(t,y,s)','[-0.04,1.d4*y(3),1.d4*y(2);...
 0.04,-1.d4*y(3)-6.d7*y(2),-1.d4*y(2);...
 1,1,1]')
  
-comp(resid);comp(aplusp);comp(dgbydy);
- 
 //        %ODEOPTIONS tests
  
 //
@@ -167,7 +163,7 @@ x0=ones(nx,1);t0=0;t=[1,2,3,4,5];
  
 nt=size(t,'*');
  
-eAt=exp(A*t(nt));
+eAt=expm(A*t(nt));
  
  
 //        Test itask=%ODEOPTIONS(1)
@@ -210,7 +206,7 @@ xlast=xft(2:nx+1,q);
  
 if xft(1,q)<tmax then bugmes();quit;end
  
-if norm(xlast-exp(A*xft(1,q))*x0)>Leps then bugmes();quit;end
+if norm(xlast-expm(A*xft(1,q))*x0)>Leps then bugmes();quit;end
  
  
 //itask=3;   ---> solution at first mesh point beyond t=tmax
@@ -585,5 +581,17 @@ ysf=ode('stiff',ones(nx,1),0,2,f,j);
  
 ysj=ode('stiff',ones(nx,1),0,2,f,j);
  
+ 
+deff('xd=f(t,x)','xd=A*x+B*sin(3*t)')
+Warning :redefining function: f                       
+ 
+ 
+A=rand(10,10)-4.5*eye;B=rand(10,1);
+ 
+x=ode(ones(10,1),0,[1,2,3],f);
+ 
+//link('fexab.o','fexab')
+ 
+if norm(x-ode(ones(10,1),0,[1,2,3],'fexab'),1) > 1.d-10 then pause;end
  
  

@@ -1,13 +1,8 @@
-function [t]=tanh(x)
-//Syntax : [t]=tanh(x)
-//
-//Hyperbolic tangent
+function t=tanh(x)
+//Element wise Hyperbolic tangent
 if type(x)<>1 then error(53),end
-[m,n]=size(x);
 t=exp(x);
-if m<>n then t=(t-ones(m,n)./t)./(t+ones(m,n)./t)
-        else ti=inv(t);t=(t-ti)/(t+ti)
-end
+t=(t-ones(t)./t)./(t+ones(t)./t)
 
 
 

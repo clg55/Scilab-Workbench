@@ -20,10 +20,11 @@ function [Inn,X,Gbar]=rowinout(G)
 //               T
 // X is lxl and X (-s) X(s) = Identity (all-pass property).
 //
-flag='ss';if G(1)='r' then flag='tf';G=tf2ss(G);end
+G1=G(1);
+flag='ss';if G1(1)='r' then flag='tf';G=tf2ss(G);end
 [rows,cols]=size(G);
 [A,B,C,D]=abcd(G);
-sqD=inv(sqrt(D'*D));
+sqD=inv(sqrtm(D'*D));
 //----------------
 [w,rt]=rowcomp(D);
 Dorto=w(rt+1:rows,:)';

@@ -1,4 +1,4 @@
-//<a,b,d,sig,resid>=armax1(r,s,q,y,u,b0f)
+function [a,b,d,sig,resid]=armax1(r,s,q,y,u,b0f)
 //<a,b,d,sig,resid>=armax1(r,s,q,y,u,[b0f])
 //
 // Calcule les coefficients d'un ARMAX monodimensionnel
@@ -76,6 +76,6 @@ end
 //On simule pour avoir l'erreur de prediction
 //
 [sig,resid]=epred(r,s,q,CTM1,y,u,b0f);
-//end
+
 
 

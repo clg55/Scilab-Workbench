@@ -1,5 +1,4 @@
-C/MEMBR ADD NAME=WMDSP,SSI=0
-      subroutine wmdsp(xr,xi,nx,m,n,maxc,mode,ll,lunit,cw,iw)
+      subroutine wmdsp(xr,xi,nx,mm,nn,maxc,mode,ll,lunit,cw,iw)
 c!but
 c     wmdsp ecrit une matrice complexe  (ou un scalaire) sous
 c     la forme d'un tableau, avec gestion automatique de
@@ -34,6 +33,9 @@ c
       var='i'
       lvar=1
 c
+      m=abs(mm)
+      n=abs(nn)
+
       cw=' '
       write(form(1),130) maxc,maxc-7
       dl=' '
@@ -129,9 +131,17 @@ c
          s=iw(k)
       endif
    21 continue
+      l1=1
       if(fact.ne.1.0d+0) then
-         write(cw(1:12),'(1x,1pd9.1,'' *'')')  1.0d+0/fact
-         call basout(io,lunit,cw(1:12))
+         write(cw(l1:l1+11),'(1x,1pd9.1,'' *'')')  1.0d+0/fact
+         l1=l1+12
+      endif
+      if(mm.lt.0) then
+         write(cw(l1:l1+4),'(''eye *'')') 
+         l1=l1+5
+      endif
+      if(l1.gt.1) then
+         call basout(io,lunit,cw(1:l1-1))
          call basout(io,lunit,' ')
          if(io.eq.-1) goto 99
       endif

@@ -1,8 +1,9 @@
-//<s>=%lsss(s1)
-//
+function s1=%lsss(s1)
+// s=-s1
 //!
- [a1,b1,c1,d1,x1,dom1]=s1(2:7),
- s=tlist('lss',a1,b1,-c1,-d1,x1,dom1),
-//end
+s1(4)=-s1(4)
+s1(5)=-s1(5)
+
+
 
 

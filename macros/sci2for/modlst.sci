@@ -1,4 +1,4 @@
-//[lst]=modlst(lst)
+function [lst]=modlst(lst)
 //
 //!
 //count=count+1
@@ -80,6 +80,6 @@ for ll=lst;
   end
 end
 lst=lst1;
-//end
+
 
 

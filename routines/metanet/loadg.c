@@ -1,7 +1,13 @@
 #include <stdio.h>
+#ifndef __MSC__
 #include <dirent.h>
+#endif
 #include <string.h>
+#ifdef __STDC__
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 
 #include "mysearch.h"
 #include "../machine.h"
@@ -11,9 +17,18 @@
 
 extern double atof();
 extern char* basename();
+extern int CheckGraphName();
 extern void cerro();
 extern char* dirname();
 extern char *StripGraph();
+
+typedef int (*PF)();
+
+static int CompString(s1, s2)
+char **s1, **s2;
+{
+  return strcmp((char*)*s1,(char*)*s2);
+}
 
 static char description[2*MAXNAM];
 
@@ -40,6 +55,9 @@ int *default_node_diam,*default_node_border,*default_edge_width;
 int *default_edge_hi_width,*default_font_size;
 int *ndim,*ma;
 {
+#ifdef __MSC__
+  return;
+#else 
   FILE *fg;
   DIR *dirp;
   char fname[2 * MAXNAM];
@@ -50,6 +68,7 @@ int *ndim,*ma;
   ENTRY node,*found;
   char dir[1024];
   char *pname;
+  char **lar;
 
   path[*lpath] = '\0';
 
@@ -278,7 +297,34 @@ int *ndim,*ma;
     strcpy(node.data,strname);
     myhsearch(node,ENTER);
   }
-  
+
+  /* check uniqueness of node names */
+  if (*ndim != 1) {
+    if ((lar = (char **)malloc(sizeof(char *) * *ndim)) == NULL) {
+      cerro("Running out of memory");
+      return;
+    }
+    for (i = 0; i < *ndim; i++) lar[i] = (*node_name)[i];
+    qsort((char*)lar,*ndim,sizeof(char*),(PF)CompString);
+    for (i = 0; i < *ndim - 1; i++) {
+      if (!strcmp(lar[i],lar[i+1])) {
+	sprintf(description,
+		"Bad graph file. Node \"%s\" is duplicated",lar[i]);
+	cerro(description);
+	free(lar);
+	return;
+      }
+    }
+    if (!strcmp(lar[*ndim - 2],lar[*ndim - 1])) {
+      sprintf(description,
+	      "Bad graph file. Node \"%s\" is duplicated",lar[*ndim - 2]);
+      cerro(description);
+      free(lar);
+      return;
+    }
+    free(lar);
+  }
+ 
    /* rewind and go to arc description */
   rewind(fg);
   for (i = 0; i < 11; i++)
@@ -337,4 +383,5 @@ int *ndim,*ma;
   }
   myhdestroy();
   fclose(fg);
+#endif /**  __MSC__ **/
 }

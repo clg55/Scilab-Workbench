@@ -4,6 +4,12 @@ c     gestion de la standard input
 c ================================== ( Inria ) =============
 c
       include '../stack.h'
+c     --- for myback 
+      integer lrecl,bkflag
+      parameter (lrecl=512) 
+      character bckbuf*(lrecl)
+      common / keepme / bkflag,bckbuf
+c     --- end 
       character string*(*),fmt*(*)
       integer ierr,lunit
 c
@@ -25,8 +31,13 @@ c
             read(string(1:lline),fmt,end=10,err=20) string
          else
            string(lline+1:)=' '
-         endif
+        endif
       else
+         if ( bkflag.eq.1 ) then 
+            string = bckbuf(1:lrecl)
+            bkflag=0
+            return
+         endif
          if(fmt(1:1).eq.'*') then
             read(lunit,'(a)',end=10,err=20) string
          else
@@ -40,3 +51,20 @@ c
  20   ierr=2
       return
       end
+
+      subroutine myback(lunit)
+C     backspace has erratic behaviour with cygwin32 
+c     this routine mimin the same behaviour without 
+c     using backspace 
+C     this routine is only used in getfun where lrecl 
+C     is also set 
+      include '../stack.h'
+      integer lrecl,bkflag
+      parameter (lrecl=512) 
+      character bckbuf*(lrecl)
+      common / keepme / bkflag,bckbuf
+      bckbuf = buf(1:lrecl)
+      bkflag=1
+      return
+      end
+

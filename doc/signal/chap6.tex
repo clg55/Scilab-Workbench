@@ -518,7 +518,7 @@ the transient behavior of the filter has died away.
 
 	To use the steady-state
 Kalman gain to implement the Kalman filter algorithm there exists,
-in $\Psi$Lab, a function and a primitive which when 
+in Scilab, a function and a primitive which when 
 used in tandem yield the estimated state.
 The function is {\tt optgain} and the primitive is {\tt ltitr}.  The function
 {\tt optgain} calculates the steady-state error covariance matrix
@@ -780,7 +780,7 @@ provide no useful information concerning the estimate of this state.
 Secondly, since the system matrix {\tt f} has un unstable eigenvalue
 the standard deviation of this state, in the limit,  is unbounded.
 	
-	The $\Psi$Lab code used to generate the examples in this section
+	The Scilab code used to generate the examples in this section
 is displayed below.  The code for the steady-state Kalman filter example
 is as follows:
 \verbatok{\Figdir kf1.dia}
@@ -1089,7 +1089,7 @@ where $\tilde{a}_1$ is still as in (\ref{e.kf52}) and $\tilde{\tilde{a}}_2$
 is as in (\ref{e.kf55}).  Continuing recursively in this way we can
 upper triangularize the $A$ matrix.
 
-	The $\Psi$Lab primitive {\tt qr} performs a triangularization of
+	The Scilab primitive {\tt qr} performs a triangularization of
 a matrix using Householder transformations.  In particular, it is
 the $r$ part of the qr-decomposition which yields the 
 desired triangularized matrix.
@@ -1538,7 +1538,7 @@ are now estimated based on all of the observed data.
 \dessin{{\tt exec('wf1.code')} Wiener Smoothing Filter}{f.wf1}
 %
 
-	The $\Psi$Lab code which generated the example in this section
+	The Scilab code which generated the example in this section
 is as follows.
 \verbatok{\Diary Swf1.dia}
 \end{verbatim}

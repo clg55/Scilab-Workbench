@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WGESL,SSI=0
       subroutine wgesl(ar,ai,lda,n,ipvt,br,bi,job)
       integer lda,n,ipvt(*),job
       double precision ar(lda,*),ai(lda,*),br(*),bi(*)

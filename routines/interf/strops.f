@@ -9,7 +9,6 @@ c
 c
       integer plus,quote,equal,less,great,insert,extrac
       integer top0,iadr,sadr,op,vol,volr,rhs1
-      logical iscolon
       data plus/45/,quote/53/
       data equal/50/,less/59/,great/60/,insert/2/,extrac/3/
 c     
@@ -29,8 +28,8 @@ c
 c
       lw=lstk(top+1)
       rhs1=rhs
-      if(op.eq.insert) rhs=2
-      if(op.eq.extrac) rhs=1
+      if(op.eq.extrac) goto 130
+      if(op.eq.insert) goto 120
 c
       if(rhs.eq.1) goto 05
       il2=iadr(lstk(top))
@@ -69,7 +68,17 @@ c     operations non implantees
 c
 c addition
 c
-   20 if(m1.ne.m2.or.n1.ne.n2) then
+ 20   continue
+      if(m1*n1.eq.0) then
+c     .  []+b
+         vol=5+mn2+istk(id2+mn2)-1
+         call icopy(vol,istk(il2),1,istk(il1),1)
+         lstk(top+1)=sadr(il1+vol)
+         return
+      elseif(m2*n2.eq.0) then
+c     .  a+[]
+         return
+      elseif(m1.ne.m2.or.n1.ne.n2) then
          call error(8)
          return
       endif
@@ -194,356 +203,630 @@ c
 c
 c insertion
 c
-c     a(vl,vc)=m  a(v)=u
   120 continue
-      ili=iadr(lstk(top0-1))
-      if (istk(ili+1)*istk(ili+2).eq.0) then
-         top=top0
-         rhs=rhs1
-         fin=-fin
-         return
-      endif
-
-      if(istk(il1).ne.istk(il2)) then
-          if(istk(il2).ne.1.or.m2*n2.ne.0) goto 10
-      endif
-      rhs=rhs1-2
-      nrow=-1
-c
-      top=top-1
-      if(m1.le.0) then
-         call error(14)
-         return
-      endif
-      ilcol=iadr(lstk(top))
-      if(istk(ilcol).eq.4) then
-         rhs=rhs1
-         top=top0
-         fin=-fin
-         return
-      endif
-
-      if(istk(ilcol).ne.1) then
-         call error(21)
-         return
-      endif
-      if(istk(ilcol+3).ne.0) then
-         call error(21)
-         return
-      endif
-      if(istk(ilcol+1).gt.1.and.istk(ilcol+2).gt.1) then
-         call error(21)
-         return
-      endif
-      ncol=isign(istk(ilcol+1)*istk(ilcol+2),istk(ilcol+1))
-      lcol=sadr(ilcol+4)
-      if(ncol.lt.0) goto 122
-      do 121 i=1,ncol
-      istk(ilcol-1+i)=int(stk(lcol-1+i))
-  121 continue
-  122 continue
-      ilrow=ilcol
-      if(rhs.eq.1.and.n2.eq.1) then
-        nrow=ncol
-        ilrow=ilcol
-        ncol=-1
-      endif
-c
-      if(rhs.eq.1) then
+      if(rhs.eq.4) goto 124
 c     arg3(arg1)=arg2
-         if (m2.gt.1.and.n2.gt.1) then
-c     .  arg3 is a matrix
-            call dimin(m2*n2,1,istk(ilcol),ncol,istk(ilrow),-1,m1*n1,1,
-     &           mr,nr,err)
-            if(err.gt.0.or.mr.gt.m2*n2) then
-               call error(21)
-               return
-            endif
-
-            idr=iadr(l3r)
-            lr=idr+m2*n2+1
-            err=sadr(lr)-lstk(bot)
-            if(err.gt.0) then
-               call error(17)
-               return
-            endif
-            call mpinsp(istk(id2),m2*n2,1,istk(ilcol),ncol,istk(ilrow),
-     &           -1,istk(id1),m1*n1,1,istk(idr),m2*n2,1,err)
- 
-            if(err.gt.0) then
-               call error(15)
-               return
-            endif
-            volr=istk(idr)
-            err=sadr(lr+volr)-lstk(bot)
-            if(err.gt.0) then
-               call error(17)
-               return
-            endif
-            call impins(istk(l2r),istk(id2),m2*n2,1, istk(l1r),
-     &          istk(id1),m1*n1,1,istk(lr),istk(idr),m2*n2,1)
-            il1=iadr(lstk(top))
-            istk(il1)=10
-            istk(il1+1)=m2
-            istk(il1+2)=n2
-            istk(il1+3)=it1
-            volr=istk(idr+m2*n2)
-            call icopy(m2*n2+1+volr,istk(idr),1,istk(il1+4),1)
-            lstk(top+1)=sadr(il1+5+m2*n2+volr)
-         else
-            call dimin(m2,n2,istk(ilrow),nrow,istk(ilcol),ncol,m1,n1,
-     &           mr,nr,err)
-            if(err.gt.0) then
-               call error(21)
-               return
-            endif
-            idr=iadr(l3r)
-            lr=idr+mr*nr+1
-            err=sadr(lr)-lstk(bot)
-            if(err.gt.0) then
-               call error(17)
-               return
-            endif
-            call mpinsp(istk(id2),m2,n2,istk(ilrow),nrow,istk(ilcol),
-     &           ncol,istk(id1),m1,n1,istk(idr),mr,nr,err)
-            if(err.gt.0) then
-               call error(15)
-               return
-            endif
-            volr=istk(idr)
-            err=sadr(lr+volr)-lstk(bot)
-            if(err.gt.0) then
-               call error(17)
-               return
-            endif
-            call impins(istk(l2r),istk(id2),m2,n2,
-     &           istk(l1r),istk(id1),m1,n1,istk(lr),istk(idr),mr,nr)
 c     
-            il1=iadr(lstk(top))
-            istk(il1)=10
-            istk(il1+1)=mr
-            istk(il1+2)=nr
-            istk(il1+3)=it1
-            volr=istk(idr+mr*nr)
-            call icopy(mr*nr+1+volr,istk(idr),1,istk(il1+4),1)
-            lstk(top+1)=sadr(il1+5+mr*nr+volr)
-         endif
-      else
-c     arg4(arg1,arg2)=arg3
-            top=top-1
-         ilrow=iadr(lstk(top))
-         if(istk(ilrow).eq.4) then
-            rhs=rhs1
+c     get arg3
+      il3=iadr(lstk(top))
+      if(istk(il3).lt.0) il3=iadr(istk(il3+1))
+
+      if(istk(il3).ne.10) then
+         if(istk(il3).ne.1.or.istk(il3+1).ne.0) then
             top=top0
             fin=-fin
             return
          endif
-
-         if(istk(ilrow).ne.1) then
-            call error(21)
-            return
+      endif
+      m3=istk(il3+1)
+      n3=istk(il3+2)
+      mn3=m3*n3
+      id3=il3+4
+      l3r=id3+mn3+1
+c     get arg2
+      top=top-1
+      il2=iadr(lstk(top))
+      if(istk(il2).lt.0) il2=iadr(istk(il2+1))
+      if(istk(il2).ne.10) then
+         top=top0
+         fin=-fin
+         return
+      endif
+      m2=istk(il2+1)
+      n2=istk(il2+2)
+      mn2=m2*n2
+      id2=il2+4
+      l2r=id2+mn2+1
+c     get arg1
+      top=top-1
+      il1=iadr(lstk(top))
+      m1=istk(il1+1)
+c
+      if (m2.eq.0) then
+c     .  arg3(arg1)=[] 
+         if(m1.eq.-1) then
+c     .    arg3(:)=[] -->[]
+            istk(il1)=1
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)+1
+            goto 999
+         elseif(m1.eq.0) then
+c     .     arg3([])=[]  --> arg3
+            istk(il1)=10
+            istk(il1+1)=m3
+            istk(il1+2)=n3
+            istk(il1+3)=0
+            volr=istk(id3+mn3)-1
+            call icopy(mn3+1+volr,istk(id3),1,istk(il1+4),1)
+            lstk(top+1)=sadr(il1+5+mn3+volr)
+            goto 999
+         else
+c     .     arg3(arg1)=[] --> arg3(compl(arg1))
+            call indxgc(il1,mn3,ilr,mi,mx,lw)
+            if(err.gt.0) return
+            l2r=l3r
+            n2=n3
+            m2=m3
+            mn2=m2*n2
+            id2=id3
+            ili=ilr
+c     .     call extraction
+            goto 131
          endif
-         if(istk(ilrow+3).ne.0) then
-            call error(21)
-            return
-         endif
-         if(istk(ilrow+1).gt.1.and.istk(ilrow+2).gt.1) then
-            call error(21)
-            return
-         endif
-         nrow=isign(istk(ilrow+1)*istk(ilrow+2),istk(ilrow+1))
-         lrow=sadr(ilrow+4)
-         if(nrow.lt.0) goto 124
-         do 123 i=1,nrow
-            istk(ilrow-1+i)=int(stk(lrow-1+i))
- 123     continue
- 124     continue
-c     
- 125     call dimin(m2,n2,istk(ilrow),nrow,istk(ilcol),ncol,m1,n1,
-     &        mr,nr,err)
-         if(err.gt.0) then
-            call error(21)
-            return
-         endif
-         idr=iadr(l3r)
-         lr=idr+mr*nr+1
-         err=sadr(lr)-lstk(bot)
-         if(err.gt.0) then
-            call error(17)
-            return
-         endif
-         call mpinsp(istk(id2),m2,n2,istk(ilrow),nrow,istk(ilcol),ncol,
-     &        istk(id1),m1,n1,istk(idr),mr,nr,err)
-         if(err.gt.0) then
+      elseif(m2.lt.0.or.m3.lt.0) then
+c     .  arg3=eye,arg2=eye
+         call error(14)
+         return
+      elseif(m1.lt.0) then
+c     .  arg3(:)=arg2
+         if(mn2.ne.mn3) then
+            if(mn2.eq.1) goto 121
             call error(15)
             return
          endif
-         volr=istk(idr)
-         err=sadr(lr+volr)-lstk(bot)
-         if(err.gt.0) then
-            call error(17)
-            return
-         endif
-         call impins(istk(l2r),istk(id2),m2,n2,
-     &        istk(l1r),istk(id1),m1,n1,istk(lr),istk(idr),mr,nr)
-c     
-         il1=iadr(lstk(top))
+c     .  reshape arg2 according to arg3
          istk(il1)=10
-         istk(il1+1)=mr
-         istk(il1+2)=nr
-         istk(il1+3)=it1
-         volr=istk(idr+mr*nr)
-         call icopy(mr*nr+1+volr,istk(idr),1,istk(il1+4),1)
-         lstk(top+1)=sadr(il1+5+mr*nr+volr)
+         istk(il1+1)=m3
+         istk(il1+2)=n3
+         istk(il1+3)=0
+         volr=istk(id2+mn2)-1
+         call icopy(mn3+1+volr,istk(id2),1,istk(il1+4),1)
+         lstk(top+1)=sadr(il1+5+mn3+volr)
+         goto 999
       endif
-      goto 999
-c
-c
-c extraction
-c
-  130 rhs=rhs1-1
-      mr=-1
-      nrow=-1
-c
-      if(m1.le.0) then
-         call error(14)
-         return
-      endif
-c
-      top=top-1
-      ilcol=iadr(lstk(top))
-      if(istk(ilcol).eq.4) then
-         rhs=rhs1
-         top=top0
-         fin=-fin
-         return
-      endif
-
-      if(istk(ilcol).ne.1) then
-         call error(21)
-         return
-      endif
-      if(istk(ilcol+3).ne.0) then
-         call error(21)
-         return
-      endif
-      if(istk(ilcol+1).gt.1.and.istk(ilcol+2).gt.1) then
-         call error(21)
-         return
-      endif
-      ncol=isign(istk(ilcol+1)*istk(ilcol+2),istk(ilcol+1))
-      nr=ncol
-      lcol=sadr(ilcol+4)
-      if(ncol.eq.0) goto 146
-      if(ncol.lt.0) goto 132
-      do 131 i=1,ncol
-      istk(ilcol-1+i)=int(stk(lcol-1+i))
-  131 continue
-  132 continue
-c
-      if(rhs.eq.1) then
-         iscolon=ncol.lt.0
-c     vect(arg)
-         if(n1.eq.1) then
-c     vect is a column vector
-            mr=nr
-            nr=1
-            nrow=ncol
-            ilrow=ilcol
-            ncol=-1
+ 121  call indxg(il1,mn3,ili,mi,mxi,lw,1)
+      if(err.gt.0) return
+      if(mi.eq.0) then
+c     .  arg3([])=arg2
+         if(mn2.eq.1) then
+c     .  arg3([])=c  --> arg3 
+            istk(il1)=10
+            istk(il1+1)=m3
+            istk(il1+2)=n3
+            istk(il1+3)=0
+            volr=istk(id3+mn3)-1
+            call icopy(mn3+1+volr,istk(id3),1,istk(il1+4),1)
+            lstk(top+1)=sadr(il1+5+mn3+volr)
+            goto 999
          else
-c     vect is a row vector
-            mr=1
-            if(m1.ne.1) then
-               n1=mn1
-               m1=1
-            endif
-            nrow=-1
-            ilrow=ilcol
+            call error(15)
+            return
          endif
-         if(iscolon) then
-c     vect(:)
-            mr=m1*n1
-            nr=1
+      endif
+      if(mi.ne.mn2.and.mn2.gt.1) then
+         call error(15)
+         return
+      endif
+c
+      if (n3.gt.1.and.m3.gt.1) then
+c     .  arg3 is not a vector
+         if(n2.gt.1.and.m2.gt.1) then
+            call error(15)
+            return
          endif
+         if(mxi.gt.m3*n3) then
+            call error(21)
+            return
+         endif
+         mr=m3
+         nr=n3
+      elseif (n3.le.1.and.n2.le.1) then
+c     .  arg3 and arg2 are  column vectors
+         mr=max(m3,mxi)
+         nr=max(n3,1)
+      elseif (m3.le.1.and.m2.le.1) then
+c     .  row vectors
+         nr=max(n3,mxi)
+         mr=max(m3,1)
       else
-         top=top-1
-         ilrow=iadr(lstk(top))
-         if(istk(ilrow).eq.4) then
-            rhs=rhs1
-            top=top0
-            fin=-fin
-            return
-         endif
-
-         if(istk(ilrow).ne.1) then
-            call error(21)
-            return
-         endif
-         if(istk(ilrow+3).ne.0) then
-            call error(21)
-            return
-         endif
-         if(istk(ilrow+1).gt.1.and.istk(ilrow+2).gt.1) then
-            call error(21)
-            return
-         endif
-         nrow=isign(istk(ilrow+1)*istk(ilrow+2),istk(ilrow+1))
-         mr=nrow
-         lrow=sadr(ilrow+4)
-         if(nrow.eq.0) goto 146
-         if(nrow.lt.0) goto 142
-         do 141 i=1,nrow
-            istk(ilrow-1+i)=int(stk(lrow-1+i))
- 141     continue
- 142     continue
-c     
-c     matrix(arg,arg)
-         if(mr.lt.0) mr=m1
-         if(nr.lt.0) nr=n1
+c     .  arg3 and arg2 dimensions dont agree
+         call error(15)
+         return
       endif
 c
-  145 mnr=mr*nr
+      mnr=mr*nr
+c     set result pointers
       idr=iadr(lw)
-      lr=idr+mnr+1
-      err=sadr(lr)-lstk(bot)
+      lr=idr+mr*nr+1
+      lw=sadr(lr)
+      err=lw-lstk(bot)
       if(err.gt.0) then
          call error(17)
          return
       endif
-c
-      call impext(istk(l1r),istk(id1),m1,n1,istk(ilrow),nrow,
-     &    istk(ilcol),ncol,istk(lr),istk(idr),0,err)
+      call mpinsp(istk(id3),m3*n3,1,istk(ili),mi,1,1,istk(id2),m2*n2,1
+     $     ,istk(idr),mnr,1,err)
       if(err.gt.0) then
-         call error(21)
+         call error(15)
          return
       endif
-      volr=istk(idr+mnr)-1
-      err=sadr(lr+volr)-lstk(bot)
+      volr=istk(idr)
+c     set result coefficients
+      
+      lw=sadr(lr+volr)
+      err=lw-lstk(bot)
       if(err.gt.0) then
          call error(17)
          return
       endif
-      call impext(istk(l1r),istk(id1),m1,n1,istk(ilrow),nrow,
-     &            istk(ilcol),ncol,istk(lr),istk(idr),1,err)
-c
+c     
+      call impins(istk(l3r),istk(id3),m3*n3,1,istk(l2r),istk(id2),
+     $     m2*n2,1,istk(lr),istk(idr),mnr,1)
+
+c     set output variable
       il1=iadr(lstk(top))
       istk(il1)=10
       istk(il1+1)=mr
       istk(il1+2)=nr
-      istk(il1+3)=it1
+      istk(il1+3)=0
       call icopy(mnr+1+volr,istk(idr),1,istk(il1+4),1)
       lstk(top+1)=sadr(il1+5+mnr+volr)
-      go to 999
-  146 continue
-c un des vecteurs d'indice est vide
-      top=top0-rhs1+1
-      il1=iadr(lstk(top))
-      istk(il1)=1
-      istk(il1+1)=0
-      istk(il1+2)=0
-      lstk(top+1)=sadr(il1+4)+1
       goto 999
+c
+ 124  continue
+c     arg4(arg1,arg2)=arg3
+c     get arg4
+      il4=iadr(lstk(top))
+      if(istk(il4).lt.0) il4=iadr(istk(il4+1))
+      if(istk(il4).ne.10) then
+         if(istk(il4).ne.1.or.istk(il4+1).ne.0) then
+            top=top0
+            fin=-fin
+            return
+         endif
+      endif
+      m4=istk(il4+1)
+      n4=istk(il4+2)
+      mn4=m4*n4
+      id4=il4+4
+      l4r=id4+mn4+1
+      top=top-1
+c     get arg3
+      il3=iadr(lstk(top))
+      if(istk(il3).lt.0) il3=iadr(istk(il3+1))
+      if(istk(il3).ne.10) then
+         top=top0
+         fin=-fin
+         return
+      endif
+      m3=istk(il3+1)
+      n3=istk(il3+2)
+      mn3=m3*n3
+      id3=il3+4
+      l3r=id3+mn3+1
+c     get arg2
+      top=top-1
+      il2=iadr(lstk(top))
+      m2=istk(il2+1)
+c     get arg1
+      top=top-1
+      il1=iadr(lstk(top))
+      m1=istk(il1+1)
+
+      if (m3.eq.0) then
+c     .  arg4(arg1,arg2)=[]
+         if(m1.eq.-1.and.m2.eq.-1) then
+c     .    arg4(:,:)=[] -->[]
+            istk(il1)=1
+            istk(il1+1)=0
+            istk(il1+2)=0
+            istk(il1+3)=0
+            lstk(top+1)=sadr(il1+4)+1
+            goto 999
+         elseif(m1.eq.0.or.m2.eq.0) then
+c     .     arg4([],arg2)=[],  arg4(arg1,[])=[] --> arg4
+            istk(il1)=10
+            istk(il1+1)=m4
+            istk(il1+2)=n4
+            istk(il1+3)=0
+            volr=istk(id4+mn4)-1
+            call icopy(mn4+volr,istk(id4),1,istk(il1+4),1)
+            lstk(top+1)=sadr(il1+5+mn4+volr)
+            goto 999
+         elseif(m2.eq.-1) then
+c     .     arg4(arg1,:)=[] --> arg4(compl(arg1),:)
+            call indxgc(il1,m4,ili,mi,mxi,lw)
+            if(err.gt.0) return
+            call indxg(il2,n4,ilj,nj,mxj,lw,1)
+            if(err.gt.0) return
+            l3r=l4r
+            n3=n4
+            m3=m4
+            mn3=m3*n3
+            id3=id4
+c     .     call extraction
+            goto 133
+         elseif(m1.eq.-1) then
+c     .     arg4(:,arg2)=[] --> arg4(:,compl(arg2))
+            call indxgc(il2,n4,ilj,nj,mxj,lw)
+            if(err.gt.0) return
+            call indxg(il1,m4,ili,mi,mxi,lw,1)
+            if(err.gt.0) return
+            l3r=l4r
+            n3=n4
+            m3=m4
+            mn3=m3*n3
+            id3=id4
+c     .     call extraction
+            goto 133
+         else
+c     .     arg4(arg1,arg2)=[] 
+            lw1=lw
+            call indxgc(il2,n4,ilj,nj,mxj,lw)
+            if(err.gt.0) return
+            if(nj.eq.0) then
+c     .        arg4(arg1,1:n4)=[] 
+               lw2=lw
+               call indxgc(il1,m4,ili,mi,mxi,lw)
+               if(err.gt.0) return
+c     .        arg2=1:n4
+               if(mi.eq.0) then
+c     .           arg4(1:m4,1:n4)=[] 
+                  istk(il1)=1
+                  istk(il1+1)=0
+                  istk(il1+2)=0
+                  istk(il1+3)=0
+                  lstk(top+1)=sadr(il1+4)+1
+                  goto 999
+               else
+c     .           arg4(arg1,1:n4)=[] 
+                  lw=lw2
+                  call indxg(il2,n4,ilj,nj,mxj,lw,1)
+                  if(err.gt.0) return
+                  l3r=l4r
+                  n3=n4
+                  m3=m4
+                  mn3=m3*n3
+                  id3=id4
+c     .           call extraction
+                  goto 133
+               endif
+            else
+               lw=lw1
+               call indxgc(il1,m4,ili,mi,mxi,lw)
+               if(err.gt.0) return
+               if(mi.eq.0) then
+c     .           arg4(1:m4,arg2)=[] 
+                  call indxg(il1,m4,ili,mi,mxi,lw,1)
+                  if(err.gt.0) return
+                  l3r=l4r
+                  n3=n4
+                  m3=m4
+                  mn3=m3*n3
+                  id3=id4
+c     .           call extraction
+                  goto 133
+               else
+                  call error(15)
+                  return
+               endif
+            endif
+         endif
+      elseif(m3.lt.0.or.m4.lt.0) then
+c     .  arg3=eye , arg4=eye
+         call error(14)
+         return
+      elseif(m1.eq.-1.and.m2.eq.-1) then
+c     .  arg4(:,:)=arg3
+         if(mn3.ne.mn4) then
+            if(mn3.eq.1) goto 125
+            call error(15)
+            return
+         endif
+c     .  reshape arg3 according to arg4
+         istk(il1)=10
+         istk(il1+1)=m4
+         istk(il1+2)=n4
+         istk(il1+3)=0
+         volr=istk(id3+mn3)-1
+         call icopy(mn3+volr,istk(id3),1,istk(il1+4),1)
+         lstk(top+1)=sadr(il1+5+mn3+volr)
+         goto 999
+      endif
+
+ 125  call indxg(il1,m4,ili,mi,mxi,lw,1)
+      if(err.gt.0) return
+      call indxg(il2,n4,ilj,mj,mxj,lw,1)
+      if(err.gt.0) return
+      if(mi.ne.m3.or.mj.ne.n3) then
+         if(m3*n3.eq.1) then
+            if(mi.eq.0.or.mj.eq.0) then
+               istk(il1)=10
+               istk(il1+1)=m4
+               istk(il1+2)=n4
+               istk(il1+3)=0
+               volr=istk(id4+mn4)-1
+               call icopy(mn4+volr,istk(id4),1,istk(il1+4),1)
+               lstk(top+1)=sadr(il1+5+mn4+volr)
+               goto 999
+            endif
+         else
+c     .  sizes of arg1 or arg2 dont agree with arg3 sizes
+            call error(15)
+            return
+         endif
+         if(mi.eq.0.or.mj.eq.0) then
+            call error(15)
+            return
+         endif
+      endif
+      mr=max(m4,mxi)
+      nr=max(n4,mxj)
+c
+      mnr=mr*nr
+c     set result pointers
+      idr=iadr(lw)
+      lr=idr+mr*nr+1
+      lw=sadr(lr)
+      err=lw-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      call mpinsp(istk(id4),m4,n4,istk(ili),mi,istk(ilj),mj,istk(id3)
+     $     ,m3,n3,istk(idr),mr,nr,err)
+      if(err.gt.0) then
+         call error(15)
+         return
+      endif
+      volr=istk(idr)
+c     set result coefficients
+      lw=sadr(lr+volr)
+      err=lw-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+c     
+      call impins(istk(l4r),istk(id4),m4,n4,istk(l3r),istk(id3),m3,n3
+     $     ,istk(lr),istk(idr),mr,nr)
+c     set output variable
+      il1=iadr(lstk(top))
+      istk(il1)=10
+      istk(il1+1)=mr
+      istk(il1+2)=nr
+      istk(il1+3)=0
+      call icopy(mnr+1+volr,istk(idr),1,istk(il1+4),1)
+      lstk(top+1)=sadr(il1+5+mnr+volr)
+      goto 999
+c
+c extraction
+c
+  130 continue
+      if(rhs.gt.2) goto 132
+c     arg2(arg1)
+c     get arg2
+      il2=iadr(lstk(top))
+      if(istk(il2).lt.0) il2=iadr(istk(il2+1))
+      m2=istk(il2+1)
+      n2=istk(il2+2)
+      mn2=m2*n2
+      id2=il2+4
+      l2r=id2+mn2+1
+c     get arg1
+      top=top-1
+      il1=iadr(lstk(top))
+      m1=istk(il1+1)
+      n1=istk(il1+2)
+
+      if(mn2.eq.0) then 
+c     .  arg2=[]
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         l1=sadr(il1+4)
+         lstk(top+1)=l1+1
+         goto 999
+      elseif(m2.lt.0) then
+c     .  arg2=eye
+         call error(14)
+         return
+      elseif(m1.lt.0) then
+c     .  arg2(:), just reshape to column vector
+         istk(il1)=10
+         istk(il1+1)=mn2
+         istk(il1+2)=1
+         istk(il1+3)=istk(il2+3)
+         volr=istk(id2+mn2)-1
+         call icopy(mn2+1+volr,istk(id2),1,istk(il1+4),1)
+         lstk(top+1)=sadr(il1+5+mn2+volr)
+         goto 999
+      endif
+c     check and convert indices variable
+      call indxg(il1,mn2,ili,mi,mx,lw,1)
+      if(err.gt.0) return
+      if(mx.gt.mn2) then
+         call error(21)
+         return
+      endif
+ 131  if(mi.eq.0) then
+c     arg2([])
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         l1=sadr(il1+4)
+         lstk(top+1)=l1+1
+         goto 999
+      endif
+c     get memory for the result
+      idr=iadr(lw)
+      lr=idr+mi+1
+      lw=sadr(lr)
+      err=lw-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+c     set result pointers
+      if (m2 .gt. 1.or.m1.lt.0) then
+         call impext(istk(l2r),istk(id2),m2,n2,istk(ili),mi,1,1,istk(lr)
+     $     ,istk(idr),0,err)
+      else
+         call impext(istk(l2r),istk(id2),m2,n2,1,1,istk(ili),mi,istk(lr)
+     $     ,istk(idr),0,err)
+      endif
+      if(err.gt.0) then
+         call error(21)
+         return
+      endif
+
+c     set result coefficients 
+      volr=istk(idr+mi)-1
+      lw=sadr(lr+volr)
+      err=lw-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      if (m2.eq.1.and.n2.eq.1.and.m1.gt.0) then
+         call impext(istk(l2r),istk(id2),m2,n2,istk(ili),mi,1,1,istk(lr)
+     $     ,istk(idr),1,err)
+         m = m1
+         n = min(n1,mi)
+      elseif (m2 .gt. 1.or.m1.lt.0) then
+         call impext(istk(l2r),istk(id2),m2,n2,istk(ili),mi,1,1,istk(lr)
+     $     ,istk(idr),1,err)
+         m = mi
+         n = 1
+      else
+         call impext(istk(l2r),istk(id2),m2,n2,1,1,istk(ili),mi,istk(lr)
+     $     ,istk(idr),1,err)
+         n = mi
+         m = 1
+      endif
+
+c     form resulting variable
+      il1=iadr(lstk(top))
+      istk(il1)=10
+      istk(il1+1)=m
+      istk(il1+2)=n
+      istk(il1+3)=0
+      volr=istk(idr+mi)-1
+      call icopy(mi+1+volr,istk(idr),1,istk(il1+4),1)
+      lstk(top+1)=sadr(il1+5+m*n+volr)
+      go to 999
+ 132  continue
+c     arg3(arg1,arg2)
+      if(rhs.gt.3) then
+         call error(36)
+         return
+      endif
+c     get arg3
+      il3=iadr(lstk(top))
+      if(istk(il3).lt.0) il3=iadr(istk(il3+1))
+      m3=istk(il3+1)
+      n3=istk(il3+2)
+      mn3=m3*n3
+      id3=il3+4
+      l3r=id3+mn3+1
+c     get arg2
+      top=top-1
+      il2=iadr(lstk(top))
+      m2=istk(il2+1)
+c     get arg1
+      top=top-1
+      il1=iadr(lstk(top))
+      m1=istk(il1+1)
+      l1=sadr(il1+4)
+c
+      if(mn3.eq.0) then 
+c     .  arg3=[]
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         l1=sadr(il1+4)
+         lstk(top+1)=l1+1
+         goto 999
+      elseif(m3.lt.0) then
+c     .arg3=eye
+         call error(14)
+         return
+      endif
+c     check and convert indices variables
+      call indxg(il1,m3,ili,mi,mxi,lw,1)
+      if(err.gt.0) return
+      if(mxi.gt.m3) then
+         call error(21)
+         return
+      endif
+      call indxg(il2,n3,ilj,nj,mxj,lw,1)
+      if(err.gt.0) return
+      if(mxj.gt.n3) then
+         call error(21)
+         return
+      endif
+c
+c     perform extraction
+ 133  mnr=mi*nj
+      if(mnr.eq.0) then 
+c     .  arg1=[] or arg2=[] 
+         istk(il1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=l1+1
+         goto 999
+      endif
+      idr=iadr(lw)
+      lr=idr+mnr+1
+      lw=sadr(lr)
+      err=lw-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+c     set result pointers
+      call impext(istk(l3r),istk(id3),m3,n3,istk(ili),mi,istk(ilj),nj
+     $     ,istk(lr),istk(idr),0,err)
+      if(err.gt.0) then
+         call error(21)
+         return
+      endif
+c     set result coefficients 
+      volr=istk(idr+mnr)-1
+      lw=sadr(lr+volr)
+      err=lw-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      call impext(istk(l3r),istk(id3),m3,n3,istk(ili),mi,istk(ilj),nj
+     $     ,istk(lr),istk(idr),1,err)
+c
+      il1=iadr(lstk(top))
+      istk(il1)=10
+      istk(il1+1)=mi
+      istk(il1+2)=nj
+      istk(il1+3)=0
+      call icopy(mnr+1+volr,istk(idr),1,istk(il1+4),1)
+      lstk(top+1)=sadr(il1+5+mnr+volr)
+      goto 999
+
 c
 c     comparaisons
  180  continue

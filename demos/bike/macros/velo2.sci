@@ -15,7 +15,6 @@ xset("alufunction",6)
 deff('[]=velod(i)',['param3d(xf(:,i),yf(:,i),zf(:,i),t,p,'' '',[0,0]);';
     'param3d(xfrontar(:,i),yfrontar(:,i),zfrontar(:,i),t,p,'' '',[0,0]);';
     'param3d(xrearar(:,i),yrearar(:,i),zrearar(:,i),t,p,'' '',[0,0]);';])
-comp(velod);
 for i=1:1:n2-1,velod(i);velod(i);
 ww=i:i+1;
 param3d(xprear(1,ww),xprear(2,ww),xprear(3,ww),  t,p," ",[0,0])

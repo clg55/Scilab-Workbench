@@ -1,4 +1,4 @@
-//[]=velod(i)
+function []=velod(i)
 //------------ generation of the rear wheel
 nnn=24
 i1=(i-1)*nstep+1
@@ -44,6 +44,6 @@ dec = ones(l);sinl=r1*sin(l);cosl=r1*cos(l);
       xx1=[xnf(1:nn2/2)';xnf((nn2/2+1):nn2)'];
       yy1=[ynf(1:nn2/2)';ynf((nn2/2+1):nn2)'];
       xsegs(xx1,yy1);
-//end
+
 
 

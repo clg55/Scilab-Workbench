@@ -8,12 +8,12 @@ Leps=1.e-6;
 deff('[ydot]=f(t,y)',...
    'f1=-0.04*y(1)+1e4*y(2)*y(3),...
     f3=3e7*y(2)*y(2),...
-    ydot=[f1;-f1-f3;f3]')
+    ydot=[f1;-f1-f3;f3]','n')
 //     jacobian
 deff('[jac]=j(t,y)',...
 'jac(1,1)=-0.04;jac(1,2)=1.e4*y(3);jac(1,3)=1.e4*y(2),...
  jac(3,1)=0;jac(3,2)=6.e7*y(2);jac(3,3)=0;...
- jac(2,1)=-jac(1,1);jac(2,2)=-jac(1,2)-jac(3,2);jac(2,3)=-jac(1,3);')
+ jac(2,1)=-jac(1,1);jac(2,2)=-jac(1,2)-jac(3,2);jac(2,3)=-jac(1,3);','n')
 //    
 y0=[1;0;0];t0=0;t1=[0.4,4];nt=size(t1,'*');
 //    solution 
@@ -56,9 +56,8 @@ y6=ode('stiff',y0,t0,t1,0.00001,0.00001,f,j);
 if (y6-yref) > 2*0.00001 then pause,end
 //  7. matrix rhs, type given(adams),jacobian not passed
 // 
-a=rand(3,3);ea=exp(a);
+a=rand(3,3);ea=expm(a);
 deff('[ydot]=f(t,y)','ydot=a*y')
-comp(f);
 t1=1;y=ode('adams',eye(a),t0,t1,f);
 if maxi(ea-y) > Leps then pause,end
 //
@@ -78,7 +77,6 @@ p(2,2)=p(2,2)+1')
 deff('[p]=dgbydy(t,y,s)','[-0.04,1.d4*y(3),1.d4*y(2);...
 0.04,-1.d4*y(3)-6.d7*y(2),-1.d4*y(2);...
 1,1,1]')
-comp(resid);comp(aplusp);comp(dgbydy);
 //        %ODEOPTIONS tests
 //       
 rand('seed',0);rand('normal');
@@ -87,7 +85,7 @@ deff('y=f(t,x)','y=A*x')
 deff('J=j(t,x)','J=A')
 x0=ones(nx,1);t0=0;t=[1,2,3,4,5];
 nt=size(t,'*');
-eAt=exp(A*t(nt));
+eAt=expm(A*t(nt));
 
 //        Test itask=%ODEOPTIONS(1)
 
@@ -109,7 +107,7 @@ xft=ode(x0,t0,tmax,f);
 [p,q]=size(xft);
 xlast=xft(2:nx+1,q);
 if xft(1,q)<tmax then pause,end
-if norm(xlast-exp(A*xft(1,q))*x0)>Leps then pause,end
+if norm(xlast-expm(A*xft(1,q))*x0)>Leps then pause,end
 
 //itask=3;   ---> solution at first mesh point beyond t=tmax
 %ODEOPTIONS(1)=3;
@@ -304,4 +302,9 @@ yaj=ode('adams',ones(nx,1),0,2,f,j);
 ysf=ode('stiff',ones(nx,1),0,2,f,j);
 ysj=ode('stiff',ones(nx,1),0,2,f,j);
 
+deff('xd=f(t,x)','xd=A*x+B*sin(3*t)')
+A=rand(10,10)-4.5*eye;B=rand(10,1);
+x=ode(ones(10,1),0,[1,2,3],f);
+//link('fexab.o','fexab')
+if norm(x-ode(ones(10,1),0,[1,2,3],'fexab'),1) > 1.d-10 then pause;end
 

@@ -11,14 +11,15 @@ function [P,m]=lqg2stan(P22,Q,R)
 //  mininize (x,u)'Q(x,u)
 //
 flag=0;
-if P22(1)='r' then
+P221=P22(1);
+if P221(1)='r' then
   P22=tf2ss(P22);flag=1;end
 P22=-P22;
 [A,B,C,D22]=P22(2:5);
 [nx,nu]=size(B);
 [ny,nx]=size(C);
-Qhalf=real(sqrt(Q));
-Rhalf=real(sqrt(R));
+Qhalf=real(sqrtm(Q));
+Rhalf=real(sqrtm(R));
 B1=Rhalf(1:nx,:);D21=Rhalf(nx+1:nx+ny,:);
 B2=B;
 C1=Qhalf(:,1:nx);D12=Qhalf(:,nx+1:nx+nu);

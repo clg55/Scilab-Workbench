@@ -1,17 +1,20 @@
-      subroutine cosblk(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),z(*),u(*),rpar(*),out(*)
-      integer ipar(*),flag
-c     COSBLK, Alvaro:17-5-95
-c     Continous block, MIMO
-      if(flag.eq.1) then
-c     flag=1
-         do 15 i=1,nu
-            out(i)=cos(u(i))
- 15      continue
-      else
-c     flag=2 or 3 --> ERROR
-         write(*,'(''ERROR; block cos flag:'',i2,'' t '',e10.3)') flag,t
-         flag=-1
+      subroutine cosblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
+c     Outputs cos(u(i))
+c     
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
+
+c     
+      common /dbcos/ idb
+c
+      if(idb.eq.1) then
+         write(6,'(''Cosblk   t='',e10.3,'' flag='',i1)') t,flag
       endif
+
+      do 15 i=1,nu
+         y(i)=cos(u(i))
+ 15   continue
       end

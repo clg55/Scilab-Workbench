@@ -1,4 +1,4 @@
-//[out,nwrk,txt]=getwrk(nwrk,typ,m,n)
+function [out,nwrk,txt]=getwrk(nwrk,typ,m,n)
 //Cette macro alloue une matrice de taille m*n de type fortran typ dans le
 //    tableau de travail correspondant (modifie en consequence nwrk)
 //    et retourne
@@ -27,7 +27,7 @@ if typ=='1' then
     nwrk(2)=[nwrk(2) [mn;'1']]
     txt=[' iw'+string(i)+' = '+addf('iw'+string(i-1),mn)];
   end
-  out='work(iw'+string(i)+')'
+  out='work(iw'+string(i-1)+')'
 else
   i=nwrk(4)
   nw5=nwrk(5);[m5,n5]=size(nw5)
@@ -48,8 +48,8 @@ else
     nwrk(5)=[nwrk(5),[mn;'1']]
     txt=[' iiw'+string(i)+' = '+addf('iiw'+string(i-1),mn)];
   end
-  out='iwork(iiw'+string(i)+')'
+  out='iwork(iiw'+string(i-1)+')'
 end
-//end
+
 
 

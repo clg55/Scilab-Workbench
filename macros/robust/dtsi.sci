@@ -9,9 +9,10 @@ function [ga,gs,gi]=dtsi(g,tol)
 // tol optional parameter for detecting stables poles. 
 // Default value: 100*%eps
 //!
+g1=g(1);
 [lhs,rhs]=argn(0),
 if rhs=1 then tol=100*%eps,end,
-if g(1)='r' then
+if g1(1)='r' then
   //transfer
   //----------------------------
   num=g(2),den=g(3),var=varn(den),
@@ -58,7 +59,7 @@ if g(1)='r' then
       end,
     end,
   end,
-  ga=tlist('r',num1,den1,'c'),gs=tlist('r',num2,den2,'c'),
+  ga=syslin('c',num1,den1),gs=syslin('c',num2,den2),
   gi1=ginfini(ga),gi2=ginfini(gs),
   ga=ga-gi1,gs=gs-gi2,gi=gi1+gi2,return,
 else
@@ -90,8 +91,9 @@ end;
 function D=ginfini(g)
 //gi=ginfini(g) computes D = g(infinity) for the proper transfer matrix g
 //!
+g1=g(1);
 if type(g)=1 then D=g,return,end,
-if g(1)<>'r' then error(90,1),end
+if g1(1)<>'r' then error(90,1),end
 num=g(2),den=g(3),
 [nn,mm]=size(num),D=0*ones(nn,mm),
 for i=1:nn,

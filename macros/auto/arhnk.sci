@@ -1,13 +1,16 @@
 function [slm]=arhnk(a,ordre,tol)
 [lhs,rhs]=argn(0),
    if lhs<>1 then error(41),end
-   if a(1)<>'lss' then error(91,1),end;
+   typeofa=a(1)
+   if typeofa(1)<>'lss' then error(91,1),end;
    if a(7)='d' then error(93,1),end
    select rhs
      case 2 then istol=0;
      case 3 then istol=1;
    end;
-   [a,b,c,d,x0,dom]=a(2:7)
+   [a,b,c,d,x0,dom]=a(2:7);
+if(maxi(real(spec(a)))) > 0 then
+  error('unstable system!');return;end
 domaine='c'
 wc=lyap(a',-b*b',domaine)
 wo=lyap(a,-c'*c,domaine)
@@ -23,7 +26,7 @@ if ordre>n1 then
 end;
 if ordre=n1 then
   a=a(1:n1,1:n1);b=b(1:n1,:);c=c(:,1:n1);
-  if lhs=1 then a=tlist('lss',a,b,c,d,0*ones(n1,1),'c'),end
+  if lhs=1 then a=syslin('c',a,b,c,d,0*ones(n1,1)),end
   return,
 end;
 sigma=wc(ordre+1,ordre+1)
@@ -42,7 +45,6 @@ a=gamma\(sigma*sigma*a'+wo*a*wc-sigma*c'*u*b')
 b1=gamma\(wo*b+sigma*c'*u)
 c=c*wc+sigma*u*b';b=b1;
 d=-sigma*u+d
-
 //
 [n,n]=size(a)
 [u,m]=schur(a,'c')
@@ -54,8 +56,4 @@ if m<n then
   c=c(:,1:m)
 end;
 //
-slm=tlist('lss',a,b,c,d,0*ones(m,1),'c');
-
-
-
-
+slm=syslin('c',a,b,c,d,0*ones(m,1));

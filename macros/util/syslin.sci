@@ -1,12 +1,13 @@
 function [sl]=syslin(domain,a,b,c,d,x0)
 [lhs,rhs]=argn(0)
 //
+lss_t=['lss','A','B','C','D','X0','dt']
 select type(domain)
 case 1 then  //sampled system
   if domain=[] then 
     tp=[]
   else
-    if prod(size(domain))<>1 then
+    if size(domain,'*')<>1 then
       if rhs==3 then
         [m1,n1]=size(domain);
         if m1<>n1 then error('syslin: a must be square');end
@@ -14,7 +15,7 @@ case 1 then  //sampled system
         if n2~=0&n2<>n1 then error('syslin: invalid column dimension of b matrix');end
         [n3,m3]=size(b);
         if m3~=0&m3<>n1 then error('syslin: invalid row dimension of c matrix');end
-        sl=tlist('lss',domain,a,b,zeros(b*a),zeros(n1,1),[ ]);
+        sl=tlist(lss_t,domain,a,b,zeros(b*a),zeros(n1,1),[ ]);
         return
       end
       if rhs==4 then
@@ -27,7 +28,7 @@ case 1 then  //sampled system
         [n4,m4]=size(c);
         if n4<>n3 then error('syslin: invalid column dimension of d matrix');end
         if m4<>m2 then error('syslin: invalid row dimension of d matrix');end
-        sl=tlist('lss',domain,a,b,c,zeros(n1,1),[]);
+        sl=tlist(lss_t,domain,a,b,c,zeros(n1,1),[]);
         return
       end
       if rhs==5 then
@@ -43,7 +44,7 @@ case 1 then  //sampled system
         [n5,m5]=size(d);
         if n5<>n1 then error('syslin: invalid x0');end
         if m5<>1 then error('syslin: invalid x0 (column vector)');end
-        sl=tlist('lss',domain,a,b,c,d,[]);
+        sl=tlist(lss_t,domain,a,b,c,d,[]);
         return
       end
       error('domain (1rst argument of syslin) must be a scalar')
@@ -54,7 +55,7 @@ case 1 then  //sampled system
     tp=domain(1,1)
   end
 case 10 //continuous or discrete
-  if prod(size(domain))<>1 then
+  if size(domain,'*')<>1 then
     error('domain (1rst argument of syslin) must be a single string')
   end
   select part(domain,1)
@@ -68,6 +69,11 @@ end;
 select type(a)
 case 1 then // (a,b,c,d...)
   //-------------------------
+  if type(b)==2 then 
+    a=a+0*poly(0,varn(b));
+    sl=tlist(['r','num','den','dt'],a,b,tp);
+    return;
+  end
   if rhs <4 then
     error('syslin : (domain,a,b,c [d [x0]])');
   end
@@ -113,7 +119,7 @@ case 1 then // (a,b,c,d...)
   sl=tlist('lss',a,b,c,d,x0,tp)
 case 2 then //(n,d,...)
   //---------------------
-  if rhs==2 then s=tlist('lss',[],[],[],a,[],tp);return;end
+  if rhs==2 then sl=tlist(['r','num','den','dt'],a,1,tp);return;end
   if rhs >3 then error('syslin : (domain,n,d )');end
   if type(b)>2 then error('syslin : n and d polynomial matrices');end
   //
@@ -121,30 +127,23 @@ case 2 then //(n,d,...)
     error('syslin : n and d have inconsistent dimensions'),
   end;
   z='z';
+  if tp=[] then z=varn(a);end
   if tp='c' then z='s',end
   //
   if type(a)=2 then a=varn(a,z),end
-  sl=tlist('r',a,varn(b,z),tp)
+  sl=tlist(['r','num','den','dt'],a,varn(b,z),tp)
   //-compat next case retained for list -> tlist compatibility
-case 15 then //(n,d,...)
+case 15 then //(n/d,...)
   //---------------------
-  if a(1)<>'r' then error(90,1),end
-  if rhs >2 then  error('syslin : (domain,h )');end
-  if a(4)<>[] then error('syslin:time domain already defined');end
-  //
-  z='z';
-  if tp='c' then z='s',end
-  sl=tlist('r',varn(a(2),z),varn(a(3),z),tp)
-case 16 then //(n,d,...)
+  error('Obsolete feature, please use tlist to define rational fractions')
+case 16 then //(n/d,...)
   //---------------------
-  if a(1)<>'r' then error(90,1),end
+  typ=a(1)
+  if typ(1)<>'r' then error(90,1),end
   if rhs >2 then  error('syslin : (domain,h )');end
-  if a(4)<>[] then error('syslin:time domain already defined');end
-  //
-  z='z';
-  if tp='c' then z='s',end
-  sl=tlist('r',varn(a(2),z),varn(a(3),z),tp)  
-else error(44,2)
+  sl=a;sl(4)=tp
+else 
+  error(44,2)
 end
 
 

@@ -1,4 +1,4 @@
-//<s>=%smlss(d1,s2)
+function s=%smlss(d1,s2)
 // s=d1*s2
 //!
 // origine s. steer inria 1987
@@ -9,6 +9,6 @@ if prod(size(s2))==1 then
 end
 d=d1*d2;
 [a2;d1*c2];
-s=tlist('lss',a2,b2,d1*c2,d,x2,dom2)
-//end
+s=tlist(['lss','A','B','C','D','X0','dt'],a2,b2,d1*c2,d,x2,dom2)
+
 

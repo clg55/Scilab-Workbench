@@ -37,9 +37,9 @@ Mat=[Ia.*.F-A'.*.Inf, Ia.*.G, zeros(nf*na,nu*num);
       zeros(ny*num,nf*na),zeros(ny*num,nu*na),Iu.*.J];
 
 rhs=[zeros(nf*na,1);
-     matrix(C,prod(size(C)),1);
+     matrix(C,size(C,'*'),1);
      zeros(nf*num,1);
-     matrix(D,prod(size(D)),1)];
+     matrix(D,size(D,'*'),1)];
 TLM=pinv(Mat)*rhs;
 T=TLM(1:nf*na);T=matrix(T,nf,na);
 L=TLM(nf*na+1:nf*na+nu*na);L=matrix(L,nu,na);

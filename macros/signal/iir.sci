@@ -28,18 +28,9 @@ function hz=iir(n,ftype,fdesign,frq,delta)
 // author: C. Bunks  date: 9 Sept 1988
  
 //select analog filter design for low-pass filter with fc=.25
- 
-   [hs,pc,zc,gc]=analpf(n,fdesign,delta,2);
- 
+[hs,pc,zc,gc]=analpf(n,fdesign,delta,2);
 //make digital low-pass filter from analog low-pass filter
- 
-   z=poly(0,'z');
-   [pd,zd,gd]=bilt(pc,zc,gc,2*(z-1),(z+1));
- 
+z=poly(0,'z');[pd,zd,gd]=bilt(pc,zc,gc,2*(z-1),(z+1));
 //do change of variables to obtain general digital filter
- 
-   [hz]=trans(pd,zd,gd,ftype,frq)
- 
-//end
-
+hz=trans(pd,zd,gd,ftype,frq);
 

@@ -1,4 +1,4 @@
-      subroutine dmpdsp(mp,d,nl,m,n,var,lvar,maxc,mode,ll,lunit,
+      subroutine dmpdsp(mp,d,nl,mm,nn,var,lvar,maxc,mode,ll,lunit,
      1     cw,iw)
 c     !but
 c     dmpdsp ecrit une matrice polynomiale (ou un polynome) sous
@@ -43,6 +43,9 @@ c     !
       character var*(*),cw*(*),sgn*1,dl*1
       character*10 form(2),fexp,expo
 c     
+      m=abs(mm)
+      n=abs(nn)
+
       cw=' '
       write(form(1),130) maxc,maxc-7
       dl=' '
@@ -138,6 +141,15 @@ c
  21   continue
       nbloc=min(nbloc,n)
 c     
+      l1=1
+      if(mm.lt.0) then
+         write(cw(l1:l1+4),'(''eye *'')') 
+         l1=l1+5
+         call basout(io,lunit,cw(1:l1-1))
+         call basout(io,lunit,' ')
+         if(io.eq.-1) goto 99
+      endif
+
 c     
 c     phase d'edition : les deux chaines de caracteres representant
 c     la ligne des exposants et la ligne des coefficients,sont

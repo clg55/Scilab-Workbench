@@ -14,7 +14,7 @@
 #include <stdio.h> 
 #include <math.h>
 #include <string.h>
-#include "sp.h"
+#include "spd.h"
 
 void cngrncb(itype,n,AP,B,CP,temp)
  int itype;

@@ -10,8 +10,8 @@ function [ac,bc,u,ind]=canon(a,b)
 //Author:F. D. (Inria)
 //!
 //1: block-hessenberg form
-[ac,bc,u,ro]=contr(a,b);
-//2:on annule ce qui est a droite des blocs sous diagonaux
+[ac,bc,u,ro]=contr(a,b,[1.d-10*norm([a,b],1),1.d-10]);
+//2:zeroing what is th the right of under-diagonal blocks
 [na,ni]=size(b);[l,k]=size(ro);k0=na+1;k1=k0-ro(k);
 for kk=k:-1:2,
   k2=k1-ro(kk-1);rows=k1:k0-1;cols=k1:na;intsc=k2:k1-1;

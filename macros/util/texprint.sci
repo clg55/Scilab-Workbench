@@ -52,8 +52,9 @@ case 10 then //strings
      end
      tt=part(tt,1:length(tt)-4)+'}}'
  
-case 16 then //transfer and linear systems
-  select a(1)
+case 16 then 
+     a1=a(1)//transfer and linear systems
+  select a1(1)
     case 'r' then //rationals
      num=a(2);a=a(3)
      [m,n]=size(a)

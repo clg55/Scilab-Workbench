@@ -1,35 +1,18 @@
 SHELL = /bin/sh
-
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/intersci.a
 
 OBJSC = cchar.o ccharf.o cdouble.o cdoublef.o cerro.o cint.o cintf.o cout.o \
-	cstringf.o stringc.o
+	cstringf.o stringc.o int2cint.o dbl2cdbl.o freeptr.o
 
 OBJSF = erro.o out.o
 
-OBJS = $(OBJSC) $(OBJSF)
+include ../../Makefile.incl
 
-all:: $(LIBRARY)
+CFLAGS = $(CC_OPTIONS)
 
-world: all
-
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)
+include ../Make.lib
 
 erro.o:       ../stack.h
 out.o:       ../stack.h
@@ -44,3 +27,6 @@ cintf.o: ../machine.h
 cout.o: ../machine.h
 cstringf.o: ../machine.h
 stringc.o: ../machine.h
+int2cint.o: ../machine.h
+dbl2cdbl.o: ../machine.h
+freeptr.o: ../machine.h

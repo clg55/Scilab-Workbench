@@ -1,4 +1,4 @@
-//[]=setparam()
+function []=setparam()
 //
 //!
 %else='else',%end='end';%elseif='elseif';%if='if';%for='for';
@@ -39,7 +39,6 @@ ops     =['+','2','  ';
          quote,'0','  '];
 [logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then]=...
 resume(logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then)
- 
-//end
+
 
 

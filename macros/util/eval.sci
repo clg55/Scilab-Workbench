@@ -13,7 +13,6 @@ else
    texte='%h='+z
 end
 deff('[%h]=%eval()',texte),
-comp(%eval),
 h=%eval(),
 
 

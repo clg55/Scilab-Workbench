@@ -265,9 +265,9 @@ c   here two constants emboding the machine epsilon is present
 c   twoesp is set to twice the machine epsilon while u26 is set
 c   to 26 times the machine epsilon
 c
-c     data twoeps, u26/4.4d-16, 5.72d-15/                               ***
+c     data twoeps, u26/4.4d-16, 5.72d-15/
       twoeps = 2.*dlamch('p')
-      u26 = 13.*twoeps                                                  ***
+      u26 = 13.*twoeps
 c
 c
 c     check input parameters

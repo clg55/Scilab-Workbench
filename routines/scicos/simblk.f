@@ -1,92 +1,123 @@
       subroutine simblk(neq,t,xc,xcdot)
-C 
+c!purpose
+c     interface to simbl1 at the lsodar format
+c!calling sequence
+c     neq   : integer vector whose first element is the size of the
+c             continuous state. next elements store integer arrays used by
+c             simbl1 and grbl1
+c     t     : current time 
+c     xc    : double precision vector whose first neq(1) elements contain
+c             the continuous state. Next elements store double precision
+c             arrays used by simbl1 and grbl1
+c     xcdot : double precision vector, contain the computed derivative
+c             of the state 
+c!
       integer neq(*)
       double precision t
       double precision xc(*)
       double precision xcdot(*)
-C 
-C.. External Calls .. 
+c
       external simbl1
-C 
-C... Variables in Common Block ... 
-      integer lrpar,lrptr,lipar,liptr,louttb,lcmat,lrhot,linppt,loutpt,
-     &        lstpt,lfunpt,lihot,ljroot,lclkpt,lcord,loord,lzord
-      common /cosptr/ lrpar,lrptr,lipar,liptr,louttb,lcmat,lrhot,linppt,
-     &                loutpt,lstpt,lfunpt,lclkpt,lihot,ljroot,lww,lcord,
-     &                loord,lzord
-C 
-C 
-C... Variables in Common Block ... 
-      integer nblk,nxblk,ncblk,ndblk,nout,ncout,ninp,ncinp,ncst,ng,nrwp,
-     &     niwp,ncord,niord,noord,nzord
-      common /cossiz/ nblk,nxblk,ncblk,ndblk,nout,ncout,ninp,ncinp,
-     &     ncst,ng,nrwp,niwp,ncord,niord,noord,nzord
-C 
-C ... Executable Statements ...
-C 
-      call simbl1(t,nxblk,ncblk,nout,noord,neq(loord),xc(lww),xc,
-     &            xc(louttb),neq(linppt),neq(loutpt),neq(lstpt),ncst,
-     &            ncout,ncinp,neq(lcmat),neq(lfunpt),xc(lrpar),
-     &            neq(lrptr),neq(lipar),neq(liptr),nblk,ninp,xcdot)
+c 
+      integer lfunpt,lxptr,lz,lzptr,liz,lizptr,lrpar,lrpptr,lipar
+      integer lipptr,linpptr,linplnk,loutptr,loutlnk,llnkptr
+      integer louttb,loord,lzord,lfuntyp
+
+      common /cosptr/ lfunpt,lxptr,lz,lzptr,liz,lizptr,lrpar,lrpptr,
+     &     lipar,lipptr,linpptr,linplnk,loutptr,loutlnk,llnkptr,
+     &     louttb,loord,lzord,lfuntyp
+c
+      integer         nblk,nxblk,ncblk,ndblk,nout,ng,nrwp,niwp,ncord,
+     &     noord,nzord
+      common /cossiz/ nblk,nxblk,ncblk,ndblk,nout,ng,nrwp,niwp,ncord,
+     &     noord,nzord
+c
+      call simbl1(neq(lfunpt),neq(lfuntyp),t,xcdot,xc,neq(lxptr),
+     $     xc(lz),neq(lzptr),
+     $     neq(liz),neq(lizptr),xc(lrpar),neq(lrpptr),neq(lipar),
+     $     neq(lipptr),neq(linpptr),neq(linplnk),neq(loutptr),
+     $     neq(loutlnk),neq(llnkptr),xc(louttb),nxblk,neq(loord),
+     $     noord) 
+
       end
-C
-C
-C
-      subroutine simbl1(told,nxblk,ncblk,nout,noord,oord,w,xc,outtb,
-     &                  inpptr,outptr,stptr,ncst,ncout,ncinp,cmat,
-     &                  funptr,rpar,rpptr,ipar,ipptr,nblk,ninp,xcdot)
-C 
-      double precision told
-      integer ncblk,nxblk
-      integer nout
-      double precision xc(*),w(*)
-      double precision outtb(*)
-      integer inpptr(nblk+1)
-      integer outptr(nblk+1)
-      integer stptr(*)
-      integer ncst
-      integer ncout
-      integer noord
-      integer ncinp
-      integer oord(noord)
-      integer cmat(ninp)
-      integer funptr(nblk)
-      double precision rpar(*)
-      integer rpptr(nblk+1)
-      integer ipar(*)
-      integer ipptr(nblk+1)
-      integer nblk
-      integer ninp
-      double precision xcdot(ncst)
+c
+      subroutine simbl1(funptr,funtyp,told,xd,x,xptr,z,zptr,iz,
+     $        izptr,rpar,rpptr,ipar,ipptr,inpptr,inplnk,
+     $        outptr,outlnk,lnkptr,outtb,nxblk,oord,noord)
+c!purpose
+c     compute state derivative of the continuous part
+c!calling sequence
+c     funptr : table of block simulation functions adresses
+c     told   : current rtime value
+c     xd     : vector of full continuous state derivatives
+c     x      : vector of full continuous state
+c     xptr   : x,xd splitting array on individual blocks
+c     z      : floatting point full discrete state
+c     zptr   : z splitting array on individual blocks
+c     iz     : integer full discrete state
+c     izptr  : iz splitting array on individual blocks
+c     rpar   : vector resulting of the concatenation of blocks floatting
+c              point parameters
+c     rpptr  : rpar splitting array on individual blocks
+c     ipar   : vector resulting of the concatenation of blocks integer
+c              parameters
+c     ipptr  : ipar splitting array on individual blocks
+c     inpptr : input  splitting array
+c     inplnk : input indirection table
+c     outptr : output  splitting array
+c     outlnk : output indirection table
+c     lnkptr : outtb splitting array by link
+c     outtb  : vector containing the concatenation of link (vector) values
+c!
+      double precision told,xd(*),x(*),z(*),rpar(*),outtb(*)
+      integer funptr(*),funtyp(*),xptr(*),zptr(*),iz(*),izptr(*)
+      integer rpptr(*),ipar(*),ipptr(*),inpptr(*),inplnk(*),outptr(*)
+      integer outlnk(*),lnkptr(*),nxblk,oord(*),noord
+c
       integer iero
       common /ierode/ iero
-C 
-C.. Local Scalars .. 
-      integer i,flag
-C 
-C ... Executable Statements ...
-C 
+
+c     
+      integer kfun
+      common /curblk/ kfun
+c 
+      integer jj,flag,nclock,ntvec
+      double precision tvec(1)
+c 
+c     compute outputs necessary for computing xdot
       iero = 0
-      call inout(told,xc,outtb,inpptr,outptr,stptr,cmat,funptr,rpar,
-     &           rpptr,ipar,ipptr,ninp,nout,oord,noord,w,nblk,iero)
-      if (iero .ne. 0) return
       nclock = 0
-      do 100 i = 1,nxblk
-        ksz = inpptr(i+1) - inpptr(i)
-        do 99 j = 1,ksz
-          w(j) = outtb(cmat(inpptr(i)-1+j))
- 99     continue
+      tvec(1)=0.0d0
+      ntvec=0
+      if (noord.gt.0) then
+         do 10 jj=1,noord
+            kfun=oord(jj)
+            flag=1
+            call callf(kfun,nclock,funptr,funtyp,told,x,x,xptr,z,zptr,iz
+     $           ,izptr,rpar,rpptr,ipar,ipptr,tvec,ntvec,inpptr,inplnk
+     $           ,outptr,outlnk,lnkptr,outtb,flag) 
+            if (flag .lt. 0) then
+               iero = 5 - flag
+               return
+            endif
+
+ 10      continue
+      endif
+c
+c     compute  xdot
+c
+      nclock = 0
+      do 20 kfun = 1,nxblk
         flag = 2
-        call callf(funptr(i),told,xc(stptr(i)),stptr(i+1)-stptr(i),
-     &   xc(stptr(i+nblk)),stptr(i+1+nblk)-stptr(i+nblk),w,
-     &             inpptr(i+1)-inpptr(i),nclock,rpar(rpptr(i)),
-     &             rpptr(i+1)-rpptr(i),ipar(ipptr(i)),
-     &             ipptr(i+1)-ipptr(i),xcdot(stptr(i)),
-     &             stptr(i+1)-stptr(i),flag)
+        call callf(kfun,nclock,funptr,funtyp,told,xd,x,xptr,z,zptr,iz,
+     $       izptr,rpar,rpptr,ipar,ipptr,tvec,ntvec,inpptr,inplnk,
+     $       outptr,outlnk,lnkptr,outtb,flag) 
         if (flag .lt. 0) then
           iero = 5 - flag
           return
         endif
- 100  continue
+ 20   continue
       end
+
+
 

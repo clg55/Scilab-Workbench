@@ -1,6 +1,6 @@
-      subroutine tql2(nm,n,d,e,z,ierr)
+      subroutine tql2(nm,n,d,e,z,job,ierr)
 c
-      integer i,j,k,l,m,n,ii,l1,l2,nm,mml,ierr
+      integer i,j,k,l,m,n,ii,l1,l2,nm,mml,job,ierr
       double precision d(n),e(n),z(nm,n)
       double precision c,c2,c3,dl1,el1,f,g,h,p,r,s,s2,tst1,tst2,pythag
 c
@@ -17,7 +17,7 @@ c     full matrix to tridiagonal form.
 c
 c!calling sequence
 c
-c      subroutine tql2(nm,n,d,e,z,ierr)
+c      subroutine tql2(nm,n,d,e,z,job,ierr)
 c
 c     on input
 c
@@ -32,10 +32,10 @@ c
 c        e contains the subdiagonal elements of the input matrix
 c          in its last n-1 positions.  e(1) is arbitrary.
 c
-c        z contains the transformation matrix produced in the
-c          reduction by  tred2, if performed.  if the eigenvectors
+c        z contains (for job=1) the transformation matrix produced 
+c          in the reduction by  tred2, if performed.  if the eigenvectors
 c          of the tridiagonal matrix are desired, z must contain
-c          the identity matrix.
+c          the identity matrix. If job=0 z is not referenced
 c
 c      on output
 c
@@ -46,9 +46,9 @@ c
 c        e has been destroyed.
 c
 c        z contains orthonormal eigenvectors of the symmetric
-c          tridiagonal (or full) matrix.  if an error exit is made,
-c          z contains the eigenvectors associated with the stored
-c          eigenvalues.
+c          tridiagonal (or full) matrix (for job=1).  if an error 
+c          exit is made,z contains the eigenvectors associated with the stored
+c          eigenvalues. If job=0 z is not referenced
 c
 c        ierr is set to
 c          zero       for normal return,
@@ -126,12 +126,15 @@ c     .......... for i=m-1 step -1 until l do -- ..........
             c = p / r
             p = c * d(i) - s * g
             d(i+1) = h + s * (c * g + s * d(i))
+cSS96        test on job added to inhibit z computation 
+            if(job.eq.1) then
 c     .......... form vector ..........
-            do 180 k = 1, n
-               h = z(k,i+1)
-               z(k,i+1) = s * z(k,i) + c * h
-               z(k,i) = c * z(k,i) - s * h
-  180       continue
+               do 180 k = 1, n
+                  h = z(k,i+1)
+                  z(k,i+1) = s * z(k,i) + c * h
+                  z(k,i) = c * z(k,i) - s * h
+ 180           continue
+            endif
 c
   200    continue
 c
@@ -158,11 +161,14 @@ c
          d(k) = d(i)
          d(i) = p
 c
-         do 280 j = 1, n
-            p = z(j,i)
-            z(j,i) = z(j,k)
-            z(j,k) = p
-  280    continue
+cSS96    test on job added to inhibit z computation 
+         if(job.eq.1) then
+            do 280 j = 1, n
+               p = z(j,i)
+               z(j,i) = z(j,k)
+               z(j,k) = p
+ 280        continue
+         endif
 c
   300 continue
 c

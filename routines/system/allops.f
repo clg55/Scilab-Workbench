@@ -31,17 +31,34 @@ c
          if (r.eq.401) then 
             call putid(syn(1),ids(1,pt))
             pt=pt-1
-         else if (r.eq.402) then 
+c            if(pt.gt.0) then
+c               if(rstk(pt).eq. ) goto 50
+c            endif
+         elseif (r.eq.402) then 
             pt=pt-1
+         elseif (r.eq.403.or.r.eq.404) then
+            goto 50
          endif
          return
       endif
       if(err1.gt.0) return
-      vt=0
-      do 03 i=1,rhs
-         vt1=abs(ogettype(top+1-i))
+ 02   vt=0
+      icall=0
+
+      if(fin.eq.2) then
+c     . insertions
+         nt=2
+      elseif(fin.eq.3) then
+c     .  extraction
+         nt=1
+      else
+         nt=rhs
+      endif
+      do 03 i=1,nt
+         vt1=mod(abs(ogettype(top+1-i)),128)
          if(vt1.gt.vt) vt=vt1
  03   continue
+
 c
       goto (10,20,05,30,70,35,05,05,05,40,60,05,60,60,50,50) ,vt
  05   call error(43)
@@ -57,7 +74,9 @@ c
  40   call strops
       goto 80
  50   call lstops
-      goto 80
+      if(err.gt.0) return
+      if(icall.eq.4) goto 02
+      goto 81
  60   call misops
       goto 80
  70   call spops
@@ -65,28 +84,33 @@ c
 
 c
  80   if(err.gt.0) return
+ 81   call iset(lhs,0,infstk(top-lhs+1),1)
+c
       if(fun.ne.0) then 
-c        ------appel d'un matfn necessaire pour achever l'evaluation
+c     .  appel d'un matfn necessaire pour achever l'evaluation
          if (ptover(1,psiz)) return
          rstk(pt)=402
          icall=9
-c        *call* matfns
-      return
+c     .  *call* matfns
+         return
       endif
-      if(fin.gt.0) return
-c     ---------------recherche d'une macro associee a une operation macro 
-c                    programme
-      fin=-fin
-      call mname(fin,id)
-      if(err.gt.0) return
-c     ---------------appel de la macro
-      fin=lstk(fin)
-      if (ptover(1,psiz)) return
-      call putid(ids(1,pt),syn(1))
-c next line suppressed to allow multiple extraction
-c      lhs=1
-      rstk(pt)=401
-      icall=5
-c     *call* macro
-      return
+c
+      if(fin.le.0) then
+c     .  operation macro programmee ?
+         fin=-fin
+         call mname(fin,id)
+         if(err.gt.0) return
+         fin=lstk(fin)
+         if (ptover(1,psiz)) return
+         call putid(ids(1,pt),syn(1))
+         rstk(pt)=401
+         icall=5
+c     .  *call* macro
+         return
+      endif
+
+      if(rstk(pt).eq.406.or.rstk(pt).eq.405) then
+c     .  list recursive extraction insertion 
+         goto 50
+      endif
       end

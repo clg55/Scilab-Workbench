@@ -1,9 +1,12 @@
-//<f>=%pqs(p1,p2)
-// %pqs(p,m) calcule le quotient element par element a gauche d'une matrice
-//de scalaire par une matrice de polynomes.
-//Cette macro correspond a l'operation p.\m
+function f=%pqs(p1,p2)
+// f=%pqs(p,m) <=> f=p.\m
 //!
-f=tlist('r',p2,p1,[])
-//end
+if size(p1,'*')==1 then
+  p1=p1*ones(p2)
+elseif size(p2,'*')==1 then
+  p2=p2*ones(p1)
+end
+f=tlist(['r','num','den','dt'],p2,p1,[])
+
 
 

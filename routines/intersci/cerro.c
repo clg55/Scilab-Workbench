@@ -1,4 +1,5 @@
 #include "../machine.h"
+#include "cerro.h"
 
 extern void C2F(erro)();
 

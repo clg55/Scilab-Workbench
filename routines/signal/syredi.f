@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=SYREDI,SSI=0
       subroutine syredi(maxdeg,ityp,iapro,om,adelp,adels,ndeg,
      *         nb,fact,b2,b1,b0,c1,c0,zzr,zzi,zpr,zpi,ierr,
      *          spr,spi,pren,pimn,zm,sm,rom,nzero,nze)
@@ -75,6 +74,14 @@ c
      *edeg,ndeg,adelp,adels,nbn,nzero,nzm,vsn,a,
      *adelta,adeg,sm,pren,pimn,ugc,ogc,ack,zm,zzr,zzi,
      *rom,b2,b1,b0,dk,dks,dcap02,dcap04,vsnn,ndegn,nh,vd,nze,ierr)
+      if(2*ndeg.gt.maxdeg) then
+         ierr=-9
+         return
+      endif
+      if(ndeg.le.0) then
+         ierr=-7
+         return
+      endif
       call desib(nmaxi,maxdeg,vsnn,ndegn,nbn,ityp,iapro,om,nh,adelp,
      *adels,vd,a,adelta,pren,pimn,ugc,ogc,ack,dk,
      *dks,dcap02,dcap04,acx,spr,spi,zpr,zpi,
@@ -82,3 +89,4 @@ c
 c
       return
       end
+

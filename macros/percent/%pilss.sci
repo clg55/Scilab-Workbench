@@ -1,10 +1,6 @@
 function s2=%pilss(i,j,s1,s2)
-//%pilss(i,j,s1,s2) calcule l'insertion d'un transfert polynomial
-// dans un systeme dynamique decrit par une representation d'etat 
-//Cette macro correspond a l'operation  s2(i,j)=s1
+//s2=%pilss(i,j,s1,s2) <=> s2(i,j)=s1
 //!
-// origine s. steer inria 1992
-//
 if type(i)==10 then  // sl('D')
   [lhs,rhs]=argn(0)
   if rhs<>3 then  error(21),end
@@ -19,8 +15,8 @@ if type(i)==10 then  // sl('D')
   return
 end
 
-s1=tlist('lss',[],[],[],s1,[],[])
+s1=tlist(['lss','A','B','C','D','X0','dt'],[],[],[],s1,[],[])
 s2(i,j)=s1
-//end
+
 
 

@@ -1,5 +1,11 @@
 #include <string.h>
+
+#ifdef __STDC__
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
+
 
 #include "../machine.h"
 
@@ -12,7 +18,7 @@ extern struct {
 } C2F(stack);
 
 integer C2F(scimem)(n,ptr)
-integer *n, *ptr;
+     integer *n, *ptr;
 {
   char *p1;
   if (*n > 0){
@@ -33,9 +39,11 @@ integer *n, *ptr;
 	*ptr=0;
       }
   }
+  return(0);
 }
 
 void C2F(freemem)()
 {
   if (the_ps != NULL) free(the_ps);
 }
+

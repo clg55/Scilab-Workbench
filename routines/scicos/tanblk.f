@@ -1,32 +1,28 @@
-      subroutine tanblk(t,x,nx,z,nz,u,nu,rpar,nrpar,ipar,nipar,nclock,
-     &     out,nout,flag)
-      double precision t,x(*),u(*),rpar(*),out(*),w,z(*)
-      integer ipar(*),flag
-c     TANBLK, Alvaro:17-5-95
-c     Continous block, MIMO
-c     rpar(1) is tan basis
+      subroutine tanblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
+     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Scicos block simulator
+c
+      double precision t,xd(*),x(*),z(*),tvec(*),rpar(*),u(*),y(*)
+      integer flag,nevprt,nx,nz,ntvec,nrpar,ipar(*)
+      integer nipar,nu,ny
 
-
+c
+      double precision ww
       common /dbcos/ idb
 c
       if(idb.eq.1) then
          write(6,'(''Tanblk     t='',e10.3,'' flag='',i1)') t,flag
       endif
 
-      if(flag.eq.1) then
-c     flag=1
-         do 15 i=1,nu
-            w=cos(u(i))
-            if(w.ne.0.0d0) then
-               out(i)=sin(u(i))/w
-            else
-               flag=-2
-               return
-            endif
- 15      continue
-      else
-c     flag=2 or 3 --> ERROR
-         write(*,'(''ERROR; block tan flag:'',i2,'' t '',e10.3)') flag,t
-         flag=-1
-      endif
+c     
+      do 15 i=1,nu
+         ww=cos(u(i))
+         if(ww.ne.0.0d0) then
+            y(i)=sin(u(i))/ww
+         else
+            flag=-2
+            return
+         endif
+ 15   continue
+      
       end

@@ -66,6 +66,5 @@ function [la,sig,lb]=levin(n,cov)
    b=-k2*a+z*b;a=a1;
    la(j+1)=a;lb(j+1)=b;sig(j+1)=sig1;
    end;
-//end
 
 

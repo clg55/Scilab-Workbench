@@ -4,8 +4,8 @@ tt=0:0.05:10;
 
 path="SCI/demos/npend";
 mode(-1);
-getf(path+'/macros.sci','c');
-getf(path+'/dessin.sci','c');
+getf(path+'/macros.sci');
+getf(path+'/dessin.sci');
 xbasc();
 flag1=x_choose(['Read a precomputed trajectory';
         'Simulation with ode (needs f77 and link. may fail. see help link)'],...

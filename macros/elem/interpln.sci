@@ -11,32 +11,31 @@ function [y]=interpln(xyd,x)
 //!
 // S Steer INRIA 1991
 
-[md,nd]=size(xyd)
+[md,nd]=size(xyd);
 if md<>2 then
-  error('interpln:xyd doit avoir 2 lignes')
+  error('interpln:xyd must have two rows!')
 end
 //
 
-n=prod(size(x))
-d=xyd(:,1:nd-1)-xyd(:,2:nd)
+n=size(x,'*');
+d=xyd(:,1:nd-1)-xyd(:,2:nd);
 k=find(abs(d(1,1:nd-1))==0)
 if k<>[] then
   d(1,k)=%eps*ones(k)
-  xyd(1,k+ones(k))=xyd(1,k)+%eps*ones(k)
+  xyd(1,k+ones(k))=xyd(1,k)+%eps*ones(k);
 end
-d=d(2,:)./d(1,:)
+d=d(2,:)./d(1,:);
 for pt=1:n,
-  xpt=x(pt)
-  k=find(xpt>xyd(1,1:nd-1)&xpt<=xyd(1,2:nd))
+  xpt=x(pt);
+  k=find(xpt>xyd(1,1:nd-1)&xpt<=xyd(1,2:nd));
   if k==[] then
     if xpt<=xyd(1,1) then k=1,else k=nd-1,end
   else
-    k=k(prod(size(k)))
+    k=k(size(k,'*'));
   end
-//  if abs(d(k))>1d5 then pause,end
   y(1,pt)=xyd(2,k)+(xpt-xyd(1,k))*d(k)
 end
-//end
+
 
 
 

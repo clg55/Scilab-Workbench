@@ -1,18 +1,21 @@
-function x=do_tild(x)
+function scs_m=do_tild(scs_m)
 while %t
-  [n,pt]=getmenu(datam);xc=pt(1);yc=pt(2)
+  [btn,xc,yc]=xclick(0);
+  pt=[xc,yc]
+  [n,pt]=getmenu(datam,pt);
   if n>0 then n=resume(n),end
-  //[btn,xc,yc]=xclick()
-  k=getobj(x,[xc;yc])
+  k=getobj(scs_m,[xc;yc])
   if k<>[] then break,end
 end
-if get_connected(x,k)<>[] then
-  x_message('Connected block can''t be tilded')
+if get_connected(scs_m,k)<>[] then
+  message('Connected block can''t be tilded')
   return
 end
-o=x(k)
+o=scs_m(k)
 drawobj(o)
 if pixmap then xset('wshow'),end
 geom=o(2);geom(3)=~geom(3);o(2)=geom;
 drawobj(o)
-x(k)=o
+scs_m(k)=o
+
+

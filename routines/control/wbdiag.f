@@ -111,6 +111,7 @@ c
  10      continue
          eps=max(eps,temp)
  11   continue
+      if (eps.eq.0.0d0) eps=1.0d0
       eps=dlamch('p')*eps
 c
 c     convert a to upper hessenberg form.

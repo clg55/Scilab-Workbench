@@ -1,36 +1,39 @@
-function xbasimp(win_num,filen,flag)
-// xbasimp(win_num,[filen,flag])
-// This function will send the recorded graphics of the
-// window win_num in the Postscript file filen
-// and will print the Postscript file with the 
-// command Blpr.
-// -filen is optionnal.
-// -win_num can be a number which gives the 
-// number of the window to save, or a vector
-// in which case several files are generated
-// one for each window (with names filenxx), and the files are printed 
-// on a unique page with the command Blpr.
-// -if flag =0 the files are created but not printed 
-// -caution : this function will work only if the selected 
-// driver is 'Rec'
+function xbasimp(win_num,filen,printer)
+// This function will send the recorded graphics 
+// to a Postscript file 
 //!
 [lhs,rhs]=argn(0);
 n=prod(size(win_num))
 win_num=matrix(win_num,1,n);
 if rhs<2,filen=TMPDIR+'/scilab.ps';end
-if rhs<3,flag=1;end
+flag=0;
+if rhs=1 | rhs>=3 ,flag=1;end
 fname=' ';
 for i=1:n,
   fnamel=filen+'.'+string(win_num(i));
   fname=fname+fnamel+' ';
   // don't break next line
-  driver('Pos');xinit(fnamel);xtape('replay',win_num(i));driver('Pos');xend();
+  //driver('Pos');xinit(fnamel);xtape('replay',win_num(i));driver('Pos');xend();
+  // xg2ps is not documented it's only used here 
+  // the third argument which is optional can be set to 0 1
+  // 0 for b&w and 1 for color  : the default value is to use the screen 
+  // status 
+  xg2ps(win_num(i),fnamel);
 end
-driver('Rec');
+//driver('Rec');
 //Blpr 'titre' filename1 filename2 ....  lpr
-if flag=1,host('$SCI/bin/Blpr ''  '' '+fname+ ' | lpr');end
+if rhs <= 2 then 
+  prs= getenv('PRINTERS','void')
+  if prs<>"void" ;k=strindex(prs,':')
+	       prs=part(prs,1:k(1)-1);
+	       prc= 'lpr -P'+prs;
+  else
+	       prc= 'lpr'
+  end
+else 
+	prc = 'lpr -P'+printer
+end 
+if flag=1,host('$SCI/bin/Blpr ''  '' '+fname+ ' |' + prc);end
 if rhs=1,host('rm -f '+fname);end
-
-
 
 

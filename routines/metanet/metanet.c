@@ -1,7 +1,7 @@
 #include "../machine.h"
 
 #include <errno.h>
-#ifdef SYSV
+#if defined(SYSV) || defined(WIN32)
 #include <string.h>
 #else
 #include <strings.h>
@@ -9,37 +9,58 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#ifdef __STDC__
+#include <stdlib.h>
+#else
 #include <malloc.h>
+#endif
 
-#include "../comm/libCalCom.h"
-#include "../comm/libCom.h"
+#include "../libcomm/libCalCom.h"
+#include "../libcomm/libCom.h"
+#include "netcomm.h"
 
-extern void GetMsg();
+#ifdef __MSC__ 
+/** XXXX : metanet not implemented in windows **/
+void gethostname(char *str,int len) { 
+  strncpy(str,"BUG",len);
+}
+void getwd(char *str) {};
+#endif
 
 extern void cerro();
 extern void cout();
 
+extern int isGeci;
+
 #define MAXNETWINDOW 512
+
 char *Netwindows[MAXNETWINDOW];
 int theNetwindow = 0;
 int nNetwindows = 0;
+int metanetSync = 0;
 
 #define MAXNAM 80
+#define MAXHOSTLEN 128
 
 static char str[MAXNAM];
 
-void C2F(inimet)(scr,path,lpath)
+void C2F(inimet)(scr,path,lpath,dwidth,dheight)
 int *scr;
 char *path;
 int *lpath;
+int *dwidth, *dheight;
 {
   char windowname[MAXNAM];
   char command[2 * MAXNAM];
-  char warg[MAXNAM];
+  char warg[MAXNAM], widtharg[MAXNAM], heightarg[MAXNAM];
   char* env;
   char server[MAXHOSTLEN];
   char dir[1024];
 
+  if (isGeci == 0) {
+    cerro("Unable to launch Metanet graphics window: no communications");
+    return;
+  }
   path[*lpath] = '\0';
 
   strcpy(dir,path);
@@ -47,7 +68,7 @@ int *lpath;
 
   gethostname(server,MAXHOSTLEN);
   
-  GetMsg();
+  scanner_messages();
   nNetwindows++;
 
    if (nNetwindows > MAXNETWINDOW) {
@@ -76,15 +97,17 @@ int *lpath;
   else sprintf(command,"%s",env);
 
   sprintf(warg,"%d",nNetwindows);
+  sprintf(widtharg,"%d",*dwidth);
+  sprintf(heightarg,"%d",*dheight);
 
   envoyer_message_parametres_var(ID_GeCI,
 				 MSG_LANCER_APPLI,
 				 windowname,
 				 server,
 				 command,
-				 "-w",
-				 warg,
-				 path,
+				 "-w", warg,
+				 dir,
+				 widtharg, heightarg,
 				 "__ID_PIPES__",
 				 NULL);
 
@@ -121,7 +144,7 @@ int *lpath;
 int checkNetconnect()
 {
   /* checking for closed Metanet windows */
-  GetMsg();
+  scanner_messages();
   if (nNetwindows == 0) {
     cerro("You must first execute Metanet");
     return 0;
@@ -141,7 +164,6 @@ int checkTheNetwindow()
 void C2F(netwindow)(s)
 int *s;
 {
-  char fname[MAXNAM];
   char str[MAXNAM];
 
   if (checkNetconnect() == 0) return;
@@ -185,11 +207,10 @@ int **vs;
 int *nvs;
 int *cv;
 {
-  char fname[MAXNAM];
   int i,j;
   int s[MAXNETWINDOW];
 
-  GetMsg();
+  scanner_messages();
 
   *nvs = 0;
   *cv = 0;
@@ -228,5 +249,17 @@ int s;
     sprintf(str,"Warning: current Metanet window %d has been closed",s);
     cout(str);
     theNetwindow = 0;
+  }
+}
+
+void C2F(metasync)(s,res)
+int *s;
+int *res;
+{
+  if (*s == -1) {
+    *res = metanetSync;
+  } else {
+    metanetSync = *s;
+    *res = *s;
   }
 }

@@ -5,7 +5,8 @@ function [sl,name]=bloc2ss(syst)
 if type(syst)<>15 then
     error('input must be a list for block-diagram')
 end;
-if syst(1)<>'blocd' then
+syst1=syst(1);
+if syst1(1)<>'blocd' then
     error('input must be a list for block-diagram')
 end;
 
@@ -22,7 +23,8 @@ for l=2:nsyst
    end
    transfert=sys(2)
    if type(transfert)==10 then transfert=evstr(transfert);end
-   if transfert(1)='r' then transfert=tf2ss(transfert);end
+   tr1=transfert(1);
+   if tr1(1)='r' then transfert=tf2ss(transfert);end
    syst(l)=list('transfert',transfert)
    
    //-compat type(transfert)==15 retained for list/tlist compatibility
@@ -176,10 +178,9 @@ end
 if or(size(d')<>size(k)) then
   error('invalid data')
 end
-sl=tlist('lss',a,b,c,d,0*ones(ms,1),[])/.(-k)
+sl=syslin(a,b,c,d)/.(-k)
 sl=sl(out,in)
 sl(7)=dom
-//end
 
 function [lboites,lliens,lentrees,lsorties]=blocdext(syst)
 //!

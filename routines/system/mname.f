@@ -6,41 +6,46 @@ c     =======================================================
       integer gettype
       logical ilog,getilist,getsmat
 c
-      parameter (nops=25)
+      parameter (nops=27)
       integer op,id(nsiz),name(nlgh),blank,percen
       integer ops(nops),code(nops),top1,rhs1,codop
       integer compat
       data compat/1/
       data blank/40/,percen/56/
       data ops /53,45,46,47,48,49,62, 1, 2, 3,4,98,99,100,200,201,202,
-     &          44,149,150,151,50,119,57,58/
+     &          44,149,150,151,50,119,57,58,113,61/
       data code/29,10,28,22,27,21,25,12,18,14,15,33,13,26,20, 34, 35, 
-     &          11,30, 31, 32, 24, 23, 16, 17/
+     &          11,30, 31, 32, 24, 23, 16, 17,19,37/
 c
-c  '  +  -  *  /  \  **  []  ()  .*  ./  .\  .*.  ./.  .\.  : *.  /. \.
-c  t  a  s  m  r  l  p   c,f e,i  x   d    q   k    y    z   b u   v  w
+c  '  +  -  *  /  \  **  []  ()  .*  ./  .\  .*.  ./.  .\.   :  *.  /. \.
+c  t  a  s  m  r  l  p   c,f e,i  x   d    q   k    y    z   b  u   v  w
 c
-c  ==  <>
-c   o  n
+c  ==  <>  | &  .^  ~
+c   o  n   g h   j  #
 c  caracteres  polynomes macros files   scalaires  listes(non typees)
 c      c           p       m      f         s         l
 c
-c  padic booleen sparse   booleen_sparse
-c   pp     b      sp          spb
+c  booleen sparse   booleen_sparse
+c     b      sp          spb
 c
 c  listes(typees): 3 premiers caracteres du premiers champ
 c    ou moins si la chaine est plus courte que 3 caracteres
 c
       rhs1=rhs
-      if (op.eq.3) rhs1=1
-      if (op.eq.2) rhs1=2
+      if (op.eq.3) then
+         rhs1=1
+      elseif (op.eq.2) then
+         rhs1=2
+      else
+         rhs1=rhs
+      endif
       name(1)=percen
       k=2
       nb=1
 c
       top1=top-rhs1
    10 top1=top1+1
-      goto(11,12,20,21,22,23,99,99,99,13,
+      goto(11,12,99,21,22,23,99,99,99,13,
      $     14,14,99,15,16,18),gettype(top1)
       goto 99
 c     --------------matrices scalaires
@@ -72,21 +77,21 @@ c     liste vide
          k=k+1
       else
          call mvptr(top+1,ili)
-         if ( gettype(top+1).ne.10) then 
+c         if ( gettype(top+1).ne.10) then 
             name(k)=21
             k=k+1
-         else
+c         else
 c-compat this case is maintained for list->tlist compatibility
-            if(compat.eq.1) then
-               call msgs(62,0)
-               compat=0
-            endif
-            ilog= getsmat("mname",top+1,top+1,ms,ns,1,1,lr,nlr)
-            do 17 i=1,min(3,nlr)
-               name(k)=istk(lr+i-1)
-               k=k+1
- 17         continue
-         endif
+c            if(compat.eq.1) then
+c               call msgs(62,0)
+c               compat=0
+c            endif
+c            ilog= getsmat("mname",top+1,top+1,ms,ns,1,1,lr,nlr)
+c            do 17 i=1,min(3,nlr)
+c               name(k)=istk(lr+i-1)
+c               k=k+1
+c 17         continue
+c         endif
          call ptrback(top+1)
       endif
       goto 51
@@ -108,11 +113,6 @@ c     liste vide
       endif
       goto 51
 
-c     --------------padic
- 20   name(k)=25
-      name(k+1)=25
-      k=k+2
-      goto 51
 c     --------------booleen
  21   name(k)=11
       k=k+1
@@ -144,18 +144,30 @@ c
       fin=0
       call funs(id)
       if(fun.eq.0) then
-         if ((gettype(top).eq.15.or.gettype(top).eq.16).and.
-     $        (gettype(top-1).eq.15.or.gettype(top-1).eq.16)) then
-c     tlist comparison, use general list comparison function %lol or %lnl 
-c     instead of undefined type dependent one.
-            name(1)=percen
-            name(2)=21
-            name(3)=codop
-            name(4)=21
-            call namstr(id,name,4,0)
-            fin=0
-            call funs(id)
-            if(fun.ne.0) goto 55
+         if(rhs1.eq.1) then
+            if (gettype(top).eq.15.or.gettype(top).eq.16) then
+               name(1)=percen
+               name(2)=21
+               name(3)=codop
+               call namstr(id,name,4,0)
+               fin=0
+               call funs(id)
+               if(fun.ne.0) goto 55
+            endif
+         else
+            if ((gettype(top).eq.15.or.gettype(top).eq.16).and.
+     $           (gettype(top-1).eq.15.or.gettype(top-1).eq.16)) then
+c     tlist comparison, use general list comparison function 
+c     %lol or %lnl  instead of undefined type dependent one.
+               name(1)=percen
+               name(2)=21
+               name(3)=codop
+               name(4)=21
+               call namstr(id,name,4,0)
+               fin=0
+               call funs(id)
+               if(fun.ne.0) goto 55
+            endif
          endif
          call error(43)
          return

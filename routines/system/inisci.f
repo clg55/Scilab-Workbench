@@ -21,16 +21,19 @@ c     common for Control-C interruptions
 c     scilab function protection mode
       integer macprt
       common /mprot/ macprt
-c     synchronisation
-      integer isok,ntfy,enabled(100)
-      common /syncro/ isok,ntfy,enabled
+c     mmode : matlab ops compatibilty mode
+      common /mtlbc/ mmode
+c     
+c     simpmd : rational fraction simplification mode
+      integer simpmd
+      common /csimp/  simpmd
 c     
 
       logical first
       double precision dlamch
-      integer i,k,l,nc
+      integer i,k,l,nc,mode(2)
       integer eps(nsiz),im(nsiz),exp(nsiz),pi(nsiz),bl(nsiz),io(nsiz)
-      integer true(nsiz),false(nsiz)
+      integer true(nsiz),false(nsiz),dollar(nsiz)
       integer offset
       integer iadr,sadr
 c     
@@ -53,7 +56,7 @@ c
       data alpha /'0','1','2','3','4','5','6','7','8','9',
      $     'a','b','c','d','e','f','g','h','i','j',
      $     'k','l','m','n','o','p','q','r','s','t',
-     $     'u','v','w','x','y','z','_','#','!','0',
+     $     'u','v','w','x','y','z','_','#','!','$',
      $     ' ','(',')',';',':','+','-','*','/','\\',
      $     '=','.',',','''','[',']','%','|','&','<','>','~',
      $     '^'/
@@ -71,17 +74,19 @@ c
       data im/673714744,nz1*673720360/,exp/673713720,nz1*673720360/
       data pi/672274744,nz1*673720360/,bl/nsiz*673720360/
       data eps/471404088,nz1*673720360/,io/672666168,nz1*673720360/
+      data dollar/673720359,nz1*673720360/
       data first/.true./
       data true/673717560,nz1*673720360/,false/673713976,nz1*673720360/
       data nunit/20/
 c     
-      save /units/,/basbrk/,/mprot/,/syncro/
+      save /units/,/basbrk/,/mprot/
 c     
 
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 
       ierr=0
+      mode(2)=0
 
 c     initialization call
 c     -------------------
@@ -92,7 +97,7 @@ c     .  ------------------------------
 c     
 c     .  scilab function protection mode
 c     .  ------------------------------
-      macprt=0
+      macprt=1
 c     
 c     .  standard i/o initialization
 c     .  ----------------------------
@@ -100,7 +105,8 @@ c     .  ----------------------------
 c     .  rte = unit number for terminal input
       if(ini1.ne.-3) then
          rte = 5
-         call clunit(rte,buf,0)
+         mode(1)=0
+         call clunit(rte,buf,mode)
          if(err.gt.0) then
             call error(241)
             ierr=err
@@ -113,7 +119,8 @@ c     .  rte = unit number for terminal input
 c     .  wte = unit number for terminal output
       if(ini1.ne.-3) then
          wte = 6
-         call clunit(wte,buf,1)
+         mode(1)=1
+         call clunit(wte,buf,mode)
          if(err.gt.0) then
             call error(240)
             ierr=err
@@ -126,9 +133,11 @@ c     .  wte = unit number for terminal output
 c     .  hio =unit for history output
       hio = 0
       i   = 0
+      buf = ' '
       call inffic(4,buf,nc)
       nc=max(1,nc)
-      call clunit(i,buf(1:nc),3)
+      mode(1)=3
+      call clunit(i,buf(1:nc),mode)
       if(err.gt.0) then
          call error(err)
          hio=0
@@ -156,14 +165,9 @@ c     .  ------------------
 c     
 c     .  Initial values for main window row and column sizes
 c     .  ---------------------------------------------------
-c         jpc : nov 1995 : cette initialisation est inutile si on est 
-c     sous XWindow 
-c     c'est scilines qui le fait en creant la fenetre
-         call xscion(ix) 
-         if (ix.eq.0) then 
-            lct(2) = 45
-            lct(5) = 72
-         endif
+      lct(2) = 1
+      call scilines(45,72)
+c     .  en mode fenetre ces valeurs sont remplacees par les dimension effectives
 
 c     .  initial format for number display
 c     .  ---------------------------------
@@ -190,12 +194,30 @@ c     .  memory allocation
       call scimem(vsizr,offset)
       lstk(1) =   offset+1
 c     . hard predefined variables
-      bot=isiz-7
+      bot=isiz-8
       bbot=bot
       bot0=bot
-      l=vsizr-(8*sadr(5)+2)-2*sadr(4)
+      l=vsizr-(8*sadr(5)+2)-2*sadr(4)-sadr(10)-2
       k=bot
       lstk(k)=lstk(1)-1+l
+c     .  $    : formal index
+      call putid(idstk(1,k),dollar)
+      il=iadr(lstk(k))
+      istk(il)=2
+      istk(il+1)=1
+      istk(il+2)=1
+      istk(il+3)=0
+      istk(il+4)=39
+      istk(il+5)=40
+      istk(il+6)=40
+      istk(il+7)=40
+      istk(il+8)=1
+      istk(il+9)=3
+      lw=sadr(il+10)
+      stk(lw)=0.0d0
+      stk(lw+1)=1.0d0
+      lstk(k+1)=lw+2
+      k=k+1
 c     .  %t   : True boolean
       call crebmatvar(true,k,1,1,1)
       k=k+1
@@ -220,7 +242,7 @@ c     .  %e : exp(1)
 c     .  %pi 
       call crematvar(pi,k,0,1,1,3.14159265358979320d+0,0.0d0)
       k=k+1
-c     .  blanc ?
+c     .  blanc 
       call crematvar(bl,k,0,1,1,0.0d0,0.0d0)
       k=k+1
 c     
@@ -249,7 +271,8 @@ c     debug mode
       nmacs   =   0
       lgptrs(1)=  1
       wmac    =   0
-      call iset(100,0,enabled,1)
+      mmode   =   0
+      simpmd  =   1
       return
       end
 
@@ -299,3 +322,5 @@ c
       lstk(lw+1)=sadr(il+3+m*n+2)
       call icopy(m*n,val,1,istk(lr),1)
       end
+
+c     

@@ -1,8 +1,10 @@
-function f=%sxr(n1,f2)
-// %sxr(,M,r) calcule le produit element par element de la matrice de
-//scalaires M par la matrice de fractions rationnelles r . (M.*r)
+function f2=%sxr(n1,f2)
+// %sxr(M,r) = (M.*r)   constant .* rational
 //!
-f=tlist('r',n1.*f2(2),f2(3),f2(4))
-
+if size(n1,'*')==0 then 
+  f2=[]
+else
+  f2(2)=n1.*f2(2)
+end
 
 

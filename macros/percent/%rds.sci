@@ -1,9 +1,9 @@
-//<r>=%rds(r,m)
-// %rds(r,m)  calcule la division element par element de la matrice de
-//fractions rationnelles r par la matrice de scalaires m.
-//Cette macro correspond a l'operation  r.*m
+function r=%rds(r,m)
+// r=r./m
 //!
+if size(m,'*')==0 then r=[],return,end
 r(3)=r(3).*m
-//end
+r(2)=r(2).*ones(m)
+
 
 

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=IDEGRE,SSI=0
       subroutine idegre(a,majo,nvrai)
 c!but
 c    calcul du degre d un polynome

@@ -1,4 +1,4 @@
-//[txt]=makeargs(args)
+function [txt]=makeargs(args)
 //etant donne un vecteur de chaines de caracteres "args", makeargs(args)
 //retourne une chaine de la forme arg(1)+,+....+,+arg(n)
 //!
@@ -13,6 +13,6 @@ for k=1:n,
   end,
 end
 txt=part(txt,2:length(txt)-1)
-//end
+
 
 

@@ -90,17 +90,17 @@ Rhs=- R(Norder+2:nr);
 denf=[1 Rhs/Rm'];
 
 A=polystab(denf);
-nA=prod(size(A));
+nA=size(A,'*');
 Dz=poly(A(nA:-1:1),'z','c');
 Qh=numf([R(1)/2,R(2:nr)],A,Norder);	// compute additive decomposition
-Qhsci=poly(Qh(prod(size(Qh)):-1:1),'z','c')
+Qhsci=poly(Qh( size(Qh,'*'):-1:1 ),'z','c')
 aa=A(:);bb=Qh(:);
 nna=max(size(aa));nnb=max(size(bb));
 Ss=2*real((fft([Qh,zeros(1,n-nnb)],-1) ./ fft([A,zeros(1,n-nna)],-1)));
 hh=fft(exp(fft( Rwindow.*fft(log(Ss),1),-1)),1);
 impr=filter(1,A,[1 zeros(1,nr-1)]);
 B=real(hh(1:nr)/toeplitz(impr,[1 zeros(1,nb)])');
-nB=prod(size(B));
+nB=size(B,'*');
 Nz=poly(B(nB:-1:1),'z','c');
 B =real(numf(hh(1:nr),A,nb));
 if LHS==1 then
@@ -111,12 +111,12 @@ end
 
 function b=polystab(a);
 //Utility function for use with yulewalk: polynomial stabilization.
-//	POLYSTAB(A), where A is a vector of polynomial coefficients,
+//	polystab(A), where A is a vector of polynomial coefficients,
 //	stabilizes the polynomial with respect to the unit circle;
 //	roots whose magnitudes are greater than one are reflected
 //	inside the unit circle.
 if length(a) == 1, b=a; return, end
-ll=prod(size(a));
+ll=size(a,'*');
 ap=poly(a(ll:-1:1),'s','coeff');
 v=roots(ap); i=find(v~=0);
 vs=0.5*(sign(abs(v(i))-1)+1);
@@ -128,23 +128,20 @@ if ~or(imag(a))
 end
   
 function y=filter(b,a,x)
-//Clone of Matlab's filter function
+//Clone of Matlab filter function
 //
-// FILTER Digital filter.
-//Y=FILTER(B, A, X) filters the data in vector X with the
+// filter Digital filter.
+//Y=filter(B, A, X) filters the data in vector X with the
 //filter described by vectors A and B to create the filtered
 //data Y.  
 //Implementation of the standard difference equation:
 //
 //    y(n)=b(1)*x(n) + b(2)*x(n-1) + ... + b(nb+1)*x(n-nb)
 //        - a(2)*y(n-1) - ... - a(na+1)*y(n-na)
-na=prod(size(a));nb=prod(size(b));
+na=size(a,'*');nb=size(b,'*');
 if na<nb then a=[a,zeros(1,nb-na)];na=nb;end;
 y=rtitr(poly(b(nb:-1:1),'z','c'),poly(a(na:-1:1),'z','c'),x)
 if na>nb then y=y(na-nb+1:length(y));end
-
-
-
 
 function b=numf(h,a,nb)
 //NUMF	Find numerator B given impulse-response h of B/A and denominator A

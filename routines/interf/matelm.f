@@ -9,11 +9,12 @@ c
       double precision s,sr,si,t,x,x1,eps,epsr,epsa,t1
 c
       integer id(nsiz)
-      integer unifor,normal,seed,magi,frk,top2,hilb
-      double precision dsum,pythag,round,urand,norm
+      integer magi,frk,top2,hilb,tops
+      double precision dsum,pythag,round,norm
       integer iadr,sadr
       integer sel,row,col
-      data unifor/30/,normal/23/,seed/28/,magi/22/,frk/15/
+c
+      data magi/22/,frk/15/
       data row/27/,col/12/,star/47/
       data hilb/17/
 
@@ -32,11 +33,14 @@ c     abs  real imag conj roun int  size sum  prod diag triu tril
 c      1    2    3    4    5    6    7    8    9    10   11   12
 c     eye  rand ones maxi mini sort kron matr sin  cos  atan exp
 c      13   14   15   16   17   18  19-21 22   23   24   25   26
-c     sqrt log   ^  sign clean 
-c      27   28   29  30   31
-c
+c     sqrt log   ^  sign clean floor ceil expm cumsum  cumprod 
+c      27   28   29  30   31     32   33   34    35      36
+c     var2vec  vec2var get_import set_import
+c      37        38       39         40
+c!
       if(rstk(pt).eq.905) goto 310
 c
+      tops=top
       if(top-rhs+lhs+1.ge.bot) then
          call error(18)
          return
@@ -67,9 +71,10 @@ c
 
       lw=lstk(top+1)
 c
-   05 goto (10,15,20,25,30,35,40,45,50,60,60,60,70,70,70,
-     1    90,90,105,110,110,110,130,140,150,160,170,180,190,200,
-     2       210,220,37,39),fin
+   05 goto (10 ,15 ,20 ,25 ,30 ,35 ,40 ,45 ,50 ,60,
+     1      60 ,60 ,70 ,71 ,70 ,90 ,90 ,105,110,110,
+     2      110,130,140,150,160,170,180,190,200,210,
+     3      220,37 ,39 ,173,46 ,47),fin
 c
 c    abs
 c
@@ -101,7 +106,13 @@ c real
          goto 300
       endif
       istk(il+3)=0
-      lstk(top+1)=l+mn
+      if(istk(il).eq.1) then
+         lstk(top+1)=l+mn
+      else
+         ilw=iadr(l+mn)
+         call dmpcle(stk(l),istk(id1),m,n,istk(ilw),0.0d0,0.0d0)
+         lstk(top+1)=l+istk(id1+m*n)
+      endif
       goto 999
 c
 c imag
@@ -116,9 +127,26 @@ c imag
       endif
 
       istk(il+3)=0
-      if(it.eq.1) call dcopy(mn,stk(l+mn),1,stk(l),1)
-      if(it.eq.0) call dset(mn,0.0d+0,stk(l),1)
-      lstk(top+1)=l+mn
+      if(istk(il).eq.1) then
+         if(it.eq.1) then
+            call dcopy(mn,stk(l+mn),1,stk(l),1)
+         else
+            call dset(mn,0.0d+0,stk(l),1)
+         endif
+         lstk(top+1)=l+mn
+      else
+         if(it.eq.1) then
+            call dcopy(mn,stk(l+mn),1,stk(l),1)
+            ilw=iadr(l+mn)
+            call dmpcle(stk(l),istk(id1),m,n,istk(ilw),0.0d0,0.0d0)
+         else
+            call dset(m*n,0.0d+0,stk(l),1)
+            do 21 i=1,m*n+1
+               istk(id1-1+i)=i
+ 21         continue
+         endif
+         lstk(top+1)=l+istk(id1+m*n)
+      endif
       goto 999
 c
 c conjg
@@ -268,11 +296,13 @@ c     row or column size
          ll=sadr(il+istk(il+1)+3)
          ilt=iadr(ll)
          if(istk(ilt).eq.10) then
-            if((istk(ilt+5).eq.2.and.istk(ilt+6).eq.27).or.
+            mnt=istk(ilt+1)*istk(ilt+2)
+            if((istk(ilt+5).eq.2.and.istk(ilt+5+mnt).eq.27).or.
      +           (istk(ilt+5).eq.4.and.
-     +           (istk(ilt+6).eq.21.and.istk(ilt+7).eq.28.and.
-     +           istk(ilt+8).eq.28))) then
+     +           (istk(ilt+5+mnt).eq.21.and.istk(ilt+6+mnt).eq.28.and.
+     +           istk(ilt+7+mnt).eq.28))) then
 c     size of  'lss' or 'r' typed list
+               top=tops
                call cvname(id,'g_size   ',0)
                goto 300
             endif
@@ -352,52 +382,489 @@ c     matrix type variable type
       goto 999
 c
 c     sum
-   45 continue
-      if (lhs .ne. 1) then
-         call error(41)
+ 45   continue
+      if(rhs.gt.2) then
+         call error(42)
          return
       endif
-      if(istk(il).ne.1.and.istk(il).ne.5) goto 900
-      istk(il)=1
-      istk(il+1)=1
-      istk(il+2)=1
-      istk(il+3)=it
-      l1=sadr(il+4)
-      stk(l1)=dsum(mn,stk(l),1)
-      if(it.eq.1) stk(l1+1)=dsum(mn,stk(l+mn),1)
-      lstk(top+1)=l1+(it+1)
+      sel=0
+      if(rhs.eq.2) then
+         top=top-1
+         if(lhs.ne.1) then
+            call error(41)
+            return
+         endif
+c     row or column op
+         il=iadr(lstk(top+1))
+         if(istk(il).eq.1) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            sel=stk(sadr(il+4))
+            if(sel.ne.1.and.sel.ne.2) then
+               err=2
+               call error(44)
+               return
+            endif
+         elseif (istk(il).eq.10) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            if(istk(il+6).eq.row) then
+               sel=1
+            elseif(istk(il+6).eq.col) then
+               sel=2
+            elseif(istk(il+6).eq.star) then
+               sel=0
+            else
+               err=2
+               call error(44)
+               return
+            endif
+         else
+            err=2
+            call error(44)
+            return
+         endif
+      endif
+      il0=iadr(lstk(top))
+      if(istk(il0).ne.1.and.istk(il0).ne.5) then
+         if(sel.eq.0) goto 900
+         if(sel.eq.1.or.sel.eq.2) then
+         top=top+1
+         call cvname(id,'po_sum        ',0)
+         goto 300
+         endif
+      endif
+      if(istk(il0).eq.5) then
+         it=istk(il0+3)
+         mn=istk(il0+4)
+         l=sadr(il0+5+m+mn)
+         if(sel.eq.0) then
+         istk(il0)=1
+         istk(il0+1)=1
+         istk(il0+2)=1
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         stk(l1)=dsum(mn,stk(l),1)
+         if(it.eq.1) stk(l1+1)=dsum(mn,stk(l+mn),1)
+         lstk(top+1)=l1+(it+1)
+         elseif(sel.eq.1.or.sel.eq.2) then
+         top=top+1
+         call cvname(id,'sp_sum        ',0)
+         goto 300
+         endif
+      endif
+      m=istk(il0+1)
+      n=istk(il0+2)
+      it=istk(il0+3)
+      mn=m*n
+      if(sel.eq.0) then
+c     op(a) <=> op(a,'*')
+         istk(il0)=1
+         istk(il0+1)=1
+         istk(il0+2)=1
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         stk(l1)=dsum(mn,stk(l1),1)
+         if(it.eq.1) stk(l1+1)=dsum(mn,stk(l1+mn),1)
+         lstk(top+1)=l1+(it+1)
+      elseif(sel.eq.1) then
+c     op(a,'r')  <=>  op(a,1)
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=1
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         do 450 k=0,m-1
+         stk(l1+k)=dsum(n,stk(l1+k),m)
+ 450     continue
+         if(it.eq.1) then
+            do 451 k=0,n-1
+            stk(l1+m+k)=dsum(n,stk(l1+mn+k),m)
+ 451        continue
+         endif
+         lstk(top+1)=l1+m*(it+1)
+      elseif(sel.eq.2) then
+c     op(a,'c')   <=>  op(a,2)
+         istk(il0)=1
+         istk(il0+1)=1
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         do 452 k=0,n-1
+            stk(l1+k)=dsum(m,stk(l1+k*m),1)
+ 452     continue
+         if(it.eq.1) then
+            do 453 k=0,n-1
+            stk(l1+n+k)=dsum(m,stk(l1+mn+k*m),1)
+ 453        continue
+         endif
+         lstk(top+1)=l1+n*(it+1)
+      endif
       go to 999
 c
+c     cumsum
+ 46   continue
+      if(rhs.gt.2) then
+         call error(42)
+         return
+      endif
+      sel=0
+      if(rhs.eq.2) then
+         top=top-1
+         if(lhs.ne.1) then
+            call error(41)
+            return
+         endif
+c     row or column op
+         il=iadr(lstk(top+1))
+         if(istk(il).eq.1) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            sel=stk(sadr(il+4))
+            if(sel.ne.1.and.sel.ne.2) then
+               err=2
+               call error(44)
+               return
+            endif
+         elseif (istk(il).eq.10) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            if(istk(il+6).eq.row) then
+               sel=1
+            elseif(istk(il+6).eq.col) then
+               sel=2
+            elseif(istk(il+6).eq.star) then
+               sel=0
+            else
+               err=2
+               call error(44)
+               return
+            endif
+         else
+            err=2
+            call error(44)
+            return
+         endif
+      endif
+      il0=iadr(lstk(top))
+      if(istk(il0).ne.1.and.istk(il0).ne.5) goto 900
+      if(istk(il0).eq.5) then
+         buf='sparse: op not yet implemented' 
+         call error(9999)
+         return
+      endif
+      m=istk(il0+1)
+      n=istk(il0+2)
+      it=istk(il0+3)
+      mn=m*n
+      if(sel.eq.0) then
+c     op(a) <=> op(a,'*')
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         call cusum(mn,stk(l1))
+         if(it.eq.1) call cusum(mn,stk(l1+mn))
+         lstk(top+1)=l1+mn*(it+1)
+      elseif(sel.eq.1) then
+c     op(a,'r')  <=>  op(a,1)
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         do 460 k=0,n-1
+         call cusum(m,stk(l1+k*m))
+ 460     continue
+         if(it.eq.1) then
+            do 461 k=0,n-1
+	    call cusum(m,stk(l1+k*m+mn))
+ 461        continue
+         endif
+         lstk(top+1)=l1+mn*(it+1)
+      elseif(sel.eq.2) then
+c     op(a,'c')   <=>  op(a,2)
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         kk=0
+         do 462 k=1,n-1
+	    call dadd(m,stk(l1+kk),1,stk(l1+kk+m),1)
+            kk=kk+m
+ 462     continue
+         if(it.eq.1) then
+            kk=0
+            do 463 k=1,n-1
+	    call dadd(m,stk(l1+mn+kk),1,stk(l1+kk+m+mn),1)
+            kk=kk+m
+ 463        continue
+         endif
+         lstk(top+1)=l1+mn*(it+1)
+      endif
+      go to 999
+c
+c     cumprod
+ 47   continue
+      if(rhs.gt.2) then
+         call error(42)
+         return
+      endif
+      sel=0
+      if(rhs.eq.2) then
+         top=top-1
+         if(lhs.ne.1) then
+            call error(41)
+            return
+         endif
+c     row or column op
+         il=iadr(lstk(top+1))
+         if(istk(il).eq.1) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            sel=stk(sadr(il+4))
+            if(sel.ne.1.and.sel.ne.2) then
+               err=2
+               call error(44)
+               return
+            endif
+         elseif (istk(il).eq.10) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            if(istk(il+6).eq.row) then
+               sel=1
+            elseif(istk(il+6).eq.col) then
+               sel=2
+            elseif(istk(il+6).eq.star) then
+               sel=0
+            else
+               err=2
+               call error(44)
+               return
+            endif
+         else
+            err=2
+            call error(44)
+            return
+         endif
+      endif
+      il0=iadr(lstk(top))
+      if(istk(il0).ne.1.and.istk(il0).ne.5) goto 900
+      if(istk(il0).eq.5) then
+         buf='sparse: op not yet implemented' 
+         call error(9999)
+         return
+      endif
+      m=istk(il0+1)
+      n=istk(il0+2)
+      it=istk(il0+3)
+      mn=m*n
+      if(sel.eq.0) then
+c     op(a) <=> op(a,'*')
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         call cupro(mn,stk(l1))
+         if(it.eq.1) call cupro(mn,stk(l1+mn))
+         lstk(top+1)=l1+mn*(it+1)
+      elseif(sel.eq.1) then
+c     op(a,'r')  <=>  op(a,1)
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         if(it.eq.0) then
+         do 470 k=0,n-1
+         call cupro(m,stk(l1+k*m))
+ 470     continue
+         elseif(it.eq.1) then
+            do 471 k=0,n-1
+	    call cuproi(m,stk(l1+k*m),stk(l1+k*m+mn))
+ 471        continue
+         endif
+         lstk(top+1)=l1+mn*(it+1)
+      elseif(sel.eq.2) then
+c     op(a,'c')   <=>  op(a,2)
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         if(it.eq.0) then
+         kk=0
+         do 472 k=1,n-1
+	    call dvmul(m,stk(l1+kk),1,stk(l1+kk+m),1)
+            kk=kk+m
+ 472     continue
+         elseif(it.eq.1) then
+            kk=0
+            do 473 k=1,n-1
+	    call wvmul(m,stk(l1+kk),stk(l1+mn+kk),1,
+     $                  stk(l1+kk+m),stk(l1+kk+m+mn),1)
+            kk=kk+m
+ 473        continue
+         endif
+         lstk(top+1)=l1+mn*(it+1)
+      endif
+      go to 999
 c     prod
-   50 continue
-      if (lhs .ne. 1) then
-         call error(41)
+ 50   continue
+      if(rhs.gt.2) then
+         call error(42)
          return
       endif
-      if(istk(il).ne.1) goto 900
-      istk(il+1)=1
-      istk(il+2)=1
-      lstk(top+1)=l+it+1
-      sr = 1.0d+0
-      si = 0.0d+0
-      if(it.eq.1) goto 52
-      do 51 i = 1, mn
-         ls = l+i-1
-         sr=sr*stk(ls)
-   51 continue
-      stk(l)=sr
-      goto 999
-   52 continue
-      do 53 i=1,mn
-      ls=l+i-1
-      s=sr*stk(ls)-si*stk(ls+mn)
-      si=sr*stk(ls+mn)+si*stk(ls)
-      sr=s
-   53 continue
-      stk(l) = sr
-      stk(l+1) = si
+      sel=0
+      if(rhs.eq.2) then
+         top=top-1
+         if(lhs.ne.1) then
+            call error(41)
+            return
+         endif
+c     row or column op
+         il=iadr(lstk(top+1))
+         if(istk(il).eq.1) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            sel=stk(sadr(il+4))
+            if(sel.ne.1.and.sel.ne.2) then
+               err=2
+               call error(44)
+               return
+            endif
+         elseif (istk(il).eq.10) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            if(istk(il+6).eq.row) then
+               sel=1
+            elseif(istk(il+6).eq.col) then
+               sel=2
+            elseif(istk(il+6).eq.star) then
+               sel=0
+            else
+               err=2
+               call error(44)
+               return
+            endif
+         else
+            err=2
+            call error(44)
+            return
+         endif
+      endif
+      il0=iadr(lstk(top))
+      if(istk(il0).ne.1.and.istk(il0).ne.5) goto 900
+      if(istk(il0).eq.5) then
+         it=istk(il0+3)
+         if(it.eq.1) then
+            buf='op. not implemented'
+            call error(9999)
+         return
+         endif
+         mn=istk(il0+4)
+         l=sadr(il0+5+m+mn)
+         if(sel.eq.0) then
+         istk(il0)=1
+         istk(il0+1)=1
+         istk(il0+2)=1
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         call dvmul(mn-1,stk(l+1),1,stk(l),0)
+         stk(l1)=stk(l)
+         elseif(sel.eq.1.or.sel.eq.2) then
+         buf='sparse: op with 2 args not yet implemented' 
+         call error(9999)
+         return
+         endif
+      endif
+      m=istk(il0+1)
+      n=istk(il0+2)
+      it=istk(il0+3)
+      mn=m*n
+      if(sel.eq.0) then
+c     op(a) <=> op(a,'*')
+         istk(il0)=1
+         istk(il0+1)=1
+         istk(il0+2)=1
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         if(it.eq.0) then
+         call dvmul(mn-1,stk(l1+1),1,stk(l1),0)
+         elseif(it.eq.1) then
+         call wvmul(mn-1,stk(l1+1),stk(l1+mn+1),1,stk(l1),stk(l1+mn),0)
+         stk(l1+1)=stk(l1+mn)
+         endif
+         lstk(top+1)=l1+(it+1)
+      elseif(sel.eq.1) then
+c     op(a,'r')  <=>  op(a,1)
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=1
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         if(it.eq.0) then
+         do 550 k=0,m-1
+         call dvmul(n-1,stk(l1+k+m),m,stk(l1+k),0)
+ 550     continue
+         elseif(it.eq.1) then
+            do 551 k=0,m-1
+         call wvmul(n-1,stk(l1+k+m),stk(l1+k+m+mn),m,stk(l1+k),
+     $             stk(l1+k+mn),0)
+ 551        continue
+         call dcopy(m,stk(l1+mn),1,stk(l1+m),1)
+         endif
+         lstk(top+1)=l1+m*(it+1)
+      elseif(sel.eq.2) then
+c     op(a,'c')   <=>  op(a,2)
+         istk(il0)=1
+         istk(il0+1)=1
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         if(it.eq.0) then
+         do 552 k=0,n-1
+            call dvmul(m-1,stk(l1+k*m+1),1,stk(l1+k*m),0)
+ 552     continue
+         call dcopy(n,stk(l1),m,stk(l1),1)
+         elseif(it.eq.1) then
+            do 553 k=0,n-1
+             call wvmul(m-1,stk(l1+k*m+1),stk(l1+k*m+mn+1),
+     $                 1,stk(l1+k*m),stk(l1+k*m+mn),0)
+ 553        continue
+         call dcopy(n-1,stk(l1+m),m,stk(l1+1),1)
+         call dcopy(n,stk(l1+mn),m,stk(l1+n),1)
+         endif
+         lstk(top+1)=l1+n*(it+1)
+      endif
       go to 999
-c
 c     diag, triu, tril
    60 continue
       if (lhs .ne. 1) then
@@ -505,9 +972,9 @@ c     tril, triu
       ll=ll+1
    69 continue
       go to 999
-c
-c     eye, rand, ones
-c
+c     ---------------------
+c     eye, ones
+c     ---------------------
  70   continue
       if (lhs .ne. 1) then
          call error(41)
@@ -518,7 +985,7 @@ c
          return
       endif
       if(rhs.eq.0) then
-c     rand sans argument
+c     sans argument
          top=top+1
          il=iadr(lstk(top))
          istk(il)=1
@@ -529,20 +996,17 @@ c     rand sans argument
             n=-1
          endif
       elseif(rhs.eq.1) then
-         if(fin.eq.14 .and. istk(il).eq.10) goto 80
          if(istk(il).gt.10) then
             if(fin.eq.15) then
                call cvname(id,'g_ones   ',0)
             elseif(fin.eq.13) then
                call cvname(id,'g_eye   ',0)
-            elseif(fin.eq.14) then
-               call cvname(id,'g_rand   ',0)
             endif
             goto 300
          endif
-c     eye(matrice),rand(matrice),ones(matrice)
+c     eye(matrice),ones(matrice)
       elseif(rhs.eq.2) then
-c     eye(m,n),rand(m,n),ones(m,n)
+c     eye(m,n),ones(m,n)
          if(istk(il).ne.1) then
             err=1
             call  error(53)
@@ -561,7 +1025,6 @@ c     eye(m,n),rand(m,n),ones(m,n)
          n=max(int(stk(l)),0)
          top=top-1
          il=iadr(lstk(top))
-         if(fin.eq.14 .and. istk(il).eq.10) goto 80
          if(istk(il).ne.1) then
             err=1
             call  error(53)
@@ -585,8 +1048,11 @@ c
       if(m.eq.0) n=0
       if(n.eq.0) m=0
       l=sadr(il+4)
-      err = l+m*n - lstk(bot)
-      if(err.gt.0) then
+
+c     to avoid integer overflow
+      s=l+dble(m)*dble(n)- lstk(bot)
+      if(s.gt.0.0d0) then
+         err=s
          call error(17)
          return
       endif
@@ -596,54 +1062,21 @@ c
       istk(il+3)=0
       lstk(top+1)=l+mn
       if(mn.eq.0) goto 999
-      goto(74,73) fin-13
-c eye
-      m=abs(m)
-      call dset(mn,0.0d+0,stk(l),1)
-      call dset(min(m,abs(n)),1.0d+0,stk(l),m+1)
+      if ( fin.eq.13 ) then 
+c     eye
+         m=abs(m)
+         call dset(mn,0.0d+0,stk(l),1)
+         call dset(min(m,abs(n)),1.0d+0,stk(l),m+1)
+      else
+c     ones
+         call dset(mn,1.0d+0,stk(l),1)
+      endif
       goto 999
-c ones
-   73 call dset(mn,1.0d+0,stk(l),1)
-      goto 999
-c rand
-   74 continue
-      ll=l-1
-      do 76 j = 1, mn
-        if (ran(2).eq.0) stk(ll+j) = urand(ran(1))
-        if (ran(2).eq.0) go to 76
-   75      sr=2.0d+0*urand(ran(1))-1.0d+0
-           si=2.0d+0*urand(ran(1))-1.0d+0
-           t = sr*sr+si*si
-           if (t .gt. 1.0d+0) go to 75
-        stk(ll+j) = sr*sqrt(-2.0d+0*log(t)/t)
-   76 continue
-      go to 999
-c
- 80   l=il+istk(il+1)*istk(il+2)+5
-      ist=abs(istk(l))
-      if(ist.eq.unifor.or.ist.eq.normal) goto 81
-      if(ist.eq.seed) goto 82
-      call error(31)
-      return
-c
-c     switch uniform and normal
-   81 ran(2) = ist - unifor
-      istk(il)=0
-      go to 999
-c
-c     seed
-   82 if(rhs.eq.2) goto 83
-      istk(il)=1
-      istk(il+1)=1
-      istk(il+2) = 1
-      istk(il+3)=0
-      l=sadr(il+4)
-      stk(l) = ran(1)
-      lstk(top+1)=l+1
-      go to 999
-   83 ran(1)=max(n,0)
-      istk(il)=0
-      lstk(top+1)=lstk(top)+1
+C
+C     rand 
+C     
+ 71   call  intrand('rand',icont)
+      if (icont.eq.300) goto 300
       goto 999
 c
 c maxi mini
@@ -847,46 +1280,163 @@ c     maxi mini des vecteurs d'une liste
 c
 c sort
  105  continue
-      if (lhs .gt. 2) then
-         call error(41)
+      if(rhs.gt.2) then
+         call error(42)
          return
       endif
-      if(istk(il).ne.1) then
-         err=1
-         call error(53)
+      il=iadr(lstk(top+1-rhs))
+      if(istk(il).eq.10) then
+c     *call* strelm
+         fun=21
+         fin=8
          return
       endif
-      if(it.ne.0) then
-         err=1
-         call error(52)
-         return
+      sel=0
+      if(rhs.eq.2) then
+         top=top-1
+         if(lhs.ge.3) then
+            call error(41)
+            return
+         endif
+c     row or column op
+         il=iadr(lstk(top+1))
+         if(istk(il).eq.1) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            sel=stk(sadr(il+4))
+            if(sel.ne.1.and.sel.ne.2) then
+               err=2
+               call error(44)
+               return
+            endif
+         elseif (istk(il).eq.10) then
+            if(istk(il+1)*istk(il+2).ne.1) then
+               err=2
+               call error(89)
+               return
+            endif
+            if(istk(il+6).eq.row) then
+               sel=1
+            elseif(istk(il+6).eq.col) then
+               sel=2
+            elseif(istk(il+6).eq.star) then
+               sel=0
+            else
+               err=2
+               call error(44)
+               return
+            endif
+         else
+            err=2
+            call error(44)
+            return
+         endif
       endif
+      il0=iadr(lstk(top))
+      if(istk(il0).ne.1.and.istk(il0).ne.5) goto 900
+      if(istk(il0).eq.5) then
+         if(rhs.eq.2)   top=top+1
+         call cvname(id,'g_sort         ',0)
+         goto 300
+      endif
+      m=istk(il0+1)
+      n=istk(il0+2)
+      it=istk(il0+3)
+      mn=m*n
+c
       lw=iadr(lstk(top+1))
-      err=sadr(lw+n)-lstk(bot)
+c     
+      if(mn.eq.0) then
+         if(lhs.eq.1) goto 999
+         top=top+1
+         il=iadr(lstk(top))
+         istk(il)=1
+         istk(il+1)=0
+         istk(il+2)=0
+         istk(il+3)=0
+         lstk(top+1)=sadr(il+4)
+         goto 999
+      endif
+c
+      err=sadr(lw+mn)-lstk(bot)
       if(err.gt.0) then
          call error(17)
          return
       endif
-      call dsort(stk(l),mn,istk(lw))
-      if(lhs.eq.1) goto 999
-      top=top+1
-      il=lw
-      l1=sadr(il+4)+mn
-      l2=lw+mn
-      err=l1-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
+c
+      if(sel.eq.0) then
+c     sort(a) <=> sort(a,'*')
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         call dsort(stk(l1),mn,istk(lw))
+         lstk(top+1)=l1+mn*(it+1)
+c              cccccccccccc
+         if(lhs.eq.1) goto 999
+         top=top+1
+         il=lw
+         l1=sadr(il+4)+mn
+         l2=lw+mn
+         err=l1-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
          return
+         endif
+         lstk(top+1)=l1
+         do 106 i=1,mn
+           stk(l1-i)=dble(istk(l2-i))
+  106    continue
+         istk(il)=1
+         istk(il+1)=m
+         istk(il+2)=n
+         istk(il+3)=0
+c                cccccccccc
+      elseif(sel.eq.1) then
+c     sort(a,'r')  <=>  sort(a,1)
+         istk(il0)=1
+         istk(il0+1)=m
+         istk(il0+2)=n
+         istk(il0+3)=it
+         l1=sadr(il0+4)
+         lw1=lw
+         do 107 k=0,n-1
+         call dsort(stk(l1+k*m),m,istk(lw1))
+         lw1=lw1+m
+ 107     continue
+         lstk(top+1)=l1+mn*(it+1)
+c              cccccccccccc
+         if(lhs.eq.1) goto 999
+         top=top+1
+         il=lw
+         l1=sadr(il+4)+mn
+         l2=lw+mn
+         err=l1-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+         return
+         endif
+         lstk(top+1)=l1
+         do 108 i=1,mn
+           stk(l1-i)=dble(istk(l2-i))
+  108    continue
+         istk(il)=1
+         istk(il+1)=m
+         istk(il+2)=n
+         istk(il+3)=0
+c                cccccccccc
+      elseif(sel.eq.2) then
+c     sort(a,'c')   <=>  sort(a,2)
+c   The lazy way...
+         top=top+1
+         call cvname(id,'c_sort     ',0)
+         goto 300
       endif
-      lstk(top+1)=l1
-      do 106 i=1,mn
-      stk(l1-i)=dble(istk(l2-i))
-  106 continue
-      istk(il)=1
-      istk(il+1)=m
-      istk(il+2)=n
-      istk(il+3)=0
-      goto 999
+      go to 999
 c
 c     kronecker product
   110 if (rhs .ne. 2) then
@@ -1097,11 +1647,11 @@ c
          call error(41)
          return
       endif
-      if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
-         call cvname(id,'msin    ',0)
+      if(istk(il).ne.1) then
+         call cvname(id,'g_sin       ',0)
          goto 300
       endif
+      if(mn.eq.0) goto 999
       if(it.eq.0) then
          do 141 i=0,mn-1
             stk(l+i)=sin(stk(l+i))
@@ -1123,11 +1673,11 @@ c
          call error(41)
          return
       endif
-      if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
-         call cvname(id,'mcos    ',0)
+      if(istk(il).ne.1) then
+         call cvname(id,'g_cos       ',0)
          goto 300
       endif
+      if(mn.eq.0) goto 999
       if(it.eq.0) then
          do 151 i=0,mn-1
             stk(l+i)=cos(stk(l+i))
@@ -1149,17 +1699,13 @@ c
          call error(41)
          return
       endif
-      if(mn.eq.0) goto 999
       if(istk(il).ne.1) then
          err=1
          call  error(53)
          return
       endif
-      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
-         call cvname(id,'matan   ',0)
-         goto 300
-      endif
       if(rhs.eq.1) then
+         if(mn.eq.0) goto 999
          if(it.eq.0) then
             do 161 i=0,mn-1
                stk(l+i)=atan(stk(l+i))
@@ -1192,6 +1738,7 @@ c
             call error(60)
             return
          endif
+         if(mn.eq.0) goto 999
          l1=sadr(il1+4)
          do 163 i=0,mn
             if(abs(stk(l1+i))+abs(stk(l+i)).eq.0.0d+0) then
@@ -1203,7 +1750,7 @@ c
       endif
       goto 999
 c
-c     exp
+c     exp element wise
 c
  170  continue
       if (lhs .ne. 1) then
@@ -1212,44 +1759,8 @@ c
       endif
       if(mn.eq.0) goto 999
       if(istk(il).ne.1.or.(istk(il).ne.1.and.istk(il).ne.5)) then
-         call cvname(id,'mexp   ',0)
+         call cvname(id,'g_exp   ',0)
          goto 300
-      endif
-      if(m.eq.n.and.n.gt.1) then
-         nn=mn
-         if(it.eq.0) then
-            le=lstk(top+1)
-            lw=le+nn
-            ilb=iadr(lw+4*nn+5*n)
-            err=sadr(ilb+n+n)-lstk(bot)
-            if(err.gt.0) then
-               call error(17)
-               return
-            endif
-            call dexpm1(n,n,stk(l),stk(le),n,stk(lw),istk(ilb),err)
-            if(err.ne.0) then
-               call error(24)
-               return
-            endif
-            call dcopy(nn,stk(le),1,stk(l),1)
-         else
-            le=lstk(top+1)
-            lw=le+2*nn
-            ilb=iadr(lw+8*nn+7*n)
-            err=sadr(ilb+n+n)-lstk(bot)
-            if(err.gt.0) then
-               call error(17)
-               return
-            endif
-            call wexpm1(n,stk(l),stk(l+nn),n,stk(le),stk(le+nn),
-     *           n,stk(lw),istk(ilb),err)
-            if(err.ne.0) then
-               call error(24)
-               return
-            endif
-            call dcopy(2*nn,stk(le),1,stk(l),1)
-         endif
-         goto 999
       endif
       if(it.eq.0) then
          do 171 i=0,mn-1
@@ -1265,6 +1776,58 @@ c
       endif
       goto 999
 c
+c     expm matricial exponential
+c
+ 173  continue
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+      if(mn.eq.0) goto 999
+      if(istk(il).ne.1.or.(istk(il).ne.1.and.istk(il).ne.5)) then
+         call cvname(id,'g_exp   ',0)
+         goto 300
+      endif
+      if(m.ne.n) then
+         err=1
+         call error(2)
+         return
+      endif
+      nn=mn
+      if(it.eq.0) then
+         le=lstk(top+1)
+         lw=le+nn
+         ilb=iadr(lw+4*nn+5*n)
+         err=sadr(ilb+n+n)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         call dexpm1(n,n,stk(l),stk(le),n,stk(lw),istk(ilb),err)
+         if(err.ne.0) then
+            call error(24)
+            return
+         endif
+         call dcopy(nn,stk(le),1,stk(l),1)
+      else
+         le=lstk(top+1)
+         lw=le+2*nn
+         ilb=iadr(lw+8*nn+7*n)
+         err=sadr(ilb+n+n)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         call wexpm1(n,stk(l),stk(l+nn),n,stk(le),stk(le+nn),
+     *        n,stk(lw),istk(ilb),err)
+         if(err.ne.0) then
+            call error(24)
+            return
+         endif
+         call dcopy(2*nn,stk(le),1,stk(l),1)
+      endif
+      goto 999
+c
 c     sqrt
 c
  180  continue
@@ -1272,11 +1835,11 @@ c
          call error(41)
          return
       endif
-      if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
-         call cvname(id,'msqrt   ',0)
+      if(istk(il).ne.1) then
+         call cvname(id,'g_sqrt       ',0)
          goto 300
       endif
+      if(mn.eq.0) goto 999
       if(it.eq.0) then
          itr=0
          do 181 i=0,mn-1
@@ -1317,11 +1880,11 @@ c
          call error(41)
          return
       endif
-      if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
-         call cvname(id,'mlog    ',0)
+      if(istk(il).ne.1) then
+         call cvname(id,'g_log       ',0)
          goto 300
       endif
+      if(mn.eq.0) goto 999
       if(it.eq.0) then
          itr=0
          do 191 i=0,mn-1
@@ -1362,10 +1925,10 @@ c
       endif
       goto 999
 c
-c  ** puissance non entiere des matrices carres
+c  ** puissance non entiere des matrices carres ou scalaire^matrice
 c
  200  continue
-      call cvname(id,'mpow    ',0)
+      call cvname(id,'g_pow    ',0)
       goto 300
 c
 c     sign
@@ -1376,10 +1939,6 @@ c
          return
       endif
       if(mn.eq.0) goto 999
-      if((m.eq.n.and.n.gt.1).or.(istk(il).ne.1.and.istk(il).ne.5)) then
-         call cvname(id,'msign    ',0)
-         goto 300
-      endif
       if(it.eq.0) then
          do 211 i=0,mn-1
             if(stk(l+i).gt.0.d0) then
@@ -1446,13 +2005,12 @@ c     clean(p,epsa)
          norm=wasum(m*n,stk(l),stk(l+m*n),1)
       endif
       eps=max(epsa,epsr*norm)
-      do 201 kk=0,m*n*(it+1)
+      do 221 kk=0,m*n*(it+1)
          if (abs(stk(l+kk)).le.eps) stk(l+kk)=0.d0
- 201  continue
+ 221  continue
 
       goto 999
 
-c
 c
 c  fonctions matricielles gerees par l'appel a une macro
 c
@@ -1483,7 +2041,7 @@ c
   900 continue
       if(istk(il).ne.2) then
          err=1
-         call error(54)
+         call error(44)
          return
       endif
 c     *call* polelm
@@ -1493,3 +2051,180 @@ c     *call* polelm
 c
   999 return
       end
+
+      subroutine intrand(fname,icont)
+c     -------------------------------
+      character*(*) fname
+c     Interface for rand function 
+      INCLUDE '../stack.h'
+      double precision s,sr,si
+      integer id(nsiz)
+      double precision urand
+      logical checkrhs,checklhs,getsmat,getscalar,cremat,getmat
+      logical cresmat2
+      integer gettype
+      character*(20) randtype
+      integer iadr,sadr
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+      randtype='uniform'//char(0)
+      irt=0
+      icont=0
+      m=-99
+      if (.not.checkrhs(fname,0,3)) return
+      if (.not.checklhs(fname,1,1)) return
+      topk=top
+C     if rhs=3 third argument is a string giving the rand type ( 'uniform','gaussian',...)
+      if ( rhs.eq.3 ) then 
+         if(.not.getsmat(fname,topk,top,mt,nt,1,1,lrt,nlrt))return
+         call cvstr(nlrt,istk(lrt),randtype,1)
+         randtype(nlrt+1:nlrt+1)=char(0)
+         irt=2
+         top=top-1
+      endif
+C     
+      if( rhs.ge.2) then
+         itype=gettype(top) 
+         if ( itype.eq.1) then 
+            if(.not.getscalar(fname,topk,top,lr2))return
+            n=int(stk(lr2))
+         elseif ( itype.eq.10 ) then 
+            if(.not.getsmat(fname,topk,top,mt,nt,1,1,lrt,nlrt))return
+            call cvstr(nlrt,istk(lrt),randtype,1)
+            randtype(nlrt+1:nlrt+1)=char(0)
+            irt=2
+         else
+            buf=fname//' : second argument has wrong type'
+            call error(999)
+            return
+         endif
+         top=top-1
+      endif
+C     
+      it1=-1
+      if( rhs.ge.1) then
+         itype1=gettype(top) 
+         if ( itype1.eq.1.and.rhs.eq.1) then 
+            if(.not.getmat(fname,topk,top,it1,m,n,lr1,lc1))return
+         elseif ( itype1.eq.1.and.rhs.ge.1.and.itype.eq.1) then 
+            if(.not.getscalar(fname,topk,top,lr1))return
+            m=int(stk(lr1))
+         elseif ( itype1.eq.1.and.rhs.ge.1.and.itype.ne.1) then 
+            if(.not.getmat(fname,topk,top,it1,m,n,lr1,lc1))return
+         elseif ( itype1.eq.10 ) then 
+            if(.not.getsmat(fname,topk,top,mt,nt,1,1,lrt,nlrt))return
+            call cvstr(nlrt,istk(lrt),randtype,1)
+            randtype(nlrt+1:nlrt+1)=char(0)
+            irt=1
+         elseif ( rhs.eq.1.and.itype1.gt.10 ) then 
+            call cvname(id,'g_rand   ',0)
+            icont=300
+            return
+         else
+            buf=fname//' : first argument has wrong type'
+            call error(999)
+            return
+         endif
+      endif
+      if (rhs.eq.0) then 
+         top=top+1
+         il=iadr(lstk(top))
+         istk(il)=1
+         m=1
+         n=1
+      endif
+C     seed options 
+      if ( randtype(1:nlrt).eq.'seed') then 
+         if ( rhs.eq.1 ) then 
+            if (.not.cremat(fname,top,0,1,1,lr,lc)) return
+            stk(lr) = ran(1)            
+            return
+         else
+            if (itype.eq.1) then
+               ran(1) = max(int(stk(lr2)),0)
+               call objvide(fname,top)
+               return
+            else
+               buf=fname//' : second argument has wrong type'
+               call error(999)
+               return
+            endif
+         endif
+      endif
+C     getting info 
+      if ( randtype(1:nlrt).eq.'info') then 
+         call randinfo(randtype,ilen) 
+         if (.not.cresmat2(fname,top,ilen,lr)) return
+         call cvstr(ilen,istk(lr),randtype,0) 
+         return
+      endif
+C     switching to an other law 
+      if ( irt.ge.1 ) then 
+         iran1kp=ran(2)
+         call randswitch(randtype)
+      endif
+C     no need for random generation 
+      if(m.eq.-99) then 
+         call objvide(fname,top)
+         return
+      endif
+C     random generation 
+      if(m.eq.0) n=0
+      if(n.eq.0) m=0
+      if(it1.ne.-1) then 
+         itres= it1
+      else
+         itres= 0
+      endif
+      if (.not.cremat(fname,top,itres,m,n,lr,lc)) return
+      if ( m*n .ne. 0 ) then 
+         if ( ran(2).eq.0 ) then 
+            do 76 j = 0, (itres+1)*m*n-1
+               stk(lr+j) = urand(ran(1))
+ 76         continue
+         elseif (ran(2).eq.1) then 
+            do 77 j = 0, m*n-1
+ 75            sr=2.0d+0*urand(ran(1))-1.0d+0
+               si=2.0d+0*urand(ran(1))-1.0d+0
+               t = sr*sr+si*si
+               if (t .gt. 1.0d+0) go to 75
+               stk(lr+j) = sr*sqrt(-2.0d+0*log(t)/t)
+ 77         continue
+         endif
+      endif
+C     switching back to the default randvalue
+      if ( irt.ge.2) then 
+         ran(2)=iran1kp
+      endif
+      return
+      end
+      
+      subroutine randswitch(randtype)
+      character*(20) randtype
+      INCLUDE '../stack.h'
+      if ( randtype(1:1).eq.'u') then 
+         ran(2)=0
+      else if ( randtype(1:1).eq.'g') then 
+         ran(2)=1
+      else if ( randtype(1:1).eq.'n') then 
+         ran(2)=1
+      else 
+         ran(2)=0
+      endif
+      return
+      end
+
+      subroutine randinfo(randtype,ilen) 
+      INCLUDE '../stack.h'
+      character*(20) randtype
+      integer ilen 
+      if ( ran(2).eq.0) then 
+         randtype='uniform'
+         ilen=7
+      else if ( ran(2).eq.1) then 
+         randtype='normal'
+         ilen=6
+      endif
+      return
+      end
+

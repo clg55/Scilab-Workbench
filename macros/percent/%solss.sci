@@ -1,8 +1,7 @@
-//[r]=%solss(s1,s2)
-//%solss(s1,s2) effectue le test d'egalite entre gain et systemes d'etat
-//correspond a l'operation s1==s2
+function [r]=%solss(s1,s2)
+//%solss(s1,s2) constant==state-space
 //!
 r=s2(2)==[]&s2(5)==s1
-//end
+
 
 

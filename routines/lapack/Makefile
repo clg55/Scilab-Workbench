@@ -1,11 +1,6 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
-include ../../Makefile.incl
-
-CFLAGS = $(CC_OPTIONS)
-
-FFLAGS = $(FC_OPTIONS)
 
 LIBRARY = $(SCIDIR)/libs/lapack.a
 
@@ -19,21 +14,11 @@ OBJSF = dgelqf.o dgels.o dgemm.o dgemv.o dgeqrf.o dger.o dlae2.o dlaev2.o \
 	ilaenv.o dlamch.o dlabad.o dlange.o dtrsm.o dormlq.o dlansp.o \
 	dsterf.o dgeqr2.o dlarft.o dlarfb.o dorm2r.o dgelq2.o dlanst.o \
 	dlapy2.o dlantr.o dlacon.o dlatrs.o drscl.o dorml2.o dtrmv.o \
-	dtrmm.o dtrsv.o slamch.o
+	dtrmm.o dtrsv.o slamch.o dggbal.o dggbak.o
 
-OBJS = $(OBJSC) $(OBJSF)
+include ../../Makefile.incl
 
-all:: $(LIBRARY)
+CFLAGS = $(CC_OPTIONS)
 
-world: all
+include ../Make.lib
 
-$(LIBRARY): $(OBJS)
-	@echo Creation of $(LIBRARY)
-	@$(RM) $@
-	@$(AR) $@ $(OBJS)
-	@$(RANLIB) $@
-
-clean::
-	$(RM) $(OBJS)
-distclean::
-	$(RM) $(OBJS) $(LIBRARY)

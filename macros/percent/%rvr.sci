@@ -1,6 +1,5 @@
 function h=%rvr(h1,h2)
-// %rvr(h1,h2) calcule (I+h1*h2)\h1. h1 et h2 matrices de fractions
-//  rationnelles
+// %rvr(h1,h2)=(I+h1*h2)\h1. h1 and h2 rational matrices
 //!
 [h1,h2]=sysconv(h1,h2),
 [m1,n1]=size(h1(2))

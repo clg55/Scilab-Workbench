@@ -8,16 +8,12 @@ c isiz  maximum number of scilab variables
 c psiz  defines recursion size
 c lsiz  dim. of vector containing the command line
 c nlgh  length of variable names
-c nftn   used for dynamic link
-c maxlnk used for dynamic link
 c csiz  used for character coding
 c*-------------------------------------------------------------------
       integer   csiz,bsiz,isiz,psiz,nsiz,lsiz
-      parameter (csiz=63,bsiz=4096,isiz=500,psiz=256,nsiz=6,lsiz=8192)
+      parameter (csiz=63,bsiz=4096,isiz=500,psiz=256,nsiz=6,lsiz=16384)
       integer   nlgh,vsiz
       parameter (nlgh=nsiz*4,vsiz=2)
-      integer   nftn,maxlnk
-      parameter (nftn=20,maxlnk=50)
       integer   maxdb,maxbpt
       parameter (maxdb=20,maxbpt=100)
 c
@@ -26,8 +22,15 @@ c
       integer istk(2*vsiz)
       equivalence (istk(1),stk(1))
 
+      real sstk(2*vsiz)
+      equivalence (sstk(1),stk(1))
+       
+      character cstk*(4*vsiz)
+      equivalence (cstk,stk(1))
+
       integer bot,top,idstk(nsiz,isiz),lstk(isiz),leps,bbot,bot0
-      common /vstk/ bot,top,idstk,lstk,leps,bbot,bot0
+      integer infstk(isiz)
+      common /vstk/ bot,top,idstk,lstk,leps,bbot,bot0,infstk
 
       integer ids(nsiz,psiz),pstk(psiz),rstk(psiz),pt,niv,macr,paus
       integer icall
@@ -45,16 +48,13 @@ c
       character alfa(csiz)*1,alfb(csiz)*1,buf*(bsiz)
       common /cha1/ alfa,alfb,buf
 
-      integer nlink
-      common /link1/ nlink
-
-      character*(nftn) tablin(maxlnk)
-      common /link2/ tablin
-
       integer wmac,lcntr,nmacs,macnms(nsiz,maxdb),lgptrs(maxdb+1)
       integer bptlg(maxbpt)
       common /dbg/ wmac,lcntr,nmacs,macnms,lgptrs,bptlg
 
+      common/adre/lbot,ie,is,ipal,nbarg,ladr(30)
+      common/intersci/nbvars,nbrows(30),nbcols(30),ntypes(30),
+     $      lad(30),lhsvar(30)
 
 c*------------------------------------------------------------------
 

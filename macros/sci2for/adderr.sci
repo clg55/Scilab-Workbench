@@ -1,4 +1,4 @@
-//[errn,nwrk]=adderr(nwrk,txt)
+function [errn,nwrk]=adderr(nwrk,txt)
 //Cette macro ajoute une erreur dont le texte du message est donne dans txt
 //    dans la table des erreurs possibles et retourne
 // errn : le numero associe a cette erreur  dans le sous programme fortran
@@ -12,7 +12,3 @@
   errn=nwrk(7)
   msgs=nwrk(8);msgs(nwrk(7))=txt
   nwrk(8)=msgs
- 
-//end
-
-

@@ -16,6 +16,7 @@ c     compilation  [4]
       endif
       top = top+1
       call putid(idstk(1,top),bl)
+      infstk(top)=0
       if (.not.cremat(fname,top,0,0,0,lr,lc)) return      
       return
       end

@@ -4,7 +4,7 @@ function []=xclip(x,y,w,h)
 //!
 [lhs,rhs]=argn(0)
 if rhs<=0, xset('clipoff');return;end
-if rhs=1,if typeof(x)<>"character" then 
+if rhs=1,if typeof(x)<>"string" then 
 		xset('clipping',x(1),x(2),x(3),x(4));
 	else 
 		xset(x);

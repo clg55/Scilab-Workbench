@@ -12,6 +12,7 @@ c     get startup instruction and start parser
 c     ----------------------------------------
       if(nos1.eq.0) then
 c     .  get initial instruction  if required
+         bu1=' '
          call inffic( 2, bu1,nc)
          nc=max ( 1 , nc )
       else

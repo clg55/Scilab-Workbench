@@ -16,30 +16,29 @@
 #include "wf_mode.h"
 #include "wf_w_util.h"
 
+#include "../machine.h"
+#include "All-extern.h"
+
 int
 emptyname(name)
     char	    name[];
 
 {
-    if (*name == '\0') {
-	return (1);
-    } else {
-	return (0);
-    }
+  if (*name == '\0') {
+    return (1);
+  } else {
+    return (0);
+  }
 }
 
-int
-emptyname_msg(name, msg)
-    char	    name[], msg[];
-
+int emptyname_msg(name, msg)
+     char	    name[], msg[];
 {
-    int		    returnval;
-
-    if (returnval = emptyname(name))
-	put_msg("No file name specified, %s command ignored", msg);
-    return (returnval);
+  int		    returnval;
+  if ( (returnval = emptyname(name)) == 1)
+    put_msg("No file name specified, %s command ignored", msg);
+  return (returnval);
 }
-
 
 int
 change_directory(path)

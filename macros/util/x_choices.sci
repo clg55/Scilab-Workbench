@@ -7,8 +7,8 @@ function [rep]=x_choices(title,choices_l)
          write(%io(2),s_mat);execstr(s_mat);
          return;end;
 
-if typeof(title)<>'character' then 
-	write(%io(2),'x_choices first argument is not of type character')
+if typeof(title)<>'string' then 
+	write(%io(2),'x_choices first argument is not character string')
 	return
 end
 if typeof(choices_l)<>'list' then 
@@ -23,12 +23,12 @@ for i=1:n, l_ch=choices_l(i);
 	write(%io(2),'x_choices(t,x): x('+string(i)+') is not a list');
 	return
  end 
- if typeof(l_ch(1))<>'character' then 
+ if typeof(l_ch(1))<>'string' then 
 	write(%io(2),'x_choices(t,x): x('+string(i)+')(1) is not a string');
 	return	
  end
  items= [items, l_ch(1)];
- if typeof(l_ch(3))<>'character' then 
+ if typeof(l_ch(3))<>'string' then 
 	write(%io(2),'x_choices(t,x): x('+string(i)+')(3) is not vector of strings');
 	return	
  end
@@ -38,7 +38,7 @@ for i=1:n, l_ch=choices_l(i);
 	return	
  end 
  items= [items, l_ch(3)];
- if typeof(l_ch(2))<>'usual' then 
+ if typeof(l_ch(2))<>'constant' then 
 	write(%io(2),'x_choices(t,x): x('+string(i)+')(2) is not of type int');
 	return	
  end
