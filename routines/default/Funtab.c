@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <string.h>
 #include <stdio.h>
 #ifdef __STDC__
@@ -49,13 +50,14 @@ static int FindStr();
 typedef struct 
 {
   char *name;
+  int codeI;
   int code;
   int level;
 } Funcs ;
 
 Funcs SciFuncs[]={
 #include "fundef"
-  {(char*) 0 ,                  0  ,   1},
+  {(char*) 0 ,  0,  0  ,   1},
 };
 
 
@@ -161,7 +163,8 @@ int test_hash()
       j=0;
       while ( SciFuncs[j].name != (char *) 0 && j < 20 )
 	{
-	  EnterStr(SciFuncs[j].name,&SciFuncs[j].code,&SciFuncs[j].level);
+	  EnterStr(SciFuncs[j].name,&SciFuncs[j].codeI,&SciFuncs[j].code,
+		   &SciFuncs[j].level);
 	  j++;
 	}
       j=0;
@@ -199,14 +202,16 @@ C2F(cvname)(id,str,n1,n2)
 
 #endif  /********************* end of test part ***/
   
-static int EnterStr(str,data,level)
+static int EnterStr(str,dataI,data,level)
      char *str;
-     int  *data,*level;
+     int  *data,*dataI,*level;
 {
+  int ldata;
   int id[NAMECODE];
   int zero=0;
   C2F(cvname)(id,str,&zero,strlen(str));
-  return( myhsearch(id,data,level,ENTER));
+  ldata= (*dataI)*100+*data;
+  return( myhsearch(id,&ldata,level,ENTER));
 }
 
 static void DeleteStr(str,data,level)
@@ -242,7 +247,8 @@ static void  Init()
     }
   while ( SciFuncs[j].name != (char *) 0 )
     {
-      if ( EnterStr(SciFuncs[j].name,&SciFuncs[j].code,&SciFuncs[j].level) == FAILED)
+      if ( EnterStr(SciFuncs[j].name,&SciFuncs[j].codeI,&SciFuncs[j].code,
+		    &SciFuncs[j].level) == FAILED)
 	{
 	  printf("Fatal Error : Table for scilab functions is too small \n");
 	  exit(1);

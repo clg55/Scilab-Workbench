@@ -5,6 +5,7 @@ function [n,d]=cmndred(num,den)
 //polynomial matrix n and a common denominator d such that
 //n/d=num./den
 //!
+// Copyright INRIA
 [m1,n1]=size(num)
 d=1;for dk=matrix(den,1,m1*n1),d=lcm([d,dk]),end
 for l=1:m1

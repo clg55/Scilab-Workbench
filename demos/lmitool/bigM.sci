@@ -45,6 +45,7 @@ function [x,Z,z,ul,iters]=bigM(F,blck_szs,c,x0,M,nu,abstol,reltol,tv,maxiters);
 // ul:        ul(1): primal objective, ul(1): dual objective.
 // iters:     number of iterations taken.
 
+// Copyright INRIA
 
 [rowf,colf]=size(F);
 m = colf-1;

@@ -2,6 +2,7 @@ function num=numer(r)
 //returns the numerator num of a rational function matrix r (r may be
 //also a scalar or polynomial matrix
 //!
+// Copyright INRIA
 r1=r(1);
 select type(r)
 case 1 then

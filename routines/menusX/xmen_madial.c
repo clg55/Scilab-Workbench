@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "men_scilab.h"
 
 extern void ShellFormCreate();

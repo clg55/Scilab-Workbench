@@ -1,7 +1,7 @@
-
 mode(-1)
+// Copyright INRIA
 getf('SCI/demos/surface/Macros.sci');
-getf('SCI/demos/surface/bezier.sci');
+getf('SCI/demos/surface/bezier.sci','n');
 oldln=lines()
 lines(0)
 deff('[]=demoex(num)',['select num,';
@@ -11,15 +11,15 @@ deff('[]=demoex(num)',['select num,';
      'case 4 then xdemo4()';'end']);
 
 demolist=[
-'Gammatest','xbasc();gammatest();';
-'2D curve Bezier test','xbasc();beziertest();';
-'3D curve Bezier test','xbasc();bezier3dtest();';
-'Bezier surface test','xbasc();beziersurftest();'
-'Bezier surface test 2','xbasc();c1test();']
+'Gammatest','xbasc();showinstr(gammatest);gammatest();';
+'2D curve Bezier test','xbasc();showinstr(beziertest);beziertest();';
+'3D curve Bezier test','xbasc();showinstr(bezier3dtest);bezier3dtest();';
+'Bezier surface test','xbasc();showinstr(beziersurftest);beziersurftest();'
+'Bezier surface test 2','xbasc();showinstr(c1test);c1test();']
 
 while %t then
   num=x_choose(demolist(:,1),'Bezier demos (From Euler)');
-  if num=0 then 
+  if num==0 then 
      lines(oldln(1))
      return
   else

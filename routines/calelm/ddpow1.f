@@ -26,6 +26,7 @@ c            iscmpl=1 if result is complex
 c!origin
 c Serge Steer INRIA 1996
 c!
+c     Copyright INRIA
       integer n,iv,ierr
       double precision v(*),p(*),rr(*),ri(*)
 c
@@ -38,7 +39,7 @@ c
       iir=1
       do 20 i=1,n
          call ddpowe(v(ii),p(iip),rr(iir),ri(iir),ierr,isc)
-         if(ierr.ne.0) return
+c         if(ierr.ne.0) return
          iscmpl=max(iscmpl,isc)
          ii=ii+iv
          iip=iip+ip

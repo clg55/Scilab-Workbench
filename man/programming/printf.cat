@@ -36,7 +36,7 @@ DESCRIPTION
   If any values remain after the entire format has been processed, they are
   ignored.
 EXAMPLES
-  printf('Result is:0lpha=%f",0.535)
+  printf('Result is:\nalpha=%f",0.535)
 
 SEE ALSO
   string, print, write, format, disp, file, fprintf, sprintf

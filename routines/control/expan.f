@@ -11,7 +11,8 @@ c
 c!origine
 c     F Delebecque INRIA 1986
 c!
-       dimension a(la),b(lb),c(nmax)
+c     Copyright INRIA
+      dimension a(la),b(lb),c(nmax)
        double precision a,b,c,s,a0
 c
        m=la

@@ -1,7 +1,7 @@
-.TH Cheb2mag 1 "April 1993" "Scilab Group" "Scilab Function"
+.TH cheb2mag 1 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-Cheb2mag - response of type 2 Chebyshev filter
+cheb2mag - response of type 2 Chebyshev filter
 .SH CALLING SEQUENCE
 .nf
 [h2]=cheb2mag(n,omegar,A,sample)

@@ -3,6 +3,7 @@ c!Kpurpose
 c     same as matz but for real (single precision) matrix.
 c
 c!
+c     Copyright INRIA
       integer lda,m,n,job
       character*(*) name
       real ar(lda,*),ai(lda,*)

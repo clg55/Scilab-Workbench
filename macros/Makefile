@@ -1,12 +1,16 @@
 SHELL = /bin/sh
 
+include ../Path.incl
 include ../Makefile.incl
+
+CFLAGS = $(CC_OPTIONS) 
 
 SUBDIRS = algebre arma auto calpol comm \
 	elem metanet optim percent robust sci2for \
-	signal tdcs util xdess scicos scicos_blocks sound
+	signal tdcs util xdess scicos scicos_blocks sound fraclab \
+	m2sci mtlb
 
-all::
+all:: Progs 
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
 	for i in $(SUBDIRS) ;\
 	do \
@@ -16,7 +20,7 @@ all::
 
 world: all
 
-release :
+release : Progs
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
 	for i in $(SUBDIRS) ;\
 	do \
@@ -24,6 +28,8 @@ release :
 		$(MAKE) $(MFLAGS) release ); \
 	done
 
+distclean::
+	$(RM) Lib Name
 
 distclean::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
@@ -40,3 +46,16 @@ clean::
 		(cd $$i ; echo "making clean in macros/$$i..."; \
 		$(MAKE) $(MFLAGS) clean); \
 	done
+
+Progs : Lib Name 
+
+Lib:  Lib.c 
+	$(RM) $@
+	$(CC) $(CFLAGS) -o $@ $?  $(CC_LDFLAGS) 
+
+Name:  Name.c 
+	$(RM) $@
+	$(CC) $(CFLAGS) -o $@ $?  $(CC_LDFLAGS) 
+
+
+

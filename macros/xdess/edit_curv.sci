@@ -34,6 +34,7 @@ function [x,y,ok,gc]=edit_curv(x,y,job,tit,gc)
 //          la courbe
 //!
 //origine: serge Steer, Habib Jreij INRIA 1993
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 xset('default')
 
@@ -84,132 +85,92 @@ else
 end
 xbasc()
 auto=%t
-// -- trace des menus
-menus=['Ok','Abort','Undo','Size','Grids','Clear','Read','Save','Replot']
+
+// Set menus and callbacks
+menu_d=['Read','Save','Clear']
+menu_e=['Undo','Size','Grids','Replot','Ok','Abort']
+menus=list(['Edit','Data'],menu_e,menu_d)
+w='menus(2)(';rpar=')'
+Edit=w(ones(menu_e))+string(1:size(menu_e,'*'))+rpar(ones(menu_e))
+w='menus(3)(';rpar=')'
+Data=w(ones(menu_d))+string(1:size(menu_d,'*'))+rpar(ones(menu_d))
+
 xselect()
+curwin=xget('window')
+unsetmenu(curwin,'File',1) //clear
+unsetmenu(curwin,'File',2) //select
+unsetmenu(curwin,'File',6) //load
+unsetmenu(curwin,'3D Rot.')
+//
+execstr('Edit_'+string(curwin)+'=Edit')
+execstr('Data_'+string(curwin)+'=Data')
+menubar(curwin,menus)
+//
 xset('alufunction',3)
 xset('dashes',1)
 xset('pattern',1)
-// -- premier trace de la courbe
-
-if x<>[]&y<>[] then 
-  plot2d(x,y,-1,'011',' ',rect,axisdata);
-else
-  plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
-end
+// -- trace du cadre
+plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
+xgrid(4)
 
 xset('alufunction',6)
-if x<>[]&y<>[] then plot2d(x,y,1,'000',' ');end
-datas=drawmbar(menus,'v',1/6);xgrid(4)
+if x<>[]&y<>[] then 
+  plot2d(x,y,1,'000',' ');plot2d(x,y,-1,'000',' ');
+end
+
+
 
 // -- boucle principale
 while %t then
   [n1,n2]=size(x);npt=n1*n2
-  while %t then
-    [n,c1]=getmenu(datas)
-    select n
-    case 0 then 
-//ce n est pas un menu
-     break
-    case 1 then 
-//    -- ok menu
-      xset('default')
-      gc=list(rect,axisdata)
-      return
-    case 2 then 
-//    -- abort menu
-      x=xsav
-      y=ysav
-      xset('default')
-      ok=%f
-      return
-    case 3 then
-//    -- undo menu
-      if x<>[]&y<>[] then plot2d(x,y,-1,'000',' ');plot2d(x,y,1,'000',' ');end
-      x=xs;y=ys
-      if x<>[]&y<>[] then plot2d(x,y,-1,'000',' ');plot2d(x,y,1,'000',' ');end
-      x=xs;y=ys
-    case 4 then
-//    -- size menu
-      while %t
-        [ok,xmn,xmx,ymn,ymx]=getvalue('entrez les nouvelles bornes',..
-                  ['xmin';'xmax';'ymin';'ymax'],..
-                  list('vec',1,'vec',1,'vec',1,'vec',1),..
-                  string([xmn;xmx;ymn;ymx]))
-        if ~ok then break,end
-        if xmn>xmx|ymn>ymx then
-          message('Les bornes sont incorrectes')
-        else
-          break
-        end
-      end
-      if ok then
-        xset('alufunction',3)
-        dx=xmx-xmn;dy=ymx-ymn
-        if dx==0 then dx=maxi(xmx/2,1),xmn=xmn-dx/10;xmx=xmx+dx/10;end
-        if dy==0 then dy=maxi(ymx/2,1),ymn=ymn-dy/5;ymx=ymx+dy/10;end
-        rect=[xmn,ymn,xmx,ymx];
-        xbasc()
-        auto=%f
-
-//   -- trace des menus
-
-        xset('alufunction',3)
-	if x<>[]&y<>[] then 
-	  plot2d(x,y,-1,'011',' ',rect,axisdata);
-	  xset('alufunction',6)
-	  plot2d(x,y,1,'000',' ')
-	else
-	  plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
-	  xset('alufunction',6)
-	end
-	datas=drawmbar(menus,'v',1/6);xgrid(4)
-
-      end
-    case 5 then 
-//   -- grids menu
-      rep=x_mdialog('entrez les nouveaux nombres d''intervalles',..
-                  ['axe des x';'axe des y'],..
-                  string([axisdata(2);axisdata(4)]))
-      if rep<>[] then
-        rep=evstr(rep)
-        axisdata(2)=rep(1);axisdata(4)=rep(2);
-        xset('alufunction',3)
-        rect=[xmn,ymn,xmx,ymx];
-        xbasc()
-        auto=%f
-	if x<>[]&y<>[] then 
-	  plot2d(x,y,-1,'011',' ',rect,axisdata);
-	  xset('alufunction',6)
-	  plot2d(x,y,1,'000',' ')
-	else
-	  plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
-	  xset('alufunction',6)
-	end
-	datas=drawmbar(menus,'v',1/6);xgrid(4)
-      end
-    case 6 then
-//   -- clear menu
-      if x<>[]&y<>[] then 
-	plot2d(x,y,-1,'000',' ');plot2d(x,y,-1,'000',' ')
-	x=[];y=[];
-//	plot2d(x,y,-1,'000',' ');
-      end
-    case 7 then
-//   -- read menu
-      [x,y]=readxy()
-      mx=mini(prod(size(x)),prod(size(y)))
-      if mx<>0 then
-        xmx=maxi(x);xmn=mini(x)
-        ymx=maxi(y);ymn=mini(y)
-        dx=xmx-xmn;dy=ymx-ymn
-        if dx==0 then dx=maxi(xmx/2,1),xmn=xmn-dx/10;xmx=xmx+dx/10;end
-        if dy==0 then dy=maxi(ymx/2,1),ymn=ymn-dy/5;ymx=ymx+dy/10;end
+  [btn,xc,yc,win,Cmenu]=getclick()
+  c1=[xc,yc]
+  if Cmenu==[] then Cmenu='edit',end
+  if Cmenu=='Exit' then Cmenu='Ok',end
+  select Cmenu
+  case [] then 
+    //ce n est pas un menu
+    break
+  case 'Ok' then 
+    //    -- ok menu
+    xset('default')
+    gc=list(rect,axisdata)
+    xdel()
+    return
+  case 'Abort' then 
+    //    -- abort menu
+    x=xsav
+    y=ysav
+    xset('default')
+    xdel()
+    ok=%f
+    return
+  case 'Undo' then
+    if x<>[]&y<>[] then plot2d(x,y,-1,'000',' ');plot2d(x,y,1,'000',' ');end
+    x=xs;y=ys
+    if x<>[]&y<>[] then plot2d(x,y,-1,'000',' ');plot2d(x,y,1,'000',' ');end
+    x=xs;y=ys
+  case 'Size' then
+    while %t
+      [ok,xmn,xmx,ymn,ymx]=getvalue('entrez les nouvelles bornes',..
+	  ['xmin';'xmax';'ymin';'ymax'],..
+	  list('vec',1,'vec',1,'vec',1,'vec',1),..
+	  string([xmn;xmx;ymn;ymx]))
+      if ~ok then break,end
+      if xmn>xmx|ymn>ymx then
+	message('Les bornes sont incorrectes')
       else
-        xmn=0;ymn=0;xmx=1;ymx=1;dx=1;dy=1
+	break
       end
+    end
+    if ok then
+      xset('alufunction',3)
+      dx=xmx-xmn;dy=ymx-ymn
+      if dx==0 then dx=maxi(xmx/2,1),xmn=xmn-dx/10;xmx=xmx+dx/10;end
+      if dy==0 then dy=maxi(ymx/2,1),ymn=ymn-dy/5;ymx=ymx+dy/10;end
       rect=[xmn,ymn,xmx,ymx];
       xbasc()
+      auto=%f
       xset('alufunction',3)
       if x<>[]&y<>[] then 
 	plot2d(x,y,-1,'011',' ',rect,axisdata);
@@ -219,37 +180,90 @@ while %t then
 	plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
 	xset('alufunction',6)
       end
-      datas=drawmbar(menus,'v',1/6);xgrid(4)
-    case 8 then
-//   -- save menu
-      savexy(x,y)
-    case 9 then
-//   -- replot menu  
-      xbasc()
+      xgrid(4)
+
+    end
+  case 'Grids' then 
+    rep=x_mdialog('entrez les nouveaux nombres d''intervalles',..
+	['axe des x';'axe des y'],..
+	string([axisdata(2);axisdata(4)]))
+    if rep<>[] then
+      rep=evstr(rep)
+      axisdata(2)=rep(1);axisdata(4)=rep(2);
       xset('alufunction',3)
+      rect=[xmn,ymn,xmx,ymx];
+      xbasc()
+      auto=%f
+      if x<>[]&y<>[] then 
+	plot2d(x,y,-1,'011',' ',rect,axisdata);
+	xset('alufunction',6)
+	plot2d(x,y,1,'000',' ')
+      else
+	plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
+	xset('alufunction',6)
+      end
+      xgrid(4)
+    end
+  case 'Clear' then
+    if x<>[]&y<>[] then 
+      plot2d(x,y,1,'000',' ');plot2d(x,y,-1,'000',' ')
+      x=[];y=[];
+    end
+  case 'Read' then
+    [x,y]=readxy()
+    mx=mini(prod(size(x)),prod(size(y)))
+    if mx<>0 then
+      xmx=maxi(x);xmn=mini(x)
+      ymx=maxi(y);ymn=mini(y)
+      dx=xmx-xmn;dy=ymx-ymn
+      if dx==0 then dx=maxi(xmx/2,1),xmn=xmn-dx/10;xmx=xmx+dx/10;end
+      if dy==0 then dy=maxi(ymx/2,1),ymn=ymn-dy/5;ymx=ymx+dy/10;end
+    else
+      xmn=0;ymn=0;xmx=1;ymx=1;dx=1;dy=1
+    end
+    rect=[xmn,ymn,xmx,ymx];
+    xbasc()
+    xset('alufunction',3)
+    if x<>[]&y<>[] then 
       plot2d(x,y,-1,'011',' ',rect,axisdata);
       xset('alufunction',6)
       plot2d(x,y,1,'000',' ')
-      datas=drawmbar(menus,'v',1/6);xgrid(4)
+    else
+      plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
+      xset('alufunction',6)
     end
-  end
-  npt=prod(size(x))
-  if npt<>0 then
-    dist=((x-ones(npt,1)*c1(1))/dx)^2+((y-ones(npt,1)*c1(2))/dy)^2
-    [m,k]=mini(dist);m=sqrt(m)
-  else
-    m=3*eps
-  end
-  if m<eps then                 //on deplace le point
-    xs=x;ys=y
-    [x,y]=movept(x,y)         
-  else                          
-    if add=1 then 
-      xs=x;ys=y                  //on rajoute un point de cassure
-      [x,y]=addpt(c1,x,y)
+    xgrid(4)
+  case 'Save' then
+    savexy(x,y)
+  case 'Replot' then
+    xbasc()
+    xset('alufunction',3)
+    plot2d(rect(1),rect(2),-1,'011',' ',rect,axisdata);
+    xgrid(4)
+    xset('alufunction',6)
+    if x<>[]&y<>[] then 
+      plot2d(x,y,1,'000',' ');plot2d(x,y,-1,'000',' ');
+    end
+  case 'edit' then
+    npt=prod(size(x))
+    if npt<>0 then
+      dist=((x-ones(npt,1)*c1(1))/dx)^2+((y-ones(npt,1)*c1(2))/dy)^2
+      [m,k]=mini(dist);m=sqrt(m)
+    else
+      m=3*eps
+    end
+    if m<eps then                 //on deplace le point
+      xs=x;ys=y
+      [x,y]=movept(x,y)         
+    else                          
+      if add==1 then 
+	xs=x;ys=y                  //on rajoute un point de cassure
+	[x,y]=addpt(c1,x,y)
+      end
     end
   end
 end
+
 
 function [x,y]=addpt(c1,x,y)
 //permet de rajouter un point de cassure
@@ -285,19 +299,19 @@ if  kk<>[] then
         k=kk(i)
         pp=pp(:,i)
 //  -- trace du point designe
-        plot2d(pp(1),pp(2),1,'000',' ')
+        plot2d(pp(1),pp(2),-1,'000',' ')
 //  acquisition du nouveau point
 //        [btn,xc,yc]=xclick();c2=[xc;yc]
 	c2=pp
 //  -- effacage de l'ancien segment
-        plot2d(pp(1),pp(2),1,'000',' ')
-        plot2d(x(k:k+1),y(k:k+1),-1,'000',' ')
+        plot2d(pp(1),pp(2),-1,'000',' ')
+        plot2d(x(k:k+1),y(k:k+1),1,'000',' ')
 //  -- mise a jour de x et y
         x=x([1:k k:npt]);x(k+1)=c2(1);
         y=y([1:k k:npt]);y(k+1)=c2(2);
 //  -- dessin des 2 nouveaux segments
-       plot2d(x(k:k+2),y(k:k+2),-1,'000',' ')
-       plot2d(x(k+1),y(k+1),1,'000',' ')
+       plot2d(x(k:k+2),y(k:k+2),1,'000',' ')
+       plot2d(x(k+1),y(k+1),-1,'000',' ')
        return
       end
     end
@@ -309,15 +323,15 @@ if norm([d1;d2].\([x(1);y(1)]-c1))<norm([d1;d2].\([x(npt);y(npt)]-c1)) then
     x(2:npt+1)=x;x(1)=c1(1)
     y(2:npt+1)=y;y(1)=c1(2)
 //  -- dessin du nouveau segment
-    plot2d(x(1),y(1),1,'000',' ')
-    plot2d(x(1:2),y(1:2),-1,'000',' ')
+    plot2d(x(1),y(1),-1,'000',' ')
+    plot2d(x(1:2),y(1:2),1,'000',' ')
 else
 //  -- mise a jour de x et y
     x(npt+1)=c1(1)
     y(npt+1)=c1(2)
 //  -- dessin du nouveau segment
-    plot2d(x(npt+1),y(npt+1),1,'000',' ')
-    plot2d(x(npt:npt+1),y(npt:npt+1),-1,'000',' ')
+    plot2d(x(npt+1),y(npt+1),-1,'000',' ')
+    plot2d(x(npt:npt+1),y(npt:npt+1),1,'000',' ')
 end
 
 
@@ -329,16 +343,16 @@ while rep(3)==-1 do
   rep=xgetmouse()
   xc=rep(1);yc=rep(2);c2=[xc;yc]
   //[btn,xc,yc]=xclick();c2=[xc;yc]
-  if modx=0 then c2(1)=x(k);end
-  if mody=0 then c2(2)=y(k);end
+  if modx==0 then c2(1)=x(k);end
+  if mody==0 then c2(2)=y(k);end
   pts=maxi(k-1,1):mini(k+1,npt)
   // - effacage des deux segments   
-  plot2d(x(pts),y(pts),-1,'000',' ')
   plot2d(x(pts),y(pts),1,'000',' ')
+  plot2d(x(pts),y(pts),-1,'000',' ')
   // - trace dans la nouvelle position
   x(k)=c2(1);y(k)=c2(2)
-  plot2d(x(pts),y(pts),-1,'000',' ')
   plot2d(x(pts),y(pts),1,'000',' ')
+  plot2d(x(pts),y(pts),-1,'000',' ')
 end
 
 function [x,y]=readxy()

@@ -8,6 +8,7 @@ function x=logm(a)
 //%DESCRIPTION
 //computes X=logm(A), matrix log of A
 //!
+// Copyright INRIA
 [m,n]=size(a)
 if m<>n then error(20,1),end
 flag=or(a<>a')

@@ -4,12 +4,14 @@ if rhs<2 then win=xget('window'),end
 xset('window',win);xbasc()
 wpar=scs_m(1)
 wsiz=wpar(1)
+options=wpar(7)
+
+// Copyright INRIA
 Xshift=wsiz(3)
 Yshift=wsiz(4)
 
 xset('wdim',wsiz(1),wsiz(2))
 [frect1,frect]=xgetech()
-xset('wdim',wsiz(1),wsiz(2))
 xsetech([-1 -1 8 8]/6,[Xshift,Yshift ,Xshift+wsiz(1),Yshift+wsiz(2)])
 
 drawobjs(scs_m)

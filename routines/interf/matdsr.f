@@ -6,6 +6,7 @@ C     evaluate functions involving eigenvalues and eigenvectors
 C
 C ====================================================================
 C
+c     Copyright INRIA
       include '../stack.h'
 C
       double precision sr,t,rmax,tt(1,1)
@@ -14,7 +15,7 @@ C
       integer fschur,bschur
       external fschur, bschur
       integer top2,tope,topf
-      character*24 namef
+      character*(nlgh+1) namef
       common /cschur/ namef
       integer iero
       common /ierinv/ iero
@@ -43,9 +44,23 @@ C
       eps = stk(leps)
       tope = top - rhs + 1
       if (istk(iadr(lstk(tope))) .ne. 1) then
-        err = 1
-        call error(53)
-        return
+         if(fin.eq.1) then
+            call putfunnam('hess',top-rhs+1)
+         elseif(fin.eq.2) then
+            call putfunnam('schur',top-rhs+1)
+         elseif(fin.eq.3) then
+            call putfunnam('spec',top-rhs+1)
+         elseif(fin.eq.4) then
+            call putfunnam('bdiag',top-rhs+1)
+         elseif(fin.eq.6) then
+            call putfunnam('balanc',top-rhs+1)
+         else
+            err = 1
+            call error(53)
+            return
+         endif
+         fun=-1
+         return
       endif
 C
       if (fin .eq. 6) goto 310

@@ -3,6 +3,8 @@
 # scilib scidir name nam 
 # To create the library name  stored in macro/nam
 # The file names is supposed to exist (See Imakefiles)
+
+# Copyright INRIA
 #-------------------------------------------------------
 SCI=$1; export SCI
 echo generating $2.bin

@@ -7,6 +7,7 @@ c fin de ligne : retourner k=99
 c effacement du caractere precedent :retourner k=-1
 c ignorer le caractere : retourner k=0
 c
+c     Copyright INRIA
       include '../stack.h'
 c
       integer blank

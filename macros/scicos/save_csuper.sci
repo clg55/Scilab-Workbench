@@ -1,7 +1,9 @@
 function path=save_csuper(scs_m,fpath)
 // given a super block definition x save_super creates a file which contains
 // this super block  handling  macro definition
+// Copyright INRIA
 path=[]
+scs_m=do_purge(scs_m)
 x1=scs_m(1);nam=x1(2)(1);
 nam=strsubst(nam,' ','_')
 in=[];out=[];clkin=[];clkout=[];
@@ -59,7 +61,7 @@ if size(ppath)>0 then
        '    execstr(''xxn=''+xx(5)+''(''''set'''',xx)'')'
        '    if ~and(xxn==xx) then '
        '      '+com+' parameter or states changed'
-       '      arg1=change_tree_elt(arg1,spath,xxn)'+com+' Update'
+       '      arg1(vec2list(spath,ones(size(spath,''*''),2)))=xxn'+com+' Update'
        '      newpar(size(newpar)+1)=path'+com+' Notify modification'
        '    end'
        '  end';

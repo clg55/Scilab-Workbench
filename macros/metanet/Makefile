@@ -1,6 +1,8 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
+
 include ../../Makefile.incl
 
 .SUFFIXES: .sci .bin $(SUFFIXES)
@@ -26,7 +28,7 @@ MACROS = adj_lists.sci add_edge.sci add_node.sci arc_graph.sci \
 	min_lcost_flow1.sci min_lcost_flow2.sci min_qcost_flow.sci \
 	min_weight_tree.sci neighbors.sci node_number.sci \
 	nodes_2_path.sci \
-	path_2_nodes.sci perfect_match.sci plot_graph.sci \
+	path_2_nodes.sci perfect_match.sci pipe_network.sci plot_graph.sci \
 	predecessors.sci qassign.sci \
 	salesman.sci save_graph.sci shortest_path.sci \
 	show_arcs.sci show_graph.sci show_nodes.sci split_edge.sci \

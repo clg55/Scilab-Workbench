@@ -1,3 +1,5 @@
+% Copyright INRIA
+
 \chapter{Programming}
 \label{ch4}
 \index{programming}
@@ -396,7 +398,7 @@ The following example runs the following {\tt foo} function which
 illustrates these commands.
 \begin{verbatim}
 function [z]=foo(x,y)
-[in,out]=argn(0);
+[out,in]=argn(0);
 if x=0 then,
      error('division by zero');
 end,
@@ -545,24 +547,24 @@ SYMBOL & VARIABLE TYPE
 
 A typed list is one in which the first
 entry of the list is a character string where the first
-three characters of the string are represented by the 
-{\tt xxx} in the above table.  For example a list
+characters of the string are represented by the 
+{\tt xxx} in the above table.  For example a typed list
 representing a linear system has the form 
-{\tt list('lss',a,b,c,d,x0,'c')} and, thus, the {\tt xxx}
+{\tt tlist(['lss','A','B','C','D','X0','dt'],a,b,c,d,x0,'c')} and, thus, the {\tt xxx}
 above is {\tt lss}.
 
 	An example of the function name which multiplies two
 linear systems together (to represent their series inter-connection)
-is {\tt \%lssmlss}.  Here the first field is \%, the second field is 
+is {\tt \%lss\_m\_lss}.  Here the first field is \%, the second field is 
 {\tt lss} (linear state-space), the third field is {\tt m} ``multiply''
 and the fourth one is {\tt lss}. A possible user function which performs
 this multiplication is as follows
 \begin{verbatim}
-function [s]=%lssmlss(s1,s2)
+function [s]=%lss_m_lss(s1,s2)
 [A1,B1,C1,D1,x1,dom1]=s1(2:7),
 [A2,B2,C2,D2,x2]=s2(2:6),
 B1C2=B1*C2,
-s=list('lss',[A1,B1C2;0*B1C2' ,A2],...
+s=lsslist([A1,B1C2;0*B1C2' ,A2],...
        [B1*D2;B2],[C1,D1*C2],D1*D2,[x1;x2],dom1),
 \end{verbatim}
 An example of the use of this function after having loaded it into
@@ -593,7 +595,7 @@ x = | 0  1 |x + | 2  1 |u
  
 y = | 1  1 |x + | 1  1 |u   
  
--->s12=s1*s2;   //This is equivalent to s12=%lssmlss(s1,s2)
+-->s12=s1*s2;   //This is equivalent to s12=%lss_m_lss(s1,s2)
  
 -->ssprint(s12)
  
@@ -605,14 +607,14 @@ x = | 0  0  1 -1 |x + | 1  0 |u
     | 0  1  0  0 |    
 y = | 1  0  0  0 |x   
 \end{verbatim}
-Notice that the use of {\tt \%lssmss} is totally transparent in
+Notice that the use of {\tt \%lss\_m\_lss} is totally transparent in
 that the multiplication of the two lists {\tt s1} and {\tt s2}
 is performed using the usual multiplication operator {\tt *}.
 
 The directory {\tt SCIDIR/macros/percent} contains all the functions
 (a very large number...) which perform operations on linear systems
 and transfer matrices. Conversions are automatically performed.
-For example the code for the function {\tt \%lssmlss} is there (note
+For example the code for the function {\tt \%lss\_m\_lss} is there (note
 that it is much more complicated that the code given here!).
 \section{Debbuging}
 The simplest way to debug a Scilab function is to introduce

@@ -1,4 +1,5 @@
       subroutine lsposp(op,ma,na,nela,inda,mb,nb,nelb,indb,
+c     Copyright INRIA
      $     nelc,indc,ierr)
 c!purpose
 c     compare the elements of two  sparse boolean matrices.

@@ -1,9 +1,9 @@
-C/MEMBR ADD NAME=GETSTR,SSI=0
       subroutine getstr
 c ====================================================================
 c             interpretation d une chaine de caracteres
 c               et rangement dans la base de donnees
 c ====================================================================
+c     Copyright INRIA
       include '../stack.h'
       integer quote,eol,bl(nsiz),iadr,sadr
       logical cresmat
@@ -63,10 +63,10 @@ c     Begin : reading the string
       go to 16
    18 call getch
       if (abs(char1) .eq. quote) go to 17
-      if (n .le. 0) then
-         call error(31)
-         return
-      endif
+c      if (n .le. 0) then
+c         call error(31)
+c         return
+c      endif
 c     end reading : the string is stored in istk(ln-> ln+(n-1))
 c     Storing size info in data Base
       if(comp(1).ne.0) then 

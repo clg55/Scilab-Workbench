@@ -1,4 +1,5 @@
 function scs_m=do_rename(scs_m)
+// Copyright INRIA
 if pal_mode then 
   mess='Enter the new palette name'
 else

@@ -9,17 +9,20 @@ function [sm,fr]=mese(x,npts);
 //!
 // author: C. Bunks  date: 24 August 1988
 // revised: 9 April 1991
- 
+// Copyright INRIA
+
 //default evaluation
  
    [rhs,lhs]=argn(0);
-   if lhs=1 then,
+   if lhs==1 then,
       npts=256;
    end,
  
 //estimate autocorrelation function of x
  
-   [r]=corr(x,npts);
+   Nx=length(x);
+   r=convol(x,x(Nx:-1:1))
+   r=r(Nx:-1:1)/Nx;
  
 //get solution to the Yule-Walker equations
  
@@ -30,6 +33,3 @@ function [sm,fr]=mese(x,npts);
    ak=[1;ar];
    [sf,fr]=frmag(ak,npts);
    sm=sigma2*ones(sf)./(sf.*conj(sf));
-
-
-

@@ -12,6 +12,7 @@ c     dy : tableau contenant le vecteur
 c     incy : increment entre deux elements consecutifs du vecteur y
 c              dans le tableau dy
 c!
+c     Copyright INRIA
       double precision dx,dy(*)
 c
       if (n.le.0) return

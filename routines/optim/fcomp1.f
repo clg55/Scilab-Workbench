@@ -1,5 +1,6 @@
       subroutine fcomp1(indic2,ibloc,indi,h,g,d,w,w1,n,nr,ncs,
      &dga,delta,prop,acc,scale)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension ibloc(n),indi(n),h(*),g(n),d(n),
      &w(n),w1(n),scale(n)

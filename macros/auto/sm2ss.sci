@@ -2,6 +2,7 @@ function des=sm2ss(sysmat)
 // Generalized system-matrix to descriptor
 // sysmat=[-s I + A , B; C , D]
 // [n,n]=size(A) 
+// Copyright INRIA
 [LHS,RHS]=argn(0)
 [nl,nc]=size(sysmat);
 E=-coeff(sysmat,1);

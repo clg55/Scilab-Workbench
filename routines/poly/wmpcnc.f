@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WMPCNC,SSI=0
+c     Copyright INRIA
       subroutine wmpcnc(mp1r,mp1i,d1,ld1,mp2r,mp2i,d2,ld2,mp3r,mp3i,d3,
      & l,m,n,job)
 c!but

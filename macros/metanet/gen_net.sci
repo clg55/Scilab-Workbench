@@ -1,4 +1,5 @@
 function [g]=gen_net(name,directed,v)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 g=[]
 if rhs==0 then

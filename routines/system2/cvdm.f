@@ -28,6 +28,7 @@ c     istr : tableau donnant la structure de str
 c
 c ================================== ( Inria    ) =============
 c
+c     Copyright INRIA
       double precision x(*),a,eps,dlamch
       integer maxc,mode,fl,typ
       integer str(*),istr(*),ipt
@@ -35,50 +36,60 @@ c
       character*1 ii
       character*10 form(2)
       data ipt /46/
+
 c
       eps=dlamch('p')
       write(form(1),130) maxc,maxc-7
-c
+c     
       lstr=1
       istr(1)=1
       lp=-nx
-      do 20 k=1,n
-      lp=lp+nx
-      do 20 l=1,m
-c
+      do 60 k=1,n
+         lp=lp+nx
+         do 50 l=1,m
+c     
 c     traitement du coeff (l,k)
-      a=x(lp+l)
-      if(m*n.gt.1.and.abs(a).lt.eps.and.mode.ne.0) a=0.0d+0
+            a=x(lp+l)
+
+            if(m*n.gt.1.and.abs(a).lt.eps.and.mode.ne.0) a=0.0d+0
 c     determination du format devant representer a
-      typ=1
-      if(mode.eq.1) call fmt(abs(a),maxc,typ,n1,n2)
-      if(typ.ne.2) then
-         nf=1
-         fl=maxc
-      else
-         fl=n1
-         nf=2
-         write(form(nf),120) fl,n2
-      endif
+            typ=1
+            if(mode.eq.1) call fmt(abs(a),maxc,typ,n1,n2)
+c     
+            l1=1
+            l0=1
 c
-      l1=1
-      l0=1
-c
-   41 write(cw(l1:l1+fl-1),form(nf)) a
-      l1=l1+fl
-      if(cw(l0:l0).eq.'+'.or.cw(l0:l0).eq.' ') l0=2
-c      if(a.ge.0.0d+0) l0=2
-      l1=l1+1
-   42 l1=l1-1
-      ii=cw(l1-1:l1-1)
-      if(ichar(ii).eq.ichar(' ')) goto 42
-      if(ichar(ii).eq.ipt) goto 42
-c      if(n2.eq.0) l1=l1-1
-      call cvstr(l1-l0,str(lstr),cw(l0:l1-1),0)
-      lstr=lstr+l1-l0
-      istr((k-1)*m+l+1)=lstr
-   20 continue
+            if(typ.eq.1) then
+               fl=maxc
+               write(cw(l1:l1+fl-1),form(1)) a
+            elseif(typ.eq.-1) then
+c     .        Inf
+               fl=3
+               cw(l1:l1+fl-1)='Inf'
+            elseif(typ.eq.-2) then
+c     .        Nan
+               fl=3
+               cw(l1:l1+fl-1)='Nan'
+            else
+               fl=n1
+               if(a.lt.0.0d0) fl=fl+1
+               write(form(2),120) fl,n2
+               write(cw(l1:l1+fl-1),form(2)) a
+            endif
+c     
+            l1=l1+fl
+            if(cw(l0:l0).eq.'+'.or.cw(l0:l0).eq.' ') l0=2
+            l1=l1+1
+ 42         l1=l1-1
+            ii=cw(l1-1:l1-1)
+            if(ichar(ii).eq.ichar(' ')) goto 42
+            if(ichar(ii).eq.ipt) goto 42
+            call cvstr(l1-l0,str(lstr),cw(l0:l1-1),0)
+            lstr=lstr+l1-l0
+            istr((k-1)*m+l+1)=lstr
+ 50      continue
+ 60   continue
       return
-  120 format('(f',i2,'.',i2,')')
-  130 format('(1pd',i2,'.',i2,')')
+ 120  format('(f',i2,'.',i2,')')
+ 130  format('(1pd',i2,'.',i2,')')
       end

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DSUM,SSI=0
+c     Copyright INRIA
       double precision function dsum(n,dx,incx)
 c
 c!but

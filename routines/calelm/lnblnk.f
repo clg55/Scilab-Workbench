@@ -1,4 +1,5 @@
       integer function lnblnk(str)
+c     Copyright INRIA
       character*(*) str
       n=len(str)+1
  10   continue

@@ -1,4 +1,5 @@
 function [x,y,typ]=PROD_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[];
 p=1 //pixel sizes ratio
 select job
@@ -9,6 +10,7 @@ case 'plot' then
   wd=xget('wdim')
   graphics=arg1(2); [orig,sz,orient]=graphics(1:3)
   thick=xget('thickness');xset('thickness',2)
+  patt=xget('dashes');xset('dashes',default_color(1))
   rx=sz(1)*p/2
   ry=sz(2)/2
   xarc(orig(1),orig(2)+sz(2),sz(1)*p,sz(2),0,23040) // (23040=360*64)
@@ -35,6 +37,7 @@ case 'plot' then
     xfpoly(sz(1)*out(:,1)+ones(3,1)*orig(1),..
 	sz(2)*out(:,2)+ones(3,1)*(orig(2)+sz(2)/2),1)
   end
+    xset('dashes',patt)
 case 'getinputs' then
   graphics=o(2)
   [orig,sz,orient]=graphics(1:3)

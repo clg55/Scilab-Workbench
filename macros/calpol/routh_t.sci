@@ -6,9 +6,10 @@ function r=routh_t(h,k)
 //k, formal expression of the Routh table.
 //r=routh_t(d) computes Routh table of h.
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 h1=h(1);
-if rhs=2 then
+if rhs==2 then
   
   //-compat type(h)<>15 retained for list/tlist compatibility
    if type(h)<>15&type(h)<>16 then

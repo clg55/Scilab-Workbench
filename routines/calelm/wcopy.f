@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WCOPY,SSI=0
+c     Copyright INRIA
       subroutine  wcopy(n,dxr,dxi,incx,dyr,dyi,incy)
 c!calling sequence
 c      subroutine  dcopy(n,dxr,dxi,incx,dyr,dyi,incy)

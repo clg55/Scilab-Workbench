@@ -17,8 +17,7 @@ x
 y
 : vector (y-axis values)
 .SH DESCRIPTION
-given \fVxyd\fR a set of points in the xy-plane and \fVx\fR a set of
-increasing abscissae, this function computes \fVy\fR the corresponding
+given \fVxyd\fR a set of points in the xy-plane  which increasing abscissae and \fVx\fR a set of abscissae, this function computes \fVy\fR the corresponding
 y-axis values by linear interpolation.
 .SH EXAMPLE
 .nf

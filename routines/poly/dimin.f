@@ -40,6 +40,7 @@ c     carlos klimann, inria, 26-XI-85.
 c
 c
 c!
+c     Copyright INRIA
       integer v1(*),v2(*)
       integer lig1,col1,d1,d2,lig2,col2,ligr,colr,ierr
       integer noo1,noo2

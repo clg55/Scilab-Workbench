@@ -5,24 +5,24 @@ c     evaluate system functions
 c     
 c     ====================================================================
 c
+c     Copyright INRIA
       include '../stack.h'
       parameter (nz1=nsiz-1,nz2=nsiz-2)
 c     
       common /mprot/ macprt
 c
       
-      integer eol,comma,p,iadr,sadr
+      integer eol,comma,p,iadr,sadr,r
       integer id(nsiz),fe,fv,semi
       integer double,reel,ent,sort,errn,orts,rtso,tsor,out
       integer uto,tou
       integer top2,tops,pt0,count,fptr,bbots,cmode
+      integer local
       double precision x
       logical flag,eqid
       integer offset
 c     
-      character*24    name
-      common /inter/ name
-      common /ibfu/ ibuf(200)
+      character*(nlgh)    name
 c
       common /mtlbc/ mmode
 c
@@ -35,7 +35,8 @@ c
       data fe/14/,fv/31/
       data double/13/,reel/27/,ent/18/,sort/28/
       data orts/24/,rtso/27/,tsor/29/,out/24/,uto/30/,tou/29/
-c     
+      data local/21/
+c    
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 c     
@@ -50,6 +51,8 @@ c     funcprot whereis where   timer havewindow memory stacksize
 c     26         27    28      29       30       31     32
 c     mtlb_mode  link     ulink  c_link addinter  fhelp  fapropos
 c     33         34        35     36    37       38     39
+c     fclear    what    sciargs  chdir getcwd ieee
+c     40         41       42     43     44     45
 
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
@@ -62,7 +65,8 @@ c
       goto (10 ,20 ,998 ,55,60 ,70 ,80 ,120,130,140,
      +      150,160,190,180,200,210,220,230,240,250,
      +      250,300,320,320,370,380,390,400,410,420,
-     +      450,500,510,600,610,620,630,640,650),fin
+     +      450,500,510,600,610,620,630,640,650,660,
+     +      670,680,681,682,683),fin
 c     
 c     debug
  10   if(rhs.le.0) then
@@ -79,16 +83,33 @@ c
 c     who
 c
  20   continue
-      if(rhs.gt.0) then
+      if(rhs.gt.1) then
          call error(39)
          return
       endif
+      if(rhs.le.0) then
+         if(lhs.ne.1) then
+            call error(41)
+            return
+         endif
+         call msgs(38,0)
+         call prntid(idstk(1,bot),isiz-bot+1,wte)
+         l = lstk(isiz) - lstk(bot) + 1
+         write (buf,'(4i10)') l, lstk(isiz)-lstk(1), isiz-bot, isiz-1
+         call msgs(39,0)
+c     
+         top=top+1
+         il = iadr(lstk(top))
+         istk(il) = 0
+         lstk(top+1) = lstk(top) + 1
+         return
+      endif
+c
       if(lhs.gt.2) then
          call error(41)
          return
       endif
       n=isiz-bot
-      top=top+1
       il=iadr(lstk(top))
       lw=sadr(il+5+n+n*nlgh)
       err=lw-lstk(bot)
@@ -266,6 +287,7 @@ cx    top=top+1
 cx    lstk(top+1)=lstk(top)
 cx    endif
       comp(1)=iadr(lstk(top+1))
+      comp(2)=0
       comp(3)=cmode
       rstk(pt)=901
       icall=5
@@ -304,261 +326,8 @@ c
       goto 999
 c     
 c     fort
- 80   continue
-      if (rhs .eq. 0) then
-         call error(39)
-         return
-      endif
-      flag=.false.
-      is=0
-      namax=30
-      call iset(namax,0,ladr,1)
-      top2=top-rhs+1
-      il=iadr(lstk(top2))
-      nc=istk(il+5)-1
-      name=' '
-      call cvstr(nc,istk(il+6),name,1)
-      name(nc+1:nc+1)=char(0)
-C     Check the name in the <<fort>> table 
-      call setinterf(name,irep)
-      if ( irep.eq.1) then 
-         buf = name
-         call error(50)
-         return
-      endif
-C     calcul de ie,tops,ipal,is1
-      do 81 i=1,rhs
-         tops=top2+i
-         il=iadr(lstk(tops))
-c     if(istk(il).eq.10.and.abs(istk(il+6)).eq.sort) goto 82
-         if(istk(il).eq.10) then
-            if(istk(il+6).eq.sort.and.istk(il+7).eq.orts.and.
-     $      istk(il+8).eq.rtso.and.istk(il+9).eq.tsor) goto 82
-            if(istk(il+6).eq.out.and.istk(il+7).eq.uto.and.
-     $      istk(il+8).eq.tou) goto 82
-         endif
- 81   continue
-c     la chaine 'sort' n apparait pas ; on va a la forme breve
-      goto 110
- 82   continue
-      ie=(tops-1-top2)/3
-      ipal=sadr(il)
-      lbot=lstk(bot)
-      is1=3*ie+1
-c     ie :nb de variables d entree transmises
-c     
-c     calcul de iss: nombre de variables de sorties
-c     transmises (apres le sort)
-      jjj=tops+1
-      iss=0
-      if(jjj.gt.top) goto 86
-      do 85 i=1,namax
-         ilm=iadr(lstk(jjj))
-         if(istk(ilm+1)*istk(ilm+2).eq.2) goto 83
-c     forme courte;position seulmt.
-         jjj=jjj+1
-         goto 84
- 83      continue
-         jjj=jjj+3
- 84      continue
-         iss=iss+1
-         if(jjj.gt.top) goto 86
- 85   continue
- 86   continue
-      if(iss.gt.0 .and. lhs.gt.iss) then
-         call error(41)
-         return
-      endif
-      if(err.gt.0) return
-      ieis=ie+iss
-      if(ie.eq.0) goto 88
-c     traitement des variables d'entree
-      do 87 i=1,ie
-         ir1=top2+1+3*(i-1)
-         ir=ir1+1
-         irt=ir+1
-         il=iadr(lstk(ir))
-         il1=iadr(lstk(ir1))
-         ivol=istk(il1+1)*istk(il1+2)
-         l=sadr(il+4)
-         l1=sadr(il1+4)
-         ipla=int(stk(l))
-         ilt=iadr(lstk(irt))
-         if(istk(ilt).ne.10) then
-            err=i*3+1
-            call error(55)
-            return
-         endif
-         itf=abs(istk(ilt+5+istk(il+1)*istk(il+2)))
-         ibuf(1+3*(i-1))=ipla
-         ibuf(2+3*(i-1))=l1
-         ibuf(3+3*(i-1))=itf
-c     test simple,entier...et conversion
-         if(itf.eq.double) goto 87
-         if(itf.eq.reel) call simple(ivol,stk(l1),stk(l1))
-         if(itf.eq.ent.or.itf.eq.12) call entier(ivol,stk(l1),stk(l1))
-         if(itf.eq.12) then
-            call in2str(ivol,istk(iadr(l1)),istk(iadr(l1)))
-         endif
-         if(itf.eq.reel.or.itf.eq.ent.or.itf.eq.12) goto 87
-         if(itf.ne.reel.and.itf.ne.double.and.itf.
-     + ne.ent.and.itf.ne.12) then
-            call error(71)
-            return
-         endif
- 87   continue
-c     
- 88   continue
-c     
-c     traitement des variables de sortie
-      jjj=tops+1
-      if(iss.eq.0) goto 95
-      do 94 i=1,iss
-         ilm=iadr(lstk(jjj))
-         if(istk(ilm+1)*istk(ilm+2).eq.2) goto 93
-c     forme courte:position seulmt.
-         lm=sadr(ilm+4)
-         ipla=int(stk(lm))
-         ijk=3*ie+1+(i-1)*3
-         ijkl=3*ie+3*iss+3*(i-1)+1
-c     on va chercher nlgn,ncol,type
-         do 91 j=1,ie
-            jj=1+3*(j-1)
-            if(ibuf(jj).eq.ipla) goto 92
- 91      continue
-c     variable de sortie qui n'est pas une variable d'entree
-         flag=.true.
-         goto 94
- 92      continue
-         itf=ibuf(jj+2)
-c     ivol= size(jj+1,nlgn,ncol)
-         jadr=iadr(ibuf(jj+1))
-         nlgn=istk(jadr-3)
-         ncol=istk(jadr-2)
-         ivol=nlgn*ncol
-cccc  call alloc(ipla,ivol,nlgn,ncol,typfor)
-         is=is+1
-         is2=is1+3*is
-         la=is1+3*(2*is-1)
-         ibuf(la)=nlgn
-         ibuf(la+1)=ncol
-         ibuf(la+2)=itf
-         call icopy(3*(is-1),ibuf(is1+(is-1)*3),-1,ibuf(is1+3*is),-1)
-         ka=is1+(is-1)*3
-         ibuf(ka)=ipla
-         ibuf(ka+1)=ivol
-         ibuf(ka+2)=itf
-cccc  
-         jjj=jjj+1
-         goto 94
- 93      continue
-c     cas standard on met plac,vol,type + nl,nc,type
-         il=iadr(lstk(jjj+1))
-         ilp=iadr(lstk(jjj+2))
-         lm=sadr(ilm+4)
-         nlgn=int(stk(lm))
-         ncol=int(stk(lm+1))
-         ivol=nlgn*ncol
-         l=sadr(il+4)
-         itf=abs(istk(ilp+5+istk(ilp+1)*istk(ilp+2)))
-         ipl=int(stk(l))
-cccc  call alloc(ipl,ivol,nlgn,ncol,typfor)
-         is=is+1
-         is2=is1+3*is
-         la=is1+3*(2*is-1)
-         ibuf(la)=nlgn
-         ibuf(la+1)=ncol
-         ibuf(la+2)=itf
-         call icopy(3*(is-1),ibuf(is1+(is-1)*3),-1,ibuf(is1+3*is),-1)
-         ka=is1+(is-1)*3
-         ibuf(ka)=ipl
-         ibuf(ka+1)=ivol
-         ibuf(ka+2)=itf
-cccc  
-         jjj=jjj+3
- 94   continue
- 95   continue
-c     
-c     calcul des adresses ladr(.)
-      narg=0
-      do 100 i=1,ieis
-         narg=max(narg,ibuf(3*(i-1)+1))
- 100  continue
-      nbarg=narg
-      if(narg.gt.namax) then
-         call error(70)
-         return
-      endif
-      n=namax-narg
-      if(.not.flag) then
-         do 101 k=1,n
-            ladr(narg+k)=lbot-1
- 101     continue
-      endif
-      do 103 j=1,narg
-         do 102 i=1,ieis
-            i1=3*(i-1)+1
-            if(ibuf(i1).ne.j) goto 102
-            if(i.le.ie) ladr(j)=ibuf(i1+1)
-            if(i.gt.ie.and.ladr(j).eq.0) ladr(j)=ipal
-            if(i.gt.ie.and.ladr(j).eq.ipal) ipal=ipal+ibuf(i1+1)
-            err=ipal-lbot
-            if(err.gt.0) then
-               call error(17)
-               return
-            endif
- 102     continue
- 103  continue
-c     
-      if(.not.flag) call interf(stk(ladr(1)),stk(ladr(2)),
-     $     stk(ladr(3)),stk(ladr(4)),stk(ladr(5)),stk(ladr(6)),
-     $     stk(ladr(7)),stk(ladr(8)),stk(ladr(9)),stk(ladr(10)),
-     $     stk(ladr(11)),stk(ladr(12)),stk(ladr(13)),stk(ladr(14)),
-     $     stk(ladr(15)),stk(ladr(16)),stk(ladr(17)),stk(ladr(18)),
-     $     stk(ladr(19)),stk(ladr(20)),stk(ladr(21)),stk(ladr(22)),
-     $     stk(ladr(23)),stk(ladr(24)),stk(ladr(25)),stk(ladr(26)),
-     $     stk(ladr(27)),stk(ladr(28)),stk(ladr(29)),stk(ladr(30)))
-      if(flag) call interf(x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,
-     1     x,x,x,x,x,x,x,x,x,x,x,x,x,x,x)
-      top=top2
-      if(iss.le.0) then
-         il=iadr(lstk(top))
-         istk(il)=0
-         lstk(top+1)=lstk(top)+1
-      else
-         ir1=is1
-         do 104 i=1,lhs
-            no=ibuf(ir1)
-            call back(no)
-            ir1=ir1+3
- 104     continue
-         top=top-1
-      endif
-      goto 999
- 110  continue
-c     no out: interface automatique...forme breve
-      top=top2
-      lbot=lstk(bot)
-      ipal=sadr(il)
-      ie=rhs-1
-      do 111 i=1,ie
-         ir1=top2+i
-         il=iadr(lstk(ir1))
-         ivol=istk(il+1)*istk(il+2)
-         l1=sadr(il+4)
-         if(istk(il).ne.1) then
-         buf='fort: invalid input parameter'
-         call error(9999)
-         return
-         endif
-         ibuf(1+3*(i-1))=i
-         ibuf(2+3*(i-1))=l1
-         ibuf(3+3*(i-1))=0
-         ladr(i)=l1
- 111  continue
-      call interf(x,x,x,x,x,x,x,x,x,x,x,x,x,x,x,
-     1     x,x,x,x,x,x,x,x,x,x,x,x,x,x,x)
-      top=top2+lhs-1
+c     ----
+ 80   call intfort('fort')
       goto 999
 c     
 c     mode
@@ -637,6 +406,11 @@ c     error(str [,errn])
             return
          endif
          errn=int(stk(sadr(il+4)))
+         if(errn.ge.100000) then
+            err=2
+            call error(116)
+            return
+         endif
          top=top-1
          il=iadr(lstk(top))
       else
@@ -670,23 +444,49 @@ c
      &     (rstk(pt0).eq.616.and.pstk(pt0).eq.10)) count=count+1
       if(int(rstk(pt0)/100).ne.5) goto 151
 c
-      if(rstk(pt0).eq.501) then
-c     resume dans une macro compilee
+ 152  if(rstk(pt0).eq.501) then
+c     resume in a compiled macro
          lc=pstk(pt)
          ids(1,pt0+1)=lc
          pstk(pt0+2)=count
       elseif(rstk(pt0).eq.502) then
-c     resume dans une macro non compilee
-         if(rstk(pt-1).ne.201
-     &        .or.rstk(pt-2).ne.101
-     &        .or.rstk(pt-3).ne.703
-     &        .or.(sym.ne.semi.and.sym.ne.comma.and.sym.ne.eol)) 
-     &         goto 156
-         pt=pt-3
-         pstk(pt0+1)=pt
-         pstk(pt0+2)=count
+         if(rstk(pt0-1).eq.903) then
+            if(rstk(pt0-3).ne.501.and.rstk(pt0-3).ne.201) goto 156
+            if(paus.ne.0.and.rstk(pt0-3).eq.201) then
+               r=rstk(pt0-7)
+               if (r.eq.701.or.r.eq.604) goto 156
+            endif
+c    .      resume in an execstr, simulate a resume in the calling macro
+c    .      see macro.f code for details 
+            k = lpt(1) - (13+nsiz)
+            lpt(1)=lin(k+1)
+            macr=macr-1
+            pt=pt0+1
+            if(rstk(pt0-3).eq.501) then
+c     .        resume in an execstr call by a compiled macro
+c     .        pt points to the beginning of resumed variable names in ids
+               pt0=pt0-3
+            elseif(rstk(pt0-3).eq.201) then
+c     .        resume in an execstr call by an uncompiled macro
+c     .        pt points to the beginning of resumed variable names in ids
+               pt0=pt0-6
+            endif
+            rstk(pt0)=502
+            pstk(pt0+1)=pt-1+lhs
+            pstk(pt0+2)=count+1
+         else
+c     .     resume in an uncompiled macro
+            if(rstk(pt-1).ne.201
+     &           .or.rstk(pt-2).ne.101
+     &           .or.rstk(pt-3).ne.703
+     &           .or.(sym.ne.semi.and.sym.ne.comma.and.sym.ne.eol)) 
+     &           goto 156
+            pt=pt-3
+            pstk(pt0+1)=pt
+            pstk(pt0+2)=count
+         endif
       elseif(rio.eq.rte) then
-c     resume dans une pause
+c     resume in a pause
          if(rstk(pt-1).ne.201
      &        .or.rstk(pt-2).ne.101
      &        .or.rstk(pt-3).ne.703
@@ -773,10 +573,29 @@ c     retour du format
 c     
 c     exists
  180  continue
-      if(rhs.ne.1) then
+      if(rhs.ne.1.and.rhs.ne.2) then
          call error(39)
          return
       endif
+
+      flag=.false.
+c
+      if(rhs.eq.2) then
+         il=iadr(lstk(top))
+         if(istk(il).ne.10) then
+            err=1
+            call error(55)
+            return
+         endif
+         if(istk(il+1)*istk(il+2).ne.1) then
+            err=1
+            call error(36)
+            return
+         endif
+         if(istk(il+6).eq.local) flag=.true.
+         top=top-1
+      endif
+
       il=iadr(lstk(top))
       if(istk(il).ne.10) then
          err=1
@@ -791,21 +610,41 @@ c     exists
       n=istk(il+5)-1
       l=il+6
       call namstr(id,istk(l),n,0)
+
 c     look for  variables in the stack
-      fin=-1
-      call stackg(id)
-      if (fin.le.0) then
-c     look for libraries functions
+      if(flag) then
+c      just in local environnement
          fin=-3
-         kfun=fun
-         call funs(id)
-         fun=kfun
+         call stackg(id)
+         ilw=iadr(lstk(top))
+         top=top-1
+         if(istk(ilw).lt.0) then
+            fin=1
+         else
+            fin=0
+         endif
+      else
+c     in all the stack
+         fin=-1
+         call stackg(id)
+         if (fin.le.0) then
+c     look for libraries functions
+            fin=-3
+            kfun=fun
+            call funs(id)
+            fun=kfun
+         endif
       endif
-      if (fin.gt.0) fin=1
+c
       istk(il)=1
       l=sadr(il+4)
-      stk(l)=dble(fin)
+      if (fin.gt.0) then
+         stk(l)=1.0d0
+      else
+         stk(l)=0.0d0
+      endif
       lstk(top+1)=l+1
+      fin=1
       goto 999
 c     
 c     link dynamique
@@ -854,7 +693,7 @@ c     errcatch
          endif
          top=top-1
  201  continue
-      errct=(8*imess+imode)*10000+abs(num)
+      errct=(8*imess+imode)*100000+abs(num)
       if(num.lt.0) errct=-errct
       p=pt+1
  202  p=p-1
@@ -1438,7 +1277,7 @@ c     stacksize
       if (mem.eq.memold) goto 502
       l=lstk(isiz)-lstk(bot)
       if (mem.lt.l) then
-         buf='Required memory to small for defined data'
+         buf='Required memory too small for defined data'
          call error(1503)
          return
       endif
@@ -1507,9 +1346,24 @@ c     mtlb_mode
       goto 999
  650  call scifapr("fapropos")
       goto 999
-c
+ 660  call intclear("clear")
+      goto 999
+ 670  call intwhat("what")
+      goto 999
+ 680  call intsciargs("sciargs")
+      goto 999
+ 681  call intschdir("chdir")
+      goto 999
+ 682  call intsgetdir("getcwd")
+      goto 999
+ 683  call intsieee("ieee")
+      goto 999
  998  continue
-c     fake calls for link
+c     fake calls : only to force the 
+c     linker to load the following functions
+c     in scilab executable 
+      call rcopy(m*n,ar,1,ar,1)
+      call ccopy(1,'tutu',1,buf,1)
       call matz(ar,ai,lda,m,n,name,job)
       call readmat(' ',m,n,ar)
       i=creadmat(' ',m,n,w)
@@ -1521,6 +1375,7 @@ c     fake calls for link
       call matzs(ar,ai,lda,m,n,' ',job)
       call rea2db(n,dx,incx,dy,incy)
       call freeptr(i)
+      call csparsef(ar,it,m,n,nel,mnel,icol,ar,ar)
  999  return
       end
 
@@ -1581,8 +1436,22 @@ C     first argument
      $           istk(il2),istk(ild2),m2*n2,strf,ilib,iflag,rhs)
          endif
          if ( ilib.lt.0 ) then 
-            buf= fname // ': Error'
-            call error(999)
+            if (ilib.eq.-1) then
+               call error(236)
+            elseif (ilib.eq.-2) then
+               call error(239)
+            elseif (ilib.eq.-3) then
+               call error(238)
+            elseif (ilib.eq.-4) then
+               call error(237)
+            elseif (ilib.eq.-5) then
+               call error(235)
+            elseif (ilib.eq.-6) then
+               call error(235)
+            else
+               buf= fname // ': Error'
+               call error(999)
+            endif
             return
          endif
          if (.not.cremat(fname,top,0,1,1,lr,lc)) return
@@ -1626,7 +1495,30 @@ c      integer ilib,gettype,iv ,l1
 C     first argument 
       if (.not.getwsmat(fname,topk,top,m1,n1,il1,ild1)) return
       call addinter(istk(il1),istk(ild1),m1*n1,strf,
-     $     istk(il3),istk(ild3),m3*n3)
+     $     istk(il3),istk(ild3),m3*n3,ierr)
+      if(ierr.ne.0) then
+         if (ierr.eq.-1) then
+            call error(236)
+         elseif (ierr.eq.-2) then
+            call error(239)
+         elseif (ierr.eq.-3) then
+            call error(238)
+         elseif (ierr.eq.-4) then
+            call error(237)
+         elseif (ierr.eq.-5) then
+            call error(231)
+         elseif (ierr.eq.-6) then
+            call error(234)
+         elseif (ierr.eq.1) then
+            call error(233)
+         elseif (ierr.eq.2) then
+            call error(232)
+         else
+            buf = fname // ': Error '
+            call error(999)
+         endif
+         return
+      endif
       call objvide(fname,top)
       return
       end
@@ -1661,7 +1553,7 @@ cc    implicit undefined (a-z)
       integer topk,iadr
 c      integer m3,n3,lr3,nlr3,m2,n2,il2,ild2,m1,n1,il1,ild1
       integer ilib,iv ,l1
-      logical checkrhs,crebmat,getscalar,getsmat
+      logical checkrhs,crebmat,getscalar,getsmat,cremat
       iadr(l)=l+l-1
       if (.not.checkrhs(fname,1,2)) return
       if (.not.checkrhs(fname,1,2)) return
@@ -1683,6 +1575,11 @@ c      integer m3,n3,lr3,nlr3,m2,n2,il2,ild2,m1,n1,il1,ild1
       else
          istk(lr) = 1
       endif
+      if ( lhs.eq.2) then 
+         top=top+1
+         if (.not.cremat(fname,top,0,1,1,lr,lc)) return
+         stk(lr)= ilib
+      endif
       return
       end
 
@@ -1691,15 +1588,35 @@ c      integer m3,n3,lr3,nlr3,m2,n2,il2,ild2,m1,n1,il1,ild1
 c     =============================
 c     fhelp(name)
       character*(*) fname
+      character*80 h
       logical checkrhs,checklhs,getsmat,checkval,cresmat2,bufstore
       include '../stack.h'
+      integer a, blank,percent
+      data a/10/,blank/40/,percen/56/
+c
       rhs = max(0,rhs)
       lbuf = 1
-      if(.not.checkrhs(fname,1,1)) return
-      if(.not.getsmat(fname,top,top-rhs+1,m1,n1,1,1,lr1,nlr1)) return
-      if(.not.checkval(fname,m1*n1,1)) return
-      if(.not.bufstore(fname,lbuf,lbufi1,lbuff1,lr1,nlr1)) return
-      call iscihelp(buf,buf(lbufi1:lbuff1),ierr)
+      if(.not.checkrhs(fname,0,1)) return
+      if(rhs.eq.0) then
+         h='help'
+         h(5:5)= char(0)
+         call iscihelp(buf,h,ierr)
+      else
+         if(.not.getsmat(fname,top,top-rhs+1,m1,n1,1,1,lr1,nlr1)) return
+         if(.not.checkval(fname,m1*n1,1)) return
+         if(nlr1.gt.0) then
+            ic=abs(istk(lr1))
+            if(.not.((ic.ge.a.and.ic.lt.blank) .or. ic.eq.percen)) then
+               h='symbols'
+               h(8:8)= char(0)
+               call iscihelp(buf,h,ierr)
+            else
+               if(.not.bufstore(fname,lbuf,lbufi1,lbuff1,lr1,nlr1))
+     $              return
+               call iscihelp(buf,buf(lbufi1:lbuff1),ierr)
+            endif
+         endif
+      endif
       call objvide(fname,top)
       return
       end
@@ -1715,46 +1632,448 @@ c     fapropos(name)
       if(.not.checkrhs(fname,1,1)) return
       if(.not.getsmat(fname,top,top-rhs+1,m1,n1,1,1,lr1,nlr1)) return
       if(.not.checkval(fname,m1*n1,1)) return
+c     conversion to lower case
+      do 10 i=0,nlr1-1
+         istk(lr1+i)=abs(istk(lr1+i))
+ 10   continue
       if(.not.bufstore(fname,lbuf,lbufi1,lbuff1,lr1,nlr1)) return
       call isciap(buf,buf(lbufi1:lbuff1),ierr)
       call objvide(fname,top)
       return
       end
 
-      subroutine in2str(n,line,str)
-c     int to string (cvstr)
-c!
-c
+      subroutine intfort(fname)
+c     =====================================
+c     interface for the scilab fort command 
+c     =====================================
       include '../stack.h'
-      integer eol
-c
-      integer line(*)
-      character str*(*),mc*1
-      data eol/99/
-c
-c     conversion code ->ascii
-      do 30 j=1,n
-      m=line(j)
-      if(abs(m).gt.csiz) m=99
-      if(m.eq.99) goto 10
-      if(m.lt.0) then
-                     str(j:j)=alfb(abs(m)+1)
-                 else
-                     str(j:j)=alfa(m+1)
+cc      implicit undefined (a-z)
+      character*(*) fname
+      character*1   type
+      logical checkrhs,checklhs,getsmat,checkval,cresmat2,bufstore
+      logical flag,getscalar ,getmat,getrhsvar,cremat,lcres
+      logical createvar
+      integer gettype,sadr,iadr,top2,tops,topl,topk
+
+      parameter (fortname=24)
+      character  name*25
+      common /inter/ name
+      common /ibfu/ ibuf(intersiz*6)
+       iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+      if (rhs .eq. 0) then
+         call error(39)
+         return
       endif
-      goto 30
-   10 str(j:j)='!'
-   30 continue
-      j=n+1
-         str(j:j)=char(0)
+      nbvars = 0
+      flag=.false.
+c     maximum number of variables ( see stack.h) 
+c     
+      namax=intersiz
+      call iset(namax,0,ladr,1)
+c     get a scilab string the fort function name 
+      top2=top-rhs+1
+      if(.not.getsmat(fname,top,top2,m1,n1,1,1,lrc,nc))return
+      name=' '
+      if ( nc.gt.fortname ) then 
+         buf = fname // ' first argument must be of length < 24'
+         call error(999)
+         return
+      endif
+      call cvstr(nc,istk(lrc),name,1)
+      name(nc+1:nc+1)=char(0)
+C     Check the name in the <<fort>> table 
+      call setinterf(name,irep)
+      if ( irep.eq.1) then 
+         buf = name
+         call error(50)
+         return
+      endif
+C     test the argument list : search for 'out' or 'sort'
+c     ----------------------------------------------------
+      do 81 i=1,rhs-1
+         tops=top2+i
+         itype = gettype(tops) 
+         if ( itype.eq.10 ) then 
+            if(.not.getsmat(fname,top,tops,m1,n1,1,1,lr1,nlr1)) return
+            if(.not.checkval(fname,m1*n1,1)) return
+            lbuf=1
+            if(.not.bufstore(fname,lbuf,lbufi1,lbuff1,lr1,nlr1)) return
+            if (buf(lbufi1:lbuff1).eq.'sort'.or.
+     $           buf(lbufi1:lbuff1).eq.'out') goto 82 
+         endif
+ 81   continue
+c     'sort' or 'out' are not in the calling list we use the brief form 
+C     we call the routine directly 
+C     the routine must deal itself with the stack 
+c     ----------------------------------------------------
+      call interf1(name(1:nc))
       return
+c     Now the long form 
+c     -----------------
+ 82   continue
+c     for the long form the call to interf is hardcoded 
+c     with a limit of 30 arguments
+      namax=min(intersiz,30)
+c     ie : number of input arguments 
+      ie=(tops-1-top2)/3
+c     computing iss : 
+c     number of output variables described after the 'out'  string 
+c     -----------------
+      jjj=tops+1
+      iss=0
+ 86   if ( jjj.gt.top) goto 861
+      itype = gettype(jjj)
+      if (itype.eq.1) then 
+         if(.not.getmat(fname,top,jjj,it1,m,n,lr1,lc1)) return
+         if( m*n.eq.2 ) then 
+            jjj = jjj+3 
+         else
+            jjj = jjj+1 
+         endif
+         iss = iss+1
+      else
+         err= jjj-top2+1
+         call cvname(ids(1,pt+1),fname,0)
+         call error(81) 
+         return
+      endif
+      goto 86 
+ 861  continue
+      if( iss.gt.0 .and. lhs.gt.iss) then
+         call error(41)
+         return
+      endif
+      if( err.gt.0) return
+      ieis=ie+iss
+      if(ie.ne.0) then 
+c     input arguments 
+c     storing information in ibuf for each input variable
+c     ibuf(6*(i-1)+ j) 
+c       j=1,2,3,4,5,6 ==>[call position,adress of data,type, nrow,ncol
+c         number-in-the-caling-stack]
+c     -------------------------------------------------------------
+         do 87 i=1,ie
+            ir1=top2+1+3*(i-1)
+            if(.not.getsmat(fname,top,ir1+2,m1,n1,1,1,lr1,nlr1)) return
+            if( m1*n1.ne.1.or.nlr1.ne.1) then 
+               buf = fname // ': argument must be "c","d","i",or "r"'
+               call error(999)
+               return
+            endif
+c           stack-position 
+            ibuf(6+6*(i-1)) = ir1-top2+1
+            call cvstr(nlr1,istk(lr1),type,1)
+            ibuf(3+6*(i-1)) = ichar(type)
+            if(.not.getscalar(fname,top,ir1+1,lr1))return
+            ibuf(1+6*(i-1)) = int(stk(lr1))
+            if(.not.getrhsvar(2+3*(i-1),type,m1,n1,lr1)) return
+            ibuf(2+6*(i-1)) = lr1 
+            ibuf(4+6*(i-1)) = m1
+            ibuf(5+6*(i-1)) = n1
+            if (type.eq.'d' ) then 
+               ladr(ibuf(1+6*(i-1))) = lr1 
+            else if (type.eq.'r') then 
+               ladr(ibuf(1+6*(i-1))) = sadr(lr1)
+            else if (type.eq.'i') then 
+               ladr(ibuf(1+6*(i-1))) = sadr(lr1)
+            else if (type.eq.'c') then 
+               call cs2st(lr1,lr2)
+               ladr(ibuf(1+6*(i-1))) = lr2
+            endif
+
+ 87      continue
+      endif
+c     Output variables 
+c     -------------------------------------------------------------
+c     icre will output variables which need to be created
+      icre=0
+      jjj=tops+1
+      if(iss.eq.0) goto 95
+      do 94 i=1,iss
+         ilm=iadr(lstk(jjj))
+         if(istk(ilm+1)*istk(ilm+2).eq.1) then 
+c           output variable is described by position only 
+            ipla=int(stk(sadr(ilm+4)))
+c           get the data of the associated input var 
+            do 91 j=1,ie
+               jj=6*(j-1)
+               if(ibuf(jj+1).eq.ipla) then 
+                  call icopy(6,ibuf(jj+1),1,ibuf(6*(ie+i-1)+1),1)
+                  jjj=jjj+1
+                  goto 94 
+               endif
+ 91         continue
+            buf = fname // ': output variable described by position'
+     $          // ' must be an input variable'
+            call error(999)
+         else
+c           explicit dimension of the output var 
+            if(.not.getsmat(fname,top,jjj+2,m1,n1,1,1,lr1,nlr1)) return
+            if( m1*n1.ne.1.or.nlr1.ne.1) then 
+               buf = fname // ': argument must be "c","d","i",or "r"'
+               call error(999)
+               return
+            endif
+            call cvstr(nlr1,istk(lr1),type,1)
+            if(.not.getscalar(fname,top,jjj+1,lr1))return
+            ipla = int(stk(lr1))
+            if(.not.getmat(fname,top,jjj,it1,m1,n1,lr1,lc1)) return
+            if (m1*n1.ne.2) then 
+               buf = fname 
+     $              // 'Output argument dimension must be [nr,nc]'
+               call error(999)
+               return
+            endif
+            m1 = int(stk(lr1))
+            n1 = int(stk(lr1+1))
+c           maybe this output variable was also an input variable
+c           we must check that dimensions and type are compatible 
+            iecor=0
+            do 910 j=1,ie
+               jj=6*(j-1)
+               if(ibuf(jj+1).eq.ipla) then 
+                  iecor= j
+                  goto 911
+               endif
+ 910        continue
+ 911        continue 
+            if ( iecor.eq.0 ) then 
+c           we must create a new entry 
+c           for an output variable 
+               icre=icre+1
+               if (.not.createvar(rhs+icre,type,m1,n1,lr1)) return
+               ipos=6*(ie+i-1)
+               ibuf(ipos+1) = ipla  
+               ibuf(ipos+2) = lr1
+               ibuf(ipos+3) = ichar(type)
+               ibuf(ipos+4) = m1
+               ibuf(ipos+5) = n1 
+               ibuf(ipos+6) = rhs + icre 
+               narg = ibuf(6*(ie+i-1)+1)
+               if(narg.gt.namax) then
+                  call error(70)
+                  return
+               endif            
+               if (type.eq.'d' ) then 
+                  ladr(ipla) = lr1 
+               else if (type.eq.'r') then 
+                  ladr(ipla) = sadr(lr1)
+               else if (type.eq.'i') then 
+                  ladr(ipla) = sadr(lr1)
+               else if (type.eq.'c') then 
+                  ladr(ipla) = sadr((lr1/4)+1)
+               endif
+            else
+c           we must check input-output consistency 
+               ii=6*(iecor-1)
+               if (m1*n1.gt.ibuf(ii+4)*ibuf(ii+5)
+     $              .or.ichar(type).ne.ibuf(ii+3)) then
+                  buf = fname // ': incompatibility between '
+     $                 //'input and output variable'
+                  call error(999)
+                  return
+               endif
+               ibuf(ii+4)=m1
+               ibuf(ii+5)=n1
+               call icopy(6,ibuf(ii+1),1,ibuf(6*(ie+i-1)+1),1)
+            endif
+            jjj=jjj+3
+         endif
+ 94   continue
+ 95   continue
+      call interf(stk(ladr(1)),stk(ladr(2)),
+     $     stk(ladr(3)),stk(ladr(4)),stk(ladr(5)),stk(ladr(6)),
+     $     stk(ladr(7)),stk(ladr(8)),stk(ladr(9)),stk(ladr(10)),
+     $     stk(ladr(11)),stk(ladr(12)),stk(ladr(13)),stk(ladr(14)),
+     $     stk(ladr(15)),stk(ladr(16)),stk(ladr(17)),stk(ladr(18)),
+     $     stk(ladr(19)),stk(ladr(20)),stk(ladr(21)),stk(ladr(22)),
+     $     stk(ladr(23)),stk(ladr(24)),stk(ladr(25)),stk(ladr(26)),
+     $     stk(ladr(27)),stk(ladr(28)),stk(ladr(29)),stk(ladr(30)))
+      if(iss.le.0) then
+         top=top2
+         call objvide(fname,top)
+      else
+c        check if output variabe are in increasing order in the stack 
+         lcres=.true.
+         ibufprec=0
+         do 105 i=1,lhs 
+            ir1= 6*(ie+1-1)
+            if ( ibuf(ir1+1).lt.ibufprec) then 
+               lcres=.false.
+               goto 106 
+            else
+               ibufprec = ibuf(ir1+1)
+            endif
+ 105     continue
+ 106     continue
+         if ( lcres) then 
+            top=top2-1
+         else
+            topk=top2-1
+            topl=top+icre
+            top=topl
+         endif
+         ir1= 6*(ie+1-1)
+         do 104 i=1,lhs
+            top=top+1
+            type=char(ibuf(ir1+3)) 
+            m = ibuf(ir1+4)
+            n = ibuf(ir1+5)
+            if (type.eq.'d') then 
+               if (.not.cremat(fname,top,0,m,n,lr1,lc1)) return
+               call dcopy(m*n,stk(ibuf(ir1+2)),1,stk(lr1),1)
+            else if (type.eq.'i') then 
+               if (.not.cremat(fname,top,0,m,n,lr1,lc1)) return
+               call entier2d(m*n,stk(lr1),istk(ibuf(ir1+2)))
+            else if (type.eq.'r') then 
+               if (.not.cremat(fname,top,0,m,n,lr1,lc1)) return
+               call simple2d(m*n,stk(lr1),sstk(ibuf(ir1+2)))
+            else if (type.eq.'c') then 
+               if (.not.cresmat2(fname,top,m*n,lr1)) return
+               l1=ibuf(ir1+2)
+               call cvstr(m*n,istk(lr1),cstk(l1:l1+m*n),0)
+            endif
+            ir1=ir1+6
+ 104     continue
+         if (.not.lcres) then 
+            do 107 i=1,lhs 
+               call copyobj(fname,topl+i,topk+i)
+ 107        continue
+            top=topk+lhs
+         endif
+      endif
+      return
+      end
+
+      subroutine intsciargs(fname)
+c     fapropos(name)
+      character*(*) fname
+      character*40 arg
+      logical checkrhs,checklhs
+      integer iadr,sadr
+      include '../stack.h'
 c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      rhs = max(0,rhs)
+      lbuf = 1
+
+      if(.not.checkrhs(fname,0,0)) return
+      if(.not.checklhs(fname,1,1)) return
+
+      nargs = iargc()
+
+      top=top+1
+      il=iadr(lstk(top))
+      l=il+5+nargs+1
+      err=sadr(l)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      istk(il)=10
+      istk(il+1)=nargs+1
+      istk(il+2)=1
+      istk(il+3)=0
+      istk(il+4)=1
+
+      do 20 k=0,nargs
+         call fgetarg(k,arg)
+         l1=len(arg)+1
+ 10      l1=l1-1
+         if(arg(l1:l1).eq.' ') goto 10
+         err=sadr(l+l1)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         call cvstr(l1,istk(l),arg,0)
+         istk(il+5+k)=istk(il+4+k)+l1
+         l=l+l1
+ 20   continue
+      lstk(top+1)=sadr(l)
+      return
       end
 
 
+      subroutine intschdir(fname)
+      character*(*) fname
+      logical getrhsvar, createvar,  putlhsvar
+      logical checkrhs,checklhs
+      include '../../routines/stack.h'
+      nbvars=0
+      if(.not.checkrhs(fname,1,1)) return
+      if(.not.checklhs(fname,1,1)) return
+      if(.not.getrhsvar(1,'c',m1,n1,l1)) return
+      if(.not.createvar(2,'i',1,1,l2)) return
+      call scichdir(cstk(l1:l1+m1*n1),istk(l2))
+      if(istk(l2) .gt. 0) then 
+         buf = fname // ': Internal Error' 
+         call error(998)
+         return
+      endif
+      lhsvar(1)=2
+      if(.not.putlhsvar()) return
+      return 
+      end
 
+      subroutine intsgetdir(fname)
+c     --------------------------
+      character*(*) fname
+      logical checkrhs,checklhs
+      include '../../routines/stack.h'
+      logical putlhsvar, createvarfromptr
+      double precision l1
+      nbvars = 0
+      rhs = max(0,rhs)
+      if(.not.checkrhs(fname,0,0)) return
+      if(.not.checklhs(fname,1,1)) return
+      call scigetcwd(l1,m,err)
+      if(err .gt. 0) then 
+         buf = fname // ': Internal Error' 
+         call error(998)
+         return
+      endif
+      if(.not.createvarfromptr(1,'c',m,1,l1)) return
+      lhsvar(1)=1
+      if(.not.putlhsvar()) return
+      end
+      
+      subroutine intsieee(fname)
+c     --------------------------
+      character*(*) fname
+      logical checkrhs,checklhs
+      include '../../routines/stack.h'
+      logical cremat, getscalar
 
-
+      integer iadr
+c
+      iadr(l)=l+l-1
+C
+      nbvars = 0
+      rhs = max(0,rhs)
+      if(.not.checkrhs(fname,0,1)) return
+      if(.not.checklhs(fname,1,1)) return
+      if(rhs.le.0) then
+         top=top+1
+         if(.not.cremat(fname,lw,0,1,1,lr,lc)) return
+         stk(lr)=ieee
+      else
+         if(.not.getscalar(fname,top,top,lr)) return
+         i=stk(lr)
+         if(i.lt.0.or.i.gt.2) then
+            err=1
+            call error(116)
+            return
+         endif
+         ieee=i
+         il=iadr(lstk(top))
+         istk(il)=0
+      endif
+      end
+      
 
 
 

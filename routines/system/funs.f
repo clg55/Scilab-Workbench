@@ -2,6 +2,7 @@
 c     ====================================================================
 c     scan primitive function and scilab code function lists for a given name
 c     ====================================================================
+c     Copyright INRIA
       include '../stack.h'
       parameter (nz1=nsiz-1,nz2=nsiz-2)
       integer id(nsiz),id1(nsiz),istr(nlgh)
@@ -54,7 +55,7 @@ c
 c     look in scilab code function libraries
  35   k=bot-1
  36   k=k+1
-      if(k.gt.isiz) then
+      if(k.ge.isiz) then
          fin=0
          fun=0
          return
@@ -68,7 +69,7 @@ c     look in scilab code function libraries
       call namstr(id,istr,nn,1)
       ip=abs(istr(1))
       if(ip.eq.percen) ip=abs(istr(2))
-      ip=ip-9
+      ip=max(1,ip-9)
       if(ip.gt.nclas) goto 36
       n=istk(ilp+ip)-istk(ilp+ip-1)
       if(n.eq.0) goto 36
@@ -108,9 +109,12 @@ c     load it in the variables stack
       endif
 c
       loaded=.false.
+c     initialize file (for comptibility)
+      call savlod(lunit,id1,-2,top+1)
  49   top=top+1
       job=lstk(bot)-lstk(top)
 c     get all functions defined in the file
+      if(err.gt.0) goto 51
       id1(1)=blank
       call savlod(lunit,id1,job,top)
       if(err.gt.0) goto 51

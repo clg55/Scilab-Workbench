@@ -3,6 +3,7 @@ c     scilab data structure to fortran fortran var2vec  to scilab
 c     x is the var2vec fortran image of the variable stored at the top
 c     of the stack 
 c 
+c     Copyright INRIA
       double precision x(*)
       integer  l
 c 

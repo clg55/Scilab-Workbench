@@ -2,13 +2,14 @@ function [Kopt,gamaopt]=h_inf_st(D,r)
 //compute a matrix K such that largest singular value of 
 //       Fl(D,r,K)=D11+D12 K inv(I-D22 K) D21
 //is minimal (Static H-infinity four blocks problem)
-//%Syntaxe et description des parametres
-//[Kopt,gamaopt]=h_inf_stat(D,r)
+//
+//[Kopt,gamaopt]=h_inf_st(D,r)
 //
 //  D   partionned as [D11 D12
 //                     D21 D22]
 //where size(D22)=r=[r1 r2]
 
+// Copyright INRIA
 //!
 //F.D. (1990)
 

@@ -21,6 +21,7 @@ c
 c     Tableaux de travail
 c     - w : 3*nq+1
 c!
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension tq(nq+1),w(*)
       logical fail

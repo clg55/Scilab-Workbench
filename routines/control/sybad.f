@@ -86,7 +86,7 @@ C
 C!originator
 C
 C     Serge Steer Inria 1987
-C
+C     Copyright SLICOT
 C!comments
 C                note that the contents of  a  are overwritten by
 C                this routine by the triangularised form of  a.

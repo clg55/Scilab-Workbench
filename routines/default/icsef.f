@@ -1,5 +1,6 @@
       subroutine icsef(indf,t,y,uc,uv,f,fy,fu,b,itu,dtu,
-     &        t0,tf,dti,dtf,ermx,iu,nuc,nuv,ilin,nti,ntf,ny,nea,
+c     Copyright INRIA
+      &        t0,tf,dti,dtf,ermx,iu,nuc,nuv,ilin,nti,ntf,ny,nea,
      &        itmx,nex,nob,ntob,ntobi,nitu,ndtu,nomf,nomc,nomi)
 c     sous programme appele par icse.f qui donne :
 c     pour indf=1,les seconds membres du systeme:f(ny)

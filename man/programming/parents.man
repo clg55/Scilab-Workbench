@@ -29,16 +29,13 @@ e1,e2,...
 : any possible type expression
 .SH DESCRIPTION
 Left and right parenthesis are used to 
-.TP
-*Specify 
-evaluation order within expressions, 
-.TP 10
-*Form 
-right-hand-side functions argument list. Within multiple rhs
+.IP *
+Specify evaluation order within expressions, 
+.IP *
+Form right-hand-side functions argument list. Within multiple rhs
 arguments must be separated by comma. 
-.TP
-*Select 
-elements within vectors, matrices and lists.
+.IP *
+Select elements within vectors, matrices and lists.
 see help on extraction and insertion for more precisions
 .SH EXAMPLE
 .nf

@@ -2,6 +2,7 @@
 c ====================================================================
 c     impl dassl dasrt : simulation  de systeme algebrico-differentiel
 c ====================================================================
+c     Copyright INRIA
       INCLUDE '../stack.h'
 c     impl     dassl     dasrt
 c     1         2          3
@@ -37,7 +38,7 @@ c
       logical getexternal,getrvect,vcopyobj
       logical checkrhs,checklhs,getrmat,cremat,getscalar
       logical typej,typea,typer,getsmat,vectsize
-      character*24 namres,namadd,namjac
+      character*(nlgh+1) namres,namadd,namjac
       character*1 strf
       common/cjac/namjac
       external setfres,setfadda,setfj2
@@ -143,6 +144,7 @@ c     les externaux : res,adda et jac
 c     -----------------------------------
 c     checking variable res (number 8 - iskip )
       kres=topk-rhs+8-iskip
+      typer=.false.
       if (.not.getexternal(fname,topk,kres,namres,typer,
      $     setfres)) return
 
@@ -345,8 +347,8 @@ c
       logical checkrhs,checklhs,getrmat,cremat,getscalar
       double precision tout,tstop,maxstep,stepin
       double precision atol,rtol,t0
-      character*24 namer,namej,names
-      character*24 namjac
+      character*(nlgh+1) namer,namej,names
+      character*(nlgh+1) namjac
       external bresd,bjacd
       external setfresd,setfjacd
       common /dassln/ namer,namej,names
@@ -648,15 +650,25 @@ c     not enough memory
             k=k-1
             goto 125
          endif
-         stk(lyri)=tout
-         call dcopy(n1,stk(l1),1,stk(lyri+1),1)
-         call dcopy(n1,stk(lydot),1,stk(lyri+n1+1),1)
-         l1=lyri+1
-         lydot=lyri+n1+1
-         call ddassl(bresd,n1,t0,stk(l1),stk(lydot),
-     &        stk(lyri),info,stk(lrtol),stk(latol),idid,
-     &        stk(lrwork),lrw,istk(iadr(liwork)),liw,stk(lw15),
-     &        istk(il17),bjacd)
+         if (tout .eq. t0) then
+            stk(lyri)=tout
+            call dcopy(n1,stk(l1),1,stk(lyri+1),1)
+            call dcopy(n1,stk(lydot),1,stk(lyri+n1+1),1)
+            l1=lyri+1
+            lydot=lyri+n1+1
+            t0=tout
+            goto 120            
+         else
+            stk(lyri)=tout
+            call dcopy(n1,stk(l1),1,stk(lyri+1),1)
+            call dcopy(n1,stk(lydot),1,stk(lyri+n1+1),1)
+            l1=lyri+1
+            lydot=lyri+n1+1
+            call ddassl(bresd,n1,t0,stk(l1),stk(lydot),
+     &           stk(lyri),info,stk(lrtol),stk(latol),idid,
+     &           stk(lrwork),lrw,istk(iadr(liwork)),liw,stk(lw15),
+     &           istk(il17),bjacd)
+         endif
          if(err.gt.0)  return
          if(idid.eq.1) then
 C     A step was successfully taken in the intermediate-output mode. 

@@ -6,12 +6,13 @@ SCIDOC=$(SCIDIR)/../$(SCIVERSION)-doc
 include ../../Makefile.incl
 
 FILES = Chap1.tex Chap2.tex Chap3.tex Chap4.tex Chap5.tex Chap6.tex Chap7.tex Chap8.tex \
-	Chap2-1.tex Chap2-2.tex Chap2-3.tex Chap2-4.tex Chap2-5.tex 
+	Chap2-1.tex Chap2-2.tex Chap2-3.tex Chap2-4.tex Chap2-5.tex Chap2-6.tex Chap2-7.tex \
+	Chap3-1.tex Chap3-2.tex Chap3-3.tex Chap3-4.tex 
 
 MAN = $(SCIDIR)/man/
 
 
-TR2TEX = tr2latex/tr2tex
+TR2TEX = tr2latex/translate
 LATEX = latex
 
 all:: $(SCIDOC)/Manual.ps
@@ -135,6 +136,33 @@ Chap2-5.tex : $(TR2TEX) $(MAN)/scicos/?*.man
 	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap2-5.tex > Chap2-5.tex
 	$(RM) /tmp/Chap2-5.tex
 
+Chap2-6.tex : $(TR2TEX) $(MAN)/sound/?*.man
+	$(TR2TEX)  -m $(MAN)/sound/?*.man > /tmp/Chap2-4.tex
+	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap2-4.tex > Chap2-4.tex
+	$(RM) /tmp/Chap2-4.tex
+
+Chap2-7.tex : $(TR2TEX) $(MAN)/dcd/?*.man
+	$(TR2TEX)  -m $(MAN)/dcd/?*.man > /tmp/Chap2-4.tex
+	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap2-4.tex > Chap2-4.tex
+	$(RM) /tmp/Chap2-4.tex
+
+Chap3-1.tex : $(TR2TEX) $(MAN)/fraclab/?*.man
+	$(TR2TEX)  -m $(MAN)/fraclab/?*.man > /tmp/Chap3-1.tex
+	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap3-1.tex > Chap3-1.tex
+	$(RM) /tmp/Chap3-1.tex
+Chap3-2.tex : $(TR2TEX) $(MAN)/tksci/?*.man
+	$(TR2TEX)  -m $(MAN)/tksci/?*.man > /tmp/Chap3-2.tex
+	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap3-2.tex > Chap3-2.tex
+	$(RM) /tmp/Chap3-2.tex
+Chap3-3.tex : $(TR2TEX) $(MAN)/translation/?*.man
+	$(TR2TEX)  -m $(MAN)/translation/?*.man > /tmp/Chap3-3.tex
+	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap3-3.tex > Chap3-3.tex
+	$(RM) /tmp/Chap3-3.tex
+Chap3-4.tex : $(TR2TEX) $(MAN)/pvm/?*.man $(MAN)/comm/?*.man 
+	$(TR2TEX)  -m $(MAN)/pvm/?*.man > /tmp/Chap3-4.tex
+	$(TR2TEX)  -m $(MAN)/comm/?*.man >> /tmp/Chap3-4.tex
+	@sed -e 's/\\documentstyle/%\\documentstyle/' 			-e 's/\\end{document}//' -e 's/\\begin{document}//' /tmp/Chap3-4.tex > Chap3-4.tex
+	$(RM) /tmp/Chap3-4.tex
 
 clean::
 	$(RM) *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg  *.toc *.lot

@@ -5,6 +5,7 @@ c     operations  sur les matrices de polynomes
 c
 c ====================================================================
 c
+c     Copyright INRIA
       include '../stack.h'
 c
 
@@ -32,6 +33,8 @@ c
 c
       fun=0
       lw=lstk(top+1)
+      topin=top
+
       if(op.eq.dstar) goto 80
       if(op.eq.dstar+dot) goto 70
 
@@ -39,7 +42,7 @@ c
       if(op.eq.extrac) goto 130
       if(op.eq.insert) goto 120
 c
-      topin=top
+
       top0=top+1-rhs
       rhs1=rhs
 
@@ -742,6 +745,11 @@ c
 c     insertion
 c
   120 continue
+      if(rhs.gt.4) then
+         top=topin
+         fin=-fin
+         return
+      endif
       if(rhs.eq.4) goto 124
 c     arg3(arg1)=arg2
 c     
@@ -1178,7 +1186,7 @@ c     .     call extraction
                   goto 133
                endif
             else
-               lw=lw1
+c               lw=lw1
                call indxgc(il1,m4,ili,mi,mxi,lw)
                if(err.gt.0) return
                if(mi.eq.0) then
@@ -1355,6 +1363,7 @@ c     get arg2
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       if(istk(il1).eq.0) then
          call error(220)
          return
@@ -1364,6 +1373,7 @@ c     get arg1
 
       if(mn2.eq.0) then 
 c     .  arg2=[]
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
@@ -1378,6 +1388,7 @@ c     .  arg2=eye
       elseif(m1.lt.0) then
 c     .  arg2(:), just reshape to column vector
          volr=istk(id2+mn2)-1
+         il1=iadr(lstk(top))
          istk(il1)=2
          istk(il1+1)=mn2
          istk(il1+2)=1
@@ -1398,6 +1409,7 @@ c     check and convert indices variable
       endif
  131  if(mi.eq.0) then
 c     arg2([])
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
@@ -1491,6 +1503,7 @@ c     get arg3
 c     get arg2
       top=top-1
       il2=iadr(lstk(top))
+      if(istk(il2).lt.0) il2=iadr(istk(il2+1))
       if(istk(il2).eq.0) then
          call error(220)
          return
@@ -1499,7 +1512,8 @@ c     get arg2
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
-      if(istk(il2).eq.0) then
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
+      if(istk(il1).eq.0) then
          call error(220)
          return
       endif
@@ -1507,6 +1521,7 @@ c     get arg1
 c
       if(mn3.eq.0) then 
 c     .  arg3=[]
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
@@ -1537,6 +1552,7 @@ c     perform extraction
  133  mnr=mi*nj
       if(mnr.eq.0) then 
 c     .  arg1=[] or arg2=[] 
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
@@ -1935,6 +1951,7 @@ c      a [:b]:c
       var1(1)=0
       if(rhs.eq.3) then
          il3=iadr(lstk(top))
+         if(istk(il3).lt.0) il3=iadr(istk(il3+1))
          if(istk(il3).ne.1.and.istk(il3).ne.2) then
             err=3
             buf='Invalid indexing '
@@ -1960,6 +1977,7 @@ c      a [:b]:c
       endif
       if (rhs.ge.2) then
          il2=iadr(lstk(top))
+         if(istk(il2).lt.0) il2=iadr(istk(il2+1))
          if(istk(il2).ne.1.and.istk(il2).ne.2) then
            err=2
             buf='Invalid indexing '
@@ -1995,6 +2013,7 @@ c      a [:b]:c
          top=top-1
       endif
       il1=iadr(lstk(top))
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       if(istk(il1).ne.1.and.istk(il1).ne.2) then
          err=1
          buf='Invalid indexing '
@@ -2037,6 +2056,7 @@ c      a [:b]:c
       call dcopy(n1,stk(l1),1,stk(lw),1)
       call dcopy(n2,stk(l2),1,stk(lw+n1),1)
       call dcopy(n3,stk(l3),1,stk(lw+n1+n2),1)
+      il1=iadr(lstk(top))
       istk(il1)=129
       istk(il1+1)=1
       istk(il1+2)=3

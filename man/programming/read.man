@@ -23,19 +23,22 @@ left parenthesis.  Formats cannot mix floating point or character
 edition modes. 
 .TP 10
 k
-: integer
+: integer or vector of integer
 .SH DESCRIPTION
 reads row after row
 the \fVmxn\fR matrix \fVx\fR (\fVn=1\fR for character chain) in the
 file \fVfile-desc\fR (string or integer).  Each row of the matrix \fVx\fR
-begin in a new line of \fVfile-desc\fR file. Depending on \fVformat\fR a
+begin in a new line of \fVfile-desc\fR file. Depending on \fVformat\fR, a
 given row of the \fVx\fR matrix may be read from more than one line
 of \fVfile-desc\fR file.
 .LP
-The type of the result will depend on the specified form. 
-If form is numeric \fV(d,e,f,g)\fR the matrix will be a scalar matrix
-and if form contains the character \fVa\fR the matrix will be a matrix of
-character strings. In this case n must be equal to 1.
+The type of the result will depend on the specified format. 
+If format contains only \fV(d,e,f,g)\fR  descriptors the function
+tries to read numerical data (the result is matrix of real numbers).
+.LP
+If format contains only  \fVa\fR descriptors the function tries to
+read character strings (the result is a character string column
+vector). In this case n must be equal to 1. 
 
 .LP
 Examples for \fVformat\fR: 

@@ -16,6 +16,7 @@ function [h,num,den]=ss2tf(sl,rmax)
 //   this gives a less accurate result).
 //
 //!
+// Copyright INRIA
 if type(sl)==1|type(sl)==2 then
   h=sl
   return
@@ -25,8 +26,8 @@ flag=sl(1);
 if (type(sl)<>15&type(sl)<>16)|flag(1)<>'lss' then
   error('First argument must be in state-space form')
 end
-if sl(3)=[] then h=sl(5);num=sl(5);den=eye(sl(5));return;end
-if sl(4)=[] then h=sl(5);num=sl(5);den=eye(sl(5));return;end
+if sl(3)==[] then h=sl(5);num=sl(5);den=eye(sl(5));return;end
+if sl(4)==[] then h=sl(5);num=sl(5);den=eye(sl(5));return;end
 if size(sl(2),'*')==0 then
   h=sl(5)
   return
@@ -43,8 +44,8 @@ end
 //
 [lhs,rhs]=argn(0);
 meth='p'
-if rhs=2 then
-  if type(rmax)=10 then  
+if rhs==2 then
+  if type(rmax)==10 then  
     meth=part(rmax,1),
   else 
     meth='b'
@@ -56,7 +57,7 @@ case 'b' //
 a=sl(2)
 [n1,n1]=size(a)
 z=poly(0,var);
-if rhs=1 then
+if rhs==1 then
   [a,x,bs]=bdiag(a)
 else
   [a,x,bs]=bdiag(a,rmax)

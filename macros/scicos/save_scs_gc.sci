@@ -1,6 +1,7 @@
 function scs_gc=save_scs_gc()
 // save the current scicos graphic context
 // and the curent scale ( xsetech)
+// Copyright INRIA
 vals=["alufunction";"clipping";"pattern";"thickness";"wdim";"window";'pixmap'];
 [r1,r2]=xgetech()
 scs_gc=list(list(r1,r2),driver());

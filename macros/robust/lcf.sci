@@ -8,8 +8,9 @@ function [N,M]=lcf(Sl)
 //  N,M : is realization of Sl: Sl = M^-1 N
 //!
 //FD.
+// Copyright INRIA
 flag=0;Sl1=Sl(1);
-if Sl1(1)='r' then Sl=tf2ss(Sl),flag=1;end
+if Sl1(1)=='r' then Sl=tf2ss(Sl),flag=1;end
 [A,B,C,D]=Sl(2:5);[nw,nb]=size(B);[nc,nw]=size(C);
 R=eye+D*D';
 [Z,H]=gfare(Sl);
@@ -19,7 +20,7 @@ Rm12=inv(sqrtm(R));
 Cr=Rm12*C;Dn=Rm12*D;Dm=Rm12;
 N=syslin('c',Ar,Bn,Cr,Dn);
 M=syslin('c',Ar,Bm,Cr,Dm);
-if flag=1 then N=ss2tf(N);M=ss2tf(M);end
+if flag==1 then N=ss2tf(N);M=ss2tf(M);end
 
 
 

@@ -4,6 +4,7 @@ function [sl]=tf2ss(h)
 // h = transfer matrix 
 // sl = linear system in state-space representation (syslin list)
 //!
+// Copyright INRIA
 if type(h)<=2 then 
   sl=syslin([],[],[],[],h);return;
 end
@@ -38,10 +39,10 @@ end;
 if degree(d)==0 then d=coeff(d),end
 if n1<>0 then
   
-//ss96  nrmb=norm(b,1);nrmc=norm(c,1);fact=sqrt(nrmc*nrmb);
-//ss96  b=b*fact/nrmb;c=c*fact/nrmc;
-//ss96  [a,u]=balanc(a);c=c*u;b=u\b; 
-//
+  nrmb=norm(b,1);nrmc=norm(c,1);fact=sqrt(nrmc*nrmb);
+  b=b*fact/nrmb;c=c*fact/nrmc;
+  [a,u]=balanc(a);c=c*u;b=u\b; 
+
   [no,u]=contr(a',c');
   u=u(:,1:no);
   a=u'*a*u;b=u'*b;c=c*u;

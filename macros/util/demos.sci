@@ -1,4 +1,5 @@
 function demos()
+// Copyright INRIA
 oldln=lines()
 lines(0)
 deff('[]=demoex(num)','exec(''SCI/demos/''+demolist(num,2))')
@@ -23,7 +24,7 @@ demolist=[
 
 while %t then
   num=x_choose(demolist(:,1),'Click to choose a demo');
-  if num=0 then 
+  if num==0 then 
      lines(oldln(1))
      return
   else

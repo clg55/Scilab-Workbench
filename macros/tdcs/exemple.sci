@@ -2,6 +2,7 @@ function []=exemple()
 // un essai de calcul de gains avec riccati
 // et simulation.
 //!
+// Copyright INRIA
 ue=1;
 xe=equilcom(ue);
 [f,g,h,vv]=lincomp(ue);

@@ -13,7 +13,7 @@ c     ***     (min-cost perfect matching problem)              ***
       integer basis(n),mem(n),ka(n),kb(n),sm(n),tma(n),tmb(n)
       integer zfw,cost,nmatch(n),cc(m2),nbl(m2)
       integer index(np1)
-      double precision  y1(n),y2(n),dminus(n),dplus(n)
+      double precision  y1(n),y2(n),dminus(n),dplus(n),eps
       eps=10.**(-38)
       sup=40000000
       cost=400000000
@@ -55,7 +55,7 @@ c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
       integer    cc(1),sm(1),tma(1),tmb(1),index(1)
       integer  nbl(1)
       double precision y1(1),y2(1),dminus(1),dplus(1),c0,d,dbest,y1b,
-     *                 y2b
+     *                 y2b,eps
 c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 c *** start
           top =n+2
@@ -132,7 +132,7 @@ c *** control-routine of the procedure
           dbest     =d
   215 continue
       if (tma(nbest).ge.top) goto 217
-             call expand(n,m,top,nmatch,cc,basis,mem,ka,kb,sm,tma,tmb,
+             call bexpand(n,m,top,nmatch,cc,basis,mem,ka,kb,sm,tma,tmb,
      f                y1,y2,dplus,dminus,sup,eps,nbl,index,nbest,dbest)
       goto 200
   217 if (sm (nbest).lt.top) goto 218
@@ -192,7 +192,7 @@ c************************************************************************
       integer    basis(1),mem(1),ka(1),kb(1)
       integer    cc(1),sm(1),tma(1),tmb(1),index(1)
       integer    top,nmatch(1),nbl(1)
-      double precision y1(1),y2(1),dminus(1),dplus(1),d,dbest
+      double precision y1(1),y2(1),dminus(1),dplus(1),d,dbest,eps
 c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 c *** augmentation of the matching
 c exchange of the matching- and non-matching-edges along the augmenting path
@@ -243,13 +243,13 @@ c
       return
       end
 c*************************************************************************
-      subroutine expand(n,m,top,nmatch,cc,basis,mem,ka,kb,sm,tma,tmb,y1,
-     f                  y2,dplus,dminus,sup,eps,nbl,index,nbest,dbest)
+      subroutine bexpand(n,m,top,nmatch,cc,basis,mem,ka,kb,sm,tma,tmb,
+     f     y1,y2,dplus,dminus,sup,eps,nbl,index,nbest,dbest)
       integer    basis(1),mem(1),ka(1),kb(1)
       integer    cc(1),sm(1),tma(1),tmb(1),index(1)
       integer    top,nmatch(1)
       integer  nbl(1)
-      double precision y1(1),y2(1),dminus(1),dplus(1),dbest,y1b
+      double precision y1(1),y2(1),dminus(1),dplus(1),dbest,y1b,eps
 c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 c *** expansion of a t-labeled blossom
 c
@@ -374,7 +374,7 @@ c
       integer    cc(1),sm(1),tma(1),tmb(1),index(1)
       integer    top,nmatch(1)
       integer  nbl(1)
-      double precision y1(1),y2(1),dminus(1),dplus(1),dbest
+      double precision y1(1),y2(1),dminus(1),dplus(1),dbest,eps
 c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 c *** growing an alternating tree by adding two edges
 c
@@ -396,7 +396,7 @@ c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
      f           nmatch(1),mem(1),basis(1),ka(1),kb(1)
       integer  nbl(1)
       double precision dplus(1),dminus(1),y1(1),y2(1),d,yb,
-     f                 y1b
+     f                 y1b,eps
 c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 c *** generation of the original graph by expansion of all
 c     shrunken blossoms
@@ -599,7 +599,7 @@ c***********************************************************************
       integer    top,nmatch(1)
       integer  nbl(1)
       double precision y1(1),y2(1),dminus(1),dplus(1),dbest,y1b,
-     f                 yb
+     f                 yb,eps
 c - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 c *** shrinking a blossom
 c

@@ -282,6 +282,7 @@ c                      nitv et ndtv sont passees par le common nird.
 c
 c
 c!
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       real rtv
       dimension u(nu),g(nu),itv(*),rtv(*),dtv(*),iu(5)

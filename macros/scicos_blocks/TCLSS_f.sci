@@ -1,4 +1,5 @@
 function [x,y,typ]=TCLSS_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -40,16 +41,21 @@ case 'set' then
 	rpar=[A(:);B(:);C(:);D(:)];
 	if D<>[] then	
 	  if norm(D,1)<>0 then
-	    mmm=[%t %f];
+	    mmm=[%t %t];
 	  else
-	    mmm=[%f %f];
+	    mmm=[%f %t];
 	  end
 	  if or(model(12)<>mmm) then 
 	      model(12)=mmm,end
 	else
-	  model(12)=[%f %f];
+	  model(12)=[%f %t];
 	end
-	model(6)=x0(:);model(8)=rpar
+	model(6)=x0(:);model(8)=rpar;
+	if D<>[] then 
+	  model(1)=list('tcslti',1) 
+	else 
+	  model(1)=list('tcsltj',1);
+	end
 	model(11)=[] //compatibility
 	x(2)=graphics;x(3)=model
 	break
@@ -61,7 +67,7 @@ case 'define' then
   in=1;
   nx=size(x0,'*')
   out=1
-  model=list(list('tcslti',1),[in;nx],out,1,[],x0,[],[A;B;C;D],[],'c',[],[%f %f],' ',list())
+  model=list(list('tcslti',1),[in;nx],out,1,[],x0,[],[A;B;C;D],[],'c',[],[%f %t],' ',list())
   label=[strcat(sci2exp(A));
 	strcat(sci2exp(B));
 	strcat(sci2exp(C));

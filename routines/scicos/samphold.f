@@ -1,5 +1,7 @@
       subroutine samphold(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     returns sample and hold  of the input
 c

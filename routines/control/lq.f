@@ -16,6 +16,7 @@ c             tvq =tr(nq+1:nq+ng+1) coefficients du quotient vq de la
 c                    division par q du polynome gqti .
 c!
 
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension tq(nq+1),tr(nq+ng+1),tg(ng+1)
 c

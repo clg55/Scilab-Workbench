@@ -6,6 +6,7 @@ c     minimisation sans contraintes par un algorithme de quasi-Newton
 c     a memoire limitee
 c!origine
 c     c. lemarechal, inria, 1987
+c     Copyright INRIA
 c!commentaires
 c le sous-programme n1gc2 (gradient conjugue a encombrement variable)
 c est une interface entre le programme appelant et le sous-programme

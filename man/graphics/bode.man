@@ -79,4 +79,4 @@ xbasc()
 bode([h1;h],0.01,100,['h1';'h'])
 .fi
 .SH SEE ALSO
-black, nyquist, freq, repfreq, g_margin, p_margin, calfrq, phasemag
+black, nyquist, gainplot, repfreq, g_margin, p_margin, calfrq, phasemag

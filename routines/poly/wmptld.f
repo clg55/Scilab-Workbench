@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WMPTLD,SSI=0
+c     Copyright INRIA
       subroutine wmptld(pm1r,pm1i,d1,ld1,pm2r,pm2i,d2,m,n)
 c!but
 c     cette routine determine la matrice polynomiale :

@@ -1,11 +1,12 @@
 function K=lqg(P,r)
 // returns the (strictly proper) lqg (H2) controller
 // for the augmented plant P
+// Copyright INRIA
 [A,B1,B2,C1,C2,D11,D12,D21,D22]=smga(P,r);
 if norm(D11,1) <> 0 then warning('lqg: D11 is not zero! (set to zero)');end
 //if norm(D22,1) <> 0 then warning('lqg: D22 is not zero!');end
 dom=P(7);
-if dom=[] then warning('lqg: time domain unspecified, assumed continuous');
+if dom==[] then warning('lqg: time domain unspecified, assumed continuous');
                dom='c';end
 P12=syslin(dom,A,B2,C1,D12);
 Kc=lqr(P12);

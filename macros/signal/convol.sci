@@ -18,6 +18,7 @@ function [y,e1]=convol(h,x,e0)
 //  Final call : [yN]=convol(h,xN,eNm1)
 //  Finally y=[y1,y2,...,yNm1,yN]
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 n=prod(size(x))
 m=prod(size(h))
@@ -28,13 +29,13 @@ if norm(imag(x))==0&norm(imag(h))==0 then
 else
   y=fft(fft(matrix(x,1,m1),-1).*fft(matrix(h,1,m1),-1),1)
 end
-if lhs+rhs=5 then,
+if lhs+rhs==5 then,
   e0(n)=0;//update carried from left to right
   e1=y(n+1:n+m-1)
   y=y(1:n)+e0
 
-elseif lhs+rhs=4 then
-  if rhs=2 then
+elseif lhs+rhs==4 then
+  if rhs==2 then
     e1=y(n+1:n+m-1)
     y=y(1:n) //initial update
   else

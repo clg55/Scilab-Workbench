@@ -1,8 +1,12 @@
-      subroutine list2vars(n1)
+      subroutine list2vars(n1,ltop)
 c     given a list stored in position top in the stack
 c     list2vars computes lstk(top:top-1+n1) pointers on the beginning of
-c      each first n1 entries of the list.
+c     each first n1 entries of the list.
 
+c     Copyright INRIA
+c     WARNING : if topk is the entry value of top, lstk(topk) is
+c     incremented by sadr(3+n). Previous value is returned in ltop.
+c
       include '../stack.h'
       integer iadr,sadr
 c
@@ -25,6 +29,7 @@ c
          return
       endif
       l=lstk(top)
+      ltop=l
       l0=sadr(il+1+n+2)-1
       do 10 i=1,n1
          lstk(top)=l0+istk(il+1+i)
@@ -32,5 +37,10 @@ c
  10   continue
       top=top-1
       lstk(top+1)=l0+istk(il+2+n1)
+      return
+      end
+      subroutine ltopadj(ltop)
+      include '../stack.h'
+      lstk(top+1)=ltop
       return
       end

@@ -1,6 +1,7 @@
 function ok=check_mac(txt)
 //ok=%t,return
 //errcatch doesnt work poperly
+// Copyright INRIA
 ok=%t
 errcatch(-1,'continue')
 comp(mac)

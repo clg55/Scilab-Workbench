@@ -115,6 +115,7 @@ C!originator
 C
 C                a.emami-naeini, computer science department,
 C                stanford university.
+C     Copyrigth SLICE
 C
       integer n,m,p,na,nc,nu,irank,naf,mplusn,nwrk1,nwrk2,ierr
 C
@@ -179,7 +180,7 @@ C
       iro = p
       isigma = 0
 C
-      call reduce(bf,naf,mplusn,m,n,p,heps,iro,isigma,mu,nu,wrk1,nwrk1,
+      call preduc(bf,naf,mplusn,m,n,p,heps,iro,isigma,mu,nu,wrk1,nwrk1,
      &            wrk2,nwrk2)
 C
       irank = mu
@@ -212,7 +213,7 @@ C
       iro = pp - mm
       isigma = mm
 C
-      call reduce(af,naf,mplusn,mm,nn,pp,heps,iro,isigma,mu,nu,wrk1,
+      call preduc(af,naf,mplusn,mm,nn,pp,heps,iro,isigma,mu,nu,wrk1,
      &            nwrk1,wrk2,nwrk2)
 C
       if (nu .eq. 0) return
@@ -273,10 +274,10 @@ Cc
  150  ierr = ierr + 2
       return
       end
-        subroutine reduce(abf,naf,mplusn,m,n,p,heps,iro,isigma,mu,nu,
+        subroutine preduc(abf,naf,mplusn,m,n,p,heps,iro,isigma,mu,nu,
      1                    wrk1,nwrk1,wrk2,nwrk2)
 c%calling sequence
-c       subroutine reduce(abf,naf,mplusn,m,n,p,heps,iro,isigma,mu,nu,
+c       subroutine preduc(abf,naf,mplusn,m,n,p,heps,iro,isigma,mu,nu,
 c    1                    wrk1,nwrk1,wrk2,nwrk2)
 c       integer naf,mplusn,m,n,p,iro,isigma,mu,nu,nwrk1,nwrk2
 c       double precision abf(naf,mplusn),wrk1(nwrk1),wrk2(nwrk2)

@@ -1,5 +1,6 @@
 function [ok,bllst]=adjust(bllst,inpptr,outptr,inplnk,outlnk)
 //
+// Copyright INRIA
 [outoin,outoinptr]=connmat(inpptr,outptr,inplnk,outlnk)
 //
 for hh=1:length(bllst)

@@ -1,12 +1,17 @@
+#-----------------------------
+# generated from Makefile: DO NOT EDIT
+# -----------------------------
 SHELL = /bin/sh
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/metanet.lib
 
 OBJSC = metanet.obj loadg.obj saveg.obj show.obj connex.obj dmtree.obj paths.obj \
 	transc.obj files.obj myhsearch.obj
 
-OBJSF = arbor.obj bandred.obj bmatch.obj busack.obj carete.obj cent.obj cfc.obj chcm.obj \
+OBJSF = metane.obj arbor.obj bandred.obj bmatch.obj busack.obj carete.obj \
+	cent.obj cfc.obj chcm.obj \
 	clique.obj clique1.obj \
 	compc.obj compfc.obj compmat.obj deumesh.obj diam.obj dijkst.obj \
 	dfs.obj dfs1.obj dfs2.obj eclat.obj flomax.obj floqua.obj fordfulk.obj frang.obj \
@@ -30,3 +35,9 @@ dmtree.obj: ../machine.h
 paths.obj: ../machine.h
 transc.obj: ../machine.h
 myhsearch.obj: mysearch.h
+metane.obj : ../stack.h
+
+
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile

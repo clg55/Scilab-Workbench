@@ -13,7 +13,8 @@ function [ze,po,gain]=zpell(epsilon,A,omegac,omegar)
 //!
 //Author F.Delebecque INRIA 1989
 //Revised by C. Bunks Oct. 24, 1996  
-   m1=(epsilon*epsilon)/(A*A-1);
+// Copyright INRIA
+m1=(epsilon*epsilon)/(A*A-1);
    K1=%asn(1,m1);
    K1t=imag(%asn(1/sqrt(m1),m1));
    m=(omegac/omegar)^2;
@@ -40,7 +41,7 @@ function [ze,po,gain]=zpell(epsilon,A,omegac,omegar)
       po=[po,%i*omegac*%sn(-%i*u0,m)];
    end,
     gain=abs(real(prod(po))/real(prod(ze)));
-   if order=even then,
+   if order==even then,
       gain=gain/sqrt(1+epsilon^2);
    end;
 

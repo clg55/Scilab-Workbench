@@ -1,5 +1,4 @@
-//<cels>=casc(x,z)
-//<cels>=casc(x,z)
+function cels=casc(x,z)
 //Creates cascade realization of filter
 //from a matrix of coefficients
 //  x    :(4xN)-Matrix where each column is a cascade
@@ -27,7 +26,8 @@
 //  !   7 + 10z + z     8 + 11z + z     9 + 12z + z  !
 //!
 //author: F. Delebecque  date: August 1988
-   cels=[];
+// Copyright INRIA
+cels=[];
    for col=x,
       nf=[col(1:2);1];
       nd=[col(3:4);1];

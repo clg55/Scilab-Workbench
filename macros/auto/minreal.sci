@@ -1,5 +1,6 @@
 function [a,b,c]=minreal(a,b,c,domaine,tol)
 //
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select type(a)
   
@@ -14,7 +15,7 @@ case 15
   else error('2 inputs to minreal: sl [,tol]'),
   end;
   [a,b,c,d,x0,dom]=a(2:7);
-  if dom=[] then error(96,1),end
+  if dom==[] then error(96,1),end
   domaine='c';if dom<>'c' then domaine='d',end
 case 16
   flag=a(1)
@@ -26,7 +27,7 @@ case 16
   else error('2 inputs to minreal: sl [,tol]'),
   end;
   [a,b,c,d,x0,dom]=a(2:7);
-  if dom=[] then error(96,1),end
+  if dom==[] then error(96,1),end
   domaine='c';if dom<>'c' then domaine='d',end
 case 1
   if lhs<>3 then
@@ -43,7 +44,7 @@ end;
 //
 wc=lyap(a',-b*b',domaine);
 wo=lyap(a,-c'*c,domaine);
-if istol=0 then 
+if istol==0 then 
   [r,n]=equil1(wc,wo);
 else 
   [r,n]=equil1(wc,wo,tol);
@@ -51,7 +52,7 @@ end;
 n1=n(1);
 ri=inv(r);r=r(1:n1,:);ri=ri(:,1:n1)
 a=r*a*ri;b=r*b;c=c*ri
-if lhs=1 then a=syslin(dom,a,b,c,d,r*x0),end
+if lhs==1 then a=syslin(dom,a,b,c,d,r*x0),end
 
 
 

@@ -1,5 +1,6 @@
 function MM=unpack(M,blck_szs)
 //utility function (for use with semidef)
+// Copyright INRIA
 MM=[]
 [mM,nM]=size(M)
 n=sum(blck_szs)

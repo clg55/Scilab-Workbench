@@ -181,7 +181,7 @@ c
 c     
 c     costs
 c     
-         namc=na*bhicst/100.
+         namc=na*(100.-bhicst)/100.
          do 5,i=1,na
             iflag(i)=0
  5       continue
@@ -189,13 +189,13 @@ c
  100        call getran(iseed,2,1,no,ran,non,ia,ia5,bunny,inseed)
             j=na*ran+1
             if(iflag(j).eq.1) goto 100
-            c(j)=maxcst
+            c(j)=mincst
             iflag(j)=1
  90      continue
          do 110,i=1,na
             if(iflag(i).eq.1) goto 110
             call getran(iseed,2,1,no,ran,non,ia,ia5,bunny,inseed)
-            c(i)=mincst+(maxcst-mincst)*ran-1
+            c(i)=mincst+(maxcst-mincst+1)*ran
  110     continue
 c     
 c     capacities
@@ -215,7 +215,7 @@ c
          do 140,i=1,na
             if(iflag(i).eq.1) goto 140
             call getran(iseed,2,1,no,ran,non,ia,ia5,bunny,inseed)
-            u(i)=mincap+(maxcap-mincap)*ran
+            u(i)=mincap+(maxcap-mincap+1)*ran
  140     continue
 c     
 c     node for sources

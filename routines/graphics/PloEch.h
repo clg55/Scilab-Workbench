@@ -1,4 +1,4 @@
-
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 typedef  struct  
 {
   double WW1Rect[4],WFRect1[4],Wxofset1,Wyofset1,Wscx1,Wscy1;

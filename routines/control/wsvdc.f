@@ -1,5 +1,5 @@
       subroutine wsvdc(xr,xi,ldx,n,p,sr,si,er,ei,ur,ui,ldu,vr,vi,ldv,
-     *                 workr,worki,job,info)
+     *     workr,worki,job,info)
       integer ldx,n,p,ldu,ldv,job,info
       double precision xr(ldx,*),xi(ldx,*),sr(1),si(1),er(1),ei(1),
      *                 ur(ldu,*),ui(ldu,*),vr(ldv,*),vi(ldv,*),
@@ -107,6 +107,7 @@ c     fortran abs,dimag,max
 c     fortran max,min,mod,sqrt
 c
 c!
+c     Copyright INRIA
 c     internal variables
 c
       integer i,iter,j,jobu,k,kase,kk,l,ll,lls,lm1,lp1,ls,lu,m,maxit,

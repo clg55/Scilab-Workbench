@@ -1,6 +1,7 @@
 function x=g_imag(a)
 // only to be called by function imag
 //!
+// Copyright INRIA
 select type(a)
 case 2 then 
   x=imag(a)

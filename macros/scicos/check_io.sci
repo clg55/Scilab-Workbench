@@ -13,6 +13,7 @@ function [model,graphics,ok]=check_io(model,graphics,in,out,clkin,clkout)
 //                    attempt to add/delete ports when some are connected
 //           ok==%t  : changes of block structure has been performed
 //!
+// Copyright INRIA
 in=int(in(:));nin=size(in,1)
 
 out=int(out(:));nout=size(out,1);

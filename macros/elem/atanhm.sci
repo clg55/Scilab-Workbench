@@ -1,6 +1,7 @@
 function t=atanhm(x)
 //Matrix wise Hyperbolic tangent inverse 
 
+// Copyright INRIA
 if type(x)<>1 then error(53),end
 if x==[] then t=[],end
 [m,n]=size(x)

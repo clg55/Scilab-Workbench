@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "../machine.h"
 
 /* ip is a pointer to a FORTRAN variable coming from SCILAB

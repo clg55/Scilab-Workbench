@@ -23,6 +23,7 @@ c     idamax dcopy dswap dscal dasum daxpy (blas)
 c     dble (fortran)
 c!
 c!
+c     Copyright INRIA
       double precision a(lda,*),eps,tol,t,dasum
       tol = 0.0d+0
       do 10 j = 1, n

@@ -1,5 +1,7 @@
       subroutine rndblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c
 c     ipar(1) 
@@ -25,7 +27,7 @@ c
       endif
 
 c     
-      if(flag.eq.1) then
+      if(flag.eq.1.or.flag.eq.6) then
       do 10 i=1,ny
          y(i)=rpar(i)+rpar(ny+i)*z(i+1)
  10   continue

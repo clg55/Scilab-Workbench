@@ -10,9 +10,10 @@ function [P,m]=lqg2stan(P22,Q,R)
 //
 //  mininize (x,u)'Q(x,u)
 //
+// Copyright INRIA
 flag=0;
 P221=P22(1);
-if P221(1)='r' then
+if P221(1)=='r' then
   P22=tf2ss(P22);flag=1;end
 P22=-P22;
 [A,B,C,D22]=P22(2:5);
@@ -29,7 +30,7 @@ dom=P22(7);
 if dom==[] then warning('lqg2stan: time domain (?) assumed continuous');end
 P=syslin(dom,A,real([B1,B2]),real([C1;C2]),real([D11,D12;D21,D22]));
 m=size(C2*B2);
-if flag=1 then
+if flag==1 then
 P=ss2tf(P);end
 
 

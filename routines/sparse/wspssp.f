@@ -1,4 +1,5 @@
       subroutine wspssp(nr,nc,ar,ai,nela,inda,br,bi,nelb,indb,cr,ci,
+c     Copyright INRIA
      $     nelc,indc,ia,ib,ierr)
 c!pupose
 c     c=a-b for sparse complex matrices

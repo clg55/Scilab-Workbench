@@ -6,7 +6,7 @@ optim - non-linear optimization routine
 .nf
 [f,xopt]=optim(costf,x0)
 [f,[xopt,[gradopt,[work]]]]=optim(costf,[contr],x0,['algo'],[df0,[mem]],
-     [work],[stop],['in'])
+     [work],[stop],['in'],[imp=iflag])
 .fi
 .SH PARAMETERS
 .TP 10
@@ -43,7 +43,8 @@ Hessian, (\fValgo='gc' or 'nd'\fR). Default value is around 6.
 stop 
 :  sequence of optional parameters controlling the 
 convergence of the algorithm.
-\fVstop=  'ar',nap, [iter [,epsg [,epsf [,epsx]]]]\fR
+\fV
+            top=top-1stop=  'ar',nap, [iter [,epsg [,epsf [,epsx]]]]\fR
 .RS
 .TP
 "ar"
@@ -70,6 +71,13 @@ to scale \fVx\fR.
 "in" 
 : reserved  keyword for initialization of parameters
 used when \fVcostf\fR in given as a Fortran routine (see below).
+.TP
+"imp=iflag" 
+: named argument used to set the trace mode. \fViflag=0\fR nothing
+(execpt errors) is reported, \fViflag=1\fR initial and final reports,
+\fViflag=2\fR adds a report per iteration, \fViflag>2\fR add reports on
+linear search. Warning, most of these reports are written on the
+Scilab standard output.
 .TP
 gradopt
 :  gradient of \fVcostf\fR at \fVxopt\fR
@@ -157,8 +165,8 @@ deff('[f,g,ind]=cost(x,ind)','f=0.5*norm(x-xref)^2,g=x-xref');
 [f,xopt,gopt]=optim(cost,'b',[-1;0;2],[0.5;1;4],x0,'gc') //  Bounds on x
 [f,xopt,gopt]=optim(cost,'b',[-1;0;2],[0.5;1;4],x0,'gc','ar',3)
 // Here, 3 calls to cost are allowed.
-//Now calling the Fortran subroutine "genros.f" in SCIDIR/default 
-// (see also the interface foptim.f)
+// Now calling the Fortran subroutine "genros" in SCIDIR/default/Ex-optim.f
+// See also the link function for dynamically linking an objective function
 [f,xopt,gopt]=optim('genros',[1;2;3])    //Rosenbrock's function
 .fi
 .SH SEE ALSO

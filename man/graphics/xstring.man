@@ -27,7 +27,7 @@ to use for drawing the string. if  \fVframe=1\fR a box is drawn around the strin
 (only if \fVangle=0\fR )
 .SH EXAMPLE 
 .nf
-plot2d([0,1],[0,1])
+plot2d([0;1],[0;1],0)
 xstring(0.5,0.5,["Scilab","is" ; "Not","Basilc"])
 //Other example
 alphabet=['a ','b ','c ','d ','e ','f ','g ',...
@@ -38,7 +38,7 @@ alphabet=['a ','b ','c ','d ','e ','f ','g ',...
 xset('default');              //default graphic parameters
 xset("window",1);             //set window number to 1
 xclear();                     
-plot2d([0,1],[0,2])
+plot2d([0;1],[0;2],0);
 xstring(0.1,1.8,alphabet)     //alphabet
 xstring(0.1,1.6,alphabet,20)  //angle
 xset("font",1,1)              //symbol fonts

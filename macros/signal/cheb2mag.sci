@@ -12,7 +12,8 @@ function [h2]=cheb2mag(n,omegar,A,sample)
 //
 //!
 //Author F.D.
- 
+// Copyright INRIA
+
    [n1,n2]=size(sample);
    un=ones(n1,n2);
    Tn=chepol(n,'x');             //n-th Chebyshev polynomial

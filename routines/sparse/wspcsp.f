@@ -1,4 +1,5 @@
       subroutine wspcsp(op,ma,na,ar,ai,nela,inda,mb,nb,br,bi,nelb,indb,
+c     Copyright INRIA
      $     cr,ci,nelc,indc,ita,itb)
 c!purpose
 c     concatenation of two  sparse matrices.

@@ -5,6 +5,7 @@ function fresp = cepstrum(w,mag)
 //equal to magnitude data mag and whose phase corresponds
 //to a stable, minimum phase transfer function. 
 //
+// Copyright INRIA
 [w,ind]=sort(-w);w=-w;mag=mag(ind);
 dnum=length(w);
 

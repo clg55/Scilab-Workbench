@@ -1,4 +1,5 @@
       subroutine lspcsp(op,ma,na,nela,inda,mb,nb,nelb,indb,
+c     Copyright INRIA
      $     nelc,indc)
 c!purpose
 c     concatenation of two  sparse boolean matrices.

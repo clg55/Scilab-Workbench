@@ -1,6 +1,7 @@
 function [r,ind]=aplat(l,r)
 //flattens a list. If l is constant it puts it in a list
 //ind contains the list structure
+// Copyright INRIA
 if type(l)==1|type(l)==5 then r=list(l);ind=-1;return;end
 n=size(l)
 [lhs,rhs]=argn(0)

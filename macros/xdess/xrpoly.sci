@@ -7,6 +7,7 @@ function []=xrpoly(orig,n,r,teta)
 // teta : angle, 0 si omis
 // Attention utilise l'echelle d'un appel precedent de plot2d.
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 select rhs
  case 3 then b=eye(2,2);

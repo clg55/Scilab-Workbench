@@ -1,10 +1,11 @@
 function [gc]=ctr_gram(a,b,domaine)
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select type(a)
  case 1  then
     if rhs<2 then error(39); end;
-    if rhs=2 then domaine='c'; end;
+    if rhs==2 then domaine='c'; end;
     if part(domaine,1)<>'c' then domaine='d',end
     [m,n]=size(a)
     if m<>n then error(20,1),end
@@ -13,20 +14,20 @@ select type(a)
   //-compat next case retained for list/tlist compatibility
 case 15 then
     flag=a(1);
-    if flag(1)='r' then a=tf2ss(a);end
+    if flag(1)=='r' then a=tf2ss(a);end
     if flag(1)<>'lss' then error(91,1),end
     [a,b,domaine]=a([2,3,7])
-    if domaine=[] then
+    if domaine==[] then
 write(%io(2),'Warning: ctr_gram --> By default time-domain is continuous')
       domaine='c';
     end
     [n,n]=size(a)
   case 16 then
     flag=a(1);
-    if flag(1)='r' then a=tf2ss(a);end
+    if flag(1)=='r' then a=tf2ss(a);end
     if flag(1)<>'lss' then error(91,1),end
     [a,b,domaine]=a([2,3,7])
-    if domaine=[] then
+    if domaine==[] then
 write(%io(2),'Warning: ctr_gram --> By default time-domain is continuous')
       domaine='c';
     end

@@ -27,6 +27,7 @@ c     - pd. est le tableau ou l on range la matrice pleine
 c       dont les elements sont etablis par la sub. Hessien
 c     - nrowpd. est le nombre de ligne du tableau pd
 c!
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
       dimension tq(*),pd(nrowpd,*)
       dimension neq(*)

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <X11/Intrinsic.h>
 
 #include "bezier.h"

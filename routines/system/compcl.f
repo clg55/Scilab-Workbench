@@ -2,6 +2,7 @@
 c     ======================================================================
 c     compilation des structures de controle
 c     ======================================================================
+c     Copyright INRIA
       include '../stack.h'
 c
       parameter (nz1=nsiz-1,nz2=nsiz-2)

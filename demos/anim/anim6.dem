@@ -1,15 +1,12 @@
-kp=xget("pixmap");
-if kp=0, xset("pixmap",1);end;
-
-n_path="SCI/demos/npend";
-getf(n_path+'/macros.sci');
-getf(n_path+'/dessin.sci');
+// Copyright INRIA
+mode(1)
+xselect();  //raise the graphic window
+kp=xget("pixmap");xset("pixmap",1)
 getf('SCI/demos/anim/anim6.sci');
 n=10;
 r=1*ones(1,n);m=1*ones(1,n);j=1*ones(1,n);g=9.81;
 y0=0*ones(2*n,1);
-yt=read(n_path+'/yt.wrt',20,201);
-chaina(yt);
-
-if kp=0, xset("pixmap",0);end;
+yt=read('SCI/demos/npend/yt.wrt',20,201);  //load data
+chainap(yt); //draw the animation
+xset("pixmap",kp);
 

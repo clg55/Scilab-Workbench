@@ -1,3 +1,5 @@
+//Copyright INRIA
+
 //-----------------------------------------------------------------------
 // Second problem (Van Der Pol oscillator).
 // The initial value problem is..
@@ -8,11 +10,12 @@
 // An analytic solution is not known, but the zeros of Y1 are known
 // to 15 figures for purposes of checking the accuracy.
 //-----------------------------------------------------------------------
+Eps=1.e-5
 rtol=[1.d-6;1.d-6];atol=[1.d-6;1.d-4];
 t0=0;y0=[2;0];y0d=[0;-2];t=[20:20:200];ng=1;
 info=list([],0,[],[],[],0,0);
 [yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,'res2','jac2',ng,'gr2',info);
-abs(nn(1)-81.163512)
+if abs(nn(1)-81.163512)  > Eps then pause,end
 
 deff('[delta,ires]=res2(t,y,ydot)',...
 'ires=0;y1=y(1),y2=y(2),delta=[ydot-[y2;100*(1-y1*y1)*y2-y1]]')
@@ -27,4 +30,4 @@ deff('s=gr2(t,y,yd)','s=y(1)')
 [yy,nn,hot]=dasrt([y0,y0d],t0,t,atol,rtol,'res2','jac2',ng,'gr2',info);
 t01=nn(1);t=100:20:200;[pp,qq]=size(yy);y01=yy(2:3,qq);y0d1=yy(3:4,qq);
 [yy,nn,hot]=dasrt([y01,y0d1],t01,t,atol,rtol,'res2','jac2',ng,'gr2',info,hot);
-abs(nn(1)-162.57763)
+if abs(nn(1)-162.57763) > Eps then pause,end

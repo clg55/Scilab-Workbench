@@ -1,3 +1,4 @@
+// Copyright INRIA
 //   DAE's
 Leps=1.e-6;
 // scilab macros

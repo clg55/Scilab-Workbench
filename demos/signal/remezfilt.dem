@@ -1,9 +1,10 @@
-function []=remezfilt()
 ////////////////////////
 //MINIMAX FIR FILTERS///
 ////////////////////////
-//   clear 
+// Copyright INRIA
+xbasc();xselect();
 //Low pass filter (length 33, cut-off in [.23,.27], weight 1/.1)
+
    hn=eqfir(33,[0 .23;.27 .5],[1 0],[1 .1]);
    [hm,fr]=frmag(hn,256);
    plot2d(fr',hm'),

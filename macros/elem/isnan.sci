@@ -1,4 +1,5 @@
 function r=isnan(x)
+// Copyright INRIA
 if x==[] then
   r=[]
 else

@@ -1,5 +1,6 @@
 c fin = 1 
 c SCILAB function : GetMsg
+c     Copyright INRIA
       subroutine intsGetMsg
 c
       include '../stack.h'

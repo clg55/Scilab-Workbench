@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WMPAD,SSI=0
+c     Copyright INRIA
       subroutine wmpad(pm1r,pm1i,d1,l1,pm2r,pm2i,d2,l2,pm3r,pm3i,d3,
      & m,n)
 c!but

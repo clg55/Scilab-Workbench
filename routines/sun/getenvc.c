@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /* returns setenv defined variable when getenv fails */
 #include <stdio.h>
 

@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 /* Scilab wgmenu.c 
  *
  *  Menus for graphic window ( from wmenu.c ) 
@@ -58,12 +59,13 @@ extern TW textwin;
 #define SCIPR   141
 #define SCIGSEL 142
 #define UPDINI  143
-#define CMDMAX 143
+#define CLOSE   144
+#define CMDMAX 144
 
 static char * keyword[] = {
 	"[ZOOM]", "[UNZOOM]", "[ROT3D]", "[PRINT]","[COPYCLIP]","[COPYCLIP1]",
 	"[REDRAW]","[LOADSCG]","[SAVESCG]","[CLEARWG]","[SCIPS]","[SCIPR]",
-	"[SCIGSEL]","[UPDINI]","[EOS]",
+	"[SCIGSEL]","[UPDINI]","[EOS]","[CLOSE]",
         "{ENTER}", "{ESC}", "{TAB}",
         "{^A}", "{^B}", "{^C}", "{^D}", "{^E}", "{^F}", "{^G}", "{^H}", 
 	"{^I}", "{^J}", "{^K}", "{^L}", "{^M}", "{^N}", "{^O}", "{^P}", 
@@ -74,6 +76,7 @@ static char * keyword[] = {
 static BYTE keyeq[] = {
 	ZOOM,UNZOOM,ROT3D,PRINT,COPYCLIP,COPYCLIP1,
 	REDRAW,LOADSCG,	SAVESCG,CLEARWG,SCIPS,SCIPR,SCIGSEL,UPDINI,EOS,
+	CLOSE,
         13, 27, 9,
         1, 2, 3, 4, 5, 6, 7, 8,
 	9, 10, 11, 12, 13, 14, 15, 16,
@@ -170,6 +173,9 @@ void SendGraphMacro(struct BCG *ScilabGC, UINT m)
 	  case UPDINI :
 	    SendMessage(ScilabGC->CWindow,WM_COMMAND,M_WRITEINI,0L);
 	    s++;break;
+	  case CLOSE :
+	    C2F(deletewin)(&(ScilabGC->CurWindow));
+	    s++;break;
 	  default:
 	    s++;
 	    break;
@@ -210,7 +216,7 @@ void ScilabMenuAction(char *buf)
       if ( buf[1] == '0' )
 	{ 
 	  /* Interpreted mode : we store the action on a queue */
-	  StoreCommand(buf+2,1);
+	  StoreCommand1(buf+2,1);
 	}
       else 
 	{ 
@@ -242,9 +248,9 @@ void ScilabMenuAction(char *buf)
     {
       /** standard string that we send to scilab **/
       if  ( strlen(buf)== 1 && buf[0] <= 31 && buf[0] >= 1) 
-	StoreCommand(buf,0);
+	StoreCommand1(buf,0);
       else 
-	StoreCommand(buf,1);	
+	StoreCommand1(buf,1);	
     }
 }
 
@@ -821,6 +827,7 @@ int C2F(addmen)(integer *win_num,char *button_name,integer *entries,
 		integer *ierr)
 {
   char ** menu_entries;
+  *ierr = 0;
   if (*ne!=0) {
     ScilabMStr2CM(entries,ne,ptrentries,&menu_entries,ierr);
     if ( *ierr == 1) return(0);
@@ -941,7 +948,7 @@ static void SavePs(struct BCG *ScilabGC)
   char *d,ori;
   BYTE *s;
   char str[]= "[SAVESCG]XScilab Postscript[EOS]*[EOS]";
-  int flag,ierr;
+  int flag,ierr=0;
   /** getting ls flags **/
   ls.use_printer = 0;
   if ( ExportStyle(ScilabGC) == FALSE ) return ;

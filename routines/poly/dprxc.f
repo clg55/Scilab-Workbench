@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DPRXC,SSI=0
+c     Copyright INRIA
       subroutine dprxc(n,roots,coeff)
 c!but
 c     dpxrc calcule les coefficients d'un polynome defini par ses

@@ -9,6 +9,7 @@ function [co,u,g,itv,dtv,cof]=icsua(u,simu,nap,imp)
 //%Syntaxe
 //[co,u,g,itv,dtv,cof]=icsua(u,simu,nap,imp)
 
+// Copyright INRIA
 //variables d'entree :
 //u(nu) : parametres initiaux
 //nap   : nombre maximum d' appels du simulateur

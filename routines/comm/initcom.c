@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <stdio.h>
 #include <sys/types.h>
 #ifndef __MSC__
@@ -60,8 +61,8 @@ static void FinAppli(message)
 Message message;
 {
   int i;
-
-  /* Close opened Metanet windows */
+  /* If a xmetanet application is ended, put "CLOSED" flag to 
+     corresponding Metanet Window */
   for (i = 0; i < nNetwindows; i++) {
     if (strcmp(Netwindows[i],message.tableau[3]) == 0) {
       CloseNetwindow(i+1);

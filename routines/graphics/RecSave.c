@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <string.h> /* in case of dbmalloc use */
 #ifdef __STDC__
 #include <stdlib.h>
@@ -309,6 +310,23 @@ int SaveGray(plot)
   return(1);
 }
 
+int SaveGray1(plot)
+     char *plot;
+{
+  struct gray_rec *lplot = (struct gray_rec *) plot;
+  if ( SaveLI(lplot->n1)== 0) return(0);
+  if ( SaveLI(lplot->n2)== 0) return(0);
+  if ( SaveVectC((lplot->name),((int)strlen(lplot->name))+1) == 0) return(0);
+  if ( SaveVectF((lplot->z),(lplot->n1)*(lplot->n2)) == 0) return(0);
+  if ( SaveVectC((lplot->strflag),((int)strlen(lplot->strflag))+1) == 0) return(0);
+  if ( SaveVectC((lplot->strflag_kp),((int)strlen(lplot->strflag))+1) == 0) return(0);
+  if ( SaveVectF((lplot->brect),4L) == 0) return(0);
+  if ( SaveVectF((lplot->brect_kp),4L) == 0) return(0);
+  if ( SaveVectLI((lplot->aaint),4L)  == 0) return(0);
+  if ( SaveVectLI((lplot->aaint_kp),4L) == 0) return(0);
+  return(1);
+}
+
 
 /*---------------------------------------------------------------------
 \encadre{Le cas des champs de vecteurs}
@@ -379,6 +397,7 @@ static SaveTable SaveCTable[] ={
     {"fac3d2",SaveFac3D},
     {"fec",SaveFec},
     {"gray",SaveGray},
+    {"gray1",SaveGray1},
     {"param3d",SaveParam3D},
     {"param3d1",SaveParam3D1},
     {"plot2d",SavePlot},
@@ -389,6 +408,10 @@ static SaveTable SaveCTable[] ={
     {"xgrid",SaveGrid},
     {(char *)NULL,NULL}};
 
+
+#ifdef __MSC__
+#define __STDC__
+#endif 
 
 int C2F(xsaveplots)(winnumber, fname1, lxv)
      integer *winnumber;
@@ -415,6 +438,11 @@ int C2F(xsaveplots)(winnumber, fname1, lxv)
   xdrstdio_create(xdrs, F, XDR_ENCODE) ;
   SaveVectC(scig,((int)strlen(scig))+1) ;
   list=ListPFirst;
+  if ( SaveColormap() == 0) 
+    {
+      sciprint("save: saving colormap failed\r\n") ;
+      return(0);
+    }
   while (list)
     {
       if (list->window == *winnumber && list->theplot != NULL) 
@@ -460,6 +488,21 @@ static int SaveD(x)
   szof = sizeof(double) ;
   count = 1;
   assert( xdr_vector(xdrs, (char *) &x, count, szof, xdr_double)) ;
+  return(1);
+}
+
+static int SaveF(x)
+     float x;
+{
+  double z=x;
+  SaveD(z);
+  /** sciprint("saving %f\r\n",z); **/
+  /** 
+  szof = sizeof(float) ;
+  count = 1;
+  assert( xdr_vector(xdrs, (char *) &x, count, szof, xdr_float)) ;
+  sciprint("saving %f\r\n",x);
+  **/
   return(1);
 }
 
@@ -551,6 +594,37 @@ static int SaveVectC(nx, l)
     { assert( xdr_opaque(xdrs, &nx1,szof)); } 
   else 
     { assert( xdr_opaque(xdrs, nx,szof)); }
+  return(1);
+}
+
+/** save the colormap if necessary **/
+
+int SaveColormap()
+{
+  int m;
+  /** If the X window exists we check its colormap **/
+  if (  CheckColormap(&m) == 1) 
+    { 
+      int i;
+      float r,g,b;
+      if ( SaveVectC("colormap",((int)strlen("colormap"))+1) == 0) return(0);
+      if ( SaveLI(m)== 0) return(0);
+      for ( i=0; i < m ; i++)
+	{
+	  get_r(i,&r);
+	  if ( SaveF(r) == 0) return(0);
+	}
+      for ( i=0; i < m ; i++) 
+	{
+	  get_g(i,&g);
+	  if ( SaveF(g) == 0) return(0);
+	}
+      for ( i=0; i < m; i++)
+	{
+	  get_b(i,&b);
+	  if ( SaveF(b) == 0) return(0);
+	}
+    }
   return(1);
 }
 

@@ -19,6 +19,7 @@ c
 c     Serge Steer
 c
 c!
+c     Copyright INRIA
       double precision ar,ai,br,cr,ci
 c
       double precision s

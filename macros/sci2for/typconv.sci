@@ -1,8 +1,9 @@
 function [s,nwrk,txt]=typconv(s,nwrk,typ)
 //[s1,te1,t1,m1,n1]=s(1:5);
 //!
+// Copyright INRIA
 txt=[]
-if typ='1'&s(3)='0' then
+if typ=='1'&s(3)=='0' then
   if s(4)=='1'&s(5)=='1' then
     if isnum(s(1)) then s(1)=s(1)+'D0',else s(1)='dble('+s(1)+')',end
   else
@@ -24,7 +25,7 @@ if typ='1'&s(3)='0' then
            indentfor(t1);part(tl1+'    ',1:6)+' continue']
 
   end
-elseif typ='0'&s(3)='1' then
+elseif typ=='0'&s(3)=='1' then
   if s(4)=='1'&s(5)=='1' then
     s(1)='int('+s(1)+')'
   else

@@ -1,4 +1,5 @@
 function [x,y,typ]=MSCOPE_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -18,8 +19,7 @@ case 'set' then
   while %t do
     [ok,in,clrs,win,wpos,wdim,ymin,ymax,per,N,heritance,label]=getvalue(..
 	'Set Scope parameters',..
-	[
-	'Input ports sizes';
+	['Input ports sizes';
 	'Drawing colors (>0) or mark (<0)';
 	'Output window number';
 	'Output window position';
@@ -79,9 +79,12 @@ case 'set' then
 	         ' ';mess])
     end
     if ok then
+      [model,graphics,ok]=check_io(model,graphics,in,[],ones(1-heritance,1),[])
+    end
+    if ok then
       if wpos==[] then wpos=[-1;-1];end
       if wdim==[] then wdim=[-1;-1];end
-      [model,graphics,ok]=check_io(model,graphics,in,[],1,[])
+//      [model,graphics,ok]=check_io(model,graphics,in,[],1,[])
       if ok then
 	yy=[ymin(:)';ymax(:)']
 	rpar=[0;per;yy(:)]
@@ -90,6 +93,7 @@ case 'set' then
 	if prod(size(state))<>(sum(in)+1)*N+1 then 
 	  state=-eye((sum(in)+1)*N+1,1),
 	end
+        model(4)=ones(1-heritance,1)
 	model(7)=state;model(8)=rpar;model(9)=ipar
 	model(11)=[] //compatibility
         model(12)=[%t %f] //compatibility

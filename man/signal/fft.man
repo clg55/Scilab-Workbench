@@ -29,10 +29,10 @@ Short syntax (one or two dimensional fft):
 gives a direct transform (the \fV-1\fR refers to
 the sign of the exponent..., NOT to "inverse"), that is
 .IG
-x(k)=sum over m of a(m)*exp(-2i*pi*m*k/n)
+x(k)=sum over m from 1 to n  of a(m)*exp(-2i*pi*(m-1)*(k-1)/n)
 .FI
-.LA $$ x(k)=\sum_{m}{ a(m) exp(-2i \pi m k/n)} $$
-for k varying from 0 to n-1 (n=size of vector \fVa\fR).
+.LA $$ x(k)=\sum_{m=1}^n { a(m) exp(-2i \pi (m-1)(k-1)/n)} $$
+for k varying from 1 to n (n=size of vector \fVa\fR).
 .LP
 .Vb a=fft(x,1)
 performs the inverse transform normalized by \fV1/n\fR.
@@ -62,5 +62,11 @@ In particular,if \fVa\fR is an nxm matrix,
 \fVx=fft(a,-1)\fR is equivalent to the two instructions:
 .LP
 \fVa1=fft(a,-1,m,1)\fR and \fVx=fft(a1,-1,n,m)\fR.
+.SH EXAMPLE 
+.nf
+a=[1;2;3];n=size(a,'*');
+norm(1/n*exp(2*%i*%pi*(0:n-1)'.*.(0:n-1)/n)*a -fft(a,1))
+norm(exp(-2*%i*%pi*(0:n-1)'.*.(0:n-1)/n)*a -fft(a,-1))  
+.fi 
 .SH SEE ALSO
 corr

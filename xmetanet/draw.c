@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <stdio.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
@@ -95,8 +96,8 @@ char *str;
   int xf,yf;  
 
   if (str == 0) return;
-  xf = (int)((x+2) * metaScale);
-  yf = (int)((y-2) * metaScale);
+  xf = (int)((x+3) * metaScale);
+  yf = (int)((y-4) * metaScale);
   SetFont(theDrawFont);
   XDrawString(theG.dpy,theG.d,theG.gc_clear,xf,yf,str,strlen(str)); 
 }
@@ -109,8 +110,8 @@ char *str;
 
   if (str == 0) return;
   SetFont(theDrawFont);
-  xf = (int)((x+2) * metaScale);
-  yf = (int)((y-2) * metaScale);
+  xf = (int)((x+3) * metaScale);
+  yf = (int)((y-4) * metaScale);
   fw = XTextWidth(theG.drawfont,str,strlen(str));
   fh = theG.drawfont->max_bounds.ascent + theG.drawfont->max_bounds.descent;
   SetForeground(theG.gc,theColor);
@@ -128,8 +129,8 @@ char *str;
 
   if (str == 0) return;
   SetFont(theDrawFont);
-  xf = (int)((x+2) * metaScale);
-  yf = (int)((y-2) * metaScale);
+  xf = (int)((x+3) * metaScale);
+  yf = (int)((y-4) * metaScale);
   fw = XTextWidth(theG.drawfont,str,strlen(str));
   fh = theG.drawfont->max_bounds.ascent + theG.drawfont->max_bounds.descent;
   XFillRectangle(theG.dpy,theG.d,theG.gc_clear,

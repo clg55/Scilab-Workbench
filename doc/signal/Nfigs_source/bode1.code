@@ -7,13 +7,13 @@ ax=0:.01:2;
 ax=exp(log(10)*ax);
 hm=20*log(abs(freq(1,h,%i*ax)))/log(10);
 
-plot2d1("gln",ax',hm',[-2],"011",' ',[1,-40,100,-10],[10,2,10,2]);
+plot2d1("gln",ax',hm',[2],"011",' ',[1,-40,100,-10],[10,2,10,2]);
 x=-20*log(a)/log(10);
 //horizontal straight line approximation
-plot2d1("gln",[1 a]',[x x]',[-3],"000");
+plot2d1("gln",[1 a]',[x x]',[3],"000");
 //-20 db/dec straight line approximation
-plot2d1("gln",[a 100]',[x -40]',[-1],"000");
+plot2d1("gln",[a 100]',[x -40]',[1],"000");
 //vertical line at -3db
-plot2d1("gln",[a a]',[-20 -23]',[-1],"000");
+plot2d1("gln",[a a]',[-20 -23]',[1],"000");
 xtitle(' ','Log scale',' ')
 xend()

@@ -5,6 +5,7 @@ c----
 c
 c     n1qn3, version 1.0, septembre 1988.
 c     Jean Charles Gilbert, Claude Lemarechal, INRIA.
+c     Copyright INRIA
 c     email: Jean-Charles.Gilbert@inria.fr
 c
 c     Utilise les sous-routines:

@@ -1,26 +1,50 @@
 This directory contains examples of C and Fortran interface routines
 dynamically linked with scilab by the addinter command.
 
-The source code of the interfaced routines are found in directory "src"
-
-For example, the Fortran subroutine src/foubare2f.f is interfaced with Scilab
-by the interface program Exemplf.f. It is called from
-Scilab by function [x,y,z,t]=foubare('flag',a,b,c).
-
-The C routine src/foubare2c.c is interfaced with Scilab
-by the interface program Exemplc.c. It is called from
-Scilab by function [x,y,z,t]=foubare('flag',a,b,c).
+ex*f.f ex*c.f : code for the routines to be interfaced.
+ex*fi.f ex*cI.c: code for the interfaces.
+ex*f.sce ex*c.sce : Scilab script to run the example 
 
 template.f and template.c are generic skeletons of
 interface programs.
 
-To run a Fortran demo, execute Scilab HERE in this directory and enter at 
+
+To run the C first example,
+execute Scilab HERE in this directory and enter at 
 scilab prompt:
--->exec('Examplf.sce')
+-->exec('ex1c.sce')
 
-To run a C demo enter at scilab prompt:
--->exec('Examplc.sce')
+To run the Fortran first example,
+execute Scilab HERE in this directory and enter at 
+scilab prompt:
+-->exec('ex1f.sce');
 
-Other examples are *.sce script files.
+ex1* : A simple interface with Scilab matrix arguments 
+	( converted to integer, float or double arrays ) 
 
-make('/tmp/pgm.o') compiles pgm program in the /tmp directory.
+ex2* : optional argument passing with the syntax f(..., var=val) 
+
+ex3* : interfacing C function which creates object on the stack 
+	( malloc ) and how to transfer these objects to Scilab
+       Interfaces are given in C and Fortran but the functions 
+	which are to be interfaced are only given in C (they use malloc)
+
+ex4* : simple interface with Scilab matrix arguments to call 
+	a subroutine which is already inside Scilab (dgemm) 
+
+ex5* : interfacing a function with a functional argument 
+	( i.e how to deal with Argument functions in an 
+	interface ) just a C example 
+
+ex6* : string arguments and stack manipulation 
+
+ex7* : call and execute a Scilab function  within an interface
+	. The Scilab function is defined in the calling environment 
+       (by getf or deff).
+
+ex8* : call and execute a Scilab argument function (function 
+	is a parameter) within an interface.
+
+
+
+

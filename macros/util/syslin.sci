@@ -1,150 +1,107 @@
 function [sl]=syslin(domain,a,b,c,d,x0)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 //
-lss_t=['lss','A','B','C','D','X0','dt']
+// check domain 
 select type(domain)
 case 1 then  //sampled system
-  if domain=[] then 
-    tp=[]
+  if size(domain,'*')<=2 then
+    tp=domain
   else
-    if size(domain,'*')<>1 then
-      if rhs==3 then
-        [m1,n1]=size(domain);
-        if m1<>n1 then error('syslin: a must be square');end
-        [n2,m2]=size(a);
-        if n2~=0&n2<>n1 then error('syslin: invalid column dimension of b matrix');end
-        [n3,m3]=size(b);
-        if m3~=0&m3<>n1 then error('syslin: invalid row dimension of c matrix');end
-        sl=tlist(lss_t,domain,a,b,zeros(b*a),zeros(n1,1),[ ]);
-        return
-      end
-      if rhs==4 then
-        [m1,n1]=size(domain);
-        if m1<>n1 then error('syslin: a must be square');end
-        [n2,m2]=size(a);
-        if n2<>n1 then error('syslin: invalid column dimension of b matrix');end
-        [n3,m3]=size(b);
-        if m3<>n1 then error('syslin: invalid row dimension of c matrix');end
-        [n4,m4]=size(c);
-        if n4<>n3 then error('syslin: invalid column dimension of d matrix');end
-        if m4<>m2 then error('syslin: invalid row dimension of d matrix');end
-        sl=tlist(lss_t,domain,a,b,c,zeros(n1,1),[]);
-        return
-      end
-      if rhs==5 then
-        [m1,n1]=size(domain);
-        if m1<>n1 then error('syslin: a must be square');end
-        [n2,m2]=size(a);
-        if n2<>n1 then error('syslin: invalid column dimension of b matrix');end
-        [n3,m3]=size(b);
-        if m3<>n1 then error('syslin: invalid row dimension of c matrix');end
-        [n4,m4]=size(c);
-        if n4<>n3 then error('syslin: invalid column dimension of d matrix');end
-        if m4<>m2 then error('syslin: invalid row dimension of d matrix');end
-        [n5,m5]=size(d);
-        if n5<>n1 then error('syslin: invalid x0');end
-        if m5<>1 then error('syslin: invalid x0 (column vector)');end
-        sl=tlist(lss_t,domain,a,b,c,d,[]);
-        return
-      end
-      error('domain (1rst argument of syslin) must be a scalar')
-    end
-    if domain<=0 then
-      error('domain must be a >0 scalar'),
-    end
-    tp=domain(1,1)
+    error('domain (1rst argument of syslin) must be a scalar')
   end
+  z='z'
 case 10 //continuous or discrete
   if size(domain,'*')<>1 then
     error('domain (1rst argument of syslin) must be a single string')
   end
-  select part(domain,1)
-  case 'c' then tp='c';
-  case 'd' then tp='d';
-  else error(domain+' : unknown time domain')
-  end;
-else error('1rst argument of syslin should be a string, a scalar or a [] matrix')
-end;
-//
-select type(a)
-case 1 then // (a,b,c,d...)
-  //-------------------------
-  if type(b)==2 then 
-    a=a+0*poly(0,varn(b));
-    sl=tlist(['r','num','den','dt'],a,b,tp);
-    return;
-  end
-  if rhs <4 then
-    error('syslin : (domain,a,b,c [d [x0]])');
-  end
-  if type(b)*type(c)<>1 then
-    error('syslin : a,b and c scalar matrices')
-  end
-  //
-  [ma,na]=size(a);[mb,nb]=size(b);[mc,nc]=size(c);
-  if ma<>na then error('syslin : a must be square'),end
-  //
-  if nb==0 then
-    // warning('syslin: no inputs'),
-    mb=na;
-  end
-  if mc=0 then
-    // warning('syslin: no outputs'),
-    nc=na;
-  end
-  if 2*na-mb-nc<>0 then
-    error('syslin : dimension of b or c is incorrect')
-  end
-  //
-  if rhs <6 then 
-    x0=0*ones(na,1),
+  domain=part(domain,1)
+  select domain
+  case 'c' then 
+    z='s'
+  case 'd' then 
+    z='z'
   else 
-    [mx,nx]=size(x0),
-    if nx<>0 & (mx-na+1)*nx<>1 then
-      error('syslin : x0 is incorrect'),
-    end
-  end
-  //
-  if rhs < 5 then 
-    d=0*ones(mc,nb),
-  else 
-    [md,nd]=size(d),
-    if md=0 then md=mc;end
-    if nd=0 then nd=nb;end
-    if (a<>[])&((md-mc+1)*(nb-nd+1)<>1) then
-      error('syslin : d has invalid dimension'),
-    end
-  end
-  //
-  sl=tlist('lss',a,b,c,d,x0,tp)
-case 2 then //(n,d,...)
-  //---------------------
-  if rhs==2 then sl=tlist(['r','num','den','dt'],a,1,tp);return;end
-  if rhs >3 then error('syslin : (domain,n,d )');end
-  if type(b)>2 then error('syslin : n and d polynomial matrices');end
-  //
-  if size(a)<>size(b) then
-    error('syslin : n and d have inconsistent dimensions'),
+    error(domain+' : unknown time domain')
   end;
-  z='z';
-  if tp=[] then z=varn(a);end
-  if tp='c' then z='s',end
-  //
-  if type(a)=2 then a=varn(a,z),end
-  sl=tlist(['r','num','den','dt'],a,varn(b,z),tp)
-  //-compat next case retained for list -> tlist compatibility
-case 15 then //(n/d,...)
-  //---------------------
-  error('Obsolete feature, please use tlist to define rational fractions')
-case 16 then //(n/d,...)
-  //---------------------
-  typ=a(1)
-  if typ(1)<>'r' then error(90,1),end
-  if rhs >2 then  error('syslin : (domain,h )');end
-  sl=a;sl(4)=tp
 else 
-  error(44,2)
+  error('1rst argument of syslin should be a string, a scalar or a [] matrix')
+end;
+//============================================================================
+if rhs==2 then //syslin(domaine,sys)
+
+  if type(a)<>16 then 
+    error()
+  else
+    if a(1)(1)=='r'|a(1)(1)=='lss' then
+      sl=a;
+      sl('dt')=domain
+    else
+      error('syslin : H must be a linear state space or a transfer function')
+    end
+  end
+//============================================================================
+elseif rhs==3 then // syslin(domaine,num,den)
+  num=a;den=b
+  if type(num)>2 | type(den)>2 then
+    error('syslin : N and D must be matrix of numbers or of polynomials')
+  end
+  if type(num)==2 & type(den)==2 then
+    if varn(num)<>varn(den) then 
+      error('syslin : N and D have inconsistent formal variable names')
+    end
+  end
+  if or(size(num)<>size(den)) then
+    error('syslin : N and D have inconsistent dimensions')
+  end
+  sl=rlist(varn(num,z),varn(den,z),domain)
+//============================================================================
+elseif rhs>3 then // syslin(domaine,A,B,C [,D [X0]])
+  if type(a)<>1 then
+    error('syslin : A must be a square matrix of numbers')
+  end
+  [ma,na]=size(a);
+  if ma<>na then 
+    error('syslin : A must be a square matrix of numbers')
+  end
+  if type(b)<>1 then
+    error('syslin : B must be a  matrix of numbers')
+  end
+  [mb,nb]=size(b);
+  if na<>mb&mb<>0 then 
+    error('syslin : row dimension of B do not agree dimensions of A')
+  end
+  if type(c)<>1 then
+    error('syslin : C must be a  matrix of numbers')
+  end
+  [mc,nc]=size(c);
+  if na<>nc&nc<>0 then 
+    error('syslin : column dimension of C do not agree dimensions of A')
+  end
+  if rhs<6 then
+    x0=0*ones(na,1)
+  else
+    if type(x0)>1 then
+      error('syslin : X0 must be a vector of numbers')
+    end
+    [mx,nx]=size(x0);
+    if mx<>na|nx<>min(na,1) then 
+      error('syslin : dimensions of X0 do not agree')
+    end
+  end
+  if rhs<5  then
+    d=0*ones(mc,nb)
+  else
+    if type(d)>2 then
+      error('syslin : D must be a  matrix of numbers or polynomials')
+    end
+    [md,nd]=size(d);
+    if c*b<>[] then
+      if mc<>md|nb<>nd then 
+        error('syslin : column dimension of D do not agree dimensions of B or C')
+      end
+    end
+  end
+  sl=lsslist(a,b,c,d,x0,domain)
 end
-
-
-
+ 

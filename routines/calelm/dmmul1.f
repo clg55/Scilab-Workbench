@@ -17,6 +17,7 @@ c     n            nombre de colonnes de b et c
 c!sous programmes utilises
 c     neant
 c!
+c     Copyright INRIA
       double precision a(*),b(*),c(*)
       double precision ddot
       integer na,nb,nc,l,m,n

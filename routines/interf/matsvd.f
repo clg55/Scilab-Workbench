@@ -3,15 +3,12 @@ c ================================== ( Inria    ) =============
 c     evaluate functions involving singular value decomposition
 c
 c =============================================================
+c     Copyright INRIA
       include '../stack.h'
 c
-      logical fro,inf
-      double precision p,s,t,tol,eps
-      double precision pythag,wnrm2,wasum
-      double precision ddot,dnrm2,dasum,dlamch
-      integer rang,froben,infini
-      integer iadr,sadr
-      data froben/15/,infini/18/
+      double precision s,t,tol,eps
+      double precision ddot,dlamch
+      integer rang, iadr,sadr
 c
 c    fin     1        2        3        4        5      6
 c           svd      pinv     cond     norm     rank   sva
@@ -25,8 +22,6 @@ c
          call basout(io,wte,' matsvd '//buf(1:4))
       endif
 c
-      if(rstk(pt).eq.907) goto 310
-
       if(rhs.le.0) then
          call error(39)
          return
@@ -45,8 +40,8 @@ c
    10 continue
       il=iadr(lstk(top+1-rhs))
       if(istk(il).ne.1) then
-         err=1
-         call error(53)
+         call putfunnam('cond',top-rhs+1)
+         fun=-1
          return
       endif
       m=istk(il+1)
@@ -91,143 +86,19 @@ c
       lstk(top+1)=l+1
       go to 99
 c
-c     vector norm
+c     vector and matrix norm
 c
    30 continue
-      il=iadr(lstk(top+1-rhs))
-      if(istk(il).ne.1) then
-         call cvname(id,'g_norm   ',0)
-         goto 300
-      endif
-      m=istk(il+1)
-      n=istk(il+2)
-      it=istk(il+3)
-      l=sadr(il+4)
-      mn = m*n
-      m1=min(m+1,n)
-      if(mn.eq.0) then
-c        empty matrix
-         err=1
-         call error(45)
-         return
-      endif
-
-      p = 2.0d+0
-      inf = .false.
-      if (rhs .ne. 2) go to 32
-      iln=il
-      fro=.false.
-      iln=iadr(lstk(top))
-      top = top-1
-c
-      if(istk(iln).eq.1) then
-         p=stk(sadr(iln+4))
-      else if(istk(iln).eq.10) then
-         ilc=iln+5+istk(iln+1)*istk(iln+2)
-         fro = abs(istk(ilc)).eq.froben .and. mn.gt.1
-         inf = abs(istk(ilc)).eq.infini .and. mn.gt.1
-         if (fro) m = mn
-         if (fro) n = 1
-      else
-         err=2
-         call error(55)
-         return
-      endif
- 32   continue
-      if (m .gt. 1 .and. n .gt. 1) go to 40
-      if (m*n.eq.0) then
-c     empty matrix
-         istk(il)=1
-         istk(il+1)=0
-         istk(il+2)=0
-         istk(il+3)=0
-         lstk(top+1)=sadr(il+4)
-         return
-      endif
-      if(inf) goto 33
-      if (p .eq. 1.0d+0) go to 36
-      if (p .eq. 2.0d+0) go to 38
-   33 if(it.eq.1) goto 34
-      i=idamax(mn,stk(l),1)+l-1
-      s=abs(stk(i))
-      if( inf .or. s .eq. 0.0d+0) goto 49
-   34 i=iwamax(mn,stk(l),stk(l+mn),1)+l-1
-      s=abs(stk(i))+abs(stk(i+mn))
-      if (inf .or. s .eq. 0.0d+0) go to 49
-      t = 0.0d+0
-      do 35 i = 1, mn
-         ls = l+i-1
-         t = t + (pythag(stk(ls),stk(ls+mn))/s)**p
-   35 continue
-      if (p .ne. 0.0d+0) p = 1.0d+0/p
-      s = s*t**p
-      go to 49
-c
-   36 if(it.eq.1) s = wasum(mn,stk(l),stk(l+mn),1)
-      if(it.eq.0) s=dasum(mn,stk(l),1)
-      go to 49
-c
-   38 if(it.eq.1) s= wnrm2(mn,stk(l),stk(l+mn),1)
-      if(it.eq.0) s=dnrm2(mn,stk(l),1)
-      go to 49
-c
-c     matrix norm
-c
-   40 if (inf) go to 43
-      if (p .eq. 1.0d+0) go to 46
-      if (p .ne. 2.0d+0) then
-         call error(23)
-         return
-      endif
-      ld = l + mn*(it+1)
-      l1 = ld + m1*(it+1)
-      l2 = l1 + n*(it+1)
-      err = l2+m*(it+1) - lstk(bot)
-      if (err .gt. 0) then
-         call error(17)
-         return
-      endif
-      if(it.eq.0) goto 41
-      call wsvdc(stk(l),stk(l+mn),m,m,n,stk(ld),stk(ld+m1),
-     1 stk(l1),stk(l1+n),t,t,1,t,t,1,stk(l2),stk(l2+m),0,ierr)
-      goto 42
-   41 continue
-      call dsvdc(stk(l),m,m,n,stk(ld),stk(l1),t,1,t,1,stk(l2),0,ierr)
-c
-   42 if (ierr.gt.1) call msgs(3,ierr)
-
-      s = stk(ld)
-      go to 49
-c
-   43 s = 0.0d+0
-      do 45 i = 1, m
-         li = l+i-1
-         if(it.eq.0) t = dasum(n,stk(li),m)
-         if(it.eq.1) t = wasum(n,stk(li),stk(li+mn),m)
-         s = max(s,t)
-   45 continue
-      goto 49
-   46 s=0.0d+0
-      do 48 j = 1, n
-         lj = l+(j-1)*m
-         if(it.eq.0) t = dasum(m,stk(lj),1)
-         if(it.eq.1) t = wasum(m,stk(lj),stk(lj+mn),1)
-         s = max(s,t)
-   48 continue
-   49 stk(l) = s
-      istk(il+1)=1
-      istk(il+2)=1
-      istk(il+3)=0
-      lstk(top+1)=l+1
-      go to 99
+      call intnorm("norm")
+      goto 99
 c
 c     svd
 c
    50 continue
       il=iadr(lstk(top+1-rhs))
       if(istk(il).ne.1) then
-         err=1
-         call error(53)
+         call putfunnam('svd',top-rhs+1)
+         fun=-1
          return
       endif
       m=istk(il+1)
@@ -403,10 +274,12 @@ c
       il=iadr(lstk(top+1-rhs))
       if(istk(il).ne.1) then
          if(fin.eq.5) then
-            call cvname(id,'g_rank   ',0)
-            goto 300
+            call putfunnam('rank',top-rhs+1)
+
+         else
+            call putfunnam('pinv',top-rhs+1)
          endif
-         call error(53)
+         fun=-1
          return
       endif
       m=istk(il+1)
@@ -514,8 +387,8 @@ c
    80 continue
       il=iadr(lstk(top+1-rhs))
       if(istk(il).ne.1) then
-         err=1
-         call error(53)
+         call putfunnam('sva',top-rhs+1)
+         fun=-1
          return
       endif
       m=istk(il+1)
@@ -619,35 +492,156 @@ c
       istk(il+3)=it
       lstk(top+1)=lvn+n*rang*(it+1)
       go to 99
-c
-c
-c  fonctions matricielles gerees par l'appel a une macro
-c
- 300  fin=0
-      call funs(id)
-      if(err.gt.0) return
-      if(fun.gt.0) then
-         buf='primitive call'
-         call error(9999)
-         return
-      endif
-      if(fin.eq.0) then
-         call putid(ids(1,pt+1),id)
-         call error(4)
-         if(err.gt.0) return
-      endif
-      pt=pt+1
-      fin=lstk(fin)
-      rstk(pt)=907
-      icall=5
-      fun=0
-c     *call*  macro
-      return
- 310  continue
-      pt=pt-1
-      goto 99
 
    99 return
-
-
       end
+
+      subroutine intnorm(fname)
+c     -------------------------------
+c     norm of matrix or vector
+c     -------------------------------
+      character*(*) fname
+      character*(4) type
+      INCLUDE '../stack.h'
+      logical checkrhs,checklhs,getsmat,getscalar,cremat,getmat
+      logical inf,fro 
+      integer gettype,itype,topk,isanan
+      double precision p,wnrm2
+      double precision dnrm2,dasum,dlamch,dres,t
+      ires=0
+      inf = .false.
+      fro = .false.
+      p=2.0d+0
+      topk=top
+      if (.not.checklhs(fname,1,1)) return
+      if (.not.checkrhs(fname,1,2)) return
+c     second argument : optional 'inf','fro' or p ( p: double 
+c                       or %inf or %nan )
+c     --------------------------------
+      if ( rhs.eq.2 ) then 
+         itype=gettype(topk)
+         if ( itype.eq.10 ) then 
+            if(.not.getsmat(fname,topk,top,m2,n2,1,1,lr2,nlr2))return
+            call cvstr(min(nlr2,3),istk(lr2),type,1)
+            if ( type(1:1).eq.'i') then 
+               inf = .true. 
+            else if ( type(1:1).eq.'f') then 
+               fro = .true.
+            else
+               buf=fname//' : second argument string inf or fro '
+               call error(999)         
+               return
+            endif
+         else if (itype.eq.1) then 
+            if(.not.getscalar(fname,topk,top,lr2))return
+            p=stk(lr2)
+         else 
+            buf=fname
+     $           //' : second argument string inf or fro or integer '
+            call error(999)         
+            return
+         endif
+         top=top-1
+      endif
+c     the first argument matrix or vector  
+c     ---------------------------------
+      itype = gettype(top) 
+      if ( itype.ne.1 ) then 
+         call putfunnam('norm',top)
+         top=topk
+         fun=-1
+         return
+      endif
+      if(.not.getmat(fname,topk,top,it1,m,n,lr1,lc1)) return      
+      mn = m*n
+      if (mn.eq.0.or. m.eq.1.or.n.eq.1) then 
+c     ==============================vector case 
+         if (mn.eq.0) then 
+            dres = 0.0d+0
+         else if ( isanan(p).eq.1) then 
+	    dres = p
+         else if (p.gt.dlamch('o').or.inf) then 
+            if (it1.eq.1) call vpythag(mn,stk(lr1),stk(lc1))
+            i = idamax(mn,stk(lr1),1)
+            dres= abs(stk(lr1+i-1))
+         else if ( p.eq.1.0d+0) then
+            if (it1.eq.1) call vpythag(mn,stk(lr1),stk(lc1))
+            dres = dasum(mn,stk(lr1),1)
+         else if (fro.or. p.eq.2.0d+0) then 
+            if (it1.eq.1) then 
+               dres=  wnrm2(mn,stk(lr1),stk(lc1),1)
+            else
+               dres=  dnrm2(mn,stk(lr1),1)
+            endif
+         else
+            if (it1.eq.1) call vpythag(mn,stk(lr1),stk(lc1))
+            i=idamax(mn,stk(lr1),1)+lr1-1
+            dres =abs(stk(i))
+            if ( dres .ne.0.0d+0) then 
+               t=0.0d+0
+               do 12 i=0,mn-1
+                  t = t + (abs(stk(lr1+i))/dres)** p
+ 12            continue
+               if (p.ne.0.0d+0) then 
+                  dres = dres*t**(1.0d+0/p)
+               else
+c     Must return %inf : 
+                  dres = 10000.0d0**1000.0d0
+               endif
+            endif
+         endif
+         if (.not.cremat(fname,top,0,1,1,lr1,lc1)) return
+         stk(lr1)=dres
+      else
+c     ==============================Matrix case 
+         if ( isanan(p).eq.1) then 
+            dres = p
+         else if (p.gt.dlamch('o').or.inf) then 
+            if (it1.eq.1) call vpythag(mn,stk(lr1),stk(lc1))
+            dres = 0.0d+0
+            do 45 i = 1, m
+               li = lr1+i-1
+               t = dasum(n,stk(li),m)
+               dres = max(dres,t)
+ 45         continue
+         else if (fro) then
+            if (it1.eq.1) then 
+               dres=  wnrm2(mn,stk(lr1),stk(lc1),1)
+            else
+               dres=  dnrm2(mn,stk(lr1),1)
+            endif
+         else if ( p.eq.1.0d+0) then
+            if (it1.eq.1) call vpythag(mn,stk(lr1),stk(lc1))
+            dres=0.0d+0
+            do 48 j = 1, n
+               lj = lr1+(j-1)*m
+               t = dasum(m,stk(lj),1)
+               dres = max(dres,t)
+ 48         continue
+         else if ( p.eq.2.0d+0) then 
+            m1=min(m+1,n)
+            if (.not.cremat(fname,topk+1,it1,1,m1,ld,lcd)) return            
+            if (.not.cremat(fname,topk+2,it1,1,n,l1,l1c)) return            
+            if (.not.cremat(fname,topk+3,it1,1,m,l2,l2c)) return            
+            ierr=1
+            if(it1.eq.0) then 
+               call dsvdc(stk(lr1),m,m,n,stk(ld),stk(l1),
+     $              t,1,t,1,stk(l2),0,ierr)
+            else
+               call wsvdc(stk(lr1),stk(lc1),m,m,n,stk(ld),stk(lcd),
+     $              stk(l1),stk(l1c),t,t,1,t,t,1,
+     $              stk(l2),stk(l2c),0,ierr)
+            endif
+            if (ierr.gt.1) call msgs(3,ierr)
+            dres = stk(ld)
+         else
+            call error(23)
+            return
+         endif
+         if (.not.cremat(fname,top,0,1,1,lr1,lc1)) return
+         stk(lr1)=dres
+      endif
+      return
+      end
+
+

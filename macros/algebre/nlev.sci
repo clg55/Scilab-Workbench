@@ -8,8 +8,9 @@ function[m,den]=nlev(a,z,rmax)
 //!
 // origine f delebecque s. steer inria 1987
 //
+// Copyright INRIA
 [rhs,lhs]=argn(0);z=poly(0,z)
-if rhs=3 then [a,x,bs]=bdiag(a,rmax),
+if rhs==3 then [a,x,bs]=bdiag(a,rmax),
          else [a,x,bs]=bdiag(a),
 end;
 [m1 n1]=size(a)

@@ -25,6 +25,7 @@ c     d2 : tableau de travail meme taille que d1
 c!origine
 c     s Steer INRIA
 c!    
+c     Copyright INRIA
       double precision pm1(*),norm,epsr,epsa,eps
       integer d1(*),d2(*),m,n,count
       logical ok

@@ -1,6 +1,7 @@
 // demo of macros portrait & fchamp
 //  limit circle
 
+// Copyright INRIA
 xbasc();
 part1()
 // phase portrait : dimension 2

@@ -5,6 +5,7 @@ function [ro,teta]=polar(a);
 // Teta hermitian >=0
 //F.D.
 //!
+// Copyright INRIA
 [U,s,V]=svd(a);
 ro1=U*sqrt(s);
 ro=ro1*ro1';

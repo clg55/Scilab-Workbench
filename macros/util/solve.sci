@@ -4,6 +4,7 @@ function x=solve(a,b)
 //!
 //origin F Delebecque S. Steer INRIA 1987
 //
+// Copyright INRIA
 [na,ma]=size(a),[mb,nb]=size(b)
 pivot=a(na,na);
 if pivot<>'1' then

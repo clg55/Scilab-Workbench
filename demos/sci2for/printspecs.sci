@@ -2,6 +2,7 @@ function []=printspecs(mac,type_desc)
 //displays description of a macro to translate into fortran
 //!
 
+// Copyright INRIA
 blk='                                 ';
 typs=['entier','double precision','?','?']
 n=size(type_desc)
@@ -21,7 +22,7 @@ for k=1:n,
   desc=[desc;'|'+num+'|'+ftyp+'|'+nl+'|'+nc+'|']
 end
 
-x_message(['       source code of macro';..
+x_message(['       source code of Scilab function';..
          '-----------------------------';' ';txt;..
          ' ';' ';..
          'type and dimension of input parameters';..
@@ -43,11 +44,11 @@ for k=1:n
   tk=type_desc(k)
   first=first+' '+in(k)
   desck=in(k)
-  if tk(2:3)= ['1','1'] then 
+  if tk(2:3)== ['1','1'] then 
     desck=desck+'  scalar'
-  elseif tk(2)='1' then
+  elseif tk(2)=='1' then
     desck=desck+'  column '+tk(3)
-  elseif tk(3)='1' then
+  elseif tk(3)=='1' then
     desck=desck+'  row '+tk(2)
   else
     desck=desck+'  matrix '+tk(2)+' '+tk(3)
@@ -59,9 +60,9 @@ for k=1:n
   tk=type_desc(k)
   first=first+' '+in(k)
   desck=in(k)
-  if tk(1)= '0' then 
+  if tk(1)== '0' then 
     desck=desck+'  int'
-  elseif tk(2)='1' then
+  elseif tk(2)=='1' then
     desck=desck+'  double'
   end
   txt=[txt;desck]

@@ -1,4 +1,5 @@
       subroutine bezstp(p1,n1,p2,n2,a,na,u,nu,l,x,v,w,best,ipb,errr)
+c     Copyright INRIA
       double precision a(na,*),u(nu,*),x(na,*),v(nu,*),p1(*),p2(*)
       integer ipb(6)
       double precision w(*),best(*),errr

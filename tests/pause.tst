@@ -1,3 +1,4 @@
+// Copyright INRIA
 a=1;
 deff('[x]=tata(y)','x=-y,write(%io(2),''enter quit''),pause,x=+20')
 xx=tata(10);

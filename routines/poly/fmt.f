@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=FMT,SSI=0
       subroutine fmt(a,maxc,typ,n1,n2)
 c!but
 c     ce sous programme determine le format d'ecriture le plus court
@@ -20,21 +19,18 @@ c     n1,n2 : entiers definissant les champs des formats
 c!origine
 c     Serge Steer INRIA
 c!
+c     Copyright INRIA
       double precision a,a1,ent,dec,round,dlamch
       integer typ,n1,n2,maxc
-      logical v,t1,t2
+      logical v
 c
-c     test des NaN
+C     testing Nans 
       v=.false.
-      t1=(a.le.1)
-      t2=(a.ge.1)
-      if ((.not.t1).and.(.not.t2)) then
-         v=.true.
-      endif
-
+      if (isanan(a).eq.1) v=.true.
       if(v) then
          typ=-2
          return
+c     testing Inf 
       elseif(a.gt.dlamch('o')) then
          typ=-1
          return

@@ -15,6 +15,7 @@ c          ind(i) contains the number of non zero elements in the
 c                 resulting vector ith row (must be 0 or 1)
 c          indr(m*n+j) contains the old position of the jth non zero 
 c                      element
+c     Copyright INRIA
       integer ind(*),indr(*)
 c
       call iset(m*n,0,indr,1)

@@ -1,5 +1,6 @@
 function restore_scs_gc(scs_gc)
 // restore the current scicos graphic context
+// Copyright INRIA
 [r1,r2]=scs_gc(1)(1:2)
 xsetech(scs_gc(1)(1),scs_gc(1)(2))
 driver(scs_gc(2))

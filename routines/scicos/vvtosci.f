@@ -2,6 +2,7 @@
 c     fortran var2vec  to scilab
 c     x is supposed to be a fortran image of var2vec result
 c 
+c     Copyright INRIA
       double precision x(*)
 c 
       integer  l

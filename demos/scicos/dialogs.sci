@@ -15,6 +15,7 @@ function rep=x_message(comment,btns)
 //%exemple
 //  message(['Identification du systeme';'methode des moindres carres'])
 //!
+// Copyright INRIA
 rep=[]
 [lhs,rhs]=argn(0)
 comment=matrix(comment,prod(size(comment)),1)
@@ -29,9 +30,6 @@ else
     rep=find(str==btns)
   end
 end
-
-
-//str=read(%IO(1),1,1,'(a)')
 
 
 function str=x_dialog(comment,default)
@@ -187,11 +185,11 @@ function tab=mat2tab(str,del)
 //origine S Steer 1991
 [lhs,rhs]=argn(0)
 job=0
-if rhs=1 then 
+if rhs==1 then 
   delc=' ',
 else
   delc=del(1)
-  if prod(size(del))=2 then
+  if prod(size(del))==2 then
     dell=del(2)
     dell=part(dell,1)
     job=1
@@ -203,7 +201,7 @@ blk='                              ';blk=blk+blk+blk
 lmx=[];for col=len,lmx=[lmx,maxi(col)+1],end
 
 ln=sum(lmx)+(n+1)*length(delc)
-if job=1 then
+if job==1 then
   rd=delc
   for l=2:ln-1,rd=rd+dell,end
   rd=rd+delc
@@ -219,13 +217,13 @@ for l=1:m
   end
   ll=ll+part(blk,1:lmx(n)-len(l,n))+delc
   tab=[tab;ll]
-  if job=1 then tab=[tab;rd],end
+  if job==1 then tab=[tab;rd],end
 end 
 
 
-function [btn,xc,yc,win]=xclick();
+function [btn,xc,yc,win,Cmenu]=xclick();
 str=readline()
-rep=evstr('['+str+']')
+rep=evstr('list('+str+')')
 btn=rep(1)
 xc=rep(2)
 yc=rep(3)
@@ -234,7 +232,15 @@ xset('mark',0,5)
 plot2d(xc,yc,-1,'000')
 plot2d(xc,yc,-1,'000')
 xset('mark',mrk(1),mrk(2))
-if size(rep,'*')==4 then win=rep(4),end
+win=0
+if size(rep)>=4 then 
+  win=rep(4),
+end
+if size(rep)>=5 then 
+  Cmenu=rep(5)
+else
+  Cmenu=[]
+end
 
 function rep=xgetmouse(flag);
 str=readline()
@@ -252,7 +258,7 @@ while %t do
     if part(rep,1:k)<>part(blank,1:k) then 
       str=stripblanks(part(rep,1:k-1))
       com=part(rep,k+1:length(rep))
-      if part(str,1:3)='-->' then
+      if part(str,1:3)=='-->' then
 	execstr(part(str,4:length(str)))
       else
 	break
@@ -262,7 +268,7 @@ while %t do
     n=length(rep)
     str=stripblanks(rep)
     com=emptystr()
-    if part(str,1:3)='-->' then
+    if part(str,1:3)=='-->' then
       execstr(part(str,4:length(str)))
     else
       break
@@ -270,7 +276,8 @@ while %t do
   end
 end
 bl='=';txt=com+':'+str;txt=part(bl,ones(1,60-length(txt)))+txt
-write(%io(2),[' ';txt;' '])
+//write(%io(2),[' ';txt;' '])
+
     
 
 function c=getcolor(title,cini)

@@ -1,4 +1,5 @@
 function [x,y,typ]=CLR_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -38,9 +39,9 @@ case 'set' then
 	    matrix(C,ns1,1);
 	    D]
       if norm(D,1)<>0 then
-	mmm=[%t %f];
+	mmm=[%t %t];
       else
-	mmm=[%f %f];
+	mmm=[%f %t];
       end
       if or(model(12)<>mmm) then 
 	  model(12)=mmm,end
@@ -59,7 +60,7 @@ case 'set' then
 case 'define' then
   x0=0;A=-1;B=1;C=1;D=0;
   label=['1';'1+s']
-  model=list(list('csslti',1),1,1,[],[],x0,[],[A;B;C;D],[],'c',[],[%f %f],' ',list())
+  model=list(list('csslti',1),1,1,[],[],x0,[],[A;B;C;D],[],'c',[],[%f %t],' ',list())
   gr_i=['xstringb(orig(1),orig(2),[''Num(s)'';''-----'';''Den(s)''],sz(1),sz(2),''fill'');']
   x=standard_define([2.5 2.5],model,label,gr_i)
 end

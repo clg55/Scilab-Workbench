@@ -41,6 +41,9 @@ If there are not enough items for \fVformat\fR in the
 If any \fVvalue\fRs remain after the entire \fVformat\fR has been
 processed, they are ignored.
 
+.LP
+Note that sprintf is a scilab emulation of C language function build
+in Scilab. Consequently it is quite slow. Use string whenever it is possible.
 .SH EXAMPLES
 .nf
 fahr=120

@@ -24,7 +24,7 @@ DESCRIPTION
   "Rec"     : an X Window driver (X11) which also records all the graphic
             commands. this is the default driver.
 
-  "Fig"     : an XFig driver ( not fully released )
+  "Fig"     : an XFig driver. (Clipping of objects is not provided in XFig).
 
 SEE ALSO
   xtape, xbasc, xbasimp

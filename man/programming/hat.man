@@ -14,7 +14,12 @@ element-wise, with the usual meaning.
 .LP
 For square \fVA\fR matrices the exponentiation is done in the matrix sense.
 .LP
-For boolean, polynomial and rational matrices, the exponent must be an integer
+For boolean, polynomial and rational matrices, the exponent must be an
+integer
+.LP
+Remark that \fV123.^b\fR is interpreted as \fV(123).^b\fR. In such
+cases dot is part of the operator, not of the number.
+
 .SH EXAMPLES
 .nf
 2^4

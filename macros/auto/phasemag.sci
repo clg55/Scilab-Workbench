@@ -1,9 +1,10 @@
 function [phi,db]=phasemag(z,mod)
 //
+// Copyright INRIA
 mod_def='c'     //continuous representation
 //mod_def='m'   //representation modulo 360 degrees
 [lhs,rhs]=argn(0)
-if lhs=2 then 
+if lhs==2 then 
   db=20*log(abs(z))/log(10),
 end
 if rhs<>2 then 

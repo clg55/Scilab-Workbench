@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <dirent.h>
 #include <malloc.h>
 #include <stdio.h>
@@ -10,7 +11,7 @@
 #include "metio.h"
 #include "menus.h"
 
-extern char* basename();
+extern char* my_basename();
 extern char* dirname();
 extern void RenumberGraph();
 extern char* StripGraph();
@@ -214,7 +215,7 @@ int RenameSaveGraph()
     return 0;
   }
 
-  strcpy(name,StripGraph(basename(path)));
+  strcpy(name,StripGraph(my_basename(path)));
 
   if (dirname(path) == NULL) strcpy(dir,datanet);
   else strcpy(dir,dirname(path));

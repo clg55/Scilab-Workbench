@@ -3,6 +3,7 @@ c     ==============================================================
 C     extracts the jth occurence of x in do x=val and stores its value on top 
 C     of the stack 
 c     ==============================================================
+c     Copyright INRIA
       include '../stack.h'
 c
       double precision dlamch

@@ -5,6 +5,7 @@ c ====================================================================
 c
 c traitement de l'erreur fortran ou du break
 c
+c     Copyright INRIA
       integer  n
       include '../stack.h'
       logical         iflag
@@ -56,6 +57,8 @@ c sauvegarde
 c
  30   k = isiz-6
       if (k .lt. bot) k = isiz
+      call savlod(lunit,0,-1,0)
+      if(err.gt.0) goto 33
  32   continue
       l=k
       ilk=iadr(lstk(k))
@@ -64,7 +67,7 @@ c
       k = k-1
       if(k.ge.bot) goto 32
 c 
-      mode(1)=103
+ 33   mode(1)=103
       call clunit( -lunit, buf, mode)
  90   stop
 c

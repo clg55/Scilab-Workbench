@@ -26,6 +26,7 @@ c            iscmpl=1 resultat complexe
 c!origine
 c Serge Steer INRIA 1989
 c!
+c     Copyright INRIA
       integer n,iv,ierr
       double precision vr(*),vi(*),dpow,sr,si
 c

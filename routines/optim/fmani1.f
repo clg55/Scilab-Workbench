@@ -1,4 +1,5 @@
       subroutine fmani1 (mode,n,d,w,indi)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension d(n),w(n),indi(n)
 c

@@ -1,6 +1,7 @@
 function [stk,txt,ilst,vnms,vtps,nwrk,lbl]=op2for(op,stk,vnms,vtps,nwrk,lbl)
 //
 //!
+// Copyright INRIA
 txt=[]
 iop=evstr(op(2))
 execstr('[stkr,nwrk,txt,top]=%'+ops(iop,2)+'2for(nwrk)')

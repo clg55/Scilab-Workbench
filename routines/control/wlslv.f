@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WLSLV,SSI=0
+c     Copyright INRIA
       subroutine wlslv(ar,ai,na,n,br,bi,nb,m,w,rcond,ierr,job)
 c! purpose
 c   la factorisation lu de la matrice a si job=0

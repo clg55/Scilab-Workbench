@@ -1,3 +1,5 @@
+% Copyright INRIA
+
 \documentclass[11pt]{article}
 
 \textheight=23cm \textwidth=16cm
@@ -9,7 +11,7 @@
 
 \title{Communication Toolbox}
 \author{Claude Gomez}
-\date{Manual Version 1.0 for Scilab 2.3}
+\date{Manual Version 1.0 for Scilab 2.4}
 
 \begin{document}
 
@@ -398,19 +400,19 @@ The first program opens Scilab,
 wait for messages and print them. We call the file of this program 
 \T{alpha.c}
 and we suppose that the main directory of Scilab, 
-\verb|<Scilab directory>| is \T{/usr/local/lib/scilab-2.3}.
+\verb|<Scilab directory>| is \T{/usr/local/lib/scilab-2.4}.
 
 Compile this program with:
  
 \begin{verbatim}
-cc -o alpha alpha.c /usr/local/lib/scilab-2.3/libs/libcomm.a
+cc -o alpha alpha.c /usr/local/lib/scilab-2.4/libs/libcomm.a
 \end{verbatim}
 
 and execute it with (if shell is csh):
 
 \begin{verbatim}
-setenv SCI /usr/local/lib/scilab-2.3
-/usr/local/lib/scilab-2.3/bin/geci -local alpha
+setenv SCI /usr/local/lib/scilab-2.4
+/usr/local/lib/scilab-2.4/bin/geci -local alpha
 \end{verbatim} 
 
 Then a new Scilab is executed and you can execute in it commands of the form
@@ -430,8 +432,8 @@ distribution.
 #include <string.h>
 
 /* Communications headers */
-#include "/usr/local/lib/scilab-2.3/routines/libcomm/libCalCom.h"
-#include "/usr/local/lib/scilab-2.3/routines/libcomm/libCom.h"
+#include "/usr/local/lib/scilab-2.4/routines/libcomm/libCalCom.h"
+#include "/usr/local/lib/scilab-2.4/routines/libcomm/libCom.h"
 
 static void QuitAppli();  
 static void EndAppli();
@@ -515,7 +517,7 @@ int main(argc, argv)
   int p1, p2;
   char myhost[128];
   /* Scilab application to execute */
-  char *scilex = "/usr/local/lib/scilab-2.3/bin/scilex";
+  char *scilex = "/usr/local/lib/scilab-2.4/bin/scilex";
 
   igeci = find("-pipes",argc,argv);
   if (igeci == -1) exit(1);
@@ -570,12 +572,12 @@ application linked to GeCI, Scilab for instance.
 It waits for messages and print them. We call the file of this program 
 \T{beta.c}
 and we suppose that the main directory of Scilab, 
-\verb|<Scilab directory>| is \T{/usr/local/lib/scilab-2.3}.
+\verb|<Scilab directory>| is \T{/usr/local/lib/scilab-2.4}.
 
 Compile this program with:
  
 \begin{verbatim}
-cc -o beta beta.c /usr/local/lib/scilab-2.3/libs/libcomm.a
+cc -o beta beta.c /usr/local/lib/scilab-2.4/libs/libcomm.a
 \end{verbatim}
 
 Then, being in the directory where \T{beta} lies, execute Scilab and
@@ -607,8 +609,8 @@ distribution.
 #include <string.h>
 
 /* Communications headers */
-#include "/usr/local/lib/scilab-2.3/routines/libcomm/libCalCom.h"
-#include "/usr/local/lib/scilab-2.3/routines/libcomm/libCom.h"
+#include "/usr/local/lib/scilab-2.4/routines/libcomm/libCalCom.h"
+#include "/usr/local/lib/scilab-2.4/routines/libcomm/libCom.h"
 
 static void QuitAppli();  
 static void EndAppli();

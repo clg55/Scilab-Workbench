@@ -24,6 +24,7 @@ c!Remarque
 c     la structure particuliere  pour neq et tq est liee au fait que feq peut
 c     etre appele comme un external de lsode
 c!
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
       dimension tq(*),tqdot(*)
       dimension neq(*)

@@ -1,7 +1,7 @@
 .TH readb 1 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-readb - binary read 
+readb - fortran file binary read 
 .SH CALLING SEQUENCE
 .nf
 x=readb(file-name,m,n [,rec])
@@ -20,9 +20,10 @@ rec
 This vector size must be equal to the number of rows of desired \fVx\fR.
 .SH DESCRIPTION
 binary read of the matrix \fVx\fR in the file \fVfile-name\fR.
+Matrix entries are supposed to have been stored on 8 byte words.
 .LP
 For direct record access, file must have been previously opened using
 \fVfile\fR function to set the record_length. \fVfile-name\fR must be
 the result of the \fVfile\fR function. 
 .SH SEE ALSO
-file, write, writb
+file, write, writb, binary, read4b

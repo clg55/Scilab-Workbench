@@ -11,6 +11,7 @@ function [out,nwrk,txt]=outname(nwrk,typ,m,n,excluded)
 //      -dans txt les lignes fortran permettant de definir iwn ou iiwn
 //
 //!
+// Copyright INRIA
 txt=[]
 [lhs,rhs]=argn(0)
 nvar=prod(size(typ))
@@ -18,7 +19,7 @@ if rhs<5 then excluded(nvar)=' ',end
 for k=1:nvar
   op=lst(ilst+k)
   out(k)=' ';
-  if op(1)='1'&and(op(2)<>excluded(k)) then
+  if op(1)=='1'&and(op(2)<>excluded(k)) then
     k3=find(op(2)==vnms(:,2))
     if k3==[] then
 // la variable n'existe pas il faut lui allouer de la place

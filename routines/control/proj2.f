@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=PROJ2,SSI=0
+c     Copyright INRIA
       subroutine proj2(f,nn,am,n,np1,np2,pf,w)
 c ce sous programme calcule les produits scalaires:
 c <f,(z**(n-v)/am>=pf(np+1-v)   v=np1...np2  ;np=np2-np1+1

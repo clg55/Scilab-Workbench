@@ -1,3 +1,4 @@
+// Copyright INRIA
 //This part of the test verify visual aspect of the dialogs window 
 // and in particular scroll bars
 // It must be checked visually

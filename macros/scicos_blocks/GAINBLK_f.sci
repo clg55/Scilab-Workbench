@@ -1,4 +1,5 @@
 function [x,y,typ]=GAINBLK_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then
@@ -46,8 +47,11 @@ case 'define' then
       '  yy=orig(2)+[1/2 0 1 1/2]*sz(2);';
       '  x1=1/4'
       'end'
+      'pats=xget(''dashes'')'
+      'xset(''dashes'',default_color(1))'
       'xpoly(xx,yy,''lines'');';
-      'xstringb(orig(1)+x1*sz(1),orig(2),gain,(1-x1)*sz(1),sz(2));']
+      'xstringb(orig(1)+x1*sz(1),orig(2),gain,(1-x1)*sz(1),sz(2));'
+      'xset(''dashes'',pats)']
   x=standard_define([2 2],model,label,gr_i)
 end
 

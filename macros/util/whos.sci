@@ -1,5 +1,6 @@
 function whos()
-[nams,vol]=who();
+// Copyright INRIA
+[nams,vol]=who('get');
 //display defined variable in a long form
 typnames=['constant matrix';
     'polynomial'

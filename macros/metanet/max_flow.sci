@@ -1,4 +1,5 @@
 function [v,phi,ierr]=max_flow(i,j,g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>3 then error(39), end
 // check i and j

@@ -3,6 +3,7 @@ function []=chaintest(f_l,b1,odem,xdim,npts)
 // Integration of the chain model
 // a Three-species food chain model 
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 if rhs <=0, f_l=chain;end
 if rhs <=1, b1=3.0;end

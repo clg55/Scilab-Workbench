@@ -10,6 +10,7 @@ c!sous programmes appeles
 c     pythag (blas.extension)
 c     atan2,log (fortran)
 c!
+c     Copyright INRIA
       double precision xr,xi,yr,yi,t,r,pythag
       r = pythag(xr,xi)
       t = atan2(xi,xr)

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=MPDEGR,SSI=0
+c     Copyright INRIA
       subroutine mpdegr(d,nl,deg,m,n)
 c!but
 c mpdegr calcule le degre maximum des elements d'une matrice de polynomes

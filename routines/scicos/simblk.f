@@ -12,6 +12,7 @@ c             arrays used by simbl1 and grbl1
 c     xcdot : double precision vector, contain the computed derivative
 c             of the state 
 c!
+c     Copyright INRIA
       integer neq(*)
       double precision t
       double precision xc(*)

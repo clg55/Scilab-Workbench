@@ -4,7 +4,10 @@
 xgetfile - dialog to get a file path
 .SH CALLING SEQUENCE
 .nf
-path=xgetfile([file_mask], [dir]) 
+path=xgetfile([title='string'])
+path=xgetfile(file_mask,[title='string'])
+path=xgetfile(file_mask,dir,[title='string'])
+path=xgetfile(file_mask,dir,'string')
 .fi
 .SH PARAMETERS
 .TP 12
@@ -20,13 +23,16 @@ search. by default xgetfile uses the previously selected directory.
 path
 : is the user selected file path if user answers "Ok" or the " "
 string if user answers "Cancel"
-
+.TP
+title='string'
+:Optional arguments which gives the title for the xgetfile window.
 .SH DESCRIPTION
 Creates a dialog window for file selection
 .SH EXAMPLE
 .nf
 xgetfile()
 xgetfile('*.sci','SCI/macros/xdess')
+xgetfile(title='Choose a file name ')
 .fi
 .SH SEE ALSO
 x_dialog, file, read, write, exec, getf 

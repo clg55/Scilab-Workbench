@@ -1,6 +1,5 @@
 function []=mvcr(x,y,theta,phi)
 ///////////////%% BEGIN OF SCRIPT-FILE mvcr %%%%%%%%%%%%%%%
-xbasc() ;
 //
 //  CAR PACKING VIA FLATNESS AND FRENET FORMULAS
 //
@@ -22,6 +21,8 @@ xbasc() ;
 //           curves definition
 //
 //
+// Copyright INRIA
+xbasc() ;
 bigT = 1 ; bigL = 1 ;
 a0 =0 ; a1 = 0 ;
 p= [0 0 0 ] ;
@@ -108,8 +109,10 @@ ymini = mini(state(:,2))-1.5*bigL ;
 ymaxi = maxi(state(:,2))+1.5*bigL ;
 
 //xsetech([0,0,1,1],[xmini,ymini,xmaxi,ymaxi]);
+pixb=xget("pixmap");xset("pixmap",1);xset("wwpc");
 isoview(xmini,xmaxi,ymini,ymaxi)
-
+rect=[xmini ymini xmaxi ymaxi]
+xpoly(rect([1 3 3 1]),rect([2,2,4,4]),'lines',1)
 // starting configuration
 ptcr([x1,y1,theta1,phi1]) ;
 // end configuration
@@ -118,27 +121,40 @@ ptcr([x2,y2,theta2,phi2]) ;
 ptcr([x0,y0,0,0]) ;
 // trajectory of the linearizing output
 xpoly(state(:,1),state(:,2),'lines') ;
+if xget('pixmap')==1 then xset("wshow");end
 // movies 
 [n m] = size(state) ;
-xset('alufunction',6);...
-for i=1:n,
-  ptcr( state(i,:)) ; ptcr( state(i,:)) ;
-end ;
-xset('alufunction',3);...
-// animated version with the pixmap driver 
-// pixb=xget("pixmap");
-// xset("pixmap",1)
-// for i=1:n,xset("wwpc");
-//	ptcr([x1,y1,theta1,phi1]) ;
-//	ptcr([x2,y2,theta2,phi2]) ;
-//	ptcr([x0,y0,0,0]) ;
-//	xpoly(state(:,1),state(:,2),'lines') ;
-//	 ptcr( state(i,:)) ;
-//	xset("wshow");	
-//      end ;
-//xset("pixmap",pixb);
+if driver()<>'Pos' then
+  if xget('pixmap')==0 then
+    xset('alufunction',6);...
+	for i=1:n,
+      ptcr( state(i,:)) ; ptcr( state(i,:)) ;
+    end ;
+    xset('alufunction',3);
+  else
+    xset('alufunction',6);
+    for i=1:n,
+      ptcr( state(i,:)) ; 
+      xset("wshow");
+      ptcr( state(i,:))
+    end ;  
+    xset('alufunction',3)
+    ptcr( state(n,:)) ; 
+    xset("wshow");
+  end
+else //used for gif animation generation
+  for i=1:2:n,
+    xpoly(rect([1 3 3 1]),rect([2,2,4,4]),'lines',1)
+    ptcr([x1,y1,theta1,phi1]) ;
+    ptcr([x2,y2,theta2,phi2]) ;
+    ptcr([x0,y0,0,0]) 
+    xpoly(state(:,1),state(:,2),'lines') ;
+    ptcr( state(i,:)) ; 
+    xset("wshow");
+  end ;  
+end
+xset("pixmap",pixb)
 
-//%%%%%%%% END OF SCRIPT-FILE mvcr %%%%%%%%%%%%%%%
 
 function []=mvcr2T(x,y,theta1,theta2,theta3,phi)
 xbasc();
@@ -265,8 +281,11 @@ xmini = mini([mini(state_1(:,1)) mini(state_2(:,1))]) -1.5*(d1+d2)  ;
 xmaxi = maxi([maxi(state_1(:,1)) maxi(state_1(:,1))]) +1.5*bigL ;
 ymini = mini([mini(state_1(:,2)) mini(state_2(:,2))])-bigL;
 ymaxi = maxi([maxi(state_1(:,2)) maxi(state_1(:,2))])+bigL;
-xsetech([0,0,1,1],[xmini,ymini,xmaxi,ymaxi]);
+rect=[xmini ymini xmaxi ymaxi]
+pixb=xget("pixmap");xset("pixmap",1);xset("wwpc");
+xsetech([0,0,1,1],rect);
 isoview(xmini,xmaxi,ymini,ymaxi)
+xpoly(rect([1 3 3 1]),rect([2,2,4,4]),'lines',1)
 //
 
 xy_T1 = [ [-bigL/3  bigL/3   bigL/3  -bigL/3  -bigL/3  
@@ -297,7 +316,8 @@ xy_T2 = [[-bigL/3  bigL/3   bigL/3  -bigL/3  -bigL/3
    y1=y2+d2*sin(theta2) ;
    x0=x1+d1*cos(theta1) ;
    y0=y1+d1*sin(theta1) ;
-ptcr2T([x0,y0,theta0,theta1,theta2,phi]) ;
+   ptsts=[x0,y0,theta0,theta1,theta2,phi] ;
+ptcr2T(ptsts) ;
 // end configuration
    x2=x2_2 ; y2=y2_2 ;
    theta2 = theta2_2 ;
@@ -308,7 +328,8 @@ ptcr2T([x0,y0,theta0,theta1,theta2,phi]) ;
    y1=y2+d2*sin(theta2) ;
    x0=x1+d1*cos(theta1) ;
    y0=y1+d1*sin(theta1) ;
-ptcr2T([x0,y0,theta0,theta1,theta2,phi]) ;
+   ptste=[x0,y0,theta0,theta1,theta2,phi] 
+ptcr2T(ptste) ;
 // intermediate configuration (inversion of velocity)
    x2=x2_0 ; y2=y2_0 ;
    theta2 = 0 ;
@@ -319,7 +340,8 @@ ptcr2T([x0,y0,theta0,theta1,theta2,phi]) ;
    y1=y2+d2*sin(theta2) ;
    x0=x1+d1*cos(theta1) ;
    y0=y1+d1*sin(theta1) ;
-ptcr2T([x0,y0,theta0,theta1,theta2,phi]) ;
+   ptsti=[x0,y0,theta0,theta1,theta2,phi]    
+ptcr2T(ptsti) ;
 state_1 =[state_1;state_2] ;
 x_lin = state_1(:,1)-d1*cos(state_1(:,4))-d2*cos(state_1(:,5)) ;
 y_lin = state_1(:,2)-d1*sin(state_1(:,4))-d2*sin(state_1(:,5)) ;
@@ -327,14 +349,41 @@ y_lin = state_1(:,2)-d1*sin(state_1(:,4))-d2*sin(state_1(:,5)) ;
 //
 // trajectory of the linearizing output
 xpoly(x_lin,y_lin,'lines')
-// movies 
-[n m] = size(state_1) ;
-xset('alufunction',6);
-for j=1:n
-  ptcr2T(state_1(j,:));ptcr2T(state_1(j,:));
-end ;
-xset('alufunction',3);
+if xget('pixmap')==1 then xset("wshow");end
 
+// movies 
+[n,m] = size(state_1) ;
+if driver()<>'Pos' then
+  if xget('pixmap')==0 then
+    xset('alufunction',6);
+    for j=1:n
+      ptcr2T(state_1(j,:));ptcr2T(state_1(j,:));
+    end ;
+    xset('alufunction',3);
+  else
+    xset('alufunction',6);
+    for j=1:n
+      ptcr2T(state_1(j,:));
+      xset("wshow");
+      ptcr2T(state_1(j,:));
+    end 
+    xset('alufunction',3);
+    ptcr2T(state_1(n,:));
+    xset("wshow");
+  end
+else //only use for gif animation generation
+  for j=1:4:n
+    xpoly(rect([1 3 3 1]),rect([2,2,4,4]),'lines',1)
+    ptcr2T(ptsts) ;
+    ptcr2T(ptsti) ;
+    ptcr2T(ptste) ;
+    xpoly(x_lin,y_lin,'lines')
+    ptcr2T(state_1(j,:))
+    xset("wshow");
+  end 
+end
+
+xset("pixmap",pixb)
 ////%%%%%%%%%%%% END OF SCRIPT-FILE mvcr2T %%%%%%%%%%%%%
 
 function []=dbcr()

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 
 #include <windows.h> 
 #include <stdio.h>

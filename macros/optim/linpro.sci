@@ -1,4 +1,5 @@
 function [x,lagr,f]=linpro(p,C,b,ci,cs,mi,x0,imp)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 n=maxi(size(p));Q=0*ones(n,n);
 select rhs

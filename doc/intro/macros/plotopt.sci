@@ -1,5 +1,6 @@
 function []=popt(ps)
-   px=0:x/25:x;
+// Copyright INRIA
+px=0:x/25:x;
    dx=[];
    for k=1:maxi(size(px)),
       [d,d_p]=dpfun(px(k));

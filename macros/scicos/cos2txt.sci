@@ -1,6 +1,7 @@
 function t=cos2txt(scs_m,count)
 //Generate a vector of strings containing scilab instructions whose evaluation 
 //returns the  value of scicos data structure scs_m.
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<2 then 
   count=0,

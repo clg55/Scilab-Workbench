@@ -30,6 +30,7 @@ c     dest dcopy bezstp dlamch
 c!origine
 c S Steer INRIA 1989
 c!
+c     Copyright INRIA
       double precision  p1(n1+1),p2(n2+1),w(*),best(*),err
       double precision  dlamch
       integer ipb(6)

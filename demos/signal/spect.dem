@@ -1,8 +1,8 @@
-function spectdem()
 ////////////////////////
 //SPECTRAL ESTIMATION///
 ////////////////////////
 
+// Copyright INRIA
 xselect();xbasc(); 
  
 //generate white data

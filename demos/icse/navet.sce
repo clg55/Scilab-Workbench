@@ -2,6 +2,7 @@
 //  calcul trajectoire optimale de rentree d'une navette spatiale
 //  *************************************************************
 //
+// Copyright INRIA
 exec('icse.contexte');
 // les doubles slash introduisent des commentaires
 //

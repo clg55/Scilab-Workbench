@@ -10,9 +10,9 @@ function histplot(n,data,style,strf,leg,rect,nax)
 // [style,strf,leg,rect,nax] same as plot2d
 // Example : enter histplot()
 //! 
+// Copyright INRIA
 [lhs,rhs]=argn(0)
-if rhs<=0, s_mat=['rand(''normal'');';
-   'histplot([-6:0.2:6],rand(1,2000),[1,-1],''011'','' '',[-6,0,6,0.5],[2,12,2,11]);';
+if rhs<=0, s_mat=['histplot([-6:0.2:6],rand(1,2000,''n''),[1,-1],''011'','' '',[-6,0,6,0.5],[2,12,2,11]);';
 	 'deff(''[y]=f(x)'',''y=exp(-x.*x/2)/sqrt(2*%pi);'');';
          'x=-6:0.1:6;x=x'';plot2d(x,f(x),1,'"000'");';
          'titre= ''macro histplot : Histogram plot'';';
@@ -26,7 +26,7 @@ end;
   data=matrix(data,p,1);
 //
   q=prod(size(n))
-  if q=1 then 
+  if q==1 then 
      dmin=mini(data)
      dmax=maxi(data)
      x=(0:n)';

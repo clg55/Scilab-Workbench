@@ -10,6 +10,7 @@ c     op=119: a~=b
 c
 c!origin : Serge Steer INRIA 1995
 c!
+c     Copyright INRIA
       double precision ar,ai,br,bi
       integer op
       integer less,great,equal

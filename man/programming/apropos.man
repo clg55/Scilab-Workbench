@@ -6,7 +6,6 @@ apropos - searches keywords in Scilab help
 .nf
 apropos word
 apropos 'string'
-fapropos('string')
 .fi
 .SH DESCRIPTION
 Looks for keywords in  \fVman/*/whatis\fR files.

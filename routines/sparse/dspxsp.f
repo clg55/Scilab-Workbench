@@ -26,6 +26,7 @@ c            of c
 c            indc(m+i) 1<=i<=nelb column index of each non zero element
 c     ierr : if non zero initial value of nelc is to small
 c!
+c     Copyright INRIA
       double precision a(*),b(*),c(*)
       integer nr,nc,nela,inda(*),nelb,indb(*),nelc,indc(*),ierr
 c

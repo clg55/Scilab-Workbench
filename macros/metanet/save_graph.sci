@@ -1,4 +1,5 @@
 function save_graph(g,data)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select rhs
 case 1 then

@@ -1,7 +1,7 @@
 /*------------------------------BEGIN--------------------------------------
 %    Missile 
 %    XWindow and Postscript library for 2D and 3D plotting 
-%    Copyright (C) 1990 Chancelier Jean-Philippe
+%    Copyright (C) 1998 Chancelier Jean-Philippe
 %
 %    This program is free software; you can redistribute it and/or modify
 %    it under the terms of the GNU General Public License as published by
@@ -18,7 +18,6 @@
 %    Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 %
 %    jpc@cergrene.enpc.fr 
-%    Phone : 33+ 1 49 14 36 38
 %
 --------------------------------------------------------------------------*/
 
@@ -410,13 +409,10 @@ void C2F(clearwindow)(v1, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
  \encadre{To generate a pause, in seconds}
 ------------------------------------------------------------*/
 
-#if defined (sparc) && defined(__STDC__)
-#define usleep(x) x
+#if defined(__STDC__) || defined(_IBMR2)
+/** for usleep **/
+#include <unistd.h> 
 #endif 
-
-#ifdef hpux
-#include <unistd.h>
-#endif
 
 void C2F(xpause)(str, sec_time, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
      char *str;
@@ -434,10 +430,10 @@ void C2F(xpause)(str, sec_time, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
   unsigned useconds;
   useconds=(unsigned) *sec_time;
   if (useconds != 0)  
-#ifdef sun
+#ifdef HAVE_USLEEP
       { usleep(useconds); }
 #else
-#ifdef hpux
+#ifdef HAVE_SLEEP
       {  sleep(useconds/1000000); }
 #else
   return;
@@ -451,14 +447,14 @@ void C2F(xpause)(str, sec_time, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
  *   and the window number 
  ****************************************************************/
 
-void C2F(xclick_any)(str, ibutton, x1, yy1, iwin,iflag, v7, dv1, dv2, dv3, dv4)
+void C2F(xclick_any)(str, ibutton, x1, yy1, iwin,iflag, istr, dv1, dv2, dv3, dv4)
      char *str;
      integer *ibutton;
      integer *x1;
      integer *yy1;
      integer *iwin;
      integer *iflag;
-     integer *v7;
+     integer *istr;
      double *dv1;
      double *dv2;
      double *dv3;
@@ -469,18 +465,25 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin,iflag, v7, dv1, dv2, dv3, dv4)
   Bool flag1;
   int buttons = 0;
   integer i,win;
-  integer wincount = 0;
-  flag1=True;
-  while (flag1) {
-      CW=GetWindowNumber(wincount);
-      if (CW!=(Window ) NULL) {
-	  wincount++;
-	  XDefineCursor(dpy, CW ,crosscursor);
-      }
-      else
-	  flag1=False;
-  }
+  integer wincount,flag=0,ivoid=0;
+  integer lstr ;
 
+  wincount =  GetWinsMaxId()+1;
+  if (wincount == 0) 
+    {
+      *x1=0;
+      *yy1=0;
+      *iwin=0;
+      *ibutton = -100;
+      *istr = 0;
+      return;
+    }
+  for (i=0; i < wincount ; i++ ) 
+    {
+      CW=GetWindowNumber(i);
+      if (CW!=(Window ) NULL) 
+	XDefineCursor(dpy, CW ,crosscursor);
+    }
   /** if we already have something on the queue **/
   win = -1;
   if ( *iflag ==1 && CheckClickQueue(&win,x1,yy1,ibutton) == 1) 
@@ -491,6 +494,16 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin,iflag, v7, dv1, dv2, dv3, dv4)
   if ( *iflag ==0 )  ClearClickQueue(-1);
 
   while (buttons == 0) {
+    wincount =  GetWinsMaxId()+1;
+    if ( wincount == 0) 
+      {
+	*x1=0;
+	*yy1=0;
+	*iwin=0;
+	*ibutton = -100;
+	*istr = 0;    
+	return;
+      }
       XNextEvent (dpy, &event);
       if ( event.type ==  ButtonPress ) 
 	{
@@ -498,15 +511,19 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin,iflag, v7, dv1, dv2, dv3, dv4)
 	  for (i=0;i < wincount;i++) 
 	    {
 	      CW=GetWindowNumber(i);
-	      if ( event.xany.window == CW) 
+	      if (CW!=(Window ) NULL) 
 		{
-		  *x1=event.xbutton.x;
-		  *yy1=event.xbutton.y;
-		  *ibutton=event.xbutton.button-1;
-		  buttons++;
-		  *iwin=i;
-		  nowin = 0 ;
-		  break;
+		  if ( event.xany.window == CW) 
+		    {
+		      *x1=event.xbutton.x;
+		      *yy1=event.xbutton.y;
+		      *ibutton=event.xbutton.button-1;
+		      buttons++;
+		      *iwin=i;
+		      nowin = 0 ;
+		      *istr = 0;
+		      break;
+		    }
 		}
 	    }
 	  if ( nowin==1 )  XtDispatchEvent(&event);
@@ -514,10 +531,23 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin,iflag, v7, dv1, dv2, dv3, dv4)
       else 
 	  XtDispatchEvent(&event);
 
+      if ( *istr==1 && C2F(ismenu)()==1 ) 
+	{
+	  int entry;
+	  C2F(getmen)(str,&lstr,&entry);
+	  *ibutton = -2;
+	  *istr=lstr;
+	  *x1=0;
+	  *yy1=0;
+	  *iwin=-1;
+	  break;
+	}
+
   }
   for (i=0;i < wincount;i++) {
       CW=GetWindowNumber(i);
-      XDefineCursor(dpy, CW ,arrowcursor);
+      if (CW!=(Window ) NULL) 
+	XDefineCursor(dpy, CW ,arrowcursor);
   }
   XSync (dpy, 0);
 }
@@ -537,7 +567,7 @@ void C2F(xclick)(str, ibutton, x1, yy1, iflag,istr, v7, dv1, dv2, dv3, dv4)
     {
       if (*ibutton == -2) 
 	{
-	  sciprint("Menu activated %s %d",str,lstr);
+	  /*	  sciprint("Menu activated %s %d",str,lstr);*/
 	  *istr = lstr;
 	}
       else
@@ -594,6 +624,7 @@ void SciClick(ibutton,x1,yy1,iflag,getmouse,getrelease,dyn_men,str,lstr)
 	  return;
 	}
       XNextEvent (dpy, &event); 
+
       if ( event.xany.window == ScilabXgc->CWindow 
 	   && event.type ==  ButtonPress ) 
 	{
@@ -623,11 +654,14 @@ void SciClick(ibutton,x1,yy1,iflag,getmouse,getrelease,dyn_men,str,lstr)
 	}
       else      
 	XtDispatchEvent(&event);
+
       if ( dyn_men == 1 &&  C2F(ismenu)()==1 ) 
 	{
 	  int entry;
 	  C2F(getmen)(str,lstr,&entry);
 	  *ibutton = -2;
+	  *x1=0;
+	  *yy1=0;
 	  break;
 	}
     }
@@ -1420,7 +1454,7 @@ void C2F(getpixmapOn)(verbose, value, narg,dummy)
 {
   *value=ScilabXgc->CurPixmapStatus;
   *narg =1 ;
-  if (*verbose == 1) sciprint("Color %d",(int)*value);
+  if (*verbose == 1) sciprint("Pixmap status %d",(int)*value);
 }
 
 /* setting the default colormap with colors defined in color.h */
@@ -1436,7 +1470,8 @@ int C2F(sedeco)(flag)
 
 /* Our function to translate from RGB to pixels for True Color screens:
    very tricky... */
-Pixel RGB2pix(r,g,b,r_mask,g_mask,b_mask)
+
+Pixel RGB2pixO(r,g,b,r_mask,g_mask,b_mask)
      unsigned int r,g,b;
      unsigned long r_mask,g_mask,b_mask;
 {
@@ -1472,6 +1507,56 @@ Pixel RGB2pix(r,g,b,r_mask,g_mask,b_mask)
   return pix;
 }
 
+
+static char  *hex_string();
+
+/*
+ * Get the hex string corresponding to a r,g,b spec
+ */
+
+static char hex_str[10];
+
+static char *hex_string(r,g,b)
+     int r,g,b;
+{
+   char rlabel[10], glabel[10], blabel[10];
+ 
+   /* Copy the rgb to char strings */
+   (void) sprintf(rlabel,"00%x",r);
+   (void) sprintf(glabel,"00%x",g);
+   (void) sprintf(blabel,"00%x",b);
+
+   /* The hex label is composed of last 2 chars from r,g,b */
+   (void) sprintf(hex_str,"#000000");
+   hex_str[1] = rlabel[strlen(rlabel)-2];
+   hex_str[2] = rlabel[strlen(rlabel)-1];
+   hex_str[3] = glabel[strlen(glabel)-2];
+   hex_str[4] = glabel[strlen(glabel)-1];
+   hex_str[5] = blabel[strlen(blabel)-2];
+   hex_str[6] = blabel[strlen(blabel)-1];
+
+   return(hex_str);
+}
+
+Pixel RGB2pix(r,g,b,r_mask,g_mask,b_mask)
+     unsigned int r,g,b;
+     unsigned long r_mask,g_mask,b_mask;
+{
+  Colormap cmap;
+   XColor      cdef;
+   cdef.red   = r *256 ;
+   cdef.green = g *256 ;
+   cdef.blue  = b *256 ;
+   cdef.flags = DoRed | DoGreen | DoBlue;
+   cmap = XDefaultColormap(dpy,XDefaultScreen(dpy));
+   if (XAllocColor(dpy,cmap,&cdef))
+     return( cdef.pixel);
+   else if (XParseColor(dpy,cmap,hex_string(r,g,b),&cdef) &&
+	    XAllocColor(dpy,cmap,&cdef)) {
+     return( cdef.pixel);
+   }
+}
+
 /* set_default_colormap is called when raising a window for the first 
    time by xset('window',...) or by getting back to default by 
    xset('default',...) */
@@ -1490,7 +1575,7 @@ void set_default_colormap()
   if (set_default_colormap_flag == 0) return;
 
   if (DEFAULTNUMCOLORS > maxcol) {
-    sciprint("No enough colors for default colormap. Maximum is %d\r\n",
+    sciprint("Not enough colors for default colormap. Maximum is %d\r\n",
 	     maxcol);
     return;
   }
@@ -1588,6 +1673,7 @@ void set_default_colormap3(m)
      int m;
 {
   int i,j;
+  int missing_col_mess=-1;
   Colormap cmap,dcmap,ocmap;
   XColor color;
   Pixel *pixels, *c;
@@ -1660,80 +1746,88 @@ void set_default_colormap3(m)
   
   cmap = dcmap;
 
-  if (i < m - 1) {
-    /* Can't allocate all colors in default colormap; if old colormap was 
-       the default colormap, create a new one, otherwise use old one */
-    if (ocmap == 0 || ocmap == dcmap) {
-      /* Create a new private colormap */
-      sciprint("%d colors missing, switch to private colormap\r\n",m - i);
-      if ((cmap = XCreateColormap(dpy,ScilabXgc->CBGWindow,visual,AllocNone)) == 0) {
-	Scistring("Cannot allocate new colormap\n");
-	XgcFreeColors(ScilabXgc);
-	FREE(pixels);
-	ScilabXgc->Colors = c;
-	ScilabXgc->Red = r;
-	ScilabXgc->Green = g;
-	ScilabXgc->Blue = b;
-	return;
-      }
-    } else {
-      /* Use old private colormap */
-      cmap = ocmap;
-      /* Free already allocated colors */
-      if (ScilabXgc->CmapFlag) 
-	XFreeColors(dpy,cmap,c,ScilabXgc->Numcolors,0);
-      else XFreeColors(dpy,cmap,c,ScilabXgc->Numcolors+2,0);
-    }
-    /* Try to alloc readwrite colors from the private colormap */
-    for (i = 0; i < m; i++) {
-      if (!XAllocColorCells(dpy,cmap,False,NULL,0,&pixels[i],1)) {
-	sciprint("%d colors missing, unable to allocate colormap\r\n",m - i);
-	XgcFreeColors(ScilabXgc);
-	FREE(pixels);
-	ScilabXgc->Colors = c;
-	ScilabXgc->Red = r;
-	ScilabXgc->Green = g;
-	ScilabXgc->Blue = b;
-	return;
-      }
-    }
+  if (i < m - 1) 
+    {
+      /* Can't allocate all colors in default colormap; if old colormap was 
+	 the default colormap, create a new one, otherwise use old one */
+      if (ocmap == 0 || ocmap == dcmap) 
+	{
+	  /* Create a new private colormap */
+	  missing_col_mess=i;
+	  if ((cmap=XCreateColormap(dpy,ScilabXgc->CBGWindow,visual,AllocNone)) == 0) 
+	    {
+	      XgcFreeColors(ScilabXgc);
+	      FREE(pixels);
+	      ScilabXgc->Colors = c;
+	      ScilabXgc->Red = r;
+	      ScilabXgc->Green = g;
+	      ScilabXgc->Blue = b;
+	      sciprint("%d colors missing, switch to private colormap\r\n",m - i);
+	      sciprint("Cannot allocate new colormap\r\n");
+	      return;
+	    }
+	}
+      else 
+	{
+	  /* Use old private colormap */
+	  cmap = ocmap;
+	  /* Free already allocated colors */
+	  if (ScilabXgc->CmapFlag) 
+	    XFreeColors(dpy,cmap,c,ScilabXgc->Numcolors,0);
+	  else XFreeColors(dpy,cmap,c,ScilabXgc->Numcolors+2,0);
+	}
+      /* Try to alloc readwrite colors from the private colormap */
+      for (i = 0; i < m; i++) 
+	{
+	  if (!XAllocColorCells(dpy,cmap,False,NULL,0,&pixels[i],1)) 
+	    {
+	      XgcFreeColors(ScilabXgc);
+	      FREE(pixels);
+	      ScilabXgc->Colors = c;
+	      ScilabXgc->Red = r;
+	      ScilabXgc->Green = g;
+	      ScilabXgc->Blue = b;
+	      sciprint("%d colors missing, unable to allocate colormap\r\n",m - i);
+	      return;
+	    }
+	}
     
-    color.flags = DoRed|DoGreen|DoBlue;
+      color.flags = DoRed|DoGreen|DoBlue;
 
     /* First store white(wpixel) and black(bpixel) 
-     wpixel and bpixel are usually 0 and 1 or 1 and 0 */
-    color.red = default_colors[3*DEFAULTWHITE]<<8;
-    color.green = default_colors[3*DEFAULTWHITE+1]<<8;
-    color.blue = default_colors[3*DEFAULTWHITE+2]<<8;
-    if (wpixel == 1) wp1 = wpixel;
-    else if (wpixel == 0) wp1 = wpixel;
-    else if (bpixel == 0) wp1 = 1;
-    else if (bpixel == 1) wp1 = 0;
-    else wp1 =0;
-    color.pixel = ScilabXgc->Colors[DEFAULTWHITE] = pixels[wp1];
-    XStoreColor(dpy,cmap,&color);
-    color.red = default_colors[3*DEFAULTBLACK]<<8;
-    color.green = default_colors[3*DEFAULTBLACK+1]<<8;
-    color.blue = default_colors[3*DEFAULTBLACK+2]<<8;   
-    if (bpixel == 1) bp1 = bpixel;
-    else if (bpixel == 0) bp1 = bpixel;
-    else if (wpixel == 0) bp1 = 1;
-    else if (wpixel == 1) bp1 = 0;
-    else bp1 =1;
-    color.pixel = ScilabXgc->Colors[DEFAULTBLACK] = pixels[bp1];
-    XStoreColor(dpy,cmap,&color);
-    j = 2;
-    for (i = 0; i < m; i++) {
-      if (i == DEFAULTBLACK || i == DEFAULTWHITE) continue;
-      color.red = default_colors[3*i]<<8;
-      color.green = default_colors[3*i+1]<<8;
-      color.blue = default_colors[3*i+2]<<8;
-      color.pixel = ScilabXgc->Colors[i] = pixels[j++];
+       wpixel and bpixel are usually 0 and 1 or 1 and 0 */
+      color.red = default_colors[3*DEFAULTWHITE]<<8;
+      color.green = default_colors[3*DEFAULTWHITE+1]<<8;
+      color.blue = default_colors[3*DEFAULTWHITE+2]<<8;
+      if (wpixel == 1) wp1 = wpixel;
+      else if (wpixel == 0) wp1 = wpixel;
+      else if (bpixel == 0) wp1 = 1;
+      else if (bpixel == 1) wp1 = 0;
+      else wp1 =0;
+      color.pixel = ScilabXgc->Colors[DEFAULTWHITE] = pixels[wp1];
       XStoreColor(dpy,cmap,&color);
+      color.red = default_colors[3*DEFAULTBLACK]<<8;
+      color.green = default_colors[3*DEFAULTBLACK+1]<<8;
+      color.blue = default_colors[3*DEFAULTBLACK+2]<<8;   
+      if (bpixel == 1) bp1 = bpixel;
+      else if (bpixel == 0) bp1 = bpixel;
+      else if (wpixel == 0) bp1 = 1;
+      else if (wpixel == 1) bp1 = 0;
+      else bp1 =1;
+      color.pixel = ScilabXgc->Colors[DEFAULTBLACK] = pixels[bp1];
+      XStoreColor(dpy,cmap,&color);
+      j = 2;
+      for (i = 0; i < m; i++) {
+	if (i == DEFAULTBLACK || i == DEFAULTWHITE) continue;
+	color.red = default_colors[3*i]<<8;
+	color.green = default_colors[3*i+1]<<8;
+	color.blue = default_colors[3*i+2]<<8;
+	color.pixel = ScilabXgc->Colors[i] = pixels[j++];
+	XStoreColor(dpy,cmap,&color);
+      }
+      /* Change decoration of graphics windows */
+      ChangeBandF(ScilabXgc->CurWindow,pixels[bp1],pixels[wp1]);
     }
-    /* Change decoration of graphics windows */
-    ChangeBandF(ScilabXgc->CurWindow,pixels[bp1],pixels[wp1]);
-  }
 
   if (ocmap != (Colormap)0 && ocmap != cmap && ocmap != dcmap) 
     XFreeColormap(dpy,ocmap);
@@ -1750,6 +1844,13 @@ void set_default_colormap3(m)
   XFlush(dpy);
   FREE(c); FREE(r); FREE(g); FREE(b);
   FREE(pixels);
+  /** Warning : sciprint induces Xevents evaluation and this can 
+      lead to the executaion of a redraw graphic event so we must 
+      be sure that ScilabXgc is in a correct state before caling 
+      sciprint **/
+  if (missing_col_mess != -1 ) 
+    sciprint("%d colors missing, switch to private colormap\r\n",m - 
+	     missing_col_mess);
 }
 
 void setcolormap1();
@@ -1769,22 +1870,16 @@ void C2F(setcolormap)(v1,v2,v3,v4,v5,v6,a)
      integer *v4,*v5,*v6;
      double *a;
 {
-  int i,m;
-  Colormap cmap,dcmap,ocmap;
-  XColor color;
-  Pixel *pixels, *c;
-  float *r, *g, *b;
+  int m;
   char merror[128];
-
   /* 2 colors reserved for black and white */
   if (*v2 != 3 || *v1 < 0 || *v1 > maxcol - 2) {
-    sprintf(merror,"Colormap must be a m x 3 array with m <= %d\r\n",
+    sprintf(merror,"Colormap must be a m x 3 array with m <= %ld\r\n",
 	    maxcol-2);
     cerro(merror);
     return;
   }
   m = *v1;
-
   switch (visual->class) {
   case TrueColor:
     setcolormap1(m,a);
@@ -1842,7 +1937,8 @@ void setcolormap1(m,a)
   ScilabXgc->Red[m] = 0;
   ScilabXgc->Green[m] = 0;
   ScilabXgc->Blue[m] = 0;
-  ScilabXgc->Colors[m] = 0;
+  ScilabXgc->Colors[m] =  RGB2pix(0,0,0,visual->red_mask,
+				  visual->green_mask,visual->blue_mask);
 
   /* White */
   ScilabXgc->Red[m+1] = 1;
@@ -1892,12 +1988,12 @@ void setcolormap3(m,a)
      integer m;
      double *a;
 {
+  int missing_col_mess=-1;
   int i;
   Colormap cmap,dcmap,ocmap;
   XColor color;
   Pixel *pixels, *c;
   float *r, *g, *b;
-  char merror[128];
   int bp1,wp1;
 
   /* Save old color vectors */
@@ -2004,15 +2100,16 @@ void setcolormap3(m,a)
        the default colormap, create a new one, otherwise use old one */
     if (ocmap == 0 || ocmap == dcmap) {
       /* Create a new private colormap */
-      sciprint("%d colors missing, switch to private colormap\r\n",m+2 - i);
+      missing_col_mess=i;
       if ((cmap = XCreateColormap(dpy,ScilabXgc->CBGWindow,visual,AllocNone)) == 0) {
-	Scistring("Cannot allocate new colormap\n");
 	XgcFreeColors(ScilabXgc);
 	FREE(pixels);
 	ScilabXgc->Colors = c;
 	ScilabXgc->Red = r;
 	ScilabXgc->Green = g;
 	ScilabXgc->Blue = b;
+	sciprint("%d colors missing, switch to private colormap\r\n",m+2 - i);
+	sciprint("Cannot allocate new colormap\n");
 	return;
       }
     } else {
@@ -2026,13 +2123,14 @@ void setcolormap3(m,a)
     /* Try to alloc readwrite colors from the private colormap */
     for (i = 0; i < m+2; i++) {
       if (!XAllocColorCells(dpy,cmap,False,NULL,0,&pixels[i],1)) {
-	sciprint("%d colors missing, unable to allocate colormap\r\n",m+2 - i);
+	/* sciprint is dangerous here we use wininfo : see the Warning bellow*/
 	XgcFreeColors(ScilabXgc);
 	FREE(pixels);
 	ScilabXgc->Colors = c;
 	ScilabXgc->Red = r;
 	ScilabXgc->Green = g;
 	ScilabXgc->Blue = b;
+	sciprint("%d colors missing, unable to allocate colormap\r\n",m+2 - i);
 	return;
       }
     }
@@ -2084,6 +2182,8 @@ void setcolormap3(m,a)
   XFlush(dpy);
   FREE(c); FREE(r); FREE(g); FREE(b);
   FREE(pixels);
+  if (missing_col_mess != -1) 
+    sciprint("%d colors missing, switch to private colormap\r\n",m+2 - missing_col_mess);
 }
 
 /* getting the colormap */
@@ -3284,7 +3384,6 @@ void C2F(getwins)(Num,Ids,flag)
 	  (*Num)++;
 	  listptr = (WindowList *) listptr->next;
 	}
-      
     }
   else 
     {
@@ -3296,6 +3395,25 @@ void C2F(getwins)(Num,Ids,flag)
 	}
     }
 }
+
+/***************************
+ * get the highest id of scilab windows
+ * or -1 if no windows 
+ ***************************/
+
+int GetWinsMaxId()
+{
+  WindowList *listptr = The_List;
+  int Num = -1;
+  while ( listptr != (WindowList  *) 0 ) 
+    {
+      Num = Max(listptr->winxgc.CurWindow,Num);
+      listptr =  (WindowList *)listptr->next;
+    }
+  /* sciprint("Max Id : %d \r\n",Num); */
+  return(Num);
+}
+
 
 
 /*--------------------------------------------------------------
@@ -3439,7 +3557,7 @@ void C2F(xinfo)(message, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
      double *dv4;
 {
   Arg args[1];
-  if ( ScilabXgc->CinfoW != (Widget) NULL)
+  if ( ScilabXgc != (struct BCG *) 0 && ScilabXgc->CinfoW != (Widget) NULL)
     {
       Cardinal n = 0;
       XtSetArg(args[n], XtNlabel, message);n++;
@@ -3450,23 +3568,36 @@ void C2F(xinfo)(message, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
 /* meme chose mais appel r'eduit pour appel a partir de C 
    avec plus d'arguments */
 
+#ifdef __STDC__
+#include <stdarg.h>
+#else
 #include <varargs.h>
+#endif 
 
 #define MAXPRINTF 512
 
+#ifdef __STDC__ 
+void  wininfo(char *format,...) 
+#else 
 /*VARARGS0*/
 void wininfo(va_alist) va_dcl
+#endif 
+/*VARARGS0*/
 {
   /* Extended call for C calling */
   Arg args[1];
   va_list ap;
-  char *format;
   char buf[MAXPRINTF];
+#ifdef __STDC__
+  va_start(ap,format);
+#else
+  char *format;
   va_start(ap);
   format = va_arg(ap, char *);
+#endif
   (void ) vsprintf(buf, format, ap );
   va_end(ap);
-  if ( ScilabXgc->CinfoW != (Widget) NULL)
+  if ( ScilabXgc != (struct BCG *) 0 && ScilabXgc->CinfoW != (Widget) NULL)
     {
       Cardinal n = 0;
       XtSetArg(args[n], XtNlabel,buf);n++;
@@ -3796,11 +3927,15 @@ void C2F(drawaxis)(str, alpha, nsteps, v2, initpoint, v6, v7, size, dx2, dx3, dx
   cosal= cos( (double)M_PI * (*alpha)/180.0);
   sinal= sin( (double)M_PI * (*alpha)/180.0);
   for (i=0; i <= nsteps[0]*nsteps[1]; i++)
-    { xi = initpoint[0]+i*size[0]*cosal;
-      yi = initpoint[1]+i*size[0]*sinal;
-      xf = xi - ( size[1]*sinal);
-      yf = yi + ( size[1]*cosal);
-      XDrawLine(dpy,ScilabXgc->Cdrawable,gc,inint(xi),inint(yi),inint(xf),inint(yf));
+    {
+      if (( i % nsteps[0]) != 0)
+	{
+	  xi = initpoint[0]+i*size[0]*cosal;
+	  yi = initpoint[1]+i*size[0]*sinal;
+	  xf = xi - ( size[1]*sinal);
+	  yf = yi + ( size[1]*cosal);
+	  XDrawLine(dpy,ScilabXgc->Cdrawable,gc,inint(xi),inint(yi),inint(xf),inint(yf));
+	}
     }
   for (i=0; i <= nsteps[1]; i++)
     { xi = initpoint[0]+i*nsteps[0]*size[0]*cosal;
@@ -3809,10 +3944,12 @@ void C2F(drawaxis)(str, alpha, nsteps, v2, initpoint, v6, v7, size, dx2, dx3, dx
       yf = yi + ( size[1]*size[2]*cosal);
       XDrawLine(dpy,ScilabXgc->Cdrawable,gc,inint(xi),inint(yi),inint(xf),inint(yf));
     }
+  /** 
   xi = initpoint[0]; yi= initpoint[1];
   xf = initpoint[0]+ nsteps[0]*nsteps[1]*size[0]*cosal;
   yf = initpoint[1]+ nsteps[0]*nsteps[1]*size[0]*sinal;
   XDrawLine(dpy,ScilabXgc->Cdrawable,gc,inint(xi),inint(yi),inint(xf),inint(yf));
+  **/
   XFlush(dpy);
 }
 
@@ -4239,7 +4376,17 @@ int C2F(AllocVectorStorage)()
 
 static XPoint *C2F(ReturnPoints)() { return(points); }
 
-/**  Clipping functions **/
+/************************************************************
+ * Clipping functions 
+ ************************************************************/
+
+static void XDroutine(npts)
+     int npts;
+{
+  XDrawLines (dpy, ScilabXgc->Cdrawable, gc, C2F(ReturnPoints)(),(int) npts,
+	      ScilabXgc->CurVectorStyle);
+}
+
 
 /* My own clipping routines  
   XDrawlines with clipping on the current graphic window 
@@ -4417,8 +4564,11 @@ static void MyDraw(iib, iif, vx, vy)
   {
     if (iib > 0 && (flag1==1||flag1==3)) change_points((integer)0L,x1n,y1n);
     if (flag2==2 || flag2==3) change_points(npts-1,x2n,y2n);
+    XDroutine((int)npts);
+    /**
     XDrawLines (dpy, ScilabXgc->Cdrawable, gc, C2F(ReturnPoints)(),(int) npts,
 		ScilabXgc->CurVectorStyle);
+    **/
   }
 }
 
@@ -4437,8 +4587,11 @@ static void My2draw(j, vx, vy)
 	  sciprint("segment out mais intersecte en (%d,%d),(%d,%d)\r\n",
 		   vxn[0],vyn[0],vxn[1],vyn[1]);
 #endif 
+    XDroutine((int)npts);
+    /**
     XDrawLines (dpy, ScilabXgc->Cdrawable, gc, C2F(ReturnPoints)(),(int)npts,
 		ScilabXgc->CurVectorStyle);
+    **/
   }
 }
 
@@ -4448,7 +4601,7 @@ static void My2draw(j, vx, vy)
  *  or zero if the whole polyline is out 
  */
 
-static integer first_in(n, ideb, vx, vy)
+integer first_in(n, ideb, vx, vy)
      integer n;
      integer ideb;
      integer *vx;
@@ -4474,7 +4627,7 @@ static integer first_in(n, ideb, vx, vy)
  *  or zero if the whole polyline is out 
  */
 
-static integer first_out(n, ideb, vx, vy)
+integer first_out(n, ideb, vx, vy)
      integer n;
      integer ideb;
      integer *vx;
@@ -4537,15 +4690,20 @@ static void C2F(analyze_points)(n, vx, vy, onemore)
 	/* special case the polyligne is totaly inside */
 	if (iib == 0) 
 	  {
-	    if (C2F(store_points)(n,vx,vy,onemore));
-	    {
-	      int n1 ;
-	      if (onemore == 1) n1 = n+1;else n1= n;
-	      XDrawLines (dpy, ScilabXgc->Cdrawable, gc, C2F(ReturnPoints)(),
-			  n1,
-			  ScilabXgc->CurVectorStyle);
+	    if (C2F(store_points)(n,vx,vy,onemore))
+	      {
+		int n1 ;
+		if (onemore == 1) n1 = n+1;else n1= n;
+		XDroutine(n1);
+		/**
+		   XDrawLines (dpy, ScilabXgc->Cdrawable, gc, 
+		   C2F(ReturnPoints)(), n1,
+		   ScilabXgc->CurVectorStyle);
+		**/
+		return;
+	      }
+	    else
 	      return;
-	    }	    
 	  }
 	else 
 	  MyDraw(iib,n-1,vx,vy);
@@ -4567,8 +4725,12 @@ static void C2F(analyze_points)(n, vx, vy, onemore)
       {
 	if (flag1==1||flag1==3) change_points((integer)0L,x1n,y1n);
 	if (flag1==2||flag1==3) change_points((integer)1L,x2n,y2n);
+	XDroutine(2);
+	/**
 	XDrawLines (dpy, ScilabXgc->Cdrawable, gc, C2F(ReturnPoints)(),2,
 		    ScilabXgc->CurVectorStyle);	
+	**/
       }
   }
 }
+

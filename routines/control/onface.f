@@ -26,6 +26,7 @@ C
 C     Tableau de travail
 C     - w : 12*nq+ng+1
 C!
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
       dimension tq(0:nq), w(*),tg(ng+1)
 C

@@ -10,6 +10,7 @@ c
 c sous programmes appeles: aucun
 c
 c
+c     Copyright INRIA
       double precision function coshin(x)
       double precision x
       coshin=log(x+sqrt(x*x-1.0d+0))

@@ -41,6 +41,7 @@ C     Tableau de travail
 C     - w de taille 25+26*nq+ng+nq**2
 C     - iw de taille 20+nq
 C!
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
       dimension q(*), w(*), iw(*), xx(1)
       integer neq(*)

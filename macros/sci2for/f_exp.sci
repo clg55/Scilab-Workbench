@@ -40,6 +40,7 @@ function [stk,nwrk,txt,top]=f_exp(nwrk)
 //              (columns) of the matrix		
 //          des chaines de caracteres
 
+// Copyright INRIA
 //
 //  nwrk : this variable contain information on working arrays, error
 //         indicators. It only may be modified by call to scilab functions

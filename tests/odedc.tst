@@ -1,3 +1,4 @@
+// Copyright INRIA
 deff('xcd=f(t,xc,xd,iflag)',...
     ['if iflag==0 then '
      '  xcd=fc(t,xc,e(t)-hd(t,xd));'
@@ -16,9 +17,9 @@ deff('u=hd(t,x)','u=Cd*x')
 h=0.1;t0=0;t=0:0.1:2;
 x0c=[0;0;0];x0d=[0;0];nd=2;
 xcd=odedc([x0c;x0d],nd,h,t0,t,f);
-if norm(xcd-odedc([x0c;x0d],nd,h,t0,t,'fcd'),1) > 1.0d-10 then pause;end
+if norm(xcd-odedc([x0c;x0d],nd,h,t0,t,'fcd'),1) > 1.0d-5 then pause,end
 //(see fydot2.f)
-if norm(xcd-odedc([x0c;x0d],nd,h,t0,t,'fcd1'),1) >1.d-10 then pause;end
+if norm(xcd-odedc([x0c;x0d],nd,h,t0,t,'fcd1'),1) >1.d-5 then pause,end
 
 deff('xcd=phis(t,xc,xd,iflag)',...
     ['if iflag==0 then '
@@ -32,7 +33,7 @@ xcd=odedc([x0c;0],1,1,t0,t,phis);
 //link('phis.o','phis')
 xcd2=odedc([x0c;0],1,1,t0,t,'phis');
 
-if norm(xcd-xcd2,1) > 1.d-10 then pause;end
+if norm(xcd-xcd2,1) > 1.d-10 then pause,end
 deff('xd=ff(t,x)','xd=A*x+B*u')
 
 u=1/2;xn=ode(x0c,t0,t,ff);
@@ -48,14 +49,14 @@ deff('xcd=phit(t,xc,xd,iflag)',...
 xcdt=odedc([x0c;1;1],1,1,t0,t,phit);
 //link('phit.o','phit')
 xcdt2=odedc([x0c;1;1],1,1,t0,t,'phit');
-if norm(xcdt-xcdt2,1) > 1.d-10 then pause;end
+if norm(xcdt-xcdt2,1) > 1.d-10 then pause,end
 //plot2d([t',t',t',t'],[(xcdt(1,:))',(xcdt(2,:))',(xcdt(3,:))',(xcdt(4,:))'])
 
 xcdt3=odedc('adams',[x0c;1;1],1,1,t0,t,'phit');
-if norm(xcdt3-xcdt2,1) > 0.0001 then pause;end
+if norm(xcdt3-xcdt2,1) > 0.0001 then pause,end
 
 xcdt4=odedc('fix',[x0c;1;1],1,1,t0,t,'phit');
-if norm(xcdt4-xcdt2,1) > 0.001 then pause;end
+if norm(xcdt4-xcdt2,1) > 0.001 then pause,end
 
 xcdt5=odedc('stiff',[x0c;1;1],1,1,t0,t,'phit');
-if norm(xcdt5-xcdt2,1) > 0.0001 then pause;end
+if norm(xcdt5-xcdt2,1) > 0.0001 then pause,end

@@ -8,13 +8,14 @@ c     kmac  : variable number of the compiled macro in the scilab stack
 c!    
 c
 c
+c     Copyright INRIA
       include '../stack.h'
 c     
       integer nops
       parameter (nops=32)
       character*40 strg
       character*40 form
-      double precision x
+      double precision x,xx
       integer op,ix(2),fptr
       equivalence (x,ix(1))
       logical iflag
@@ -148,7 +149,7 @@ c     nouvelle 'operation'
 c     
       if(ddt.lt.-1) write(6,'(i7)') op
       goto(20,25,40,42,30,41,45,50,50,60,15,90,90,90,90,100,
-     &     12,101,102) ,op
+     &     12,101,102,90) ,op
 c     
 c     
 c     matfns
@@ -334,17 +335,7 @@ c
       isign=1
       if(x.lt.0)  isign=-1
       call fmt(abs(x),maxc,ifmt,n1,n2)
-      if(ifmt.eq.1) then
-         nf=1
-         ifl=maxc
-         n2=1
-         write(form,130) maxc,maxc-7
-         write(strg,form) x
-      elseif(ifmt.ge.0) then
-         nf=2
-         write(form,120) n1,n2
-         write(strg,form) x
-      elseif(ifmt.eq.-1) then
+      if(ifmt.eq.-1) then
 c     Inf
          ifl=3
          strg='Inf'
@@ -352,16 +343,42 @@ c     Inf
 c     Nan
          ifl=3
          strg='Nan'
+      elseif(ifmt.eq.1) then
+         nf=1
+         ifl=maxc
+         n2=1
+         if(abs(x).ge.1.d100.or.abs(x).lt.1.d-99) then
+            ie=int(log10(abs(x)))
+            if(ie.lt.0) ie=ie-1
+            xx=x/(10.0d0**ie)
+            nf=2
+            write(form,120) maxc,0
+            write(strg,form) xx
+            ls=lnblnk(strg)
+            write(strg(ls+1:),'(''D'',i4)') ie
+         else
+            write(form,130) maxc,maxc-7
+            write(strg,form) x
+         endif
+      elseif(ifmt.ge.0) then
+         nf=2
+         write(form,120) n1,n2
+         write(strg,form) x
       endif
       i1=0
  410  i1=i1+1
       if(strg(i1:i1).eq.' ') goto 410
+
       i2=lnblnk(strg)+1
- 420  i2=i2-1
-      if(i2.gt.2) then
-         if(strg(i2:i2).eq.'0') goto 420
+      if(ifmt.ge.0.and.ifmt.ne.1) then
+ 420     i2=i2-1
+         if(i2.gt.2) then
+            if(strg(i2:i2).eq.'0') goto 420
+         endif
+         if(strg(i2:i2).eq.'.') i2=i2-1
+      else
+         i2=i2-1
       endif
-      if(strg(i2:i2).eq.'.') i2=i2-1
 
       istk(il)=10
       istk(il+1)=1
@@ -427,7 +444,7 @@ c     on cree les premiers elements de la liste "for"
       istk(il)=15
       istk(il+1)=3
       istk(il+2)=1
-      lr=sadr(il+5)
+      lr=sadr(il+6)
       ilr=il+3
 c
       il=iadr(lr)
@@ -1001,7 +1018,7 @@ c     mark named variable
       l=il+7
 c     type 18
       istk(l)=1
-      istk(l)=8
+      istk(l+1)=8
       istk(il+5)=3
       l=l+2
 c     nom de la variable
@@ -1027,7 +1044,7 @@ c     mkindx
       l=il+9
 c     type 2
       istk(l)=1
-      istk(l)=9
+      istk(l+1)=9
       istk(il+5)=3
       l=l+2
 
@@ -1054,3 +1071,4 @@ c
 
 c     
       end
+

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 void AddMessage(description)
 char *description;
 {

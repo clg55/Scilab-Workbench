@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 
 #include <string.h> 
 #include <stdio.h>
@@ -9,10 +10,13 @@
 #include "men_Sutils.h"
 #include "link.h"
 
-extern int C2F(namstr) _PARAMS((integer *id, integer *str, integer *n, integer *job));
+#include "addinter.h" 
 
+extern int C2F(namstr) _PARAMS((integer *id, integer *str, integer *n, integer *job));
 extern int C2F(funtab) _PARAMS((int *id, int *fptr, int *job));  
 extern int C2F(error)  _PARAMS((integer *n));  
+extern void GetenvB _PARAMS(( char *name,char *env, int len));
+
 
 #ifdef __STDC__
 #include <stdlib.h>
@@ -23,7 +27,7 @@ extern int C2F(error)  _PARAMS((integer *n));
 #define OK 1
 #define FAIL 0
 
-#define MAXINTERF 30
+#define MAXINTERF 50
 #define INTERFSIZE 25 
 
 typedef struct 
@@ -36,49 +40,110 @@ typedef struct
 
 Iel DynInterf[MAXINTERF];
 static int LastInterf=0;
-
+static void SciInterInit();
 static void DynFuntab _PARAMS((int *Scistring,int *ptrstrings,int *nstring,int k1));
 
 /************************************************
  * Dynamically added interface to Scilab 
  ************************************************/
 
-void C2F(addinter)(descla,ptrdescla,nvla,iname,desc,ptrdesc,nv)
+void C2F(addinter)(descla,ptrdescla,nvla,iname,desc,ptrdesc,nv,err)
      int *desc,*ptrdesc,*nv;         /* ename */
      int *descla,*ptrdescla,*nvla;   /* files */
      char *iname;                    /* interface name */
+     int *err;
 {
-  int ierr,i,rhs=2,ilib=0;
+  int ierr,i,rhs=2,ilib=0,inum;
   char **files,*names[2];
-  ierr=0;
-  ScilabMStr2CM(descla,nvla,ptrdescla,&files,&ierr);
-  if ( ierr == 1) return;
+  *err=0;
+  ScilabMStr2CM(descla,nvla,ptrdescla,&files,err);
+  if ( *err == 1) return;
   names[0]=iname;
   names[1]=(char *)0;
-  /** Linking Files and entry point name (in names)*/
+
   SciLinkInit();
+  SciInterInit();
+
+  /** Try to unlink the interface if it was previously linked **/
+  
+  for ( i = 0 ; i < LastInterf ; i++) 
+    {
+      if (strcmp(iname,DynInterf[i].name)==0) 
+	{
+	  /** check if my os accepts unlink **/
+	  if ( LinkStatus() == 1) 
+	    {
+	      C2F(isciulink)(&DynInterf[i].Nshared);
+	    }
+	  break;
+	}
+    }
+
+  /** Try to find a free position in the interface table : inum **/
+  inum=-1;
+  for ( i = 0 ; i < LastInterf ; i++) 
+    {
+      if ( DynInterf[i].ok == 0 ) inum= i;
+    }
+  inum = ( inum == -1 ) ? LastInterf : inum ;
+
+  /** Linking Files and add entry point name iname */
+
+  if ( inum >=  MAXINTERF ) 
+    {
+      /*      sciprint("Maximum number of dynamic interfaces %d\r\n",MAXINTERF);
+	      sciprint("has been reached\r\n");*/
+      *err=1;
+      return;
+    }
+
   SciLink(0,&rhs,&ilib,files,names,"f");
 
-  /** we get the linked function in the INterface function table DynInterf **/
-  DynInterf[LastInterf].Nshared = ilib;
-  if ( SearchInDynLinks(names[0],&DynInterf[LastInterf].func) < 0 ) 
+  if ( ilib < 0 ) 
     {
-      sciprint("Not  found!");
+      *err=ilib;  return;
+    }
+
+  /** store the linked function in the interface function table DynInterf **/
+  DynInterf[inum].Nshared = ilib;
+
+  if ( SearchInDynLinks(names[0],&DynInterf[inum].func) < 0 ) 
+    {
+      /*sciprint("addinter failed for %s Not  found!\r\n",iname);*/
+      *err=2;
       return;
     }
   else
     {
-      strncpy(DynInterf[LastInterf].name,iname,INTERFSIZE);
-      DynInterf[LastInterf].ok = 1;
+      strncpy(DynInterf[inum].name,iname,INTERFSIZE);
+      DynInterf[inum].ok = 1;
     }
-  LastInterf++;
+  if ( inum == LastInterf ) LastInterf++;
 
-  /** we add all the Scilab new entry names in the scilab function table funtab **/
+  /** we add all the Scilab new entry names 
+    in the scilab function table funtab **/
 
-  DynFuntab(desc,ptrdesc,nv,LastInterf);
-
+  DynFuntab(desc,ptrdesc,nv,inum+1);
   for (i=0;i< *nvla;i++) FREE(files[i]); FREE(files);
+  ShowInterf();
 }
+
+
+static void SciInterInit()
+{
+  static int first_entry=0;
+  if ( first_entry == 0) 
+    {
+      int i;
+      for ( i= 0 ; i < MAXINTERF ; i++) 
+	DynInterf[i].ok=0;
+      first_entry++;
+    }
+}
+
+/*********************************
+ * used in C2F(isciulink)(i) 
+ *********************************/
 
 void RemoveInterf(Nshared)
      int Nshared;
@@ -94,12 +159,28 @@ void RemoveInterf(Nshared)
     }
 }
 
+/*********************************
+ * show the interface table 
+ *********************************/
+
+ShowInterf()
+{
+  int i;
+  for ( i = 0 ; i < LastInterf ; i++ ) 
+    {
+      if ( DynInterf[i].ok == 1 ) 
+	sciprint("Interface %d %s\r\n",i,DynInterf[i].name);
+    }
+}
 
 #define nsiz 6 
 
 /************************************************
- * add a set of function to scilab function table 
+ * add the set of functions associated to 
+ *   dynamically added interface k1 
+ *   in scilab function table with id 10000*k1+i 
  ************************************************/
+
 
 static void DynFuntab(Scistring,ptrstrings,nstring,k1)
      int *Scistring,*nstring,*ptrstrings;
@@ -113,7 +194,7 @@ static void DynFuntab(Scistring,ptrstrings,nstring,k1)
       ni=ptrstrings[i]-li;
       li=ptrstrings[i];
       C2F(namstr)(id,SciS,&ni,&zero);
-      fptr1= fptr= 10000*k1+i;
+      fptr1= fptr= (DynInterfStart+k1)*100 +i;
       C2F(funtab)(id,&fptr1,&quatre); /* clear previous def set fptr1 to 0*/
       C2F(funtab)(id,&fptr,&trois);  /* reinstall */
       SciS += ni;
@@ -122,13 +203,14 @@ static void DynFuntab(Scistring,ptrstrings,nstring,k1)
 
 /************************************************
  * Used when one want to call a function added 
- * with addinterf 
+ * with addinterf the dynamic interface number 
+ * is given by k1=(*k/100)-1
  ************************************************/
 
 void C2F(userlk)(k) 
      integer *k;
 {
-  int k1 = (*k/100) -1 ;
+  int k1 = *k - (DynInterfStart+1) ;
   int imes = 9999;
   if ( k1 >= LastInterf || k1 < 0 ) 
     {
@@ -145,5 +227,110 @@ void C2F(userlk)(k)
       return;
     }
 }
+
+
+/******************************************************
+ * Test for scilab library loaded when needed 
+ * similar to addinter but we do not add the function list 
+ * in fundef since it is already present 
+ * sometimes we need to link several interfaces with the same code 
+ ******************************************************/
+
+int  SciLibLoad(num_names,names,files,nums,err)
+     char *names[];
+     char **files;
+     int *err;
+     int nums[],num_names;
+{
+  int ierr,i,rhs=2,inum,ilib=0,j;
+  SciLinkInit();
+  SciInterInit();
+  *err=0;
+  
+  for ( j=0 ; j < num_names ; j++) 
+    {
+      /** Try to find a free position in the interface table : inum **/
+      inum=-1;
+      for ( i = 0 ; i < LastInterf ; i++) 
+	{
+	  if ( DynInterf[i].ok == 0 ) inum= i;
+	}
+      inum = ( inum == -1 ) ? LastInterf : inum ;
+      /** Linking Files and add entry point name iname */
+      if ( inum >=  MAXINTERF ) 
+	{
+	  sciprint("Maximum number of dynamic interfaces %d\r\n",MAXINTERF);
+	  sciprint("has been reached\r\n");
+	  *err=1;
+	  return -1 ;
+	}
+      else 
+	nums[j]=inum;
+      if ( inum == LastInterf ) LastInterf++;
+    }
+  SciLink(0,&rhs,&ilib,files,names,"f");
+  if ( ilib < 0 ) 
+    {
+      *err=1;  return -1;
+    }
+  /** store the linked function in the interface function table DynInterf **/
+
+  for ( j=0 ; j < num_names ; j++) 
+    {
+      DynInterf[nums[j]].Nshared = ilib;
+      if ( SearchInDynLinks(names[0],&DynInterf[nums[j]].func) < 0 ) 
+	{
+	  sciprint("addinter failed for %s Not  found!\r\n",names[j]);
+	  return -1;
+	}
+      else
+	{
+	  strncpy(DynInterf[nums[j]].name,names[j],INTERFSIZE);
+	  DynInterf[nums[j]].ok = 1;
+	}
+    }
+  ShowInterf();
+  return 0;
+}
+
+#define MAX_ENV 256 
+
+BuildName(name,str)
+     char *name,*str;
+{
+  int  nc= MAX_ENV;
+  GetenvB("SCI",name,nc);
+  strcat(name,"/libs/");
+  strcat(name,str);
+}
+
+CallDynInterf(pos,num_names,namepos,names,nums,files)
+     int *pos;
+     char *names[];
+     char *files[];
+     int namepos,num_names,nums[];
+{
+  int imes = 9999;
+  if ( *pos == -1 || DynInterf[*pos].ok == 0) 
+    {
+      /** need to load or reload the interface **/
+      int pos1, err=0;
+      SciLibLoad(num_names,names,files,nums,&err);
+      if (err != 1) *pos = nums[namepos];
+    }
+  if ( DynInterf[*pos].ok == 1 ) 
+    (*DynInterf[*pos].func)();
+  else 
+    {
+      sciprint("Interface %s not linked\r\n",DynInterf[*pos].name);
+      C2F(error)(&imes);
+      return;
+    }
+}  
+
+
+
+
+
 
 

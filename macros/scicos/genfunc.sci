@@ -1,4 +1,5 @@
 function [ok,mac,txt]=genfunc(txt)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<1 then txt=' ',end
 mac=[]

@@ -1,5 +1,7 @@
       subroutine dsslti(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     discrete state space linear system simulator
 c     rpar(1:nx*nx)=A

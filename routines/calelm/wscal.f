@@ -32,6 +32,7 @@ c
 c     cleve moler.
 c
 c!
+c     Copyright INRIA
       double precision sr,si,xr(*),xi(*)
       if (n .le. 0) return
       ix = 1

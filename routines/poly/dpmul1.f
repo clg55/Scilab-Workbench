@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DPMUL1,SSI=0
+c     Copyright INRIA
       subroutine dpmul1(p1,d1,p2,d2,p3)
 c!but
 c  ce sous programme effectue le produit polynomial:

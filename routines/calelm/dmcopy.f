@@ -18,6 +18,7 @@ c     n         nombre de colonnes des matrices a et b
 c!sous programmes utilises
 c     neant
 c!
+c     Copyright INRIA
       double precision a(*),b(*)
       integer na,nb,m,n
       integer ia,ib,i,j,mn

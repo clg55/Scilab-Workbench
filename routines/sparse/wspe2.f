@@ -1,4 +1,5 @@
       subroutine wspe2(ma,na,ar,ai,nela,inda,i,ni,j,nj,
+c     Copyright INRIA
      $     mr,nr,rr,ri,nelr,indr,ptr,ierr)
 c     extract a submatrix from a sparse matrix
 c!

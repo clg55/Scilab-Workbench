@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 /************************************************************************
  * wmhelp 
  * help menu for scilab 
@@ -39,6 +40,8 @@ static void SciApropos(HWND hwnd,char *str);
  * Comments:
  ************************************************************************/
 
+static int using_menu_help =0;
+
 void DoHelpDialog()
 {
   if ( Help_Init() == 1) 
@@ -47,14 +50,21 @@ void DoHelpDialog()
       return;
     }
   if ( HelpModeless == (HWND)0 )
-    HelpModeless= CreateDialog(hdllInstance, MAKEINTRESOURCE(ID_HELPDIALOG),
-			       NULL,
-			       /** NULL or textwin.hWndParent, **/
-			       HelpProc) ;
+    {
+      HelpModeless= CreateDialog(hdllInstance, MAKEINTRESOURCE(ID_HELPDIALOG),
+				 NULL,
+				 /** NULL or textwin.hWndParent, **/
+				 HelpProc) ;
+      using_menu_help = 1;
+    }
   else
     sciprint("You cannot open more than one help dialog at a time \r\n");
 }
 
+int help_popped_status()
+{
+  return(using_menu_help);
+}
 
 /************************************************************************
  * Function: HelpProc(HWND, UINT, UINT, LONG)

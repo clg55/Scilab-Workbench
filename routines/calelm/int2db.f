@@ -26,6 +26,7 @@ c     jack dongarra, linpack, 3/11/78.
 c
 c!
 c
+c     Copyright INRIA
       integer dx(*)
       double precision dy(*)
       integer i,incx,incy,ix,iy,n

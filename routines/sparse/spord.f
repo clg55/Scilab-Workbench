@@ -2,6 +2,7 @@
 c!purpose
 c     test function for dspsort wspsort et lspsort
 c!
+c     Copyright INRIA
       integer r11,r12,r21,r22,r
 c     returns
 c                1 :if record r1 is greater than r2

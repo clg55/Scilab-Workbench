@@ -4,7 +4,7 @@
 savewave - save data into a sound <<wav>> file.
 .SH CALLING SEQUENCE
 .nf
-x=savewave('file-name' [, rate ]);
+savewave('file-name',x [, rate ]);
 .fi
 .SH PARAMETERS
 .TP
@@ -13,11 +13,11 @@ x
 .TP
 rate
 : a scalar. 22050 is the default value.
-.SH DESCRIPTION
+.SH DESCRIPTION 
 save x into a  wav sound file. you can transform other sound files
 into wav file with the \fVsox\fR program.
 .SH SEE ALSO
-loadwave, soundsec, analyze, mapsound
+loadwave,  analyze, mapsound
 
 
 

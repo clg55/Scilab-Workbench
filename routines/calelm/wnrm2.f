@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WNRM2,SSI=0
+c     Copyright INRIA
       double precision function wnrm2(n,xr,xi,incx)
 c!purpose
 c

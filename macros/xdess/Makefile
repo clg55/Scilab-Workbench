@@ -1,6 +1,8 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
+
 include ../../Makefile.incl
 
 .SUFFIXES: .sci .bin $(SUFFIXES)
@@ -19,6 +21,8 @@ MACROS = errbar.sci fchamp.sci fcontour.sci fplot2d.sci fplot3d.sci \
 	zgrid.sci graduate.sci  \
 	fac3d.sci fac3d1.sci eval3dp.sci plotframe.sci xsetm.sci \
 	edit_curv.sci drawmbar.sci getmenu.sci genfac3d.sci Sgrayplot.sci \
-	Sfgrayplot.sci fcontour2d.sci addcolor.sci replot.sci sgrid.sci
+	Sfgrayplot.sci fcontour2d.sci addcolor.sci replot.sci sgrid.sci \
+	hotcolormap.sci graycolormap.sci getsymbol.sci getcolor.sci \
+	sd2sci.sci contourf.sci
 
 include ../Make.lib

@@ -16,6 +16,7 @@ function [h,name]=bloc2exp(syst,sexp)
 //!
 //origine F. Delebecque S. Steer inria   1989
 //
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 
 //-compat type(syst)<>15 retained for list/tlist compatibility
@@ -29,8 +30,8 @@ end;
 nsyst=size(syst)
 for l=2:nsyst
  sys=syst(l)
- if sys(1)='blocd' then
-    if rhs=1 then  sys=bloc2exp(sys)
+ if sys(1)=='blocd' then
+    if rhs==1 then  sys=bloc2exp(sys)
                    syst(l)=list('transfer',sys)
              else  [sys]=bloc2exp(sys,sexp)
                    syst(l)=list('transfer',sys(1))
@@ -38,11 +39,11 @@ for l=2:nsyst
     end;
  end;
 end;
-if lhs=2 then [t,nio,name]=construct(syst)
+if lhs==2 then [t,nio,name]=construct(syst)
              else [t,nio]=construct(syst)
 end;
 //linear equation
-if rhs=1 then
+if rhs==1 then
   t=trianfml(t)
 else
   [t,sexp]=trianfml(t,sexp)
@@ -52,11 +53,11 @@ h=t(nt-nio(2)+1:nt,nt+1:mt)
 for kt=1:nio(1),for lt=1:nio(2),
   h(lt,kt)=mulf('-1',h(lt,kt))
 end,end,
-if rhs=1 then h=trisolve(t(nt-nio(2)+1:nt,nt-nio(2)+1:nt),h)
+if rhs==1 then h=trisolve(t(nt-nio(2)+1:nt,nt-nio(2)+1:nt),h)
          else [h,sexp]=trisolve(t(nt-nio(2)+1:nt,nt-nio(2)+1:nt),h,sexp)
               h=list(h,sexp)
 end;
-if lhs=2 then name=list(name(nt+1:mt)',name(nt-nio(2)+1:nt)'),end,
+if lhs==2 then name=list(name(nt+1:mt)',name(nt-nio(2)+1:nt)'),end,
 
 function [ab,nio,name]=construct(syst)
 //!
@@ -104,7 +105,7 @@ for numero=lboites
     end;
     l=l1+1
 end;
-if lhs=1 then  return,end
+if lhs==1 then  return,end
 name=[]
 for kvar=[lliens,lentrees],
 obj=syst(kvar)
@@ -134,7 +135,7 @@ for k=2:nsyst
                objk=obj(ko)
                if objk(1)<0 then is_sortie=[is_sortie,-objk(1)],end
             end;
-            if is_sortie=[] then lliens=[lliens,k],
+            if is_sortie==[] then lliens=[lliens,k],
                             else lsorties(1,is_sortie)=k
             end;
                       else lentrees(1,-obj2(1))=k,
@@ -143,8 +144,8 @@ for k=2:nsyst
   end;
   end,end
 end;
-if mini(lsorties)=0 then error('undefined output'),end
-if mini(lentrees)=0 then error('undefined input'),end
+if mini(lsorties)==0 then error('undefined output'),end
+if mini(lentrees)==0 then error('undefined input'),end
 
 function [where_x]=%connect(bloc,lliens,syst)
 //[where_x]=%connect(bloc,lliens,syst) recherche parmi les liens de syst
@@ -165,7 +166,7 @@ for l=1:nliens,
          whi=l
          for k=4:nb,
              output=lien(k),
-             if bloc=output(1) then whi=[whi,output(2)],end;
+             if bloc==output(1) then whi=[whi,output(2)],end;
          end;
          if prod(size(whi))>1 then nw=nw+1,where_x(nw)=whi,end
 end;
@@ -183,5 +184,5 @@ for li=lliens
          lien=syst(li)
          nb=size(lien);l=l+1;
          output=lien(3),
-         if bloc=output(1) then where_x=[where_x,[l;output(2)]],end;
+         if bloc==output(1) then where_x=[where_x,[l;output(2)]],end;
 end;

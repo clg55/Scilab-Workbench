@@ -1,4 +1,5 @@
       subroutine isova0(a,lda,m,n,path,kpath,ir,ic,dir,pend,
+c     Copyright INRIA
      $     h,v,c)
 c% but
 c     Sous programme appele par le sous programme isoval

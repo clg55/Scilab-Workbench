@@ -1,6 +1,7 @@
       subroutine fmulb1(n,h,x,hx,tabaux,nmisaj,prosca,izs,rzs,dzs)
       implicit double precision (a-h,o-z)
       external prosca
+c     Copyright INRIA
 c
 c parametres
       double precision   un     , deux

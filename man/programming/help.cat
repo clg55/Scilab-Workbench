@@ -5,7 +5,6 @@ NAME
 
 CALLING SEQUENCE
           help word
-          fhelp('word')
 
 DESCRIPTION
   To each documented word corresponds a word.cat ascii file. these files are

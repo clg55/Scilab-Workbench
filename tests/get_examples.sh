@@ -29,11 +29,12 @@ then
 else
 	echo "$1" NO EXAMPLE >> $LOGFILE
 fi
-
+echo "for k=winsid(),xdel(k);end" >> prov
 echo '' >> prov
+
 }
 
-for j in arma control elementary graphics linear nonlinear polynomials programming robust signal tdcs scicos metanet
+for j in arma control dcd elementary graphics linear metanet nonlinear polynomials programming robust scicos signal sound tdcs translation
 do
 	echo -n "Processing man/$j "
 	for f in $SCI/man/$j/*.man

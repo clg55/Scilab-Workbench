@@ -1,4 +1,5 @@
 function [g1]=add_node(g,xy,name)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select rhs
 case 1 then

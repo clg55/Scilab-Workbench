@@ -1,3 +1,5 @@
+/* Copyright INRIA */
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -20,6 +22,10 @@
 static void Sed _PARAMS((char *,char *,char *,char *,char *,char *,char *));
 static void readOneLine _PARAMS((char *buff,int *stop,FILE *fd));
 static void ComputeSize _PARAMS((int num,int i,double *,double *,double *,double *));
+
+#ifdef WIN32 
+extern void SciEnv(void);
+#endif 
 
 /*---------------------------------------------------------
 
@@ -59,6 +65,9 @@ int main(argc, argv)
 		     }
 		   exit(0);
 		 }
+#ifdef WIN32 
+  SciEnv();
+#endif 
   env = getenv("SCI");
   if (env == NULL) {
     fprintf(stderr,"Environment variable SCI must be defined\n");
@@ -225,4 +234,5 @@ static void ComputeSize(num,i,x,y,w,h)
       break ;
     }
 }
+
 

@@ -1,6 +1,8 @@
       subroutine zqnbd(indqn,simul,dh,n,binf,bsup,x,f,g,zero,napmax,
      &itmax,indic,izig,nfac,imp,io,epsx,epsf,epsg,x1,x2,g1,dir,df0,
      &ig,in,irel,izag,iact,epsrel,ieps1,izs,rzs,dzs)
+c     Copyright INRIA
+
 c
       implicit double precision (a-h,o-z)
       real rzs(*)

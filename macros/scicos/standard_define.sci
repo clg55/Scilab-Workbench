@@ -1,5 +1,6 @@
 function o=standard_define(sz,model,label,gr_i)
 //initialize graphic part of the block data structure
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<4 then gr_i=[],end
 [nin,nout,ncin,ncout]=model(2:5)

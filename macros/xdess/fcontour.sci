@@ -28,14 +28,19 @@ function fcontour(xr,yr,f,nz,teta,alpha,legend,flag,bbox,zlev)
 // fcontour(surf,-1:0.1:1,-1:0.1:1,10);
 //
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
-if rhs=0,s_mat=['deff(''[z]=surf(x,y)'',''z=x**2+y**2'');';
-                'fcontour(-1:0.1:1,-1:0.1:1,surf,10);'];
-         write(%io(2),s_mat);execstr(s_mat);
-         return;end;
-if rhs<3,write(%io(2),[' I need at least 3 arguments';
-                       'or zero to have a demo']);
-return;end
+if rhs==0,
+  s_mat=['deff(''[z]=surf(x,y)'',''z=x**2+y**2'');';
+      'fcontour(-1:0.1:1,-1:0.1:1,surf,10);'];
+  write(%io(2),s_mat);execstr(s_mat);
+  return;
+end;
+if rhs<3,
+  write(%io(2),[' I need at least 3 arguments';
+      'or zero to have a demo']);
+  return;
+end
 if rhs<4,nz=10,end;
 if rhs<5,teta=35,end;
 if rhs<6,alpha=45,end;
@@ -43,7 +48,7 @@ if rhs<7,leg="X@Y@Z",end;
 if rhs<8,flag=[2,2,3],end;
 if rhs<9,bbox=0*ones(1,6),end;
 if rhs<10,zlev=0;end
-if type(f)=11 then comp(f),end;
+if type(f)==11 then comp(f),end;
 contour(xr,yr,feval(xr,yr,f),nz,teta,alpha,leg,flag,bbox,zlev);
 
 

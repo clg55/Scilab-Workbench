@@ -4,10 +4,11 @@ function [tt]=pol2tex(a)
 //!
 //origine S Steer INRIA 1989
 //
+// Copyright INRIA
 p=string(coeff(a))
 z=varn(a)
 lz=length(z)
-while part(z,lz)=' ' then lz=lz-1,end
+while part(z,lz)==' ' then lz=lz-1,end
 z=part(z,1:lz)
 //
 np=prod(size(p));ok=' ',tt=' ',
@@ -21,8 +22,8 @@ else
    ok='+'
    tt=tt+p(1)
 end
-if np=1 then
-   if ok=' ' then tt='0',end
+if np==1 then
+   if ok==' ' then tt='0',end
    return,
 end
 //coeff  degree 1
@@ -33,7 +34,7 @@ if part(p(2),1)<>'-' then
     else  tt=tt+ok+p(2)+' '+z,ok='+'
   end
 else
-  if p(2)='-1' then
+  if p(2)=='-1' then
     tt=tt+'-'+z
   else
     tt=tt+p(2)+' '+z
@@ -50,13 +51,13 @@ for i=3:np
    end
  else
    ok='+'
-   if p(i)='-1' then
+   if p(i)=='-1' then
      tt=tt+'-'+z+'^{'+string(i-1)+'}'
    else
      tt=tt+p(i)+' '+z+'^{'+string(i-1)+'}'
    end
  end
 end
-if ok=' ' then tt='0',end
+if ok==' ' then tt='0',end
 
 

@@ -1,4 +1,5 @@
 function [g1]=graph_complement(g,gmax)
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 if rhs==1 then
   ind=0;

@@ -1,3 +1,4 @@
+// Copyright INRIA
 // simple
 //
 deff('[x,y]=t1(a,b)','x=a+b,y=a-b','n')
@@ -42,12 +43,12 @@ if z<>1 then pause,end
 text = ['if n>0 then x=1'
                                 'y=0;for k=1:n,y=y+k,end'
                             'else x=-1'
-                                 'if n=4 then y=''yes'' '
+                                 'if n==4 then y=''yes'' '
                                          'else y=''no'' '
                                  'end'
                     'end'
-                   'if n=-1 then return,end'
-                   'if n=-2 then tt=resume(n),end'
+                   'if n==-1 then return,end'
+                   'if n==-2 then tt=resume(n),end'
                     'select x,'
                     'case 1 then x=''pos'' ,tt=resume(''ok''),'
                     'case -1 then x=''neg'' ,'
@@ -62,7 +63,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -70,7 +71,7 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear u v tt
 [u,v]=t5(5);
 if u<>'pos' then pause,end
@@ -80,7 +81,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -88,19 +89,19 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 //
 // complex clauses
 //
 text = ['if n>0 then x=1'
                                 'y=0;for k=1:b(n),y=y+b(k),end'
                             'else x=-1'
-                                 'if n=4 then y=b(''yes'') '
+                                 'if n==4 then y=b(''yes'') '
                                          'else y=b(''no'') '
                                  'end'
                     'end'
-                   'if n=b(-1) then return,end'
-                   'if n=b(-2) then tt=resume(b(n)),end'
+                   'if n==b(-1) then return,end'
+                   'if n==b(-2) then tt=resume(b(n)),end'
                     'select x,'
                     'case 1 then x=b(''pos'') ,tt=resume(b(''ok'')),'
                     'case b(-1) then x=b(''neg'') ,'
@@ -115,7 +116,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -123,7 +124,7 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear u v tt
 [u,v]=t5(5);
 if u<>'pos' then pause,end
@@ -133,7 +134,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -141,7 +142,7 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 deff('[x,y]=t5(n)',text,'n')
 [u,v]=t5(5);
 if u<>'pos' then pause,end
@@ -151,7 +152,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -159,7 +160,7 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 // 
 clear u v tt
 [u,v]=t5(5);
@@ -170,7 +171,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -178,9 +179,9 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 //more complex
-deff('[x]=b(a)','if a=1 then x=1,else x=a,prod([1 1]),end','n')
+deff('[x]=b(a)','if a==1 then x=1,else x=a,prod([1 1]),end','n')
 //
 deff('[x,y]=t5(n)',text,'n')
 [u,v]=t5(5);
@@ -191,7 +192,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -199,7 +200,7 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear u v tt
 [u,v]=t5(5);
 if u<>'pos' then pause,end
@@ -209,7 +210,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -217,7 +218,7 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 //
 deff('[x,y]=t5(n)',text,'n')
 [u,v]=t5(5);
@@ -228,7 +229,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -236,7 +237,7 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 //
 clear u v tt
 [u,v]=t5(5);
@@ -247,7 +248,7 @@ clear tt
 [u,v]=t5(-1);
 if u<>-1 then pause,end
 if v<>'no' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 clear tt v
 u=t5(-2);
 if u<>-1 then pause,end
@@ -255,18 +256,18 @@ if tt<>-2 then pause,end
 clear tt
 u=t5(-4);
 if u<>'neg' then pause,end
-if exists('tt')=1 then pause,end
+if exists('tt')==1 then pause,end
 // resume
 deff('[]=t6(a)','x=resume(a)','n')
 clear ans x
 t6(15)
 if x<>15 then pause,end
-if exists('ans')=1 then pause,end
+if exists('ans')==1 then pause,end
 //
 clear ans x
 t6(15)
 if x<>15 then pause,end
-if exists('ans')=1 then pause,end
+if exists('ans')==1 then pause,end
 //
 //
 //
@@ -344,7 +345,7 @@ if norm(x-a*[1 2 3])>1000*%eps then pause,end
 //
 //external calls a macro
 //
-deff('[x]=b(a)','if a=1 then x=a,prod([1 1]),else x=a,prod([1 1]),end','n')
+deff('[x]=b(a)','if a==1 then x=a,prod([1 1]),else x=a,prod([1 1]),end','n')
 text=['for k=1:n,'
      'y=ode(a*(k-1),k-1,k,simul),'
      'x=[x,y],'
@@ -458,7 +459,7 @@ if norm(x-a*[1 2 3])>1000*%eps then pause,end
 //
 //macro defining ,compiling and executing a macro
 //
-text=['deff(''[x]=b(a)'',''if a=1 then x=1,else x=a,prod([1 1]),end'',''n''),'
+text=['deff(''[x]=b(a)'',''if a==1 then x=1,else x=a,prod([1 1]),end'',''n''),'
       'b,'
       'x=b(n),']
 deff('[x]=t8(n)',text','n')
@@ -483,7 +484,7 @@ deff('[r]=horner(p,x)',['if type(p)==15|type(p)==16 then';
                         'for k=1:d,';
                           'r=r*x+coeff(p,d-k)*eye;';
                         'end;'],'n')
-deff('[f]=%prp(p1,p2)',['[l,c]=size(p2);';
+deff('[f]=%p_r_p(p1,p2)',['[l,c]=size(p2);';
                         'if l*c <>1 then f=p1*invr(p2),return,end;';
                         '[l,c]=size(p1);';
                         '[p1 p2]=simp(p1,p2*ones(l,c));';
@@ -493,26 +494,26 @@ deff('[f]=%prp(p1,p2)',['[l,c]=size(p2);';
  
 horn=horner;
 h=1/s;
-if cplist(h,tlist(['r','num','den','dt'],1,s,[]))=0 then pause,end
+if cplist(h,tlist(['r','num','den','dt'],1,s,[]))==0 then pause,end
 h1=(z-1)/(z+1);
 hrn=horner(h,h1);
-if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))=0 then pause,end
+if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))==0 then pause,end
 //
 hrn=horner(h,h1);
-if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))=0 then pause,end
+if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))==0 then pause,end
 //
 h=1/s;
-if cplist(h,tlist(['r','num','den','dt'],1,s,[]))=0 then pause,end
+if cplist(h,tlist(['r','num','den','dt'],1,s,[]))==0 then pause,end
 h1=(z-1)/(z+1);
 hrn=horn(h,h1);
-if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))=0 then pause,end
+if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))==0 then pause,end
 //
 hrn=horn(h,h1);
-if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))=0 then pause,end
+if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))==0 then pause,end
 //
 //
 //
-text=['aa=1,if a=2 then aa=b(a),end']
+text=['aa=1,if a==2 then aa=b(a),end']
 fic=file('open','test_macro_exec','unknown')
 write(fic,text)
 file('close',fic)

@@ -1,5 +1,6 @@
 SHELL = /bin/sh
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/control.a
 
@@ -34,4 +35,10 @@ include ../../Makefile.incl
 CFLAGS = $(CC_OPTIONS)
 
 include ../Make.lib
+
+all:: Makefile.mak
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile
+
 

@@ -5,6 +5,7 @@ maxi - maximum
 .SH CALLING SEQUENCE
 .nf
 [m [,k]]=maxi(A)
+[m [,k]]=maxi(A,'c') or [m [,k]]=maxi(A,'r')
 [m [,k]]=maxi(A1,A2,...,An)
 [m [,k]]=maxi(list(A1,A2,...,An))
 .fi
@@ -19,6 +20,10 @@ A1,...,An
 For \fVA\fR, a real  vector or matrix, \fVmaxi(A)\fR 
 is the largest element 
 \fVA\fR. \fV[m,k]=maxi(A)\fR gives in addition the index of the maximum.
+A second argument of type string \fV'r'\fR or \fV'c'\fR can be used : \fV'r'\fR
+is used to get a row vector \fVm\fR such that \fVm(j)\fR contains the 
+maximum of the \fVj\fR th column of A (\fVA(:,j)\fR), \fVk(j)\fR gives the row 
+indice which contain the maximum for column \fVj\fR. \fV'c'\fR is used for the dual operation on the rows of \fVA\fR.
 
 \fVm=maxi(A1,A2,...,An)\fR, where all the \fVAj\fR are matrices of the same 
 sizes,returns a vector or a matrix \fVm\fR of size \fVsize(m)=size(A1)\fR

@@ -31,7 +31,7 @@ Scicos editor creates and uses for each block a data structure
 containing all information relative to the graphic interface and
 simulation part of the block.
 .SH SEE ALSO
-scicos, scicos_graphic, scicos_model
+scicos, scicos_graphics, scicos_model
 
 
 

@@ -4,7 +4,10 @@ NAME
   xgetfile - dialog to get a file path
 
 CALLING SEQUENCE
-  path=xgetfile([file_mask], [dir])
+  path=xgetfile([title='string'])
+  path=xgetfile(file_mask,[title='string'])
+  path=xgetfile(file_mask,dir,[title='string'])
+  path=xgetfile(file_mask,dir,'string')
 
 PARAMETERS
 
@@ -18,12 +21,18 @@ PARAMETERS
 
   path        : is the user selected file path if user answers "Ok" or the "
               " string if user answers "Cancel"
+
+  title='string'
+              :Optional arguments which gives the title for the xgetfile win-
+              dow.
+
 DESCRIPTION
   Creates a dialog window for file selection
 
 EXAMPLE
   xgetfile()
   xgetfile('*.sci','SCI/macros/xdess')
+  xgetfile(title='Choose a file name ')
 
 SEE ALSO
   x_dialog, file, read, write, exec, getf

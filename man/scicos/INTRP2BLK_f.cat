@@ -1,7 +1,5 @@
 
-INTRP2BLK_f(5)                     Scilab                      INTRP2BLK_f(5)
-Group                                                                   Group
-Scicos                                                                 Scicos
+INTRP2BLK_f(5)                  Scicos Block                   INTRP2BLK_f(5)
 NAME
   INTRP2BLK_f - Scicos 2D linear interpolation block
 

@@ -1,4 +1,5 @@
       subroutine wspos(op,ma,na,ar,ai,nela,inda,mb,nb,br,bi,
+c     Copyright INRIA
      $     nelc,indc,ierr,ita,itb)
 c!purpose
 c     compare the elements of a  sparse matrix A and a full matrix B.

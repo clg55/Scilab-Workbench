@@ -1,6 +1,7 @@
 C     Examples for dassl system and jacobian 
 C     --------------------------------------
 
+c     Copyright INRIA
       subroutine res1(t,y,ydot,delta,ires,rpar,ipar)
       implicit double precision (a-h,o-z)
       dimension y(*), ydot(*), delta(*),rpar(*)

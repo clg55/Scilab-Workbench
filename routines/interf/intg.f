@@ -2,6 +2,7 @@
 C     --------------------------------------------
 c     Scilab intg 
 c      implicit undefined (a-z)
+c     Copyright INRIA
       character*(4) fname
       character*6   namef
       include '../stack.h'

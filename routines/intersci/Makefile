@@ -1,10 +1,12 @@
 SHELL = /bin/sh
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/intersci.a
 
 OBJSC = cchar.o ccharf.o cdouble.o cdoublef.o cerro.o cint.o cintf.o cout.o \
-	cstringf.o stringc.o int2cint.o dbl2cdbl.o freeptr.o
+	cstringf.o stringc.o int2cint.o dbl2cdbl.o freeptr.o \
+	sparse.o 
 
 OBJSF = erro.o out.o
 
@@ -30,3 +32,8 @@ stringc.o: ../machine.h
 int2cint.o: ../machine.h
 dbl2cdbl.o: ../machine.h
 freeptr.o: ../machine.h
+
+all:: Makefile.mak
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile

@@ -1,3 +1,4 @@
+c Copyright INRIA 
 
 c*------------------------------------------------------------------
 c vsiz  size of internal scilab stack 
@@ -39,8 +40,8 @@ c
       integer ddt,err,lct(8),lin(lsiz),lpt(6),hio,rio,wio,rte,wte
       common /iop/ ddt,err,lct,lin,lpt,hio,rio,wio,rte,wte
 
-      integer err1,err2,errct,toperr,errpt
-      common /errgst/ err1,err2,errct,toperr,errpt
+      integer err1,err2,errct,toperr,errpt,ieee
+      common /errgst/ err1,err2,errct,toperr,errpt,ieee
 
       integer sym,syn(nsiz),char1,fin,fun,lhs,rhs,ran(2),comp(3)
       common /com/ sym,syn,char1,fin,fun,lhs,rhs,ran,comp
@@ -52,9 +53,10 @@ c
       integer bptlg(maxbpt)
       common /dbg/ wmac,lcntr,nmacs,macnms,lgptrs,bptlg
 
-      common/adre/lbot,ie,is,ipal,nbarg,ladr(30)
-      common/intersci/nbvars,nbrows(30),nbcols(30),ntypes(30),
-     $      lad(30),lhsvar(30)
-
+      parameter (intersiz=60)
+      common/adre/lbot,ie,is,ipal,nbarg,ladr(intersiz)
+      common/intersci/nbvars,nbrows(intersiz),nbcols(intersiz),
+     $ itflag(intersiz),ntypes(intersiz),lad(intersiz),
+     $ ladc(intersiz),lhsvar(intersiz)
 c*------------------------------------------------------------------
 

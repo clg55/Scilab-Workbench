@@ -3,6 +3,7 @@
 // Most examples are in transfer representation but computations
 // are done in state space form
 
+// Copyright INRIA
 //2.4.1 (Kwakernaak)
 
 H=[1 (s-1)/((s-2)*(s-3));

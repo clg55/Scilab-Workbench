@@ -1,3 +1,4 @@
+// Copyright INRIA
 // test conversion transfer <---> state-space
 // 1- coff inversion 
  s=poly(0,'s'); a=[1 2 3;4 5 6;7 8 9];
@@ -30,7 +31,7 @@
        0 , 0 , 0];
  
 sl=syslin('c',a,b,c);
-if sl<>tlist('lss',a,b,c,0*ones(2,3),0*ones(5,1),'c') then pause,end
+if or(sl<>lsslist(a,b,c,0*ones(2,3),0*ones(5,1),'c')) then pause,end
 //
 eps=sqrt(%eps);
 if contr(a,b,eps)<>4 then pause,end
@@ -75,7 +76,7 @@ b=[1/ti;0;k;0;0;0];
  
 c=[0 0 0 0 0 1];
 tech=0.2;t=0:tech:15; //
-deff('[y]=u(t)','if t=0 then y=0;else y=1,end') //step
+deff('[y]=u(t)','if t==0 then y=0;else y=1,end') //step
  
 // with csim
 if type(csim)<>13 then comp(csim);end

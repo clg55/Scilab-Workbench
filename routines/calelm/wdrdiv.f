@@ -12,6 +12,7 @@ c     ierr     : returned error flag:
 c                o   : ok
 c                <>0 : b(ierr)=0
 c!
+c     Copyright INRIA
       double precision ar(*),ai(*),br(*),rr(*),ri(*)
       integer ia,ib,ir,n
       jr=1
@@ -23,7 +24,7 @@ c!
             call wddiv(ar(ja),ai(ja),br(jb),rr(jr),ri(jr),ierr)
             if(ierr.ne.0) then
                ierr=k
-               return
+c               return
             endif
             jr=jr+ir
             jb=jb+ib
@@ -31,7 +32,7 @@ c!
       elseif(ib.eq.0) then
          if(br(jb).eq.0.0d0) then
             ierr=1
-            return
+c            return
          endif
          do 11 k=1,n
             call wddiv(ar(ja),ai(ja),br(jb),rr(jr),ri(jr),ierr)
@@ -43,7 +44,7 @@ c!
             call wddiv(ar(ja),ai(ja),br(jb),rr(jr),ri(jr),ierr)
             if(ierr.ne.0) then
                ierr=k
-               return
+c               return
             endif
             jr=jr+ir
             jb=jb+ib

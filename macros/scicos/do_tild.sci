@@ -1,9 +1,10 @@
 function scs_m=do_tild(scs_m)
+// Copyright INRIA
 while %t
-  [btn,xc,yc]=xclick(0);
-  pt=[xc,yc]
-  [n,pt]=getmenu(datam,pt);
-  if n>0 then n=resume(n),end
+  [btn,xc,yc,win,Cmenu]=getclick()
+  if Cmenu<>[] then
+    Cmenu=resume(Cmenu)
+  end
   k=getobj(scs_m,[xc;yc])
   if k<>[] then break,end
 end
@@ -16,6 +17,8 @@ drawobj(o)
 if pixmap then xset('wshow'),end
 geom=o(2);geom(3)=~geom(3);o(2)=geom;
 drawobj(o)
+scs_m_save=scs_m
 scs_m(k)=o
+[scs_m_save,enable_undo,edited]=resume(scs_m_save,%t,%t)
 
 

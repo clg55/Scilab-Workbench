@@ -3,12 +3,13 @@
 //
 //
 // creation y0 (etat initial)
-if exists('y0')=0, y0=ones(1,ny); end;
+// Copyright INRIA
+if exists('y0')==0, y0=ones(1,ny); end;
 // creation de b,fy et fu et passage en vecteur ligne
-if exists('b')=0, b=ones(1,ny); end;
-if exists('fy')=0, fy1=ones(1,ny*ny);
+if exists('b')==0, b=ones(1,ny); end;
+if exists('fy')==0, fy1=ones(1,ny*ny);
      else fy1=matrix(fy,1,ny*ny) ; end;
-if exists('fu')=0, fu1=ones(1,ny*(nuc+nuv));
+if exists('fu')==0, fu1=ones(1,ny*(nuc+nuv));
    else fu1=matrix(fu,1,ny*(nuc+nuv)); end;
 //
 format('e');

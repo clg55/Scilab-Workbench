@@ -1,4 +1,5 @@
       subroutine wgedi(ar,ai,lda,n,ipvt,detr,deti,workr,worki,job)
+c     Copyright INRIA
       integer lda,n,ipvt(*),job
       double precision ar(lda,*),ai(lda,*),detr(2),deti(2),workr(*),
      *                 worki(*)

@@ -34,7 +34,8 @@ function [la,lb]=lattn(n,p,cov)
 //       : polynomials (degree 1 to degree n),with coefficients Ak
 //!
 //author: G. Le Vey  Date: 9 Febr. 1989
- 
+// Copyright INRIA
+
    [lhs,rhs]=argn(0);
    [l,d]=size(cov);
    if d>l,error('bad dimension for the covariance sequence');end

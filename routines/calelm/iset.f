@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=ISET,SSI=0
+c     Copyright INRIA
       subroutine iset(n,dx,dy,incy)
 c!but
 c     iset affecte un entier a tous les elements d'un vecteur

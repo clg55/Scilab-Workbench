@@ -1,4 +1,5 @@
       subroutine scilines(nl,nc)
+c     Copyright INRIA
       include '../stack.h'
       integer nl,nc
 c     set  number of lines and columns 

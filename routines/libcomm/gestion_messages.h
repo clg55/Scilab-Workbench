@@ -25,11 +25,11 @@ typedef struct Actions_messages{
     void (*action)();
 } actions_messages;
 
-extern void init_messages();
-extern char *identificateur_appli();
-extern void scanner_messages();
-extern Message attendre_message();
-extern void ecrire_trame();
-extern char *lire_trame();
+extern void init_messages _PARAMS((actions_messages *table, int p_in, int p_out));
+extern char *identificateur_appli _PARAMS((void));
+extern void scanner_messages _PARAMS((void));
+extern Message attendre_message _PARAMS((char *source, char *type_message, int nb_parametres_max));
+extern void ecrire_trame _PARAMS((char *trame));
+extern char *lire_trame _PARAMS((void));
 
 #endif

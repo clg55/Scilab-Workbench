@@ -7,6 +7,7 @@ function [Sl]=markp2ss(markpar,n,nout,nin)
 // C*A*B =marpar(1:nout,nin+1:2*nin),....
 // See also: pol2des
 //!
+// Copyright INRIA
 nmax=maxi(size(markpar));
 H=[];H(n*nout,n*nin)=0;
 p=markpar;

@@ -1,5 +1,7 @@
       subroutine writef(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     write input to a binary or formatted file
 c     ipar(1) = lfil : file name length
@@ -27,7 +29,7 @@ c
       K=int(z(1))
       lunit=int(z(2))
 c
-      if(flag.eq.1.and.nevprt.gt.0) then
+      if(flag.eq.2.and.nevprt.gt.0) then
 c     add new point to the buffer
          K=K+1
          z(2+K)=t

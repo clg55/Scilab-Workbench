@@ -2,6 +2,7 @@
 c     ====================================================================
 c     Call unix:  scihelp -k symbol
 c     ====================================================================
+c     Copyright INRIA
       include '../stack.h'
       character*80 h
       integer name,eol,quote

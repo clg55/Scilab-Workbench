@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=FMTTYP,SSI=0
+c     Copyright INRIA
       integer function fmttyp(form,nf)
 c!but
 c     analyse un format fortran code en scilab, pour en deduire

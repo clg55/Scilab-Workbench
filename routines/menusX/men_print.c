@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #ifdef WIN32 
 #include "wmen_scilab.h"
 #else
@@ -28,8 +29,8 @@ int prtdlg(flag,printer,colored,orientation,file,ok)
      char printer[],file[];
 { 
   static int firstentry=0;
+  static int multiple_call=0;
   int rep ;
-  *ok=1;
   if ( firstentry == 0) 
     {
       ScilabPrintD.numChoice=1;
@@ -37,6 +38,18 @@ int prtdlg(flag,printer,colored,orientation,file,ok)
       ScilabPrintD.PList = NULL;
       firstentry++;
     }
+  /** multiple calls are forbidden **/
+  if ( multiple_call == 1 )
+    {
+      sciprint(" Can't raise the print menu : you must quit another raised menu before \r\n");
+      *ok=0;
+      return(0);
+    }
+  else
+    {
+      multiple_call = 1;
+    }
+  *ok=1;
   rep = ExposePrintdialogWindow((int) *flag,colored,orientation);
   if ( rep == TRUE ) 
     {
@@ -52,6 +65,7 @@ int prtdlg(flag,printer,colored,orientation,file,ok)
       FREE(ScilabPrintD.Pbuffer);
       FREE(ScilabPrintD.PList);
     }
+  multiple_call =0;
   return(0);
 }
 

@@ -1,7 +1,8 @@
 function [d]=detr(h)
 //[d]=detr(h)  computes de determinant of a polynomial or 
-//rational function matrix h
+//rational function matrix h using Leverrier's method
 //!
+// Copyright INRIA
 h1=h(1);
 if type(h)< 3 then
    [m,n]=size(h);

@@ -1,4 +1,5 @@
 function [y,xf]=flts(u,sl,x0)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if type(u)<>1 then error(53,1),end
 if rhs<=1 then error(39),end
@@ -9,7 +10,7 @@ if type(sl)<>15&type(sl)<>16 then error(97,2),end
 flag=sl(1);
 select flag(1)
   case 'lss' then 
-    if rhs=2 then x0=sl(6),end
+    if rhs==2 then x0=sl(6),end
     [nb,mb]=size(sl(3))
     if mb<>nu then
        error(60),
@@ -25,7 +26,7 @@ select flag(1)
       y=sl(4)*x+rtitr(sl(5),eye(sl(5)),u)
     end
    case 'r'  then  
-    if lhs>1 then error(39),end
+    if lhs>1 then error('flts: invalid lhs'),end
     [num,den]=sl(2:3);[ns,ne]=size(num)
        select sl(4)
         case 'c' then error(94,2),
@@ -39,7 +40,7 @@ select flag(1)
     end;
     for l=1:ns, nm(l)=degree(nden(l))-maxi(degree(nnum(l,:))),end
     ly=mu+mini(nm)
-    if rhs=3 then
+    if rhs==3 then
        [mx,nx]=size(x0);maxdgd=maxi(degree(nden))
        if nx<maxdgd then
          error('AT LEAST '+string(maxdgd)+' PAST VALUES!')
@@ -62,7 +63,8 @@ select flag(1)
                y(l,:)=rtitr(nnum(l,:),nden(l),u(:,1:lent),up,yp);
       end;
     end,
-    y=y(:,1:mu);
+    l=size(y,2);
+    y=y(:,1:min(mu,l));
   else error(97,2)
 end;
 

@@ -1,9 +1,10 @@
 function [t,siz]=equil1(p,q,tol)
 //
+// Copyright INRIA
 [n,n]=size(p);
 [lhs,rhs]=argn(0);
 // t1
-if rhs=2 then 
+if rhs==2 then 
   [u,p,u,np]=svd(p);
 else 
   [u,p,u,np]=svd(p,tol);
@@ -13,7 +14,7 @@ t1=diag(ones(n,1)./p)*u';
 //
 // t2
 q=diag(p)*(u'*q*u)*diag(p) // q1=t1**-1'*q*t1**-1
-if rhs=2 then 
+if rhs==2 then 
   [u,sigma1,u,nq]=svd(q(1:np,1:np))
 else 
   [u,sigma1,u,nq]=svd(q(1:np,1:np),tol)
@@ -31,7 +32,7 @@ if np<>n then
 end;
 //
 // t4
-if rhs=2 then 
+if rhs==2 then 
   [u,q,u,n3]=svd(q(np+1:n,np+1:n));
 else 
   [u,q,u,n3]=svd(q(np+1:n,np+1:n),tol);

@@ -6,6 +6,7 @@ NAME
 CALLING SEQUENCE
   s=svd(X)
   [U,S,V]=svd(X)
+  [U,S,V]=svd(X,0)
   [U,S,V,rk]=svd(X [,tol])
 
 PARAMETERS
@@ -24,6 +25,10 @@ DESCRIPTION
   [U,S,V] = svd(X) produces a diagonal matrix S , of the same dimension as X
   and with nonnegative diagonal elements in decreasing order, and unitary
   matrices U and V so that X = U*S*V'.
+
+  [U,S,V] = svd(X,0) produces the economy size decomposition. If X is m-by-n
+  with m > n, then only the first n columns of U are computed and S is n-by-
+  n.
 
   s = svd(X) by itself, returns a vector s containing the singular values.
 

@@ -5,6 +5,7 @@
 // les doubles slash introduisent des commentaires
 //
 // contexte : tue les variables de nom reserve
+// Copyright INRIA
 exec('icse.contexte');
 t0=0.d0;    // instant initial
 tf=18.d1;   // instant final

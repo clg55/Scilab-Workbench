@@ -1,3 +1,4 @@
+// Copyright INRIA
 //DASSL
 // PROBLEM 1..   LINEAR DIFFERENTIAL/ALGEBRAIC SYSTEM
 //
@@ -66,7 +67,7 @@ info=list([],0,[],[],[],0,0);
 y0=zeros(25,1);y0(1)=1;
 delta=0*y0;
 //link('dres2.o','dres2');
-//y0d=fort('dres2',0,1,'d',y0,2,'d',delta,3,'d',0,5,'i',0,6,'d',0,7,'d','out',[25,1],4,'d');
+//y0d=call('dres2',0,1,'d',y0,2,'d',delta,3,'d',0,5,'i',0,6,'d',0,7,'d','out',[25,1],4,'d');
 y0d=zeros(y0);y0d(1)=-2;y0d(2)=1;y0d(6)=1;
 t0=0;t=[0.01,0.1,1,10,100];
 rtol=0;atol=1.d-6;
@@ -137,9 +138,9 @@ deff('s=gr2(t,y,yd)','s=y(1)')
 
 //           Hot Restart
 
-[yy,nn,hot]=dasrt([y0,y0d],t0,t,atol,rtol,'res2','jac2',ng,'gr2',info);
+[yy,nn,hotd]=dasrt([y0,y0d],t0,t,atol,rtol,'res2','jac2',ng,'gr2',info);
 t01=nn(1);t=100:20:200;[pp,qq]=size(yy);y01=yy(2:3,qq);y0d1=yy(3:4,qq);
-[yy,nn,hot]=dasrt([y01,y0d1],t01,t,atol,rtol,'res2','jac2',ng,'gr2',info,hot);
+[yy,nn,hotd]=dasrt([y01,y0d1],t01,t,atol,rtol,'res2','jac2',ng,'gr2',info,hotd);
 if abs(nn(1)-162.57763)>0.001 then pause,end
 
 //Test of Dynamic link (Require f77!)
@@ -211,8 +212,8 @@ gr22=[...
 //          3 Calling the routines by dasrt
 //[yy,nn]=dasrt([y0,y0d],t0,t,atol,rtol,'res22','jac22',ng,'gr22',info);
 // hot restart
-//[yy,nn,hot]=dasrt([y0,y0d],t0,t,atol,rtol,'res22','jac22',ng,'gr22',info);
+//[yy,nn,hotd]=dasrt([y0,y0d],t0,t,atol,rtol,'res22','jac22',ng,'gr22',info);
 //t01=nn(1);t=100:20:200;[pp,qq]=size(yy);y01=yy(2:3,qq);y0d1=yy(3:4,qq);
-//[yy,nn,hot]=dasrt([y01,y0d1],t01,t,atol,rtol,'res22','jac22',ng,'gr22',info,hot);
+//[yy,nn,hotd]=dasrt([y01,y0d1],t01,t,atol,rtol,'res22','jac22',ng,'gr22',info,hotd);
 
 

@@ -1,3 +1,4 @@
+# Copyright INRIA
 with(share):
 
 if SearchText(`Release 3`,interface(version))<>0 then

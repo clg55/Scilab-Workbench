@@ -8,16 +8,17 @@ include ../Makefile.incl
 .tst.dia:
 	@$(SCIDIR)/util/scidem $(SCIDIR) $*.tst $*.dia
 
-OBJS =  matops.dia scilab.dia macro.dia calpol.dia clause.dia \
+OBJS =  maxi.dia norm.dia matops.dia scilab.dia macro.dia calpol.dia clause.dia \
 	sparse.dia lsparse.dia lstops.dia polops.dia \
 	break.dia breakpoints.dia pause.dia \
 	sprintf.dia sscanf.dia display.dia \
-	matode.dia matopt.dia \
+	matode.dia matopt.dia matelm.dia polelm.dia\
 	metanet.dia matimp.dia dassldasrt.dia \
-	fort.dia \
-	colnew.dia feval.dia auto.dia \
+	call.dia \
+	bvode.dia feval.dia auto.dia \
 	odedc.dia sound.dia listinsertion.dia listextraction.dia \
-	links.dia strelm.dia
+	links.dia strelm.dia gsort.dia fmlelm.dia odedi.dia dcd.dia \
+	grand.dia grandb.dia
 
 all:: info
 
@@ -36,7 +37,7 @@ clean ::
 
 distclean:: clean 
 
-FFLAGS = $(FC_OPTIONS)
+FFLAGS = $(FC_OPTIONS) $(FC_PICFLAGS)
 
 OBJSF = externals.o
 

@@ -51,11 +51,9 @@ DESCRIPTION
   The command link('SCIDIR/libs/calelm.a','dcopy') links the Fortran routine
   dcopy in the library calelm.a.
 
-  Note that with dld (Linux machine) you can use an empty string if you want
-  to link a program which is already in one of the Scilab libraries (e.g.
-  link(' ','dcopy')).
-
-  A routine can be linked several times: each link undo the previous one.
+  A routine can be linked several times and can be unlinked with ulink. Note
+  that, on some architectures (the ones on which ulink exists) when a routine
+  is linked several times, all the version are kept inside Scilab.
 
   Used with no arguments, link() returns the current linked routines.
 
@@ -126,6 +124,8 @@ REMARKS
        a Scilab internal function after a first call to link ( with a default
        binary file )
        link("test.o",['Scilab-entry-point'])
+       Note that with dld (Linux machine aout) you can use an empty string
+       link(" ",['Scilab-entry-point'])
 
 SEE ALSO
   fort, c_link, addinter

@@ -3,6 +3,7 @@ c
 c     converti un nom code scilab en une chaine scilab
 c     
 c
+c     Copyright INRIA
       include '../stack.h'
       integer blank
       parameter (blank=40)

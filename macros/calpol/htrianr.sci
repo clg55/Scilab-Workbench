@@ -6,6 +6,7 @@ function [A,U,rk]=htrianr(A)
 //rk=normal rank of A
 //Warning: there is an elimination of neglectable terms
 //!
+// Copyright INRIA
 A=clean(A); 
 [m,n]=size(A);U=eye(n,n);
 l1=n+1;

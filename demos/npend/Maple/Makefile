@@ -4,7 +4,8 @@ include ../../../Path.incl
 include ../../../Version.incl
 include ../../../Makefile.incl
 
-FFLAGS = $(FC_OPTIONS)
+FFLAGS = $(FC_OPTIONS) $(FC_PICFLAGS)
+
 
 OBJS = /tmp/ener.o /tmp/npend.o /tmp/np.o
 

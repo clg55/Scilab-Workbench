@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "wmen_scilab.h"
 
 extern PrintDial ScilabPrintD;

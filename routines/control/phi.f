@@ -11,6 +11,7 @@ c        w  . tableau de travail de taille nq+ng+1
 c     Sortie :
 c        phi
 c%
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
 
       dimension tq(nq+1),tg(ng+1),w(nq+ng+1)

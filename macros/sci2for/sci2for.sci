@@ -1,5 +1,6 @@
 function txt=sci2for(fun,nam,vtps)
 //!
+// Copyright INRIA
 if type(fun)==11 then comp(fun),end
 if type(fun)<>13 then 
   error('sci2for: first argument must be a scilab function'),
@@ -30,7 +31,7 @@ k=1
 while k<=na
   w=vtps(k);
   nw=size(w)
-  if nw=3 then w(4)=0;vtps(k)=w;nw=4;end
+  if nw==3 then w(4)=0;vtps(k)=w;nw=4;end
   for iw=2:nw-1
       if find(vnms(:,1)==w(iw))==[] then
         ch=part(w(iw),1)
@@ -66,7 +67,7 @@ end
 v1=vnms(1:bot,1)
 // 
 if nwrk(3)<>[]|nwrk(10)<>[] then
-  if prod(size(nwrk(3)))=1 then
+  if prod(size(nwrk(3)))==1 then
     used=nwrk(3)
   else
     used='max('+makeargs(nwrk(3))+')'
@@ -89,7 +90,7 @@ if nwrk(3)<>[]|nwrk(10)<>[] then
 end
 // tableau de travail entier
 if nwrk(6)<>[]|nwrk(12)<>[] then
-  if prod(size(nwrk(6)))=1 then
+  if prod(size(nwrk(6)))==1 then
     iused=nwrk(6)
   else
     iused='max('+makeargs(nwrk(6))+')'
@@ -120,7 +121,7 @@ kv1=0;nvc=na
 for k=1:bot
   kv1=kv1+1
   vk=vtps(k);
-  if vk(4)=1 then
+  if vk(4)==1 then
     v1=[v1(1:k-1);v1(k)+'_r';v1(k)+'_i';v1(k+1:nvc)]
     kv1=kv1+1
     nvc=nvc+2
@@ -144,22 +145,22 @@ for iv=1:na
   if part(var,1:4)<>'work'&part(var,1:5)<>'iwork' then
     nl=vartyp(2);nc=vartyp(3);it=vartyp(4)
 
-    if type(nl)=1 then 
+    if type(nl)==1 then 
       nl=string(maxi(1,nl)),
     else
       if isnum(nl) then 
 	nl=string(maxi(evstr(nl),1))
       end
     end
-    if type(nc)=1 then 
+    if type(nc)==1 then 
       nc=string(maxi(1,nc)),
     else
       if isnum(nc) then 
 	nc=string(maxi(evstr(nc),1))
       end
     end
-    if nl+nc='11' then
-      if it=0 then
+    if nl+nc=='11' then
+      if it==0 then
          nm=var
       else
          nm=nm+'_r'+','+nm+'_i',
@@ -167,7 +168,7 @@ for iv=1:na
       end
       com=' '
     elseif nl=='1' then
-      if it=0 then
+      if it==0 then
         nm=var+'('+nc+')'
       else
         nm=var+'_r('+nc+')'+','+var+'_i('+nc+')'
@@ -175,7 +176,7 @@ for iv=1:na
       end
       com='of size '+nc
     elseif nc=='1' then
-      if it=0 then
+      if it==0 then
         nm=var+'('+nl+')'
       else
         nm=var+'_r('+nl+')'+','+var+'_i('+nl+')'
@@ -183,7 +184,7 @@ for iv=1:na
       end
       com='of size '+nl
     else
-      if it=0 then
+      if it==0 then
         nm=var+'('+makeargs([nl;nc])+')'
       else
         nm=var+'_r('+makeargs([nl,nc])+')'+','+var+'_i('+makeargs([nl,nc])+')'
@@ -263,7 +264,7 @@ while kk<>[] then
   for k=nk:-1:1
     k1=kk(k)
     t1=txt(k1),
-    if part(t1,1)='c' then
+    if part(t1,1)=='c' then
       t1=[part(t1,1:72);
          'c              '+part(t1,73:length(t1))];
     else

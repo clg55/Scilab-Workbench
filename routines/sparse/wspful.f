@@ -1,4 +1,5 @@
       subroutine wspful(ma,na,ar,ai,nela,inda,rr,ri)
+c     Copyright INRIA
       double precision ar(nela),ai(nela),rr(*),ri(*)
       integer ma,na,nela,inda(*)
 c

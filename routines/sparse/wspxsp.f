@@ -1,4 +1,5 @@
       subroutine wspxsp(nr,nc,ar,ai,nela,inda,br,bi,nelb,indb,cr,ci,
+c     Copyright INRIA
      $     nelc,indc,ierr,it1,it2)
 c!purpose
 c     multiply two sparse matrices elementwise

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "../machine.h"
 
 /* ip is a pointer to a FORTRAN variable coming from SCILAB
@@ -7,9 +8,9 @@ coming from a C function
    moreover, pointer ip is freed */
 
 void C2F(ccharf)(n,ip,op)
-int *n;
-char **ip;
-int *op;
+     int *n;
+     char **ip;
+     int *op;
 {
   int i = 0;
   if (*n > 0) {
@@ -17,3 +18,4 @@ int *op;
       free(*ip);
   }
 }
+

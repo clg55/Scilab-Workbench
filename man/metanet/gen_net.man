@@ -56,6 +56,9 @@ Percentage of edges with costs: between 0 and 100
 
 Percentage of edges with capacities: between 0 and 100
 
+The cost of edges without cost are put to minimum cost.
+The maximum capacity of edges without capacity are put to maximum upply
+
 The result is a network \fVg\fR built on a planar connected graph, by using a
 triangulation method. Moreover, computations are made in order to have
 a coherent network. Values of costs and maximum capacities are

@@ -29,6 +29,7 @@ function [co,u,g,itv,dtv,cof]=icsuq(u,simu,nap,imp,obs,ytob)
 //cof(nob,ntob) : coefficients de ponderation du cout
 //Utiliser les macros icot et icob pour extraire l'etat
 //!
+// Copyright INRIA
 df0=1;
 if mini(binf) <=0, ..
   error('appel de icsuq avec binf non strictement positif'); end;

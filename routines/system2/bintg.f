@@ -4,6 +4,7 @@ c ======================================================================
 c     gestion des macros externals pour le primitive INTG
 c ======================================================================
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     
@@ -112,5 +113,6 @@ c
  9999 continue
       iero=1
       niv=niv-1
+      bintg=0.0d0
       return
       end

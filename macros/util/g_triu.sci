@@ -1,5 +1,6 @@
 function d=g_triu(a,k)
 // g_triu - implement triu function for sparse matrix, rationnal matrix ,..
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs==1 then k=0,end
 select type(a)

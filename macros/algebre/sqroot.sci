@@ -1,4 +1,5 @@
 function [S]=sqroot(Q)
+// Copyright INRIA
 Q1=(Q+Q')/2;
 if norm(Q1-Q,1) > 100*%eps then warning('sqroot: input not symmetric!');end
 tt=mini(spec(Q1));

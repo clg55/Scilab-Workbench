@@ -1,6 +1,6 @@
 ; Menu file for Windows Scilab 
 ; From the gnulot version ( Roger Hadgraft, 26-5-92,Russell Lang, 30 Nov 1992)
-; Jean-Philippe Chancelier 1996 
+; Jean-Philippe Chancelier 1996 / 1997
 
 [Menu]
 &File
@@ -12,13 +12,14 @@
 		save('[SAVE]save[EOS]*.bin[EOS]')
 	&Load ...
 		load('[OPEN]load[EOS]*.sav;*.bin[EOS]')
+	&Change Directory ...
+		chdir('[INPUT]New directory?[EOS]')
+	Ge&T current Directory ...
+		getcwd()
 	--
 	&Demos 
 		exec('SCI/demos/alldems.dem');
 	--
-;	Change Directory ...
-;		cd '[INPUT]New directory?[EOS]'
-;	--
 	[Menu]
 	&History
 		Previous command	^P
@@ -77,9 +78,8 @@
 ; 	[EndMenu]
 ; [EndMenu]
 
-
 [Menu]
-F&unctions
+F&Unctions
 	&Define User Function ...
 	deff('[ [INPUT]Name of output variables eg. x,y ?[EOS]]=[INPUT]Name for function?[EOS]([INPUT]Variable/s, eg. a,b ?[EOS])',[[INPUT]code, eg 'x=sin(a)';'y=cos(b)'[EOS]])
 	Show &Commands
@@ -97,17 +97,18 @@ F&unctions
 	&Apropos 
 		apropos [INPUT]Key ?
 [EndMenu]
-
-&pause
+&Restart
+	abort;{ENTER};exec('SCI/scilab.star',-1);
+&Pause
 	pause
 
-&resume
+R&Esume
 	resume
 
-&abort
+&Abort
 	abort
 
-&interupt
+&Interupt
 	{^C}
 
 [Menu]

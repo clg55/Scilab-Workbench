@@ -11,6 +11,7 @@ c     zeror (zeroi) : vecteurs des parties reelles (imaginaires) du
 c            vecteur de nombres complexes
 c     zmod : vecteur des modules
 c!
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension zeror(*),zeroi(*),zmod(*)
 c

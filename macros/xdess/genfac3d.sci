@@ -1,5 +1,5 @@
 function [xx,yy,zz]=genfac3d(x,y,zmat,mask)
-// genfac - transforms  standard 3d datas to four sides facets
+// genfac - transforms  standard 3d data to four sides facets representation
 //%Syntax
 // [xx,yy,zz]=genfac3d(x,y,zmat,mask)
 //%Parameters
@@ -13,6 +13,7 @@ function [xx,yy,zz]=genfac3d(x,y,zmat,mask)
 //%Examples
 //  genfac3d() 
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs <=0 then
   s_mat=['t=(0:10)''*%pi/5;';

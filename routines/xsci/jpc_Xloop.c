@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xutil.h>
@@ -35,6 +36,9 @@ static int INXscilab=0;
 
 void SetXsciOn()
 {
+#ifdef WITH_TK
+  inittk();
+#endif
   INXscilab=1;
 }
 

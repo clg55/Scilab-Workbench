@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <stdio.h>
 #include <string.h>
 
@@ -10,7 +11,7 @@ extern void C2F(getenvc)
 
 static char *SCI_a[] = {  "SCI/", "sci/", "$SCI", (char *) 0 };
 static char *HOME_a[] = {  "HOME/", "home/", "~/" , "$HOME", (char *) 0};
-static void GetenvB _PARAMS(( char *name,char *env, int len));
+void GetenvB _PARAMS(( char *name,char *env, int len));
 static int Cluni0 _PARAMS((char *env,char **alias,char* in_name,char *out_name));
 
 /************************************************
@@ -48,7 +49,7 @@ int C2F(cluni0)( in_name, out_name, out_n,lin,lout)
  * getenv + squash trailing white spaces 
  ************************************************/
 
-static void GetenvB(name,env,len)
+void GetenvB(name,env,len)
      char *name,*env;
      int len;
 {

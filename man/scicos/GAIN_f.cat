@@ -1,7 +1,5 @@
 
-GAIN_f(5)                          Scilab                           GAIN_f(5)
-Group                                                                   Group
-Scicos                                                                 Scicos
+GAIN_f(5)                       Scicos Block                        GAIN_f(5)
 NAME
   GAIN_f - Scicos gain block
 

@@ -1,6 +1,8 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
+
 include ../../Makefile.incl
 
 .SUFFIXES: .sci .bin $(SUFFIXES)
@@ -23,6 +25,8 @@ MACROS = calfrq.sci svplot.sci abcd.sci sm2ss.sci sm2des.sci \
 	phasemag.sci projsl.sci des2tf.sci repfreq.sci ss2tf.sci ss2des.sci \
 	ss2ss.sci  st_ility.sci statgain.sci lqg.sci lqg2stan.sci \
 	obscont.sci tf2ss.sci trzeros.sci colregul.sci rowregul.sci \
-	time_id.sci zeropen.sci specfact.sci abinv.sci cainv.sci
+	time_id.sci zeropen.sci specfact.sci abinv.sci cainv.sci dbphi.sci \
+	bilin.sci arl2.sci \
+	scicos.sci
 
 include ../Make.lib

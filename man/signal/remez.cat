@@ -29,3 +29,6 @@ DESCRIPTION
                    hn(nc)=an(1);
                    hn(nc+12*nc-1)=an(2nc)/2;
   where an = cosine filter coefficients
+
+SEE ALSO
+  remezb

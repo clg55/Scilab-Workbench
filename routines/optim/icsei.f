@@ -4,6 +4,7 @@
 c
 c     calcul de l'etat initial dans ICSE : cas standard : 
 c     controle par l'etat initial 
+c     Copyright INRIA
 c!
       implicit double precision (a-h,o-z)
       dimension u(nui),y0(ny),y0u(ny,nui),itu(nitu),dtu(ndtu),iu(5)

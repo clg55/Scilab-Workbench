@@ -17,6 +17,8 @@ DESCRIPTION
   For boolean, polynomial and rational matrices, the exponent must be an
   integer
 
+  Remark that 123.^b is interpreted as (123).^b. In such cases dot is part of
+  the operator, not of the number.
 EXAMPLES
   2^4
   [1 2;2 4]^(1+%i)

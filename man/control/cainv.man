@@ -91,7 +91,7 @@ This function can be used to calculate an unknown input observer:
 // For any W which makes a column compression of [Xp(1:dimSg,:);C]
 // with Xp=X' and [X,dims,J,Y,k,Z]=cainv(syslin('c',A,G,C));
 // [Xp(1:dimSg,:);C]*W = [0 | *] one has
-// H*W = [0 | *]  (with at least as many columns as above).
+// H*W = [0 | *]  (with at least as many aero columns as above).
 .fi
 .SH SEE ALSO
 abinv, dt_ility

@@ -1,6 +1,8 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
+
 include ../../Makefile.incl
 
 .SUFFIXES: .sci .bin $(SUFFIXES)

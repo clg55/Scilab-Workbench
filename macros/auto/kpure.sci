@@ -1,5 +1,6 @@
 function y=kpure(n)
 //!
+// Copyright INRIA
 y=[],
 if type(n)<>16 then error(92,1),end;
 flag=n(1);
@@ -13,7 +14,7 @@ r=routh_t(n,poly(0,'k')),
 [s,t]=size(r);
 for i=1:s,
   coe=coeff(r(i,:)),
-  if coe=0*ones(1,t) then error('---> infinite solution'),end
+  if coe==0*ones(1,t) then error('---> infinite solution'),end
 end,
 
 z=0;u=0;eps=1e-7;

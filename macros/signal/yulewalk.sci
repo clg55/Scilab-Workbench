@@ -8,11 +8,11 @@ function [Nz,Dz]=yulewalk(Norder, frq, mag)
 //		            n-1       n-2
 //		   A(z)    z   + a(1)z    + .... + a(n)
 //
-//      which matches the magnitude frequency response given by vectors F and M.
-//	Vectors frq and mag specify the frequency and magnitude of the desired
-//	frequency response. The frequencies in frq must be between 0.0 and 1.0,
-//	with 1.0 corresponding to half the sample rate. They must be in
-//	increasing order and start with 0.0 and end with 1.0. 
+//which matches the magnitude frequency response given by vectors F and M.
+//Vectors frq and mag specify the frequency and magnitude of the desired
+//frequency response. The frequencies in frq must be between 0.0 and 1.0,
+//with 1.0 corresponding to half the sample rate. They must be in
+//increasing order and start with 0.0 and end with 1.0. 
 //
 // Example: f=[0,0.4,0.4,0.6,0.6,1];H=[0,0,1,1,0,0];Hz=yulewalk(8,f,H);
 //fs=1000;fhz = f*fs/2;  
@@ -22,12 +22,13 @@ function [Nz,Dz]=yulewalk(Norder, frq, mag)
 //xbasc(1);xset('window',1);plot2d(fs*frq',abs(repf'));
 //xtitle('Obtained Frequency Response')
 //
+// Copyright INRIA
 [LHS,RHS]=argn(0);
 if RHS <>3
    error('Wrong number of input parameters.')
 end
    npt=512;
-  lap=fix(npt/25);
+  thelap=fix(npt/25);
    
 [mf,nf]=size(frq);
 [mm,nn]=size(mag);
@@ -57,8 +58,8 @@ nb=1;
 Ht(1)=mag(1);
 for i=1:nint
     if df(i) == 0
-       nb=nb - lap/2;
-       ne=nb + lap;
+       nb=nb - thelap/2;
+       ne=nb + thelap;
     else
        ne=int(frq(i+1)*npt);
     end

@@ -3,6 +3,7 @@ function [X,dim]=range(A,k)
 // range of A^k.
 //F.D.
 //!
+// Copyright INRIA
 if k==0
        [n,n]=size(A);  
        dim=n;X=eye(A);return;

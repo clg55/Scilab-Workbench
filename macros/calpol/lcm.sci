@@ -1,8 +1,9 @@
 function [p,fact]=lcm(p)
-//<p>=lcm(p) computes the lcm of polynomial vector p
-//<pp,fact>=lcm(p) computes besides the vector fact of factors 
+//p=lcm(p) computes the lcm of polynomial vector p
+//[pp,fact]=lcm(p) computes besides the vector fact of factors 
 //such that  p.*fact=pp*ones(p)
 //!
+// Copyright INRIA
 [m,n]=size(p),
 p=matrix(p,m*n,1),
 p0=p(1);fact=1;

@@ -1,4 +1,5 @@
       subroutine wspmsp(p,q,r,ar,ai,nela,inda,br,bi,nelb,indb,
+c     Copyright INRIA
      $     cr,ci,nelc,indc,
      $     ib,ic,xr,xi,xb,ita,itb,ierr)
 c multiply complex sparse matrices by the method of gustafson,acm t.o.m.s.

@@ -3,11 +3,12 @@ c =============================================================
 c     operations elementaires sur les listes
 c =============================================================
 c
+c     Copyright INRIA
       include '../stack.h'
 c
 c
       integer rhs1,vol1,vol2,vol3,vol3s,dvol
-      integer typ2,op,iadr,sadr,top0,typ3
+      integer typ2,op,iadr,sadr,top0,typ3,tops
 
       integer strpos,subptr
       external strpos,subptr
@@ -66,6 +67,7 @@ c     get arg2
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
       ilist=0
       nlist=0
@@ -75,12 +77,19 @@ c     get arg1
          ll=sadr(ill+3+nlist)
          ilist=1
          il1=iadr(ll+istk(ill+1+ilist)-1)
+         if(istk(il1).lt.0) il1=iadr(istk(il1+1))
          m1=istk(il1+1)
       endif
 c
  15   continue
-c
-      if(istk(il1).ne.10) goto 20
+c     
+      if(istk(il2).eq.17.and.istk(il1).eq.1) then
+         fin=-fin
+         top=top0
+         rhs1=rhs
+         return
+      endif
+      if(istk(il1).ne.10)  goto 20
 c     .  arg2(arg1) with arg1 vector of strings
       ilt=iadr(sadr(il2+istk(il2+1)+3))
       nt=istk(ilt+1)*istk(ilt+2)
@@ -156,6 +165,7 @@ c
          ill=iadr(lstk(top))
          ll=sadr(ill+3+nlist)
          il1=iadr(ll+istk(ill+1+ilist)-1)
+         if(istk(il1).lt.0) il1=iadr(istk(il1+1))
          goto 23
       endif
 c     
@@ -202,8 +212,11 @@ c     .  arg2(:)
             endif
          endif
          if(m2.ne.lhs) then
-            call error(41)
-            return
+            call forcerhs(m2,ierr)
+            if(ierr.ne.0) then
+               call error(41)
+               return
+            endif
          endif
          if(top+1+m2.ge.bot) then
             call error(18)
@@ -212,6 +225,7 @@ c     .  arg2(:)
          do  21 i=1,m2
             vol1=istk(il2+2+i)-istk(il2+1+i)
             if(vol1.eq.0) then
+               err=i
                call error(117)
                return
             endif
@@ -242,9 +256,10 @@ c
       il2=iadr(lt2)
  23   ilist=ilist+1
       il1=iadr(ll+istk(ill+1+ilist)-1)
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
 
-      if(istk(il2).eq.15.or.istk(il2).eq.16) goto 26
+      if(istk(il2).ge.15.and.istk(il2).le.17) goto 26
 c     a leaf has been found
       if(ilist.ne.nlist) then
          call error(21)
@@ -259,6 +274,7 @@ c     .  matrix/vector element extraction
 c     .  form indexes at the top of the stack
          ll=sadr(il1+m1+3)
          ltop=lstk(top)
+         tops=top
          lstk(top)=lw
          rhs=1
          do 24 i=1,m1
@@ -269,6 +285,7 @@ c     .  form indexes at the top of the stack
          call dcopy(istk(il1+m1+2)-1,stk(ll),1,
      $        stk(lstk(top-m1)),1) 
       else
+         tops=0
          ll=ll+istk(ill+1+ilist)-1
          nn=istk(ill+2+ilist)-istk(ill+1+ilist)
          call dcopy(nn,stk(ll),1,stk(lstk(top)),1)
@@ -283,7 +300,7 @@ c     form variable pointer
       lstk(top+1)=sadr(ilv+2)
 
       fin=3
-      if(istk(il2).eq.15.or.istk(il2).eq.16) then
+      if(istk(il2).ge.15.and.istk(il2).le.17) then
          call dcopy(ll2,stk(lt2),1,stk(lstk(top)),1)
          lstk(top+1)=lstk(top)+ll2
          fin=-fin
@@ -293,10 +310,20 @@ c     form variable pointer
 c     back to allops for  standard extraction
       if (ptover(1,psiz)) return
       icall=4
+      ids(1,pt)=tops
+      ids(2,pt)=ltop
       rstk(pt)=405
 c     *call* allops
       return
  25   continue
+      tops=ids(1,pt)
+      if(tops.gt.0) then
+c     move results at its correct location
+         vol1=lstk(top+1)-lstk(top)
+         call dcopy(vol1,stk(lstk(top)),1,stk(ids(2,pt)),1)
+         lstk(top+1)=lstk(top+1)-(lstk(top)-ids(2,pt))
+         lstk(top)=ids(2,pt)
+      endif
       pt=pt-1
       return
 
@@ -307,8 +334,11 @@ c     *call* allops
 c
 
  31   if(n.ne.lhs) then
-         call error(41)
-         return
+         call forcerhs(n,ierr)
+         if(ierr.ne.0) then
+            call error(41)
+            return
+         endif
       endif
 c
       if(top+n+1.ge.bot) then
@@ -319,6 +349,7 @@ c
          k=istk(ili-1+i)
          vol2=istk(il2+2+k)-istk(il2+1+k)
          if(vol2.eq.0) then
+            err=k
             call error(117)
             return
          endif
@@ -362,8 +393,11 @@ c     get arg3
       il3=iadr(lstk(top))
       if(istk(il3).lt.0) il3=iadr(istk(il3+1))
       il3s=il3
-
       typ3=istk(il3)
+      if(typ3.lt.14.or.typ3.gt.17) then
+         fin=-fin
+         return
+      endif
       m3=istk(il3+1)
       m3s=m3
       id3=il3+3
@@ -380,15 +414,17 @@ c     get arg2
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
       ilist=0
       nlist=0
-      if(istk(il1).eq.15.or.istk(il1).eq.16) then
+      if(istk(il1).ge.15.and.istk(il1).le.17) then
          ill=il1
          nlist=m1
          ll=sadr(ill+3+nlist)
          ilist=1
          il1=iadr(ll+istk(ill+1+ilist)-1)
+         if(istk(il1).lt.0) il1=iadr(istk(il1+1))
          m1=istk(il1+1)
          ilind=iadr(lw)
          lw=sadr(ilind+m1)
@@ -460,9 +496,10 @@ c     move pointer to indexed sub-list of arg3
 c     move pointer to next index list entry
       ilist=ilist+1
       il1=iadr(ll+istk(ill+1+ilist)-1)
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
 c
-      if(abs(istk(il3)).eq.15.or.abs(istk(il3)).eq.16) goto 56
+      if(abs(istk(il3)).ge.15.and.abs(istk(il3)).le.17) goto 56
 c     a leaf found
       if(ilist.ne.nlist) then
          call error(21)
@@ -689,8 +726,10 @@ c     .     update new data structure pointers recursively
 c     .     copy the rest of data structure
             istk(ilind+nlist-2)=istk(ilind+nlist-2)+n-m3
             lt3=sadr(subptr(il3s,istk(ilind),nlist-1))
-            call dcopy(l3s+vol3s-lt3,stk(lt3),1,stk(lr),1)
-            lr=lr+l3s+vol3s-lt3
+            if(l3s+vol3s-lt3.gt.0) then
+               call dcopy(l3s+vol3s-lt3,stk(lt3),1,stk(lr),1)
+               lr=lr+l3s+vol3s-lt3
+            endif
          endif
 c     .  store result
          lrn=sadr(iln)
@@ -919,4 +958,25 @@ c     .  il pointer to ind(k) sub-list entry
          il=iadr(sadr(il+3+m)+istk(il+1+ind(k))-1)
  20   continue
  30     subptr=il
+      end
+
+      subroutine forcerhs(n,ierr)
+      integer n,ierr
+      include '../stack.h'
+
+      ierr=0
+c      write(6,'(''forcerhs'',i5)') n
+      if(rstk(pt-1).eq.501) then
+c      in a compiled function
+         ids(5,pt-1)=n-1
+      elseif(pt.ge.8) then
+         if(rstk(pt-7).eq.703) then
+            pstk(pt-3)=pstk(pt-3)-1+n
+         else
+            ierr=1
+         endif
+      else
+         ierr=1
+      endif
+      return
       end

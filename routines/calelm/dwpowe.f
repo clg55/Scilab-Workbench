@@ -17,6 +17,7 @@ c            ierr=2 if  0**k with k<0
 c!origin
 c Serge Steer INRIA 1996
 c!
+c     Copyright INRIA
       integer ierr
       double precision v,pr,pi,sr,si,rr,ri
 c     
@@ -36,8 +37,13 @@ c     p real
             if(pr.gt.0.0d+0) then
                rr=0.0d+0
                ri=0.0d+0
-            else
+            elseif(pr.lt.0.0d+0) then
+               ri=0.0d+0
+               rr=1.0d0/ri
                ierr=2
+            else
+               rr=1.0d+0
+               ri=0.0d+0
             endif
          endif
       endif

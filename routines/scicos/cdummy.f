@@ -1,5 +1,7 @@
       subroutine cdummy(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     Dummy state space x'=0
 c
@@ -14,7 +16,7 @@ c
          write(6,'(''Cdummy     t='',e10.3,'' flag='',i1)') t,flag
       endif
 
-      if(flag.eq.2) then
+      if(flag.eq.0) then
          xd(1)=0.0d0
       endif
       end

@@ -1,6 +1,7 @@
 function []=evans(n,d,kmax)
 //seuil maxi et mini (relatifs) de discretisation
 // en espace
+// Copyright INRIA
 smax=0.01;smin=smax/3;
 nptmax=500 //nbre maxi de pt de discretisation en k
 //
@@ -148,7 +149,7 @@ if q>0 then
   else
     x1=0,y1=0,//x2=0,y2=0,
   end
-  if md=2,
+  if md==2,
     if coeff(d,md)<0 then
       x1=0*ones(2),y1=0*ones(2)
       //        x2=0*ones(2),y2=0*ones(2),
@@ -167,7 +168,7 @@ xclip();
 [n1,n2]=size(racines);
 plot2d(real(racines)',imag(racines)',3*ones(1,n2),"100",...
     'closed-loop poles loci');
-if fin='nptmax' then
+if fin=='nptmax' then
   write(%io(2),'evans : too many points required')
 end
 xset("mark",xx(1),xx(2));

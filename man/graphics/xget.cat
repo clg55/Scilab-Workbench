@@ -69,8 +69,10 @@ DESCRIPTION
 
        15
          : function " 1 ";
-  color=xget("background") : to get the background color of the current
-  graphic window.
+  str=xset("auto clear") : to get the auto clear status ("on" or "off").
+
+  color=xget("background")
+       : to get the background color of the current graphic window.
 
   rect=xget("clipping")
        :  get the clipping zone rectangle rect=[x,y,w,h] (Upper-Left point
@@ -89,6 +91,10 @@ DESCRIPTION
 
   color=xget("foreground")
        : to fix the foreground color of the current graphic window.
+
+  str=xget("fpf")
+       : to get the floating point format for number display in contour func-
+       tions. Note that str=='' when default format is used.
 
   color=xget("hidden3d")
        : set the color number for ``hidden'' faces in plot3d.

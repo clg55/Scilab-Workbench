@@ -14,16 +14,16 @@
 
  for j=1:201,if abs(w(j))<=%pi/4 then sb(j)=1;end;end
  for j=1:201,if abs(w(j))<=%pi/2 then sb(j)=1;end;end;
- plot2d(w',lp',[-1],"011"," ",[-%pi,-0.125,%pi,1.125])
+ plot2d(w',lp',[1],"011"," ",[-%pi,-0.125,%pi,1.125])
  xend()
  xinit('fir3.ps')
- plot2d(w',hp',[-1],"011"," ",[-%pi,-0.125,%pi,1.125])
+ plot2d(w',hp',[1],"011"," ",[-%pi,-0.125,%pi,1.125])
  xend()
  xinit('fir4.ps')
- plot2d(w',bp',[-1],"011"," ",[-%pi,-0.125,%pi,1.125])
+ plot2d(w',bp',[1],"011"," ",[-%pi,-0.125,%pi,1.125])
  xend()
  xinit('fir5.ps')
- plot2d(w',sb',[-1],"011"," ",[-%pi,-0.125,%pi,1.125])
+ plot2d(w',sb',[1],"011"," ",[-%pi,-0.125,%pi,1.125])
  xend()
 
 

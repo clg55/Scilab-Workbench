@@ -1,6 +1,7 @@
 function x=g_ceil(a)
 // only to be called by function ceil
 //!
+// Copyright INRIA
 select type(a)
 case 2 then 
   x=ceil(a)

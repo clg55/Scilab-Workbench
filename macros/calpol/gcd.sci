@@ -3,6 +3,7 @@ function [x,uu]=gcd(p)
 //of components and a unimodular matrix (with polynomial inverse) u, 
 //with minimal degree such that [p1 p2]*u=[0 ... 0 pgcd]
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 [m,n]=size(p)
 mn=m*n
@@ -11,11 +12,11 @@ x=p(1);fact=1;
 uu=1
 for l=2:mn,
   [x,u]=bezout(x,p(l)),
-  if lhs=2 then
+  if lhs==2 then
      uu=[uu(:,1:l-2) uu(:,l-1)*u(1,[2 1])];uu(l,l-1:l)=u(2,[2 1]);
   end
 end,
-if lhs=1 then return,end
+if lhs==1 then return,end
 for l=mn:-1:2
   pivot=uu(l,l-1);
   for k=l:mn

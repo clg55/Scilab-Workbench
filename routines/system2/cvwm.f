@@ -21,6 +21,7 @@ c     str : tableau contenant apres execution la suite des codes scilab
 c     des caracteres.taille >= m*n*maxc
 c     istr : tableau donnant la structure de str
 c!    
+c     Copyright INRIA
       double precision xr(*),xi(*),ar,ai,eps,dlamch
       integer maxc,mode,fl,typ
       integer str(*),istr(*)
@@ -48,19 +49,25 @@ c     traitement du coeff (l,k)
 c     .        non zero real part
                typ=1
                if(mode.eq.1) call fmt(abs(ar),maxc,typ,n1,n2)
-               if(typ.ne.2) then
-                  nf=1
-                  fl=maxc
-               else
-                  fl=n1
-                  nf=2
-                  write(form(nf),120) fl,n2
-               endif
                if (ar.lt.0.0d0) then
                   cw(l1:l1)='-'
                   l1=l1+1
                endif
-               write(cw(l1:l1+fl-1),form(nf)) abs(ar)
+               if(typ.eq.1) then
+                  fl=maxc
+                  write(cw(l1:l1+fl-1),form(1)) abs(ar)
+               elseif(typ.eq.-1) then
+                  fl=3
+                  cw(l1:l1+fl-1)='Inf'
+               elseif(typ.eq.-2) then
+                  fl=3
+                  cw(l1:l1+fl-1)='Nan'
+               else
+                  fl=n1
+                  write(form(2),120) fl,n2
+                  write(cw(l1:l1+fl-1),form(2)) abs(ar)
+               endif
+
                if (cw(l1:l1).eq.' ') then
                   cw(l1:l1+fl-2)=cw(l1+1:l1+fl-1)
                   cw(l1+fl-1:l1+fl-1)=' '
@@ -77,16 +84,21 @@ c     .           non zero imaginary part
                   l1=l1+4
                   typ=1
                   if(mode.eq.1) call fmt(abs(ai),maxc,typ,n1,n2)
-                  if(typ.ne.2) then
-                     nf=1
+                  if(typ.eq.1) then
                      fl=maxc
+                     write(cw(l1:l1+fl-1),form(1)) ai
+                  elseif(typ.eq.-1) then
+                     fl=3
+                     cw(l1:l1+fl-1)='Inf'
+                  elseif(typ.eq.-2) then
+                     fl=3
+                     cw(l1:l1+fl-1)='Nan'
                   else
                      fl=n1
-                     nf=2
-                     write(form(nf),120) fl,n2
+                     write(form(2),120) fl,n2
+                     write(cw(l1:l1+fl-1),form(2)) ai
                   endif
                   l11=l1
-                  write(cw(l1:l1+fl-1),form(nf)) ai
                   if (cw(l1:l1).eq.' ') then
                      cw(l1:l1+fl-2)=cw(l1+1:l1+fl-1)
                      cw(l1+fl-1:l1+fl-1)=' '
@@ -116,15 +128,20 @@ c     .        imaginary case
                   endif
                   typ=1
                   if(mode.eq.1) call fmt(abs(ai),maxc,typ,n1,n2)
-                  if(typ.ne.2) then
-                     nf=1
+                  if(typ.eq.1) then
                      fl=maxc
+                     write(cw(l1:l1+fl-1),form(1)) ai
+                  elseif(typ.eq.-1) then
+                     fl=3
+                     cw(l1:l1+fl-1)='Inf'
+                  elseif(typ.eq.-2) then
+                     fl=3
+                     cw(l1:l1+fl-1)='Nan'
                   else
                      fl=n1
-                     nf=2
-                     write(form(nf),120) fl,n2
+                     write(form(2),120) fl,n2
+                     write(cw(l1:l1+fl-1),form(2)) abs(ai)
                   endif
-                  write(cw(l1:l1+fl-1),form(nf)) abs(ai)
                   if (cw(l1:l1).eq.' ') then
                      cw(l1:l1+fl-2)=cw(l1+1:l1+fl-1)
                      cw(l1+fl-1:l1+fl-1)=' '

@@ -5,11 +5,13 @@ function []=gaincom(pole,ue)
 // de sorte que la matrice f -g*k ait pour p\^oles
 // le vecteur colonne pole
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
-if rhs=1,ue=1,end
+if rhs==1,ue=1,end
 [f,g,h]=lincomp(ue);
 k=ppol(f,g,pole)
 [f,g,h,k]=resume(f,g,h,k)
+
 
 
 

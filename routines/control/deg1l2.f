@@ -15,6 +15,7 @@ C     devant contenir le coeff du plus au degre qui est
 C     toujours 1. contient en fait la valeur du critere
 C     pour ce polynome.
 C!
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
       dimension ta(mxsol,*),tg(ng+1)
       external feq, feqn, jacl2, jacl2n

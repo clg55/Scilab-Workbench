@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WPMUL,SSI=0
+c     Copyright INRIA
       subroutine wpmul(p1r,p1i,d1,p2r,p2i,d2,p3r,p3i,d3)
 c!purpose
 c  ce sous programme effectue le calcul:

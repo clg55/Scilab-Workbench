@@ -1,3 +1,5 @@
+# Copyright INRIA
+
 if SearchText(`Release 3`,interface(version))<>0 then
 	matadd:=add;
 elif SearchText(`Release 4`,interface(version))<>0 then

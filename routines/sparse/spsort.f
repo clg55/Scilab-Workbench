@@ -16,6 +16,7 @@ c     quick sort method is used
 c!restriction
 c     n must be less than 2**(50/2) ! due to lengh of work space mark
 c!
+c     Copyright INRIA
       dimension mark(50),index(n)
       integer count(n,2),av(2),x(2)
       integer spord

@@ -19,6 +19,7 @@ function [a,b,c,d]=lin(sim,x0,u0)
 //               [a,b,c,d]=lin(simula,z,u)
 //                sl = syslin('c',a,b,c,d,x0)
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 [n,w]=size(x0);[m,w]=size(u0);mpn=m+n
 nrm=norm([x0;u0]);if nrm<1 then nrm=1,end;
@@ -29,7 +30,7 @@ ab=[];for v=d,[y,xd]=sim(x0+v(1:n),u0+v(n+1:mpn)),
 [p,w]=size(y);
 ab=ab/d;a=ab(1:n,1:n);b=ab(1:n,n+1:mpn)
 c=ab(n+1:n+p,1:n);d=ab(n+1:n+p,n+1:mpn)
-if lhs=1 then a=syslin('c',a,b,c,d,x0),end
+if lhs==1 then a=syslin('c',a,b,c,d,x0),end
 
 
 

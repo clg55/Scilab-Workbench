@@ -41,8 +41,9 @@ EXAMPLE
   bigR=rand(nx+ny,nx+ny);bigR=bigR*bigR';
   [P,r]=lqg2stan(P22,bigQ,bigR);
   J=fstabst(P,r);
-  Q=ssrand(nu,ny,1);Q(2)=-1;  //Stable Q
-  A=h_cl(P,r,Q); spec(A)
+  Q=ssrand(nu,ny,1);Q('A')=-1;  //Stable Q
+  K=lft(J,r,Q);
+  A=h_cl(P,r,K); spec(A)
 
 SEE ALSO
   obscont, lft, lqg, lqg2stan

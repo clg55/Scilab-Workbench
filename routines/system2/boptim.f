@@ -4,6 +4,7 @@ c ======================================================================
 c     gestion des macros externals pour la primitive OPTIM
 c ======================================================================
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     

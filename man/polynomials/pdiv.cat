@@ -5,6 +5,7 @@ NAME
 
 CALLING SEQUENCE
   [R,Q]=pdiv(P1,P2)
+  [Q]=pdiv(P1,P2)
 
 PARAMETERS
 

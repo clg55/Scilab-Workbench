@@ -1,6 +1,7 @@
 function n=countblocks(scs_m)
 // count number of blocks used in the scicos data structure scs_m
 
+// Copyright INRIA
 
 nx=size(scs_m)
 n=0

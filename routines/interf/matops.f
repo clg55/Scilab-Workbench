@@ -2,6 +2,7 @@
 c     
 c     operations matricielles
 c     
+c     Copyright INRIA
       include '../stack.h'
       common /mtlbc/ mmode
       integer op
@@ -10,7 +11,7 @@ c
       double precision cstr,csti
       integer vol,iadr,sadr
 c     
-      double precision sr,si,e1,st,e2,e1r,e1i,e2r,e2i
+      double precision sr,si,e1,st,e2,e1r,e1i,e2r,e2i,dn
       double precision dasum
       integer star,dstar,slash,bslash,dot,colon,quote
       integer less,great,equal,et,ou,non
@@ -34,7 +35,12 @@ c
       lw=lstk(top+1)+1
       it2=0
       goto (04,03,02,01) rhs
-      call error(39)
+      if (op.eq.2) then
+         top=top0
+         fin=-fin
+      else
+         call error(39)
+      endif
       return
 c     
  01   il4=iadr(lstk(top))
@@ -242,7 +248,7 @@ c     .  []*a , a*[]
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
-         lstk(top+1)=sadr(il1+4)+1
+         lstk(top+1)=sadr(il1+4)
       elseif (mn1 .eq. 1) then
 c     .  cst*a
          sr = stk(l1)
@@ -393,8 +399,12 @@ c     .     complex / complex
      $           ,0,stk(l1),stk(l1+mn1),1,mn1,ierr)
          endif
          if(ierr.ne.0) then
-            call error(27)
-            return
+            if(ieee.eq.0) then
+               call error(27)
+               return
+            elseif(ieee.eq.1) then
+               call msgs(63)
+            endif
          endif
       endif
       go to 999
@@ -453,8 +463,12 @@ c     .     complex \ complex
      $           ,stk(l1+mn2),1,mn2,ierr)
          endif
          if(ierr.ne.0) then
-            call error(27)
-            return
+            if(ieee.eq.0) then
+               call error(27)
+               return
+            elseif(ieee.eq.1) then
+               call msgs(63)
+            endif
          endif
       endif
       go to 999
@@ -470,7 +484,7 @@ c     puissance  element wise .^
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
-         lstk(top+1)=sadr(il1+4)+1
+         lstk(top+1)=sadr(il1+4)
          return
       endif
       if (mn2 .gt. 1) then
@@ -520,8 +534,13 @@ c     puissance  element wise .^
          return
       endif
       if(err.eq.2) then
-         call error(27)
-         return
+         if(ieee.eq.0) then
+            call error(27)
+            return
+         elseif(ieee.eq.1) then
+            call msgs(63)
+         endif
+         err=0
       endif
       istk(il1+1)=m
       istk(il1+2)=n
@@ -540,7 +559,7 @@ c     elevation d'une matrice carree a une puissance
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
-         lstk(top+1)=sadr(il1+4)+1
+         lstk(top+1)=sadr(il1+4)
          return
       endif
       if(mn1.eq.1) goto 30
@@ -736,7 +755,14 @@ c
       else
          st = 1.0d+0
       endif
-      if (st .eq. 0.0d+0) go to 53
+      if (st .eq. 0.0d+0) then
+         istk(il1+1)=1
+         istk(il1+1)=0
+         istk(il1+2)=0
+         istk(il1+3)=0
+         lstk(top+1)=l1
+         return
+      endif
 
 c     check for clause
       if (rstk(pt-1) .eq. 801.or.rstk(pt).eq.611) go to 54
@@ -746,7 +772,7 @@ c     : in compiled for, next line to differentiate from extraction
       endif
 c
 c     floating point used to avoid integer overflow
-      e1r=l1 + max(3,int((e2-e1)/st)) - lstk(bot)
+      e1r=dble(l1) + max(3.0d0,(e2-e1)/st) - dble(lstk(bot))
       if (e1r .gt. 0.0d0) then
          err=e1r
          call error(17)
@@ -791,7 +817,7 @@ c     [].*a     a.*[]  -->[]
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
-         lstk(top+1)=sadr(il1+4)+1
+         lstk(top+1)=sadr(il1+4)
          goto 999
       endif
       if(mn1.ne.1.and.mn2.ne.1) then
@@ -878,8 +904,12 @@ c     .     complex ./ complex
             endif
          endif
          if(ierr.ne.0) then
-            call error(27)
-            return
+            if(ieee.eq.0) then
+               call error(27)
+               return
+            elseif(ieee.eq.1) then
+               call msgs(63)
+            endif
          endif
       elseif(op.eq.bslash) then
          it21=it2+2*it1
@@ -929,8 +959,12 @@ c     .     complex .\ complex
             endif
          endif
          if(ierr.ne.0) then
-            call error(27)
-            return
+            if(ieee.eq.0) then
+               call error(27)
+               return
+            elseif(ieee.eq.1) then
+               call msgs(63)
+            endif
          endif
       endif
       goto 999
@@ -1047,7 +1081,8 @@ c     .  [[];b]
          lstk(top+1)=l1+mn*(itr+1)
          goto 999
       endif
-      lw1=l1+(itr+1)*mn
+c      lw1=l1+(itr+1)*mn
+      lw1=max(lw,l1+(itr+1)*mn)
       lw2=lw1+mn1*(it1+1)
       err=lw2+mn2*(it2+1)-lstk(bot)
       if(err.gt.0) then
@@ -1086,14 +1121,14 @@ c     implied polynomials vector extraction
          goto 999
       endif
 
-      l1=sadr(il1+4)
       if(mn2.eq.0) then 
 c     .  arg2=[]
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
-         lstk(top+1)=l1+1
+         lstk(top+1)=sadr(il1+4)
          goto 999
       elseif(m2.lt.0) then
 c     .  arg2=eye
@@ -1101,12 +1136,13 @@ c     .  arg2=eye
          return
       elseif(m1.lt.0) then
 c     .  arg2(:), just reshape to column vector
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=mn2
          istk(il1+2)=1
          istk(il1+3)=istk(il2+3)
          call dcopy(mn2*(it2+1),stk(l2),1,stk(l1),1)
-         lstk(top+1)=l1+mn2*(it2+1)
+         lstk(top+1)=sadr(il1+4)+mn2*(it2+1)
          goto 999
       endif
 c     check and convert indices variable
@@ -1118,14 +1154,18 @@ c     check and convert indices variable
       endif
  79   if(mi.eq.0) then
 c     arg2([])
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
-         lstk(top+1)=l1+1
+         l1=sadr(il1+4)
+         lstk(top+1)=l1
          goto 999
       endif
 c     get memory for the result
+      il1=iadr(lstk(top))
+      l1=sadr(il1+4)
       if(sadr(ilr-1).le.l1+(it2+1)*mi) then
          lr=lw
          lw=lr+(it2+1)*mi
@@ -1159,7 +1199,6 @@ c     form resulting variable
       istk(il1+1)=m
       istk(il1+2)=n
       istk(il1+3)=it2
-      l1=sadr(il1+4)
       if(lr.ne.l1) call dcopy(mi*(it2+1),stk(lr),1,stk(l1),1)
       lstk(top+1)=l1+mi*(it2+1)
       go to 999
@@ -1169,14 +1208,14 @@ c     arg3(arg1,arg2)
          call error(36)
          return
       endif
-      l1=sadr(il1+4)
       if(mn3.eq.0) then 
 c     .  arg3=[]
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
-         lstk(top+1)=l1+1
+         lstk(top+1)=sadr(il1+4)
          goto 999
       elseif(m3.lt.0) then
 c     .arg3=eye
@@ -1200,14 +1239,17 @@ c
  90   mn=mi*nj
       if(mn.eq.0) then 
 c     .  arg1=[] or arg2=[] 
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
-         lstk(top+1)=l1+1
+         lstk(top+1)=sadr(il1+4)
          goto 999
       endif
 c     get memory for the result
+      il1=iadr(lstk(top))
+      l1=sadr(il1+4)
       if(sadr(ili-1).le.l1+(it3+1)*mi*nj) then
          lr=lw
          lw=lr+(it3+1)*mi*nj
@@ -1257,7 +1299,7 @@ c     .    arg3(:)=[]
             istk(il1+1)=0
             istk(il1+2)=0
             istk(il1+3)=0
-            lstk(top+1)=sadr(il1+4)+1
+            lstk(top+1)=sadr(il1+4)
             goto 999
          elseif(m1.eq.0) then
 c     .     arg3([])=[]  --> arg3
@@ -1427,7 +1469,7 @@ c     .    arg4(:,:)=[] -->[]
             istk(il1+1)=0
             istk(il1+2)=0
             istk(il1+3)=0
-            lstk(top+1)=sadr(il1+4)+1
+            lstk(top+1)=sadr(il1+4)
             goto 999
          elseif(m1.eq.0.or.m2.eq.0) then
 c     .     arg4([],arg2)=[],  arg4(arg1,[])=[] --> arg4
@@ -1479,7 +1521,7 @@ c     .           arg4(1:m4,1:n4)=[]
                   istk(il1+1)=0
                   istk(il1+2)=0
                   istk(il1+3)=0
-                  lstk(top+1)=sadr(il1+4)+1
+                  lstk(top+1)=sadr(il1+4)
                   goto 999
                else
 c     .           arg4(arg1,1:n4)=[] 
@@ -1495,7 +1537,6 @@ c     .           call extraction
                   goto 90
                endif
             else
-               lw=lw1
                call indxgc(il1,m4,ili,mi,mxi,lw)
                if(err.gt.0) return
                if(mi.eq.0) then
@@ -1790,7 +1831,14 @@ c     .  eye op b
          do 132 i=0,mn1-1
             e1=stk(l1+i)
             e2=stk(l2+i)
-            if(  (op.eq.equal   .and. e1.eq.e2) .or.
+c     for vc++ we add an explicit test for nan 
+            if(isanan(e1).eq.1.and.isanan(e2).eq.1) then 
+               if (op.eq.less+great) then 
+                  istk(il1+3+i)=1
+               else
+                  istk(il1+3+i)=0
+               endif
+            elseif(  (op.eq.equal   .and. e1.eq.e2) .or.
      &           (op.eq.less+great    .and. e1.ne.e2) .or.
      &           (op.eq.less          .and. e1.lt.e2) .or.
      &           (op.eq.great         .and. e1.gt.e2) .or.

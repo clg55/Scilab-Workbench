@@ -3,6 +3,7 @@ function bifish(f_ch)
 // Biffurcation on the fish model 
 // f_ch can be one of fish fishr fishr2
 //!
+// Copyright INRIA
 x_message([" A bifurcation diagram of a discrete time system";
           " y=b*exp(-0.1*(x(k)_1+x(k)_2));";
           " x(k+1)=[ y 2*y ; s 0.0]*x(k);";

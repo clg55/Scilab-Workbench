@@ -23,6 +23,8 @@ c        indc     : comme pour icsec1
 c        c2       : cout
 c        c2y(ny,ntob) : derivee de c2 par rapport a y
 c        g(nu)  : derivee de c2 par rapport a u
+c     Copyright INRIA
+
 c!
       implicit double precision (a-h,o-z)
       dimension tob(ntob),obs(nob,ny),cof(nob,ntob),ytob(ny,ntob),

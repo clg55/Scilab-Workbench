@@ -1,6 +1,6 @@
 #ifndef _FORMATAGE_MESSAGES_
 #define _FORMATAGE_MESSAGES_
-
+#include "../machine.h"
 #include "utilitaires.h"
 
 #define SEPARATEUR ' '
@@ -26,7 +26,7 @@ typedef tableau_avec_taille Message;
    d'une structure Message, qui est retournee.
 */
 
-extern Message decouper_trame();
+extern Message decouper_trame _PARAMS((char *trame_origine));
 
 
 
@@ -36,7 +36,7 @@ extern Message decouper_trame();
    des SEPARATEUR et les formatant au format trame
 */
 
-extern char *coller_chaines();
+extern char *coller_chaines _PARAMS((Message message));
 
 
 
@@ -47,6 +47,6 @@ extern char *coller_chaines();
    la fonction liberer_mixte qui est appelee.
 */
 
-extern void liberer_message();
+extern void liberer_message _PARAMS((Message message));
 
 #endif

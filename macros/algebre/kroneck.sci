@@ -24,8 +24,9 @@ function [Q,Z,Qd,Zd,numbeps,numbeta]=kroneck(E,A)
 //
 // interface  F.D. from Slicot-fstair
 // T. Beelen's routines
+// Copyright INRIA
 [LHS,RHS]=argn(0);
-if RHS=1 then
+if RHS==1 then
     [E,A]=pen2ea(E);end
 [Q,Z,Ec,Ac,Qd,Zd,numbeps]=quaskro(E,A);
 rows=Qd(1)+Qd(2)+1:Qd(1)+Qd(2)+Qd(3);

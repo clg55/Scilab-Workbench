@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=ICOPY,SSI=0
+c     Copyright INRIA
       subroutine  icopy(n,dx,incx,dy,incy)
 c!but
 c

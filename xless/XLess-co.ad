@@ -1,6 +1,7 @@
 
 
 XLess*Background:white
+XLess*Foreground:black
 XLess*Command.background:yellow
 XLess*confirm.background:lightblue
 XLess*Cancel.background:orange red

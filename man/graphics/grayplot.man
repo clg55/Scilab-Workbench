@@ -1,7 +1,7 @@
 .TH GRAYPLOT 2 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-grayplot - 2D plot of a surface using gray levels
+grayplot - 2D plot of a surface using colors 
 .SH CALLING SEQUENCE
 .nf
 grayplot(x,y,z,[strf,rect,nax])

@@ -1,4 +1,5 @@
       subroutine calmaj(dh,n,g1,sig,w,ir,mk,epsmc,nfac)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
 c     subroutine de qnbd
       dimension dh(*),g1(*),w(*)

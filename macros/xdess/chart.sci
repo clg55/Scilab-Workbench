@@ -1,4 +1,5 @@
 function []=chart(attenu,angl,flags)
+// Copyright INRIA
 titre='amplitude and phase contours of y/(1+y)'
 l10=log(10);
 ratio=%pi/180;

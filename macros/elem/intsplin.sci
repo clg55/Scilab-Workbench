@@ -7,6 +7,7 @@ function v = intsplin(x,s)
 //v = intsplin(s) computes the integral of y assuming unit
 //spacing between the data points. 
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<2 then
   s=x;

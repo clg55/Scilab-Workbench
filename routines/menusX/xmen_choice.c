@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /********************************************************
  * choice.c The XWindow part 
  * All the generic stuff for dealing with choice widgets.

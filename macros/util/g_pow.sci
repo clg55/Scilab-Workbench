@@ -11,6 +11,7 @@ function x=g_pow(a,p)
 // - A scalar and p square matrix
 // - A square matrix p is not an integer
 //!
+// Copyright INRIA
 [m,n]=size(a)
 [mp,np]=size(p)
 if m*n==1&mp==np then  //a^P
@@ -33,7 +34,7 @@ if m*n==1&mp==np then  //a^P
     x=u*diag(a.^diag(s))*inv(u);
   end
   if r then x=real(x), end
-elseif m==n&mp*np=1 then  //A^p  p non integer
+elseif m==n&mp*np==1 then  //A^p  p non integer
   flag=or(a<>a')
   if ~flag then 
     //Hermitian matrix

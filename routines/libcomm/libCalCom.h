@@ -1,9 +1,13 @@
 #ifndef _LIBCALCOM_
 #define _LIBCALCOM_
 
+#include "../machine.h"
+
 /*********************************************************************
  * Header file utilitaires.h
  */
+
+#include <varargs.h>
 
 typedef struct Tableau_avec_taille
 {
@@ -12,32 +16,32 @@ typedef struct Tableau_avec_taille
 } tableau_avec_taille;
 
 
-extern void liberer_tableau_de_pointeurs();
+extern void liberer_tableau_de_pointeurs _PARAMS((char **tableau, int taille));
 
 /*
     concat_caractere et strcat_plus_caractere :
     il faut que la chaine passee en premier argument ait 
     la place d'accueillir ce qui leur sera concatene.
 */
+extern void concat_caractere _PARAMS((char *chaine, char caractere));
+extern void strcat_plus_caractere _PARAMS((char *chaine_a_remplir, char *chaine_a_copier, char caractere));
 
-extern void concat_caractere();
-extern void strcat_plus_caractere();
 
-
-extern char *concatener_deux_chaines();
-extern tableau_avec_taille convertir_nombre_arbitraire_de_chaines_en_tableau();
-extern char *concatenation_plusieurs_chaines();
+extern char *concatener_deux_chaines _PARAMS((char *chaine1, char *chaine2));
+extern tableau_avec_taille convertir_nombre_arbitraire_de_chaines_en_tableau _PARAMS((va_list *liste));
+extern char *concatenation_plusieurs_chaines ();
 
 /*
     dupliquer_chaine est l'equivalent de strdup mais utilise allouer_type
     du module de gesation memoire.
 */
-extern char *dupliquer_chaine();
+extern char *dupliquer_chaine _PARAMS((char *chaine_source));
 
 
 /*********************************************************************
  * Header file : formatage_messages
  */
+
 
 #define SEPARATEUR ' '
 #define CARACTERE_ECHAPPEMENT '\\'
@@ -62,7 +66,7 @@ typedef tableau_avec_taille Message;
    d'une structure Message, qui est retournee.
 */
 
-extern Message decouper_trame();
+extern Message decouper_trame _PARAMS((char *trame_origine));
 
 
 
@@ -72,7 +76,7 @@ extern Message decouper_trame();
    des SEPARATEUR et les formatant au format trame
 */
 
-extern char *coller_chaines();
+extern char *coller_chaines _PARAMS((Message message));
 
 
 
@@ -83,31 +87,34 @@ extern char *coller_chaines();
    la fonction liberer_mixte qui est appelee.
 */
 
-extern void liberer_message();
+extern void liberer_message _PARAMS((Message message));
 
 
 /*********************************************************************
  * Header file : communications
  */
 
-/*
-   La fonction envoyer_message_parametres_var prend un nombre arbitraire de
-   chaines de caracteres et les envoie au scruteur apres les avoir formate
-   correctement.
-*/
-extern void envoyer_message_parametres_var();
 
 /*
-   La fonction envoyer_message_tableau fait la meme chose que
-   la fonction envoyer_message_parametres_var, mais les chaines
-   de caracteres lui sont passees dans une structure Message.
+    La fonction envoyer_message_parametres_var prend un nombre arbitraire de
+    chaines de caracteres et les envoie au scruteur apres les avoir formate
+    correctement.
 */
-extern void envoyer_message_tableau();
+
+extern void envoyer_message_parametres_var _PARAMS(());
 
 /*
-   attendre_reponse renvoie un message de la source et du type demande.
+    La fonction envoyer_message_tableau fait la meme chose que
+    la fonction envoyer_message_parametres_var, mais les chaines
+    de caracteres lui sont passees dans une structure Message.
 */
-extern Message attendre_reponse();
+
+extern void envoyer_message_tableau _PARAMS((Message message));
+
+/*
+    attendre_reponse renvoie un message de la source et du type demande.
+*/
+extern Message attendre_reponse _PARAMS((char *source, char *type_message, int nb_parametres_min));
 
 
 
@@ -133,11 +140,11 @@ typedef struct Actions_messages{
     void (*action)();
 } actions_messages;
 
-extern void init_messages();
-extern char *identificateur_appli();
-extern void scanner_messages();
-extern Message attendre_message();
-extern void ecrire_trame();
-extern char *lire_trame();
+extern void init_messages _PARAMS((actions_messages *table, int p_in, int p_out));
+extern char *identificateur_appli _PARAMS((void));
+extern void scanner_messages _PARAMS((void));
+extern Message attendre_message _PARAMS((char *source, char *type_message, int nb_parametres_max));
+extern void ecrire_trame _PARAMS((char *trame));
+extern char *lire_trame _PARAMS((void));
 
 #endif

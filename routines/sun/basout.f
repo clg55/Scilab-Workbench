@@ -1,6 +1,7 @@
       subroutine basout(io,lunit,string)
 c     gestion des sorties sur le "standard output" de scilab.
 c
+c     Copyright INRIA
       include '../stack.h'
       character*(*) string
       character ch*1

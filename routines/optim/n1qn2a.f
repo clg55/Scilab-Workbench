@@ -1,6 +1,8 @@
       subroutine n1qn2a (simul,prosca,n,x,f,g,dxmin,df1,epsg,
      /                   impres,io,mode,niter,nsim,m,
      /                   d,gg,aux,alpha,ybar,sbar,izs,rzs,dzs)
+c     Copyright INRIA
+
 c----
 c
 c     code d'optimisation proprement dit

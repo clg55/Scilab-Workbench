@@ -27,7 +27,7 @@ c
 c NOTE: Could return the wrong value when the line segment
 c passes through an end point of the line sequence. Thus
 c all line segments on a grid point must be perturbed.
-
+c Copyright INRIA
       integer      nc,flag,count
       real         bav(3,nc),xyline(2,nc)
       real         p1,p2,pd,q1

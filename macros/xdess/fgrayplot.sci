@@ -11,6 +11,7 @@ function []=fgrayplot(x,y,f,strf,rect,aaint)
 //    deff('[z]=surf(x,y)','z=x**2+y**2');
 //    fgrayplot(-1:0.1:1,-1:0.1:1,surf);
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 if rhs<=0,s_mat=['deff(''[z]=surf(x,y)'',''z=x**2+y**2'');';
                 'fgrayplot(-1:0.1:1,-1:0.1:1,surf);'];
@@ -19,7 +20,7 @@ if rhs<=0,s_mat=['deff(''[z]=surf(x,y)'',''z=x**2+y**2'');';
 if rhs <= 3,strf="121";end
 if rhs <= 4,rect=[-1,-1,1,1];end
 if rhs <= 5,aaint=[10,2,10,2];end
-if type(f)=11 then comp(f),end;
+if type(f)==11 then comp(f),end;
 grayplot(x,y,feval(x,y,f),strf,rect,aaint);
 
 

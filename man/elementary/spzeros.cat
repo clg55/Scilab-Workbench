@@ -4,9 +4,9 @@ NAME
   spzeros -  sparse zero matrix
 
 SYNTAX
-  Zsp=spzeros(nrows,ncols)
+  sp=spzeros(nrows,ncols)
 
-  Zsp=spzeros(A)
+  sp=spzeros(A)
 
 PARAMETERS
 
@@ -19,10 +19,10 @@ PARAMETERS
   sp      : sparse zero matrix
 
 DESCRIPTION
-  Zsp=spzeros(nrows,ncols,fill) returns a sparse zero matrix Zsp with nrows
+  sp=spzeros(nrows,ncols,fill) returns a sparse zero matrix sp with nrows
   rows, ncols columns. (Equivalent to sparse([],[],[nrow,ncols]))
 
-  Zsp=spzeros(A) returns a sparse zero matrix with same dimensions as A. If
+  sp=spzeros(A) returns a sparse zero matrix with same dimensions as A. If
   [m,n]=size(A), spzeros(m,n) and spzeros(A) are equivalent. In particular
   spzeros(3) is not equivalent to spzeros(3,3).
 
@@ -30,4 +30,4 @@ EXAMPLE
   sum(spzeros(1000,1000))
 
 SEE ALSO
-  sparse, full, eye, speye
+  sparse, full, eye, speye, spones

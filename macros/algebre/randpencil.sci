@@ -15,15 +15,21 @@ function F=randpencil(eps,infi,fin,eta)
 // this should be a empty matrix with coldim(eta) rows and 0 columns.
 // (bad behavior of the empty matrix!!!!!)
 
+// Copyright INRIA
 [LHS,RHS]=argn(0);
 if RHS<>4 then error('randpencil requires 4 (possibly []) input parameters!');
 end
-if diag(fin)<>[] then Fin=%s*eye-diag(fin);else Fin=[];end
+select type(fin)
+  case 1
+    if diag(fin)<>[] then Fin=%s*eye-diag(fin);else Fin=[];end
+  case 2
+    Fin=%s*eye-companion(fin);
+end
 deff('j=%jdrn(n)','j=zeros(n,n);for k=1:n-1;j(k,k+1)=1;end')
 deff('Lk=%eta(k)','Lk=zeros(k+1,k);...
-if k=0 then return;end;for j=1:k;Lk(j,j)=%s;Lk(j+1,j)=-1;end');
+if k==0 then return;end;for j=1:k;Lk(j,j)=%s;Lk(j+1,j)=-1;end');
 deff('Lk=%epsilon(k)','Lk=zeros(k,k+1);...
-if k=0 then return;end;for j=1:k;Lk(j,j)=%s;Lk(j,j+1)=-1;end');
+if k==0 then return;end;for j=1:k;Lk(j,j)=%s;Lk(j,j+1)=-1;end');
 
 J=[];
 for kk=infi;
@@ -37,7 +43,7 @@ seps=sort(eps);
 if seps(1)==0 then flageps=%t;end
 if ~flageps then
 for k=seps;
-  if k=0 then [p,q]=size(Eps); Eps=[Eps,zeros(p,1)];end
+  if k==0 then [p,q]=size(Eps); Eps=[Eps,zeros(p,1)];end
   if k<>0 then Eps=sysdiag(Eps,%epsilon(k));end
 end
 end
@@ -48,7 +54,7 @@ seta=sort(eta);
 if seta(1)==0 then flageta=%t;end
 if ~flageta then
 for k=seta;
-  if k=0 then [p,q]=size(Eta); Eta=[Eta;zeros(1,q)];end
+  if k==0 then [p,q]=size(Eta); Eta=[Eta;zeros(1,q)];end
   if k<>0 then Eta=sysdiag(Eta,%eta(k));end
 end
 end
@@ -59,7 +65,7 @@ F=sysdiag(Eps,Infin,Fin,Eta);
 
 if flageps then
   F=[zeros(p,prod(size(eps))),F];
-  if F=[] then ncols=prod(size(eps));end
+  if F==[] then ncols=prod(size(eps));end
 end
 
 if flageta then
@@ -70,11 +76,11 @@ else
   F=[F;zeros(prod(size(eta)),ncols)];
 end
 end
-
-[p,q]=size(F);
-rand('seed',0);
+// This can be uncommented for a seemingly more random pencil!
+//[p,q]=size(F);
+//rand('seed',0);
 //rand('normal')
-Q=rand(p,p);
-Z=rand(q,q);
+//Q=rand(p,p);
+//Z=rand(q,q);
 //F=Q*F*Z;
 

@@ -9,6 +9,7 @@ function fplot3d(xr,yr,f,teta,alpha,leg,flag,ebox)
 // -flag et ebox (voir plot3d)
 // Exemple : taper fplot3d() pour voir un exemple
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<=0;s_mat=['deff(''[z]=surf(x,y)'',''z=sin(x)*cos(y)'');';
                  't=-%pi:0.3:%pi;';
@@ -24,7 +25,7 @@ if rhs<5,alpha=45,end;
 if rhs<6,leg="X@Y@Z",end;
 if rhs<7,flag=[2,2,3],end;
 if rhs<8,ebox=0*ones(1,6),end;
-if type(f)=11 then comp(f),end;
+if type(f)==11 then comp(f),end;
 plot3d(xr,yr,feval(xr,yr,f),teta,alpha,leg,flag,ebox),
 
 

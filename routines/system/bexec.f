@@ -4,6 +4,7 @@ c     This routine prepare execution of a scilab  instruction (given
 c     in a character string str) within a C 
 c     or fortran procedure
 c     ==========================================================
+c     Copyright INRIA
       include '../stack.h'
       integer sadr,iadr
       character*(*) str

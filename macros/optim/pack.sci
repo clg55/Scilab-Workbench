@@ -1,5 +1,6 @@
 function [M,sel]=pack(M,blck_szs)
 //utility function (for use with semidef)
+// Copyright INRIA
 sel=[]
 kk=0
 blck_szs=matrix(blck_szs,1,size(blck_szs,'*'))

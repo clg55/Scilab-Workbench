@@ -1,5 +1,7 @@
-
 function []=tdinit()
+
+// Copyright INRIA
+
 tit=["bioreactor model (bioreact)";
  "competition model (compet)";
  "system with limit cycle (cycllim)";
@@ -54,6 +56,9 @@ q1linper,q2linper,rlinper,ppm,alin,p_ppr,p_ppa,p_ppm,p_ppb,p_ppk,lic_a,lic_b)
 
 function [k,debit,x2in]=ibio()
 // initialisation du bioreactur
+
+// Copyright INRIA
+
 tit=["  bioreactor model initialisation";
    "x(1): biomass concentration ";
    "x(2): sugar concentration"; 
@@ -67,6 +72,9 @@ if x<>[] then k=evstr(x(1));debit=evstr(x(2));x2in=evstr(x(3));end
 
 
 function [ppr,ppa,pps,ppb,ppk,ppl]=icompet()
+
+// Copyright INRIA
+
 tit=["  competition model initialisation";
      "xdot(1) = ppr*x(1)*(1-x(1)/ppk) - u*ppa*x(1)*x(2)";
      "xdot(2) = pps*x(2)*(1-x(2)/ppl) - u*ppb*x(1)*x(2)"];
@@ -84,6 +92,9 @@ ppl=evstr(x(6));end
 
 
 function [qeps]=icycl()
+
+// Copyright INRIA
+
 //[qeps]=icycl()
 tit=["  system with limit cycle ";
      " xdot=a*x+qeps(1-||x||**2)x";" Enter qeps"];
@@ -93,11 +104,17 @@ if qeps_r<>[] then qeps=qeps_r;end
 
 
 function [alin]=ilinear()
+
+// Copyright INRIA
+
 rep=x_matrix(['xdot=a*x';'Matrice 2x2 du systeme lineaire'],alin);
 if rep<>[] then alin=rep;end
 
 
 function [alin,qeps,q1linper,q2linper,rlinper]=ilinp()
+
+// Copyright INRIA
+
 tit=[" quadratic model ";
      "xdot= a*x+(1/2)*qeps*[(x'')*q1*x;(x'')*q2*x]+r"];
 x=x_mdialog(tit,['qeps';'r'],...
@@ -121,6 +138,9 @@ if rep<>[] then q2linper=rep;end
 
 
 function [lic_a,lic_b]=ilic()
+
+// Copyright INRIA
+
 tit=[" linear system with a feedback ";
 	"xdot= a*x +b*(-k*x);"];
 rep=x_matrix([tit;"Enter a"],lic_a)
@@ -130,6 +150,9 @@ if rep<>[] then lic_b=rep;end
 
 
 function [p_ppr,p_ppa,p_ppm,p_ppb,p_ppk]=ip_p()
+
+// Copyright INRIA
+
 tit=["  pray predator model initialisation";
      "xdot(1) = p_ppr*x(1)*(1-x(1)/p_ppk) - p_ppa*x(1)*x(2) - u*x(1);"
      "xdot(2) = -p_ppm*x(2)             + p_ppb*x(1)*x(2) - u*x(2);"];

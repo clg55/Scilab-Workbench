@@ -9,10 +9,11 @@ function []=ssprint(sl,out)
 // ssprint(syslin('d',a,b,c,d))
 //!
 
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 mess='system cannot be displayed in this page'
 fil=%f
-if rhs=1 then 
+if rhs==1 then 
   out=%io(2),
 else
   if type(out)==10 then
@@ -22,8 +23,8 @@ else
 end
 deff('[ta]=%cv(x)',['[m,n]=size(x);';
                     'if m*n==0 then ta='' '',return,end';
-                    'fmt=format();fmt=10**fmt(2)/maxi([1,norm(x)]);';
-                    'x=round(fmt*x)/fmt;';
+                    'frmt=format();frmt=10**frmt(2)/maxi([1,norm(coeff(x))]);';
+                    'x=round(frmt*x)/frmt;';
                     't=[];for k=1:m,t=[t;''|''],end;';
                     'ta=t;for k=1:n,';
                     '        aa=string(x(:,k)),';

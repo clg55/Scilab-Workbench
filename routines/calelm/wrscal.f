@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WRSCAL,SSI=0
+c     Copyright INRIA
       subroutine wrscal(n,s,xr,xi,incx)
 c!but
 c

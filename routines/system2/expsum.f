@@ -24,6 +24,7 @@ c     ierr : retour d'erreur si np>maxnp (ierr=1)
 c!origine
 c     S Steer INRIA 1990
 c!
+c     Copyright INRIA
       integer chaine(*),iptr(*)
 c     
       integer plus,minus,sign,lparen,rparen

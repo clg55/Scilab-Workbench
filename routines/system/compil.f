@@ -2,6 +2,7 @@
 c
 c     add  compiled instruction in compiled macro structure
 c
+c     Copyright INRIA
       integer val1(*),val2,val3,val4,l
       include '../stack.h'
       integer code,sadr
@@ -81,6 +82,7 @@ c     break :<13>
 c     abort :<14>
 c     seteol:<15>
 c     quit  :<17>
+c     exit  :<20>
 c     return:<99>
          err=sadr(l+2)-lstk(bot)
          if(err.gt.0) goto 90

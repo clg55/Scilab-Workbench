@@ -1,4 +1,4 @@
-
+/* Copyright INRIA */
 extern void GetDynFunc _PARAMS(( int ii, void (**realop)()));
 extern int SearchInDynLinks _PARAMS((char *op, void (**realop)()));
 extern void SciLinkInit _PARAMS((void));

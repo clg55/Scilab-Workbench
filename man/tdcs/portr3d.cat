@@ -13,7 +13,7 @@ PARAMETERS
        point x [y]=f(t,x,[u]) or a list list(f1,u1) where f1 is a macro of
        type [y]=f1(t,x,u) or a character string
 
-  _r_e_s_t : The other parameters are optional. If omitted they will be asked
+  rest : The other parameters are optional. If omitted they will be asked
        interactively
 
        odem

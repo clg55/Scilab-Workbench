@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "../machine.h"
 
 /* Element wise som */

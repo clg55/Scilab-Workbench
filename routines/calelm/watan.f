@@ -13,6 +13,7 @@ c!sous programmes appeles
 c     wdiv wlog (blas.extensions)
 c!
 c     y = atan(x) = (i/2)*log((i+x)/(i-x))
+c     Copyright INRIA
       double precision xr,xi,yr,yi,tr,ti
       if(xi.ne.0.0d0) goto 20
       yr = atan2(xr,1.0d+0)

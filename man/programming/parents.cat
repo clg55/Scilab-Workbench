@@ -24,14 +24,13 @@ PARAMETERS
 DESCRIPTION
   Left and right parenthesis are used to
 
-  *Specify
-       evaluation order within expressions,
+  **    Specify evaluation order within expressions,
 
-  *Form     right-hand-side functions argument list. Within multiple rhs
-            arguments must be separated by comma.
+  **    Form right-hand-side functions argument list. Within multiple rhs
+       arguments must be separated by comma.
 
-  *Select   elements within vectors, matrices and lists.  see help on extrac-
-            tion and insertion for more precisions
+  **    Select elements within vectors, matrices and lists.  see help on
+       extraction and insertion for more precisions
 
 EXAMPLE
   3^(-1)

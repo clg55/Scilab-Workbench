@@ -13,8 +13,9 @@ PARAMETERS
   filen     : string (Postscript file name). (default value=file). The window
             number is appended to the filen.
 
-  flag      : if printer is present or if there's only one argument in the
-            calling sequence, the created file is printed.
+  printer   : string (Printer name). if printer is present or if there's only
+            one argument in the calling sequence, the created file is printed
+            on printer printer.
 
 DESCRIPTION
   This function will send the recorded graphics of the window win_num in the

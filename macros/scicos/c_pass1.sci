@@ -17,6 +17,7 @@ function  [blklst,cmat,ccmat,cor,corinv,ok]=c_pass1(scs_m,ksup)
 // corinv : corinv(nb) is the path of nb ith block defined in blklst 
 //          in the scs_m structure
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 sup_tab=[]
 if rhs<=1 then ksup=0;end
@@ -28,7 +29,6 @@ if ksup==0 then   // main scheme
   path=[] // for delete_unconnected 
   scs_m_s=scs_m // for delete_unconnected 
 end
-
 scs_m=delete_unconnected(scs_m); //suppress blocks with an unconnected regular port
 
 
@@ -58,7 +58,7 @@ for k=sel
       nsblk=nsblk+1
       cor(k)=MaxBlock+nsblk
       nrmsplit=[nrmsplit,MaxBlock+nsblk]
-    elseif o(5)=='CLKSOM_f' then
+    elseif o(5)=='CLKSOM_f'|o(5)=='CLKSOMV_f' then
       nsblk=nsblk+1
       cor(k)=MaxBlock+nsblk
       clksum=[clksum,MaxBlock+nsblk]
@@ -153,6 +153,7 @@ for k=sel
       end
       cor(k)=cors
       nb=nb+nbs
+      path($)=[]
     elseif o(5)=='IN_f' then
       if ksup==0 then
 	message('Input port must be only used in a Super Block')
@@ -234,7 +235,21 @@ for k=sel
       corinv(nb)=k
       model=o(3)
       if model(1)(1)=='scifunc' then
+	if model(9)==0 then
+	  message('A scifunc block has not been defined')
+	  ok=%f
+	  return
+	end
 	model(1)=list(genmac(model(9),size(model(2),'*'),size(model(3),'*')),3)
+      end
+      if type(model(1))==15 then
+	if int(model(1)(2)/1000)==1 then   //fortran block
+	  funam=model(1)(1)
+	  if ~c_link(funam) then
+	    tt=graphics(4)(2);
+	    [ok]=do_forcomlink(funam,tt)
+	  end
+	end
       end
       blklst(nb)=model
       cor(k)=nb
@@ -308,7 +323,7 @@ for k=sup_tab //loop on super blocks
 end
 cmat(to_kill,:)=[];to_kill=[]
 [nc,nw]=size(cmat)
-// strip super block output  clock connection
+// strip super block output  port connection
 //===========================================
 for k=sup_tab //loop on super blocks
   fn=find(cmat(:,3)==k); //super block outputs
@@ -325,6 +340,8 @@ for k=sup_tab //loop on super blocks
 	  cmat=[cmat;[ones(c')*cmat(fnp(ii),1:2),cmat(c,3:4)] ];
 	  to_kill=[to_kill;fnp(ii)];
 	end
+      else
+	to_kill=[to_kill;fnp(1)];
       end
     end
   end
@@ -400,8 +417,12 @@ for ksum=clksum
   kfrom=find(ccmat(:,1)==ksum); // links coming from the clksum
   kto=find(ccmat(:,3)==ksum); // links going to the clksum
   if ~or(to_kill==kfrom(1)) then to_kill=[to_kill,kfrom(1)];end
-  ccmat(kto,3:4)=ccmat(kfrom(1)*ones(kto'),3:4);
-  kfrom(1)=[];
+  if kfrom(1)<>[] then
+    ccmat(kto,3:4)=ccmat(kfrom(1)*ones(kto'),3:4);
+    kfrom(1)=[];
+  else
+    if ~or(to_kill==kto(1)) then to_kill=[to_kill,kto(1)];end
+  end
   nto=size(kto,'c');
   //add new links
   for k=kfrom

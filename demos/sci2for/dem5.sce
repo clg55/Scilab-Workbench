@@ -1,4 +1,5 @@
 // function definition
+// Copyright INRIA
 deff('[x]=t5(a,b)','x=a+%i*b','n')
 
 // define type and dimension of the input args
@@ -11,4 +12,4 @@ printspecs(t5,lt5)
 
 //translate
 txt=sci2for(t5,'t5',lt5);
-message(txt);
+message(['Generated Fortran code';' ';txt])

@@ -24,7 +24,7 @@ REMARK
 
 EXAMPLE
   plot2d([0;1],[0;1])
-  rect=xstringl(0.5,0.5,["Scilab","is" ; "not","Basile"])
+  rect=xstringl(0.5,0.5,["Scilab","is" ; "not","balicS"])
 
 SEE ALSO
   xstring

@@ -7,6 +7,7 @@ c
 c     ====================================================================
 c     
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     
@@ -131,5 +132,6 @@ c
  9999 continue
       iero=1
       niv=niv-1
+      bschur=1
       return
       end

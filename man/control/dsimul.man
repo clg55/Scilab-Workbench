@@ -1,7 +1,7 @@
 .TH dscr 1 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an 
 .SH NAME
-dsimul -  discrete time simulation
+dsimul -  state space discrete time simulation 
 .SH CALLING SEQUENCE
 .nf
 y=dsimul(sl,u)
@@ -18,8 +18,9 @@ y
 : output of \fVsl\fR
 .SH DESCRIPTION
 Utility function. 
-If \fV[A,B,C,D]=abcd(sl)\fR, dsimul returns \fVy=C*ltitr(A,B,u,x0)+D*u\fR i.e.
+If \fV[A,B,C,D]=abcd(sl)\fR and \fVx0=sl('X0')\fR, \fVdsimul\fR returns \fVy=C*ltitr(A,B,u,x0)+D*u\fR i.e.
 the time response of \fVsl\fR to the input \fVu\fR.
+\fVsl\fR is assumed to be in state space form (\fVsyslin\fR list).
 .SH EXAMPLE
 .nf
 z=poly(0,'z');

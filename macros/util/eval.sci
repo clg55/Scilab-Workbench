@@ -3,6 +3,7 @@ function [h]=eval(z)
 // returns the evaluation of the matrix of character strings Z.
 // Example: a=1; b=2; Z=['a','b'] ; eval(Z) returns the matrix [1,2];
 //!
+// Copyright INRIA
 [mz,nz]=size(z),
 if mz*nz>1 then
    texte=[];

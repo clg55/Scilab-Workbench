@@ -1,5 +1,7 @@
       subroutine lookup(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     rpar(1:n)  =  u coordinate discretisation must be strictly increasing
 c     rpar(n+1:2*n)  =  y coordinate discretisation

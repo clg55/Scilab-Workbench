@@ -28,4 +28,4 @@ DESCRIPTION
   poses. Scicos serves as an interface to the various block diagram compilers
   and the hybrid simulator scicosim.
 SEE ALSO
-  scicosim, scicos_main, scicos_menu
+  scicosim, scicos_main, scicos_menus

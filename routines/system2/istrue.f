@@ -1,4 +1,5 @@
       function istrue(mod)
+c     Copyright INRIA
       logical istrue
 c
       include '../stack.h'

@@ -10,6 +10,7 @@ C     other function for impl don't forget to add their names
 c     in Flist
 c     -------------------------------------------------------
 
+c     Copyright INRIA
       subroutine resid(neq, t, y, s, r, ires)
 c     ----------------------------------------
 c     this subroutine must calculate vector r=g(t,y)-a(t,y)*s

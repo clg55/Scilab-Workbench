@@ -1,5 +1,6 @@
 c     Example for intg 
 c     ---------------------
+c     Copyright INRIA
       
       double precision function intgex(x)
       double precision x,pi

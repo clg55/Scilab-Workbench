@@ -22,6 +22,7 @@ function []=black(sl,fmin,fmax,pas,comments)
 //  phi      : matrix of phases (in degrees). One row for each response.
 //  repf     : matrix of complex numbers. One row for each response.
 
+// Copyright INRIA
 //To plot the grid of iso-gain and iso-phase of y/(1+y) use abaque()
 //%Example
 //  s=poly(0,'s')
@@ -51,17 +52,25 @@ case 16 then  // sl,fmin,fmax [,pas] [,comments]
   select rhs
   case 1 then //sl
    comments=' '
-   [frq,d,phi]=repfreq(sl);sl=[] 
+   [frq,repf]=repfreq(sl);
+   [d,phi]=dbphi(repf);
+   sl=[] 
   case 2 then // sl,frq
    comments=' '
-   [frq,d,phi]=repfreq(sl,fmin);fmin=[];sl=[]
+   [frq,repf]=repfreq(sl,fmin);
+   [d,phi]=dbphi(repf);
+   fmin=[];sl=[]
   case 3 ,
    if type(fmax)==1 then
       comments=' '
-      [frq,d,phi]=repfreq(sl,fmin,fmax,pas_def),sl=[]
+      [frq,repf]=repfreq(sl,fmin,fmax,pas_def),
+      [d,phi]=dbphi(repf);
+      sl=[]
    else
       comments=fmax
-      [frq,d,phi]=repfreq(sl,fmin);fmin=[];sl=[]
+      [frq,repf]=repfreq(sl,fmin);
+      [d,phi]=dbphi(repf);
+      fmin=[];sl=[]
    end
   case 4 ,
     if type(pas)==1 then 
@@ -69,9 +78,11 @@ case 16 then  // sl,fmin,fmax [,pas] [,comments]
     else 
       comments=pas;pas=pas_def
     end,
-    [frq,d,phi]=repfreq(sl,fmin,fmax,pas)
+    [frq,repf]=repfreq(sl,fmin,fmax,pas)
+    [d,phi]=dbphi(repf);
   case 5 then,
-    [frq,d,phi]=repfreq(sl,fmin,fmax,pas)
+    [frq,repf]=repfreq(sl,fmin,fmax,pas)
+    [d,phi]=dbphi(repf);
   else 
     error('invalid call: sys,fmin,fmax [,pas] [,com]')
   end;
@@ -82,7 +93,7 @@ case 1 then //frq,db,phi [,comments] or frq, repf [,comments]
     comments=' '
     [phi,d]=phasemag(fmin),fmin=[]
   case 3 then
-    if type(fmax)=1 then
+    if type(fmax)==1 then
       comments=' '//frq db phi
       d=fmin,fmin=[]
       phi=fmax,fmax=[]
@@ -107,7 +118,7 @@ end;
 
 [mn,n]=size(phi);
 //
-if comments=' ' then
+if comments==' ' then
    comments(mn)=' ';
    mnc=0;
    strf='011'

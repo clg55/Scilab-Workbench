@@ -25,8 +25,8 @@ DESCRIPTION
   x=fft(a,-1) gives a direct transform (the -1 refers to the sign of the
   exponent..., NOT to "inverse"), that is
 
-  x(k)=sum over m of a(m)*exp(-2i*pi*m*k/n)
-  for k varying from 0 to n-1 (n=size of vector a).
+  x(k)=sum over m from 1 to n  of a(m)*exp(-2i*pi*(m-1)*(k-1)/n)
+  for k varying from 1 to n (n=size of vector a).
 
   a=fft(x,1) performs the inverse transform normalized by 1/n.
 
@@ -50,5 +50,10 @@ DESCRIPTION
   instructions:
 
   a1=fft(a,-1,m,1) and x=fft(a1,-1,n,m).
+EXAMPLE
+  a=[1;2;3];n=size(a,'*');
+  norm(1/n*exp(2*%i*%pi*(0:n-1)'.*.(0:n-1)/n)*a -fft(a,1))
+  norm(exp(-2*%i*%pi*(0:n-1)'.*.(0:n-1)/n)*a -fft(a,-1))
+
 SEE ALSO
   corr

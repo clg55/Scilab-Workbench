@@ -5,6 +5,7 @@ function den=denom(r)
 //r: rational function matrix (may be polynomial or scalar matrix)
 //den: polynomial matrix
 //!
+// Copyright INRIA
 select type(r)
 case 1 then
   den=ones(r);

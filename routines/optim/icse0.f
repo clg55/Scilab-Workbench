@@ -3,6 +3,7 @@
 c
 c     programme d'initialisation appele par icse.bas
 c     initialisation des commons icsez icsez0 et nird
+c     Copyright INRIA
 c
       implicit double precision (a-h,o-z)
       dimension iu(5),iu0(5)

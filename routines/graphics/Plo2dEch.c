@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <string.h> /* in case of dbmalloc use */
 
 #if defined(THINK_C) || defined (__MWERKS__) || defined(WIN32)

@@ -6,6 +6,7 @@ function [gm]=fspecg(g)
 // Imaginary-axis poles are forbidden.
 //
 //!
+// Copyright INRIA
 [a,b,c,d]=g(2:5),g=[];
 a=-a;
 b=-b;

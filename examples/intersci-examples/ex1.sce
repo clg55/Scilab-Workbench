@@ -1,19 +1,14 @@
 //ex1 example
 //1-Creating interface source file 
-// from intex1.desc file by call to intersci
-host('../../bin/intersci intex1');
-host('./sedprov intex1');
-//2-Making object files
-// Interface file
-host('make /tmp/intex1.o');
-ifile='/tmp/intex1.o'
-// User's files
-host('make /tmp/fcalc.o');
-ufiles=['/tmp/fcalc.o'];
-//3-Link object files .o with addinter
-//addinter([ifiles,ufiles],'intex1',intex1_funs);
-exec('intex1.sce');
+//  from ex1fi.desc file by call to intersci (see Makefile)
+//  Making object files 
+files=G_make(['/tmp/ex1fi.o','/tmp/ex1c.o'],'ex1.dll');
+//2-Link object files .o with addinter
+//addinter(files,'intex1',intex1_funs);
+exec('ex1fi.sce');
 //Run Scilab functions:
-calc('one')-1
-calc('two')-2
-calc('other')+1
+a=[1,2,3];b=[4,5,6];
+c=ext1c(a,b);
+if norm(c-(a+b)) > %eps then pause,end
+
+

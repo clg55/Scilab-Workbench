@@ -11,6 +11,7 @@ function plotframe(rect,axisdata,flags,legs,subwindow)
 //	      rect initial data.
 //  subwindow : see xsetech (wrect)
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 f_subwin=%f,f_flags=%f,f_legs=%f;
 r_flags=[%f,%f];

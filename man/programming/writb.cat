@@ -1,7 +1,7 @@
 
 writb(1)                       Scilab Function                       writb(1)
 NAME
-  writb - binary write
+  writb - fortran file binary write
 
 CALLING SEQUENCE
   writb(file-name,a [,rec])
@@ -22,4 +22,4 @@ DESCRIPTION
   function.
 
 SEE ALSO
-  file, readb, write
+  file, readb, write, binary, write4b

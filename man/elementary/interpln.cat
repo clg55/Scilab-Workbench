@@ -15,9 +15,9 @@ PARAMETERS
   y         : vector (y-axis values)
 
 DESCRIPTION
-  given xyd a set of points in the xy-plane and x a set of increasing abscis-
-  sae, this function computes y the corresponding y-axis values by linear
-  interpolation.
+  given xyd a set of points in the xy-plane  which increasing abscissae and x
+  a set of abscissae, this function computes y the corresponding y-axis
+  values by linear interpolation.
 
 EXAMPLE
   x=[1 10 20 30 40];

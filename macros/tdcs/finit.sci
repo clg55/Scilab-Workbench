@@ -2,7 +2,7 @@ function []=finit()
 // Initialisation de parametres relatif au probleme
 // de l'alunissage
 //k     : acceleration de poussee de la fusee
-//gamma : acceleration de la pesanteur sur la lune
+//ga_mma : acceleration de la pesanteur sur la lune
 //umax  : debit maximum d'ejection des gaz
 //mcap  : masse de la capsule
 //cpen  : penalisation dans la fonction cout de l'etat final
@@ -10,8 +10,9 @@ function []=finit()
 //v0    : vitesse initiale ( negative si chute )
 //m0    : masse initale ( carburant +capsule) 
 //!
+// Copyright INRIA
 k=100
-gamma=1
+ga_mma=1
 umax = 1
 mcap = 10
 cpen =100;
@@ -19,7 +20,7 @@ h0=5220
 v0=-5
 m0=100;
 tf=135;
-[k,gamma,umax,mcap,cpen,h0,v0,m0,tf]=resume(k,gamma,umax,mcap,cpen,h0,v0,m0,tf)
+[k,ga_mma,umax,mcap,cpen,h0,v0,m0,tf]=resume(k,ga_mma,umax,mcap,cpen,h0,v0,m0,tf)
 
 
 function [ukp1]=fuseegrad(niter,ukp1,pasg)
@@ -34,10 +35,10 @@ function [ukp1]=fuseegrad(niter,ukp1,pasg)
 // fenetres graphiques
 xset("window",0);xclear();
 xset("window",1);
-if xget("window")=0 , xinit('unix:0.0'),xset("window",1),end
+if xget("window")==0 , xinit('unix:0.0'),xset("window",1),end
 xclear();
 xset("window",2);
-if xget("window")=0 , xinit('unix:0.0'),xset("window",2),end
+if xget("window")==0 , xinit('unix:0.0'),xset("window",2),end
 xclear();
 // on s'arrete a tf=
 tf=135
@@ -84,9 +85,9 @@ function [xdot]=fusee(t,x)
 //!
 xd= x(2);
 if x(3)<= mcap, md=0
-yd= -gamma;
+yd= -ga_mma;
 ,else md= -pousse(t),
-yd= k*pousse(t)/x(3)-gamma;
+yd= k*pousse(t)/x(3)-ga_mma;
 end;
 xdot=[xd;yd;md];
 
@@ -138,8 +139,8 @@ n=20;
 ind=1:n;
 t= ind*tau/n;
 m(ind)= m0*ones(1,n);
-v(ind)=-gamma*(t)+v0*ones(1,n);
-h(ind)= - gamma*(t.*t)/2 +  v0*(t) + h0*ones(1,n);
+v(ind)=-ga_mma*(t)+v0*ones(1,n);
+h(ind)= - ga_mma*(t.*t)/2 +  v0*(t) + h0*ones(1,n);
 m=[ m0,m]
 v=[ v0,v]
 h=[h0,h]
@@ -152,8 +153,8 @@ t1= ind1*tf/(n1-1) +tau* ((n1-1)*ones(1,n1)-ind1)/(n1-1);
 m1(ind)= ( m0+umax*tau)*ones(1,n1) -umax*(t1);
 mcapsul=mcap*ones(1,n1);
 m1=maxi(m1,mcapsul);
-v1(ind)= - gamma*(t1)+ v0*ones(1,n1) -k *log( m1(ind)/m0);
-h1(ind)= - gamma*(t1.*t1)/2 +  v0*(t1) + (h0-k*tau)*ones(1,n1)...
+v1(ind)= - ga_mma*(t1)+ v0*ones(1,n1) -k *log( m1(ind)/m0);
+h1(ind)= - ga_mma*(t1.*t1)/2 +  v0*(t1) + (h0-k*tau)*ones(1,n1)...
       +(k/umax)*m1(ind).*log(m1(ind)/m0)+k*t1;
 m=[m,m1];
 v=[v,v1];
@@ -164,7 +165,7 @@ t=[t,t1];
 m2=2*ones(m2)-m2;
 [n1,n2]=size(m2);
 ialu=1;
-for i=1:n2,if m2(i)=0,ialu=[ialu,i],end,end
+for i=1:n2,if m2(i)==0,ialu=[ialu,i],end,end
 if prod(size(ialu))<>1 then ialu=ialu(2);
   write(%io(2),t(ialu),'('' Date alunissage'',f7.2)')
   write(%io(2),m(ialu),'('' Masse  alunissage'',f7.2)')
@@ -182,7 +183,7 @@ h1=0*ones(h);
 plot2d([t]',[h]',[1;-1],"111","distance par rapport au sol",...
     [0,0,tf,maxi(h)])
 xset("window",1)
-if xget("window")=0 , xinit('unix:0.0'),xset("window",1),end
+if xget("window")==0 , xinit('unix:0.0'),xset("window",1),end
 xclear();
 plot2d([t;t]',[v;0*v]',[1;1],"121",...
        "vitesse de la fusee (si + v ascent.)@0");

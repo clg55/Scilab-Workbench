@@ -11,6 +11,7 @@ function [y]=interpln(xyd,x)
 //!
 // S Steer INRIA 1991
 
+// Copyright INRIA
 [md,nd]=size(xyd);
 if md<>2 then
   error('interpln:xyd must have two rows!')

@@ -1,6 +1,12 @@
 function [fe,che,fn,chn]=chain_struct(lp,la,ls)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
-if rhs<>3 then error(39), end
+if rhs==1 then
+  // g
+  check_graph(lp)
+  [lp,la,ls]=adj_lists(lp)
+elseif rhs<>3 then error(39), 
+end
 // lp
 s=size(lp)
 if s(1)<>1 then

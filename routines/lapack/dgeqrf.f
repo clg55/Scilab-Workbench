@@ -1,9 +1,9 @@
       SUBROUTINE DGEQRF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 1.0b) --
+*  -- LAPACK routine (version 2.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
 *     Courant Institute, Argonne National Lab, and Rice University
-*     February 29, 1992
+*     September 30, 1994
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LWORK, M, N
@@ -15,7 +15,7 @@
 *  Purpose
 *  =======
 *
-*  DGEQRF computes a QR factorization of a real m by n matrix A:
+*  DGEQRF computes a QR factorization of a real M-by-N matrix A:
 *  A = Q * R.
 *
 *  Arguments
@@ -28,12 +28,13 @@
 *          The number of columns of the matrix A.  N >= 0.
 *
 *  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
-*          On entry, the m by n matrix A.
+*          On entry, the M-by-N matrix A.
 *          On exit, the elements on and above the diagonal of the array
-*          contain the min(m,n) by n upper trapezoidal matrix R (R is
+*          contain the min(M,N)-by-N upper trapezoidal matrix R (R is
 *          upper triangular if m >= n); the elements below the diagonal,
 *          with the array TAU, represent the orthogonal matrix Q as a
-*          product of elementary reflectors (see Further Details).
+*          product of min(m,n) elementary reflectors (see Further
+*          Details).
 *
 *  LDA     (input) INTEGER
 *          The leading dimension of the array A.  LDA >= max(1,M).
@@ -42,18 +43,17 @@
 *          The scalar factors of the elementary reflectors (see Further
 *          Details).
 *
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*          On exit, if INFO = 0, WORK(1) returns the minimum value of
-*          LWORK required to use the optimal blocksize.
+*  WORK    (workspace/output) DOUBLE PRECISION array, dimension (LWORK)
+*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *
 *  LWORK   (input) INTEGER
 *          The dimension of the array WORK.  LWORK >= max(1,N).
-*          For optimum performance LWORK should be at least N*NB,
-*          where NB is the optimal blocksize.
+*          For optimum performance LWORK >= N*NB, where NB is
+*          the optimal blocksize.
 *
 *  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
+*          = 0:  successful exit
+*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  Further Details
 *  ===============

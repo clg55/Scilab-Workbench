@@ -1,6 +1,7 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/optim.a
 
@@ -29,5 +30,11 @@ include ../../Makefile.incl
 CFLAGS = $(CC_OPTIONS)
 
 include ../Make.lib
+
+all:: Makefile.mak
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile
+
 
 sp.o: spd.h ../machine.h

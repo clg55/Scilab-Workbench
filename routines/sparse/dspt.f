@@ -17,6 +17,7 @@ c               in same format as ma...see msmgus.
 c*** working storage.
 c  iat        iat(i) is address in at of first element in row i of at.
 c               iat(s+1) contains number of elements in at,plus 1.
+c     Copyright INRIA
       double precision a(*), at(nela)
       integer inda(*), ia(*), indat(*), iat(*)
       integer r, s

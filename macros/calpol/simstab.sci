@@ -14,6 +14,7 @@ function [punst,lambda]=simstab(p0,p,moeb)
 //!
 //
 //
+// Copyright INRIA
 deff('[teta]=angle(z)',['teta=atan(imag(z),real(z));';
                         'n=prod(size(z));';
                         'for k=1:n,';
@@ -56,7 +57,7 @@ nn=n;p0w=0;scale=0;
 opiw=moeb(2,2)**n*horner(p0,moeb(1,2)/moeb(2,2));
 olo=angle(opiw);j=0; //
 extra=%i*ones(2*m+1,1);
-while 1=1,
+while %t,
    j=j+1;
    numer=moeb(1,:)*[%i*w(j);1];
    denom=moeb(2,:)*[%i*w(j);1];
@@ -85,7 +86,7 @@ end;
 scale(j)=maxi(abs(piw))
 xpiw=conj([piw, piw(1)]')/scale(j)
 //
-if plt=1 then
+if plt==1 then
             plot2d(real(xpiw)',imag(xpiw)',[-3,-1])
             plot2d(real(p0w(j))'/scale(j),imag(p0w(j))'/scale(j),...
             [-2,-2],"000");
@@ -106,7 +107,7 @@ ldlo(ii(1:ilo))=ones(1,ilo)-ldlo(ii(1:ilo));
 lambda=nl'*[0*ones(1,m);ldhi;ldlo]/sum(nl)
 punst=p0
 punst=punst+lambda*p
-if plt=1 then
+if plt==1 then
   plot2d(real(p0w./scale)',imag(p0w./scale)',[-4,-3],"100",...
       'parameter lambda gives an unstable polynomial punst');
 end;
@@ -121,12 +122,12 @@ else
   opiw=p0w(j)
   olo=lo;
 end;
-if j=nn
+if j==nn then
   if hi-lo>=%pi/4
     nn=nn+1
     w(nn)=w(nn-1)*2-w(nn-2)
     else
-  if plt=1 then plot2d(real(p0w)./scale',imag(p0w)./scale',[-5,-3],...
+  if plt==1 then plot2d(real(p0w)./scale',imag(p0w)./scale',[-5,-3],...
                    "100", 'The family is stable'),end
   return
 end;

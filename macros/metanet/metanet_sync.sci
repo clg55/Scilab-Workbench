@@ -1,4 +1,5 @@
 function [res]=metanet_sync(s)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs>1 then error(39), end
 if rhs==0 then 

@@ -1,11 +1,12 @@
-function [ac,mean]=acf(x,n,minim,maxim)
+function [ac,Mean]=acf(x,n,minim,maxim)
 //function acp(x,n,[minim,maxim])
 // Autocorrelation for one-deimensional process
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs <= 1 ; n=prod(size(x))/4;end
 if rhs <= 2 ; minim=-1.0;end
 if rhs <= 3 ; maxim= 1.0;end
-[cov,mean]=corr(x,n+1);
+[cov,Mean]=corr(x,n+1);
 ac=cov'/cov(1);
 plot2d3("onn",(0:n)',ac,[1],"011"," ",[0,minim,n,maxim]);
 //stde=sqrt((1+2*ac(2:n+1)'*ac(2:n+1))*1/prod(size(x)))

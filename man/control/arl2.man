@@ -4,6 +4,8 @@
 arl2 - SISO model realization by L2 transfer approximation
 .SH CALLING SEQUENCE
 .nf
+h=arl2(y,den0,n [,imp])
+h=arl2(y,den0,n [,imp],'all')
 [den,num,err]=arl2(y,den0,n [,imp])
 [den,num,err]=arl2(y,den0,n [,imp],'all')
 .fi
@@ -25,6 +27,10 @@ den)
 imp 
 : integer in \fV(0,1,2)\fR (verbose mode)
 .TP
+h
+: transfer function \fVnum/den\fR or transfer matrix (column vector)
+when flag \fV'all'\fR is given.
+.TP
 den
 : polynomial or vector of polynomials, contains the denominator(s) of
 the solution(s)
@@ -38,7 +44,7 @@ err
 .SH DESCRIPTION
 \fV[den,num,err]=arl2(y,den0,n [,imp]) \fR finds a pair of polynomials
 \fVnum\fR and \fVden\fR such that the transfer function \fVnum/den\fR
-is stable and it's impulse response approximates (with a minimal l2
+is stable and its impulse response approximates (with a minimal l2
 norm) the vector \fVy\fR assumed to be completed by an infinite number
 of zeros. 
 
@@ -51,7 +57,8 @@ then l2-norm of \fVnum/den - y(z)\fR is \fVerr\fR.
 .LP
 \fVn\fR is the degree of the polynomial \fVden\fR.
 .LP
-The \fVnum/den\fR  transfer function is a L2 approximant of the 
+The \fVnum/den\fR  transfer function is a L2 approximant of the
+Fourier's series of the rational system.
 .LP
 Various intermediate results are printed according to \fVimp\fR.
 

@@ -4,6 +4,7 @@ c ======================================================================
 c     gestion external "soft" relatif a solve
 c ======================================================================
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     

@@ -6,4 +6,5 @@ function x=sqrtm(a)
 //   a   : square hermitian or diagonalizable matrix
 //   x   : square  matrix
 //!
-x=g_pow(a,0.5);
+// Copyright INRIA
+x=%s_pow(a,0.5);

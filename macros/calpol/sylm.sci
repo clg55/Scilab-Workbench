@@ -11,6 +11,7 @@ function [s]=sylm(a,b)
 //compute Bezout factors x et y of minimal degree de degre minimal
 //such that a*x+b*y=1
 //!
+// Copyright INRIA
 na=degree(a);a=coeff(a)';
 nb=degree(b);b=coeff(b)';
 s(na+nb,na+nb)=0;

@@ -1,5 +1,6 @@
       logical function chkvar(v1,v2)
 c     compare polynomials formal names
+c     Copyright INRIA
       integer v1(4),v2(4)
       logical test
       

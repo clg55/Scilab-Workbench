@@ -4,7 +4,7 @@ NAME
   armax - armax identification
 
 CALLING SEQUENCE
-  [la,lb,sig,resid]=armax(r,s,y,u,[b0f,prf])
+  [arc,la,lb,sig,resid]=armax(r,s,y,u,[b0f,prf])
 
 PARAMETERS
 
@@ -22,6 +22,8 @@ PARAMETERS
 
   prf            : optional parameter for display control. If prf =1, the
                  default value, a display of the identified Arma is given.
+
+  arc            : a Scilab arma object (see armac)
 
   la             : is the list(a,a+eta,a-eta) ( la = a in dimension 1) ;
                  where eta is the estimated standard deviation. ,
@@ -48,8 +50,10 @@ DESCRIPTION
    coef= [-a1,..,-ar,b0,...,b_s] we can write y(t)= coef* z(t) + sig*e(t) and
   the algorithm minimises sum_{t=1}^N ( [y(t)- coef'z(t)]^2) where
   t0=maxi(maxi(r,s)+1,1))).
+
 EXAMPLE
-  [a,b,sig,resid]=armax(); // will gives an example in dimension 1
+  [arc,a,b,sig,resid]=armax(); // will gives an example in dimension 1
+
 AUTHOR
   J-Ph. Chancelier.
 

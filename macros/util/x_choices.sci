@@ -1,4 +1,5 @@
 function [rep]=x_choices(title,choices_l)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 	if rhs<=0 then s_mat=['l1=list(''choice 1'',1,[''toggle c1'',''toggle c2'',''toggle c3'']);';
 		 'l2=list(''choice 2'',2,[''toggle d1'',''toggle d2'',''toggle d3'']);';

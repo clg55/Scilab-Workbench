@@ -1,12 +1,13 @@
 mode(-1)
 // function definition
+// Copyright INRIA
 deff('[x]=t1(a,b,n)',[
 'z=n+m+n,'
 'c(1,1)=z,'
 'c(2,1)=z+1,'
 'c(1,2)=2,'
 'c(2,2)=0,'
-'if n=1 then,'
+'if n==1 then,'
 ' x=a+b+a,'
 'else,'
 ' x=a+b-a''+b,'

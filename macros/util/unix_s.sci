@@ -12,14 +12,25 @@ function unix_s(cmd)
 //%See also
 // host unix_g unix_x
 //!
+// Copyright INRIA
 if prod(size(cmd))<>1 then   error(55,1),end
-stat=host('('+cmd+')>/dev/null 2>'+TMPDIR+'/unix.err;')
+
+if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+	cmd1= cmd + ' > '+ strsubst(TMPDIR,'/','\')+'\unix.out';
+else 
+	cmd1='('+cmd+')>/dev/null 2>'+TMPDIR+'/unix.err;';
+end 
+stat=host(cmd1);
 select stat
 case 0 then
 case -1 then // host failed
   error(85)
 else //sh failed
-  msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
-  error('unix_s: '+msg(1))
+  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+	error('unix_s: shell error');
+  else 
+	msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
+	error('unix_s: '+msg(1))
+  end 
 end
 

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=ICSE1,SSI=0
+c     Copyright INRIA
       subroutine icse1(ind,nu,u,icsef,y0,ytot,f,b,fy,fu,ipv1,
      &dm,yold,smold,yint,yerr,dif1,dif2,dif3,itu,dtu,
      &t0,tf,dti,dtf,ermx,iu,nuc,nuv,ilin,nti,ntf,ny,nea,

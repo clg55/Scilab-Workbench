@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WDOTCI,SSI=0
+c     Copyright INRIA
       double precision function wdotci(n,xr,xi,incx,yr,yi,incy)
       double precision xr(*),xi(*),yr(*),yi(*),s
       s = 0.0d+0

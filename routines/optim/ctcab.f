@@ -1,7 +1,6 @@
-c
-c-----------------------------------------------------------------------
-c
       subroutine ctcab (n,u,v,izs,rzs,dzs)
+c     Copyright INRIA
+
       integer n,izs(1)
       real rzs(1)
       double precision u(1),v(1),dzs(1)

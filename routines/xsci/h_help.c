@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 /*
  * help.c : The Help browser 
  *
@@ -66,6 +67,8 @@ void initHelpActions(appContext)
   XtAppAddActions(appContext, actionTable, XtNumber(actionTable));
 }
 
+static int using_menu_help =0;
+
 void popupHelpPanel()
 {
   if (isPoppedUp) 
@@ -82,13 +85,20 @@ void popupHelpPanel()
 	}
       initHelpWidgets();
       isPoppedUp = True;
+      using_menu_help =1;
       XtPopup(helpShell, XtGrabNone);
     }
   else 
     {
       isPoppedUp = True;
+      using_menu_help = 1;
       XtPopup(helpShell, XtGrabNone);
     }
+}
+
+int help_popped_status()
+{
+  return(using_menu_help);
 }
 
 /**********************************************

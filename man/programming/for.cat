@@ -8,6 +8,8 @@ DESCRIPTION
 
   for variable=expression ,instruction, ,instruction,end
 
+  for variable=expression do instruction, ,instruction,end
+
   If  expression is a matrix or a row vector, variable takes as values the
   values of each column of the matrix.
 

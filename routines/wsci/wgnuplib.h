@@ -173,7 +173,9 @@ typedef TW *  LPTW;
  * wtext.c - Text Window *
  *****************************************/
 
-EXPORT void WINAPI  TextMessage(void);
+EXPORT void WINAPI TextMessage(void);
+EXPORT void TextMessage2(void);
+EXPORT void TextMessage1(int);
 EXPORT int  WINAPI  TextInit(LPTW lptw);
 EXPORT void WINAPI  TextClose(LPTW lptw);
 EXPORT void WINAPI  TextToCursor(LPTW lptw);

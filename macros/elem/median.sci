@@ -1,4 +1,5 @@
 function y=median(x,orient)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs==1 then
   n=size(x,'*')
@@ -25,6 +26,6 @@ elseif orient=='c'|orient==1 then
     y = x(:,(n+1)/2);
   end
 else
-  error('median : second argument must be ''r'', ''c'', 0 or 1')
+  error('median : second argument must be ''r'', ''c'', 1 or 2')
 end
   

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "../machine.h"
 
 #include <errno.h>
@@ -20,11 +21,21 @@
 #include "netcomm.h"
 
 #ifdef __MSC__ 
-/** XXXX : metanet not implemented in windows **/
-void gethostname(char *str,int len) { 
+/** gethostname exists metanet not implemented in windows **/
+/**void gethostname(char *str,int len) { 
   strncpy(str,"BUG",len);
-}
-void getwd(char *str) {};
+} **/
+#include <winsock2.h>
+/** only used for x=dir[1024] **/
+#define  getwd(x) _getcwd(x,1024); 
+#endif
+
+#ifdef __MINGW32__ 
+#include <dir.h>
+#include <windows.h>
+int PASCAL gethostname( char * name,  int namelen  );
+
+#define  getwd(x) _getcwd(x,1024); 
 #endif
 
 extern void cerro();

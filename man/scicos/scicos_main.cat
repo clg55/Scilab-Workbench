@@ -9,7 +9,8 @@ DEFINITION
 PARAMETERS
 
   params
-       : Scilab list, params=list(wpar,title,tol,tf,context))
+       : Scilab list,
+       params=list(wpar,title,tol,tf,context,void,options,void,void,doc))
 
        wpar
          : viewing parameters: [w,h,Xshift,Yshift]
@@ -42,6 +43,23 @@ PARAMETERS
        context
          : vector of character strings, Scilab instructions used to define
          Scilab variables  used in block definitions as symbolic parameters.
+
+       void
+         : unused fields
+
+       options
+         :  list(With3D,Color3D)
+
+         With3D
+           : boolean, true for 3D shape blocks
+
+         Color3D
+           : vector with three entries  [R,G,B]. defines the color of 3D
+           shape
+
+       doc
+         : user defined diagram documentation structure, default value is
+         list()
 
   o_i  : block or link  or deleted object data structure.
 

@@ -5,7 +5,7 @@ NAME
 
 DEFINITION
   model=list(sim,in,out,evtin,evtout,state,dstate,..
-        rpar,ipar,blocktype,firing,dep_ut,label,import)
+        rpar,ipar,blocktype,firing,dep_ut,label,import,ID)
 
 PARAMETERS
 
@@ -64,10 +64,11 @@ PARAMETERS
                  if output depends continuously of the input, dep_t must be
                  true if output depends continuously of the time.
 
-  label          : a character string, used as an identifier.
+  label          : a character string, used as a label
 
   import         : Unused.
 
+  ID             : a character string, used as an identifier.
   model          : Scilab list, Scicos block model data structure.
 
 DESCRIPTION

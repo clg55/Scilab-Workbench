@@ -12,6 +12,7 @@ c             arrays used by simbl1 and grbl1
 c     g     : computed zero crossing surface (see lsodar)
 c     ng1   : size ng
 c!
+c     Copyright INRIA
       integer neq(*)
       double precision t
       double precision xc(*)

@@ -1,4 +1,5 @@
 // function definition
+// Copyright INRIA
 deff('[x]=t(a,b)',[
 'c=b*b,'
 'x=(a/b)/2+2/c,'],'n')
@@ -13,4 +14,4 @@ printspecs(t,lt)
 
 //translate
 txt=sci2for(t,'t',lt);
-message(txt)
+message(['Generated Fortran code';' ';txt])

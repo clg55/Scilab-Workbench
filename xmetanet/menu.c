@@ -90,8 +90,7 @@ XtPointer number, garbage;
     break;
   case 5:
     if (menuId == MODIFY) {
-      sprintf(Description,"Quit Modify Mode first");
-      MetanetAlert(Description);
+      ModifyQuit();
     }
     else MetanetQuit();
     break;
@@ -202,9 +201,6 @@ XtPointer number, garbage;
     break;
   case 9:
     ChooseDefaults();
-    break;
-  case 10:
-    ModifyQuit();
     break;
   }
 }
@@ -540,19 +536,6 @@ void CreateMenus()
 					   menuModify, args, iargs);
   XtAddCallback(ChooseDefaultsEntry, XtNcallback, ModifySelect, 
 		(XtPointer) 9);
-  
-  iargs = 0;
-  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
-			menuModify, args, iargs); 
- 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNlabel, "Quit Modify Mode"); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  ModifyQuitEntry = XtCreateManagedWidget((String)NULL,
-					  smeBSBObjectClass,
-					  menuModify, args, iargs);
-  XtAddCallback(ModifyQuitEntry, XtNcallback, ModifySelect, 
-		(XtPointer) 10);
  
   /* Redraw command */
 

@@ -1,6 +1,8 @@
+/* Copyright INRIA */
 /*-----------------------------------------------------------
   test with explicit load of a dll
   -----------------------------------------------------------*/
+#include <stdio.h>
 #include <windows.h>
 
 typedef int (WINAPI *DLLTEST)(int);
@@ -23,9 +25,11 @@ int test(char *dll)
   printf("doit(5) returns %d\n", foo(5));
   if (hLibrary)
     FreeLibrary (hLibrary) ;
+  return 0;
 }
 
 int main()
 {
   test("libtdll.dll");
+  return 0;
 }

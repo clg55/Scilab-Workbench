@@ -1,4 +1,5 @@
 function [nart]=articul(i,g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 n=g('node_number')
 if rhs==1 then

@@ -1,4 +1,5 @@
 function [g]=make_graph(name,directed,n,tail,head)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>5 then error(39), end
 // name

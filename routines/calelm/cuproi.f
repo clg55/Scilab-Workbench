@@ -1,5 +1,6 @@
 	subroutine cuproi(n,wr,wi)
 c      Utility fct: cumulated product, complex argument
+c	Copyright INRIA
 	double precision wr(*),wi(*),tr,ti,wwr
 	tr=1.0d0
         ti=0.0d0

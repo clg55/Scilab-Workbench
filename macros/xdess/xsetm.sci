@@ -1,5 +1,6 @@
 function []=xsetm() 
 // Changing graphic context with x_choices 
+// Copyright INRIA
 if driver()<>"Rec" & driver()<>"X11" then 
 	write(%io(2),"xsetm works with X11 or Rec driver only")
 	return;

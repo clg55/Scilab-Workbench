@@ -1,6 +1,7 @@
 function newparameters=mark_newpars(k,newparametersb,newparameters)
 // k block index in x
 //
+// Copyright INRIA
 o=scs_m(k)
 model=o(3)
 if model(1)=='super'|model(1)=='csuper'

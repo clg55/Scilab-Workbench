@@ -1,4 +1,5 @@
       subroutine fretc1(mode,n,nc,nr,h,w,indi,indic2)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension h(*),w(n),indi(n)
 c

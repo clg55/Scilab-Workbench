@@ -14,7 +14,7 @@ PARAMETERS
 
   om        : 4-vector of cutoff frequencies (in radians)
              om=[om1,om2,om3,om4], 0 <= om1 <= om2 <= om3 <= om4 <= pi.
-             When ftype=3 or 4, om3 and om4 are not used
+             When ftype='lp' or 'hp', om3 and om4 are not used
              and may be set to 0.
 
   deltap    : ripple in the passband. 0<= deltap <=1
@@ -37,9 +37,9 @@ DESCRIPTION
   That is hz=fact*prod(cells(2))./prod(cells(3))
 
 EXAMPLE
-  [cells,fact,zeros,zpoles]=...
+  [cells,fact,zzeros,zpoles]=...
   eqiir('lp','ellip',[2*%pi/10,4*%pi/10],0.02,0.001)
-  transfer=fact*poly(zeros,'z')/poly(zpoles,'z')
+  transfer=fact*poly(zzeros,'z')/poly(zpoles,'z')
 
 SEE ALSO
   eqfir, iir

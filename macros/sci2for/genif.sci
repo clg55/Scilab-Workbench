@@ -3,6 +3,7 @@ function [t]=genif(cnd,t1,t2)
 //le  texte relatif  a la  partie  then est  donne  dans t1 et le  texte
 //relatif a la partie else est eventuellement donne dans t2.
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs==2&prod(size(t1))==1 then
   t=' if('+cnd+') '+t1

@@ -1,4 +1,5 @@
       subroutine icsest(ind,nu,u,co,g,itv,rtv,dtv)
+c     Copyright INRIA
       external stsec,icsec2,icsei
 c
 c     identification de parametres d'un systeme lineaire

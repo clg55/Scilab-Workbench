@@ -1,9 +1,11 @@
-host('make /tmp/res22.o');
-link('/tmp/res22.o','res22');
-host('make /tmp/jac22.o');
-link('/tmp/jac22.o','jac22');
-host('make /tmp/gr22.o');
-link('/tmp/gr22.o','gr22');
+//Copyright INRIA
+
+files=G_make(['/tmp/res22.o'],'res22.dll');
+link(files,'res22');
+files=G_make(['/tmp/jac22.o'],'jac22.dll');
+link(files,'jac22');
+files=G_make(['/tmp/gr22.o'],'gr22.dll');
+link(files,'gr22');
 //
 rtol=[1.d-6;1.d-6];atol=[1.d-6;1.d-4];
 //

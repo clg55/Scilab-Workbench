@@ -4,6 +4,7 @@ function txt=do_newblk(o,nam)
 // nam   : name of the created GUI function
 //!
 
+// Copyright INRIA
 for  k=5:8,o(2)(k)=0*o(2)(k),end // disconnect links
 o(2)(1)=0*o(2)(1) // set origin to zero
 o(2)(2)=o(2)(2)/20 // set definition size ?????

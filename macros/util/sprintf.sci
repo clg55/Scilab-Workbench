@@ -1,30 +1,31 @@
-function buf=sprintf(fmt,v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,..
-    v17,v18,v19,v20,v21,v22,v23,v24,v25,v26,v27,v28,v29,v30)
+function buf=sprintf(frmt,varargin)
 // sprintf - Emulator of C language sprintf
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 kbuf=1
 nv=rhs-1
-if type(fmt)<>10 then
+if type(frmt)<>10 then
   error('argument must be a character string')
 end
-if prod(size(fmt))<>1 then
+if prod(size(frmt))<>1 then
   error('argument must be a character string')
 end
 buf=emptystr()
-lfmt=length(fmt)
+lfmt=length(frmt)
 il=0
 count=0 // argument counter
 while il<=lfmt do
   [str,flags,width,prec,typemod,conv]=analyse_next_format()
-  if prod(size(str))>1 then
+  if size(str,'*')>1 then
     buf(kbuf)=buf(kbuf)+str(1)
-    buf=[buf;str(2:prod(size(str)))];kbuf=kbuf+1
+    buf=[buf;str(2:$)];kbuf=kbuf+size(str,'*')-1
   else
     buf(kbuf)=buf(kbuf)+str
   end
   if conv<>[] then
-    w=evstr('v'+string(count+1))
+    w=varargin(count+1)
+//    w=evstr('v'+string(count+1))
     buf(kbuf)=buf(kbuf)+cformat(w,flags,width,prec,typemod,conv)
     count=count+1
   end
@@ -71,7 +72,7 @@ elseif cc=='o' then
     n=length(str)
     str=part('0',ones(1,prec-n))+str
     if or(flags=='#') then str='0'+str,end
-    if conv='O' then str=convstr(str,'u'),end
+    if conv=='O' then str=convstr(str,'u'),end
   end
 elseif cc=='u' then
   format('v',mxdgt)
@@ -90,7 +91,7 @@ elseif cc=='x'then
     n=length(str)
     str=part('0',ones(1,prec-n))+str
     if or(flags=='#') then str='0x'+str,end
-    if conv='X' then str=convstr(str,'u'),end
+    if conv=='X' then str=convstr(str,'u'),end
   end
 elseif cc=='f' then
   if prec==[] then prec=6,end
@@ -110,7 +111,7 @@ elseif cc=='e' then
 //  fct=10^prec
   [m,e]=float2me(v)
   if prec==[] then ndgt=6, else ndgt=prec,end //nombre de digit apres le .
-  ll=ndgt+3;if ndgt=0 then ll=ll-1,end
+  ll=ndgt+3;if ndgt==0 then ll=ll-1,end
   format('v',ll);s=string(abs(m))
   n1=length(s);
   if n1==1&(ndgt>0|or(flags=='#')) then s=s+'.';n1=n1+1;end
@@ -124,7 +125,7 @@ elseif cc=='g' then
   [m,e]=float2me(v)
   if e<>0&e<-4|e>=prec  then //use 'e' format
     ndgt=prec
-    ll=ndgt+2;if ndgt=0 then ll=ll-1,end
+    ll=ndgt+2;if ndgt==0 then ll=ll-1,end
     format('v',ll);str=string(abs(m))
     n1=length(str);
     if or(flags=='#') then
@@ -188,26 +189,26 @@ else
 end  
 
 function [str,flags,width,prec,typemod,conv]=analyse_next_format()
-//Scan fmt for % escapes and print out the arguments.
+//Scan frmt for % escapes and print out the arguments.
 str=emptystr();kstr=1
 width=[];prec=[],flags=[],typemod=[],conv=[]
 il=il+1
 if il>lfmt then [il,count]=resume(il,count),end
 
-c=part(fmt,il);
+c=part(frmt,il);
 while c<>'%' then
   if c=='\' then
-    if part(fmt,il+1)=='n' then str=[str;emptystr()],kstr=kstr+1,end
+    if part(frmt,il+1)=='n' then str=[str;emptystr()],kstr=kstr+1,end
     il=il+1
   else
     str(kstr)=str(kstr)+c
   end
   il=il+1
   if il>lfmt then break, end
-  c=part(fmt,il);
+  c=part(frmt,il);
 end
 if il>lfmt then [il,count]=resume(il,count),end
-if part(fmt,il+1)=='%' then 
+if part(frmt,il+1)=='%' then 
   str(kstr)=str(kstr)+'%',il=il+1
   [il,count]=resume(il,count)
 end
@@ -217,7 +218,7 @@ end
 //get flags
 flags=[]
 while il<=lfmt do
-  il=il+1;c=part(fmt,il)
+  il=il+1;c=part(frmt,il)
   if c=='+'|c=='-'|c==' '|c=='0'|c=='#' then 
     flags=[flags c]
   else
@@ -244,14 +245,14 @@ if isdigit(c)|c=='*' then
     width=w
     il=il+1;
     if il>lfmt then error('incorrect format'),end
-    c=part(fmt,il)
+    c=part(frmt,il)
   else //from format
     width=0
     while isdigit(c) do
       width=10*width+evstr(c)
       il=il+1;
       if il>lfmt then error('incorrect format'),end
-      c=part(fmt,il)
+      c=part(frmt,il)
     end
   end
 end
@@ -259,7 +260,7 @@ prec=[]
 if c=='.' then
   il=il+1;
   if il>lfmt then error('incorrect format'),end
-  c=part(fmt,il)
+  c=part(frmt,il)
   //get precision
   if c=='*' then //from args
     count=count+1
@@ -276,14 +277,14 @@ if c=='.' then
     prec=w
     il=il+1;
     if il>lfmt then error('incorrect format'),end
-    c=part(fmt,il)
+    c=part(frmt,il)
   elseif isdigit(c) //form format
     prec=0
     while isdigit(c) do
       prec=10*prec+evstr(c)
       il=il+1;
       if il>lfmt then error('incorrect format'),end
-      c=part(fmt,il)
+      c=part(frmt,il)
     end
   else error('incorrect format')      
   end
@@ -295,7 +296,7 @@ if c=='l'| c=='L'|c=='h' then
   typemod=c
   il=il+1;
   if il>lfmt then error('incorrect format'),end
-  c=part(fmt,il)
+  c=part(frmt,il)
 end
 
 //get conversion

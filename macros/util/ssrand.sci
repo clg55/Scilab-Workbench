@@ -98,6 +98,7 @@ function [sl,U]=ssrand(nout,nin,nstate,flag)
 //         dimension A44=nwuis-nwui
 //         row dimension C2.= row dimension of D2. =rk
 //***************************************************************
+// Copyright INRIA
 deff('[w]=st_able(w,margin)','if w~=[] then w=w-(maxi(real(spec(w)))+margin)*eye;end')
 margin=0.5;  //M "stable"  will mean real-part(M) < -margin
 [lhs,rhs]=argn(0)
@@ -178,7 +179,7 @@ case 'on'
   if rk<>0 then a21c1=b21d1*rand(rk,nv);else a21c1=c1;end
   b21=b21d1(1:nstate-nv,:);d1=b21d1(nstate-nv+1:nstate-nv+nout,:);
   a21=a21c1(1:nstate-nv,:);c1=a21c1(nstate-nv+1:nstate-nv+nout,:);
-  //pause;sl=syslin('c',a11,b12,c1,d2);
+
   if rk>=nout then error('ssrand: you must choose rk<nout!');end
 //  if rk>=nout then j=-b21*pinv(d1);a22=-j*c2;end
   [pp,qq]=size(a21);a21(p1+1:pp,1:nv)=0*a21(p1+1:pp,1:nv);
@@ -214,7 +215,7 @@ case 'ui'
   c21=[c21d2(:,1:nw),zeros(rk,nwuis-nw)];
   d2=c21d2(:,nw+1:nw+nin);
   c11=zeros(nout-rk,nwuis);c12=rand(nout-rk,nstate-nwuis);
-  d1=zeros(nout-rk,nin);c22=zeros(rk,nstate-nwuis);//pause;
+  d1=zeros(nout-rk,nin);c22=zeros(rk,nstate-nwuis);
   w=syslin('c',[a11,a12;a21,a22],[b1;b2],[c11,c12;c21,c22],[d1;d2]);
   U=rand(nstate,nstate);
   sl=ss2ss(w,U);
@@ -229,7 +230,7 @@ function w=imag_axis(ns,nn,nu,flag);
 // order "unstable", "imaginary axis", "stable".
 [LHS,RHS]=argn(0);
 if RHS==3 then flag='siu';end
-if flag='siu' then
+if flag=='siu' then
 deff('[w]=st_able(w,margin)','if w~=[] then w=w-(maxi(real(spec(w)))+margin)*eye;end')
 margin=0.5;  //M "stable"  will mean real-part(M) < -margin
 w=[];k=int(nn/2);

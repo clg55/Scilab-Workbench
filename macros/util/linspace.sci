@@ -3,6 +3,7 @@ function y = linspace(d1, d2, n)
 // linspace(x1, x2) generates a row vector of 100 linearly
 // equally spaced points between x1 and x2.
 // linspace(x1, x2, n) generates n points between x1 and x2.
+// Copyright INRIA
 [nargout,nargin]=argn(0)
 if nargin == 2
     n = 100;

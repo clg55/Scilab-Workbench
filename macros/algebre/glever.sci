@@ -10,6 +10,7 @@ function [Bfs,Bis,chis]=glever(E,A,s)
 // See also shuffle, determ, invr, coffg
 // F.D. (1988)
 //!
+// Copyright INRIA
 [LHS,RHS]=argn(0);
 if RHS==1 then [E,A]=pen2ea(E),s=poly(0,'s');end 
 if RHS==2 then s=poly(0,'s'),end;

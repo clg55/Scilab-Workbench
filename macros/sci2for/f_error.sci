@@ -40,6 +40,7 @@ function [stk,nwrk,txt,top]=f_error(nwrk)
 //              (columns) of the matrix		
 //          des chaines de caracteres
 
+// Copyright INRIA
 //
 //  nwrk : this variable contain information on working arrays, error
 //         indicators. It only may be modified by call to scilab functions
@@ -55,7 +56,7 @@ function [stk,nwrk,txt,top]=f_error(nwrk)
 
 txt=[]
 s=stk(top);mess=s(1)
-if part(mess,1)='''' then mess=part(mess,2:length(mess)-1),end
+if part(mess,1)=='''' then mess=part(mess,2:length(mess)-1),end
  
 [errn,nwrk]=adderr(nwrk,mess)
 txt=[' ierr='+string(errn);' return']

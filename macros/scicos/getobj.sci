@@ -1,10 +1,11 @@
 function [k,wh]=getobj(objs,pt)
+// Copyright INRIA
 n=size(objs)
 wh=[];
 x=pt(1);y=pt(2)
 data=[]
 k=[]
-for i=2:n
+for i=2:n //loop on objects
   o=objs(i)
   if o(1)=='Block' then
     graphics=o(2)
@@ -15,20 +16,8 @@ for i=2:n
     [frect1,frect]=xgetech();
     eps=0.01*min(abs(frect(3)-frect(1)),abs(frect(4)-frect(2)))
     xx=o(2);yy=o(3);
-    x=x;y=y;
-    n=prod(size(xx))
-    d=sqrt((xx(2:n)-xx(1:n-1))^2+(yy(2:n)-yy(1:n-1))^2)
-    n=((yy(1:n-1)-yy(2:n))*x+(xx(2:n)-xx(1:n-1))*y+..
-	                  xx(1:n-1).*yy(2:n)-xx(2:n).*yy(1:n-1))
-    kz=find(d==0)
-    d(kz)=[];n(kz)=[]
-    t=n./d
-    l=find(abs(t)<eps)
-    for j=1:prod(size(l))
-      lj=l(j)
-      if (x-xx(lj))*(x-xx(lj+1))<0 then wh=lj;k=i,break,end
-      if (y-yy(lj))*(y-yy(lj+1))<0 then wh=lj;k=i,break,end
-    end
+    [d,ptp,ind]=dist2polyline(xx,yy,pt)
+    if d<eps then k=i,wh=ind,break,end
   elseif o(1)=='Text' then
     graphics=o(2)
     [orig,sz]=graphics(1:2)

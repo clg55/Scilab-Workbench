@@ -2,6 +2,7 @@
 c
 c     store a name
 c
+c     Copyright INRIA
       include '../stack.h'
 c
       integer x(nsiz),y(nsiz)

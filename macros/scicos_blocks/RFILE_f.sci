@@ -1,4 +1,5 @@
 function [x,y,typ]=RFILE_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -20,9 +21,9 @@ case 'set' then
   outmask=ipar(imask+1:imask+nout)
   lunit=state(3)
   fname=label(3)
-  fmt=label(4)
+  frmt=label(4)
   while %t do
-    [ok,tmask1,outmask,fname1,fmt1,N,out,label]=getvalue(..
+    [ok,tmask1,outmask,fname1,frmt1,N,out,label]=getvalue(..
 	['Set RFILE block parameters';
 	 'Read is done on';
 	 '  -  a binary file if no format given';
@@ -37,12 +38,12 @@ case 'set' then
 	 label)
     if ~ok then break,end //user cancel modification
     fname1=stripblanks(fname1)
-    fmt1=stripblanks(fmt1)
+    frmt1=stripblanks(frmt1)
     out=int(out)
     nout=out
     if prod(size(tmask1))>1 then
       message('Time record selection must be a scalar or an empty matrix')
-    elseif lunit>0&min(length(fmt),1)<>min(length(fmt1),1) then
+    elseif lunit>0&min(length(frmt),1)<>min(length(frmt1),1) then
       message(['You cannot swich from formatted to unformatted';
 	         'or  from unformatted to formatted when running';' '])
     elseif lunit>0&fname1<>fname then
@@ -63,11 +64,11 @@ case 'set' then
 	  model(11)=0
 	end
 	ipar=[length(fname1);
-	    length(fmt1);
+	    length(frmt1);
 	    ievt;
 	    N;
 	    str2code(fname1);
-	    str2code(fmt1);
+	    str2code(frmt1);
 	    tmask1
 	    outmask(:)]
 	if prod(size(state))<>(nout+ievt)*N+3 then
@@ -82,21 +83,21 @@ case 'set' then
   end
 case 'define' then
   out=1;nout=sum(out)
-  fmt='(7(e10.3,1x))'
+  frmt='(7(e10.3,1x))'
   fname='foo'
   lunit=0
   N=2;
   rpar=[]
   tmask=0
   outmask=1
-  ipar=[length(fname);length(fmt);0;N;str2code(fname);str2code(fmt);
+  ipar=[length(fname);length(frmt);0;N;str2code(fname);str2code(frmt);
       tmask;outmask]
   state=[1;1;lunit;zeros((nout)*N,1)]
   model=list('readf',[],nout,1,[],[],state,rpar,ipar,'d',[],[%f %f],' ',list())
   label=[sci2exp([]);
 	sci2exp(outmask);
 	fname;
-	fmt;
+	frmt;
 	string(N);
 	sci2exp(out)]
   gr_i=['txt=[''read from'';''input file''];';

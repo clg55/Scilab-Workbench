@@ -5,6 +5,7 @@ function [xy]=scaling(xy,factor,orig)
 // factor : factor
 // orig   : origin, [0;0] if omitted
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select rhs
  case 2 then orig=[0;0];

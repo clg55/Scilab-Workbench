@@ -3,6 +3,7 @@ c!but
 c     converti la representation decimale d'un entier en une chaine 
 c     de caractere scilab
 c!
+c     Copyright INRIA
       parameter (nc=20)
       character*(nc) buf
       integer istk(*)

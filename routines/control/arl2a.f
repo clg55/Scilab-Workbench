@@ -36,6 +36,7 @@ C      iw :29+nall**2+4*nall+2*mxsol
 C!Origine
 C M Cardelli L Baratchart INRIA Sophia-Antipolis 1989
 C!
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
       dimension ta(mxsol,*), f(nf), w(*), iw(*), x(1)
       integer dgmax

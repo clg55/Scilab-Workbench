@@ -20,12 +20,13 @@ function [m,x]=secto3d(seclist,npas)
 // la macro plot3d
 //!
 //origine S Steer INRIA 1991
- 
+// Copyright INRIA
+
 [lhs,rhs]=argn(0)
 n=size(seclist)
 //
 if rhs<2 then npas=n,end
-if prod(size(npas))=1 then
+if prod(size(npas))==1 then
   sec=seclist(1);sec=sec(1,:)
   xmax=maxi(sec);xmin=mini(sec)
   for k=2:n

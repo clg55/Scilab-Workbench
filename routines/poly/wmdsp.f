@@ -25,6 +25,7 @@ c     cw : chaine de caracteres de travail de longueur au moins ll
 c     iw : tableau de travail entier de taille au moins egale a
 c          m*n + 2*n
 c
+c     Copyright INRIA
       double precision xr(*),xi(*),a,a1,a2,fact
       integer iw(*),maxc,mode,fl,s,typ
       character cw*(*),sgn*1,dl*1,var*4

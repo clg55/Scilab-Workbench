@@ -26,7 +26,7 @@ Enter the command \fVxstringb()\fR to see a demo.
 
 .SH EXAMPLE
 .nf
-mat=['Scilab','is';'not','Basile'];
+mat=['Scilab','is';'not','balicS'];
 plot2d(0,0,[-1,1],'010',' ',[0,0,1,1]);
 r=[0,0,1,0.5];
 xstringb(r(1),r(2),mat,r(3),r(4),'fill');

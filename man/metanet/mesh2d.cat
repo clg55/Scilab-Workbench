@@ -4,7 +4,7 @@ NAME
   mesh2d - triangulation of n points in the plane
 
 CALLING SEQUENCE
-  [nutr,ierr] = mesh2d(x,y,[front])
+  [nutr,A] = mesh2d(x,y,[front])
 
 PARAMETERS
 
@@ -16,29 +16,32 @@ PARAMETERS
 
   nutr : integer matrix
 
-  ierr : integer
+  A    : sparse 0-1 matrix
 
 DESCRIPTION
   The arrays x and y are the coordinates of n points in the plane.  mesh2d
   returns a matrix nutr(3,nbt) of the numbers of the nodes of the nbt trian-
-  gles of the triangulation of the points.  In the case of 3 parameters:
-  front is the array defining the boundary. The boundary is defined such that
-  the normal to the boundary is oriented towards outside. The boundary is
-  given by its connected components: a component is the part (i1,i2) such
-  that front(i1)=front(i2) (the external boundary is defined in the counter-
-  clockwise way, see the examples below).  ierr is an error indicator:
-             ierr = 0 if no errors were encountered;
-             ierr = 3 all nodes are collinear.
+  gles of the triangulation of the points.  It returns also a sparse matrix A
+  representing the connections between the nodes (A(i,j)=1 if (i,j) is a side
+  of one of the triangles or i=j).  In the case of 3 parameters front is the
+  array defining the boundary: it is the array of the indices of the points
+  located on the boundary . The boundary is defined such that the normal to
+  the boundary is oriented towards outside. The boundary is given by its con-
+  nected components: a component is the part (i1,i2) such that
+  front(i1)=front(i2) (the external boundary is defined in the counterclock-
+  wise way, see the examples below). The error cases are the following:
+             err = 0 if no errors were encountered;
+             err = 3 all nodes are collinear.
 
   If the boundary is given, the other error cases are:
-             ierr = 2 some points are identical;            ierr = 5 wrong
+             err = 2 some points are identical;            err = 5 wrong
   boundary array;
-             ierr = 6 crossed boundary;
-             ierr = 7 wrong orientation of the boundary;
-             ierr = 10 an interior point is on the boundary;
-             ierr = 8 size limitation;
-             ierr = 9 crossed boundary;
-             ierr = 12 some points are identical or size limitation.
+             err = 6 crossed boundary;
+             err = 7 wrong orientation of the boundary;
+             err = 10 an interior point is on the boundary;
+             err = 8 size limitation;
+             err = 9 crossed boundary;
+             err = 12 some points are identical or size limitation.
 
 EXAMPLE
   //      FIRST CASE
@@ -54,7 +57,7 @@ EXAMPLE
   x=[x x1 x2];
   y=[y y1 y2];
   //
-  [nu,ierr]=mesh2d(x,y);
+  nu=mesh2d(x,y);
   nbt=size(nu,2);
   jj=[nu(1,:)' nu(2,:)';nu(2,:)' nu(3,:)';nu(3,:)' nu(1,:)'];
   as=sparse(jj,ones(size(jj,1),1));
@@ -83,7 +86,7 @@ EXAMPLE
   fr3=[[61:70] 61];fr3=fr3($:-1:1);
   front=[fr1 fr2 fr3];
   //
-  [nu,ierr]=mesh2d(xnew,ynew,front);
+  nu=mesh2d(xnew,ynew,front);
   nbt=size(nu,2);
   jj=[nu(1,:)' nu(2,:)';nu(2,:)' nu(3,:)';nu(3,:)' nu(1,:)'];
   as=sparse(jj,ones(size(jj,1),1));
@@ -110,7 +113,7 @@ EXAMPLE
   ii=find(wai <= 0.21);
   x3(ii)=[];y3(ii)=[];
   xnew=[x x3];ynew=[y y3];
-  [nu,ierr]=mesh2d(xnew,ynew,front);
+  nu=mesh2d(xnew,ynew,front);
   nbt=size(nu,2);
   jj=[nu(1,:)' nu(2,:)';nu(2,:)' nu(3,:)';nu(3,:)' nu(1,:)'];
   as=sparse(jj,ones(size(jj,1),1));

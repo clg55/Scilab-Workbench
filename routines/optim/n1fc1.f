@@ -3,6 +3,8 @@
 C          dimension iz=2*(memax+1)
 C          dimension rz=5*n+(n+4)*memax
 C          dimension dz=(memax+9)*memax+8
+c     Copyright INRIA
+
       implicit double precision (a-h,o-z)
       external simul, prosca
       dimension iz(*), rz(*), dz(*), xn(n), g(n), izs(*), dzs(*)

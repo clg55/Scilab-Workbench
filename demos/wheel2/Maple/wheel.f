@@ -1,6 +1,7 @@
 c      
 c     SUBROUTINE wheel
-c      
+c     
+c     Copyright INRIA 
       subroutine wheel(neq,t,z,zdot)
         implicit double precision (t)
         parameter (kn=3)

@@ -1,7 +1,7 @@
 
-Cheb2mag(1)                    Scilab Function                    Cheb2mag(1)
+cheb2mag(1)                    Scilab Function                    cheb2mag(1)
 NAME
-  Cheb2mag - response of type 2 Chebyshev filter
+  cheb2mag - response of type 2 Chebyshev filter
 
 CALLING SEQUENCE
   [h2]=cheb2mag(n,omegar,A,sample)

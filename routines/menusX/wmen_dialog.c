@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /***********************************************
  * wmdialog.c / Scilab
  *   Jean-Philippe Chancelier 
@@ -16,9 +17,11 @@ extern SciDialog ScilabDialog;
 EXPORT int CALLBACK 
 SciDialogDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
 {
-  
   switch (wmsg) {
   case WM_INITDIALOG:
+    if ( SciMenusRect.left != -1) 
+      SetWindowPos(hdlg,HWND_TOP,SciMenusRect.left,SciMenusRect.top,0,0,
+		   SWP_NOSIZE | SWP_NOZORDER );
     SetDlgItemText(hdlg, DI_TIT, ScilabDialog.description);
     SetDlgItemText(hdlg, DI_TEXT,ScilabDialog.init);
     SetDlgItemText(hdlg, IDOK,ScilabDialog.pButName[0]);
@@ -30,9 +33,11 @@ SciDialogDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
       GetDlgItemText(hdlg, DI_TEXT, dialog_str, MAXSTR-1);
       if (dialog_str[strlen(dialog_str)-1] == '\n') 
 	dialog_str[strlen(dialog_str)-1] = '\0' ;
+      GetWindowRect(hdlg,&SciMenusRect);
       EndDialog(hdlg, IDOK);
       return TRUE;
     case IDCANCEL:
+      GetWindowRect(hdlg,&SciMenusRect);
       EndDialog(hdlg, IDCANCEL);
       return TRUE;
     }
@@ -49,10 +54,21 @@ SciDialogDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
 
 int  DialogWindow()
 {
+  char *c;
+  int i=0;
+  HWND hwndOwner ;
   DLGPROC lpfnSciDialogDlgProc ;
   lpfnSciDialogDlgProc = (DLGPROC) MyGetProcAddress("SciDialogDlgProc",
 						    SciDialogDlgProc);
-  if (DialogBox(hdllInstance, "SciDialogDlgBox",textwin.hWndParent,
+  c=ScilabDialog.description;
+  while ( *c != '\0') { if ( *c == '\n' ) i++; c++;};
+  if ( i >= 3 ) 
+    c="SciBigDialogDlgBox";
+  else
+    c="SciDialogDlgBox";
+  if ( (hwndOwner = GetActiveWindow()) == NULL) 
+    hwndOwner =  textwin.hWndParent;
+  if (DialogBox(hdllInstance,c,hwndOwner,
 		lpfnSciDialogDlgProc)  == IDOK) 
     return(TRUE);
   else 

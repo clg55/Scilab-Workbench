@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /***********************************************************************
  * zzledt.c - last line editing routine
  *

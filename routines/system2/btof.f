@@ -1,6 +1,7 @@
       subroutine btof(x,nx)
 c    scilab to fortran
 c
+c     Copyright INRIA
       include '../stack.h'
       integer iadr,sadr
       integer hsize

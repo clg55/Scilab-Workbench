@@ -1,3 +1,4 @@
+// Copyright INRIA
 getf(SCI+'/demos/lmitool/h2hinf.sci','c');
 n=4;m1=1;m2=2;n1=2;n2=2;
 A=rand(n,n);

@@ -22,6 +22,7 @@ c     incx, incy: increments entre les composantes des vecteurs.
 c
 c!
 c
+c     Copyright INRIA
       double precision dx(*),dy(*)
       integer i,incx,incy,ix,iy,n
 c

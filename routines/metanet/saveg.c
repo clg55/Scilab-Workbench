@@ -9,12 +9,17 @@
 #include <malloc.h>
 #endif
 
+#ifdef __MSC__ 
+/** only used for x=dir[1024] **/
+#define  getwd(x) _getcwd(x,1024) 
+#endif
+
 #include "../machine.h"
 
 #define MAXNAM 80
 
 extern double atof();
-extern char* basename();
+extern char* my_basename();
 extern void cerro();
 extern char* dirname();
 extern int CheckGraphName();
@@ -50,18 +55,19 @@ int *default_node_diam,*default_node_border,*default_edge_width;
 int *default_edge_hi_width,*default_font_size;
 int *ma;
 {
-#ifdef __MSC__
-  return(0);
-#else 
   FILE *f;
+#ifndef __MSC__
   DIR *dirp;
+#else
+  int it;
+#endif
   char fname[2*MAXNAM];
   char description[2*MAXNAM];
   char dir[1024], nname[2*MAXNAM];
   int i;
   char **lar;
 
- /* check uniqueness of node names */
+  /* check uniqueness of node names */
   if (*node_number != 1) {
     if ((lar = (char **)malloc(sizeof(char *) * *node_number)) == NULL) {
       cerro("Running out of memory");
@@ -90,36 +96,46 @@ int *ma;
  
   path[*lpath] = '\0';
   name[*lname] = '\0';
-
+  
   if (!strcmp(path," ")) {
     getwd(dir);
     strcpy(nname,name);
   }
   else {
+#ifdef __MSC__
+    getwd(dir);
+    it= _chdir(path);
+    _chdir(dir);
+    if (it == 0) {
+      strcpy(dir,path);
+    }
+#else
     if ((dirp=opendir(path)) != NULL) {
       strcpy(dir,path);
       closedir(dirp);
     }
+#endif 
     else {
-      strcpy(nname,StripGraph(basename(path)));
+      strcpy(nname,StripGraph(my_basename(path)));
       if (dirname(path) == NULL) getwd(dir);
       else strcpy(dir,dirname(path));     
     }
   }
-  
+#ifndef __MSC__  
   if ((dirp=opendir(dir)) == NULL) {
     sprintf(description,"Directory \"%s\" does not exist",dir);
     cerro(description);
     return;
   }
   closedir(dirp);
-  
+
   if(CheckGraphName(nname,dir)) {
     sprintf(description,"Graph \"%s\" already exists in directory \"%s\"",
 	    nname,dir);
     cerro(description);
     return;
   }
+#endif
 
   strcpy(fname,dir);
   strcat(fname,"/");
@@ -192,5 +208,4 @@ int *ma;
   }
 
   fclose(f);
-#endif /*  __MSC__ */
 }

@@ -1,5 +1,7 @@
       subroutine andlog(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     Logical and block
 c     if event input exists synchronuously, output is 1 else -1

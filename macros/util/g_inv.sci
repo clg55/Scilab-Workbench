@@ -1,6 +1,7 @@
 function x=g_inv(a)
 // only to be called by function inv
 //!
+// Copyright INRIA
 typ=type(a)
 
 //-compat next row added for list/tlist compatibility
@@ -25,7 +26,7 @@ case 16 then
   if a1(1)=='r' then
     x=invr(a);return
   end
-  if a1(1)='lss' then
+  if a1(1)=='lss' then
     d=a(5);
     [m,n]=size(d);
     polyn=(type(d)==2);constant=(type(d)==1);
@@ -42,12 +43,13 @@ case 16 then
         x=invsyslin(a)
       else
         h=systmat(a);
-        rand('normal');
-        valfa=rand(1,10)/100;
-        www=[];for k=1:10
+        se=rand('seed');
+        valfa=rand(1,10,'normal')/100;
+	rand('seed',se);
+        www=[];
+	for k=1:10
           www=[www,rcond(horner(h,valfa(k)))];end
           [w,k1]=maxi(www);alfa=valfa(k1);
-          rand('uniform');
           x=invrs(a,alfa);
         end
         return

@@ -1,3 +1,4 @@
+// Copyright INRIA
 //check button creation/destruction; must be executed in window mode
 mode(-1)
 for k=1:10

@@ -123,6 +123,7 @@ c!originator
 c     p.hr.petkov, higher institute of mechanical and electrical
 c     engineering, sofia, bulgaria.
 c     modified by serge Steer INRIA
+c     Copyright SLICOT
 c!
 c
       ierr = 0

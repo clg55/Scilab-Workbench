@@ -1,4 +1,5 @@
 function draw(scs_m)
+// Copyright INRIA
 nx=size(scs_m)
 for k=2:nx
    o=scs_m(k)

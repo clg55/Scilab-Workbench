@@ -1,6 +1,7 @@
 function [stk,top]=num2f(val,stk)
 // traduit la definition d'un nombre
 //!
+// Copyright INRIA
 top=top+1
 nn=length(val);typ='0'
 for k=1:nn

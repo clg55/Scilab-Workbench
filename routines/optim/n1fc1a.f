@@ -3,6 +3,7 @@
      &                  aps,anc,poids,q,jc,ic,r,a,e,rr,xga,y,w1,w2,izs,
      &                  rzs,dzs)
 C ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     Copyright INRIA
 C ccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 C minimisation d'une fonction hemiderivable par une methode de faisceau.
 C la direction est obtenue par projection de l'origine

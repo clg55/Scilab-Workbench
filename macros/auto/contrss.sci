@@ -1,4 +1,5 @@
 function slc=contrss(a,tol)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 //
 flag=a(1);

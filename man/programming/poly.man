@@ -15,7 +15,7 @@ x
 : symbolic variable
 .TP 10
 "flag"
-: string ("roots", "coeff")
+: string ("roots", "coeff"), default value is "roots".
 .SH DESCRIPTION
 If \fVa\fR is a matrix, \fVp\fR is the characteristic polynomial i.e.
  \fVdeterminant(x*eye-a)\fR, \fVx\fR being the symbolic variable.

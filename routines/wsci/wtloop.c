@@ -96,7 +96,7 @@ static void interrupt_setup(void)
   (void) signal(SIGINT, inter);
 }
 
-void sci_windows_main(int nowin,int *nos)
+void sci_windows_main(int nowin,int *nos,char *path, int *lpath)
 {
 #ifdef XPG3_LOCALE
   (void) setlocale(LC_CTYPE, "");
@@ -116,11 +116,16 @@ void sci_windows_main(int nowin,int *nos)
 #ifdef TEST 
   testloop();
 #else 
-  C2F(mainsci)(nos);
+  C2F(mainsci)(nos,path,lpath,*lpath );
 #endif
 }
 
 #ifdef TEST 
+
+int main()
+{
+  return(MAIN__());
+}
 
 /**********************************************
  * a loop function for testing a mini scilab 
@@ -221,6 +226,18 @@ static int command(char *com)
 	sciprint("pwd %s\r\n",buf);
       else 
 	sciprint("pwd not found\r\n");
+      bufl=256;
+      C2F(getenvc)(&ierr,"PVM_ROOT",buf,&bufl,&iflag);
+      if ( ierr == 0 ) 
+	sciprint("PVM_ROOT %s\r\n",buf);
+      else 
+	sciprint("PVM_ROOT not found\r\n");
+      bufl=256;
+      C2F(getenvc)(&ierr,"PVM_TMP",buf,&bufl,&iflag);
+      if ( ierr == 0 ) 
+	sciprint("PVM_TMP %s\r\n",buf);
+      else 
+	sciprint("PVM_TMP not found\r\n");
     }
   else if ( Equals(com,"stimer") ) 
     {
@@ -378,6 +395,10 @@ static int command(char *com)
     {
       return(1);
     } 
+  else if (Equals(com,"deltemp")) 
+    {
+      SciRemoveDirectory("C:/temp/foo");
+    }
   else 
     {
       if (Equals(com, "help") || Equals(com, "?")) 
@@ -385,10 +406,10 @@ static int command(char *com)
       else 
 	sciprint("[%s] is not a valid command, use :\n",com);
       sciprint("possible test \n");
-      sciprint("sci,mouse,mouse1,choose,xgetf,mdial,mch,menuhelp,dialog\n");
+      sciprint("sci(for graphics),mouse,mouse1,choose,xgetf,mdial,mch,menuhelp,dialog\n");
       sciprint("message1,message2,zoom,pause,screendump,shell,exit,addmen\n");
       sciprint("delmen,wdim(sci first),time,timer,stimer,env,! xxx,!\n");
-      sciprint("help xxx,apropos xxx\n");
+      sciprint("help xxx,apropos xxx,deltemp\n");
     } 
   return(0);
 }
@@ -396,6 +417,8 @@ static int command(char *com)
 /**********************************
  * just for test 
  **********************************/
+
+int C2F(sciwin)() {return(0);};
 
 double C2F(dsort)() {return(0.0);};
 

@@ -2,6 +2,7 @@ function []=artest(f_l,odem,xdim,npts)
 //[]=artest(f_l,[odem,xdim,npts])
 // Integration of the lorentz system 
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 if rhs <=3, npts=[100,1],end;
 if rhs <=2  then xdim=100*[-1,1,-1,1,-1,1];end;
@@ -32,7 +33,7 @@ function []=iarf(aa)
 // par defaut
 //!
 [lhs,rhs]=argn(0)
-if rhs=0, aa=ones(1,6);end
+if rhs==0, aa=ones(1,6);end
 fort('arset',aa,1,'r','sort');
 
 

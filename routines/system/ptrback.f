@@ -1,4 +1,5 @@
 
+c     Copyright INRIA
       subroutine mvptr(topk,il)
 C     just for dealing with lists 
       include '../stack.h'

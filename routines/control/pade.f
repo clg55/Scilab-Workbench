@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=PADE,SSI=0
       subroutine pade(a,ia,n,ea,iea,alpha,wk,ipvt,ierr)
 c
 c!purpose

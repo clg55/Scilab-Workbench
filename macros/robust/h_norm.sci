@@ -14,18 +14,19 @@ function [hinfnorm,frequency]=h_norm(Sl,rerr)
 //  Version 3.2, 09-27-1990
 //  N.A. Bruinsma   T.U.Delft/Philips Research Eindhoven, see also
 // Systems & Control Letters, vol. 14 pp. 287-293.
+// Copyright INRIA
 Sl1=Sl(1);
 [lhs,rhs]=argn(0);
 eps=1.d-8;
-flag='ss';if Sl1(1)='r' then Sl=tf2ss(Sl);end
+flag='ss';if Sl1(1)=='r' then Sl=tf2ss(Sl);end
 if Sl(7)=='d' then hinfnorm=dhnorm(Sl);frequency=[];return;end
 [a,b,c,d]=Sl(2:5);
 eiga=spec(a);
 if maxi(real(eiga)) >= -1e-12 then  ...
   write(%io(2),'Warning : system is not stable ! '),end
-if rhs=1 then rerr=1e-8; end;
+if rhs==1 then rerr=1e-8; end;
 [no,ns] = size(c); [ns,ni] = size(b);
-if mini(ni,no) = 1 then isiso = 2; else isiso = 1; end;
+if mini(ni,no) == 1 then isiso = 2; else isiso = 1; end;
 [p,a] = hess(a); [u,d,v] = svd(d); b = p' * b * v; c = u' * c * p;
 dtd = diag(d'*d); ddt = diag(d*d'); dtc = d' * c;
 aj = sqrt(-1)*eye(ns); R1 = ones(ni,1); S1 = ones(no,1);
@@ -38,9 +39,9 @@ sv0 = norm( -c * (a\b) + d );
 svdd = norm(d);
 [lb,i] = maxi([svdd sv0 svw]);l=lb;
 w = [1.d30 0 w ]; M = w(i);
-// to avoid numerical problems with Rinv and Sinv if lb = norm(d), lb must be
+// to avoid numerical problems with Rinv and Sinv if lb == norm(d), lb must be
 // enlarged to at least (1+1e-3)*lb;
-if lb = svdd then lb=1.001*lb+eps;end;
+if lb == svdd then lb=1.001*lb+eps;end;
 for it = 1:15,
   gam = (1 + 2 * rerr) * lb; gam2 = gam * gam;
   Rinv = diag(R1./(dtd - gam2 * R1));
@@ -53,7 +54,7 @@ for it = 1:15,
   [imev] = sort(imev);
   q = maxi(size(imev));
   if q <= 1 then
-  // q=1 can only happen in the first step if H-norm=maxsv(D) or H-norm=maxsv(0)
+  // q=1 can only happen in the first step if H-norm==maxsv(D) or H-norm==maxsv(0)
   // due to inaccurate eigenvalue computation (so gam must be an upper bound).
     ub = gam;
 //    pause;
@@ -66,21 +67,21 @@ for it = 1:15,
     lb = maxi(sv);l=[l;lb];
   end;
 end;
-if M = 1.d30 then
+if M == 1.d30 then
   lb=svdd;
 write(%io(2),"Warning:norm cannot be computed rel. accuracy smaller than 1e-3")
 write(%io(2),'Hinfnorm is probably exactly max sv(D)')
 write(%io(2),'The system might be all-pass')
 end;
-if exists('ub')=0 then ub=lb;end
+if exists('ub')==0 then ub=lb;end
 hinfnorm = 0.5 * (ub+lb); frequency = M;
 
 function gama=dhnorm(Sl,tol,gamamax)
 //discrete-time case (should be tested!!!)
 disp('warning: discrete-time h_norm is not fully tested!')
 [lhs,rhs]=argn(0);
-if rhs=1 then tol=0.001;gamamax=4000;end
-if rhs=2 then gamamax=1000;end
+if rhs==1 then tol=0.001;gamamax=4000;end
+if rhs==2 then gamamax=1000;end
 gamamin=sqrt(%eps);
 n=0;
 while %T

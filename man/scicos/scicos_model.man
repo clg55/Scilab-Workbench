@@ -5,7 +5,7 @@ scicos_model - Scicos block functionality  data structure
 .SH DEFINITION
 .nf
 model=list(sim,in,out,evtin,evtout,state,dstate,..
-      rpar,ipar,blocktype,firing,dep_ut,label,import)
+      rpar,ipar,blocktype,firing,dep_ut,label,import,ID)
 .fi
 .SH PARAMETERS
 .TP 15
@@ -85,10 +85,14 @@ true if output depends continuously of the input, \fVdep_t\fR must be
 true if output depends continuously of the time.
 .TP
 label
-: a character string, used as an identifier. 
+: a character string, used as a label
 .TP
 import
 : Unused.
+.TP
+ID
+: a character string, used as an identifier. 
+
 .TP
 model
 : Scilab list, Scicos block model data structure.

@@ -1,4 +1,5 @@
       subroutine cosend(x,xptr,z,zptr,iz,izptr,told,inpptr,inplnk,
+c     Copyright INRIA
      $     outptr,outlnk,lnkptr,cord,rpar,rpptr,ipar,ipptr,funptr,
      $     funtyp,outtb,w,ierr) 
 C     ending  (flag 5)

@@ -1,5 +1,7 @@
       subroutine expblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     Outputs a^u(i)
 c     a=rpar(1)

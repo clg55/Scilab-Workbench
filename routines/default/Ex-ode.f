@@ -12,6 +12,7 @@ c       fex3     : uses matptr to get parameters
 c       fexab    : a more complex example with matpr
 c-----------------------------------------------------------------
 
+c     Copyright INRIA
       subroutine fex (neq, t, y, ydot)
 c     -------------------------------------------
 c     input variables neq, t, y
@@ -79,7 +80,7 @@ c     param must be defined as a scilab variable
       double precision t, y, ydot, param
       dimension y(3), ydot(3), param(3)
 
-      call readmat('param',m,n,param)
+      call readmat('param'//char(0),m,n,param)
 c     *******************************
 
       ydot(1) = param(1)*y(1) + param(2)*y(2)*y(3)
@@ -97,7 +98,7 @@ c     param must be defined as a scilab variable
       dimension y(3), ydot(3), param(3)
 
       include '../stack.h'
-      call matptr('param',m,n,lp)
+      call matptr('param'//char(0),m,n,lp)
       if(m.eq.-1) return
 c     ***************************
 c     param entries are in stk(lp),stk(lp+1),stk(lp+2)
@@ -143,9 +144,9 @@ c     set dimension of u here
       double precision u(1)
 c
       include '../stack.h'
-      call matptr('A',m,n,la)
+      call matptr('A'//char(0),m,n,la)
       call dmmul(stk(la),m,x,m,xdot,m,m,m,1)
-      call matptr('B',m,nb,lb)
+      call matptr('B'//char(0),m,nb,lb)
       call uinput(t,x,u)
       call dgemm('n','n',m,1,nb,1.0d0,stk(lb),m,u,1,1.0d0,xdot,m)
       end

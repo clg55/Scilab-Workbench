@@ -30,4 +30,4 @@ EXAMPLE
   eye(3,3)-full(speye(3,3))
 
 SEE ALSO
-  sparse, full, eye, spzeros
+  sparse, full, eye, spzeros, spones

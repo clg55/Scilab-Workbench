@@ -4,7 +4,7 @@
 scicos_link - Scicos link data structure
 .SH DEFINITION
 .nf
-lnk=list('Link',xx,yy,'drawlink',' ',[0,0],ct,from,to)
+lnk=list('Link',xx,yy,'drawlink',id,[0,0],ct,from,to)
 .fi
 .SH PARAMETERS
 .TP 10
@@ -16,6 +16,9 @@ xx
 .TP
 yy
 : vector of y coordinates of the link path.
+.TP
+id
+: Character string, the link id
 .TP
 ct
 : 2 x 1 vector, \fV[color,typ]\fR where \fVcolor\fR defines the color

@@ -12,7 +12,8 @@ function [czx]=czt(x,m,w,phi,a,theta)
 //  czx   :Chirp z-transform output
 //!
 //author: C. Bunks  date: 10 July 1988
- 
+// Copyright INRIA
+
 //get the size of x and find the maximum of (n,m)
  
    n=maxi(size(x));

@@ -22,6 +22,7 @@ c and NOT as:
 c    call matc(ch,lda,10,10,name,0) if e.g. ch is a 
 c    10 by 10 matrix of character string.
 c
+c     Copyright INRIA
       integer lda,m,n,job
       character*(*) chai(lda,*),name
       include '../stack.h'

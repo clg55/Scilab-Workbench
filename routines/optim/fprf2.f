@@ -1,5 +1,6 @@
       subroutine fprf2(iflag,ntot,nv,io,zero,s2,eps,al,imp,u,eta,mm1,jc,
      &                 ic,r,a,e,rr,xpr,y,w1,w2)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       common /fprf2c/ u1,nc
 C         the dimension is mm1*mm1 for r

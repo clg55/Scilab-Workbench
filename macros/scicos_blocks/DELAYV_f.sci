@@ -1,4 +1,5 @@
 function [x,y,typ]=DELAYV_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then //normal  position 

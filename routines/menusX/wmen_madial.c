@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /* wmessage.c
  * Scilab 
  *   Jean-Philipe Chancelier 

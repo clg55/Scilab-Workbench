@@ -2,6 +2,7 @@
 c     ================================== ( Inria    ) =============
 c     operations sur les types secondaires (macros librairies...)
 c     =============================================================
+c     Copyright INRIA
       include '../stack.h'
 c     
       integer top0,iadr,sadr,op,rhs1
@@ -28,11 +29,12 @@ c
       if(op.eq.extrac) rhs=1
 c     
       il2=iadr(lstk(top))
+      if(istk(il2).lt.0) il2=iadr(istk(il2+1))
 c     
 c     
       ityp=0
       do 01 i=top+1-rhs1,top
-        ityp=max(ityp,istk(iadr(lstk(i))))
+        ityp=max(ityp,abs(istk(iadr(lstk(i)))))
  01   continue
       if(ityp.eq.11.or.ityp.eq.13) goto 100
       if(ityp.eq.14) goto 50
@@ -53,11 +55,13 @@ c     comparaisons
  60   continue
       top = top-1
       il1=iadr(lstk(top))
+      ilr=il1
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       itrue=1
       if(op.eq.less+great) itrue=0
       ilog=1-itrue
 c     
-      If(istk(il1).ne.istk(il2)) goto 65
+      if(istk(il1).ne.istk(il2)) goto 65
       if(istk(il1+1).ne.istk(il2+1)) goto 65
       nf=istk(il1+1)
       do 61 i=1,nf
@@ -79,11 +83,11 @@ c
  63   continue
       ilog=itrue
       
- 65   istk(il1)=4
-      istk(il1+1)=1
-      istk(il1+2)=1
-      istk(il1+3)=ilog
-      lstk(top+1)=sadr(il1+4)
+ 65   istk(ilr)=4
+      istk(ilr+1)=1
+      istk(ilr+2)=1
+      istk(ilr+3)=ilog
+      lstk(top+1)=sadr(ilr+4)
       goto 999
       
       
@@ -101,6 +105,8 @@ c     comparaisons
  180  continue
       top = top-1
       il1=iadr(lstk(top))
+      ilr=il1
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       itrue=1
       if(op.eq.less+great) itrue=0
       ilog=1-itrue
@@ -125,11 +131,11 @@ c
  183  continue
       ilog=itrue
       
- 185  istk(il1)=4
-      istk(il1+1)=1
-      istk(il1+2)=1
-      istk(il1+3)=ilog
-      lstk(top+1)=sadr(il1+4)
+ 185  istk(ilr)=4
+      istk(ilr+1)=1
+      istk(ilr+2)=1
+      istk(ilr+3)=ilog
+      lstk(top+1)=sadr(ilr+4)
       goto 999
       
 c     

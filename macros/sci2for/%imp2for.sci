@@ -4,9 +4,10 @@ function [stk,nwrk,txt,top]=%imp2for(nwrk)
 // Voir s'il est possible d'ameliorer dans le cas ou ces vecteurs implicite
 // servent dans la designation d'une sous matrice
 //!
-if forexp=1 then
+// Copyright INRIA
+if forexp==1 then
   s1=stk(top-1);s2=stk(top)
-  if op(3)='2' then
+  if op(3)=='2' then
     stk=list(s1(1)+','+s2(1),'2')
     top=top-1
   else
@@ -16,8 +17,8 @@ if forexp=1 then
   end
   return
 end
-rhs=evstr(op(3))
-if rhs=2 then
+rhs=abs(evstr(op(3)))
+if rhs==2 then
   fin=stk(top);
   deb=stk(top-1);
   pas=['1','0','0']
@@ -41,11 +42,6 @@ else
   typ='0'
 end
 //
-//if lst(ilst+1)(1)=='2'& whereis(lst(ilst+1)(2))==[]then // next op is extraction
-//  [stk1,top1,vnms,vtps]=get2f(lst(ilst+1)(2),list(),0,vnms,vtps)
-//  stk=stk1(1);stk(1)=list(stk(1),[deb(1),pas(1),fin(1)])
-//  pause
-//else
   [out,nwrk,txt]=outname(nwrk,typ,'1',ln)
   if typ=='1' then
     txt=[txt;gencall(['dvimp',deb(1),fin(1),pas(1),out])]

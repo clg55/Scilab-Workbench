@@ -1,4 +1,5 @@
       subroutine dspcsp(op,ma,na,a,nela,inda,mb,nb,b,nelb,indb,
+c     Copyright INRIA
      $     c,nelc,indc)
 c!purpose
 c     concatenation of two  sparse matrices.

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=IMCOPY,SSI=0
+c     Copyright INRIA
       subroutine imcopy(a,na,b,nb,m,n)
 c!but
 c     ce sous programme effectue:b=a

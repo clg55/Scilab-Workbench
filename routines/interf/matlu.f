@@ -5,7 +5,9 @@ c     evaluate functions involving gaussian elimination
 c
 c ====================================================================
 c
+c     Copyright INRIA
       include '../stack.h'
+      integer id(nsiz),io
 c
 c     fonction / fin
 c     -2   -1    1    2     3    4   5    6    7     
@@ -15,8 +17,6 @@ c
          write(buf(1:4),'(i4)') fin
          call basout(io,wte,' matlu '//buf(1:4))
       endif
-c
-      if(rstk(pt).eq.906) goto 310
 c
       if(rhs.le.0) then
          call error(39)
@@ -28,100 +28,41 @@ c
  10   continue
 c     matrix right division, a/a2
       call intrdiv
-      if(err.gt.0) return
       goto 99
 c
  20   continue
       call intldiv
-      if(err.gt.0) return
       goto 99
 c
  30   continue
 c     inv
       call intinv
-      if(err.gt.0) return
-      if (fin.lt.0) then
-         call cvname(id,'g_inv   ',0)
-         goto 300
-      endif
       goto 99
 c
  40   continue
 c     det
       call intdet
-      if(err.gt.0) return
-      if (fin.lt.0) then
-         call cvname(id,'g_det   ',0)
-         goto 300
-      endif
-      goto 99
+      return
 c
  50   continue
 c     rcond
       call intrcond
-      if(err.gt.0) return
-      if (fin.lt.0) then
-         call cvname(id,'g_rcond   ',0)
-         goto 300
-      endif
       goto 99
 c
  60   continue
 c     lu
       call intlu
-      if(err.gt.0) return
-      if (fin.lt.0) then
-         call cvname(id,'g_lu   ',0)
-         goto 300
-      endif
       goto 99
 c
  80   continue
 c     cholesky
       call intchol
-      if(err.gt.0) return
-      if (fin.lt.0) then
-         call cvname(id,'g_chol   ',0)
-         goto 300
-      endif
       go to 99
 c
  85   continue
 c     rref
       call intrref
-      if(err.gt.0) return
-      if (fin.lt.0) then
-         call cvname(id,'g_rref   ',0)
-         goto 300
-      endif
       go to 99
-c
-c
-c  fonctions matricielles gerees par l'appel a une macro
-c
- 300  fin=0
-      call funs(id)
-      if(err.gt.0) return
-      if(fun.gt.0) then
-         buf='primitive call'
-         call error(9999)
-         return
-      endif
-      if(fin.eq.0) then
-         call putid(ids(1,pt+1),id)
-         call error(4)
-         if(err.gt.0) return
-      endif
-      pt=pt+1
-      fin=lstk(fin)
-      rstk(pt)=906
-      icall=5
-      fun=0
-c     *call*  macro
-      return
- 310  continue
-      pt=pt-1
-      goto 99
 
  99   return
       end
@@ -146,7 +87,8 @@ c     Check number of arguments
 c     Check input argument type
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
-         fin=-fin
+         call putfunnam('lu',top-rhs+1)
+         fun=-1
          return
       endif
       m=istk(il+1)
@@ -288,7 +230,8 @@ c     Check number of arguments
 c     Check argument type
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
-         fin=-fin
+         call putfunnam('chol',top-rhs+1)
+         fun=-1
          return
       endif
       m=istk(il+1)
@@ -341,7 +284,8 @@ c     Check number of arguments
 c     Check argument type
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
-         fin=-fin
+         call putfunnam('rref',top-rhs+1)
+         fun=-1
          return
       endif
 
@@ -381,7 +325,8 @@ c
 c     Check  argument type
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
-         fin=-fin
+         call putfunnam('rcond',top-rhs+1)
+         fun=-1
          return
       endif
 
@@ -461,7 +406,8 @@ c
 c
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
-         fin=-fin
+         call putfunnam('det',top-rhs+1)
+         fun=-1
          return
       endif
 c
@@ -569,7 +515,8 @@ c
 c
       il=iadr(lstk(top-rhs+1))
       if (istk(il).ne.1) then
-         fin=-fin
+         call putfunnam('inv',top-rhs+1)
+         fun=-1
          return
       endif
 

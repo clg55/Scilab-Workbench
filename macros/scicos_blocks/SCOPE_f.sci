@@ -1,4 +1,5 @@
 function [x,y,typ]=SCOPE_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -18,8 +19,7 @@ case 'set' then
   while %t do
     [ok,clrs,win,wpos,wdim,ymin,ymax,per,N,heritance,label]=getvalue(..
 	'Set Scope parameters',..
-	[
-	'Color (>0) or mark (<0) vector (8 entries)';
+	['Color (>0) or mark (<0) vector (8 entries)';
 	'Output window number';
 	'Output window position';
 	'Output window sizes';
@@ -64,7 +64,11 @@ case 'set' then
     if ~ok then
       message(['Some specified values are inconsistent:';
 	         ' ';mess])
+	   end
+    if ok then
+      [model,graphics,ok]=check_io(model,graphics,-1,[],ones(1-heritance,1),[])
     end
+    
     if ok then
       if wpos==[] then wpos=[-1;-1];end
       if wdim==[] then wdim=[-1;-1];end
@@ -72,6 +76,7 @@ case 'set' then
       ipar=[win;1;N;clrs(:);wpos(:);wdim(:);heritance]
       if prod(size(state))<>(8+1)*N+1 then state=-eye((8+1)*N+1,1),end
       model(7)=state;model(8)=rpar;model(9)=ipar
+      model(4)=ones(1-heritance,1)
       model(11)=[] //compatibility
       model(12)=[%t %f] //compatibility
       graphics(4)=label;

@@ -5,6 +5,7 @@ function t=asinh(x)
 //                             ]-inf, 0 ] x [-pi/2]
 //                      and    [ 0  ,inf[ x [ pi/2]
 //!
+// Copyright INRIA
 if type(x)<>1 then error(53),end
 t=log(x+sqrt(x.*x+ones(x)))
 

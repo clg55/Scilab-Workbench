@@ -6,7 +6,6 @@ NAME
 CALLING SEQUENCE
   apropos word
   apropos 'string'
-  fapropos('string')
 
 DESCRIPTION
   Looks for keywords in  man/*/whatis files.

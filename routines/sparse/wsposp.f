@@ -1,4 +1,5 @@
       subroutine wsposp(op,ma,na,ar,ai,nela,inda,mb,nb,br,bi,nelb,indb,
+c     Copyright INRIA
      $     nelc,indc,ierr,ita,itb)
 c!purpose
 c     compare the elements of two  complex sparse matrices.

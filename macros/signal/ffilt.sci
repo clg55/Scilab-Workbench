@@ -19,7 +19,8 @@ function [x]=ffilt(ft,n,fl,fh)
 //  x  :Filter coefficients
 //!
 //author: C. Bunks  date: 12 March 1988
- 
+// Copyright INRIA
+
 //Pre-calculation
  
 no2=(n-1)/2;
@@ -29,13 +30,13 @@ ino2=int(no2);
  
 //Low pass filter
  
-if ft='lp' then
+if ft=='lp' then
   [x]=sinc(n,fl)
 end
  
 //High pass filter
  
-if ft='hp' then
+if ft=='hp' then
    x=sinc(n,fl)
    x=-x;
    x(no2+1)=1+x(no2+1);
@@ -43,7 +44,7 @@ end
  
 //Band pass filter
  
-if ft='bp' then
+if ft=='bp' then
    wc=%pi*(fh+fl);
    fl=(fh-fl)/2;
    x=sinc(n,fl)
@@ -53,7 +54,7 @@ end
  
 //Stop band filter
  
-if ft='sb' then
+if ft=='sb' then
    wc=%pi*(fh+fl);
    fl=(fh-fl)/2;
    x=sinc(n,fl)

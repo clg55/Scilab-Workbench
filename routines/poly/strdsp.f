@@ -36,6 +36,7 @@ c!auteur:
 c     s Steer (inria), 18sept.1985. corrige 1992
 c!    
 c     
+c     Copyright INRIA
       integer mat(*),d(*),lig,col,ll,lunit,iw(*)
       character cw*(*),dl*1
       integer lines,sl,sk,c1,nind

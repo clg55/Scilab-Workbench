@@ -1,6 +1,7 @@
 function new=addcolor(c)
 // add colors to the current colormap
 //!
+// Copyright INRIA
 if size(c,'c')<>3 then
   error('addcolor : argument is not a color table')
 end

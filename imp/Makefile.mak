@@ -8,73 +8,59 @@ include ../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
 
-all:: $(SCIDIR)/bin/Slpr.exe $(SCIDIR)/bin/Slatexprs.exe \
-	$(SCIDIR)/bin/Slatexpr2.exe \
-	$(SCIDIR)/util/Slatdocs.exe $(SCIDIR)/bin/SEpsf.exe \
-	 $(SCIDIR)/bin/Slatexpr.exe \
-	 $(SCIDIR)/util/Slatdoc.exe
+all:: $(SCIDIR)/bin/Blpr.exe $(SCIDIR)/bin/Blatexprs.exe \
+	$(SCIDIR)/bin/Blatexpr2.exe \
+	$(SCIDIR)/util/Blatdocs.exe $(SCIDIR)/bin/BEpsf.exe \
+	 $(SCIDIR)/bin/Blatexpr.exe \
+	 $(SCIDIR)/util/Blatdoc.exe
 
 world: all
 
-$(SCIDIR)/bin/Slpr.exe: Slpr.obj
-	$(RM) $@
-	$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slpr.obj $(GUILIBS)
+$(SCIDIR)/bin/Blpr.exe: Slpr.obj env.obj
+	@$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slpr.obj env.obj $(GUILIBS)
 
-clean::
-	$(RM) Slpr.obj
 distclean::
-	$(RM) Slpr.obj $(SCIDIR)/bin/Slpr.exe
+	@del $(SCIDIR)\bin\Blpr.exe
 
-$(SCIDIR)/bin/SEpsf.exe: SEpsf.obj
-	$(RM) $@
-	$(LINKER) -SUBSYSTEM:console -OUT:"$@" SEpsf.obj $(GUILIBS)
+$(SCIDIR)/bin/BEpsf.exe: SEpsf.obj env.obj
+	@$(LINKER) -SUBSYSTEM:console -OUT:"$@" SEpsf.obj env.obj $(GUILIBS)
 
-clean::
-	$(RM) SEpsf.obj
 distclean::
-	$(RM) SEpsf.obj $(SCIDIR)/bin/SEpsf.exe
+	@del $(SCIDIR)\bin\BEpsf.exe
 
-$(SCIDIR)/bin/Slatexpr.exe: Slatexpr.obj
-	$(RM) $@
-	$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatexpr.obj $(GUILIBS)
+$(SCIDIR)/bin/Blatexpr.exe: Slatexpr.obj env.obj
+	@$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatexpr.obj env.obj $(GUILIBS)
 
-clean::
-	$(RM) Slatexpr.obj
 distclean::
-	$(RM) Slatexpr.obj $(SCIDIR)/bin/Slatexpr.exe
+	@del $(SCIDIR)\bin\Blatexpr.exe
 
-$(SCIDIR)/bin/Slatexprs.exe: Slatexprs.obj
-	$(RM) $@
-	$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatexprs.obj $(GUILIBS)
+$(SCIDIR)/bin/Blatexprs.exe: Slatexprs.obj env.obj
+	@$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatexprs.obj env.obj $(GUILIBS)
 
-clean::
-	$(RM) Slatexprs.obj
 distclean::
-	$(RM) Slatexprs.obj $(SCIDIR)/bin/Slatexprs.exe
+	@del $(SCIDIR)\bin\Blatexprs.exe
 
-$(SCIDIR)/bin/Slatexpr2.exe: Slatexpr2.obj
-	$(RM) $@
-	$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatexpr2.obj $(GUILIBS)
+$(SCIDIR)/bin/Blatexpr2.exe: Slatexpr2.obj env.obj
+	@$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatexpr2.obj env.obj $(GUILIBS)
 
-clean::
-	$(RM) Slatexpr2.obj
 distclean::
-	$(RM) Slatexpr2.obj $(SCIDIR)/bin/Slatexpr2.exe
+	@del $(SCIDIR)\bin\Blatexpr2.exe
 
-$(SCIDIR)/util/Slatdocs.exe: Slatdocs.obj
+$(SCIDIR)/util/Blatdocs.exe: Slatdocs.obj env.obj
 	$(CC) $(CFLAGS) -DDOC Slatexprs.c
-	$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatdocs.obj $(GUILIBS)
-clean::
-	$(RM) Slatdocs.obj
+	@$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatdocs.obj env.obj $(GUILIBS)
 
 distclean::
-	$(RM) $(SCIDIR)/util/Slatdocs.exe 
+	@del $(SCIDIR)\util\Blatdocs.exe 
 
-$(SCIDIR)/util/Slatdoc.exe: Slatdoc.obj
-	$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatdoc.obj $(GUILIBS)
+$(SCIDIR)/util/Blatdoc.exe: Slatdoc.obj env.obj
+	@$(LINKER) -SUBSYSTEM:console -OUT:"$@" Slatdoc.obj env.obj $(GUILIBS)
 
 distclean::
-	$(RM) $(SCIDIR)/util/Slatdoc.exe
+	@del $(SCIDIR)\util\Blatdoc.exe
 
 clean::
-	$(RM) Slatdoc.obj
+	@del *.obj 
+
+distclean:: clean
+

@@ -9,10 +9,11 @@ function [ga,gs,gi]=dtsi(g,tol)
 // tol optional parameter for detecting stables poles. 
 // Default value: 100*%eps
 //!
+// Copyright INRIA
 g1=g(1);
 [lhs,rhs]=argn(0),
-if rhs=1 then tol=100*%eps,end,
-if g1(1)='r' then
+if rhs==1 then tol=100*%eps,end,
+if g1(1)=='r' then
   //transfer
   //----------------------------
   num=g(2),den=g(3),var=varn(den),
@@ -25,7 +26,7 @@ if g1(1)='r' then
       dn=degree(n),dd=degree(d),
       if dn>dd then error('degree  num. > degree  den.'),end,
       //alf and bet /alf*d1(unstable) and bet*d2(stable)=n.
-      if dd=0 then 
+      if dd==0 then 
         num2(i,j)=n,
       else
         pol=roots(d),
@@ -43,7 +44,7 @@ if g1(1)='r' then
         case dd+1 then num1(i,j)=n,den1(i,j)=d,
         else
           d1=poly(pol(1:no-1),var),d2=poly(pol(no:dd),var),
-          if dn=dd then 
+          if dn==dd then 
             d1o=poly([coeff(d1),0],var,'c'),
             dd=dd+1,no=no+1,
           else
@@ -70,10 +71,10 @@ else
   [a,u0]=balanc(a);b=u0\b;c=c*u0;
   [u,n]=schur(a,'cont'),
   a=u'*a*u,
-  if n=t then ga=0,
+  if n==t then ga=0,
     gs=g,return,
   end,
-  if n=0 then gs=0,
+  if n==0 then gs=0,
     ga=g,return,
   end,
   //      [ab,w,bs]=bdiag(a);
@@ -92,7 +93,7 @@ function D=ginfini(g)
 //gi=ginfini(g) computes D = g(infinity) for the proper transfer matrix g
 //!
 g1=g(1);
-if type(g)=1 then D=g,return,end,
+if type(g)==1 then D=g,return,end,
 if g1(1)<>'r' then error(90,1),end
 num=g(2),den=g(3),
 [nn,mm]=size(num),D=0*ones(nn,mm),

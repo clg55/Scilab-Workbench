@@ -1,3 +1,5 @@
+% Copyright INRIA
+
 \chapter{Description of the Basic Tools}
 
 \section{Introduction}
@@ -535,7 +537,7 @@ system descriptions
 in state-space form, and linear system descriptions in transfer
 function form.  The syntax using system matrices is as follows
 \begin{verbatim}
--->[f,g[,r]]=dscr(a,b,dt[,m])
+-->[f,g[,r]]=dscr(syslin('c',a,b,[],[]),dt [,m])
 \end{verbatim}
 \index{function syntax!dscr@{\tt dscr}}
 where {\tt a} and {\tt b} are the two matrices associated to the 
@@ -689,7 +691,7 @@ is done on the unit circle in the $z$-plane by using the function {\tt frmag}.
 
 The returned arguments are {\tt xm}, the magnitude response at
 the values in {\tt fr}, which contains the normalized discrete 
-frequency values in the range $[0,5]$. 
+frequency values in the range $[0,0.5]$. 
 \verbatok{\Diary Splot3.dia}
 \end{verbatim}
 \index{plotting!discrete magnitude}
@@ -710,7 +712,7 @@ for the poles-zeros plot.
 \verbatok{\Diary Splot4.dia}
 \end{verbatim}
 \index{plotting!poles and zeros}
-Here a third order, low-pass, IIR filter is created using the 
+Here a fourth order, low-pass, IIR filter is created using the 
 function {\tt iir} (see Section~\ref{desiir}).  The resulting
 pole-zero plot is illustrated in Figure~\ref{f.plot4}
 %

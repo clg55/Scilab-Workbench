@@ -4,6 +4,7 @@ function [Z,H]=gfare(Sl)
 //X = solution , F = gain
 //!
 //FD.
+// Copyright INRIA
 [A,B,C,D]=Sl(2:5);
 S=eye+D'*D;R=eye+D*D';
 Si=inv(S);Ri=inv(R);

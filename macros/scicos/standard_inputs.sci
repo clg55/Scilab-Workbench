@@ -4,6 +4,7 @@ function [x,y,typ]=standard_inputs(o)
 //    side of the block, regularly located from top to bottom
 //  the clock input ports are located on the top horizontal side
 //    side of the block, regularly located from left to right
+// Copyright INRIA
 xf=60
 yf=40
 graphics=o(2)

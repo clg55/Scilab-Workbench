@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /*
   Interface with system C function
   */

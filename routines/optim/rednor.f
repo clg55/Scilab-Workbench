@@ -1,4 +1,5 @@
       function rednor(n,binf,bsup,x,epsx,g)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension binf(n),bsup(n),x(n),epsx(n),g(n)
       rednor=0.0d+0

@@ -1,4 +1,5 @@
       subroutine lspful(ma,na,nela,inda,r)
+c     Copyright INRIA
       integer r(*)
       integer ma,na,nela,inda(*)
 c

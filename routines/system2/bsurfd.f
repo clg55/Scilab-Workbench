@@ -1,6 +1,7 @@
       subroutine bsurfd(ny, t, y, ng, gout,RPAR,IPAR)
 
-c ====================================
+c     Copyright INRIA
+c     ====================================
 c    soft external for dasrt (surface crossing)
 c ====================================
 c

@@ -1,6 +1,7 @@
 function [i]=modulo(n,m)
 //i=modulo(n,m) returns  n modulo m.
 //!
+// Copyright INRIA
 if size(m,'*')==1 then 
   m=ones(n)*m,
 elseif size(n,'*')==1 then 

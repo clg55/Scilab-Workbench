@@ -14,6 +14,7 @@ function [Sl1,right,left]=ss2ss(Sl,T,F,G,flag)
 // Sl1=ss2ss(Sl,rand(5,5),rand(2,5),rand(5,2)); 
 // trzeros(Sl1), trzeros(rand(2,2)*Sl1*rand(2,2))
 // See also : projsl
+// Copyright INRIA
 [A,B,C,D]=abcd(Sl);
 [LHS,RHS]=argn(0);
 select RHS
@@ -25,7 +26,7 @@ select RHS
 	A1=inv(T)*A1*T;B1=inv(T)*B;C1=C1*T;D1=D
 	Sl1=syslin(Sl(7),A1,B1,C1,D1);
 	right=syslin(Sl(7),A+B*F,B,F,eye(F*B));
-	left=eye(A);
+	left=eye(size(C,1),size(C,1));
    case 4 then 
 	A1=A+B*F+G*C+G*D*F;C1=C+D*F;B1=B+G*D
 	A1=inv(T)*A1*T;B1=inv(T)*B1;C1=C1*T;D1=D
@@ -36,7 +37,7 @@ select RHS
 	At=A+B*F; Ct=C+D*F
 	left=syslin(Sl(7),At+G*Ct,G,Ct,eye(Ct*G));
    case 5 then 
-	if flag=1 then 
+	if flag==1 then 
 	// x in R^n , y in R^p, u in R^m 
 	// output injection [ A + GC, (B+GD,-G)]
 	//                  [   C   , (D   , 0)]
@@ -62,7 +63,7 @@ select RHS
 	  right=syslin(Sl(7),A1+B1*F,B1,F,eye(F*B1));
 	  return
     	end  
-	if flag=2 then 
+	if flag==2 then 
 	// x in R^n , y in R^p, u in R^m 
 	// feedback first F of size(m,n) 
 	//   		    [ A+BF,B]

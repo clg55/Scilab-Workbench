@@ -17,4 +17,4 @@ EXAMPLE
   10.^log10([1,%i,-1,-%i])
 
 SEE ALSO
-  log
+  log, hat, ieee

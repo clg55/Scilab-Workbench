@@ -18,6 +18,7 @@ c     de a et b en changeant le signe de v.
 c     on itere jusqu a trouver degre de a ou degre de b=0.
 c     F.D.
 c        
+c     Copyright INRIA
       dimension ar(*),br(*),pr(*),ai(*),bi(*),pi(*)
       double precision ar,br,pr,vr,rr,ai,bi,pi,vi,ri,tol,b1
       vr=0.0d+0

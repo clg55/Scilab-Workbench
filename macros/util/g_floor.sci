@@ -1,6 +1,7 @@
 function x=g_floor(a)
 // only to be called by function floor
 //!
+// Copyright INRIA
 select type(a)
 case 2 then 
   x=floor(a)

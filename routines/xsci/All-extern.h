@@ -117,7 +117,7 @@ extern void C2F(setfbutn)  _PARAMS((char *name,int *rep));
   extern void do_exec  _PARAMS((Widget w, XButtonEvent *ev));  
   extern void ok_file  _PARAMS((char *dir, char *file));  
   extern void ok_end  _PARAMS((void));  
-  extern void ok_prep  _PARAMS((char *filemask, char *dirname, int flag, int *err));  
+  extern void ok_prep  _PARAMS((char *filemask, char *dirname, char *title,int flag, int *err));  
   extern void parsescipath  _PARAMS((char *path, char *longpath));  
   extern void do_ok  _PARAMS((Widget w, XButtonEvent *ev));  
   extern int getfc_file  _PARAMS((char *dir, char *file));  
@@ -128,8 +128,8 @@ extern void C2F(setfbutn)  _PARAMS((char *name,int *rep));
   extern void do_getf  _PARAMS((Widget w));  
   extern int load_file  _PARAMS((char *dir, char *file));  
   extern void do_load  _PARAMS((Widget w));  
-  extern void popup_file_panel  _PARAMS((Widget w));  
-  extern void create_file_panel  _PARAMS((Widget w));  
+  extern void popup_file_panel  _PARAMS((Widget w,char *));  
+  extern void create_file_panel  _PARAMS((Widget w,char *));  
 
 /*  "wf_w_init-n.c.X1"*/
 
@@ -139,8 +139,7 @@ extern void C2F(setfbutn)  _PARAMS((char *name,int *rep));
 
   extern void init_msg  _PARAMS((Widget tool,Widget vert_w, int ch, char *filename));  
   extern void update_cur_filename  _PARAMS((char *newname));  
-  /**   extern int put_msg  _PARAMS((va_alist));   **/
-  extern void put_msg _PARAMS(());
+  extern void put_msg  _PARAMS((char *,...)); 
   extern void clear_message  _PARAMS((void));  
   extern void FOpAddInfoHandler  _PARAMS((Widget widget, char *message));  
 

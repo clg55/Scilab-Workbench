@@ -1,3 +1,4 @@
+// Copyright INRIA
 pi=%pi
 i=%i
 e=%e

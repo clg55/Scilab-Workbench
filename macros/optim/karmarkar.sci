@@ -1,16 +1,17 @@
-function [x1,crit]=karmarkar(a,b,c,x0,eps,gamma)
+function [x1,crit]=karmarkar(a,b,c,x0,eps,Gamma)
+// Copyright INRIA
 maxiter=200;
 epsdef=1.d-5
 //
 [lhs,rhs]=argn(0)
 select rhs
 case 4 then
-  gamma=1/4,eps=epsdef
+  Gamma=1/4,eps=epsdef
 case 5 then
-  gamma=1/4
+  Gamma=1/4
 case 6,
 else
- error('[x1,crit]=karmarkar(a,b,c,x0 [,eps [,gamma]])')
+ error('[x1,crit]=karmarkar(a,b,c,x0 [,eps [,Gamma]])')
 end
 //verification des donnees
 [n,p]=size(a)
@@ -35,7 +36,7 @@ while test>eps&count<=maxiter
     d=-xc+ax'*y
     dk=x1.*d
     if mini(dk)>0 then error('Unbounded problem!'),end
-    alpha=-gamma/mini(d)
+    alpha=-Gamma/mini(d)
     test=alpha*(norm(d)**2)/maxi(1,abs(crit))
     x1=x1+alpha*dk
     crit=tc*x1

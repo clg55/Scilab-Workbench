@@ -1,4 +1,5 @@
-function chaina(yt)
+function chainap(yt)
+// Copyright INRIA
 [n1,n2]=size(yt);
 x=ones(n1/2,n2);
 y=ones(n1/2,n2);
@@ -13,12 +14,17 @@ y=[0*ones(1,n2);y];
 rr=r(1)/(n1+1);
 rect=2*[-(n1/2+1),-(n1/2+1),n1/2+1,n1/2+1];
 plot2d(0,0,[0],"012"," ",rect);
-for j=1:n2,
-  xset("wwpc");chaind([x(:,j),y(:,j)],rr,rect);
+pix=xget('pixmap')
+if driver()=='Pos' then st=3;xset('pixmap',1);else st=1;end
+for j=1:st:n2,
+  xset("wwpc");
+  xpoly(rect([1 3 3 1]),rect([2,2,4,4]),'lines',1)
+  chaindp([x(:,j),y(:,j)],rr,rect);
   xset("wshow");
 end
+xset('pixmap',pix)
 
-function chaind(p,r,rect)
+function chaindp(p,r,rect)
 //draw chain given sequence of points
 //!
 [n,ign]=size(p);

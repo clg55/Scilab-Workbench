@@ -5,6 +5,7 @@ C     evaluate functions involving   eigenvalues and eigenvectors
 C
 C ====================================================================
 C
+c     Copyright INRIA
       include '../stack.h'
 C
       double precision sr,si,powr,powi,t,rmax,eps,tt(1,1)
@@ -32,9 +33,23 @@ C
       endif
 C
       if (istk(iadr(lstk(top+1-rhs))) .ne. 1) then
-        err = 1
-        call error(53)
-        return
+         if(fin.eq.1) then
+            call putfunnam('hess',top-rhs+1)
+         elseif(fin.eq.2) then
+            call putfunnam('schur',top-rhs+1)
+         elseif(fin.eq.3) then
+            call putfunnam('spec',top-rhs+1)
+         elseif(fin.eq.4) then
+            call putfunnam('bdiag',top-rhs+1)
+         elseif(fin.eq.6) then
+            call putfunnam('balanc',top-rhs+1)
+         else
+            err = 1
+            call error(53)
+            return
+         endif
+         fun=-1
+         return
       endif
 C
       lw = lstk(top+1)

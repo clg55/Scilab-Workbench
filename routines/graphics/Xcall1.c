@@ -2,7 +2,7 @@
 /*------------------------------------------------------------------------
     Missile 
     XWindow and Postscript library for 2D and 3D plotting 
-    Copyright (C) 1990 Chancelier Jean-Philippe
+    Copyright (C) 1998 Chancelier Jean-Philippe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -18,8 +18,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-    jpc@arletty.enpc.fr 
-    Phone : 43.04.40.98 poste : 3327 
+    jpc@cergrene.enpc.fr 
 
 --------------------------------------------------------------------------*/
 /*-------------BEGIN--------------------------------------------------------
@@ -40,6 +39,7 @@
 static void Myalloc1();
 static void Myalloc();
 static void xstringb();
+int C2F(xsetg)(),C2F(xgetg)();
 
 typedef void (*func)();
 
@@ -131,8 +131,8 @@ int C2F(dr1)(x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4,lx0,lx1)
      double *dx1,*dx2,*dx3,*dx4;
 { 
   int i=0;
-/*  fprintf(stderr,"\ndr1 [%s,%s] [%d,%d,%d,%d,%d,%d],[%d,%d]",
-	  x0,x1,*x2,*x3,*x4,*x5,*x6,*x7,lx0,lx1); */
+  /*  fprintf(stderr,"\ndr1 [%s,%s] [%d,%d,%d,%d,%d,%d],[%d,%d]",
+      x0,x1,*x2,*x3,*x4,*x5,*x6,*x7,lx0,lx1); */
   while ( keytab_1[i].name != (char *) 0)
      {
        int j;
@@ -155,8 +155,97 @@ int C2F(dr1)(x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4,lx0,lx1)
   return(0);
 }
 
-static integer Ivide=0;
+/**************************************************
+ * Global values which are set at this level and 
+ * not redirected to each driver
+ **************************************************/
 
+
+static char FPF[32]={'\0'};
+static int Autoclear = 0;
+
+void C2F(setautoclear)(num, v2, v3, v4)
+     integer *num;
+     integer *v2;
+     integer *v3;
+     integer *v4;
+{ 
+  Autoclear = Max(0,Min(1,*num));
+}
+
+void C2F(getautoclear)(verbose, num, narg,dummy)
+     integer *verbose;
+     integer *num;
+     integer *narg;
+     double *dummy;
+{ 
+  *narg=1;
+  *num = Autoclear;
+  if (*verbose == 1) 
+    sciprint("\n Autoclear : %d\r\n",*num);
+}
+
+char *getFPF()
+{
+  return(FPF);
+}
+
+int C2F(xsetg)(str,str1,lx0,lx1)
+     char *str,*str1;
+     integer lx0,lx1;
+{
+  if ( strcmp(str,"fpf") == 0) 
+    {
+      strncpy(FPF,str1,32);
+    }
+  else if ( strcmp(str,"auto clear")==0) 
+    {
+      if (strcmp(str1,"on")==0 )
+	Autoclear = 1;
+      else
+	Autoclear = 0;
+    }
+  else if ( strcmp(str,"default")==0)
+    {
+      Autoclear =0;
+      FPF[0]='\0';
+    }
+  else 
+    {
+      sciprint("xset(arg,<string>): Unrecognized arg: %s\r\n",str);
+    }
+  return 0;
+}
+
+int C2F(xgetg)(str,str1, len,lx0,lx1)
+     char *str,*str1;
+     integer *len;
+     integer lx0,lx1;
+{
+  if ( strcmp(str,"fpf") == 0) 
+    {
+      strncpy(str1,FPF,32);
+      *len= strlen(str1);
+    }
+  else if ( strcmp(str,"auto clear")==0) 
+    {
+      if ( Autoclear == 1) 
+	{
+	  strncpy(str1,"on",2);
+	  *len=2;
+	}
+      else 
+	{
+	  strncpy(str1,"off",3);
+	  *len=3;
+	}
+    }
+  return 0;
+}
+
+
+static integer Ivide=0;
+static double  Dvide;
 
 /** 
   a verifier ds le futur : les arguments de xset_1 
@@ -370,18 +459,9 @@ void drawarrows_1(fname, str, style, iflag, n, v3, x7, x8, vx, vy, as, dx4, lx0,
 
 
 void drawaxis_1(fname, str, v1, nsteps, v2, v3, x7, x8, alpha, size, initpoint, dx4, lx0, lx1)
-     char *fname;
-     char *str;
-     integer *v1;
-     integer *nsteps;
-     integer *v2;
-     integer *v3;
-     integer *x7;
-     integer *x8;
-     double *alpha;
-     double *size;
-     double *initpoint;
-     double *dx4;
+     char *fname,*str;
+     integer *v1,*nsteps,*v2,*v3,*x7,*x8;
+     double *alpha,*size,*initpoint,*dx4;
      integer lx0;
      integer lx1;
 {
@@ -390,7 +470,8 @@ void drawaxis_1(fname, str, v1, nsteps, v2, v3, x7, x8, alpha, size, initpoint, 
   alpha1=inint( *alpha);
   C2F(axis2d)(alpha,initpoint,size,initpoint1,size1);  
   if (GetDriver()=='R') 
-    Scistring("Store To be done ...\n");	
+    StoreXcall1(fname,str,&Ivide,1L,nsteps,2L,&Ivide,1L,&Ivide,1L,&Ivide,1L,&Ivide,1L,alpha,1L,size,3L,initpoint,2L,&Dvide,1L);
+
   C2F(dr)(fname,str,&alpha1,nsteps,PI0,initpoint1,x7,x8,size1,PD0,PD0,PD0,lx0,lx1);
 }
 

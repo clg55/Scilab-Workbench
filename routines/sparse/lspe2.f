@@ -1,4 +1,5 @@
       subroutine lspe2(ma,na,nela,inda,i,ni,j,nj,
+c     Copyright INRIA
      $     mr,nr,nelr,indr,ptr,ierr)
 c     extract a submatrix from a sparse boolean matrix
 c!

@@ -1,11 +1,12 @@
 function [stk,nwrk,txt,top]=%i2for(nwrk)
 //
 //!
- 
-rhs=evstr(op(3))-2
+// Copyright INRIA
+
+rhs=abs(evstr(op(3)))-2
 sto=stk(top);top=top-1
 sfrom=stk(top);top=top-1
-if sto(3)='1'|sfrom(3)='1' then
+if sto(3)=='1'|sfrom(3)=='1' then
   typ='1'
 else
   typ='0'
@@ -18,17 +19,17 @@ if rhs==1 then
   if s2(4)=='1'&s2(5)=='1' then
     txt=' '+sto(1)+'('+s2(1)+')='+sfrom(1)
     out=sto(1)
-    if sto(4)='0' then
+    if sto(4)=='0' then
       sto(4)=s2(1);sto(5)='1'
-    elseif sto(4)='1'&sto(5)='1' then
+    elseif sto(4)=='1'&sto(5)=='1' then
       sto(4)=s2(1)
-    elseif sto(4)='1' then
+    elseif sto(4)=='1' then
       if isnum(sto(5))&isnum(s2(1)) then
         sto(5)=string(maxi(evstr(sto(5)),evstr(s2(1))))
       else
         sto(5)=callfun(['max',sto(5),s2(1)])
       end
-    elseif sto(5)='1' then
+    elseif sto(5)=='1' then
       if isnum(sto(4))&isnum(s2(1)) then
         sto(4)=string(maxi(evstr(sto(4)),evstr(s2(1))))
       else

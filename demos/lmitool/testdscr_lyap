@@ -1,3 +1,4 @@
+// Copyright INRIA
 n=3;
 rand('seed',0)
 rand('normal')

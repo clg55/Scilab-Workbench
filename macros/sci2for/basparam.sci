@@ -1,6 +1,7 @@
 function []=basparam()
 //utility
 //!
+// Copyright INRIA
 %else='else',%end='end';%elseif='elseif';%if='if';%for='for';
 %select='select';%while='while';%case='case';%then='then'
 quote=''''

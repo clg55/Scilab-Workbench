@@ -4,7 +4,7 @@
 colcomp - column compression, kernel, nullspace
 .SH CALLING SEQUENCE
 .nf
-[W,rk]=colcomp(A [,flag,tol])
+[W,rk]=colcomp(A [,flag] [,tol])
 .fi
 .SH PARAMETERS
 .TP 10

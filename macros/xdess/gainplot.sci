@@ -1,6 +1,8 @@
 function []=gainplot(sl,fmin,fmax,pas,comments)
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
+dom='c';
 //---------------------
 pas_def='auto' // default
 //
@@ -15,23 +17,44 @@ case 16 then  // sl,fmin,fmax [,pas] [,comments]
     error(97,1)
   end
   sl1=sl(1);
-  if sl1(1)='r' then dom=sl(4),else dom=sl(7),end
+  if sl1(1)=='r' then dom=sl(4),else dom=sl(7),end
   if dom==[] then error(96,1),end
   if dom=='d' then dom=1;end
   select rhs
   case 1 then //sl
    comments=' '
-   [frq,d,phi]=repfreq(sl);sl=[] 
+   fmin_default=1.d-3;
+   fmax_default=1.d3;
+
+   if dom=='c' then fmax_default=1.d3; else fmax_default=1/(2*dom),end
+   [frq,repf]=repfreq(sl,fmin_default,fmax_default);sl=[] 
+   [d,phi]=dbphi(repf);
   case 2 then // sl,frq
    comments=' '
-   [frq,d,phi]=repfreq(sl,fmin);fmin=[];sl=[]
+   if min(fmin)<=0 then
+     error('bode: requires strictly positive frequency vector')
+   end   
+   [frq,repf]=repfreq(sl,fmin);fmin=[];sl=[]
+   [d,phi]=dbphi(repf);
   case 3 , //sl,frq,comments ou sl,fmin,fmax
    if type(fmax)==1 then
       comments=' '
-      [frq,d,phi]=repfreq(sl,fmin,fmax,pas_def),sl=[]
+      if fmin<=0 then
+         error('bode: requires strictly positive frequency range')
+       end      
+      [frq,repf]=repfreq(sl,fmin,fmax,pas_def),sl=[]
+      [d,phi]=dbphi(repf);
    else
       comments=fmax
-      [frq,d,phi]=repfreq(sl,fmin);fmin=[];sl=[]
+      if min(fmin)<=0 then
+	error('bode: requires strictly positive frequency vector')
+      end      
+      if type(dom)==1 then nyq_frq=1/2/dom;end
+      if find(fmin>nyq_frq)~=[] then 
+	warning('There are frequencies beyond Nyquist f!');
+      end      
+      [frq,repf]=repfreq(sl,fmin);fmin=[];sl=[]
+      [d,phi]=dbphi(repf);
    end
   case 4 ,
     if type(pas)==1 then 
@@ -39,9 +62,17 @@ case 16 then  // sl,fmin,fmax [,pas] [,comments]
     else 
       comments=pas;pas=pas_def
     end,
-    [frq,d,phi]=repfreq(sl,fmin,fmax,pas)
+    if min(fmin)<=0 then
+      error('bode: requires strictly positive frequency vector')
+    end    
+    [frq,repf]=repfreq(sl,fmin,fmax,pas)
+    [d,phi]=dbphi(repf);
   case 5 then,
-    [frq,d,phi]=repfreq(sl,fmin,fmax,pas)
+    if min(fmin)<=0 then
+      error('bode: requires strictly positive frequency vector')
+    end    
+    [frq,repf]=repfreq(sl,fmin,fmax,pas)
+    [d,phi]=dbphi(repf);
   else 
     error('Invalid call: sys,fmin,fmax [,pas] [,com]')
   end;
@@ -53,7 +84,7 @@ noxtitle=%t;
     comments=' '
     [phi,d]=phasemag(fmin),fmin=[]
   case 3 then
-    if type(fmax)=1 then
+    if type(fmax)==1 then
       comments=' '//frq db phi
       d=fmin,fmin=[]
       phi=fmax,fmax=[]
@@ -67,6 +98,9 @@ noxtitle=%t;
      error('inputs:frq,db,phi,[com] or frq,repf,[com]')
    end;
    frq=sl;sl=[];[mn,n]=size(frq);
+   if min(frq)<=0 then
+     error('bode: requires strictly positive frequencies')
+   end   
    if mn<>1 then
       ilf=1;//un vecteur de frequences par reponse
    else
@@ -78,25 +112,22 @@ end;
 [mn,n]=size(phi)
 //
 //Captions
-if comments=' ' then
+if comments==' ' then
    comments(mn)=' ';
    mnc=0
-  strf='011'
+  strf='051'
 else
    mnc=mn
-  strf='111'
+  strf='151'
 end;
 
-xmn=mini(frq),xmx=maxi(frq),npx=10
-//Magnitude
-[ymn,ymx,npy]=graduate(mini(d),maxi(d))
-rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
+rect=[mini(frq),mini(d),maxi(frq),maxi(d)]
+plot2d1("oln",mini(frq),mini(d),0,'051',' ',rect);
+xgrid(4)
 if ilf==0 then
-     	plot2d1("oln",frq',d',[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
-	xgrid()
+     	plot2d1("oln",frq',d',[1,3:mn+1],strf,strcat(comments,'@'),rect);
 else
-     	plot2d1("gln",frq',d',[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
-	xgrid()
+     	plot2d1("gln",frq',d',[1,3:mn+1],strf,strcat(comments,'@'),rect);
 end
 if ~noxtitle then
 xtitle(' ','Hz','db');

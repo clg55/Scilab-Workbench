@@ -2,6 +2,7 @@ c     Examples for schur
 C     when schur is called with option 'c'
 c     the function folhp1 is called
 c--------------------------------------------
+c     Copyright INRIA
       integer function folhp1(ls,alpha,beta,s,p)
       integer ls
       double precision alpha,beta,s,p

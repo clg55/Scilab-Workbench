@@ -3,6 +3,7 @@ function [A,b]=aff2ab(lme,dimX,D,flag)
 //Y=lme(X,D)= affine fct of Xi's; 
 //[A,b]=matrix representation of lme in canonical basis.
 // if flag=='sp' A matrix is return in sparse storage.
+// Copyright INRIA
 [LHS,RHS]=argn(0)
 if RHS==3 then flag='f';end
 

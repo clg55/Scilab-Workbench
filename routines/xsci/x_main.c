@@ -1,4 +1,3 @@
-
 /***********************************************************
 Copyright 1987, 1988 by Digital Equipment Corporation, Maynard,
 Massachusetts, and the Massachusetts Institute of Technology,
@@ -200,7 +199,7 @@ NULL};
 static void Syntax  _PARAMS((char *badOption));  
 static void Help  _PARAMS((void));  
 static void strip_blank  _PARAMS((char *source));  
-
+static void ClearExit1 _PARAMS((int));
 
 extern WidgetClass xtermWidgetClass;
 
@@ -471,8 +470,11 @@ void main_sci(argc, argv)
   max_plus1 = (pty < Xsocket) ? (1 + Xsocket) : (1 + pty); 
   XSetErrorHandler((XErrorHandler)xerror);
   XSetIOErrorHandler((XIOErrorHandler)xioerror);
-  signal(SIGINT,do_kill1);
-  signal(SIGKILL,do_kill1);
+  signal(SIGINT,ClearExit1);
+  signal(SIGBUS,ClearExit1);
+  signal(SIGSEGV,ClearExit1);
+  signal(SIGQUIT,ClearExit1);
+  signal(SIGHUP,ClearExit1);
   {
     VTRun(nostartup);
   }
@@ -504,6 +506,12 @@ void ClearExit(n)
 }
 
 extern void   C2F(tmpdirc)();
+
+static void ClearExit1(n) 
+     int n;
+{
+  C2F(clearexit)(&n);
+}
 
 int C2F(clearexit)(n)
      int *n;

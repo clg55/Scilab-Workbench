@@ -21,7 +21,13 @@ static  Widget	msg_form, msg_panel, name_panel;
 #include "../machine.h"
 #include "All-extern.h"
 
+
+
+#ifdef __STDC__
+#include <stdarg.h>
+#else
 #include <varargs.h>
+#endif 
 
 /************************  LOCAL ******************/
 
@@ -103,18 +109,26 @@ void update_cur_filename(newname)
 	XtManageChild(msg_form);
 }
 
+
+#ifdef __STDC__ 
+void  put_msg(char *fmt,...) 
+#else 
 /*VARARGS0*/
 void  put_msg(va_alist) va_dcl
+#endif 
 {
-    va_list ap;
-    char *format;
-
-    va_start(ap);
-    format = va_arg(ap, char *);
-    vsprintf(prompt, format, ap );
-    va_end(ap);
-    FirstArg(XtNstring, prompt);
-    SetValues(msg_panel);
+  va_list ap;
+#ifdef __STDC__
+  va_start(ap,fmt);
+#else
+  char *fmt;
+  va_start(ap);
+  fmt = va_arg(ap, char *);
+#endif
+  vsprintf(prompt, fmt, ap );
+  va_end(ap);
+  FirstArg(XtNstring, prompt);
+  SetValues(msg_panel);
 }
 
 void clear_message()

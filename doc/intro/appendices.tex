@@ -1,3 +1,5 @@
+% Copyright INRIA
+
 \appendix
 \chapter{Demo session}
 We give here the Scilab session corresponding to the first demo.
@@ -95,7 +97,8 @@ are defined as Scilab linear systems.
  
 -->tm=list('transfer','model');tr=list('transfer',['reg(:,1)','reg(:,2)']);
  
--->tp=list('transfer','proc');ts=list('transfer','sensor');
+-->tp=list('transfer','proc');ts=list('transfer','s
+ensor');
  
 -->tf=list('transfer','ff');tsum=list('transfer',['1','1']);
  
@@ -105,7 +108,7 @@ are defined as Scilab linear systems.
  
 -->lrs=list('link','regulator output',[reg,1],[somm,1]);
  
--->lfs=list('link','feed-forward output',[ff,1],[somm,1]);
+-->lfs=list('link','feed-forward output',[ff,1],[somm,2]);
  
 -->lsp=list('link','proc input',[somm,1],[proc,1],[-2]);
  
@@ -241,8 +244,8 @@ x=[a b;-b' a']
 which can be translated into Fortran by using the function {\tt mac2for}.
 Each input parameter of the subroutine is described by a list
 which contains its type and its dimensions. Here, we have three
-input variables {\tt a,b,c} which are, say, {\tt integer,
-double precision, double precision} with dimensions
+input variables {\tt a,b,c} which are, say, {\tt 
+double precision, double precision, integer} with dimensions
 {\tt (m,m), (m,m), (1,1)}. This information is gathered
 in the following list:
 \begin{verbatim}

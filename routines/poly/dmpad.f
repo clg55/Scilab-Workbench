@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DMPAD,SSI=0
+c     Copyright INRIA
       subroutine dmpad(pm1,d1,l1,pm2,d2,l2,pm3,d3,m,n)
 c!but
 c     cette subroutine ajoute deux matrices dont les coefficients

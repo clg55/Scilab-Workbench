@@ -1,6 +1,7 @@
 C     Examples for dasrt 
 C     ----------------------
 C
+c     Copyright INRIA
       subroutine gr1 (neq, t, y, ng, groot, rpar, ipar)
       INTEGER neq, ng,ipar(*)
       DOUBLE PRECISION t, y(*), groot(*),rpar(*)

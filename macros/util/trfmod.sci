@@ -6,6 +6,7 @@ function h=trfmod(h,job)
 //
 //!
 
+// Copyright INRIA
 
 typ=type(h);h1=h(1);
 //-compat next row added for list/tlist compatibility
@@ -102,7 +103,7 @@ else
        '  of transfer function              ';
        '  natural frequency and damping factor (click below) ']
 end
-while id=[] then
+while id==[] then
   t=x_dialog(tit,txt)
   id=find(t=='Denominator : ')
 end
@@ -171,7 +172,7 @@ x=evstr(tgain)/coeff(den,degree(den))
 h(2)=num*x
 h(3)=den/coeff(den,degree(den))
 format(10)
-if flag='lss' then h=tf2ss(h),end
+if flag=='lss' then h=tf2ss(h),end
 
 
 

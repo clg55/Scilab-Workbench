@@ -1,8 +1,8 @@
 function [stk,nwrk,txt,top]=%a2for(nwrk)
 //
 //!
+// Copyright INRIA
 txt=[]
-//write(6,'%a2for');pause
 s2=stk(top);s1=stk(top-1);
 [s1,te1,t1,m1,n1]=s1(1:5);
 [s2,te2,t2,m2,n2]=s2(1:5);

@@ -15,7 +15,7 @@ PARAMETERS
        simulate a continuous or discrete system and in case of discrete sys-
        tem the second parameter must be set to 'discrete'
 
-  _r_e_s_t : The other parameters are optional. If omitted they will be asked
+  rest : The other parameters are optional. If omitted they will be asked
        interactively
 
        odem

@@ -2,8 +2,9 @@ function li=vec2list(bigVector,varsizes,ind)
 //bigVector: big vector
 //varsizes: k x 2 matrix, varsizes(i,:)=size of ith matrix
 //li: list of k matrices, li(i)=matrix of size varsizes(i,:);
+// Copyright INRIA
 [LHS,RHS]=argn(0)
-if bigVector=[] then
+if bigVector==[] then
      n=0;for dimi=varsizes',n=n+prod(dimi);end
 bigVector=zeros(n,1);
 end

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WMMUL,SSI=0
+c     Copyright INRIA
       subroutine wmmul(ar,ai,na,br,bi,nb,cr,ci,nc,l,m,n)
 c!but
 c     ce sous programme effectue le produit matriciel:

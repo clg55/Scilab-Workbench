@@ -1,5 +1,9 @@
+#-----------------------------
+# generated from Makefile: DO NOT EDIT
+# -----------------------------
 SHELL = /bin/sh
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/libcomm.lib
 
@@ -25,3 +29,8 @@ gest_messages.obj: utilitaires.h libCom.h formatage_messages.h \
 	 gestion_memoire.h gestion_messages.h
 list_chainees.obj: listes_chainees.h
 utilitaires.obj: gestion_memoire.h buffer_dynamiques.h utilitaires.h
+
+
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile

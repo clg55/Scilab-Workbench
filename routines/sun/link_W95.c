@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /*********************************
  * Link version for SYSV machine 
  *********************************/
@@ -24,7 +25,7 @@ static int Sci_dlsym _PARAMS((char *ename,int  ishared,char * strf));
  *   from new shared lib created with 
  *   files.
  *   -1 : the shared archive was not loaded 
- *   -2 : pb with one of the entry point 
+ *   -5 : pb with one of the entry point 
  *************************************/
 
 void SciLink(iflag,rhs,ilib,files,en_names,strf)
@@ -44,7 +45,7 @@ void SciLink(iflag,rhs,ilib,files,en_names,strf)
       while ( en_names[i] != (char *) 0)
 	{
 	  if ( Sci_dlsym(en_names[i],*ilib,strf) == FAIL) 
-	    *ilib=-2;
+	    *ilib=-5;
 	  i++;
 	}
     }
@@ -55,7 +56,7 @@ void SciLink(iflag,rhs,ilib,files,en_names,strf)
  * or 0 elsewhere 
  *************************************/
 
-static int LinkStatus()
+int LinkStatus()
 {
   return(1);
 }
@@ -197,6 +198,9 @@ void Sci_Delsym( ishared)
 	  NEpoints--;
 	}
     }
-  FreeLibrary ((HINSTANCE) hd[ish].shl);
-  hd[ish].ok = FAIL;
+  if ( hd[ish].ok != FAIL)
+    {
+      FreeLibrary ((HINSTANCE) hd[ish].shl);
+      hd[ish].ok = FAIL;
+    }
 }

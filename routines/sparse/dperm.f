@@ -1,5 +1,7 @@
       subroutine dperm(vv,nv,ind)
 c apply an in-situ  permutation 
+c     Copyright INRIA
+c     Copyright INRIA
       double precision vv(nv),x
       integer ind(nv)
 c

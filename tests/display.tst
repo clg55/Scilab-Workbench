@@ -1,3 +1,4 @@
+// Copyright INRIA
 z=poly(0,'z')
 //lines(20,60)
 format('v',10)

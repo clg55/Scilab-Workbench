@@ -4,7 +4,7 @@
 rowcomp - row compression, range
 .SH CALLING SEQUENCE
 .nf
-[W,rk]=rowcomp(A, flag, tol)
+[W,rk]=rowcomp(A [,flag] [,tol])
 .fi
 .SH PARAMETERS
 .TP 10
@@ -30,7 +30,7 @@ Row compression of \fVA\fR. \fVAc = W*A\fR is a row compressed matrix: i.e.
 \fVflag\fR and \fVtol\fR are optional parameters: \fVflag='qr'\fR 
 or \fV'svd'\fR (default \fV'svd'\fR).
 .LP
-\fVtol\fR is a tolerance parameter (of order \fV%eps\fR as default value).
+\fVtol\fR is a tolerance parameter (of order \fVsqrt(%eps)\fR as default value).
 .LP
 The \fVrk\fR first columns of \fVW'\fR span the range of \fVA\fR.
 .LP

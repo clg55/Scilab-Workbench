@@ -1,28 +1,36 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/system2.a
 
-OBJSC =
+OBJSC = 
 
 OBJSF = fmttyp.o getfun.o chkvar.o \
 	btof.o btofm.o ftob.o \
 	bschur.o bjac.o bintg.o bj2.o bydot.o boptim.o bgety.o bgetx.o \
 	badd.o bresid.o bfeval.o bresd.o bjacd.o \
 	cvwm.o cvdm.o atome.o iseye.o \
-	alloc.o back.o creadmat.o creadchain.o cmatptr.o \
-	matz.o matc.o matzs.o matptr.o readmat.o readchain.o \
+	matz.o matc.o matzs.o \
 	expsum.o termf.o bsurf.o bsurfd.o tradsl.o \
 	dldsp.o istrue.o isnum.o namstr.o basnms.o cmplxt.o \
 	intstr.o extlarg.o bcol.o bsolv.o bjsolv.o\
-	bydot2.o
+	bydot2.o rwstack.o bint2d.o bint3d.o
 
 include ../../Makefile.incl
 
 CFLAGS = $(CC_OPTIONS)
 
 include ../Make.lib
+
+all:: Makefile.mak
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile
+
+
+
 
 
 alloc.o: ../stack.h
@@ -33,6 +41,8 @@ bfeval.o: ../stack.h ../callinter.h
 bgetx.o: ../stack.h ../callinter.h
 bgety.o: ../stack.h ../callinter.h
 bintg.o: ../stack.h ../callinter.h
+bint2d.o: ../stack.h ../callinter.h
+bint3d.o: ../stack.h ../callinter.h
 bj2.o: ../stack.h ../callinter.h
 bjac.o: ../stack.h ../callinter.h
 bjacd.o: ../stack.h  ../callinter.h
@@ -63,3 +73,4 @@ namstr.o: ../stack.h
 readchain.o: ../stack.h
 readmat.o: ../stack.h
 tradsl.o: ../stack.h
+rwstack.o : ../stack.h

@@ -67,7 +67,7 @@ char *name;
   return name;
 }
 
-char *basename (name)
+char *my_basename (name)
 char *name;
 {
   char *base;

@@ -1,4 +1,5 @@
 function scicos_play(fil)
+// Copyright INRIA
 funcprot(0)
 x_mess=funptr('x_message')
 x_dia=funptr('x_dialog')
@@ -7,22 +8,24 @@ c_cho=funptr('x_choose')
 xcli=funptr('xclick')
 xgetm=funptr('xgetmouse')
 
-//clearfun('x_message')
+clearfun('x_message')
 clearfun('x_dialog')
 clearfun('x_mdialog')
 clearfun('x_choose')
 clearfun('xclick')
 clearfun('xgetmouse')
-getf('SCI/macros/util/x_matrix.sci','c')
+getf('SCI/macros/util/x_matrix.sci')
 getf('SCI/macros/util/getvalue.sci')
 getf('SCI/macros/xdess/getmenu.sci')
+getf('SCI/macros/auto/scicos.sci')
+getf('SCI/macros/util/getclick.sci')
 
 names=['choosefile';
 'do_addnew';
 'do_block';
 'do_color';
 'do_copy';
-'do_copy_region';
+'do_copy_region'; 
 'do_delete';
 'do_delete_region';
 'do_help';
@@ -34,18 +37,18 @@ names=['choosefile';
 'do_view';
 'getlink';
 'move';
-'prt_align';
-'scicos']
+'prt_align']
+
 
 for k=1:size(names,'r')
   getf('SCI/macros/scicos/'+names(k)+'.sci')
 end
 
 lines(0)
-getf('SCI/demos/scicos/dialogs.sci','c')
-message=x_message
+getf('SCI/demos/scicos/dialogs.sci')
+execstr('message=x_message')
 newfun('x_message',x_mess)
-dialog=x_dialog
+execstr('dialog=x_dialog')
 I=file('open',fil,'old')
 O=file('open','/dev/null','unknown')
 %IO=[I,O]

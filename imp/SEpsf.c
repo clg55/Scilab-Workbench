@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #ifdef __STDC__
 # include <stdlib.h>
 # include <stdarg.h>
@@ -11,7 +12,7 @@ char *getenv();
 #include <ctype.h>
 #include <stdio.h>
 
-#include "../routines/params.h"
+#include "../routines/machine.h"
 
 static int Sed _PARAMS((int,char *,FILE *,char *,char *,char *,char *,char *,char *));
 int ScilabPsToEps _PARAMS((char orientation,char *filein,char *fileout));

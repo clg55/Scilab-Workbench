@@ -1,10 +1,11 @@
 function [stk,nwrk,txt,top]=%c2for(nwrk)
 //
 //!
+// Copyright INRIA
 nrc=evstr(op(3))
-if op(2)=27 then
+if op(2)=='27' then
   ncc=1
-elseif op(2)=23 then
+elseif op(2)=='23' then
   ncc=nrc;nrc=1;
 else
   ncc=evstr(op(4))
@@ -12,18 +13,24 @@ end
 nc='0';typ=0
 top1=top-nrc*ncc
 for k=1:ncc
-  sk=stk(top1+k)
-  typ=maxi(typ,evstr(sk(3)))
-  nc=addf(nc,sk(5))
+  for l=1:nrc
+    sk=stk(top1+(l-1)*ncc+k)
+    typ=maxi(typ,evstr(sk(3)))
+    nc=addf(nc,sk(5))
+    if sk(5)<>'0' then break,end
+  end
 end
 nl='0'
 for l=1:nrc
- sk=stk(top1+(l-1)*ncc+1)
- typ=maxi(typ,evstr(sk(3)))
- nl=addf(nl,sk(4))
+  for k=1:ncc
+    sk=stk(top1+(l-1)*ncc+k)
+    typ=maxi(typ,evstr(sk(3)))
+    nl=addf(nl,sk(4))
+    if sk(4)<>'0' then break,end
+  end
 end
 typ=string(typ)
- 
+
 [out,nwrk,txt]=outname(nwrk,typ,nl,nc)
 lout=length(out)
 //

@@ -1,5 +1,6 @@
       subroutine iperm(vv,nv,ind)
 c apply an in-situ  permutation 
+c     Copyright INRIA
       integer vv(nv),x
       integer ind(nv)
 c

@@ -1,3 +1,4 @@
+// Copyright INRIA
 //insertion
 v=[1 2 3];
 v(2)=3;if or(v<>[1 3 3]) then pause,end

@@ -44,6 +44,7 @@ function result=calerf(x,jint)
 //  UNIVAC 1108    26.582      5.37D+8     8.98D+307
 //  VAX D-Format    9.269      1.90D+8     1.70D+38
 //  VAX G-Format   26.569      6.71D+7     8.98D+307
+// Copyright INRIA
 [mx,nx]=size(x);x=matrix(x,1,mx*nx);
 thresh=0.46875; //
 sqrpi=5.6418958354775628695d-1;

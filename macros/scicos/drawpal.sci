@@ -8,6 +8,7 @@ function palettes=drawpal(palettes,win_height)
 // win    : numero de la fenetre
 //!
 //origine S Steer INRIA 1993
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 
 //compute blocks position

@@ -12,6 +12,7 @@ c     idebut : pointeur sur le debut de la ligne
 c     ifin   : pointeur sur la fin de la ligne
 c!
 c
+c     Copyright INRIA
       include '../stack.h'
       integer eol
       data eol/99/

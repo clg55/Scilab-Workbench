@@ -7,7 +7,7 @@
 #define MAXCALL 2000
 #define MAXEL 50
 #define MAXLINE 1000
-#define MAXNAM 80
+#define MAXNAM 128
 #define MAXVAR 200
 /* flag for generation of type and element dimension checking for lists: 
    can be modified */
@@ -75,6 +75,7 @@
 #define BMATRIX 19
 #define SCIBPOINTER 20
 #define SCIOPOINTER 21
+#define SPARSE 22
 
 /* SCILAB optional variable types */
 
@@ -84,6 +85,7 @@
 typedef int IVAR; /* variable number */
 
 /* VAR struct: informations for FORTRAN and/or SCILAB variable */
+
 typedef struct var {
   char *name; /* variable name */
   int type; /* SCILAB type */
@@ -183,7 +185,7 @@ int ParseLine _PARAMS((char *s, char **words));
 int ParseScilabLine _PARAMS((char *s, char **words));
 int ReadListElement _PARAMS((FILE *f, char *varlistname, IVAR iivar, int nel));
 void ReadListFile _PARAMS((char *listname, char *varlistname, IVAR ivar));
-void ReadFile _PARAMS((char *file));
+void ISCIReadFile _PARAMS((char *file));
 int ReadFunction _PARAMS((FILE *f));
 int TypeToBas _PARAMS(());
 void WriteArgCheck _PARAMS((FILE *f, int i));

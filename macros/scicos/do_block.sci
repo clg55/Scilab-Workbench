@@ -1,10 +1,11 @@
 function scs_m=do_block(scs_m)
 // do_block - edit a block icon
+// Copyright INRIA
 while %t
-  [btn,xc,yc]=xclick(0);
-  pt=[xc,yc]
-  [n,pt]=getmenu(datam,pt);
-  if n>0 then n=resume(n),end
+  [btn,xc,yc,win,Cmenu]=getclick()
+  if Cmenu<>[] then
+    Cmenu=resume(Cmenu)
+  end
   K=getblock(scs_m,[xc;yc])
   if K<>[] then break,end
 end
@@ -14,6 +15,7 @@ if type(gr_i)==15 then
 else
   coli=[]
 end
+if gr_i==[] then gr_i=' ',end
 while %t do
   gr_i=dialog(['Give scilab instructions to draw block';
       'shape.';

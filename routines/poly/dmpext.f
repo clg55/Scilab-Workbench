@@ -37,6 +37,7 @@ c     Serge Steer INRIA  5/02/86
 c!sous programmes appeles
 c     dcopy (blas)
 c!
+c     Copyright INRIA
       double precision mp(*),mp1(*)
       integer d(*),m,n,row(*),nr,col(*),nc,d1(*),job,ierr
 c

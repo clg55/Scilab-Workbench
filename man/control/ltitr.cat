@@ -1,5 +1,5 @@
 
-LTITR(G)                       Scilab Function                       LTITR(G)
+ltitr(G)                       Scilab Function                       ltitr(G)
 NAME
   ltitr - discrete time response (state space)
 

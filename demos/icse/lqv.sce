@@ -2,6 +2,7 @@
 //  *************************************************************
 //
 //
+// Copyright INRIA
 exec('icse.contexte');  // contexte
 //
 t0=0;    // instant initial

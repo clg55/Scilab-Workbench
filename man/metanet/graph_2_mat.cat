@@ -1,21 +1,27 @@
 
 graph_2_mat(1)                 Scilab function                 graph_2_mat(1)
 NAME
-  graph_2_mat - node-arc incidence matrix of a graph
+  graph_2_mat - node-arc or node-node incidence matrix of a graph
 
 CALLING SEQUENCE
-  a = graph_2_mat(g)
+  a = graph_2_mat(g,mat)
 
 PARAMETERS
 
   g : graph list
 
-  a : sparse node-arc incidence matrix
+  mat : optional string, 'node-arc' or 'node-node' matrix
+
+  a : sparse node-arc or node-node incidence matrix
 
 DESCRIPTION
-  graph_2_mat computes the node-arc incidence matrix corresponding to the
-  graph g. If n is the number of nodes of the graph and m is the number of
-  edges of the graph, it is a Scilab sparse matrix of size (n,m).
+  graph_2_mat computes the node-arc or the node-node incidence matrix
+  corresponding to the graph g.
+
+  If the optional argument mat is omitted or is the string
+
+  If n is the number of nodes of the graph and m is the number of edges of
+  the graph, the node-arc matrix is a Scilab sparse matrix of size (n,m).
 
   It is defined as follows. If the graph is directed:
 
@@ -27,9 +33,17 @@ DESCRIPTION
 
   a(i,j) = 1 if node i is the tail or the head of arc j
 
+  If n is the number of nodes of the graph, the node-node matrix is a Scilab
+  sparse matrix of size (n,n).
+
+  It is defined as follows:
+
+  a(i,j) = 1 if there is an arc from node i to node j
+
 EXAMPLE
   g=load_graph(SCI+'/demos/metanet/colored');
   a=graph_2_mat(g)
+  a=graph_2_mat(g,'node-node')
 
 SEE ALSO
   mat_2_graph

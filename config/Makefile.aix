@@ -1,3 +1,4 @@
+# Copyright INRIA
 LLD = ld -bh:4 -T512 -H512 -o /tmp/scilex-1 -bnodelcsect /lib/crt0.o
 LLD1 = ld -bh:4 -T512 -H512 -o $@ -bnodelcsect -bE:bin/scilex.exp /lib/crt0.o
 LLDLF = -lxlf -lm -lc
@@ -11,14 +12,14 @@ bin/scilex: scilex-lib
 		echo "linking";\
 		$(RM) $@ ;\
 		$(RM) /tmp/scilex-1;\
-		$(LLD) $(DEFAULTS) $(LIBR) $(LD_LDFLAGS) $(XLIBS) \
-			$(TERMCAPLIB) $(LLDLF);\
+		$(LLD) $(DEFAULTS) $(LIBR) $(LD_LDFLAGS) $(TCLTK_LIBS) \
+			$(XLIBS) $(TERMCAPLIB) $(LLDLF);\
 		(echo "#!$(SCIDIR)/bin/scilex"; /usr/ucb/nm -gp /tmp/scilex-1\
 			| sed -n -e '/.* T \./s///p' -e '/.* [DB] /s///p' \
 			| sort -u) > bin/scilex.exp ;\
 		$(RM) /tmp/scilex-1 ;\
-		$(LLD1) $(DEFAULTS) $(LIBR) $(LD_LDFLAGS) $(XLIBS) \
-			$(TERMCAPLIB) $(LLDLF) ;\
+		$(LLD1) $(DEFAULTS) $(LIBR) $(LD_LDFLAGS) $(TCLTK_LIBS) \
+			$(XLIBS) $(TERMCAPLIB) $(LLDLF);\
 	else \
 		echo bin/scilex is up to date ;\
 	fi

@@ -13,7 +13,6 @@ all:: $(SCIDOC)/Scicos.ps
 $(SCIDOC)/Scicos.ps: $(TEXFILES)
 	latex scicos
 	latex scicos
-	latex scicos
 	$(RM) $(SCIDOC)/Scicos.ps
 	dvips -o $(SCIDOC)/Scicos.ps scicos.dvi
 

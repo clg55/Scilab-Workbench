@@ -1,3 +1,6 @@
+# Copyright INRIA
+
+
 FFLAGS = $(FC_OPTIONS)
 
 bin/scilex: scilex-lib
@@ -8,8 +11,8 @@ bin/scilex: scilex-lib
 	if [ $$x -ne 0 ] ; then \
 		$(RM) $@; \
 		echo "linking";\
-		$(FC) -o $@ $(DEFAULTS) $(LIBR) $(FC_LDFLAGS) $(XLIBS) \
-			$(TERMCAPLIB) ;\
+		$(FC) -o $@ $(DEFAULTS) $(LIBR) $(FC_LDFLAGS) $(TCLTK_LIBS) \
+			$(XLIBS) $(TERMCAPLIB)  ;\
 		nm $@ > $@.nm;\
 		grep ' T ' $@.nm > $@.txtnm;\
 		grep ' [A-SU-Z] ' $@.nm > $@.datnm;\

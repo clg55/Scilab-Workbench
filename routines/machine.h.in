@@ -1,4 +1,4 @@
-
+/* Copyright INRIA */
 #ifndef MACHINE_H 
 #define MACHINE_H 
 
@@ -20,11 +20,23 @@
 /* Define if have getwd */
 #undef HAVE_GETWD
 
+/* Define if have sleep: used in graphics/periX11.c */
+#undef HAVE_SLEEP
+
 /* Define if have strerror: used in sound/misc.c */
 #undef HAVE_STRERROR
 
 /* Define if have termcap library: used in sun/zzledt.c */
 #undef HAVE_TERMCAP
+
+/* Define if have usleep: used in graphics/periX11.c */
+#undef HAVE_USLEEP
+
+/* Define if have and use TCL/TK */
+#undef WITH_TK
+
+/* Define if have and use PVM */
+#undef WITH_PVM
 
 /* CNAME(x,y) ==> xy **/
 
@@ -71,6 +83,21 @@
 
 typedef int integer;
 
-#include "params.h"
+/*  params.h */
+#ifdef __STDC__
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)		paramlist
+#endif
+#else	
+#ifndef  _PARAMS
+#define  _PARAMS(paramlist)		()
+#endif
+#endif
+
+/** Intel Blas library on win32 */
+
+#ifdef MKL 
+#include "MKL.h" 
+#endif 
 
 #endif MACHINE_H 

@@ -1,5 +1,7 @@
       subroutine cstblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     output a vector of constants out(i)=rpar(i)
 c     rpar(1:nrpar) : given constants

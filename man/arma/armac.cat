@@ -30,8 +30,7 @@ EXAMPLE
   b=[0,1,1,1].*.[1;1];
   d=[1,0.7,0.2].*.eye(2,2);
   sig=eye(2,2);
-  ar=armac(a,b,d,2,1,sig);
-  armap(ar);
+  ar=armac(a,b,d,2,1,sig)
 
 SEE ALSO
-  armap
+  arma, armax, armax1, arsimul

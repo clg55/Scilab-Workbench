@@ -7,9 +7,10 @@ function [u]=givens(x,y)
 // givens(x,y)=givens([x;y])
 //
 //!
-[lhs,rhs]=argn(0);if rhs=1 then y=x(2),x=x(1);end
-if abs(y)=0 then  u=eye(2,2),return,end
-if abs(x)=0 then  u=[0 1;1 0],return,end
+// Copyright INRIA
+[lhs,rhs]=argn(0);if rhs==1 then y=x(2),x=x(1);end
+if abs(y)==0 then  u=eye(2,2),return,end
+if abs(x)==0 then  u=[0 1;1 0],return,end
 //
 nrm = norm([x y]);
 alpha = x/abs(x);

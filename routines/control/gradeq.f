@@ -1,6 +1,7 @@
       subroutine gradeq (n,ma,a,mb,b,low,igh,cperm,wk)
 c
 c     *****parameters:
+c     Copyright INRIA
       integer igh,low,ma,mb,n
       double precision a(ma,n),b(mb,n),cperm(n),wk(n,2)
 c

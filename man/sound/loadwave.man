@@ -13,6 +13,6 @@ x
 Read a wav sound file into Scilab. you can transform other sound files
 into wav file with the \fVsox\fR program.
 .SH SEE ALSO
-savewave, soundsec, analyze, mapsound
+savewave,  analyze, mapsound
 
 

@@ -3,13 +3,17 @@ c ====================================================================
 c     get a new line
 c ====================================================================
 c
+c     Copyright INRIA
       include '../stack.h'
 c
-      integer lrecl,eol,slash,dot,blank,retu(6)
+      integer lrecl,eol,slash,dot,blank
+      integer retu(6)
       integer r,quit(4)
-      logical maj
+      logical maj,isinstring
+      external isinstring
 
-      data eol/99/,dot/51/,blank/40/, retu/27,14,29,30,27,23/
+      data eol/99/,dot/51/,blank/40/
+      data retu/27,14,29,30,27,23/
       data slash/48/,lrecl/512/
       data quit/26,30,18,29/
 c
@@ -20,11 +24,9 @@ c
       endif
 c
       n=1
-   10 l1=lpt(1)
+ 10   l1=lpt(1)
       lct(8)=lct(8)+1
-cxxx  if(job.eq.1) l1=lpt(6)
-c     a ete remplace par la ligne suivante pour conserver les
-c     delimiteurs de ligne (eol)
+c     next line to preserve end-of-line marks (eol)
       if(job.eq.1) l1=lpt(6)+1
       if(job.eq.-1) then
          if (lpt(6).lt.0) then
@@ -42,34 +44,41 @@ c     delimiteurs de ligne (eol)
       if(macr.gt.0.and.fin.ne.2) then
          k=lpt(1)-(13+nsiz)
          il=lin(k+7)
-c        test pour determiner si c'est la macro ou un exec qui appele getlin
+c        check if getlin is call in a macro or an exec 
          if(il.gt.0) goto 80
       endif
  11   call basin(ierr,rio,buf(1:lrecl),'*')
       if(ierr.ne.0) goto 50
-   12 n = lrecl+1
-   15 n = n-1
+ 12   l0=l
+      n = lrecl+1
+ 15   n = n-1
       if(n.le.0) goto 45
       if (buf(n:n) .eq. ' ') go to 15
       if (mod(lct(4),2) .eq. 1.and.rio.ne.rte) then
-         call basout(io,wte,buf(1:n))
+         call promptecho(wte,buf(1:n),n)
       endif
       if (rio.eq.rte) then
-         if(wio.ne.0) call basout(io,wio,buf(1:n))
+         if(wio.ne.0) then
+            call promptecho(wio,buf(1:n),n)
+         endif
          if (hio.gt.0) call basout(io,hio,buf(1:n))
          lct(1)=1
       endif
 c
-      do 40 j = 1, n
-         do 20 k = 1, csiz
+c     loop on read characters
+      j=0
+ 17   j=j+1
+      if(j.gt.n) goto 45
+c      do 40 j = 1, n
+         do 21 k = 1, csiz
          if (buf(j:j).eq.alfa(k)) then
             maj=.false.
-            goto 30
+            goto 25
          elseif(buf(j:j).eq.alfb(k)) then
             maj=.true.
-            go to 30
+            goto 25
          endif
-   20    continue
+ 21   continue
          k = eol+1
          call xchar(buf(j:j),k)
          if (k .gt. eol) go to 10
@@ -81,16 +90,34 @@ c
             go to 40
          endif
          maj=.false.
- 30      k=k-1
+ 25      k=k-1
 c
-c cas particuliers    :    //    ..
-c        if(k.eq.colon.and.n.eq.1) goto 60
+c     special cases        //    ..
         if(buf(j+1:j+1).ne.buf(j:j)) goto 31
-        if(k.eq.slash) goto 45
+
+        if(k.eq.slash) then
+c     .    check if // occurs in a string
+           if(isinstring(lin(l0),l-l0+1)) then
+c     .       // is part of a string
+              if (l+1.ge.lsiz) then
+                 call error(108)
+                 return
+              endif
+              lin(l)=slash
+              lin(l+1)=slash
+              j=j+1
+              l=l+2
+              goto 40
+           else
+c     .       // marks beginning of a comment
+              goto 45
+           endif
+        endif
+c
         if(k.ne.dot) goto 31
         if(j.eq.1) goto 70
-c on a trouve ..
-c c'est une ligne suite si il n'y a que des points ensuite ou //
+c     . .. find
+c     check if .. is followed by more dots or //
         jj=j
  28     continue
         if(jj.eq.n)goto 29
@@ -103,14 +130,14 @@ c c'est une ligne suite si il n'y a que des points ensuite ou //
         goto 31
 c
  29     continue
-c la ligne suivante est une ligne suite
+c     next line is a continuation line
         if(job.ne.-1) goto 11
-c gestion des lignes suite dans le cas "scilab appele par fortran"
+c     handle continuation lines when scilab is call as a procedure
         fin=-1
         lpt(6)=-l
         return
-c il n'y a pas de ligne suite ou alors il y a une erreur de syntaxe
-   31 continue
+c     There is no continuation line or syntax error
+ 31     continue
 
          lin(l) = k
          if(maj) lin(l)=-k
@@ -119,7 +146,7 @@ c il n'y a pas de ligne suite ou alors il y a une erreur de syntaxe
             call error(108)
             return
          endif
-   40 continue
+   40 goto 17
 c
    45 continue
       lin(l) = eol
@@ -207,3 +234,77 @@ c
       if(l2.lt.l) goto 84
       goto 45
       end
+
+      logical function isinstring(lin,l)
+c     this function returns true if character l in lin belongs to a
+c     string syntax
+      integer lin(*)
+c     lin is a vector of scilab codes
+c
+      integer dot,blank,quote,right,rparen
+      integer qcount,pchar
+
+      data dot/51/,blank/40/,quote/53/,right/55/,rparen/42/
+c
+      il=0
+      qcount=0
+      pchar=blank
+ 27   il=il+1
+      if(il.ge.l) then
+         if(qcount.eq.0) then
+c     .  Not in string
+            isinstring=.false.
+            return
+         else
+            qcount=0
+c     .     is part of a string
+            isinstring=.true.
+            return
+         endif
+      elseif(abs(lin(il)).eq.quote) then
+         if(qcount.eq.0) then
+            if(pchar.lt.blank.or.pchar.eq.right.or.
+     $           pchar.eq.rparen.or.pchar.eq.dot) then
+c     .          quote marks a tranposition
+            else
+               qcount=qcount+1
+            endif
+         else
+c     .     a quote in a string
+            if(lin(il+1).eq.quote) then
+               il=il+1
+            else
+c     .        end of string
+               qcount=0
+            endif
+         endif
+      endif
+      pchar=lin(il)
+      if(pchar.eq.-blank) pchar=blank
+      goto 27
+      end
+
+      subroutine promptecho(lunit,string,strl)
+      include '../stack.h'
+      character*(*) string
+      character*(bsiz) temp
+      character*10 prpt
+      integer l,strl
+      prpt=' '
+      if(paus.eq.0) then
+         prpt='-->'
+      elseif(paus.lt.10) then
+         write(prpt,'(''-'',i1,''->'')') paus
+      elseif(paus.lt.100) then
+         write(prpt,'(''-'',i2,''->'')') paus
+      elseif(paus.lt.1000) then
+         write(prpt,'(''-'',i3,''->'')') paus
+      else
+         prpt='-*->'
+      endif
+      l=lnblnk(prpt)
+      temp = prpt(1:l)//string(1:strl)
+      call basout(io,lunit,temp(1:l+strl))
+      return 
+      end
+

@@ -1,5 +1,5 @@
       subroutine wbdiag(lda,n,ar,ai,rmax,er,ei,bs,xr,xi,
-     * yr,yi,scale,job,fail)
+     *     yr,yi,scale,job,fail)
 c
 c!purpose
 c   wbdiag reduces a matrix a to block diagonal form by first
@@ -83,6 +83,7 @@ c     dset ddot (blas)
 c     wshrsl dad
 c
 c!
+c     Copyright INRIA
 c
       integer lda, n,  bs, job
       double precision ar,ai,er,ei,xr,xi,yr,yi,rmax,scale(n)

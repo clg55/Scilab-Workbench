@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WMPINS,SSI=0
+c     Copyright INRIA
       subroutine wmpins(mat1r,mat1i,dep1,lig1,col1,mat2r,mat2i,
      & dep2,lig2,col2,matrr,matri,depr,ligr,colr)
 c!but

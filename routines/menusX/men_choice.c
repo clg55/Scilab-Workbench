@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /********************************************************
  * choice.c
  * All the generic stuff for dealing with choice widgets.

@@ -1,4 +1,6 @@
  
+// Copyright INRIA
+ 
 //
  
 deff('[ok]=cmpr(h1,h2,eps)',['h1=h1-h2;';

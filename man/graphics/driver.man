@@ -28,7 +28,7 @@ The selected driver can be one of the following :
 commands. this is the default driver.
 .TP
 "Fig" 
-: an XFig driver ( not fully released )
+: an XFig driver. (Clipping of objects is not provided in XFig).
 .SH SEE ALSO
 xtape, xbasc, xbasimp
 .SH AUTHOR

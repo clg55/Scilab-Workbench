@@ -5,6 +5,7 @@ function [x,y,typ]=standard_outputs(o)
 //  the clock output ports are located on the bottom horizontal side
 //     of the block, regularly located from left to right
 //!
+// Copyright INRIA
 xf=60
 yf=40
 graphics=o(2)

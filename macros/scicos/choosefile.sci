@@ -8,6 +8,7 @@ function fname=choosefile(path,comm,errmess)
 // fname  :  character string : selected file name or empty matrix if none
 //!
 
+// Copyright INRIA
 
 [lhs,rhs]=argn(0)
 select rhs

@@ -4,6 +4,7 @@ function [str]=pol2str(p)
 // p : polynomial (real)
 // str : chracter string
 //!
+// Copyright INRIA
 n=degree(p)
 var=varn(p)
 nv=length(var);while part(var,nv)==' ' then nv=nv-1,end;var=part(var,1:nv);

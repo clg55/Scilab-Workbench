@@ -15,10 +15,10 @@ opt
 : optional character string 
 .RS
 .TP
-'c' 
+ "c"
 : loaded functions are "compiled" to be more efficient (default)
 .TP
-'n' 
+ "n" 
 : loaded functions are not "compiled"
 .RE
 

@@ -24,4 +24,4 @@ EXAMPLE
   norm(R'*R-X)
 
 SEE ALSO
-  qr, svd, bdiag, fullrf
+  spchol, qr, svd, bdiag, fullrf

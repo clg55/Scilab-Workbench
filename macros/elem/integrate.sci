@@ -9,10 +9,11 @@ function x=integrate(expr,var,x0,x1,ea,er)
 //
 //examples:
 //integrate('sin(x)','x',0,%pi)
-//integrate(['if x=0 then 1,';
+//integrate(['if x==0 then 1,';
 //           'else sin(x)/x,end'],'x',0,%pi)
 //
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if size(x0,'*')<>1 then error('x0 must be a real scalar number'),end
 if imag(x0)<>0 then error('x0 doit etre un scalaire reel'),end

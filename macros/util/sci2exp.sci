@@ -11,6 +11,7 @@ function t=sci2exp(a,nom,lmax)
 //  a=[1 2;3 4]
 //  sci2exp(a,'aa')
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 $ // import global variable $ in sci2exp context for efficiency
 select rhs
@@ -67,7 +68,10 @@ if rhs<2 then lmax=0,end
 dots='.'+'.'
 t=[];
 quote=''''
+
 a=strsubst(a,quote,quote+quote)
+dquote='""'
+a=strsubst(a,dquote,dquote+dquote)
 a=quote(ones(a))+a+quote(ones(a))
 
 for i=1:m
@@ -190,7 +194,7 @@ if rhs<2 then lmax=0,end
 
 [m,n]=size(a),var=' ';lvar=1
 var=varn(a),lvar=length(var);
-while part(var,lvar)=' ' then lvar=lvar-1,end
+while part(var,lvar)==' ' then lvar=lvar-1,end
 var=part(var,1:lvar);
 if m<0 then
   t=pol2exp(a+0)
@@ -242,7 +246,7 @@ for i=1:m
     [ny,my]=size(y)
 
     if lmax==0|length(x($))+length(y(1))<lmax then
-      if j=1 then
+      if j==1 then
          x=y(1)
       else
          x($)=x($)+','+y(1),
@@ -347,7 +351,7 @@ for i=1:m
   for j=1:n,
     y=a(i,j);
     if lmax==0|length(x($))+length(y)<lmax then
-      if j=1 then
+      if j==1 then
         x=y
       else
         x($)=x($)+','+y,
@@ -375,7 +379,7 @@ function t=func2exp(a,lmax)
 [lhs,rhs]=argn(0)
 if rhs<2 then lmax=0,end
 [out,in,text]=string(a)
-if out=[] then out=emptystr(),end
+if out==[] then out=emptystr(),end
 text=str2exp(text,lmax)
 nt=size(text,'*')
 if named then mac=nom,else mac='mac',end

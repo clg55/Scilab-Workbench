@@ -14,16 +14,17 @@ function [xh]=hilb(n,wtype,par)
 //
 //!
 // author: C. Bunks  date: 3 Jan 1989
- 
+// Copyright INRIA
+
    [lhs,rhs]=argn(0);
-   if rhs=1 then,
+   if rhs==1 then,
       wtype='re';
       par=[0 0];
-   else if rhs=2 then,
+   else if rhs==2 then,
       par=[0 0];
    end,
    end,
-   if int(n/2)=n/2 then,
+   if int(n/2)==n/2 then,
       error('Error---Filter length must be odd')
    end,
    no2=(n-1)/2;

@@ -1,4 +1,4 @@
-function elts=pfss(S,cord)
+function elts=pfss(S,rmax,cord)
 //Syntax : elts=pfss(S)
 //Partial fraction decomposition of the linear system S (in state-space form):
 // elts is the list of linear systems which add up to S
@@ -8,17 +8,27 @@ function elts=pfss(S,cord)
 // If S is given in transfer form, it is first converted into state-space
 // and each subsystem is then converted in transfer form.
 //!
+// Copyright INRIA
 flag=0;
 [LHS,RHS]=argn(0);
 FLAG=S(1)
 if FLAG(1)=='r' then flag=1;S=tf2ss(S);end
-
+if RHS==1 then rmax=[];cord=[];end
+if RHS==2 then 
+  if type(rmax)==10 then cord=rmax;end
+  if type(rmax)==1 then cord=[];end
+end
 //-compat type(S)<>15 retained for list/tlist compatibility
 if type(S)<>15&type(S)<>16 then error(91,1),end
 [t,f,g,h,dd,dom]=S([1:5,7]);
 if t(1)<>'lss' then error(91,1),end;
 [n,n]=size(f);
-[f,x,bs]=bdiag(f);h=h*x;g=x\g;
+if rmax==[] then
+[f,x,bs]=bdiag(f);
+else
+[f,x,bs]=bdiag(f,rmax);
+end
+h=h*x;g=x\g;
 k=1;ll=0;
 elts=list();
 for l=bs',

@@ -1,4 +1,5 @@
       subroutine wspasp(nr,nc,ar,ai,nela,inda,br,bi,nelb,indb,cr,ci,
+c     Copyright INRIA
      $     nelc,indc,ia,ib,ierr)
 c!pupose
 c     add two sparse complex matrices.

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <X11/Intrinsic.h>
 #include <dirent.h>
 #include <stdio.h>
@@ -394,7 +395,7 @@ graph *g;
 {
   mylink *p;
   node *n, *tail, *head;
-  int c;
+  int c,i;
   arc *a;
   int iscoord;
 
@@ -419,9 +420,8 @@ graph *g;
     }
   }
 
-  p = g->arcs->first;
-  while (p) {
-    a = (arc*)p->element;
+  for (i = 1; i <= g->arc_number; i++) {
+    a = GetArc(i,g);
     tail = a->tail;
     head = a->head;
     c = ComputeNewType(tail,head);
@@ -433,7 +433,6 @@ graph *g;
       AddListElement((ptr)a,tail->connected_arcs);
       AddListElement((ptr)a,head->connected_arcs);
     }
-    p = p->next;
   }
   return 1;
 }

@@ -24,7 +24,7 @@ DESCRIPTION
   around the string (only if angle=0 )
 
 EXAMPLE
-  plot2d([0,1],[0,1])
+  plot2d([0;1],[0;1],0)
   xstring(0.5,0.5,["Scilab","is" ; "Not","Basilc"])
   //Other example
   alphabet=['a ','b ','c ','d ','e ','f ','g ',...
@@ -35,7 +35,7 @@ EXAMPLE
   xset('default');              //default graphic parameters
   xset("window",1);             //set window number to 1
   xclear();
-  plot2d([0,1],[0,2])
+  plot2d([0;1],[0;2],0);
   xstring(0.1,1.8,alphabet)     //alphabet
   xstring(0.1,1.6,alphabet,20)  //angle
   xset("font",1,1)              //symbol fonts

@@ -42,13 +42,13 @@ We give below examples where tlist are used.
 
 Linear systems are represented by specific \fVtyped-list\fR e.g. a
 linear system \fV[A,B,C,D]\fR is represented by the tlist
-\fVSys=tlist(['lss';'A';'B';'C';'D';'X';'td'],A,B,C,D,x0,'c')\fR 
+\fVSys=tlist(['lss';'A';'B';'C';'D';'X0';'dt'],A,B,C,D,x0,'c')\fR 
 and this specific list may be created by the function \fVsyslin\fR.
 .LP
 Sys(2) or Sys('A') is the state-matrix and Sys('td') is the time domain
 .LP
 A rational matrix \fVH\fR is represented by the \fVtyped-list\fR
-\fVH=tlist(['r';'num';'den';'td'],Num,Den,[])\fR where \fVNum\fR and \fVDen\fR are two
+\fVH=tlist(['r';'num';'den';'dt'],Num,Den,[])\fR where \fVNum\fR and \fVDen\fR are two
 polynomial matrices and a  (e.g. continuous time) linear system with
 transfer matrix \fVH\fR maybe created by \fVsyslin('c',H)\fR.
 .LP

@@ -1,6 +1,7 @@
 function []=velo4p()
 // version with full wheels with  xgeom & xfpoly
 // ( geom performs the geometric calculations)
+// Copyright INRIA
 t= t*180/%pi;
 p= p*180/%pi;
 xe=[xmin,xmax,xmax,xmin,xmin]
@@ -27,7 +28,7 @@ deff('[]=traj(i)',['j=i-1;';
 
 //Caution: start at i=2
 for i=2:1:n2;velod(i);
-//traj();
+traj(i);
 velod(i);end
 velod(n2);
 xset("alufunction",3);

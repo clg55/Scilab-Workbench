@@ -101,7 +101,14 @@ DESCRIPTION
 
        lkn   = lkn-1(kn)
 
-               lkn(i,j)
+               lkn(i,j) i and j, can be:
+
+       When path points on more than one list component the instruction must
+       have as many left hand side arguments as selected components. But if
+       the extraction syntax is used within a function input calling sequence
+       each returned list component is added to the function calling
+       sequence.
+
        -  real scalar or vector or matrix with positive elements.
 
            [r1,...rn]=l(i) extracts the i(k) elements from the list l and
@@ -109,8 +116,8 @@ DESCRIPTION
 
        -  the  :  symbol which stands for "all elements".
 
-       -  a vector of booleans. If i is a vector of booleans it is
-          interpreted as find(i).
+       -  a vector of booleans. If i is a vector of booleans it is inter-
+          preted as find(i).
 
        -  a polynomial.  If i  is a vector of polynomials or implicit polyno-
           mial vector it is interpreted as horner(i,m) where m=size(l).
@@ -158,6 +165,7 @@ EXAMPLE
   l(1)
   [a,b]=l([3 2])
   l($)
+  x=tlist(l(2:3)) //form a tlist with the last 2 components of l
   //
   dts=list(1,tlist(['x';'a';'b'],10,[2 3]));
   dts(2)('a')

@@ -15,6 +15,7 @@ function [co,u,g,itv,dtv]=icse(u,simu,nap,imp)
 //dtv(ndtv) : tableau de travail (double precision fortran)
 //Utiliser les macros icot et icob pour extraire l'etat
 //!
+// Copyright INRIA
 df0=1;
 nu=prod(size(u))
 ech=ones(1,nu);

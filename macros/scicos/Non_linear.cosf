@@ -1,7 +1,7 @@
-scicos_ver = 'scicos2.3'
+scicos_ver = 'scicos2.3.1'
 scs_m=list()
-scs_m(1)=list([450,450,0,0],..
-['Non_linear','/usr/arte/local/lib/scilab-2.3/macros/scicos/'],[],[],' ')
+scs_m(1)=list([450,450,0,0],['Non_linear','/usr/local/lib/scilab/macros/scicos/'],[],[],..
+' ',list(),list(%t,[0.8,0.8,0.8]),[],[],[])
 scs_m(2)=list('Block',..
          list([39.593909,354.3038],[40,40],%t,['0.1';'1'],0,0,[],[],..
          ['thick=xget(''thickness'');xset(''thickness'',2);';
@@ -88,7 +88,7 @@ scs_m(15)=list('Block',..
           list('maxblk',-1,1,[],[],[],[0;0],[],[],'c',[],[%t,%f],' ',list()),' ',..
           'MAX_f')
 scs_m(16)=list('Block',..
-          list([237.56345,31.898734],[40,40],%t,..
+          list([237.56345,31.898734],[40;50],%t,..
           ['[0;1]';
           '[]';
           '[0.2+%i*0.8,0.2-%i*0.8;';

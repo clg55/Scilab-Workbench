@@ -1,5 +1,6 @@
 SHELL = /bin/sh
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/wsci.a
 
@@ -7,7 +8,8 @@ OBJSC1 =wtext.o wgnuplib.o wmenu.o wprinter.o wpause.o wgraph.o winmain.o \
 	wmhelp.o wgmenu.o wstatbar.o gvwprn.o wmprint.o wmtex.o
 
 OBJSC2 =readwin.o wtloop.o misc.o \
-	command.o readcons.o x_zzledt.o jpc_Xloop.o sh.o
+	command.o readcons.o x_zzledt.o jpc_Xloop.o sh.o \
+	strings.o files.o tclWinError.o 
 
 OBJSC = $(OBJSC1) $(OBJSC2)
 
@@ -18,6 +20,8 @@ CFLAGS = $(CC_OPTIONS) -I../ -Wall
 FFLAGS = $(FC_OPTIONS)
 
 include ../Make.lib
+
+
 
 #================== dependencies 
 
@@ -46,7 +50,7 @@ test	: $(RESOURCES) wtest.o ../../libs/wsci.a
 	$(CC) $(CFLAGS) $(LINKEROPT) -o ../../bin/test.exe wtest.o \
 	$(RESOURCES) ../../libs/wsci.a ../../libs/graphics.a \
 	../../libs/wsci.a ../../libs/menusX.a \
-	../../libs/sun.a ../../libs/system.a ../../libs/xdr.a -Wl,-subsystem,console $(WIN32LIBS)
+	../../libs/sun.a ../../libs/system.a ../../libs/xdr.a -Wl,-subsystem,console $(WINLIBS)
 
 wtest.o : wtloop.c 
 
@@ -65,7 +69,7 @@ lpr.o : gvwprn.c
 RUNOBJSC = runscilab.o
 RUNRESOURCES= Rrunscilab.o
 
-RUNLINKEROPT=-Wl,-subsystem,windows
+RUNLINKEROPT=-Wl,-subsystem,windows,-S
 
 all	:: ../../bin/runscilab.exe
 

@@ -1,14 +1,19 @@
       subroutine macro
 c
+c     Copyright INRIA
       include '../stack.h'
 c     
+      parameter (nz2=nsiz-2,nz3=nsiz-3)
       double precision val
       integer eol
-      logical eqid,ptover
+      logical eqid,ptover,vargin,vargout
       integer blank,r,ival(2),ptr,top1,count,iadr
+      integer varargin(nsiz),varargout(nsiz)
       equivalence (ival(1),val)
       data blank/40/,eol/99/
-      
+      data varargin/169544223,387059739,nz2*673720360/
+      data varargout/169544223,504893467,673720349,nz3*673720360/
+c
 c
       iadr(l)=l+l-1
 c
@@ -32,6 +37,7 @@ c
       ilk=iadr(fin)
 c     
       if(istk(ilk).eq.10) then
+c     an execstr
          mrhs=0
          rhs=0
          mlhs=0
@@ -43,6 +49,7 @@ c
             last=lin(k+5)
          endif
       else
+c     a macro
          wmac=0
          if(nmacs.gt.0) then
             do 15 im=1,nmacs
@@ -60,10 +67,12 @@ c     set output variable name
          mlhs=istk(l)
          l0=l
          l=l+nsiz*mlhs+1
-         if(mlhs.lt.lhs) then
+         vargout=.false.
+         if(mlhs.gt.0) vargout=eqid(istk(l-nsiz),varargout)
+         if(mlhs.lt.lhs.and..not.vargout) then
             if(mlhs.ne.0.or.lhs.gt.1) then
                lhs=mlhs
-               pstk(pt)=l0
+               pstk(pt)=l0+1
                call error(59)
                return
             endif
@@ -79,7 +88,9 @@ c     set input variable name
             if(comp(1).eq.0.and.rhs.eq.1) top=top-1
             rhs=0
          endif
-         if(mrhs.lt.rhs) then
+         vargin=.false.
+         if(mrhs.gt.0) vargin=eqid(istk(l-nsiz-1),varargin)
+         if(mrhs.lt.rhs.and..not.vargin) then
             pstk(pt)=l1-(rhs-1)*nsiz
             rhs=mrhs
             call error(58)
@@ -112,6 +123,11 @@ c
       ids(1,pt) = rhs
       ids(2,pt) = lhs
       ids(3,pt)=lf
+      if(vargout) then
+         ids(4,pt)=1
+      else
+         ids(4,pt)=0
+      endif
       pstk(pt)=lct(4)
 c     
       macr=macr+1
@@ -122,34 +138,48 @@ c     set line pointers
       lpt(4) = lpt(1)
       lpt(3) = lpt(1)
       lpt(2) = lpt(1)
-cc_ex lct(1) = 0
+c     c_ex lct(1) = 0
       if (ddt .ne. 2) lct(4)=-1
       char1 = blank
       lin(lpt(4)+1)=blank
 c     
 c     save input variables
-      if(comp(1).eq.0.and.mrhs.gt.0) then
-         mrhs=rhs
-         rhs=0
-         do 20 j=1,mrhs
-            if(infstk(top).ne.1) then
-               call stackp(istk(l1),0)
-            else
-               call stackp(idstk(1,top),0)
+      if(comp(1).eq.0) then
+         if( mrhs.gt.0) then
+             if(vargin.and.rhs.ge.mrhs-1) then
+               call mklist(rhs-mrhs+1)
+               rhs=mrhs
+               l1=l-nsiz-1
             endif
-            l1=l1-nsiz
- 20      continue
+            mrhs=rhs
+            rhs=0
+            do 20 j=1,mrhs
+               if(infstk(top).ne.1) then
+                  call stackp(istk(l1),0)
+               else
+                  call stackp(idstk(1,top),0)
+               endif
+               l1=l1-nsiz
+ 20         continue
+         endif
+         if(vargout) then
+            call mklist(0)
+            call stackp(varargout,0)
+         endif
       endif
 c     
       toperr=top
       if(istk(ilk).eq.13) then
          lct(8)=1
          rstk(pt)=501
+c     next line for forced rhs
+         ids(5,pt)=0
          icall=6
 c     *call* run
       else
          lct(8)=1
          rstk(pt)=502
+c         pstk(pt)=0
          icall=7
 c     *call* parse
       endif
@@ -159,7 +189,7 @@ c
 c     fin de l'execution d'une macro
 c-----------------------------------
 c     handle errcatch
-      if(errct.ne.0.and.errpt.ge.pt) then
+      if(errct.ne.0.and.errpt.ge.pt.and.rstk(pt-1).ne.903) then
          errct=0
          errpt=0
          err1=0
@@ -178,6 +208,7 @@ c
       rhs=ids(1,pt)
       lhs=ids(2,pt)
       lct(4)=pstk(pt)
+      vargout=ids(4,pt).eq.1
 c     
       if(comp(1).ne.0) then
          comp(2)=comp(1)
@@ -191,11 +222,18 @@ c     recopie des variables de sorties en haut de la pile
 c     set output variable name
          mlhs=istk(l0)
          if(mlhs.eq.0.and.lhs.le.1) lhs=0
+
+         if(vargout.and.lhs.ge.mlhs) then
+            lhs1=mlhs-1
+         else
+            lhs1=lhs
+         endif
+
          l0=l0+1
-         if(lhs.gt.0) then
+         if(lhs1.gt.0) then
             mrhs=rhs
             rhs=0
-            do 41 i=1,lhs
+            do 41 i=1,lhs1
                fin=0
                call stackg(istk(l0))
                if(fin.eq.0) then
@@ -206,6 +244,13 @@ c     set output variable name
                l0=l0+nsiz
  41         continue
             rhs=mrhs
+         endif
+         if(lhs1.lt.lhs) then
+c     extract required output variables out of varargout
+            nv=lhs-mlhs+1
+            call stackgl(istk(l0),nv)
+            if(err.gt.0) return
+            l0=l0+nsiz
          endif
       endif
 c     
@@ -223,10 +268,18 @@ c
 c     dans les macros compilees
             count=pstk(pt+2)
             lc=ids(1,pt+1)+1
-            do 44 i=1,lhsr
-               call stackp(istk(lc),0)
-               if(err.gt.0) return
+c     .     preserve names stored in the macro if macro is moved
+            if(pt+lhsr.gt.psiz) then
+               call error(26)
+               return
+            endif
+            do 43 i=1,lhsr
+               call putid(ids(1,pt+i),istk(lc))
                lc=lc+nsiz+1
+ 43         continue
+            do 44 i=1,lhsr
+               call stackp(ids(1,pt+i),0)
+               if(err.gt.0) return
  44         continue
          else
 c     dans les macros non compilees
@@ -289,14 +342,16 @@ c     exec
       lin(k+3) = lpt(3)
       lin(k+4) = lpt(4)
       lin(k+5) = isiz-4
+c     two following lines set information necessary for  stackp to know 
+c     current macro context
       if(macr.ge.1) lin(k+5)=lin(lpt(1)-(8+nsiz))
       if(rio.eq.rte) lin(k+5)=bot
-c     les deux lignes precedentes sont necessaires pour que stackp connaisse
-c     l'environnement de la macro courante
+
       lin(k+6) = lct(4)
+c     following lines allows to distinguish between macro (<>0) and
+c      exec (=0)
       lin(k+7)=0
-c     la ligne precedente permet de distinguer si c'est une macro (<>0) ou un
-c     exec (=0) qui est au top level d'execution
+c
       lin(k+10)=char1
       lin(k+11)=sym
       lin(k+12+nsiz)=lct(8)

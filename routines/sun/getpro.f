@@ -8,6 +8,7 @@ c     getarg(0,..) retourne les caracteres compris entre le debut de
 c     l'instruction et le premier blanc , c'est a dire a peu pres la
 c     facon dont on a designe l'executable
 c!
+c     Copyright INRIA
       character*(*) getpro
       getpro=' '
       call fgetarg(0,getpro)

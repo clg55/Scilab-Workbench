@@ -11,6 +11,7 @@ function []=Sfgrayplot(x,y,f,strf,rect,aaint)
 // | /| /|
 // |/_|/_|
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 if rhs<=0,s_mat=['deff(''[z]=surf(x,y)'',''z=x**3+y'');';
                 'Sfgrayplot(-1:0.1:1,-1:0.1:1,surf);'];
@@ -19,7 +20,7 @@ if rhs<=0,s_mat=['deff(''[z]=surf(x,y)'',''z=x**3+y'');';
 if rhs <= 3,strf="121";end
 if rhs <= 4,rect=[-1,-1,1,1];end
 if rhs <= 5,aaint=[10,2,10,2];end
-if type(f)=11 then comp(f),end;
+if type(f)==11 then comp(f),end;
 p=prod(size(x));
 q=prod(size(y));
 noe_x = ones(y).*.x;

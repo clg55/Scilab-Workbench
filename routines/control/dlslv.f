@@ -29,6 +29,8 @@ c!sous programmes appeles
 c     dgeco dgesl dgedi (linpack)
 c     dcopy (blas)
 c     abs (fortran)
+c!Origine S Steer
+c     Copyright INRIA
 c!
       double precision a(na,n),b(*),w(*),rcond,dt(2)
       integer sadr

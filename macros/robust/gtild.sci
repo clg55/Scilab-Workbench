@@ -11,6 +11,7 @@ function Gt=gtild(G,flag)
 // returns Gt = z^n * G(1/z)' (n = maximum degree of G)
 // for discrete-time matrix polynomials
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs==1 then
   if typeof(G)=='rational'
@@ -37,9 +38,9 @@ case 'rational'
 v=varn([G(2),G(3)]);s=poly(0,v);
 if flag=='c'
     Gt=horner(G',-s);return;
-elseif flag='d' 
+elseif flag=='d' 
   Gt=horner(G',1/s);return;
-elseif flag=[]
+elseif flag==[]
   warning('Flag not given : assumes c');
   Gt=cp_tilde(G);return;
 end
@@ -47,25 +48,25 @@ end
 case 'state-space'
 if flag==[] then dom=G(7);else dom=flag;end
 [A,B,C,D]=abcd(G);
-if dom='c' then
-     if typeof(D)='polynomial'
+if dom=='c' then
+     if typeof(D)=='polynomial'
         Dp=horner(D,-poly(0,varn(D)));
         Gt=syslin(dom,-A',-C',B',Dp');return;
-     elseif typeof(D)='constant'
+     elseif typeof(D)=='constant'
         Gt=syslin(dom,-A',-C',B',D');return
      end
 elseif dom=='d'
-     if typeof(G(5))='polynomial'
+     if typeof(G(5))=='polynomial'
         Dp=horner(D,1/poly(0,varn(D)));
 	Dp=tf2ss(Dp);
 	[A,B,C,D]=abcd(G');
-	w=list('des',eye(A),B,C,0*C*B,A);
+	w=tlist(['des','A','B','C','D','E'],eye(A),B,C,0*C*B,A);
 	z=poly(0,'z');zss=-tf2ss(z);zss(7)='d';
 	Gt=zss*des2ss(w)+Dp';
-     elseif typeof(G(5))='constant'
+     elseif typeof(G(5))=='constant'
         z=poly(0,'z');zss=-tf2ss(z);zss(7)='d';
         [A,B,C,D]=abcd(G');  //lazy way for transposition...
-        w=list('des',eye(A),B,C,0*D,A);
+        w=tlist(['des','A','B','C','D','E'],eye(A),B,C,0*D,A);
         Gt=zss*des2ss(w)+D;   //-z*C*inv(I-z*A)*B + D
      end
 end

@@ -1,10 +1,9 @@
+/* Copyright INRIA */
 #include <string.h>
 #include "FTables0.h"
 #include "FTables.h"
-#include "../machine.h"
+#include "../stack-c.h"
 #include "../sun/link.h"
-
-
 
 extern int C2F(getcodc) _PARAMS((integer *nd1, integer *iflag1));
 static voidf SetFunction  _PARAMS((char *name, int *rep, FTAB *table));  
@@ -355,6 +354,60 @@ void C2F(setfintg)(name,rep)
 }
 
 /***********************************
+ * Search Table for int2d
+ *    uses : fint2d
+ ***********************************/
+
+/** the current function fixed by setfint2d **/
+
+static fint2df fint2dfonc ;
+
+/** function call : WARNING fintg returns a double  **/
+
+double *C2F(fint2d)(x,y)
+     double *x,*y;
+{
+  return((*fint2dfonc)(x,y));
+}
+
+/** fixes the function associated to name **/
+
+void C2F(setfint2d)(name,rep)
+     char *name;
+     int *rep;
+{
+  fint2dfonc = (fint2df) SetFunction(name,rep,FTab_fint2d);
+}
+
+/***********************************
+ * Search Table for int3d
+ *    uses : fint3d
+ ***********************************/
+
+/** the current function fixed by setfint3d **/
+
+static fint3df fint3dfonc ;
+
+/** function call : WARNING fintg returns a double  **/
+
+void C2F(fint3d)(xyz,numfun,v)
+     double *xyz,*v;
+     integer *numfun;
+{
+  (*fint3dfonc)(xyz,numfun,v);
+}
+
+/** fixes the function associated to name **/
+
+void C2F(setfint3d)(name,rep)
+     char *name;
+     int *rep;
+{
+  fint3dfonc = (fint3df) SetFunction(name,rep,FTab_fint3d);
+}
+
+
+/***********************************
  * Search Table for fsolve 
  *    uses : fsolvf and fsolvj 
  ***********************************/
@@ -646,6 +699,12 @@ void C2F(interf)(x1 ,x2 ,x3 ,x4 ,x5 ,x6 ,x7 ,x8 ,x9 ,x10,
 	       x21,x22,x23,x24,x25,x26,x27,x28,x29,x30);
 }
 
+
+void C2F(interf1)(name) char *name;
+{
+  ((interff1) *interffonc)(name,strlen(name));
+}
+
 /** fixes the function associated to name **/
 
 void C2F(setinterf)(name,rep)
@@ -659,7 +718,7 @@ void C2F(setinterf)(name,rep)
 
 
 /*******************************************
- * General function 
+ * General functions 
  *******************************************/
 
 static voidf SetFunction(name,rep,table) 
@@ -725,3 +784,45 @@ static int SearchComp(Ftab,op,realop)
   return(FAIL);
 }
 
+
+
+
+/*********************************************************
+ * General function to get an external 
+ * when writting an interface 
+ *********************************************************/
+
+#define a_chain 10
+#define a_function 13
+
+extern int C2F(vartype) _PARAMS((integer*));
+
+voidf GetFuncPtr(name,n,Table,scifun,ifunc,lhs,rhs)
+        char *name;
+        int n,*lhs,*rhs,*ifunc;
+        FTAB *Table;
+        voidf scifun;
+{
+  int type,rep,mm,nn;
+  voidf f;
+  type=C2F(vartype)(&n);
+  switch ( type)
+    {
+    case a_chain :
+      GetRhsVar(n, "c", &mm, &nn, ifunc);
+      f = SetFunction(cstk(*ifunc),&rep,Table);
+      if ( rep == 1 )
+        {
+          Error(999);
+          return (voidf) 0;
+        }
+      return f ;
+    case  a_function :
+      GetRhsVar(n, "f", lhs,rhs, ifunc);
+      return (voidf) scifun ;
+    default:
+      sciprint("Wrong parameter in %s ! (number %d)\r\n",name,n);
+      Error(999);
+      return (voidf) 0 ;
+    }
+}

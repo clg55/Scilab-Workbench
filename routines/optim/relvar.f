@@ -1,6 +1,7 @@
-C/MEMBR ADD NAME=RELVAR,SSI=0
       subroutine relvar(ind,n,x,binf,bsup,x2,g,diag,imp,io,ibloc,izag,
      &iter,nfac,irit)
+c     Copyright INRIA
+
 c     determination des variables a relacher par meth bertsekas
       implicit double precision (a-h,o-z)
       dimension x(n),binf(n),bsup(n),x2(n),g(n),ibloc(n),diag(n)

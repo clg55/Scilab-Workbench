@@ -1,5 +1,6 @@
 function t=trace(a)
 // trace - computes the trace of a matrix
+// Copyright INRIA
 select type(a)
 case 1 then
   [m,n]=size(a)

@@ -1,6 +1,7 @@
        subroutine dspcle(ma,na,a,nela,inda,r,nelr,indr,abstol,reltol)
 c     cleans a sparse matrix
 c!
+c     Copyright INRIA
       integer inda(*),indr(*)
       integer ma,na,nela,nelr
       double precision a(*),r(*),abstol,reltol

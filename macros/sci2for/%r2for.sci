@@ -1,11 +1,12 @@
 function [stk,nwrk,txt,top]=%r2for(nwrk)
 // genere le code Fortran relatif a la division a droite
 //!
+// Copyright INRIA
 txt=[]
 s2=stk(top);s1=stk(top-1);top=top-1;
 if s1(4)=='1'&s1(5)=='1'&s2(4)=='1'&s2(5)=='1' then
-   if s2(2)='2'|s2(2)='1' then s2(1)='('+s2(1)+')',end
-   if s1(2)='2' then s1(1)='('+s1(1)+')',end
+   if s2(2)=='2'|s2(2)=='1' then s2(1)='('+s2(1)+')',end
+   if s1(2)=='2' then s1(1)='('+s1(1)+')',end
    stk=list(s1(1)+'/'+s2(1),'1',s1(3),s1(4),s1(5))
 elseif s1(4)=='1'&s1(5)=='1' then
  
@@ -20,7 +21,7 @@ elseif s1(4)=='1'&s1(5)=='1' then
        gencall(['dgefa',out,s2(4),s2(5),ipvt,'ierr']);
        genif('ierr.ne.0',[' ierr='+string(errn);' return']);
        gencall(['dgedi',out,s2(4),s2(5),ipvt,'w',wrk,'1'])]
-  if op(2)=s1(1) then
+  if op(2)==s1(1) then
     txt=[txt;gencall([' dcopy',mulf(s2(4),s2(5)),out,'1',s1(1),'1'])]
     out=s1(1)
   end
@@ -30,10 +31,10 @@ elseif s2(4)=='1'&s2(5)=='1' then
   if out<>s1(1) then
     txt=gencall(['dcopy',mulf(s1(4),s1(5)),s1(1),'1',out,'1'])
   end
-  if s2(2)='2'|s2(2)='1' then s2(1)='('+s2(1)+')',end
+  if s2(2)=='2'|s2(2)=='1' then s2(1)='('+s2(1)+')',end
   txt=[txt;gencall(['dscal',mulf(s1(4),s1(5)),'1.0d0/'+s2(1),out,'1'])]
  
-  if op(2)=s2(1) then
+  if op(2)==s2(1) then
     txt=[txt;gencall(['dcopy',mulf(s1(4),s1(5)),out,'1',s2(1),'1'])]
     out=s2(1)
   end

@@ -1,7 +1,10 @@
 function []=bode(sl,fmin,fmax,pas,comments)
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
+dom='c';
 //---------------------
+nyq_frq=[];l10=log(10);
 pas_def='auto' // default
 ilf=0
 typ=type(sl)
@@ -19,20 +22,47 @@ case 16 then  // sl,fmin,fmax [,pas] [,comments]
   if typ=='r' then
     if sl(4)==[] then error('Undefined time domain (sl(4))');end
   end
+  dom=sl('dt')
+  if dom==[]|dom==0 then error(96,1),end
+  if dom=='d' then dom=1;end
+  
   select rhs
   case 1 then //sl
    comments=' '
-   [frq,d,phi]=repfreq(sl);sl=[] 
+   fmin_default=1.d-3;
+   fmax_default=1.d3;
+
+   if dom=='c' then fmax_default=1.d3; else fmax_default=1/(2*dom),end
+   [frq,repf]=repfreq(sl,fmin_default,fmax_default);
+   [d,phi]=dbphi(repf);
+   sl=[] 
   case 2 then // sl,frq
    comments=' '
-   [frq,d,phi]=repfreq(sl,fmin);fmin=[];sl=[]
+   if min(fmin)<=0 then
+     error('bode: requires strictly positive frequency vector')
+   end
+   [frq,repf]=repfreq(sl,fmin);
+   [d,phi]=dbphi(repf);
+   fmin=[];sl=[]
   case 3 , //sl,frq,comments ou sl,fmin,fmax
    if type(fmax)==1 then
       comments=' '
-      [frq,d,phi]=repfreq(sl,fmin,fmax,pas_def),sl=[]
+      if fmin<=0 then
+         error('bode: requires strictly positive frequency range')
+       end
+      [frq,repf]=repfreq(sl,fmin,fmax,pas_def),sl=[]
+      [d,phi]=dbphi(repf);
    else
       comments=fmax
-      [frq,d,phi]=repfreq(sl,fmin);fmin=[];sl=[]
+      if min(fmin)<=0 then
+	error('bode: requires strictly positive frequency vector')
+      end      
+      if type(dom)==1 then nyq_frq=1/2/dom;end
+      if find(fmin>nyq_frq)~=[] then 
+	warning('There are frequencies beyond Nyquist f!');
+      end
+      [frq,repf]=repfreq(sl,fmin);fmin=[];sl=[]
+      [d,phi]=dbphi(repf);
    end
   case 4 ,
     if type(pas)==1 then 
@@ -40,9 +70,17 @@ case 16 then  // sl,fmin,fmax [,pas] [,comments]
     else 
       comments=pas;pas=pas_def;
     end,
-    [frq,d,phi]=repfreq(sl,fmin,fmax,pas)
+    if min(fmin)<=0 then
+      error('bode: requires strictly positive frequency vector')
+    end
+    [frq,repf]=repfreq(sl,fmin,fmax,pas)
+    [d,phi]=dbphi(repf);
   case 5 then,
-    [frq,d,phi]=repfreq(sl,fmin,fmax,pas)
+    if min(fmin)<=0 then
+      error('bode: requires strictly positive frequency vector')
+    end
+    [frq,repf]=repfreq(sl,fmin,fmax,pas)
+    [d,phi]=dbphi(repf);
   else 
     error('Invalid call: sys,fmin,fmax [,pas] [,com]')
   end;
@@ -53,7 +91,7 @@ case 1 then //frq,db,phi [,comments] ou frq, repf [,comments]
     comments=' '
     [phi,d]=phasemag(fmin);fmin=[]
   case 3 then
-    if type(fmax)=1 then
+    if type(fmax)==1 then
       comments=' '//frq db phi
       d=fmin,fmin=[]
       phi=fmax,fmax=[]
@@ -67,6 +105,9 @@ case 1 then //frq,db,phi [,comments] ou frq, repf [,comments]
      error('Invalid call: frq,db,phi,[com] or frq,repf,[com]')
    end;
    frq=sl;sl=[];[mn,n]=size(frq);
+   if min(frq)<=0 then
+     error('bode: requires strictly positive frequencies')
+   end
    if mn<>1 then
       ilf=1;//un vecteur de frequences par reponse
    else
@@ -78,7 +119,7 @@ end;
 [mn,n]=size(phi)
 //
 //Captions
-if comments=' ' then
+if comments==' ' then
    comments(mn)=' ';
    mnc=0
    hx=0.48
@@ -90,15 +131,33 @@ end;
 [ffr,bds]=xgetech();
 //magnitude
 xsetech([0,0,1.0,hx*0.95]);
-plot2d1("oln",frq',d',[1:mn],"061")
+rect=[mini(frq),mini(d),maxi(frq),maxi(d)]
+// just to fix the scales for xgrid
+plot2d1("oln",mini(frq),mini(d),0,"051"," ",rect);
+// xgrid first 
 xgrid(4);
+// now the curves 
+plot2d1("oln",frq',d',[1:mn],"000"," ",rect);
+if type(dom)==1 then
+  [xx1,xx2]=xgetech();
+  val= xx2([2;4])';
+  plot2d1("oln",max(frq)*[1;1],val,5,"000"," ",rect);
+end
 xtitle('Magnitude ',' Hz','db');
 
 //phase
 xsetech([0,hx,1.0,hx*0.95]);
-// We change the phase 
-plot2d1("oln",frq',phi',[1:mn],"061")
+rect=[mini(frq),mini(phi),maxi(frq),maxi(phi)]
+// just to fix the scales for xgrid
+plot2d1("oln",mini(frq),mini(phi),0,"051"," ",rect);
 xgrid(4);
+//  now the curves
+plot2d1("oln",frq',phi',[1:mn],"000");
+if type(dom)==1 then
+  [xx1,xx2]=xgetech();
+  val= xx2([2;4])';
+  plot2d1("oln",max(frq)*[1;1],val,5,"000");
+end
 xtitle('Phase ',' Hz','degrees');
 if mnc>0 then
   xsetech([0,2*hx,1.0,0.1],[0 0 1 1]);
@@ -110,6 +169,7 @@ if mnc>0 then
     xset('dashes',k)
     xsegs([x0;x0+0.08],[y0;y0])
     rect=xstringl(x0+0.1,y0,comments(k))
+    xset('dashes',dash(1));
     xstring(x0+0.1,y0-rect(4)/3,comments(k))
     count=count+1
     y0=y0+dy

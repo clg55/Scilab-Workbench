@@ -1,4 +1,5 @@
       subroutine termf(chaine,n,type)
+c     Copyright INRIA
       integer chaine(n),type
 c
       integer plus,minus,lparen,rparen

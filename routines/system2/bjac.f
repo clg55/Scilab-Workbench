@@ -1,5 +1,6 @@
       subroutine bjac(ny,t,y,ml,mu,jac,nrowj)
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     

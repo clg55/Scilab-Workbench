@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "../machine.h"
 
 #ifdef __STDC__

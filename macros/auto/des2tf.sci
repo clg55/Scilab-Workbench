@@ -1,5 +1,6 @@
 function [Bfs,Bis,tf]=des2tf(des)
 //des admits a D matrix.
+// Copyright INRIA
 [LHS,RHS]=argn(0);
 if LHS<>1 & LHS<> 3 then error('des2tf: 1 or 3 output args needed');end
 [A,B,C,D,E]=des(2:6);

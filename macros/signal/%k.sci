@@ -13,7 +13,8 @@ function [K]=%k(m)
 //
 //!
 //Author F.D.
- 
+// Copyright INRIA
+
    [n1,n2]=size(m);
    un=ones(n1,n2);
    a=un;

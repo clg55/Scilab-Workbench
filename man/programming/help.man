@@ -5,7 +5,6 @@ help - on-line help command
 .SH CALLING SEQUENCE
 .nf
 	help word
-	fhelp('word')
 .fi
 .SH DESCRIPTION
 To each documented word corresponds a \fVword.cat\fR ascii file. these files

@@ -1,6 +1,7 @@
       subroutine bydot2(n,t,y,ydot)
 c     
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     

@@ -1,5 +1,7 @@
       subroutine nlis0 (n,simul,prosca,xn,fn,fpn,t,tmin,tmax,d,g,
      /                  amd,amf,imp,io,logic,nap,napmax,x,izs,rzs,dzs)
+c     Copyright INRIA
+
 c----
 c
 c     nlis0 + minuscules + commentaires

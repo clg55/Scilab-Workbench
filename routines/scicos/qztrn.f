@@ -1,5 +1,6 @@
       subroutine qztrn(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
 c     Scicos block simulator
 c
 c     Gives quantized signal by truncation method

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 
 #include "../machine.h"
 #include <stdio.h>
@@ -13,6 +14,7 @@ extern  char  *getenv();
 #endif
 
 #ifdef __MSC__
+#include <stdlib.h> 
 #ifdef __MINGW32__
 /** XXXXX missing in mingw32 **/
 #define putenv(x) 
@@ -30,14 +32,13 @@ static char tmp_dir[20],buf[128];
 
 void C2F(settmpdir)()
 {
-
 #ifdef WIN32 
-  sprintf(tmp_dir,"C:/tmp/SD_%d_",(int) getpid());
-  sprintf(buf,"mkdir %s",tmp_dir);
-  if (winsystem(buf,0))
-    {
-      sciprint("Error : %s failed\r\n",buf);
-    }
+  if (!getenv("TEMP")) {
+    sprintf(tmp_dir,"C:/tmp/SD_%d_",(int) getpid());
+  } else {
+    sprintf(tmp_dir,"%s\\SD_%d_",getenv("TEMP"),(int) getpid());
+  }
+  SciCreateDirectory(tmp_dir);
 #else 
   sprintf(tmp_dir,"/tmp/SD_%d_",(int) getpid());
   sprintf(buf,"umask 000;if test ! -d %s; then mkdir %s; fi ",tmp_dir,tmp_dir);
@@ -54,12 +55,12 @@ void C2F(settmpdir)()
 void C2F(tmpdirc)()
 {
 #ifdef WIN32 
-  sprintf(tmp_dir,"C:/tmp/SD_%d_",(int) getpid());
-  sprintf(buf,"deltree /Y %s",tmp_dir);
-  if (winsystem(buf,0))
-    {
-      sciprint("Error : %s failed\r\n",buf);
-    }
+  if (!getenv("TEMP")) {
+    sprintf(tmp_dir,"C:/tmp/SD_%d_",(int) getpid());
+  } else {
+    sprintf(tmp_dir,"%s\\SD_%d_",getenv("TEMP"),(int) getpid());
+  }
+  SciRemoveDirectory(tmp_dir);
 #else 
   sprintf(tmp_dir,"/tmp/S*_%d_*",(int) getpid());
   sprintf(buf,"rm -f -r %s >/dev/null  2>/dev/null",tmp_dir);

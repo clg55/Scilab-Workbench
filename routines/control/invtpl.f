@@ -10,6 +10,7 @@ c tm1 vecteur de dimension n  contenant les coeff de l'inverse ranges
 c     comme precedemment.
 c ierr:code d'erreur si ierr.ne.0 matrice non inversible avec l'ordinate
 c
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension t(m),tm1(n)
       data amax/1.0e+30/

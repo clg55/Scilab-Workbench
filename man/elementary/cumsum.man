@@ -16,8 +16,7 @@ x
 y
 : vector or matrix (real or complex)
 .SH DESCRIPTION
-For a vector or a matrix \fVx\fR, \fVy=cumsum(x)\fR (or, equivalently,
-\fVy=cumsum(x,'*')\fR) returns in \fVy\fR the cumulative sum of all the entries
+For a vector or a matrix \fVx\fR, \fVy=cumsum(x)\fR  returns in \fVy\fR the cumulative sum of all the entries
 of \fVx\fR taken columnwise. 
 .LP
 \fVy=cumsum(x,'c')\fR (or, equivalently, \fVy=cumsum(x,2)\fR) returns in 

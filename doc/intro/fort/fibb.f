@@ -1,5 +1,6 @@
       subroutine fibb(fn,n)
 
+c     Copyright INRIA
       n0=0
       n1=1
       if(n.ge.3)then

@@ -21,7 +21,7 @@
 #include "../machine.h"
 
 #define Abs(x) ( ( (x) >= 0) ? (x) : -( x) )
-
+#define Min(x,y) ( ( (x) < (y))  ? (x) : (y) )
 struct soundstream informat;
 ft_t ft;
 
@@ -32,7 +32,12 @@ C2F(loadwave)(filename,res,size_res,ierr)
      integer *ierr,*size_res;
 {
   double maxi,sum;
-  long buf[BUFSIZ], i,size_max;
+  long i,size_max;
+#if defined(__alpha)
+  int buf[BUFSIZ];
+#else
+  long buf[BUFSIZ];
+#endif
   int e, f, havedata,olen;
   double *res1;
   *ierr=0;
@@ -60,11 +65,15 @@ C2F(loadwave)(filename,res,size_res,ierr)
   wavstartread(&informat);
   if ( ft->ierr > 0 ) 
     {
+      sciprint("Error while reading \r\n");
+      *ierr=1;
       return;
     }
   checkformat(&informat);
   if ( ft->ierr > 0 ) 
     {
+      sciprint("Error while reading \r\n");
+      *ierr=1;
       return;
     }
   sciprint("Input file: using sample rate %lu\r\n\tsize %s, style %s, %d %s\r\n",
@@ -82,6 +91,8 @@ C2F(loadwave)(filename,res,size_res,ierr)
       olen = wavread(&informat,buf, (long) BUFSIZ);
       if ( ft->ierr > 0 ) 
 	{
+	  sciprint("Error while reading \r\n");
+	  *ierr=1;
 	  return;
 	}
       *size_res += olen ;
@@ -90,15 +101,25 @@ C2F(loadwave)(filename,res,size_res,ierr)
 	  sciprint(" Sorry wav file too big \r\n");
 	  return;
 	}
+      /** sciprint("2 premier nombres du bloc \r\n"); **/
       for ( i = 0 ; i < olen ; i++ ) 
 	{
+	  /** if (i < 2)
+	    {
+	      sciprint(" %ld \r\n",buf[i]);
+	    }
+	  **/
 	  *res1++ = buf[i];
 	}
     }
   
   fclose(informat.fp);
   /** centering data **/
-
+  /** 
+  sciprint(" Nombre de valeurs lues %d \r\n",*size_res);
+  for (i=0 ; i < Min(*size_res,2) ; i++) 
+    sciprint(" %d -> %f %ld\r\n",i,res[i],(long) res[i]);
+  **/
   sum = 0.0;
   for ( i = 0 ; i < *size_res ; i++ ) 
     {
@@ -120,6 +141,7 @@ C2F(loadwave)(filename,res,size_res,ierr)
       res[i] /=  maxi;
     }
   *ierr= ft->ierr;
+  return ;
 }
 
 C2F(savewave)(filename,res,rate,size_res,ierr)
@@ -189,6 +211,7 @@ C2F(savewave)(filename,res,rate,size_res,ierr)
 	  /* x= v/m*2**(31-1); */
 	  x= (*loc++)/m*2147483647;
 	  buf[i-count ] = (long) x;
+	  /** if (i < 2) sciprint("Ecriture d'un long %f %ld\r\n", x,buf[i-count]); **/
 	}
       num = len - count ;
       wavwrite(&informat,buf, num );
@@ -204,7 +227,6 @@ C2F(savewave)(filename,res,rate,size_res,ierr)
   fclose(informat.fp);
   res[0] = ((double)(size_max))/((double) (*rate));
   *ierr= ft->ierr;
-
 }
 
 init() {

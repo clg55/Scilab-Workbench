@@ -1,15 +1,16 @@
 function [path,name,ext]=splitfilepath(fname)
+// Copyright INRIA
 l=length(fname)
 //getting the extension part
 n=l
 while n>0
   cn=part(fname,n)
-  if cn=='.'|cn=='/' then break,end
+  if cn=='.'|cn=='/'|cn=='\' then break,end
   n=n-1
 end
 if n==0 then
   ext=emptystr()
-elseif cn=='/' then
+elseif cn=='/'|cn=='\' then
   ext=emptystr()
   n=l
 else
@@ -21,7 +22,7 @@ l=n
 n=l
 while n>0
   cn=part(fname,n)
-  if cn=='/' then break,end
+  if cn=='/'|cn=='\' then break,end
   n=n-1
 end
 if n==0 then
@@ -31,5 +32,6 @@ else
   name=part(fname,n+1:l)
   path=part(fname,1:n)
 end
+
 
 

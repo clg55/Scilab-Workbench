@@ -1,7 +1,9 @@
 function [stk,nwrk,txt]=%rc2for(nwrk)
 // genere le code relatif a la concatenation en ligne des matrices
 //!
-rhs=evstr(op(3))
+
+// Copyright INRIA
+rhs=abs(evstr(op(3)))
 nl='0';typ=0
 for k=1:rhs
  sk=stk(top-rhs+k)

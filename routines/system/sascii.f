@@ -7,6 +7,7 @@ c     job: entier, si egal a 1: scilab-->ascii
 c                  si egal a 0: ascii-->scilab
 c
 c!
+c     Copyright INRIA
       include '../stack.h'
 c
       integer line(*),mc

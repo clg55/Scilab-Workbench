@@ -2,6 +2,7 @@ function [x]=and(a)
 // Logical and. A is a matrix of booleans or a real matrix.
 // Returns True or non-zero entries.
 //!
+// Copyright INRIA
 select type(a)
 case 1 then
   k=find(abs(a)==0)

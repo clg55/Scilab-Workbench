@@ -34,8 +34,9 @@ function [pt,dx,dz,dt]=acoustic(vel,tf,fc,spos,dx,dz,dt)
 //
 //!
 //author: C. Bunks     date: 29-Oct-90
+// Copyright INRIA
 
-   [lhs,rhs]=argn(0);
+[lhs,rhs]=argn(0);
    lines(0);
 
 //velocity parameters
@@ -45,19 +46,19 @@ function [pt,dx,dz,dt]=acoustic(vel,tf,fc,spos,dx,dz,dt)
 
 //default check
 
-   if rhs=4 then,//auto calculation of dx, dz, and dt
+   if rhs==4 then,//auto calculation of dx, dz, and dt
       dx=vmin/(16*fc);
       dz=dx;
       dmin=mini([dx,dz]);dmax=maxi([dx,dz]);   
       dt=.95*dmin/(vmax*sqrt(2));//stability condition 
    end,
-   if rhs=5 then,//auto calculation of dx and dz
+   if rhs==5 then,//auto calculation of dx and dz
       dx=vmin/(16*fc);
       dz=dx;
       dmin=mini([dx,dz]);dmax=maxi([dx,dz]);   
    end,
    dmin=mini([dx,dz]);dmax=maxi([dx,dz]);   
-   if rhs=6 then,//auto calculation of dt
+   if rhs==6 then,//auto calculation of dt
       dt=.95*dmin/(vmax*sqrt(2));//stability condition 
    end,
 
@@ -77,7 +78,7 @@ function [pt,dx,dz,dt]=acoustic(vel,tf,fc,spos,dx,dz,dt)
       eflag='off';
    end,end,
    end,end,
-   if eflag='on' then,
+   if eflag=='on' then,
       write(%io(2),'                               '),
       write(%io(2),'*************ERROR*************');
       write(%io(2),'                               '),
@@ -156,6 +157,7 @@ function [utp1]=integrate(t,ut,utm1,src,spos)
 //
 //!
 //author: C. Bunks     date: 29-OCT-90
+// Copyright INRIA
 
    write(%io(2),'t='+string(t));
 
@@ -219,6 +221,7 @@ function [dg]=shot(t,fc)
 //
 //!
 //author: C. Bunks     date: 29-OCT-90
+// Copyright INRIA
 
    m=1/(2*fc);
    sig=m/4;
@@ -233,7 +236,7 @@ function [pt]=get_data(ntbl,entry)
 //       :data dimensions)
 // entry :integer giving the entry in the table-2
 // pt    :returned data file
-
+// Copyright INRIA
    ts=maxi(size(ntbl));
    nr=evstr(ntbl(1));
    nc=evstr(ntbl(2));

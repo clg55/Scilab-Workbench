@@ -7,6 +7,8 @@ Used to define loops. Its syntax is:
 .LP
 .Vb for variable=expression ,instruction,   ,instruction,end
 .LP
+.Vb for variable=expression do instruction,   ,instruction,end
+.LP
 If  \fVexpression\fR is a matrix or a row vector, \fVvariable\fR
 takes as values the values of each column of the matrix.
 .LP

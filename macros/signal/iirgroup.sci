@@ -6,6 +6,7 @@ function [lt,grad]=iirgroup(p,r,theta,omega,wt,td)
 //wt=weighting function for group delay
 //!
 //
+// Copyright INRIA
 [m,n]=size(td);if m>n,td=td';end;
 [m,n]=size(omega);if m>n,omega=omega';end;
 [m,n]=size(r);if n>m,r=r';m=n;end;

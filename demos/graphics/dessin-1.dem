@@ -1,13 +1,14 @@
 
+// Copyright INRIA
 str_l=list();
 str_l(1)=['t=(0:0.1:6*%pi);';
       'plot2d(t'',sin(t)'');'
       'xtitle(''plot2d and xgrid '',''t'',''sin(t)'');';
-      'halt();xgrid();'];
+      'xgrid();'];
 
 str_l(2)=['plot2d1(''enl'',1,(1:10:10000)'');';
-      'xtitle(''plot2d1 log scale'',''t'',''y  log scale'');';
-	'halt();xgrid(3);'];
+         'xtitle(''plot2d1 log scale'',''t'',''y  log scale'');';
+	 'xgrid(3);'];
      
 str_l(3)=['n=32-1;t=(0:n)/n;';
      'u=sin(80*%pi*t)+sin(100*%pi*t);';

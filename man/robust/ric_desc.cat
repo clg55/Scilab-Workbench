@@ -4,7 +4,7 @@ NAME
   ric_desc - Riccati equation
 
 CALLING SEQUENCE
-  [X1,X2,zero]=ric_desc(H,E)
+  X=ric_desc(H [,E))
   [X1,X2,zero]=ric_desc(H [,E])
 
 PARAMETERS
@@ -25,8 +25,8 @@ DESCRIPTION
   Defining the hamiltonian matrix H by:
    H = [A  R;
         Q -A']
-  with the calling sequence [X1,X2,err]=ric_descr(H), the solution X is given
-  by X=X1/X2.
+  with the calling sequence [X1,X2,zero]=ric_descr(H), the solution X is
+  given by X=X1/X2.
 
   zero = L1 norm of rhs of (Ec)
 

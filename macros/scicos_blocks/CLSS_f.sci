@@ -1,4 +1,5 @@
 function [x,y,typ]=CLSS_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -40,14 +41,14 @@ case 'set' then
 	rpar=[A(:);B(:);C(:);D(:)];
 	if D<>[] then	
 	  if norm(D,1)<>0 then
-	    mmm=[%t %f];
+	    mmm=[%t %t];
 	  else
-	    mmm=[%f %f];
+	    mmm=[%f %t];
 	  end
 	  if or(model(12)<>mmm) then 
 	      model(12)=mmm,end
 	else
-	  model(12)=[%f %f];
+	  model(12)=[%f %t];
 	end
 	model(6)=x0(:);model(8)=rpar
 	x(2)=graphics;x(3)=model
@@ -58,7 +59,7 @@ case 'set' then
   x(3)(11)=[] //comptibility
 case 'define' then
   x0=0;A=-1;B=1;C=1;D=0;in=1;out=1
-  model=list(list('csslti',1),in,out,[],[],x0,[],[A;B;C;D],[],'c',[],[%f %f],' ',list())
+  model=list(list('csslti',1),in,out,[],[],x0,[],[A;B;C;D],[],'c',[],[%f %t],' ',list())
   label=[strcat(sci2exp(A));
 	    strcat(sci2exp(B));
 	    strcat(sci2exp(C));

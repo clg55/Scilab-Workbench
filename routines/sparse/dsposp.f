@@ -1,4 +1,5 @@
       subroutine dsposp(op,ma,na,a,nela,inda,mb,nb,b,nelb,indb,
+c     Copyright INRIA
      $     nelc,indc,ierr)
 c!purpose
 c     compare the elements of two  sparse matrices.

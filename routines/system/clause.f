@@ -2,6 +2,7 @@
 c     ======================================================================
 c     gestion des structures de controle
 c     ======================================================================
+c     Copyright INRIA
       include '../stack.h'
       integer while(nsiz),iff(nsiz),else(nsiz),ennd(nsiz)
       integer do(nsiz),thenn(nsiz),cas(nsiz),sel(nsiz)
@@ -65,6 +66,7 @@ c
          call compcl
          if(err.gt.0) return
       endif
+      ids(4,pt-1) = toperr
       rstk(pt) = 801
       icall=1
 c     *call* expr
@@ -74,7 +76,11 @@ c     *call* expr
       toperr=top
       pstk(pt-1) = 0
       ids(1,pt-1)=top
-      if (eqid(syn,do).or.sym.eq.comma.or.sym.eq.semi) then
+      if (eqid(syn,do)) then
+         sym=comma
+         if(char1.eq.eol) call getsym
+      endif
+      if(sym.eq.comma.or.sym.eq.semi) then
          sym = semi
          pstk(pt) = lpt(4) - 1
       elseif( sym.eq.eol) then
@@ -109,6 +115,7 @@ c     *call* parse
 c     
 c     fin for
  20   continue
+      toperr = ids(4,pt-1)
       pt = pt-2
       icall=7
       char1 = blank

@@ -12,26 +12,32 @@ function [npl,nzr,ngn]=bilt(pl,zr,gn,num,den)
 //  den :denominator of transform
 //!
 //author: C. Bunks  date: 5 May 1989
- 
-   n=coeff(num);
+//Updated: 15 Sep 1997
+
+// Copyright INRIA
+n=coeff(num);
    d=coeff(den);
    order=maxi(size(n))-1;
    ms=maxi(size(pl));ns=maxi(size(zr));
-   if order=1 then,
+
+   if order==1 then
       n0=n(1);n1=n(2);
       if prod(size(d))==1 then d=[d,0];end
       d0=d(1);d1=d(2);
-      ngn=prod(n1*ones(zr)-d1*zr)/prod(n1*ones(pl)-d1*pl);
+      if zr == [] then      
+         ngn=1/prod(n1*ones(pl)-d1*pl);
+      else
+         ngn=prod(n1*ones(zr)-d1*zr)/prod(n1*ones(pl)-d1*pl);
+      end
       if ms<>ns then ngn=real(gn*d1**(ms-ns)*ngn);else ngn=real(gn*ngn);end
       nzr=-(n0*ones(zr)-d0*zr)./(n1*ones(zr)-d1*zr);
       npl=-(n0*ones(pl)-d0*pl)./(n1*ones(pl)-d1*pl);
-      if ms>ns then,
+      if ms>ns then
          nzr=[nzr';-(d0/d1)*ones(ms-ns,1)];
-      else if ms<ns then,
+      elseif ms<ns then
          npl=[npl';-(d0/d1)*ones(ms-ns,1)];
-      end,
-      end,
-   else if order=2 then,
+      end
+   elseif order==2 then
       n0=n(1);n1=n(2);n2=n(3);
       d0=d(1);d1=d(2);d2=d(3);
       a=n2*ones(zr)-d2*zr;
@@ -52,17 +58,12 @@ function [npl,nzr,ngn]=bilt(pl,zr,gn,num,den)
       ngn=gn*prod(gz)/prod(gp);
       nzr=[z1,z2];
       npl=[p1,p2];
-      if ms>ns then,
+      if ms>ns then
          nzr=[nzr';-(d0/d1)*ones(ms-ns,1)];
-      else if ms<ns then,
+      elseif ms<ns then
          npl=[npl';-(d0/d1)*ones(ms-ns,1)];
-      end,
-      end,
+      end
       ngn=real(ngn*(gw**(ms-ns)));
-   else,
-      error('error bilt --- wrong order tranform')
-   end,
-   end,
-
-
-
+   else
+      error('error bilt --- wrong order transform')
+   end

@@ -25,7 +25,8 @@ function cels=casc(x,z)
 //  !   7 + 10z + z     8 + 11z + z     9 + 12z + z  !
 //!
 //author: F. D.  date: August 1988
- 
+// Copyright INRIA
+
 cels=[];
 for col=x,
       nf=[col(1:2);1];

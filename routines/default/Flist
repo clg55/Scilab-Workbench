@@ -30,6 +30,18 @@ foptim_list=genros topt2 icsemc
 fintg_list=intgex
 
 # -------------------------------------------------
+# predefined function(s) for int2d
+# --------------------------------------------------
+
+fint2d_list=int2dex
+
+# -------------------------------------------------
+# predefined function(s) for int3d
+# --------------------------------------------------
+
+fint3d_list=int3dex
+
+# -------------------------------------------------
 # predefined function(s) for fsolve 
 # --------------------------------------------------
 
@@ -116,4 +128,4 @@ dgety_list= corexy
 # predefined function(s) for Ex-fort or other Ex-something
 # --------------------------------------------------
 
-interf_list= foubare foobar1 foobar3 icomp loset arset icse0 icse icscof
+interf_list= foubare foobar1 icomp loset arset icse0 icse icscof

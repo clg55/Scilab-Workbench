@@ -1,6 +1,7 @@
 mode(-1)
+// Copyright INRIA
 getf('SCI/demos/graphics/xdemo-1.dem');
-oldln=lines()
+oldln=lines();
 lines(0)
 deff('[]=demoex(num)',['select num,';
      'case 1 then xdemo1()';
@@ -26,7 +27,7 @@ demolist=[
 
 while %t then
   num=x_choose(demolist(:,1),'Choose a demo');
-  if num=0 then 
+  if num==0 then 
      lines(oldln(1))
      return
   else

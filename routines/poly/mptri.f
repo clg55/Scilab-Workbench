@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=MPTRI,SSI=0
+c     Copyright INRIA
       subroutine mptri(d,m,n,diag,dd,job)
 c
       integer d(*),m,n,dd(*),diag,job

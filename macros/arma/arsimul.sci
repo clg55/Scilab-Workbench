@@ -31,16 +31,17 @@ function z=arsimul(a,b,d,sig,u,up,yp,ep)
 // Auteur : J-Ph. Chancelier ENPC Cergrene
 //!
 //
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 //-compat type(a)==15 retain for list/tlist compatibility
 if type(a)==15|type(a)==16,
-   if rhs=2,z=arsimul(a(2),a(3),a(4),a(7),b);return;end
-   if rhs=3,z=arsimul(a(2),a(3),a(4),a(7),b,d);return;end
-   if rhs=4,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig);return;end
-   if rhs=5,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u);return;end
-   if rhs=6,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u,up);return;end
-   if rhs=7,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u,up,yp);return;end
-   if rhs=8,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u,up,yp,ep);return;end
+   if rhs==2,z=arsimul(a(2),a(3),a(4),a(7),b);return;end
+   if rhs==3,z=arsimul(a(2),a(3),a(4),a(7),b,d);return;end
+   if rhs==4,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig);return;end
+   if rhs==5,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u);return;end
+   if rhs==6,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u,up);return;end
+   if rhs==7,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u,up,yp);return;end
+   if rhs==8,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u,up,yp,ep);return;end
 end
 z=0;
 [lhs,rhs]=argn(0)
@@ -74,8 +75,7 @@ deff('[xdot]=fff(t,x)',['xdot1=a_fff*x(nn+1:$)+b_fff*u(:,t)+d_fff*br(:,t)';
 	   'xdot2=xdot1+b(1:al,1:mmu)*u(:,t+1)+d(1:al,1:al)*br(:,t+1);';
 	   'xdot=[xdot1;xdot2];']);
 // Noise simulation.
-rand('normal');
-br=sig*rand(al,Nu);
+br=sig*rand(al,Nu,'normal');
 // Calcul des Conditions initiales pour le systeme en Y_n
 // yp doit etre de taille (al,(adeg-1))
 // up doit etre de taille (al,(bdeg-1))
@@ -119,7 +119,7 @@ end;
 y1=[y1;y1+ b(1:al,1:mmu)*u(:,1)+d(1:al,1:al)*br(:,1)];
 // Simulation par ode et calcul de la sortie
 // z = premiere composante ``bloc'' de Y
-if size(a_fff)=[0,1];
+if size(a_fff)==[0,1];
    z=b(1:al,1:mmu)*u(:,:)+d(1:al,1:al)*br(:,:);
 else
    z=ode('discret',y1,1,2:Nu,fff);z=[y1,z];

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WASUM,SSI=0
+c     Copyright INRIA
       double precision function wasum(n,xr,xi,incx)
 c!but
 c

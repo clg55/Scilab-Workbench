@@ -1,12 +1,16 @@
+#-----------------------------
+# generated from Makefile: DO NOT EDIT
+# -----------------------------
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/signal.lib
 
 OBJSC =
 
-OBJSF = chebc.obj cmpse3.obj dfftbi.obj fft842.obj freque.obj kaiser.obj r2tx.obj rpem.obj \
+OBJSF = sigelm.obj datatf.obj chebc.obj cmpse3.obj dfftbi.obj fft842.obj freque.obj kaiser.obj r2tx.obj rpem.obj \
 	cheby.obj coeft.obj dfftmx.obj filbut.obj hammin.obj nstabl.obj r4tx.obj \
 	cmpse2.obj dfft2.obj ino.obj poles.obj r8tx.obj tscccf.obj  \
 	dpspln.obj dspln.obj tg02ad.obj  amell.obj belan.obj bldenz.obj blnumz.obj bounn.obj  \
@@ -21,3 +25,12 @@ include ../../Makefile.incl.mak
 CFLAGS = $(CC_OPTIONS)
 
 include ../Make.lib.mak
+
+
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile
+
+
+datatf.obj: ../stack.h
+sigelm.obj: ../stack.h

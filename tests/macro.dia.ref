@@ -1,4 +1,6 @@
  
+// Copyright INRIA
+ 
 // simple
  
 //
@@ -84,12 +86,12 @@ if z<>1 then bugmes();quit;end
 text = ['if n>0 then x=1'
                                 'y=0;for k=1:n,y=y+k,end'
                             'else x=-1'
-                                 'if n=4 then y=''yes'' '
+                                 'if n==4 then y=''yes'' '
                                          'else y=''no'' '
                                  'end'
                     'end'
-                   'if n=-1 then return,end'
-                   'if n=-2 then tt=resume(n),end'
+                   'if n==-1 then return,end'
+                   'if n==-2 then tt=resume(n),end'
                     'select x,'
                     'case 1 then x=''pos'' ,tt=resume(''ok''),'
                     'case -1 then x=''neg'' ,'
@@ -115,7 +117,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -131,7 +133,7 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear u v tt
  
@@ -151,7 +153,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -167,7 +169,7 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 //
  
@@ -178,12 +180,12 @@ if exists('tt')=1 then bugmes();quit;end
 text = ['if n>0 then x=1'
                                 'y=0;for k=1:b(n),y=y+b(k),end'
                             'else x=-1'
-                                 'if n=4 then y=b(''yes'') '
+                                 'if n==4 then y=b(''yes'') '
                                          'else y=b(''no'') '
                                  'end'
                     'end'
-                   'if n=b(-1) then return,end'
-                   'if n=b(-2) then tt=resume(b(n)),end'
+                   'if n==b(-1) then return,end'
+                   'if n==b(-2) then tt=resume(b(n)),end'
                     'select x,'
                     'case 1 then x=b(''pos'') ,tt=resume(b(''ok'')),'
                     'case b(-1) then x=b(''neg'') ,'
@@ -211,7 +213,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -227,7 +229,7 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear u v tt
  
@@ -247,7 +249,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -263,7 +265,7 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 deff('[x,y]=t5(n)',text,'n')
  
@@ -283,7 +285,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -299,7 +301,7 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 //
  
@@ -321,7 +323,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -337,11 +339,11 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 //more complex
  
-deff('[x]=b(a)','if a=1 then x=1,else x=a,prod([1 1]),end','n')
+deff('[x]=b(a)','if a==1 then x=1,else x=a,prod([1 1]),end','n')
 Warning :redefining function: b                       
  
  
@@ -365,7 +367,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -381,7 +383,7 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear u v tt
  
@@ -401,7 +403,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -417,7 +419,7 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 //
  
@@ -439,7 +441,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -455,7 +457,7 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 //
  
@@ -477,7 +479,7 @@ if u<>-1 then bugmes();quit;end
  
 if v<>'no' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 clear tt v
  
@@ -493,7 +495,7 @@ u=t5(-4);
  
 if u<>'neg' then bugmes();quit;end
  
-if exists('tt')=1 then bugmes();quit;end
+if exists('tt')==1 then bugmes();quit;end
  
 // resume
  
@@ -505,7 +507,7 @@ t6(15)
  
 if x<>15 then bugmes();quit;end
  
-if exists('ans')=1 then bugmes();quit;end
+if exists('ans')==1 then bugmes();quit;end
  
 //
  
@@ -515,7 +517,7 @@ t6(15)
  
 if x<>15 then bugmes();quit;end
  
-if exists('ans')=1 then bugmes();quit;end
+if exists('ans')==1 then bugmes();quit;end
  
 //
  
@@ -689,7 +691,7 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 //
  
-deff('[x]=b(a)','if a=1 then x=a,prod([1 1]),else x=a,prod([1 1]),end','n')
+deff('[x]=b(a)','if a==1 then x=a,prod([1 1]),else x=a,prod([1 1]),end','n')
 Warning :redefining function: b                       
  
  
@@ -937,16 +939,16 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 //
  
-text=['deff(''[x]=b(a)'',''if a=1 then x=1,else x=a,prod([1 1]),end'',''n''),'
+text=['deff(''[x]=b(a)'',''if a==1 then x=1,else x=a,prod([1 1]),end'',''n''),'
       'b,'
       'x=b(n),']
  text  =
  
-!deff('[x]=b(a)','if a=1 then x=1,else x=a,prod([1 1]),end','n'),  !
-!                                                                  !
-!b,                                                                !
-!                                                                  !
-!x=b(n),                                                           !
+!deff('[x]=b(a)','if a==1 then x=1,else x=a,prod([1 1]),end','n'),  !
+!                                                                   !
+!b,                                                                 !
+!                                                                   !
+!x=b(n),                                                            !
  
 deff('[x]=t8(n)',text','n')
  
@@ -982,12 +984,12 @@ deff('[r]=horner(p,x)',['if type(p)==15|type(p)==16 then';
 Warning :redefining function: horner                  
  
  
-deff('[f]=%prp(p1,p2)',['[l,c]=size(p2);';
+deff('[f]=%p_r_p(p1,p2)',['[l,c]=size(p2);';
                         'if l*c <>1 then f=p1*invr(p2),return,end;';
                         '[l,c]=size(p1);';
                         '[p1 p2]=simp(p1,p2*ones(l,c));';
                         'f=tlist([''r'',''num'',''den'',''dt''],p1,p2,[]);'],'n')
-Warning :redefining function: %prp                    
+Warning :redefining function: %p_r_p                  
  
  
  
@@ -997,37 +999,37 @@ horn=horner;
  
 h=1/s;
  
-if cplist(h,tlist(['r','num','den','dt'],1,s,[]))=0 then bugmes();quit;end
+if cplist(h,tlist(['r','num','den','dt'],1,s,[]))==0 then bugmes();quit;end
  
 h1=(z-1)/(z+1);
  
 hrn=horner(h,h1);
  
-if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))==0 then bugmes();quit;end
  
 //
  
 hrn=horner(h,h1);
  
-if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))==0 then bugmes();quit;end
  
 //
  
 h=1/s;
  
-if cplist(h,tlist(['r','num','den','dt'],1,s,[]))=0 then bugmes();quit;end
+if cplist(h,tlist(['r','num','den','dt'],1,s,[]))==0 then bugmes();quit;end
  
 h1=(z-1)/(z+1);
  
 hrn=horn(h,h1);
  
-if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))==0 then bugmes();quit;end
  
 //
  
 hrn=horn(h,h1);
  
-if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))==0 then bugmes();quit;end
  
 //
  
@@ -1035,10 +1037,10 @@ if cplist(hrn , tlist(['r','num','den','dt'],z+1,z-1,[]))=0 then bugmes();quit;e
  
 //
  
-text=['aa=1,if a=2 then aa=b(a),end']
+text=['aa=1,if a==2 then aa=b(a),end']
  text  =
  
- aa=1,if a=2 then aa=b(a),end   
+ aa=1,if a==2 then aa=b(a),end   
  
 fic=file('open','test_macro_exec','unknown')
  fic  =
@@ -1056,7 +1058,7 @@ Warning :redefining function: b
  
 y=t9(2)
  
- aa=1,if a=2 then aa=b(a),end
+ aa=1,if a==2 then aa=b(a),end
  aa  =
  
     1.  
@@ -1074,7 +1076,7 @@ file('rewind',fic)
  
 y=t9(2)
  
- aa=1,if a=2 then aa=b(a),end
+ aa=1,if a==2 then aa=b(a),end
  aa  =
  
     1.  
@@ -1093,7 +1095,7 @@ if y<>2 then bugmes();quit;end
  
 y=t9(2)
  
- aa=1,if a=2 then aa=b(a),end
+ aa=1,if a==2 then aa=b(a),end
  aa  =
  
     1.  
@@ -1109,7 +1111,7 @@ if y<>2 then bugmes();quit;end
  
 y=t9(2)
  
- aa=1,if a=2 then aa=b(a),end
+ aa=1,if a==2 then aa=b(a),end
  aa  =
  
     1.  

@@ -29,6 +29,8 @@ with range(\fVQ\fR)=range(\fVA\fR) and ker(\fVM\fR)=ker(\fVA\fR),
 \fVtol\fR is an optional real parameter (default value is \fVsqrt(%eps)\fR).
 The rank \fVrk\fR of \fVA\fR is defined as the number of singular values
 larger than \fVnorm(A)*tol\fR.
+.LP
+If A is symmetric, \fVfullrf\fR returns \fVM=Q'\fR.
 .SH EXAMPLE
 .nf
 A=rand(5,2)*rand(2,5);

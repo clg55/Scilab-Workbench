@@ -1,6 +1,7 @@
 c      
 c     SUBROUTINE ener
 c      
+c     Copyright INRIA
       subroutine ener(th,e)
         parameter (n=10)
         implicit doubleprecision (t)

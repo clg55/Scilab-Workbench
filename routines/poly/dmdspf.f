@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DMDSPF,SSI=0
+c     Copyright INRIA
       subroutine dmdspf(x,nx,m,n,maxc,ll,lunit)
 c!but
 c     dmdspf ecrit une matrice  (ou un scalaire) sous la forme d'un

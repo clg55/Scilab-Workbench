@@ -1,7 +1,8 @@
 function [stk,nwrk,txt]=%cc2for(nwrk)
 //
 //!
-rhs=evstr(op(3))
+// Copyright INRIA
+rhs=abs(evstr(op(3)))
 nc='0';typ=0
 for k=1:rhs
  sk=stk(top-rhs+k)

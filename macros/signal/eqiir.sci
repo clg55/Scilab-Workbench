@@ -21,6 +21,7 @@ function [cells,fact,zzeros,zpoles]=eqiir(ftype,approx,om,deltap,deltas)
 //     hz=fact*prod(cells(2))./prod(cells(3))
 //
 //!
+// Copyright INRIA
 select part(approx,1);
    case 'b'
         iapro=1
@@ -28,8 +29,8 @@ select part(approx,1);
         iapro=4
    case 'c'
         last=part(approx,length(approx));
-        if last='1' then iapro=2,end;
-        if last='2' then iapro=3,end
+        if last=='1' then iapro=2,end;
+        if last=='2' then iapro=3,end
    else write(%io(2),'iir : unknown filter approximation');
         return;
 end
@@ -45,7 +46,7 @@ select ftype;
    else write(%io(2),'iir : wrong first input parameter');
      return;
    end
-if maxi(size(om))=2 then
+if maxi(size(om))==2 then
       om=matrix([matrix(om,1,2),0,0],1,4),
 end
 [fact,b2,b1,b0,c1,c0,zzeros,zpoles]=...

@@ -5,7 +5,7 @@ stacksize - set scilab stack size
 .SH CALLING SEQUENCE
 .nf
 stacksize(n)
-szstacksize()
+sz=stacksize()
 .fi
 .SH PARAMETERS
 .TP 10
@@ -19,12 +19,12 @@ sz
 Scilab stores all variables in a unique stack
 \fVstk\fR. 
 
-\fVstacksize(n)\fR allows the user to increase or decrease this
-stack current size. The maximum allowed size depends on the amount of
-cpu memory and swap space, and on the others tools running.
+\fVstacksize(n)\fR allows the user to increase or decrease the size of
+this stack. The maximum allowed size depends on the amount of
+free memory and swap space available at the time.
 
 This function with the \fVn\fR argument may only be called at the main
-prompt time. It cannot be called within a scilab function. 
+prompt; it cannot be called within a scilab function. 
 
 \fVsz=stacksize()\fR returns a 2-vector which contains  the current
 total and used stack size. It can be used everywhere.

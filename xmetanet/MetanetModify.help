@@ -1,10 +1,7 @@
-			     Metanet 3.0
-			     ***********
+			     Metanet 3.0.2
+			     *************
 
 You are in Modify Mode.
-
-***NOTE*** that the only way to exit Modify Mode is to use the item 
-"Quit Modify Mode" of "Modify" menu.
 
 You can modify and save the graph.
 
@@ -12,12 +9,14 @@ With the left button of the mouse, you can highlight an arc or a node.
 
 With the right button of the mouse, you can modify the graph:
 
-- if you click where there is no arc or node, a new node is created
+ - if you click with the right button where there is no arc or node, 
+   a new node is created
 
-- if you click on a node and another node is highlighted, a new arc is created
-	between the two nodes
+ - if you click with the right button on a node and another node is 
+   highlighted, a new arc is created between the two nodes
 
-- if you click on a node and drag the mouse, the node is moved
+ - if you click with the right button on a node and drag the mouse, 
+   the node is moved
 
 Menus description:
 ******************
@@ -31,7 +30,8 @@ Files
   Save As: Save the modified graph with a new name in the default directory.
            All the arcs and nodes must have names.
 
-  Quit: Do nothing.
+  Quit: Quit Modify Mode. If the graph has been modified, it must
+                    be saved first.
 
 Graph
 
@@ -41,14 +41,14 @@ Graph
 
   Find Arc: Prompt for an arc name and highlight it. The viewport of the
             window is moved to display the arc if needed.
-  Find Node:Prompt for a node name and highlight it. The viewport of the
-            window is moved to display the arc if needed.
+  Find Node: Prompt for a node name and highlight it. The viewport of the
+             window is moved to display the arc if needed.
 
-  Graphics: Change the scale. The default is 1.
+  Graphics: Change the scale. Default is 1.
 
   Use internal numbers as names: Use the consecutive internal numbers of
                                  arcs and nodes as names. This is useful 
-                                 when working with Scilab.
+                                 when computing with Scilab.
   Display arc names: Display arc names on the arcs.
   Display node names: Display node names on the nodes.
 
@@ -80,8 +80,5 @@ Modify
                 - the default width of the border of the nodes
                 - the default width of the arcs
                 - the default width of the highlighted arcs
-
-  Quit Modify Mode: Exit Modify Mode. If the graph has been modified, it must
-                    be saved first.
 
 Redraw: Refresh the screen and redraw the graph.

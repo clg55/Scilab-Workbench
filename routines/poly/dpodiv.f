@@ -1,4 +1,5 @@
       subroutine dpodiv(a,b,na,nb  )
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension a(*),b(*)
 c

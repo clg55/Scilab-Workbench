@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WCERR,SSI=0
+c     Copyright INRIA
       subroutine wcerr(ar,ai,w,ia,n,ndng,m,maxc)
 c!purpose
 c     wcerr evaluate the error introduced by pade

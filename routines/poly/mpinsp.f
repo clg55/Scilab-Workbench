@@ -46,6 +46,8 @@ c     imprevisibles.
 c
 c!auteur:
 c     carlos klimann, inria, 12-XI-85.
+c     Copyright INRIA
+
 c
 c
 c!

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <string.h>
 
 #ifdef __STDC__

@@ -3,6 +3,7 @@ c
 c     print variable names
 c
 c
+c     Copyright INRIA
       include '../stack.h'
       integer id(nsiz,*),argcnt
       character name*(nlgh)

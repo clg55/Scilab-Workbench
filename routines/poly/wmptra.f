@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WMPTRA,SSI=0
+c     Copyright INRIA
       subroutine wmptra(pm1r,pm1i,d1,ld1,pm2r,pm2i,d2,m,n)
 c!but
 c     cette subroutine transpose une matrice dont les coefficients

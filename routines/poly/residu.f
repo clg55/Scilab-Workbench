@@ -1,4 +1,3 @@
-C     /MEMBR ADD NAME=RESIDU,SSI=0
       subroutine residu(p,np,a,na,b,nb,v,tol,ierr)
 c     but! calcul de residus
 c     calcul de la somme des residus de p/(a.b)
@@ -27,6 +26,7 @@ c     on itere jusqu a trouver degre de a ou degre de b=0.
 c     routines appelees:dpodiv,idegre (bibli blaise Inria)
 c     Auteur!    F.D. (blaise)
 c     
+c     Copyright INRIA
       dimension a(*),b(*),p(*)
       double precision a,b,p,v,r,b1,tol
       v=0.0d+0

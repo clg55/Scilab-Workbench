@@ -8,6 +8,7 @@ c!methode
 c     methode de bfgs a memoire limitee + projection
 c!origine
 c     f. bonnans inria juin 1985
+c     Copyright INRIA
 c
 c!sous programmes (modulopt)
 c     proj rlbd majysa majz calbx gcp relvar bfgsd shanph

@@ -1,6 +1,8 @@
       SUBROUTINE DDASRT (RES,NEQ,T,Y,YPRIME,TOUT,
      *  INFO,RTOL,ATOL,IDID,RWORK,LRW,IWORK,LIW,RPAR,IPAR,JAC,
      *  G,NG,JROOT)
+C***MODIF
+C   WHEN A ROOT IS FOUND YPRIME WAS NOT UPDATED. see c*SS* modifications
 C
 C***BEGIN PROLOGUE  DDASRT
 C***DATE WRITTEN   821001   (YYMMDD)
@@ -1115,6 +1117,8 @@ C
       IWORK(LIRFND) = 1
       IDID = 4
       T = RWORK(LT0)
+c*SS* 1997 next line added to return current value of yprime
+      call dcopy(neq,RWORK(LE),1,YPRIME,1)
       GO TO 580
 C
 390   GO TO 500
@@ -1144,6 +1148,8 @@ C
       IWORK(LIRFND) = 1
       IDID = 4
       T = RWORK(LT0)
+c*SS* 1997 next line added to return current value of yprime
+      call dcopy(neq,RWORK(LE),1,YPRIME,1)
       DONE = .TRUE.
       GO TO 490
 C
@@ -1318,6 +1324,8 @@ C
       IWORK(LIRFND) = 1
       IDID = 4
       T = RWORK(LT0)
+c*SS* 1997 next line added to return current value of yprime
+      call dcopy(neq,RWORK(LE),1,YPRIME,1)
       GO TO 580
 C
 529   CONTINUE

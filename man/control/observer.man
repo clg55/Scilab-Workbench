@@ -4,12 +4,16 @@
 observer - observer design
 .SH CALLING SEQUENCE
 .nf
-[Obs,U,m]=observer(Sys,flag,alfa)
+Obs=observer(Sys,J)
+[Obs,U,m]=observer(Sys [,flag,alfa])
 .fi
 .SH PARAMETERS
 .TP 10
 Sys
 : \fVsyslin\fR list (linear system)
+.TP
+J
+: nx x ny constant matrix (output injection matrix)
 .TP
 flag
 : character strings (\fV'pp'\fR or \fV'st'\fR (default))
@@ -24,11 +28,15 @@ U
 : orthogonal matrix (see \fVdt_ility\fR)
 .TP
 m
-: integer
+: integer (dimension of unstable unobservable (\fVst\fR)  or unobservable 
+(\fVpp\fR) subspace)
 .SH DESCRIPTION
-Observer returns in \fVObs\fR an observer for (the observable part of) 
-linear system \fVSys\fR: \fVdotx=A x + Bu, y=Cx + Du\fR
- represented by a \fVsyslin\fR list.
+\fVObs=observer(Sys,J)\fR returns the observer 
+\fVObs=syslin(td,A+J*C,[B+J*D,-J],eye(A))\fR obtained from \fVSys\fR 
+by a \fVJ\fR output injection. (td is the time domain of \fVSys\fR).
+More generally, \fVobserver\fR returns in \fVObs\fR an observer for 
+the observable part of linear system 
+\fVSys\fR: \fVdotx=A x + Bu, y=Cx + Du\fR  represented by a \fVsyslin\fR list.
 \fVSys\fR has \fVnx\fR state variables, \fVnu\fR inputs and \fVny\fR outputs.
 \fVObs\fR is a linear system with matrices \fV[Ao,Bo,Identity]\fR, 
 where \fVAo\fR is \fVno x no\fR, \fVBo\fR is \fVno x (nu+ny)\fR, \fV Co\fR is
@@ -36,10 +44,10 @@ where \fVAo\fR is \fVno x no\fR, \fVBo\fR is \fVno x (nu+ny)\fR, \fV Co\fR is
 .LP
 Input to \fVObs\fR is \fV[u,y]\fR and output of \fVObs\fR is: 
 .LP
-xhat=estimate of x modulo unobservable subsp. (case 'pp')
+xhat=estimate of x modulo unobservable subsp. (case \fVflag='pp'\fR)
 or
 .LP
-xhat=estimate of x modulo unstable unobservable subsp. (case 'st')
+xhat=estimate of x modulo unstable unobservable subsp. (case \fVflag='st'\fR)
 .LP
 case \fVflag='st'\fR:
 z=H*x can be estimated with stable observer iff \fVH*U(:,1:m)=0\fR
@@ -51,8 +59,13 @@ all poles of the observer are assigned and set to \fValfa(1),alfa(2),...\fR
 .LP
 If H satifies the constraint: \fVH*U(:,1:m)=0\fR  (ker(H) contains unobs-subsp.
 of Sys) one has H*U=[0,H2] and the observer for 
-z=H*x is is H2*Obs with H2=H*U(:,m+1:nx) i.e. Co, the C-matrix of the
+z=H*x is H2*Obs with H2=H*U(:,m+1:nx) i.e. Co, the C-matrix of the
 observer for H*x, is Co=H2.
+.LP 
+In the particular case where the pair \fV(A,C)\fR of \fVSys\fR is 
+observable, one has \fVm=0\fR and the linear system \fVU*Obs\fR (resp.
+\fVH*U*Obs\fR) is an observer for \fVx\fR (resp. \fVHx\fR). 
+The error spectrum is \fValpha(1),alpha(2),...,alpha(nx)\fR.
 .SH EXAMPLE
 .nf
 nx=5;nu=1;ny=1;un=3;us=2;Sys=ssrand(ny,nu,nx,list('dt',us,us,un));
@@ -61,8 +74,8 @@ nx=5;nu=1;ny=1;un=3;us=2;Sys=ssrand(ny,nu,nx,list('dt',us,us,un));
 [Obs,U,m]=observer(Sys);  //Stable observer (default)
 W=U';H=W(m+1:nx,:);[A,B,C,D]=abcd(Sys);  //H*U=[0,eye(no,no)];
 Sys2=ss2tf(syslin('c',A,B,H))  //Transfer u-->z
-Idu=eye(nu,nu);ss2tf(Obs*sysdiag(Idu,Sys)*[Idu;Idu])  
-//Transfer u-->[u;u]-->w=[u;y=Sys*u]-->Obs*w  i.e. u-->output of Obs
+Idu=eye(nu,nu);Sys3=ss2tf(H*U(:,m+1:$)*Obs*[Idu;Sys])  
+//Transfer u-->[u;y=Sys*u]-->Obs-->xhat-->HUxhat=zhat  i.e. u-->output of Obs
 //this transfer must equal Sys2, the u-->z transfer  (H2=eye).
 .fi
 .SH SEE ALSO

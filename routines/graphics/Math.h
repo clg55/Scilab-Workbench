@@ -1,4 +1,4 @@
-
+/* Copyright INRIA */
 #include "../machine.h"
 
 #ifdef WIN32 

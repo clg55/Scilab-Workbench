@@ -5,7 +5,6 @@ syslin - linear system definition
 .SH CALLING SEQUENCE
 .nf
 [sl]=syslin(dom,A,B,C [,D [,x0] ])
-[sl]=syslin(A,B,C [,D [,x0] ])
 [sl]=syslin(dom,N,D)
 [sl]=syslin(dom,H)
 .fi
@@ -13,7 +12,6 @@ syslin - linear system definition
 .TP 10
 dom 
 : character string (\fV'c'\fR, \fV'd'\fR), or \fV[]\fR or a scalar.
-(If omitted, \fVdom=[]\fR)
 .TP 10
 A,B,C,D
 : matrices of the state-space representation (\fVD\fR optional
@@ -27,7 +25,7 @@ N, D
 : polynomial matrices
 .TP
 H
-: rational matrix
+: rational matrix or linear state space representation
 .TP 10
 sl
 : tlist ("\fVsyslin\fR" list) representing the linear system
@@ -39,8 +37,7 @@ sl
 \fVdom='c'\fR for a continuous time system, \fVdom='d'\fR for a discrete time system,
 \fVn\fR for a sampled system with sampling period \fVn\fR (in seconds).
 .LP
-\fVdom=[]\fR if the time domain is undefined (\fVdom\fR can be omitted in
-the calling sequence)
+\fVdom=[]\fR if the time domain is undefined 
 .LP
 State-space representation:
 .nf
@@ -91,4 +88,4 @@ S1*S2bis
 size(S1)
 .fi
 .SH SEE ALSO
-tlist, ssrand, ss2tf, tf2ss, dscr, abcd
+tlist, lsslist, rlist, ssrand, ss2tf, tf2ss, dscr, abcd

@@ -1,4 +1,5 @@
 function do_terminate(scs_m,cpr,tcur)
+// Copyright INRIA
 par=scs_m(1);
 if alreadyran then  
   //terminate current simulation

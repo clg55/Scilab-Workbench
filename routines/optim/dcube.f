@@ -2,6 +2,7 @@ c
 c-----------------------------------------------------------------------
 c
       subroutine dcube(t,f,fp,ta,fa,fpa,tlower,tupper)
+c     Copyright INRIA
 c
 c --- arguments
 c

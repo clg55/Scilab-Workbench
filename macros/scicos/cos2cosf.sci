@@ -2,6 +2,7 @@ function t=cos2cosf(u,scs_m,count)
 //write scilab instructions whose evaluation 
 //returns the  value of scicos data structure scs_m.
 // in the opened file associated with logical unit u
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<3 then 
   count=0,

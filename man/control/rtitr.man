@@ -1,4 +1,4 @@
-.TH RTITR G "April 1993" "Scilab Group" "Scilab Function"
+.TH rtitr G "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an 
 .SH NAME
 rtitr - discrete time response (transfer matrix)
@@ -15,10 +15,10 @@ u
 : real matrix (dimension \fVm\fRx\fV(t+1)\fR
 .TP
 up,yp 
-: real matrices (dimension \fVm \fRx\fV (maxi(degree(Den)))\fR (default values=\fV0\fR)
+: real matrices (\fVup\fR dimension \fVm\fRx\fV (maxi(degree(Den)))\fR (default values=\fV0\fR) , \fVyp\fR dimension \fVn\fRx\fV (maxi(degree(Den)))\fR)
 .TP
 y
-: real matrix
+: real matrix 
 .SH DESCRIPTION
 \fVy=rtitr(Num,Den,u [,up,yp])\fR returns the time response of
 the discrete time linear system with transfer matrix \fVDen^-1 Num\fR 
@@ -34,21 +34,25 @@ and \fVDen y = Num u\fR is interpreted as the recursion:
 .nf
   D(0)y(t)+D(1)y(t+1)+...+ D(d1)y(t+d1)= N(0) u(t) +....+ N(d2) u(t+d2)
 .fi
+It is assumed that \fVD(d1)\fR is non singular. 
+.LP
 The columns of u are the inputs of the system at t=0,1,...,T:
 .nf
   u=[u(0) , u(1),...,u(T)]
 .fi
 The outputs at \fVt=0,1,...,T+d1-d2\fR are the columns of the matrix \fVy\fR:
 .nf
-  y=[y(0), y(1),  .... y(t+d1-d2)]
+  y=[y(0), y(1),  .... y(T+d1-d2)]
 .fi
 \fVup\fR and \fVyp\fR define the initial conditions for t < 0 i.e
 .nf
   up=[u(-d1), ..., u(-1)  ]
-  yp=[y(-d2), ...  y(-1)  ]
+  yp=[y(-d1), ...  y(-1)  ]
 .fi
+Depending on the relative values of \fVd1\fR and \fVd2\fR, some of the
+leftmost components of \fVup\fR, \fVyp\fR are ignored.
 The default values of \fVup\fR and \fVyp\fR are zero:
-\fVup = 0*ones(m,d1), yp=0*ones(n,d2)\fR
+\fVup = 0*ones(m,d1), yp=0*ones(n,d1)\fR
 .SH EXAMPLE
 .nf
 z=poly(0,'z');
@@ -57,13 +61,13 @@ rtitr(Num,Den,u)-u
 //Other examples
 //siso
 //causal
-n1=1;d1=poly([1 1],'s','c');       // yj=y(j-1)+u(j-1)
+n1=1;d1=poly([1 1],'z','coeff');       // y(j)=-y(j-1)+u(j-1)
 r1=[0 1 0 1 0 1 0 1 0 1 0];
 r=rtitr(n1,d1,ones(1,10));norm(r1-r,1)
 //hot restart
 r=rtitr(n1,d1,ones(1,9),1,0);norm(r1(2:11)-r)
 //non causal
-n2=poly([1 1 1],'s','c');d2=d1;    // yj=-y(j-1)+u(j-1)+u(j)+u(j+1)
+n2=poly([1 1 1],'z','coeff');d2=d1;    // y(j)=-y(j-1)+u(j-1)+u(j)+u(j+1)
 r2=[2 1 2 1 2 1 2 1 2];
 r=rtitr(n2,d2,ones(1,10));norm(r-r2,1)
 //hot restart
@@ -77,7 +81,7 @@ r=rtitr(n1,d1,ones(3,10));norm(r1-r,1)
 r=rtitr(n1,d1,ones(3,9),[1;1;1],[0;0]);
 norm(r1(:,2:11)-r,1)
 //polynomial n1  (same ex.)
-n1(1,1)=poly(1,'s','c');r=rtitr(n1,d1,ones(3,10));norm(r1-r,1)
+n1(1,1)=poly(1,'z','c');r=rtitr(n1,d1,ones(3,10));norm(r1-r,1)
 //
 r=rtitr(n1,d1,ones(3,9),[1;1;1],[0;0]);
 norm(r1(:,2:11)-r,1)
@@ -104,7 +108,7 @@ c = [0.28 , 0.78 , 0.11 , 0.15 , 0.84
 d = [0.41 , 0.11 , 0.56
      0.88 , 0.2 , 0.59];
 s=syslin('d',a,b,c,d);
-h=ss2tf(s);num=h(2);den=h(3);den=den(1,1)*eye(2,2);
+h=ss2tf(s);num=h('num');den=h('den');den=den(1,1)*eye(2,2);
 u=1;u(3,10)=0;r3=flts(u,s);
 r=rtitr(num,den,u);norm(r3-r,1)
 .fi

@@ -1,10 +1,10 @@
 
-exit(1)                        Scilab Function                        exit(1)
+exit(1)                        Scilab Command                         exit(1)
 NAME
-  exit -  Scilab quit
+  exit -  Ends the current Scilab session
 
 DESCRIPTION
-  Ends the current Scilab session. Same as quit .
+  Ends the current Scilab session.
 
 SEE ALSO
   quit, abort, break, return, resume

@@ -36,6 +36,9 @@ DESCRIPTION
   If there are not enough items for format in the value parameter list,
   sprintf generate an error.  If any values remain after the entire format
   has been processed, they are ignored.
+  Note that sprintf is a scilab emulation of C language function build in
+  Scilab. Consequently it is quite slow. Use string whenever it is possible.
+
 EXAMPLES
   fahr=120
   sprintf('%3d Fahrenheit = %6.1f Celsius',fahr,(5/9)*(fahr-32))

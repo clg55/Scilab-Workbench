@@ -5,6 +5,7 @@ c       initialisation systeme pour recuperer le break
 c
 c ===================================== ( Inria    ) ==========
 c
+c     Copyright INRIA
       logical         iflag
       common /basbrk/ iflag
       iflag=.false.

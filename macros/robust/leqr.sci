@@ -7,6 +7,7 @@ function [k,x,err]=leqr(p12,vx)
 //  z|0   a'  0| - |-c'c  i    -s|      s|0   i   0| - |-c'c  -a'  -s  |
 //   |0   b'  0|   | s'   0   d'd|       |0   0   0|   | s'   -b'   d'd|
 //
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 p121=p12(1);
 if p121(1)<>'lss' then error('leqr: state-space only!');end
@@ -14,7 +15,7 @@ if p121(1)<>'lss' then error('leqr: state-space only!');end
 [n,nu]=size(b2);
 [ny,n]=size(c1);
 dom=p12(7);
-if dom=[] then 
+if dom==[] then 
   dom='c';
   warning('leqr: time domain (p12(7)) is not defined (assumed continuous)')
 end

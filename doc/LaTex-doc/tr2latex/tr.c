@@ -5,6 +5,8 @@ This program has the HARD-WIRED rules of the translator.
 It should handled with care.
 */
 
+#define NULL_C '\0'
+
 #define IN_TR  1
 #include        "setups.h"
 int def_count = 0;
@@ -36,9 +38,9 @@ int lastfont = 1;		/* default last font is roman */
 int offset = 0;			/* amount to offset inbuf */
 extern man;			/* man flag */
 
-*outbuf = NULL;		w[0] = NULL;	ww[0] = NULL;
-tmp[0] = NULL;		tmp2[0] = NULL;
-while (*inbuf != NULL)
+*outbuf = NULL_C;		w[0] = NULL_C;	ww[0] = NULL_C;
+tmp[0] = NULL_C;		tmp2[0] = NULL_C;
+while (*inbuf != NULL_C)
 	{
 	len = getword(inbuf,w);
 	c1 = *--inbuf;
@@ -154,11 +156,11 @@ while (*inbuf != NULL)
 				sprintf(tmp,"\\eqno %s",eqn_no);
 				outbuf = strapp(outbuf,tmp);
 				}
-			eqn_no[0] = NULL;
+			eqn_no[0] = NULL_C;
 			c1 = *--outbuf;
 			c2 = *--outbuf;
 			if (c1 == '\n' && c2 == '$')
-				*--outbuf = NULL;
+				*--outbuf = NULL_C;
 			else
 				{
 				outbuf += 2;
@@ -196,9 +198,9 @@ while (*inbuf != NULL)
 				}
 			for (i=0; *--outbuf != '$' && i < MAXLEN; i++)
 				tmp[i] = *outbuf;
-			tmp[i] = NULL;
+			tmp[i] = NULL_C;
 			strcat(tmp,"$$");
-			*--outbuf = NULL;
+			*--outbuf = NULL_C;
 			inbuf += skip_white(inbuf);
 			inbuf += get_defword(inbuf,w,&illegal);
 			inbuf += skip_white(inbuf);
@@ -226,7 +228,7 @@ while (*inbuf != NULL)
 			inbuf += skip_white(inbuf);
 			for (j=i+1; j >= 0; j--)
 				*outbuf++ = tmp[j];
-			tmp[0] = NULL;
+			tmp[0] = NULL_C;
 			}
 		else if (strcmp(w,"gsize") == 0 || strcmp(w,"gfont") == 0)
 			inbuf = skip_line(inbuf);
@@ -273,7 +275,7 @@ while (*inbuf != NULL)
 					}
 				for (j=i-1; j >= 0; j--)
 					*++outbuf = tmp[j];
-			*++outbuf = NULL;
+			*++outbuf = NULL_C;
 				}
 			outbuf = strapp(outbuf,"\\over");
 			inbuf += skip_white(inbuf);
@@ -284,7 +286,7 @@ while (*inbuf != NULL)
 				{
 				inbuf = get_over_arg(inbuf,ww);
 				outbuf = strapp(outbuf,ww);
-				if (*inbuf != NULL || !first_word)
+				if (*inbuf != NULL_C || !first_word)
 					*outbuf++ = '}';
 				}
 			}
@@ -294,7 +296,7 @@ while (*inbuf != NULL)
 			 strcmp(w,"sub") == 0 || strcmp(w,"from") == 0)
 			{
 			while ((c = *--outbuf) == ' ' || c == '\t' || c == '\n') ;
-			*++outbuf = NULL;
+			*++outbuf = NULL_C;
 			if (strcmp(w,"sup") == 0 || strcmp(w,"to") == 0)
 				outbuf = strapp(outbuf,"^");
 			else
@@ -342,7 +344,7 @@ while (*inbuf != NULL)
 			inbuf += skip_white(inbuf);
 			inbuf += getword(inbuf,ww);
 			len = atoi(ww);		flen = len/100.;
-			ww[0] = NULL;
+			ww[0] = NULL_C;
 			sprintf(tmp2,"%4.2f%s",flen,tmp);
 			outbuf = strapp(outbuf,tmp2);
 			}
@@ -429,7 +431,7 @@ while (*inbuf != NULL)
 				sprintf(tmp,"%%.%c%c",c1,c2);
 				outbuf = strapp(outbuf,tmp);
 				outbuf = strapp(outbuf,ww);
-				if (*inbuf == NULL)	*outbuf++ = '\n';
+				if (*inbuf == NULL_C)	*outbuf++ = '\n';
 				}
 			}
 /* Now search for commands that start with a capital */
@@ -452,7 +454,7 @@ while (*inbuf != NULL)
 			else
 				strcpy(w,"it");
 			inbuf += get_arg(inbuf,ww,1);
-			if (ww[0] == NULL)
+			if (ww[0] == NULL_C)
 				{
 				outbuf = strapp(outbuf,"\\");
 				outbuf = strapp(outbuf,w);
@@ -533,15 +535,15 @@ while (*inbuf != NULL)
 			RSRE--;
 			if (RSRE < 0)
 				fprintf(stderr,".RS with no matching .RE\n");
-			/* JPC: sprintf(tmp,"\\ind{%d\\parindent}",RSRE); */
-		        sprintf(tmp,"\\end{scitem}"); 
+			sprintf(tmp,"\\ind{%d\\parindent}",RSRE);
+		        /* sprintf(tmp,"\\end{scitem}"); */
 			outbuf = strapp(outbuf,tmp);
 			}
 		else if (strcmp(w,".RS") == 0)
 			{
 			RSRE++;
-			/* JPC sprintf(tmp,"\\ind{%d\\parindent}",RSRE); */
-		        sprintf(tmp,"\\begin{scitem}"); 
+			sprintf(tmp,"\\ind{%d\\parindent}",RSRE); 
+		        /* sprintf(tmp,"\\begin{scitem}"); */
 			outbuf = strapp(outbuf,tmp);
 			}
 		else if (strcmp(w,".Re") == 0)
@@ -604,7 +606,7 @@ while (*inbuf != NULL)
 			 /* JPC : **/
 			  inbuf += get_line(inbuf,ww,0);
 			  inbuf++;
-			  sprintf(tmp,"%s",ww);
+			  sprintf(tmp,"%s\n",ww);
 			  outbuf = strapp(outbuf,tmp);
 			}
 		else if (man && (strcmp(w,".Vb") == 0))
@@ -641,7 +643,7 @@ while (*inbuf != NULL)
 			    /* next  lines added to set key references (ss) */
 			    outbuf = strapp(outbuf,"\\label");
 			    ii1=0;
-			    while ( (c = tmp[ii1]) != NULL && c != ',')  {
+			    while ( (c = tmp[ii1]) != NULL_C && c != ',')  {
 				ii1++;
 				if (c != '%' && c != '_' && c != '\\' && c != ' ' ) {
 				    tmp3[0]=c;tmp3[1]='\0';
@@ -667,7 +669,7 @@ while (*inbuf != NULL)
 			      {	
 				outbuf = strapp(outbuf,"{\\verb?");
 				iis=ii;
-				while ( (c = ww[ii]) != NULL && c != ',') 
+				while ( (c = ww[ii]) != NULL_C && c != ',') 
 				  {
 				    tmp[0]=ww[ii];tmp[1]='\0';ii++;
 				    outbuf = strapp(outbuf,tmp);
@@ -675,7 +677,7 @@ while (*inbuf != NULL)
 				outbuf = strapp(outbuf,"?}");
 				/* Next  lines added to set see also ref (ss) */
 				outbuf = strapp(outbuf," \\pageref{");
-				while ( (c = ww[iis]) != NULL && c != ',') 
+				while ( (c = ww[iis]) != NULL_C && c != ',') 
 				  {
 				    tmp[0]=ww[iis];tmp[1]='\0';iis++;
 				    if (tmp[0]!='%'&&tmp[0]!='_'&&tmp[0]!=' '&&tmp[0]!=',') 
@@ -683,7 +685,7 @@ while (*inbuf != NULL)
 				  };
 				outbuf = strapp(outbuf,"}");
 				/* end of (ss) modif */
-				if (c== NULL ) flag=0;
+				if (c== NULL_C ) flag=0;
 				else {outbuf=strapp(outbuf,",");ii++;};
 			      }
 			    *outbuf++ = '\n';
@@ -841,7 +843,7 @@ I can only do very simple ones. You may need to check what I've done\n");
 			{
 			inbuf += get_arg(inbuf,ww,0);
 			/** JPC**/
-			if ( strcmp(ww,"../sci.an")!=0)
+			if ( strcmp(ww,"../sci.an")!=0 && strcmp(ww,"sci.an") != 0) 
 			  sprintf(tmp,"\\input %s",ww);
 			outbuf = strapp(outbuf,tmp);
 			}
@@ -909,9 +911,9 @@ I can only do very simple ones. You may need to check what I've done\n");
 				else		outbuf = end_env(outbuf);
 				}
 			outbuf = strapp(outbuf,ww);
-			if (ww[0] == NULL)
+			if (ww[0] == NULL_C)
 				inbuf = skip_line(inbuf);
-			if (ww[0] != NULL && arg == 0)
+			if (ww[0] != NULL_C && arg == 0)
 				{
 				inbuf = skip_line(inbuf);
 				*outbuf++ = '\n';
@@ -934,7 +936,7 @@ I can only do very simple ones. You may need to check what I've done\n");
 						{
 						inbuf += get_arg(inbuf,tmp,0);
 						inbuf = skip_line(inbuf);
-						if (tmp[0] == NULL)	N = 1;
+						if (tmp[0] == NULL_C)	N = 1;
 						else		N = atoi(tmp);
 						inbuf += get_N_lines(inbuf,ww,N);
 						}
@@ -979,7 +981,7 @@ I can only do very simple ones. You may need to check what I've done\n");
 				outbuf = strapp(outbuf,"%");
 				outbuf = strapp(outbuf,w);
 				outbuf = strapp(outbuf,ww);
-				if (*inbuf == NULL)	*outbuf++ = '\n';
+				if (*inbuf == NULL_C)	*outbuf++ = '\n';
 				}
 			}
 		}
@@ -1028,7 +1030,7 @@ I can only do very simple ones. You may need to check what I've done\n");
 			outbuf = strapp(outbuf,"\\");
 			*outbuf++ = *inbuf++;
 			}
-		else if (*inbuf == NULL)	;
+		else if (*inbuf == NULL_C)	;
 		else if (*inbuf == '-')
 			{
 			inbuf++;
@@ -1220,7 +1222,7 @@ I can only do very simple ones. You may need to check what I've done\n");
 
 	else
 		outbuf = strapp(outbuf,w);
-	*outbuf = NULL;	ww[0] = NULL;  tmp[0] = NULL;	tmp2[0] = NULL;
+	*outbuf = NULL_C;	ww[0] = NULL_C;  tmp[0] = NULL_C;	tmp2[0] = NULL_C;
 	if (!no_word)	first_word = 0;
       }
 /* if file end, close opened environments and delimitters */
@@ -1233,5 +1235,5 @@ if (rec == 0)
 	if (TP_stat)	outbuf = strapp(outbuf,"\\end{scitem}\n");
 	}
 
-*outbuf = NULL;
+*outbuf = NULL_C;
 }

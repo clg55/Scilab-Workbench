@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WBALIN,SSI=0
+c     Copyright INRIA
       subroutine wbalin(max , n , low , igh , scale , ear , eai)
 c
 c!purpose

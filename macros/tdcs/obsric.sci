@@ -7,6 +7,7 @@ function []=obsric(q1,q2,r)
 // ici, q est la variance du bruit d'etat,
 //      r la variance du bruit de mesure.
 //!
+// Copyright INRIA
 [p]=ricc(f',(1/r)*h'*h,[q1,0;0,q2],'cont');
 l= (1/r) *p*h'
 [l]=resume(l);

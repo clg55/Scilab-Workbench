@@ -1,22 +1,23 @@
 function [txt,ilst,vnms,vtps,nwrk]=cod2for(lst,ilst,vnms,vtps,nwrk)
 //
 //!
+// Copyright INRIA
 nlst=size(lst)
 txt=[]
 ilst=ilst-1
 while ilst<nlst then
   ilst=ilst+1
   op=lst(ilst)
-  if type(op)=15 then return,end
+  if type(op)==15 then return,end
  
   //write(6,'cod2for '+op(1)+' '+string(ilst))
   select op(1)
   case '1' then //stackp
-    //write(6,'stackp '+op(2));pause
+    //write(6,'stackp '+op(2));
     prev=lst(ilst-1)
     if size(prev,'*')<2 then
       lhs=1
-    elseif prev(1:2)=['5','25']|prev(1)='20' then
+    elseif prev(1:2)==['5','25']|prev(1)=='20' then
       lhs=evstr(prev(4))
     else
       lhs=1

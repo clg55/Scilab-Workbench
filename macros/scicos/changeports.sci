@@ -2,13 +2,13 @@ function scs_m=changeports(scs_m,k,o_n)
 // Move  change number of ports of block  k and modify connected links if any
 //!
 //look at connected links
+// Copyright INRIA
 connected=[];dx=[];dy=[]
 o=scs_m(k)
 [nin_n,nout_n,ncin_n,ncout_n]=o_n(3)(2:5)
 
 [sz,orient,ip,op,cip,cop]=o(2)([2:3,5:8])
 [nin,nout,ncin,ncout]=o(3)(2:5)
-
 
 //standard inputs
 nip=size(ip,'*')
@@ -102,109 +102,7 @@ if ncop<>ncopn then
   dx=[dx, (sz(1)/(ncopn+1)-sz(1)/(ncop+1))*kc]
   dy=[dy,0*kc]
 end
-
-// build movable segments for all connected links
-//===============================================
-xx=[];yy=[];ii=[];clr=[];mx=[];my=[]
-
-for i1=1:size(connected,'*')
-  i=connected(i1)
-  oi=scs_m(i)
-  [xl,yl,ct,from,to]=oi([2,3,7:9])
-  clr=[clr ct(1)]
-  nl=prod(size(xl))
-  if from(1)==k then
-    ii=[ii i]
-    // build movable segments for this link
-    if nl>=4 then
-      x1=xl(1:4)
-      y1=yl(1:4)
-    elseif nl==3 then 
-      // 3 points link add one point at the begining
-      x1=xl([1 1:3])
-      y1=yl([1 1:3])
-    elseif xl(1)==xl(2)|yl(1)==yl(2) then 
-      // vertical or horizontal   2 points link add a point in the middle
-      x1=[xl(1);xl(1)+(xl(2)-xl(1))/2;xl(1)+(xl(2)-xl(1))/2;xl(2)]
-      y1=[yl(1);yl(1)+(yl(2)-yl(1))/2;yl(1)+(yl(2)-yl(1))/2;yl(2)]
-    else
-      // oblique 2 points link add 2 points in the middle
-      x1=[xl(1);xl(1)+(xl(2)-xl(1))/2;xl(1)+(xl(2)-xl(1))/2;xl(2)]
-      y1=[yl(1);yl(1);yl(2);yl(2)]
-    end
-    //set allowed (x or y) move for each points of build movable segments
-    if nl==3 then
-      if xl(1)==xl(2) then 
-	mx=[mx,[1;1;1;0]]
-	my=[my,[1;1;0;0]]
-      else
-	mx=[mx,[1;1;0;0]]
-	my=[my,[1;1;1;0]]
-      end
-    else
-      if xl(1)==xl(2) then
-	mx=[mx,[1;1;0;0]]
-	my=[my,[1;1;1;0]]
-      else
-	mx=[mx,[1;0;0;0]]
-	my=[my,[1;1;0;0]]
-      end
-    end
-    mx(:,$)=mx(:,$)*dx(i1)
-    my(:,$)=my(:,$)*dy(i1)
-    xx=[xx x1];yy=[yy y1]  //store  movable segments for this link
-  elseif to(1)==k then
-    ii=[ii -i]
-    // build movable segments
-    if nl>=4 then
-      x1=xl(nl:-1:nl-3)
-      y1=yl(nl:-1:nl-3)
-    elseif nl==3 then 
-      // 3 points link add one point at the end
-      sel=[nl:-1:nl-2,nl-2]
-      x1=xl([nl nl:-1:nl-2])
-      y1=yl([nl nl:-1:nl-2])
-    elseif xl(1)==xl(2)|yl(1)==yl(2) then 
-      // vertical or horizontal 2 points link add a point in the middle
-      xm=xl(2)+(xl(1)-xl(2))/2
-      x1= [xl(2);xm;xm;xl(1)]
-      ym=yl(2)+(yl(1)-yl(2))/2;
-      y1= [yl(2);ym;ym;yl(1)]
-    else
-      // oblique 2 points link add 2 points in the middle
-      xm=xl(2)+(xl(1)-xl(2))/2
-      x1=[xl(2);xm;xm;xl(1)]
-      y1=[yl(2);yl(2);yl(1);yl(1)]
-    end
-    if nl==3 then
-      if x1(2)==x1(3) then 
-	mx=[mx,[1;1;1;0]]
-	my=[my,[1;1;0;0]]
-      else
-	mx=[mx,[1;1;0;0]]
-	my=[my,[1;1;1;0]]
-      end
-    else
-      if x1(1)==x1(2) then
-	mx=[mx,[1;1;0;0]]
-	my=[my,[1;1;1;0]]
-      else
-	mx=[mx,[1;0;0;0]]
-	my=[my,[1;1;0;0]]
-      end
-    end
-    mx(:,$)=mx(:,$)*dx(i1)
-    my(:,$)=my(:,$)*dy(i1)
-    xx=[xx x1];yy=[yy y1] 
-end
-end
-// update and draw block
-//======================
-
-// clear block
-
-drawobj(o)
-// update and draw block
+// update  block
 o_n(2)(5)=ipn
 o_n(2)(6)=opn
 o_n(2)(7)=cipn
@@ -213,52 +111,154 @@ o_n(3)(2)=nin_n
 o_n(3)(3)=nout_n
 o_n(3)(4)=ncin_n
 o_n(3)(5)=ncout_n
-drawobj(o_n)
+
+if nip<>nipn|nop<>nopn|ncip<>ncipn|ncop<>ncopn then
+  // build movable segments for all connected links
+  //===============================================
+  xx=[];yy=[];ii=[];clr=[];mx=[];my=[]
+
+  for i1=1:size(connected,'*')
+    i=connected(i1)
+    oi=scs_m(i)
+    [xl,yl,ct,from,to]=oi([2,3,7:9])
+    clr=[clr ct(1)]
+    nl=prod(size(xl))
+    if from(1)==k then
+      ii=[ii i]
+      // build movable segments for this link
+      if nl>=4 then
+	x1=xl(1:4)
+	y1=yl(1:4)
+      elseif nl==3 then 
+	// 3 points link add one point at the begining
+	x1=xl([1 1:3])
+	y1=yl([1 1:3])
+      elseif xl(1)==xl(2)|yl(1)==yl(2) then 
+	// vertical or horizontal   2 points link add a point in the middle
+	x1=[xl(1);xl(1)+(xl(2)-xl(1))/2;xl(1)+(xl(2)-xl(1))/2;xl(2)]
+	y1=[yl(1);yl(1)+(yl(2)-yl(1))/2;yl(1)+(yl(2)-yl(1))/2;yl(2)]
+      else
+	// oblique 2 points link add 2 points in the middle
+	x1=[xl(1);xl(1)+(xl(2)-xl(1))/2;xl(1)+(xl(2)-xl(1))/2;xl(2)]
+	y1=[yl(1);yl(1);yl(2);yl(2)]
+      end
+      //set allowed (x or y) move for each points of build movable segments
+      if nl==3 then
+	if xl(1)==xl(2) then 
+	  mx=[mx,[1;1;1;0]]
+	  my=[my,[1;1;0;0]]
+	else
+	  mx=[mx,[1;1;0;0]]
+	  my=[my,[1;1;1;0]]
+	end
+      else
+	if xl(1)==xl(2) then
+	  mx=[mx,[1;1;0;0]]
+	  my=[my,[1;1;1;0]]
+	else
+	  mx=[mx,[1;0;0;0]]
+	  my=[my,[1;1;0;0]]
+	end
+      end
+      mx(:,$)=mx(:,$)*dx(i1)
+      my(:,$)=my(:,$)*dy(i1)
+      xx=[xx x1];yy=[yy y1]  //store  movable segments for this link
+    elseif to(1)==k then
+      ii=[ii -i]
+      // build movable segments
+      if nl>=4 then
+	x1=xl(nl:-1:nl-3)
+	y1=yl(nl:-1:nl-3)
+      elseif nl==3 then 
+	// 3 points link add one point at the end
+	sel=[nl:-1:nl-2,nl-2]
+	x1=xl([nl nl:-1:nl-2])
+	y1=yl([nl nl:-1:nl-2])
+      elseif xl(1)==xl(2)|yl(1)==yl(2) then 
+	// vertical or horizontal 2 points link add a point in the middle
+	xm=xl(2)+(xl(1)-xl(2))/2
+	x1= [xl(2);xm;xm;xl(1)]
+	ym=yl(2)+(yl(1)-yl(2))/2;
+	y1= [yl(2);ym;ym;yl(1)]
+      else
+	// oblique 2 points link add 2 points in the middle
+	xm=xl(2)+(xl(1)-xl(2))/2
+	x1=[xl(2);xm;xm;xl(1)]
+	y1=[yl(2);yl(2);yl(1);yl(1)]
+      end
+      if nl==3 then
+	if x1(2)==x1(3) then 
+	  mx=[mx,[1;1;1;0]]
+	  my=[my,[1;1;0;0]]
+	else
+	  mx=[mx,[1;1;0;0]]
+	  my=[my,[1;1;1;0]]
+	end
+      else
+	if x1(1)==x1(2) then
+	  mx=[mx,[1;1;0;0]]
+	  my=[my,[1;1;1;0]]
+	else
+	  mx=[mx,[1;0;0;0]]
+	  my=[my,[1;1;0;0]]
+	end
+      end
+      mx(:,$)=mx(:,$)*dx(i1)
+      my(:,$)=my(:,$)*dy(i1)
+      xx=[xx x1];yy=[yy y1] 
+    end
+  end
+  [mxx,nxx]=size(xx)
+  if connected<>[] then // move connected links  
+    // erase moving part of links
+    xpolys(xx,yy,clr)
+    // draw moving part of links
+    xx=xx+mx
+    yy=yy+my
+    xpolys(xx,yy,clr)
+    //udate moved links in scicos structure
+    for i=1:prod(size(ii))
+      oi=scs_m(abs(ii(i)))
+      xl=oi(2);yl=oi(3);nl=prod(size(xl))
+      if ii(i)>0 then
+	if nl>=4 then
+	  xl(1:4)=xx(:,i)
+	  yl(1:4)=yy(:,i)
+	elseif nl==3 then
+	  xl=xx(2:4,i)
+	  yl=yy(2:4,i)
+	else
+	  xl=xx(:,i)
+	  yl=yy(:,i)
+	end
+      else
+	if nl>=4 then
+	  xl(nl-3:nl)=xx(4:-1:1,i)
+	  yl(nl-3:nl)=yy(4:-1:1,i)
+	elseif nl==3 then
+	  xl=xx(4:-1:2,i)
+	  yl=yy(4:-1:2,i)
+	else
+	  xl=xx(4:-1:1,i)
+	  yl=yy(4:-1:1,i)
+	end
+      end
+      nl=prod(size(xl))
+      //eliminate double points
+      kz=find((xl(2:nl)-xl(1:nl-1))^2+(yl(2:nl)-yl(1:nl-1))^2==0)
+      xl(kz)=[];yl(kz)=[]
+      //store
+      oi(2)=xl;oi(3)=yl;
+      scs_m(abs(ii(i)))=oi;
+    end
+  end
+
+end
+// redraw block
+drawobj(o) //clear old block
+drawobj(o_n)// draw new block
+
 if pixmap then xset('wshow'),end
 // update block in scicos structure
 scs_m(k)=o_n
-  
-[mxx,nxx]=size(xx)
-if connected<>[] then // move connected links  
-  // erase moving part of links
-  xpolys(xx,yy,clr)
-  // draw moving part of links
-  xx=xx+mx
-  yy=yy+my
-  xpolys(xx,yy,clr)
-  //udate moved links in scicos structure
-  for i=1:prod(size(ii))
-    oi=scs_m(abs(ii(i)))
-    xl=oi(2);yl=oi(3);nl=prod(size(xl))
-    if ii(i)>0 then
-      if nl>=4 then
-	xl(1:4)=xx(:,i)
-	yl(1:4)=yy(:,i)
-      elseif nl==3 then
-	xl=xx(2:4,i)
-	yl=yy(2:4,i)
-      else
-	xl=xx(:,i)
-	yl=yy(:,i)
-      end
-    else
-      if nl>=4 then
-	xl(nl-3:nl)=xx(4:-1:1,i)
-	yl(nl-3:nl)=yy(4:-1:1,i)
-      elseif nl==3 then
-	xl=xx(4:-1:2,i)
-	yl=yy(4:-1:2,i)
-      else
-	xl=xx(4:-1:1,i)
-	yl=yy(4:-1:1,i)
-      end
-    end
-    nl=prod(size(xl))
-    //eliminate double points
-    kz=find((xl(2:nl)-xl(1:nl-1))^2+(yl(2:nl)-yl(1:nl-1))^2==0)
-    xl(kz)=[];yl(kz)=[]
-    //store
-    oi(2)=xl;oi(3)=yl;
-    scs_m(abs(ii(i)))=oi;
-  end
-end
+

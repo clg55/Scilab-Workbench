@@ -15,6 +15,7 @@ c      if x>=xd(nc) y=yd(nc,:)
 c!origin
 c     Pejman GOHARI 1996
 c!
+c     Copyright INRIA
       double precision x,xd(*),y(*),yd(nc,*)
       integer n,nc
 c     

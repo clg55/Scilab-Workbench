@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=MPDIAG,SSI=0
+c     Copyright INRIA
       subroutine mpdiag(d,m,n,diag,dd,mr,nr)
       integer d(*),dd(*),diag
 c

@@ -28,6 +28,7 @@ function []=plotdb(f,gain,thetaphi,modxy)
 //!
 //author: C. Bunks  date: Jan 22, 1990
 //defaults for gain, theta, and phi
+// Copyright INRIA
 [lhs,rhs]=argn(0),
 select rhs
    case 1 then,
@@ -35,7 +36,7 @@ select rhs
      thetaphi=[%pi/4,%pi/3];
      modxy='xy'
    case 2 then,
-     if type(gain)=10 then
+     if type(gain)==10 then
        select gain
          case 'agc' then modxy='xy'
          case 'x'   then modxy='x';gain=1
@@ -45,7 +46,7 @@ select rhs
        end,
        thetaphi=[%pi/4,%pi/3];
      else
-       if size(gain)=[1,2] then,
+       if and(size(gain)==[1,2]) then,
           thetaphi=gain;
           gain=1;
           modxy='xy';
@@ -55,12 +56,12 @@ select rhs
        end,
      end
    case 3 then,
-     if type(thetaphi)=10 then
+     if type(thetaphi)==10 then
        modxy=thetaphi;
-       if type(gain)=10 then,
+       if type(gain)==10 then,
          thetaphi=[%pi/4,%pi/3];
        else,
-         if size(gain)=[1,2] then,
+         if and(size(gain)==[1,2]) then,
             thetaphi=gain;
             gain=1;
          else,
@@ -81,7 +82,7 @@ xe=[-(nc-1)/2,(nc-1)/2],
 ye=[(nr-1)/2,-(nr-1)/2];
 //gain
    range=(maxi(f)-mini(f));
-   if gain='agc' then,
+   if gain=='agc' then,
       if range<>0 then,
          gain=.25*sp*(nr*abs(st)+nc*abs(ct))/range;
          print(6,gain),
@@ -110,13 +111,13 @@ dy=0.04*(ymax-ymin)
 
 plot2d(0,0,[1],"012",' ',[xmin-dx,ymin-dy,xmax+dx,ymax+dy])
 //plot matrix in both directions
-if part(modxy,1)='x' then
+if part(modxy,1)=='x' then
    for k=1:nr,
       plot2d([ct*x-st*y(k)*ones(x)]',...
              [cp*(st*x+ct*y(k)*ones(x))+sp*f(k,:)]',[1],"000");
    end,
 end
-if part(modxy,length(modxy))='y' then
+if part(modxy,length(modxy))=='y' then
    for k=1:nc,
      plot2d([ct*x(k)*ones(y)-st*y]',...
             [cp*(st*x(k)*ones(y)+ct*y)+sp*f(:,k)]',[1],"000");

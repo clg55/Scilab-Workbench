@@ -34,13 +34,14 @@ function z=narsimul(a,b,d,sig,u,up,yp,ep)
 // Auteur : J-Ph. Chancelier ENPC Cergrene
 //
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 //-compat type(a)==15 retain for list/tlist compatibility
 if type(a)==15|type(a)==16,
-   if rhs=2,z=narsimul(ar(2),ar(3),ar(4),ar(7),b);return;end
-   if rhs=3,z=narsimul(ar(2),ar(3),ar(4),ar(7),b,d);return;end
-   if rhs=4,z=narsimul(ar(2),ar(3),ar(4),ar(7),b,d,sig);return;end
-   if rhs=5,z=narsimul(ar(2),ar(3),ar(4),ar(7),b,d,sig,u);return;end
+   if rhs==2,z=narsimul(ar(2),ar(3),ar(4),ar(7),b);return;end
+   if rhs==3,z=narsimul(ar(2),ar(3),ar(4),ar(7),b,d);return;end
+   if rhs==4,z=narsimul(ar(2),ar(3),ar(4),ar(7),b,d,sig);return;end
+   if rhs==5,z=narsimul(ar(2),ar(3),ar(4),ar(7),b,d,sig,u);return;end
 end
 // calcul de dimension
    [al,ac]=size(a);adeg=int(ac/al);

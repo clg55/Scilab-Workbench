@@ -1,4 +1,5 @@
       subroutine dspe2(ma,na,a,nela,inda,i,ni,j,nj,
+c     Copyright INRIA
      $     mr,nr,r,nelr,indr,ptr,ierr)
 c     extract a submatrix from a sparse matrix
 c!

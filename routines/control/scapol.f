@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=SCAPOL,SSI=0
+c     Copyright INRIA
       subroutine scapol(na,a,nb,b,y)
 c!but
 c     cette subroutine a pour but de calculer le produit

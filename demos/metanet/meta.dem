@@ -1,4 +1,5 @@
 getf(SCI+'/demos/metanet/metro.sci','c');
+// Copyright INRIA
 mode(0);
 num=x_message([' ';
 'METANET is a Scilab toolbox for graph and network analysis';

@@ -23,7 +23,7 @@ DESCRIPTION
         B(z)   b(1)z     + b(2)z    + .... + b(n)
   H(z)= ---- = ---------------------------------
                   n-1       n-2
-        A(z)    z   + a(1)z    + .... + a(n)
+        A(z)    z   + a(2)z    + .... + a(n)
   which matches the magnitude frequency response given by vectors frq and
   mag.  Vectors frq and mag specify the frequency and magnitude of the
   desired frequency response. The frequencies in frq must be between 0.0 and

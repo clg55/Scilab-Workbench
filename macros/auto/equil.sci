@@ -1,4 +1,5 @@
 function [t]=equil(p,q)
+// Copyright INRIA
 t=chol(q);
 [u,s,u]=svd(t*p*t');
 s=diag(s);

@@ -130,7 +130,12 @@ instructions are  interpreted as:
 \fVlkn   = lkn-1(kn)\fR
 
 \fV        lkn(i,j)\fR
+\fVi\fR and \fVj\fR, can be:
 
+When path points on more than one list component the instruction must
+have as many left hand side arguments as selected components. But if the
+extraction syntax is used within a function input calling sequence
+each returned list component is added to the function calling sequence.
 .RS
 .TP 3
 -
@@ -205,6 +210,7 @@ l=list(1,'qwerw',%s)
 l(1)
 [a,b]=l([3 2])
 l($)
+x=tlist(l(2:3)) //form a tlist with the last 2 components of l
 //
 dts=list(1,tlist(['x';'a';'b'],10,[2 3]));
 dts(2)('a')

@@ -10,7 +10,8 @@ function [Pn,Rt,T]=lindquist(n,H,F,G,r0)
 //   Rt,Tt : gain matrices of the filter.
 //!
 //author: G. Le Vey  Date: 16 Febr. 1989
- 
+// Copyright INRIA
+
 //initialization
    [d,m]=size(H);
    gam=G;

@@ -18,6 +18,7 @@ function [svm] = svplot(Sl,w)
 // SVM = SVPLOT(Sl,LOGSPACE(-3,3))  (continuous) or
 // SVM = SVPLOT(Sl,LOGSPACE(-3,PI)) (discrete).
 //!
+// Copyright INRIA
 [nargout,nargin]=argn(0);
 //
 [a,b,c,d]=abcd(Sl);

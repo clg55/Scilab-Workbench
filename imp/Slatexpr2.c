@@ -1,3 +1,5 @@
+/* Copyright INRIA */
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -7,6 +9,10 @@
 #include <stdio.h>
 
 void readOneLine();
+
+#ifdef WIN32 
+extern void SciEnv(void);
+#endif 
 
 /*---------------------------------------------------------
   Blatexprs fileres file1 .... filen  
@@ -142,6 +148,9 @@ int main(argc, argv)
   int i ;
   FILE *fd;
   FILE *fdo;
+#ifdef WIN32 
+  SciEnv();
+#endif 
   if (argc !=4 ) { int i=0;
 		   while (strcmp(UsageStr[i],"fin")!=0)
 		     { 

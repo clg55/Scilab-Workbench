@@ -7,8 +7,9 @@ function [z]=eval3d(fun,x,y)
 //  feval(x,y,fun) 
 //Si y n'est pas fourni il est suppose identique a x
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
-if rhs=3 then
+if rhs==3 then
   nx=prod(size(x));ny=prod(size(y))
   z=matrix(fun(ones(1,ny).*.matrix(x,1,nx),matrix(y,1,ny).*.ones(1,nx)),nx,ny)
 else

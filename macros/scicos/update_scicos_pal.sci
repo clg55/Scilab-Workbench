@@ -1,4 +1,5 @@
 function update_scicos_pal(path,name,fname)
+// Copyright INRIA
 scicos_pal;
 mess=%f
 [u,ierr]=file('open','~/.scilab','unknown')
@@ -49,10 +50,21 @@ elseif part(fname,lf-4:lf)=='.cosf' then
 else
   graph=fname+'.pal'
 end
-if part(graph,1:4)='SCI/' then 
+if part(graph,1:4)=='SCI/' then 
   graph=getenv('SCI')+'/'+part(graph,5:length(graph))
 end
-unix_s('\rm -f '+graph')
 
+errcatch(-1,'continue')
+if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+  unix_s('del '+graph)
+else
+  unix_s('\rm -f '+graph)
+end
+
+errcatch(-1)
+if iserror(-1)==1 then
+  errclear(-1)
+  x_message('I was not able to delete'+graph+'. You must do it now!')
+end
 
 

@@ -17,26 +17,24 @@ c   [y1,y2,...y_      ]=scilabfunctionname2(x1,x2,...,x_      )
 c
 c************************************************************************
 
+c     Copyright INRIA
       include '../../routines/stack.h'
+      logical checkrhs,checklhs,getrhsvar,createvar,putlhsvar
       character fname*(*)
 c     global nbvars must be initialized to 0.
 c
        nbvars=0
 c*****************************************************
-c      0-Check number of rhs and lhs arguments
+c      0-Check number of rhs and lhs arguments (MUST BE DONE)
 c*****************************************************       
        minrhs=?
        maxrhs=?
        minlhs=?
        maxlhs=?
 c
-
-       if(.not.((rhs.ge.minrhs).and.(rhs.le.maxrhs))) then
-          call erro('wrong number of rhs arguments')
-       endif
-       if(.not.((lhs.ge.minlhs).and.(lhs.le.maxlhs))) then
-          call erro('wrong number of lhs arguments')
-       endif
+c    
+       if(.not.checkrhs(fname,minrhs,maxrhs))) return
+       if(.not.checklhs(fname,minlhs,maxlhs))) return
 
 c*******************************************************
 c      1-Get rhs parameters and set their Fortran types
@@ -66,7 +64,7 @@ c      stk  <-> double
 c      sstk <-> real
 c      istk <-> integer
 c      cstk <-> character
-
+c*****************************************************
        call fortroutine1(...,stk(l?),..., cstk(l?:l?+?),...,istk(l?),....
      $      ...,sstk(l?),...,ierr)
 
@@ -75,6 +73,7 @@ c      4-Display error message(s)
 c******************************************************
        if(ierr .gt. 0) then 
         call erro('Error in ...')
+        return
        endif
 c
 c******************************************************
@@ -94,31 +93,30 @@ c
        end
 
 
-
-subroutine interface2(fname)
-.
-.
-.
-
+      subroutine interface2(fname)
+      .
+      .
+      .
+      end
 
 c  interface function 
 c *********************
+c     
+      subroutine entrypointroutine
+      include 'SCIDIR/routines/stack.h'
+      rhs = max(0,rhs)
 c
-       subroutine entrypointroutine
-       include 'SCIDIR/routines/stack.h'
-       rhs = max(0,rhs)
-c
-c      To each fin corresponds one interface and one scilab function
-c
-       goto (1,2,...) fin
-       return
- 1     call interface1('scilabfunctionname1')
-       return
- 2     call interface2('scilabfunctionname2')
-       return
-       .
-       .
-       end
+c     To each fin corresponds one interface and one scilab function
+c     
+      goto (1,2,...) fin
+      return
+ 1    call interface1('scilabfunctionname1')
+      return
+ 2    call interface2('scilabfunctionname2')
+      return
+      .
+      .
+      end
 
 
 

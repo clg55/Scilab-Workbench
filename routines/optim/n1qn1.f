@@ -1,9 +1,11 @@
       subroutine n1qn1 (simul,n,x,f,g,var,eps,
-     1 mode,niter,nsim,imp,lp,zm,izs,rzs,dzs)
+     1     mode,niter,nsim,imp,lp,zm,izs,rzs,dzs)
+
 c!but
 c     minimisation d une fonction reguliere sans contraintes
 c!origine
 c     c. lemarechal, inria, 1987
+c     Copyright INRIA
 c!methode
 c     direction de descente calculee par une methode de quasi-newton
 c     recherche lineaire de type wolfe

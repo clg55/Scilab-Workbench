@@ -1,4 +1,5 @@
       subroutine wsqrt(xr,xi,yr,yi)
+c     Copyright INRIA
       double precision xr,xi,yr,yi,s,tr,ti,pythag
 c     y = sqrt(x) with yr .ge. 0.0 and sign(yi) .eq. sign(xi)
 c

@@ -7,10 +7,11 @@ function [n]=linf(g,eps,tol)
 //-- tol threshold for imaginary axis poles.
 // See also: h_norm
 //!
+// Copyright INRIA
 g1=g(1);
-if g1(1)='r' then g=tf2ss(g);end
-      if type(g)=1,if norm(g)=0,n=0,return,end,end,
-      if g(7)='d' then
+if g1(1)=='r' then g=tf2ss(g);end
+      if type(g)==1,if norm(g)==0,n=0,return,end,end,
+      if g(7)=='d' then
          error('system must be continuous')
       else
          g(7)='c'
@@ -27,10 +28,10 @@ if g1(1)='r' then g=tf2ss(g);end
 //1. min , max.
 //----------------------------------
       [slp,slm]=dtsi(g),
-      if slp=0 then pp=0,qq=0,tp=1,
+      if slp==0 then pp=0,qq=0,tp=1,
          pm=p,qm=q,tm=t,
       else
-         if slm=0 then pm=0,qm=0,tm=1,
+         if slm==0 then pm=0,qm=0,tm=1,
             pp=p,qq=q,tp=t,
          else
             [tp,tp]=size(slp(2)),[tm,tm]=size(slm(2)),

@@ -1,5 +1,6 @@
       subroutine lful2sp(ma,na,a,nel,indr)
 c     converts a full matrix to a sparse representation
+c     Copyright INRIA
       integer a(ma,na)
       integer indr(*)
 c

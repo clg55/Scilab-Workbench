@@ -107,3 +107,25 @@ fd	int
 
 out	sequence	res 
 *********************
+mseek  n [fd -1] [flag set]
+n	scalar 
+fd 	scalar 
+flag	string n1
+
+mseek	fd n flag err
+fd	int
+n	int
+flag	char 
+
+out	empty
+*********************
+mtell  [fd -1] 
+n	scalar 
+fd 	scalar 
+
+mseek	fd n err
+fd	int
+n	int
+
+out	sequence n
+*********************

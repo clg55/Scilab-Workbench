@@ -1,8 +1,8 @@
 #!/bin/sh
- 
+# Copyright INRIA
 for i in $*
 do
-        sed -n -e '/^.SH *NAME */,/^./p' $i |sed -n -e '2p'
+        sed -n -e '/^.SH *NAME */,/^./p' $i |sed -n -e '2p'|awk '{printf "%s ",$1;i=1;while (i++<=NF) printf "%s ",tolower($i);printf "\n" }'
 done  |\
 sed	-e 's/\\(em/-/'		\
 	-e 's/\\(hy/-/'		\
@@ -36,5 +36,6 @@ sed	-e 's/\\(em/-/'		\
 	-e 's/\\\//\//g'	\
 	-e 's/.TH *[^ ][^ ]* \([^ 	]*\).*	\([^@]*\)@/\2(\1)	- /' \
 	-e 's/@/- /'		\
-	-e 's/	 /	/g' |\
+	-e 's/	 /	/g'     \
+	-e 's/^ *//' |\
 sort -u >whatis

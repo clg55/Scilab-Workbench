@@ -1,3 +1,5 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
+
 static void CNAME(ColSort,double)();
 static void CNAME(RowSort,double)();
 static void CNAME(GlobalSort,double)();

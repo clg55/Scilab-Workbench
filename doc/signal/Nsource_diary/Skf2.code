@@ -37,7 +37,7 @@ deff('[]=ellipse(m1,m2,s1,s2,s12)',...
    rho=s12/sqrt(s1*s2);...
    cr=sqrt(s1)*c+m1*ones(c);...
    sr=sqrt(s2)*(rho*c+sqrt(1-rho*rho)*s)+m2*ones(s);...
-   plot2d(cr'',sr'',[-1],'"000'"),')
+   plot2d(cr'',sr'',[1],'"000'"),')
 //plot result
 a=mini([x(1,:)-2*sqrt(ell(1,:)),xke(1,:)]);a=-.1*abs(a)+a;
 b=maxi([x(1,:)+2*sqrt(ell(1,:)),xke(1,:)]);b=.1*abs(b)+b;
@@ -45,12 +45,12 @@ c=mini([x(2,:)-2*sqrt(ell(2,:)),xke(2,:)]);c=-.1*abs(c)+c;
 d=maxi([x(2,:)+2*sqrt(ell(2,:)),xke(2,:)]);d=.1*abs(d)+d;
 //plot frame, real state (x), and estimate (xke)
 plot([a a b],[d c c]),
-plot2d(x(1,:)',x(2,:)',[-2],"000"),
-plot2d(xke(1,:)',xke(2,:)',[-1],"000"),
+plot2d(x(1,:)',x(2,:)',[2],"000"),
+plot2d(xke(1,:)',xke(2,:)',[1],"000"),
 //plot ellipses of constant likelihood (2 standard dev's)
    for k=1:n+1,
       ellipse(x(1,k),x(2,k),ell(1,k),ell(2,k),ell(3,k)),
    end,
 //mark data points (* for real data, o for estimates)
-plot2d(x(1,:)',x(2,:)',[2],"000"),
-plot2d(xke(1,:)',xke(2,:)',[3],"000")
+plot2d(x(1,:)',x(2,:)',[-2],"000"),
+plot2d(xke(1,:)',xke(2,:)',[-3],"000")

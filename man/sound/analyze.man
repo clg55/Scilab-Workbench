@@ -1,7 +1,7 @@
 .TH analyze 1 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-analyze - 
+analyze - frequency plot of a sound  signal
 .SH CALLING SEQUENCE
  analyze (w [,fmin,fmax,rate,points])
 .fi

@@ -1,7 +1,7 @@
 %!PS-ADOBE
 %%Missile File : J.Ph Chancelier 1991
 %%EndComments
-
+% Copyright INRIA
 /saved save def 
 /$pictdict 100 dict def
 $pictdict begin

@@ -8,7 +8,8 @@ function [hn]=eqfir(nf,bedge,des,wate)
 //  hn    :Output of linear-phase FIR filter coefficients
 //!
 //author: C. Bunks  date: 18 June 1988
- 
+// Copyright INRIA
+
 //get number of cosines
  
    nc=int(nf/2);
@@ -40,7 +41,7 @@ function [hn]=eqfir(nf,bedge,des,wate)
  
 //adjust values of ds and wt if filter is of even length
  
-   if flag=1 then,
+   if flag==1 then,
       fgs=maxi(size(fg));
       if fg(fgs)>.5-%eps then,
          fg=fg(1:fgs-1);
@@ -58,7 +59,7 @@ function [hn]=eqfir(nf,bedge,des,wate)
  
 //obtain other half of filter coefficients (by symmetry)
  
-   if flag=1 then,
+   if flag==1 then,
       hn(1)=.25*an(nc);
       hn(2:nc-1)=.25*(an(nc:-1:3)+an(nc-1:-1:2));
       hn(nc)=.5*an(1)+.25*an(2);

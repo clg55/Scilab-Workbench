@@ -5,6 +5,7 @@ function syst=analyse(scs_m)
 //  string 'blocd'.  Each	other element of this list (blocd(2),blocd(3),...) is
 //  itself a list	of one the following types :
 
+// Copyright INRIA
 
 //  list('transfer','name_of_linear_system')
 
@@ -53,7 +54,6 @@ for k=2:nx
          nb=nb-1
       else
         message('Non linear systems are not implemented yet')
-        pause
         syst(nb)=list('transfer',o(5))
         corresp(k)=nb
       end

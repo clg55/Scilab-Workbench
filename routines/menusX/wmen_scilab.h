@@ -1,5 +1,8 @@
+/* Copyright INRIA */
 
+#ifndef STRICT 
 #define STRICT
+#endif
 #include <windows.h>
 #include <windowsx.h>
 #include <commdlg.h>
@@ -146,7 +149,9 @@ extern void xdialg1 (char *, char *valueinit, char **pButName, char *value, int 
 /* "men_getfile-n.c.X1" */
 
 extern int TestGetFile (void);  
-extern void C2F(xgetfile)(char *filemask, char *dirname, char **res, integer *ires, integer *ierr, integer *rhs);  
+
+extern void C2F(xgetfile) (char *filemask, char *dirname, char **res, integer *ires, integer *ierr, integer *idir,integer *desc,integer *ptrdesc,integer *nd);
+
 
 /* "men_madial-n.c.X1" */
 
@@ -189,7 +194,7 @@ extern BOOL DialogWindow  _PARAMS((void));
 
 /*  "wmen_getfile-n.c.X1" */
 
-extern int GetFileWindow  _PARAMS((char *filemask, char **szFile, char *dirname, int flag, int *ierr));  
+extern int GetFileWindow  _PARAMS((char *filemask, char **szFile, char *dirname, int flag, int *ierr,char *title));  
 
 /*  "wmen_madial-n.c.X1" */
 
@@ -209,3 +214,6 @@ extern int ExposeMessageWindow  _PARAMS((void));
 
 extern int ExposePrintdialogWindow  _PARAMS((int flag, int *colored, int *orientation));  
 
+/*  Global variable to keep track of the last position of a popup menu */
+
+extern RECT SciMenusRect ;

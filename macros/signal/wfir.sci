@@ -18,6 +18,7 @@ function [wft,wfm,fr]=wfir(ftype,forder,cfreq,wtype,fpar)
 //  fr     :Frequency grid
 //!
 //author: C. Bunks  date: 12 March 1988
+// Copyright INRIA
 wft=[];wfm=[];fr=[]
 //check arguments of macro call
  

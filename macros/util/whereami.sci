@@ -1,6 +1,7 @@
 function whereami()
 // whereami - display calling tree 
 //!
+// Copyright INRIA
 [linn,mac]=where()
 nn=prod(size(linn))
 lm=maxi(length(mac))

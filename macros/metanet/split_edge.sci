@@ -1,4 +1,5 @@
 function [g1]=split_edge(i,j,g,name)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 // check name
 if rhs==3 then

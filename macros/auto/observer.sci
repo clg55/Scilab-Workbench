@@ -33,6 +33,7 @@ function [Obs,U,m]=observer(Sys,flag,alfa)
 // Transfer u-->[u;u]-->w=[u;y=Sys*u]-->Obs*w  i.e. u-->output of Obs
 // this transfer must equal Sys2, the u-->z transfer  (H2=eye).
 //FD.
+// Copyright INRIA
 [nx,nx]=size(Sys(2));
 td=Sys(7);x0=Sys(6);
 [LHS,RHS]=argn(0);

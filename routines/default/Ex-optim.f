@@ -1,6 +1,7 @@
 C     Examples for the optim Scilab function 
 C     -------------------------------------------
 
+c     Copyright INRIA
       subroutine genros(ind,n,x,f,g,izs,rzs,dzs)
 C     -------------------------------------------
 c     Example of cost function given by a subroutine

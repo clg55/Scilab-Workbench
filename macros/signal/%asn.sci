@@ -9,6 +9,7 @@ function [y]=%asn(x,m)
 //
 //!
 //Author F.D.
+// Copyright INRIA
 m=real(m);
 if m<0 then error('m must be positive');end 
 if m>1 then error('m must be lower than 1');end 

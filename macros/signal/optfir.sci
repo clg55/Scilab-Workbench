@@ -16,29 +16,33 @@ function [ad,att,rp,flag,itrans,m,zz]=optfir(typ,n,fc,tw,eps);
 //          :               <0;attenuation>
 //          : the maximum ripple in the passbands being then minimized.
 //!
- 
-if eps(1)=0, crit='att';else crit='rip';end;
+// Copyright INRIA
+
+if eps(1)==0, crit='att';else crit='rip';end;
 p=prod(size(fc));
 p1=prod(size(tw));
 ch1='Transition width is less than the achievable resolution';
 ch2='First transition width is less than the achievable resolution';
 ch3='Second transition width is less than the achievable resolution';
 ch4='Stopband is less than the sum of transition widths';
-if p1=1,nbech=int(tw*n);
+if p1==1,nbech=int(tw*n);
 if tw<1/n then error(ch1);return;end;
 else
 if tw(1)<1/n then error(ch2);return;end;
 if tw(2)<1/n then error(ch3);return;end;
 nbech1=int(tw(1)*n);nbech2=int(tw(2)*n);
 nbech=nbech1+nbech2;end;
-if int(n/2)=n/2,n1=n/2;
-else n1=(n-1)/2+1;end;
+if int(n/2)==n/2 then
+  n1=n/2;
+else 
+  n1=(n-1)/2+1;
+end;
 
 fc=fc(1);
 alph1=fc*n;
 k1=int(alph1);
 k2=int(alph1-.5);
-if k1=k2,flag=2;else flag=1;end;
+if k1==k2,flag=2;else flag=1;end;
 itrans=k1+1:k1+nbech;
 ad=ones(1,k1);ad(1,n1)=0;
 ai=[];
@@ -55,12 +59,12 @@ nmax3=mini(3,nm3);
 nmax3=mini(q2,nmax3);
 m3=m3(1:nmax3);
 m=[m1 m3];
-if flag=2,m=m+ones(m);end;
+if flag==2,m=m+ones(m);end;
 nm=prod(size(m));
 //	contraintes de bornes
 // $$$$$$$$$ [ab,bb,zb]=bound(typ)
 //	contraintes inegalite
-pause;a=ai(:,m)'.*.[1;1];
+a=ai(:,m)'.*.[1;1];
 a1=[0*ones(2*nmax1,1);ones(nmax3,1).*.[-1;1]];
 a=[a a1];
 b=(-bi(m)').*.[1;1];

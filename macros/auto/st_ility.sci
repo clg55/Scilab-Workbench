@@ -1,14 +1,15 @@
 function [n,nc,u,sl]=st_ility(sl,tol)
 //stabilizability test
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 [a,b,c,d,x0,dom]=sl(2:7);
-if dom=[] then 
+if dom==[] then 
  dom='c';warning('st_ility: time domain not given => sl assumed continuous!');
 end
 typ='c';if dom<>'c' then typ='d',end
 [na,na]=size(a);[nw,nb]=size(b);
 // controllable part
-if rhs=1 then 
+if rhs==1 then 
   if [a,b]~=[] then reltol=1.d-10*norm([a,b],1);else reltol=0;end
   [a,b,u,n]=contr(a,b,[reltol,1.d-10])
          else [a,b,u,n]=contr(a,b,tol)

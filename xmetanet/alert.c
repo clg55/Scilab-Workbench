@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <stdio.h>
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>

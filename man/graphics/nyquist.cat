@@ -35,7 +35,7 @@ DESCRIPTION
 
   For continous time systems sl(2*%i*%pi*w) is plotted.  For discrete time
   system or discretized systems sl(exp(2*%i*%pi*w*fd) is used ( fd=1 for
-  discrete time systems and fd=sl(4) for discretized systems )
+  discrete time systems and fd=sl('dt') for discretized systems )
 
   sl can be a continuous-time or discrete-time SIMO system (see syslin).  In
   case of multi-output the outputs are plotted with different symbols.

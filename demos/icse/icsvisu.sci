@@ -9,6 +9,7 @@ function [yobt,yob]=icsvisu(vue)
 //yob  : idem, aux instants d'observation
 //!
 //
+// Copyright INRIA
 tob1=[t0,tob];
 tobt=t0*ones(1,nti+ntf)+[dti*[1:nti],dtf*[(nti*dti/dtf)+1:..
 (nti*dti/dtf)+ntf]];

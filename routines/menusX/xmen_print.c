@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "men_scilab.h"
 
 #define OK 1

@@ -39,6 +39,7 @@ c     ierr=2 : espace memoire insuffisant on retourne les polynomes
 c!    
 c     origine S Steer INRIA 1990
 c     
+c     Copyright INRIA
       double precision a(na+1),b(nb+1),w(*),a1(*),b1(*),t,er,t1,t2
       integer na,nb,ierr,ipb(6)
 c     
@@ -52,18 +53,20 @@ c
 c
 c degre reel des polynomes
 c
-      nna=na+1
- 08   nna=nna-1
-      if(nna.lt.0) goto 20
-      if(a(nna+1).eq.0.0d+0) goto 08
+
 c
       nnb=nb+1
- 09   nnb=nnb-1
+ 08   nnb=nnb-1
       if(nnb.lt.0) then
          ierr=1
          return
       endif
-      if(b(nnb+1).eq.0.0d+0) goto 09
+      if(b(nnb+1).eq.0.0d+0) goto 08
+
+      nna=na+1
+ 09   nna=nna-1
+      if(nna.lt.0) goto 20
+      if(a(nna+1).eq.0.0d+0) goto 09
 c     
 c     elimination des racines en zero
       la0=0

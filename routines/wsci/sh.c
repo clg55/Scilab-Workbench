@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <stdio.h> 
 #include <windows.h> 
 #include <string.h>

@@ -2,6 +2,8 @@
      /                  niter,nsim,info,memh,d,xx,gg,tabaux,h,
      /                  izs,rzs,dzs)
       implicit double precision (a-h,o-z)
+c     Copyright INRIA
+
 c
 c parametres
       double precision  zero     , un     , deux     , ro

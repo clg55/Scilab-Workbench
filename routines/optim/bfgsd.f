@@ -4,6 +4,8 @@ c     utiliser a la suite de la correction de powell
 c     condm borne sup du conditionnement de diag
 c     param borne inf rapport reduction diag(i)
 c
+c     Copyright INRIA
+c
       implicit double precision (a-h,o-z)
       dimension diag(n),y(nt,n),s(nt,n),ys(nt)
       integer index(nt)

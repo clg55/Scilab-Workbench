@@ -5,6 +5,7 @@ c!liste d'appel
 c     double precision function arcosh(x)
 c     double precision x
 c!
+c     Copyright INRIA
       double precision x
       if (x.lt.1.0d+0) go to 10
       arcosh = log(x+sqrt(x*x-1.0d+0))

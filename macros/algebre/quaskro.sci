@@ -16,15 +16,16 @@ function [Q,Z,Ec,Ac,Qd,Zd,numbeps]=quaskro(E,A,tol)
 // interface  from Slicot-fstair (F.D.) 
 // T. Beelen's routines
 //!
+// Copyright INRIA
 [LHS,RHS]=argn(0);
 if RHS==1 then [E,A]=pen2ea(E);tol=1.d-10;end
 if RHS==2 then
-  if type(E)=2 then [E,A]=pen2ea(E);end  //quaskro(pencil,tol)
-  if type(E)=1 then tol=1.d-10;end   //quaskro(E,A);
+  if type(E)==2 then [E,A]=pen2ea(E);end  //quaskro(pencil,tol)
+  if type(E)==1 then tol=1.d-10;end   //quaskro(E,A);
 end
 [na,ma]=size(A);
 Q=eye(na,na);Z=eye(ma,ma);
-if E~=[] then nE=norm(E);else nE=0;end
+if E~=[] then nE=norm(E,1);else nE=0;end
 [E,Q,Z,stair,rk]=ereduc(E,1000*%eps+tol*nE)
 A=Q*A*Z;
 

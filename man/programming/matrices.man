@@ -27,7 +27,7 @@ E=[1/s,0;s,1/(s+1)]
 E=['A11','A12';'A21','A22']
 .fi
 .SH SEE ALSO
-poly, string, boolean, rational, syslin, empty
+poly, string, boolean, rational, syslin, empty, hypermatrices
 
 
 

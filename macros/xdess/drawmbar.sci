@@ -10,6 +10,7 @@ function datas=drawmbar(menus,flag,shift)
 // datas  : contient les information necessaires a getmenu
 //!
 //origine S Steer INRIA 1993
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs==1 then flag='r',end
 if rhs<3 then  shift=0,end
@@ -120,7 +121,7 @@ end
 xset('thickness',thick)
 datas=[datas;cliprect;mrect;[win 0 0 0]]
 wdp=xget('pixmap')
-if wdp=1,xset('wshow');end
+if wdp==1,xset('wshow');end
 xclip(cliprect)
 //if colored then 
 //  xset('colormap',cmap(1:ncol,:))

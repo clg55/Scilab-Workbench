@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WVMUL,SSI=0
+c     Copyright INRIA
       subroutine wvmul(n,dxr,dxi,incx,dyr,dyi,incy)
 c!but
 c

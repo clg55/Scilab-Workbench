@@ -3,6 +3,7 @@ c
 c     gestion de la standard input
 c ================================== ( Inria ) =============
 c
+c     Copyright INRIA
       include '../stack.h'
 c     --- for myback 
       integer lrecl,bkflag
@@ -11,7 +12,7 @@ c     --- for myback
       common / keepme / bkflag,bckbuf
 c     --- end 
       character string*(*),fmt*(*)
-      integer ierr,lunit
+      integer ierr,lunit,status
 c
       ierr=0
       if(lunit.eq.rte) then

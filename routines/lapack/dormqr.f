@@ -1,10 +1,10 @@
       SUBROUTINE DORMQR( SIDE, TRANS, M, N, K, A, LDA, TAU, C, LDC,
      $                   WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 1.0b) --
+*  -- LAPACK routine (version 2.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
 *     Courant Institute, Argonne National Lab, and Rice University
-*     February 29, 1992
+*     September 30, 1994
 *
 *     .. Scalar Arguments ..
       CHARACTER          SIDE, TRANS
@@ -18,34 +18,30 @@
 *  Purpose
 *  =======
 *
-*  DORMQR overwrites the general real m by n matrix C with
+*  DORMQR overwrites the general real M-by-N matrix C with
 *
-*        Q * C  if SIDE = 'L' and TRANS = 'N', or
-*
-*        Q'* C  if SIDE = 'L' and TRANS = 'T', or
-*
-*        C * Q  if SIDE = 'R' and TRANS = 'N', or
-*
-*        C * Q' if SIDE = 'R' and TRANS = 'T',
+*                  SIDE = 'L'     SIDE = 'R'
+*  TRANS = 'N':      Q * C          C * Q
+*  TRANS = 'T':      Q**T * C       C * Q**T
 *
 *  where Q is a real orthogonal matrix defined as the product of k
 *  elementary reflectors
 *
 *        Q = H(1) H(2) . . . H(k)
 *
-*  as returned by DGEQRF. Q is of order m if SIDE = 'L' and of order n
+*  as returned by DGEQRF. Q is of order M if SIDE = 'L' and of order N
 *  if SIDE = 'R'.
 *
 *  Arguments
 *  =========
 *
 *  SIDE    (input) CHARACTER*1
-*          = 'L': apply Q or Q' from the Left
-*          = 'R': apply Q or Q' from the Right
+*          = 'L': apply Q or Q**T from the Left;
+*          = 'R': apply Q or Q**T from the Right.
 *
 *  TRANS   (input) CHARACTER*1
-*          = 'N': apply Q  (No transpose)
-*          = 'T': apply Q' (Transpose)
+*          = 'N':  No transpose, apply Q;
+*          = 'T':  Transpose, apply Q**T.
 *
 *  M       (input) INTEGER
 *          The number of rows of the matrix C. M >= 0.
@@ -75,27 +71,26 @@
 *          reflector H(i), as returned by DGEQRF.
 *
 *  C       (input/output) DOUBLE PRECISION array, dimension (LDC,N)
-*          On entry, the m-by-n matrix C.
-*          On exit, C is overwritten by Q*C or Q'*C or C*Q' or C*Q.
+*          On entry, the M-by-N matrix C.
+*          On exit, C is overwritten by Q*C or Q**T*C or C*Q**T or C*Q.
 *
 *  LDC     (input) INTEGER
 *          The leading dimension of the array C. LDC >= max(1,M).
 *
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*          On exit, if INFO = 0, WORK(1) returns the minimum value of
-*          LWORK required to use the optimal blocksize.
+*  WORK    (workspace/output) DOUBLE PRECISION array, dimension (LWORK)
+*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *
 *  LWORK   (input) INTEGER
 *          The dimension of the array WORK.
 *          If SIDE = 'L', LWORK >= max(1,N);
 *          if SIDE = 'R', LWORK >= max(1,M).
-*          For optimum performance LWORK should be at least N*NB
-*          if SIDE = 'L' and at least M*NB if SIDE = 'R', where NB is
-*          the optimal blocksize.
+*          For optimum performance LWORK >= N*NB if SIDE = 'L', and
+*          LWORK >= M*NB if SIDE = 'R', where NB is the optimal
+*          blocksize.
 *
 *  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
+*          = 0:  successful exit
+*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  =====================================================================
 *

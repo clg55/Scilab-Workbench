@@ -30,6 +30,7 @@ function [x,y,z]=eval3dp(fun,p1,p2)
 //!
 //origine S Steer INRIA 1990
 //
+// Copyright INRIA
 n1=prod(size(p1))
 n2=prod(size(p2))
 //on calcule la valeur de la fonction en tous le couples (p1(i),p2(j))

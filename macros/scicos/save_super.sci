@@ -1,14 +1,18 @@
-function save_super(scs_m)
+function path=save_super(scs_m,fpath)
 // given a super block definition x save_super creates a file which contains
 // this super block  handling  macro definition
-x1=scs_m(1);nam=x1(2);
-nin=0;nout=0;clkin=0;clkout=0;
-
+// Copyright INRIA
+path=[]
+scs_m=do_purge(scs_m)
+x1=scs_m(1);nam=x1(2)(1);
+nam=strsubst(nam,' ','_')
 in=[];out=[];clkin=[];clkout=[];
+bl='  '
+com='/'+'/'
 for k=2:size(scs_m)
   o=scs_m(k)
   if o(1)=='Block' then
-    model=o(2)
+    model=o(3)
     select o(5)
     case 'IN_f' then
       in=[in;model(3)]
@@ -26,73 +30,54 @@ for k=2:size(scs_m)
   end
 end
 model=list('super',in,out,clkin,clkout,[],[],..
-      x,[],'h',%f,[%f %f])
+      scs_m,[],'h',%f,[%f %f])
+ppath=getparpath(scs_m,[])
+
+
+// form text of the macro
 txt=[
 'function [x,y,typ]='+nam+'(job,arg1,arg2)';
 'x=[];y=[],typ=[]';
 'select job';
 'case ''plot'' then';
 '  standard_draw(arg1)';
-'  graphics=arg1(2); [orig,sz]=graphics(1:2)';
-'  thick=xget(''thickness'');xset(''thickness'',2)';
-'  xx=orig(1)+      [2 4 4]*(sz(1)/7)';
-'  yy=orig(2)+sz(2)-[2 2 6]*(sz(2)/10)';
-'  xrects([xx;yy;[sz(1)/7;sz(2)/5]*ones(1,3)])';
-'  xx=orig(1)+      [1 2 3 4 5 6 3.5 3.5 3.5 4 5 5.5 5.5 5.5]*sz(1)/7';
-'  yy=orig(2)+sz(2)-[3 3 3 3 3 3 3   7   7   7 7 7   7   3  ]*sz(2)/10';
-'  xsegs(xx,yy,1)   ';
-'  xset(''thickness'',thick)';
 'case ''getinputs'' then';
 '  [x,y,typ]=standard_inputs(arg1)';
 'case ''getoutputs'' then';
 '  [x,y,typ]=standard_outputs(arg1)';
 'case ''getorigin'' then';
 '  [x,y]=standard_origin(arg1)';
-'case ''set'' then';
-'  graphics=arg1(2);label=graphics(4)';
-'  model=arg1(3);';
-'  x=model(8)';
-'  while %t do';
-'    [x,newparameters,needcompile]=scicos(model(8))';
-'    in=[];out=[];clkin=[];clkout=[];';
-'    for k=2:size(x)';
-'      o=x(k)';
-'      if o(1)==''Block'' then';
-'        modelb=o(3);'
-'        select o(5)';
-'        case ''IN_f'' then';
-'          in=[in;modelb(3)];';
-'        case ''OUT_f'' then';
-'          out=[out;modelb(2)];';
-'        case ''CLKIN_f'' then';
-'          clkin=[clkin;modelb(5)];';
-'        case ''CLKOUT_f'' then';
-'          clkout=[clkout;modelb(4)];';
-'        end';
-'      end';
-'    end';
-'    [model,graphics,ok]=check_io(model,graphics,in,out,clkin,clkout)';
-'    if ok then';
-'      model(8)=x';
-'      x=arg1;x(3)=model;x(2)=graphics;';
-'      y=needcompile';
-'      typ=newparameters';
-'      break';
-'    end';
-'  end';
-'case ''define'' then']
+'case ''set'' then'
+'  while %t do'
+'    [x,newparameters,needcompile]=scicos(arg1(3)(8))'
+'    arg1(3)(8)=x'
+'    [ok,arg1]=adjust_s_ports(arg1)'
+'    if ok then'
+'      x=arg1'
+'      y=needcompile'
+'      typ=newparameters'
+'      break'
+'    end'
+'  end']
 
-
+model(1)='super'
 t1=sci2exp(model,'model');
-bl='  '
 txt=[
-   txt;
+    txt;
+'case ''define'' then'
    bl(ones(size(t1,1),1))+t1;
-'  x=standard_define([2 2],model,'''+nam+''',[])';
+'  gr_i=''xstringb(orig(1),orig(2),'''''+nam+''''',sz(1),sz(2),''''fill'''')'';'
+'  x=standard_define([2 2],model,[],gr_i)';
 'end']
-u=file('open',nam+'.sci','unknown')
+path=stripblanks(fpath)+'/'+nam+'.sci'
+[u,err]=file('open',path,'unknown')
+if err<>0 then
+  message(path+': Directory or file write access denied')
+  return
+end
 write(u,txt,'(a)')
 file('close',u)
+
 
 
 

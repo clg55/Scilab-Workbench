@@ -5,6 +5,8 @@
 # can only be executed by the owner of Scilab tree 
 # $1 is the name  of scilab directory 
 # $2 the macrofile 
+
+# Copyright INRIA
 #-------------------------------------------------------
 name=`basename $2 .sci`
 SCI=$1; export SCI

@@ -23,7 +23,6 @@ $(SBIN)/scilab: scilab.g $(IP) $(IV)
 	@$(RM) $(SBIN)/scilab
 	@sed -e "s+SCILAB_DIRECTORY+$(SCIDIR)+" \
 	-e "s+SCILAB_VERSION+$(SCIVERSION)+" \
-	-e "s+SCILAB_DATE+$(SCIDATE)+" \
 	-e "s+SCILABGS+sh+" scilab.g > scilab;
 	@cp scilab $(SBIN)
 	@chmod 775 $(SBIN)/scilab

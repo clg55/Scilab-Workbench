@@ -1,6 +1,7 @@
       subroutine where
 c     extrait l'arbre d'appel de l'instruction courante
 c     cette routine est issue de la fin du sous programme error
+c     Copyright INRIA
       include '../stack.h'
       integer iadr,sadr
       integer p,lpts(6),lcts,r,vol

@@ -7,6 +7,7 @@ c       contraintes de borne (traitees par projection)
 c       le critere de retour est une extension de celui de wolfe
 c!origine
 c       f.bonnans  inria juin 1988
+c     Copyright INRIA
 c!methode
 c     pour chaque valeur du parametre t , sont calcules le critere
 c     et son gradient.

@@ -3,7 +3,7 @@ function [num,den]=frfit(w,fresp,order,weight)
 //[num,den]=frfit(w,fresp,r,weight)
 //sys=frfit(w,fresp,r,weight)
 //
-//  w: vector of frequencies 
+//  w: vector of frequencies in Hz
 //  fresp: vector of frequency responses at these frequencies.   
 //  weight: vector of weights given to each point
 //
@@ -13,15 +13,18 @@ function [num,den]=frfit(w,fresp,order,weight)
 //  of order r.
 //  freq(num,den,%i*w) should be close to fresp
 //
+// changing frequencies to rad/s 
+// Copyright INRIA
+w=2*%pi*w;
 [LHS,RHS]=argn(0);
-if RHS=3 
+if RHS==3 
 weight=ones(w);
 end
 w=w(:);fresp=fresp(:);weight=weight(:);
 
-mean=sum(fresp)/size(fresp,'*');
-if max(abs(fresp-mean)) < .1*max(abs(fresp))
-   num=real(mean); den=1; return
+Mean=sum(fresp)/size(fresp,'*');
+if max(abs(fresp-Mean)) < .1*max(abs(fresp))
+   num=real(Mean); den=1; return
 end
 
 order1=order+1;npts=length(w);wmed=1;
@@ -43,7 +46,7 @@ sl0=round((log10(abs(fresp(k)))-log10(abs(fresp(km))))/(log10(w(k))-log10(w(km))
 k=npts;km=k-1;
 slinf=round((log10(abs(fresp(k)))-log10(abs(fresp(km))))/(log10(w(k))-log10(w(km))));
 
-if slinf>0
+if slinf>0&slinf<20
   w=[w;[10;15]*w(npts)];
   fresp=[fresp;[1;1]*10^slinf*abs(fresp(npts))];
   weight=[weight;1;1];
@@ -77,7 +80,10 @@ for i=1:order-1,
    t0=t1; t1=t;
 end
 
-Aom=A;A=[A -diag(fresp)*A];AA=A;om0=w;
+Aom=A;
+
+//A=[A -diag(fresp)*A];AA=A;om0=w;
+A=[A, -fresp*ones(1,size(A,2)).*A];AA=A;om0=w;
 
 Acons=[]; ycons=[];
 if sl0<=0         
@@ -125,7 +131,6 @@ else
   end
   perm=[indout indin];
   Ac1=Acons(:,1:nc); Ac2=Acons(:,nc+1:nv);
-
   A=A(1:npts,:);
   A=[real(A);imag(A)];
   A=A(:,perm);     
@@ -135,13 +140,17 @@ else
 
   fweight=ones(npts,1); 
   ind=find(w > 10);
-  fweight(ind)=(1./(w(ind)^order))';
-  ind=find(w < .01);
-  fweight(ind)=1./(w(ind)^min(0,sl0));
-  fweight=weight.*fweight;
-  Wt=diag([fweight;fweight]);
 
-  x=pinv(Wt*A)*(Wt*y);
+  fweight(ind)=((1) ./(w(ind)^order));
+  ind=find(w < .01);
+
+  fweight(ind)=(1./(w(ind)^min(0,sl0)))';
+  fweight=weight.*fweight;
+  //Wt=diag([fweight;fweight]);
+  //x=pinv(Wt*A)*(Wt*y);
+  //x=pinv([fweight;fweight]*ones(1,size(A,2)).*A)*(vvv.*y);
+  vvv=[fweight;fweight];
+  x=(vvv*ones(1,size(A,2)).*A)\(vvv.*y);
   x=[Ac1\(ycons-Ac2*x);x];
   [s,perm]=sort(-perm);s=-s;
   x=x(perm);              
@@ -153,11 +162,15 @@ else
   ind=find(mag < .01); relerr(ind)=relerr(ind)*.3;
   ind=find(relerr>.5);
   if ind<>[] 
-  fweight(ind)=( exp(ind*log(10))' ).*fweight(ind);
+  fweight(ind)=( exp(relerr(ind)*log(10)) ).*fweight(ind);
   end
-  Wt=diag([fweight;fweight]);
-  x=pinv(Wt*A)*(Wt*y); x=[Ac1\(ycons-Ac2*x);x];x=x(perm);                 
+  //Wt=diag([fweight;fweight]);
+  //x=pinv(Wt*A)*(Wt*y);
+  //x=pinv([fweight;fweight]*ones(1,size(A,2)).*A)*(vvv.*y);
+  x=([fweight;fweight]*ones(1,size(A,2)).*A)\(vvv.*y);
+  x=[Ac1\(ycons-Ac2*x);x];x=x(perm);                 
 end
+
 a=x(1:order1); b=x(order1+1:2*order1);
 num=fliplr((M*a)');den=fliplr((M*b)');
 

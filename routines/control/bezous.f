@@ -31,6 +31,7 @@ c la premiere ligne de y  des n derniers ranges en ordre inverse
 c c est alors solution du systeme : (y'-x'*(y**-1)*x)*c=e1
 c!auteur
 c     serge Steer Inria 1983
+c     Copyright INRIA
 c!sous programmes appeles
 c     invtpl
 c     ddot (blas)

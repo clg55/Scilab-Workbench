@@ -1,10 +1,10 @@
 function [scs_m,needcompile]=do_replace(scs_m,needcompile)
+// Copyright INRIA
 while %t
   // get replacement block
-  [btn,xc,yc,win]=xclick(0);
-  if win==curwin then
-    [n,pt]=getmenu(datam,[xc,yc])
-    if n>0 then n=resume(n),end
+  [btn,xc,yc,win,Cmenu]=getclick()
+  if Cmenu<>[] then
+    Cmenu=resume(Cmenu)
   end
   kc=find(win==windows(:,2))
   if kc==[] then
@@ -35,8 +35,10 @@ if k==[] then return,end
 // get block to replace
 xset('window',curwin);
 while %t do
-  [n,pt]=getmenu(datam);xc=pt(1);yc=pt(2)
-  if n>0 then n=resume(n),end
+  [btn,xc,yc,win,Cmenu]=getclick()
+  if Cmenu<>[] then
+    Cmenu=resume(Cmenu)
+  end
   k_n=getobj(scs_m,[xc;yc])
   if k_n<>[] then
     o_n=scs_m(k_n)

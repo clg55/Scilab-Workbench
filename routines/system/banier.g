@@ -15,9 +15,9 @@ c ================================== ( inria    ) =============
          call basout(io,wwte,' ')
          call basout(io,wwte,' ')
          call basout(io,wwte,
-     $'                  SCILAB_VERSION  ( SCILAB_DATE ) ')
+     $'                  SCILAB_VERSION  (SCILAB_DATE) ')
          call basout(io,wwte,
-     $'                  Copyright (C) 1989-97 INRIA ')
+     $'                  Copyright (C) 1989-98 INRIA ')
       endif
       return 
       end

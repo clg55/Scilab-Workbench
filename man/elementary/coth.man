@@ -13,7 +13,7 @@ of elements of the vector \fVx\fR.
 .nf
 x=[1,2*%i]
 t=exp(x);
-(t-ones(x)./t).\(t+ones(x)./t)
+(t-ones(x)./t).\\(t+ones(x)./t)
 coth(x)
 .fi
 .SH SEE ALSO

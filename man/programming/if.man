@@ -2,15 +2,29 @@
 .so ../sci.an
 .SH NAME
 if then else - conditional execution
-.SH DESCRIPTION
-Conditional execution; the syntax is the following :
+.SH SYNTAX
 .nf
-if boolean then instructions,
-elseif expri then instructions,
+if expr1 then statements
+elseif expri then statements
   ....
-[else instructions],
+else  statements
 end
 .fi
+.SH DESCRIPTION
+The if statement evaluates a logical expression and executes a group
+of statements when the expression is true.
+
+The  \fVexpri\fR are expressions with numeric or boolean
+values. If \fVexpri\fR are matrix valued the condition is true only if
+all matrix entries are true.
+.LP
+ The optional \fVelseif\fR and \fVelse\fR provide for the
+execution of alternate groups of statements. An \fVend\fR keyword,
+which matches the \fVif\fR, terminates the last group of
+statements. The line structure given above is not significant, the
+only constraint is that each \fVthen\fR keyword must be on the same
+line line as its corresponding \fVif\fR or \fVelseif\fR keyword.
+
 .TP
 -
 The only constraint is that each \fVthen\fR keyword must be on 

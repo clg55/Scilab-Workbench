@@ -91,16 +91,7 @@ extern HWND HelpModeless ; /* the modeless Help Window */
 EXPORT void WINAPI 
 TextMessage(void)
 {
-  MSG msg;
-  while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
-    {
-      /** test if Modeless help exists **/
-      if ( HelpModeless == 0 || ! IsDialogMessage(HelpModeless,&msg) )
-	{
-	  TranslateMessage(&msg);
-	  DispatchMessage(&msg);
-	}
-    }
+  TextMessage1(0);
   return;
 }
 
@@ -1040,9 +1031,7 @@ WndTextProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
   RECT rect;
   int nYinc, nXinc,nl,nc;
   LPTW lptw;
-
   lptw = (LPTW)GetWindowLong(hwnd, 0);
-
   switch(message) {
   case WM_SETFOCUS: 
     lptw->bFocus = TRUE;
@@ -1063,6 +1052,7 @@ WndTextProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
     nc= lptw->ClientSize.x/lptw->CharSize.x;
     nl= lptw->ClientSize.y/lptw->CharSize.y;
     /** send number of lines info to scilab **/
+    nl=(nl > 5) ? nl : 5 ; /** to avoid lines set to 0 when iconified **/
     C2F(scilines)(&nl,&nc);
     lptw->ScrollMax.y = max(0, lptw->CharSize.y*lptw->ScreenSize.y - lptw->ClientSize.y);
     lptw->ScrollPos.y = min(lptw->ScrollPos.y, lptw->ScrollMax.y);
@@ -1104,7 +1094,7 @@ WndTextProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
       nYinc = max(1,lptw->ClientSize.y);
       break;
     case SB_THUMBPOSITION:
-      nYinc = LOWORD(lParam) - lptw->ScrollPos.y;
+      nYinc = HIWORD(wParam) - lptw->ScrollPos.y;
       break;
     default:
       nYinc = 0;
@@ -1133,7 +1123,7 @@ WndTextProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
       nXinc = max(1,lptw->ClientSize.x);
       break;
     case SB_THUMBPOSITION:
-      nXinc = LOWORD(lParam) - lptw->ScrollPos.x;
+      nXinc = HIWORD(wParam) - lptw->ScrollPos.x;
       break;
     default:
       nXinc = 0;
@@ -1498,6 +1488,7 @@ TextKBHit(LPTW lptw)
 
 /* get character from keyboard, no echo */
 /* need to add extended codes */
+
 EXPORT int WINAPI 
 TextGetCh(LPTW lptw)
 {
@@ -1510,9 +1501,25 @@ TextGetCh(LPTW lptw)
 		- lptw->CaretHeight - lptw->ScrollPos.y);
     ShowCaret(lptw->hWndText);
   }
+  /** 
+    jpc 1998 : Here we must wait for an event so TextMessage 
+    cannot be called directly in order not to use 
+    99% of the cpu time doing nothing. 
+    we can use TextMessage with a Sleep or TextMessage2 
+    XXXX : must check if tck/tk works with both ?
+    **/
+  /** 
   do {
+    Sleep(1);
     TextMessage();
   } while (!TextKBHit(lptw));
+  **/
+
+  while (!TextKBHit(lptw))
+    {
+      TextMessage2();
+    }
+
   ch = *lptw->KeyBufOut++;
   if (ch=='\r')
     ch = '\n';

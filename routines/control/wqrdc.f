@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WQRDC,SSI=0
+c     Copyright INRIA
       subroutine wqrdc(xr,xi,ldx,n,p,qrauxr,qrauxi,jpvt,workr,worki,
      *                 job)
       integer ldx,n,p,job

@@ -6,13 +6,14 @@ function [b,sexp]=trisolve(a,b,sexp)
 //!
 //origine F. D. S. Steer INRIA 1989
 //
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 [n0,m]=size(b)
-if rhs=2 then
+if rhs==2 then
 for n=n0:-1:1
     pivot=a(n,n)
     for k=1:m,b(n,k)=ldivf(pivot,b(n,k)),end
-    if n=1 then return,end
+    if n==1 then return,end
     for l=1:n-1
         for k=1:m,
           b(l,k)=addf(b(l,k),mulf(mulf('-1',a(l,n)),b(n,k)))
@@ -28,7 +29,7 @@ for n=n0:-1:1
        sexp(ns)=ldivf(pivot,b(n,k))
        b(n,k)='%('+string(ns)+')';
     end
-    if n=1 then return,end
+    if n==1 then return,end
     for l=1:n-1
         for k=1:m,
           b(l,k)=addf(b(l,k),mulf(mulf('-1',a(l,n)),b(n,k)))

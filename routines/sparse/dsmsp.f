@@ -19,6 +19,7 @@ c***output
 c  c          a two-dimensional array containing all the
 c               elements of the product matrix.
 c!
+c     Copyright INRIA
       double precision  a(*), b(mrb,ncb), c(mrc,nca)
       integer inda(*)
 

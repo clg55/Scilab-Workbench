@@ -1,5 +1,5 @@
-C/MEMBR ADD NAME=AJOUR,SSI=0
       subroutine ajour(mode,n,nc,nr,h,w,indi)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension h(*),w(n),indi(n)
 c

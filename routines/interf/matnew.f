@@ -6,6 +6,7 @@ c             reponse frequentielle
 c
 c ====================================================================
 c
+c     Copyright INRIA
       include '../stack.h'
 c
       double precision dnrm2,tol,atol,eps,gi,rcond,ur,ui,vr,vi,xr,xi
@@ -976,7 +977,7 @@ c
       ly0=lw
       lu0=lw
       if (rhs .eq. 5) then
-         if (istk(iy0+1) .ne. istk(id+2)) then
+         if (istk(iy0+1).ne.istk(id+2).and.istk(iy0+1).ne.0) then
             call error(60)
             return
          endif
@@ -986,7 +987,7 @@ c
          endif
          ly0=sadr(iy0+4)
 c
-         if (istk(iu0+1) .ne. istk(in+2)) then
+         if (istk(iu0+1).ne.istk(in+2).and.istk(iu0+1).ne.0) then
             call error(60)
             return
          endif
@@ -1035,7 +1036,7 @@ c     matrice est quasi singuliere ou mal normalisee
          write(buf(1:13),'(1pd13.4)') stk(lw)
          call msgs(5,0)
       endif
-      if (err .eq. 2) then
+      if (ierr .eq. 2) then
          call error(19)
          return
       endif

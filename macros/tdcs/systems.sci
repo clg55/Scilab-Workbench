@@ -1,5 +1,6 @@
 function []=systems()
 
+// Copyright INRIA
 
 function [xdot]=bioreact(t,x)
 //[xdot]=bioreact(t,x)
@@ -28,7 +29,7 @@ function [xdot]=compet(t,x,u)
 // ex : des crustaces sur une algue
 //!
 [lhs,rhs]=argn(0);
-if rhs=2,u=1,end
+if rhs==2,u=1,end
 xdot=0*ones(2,1);
 xdot(1) = ppr*x(1)*(1-x(1)/ppk) - u*ppa*x(1)*x(2) ,
 xdot(2) = pps*x(2)*(1-x(2)/ppl) - u*ppb*x(1)*x(2) ,
@@ -53,7 +54,7 @@ function [xe]=equilcom(ue)
 // pour un niveau de ressource ue  (vaut 1 par defaut)
 //!
 [lhs,rhs]=argn(0);
-if rhs=0,ue=1,end
+if rhs==0,ue=1,end
 mat=[  ppr/ppk , ue*ppa; ue*ppb , pps/ppl ]
 cte=[ppr;pps ]
 xe= inv(mat)*cte;
@@ -107,7 +108,7 @@ function [xdot]=p_p(t,x,u)
 //        par defaut u=0 (pas d'insecticide)
 //!
 [lhs,rhs]=argn(0);
-if rhs=2,u=0,end
+if rhs==2,u=0,end
 xdot(1) = p_ppr*x(1)*(1-x(1)/p_ppk) - p_ppa*x(1)*x(2) - u*x(1);
 xdot(2) = -p_ppm*x(2)             + p_ppb*x(1)*x(2) - u*x(2);
 
@@ -118,7 +119,7 @@ function [xe]=equilpp(ue)
 // pour la commande constante ue a choisir lors de l'appel de la macro
 //  ue=0 par defaut
 //!
-[lhs,rhs]=argn(0);if rhs=0,ue=0,end
+[lhs,rhs]=argn(0);if rhs==0,ue=0,end
 xe(1) =  (p_ppm+ue)/p_ppb;
 xe(2) =  (p_ppr*(1-xe(1)/p_ppk)-ue)/p_ppa;
 

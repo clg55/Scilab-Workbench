@@ -40,6 +40,7 @@ function [stk,nwrk,txt,top]=f_eye(nwrk)
 //              (columns) of the matrix		
 //          des chaines de caracteres
 
+// Copyright INRIA
 //
 //  nwrk : this variable contain information on working arrays, error
 //         indicators. It only may be modified by call to scilab functions
@@ -56,8 +57,7 @@ function [stk,nwrk,txt,top]=f_eye(nwrk)
 txt=[]
 select rhs
 case 0 then
-//write(6,'eye');pause
-   top=top+1;stk=list('1.0',0,'-1','-1','0')
+   top=top+1;stk=list('1',0,'-1','-1','0')
 case 1 then
    s2=stk(top)
    [out,nwrk,txt]=outname(nwrk,'1',s2(4),s2(5))

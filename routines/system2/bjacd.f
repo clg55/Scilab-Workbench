@@ -1,6 +1,8 @@
       subroutine bjacd(t,y,ydot,res,cj,rpar,ipar)
 
-c ======================================================================
+c     Copyright INRIA
+c     ================================================================
+c     ======
 c     gestion external "soft" relatif a dassl calcul du jacobien
 c ======================================================================
 c

@@ -158,6 +158,32 @@ typedef double * (*fintgf)(ARGS_fintg);
 typedef double * (*fintgf)();
 #endif 
 
+/***********************************
+ * Search Table for int2d
+ ***********************************/
+
+
+#if defined(__STDC__)
+#define ARGS_fint2d double *,double *
+typedef double * (*fint2df)(ARGS_fint2d);
+#else
+#define ARGS_fint2d /**/
+typedef double * (*fint2df)();
+#endif 
+
+/***********************************
+ * Search Table for int3d
+ ***********************************/
+
+
+#if defined(__STDC__)
+#define ARGS_fint3d double *,integer*,double *
+typedef void (*fint3df)(ARGS_fint3d);
+#else
+#define ARGS_fint3d /**/
+typedef void (*fint3df)();
+#endif 
+
 
 /***********************************
  * Search Table for fsolve 
@@ -286,5 +312,13 @@ typedef integer * (*interff)(ARGS_interf);
 #else
 #define ARGS_interf /**/
 typedef integer * (*interff)();
+#endif 
+
+#if defined(__STDC__)
+#define ARGS_interf1 char *,long int
+typedef integer * (*interff1)(ARGS_interf1);
+#else
+#define ARGS_interf1 /**/
+typedef integer * (*interff1)();
 #endif 
 

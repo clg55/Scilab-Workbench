@@ -42,6 +42,9 @@ C
 C     tableaux de travail
 C      w : 33+33*neq+7*ng+neq*ng+neq**2*(ng+2)
 C      iw :29+neq**2+4*neq
+c
+c     Copyright INRIA
+
 C!
       implicit double precision (a-h,o-y)
       dimension ta(mxsol,*), tb(mxsol,*), tc(mxsol,*),tg(ng+1),

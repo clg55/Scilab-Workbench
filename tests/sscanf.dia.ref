@@ -1,4 +1,6 @@
  
+// Copyright INRIA
+ 
 //test format %i %d
  
 if sscanf('123','%i')<>123 then bugmes();quit;end

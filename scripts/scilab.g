@@ -1,6 +1,9 @@
 #!/bin/SCILABGS
 # Warning : some old versions of sh dont allow inline function definitions
 # like do_scilex()... . In this case use a system V sh (sh5)
+
+# Copyright INRIA
+
 if test "$PRINTERS" = ""; then
   PRINTERS="lp:LaserHP:SalleBal:Secretariat:ColorPS:Color12"
 fi
@@ -24,6 +27,11 @@ export  MANCHAPTERS
 export PRINTERS
 VERSION="SCILAB_VERSION"
 export VERSION
+
+PVM_ROOT=$SCI/pvm3
+PVM_DPATH=$PVM_ROOT/lib/pvmd
+export PVM_ROOT PVM_DPATH
+
 
 do_scilex()
 {
@@ -56,7 +64,7 @@ do_geci_scilex()
 do_help()
 {
 echo "Usage:"
-echo     "	scilab [-ns -nw -display display]"
+echo     "	scilab [-ns -nw -display display -f path]"
 echo     "	scilab -help <key>"
 echo     "	scilab -k <key>"
 echo     "	scilab -xk <key>"
@@ -66,6 +74,7 @@ echo     "	scilab -print_p file printer"
 echo     "	scilab -print_l file printer"
 echo     "	scilab -save_p file format"
 echo     "	scilab -save_l file format"
+exit
 }
 
 do_mank()
@@ -217,48 +226,14 @@ do_save()
 	esac
 }
 
-
+# calling Scilab with no argument or special cases of calling Scilab
+rest="no"
 case $# in
     0)
 	do_geci_scilex &
         ;;
-    1)
-        case $1 in
-             -ns)
-		do_scilex $* &
-		;;
-	     -nw)	
-		do_geci_scilex $*
-		;;
-	     -help)
-		do_man scilab|more
-		;;
-             -link|-function|-k|-xk)
-		do_help
-                 ;;
-             *)
-		do_help
-                ;;
-        esac
-        ;;
     2)
         case $1 in
-             -ns)
-                case $2 in 
-                   -nw)
-                      do_scilex $*
-                      ;;
-                   *)
-                      do_scilex $* &
-                      ;;
-                esac
-		;;
-	     -nw)
-		do_geci_scilex $* 
-		;;
-             -display)
-		do_geci_scilex $* &
-		;;
             -help)
 		do_man $2|more
                 ;;
@@ -282,7 +257,7 @@ case $# in
 		$SCI/bin/minfopr $SCI $2
 		;;
             *)
-		do_help
+		rest="yes"
                 ;;
         esac
         ;;
@@ -304,7 +279,7 @@ case $# in
                 do_save -portrait $2 $3
                 ;;
             *)
-		do_help
+		rest="yes"
                 ;;
         esac
         ;;
@@ -315,8 +290,66 @@ case $# in
 		$SCI/bin/scilink $SCI $*
                 ;;
             *)
-		do_help
+		rest="yes"
                 ;;
         esac
         ;;
 esac
+
+# really calling Scilab with arguments
+if test "$rest" = "yes"; then
+  nos=
+  now=
+  display=
+  start_file=
+  prevarg=
+  for sciarg 
+  do
+    # If the previous argument needs an argument, assign it.
+    if test -n "$prevarg"; then
+      eval "$prevarg=\$sciarg"
+      prevarg=
+      continue
+    fi
+    case $sciarg in
+      -ns)
+          nos="yes"
+          ;;
+      -nw)
+          now="yes"
+          ;;
+      -display|-d)
+          prevarg="display"
+          ;;
+      -f)
+          prevarg="start_file"
+          ;;
+      *)
+          do_help
+          ;;
+    esac
+  done
+
+  if test -n "$display"; then
+    display="-display $display"
+  fi
+
+  if test -n "$start_file"; then
+    start_file="-f $start_file"
+  fi
+
+  if test -n "$nos"; then
+     if test -n "$now"; then
+       do_scilex -ns -nw $start_file
+     else
+       do_scilex -ns $display $start_file &
+     fi
+  else
+     if test -n "$now"; then
+       do_geci_scilex -nw $start_file
+     else
+       do_geci_scilex $display $start_file &
+     fi
+  fi    
+
+fi

@@ -1,3 +1,4 @@
+/* Copyright 1989 Massachusetts Institute of Technology */
 /*
  * $Header: /usr/sww/share/src/X11R5/local/clients/xless-1.4/RCS/window.c,v 1.11 1993/03/02 02:07:05 dglo Exp dglo $
  */

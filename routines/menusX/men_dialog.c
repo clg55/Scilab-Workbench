@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #ifdef WIN32 
 #include "wmen_scilab.h"
 char dialog_str[MAXSTR];

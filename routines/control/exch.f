@@ -1,5 +1,6 @@
         subroutine exch(nmax,n,a,z,l,ls1,ls2)
-        integer nmax,n,l,ls1,ls2
+c     Copyright INRIA
+      integer nmax,n,l,ls1,ls2
         double precision a(nmax,n),z(nmax,n)
 c!purpose
 c  given  upper hessenberg matrix a

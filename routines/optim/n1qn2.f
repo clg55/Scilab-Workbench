@@ -6,6 +6,7 @@ c     de quasi-Newton a memoire limitee.
 c!Origine
 c     Version 1.0 de n1qn2 (Modulopt, INRIA), septembre 1988.
 c     Jean Charles Gilbert, Claude Lemarechal.
+c     Copyright INRIA
 c!Commentaires
 c     Ce code est en principe destine aux problemes de grande taille,
 c     n grand, mais convient egalement pour n quelconque. La methode

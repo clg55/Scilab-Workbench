@@ -7,8 +7,9 @@ function [Ws,Fs1]=rowshuff(Fs,alfa)
 // Note that (s*E-A)^-1 = (s*E1-A1)^-1 * W(s) = (W(s)*(s*E-A))^-1 *W(s)
 // F.D.
 //!
+// Copyright INRIA
 [LHS,RHS]=argn(0);
-if RHS=1 then
+if RHS==1 then
      alfa=0;
 end
 [E,A]=pen2ea(Fs);
@@ -20,7 +21,7 @@ s=poly(0,'s');tol=1.d-10*(norm(E,1)+norm(A,1));
 //     
 rk=0;i=0;
 while rk  < n
-   if i=n then error('rowshuffle: singular pencil!');W=[];end
+   if i==n then error('rowshuffle: singular pencil!');W=[];end
   [W,rk]=rowcomp(E);
    if rk==n then return;end
    W1=W(1:rk,:);W2=W(rk+1:n,:);

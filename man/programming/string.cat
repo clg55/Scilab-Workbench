@@ -35,4 +35,4 @@ EXAMPLES
   x=123.356; 'Result is '+string(x)
 
 SEE ALSO
-  part, length, format, quote, pol2str, evstr, execstr
+  part, length, quote, evstr, execstr, strsubst, strcat, strindex, sci2exp

@@ -1,5 +1,6 @@
       subroutine matusr
 c
+c     Copyright INRIA
       include '../stack.h'
 c
 c      integer iadr, sadr

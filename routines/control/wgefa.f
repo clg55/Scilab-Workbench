@@ -1,4 +1,5 @@
       subroutine wgefa(ar,ai,lda,n,ipvt,info)
+c     Copyright INRIA
       integer lda,n,ipvt(*),info
       double precision ar(lda,*),ai(lda,*)
 c!purpose

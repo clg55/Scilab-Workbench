@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DPMUL,SSI=0
+c     Copyright INRIA
       subroutine dpmul(p1,d1,p2,d2,p3,d3)
 c!purpose
 c  ce sous programme effectue le calcul:

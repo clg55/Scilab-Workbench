@@ -1,5 +1,6 @@
       subroutine lspmat(ma,na,nela,inda,mr,indr,iw)
 c     lspmat reshape a sparse boolean matrix
+c     Copyright INRIA
       integer inda(*),indr(*),iw(*)
       integer ma,na,nela
 c

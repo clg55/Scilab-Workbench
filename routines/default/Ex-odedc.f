@@ -32,6 +32,7 @@ c     param(1)=y(nc+nd+1) , param(2)=y(nc+nd+2) etc
 c     with this calling sequence y is a nc+nd+np vector
 c     where np=dimension of scilab variable param
 c
+c     Copyright INRIA
       double precision t, y, ydp
       dimension y(*), ydp(*)
       if(jflag.eq.0) then
@@ -131,11 +132,11 @@ c     xdot=A*xc+B*u
 c     A and B real scilab matrices
       double precision t,xc(*),xdot(*),u(*)
       include '../stack.h'
-      call matptr('A',m,n,la)
+      call matptr('A'//char(0),m,n,la)
 c      call dset(m,0.0d0,xdot,1)
 c      call dgemm('n','n',m,1,m,1.0d0,stk(la),m,xc,m,1.0d0,xdot,m)
       call dmmul(stk(la),m,xc,m,xdot,m,m,m,1)
-      call matptr('B',m,nb,lb)
+      call matptr('B'//char(0),m,nb,lb)
       call dgemm('n','n',m,1,nb,1.0d0,stk(lb),m,u,1,1.0d0,xdot,m)
       end
 
@@ -143,7 +144,7 @@ c      call dgemm('n','n',m,1,m,1.0d0,stk(la),m,xc,m,1.0d0,xdot,m)
       double precision t,x(*),y(*)
       include '../stack.h'
 c     y=C*x
-      call matptr('C',m,n,lc)      
+      call matptr('C'//char(0),m,n,lc)      
       call dmmul(stk(lc),m,x,m,y,m,m,n,1)
       end
 
@@ -151,9 +152,9 @@ c     y=C*x
 c     xp=Ad*xd + Bd*y
       double precision xd(*),y(*),xp(*)
       include '../stack.h'
-      call matptr('Ad',m,n,la)
+      call matptr('Ad'//char(0),m,n,la)
       call dmmul(stk(la),m,xd,m,xp,m,m,m,1)
-      call matptr('Bd',m,nb,lb)
+      call matptr('Bd'//char(0),m,nb,lb)
       call dgemm('n','n',m,1,nb,1.0d0,stk(lb),m,y,1,1.0d0,xp,m)
       end
 
@@ -163,7 +164,7 @@ c     xp=Ad*xd + Bd*y
 c     u=Cd*xd
       include '../stack.h'
 c     y=C*x
-      call matptr('Cd',m,n,lc)      
+      call matptr('Cd'//char(0),m,n,lc)      
       call dmmul(stk(lc),m,xd,m,u,m,m,n,1)
       end
 
@@ -212,9 +213,9 @@ c     xdot=A*x1+B*x2
 c     A and B real scilab matrices
       double precision t,x(*),xdot(*)
       include '../stack.h'
-      call matptr('A',m,n,la)
+      call matptr('A'//char(0),m,n,la)
       call dmmul(stk(la),m,x,m,xdot,m,m,m,1)
-      call matptr('B',m,nb,lb)
+      call matptr('B'//char(0),m,nb,lb)
       call dgemm('n','n',m,1,nb,1.0d0,stk(lb),m,x(m+1),1,1.0d0,xdot,m)
       end
 

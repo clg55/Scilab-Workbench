@@ -1,4 +1,5 @@
 function [z]=foo(x,y)
+// Copyright INRIA
 [in,out]=argn(0);
 if x=0 then,
      error('division by zero');

@@ -1,5 +1,5 @@
       subroutine wqrsl(xr,xi,ldx,n,k,qrauxr,qrauxi,yr,yi,qyr,qyi,qtyr,
-     *                 qtyi,br,bi,rsdr,rsdi,xbr,xbi,job,info)
+     *     qtyi,br,bi,rsdr,rsdi,xbr,xbi,job,info)
       integer ldx,n,k,job,info
       double precision xr(ldx,*),xi(ldx,*),qrauxr(*),qrauxi(*),yr(*),
      *                 yi(*),qyr(*),qyi(*),qtyr(*),qtyi(*),br(*),bi(*),
@@ -148,6 +148,8 @@ c
 c     blas waxpy,wcopy,wdotcr,wdotci
 c     fortran abs,dimag,min,mod
 c
+c     Copyright INRIA
+
 c!
 c     internal variables
 c

@@ -14,6 +14,7 @@ function [cout,grad,ind]=iirlp(x,ind,p,flag,lambda,omega,ad,wa,td,wt)
 //wa,wt=fonctions de ponderation pour l'amplitude et le
 //retard de groupe ad,td=amplitudes et retard de groupe desires
 //!
+// Copyright INRIA
 r=x(:,1);theta=x(:,2);
 [m,n]=size(ad);if m>n,ad=ad';end
 [m,n]=size(td);if m>n,td=td';end

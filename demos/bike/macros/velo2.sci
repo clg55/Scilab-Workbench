@@ -1,6 +1,7 @@
 function []=velo2()
 // empty wheel : the shortest
 // (geometric calculations made by param3d)
+// Copyright INRIA
 t= t*180/%pi;
 p= p*180/%pi;
 xe=[xmin,xmax,xmax,xmin,xmin]

@@ -71,6 +71,7 @@ C          lq
 C          calsca       
 C    lq
 C!
+c     Copyright INRIA
       integer dgmin,dgmax,dginit,info,ierr,iw(*)
       double precision tq(dgmax+1),f(nf),num(dgmax),w(*),x
 C

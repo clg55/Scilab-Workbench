@@ -6,6 +6,7 @@ function a=g_clean(a,epsa,epsr)
 // the coefficients)
 // Default values : epsa=1.d-10; epsr=1.d-10;
 //!
+// Copyright INRIA
 a1=a(1);
 [lhs,rhs]=argn(0)
 if rhs == 1 then

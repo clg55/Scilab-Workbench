@@ -1,10 +1,11 @@
 function [x,y,typ]=IN_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
   graphics=arg1(2); [orig,sz,orient]=graphics(1:3)
   model=arg1(3);prt=model(9)
-  pat=xget('pattern');xset('pattern',1)
+  pat=xget('pattern');xset('pattern',default_color(1))
   thick=xget('thickness');xset('thickness',2)
   if orient then
     x=orig(1)+sz(1)*[-1/6;-1/6;1/1.5;1;1/1.5]
@@ -28,7 +29,7 @@ case 'getoutputs' then
     y=orig(2)+sz(2)/2
   else
     x=orig(1)
-    y=orig(2)+sz(2)
+    y=orig(2)+sz(2)/2
   end
   typ=ones(x)
 case 'getorigin' then
@@ -46,6 +47,7 @@ case 'set' then
     if prt<=0 then
       message('Port number must be a positive integer')
     else
+      if model(9)<>prt then needcompile=4;y=needcompile,end
       model(9)=prt
       model(11)=[];model(3)=-1//compatibility
       graphics(4)=label

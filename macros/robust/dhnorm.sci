@@ -1,8 +1,9 @@
 function gama=dhnorm(sl,tol,gamamax)
 // Discrete time H-infinity norm
+// Copyright INRIA
 [lhs,rhs]=argn(0);
-if rhs=1 then tol=0.01;gamamax=1000;end
-if rhs=2 then gamamax=1000;end
+if rhs==1 then tol=0.01;gamamax=1000;end
+if rhs==2 then gamamax=1000;end
 gamamin=sqrt(%eps);
 n=0;
 while %t

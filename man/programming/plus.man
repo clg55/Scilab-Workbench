@@ -1,4 +1,4 @@
-.TH plus 1 "April 1993" "Scilab Group" "Scilab Function"
+.TH plus 1 "April 1993" "Scilab Group" "Scilab Operator"
 .so ../sci.an
 .SH NAME
 plus (+) -  addition operator

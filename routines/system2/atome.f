@@ -15,6 +15,7 @@ c attention n est modifie aussi
 c!
 c reference externe : icopy
 c!
+c     Copyright INRIA
       integer n
       integer chaine(*),type,sign
 c

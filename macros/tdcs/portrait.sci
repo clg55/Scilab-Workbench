@@ -1,5 +1,6 @@
 function []=portrait(fch,odem,xdim,npts,farrow,pinit)
 // phase portrait 
+// Copyright INRIA
 xselect();
 ncnl=lines();
 lines(0);
@@ -8,8 +9,8 @@ lines(0);
 // minimal calling sequence 
 if rhs<=1,odem='default';end
 // Interactive version 
-if odem = 'discrete'; style_d=x_choose(['trait continu','points'],['option de dessin']);
-	style_d=maxi(style_d-2,-1);end
+if odem == 'discrete'; style_d=x_choose(['trait continu','points'],['option de dessin']);
+	style_d=mini(-style_d,1);end
 if rhs <= 2,
   if ~isdef('p_xdim');p_xdim=['-1';'-1';'1';'1'];end
   rep=x_mdialog('Graphic boundaries',...
@@ -42,7 +43,7 @@ else
   p_nxx=['10';'10'];
   style="051";
 end
-//pause;
+
 plot2d(0,0,0,style," ",xdim);
 if rhs<=3,
   if ~isdef('p_npts');p_npts=['100';'0.1'];end;
@@ -56,25 +57,25 @@ if rhs<=4,farrow='f';end;
 if rhs<=5
 // Loop on Initial points 
   go_on=1
-  while go_on=1,
+  while go_on==1,
        ftest=1;
-       while ftest=1,
+       while ftest==1,
 	  n=x_choose(['New initial point';'Continue ode';'Quit'],"Choose ");
 	  n=n-1;
-          if n=-1,go_on=0;lines(ncnl(1));
+          if n==-1,go_on=0;lines(ncnl(1));
 		[p_xdim,p_npts,p_nxx]=resume(p_xdim,p_npts,p_nxx);return;end
-          if n=2,go_on=0;lines(ncnl(1));
+          if n==2,go_on=0;lines(ncnl(1));
 		[p_xdim,p_npts,p_nxx]=resume(p_xdim,p_npts,p_nxx);return;end
-	  if n=0,[i,x,y]=xclick(); x0=[x,y];end;
-          if n=1,x0=ylast';end;
+	  if n==0,[i,x,y]=xclick(); x0=[x,y];end;
+          if n==1,x0=ylast';end;
           ftest=desorb(odem,x0',npts,fch,farrow,xdim);
-          if ftest=1;x_message('Initial value out of boundaries'),end
+          if ftest==1;x_message('Initial value out of boundaries'),end
        end
   end
 else
 // No question mode 
 res=desorb(odem,pinit,npts,fch,farrow,xdim);
-if res=1,write(%io(2),'Points hors du cadre elimines ');end;
+if res==1,write(%io(2),'Points hors du cadre elimines ');end;
 end
 lines(ncnl(1));
 [p_xdim,p_npts,p_nxx]=resume(p_xdim,p_npts,p_nxx);
@@ -84,17 +85,17 @@ function []=addtitle(fch)
 // Adds know titles 
 //!
 if type(fch)<>11& type(fch)<>13 then return;end;
-if fch=linear,xtitle("Systeme lineaire"," "," ",0);end
-if fch=linper,xtitle("Systeme lineaire perturbe "," "," ",0);end
-if fch=cycllim,xtitle("Systeme avec cycle limite "," "," ",0);end
-if fch=bioreact,xtitle("Bioreacteur ","biomasse ","sucre ",0);end
-if fch=lincom,xtitle("Systeme lineaire commande "," "," ",0);end
-if fch=p_p,xtitle("Modele proie-predateur ","proies ","predateurs ",0);end
-if fch=compet,xtitle("Modele de competition ","population 1 "...
+if fch==linear,xtitle("Systeme lineaire"," "," ",0);end
+if fch==linper,xtitle("Systeme lineaire perturbe "," "," ",0);end
+if fch==cycllim,xtitle("Systeme avec cycle limite "," "," ",0);end
+if fch==bioreact,xtitle("Bioreacteur ","biomasse ","sucre ",0);end
+if fch==lincom,xtitle("Systeme lineaire commande "," "," ",0);end
+if fch==p_p,xtitle("Modele proie-predateur ","proies ","predateurs ",0);end
+if fch==compet,xtitle("Modele de competition ","population 1 "...
 ,"population2 ",0);end
-if fch='bcomp',xtitle("Modele de competition observe-comtrole ",...
+if fch=='bcomp',xtitle("Modele de competition observe-comtrole ",...
     "population 1 ","population2 ",0);end
-if fch='lcomp',xtitle("Modele de competition linearise observe-comtrole ",...
+if fch=='lcomp',xtitle("Modele de competition linearise observe-comtrole ",...
     "population 1 ","population2 ",0);end
 
 
@@ -103,17 +104,17 @@ function [res]=desorb(odem,x0,n1,fch,farrow,xdim);
 //!
 res=0
 [nn1,n2]=size(x0);
-style=-1;
-if odem='discrete', style=style_d;end
+style=1;
+if odem=='discrete', style=style_d;end
 for i=1:n2,
     ftest=1;
     if x0(1,i) > xdim(3), ftest=0;end
     if x0(1,i) < xdim(1), ftest=0;end
     if x0(2,i) > xdim(4), ftest=0;end
     if x0(2,i) < xdim(2), ftest=0;end
-    if ftest=0;res=1,ylast=x0,else
+    if ftest==0;res=1,ylast=x0,else
        write(%io(2),'Calling ode')
-       if odem='default' then 
+       if odem=='default' then 
         y=ode([x0(1,i);x0(2,i)],0,n1(2)*(0:n1(1)),fch);
        else
         y=ode(odem,[x0(1,i);x0(2,i)],0,n1(2)*(0:n1(1)),fch);
@@ -131,11 +132,11 @@ for i=1:n2,
  
        [m11,k11]=maxi(k1);
        [m22,k22]=maxi(k2);
-       if k11=1,k11=n1(1);end
-       if k22=1,k22=n1(1);end
+       if k11==1,k11=n1(1);end
+       if k22==1,k22=n1(1);end
        kf=mini(k11,k22);
-       if kf=1, kf=n1(1),end
-       if farrow='t',
+       if kf==1, kf=n1(1),end
+       if farrow=='t',
           plot2d4("gnn",y(1,1:kf)',y(2,1:kf)',style,"000"," ",xdim);
        else
           plot2d(y(1,1:kf)',y(2,1:kf)',style,"000"," ",xdim);

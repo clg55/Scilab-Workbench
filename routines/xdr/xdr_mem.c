@@ -45,6 +45,11 @@ static char *rcsid = "$Id: xdr_mem.c,v 1.3 1995/10/22 14:53:55 phk Exp $";
  */
 
 #include <string.h>
+
+#ifdef __MINGW32__
+#define __MSC__
+#endif 
+
 #ifndef __MSC__
 #include <netinet/in.h> /** jpc : je met netinet/ avant rpc pour eviter un warning */
 #include <rpc/types.h> 

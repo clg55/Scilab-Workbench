@@ -1,5 +1,6 @@
       subroutine dspmat(ma,na,a,nela,inda,mr,indr,iw)
 c     dspmat reshape a sparse matrix
+c     Copyright INRIA
       integer inda(*),indr(*),iw(*)
       integer ma,na,nela
       double precision a(*)

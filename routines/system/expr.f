@@ -2,6 +2,7 @@
 c     
 c     analyseur d'expressions
 c     
+c     Copyright INRIA
       INCLUDE '../stack.h'
       parameter (nz1=nsiz-1,nz2=nsiz-2)
 c     
@@ -62,9 +63,9 @@ c     *call* allops(minus)
       if(sym.ge.ou.or.sym.eq.equal) goto 70
       go to 50
  20   if (rstk(pt) .ne. 301) go to 21
-c     blank is delimiter inside angle brackets
+c     blank or tab is delimiter inside angle brackets
       ls = lpt(3) - 2
-      if (lin(ls) .eq. blank.and.lin(lpt(3)).ne.blank) go to 50
+      if (abs(lin(ls)).eq.blank.and.abs(lin(lpt(3))).ne.blank) go to 50
  21   op = sym
       call getsym
       pt = pt+1
@@ -240,6 +241,12 @@ c     *call* expr
       if(sym.ne.equal.and.sym.lt.less.or.sym.eq.eol)  goto 86
  103  op=sym
       call getsym
+c      if(rstk(pt-3).ne.803) then
+         if(op.eq.equal.and.sym.ne.equal) then
+            call msgs(7,0)
+         endif
+c      endif
+
       if(sym.eq.equal.or.sym.eq.great) then
          if(op.ne.equal) op=op+sym
          call  getsym

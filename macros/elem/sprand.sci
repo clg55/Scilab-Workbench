@@ -1,4 +1,5 @@
 function a=sprand(m,n,density,typ)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<4 then typ='uniform',end
 
@@ -15,8 +16,7 @@ if density==0 then a=sparse([],[],[m,n]),return,end
 nel=m*n*density
 mdist=1/density
 
-rand('uniform')
-ij=int(1+2*(mdist-1)*rand(1,1.2*nel))
+ij=int(1+2*(mdist-1)*rand(1,1.2*nel,'uniform'))
 // sum the increments
 ij=rtitr(1,poly([-1 1],'z','c'),ij);
 nel1=size(ij,'*')
@@ -28,6 +28,5 @@ ij=matrix(ij(2:nel1),nel1-1,1);
 j=int((ij-1)/m);
 i=ij-j*m;
 j=j+1;
-rand(typ);
-a=sparse([i j],rand(nel1-1,1),[m,n]);
+a=sparse([i j],rand(nel1-1,1,typ),[m,n]);
 

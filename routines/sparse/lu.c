@@ -12,6 +12,7 @@
  * since we  are in scilab 
  * the pointer transmitted to f_ is an istk(il1) it can in fact contain 
  * something as long as a double 
+ * Copyright INRIA
  */
 
 

@@ -1,4 +1,5 @@
       subroutine lspis(ma,na,nela,inda,i,ni,j,nj,
+c     Copyright INRIA
      $     mb,nb,b,mr,nr,nelr,indr,ierr)
 c     extract a submatrix from a sparse matrix
 c!

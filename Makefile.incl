@@ -1,14 +1,15 @@
 # Generated automatically from Makefile.incl.in by configure.
 RM = rm -f
 AR = ar cq
-FILES_TO_CLEAN = *.CKP *.ln *.BAK *.bak core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut .*~ *.trace so_locations *.orig
+FILES_TO_CLEAN = *.CKP *.ln *.BAK *.bak core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut .*~ *.trace so_locations *.orig *.cos
 
 all::
 
 clean::
-	$(RM) $(FILES_TO_CLEAN)
+	@echo Cleaning 
+	@$(RM) $(FILES_TO_CLEAN)
 distclean::
-	$(RM) $(FILES_TO_CLEAN)
+	@$(RM) $(FILES_TO_CLEAN)
 
 RANLIB = ranlib
 
@@ -28,6 +29,7 @@ TERMCAPLIB = -ltermcap
 CC = cc
 CC_OPTIONS = -O -ieee_with_inexact
 CC_LDFLAGS = -ieee_with_inexact
+CC_PICFLAGS = 
 
 ##################
 # Fortran compiler
@@ -37,6 +39,8 @@ CC_LDFLAGS = -ieee_with_inexact
 FC = DECFORT_DEBUG=T;export DECFORT_DEBUG;f77
 FC_OPTIONS = -O -fpe3 -switch nosqrt_recip
 FC_LDFLAGS = 
+FC_PICFLAGS = 
+
 
 ########
 # Linker
@@ -55,6 +59,8 @@ LD_LDFLAGS =
 ##########
 DLDLIB = 
 DLD_SUBDIR = 
+PVMLIB = $(SCIDIR)/pvm3/lib/ALPHA/libpvm3.a
+PVMGLIB = $(SCIDIR)/pvm3/lib/ALPHA/libgpvm3.a
 XAWLIB = -lXaw
 XMULIB = -lXmu
 XAW_LOCAL_SUBDIR = 
@@ -62,6 +68,14 @@ XAW_LOCAL_LIB =
 XFLAGS =  
 X_EXTRA_LIBS =  -ldnet_stub
 XLIBS =  $(XAWLIB) $(XMULIB) -lXt -lXext  -lX11 $(X_EXTRA_LIBS)
+
+#####################
+# TCL/TK
+#####################
+TK_INC_PATH = -I/usr/local/include
+TCL_INC_PATH = -I/usr/local/include
+TCLTK_LIBS =  -L/usr/local/lib -ltk8.0  -L/usr/local/lib -ltcl8.0 
+
 #####################
 # for WIN32 version 
 # win32 libraries for gcwin32 

@@ -1,5 +1,6 @@
       subroutine wperm(vr,vi,nv,ind)
 c apply an in-situ  permutation 
+c     Copyright INRIA
       double precision vr(nv),vi(nv),xr,xi
       integer ind(nv)
 c

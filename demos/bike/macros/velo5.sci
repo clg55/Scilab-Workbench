@@ -1,6 +1,7 @@
 function []=velo5()
 //  full wheels using xgeom et xfpoly
 // computations made by geom)
+// Copyright INRIA
 t= t*180/%pi;
 p= p*180/%pi;
 xe=[xmin,xmax,xmax,xmin,xmin]

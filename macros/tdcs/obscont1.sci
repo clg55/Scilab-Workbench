@@ -20,9 +20,10 @@ function [macr]=obscont1(sysn)
 //    br=rand(1,n)
 //    ode([x0;xchap0],0,pas*(0:n),list(macr,1.0,pas,n));
 //!
+// Copyright INRIA
 deff('[zdot]=macr(t,z,abr,pas,n)',...
     ['u=ue-k(1)*(z(3)-xe(1))-k(2)*(z(4)-xe(2))';
-     'ff_brui=abr*br(ent(mini(t/pas+1,n)))';
+     'ff_brui=abr*br(int(mini(t/pas+1,n)))';
      'y=h(1)*z(1)+h(2)*z(2)+ff_brui';
      'xdot='+sysn+'(t,z(1:2),u)';
      'xdot1=f*(z(3:4)-xe) +g*(u-ue)-l*(h*z(3:4)-y)';

@@ -1,5 +1,6 @@
 function [cpr,ok]=c_pass3(scs_m,cpr)
 // reconstruct the block list structure
+// Copyright INRIA
 bllst=list();
 corinv=cpr(4)
 for k=1:size(corinv)
@@ -27,9 +28,26 @@ for i=1:length(bllst)
   ll=bllst(i)
   if type(ll(1))==15 then funtyp(i,1)=ll(1)(2); else funtyp(i,1)=0;end
   //
-  xc0=[xc0;ll(6)(:)];xptr=[xptr;xptr($)+size(ll(6),'*')]
-  xd0=[xd0;ll(7)(:)];zptr=[zptr;zptr($)+size(ll(7),'*')]
-  rpar=[rpar;ll(8)(:)];rpptr=[rpptr;rpptr($)+size(ll(8),'*')]
+  xc0=[xc0;ll(6)(:)];
+  xptr=[xptr;xptr($)+size(ll(6),'*')]
+  
+  
+  if funtyp(i,1)==3 then //sciblocks
+    xd0k=var2vec(ll(7))
+  else
+    xd0k=ll(7)(:)
+  end
+  xd0=[xd0;xd0k];
+  zptr=[zptr;zptr($)+size(xd0k,'*')]
+  
+  if funtyp(i,1)==3 then //sciblocks
+    rpark=var2vec(ll(8))
+  else
+    rpark=ll(8)(:)
+  end
+  rpar=[rpar;rpark]
+  
+  rpptr=[rpptr;rpptr($)+size(rpark,'*')]
   //
   if type(ll(9))==1 then 
     ipar=[ipar;ll(9)(:)];ipptr=[ipptr;ipptr($)+size(ll(9),'*')]

@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 /*********************************************
  *   STATBAR.C -- Status bar helper functions.
  *              (c) Paul Yao, 1996

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <string.h>
 #include <sys/types.h>
 #include <sys/param.h>
@@ -48,13 +49,13 @@ void SciLink(iflag,rhs,ilib,files,en_names,strf)
   int i,ii,err=0;
   if ( iflag != 0 ) 
     {
-      sciprint("Std link Error : First argument  can't be a number \r\n");
+      /* First argument  can't be a number  */
       *ilib=-3;
       return;
     }
   if ( en_names[1] != (char *) 0 )
     {
-      sciprint("Std link Error: en_names must be of size 1 \r\n");
+      /*Only one entry point allowed on this operating system */
       *ilib=-4;
       return;
     }
@@ -68,7 +69,7 @@ void SciLink(iflag,rhs,ilib,files,en_names,strf)
       NEpoints++;
       if ( NEpoints == ENTRYMAX ) 
 	{
-	  sciprint("You can't link more functions maxentry %d reached\r\n",ENTRYMAX);
+	  /* You cannot link more functions, maxentry reached */
 	  *ilib=-2;
 	  return;
 	}
@@ -101,7 +102,7 @@ void SciLink(iflag,rhs,ilib,files,en_names,strf)
  * or 0 elsewhere 
  *************************************/
 
-static int LinkStatus()
+int LinkStatus()
 {
   return(0);
 }

@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <string.h> /* in case of dbmalloc use */
 #ifdef __STDC__
 #include <stdlib.h>

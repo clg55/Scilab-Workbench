@@ -2,6 +2,7 @@
 c ====================================================================
 c     simulation non lineaire
 c ====================================================================
+c     Copyright INRIA
       include '../stack.h'
       integer iadr,sadr
 c
@@ -16,7 +17,7 @@ c     common de lsode,lsoda,lsodar
 c
 c     commons avec bydot,bjac,....
 c
-      character*24 namef,namej,names
+      character*(nlgh+1) namef,namej,names
       common/cydot/namef
       common/cjac/namej
       common/csurf/names
@@ -30,10 +31,10 @@ c     meth is simulator number, and jactyp the jacobian type used
       integer meth,jactyp
       logical jaco,achaud,withw,single
       external bydot,bjac,bsurf
-      integer raide(2),root(2),adams,discre,rgk(2),rk(2),fix(2)
+      integer raide(2),root(2),adams,discre,rkf(3),rk(2),fix(2)
       integer params(nsiz)
       data raide/28,29/,adams/10/,root/27,24/
-      data discre/13/,rgk/27,16/,rk/27,20/,fix/15,18/
+      data discre/13/,rkf/27,20,15/,rk/27,20/,fix/15,18/
       data params/-235739080,-303896856,669247720,3*673720360/
 c
       iadr(l)=l+l-1
@@ -159,14 +160,15 @@ c     lsodar
          elseif(abs(istk(ile+6)).eq.discre) then
 c     ldisc
             meth=4
-         elseif(abs(istk(ile+6)).eq.rgk(1) .and.
-     $           abs(istk(ile+7)).eq.rgk(2)) then
-c     runge-kutta
-            meth=5
-         elseif(abs(istk(ile+6)).eq.rk(1) .and.
-     $           abs(istk(ile+7)).eq.rk(2)) then
+         elseif(abs(istk(ile+6)).eq.rkf(1) .and.
+     $           abs(istk(ile+7)).eq.rkf(2) .and.
+     $           abs(istk(ile+8)).eq.rkf(3)) then
 c     rkf45
             meth=6
+         elseif(abs(istk(ile+6)).eq.rk(1) .and.
+     $           abs(istk(ile+7)).eq.rk(2)) then
+c     rk4
+            meth=5
          elseif(abs(istk(ile+6)).eq.fix(1) .and.
      $           abs(istk(ile+7)).eq.fix(2)) then
 c     rksimp

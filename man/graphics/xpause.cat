@@ -4,7 +4,7 @@ NAME
   xpause - suspends Scilab
 
 CALLING SEQUENCE
-  xpause(msecs)
+  xpause(microsecs)
 
 DESCRIPTION
   Synchronises the X11-display and suspends the current process for the

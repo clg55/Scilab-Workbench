@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WPRXC,SSI=0
+c     Copyright INRIA
       subroutine wprxc(n,rootr,rooti,coeffr,coeffi)
 c!but
 c     wprxc calcule les coefficients d'un polynome defini par ses

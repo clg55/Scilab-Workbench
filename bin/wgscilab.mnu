@@ -17,7 +17,7 @@
 	&Load ...
 		[LOADSCG]xload[EOS]*.scg[EOS]
 	Cl&ose 
-				
+		[CLOSE]						
 	--
 	Print (&Windows)
 		[PRINT]

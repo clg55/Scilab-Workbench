@@ -1,3 +1,5 @@
+% Copyright INRIA
+
 We describe here the internal structure of Scilab, in particular the way
 Fortran subroutine are hard interfaced with Scilab: description of the stack 
 where all Scilab data are put and description of the internal coding of
@@ -12,25 +14,25 @@ The program {\tt main} is {\tt scilab} (in the sub-directory
 (in the sub-directory {\tt routines/sun}) which initializes the names of the 
 main files
 needed by Scilab (for the help, save, graphics ...). Then the routine 
-{\tt matlab} (in the sub-directory {\tt routines/default}) is called 
-twice. The first call corresponds to a silent initialization of the database
-and the second one to the execution of the start-up.
+{\tt inisci} (in the sub-directory {\tt routines/system}) is called 
+to initialize the data bases and some other tables. After that  the routine 
+{\tt scirun} (in the sub-directory {\tt routines/system}) is called
+and first executes the Scilab instruction given in scilab.star file.
 
-\subsection{The main routine matlab}
+\subsection{The main routines inisci ans scirun}
 The initializations of the database are done by the include file\\
 {\tt <scilab dir>/routines/stack.h}; the other initialization done by 
-{\tt matlab} is {\tt nunit} which is the maximum number of logical units and 
-then {\tt matlab} calls the routine {\tt inibas} (in the sub-directory
-{\tt routines/system}). Numerous initializations are done by this routine
+{\tt inisci} is {\tt nunit} which is the maximum number of logical
+units. Numerous other initializations are done by this routine 
 such as : the unit numbers for the input and the output,the predefined 
 variables, the character set,...
 
-After that {\tt matlab} calls the routine {\tt matla0} (in the sub-directory
+After that {\tt scirun}  (in the sub-directory
 {\tt routines/sytem}) which is a simple call of the routine {\tt parse} (in
 the sub-directory {\tt routines/system}) followed by a call to one of the interfaces. This is done by the mean of the include file 
 {\tt callinter.h} (in the sub-directory {\tt routines}). {\tt parse} is the
 Scilab parsing function : after examination of a command, {\tt parse} returns
-{\tt fun} which is the number of the interface to be called by {\tt matla0}.
+{\tt fun} which is the number of the interface to be called by {\tt scirun}.
 
 \subsection{The Scilab parsing function and the interfaces}
 After the analysis of a Scilab command by {\tt parse} a Scilab function

@@ -3,11 +3,13 @@ SHELL = /bin/sh
 
 include ../Makefile.incl
 
-SCIDIRS = graphics calelm comm control default integ interf intersci lapack \
+SCIDIRS = graphics calelm blas comm control default integ interf intersci \
+	lapack \
 	libcomm metanet optim poly signal sparse sun system system2 \
-	menusX scicos sound xsci 
+	menusX scicos sound dcd randlib \
+	fraclab xsci  tksci pvm
 
-SUBDIRS = $(XAW_LOCAL_SUBDIR) $(DLD_SUBDIR) $(SCIDIRS)
+SUBDIRS = $(XAW_LOCAL_SUBDIR) $(DLD_SUBDIR) $(SCIDIRS) 
 
 all::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
@@ -48,6 +50,3 @@ f2cclean::
 		(cd $$i ; echo "making f2cclean in routines/$$i..."; \
 		$(MAKE) $(MFLAGS) f2cclean); \
 	done
-
-
-	

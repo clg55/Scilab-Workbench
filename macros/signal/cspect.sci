@@ -18,19 +18,20 @@ function [sm,cwp]=cspect(nlags,ntp,wtype,x,y,wpar)
 //
 //!
 //author: C. Bunks  date: 16 Sept 1988
- 
+// Copyright INRIA
+
    [lhs,rhs]=argn(0);
    cross=0;
  
 //construct window
  
-   if rhs=4 then,
+   if rhs==4 then,
       w=window(wtype,2*nlags-1);
-   else if rhs=5 then,
-      if wtype='kr' then,
+   else if rhs==5 then,
+      if wtype=='kr' then,
          wpar=y;
          w=window(wtype,2*nlags-1,wpar);
-      else if wtype='ch' then,
+      else if wtype=='ch' then,
          wpar=y;
          [w,cwp]=window(wtype,2*nlags-1,wpar);
       else,
@@ -46,11 +47,11 @@ function [sm,cwp]=cspect(nlags,ntp,wtype,x,y,wpar)
  
 //estimate correlations
  
-   if maxi(size(x))=1 then,
+   if maxi(size(x))==1 then,
       nsects=int(x/(3*nlags));
       xlen=int(x/nsects);
       ss=0*ones(1,2*nlags);
-      if cross=1 then,
+      if cross==1 then,
          for k=1:nsects,
             xk=getx(xlen,1+(k-1)*xlen);
             yk=gety(xlen,1+(k-1)*xlen);
@@ -67,7 +68,7 @@ function [sm,cwp]=cspect(nlags,ntp,wtype,x,y,wpar)
          re=[re(nlags:-1:1) re(2:nlags)];
       end,
    else,
-      if cross=1 then,
+      if cross==1 then,
          [re,me]=corr(x,y,nlags);
          re=[re(nlags:-1:1) re(2:nlags)];
       else,

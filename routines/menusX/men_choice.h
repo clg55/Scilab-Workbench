@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 
 /* Data structure to deal with a set of choices */
 

@@ -1,5 +1,6 @@
 function [scs_m,cpr,needcompile,ok]=do_eval(scs_m,cpr)
 // This function (re)-evaluates blocks in the scicos data structure scs_m 
+// Copyright INRIA
 ok=%t
 //Evaluate context
 if size(scs_m(1))<5 then scs_m(1)(5)=[] ,end //compatibility

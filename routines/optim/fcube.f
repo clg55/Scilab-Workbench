@@ -1,4 +1,5 @@
       subroutine fcube(t,f,fp,ta,fa,fpa,tlower,tupper)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
 c
 c           Using f and fp at t and ta, computes new t by cubic formula

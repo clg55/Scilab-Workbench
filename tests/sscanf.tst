@@ -1,3 +1,4 @@
+// Copyright INRIA
 //test format %i %d
 if sscanf('123','%i')<>123 then pause,end
 if sscanf('     123','%i')<>123 then pause,end

@@ -2,6 +2,7 @@
 C     fortran to scilab
 C 
 C.. Formal Arguments .. 
+c     Copyright INRIA
       integer  x(*)
       integer  mx
       integer  nx

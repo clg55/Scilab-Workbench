@@ -7,6 +7,7 @@ function [out,nwrk,txt]=getwrk(nwrk,typ,m,n)
 //      -dans txt les lignes fortran permettant de definir iwn ou iiwn
 //
 //!
+// Copyright INRIA
 mn=mulf(m,n)
 if typ=='1' then
   i=nwrk(1)

@@ -5,6 +5,7 @@ c     a un ensemble d'"operations") d'une macro compilee de scilab
 c     cette  fonction en retourne le nombre d'"operations" au 
 c     niveau 1.
 c!
+c     Copyright INRIA
       integer istk(ni),cmplxt
 c     
 
@@ -83,11 +84,11 @@ c     pause,break,abort,eol
             goto 10
          elseif(op.eq.18) then 
             lc=lc+1+nsiz
-            icount=icount-1
+c            icount=icount-1
             goto 10
          elseif(op.eq.19) then 
             lc=lc+3
-            icount=icount-1
+c            icount=icount-1
             goto 10
          elseif(op.ge.100) then
 c     matfns

@@ -2,6 +2,7 @@ function [ok,tt,dep_ut]=genfunc1(tt,inp,out,nci,nco,nx,nz,nrp,type_)
 // manages dialog to get  definition (with scilab instruction) of a new scicos 
 // block
 //!
+// Copyright INRIA
 ni=size(inp,'*')
 no=size(out,'*')
 
@@ -22,22 +23,17 @@ dep=['t,','x,','z,',u,'n_evi,','rpar']
 
 if nx==0 then dep(2)=emptystr(),end
 if nz==0 then dep(3)=emptystr(),end
-if nci==0 then dep(5)=emptystr(),end
+//if nci==0 then dep(5)=emptystr(),end
 if nrp==0 then dep(6)=emptystr(),end
 
 
 //flag = 1
 if no>0 then
-  if nci>0 then
-    depp=strcat(dep([1:5,6]))
-  else
-    depp=strcat(dep([1:4,6]))
-  end
+  depp=strcat(dep([1:5,6]))
   w=[]
   for k=1:no,w=[w;'y'+string(k)+' (size : '+string(out(k))+')'],end
   while %t do
-    txt1=dialog(['You may define function which computes the output';
-	'outside event times';
+    txt1=dialog(['Define function which computes the output';
 	' '
 	'Enter Scilab instructions defining';
 	w;
@@ -94,7 +90,7 @@ if nx>0 then
 else
   txt2='xd=[]'
 end
-if nci>0&(nx>0|nz>0) then // x+ z+
+if (nci>0&(nx>0|nz>0))|nz>0 then // x+ z+
   depp=strcat(dep([1:5,6]))
   while %t do
     if txt2_1==[] then txt2_1=' ',end
@@ -105,12 +101,12 @@ if nci>0&(nx>0|nz>0) then // x+ z+
     if nz>0 then
       t1=[t1;'-new discrete state z (size:'+string(nz)+')']
     end
-    if type_=='c' then  t2='or may be inherited (n_evi<0)',else t2=[],end
+//if type_=='c' then  t2='or may be inherited (n_evi<0)',else t2=[],end
+t2=[]
 
     txt2_1=dialog(['You may define:';
 	t1
 	'at event time, as functions of '+depp
-	'Events may come through event input ports (n_evi>0)';
 	t2],txt2_1)
     if txt2_1==[] then return,end	
     mac=null();deff('[]=mac()',txt2_1,'n')
@@ -129,13 +125,13 @@ end // end of x+ z+
 //flag = 3
 if nci>0&nco>0 then
   depp=strcat(dep)
-  if type_=='c' then  t2='or may be inherited (n_evi<0)',else t2=[],end
+//  if type_=='c' then  t2='or may be inherited (n_evi<0)',else t2=[],end
 
   while %t do
     if txt3==[] then txt3=' ',end
     txt3=dialog(['Using '+depp+',you may set '
 	'vector of output time events t_evo (size:'+string(nco)+')'
-	'at event time. Events may come through event input ports (n_evi>0)'
+	'at event time. '
 	t2],txt3)
     if txt3==[] then return,end	
     mac=null();deff('[]=mac()',txt3,'n')

@@ -1,6 +1,9 @@
+// Copyright INRIA
+mode(-1)
 exec(SCI+'/demos/control/scheme.dem');
 x_message(['Mixed Sensitivity Controller Design';
            'file: '+SCI+'/demos/control/scheme.dem'])
+mode(1)
 s=poly(0,'s');
 str='[(s-1)/((s-1)^2*(s+2))]';
 rep=x_dialog('Nominal plant?',str)
@@ -34,21 +37,24 @@ disp(spec(h_cl(Pms,r,K)),'closed loop eigenvalues')    //Check internal stabilit
 x_message('Singular values plot')
 fcts=['S function';'R (=K*S) function';'T function'];
 www=x_mdialog('Select sensitivity function',fcts,['Yes';'No';'Yes']);
-if www=[] then return,end
+if www==[] then return,end
 ww1=part(www(1),1)=='Y';
 if ww1 then
-xbasc(1);xset("window",1);xselect();gainplot(Ssens);
-xtitle('S = Sensitivity function');
+  xbasc(1);xset("window",1);xselect();gainplot(Ssens)
+  xtitle('S = Sensitivity function');
+  xend()
 end
 
 ww2=part(www(2),1)=='Y';
 if ww2 then
-xbasc(2);xset("window",2);xselect();gainplot(Rsens);
-xtitle('R (=G*S) Sensitivity function');
+  xbasc(2);xset("window",2);xselect();gainplot(Rsens);
+  xtitle('R (=G*S) Sensitivity function');
+  xend()
 end
 
 ww3=part(www(3),1)=='Y';
 if ww3 then
-xbasc(3);xset("window",3);xselect();gainplot(Tsens);
-xtitle('T = Complementary Sensitivity function');
+  xbasc(3);xset("window",3);xselect();gainplot(Tsens);
+  xtitle('T = Complementary Sensitivity function');
+  xend()
 end

@@ -4,6 +4,7 @@ c
 c     evaluate formal operations
 c =============================================================
 c     
+c     Copyright INRIA
       include '../stack.h'
       logical iseye,isnum
       integer lparen,rparen,star,plus,minus,blanc,slash,bslash,symb

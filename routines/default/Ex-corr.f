@@ -1,5 +1,6 @@
 c     Exemple for corr
 c     ----------------
+c     Copyright INRIA
       
       subroutine corexx(x, incr, istart)
       integer incr,istart

@@ -1,12 +1,22 @@
-function [scs_m,modified]=do_copy_region(scs_m,xc,yc,win)
-xinfo('Drag to select region and click to fix the selection')
+function [scs_m,needcompile]=do_copy_region(scs_m,needcompile)
+[btn,xc,yc,win,Cmenu]=getclick()
+if Cmenu<>[] then
+  Cmenu=resume(Cmenu)
+end
+disablemenus()
 [reg,rect]=get_region(xc,yc,win)
+// Copyright INRIA
+if rect==[] then enablemenus();return,end
 modified=size(reg)>1
-if rect==[] then return,end
 
-xinfo('Drag to destination position and click to fix it')
+
+xinfo('Drag to destination position and click (left to fix, right to cancel)')
 rep(3)=-1
 yc=yc-rect(4)  
+dr=driver()
+if dr=='Rec' then driver('X11'),end
+pat=xget('pattern')
+xset('pattern',default_color(0))
 while rep(3)==-1 , //move loop
   // draw block shape
   xrect(xc,yc+rect(4),rect(3),rect(4))
@@ -15,11 +25,15 @@ while rep(3)==-1 , //move loop
   rep=xgetmouse()
   // erase block shape
   xrect(xc,yc+rect(4),rect(3),rect(4))
-
+if pixmap then xset('wshow'),end
   xc=rep(1);yc=rep(2)
   xy=[xc,yc];
 end
 
+driver(dr);xset('pattern',pat)
+if rep(3)==2 then enablemenus();return,end
+
+scs_m_save=scs_m,nc_save=needcompile
 n=size(scs_m)
 for k=2:size(reg)
   o=reg(k)
@@ -43,68 +57,9 @@ for k=2:size(reg)
   scs_m($+1)=o
   drawobj(o)
 end
-
-
-function [reg,rect]=get_region(xc,yc,win)
-alu=xget('alufunction')
-wins=curwin
-xset('window',win)
-xset('alufunction',6)
-reg=list();rect=[]
-kc=find(win==windows(:,2))
-if kc==[] then
-  message('This window is not an active palette')
-  return
-elseif windows(kc,1)<0 then //click dans une palette
-  kpal=-windows(kc,1)
-  scs_m=palettes(kpal)
-elseif win==curwin then //click dans la fenetre courante
-  scs_m=scs_m
-elseif pal_mode&win==lastwin then 
-  scs_m=scs_m_s
-elseif slevel>1 then
-  execstr('scs_m=scs_m_'+string(windows(kc,1)))
-else
-  message('This window is not an active palette')
-  return
+if modified then 
+  needcompile=4,
+  enablemenus()
+  [scs_m_save,nc_save,enable_undo,edited]=resume(scs_m_save,nc_save,%t,%t)
 end
-rep(3)=-1
-ox=xc
-oy=yc
-w=0;h=0
-first=%t
-while rep(3)==-1 do
-  xrect(ox,oy,w,h)
-  if first then rep=xgetmouse();else rep=xgetmouse(0),end
-  xrect(ox,oy,w,h)
-  xc1=rep(1);yc1=rep(2)
-  ox=mini(xc,xc1)
-  oy=maxi(yc,yc1)
-  w=abs(xc-xc1);h=abs(yc-yc1)
-  first=%f
-end
-xrect(ox,oy,w,h)
-keep=[];del=[]
-for k=2:size(scs_m)
-  o=scs_m(k)
-  if o(1)=='Block'|o(1)=='Text' then
-    // check is block is outside rectangle
-    orig=o(2)(1)
-    sz=o(2)(2)
-    x=[0 1 1 0]*sz(1)+orig(1)
-    y=[0 0 1 1]*sz(2)+orig(2)
-    ok=%f
-    for kk=1:4
-      data=[(ox-x(kk))'*(ox+w-x(kk)),(oy-h-y(kk))'*(oy-y(kk))];
-      if data(1)<0&data(2)<0 then ok=%t;keep=[keep k];break;end
-    end
-    if ~ok then del=[del k],end
-  end
-end
-
-[reg,DEL,DELL]=do_delete1(scs_m,del,%f)
-reg=do_purge(reg)
-rect=[ox,oy-h,w,h]
-xrect(ox,oy,w,h)
-xset('window',wins)
-xset('alufunction',alu)
+enablemenus()

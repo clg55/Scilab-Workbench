@@ -31,6 +31,7 @@ c     d2 : cf d1
 c!origine
 c    s Steer INRIA
 c!
+c     Copyright INRIA
       double precision pm1r(*),pm1i(*),norm,normr,normi,epsr,epsa,eps
       integer d1(*),d2(*),m,n
 c

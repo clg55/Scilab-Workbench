@@ -5,6 +5,7 @@ function [S]=tf2des(G,flag)
 //  y=C*x+D*u
 //  with flag="withD" a maximal rank D matrix is returned
 //!
+// Copyright INRIA
 [LHS,RHS]=argn(0);
 if RHS==1 then flag=[];end
 if RHS==2&flag<>"withD" then warning("tf2des: unknown flag");end
@@ -40,7 +41,7 @@ E=[eye(n1,n1),0*ones(n1,n2);
 B=[sp(3);
    spol(3)];
 C=[sp(4),-spol(4)];
-S=list('des',A,B,C,D,E)
+S=tlist(['des','A','B','C','D','E'],A,B,C,D,E)
 
 
 

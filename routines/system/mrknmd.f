@@ -1,4 +1,5 @@
       subroutine mrknmd()
+c     Copyright INRIA
       INCLUDE '../stack.h'
       logical compil,c
       character*(6) str

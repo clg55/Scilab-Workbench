@@ -38,6 +38,7 @@ c     Serge Steer INRIA  5/02/86
 c!sous programmes appeles
 c     icopy (blas)
 c!
+c     Copyright INRIA
       integer mp(*),mp1(*)
       integer d(*),m,n,row(*),nr,col(*),nc,d1(*),job,ierr
 c

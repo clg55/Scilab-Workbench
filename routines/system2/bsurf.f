@@ -5,6 +5,7 @@ c     gestion des macros external pour la primitive ODE
 c     (traversee de surface)
 c ======================================================================
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     

@@ -1,6 +1,7 @@
 function [txt,vnms,vtps,nwrk]=cla2for(clause,vnms,vtps,nwrk)
 // traduit une clause (if while for select)
 //!
+// Copyright INRIA
 typ=clause(1)
 //write(6,'cla2for '+typ(1))
 
@@ -61,7 +62,7 @@ case %select then
   [t1,vnms,vtps,nwrk]=ins2for(clause(4),1,vnms,vtps,nwrk)
   txt=[txt;indentfor(t1)];
   for ic=4:2:2*ncas
-    [exp2,t2;ilst,vnms,vtps,nwrk]=exp2for(clause(1+ic),1,vnms,vtps,nwrk)
+    [exp2,t2,ilst,vnms,vtps,nwrk]=exp2for(clause(1+ic),1,vnms,vtps,nwrk)
     exp2=exp2(1)
     txt=[txt;' '+%elseif+'('+exp1(1)+'.eq.'+exp2(1)+' '+%then]
     [t1,vnms,vtps,nwrk]=ins2for(clause(2+ic),1,vnms,vtps,nwrk)

@@ -1,4 +1,5 @@
 
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 
 /*---------------------------------------------------------------------
 \encadre{Le cas des xcall1}

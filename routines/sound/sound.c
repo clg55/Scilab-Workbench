@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <stdio.h>
 #ifdef __STDC__
 #include <stdlib.h>
@@ -23,6 +24,7 @@ static struct soundstream ftf;
 static ft_t ft ;
 
 static FILE *ftformat[MAXF]={(FILE*) 0}; /*** must be zero initialized ***/
+static int ftswap[MAXF]={0}; /** swap status for each file **/
 
 static int GetFirst() 
 {
@@ -36,14 +38,22 @@ FILE *GetFile(fd)
      integer *fd;
 {
   int fd1;
-  if ( *fd != -1) 
-      fd1 = Min(Max(*fd,0),MAXF-1);
-  else 
-      fd1 = CurFile;
+  fd1 = (*fd != -1) ?  Min(Max(*fd,0),MAXF-1) : CurFile ;
   if ( fd1 != -1 ) 
     return(ftformat[fd1]);
   else
     return((FILE *) 0);
+}
+
+int GetSwap(fd)
+     integer *fd;
+{
+  int fd1;
+  fd1 = (*fd != -1) ?  Min(Max(*fd,0),MAXF-1) : CurFile ;
+  if ( fd1 != -1 ) 
+    return(ftswap[fd1]);
+  else
+    return(0);
 }
 
 
@@ -56,7 +66,13 @@ void C2F(mopen)(fd,file,status,f_swap,res,error)
   int	littlendian = 1;
   char	*endptr;
   endptr = (char *) &littlendian;
-  if ( (!*endptr) && *f_swap == 1 ) swap = 1;
+  if ( (!*endptr) )
+    {
+      if( *f_swap == 1 ) 
+	swap = 1;
+      else 
+	swap =0;
+    }
   sciprint("    Byte Swap status %d \r\n",swap);
   *fd = GetFirst();
   if ( *fd == MAXF )
@@ -66,6 +82,7 @@ void C2F(mopen)(fd,file,status,f_swap,res,error)
       return;
     }
   ftformat[*fd]=fopen(file,status);
+  ftswap[*fd]= swap;
   if (! ftformat[*fd] )
     {     
       *error=1;
@@ -123,6 +140,71 @@ void C2F(meof) (fd,res)
 }
 
 
+#if (defined(sun) && !defined(SYSV)) || defined(sgi)
+#define SEEK_SET 0
+#define SEEK_CUR 1
+#define SEEK_END 2
+#endif 
+
+FILE * GetFile();
+
+void C2F(mseek) (fd,offset,flag,err)
+     integer *fd,*offset,*err;
+     char *flag;
+{     
+  int iflag,irep;
+  FILE *fa= GetFile(fd);
+  if ( fa == (FILE *) 0 ) 
+    {
+      sciprint("mseek: wrong file descriptor \r\n");
+      *err=1;
+      return;
+    }
+  if ( strncmp(flag,"set",3)==0 ) 
+    iflag = SEEK_SET;
+  else if ( strncmp(flag,"cur",3)==0 ) 
+    iflag = SEEK_CUR;
+  else if ( strncmp(flag,"end",3)==0 ) 
+    iflag = SEEK_END;
+  else 
+    {
+      sciprint("mseek : flag = %s not recognized \r\n");
+      *err=1;
+      return;
+    }
+  irep = fseek(fa,(long) *offset,iflag) ;
+#if (defined(sun) && !defined(SYSV)) || defined(sgi)
+  if ( irep != 0 ) 
+    {
+      sciprint(strerror(irep));
+      irep =-1;
+    }
+#endif
+  if (fseek(fa,(long) *offset,iflag) == -1 ) 
+    {
+      sciprint("mseek: error\r\n");
+      *err=1;
+    }
+  else 
+    *err=0;
+}
+
+void C2F(mtell) (fd,offset,err)
+     integer *fd,*offset,*err;
+{     
+  int iflag;
+  FILE *fa= GetFile(fd);
+  if ( fa == (FILE *) 0 ) 
+    {
+      sciprint("mseek: wrong file descriptor \r\b");
+      *err=1;
+      return;
+    }
+  *err=0;
+  *offset = ftell(fa) ;
+}
+
+
 /* 
    Read and write words and longs in "machine format".  
    Swap if indicated. 
@@ -149,6 +231,7 @@ void C2F(mput) (fd,res,n,type,ierr)
   FILE *fa;
   ft_t ft;
   fa = GetFile(fd);
+  swap = GetSwap(fd);
   ft = &ftf; 
   ft->fp = fa;
   if (fa)
@@ -276,6 +359,7 @@ void C2F(mget) (fd,res,n,type,ierr)
   ft_t ft;
   FILE *fa;
   fa = GetFile(fd);
+  swap = GetSwap(fd);
   ft = &ftf; 
   ft->fp = fa;
   if (fa)

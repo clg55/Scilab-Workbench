@@ -34,7 +34,6 @@ equivalent to \fVspeye(3,3)\fR.
 eye(3,3)-full(speye(3,3))
 .fi
 .SH SEE ALSO
-sparse, full, eye, spzeros
-
+sparse, full, eye, spzeros, spones
 
                         

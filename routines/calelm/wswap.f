@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WSWAP,SSI=0
+c     Copyright INRIA
       subroutine wswap(n,xr,xi,incx,yr,yi,incy)
 c!but
 c

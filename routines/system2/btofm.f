@@ -1,6 +1,7 @@
       subroutine btofm(x,ldx,nx,mx)
 c    scilab to fortran matrix transfer
 c
+c     Copyright INRIA
       include '../stack.h'
       integer iadr,sadr
       double precision x

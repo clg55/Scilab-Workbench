@@ -1,4 +1,5 @@
 function A=g_sort(A,flag)
+// Copyright INRIA
 [ij,v,mn]=spget(A);
 if mn(2)==1 then
   last=find(v<0);

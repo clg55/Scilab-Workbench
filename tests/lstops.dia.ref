@@ -1,4 +1,6 @@
  
+// Copyright INRIA
+ 
 mode(5)
 //-----------------------
 //-- extractions tests --
@@ -36,7 +38,7 @@ if x1<>l('a')|x2<>l('c') then bugmes();quit;end
 if x1<>l('a')|x2<>l('c') then bugmes();quit;end
 //with partial tlists (no elements formal names)
 l=tlist('t',1,-2,5);
-deff('[f1,f2,f3,f4,f5,f6,f7]=%te(i,j,f)',[
+deff('[f1,f2,f3,f4,f5,f6,f7]=%t_e(i,j,f)',[
   'nams=[''a'',''b'',''c''];'
   'for k=1:prod(size(i))';
   '   kf=find(i(k)==nams);';
@@ -83,14 +85,14 @@ l(0)=null();
 if l<>list(1.25,33,[1 2 3]) then bugmes();quit;end
 l=tlist('t',2,'a',-1);
 l(2)=[1 2 3];
-if %lnl(l,tlist('t',[1 2 3],'a',-1)) then bugmes();quit;end
+if %l_n_l(l,tlist('t',[1 2 3],'a',-1)) then bugmes();quit;end
 l(2)=33;
-if %lnl(l,tlist('t',33,'a',-1)) then bugmes();quit;end
+if %l_n_l(l,tlist('t',33,'a',-1)) then bugmes();quit;end
 l(2)=33;
-if %lnl(l,tlist('t',33,'a',-1)) then bugmes();quit;end
+if %l_n_l(l,tlist('t',33,'a',-1)) then bugmes();quit;end
 l(4)=[1 2];
-if %lnl(l,tlist('t',33,'a',[1,2])) then bugmes();quit;end
+if %l_n_l(l,tlist('t',33,'a',[1,2])) then bugmes();quit;end
 l(2)=null();
-if %lnl(l,tlist('t','a',[1,2])) then bugmes();quit;end
+if %l_n_l(l,tlist('t','a',[1,2])) then bugmes();quit;end
 l(1)=null();
-if %lnl(l,list('a',[1,2])) then bugmes();quit;end
+if %l_n_l(l,list('a',[1,2])) then bugmes();quit;end

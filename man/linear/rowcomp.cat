@@ -4,7 +4,7 @@ NAME
   rowcomp - row compression, range
 
 CALLING SEQUENCE
-  [W,rk]=rowcomp(A, flag, tol)
+  [W,rk]=rowcomp(A [,flag] [,tol])
 
 PARAMETERS
 
@@ -24,7 +24,7 @@ DESCRIPTION
 
   flag and tol are optional parameters: flag='qr' or 'svd' (default 'svd').
 
-  tol is a tolerance parameter (of order %eps as default value).
+  tol is a tolerance parameter (of order sqrt(%eps) as default value).
 
   The rk first columns of W' span the range of A.
 

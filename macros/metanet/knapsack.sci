@@ -1,4 +1,5 @@
 function [earn,ind]=knapsack(profit,weight,capa,bck)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if (rhs<3|rhs>4) then 
   error(39)

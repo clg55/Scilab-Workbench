@@ -7,6 +7,7 @@ function [v]=ell1mag(eps,m1,z)
 //  v       :Elliptic filter values at sample points
 //
 //!
+// Copyright INRIA
 s=%sn(z,m1);un=ones(z);
 v=real(un./(un+eps*eps*s.*s))
 

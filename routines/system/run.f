@@ -3,6 +3,7 @@ c ========================================================================
 C     Execution of a compiled macro 
 c ======================================================================== 
 c     
+c     Copyright INRIA
       include '../stack.h'
 c     
       double precision x
@@ -42,12 +43,6 @@ c     debut d'une macro compilee
       lc=lin(k+7)
 c     
  10   if(err.gt.0) return
-c$$$      if(err1.ne.0) then
-c$$$        if(err2.eq.0) err2=err1
-c$$$        err1=0
-c$$$        imode=abs(errct/10000)
-c$$$        if(imode-8*int(imode/8).eq.2) iflag=.true.
-c$$$      endif
       if(iflag) then
          iflag=.false.
          goto 91
@@ -59,8 +54,8 @@ c
 c     nouvelle 'operation'
  11   continue
       op=istk(lc)
-      goto(20,25,40,42,30,41,45,49,49,55,15,90,95,100,105,110,
-     $     120,130,140) ,op
+      goto(20, 25, 40, 42, 30, 41, 45, 49, 49, 55,
+     &     15, 90, 95, 100,105,110,120,130,140,150) ,op
 c     matfns
       if(op.ge.100) goto 80
 c     return
@@ -166,7 +161,6 @@ c     for
          lc=lc+nsiz+istk(lc)
          goto 10
       endif
-      toperr=top
       rstk(pt)=611
       ids(1,pt)=l0
       ids(2,pt)=nc
@@ -179,6 +173,8 @@ c
       ids(1,pt)=l0
       ids(2,pt)=lct(8)
       ids(3,pt)=top
+      ids(4,pt)=toperr
+      toperr=top
  47   lc=l0
       if(top.ne.ids(3,pt)) then 
          call error(115)
@@ -199,6 +195,7 @@ c
       endif
 c     fin for
       lc=lc+nc
+      toperr=ids(4,pt)
       pt=pt-1
       goto 70
 c     
@@ -219,6 +216,7 @@ c     evaluation de l'expression logique
       ids(1,pt)=li
       l0=lc
       ids(2,pt)=kc
+      ids(3,pt)=toperr
       goto 10
 c
  52   if(kc.eq.0) then
@@ -248,6 +246,7 @@ c     evaluation des instructions du then
 c     
       if(kc.ne.2.and.istk(li).eq.9) goto 51
       lct(8)=pstk(pt)
+      toperr=ids(3,pt)
       lc=li+5+istk(li+2)
       lc=lc+istk(li+3)+istk(li+4)
       pt=pt-1
@@ -260,6 +259,7 @@ c     select - case  ou nouveau "if elseif else end"
          goto 10
       endif
       pstk(pt)=lc
+      ids(3,pt)=toperr
 c     
       if(istk(lc+1).gt.0) then
 c     premiere expression
@@ -350,11 +350,16 @@ c     fin if while select/case
       endif
  62   l0=pstk(pt)
       lc=l0+abs(istk(l0+1))
+      toperr=ids(3,pt)
       pt=pt-1
       goto 70
 c     
 c     macro
  65   rhs=max(istk(lc+2)-1,0)
+      if(rstk(pt).eq.501) then
+         rhs=rhs+ids(5,pt)
+         ids(5,pt)=0
+      endif
       lhs=istk(lc+3)
       lc=lc+4
 c     
@@ -411,6 +416,10 @@ c
 c     
  80   fun=op/100
       rhs=istk(lc+1)
+      if(rstk(pt).eq.501) then
+         rhs=rhs+ids(5,pt)
+         ids(5,pt)=0
+      endif
       lhs=istk(lc+2)
       fin=istk(lc+3)
       lc=lc+4
@@ -511,7 +520,7 @@ c     de fin d'instruction dans les macros
       if(err1.ne.0) then
         if(err2.eq.0) err2=err1
         err1=0
-        imode=abs(errct/10000)
+        imode=abs(errct/100000)
         if(imode-8*int(imode/8).eq.2) iflag=.true.
       endif
 
@@ -594,7 +603,19 @@ c
       call mkindx(istk(lc+1),istk(lc+2))
       lc=lc+3
       goto 10
-c     
+c
+c     exit
+c
+ 150  continue
+      lc=lc+1
+      if (niv.gt.0) then
+         call sciquit
+         stop
+      endif
+      fun = 99
+      goto 10
+c
+
  998  continue
       lhs=0
  999  continue

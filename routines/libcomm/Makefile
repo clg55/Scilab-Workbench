@@ -1,5 +1,6 @@
 SHELL = /bin/sh
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/libcomm.a
 
@@ -25,3 +26,8 @@ gest_messages.o: utilitaires.h libCom.h formatage_messages.h \
 	 gestion_memoire.h gestion_messages.h
 list_chainees.o: listes_chainees.h
 utilitaires.o: gestion_memoire.h buffer_dynamiques.h utilitaires.h
+
+all:: Makefile.mak
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile

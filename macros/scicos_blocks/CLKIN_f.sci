@@ -1,4 +1,5 @@
 function [x,y,typ]=CLKIN_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -18,6 +19,22 @@ case 'plot' then
   xpoly(x,y,'lines',1)
   xset('thickness',thick)
   xset('pattern',pat)
+    //identification
+  if size(o(3)) >= 15 then
+    ident = o(3)(15)
+  else
+    ident = []
+  end
+  if ident <> [] then
+    font=xget('font')
+    xset('font', options('ID')(1)(1), options('ID')(1)(2))
+    rectangle = xstringl(orig(1)+3/2*sz(1), orig(2), ident)
+    w = rectangle(3)
+    h = rectangle(4)
+    xstringb(orig(1) + 3/2 * sz(1), orig(2) + sz(2) * 0.5 , ident , w, h)
+    xset('font', font(1), font(2))
+  end
+
 case 'getinputs' then
   x=[];y=[];typ=[]
 case 'getoutputs' then
@@ -28,7 +45,7 @@ case 'getoutputs' then
     y=orig(2)+sz(2)/2
   else
     x=orig(1)
-    y=orig(2)+sz(2)
+    y=orig(2)+sz(2)/2
   end
   typ=-ones(x)
 case 'getorigin' then

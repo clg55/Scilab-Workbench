@@ -8,6 +8,7 @@ c               dimension m or n
 c     ierr=2  : not enough memory for ind
 c     ierr=3  : doubly defined entry with different value
 c!
+c     Copyright INRIA
       double precision v(nel)
       integer ij(nel,2),ind(nind),iw(nel)
 c

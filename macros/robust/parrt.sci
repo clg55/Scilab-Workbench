@@ -16,6 +16,7 @@ function [go,xo]=par(a,b,c,rx,cx);
 //
 //!
 //constant
+// Copyright INRIA
 TOLA=1.0e-8; // threshold used to discard near singularities in
 //		gs I - A'*A
  
@@ -26,7 +27,7 @@ go=maxi(norm([a b]),norm([a;c]));
  
 //MONITOR LIMIT CASES
 //--------------------
-if ra=0 | ca = 0 | go = 0 then xo(rx,cx)=0; return; end
+if ra==0 | ca == 0 | go == 0 then xo(rx,cx)=0; return; end
  
  
  
@@ -47,7 +48,7 @@ nnz1=nthresh(dd/go,TOLA);
 nd=ns-nnz1;   //number of singular values thresholded out
  
 //compute xo
-if nnz1=0 then
+if nnz1==0 then
    xo(rc,cb)=0;
  
 else

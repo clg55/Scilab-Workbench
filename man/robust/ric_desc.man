@@ -4,7 +4,7 @@
 ric_desc - Riccati equation
 .SH CALLING SEQUENCE
 .nf
-[X1,X2,zero]=ric_desc(H,E)
+X=ric_desc(H [,E))
 [X1,X2,zero]=ric_desc(H [,E])
 .fi
 .SH PARAMETERS
@@ -32,7 +32,7 @@ Defining the hamiltonian matrix \fVH\fR by:
  H = [A  R;
       Q -A']
 .fi
-with the calling sequence \fV[X1,X2,err]=ric_descr(H)\fR, the 
+with the calling sequence \fV[X1,X2,zero]=ric_descr(H)\fR, the 
 solution \fVX\fR is given by \fVX=X1/X2\fR.
 .LP
 \fVzero\fR = L1 norm of rhs of (\fVEc\fR)

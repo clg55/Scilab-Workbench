@@ -1,5 +1,7 @@
       subroutine demux(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,uy1,nuy1,uy2,nuy2,uy3,nuy3,uy4,
+c     Copyright INRIA
+
      &     nuy4,uy5,nuy5,uy6,nuy6,uy7,nuy7,uy8,nuy8,uy9,nuy9)
 c     Scicos block simulator
 c

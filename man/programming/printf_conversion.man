@@ -188,7 +188,7 @@ Trailing zeros are removed from the result.
 A decimal point appears only if it is followed by a digit.
 The style used depends on the value converted.
 Style \fVe\fR (\fVE\fR, if \fVG\fR is the flag used) results only if
-the exponent resulting from the conversion is less than \-4, or if it
+the exponent resulting from the conversion is less than -4, or if it
 is greater or equal to the precision.
 .TP 
 c

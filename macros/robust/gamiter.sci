@@ -1,4 +1,5 @@
 function [ok,sk,stint]=gamiter(P12,P21,gama)
+// Copyright INRIA
 write(%io(2),gama);
 ok=%F;sk=[];stint=%F;
 [A,B2,C1,D12]=P12(2:5);
@@ -19,7 +20,7 @@ V=B1*B1';L=D21*B1';N=D21*D21';
 [H,Y,err]=leqe(P21,Q/gama/gama);
 //[L,Y,err]=dleqe(P,size(C2*B2),gama);
 //H=L(:,ny+1:ny+nz)
-//pause;
+
 //Atild*inv(inv(Y)+C2'*inv(N)*C2-Q/gama/gama)*Atild'+Vtild
 //-(Atild*inv(inv(Y)+C2'*inv(N)*C2-Q/gama/gama)*C2'+L')*inv(N)
 //tests
@@ -49,7 +50,7 @@ else
           Sk=des2ss(Ak,Bk,Ck,0*Ck*Bk,E);
 end
 end
-if dom='c' then
+if dom=='c' then
 ok1=and(real(spec(A+B2*K)) < zeros(nx,1));
 ok2=and(real(spec(A+H*C2)) < zeros(nx,1));
 ok3=mini(real(spec(eye-Y*X/gama/gama))) > 100*%eps;

@@ -32,6 +32,7 @@ c!auxiliary routines
 c     ifix real mod (fortran)
 c!
 c
+c     Copyright INRIA
       integer i1, i2, j1, j2, na, isw
       double precision a, r
       dimension a(na,*)

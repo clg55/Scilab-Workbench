@@ -1,4 +1,5 @@
       subroutine sz2ptr(ind,m,ptr)
+c     Copyright INRIA
       integer ind(m),ptr(*)
       ptr(1)=1
       do 10 i=1,m

@@ -4,7 +4,8 @@ binary:
 	@if test -f .binary; then \
 		echo "Humm... this is a binary version"; \
 		config/findpath; \
-		cd scripts; make; \
+		(cd scripts; make); \
+                (cd maple; make); \
 		echo "Installation done"; \
 	else \
 		echo "Humm... this is a source version,"; \
@@ -21,11 +22,12 @@ world:: scilex-lib-world bin/scilex
 LIBRSCI = libs/system.a libs/interf.a libs/system2.a libs/optim.a \
 	libs/integ.a libs/control.a libs/scicos.a libs/signal.a \
 	libs/poly.a libs/calelm.a libs/lapack.a libs/graphics.a \
-	libs/sparse.a libs/metanet.a libs/sun.a libs/system.a libs/sun.a \
-	libs/intersci.a  libs/@GUILIB@.a libs/sun.a libs/graphics.a libs/menusX.a \
-	libs/libcomm.a libs/comm.a libs/sound.a @XDRLIBNAME@
+	libs/sparse.a libs/metanet.a libs/sun.a  \
+	libs/intersci.a  libs/@GUILIB@.a libs/graphics.a libs/menusX.a \
+	libs/libcomm.a libs/comm.a libs/sound.a libs/dcd.a libs/rand.a \
+	libs/blas.a libs/fraclab.a libs/pvm.a @XDRLIBNAME@ @TKSCILIB@
 
-LIBR = $(XAW_LOCAL_LIB) $(LIBRSCI) $(DLDLIB)
+LIBR = $(XAW_LOCAL_LIB) $(LIBRSCI) $(DLDLIB) $(PVMGLIB) $(PVMLIB)
 
 DEFAULTS = \
 	routines/default/FTables.o \
@@ -35,6 +37,8 @@ DEFAULTS = \
 	routines/default/Ex-fsolve.o \
 	routines/default/Ex-impl.o \
 	routines/default/Ex-intg.o \
+	routines/default/Ex-int2d.o \
+	routines/default/Ex-int3d.o \
 	routines/default/Ex-ode-more.o \
 	routines/default/Ex-ode.o \
 	routines/default/Ex-odedc.o \
@@ -47,32 +51,40 @@ DEFAULTS = \
 	routines/default/@MAIN@ \
 	routines/default/matusr.o  routines/default/matus2.o \
 	routines/default/Funtab.o  routines/default/msgstxt.o \
-	routines/default/scimem.o
+	routines/default/scimem.o \
+	routines/default/callinterf.o
 
 include config/@MAKEFILE_TARGET@
 
 distclean::
 	$(RM) bin/scilex
 
-SUBDIRS = scripts macros imp intersci @MANVIEWER@ @XMETANET@ tests demos @COMM@
+SUBDIRS = scripts maple macros imp intersci @MANVIEWER@ @XMETANET@ \
+	tests demos @COMM@ examples
 
 SUBDIRS-DOC = man doc
 
-scilex-lib:
+scilex-lib::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
 	cd routines; echo "making all in routines..."; \
 		$(MAKE) $(MFLAGS) all;
 
-scilex-lib-world:
+scilex-lib::
+	@cd pvm3; echo "making all in pvm3..."; $(MAKE) $(MFLAGS) "CC=$(CC)";
+
+scilex-lib-world::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
-	cd routines; echo "making world in routines..."; \
+	@cd routines; echo "making world in routines..."; \
 		$(MAKE) $(MFLAGS) world;
+
+scilex-lib-world::
+	@cd pvm3; echo "making all in pvm3..."; $(MAKE) $(MFLAGS);
 
 all::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
 	for i in $(SUBDIRS) ;\
 	do \
-		(cd $$i ; echo "making" all "in $$i..."; \
+		(cd $$i ; echo "making all in $$i..."; \
 			$(MAKE) $(MFLAGS) all); \
 	done
 
@@ -80,7 +92,7 @@ world::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
 	for i in $(SUBDIRS) $(SUBDIRS-DOC);\
 	do \
-		(cd $$i ; echo "making" world "in $$i..."; \
+		(cd $$i ; echo "making world in $$i..."; \
 			$(MAKE) $(MFLAGS) world); \
 	done
 
@@ -89,51 +101,63 @@ distclean::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
 	for i in routines $(SUBDIRS) $(SUBDIRS-DOC);\
 	do \
-		(cd $$i ; echo "making" distclean "in $$i..."; \
+		(cd $$i ; echo "making distclean in $$i..."; \
 			$(MAKE) $(MFLAGS)  distclean); \
 	done
+
+distclean::
+	@cd pvm3; echo "making distclean in pvm3..."; \
+	$(MAKE) $(MFLAGS) clean;
+	$(RM) -r pvm3/lib/@PVMARCH@ pvm3/bin/@PVMARCH@
 
 clean::
 	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
 	for i in routines $(SUBDIRS) $(SUBDIRS-DOC);\
 	do \
-		(cd $$i ; echo "making" clean "in $$i..."; \
+		(cd $$i ; echo "making clean in $$i..."; \
 			$(MAKE) $(MFLAGS)  clean); \
 	done
+
+clean::
+	@cd pvm3; echo "making clean in pvm3..."; \
+	$(MAKE) $(MFLAGS)  clean;
 
 tests:
 	@echo "Type \"make tests\" in $(SCIDIR)/tests directory "
 	@echo "  to test the  distribution"
 
 distclean::
-	$(RM) config.cache config.log config.status .binary foo.f foo.o so_locations
-
-examples/callsci/Makefile: examples/callsci/Makefile.g
-	@sed -e "s|SCI_DIR|`pwd`|" \
-	-e "s|SCI_LIBR|$(LIBRSCI/*/SCI_DIR\/&) SCI_DIR/libs/system.a|" \
-	-e "s|SCI_DEF|$(DEFAULTS/*/SCI_DIR\/&)|" \
-	-e "s|SCI_DIR\/routines/default/mainsci.o||"\
-	-e "s|SCI_DIR|$$\(SCIDIR\)|g" examples/callsci/Makefile.g >examples/callsci/Makefile
+	$(RM) config.cache config.log config.status .binary foo.f foo.o \
+	conftest conftest.c so_locations
 
 
-SCIBASE = scilab-2.3
+SCIBASE = scilab-2.4
 
 BINDISTFILES = \
-	$(SCIBASE)/CHANGES $(SCIBASE)/README $(SCIBASE)/README.win32 \
+	$(SCIBASE)/CHANGES $(SCIBASE)/README $(SCIBASE)/ACKNOWLEDGEMENTS \
 	$(SCIBASE)/notice.ps $(SCIBASE)/notice.tex \
 	$(SCIBASE)/scilab.quit $(SCIBASE)/scilab.star \
 	$(SCIBASE)/configure $(SCIBASE)/config $(SCIBASE)/Makefile* \
 	$(SCIBASE)/Version.incl $(SCIBASE)/patchlevel.h \
 	$(SCIBASE)/X11_defaults \
+	$(SCIBASE)/README_Windows.txt $(SCIBASE)/Win95-util \
 	$(SCIBASE)/bin $(SCIBASE)/demos $(SCIBASE)/examples \
 	$(SCIBASE)/imp/NperiPos.ps $(SCIBASE)/macros \
 	$(SCIBASE)/man \
 	$(SCIBASE)/maple $(SCIBASE)/scripts $(SCIBASE)/util \
 	$(SCIBASE)/routines/*.h \
-	$(SCIBASE)/routines/graphics/Math.h $(SCIBASE)/routines/graphics/Graphics.h $(SCIBASE)/routines/sun/link.h \
+	$(SCIBASE)/routines/graphics/Math.h \
+	$(SCIBASE)/routines/graphics/Graphics.h \
+	$(SCIBASE)/routines/sun/link.h $(SCIBASE)/routines/intersci/sparse.h \
+	$(SCIBASE)/pvm3/lib/pvm $(SCIBASE)/pvm3/lib/pvmd \
+	$(SCIBASE)/pvm3/lib/pvmtmparch \
+	$(SCIBASE)/pvm3/lib/@PVMARCH@/pvmd3 \
+	$(SCIBASE)/pvm3/lib/@PVMARCH@/pvmgs \
+	$(SCIBASE)/tcl \
 	$(SCIBASE)/.binary
 
 tarbindist:
 	touch .binary
+	strip $(SCIDIR)/bin/scilex
 	cd .. ; tar cvf $(SCIDIR)/$(SCIBASE)-bin.tar $(BINDISTFILES)
 	$(RM) .binary

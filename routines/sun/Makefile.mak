@@ -1,19 +1,21 @@
 # Generated automatically from Makefile.in by configure.
 SHELL = /bin/sh
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/sun.lib
 
 OBJSF = bashos.obj basin.obj basout.obj \
-	cluni0.obj clunit.obj ctrlc.obj dbasin.obj  \
-	fgetarg.obj getpro.obj inffic.obj inibrk.obj sigbas.obj 
+	clunit.obj ctrlc.obj dbasin.obj  \
+	fgetarg.obj getpro.obj inibrk.obj sigbas.obj 
 
 OBJSC  = getenvc.obj link.obj systemc.obj zzledt.obj  csignal.obj getpidc.obj timer.obj \
-	flags.obj men_Sutils.obj addinter.obj h_help_data.obj tmpdir.obj
+	flags.obj men_Sutils.obj addinter.obj h_help_data.obj tmpdir.obj cluni0.obj \
+	inffic.obj isanan.obj
 
 include ../../Makefile.incl.mak
 
-CFLAGS = $(CC_OPTIONS) $(XFLAGS)
+CFLAGS = $(CC_OPTIONS) $(XFLAGS) 
 
 include ../Make.lib.mak
 
@@ -32,3 +34,4 @@ zzledt.obj: ../machine.h
 csignal.obj: ../machine.h
 getpidc.obj: ../machine.h
 timer.obj: ../machine.h
+addinter.obj : addinter.h 

@@ -19,7 +19,8 @@ function [x1,y]=system(x0,f,g,h,q,r)
 //and v is distribute N(0,r).
 //!
 //author: C. Bunks  date: August 1988
-   rand('normal');
+// Copyright INRIA
+rand('normal');
    q2=chol(q);
    r2=chol(r);
    u=q2'*rand(ones(x0));

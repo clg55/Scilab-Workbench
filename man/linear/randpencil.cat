@@ -12,7 +12,7 @@ PARAMETERS
 
   infi : vector of integers
 
-  fin  : real vector
+  fin  : real vector, or monic polynomial, or vector of monic polynomial
 
   eta  : vector of integers
 
@@ -29,10 +29,19 @@ DESCRIPTION
 
   epsi's should be >=0, etai's should be >=0, infi's should be >=1.
 
+  If fin is a (monic) polynomial, the finite block admits the roots of fin as
+  eigenvalues.
+
+  If fin is a vector of polynomial, they are the finite elementary divisors
+  of F i.e. the roots of p(i) are finite eigenvalues of F.
+
 EXAMPLE
   F=randpencil([0,1],[2],[-1,0,1],[3]);
   [Q,Z,Qd,Zd,numbeps,numbeta]=kroneck(F);
   Qd, Zd
+  s=poly(0,'s');
+  F=randpencil([],[1,2],s^3-2,[]); //regular pencil
+  det(F)
 
 SEE ALSO
   kroneck, pencan, penlaur

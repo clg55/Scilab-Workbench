@@ -11,8 +11,9 @@ function [J]=fstabst(Stplant,r)
 //               j21 j22]
 // K is a stablizing controller iff K=LFT(J,r,Q) with Q stable
 //!
+// Copyright INRIA
 Stplant1=Stplant(1);
-flag='ss';if Stplant1(1)='r' then flag='tf';Stplant=tf2ss(Stplant);end
+flag='ss';if Stplant1(1)=='r' then flag='tf';Stplant=tf2ss(Stplant);end
 [LHS,RHS]=argn(0);
     [a,b1,b2,c1,c2,d11,d12,d21,d22]=smga(Stplant,r),
     Rd1=d12'*d12,
@@ -23,9 +24,9 @@ flag='ss';if Stplant1(1)='r' then flag='tf';Stplant=tf2ss(Stplant);end
    //-------------
     [s1,s2,t]=size(Stplant);
     [w1,k1]=rowcomp(d12),do1=w1(k1+1:s1-r,:)',
-    if do1=[] then do1=0,end,
+    if do1==[] then do1=0,end,
     [w2,k2]=rowcomp(d21'),do2=w2(k2+1:s2-p,:),
-    if do2=[] then do2=0,end,
+    if do2==[] then do2=0,end,
    //gains f and h
    //-------------
     ar1=a-b2*inv(Rd1)*d12'*c1,br1=b2*inv(Rd1)*b2',
@@ -46,4 +47,4 @@ flag='ss';if Stplant1(1)='r' then flag='tf';Stplant=tf2ss(Stplant);end
         inv(R22)*eye(r,r)         d22],
 //Normalization to get inner and co-inner factors
     J=syslin('c',aj,bj,cj,dj),
-    if flag='tf' then J=ss2tf(J);end
+    if flag=='tf' then J=ss2tf(J);end

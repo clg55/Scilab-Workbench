@@ -1,8 +1,9 @@
 function o=obsv_mat(a,c)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select type(a)
  case 1  then
-    if rhs=1 then error('2 arguments : a,c'),end
+    if rhs==1 then error('2 arguments : a,c'),end
     [m,n]=size(a)
     if m<>n then error(20,1),end
     [mb,nb]=size(c);if nb<>n then error(60),end

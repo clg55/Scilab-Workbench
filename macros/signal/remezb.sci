@@ -21,7 +21,8 @@ function [an]=remezb(nc,fg,ds,wt)
 //  an :Cosine filter coefficients
 //!
 // author: C. Bunks  date: 24 August 1988
- 
+// Copyright INRIA
+
 //get frequency grid size
  
    ngrid=maxi(size(fg));

@@ -8,7 +8,8 @@ function [errn,nwrk]=adderr(nwrk,txt)
 //             return
 //         endif
 //!
-  nwrk(7)=nwrk(7)+1
+// Copyright INRIA
+nwrk(7)=nwrk(7)+1
   errn=nwrk(7)
   msgs=nwrk(8);msgs(nwrk(7))=txt
   nwrk(8)=msgs

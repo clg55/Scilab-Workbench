@@ -1,6 +1,7 @@
 # Generated automatically from Makefile.in by configure.
 SHELL = /bin/sh
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/menusX.lib
 

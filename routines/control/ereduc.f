@@ -6,7 +6,8 @@ C     EREDUC computes a unitary transformed matrix Q*E*Z which is in
 C     column echelon form (trapezoidal form). Furthermore the rank of
 C     matrix E is determined.
 C        
-C     CONTRIBUTOR: Th.G.J. Beelen (Philips Glass Eindhoven).         
+C     CONTRIBUTOR: Th.G.J. Beelen (Philips Glass Eindhoven). 
+C     Copyright SLICOT
 C        
 C     REVISIONS: 1988, January 29.     
 C        

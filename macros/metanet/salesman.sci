@@ -1,4 +1,5 @@
 function [cir]=salesman(g,nstac)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 n=g('node_number');
 if rhs>2|rhs<1 then 

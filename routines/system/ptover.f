@@ -1,4 +1,5 @@
       logical function ptover(inc,icheck)
+c     Copyright INRIA
       integer inc,icheck
 C     increment pt with inc and 
 C     checks overflow in pt counter 

@@ -22,6 +22,7 @@ function F=stabil(A,B,alfa)
 //spec(A+B*F) 
 //the two controllable modes are set to -1.
 //
+// Copyright INRIA
 [LHS,RHS]=argn(0)
 if typeof(A)~='state-space' then
 [ns,nc,U,sl]=st_ility(syslin('c',A,B,[]));
@@ -29,7 +30,7 @@ if typeof(A)~='state-space' then
 if ns<nx then 
 warning('system not stabilizable (or detectable)=>stabilizing the stabilizable part');
 end
-if RHS=2 then 
+if RHS==2 then 
   alfa=-ones(1,nx);
 end
 if prod(size(alfa))==1 then

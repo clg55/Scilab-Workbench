@@ -15,7 +15,8 @@ function [x1,p1,x,p]=kalm(y,x0,p0,f,g,h,q,r)
 //        :based on data up to t=0
 //!
 // author: C. Bunks  date: 9 August 1988
- 
+// Copyright INRIA
+
    k=p0*h'*(h*p0*h'+r)**(-1);
    p=(eye(p0)-k*h)*p0;
    p1=f*p*f'+g*q*g';

@@ -4,7 +4,7 @@
 armax - armax identification 
 .SH CALLING SEQUENCE
 .nf
-[la,lb,sig,resid]=armax(r,s,y,u,[b0f,prf])
+[arc,la,lb,sig,resid]=armax(r,s,y,u,[b0f,prf])
 .fi 
 .SH PARAMETERS
 .TP 15
@@ -23,6 +23,9 @@ b0f
 prf 
 : optional parameter for display control. If prf =1, the default value, 
 a display of the identified Arma is given.
+.TP
+arc
+: a Scilab arma object (see armac) 
 .TP
 la 
 : is the list(a,a+eta,a-eta) ( la = a in dimension 1)
@@ -59,7 +62,7 @@ sum_{t=1}^N ( [y(t)- coef'z(t)]^2)
 where t0=maxi(maxi(r,s)+1,1))).
 .SH EXAMPLE
 .nf 
-[a,b,sig,resid]=armax(); // will gives an example in dimension 1
+[arc,a,b,sig,resid]=armax(); // will gives an example in dimension 1
 .fi
 .SH AUTHOR 
 J-Ph. Chancelier.

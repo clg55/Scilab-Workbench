@@ -17,7 +17,7 @@ approx
 om
 : 4-vector of cutoff frequencies (in radians)
  \fVom=[om1,om2,om3,om4]\fR, \fV0 <= om1 <= om2 <= om3 <= om4 <= pi\fR.
- When \fVftype\fR=3 or 4, \fVom3\fR and \fVom4\fR are not used
+ When \fVftype\fR='lp' or 'hp', \fVom3\fR and \fVom4\fR are not used
  and may be set to 0.
 .TP
 deltap
@@ -46,9 +46,9 @@ The filter obtained is \fVh(z)=fact\fR*product of the elements of
 That is \fVhz=fact*prod(cells(2))./prod(cells(3))\fR
 .SH EXAMPLE
 .nf
-[cells,fact,zeros,zpoles]=...
+[cells,fact,zzeros,zpoles]=...
 eqiir('lp','ellip',[2*%pi/10,4*%pi/10],0.02,0.001)
-transfer=fact*poly(zeros,'z')/poly(zpoles,'z')
+transfer=fact*poly(zzeros,'z')/poly(zpoles,'z')
 .fi
 .SH SEE ALSO
 eqfir, iir

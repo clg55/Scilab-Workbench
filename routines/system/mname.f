@@ -1,38 +1,46 @@
        subroutine mname(op,id)
-c     =======================================================
-c     searches a macro name for coded operations
-c     =======================================================
+c     ================================================
+c     searches a macro name for overloaded  operations
+c     ================================================
+c     Copyright INRIA
       include '../stack.h'
       integer gettype
-      logical ilog,getilist,getsmat
+      logical ilog,getilist,getsmat,first
 c
-      parameter (nops=28)
-      integer op,id(nsiz),name(nlgh),blank,percen
+      parameter (nops=32)
+      integer op,id(nsiz),name(nlgh),blank,percen,under,id1(nsiz)
       integer ops(nops),code(nops),top1,rhs1,codop
       integer compat
+      integer iadr
       data compat/1/
-      data blank/40/,percen/56/
+      data blank/40/,percen/56/,under/36/
       data ops /53,45,46,47,48,49,62, 1, 2, 3,4,98,99,100,200,201,202,
-     &          44,149,150,151,50,119,57,58,113,61,104/
+     &          44,149,150,151,50,119,57,58,113,61,104,59,60,109,110/
       data code/29,10,28,22,27,21,25,12,18,14,15,33,13,26,20, 34, 35, 
-     &          11,30, 31, 32, 24, 23, 16, 17,19,37,-53/
+     &          11,30, 31, 32, 24, 23, 16, 17,19,5,0,1,2,3,4/
 c
-c  '  +  -  *  /  \  **  []  ()  .*  ./  .\  .*.  ./.  .\.   :  *.  /. \.
-c  t  a  s  m  r  l  p   c,f e,i  x   d    q   k    y    z   b  u   v  w
+c     operators codes
+c     ---------------
+c     '  +  -  *  /  \  **  []  ()  .*  ./  .\  .*.  ./.  .\.   :  *. /.
+c     t  a  s  m  r  l  p   c,f e,i  x   d    q   k    y    z   b  u   v
+c     w   ==  <>  |  &  .^  ~ .' <  >  <=  >= 
+c     \.   o  n   g  h   j  5 0  1  2  3   4
 c
-c  ==  <>  | &  .^  ~ .'
-c   o  n   g h   j  # T
+c     type codes
+c     ----------
+c     characters  polynomial macros libraries  mat of numbers  list
+c     c           p          m      f          s                l
 c
-c  caracteres  polynomes macros files   scalaires  listes(non typees)
-c      c           p       m      f         s         l
+c     booleen sparse   booleen_sparse
+c     b       sp       spb
 c
-c  booleen sparse   booleen_sparse
-c     b      sp          spb
+c     tlist: up to 8 first characters of the tlist type
 c
-c  listes(typees): 3 premiers caracteres du premiers champ
-c    ou moins si la chaine est plus courte que 3 caracteres
+      iadr(l)=l+l-1
 c
       rhs1=rhs
+      first=.true.
+
       if (op.eq.3) then
          rhs1=1
       elseif (op.eq.2) then
@@ -40,138 +48,87 @@ c
       else
          rhs1=rhs
       endif
-      name(1)=percen
+
+ 10   name(1)=percen
       k=2
-      nb=1
 c
       top1=top-rhs1
-   10 top1=top1+1
-      goto(11,12,99,21,22,23,99,99,99,13,
-     $     14,14,99,15,16,18),gettype(top1)
-      goto 99
-c     --------------matrices scalaires
-   11 name(k)=28
-      k=k+1
-      goto 51
-c     --------------polynomes a coef dans R ou C
-   12 name(k)=25
-      k=k+1
-      goto 51
-c     --------------chaine de caractere
-   13 name(k)=12
-      k=k+1
-      goto 51
-c     --------------macros
-   14 name(k)=22
-      k=k+1
-      goto 51
-c     --------------files
-   15 name(k)=15
-      k=k+1
-      goto 51
-c     --------------list
-   16 continue
-      ilog=getilist("mname",top,top1,n,1,ili)
-      if(n.eq.0) then
-c     liste vide
-         name(k)=21
-         k=k+1
-      else
-         call mvptr(top+1,ili)
-c         if ( gettype(top+1).ne.10) then 
-            name(k)=21
-            k=k+1
-c         else
-c-compat this case is maintained for list->tlist compatibility
-c            if(compat.eq.1) then
-c               call msgs(62,0)
-c               compat=0
-c            endif
-c            ilog= getsmat("mname",top+1,top+1,ms,ns,1,1,lr,nlr)
-c            do 17 i=1,min(3,nlr)
-c               name(k)=istk(lr+i-1)
-c               k=k+1
-c 17         continue
-c         endif
-         call ptrback(top+1)
-      endif
-      goto 51
-c     --------------tlist
-   18 continue
-      ilog=getilist("mname",top,top1,n,1,ili)
-      if(n.eq.0) then
-c     liste vide
-         name(k)=21
-         k=k+1
-      else
-         call mvptr(top+1,ili)
-         ilog= getsmat("mname",top+1,top+1,ms,ns,1,1,lr,nlr)
-         do 19 i=1,min(3,nlr)
-            name(k)=istk(lr+i-1)
-            k=k+1
- 19      continue
-         call ptrback(top+1)
-      endif
-      goto 51
-
-c     --------------booleen
- 21   name(k)=11
-      k=k+1
-      goto 51
-c     -------------- sparse
- 22   name(k)=28
-      name(k+1)=25
-      k=k+2
-      goto 51
-c     -------------- booleen sparse
- 23   name(k)=28
-      name(k+1)=25
-      name(k+2)=11
-      k=k+3
-      goto 51
-c     --------------
-   51 if(nb.eq.2) goto 54
+c
+c     get code associated to first operand 
+      top1=top1+1
+      call typ2cod(iadr(lstk(top1)),name(k),n)
+      if(n.eq.0) goto 99
+      k=k+n
+c
+c     get code associated with operator
       do 52 i=1,nops
          if(ops(i).eq.op) goto 53
    52 continue
       goto 99
    53 codop=code(i)
-      name(k)=codop
-      k=k+1
-      nb=2
-      if(rhs1.eq.2) goto 10
+      if(first) then
+         name(k)=under
+         name(k+1)=codop
+         if(rhs1.gt.1) then 
+            name(k+2)=under
+            k=k+3
+         else
+            k=k+2
+         endif
+      else
+         name(k)=codop
+         k=k+1
+      endif
+c
+      if(rhs1.eq.1) goto 54
+c
+c     get code associated to second operand 
+      top1=top1+1
+      call typ2cod(iadr(lstk(top1)),name(k),n)
+      if(n.eq.0) goto 99
+      k=k+n
 c
    54 call namstr(id,name,k-1,0)
       fin=0
       call funs(id)
       if(fun.eq.0) then
          if(rhs1.eq.1) then
-            if (gettype(top).eq.15.or.gettype(top).eq.16) then
+            if (gettype(top).ge.15.and.gettype(top).le.17) then
                name(1)=percen
                name(2)=21
-               name(3)=codop
+               name(3)=under
+               name(4)=codop
                call namstr(id,name,4,0)
                fin=0
                call funs(id)
                if(fun.ne.0) goto 55
             endif
          else
-            if ((gettype(top).eq.15.or.gettype(top).eq.16).and.
-     $           (gettype(top-1).eq.15.or.gettype(top-1).eq.16)) then
+            if ((gettype(top).ge.15.and.gettype(top).le.17).and.
+     $           (gettype(top-1).ge.15.and.gettype(top-1).le.17)) then
 c     tlist comparison, use general list comparison function 
-c     %lol or %lnl  instead of undefined type dependent one.
+c     %l_o_l or %l_n_l  instead of undefined type dependent one.
                name(1)=percen
                name(2)=21
-               name(3)=codop
-               name(4)=21
-               call namstr(id,name,4,0)
+               name(3)=under
+               name(4)=codop
+               name(5)=under
+               name(6)=21
+               call namstr(id,name,6,0)
                fin=0
                call funs(id)
                if(fun.ne.0) goto 55
             endif
          endif
-         call error(43)
-         return
+         if(first) then
+            first=.false.
+            call putid(id1,id)
+            goto 10
+         else
+            call  putid(ids(1,pt+1),id1)
+            call error(4)
+            return
+         endif
       endif
  55   if(fun.eq.-2) then 
          fin=-1
@@ -179,7 +136,8 @@ c     %lol or %lnl  instead of undefined type dependent one.
       endif
       return
 c
-   99 id(1)=blank
+   99 continue
       call error(43)
+      id(1)=blank
       return
       end

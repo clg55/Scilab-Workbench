@@ -1,3 +1,6 @@
+/* Copyright INRIA */
+
+
 #include <stdio.h>
 #include "../machine.h"
 #include "../graphics/Graphics.h"
@@ -168,7 +171,7 @@ extern void xdialg1  _PARAMS((char *, char *valueinit, char **pButName, char *va
 /* "men_getfile-n.c.X1" */
 
 extern int TestGetFile  _PARAMS((void));  
-extern void C2F(xgetfile) _PARAMS((char *filemask, char *dirname, char **res, integer *ires, integer *ierr, integer *rhs));  
+extern void C2F(xgetfile) _PARAMS((char *filemask, char *dirname, char **res, integer *ires, integer *ierr, integer *idir,integer *desc,integer *ptrdesc,integer *nd));
 
 /* "men_madial-n.c.X1" */
 
@@ -221,11 +224,11 @@ extern int DialogWindow  _PARAMS((void));
 
 /* "xmen_getfile-n.c.X1" */
 
-extern int GetFileWindow  _PARAMS((char *, char **, char *, int, int *));  
+extern int GetFileWindow  _PARAMS((char *, char **, char *, int, int *,char *));  
 extern void XtSpecialLoop  _PARAMS((void));  
 extern void cancel_getfile  _PARAMS((void));  
 extern int write_getfile  _PARAMS((char *, char *));  
-extern int popup_file_panel1  _PARAMS((Widget ));  
+extern int popup_file_panel1  _PARAMS((Widget,char* ));  
 
 /* "xmen_madial-n.c.X1" */
 

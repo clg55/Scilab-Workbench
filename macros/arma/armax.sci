@@ -1,4 +1,4 @@
-function [la,lb,sig,resid]=armax(r,s,y,u,b0f,prf)
+function [archap,la,lb,sig,resid]=armax(r,s,y,u,b0f,prf)
 //[la,lb,sig,resid]=armax(r,s,y,u,[b0f,prf])
 // Identification ARX
 // Calcule les coefficients d'un ARX n-dimensionnel
@@ -39,15 +39,16 @@ function [la,lb,sig,resid]=armax(r,s,y,u,b0f,prf)
 //     en dimension 1.
 // Auteur: J-Ph. Chancelier ENPC Cergrene
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
-if rhs=0,write(%io(2),"/ / y_t = 0.2*u_{t-1}+0.01*e(t)");
+if rhs==0,write(%io(2),"/ / y_t = 0.2*u_{t-1}+0.01*e(t)");
         write(%io(2)," rand(''normal''); u=rand(1,1000);");
         write(%io(2)," y=arsimul([1],[0,0.2],1,0.01,u);");
-        write(%io(2)," [a,b,sig,resid]=armax(0,1,y,u)");
+        write(%io(2)," [archap,a,b,sig,resid]=armax(0,1,y,u)");
         write(%io(2),"/ / we must find a=1,b=[0,0.2]''");
         rand('normal'),u=rand(1,1000);
         y=arsimul([1],[0,0.2],1,0.01,u);
-        [la,lb,sig,resid]=armax(0,1,y,u,1);
+        [archap,la,lb,sig,resid]=armax(0,1,y,u,1);
         return
 end
 if rhs<=5,prf=1;end
@@ -58,7 +59,7 @@ if rhs<=4,b0f=0;end
 // zz(:,j)=[ y(t-1),...,y(t-r),u(t),...,u(t-s)]', avec  t=t0-1+j
 // on peut calcule zz a partir de t=t0;
  t0=maxi(maxi(r,s)+1,1);
- if r=0;if s=-1;write(%io(2),"if  r=0 and s=-1 there''s nothing to identify");
+ if r==0;if s==-1;write(%io(2),"if  r==0 and s==-1 there''s nothing to identify");
  return
  end;end
  z=[];
@@ -69,7 +70,8 @@ if rhs<=4,b0f=0;end
 // Test de rang
  [nzl,nzc]=size(zz);
  k=rank(zz);
-if k<>nzl;write(%io(2),"Warning: z.z'' is numerically singular");
+if k<>nzl then
+  write(%io(2),"Warning: z.z'' is numerically singular");
 end;
  pv=pinv(zz);
  coef=(pv*zy)';
@@ -80,24 +82,29 @@ end;
 // l'ecart type
  sig=sqrt(sig2);
  a=[eye(ny,ny),-coef(:,1:r*ny)];
- if b0f=0;b=coef(:,r*ny+1:(s+1)*nu+r*ny);
-   else b=[0*ones(ny,nu),coef(:,r*ny+1:r*ny+s*nu)];end
+ if b0f==0 then
+   b=coef(:,r*ny+1:(s+1)*nu+r*ny);
+ else 
+   b=[0*ones(ny,nu),coef(:,r*ny+1:r*ny+s*nu)];
+ end
 // Pour les systemes SISO on rajoute les ecarts types des estimateur
 // cela reste a faire pour les MIMO
- if ny = 1,
-    dve=sqrt(diag(sig*pv,0))';
-    la=list(a,a+[0,dve(1:r)],a-[0,dve(1:r)]);
-    if b0f=0,lb=list(b,b+dve(r+1:r+s+1),b-dve(r+1:r+s+1)),
-       else
-       lb=list(b,b+[0,dve(r+1:r+s)],b-[0,dve(r+1:r+s)]);
-       end
- else la=a;lb=b;end
+ if ny == 1,
+   dve=sqrt(diag(sig*pv,0))';
+   la=list(a,a+[0,dve(1:r)],a-[0,dve(1:r)]);
+   if b0f==0 then
+     lb=list(b,b+dve(r+1:r+s+1),b-dve(r+1:r+s+1)),
+   else
+     lb=list(b,b+[0,dve(r+1:r+s)],b-[0,dve(r+1:r+s)]);
+   end
+ else 
+   la=a;lb=b;
+ end
 //si prf vaut 1 on donne un display
-idar=armac(a,b,eye(ny,ny),ny,nu,sig);
+archap=armac(a,b,eye(ny,ny),ny,nu,sig);
 
-if prf=1;
-   armap(idar);
-   if ny=1,
+if prf==1;
+   if ny==1,
      [nla,nca]=size(la(2));
      write(%io(2),"  Standard deviation of the estimator a :");
      form_a='(5x,'+string(nca)+'(f7.5,1x))';

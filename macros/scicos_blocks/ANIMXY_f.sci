@@ -1,5 +1,6 @@
 function [x,y,typ]=ANIMXY_f(job,arg1,arg2)
 //Scicos 2D animated visualization block
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then

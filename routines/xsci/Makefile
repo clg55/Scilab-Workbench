@@ -1,3 +1,4 @@
+# Generated automatically from Makefile.in by configure.
 SHELL = /bin/sh
 
 SCIDIR=../..
@@ -22,9 +23,10 @@ OBJSF  =
 
 include ../../Makefile.incl
 
-CFLAGS = $(CC_OPTIONS) $(XFLAGS)
+CFLAGS = $(CC_OPTIONS) $(XFLAGS) $(TK_INC_PATH) $(TCL_INC_PATH)
 
 include ../Make.lib
+
 
 XSCILAB_DEFAULT = $(SCIDIR)/X11_defaults/Xscilab
 
@@ -51,13 +53,14 @@ OBJTEST = x_test_loop.o
 
 # $(SCIDIR)/libs/xgc.a 
 
-test: $(OBJTEST) $(OBJSC) ../sun/zzledt.o ../sun/flags.o ../sun/h_help_data.o ../sun/men_Sutils.o ../sun/tmpdir.o
+test: $(OBJTEST) $(OBJSC) ../sun/zzledt.o ../sun/flags.o ../sun/h_help_data.o ../sun/men_Sutils.o ../sun/tmpdir.o ../sun/timer.o
 	cd ../graphics; make ;cd ../xsci
 	$(RM) $@
 	$(CC) -g -o $@ $(OBJTEST) ../sun/zzledt.o ../sun/flags.o ../sun/h_help_data.o ../sun/tmpdir.o \
-	../sun/men_Sutils.o ../sun/inffic.o \
+	../sun/men_Sutils.o ../sun/inffic.o ../sun/timer.o \
 	$(OBJSC) $(SCIDIR)/libs/graphics.a $(SCIDIR)/libs/menusX.a \
-	$(CC_LDFLAGS) $(XLIBS) $(TERMCAPLIB) -lm
+	$(SCIDIR)/libs/tksci.a $(CC_LDFLAGS) $(XLIBS) $(TERMCAPLIB) \
+	$(TCLTK_LIBS) -lm
 
 clean::
 	$(RM) $(OBJTEST)
@@ -106,20 +109,20 @@ wf_w_setup.o: wf_w_util.h
 wf_e_edit.o: wf_fig.h wf_figx.h wf_resources.h wf_mode.h wf_w_drawprim.h \
 	wf_w_util.h
 wf_w_init.o: wf_fig.h wf_figx.h wf_resources.h
-jpc_Xloop.o: ../graphics/Math.h
+jpc_Xloop.o: ../graphics/Math.h ../machine.h
 jpc_windows.o: x_ptyx.h x_data.h jpc_global.h jpc_defs.h x_xbas.icon.X \
 	version.h
 jpc_command.o: ../machine.h jpc_global.h jpc_defs.h ../sun/h_help.h
 jpc_utils.o: jpc_global.h jpc_defs.h 
 jpc_inter.o: x_ptyxP.h x_ptyx.h x_data.h ../machine.h
 x_button.o: x_ptyxP.h x_ptyx.h x_data.h x_error.h x_menu.h
-x_charproc.o: ../machine.h x_ptyx.h x_ptyxP.h x_VTparse.h x_data.h x_error.h x_menu.h \
-	x_main.h 
+x_charproc.o: ../machine.h x_ptyx.h x_ptyxP.h x_VTparse.h x_data.h x_error.h \
+	x_menu.h x_main.h 
 x_cursor.o: x_ptyx.h x_ptyxP.h 
 x_data.o: x_ptyx.h x_ptyxP.h x_data.h
 x_input.o: x_ptyx.h x_ptyxP.h 
-x_main.o: version.h ../machine.h x_ptyx.h x_ptyxP.h x_data.h x_error.h x_menu.h \
-	Xscilab.ad.h
+x_main.o: version.h ../machine.h x_ptyx.h x_ptyxP.h x_data.h x_error.h \
+	x_menu.h Xscilab.ad.h
 x_menu.o: x_ptyx.h x_ptyxP.h x_data.h x_menu.h
 x_misc.o: x_ptyx.h x_ptyxP.h x_data.h x_error.h x_menu.h 
 x_screen.o: x_ptyx.h x_ptyxP.h x_error.h x_data.h ../machine.h

@@ -16,6 +16,7 @@ function [flag]=%choose(x)
 //     U1=U(:,1:dim);chi1=poly(U1'*A*U1,'s')  //Check
 //     w1=factors(chi1)          // w1 = %sel ?
 //
+// Copyright INRIA
 eps=0.0001;         //modify eps here !
 // 
 ls=x(1);flag=0;s=poly(0,'s');

@@ -3,6 +3,7 @@ c----------------------------------------------
 c create a scalar variable
 c x=stk(lstk(isiz)) ==> stored in data base 
 c----------------------------------------------
+c     Copyright INRIA
       include '../stack.h'
       double precision x
       integer bl(nsiz),ix(2),lr,lc

@@ -1,6 +1,8 @@
 function [v1,v2,v3,v4,v5,v6,v7,v8,v9,v10,v11,v12,v13,v14,v15,v16,..
-    v17,v18,v19,v20,v21,v22,v23,v24,v25,v26,v27,v28,v29,v30]=sscanf(buf,fmt)
+v17,v18,v19,v20,v21,v22,v23,v24,v25,v26,v27,v28,v29,v30]=sscanf(buf,frmt)
 // sscanf - Emulator of C language sscanf
+// Copyright INRIA
+
 //!
 [lhs,rhs]=argn(0)
 hexdigits=[string(0:9),'a','b','c','d','e','f','A','B','C','D','E','F']
@@ -8,14 +10,14 @@ hexvalues=[0:15,10,11,12,13,14,15]
 kbuf=1
 sbuf=length(buf)
 nv=lhs
-if type(fmt)<>10 then
+if type(frmt)<>10 then
   error('argument must be a character string')
 end
-if prod(size(fmt))<>1 then
+if prod(size(frmt))<>1 then
   error('argument must be a character string')
 end
 lb=1
-lfmt=length(fmt)
+lfmt=length(frmt)
 il=0
 count=0 // argument counter
 while il<=lfmt do
@@ -117,7 +119,7 @@ elseif cc=='x'then
     c=part(buf,lb)
     k=find(c==hexdigits)
   end
-elseif cc=='f'|cc='e'|cc='g' then
+elseif cc=='f'|cc=='e'|cc=='g' then
   ll=0
   ch=part(buf,lb)
   if ch=='+'|ch=='-' then
@@ -188,30 +190,30 @@ elseif cc=='s' then
   end
   v=x
 end      
-if flags='*' then  v=[],end
+if flags=='*' then  v=[],end
 
 function [str,flags,width,typemod,conv,err]=next_scanf_format()
-//Scan fmt for % escapes and print out the arguments.
+//Scan frmt for % escapes and print out the arguments.
 err=0
 str=emptystr();kstr=1
 width=[];prec=[],flags=[],typemod=[],conv=[]
 il=il+1
 if il>lfmt then [il,count]=resume(il,count),end
 
-c=part(fmt,il);
+c=part(frmt,il);
 while c<>'%' then
   if c=='\' then
-    if part(fmt,il+1)=='n' then str=[str;emptystr()],kstr=kstr+1,end
+    if part(frmt,il+1)=='n' then str=[str;emptystr()],kstr=kstr+1,end
     il=il+1
   else
     str(kstr)=str(kstr)+c
   end
   il=il+1
   if il>lfmt then break, end
-  c=part(fmt,il);
+  c=part(frmt,il);
 end
 if il>lfmt then [il,count]=resume(il,count),end
-if part(fmt,il+1)=='%' then 
+if part(frmt,il+1)=='%' then 
   str(kstr)=str(kstr)+'%',il=il+1
   [il,count]=resume(il,count)
 end
@@ -220,8 +222,8 @@ end
 
 //get flags
 flags=[]
-il=il+1;c=part(fmt,il)
-if c='*' then flags='*',il=il+1;c=part(fmt,il),end
+il=il+1;c=part(frmt,il)
+if c=='*' then flags='*',il=il+1;c=part(frmt,il),end
 
 width=[]
 if isdigit(c) then
@@ -231,7 +233,7 @@ if isdigit(c) then
     width=10*width+evstr(c)
     il=il+1;
     if il>lfmt then err=1;return,end
-    c=part(fmt,il)
+    c=part(frmt,il)
   end
 end
 // get type modifier
@@ -240,7 +242,7 @@ if c=='l'| c=='L'|c=='h' then
   typemod=c
   il=il+1;
   if il>lfmt then err=1;return,end
-  c=part(fmt,il)
+  c=part(frmt,il)
 end
 
 //get conversion

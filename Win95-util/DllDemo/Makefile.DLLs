@@ -13,7 +13,10 @@
 	@echo EXPORTS > $@
 	@nm $< | grep '^........ [T] _' | sed 's/[^_]*_//' >> $@
 
-CYGWIN32_LIBS = -lgcc -lcygwin -lkernel32 -lgcc 
+# cygwin32 
+#CYGWIN32_LIBS = -lgcc -lcygwin -lkernel32 -lgcc 
+#mingwin32
+CYGWIN32_LIBS = -lf2c -lwsock32 -lshell32 -lcomctl32 -lwinspool -lm -lmingw32 -lgcc -lmoldname -lcrtdll -luser32 -lgdi32 -lcomdlg32 -lkernel32 -ladvapi32 -lshell32 -lmingw32 -lgcc -lmoldname -lcrtdll
 
 # The following rule generates proper path for libraries 
 # contained in LIBNAME 
@@ -23,17 +26,32 @@ CYGWIN32_LIBS = -lgcc -lcygwin -lkernel32 -lgcc
 # at the end
 
 LIBNAME=libgcc.a libcygwin.a libkernel32.a
+# for mingw32 
+LIBNAME=libgcc.a libkernel32.a
 
-libs_path	:
+# use libs_path_cygwin for cygwin 
+# and next for mingwin 
+
+libs_path_cygwin	:
 	@echo "using gcc to find libs'path"
 	@rm -f libs_path ; \
 	for x in $(LIBNAME) ; \
 	do ( \
 	$(CC) -print-file-name="$$x" |sed -e "s/^[a-zA-Z]://" -e 's+\\+/+g' > lib_path ;\
-	dirname `cat lib_path` | sed -e "s/^/-L/" >> libs_path )  ;\
+	dirname `cat lib_path` | sed -e "s/^/-L/"  lib_path>> libs_path )  ;\
 	done ; \
 	rm -f lib_path 
-	@echo "-L/softs/GCWIN32/win32/lib" >> libs_path
+
+libs_path	: 
+	@echo "using gcc to find libs'path"
+	@rm -f libs_path ; \
+	for x in $(LIBNAME) ; \
+	do ( \
+	$(CC) -print-file-name="$$x"  > lib_path ;\
+	sed -e "s/^/-L/" -e "s+\\$$x++" lib_path >> libs_path )  ;\
+	done ; \
+	rm -f lib_path 
+
 
 
 %.dll:	%.def  dll_fixup.o libs_path $(OBJS) 

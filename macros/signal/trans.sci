@@ -9,7 +9,8 @@ function [hzt]=trans(pd,zd,gd,tr_type,frq)
 // hzt     :output polynomial
 //!
 //author: C. Bunks  date: 9 Sept 1988
-// correction : Masse john date: 14 April 1992.
+//corrections: C. Bunks date 14 Feb. 1998
+// Copyright INRIA
 z=poly(0,'z');fc=.25;fu=frq(1);fl=frq(2);
 //make filter type using all-pass change of variables
 select tr_type
@@ -18,23 +19,21 @@ select tr_type
       num=z-alpha;
       den=1-alpha*z;
    case 'hp' then
-// correction       alpha=-cos(%pi*(fc-fu))/cos(%pi*(fc+fu));
-       alpha=-cos(%pi*(fc+fu))/cos(%pi*(fc-fu));
-       num=-(z+alpha);
-       den=1+alpha*z;
+       alpha=-cos(%pi*(fc-fu))/cos(%pi*(fc+fu));
+       num=-(1+alpha*z);
+       den=z+alpha;
    case 'bp' then
       k=tan(%pi*fc)/tan(%pi*(fu-fl));
       alpha=cos(%pi*(fu+fl))/cos(%pi*(fu-fl));
-      num=-((k+1)*z^2-2*alpha*k*z+(k-1));
-      den=(k+1)-2*alpha*k*z+(k-1)*z^2;
+      num=-((k+1)-2*alpha*k*z+(k-1)*z^2);
+      den=(k+1)*z^2-2*alpha*k*z+(k-1);
    case 'sb' then
       k=tan(%pi*fc)*tan(%pi*(fu-fl));
       alpha=cos(%pi*(fu+fl))/cos(%pi*(fu-fl));
-      num=(k+1)*z^2-2*alpha*z+(1-k);
-      den=(k+1)-2*alpha*z+(1-k)*z^2;
+      num=(k+1)-2*alpha*z+(1-k)*z^2;
+      den=(k+1)*z^2-2*alpha*z+(1-k);
    else
       error('Unknown filter type --- program termination'),
 end
 [pt,zt,gt]=bilt(pd,zd,gd,num,den);
-hzt=gt*real(poly(zt,'z'))./real(poly(pt,'z'));
-
+hzt=rlist(gt*real(poly(zt,'z')),real(poly(pt,'z')),'d');

@@ -18,5 +18,5 @@ For matrix logarithm see \fVlogm\fR.
 exp(log([1,%i,-1,-%i]))
 .fi
 .SH SEE ALSO
-exp, logm
+exp, logm, ieee
 

@@ -1,6 +1,7 @@
 function [stk,txt,ilst,vnms,vtps,nwrk]=exp2for(lst,ilst,vnms,vtps,nwrk)
 //
 //!
+// Copyright INRIA
 nlst=size(lst)
 top=0
 stk=list()
@@ -16,7 +17,7 @@ while ilst<nlst&ok then
   lhs=1
   ilst=ilst+1
   op=lst(ilst)
-  if type(op)=10 then
+  if type(op)==10 then
     select op(1)
     case '0' then
  
@@ -24,15 +25,22 @@ while ilst<nlst&ok then
       if whereis(op(2))==[] then
 	[stk,top,vnms,vtps]=get2f(op(2),stk,top,vnms,vtps)
       else //appel des macros
-        [stk,nwrk,t1,top]=func2f(op,stk,nwrk)
-        txt=[txt;t1]
-        ilst=ilst+1
+	nop=lst(ilst+1)
+	if nop(1)<>'5'|nop(2)<>'25'
+	  [stk,top,vnms,vtps]=get2f(op(2),stk,top,vnms,vtps)
+	else
+	  op(3)=string(evstr(nop(3))-1)
+	  op(4)=nop(4)
+	  [stk,nwrk,t1,top]=func2f(op,stk,nwrk)
+	  txt=[txt;t1]
+	  ilst=ilst+1
+	end
       end
     case '3' then //string
       [stk,top]=str2f(op(2),stk)
     case '4' then //matrice vide
       top=top+1
-      stk(top)=list('[]','0','?','0','0')
+      stk(top)=list('[]','0','1','0','0')
     case '5' then //allops
       t1=[]
       iop=evstr(op(2))

@@ -1,7 +1,8 @@
 function m=findm(chi)
 //Search for m such that chi = %k(1-m)/%k(m)
 //!
- 
+// Copyright INRIA
+
 if chi < 1 then
   t=1;
   tn=2;

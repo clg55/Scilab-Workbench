@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------
     Missile 
     XWindow and Postscript library for 2D and 3D plotting 
-    Copyright (C) 1990 Chancelier Jean-Philippe
+    Copyright (C) 1998 Chancelier Jean-Philippe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-    jpc@arletty.enpc.fr 
-    Phone : 43.04.40.98 poste : 3327 
+    jpc@cergrene.enpc.fr 
 
 --------------------------------------------------------------------------*/
 
@@ -36,6 +35,11 @@
 static void contourI(),look(),ContourTrace();
 static void ContStore(),ContStore1(),ContStore2(),ContStore2d();
 static void FrameBoundsC2D();
+static integer AllocContour();
+static integer GAllocContour();
+static void GContStore2 _PARAMS((integer ival, double Cont,double xncont,double yncont));
+static void GContStore2Last();
+
 
 /*-----------------------------------------------------------------------
   Level curves 
@@ -115,10 +119,22 @@ void inc_itg_cont(i, j, val)
 }
 
 
+#ifdef WIN32 
+#ifndef __CYGWIN32__
+#include <float.h>
+#define ISNAN(x) _isnan(x)
+#else 
+#define ISNAN(x) isnan(x)
+#endif /* __CYGWIN32__ */
+#else 
+#define ISNAN(x) isnan(x)
+#endif 
+
 integer not_same_sign(val1, val2)
      double val1;
      double val2;
 {
+  if ( ISNAN(val1) ==1 || ISNAN(val2) == 1) return(0);
   /** 0.0 est consid\'er\'e comme positif **/
   if ( val1 >= 0.0) 
     {
@@ -166,6 +182,8 @@ static double FRect2d[4],scx2d,scy2d;
 double x_cont(i) integer i; {  return(GX2D(i));}
 /*---------return the y-value of a grid pointeger --------*/
 double y_cont(i) integer i; {return(GY2D(i));}
+
+
 
 /*  lstr : unused ( but used by Fortran )  */
 
@@ -283,7 +301,38 @@ int C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
   return(0);
 }
 
+
 int C2F(contour2)(x,y,z,n1,n2,flagnz,nz,zz,style,strflag,legend,brect,aaint,lstr1,lstr2)
+     double x[],y[],z[],zz[];
+     integer *n1,*n2,*nz,*flagnz;
+     double brect[];
+     integer aaint[];
+     char legend[],strflag[];
+     integer lstr1,lstr2,style[];
+{
+  Contour2D(ContStore2,"contour2",x,y,z,n1,n2,flagnz,nz,zz,style,strflag,
+	    legend,brect,aaint,lstr1,lstr2);
+}
+
+
+
+int C2F(contourif)(x,y,z,n1,n2,flagnz,nz,zz,style,strflag,legend,brect,aaint,lstr1,lstr2)
+     double x[],y[],z[],zz[];
+     integer *n1,*n2,*nz,*flagnz;
+     double brect[];
+     integer aaint[];
+     char legend[],strflag[];
+     integer lstr1,lstr2,style[];
+{
+  Contour2D(GContStore2,"contourif",x,y,z,n1,n2,flagnz,nz,zz,style,strflag,
+	    legend,brect,aaint,lstr1,lstr2);
+}
+
+
+
+int Contour2D(func,name,x,y,z,n1,n2,flagnz,nz,zz,style,strflag,legend,brect,aaint,lstr1,lstr2)
+     void (*func)();
+     char name[];
      double x[],y[],z[],zz[];
      integer *n1,*n2,*nz,*flagnz;
      double brect[];
@@ -299,7 +348,7 @@ int C2F(contour2)(x,y,z,n1,n2,flagnz,nz,zz,style,strflag,legend,brect,aaint,lstr
   double zmin,zmax;
   integer N[3],i;
   /** If Record is on **/
-  if (GetDriver()=='R') 
+  if (GetDriver()=='R' && strcmp(name,"contour2")==0 ) 
     StoreContour2D("contour2",x,y,z,n1,n2,flagnz,nz,zz,style,strflag,legend,brect,aaint);
   zmin=(double) Mini(z,*n1*(*n2)); 
   zmax=(double) Maxi(z,*n1*(*n2));
@@ -310,10 +359,13 @@ int C2F(contour2)(x,y,z,n1,n2,flagnz,nz,zz,style,strflag,legend,brect,aaint,lstr
   if ( (int)strlen(strflag) >=2 && strflag[1]=='0') job=0;
   Scale2D(job,FRect2d,IRect,aaint,&scx2d,&scy2d,&xofset,&yofset,logflag,&xm,&ym,0L,&err);
   if ( err == 0) return(0);
-  AxisDraw(FRect2d,IRect,Xdec,Ydec,aaint,scx2d,scy2d,xofset,yofset,strflag,"nn");
-  /** Drawing the curves **/
-  C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
-	  ,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  if (strcmp(name,"contour2")==0 )
+    {
+      AxisDraw(FRect2d,IRect,Xdec,Ydec,aaint,scx2d,scy2d,xofset,yofset,strflag,"nn");
+      /** Drawing the curves **/
+      C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
+	      ,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+    }
   if (*flagnz==0)
     {
       if (firstentry)
@@ -329,14 +381,16 @@ int C2F(contour2)(x,y,z,n1,n2,flagnz,nz,zz,style,strflag,legend,brect,aaint,lstr
       for ( i =0 ; i < *nz ; i++)
 	zconst[i]=zmin + i*(zmax-zmin)/(*nz);
       N[0]= *n1;N[1]= *n2;N[2]= *nz;
-      contourI(ContStore2,x,y,z,zconst,N,style,&err);
+      contourI(func,x,y,z,zconst,N,style,&err);
     }
   else
     {
       N[0]= *n1;N[1]= *n2;N[2]= *nz;
-      contourI(ContStore2,x,y,z,zz,N,style,&err);
+      contourI(func,x,y,z,zz,N,style,&err);
     }
-  C2F(dr)("xset","clipoff",PI0,PI0,PI0,PI0, PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+
+  if (strcmp(name,"contour2")==0 )
+    C2F(dr)("xset","clipoff",PI0,PI0,PI0,PI0, PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   /** Drawing the Legends **/
   /** XXXX
   if ((int)strlen(strflag) >=1  && strflag[0] == '1')
@@ -441,12 +495,21 @@ static void contourI(func, x, y, z, zCont, N,style, err)
      integer *N,*style;
      integer *err;
 {
+  char *F;
   integer n1,n2,ncont,i,c,j,k,n5;
-  integer AllocContour();
   integer stylec;
   n1=N[0];n2=N[1];ncont=N[2];
-  ChoixFormatE1(ContNumFormat,&ContNumPrec,zCont,N[2]);
-  if (AllocContour()==0) return;
+  F=getFPF();
+  if ( F[0] == '\0') 
+    ChoixFormatE1(ContNumFormat,&ContNumPrec,zCont,N[2]);
+  if ( func == GContStore2 ) 
+    {
+      if (GAllocContour()==0) return; 
+    }
+  else
+    {
+      if (AllocContour()==0) return;
+    }
   InitValues(x,y,z,n1,n2);
   n5 =  2*(n1)+2*(n2)-3;
   /* deux tableaux pour stocker les points du bord **/
@@ -505,7 +568,7 @@ static void contourI(func, x, y, z, zCont, N,style, err)
 
 /*--------------------------------------------------------------------
   the level curve is crossing the segment (i,j) (ib,jb)
-  look store the level curve pointeger and try to find the next segment to look at
+  look store the level curve point and try to find the next segment to look at
   Cont: value of f along the contour 
   ncont: number of contour 
   c: indice of the contour Cont 
@@ -536,7 +599,7 @@ static void look(func, i, j, ib, jb, qq, Cont,style)
     case  1 :
       if  (get_itg_cont(i,jm) > 1) return;
       ent=1 ; /* le segment est vertical vers le bas */
-      /* on stocke le pointeger d'intersection */
+      /* Storing intersection point */
       (*func)(0,Cont, x_cont(i), 
 		f_intercept(Cont,phi_cont(i,jm),
 			    y_cont(jm),phi_cont(i,j),y_cont(j)));
@@ -544,7 +607,7 @@ static void look(func, i, j, ib, jb, qq, Cont,style)
     case 2 : 
       if  (get_itg_cont(im,j) == 1 || get_itg_cont(im,j)==3 ) return;
       ent=2 ; /* le segment est horizontal gauche */
-      /* on stocke le pointeger d'intersection */
+      /* Storing intersection point */
       (*func)( 0,Cont,
 		f_intercept(Cont,phi_cont(im,j),
 			    x_cont(im),phi_cont(i,j),x_cont(i)), y_cont(j));
@@ -552,14 +615,14 @@ static void look(func, i, j, ib, jb, qq, Cont,style)
     case 3 :
       if  (get_itg_cont(i,j) > 1 ) return;
       ent=3 ; /* le segment est vertical haut */
-      /* on stocke le pointeger d'intersection */
+      /* Storing intersection point */
       (*func)(0,Cont,x_cont(i), f_intercept(Cont,phi_cont(i,j),
 					 y_cont(j),phi_cont(i,jp),y_cont(jp)));
       break ;
     case 4 :
       if  (get_itg_cont(i,j) == 1 || get_itg_cont(i,j)==3 ) return;
       ent=4 ; /* le segment est horizontal droit */
-      /* on stocke le pointeger d'intersection */
+      /* Storing intersection point */
       (*func)(0,Cont,f_intercept(Cont,phi_cont(i,j),
 			      x_cont(i),phi_cont(ip,j),x_cont(ip)),
 		y_cont(j));
@@ -580,6 +643,7 @@ static void look(func, i, j, ib, jb, qq, Cont,style)
 	     direction du segment a explorer */
 	  switch ( ent)
 	    {
+	    case -1: wflag=0; break;
 	    case 1 : i=ip ; break ;
 	    case 2 : i=ip;j=jm; break ;
 	    }
@@ -588,7 +652,9 @@ static void look(func, i, j, ib, jb, qq, Cont,style)
 	  inc_itg_cont(im,j,1L);
 	  ent = ffnd(func,i,i,im,im,j,jm,jm,j,ent,qq,Cont,&zds);
 	  switch ( ent)
-	    { case 2 : j = jm ;break ;
+	    { 
+	    case -1: wflag=0; break;
+	    case 2 : j = jm ;break ;
 	    case  3  : i=im;j=jm; break ;
 	    }
 	  break ;
@@ -596,7 +662,9 @@ static void look(func, i, j, ib, jb, qq, Cont,style)
 	  inc_itg_cont(i,j,2L);
 	  ent = ffnd(func,i,im,im,i,j,j,jp,jp,ent,qq,Cont,&zds);
 	  switch ( ent)
-	    { case 3 : i=im; break ;
+	    { 
+	    case -1: wflag=0; break;
+	    case 3 : i=im; break ;
 	    case 4 : i=im;j=jp; break ;
 	    }
 	  break ;
@@ -604,11 +672,14 @@ static void look(func, i, j, ib, jb, qq, Cont,style)
 	  inc_itg_cont(i,j,1L);
 	  ent = ffnd(func,i,i,ip,ip,j,jp,jp,j,ent,qq,Cont,&zds);
 	  switch ( ent)
-	    {case 4 :j=jp;break ;
+	    {
+	    case -1: wflag=0; break;
+	    case 4 :j=jp;break ;
 	    case 1 :i=ip;j=jp;break ;
 	    }
 	  break ;
 	}
+     
       /** le nouveau segment  est au bord du domaine **/
       if ( zds == 1) 
 	{
@@ -634,13 +705,16 @@ static void look(func, i, j, ib, jb, qq, Cont,style)
 	    }
 	}
     }
-  ContourTrace(Cont,style);
+  if ( func == GContStore2 ) 
+    GContStore2Last();
+  else 
+    ContourTrace(Cont,style);
 }
 
 
 /*-----------------------------------------------------------------------
    ffnd : cette fonction  recoit en entree quatre points 
-       on sait que la courbe de niveau passe entre le pointeger 1 et le quatre 
+       on sait que la courbe de niveau passe entre le point 1 et le quatre 
        on cherche a savoir ou elle resort, 
        et on fixe une nouvelle valeur de ent aui indiquera le segment suivant a explorer 
 -----------------------------------------------------------------------*/
@@ -672,6 +746,10 @@ integer ffnd (func, i1, i2, i3, i4, jj1, jj2, jj3, jj4, ent, qq, Cont, zds)
   xav = ( x_cont(i1)+ x_cont(i3))/2.0 ; 
   yav = ( y_cont(jj1)+ y_cont(jj3))/2.0 ; 
   phiav = ( phi1+phi2+phi3+phi4) / 4.0;
+  if (ISNAN(phiav)==1) 
+    {
+      return -1;
+    }
   if (  not_same_sign( phiav,phi4)) 
     {
       integer l1, k1; 
@@ -684,7 +762,7 @@ integer ffnd (func, i1, i2, i3, i4, jj1, jj2, jj3, jj4, ent, qq, Cont, zds)
       phi = phi1; phi1 = phi4; phi4= phi;
       phi = phi3; phi3 = phi2; phi2= phi;
     }
-  /* on stocke un nouveau pointeger  */
+  /* on stocke un nouveau point  */
   (*func)(1,Cont,f_intercept(0.0,phi1,x_cont(i1),phiav,xav),
 	    f_intercept(0.0,phi1,y_cont(jj1),phiav,yav));
   /* on parcourt les segments du rectangle pour voir sur quelle face
@@ -737,7 +815,7 @@ integer ReallocContour(n)
 }
 static int first = 0 ;
 
-integer AllocContour()
+static integer AllocContour()
 {
   if (first == 0)
     {
@@ -845,6 +923,7 @@ static void ContourTrace(Cont,style)
      double Cont;
      integer style;
 { 
+  char *F;
   integer verbose=0 ,Dnarg,Dvalue[10];
   integer close=0, flag=0;
   double angle=0.0;
@@ -854,11 +933,115 @@ static void ContourTrace(Cont,style)
   C2F(dr)("xset","dashes",&style,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xlines","void",&cont_size,xcont,ycont,&close,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xset","dashes",Dvalue,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-  sprintf(str,ContNumFormat,ContNumPrec,Cont);
+  F=getFPF();
+  if ( F[0] == '\0') 
+    sprintf(str,ContNumFormat,ContNumPrec,Cont);
+  else 
+    sprintf(str,F,Cont);
   C2F(dr)("xstring",str, &xcont[cont_size / 2],&ycont[cont_size /2],
 	  PI0,&flag,PI0,PI0, &angle,PD0,PD0,PD0,0L,0L);
 }
 
 
+
+/*--------------------------------------------------------------
+Storing and tracing level curves 
+----------------------------------------------------------------*/
+static int Gcont_size = 0;
+
+double *Gxcont,*Gycont;
+unsigned GContMaxPoints;
+#define GNBPOINTS 256;
+
+integer GReallocContour(n)
+     integer n;
+{
+  while (n > (int) GContMaxPoints)
+    {
+      GContMaxPoints += GNBPOINTS;
+      Gxcont = (double *) REALLOC( Gxcont,
+				  GContMaxPoints * sizeof (double));
+      Gycont = (double *) REALLOC( Gycont,
+				  GContMaxPoints * sizeof (double));
+      if (Gycont == 0 || Gxcont == 0 ) 
+	{ sciprint("GReallocContour : No more place \n:" );
+	  return (0);
+	}
+    }
+  return(1);
+}
+
+
+static integer GAllocContour()
+{
+  static int Gfirst = 0 ;
+  Gcont_size = 0; /** initialize the array indices for storing contours **/
+  if (Gfirst == 0) /** allocate space on first entry **/
+    {
+      GContMaxPoints = GNBPOINTS;
+      Gxcont = (double *) MALLOC(GContMaxPoints * sizeof (double)); 
+      Gycont = (double *) MALLOC(GContMaxPoints * sizeof (double)); 
+      if ( Gycont == 0 || Gxcont == 0 )
+	{ sciprint("GAllocContour : No more place\n");return(0);}
+      else 
+	{
+	  Gfirst =1 ;
+	  return(1);
+	}
+    }
+  return(1);
+}
+
+  static int last=-1;
+  static int count=0;
+
+#define GX2DINV(x) ( (x-xofset)/scx2d +FRect2d[0])
+#define GY2DINV(y) ( -(y-yofset)/scy2d +FRect2d[3])
+
+static void GContStore2(ival, Cont, xncont, yncont)
+     integer ival;
+     double Cont;
+     double xncont;
+     double yncont;
+{
+#ifdef lint
+  Cont,ival;
+#endif
+  /* nouveau contour */
+  if ( ival == 0) 
+    {
+      /** Gcont_size =0 ; **/
+      if ( Gcont_size < (int) GContMaxPoints || GReallocContour(Gcont_size+1))
+	{
+	  Gxcont[Gcont_size] = Cont;
+	  if ( last != -1 ) Gycont[last]= count;
+	  last = Gcont_size;
+	  Gcont_size++;
+	}
+      count = 0;
+    }
+  if ( Gcont_size < (int) GContMaxPoints || GReallocContour(Gcont_size+1))
+    {
+      Gxcont[Gcont_size]=GX2DINV(xncont);
+      Gycont[Gcont_size++]=GY2DINV(yncont);
+      count++;
+    }
+}
+
+static void GContStore2Last()
+{
+  if ( last != -1 ) Gycont[last]= count;
+}
+
+
+C2F(getconts)(x,y,m,n)
+     double **x,**y;
+     integer *m,*n;
+{
+  *x = Gxcont;
+  *y = Gycont;
+  *m= 1;
+  *n= Gcont_size;
+}
 
 

@@ -1,4 +1,5 @@
 function kp=krac2(n)
+// Copyright INRIA
 if type(n)<>16 then error(97,1),end;
 flag=n(1)
 select flag(1)
@@ -18,7 +19,7 @@ for a=s',
   end,
 end
 //x(x==0)=[]
-if x=[] then;return,end
+if x==[] then;return,end
 kp=sort(-real(freq(d,n,real(x))))
 
 

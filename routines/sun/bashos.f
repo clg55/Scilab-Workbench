@@ -2,6 +2,7 @@
 c
 c ================================== ( Inria    ) =============
 c
+c     Copyright INRIA
       include '../stack.h'
       integer    ierr,n,nout
       character  ligne*(*)

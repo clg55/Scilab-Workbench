@@ -11,15 +11,23 @@ function lst=lstfiles(path,opt)
 //          permettant de selectionner uniquement les fichiers de type
 //          correspondant.
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<1 then path=' ',end
 if rhs<=1 then opt='file',end
 [np,mp]=size(path);np=np*mp;path=matrix(path,np,1);
 lst=[]
 for k=1:np
-  cmd='ls -F -c '+path(k)
-  host(cmd+'>'+TMPDIR+'/unix.out 2>'+TMPDIR+'/unix.err')
-  lst=[lst;read(TMPDIR+'/unix.out',-1,1,'(a)')]
+  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+    cmd='dir '+path(k);
+    out_f = strsubst(TMPDIR,'/','\')+'\unix.out';
+    host(cmd+'> '+ outf);
+    lst=[lst;read(TMPDIR+'/unix.out',-1,1,'(a)')]
+  else 
+    cmd='ls -F -c '+path(k)
+    host(cmd+'>'+TMPDIR+'/unix.out 2>'+TMPDIR+'/unix.err')
+    lst=[lst;read(TMPDIR+'/unix.out',-1,1,'(a)')]
+  end
 end
 if prod(size(lst))==0 then lst=[],end
 n=prod(size(lst))
@@ -37,7 +45,7 @@ for k=1:n
 end
 if opt=='file' then
   lst=lst(find(~isdir))
-elseif opt='dir' then
+elseif opt=='dir' then
   lst=lst(find(isdir))
 end
 

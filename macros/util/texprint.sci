@@ -4,6 +4,7 @@ function [tt]=texprint(a)
 // (syslin list).
 //!
 //
+// Copyright INRIA
 debut='\begin{array}{l}';fin='\end{array}'
 typ=type(a)
 
@@ -65,16 +66,16 @@ case 16 then
 //
      for l=1:m
        for k=1:n,
-         if degree(a(l,k))=0 then
+         if degree(a(l,k))==0 then
             num(l,k)=num(l,k)/coeff(a(l,k)),pol=1
          else
             pol=0
          end
          nlk=pol2tex(num(l,k));
-         if nlk='0' then
+         if nlk=='0' then
             tt=tt+'0&'
          else
-           if pol=1 then
+           if pol==1 then
              tt=tt+nlk+'&'
            else
              dlk=pol2tex(a(l,k))
@@ -86,10 +87,10 @@ case 16 then
      end
      tt=part(tt,1:length(tt)-4)+'}}'
     case 'lss' //linear state space
-     if a(7)='c' then der=' \dot{x}',else der=' \stackrel{+}{X}',end
+     if a(7)=='c' then der=' \dot{x}',else der=' \stackrel{+}{X}',end
      tt=debut+der+' = '+texprint(a(2))+' X + '+...
          texprint(a(3))+'U \\ \\ Y = '+texprint(a(4))+' X '
-     if norm(a(5),1)=0 then
+     if norm(a(5),1)==0 then
        tt=tt+fin
      else
        tt=tt+' + '+texprint(a(5))+fin

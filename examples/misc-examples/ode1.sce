@@ -1,3 +1,5 @@
+//Copyright INRIA
+Eps=1.e-2
 //     Example of use of ode function:
 //     System to solve:
 //     dy1/dt = -0.04*y1 + 1.e4*y2*y3
@@ -21,10 +23,10 @@ y0=[1;0;0];t0=0;t1=[0.4,4];nt=size(t1,'*');
 yref=[0.9851721 0.9055180;0.0000339 0.0000224;0.0147940 0.0944596];
 //
 //  1. fortran program wfex and wjex dynamically called
-host("make /tmp/wfex.o");
-iwfex=link("/tmp/wfex.o","wfex");
-host("make /tmp/wjex.o");
-iwjex=link("/tmp/wjex.o","wjex");
+files=G_make(["/tmp/wfex.o"],"wfex.dll");
+iwfex=link(files,"wfex");
+files=G_make(["/tmp/wjex.o"],"wjex.dll");
+iwjex=link(files,"wjex");
 //     jacobian is not given
 y1=ode(y0,t0,t1,'wfex');
 
@@ -35,15 +37,15 @@ y3=ode('stiff',y0,t0,t1,'wfex','wjex');
 //   hot restart
 [z,w,iw]=ode('stiff',y0,0,0.4,'wfex','wjex');
 z=ode('stiff',z,0.4,4,'wfex','wjex',w,iw);
-max(z-y3(:,2))
+if max(z-y3(:,2))  > Eps then pause,end
 
 [y1,w,iw]=ode(y0,t0,t1(1),'wfex');
 y2=ode(y0,t1(1),t1(2:nt),'wfex',w,iw);
-max([y1 y2]-yref)
+if max([y1 y2]-yref)  > Eps then pause,end
 
 [y1,w,iw]=ode(y0,t0,t1(1),'wfex','wjex');
 y2=ode(y0,t1(1),t1(2:nt),'wfex','wjex',w,iw);
-max([y1 y2]-yref)
+if max([y1 y2]-yref)  > Eps then pause,end
 
 // Unlink wfex and wjex
 
@@ -54,21 +56,22 @@ atol=[0.001,0.0001,0.001];rtol=atol;
 //   
 //  4. type given , scilab lhs ,jacobian not passed
 y4=ode('stiff',y0,t0,t1(1),atol,rtol,f);
-maxi(y4(:,1)-yref(:,1))
+if maxi(y4(:,1)-yref(:,1))  > Eps then pause,end
 
 //  5. type non given,  scilab rhs and jacobian functions
 y5=ode(y0,t0,t1,f,j);
-max(y5-yref)
+if max(y5-yref)  > Eps then pause,end
 //  6. type given (stiff),rhs and jacobian  by scilab
 y6=ode('stiff',y0,t0,t1,0.00001,0.00001,f,j);
-max(y6-yref)
+if max(y6-yref)  > Eps then pause,end
 
 //  7. matrix rhs, type given (adams),jacobian not passed
 // 
 a=rand(3,3);ea=expm(a);
 deff('[ydot]=f(t,y)','ydot=a*y')
 t1=1;y=ode('adams',eye(a),t0,t1,f);
-max(ea-y)
+if max(ea-y)  > Eps then pause,end
+
 
 
 

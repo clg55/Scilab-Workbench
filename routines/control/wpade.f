@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WPADE,SSI=0
+c     Copyright INRIA
       subroutine wpade(ar,ai,ia,n,ear,eai,iea,alpha,w,ipvt,ierr)
 c
 c!purpose

@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -6,7 +7,7 @@
 #endif 
 #include <stdio.h>
 
-#include "../params.h"
+#include "../machine.h"
 
 static int Sed _PARAMS((int,char *,FILE *,char *,char *,char *,char *,char *,char *));
 static void readOneLine _PARAMS((char *buff,int *stop,FILE *fd));

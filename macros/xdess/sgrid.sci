@@ -2,15 +2,16 @@ function [] = sgrid(zeta,wn,col)
 // sgrid()
 // sgrid(Z,Wn)
 // sgrid('new') 
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs < 3 ; col=3;end
-if rhs=0 then 
+if rhs==0 then 
 	[a,limits]=xgetech()
 	wmax = 10 .^(floor(log10(max(abs(limits)))));
 	wn= 0:1:10;
 	zeta = linspace(0,1,10);
 end
-if rhs=1 then 
+if rhs==1 then 
 	if type(zeta)<>10 then 
 		write(%io(2),'sgrid with one argument : sgrid(''new'')')
 		error(999)

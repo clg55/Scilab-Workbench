@@ -12,65 +12,122 @@ info:
 	@echo "Type \"make /tmp/pgm.o\" to compile pgm program"
 
 
-FFLAGS = $(FC_OPTIONS)
+FFLAGS = $(FC_OPTIONS) $(FC_PICFLAGS)
 
-CFLAGS = $(CC_OPTIONS)
+CFLAGS = $(CC_OPTIONS) $(CC_PICFLAGS)
 
-OBJSF = /tmp/Examplf.o /tmp/foubare2f.o
+OBJSF = /tmp/ex1f.o /tmp/ex1fi.o /tmp/ex2f.o /tmp/ex2fi.o \
+	/tmp/ex3f.o /tmp/ex3fi.o  /tmp/ex4fi.o \
+	/tmp/ex6f.o /tmp/ex6fi.o /tmp/ex5f.o /tmp/ex5fm.o
 
-OBJSC = /tmp/Examplc.o /tmp/foubare2c.o
+OBJSC = /tmp/ex1c.o /tmp/ex1cI.o /tmp/ex2c.o /tmp/ex2cI.o \
+	/tmp/ex3c.o /tmp/ex3cI.o /tmp/ex4cI.o \
+	/tmp/ex5cI.o /tmp/ex5c.o /tmp/ex5cm.o /tmp/ex6c.o /tmp/ex6cI.o \
+	/tmp/ex5fI.o
 
 test : $(OBJSF) $(OBJSC)
 
-/tmp/Examplf.o: Examplf.f
-	$(FC) $(FFLAGS) -c Examplf.f  -o /tmp/Examplf.o 
+/tmp/ex1f.o: ex1f.f
+	$(FC) $(FFLAGS) -c ex1f.f  -o /tmp/ex1f.o
 
-/tmp/foubare2f.o: src/foubare2f.f
-	$(FC) $(FFLAGS) -c src/foubare2f.f  -o /tmp/foubare2f.o
+/tmp/ex1fi.o: ex1fi.f
+	$(FC) $(FFLAGS) -c ex1fi.f  -o /tmp/ex1fi.o
 
-/tmp/Examplc.o: Examplc.c
-	$(CC) $(CFLAGS) -c Examplc.c  -o /tmp/Examplc.o
+/tmp/ex1c.o: ex1c.c
+	$(CC) $(CFLAGS) -c ex1c.c  -o /tmp/ex1c.o
 
-/tmp/foubare2c.o: src/foubare2c.c
-	$(CC) $(CFLAGS) -c src/foubare2c.c  -o /tmp/foubare2c.o
+/tmp/ex1cI.o: ex1cI.c
+	$(CC) $(CFLAGS) -c ex1cI.c  -o /tmp/ex1cI.o
 
-/tmp/dgemmint.o: dgemmint.f
-	$(FC) $(FFLAGS) -c dgemmint.f  -o /tmp/dgemmint.o
+/tmp/ex2f.o: ex2f.f
+	$(FC) $(FFLAGS) -c ex2f.f  -o /tmp/ex2f.o
 
-/tmp/fcalcint.o: fcalcint.f
-	$(FC) $(FFLAGS) -c fcalcint.f  -o /tmp/fcalcint.o
+/tmp/ex2fi.o: ex2fi.f
+	$(FC) $(FFLAGS) -c ex2fi.f  -o /tmp/ex2fi.o
 
-/tmp/fcalc.o: src/fcalc.f
-	$(FC) $(FFLAGS) -c src/fcalc.f  -o /tmp/fcalc.o
+/tmp/ex2c.o: ex2c.c
+	$(CC) $(CFLAGS) -c ex2c.c  -o /tmp/ex2c.o
 
-/tmp/fcalc2.o: src/fcalc2.f
-	$(FC) $(FFLAGS) -c src/fcalc2.f  -o /tmp/fcalc2.o
+/tmp/ex2cI.o: ex2cI.c
+	$(CC) $(CFLAGS) -c ex2cI.c  -o /tmp/ex2cI.o
 
-/tmp/Testf.o: Testf.f
-	$(FC) $(FFLAGS) -c Testf.f  -o /tmp/Testf.o
+/tmp/ex3f.o: ex3f.c
+	$(CC) $(CFLAGS) -c ex3f.c  -o /tmp/ex3f.o
 
-/tmp/OptTestf.o: OptTestf.f
-	$(FC) $(FFLAGS) -c OptTestf.f  -o /tmp/OptTestf.o
+/tmp/ex3fi.o: ex3fi.f
+	$(FC) $(FFLAGS) -c ex3fi.f  -o /tmp/ex3fi.o
 
-/tmp/OptTestc.o: OptTestc.c
-	$(CC) $(CFLAGS) -c OptTestc.c  -o /tmp/OptTestc.o
+/tmp/ex3c.o: ex3c.c
+	$(CC) $(CFLAGS) -c ex3c.c  -o /tmp/ex3c.o
 
-/tmp/opttest.o: src/opttest.c
-	$(CC) $(CFLAGS) -c src/opttest.c  -o /tmp/opttest.o 
+/tmp/ex3cI.o: ex3cI.c
+	$(CC) $(CFLAGS) -c ex3cI.c  -o /tmp/ex3cI.o
+
+/tmp/ex4fi.o: ex4fi.f
+	$(FC) $(FFLAGS) -c ex4fi.f  -o /tmp/ex4fi.o
+
+/tmp/ex4cI.o: ex4cI.c
+	$(CC) $(CFLAGS) -c ex4cI.c  -o /tmp/ex4cI.o
+
+/tmp/ex5c.o: ex5c.c
+	$(CC) $(CFLAGS) -c ex5c.c  -o /tmp/ex5c.o
+
+/tmp/ex5cm.o: ex5cm.c
+	$(CC) $(CFLAGS) -c ex5cm.c  -o /tmp/ex5cm.o
+
+/tmp/ex5cI.o: ex5cI.c
+	$(CC) $(CFLAGS) -c ex5cI.c  -o /tmp/ex5cI.o
+
+/tmp/ex5fI.o: ex5fI.c
+	$(CC) $(CFLAGS) -c ex5fI.c  -o /tmp/ex5fI.o
+
+/tmp/ex5f.o: ex5f.f
+	$(FC) $(FFLAGS) -c ex5f.f  -o /tmp/ex5f.o
+
+/tmp/ex5fm.o: ex5fm.f
+	$(FC) $(FFLAGS) -c ex5fm.f  -o /tmp/ex5fm.o
 
 
-/tmp/testfc.o: src/testfc.c
-	$(CC) $(CFLAGS) -c src/testfc.c  -o /tmp/testfc.o
+/tmp/ex6f.o: ex6f.f
+	$(FC) $(FFLAGS) -c ex6f.f  -o /tmp/ex6f.o
 
-/tmp/Testc.o: Testc.c
-	$(CC) $(CFLAGS) -c Testc.c  -o /tmp/Testc.o
+/tmp/ex6fi.o: ex6fi.f
+	$(FC) $(FFLAGS) -c ex6fi.f  -o /tmp/ex6fi.o
 
-/tmp/testcc.o: src/testcc.c
-	$(CC) $(CFLAGS) -c src/testcc.c  -o /tmp/testcc.o
+/tmp/ex6c.o: ex6c.c
+	$(CC) $(CFLAGS) -c ex6c.c  -o /tmp/ex6c.o
+
+/tmp/ex6cI.o: ex6cI.c
+	$(CC) $(CFLAGS) -c ex6cI.c  -o /tmp/ex6cI.o
+
+/tmp/ex7fi.o: ex7fi.f
+	$(FC) $(FFLAGS) -c ex7fi.f  -o /tmp/ex7fi.o
+
+/tmp/ex8fi.o: ex8fi.f
+	$(FC) $(FFLAGS) -c ex8fi.f  -o /tmp/ex8fi.o
 
 clean::
-	$(RM) /tmp/Examplf.o /tmp/Examplc.o /tmp/foubare2c.o /tmp/foubare2f.o /tmp/fcalcint.o /tmp/fcalc.o /tmp/fcalc2.o /tmp/dgemmint.o /tmp/testfc.o /tmp/Testf.o /tmp/testcc.o /tmp/Testc.o so_locations *.o
+	@echo Cleaning addinter-examples
+	@$(RM) $(OBJSF) $(OBJSC)
 
 distclean:: clean
+
+
+##----------------------  test all the example  
+
+EXAMPLES=ex1c.sce ex1f.sce ex2c.sce ex2f.sce ex3c.sce \
+	ex3f.sce ex4c.sce ex4f.sce ex5c.sce ex6c.sce ex6f.sce ex7f.sce ex8f.sce
+
+tests	:
+	@$(RM) zlink.dia	
+	@cat $(EXAMPLES) > zlink.tst 		
+	@$(SCIDIR)/util/scidem $(SCIDIR) zlink.tst zlink.dia
+
+clean	::
+	@$(RM) zlink.dia zlink.tst 
+
+distclean::
+	@$(RM) zlink.dia zlink.tst $(OBJSC) $(OBJSF) 
+
 
 

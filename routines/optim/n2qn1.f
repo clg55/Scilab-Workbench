@@ -1,5 +1,6 @@
       subroutine n2qn1 (simul,n,x,f,g,dxmin,df1,epsabs,
-     & imp,io,mode,iter,nsim,binf,bsup,iz,rz,izs,rzs,dzs)
+c     Copyright INRIA
+      & imp,io,mode,iter,nsim,binf,bsup,iz,rz,izs,rzs,dzs)
       implicit double precision (a-h,o-z)
       dimension x(n),g(n),dxmin(n),bsup(n),binf(n)
       dimension iz(*),rz(*),izs(*),dzs(*)

@@ -26,6 +26,7 @@ c            ierr=2 if  0**k with k<0
 c!origin
 c Serge Steer INRIA 1996
 c!
+c     Copyright INRIA
       integer n,iv,ierr
       double precision vr(*),vi(*),p(*),rr(*),ri(*)
 c
@@ -38,7 +39,7 @@ c
       iir=1
       do 20 i=1,n
          call wdpowe(vr(ii),vi(ii),p(iip),rr(iir),ri(iir),ierr)
-         if(ierr.ne.0) return
+c         if(ierr.ne.0) return
          ii=ii+iv
          iip=iip+ip
          iir=iir+ir

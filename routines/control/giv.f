@@ -1,4 +1,5 @@
       subroutine giv(sa,sb,sc,ss)
+c     Copyright INRIA
       double precision sa,sb,sc,ss
 c!purpose
 c      this routine constructs the givens transformation

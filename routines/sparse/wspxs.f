@@ -1,4 +1,5 @@
       subroutine wspxs(nr,nc,ar,ai,nela,inda,br,bi,mb,cr,ci,nelc,indc,
+c     Copyright INRIA
      $     ierr,it1,it2)
 c!purpose
 c     multiply a full and a  sparse matrices elementwise

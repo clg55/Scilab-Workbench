@@ -10,6 +10,7 @@ function [Q,M,i1]=pencan(E,A)
 //See glever,  penlaur
 //F.D.
 //!
+// Copyright INRIA
 [LHS,RHS]=argn(0);
 if RHS==1 then [E,A]=pen2ea(E);end
 [Si,Pi,Di,index]=penlaur(E,A);

@@ -5,9 +5,10 @@ FILES_TO_CLEAN = @FILES_TO_CLEAN@
 all::
 
 clean::
-	$(RM) $(FILES_TO_CLEAN)
+	@echo Cleaning 
+	@$(RM) $(FILES_TO_CLEAN)
 distclean::
-	$(RM) $(FILES_TO_CLEAN)
+	@$(RM) $(FILES_TO_CLEAN)
 
 RANLIB = @RANLIB@
 
@@ -27,6 +28,7 @@ TERMCAPLIB = @TERMCAPLIB@
 CC = @CC@
 CC_OPTIONS = @CC_OPTIONS@
 CC_LDFLAGS = @CC_LDFLAGS@
+CC_PICFLAGS = @CC_PICFLAGS@
 
 ##################
 # Fortran compiler
@@ -36,6 +38,8 @@ CC_LDFLAGS = @CC_LDFLAGS@
 FC = @FC@
 FC_OPTIONS = @FC_OPTIONS@
 FC_LDFLAGS = @FC_LDFLAGS@
+FC_PICFLAGS = @FC_PICFLAGS@
+
 
 ########
 # Linker
@@ -54,6 +58,8 @@ LD_LDFLAGS = @LD_LDFLAGS@
 ##########
 DLDLIB = @DLDLIB@
 DLD_SUBDIR = @DLD_SUBDIR@
+PVMLIB = @PVMLIB@
+PVMGLIB = @PVMGLIB@
 XAWLIB = @XAWLIB@
 XMULIB = @XMULIB@
 XAW_LOCAL_SUBDIR = @XAW_LOCAL_SUBDIR@
@@ -61,6 +67,14 @@ XAW_LOCAL_LIB = @XAW_LOCAL_LIB@
 XFLAGS = @X_CFLAGS@ @XAW_LOCAL_INCLUDES@
 X_EXTRA_LIBS = @X_EXTRA_LIBS@
 XLIBS = @X_LIBS@ $(XAWLIB) $(XMULIB) -lXt -lXext @X_PRE_LIBS@ -lX11 $(X_EXTRA_LIBS)
+
+#####################
+# TCL/TK
+#####################
+TK_INC_PATH = @TK_INC_PATH@
+TCL_INC_PATH = @TCL_INC_PATH@
+TCLTK_LIBS = @TCLTK_LIBS@
+
 #####################
 # for WIN32 version 
 # win32 libraries for gcwin32 

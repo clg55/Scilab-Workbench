@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <string.h> 
 
 #ifdef __STDC__
@@ -458,6 +459,35 @@ int LoadGray()
   return(1);
 }
 
+int LoadGray1()
+{
+ 
+  struct gray_rec *lplot;
+  lplot= ((struct gray_rec *) MALLOC(sizeof(struct gray_rec)));
+  if (lplot != NULL)
+    {
+      if (LoadLI(&lplot->n1) == 0) return(0);
+      if (LoadLI(&lplot->n2) == 0) return(0);
+      if (LoadVectC(&(lplot->name)) == 0) return(0);
+      if (LoadVectF(&(lplot->z)) == 0) return(0);
+      if (LoadVectC(&(lplot->strflag)) == 0) return(0);
+      if (LoadVectC(&(lplot->strflag_kp)) == 0) return(0);
+      if (LoadVectF(&(lplot->brect)) == 0) return(0);
+      if (LoadVectF(&(lplot->brect_kp)) == 0) return(0);
+      if (LoadVectLI(&(lplot->aaint))  == 0) return(0);
+      if (LoadVectLI(&(lplot->aaint_kp)) == 0) return(0);
+      if (Store(lplot->name,(char *) lplot) == 0) return(0);
+      
+    }
+  else 
+    {
+      Scistring("\nLoad Plot (gray): No more place \n");
+      return(0);
+    }
+  return(1);
+}
+
+
 
 /*---------------------------------------------------------------------
   \encadre{Le cas des champs de vecteurs}
@@ -493,6 +523,7 @@ int LoadChamp()
   return(1);
 }
 
+
 /*---------------------------------------------------------------------
   Relecture 
   ---------------------------------------------------------------------------*/
@@ -503,6 +534,30 @@ static XDR rxdrs[1] ;
 static u_int rcount ;
 static u_int rszof ;
 
+/** special case for colormap **/
+
+int LoadColormap()
+{
+  double *table; double x;
+  int m,i,trois=3;
+  if (LoadLI(&m) == 0) return(0);
+  table  = (double *)  MALLOC(3*m*sizeof(double));
+  if ( table == NULL) return(0);
+  /**  assert( xdr_vector(rxdrs, (char *) table,3*m,sizeof(float), xdr_float)) ;
+  for ( i = 3*m-1 ; i >= 0 ; i--) 
+  table[i]= ((float *) table)[i]; **/
+
+  for ( i = 0 ; i < 3*m  ; i++ ) 
+    {
+      assert( xdr_vector(rxdrs, (char *) &x,1,sizeof(double), xdr_double)) ;
+      table[i]=x;
+      /** sciprint("loading %f\r\n",table[i]); **/
+    }
+  C2F(dr)("xset","colormap",&m,&trois,PI0,PI0,PI0,PI0,table,PD0,PD0,PD0,0L,0L);
+  FREE(table);
+  return(1);
+}
+
 
 typedef  struct  {
   char *name;
@@ -510,6 +565,7 @@ typedef  struct  {
 
 static LoadTable LoadCTable[] ={
   {"champ",LoadChamp},
+  {"colormap",LoadColormap},
   {"contour",LoadContour},
   {"contour2",LoadContour2D},
   {"fac3d",LoadFac3D},
@@ -517,6 +573,7 @@ static LoadTable LoadCTable[] ={
   {"fac3d2",LoadFac3D},
   {"fec",LoadFec},
   {"gray",LoadGray},
+  {"gray1",LoadGray1}, 
   {"param3d",LoadParam3D},
   {"param3d1",LoadParam3D1},
   {"plot2d",LoadPlot},
@@ -527,7 +584,9 @@ static LoadTable LoadCTable[] ={
   {"xgrid",LoadGrid},
   {(char *)NULL,NULL}};
 
-
+#ifdef __MSC__
+#define __STDC__
+#endif 
 
 
 int C2F(xloadplots)(fname1,lvx)
@@ -673,4 +732,3 @@ static int LoadVectC(nx)
   assert( xdr_opaque(rxdrs, *nx,rszof));
   return(1);
 }
-

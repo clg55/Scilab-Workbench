@@ -1,9 +1,12 @@
       subroutine fremf2 (prosca,iflag,n,ntot,nta,mm1,p,alfa,e,a,r,
      1 izs,rzs,dzs)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       external prosca
       dimension p(*),alfa(ntot),izs(*),dzs(*),e(mm1),a(mm1),r(*)
       real rzs(*)
+
+
 c
 c          cette subroutine remplit les donnees pour fprf2
 c          (produits scalaires et 2 contraintes lineaires)

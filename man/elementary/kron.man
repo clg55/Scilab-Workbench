@@ -1,10 +1,11 @@
 .TH kron 3 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-kron - Kronecker product
+kron - Kronecker product (.*.)
 .SH CALLING SEQUENCE
 .nf
 kron(x,y) 
+x.*.y
 .fi
 .SH DESCRIPTION
 Kronecker tensor product of two matrices \fVx\fR and \fVy\fR.

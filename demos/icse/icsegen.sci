@@ -22,6 +22,7 @@ function [co,u,g,itv,dtv]=icsegen(u,simu,nap,imp,ech,cof)
 //Utiliser les macros icot et icob pour extraire l'etat
 //!
 
+// Copyright INRIA
 if nu<large then alg='qn' ; else alg='gc' ; end;
 itv=itu;
 itv(nitv)=0;

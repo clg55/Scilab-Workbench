@@ -1,9 +1,10 @@
 function fr=freson(h)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 [n,d]=h(2:3);
-if type(n)=1 then n=poly(n,varn(d),'c'),end
+if type(n)==1 then n=poly(n,varn(d),'c'),end
 d0=coeff(d,0)
-if d0=0 then
+if d0==0 then
    error('infinite gain at zero frequency'),
 end;
 ar0=abs(coeff(n,0)/d0)^2

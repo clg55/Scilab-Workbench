@@ -83,8 +83,9 @@ Widget		file_panel,	/* so w_dir can access the scrollbars */
 		file_selfile,	/* selected file widget */
 		file_mask,	/* mask widget */
 		file_dir,	/* current directory widget */
-		file_flist,	/* file list wiget */
-		file_dlist;	/* dir list wiget */
+		file_flist,	/* file list widget */
+		file_dlist,	/* dir list widget */
+                labelW;         /* popup label */
 
 static void
 file_panel_dismiss()
@@ -173,12 +174,20 @@ void ok_end()
 static String	file_name_translations1 =
 	"<Key>Return: ok()\n";
 
-void ok_prep(filemask,dirname,flag,err)
+void ok_prep(filemask,dirname,title,flag,err)
      char *filemask;
      char *dirname;
+     char *title;
      int flag,*err;
 {
   char newdir[PATH_MAX];
+  if (file_popup) {
+/*    FirstArg(XtNtitle, title);
+    SetValues(file_popup);	*/
+      FirstArg(XtNlabel, title);
+      SetValues(labelW);
+  }
+
   /* Change Accelerators to ok */
   XtOverrideTranslations(file_selfile,
 			 XtParseTranslationTable(file_name_translations1));
@@ -519,8 +528,9 @@ file_panel_cancel(w, ev)
 
 
 
-void popup_file_panel(w)
+void popup_file_panel(w,description)
     Widget	    w;
+     char* description;
 {
     extern Atom     wm_delete_window;
 
@@ -529,10 +539,12 @@ void popup_file_panel(w)
     XtSetSensitive(w, False);
 
     if (!file_popup)
-	create_file_panel(w);
-    else
-      Rescan((Widget) 0, (XEvent*) 0, (String*) 0, (Cardinal*) 0);
-
+	create_file_panel(w,description);
+    else{
+	Rescan((Widget) 0, (XEvent*) 0, (String*) 0, (Cardinal*) 0);
+	FirstArg(XtNlabel, description);
+	SetValues(labelW);
+    }
     XtPopup(file_popup, XtGrabNonexclusive);
     (void) XSetWMProtocols(XtDisplay(file_popup), XtWindow(file_popup),
 			   &wm_delete_window, 1);
@@ -541,16 +553,18 @@ void popup_file_panel(w)
     reset_wf_cursor();
 }
 
-void create_file_panel(w)
-	Widget		   w;
-{
-  int ch;
+void create_file_panel(w,description)
+     Widget		   w;
+     char *description;
+    {
+	int ch;
 	Widget		   file, beside, below;
+        Widget             hpaned,dialogpanned,viewportW/*,labelW*/;
         XFontStruct     *temp_font;
 	static int	   actions_added=0;
 	file_w = w;
 	XtTranslateCoords(w, (Position) 0, (Position) 0, &xposn, &yposn);
-
+	
 	FirstArg(XtNx, xposn);
 	NextArg(XtNy, yposn + 50);
 	NextArg(XtNtitle, " File menu");
@@ -558,10 +572,22 @@ void create_file_panel(w)
 					transientShellWidgetClass,
 					w_toplevel, Args, ArgCount);
 	XtOverrideTranslations(file_popup,
-			   XtParseTranslationTable(file_translations));
+			       XtParseTranslationTable(file_translations));
+	
+        hpaned = XtCreateManagedWidget("hpaned",panedWidgetClass,file_popup,
+				       (Arg *) NULL,(Cardinal)ZERO);
+	
+        dialogpanned = XtCreateManagedWidget("paned",panedWidgetClass,hpaned,
+					     (Arg *) NULL,(Cardinal)ZERO);
+
+	viewportW = XtCreateManagedWidget("labelviewport",viewportWidgetClass,
+					  dialogpanned,(Arg *) NULL,(Cardinal)ZERO);
+	FirstArg(XtNlabel, description);
+	labelW=XtCreateManagedWidget("label",labelWidgetClass,viewportW,Args, ArgCount);
+
 
 	file_panel = XtCreateManagedWidget("file_panel", formWidgetClass,
-					   file_popup, (Arg *) NULL, (Cardinal) 0);
+					   dialogpanned, (Arg *) NULL, (Cardinal) 0);
 
 	FirstArg(XtNlabel, " Current Filename:");
 	NextArg(XtNvertDistance, 15);

@@ -1,3 +1,5 @@
+% Copyright INRIA
+
 \chapter{Introduction}
 
 \section{What is Scilab}
@@ -15,11 +17,10 @@ independent interest and most of them are available through Netlib.
 A few of them have been slightly modified for better compatibility
 with Scilab's interpreter.
  
-A key feature of the Matlab syntax is its ability to handle matrices: 
+A key feature of the Scilab syntax is its ability to handle matrices: 
 basic matrix manipulations such as concatenation, 
 extraction or transpose are immediately performed as well as basic operations
-such as addition or multiplication. For handling matrices, Scilab uses 
-the Matlab syntax but Scilab also aims at handling more complex
+such as addition or multiplication. Scilab also aims at handling more complex
 objects than numerical matrices. For instance, control people may want
 to manipulate rational or polynomial transfer matrices. This is
 done in Scilab by manipulating lists and typed lists which allows a 
@@ -93,8 +94,8 @@ The subdirectories are the following:
 \begin{itemize}
 
 \item{{\tt bin} is the directory of the executable files.
-The executable code of Scilab, {\tt scilex}, is there. 
-This directory contains Shell scripts 
+The starting script {\tt scilab} on Unix/Linux systems and {\tt runscilab.exe} on Windows95/NT, The executable code of Scilab: {\tt scilex} on Unix/Linux systems and {\tt scilex.exe} on Windows95/NT are there. 
+This directory also contains Shell scripts 
 for managing or printing Postscript/\LaTeX\  files produced by Scilab.}
 
 \item{{\tt demos} is the directory of demos. The file 
@@ -123,6 +124,9 @@ machines on a network, as a virtual computer, by creating a
 distributed group of independent softwares 
 (\verb!help communications! for a detailed description).
 GeCI is used for the link of Xmetanet with Scilab.}
+
+\item{\tt pvm3} contains source code and binaries of the PVM version
+3 which is another interactive communication manager. 
 
 \item{{\tt imp} is the directory of the routines managing the Postscript files
 for print.}
@@ -196,31 +200,27 @@ sub-routine or for making the documentation }
 \item{{\tt xmetanet} is the directory which contains {\tt xmetanet}, a 
 graphic display for networks. Type {\tt metanet()} in Scilab to use it.}
 
-
 \end{itemize}
 
 \section{Installing Scilab. System Requirements}
 \label{install}
-Scilab is distributed in source code format; binaries for several popular 
-Unix-XWindow systems are also available:
-Dec Alpha (OSF 3.0), Dec Mips (ULTRIX 4.2), Sun Sparc stations (Sun OS 4.1.3), 
-Sun Sparc stations (Sun Solaris 2.3), HP9000 (HP-UX 9.01),
-SGI Mips Irix 5.2, IBM-RS6000 (AIX 3.2), PC Linux.
+Scilab is distributed in source code format; binaries for Windows95/NT
+systems and several popular Unix/Linux-XWindow systems are also
+available: Dec Alpha (OSF V4), Dec Mips (ULTRIX 4.2), Sun Sparc
+stations (Sun OS), Sun Sparc stations (Sun Solaris), HP9000 (HP-UX
+V10), SGI Mips Irix, PC Linux. All of these binaries versions include
+tk/tcl interface.
 
 The installation requirements are the following :
 
-- for the source version: Scilab requires approximately 75Mb of 
-disk storage to unpack and install (all sources included). 
-You need X Window (X11R4, X11R5 or X11R6, C compiler and Fortran
-compiler (e.g. f2c or g77). If you run X11R4, you also need Athena 
-Widgets libraries libXaw.a and libXmu.a.
+- for the source version: Scilab requires approximately 130Mb of disk
+storage to unpack and install (all sources included).  You need X
+Window (X11R4, X11R5 or X11R6, C compiler and Fortran compiler
+(e.g. f2c or g77 or Visual C++ for Windows systems). 
   
 - for the binary version: the minimum for running Scilab (without
-sources) is about 20 Mb when decompressed.
-The versions for Dec Alpha, Dec Mips, Sun OS, HP9000 and 
-IBM-RS6000 are statically linked and in principle
-do not require a fortran compiler.
-The versions for Sun Solaris, SGI and PC Linux are dynamically linked.
+sources) is about 40 Mb when decompressed.
+These versions  are partially statically linked and in principle do not require a fortran compiler.
 
 \label{stks}
 Scilab uses a large internal stack for its calculations. This size
@@ -229,6 +229,8 @@ of this stack can be reduced or enlarged by the
 command. The default dimension of the internal stack can be adapted
 by modifying the variable {\tt newstacksize} in the {\tt scilab.star}
 script.
+
+- For more information on the installation, please look at the README files
 
 \section{Documentation}
 
@@ -263,8 +265,8 @@ prompt represented by the {\tt -->} :
                            ===========
  
  
-                  Scilab-2.x  ( 10 February 1995 ) 
-                  Copyright (C) 1989-95 INRIA 
+                  Scilab-2.4  ( 12 July 1998 ) 
+                  Copyright (C) 1989-98 INRIA 
  
  
 Startup execution:

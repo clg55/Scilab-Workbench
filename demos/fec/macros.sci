@@ -2,6 +2,7 @@ function []=emc2(filename)
 // Visualise un resultat de type GNU.*
 // generes par NSCK2E 
 // en general un ensemble de segments 
+// Copyright INRIA
 xx=read(filename,-1,2) 
 x=xx(:,1) 
 y=xx(:,2)
@@ -16,7 +17,7 @@ function []=amdbaR(File_name)
 // of triangle type 
 // The file is of amdba type 
 [lhs,rhs]=argn(0);
-if rhs = 0 ; File_name='MESH';end
+if rhs == 0 ; File_name='MESH';end
 unit=file('open',File_name,'old')
 x=read(unit,1,2);
 noeuds=x(1);
@@ -26,27 +27,30 @@ trianl=read(unit,x(2),5);
 file('close',unit)
 [noeuds,triang,noeul,trianl]=resume(noeuds,triang,noeul,trianl)
 
-function []=meshvisu(rect)
+function []=meshvisu(col,rect)
 // Mesh visualisation 
+// uses global variables 
 [lhs,rhs]=argn(0);
-if rhs<=0;rect=[mini(noeul(:,2)),mini(noeul(:,3)),maxi(noeul(:,2)),maxi(noeul(:,3))];end
-if rhs<=1;iso='1';end
+if rhs<=0;col=1;end
+if rhs<=1;rect=[mini(noeul(:,2)),mini(noeul(:,3)),maxi(noeul(:,2)),maxi(noeul(:,3))];end
+if rhs<=2;iso='1';end
 plot2d(1,1,[1],"031"," ",rect)
 xset("clipgrf");
 xx=trianl(:,2:4); xx=matrix(xx,prod(size(xx)),1);
 x=noeul(xx,2)
+triang=size(x,'*')/3
 x=matrix(x,triang,3);
 y=noeul(xx,3)
 y=matrix(y,triang,3);
 x=[x,x(:,1)]';y=[y,y(:,1)]'
-xpolys(x,y);
+xpolys(x,y,col*ones(1,triang));
 xset("clipoff");
 
 
 function []=nvisu(rect)
 // Visualisation des noeuds 
 [lhs,rhs]=argn(0);
-if rhs=0;rect=[mini(noeul(:,2)),mini(noeul(:,3)),maxi(noeul(:,2)),maxi(noeul(:,3))];end
+if rhs==0;rect=[mini(noeul(:,2)),mini(noeul(:,3)),maxi(noeul(:,2)),maxi(noeul(:,3))];end
 plot2d(1,1,[1],"031"," ",rect)
 xset("clipgrf");
 bords=noeul(find(noeul(:,4)>0),:);
@@ -65,7 +69,7 @@ function []=emc2V(i,j,k,sca,FN,rect)
 [lhs,rhs]=argn(0);
 plot2d(1,1,[1],"031"," ",rect);
 xset("clipgrf");
-if rhs = 0 ; FN='MESH';end
+if rhs == 0 ; FN='MESH';end
 unit=file('open',FN,'old')
 resu=read(unit,noeuds,k);
 resu=resu(:,[i,j]);

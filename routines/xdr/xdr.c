@@ -47,6 +47,9 @@ static char *rcsid = "$Id: xdr.c,v 1.3 1995/10/22 14:53:51 phk Exp $";
 #include <stdlib.h>
 
 /** #define __INSIDE_CYGWIN32__ **/
+#ifdef __MINGW32__
+#define __MSC__
+#endif 
 
 #ifndef __MSC__
 #include <rpc/types.h> 

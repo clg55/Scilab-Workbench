@@ -1,4 +1,5 @@
-
+# This Makefile should work with egcs-1.0.2-mingw32 
+# for cygwin edit the file Makefile.DLLs 
 # the list of files to produce the library 
 OBJS = tdll.o
 
@@ -12,8 +13,7 @@ DLLTOOL= dlltool --as=as
 # test1 OK 
 # test2 NOK 
 # test2 OK with ``LDFLAGS-libtdll = --image-base=0x11000000'' only  
-
-LDFLAGS-libtdll = --image-base=0x11000000 
+# LDFLAGS-libtdll = --image-base=0x11000000 
 
 all: libtdll.dll libtdll.stubs.a test1 test2 
 

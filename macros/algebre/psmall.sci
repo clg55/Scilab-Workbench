@@ -4,11 +4,12 @@ function [Q,M]=psmall(A,thres,flag)
 //with real part < thres (case flag='c') or with modulus <thres (flag='d')
 //Projection is defined by Q*M. Eigenvalues of M*A*Q = eigenvalues
 //of A with real part < thres (case flag='c',...).
-//If [Q1,M1]= full rank factorization (fullrf) of eye-Q*M then evals of 
+//If [Q1,M1]== full rank factorization (fullrf) of eye-Q*M then evals of 
 // M1*A*Q1 =evals of A with real part >= thres (case flag='d',...).
 // See also pbig
 //F.D.
 //!
+// Copyright INRIA
 deff('[flag]=%csmall(x)',[...
    'ls=x(1);';
    'select ls;';
@@ -43,13 +44,13 @@ deff('[flag]=%dbigeig(x)',[...
 
  [n,n]=size(A);
  thres=real(thres);
-if flag='c' then %smallei=%csmall;%bigeig=%cbigeig;end
-if flag='d' then %smallei=%dsmall;%bigeig=%dbigeig;end
+if flag=='c' then %smallei=%csmall;%bigeig=%cbigeig;end
+if flag=='d' then %smallei=%dsmall;%bigeig=%dbigeig;end
 // 
  [X,dsmall] = schur(A,%smallei);
  [Y,dbig] = schur(A,%bigeig);
  Q=X(:,1:dsmall);
- if Q=[] then M=[];return;end
+ if Q==[] then M=[];return;end
  Y1=Y';
  M1=Y1(dbig+1:n,:);
  E=M1*Q;

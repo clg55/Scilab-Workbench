@@ -2,6 +2,7 @@
 c ====================================================================
 c     interprets comands arguments (blank or quote delimited character strings)
 c ====================================================================
+c     Copyright INRIA
       include '../stack.h'
       integer quote,bl(nsiz),iadr,sadr,last
       logical cresmat,strtyp
@@ -19,6 +20,7 @@ c
 
 
  01   continue
+c      strtyp=abs(char1).eq.quote.and.lin(lpt(4)).eq.blank
       strtyp=abs(char1).eq.quote
 C     maximum number of characters that we can store
       ilmax=iadr(lstk(bot)-1)
@@ -107,5 +109,7 @@ c     Storing size info in data Base
       endif
       rhs=rhs+1
       if(last.eq.0) goto 01
+c     next line added for getf getfun
+      lpt(3)=lpt(4)
       return
       end

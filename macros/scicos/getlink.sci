@@ -1,15 +1,18 @@
 function [scs_m,needcompile]=getlink(scs_m,needcompile)
 //edition of a link from an output block to an input  block
+// Copyright INRIA
 dash=xget('dashes')
 //----------- get link origin --------------------------------------
 //------------------------------------------------------------------
 while %t
-  [btn,xc1,yc1]=xclick(0);
-  [n,pt]=getmenu(datam,[xc1,yc1]);
-  if n>0 then n=resume(n),end
+  [btn,xc1,yc1,win,Cmenu]=getclick()
+  if Cmenu<>[] then
+    Cmenu=resume(Cmenu)
+  end
   [kfrom,wh]=getobj(scs_m,[xc1;yc1])
   if kfrom<>[] then o1=scs_m(kfrom);break,end
 end
+scs_m_save=scs_m,nc_save=needcompile
 
 if o1(1)=='Link' then  // add a split block
   pt=[xc1;yc1]
@@ -25,7 +28,13 @@ if o1(1)=='Link' then  // add a split block
 
 
   // get initial split position
-  d=projaff(xx(wh:wh+1),yy(wh:wh+1),pt)
+  wh=wh(1)
+  if wh>0 then
+    d=projaff(xx(wh:wh+1),yy(wh:wh+1),pt)
+  else // a corner
+    wh=-wh
+    d=[xx(wh);yy(wh)]
+  end
   // Note : creation of the split block and modifications of links are
   //        done later, the sequel assumes that the split block is added
   //        at the end of scs_m
@@ -82,6 +91,15 @@ while %t do //loop on link segments
   rep(3)=-1
   while rep(3)==-1 do //get a new point
     rep=xgetmouse(0)
+    
+if rep(3)==2 then 
+      xpoly([xl;xe],[yl;ye],'lines')
+      if pixmap then xset('wshow'),end
+      xset('dashes',dash)
+      driver(dr);
+      return
+    end
+  
     //erase last link segment
     xpoly([xo;xe],[yo;ye],'lines')
     //plot new position of last link segment
@@ -100,6 +118,7 @@ while %t do //loop on link segments
       xpoly([xl;xe],[yl;ye],'lines')
       if pixmap then xset('wshow'),end
       xset('dashes',dash)
+      driver(dr);
       return
     end
     [m,kp2]=mini((ye-yin)^2+(xe-xin)^2)
@@ -112,6 +131,7 @@ while %t do //loop on link segments
       xpoly([xl;xe],[yl;ye],'lines')
       if pixmap then xset('wshow'),end
       xset('dashes',dash)
+      driver(dr);
       return
     end
     if typo==1 then
@@ -121,6 +141,7 @@ while %t do //loop on link segments
 	xpoly([xl;xe],[yl;ye],'lines')
 	if pixmap then xset('wshow'),end
 	xset('dashes',dash)
+	driver(dr);
 	return
       end
       szin=getportsiz(o2,port_number,'in')
@@ -135,6 +156,7 @@ while %t do //loop on link segments
 	xpoly([xl;xe],[yl;ye],'lines')
 	if pixmap then xset('wshow'),end
 	xset('dashes',dash)
+	driver(dr);
 	return
       end
       szin=getportsiz(o2,port_number,'clkin')
@@ -219,6 +241,9 @@ else
     xl=[xl;xc2];yl=[yl;yc2]
   end
 end
+
+lk=list('Link',xl,yl,'drawlink',' ',[0 0],[clr,typ],from,to)
+drawobj(lk)
 driver(dr);
 
 
@@ -263,17 +288,16 @@ if fromsplit then //link comes from a split
 
 end
 //add new link in objects structure
-lk=list('Link',xl,yl,'drawlink',' ',[0 0],[clr,typ],from,to)
+
 nx=size(scs_m)+1
 scs_m(size(scs_m)+1)=lk
 //update connected blocks
 scs_m(kfrom)=mark_prt(scs_m(kfrom),from(2),'out',typ,nx)
 scs_m(kto)=mark_prt(scs_m(kto),to(2),'in',typ,nx)
 
-
+drawobj(lk)
 
 
 xset('dashes',dash)
 needcompile=4
-
-
+[scs_m_save,nc_save,enable_undo,edited]=resume(scs_m_save,nc_save,%t,%t)

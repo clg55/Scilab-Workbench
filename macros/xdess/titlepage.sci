@@ -4,10 +4,11 @@ function titlepage(str,win)
 //une taille de caractere maximale.
 //!
 //origine S Steer INRIA 1989
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 old=xget('window')
 if rhs==2 then xset('window',win);end
-xbasc();plot2d([0,1],[0,1],[-1,-1],"022");
+plot2d([0,1],[0,1],[-1,-1],"022");
 xstringb(0,0,str,1,1,'fill');
 xset('window',old)
 

@@ -6,6 +6,19 @@
 
 #ifndef F2C_INCLUDE
 #define F2C_INCLUDE
+/** added for MKL **/
+
+#ifdef MKL 
+#include "MKL.h"
+#endif 
+
+/** added for Scilab addinter  vc++ version **/
+
+#ifdef FORDLL 
+#define IMPORT  __declspec (dllimport)
+#else 
+#define IMPORT 
+#endif
 
 typedef long int integer;
 typedef unsigned long uinteger;

@@ -1,4 +1,5 @@
       subroutine matopt
+c     Copyright INRIA
       INCLUDE '../stack.h'
 c     
       double precision zero,df0,zng,dxmin
@@ -11,15 +12,18 @@ c
       external foptim,boptim,fuclid,ctonb,ctcab
       integer coin,coar,coti,cotd,cosi,cosd,nfac
 c     
-      character*24 namef,namej
+      character*(nlgh+1) namef,namej
       common/csolve/namef,namej
 c     for semidef
       double precision abstol,reltol,nu,tv
       integer sz,upsz
 c
-
+      integer impn(nsiz)
+      logical eqid, getscalar
       integer iadr, sadr
 c     
+      parameter (nsiz1=nsiz-1)
+      data impn/672732690,nsiz1*673720360/
       data coin,coar,coti,cotd,cosi,cosd,nfac
      &     /   5906,6922,4637,3357,4636,3356, 0/
 c     
@@ -44,7 +48,7 @@ c     optim
       epsf=0.0d+0
       iepsx=1
       indtes=0
-      imp=ddt
+      imp=0
       io=wte
       if(wio.gt.0) io=wio
       zero=stk(leps)
@@ -56,6 +60,17 @@ c     optim
       ialg=1
       irecd=0
       ireci=0
+
+c
+      if(infstk(top).eq.1) then
+         if(eqid(idstk(1,top),impn)) then
+            if (.not.getscalar('optim',top,top,lr)) return
+            imp=stk(lr)
+            top=top-1
+            rhs=rhs-1
+         endif
+      endif
+
       lf=lstk(top+1)
       ldisp=lf+1
       lizs=iadr(ldisp)
@@ -951,22 +966,31 @@ c     commentaires finaux
       endif
 
  360  continue
-      if(indopt.eq.1) then
-         write(buf(1:15),'(1pd15.7)') epsg
-         call msgs(12,0)
+      if(imp.ne.0) then
+         if(indopt.eq.1) then
+            write(buf(1:15),'(1pd15.7)') epsg
+            call msgs(12,0)
+         elseif(indopt.eq.2) then
+            write(buf(1:15),'(1pd15.7)') epsf
+            call msgs(13,0)
+         elseif(indopt.eq.3)  then
+            call msgs(14,0)
+         elseif(indopt.eq.4)  then
+            call msgs(15,0)
+         elseif(indopt.eq.5)  then
+            call msgs(16,0)
+         elseif(indopt.eq.6)  then
+            call msgs(17,0)
+         elseif(indopt.eq.7)  then
+            call msgs(18,0)
+         elseif(indopt.eq.8)  then
+            call msgs(19,0)
+         elseif(indopt.eq.9)  then
+            call msgs(20,0)
+         elseif(indopt.ge.10)  then
+            call msgs(21,0)
+         endif
       endif
-      if(indopt.eq.2) then
-         write(buf(1:15),'(1pd15.7)') epsf
-         call msgs(13,0)
-      endif
-      if(indopt.eq.3) call msgs(14,0)
-      if(indopt.eq.4) call msgs(15,0)
-      if(indopt.eq.5) call msgs(16,0)
-      if(indopt.eq.6) call msgs(17,0)
-      if(indopt.eq.7) call msgs(18,0)
-      if(indopt.eq.8) call msgs(19,0)
-      if(indopt.eq.9) call msgs(20,0)
-      if(indopt.ge.10) call msgs(21,0)
       return
 c     
 c     quapro
@@ -1513,7 +1537,7 @@ c      implicit undefined (a-z)
       logical type,getscalar
       double precision tol
       external bsolv,bjsolv,setfsolvf,setfsolvj
-      character*24 namef,namej
+      character*(nlgh+1) namef,namej
       common/csolve/namef,namej
       integer iadr, sadr
       iadr(l)=l+l-1

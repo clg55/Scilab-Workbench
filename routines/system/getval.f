@@ -1,4 +1,5 @@
       subroutine getval(s)
+c     Copyright INRIA
       double precision s
 c
 c     form numerical value

@@ -1,78 +1,148 @@
-REM Makesubdirs.bat all
 @echo off
+REM Makesubdirs.bat all
+if "%1" == "all" goto all
+if "%1" == "clean" goto all
+if "%1" == "distclean" goto all
+if "%1" == "tksci" goto tksci 
+if "%1" == "pvm" goto pvm 
+
+echo Unknown target %1 
+goto end
+
+:all
+cd f2c\src 
+echo Making %1 in directory  f2c\src 
+ nmake /C /f Makefile.mak %1
+cd ..\..
+cd f2c\libf2c
+echo Making %1 in directory  f2c\libf2c
+ nmake /C /f Makefile.mak %1
+cd ..\..
+cd xdr
+echo Making %1 in directory  xdr
+ nmake /C /f Makefile.mak %1
+cd ..
+cd fraclab
+echo Making %1 in directory  fraclab
+ nmake /C /f Makefile.mak %1
+cd ..
 cd graphics
- nmake /f Makefile.mak %1
+echo Making %1 in directory  graphics
+ nmake /C /f Makefile.mak %1
 cd ..
 cd calelm
- nmake /f Makefile.mak %1
+echo Making %1 in directory  calelm
+ nmake /C /f Makefile.mak %1
+cd ..
+cd blas
+echo Making %1 in directory  blas
+ nmake /C /f Makefile.mak %1
 cd ..
 cd comm
- nmake /f Makefile.mak %1
+echo Making %1 in directory  comm
+ nmake /C /f Makefile.mak %1
 cd ..
 cd control
- nmake /f Makefile.mak %1
+echo Making %1 in directory  control
+ nmake /C /f Makefile.mak %1
 cd ..
 cd default
- nmake /f Makefile.mak %1
+echo Making %1 in directory  default
+ nmake /C /f Makefile.mak %1
 cd ..
 cd integ
- nmake /f Makefile.mak %1
+echo Making %1 in directory  integ
+ nmake /C /f Makefile.mak %1
 cd ..
 cd interf
- nmake /f Makefile.mak %1
+echo Making %1 in directory  interf
+ nmake /C /f Makefile.mak %1
 cd ..
 cd intersci
- nmake /f Makefile.mak %1
+echo Making %1 in directory  intersci
+ nmake /C /f Makefile.mak %1
 cd ..
 cd lapack
- nmake /f Makefile.mak %1
+echo Making %1 in directory  lapack
+ nmake /C /f Makefile.mak %1
 cd ..
 cd libcomm
- nmake /f Makefile.mak %1
+echo Making %1 in directory  libcomm
+ nmake /C /f Makefile.mak %1
 cd ..
 cd metanet
- nmake /f Makefile.mak %1
+echo Making %1 in directory  metanet
+ nmake /C /f Makefile.mak %1
 cd ..
 cd optim
- nmake /f Makefile.mak %1
+echo Making %1 in directory  optim
+ nmake /C /f Makefile.mak %1
 cd ..
 cd poly
- nmake /f Makefile.mak %1
+echo Making %1 in directory  poly
+ nmake /C /f Makefile.mak %1
 cd ..
 cd signal
- nmake /f Makefile.mak %1
+echo Making %1 in directory  signal
+ nmake /C /f Makefile.mak %1
 cd ..
 cd sparse
- nmake /f Makefile.mak %1
+echo Making %1 in directory  sparse
+ nmake /C /f Makefile.mak %1
 cd ..
 cd sun
- nmake /f Makefile.mak %1
+echo Making %1 in directory  sun
+ nmake /C /f Makefile.mak %1
 cd ..
 cd system
- nmake /f Makefile.mak %1
+echo Making %1 in directory  system
+ nmake /C /f Makefile.mak %1
 cd ..
 cd system2
- nmake /f Makefile.mak %1
+echo Making %1 in directory  system2
+ nmake /C /f Makefile.mak %1
 cd ..
 cd menusX
- nmake /f Makefile.mak %1
+echo Making %1 in directory  menusX
+ nmake /C /f Makefile.mak %1
 cd ..
 cd scicos
- nmake /f Makefile.mak %1
+echo Making %1 in directory  scicos
+ nmake /C /f Makefile.mak %1
 cd ..
 cd sound
- nmake /f Makefile.mak %1
+echo Making %1 in directory  sound
+ nmake /C /f Makefile.mak %1
+cd ..
+cd dcd 
+echo Making %1 in directory  dcd 
+ nmake /C /f Makefile.mak %1
+cd ..
+cd randlib
+echo Making %1 in directory  randlib
+ nmake /C /f Makefile.mak %1
 cd ..
 cd wsci
- nmake /f Makefile.mak %1
+echo Making %1 in directory  wsci
+ nmake /C /f Makefile.mak %1
 cd ..
-cd xdr
- nmake /f Makefile.mak %1
-cd ..
-cd f2c\libI77
- nmake /f Makefile.mak %1
-cd ..\..
-cd f2c\libF77
- nmake /f Makefile.mak %1
-cd ..\..
 echo on
+goto end
+
+:tksci 
+cd tksci 
+echo Making %1 in directory  tksci 
+ nmake /C /f Makefile.mak all
+cd ..
+goto end 
+
+:pvm 
+cd pvm 
+echo Making %1 in directory  pvm 
+ nmake /C /f Makefile.mak all
+cd ..
+goto end
+
+:end 
+
+

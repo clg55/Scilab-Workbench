@@ -1,4 +1,5 @@
 function lnkptr=lnkptrcomp(bllst,inpptr,outptr,inplnk,outlnk)
+// Copyright INRIA
 lnkbsz=[];
 for blkout=1:length(bllst)
   for portout=1:outptr(blkout+1)-outptr(blkout)

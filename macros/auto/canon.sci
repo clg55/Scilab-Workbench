@@ -10,6 +10,7 @@ function [ac,bc,u,ind]=canon(a,b)
 //Author:F. D. (Inria)
 //!
 //1: block-hessenberg form
+// Copyright INRIA
 [ac,bc,u,ro]=contr(a,b,[1.d-10*norm([a,b],1),1.d-10]);
 //2:zeroing what is th the right of under-diagonal blocks
 [na,ni]=size(b);[l,k]=size(ro);k0=na+1;k1=k0-ro(k);

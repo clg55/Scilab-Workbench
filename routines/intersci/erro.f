@@ -1,4 +1,5 @@
       subroutine erro(str)
+c     Copyright INRIA
       include '../stack.h'
       character *(*) str
       buf = str

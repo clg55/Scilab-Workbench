@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /*---------------------------------------
    POPPAD.C -- Popup Editor
                (c) Charles Petzold, 1996

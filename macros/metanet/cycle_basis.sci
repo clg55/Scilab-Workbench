@@ -1,4 +1,5 @@
 function [spc]=cycle_basis(g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>1 then error(39), end
 // finds a cycle basis in a simple connected undirected graph

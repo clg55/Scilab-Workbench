@@ -1,5 +1,5 @@
 
-grmenu(2)                      Scilab Function                      grmenu(2)
+gr_menu(2)                     Scilab Function                     gr_menu(2)
 NAME
   gr_menu - simple interactive graphic editor
 

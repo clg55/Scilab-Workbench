@@ -841,7 +841,8 @@ c
       endif
 c
       if (retadd .eq. 777) then
-         goto 777
+         entrnc = bass
+         goto 710
       else if (retadd .eq. 902) then
          goto 902
       else
@@ -871,20 +872,22 @@ c
             job = -1
             b = lb
             goto 10
- 902        path(peakl(lb)) = peakr(lb)
-            call push(high,low,b,job,entrnc,bass,lb,777,stack,
-     +        stklim, stktop)
-            high= peakr(lb)
-            low = bass
-            job = 1
-            b = lb
-            goto 10
          else
             call push(high,low,b,job,entrnc,bass,lb,904,stack,
      +           stklim, stktop)
             high = peakr(lb)
             low = entrnc
             job = -1
+            b = lb
+            goto 10
+         endif
+      endif
+ 902        path(peakl(lb)) = peakr(lb)
+            call push(high,low,b,job,entrnc,bass,lb,777,stack,
+     +        stklim, stktop)
+            high= peakr(lb)
+            low = bass
+            job = 1
             b = lb
             goto 10
  904        path(peakr(lb)) = peakl(lb)
@@ -895,8 +898,6 @@ c
             job = 1
             b = lb
             goto 10
-         endif
-      endif
       end
 c***********************************************************************
       subroutine ancest(v,job,u,index,pred,edge,mark,nindex,nghbr)

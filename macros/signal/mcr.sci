@@ -24,7 +24,8 @@ function [z,flag]=mcr(y,phi,m,lbd0,psi)
 //        = 1 convergence correcte
 //        = 0 convergence forcee (/ au nombre d'echantillons disponibles)
 //!
-   [o,i]=argn(0);
+// Copyright INRIA
+[o,i]=argn(0);
    if i < 2 then error(58); end;
 //
 // Controle sur le type des entrees
@@ -77,7 +78,7 @@ function [z,flag]=mcr(y,phi,m,lbd0,psi)
        to=lbd0;
        if to <= 0 then error(36,4); end;
        if to >  1 then error(36,4); end;
-       if m = 0 then error(36,3); end;
+       if m == 0 then error(36,3); end;
        if m > 3 then error(36,3); end;
      else error(58), end;
 //
@@ -87,7 +88,7 @@ function [z,flag]=mcr(y,phi,m,lbd0,psi)
    tphi=size(phi);
    dim=tphi(1,2);
 //
-   if m=0 then
+   if m==0 then
      mphi=phi' * phi;
      th=inv(mphi) * (phi' * y');
      flag=1;
@@ -110,10 +111,10 @@ function [z,flag]=mcr(y,phi,m,lbd0,psi)
        P= (1/to) * (eye(P1p) - G*phi(n,:)) * P1p;
        th= th1p + G * e;
        dis=abs(1 - norm(th1p)/norm(th));
-       if n = K-1 then dis=0; flag=0; end;
+       if n == K-1 then dis=0; flag=0; end;
        th1p=th;
        P1p=P;
-       if m=3 then
+       if m==3 then
          to=lbd0 * to + (1-lbd0);
          mu=1/to;
        end;

@@ -17,6 +17,7 @@ c!origin
 c Serge Steer INRIA 1996
 c!
 
+c     Copyright INRIA
       integer ierr
       double precision vr,vi,p,sr,si,rr,ri
 c
@@ -35,8 +36,13 @@ c
             if(p.gt.0.0d+0) then
                rr=0.0d+0
                ri=0.0d+0
-            else
+            elseif(p.lt.0.0d+0) then
+               ri=0.0d+0
+               rr=1.0d0/ri
                ierr=2
+            else
+               rr=1.0d+0
+               ri=0.0d+0
             endif
          endif
       endif

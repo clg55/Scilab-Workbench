@@ -6,15 +6,16 @@ function [X,dim,Y]=im_inv(A,B,tol)
 // default value tol = 100*%eps;
 // F.D.
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 [nA,mA]=size(A);[nB,mB]=size(B);
-if rhs=2 then tol=100*%eps*mA*nA*nB*mB,end;
+if rhs==2 then tol=100*%eps*mA*nA*nB*mB,end;
 if nA<>nB then error ('im_inv: uncompatible dimensions!'),return,end
 // basis for im(B)
 [Y,rB]=rowcomp(B);//u=Y'
 //Trivial cases
 if rB >= nA then X=eye(mA,mA);dim=mA,return;end;
-if rB =0 then [X,k1]=colcomp(A);dim=mA-k1,return,end
+if rB ==0 then [X,k1]=colcomp(A);dim=mA-k1,return,end
 //
 up=1:rB;low=rB+1:nA;
 A=Y*A;   //update 

@@ -4,8 +4,8 @@
 corr - correlation, covariance
 .SH CALLING SEQUENCE
 .nf
-[cov,mean]=corr(x,[y],nlags)
-[cov,mean]=corr('fft',xmacro,[ymacro],n,sect)
+[cov,Mean]=corr(x,[y],nlags)
+[cov,Mean]=corr('fft',xmacro,[ymacro],n,sect)
 
 [w,xu]=corr('updt',x1,[y1],w0)
 [w,xu]=corr('updt',x2,[y2],w,xu)
@@ -44,21 +44,21 @@ yi
 cov
 : real vector, the correlation coefficients 
 .TP
-mean
+Mean
 : real number or vector,  the mean of x and if given y
 
 .SH DESCRIPTION
 Computes
 .nf
-                n - m - 1
+                n - m 
                  ====
-                 \\                                         1
-        cov(m) =  >        (x  - xmean) (y      - ymean) * ---
-                 /           k            m + k            n-m
+                 \\                                                 1
+        cov(m) =  >        (x(k)  - xmean) (y(m+k)      - ymean) * ---
+                 /                                                  n
                  ====
-                 k = 0
+                 k = 1
 .fi
-.LA $$         cov(m) = 1/(n-m) \sum_0^{n-m-1} (x_k  - E(x)) (y_k - E(y)) $$
+.LA $$         cov(m) = 1/n \sum_1^{n-m} (x(k)  - E(x)) (y(m+k) - E(y)) $$
 for   m=0,..,\fVnlag-1\fR and two vectors \fVx=[x(1),..,x(n)]\fR
  \fVy=[y(1),..,y(n)]\fR
 .LP
@@ -67,16 +67,16 @@ different with corr(y,x,...)
 .LP
 Short sequences:
 .LP
-.Vb [cov,mean]=corr(x,[y],nlags)
+.Vb [cov,Mean]=corr(x,[y],nlags)
 returns the first nlags
-correlation coefficients and mean = mean of \fVx\fR
+correlation coefficients and Mean = \fVmean(x)\fR
 (mean of \fV[x,y]\fR if \fVy\fR is an argument).
 The sequence \fVx\fR (resp. \fVy\fR) is assumed real, and \fVx\fR 
 and \fVy\fR are of same dimension n.
 .LP
 Long sequences:
 .LP
-.Vb [cov,mean]=corr('fft',xmacro,[ymacro],n,sect)
+.Vb [cov,Mean]=corr('fft',xmacro,[ymacro],n,sect)
 .LP
 Here \fVxmacro\fR is either
 .TP

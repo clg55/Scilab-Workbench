@@ -1,5 +1,6 @@
 getf(SCI+'/demos/lmitool/lmidem.sci');
-mode(0);
+// Copyright INRIA
+mode(-1);
 x_message(['      ';
 'LMITOOL is a Scilab package for LMI optimization';
       '           ';
@@ -21,55 +22,57 @@ x_message(['      ';
       '          ''LMITOOL: a Package for LMI Optimization in Scilab, User''s Guide'' ';
       '          ';
       '          ';
-'LMITOOL uses Semidefinite Programming package SP developed by L. Vandenberghe and S. Boyd.'])
+'LMITOOL uses Semidefinite Programming package SP developed by L. Vandenberghe and S. Boyd.']);
 
-
-%demo_=x_choose(['H-infinity gain';'Output Feedback';'Sylvester equation'],...
-['This is a sample of LMI problems that LMITOOL can solve';
-'Select a problem (other examples are given in demos/lmitool directory)']);
-select %demo_
-case 0
-  error('LMI demo STOPS!');
-case 1
-   lmidem(SCI+'/demos/lmitool/normopt.sci');
-   getf(SCI+'/demos/lmitool/normopt.sci');
-   x_message(['Let''s try a simple example with 3 states';...
-              'Edit below A,B,C,D matrices']);
-   [ok,A,B,C,D]=getvalue('Enter A, B, C, D matrices',['A';'B';'C';'D'],...
-   list('mat',[3,3],'mat',[3,2],'mat',[2,3],'mat',[2,2]),...
-   ['[0,1,0;2,3,1;-1,-2,0]','[1,0;-2,1;0,1]','[1,2,0;0,1,-2]','[0,0;0,0]']);
-   if ok then
-   [X,gopt]=normopt(A,B,C,D);
-   disp(gopt, 'optimal gama found is:')
-   disp(gopt-h_norm(syslin('c',A,B,C,D)),...
-        'check: gopt-h_norm(syslin(''c'',A,B,C,D)=')
-      else
-   error('LMI demo STOPS!');
+while %t
+  %demo_=x_choose(['H-infinity gain';'Output Feedback';'Sylvester equation'],...
+      ['This is a sample of LMI problems that LMITOOL can solve';
+      'Select a problem (other examples are given in demos/lmitool directory)']);
+  select %demo_
+  case 0
+    break;
+  case 1
+    mode(1)
+    lmidem(SCI+'/demos/lmitool/normopt.sci');
+    getf(SCI+'/demos/lmitool/normopt.sci');
+    x_message(['Let''s try a simple example with 3 states';...
+	    'Edit below A,B,C,D matrices']);
+    [ok,A,B,C,D]=getvalue('Enter A, B, C, D matrices',['A';'B';'C';'D'],...
+	list('mat',[3,3],'mat',[3,2],'mat',[2,3],'mat',[2,2]),...
+	['[0,1,0;2,3,1;-1,-2,0]','[1,0;-2,1;0,1]','[1,2,0;0,1,-2]','[0,0;0,0]']);
+    if ok then
+      [X,gopt]=normopt(A,B,C,D);
+      disp(gopt, 'optimal gama found is:')
+      disp(gopt-h_norm(syslin('c',A,B,C,D)),...
+	  'check: gopt-h_norm(syslin(''c'',A,B,C,D)=')
+    end
+    mode(-1)
+  case 2
+    mode(1)
+    lmidem(SCI+'/demos/lmitool/of.sci');
+    getf(SCI+'/demos/lmitool/of.sci');
+    x_message(['Let''s try a simple example with 3 states';...
+	    'Enter A,B,C matrices']);
+    [ok,A,B,C]=getvalue('Edit below A, B, C matrices',['A';'B';'C'],...
+	list('mat',[3,3],'mat',[3,2],'mat',[2,3]),...
+	['[0,1,0;2,3,1;-1,-2,0]','[1,0;-2,1;0,1]','[1,2,0;0,1,-2]']);
+    if ok then
+      [P,Q]=of(A,B,C);
+      disp(P,Q);
+    end
+    mode(-1)
+  case 3
+    mode(1)
+    lmidem(SCI+'/demos/lmitool/sylvester.sci');
+    getf(SCI+'/demos/lmitool/sylvester.sci');
+    x_message(['Let''s try a simple example with 3 states';...
+	    'Enter A,B,C matrices']);
+    [ok,A,B,C]=getvalue('Edit below A, B, C matrices',['A';'B';'C'],...
+	list('mat',[3,3],'mat',[2,2],'mat',[3,2]),...
+	['[0,1,0;2,3,1;-1,-2,0]','[1,0;-2,1]','[1,2;0,1;1,-2]']);
+    [X]=sylvester(A,B,C,'c');
+    disp(X, 'X found is:')
+    disp(A*X+X*B-C ,'Check: A*X+X*B-C =')
+    mode(-1)
+  end   
 end
-case 2
-   lmidem(SCI+'/demos/lmitool/of.sci');
-   getf(SCI+'/demos/lmitool/of.sci');
-   x_message(['Let''s try a simple example with 3 states';...
-   'Enter A,B,C matrices']);
-   [ok,A,B,C]=getvalue('Edit below A, B, C matrices',['A';'B';'C'],...
-   list('mat',[3,3],'mat',[3,2],'mat',[2,3]),...
-   ['[0,1,0;2,3,1;-1,-2,0]','[1,0;-2,1;0,1]','[1,2,0;0,1,-2]']);
-   if ok then
-   [P,Q]=of(A,B,C);
-   disp(P,Q);
-      else
-   error('LMI demo STOPS!');
-   end
-case 3
-   lmidem(SCI+'/demos/lmitool/sylvester.sci');
-   getf(SCI+'/demos/lmitool/sylvester.sci');
-   x_message(['Let''s try a simple example with 3 states';...
-   'Enter A,B,C matrices']);
-   [ok,A,B,C]=getvalue('Edit below A, B, C matrices',['A';'B';'C'],...
-   list('mat',[3,3],'mat',[2,2],'mat',[3,2]),...
-   ['[0,1,0;2,3,1;-1,-2,0]','[1,0;-2,1]','[1,2;0,1;1,-2]']);
-   [X]=sylvester(A,B,C,'c');
-   disp(X, 'X found is:')
-   disp(A*X+X*B-C ,'Check: A*X+X*B-C =')
-end   
-

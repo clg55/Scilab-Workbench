@@ -1,3 +1,6 @@
+# Copyright INRIA
+
+
 FFLAGS = $(FC_OPTIONS)
 
 bin/scilex: scilex-lib 
@@ -9,7 +12,7 @@ bin/scilex: scilex-lib
 		$(RM) $@; \
 		echo "linking"; \
 		$(FC) $(FFLAGS) -o $@ $(DEFAULTS) $(FC_LDFLAGS) $(LIBR)  \
-			$(XLIBS) $(TERMCAPLIB); \
+			$(TCLTK_LIBS) -ldl $(XLIBS) $(TERMCAPLIB); \
 	else \
 		echo bin/scilex is up to date ; \
 	fi

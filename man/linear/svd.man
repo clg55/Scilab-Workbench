@@ -6,6 +6,7 @@ svd  -  singular value decomposition
 .nf
 s=svd(X)
 [U,S,V]=svd(X)
+[U,S,V]=svd(X,0)
 [U,S,V,rk]=svd(X [,tol])
 .fi
 .SH PARAMETERS
@@ -30,6 +31,10 @@ produces a diagonal matrix \fVS\fR , of the same
 dimension as \fVX\fR and with nonnegative diagonal elements in 
 decreasing order, and unitary matrices \fVU\fR and \fVV\fR so that 
 \fVX = U*S*V'\fR.
+.LP
+.Vb [U,S,V] = svd(X,0) produces the "economy size"
+decomposition. If \fVX\fR is m-by-n with m > n, then only the
+first n columns of \fVU\fR are computed and \fVS\fR is n-by-n.
 .LP
 .Vb s = svd(X)
 by itself, returns a vector \fVs\fR containing the singular values.

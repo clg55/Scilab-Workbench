@@ -1,4 +1,5 @@
 x_message(['x_message: Simple example of message ';
+// Copyright INRIA
 'First row of comments';
 'Second row';
 'etc...';])

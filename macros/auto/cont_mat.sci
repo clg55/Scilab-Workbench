@@ -4,10 +4,11 @@ function c=cont_mat(a,b)
 //                 2       n
 //i.e. c=[b, ab, ab,...; ab ]  
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select type(a)
  case 1  then
-    if rhs=1 then error('2 arguments : a,b'),end
+    if rhs==1 then error('2 arguments : a,b'),end
     [m,n]=size(a)
     if m<>n then error(20,1),end
     [mb,nb]=size(b);if mb<>n then error(60),end

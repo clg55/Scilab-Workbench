@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /*
  * Utility functions to build data for 
  * Scilab help browser 
@@ -78,12 +79,13 @@ void HelpActivate(ntopic)
   if (AP.nTopic == 0) 
     {
       /* get keyword as first word of  helpTopicInfo[ntopic] */
-      TopicInfo = helpTopicInfo[ntopic];
+      TopicInfo = helpTopicInfo[Min(nTopicInfo-1,Max(ntopic,0))];
     } 
   else 
     {
-      TopicInfo = AP.HelpTopic[ntopic];
-      helpPath  = helpPaths[ AP.Where[ntopic]];
+      int ntopic1= Min(AP.nTopic-1,Max(ntopic,0));
+      TopicInfo = AP.HelpTopic[ntopic1];
+      helpPath  = helpPaths[ AP.Where[ntopic1]];
     }
   /*** Set Topic to TopicInfo up to the first blank char**/
   k = 0;
@@ -144,7 +146,12 @@ void SciCallHelp(buf,helpPath,Topic)
 int Sci_Help(name) 
      char *name;
 {
-  int i,k;
+  int i,k,cti,aps,ok=0;
+  char c_name[MAXTOPIC];
+  /** keep tracks of the current status **/
+  cti=CurrentTopicInfo ;
+  aps=AP.nTopic;
+  if ( aps != 0) strcpy(c_name,AP.name);
   if ( Help_Init() == 1) 
     {
       sciprint("can't use man\r\n");
@@ -159,11 +166,17 @@ int Sci_Help(name)
 	       helpTopicInfo[k][strlen(name)]== ' ' )
 	    {
 	      HelpActivate(k);
-	      return(0);
+	      ok=1;break;
 	    }
 	}
     }
-  sciprint("No man for %s\r\n",name);
+  /** back to previous state **/
+  if ( aps != 0) 
+    SetAproposTopics(c_name);
+  else if ( cti >=1 && cti <= nInfo) 
+    setHelpTopicInfo(cti);
+  if ( ok == 0) 
+    sciprint("No man for %s\r\n",name);
   return(0);
 }
 
@@ -187,7 +200,12 @@ int Sci_Apropos(name)
   static char *butn[]= { "Ok","Cancel",NULL};
   int Rep;
   ChooseMenu Ch;
-  int i;
+  int i,k,cti,aps;
+  char c_name[MAXTOPIC];
+  /** keep tracks of the current status **/
+  cti=CurrentTopicInfo ;
+  aps=AP.nTopic;
+  if ( aps != 0) strcpy(c_name,AP.name);
   /** init Help database **/
   if ( Help_Init() == 1) 
     {
@@ -201,24 +219,32 @@ int Sci_Apropos(name)
       sciprint("Nothing found for topic %s\r\n",name);
       return(0);
     }
-  C2F(xscion)(&i);
-  if ( i != 0 ) 
-    {
-      Ch.nstrings =   AP.nTopic ;
-      Ch.nb = 2; 
-      Ch.choice = 0;
-      Ch.description = name;
-      Ch.buttonname = butn;
-      Ch.strings = AP.HelpTopic ;
-      Rep = ExposeChooseWindow(&Ch);
-      if ( Rep == TRUE )
-	HelpActivate(Ch.choice);
-    }
   else 
     {
-      for ( i = 0 ; i < AP.nTopic ; i++) 
-	sciprint("%s\r\n", AP.HelpTopic[i]);
+      C2F(xscion)(&i);
+      if ( i != 0 ) 
+	{
+	  Ch.nstrings =   AP.nTopic ;
+	  Ch.nb = 2; 
+	  Ch.choice = 0;
+	  Ch.description = name;
+	  Ch.buttonname = butn;
+	  Ch.strings = AP.HelpTopic ;
+	  Rep = ExposeChooseWindow(&Ch);
+	  if ( Rep == TRUE )
+	    HelpActivate(Ch.choice);
+	}
+      else 
+	{
+	  for ( i = 0 ; i < AP.nTopic ; i++) 
+	    sciprint("%s\r\n", AP.HelpTopic[i]);
+	}
     }
+  /** back to previous state **/
+  if ( aps != 0) 
+    SetAproposTopics(c_name);
+  else if ( cti >=1 && cti <= nInfo) 
+    setHelpTopicInfo(cti);
   return(0);
 }
 
@@ -401,10 +427,6 @@ int setHelpTopicInfo(n)
     {
       return(0);
     }
-  else
-    {
-      CurrentTopicInfo = n ;
-    }
   CleanHelpTopics();
   helpPath = helpPaths[n - 1];
   strcpy(Help, helpPath);
@@ -444,6 +466,7 @@ int setHelpTopicInfo(n)
       nTopicInfo++;
     }
   helpTopicInfo[nTopicInfo]= (char *) 0;
+  CurrentTopicInfo = n ;
   fclose(fg);
   return(0);
 }
@@ -475,14 +498,14 @@ int SetAproposTopics(str)
   FILE           *fg;
   char            line[120];
   int             k, ln, n;
-  if ( strcmp(str,AP.name)== 0) 
+#ifdef __MSC__
+  if ( _stricmp(str,AP.name)== 0) 
+#else 
+  if ( strcasecmp(str,AP.name)== 0) 
+#endif
     {
       /** current apropos database is correct **/
       return(0);
-    }
-  else 
-    {
-      strncpy(AP.name,str,MAXTOPIC);
     }
   CleanAproposTopics();
   AP.nTopic = 0;
@@ -525,6 +548,7 @@ int SetAproposTopics(str)
       fclose(fg);
     }
   AP.HelpTopic[AP.nTopic] = NULL;
+  strncpy(AP.name,str,MAXTOPIC);
   return(0);
 }
 
@@ -559,4 +583,7 @@ static int NewString(hstr,line)
   strcpy(*hstr, line);
   return(0);
 }
+
+
+
 

@@ -2,6 +2,7 @@ function [cpr,state0,needcompile,ok]=do_update(cpr,state0,needcompile)
 //Update an already compiled scicos diagram compilation result according to 
 //parameter changes
 //!
+// Copyright INRIA
 ok=%t 
 select needcompile
 case 0 then  // only parameter changes 

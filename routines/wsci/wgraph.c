@@ -344,7 +344,7 @@ int CopyPrint(struct BCG *ScilabGC)
 	    put the apropriate scale factor according to printer 
 	    resolution and redraw with the printer as hdc 
 	  **/
-	  scalef = 10* ((int) ((double) xPage*yPage)/(6800.0*4725.0));
+	  scalef = (int) (10.0 * ((double) xPage*yPage)/(6800.0*4725.0));
 	  scig_replay_hdc('P',ScilabGC->CurWindow, printer,
 			  xPage,yPage,scalef);
 	  if (EndPage (pr.hdcPrn) > 0)
@@ -508,7 +508,7 @@ int ClearClickQueue(win)
   if ( win == -1 ) 
 {
       lastc = 0;
-      return;
+      return 0;
     }
   for ( i = 0 ; i < lastc ; i++ )
     {
@@ -597,15 +597,15 @@ WndGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
       return 0;
     case WM_LBUTTONDOWN:
       PushClickQueue(ScilabGC->CurWindow,(int) LOWORD(lParam),HIWORD(lParam),0) ;
-      wininfo("mouse %d %d,%d",lastc,(int) LOWORD(lParam),HIWORD(lParam));
+      /** wininfo("mouse %d %d,%d",lastc,(int) LOWORD(lParam),HIWORD(lParam));**/
       return(0);
     case WM_MBUTTONDOWN:
       PushClickQueue(ScilabGC->CurWindow,(int) LOWORD(lParam),HIWORD(lParam),1) ;
-      wininfo("mouse %d,%d",(int) LOWORD(lParam),HIWORD(lParam));
+      /** wininfo("mouse %d,%d",(int) LOWORD(lParam),HIWORD(lParam)); **/
       return(0);
     case WM_RBUTTONDOWN:
       PushClickQueue(ScilabGC->CurWindow,(int) LOWORD(lParam),HIWORD(lParam),2) ;
-      wininfo("mouse %d,%d",(int) LOWORD(lParam),HIWORD(lParam));
+      /** wininfo("mouse %d,%d",(int) LOWORD(lParam),HIWORD(lParam)); **/
       return(0);
     case WM_CREATE:
       ScilabGC  = ((CREATESTRUCT *)lParam)->lpCreateParams;
@@ -618,7 +618,7 @@ WndGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
       return(0);
     case WM_PAINT:
       paint++;
-      wininfo("Painting %d",paint);
+      /** wininfo("Painting %d",paint); **/
       /** if we are in pixmap mode ? **/
       hdc = BeginPaint(hwnd, &ps);
       if (  ScilabGC->Inside_init != 1 )
@@ -630,7 +630,7 @@ WndGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	  DebugGW("==> paint rect %d %d \n", rect.right, rect.bottom);
 	  if ( ScilabGC->CurPixmapStatus == 1) 
 	    {
-	      scig_replay_hdc('P',ScilabGC->CurWindow,ScilabGC->hdcCompat,
+	      scig_replay_hdc('W',ScilabGC->CurWindow,ScilabGC->hdcCompat,
 			      rect.right,rect.bottom,1);
 	      C2F(show)(PI0,PI0,PI0,PI0);
 	    }
@@ -704,6 +704,8 @@ static void scig_replay_hdc(char c, integer win_num,HDC hdc,int width,int height
   if ( c == 'P' ) SciG_Font_Printer(scale);
   /** the create default font/brush etc... in hdc */ 
   ResetScilabXgc ();
+  /** xclear will properly upgrade background if necessary **/
+  C2F(dr)("xclear","v",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);    
   C2F(dr)("xreplay","v",&win_num,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr1)("xset","alufunction",&alu,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
@@ -740,11 +742,18 @@ WndParentGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	SendMessage(ScilabGC->CWindow, WM_COMMAND, wParam, lParam);
       }
     break;
+  case WM_KILLFOCUS: 
+    SendMessage(textwin.hWndText, message, wParam, lParam);
+    return(0);
   case WM_SETFOCUS: 
+    /** when focus is set in the graphic window we set it to scilab window**/
+    SendMessage(textwin.hWndText, message, wParam, lParam);
     return(0);
   case WM_KEYDOWN:
-    wininfo("key down");
-    /** SendMessage(textwin.hWndText, message, wParam, lParam);  **/
+    SendMessage(textwin.hWndText, message, wParam, lParam);
+    return(0);
+  case WM_CHAR :
+    SendMessage(textwin.hWndText, message, wParam, lParam);
     return(0);
   case WM_GETMINMAXINFO:
     /*** Eventuellement a changer XXXXXXX  **/

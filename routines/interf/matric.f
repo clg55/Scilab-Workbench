@@ -2,6 +2,7 @@
 c ================================== ( Inria    ) =============
 c       equations de lyapounov,sylvester et riccati
 c ====================================================================
+c     Copyright INRIA
       include '../stack.h'
       integer iadr,sadr
 c

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 
 #include <stdio.h>
 #include "../machine.h"

@@ -1,4 +1,5 @@
 function [cw]=show_graph(g,smode,scale,winsize)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select rhs
 case 1 then

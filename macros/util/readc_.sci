@@ -7,6 +7,7 @@ function [c]=readc_(unit)
 //the exec file stops until carrige return is made.
 //!
 //
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 if rhs<=0 then unit=%io(1); end;
 c=read(unit,1,1,'(a)');

@@ -1,5 +1,7 @@
       subroutine dband(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     Dead Band,
 c     if u(i)<0 ,y(i)=min(0,u+DB(i)/2)

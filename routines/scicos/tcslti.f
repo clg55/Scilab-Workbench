@@ -23,7 +23,7 @@ c
       lb=nx*nx+la
       lc=lb+nx*nu1
 
-      if(flag.eq.1) then
+      if(flag.eq.1.or.flag.eq.6) then
 c     y=c*x+d*u1     
          ld=lc+nx*ny
          call dmmul(rpar(lc),ny,x,nx,y,ny,ny,nx,1)
@@ -31,7 +31,7 @@ c     y=c*x+d*u1
       elseif(flag.eq.2.and.nevprt.eq.1) then
 c     x+=u2
          call dcopy(nx,u2,1,x,1)
-      elseif(flag.eq.2.and.nevprt.eq.0) then
+      elseif(flag.eq.0.and.nevprt.eq.0) then
 c     xd=a*x+b*u1
          call dmmul(rpar(la),nx,x,nx,xd,nx,nx,nx,1)
          call dmmul1(rpar(lb),nx,u1,nu1,xd,nx,nx,nu1,1)

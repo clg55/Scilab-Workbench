@@ -14,6 +14,7 @@ C     -nbout . est le nombre de racine a l'exterieur du  du cercle unite
 C     tableau de travail
 C     -w 3*nq+1
 C!
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension tq(nq+1), w(*)
 C

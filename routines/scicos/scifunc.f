@@ -5,6 +5,7 @@ c     input args are supposed to be stored in the top of the stack
 c     at positions top-mrhs+1:top
 c     function adress is given by the integer ptr in the common /scsptr/
 c
+c     Copyright INRIA
       include "../stack.h"
       integer ptr
       integer mlhs,mrhs
@@ -42,5 +43,7 @@ C
       niv = niv - 1
 C+    
  9999 continue
+      iero=1
+      niv=niv-1
       return
       end

@@ -1,4 +1,5 @@
 function []=m_circle(gain)
+// Copyright INRIA
 [lhr,rhs]=argn(0)
 //
 d36=11;

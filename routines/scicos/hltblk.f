@@ -1,5 +1,7 @@
       subroutine hltblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     Notify simulation to stop  when called 
 c     ipar(1) : stop reference

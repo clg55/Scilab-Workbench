@@ -24,6 +24,7 @@ C
 C # cases according to the difference between t and tout 
 C 
 c!
+C     Copyright INRIA
 c-----------------------------------------------------------------------
       integer  it,itout
       double precision tt

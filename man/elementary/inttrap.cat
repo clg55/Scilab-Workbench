@@ -8,7 +8,8 @@ CALLING SEQUENCE
 
 PARAMETERS
 
-  x         : vector of x coordinate data. Default value is 1:size(y,'*')
+  x         : vector of increasing x coordinate data. Default value is
+            1:size(y,'*')
 
   s         : vector of y coordinate data
 
@@ -29,7 +30,7 @@ DESCRIPTION
 
 EXAMPLE
   t=0:0.1:%pi
-  intsplin(t,sin(t))
+  inttrap(t,sin(t))
 
 SEE ALSO
   intg, integrate, intsplin, splin

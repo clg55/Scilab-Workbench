@@ -19,6 +19,7 @@ c     ll : longueur de ligne maximum admissible
 c     lunit : etiquette logique du support d'edition
 c     cw : chaine de caracteres de travail de longueur au moins ll
 c!    
+c     Copyright INRIA
       integer x(*),a
       character cw*(*),dl*1,true*1,false*1
       data true/'T'/,false/'F'/

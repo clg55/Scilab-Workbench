@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DMPMU,SSI=0
+c     Copyright INRIA
       subroutine dmpmu(mp1,d1,nl1,mp2,d2,nl2,mp3,d3,l,m,n)
 c!purpose
 c  ce sous programme effectue le calcul du produit de matrices

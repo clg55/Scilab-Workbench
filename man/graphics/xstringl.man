@@ -25,7 +25,7 @@ The result can be approximative under the Postscript driver
 .SH EXAMPLE
 .nf
 plot2d([0;1],[0;1])
-rect=xstringl(0.5,0.5,["Scilab","is" ; "not","Basile"])
+rect=xstringl(0.5,0.5,["Scilab","is" ; "not","balicS"])
 .fi
 .SH SEE ALSO
 xstring

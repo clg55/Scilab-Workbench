@@ -1,7 +1,7 @@
 
 GRAYPLOT(2)                    Scilab Function                    GRAYPLOT(2)
 NAME
-  grayplot - 2D plot of a surface using gray levels
+  grayplot - 2D plot of a surface using colors
 
 CALLING SEQUENCE
   grayplot(x,y,z,[strf,rect,nax])

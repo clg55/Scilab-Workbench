@@ -4,6 +4,7 @@ c     cette fonction teste si la chaine de caractere codee donnee
 c     dans les n premiers entiers de s represente un nombre entier et si oui 
 c     retourne sa valeur ival
 c!
+c     Copyright INRIA
       integer s(n),ival
 c
       ival=0

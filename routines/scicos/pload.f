@@ -1,5 +1,7 @@
       subroutine pload(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     Preload function
 c     if u(i).lt.0 then y(i)=-u(i)-rpar(i)

@@ -1,4 +1,5 @@
 function ns=strong_con_nodes(i,g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>2 then error(39), end
 // check i

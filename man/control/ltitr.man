@@ -1,4 +1,4 @@
-.TH LTITR G "April 1993" "Scilab Group" "Scilab Function"
+.TH ltitr G "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an 
 .SH NAME
 ltitr - discrete time response (state space)

@@ -1,4 +1,5 @@
       integer function find(lsize,alpha,beta,s,p)
+c     Copyright INRIA
       integer lsize
       double precision alpha,beta,s,p
 c!purpose

@@ -1,4 +1,5 @@
       subroutine dspis(ma,na,a,nela,inda,i,ni,j,nj,
+c     Copyright INRIA
      $     mb,nb,b,mr,nr,r,nelr,indr,ierr)
 c     insert a full submatrix in a sparse matrix
 c!

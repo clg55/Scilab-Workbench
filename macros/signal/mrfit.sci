@@ -13,19 +13,20 @@ function [num,den]=mrfit(w,mod,r)
 //
 //  abs(freq(num,den,%i*w)) should be close to mod
 //
+// Copyright INRIA
 w=w(:);mod=mod(:);
 [LHS,RHS]=argn(0);
-if w(1)=0 then w(1)=%eps;end
+if w(1)==0 then w(1)=%eps;end
 
-if r==0 then num=pinv(ones(length(mod),1))*mod;den=1;return;end
+if r==0 then num=sum(mod)/size(mod,'*');den=1;return;end
 
 sl0=round(log10(mod(2)/mod(1))/log10(w(2)/w(1)));w(1)=w(2)/10; 
 if sl0~=0 then mod(1)=mod(2)/10^sl0;end
 
 n=length(w);
-slinf=round(log10(mod(n)/mod(n-1))/log10(w(n)/w(n-1)));
-w(n)=w(n-1)*10; 
-if slinf~=0 then mod(n)=mod(n-1)*10^slinf;end
+slinf=round(log10(mod($)/mod($-1))/log10(w($)/w($-1)));
+w($)=w($-1)*10; 
+if slinf~=0 then mod($)=mod($-1)*10^slinf;end
 logw=log10(w);logmod=log10(mod);delw=diff(logw);delmod=diff(logmod); 
 
 weight=ones(length(w),1);
@@ -56,7 +57,7 @@ w=w(ind); mod=mod(ind); weight=weight(ind);
 fresp=cepstrum(w,mod);
 
 [num,den]=frfit(w,fresp,r,weight);
-if LHS=1 
+if LHS==1 then
   num=syslin('c',num/den);
 end
 

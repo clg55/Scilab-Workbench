@@ -20,6 +20,8 @@
  * Modified for Scilab : Jean-Philippe Chancelier 
  */
 
+#ifndef SCI_WCOMMON
+#define SCI_WCOMMON
 
 #ifndef __GNUC__ 
 #include <shellapi.h>
@@ -167,7 +169,8 @@ extern void C2F(winsci) (char *pname,int *nos,int *idisp,char *display,
 extern int C2F(getmen)(char *,integer *,integer *);
 extern integer C2F(ismenu)(void);
 extern void GetCommand(char *);
-extern int StoreCommand(char *,int);
+extern int StoreCommand1(char *,int);
+extern int StoreCommand(char *);
 
 /* misc */
 
@@ -180,7 +183,7 @@ extern int instring(char *str,char  c);
 
 /* wtloop */
 
-extern void sci_windows_main(int,int *);
+extern void sci_windows_main(int,int *,char *,int *);
 void SciMenuSelect(char *Name);
 void test_sci();
 void test_mouse();
@@ -229,11 +232,12 @@ int ScilabPsToTeX(char orientation,char *filenamein,char *filenameout,double xs,
 
 /* elsewhere in scilab : in Fortran code maybe */
 
-extern int C2F(mainsci)(int *);
+extern int C2F(mainsci)(int *, char *, int *, integer);
 extern void set_is_reading(int);
 extern int get_is_reading(void);
 extern int C2F(timer)(double *);
 extern int C2F(stimer)(void);
 extern int C2F(sigbas)(integer *);
+extern void sciprint(char *fmt,...);
 
-
+#endif 

@@ -4,6 +4,7 @@ function [f,sexp]=trianfml(f,sexp)
 // sexp is a set of common expressions stored by the algorithm.
 //!
 //
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 [mf,nf]=size(f)
 f_tra=f
@@ -31,7 +32,7 @@ for nli=1:mf
       if c1(k)<>'0' then
         f_tra(k,:)=cmb_lin(pivot,f_tra(k,:),c1(k),f_tra(1,:))
         f_tra(k,1)='0'
-        if rhs=2 then
+        if rhs==2 then
           ns=prod(size(sexp)),
           for kl=2:nf_tra
             if length(f_tra(k,kl))>20 then

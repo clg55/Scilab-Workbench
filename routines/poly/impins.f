@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=IMPINS,SSI=0
+c     Copyright INRIA
       subroutine impins(mat1,dep1,lig1,col1,mat2,
      & dep2,lig2,col2,matr,depr,ligr,colr)
 c!but

@@ -4,6 +4,8 @@ c     fonction : {bx}=[b]*{x}.
 c                [b] est definie par les vecteurs
 c                ({y}(i),{s}(i),{z}(i), i=1,np) et {diag}
 c
+c     Copyright INRIA
+c
       implicit double precision (a-h,o-z)
       dimension y(nt,n),s(nt,n),z(nt,n),ys(nt),zs(nt)
       dimension diag(n),bx(n),x(n)

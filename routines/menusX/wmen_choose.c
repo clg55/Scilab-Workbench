@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /* wchoose.c 
  * Scilab [ gcwin32 and WIN32 ] 
  *   Jean-Philipe Chancelier 
@@ -22,6 +23,9 @@ ChooseDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
   /** Ch = (ChooseMenu * )GetWindowLong(GetParent(hdlg), 4); **/
   switch (wmsg) {
   case WM_INITDIALOG:
+    if ( SciMenusRect.left != -1) 
+      SetWindowPos(hdlg,HWND_TOP,SciMenusRect.left,SciMenusRect.top,0,0,
+		   SWP_NOSIZE | SWP_NOZORDER );
     for (i=0; i < Ch->nstrings  ; i++) {
       SendDlgItemMessage(hdlg, CHOOSE_LINENUM, LB_ADDSTRING, 0, 
 			 (LPARAM)((LPSTR) Ch->strings[i]));
@@ -36,11 +40,13 @@ ChooseDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
       case CHOOSE_LINENUM:
 	return FALSE;
       case IDOK:
+	GetWindowRect(hdlg,&SciMenusRect);
 	DestroyWindow(hdlg);
 	ChooseModeless = (HWND)0;
 	Ch->status = TRUE;
 	return TRUE;
       case IDCANCEL:
+	GetWindowRect(hdlg,&SciMenusRect);
 	DestroyWindow(hdlg);
 	ChooseModeless = (HWND)0;
 	Ch->status = FALSE;
@@ -49,6 +55,7 @@ ChooseDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
     break;
   case WM_CLOSE:
     /** sciprint("OK fini sur close : \r\n");**/
+    GetWindowRect(hdlg,&SciMenusRect);
     DestroyWindow(hdlg);
     ChooseModeless = (HWND)0;
     Ch->status = FALSE;

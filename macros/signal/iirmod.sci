@@ -6,6 +6,7 @@ function [la,grad,ind]=iirmod(x,ind)
 //wa=fonction de ponderation pour l'amplitude
 //!
 //
+// Copyright INRIA
 r=x(:,1);theta=x(:,2);
 [m,n]=size(ad);if m>n,ad=ad';end;
 [m,n]=size(omega);if m>n,omega=omega';end;

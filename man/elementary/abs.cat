@@ -14,7 +14,7 @@ PARAMETERS
 
 DESCRIPTION
   abs(x) is the absolute value of the elements of x. When x is complex,
-  abs(x) is the magnitude of the elements .
+  abs(x) is the complex modulus (magnitude) of the elements of x.
 
 EXAMPLE
-  abs([1,%i,-1,-%i])
+  abs([1,%i,-1,-%i,1+%i])

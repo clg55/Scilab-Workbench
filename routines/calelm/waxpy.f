@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WAXPY,SSI=0
+c     Copyright INRIA
       subroutine waxpy(n,sr,si,xr,xi,incx,yr,yi,incy)
 c!but
 c

@@ -9,6 +9,7 @@ c
 c     attention skpins modifie la valeur de lpt en particulier lpt(4)
 c     et lpt(6)
 c     
+c     Copyright INRIA
       include '../stack.h'
       parameter (nz1=nsiz-1,nz2=nsiz-2)
 c     
@@ -60,13 +61,17 @@ c     get the following line
             bcount=bcount-1
          else if (sym.eq.quote) then
 c     .  check if transpose or beginning of a string
-            if(psym.ne.num.and.psym.ne.name.and.psym.ne.rparen.and.
-     $           psym.ne.right.and.psym.ne.dot.and.psym.ne.quote)
-     $           strcnt=1
-            if (bcount.ne.0) then
-               pchar=lin(lpt(3)-2)
-               if(pchar.eq.blank) strcnt=1
+            pchar=lin(lpt(3)-2)
+            if(abs(pchar).eq.blank) then
+               strcnt=1
+            elseif(psym.ne.num.and.psym.ne.name.and.psym.ne.rparen.and.
+     $           psym.ne.right.and.psym.ne.dot.and.psym.ne.quote) then
+               strcnt=1
             endif
+c            if (bcount.ne.0) then
+c               pchar=lin(lpt(3)-2)
+c               if(abs(pchar).eq.blank) strcnt=1
+c            endif
          else if(sym .eq. name.and.bcount.eq.0) then
             if(eqid(syn,ennd)) then
                if(clcnt.eq.0) goto 20

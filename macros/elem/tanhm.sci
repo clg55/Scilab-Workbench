@@ -1,5 +1,6 @@
 function x=tanhm(a)
 //Matrix wise Hyperbolic tangent
+// Copyright INRIA
 if a==[] then x=[],return,end
 [m,n]=size(a)
 if m<>n then error(20),end

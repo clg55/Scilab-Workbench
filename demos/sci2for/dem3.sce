@@ -1,4 +1,5 @@
 // function definition
+// Copyright INRIA
 deff('[x]=t3(a,b,c,d)','x=[a;c]/[a b;c d]*3.5','n')
 
 // define type and dimension of the input args

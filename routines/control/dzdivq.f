@@ -22,6 +22,7 @@ c     - tv. contient les coeff. du nouveau quotient.
 c     - tr. ceux du nouveau reste de degre toujours nq-1.
 c
 c     --------------------------
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
       dimension tv(0:*),tq(0:*)
 c

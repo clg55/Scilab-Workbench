@@ -4,6 +4,7 @@ function [a,u]=hermit(a)
 //triangular. The output value of A is A*U.
 //Warning: Experimental version
 //!
+// Copyright INRIA
 [m,n]=size(a);if m<>n then error('square matrix only!'),end
 [a,u]=htrianr(a)
 for l=n-1:-1:1

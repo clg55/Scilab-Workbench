@@ -9,7 +9,7 @@ v = intsplin([x,] s)
 .SH PARAMETERS
 .TP 10
 x
-: vector of x coordinate data. Default value is \fV1:size(y,'*')\fR
+: vector of increasing x coordinate data. Default value is \fV1:size(y,'*')\fR
 .TP
 s
 : vector of y coordinate data

@@ -37,6 +37,7 @@ c     steer i.n.r.i.a  from routine exchng
 c!
 c
 c
+c     Copyright INRIA
       integer l,na,nv
       double precision ar,ai,vr,vi
       dimension ar(na, n),  ai(na, n), vr(nv, n), vi(nv, n)

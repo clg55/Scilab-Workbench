@@ -1,44 +1,275 @@
       subroutine error(n)
-c ====================================================================
-c     gestion des erreurs
-c ====================================================================
+c     -------------------------
+c     error display and handling
+c     n : the error number
+c!
+c     Copyright INRIA
+      integer n
+      include '../stack.h'
+
+      integer num,imess,imode,errtyp,lct1
+      logical trace
 c
+      call errmds(num,imess,imode)
+      trace=.not.((num.lt.0.or.num.eq.n).and.imess.ne.0)
+c
+c     de-activate output control
+      lct1=lct(1)
+      lct(1)=0
+c
+      if(trace) then
+         if(err1.eq.0.and.err2.eq.0) then
+c     .     locate the error in the current statement
+            call errloc(n)
+c     .     output error message
+            call errmsg(n,errtyp)
+         endif
+      endif
+c
+c     handle the error
+      call errmgr(n,errtyp)
+c
+c     re-activate output control
+      lct(1)=lct1
+c
+      return
+      end
+
+
+      subroutine errmgr(n,errtyp)
+c     -------------------------
+c     this routines handle errors: recursion stack cleaning, error
+c     recovery, display of calling tree
+c     n      : the error number
+c     errtyp : error type (recoverable:0 or not:1)
+c!
+      include '../stack.h'
+      integer errtyp,n
+c
+      integer sadr
+c
+      integer num,imess,imode,lunit
+      integer l1,ilk,m,lk,km,k,ll,r,p,mode(2)
+      logical first,trace
+c
+      sadr(l)=(l/2)+1
+c
+      ll=lct(5)
+      first=.true.
+      lunit=wte
+c
+      call errmds(num,imess,imode)
+      trace=.not.((num.lt.0.or.num.eq.n).and.imess.ne.0)
+c
+      if(comp(1).ne.0) then
+         p=pt+1
+ 1001    p=p-1
+         if(p.eq.0) goto 1005
+         if(rstk(p).eq.904) then
+c     .     fermeture du fichier dans le cas getf(  'c')
+            mode(1)=0
+            call clunit(-ids(2,p),buf,mode)
+c     added 16/04/97
+            pt=p+1
+c     added 16/04/97
+         elseif(rstk(p).eq.901) then
+            if(rstk(p+1).eq.502) then
+c     .       erreur dans comp
+               pt=p+1
+            endif
+         else
+            goto 1001
+         endif
+         errtyp=0
+      endif
+ 1005 continue
+      if((num.eq.n.or.num.lt.0).and.imode.ne.0.and.imode.ne.3) then
+c     error recovery mode
+         p=pt+1
+c        . looking if error has occured in execstr deff getf or comp
+ 1006    p=p-1
+         if(p.le.errpt) goto 1007
+         if(rstk(p).eq.903) then
+c     .     error has occured in execstr
+            errtyp=0
+            pt=p+1
+         elseif(rstk(p).eq.901) then
+c     .     error has occured in deff or getf
+            errtyp=0
+            pt=p+1
+         elseif(rstk(p).eq.904) then
+c     .     error has occured in comp
+            errtyp=0
+            pt=p+1
+         else
+            goto 1006
+         endif
+
+ 1007    if(errtyp.eq.0) then
+c     .     recoverable error
+            top=toperr
+            if(err2.eq.0) then
+               err1=n
+            else
+               err1=err2
+            endif
+            err=0
+            goto 1510
+         else
+            comp(1)=0
+            comp(3)=0
+            err=n
+         endif
+      else
+         comp(1)=0
+         comp(3)=0
+         err=n
+      endif
+c
+c depilement de l'environnement
+      lct(4)=2
+      pt=pt+1
+ 1501 pt=pt-1
+      if(pt.eq.0) goto 1510
+      r=rstk(pt)
+      goto(1502,1502,1504) r-500
+      goto 1501
+c
+c     on depile une function
+ 1502 k=lpt(1)-(13+nsiz)
+      lpt(1)=lin(k+1)
+      lpt(2)=lin(k+2)
+      lpt(6)=k
+c
+c     recherche du nom de la function correspondant a ce niveau
+      lk=sadr(lin(k+6))
+      if(lk.le.lstk(top+1)) then
+         km=0
+      else
+         km=lin(k+5)-1
+      endif
+ 1503 km=km+1
+      if(km.gt.isiz)goto 1513
+      if(lstk(km).ne.lk) goto 1503
+c
+ 1513 continue
+      ilk=lin(k+6)
+      if(trace) then
+         if(istk(ilk).ne.10) then
+            if(first) then
+               buf='at line '
+               m=11
+               first=.false.
+               nlc=0
+            else
+               buf='line '
+               m=6
+               call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
+            endif
+            write(buf(m+1:m+5),'(i4)') lct(8)-nlc
+            m=m+4
+            buf(m+1:m+18)=' of function     '
+            m=m+13
+            if (km.le.isiz) call cvname(idstk(1,km),buf(m+1:m+nlgh),1)
+            m=m+nlgh
+         else
+            buf='in  execstr instruction'
+            m=26
+         endif
+         buf(m+1:m+14)=' called by :'
+         m=m+14
+         call basout(io,lunit,buf(1:m))
+         lct(8)=lin(k+12+nsiz)
+c     
+         call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
+         m=ifin-l1+1
+         if(m.gt.ll) then
+            l1=max(l1,lpt(2)-ll/2)
+            m=min(ifin-l1,ll)
+         endif
+
+         if(l1.gt.0.and.m.gt.0.and.m+l1-1.le.lsiz) then
+            call cvstr(m,lin(l1),buf(1:m),1)
+            call basout(io,lunit,buf(1:m))
+         endif
+      endif
+c
+      macr=macr-1
+      if(istk(ilk).ne.10) bot=lin(k+5)
+      goto 1501
+c
+c     on depile un exec ou une pause
+ 1504 if(rio.ne.rte) then
+c     exec
+         k=lpt(1)-(13+nsiz)
+         lpt(1)=lin(k+1)
+         lpt(2)=lin(k+4)
+         lpt(6)=k
+c
+         if (trace) then
+            if(first) then
+               buf='at line '
+               m=11
+               first=.false.
+               nlc=0
+            else
+               buf='line '
+               m=6
+            endif
+            write(buf(m+1:m+5),'(i4)') lct(8)-nlc
+            m=m+4
+            buf(m+1:m+29)=' of exec file called by :'
+            m=m+29
+            call basout(io,lunit,buf(1:m))
+            lct(8)=lin(k+12+nsiz)
+c     
+            call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
+            m=ifin-l1+1
+            if(m.gt.ll) then
+               l1=max(l1,lpt(2)-ll/2)
+               m=min(ifin-l1,ll)
+            endif
+            call cvstr(m,lin(l1),buf,1)
+            call basout(io,lunit,buf(1:m))
+         endif
+         mode(1)=0
+         call clunit(-rio,buf,mode)
+ 1505    pt=pt-1
+         if(rstk(pt).ne.902) goto 1505
+         rio=pstk(pt)
+         goto 1501
+      else
+c     pause
+         top=ids(2,pt-1)
+         goto 1510
+      endif
+c
+ 1510 continue
+      if(trace) call basout(io,lunit,' ')
+c
+      return
+      end
+
+      subroutine errloc(n)
+c     this routines shows the approximate location of the error in the
+c     current statement
+c!
       include '../stack.h'
 
       integer sadr
 
 c
       character mg*9,bel*1,line*340
-      integer errtyp,n,ll,r,p,mode(2)
-      logical first
+      integer n,ll,m,m1
       data mg /' !--error'/,bel/' '/
 c
       sadr(l)=(l/2)+1
 c
-c     set bel to ctrl-g if possible
-      first=.true.
-      num=0
-      if(errct.gt.0) then
-        num=errct-10000*int(errct/10000)
-        imode=errct/10000
-       else if(errct.lt.0) then
-        num=-1
-        imode=-errct/10000
-      endif
-      imess=imode/8
-      imode=imode-8*imess
-      errtyp=0
-c
       ll=lct(5)
-c     de-activate output control
-      lct1=lct(1)
-      lct(1)=0
-c
+
       lunit = wte
       m1=lpt(2)-lpt(1)
       if(m1.lt.1) m1=1
-c
-      if((num.lt.0.or.num.eq.n).and.imess.ne.0) goto 999
 c
       if(macr.eq.0.and.rio.eq.rte) goto 1000
       call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
@@ -47,25 +278,44 @@ c
          l1=max(l1,lpt(2)-ll/2)
          m=min(ifin-l1,ll)
       endif
-      m1=lpt(2)-l1
-c   ****************
-c      if(n.eq.-1) goto 999
-c   ****************
-      if(m.gt.0.and.err1.eq.0.and.err2.eq.0) then
+      m1=max(0,lpt(2)-l1)
+
+      if(m.gt.0) then
          call cvstr(m,lin(l1),line,1)
          call basout(io,lunit,line(1:max(m,1)))
       endif
  1000 line=' '
-      if(err1.eq.0.and.err2.eq.0) then
-         line(m1+1:m1+9)=mg
-         write(line(m1+11:m1+15),'(i5)') n
-         line(m1+16:m1+16)=bel
-         call basout(io,lunit,line(1:m1+16))
-         if(hio.gt.0) call basout(io,hio,line(1:m1+15))
-      else
-         goto 999
-      endif
+      line(m1+1:m1+9)=mg
+      write(line(m1+11:m1+15),'(i5)') n
+      line(m1+16:m1+16)=bel
+      call basout(io,lunit,line(1:m1+16))
+      if(hio.gt.0) call basout(io,hio,line(1:m1+15))
+      return
+      end
+
+
+      subroutine errmsg(n,errtyp)
+c     -------------------------
+c     this routine displays the error message and set if the error is
+c     recoverable by errcatch or not:
+c     errtyp=0  : recoverable error
+c     errtyp=1  : unrecoverable error
 c
+c     n : error number, if n execeeds the maximum error number this
+c         routines displays the error message contained in buf
+c!
+      include '../stack.h'
+      integer n,errtyp
+      integer lunit,sadr,nl,io
+      character line*340
+c
+      sadr(l)=(l/2)+1
+c
+      ll=lct(5)
+      lunit=wte
+      errtyp=0
+c
+
       goto (
      +   1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15,
      +  16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30,
@@ -85,11 +335,12 @@ c
      +     220,221,222,223,224,225,226,227,228,229,
      +     230,231,232,233,234,235,236,237,238,239,
      +     240,241,242,243,244,245,246,247,248,249,
-     +     250),n-199
+     +     250,251,252,253,254,255,256,257,258,259,
+     +     260),n-199
 
       goto 998
 c
-    1 call basout(io,lunit,'incorrect multiple assignment')
+    1 call basout(io,lunit,'incorrect assignment')
       go to 999
     2 call basout(io,lunit,'invalid factor')
       errtyp=1
@@ -105,6 +356,8 @@ c
     6 call basout(io,lunit,'inconsistent row/column dimensions')
       go to 999
     7 continue
+      call basout(io,lunit,
+     $     'dot cannot be used as modifier for this operator')
       go to 999
     8 call basout(io,lunit,'inconsistent addition')
       go to 999
@@ -130,10 +383,10 @@ c
       lt = err + lstk(bot)-lstk(1)
       call basout(io,lunit,'stack size exceeded!'//
      &     ' (Use stacksize function to increase it)')
-      write(buf(1:27),'(3i9)') lb,lt,lstk(isiz)-lstk(1)+1
-      call basout(io,lunit,'Memory used for variables :'//buf(1:9))
-      call basout(io,lunit,'Intermediate memory needed:'//buf(10:18))
-      call basout(io,lunit,'Total  memory available   :'//buf(19:27))
+      write(buf(1:40),'(4i10)') lb,lt,lstk(isiz)-lstk(1)+1
+      call basout(io,lunit,'Memory used for variables :'//buf(1:10))
+      call basout(io,lunit,'Intermediate memory needed:'//buf(11:20))
+      call basout(io,lunit,'Total  memory available   :'//buf(21:30))
       go to 999
    18 call basout(io,lunit,'too many names!')
       go to 999
@@ -154,7 +407,7 @@ c
    22 call basout(io,lunit,' recursion problems. Sorry....')
       go to 999
    23 call basout(io,lunit,
-     &     ' 1-, 2- or infinity- norm for numerical matrix only')
+     &     ' Matrix norms available are 1, 2, inf, and fro')
       go to 999
    24 call basout(io,lunit,'convergence problem...')
       go to 999
@@ -240,8 +493,7 @@ c
       goto 999
    50 call basout(io,lunit,'subroutine not found : '//buf(1:32))
       goto 999
-   51 call basout(io,lunit,
-     &     'This command cannot be compiled : '//buf(1:nlgh))
+   51 continue
       goto 999
    52 if(err.ne.1) then
          write(buf(1:3),'(i3)') err
@@ -501,8 +753,8 @@ c
      &        'a system in state space or transfer matrix form')
       endif
       goto 999
-   98 call basout(io,lunit,' variable returned by scilab external '//
-     &     'is incorrect')
+   98 call basout(io,lunit,' variable returned by scilab argument '//
+     &     'function is incorrect')
       goto 999
    99 if(err.ne.1) then
          write(buf(1:3),'(i3)') err
@@ -601,6 +853,14 @@ c
       call basout(io,lunit,'List element' //buf(1:6)//' is Undefined')
       goto 999
  118  continue
+      if(err.ne.1) then
+         write(buf(1:3),'(i3)') err
+         call basout(io,lunit,buf(1:3)//
+     +        'th argument must be a named variable not an expression')
+      else
+         call basout(io,lunit,
+     +        'argument must be a named variable not an expression ')
+      endif
       goto 999
  119  continue
       goto 999
@@ -765,7 +1025,8 @@ c
       call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
       call basout(io,lunit,
      +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
-     +     ' : wrong type argument, expecting an external')
+     +     ' : wrong type argument, expecting a function'
+     +       //' or string (external function)')
       goto 999
  212  continue
       write(buf(1:3),'(i3)') err
@@ -869,22 +1130,34 @@ C     errors from semidef
          call basout(io,lunit,'semidef fails')
       goto 999
  231  continue
+      call basout(io,wte,'First argument must be a single string')
       goto 999
  232  continue
+      call basout(io,wte,'Entry name not found')
       goto 999
  233  continue
+      call basout(io,wte,'Maximum number of dynamic interfaces '//
+     &     'reached')
       goto 999
  234  continue
+      call basout(io,wte,'link: expecting more than one argument')
       goto 999
  235  continue
+      call basout(io,wte,'link: problem with one of the entry point')
       goto 999
  236  continue
+      call basout(io,wte,'link: the shared archive was not loaded') 
       goto 999
  237  continue
+      call basout(io,wte,'link: Only one entry point allowed '//
+     &     'On this operating system')
       goto 999
  238  continue
+      call basout(io,wte,'link: First argument  cannot be a number') 
       goto 999
  239  continue
+      call basout(io,wte,'You cannot link more functions, '//
+     &     'maxentry reached')
       goto 999
  240  continue
       l1=lnblnk(buf)
@@ -913,6 +1186,14 @@ C     errors from semidef
  247  continue
       goto 999
  248  continue
+      if(err.ne.1) then
+         write(buf(1:3),'(i3)') err
+         call basout(io,lunit,buf(1:3)//
+     +        'th argument is not a valid variable name')
+      else
+         call basout(io,lunit,
+     +        'argument is not a valid variable name')
+      endif
       goto 999
  249  continue
       if(err.ne.1) then
@@ -929,6 +1210,39 @@ C     errors from semidef
       call basout(io,lunit
      $     ,'Recursive extraction is not valid in this context')
       goto 999
+
+
+ 251  continue
+      call basout(io,lunit,'bvode: ipar dimensioned at least 11')
+      goto 999
+ 252  continue
+      call basout(io,lunit,'bvode: ltol must be of size ipar(4)')
+      goto 999
+ 253  continue
+      call basout(io,lunit,'bvode: fixpnt must be of size ipar(11)')
+      goto 999
+ 254  continue
+      call basout(io,lunit,'bvode: ncomp < 20 requested ')
+      goto 999
+ 255  continue
+      call basout(io,lunit,'bvode: m must be of size ncomp')
+      goto 999
+ 256  continue
+      call basout(io,lunit,'bvode: sum(m) must be less than 40')
+      goto 999
+ 257  continue
+      call basout(io,lunit,'bvode: sum(m) must be less than 40')
+
+      goto 999
+ 258  continue
+      call basout(io,lunit,'bvode: input data error')
+      goto 999
+ 259  continue
+      call basout(io,lunit,'bvode: no. of subintervals exceeds storage')
+      goto 999
+ 260  continue
+      call basout(io,lunit,'bvode: Th colocation matrix is singular')
+      goto 999
 c
 c
 c---------------------------------------------------------------------
@@ -936,187 +1250,28 @@ c---------------------------------------------------------------------
 c     message d'erreur soft
       call basout(io,lunit,buf(1:80))
 c
- 999  continue
-      if(comp(1).ne.0) then
-         p=pt+1
- 1001    p=p-1
-         if(p.eq.0) goto 1005
-         if(rstk(p).eq.904) then
-c     .     fermeture du fichier dans le cas getf(  'c')
-            mode(1)=0
-            call clunit(-ids(2,p),buf,mode)
-c     added 16/04/97
-            pt=p+1
-c     added 16/04/97
-         elseif(rstk(p).eq.901) then
-            if(rstk(p+1).eq.502) then
-c     .       erreur dans comp
-               pt=p+1
-            endif
-         else
-            goto 1001
-         endif
-         errtyp=0
+ 999  return
+      end
+
+      subroutine errmds(num,imess,imode)
+c     -------------------------
+c     this routine extract error modes out of errct variable
+c     imess:  if 0 error message is displayed
+c     imode:  error recovery mode
+c     num  : error to catch, if num=-1 all errors are catched
+      include '../stack.h'
+      integer num,imode,imess
+c
+      num=0
+      if(errct.gt.0) then
+        num=errct-100000*int(errct/100000)
+        imode=errct/100000
+       else if(errct.lt.0) then
+        num=-1
+        imode=-errct/100000
       endif
- 1005 continue
-      if((num.eq.n.or.num.lt.0).and.imode.ne.0.and.imode.ne.3) then
-c     error recovery mode
-         p=pt+1
-c        . looking if error has occured in execstr deff getf or comp
- 1006    p=p-1
-         if(p.le.errpt) goto 1007
-         if(rstk(p).eq.903) then
-c     .     error has occured in execstr
-            errtyp=0
-            pt=p+1
-         elseif(rstk(p).eq.901) then
-c     .     error has occured in deff or getf
-            errtyp=0
-            pt=p+1
-            goto 1006
-         elseif(rstk(p).eq.904) then
-c     .     error has occured in comp
-            errtyp=0
-            pt=p+1
-            goto 1006
-         endif
- 1007    if(errtyp.eq.0) then
-c     .     recoverable error
-            top=toperr
-            if(err2.eq.0) then
-               err1=n
-            else
-               err1=err2
-            endif
-            err=0
-            goto 1510
-         else
-            comp(1)=0
-            comp(3)=0
-            err=n
-         endif
-      else
-         comp(1)=0
-         comp(3)=0
-         err=n
-      endif
-c
-c depilement de l'environnement
-      lct(4)=2
-      pt=pt+1
- 1501 pt=pt-1
-      if(pt.eq.0) goto 1510
-      r=rstk(pt)
-      goto(1502,1502,1504) r-500
-      goto 1501
-c
-c     on depile une function
- 1502 k=lpt(1)-(13+nsiz)
-      lpt(1)=lin(k+1)
-      lpt(2)=lin(k+2)
-      lpt(6)=k
-c
-c     recherche du nom de la function correspondant a ce niveau
-      lk=sadr(lin(k+6))
-      if(lk.le.lstk(top+1)) then
-         km=0
-      else
-         km=lin(k+5)-1
-      endif
- 1503 km=km+1
-      if(km.gt.isiz)goto 1513
-      if(lstk(km).ne.lk) goto 1503
-c
- 1513 continue
-      ilk=lin(k+6)
-      if(istk(ilk).ne.10) then
-         if(first) then
-            buf='at line '
-            m=11
-            first=.false.
-         else
-            buf='line '
-            m=6
-            call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
-         endif
-         write(buf(m+1:m+5),'(i4)') lct(8)-nlc
-         m=m+4
-         buf(m+1:m+18)=' of function     '
-         m=m+13
-         if (km.le.isiz) call cvname(idstk(1,km),buf(m+1:m+nlgh),1)
-         m=m+nlgh
-      else
-         buf='in  execstr instruction'
-         m=26
-      endif
-      buf(m+1:m+14)=' called by :'
-      m=m+14
-      call basout(io,lunit,buf(1:m))
-      lct(8)=lin(k+12+nsiz)
-c
-      call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
-      m=ifin-l1+1
-      if(m.gt.ll) then
-         l1=max(l1,lpt(2)-ll/2)
-         m=min(ifin-l1,ll)
-      endif
-       if(l1.gt.0.and.m.gt.0.and.m+l1-1.le.lsiz) then
-          call cvstr(m,lin(l1),buf(1:m),1)
-          call basout(io,lunit,buf(1:m))
-       endif
-c
-      macr=macr-1
-      if(istk(ilk).ne.10) bot=lin(k+5)
-      goto 1501
-c
-c     on depile un exec ou une pause
- 1504 if(rio.ne.rte) then
-c     exec
-         k=lpt(1)-(13+nsiz)
-         lpt(1)=lin(k+1)
-         lpt(2)=lin(k+4)
-         lpt(6)=k
-c
-         if(first) then
-            buf='at line '
-            m=11
-            first=.false.
-         else
-            buf='line '
-            m=6
-         endif
-         write(buf(m+1:m+5),'(i4)') lct(8)-nlc
-         m=m+4
-         buf(m+1:m+29)=' of exec file called by :'
-         m=m+29
-         call basout(io,lunit,buf(1:m))
-         lct(8)=lin(k+12+nsiz)
-c
-         call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
-         m=ifin-l1+1
-         if(m.gt.ll) then
-            l1=max(l1,lpt(2)-ll/2)
-            m=min(ifin-l1,ll)
-         endif
-         call cvstr(m,lin(l1),buf,1)
-         call basout(io,lunit,buf(1:m))
-         mode(1)=0
-         call clunit(-rio,buf,mode)
- 1505    pt=pt-1
-         if(rstk(pt).ne.902) goto 1505
-         rio=pstk(pt)
-         goto 1501
-      else
-c     pause
-         top=ids(2,pt-1)
-         goto 1510
-      endif
-c
- 1510 continue
-      if(imess.eq.0) call basout(io,lunit,' ')
-c
-c     re-activate output control
-      lct(1)=lct1
+      imess=imode/8
+      imode=imode-8*imess
 c
       return
       end

@@ -19,6 +19,7 @@ c                  si egal a 0: ascii-->code
 c
 c!
 c
+c     Copyright INRIA
       include '../stack.h'
       integer eol
 c
@@ -34,9 +35,9 @@ c     conversion code ->ascii
       if(abs(m).gt.csiz) m=99
       if(m.eq.99) goto 10
       if(m.lt.0) then
-                     str(j:j)=alfb(abs(m)+1)
-                 else
-                     str(j:j)=alfa(m+1)
+         str(j:j)=alfb(abs(m)+1)
+      else
+         str(j:j)=alfa(m+1)
       endif
       goto 30
    10 str(j:j)='!'

@@ -122,7 +122,7 @@ Widget w;
 XtPointer call_data, client_data;
 {
     fprintf(stdout, "Button Selected.\n");
-    popup_file_panel(w);
+    popup_file_panel(w,"File Menu");
 
 }
 

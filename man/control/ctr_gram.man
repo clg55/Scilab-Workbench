@@ -27,7 +27,7 @@ discrete time system and \fV"c"\fR for continuous time (default case).
 .IG 
 .nf
                   /+inf                             ---+inf
-                  [  At  ' A't                      \   k      k
+                  [  At  ' A't                      \\   k      k
              Gc = | e  BB e   dt               Gc =  > A BB' A'
                   ]                                 /
                  /0                                 ---0

@@ -1,3 +1,4 @@
+// Copyright INRIA
  
 mode(5)
 lines(0)

@@ -40,6 +40,7 @@ function [X,dims,J,Y,k,Z]=cainv(Sl,alfa,beta)
 // with Xp=X' and [X,dims,J,Y,k,Z]=cainv(syslin('c',A,G,C));
 // [Xp(1:dimSg,:);C]*W = [0 | *] one has
 // H*W = [0 | *]  (with at least as many columns as above).
+// Copyright INRIA
 [LHS,RHS]=argn(0);
 if RHS==1 then alfa=-1;beta=-1;end
 if RHS==2 then beta=-1;end

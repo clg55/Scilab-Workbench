@@ -1,3 +1,4 @@
+# Copyright INRIA
 FFLAGS = $(FC_OPTIONS)
 CFLAGS = $(CC_OPTIONS)
 RESOURCES= routines/wsci/Rscilab.o

@@ -1,6 +1,7 @@
 function x=g_int(a)
 // only to be called by function int
 //!
+// Copyright INRIA
 select type(a)
 case 2 then 
   x=int(a)

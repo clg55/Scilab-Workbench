@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /********************************************************
  * choice.c The XWindow part 
  * All the generic stuff for dealing with choice widgets.
@@ -8,14 +9,14 @@
 
 extern int set_cmap _PARAMS((Window w)); 
 extern void DisplayInit _PARAMS((char *string,Display **dpy,Widget *toplevel));
-extern int ok_prep  _PARAMS((char *filemask,char *dirname,int flag,int *err));
+extern int ok_prep  _PARAMS((char *filemask,char *dirname,char *title,int flag,int *err));
 extern int ok_end  _PARAMS((void));
 extern int w_init  _PARAMS((  Widget w));
 extern int set_temp_wf_cursor _PARAMS((Cursor cursor));
 extern void Rescan    _PARAMS( (Widget widget, XEvent*	event,
 				String* params,    Cardinal* num_params));
 extern int reset_wf_cursor  _PARAMS((void));
-extern int create_file_panel  _PARAMS((  Widget w));
+extern int create_file_panel  _PARAMS((  Widget w, char * description));
 extern int getMenuBut0  _PARAMS((  Widget *w));
 
 extern void C2F(cvstr)();
@@ -36,8 +37,8 @@ static int error=0;
  * The main function to activate the file menu 
  **********************************************************/
 
-int GetFileWindow(filemask,file,dirname,flag,ierr)
-     char *filemask,*dirname,**file;
+int GetFileWindow(filemask,file,dirname,flag,ierr,title)
+     char *filemask,*dirname,**file,*title;
      int flag,*ierr;
 {
   int err=0;
@@ -51,8 +52,8 @@ int GetFileWindow(filemask,file,dirname,flag,ierr)
       /* we are in scilab -nw */
       toplevel = toplevel1;
     }
-  popup_file_panel1(toplevel);
-  ok_prep(filemask,dirname,flag,&err);
+  popup_file_panel1(toplevel,title);
+  ok_prep(filemask,dirname,title,flag,&err);
   if ( err != 1 )   XtSpecialLoop();
   ok_end();
   XtSetSensitive(toplevel,True);
@@ -117,15 +118,16 @@ int write_getfile(dir,file)
  * Activate the file menu 
  **********************************************************/
 
-int popup_file_panel1(w)
+int popup_file_panel1(w,description)
     Widget	    w;
+     char *description;
 {
     extern Atom     wm_delete_window;
     w_init(w);
     set_temp_wf_cursor(wait_wf_cursor);
     XtSetSensitive(w, False);
     if (!file_popup)
-	create_file_panel(w);
+	create_file_panel(w,description);
     else
       Rescan((Widget) 0, (XEvent*) 0, (String*) 0, (Cardinal*) 0);
 

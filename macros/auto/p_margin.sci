@@ -1,5 +1,6 @@
 function [phm,fr]=p_margin(h)
 
+// Copyright INRIA
 //-compat type(h)<>15 retained for list/tlist compatibility
 if type(h)<>15&type(h)<>16 then error(97,1),end
 flag=h(1)
@@ -18,7 +19,7 @@ w=roots(real(niw*conj(niw)-diw*conj(diw)))
 //recherche des racines reelles positives
 eps=1.e-7
 ws=w(find((abs(imag(w))<eps)&(real(w)>0)))
-if ws=[] then phm=[],fr=[],return,end
+if ws==[] then phm=[],fr=[],return,end
 //
 f=freq(n,d,%i*ws);
 phm=atan(imag(f),real(f))

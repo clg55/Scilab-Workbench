@@ -5,6 +5,8 @@ c     {z}(i)=[b](i-1)*{s}(i), [b](i) est definie par ({y}(j),{s}(j),{z}(j)
 c     , j=1,i) et {diag}.
 c     zs(i)=<z>(i)*{s}(i)
 c
+c     Copyright INRIA
+c
       implicit double precision (a-h,o-z)
       dimension     y(nt,n),s(nt,n),z(nt,n),ys(nt),zs(nt),diag(n)
       integer  index(nt)

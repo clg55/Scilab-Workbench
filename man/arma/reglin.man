@@ -4,7 +4,7 @@
 reglin - Linear regression 
 .SH CALLING SEQUENCE
 .nf
-[a,b,sig,]=reglin(x,y,[disp])
+[a,b,sig]=reglin(x,y)
 .fi
 .SH DESCRIPTION
 solve the regression problem y=a*x+ b in the least square sense. 
@@ -23,4 +23,8 @@ y=aa*x +bb*ones(1,100)+ 0.1*rand(3,100);
 [a,b,sig]=reglin(x,y);
 maxi(abs(aa-a))
 maxi(abs(bb-b))
+// an other example : fitting a polynom 
+f=1:100; x=[f.*f; f];
+y= [ 2,3]*x+ 10*ones(f) + 0.1*rand(f);
+[a,b]=reglin(x,y)
 .fi

@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------
     Missile 
     XWindow and Postscript library for 2D and 3D plotting 
-    Copyright (C) 1990 Chancelier Jean-Philippe
+    Copyright (C) 1998 Chancelier Jean-Philippe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -32,7 +32,7 @@
 #include <stdio.h>
 
 #ifdef MAC
-#include "machine.h"
+#include "../machine.h"
 #include "periMac.h"
 #else 
 #ifdef WIN32
@@ -256,16 +256,8 @@ int C2F(dr)(x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4,lx0,lx1)
 
 void C2F(SetDriver)(x0, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
      char *x0;
-     integer *v2;
-     integer *v3;
-     integer *v4;
-     integer *v5;
-     integer *v6;
-     integer *v7;
-     double *dv1;
-     double *dv2;
-     double *dv3;
-     double *dv4;
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
 {
   switch (x0[0])
     {
@@ -295,16 +287,8 @@ void C2F(SetDriver)(x0, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
 
 void GetDriver1(str, v2, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
      char *str;
-     integer *v2;
-     integer *v3;
-     integer *v4;
-     integer *v5;
-     integer *v6;
-     integer *v7;
-     double *dv1;
-     double *dv2;
-     double *dv3;
-     double *dv4;
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
 {
   strcpy(str,DriverName);
 }

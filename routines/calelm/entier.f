@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=ENTIER,SSI=0
+c     Copyright INRIA
       subroutine entier(n,d,s)
 c!
       double precision d(*)

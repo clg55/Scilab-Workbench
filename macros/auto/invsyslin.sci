@@ -1,5 +1,6 @@
 function it=invsyslin(t)
 
+// Copyright INRIA
 //-compat type(t)<>15 retained for list/tlist compatibility
 if type(t)<>15&type(t)<>16 then error(91,1),end
 flag=t(1);

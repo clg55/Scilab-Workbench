@@ -1,4 +1,5 @@
 function [x]=input(message,flag)
+// Copyright INRIA
 [LHS,RHS]=argn(0)
 if RHS==1 then
 disp(message)

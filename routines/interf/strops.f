@@ -5,6 +5,7 @@ c   operations sur les matrices de chaines de caracteres
 c
 c ====================================================================
 c
+c     Copyright INRIA
       include '../stack.h'
 c
       integer plus,quote,equal,less,great,insert,extrac
@@ -204,6 +205,11 @@ c
 c insertion
 c
   120 continue
+      if(rhs.gt.4) then
+         top=top0
+         fin=-fin
+         return
+      endif
       if(rhs.eq.4) goto 124
 c     arg3(arg1)=arg2
 c     
@@ -228,11 +234,14 @@ c     get arg2
       il2=iadr(lstk(top))
       if(istk(il2).lt.0) il2=iadr(istk(il2+1))
       if(istk(il2).ne.10) then
+         if(istk(il2).eq.1) then
+            if(istk(il2+1)*istk(il2+2).eq.0) goto 121
+         endif
          top=top0
          fin=-fin
          return
       endif
-      m2=istk(il2+1)
+ 121  m2=istk(il2+1)
       n2=istk(il2+2)
       mn2=m2*n2
       id2=il2+4
@@ -282,7 +291,7 @@ c     .  arg3=eye,arg2=eye
       elseif(m1.lt.0) then
 c     .  arg3(:)=arg2
          if(mn2.ne.mn3) then
-            if(mn2.eq.1) goto 121
+            if(mn2.eq.1) goto 122
             call error(15)
             return
          endif
@@ -296,7 +305,7 @@ c     .  reshape arg2 according to arg3
          lstk(top+1)=sadr(il1+5+mn3+volr)
          goto 999
       endif
- 121  call indxg(il1,mn3,ili,mi,mxi,lw,1)
+ 122  call indxg(il1,mn3,ili,mi,mxi,lw,1)
       if(err.gt.0) return
       if(mi.eq.0) then
 c     .  arg3([])=arg2
@@ -504,7 +513,7 @@ c     .           call extraction
                   goto 133
                endif
             else
-               lw=lw1
+c               lw=lw1
                call indxgc(il1,m4,ili,mi,mxi,lw)
                if(err.gt.0) return
                if(mi.eq.0) then
@@ -628,11 +637,13 @@ c     get arg2
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
       n1=istk(il1+2)
 
       if(mn2.eq.0) then 
 c     .  arg2=[]
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
@@ -646,6 +657,7 @@ c     .  arg2=eye
          return
       elseif(m1.lt.0) then
 c     .  arg2(:), just reshape to column vector
+         il1=iadr(lstk(top))
          istk(il1)=10
          istk(il1+1)=mn2
          istk(il1+2)=1
@@ -664,6 +676,7 @@ c     check and convert indices variable
       endif
  131  if(mi.eq.0) then
 c     arg2([])
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
@@ -746,15 +759,18 @@ c     get arg3
 c     get arg2
       top=top-1
       il2=iadr(lstk(top))
+      if(istk(il2).lt.0) il2=iadr(istk(il2+1))
       m2=istk(il2+1)
 c     get arg1
       top=top-1
       il1=iadr(lstk(top))
+      if(istk(il1).lt.0) il1=iadr(istk(il1+1))
       m1=istk(il1+1)
       l1=sadr(il1+4)
 c
       if(mn3.eq.0) then 
 c     .  arg3=[]
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
@@ -785,11 +801,12 @@ c     perform extraction
  133  mnr=mi*nj
       if(mnr.eq.0) then 
 c     .  arg1=[] or arg2=[] 
+         il1=iadr(lstk(top))
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
          istk(il1+3)=0
-         lstk(top+1)=l1+1
+         lstk(top+1)=sadr(il1+4)+1
          goto 999
       endif
       idr=iadr(lw)

@@ -2,6 +2,8 @@
      /                  xfinal,gfinal,imp,io,retour,ntotap,nsim,
      /                  intfor,dx,eps,izs,rzs,dzs)
 c
+c     Copyright INRIA
+
       implicit double precision (a-h,o-z)
 c     parametres
       double precision  zero      , deux     , trois

@@ -26,7 +26,7 @@ extern void C2F (xscisncr) _PARAMS((char *str, integer *n, integer dummy));
 extern void C2F (xscistring) _PARAMS((char *str, int *n, long int dummy));  
 extern void C2F (xscimore) _PARAMS((int *n));  
 extern void Scisncr  _PARAMS((char *str));  
-/** extern void sciprint _PARAMS((char *fmt, ...)); **/
+extern void sciprint _PARAMS((char *fmt, ...));
 extern void Scistring _PARAMS((char *str));
 extern void Xputchar  _PARAMS((int c));  
 extern void v_write  _PARAMS((int f, char *d, int len));  

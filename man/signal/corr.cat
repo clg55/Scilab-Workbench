@@ -4,8 +4,8 @@ NAME
   corr - correlation, covariance
 
 CALLING SEQUENCE
-  [cov,mean]=corr(x,[y],nlags)
-  [cov,mean]=corr('fft',xmacro,[ymacro],n,sect)
+  [cov,Mean]=corr(x,[y],nlags)
+  [cov,Mean]=corr('fft',xmacro,[ymacro],n,sect)
 
   [w,xu]=corr('updt',x1,[y1],w0)
   [w,xu]=corr('updt',x2,[y2],w,xu)
@@ -34,16 +34,16 @@ PARAMETERS
 
   cov       : real vector, the correlation coefficients
 
-  mean      : real number or vector,  the mean of x and if given y
+  Mean      : real number or vector,  the mean of x and if given y
 DESCRIPTION
   Computes
-                  n - m - 1
+                  n - m
                    ====
-                   \                                         1
-          cov(m) =  >        (x  - xmean) (y      - ymean) * ---
-                   /           k            m + k            n-m
+                   \                                                 1
+          cov(m) =  >        (x(k)  - xmean) (y(m+k)      - ymean) * ---
+                   /                                                  n
                    ====
-                   k = 0
+                   k = 1
 
   for   m=0,..,nlag-1 and two vectors x=[x(1),..,x(n)]
    y=[y(1),..,y(n)]
@@ -52,13 +52,13 @@ DESCRIPTION
   with corr(y,x,...)
 
   Short sequences:
-  [cov,mean]=corr(x,[y],nlags) returns the first nlags correlation coeffi-
-  cients and mean = mean of x (mean of [x,y] if y is an argument).  The
+  [cov,Mean]=corr(x,[y],nlags) returns the first nlags correlation coeffi-
+  cients and Mean = mean(x) (mean of [x,y] if y is an argument).  The
   sequence x (resp. y) is assumed real, and x and y are of same dimension n.
 
   Long sequences:
 
-  [cov,mean]=corr('fft',xmacro,[ymacro],n,sect)
+  [cov,Mean]=corr('fft',xmacro,[ymacro],n,sect)
 
   Here xmacro is either
 

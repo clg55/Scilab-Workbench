@@ -1,4 +1,5 @@
 function [c,phi,flag]=min_lcost_flow1(g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>1 then error(39), end
 // check g
@@ -44,7 +45,7 @@ end
 // check demand
 demand=g('node_demand')
 if demand==[] then
-  demand=zeros(1,ma)
+  demand=zeros(1,n)
 end
 verif=find(demand<>0)
 if verif<>[] then 

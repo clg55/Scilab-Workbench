@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DSORT,SSI=0
+c     Copyright INRIA
       subroutine dsort(count,n,index)
 c
 c!purpose

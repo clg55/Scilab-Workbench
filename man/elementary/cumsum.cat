@@ -15,8 +15,8 @@ PARAMETERS
   y         : vector or matrix (real or complex)
 
 DESCRIPTION
-  For a vector or a matrix x, y=cumsum(x) (or, equivalently, y=cumsum(x,'*'))
-  returns in y the cumulative sum of all the entries of x taken columnwise.
+  For a vector or a matrix x, y=cumsum(x)  returns in y the cumulative sum of
+  all the entries of x taken columnwise.
 
   y=cumsum(x,'c') (or, equivalently, y=cumsum(x,2)) returns in y the cumula-
   tive sum of the columns of x:  y(i,:)=cumsum(x(i,:))

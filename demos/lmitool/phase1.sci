@@ -4,6 +4,7 @@ function [x,Z,z,ul,iters] = phase1(F,blck_szs,M,nu,abstol,maxiters);
 // Find an x s.t. F(x) > 0 and Tr F(x) < M 
 //    or prove that no such x exists.
 
+// Copyright INRIA
 // minimize    t 
 // subject to  F(x) + t*I = F_0 + x_1*F_1 + ... + x_m*F_m + t*I >= 0 
 //             Tr F(x) <= M
@@ -41,7 +42,7 @@ function [x,Z,z,ul,iters] = phase1(F,blck_szs,M,nu,abstol,maxiters);
 // z:         scalar part of last dual iterate, 
 // ul:        2-vector, primal and dual objective
 // iters:     scalar
-if type(F)=5 then F=full(F);end
+if type(F)==5 then F=full(F);end
 [mf,nf]=size(F)
 m = nf-1;
 if (mf ~= sum(blck_szs^2)) 

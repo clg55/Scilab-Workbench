@@ -1,4 +1,4 @@
-.TH grmenu 2 "April 1993" "Scilab Group" "Scilab Function" 
+.TH gr_menu 2 "April 1993" "Scilab Group" "Scilab Function" 
 .so ../sci.an
 .SH NAME
 gr_menu - simple interactive graphic editor

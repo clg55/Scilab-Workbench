@@ -1,4 +1,5 @@
 function [x0,kerA]=linsolve(A,b,x0)
+// Copyright INRIA
 %tol=1.D-10;
 // Finds all x solution to Ax+b=0; 
 // x0=particular solution; kerA=nullspace of A

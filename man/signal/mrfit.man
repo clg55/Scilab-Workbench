@@ -12,7 +12,7 @@ sys=mrfit(w,mag,order,weight)
 .SH PARAMETERS
 .TP 10
 w
-: positive real vector of frequencies (rad/sec)
+: positive real vector of frequencies (Hz)
 .TP
 mag
 : real vector of frequency responses magnitude (same size as \fVw\fR)
@@ -34,11 +34,12 @@ close to \fVmag\fR.
 \fVweight(i)\fR is the weigth given to \fVw(i)\fR.
 .SH EXAMPLE
 .nf
-w=0:0.1:5;s=poly(0,'s');G=2*(s^2+0.1*s+2)/(s^2+s+1)/(s^2+0.3*s+1);
-fresp=freq(G('num'),G('den'),%i*w);
+w=0.01:0.01:2;s=poly(0,'s');
+G=syslin('c',2*(s^2+0.1*s+2),(s^2+s+1)*(s^2+0.3*s+1)); // syslin('c',Num,Den);
+fresp=repfreq(G,w);
 mag=abs(fresp);
-[num,den]=mrfit(w,mag,4);
-frespfit=freq(num,den,%i*w);
+Gid=mrfit(w,mag,4);
+frespfit=repfreq(Gid,w);
 plot2d([w',w'],[mag(:),abs(frespfit(:))])
 .fi
 .SH SEE ALSO

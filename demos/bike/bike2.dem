@@ -1,4 +1,5 @@
 mode(0);
+// Copyright INRIA
 path='SCI/demos/bike/';
 xbasc();
 

@@ -3,6 +3,7 @@ c     ======================================================================
 c     put variables into storage
 c     ======================================================================
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr
       common /mprot/ macprt
@@ -34,9 +35,9 @@ c
       vt=istk(il)
       pntr=top
       if(vt.lt.0) then
-         pntr=istk(il+2)
          if(istk(il+1).lt.0) then
 c     cas des variables modifiees sur place (insertion)
+            pntr=istk(il+2)
             top=top-1
             fin=pntr
             return 

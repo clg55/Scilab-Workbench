@@ -6,7 +6,8 @@ c
 c =============================================================
 c     
 
-c
+c     Copyright INRIA
+c     
       include '../stack.h'
       integer ltyp
       integer iadr,sadr
@@ -23,10 +24,9 @@ c
       endif
 c
 c     functions/fin
-c     1        2       3       4        5     6
-c     list     tlist   rlist   lsslist glist
+c     1        2       3       4        5     6     7     
+c     list     tlist   rlist   lsslist glist lstcat mlist 
 
-c
 c
       rhs=max(0,rhs)
       if(top-rhs+lhs+1.ge.bot) then
@@ -34,7 +34,7 @@ c
          return
       endif
 c
-      goto(01,01,20,30,40) fin
+      goto(01,01,20,30,40,50,01) fin
 c
  01   lf=lstk(top+1)
       top=top+1-rhs
@@ -56,6 +56,15 @@ c     check if first element is a string
             return
          endif
          ltyp=16
+      elseif(fin.eq.7) then
+c     typed list
+c     check if first element is a string
+         if (istk(iadr(ld)).ne.10) then
+            err=1
+            call error(55)
+            return
+         endif
+         ltyp=17
       else
 c     c untyped list
          ltyp=15
@@ -68,9 +77,11 @@ c     c untyped list
       istk(il)=ltyp
       istk(il+1)=n
       istk(il+2)=1
-      do 10 i=1,n
-      istk(il+2+i)=istk(il+1+i)+lstk(top+i)-lstk(top-1+i)
-   10 continue
+      if(n.ne.0) then
+         do 10 i=1,n
+            istk(il+2+i)=istk(il+1+i)+lstk(top+i)-lstk(top-1+i)
+ 10      continue
+      endif
       lstk(top+1)=l+lf-ld
       goto 99
 c
@@ -91,6 +102,13 @@ c     glist
       call mtlist(gratyp)
       if(err.gt.0) return
       goto 99
+
+ 50   continue
+c     lstcat
+      call intlstcat()
+      if(err.gt.0) return
+      goto 99
+
 
  99   return
       end
@@ -137,38 +155,41 @@ c     set the pointers
       return
       end
 
-
       subroutine lsstyp(ivt,job)
-c     set the type  ['lss','A','B','C','X0','dt']
+c     set the type
       integer ivt(*)
       character*(*) job
       if(job.eq.'size') then
-         ivt(1)=21
+         ivt(1)=23
       else
          ivt(1)=10
          ivt(2)=1
-         ivt(3)=6
+         ivt(3)=7
          ivt(4)=0
          ivt(5)=1
          ivt(6)=4
          ivt(7)=5
          ivt(8)=6
          ivt(9)=7
-         ivt(10)=9
-         ivt(11)=11
-         ivt(12)=21
-         ivt(13)=28
+         ivt(10)=8
+         ivt(11)=10
+         ivt(12)=12
+         ivt(13)=21
          ivt(14)=28
-         ivt(15)=-10
-         ivt(16)=-11
-         ivt(17)=-12
-         ivt(18)=-33
-         ivt(19)=0
-         ivt(20)=13
-         ivt(21)=29
+         ivt(15)=28
+         ivt(16)=-10
+         ivt(17)=-11
+         ivt(18)=-12
+         ivt(19)=-13
+         ivt(20)=-33
+         ivt(21)=0
+         ivt(22)=13
+         ivt(23)=29
       endif
       return
       end
+
+
       subroutine rattyp(ivt,job)
 c     set the type ['r','num','den','dt']
       integer ivt(*)
@@ -624,3 +645,102 @@ c       'node_label','edge_label']
       endif
       return
       end
+      subroutine intlstcat
+c     catenate two or more lists
+      include '../stack.h'
+      integer iadr,sadr
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      if (rhs .lt. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .gt. 1) then
+         call error(41)
+         return
+      endif
+c
+      if(rhs.eq.1) return
+c
+      lw=lstk(top+1)
+      nel=0
+      n1=0
+      do 10 i=rhs-1,0,-1
+         il=iadr(lstk(top-i))
+         if(istk(il).ne.15.and.istk(il).ne.16.and.istk(il).ne.17) then
+            nel=nel+1
+            n1=n1+1
+         else
+            nel=nel+istk(il+1)
+         endif
+ 10   continue
+      if(istk(il).ne.15.and.istk(il).ne.16.and.istk(il).ne.17) n1=n1+3
+c     computes table of entry sizes istk(ilp+i),total size isz
+      ilp=iadr(lw)+n1
+      iln=ilp+nel
+      err=sadr(iln)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      ill=ilp-1
+      isz=0
+      do 12 i=rhs-1,0,-1
+         il=iadr(lstk(top-i))
+         if(istk(il).ne.15.and.istk(il).ne.16.and.istk(il).ne.17) then
+            ill=ill+1
+            istk(ill)=lstk(top-i+1)-lstk(top-i)
+            isz=isz+istk(ill)
+         else
+            if(istk(il+1).gt.0) then
+               do 11 j=1,istk(il+1)
+                  ill=ill+1
+                  istk(ill)=istk(il+2+j)-istk(il+1+j)
+                  isz=isz+istk(ill)
+ 11            continue
+            endif
+         endif
+ 12   continue
+c     copy entries
+      ln=sadr(iln+3+nel)
+      le=ln+isz
+      err=le-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      ill=ilp+nel
+      do 20 i=1,rhs
+         l=lstk(top+1-i)
+         il=iadr(l)
+         if(istk(il).ne.15.and.istk(il).ne.16.and.istk(il).ne.17) then
+            lo=l
+            ill=ill-1
+            n=istk(ill)
+         else
+            ill=ill-istk(il+1)
+            lo=sadr(il+3+istk(il+1))
+            n=istk(il+2+istk(il+1))-1
+         endif
+         if(n.gt.0) then
+            le=le-n
+            call dcopy(n,stk(lo),1,stk(le),1)
+         endif
+ 20   continue
+      top=top-rhs+1
+      il=iadr(lstk(top))
+      istk(il)=15
+      istk(il+1)=nel
+      istk(il+2)=1
+      do 21 i=1,nel
+         istk(il+2+i)=istk(il+1+i)+istk(ilp-1+i)
+ 21   continue
+      l=sadr(il+3+nel)
+      call dcopy(isz,stk(ln),1,stk(l),1)
+      lstk(top+1)=l+isz
+      return
+      end
+
+

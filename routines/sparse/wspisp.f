@@ -1,4 +1,5 @@
       subroutine wspisp(ma,na,ar,ai,nela,inda,i,ni,j,nj,
+c     Copyright INRIA
      $     mb,nb,br,bi,nelb,indb,mr,nr,rr,ri,nelr,indr,ptrb,
      $     ierr,ita,itb)
 c     extract a submatrix from a sparse matrix

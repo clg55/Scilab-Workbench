@@ -1,4 +1,5 @@
       subroutine dspful(ma,na,a,nela,inda,r)
+c     Copyright INRIA
       double precision a(*),r(*)
       integer ma,na,nela,inda(*)
 c

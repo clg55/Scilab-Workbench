@@ -3,14 +3,25 @@ if(1)                          Scilab Function                          if(1)
 NAME
   if then else - conditional execution
 
-DESCRIPTION
-  Conditional execution; the syntax is the following :
-  if boolean then instructions,
-  elseif expri then instructions,
+SYNTAX
+  if expr1 then statements
+  elseif expri then statements
     ....
-  [else instructions],
+  else  statements
   end
 
+DESCRIPTION
+  The if statement evaluates a logical expression and executes a group of
+  statements when the expression is true.
+
+  The  expri are expressions with numeric or boolean values. If expri are
+  matrix valued the condition is true only if all matrix entries are true.
+
+   The optional elseif and else provide for the execution of alternate groups
+  of statements. An end keyword, which matches the if, terminates the last
+  group of statements. The line structure given above is not significant, the
+  only constraint is that each then keyword must be on the same line line as
+  its corresponding if or elseif keyword.
   -    The only constraint is that each then keyword must be on the same line
        line as its corresponding if or elseif keyword.
 

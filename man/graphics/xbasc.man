@@ -1,7 +1,7 @@
 .TH xbasc 2 "April 1993" "Scilab Group" "Scilab Function" 
 .so ../sci.an
 .SH NAME
-xbasc - clear the recorded graphics associated to a window
+xbasc - clear a graphic window and erase associated recorded graphics
 .SH CALLING SEQUENCE
 .nf
 xbasc([win_num])

@@ -11,7 +11,7 @@ scs_m=list(params,o_1,....,o_n)
 .SH PARAMETERS
 .TP
 params
-: Scilab list, \fVparams=list(wpar,title,tol,tf,context))\fR
+: Scilab list, \fVparams=list(wpar,title,tol,tf,context,void,options,void,void,doc))\fR
 .RS
 .TP
 wpar
@@ -47,6 +47,23 @@ tf
 context
 : vector of character strings, Scilab instructions used to define
 Scilab variables  used in block definitions as symbolic parameters.
+.TP
+void 
+: unused fields
+.TP
+options
+: \fV list(With3D,Color3D)\fR
+.RS
+.TP
+With3D
+: boolean, true for 3D shape blocks
+.TP
+Color3D
+: vector with three entries \fV [R,G,B]\fR. defines the color of 3D shape
+.RE
+.TP
+doc
+: user defined diagram documentation structure, default value is \fV list()\fR
 .RE
 .TP
 o_i

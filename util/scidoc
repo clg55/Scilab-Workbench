@@ -1,6 +1,8 @@
 #!/bin/sh 
 # scilab batch execution for preparing the doc 
 # scidem scidir fn fileres  flag
+
+# Copyright INRIA
 echo ------------------- File $2--------------------
 SCI=$1
 export SCI

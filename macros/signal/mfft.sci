@@ -27,7 +27,8 @@ function [xk]=mfft(x,flag,dim)
 //
 //!
 //author: C. Bunks  date: 30 Sept 1988
- 
+// Copyright INRIA
+
    xk=x;
    dims=[1 matrix(dim,1,maxi(size(dim)))];
    for k=1:maxi(size(dim)),

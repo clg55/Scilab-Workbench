@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WCLMAT,SSI=0
+c     Copyright INRIA
       subroutine wclmat(ia, n, ar, ai, br, bi, ib, w, c, ndng)
 c
 c%purpose

@@ -3,10 +3,11 @@ c ======================================================================
 c     macros or list externals for corr 
 c ======================================================================
 
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
       double precision y(*)
-      character*24 namex,namey
+      character*(nlgh+1) namex,namey
       common / corrname / namex,namey
       common / corradr  / kgxtop,kgytop,ksec,kisc
       common / corrtyp /  itxcorr,itycorr

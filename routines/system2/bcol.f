@@ -2,6 +2,7 @@
 c ======================================================================
 C     Soft and Fortrans coded externals for colnew 
 c ======================================================================
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
       common/iercol/iero

@@ -1,4 +1,6 @@
  
+// Copyright INRIA
+ 
 Leps=1.e-6;
  
 //     dy1/dt = -0.04*y1 + 1.e4*y2*y3
@@ -81,8 +83,6 @@ if maxi([y1 y2]-yref) > Leps then bugmes();quit;end
 atol=[0.001,0.0001,0.001];rtol=atol;
  
 //    externals
- 
-comp(f),comp(j)
  
 //  4. type given , scilab lhs ,jacobian not passed
  
@@ -592,6 +592,6 @@ x=ode(ones(10,1),0,[1,2,3],f);
  
 //link('fexab.o','fexab')
  
-if norm(x-ode(ones(10,1),0,[1,2,3],'fexab'),1) > 1.d-10 then pause;end
+if norm(x-ode(ones(10,1),0,[1,2,3],'fexab'),1) > 1.d-10 then bugmes();quit;end
  
  

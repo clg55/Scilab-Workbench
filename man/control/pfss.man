@@ -4,11 +4,16 @@
 pfss - partial fraction decomposition
 .SH CALLING SEQUENCE
 .nf
-elts=pfss(Sl,['cord'])
+elts=pfss(Sl)
+elts=pfss(Sl,rmax)
+elts=pfss(Sl,'cord')
+elts=pfss(Sl,rmax,'cord')
 .fi
 .SH PARAMETERS
 Sl
 : \fVsyslin\fR list (state-space or transfer linear system)
+rmax
+: real number controlling the conditioning of block diagoanalization
 cord
 : character string \fV'c'\fR or \fV'd'\fR.
 .SH DESCRIPTION
@@ -27,8 +32,13 @@ block-diagonalization of the \fVA\fR matrix of \fVS\fR.
 For non proper systems the polynomial part of \fVSl\fR is put
 in the last entry of \fVelts\fR.
 .LP
-If \fVS\fR is given in transfer form, it is first converted into state-space
-and each subsystem is then converted in transfer form.
+If \fVSl\fR is given in transfer form, it is first converted into state-space
+and each subsystem \fVSi\fR is then converted in transfer form.
+.LP
+The A matrix is of the state-space is put into block diagonal form
+by function \fVbdiag\fR. The optional parameter \fVrmax\fR is sent to
+\fVbdiag\fR. If \fVrmax\fR should be set to a large number to enforce
+block-diagonalization. 
 .LP
 If the optional flag \fVcord='c'\fR is given the elements in \fVelts\fR
 are sorted according to the real part (resp. magnitude if \fVcord='d'\fR)

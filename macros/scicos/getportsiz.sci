@@ -1,4 +1,5 @@
 function sz=getportsiz(o,prt_number,typ)
+// Copyright INRIA
 sz=[]
 typs=['in','out','clkin','clkout']
 k=find(typ==typs)+1

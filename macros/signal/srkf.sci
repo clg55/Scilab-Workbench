@@ -13,7 +13,8 @@ function [x1,p1]=srkf(y,x0,p0,f,h,q,r)
 //        :at t=1 based on data up to t=0
 //!
 // author: C. Bunks  date: 9 August 1988
- 
+// Copyright INRIA
+
    n=maxi(size(x0));
    p=maxi(size(y));
  

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /* SCILAB - win/wgetfile.c 
  *   Jean-Philippe Chancelier 
  * A terminer 
@@ -14,8 +15,8 @@
  * The main function to activate the file menu 
  **********************************************************/
 
-int GetFileWindow(filemask,szFile,dirname,flag,ierr)
-     char *filemask,*dirname,**szFile;
+int GetFileWindow(filemask,szFile,dirname,flag,ierr,title)
+     char *filemask,*dirname,**szFile,*title;
      int flag,*ierr;
 {
   int rep,i;
@@ -23,9 +24,12 @@ int GetFileWindow(filemask,szFile,dirname,flag,ierr)
   char *szTitle;
   char *szFileTitle;
   char *szFilter;
-  if ( (szTitle = LocalAllocPtr(LPTR, MAXSTR+1)) == (char *)NULL 
-       || (szFileTitle = LocalAllocPtr(LPTR, MAXSTR+1)) == (char *)NULL
-       || (szFilter = LocalAllocPtr(LPTR, MAXSTR+1)) == (char *)NULL )
+  HWND hwndOwner ;
+  if ( (hwndOwner = GetActiveWindow()) == NULL) 
+    hwndOwner =  textwin.hWndParent;
+  if ( (szTitle = MALLOC((MAXSTR+1)*sizeof(char))) == (char *)NULL 
+       || (szFileTitle = MALLOC((MAXSTR+1)*sizeof(char))) == (char *)NULL
+       || (szFilter = MALLOC((MAXSTR+1)*sizeof(char))) == (char *)NULL )
     {
       Scistring("Malloc : No more place");
       *ierr = 1;
@@ -38,7 +42,7 @@ int GetFileWindow(filemask,szFile,dirname,flag,ierr)
       *ierr = 1;
       return(1);
     }
-  strncpy(szTitle,"Choose File name",MAXSTR);
+  strncpy(szTitle,title,MAXSTR);
   strcpy(szFilter,"Default (");
   strcat(szFilter,filemask);
   strcat(szFilter,")");
@@ -59,7 +63,7 @@ int GetFileWindow(filemask,szFile,dirname,flag,ierr)
   /* clear the structrure */
   memset(&ofn, 0, sizeof(OPENFILENAME));
   ofn.lStructSize = sizeof(OPENFILENAME);
-  ofn.hwndOwner = textwin.hWndParent;
+  ofn.hwndOwner = hwndOwner ;
   ofn.lpstrFilter = szFilter;
   ofn.nFilterIndex = 1;
   ofn.lpstrFile = *szFile;

@@ -11,6 +11,7 @@ function [gm]=cfspec(g)
 //  (poles and zeros of g are symmetric wrt imaginary axis))
 //- g(+oo) = D is positive definite.
 //!
-if type(g)=1 then gm=chol(g),return,end,
+// Copyright INRIA
+if type(g)==1 then gm=chol(g),return,end,
 gm=fspec(g'),
 gm=gm'

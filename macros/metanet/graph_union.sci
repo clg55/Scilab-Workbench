@@ -1,4 +1,5 @@
 function [g2]=graph_union(g,g1)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>2 then error(39), end
 //check g and g1

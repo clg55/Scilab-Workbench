@@ -1,10 +1,10 @@
       subroutine dmrdsp(mpn,dn,mpd,dd,nl,mm,nn,var,lvar,maxc,mode,ll,
-     1     lunit,cw,iw)
-c     !but 
+     1    lunit,cw,iw)
+c!but 
 c     dmpdsp ecrit une matrice polynomiale (ou un polynome) sous
 c     la forme d'un tableau de polynomes, avec gestion automatique de
 c     l'espace disponible.
-c     !listed'appel
+c!liste d'appel
 c     
 c     subroutine dmrdsp(mpn,dn,mpd,dd,nl,m,n,var,lvar,maxc,mode,ll,
 c     1 lunit,cw,iw)
@@ -35,9 +35,11 @@ c     lunit : etiquette logique du support d'edition
 c     cw : chaine de caracteres de travail de longueur au moins ll*2
 c     iw : tableau de travail entier de taille au moins egale a
 c     n*(4+m)+1+dn(n*m+1)+dd(n*m+1)
-c     !origine
+c!origine
 c     s. steer inria 1986
-c     !    
+c     Copyright INRIA
+
+c!    
 c     
       double precision mpn(*),mpd(*),a
       integer dd(*),dn(*),iw(*),maxc,mode

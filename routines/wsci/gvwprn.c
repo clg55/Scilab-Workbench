@@ -22,6 +22,12 @@
 #include "wresource.h"
 #include "wcommon.h"
 
+/** 
+  Warning : Remove AbortPrinter from 
+  b18/H-i386-cygwin32/i386-cygwin32/include/Windows32/Functions.h
+  for gc-win32 
+  **/
+
 #ifdef GVW_ALONE
 /* standalone executable for print spool */
 /* get a filename and spool it for printing */

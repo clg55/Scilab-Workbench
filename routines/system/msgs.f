@@ -2,6 +2,7 @@
 c ======================================================================
 c     Base de donnee des messages
 c ======================================================================
+c     Copyright INRIA
       include '../stack.h'
       character ch*4,line*140
       integer p,sadr
@@ -17,8 +18,10 @@ c
      &     141,142,143,144,145,146,147,148,149,150,
      &     151,152,153,154,155,156,157,158,159,160,
      &     161,162,163,164,165,166,167,168,169,170,
-     &     171,172,173,174,175,176,177,178,179,180),n 
-
+     &     171,172,173,174,175,176,177,178,179,180,
+     &     181,182,183,184,185,186,187,188,189,190,
+     &     191,192,193,194,195,196,197,198,199,200,
+     &     201,202,203,204,205,206,207,208,209,210) n
  101  continue
       call  basout(io,wte,' Warning:')
       call basout(io,wte,'  Non convergence in the QZ algorithm.')
@@ -66,9 +69,10 @@ c---------------------- message de matlu et matnew---------------------
      +     ' results may be inaccurate. rcond ='//buf(1:13))
       goto 9999
 c----------------------------------------------------------------------
-c---------------------- message de matopt -----------------------------
+c---------------------- message d'obsolescence -----------------------------
  107  continue
-
+      call basout(io,wte,' Warning: obsolete use of = instead of ==')
+      call showstack()
       goto 9999
  108  continue
       goto 9999
@@ -76,6 +80,8 @@ c---------------------- message de matopt -----------------------------
       goto 9999
  110  continue
       goto 9999
+c----------------------------------------------------------------------
+c---------------------- message de matopt -----------------------------
  111  continue
       call basout(io,wte,'  Quapro encounters cycles on degenerate'//
      $     ' point')
@@ -187,10 +193,10 @@ c---------------------- message de comand -----------------------------
       call basout(io,wte,'your variables are...')
       goto 9999
  139  continue
-      call basout(io,wte,' using '//buf(1:7)//
-     &     ' elements  out of '//buf(8:14)//'.')
-      call basout(io,wte,'          and '//buf(15:21)//
-     &     ' variables out of '//buf(22:28))
+      call basout(io,wte,' using '//buf(1:10)//
+     &     ' elements  out of '//buf(11:20)//'.')
+      call basout(io,wte,'          and '//buf(21:30)//
+     &     ' variables out of '//buf(31:40))
       goto 9999
  140  continue
       call basout(io,wte,'System functions:')
@@ -285,8 +291,10 @@ c---------------------- message for arl2 -----------------------------
      $     '          is obsolete. Use tlist')
       goto 9999
  163  continue
+      call basout(io,wte ,'Warning :division by zero...')
       goto 9999
  164  continue
+      call basout(io,wte,'Warning :singularity of log or tan function')
       goto 9999
  165  continue
       goto 9999
@@ -315,8 +323,8 @@ c---------------------- message for ODE -----------------------------
       call basout(io,wte,' Warning: integration up to tcrit')
       goto 9999
  174  continue
-      call basout(io,wte,' Warning: integration not completed!
-     $    check tolerance parameters or step size')
+      call basout(io,wte,' Warning: integration not completed! '//
+     $    'check tolerance parameters or step size')
       goto 9999
  175  continue
       call basout(io,wte,' Warning: Jacobian external is given, but ')
@@ -340,9 +348,81 @@ c     ==============================================================
  180  continue
       call basout(io,wte,' Warning: function is already compiled')
       goto 9999
+c----------------------------------------------------------------------
+c---------------------- message for intg int2d and int3d--------------- 
+ 181  continue
+      call basout(io,wte
+     $     ,'int2d: termination for lack of space to divide triangle')
+      goto 9999
+ 182  continue
+      call basout(io,wte,'int2d: termination because of roundoff noise')
+      goto 9999
+ 183  continue
+      call basout(io,wte
+     $     ,'int2d: termination for relative error <5.0*%eps')
+      goto 9999 
+ 184  continue
+      call basout(io,wte
+     $     ,'int2d: termination: function evaluations > MEVALS')
+      goto 9999
+ 185  continue
+      call basout(io,wte
+     $     ,'int3d:maxpts was too small to obtain the required accuracy'
+     $     )
+      goto 9999
+ 186  continue
+      goto 9999
+ 187  continue
+      goto 9999
+ 188  continue
+      goto 9999
+ 189  continue
+      goto 9999
+ 190  continue
+      goto 9999
+ 191  continue
+      goto 9999
+ 192  continue
+      goto 9999
+ 193  continue
+      goto 9999
+ 194  continue
+      goto 9999
+ 195  continue
+      goto 9999
+ 196  continue
+      goto 9999
+ 197  continue
+      goto 9999
+ 198  continue
+      goto 9999
+ 199  continue
+      goto 9999
+ 200  continue
+      goto 9999
+ 201  continue
+      goto 9999
+ 202  continue
+      goto 9999
+ 203  continue
+      goto 9999
+ 204  continue
+      goto 9999
+ 205  continue
+      goto 9999
+ 206  continue
+      goto 9999
+ 207  continue
+      goto 9999
+ 208  continue
+      goto 9999
+ 209  continue
+      goto 9999
+ 210  continue
+      goto 9999
 
-
-c     
+c
+c
  9999 continue
       call basout(io,wte,' ')
       return

@@ -39,7 +39,7 @@ response of \fVsl\fR.
 .LP
 For continous time systems \fVsl(2*%i*%pi*w)\fR is plotted.
 For discrete time system or discretized systems \fVsl(exp(2*%i*%pi*w*fd)\fR 
-is used ( \fVfd=1\fR for discrete time systems and \fVfd=sl(4)\fR for discretized systems ) 
+is used ( \fVfd=1\fR for discrete time systems and \fVfd=sl('dt')\fR for discretized systems ) 
 
 \fVsl\fR can be a continuous-time or discrete-time SIMO system (see \fVsyslin\fR).
 In case of multi-output the outputs are plotted with different

@@ -24,4 +24,5 @@ allowed to be zero.
 x=[1,%i,-1,%i]
 phasex=atan(imag(x),real(x))
 .fi
-
+.SH SEE ALSO
+tan, ieee

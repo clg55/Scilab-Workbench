@@ -1,4 +1,5 @@
       subroutine wgesl(ar,ai,lda,n,ipvt,br,bi,job)
+c     Copyright INRIA
       integer lda,n,ipvt(*),job
       double precision ar(lda,*),ai(lda,*),br(*),bi(*)
 c!purpose

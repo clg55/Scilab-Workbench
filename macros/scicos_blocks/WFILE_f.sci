@@ -1,4 +1,5 @@
 function [x,y,typ]=WFILE_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -16,9 +17,9 @@ case 'set' then
   state=model(7)
   lunit=state(2)
   fname=label(2)
-  fmt=label(3)
+  frmt=label(3)
   while %t do
-    [ok,in,fname1,fmt1,N,label]=getvalue(..
+    [ok,in,fname1,frmt1,N,label]=getvalue(..
 	'Set WFILE block parameters',..
 	['Input size';
 	'Output file name';
@@ -30,9 +31,9 @@ case 'set' then
     nin=in
 
     fname1=stripblanks(fname1)
-    fmt1=stripblanks(fmt1)
+    frmt1=stripblanks(frmt1)
     mess=[]
-    if lunit>0&min(length(fmt),1)<>min(length(fmt1),1) then
+    if lunit>0&min(length(frmt),1)<>min(length(frmt1),1) then
       mess=[mess;'You cannot swich from formatted to unformatted';
 	         'or  from unformatted to formatted when running';' ']
     end
@@ -54,7 +55,7 @@ case 'set' then
     end
 
     if ok then
-      ipar=[length(fname1);length(fmt1);0;N;str2code(fname1);str2code(fmt1)]
+      ipar=[length(fname1);length(frmt1);0;N;str2code(fname1);str2code(frmt1)]
       if prod(size(state))<>(nin+1)*N+2 then
 	state=[-1;lunit;zeros((nin+1)*N,1)]
       end
@@ -69,17 +70,17 @@ case 'set' then
   end
 case 'define' then
   in=1;nin=sum(in)
-  fmt='(7(e10.3,1x))'
+  frmt='(7(e10.3,1x))'
   fname='foo'
   lunit=0
   N=2;
   rpar=[]
-  ipar=[length(fname);length(fmt);0;N;str2code(fname);str2code(fmt)]
+  ipar=[length(fname);length(frmt);0;N;str2code(fname);str2code(frmt)]
   state=[-1;lunit;zeros((nin+1)*N,1)]
   model=list('writef',in,[],1,[],[],state,rpar,ipar,'d',[],[%t %f],' ',list())
   label=[sci2exp(in);
 	fname;
-	fmt;
+	frmt;
 	string(N)]
   gr_i=['txt=[''write to'';''output file''];';
     'xstringb(orig(1),orig(2),txt,sz(1),sz(2),''fill'')']

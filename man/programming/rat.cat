@@ -24,3 +24,8 @@ DESCRIPTION
   6*norm(X,1) is the default.  y = rat(x,tol) return the quotient N./D
 SEE ALSO
   int, round
+
+EXAMPLES
+  [n,d]=rat(%pi)
+  [n,d]=rat(%pi,1.d-12)
+  n/d-%pi

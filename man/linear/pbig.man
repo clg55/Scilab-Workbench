@@ -23,8 +23,6 @@ Q,M
 Projection on eigen-subspace associated with eigenvalues
 with real part >= \fVthres\fR (\fVflag='c'\fR) or with 
 magnitude >= \fVthres\fR (\fVflag='d'\fR).
-LPA=diag([1,2,3]);X=rand(A);A=inv(X)*A*X;
-[Q,M]=pbig(A,1.5);
 
 The projection is defined by \fVQ*M\fR, \fVQ\fR is full column rank,
 \fVM\fR is full row rank and \fVM*Q=eye\fR.

@@ -1,28 +1,40 @@
-      subroutine indxg(il,siz,ilr,mi,mx,lw,iopt)
+      subroutine indxg(il,siz,ilr,mi,mx,lw,iopt1)
 c!Purpose
 c     Converts a scilab index variable to a vector of indices
 c!Calling sequence
 c     subroutine indxg(il,siz,ilr,mi,lw,iopt)
-c     il   : beginning of a  a  scilab variable structure. 
-c     siz  : integer, matrix size, used for implicits index descriptions
-c     ilr  : adress of first elment of resulting vector of indices in
+c     il    : beginning of a  a  scilab variable structure. 
+c     siz   : integer, matrix size, used for implicits index descriptions
+c     ilr   : adress of first elment of resulting vector of indices in
 c            istk
-c     mi   : size of resulting vector of indices 
-c     mx   : maximum value of resulting vector of indices
-c     lw   : pointer to free space in stk (modified by execution)
-c     iopt : flag
-c            if iopt==0 null indices are accepted
+c     mi    : size of resulting vector of indices 
+c     mx    : maximum value of resulting vector of indices
+c     lw    : pointer to free space in stk (modified by execution)
+c     iopt1 : flag with decimal form n+10*i
+c            if n==0 null indices are accepted
 c            else null indices are rejected
+c            if i==0 
+c               implicit indices ":" gives a vector istk(ilr)=1:siz, mi=siz,mx=siz
+c            else 
+c               implicit indice ":" gives mi=-1,mx=siz
 c!
 
+c     Copyright INRIA
       include '../stack.h'
-      integer siz
+      integer siz,iopt1,iopt
       double precision e1,v(3)
       integer iadr,sadr
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
+
 c
+c     
+      impl=iopt1/10
+      iopt=iopt1-10*impl
+c
+      if(istk(il).lt.0) il=istk(il+1)
+
       if(istk(il).eq.1) then
 c     Index is a vector of scalars
          m=istk(il+1)
@@ -60,18 +72,22 @@ c     .     index is []
          elseif(m.eq.-1) then
 c     .     index is : 
             ilr=iadr(lw)
-            if(siz.gt.0) then
-               lw=sadr(ilr+siz)
-               err=lw-lstk(bot)
-               if(err.gt.0) then
-                  call error(17)
-                  return
+            if(impl.eq.0) then
+               if(siz.gt.0) then
+                  lw=sadr(ilr+siz)
+                  err=lw-lstk(bot)
+                  if(err.gt.0) then
+                     call error(17)
+                     return
+                  endif
+                  do 10 i=1,siz
+                     istk(ilr-1+i)=i
+ 10               continue
                endif
-               do 10 i=1,siz
-                  istk(ilr-1+i)=i
- 10            continue
+               mi=siz
+            else
+               mi=-1
             endif
-            mi=siz
             mx=siz
          endif
       elseif (istk(il).eq.2) then
@@ -153,14 +169,14 @@ c            call error(21)
 c            return
 c         endif
          ilr=iadr(lw)
-         lw=sadr(ilr+siz)
+         lw=sadr(ilr+m*n)
          err=lw-lstk(bot)
          if(err.gt.0) then
             call error(17)
             return
          endif
          mi=0
-         do 30 i=1,siz
+         do 30 i=1,m*n
             if(istk(il+2+i).eq.1) then
                istk(ilr+mi)=i
                mi=mi+1
@@ -201,11 +217,12 @@ c!
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
+
       call indxg(il,siz,ilr,mi,mx,lw,1)
       if(err.gt.0) return
 c     computes complement
       ilc=iadr(lw)
-      lw=sadr(ilc+mi)
+      lw=sadr(ilc+siz)
       err=lw-lstk(bot)
       if(err.gt.0) then
          call error(17)
@@ -224,7 +241,8 @@ c     computes complement
  20   continue
       mx=istk(ilc-1+k)
       mi=k
-      call icopy(mi,istk(ilc),1,istk(ilr),1)
+      ilr=ilc
+c      call icopy(mi,istk(ilc),1,istk(ilr),1)
       lw=sadr(ilr+mi)
       return
       end

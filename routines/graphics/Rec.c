@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------
     Missile 
     XWindow and Postscript library for 2D and 3D plotting 
-    Copyright (C) 1990 Chancelier Jean-Philippe
+    Copyright (C) 1998 Chancelier Jean-Philippe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-    jpc@arletty.enpc.fr 
-    Phone : 43.04.40.98 poste : 3327 
+    jpc@cergrene.enpc.fr 
 --------------------------------------------------------------------------*/
 
 
@@ -698,6 +697,42 @@ void StoreGray(name, x, y, z, n1, n2, strflag, brect, aaint)
   Scistring("\n Store Plot (storegray): No more place \n");
 }
 
+/** For matrices  z(i,j) **/
+
+void StoreGray1(name,  z, n1, n2, strflag, brect, aaint)
+     char *name;
+     double *z;
+     integer *n1;
+     integer *n2;
+     char *strflag;
+     double *brect;
+     integer *aaint;
+{
+  struct gray_rec *lplot;
+  lplot= ((struct gray_rec *) MALLOC(sizeof(struct gray_rec)));
+  if (lplot != NULL)
+    {
+      lplot->n1= *n1;
+      lplot->n2= *n2;
+      lplot->x = NULL;
+      lplot->y = NULL;
+      if ( 
+	  CopyVectC(&(lplot->name), name,((int)strlen(name))+1) &&
+	  CopyVectF(&(lplot->z), z,(*n1)*(*n2)) &&
+	  CopyVectC(&(lplot->strflag),strflag,((int)strlen(strflag))+1) &&
+	  CopyVectC(&(lplot->strflag_kp),strflag,((int)strlen(strflag))+1) &&
+	  CopyVectF(&(lplot->brect),brect,4L) &&
+	  CopyVectF(&(lplot->brect_kp),brect,4L) &&
+	  CopyVectLI(&(lplot->aaint),aaint,4)  &&
+	  CopyVectLI(&(lplot->aaint_kp),aaint,4) 
+	  ) 
+	{
+	  Store(name,(char *) lplot);
+	  return;}
+    }
+  Scistring("\n Store Plot (storegray): No more place \n");
+}
+
 
 /*---------------------------------------------------------------------
 \encadre{Le cas des champs de vecteurs}
@@ -957,6 +992,15 @@ void ShowGray(plot)
 
 }
 
+void ShowGray1(plot)
+     char *plot;
+{
+  struct gray_rec *theplot;
+  theplot=(struct gray_rec *) plot;
+  sciprint("%s \r\n",theplot->name);
+
+}
+
 void ShowParam3D(plot)
      char *plot;
 {
@@ -1031,6 +1075,7 @@ static ShowTable ShTable[] ={
     {"fac3d2",ShowFac3D},
     {"fec",ShowFec},
     {"gray",ShowGray},
+    {"gray1",ShowGray1},
     {"param3d",ShowParam3D},
     {"param3d1",ShowParam3D1},
     {"plot2d",Show2D},
@@ -1291,6 +1336,7 @@ static CleanTable CTable[] ={
     {"fac3d2",CleanFac3D},
     {"fec",CleanFec},
     {"gray",CleanGray},
+    {"gray1",CleanGray}, /** same for gray and gray1 **/
     {"param3d",CleanParam3D},
     {"param3d1",CleanParam3D1},
     {"plot2d",Clean2D},
@@ -1668,6 +1714,7 @@ static SCTable SCCTable[] ={
   {"fac3d2",SCvoid},
   {"fec", SCfec},
   {"gray", SCgray},
+  {"gray1",SCgray},
   {"param3d",SCvoid},
   {"param3d1",SCvoid},
   {"plot2d",SC2D},
@@ -1826,6 +1873,7 @@ static UnSCTable UnSCCTable[] ={
   {"fac3d2",UnSCvoid},
   {"fec", UnSCfec},
   {"gray", UnSCgray},
+  {"gray1", UnSCgray},
   {"param3d",UnSCvoid},
   {"param3d1",UnSCvoid},
   {"plot2d",UnSC2D},
@@ -2113,6 +2161,17 @@ void ReplayGray(theplot)
 }
 
 
+
+void ReplayGray1(theplot)
+     char *theplot;
+{
+  struct gray_rec *pl3d;
+  pl3d= (struct gray_rec *)theplot;
+  C2F(xgray1)(pl3d->z,&pl3d->n1,&pl3d->n2,
+	     pl3d->strflag,pl3d->brect,pl3d->aaint,0L);
+}
+
+
 void ReplayParam3D(theplot)
      char *theplot;
 {
@@ -2269,6 +2328,7 @@ static ReplayTable RTable[] ={
     {"fac3d2",ReplayFac3D2},
     {"fec",ReplayFec},
     {"gray",ReplayGray},
+    {"gray1",ReplayGray1},
     {"param3d",ReplayParam3D},
     {"param3d1",ReplayParam3D1},
     {"plot2d",Replay2D},

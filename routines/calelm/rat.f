@@ -19,6 +19,7 @@ c!origine
 c     s steer inria
 c!
 c
+c     Copyright INRIA
       double precision x,eps,z,err,dz,xn,xd,ax
       integer n,d,nmax,n0,d0,n1,d1,bm,fail
 c possibly the largest integer (hum ???)

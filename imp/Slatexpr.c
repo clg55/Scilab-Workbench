@@ -1,3 +1,5 @@
+/* Copyright INRIA */
+
 #ifdef __STDC__
 # include <stdlib.h>
 # include <stdarg.h>
@@ -11,7 +13,7 @@ char *getenv();
 #include <ctype.h>
 #include <stdio.h>
 
-#include "../routines/params.h"
+#include "../routines/machine.h"
 
 static int Sed _PARAMS((int,char *,FILE *,char *,char *,char *,char *,char *,char *));
 static void readOneLine _PARAMS((char *buff,int *stop,FILE *fd));
@@ -32,12 +34,19 @@ char * UsageStr[]={
 
 char file1[256],file2[256];
 
+#ifdef WIN32 
+extern void SciEnv(void);
+#endif 
+
 int main(argc, argv)
      int argc;
      char *argv[];
 {
   double xs=1.0,ys=1.0;
   char orientation='p';
+#ifdef WIN32 
+  SciEnv();
+#endif 
   if (argc >= 6 || argc <= 3 )
     { int i=0;
       fprintf(stderr,"Usage  : %s [-orientation] xs ys filename.ps \n",argv[0]);
@@ -241,7 +250,7 @@ double xs,ys;
   FileNameChange(filein,fileout,base,"eps");
 #ifdef EPSFIG
   fprintf(fo,"\\epsfig{file=\\Figdir %s.eps,width=%.2fpt,height=%.2fpt}\n",
-	  base,wide.high);
+	  base,wide,high);
 #else
   fprintf(fo,"%% if you want to use epsfig uncomment the following line \n");
   fprintf(fo,"%% and comment the special line \n");

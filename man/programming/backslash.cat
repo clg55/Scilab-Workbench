@@ -28,4 +28,4 @@ EXAMPLE
   A=rand(2,1)*rand(1,3); b=[1;1]; x=A\b; y=pinv(A)*b; A*x-b, A*y-b
 
 SEE ALSO
-  slash, inv, pinv, percent
+  slash, inv, pinv, percent, ieee

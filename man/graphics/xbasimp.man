@@ -15,9 +15,9 @@ filen
 : string (Postscript file name). (default value=file). The window number 
 is appended to the \fVfilen\fR.
 .TP
-flag
-: if \fVprinter\fR is present or if there's only one argument in the 
-calling sequence, the created file is printed.
+printer
+: string (Printer name). if \fVprinter\fR is present or if there's only one argument in the 
+calling sequence, the created file is printed on printer \fVprinter\fR.
 .SH DESCRIPTION
 This function will send the recorded graphics of the
 window \fVwin_num\fR in the Postscript file \fVfilen\fR

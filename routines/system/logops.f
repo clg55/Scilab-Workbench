@@ -4,6 +4,7 @@ c     effectue les test logiques entre variables
 C     This routine is no more used ?
 C     it's only here for backward compatibility with old compiled macros
 c ================================== ( Inria    ) ======================
+c     Copyright INRIA
       include '../stack.h'
 c
       logical logops

@@ -1,6 +1,8 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
+
 include ../../Makefile.incl
 
 .SUFFIXES: .sci .bin $(SUFFIXES)
@@ -8,9 +10,8 @@ include ../../Makefile.incl
 NAME = armalib
 NAM = arma
 
-MACROS = armap.sci armax.sci armax1.sci arsimul.sci arspec.sci \
-	epred.sci exar1.sci exar2.sci \
-	exar3.sci gbruit.sci narsimul.sci odedi.sci prbs_a.sci  \
-	vpmacr.sci armac.sci reglin.sci acf.sci sdiff.sci
+MACROS = armax.sci armax1.sci arsimul.sci \
+	noisegen.sci narsimul.sci prbs_a.sci  \
+	armac.sci reglin.sci acf.sci sdiff.sci epred.sci
 
 include ../Make.lib

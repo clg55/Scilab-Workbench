@@ -9,6 +9,12 @@
 #include <malloc.h>
 #endif
 
+#ifdef __MSC__ 
+/** only used for x=dir[1024] **/
+#define  getwd(x) _getcwd(x,1024)
+#endif
+
+
 #include "mysearch.h"
 #include "../machine.h"
 #include "defs.h"
@@ -16,7 +22,7 @@
 #define MAXNAM 80
 
 extern double atof();
-extern char* basename();
+extern char* my_basename();
 extern int CheckGraphName();
 extern void cerro();
 extern char* dirname();
@@ -55,11 +61,13 @@ int *default_node_diam,*default_node_border,*default_edge_width;
 int *default_edge_hi_width,*default_font_size;
 int *ndim,*ma;
 {
-#ifdef __MSC__
+  /** #ifdef __MSC__
   return;
-#else 
+  #else  **/
   FILE *fg;
+#ifndef __MSC__
   DIR *dirp;
+#endif
   char fname[2 * MAXNAM];
   char line[5 * MAXNAM];
   char strname[MAXNAM], head_name[MAXNAM], tail_name[MAXNAM];
@@ -71,25 +79,25 @@ int *ndim,*ma;
   char **lar;
 
   path[*lpath] = '\0';
-
+#ifndef __MSC__ 
   if ((dirp=opendir(path)) != NULL) {
     sprintf(description,"\"%s\" is a directory",path);
     cerro(description);
     closedir(dirp);
     return;
   }
-  
+#endif
   if (dirname(path) == NULL) getwd(dir);
   else strcpy(dir,dirname(path));
-
+#ifndef __MSC__ 
   if ((dirp=opendir(dir)) == NULL) {
     sprintf(description,"Directory \"%s\" does not exist",dir);
     cerro(description);
     return;
   }
   closedir(dirp);
-  
-  pname = StripGraph(basename(path));
+#endif
+  pname = StripGraph(my_basename(path));
 
   *lname = strlen(pname);
 
@@ -99,13 +107,13 @@ int *ndim,*ma;
     return;
   }
   strcpy(*name,pname);
-
+#ifndef __MSC__
   if(!CheckGraphName(*name,dir)) {
     sprintf(description,"Graph file \"%s/%s.graph\" does not exist",dir,*name);
     cerro(description);
     return;
   }
-  
+#endif  
   isize = sizeof(int);
   dsize = sizeof(double);
 
@@ -383,5 +391,5 @@ int *ndim,*ma;
   }
   myhdestroy();
   fclose(fg);
-#endif /**  __MSC__ **/
+  /** #endif**/ /**  __MSC__ **/
 }

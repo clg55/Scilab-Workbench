@@ -15,6 +15,7 @@ c         le degre est inferieur a ns
 c
 c     sortie  : y0. contient la valeur du produit scalaire recherche.
 c!
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension ts(0:ns),tr(0:ns),x(0:40)
       dimension tg(0:ng)

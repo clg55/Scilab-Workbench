@@ -1,5 +1,6 @@
       subroutine wpofa(ar,ai,lda,n,info)
 c!
+c     Copyright INRIA
       double precision ar(lda,*),ai(lda,*)
       double precision s,tr,ti,wdotcr,wdotci
       do 30 j = 1, n

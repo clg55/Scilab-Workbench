@@ -8,5 +8,5 @@ z3=z1max:-(z1max/100):0;z3=z3+%i*z2max*ones(z3);
 plot(ell1mag(eps,m1,[z1,z2,z3]));
 omc=prod(size(z1));
 omr=prod(size([z1,z2]));
-plot2d([omc,omc]',[0,1]',[-2],"000");
-plot2d([omr,omr]',[0,1]',[-2],"000");
+plot2d([omc,omc]',[0,1]',[2],"000");
+plot2d([omr,omr]',[0,1]',[2],"000");

@@ -2,6 +2,7 @@ function []=lotest(f_l,odem,xdim,npts,pinit)
 //[]=lotest(f_l,[odem,xdim,npts,pinit])
 // Integration of the lorenz system 
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 if rhs <=3, npts=[1000,0.01],end;
 if rhs <=2 then xdim=[-20,20,-30,30,0,50];end;
@@ -31,7 +32,7 @@ function []=ilo(sig,ro,beta)
 // par defaut
 //!
 [lhs,rhs]=argn(0)
-if rhs=0,sig=10,ro=28,beta=8/3;end
+if rhs==0,sig=10,ro=28,beta=8/3;end
 [sig,ro,beta]=resume(sig,ro,beta)
 
 
@@ -43,7 +44,7 @@ function []=ilof(sig,ro,beta)
 // par defaut
 //!
 [lhs,rhs]=argn(0)
-if rhs=0,sig=10,ro=28,beta=8/3;end;
+if rhs==0,sig=10,ro=28,beta=8/3;end;
 fort('loset',sig,1,'r',ro,2,'r',beta,3,'r','sort');
 
 

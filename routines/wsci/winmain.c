@@ -72,6 +72,9 @@ LPSTR szModuleName;
 LPSTR szMenuName;
 LPSTR szGraphMenuName;
 
+int   SciPlatformId ;
+
+
 #define MENUNAME "wscilab.mnu"
 #define GRAPHMENUNAME "wgscilab.mnu"
 
@@ -199,11 +202,44 @@ static void SciEnv ()
 	{  sprintf(env,"PWD=%s",p); putenv(env); }
       if ( ( p1 = getenv("MANCHAPTERS"))  == (char *) 0 )
 	{
-	  strcat(p,"/man/Chapters");
-	  sprintf(env,"MANCHAPTERS=%s",p); putenv(env); 
+	  sprintf(env,"MANCHAPTERS=%s/man/Chapters",p); putenv(env); 
 	}
+      /** for PVM **/
+      for (p1 = p ; *p1; p1++)
+	{
+	  if (*p1 == '/') *p1 = '\\';
+	}
+      if ( ( p1 = getenv("PVM_ROOT"))  == (char *) 0 )
+	{  sprintf(env,"PVM_ROOT=%s\\pvm3",p); putenv(env); }
+      if ( ( p1 = getenv("PVM_TMP")) == (char *) 0 )
+	{if ( (p1 = getenv("TEMP")) == (char *) 0 ) {
+	  sprintf(env,"PVM_TMP=c:\\tmp"); putenv(env);
+	} else {
+	  sprintf(env,"PVM_TMP=%s",p1); putenv(env);
+	}}
+      if ( ( p1 = getenv("WSCI"))  == (char *) 0 )
+	{  sprintf(env,"WSCI=%s",p); putenv(env); }
+#ifdef __MSC__
+      putenv("COMPILER=VC++");
+#endif 
+#ifdef __CYGWIN32__ 
+      putenv("COMPILER=gcc");
+#endif 
       putenv("WIN32=OK");
     }
+}
+
+/*************
+ * platform flag 
+ *	The return value is one of:
+ *	    VER_PLATFORM_WIN32s		Win32s on Windows 3.1. 
+ *	    VER_PLATFORM_WIN32_WINDOWS	Win32 on Windows 95.
+ *	    VER_PLATFORM_WIN32_NT	Win32 on Windows NT
+ ****************/
+
+int  SciWinGetPlatformId()
+{
+    return SciPlatformId;
 }
 
 
@@ -215,7 +251,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 		   PSTR szCmdLine, int iCmdShow)
 {
   LPSTR tail;
-  int nowin=0,argcount=0;
+  int nowin=0,argcount=0,lpath =0;
+  char *path = NULL;
+  OSVERSIONINFO os;
 #ifdef __GNUC__  /* arguments are in szCmdline */
 #define MAXCMDTOKENS 128
   int     _argc=-1;
@@ -233,6 +271,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   while (_argv[_argc] != NULL)
     _argv[++_argc] = strtok( NULL, " ");
 #endif /** __GNUC__ **/
+
+  os.dwOSVersionInfoSize = sizeof(os);
+  GetVersionEx(&os);
+  SciPlatformId = os.dwPlatformId;
 
   szModuleName = (LPSTR)malloc(MAXSTR+1);
   CheckMemory(szModuleName);
@@ -276,14 +318,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   textwin.DragPre = "gl_name='";
   textwin.DragPost = "';exec('SCI/util/GLoad.sce');\n";
   textwin.lpmw = &menuwin;
-  textwin.ScreenSize.x = 80;
+  textwin.ScreenSize.x = 120;
   textwin.ScreenSize.y = 80;
   textwin.KeyBufSize = 2048;
   textwin.CursorFlag = 1;	/* scroll to cursor after \n & \r */
   textwin.shutdown = (DLGPROC) ShutDown ;
   textwin.AboutText = (LPSTR)malloc(1024);
   CheckMemory(textwin.AboutText);
-  strcpy(textwin.AboutText,"Scilab 2.3, Scilab Group (Inria/Enpc)\n\t");
+  strcpy(textwin.AboutText,"Scilab 2.4, Scilab Group (Inria/Enpc)\n\t");
   strcat(textwin.AboutText,"\n\tWindows port (Jean-Philippe Chancelier)\n\t");
   strcat(textwin.AboutText,"Scilab is a free software.\n\t");
   strcat(textwin.AboutText,"This Windows port of Scilab is free too.\n\t");
@@ -321,6 +363,11 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	{
 	  nowin=1; nointeractive=1;
 	}
+      else if ( strcmp(_argv[argcount],"-f") ==0 && argcount +1 < _argc )
+	{
+	  path = _argv[argcount+1];
+	  lpath = strlen(_argv[argcount+1]);
+	}
     }
 #ifndef __DLL__
   /** when we don't use a dll version of the graphic library 
@@ -332,7 +379,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   if (nowin==1) 
     {
       /** XXXX AllocConsole(); **/
-      sci_windows_main(nowin,&startupf);
+      sci_windows_main(nowin,&startupf,path,&lpath);
     }
   else 
     {
@@ -342,14 +389,22 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
       SetXsciOn();
       /** XXX **/
       ShowWindow (textwin.hWndParent , SW_SHOWNORMAL);
-      sci_windows_main(nowin,&startupf);
+      sci_windows_main(nowin,&startupf,path,&lpath);
     }
   return 0;
 }
 #define __MSC_NOC__
 #ifdef __MSC_NOC__
-/* for a console application */
-int main()
+/* 
+   we want Scilab to work in two mode 
+   as a console application or as a window 
+   application 
+   for a console application 
+   we do not directly use main for scilab 
+   since main is in libf2c which in truns call our MAIN__
+**/
+
+int MAIN__()
 {
   HANDLE x = GetModuleHandleA(0);
   WinMain (x, 0, GetCommandLineA(), 1);

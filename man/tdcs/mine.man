@@ -32,7 +32,7 @@ according to the control value to reach another level at next step.
 The extraction process must maximise the following cost :
 .nf
    -- n2-1
-   \
+   \\
    /        f(x(k),k) + V_F(x,n2)
    -- k=1
 .fi

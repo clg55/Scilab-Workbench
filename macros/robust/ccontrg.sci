@@ -1,9 +1,10 @@
-function [K]=ccontrg(PP,r,gamma);
+function [K]=ccontrg(PP,r,Gamma);
 //***********************************
 //   returns a realization of the central controller for the
 //   general problem using the formulas in Gahinet, 92
-//   Note that gamma must be > gopt (ouput of gamitg)
- 
+//   Note that Gamma must be > gopt (ouput of gamitg)
+// Copyright INRIA
+
 //  PP contains the parameters of plant realization (sylin list)
 //  b = ( b1 , b2 ) , 	c = ( c1 ) ,    d = ( d11  d12)
 //			    ( c2 )          ( d21  d22)
@@ -17,7 +18,7 @@ function [K]=ccontrg(PP,r,gamma);
 [na,na]=size(a); nh=2*na;
 [p1,m2]=size(d12),
 [p2,m1]=size(d21),
-gs=gamma**2;
+gs=Gamma**2;
  
 //HAMILTONIAN SETUP
 //------------------
@@ -110,13 +111,12 @@ ncom=norm(d11+d12*dk*d21);
  
 ca=a+b2*dk*c2; cb=b1+b2*dk*d21; cc=c1+d12*dk*c2; cd=d11+d12*dk*d21;
 ak=py'*b2*that+ttil*c2*px-py'*ca*px-qy'*ca'*qx/gs+..
-    [-qy'*cc'/gamma,py'*cb-ttil*d21]/..
-       [gamma*eye(p1,p1),cd;cd',gamma*eye(m1,m1)]*..
-          [cc*px-d12*that;-cb'*qx/gamma];
+    [-qy'*cc'/Gamma,py'*cb-ttil*d21]/..
+       [Gamma*eye(p1,p1),cd;cd',Gamma*eye(m1,m1)]*..
+          [cc*px-d12*that;-cb'*qx/Gamma];
 ak=sz\(vz'*ak*uz)/sz;
  
  
-//pause,
  
 K=syslin('c',ak,bk,ck,dk);
  
@@ -148,7 +148,7 @@ go=maxi(norm([a b]),norm([a;c]));
  
 //MONITOR LIMIT CASES
 //--------------------
-if ra=0 | ca = 0 | go = 0 then xo(rx,cx)=0; return; end
+if ra==0 | ca == 0 | go == 0 then xo(rx,cx)=0; return; end
  
  
  
@@ -169,7 +169,7 @@ nnz1=nthresh(dd/go,TOLA);
 nd=ns-nnz1;   //number of singular values thresholded out
  
 //compute xo
-if nnz1=0 then
+if nnz1==0 then
    xo(rc,cb)=0;
  
 else

@@ -43,7 +43,7 @@ char caractere;
 }
 
 tableau_avec_taille convertir_nombre_arbitraire_de_chaines_en_tableau(liste)
-va_list *liste;
+     va_list *liste;
 {
     tableau_avec_taille resultat;
     char *chaine;
@@ -64,7 +64,7 @@ va_list *liste;
 
 
 char *concatenation_plusieurs_chaines(va_alist)
-va_dcl
+     va_dcl
 {
     va_list liste;
 

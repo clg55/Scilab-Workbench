@@ -19,7 +19,6 @@ PARAMETERS
 DESCRIPTION
   Projection on eigen-subspace associated with eigenvalues with real part >=
   thres (flag='c') or with magnitude >= thres (flag='d').
-  LPA=diag([1,2,3]);X=rand(A);A=inv(X)*A*X; [Q,M]=pbig(A,1.5);
 
   The projection is defined by Q*M, Q is full column rank, M is full row rank
   and M*Q=eye.

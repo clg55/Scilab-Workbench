@@ -1,4 +1,5 @@
       subroutine wpodiv(ar,ai,br,bi,na,nb,ierr)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension ar(*),br(*),ai(*),bi(*)
 c     division euclidienne de deux polynomes a coefficients complexes

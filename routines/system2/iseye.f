@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=ISEYE,SSI=0
+c     Copyright INRIA
       logical function iseye(ib)
       integer ib(3),eye(3)
       data eye/14,34,14/

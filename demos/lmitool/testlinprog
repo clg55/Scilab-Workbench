@@ -1,3 +1,4 @@
+// Copyright INRIA
 getf(SCI+'/demos/lmitool/linprog.sci','c')
 rand('seed',0);
 //rand('normal')

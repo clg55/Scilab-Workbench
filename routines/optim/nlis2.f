@@ -1,6 +1,8 @@
       subroutine nlis2 (simul,prosca,n,xn,fn,fpn,t,tmin,tmax,d,d2,g,gd,
-     1 amd,amf,imp,io,logic,nap,napmax,x,tol,a,tps,tnc,gg,izs,rzs,dzs)
+     1     amd,amf,imp,io,logic,nap,napmax,x,tol,a,tps,tnc,gg,izs,rzs
+     $     ,dzs)
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c     Copyright INRIA
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c subroutine effectuant une recherche lineaire sur 0 tmax
 c partant du point xn dans la direction d.

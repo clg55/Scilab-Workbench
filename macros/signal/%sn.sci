@@ -12,7 +12,8 @@ function [y]=%sn(x,m)
 //
 //!
 //Author F.D.
- 
+// Copyright INRIA
+
 [n1,n2]=size(x);
 n=n1*n2;
 a=amell(real(x),sqrt(m));

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DMP2PM,SSI=0
+c     Copyright INRIA
       subroutine dmp2pm(mp,d,nl,pm,deg,m,n)
 c!but
 c Le sous programme dmptopm converti la  matrice de polynomes

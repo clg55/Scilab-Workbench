@@ -13,6 +13,7 @@ c            ierr=2 if  0**k with k<0
 c!origin
 c Serge Steer INRIA 1996
 c!
+c     Copyright INRIA
       integer p ,ierr
       double precision v,r
 c
@@ -22,15 +23,18 @@ c
          r=v
       elseif(p.eq.0) then
 c     .  v^0
-         if(v.ne.0.0d+0) then
+c         if(v.ne.0.0d+0) then
             r=1.0d+0
-         else
-            ierr=1
-         endif
+c         else
+
+c            ierr=1
+c         endif
       else if(p.lt.0) then
          if(v.ne.0.0d+0) then
             r=v**p
          else
+            r=0.0d0
+            r=1.0d0/r
             ierr=2
          endif
       else

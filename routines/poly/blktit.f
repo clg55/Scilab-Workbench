@@ -5,6 +5,7 @@ c     <empty line>
 c            column k1 to k2
 c     <empty line>
 c!
+c     Copyright INRIA
       integer k1,k2,io
 c
       character*4 fmt2

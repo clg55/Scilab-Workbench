@@ -25,7 +25,7 @@ If \fVa\fR and \fVb\fR are coprime polynomials then
 .LP
 \fVrank(sylm(a,b))=degree(a)+degree(b))\fR and the instructions
 .nf
-  u = sylm(a,b) \ eye(na+nb,1)
+  u = sylm(a,b) \\ eye(na+nb,1)
   x = poly(u(1:nb),'z','coeff')
   y = poly(u(nb+1:na+nb),'z','coeff')
 .fi

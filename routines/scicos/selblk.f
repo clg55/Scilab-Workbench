@@ -1,5 +1,7 @@
       subroutine selblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     Selector block
 c
@@ -24,7 +26,7 @@ c
             goto 10
          endif
          z(1)=dble(ic)
-      elseif(flag.eq.1) then
+      elseif(flag.eq.1.or.flag.eq.6) then
       y(1)=u(int(z(1)))
       endif
       end

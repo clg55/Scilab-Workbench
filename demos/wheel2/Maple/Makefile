@@ -8,7 +8,8 @@ OBJS = /tmp/wheel.o /tmp/wheelg.o
 
 all:: $(OBJS)
 
-FFLAGS = $(FC_OPTIONS)
+FFLAGS = $(FC_OPTIONS) $(FC_PICFLAGS)
+
 
 /tmp/wheel.o: wheel.f
 	$(FC) $(FFLAGS) -c wheel.f -o /tmp/wheel.o

@@ -1,4 +1,5 @@
 function [p,lp]=shortest_path(i,j,g,typ)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs==3 then
   typ='arc'

@@ -19,10 +19,10 @@ PARAMETERS
   k    : vector or matrix of integers
 
 DESCRIPTION
-  s=sort(v) (or, equivalently s=sort(v,'*')) sorts v  in decreasing order. If
-  v is a matrix, sorting is done columnwise, v being seen as the stacked vec-
-  tor v(:).  [s,k]=sort(v) gives in addition the indices of entries of s in
-  v, i.e. v(k(:))  is the vector s.
+  s=sort(v) sorts v  in decreasing order. If v is a matrix, sorting is done
+  columnwise, v being seen as the stacked vector v(:).  [s,k]=sort(v) gives
+  in addition the indices of entries of s in v, i.e. v(k(:))  is the vector
+  s.
 
   s=sort(v,'r') sorts the rows of v in decreasing order i.e.  each column of
   s is obtained from each column of v by reordering it in decreasing order.
@@ -34,7 +34,7 @@ DESCRIPTION
   [s,k]=sort(v,'c') returns in addition in each row of k the indices such
   that v(i,k(i,:))=s(i,:) for each row index i.
 
-  Complex matrices or vectors are sorted w.r.t their real part.
+  Complex matrices or vectors are sorted w.r.t their magnitude.
 
   y=sort(A) is valid when A is a sparse vector. Column/row sorting is not
   implemented for sparse matrices.

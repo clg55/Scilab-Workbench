@@ -1,18 +1,17 @@
+// Copyright INRIA
+mode(1)
 s=poly(0,'s');
 
 //MAC-FARLANE PROBLEM for G=1/s^3;
 
-[P,r]=macglov(1/s^3);
-clean(P)
+[P,r]=macglov(1/s^3);clean(P)
 
 //Optimal controller K:
 
 halt()
+//K Optimal controller , ro = gamaopt^-2;
 [K,ro]=h_inf(P,r,0,1,30);
-
-K    //Optimal controller , ro = gamaopt^-2;
-
-gamaopt=1/sqrt(ro)
+K,gamaopt=1/sqrt(ro)
 
 // Check internal stability:
 

@@ -34,7 +34,8 @@ function [la,sig,lb]=levin(n,cov)
 //      : mean-square errors.
 //!
 //author: G. Le Vey
- 
+// Copyright INRIA
+
    [lhs,rhs]=argn(0);
    if rhs<>2,error('wrong number of arguments');end
       [l,d]=size(cov);

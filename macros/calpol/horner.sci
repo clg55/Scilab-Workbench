@@ -10,9 +10,8 @@ function r=horner(p,x)
 // See also: freq, repfreq.
 //!
 //
-
-//-compat type(p)==15 retained for list/tlist compatibility
-if type(p)==15|type(p)==16 then r=horner(p(2),x)./horner(p(3),x),return,end
+// Copyright INRIA
+if type(p)==16 then r=horner(p(2),x)./horner(p(3),x),return,end
 if type(p)==129 then
   p=horner(p(:),x);p=p(1):p(2):p(3)
 end
@@ -24,9 +23,9 @@ for l=1:m
   for k=1:n
    plk=p(l,k)
    d=degree(plk)
-   rlk=coeff(plk,d);
+   rlk=coeff(plk,d)*ones(x); // for the case horner(1,x)
    for kk=1:d,
-     rlk=rlk*x+coeff(plk,d-kk)*eye;
+     rlk=rlk.*x+coeff(plk,d-kk);
    end;
    rk=[rk rlk]
   end

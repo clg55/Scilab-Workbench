@@ -41,6 +41,7 @@ c!auxiliary routines
 c     exchng
 c     ftest  (user defined)
 c!
+c Copyright SLICOT
       external ftest
       integer l,ls,ls1,ls2,l1,ll,num,is,l2i,l2k,i,k,ii,istep,ifirst
       double precision s,p,alpha,beta

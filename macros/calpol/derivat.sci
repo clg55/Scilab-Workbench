@@ -2,6 +2,7 @@ function p=derivat(p)
 //pd=derivat(p)  computes the derivative of the polynomial or rational
 //function marix relative to the dummy variable
 //!
+// Copyright INRIA
 t=type(p)
 if t==1 then p=0*p,return,end
 if t==2 then
@@ -9,7 +10,7 @@ if t==2 then
   for i=1:m
     for j=1:n
       pij=p(i,j);nij=degree(pij);
-      if nij=0 then
+      if nij==0 then
 	p(i,j)=0
       else
 	pij=coeff(pij).*(0:nij),p(i,j)=poly(pij(2:nij+1),var,'c')
@@ -22,7 +23,7 @@ end;
 //-compat t==15 retained for list/tlist compatibility  
 if t==15|t==16 then
   p1=p(1);
-  if p1(1)='r' then
+  if p1(1)=='r' then
     num=p(2);den=p(3)
     [m,n]=size(num)
     for i=1:m

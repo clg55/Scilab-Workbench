@@ -144,7 +144,7 @@ void SendMacro(LPTW lptw, UINT m)
 	  case  MINUS : Countm();s++;break;
 	  case  RAISE : SendCountRaise();s++;break;
 	  case  SET  : SendCountSet();s++;break;
-	  case  DELETE :SendCountDelete();s++;break;
+	  case  DELETESCIW :SendCountDelete();s++;break;
 	  case EOS: /* [EOS] - End Of String - do nothing */
 	  default:
 	    s++;

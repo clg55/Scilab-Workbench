@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=HILBER,SSI=0
+c     Copyright INRIA
       subroutine hilber(a,lda,n)
       double precision a(lda,n)
 c!but

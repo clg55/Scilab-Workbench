@@ -5,13 +5,14 @@ function [x]=nehari(r,tol)
 //    || R - X ||oo = min || R - Y ||oo
 //                  Y in Hoo
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 r1=r(1);
 if r1(1)<>'lss' then error('State-space only!'),end
-if r(7)='d' then error('Continuous-time only!'),end
+if r(7)=='d' then error('Continuous-time only!'),end
 r(7)='c'
 //
-if rhs=1 then tol=1e-6,end,
+if rhs==1 then tol=1e-6,end,
 //norm of Hankel operator
 //-----------------------
 nk=nophkel(r),nn=nk+tol,
@@ -31,8 +32,8 @@ x=syslin('c',ax,bx,cx*nn),
 function [nk]=nophkel(sl,tol)
 //[nk]=nophkel(sl,[tol]) : norm of Hankel operator
 [lhs,rhs]=argn(0),
-if rhs=1 then tol=1000*%eps,end,
-if sl=0 then nk=0,return,end,
+if rhs==1 then tol=1000*%eps,end,
+if sl==0 then nk=0,return,end,
 lf=spec(sl(2)),
 if mini(abs(lf))<=tol then
      error('Imaginary axis poles!'),end,

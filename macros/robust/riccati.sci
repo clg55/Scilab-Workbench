@@ -12,11 +12,12 @@ function [x1,x2]=riccati(a,b,c,dom,typ)
 //    typ = 'schur' --->schur method
 // See also ric_desc
 //!
-      [lhs,rhs]=argn(0),
-      if rhs=4 then typ='eigen',end,
+// Copyright INRIA
+[lhs,rhs]=argn(0),
+      if rhs==4 then typ='eigen',end,
       ham=[a -b;-c -a'],
       [n,n]=size(a),
-      if part(dom,1)='c' then
+      if part(dom,1)=='c' then
          select  typ,
            case 'schur' then
                 [s,d]=schur(ham,'c'),
@@ -32,7 +33,7 @@ function [x1,x2]=riccati(a,b,c,dom,typ)
          [bs,as,s,n1]=gschur(bb,aa,'d');s=s(:,1:n1);
       end,
       x1=s(n+1:2*n,:),x2=s(1:n,:),
-      if lhs=1 then x1=x1/x2,end
+      if lhs==1 then x1=x1/x2,end
 
 
 

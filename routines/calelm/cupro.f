@@ -1,5 +1,6 @@
 	subroutine cupro(n,w)
 c      Utility fct: cumulated product
+c	Copyright INRIA
 	double precision w(*),t
 	t=1.0d0
 	do 1 k=1,n

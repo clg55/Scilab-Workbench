@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include "machine.h"
 #include <stdio.h>
 extern	WindowPtr CWindow;

@@ -4,6 +4,8 @@ c de la division euclidienne q*z**k/a pour k variant de 1 a kmax
 c q polynome de degre n-1
 c a polynome de degre n
 c ck=(q(n+1-k)-sum(a(n+1-i)*c(k-i)) )/an i=1...min(n,k-1)
+
+c     Copyright INRIA
 c
       implicit double precision (a-h,o-z)
       dimension q(*),a(*),c(*)

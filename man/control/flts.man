@@ -88,11 +88,15 @@ maximum degree of denominator
 .SH EXAMPLE
 .nf
 sl=syslin('d',1,1,1);u=1:10;
-y=flts(u,sl); [y1,x1]=flts(u(1:5),sl);y2=flts(u(6:10),sl,x1);
+y=flts(u,sl); 
+plot2d2("onn",(1:size(u,'c'))',y')
+[y1,x1]=flts(u(1:5),sl);y2=flts(u(6:10),sl,x1);
 y-[y1,y2]
 
 //With polynomial D:
-z=poly(0,'z');sl=syslin('d',1,1,1,1+z+z^2);p=2;
+z=poly(0,'z');
+D=1+z+z^2; p =degree(D);
+sl=syslin('d',1,1,1,D);
 y=flts(u,sl);[y1,x1]=flts(u(1:5),sl);
 y2=flts(u(5-p+1:10),sl,x1);  // (update)
 y-[y1,y2]
@@ -103,8 +107,10 @@ z=poly(0,'z');
 h=(1-2*z)/(z^2+0.3*z+1)
 u=zeros(1,20);u(1)=1;
 imprep=flts(u,tf2ss(h));   //Impulse response
+plot2d2("onn",(1:size(u,'c'))',imprep')
 u=ones(1,20);
 stprep=flts(u,tf2ss(h));   //Step response
+plot2d2("onn",(1:size(u,'c'))',stprep')
 //
 // Other examples
 A=[1 2 3;0 2 4;0 0 1];B=[1 0;0 0;0 1];C=eye(3,3);Sys=syslin('d',A,B,C);

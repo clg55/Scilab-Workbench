@@ -5,6 +5,7 @@ c     clean ieeeflags,deallocate memory
 c!Syntax
 c     call sciquit
 c!      
+c     Copyright INRIA
       include '../stack.h'
       integer nos1,vsiz1,quitf
       common /comnos/ nos1,vsiz1

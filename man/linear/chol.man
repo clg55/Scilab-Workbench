@@ -25,5 +25,5 @@ R=chol(X);
 norm(R'*R-X)
 .fi
 .SH SEE ALSO 
-qr, svd, bdiag, fullrf
+spchol, qr, svd, bdiag, fullrf
 

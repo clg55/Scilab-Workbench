@@ -45,6 +45,7 @@ function [x,y,typ]=func_block(job,arg1,arg2)
 //                        'z' if zero-crossing.
 //          firing      - boolean initial clock firing if true
 //
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then

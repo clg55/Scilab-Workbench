@@ -1,4 +1,5 @@
       subroutine majour(hm,hd,dd,n,hno,ir,indic,eps)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension hm(*),hd(n),dd(n)
       if(n.eq.1) go to 100

@@ -13,7 +13,7 @@ TEX = d7-1.tex d7-2.tex d7-3.tex d7-4.tex d7-5.tex d7-6.tex d7-7.tex \
 VTEX = example1.vtex example2.vtex example3.vtex d7-10.vtex d7-8.vtex d7a11.vtex
 
 PS = $(TEX:.tex=.ps)
-EPSF = $(TEX:.tex=.epsf)
+EPSF = $(TEX:.tex=.eps)
 DIAGS = $(TEX:.tex=.dia)
 CODE = $(TEX:.tex=.code)
 

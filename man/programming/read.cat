@@ -20,18 +20,21 @@ PARAMETERS
             a left parenthesis.  Formats cannot mix floating point or charac-
             ter edition modes.
 
-  k         : integer
+  k         : integer or vector of integer
 
 DESCRIPTION
   reads row after row the mxn matrix x (n=1 for character chain) in the file
   file-desc (string or integer).  Each row of the matrix x begin in a new
-  line of file-desc file. Depending on format a given row of the x matrix may
-  be read from more than one line of file-desc file.
+  line of file-desc file. Depending on format, a given row of the x matrix
+  may be read from more than one line of file-desc file.
 
-  The type of the result will depend on the specified form. If form is
-  numeric (d,e,f,g) the matrix will be a scalar matrix and if form contains
-  the character a the matrix will be a matrix of character strings. In this
-  case n must be equal to 1.
+  The type of the result will depend on the specified format. If format con-
+  tains only (d,e,f,g)  descriptors the function tries to read numerical data
+  (the result is matrix of real numbers).
+
+  If format contains only  a descriptors the function tries to read character
+  strings (the result is a character string column vector). In this case n
+  must be equal to 1.
   Examples for format:
   (1x,e10.3,5x,3(f3.0))
   (10x,a20)
@@ -44,6 +47,7 @@ DESCRIPTION
   thus m must be m=prod(size(k)).
 
   To read on the keyboard use read(%io(1),...).
+
 EXAMPLE
   unix('rm -f foo')
   A=rand(3,5); write('foo',A);

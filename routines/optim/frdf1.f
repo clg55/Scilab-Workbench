@@ -1,5 +1,6 @@
       subroutine frdf1(prosca,n,ntot,ninf,kgrad,
      & al,q,s,poids,aps,anc,mm1,r,e,ic,izs,rzs,dzs)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension al(ntot),q(*),poids(ntot),aps(ntot),anc(ntot),
      & ic(mm1),s(n),izs(*),dzs(*),e(mm1),r(*)

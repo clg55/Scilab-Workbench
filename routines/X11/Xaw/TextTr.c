@@ -1,5 +1,7 @@
 /* $XConsortium: TextTr.c,v 1.13 89/11/01 17:01:24 kit Exp $ */
-
+/*
+ * Copyright 1989 Massachusetts Institute of Technology
+ */
 char *_XawDefaultTextTranslations1 =
 "\
 Ctrl<Key>A:	beginning-of-line() \n\

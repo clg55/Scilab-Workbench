@@ -1,4 +1,5 @@
       subroutine fuclid (n,x,y,ps,izs,rzs,dzs)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension x(n),y(n),izs(*),dzs(*)
       real rzs(*)

@@ -1,3 +1,4 @@
+// Copyright INRIA
 // At first we create 0.5 seconds of sound parameters.
 t=soundsec(0.5);
 // Then we generate the sound.

@@ -1,7 +1,9 @@
-mode(0)
-xselect();xbasc();
+xselect();xbasc();wdim=xget('wdim')
+mode(1)
+
 //
-getf('SCI/demos/pendulum/macros.sci')
+getf('SCI/demos/pendulum/simulation.sci')
+getf('SCI/demos/pendulum/graphics.sci')
 //
 x_message('the cart')
 // ----------------
@@ -21,7 +23,7 @@ x_message('open loop simulation');
 // y=ode(y0,0,0.03*(1:180),ivpd);
  y=read('SCI/demos/pendulum/yy',4,180,'(e12.6)');
  xbasc();
- anim(y(1,:),y(3,:),1);
+ anim(y(1,:),y(3,:));
 //
 x_message('linearization')
 //
@@ -42,7 +44,7 @@ x_message('checking the result');
  
 x_message('analysis');
 //---------
-//unstable system !
+//stability (unstable system !)
 //
  spec(f)
 //
@@ -111,19 +113,9 @@ x_message('impulse response')
  x0=[0;0;0;0;0;0;0;0];
  u(1,180)=0;u(1,1)=1;
  y=flts(u,prd,x0);
-[xxr,yyr]=xgetech();
-[xxf]=xget("font");
- xset("wdim",850,650);
- xbasc();
- xset("font",2,0);
- xsetech([0,0,0.5,0.5]);
- plot2d1("enn",1,y(1,:)');xtitle(' ','t',' position');
- xsetech([0.5,0,0.5,0.5]);
- plot2d1("enn",1,y(2,:)');xtitle(' ','t',' theta');
- xsetech([0,0.5,1.0,0.5]);
- anim(100*y(1,:),100*y(2,:),1),
- xsetech(xxr);
- xset("font",xxf(1),xxf(2));
+
+ draw(0)
+
 //
 x_message('compensation of the non linear system');
 //--------------------------------------
@@ -134,18 +126,9 @@ x_message('compensation of the non linear system');
  x0=[0 0 0.4 0   0 0 0 0]';   //
  yd=ode(x0,t0,t1,regu);
 //
-x_message('non linear simulation')
-[xxr,yyr]=xgetech();
-[xxf]=xget("font");
- xbasc();
- xset("font",2,0);
- xsetech([0,0,0.5,0.5]);
- plot2d(t1',(kr*yd(5:8,:))');xtitle(' ','time','control');
- xsetech([0.5,0,0.5,0.5]);
- plot2d([t1;t1]',yd([3,7],:)',[1,2],"121",'theta@theta estimated');
- xsetech([0,0.5,1.0,0.5]);
- anim(yd(1,:),yd(3,:),1)
- xsetech(xxr);
- xset("font",xxf(1),xxf(2));
- xbasc();
- xset("wdim",610,455);
+ x_message('non linear simulation')
+ draw(1)
+mode(0)
+x_message('The end')
+xbasc()
+xset('wdim',wdim(1),wdim(2))

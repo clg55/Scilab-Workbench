@@ -2,12 +2,14 @@ function xbasimp(win_num,filen,printer)
 // This function will send the recorded graphics 
 // to a Postscript file 
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
-n=prod(size(win_num))
+cur_win=xget('window');
+n=size(win_num,'*')
 win_num=matrix(win_num,1,n);
 if rhs<2,filen=TMPDIR+'/scilab.ps';end
 flag=0;
-if rhs=1 | rhs>=3 ,flag=1;end
+if rhs==1 | rhs>=3 ,flag=1;end
 fname=' ';
 for i=1:n,
   fnamel=filen+'.'+string(win_num(i));
@@ -18,8 +20,12 @@ for i=1:n,
   // the third argument which is optional can be set to 0 1
   // 0 for b&w and 1 for color  : the default value is to use the screen 
   // status 
-  xg2ps(win_num(i),fnamel);
+  xset('window',win_num(i));
+  // get the color status of window win_num(i) 
+  c_status= xget("use color")
+  xg2ps(win_num(i),fnamel,c_status);
 end
+xset('window',cur_win)
 //driver('Rec');
 //Blpr 'titre' filename1 filename2 ....  lpr
 if rhs <= 2 then 
@@ -33,7 +39,18 @@ if rhs <= 2 then
 else 
 	prc = 'lpr -P'+printer
 end 
-if flag=1,host('$SCI/bin/Blpr ''  '' '+fname+ ' |' + prc);end
-if rhs=1,host('rm -f '+fname);end
-
-
+if flag==1,
+  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+	sci1 = strsubst(SCI,'/','\');
+ 	host(sci1+'\bin\Blpr.exe ''  '' '+fname+ ' | ' + sci1+'\bin\lpr.exe');
+  else 
+ 	host('$SCI/bin/Blpr ''  '' '+fname+ ' |' + prc);
+  end 
+end
+if rhs==1,
+  if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+    host('del '+fname);
+  else
+    host('rm -f '+fname);
+  end
+end

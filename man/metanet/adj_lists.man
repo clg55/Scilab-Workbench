@@ -4,9 +4,13 @@
 adj_lists - computes adjacency lists
 .SH CALLING SEQUENCE
 .nf
+[lp,la,ls] = adj_lists(g)
 [lp,la,ls] = adj_lists(directed,n,tail,head)
 .fi
 .SH PARAMETERS
+.TP 2
+g
+: graph list
 .TP 9
 directed
 : integer, 0 (undirected graph) or 1 (directed  graph)
@@ -35,7 +39,9 @@ ls
 (its size is the number of edges of the graph) 
 .SH DESCRIPTION
 \fVadj_lists\fR computes the row vectors of the adjacency lists description of 
-the graph from the description of the graph given by the number of nodes 
+the graph \fVg\fR.
+It is also possible to give \fVadj_lists\fR the description of the
+graph given by the number of nodes 
 \fVn\fR and the row vectors \fVtail\fR and \fVhead\fR.
 .SH EXAMPLE
 .nf
@@ -45,6 +51,7 @@ g=make_graph('foo',1,8,ta,he);
 g('node_x')=[129 200 283 281 128 366 122 333];
 g('node_y')=[61 125 129 189 173 135 236 249];
 show_graph(g);
+[lp,la,ls]=adj_lists(g)
 [lp,la,ls]=adj_lists(1,g('node_number'),ta,he)
 .fi
 .SH SEE ALSO

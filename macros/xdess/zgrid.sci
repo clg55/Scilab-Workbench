@@ -1,5 +1,6 @@
 function []=zgrid()
 //
+// Copyright INRIA
 xselect();
 square(-1.1,-1.1,1.1,1.1);
 xtitle( ['loci with constant damping and constant frequencies';...

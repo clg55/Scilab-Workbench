@@ -1323,7 +1323,7 @@ c
       astart = wrklen  + 1
       active = nxtnum + lwidth + 1
       nactiv = lwidth
-      nfinal = nxtnum + ncompn
+      nfinal = nxtnum + ncompn 
 c
       nnext = lvlptr(3) - lvlptr(2)
       queued = wrklen
@@ -1465,11 +1465,11 @@ c ... choose next node from either 'queued' or 'next'
 c
  1200                 cnode = lvllst (ptr)
                       ptr = ptr + 1
-                      if ( ptr .gt. lvlptr(level+2) )  go to 5200
+                       if ( ptr .gt. lvlptr(level+2) )  go to 5200
                           if (lvlnum (cnode) .gt. 0)  go to 1300
                               go to 1200
 c
- 1300             if ( level+1 .eq. depth ) go to 1500
+1300             if ( level+1 .eq. depth ) go to 1500
 c
                       rptr = rstart (cnode)
                       nconnc = 0
@@ -1499,6 +1499,7 @@ c
 c
  2000 continue
 c
+c      print *,nxtnum,nfinal
       if  (nxtnum .ne. nfinal)  go to 5300
       space = max0 (space, twrkln - unused)
       return
@@ -1509,6 +1510,7 @@ c
       go to 5400
  5200 error = 62
       go to 5400
+c !!!!!!!
  5300 error = 63
  5400 return
  5500 error = 64
@@ -1893,9 +1895,9 @@ c     by columns.
       double precision  rwork(lrwork)
       error=0
       do 1,i=1,n
-         iband(i)=0
-         mrepi(i)=0
-         iperm(i)=0
+         iband(i)=1
+         mrepi(i)=i
+         iperm(i)=i
  1    continue
    10 continue
       if  (error.ne.0)  go to 3000                                           
@@ -1921,8 +1923,8 @@ c         form by the routines which reformat the real data.
       if  (liwork .lt. ireqd)  go to 3100                               
       gpswln = liwork - gpswrk + 1                                      
       call gpstrf(n,iwork(cstart),iwork(connec),iwork(gpswrk),     
-     1              iwork(degree), iwork(permut), error)        
-      if  (error.ne.0)  go to 3000                                           
+     1              iwork(degree), iwork(permut), error)
+      if  (error.ne.0)  go to 3000 
       call gpskca (n, iwork(degree), iwork(cstart), iwork(connec),      
      1             optpro, gpswln, iwork(permut), iwork(gpswrk),        
      2             bandwd, profil, gpserr, space)                       
@@ -1931,6 +1933,7 @@ c
          iperm(i)=iwork(permut+i-1)
          mrepi(i)=iwork(gpswrk+i-1)
  21   continue
+c !!!!!
       if  (gpserr .ne. 0)  go to 3000                                    
       invcol = connec + nz                                              
       call gpsrpk (n, nz,iwork(cstart),iwork(connec),iwork(invcol),  
@@ -1952,20 +1955,20 @@ c
         do 22 i=1,n
          iband(i)=iwork(i)
  22   continue
-  200 if  (error.ne.0)  go to 3000                                           
+  200 if  (error.ne.0)  go to 3000 
   300 return
- 3000 write (6, 63000)                                             
+ 3000 continue
+      error=64000
+c call erro('program terminated by error')
       go to 300                                                         
- 3100 write (6, 63100) ireqd                                       
+ 3100 call erro('insufficient workspace for integers')
+c     write (6, 63100) ireqd                                       
       go to 300                                                         
- 4000 write (6, 64000)                                             
+ 4000 call erro('reordering completed')
+      call erro('real workspace insufficient for factorization')
       go to 300                                                         
-63000 format (28h0program terminated by error)                          
 63100 format (36h0insufficient workspace for integers    /              
      1        17h0require at least , i8)                                
-64000 format (46h0reordering completed, but real workspace size /       
-     1        45h is insufficient for performing factorization /        
-     2        33h0would need a workspace of length , i8)
       end                                                               
 c************************************************************************
       subroutine gpstrf(n,cstart,connec,cstrt2,degree,permut,error)
@@ -2040,10 +2043,12 @@ c         and initialize permutation vector for gps
   800 continue
       cstart(n+1) = cstart(n) + degree(n)
  1000 return
- 3000 write (6, 63000) i, j
+ 3000 call erro('row index out of range')
+c write (6, 63000) i, j
       error = 999
       go to 1000
- 3100 write (6, 63100) i, j
+ 3100 call erro('data out of proper triangle')
+c write (6, 63100) i, j
       error = 999
       go to 1000
 63000 format (23h0row index out of range /
@@ -2102,8 +2107,7 @@ c quickly recover the column index in the repacking of the real data.
 c
  1000 return
 c
- 3000 write (6, 63000)
-63000 format (1h0 / 35h0program check in subroutine gpsrpk )
+ 3000 call erro('program check in subroutine gpsrpk')
       error = 999
       go to 1000
 c
@@ -2187,10 +2191,14 @@ c
   800 continue
  1000 return
 c     ... error handling for data structure destruction
- 3000 write (6, 63000) i, j, newi, newj
+ 3000 continue
+      call erro('program failure in subroutine gpslpk')
+c write (6, 63000) i, j, newi, newj
       error = 999
       go to 1000
- 3100 write (6, 63100) alen, laband
+ 3100 continue
+      call erro('program failure in subroutine gpslpk')
+c write (6, 63100) alen, laband
       error = 999
       go to 1000
 63000 format (1h0 / 37h0program failure in subroutine gpslpk /
@@ -2322,13 +2330,16 @@ c         with offset of  zero  instead of  n
  1600 continue
       cstart(1) = 1
  2000 return
- 3000 write (6, 63000)
+ 3000 call erro('length of vector for envelope too short')
+c write (6, 63000)
 63000 format (40h0length of vector for envelope too short)
       go to 4000
- 3100 write (6, 63100)
+ 3100 call erro('internal diagnostic -- program failure')
+c write (6, 63100)
 63100 format (39h0internal diagnostic -- program failure)
       go to 4000
- 3200 write (6, 63200)
+ 3200 call erro('program failure')
+c write (6, 63200)
 63200 format (34h0program failure, i, j, newi, newj, 4i9)
       go to 4000
  4000 error = 999

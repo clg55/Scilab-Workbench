@@ -5,6 +5,7 @@ function []=velo3()
 // vitesse angulaire xx(6,i) pour la roue rear
 // et que le temps d'integration etait de 1
 // => theta (i) = xx(6,i)*i/imax
+// Copyright INRIA
 ct=-cos(t);cp=cos(p);st=-sin(t);sp=sin(p);
   xe=[xmin,xmax,xmax,xmin,xmin]
   ye=[ymin,ymin,ymax,ymax,ymin]

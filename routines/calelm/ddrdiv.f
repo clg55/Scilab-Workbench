@@ -12,6 +12,7 @@ c     ierr     : returned error flag:
 c                o   : ok
 c                <>0 : b(ierr)=0
 c!
+c     Copyright INRIA
       double precision a(*),b(*),r(*)
       integer ia,ib,ir,n
       jr=1
@@ -22,7 +23,7 @@ c!
          do 10 k=1,n
             if(b(jb).eq.0.0d0) then
                ierr=k
-               return
+c               return
             endif
             r(jr)=a(ja)/b(jb)
             jr=jr+ir
@@ -31,7 +32,7 @@ c!
       elseif(ib.eq.0) then
          if(b(jb).eq.0.0d0) then
             ierr=1
-            return
+c            return
          endif
          do 11 k=1,n
             r(jr)=a(ja)/b(jb)
@@ -42,7 +43,7 @@ c!
          do 12 k=1,n
             if(b(jb).eq.0.0d0) then
                ierr=k
-               return
+c               return
             endif
             r(jr)=a(ja)/b(jb)
             jr=jr+ir

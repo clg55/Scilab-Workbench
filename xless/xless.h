@@ -116,11 +116,13 @@
  * This is the default print command and is OS specific.
  * It should probably be "lpr" for BSD, "lp" for SysV
  */
-
 #ifndef PRINTCMD
+#ifdef SYSV
+#define PRINTCMD "/usr/bin/lp"
+#else
 #define PRINTCMD "/usr/ucb/lpr"
 #endif
-
+#endif
 /*
  * Application class.  You shouldn't change this.
  */

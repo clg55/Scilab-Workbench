@@ -218,7 +218,7 @@ char *trame;
 {	
   
   long longueur;
-  char chaine_num[LONG];
+  char chaine_num[LONG+1];
 
   if (pipe_out == -1)
     erreur("communications non initialisees.");
@@ -239,7 +239,7 @@ char *lire_trame()
     
   long longueur;
     char *trame;
-    char chaine_num[LONG];
+    char chaine_num[LONG+1];
       
     if (pipe_in == -1)
 	erreur("communications non initialisees.");

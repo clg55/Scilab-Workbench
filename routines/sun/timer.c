@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <stdio.h>
 
 #if ~defined(THINK_C) && ~defined(__MWERKS__) 
@@ -59,12 +60,18 @@ static struct timezone tmz;
 #endif
 #endif 
 
+/***********************************************************
+ * stimer is used while runing the interpreter (run.f) 
+ * to fix a timer for checking X11 or windows events 
+ ***********************************************************/
+    
+
 int C2F(stimer)()
 {
 #if defined(THINK_C)||defined(__MWERKS__) 
         YieldToAnyThread();
         return(0);
-#else
+#else 
 #ifndef __MSC__
 #ifndef __MINGW32__
   struct timeval ctime;
@@ -72,5 +79,38 @@ int C2F(stimer)()
   return(ctime.tv_usec);
 #endif
 #endif
+
+#ifdef WIN32 
+#ifndef __CYGWIN32__
+  return(stimerwin());
+#endif 
+#endif
+#endif /* defined(THINK_C)||defined(__MWERKS__) */
+}
+
+/****************************
+ * stimer for non cygwin win32 compilers 
+ ****************************/
+
+#ifdef WIN32 
+#ifndef __CYGWIN32__
+#include <windows.h>
+int stimerwin()
+{
+#ifndef __MINGW32__
+  int i;
+  union {FILETIME ftFileTime;
+    __int64  ftInt64;
+  } ftRealTime; 
+  SYSTEMTIME st;
+  GetSystemTime(&st);
+  SystemTimeToFileTime(&st,&ftRealTime.ftFileTime);
+  /* Filetimes are in 100NS units */
+  i= (int) (ftRealTime.ftInt64  & ((LONGLONG) 0x0ffffffff));
+  return( i/10); /** convert to microseconds **/
+#else 
+  return(0);
 #endif
 }
+#endif
+#endif

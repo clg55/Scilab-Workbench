@@ -1,4 +1,5 @@
        subroutine wspcle(ma,na,ar,ai,nela,inda,rr,ri,nelr,indr,
+c     Copyright INRIA
      $     abstol,reltol)
 c     cleans a sparse matrix
 c!

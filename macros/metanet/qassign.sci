@@ -1,4 +1,5 @@
 function [crit,order]=qassign(c,f,d)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if (rhs <> 3) then error(39), end
 n=size(c,1);n1=size(c,2);

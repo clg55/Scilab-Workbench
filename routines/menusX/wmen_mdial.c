@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /* wmdialog.c
  * Scilab 
  *   Jean-Philipe Chancelier 
@@ -179,7 +180,8 @@ int mDialogWindow(void)
   PROPSHEETPAGE psp[NPAGESMAX];
   PROPSHEETHEADER psh;
   HWND hwndOwner;
-  hwndOwner = textwin.hWndParent;
+  if ( (hwndOwner = GetActiveWindow()) == NULL) 
+    hwndOwner =  textwin.hWndParent;
   SciMDialog.NPages = SciMDialog.nv /  NITEMMAXPAGE;
   for ( i = 0 ; i < SciMDialog.NPages ; i++) 
     {
@@ -208,7 +210,7 @@ int mDialogWindow(void)
   psh.u2.nStartPage = SciMDialog.CPage;
   psh.u3.ppsp = (LPCPROPSHEETPAGE) &psp;
 #else 
-  psh.nStartPage = 0;
+  psh.nStartPage = SciMDialog.CPage;
   psh.ppsp = (LPCPROPSHEETPAGE) &psp;
 #endif
   return (PropertySheet(&psh));

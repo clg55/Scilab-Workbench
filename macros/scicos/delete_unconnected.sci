@@ -2,6 +2,8 @@ function scs_m=delete_unconnected(scs_m);
 //delete unconnected blocks and all relevant parts of a diagram
 //may be used before compilation
 //scs_m_s=scs_m
+
+// Copyright INRIA
 n=size(scs_m)
 DEL=[]
 DELL=[]
@@ -49,4 +51,3 @@ if DEL<>[] then
   xset('window',wins)
   if path<>[] then unhilite_obj(scs_m_s(path(1))),end
 end
-

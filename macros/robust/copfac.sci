@@ -12,6 +12,7 @@ function [n,m,xt,yt]=copfac(g,polf,polc,tol)
 //   These are optional arguments with defautl values -1.
 //-- tol is a threshold for detecting stable poles.
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0),
 [r,p,t]=size(g);
 [a,b,c,d]=g(2:5),

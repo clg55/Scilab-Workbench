@@ -3,6 +3,7 @@ c-----------------------------------------------------------------------
 c
       subroutine ddd2 (prosca,ctonb,ctcab,n,nm,depl,aux,jmin,jmax,diag,
      /                alpha,ybar,sbar,izs,rzs,dzs)
+c     Copyright INRIA
 c----
 c
 c     calcule le produit h g ou

@@ -1,7 +1,7 @@
 .TH minus 1 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-minus (+) -  substraction operator, sign changes
+minus (-) -  substraction operator, sign changes
 .SH CALLING SEQUENCE	
 .nf 
 X-Y

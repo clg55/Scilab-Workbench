@@ -22,6 +22,7 @@ c!auteur
 c
 c     serge steer inria
 c!
+c     Copyright INRIA
       double precision dx(*),dy(*)
       integer i,incx,incy,ix,iy,n
 c

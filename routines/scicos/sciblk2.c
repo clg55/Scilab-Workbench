@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "../machine.h"
 
 extern integer C2F(scierr)();
@@ -8,6 +9,7 @@ extern void C2F(scitovv)();
 extern void C2F(skipvars)();
 extern void C2F(scitod)();
 extern void C2F(list2vars)();
+extern void C2F(ltopadj)();
 
 void 
 sciblk2(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,rpar,nrpar,
@@ -25,6 +27,8 @@ double *inptr[],*outptr[],*t;
     integer one=1,skip;
     integer nu,ny;
     integer mlhs=5,mrhs=8;
+    integer ltop;
+
 
     C2F(itosci)(flag,&one,&one);
     if (C2F(scierr)()!=0) goto err;
@@ -50,6 +54,7 @@ double *inptr[],*outptr[],*t;
     }
     C2F(mklist)(nin);
 
+
     C2F(scifunc)(&mlhs,&mrhs);
     if (C2F(scierr)()!=0) goto err;
     
@@ -72,7 +77,7 @@ double *inptr[],*outptr[],*t;
 	    C2F(skipvars)(&skip);
 	}
 	else {
-	    C2F(list2vars)(nout);
+	    C2F(list2vars)(nout,&ltop);
 	    if (C2F(scierr)()!=0) goto err; 
 	    for (k=*nout-1;k>=0;k--) {
 		y=(double *)outptr[k];
@@ -80,6 +85,9 @@ double *inptr[],*outptr[],*t;
 		C2F(scitod)(y,&ny,&one);
 		if (C2F(scierr)()!=0) goto err;
 	    }
+	    /* list2vars has changed the lstk(top+1) value. 
+	       reset the correct value */
+	   C2F(ltopadj)(&ltop);  
 	}
 	break;
     case 2 :
@@ -135,7 +143,7 @@ double *inptr[],*outptr[],*t;
 	    C2F(skipvars)(&skip);
 	}
 	else {
-	    C2F(list2vars)(nout); 
+	    C2F(list2vars)(nout,&ltop); 
 	    if (C2F(scierr)()!=0) goto err;
 	    for (k=*nout-1;k>=0;k--) {
 		y=(double *)outptr[k];
@@ -143,12 +151,13 @@ double *inptr[],*outptr[],*t;
 		C2F(scitod)(y,&ny,&one);
 		if (C2F(scierr)()!=0) goto err;
 	    }
+	    /* list2vars has changed the lstk(top+1) value. 
+	       reset the correct value */
+	   C2F(ltopadj)(&ltop);  
 	}
 	break;
     }
     return;
  err: 
     *flag=-1;
-
-    
 }

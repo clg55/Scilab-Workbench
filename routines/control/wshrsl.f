@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WSHRSL,SSI=0
+c     Copyright INRIA
       subroutine wshrsl(ar,ai,br,bi,cr,ci,m,n,na,nb,nc,eps,rmax,fail)
 c
 c!purpose

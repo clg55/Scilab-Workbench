@@ -36,10 +36,10 @@ a=-.1*xmargin+a;b=.1*xmargin+b;
 c=-.1*ymargin+c;d=.1*ymargin+d;
 //     plot frame, real state (x), and estimates (xf, and xs)
 plot([a a b],[d c c]);
-plot2d(x(1,:)',x(2,:)',[-2],"000"),
-plot2d(xf(1,:)',xf(2,:)',[-2],"000"),
-plot2d(xs(1,:)',xs(2,:)',[-2],"000"),
-//     mark data points (* for real data, o for estimates)
+plot2d(x(1,:)',x(2,:)',[2],"000"),
+plot2d(xf(1,:)',xf(2,:)',[2],"000"),
 plot2d(xs(1,:)',xs(2,:)',[2],"000"),
-plot2d(xf(1,:)',xf(2,:)',[3],"000"),
-plot2d(x(1,:)',x(2,:)',[4],"000"),
+//     mark data points (* for real data, o for estimates)
+plot2d(xs(1,:)',xs(2,:)',[-2],"000"),
+plot2d(xf(1,:)',xf(2,:)',[-3],"000"),
+plot2d(x(1,:)',x(2,:)',[-4],"000"),

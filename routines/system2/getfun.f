@@ -4,6 +4,7 @@ c ======================================================================
 c     get a user defined function
 c ======================================================================    
 c     
+c     Copyright INRIA
       include '../stack.h'
 c     
       integer lrecl,id(nsiz),retu(6),icount
@@ -13,7 +14,7 @@ c
       integer ssym,schar
       integer first,ierr
       integer iadr,sadr
-      logical maj
+      logical maj,isinstring
 c     
       data slash/48/,dot/51/,blank/40/,equal/50/,lparen/41/,rparen/42/
       data comma/52/,semi/43/,less/59/,great/60/,left/54/,right/55/
@@ -61,7 +62,7 @@ c     elimination des blancs en fin de la ligne
  15   n = n-1
       if(n.le.0) then
          if(first.eq.1) goto 11
-         goto 27
+         goto 28
       endif
       if (buf(n:n) .eq. ' ') go to 15
 c     elimination des blancs en debut de ligne
@@ -69,11 +70,11 @@ c     elimination des blancs en debut de ligne
  16   m=m+1
       if(buf(m:m).eq.' ') goto 16
 c
-
+      if(buf(m:m+10).eq.'endfunction') goto 61
       if(buf(m:m+7).eq.'function'.or.buf(m:m+7).eq.'FUNCTION') then
          if(first.eq.1) then
             j=m+7
-            goto 231            
+            goto 25            
          else
 C     jpc : cygwin32 b17.1 bug 
 c            backspace(lunit)
@@ -85,7 +86,7 @@ c
 c     boucle de conversion des caracteres de la ligne
       j=m-1
  17   j=j+1
-      if(j.gt.n) goto 25
+      if(j.gt.n) goto 27
 c     
  18   do 20 k = 1, csiz
          if (buf(j:j).eq.alfa(k)) then
@@ -104,12 +105,33 @@ c
       if (k .le. 0) then
          call basout(io,wte,
      +        buf(j:j)//' is not a scilab character')
-         go to 23
+         go to 24
       endif
       maj=.false.
 c     
  21   k = k-1
-      if (k.eq.dot .and. buf(j+1:j+1).eq.buf(j:j)) then
+
+      if(buf(j+1:j+1).ne.buf(j:j)) goto 23
+      if(k.eq.slash) then
+c     .    check if // occurs in a string
+         if(first.eq.0.and.isinstring(istk(l0),l-l0+1)) then
+c     .     // is part of a string
+            if(l+1.gt.lmax) then
+               ierr=5
+               goto 90
+            endif
+            istk(l)=slash
+            istk(l+1)=slash
+            j=j+1
+            l=l+2
+            goto 17
+         else
+c     .     // marks beginning of a comment
+            goto 27
+         endif
+      endif
+c
+      if (k.eq.dot) then
 c     on a trouve ..
 c     c'est une ligne suite si on a que des . ou //
          jj=j+1
@@ -126,9 +148,9 @@ c     c'est une ligne suite si on a que des . ou //
             goto 11
          endif
       endif
+ 23   continue
 c     ce n'est pas une carte suite            
-      if(first.eq.1) goto 23
-      if (k.eq.slash .and. buf(j+1:j+1).eq.buf(j:j)) go to 25
+      if(first.eq.1) goto 24
       istk(l) = k
 c     
       if(maj) istk(l)=-k
@@ -138,8 +160,9 @@ c
          goto 90
       endif
       goto 17
+
 c     premiere ligne
- 23   if(l.gt.lpt(1)) goto 24
+ 24   if(l.gt.lpt(1)) goto 26
       if(buf(m:m+7).eq.'function'.or.buf(m:m+7).eq.'FUNCTION') then
          j=m+6
 c      elseif(k.ne.slash .or. buf(m+1:m+1).ne.buf(m:m)) then
@@ -148,10 +171,10 @@ c      elseif(k.ne.slash .or. buf(m+1:m+1).ne.buf(m:m)) then
          goto 90
       endif
       j=j+1
- 231  lin(l)=blank
+ 25   lin(l)=blank
       l=l+1
       goto 17
- 24   lin(l)=k
+ 26   lin(l)=k
       if(maj) lin(l)=-k
       l=l+1
       if(l.gt.lsiz) then
@@ -161,28 +184,22 @@ c      elseif(k.ne.slash .or. buf(m+1:m+1).ne.buf(m:m)) then
       goto 17
 c     
 c     fin de conversion de la ligne
- 25   if(first.eq.1) goto 40
-c      if(k.eq.slash.and.j.eq.1) then
-c         call cvstr(3,id1,buf(j+2:j+4),0)
-c         do 26 ie=1,3
-c            if(abs(id1(ie)).ne.ennd(ie)) goto 27
-c 26      continue
-c         goto 61
-c      endif
- 27   l=l-1
-      if(istk(l).eq.blank) goto 27
+ 27   if(first.eq.1) goto 40
+
+ 28   l=l-1
+      if(istk(l).eq.blank) goto 28
       l=l+1
       if(l-1.le.l0) then
          istk(l)=comma
          l=l+1
       endif
-      do 28 i=0,icount
+      do 29 i=0,icount
 c     la gestion de icount a ete ajoute pour maintenir un compteur de ligne
 c     correct malgre les lignes suite
          istk(l)=eol
          istk(l+1)=blank
          l=l+2
- 28   continue
+ 29   continue
       l=l-1
       icount=0
 c

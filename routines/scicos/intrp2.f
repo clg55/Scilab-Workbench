@@ -1,5 +1,7 @@
       subroutine intrp2(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u1,nu1,u2,nu2,y1,ny1)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     ipar(1) : the number of input
 c

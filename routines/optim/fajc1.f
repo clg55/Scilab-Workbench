@@ -1,4 +1,5 @@
       subroutine fajc1(n,nc,nr,h,w,indi)
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       dimension h(*),w(n),indi(n)
 c

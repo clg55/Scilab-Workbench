@@ -1,4 +1,5 @@
 function [context,ok]=do_context(context)
+// Copyright INRIA
 if context==[] then context=' ',end
 rep=dialog([
     'You may enter here scilab instructions to define ';

@@ -1,6 +1,7 @@
 function [Es] = r2l(Fs)
 //Kwakernaak's r2l : a left kernel to Fs
 
+// Copyright INRIA
 [F,degF]=pol2mat(Fs);
 [rF,cF] = size(Fs);
 if cF > rF then
@@ -68,7 +69,7 @@ while rowsE < rE
 
       ii = i; idel = sel(1,i);
       while ii <= rows
-         if sel(1,ii) = idel then
+         if sel(1,ii) == idel then
             sel = [sel(1,1:ii-1) sel(1,ii+1:rows)];
             rows = rows-1;
             idel = idel+rF;

@@ -1,5 +1,7 @@
       subroutine evscpe(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     Event scope
 c     ipar(1) = win_num
@@ -22,6 +24,7 @@ c
       double precision dv
       double precision frect(4)
       character*(4) logf
+      character*4 name
       common /dbcos/ idb
       data frect / 0.00d0,0.00d0,1.00d0,1.00d0/
       data cur/0/,verb/0/
@@ -31,6 +34,14 @@ c
          write(6,'(''evscpe t='',e10.3,'' flag='',i1,''window='',i3)') t
      $        ,flag,ipar(1) 
       endif
+c     
+      call dr1('xgetdr'//char(0),name,v,v,v,v,v,v,
+     $     dv,dv,dv,dv)
+      if(name(1:3).ne.'Rec') then
+         call dr1('xsetdr'//char(0),'Rec'//char(0),v,v,v,v,v,v,
+     $        dv,dv,dv,dv)
+      endif
+
 c     
       if(flag.eq.2) then
          per=rpar(1)
@@ -137,4 +148,8 @@ c
          call sxevents()
          z(1)=0.0d0
       endif
+
+      call dr1('xsetdr'//char(0),name,v,v,v,v,v,v,
+     $     dv,dv,dv,dv)
+ 
       end

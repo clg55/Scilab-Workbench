@@ -1,5 +1,6 @@
 function []=velodp(i)
 //------------ generation of the rear wheel
+// Copyright INRIA
 nnn=24
 i1=(i-1)*nstep+1
 ang=xx(6,i1)*i1/n2

@@ -15,7 +15,8 @@ function [x,frequ]=linfn(G,PREC,RELTOL,options);
 //  prespecified. If by contrast A is stable or antistable, lower
 //  and upper bounds are computed using the associated Lyapunov
 //  solutions (see Glover).
- 
+// Copyright INRIA
+
 //  On input:
 //  ---------
 //     *  G is a syslin list
@@ -63,9 +64,9 @@ frequ=[];
 select rhs,
 case 1 then PREC=1.0e-3; RELTOL=1.0e-10; options='nul';
 case 2 then RELTOL=1.0e-10;
-            if type(PREC)=10 then options=PREC; PREC=1.0e-3;
+            if type(PREC)==10 then options=PREC; PREC=1.0e-3;
                              else options='nul'; end,
-case 3 then if type(RELTOL)=10 then options=RELTOL; RELTOL=1.0e-10;
+case 3 then if type(RELTOL)==10 then options=RELTOL; RELTOL=1.0e-10;
                                else options='nul'; end,
 end
  
@@ -87,7 +88,7 @@ end
  
 noa=norm(a,'inf'); nob=norm(b,'inf'); noc=norm(c,'inf'); nobc=nob*noc;
  
-if nobc=0, x=norm(d); return, end
+if nobc==0, x=norm(d); return, end
  
 scale=nobc/noa; a=a/noa; b=b/nob; c=c/noc; d=d/scale; nd=norm(d);
  
@@ -123,7 +124,7 @@ if maxi(s)*mini(s) > 0 then
  
 else
  
-   if nd=0 then  lower=INIT_LOW; LOW=INIT_LOW;
+   if nd==0 then  lower=INIT_LOW; LOW=INIT_LOW;
    else          lower=nd;       LOW=0;         end
    upper=INIT_UPP;     UPP=INIT_UPP;
  
@@ -153,11 +154,11 @@ dd=d'*d; cd=c'*d;
 // 	BISECTION STARTS
 //----------------------
  
-while 1=1,
+while %t,
  
 ga=sqrt(lower*upper);   //test point gamma = log middle of [lower,upper]
  
-if part(options,1)='t' then
+if part(options,1)=='t' then
   write(%io(2),[scale*lower,scale*ga,scale*upper],..
      '(''lower,current,upper = '',3e20.10)');
 end
@@ -218,12 +219,12 @@ else if 1-lower/upper < PREC,
        f(twona+1:nf,1:nf)=[cdga',bga',eye(dd)-dd/(lower**2)];
        [dist,frequ]=heval_test(e,f,RELTOL,'freq');
    end
-   if frequ=[] then
+   if frequ==[] then
       write(%io(2),'The computed value of || G || may be inaccurate');
    end
  
 // evaluate the condition of the eigenproblem of (e,f) near || G ||
-   if part(options,1)='c' then
+   if part(options,1)=='c' then
       gt=1.1*ga;
       f=[a,nul,-b/gt;cc,at,cd/gt;dc/gt,bt/gt,eye(dd)-dd/(gt**2)]
       co=cond_test(e,f,frequ,RELTOL);
@@ -263,7 +264,7 @@ function [dist,frequ]=heval_test(e,f,TOL,option);
 // [ ||D|| , ||G|| ]. At gamma=||G||, some finite mode(s) hit the imaginary
 // axis and their imaginary part omega is such that ||G(j omega)|| = ||G||.
 //
-// If ||D|| = ||G|| now, we always have ||G (infinity)|| = ||G||
+// If ||D|| == ||G|| now, we always have ||G (infinity)|| = ||G||
 // and if moreover some pair (a(i),b(i)) is nearly (0,0), then
 // || G (j omega) || = || G || for all omega's (direction along which G is
 // all-pass). Note that G is all-pass iff there are nz pairs
@@ -280,7 +281,7 @@ function [dist,frequ]=heval_test(e,f,TOL,option);
 // the pencil finite eigenvalues.
 // * With the option 'freq' (used for gamma = ||G||), it furthermore returns
 // all frequencies for which ||G|| is attained. Infinite frequencies are
-// denoted by -1 and if ||G(j omega)|| = ||G|| for all omega's, frequ=[-2];
+// denoted by -1 and if ||G(j omega)|| == ||G|| for all omega's, frequ=[-2];
 //
 //
 // Input:
@@ -305,7 +306,7 @@ nz=nf-sum(diag(e)); //rank deficiency of e
 [a,b]=gspec(f,e);
  
  
-if option='test' then
+if option=='test' then
 //***********************************
 //Simple test and computation of dist
 //***********************************

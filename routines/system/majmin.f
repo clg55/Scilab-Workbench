@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=MAJMIN,SSI=0
+c     Copyright INRIA
       subroutine majmin( nc, chain1, chain2)
 c
 c ====================================================================

@@ -1,4 +1,4 @@
-.TH functions 1 "April 1993" "Scilab Group" "Scilab Function"
+.TH function 1 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
 function - Scilab procedure and Scilab object
@@ -6,7 +6,7 @@ function - Scilab procedure and Scilab object
 Functions are Scilab procedures ("macro", "function" and "procedure"
 have the save meaning). Usually, they are defined 
 in files with an editor and loaded into Scilab by \fVgetf\fR or through
-a library. 
+a library (see \fVlib\fR). 
 .LP
 They can also be defined on-line (see \fVdeff\fR). 
 A file which contains a function must begin as follows:
@@ -16,11 +16,11 @@ function [y1,...,yn]=foo(x1,...,xm)
 The \fVyi\fR are output variables calculated as functions of
 input variables and variables existing in Scilab
 when the function is executed.
+.LP
 A function can be compiled for faster execution. Collections
 of functions can be collected in libraries.
-Functions which begin with \fV%\fR sign (e.g. \fV%foo\fR) and whose
-arguments are lists are used to perform specific 
-operations: for example, \fVz=%rmr(x,y)\fR is equivalent
+Functions which begin with \fV%\fR sign (e.g. \fV%foo\fR) are often
+used to overload (see \fVoverloading\fR) operations or function for new data type: for example, \fVz=%rmr(x,y)\fR is equivalent
 to \fVz=x*y\fR when \fVx\fR and \fVz\fR are rationals 
 (i.e. \fVx=tlist(['r','num','den','dt'],n,d,[])\fR with \fVn\fR and \fVd\fR polynomials).
 
@@ -36,6 +36,6 @@ getf('pathname/myfct.sci','c')
 [a,b]=myfct(1,2)
 .fi
 .SH SEE ALSO
-deff, getf, comp, lib
+deff, getf, comp, lib, function, overloading
 
 

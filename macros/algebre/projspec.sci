@@ -7,6 +7,7 @@ function [S,P,D,index]=projspec(A,tol)
 //index = index of the 0 eigenvalue
 //Author F.D.
 //!
+// Copyright INRIA
 [LHS,RHS]=argn(0)
 [n,n]=size(A);
 if RHS==1 then tol=1.d-8;end;

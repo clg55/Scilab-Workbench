@@ -1,6 +1,7 @@
 function [xdot]=car(t,x)
 //
 //
+// Copyright INRIA
 xdot=zeros(1,4) ;
 // car lenght for the control computation
 LCpct = bigL * 1.;

@@ -24,6 +24,7 @@ c
 c       fvec is an output array of length n which contains
 c         the functions evaluated at the output x.
 c
+c     Copyright INRIA
       subroutine fsol1(n,x,fvec,iflag)
       integer n,iflag
       double precision x(n),fvec(n)

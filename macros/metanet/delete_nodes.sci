@@ -1,4 +1,5 @@
 function [g1]=delete_nodes(v,g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>2 then error(39), end
 // checking v

@@ -2,6 +2,7 @@ function []=plot_graph(g,rep,rep1)
 //This function plot a graph with multiple arcs in the Scilab graphic window
 //with the orientation of arcs
 //It uses the data of the list defining the graph
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 // g
 check_graph(g)
@@ -80,7 +81,7 @@ nodefontsize=23040.*ones(1,n);
 metarcs=[xnodes-ray;-ynodes+ray;nodecolor;nodediam;nodeborder;nodefontsize];
 xset("use color",1);
 ncolor=g('node_color');
-if ncolor=[] then ncolor=0*ones(1,n);end;
+if ncolor==[] then ncolor=0*ones(1,n);end;
 spp=0*ones(n,n);
 for i=1:ma
   ii=vtail(i); kk=vhead(i);
@@ -222,7 +223,8 @@ if (rep(3)==1) then,
   end;
 end;
 //			FINAL PLOT OF PLAIN NODES
-whid=xget("white");whin=whid*ones(1,size(ncolor,2));
+whid=xget("lastpattern")+2;
+whin=whid*ones(1,size(ncolor,2));
 xfarcs(metarcs,whin);
 xarcs(metarcs,ncolor);
 //			PLOT OF NAMES OR LABELS

@@ -9,6 +9,7 @@ function x=signm(a)
 //   This macro is called by the function sign to compute square matrix
 //   sign function.
 //!
+// Copyright INRIA
 [m,n]=size(a)
 if m<>n then error(20,1),end
 flag=or(a<>a');

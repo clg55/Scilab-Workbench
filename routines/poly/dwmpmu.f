@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DWMPMU,SSI=0
+c     Copyright INRIA
       subroutine dwmpmu(mp1r,d1,nl1,mp2r,mp2i,d2,nl2,
      & mp3r,mp3i,d3,l,m,n)
 c!purpose

@@ -1,4 +1,5 @@
       subroutine dspos(op,ma,na,a,nela,inda,mb,nb,b,
+c     Copyright INRIA
      $     nelc,indc,ierr)
 c!purpose
 c     compare the elements of a  sparse matrix A and a full matrix B.

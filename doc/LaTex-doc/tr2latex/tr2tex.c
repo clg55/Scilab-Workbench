@@ -39,20 +39,18 @@ char **xargv;
 
 int
 main(argc,argv)
-int argc; 
-char *argv[];
+     int argc; 
+     char *argv[];
 {
-
-char *inbuf, *outbuf;
-
-FILE *temp,*scr;
-register char *cptr;
-int piped_in;
-int i;
-long timeval;		/* clock value from time() for ctime()	*/
-char *document = "article";			/* document type */
-char *options = "[troffms,11pt]";		/* style options */
-
+  char *inbuf, *outbuf;
+  FILE *temp,*scr;
+  register char *cptr;
+  int piped_in;
+  int i;
+  long timeval;		/* clock value from time() for ctime()	*/
+  char *document = "article";			/* document type */
+  char *options = "[troffms,11pt]";		/* default style options */
+  
 /* Allocate large arrays dynamically to conserve stack space */
 
 if (((inbuf = (char *)malloc(MAXLEN*sizeof(char))) == (char *)NULL) ||
@@ -114,7 +112,7 @@ for (xargc--,xargv++; xargc; xargc--,xargv++)
 				{
 				case 'm':
 					man = 1;
-					strcpy(options,"[troffman]");
+					options = "[troffman]";
 					break;
 				default:
 			     		fprintf(stderr,

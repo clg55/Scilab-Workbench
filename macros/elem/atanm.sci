@@ -6,6 +6,7 @@ function x=atanm(a)
 //   a   : square  matrix
 //   x   : square  matrix
 //!
+// Copyright INRIA
 if type(a)<>1 then error(53),end
 if a==[] then x=[],return,end
 [m,n]=size(a)

@@ -10,7 +10,7 @@ OBJSF = bashos.o basin.o basout.o \
 
 OBJSC  = getenvc.o link.o systemc.o zzledt.o  csignal.o getpidc.o timer.o \
 	flags.o men_Sutils.o addinter.o h_help_data.o tmpdir.o cluni0.o \
-	inffic.o 
+	inffic.o isanan.o
 
 include ../../Makefile.incl
 
@@ -33,3 +33,5 @@ zzledt.o: ../machine.h
 csignal.o: ../machine.h
 getpidc.o: ../machine.h
 timer.o: ../machine.h
+addinter.o : addinter.h 
+isanan.o:	../machine.h

@@ -129,8 +129,8 @@ c
       integer lp(*),la(*),ls(*),n
       integer tail(*),head(*)
 c
-      do 1,inod=1,n
-         do 2,ip=lp(inod),lp(inod+1)-1
+      do 1 inod=1,n
+         do 2 ip=lp(inod),lp(inod+1)-1
             tail(la(ip))=inod
             head(la(ip))=ls(ip)
  2       continue
@@ -190,3 +190,4 @@ c
          v(head(iarc))=1
  2    continue
       end
+

@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include "wf_fig.h"
 #include "wf_figx.h"
 #include "wf_resources.h"

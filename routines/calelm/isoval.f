@@ -44,6 +44,7 @@ c
 c     Corrige par C Bunks pour isovaleurs qui sont exactement egales
 c     a des entrees de la matrice 6 mars 1991.
 c!    
+c     Copyright INRIA
       double precision a(*),c,path(2,*)
       integer iw(*)
       integer lda,m,n,maxp,ierr,job

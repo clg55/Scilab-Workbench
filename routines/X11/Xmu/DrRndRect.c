@@ -1,5 +1,6 @@
 /*
  * $XConsortium: DrRndRect.c,v 1.2 89/10/03 08:38:21 rws Exp $
+ * Copyright 1989 Massachusetts Institute of Technology
  *
  * XmuDrawRoundedRectangle, XmuFillRoundedRectangle
  *

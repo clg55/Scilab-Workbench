@@ -1,5 +1,6 @@
       subroutine bound(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
-     &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
 c     Scicos block simulator
 c     Bound y(i)=rpar(nu+i) if u(i)>rpar(i) else y(i)=0
 c

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <X11/StringDefs.h>
 #include <X11/IntrinsicP.h>
 #include <X11/Xaw/ViewportP.h>

@@ -2,6 +2,7 @@
 c     =======================================================
 c     compilation info for line counter 
 c     =======================================================
+c     Copyright INRIA
       include '../stack.h'
       logical ilog,compil
       if(err1.gt.0) return

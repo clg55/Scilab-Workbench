@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=IMPCNC,SSI=0
+c     Copyright INRIA
       subroutine impcnc(pm1,d1,ld1,pm2,d2,ld2,pm3,d3,l,m,n,job)
 c!but 
 c     cette subroutine concatene deux matrices dont les coefficients

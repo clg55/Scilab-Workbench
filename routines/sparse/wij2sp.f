@@ -1,4 +1,5 @@
       subroutine wij2sp(m,n,nel,ij,vr,vi,ind,nind,iw,ierr)
+c     Copyright INRIA
       double precision vr(nel),vi(nel)
       integer ij(nel,2),ind(nind),iw(nel)
 c

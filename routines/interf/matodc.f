@@ -2,6 +2,7 @@
 c ====================================================================
 c     simulation non lineaire hybride
 c ====================================================================
+c     Copyright INRIA
       include '../stack.h'
       integer iadr,sadr
 c
@@ -16,7 +17,7 @@ c     common de lsode,lsoda,lsodar
 c
 c     commons avec bydot,bjac,....
 c
-      character*24 namef,namej,names
+      character*(nlgh+1) namef,namej,names
       common/cydot/namef
       common/cjac/namej
       common/csurf/names
@@ -869,7 +870,7 @@ c     lsodar: a root found
 c     update discrete part if necessary
  52      continue
          iflag=1
-         if(ixpr.eq.1) then
+         if(ixpr.eq.1.and.iopt.eq.1) then
             write(buf,'(''update at t = '',e10.3)') tright
             call basout(io,wte,buf(1:20))
          endif
@@ -894,7 +895,7 @@ c     store intermediate result
          do 60 k=1,niter
  59         tf=stk(lt1+k-1)
             hf=t0+nhpass*hstep+delta*hstep
-            if(ixpr.eq.1) then
+            if(ixpr.eq.1.and.iopt.eq.1) then
                write(buf,'(''tf-hf = '',e10.3)') tf-hf
                call basout(io,wte,buf(1:20))
             endif
@@ -903,7 +904,7 @@ c     set continuous integration time
                tright=hf
                nhpass=nhpass+1
                istore=1
-               if(ixpr.eq.1) then
+               if(ixpr.eq.1.and.iopt.eq.1) then
                   write(buf,'(''integ. from tleft='',e10.3,'//
      $                 ''' to hf=tf= '',e10.3)') tleft,tright 
                   call basout(io,wte,buf(1:50))
@@ -912,7 +913,7 @@ c     set continuous integration time
             elseif(tf.lt.hf) then
                tright=tf
                istore=1
-               if(ixpr.eq.1) then
+               if(ixpr.eq.1.and.iopt.eq.1) then
                   write(buf
      $                 ,'(''integ. from tleft='',e10.3,'' to tf= '','//
      $                 'e10.3)') tleft,tright 
@@ -923,7 +924,7 @@ c     set continuous integration time
                tright=hf
                nhpass=nhpass+1
                istore=0
-               if(ixpr.eq.1) then
+               if(ixpr.eq.1.and.iopt.eq.1) then
                   write(buf
      $                 ,'(''integ. from tleft='',e10.3,'' to hf= '','//
      $                 'e10.3)') tleft,tright 
@@ -989,7 +990,7 @@ c     integrate continuuous part
 c     update discrete part if necessary
             if(update) then
                iflag=1
-               if(ixpr.eq.1) then
+               if(ixpr.eq.1.and.iopt.eq.1) then
                   write(buf,'(''update at t = '',e10.3)') tright
                   call basout(io,wte,buf(1:20))
                endif

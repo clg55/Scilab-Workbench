@@ -17,6 +17,6 @@ decimal logarithm.If \fVx\fR is a vector \fVlog10(x)=[log10(x1),...,log10(xn)]\f
 10.^log10([1,%i,-1,-%i])
 .fi
 .SH SEE ALSO
-log
+log, hat, ieee
 
 

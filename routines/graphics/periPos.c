@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------
     Missile 
     XWindow and Postscript library for 2D and 3D plotting 
-    Copyright (C) 1990 Chancelier Jean-Philippe
+    Copyright (C) 1998 Chancelier Jean-Philippe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-    jpc@arletty.enpc.fr 
-    Phone : 43.04.40.98 poste : 3327 
+    jpc@cergrene.enpc.fr 
 
 --------------------------------------------------------------------------*/
 
@@ -69,6 +68,8 @@
 
 static int C2F(PosQueryFont)();
 static void C2F(displaysymbolsPos)();
+static void WriteColorRGB();
+static void WriteColorRGBDef();
 
 #define Char2Int(x)   ( x & 0x000000ff )
 
@@ -791,12 +792,19 @@ void C2F(getusecolorPos)(verbose, num, narg,dummy)
 
 /*******************************************************
  * Setting the colormap 
- * Attention :
- *   cette fonction n'est utilis'ee que si l''on est sous 
- *   le peripherique Postscript et que l'on appelle 
- *   explicitement xset("colormap",....)
- * ds le cas usuel comme cette fonction n'est pas 
- * enregistree ds Rec.c elle ne doit pas etre appellee 
+ * WARNING 
+ * -------
+ *   This function is only used when the Postscript driver is on 
+ *   and xset('colormap',..) is used 
+ *   (i.e driver('Pos');xset('colormap',....) 
+ *   In the usual case (i.e when someone exports a graphic 
+ *   which is displayed in a window) only the graphics 
+ *   recorded commands are replayed and xset('colormap') belongs 
+ *   to the non-recorded Scilab graphic commands 
+ *   
+ *   Only the <<current colormap>> of the window is translated 
+ *   to Postscript when the Postscript file is opened 
+ *   ( see  if (  CheckColormap(&m) == 1) in FileInt) 
  ******************************************************/
 
 void C2F(setcolormapPos)(v1,v2,v3,v4,v5,v6,a)
@@ -823,23 +831,29 @@ void C2F(setcolormapPos)(v1,v2,v3,v4,v5,v6,a)
   ScilabGCPos.IDLastPattern = m - 1;
   ScilabGCPos.NumForeground = m;
   ScilabGCPos.NumBackground = m + 1;
-  FPRINTF((file,"\n/ColorR ["));
-  for ( i=0; i < ScilabGCPos.Numcolors; i++)
-      FPRINTF((file,"%f ",(float) a[i]));
-  FPRINTF((file,"0.0 1.0] def"));
-  FPRINTF((file,"\n/ColorG ["));
-  for ( i=0; i < ScilabGCPos.Numcolors; i++)
-      FPRINTF((file,"%f ",(float) a[i+m]));
-  FPRINTF((file,"0.0 1.0] def"));
-  FPRINTF((file,"\n/ColorB ["));
-  for ( i=0; i < ScilabGCPos.Numcolors; i++)
-      FPRINTF((file,"%f ",(float) a[i+2*m]));
-  FPRINTF((file,"0.0 1.0] def"));
+  WriteColorRGB("R",a,0);
+  WriteColorRGB("G",a,1);
+  WriteColorRGB("B",a,2);
   C2F(usecolorPos)((i=1,&i) ,PI0,PI0,PI0);
   C2F(setalufunction1Pos)((i=3,&i),PI0,PI0,PI0);
   C2F(setpatternPos)((i=ScilabGCPos.NumForeground+1,&i),PI0,PI0,PI0);  
   C2F(setforegroundPos)((i=ScilabGCPos.NumForeground+1,&i),PI0,PI0,PI0);
   C2F(setbackgroundPos)((i=ScilabGCPos.NumForeground+2,&i),PI0,PI0,PI0);
+}
+
+static void WriteColorRGB(str,tab,ind) 
+     char *str;
+     double tab[];
+     int ind;
+{
+  int i;
+  FPRINTF((file,"\n/Color%s [",str));
+  for ( i=0; i < ScilabGCPos.Numcolors; i++)
+    {
+      FPRINTF((file,"%f ",(float) tab[3*i+ind]));
+      if ( (i % 10 ) == 0 ) FPRINTF((file,"\n"));
+    }
+  FPRINTF((file,"0.0 1.0] def"));
 }
 
 /** 
@@ -850,17 +864,23 @@ void ColorInit()
 {
   int   m = DEFAULTNUMCOLORS,i;
   ScilabGCPos.Numcolors = m;
-  FPRINTF((file,"\n/ColorR ["));
+  WriteColorRGBDef("R",default_colors,0);
+  WriteColorRGBDef("G",default_colors,1);
+  WriteColorRGBDef("B",default_colors,2);
+}
+
+static void WriteColorRGBDef(str,tab,ind) 
+     char *str;
+     unsigned short tab[];
+     int ind;
+{
+  int i;
+  FPRINTF((file,"\n/Color%s [",str));
   for ( i=0; i < ScilabGCPos.Numcolors; i++)
-      FPRINTF((file,"%f ",(float)default_colors[3*i]/255.0));
-  FPRINTF((file,"0.0 1.0] def"));
-  FPRINTF((file,"\n/ColorG ["));
-  for ( i=0; i < ScilabGCPos.Numcolors; i++)
-      FPRINTF((file,"%f ",(float)default_colors[3*i+1]/255.0));
-  FPRINTF((file,"0.0 1.0] def"));
-  FPRINTF((file,"\n/ColorB ["));
-  for ( i=0; i < ScilabGCPos.Numcolors; i++)
-      FPRINTF((file,"%f ",(float)default_colors[3*i+2]/255.0));
+    {
+      FPRINTF((file,"%f ",(float) tab[3*i+ind]/255.0));
+      if ( (i % 10 ) == 0 ) FPRINTF((file,"\n"));
+    }
   FPRINTF((file,"0.0 1.0] def"));
 }
 
@@ -871,7 +891,6 @@ void C2F(set_cPos)(i)
   j=Max(Min(i,ScilabGCPos.Numcolors+1),0);
   FPRINTF((file,"\n%d Setcolor",(int)j));
 }
-
 
 
 /** set and get the number of the background or foreground */
@@ -991,6 +1010,15 @@ void C2F(semptyPos)(verbose, v2, v3, v4)
 {
   if ( *verbose ==1 ) Scistring("\n No operation ");
 }
+void C2F(setwwhowPos)(verbose, v2, v3, v4)
+     integer *verbose;
+     integer *v2;
+     integer *v3;
+     integer *v4;
+{
+  FPRINTF((file,"\n%% SPLIT HERE"));
+
+}
 
 void C2F(gemptyPos)(verbose, v2, v3,dummy)
      integer *verbose;
@@ -1031,7 +1059,7 @@ struct bgc { char *name ;
     {"white",C2F(semptyPos),C2F(getlastPos)},
     {"window",C2F(setcurwinPos),C2F(getcurwinPos)},
     {"wpos",C2F(setwindowposPos),C2F(getwindowposPos)},
-    {"wshow",C2F(semptyPos),C2F(gemptyPos)},
+    {"wshow",C2F(setwwhowPos),C2F(gemptyPos)},
     {"wwpc",C2F(semptyPos),C2F(gemptyPos)}
  };
 
@@ -1715,6 +1743,7 @@ void FileInit()
 	{
 	  get_r(i,&r);
 	  FPRINTF((file,"%f ",r));
+	  if ( (i % 10 ) == 0 ) FPRINTF((file,"\n"));
 	}
       FPRINTF((file,"0.0 1.0 ] def"));
       FPRINTF((file,"\n/ColorG ["));
@@ -1722,6 +1751,7 @@ void FileInit()
 	{
 	  get_g(i,&g);
 	  FPRINTF((file,"%f ",g));
+	  if ( (i % 10 ) == 0 ) FPRINTF((file,"\n"));
 	}
       FPRINTF((file,"0.0 1.0] def"));
       FPRINTF((file,"\n/ColorB ["));
@@ -1729,6 +1759,7 @@ void FileInit()
 	{
 	  get_b(i,&b);
 	  FPRINTF((file,"%f ",b));
+	  if ( (i % 10 ) == 0 ) FPRINTF((file,"\n"));
 	}
       FPRINTF((file,"0.0 1.0] def"));
     }
@@ -1861,8 +1892,10 @@ must check size and cut into pieces big objects}
 \end{verbatim}
 ----------------------------------------------------------*/
 
-/** Attention :: MAXSIZE doit etre divisible par 4  pour eviter des pbs **/
-#define MAXSIZE 452
+/** WARNING  MAXSIZE must be a multiple of  2 4 8 et 6  **/
+/** 432=8*6*9 **/
+
+#define MAXSIZE 432
 #define PERLINE 20
 #define FORMATNUM "%d "
 
@@ -1884,10 +1917,11 @@ void C2F(WriteGenericPos)(string, nobj, sizeobj, vx, vy, sizev, flag, fvect)
   if (nobj ==0 || sizeobj ==0) return;
   nobjpos =Min( Max(1,MAXSIZE /sizeobj),nobj);
   while ( objbeg < nobj)
-    {integer objres;
-     objres= nobj-objbeg;
-     C2F(WriteGeneric1Pos)(string,Min(nobjpos,objres),objbeg,sizeobj,vx,vy,flag,fvect);
-     objbeg = objbeg+nobjpos;
+    {
+      integer objres;
+      objres= nobj-objbeg;
+      C2F(WriteGeneric1Pos)(string,Min(nobjpos,objres),objbeg,sizeobj,vx,vy,flag,fvect);
+      objbeg = objbeg+nobjpos;
    }
   
 }
@@ -1907,8 +1941,9 @@ void C2F(WriteGeneric1Pos)(string, nobjpos, objbeg, sizeobj, vx, vy, flag, fvect
     {  from= (objbeg*sizeobj)/2;
        n= (nobjpos*sizeobj)/2;}
   else 
-    {  from= (objbeg*sizeobj)/2;
-       n= (nobjpos*sizeobj);}
+    {  from= (objbeg*sizeobj);
+       n= (nobjpos*sizeobj);
+    }
   FPRINTF((file,"\n (%s) %d [",string,(int)Min(sizeobj,MAXSIZE)));
   /** exept for the drawarrows case fvect[i] is a pattern **/
   /** and we must change it **/

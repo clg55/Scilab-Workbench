@@ -1,5 +1,7 @@
       subroutine gensqr(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     Square wave generator
 c     period=2*rpar(1)

@@ -1,4 +1,5 @@
 // function definition
+// Copyright INRIA
 deff('[x]=t2(a,b,c,d)',[
 'z=[a b b],'
 'y=[a;c;c],'

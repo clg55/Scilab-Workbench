@@ -12,6 +12,7 @@ function []=fchamp(macr_f,fch_t,fch_xr,fch_yr,arfact,brect,flag)
 //    flag : string ( same as  plot2d )
 //Example : enter fchamp()
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 if rhs <=0,s_mat=['deff(''[xdot] = derpol(t,x)'',[''xd1 = x(2)'';';
                  '''xd2 = -x(1) + (1 - x(1)**2)*x(2)'';';
@@ -26,7 +27,7 @@ if rhs <= 5,brect=[-1,-1,1,1];end
 if rhs <= 6,flag="061";end
 [p1,q1]=size(fch_xr);
 [p2,q2]=size(fch_yr);
-if type(macr_f)=11 then comp(macr_f),end;
+if type(macr_f)==11 then comp(macr_f),end;
 fch_rect=[fch_xr(1),fch_yr(1),fch_xr(q1),fch_yr(q2)];
 if type(macr_f) <> 15,
   deff('[yy]=mmm(x1,x2)',['xx=macr_f(fch_t,[x1;x2])';'yy=xx(1)+%i*xx(2);']);

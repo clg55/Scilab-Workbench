@@ -18,6 +18,7 @@ c     iv  : entier definissant le rangement dans v
 c     m   : nombre de ligne de la matrice de polynome
 c     n   : nombre de colonne de la matrice de polynome
 c!
+c     Copyright INRIA
       double precision mp1(*),x,v(iv,*)
       integer d1(*),nl1,iv,m,n,dp
 c

@@ -1,36 +1,21 @@
+/* Copyright INRIA */
+#include "../../routines/stack-c.h"
 
-/*********************************************
- *     argument function for ode 
- *     input variables n, t, y 
- *     n = dimension of state vector y 
- *     t = time 
- *     y = state variable 
- *     output variable = ydot 
- *     ================================
- *     external routine must 
- *     load ydot[0] with d/dt ( y(1)(t) ) 
- *          ydot[1] with d/dt ( y(2)(t) ) 
- *          ... 
- *     i.e. ydot vector of derivative of state y 
- *     ================================
- *     Example: 
- *     call this ext5 routine: 
- *     ode([1;0;0],0,[0.4,4],'ext8c') 
- *     ================================
- *     With dynamic link: 
- *     -->link('ext8c.o','ext8c','C') 
- *     -->ode([1;0;0],0,[0.4,4],'ext8c') 
- *********************************************/
+/****************************************
+ *     an example with  GetMatrixptr 
+ *     -->param=[1,2,3];         
+ *     -->link('ext8c.o','ext8c','C');     
+ *     -->y=call('ext8c','out',size(param),1,'d');
+ ****************************************/
 
-int ext8c(n, t, y, ydot)
-     int *n;
-     double *t, *y, *ydot;
+int ext8c(y)
+     double *y;
 {
-  ydot[0] = y[0] * -.04 + y[1] * 1e4 * y[2];
-  ydot[2] = y[1] * 3e7 * y[1];
-  ydot[1] = -ydot[0] - ydot[2];
-  return(0);
+  static int m, n, lp,i;
+  GetMatrixptr("param", &m, &n, &lp);
+  /* param can be changed */
+  *stk(lp)=18.0;
+  /* param can be read */
+  for (i=0; i < m*n ; i++ ) y[i] = (*stk(lp+i));
+  return 0;
 }
-
-
-

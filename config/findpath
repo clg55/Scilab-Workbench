@@ -1,4 +1,6 @@
 #! /bin/sh
+# Copyright INRIA
+
 
 SCIDIR=`pwd`
 

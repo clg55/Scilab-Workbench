@@ -55,7 +55,7 @@ change_directory(path)
     } ****/
     return(0);
     /** 
-      if (get_directory(cur_dir))
+      if (get_directory())
 	return (0);
     else
 	return (1);

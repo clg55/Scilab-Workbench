@@ -1,16 +1,101 @@
+#ifndef FIG_H
+#define FIG_H
 /*
  * FIG : Facility for Interactive Generation of figures
  * Copyright (c) 1985 by Supoj Sutanthavibul
+ * Parts Copyright (c) 1994 by Brian V. Smith
+ * Parts Copyright (c) 1991 by Paul King
  *
- * "Permission to use, copy, modify, distribute, and sell this software and its
- * documentation for any purpose is hereby granted without fee, provided that
- * the above copyright notice appear in all copies and that both the copyright
- * notice and this permission notice appear in supporting documentation. 
- * No representations are made about the suitability of this software for 
- * any purpose.  It is provided "as is" without express or implied warranty."
+ * The X Consortium, and any party obtaining a copy of these files from
+ * the X Consortium, directly or indirectly, is granted, free of charge, a
+ * full and unrestricted irrevocable, world-wide, paid up, royalty-free,
+ * nonexclusive right and license to deal in this software and
+ * documentation files (the "Software"), including without limitation the
+ * rights to use, copy, modify, merge, publish, distribute, sublicense,
+ * and/or sell copies of the Software subject to the restriction stated
+ * below, and to permit persons who receive copies from any such party to
+ * do so, with the only requirement being that this copyright notice remain
+ * intact.
+ * This license includes without limitation a license to do the foregoing
+ * actions under any patents of the party supplying this software to the 
+ * X Consortium.
+ *
  */
 
+/* For the X stuff, include only Xlib.h and Intrinsic.h here - 
+   use figx.h for widget stuff */
+
+#if defined(ultrix) || defined(__bsdi__) || defined(Mips)
+#include <sys/types.h>	/* for stat structure */
+#endif
+#include <sys/stat.h>
+
+#if defined(__convex__) && defined(__STDC__)
+#define S_IFDIR _S_IFDIR
+#define S_IWRITE _S_IWRITE
+#endif
+
+#ifndef SYSV
+#ifndef SVR4
+#include <fcntl.h>
+#endif
+#endif
+
+#include <pwd.h>
+#include <signal.h>
+#include <stdio.h>
+#include <ctype.h>
+#include <errno.h>
+
+#ifndef linux 
+#if !defined(__bsdi__) && !defined(__NetBSD__)
+extern int	errno;
+extern int	sys_nerr;
+#if (! (defined(BSD) && (BSD >= 199306)))
+extern char    *sys_errlist[];
+#endif
+#endif
+#endif 
+
+extern char    *mktemp();
+
+#include <math.h>	/* for sin(), cos() etc */
+
+#include <X11/Xlib.h>
+#include <X11/Intrinsic.h>
+
 #include <X11/Xos.h>
+
+/* for those who have an older (R4) Xos.h, we need to include unistd.h here */
+
+/*
+ * Get open(2) constants
+ */
+#ifdef X_NOT_POSIX
+#include <fcntl.h>
+#ifdef USL
+#include <unistd.h>
+#endif /* USL */
+#ifdef CRAY
+#include <unistd.h>
+#endif /* CRAY */
+#ifdef MOTOROLA
+#include <unistd.h>
+#endif /* MOTOROLA */
+#ifdef SYSV386
+#include <unistd.h>
+#endif /* SYSV386 */
+#include <sys/file.h>
+#else /* X_NOT_POSIX */
+#if !defined(_POSIX_SOURCE) && defined(macII)
+#define _POSIX_SOURCE
+#include <fcntl.h>
+#undef _POSIX_SOURCE
+#else
+#include <fcntl.h>
+#endif
+#include <unistd.h>
+#endif /* X_NOT_POSIX else */
 
 #if XtSpecificationRelease > 4
 #include <X11/Xfuncs.h>
@@ -172,73 +257,52 @@ int bcmp();
 
 #endif /* XtSpecificationRelease > 4 */
 
-#ifndef X_NOT_STDC_ENV
-#include <string.h>
-#define index strchr
-#define rindex strrchr
-#else  /* X_NOT_STDC_ENV IS defined */
+#ifdef X_NOT_STDC_ENV
 #ifdef SYSV
 #include <string.h>
-#define index strchr
-#define rindex strrchr
 #else  /* NOT SYSV */
 #include <strings.h>
+#ifndef strchr
 #define strchr index
+#endif
+#ifndef strrchr
 #define strrchr rindex
+#endif
 #endif  /* SYSV */
 #endif  /* X_NOT_STDC_ENV */
 
-#include <sys/stat.h>
-
-#if defined(__convex__) && defined(__STDC__)
-#define S_IFDIR _S_IFDIR
-#define S_IWRITE _S_IWRITE
-#endif
-
-#ifndef SYSV
-#ifndef SVR4
-#include <fcntl.h>
-#endif
-#endif
-
-#include <pwd.h>
-#include <signal.h>
-#include <stdio.h>
-#include <ctype.h>
-#include <errno.h>
-
-extern int	errno;
-extern int	sys_nerr;
-extern char    *sys_errlist[];
-
-#include <math.h>	/* for sin(), cos() etc */
-
-#if defined(SYS) && defined(SYSV386)
+#if defined(SYSV) && defined(SYSV386)
 #if defined(__STDC__)
 #ifdef ISC
 extern double atof(char const *);
 #endif  /* ISC */
 #ifdef SCO
+#ifdef SCO324
+#include <stdlib.h>   /* for atof() and getenv(), maybe required for all SCO's ? */
+#else /* NOT SCO 3.2r4 */
 extern double atof(const char *);
+#endif /* SCO 3.2r4 */
 #else  /* NOT SCO */
 extern double atof();
 #endif /* SCO */
 #else  /* NOT __STDC__ */
 extern double atof();
 #endif /* __STDC__ */
-#else  /* NOT defined(SYS) && defined(SYSV386) */
+#else  /* NOT defined(SYSV) && defined(SYSV386) */
 #ifdef X_NOT_STDC_ENV
-#if defined(sun) && !defined(sparc) || defined(titan)
+#if defined(ultrix) || defined(sun) && !defined(sparc) || defined(titan) || \
+	(defined(ibm032) && !defined(_AIX))
 extern double atof();
 extern char *getenv();
 #endif /* (sun) !(sparc) (titan) */
 #else  /* NOT X_NOT_STDC_ENV */
 #include <stdlib.h>	/* for atof() and getenv() */
 #endif /* X_NOT_STDC_ENV */
-#endif /* defined(SYS) && defined(SYSV386) */
+#endif /* defined(SYSV) && defined(SYSV386) */
 
-#if defined(SYSV) || defined(SVR4) || defined(__osf__)
+#if defined(SYSV) || defined(SVR4) || defined(__osf__) || defined(USE_DIRENT)
 #define u_int uint
+#define USE_DIRENT
 #define DIRSTRUCT	struct dirent
 #else
 #define DIRSTRUCT	struct direct
@@ -250,7 +314,7 @@ extern char *getenv();
 #ifdef _POSIX_SOURCE
 #include <limits.h>
 #else
-#if !defined(sun) || defined(sparc)
+#if !defined(sun) || defined(sparc) || (defined(SVR4) && defined(i386))
 #define _POSIX_SOURCE
 #include <limits.h>
 #undef _POSIX_SOURCE
@@ -285,11 +349,15 @@ extern char *getenv();
 
 #define		DEF_NAME	"unnamed.fig"
 
-/* include only Xlib.h and Intrinsic.h here - use figx.h for widget stuff */
+#ifdef USE_INLINE
+#define INLINE inline
+#else
+#define INLINE
+#endif /* USE_INLINE */
 
-#include <X11/Xlib.h>
-#include <X11/Intrinsic.h>
+#endif /* FIG_H */
 
 #ifdef NOSTRSTR
 extern char *strstr();
 #endif
+

@@ -1,7 +1,8 @@
 function [stk,nwrk,txt,top]=%e2for(nwrk)
 // genere le code fortran relatif a l'extraction d'une sous matrice
 //!
-rhs=maxi(0,evstr(op(3))-1)
+// Copyright INRIA
+rhs=maxi(0,abs(evstr(op(3)))-1)
 sn=stk(top);top=top-1
 arg=[]
 s2=stk(top)
@@ -20,7 +21,7 @@ else
   if s2(4)=='1'&s2(5)=='1'&s1(4)=='1'&s1(5)=='1' then
     stk=list(sn(1)+'('+makeargs([s1(1),s2(1)])+')','0',sn(3),'1','1')
   else
-    if s1(4)='-1' then
+    if s1(4)=='-1' then
       nrow='-1'
       nr=sn(4)
       s1(1)='0'
@@ -28,7 +29,7 @@ else
       nrow=mulf(s1(4),s1(5))
       nr=nrow
     end
-    if s2(4)='-1' then
+    if s2(4)=='-1' then
       ncol='-1'
       nc=sn(5)
       s2(1)='0'

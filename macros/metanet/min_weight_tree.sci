@@ -1,4 +1,5 @@
 function t=min_weight_tree(i,g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select rhs
 case 1

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "../machine.h"
 
 /* see cdoublef.c, cintf.c  (pointer ip is freed) */

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DDIF,SSI=0
+c     Copyright INRIA
       subroutine ddif(n,a,na,b,nb)
 c!but
 c     ddif effectue l'operation vectorielle b=b-a

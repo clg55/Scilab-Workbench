@@ -12,7 +12,9 @@
  */
 
 #include "st.h"
-#include "stdio.h"
+#include "../machine.h"
+
+extern void sciprint _PARAMS((char *fmt,...));
 
 EXPORT char *sizes[] = {
 			 "NONSENSE!",
@@ -350,6 +352,13 @@ lcm(a, b)
 {
   return (a * b) / gcd(a, b);
 }
+
+/** configure should make this for mingw32 */
+
+#ifdef __MINGW32__
+#define HAVE_STRERROR
+#endif 
+
 
 #ifndef HAVE_STRERROR
 /* strerror function */

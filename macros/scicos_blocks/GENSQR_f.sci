@@ -1,4 +1,5 @@
 function [x,y,typ]=GENSQR_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then

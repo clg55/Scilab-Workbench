@@ -44,6 +44,7 @@ function [x,y,typ]=standard_block(job,arg1,arg2)
 //          typ         - string: 'c' if block is continuous, 'd' if discrete
 //                        'z' if zero-crossing.
 //
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then

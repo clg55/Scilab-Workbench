@@ -1,4 +1,5 @@
 function [x,y,typ]=CLKSOM_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[];
 p=1 //pixel sizes ratio
 select job

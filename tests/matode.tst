@@ -1,3 +1,4 @@
+// Copyright INRIA
 Leps=1.e-6;
 //     dy1/dt = -.04*y1 + 1.e4*y2*y3
 //     dy2/dt = .04*y1 - 1.e4*y2*y3 - 3.e7*y2**2
@@ -44,7 +45,6 @@ if maxi([y1 y2]-yref) > Leps then pause,end
 //   variation of tolerances
 atol=[0.001,0.0001,0.001];rtol=atol;
 //    externals 
-comp(f),comp(j)
 //  4. type given , scilab lhs ,jacobian not passed
 y4=ode('stiff',y0,t0,t1(1),atol,rtol,f);
 if maxi(y4(:,1)-yref(:,1)) > 0.01 then pause,end
@@ -306,5 +306,5 @@ deff('xd=f(t,x)','xd=A*x+B*sin(3*t)')
 A=rand(10,10)-4.5*eye;B=rand(10,1);
 x=ode(ones(10,1),0,[1,2,3],f);
 //link('fexab.o','fexab')
-if norm(x-ode(ones(10,1),0,[1,2,3],'fexab'),1) > 1.d-10 then pause;end
+if norm(x-ode(ones(10,1),0,[1,2,3],'fexab'),1) > 1.d-10 then pause,end
 

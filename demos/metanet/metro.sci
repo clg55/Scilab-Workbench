@@ -3,6 +3,7 @@ function []=metro()
 //needs the file 'node2station' giving the fit between nodes and the names
 //of the stations
 //needs the execution of the program 'metrostart' for the data of the graph
+// Copyright INRIA
 inin=file('open',SCI+'/demos/metanet/node2station','old');
 mamat=read(inin,388,1,'(a40)');
 file('close',inin);
@@ -112,13 +113,13 @@ while (Lnode(Depart)==-1|Lnode(Arrivee)==-1),
 g=load_graph(SCI+'/demos/metanet/paris');
 gg=load_graph(SCI+'/demos/metanet/paris2');
 show_graph(gg,'rep');
-la1=g(7);lp1=g(8);ls1=g(9);
+la1=g('node_name');lp1=g('node_type');ls1=g('node_x');
 NodeN=lp1(Lnode(Depart)+1)-lp1(Lnode(Depart))+1;
-duration=g(21);G5=g(5);
+duration=g('edge_length');tail=g('tail');
 i=1;
 Ldepart(1)=Lnode(Depart);
 for j=1:NodeN,
-  if duration(nodes_2_path([Lnode(Depart),ls1(lp1(Lnode(Depart))+j)],g))=4 then
+  if duration(nodes_2_path([Lnode(Depart),ls1(lp1(Lnode(Depart))+j)],g))==4 then
     Ldepart(i+1)=ls1(lp1(Lnode(Depart))+j);
     i=i+1;
   end
@@ -138,7 +139,7 @@ for k=1:NodeN(1),
 		temps=duration(p(j))+temps;	
 		if duration(p(j))==4 then
 		Change=Change+1;
-		ll=G5(p(j));
+		ll=tail(p(j));
 		changename(Change)=mamat(ll);
 	     end		
 	end
@@ -192,7 +193,7 @@ xset("thickness",3);
 xbasc();
 repo=2*ones(1,13);repo(1)=1;
 plot_graph(gg,repo); 
-kk=size(routef);xnodes=gg(9);ynodes=gg(10);
+kk=size(routef);xnodes=gg('node_x');ynodes=gg('node_y');
 for i=1:kk(1), 
   x1=xnodes(TTT(i)); y1=ynodes(TTT(i));
   xstring(x1,-y1,mamat(TTT(i)));
@@ -208,7 +209,7 @@ if ichoi==1 then
 xset("wdim",900,650);
 xset("font",4,4); 
     plot_graph(gg,repo,repoo);
-    kk=size(routef);xnodes=gg(9);ynodes=gg(10);
+    kk=size(routef);xnodes=gg('node_x');ynodes=gg('node_y');
     for i=1:kk(1), 
       x1=xnodes(TTT(i)); y1=ynodes(TTT(i));
       xstring(x1,-y1,mamat(TTT(i)));

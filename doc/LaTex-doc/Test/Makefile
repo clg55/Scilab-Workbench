@@ -5,7 +5,7 @@ include ../../../Makefile.incl
 
 TR2TEX = ../tr2latex/tr2tex
 
-EX = abs
+EX = binary
 
 all:: Docu.dvi
 

@@ -23,7 +23,8 @@ function [hs,pols,zers,gain]=analpf(n,fdesign,rp,omega)
 //
 //!
 // author: C. Bunks  date: 9 Sept 1988
- 
+// Copyright INRIA
+
    select fdesign
    case 'butt' then
       [pols,gain]=zpbutt(n,omega);

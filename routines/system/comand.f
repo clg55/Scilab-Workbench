@@ -1,23 +1,26 @@
       subroutine comand(id)
 C     ====================================================================
-C     Scilab Command execution 
+C     Scilab Command and Keyword 
 C     ====================================================================
 C     id(nsiz) coded name of the comand 
+c     Copyright INRIA
       include '../stack.h'
       logical compil
 C     
       integer lunit,mode(2)
 C     
       integer cmdl
-      parameter (cmdl = 22)
+      parameter (cmdl = 23)
       parameter (nz1 = nsiz-1, nz2 = nsiz-2)
 C     
       integer cmd(nsiz,cmdl),a,blank,name
       integer id(nsiz),ennd(nsiz),sel(nsiz),while(nsiz),for(nsiz)
       integer iff(nsiz)
-      integer semi,comma,eol,percen,lparen,count,equal
+      integer semi,comma,eol,percen,lparen,count,equal,nchar
       logical eqid
       integer iadr
+      common/cmds/cmd
+      save cmds
 C     
       data a/10/
       data eol/99/,semi/43/,comma/52/,lparen/41/,equal/50/
@@ -36,23 +39,34 @@ C     who
 C     pause     clear     resume
 C               then      do
 C     apropos   abort     break
-C     elseif
+C     elseif    pwd
 C     
       data ((cmd(i,j), i = 1,nsiz), j = 1,10)/
-     &     673713938,nz1*673720360,236721422,nz1*673720360,672864271,
-     &     nz1*673720360,353505568,673720334,nz2*673720360,671946510,
-     &     nz1*673720360,236260892,673717516,nz2*673720360,236718604,
-     &     nz1*673720360,487726618,nz1*673720360,487727374,
-     &     nz1*673720360,505220635,673715995,nz2*673720360/
+     &     673713938,nz1*673720360,
+     &     236721422,nz1*673720360,
+     &     672864271,nz1*673720360,
+     &     353505568,673720334,nz2*673720360,
+     &     671946510,nz1*673720360,
+     $     236260892,673717516,nz2*673720360,
+     &     236718604,nz1*673720360,
+     $     487726618,nz1*673720360,
+     &     487727374,nz1*673720360,
+     $     505220635,673715995,nz2*673720360/
       data ((cmd(i,j), i = 1,nsiz), j = 11,20)/
-     &     420810257,nz1*673720360,487199008,nz1*673720360,672665888,
-     &     nz1*673720360,471730713,673720334,nz2*673720360,168695052,
-     &     673720347,nz2*673720360,505155099,673713686,nz2*673720360,
-     &     386797853,nz1*673720360,673716237,nz1*673720360,404429066,
-     &     672929817,nz2*673720360,454560522,673720349,nz2*673720360/
-      data ((cmd(i,j), i = 1,nsiz), j = 21,22)/
-     &     168696587,673720340,nz2*673720360,236721422,673713938,
-     &     nz2*673720360/
+     &     420810257,nz1*673720360,
+     &     487199008,nz1*673720360,
+     &     672665888,nz1*673720360,
+     &     471730713,673720334,nz2*673720360,
+     &     168695052,673720347,nz2*673720360,
+     &     505155099,673713686,nz2*673720360,
+     &     386797853,nz1*673720360,
+     &     673716237,nz1*673720360,
+     &     404429066,672929817,nz2*673720360,
+     &     454560522,673720349,nz2*673720360/
+      data ((cmd(i,j), i = 1,nsiz), j = 21,23)/
+     &     168696587,673720340,nz2*673720360,
+     &     236721422,673713938,nz2*673720360,
+     &     671948825,nz1*673720360/
 C     
 
       iadr(l) = l + l - 1
@@ -62,13 +76,24 @@ C
         call basout(io,wte,' comand   : '//buf(1:nlgh))
       endif
 C     
+
       fun = 0
       do 10 k = 1,cmdl
-        if (eqid(id,cmd(1,k))) goto 11
+        if (eqid(id,cmd(1,k))) then
+           if(k.eq.15.or.(k.ge.11.and.k.le.13).or.k.eq.19) goto 11
+           goto 15
+        endif
  10   continue
+
+c     form function like call
       fin = 0
-      if(char1.eq.lparen.or.char1.eq.equal) return
+      nchar=lin(lpt(4))
       if(char1.eq.comma.or.char1.eq.semi.or.char1.eq.eol) return
+ 11   continue
+      fin=0
+      if(char1.eq.lparen.or.char1.eq.equal) return
+      rhs=0
+
       call funs(id)
       if(fin.eq.0) then
          if(comp(1).eq.0) then
@@ -84,18 +109,19 @@ C
             fun=-1
          endif
       else
+         if(char1.eq.comma.or.char1.eq.semi.or.char1.eq.eol) return
          call cmdstr
       endif
       return
 C     
- 11   if (fin .eq. -1) return
+ 15   if (fin .eq. -1) return
 C     
       fin = 1
 C     mots cles if  then else for do  while end case selec
       goto (32,33,30,31,35,36,37) k
       goto (42,42) k-16
 C     
-      goto (50,50,45,80,65,60,20,25,45,16,16,90,120,130,38) k-7
+      goto (50,55,45,16,16,16,20,16,45,16,16,16,120,130,38,140) k-7
  16   call error(16)
       return
 C     
@@ -104,6 +130,12 @@ C     pause
 C     -----
 C     
  20   continue
+c     if special compilation mode skip  comands
+      if (comp(3).eq.1) then
+         fin=0
+         fun=0
+         return
+      endif
       if (char1.ne.eol .and. char1.ne.comma .and. char1.ne.semi) then
         call error(16)
         return
@@ -113,47 +145,7 @@ C     compilation de pause:<12>
       fin = 3
       goto 999
 C     
-C     -----
-C     clear
-C     -----
-C     
- 25   continue
-      if (comp(1) .ne. 0) then
-        call error(51)
-        if (err .gt. 0) return
-      endif
-      ic = abs(char1)
-      if (ic.ge.a.and.ic.lt.blank .or. char1.eq.percen) goto 27
-      if (char1.ne.eol .and. char1.ne.semi .and. char1.ne.comma) then
-        call error(16)
-        return
-      endif
-      bot = bbot
-      if (macr.eq.0 .and. paus.eq.0) goto 998
-      k = lpt(1) - (13+nsiz)
-      bot = lin(k+5)
-      goto 998
-C     
- 27   call getsym
-      if (top+2 .ge. bot) then
-        call error(18)
-        if (err .gt. 0) return
-      endif
-      top = top + 1
-      il = iadr(lstk(top))
-      err = lstk(top) + 1 - lstk(bot)
-      if (err .gt. 0) then
-        call error(17)
-        if (err .gt. 0) return
-      endif
-      istk(il) = 0
-      lstk(top+1) = lstk(top) + 1
-      rhs = 0
-      call stackp(syn(1),0)
-      if (err .gt. 0) return
-      if (char1.ne.eol .and. char1.ne.comma .and. char1.ne.semi) goto 27
-      fin = 1
-      goto 998
+
 C     
 C     ---------------------------------------
 C     for, while, if, else, end, select, case, elseif
@@ -229,10 +221,16 @@ C     compilation return:<99>
       goto 999
 C     
 C     -------------
-C     fin exit quit
+C     quit
 C     -------------
 C     
  50   continue
+c     if special compilation mode skip  comands
+      if (comp(3).eq.1) then
+         fin=0
+         fun=0
+         return
+      endif
 C     compilation quit:<17>
       if (compil(17,0,0,0,0)) return
       if (paus .ne. 0) then
@@ -255,72 +253,58 @@ C     quit (sortie)
         fun = 99
       endif
       goto 998
+
 C     
+C     -------------
+C     exit
+C     -------------
+C   
+ 55   continue
+c     if special compilation mode skip  comands
+      if (comp(3).eq.1) then
+         fin=0
+         fun=0
+         return
+      endif
+C     compilation exit:<20>
+      if (compil(20,0,0,0,0)) return
+      if (niv.gt.0) then
+         call sciquit
+         stop
+      endif
+      fun = 99
+      goto 998
+C     
+C     pwd
 C     ---
-C     who
-C     ---
-C     
- 60   if (char1 .eq. lparen) then
-C     who avec rhs  --> fonction et non commande
-        fin = 0
-        goto 999
+ 140  continue
+c     if special compilation mode skip  comands
+      if (comp(3).eq.1) then
+         fin=0
+         fun=0
+         return
       endif
-      if (comp(1) .ne. 0) then
-        call error(51)
-        if (err .gt. 0) return
-      endif
-      call msgs(38,0)
-      call prntid(idstk(1,bot),isiz-bot+1,wte)
-      l = lstk(isiz) - lstk(bot) + 1
-      write (buf,'(4i7)') l, lstk(isiz)-lstk(1), isiz-bot, isiz-1
-      call msgs(39,0)
-      goto 998
-C     
-C     ----
-C     what
-C     ----
-C     
- 65   if (comp(1) .ne. 0) then
-        call error(51)
-        if (err .gt. 0) return
-      endif
-C     fonctions
-C      call msgs(40,0)
-      call funtab(id,0,0)
-C     comandes
-      fin = 1
-      call msgs(41,0)
-      call prntid(cmd,cmdl,wte)
-      goto 998
-C     
-C     ----
-C     help
-C     ----
-C     
- 80   if (comp(1) .ne. 0) then
-        call error(51)
-        if (err .gt. 0) return
-      endif
-      call helpmg
-      if (err .gt. 0) goto 999
-      goto 998
-C     
-C     ----
-C     apropos
-C     ----
-C     
- 90   if (comp(1) .ne. 0) then
-        call error(51)
-        if (err .gt. 0) return
-      endif
-      call apropo
-      if (err .gt. 0) goto 999
-      goto 998
+      fun=13
+      fin=44
+      rhs=0
+      if(char1.eq.comma.or.char1.eq.semi.or.char1.eq.eol) return
+      call cmdstr
+      return
+C
+
+ 60   continue
+      
 C     
 C     abort
 C     -----
 C     
  120  continue
+c     if special compilation mode skip  comands
+      if (comp(3).eq.1) then
+         fin=0
+         fun=0
+         return
+      endif
       if (compil(14,0,0,0,0)) return
 C     compilation abort:<14>
       pt = pt + 1
@@ -370,6 +354,12 @@ C
 C     break
 C------
  130  continue
+c     if special compilation mode skip  comands
+      if (comp(3).eq.1) then
+         fin=0
+         fun=0
+         return
+      endif
       if (compil(13,0,0,0,0)) return
 C     compilation de break:<13>
       count = 0

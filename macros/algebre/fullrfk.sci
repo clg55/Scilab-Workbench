@@ -5,6 +5,7 @@ function [Bk,Ck]=fullrfk(A,k)
 // For k=1 fullrfk is the same as fullrf.
 // F.D (1990)
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0);
 if rhs==1,
     k=1;end

@@ -1,5 +1,7 @@
       subroutine mscope(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 c     ipar(1) = win_num
 c     ipar(2) = number of subwindows (input ports)
@@ -29,6 +31,7 @@ c
       double precision dv
       double precision frect(4)
       character*(4) logf
+      character*4 name
       logical herited
       common /dbcos/ idb
       data cur/0/,verb/0/
@@ -39,6 +42,15 @@ c
      $        ,flag,ipar(1) 
       endif
 c     
+c     
+      call dr1('xgetdr'//char(0),name,v,v,v,v,v,v,
+     $     dv,dv,dv,dv)
+      if(name(1:3).ne.'Rec') then
+         call dr1('xsetdr'//char(0),'Rec'//char(0),v,v,v,v,v,v,
+     $        dv,dv,dv,dv)
+      endif
+c
+
       wid=ipar(1)
       nwid=ipar(2)
       N=ipar(3)
@@ -51,7 +63,7 @@ c     compatibility
          herited=ipar(8+ipar(2)+nu).ne.0
       endif
 c
-      if((flag.eq.1.and.nevprt.gt.0).or.(flag.le.2.and.herited)) then
+      if (flag.le.2) then
          K=int(z(1))
          if(K.gt.0) then
             n1=int(z(1+K)/per)
@@ -243,4 +255,9 @@ c     loop on input port elements
  30         continue
  35      continue
       endif
+
+      call dr1('xsetdr'//char(0),name,v,v,v,v,v,v,
+     $     dv,dv,dv,dv)
+ 
       end
+ 

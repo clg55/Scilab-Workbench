@@ -1,4 +1,5 @@
       subroutine ftob(x,nx,topx)
+c     Copyright INRIA
       include '../stack.h'
       integer iadr,sadr
 c

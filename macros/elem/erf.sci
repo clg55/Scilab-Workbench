@@ -14,4 +14,5 @@ function y=erf(x)
 //%See also 
 // erfc erfcx calerf
 //!
+// Copyright INRIA
 y=calerf(x,0)

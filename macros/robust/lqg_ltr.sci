@@ -27,7 +27,8 @@ function [kf,kc]=lqg_ltr(sl,mu,ro)
 //outputs:
 //-- kf , kc = controller and observer Kalman gains.
 //!
-     [m,p]=size(sl);
+// Copyright INRIA
+[m,p]=size(sl);
      [a,b,c,d]=abcd(sl);
      r1=c'*c,r2=ro**2*eye(p,p),
      q=b*b',r=mu**2*eye(m,m),

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=HORNER,SSI=0
+c     Copyright INRIA
       subroutine horner(p,dp,xr,xi,vr,vi)
 c!but
 c     cette subroutine calcule la valeur du polynome p au point x

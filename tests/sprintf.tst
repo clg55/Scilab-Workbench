@@ -1,3 +1,4 @@
+// Copyright INRIA
 //test format '%f'
 //
 deff('[y]=bugnum(str1,str2,str3)',['[lhs,rhs]=argn(0);if rhs==3 then y= str1<>str2 & str1<>str3;';
@@ -35,10 +36,10 @@ if bugnum(sprintf('%15g',0.00433),'        0.00433','         .00433' ) then pau
 if bugnum(sprintf('%15g',0.0000000345456),'    3.45456e-08' ) then pause,end
 if bugnum(sprintf('%15g',11124234534545),'    1.11242e+13' ) then pause,end
 
-if bugnum(sprintf('%.1g',-35),'-4e+01' ) then pause,end
-if bugnum(sprintf('%.0g',-35),'-4e+01' ) then pause,end
-if bugnum(sprintf('%#.0g',-35),'-4.e+01' ) then pause,end
-if bugnum(sprintf('%#.0G',-35),'-4.E+01' ) then pause,end
+if bugnum(sprintf('%.1g',-35.1),'-4e+01' ) then pause,end
+if bugnum(sprintf('%.0g',-35.1),'-4e+01' ) then pause,end
+if bugnum(sprintf('%#.0g',-35.1),'-4.e+01' ) then pause,end
+if bugnum(sprintf('%#.0G',-35.1),'-4.E+01' ) then pause,end
 if bugnum(sprintf('%.1g',0.00433),'0.004' ,' .004' ) then pause,end
 if bugnum(sprintf('%.15g',0.0000000345456),'3.45456e-08' ) then pause,end
 if bugnum(sprintf('%.1g',11124234534545),'1e+13' ) then pause,end
@@ -60,8 +61,8 @@ if bugnum(sprintf('%+15e',0.0000000345456),'   +3.454560e-08' ) then pause,end
 if bugnum(sprintf('%15e',11124234534545),'   1.112423e+13' ) then pause,end
 
 if bugnum(sprintf('%.1e',-35),'-3.5e+01' ) then pause,end
-if bugnum(sprintf('%.0e',-35),'-4e+01' ) then pause,end
-if bugnum(sprintf('%#.0e',-35),'-4.e+01' ) then pause,end
+if bugnum(sprintf('%.0e',-35.1),'-4e+01' ) then pause,end
+if bugnum(sprintf('%#.0e',-35.1),'-4.e+01' ) then pause,end
 if bugnum(sprintf('%.1e',0.00433),'4.3e-03' ) then pause,end
 if bugnum(sprintf('%.15e',0.0000000345456),'3.454560000000000e-08' ) then pause,end
 if bugnum(sprintf('%.1e',11124234534545),'1.1e+13' ) then pause,end

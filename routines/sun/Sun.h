@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #ifndef SUNSCI_PROTO
 #define  SUNSCI_PROTO
 

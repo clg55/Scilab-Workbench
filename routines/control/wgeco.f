@@ -1,4 +1,5 @@
       subroutine wgeco(ar,ai,lda,n,ipvt,rcond,zr,zi)
+c     Copyright INRIA
       integer lda,n,ipvt(*)
       double precision ar(lda,*),ai(lda,*),zr(*),zi(*)
       double precision rcond

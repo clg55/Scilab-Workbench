@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /* wmchoice1.c
  * Scilab 
  *   Jean-Philippe Chancelier 
@@ -43,8 +44,8 @@ int SciChoiceI(label,defval,nitems)
     {
       for ( i=0 ; i < nitems ; i++) 
 	{
-	  sciprint("Item %d choix %d\r\n",i+1,  
-	     Everything[i]->choice.default_toggle +1); 
+	  /*sciprint("Item %d choix %d\r\n",i+1,  
+	    Everything[i]->choice.default_toggle +1); */
 	  defval[i]= Everything[i]->choice.default_toggle +1;
 	}
       return(TRUE);
@@ -313,7 +314,8 @@ int mChoiceWindow(void)
   PROPSHEETPAGE psp[NPAGESMAX];
   PROPSHEETHEADER psh;
   HWND hwndOwner;
-  hwndOwner = textwin.hWndParent;
+  if ( (hwndOwner = GetActiveWindow()) == NULL) 
+    hwndOwner =  textwin.hWndParent;
   SciMChoice.NPages = SciMChoice.nv /  NITEMMAXPAGE;
   for ( i = 0 ; i < SciMChoice.NPages ; i++) 
     {
@@ -341,7 +343,7 @@ int mChoiceWindow(void)
   psh.u2.nStartPage = SciMChoice.CPage;
   psh.u3.ppsp = (LPCPROPSHEETPAGE) &psp;
 #else 
-  psh.nStartPage = 0;
+  psh.nStartPage = SciMChoice.CPage;
   psh.ppsp = (LPCPROPSHEETPAGE) &psp;
 #endif
   return (PropertySheet(&psh));

@@ -3,8 +3,9 @@ function [enx,X,Y,eny]=entropy(S,gama)
 //[enx,X,Y,eny]=entropy(S,gama)
 //!
 //
+// Copyright INRIA
 S1=S(1);
-if S1(1)='r' then S=tf2ss(S);end
+if S1(1)=='r' then S=tf2ss(S);end
 [A,B,C,D]=S(2:5);
 g1=1/gama;
 H=[A,g1*B*B';-g1*C'*C,-A'];

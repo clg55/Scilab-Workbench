@@ -1,7 +1,7 @@
 
 xbasc(2)                       Scilab Function                       xbasc(2)
 NAME
-  xbasc - clear the recorded graphics associated to a window
+  xbasc - clear a graphic window and erase associated recorded graphics
 
 CALLING SEQUENCE
   xbasc([win_num])

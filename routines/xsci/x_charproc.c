@@ -1,4 +1,3 @@
-
 /*
  * $XConsortium: charproc.c,v 1.176 92/03/13 18:00:30 gildea Exp $
  */
@@ -58,6 +57,11 @@
 
 #include <string.h> /* in case of dmalloc */ 
 #include <malloc.h>  /* in case of dmalloc */ 
+
+#ifdef WITH_TK
+#include "../tksci/tksci.h"
+#endif
+
 
 #include "All-extern-x.h"
 #include "All-extern.h"
@@ -578,8 +582,11 @@ void Scistring(str)
 }
 
 
-
+#ifdef __STDC__
+#include <stdarg.h>
+#else
 #include <varargs.h>
+#endif 
 
 /* 
   Fonction de type print(format,args,....) 
@@ -587,30 +594,37 @@ void Scistring(str)
 */
 
 
+#ifdef __STDC__ 
+void  sciprint(char *fmt,...) 
+#else 
 /*VARARGS0*/
 void sciprint(va_alist) va_dcl
+#endif 
 {
   int i;
   integer lstr;
   va_list ap;
-  char *format;
   char s_buf[1024];
+#ifdef __STDC__
+  va_start(ap,fmt);
+#else
+  char *fmt;
   va_start(ap);
-  format = va_arg(ap, char *);
+  fmt = va_arg(ap, char *);
+#endif
   C2F(xscion)(&i);
   if (i == 0) 
     {
-      (void)  vfprintf(stdout, format, ap );
+      (void)  vfprintf(stdout, fmt, ap );
     }
   else 
     {
-      (void ) vsprintf(s_buf, format, ap );
+      (void ) vsprintf(s_buf, fmt, ap );
       lstr=strlen(s_buf);
       C2F(xscisncr)(s_buf,&lstr,0L);
     }
   va_end(ap);
 }
-
 
 
 /* I/O Function */
@@ -1194,18 +1208,23 @@ void v_write(f, d, len)
 static int select_mask;
 static int pty_read_bytes;
 
-/* 
+/************************************************************************ 
   This routine is called by the Scilab interpreter in the course of 
   computation to checks for all events except typed text (but testing 
   Ctrl )
   and to deal with them 
-*/
+  
+************************************************************************/
    
 extern int ctrl_action();
+
 
 void xevents1()
 {
   int bcnt1 = bcnt;
+#ifdef WITH_TK
+  flushTKEvents();
+#endif
   /* If queue is empty we reinitialize bptr */
   if ( bcnt1 == 0) bptr=buffer ;
   x_events();
@@ -1214,12 +1233,13 @@ void xevents1()
       if (ctrl_action((int) buffer[bcnt1])==1)
 	{
 	  /** since the Ctr Key was processed we remove it from the 
-	    input keys buffer */
+	      input keys buffer */
 	  bcnt = bcnt1;
 	  cok = bcnt;
 	}
     }
 }
+
 
 /****************************************
  * main Input function 
@@ -1278,27 +1298,44 @@ int in_put()
     /* Update the masks and, unless X events are already in the queue, wait
      * for I/O to be possible. */
 
-    select_mask = X_mask;
+#ifdef WITH_TK
+    /* select_mask = X_mask; */
+    /* does not work everywhere : FD_SET(XTKsocket,&select_mask); */
+    select_mask = X_mask | (1 << XTKsocket);
     select_timeout.tv_sec = 1;
     select_timeout.tv_usec = 0;
-    i = select(max_plus1, (fd_set *)&select_mask, (fd_set *) NULL, (fd_set *) NULL,
+    max_plus1 = (max_plus1 < (XTKsocket+1)) ? (XTKsocket+1): max_plus1;
+    i = select(max_plus1,(fd_set *)&select_mask,(fd_set *) NULL,(fd_set *) NULL,
 	       QLength(screen->display) ? &select_timeout
 	       : (struct timeval *) NULL);
+#else 
+    select_mask = X_mask;		
+    select_timeout.tv_sec = 1;
+    select_timeout.tv_usec = 0;
+    i = select(max_plus1,(fd_set *)&select_mask,(fd_set *) NULL,(fd_set *) NULL,
+	       QLength(screen->display) ? &select_timeout
+	       : (struct timeval *) NULL);
+#endif
     if (i < 0)
-    {
-      if (errno != EINTR)
-	SysError(ERROR_SELECT);
-      continue;
-    }
+      {
+	if (errno != EINTR)
+	  SysError(ERROR_SELECT);
+	continue;
+      }
+
+#ifdef WITH_TK
+    if ( select_mask & (1 << XTKsocket)) flushTKEvents();
+#endif
+
     /* if there are X events already in our queue, it counts as being
      * readable */
     if (QLength(screen->display) || (select_mask & X_mask))
-    {
-      cok = 0;
-      bcnt = 0;
-      bptr = buffer;
-      x_events();
-    }
+      {
+	cok = 0;
+	bcnt = 0;
+	bptr = buffer;
+	x_events();
+      }
   }
   bcnt--;
   return (*bptr++);

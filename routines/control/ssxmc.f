@@ -119,6 +119,7 @@ c!originator
 c
 c                p.hr.petkov, higher institute of mechanical and
 c                electrical engineering, sofia, bulgaria, april 1981
+C     Copyright SLICOT
 c
 c!comments
 c

@@ -32,6 +32,7 @@ c           fortran : len
 c
 c ====================================================================
 c
+c     Copyright INRIA
       include '../stack.h'
       integer       lunit,mode(*)
       character*(*) name
@@ -292,7 +293,7 @@ cvax
             endif
          endif
          unit(lunit) = 1
-         if(ista.ne.0) rewind lunit
+         if(ista.ne.0.and.iacc.eq.0) rewind(lunit)
       endif
 c
       goto 100

@@ -7,6 +7,7 @@ c h (e) dimension n(n+1)/2. tiangle superieur, coefficients par ligne
 c x (e) vecteur de dimension n
 c hx (s) dimension n. resultat du produit
 c
+c     Copyright INRIA
 c
 c parametre
       double precision  zero

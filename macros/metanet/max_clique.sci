@@ -1,4 +1,5 @@
 function [nsize,nodes]=max_clique(g,ind)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs>2|rhs<1 then 
   error(39)

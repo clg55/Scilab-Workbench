@@ -1,5 +1,9 @@
+#-----------------------------
+# generated from Makefile: DO NOT EDIT
+# -----------------------------
 SHELL = /bin/sh
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/control.lib
 
@@ -29,10 +33,15 @@ OBJSF =  bezous.obj cerr.obj coef.obj dclmat.obj dexpm1.obj \
 	rpoly.obj split.obj tql2.obj tred2.obj wbalin.obj wbdiag.obj wexchn.obj \
 	wshrsl.obj fstair.obj
 
-
 include ../../Makefile.incl.mak
 
 CFLAGS = $(CC_OPTIONS)
 
 include ../Make.lib.mak
+
+
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile
+
 

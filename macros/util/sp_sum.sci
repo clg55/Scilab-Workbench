@@ -1,4 +1,5 @@
 function a=sp_sum(a,flag)
+// Copyright INRIA
 [m,n]=size(a);
 if flag==2|flag=='c' then
   a=a*sparse(spzeros(n,1)+1);

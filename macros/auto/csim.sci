@@ -29,6 +29,7 @@ function [y,x]=csim(u,dt,sl,x0)
 //See also:
 // dsimul flts ltitr rtitr ode impl
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 //
 if rhs<3 then error(39),end
@@ -47,12 +48,12 @@ if sl(7)<>'c' then warning('csim: time domain is assumed continuous'),end
 if type(d)==2&degree(d)>0 then d=coeff(d,0);warning('D set to constant');end
 [ma,mb]=size(b);
 //
-imp=0;text='if t=0 then y=0, else y=1,end'
+imp=0;text='if t==0 then y=0, else y=1,end'
 //
 select type(u)
  case 10 then //
     if mb<>1 then error(95,1);end;
-    if part(u,1)='i' then
+    if part(u,1)=='i' then
            imp=1;
            if norm(d,1)<>0 then
                warning('direct feedthrough (d) <> 0;set to zero');
@@ -64,15 +65,15 @@ select type(u)
  case 13,
  case 15 then
     uu=u(1),
-    if type(uu)=11 then 
+    if type(uu)==11 then 
       comp(uu),
       u(1)=uu,
     end
  else error(44,2)
 end;
 //
-if rhs=3 then x0=sl(6),end
-if imp=1 then x0=0*x0,end
+if rhs==3 then x0=sl(6),end
+if imp==1 then x0=0*x0,end
 nt=size(dt,'*');x=0*ones(ma,nt)
 [a,v,bs]=bdiag(a,1);b=v\b;c=c*v;x0=v\x0;
 //
@@ -99,10 +100,10 @@ for n=bs',
   if nrmu > 0 then
     atol=1.d-7*nrmu;rtol=atol/100
     x(kk,:)=ode('adams',x0(kk),dt(1),dt,rtol,atol,%sim2)
-    if imp=1 then x(kk,:)=ak*x(kk,:)+bk*ut,end
+    if imp==1 then x(kk,:)=ak*x(kk,:)+bk*ut,end
   end;
   k=k+n
 end;
-if imp=0 then y=c*x+d*ut,else y=c*x,end
-if lhs=2 then x=v*x,end
+if imp==0 then y=c*x+d*ut,else y=c*x,end
+if lhs==2 then x=v*x,end
 

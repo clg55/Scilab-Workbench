@@ -139,7 +139,7 @@ int read_line(char *prompt)
   else 
     {
       /* normal line input */
-      register        i = start;
+      register int i = start;
       while ((input_line[i] = input_line[i + 2]) != (char) NULL)
 	i++;	/* yuck!  move everything down two characters */
 	  
@@ -177,10 +177,19 @@ void do_system()
     os_error("system() failed", NO_CARET);
 }
 
+
+void do_system1()
+{
+  sciprint("%d \r\n",system(input_line + 1));
+}
+
+
+
 /* there is a system like call on MS Windows but it is a bit difficult to 
    use, so we will invoke the command interpreter and use it to execute the 
    commands */
 
+/** #define WINEXECDEBUG **/
 
 int winsystem(char *s,int flag)
 {
@@ -188,7 +197,7 @@ int winsystem(char *s,int flag)
   int sw_sci_flag;
    /* get COMSPEC environment variable */
   char envbuf[81];
- if ( flag == 1) 
+  if ( flag == 1) 
     sw_sci_flag = SW_SHOWNORMAL;
   else 
     sw_sci_flag = SW_HIDE;
@@ -204,7 +213,9 @@ int winsystem(char *s,int flag)
     p++;
   if (*p == '\0')
     {
-      /** sciprint("TestMessage : WinExec de %s\r\n",comspec); **/
+#ifdef WINEXECDEBUG
+      sciprint("TestMessage0 : WinExec de %s\r\n",comspec); 
+#endif 
       WinExec(comspec, SW_SHOWNORMAL);
     }
   else
@@ -215,16 +226,20 @@ int winsystem(char *s,int flag)
       if ( s[0] == '/' && s[1] == '/' && s[3] == '/' ) 
 	{
 	  sprintf(execstr,"%c:%s",s[2],s+3);
-	  /* sciprint("TestMessage : WinExec de %s\r\n",execstr); */
+#ifdef WINEXECDEBUG
+	   sciprint("TestMessage1 : WinExec de %s\r\n",execstr); 
+#endif
 	  res = WinExec(execstr, sw_sci_flag) ;
 	}
       else 
 	{
 	  sprintf(execstr,"%s",s);
-	  /* sciprint("TestMessage : WinExec de %s\r\n",execstr); */
+#ifdef WINEXECDEBUG
+	   sciprint("TestMessage2 : WinExec de %s\r\n",execstr); 
+#endif
 	  res = WinExec(execstr, sw_sci_flag) ;
 	}
-      if ( res <= 32)
+      if ( res <= 31)
 	{
 	  /* attempt to run it as a dos program from command line */
 	  if ( s[0] == '/' && s[1] == '/' && s[3] == '/' ) 
@@ -235,15 +250,56 @@ int winsystem(char *s,int flag)
 	    {
 	      sprintf(execstr,"%s /c %s",comspec,s);
 	    }
-	  /* sciprint("TestMessage : WinExec de %s\r\n",execstr); */
-	  WinExec(execstr, sw_sci_flag);
-	  free(execstr);
+#ifdef WINEXECDEBUG
+	  sciprint("TestMessage3 : WinExec de %s\r\n",execstr); 
+#endif
+	  res = WinExec(execstr, sw_sci_flag);
+	  if ( res <= 31 ) 
+	    sciprint("WinExec of %s failed \r\n",execstr);
 	}
+      free(execstr);
     }
   /* regardless of the reality return OK - the consequences of */
   /* failure include shutting down Windows */
   return(0);		/* success */
 }
 
+/** pas franchement utile **/
 
+int MyWinExec(char *str,  int sw_sci_flag)
+{
+  STARTUPINFO start;
+  SECURITY_ATTRIBUTES sec_attrs;
+  PROCESS_INFORMATION child;
+  int wait_for_child = TRUE;
+  DWORD ret_code = 0;
+  memset (&start, 0, sizeof (start));
+  start.cb = sizeof (start);
+  start.dwFlags = STARTF_USESHOWWINDOW;
+  start.wShowWindow = SW_HIDE;
+  /** start.wShowWindow = SW_SHOWMINIMIZED; **/
+  sec_attrs.nLength = sizeof (sec_attrs);
+  sec_attrs.lpSecurityDescriptor = NULL;
+  sec_attrs.bInheritHandle = FALSE;
+  if (CreateProcess (NULL, str , &sec_attrs, NULL, TRUE, 0,
+		     NULL, NULL, &start, &child))
+    {
+      if (wait_for_child)
+	{
+	  WaitForSingleObject (child.hProcess, INFINITE);
+	  GetExitCodeProcess (child.hProcess, &ret_code);
+	}
+      CloseHandle (child.hThread);
+      CloseHandle (child.hProcess);
+    }
+  else
+    goto error;
+  if ( (int) ret_code == 0 )
+    return 32 ;
+  else 
+    return 0;
+error:
+  sciprint(" Could not exec %s\r\n",str);
+  return 32;
+}
 

@@ -1,5 +1,6 @@
 function [tevts,evtspt,pointi]=init_agenda(initexe,clkptr)
 
+// Copyright INRIA
 // order initial firing events in chronological order.
 nblk=size(clkptr,1)-1
 timevec=initexe(:,3)

@@ -1,7 +1,7 @@
 
 dscr(1)                        Scilab Function                        dscr(1)
 NAME
-  dsimul -  discrete time simulation
+  dsimul -  state space discrete time simulation
 
 CALLING SEQUENCE
   y=dsimul(sl,u)
@@ -15,8 +15,9 @@ PARAMETERS
   y         : output of sl
 
 DESCRIPTION
-  Utility function. If [A,B,C,D]=abcd(sl), dsimul returns
-  y=C*ltitr(A,B,u,x0)+D*u i.e.  the time response of sl to the input u.
+  Utility function. If [A,B,C,D]=abcd(sl) and x0=sl('X0'), dsimul returns
+  y=C*ltitr(A,B,u,x0)+D*u i.e.  the time response of sl to the input u.  sl
+  is assumed to be in state space form (syslin list).
 
 EXAMPLE
   z=poly(0,'z');

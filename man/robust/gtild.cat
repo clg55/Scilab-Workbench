@@ -51,7 +51,7 @@ EXAMPLE
   clean((horner(ss2tf(G),-s))'-ss2tf(Gt))   //Check
   // Discrete-time
   z=poly(0,'z');
-  Gss=ssrand(2,2,3);Gss(7)='d'; //discrete-time
+  Gss=ssrand(2,2,3);Gss('dt')='d'; //discrete-time
   Gss(5)=[1,2;0,1];   //With a constant D matrix
   G=ss2tf(Gss);Gt1=horner(G,1/z)';
   Gt=gtild(Gss);

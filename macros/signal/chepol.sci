@@ -6,13 +6,14 @@ function [Tn]=chepol(n,var)
 //
 //!
 //Author F.D.
+// Copyright INRIA
 T1=poly(0,var);
 T0=1+0*T1;
-if n=0 then,
+if n==0 then,
       Tn=T0,
       return,
 end,
-if n=1 then,
+if n==1 then,
       Tn=T1,
       return,
 end,

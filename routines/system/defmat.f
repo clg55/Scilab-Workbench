@@ -3,6 +3,7 @@ c     ---------------------------------
 C     Add an empty matrix on the stack 
 C     and blank var on vars
 C     ---------------------------------
+c     Copyright INRIA
       include '../stack.h'
       logical compil,cremat
       integer bl(nsiz)

@@ -1,18 +1,16 @@
       subroutine bva(fname)
-C     Interface for the colnew program for boundary values problem.
-C     the type and consistency checks are omited here they are to be done 
-C     at Scilab level.
-C     ==============================================================
+c
 C      implicit undefined (a-z)
+c     Copyright INRIA
+      include '../stack.h'
       character*(*) fname
-      character*24   efsub,edfsub,egsub,edgsub,eguess
+      character*(nlgh+1)   efsub,edfsub,egsub,edgsub,eguess
       integer    kfsub,kdfsub,kgsub,kdgsub,kguess,topk
       external   fsub,dfsub,gsub,dgsub,dguess
       external setfcolgu,setfcoldg,setfcolg,setfcoldf
       external setfcolf
       integer    mstar,ncomp,io
       double precision aleft,aright
-      include '../stack.h'
       integer iadr,lr,iflag,mf,nf,lfixpnt,mtol,ntol,ltol,l
       integer mltol,nltol,lltol,iero,mipar,nipar,lipar,mzeta,nzeta,lzeta
       integer mm,mn,lrm,i,lispace,lspace,lc,ki,kz,kx,lr1,lc1
@@ -27,53 +25,95 @@ C     External Position in stack and arguments model position in stack
 C     Type of externals 
       common / coltyp / itfsub,itdfsub,itgsub,itdgsub,itguess
       common / icolnew/  ncomp,mstar
+c
       iadr(l)=l+l-1
+
+c
+      if (ddt .eq. 4) then
+         write(buf(1:4),'(i4)') fin
+         call basout(io,wte,' bva '//buf(1:4))
+      endif
+c
+c     fin  1
+c         bvode
+c
+c     z=bvode(res,ncomp,m,aleft,aright,zeta,ipar,ltol,tol,fixpnt,...
+c	fsub1,dfsub1,gsub1,dgsub1,guess1)
+c
+c     Interface for the colnew program for boundary values problem.
       type=.false.
       topk=top
       kguess=top
+c     guess1 external
       itguess= gettype(top)
       if (.not.getexternal(fname,topk,top,eguess,type,
      $     setfcolgu)) return
       top=top-1
+c     dgsub1 external
       itdgsub=gettype(top)
       kdgsub=top
       if (.not.getexternal(fname,topk,top,edgsub,type,
      $     setfcoldg)) return
       top=top-1
+c     gsub1 external
       itgsub=gettype(top)
       kgsub=top
       if (.not.getexternal(fname,topk,top,egsub,type,
      $     setfcolg)) return
       top=top-1
+c     dfsub1 external
       itdfsub=gettype(top)
       kdfsub=top
       if (.not.getexternal(fname,topk,top,edfsub,type,
      $     setfcoldf)) return
       top=top-1
+c     fsub1 external
       itfsub=gettype(top)
       kfsub=top
       if (.not.getexternal(fname,topk,top,efsub,type,
      $     setfcolf)) return
-      write(06,*) 'args',itfsub,itdfsub,itgsub,itdgsub,itguess
+c      write(06,*) 'args',itfsub,itdfsub,itgsub,itdgsub,itguess
       top=top-1
+c     fixpnt
       if (.not.getrmat(fname,topk,top,mf,nf,lfixpnt))  return
       top=top-1
+c     tol
       if (.not.getrmat(fname,topk,top,mtol,ntol,ltol))  return
       top=top-1
+c     ltol
       if (.not.getrmat(fname,topk,top,mltol,nltol,lltol))  return
       call entier(mltol*nltol,stk(lltol),istk(iadr(lltol)))
       top=top-1
+c     ipar  
       if (.not.getrmat(fname,topk,top,mipar,nipar,lipar))  return
-      call entier(mipar*nipar,stk(lipar),istk(iadr(lipar)))
+      if(mipar*nipar.lt.11) then 
+c     .  bvode: ipar dimensioned at least 11
+         call error(251) 
+      endif
+      ilipar=iadr(lipar)
+      call entier(mipar*nipar,stk(lipar),istk(ilipar))
+c
+      if(istk(ilipar+3).ne.mltol*nltol) then 
+C     .  bvode: ltol must be of size ipar(4)
+         call error(252) 
+      endif
+      if(istk(ilipar+10).ne.mf*nf.and.istk(ilipar+10).ne.0) then 
+c     .  bvode: fixpnt must be of size ipar(11)
+         call error(253) 
+      endif
       top=top-1
+c     zeta 
       if (.not.getrmat(fname,topk,top,mzeta,nzeta,lzeta))  return
       top=top-1
+c     aright  
       if (.not.getscalar(fname,topk,top,lr))  return
       aright=stk(lr)
       top=top-1
+c     aleft
       if (.not.getscalar(fname,topk,top,lr))  return
       aleft=stk(lr)
       top=top-1
+c     m
       if (.not. getrmat(fname,topk,top,mm,mn,lrm)) return 
       call entier(mm*mn,stk(lrm),istk(iadr(lrm)))
       mstar=0
@@ -81,10 +121,27 @@ C     Type of externals
          mstar=mstar+ istk(iadr(lrm)+i-1)
  10   continue
       top=top-1
+c     ncomp
       if (.not.getscalar(fname,topk,top,lr))  return
       ncomp=int(stk(lr))
+      if(ncomp.gt.20) then 
+c     .  bvode: ncomp < 20 requested 
+         call error(254) 
+      endif
+      if(mm*mn.ne.ncomp) then 
+c     .  bvode: m must be of size ncomp
+         call error(255) 
+      endif
+      if(mstar.gt.40) then 
+c     .  bvode: sum(m must be less than 40
+         call error(256) 
+      endif
+
       top=top-1
+c     res
       if (.not.getrmat(fname,topk,top,mres,nres,lres))  return
+c
+c     create working arrays
       top=topk+1
       if (.not.cremat(fname,top,0,1,istk(iadr(lipar)+6-1),lispace,lc)) 
      $     return
@@ -100,10 +157,10 @@ C     Modele des arguments des external x scalaire z vecteur
       kz=top
       if (.not.cremat(fname,top,0,mstar,1,lr,lc)) return
       iero=0
-      CALL COLnew (ncomp,istk(iadr(lrm)),aleft,aright,stk(lzeta),
+      call colnew (ncomp,istk(iadr(lrm)),aleft,aright,stk(lzeta),
      $     istk(iadr(lipar)),istk(iadr(lltol)), stk(ltol),stk(lfixpnt),
-     $     istk(iadr(lispace)), stk(lspace), IFLAG, FSUB, 
-     $             DFSUB, GSUB, DGSUB, dguess) 
+     $     istk(iadr(lispace)), stk(lspace), iflag, fsub, 
+     $             dfsub, gsub, dgsub, dguess) 
       if(err.gt.0) return
       if(iero.gt.0) then
          call error(24)
@@ -111,13 +168,13 @@ C     Modele des arguments des external x scalaire z vecteur
       endif
       if ( iflag.ne.1) then 
          goto (101,102,103,104) iflag+4
- 101     call basout(io,wte,' Colnew : input data error')  
+ 101     call error(258)
          return 
- 102     call basout(io,wte,' Colnew : Iterations do not converge')  
+ 102     call error(24)
          return
- 103     call basout(io,wte,' no. of subintervals exceeds storage')
+ 103     call error(259)
          return
- 104     call basout(io,wte,' Th colocation matrix is singular')
+ 104     call error(260)
          return
       endif
       top=top+1

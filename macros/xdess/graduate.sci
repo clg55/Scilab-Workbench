@@ -21,6 +21,7 @@ function [xi,xa,np]=graduate( xmi, xma,n1,n2)
 //  rect=[1,ymn,prod(size(y),ymx];
 //  xbasc();plot2d1('enn',0,y,-1,'011',' ',rect,[10,3,10,np])
 
+// Copyright INRIA
 //!
 //%Origine 
 // S Steer INRIA 1992
@@ -134,7 +135,7 @@ for npi = k1:k2
       break
     end
   end
-  if npi=k1 then 
+  if npi==k1 then 
     xl=x0-x1
     xa=x0
     xi=x1

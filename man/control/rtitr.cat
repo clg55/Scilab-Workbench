@@ -1,5 +1,5 @@
 
-RTITR(G)                       Scilab Function                       RTITR(G)
+rtitr(G)                       Scilab Function                       rtitr(G)
 NAME
   rtitr - discrete time response (transfer matrix)
 
@@ -12,8 +12,8 @@ PARAMETERS
 
   u         : real matrix (dimension mx(t+1)
 
-  up,yp     : real matrices (dimension m x (maxi(degree(Den))) (default
-            values=0)
+  up,yp     : real matrices (up dimension mx (maxi(degree(Den))) (default
+            values=0) , yp dimension nx (maxi(degree(Den))))
 
   y         : real matrix
 
@@ -28,15 +28,18 @@ DESCRIPTION
     N(z)= N_0  + N_1  z + ... + N_d2   z^d2
   and Den y = Num u is interpreted as the recursion:
     D(0)y(t)+D(1)y(t+1)+...+ D(d1)y(t+d1)= N(0) u(t) +....+ N(d2) u(t+d2)
+  It is assumed that D(d1) is non singular.
+
   The columns of u are the inputs of the system at t=0,1,...,T:
     u=[u(0) , u(1),...,u(T)]
   The outputs at t=0,1,...,T+d1-d2 are the columns of the matrix y:
-    y=[y(0), y(1),  .... y(t+d1-d2)]
+    y=[y(0), y(1),  .... y(T+d1-d2)]
   up and yp define the initial conditions for t < 0 i.e
     up=[u(-d1), ..., u(-1)  ]
-    yp=[y(-d2), ...  y(-1)  ]
-  The default values of up and yp are zero: up = 0*ones(m,d1),
-  yp=0*ones(n,d2)
+    yp=[y(-d1), ...  y(-1)  ]
+  Depending on the relative values of d1 and d2, some of the leftmost com-
+  ponents of up, yp are ignored.  The default values of up and yp are zero:
+  up = 0*ones(m,d1), yp=0*ones(n,d1)
 
 EXAMPLE
   z=poly(0,'z');
@@ -45,13 +48,13 @@ EXAMPLE
   //Other examples
   //siso
   //causal
-  n1=1;d1=poly([1 1],'s','c');       // yj=y(j-1)+u(j-1)
+  n1=1;d1=poly([1 1],'z','coeff');       // y(j)=-y(j-1)+u(j-1)
   r1=[0 1 0 1 0 1 0 1 0 1 0];
   r=rtitr(n1,d1,ones(1,10));norm(r1-r,1)
   //hot restart
   r=rtitr(n1,d1,ones(1,9),1,0);norm(r1(2:11)-r)
   //non causal
-  n2=poly([1 1 1],'s','c');d2=d1;    // yj=-y(j-1)+u(j-1)+u(j)+u(j+1)
+  n2=poly([1 1 1],'z','coeff');d2=d1;    // y(j)=-y(j-1)+u(j-1)+u(j)+u(j+1)
   r2=[2 1 2 1 2 1 2 1 2];
   r=rtitr(n2,d2,ones(1,10));norm(r-r2,1)
   //hot restart
@@ -65,7 +68,7 @@ EXAMPLE
   r=rtitr(n1,d1,ones(3,9),[1;1;1],[0;0]);
   norm(r1(:,2:11)-r,1)
   //polynomial n1  (same ex.)
-  n1(1,1)=poly(1,'s','c');r=rtitr(n1,d1,ones(3,10));norm(r1-r,1)
+  n1(1,1)=poly(1,'z','c');r=rtitr(n1,d1,ones(3,10));norm(r1-r,1)
   //
   r=rtitr(n1,d1,ones(3,9),[1;1;1],[0;0]);
   norm(r1(:,2:11)-r,1)
@@ -92,7 +95,7 @@ EXAMPLE
   d = [0.41 , 0.11 , 0.56
        0.88 , 0.2 , 0.59];
   s=syslin('d',a,b,c,d);
-  h=ss2tf(s);num=h(2);den=h(3);den=den(1,1)*eye(2,2);
+  h=ss2tf(s);num=h('num');den=h('den');den=den(1,1)*eye(2,2);
   u=1;u(3,10)=0;r3=flts(u,s);
   r=rtitr(num,den,u);norm(r3-r,1)
 

@@ -20,8 +20,9 @@ function [Inn,X,Gbar]=rowinout(G)
 //               T
 // X is lxl and X (-s) X(s) = Identity (all-pass property).
 //
+// Copyright INRIA
 G1=G(1);
-flag='ss';if G1(1)='r' then flag='tf';G=tf2ss(G);end
+flag='ss';if G1(1)=='r' then flag='tf';G=tf2ss(G);end
 [rows,cols]=size(G);
 [A,B,C,D]=abcd(G);
 sqD=inv(sqrtm(D'*D));
@@ -37,7 +38,7 @@ X=invsyslin(Inn);
 //----------------------------
 // Outer factor:
 Gbar=invsyslin(syslin('c',Af,B*sqD,F,sqD));
-if flag='tf' then Inner=ss2tf(Inner);Gbar=ss2tf(Gbar);X=ss2tf(X);end
+if flag=='tf' then Inner=ss2tf(Inner);Gbar=ss2tf(Gbar);X=ss2tf(X);end
 
 
 

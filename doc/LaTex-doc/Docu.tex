@@ -1,4 +1,4 @@
-\documentstyle[tr2latex/troffman,makeidx]{book}
+\documentstyle[verbatim,tr2latex/troffman,makeidx]{book}
              \textheight=660pt 
              \textwidth=15cm
              \topmargin=-27pt 
@@ -9,8 +9,8 @@
 \def\matrixq#1{\left( \begin{array}{cc} #1  \end{array}\right)}
 
 \makeindex 
-\includeonly{Chap1,Chap2,Chap3,Chap4,Chap5,Chap6,Chap7,Chap8,Chap2-1,Chap2-2,Chap2-3,Chap2-4,Chap2-5}
-%\includeonly{Chap1}
+\includeonly{Chap1,Chap2,Chap3,Chap4,Chap5,Chap6,Chap7,Chap8,Chap2-1,Chap2-2,Chap2-3,Chap2-4,Chap2-5,Chap3-1,Chap3-2,Chap3-3,Chap3-4}
+%\includeonly{Chap3-1}
 
 \begin{document}
 
@@ -39,9 +39,19 @@
         \include{Chap2-2}
 \chapter{Scicos} 
         \include{Chap2-5}
+\chapter{Sound} 
+        \include{Chap2-6}
+\chapter{Cumulative Distribution Functions, Inverses, Random variables}
+        \include{Chap2-7}
 \chapter{Tools for dynamical systems}
         \include{Chap2-4}
-
-
+\chapter{Tools for fractal analysis}
+        \include{Chap3-1}
+\chapter{TCL/Tk interface}
+        \include{Chap3-2}
+\chapter{Language and data translation tools}
+        \include{Chap3-3}
+\chapter{Interprocess communication toolbox}
+        \include{Chap3-4}
 \printindex
 \end{document}

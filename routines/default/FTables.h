@@ -99,6 +99,18 @@ extern void C2F(intgex)(ARGS_fintg);
 FTAB FTab_fintg[] ={
 {"intgex", (voidf)  C2F(intgex)},
 {(char *) 0, (voidf) 0}};
+/**************** fint2d ***************/
+extern void C2F(int2dex)(ARGS_fint2d);
+ 
+FTAB FTab_fint2d[] ={
+{"int2dex", (voidf)  C2F(int2dex)},
+{(char *) 0, (voidf) 0}};
+/**************** fint3d ***************/
+extern void C2F(int3dex)(ARGS_fint3d);
+ 
+FTAB FTab_fint3d[] ={
+{"int3dex", (voidf)  C2F(int3dex)},
+{(char *) 0, (voidf) 0}};
 /**************** fsolvf ***************/
 extern void C2F(fsol1)(ARGS_fsolvf);
  
@@ -186,7 +198,6 @@ FTAB FTab_fbutn[] ={
 /**************** interf ***************/
 extern void C2F(foubare)(ARGS_interf);
 extern void C2F(foobar1)(ARGS_interf);
-extern void C2F(foobar3)(ARGS_interf);
 extern void C2F(icomp)(ARGS_interf);
 extern void C2F(loset)(ARGS_interf);
 extern void C2F(arset)(ARGS_interf);
@@ -197,7 +208,6 @@ extern void C2F(icscof)(ARGS_interf);
 FTAB FTab_interf[] ={
 {"arset", (voidf)  C2F(arset)},
 {"foobar1", (voidf)  C2F(foobar1)},
-{"foobar3", (voidf)  C2F(foobar3)},
 {"foubare", (voidf)  C2F(foubare)},
 {"icomp", (voidf)  C2F(icomp)},
 {"icscof", (voidf)  C2F(icscof)},

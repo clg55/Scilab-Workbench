@@ -1,9 +1,15 @@
-C/MEMBR ADD NAME=TERME,SSI=0
       subroutine terme
 c
+c     Copyright INRIA
       include '../stack.h'
       integer r,op,bslash,star,slash,dot
+c      integer plus,minus,ou,et
+c      integer equal,less,great,not
+
       data bslash/49/,star/47/,slash/48/,dot/51/
+
+c      data plus/45/,minus/46/,ou/57/,et/58/
+c      data equal/50/,less/59/,great/60/,not/61/
 c
       r = rstk(pt)
       if (ddt .eq. 4) then
@@ -27,9 +33,15 @@ c     *call* factor
       return
    05 pt = pt-1
    10 op = 0
-      if (sym .eq. dot) op = dot
-      if (sym .eq. dot) call getsym
+      if (sym .eq. dot) then
+         op = dot
+         call getsym
+      endif
       if (sym.eq.star .or. sym.eq.slash .or. sym.eq.bslash ) go to 20
+      if (op.ne.0) then
+         call error(7)
+         return
+      endif
       return
 c
 c     facteurs suivants

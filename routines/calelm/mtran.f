@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=MTRAN,SSI=0
+c     Copyright INRIA
       subroutine mtran(a,na,b,nb,m,n)
 c!but
 c     mtran transpose la matrice a dans le tableau b

@@ -13,6 +13,7 @@ c     op=110: a>=b
 c
 c!origin : Serge Steer INRIA 1995
 c!
+c     Copyright INRIA
       double precision a,b
       integer op
       integer less,great,equal

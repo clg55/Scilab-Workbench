@@ -7,6 +7,7 @@ function [Y,rk,Ac]=colcompr(A);
 //Ac = A*Y
 //see rowcompr
 //!
+// Copyright INRIA
 [m,n]=size(A);
 [Ac,Y,rk]=htrianr(A);
 

@@ -11,6 +11,7 @@ C     The subroutine yields also part of the Kronecker structure of
 C     the given pencil.
 C
 C     CONTRIBUTOR: Th.G.J. Beelen (Philips Glass Eindhoven).
+C     Copyright SLICOT
 C
 C     REVISIONS: 1988, February 02.
 C

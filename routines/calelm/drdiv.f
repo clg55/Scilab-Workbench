@@ -9,6 +9,7 @@ c     ierr     : returned error flag:
 c                o   : ok
 c                <>0 : b(ierr)=0
 c!
+c     Copyright INRIA
       double precision a(*),b(*),r(*)
       integer ia,ib,ir,n
       jr=1

@@ -4,10 +4,11 @@ function t=callfun(arg,typ)
 //declarations
 //!
 
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 n=prod(size(arg))
 t=' '+arg(1)+'('
-if n=0 then return,end
+if n==0 then return,end
 for k=2:n-1,
   t=t+arg(k)+','
 end

@@ -1,4 +1,5 @@
       subroutine dsosp(op,ma,na,a,mb,nb,b,nelb,indb,
+c     Copyright INRIA
      $     nelc,indc,ierr)
 c!purpose
 c     compare the elements of a full matrix A and a sparse matrix B

@@ -8,7 +8,8 @@ function [n,m,x,y,nt,mt,xt,yt]=dcf(g,polf,polc,tol)
 // G must be stabilizable and detectable.
 // See copfac for a description of parameters.
 //!
-       [lhs,rhs]=argn(0),
+// Copyright INRIA
+[lhs,rhs]=argn(0),
        n1=contr(g(2),g(3)),n2=contr(g(2)',g(4)'),
        select rhs,
         case 1 then

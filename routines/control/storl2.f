@@ -1,5 +1,5 @@
       subroutine storl2(neq,tq,tg,ng,imin,tabc,iback,ntback,tback,
-     &                  nch,mxsol,w,ierr)
+     &     nch,mxsol,w,ierr)
 C!but
 C     Lorsque un minimum local vient d'etre determine, cette
 C     procedure est appelee afin de verifier son originalite,
@@ -30,6 +30,9 @@ C
 C     sorties :
 C     - peuvent etre modifies: imin, tabc, iback, ntback,
 C        tback, suivant le tableau ou a ete stocke le minimum tq
+c
+c     Copyright INRIA
+c
 C!
       implicit double precision (a-h,o-y)
       dimension tq(0:*), tabc(mxsol,0:*), ntback(iback),

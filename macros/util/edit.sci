@@ -1,10 +1,17 @@
 function [res]=edit(macroname,editor)
 // macroname : character string giving a macroname 
 //
+// Copyright INRIA
 default_editor="emacs -i -geometry 80x50+427+143  -font 9x15 "
 [lhs,rhs]=argn(0)
 //
 finded=%f;tmp=%f
+
+if getenv('WIN32','NO')=='OK' & getenv('COMPILER','NO')=='VC++' then 
+	write(%io(2),'edit: Not implemented on win32');
+	res=evstr(macroname);
+	return;
+end
 
 if rhs>=1 then // macroname is given
   errcatch(25,'continue','nomessage')
@@ -16,7 +23,7 @@ if rhs>=1 then // macroname is given
   end
   if libr<>[] then // macroname is the name of a defined function
     w=string(evstr(libr));w=w(1)
-    if part(w,1:4)='SCI/' then //substitute SCI/ with the scilab path
+    if part(w,1:4)=='SCI/' then //substitute SCI/ with the scilab path
       w=SCI+'/'+part(w,5:length(w))
     end
     //if file is not writable create a copy in TMPDIR

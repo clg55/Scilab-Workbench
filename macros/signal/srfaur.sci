@@ -14,9 +14,10 @@ function [p,s,t,l,rt,tt]=srfaur(h,f,g,r0,n,p,s,t,l)
 //          : p,s,t,l may be given as input if more than one recursion
 //          : is desired (evaluation of intermediate values of p, e.g.).
 //!
-   [lhs,rhs]=argn(0);
+// Copyright INRIA
+[lhs,rhs]=argn(0);
    [d,m]=size(h);
-      if rhs=5,
+      if rhs==5,
 //initializations
    r0=.5*(r0+r0');
    s=sqrtm(r0);

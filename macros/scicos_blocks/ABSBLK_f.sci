@@ -1,5 +1,6 @@
 function [x,y,typ]=ABSBLK_f(job,arg1,arg2)
 //Absolute value block GUI.
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then

@@ -27,11 +27,11 @@ of (weighted) gramians or product of Riccati equations.
 .nf
 rand('seed',0);sl=ssrand(2,2,5);[A,B,C,D]=abcd(sl);poles=spec(A)
 [Q,M]=pbig(A,0,'c');  //keeping unstable poles
-slred=projsl(sl,Q,M);spec(slred(2))
-sl(5)=rand(2,2);  //making proper system
+slred=projsl(sl,Q,M);spec(slred('A'))
+sl('D')=rand(2,2);  //making proper system
 trzeros(sl)  //zeros of sl
 wi=inv(sl);  //wi=inverse in state-space
-[q,m]=psmall(wi(2),2,'d');  //keeping small zeros (poles of wi) i.e. abs(z)<2
+[q,m]=psmall(wi('A'),2,'d');  //keeping small zeros (poles of wi) i.e. abs(z)<2
 slred2=projsl(sl,q,m);
 trzeros(slred2)  //zeros of slred2 = small zeros of sl
 //  Example keeping second order modes

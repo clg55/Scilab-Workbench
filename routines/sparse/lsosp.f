@@ -1,4 +1,5 @@
       subroutine lsosp(op,ma,na,a,mb,nb,nelb,indb,
+c     Copyright INRIA
      $     nelc,indc,ierr)
 c!purpose
 c     compare the elements of a full boolean matrix A and a sparse boolean 

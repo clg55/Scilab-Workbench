@@ -2,6 +2,7 @@ function []=BInit()
 // Macro qui initialise les donnees du
 // td3
 //!
+// Copyright INRIA
 n1=10;
 n2=10;
 n3=10;

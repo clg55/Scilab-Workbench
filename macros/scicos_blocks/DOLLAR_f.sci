@@ -1,4 +1,5 @@
 function [x,y,typ]=DOLLAR_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then
@@ -15,7 +16,7 @@ case 'set' then
   model=arg1(3);
   while %t do
     [ok,a,label]=getvalue('Set dollar block parameters',..
-	'initial condition',list('vec',1),label)
+	'initial condition',list('vec',-1),label)
     if ~ok then break,end
     out=size(a,'*');if out==0 then out=[],end
     in=out

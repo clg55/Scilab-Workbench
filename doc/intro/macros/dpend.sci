@@ -1,5 +1,6 @@
 function [zdot]=dpend(time,z)
-   th1=z(1);th2=z(2);th1d=z(3);th2d=z(4);
+// Copyright INRIA
+th1=z(1);th2=z(2);th1d=z(3);th2d=z(4);
    s12=sin(th1-th2);c12=cos(th1-th2);
    m12=m1+m2;s1=sin(th1);s2=sin(th2);
    mat=[m12*r1 m2*r2*c12;...
@@ -11,6 +12,7 @@ function [zdot]=dpend(time,z)
    zdot=[th1d;th2d;th1dd;th2dd];
 
 function []=pp(z)
+// Copyright INRIA
 th1=z(1,:);th2=z(2,:);
 rc1=r1*cos(th1);rc2=r2*cos(th2);
 rs1=r1*sin(th1);rs2=r2*sin(th2);

@@ -22,7 +22,8 @@ function [tg,fr]=group(npts,a1i,a2i,b1i,b2i)
 //
 //!
 //author: C. Bunks  date: 2 March 1988
- 
+// Copyright INRIA
+
 //get frequency grid values in [0,.5)
  
    fr=(0:.5/npts:.5*(npts-1)/npts);
@@ -35,16 +36,16 @@ function [tg,fr]=group(npts,a1i,a2i,b1i,b2i)
 //the case may be non-cascade
  
    hcs=1;
-   if ne=2 then
+   if ne==2 then
  
 //get the type of h and the variable name
  
       h=a1i;
       ht=type(h);
  
-//if ht=1 then h is a vector containing filter coefficients
+//if ht==1 then h is a vector containing filter coefficients
  
-      if ht=1 then
+      if ht==1 then
  
 //make h a rational polynomial
  
@@ -55,7 +56,7 @@ function [tg,fr]=group(npts,a1i,a2i,b1i,b2i)
          ht=16;
       end,
  
-//if ht=16 then h is a rational polynomial
+//if ht==16 then h is a rational polynomial
 //(perhaps in cascade form)
  
       //-compat ht==15 retained for list/tlist compatibility
@@ -66,9 +67,9 @@ function [tg,fr]=group(npts,a1i,a2i,b1i,b2i)
  
 //if the rational polynomial is not in cascade form then
  
-      if hcs=1 then
+      if hcs==1 then
  
-//if ht=2 then h is a regular polynomial
+//if ht==2 then h is a regular polynomial
  
          if ht==2 then
             z=varn(h);
@@ -106,7 +107,7 @@ function [tg,fr]=group(npts,a1i,a2i,b1i,b2i)
  
 //if implementation is in cascade form
  
-   if ne=5 then
+   if ne==5 then
  
 //a1i,a2i,b1i,b2i are the coefficients of a
 //second order decomposition of the filter

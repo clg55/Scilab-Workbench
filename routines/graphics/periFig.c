@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------
     Missile 
     XWindow and Postscript library for 2D and 3D plotting 
-    Copyright (C) 1990 Chancelier Jean-Philippe
+    Copyright (C) 1998 Chancelier Jean-Philippe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-    jpc@arletty.enpc.fr 
-    Phone : 43.04.40.98 poste : 3327 
+    jpc@cergrene.enpc.fr 
 
 --------------------------------------------------------------------------*/
 
@@ -73,6 +72,11 @@
 
 #define WHITE 7
 #define BLACK 0
+
+static void C2F(analyze_pointsXfig) _PARAMS((integer n, 
+					     integer *vx,
+					     integer *vy,
+					     integer onemore));
 
 static void C2F(displaysymbolsXfig)();
 static int C2F(FigQueryFont)();
@@ -1684,10 +1688,12 @@ void C2F(drawpolylinesXfig)(str, vectsx, vectsy, drawvect, n, p, v7, dx1, dx2, d
 /** fill a set of polygons each of which is defined by **/
 /** (*p) points (*n) is the number of polygons **/
 /** the polygon is closed by the routine **/
-/** if fillvect <= whiteid-pattern the coresponding pattern is used  **/
-/** if fillvect == whiteid-pattern +1 -> draw the boundaries  **/
-/** if fillvect >= whiteid-pattern +2 -> fill with white and draw boundaries **/
-/** fillvect[*n] :         **/
+/*  if fillvect[i] == 0 draw the boundaries with current color 
+    if fillvect[i] > 0  draw the boundaries with current color 
+    then fill with pattern fillvect[i]
+    if fillvect[i] < 0  fill with pattern - fillvect[i]
+*/
+
 
 void C2F(fillpolylinesXfig)(str, vectsx, vectsy, fillvect, n, p, v7, dx1, dx2, dx3, dx4)
      char *str;
@@ -1715,6 +1721,7 @@ void C2F(fillpolylinesXfig)(str, vectsx, vectsy, fillvect, n, p, v7, dx1, dx2, d
 
 /** Only draw one polygon with current line style **/
 /** according to *closeflag : it's a polyline or a polygon **/
+/** XXXXXX To be done Closeflag is not used **/
 
 void C2F(drawpolylineXfig)(str, n, vx, vy, closeflag, v6, v7, dx1, dx2, dx3, dx4)
      char *str;
@@ -1734,7 +1741,12 @@ void C2F(drawpolylineXfig)(str, n, vx, vy, closeflag, v6, v7, dx1, dx2, dx3, dx4
     FPRINTF((file,"#/closeflag true def\n"));
   else 
     FPRINTF((file,"#/closeflag false def\n"));
-  C2F(fillpolylinesXfig)(str,vx,vy,&fvect,&i,n,PI0,PD0,PD0,PD0,PD0);
+  if (ScilabGCXfig.ClipRegionSet ==1 )
+    {
+      C2F(analyze_pointsXfig)(*n, vx, vy, *closeflag);
+    }
+  else 
+    C2F(fillpolylinesXfig)(str,vx,vy,&fvect,&i,n,PI0,PD0,PD0,PD0,PD0);
 }
 
 /** Fill the polygon **/
@@ -2193,7 +2205,7 @@ void C2F(WriteGenericXfig)(string, nobj, sizeobj, vx, vy, sizev, flag, fvect)
 	   }
 	  else if (fvect[i] == 0 )
 	    {
-	      /** only draws th polyine **/
+	      /** only draws th polyline **/
 	      set_dash_or_color(Dvalue[0],&l_style,&style_val,&pen_color);
 	      areafill=-1;
 	      fill_color = WHITE;
@@ -2336,7 +2348,20 @@ void C2F(WriteGenericXfig)(string, nobj, sizeobj, vx, vy, sizev, flag, fvect)
       FPRINTF((file,"# Object : %d %s -<%d>- \n", (int)0,string, (int)fvect[0]));
       for ( i =0 ; i < sizev ; i++)
 	{
+	  int flag = 1;
+	  if ( ScilabGCXfig.ClipRegionSet == 1 ) 
+	    {
+	      if ( vx[i] > ScilabGCXfig.CurClipRegion[0] 
+		   +ScilabGCXfig.CurClipRegion[2]
+		   || vx[i] <  ScilabGCXfig.CurClipRegion[0] 
+		   || vy[i] > ScilabGCXfig.CurClipRegion[1] 
+		   +ScilabGCXfig.CurClipRegion[3]
+		   || vy[i] < ScilabGCXfig.CurClipRegion[1] )
+		flag = 0;
+	    }
+	  
 	  /** polymarks are x-center justified sub-type =1  **/
+	  if ( flag == 1) 
 	  FPRINTF((file,"4 1 %d 0 0 %d %d %5.2f %d %5.2f %5.2f %d %d \\%o\\001\n",
 		  pen_color,
 		  32, /* Postscript font */
@@ -2381,4 +2406,129 @@ void C2F(Write2VectXfig)(vx, vy, n, flag)
     }
 }
 
-/*------------------------END--------------------*/
+
+/************************************************************
+ * Clipping functions for XFig 
+ ************************************************************/
+
+static void MyDraw(iib, iif, vx, vy)
+     integer iib;
+     integer iif;
+     integer *vx;
+     integer *vy;
+{
+  integer fvect=0,ipoly=1;
+  integer iideb;
+  integer x1kn,y1kn,x2kn,y2kn;
+  integer x1n,y1n,x11n,y11n,x2n,y2n,flag2=0,flag1=0;
+  integer npts;
+  npts= ( iib > 0) ? iif-iib+2  : iif-iib+1;
+  if ( iib > 0) 
+    {
+      clip_line(vx[iib-1],vy[iib-1],vx[iib],vy[iib],&x1n,&y1n,&x2n,&y2n,&flag1);
+    }
+  clip_line(vx[iif-1],vy[iif-1],vx[iif],vy[iif],&x11n,&y11n,&x2n,&y2n,&flag2);
+  /** if (C2F(store_points)(npts, &vx[Max(0,iib-1)], &vy[Max(0,iib-1)],(integer)0L)); **/
+  iideb = Max(0,iib-1);
+  if (iib > 0 && (flag1==1||flag1==3)) 
+    {
+      x1kn=vx[iideb]; y1kn=vy[iideb];
+      vx[iideb]=x1n; vy[iideb]=y1n;
+    }
+  if (flag2==2 || flag2==3) 
+    {
+      x2kn=vx[iideb+npts-1]; y2kn=vy[iideb+npts-1];
+      vx[iideb+npts-1]=x2n; vy[iideb+npts-1]=y2n;
+    }
+  C2F(fillpolylinesXfig)("MyDraw",&vx[iideb],&vy[iideb],&fvect,&ipoly,&npts,
+			 PI0,PD0,PD0,PD0,PD0);
+  if (iib > 0 && (flag1==1||flag1==3)) 
+    {
+      vx[iideb]=x1kn; vy[iideb]=y1kn;
+    }
+  if (flag2==2 || flag2==3) 
+    {
+      vx[iideb+npts-1]=x2kn; vy[iideb+npts-1]=y2kn;
+    }
+}
+
+static void My2draw(j, vx, vy)
+     integer j;
+     integer *vx;
+     integer *vy;
+{
+  /** The segment is out but can cross the box **/
+  integer vxn[2],vyn[2],flag,fvect=0,ipoly=1;
+  integer npts=2;
+  clip_line(vx[j-1],vy[j-1],vx[j],vy[j],&vxn[0],&vyn[0],&vxn[1],&vyn[1],&flag);
+  if (flag == 3 ) 
+  {
+    integer deux=2;
+    C2F(fillpolylinesXfig)("MyDraw",vxn,vyn,&fvect,&ipoly,&deux,
+			 PI0,PD0,PD0,PD0,PD0);
+  }
+}
+
+static void C2F(analyze_pointsXfig)(n, vx, vy, onemore)
+     integer n;
+     integer *vx;
+     integer *vy;
+     integer onemore;
+{ 
+  integer iib,iif,ideb=0,vxl[2],vyl[2],fvect=0,ipoly=1,deux=2;
+  integer verbose=0,wd[2],narg;
+  integer xleft, xright, ybot, ytop;
+  xleft=ScilabGCXfig.CurClipRegion[0];
+  xright=xleft+ScilabGCXfig.CurClipRegion[2];
+  ybot=ScilabGCXfig.CurClipRegion[1];
+  ytop= ybot + ScilabGCXfig.CurClipRegion[3];
+  set_clip_box(xleft, xright, ybot, ytop);
+  while (1) 
+    { integer j;
+      iib=first_in(n,ideb,vx,vy);
+      if (iib == -1) 
+	{ 
+	  for (j=ideb+1; j < n; j++) My2draw(j,vx,vy);
+	  break;
+	}
+      else 
+      if ( iib - ideb > 1) 
+	{
+	  /* un partie du polygine est totalement out de ideb a iib -1 */
+	  /* mais peu couper la zone */
+	  for (j=ideb+1; j < iib; j++) My2draw(j,vx,vy);
+	};
+      iif=first_out(n,iib,vx,vy);
+      if (iif == -1) {
+	/* special case the polyligne is totaly inside */
+	if (iib == 0) 
+	  {
+	    /** XXXX : if (C2F(store_points)(n,vx,vy,onemore)); **/
+	    /** if (onemore == 1) n1 = n+1;else n1= n; **/
+	    C2F(fillpolylinesXfig)("MyDraw",vx,vy,&fvect,&ipoly,&n,
+			 PI0,PD0,PD0,PD0,PD0);
+	    return ;
+	  }
+	else 
+	  MyDraw(iib,n-1,vx,vy);
+	break;
+      }
+      MyDraw(iib,iif,vx,vy);
+      ideb=iif;
+    }
+  if (onemore == 1) {
+    /* The polyligne is closed we consider the closing segment */
+    integer x1n,y1n,x2n,y2n,flag1=0;
+    vxl[0]=vx[n-1];vxl[1]=vx[0];vyl[0]=vy[n-1];vyl[1]=vy[0];
+    clip_line(vxl[0],vyl[0],vxl[1],vyl[1],&x1n,&y1n,&x2n,&y2n,&flag1);
+    if ( flag1==0) return ;
+    if (flag1==1||flag1==3) {vxl[0]=x1n;vyl[0]=y1n;}
+    if (flag1==2||flag1==3) {vxl[1]=x2n;vyl[0]=y2n;}
+    C2F(fillpolylinesXfig)("MyDraw",vxl,vyl,&fvect,&ipoly,&deux,
+			 PI0,PD0,PD0,PD0,PD0);
+  }
+}
+
+
+
+

@@ -1,4 +1,5 @@
 function rep=x_message(comment,btns)
+// Copyright INRIA
 // message - dialogue affichant un message
 //%Syntaxe
 // message(comment)
@@ -35,6 +36,7 @@ end
 
 
 function str=x_dialog(comment,default)
+// Copyright INRIA
 // dialog - dialogue pour l'acquisition d'une reponse
 //%Syntaxe
 // str=dialog(comment [,default])
@@ -77,6 +79,7 @@ if part(rep,1)=='c' then str=[],end
 
 
 function str=x_mdialog(description,labels,valuesini)
+// Copyright INRIA
 //mdialog - dialogue d'acquisition de plusieures reponses textuelles
 //%Syntaxe
 //str=dialog(description,labels [,valuesini])
@@ -150,6 +153,7 @@ function num=x_choose(tochoose,comment,button)
 //%Exemple
 //  choose(['PID';'Adaptatif';'LQG'],'Choisissez un type de regulateur')
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 n=prod(size(tochoose))
 tochoose=matrix(tochoose,n,1)
@@ -168,7 +172,7 @@ while num<0|num>n  then
   write(%IO(2),'Donnez le numero de votre choix')
   num=evstr(readline())
 end
-
+disp('choose:'+string(num))
 
 
 function tab=mat2tab(str,del)
@@ -185,6 +189,7 @@ function tab=mat2tab(str,del)
 //  write(%io(2),mat2tab(tt,['|','-']))
 //!
 //origine S Steer 1991
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 job=0
 if rhs=1 then 
@@ -222,10 +227,11 @@ for l=1:m
   if job=1 then tab=[tab;rd],end
 end 
 
-
-function [btn,xc,yc,win]=xclick();
+function [btn,xc,yc,win,Cmenu]=xclick();
+// Copyright INRIA
 str=readline()
-rep=evstr('['+str+']')
+rep=evstr('list('+str+')')
+if size(rep)<3 then pause,end
 btn=rep(1)
 xc=rep(2)
 yc=rep(3)
@@ -234,14 +240,23 @@ xset('mark',0,5)
 plot2d(xc,yc,-1,'000')
 plot2d(xc,yc,-1,'000')
 xset('mark',mrk(1),mrk(2))
-if size(rep,'*')==4 then win=rep(4),end
+win=0
+if size(rep)>=4 then 
+  win=rep(4),
+end
+if size(rep)>=5 then 
+  Cmenu=rep(5)
+else
+  Cmenu=[]
+end
 
 function rep=xgetmouse(flag);
+// Copyright INRIA
 str=readline()
 rep=evstr('['+str+']')
 
-
 function str=readline()
+// Copyright INRIA
 comm='/'+'/'
 blank=' '
 while %t do
@@ -274,10 +289,12 @@ write(%io(2),[' ';txt;' '])
     
 
 function c=getcolor(title,cini)
+// Copyright INRIA
 str=readline()
 c=evstr('['+str+']')
 
 function [m,pt,btn]=getmenu(datas,pt)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 n=size(datas,1)-3
 if rhs<2 then
@@ -290,6 +307,7 @@ str=readline()
 m=evstr('['+str+']')
 
 function hilitemenu(m,datas)
+// Copyright INRIA
 xclip()
 c=datas(m,:)
 xm=c(1),ym=c(3),lm=c(2)-c(1);hm=c(3)-c(4)
@@ -299,6 +317,7 @@ xset('thickness',thick)
 xclip(datas(size(datas,1)-2,:))
 
 function unhilitemenu(m,datas)
+// Copyright INRIA
 xclip()
 c=datas(m,:)
 xm=c(1),ym=c(3),lm=c(2)-c(1);hm=c(3)-c(4)
@@ -308,6 +327,7 @@ xset('thickness',thick)
 xclip(datas(size(datas,1)-2,:))
 
 function setmenubar(datas,menus)
+// Copyright INRIA
 xclip()
 alu=xget('alufunction')
 xset('alufunction',6)
@@ -323,6 +343,7 @@ xset('alufunction',alu)
 xclip(datas(nm+1,:))
 
 function erasemenubar(datas)
+// Copyright INRIA
 nm=size(datas,1)-3
 xclip()
 mrect=datas(nm+2,:)

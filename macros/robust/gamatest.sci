@@ -1,6 +1,7 @@
 function [ok,sk,stint]=gamatest(P12,P21,gama)
 // Test if gama is ok. If ok, sk=controller. stint is true (%T) if
 // internal stability is achieved.
+// Copyright INRIA
 write(%io(2),gama);
 ok=%F;sk=[];stint=%F;
 [A,B2,C1,D12]=P12(2:5);
@@ -42,7 +43,7 @@ else
 end
 end
 // ----------------->       Continuous time case
-if dom='c' then
+if dom=='c' then
 ok1=and(real(spec(A+B2*K)) < zeros(nx,1));
 ok2=and(real(spec(A+H*C2)) < zeros(nx,1));
 ok3=mini(real(spec(eye-Y*X/gama/gama))) > 100*%eps;

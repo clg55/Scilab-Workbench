@@ -54,11 +54,10 @@ object file \fVfoo.o\fR with the entry point \fVfoo\fR.
 The command \fVlink('SCIDIR/libs/calelm.a','dcopy')\fR links the 
 Fortran routine \fVdcopy\fR in the library \fVcalelm.a\fR.
 .LP
-Note that with \fVdld\fR (Linux machine) you can use an empty
-string if you want to link a program which is already in one of the
-Scilab libraries (e.g. \fVlink(' ','dcopy')\fR).
-.LP
-A routine can be linked several times: each link undo the previous one.
+A routine can be linked several times and can be unlinked with
+\fVulink\fR. Note that, on some architectures (the ones on which
+\fVulink\fR exists) when a routine is linked several times, all 
+the version are kept inside Scilab. 
 .LP
 Used with no arguments, \fVlink()\fR returns the current linked routines.
 .LP
@@ -156,6 +155,12 @@ a default binary file )
 .nf
 link("test.o",['Scilab-entry-point'])
 .fi 
+Note that with \fVdld\fR (Linux machine aout) you can use an empty
+string 
+.nf
+link(" ",['Scilab-entry-point'])
+.fi 
+.LP
 .SH SEE ALSO
 fort, c_link, addinter
 

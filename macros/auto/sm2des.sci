@@ -3,6 +3,7 @@ function des=sm2des(sysmat,n)
 // sysmat=[-s E + A , B; C , D]
 // des=list('des',A,B,C,D,E)
 // n=size(A) (assumed square) (optional parameter)
+// Copyright INRIA
 [LHS,RHS]=argn(0)
 [nl,nc]=size(sysmat);
 E=-coeff(sysmat,1);
@@ -22,5 +23,6 @@ A=coeff(sysmat(1:n,1:n),0);
 B=coeff(sysmat(1:n,n+1:nc),0);
 C=coeff(sysmat(n+1:nl,1:n),0);
 D=coeff(sysmat(n+1:nl,n+1:nc),0);
-des=list('des',A,B,C,D,E);
+des=tlist(['des','A','B','C','D','E'],A,B,C,D,E);
+
 

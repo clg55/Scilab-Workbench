@@ -1,4 +1,6 @@
  
+// Copyright INRIA
+ 
 mode(-1)
 //
 // (setbpt delbpt).
@@ -16,7 +18,7 @@ deff('[]=lig()',[
 'end,shlig(12)  ,'; // break-point
 ',';
 'for l=1:10,';
-'  if l=5 then break,end,';
+'  if l==5 then break,end,';
 '  l,';
 'end,shlig(17)  ,'; // break-point
 'shlig(18),';
@@ -48,7 +50,7 @@ deff('[]=lig()',[
 'end,shlig(44) ,'; //break-point
 'i=0;,';
 'while i<10,';
-'i=i+1,if i=2 then break,end,shlig(47),';
+'i=i+1,if i==2 then break,end,shlig(47),';
 'end,shlig(48) ,' //break-point
 ],'n')
 deff('[]=shlig(n)','write(%io(2),''ligne ''+string(n))')

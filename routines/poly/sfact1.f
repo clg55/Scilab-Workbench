@@ -25,6 +25,7 @@ c     modif s. Steer (90)
 c!origine
 c     V Kucera : Discrete Linear control (john Wiley& Sons) 1979
 c!
+c     Copyright INRIA
       dimension b(n+1),w(*)
       double precision b,b0,w,a0,temp,b00,s,dlamch,eps,best
 c

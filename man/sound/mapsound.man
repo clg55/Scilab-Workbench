@@ -1,7 +1,7 @@
 .TH mapsound 1 "April 1993" "Scilab Group" "Scilab Function"
 .so ../sci.an
 .SH NAME
-mapsound - 
+mapsound - Plots a sound map 
 .SH CALLING SEQUENCE
 .nf
 mapsound (w,dt,fmin,fmax,simpl,rate)

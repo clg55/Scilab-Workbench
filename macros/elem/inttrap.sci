@@ -4,6 +4,7 @@ function v = inttrap(x,y)
 //trapezoidal integration.  x and y must be vectors of the same dimension
 //v = inttrap(y) computes the trapezoidal integral of y assuming unit
 //spacing between the data points. 
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<2 then
   y=x;

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #if defined(THINK_C)||defined(__MWERKS__)||defined(WIN32)
 #define True 1
 #define False 0

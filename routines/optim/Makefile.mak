@@ -1,6 +1,10 @@
+#-----------------------------
+# generated from Makefile: DO NOT EDIT
+# -----------------------------
 SHELL = /bin/sh
 
 SCIDIR=../..
+SCIDIR1=..\..
 
 LIBRARY = $(SCIDIR)/libs/optim.lib
 
@@ -29,5 +33,11 @@ include ../../Makefile.incl.mak
 CFLAGS = $(CC_OPTIONS)
 
 include ../Make.lib.mak
+
+
+
+Makefile.mak	: Makefile
+	$(SCIDIR)/util/Mak2VCMak Makefile
+
 
 sp.obj: spd.h ../machine.h

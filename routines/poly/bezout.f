@@ -42,6 +42,7 @@ c!sous programmes appeles
 c     dasum dcopy dset (blas)
 c!
 c
+c     Copyright INRIA
       double precision a(*),b(*),f(*),v(*)
       integer da,db,df(2),dv(2,2),ip
 c

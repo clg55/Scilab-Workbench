@@ -40,6 +40,7 @@ function [stk,nwrk,txt,top]=f_gener(nam,nwrk,targ)
 //              (columns) of the matrix		
 //          des chaines de caracteres
 
+// Copyright INRIA
 //
 //  nwrk : this variable contain information on working arrays, error
 //         indicators. It only may be modified by call to scilab functions
@@ -55,10 +56,10 @@ function [stk,nwrk,txt,top]=f_gener(nam,nwrk,targ)
 
 
 txt=[] 
-[lhs,rhs]=argn(0);if rhs=2 then targ=['1','1'],end
+[lhs,rhs]=argn(0);if rhs==2 then targ=['1','1'],end
 tin=targ(1);tout=targ(2)
 cnvf='dble'
-if tin='0' then cnvf='int',end
+if tin=='0' then cnvf='int',end
 //
 s2=stk(top)
 if s2(4)=='1'&s2(5)=='1' then

@@ -9,6 +9,7 @@ c     op=119: a~=b
 c
 c!origin : Serge Steer INRIA 1995
 c!
+c     Copyright INRIA
       integer a,b
       integer op
       integer less,great,equal

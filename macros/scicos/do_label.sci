@@ -1,9 +1,12 @@
 function [mod,scs_m]=do_label(scs_m)
 // do_block - edit a block label
+// Copyright INRIA
 mod=%f
 while %t
-  [n,pt]=getmenu(datam);xc=pt(1);yc=pt(2)
-  if n>0 then n=resume(n),end
+  [btn,xc,yc,win,Cmenu]=getclick()
+  if Cmenu<>[] then
+    Cmenu=resume(Cmenu)
+  end
   K=getblock(scs_m,[xc;yc])
   if K<>[] then break,end
 end

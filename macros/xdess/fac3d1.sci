@@ -1,5 +1,6 @@
 function fac3d1(x,y,z,T,A,leg,flags,ebox)
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 write(%io(2),'WARNING : fac3d1 is obsolete see plot3d plot3d1 instead');
 if rhs<=0 then  //demo

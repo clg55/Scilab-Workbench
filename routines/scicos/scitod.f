@@ -1,6 +1,7 @@
       subroutine scitod(x,mx,nx)
 C    scilab to fortran
 C
+c     Copyright INRIA
       double precision  x(*)
       integer  mx
       integer  nx

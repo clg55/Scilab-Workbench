@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <dirent.h>
 #include <stdlib.h>
 #include <string.h>
@@ -7,7 +8,7 @@
 #include "metio.h"
 #include "menus.h"
 
-extern char* basename();
+extern char* my_basename();
 extern char* dirname();
 extern int LoadNamedGraph();
 extern char *StripGraph();
@@ -49,7 +50,7 @@ double scale;
       strcpy(datanet,path);
       closedir(dirp);
     } else {
-      name = basename(path);
+      name = my_basename(path);
       dir = dirname(path);
       if (dir == NULL) getwd(datanet);
       else strcpy(datanet,dir);

@@ -2,6 +2,7 @@ function []=mineInit()
 // Macro qui initialise les donnees du
 // td3
 //!
+// Copyright INRIA
 n1=30
 n2=40;
 te=n2/2;

@@ -14,4 +14,4 @@ DESCRIPTION
   wav file with the sox program.
 
 SEE ALSO
-  savewave, soundsec, analyze, mapsound
+  savewave,  analyze, mapsound

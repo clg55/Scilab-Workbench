@@ -1,4 +1,5 @@
       subroutine ivimp(i1,i2,pas,iv)
+c     Copyright INRIA
 c     generates the vector iv corresponding to scilab syntax iv=i1:pas:i2
       integer i1,i2,pas,iv(*)
       k=0
@@ -8,6 +9,7 @@ c     generates the vector iv corresponding to scilab syntax iv=i1:pas:i2
  10   continue
       end
       subroutine dmext(a,na,n,rowsel,nrs,colsel,ncs,x)
+c     Copyright INRIA
 c     generates the x matrix corresponding to scilab syntax
 c     x=a(rowsel,colsel) for a double precision matrix
       double precision a(na,n),x(nrs,ncs)
@@ -21,6 +23,7 @@ c
  10   continue
       end
       subroutine dmins(a,na,n,rowsel,nrs,colsel,ncs,x,nx)
+c     Copyright INRIA
 c     generates the x matrix corresponding to scilab syntax
 c     a(rowsel,colsel)=x for a double precision matrix
       double precision a(na,n),x(nx,*)

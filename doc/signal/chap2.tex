@@ -1,3 +1,5 @@
+% Copyright INRIA
+
 \chapter[Representation of Signals]{Time and Frequency Representation of Signals}
 
 \section{Frequency Response}
@@ -63,7 +65,7 @@ H(j\omega)&=&C\frac{\prod_{n=1}^{N}(j\omega-a_n)}{\prod_{m=1}^{M}(j\omega-b_m)}\
 and for the log-magnitude and phase response 
 %
 \begin{equation}
-M(\omega)=\sum_{n=1}^{N}20\log\sqrt{\omega^2+a_n^2}-\sum_{m=1}^M\sqrt{\omega^2+b_m^2}
+M(\omega)=20(\log_{10}C+(\sum_{n=1}^{N}\log_{10}\sqrt{\omega^2+a_n^2}-\sum_{m=1}^M\log_{10}\sqrt{\omega^2+b_m^2}
 \label{e.bode5}
 \end{equation}
 %
@@ -1714,7 +1716,7 @@ chirp z-transform.
 	The first example presented here calculates the 
 CZT of the sequence $x(n)=n$ for $n=0,1,\ldots,9$ where
 ten points are calculated in the z-plane and the parameter values
-are $W=1$, $\phi=2\pi/10$, $A=1$, and $\theta=0$.  This
+are $W0=1$, $\phi=2\pi/10$, $A0=1$, and $\theta=0$.  This
 example should yield results identical to those obtained by
 taking the FFT of the sequence $x(n)$.  The sequence of commands is 
 as follows,

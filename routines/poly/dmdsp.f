@@ -25,6 +25,7 @@ c     cw : chaine de caracteres de travail de longueur au moins ll
 c     iw : tableau de travail entier de taille au moins egale a
 c          m*n + 2*n
 c!
+c     Copyright INRIA
       double precision x(*),a,a1,a2,fact,eps,dlamch
       integer iw(*),maxc,mode,fl,s,typ
       character cw*(*),sgn*1,dl*1
@@ -46,13 +47,13 @@ c
       a2=abs(x(1))
       l=-nx
       do 05 j=1,n
-      l=l+nx
-      do 05 i=1,m
-      a=abs(x(l+i))
-      if(a.eq.0.0d+0.or.a.gt.dlamch('o')) goto 05
-      a1=max(a1,a)
-      a2=min(a2,a)
-   05 continue
+         l=l+nx
+         do 05 i=1,m
+            a=abs(x(l+i))
+            if(a.eq.0.0d+0.or.a.gt.dlamch('o')) goto 05
+            a1=max(a1,a)
+            a2=min(a2,a)
+ 05   continue
       imax=0
       imin=0
       if(a1.gt.0.0d+0) imax=int(log10(a1))
@@ -60,9 +61,9 @@ c
       if(imax*imin.le.0) goto 10
       imax=(imax+imin)/2
       if(abs(imax).ge.maxc-2)  fact=10.0d+0**(-imax)
-   10 continue
+ 10   continue
       eps=a1*fact*eps
-c
+c     
 c phase d'analyse: pour chaque coefficient a representer on determine
 c       format avec lequel on va l'editer, on en deduit la longueur
 c       de la representation de chacun des coefficients.
@@ -90,8 +91,9 @@ c
 c
 c     traitement du coeff (l,k)
       a=abs(x(lp+l))*fact
-cc_ex      if(a.lt.eps) a=0.0d+0
-      if(a.lt.eps.and.mode.ne.0) a=0.0d+0
+c     c_ex      if(a.lt.eps) a=0.0d+0
+c     jpc: add of isanan for msvc++
+      if(isanan(a).ne.1.and.a.lt.eps.and.mode.ne.0) a=0.0d+0
 c     determination du format devant representer a
       typ=1
       if(mode.eq.1) call fmt(a,maxc,typ,n1,n2)

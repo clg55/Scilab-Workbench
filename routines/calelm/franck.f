@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=FRANCK,SSI=0
+c     Copyright INRIA
       subroutine franck(a,na,n,job)
 c!but
 c     cette subroutine genere la matrice de franck d'ordre n

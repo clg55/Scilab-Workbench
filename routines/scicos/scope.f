@@ -1,5 +1,6 @@
       subroutine scope(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
 c     Scicos block simulator
 c     ipar(1) = win_num
 c     ipar(2) = 0/1 color flag
@@ -25,6 +26,7 @@ c
       double precision dt,ymin,ymax,per,rect(4),tsave
       integer i,n,verb,cur,na,v,wid,nax(4)
       character*20 strf,buf
+      character*4 name
       double precision dv
       double precision frect(4)
 c      character*(4) logf
@@ -50,7 +52,15 @@ c     compatibility
          iwd=1+nipar-3
       endif
 c     
-      if((flag.eq.1.and.nevprt.gt.0).or.(flag.le.2.and.herited)) then
+         call dr1('xgetdr'//char(0),name,v,v,v,v,v,v,
+     $        dv,dv,dv,dv)
+         if(name(1:3).ne.'Rec') then
+            call dr1('xsetdr'//char(0),'Rec'//char(0),v,v,v,v,v,v,
+     $           dv,dv,dv,dv)
+         endif
+
+
+      if((flag.eq.1.and.nevprt.gt.0).or.(flag.le.2)) then
          dt=rpar(1)
          ymin=rpar(2)
          ymax=rpar(3)
@@ -95,10 +105,10 @@ c     plot 1:K points of the buffer
      &        0,0,v,dv,dv,dv,dv)
          if(K.gt.0) then
             do 10 i=1,nu
-               if(ipar(3+i).ge.0.or.flag.eq.1) then
+c               if(ipar(3+i).ge.0.or.flag.eq.1) then
                   call dr1('xpolys'//char(0),'v'//char(0),v,v,
      &                 ipar(3+i),1,K,v,z(2),z(2+N+(i-1)*N),dv,dv)
-               endif
+c               endif
  10         continue
          endif
 c     shift buffer left
@@ -203,4 +213,8 @@ c
      &           1,K-1,v,z(2),z(2+N+(i-1)*N),dv,dv)
  30      continue
       endif
+      call dr1('xsetdr'//char(0),name,v,v,v,v,v,v,
+     $     dv,dv,dv,dv)
+
+
       end

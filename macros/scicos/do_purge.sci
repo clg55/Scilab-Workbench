@@ -1,4 +1,6 @@
 function scs_m_new=do_purge(scs_m)
+// Copyright INRIA
+disablemenus()
 //suppress deleted elements in a scicos data structure
 nx=size(scs_m);
 
@@ -9,12 +11,17 @@ for k=1:nx
  o=scs_m(k);
  if o(1)=='Deleted' then
    deleted=[deleted,k];
+ elseif o(1)=='Block' then
+   if o(3)(1)=='super' then
+     scs_m(k)(3)(8)=do_purge(scs_m(k)(3)(8))
+   end
  end
 end
 
 
 if deleted==[] then
   scs_m_new=scs_m
+enablemenus()		
   return
 end
 
@@ -44,5 +51,9 @@ for k=1:size(retained,'*')
   end
   scs_m_new(k)=o;
 end
+enablemenus()
+
+
+
 
 

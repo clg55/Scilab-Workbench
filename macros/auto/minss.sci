@@ -1,4 +1,5 @@
 function [Slmin]=minss(Sl,tol)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 flag=Sl(1);
  if flag(1)<>'lss' then error(91,1),end
@@ -25,6 +26,6 @@ else
 end
 u=u2(:,1:no)
 a=u'*a*u;b=u'*b;c=c*u
-if lhs=1 then Slmin=syslin(dom,a,b,c,d,u'*x0),end
+if lhs==1 then Slmin=syslin(dom,a,b,c,d,u'*x0),end
 //Would be nice to return U=U1*U2
 

@@ -1,6 +1,7 @@
 function [m,n,nx]=g_size(x,flag)
 // only to be called by size function for dynamical systems 
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 x1=x(1);
 if x1(1)=='r' then

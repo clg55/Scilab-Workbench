@@ -33,7 +33,8 @@ c********************************************************************
        i=1
        do 1140 j=1,neqns
        if (i .eq. nsuper+1) go to 1141
-       if (xlnz(j+1)-xlnz(j) .eq. xlindx(i+1)-xlindx(i)) go to 1120
+       if ((xlnz(j+1)-xlnz(j) .eq. xlindx(i+1)-xlindx(i)) 
+     &  .and. (indlnz(neqns+xlnz(j)) .eq. j))     go to 1120
        l=xlindx(nsuper+1)-xlindx(i)+(xlnz(j+1)-xlnz(j))
        call icopy(l,lindx(xlindx(i)-(xlnz(j+1)-xlnz(j))),
      &     1,indlnz(neqns+xlnz(j)),1)

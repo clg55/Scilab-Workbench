@@ -16,18 +16,15 @@ c            ierr=2 if  0**k with k<0
 c!origin
 c Serge Steer INRIA 1996
 c!
+c     Copyright INRIA
       integer p,ierr
       double precision vr,vi,xr,xi,rr,ri
 c
       ierr=0
 c
       if(p.eq.0) then
-         if(abs(vr)+abs(vi).ne.0.0d+0) then
-            rr=1.0d+0
-            ri=0.0d+0
-         else
-            ierr=1
-         endif
+         rr=1.0d+0
+         ri=0.0d+0
       elseif(p.lt.0) then
          if(abs(vr)+abs(vi).ne.0.0d+0) then
             call wdiv(1.0d+0,0.0d+0,vr,vi,rr,ri)
@@ -37,6 +34,8 @@ c
                call wmul(xr,xi,rr,ri,rr,ri)
  10         continue
          else
+            ri=0.0d0
+            rr=1.0d0/ri
             ierr=2
          endif
       else

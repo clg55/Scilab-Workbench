@@ -1,4 +1,5 @@
 function [node,radius]=graph_center(g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>1 then error(39), end
 // compute lp, la and ls

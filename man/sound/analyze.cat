@@ -1,7 +1,7 @@
 
 analyze(1)                     Scilab Function                     analyze(1)
 NAME
-  analyze -
+  analyze - frequency plot of a sound  signal
 
 CALLING SEQUENCE
    analyze (w [,fmin,fmax,rate,points])

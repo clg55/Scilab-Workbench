@@ -1,4 +1,5 @@
       subroutine icsenb(ind,nu,u,co,g,itv,rtv,dtv)
+c     Copyright INRIA
       external nbsec,nvcout,icsei
 c     controle de la rentree de la navette en backward
       call icse(ind,nu,u,co,g,itv,rtv,dtv,nbsec,nvcout,icsei)

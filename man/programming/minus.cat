@@ -1,7 +1,7 @@
 
 minus(1)                       Scilab Function                       minus(1)
 NAME
-  minus (+) -  substraction operator, sign changes
+  minus (-) -  substraction operator, sign changes
 
 CALLING SEQUENCE
   X-Y

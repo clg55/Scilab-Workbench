@@ -1,3 +1,5 @@
+/* Copyright INRIA */
+
 /* wmessage.c
  * Scilab 
  *   Jean-Philipe Chancelier 
@@ -8,6 +10,8 @@
 
 extern SciMess ScilabMessage;
 
+RECT SciMenusRect = {-1,-1,0,0};
+
 /****************************************************
  * Event handler function for the line style window 
  * uses GetWindowLong(hwnd, 4) and SetWindowLong
@@ -16,9 +20,11 @@ extern SciMess ScilabMessage;
 EXPORT BOOL CALLBACK 
 SciMessageDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
 {
-  
   switch (wmsg) {
   case WM_INITDIALOG:
+    if ( SciMenusRect.left != -1) 
+      SetWindowPos(hdlg,HWND_TOP,SciMenusRect.left,SciMenusRect.top,0,0,
+		   SWP_NOSIZE | SWP_NOZORDER );
     SetDlgItemText(hdlg, DI_TEXT,ScilabMessage.string);
     SetDlgItemText(hdlg, IDOK,ScilabMessage.pButName[0]);
     if ( ScilabMessage.nb >= 2) 
@@ -30,9 +36,11 @@ SciMessageDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
       /** GetDlgItemText(hdlg, DI_TEXT, str, MAXSTR-1);
       if (str[strlen(str)-1] == '\n') str[strlen(str)-1] = '\0' ;
       **/
+      GetWindowRect(hdlg,&SciMenusRect);
       EndDialog(hdlg, IDOK);
       return TRUE;
     case IDCANCEL:
+      GetWindowRect(hdlg,&SciMenusRect);
       EndDialog(hdlg, IDCANCEL);
       return TRUE;
     }
@@ -46,21 +54,51 @@ SciMessageDlgProc(HWND hdlg, UINT wmsg, WPARAM wparam, LPARAM lparam)
  * Activate the Message Dialog box window 
  ****************************************************/
 
+static void MessageWinSize(char *str,int *w,int *h)
+{
+  int wl=0;
+  *w=0,*h=0;
+  while ( *str != '\0') 
+    {
+      if ( *str == '\n' ) 
+	{
+	  (*h)++; *w=Max(*w,wl);wl=0;
+	}
+      else 
+	wl++;
+      str++;
+    }
+}
+
+
 int  ExposeMessageWindow()
 {
+  int w,h;
   char *buf;
   DLGPROC lpfnSciMessageDlgProc ;
+  HWND hwndOwner ;
   lpfnSciMessageDlgProc = (DLGPROC) MyGetProcAddress("SciMessageDlgProc",
 						    SciMessageDlgProc);
+  MessageWinSize(ScilabMessage.string,&w,&h);
   if ( ScilabMessage.nb == 2) 
-    buf = "SciMessageDlgBox2";
+    {
+      if ( h <= 8 && w <= 45)
+	buf = "SciMessageDlgBox2";
+      else 
+	buf = "SciBigMessageDlgBox2";
+    }
   else 
-    buf = "SciMessageDlgBox1";
-  if (DialogBox(hdllInstance, buf,textwin.hWndParent,
+    {
+      if ( h <= 8 && w <= 45)
+	buf = "SciMessageDlgBox1";
+      else 
+	buf = "SciBigMessageDlgBox1";
+    }
+  if ( (hwndOwner = GetActiveWindow()) == NULL) 
+    hwndOwner =  textwin.hWndParent;
+  if (DialogBox(hdllInstance, buf,hwndOwner,
 		lpfnSciMessageDlgProc)  == IDOK) 
     return(TRUE);
   else 
     return(FALSE);
 }
-
-

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 
 #include <stdio.h>
 #include "../graphics/Math.h"
@@ -10,7 +11,7 @@ extern  char  *getenv();
 #endif
 
 extern int C2F(xscion)();
-
+extern int help_popped_status();
 /******************************************
  * Calls scilab help or xhelp for string str 
  * buf is a buffer array 
@@ -20,11 +21,17 @@ extern int C2F(xscion)();
 
 
 #ifdef NEW 
+
+
 /** nouvelle version ( voir h_help_data.c ) **/
 void C2F(iscihelp)(buf,str,ierr) 
      char *str,*buf;
      integer *ierr;
 {
+  /** if ( help_popped_status() == 1) 
+    sciprint("Sorry, You cannot use interative help\r\nwhen help menu was previously activated\n");
+  else 
+  **/
   *ierr= Sci_Help(str);
 }
 
@@ -85,6 +92,10 @@ void C2F(isciap)(buf,str,ierr)
      char *str,*buf;
      integer *ierr;
 {
+  /** if ( help_popped_status() == 1) 
+    sciprint("Sorry, You cannot use interative apropos\r\nwhen help menu was previously activated\n");
+  else 
+  **/
   *ierr= Sci_Apropos(str);
 }
 

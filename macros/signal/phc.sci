@@ -10,7 +10,8 @@ function [h,f,g]=phc(hk,d,r)
 //   h,f,g  : relevant matrices of the state-space model
 //!
 //author G. Le Vey  Date: 16 Febr. 1989
- 
+// Copyright INRIA
+
    [p,q]=size(hk);
    [u,s,v]=svd(hk);
    s=diag(sqrt(diag(s(1:r,1:r))));

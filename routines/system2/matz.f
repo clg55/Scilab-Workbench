@@ -24,6 +24,7 @@ c    call matz(x,y,lda,10,10,name,0) in the case where a
 c     is a 10 by 10 matrix. (Here y is not referenced: real case).
 c
 c!
+c     Copyright INRIA
       integer lda,m,n,job
       character*(*) name
       double precision ar(lda,*),ai(lda,*)

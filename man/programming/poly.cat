@@ -12,7 +12,7 @@ PARAMETERS
 
   x         : symbolic variable
 
-  "flag"    : string ("roots", "coeff")
+  "flag"    : string ("roots", "coeff"), default value is "roots".
 
 DESCRIPTION
   If a is a matrix, p is the characteristic polynomial i.e.

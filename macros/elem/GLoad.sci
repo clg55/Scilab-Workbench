@@ -1,4 +1,5 @@
 function GLoad(name)
+// Copyright INRIA
 name1=name;
 k=strindex(name,'.');
 if k<>[] then 

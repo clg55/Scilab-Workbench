@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <stdio.h>
 #include <string.h>
 #include <X11/cursorfont.h>
@@ -44,7 +45,7 @@ extern void GetFonts();
 extern XFontStruct *FontSelect();
 
 char metanetName[MAXNAM];
-char *Version = "3.0.1";
+char *Version = "3.0.2";
 
 int isServeur;
 int theWindow;
@@ -335,8 +336,8 @@ char **argv;
   dpyWidth = DisplayWidth(dpy,screen);
   dpyHeight = DisplayHeight(dpy,screen);
 
-  max_width = dpyWidth * 0.8;
-  max_height = dpyHeight * 0.8;
+  max_width = (int)(dpyWidth * 0.8);
+  max_height = (int)(dpyHeight * 0.8);
 
   if (max_width < metaWidth) metaWidth = max_width;
   if (max_height < metaHeight) metaHeight = max_height;

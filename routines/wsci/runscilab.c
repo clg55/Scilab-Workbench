@@ -1,3 +1,5 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
+
 /*
   Simple program to start Scilab with its console window hidden.
   This program is provided purely for convenience, since most users will
@@ -12,8 +14,10 @@
 #define WIN32
 #endif 
 
+#include <stdio.h>
 #include <windows.h>
 #include <string.h>
+
 #ifdef __STDC__
 #include <stdlib.h>
 #else
@@ -23,6 +27,51 @@
 #ifdef __MSC__
 #define putenv(x) _putenv(x)
 #endif 
+
+
+/********************************
+ * Set up TK_LIBARY environment variables if 
+ * necessary 
+ ********************************/
+
+static void SciEnv ()
+{
+  char *p,*p1;
+  char modname[MAX_PATH+1];
+  char env[MAX_PATH+1+10];
+  if (!GetModuleFileName (NULL, modname+1, MAX_PATH))
+    return;
+  if ((p = strrchr (modname+1, '\\')) == NULL)
+    return;
+  *p = 0;
+
+  /* Set SCI variable */
+  if ((p = strrchr (modname+1, '\\')))
+    {
+      *p = 0;
+      for (p = modname+1; *p; p++)
+	{
+	  if (*p == '\\') *p = '/';
+	}
+#ifdef __CYGWIN32__ 
+      if ( modname[2] == ':' ) 
+	{
+	  modname[2] = modname[1];
+	  modname[0] = '/';
+	  modname[1] = '/';
+	  p = modname;
+	}
+      else 
+	{
+	  p = modname + 1;
+	}
+#else 
+      p = modname + 1;
+#endif 
+      if ( ( p1 = getenv("TK_LIBRARY"))  == (char *) 0 )
+	{  sprintf(env,"TK_LIBRARY=%s\\tcl\\tk8.0",p); putenv(env); }
+    }
+}
 
 int WINAPI
 WinMain (HINSTANCE hSelf, HINSTANCE hPrev, LPSTR cmdline, int nShow)
@@ -42,6 +91,8 @@ WinMain (HINSTANCE hSelf, HINSTANCE hPrev, LPSTR cmdline, int nShow)
     goto error;
   *p = 0;
 
+  SciEnv();
+
   new_cmdline = alloca (MAX_PATH + strlen (cmdline) + 1);
   strcpy (new_cmdline, modname+1);
   strcat (new_cmdline, "\\scilex.exe ");
@@ -57,8 +108,8 @@ WinMain (HINSTANCE hSelf, HINSTANCE hPrev, LPSTR cmdline, int nShow)
   memset (&start, 0, sizeof (start));
   start.cb = sizeof (start);
   start.dwFlags = STARTF_USESHOWWINDOW;
-  start.wShowWindow = SW_HIDE;
-  /** start.wShowWindow = SW_SHOWMINIMIZED; **/
+  /** start.wShowWindow = SW_HIDE; **/
+  start.wShowWindow = SW_SHOWMINIMIZED;
 
   sec_attrs.nLength = sizeof (sec_attrs);
   sec_attrs.lpSecurityDescriptor = NULL;

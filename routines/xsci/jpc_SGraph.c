@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <stdio.h>			/* For the Syntax message */
 #include <signal.h>
 
@@ -494,7 +495,7 @@ SavePs(w, number, client_data)
  ******************************************************/
 
 static XtCallbackProc
-Save(w, number, client_data)
+Save_Old(w, number, client_data)
      Widget w;
      XtPointer number;
      XtPointer client_data;
@@ -507,9 +508,9 @@ Save(w, number, client_data)
       "Cancel",
       NULL
   };
-  strcpy(filename," ");
+  filename[0]='\0';
   xdialg1("Set file name",filename,buttonname,filename,&ok);
-  if (ok==1) {
+  if (ok==1 && filename[0] != '\0' ) {
     /** xxxxx : xdialg1 puts extra ' ' at end of string **/
     int i = strlen(filename)-1 ;
     while ( filename[i] == ' ' ) i--;
@@ -519,12 +520,31 @@ Save(w, number, client_data)
   return(0);
 }
 
+
+static XtCallbackProc
+Save(w, number, client_data)
+     Widget w;
+     XtPointer number;
+     XtPointer client_data;
+{
+  char *filename;
+  integer win_num = (integer) number ;
+  int ierr=0,rep;
+  static char *init ="*.scg";
+  rep=GetFileWindow(init,&filename,".",0,&ierr,"Save Graphic File");
+  if ( ierr == 0 && rep == TRUE )
+    {
+      C2F(xsaveplots)(&win_num,filename,0L);
+    }
+  return(0);
+}
+
 /******************************************************
  * Binary File load 
  ******************************************************/
 
 static XtCallbackProc
-Load(w, number, client_data)
+Load_Old(w, number, client_data)
      Widget w;
      XtPointer number;
      XtPointer client_data;
@@ -538,9 +558,9 @@ Load(w, number, client_data)
       "Cancel",
       NULL
   };
-  strcpy(filename," ");
+  filename[0]='\0';
   xdialg1("Set file name",filename,buttonname,filename,&ok);
-  if (ok==1) {
+  if (ok==1 && filename[0] != '\0' ) {
     /** xxxxx : xdialg1 puts extra ' ' at end of string **/
     int i = strlen(filename)-1 ;
     while ( filename[i] == ' ' ) i--;
@@ -550,6 +570,28 @@ Load(w, number, client_data)
       C2F(xloadplots)(filename,0L);
       C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   }
+  return(0);
+}
+
+static XtCallbackProc
+Load(w, number, client_data)
+     Widget w;
+     XtPointer number;
+     XtPointer client_data;
+{
+  char *filename;
+  integer win_num = (integer) number ;
+  int ierr=0,rep;
+  static char *init ="*.scg";
+  rep=GetFileWindow(init,&filename,".",0,&ierr,"Load Graphic File");
+  if ( ierr == 0 && rep == TRUE )
+    {
+      integer verb=0,cur,na;
+      C2F(dr)("xget","window",&verb,&cur,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);  
+      C2F(dr)("xset","window",&win_num,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+      C2F(xloadplots)(filename,0L);
+      C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+    }
   return(0);
 }
 
@@ -784,7 +826,9 @@ KillButton(w, client_data, call_data)
      caddr_t call_data;
 {
   MenuDataPtr datas =(MenuDataPtr)client_data;
-  FREE(datas->fname);
+  /** Warning fname is shared so we only free fname once **/
+  if ( datas->entry == 0)
+    FREE(datas->fname);
   FREE(datas);
   return(0);
 }
@@ -1070,6 +1114,7 @@ int C2F(addmen)(win_num,button_name,entries,ptrentries,ne,typ,fname,ierr)
      char *button_name,*fname;
 {
   char ** menu_entries;
+  *ierr =0;
   if (*ne!=0) {
     ScilabMStr2CM(entries,ne,ptrentries,&menu_entries,ierr);
     if ( *ierr == 1) return(0);

@@ -1,5 +1,6 @@
       subroutine sciblk(flag,nevprt,t,xd,x,nx,z,nz,tvec,
      &     ntvec,rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
 
 C     routine used to evaluate a block defined by a scilab function
 C     scilab function syntax must be

@@ -21,6 +21,7 @@ function [co,u,g,itv,dtv]=icsu(u,simu,nap,imp)
 //Utiliser les macros icot et icob pour extraire l'etat total
 //ou l'etat aux instants de mesure de dtv.
 //!
+// Copyright INRIA
 df0=1;
 if mini(binf) <=0, ..
   error('appel de icsu avec binf non strictement positif'); end;

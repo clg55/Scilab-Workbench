@@ -1,4 +1,5 @@
       subroutine dspmsp(p,q,r,a,nela,inda,b,nelb,indb,c,nelc,indc,
+c     Copyright INRIA
      $     ib,ic,x,xb,ierr)
 c multiply sparse matrices by the method of gustafson,acm t.o.m.s.
 c  vol 4 (1978) p250.

@@ -7,7 +7,7 @@ errcatch - error trapping
 errcatch(n [,'action'] [,'option']) 
 .fi
 .SH PARAMETERS
-.TP 10
+.TP 20
 n
 : integer 
 .TP 20
@@ -16,15 +16,14 @@ action, option
 .SH DESCRIPTION
 \fVerrcatch\fR gives an "action" (error-handler)  to be 
 performed when an error of type \fVn\fR occurs.
-.LP
-meaning of \fVn\fR :
+\fVn\fR has the followin meaning:
 .PP
-\fVn>0\fR is the error number to trap
-.LP
+if \fVn>0\fR, \fVn\fR is the error number to trap
 .PP
 if \fVn<0\fR  all errors are to be trapped
 .LP
-\fVaction\fR is one of the following character strings  :
+\fVaction\fR is one of the following character strings:
+.RS
 .RS
 .TP 12
 "pause"
@@ -43,9 +42,9 @@ back to the level 0 prompt.
 : interrupts the current Scilab session (useful when 
 Scilab is called from an external program).
 .RE
+.RE
 .LP
 \fVoption\fR is the character string \fV'nomessage'\fR for killing
 error message.
-
 .SH SEE ALSO
 errclear, iserror

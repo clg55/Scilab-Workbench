@@ -5,6 +5,7 @@ NAME
 
 CALLING SEQUENCE
   [m [,k]]=maxi(A)
+  [m [,k]]=maxi(A,'c') or [m [,k]]=maxi(A,'r')
   [m [,k]]=maxi(A1,A2,...,An)
   [m [,k]]=maxi(list(A1,A2,...,An))
 
@@ -16,7 +17,11 @@ PARAMETERS
 
 DESCRIPTION
   For A, a real  vector or matrix, maxi(A) is the largest element A.
-  [m,k]=maxi(A) gives in addition the index of the maximum.
+  [m,k]=maxi(A) gives in addition the index of the maximum.  A second argu-
+  ment of type string 'r' or 'c' can be used : 'r' is used to get a row vec-
+  tor m such that m(j) contains the maximum of the j th column of A (A(:,j)),
+  k(j) gives the row indice which contain the maximum for column j. 'c' is
+  used for the dual operation on the rows of A.
 
   m=maxi(A1,A2,...,An), where all the Aj are matrices of the same
   sizes,returns a vector or a matrix m of size size(m)=size(A1) such that

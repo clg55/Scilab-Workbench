@@ -1,5 +1,7 @@
       subroutine dlradp(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u,nu,y,ny)
+c     Copyright INRIA
+
 c     Scicos block simulator
 
 c     SISO, strictly proper adapted transfer function

@@ -2,6 +2,7 @@
 c     =====================================
 c     Scilab internal coding of vars to string 
 c     =====================================
+c     Copyright INRIA
       include '../stack.h'
       integer id(nsiz),name(nlgh),ch,blank,star
       character*(*) str

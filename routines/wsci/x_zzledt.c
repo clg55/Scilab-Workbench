@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 /************************************
  * reading functions for scilab 
  * Scilab 1997

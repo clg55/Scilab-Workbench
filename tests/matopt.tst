@@ -1,3 +1,4 @@
+// Copyright INRIA
 Leps=2.e-5;
 bs=10.*ones(1,5);bi=-bs;x0=0.12*bs;epsx=1.e-15*x0;xopt=.1*bs;
 [f,x,g]=optim('genros',x0,'in');
@@ -103,7 +104,7 @@ deff('[fpen,gpen,ind]=sipn(x,ind,sip1,ne,nc,cpen)',...
 'if indic < 0 then ind=indic, return, end';
 'if nc >ne then for i=ne+1:nc, f(i)=maxi([0 f(i)]), end,end';
 'fpen=f(nc+1) + cpen*norm(f(1:nc))^2/2';
-'if ind=2 then return,end';
+'if ind==2 then return,end';
 'gpen=g(:,nc+1)';
 'if ne > 0 then';
 '   for i=1:ne, gpen=gpen + cpen*f(i)*g(:,i),end,end';

@@ -1,6 +1,7 @@
 function t__=sci2map(a,nom)
 //converts a scilab object to a maple instruction
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>2 then error('sci2map: 2 input parameters!');end;
 
@@ -75,7 +76,7 @@ function [t__]=str2map(nom,a,ma,na)
 //string to maple
 //!
 t__=[]
-if ma*na=1 then
+if ma*na==1 then
   t__= nom+' := '+new_str(a)+ ';',
 else
   nomi= nom+'[';
@@ -102,7 +103,7 @@ case 1 then// matrix R or C
   lt_real=length(st_real), lt_imag=length(st_imag),
   n_str=st_real
   if lt_real>4 then
-    if part(st_real,lt_real-3:lt_real-3) ='D' then
+    if part(st_real,lt_real-3:lt_real-3) =='D' then
       n_str=part(st_real,1:lt_real-4)+'*10^(',
       n_str=n_str+part(st_real,lt_real-2:lt_real)+')',
     end
@@ -110,7 +111,7 @@ case 1 then// matrix R or C
   if st_imag <> '0' then
     c_str=' + I*(',x_str=st_imag,
     if lt_imag>4 then
-      if part(st_imag,lt_imag-3:lt_imag-3) ='D' then
+      if part(st_imag,lt_imag-3:lt_imag-3) =='D' then
 	x_str=part(st_imag,1:lt_imag-4)+'*10^(',
 	x_str=x_str+part(st_imag,lt_imag-2:lt_imag)+')',
       end,
@@ -131,7 +132,7 @@ t__=[],k=1,
 //
 deg_=degree(poly_),coef_=coeff(poly_),
 [lhs,rhs]=argn(0),
-if rhs=2 then f_par=0 ,f_fin=1, l_deb=0, end,
+if rhs==2 then f_par=0 ,f_fin=1, l_deb=0, end,
 //
 if nom <> bl_nom then
   nom=nom+ ' := ' ,
@@ -140,7 +141,7 @@ if nom <> bl_nom then
 else
   p=part(bl,1:l_deb),
 end
-if f_par = 1 then p=p+'(' ,end,
+if f_par == 1 then p=p+'(' ,end,
 
 if coef_(1) <>0 then
   p=p+new_str(coef_(1))
@@ -150,7 +151,7 @@ end
 rp=' '
 for l=2:deg_
   c1=coef_(l)
-  if c1=0 then
+  if c1==0 then
     p=p+z+'*(',
   else
     p=p+z+'*('+new_str(c1)+'+'
@@ -181,8 +182,8 @@ end
 //   p=part(bl,1:l_nom)+part(p,l0+1:ln)
 //   l0=length(p)
 //  end
-if f_par = 1 then p=p+')' ,end,
-if f_fin = 1 then p=p+';' ,end,
+if f_par == 1 then p=p+')' ,end,
+if f_fin == 1 then p=p+';' ,end,
  
 t__(k)=p
 
@@ -210,10 +211,10 @@ function [t__]=poly2map(nom,a,ma,na)
 // polynomial to maple
 //!
 z=varn(a);nz=length(z)
-while part(z,nz)=' ' then nz=nz-1,end
+while part(z,nz)==' ' then nz=nz-1,end
 z=part(z,1:nz);
 t__=[]
-if na*ma =1 then
+if na*ma ==1 then
    t__=poly_fm(nom,a),
  else
    nomd=nom+'[',
@@ -244,10 +245,10 @@ function [t__]=frac2map(nom,num_,den_)
 //!
 [ma,na]=size(num_),
 z=varn(num_);nz=length(z)
-while part(z,nz)=' ' then nz=nz-1,end
+while part(z,nz)==' ' then nz=nz-1,end
 z=part(z,1:nz),
 t__=[],
-if ma*na =1 then
+if ma*na ==1 then
    t__=fra2map(nom,num_,den_)
   else
    t__(1)=nom+' := array(1.'+'.'+string(ma)+',1.'+'.' ...

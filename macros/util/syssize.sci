@@ -8,6 +8,7 @@ function [io,s]=syssize(sys)
 //                nout:  nb. ouputs
 //                nin :  nb. inputs
 //   s    : nb states.
+// Copyright INRIA
 select type(sys)
 case 1 then
   io=size(sys)
@@ -23,7 +24,7 @@ case 15 then
    case 'r' then
     io=size(sys(3))
     [lhs,rhs]=argn(0);
-    if lhs=2 then  sys=tf2ss(sys);[s,s]=sys(2),end
+    if lhs==2 then  sys=tf2ss(sys);[s,s]=sys(2),end
    else error(97,1)
    end;
  case 16 then
@@ -35,7 +36,7 @@ case 15 then
    case 'r' then
     io=size(sys(3))
     [lhs,rhs]=argn(0);
-    if lhs=2 then  sys=tf2ss(sys);[s,s]=sys(2),end
+    if lhs==2 then  sys=tf2ss(sys);[s,s]=sys(2),end
    else error(97,1)
    end;   
 else

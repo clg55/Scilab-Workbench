@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 
 /********************************************* 
  *   Scilab link functions    
@@ -19,7 +20,7 @@
 
 static void Underscores _PARAMS((int isfor,char *ename,char *ename1));
 static int SearchFandS  _PARAMS( ( char *,int ));
-static int LinkStatus _PARAMS((void)) ;
+int LinkStatus _PARAMS((void)) ;
 /*********************************************
  * Structure to keep the entry points 
  *********************************************/
@@ -118,10 +119,11 @@ void C2F(iscilink)(descla,ptrdescla,nvla,desc,ptrdesc,nv,strf,ilib,iflag,rhs)
 }
 
 
-#if (defined(sun) && defined(SYSV)) || defined(__alpha) || defined(sgi) || (!defined(hppa_old) && defined(hppa))
+#if defined(sun) || defined(__alpha) || defined(sgi) || (!defined(hppa_old) && defined(hppa))
 #include "link_SYSV.c"
 #else
-#if defined(sun) ||  defined(mips) || defined(_IBMR2) || defined(hppa_old)
+/** no more used on sun */
+#if defined(sun_old) ||  defined(mips) || defined(_IBMR2) || defined(hppa_old)
 #ifdef SUNOSDLD 
 #include "link_linux.c"
 #else 

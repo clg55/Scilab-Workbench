@@ -3,6 +3,7 @@ function [N,B,C]=pol2des(Ds)
 // pol2des returns three  matrices N,B,C  (with N nilpotent) such that
 // Ds = C (sN-Eye)^-1 B 
 //!
+// Copyright INRIA
 if type(Ds)==1 then Ds=Ds+0*poly(0,'s')*Ds;end
 dg=maxi(degree(Ds))+1;
 [nout,nin]=size(Ds);

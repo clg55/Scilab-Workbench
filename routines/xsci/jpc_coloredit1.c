@@ -22,7 +22,7 @@
 #include "object.h"
 #include "mode.h"
 #include "paintop.h"
-#include "u_fonts.h"
+#include "u_fonts.h"e
 #include "w_drawprim.h"
 #include "w_icons.h"
 #include "w_indpanel.h"

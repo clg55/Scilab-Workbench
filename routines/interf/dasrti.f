@@ -3,10 +3,11 @@ c ====================================================================
 C     dasrt 
 c ====================================================================
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
 c
       character*(*) fname
-      character*24 namjac
+      character*(nlgh+1) namjac
       common/cjac/namjac
       integer iadr,sadr,gettype
 c
@@ -15,7 +16,7 @@ c
       logical hotstart,type,getexternal,getrvect
       logical checkrhs,checklhs,getrmat,cremat,getscalar
       double precision tout,tstop,maxstep,stepin
-      character*24 namer,namej,names
+      character*(nlgh+1) namer,namej,names
       common /dassln/ namer,namej,names
       external bresd,bjacd,bsurfd
       external setfresd,setfjacd,setfsurfd
@@ -342,18 +343,28 @@ c     not enough memory
             k=k-1
             goto 1125
          endif
-         stk(lyri)=tout
-         call dcopy(n1,stk(l1),1,stk(lyri+1),1)
-         call dcopy(n1,stk(lydot),1,stk(lyri+n1+1),1)
-         l1=lyri+1
-         lydot=lyri+n1+1
-         call ddasrt(bresd,n1,t0,stk(l1),stk(lydot),
-     &        stk(lyri),info,stk(lrtol),stk(latol),idid,
-     &        stk(lrwork),lrw,istk(iadr(liwork)),liw,stk(lw15),
-     &        istk(il17),bjacd,bsurfd,nh,istk(lgroot))
+         if (tout .eq. t0) then
+            stk(lyri)=tout
+            call dcopy(n1,stk(l1),1,stk(lyri+1),1)
+            call dcopy(n1,stk(lydot),1,stk(lyri+n1+1),1)
+            l1=lyri+1
+            lydot=lyri+n1+1
+            t0=tout
+            goto 1120            
+         else
+            stk(lyri)=tout
+            call dcopy(n1,stk(l1),1,stk(lyri+1),1)
+            call dcopy(n1,stk(lydot),1,stk(lyri+n1+1),1)
+            l1=lyri+1
+            lydot=lyri+n1+1
+            call ddasrt(bresd,n1,t0,stk(l1),stk(lydot),
+     &           stk(lyri),info,stk(lrtol),stk(latol),idid,
+     &           stk(lrwork),lrw,istk(iadr(liwork)),liw,stk(lw15),
+     &           istk(il17),bjacd,bsurfd,nh,istk(lgroot))
 C     SUBROUTINE DDASRT (RES,NEQ,T,Y,YPRIME,TOUT,
 C     *  INFO,RTOL,ATOL,IDID,RWORK,LRW,IWORK,LIW,RPAR,IPAR,JAC,
 C     *  G,NG,JROOT)
+         endif
          if(err.gt.0)  return
          if(idid.eq.1) then
 C     A step was successfully taken in the intermediate-output mode. 

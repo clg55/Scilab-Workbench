@@ -7,4 +7,4 @@ DESCRIPTION
   quit terminates Scilab or decreases the pause level.
 
 SEE ALSO
-  pause, break, abort
+  pause, break, abort, exit

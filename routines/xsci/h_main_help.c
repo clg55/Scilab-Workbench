@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 
 /*
  * xarchie : An X browser interface to Archie

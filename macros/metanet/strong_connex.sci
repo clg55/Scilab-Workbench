@@ -1,4 +1,5 @@
 function [nc,ncomp]=strong_connex(g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>1 then error(39), end
 // g

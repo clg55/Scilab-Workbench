@@ -1,4 +1,5 @@
       subroutine majysa(n,nt,np,y,s,ys,lb,g,x,g1,x1,index,ialg,nb)
+c     Copyright INRIA
 c
 c     mise a jour des vecteurs ({y}(i),{s}(i),ys(i),i=1,np)
       implicit double precision (a-h,o-z)

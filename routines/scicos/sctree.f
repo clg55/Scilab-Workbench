@@ -12,6 +12,7 @@ c     outputs:
 c     ok: integer
 c     ord: integer vector of size nord (=<nb)
 c     nord
+c     Copyright INRIA
       integer vec(nb),in(*),outptr(*),cmat(*),ord(*)
       integer nb,i,j,lkk
       integer depu(*),ok

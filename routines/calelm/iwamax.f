@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=IWAMAX,SSI=0
+c     Copyright INRIA
       integer function iwamax(n,xr,xi,incx)
 c!but
 c

@@ -1,3 +1,4 @@
+/* Copyright 1989 Massachusetts Institute of Technology */
 #include "xless.h"
 
 static void QuitAction ARGS((Widget, XButtonEvent *, String *, Cardinal *));

@@ -26,7 +26,7 @@ Hz = yulewalk(N,frq,mag) finds the N-th order iir filter
       B(z)   b(1)z     + b(2)z    + .... + b(n)
 H(z)= ---- = ---------------------------------
                 n-1       n-2
-      A(z)    z   + a(1)z    + .... + a(n)
+      A(z)    z   + a(2)z    + .... + a(n)
 .fi
 which matches the magnitude frequency response given by vectors frq and mag.
 Vectors frq and mag specify the frequency and magnitude of the desired

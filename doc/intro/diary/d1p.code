@@ -102,7 +102,7 @@ diary(0)
 diary('d1p18.dia')
 m=['a' 'cos(b)';'sin(a)' 'c']
 m*m'
-deff('[x]=%cmc(a,b)',['[l,m]=size(a);[m,n]=size(b);x=[];';
+deff('[x]=%c_m_c(a,b)',['[l,m]=size(a);[m,n]=size(b);x=[];';
   'for j=1:n,y=[];';
   'for i=1:l,t='' '';';
   'for k=1:m;';

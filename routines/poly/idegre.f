@@ -6,6 +6,7 @@ c    a=coeff par ordre croissant
 c    majo=majorant
 c    nvrai=degre calcule
 c!
+c     Copyright INRIA
       dimension a(*)
       double precision a,test,dasum,an
 c

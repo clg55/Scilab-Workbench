@@ -4,6 +4,6 @@
  hdes=ones(1:102);
  hdes(103:256)=0*ones(1:154);
  plot(fr,wfm)
- plot2d(fr',hdes',[-1],"000")
+ plot2d(fr',hdes',[1],"000")
 
           

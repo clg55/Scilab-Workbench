@@ -1,9 +1,9 @@
       SUBROUTINE DGELQF( M, N, A, LDA, TAU, WORK, LWORK, INFO )
 *
-*  -- LAPACK routine (version 1.0b) --
+*  -- LAPACK routine (version 2.0) --
 *     Univ. of Tennessee, Univ. of California Berkeley, NAG Ltd.,
 *     Courant Institute, Argonne National Lab, and Rice University
-*     February 29, 1992
+*     September 30, 1994
 *
 *     .. Scalar Arguments ..
       INTEGER            INFO, LDA, LWORK, M, N
@@ -15,7 +15,7 @@
 *  Purpose
 *  =======
 *
-*  DGELQF computes an LQ factorization of a real m by n matrix A:
+*  DGELQF computes an LQ factorization of a real M-by-N matrix A:
 *  A = L * Q.
 *
 *  Arguments
@@ -28,9 +28,9 @@
 *          The number of columns of the matrix A.  N >= 0.
 *
 *  A       (input/output) DOUBLE PRECISION array, dimension (LDA,N)
-*          On entry, the m by n matrix A.
+*          On entry, the M-by-N matrix A.
 *          On exit, the elements on and below the diagonal of the array
-*          contain the m by min(m,n) lower trapezoidal matrix L (L is
+*          contain the m-by-min(m,n) lower trapezoidal matrix L (L is
 *          lower triangular if m <= n); the elements above the diagonal,
 *          with the array TAU, represent the orthogonal matrix Q as a
 *          product of elementary reflectors (see Further Details).
@@ -42,18 +42,17 @@
 *          The scalar factors of the elementary reflectors (see Further
 *          Details).
 *
-*  WORK    (workspace) DOUBLE PRECISION array, dimension (LWORK)
-*          On exit, if INFO = 0, WORK(1) returns the minimum value of
-*          LWORK required to use the optimal blocksize.
+*  WORK    (workspace/output) DOUBLE PRECISION array, dimension (LWORK)
+*          On exit, if INFO = 0, WORK(1) returns the optimal LWORK.
 *
 *  LWORK   (input) INTEGER
 *          The dimension of the array WORK.  LWORK >= max(1,M).
-*          For optimum performance LWORK should be at least M*NB,
-*          where NB is the optimal blocksize.
+*          For optimum performance LWORK >= M*NB, where NB is the
+*          optimal blocksize.
 *
 *  INFO    (output) INTEGER
-*          = 0: successful exit
-*          < 0: if INFO = -i, the i-th argument had an illegal value
+*          = 0:  successful exit
+*          < 0:  if INFO = -i, the i-th argument had an illegal value
 *
 *  Further Details
 *  ===============

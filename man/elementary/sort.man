@@ -19,8 +19,7 @@ s
 k
 : vector or matrix of integers
 .SH DESCRIPTION
-\fVs=sort(v)\fR (or, equivalently \fVs=sort(v,'*')\fR) 
-sorts \fVv\fR  in decreasing order. 
+\fVs=sort(v)\fR sorts \fVv\fR  in decreasing order. 
 If \fVv\fR is a matrix, sorting
 is done columnwise, \fVv\fR being seen as the stacked vector \fVv(:)\fR.
 \fV[s,k]=sort(v)\fR gives in addition the indices of entries 
@@ -38,7 +37,7 @@ by reordering it in decreasing order.
 \fV[s,k]=sort(v,'c')\fR returns in addition in each row of \fVk\fR
 the indices such that \fVv(i,k(i,:))=s(i,:)\fR for each row index \fVi\fR.
 .LP
-Complex matrices or vectors are sorted w.r.t their real part.
+Complex matrices or vectors are sorted w.r.t their magnitude.
 .LP
 \fVy=sort(A)\fR is valid when \fVA\fR is a sparse vector. Column/row
 sorting is not implemented for sparse matrices.

@@ -23,7 +23,8 @@ function [xs,ps,xf,pf]=wiener(y,x0,p0,f,g,h,q,r)
 //form of ps and pf:  [p0,p1,...,pf], and pk is a nxn matrix
 //!
 //author: C. Bunks  date: 20 August 1988
- 
+// Copyright INRIA
+
 //obtain the dimensions of xk and yk.
 //Get the time interval [t0,tf].
  

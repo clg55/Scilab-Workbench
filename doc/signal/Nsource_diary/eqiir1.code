@@ -1,7 +1,7 @@
 //exec('eqiir1.code')
-[cells,fact,zeros,zpoles]=...
+[cells,fact,Zeros,Zpoles]=...
 eqiir('lp','ellip',[2*%pi/10,4*%pi/10],0.02,0.001);
-zpoles'
-zeros'
+Zpoles'
+Zeros'
 cells'
-transfer=fact*poly(zeros,'z')/poly(zpoles,'z')
+transfer=fact*poly(Zeros,'z')/poly(Zpoles,'z')

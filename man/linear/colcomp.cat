@@ -4,7 +4,7 @@ NAME
   colcomp - column compression, kernel, nullspace
 
 CALLING SEQUENCE
-  [W,rk]=colcomp(A [,flag,tol])
+  [W,rk]=colcomp(A [,flag] [,tol])
 
 PARAMETERS
 

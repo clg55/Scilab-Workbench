@@ -1,5 +1,6 @@
 function [t,t_p,ind]=swim(p,ind)
-   [d,d_p]=dpfun(p);
+// Copyright INRIA
+[d,d_p]=dpfun(p);
    as=sqrt(d^2+p^2);
    aw=sqrt((x-p)^2+(y-d)^2);
    t=as/vs+aw/vw;

@@ -12,9 +12,12 @@ PARAMETERS
 
   opt       : optional character string
 
-            : loaded functions are "compiled" to be more efficient (default)
+             "c"
+              : loaded functions are "compiled" to be more efficient
+              (default)
 
-            : loaded functions are not "compiled"
+             "n"
+              : loaded functions are not "compiled"
 DESCRIPTION
   loads one or several functions defined in the file 'file-name'.  The string
   opt='c' means that the functions are to be compiled (pre-interpreted) when

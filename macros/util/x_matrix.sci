@@ -1,4 +1,5 @@
 function [y]=x_matrix(mes,x)
+// Copyright INRIA
 if type(x)<>1 then error(52," x must be a real matrix");end
 [n1,n2]=size(x);
 z=string(x);

@@ -15,6 +15,7 @@ c     l            # of rows of matrix  a and c
 c     m            # of columns of a and rows of b
 c     n            # of columns of b and c
 c!
+c     Copyright INRIA
       double precision a(*),b(*),c(*)
       double precision ddot
       integer na,nb,nc,l,m,n

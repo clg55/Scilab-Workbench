@@ -6,6 +6,7 @@ function x=cosm(a)
 //   a   : square hermitian or diagonalizable matrix
 //   x   : square hermitian matrix
 //!
+// Copyright INRIA
 if type(a)<>1 then error(53),end
 if a==[] then x=[],return,end
 

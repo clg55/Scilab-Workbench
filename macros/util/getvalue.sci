@@ -25,7 +25,7 @@ function [ok,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18]=get
 //  ini     : n column vector of strings, ini(i) gives the suggested
 //            response for the ith required value
 //  ok      : boolean ,%t if ok button pressed, %f if cancel button pressed
-//  xi      : contains the ith required value if ok=%t
+//  xi      : contains the ith required value if ok==%t
 //%Description
 // getvalues macro encapsulate x_mdialog function with error checking,
 // evaluation of numerical response, ...
@@ -41,6 +41,7 @@ function [ok,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15,x16,x17,x18]=get
 //%See also
 // x_mdialog, x_dialog
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 n=prod(size(labels))
 if lhs<>n+2&lhs<>n+1 then error(41),end

@@ -26,4 +26,4 @@ EXAMPLES
   E=['A11','A12';'A21','A22']
 
 SEE ALSO
-  poly, string, boolean, rational, syslin, empty
+  poly, string, boolean, rational, syslin, empty, hypermatrices

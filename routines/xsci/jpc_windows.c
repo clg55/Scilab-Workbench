@@ -1,6 +1,5 @@
-
 /*****************************************************************************
- *
+ *  Based on
  *  xdbx - X Window System interface to dbx
  *
  *  Copyright 1989, 1990 The University of Texas at Austin

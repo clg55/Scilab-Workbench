@@ -1,5 +1,6 @@
       subroutine n1fc1o(lunit,job,i1,i2,i3,i4,i5,d1,d2,d3,d4)
 c     impression des traces
+c     Copyright INRIA
       implicit double precision (a-h,o-z)
       integer lunit,job,i1,i2,i3,i4,i5(*)
       dimension d4(*),d3(*)

@@ -7,7 +7,8 @@ function r=intl(a,b,z0,r,f)
 //!
 //Author F.D.
 //First compile f if necessary:
-if type(f)=11 then comp(f),end;
+// Copyright INRIA
+if type(f)==11 then comp(f),end;
 //Define two functions for the real part and
 //imaginary part of f(g(t))*g'(t) where g(t) is a 
 //parametrization of the circle.

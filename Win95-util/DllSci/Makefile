@@ -19,18 +19,7 @@ libtdll.a: $(OBJS)
 include Makefile.DLLs
 
 clean	:
-	rm -f libtdll.a libtdll.dll libtdll.stubs.a lib_name libs_name *.o
+	rm -f libtdll.a libtdll.dll libtdll.stubs.a lib_name libs_name *.o 
+	rm -f libs_path
 
 distclean : clean 
-
-
-
-
-
-
-
-
-
-
-
-	

@@ -1,4 +1,5 @@
 function [a,b,c]=obsvss(a,b,c,tol)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select type(a)
 case 1
@@ -35,7 +36,7 @@ end;
 [no,u]=contr(a',c',tol)
 u=u(:,1:no)
 a=u'*a*u;b=u'*b;c=c*u
-if lhs=1 then a=syslin(dom,a,b,c,d,u'*x0),end
+if lhs==1 then a=syslin(dom,a,b,c,d,u'*x0),end
 
 
 

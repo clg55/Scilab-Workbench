@@ -8,10 +8,11 @@ function [f]=polfact(p)
 //     - fi polynomial
 //!
 //
+// Copyright INRIA
 if size(p,'*')<>1 then error('polynomial argument required!'),end
 if norm(imag(coeff(p)))<>0 then error('real case only!'),end
 n=degree(p);f=coeff(p,n);
-if n=0 then return,end
+if n==0 then return,end
 var=varn(p);
 r=roots(p);[s,k]=sort(abs(r));r=r(k)
 k=1;

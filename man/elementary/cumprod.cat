@@ -15,9 +15,8 @@ PARAMETERS
   y         : vector or matrix (real or complex)
 
 DESCRIPTION
-  For a vector or a matrix x, y=cumprod(x) (or, equivalently,
-  y=cumprod(x,'*')) returns in y the cumulative product of all the entries of
-  x taken columnwise.
+  For a vector or a matrix x, y=cumprod(x)  returns in y the cumulative pro-
+  duct of all the entries of x taken columnwise.
 
   y=cumprod(x,'c') (or, equivalently, y=cumprod(x,2)) returns in y the cumu-
   lative elementwise product of the columns of x:  y(i,:)=cumprod(x(i,:))

@@ -9,15 +9,15 @@ FFLAGS = $(FC_OPTIONS)
 
 EXAMPLES= Ex-colnew.obj Ex-corr.obj  Ex-feval.obj  Ex-fsolve.obj  Ex-impl.obj  Ex-intg.obj \
 	Ex-ode-more.obj  Ex-ode.obj  Ex-odedc.obj  Ex-optim.obj  Ex-schur.obj  Ex-fort.obj \
-	Ex-dasrt.obj  Ex-dassl.obj  Ex-fbutn.obj 
+	Ex-dasrt.obj  Ex-dassl.obj  Ex-fbutn.obj  Ex-int2d.obj  Ex-int3d.obj
 
 
 OBJS =  FTables.obj $(EXAMPLES) mainsci.obj matusr.obj matus2.obj Funtab.obj  msgstxt.obj \
-	scimem.obj 
+	scimem.obj  callinterf.obj
 
 # jpc win32 
 OBJS =  FTables.obj $(EXAMPLES) mainwin95.obj matusr.obj matus2.obj Funtab.obj  msgstxt.obj \
-	scimem.obj 
+	scimem.obj callinterf.obj
 
 world: all
 
@@ -35,9 +35,25 @@ $(EXAMPLES) : ../stack.h
 distclean::
 	$(RM) $(OBJS)
 
+# symbols 
 
+# A partial def file (without headers) for the default objects 
+# to build a scilex.def 
+
+DEF=../../libs/default.def 
+
+all:: $(DEF)
+
+$(DEF) : $(OBJS) 
+	@echo Creation of $(DEF)
+	@..\..\bin\dumpexts.exe -o $(DEF) -n scilex.dll $(OBJS)
+
+# default rule for Fortran Compilation 
 
 .f.obj	:
-	f2c  $*.f 
-	$(CC) $(CFLAGS) $*.c 
-	$(RM) $*.c 
+	@..\..\bin\f2c  $*.f 
+	@$(CC) $(CFLAGS) $*.c 
+	@del $*.c 
+
+matus2.obj matusr.obj msgstxt.obj user2.obj :   ../stack.h
+callinterf.obj : ../machine.h  callinterf.h

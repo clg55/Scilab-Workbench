@@ -13,6 +13,7 @@ function [L,T]= francis(P22,F,G);
 // If K stabilizes the pair (A,B2) (i.e. A+B2*K is Hurwitz)  then:
 //    u = L*w + K*(x-T*w) = K*x + (L-K*T)*w stabilizes P22 
 //    and y - y^ --> 0
+// Copyright INRIA
 [A,B2,C2,D22]=P22(2:5);
 [n,mm]= size(B2);
 [r,r1]=size(C2);

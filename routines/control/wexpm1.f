@@ -33,6 +33,7 @@ c! originator
 c     S Steer INRIA  from dexpm1:
 c     j roche laboratoire d'automatique de grenoble
 c!
+c     Copyright INRIA
       integer ia,n,iw,ierr
       double precision ar,ai,ear,eai,w
       dimension ar(ia,n),ai(ia,n),ear(iea,n),eai(iea,n),w(*),iw(*)

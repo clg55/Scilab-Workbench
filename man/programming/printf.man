@@ -42,7 +42,7 @@ processed, they are ignored.
 
 .SH EXAMPLES
 .nf
-printf('Result is:\nalpha=%f",0.535)
+printf('Result is:\\nalpha=%f",0.535)
 .fi
 .SH SEE ALSO
 string, print, write, format, disp, file, fprintf, sprintf

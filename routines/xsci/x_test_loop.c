@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <stdio.h>
 #include <setjmp.h>
 #include <signal.h>
@@ -60,6 +61,7 @@ int main(argc, argv)
 };
 
 void C2F(fbutn)() {};
+void C2F(sciwin)() {};
 
 #define PROMPT "[loop test]-->"
 
@@ -183,6 +185,13 @@ void test_apropos() {
 }
 
 
+extern int C2F(stimer)(void);
+
+void test_timer(){
+  sciprint("stimer %d\r\n",(int)C2F(stimer)());
+} 
+
+
 
 static TestOpTab testTab[] ={
   {"add menu",test_menu},
@@ -195,6 +204,7 @@ static TestOpTab testTab[] ={
   {"menus",test_message},
   {"plot",test_plot},
   {"quit",test_quit},
+  {"stimer",test_timer},
   {"xgc",test_xgc},
   {"xinfo",test_xinfo},
   {(char *) NULL,vide_}

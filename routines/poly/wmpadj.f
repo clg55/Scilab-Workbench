@@ -23,6 +23,7 @@ c     n : nombre de colonnes des matrices pm
 c!origine
 c     s Steer INRIA
 c!
+c     Copyright INRIA
       double precision pm1r(*),pm1i(*)
       integer d1(*),m,n,dj
 c

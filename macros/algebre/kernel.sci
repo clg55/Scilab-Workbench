@@ -1,6 +1,7 @@
 function kerA=kernel(A,tol,flag)
 //Syntax : [x]=kernel(A [,tol [,flag]])
 // flag = 'svd' or 'sqr' no flag if A sparse 
+// Copyright INRIA
 if type(A)==1 then
   [lhs,rhs]=argn(0);
   [n,m]=size(A);

@@ -36,8 +36,9 @@ function [X,dims,F,U,k,Z]=abinv(Sl,alfa,beta)
 //     Im(Q2) is in Im(B2) means row-compression of B2=>row-compression of Q2
 //     Then C*[(sI-A-B*F)^(-1)+D]*(Q+B*R) =0   (<=>G*(Q+B*R)=0)
 //F.D.
+// Copyright INRIA
 timedomain=Sl(7);
-if timedomain=[] then warning('abinv: time domain not given =>Sl assumed continuous (default)');timedomain='c';end
+if timedomain==[] then warning('abinv: time domain not given =>Sl assumed continuous (default)');timedomain='c';end
 [LHS,RHS]=argn(0);
 if RHS==1 then alfa=-1;beta=-1;end
 if RHS==2 then beta=alfa;end
@@ -73,7 +74,7 @@ W1=W(:,1:dimV)*inv(W(1:dimV,1:dimV));
 F1bar=W1(dimV+1:dimV+k,:);  
 //[A21,B2bar;C1,Dbar]*[eye(dimV,dimV);F1bar]=zeros(nx-dimV+ny,dimV)
 A11=A11+B1bar*F1bar;  //add B1bar*F1bar is not necessary!
-sl1=syslin(timedomain,A11,B1t,[]);
+sl1=syslin(timedomain,A11,B1t,0*B1t');    //sl1=syslin(timedomain,A11,B1t,[]); is now forbidden!
 [dimVg,dimR,Ur]=st_ility(sl1);
 if B1t<>[] then
        voidB1t=%f;
@@ -94,7 +95,7 @@ if norm(B1t,1)<1.d-10 then
 end       
 end     
 //disp(spec(A11+B1t*F1t))
-sl2=syslin(timedomain,A22,B2*Urange,[]);
+sl2=syslin(timedomain,A22,B2*Urange,0*(B2*Urange)');
 [ns2,nc2,U2,sl3]=st_ility(sl2);
 if (nc2~=0)&(RHS==1|RHS==2) then
   warning('abinv: needs beta => use default value beta=-1');

@@ -1,4 +1,5 @@
 function [h,err]=time_id(n,u,y)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 y=y(:)
 npt=size(y,'*');

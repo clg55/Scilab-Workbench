@@ -1,6 +1,7 @@
 function [y]=test2p(n)
 //!
-   [o,i]=argn(0);
+// Copyright INRIA
+[o,i]=argn(0);
    if i < 1 then error(58); end;
    if type(n) <>1 then error(53,1); end;
    if size(n) <> [1 1] then error(89,1); end;

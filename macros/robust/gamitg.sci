@@ -22,7 +22,8 @@ function [gopt]=gamitg(g,r,PREC,options)
 //      author: P. Gahinet, INRIA
 //      last modification:
 //****************************************************************************
- 
+// Copyright INRIA
+
  
 //user interface. The default values are:
 //     PREC=1.0e-3;      options='nul';
@@ -30,7 +31,7 @@ function [gopt]=gamitg(g,r,PREC,options)
 [lhs,rhs]=argn(0);
 select rhs,
 case 2 then PREC=1.0e-3; options='nul';
-case 3 then if type(PREC)=10 then options=PREC; PREC=1.0e-3;
+case 3 then if type(PREC)==10 then options=PREC; PREC=1.0e-3;
                              else options='nul'; end,
 end
  
@@ -143,7 +144,7 @@ sigd=maxi(sig12,sig21);
  
 upper=INIT_UPP;     UPP=INIT_UPP;
  
-if sigd=0 then
+if sigd==0 then
    lower=INIT_LOW; LOW=INIT_LOW;
 else
    lower=sigd; LOW=0;
@@ -213,7 +214,7 @@ DONE=0 //DONE=1 indicates that the current gamma has been classified and
  
 hg=h11-(h12/(gs*h22-d1112s))*h21;
  
-if T_EVALH=1 then
+if T_EVALH==1 then
    hev=spec(hg);
    if mini(abs(real(hev))) <= RELACCU*maxi(abs(hev)) then
       lower=ga; DONE=1;   //Hg HAS EVAL ON iR -> NEXT LOOP
@@ -224,10 +225,10 @@ if T_EVALH=1 then
 end
  
  
-if DONE=0 then
+if DONE==0 then
    jg=j11-(j12/(gs*j22-d1121s))*j21;
  
-   if T_EVALJ=1 then
+   if T_EVALJ==1 then
      jev=spec(jg);
      if mini(abs(real(jev))) <= RELACCU*maxi(abs(jev)) then
         lower=ga; DONE=1;   //Jg HAS EVAL ON iR -> NEXT LOOP
@@ -245,7 +246,7 @@ end
 //---------------------------------------------------------
  
  
-if DONE=0 then
+if DONE==0 then
  
    //compute orthon. bases of the negative invariant subspace of H
    [uh,d]=schur(hg,'c');
@@ -261,7 +262,7 @@ if DONE=0 then
    //  * For the remaining entries, if e(i)/f(i) < - RELACC/100 then X is
    //    diagnosed as indefinite. Otherwise X is nonnegative.
  
-   if T_POSX=1 then
+   if T_POSX==1 then
       [e,f]=gspec(qx,px);
       i=1;
       while i<=na,
@@ -278,13 +279,13 @@ end
  
  
  
-if DONE=0 then
+if DONE==0 then
  
    //compute orthon. bases of the negative inv. subspace of J
    [uj,d]=schur(jg,'c');
    py=uj(1:na,1:na);   qy=uj(na+1:twona,1:na);
  
-   if T_POSY=1 then
+   if T_POSY==1 then
       [e,f]=gspec(qy,py);
       i=1;
       while i<=na,
@@ -305,7 +306,7 @@ end
 //--------------------------------------------------------------
  
  
-if DONE=0 then
+if DONE==0 then
  
    [e,f]=gspec(qy'*qx,py'*px);
    if maxi(real(e-gs*f)) <= 0 then
@@ -351,7 +352,7 @@ function [bool]=str_member(c,s)
 // returns %T (true) if it does, %F (false) otherwise.
  
 for i=1:length(s),
-  if part(s,i)=c then bool=%t; return; end
+  if part(s,i)==c then bool=%t; return; end
 end
 bool=%f;
 

@@ -3,6 +3,7 @@ function bad_connection(path_out,prt_out,nout,path_in,prt_in,nin)
 // path_out : Path of the "from block" in scs_m
 // path_in  : Path of the "to block" in scs_m
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs==6 then  //two connected blocks
   lp=mini(size(path_out,'*'),size(path_in,'*'))

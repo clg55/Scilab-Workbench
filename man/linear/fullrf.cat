@@ -25,6 +25,8 @@ DESCRIPTION
   rk of A is defined as the number of singular values larger than
   norm(A)*tol.
 
+  If A is symmetric, fullrf returns M=Q'.
+
 EXAMPLE
   A=rand(5,2)*rand(2,5);
   [Q,M]=fullrf(A);

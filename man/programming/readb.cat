@@ -1,7 +1,7 @@
 
 readb(1)                       Scilab Function                       readb(1)
 NAME
-  readb - binary read
+  readb - fortran file binary read
 
 CALLING SEQUENCE
   x=readb(file-name,m,n [,rec])
@@ -18,11 +18,12 @@ PARAMETERS
             desired x.
 
 DESCRIPTION
-  binary read of the matrix x in the file file-name.
+  binary read of the matrix x in the file file-name.  Matrix entries are sup-
+  posed to have been stored on 8 byte words.
 
   For direct record access, file must have been previously opened using file
   function to set the record_length. file-name must be the result of the file
   function.
 
 SEE ALSO
-  file, write, writb
+  file, write, writb, binary, read4b

@@ -1,7 +1,7 @@
-			     Metanet 3.0
-			     ***********
+			     Metanet 3.0.2
+			     *************
 
-You can load a graph, create a new one or work with an already loaded graph.
+You can load a graph, create a new one or work with a loaded graph.
 
 With the left button of the mouse, you can highlight an arc or a node.
 
@@ -32,13 +32,13 @@ Graph
   Find Node: Prompt for a node name and highlight it. The viewport of the
              window is moved to display the arc if needed.
 
-  Graphics: Change the scale. The default is 1.
+  Graphics: Change the scale. Default is 1.
 
   Modify Graph: Enter Modify mode.
 
   Use internal numbers as names: Use the consecutive internal numbers of
                                  arcs and nodes as names. This is useful 
-                                 when working with Scilab.
+                                 when computing with Scilab.
   Display arc names: Display arc names on the arcs.
   Display node names: Display node names on the nodes.
 

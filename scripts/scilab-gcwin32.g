@@ -2,6 +2,9 @@
 # Warning : some old versions of sh dont allow inline function definitions
 # like do_scilex()... . In this case use a system V sh (sh5)
 # Set the SCI environment variable if not already set
+
+# Copyright INRIA
+
 if test "$HOME" = ""; then
   HOME="SCILAB_DIRECTORY"
 fi

@@ -19,55 +19,45 @@ PARAMETERS
                  only under X11.  The logical function used is set by x1. The
                  default value is 3.
 
-                  0
-                   : function  " 0 ",
+                  0        : function  " 0 ",
 
-                  1
-                   : function " src AND dst "
+                  1        : function " src AND dst "
 
-                  2
-                   : function " src AND NOT dst "
+                  2        : function " src AND NOT dst "
 
-                  3
-                   : function " src ",
+                  3        : function " src ",
 
-                  4
-                   : function " NOT src AND dst "
+                  4        : function " NOT src AND dst "
 
-                  5
-                   : function " dst ",
+                  5        : function " dst ",
 
-                  6
-                   : function " src XOR dst ",
+                  6        : function " src XOR dst ",
 
-                  7
-                   : function " src OR dst ",
+                  7        : function " src OR dst ",
 
-                  8
-                   : function " NOT src AND NOT dst ",
+                  8        : function " NOT src AND NOT dst ",
 
-                  9
-                   : function " NOT src XOR dst ",
+                  9        : function " NOT src XOR dst ",
 
-                 10
-                   : function " NOT dst ",
+                 10        : function " NOT dst ",
 
-                 11
-                   : function " src OR NOT dst ",
+                 11        : function " src OR NOT dst ",
 
-                 12
-                   : function " NOT src ",
+                 12        : function " NOT src ",
 
-                 13
-                   : function " NOT src OR dst ",
+                 13        : function " NOT src OR dst ",
 
-                 14
-                   : function " NOT src OR NOT dst ",
+                 14        : function " NOT src OR NOT dst ",
 
-                 15
-                   : function " 1 ";
-  xset("background",color) : to fix the background color of the current
-  graphic window.
+                 15        : function " 1 ";
+
+  xset("auto clear","on"|"off")
+                 : to switch on or off the auto clear mode for graphics. When
+                 the auto clear mode is on an xbasc() operation is performed
+                 before each high level graphic function.
+
+  xset("background",color)
+                 : to fix the background color of the current graphic window.
 
   xset("clipping",x,y,w,h)
                  : set the clipping zone to the rectangle (x,y,w,h) (Upper-
@@ -91,6 +81,12 @@ PARAMETERS
 
   xset("foreground",color)
                  : to fix the foreground color of the current graphic window.
+
+  xset("fpf",string)
+                 : to fix the floating point format for number display in
+                 contour functions. string is a string giving the format in C
+                 format syntax (for example string="%3f"), use string='' to
+                 switch back to default format.
 
   xset("hidden3d",colorid)
                  : set the color number for ``hidden'' faces in plot3d.
@@ -142,9 +138,9 @@ PARAMETERS
                    Pixmap is cleared with the  command xset("wwpc") or with
                    the usual command xbasc().
 
-  xset("wshow")  : see the function driver.
+  xset("wshow")  : see xset("pixmap",1) above
 
-  xset("wwpc")   : see the function driver.
+  xset("wwpc")   : see xset("pixmap",1) above
 
 DESCRIPTION
   xset is used to set values of the graphic context. When called no argu-

@@ -1,7 +1,7 @@
 
 mapsound(1)                    Scilab Function                    mapsound(1)
 NAME
-  mapsound -
+  mapsound - Plots a sound map
 
 CALLING SEQUENCE
   mapsound (w,dt,fmin,fmax,simpl,rate)

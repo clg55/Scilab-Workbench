@@ -6,7 +6,7 @@ NAME
 CALLING SEQUENCE
   [f,xopt]=optim(costf,x0)
   [f,[xopt,[gradopt,[work]]]]=optim(costf,[contr],x0,['algo'],[df0,[mem]],
-       [work],[stop],['in'])
+       [work],[stop],['in'],[imp=iflag])
 
 PARAMETERS
 
@@ -33,7 +33,10 @@ PARAMETERS
             (algo='gc' or 'nd'). Default value is around 6.
 
   stop      :  sequence of optional parameters controlling the convergence of
-            the algorithm.  stop=  'ar',nap, [iter [,epsg [,epsf [,epsx]]]]
+            the algorithm.
+
+                        top=top-1stop=  'ar',nap, [iter [,epsg [,epsf
+            [,epsx]]]]
 
             "ar"
               : reserved keyword for stopping rule selection defined as fol-
@@ -57,6 +60,13 @@ PARAMETERS
 
   "in"      : reserved  keyword for initialization of parameters used when
             costf in given as a Fortran routine (see below).
+
+  "imp=iflag"
+            : named argument used to set the trace mode. iflag=0 nothing
+            (execpt errors) is reported, iflag=1 initial and final reports,
+            iflag=2 adds a report per iteration, iflag>2 add reports on
+            linear search. Warning, most of these reports are written on the
+            Scilab standard output.
 
   gradopt   :  gradient of costf at xopt
 
@@ -137,8 +147,8 @@ EXAMPLES
   [f,xopt,gopt]=optim(cost,'b',[-1;0;2],[0.5;1;4],x0,'gc') //  Bounds on x
   [f,xopt,gopt]=optim(cost,'b',[-1;0;2],[0.5;1;4],x0,'gc','ar',3)
   // Here, 3 calls to cost are allowed.
-  //Now calling the Fortran subroutine "genros.f" in SCIDIR/default
-  // (see also the interface foptim.f)
+  // Now calling the Fortran subroutine "genros" in SCIDIR/default/Ex-optim.f
+  // See also the link function for dynamically linking an objective function
   [f,xopt,gopt]=optim('genros',[1;2;3])    //Rosenbrock's function
 
 SEE ALSO

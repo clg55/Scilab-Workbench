@@ -5,6 +5,7 @@ c     gestion de la standard input
 c
 c ================================== ( Inria    ) =============
 c
+c     Copyright INRIA
       include '../stack.h'
       character*(*) fmt
       double precision v(*)

@@ -20,6 +20,7 @@ c            ierr=2 si 0**k avec k<0
 c!origine
 c Serge Steer INRIA 1989
 c!
+c     Copyright INRIA
       integer n,iv,ipow ,ierr
       double precision v(*)
 c

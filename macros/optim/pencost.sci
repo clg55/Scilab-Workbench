@@ -50,13 +50,14 @@ function [fpen,gpen,ind]=pencost(x,ind,fncts,ne,nc,cpen);
 // or (passing myproblem,ne,nc,cpen by context)
 // fncts=myproblem;[f,x]=optim(pencost,x0)
 //
+// Copyright INRIA
 [f,gradf,indic]=fncts(x,ind);
 if indic < 0 then ind=indic, return, end;
 if nc >ne then
     for i=ne+1:nc, f(i)=max([0 f(i)]); end;
 end;
 fpen=f(nc+1) + 0.5*cpen*norm(f(1:nc))^2;
-if ind=2 then return, end;
+if ind==2 then return, end;
 gpen=gradf(:,nc+1);
 if ne >0 then
     for i=1:ne, gpen=gpen + cpen*f(i)*gradf(:,i),end;

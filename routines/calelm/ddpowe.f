@@ -18,6 +18,7 @@ c            iscmpl=1 if result is complex
 c!origin
 c Serge Steer INRIA 1996
 c!
+c     Copyright INRIA
       integer ierr
       double precision v,p,sr,si,rr,ri
 c     
@@ -40,9 +41,13 @@ c
             iscmpl=1
          else
             if(p.lt.0.0d+0) then
+               ri=0.0d0
+               rr=1.0d0/ri
                ierr=2
             elseif(p.eq.0.0d+0) then
-               ierr=1
+c               ierr=1
+               rr=1.0d0
+               ri=0.0d0
             else
                rr=0.0d0
                ri=0.0d0

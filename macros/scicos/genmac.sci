@@ -1,4 +1,5 @@
 function mac=genmac(tt,nin,nout)
+// Copyright INRIA
 [txt1,txt2,txt2_1,txt3,txt4,txt5,txt6]=tt(1:7)
 mac=null()
 //    [y,  x,  z,  tvec,xd]=func(flag,nevprt,t,x,z,rpar,ipar,u)

@@ -10,6 +10,7 @@ function []=errbar(x,y,em,ep)
 //   y=<sin(x);cos(x)>';x=<x;x>';plot2d(x,y);
 //   errbar(x,y,0.05*ones(x),0.03*ones(x));
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<=0,write(%io(2),'x=0:0.1:2*%pi;');
    write(%io(2),'y=[sin(x);cos(x)]'';x=[x;x]''');

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "metaconst.h"
 #include "list.h"
 #include "graph.h"

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DLBLKS,SSI=0
       SUBROUTINE DLBLKS( NAME, NBC)
 C ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 C
@@ -12,6 +11,7 @@ C          NBC   NOMBRE DE CARACTERES DE LA CHAINE
 C
 C FORTRAN  INDEX, LEN
 C ....................................................................
+c     Copyright INRIA
       CHARACTER*(*) NAME
       INTEGER       NBC
       INTEGER       I,K,J,LL

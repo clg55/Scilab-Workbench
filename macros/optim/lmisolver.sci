@@ -1,4 +1,5 @@
 function [%Xlist,%OPT]=lmisolver(%Xinit,%evalfunc,%options) 
+// Copyright INRIA
 %OPT=[];%Xlist=list();
 [LHS,RHS]=argn(0);
 
@@ -258,7 +259,6 @@ if ~(%sm>%to) then
 
 	if %info(2) == %mite then error('max # of iterations exceeded');end
 	if (%ul(1) > %ato) then error('No feasible solution exists');end
- //       pause
  //       if (%ul(1) > 0) then %F_0=%F_0+%ato*%I;end
 
 	disp('feasible solution found')
@@ -334,7 +334,7 @@ end
 
 function [r,ind]=recons(r,ind)
 //reconstruct a list from a flat list (see aplat)
-if ind=-1 then r=r(:);return;end
+if ind==-1 then r=r(:);return;end
 nr=size(r)
 ma=0
 for k=nr:-1:1
@@ -347,7 +347,7 @@ vi=ind(ki);vi=vi(1:ma-1);
 k=ki
 vj=vi
 
-while vj=vi
+while vj==vi
   k=k+1
   if k>nr then break; end
   vv=ind(k);

@@ -1,4 +1,5 @@
 function [x,y,typ]=CLKINV_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -12,6 +13,21 @@ case 'plot' then
   xstringb(orig(1),orig(2)+sz(2)/3,string(prt),sz(1),sz(2)/1.5)
   xset('thickness',thick)
   xset('pattern',pat)
+    //identification
+  if size(o(3)) >= 15 then
+    ident = o(3)(15)
+  else
+    ident = []
+  end
+  if ident <> [] then
+    font=xget('font')
+    xset('font', options('ID')(1)(1), options('ID')(1)(2))
+    rectangle = xstringl(orig(1), orig(2)+3/2*sz(2), ident)
+    w = rectangle(3)
+    h = rectangle(4)
+    xstringb(orig(1) + sz(1)/2 -w/2, orig(2)+sz(2)+h/2 , ident , w, h)
+    xset('font', font(1), font(2))
+  end
 case 'getinputs' then
   x=[];y=[];typ=[]
 case 'getoutputs' then

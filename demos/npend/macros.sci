@@ -1,5 +1,6 @@
 function [n]=np()
 // Return the size  of the Fortran pendulum 
+// Copyright INRIA
 n=1;
 n=fort('np',n,1,'i','sort',1);
 

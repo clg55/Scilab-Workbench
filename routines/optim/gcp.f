@@ -3,6 +3,7 @@ c
 c     methode de gradient preconditionne appliquee a l'equation
 c     [a]*{x}={b}. ici [a] est definie par les vecteurs ({y}(i),
 c     {s}(i), {z}(i), i=1,np).
+c     Copyright INRIA
 c
       implicit  double precision (a-h,o-z)
       dimension x(n),b(n),y(nt,n),s(nt,n),z(nt,n),ys(nt),zs(nt),diag(n)

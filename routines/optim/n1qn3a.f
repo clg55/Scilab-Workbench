@@ -1,6 +1,7 @@
 c
 c-----------------------------------------------------------------------
 c
+c     Copyright INRIA
       subroutine n1qn3a (simul,prosca,ctonb,ctcab,n,x,f,g,dxmin,df1,
      /                   epsg,impres,io,mode,niter,nsim,m,d,gg,diag,aux,
      /                   alpha,ybar,sbar,izs,rzs,dzs)

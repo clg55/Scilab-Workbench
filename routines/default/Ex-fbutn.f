@@ -1,4 +1,5 @@
 C     Examples for fbutn 
+c     Copyright INRIA
       subroutine haltscicos(name,win,entry)
       integer win,entry
       character*(*) name

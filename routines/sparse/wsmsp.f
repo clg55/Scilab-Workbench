@@ -1,4 +1,5 @@
       subroutine wsmsp(nrb,ncb,nca,br,bi,mrb,ar,ai,nela,inda,cr,ci,
+c     Copyright INRIA
      $     mrc,itb,ita)
 c multiply a full complex matrix stored in b on right by a sparse
 c  complex matrix stored in a,inda. Put result in c.

@@ -11,7 +11,8 @@ function [win_l,cwp]=window(wtype,n,par)
 // cwp   :unspecified Chebyshev window parameter
 //!
 //author: C. Bunks   date: 8 Sept 1988
- 
+// Copyright INRIA
+
    [lhs,rhs]=argn(0);
    cwp=-1;
  
@@ -129,7 +130,7 @@ function [win_l,cwp]=window(wtype,n,par)
       end,
       c1=w(1);
       w=w/c1;
-      if ieo=1 then
+      if ieo==1 then
          win_l(np1:n)=w(1:np1);
          win_l(1:np1-1)=w(np1-1:-1:1);
       else,

@@ -72,6 +72,9 @@ number=xget("alufunction")
 15
 : function " 1 ";
 .RE
+str=xset("auto clear")
+: to get the auto clear status (\fV"on"\fR or \fV"off"\fR).
+.TP
 color=xget("background")
 : to get the background color of the current graphic window.
 .TP
@@ -92,6 +95,10 @@ font=xget("font")
 .TP
 color=xget("foreground")
 : to fix the foreground color of the current graphic window.
+.TP
+str=xget("fpf")
+: to get the floating point format for number display in 
+contour functions. Note that \fVstr==''\fR when default format is used.
 .TP
 color=xget("hidden3d")
 : set the color number for ``hidden'' faces in plot3d.

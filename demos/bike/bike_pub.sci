@@ -1,8 +1,9 @@
 function[]=pub()
+// Copyright INRIA
 xbasc();xselect()
 rect=[0,0,10,10];
 xbasc();
-isoview(0,11,0,11)
+isoview(0,11,0,7)
 //plot2d([],[],[1],"010"," ",rect);
 
 deff('[x,y]=circle(amp,vx,vy)',['nn=.1';..
@@ -443,7 +444,7 @@ cy13=[3.4039087947883
 xpoly(cx13,cy13,'lines',0);
 
 
-
+if %f then
 psi=[5.931198102016608E-002  0.657894736842105     ;
   6.049822064056940E-002  0.656250000000000     ;
   8.303677342823251E-002  0.641447368421053     ;
@@ -794,25 +795,23 @@ psi4=[5.0951086956522    5.7833333333333;
     5.1902173913043    6.0833333333333;
     5.1358695652174    6.0666666666667;
     5.0815217391304    6.0333333333333]
-
 px=9.3;py=8.7;fac=.57;
 xfpoly((px-4.5)*ones(101,1)+fac*psi4(1:101,1),..
       (py-3.6)*ones(101,1)+fac*psi4(1:101,2),1)
+end
+return
 xset('font',4,20)
 xset("pattern",10)
-z=-2;
+z=0//z=-2;
 xstring(z-.5,8.75,'F  r  e  e  !');
 xset('font',3,20)
 xset("pattern",2)
 //xstring(z-1,8,'Scilab, a scientific');
 //xstring(z-1,7.25,'software package');
 xstring(z-.3,6.5,'from INRIA');
+
 xset("pattern",0)
 xset('font',3,2)
-//xstring(0.5,0.15,'Bike Simulation (see $SCI/demos/bike_demo/bike_demo.sci)');
-
-colored=%f;
 colored=%f;
 xset('default');
 xset('font',2,1);
-//[x,y,ok]=mod_curv([],[],'axy',list(' ',' ',' '),rect);

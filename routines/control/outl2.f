@@ -18,6 +18,7 @@ c     - w. trableau de travail
 c
 c     Sortie  : Aucune .
 c%
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
       dimension tq(*),neq(*)
       dimension v(*)

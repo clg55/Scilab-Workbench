@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <string.h>
 #include "../machine.h"
 #include "../sun/link.h"
@@ -12,6 +13,8 @@ typedef void (*voidf)();
 #define DP double*
 #define DPP double**
 #if defined(__STDC__)
+/*                    flag  nclock ntvec  rpar  nrpar ipar  nipar  u  nu */
+#define ARGS_scicosm1 IP,    IP,    IP,    DP,   IP,  IP,   IP,   DP, IP
 /* flag  nclock t    xd   x    nx   z   nz   tvec   ntvec  rpar  nrpar ipar  nipar  intabl  ni  outabl no */
 #define ARGS_scicos0 IP,IP,DP,DP,DP,IP,DP,IP,DP,IP,DP,IP,IP,IP,DP,IP,DP,IP
 /*       flag   nclock t    xd   x    nx   z   nz   tvec   ntvec  rpar  nrpar ipar  nipar  intabl  .... */
@@ -19,12 +22,13 @@ typedef void (*voidf)();
 
 /*        flag   nclock t    xd   x    nx   z   nz   tvec   ntvec  rpar  nrpar ipar  nipar   args_in sz_in, n_in  args_out sz_out, n_out  */
 #define ARGS_scicos2 IP,IP,DP,DP,DP,IP,DP,IP,DP,IP,DP,IP,IP,IP,DPP,IP,IP,DPP,IP,IP
-
+typedef void (*ScicosFm1)(ARGS_scicosm1);
 typedef void (*ScicosF0)(ARGS_scicos0);
 typedef void (*ScicosF)(ARGS_scicos);
 typedef void (*ScicosF2)(ARGS_scicos2);
 #else
 #define ARGS_scicos /**/
+typedef void (*ScicosFm1)();
 typedef void (*ScicosF)();
 typedef void (*ScicosF0)();
 typedef void (*ScicosF2)();
@@ -61,6 +65,7 @@ double *t,*xd,*x,*z,*rpar,*outtb,*tvec;
     int nin,nout,lprt,szi,funtype;
     ScicosF loc0;
     ScicosF loc1;
+    ScicosFm1 loc3;
     ScicosF2 loc2;
 
     kf=*kfun-1;
@@ -69,6 +74,9 @@ double *t,*xd,*x,*z,*rpar,*outtb,*tvec;
  
     if (i<0) {
 	switch (funtype) {
+	case -1:
+	  sciprint("type -1 function not allowed for scilab blocks\r\n");
+	    *flag=-1000-(*kfun);
 	case 0:
 	    loc=F2C(sciblk);
 	    break;
@@ -111,6 +119,16 @@ double *t,*xd,*x,*z,*rpar,*outtb,*tvec;
     nin=inpptr[kf+1]-inpptr[kf]; /* number of input ports */
     nout=outptr[kf+1]-outptr[kf];/* number of output ports */
     switch (funtype) {
+    case -1 :
+      /* special synchro blocks */
+      in=0;
+      lprt=inplnk[inpptr[kf]-1+in];
+      args[in]=&(outtb[lnkptr[lprt-1]-1]);
+      sz[in]=lnkptr[lprt]-lnkptr[lprt-1];
+      loc3 = (ScicosFm1) loc;
+      (*loc3)(flag,nclock,ntvec,&(rpar[rpptr[kf]-1]),&nrpar,
+	      &(ipar[ipptr[kf]-1]),&nipar,(double *)args[0],&sz[0]);
+      break;   
     case 1 :			/* one entry for each input or output */
 	for (in=0;in<nin;in++) {
 	    lprt=inplnk[inpptr[kf]-1+in];

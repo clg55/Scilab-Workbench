@@ -1,4 +1,5 @@
       integer function folhp(ls,alpha,beta,s,p)
+c     Copyright INRIA
       integer ls
       double precision alpha,beta,s,p
 c!purpose

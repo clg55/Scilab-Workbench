@@ -130,7 +130,7 @@ static integer DashTab[MAXDASH] = { PS_SOLID,PS_DASH,PS_DOT,PS_DASHDOT,PS_DASHDO
 
 
 /** 
-  We need to provid a hdc for each graphic operation 
+  We need to provide a hdc for each graphic operation 
   but hdc can be changed to be set to a window a printer a metafile etc...
   Thus hdc is kept as a global variable 
   which will be set to what we need : see Xcall.c 
@@ -142,6 +142,8 @@ extern TW textwin; /** keeps information for the current graphic window **/
 /** XXX a mettre ailleurs **/
 
 static  POINT *C2F(ReturnPoints)();
+static HFONT getcurfont();
+int XorString(integer x,integer y, char *string,int fWidth,int fHeight);
 
 static int screencolor = 1 ; /* default screen color or not :initgraphic_*/
 static COLORREF DefaultBackground = RGB(255,255,255);
@@ -503,13 +505,8 @@ void C2F(xpause)(str, sec_time, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
      double *dv3;
      double *dv4;
 { 
-  sciprint("==> pause en secondes");
-  /** 
-    unsigned useconds;
-    useconds=(unsigned) *sec_time;
-    if (useconds != 0)  
-    return;
-    **/
+  int ms = (*sec_time)/1000; /** time is specified in microseconds in scilab**/
+  if (ms != 0) Sleep(ms); /* Number of milliseconds to sleep. */
 }
 
 /****************************************************************
@@ -520,9 +517,9 @@ void C2F(xpause)(str, sec_time, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
    in this case we return i= -1
 ****************************************************************/
 
-void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, iflag, v7, dv1, dv2, dv3, dv4)
+void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, iflag, istr, dv1, dv2, dv3, dv4)
      char *str;
-     integer *ibutton,*x1,*yy1,*iwin,*iflag,*v7;
+     integer *ibutton,*x1,*yy1,*iwin,*iflag,*istr;
      double *dv1;
      double *dv2;
      double *dv3;
@@ -532,7 +529,7 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, iflag, v7, dv1, dv2, dv3, dv4)
   Window CW;
   MSG msg;
   int buttons = 0,win;
-
+  integer lstr ;
   win = -1;
   if ( *iflag ==1 && CheckClickQueue(&win,x1,yy1,ibutton) == 1) 
     {
@@ -550,6 +547,11 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, iflag, v7, dv1, dv2, dv3, dv4)
       }
     /** a loop on all the graphics windows **/
     listptr = The_List;
+    /** special case the list is empty **/
+    if ( listptr == (WindowList *) 0) 
+      {
+	*x1=0;*yy1=0;*ibutton = -100; return ;
+      }
     while ( listptr != (WindowList  *) 0 ) 
       {
 	CW = listptr->winxgc.CWindow;
@@ -587,6 +589,18 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, iflag, v7, dv1, dv2, dv3, dv4)
 		TranslateMessage(&msg);
 		DispatchMessage(&msg);
 	      }
+	    if ( *istr==1 && C2F(ismenu)()==1 ) 
+	      {
+		int entry;
+		C2F(getmen)(str,&lstr,&entry);
+		*ibutton = -2;
+		*istr=lstr;
+		*x1=0;
+		*yy1=0;
+		*iwin=-1;
+		buttons++;
+		break;
+	      }
 	  }
       }
     if ( ok != 1) 
@@ -613,7 +627,7 @@ void C2F(xclick)(str, ibutton, x1, yy1, iflag,istr, v7, dv1, dv2, dv3, dv4)
     {
       if (*ibutton == -2) 
 	{
-	  sciprint("Menu activated %s %d",str,lstr);
+	  /*sciprint("Menu activated %s %d",str,lstr);*/
 	  *istr = lstr;
 	}
       else
@@ -688,7 +702,9 @@ void SciClick(ibutton,x1,yy1,iflag,getmouse,getrelease,dyn_men,str,lstr)
       PeekMessage(&msg, 0, 0, 0, PM_REMOVE);
       /** maybe someone decided to destroy scilab Graphic window **/
       if ( ScilabXgc == (struct BCG *) 0 || ScilabXgc->CWindow == (Window) 0)
-	return;
+	{
+	  *ibutton = -100;     return;
+	}
       if ( CtrlCHit(&textwin) == 1) 
 	{
 	  *x1= 0 ;  *yy1= 0;  *ibutton=0; return;
@@ -939,9 +955,10 @@ int SwitchWindow(integer *intnum)
   if ( SXgc != (struct BCG *) 0 ) 
     {
       /** releasing previous hdc **/
-      wininfo("quit window %d with alu %d\r\n",
+      /** wininfo("quit window %d with alu %d\r\n",
 	       ScilabXgc->CurWindow,
-	       ScilabXgc->CurDrawFunction);
+	       ScilabXgc->CurDrawFunction); 
+	       **/
       ReleaseWinHdc();
       ScilabXgc = SXgc;
       SetWinhdc();
@@ -1808,9 +1825,9 @@ static BOOL SciPalette(int iNumClr)
 
   for (i=0; i<iNumClr; i++) 
     {
-      plogPal->palPalEntry[i].peRed   =(unsigned short)  255.0* ScilabXgc->Red[i];
-      plogPal->palPalEntry[i].peGreen =(unsigned short)  255.0* ScilabXgc->Green[i];
-      plogPal->palPalEntry[i].peBlue  =(unsigned short)  255.0* ScilabXgc->Blue[i];
+      plogPal->palPalEntry[i].peRed   =(unsigned char) (255.0* ScilabXgc->Red[i]);
+      plogPal->palPalEntry[i].peGreen =(unsigned char) (255.0* ScilabXgc->Green[i]);
+      plogPal->palPalEntry[i].peBlue  =(unsigned char) (255.0* ScilabXgc->Blue[i]);
       plogPal->palPalEntry[i].peFlags = PC_RESERVED;
       ScilabXgc->Colors[i]=PALETTERGB(plogPal->palPalEntry[i].peRed,
 				      plogPal->palPalEntry[i].peGreen,
@@ -2188,19 +2205,16 @@ void C2F(displaystring)(string, x, y, v1, flag, v6, v7, angle, dv2, dv3, dv4)
 { 
   if ( Abs(*angle) <= 0.1) 
     {
-      
       if ( ScilabXgc->CurDrawFunction ==  GXxor )
 	{
-	  /* Bracket begin a path  */
-	  BeginPath(hdc); 
-	  TextOut(hdc,(int) *x,(int) *y,string,strlen(string));
-	  /* Bracket end a path */
-	  EndPath(hdc); 
-	  /* Derive a region from that path */
-	  FillPath(hdc);
+	  SIZE size ;
+	  GetTextExtentPoint32(hdc,string,strlen(string),&size);
+	  XorString(*x,*y,string,size.cx,size.cy);
 	}
       else
-	TextOut(hdc,(int) *x,(int) *y,string,strlen(string));
+	{
+	  TextOut(hdc,(int) *x,(int) *y,string,strlen(string));
+	}
       if ( *flag == 1) 
 	{
 	  integer rect[4];
@@ -2234,17 +2248,14 @@ void C2F(DispStringAngle)(x0, yy0, string, angle)
       str1[0]=string[i];
       if ( ScilabXgc->CurDrawFunction ==  GXxor )
 	{
-	  /* Bracket begin a path  */
-	  BeginPath(hdc); 
-	  TextOut(hdc,(int) x,(int) y,str1,1);
-	  /* Bracket end a path */
-	  EndPath(hdc); 
-	  /* Derive a region from that path */
-	  /* StrokeAndFillPath(hdc); XXYYZZ */
-	  FillPath(hdc);
+	  SIZE size ;
+	  GetTextExtentPoint32(hdc,str1,1,&size);
+	  XorString(x,y,str1,size.cx,size.cy);
 	}
       else
-	TextOut(hdc,(int) x,(int) y,str1,1);
+	{
+	  TextOut(hdc,(int) x,(int) y,str1,1);
+	}
       C2F(boundingbox)(str1,&x,&y,rect,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
       /** C2F(drawrectangle)(string,rect,rect+1,rect+2,rect+3); **/
       if ( cosa <= 0.0 && i < (int)strlen(string)-1)
@@ -2267,6 +2278,64 @@ void C2F(DispStringAngle)(x0, yy0, string, angle)
       y +=  inint(sina*l*1.1);
     }
 }
+
+int XorString(x,y,string,fWidth,fHeight)
+     integer x,y;
+     char *string;
+     int fWidth,fHeight;
+{
+  COLORREF col ;
+  /** HPEN hpenOld;
+  HBRUSH hbrushOld; **/
+  HFONT hfont,hfontOld;
+  HDC hdcMem;
+  HBITMAP hbitmap, hbitmapOld;
+  hfont=getcurfont();
+  hdcMem = CreateCompatibleDC (hdc);
+  if (hdcMem) {
+    hbitmap = CreateCompatibleBitmap (hdc,fWidth,fHeight);
+    if (hbitmap) {
+      SetMapMode(hdcMem, MM_TEXT);
+      SetBkMode(hdcMem,TRANSPARENT);
+      SetTextAlign(hdcMem, TA_LEFT|TA_BOTTOM);
+      hbitmapOld = SelectObject (hdcMem, hbitmap);
+      BitBlt (hdcMem, 0, 0,fWidth,fHeight, NULL, 0, 0, WHITENESS);
+      /** unused : 
+	hpenOld=SelectObject(hdcMem,ScilabXgc->hPen);
+	hbrushOld=SelectObject(hdcMem,ScilabXgc->hBrush); 
+	**/
+      hfontOld=SelectObject(hdcMem,hfont);
+      if (ScilabXgc->Colors != NULL) 
+	{
+	  /** see set_c **/
+	  col = ScilabXgc->Colors[ScilabXgc->CurColor];
+	  if ( ScilabXgc->CurDrawFunction !=  GXxor )
+	    col = col ^ ScilabXgc->Colors[ScilabXgc->NumBackground];
+	  SetTextColor(hdcMem,col); 
+	}
+      if (TextOut (hdcMem,0,fHeight,string,strlen(string)))
+	{
+	  /** see raster ops in VC++ **/
+	  BitBlt(hdc, x,y-fHeight,fWidth,fHeight,hdcMem,0,0,0x990066);
+	} else {
+	  MessageBox (GetFocus(),
+		      "Unable to perform TextOut", "DisplayGlyph", MB_OK);
+	}
+      SelectObject (hdcMem, hbitmapOld);
+      /** SelectObject (hdcMem, hpenOld);
+	SelectObject (hdcMem, hbrushOld); **/
+      SelectObject (hdcMem, hfontOld);
+      DeleteObject (hbitmap);
+    } else {
+      MessageBox (GetFocus(), "Unable To create Bitmap", "DisplayGlyph", MB_OK);
+    }
+    DeleteDC (hdcMem);
+  } else {
+    MessageBox (GetFocus(), "Unable to create DC", "DisplayGlyph", MB_OK);
+  }
+  return 0;
+}
+
 
 /** To get the bounding rectangle of a string **/
 
@@ -2461,7 +2530,8 @@ void C2F(drawrectangle)(str, x, y, width, height, v6, v7, dv1, dv2, dv3, dv4)
      double *dv4;
 { 
   SelectObject(hdc,GetStockObject(NULL_BRUSH));
-  Rectangle(hdc,(int) *x,(int) *y,(int) *width+*x ,(int) *height+*y);
+  /* +1 added for correct 2d axis necessary !! **/
+  Rectangle(hdc,(int) *x,(int) *y,(int) *width+*x+1 ,(int) *height+*y+1);
   if ( ScilabXgc->hBrush != (HBRUSH) 0) 
     SelectObject(hdc,ScilabXgc->hBrush);
 }
@@ -2482,7 +2552,7 @@ void C2F(fillrectangle)(str, x, y, width, height, v6, v7, dv1, dv2, dv3, dv4)
      double *dv4;
 { 
   /** Rectangle with current pen and brush **/
-  Rectangle(hdc,(int) *x,(int) *y,(int) *width + *x ,(int) *height + *y );
+  Rectangle(hdc,(int) *x,(int) *y,(int) *width + *x+1 ,(int) *height + *y+1 );
 }
 
 /*----------------------
@@ -2583,8 +2653,10 @@ void C2F(drawarc)(str, x, y, width, height, angle1, angle2, dv1, dv2, dv3, dv4)
   SelectObject(hdc,GetStockObject(NULL_BRUSH));
   /** Ellipse(hdc,(int) *x,(int) *y,(int) *width + *x ,(int) *height + *y ); **/
   Arc(hdc,(int) *x,(int) *y,(int) *width + *x ,(int) *height + *y, 
-      xmid+lg*cos(*angle1*M_PI/(180*64)),  ymid -   lg*sin(*angle1*M_PI/(180*64)),
-      xmid+lg*cos(*angle2*M_PI/(180*64)),  ymid -   lg*sin(*angle2*M_PI/(180*64)));
+      xmid + (int) (lg*cos(*angle1*M_PI/11520.00)),
+      ymid - (int) (lg*sin(*angle1*M_PI/11520.00)),
+      xmid + (int)  (lg*cos((*angle1+*angle2)*M_PI/11520.00)),
+      ymid - (int)(lg*sin((*angle1+*angle2)*M_PI/11520.00))); /** 180*64 **/
   if ( ScilabXgc->hBrush != (HBRUSH) 0) SelectObject(hdc,ScilabXgc->hBrush);
 }
 
@@ -2598,10 +2670,12 @@ void C2F(fillarc)(str, x, y, width, height, angle1, angle2, dv1, dv2, dv3, dv4)
   int xmid= *x + *width/2;
   int ymid= *y + *height/2;
   int lg= Max(*width,*height);
-  /** Ellipse(hdc,(int) *x,(int) *y,(int) *width + *x ,(int) *height + *y ); **/
+  /**Ellipse(hdc,(int) *x,(int) *y,(int)*width+*x ,(int)*height+*y ); **/
   Pie(hdc,(int) *x,(int) *y,(int) *width + *x ,(int) *height + *y, 
-      xmid+lg*cos(*angle1*M_PI/(180*64)),  ymid -   lg*sin(*angle1*M_PI/(180*64)),
-      xmid+lg*cos(*angle2*M_PI/(180*64)),  ymid -   lg*sin(*angle2*M_PI/(180*64)));
+      xmid +(int)  (lg*cos(*angle1*M_PI/11520.00)),
+      ymid - (int) (lg*sin(*angle1*M_PI/11520.00)),
+      xmid+(int) (lg*cos((*angle1+*angle2)*M_PI/11520.00)),
+      ymid - (int) (lg*sin((*angle1+*angle2)*M_PI/11520.00))); /** 180*64 **/
 }
 
 /*--------------------------------------------------------------
@@ -3319,7 +3393,7 @@ ResetScilabXgc ()
   i= ScilabXgc->FontId;
   j= ScilabXgc->FontSize;
   C2F(xsetfont)(&i,&j,PI0,PI0);
-  
+  /** wininfo("Reset Scilab Xgc avec %d %d\r\n",i,j); **/
   i= ScilabXgc->CurHardSymb;
   j= ScilabXgc->CurHardSymbSize;
   C2F(xsetmark)(&i,&j,PI0,PI0);
@@ -3413,15 +3487,17 @@ void C2F(drawaxis)(str, alpha, nsteps, v2, initpoint, v6, v7, size, dx2, dx3, dx
   double cosal,sinal;
   cosal= cos( (double)M_PI * (*alpha)/180.0);
   sinal= sin( (double)M_PI * (*alpha)/180.0);
-   
-
   for (i=0; i <= nsteps[0]*nsteps[1]; i++)
-    { xi = initpoint[0]+i*size[0]*cosal;
-      yi = initpoint[1]+i*size[0]*sinal;
-      xf = xi - ( size[1]*sinal);
-      yf = yi + ( size[1]*cosal);
-      MoveToEx(hdc,inint(xi),inint(yi),NULL);
-      LineTo(hdc,inint(xf),inint(yf));
+    {
+      if ( ( i % nsteps[0]) != 0) 
+	{
+	  xi = initpoint[0]+i*size[0]*cosal;
+	  yi = initpoint[1]+i*size[0]*sinal;
+	  xf = xi - ( size[1]*sinal);
+	  yf = yi + ( size[1]*cosal);
+	  MoveToEx(hdc,inint(xi),inint(yi),NULL);
+	  LineTo(hdc,inint(xf),inint(yf));
+	}
     }
   for (i=0; i <= nsteps[1]; i++)
     { xi = initpoint[0]+i*nsteps[0]*size[0]*cosal;
@@ -3431,12 +3507,13 @@ void C2F(drawaxis)(str, alpha, nsteps, v2, initpoint, v6, v7, size, dx2, dx3, dx
       MoveToEx(hdc,inint(xi),inint(yi),NULL);
       LineTo(hdc,inint(xf),inint(yf));
     }
+  /**
   xi = initpoint[0]; yi= initpoint[1];
   xf = initpoint[0]+ nsteps[0]*nsteps[1]*size[0]*cosal;
   yf = initpoint[1]+ nsteps[0]*nsteps[1]*size[0]*sinal;
   MoveToEx(hdc,inint(xi),inint(yi),NULL);
   LineTo(hdc,inint(xf),inint(yf));
-  
+  **/
 }
 
 /*-----------------------------------------------------
@@ -3580,6 +3657,10 @@ void C2F(xsetfont)(fontid, fontsize, v3, v4)
   SelectFont(hdc, (*FontTab)[i].hf[fsiz]);
 }
 
+static HFONT getcurfont()
+{
+  return( (*FontTab)[ScilabXgc->FontId].hf[ScilabXgc->FontSize]);
+}
 
 /*********************************************
  * To get the  id and size of the current font 
@@ -3796,7 +3877,7 @@ LoadSymbFonts()
     {
       if ( (*FontTab)[1].hf[i] != NULL)
         {
-          C2F(xsetfont)(&fid,&i,PI0,PI0);
+	  SelectFont(hdc, (*FontTab)[fid].hf[i]);
           for (j=0 ; j < SYMBOLNUMBER ; j++)
             {
 	      SIZE size;
@@ -3834,12 +3915,23 @@ static void DrawMark(lhdc,x, y)
      integer *x;
      integer *y;
 {
-  char str[1];
+  char str[2];
 #ifdef DEBUG 
   SIZE size ;
 #endif 
   str[0]=Marks[ScilabXgc->CurHardSymb];
-  TextOut(hdc,*x+C2F(CurSymbXOffset)(),*y+C2F(CurSymbYOffset)(),str,1); 
+  str[1]='\0';
+  if ( ScilabXgc->CurDrawFunction ==  GXxor )
+    {
+      SIZE size ;
+      GetTextExtentPoint32(hdc,str,1,&size);
+      XorString(*x+C2F(CurSymbXOffset)(),*y+C2F(CurSymbYOffset)(),
+		str,size.cx,size.cy);
+    }
+  else
+    {
+      TextOut(hdc,*x+C2F(CurSymbXOffset)(),*y+C2F(CurSymbYOffset)(),str,1); 
+    }
 #ifdef DEBUG
   GetTextExtentPoint32(hdc,str,1,&size);
   sciprint("valeurs %d %d %d %d\r\n",size.cx,size.cy,C2F(CurSymbXOffset)(),
@@ -4065,3 +4157,55 @@ clip_line(x1, yy1, x2, y2, x1n, yy1n, x2n, y2n, flag)
 
 
 
+
+/* 
+ *  returns the first (vx[.],vy[.]) point inside 
+ *  xleft,xright,ybot,ytop bbox. begining at index ideb
+ *  or zero if the whole polyline is out 
+ */
+
+integer first_in(n, ideb, vx, vy)
+     integer n;
+     integer ideb;
+     integer *vx;
+     integer *vy;
+{
+  integer i;
+  for (i=ideb  ; i < n ; i++)
+    {
+      if (vx[i]>= xleft && vx[i] <= xright  && vy[i] >= ybot && vy[i] <= ytop)
+	{
+#ifdef DEBUG
+	  sciprint("first in %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
+#endif
+	  return(i);
+	}
+    }
+  return(-1);
+}
+
+/* 
+ *  returns the first (vx[.],vy[.]) point outside
+ *  xleft,xright,ybot,ytop bbox.
+ *  or zero if the whole polyline is out 
+ */
+
+integer first_out(n, ideb, vx, vy)
+     integer n;
+     integer ideb;
+     integer *vx;
+     integer *vy;
+{
+  integer i;
+  for (i=ideb  ; i < n ; i++)
+    {
+      if ( vx[i]< xleft || vx[i]> xright  || vy[i] < ybot || vy[i] > ytop) 
+	{
+#ifdef DEBUG
+	  sciprint("first out %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
+#endif
+	  return(i);
+	}
+    }
+  return(-1);
+}

@@ -1,6 +1,7 @@
       subroutine matus2
 c ================================== ( Inria    ) =============
 c
+c     Copyright INRIA
       include '../stack.h'
 c
 c      integer iadr, sadr

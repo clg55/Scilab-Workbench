@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WDEGRE,SSI=0
+c     Copyright INRIA
       subroutine wdegre(ar,ai,majo,nvrai)
 c    calcul du degre d un polynome a coefficients complexes
 c    a=ar+i*ai=coeffs par ordre croissant

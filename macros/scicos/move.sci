@@ -1,4 +1,5 @@
 function [x,y]=move(x,mx,y,my)
+// Copyright INRIA
 rep(3)=-1
 xpolys(x,y,1)
 xset('alufunction',6)

@@ -19,7 +19,7 @@ xset("alufunction",number)
 : used to set the logical function for drawing, it works only under X11.
 The logical function used is set by \fVx1\fR. The default value is 3.
 .RS
-.TP
+.TP 10
  0
 : function  " 0 ",
 .TP
@@ -68,6 +68,12 @@ The logical function used is set by \fVx1\fR. The default value is 3.
 15
 : function " 1 ";
 .RE
+.TP
+xset("auto clear","on"|"off")
+: to switch on or off the auto clear mode for graphics. 
+When the auto clear mode is on an \fVxbasc()\fR operation is 
+performed before each high level graphic function.
+.TP
 xset("background",color)
 : to fix the background color of the current graphic window.
 .TP
@@ -93,6 +99,12 @@ xset("font",fontid,fontsize)
 .TP
 xset("foreground",color)
 : to fix the foreground color of the current graphic window.
+.TP
+xset("fpf",string)
+: to fix the floating point format for number display in 
+contour functions. \fVstring\fR is a string giving the format 
+in C format syntax (for example \fVstring="%3f"\fR), use 
+\fVstring=''\fR to switch back to default format. 
 .TP
 xset("hidden3d",colorid)
 : set the color number for ``hidden'' faces in plot3d.
@@ -141,10 +153,10 @@ xbasc().
 .RE
 .TP 
 xset("wshow")
-: see the function \fVdriver\fR.
+: see \fVxset("pixmap",1)\fR above 
 .TP
 xset("wwpc")
-: see the function \fVdriver\fR.
+: see \fVxset("pixmap",1)\fR above 
 .SH DESCRIPTION
 \fVxset\fR is used to set values of the graphic context. When called 
 no arguments, a choice menu is created showing the current values and 

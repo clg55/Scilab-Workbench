@@ -2,6 +2,7 @@
 C ================================== ( Inria    ) =============
 C     evaluate functions involving qr decomposition (least squares)
 C ====================================================================
+c     Copyright INRIA
       include '../stack.h'
       integer iadr,sadr
 C
@@ -23,9 +24,15 @@ C
 C
       il = iadr(lstk(top-rhs+1))
       if (istk(il) .ne. 1) then
-        err = rhs
-        call error(53)
-        return
+         if(fin.eq.1) then
+            call putfunnam('qr',top-rhs+1)
+            fun=-1
+            return
+         else
+            err = rhs
+            call error(53)
+            return
+         endif
       endif
       m = istk(il+1)
       n = istk(il+2)
@@ -289,7 +296,8 @@ C     qr
         top = top - 1
       endif
 C
-      if (fin.eq.1 .and. (lhs.lt.2.or.lhs.gt.4)) then
+      if (fin.eq.1 .and. (lhs.lt.2.or.lhs.gt.4.or.
+     $    rhs.eq.2.and.lhs.eq.3)) then
         call error(41)
         return
       endif
@@ -375,10 +383,11 @@ C     affectation de q
       istk(ilr+3) = it
 C
       if (lhs .eq. 2) goto 99
-      if (rhs .eq. 2) then
+      if (lhs .eq. 4) then
 C     ############# calcul du rang 
         tt = abs(stk(lr))
         if (it .eq. 1) tt = tt + abs(stk(lr+mn))
+        if(rhs.eq.1)  tol = dble(max(m,n)) * eps * tt
         k = 0
         ls = lr
         m1 = min(m,n)
@@ -389,30 +398,24 @@ C     ############# calcul du rang
           k = j
           ls = ls + m + 1
  450    continue
- 460    if (k .eq. 0) then
-          err = 1
-          call error(45)
-          return
-        endif
-        istk(ilrk) = 1
+ 460    istk(ilrk) = 1
         istk(ilrk+1) = 1
         istk(ilrk+2) = 1
         istk(ilrk+3) = 0
         stk(lrk) = dble(k)
       endif
 C     #############   affectation de e
-      if ((lhs.eq.3.and.rhs.eq.1) .or. (lhs.eq.4.and.rhs.eq.2)) then
-        call dset(nn,0.0d+0,stk(le),1)
-        ll = le - 1
-        do 52 j = 1,n
-          stk(ll+istk(ilb+j-1)) = 1.0d+0
-          ll = ll + n
- 52     continue
-        istk(ile) = 1
-        istk(ile+1) = n
-        istk(ile+2) = n
-        istk(ile+3) = 0
-      endif
+      call dset(nn,0.0d+0,stk(le),1)
+      ll = le - 1
+      do 52 j = 1,n
+         stk(ll+istk(ilb+j-1)) = 1.0d+0
+         ll = ll + n
+ 52   continue
+      istk(ile) = 1
+      istk(ile+1) = n
+      istk(ile+2) = n
+      istk(ile+3) = 0
+
       goto 99
 C     
  99   return

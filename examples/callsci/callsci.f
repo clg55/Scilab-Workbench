@@ -11,6 +11,8 @@ c     All scilab functions and instructions may be used in this context
 c     for complex instruction, it may be usefull to defined it in a file 
 c     and use exec
 c!
+c     Copyright INRIA
+c
       dimension a(2,2),b(2),x(2),y(2)
       double precision a,b,x,y
 c

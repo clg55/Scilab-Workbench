@@ -1,3 +1,5 @@
+//Copyright INRIA
+Eps =1.e-5
 //     Example of use of ode function:
 //     System to solve:
 //     dy1/dt = -0.04*y1 + 1.e4*y2*y3
@@ -23,10 +25,10 @@ yref=[0.9851721 0.9055180;0.0000339 0.0000224;0.0147940 0.0944596];
 //  Fortran program called in "routines/default" directory (Ex-ode.f)
 //     jacobian is not given
 y1=ode(y0,t0,t1,'fex');
-norm(yref-y1)
+if norm(yref-y1) > Eps then pause,end
 //     jacobian is given
 y2=ode(y0,t0,t1,'fex','jex');
-norm(yref-y2)
+if norm(yref-y2) > Eps then pause,end
 
 
 

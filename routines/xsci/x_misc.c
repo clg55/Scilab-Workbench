@@ -27,6 +27,7 @@
 
 #include "x_ptyxP.h"	/* X headers included here. */
 #include "../machine.h"
+
 #include <X11/Xos.h>
 #include <stdio.h>
 #include <signal.h>
@@ -504,13 +505,17 @@ void Panic(s, a)
 #endif				/* DEBUG */
 }
 
+/** copied from wf_fig.h **/
+
+#include "wf_fig.h" /** for sys_errlist **/
+
+static char UE[]="unknown error";
+
 char *SysErrorMsg(n)
   int n;
 {
-  extern char *sys_errlist[];
   extern int sys_nerr;
-
-  return ((n >= 0 && n < sys_nerr) ? sys_errlist[n] : "unknown error");
+  return ((n >= 0 && n < sys_nerr) ? sys_errlist[n] : UE );
 }
 
 

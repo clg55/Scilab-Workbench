@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=WRREF,SSI=0
+c     Copyright INRIA
       subroutine wrref(ar,ai,lda,m,n,eps)
 c!but
 c     wrref calcule la forme echelon d'une matrice a coeff complexes

@@ -1,4 +1,5 @@
       subroutine domout(neq,q,qi,nbout,ti,touti,itol,rtol,atol,itask
+c     Copyright INRIA
      $     ,istate,iopt,w,lrw,iw,liw,jacl2,mf,job)
 C!but
 C     Etant sortie du domaine d'integration au cours

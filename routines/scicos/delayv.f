@@ -1,5 +1,7 @@
       subroutine delayv(flag,nevprt,t,xd,x,nx,z,nz,tvec,ntvec,
      &     rpar,nrpar,ipar,nipar,u1,nu1,u2,nu2,y,ny)
+c     Copyright INRIA
+
 c     rpar(1)=dt
 c     delayv=u(nin)
 c
@@ -42,7 +44,7 @@ c     .   shift buffer
  20      continue
       endif
       
-      if(flag.eq.1) then
+      if(flag.eq.1.or.flag.eq.6) then
          dtat=t-z(nz)
          do 08 in=1,nu1    
 c     extrapolate to find values at delta.t   

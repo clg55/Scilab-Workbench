@@ -8,6 +8,7 @@ function []=show(xx,t,p,slowflag)
 //                     .    .   .
 // xx= [theta,phi,psi,teta,phi,psi,x,y]
 // !
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs <= 2 , p=%pi/3;end
 if rhs <= 2 , t=%pi/3;end
@@ -70,24 +71,28 @@ time=1:nstep:nn;
 
 
 function []=wheeld(i)
+// Copyright INRIA
 	xpoly(xu(:,i),yu(:,i),"lines");
         xpoly(matrix(xr(:,i),2,4),matrix(yr(:,i),2,4),"lines");
 
 
 
 function []=wheeld(i)
+// Copyright INRIA
 	xfpoly(xu(:,i),yu(:,i),1);
         xpoly(matrix(xr(:,i),2,4),matrix(yr(:,i),2,4),"lines");
 
 
 
 function [xxu,yyu,zzu]=wheelgf(n,t,xu,yu,zu,xx)
+// Copyright INRIA
 //
 [xxu,yyu,zzu]=fort('wheelg',n,1,'i',t,2,'i',xu,3,'d',yu,4,'d',zu,5,'d',...
 	xx,6,'d','sort',3,4,5);
 
 
 function [y]=test_wheel(n,t,x)
+// Copyright INRIA
 //
 y=x
 [y]=fort('wheel',n,1,'i',t,2,'d',x,3,'d',y,4,'d','sort',4);
@@ -97,6 +102,7 @@ y=x
 
 
 function [xxu,yyu,zzu]=wheelgs(n,t,xu,yu,zu,xx)
+// Copyright INRIA
 // slower version without dynamic link 
    r=1.0
    [n,p]=size(xu);

@@ -1,8 +1,11 @@
 function drawtitle(wpar)
 // draw window title
-[frect1,frect2]=xgetech()
-rect=xstringl(0,frect2(3),wpar(2)(1))
-w=rect(3);h=rect(4)
-xstring((frect2(3)-rect(3))/2,frect2(4)-h,wpar(2)(1))
-
-
+// Copyright INRIA
+wpar=scs_m(1);wdm=wpar(1)
+w=wdm(5)/3;h=wdm(6)/12;
+pat=xget('pattern')
+xset('pattern',default_color(0));
+//xrect(wdm(3)+(wdm(5)-w)/2,wdm(4)+wdm(6),w,h)
+xstringb(wdm(3)+(wdm(5)-w)/2,wdm(4)+wdm(6)-h,wpar(2)(1),w,h,'fill')
+//
+xset('pattern',pat)

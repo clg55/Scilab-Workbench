@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 /* Copyright (C) 1993 Free Software Foundation, Inc.
    This file is part of the GNU C Library.
    Contributed by Ulrich Drepper <drepper@ira.uka.de>

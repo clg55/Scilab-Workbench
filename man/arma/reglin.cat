@@ -4,7 +4,7 @@ NAME
   reglin - Linear regression
 
 CALLING SEQUENCE
-  [a,b,sig,]=reglin(x,y,[disp])
+  [a,b,sig]=reglin(x,y)
 
 DESCRIPTION
   solve the regression problem y=a*x+ b in the least square sense. sig is the
@@ -22,3 +22,7 @@ EXAMPLE
   [a,b,sig]=reglin(x,y);
   maxi(abs(aa-a))
   maxi(abs(bb-b))
+  // an other example : fitting a polynom
+  f=1:100; x=[f.*f; f];
+  y= [ 2,3]*x+ 10*ones(f) + 0.1*rand(f);
+  [a,b]=reglin(x,y)

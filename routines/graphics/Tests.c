@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 #include <stdio.h>
 #include <math.h>
 #include "Math.h"
@@ -631,42 +632,28 @@ static void corps()
 
 static void testString()
 {
-  integer j,siz,v=0;
-  double x=0.0,y=0.0;
+  integer j,siz,v=0,pat=1;
+  double x=50.0,y=0.0;
   double angle;
   fixbounds(-200.0,200.0,-200.0,200.0);
   C2F(dr)("xset","font",(j=2,&j),(siz=10,&siz),PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   for ( j =0 ; j < 360; j=j+45)
-    C2F(dr1)("xstring","   String",PI0,PI0,PI0,&v,PI0,PI0,&x,&y,(angle=j,&angle),PD0,0L,0L);
+    {
+      pat=pat+2;
+      C2F(dr1)("xset","pattern",&pat,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+      C2F(dr1)("xstring","   String",PI0,PI0,PI0,&v,PI0,PI0,&x,&y,(angle=j,&angle),PD0,0L,0L);
+    }
   C2F(dr)("xset","default",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 }
 
 static void testXormode()
 {
-  integer j,siz,v=0;
-  double x=0.0,y=0.0;
-  double angle;
-  integer k,nrect=1;
-  double rect[4],xx=-190.0,yy=10.0,w=40.0,h=40.0;
-  C2F(dr)("xset","alufunction",(j=6,&j),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-  fixbounds(-200.0,200.0,-200.0,200.0);
-  C2F(dr)("xset","font",(j=2,&j),(siz=10,&siz),PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-  for ( j =0 ; j < 360; j=j+45)
-    C2F(dr1)("xstring","   String",PI0,PI0,PI0,&v,PI0,PI0,&x,&y,(angle=j,&angle),PD0,0L,0L);
-    for ( k =0 ; k < 4 ; k++)
-    {
-      for ( j =0 ; j < 10 ; j++)
-	{ 
-	  integer pat;
-	  pat=32+j+1;
-	  rect[0]=xx;rect[1]=yy;rect[2]=w;rect[3]=h;
-	  C2F(dr1)("xrects","str",PI0,&pat,&nrect,PI0,PI0,PI0,rect,PD0,PD0,PD0,0L,0L);
-  	  xx=xx+w+5.0;
-	}
-      yy=yy+h+5.0;
-      xx=-190;
-    }
-    /** C2F(dr)("xset","default",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L); **/
+  integer j=6;
+  C2F(dr)("xset","alufunction",&j,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  testPattern();
+  testString();
+  j=3;
+  C2F(dr)("xset","alufunction",&j,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 }
 
 static void testXliness()

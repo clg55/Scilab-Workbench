@@ -1,5 +1,6 @@
 function d=g_diag(a,k)
 // g_diag - implement diag function for sparse matrix, rational matrix ,..
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs==1 then k=0,end
 select type(a)
@@ -43,11 +44,12 @@ case 5 then
     if l==[] then d=sparse([],[],[mn,1]);return;end
     d=sparse([ij(l,1)-i0,ones(ij(l,1))],v(l),[mn,1])
   else
+    if m>1 then ij=ij(:,1);else ij=ij(:,2);end
     nn = max(m,n)+abs(k)
     if ij==[] then 
       d=sparse([],[],[nn,nn])
     else
-      d=sparse([ij(:,1),ij(:,1)+k],v,[nn,nn])
+      d=sparse([ij,ij+k],v,[nn,nn])
     end
   end
 case 6 then

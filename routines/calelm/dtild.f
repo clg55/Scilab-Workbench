@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DTILD,SSI=0
+c     Copyright INRIA
       subroutine  dtild(n,x,incx)
 c!but
 c

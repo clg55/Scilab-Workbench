@@ -1,4 +1,5 @@
       subroutine cosini(x,xptr,z,zptr,iz,izptr,told,inpptr,inplnk,
+c     Copyright INRIA
      $     outptr,outlnk,lnkptr,cord,rpar,rpptr,ipar,ipptr,funptr,
      $     funtyp,outtb,outt,w,ierr) 
 C     
@@ -13,9 +14,9 @@ c
       integer i,jj,flag,nclock,ntvec
       double precision tvec(1)
 c
-      integer nblk,nxblk,ncblk,ndblk,nout,ng,nrwp,
+      integer nblk,nordptr,nout,ng,nrwp,
      &     niwp,ncord,noord,nzord
-      common /cossiz/ nblk,nxblk,ncblk,ndblk,nout,ng,nrwp,
+      common /cossiz/ nblk,nordptr,nout,ng,nrwp,
      &     niwp,ncord,noord,nzord
 C     
       integer kfun
@@ -41,14 +42,13 @@ C     loop on blocks
  5    continue
  
 C     initialization (flag 6)
-c     update output of 'c' type blocks
       nclock = 0
       tvec(1)=0.0d0
       ntvec=0
       if(ncord.gt.0) then
          do 10 jj=1,ncord
             kfun=cord(jj)
-            flag=1
+            flag=6
             call callf(kfun,nclock,funptr,funtyp,told,x,x,xptr,z,zptr,iz
      $           ,izptr,rpar,rpptr,ipar,ipptr,tvec,ntvec,inpptr,inplnk
      $           ,outptr,outlnk,lnkptr,outtb,flag) 
@@ -75,18 +75,14 @@ C     loop on blocks
                return
             endif
  11      continue
-c         write(*,'(e10.3,e10.3,e10.3,e10.3,e10.3,e10.3,
-c     &        e10.3,e10.3)') outtb(1),outtb(2),outtb(3),
-c     &        outtb(4),outtb(5),outtb(6),outtb(7),outtb(8)
-
-c     update outputs of 'c' type blocks
+c
          nclock = 0
          tvec(1)=0.0d0
          ntvec=0
          if(ncord.gt.0) then
             do 12 jj=1,ncord
                kfun=cord(jj)
-               flag=1
+               flag=6
                call callf(kfun,nclock,funptr,funtyp,told,x,x,xptr,z,zptr
      $              ,iz,izptr,rpar,rpptr,ipar,ipptr,tvec,ntvec,inpptr
      $              ,inplnk,outptr,outlnk,lnkptr,outtb,flag) 

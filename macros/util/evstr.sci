@@ -1,4 +1,5 @@
 function [%val,%ierr]=evstr(%str)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 %val=[]
 select type(%str)
@@ -18,7 +19,8 @@ select type(%str)
     %nstr=prod(size(%sexp)); %=list();
     if lhs==2 then
       for %k=1:%nstr,
-	[%(%k),%ierr]=evstr(%sexp(%k)),
+	[%w,%ierr]=evstr(%sexp(%k)),
+	%(%k)=%w
 	if %ierr<>0 then %val=[];return;end
       end,
       [%val,%ierr]=evstr(%str(1))

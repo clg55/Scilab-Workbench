@@ -3,6 +3,7 @@ c     ==========================================================
 C     soft external for feval 
 C     the result is real or complex according to itype value 
 c     ==========================================================
+c     Copyright INRIA
       include '../stack.h'
 c     integer sadr,iadr
       character*6 ename

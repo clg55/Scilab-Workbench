@@ -1,5 +1,6 @@
 c SCILAB function : savewave, fin = 1
-       subroutine intssavewave(fname)
+c     Copyright INRIA
+      subroutine intssavewave(fname)
 c
        character*(*) fname
        integer topk,rhsk
@@ -580,30 +581,162 @@ c     Putting in order the stack
        end
 c
 
+c
+c SCILAB function : mseek, fin = 10
+       subroutine intsmseek(fname)
+c
+       character*(*) fname
+       include '../stack.h'
+c
+       integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getscalar,cremat,cresmat2,getsmat,check
+     $ val,bufstore
+       iadr(l)=l+l-1
+       sadr(l)=(l/2)+1
+       rhs = max(0,rhs)
+c
+       lbuf = 1
+       topk = top 
+       rhsk = rhs 
+       if(.not.checkrhs(fname,1,3)) return
+       if(.not.checklhs(fname,1,1)) return
+c       checking variable n (number 1)
+c       
+       if(.not.getscalar(fname,top,top-rhs+1,lr1)) return
+c       checking variable fd (number 2)
+c       
+       if(rhs .le. 1) then
+        top = top+1
+        rhs = rhs+1
+        if(.not.cremat(fname,top,0,1,1,lr2,lc2)) return
+        stk(lr2)= -1
+       endif
+       if(.not.getscalar(fname,top,top-rhs+2,lr2)) return
+c       checking variable flag (number 3)
+c       
+       if(rhs .le. 2) then
+        top = top+1
+        rhs = rhs+1
+        nlr3 = 3
+        if(.not.cresmat2(fname,top,nlr3,lr3)) return
+        call cvstr(nlr3,istk(lr3),'set',0)
+       endif
+       if(.not.getsmat(fname,top,top-rhs+3,m3,n3,1,1,lr3,nlr3)) return
+       if(.not.checkval(fname,m3*n3,1)) return
+c     
+c       cross variable size checking
+c     
+       call entier(1,stk(lr2),istk(iadr(lr2)))
+       call entier(1,stk(lr1),istk(iadr(lr1)))
+       if(.not.bufstore(fname,lbuf,lbufi3,lbuff3,lr3,nlr3)) return
+       call mseek(istk(iadr(lr2)),istk(iadr(lr1)),buf(lbufi3:lbuff3),err
+     $ )
+       if(err .gt. 0) then 
+        buf = fname // ' Internal Error' 
+        call error(999)
+        return
+       endif
+c
+       topk=top-rhs
+       topl=top+0
+c       no output variable
+       top=topk+1
+       call objvide(fname,top)
+       return
+       end
+c
+c
+c SCILAB function : mtell, fin = 11
+       subroutine intsmtell(fname)
+c
+       character*(*) fname
+       include '../stack.h'
+c
+       integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,cremat,getscalar
+       iadr(l)=l+l-1
+       sadr(l)=(l/2)+1
+       rhs = max(0,rhs)
+c
+       topk = top 
+       rhsk = rhs 
+       if(.not.checkrhs(fname,0,1)) return
+       if(.not.checklhs(fname,1,1)) return
+c       checking variable fd (number 1)
+c       
+       if(rhs .le. 0) then
+        top = top+1
+        rhs = rhs+1
+        if(.not.cremat(fname,top,0,1,1,lr1,lc1)) return
+        stk(lr1)= -1
+       endif
+       if(.not.getscalar(fname,top,top-rhs+1,lr1)) return
+c     
+c       cross variable size checking
+c     
+       call entier(1,stk(lr1),istk(iadr(lr1)))
+       if(.not.cremat(fname,top+1,0,1,1,lw2,loc2)) return
+       call mtell(istk(iadr(lr1)),stk(lw2),err)
+       if(err .gt. 0) then 
+        buf = fname // ' Internal Error' 
+        call error(999)
+        return
+       endif
+c
+       topk=top-rhs
+       topl=top+1
+c     
+       if(lhs .ge. 1) then
+c       --------------output variable: n
+        top=topl+1
+        if(.not.cremat(fname,top,0,1,1,lrs,lcs)) return
+        call int2db(1*1,istk(iadr(lw2)),-1,stk(lrs),-1)
+       endif
+c     Putting in order the stack
+       if(lhs .ge. 1) then
+        call copyobj(fname,topl+1,topk+1)
+       endif
+       top=topk+lhs
+       return
+       end
+c
+
 c  interface function 
 c   ********************
        subroutine soundI
        include '../stack.h'
        rhs = max(0,rhs)
 c
-       goto (1,2,3,4,5,6,7,8,9) fin
+       goto (1,2,3,4,5,6,7,8,9,10,11) fin
        return
-1      call intssavewave('savewave')
+ 1     call intssavewave('savewave')
        return
-2      call intsloadwave('loadwave')
+ 2     call intsloadwave('loadwave')
        return
-3      call intsmopen('mopen')
+ 3     call intsmopen('mopen')
        return
-4      call intsmputstr('mputstr')
+ 4     call intsmputstr('mputstr')
        return
-5      call intsmclose('mclose')
+ 5     call intsmclose('mclose')
        return
-6      call intsmput('mput')
+ 6     call intsmput('mput')
        return
-7      call intsmget('mget')
+ 7     call intsmget('mget')
        return
-8      call intsmgetstr('mgetstr')
+ 8     call intsmgetstr('mgetstr')
        return
-9      call intsmeof('meof')
+ 9     call intsmeof('meof')
+       return
+ 10    call intsmseek('mseek')
+       return
+ 11    call intsmtell('mtell')
        return
        end
+
+
+
+
+
+

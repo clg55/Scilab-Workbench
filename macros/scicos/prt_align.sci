@@ -1,9 +1,11 @@
 function scs_m=prt_align(scs_m)
+// Copyright INRIA
 while %t
-  [btn,xc1,yc1]=xclick(0);
-  pt=[xc1,yc1]
-  [n,pt]=getmenu(datam,pt);
-  if n>0 then n=resume(n),end
+  
+  [btn,xc1,yc1,win,Cmenu]=getclick()
+  if Cmenu<>[] then
+    Cmenu=resume(Cmenu)
+  end,
   k1=getblock(scs_m,[xc1;yc1])
   if k1<>[] then o1=scs_m(k1);break,end
 end
@@ -60,6 +62,8 @@ graphics2(1)=orig2
 drawobj(o2) // rubbout block
 o2(2)=graphics2
 drawobj(o2)
+scs_m_save=scs_m
 scs_m(k2)=o2
+[scs_m_save,enable_undo,edited]=resume(scs_m_save,%t,%t)
 
 

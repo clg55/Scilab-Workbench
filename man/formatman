@@ -1,9 +1,10 @@
 #!/bin/sh
 # usage: formatman section1,...,sectionn
+# Copyright INRIA
 formataman()
 {
 	echo "    processing $1.man"
-	tbl $1.man|neqn|nroff -man|sed -f ../strip.sed >$1.cat
+	sed -e 's/\\f[IPB]//g' -e 's/\\f(CR//g' -e 's/^\.I //' $1.man |tbl|neqn|nroff -man|sed -f ../strip.sed >$1.cat
 }
 format()
 {

@@ -1,4 +1,5 @@
 function [x,y,typ]=CLKOUTV_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then
@@ -20,6 +21,21 @@ case 'plot' then
       in(:,2)+ones(4,1)*(orig(2)+sz(2)),1)
   xset('thickness',thick)
   xset('pattern',pat)
+      //identification
+  if size(o(3)) >= 15 then
+    ident = o(3)(15)
+  else
+    ident = []
+  end
+  if ident <> [] then
+    font=xget('font')
+    xset('font', options('ID')(1)(1), options('ID')(1)(2))
+    rectangle = xstringl(orig(1), orig(2), ident)
+    w = rectangle(3)
+    h = rectangle(4)
+    xstringb(orig(1)+sz(1)/2-w/2, orig(2)-3*h/2 , ident , w, h)
+    xset('font', font(1), font(2))
+  end
 case 'getinputs' then
   graphics=arg1(2)
   [orig,sz,orient]=graphics(1:3)

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=SFACT2,SSI=0
+c     Copyright INRIA
       subroutine sfact2(b,l,n,matg,maxit,ierr)
 c
 c!but

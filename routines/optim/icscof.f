@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=ICSCOF,SSI=0
+c     Copyright INRIA
       subroutine icscof(ico,ntob,nex,nob,yob,ob,cof)
 c     ce programme est appele par les macros icsua (ico=1) et icsuq
 c     (ico=2) de icse.bas pour le calcul initial des coefficients

@@ -9,6 +9,7 @@ function [y]=recur(x0,var,k,n)
 // retourne l'exposant de Liapunov empirique y
 // ( x(i) est peu different de exp(y*i) )
 //!
+// Copyright INRIA
 rand('normal');
 br=rand(1,n);
 x=ones(1,n);

@@ -3,7 +3,8 @@ function mapsound (w,dt,fmin,fmax,simpl,rate)
 // It does FFT at time increments dt.
 // rate is the sampling rate.
 // simpl points are collected for speed reasons.
-	[lhs,rhs]=argn(0);
+// Copyright INRIA
+[lhs,rhs]=argn(0);
 	if ( rhs <= 5 ) then rate=0;end
 	if ( rhs <= 4 ) then simpl=1; end ;
 	if ( rhs <= 3 ) then fmax=1500; end ;
@@ -16,18 +17,18 @@ function mapsound (w,dt,fmin,fmax,simpl,rate)
         points=2^floor(log(dp)/log(2));
         ind=fmin/rate*points/simpl:fmax/rate*points/simpl;
         f=abs(fft(w(1:points),1));
-        f=sum(matrix(f,points/simpl,simpl),'r')';
+        f=sum(matrix(f,points/simpl,simpl),'c')';
         M=f(ind);
         i=1;
         i=i+dp;
 	while i+points <= n;
                 f=abs(fft(w(i:i+points-1),1));
-                f=sum(matrix(f,points/simpl,simpl),'r')';
+                f=sum(matrix(f,points/simpl,simpl),'c')';
                 M=[M;f(ind)];
 		i=i+dp;
         end;
 	[nl,nc]=size(M);
-	if nl=1 ; return;end 
+	if nl==1 ; return;end 
 	x_abs= (0:(nl-1))*(n/rate)/(nl-1);
 	y_abs= (0:(nc-1))/(nc-1);
 	y_abs= fmin*(y_abs-1) + fmax*(y_abs)

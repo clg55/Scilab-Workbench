@@ -1,5 +1,6 @@
 function plzr(a,b,c,d)
 //
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 
 //-compat type(a)==15 retained for list/tlist compatibility

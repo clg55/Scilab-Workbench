@@ -23,6 +23,7 @@ function [Sk,rk,mu]=h_inf(P,r,mumin,mumax,nmax)
 // mu_inf upper bound on mu = gama^-2
 //P2 = normalized P.
 //
+// Copyright INRIA
 P1=P(1);
 [P2,mu_inf,Uci,Yci,D22]=h_init(P,r)
 if mu_inf < mumax then 
@@ -31,7 +32,7 @@ mumax=mini(mu_inf,mumax)
 //
 //    Gama-iteration P6 = transformed P2 with D11 removed
 [P6,Finf,mu,Uc#i,Yc#i]=h_iter(P2,r,mumin,mumax,nmax)
-if mu=0 then 
+if mu==0 then 
 write(%io(2),[mumin,mumax],'(1x,''no feasible ro in bounds: '',2(e10.3,2x))');
 rk=[];Sk=[];
 return,end
@@ -54,11 +55,11 @@ Dk21=Dk21*Yci;
 if LHS<3 then Sk=Sk(1:r(2),1:r(1));rk=mu;
 //    Case D22 different from zero
  if norm(coeff(D22),1) <> 0 then Sk=Sk/.D22;end
-   if P1(1)='r' then Sk=ss2tf(Sk);end;
+   if P1(1)=='r' then Sk=ss2tf(Sk);end;
    return;
 end
 if LHS==3 then rk=r;
-   if P1(1)='r' then Sk=ss2tf(Sk);end;
+   if P1(1)=='r' then Sk=ss2tf(Sk);end;
 end
 
 
@@ -73,7 +74,7 @@ function [P2,mu_inf,Uci,Yci,D22]=h_init(P,r)
 //   [B1;D21] *[B1;D21]'= R = [R1 L';L R2]
 //!
 P1=P(1);
-if P1(1)='r' then P=tf2ss(P);end
+if P1(1)=='r' then P=tf2ss(P);end
      [A,B1,B2,C1,C2,D11,D12,D21,D22]=smga(P,r);
      [na,na]=size(A);
      [p1,m2]=size(D12),
@@ -91,12 +92,12 @@ P22=syslin('c',A,B2,C2);
 [ns,Us,St]=st_ility(P22,1.d-10)
  
 if ns<>na then write(%io(2),'Warning: P22 not stabilizable');end
-if ns=na then write(%io(2),'P22 is stabilizable');end
+if ns==na then write(%io(2),'P22 is stabilizable');end
 
 [nd,Ud,Sd]=dt_ility(P22,1.d-10)
 
 if nd <> 0 then write(%io(2),'Warning: P22 not detectable');end
-if nd=0 then write(%io(2),'P22 is detectable');end
+if nd==0 then write(%io(2),'P22 is detectable');end
 
 // rank P21=[A,B2,C1,D12] = m2 ?
      P12=syslin('c',A,B2,C1,D12);
@@ -159,7 +160,7 @@ if M11<>[] then g1=norm(M11);end
 if M22<>[] then g2=norm(M22);end
 
 gama_inf=maxi(g1,g2);
-if gama_inf=0 then mu_inf=1/%eps/%eps, else mu_inf=1/(gama_inf*gama_inf);end
+if gama_inf==0 then mu_inf=1/%eps/%eps, else mu_inf=1/(gama_inf*gama_inf);end
 
 P2=syslin('c',A,[B1,B2],[C1;C2],[D11,D12;D21,0*D22]);
 
@@ -207,14 +208,14 @@ tv=[1,1,1];
      D1121=D11(l2,k1),
      D1122=D11(l2,k2),
 
-if mu=0 then mu=%eps*%eps;end
+if mu==0 then mu=%eps*%eps;end
 mu1=1/mu;
 gama=1/sqrt(mu);
 gam2=1/(gama*gama);
 
 err=(m1-p2)*(p1-m2);
 
-if err=0 then
+if err==0 then
    Kinf=-D1122
 else
    Kinf=-(D1122+D1121*inv(mu1*eye-D1111'*D1111)*D1111'*D1112);
@@ -231,7 +232,6 @@ if norm(D11) >= gama then write(%io(2),'error : gamma too small');
     P6=[]; Kinf=[];Uc#i=[];Yc#i=[];return;end
 
 //P3=list(A,B1,B2,C1,C2,D11,D12,D21,D22) with norm(D11) < gama.
-//pause;
 
 Teta11=gam2*D11;
 Teta22=gam2*D11';
@@ -290,7 +290,6 @@ D22=0*D22#;
      C2=Yc#i*C2;
      D21=Yc#i*D21;
 
-//pause;
 //P6=[A,B1,B2,C1,C2,D11,D12,D21,D22] with D11=0,D22=0;D12 and D21 scaled.
 //Standard assumptions now satisfied
 
@@ -309,7 +308,6 @@ mu_test=1/mu;
      Qx=-C1#'*C1#;
 
      Rx=mu_test*R1-B2*B2';
-//pause;
 H=[Ax Rx;
    Qx -Ax'];
 
@@ -320,7 +318,7 @@ dx=mini(abs(real(spec(H))));
      write(%io(2),dx);
        indic=1;test=1;
        end
- if indic =0 then
+ if indic ==0 then
    [X1,X2,errx]=ric_desc(H);
      if errx > 1.d-4 then
        write(%io(2),'Riccati solution inaccurate ');
@@ -335,7 +333,7 @@ dx=mini(abs(real(spec(H))));
      Qy=-B1#*B1#';
  
      Ry=mu_test*Q1-C2'*C2;
-//pause;
+
     J=[Ay' Ry;
        Qy -Ay];
     dy=mini(abs(real(spec(J))));
@@ -344,14 +342,12 @@ dx=mini(abs(real(spec(H))));
    write(%io(2),'An eigenvalue of J (observer) is close to Imaginary axis !');
       write(%io(2),dy);
       indic=1 ;test=1;
-//   pause;
        end
-     if indic=0 then
+     if indic==0 then
        [Y1,Y2,erry]=ric_desc(J);
         if erry > 1.d-4 then 
           write(%io(2),'Riccati solution inaccurate ');
           write(%io(2),erry);
-//        pause;
         end
 //Tests
 //
@@ -374,19 +370,18 @@ w3=find(be3==0);be3(w3)=%eps*ones(be3(w3));
   end
 end
 
-//pause;
 //write(%io(2),1/sqrt(mu),'(10x,'' Try gama = '',f18.10)');
 [answer,no]=maxi(tv);
-//if exists('tv')=1 then write(%io(2),[tv,maxi(tv)],'(4f15.10)');end
-if exists('tv')=1 then 
+//if exists('tv')==1 then write(%io(2),[tv,maxi(tv)],'(4f15.10)');end
+if exists('tv')==1 then 
    if answer>0 then 
-               if no=1 then
+               if no==1 then
  write(%io(2),[1/sqrt(mu),answer],'('' gama = '',f18.10,'' Unfeasible (Hx hamiltonian)  test = '',e15.5)');
                        end
-               if no=2 then
+               if no==2 then
  write(%io(2),[1/sqrt(mu),answer],'('' gama = '',f18.10,'' Unfeasible (Hy hamiltonian)  test = '',e15.5)');
                        end
-               if no=3 then
+               if no==3 then
  write(%io(2),[1/sqrt(mu),answer],'('' gama = '',f18.10,'' Unfeasible (spectral radius) test = '',e15.5)');
                        end
 		     else 
@@ -468,7 +463,7 @@ if erry > 1.d-4 then
 end
 
 //Controller in descriptor form
-//pause;
+
   E=(Y2'*X2-mu*Y1'*X1);
   A#=A-B2*S-L*C2;
   Ak=Y2'*A#*X2+mu*Y1'*A#'*X1-Y2'*(mu*Qy+B2*B2')*X1-Y1'*(mu*Qx+C2'*C2)*X2;
@@ -490,7 +485,7 @@ end
     Dk21=Dk21*Y2i;
     Dk12=U2i*Dk12;
 //  Dk11=U2i*Dk11*Y2i
-//pause;
+
     Sk=list(E,Ak,Bk1,Bk2,Ck1,Ck2,Dk11,Dk12,Dk21,Dk22);
 
 

@@ -1,6 +1,10 @@
-//same example as # 10 with call to matptr
-//param must be defined as a scilab variable
-host('make /tmp/ext11f.o');
-link('/tmp/ext11f.o','ext11f');
+//Copyright INRIA
+
+//Passing a parameter to argument funtion of ode
+files=G_make(['/tmp/ext11f.o'],'ext11f.dll');
+link(files,'ext11f');
+
 param=[0.04,10000,3d+7];
-y=ode([1;0;0],0,[0.4,4],'ext11f')
+y=ode([1;0;0],0,[0.4,4],'ext11f');
+//param must be defined as a scilab variable upon calling ode
+

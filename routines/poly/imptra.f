@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=IMPTRA,SSI=0
+c     Copyright INRIA
       subroutine imptra(pm1,d1,ld1,pm2,d2,m,n)
 c!but
 c     cette subroutine transpose une matrice dont les coefficients sont

@@ -1,19 +1,25 @@
-kp=xget("pixmap");
-if kp=0, xset("pixmap",1);end;
-xset("wwpc");
+// Copyright INRIA
+mode(1)
+kp=xget("pixmap");xset("pixmap",1);
+xset("wwpc");  // clean pixmap
 t=%pi*(-5:5)/5;
-plot3d1(t,t,sin(t)'*cos(t),35,45," ",[2,2,4]);
-xset("wshow");
-sp=2;
-for i=35:sp:80,xset("wwpc");
-	plot3d1(t,t,sin(t)'*cos(t),i,45," ",[1,0,4])
-	xset("wshow");
+//first plot, to fix boundaries
+plot3d1(t,t,sin(t)'*cos(t),35,45," ",[1,2,4]);
+xset("wshow"); // show pixmap
+
+if driver()=='Pos' then st=4;else st=2;end;
+for i=35:st:80, // loop on theta angle
+  xset("wwpc");
+  plot3d1(t,t,sin(t)'*cos(t),i,45," ",[1,0,4])
+  xset("wshow");
 end
-for i=45:sp:80,xset("wwpc");
-	plot3d1(t,t,sin(t)'*cos(t),80,i," ",[1,0,4])
-	xset("wshow");
+for i=45:st:80, //loop on alpha angle
+  xset("wwpc");
+  plot3d1(t,t,sin(t)'*cos(t),80,i," ",[1,0,4])
+  xset("wshow");
 end
-if kp=0, xset("pixmap",0);end;
+
+xset("pixmap",kp);
 
 
 

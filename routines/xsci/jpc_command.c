@@ -1,5 +1,12 @@
 /*****************************************************************************
+ *  xscilab - X Window System interface to scilab
  *  
+ * 	Copyright 1990  ENPC-Cergrene
+ *  Adaptation from  GDB:  Chancelier J.Ph
+ *  xscilab Created:   	1992
+ *****************************************************************************/
+/*****************************************************************************
+ *  Based on
  *  xdbx - X Window System interface to the dbx debugger
  *  Author:  	Po Cheung
  *  Created:   	March 10, 1989
@@ -8,12 +15,6 @@
  *  Adaptation to GDB:  Pierre Willard
  *  XXGDB Created:   	December, 1990
  *
- *****************************************************************************
- *  xscilab - X Window System interface to scilab
- *  
- * 	Copyright 1990  ENPC-Cergrene
- *  Adaptation from  GDB:  Chancelier J.Ph
- *  xscilab Created:   	1992
  *****************************************************************************/
 
 /*  command.c
@@ -133,7 +134,7 @@ void FileG1(w, closure, call_data)
     XtPointer closure;
     caddr_t call_data;
 {
-  popup_file_panel( (Widget)closure);
+   popup_file_panel( (Widget)closure,"File Menu");
  }
 
 static Widget AddButton(parent, name, function, client_data)

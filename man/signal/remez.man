@@ -37,6 +37,8 @@ following commands:
                  hn(nc+12*nc-1)=an(2nc)/2;
 .fi
 where \fVan\fR = cosine filter coefficients
+.SH SEE ALSO
+remezb
 
 
 

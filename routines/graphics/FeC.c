@@ -1,7 +1,7 @@
 /*------------------------------------------------------------------------
     Missile 
     XWindow and Postscript library for 2D and 3D plotting 
-    Copyright (C) 1990 Chancelier Jean-Philippe
+    Copyright (C) 1998 Chancelier Jean-Philippe
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,8 +17,7 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-    jpc@arletty.enpc.fr 
-    Phone : 43.04.40.98 poste : 3327 
+    jpc@cergrene.enpc.fr 
 --------------------------------------------------------------------------*/
 
 
@@ -107,7 +106,7 @@ int C2F(fec)(x,y,triangles,func,Nnode,Ntr,strflag,legend,brect,aaint,lstr1,lstr2
     nz=whiteid;
     for ( i =0 ; i < nz ; i++)
       {
-	int fill = i+1;
+	int fill = -( i+1 );
 	double vmin,vmax;
 	vmin=zmin + i*(zmax-zmin)/(nz);
 	vmax=zmin + (i+1)*(zmax-zmin)/(nz);

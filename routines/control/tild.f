@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=TILD,SSI=0
+c     Copyright INRIA
       subroutine tild(n,tp,tpti)
 c!but
 c     pour un polynome p(z)  l'operation tild aboutit a un polynome

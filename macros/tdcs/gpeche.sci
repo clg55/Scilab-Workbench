@@ -4,10 +4,11 @@ function [xk,ukp1]=gpeche(uk,pasg)
 // imprime le valeur du cout
 // calcule une nouvelle valeur de commande
 //!
+// Copyright INRIA
 [xk,pk]=equad(uk);
 tk=(1/(npts-1))*(0:(npts-1));
 xset("window",1)
-if xget("window")=0 , xinit('unix:0.0'),xset("window",1),end
+if xget("window")==0 , xinit('unix:0.0'),xset("window",1),end
 plot2d(tk',uk',[1,-1],"121","commande");
 x0=30;
 gcout = sum( uk.*xk-c*uk);

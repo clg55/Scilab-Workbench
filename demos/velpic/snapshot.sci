@@ -40,7 +40,8 @@ function [pk]=snapshot(pt,view,frames,pmode)
 //!
 //author: C. Bunks     date: 1-NOV-90
 
-   [pr,pc]=size(pt);
+// Copyright INRIA
+[pr,pc]=size(pt);
    kmax=pr/pc;
    if ent(kmax)<>kmax then,
       write(%io(2),'Give matrix column length:')
@@ -52,13 +53,13 @@ function [pk]=snapshot(pt,view,frames,pmode)
 //default evaluation
 
    [lhs,rhs]=argn(0);
-   if rhs=1 then, view='top'; frames=1:kmax; pmode='3d'; end,
-   if rhs=2 then, 
-      if type(view)=10 then,
-         if view='top' then,
+   if rhs==1 then, view='top'; frames=1:kmax; pmode='3d'; end,
+   if rhs==2 then, 
+      if type(view)==10 then,
+         if view=='top' then,
             frames=1:kmax; pmode='3d';
          else,
-            if view='front' then,
+            if view=='front' then,
                frames=1:kmax; pmode='3d';
             else,
                pmode=view; view='top'; frames1:kmax;
@@ -66,7 +67,7 @@ function [pk]=snapshot(pt,view,frames,pmode)
          end,
       else, 
          frames=view; view='top'; pmode='3d';
-         if maxi(size(frames))=1 then, 
+         if maxi(size(frames))==1 then, 
             if frames>0 then,
                frames=1:frames:kmax; 
             else,
@@ -75,17 +76,17 @@ function [pk]=snapshot(pt,view,frames,pmode)
          end,
       end,
    end,
-   if rhs=3 then,
-      if type(view)=10 then,
-         if view='top' then,
-            if type(frames)=10 then
+   if rhs==3 then,
+      if type(view)==10 then,
+         if view=='top' then,
+            if type(frames)==10 then
                pmode=frames; frames=1:kmax;
             else,
                pmode='3d';
             end,
          else,
-            if view='front' then,
-               if type(frames)=10 then
+            if view=='front' then,
+               if type(frames)==10 then
                   pmode=frames; frames=1:kmax;
                else,
                   pmode='3d';
@@ -96,7 +97,7 @@ function [pk]=snapshot(pt,view,frames,pmode)
          end,
       else, 
          pmode=frames; frames=view; view='top';
-         if maxi(size(frames))=1 then, 
+         if maxi(size(frames))==1 then, 
             if frames>0 then,
                frames=1:frames:kmax; 
             else,
@@ -105,7 +106,7 @@ function [pk]=snapshot(pt,view,frames,pmode)
          end,
       end,
    end,
-   if maxi(size(frames))=1 then, 
+   if maxi(size(frames))==1 then, 
       if frames>0 then,
          frames=1:frames:kmax; 
       else,
@@ -116,12 +117,12 @@ function [pk]=snapshot(pt,view,frames,pmode)
 //plot 
 
    for k=frames,
-      if view='top' then,
+      if view=='top' then,
          pk=pt((k-1)*pc+1:k*pc,:);
       else,
          pk=pt(k:pc:pr,:);
       end,
-      if pmode='3d' then,
+      if pmode=='3d' then,
          plotdb(pk,'agc',[0,%pi/4],'x'),pause,xbasc();
       else,
          contour(1:pc,1:pc,pk,10),pause,xbasc();

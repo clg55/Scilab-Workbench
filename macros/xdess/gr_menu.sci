@@ -1,21 +1,11 @@
 function [sd]=gr_menu(sd,flag,noframe)
-
+// Copyright INRIA
 getf('SCI/macros/xdess/gr_macros.sci','c');
 
 deff('[modek]=clearmode()',['modek=xget(''alufunction'')';
             'xset(''alufunction'',6);']);
   
 deff('[]=modeback(x)','xset(''alufunction'',x);');
-
-symbtb=['1  +';
-        '2  x';
-        '3  + circle ';
-        '4  full diamond';
-        '5  empty diamond';
-        '6  triangle (up)';
-        '7  triangle (down)';
-        '8  clubs';
-        '9  circle'];
 
 dash=['0        continue';
       '1        {2,5,2,5}';
@@ -24,24 +14,6 @@ dash=['0        continue';
       '4        {8,3,2,3}';
       '5        {11,3,2,3}'; 
       '6        {11,3,5,3}}'];
-
-patt=['0  black';
-    '1  navyblue';
-    '2  blue';
-    '3  skyblue';
-    '4  aquamarine';
-    '5  forestgreen';
-    '6  green';
-    '7  lightcyan';
-    '8  cyan';
-    '9  orange';
-    '10  red';
-    '11  magenta';
-    '12  violet';
-    '13  yellow';
-    '14  gold';
-    '15  beige';
-    '16  white'];
 
 [lhs,rhs]=argn(0);
 if rhs<=1,flag=0;end;
@@ -60,54 +32,152 @@ if rhs <=0 then
                    '[xmin,ymin,xmax,ymax] ou list(''sd'',,,)')
      end
 end
-if noframe=1;s_t="010";else s_t="012";end
+if noframe==1;s_t="010";else s_t="012";end
 plot2d(0,0,[1],s_t,' ',cdef);
+curwin=xget('window')
 xclip('clipgrf')
+
+menu_o=['rectangle','frectangle','circle','fcircle','polyline',...
+	'fpolyline','spline','arrow','points','caption']
+menu_s=['dash style','pattern','thickness','mark','clip off','clip on']
+menu_e=['redraw','pause','delete','move','group','Exit']
+menus=list(['Objects','Settings','Edit'],menu_o,menu_s,menu_e)
+w='menus(2)(';rpar=')'
+Objects=w(ones(menu_o))+string(1:size(menu_o,'*'))+rpar(ones(menu_o))
+w='menus(3)(';rpar=')'
+Settings=w(ones(menu_s))+string(1:size(menu_s,'*'))+rpar(ones(menu_s))
+w='menus(4)(';rpar=')'
+Edit=w(ones(menu_e))+string(1:size(menu_e,'*'))+rpar(ones(menu_e))
+execstr('Edit_'+string(curwin)+'=Edit')
+execstr('Settings_'+string(curwin)+'=Settings')
+execstr('Objects_'+string(curwin)+'=Objects')
+menubar(curwin,menus)
+
+if init==0 then redraw(sd,s_t); else sd=list('sd',cdef); end,
 //
-// Trace des bouttons
-   tmenu=['rectangle','circle','polyline','fpolyline',...
-	  'spline','arrow',...
-          'points','caption',...
-          'dash style','pattern','mark','redraw','pause','delete',...
-	  'clip off','clip on','exit']
-//
-if init=0 then redraw(sd,s_t); else sd=list('sd',cdef); end,
-//
-if flag=1; xclip();return ;end
-fin='no';
+if flag==1; xclip();return ;end
+
 // boucle principale
-while fin<>'ok' then
- ksd=prod(size(sd))
- //
- x=x_choose(tmenu','Choose an option below (click)');
- if x<>0 then
- select tmenu(x)
-   case 'rectangle'  then xinfo('rectangle '); sd(ksd+1)=rect();
-   case 'circle'     then xinfo(['circle : center point,';...
-                                 ' point on the circle']); sd(ksd+1)=cerc();
-   case 'polyline'   then xinfo(['line : left-click to stop,';...
-                                ' right or middle to add a point']);  sd(ksd+1)=ligne();
-   case 'fpolyline'   then xinfo(['fline : left-click to stop,';...
-                                ' right or middle to add a point']); sd(ksd+1)=fligne();
-   case 'spline'     then xinfo(['splin [xi increasing]:left-click to stop,';...
-                                ' right or middle to add a point ']);   sd(ksd+1)=curve();
-   case 'arrow'      then xinfo('arrow : begining point, ending point');
-                          sd(ksd+1)=fleche();
-   case 'points'     then xinfo(['points: left-click to stop,';...
-                                ' right or middle to add a point']);
-                          sd(ksd+1)=points();
-   case 'caption'    then xinfo('leg');    sd(ksd+1)=comment();
-   case 'dash style' then xinfo('dash');    sd(ksd+1)=dashs()
-   case 'pattern'    then xinfo('pattern'); sd(ksd+1)=patts();
-   case 'mark'       then xinfo('symbols'); sd(ksd+1)=symbs();
-   case 'redraw'     then redraw(sd,s_t);
-   case 'pause'      then pause;
-   case 'delete'     then delete(sd);
-   case 'clip off'   then sd(ksd+1)=grclipoff();
-   case 'clip on'    then sd(ksd+1)=grclipon();
-   case 'exit' then fin='ok',
-//
-end, // fin select x
-end,
+Cmenu1=[]
+while %t then
+  ksd=prod(size(sd))
+  [btn,xc,yc,win,Cmenu]=getclick()
+  c1=[xc,yc]
+  select Cmenu
+  case 'Exit' then
+    fin='ok'
+    break
+  case 'rectangle'  then 
+    xinfo('rectangle '); 
+    new=rect();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'frectangle'  then 
+    xinfo('filled rectangle '); 
+    new=frect();  
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'circle'     then 
+    xinfo(['circle : center point,';...
+	    ' point on the circle']); 
+    new=cerc();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'fcircle'     then 
+    xinfo(['filles circle : center point,';...
+	    ' point on the circle']); 
+    new=fcerc();  
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'polyline'   then 
+    xinfo(['line : left-click to stop,';...
+	    ' right or middle to add a point']);  
+    new=ligne();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'fpolyline'   then 
+    xinfo(['fline : left-click to stop,';...
+	    ' right or middle to add a point']); 
+    new=fligne();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'spline'     then 
+    xinfo(['splin [xi increasing]:left-click to stop,';...
+	    ' right or middle to add a point ']);   
+    new=curve();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'arrow'      then
+    xinfo('arrow : begining point, ending point');
+    new=fleche();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'points'     then 
+    xinfo(['points: left-click to stop,';
+      ' right or middle to add a point']);
+    new=points();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'caption'    then 
+    xinfo('leg');    
+    new=comment();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'dash style' then 
+    xinfo('dash');    
+    new=dashs()
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'pattern'    then 
+    xinfo('pattern'); 
+    new=patts();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'thickness'    then 
+    xinfo('thickness'); 
+    new=Thick();
+    if new<>list() then
+      sd(ksd+1)=new
+    end    
+  case 'mark'       then 
+    xinfo('symbols'); 
+    new=symbs();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'redraw'     then 
+    xset("default");
+    redraw(sd,s_t);
+  case 'pause'      then 
+    pause;
+  case 'delete'     then 
+    delete(sd);
+  case 'move'     then 
+    sd=move(sd);  
+  case 'clip off'   then 
+    new=grclipoff();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'clip on'    then 
+    new=grclipon();
+    if new<>list() then
+      sd(ksd+1)=new
+    end
+  case 'group' then
+    sd=group(sd)
+  end  // fin select 
 end, // fin while
 xset("default");

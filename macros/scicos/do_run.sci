@@ -9,6 +9,7 @@ function [ok,tcur,cpr,alreadyran,needcompile,state0]=do_run(cpr)
 //
 // define user possible choices
 
+// Copyright INRIA
 if needcompile==4 then alreadyran=%f,end
   
 if alreadyran&needcompile<=1 then
@@ -43,6 +44,7 @@ if choix<>[] then
   case 'End' then 
     errcatch(-1,'continue')
     needstart=%t
+    wpar=scs_m(1);tf=wpar(4);tolerances=wpar(3)
     [state,t]=scicosim(cpr(1),tcur,tf,cpr(2),'finish',tolerances)
     cpr(1)=state
     alreadyran=%f
@@ -73,11 +75,14 @@ else
 end
 
 win=xget('window')
-
 if needstart then //scicos initialisation
   tcur=0
   cpr(1)=state0
   wpar=scs_m(1);tf=wpar(4);tolerances=wpar(3)
+if tf*tolerances==[] then 
+x_message(['Simulation parameters not set';'use setup button']);
+return;end
+
   errcatch(-1,'continue')
   [state,t]=scicosim(cpr(1),tcur,tf,cpr(2),'start',tolerances)
   cpr(1)=state

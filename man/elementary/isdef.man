@@ -4,11 +4,24 @@
 isdef - check variable  existence
 .SH CALLING SEQUENCE
 .nf
-isdef('var-name')
+isdef(name [,where])
 .fi
+.SH PARAMETERS
+.TP
+name
+: a character string
+.TP
+where 
+: an optional character string with default value 'all'
 .SH DESCRIPTION
-returns \fV%T\fR if the variable \fV'var-name'\fR exists 
+\fVisdef(name)\fR returns \fV%T\fR if the variable \fV'var-name'\fR exists 
 and \fV%F\fR otherwise.
+
+\fVisdef(name,'local')\fR returns \fV%T\fR if the variable \fV'var-name'\fR exists 
+in the
+  local environment of the current function and \fV%F\fR otherwise.
+
+
 .SH EXAMPLE
 .nf
 A=1;

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "../machine.h"
 
 extern void C2F(out)();

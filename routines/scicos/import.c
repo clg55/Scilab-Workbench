@@ -1,37 +1,7 @@
+/* Copyright INRIA */
 #include "../machine.h"
 #include <string.h>
-typedef struct {
-  double* x;      /* continuous  state */
-  integer* xptr;  /* vector of pointers on block states */
-  double* z;      /* discrete state */
-  integer* zptr;  /* vector of pointers on block states */
-  integer* iz;      /* unused */
-  integer* izptr;  /* vector of pointers on iz */
-  integer* inpptr; /* vector of pointers on block inputs */
-  integer* inplnk;
-  integer* outptr;/* vector of pointers on block outputs */
-  integer* outlnk;
-  integer* lnkptr;
-  integer nlnkptr; /* size of lnkptr */
-  double * rpar;  /* vector of real parameters */
-  integer* rpptr; /* vector of pointers on block real parameters */
-  integer* ipar;  /* vector of integer parameters */
-  integer* ipptr; /* vector of pointers on block integer parameters */
-  integer nblk;   /* number of  blocks */
-  double * outtb; /* vector of outputs*/
-  integer nout;   /* size of outtb */
-  integer* subs;  /* import structure */
-  integer nsubs;  /* number of imported data */
-  double* tevts;
-  integer* evtspt;
-  integer nevts;
-  integer pointi;
-  integer *oord;
-  integer *zord;
-  integer *funptr; /* block indexes */
-  integer *funtyp; /* block types */
-} ScicosImport;
-
+#include "import.h"
 extern struct {
   integer kfun;
 } C2F(curblk);
@@ -68,7 +38,13 @@ ScicosImport  scicos_imp={
 (integer *) NULL,  /* oord */
 (integer *) NULL,  /* zord */
 (integer *) NULL,  /* funptr */
-(integer *) NULL   /* funtyp */
+(integer *) NULL,   /* funtyp */
+(integer *) NULL,   /* ztyp */
+(integer *) NULL,   /* cord */
+(integer *) NULL,   /* ordclk */
+(integer *) NULL,   /* clkptr */
+(integer *) NULL,   /* ordptr */
+(integer *) NULL   /* critev */
 };
 
 void  
@@ -76,12 +52,12 @@ C2F(makescicosimport)(x,xptr,z,zptr,iz,izptr,
      inpptr,inplnk,outptr,outlnk,lnkptr,nlnkptr,
      rpar,rpptr,ipar,ipptr,nblk,outtb,nout,subs,nsubs,
      tevts,evtspt,nevts,pointi,oord,zord,
-     funptr,funtyp)
+     funptr,funtyp,ztyp,cord,ordclk,clkptr,ordptr,critev)
      
 double *x ,*z,*outtb,*rpar,*tevts;
 integer *xptr,*zptr,*iz,*izptr,*inpptr,*inplnk,*outptr,*outlnk,*lnkptr;
 integer *nlnkptr,*rpptr,*ipar,*ipptr,*nblk,*nout,*subs,*nsubs;
-integer *evtspt,*nevts,*pointi,*oord,*zord,*funptr,*funtyp;
+integer *evtspt,*nevts,*pointi,*oord,*zord,*funptr,*funtyp,*ztyp,*cord,*ordclk,*clkptr,*ordptr,*critev;
      
 {
     scicos_imp.x=x;
@@ -119,6 +95,13 @@ integer *evtspt,*nevts,*pointi,*oord,*zord,*funptr,*funtyp;
 
     scicos_imp.funptr=funptr;
     scicos_imp.funtyp=funtyp;
+
+    scicos_imp.ztyp=ztyp;
+    scicos_imp.cord=cord;
+    scicos_imp.ordclk=ordclk;
+    scicos_imp.clkptr=clkptr;
+    scicos_imp.ordptr=ordptr;
+    scicos_imp.critev=critev;
 }
 
 void
@@ -159,6 +142,12 @@ C2F(clearscicosimport)()
     scicos_imp.funptr=(integer *) NULL;
     scicos_imp.funtyp=(integer *) NULL;
 
+    scicos_imp.ztyp=(integer *) NULL;
+    scicos_imp.cord=(integer *) NULL;
+    scicos_imp.ordclk=(integer *) NULL;
+    scicos_imp.clkptr=(integer *) NULL;
+    scicos_imp.ordptr=(integer *) NULL;
+    scicos_imp.critev=(integer *) NULL;
 }
 
 integer  

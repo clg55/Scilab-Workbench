@@ -4,6 +4,7 @@ function [sk,gama]=newhinf(P,r,gamamin,gamamax)
 // gama = best gama in [gamamin,gamamax], sk = controller
 // P = augmented plant (syslin list) 
 // r=size(P22)=[#ouputs, #inputs]
+// Copyright INRIA
 gamanew=(gamamin+gamamax)/2;
 [A,B1,B2,C1,C2,D11,D12,D21,D22]=smga(P,r);
 P12=syslin(dom,A,B2,C1,D12);
@@ -18,8 +19,8 @@ if abs(gamanew-gamaold) < 0.001 then cont=%F;end
 end
 [ok,sk,pb]=gamatest(P12,P21,gama);
 //closed=lft(P,r,sk);
-//if dom='d' then frq=0:0.01:%pi;end
-//if dom='c' then frq=logspace(-3,3);end
+//if dom=='d' then frq=0:0.01:%pi;end
+//if dom=='c' then frq=logspace(-3,3);end
 //w=svplot(closed,frq);
 //xclear();plot2d(frq',w(1,:)');
 
@@ -68,7 +69,7 @@ else
 end
 end
 // ----------------->       Continuous time case
-if dom='c' then
+if dom=='c' then
 ok1=and(real(spec(A+B2*K)) < zeros(nx,1));
 ok2=and(real(spec(A+H*C2)) < zeros(nx,1));
 ok3=mini(real(spec(eye-Y*X/gama/gama))) > 100*%eps;

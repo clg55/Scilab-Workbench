@@ -8,6 +8,8 @@ c
 c
 c  warning   -this routine is intended to be called only from
 c             slice  routine  sybad .
+
+C  Copyright SLICOT
 c%
       integer i,j,k,l,m,n,dk,dl,ii,ik,jj,kk,ll,l1,na,job,km1,
      x        ierr,info,ldim,nsys,ipvt(4)

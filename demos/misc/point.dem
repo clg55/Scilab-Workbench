@@ -7,6 +7,7 @@ mode(1)
 //                    -----------------------------
 //
 
+// Copyright INRIA
 // constants
 // -------------------------
    tr=186.d-6; gb=6000; g1=0.55; tau=6.d-4; g2=0.02; g4=26;
@@ -81,7 +82,7 @@ mode(1)
 // definition de la macro simulant le systeme en boucle fermee
 // -----------------------------------------------------------
    deff('[y,x]=ddls_sim(a,b,c,tr,td,u,x)',[
-        '[lhs,rhs]=argn(0);if rhs=6 then [n,n]=size(a);x=0*ones(n,1),end'
+        '[lhs,rhs]=argn(0);if rhs==6 then [n,n]=size(a);x=0*ones(n,1),end'
         't0=int(tr/td)+1'
         '[nl,nc]=size(u),np=nl*nc,u=[0*ones(1,t0),matrix(u,1,np)]'
         'y(1,t0)=0'

@@ -5,6 +5,7 @@ function [xy]=rotate(xy,teta,orig)
 // teta : angle en radian , 0 si omis
 // orig : centre de la rotation, <0;0> si omis
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 select rhs
  case 2 then orig=[0;0];

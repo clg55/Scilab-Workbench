@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 
 #ifndef SCIG_PROTO
 #define SCIG_PROTO
@@ -70,7 +71,7 @@ extern void InitValues  _PARAMS((double *, double *, double *, integer , integer
 
 extern integer ReallocContour  _PARAMS((integer)); 
 extern double C2F(phi_cont)  _PARAMS((integer, integer)); 
-extern integer AllocContour  _PARAMS((void)); 
+/* extern integer AllocContour  _PARAMS((void)); */
 extern double C2F(f_intercept)  _PARAMS((double, double, double, double, double )); 
 extern integer bdyp  _PARAMS((integer , integer )); 
 
@@ -290,12 +291,16 @@ extern void Tape_ReplayNewScale  _PARAMS((char *unused, integer *winnumber, inte
 
  extern int C2F(dr)  _PARAMS((char *, char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *, integer , integer )); 
  extern void C2F(SetDriver)  _PARAMS((char * ,integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+
  extern void GetDriver1  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
+
+
  extern char GetDriver  _PARAMS((void)); 
  extern int C2F(inttest) _PARAMS((int *)); 
 
 	/* Xcall1 */
 
+ extern char *getFPF _PARAMS((void));
  extern int C2F(dr1)  _PARAMS((char * ,char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *, integer , integer )); 
  extern void xset_1  _PARAMS((char *, char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *, integer , integer )); 
  extern void drawarc_1  _PARAMS((char *, char *, integer *, integer *, integer *, integer *, integer *angle1, integer *angle2, double *, double *, double *width, double *height, integer , integer )); 
@@ -491,6 +496,7 @@ extern void C2F(gemptyPos)  _PARAMS((integer *, integer *, integer *, double *))
 
 #ifndef WIN32 
 
+int GetWinsMaxId _PARAMS((void));
 void SwitchWindow _PARAMS((integer *intnum));
  extern void C2F(setalufunction)  _PARAMS((char *)); 
  extern void C2F(setalufunction1)  _PARAMS((integer *num, integer *, integer *, integer *)); 
@@ -565,7 +571,6 @@ void SwitchWindow _PARAMS((integer *intnum));
  extern void C2F(initgraphic)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
  extern void CPixmapResize1  _PARAMS((void)); 
  extern void C2F(xinfo)  _PARAMS((char *message, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 
- extern void wininfo(); /** XXX _PARAMS((char *message));  */
 /**  extern void SendScilab  _PARAMS((Window local, integer winnum));  **/
 /** extern Window C2F(Window_With_Name)  _PARAMS((Window top, char *, int j, char *ResList0, char *ResList1, char *ResList2)); **/
  extern void C2F(xselgraphic)  _PARAMS((char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *)); 

@@ -1,4 +1,5 @@
 function [x,y,typ]=RAND_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then //normal  position
@@ -30,6 +31,7 @@ case 'set' then
       nout=size(a,'*')
       graphics(4)=label
       model(3)=nout
+      model(6)(1)=rand
       model(9)=flag
       model(8)=[a(:);b(:);0]
       model(7)=[0*a(:);0]

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=RTITR,SSI=0
+c     Copyright INRIA
       subroutine rtitr(nin,nout,nu,num,inum,dgnum,den,iden,dgden,
      &                 up,u,iu,yp,y,iy,job,iw,w,ierr)
 c!but

@@ -6,6 +6,7 @@ function [X,rk,Ac]=rowcompr(A)
 //Ac = X*A
 //Warning: elimination of neglected terms
 //!
+// Copyright INRIA
 [n,m]=size(A);
 [Ac,U,rk]=htrianr(A');
 Ac=Ac';

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
@@ -7,6 +8,10 @@
 #include <stdio.h>
 
 void readOneLine();
+
+#ifdef WIN32 
+extern void SciEnv(void);
+#endif 
 
 /*---------------------------------------------------------
   Blatexprs fileres file1 .... filen  
@@ -51,7 +56,7 @@ void WriteTeX(filename,wide,height)
   fprintf(fdo,"\\setlength{\\unitlength}{1cm}\n");
   fprintf(fdo,"\\fbox{\\begin{picture}(%.2f,%.2f)\n",wide,height);
 #ifdef EPSFIG
-  fprintf(fdo,"\\epsfig{file=\\Figdir %s.ps}\n",
+  fprintf(fdo,"\\epsfig{file=\\Figdir %s.ps}\n",filename);
 #else
   fprintf(fdo,"%% if you want to use epsfig uncomment the following line \n");
   fprintf(fdo,"%% and comment the special line \n");
@@ -223,6 +228,10 @@ int main(argc, argv)
   int i ;
   FILE *fd;
   FILE *fdo;
+#ifdef WIN32 
+  SciEnv();
+#endif 
+
   if (argc <= 2) { int i=0;
 		   while (strcmp(UsageStr[i],"fin")!=0)
 		     { 

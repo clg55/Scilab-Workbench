@@ -3,6 +3,7 @@ c!but
 c     traduit un nom de variable codee scilab en une variable scilab de
 c     type chaine 
 c!    
+c     Copyright INRIA
       integer nsiz
       parameter (nsiz=6)
       integer ids(nsiz,nc),istk(*),nc,ni

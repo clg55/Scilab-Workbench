@@ -1,4 +1,5 @@
 function [x]=fact(k)
+// Copyright INRIA
 k=int(k);
   if k<1 then, 
      k=1; 

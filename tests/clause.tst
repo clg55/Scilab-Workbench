@@ -1,10 +1,11 @@
+// Copyright INRIA
 deff('[y]=t(x)',[
 'y=0'
 'if x>0 then'
-'  if x=1 then '
+'  if x==1 then '
 '    return'
 '  else '
-'    if x=2 then '
+'    if x==2 then '
 '       y=10'
 '    else '
 '       for u=1:x, '
@@ -15,7 +16,7 @@ deff('[y]=t(x)',[
 '  end'
 'else '
 '  for u=1:-x, '
-'    if u=4 then '
+'    if u==4 then '
 '      return,'
 '    else '
 '      y=u,'

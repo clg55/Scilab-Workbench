@@ -40,6 +40,7 @@ function [stk,nwrk,txt,top]=f_norm(nwrk)
 //              (columns) of the matrix		
 //          des chaines de caracteres
 
+// Copyright INRIA
 //
 //  nwrk : this variable contain information on working arrays, error
 //         indicators. It only may be modified by call to scilab functions
@@ -62,7 +63,7 @@ end
 
 if p=='2' then //norme 2
 if s2(4)=='1'&s2(5)=='1' then
-  if s2(2)='2' then s2(1)='('+s2(1)+')',end
+  if s2(2)=='2' then s2(1)='('+s2(1)+')',end
   stk=list('abs('+s2(1)+')',s2(2),s2(3),s2(4),s2(5))
 elseif s2(4)=='1'|s2(5)=='1' then
   [s2,nwrk,txt]=typconv(s2,nwrk,'1')

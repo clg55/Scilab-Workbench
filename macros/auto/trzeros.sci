@@ -2,12 +2,13 @@ function [nt,dt,rk]=trzeros(Sl)
 //Transmission zeros of Sl = nt./dt
 // Syntax : [nt,dt]=trzeros(Sl)
 //!
+// Copyright INRIA
 [LHS,RHS]=argn(0);
-if type(Sl)=2 then 
+if type(Sl)==2 then 
    D=Sl;
    [m,n]=size(D);
 if m<>n then error('Trzeros: Polynomial matrix--> must be square');return;end
-   chis=determ(D);nt=roots(chis);dt=ones(nt);
+   chis=det(D);nt=roots(chis);dt=ones(nt);
    if LHS==1 then nt=nt./dt;dt=[];rk=[];end
    return;
  end
@@ -15,25 +16,25 @@ flag=Sl(1);
 if flag(1)<>'lss'&flag(1)<>'r' then 
 error('Input to trzeros must be a linear system or polynomial matrix');
 end
-if flag(1)='r' then 
+if flag(1)=='r' then 
    if size(Sl)==1 then nt=roots(Sl(2));dt=[];rk=1;return;end
    Sl=tf2ss(Sl);
 end
 //Sl=minss(Sl);
 [A,B,C,D]=Sl(2:5);
-if type(D)=2 then 
+if type(D)==2 then 
   [m,n]=size(D);
 if m<>n then error('Trzeros: Polynomial D matrix -->must be square');return;end
-   chis=determ(systmat(Sl));nt=roots(chis);dt=ones(nt);
+   chis=det(systmat(Sl));nt=roots(chis);dt=ones(nt);
    if LHS==1 then nt=nt./dt;dt=[];rk=[];end
    return;
 end
-if size(A,'*')=0 then 
-    if type(D)=1 then nt=[];dt=[];return;end;
-    if type(D)=2 then 
+if size(A,'*')==0 then 
+    if type(D)==1 then nt=[];dt=[];return;end;
+    if type(D)==2 then 
        [m,n]=size(D);
        if m<>n then error('D(s) must be square');return;end
-       chis=determ(D);nt=roots(chis);dt=ones(nt);
+       chis=det(D);nt=roots(chis);dt=ones(nt);
        if LHS==1 then nt=nt./dt;dt=[];rk=[];end
     return;
     end;
@@ -41,7 +42,7 @@ end;
 [ld,kd]=size(D);
 if norm(D,1)<sqrt(%eps)|ld==kd then
  [nt,dt,rk]=tr_zer(A,B,C,D);
- if LHS=1 then nt=nt./dt;dt=[];rk=[];end
+ if LHS==1 then nt=nt./dt;dt=[];rk=[];end
  return;
 end
 if ld < kd & norm(D*pinv(D)-eye,1)< 1.d-10

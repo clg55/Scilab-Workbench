@@ -23,7 +23,7 @@ DESCRIPTION
   If a and b are coprime polynomials then
 
   rank(sylm(a,b))=degree(a)+degree(b)) and the instructions
-    u = sylm(a,b)  eye(na+nb,1)
+    u = sylm(a,b) \ eye(na+nb,1)
     x = poly(u(1:nb),'z','coeff')
     y = poly(u(nb+1:na+nb),'z','coeff')
   compute Bezout factors x and y of minimal degree such that a*x+b*y = 1

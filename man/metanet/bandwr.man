@@ -37,7 +37,7 @@ ierr
 : integer 
 .SH DESCRIPTION
 \fVbandwr\fR solves the problem of bandwidth reduction for a sparse
-matrix: the matrix is supposed to be symmetric with a full
+matrix: the matrix is supposed to be upper triangular with a full
 diagonal (it is easy to complete a non symmetric matrix, and then
 discards the added terms).
 .LP
@@ -54,11 +54,11 @@ description (its size is the number of edges of the graph i.e. the
 number of non-zero terms of the corresponding sparse matrix).
 \fVn\fR is the number of nodes (dimension of \fVsp\fR).
 .LP
-\fViperm\fR is an array giving the permutation for reordering the rows
+\fViperm\fR is the permutation vector for reordering the rows
 and columns 
 which reduces the bandwidth and/or profile (new numbering of the nodes
 of the graph);
-\fVmrepi\fR is the reverse permutation (mrepi(iperm) is the identity).
+\fVmrepi\fR is the inverse permutation (mrepi(iperm) is the identity).
 \fVprofile\fR is the array giving the profile of the sparse matrix
 after the bandwidth reduction if \fViopt\fR is 1. If \fViopt\fR is 0 
 this array is zero except for the first term giving the bandwidth.
@@ -74,25 +74,20 @@ g('node_x')=[283 163 63 57 164 164 273 271 339 384 504 513 439 623 631 757 642];
 g('node_y')=[59 133 223 318 227 319 221 324 432 141 209 319 428 443 187 151 301];
 // THE GRAPH
 show_graph(g);
-n=g('node_number');
-[lp,la,ls] = adj_lists(1,n,g('tail'),g('head'));
-aa=graph_2_mat(g);
-ij=[g('tail')' g('head')']; v=1*ones(g('tail')');
-vv=sparse(ij,v,[n n]);
-ww=tril(vv+vv')';ww=ww+eye;
+a=graph_2_mat(g,'node-node');
+ww=tril(a)'+eye;
 ww1=full(ww);
 xset('window',0)
 hist3d((ww1+tril(ww1',-1)+tril(ww1,-1)'),52,85); 
 // BANDWIDTH REDUCTION FOR THE MATRIX
 [iperm,mrepi,profile,ierr]=bandwr(ww);
 max(profile(2:$)-profile(1:($-1)))
-g2=g;g2('node_name')=string(iperm);
 // GRAPH WITH THE NEW NUMBERING
+g2=g;g2('node_name')=string(iperm);
 show_graph(g2,'new')
-//
-yy=0*ones(n,n);
-for i=1:n, for j=1:n,
-yy(i,j)=ww1(mrepi(i),mrepi(j));end;end;
+// NEW MATRIX
+n=g('node_number');
+yy=ww1(mrepi,mrepi);
 xset('window',1)
 hist3d((yy+tril(yy',-1)+tril(yy,-1)'),52,85); 
 // STARTING WITH THE SAME MATRIX
@@ -102,7 +97,7 @@ g1('node_x')=g('node_x');g1('node_y')=g('node_y');
 // GRAPH
 //show_graph(g1,'rep');
 [lp,la,ls] = adj_lists(1,n,g1('tail'),g1('head'));
-[iperm,mrepi,profile,ierr]=bandwr(lp,ls,n,0)
+[iperm,mrepi,profile,ierr]=bandwr(lp,ls,n,0);
 g2=g;g2('node_name')=string(iperm);
 show_graph(g2,'new');
 .fi

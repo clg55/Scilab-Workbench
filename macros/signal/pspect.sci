@@ -15,7 +15,8 @@ function [sm,cwp]=pspect(sec_step,sec_leng,wtype,x,y,wpar)
 // cwp      :unspecified Chebyshev window parameter
 //!
 //author: C. Bunks  date: 14 Sept 1988
- 
+// Copyright INRIA
+
    [lhs,rhs]=argn(0);
    cross=0;
    if sec_step<sec_leng then,
@@ -23,20 +24,20 @@ function [sm,cwp]=pspect(sec_step,sec_leng,wtype,x,y,wpar)
 //get number of sections to be used
  
    xsize=maxi(size(x));
-   if xsize=1 then,
+   if xsize==1 then,
       xsize=x;
    end,
    nsecs=int((xsize-sec_leng)/sec_step);
  
 //construct window
  
-   if rhs=4 then,
+   if rhs==4 then,
       w=window(wtype,sec_leng);
-   else if rhs=5 then,
-      if wtype='kr' then,
+   else if rhs==5 then,
+      if wtype=='kr' then,
          wpar=y;
          w=window(wtype,sec_leng,wpar);
-      else if wtype='ch' then,
+      else if wtype=='ch' then,
          wpar=y;
          [w,cwp]=window(wtype,sec_leng,wpar);
       else,
@@ -54,10 +55,10 @@ function [sm,cwp]=pspect(sec_step,sec_leng,wtype,x,y,wpar)
 //average periodograms
  
    sm=0*w;
-   if maxi(size(x))=1 then,
+   if maxi(size(x))==1 then,
       ovrlp=sec_leng-sec_step;
       xd=[0*ones(1,sec_step) getx(ovrlp,1)];
-      if cross=1 then,
+      if cross==1 then,
          yd=[0*ones(1,sec_step) gety(ovrlp,1)];
       end,
       for k=1:nsecs,
@@ -66,7 +67,7 @@ function [sm,cwp]=pspect(sec_step,sec_leng,wtype,x,y,wpar)
                  getx(sec_step,sec_leng+(k-1)*sec_step+1);
          xw=w.*(xd-(sum(xd)/sec_leng)*ones(1:sec_leng));
          fx=fft(xw,-1);
-         if cross=1 then,
+         if cross==1 then,
             yd(1:ovrlp)=yd(sec_step+1:sec_leng);
             yd(ovrlp+1:sec_leng)=...
                  gety(sec_step,sec_leng+(k-1)*sec_step+1);
@@ -84,7 +85,7 @@ function [sm,cwp]=pspect(sec_step,sec_leng,wtype,x,y,wpar)
          xd=x(indd);
          xe=w.*(xd-(sum(xd)/sec_leng)*ones(1:sec_leng));
          fx=fft(xe,-1);
-         if cross=1 then,
+         if cross==1 then,
             yd=y(indd);
             ye=w.*(yd-(sum(yd)/sec_leng)*ones(1:sec_leng));
             fy=fft(ye,-1);

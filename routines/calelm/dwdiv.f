@@ -19,6 +19,7 @@ c
 c     cleve moler.
 c
 c!
+c     Copyright INRIA
       double precision ar,br,bi,cr,ci
 c     c = a/b
       double precision s,d,ars,brs,bis

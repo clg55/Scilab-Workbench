@@ -16,7 +16,8 @@ function [ar,sigma2,rc]=lev(r)
 //!
 // author: C. Bunks  date: 24 August 1988
 // revised: 9 April 1991
- 
+// Copyright INRIA
+
 //get the size of the correlation vector
  
    rsize=maxi(size(r));

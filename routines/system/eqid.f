@@ -2,6 +2,7 @@
 c
 c     check for equality of two names
 c
+c     Copyright INRIA
       include '../stack.h'
 c
       integer x(nsiz),y(nsiz)

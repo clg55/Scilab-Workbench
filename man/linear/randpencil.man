@@ -15,7 +15,7 @@ infi
 : vector of integers
 .TP
 fin
-: real vector
+: real vector, or monic polynomial, or vector of monic polynomial
 .TP
 eta
 :
@@ -36,11 +36,21 @@ with given Kronecker structure. The structure is given by:
 .LP
 \fVepsi\fR's should be >=0, \fVetai\fR's should be >=0, \fVinfi\fR's should 
 be >=1.
+.LP 
+If \fVfin\fR is a (monic) polynomial, the finite block admits the roots of 
+\fVfin\fR as eigenvalues.
+.LP
+If \fVfin\fR is a vector of polynomial, they are the finite elementary
+divisors of \fVF\fR i.e. the roots of \fVp(i)\fR are finite
+eigenvalues of \fVF\fR.
 .SH EXAMPLE
 .nf
 F=randpencil([0,1],[2],[-1,0,1],[3]);
 [Q,Z,Qd,Zd,numbeps,numbeta]=kroneck(F);
 Qd, Zd
+s=poly(0,'s');
+F=randpencil([],[1,2],s^3-2,[]); //regular pencil
+det(F)
 .fi
 .SH SEE ALSO
 kroneck, pencan, penlaur

@@ -1,6 +1,6 @@
 
 /** men_Sutils.c **/
-
+/* Copyright INRIA */
 
 #ifndef MEN_SUTIL_PROTO
 #define MEN_SUTIL_PROTO

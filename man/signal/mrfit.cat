@@ -11,7 +11,7 @@ CALLING SEQUENCE
 
 PARAMETERS
 
-  w         : positive real vector of frequencies (rad/sec)
+  w         : positive real vector of frequencies (Hz)
 
   mag       : real vector of frequency responses magnitude (same size as w)
 
@@ -28,11 +28,12 @@ DESCRIPTION
   close to mag.  weight(i) is the weigth given to w(i).
 
 EXAMPLE
-  w=0:0.1:5;s=poly(0,'s');G=2*(s^2+0.1*s+2)/(s^2+s+1)/(s^2+0.3*s+1);
-  fresp=freq(G('num'),G('den'),%i*w);
+  w=0.01:0.01:2;s=poly(0,'s');
+  G=syslin('c',2*(s^2+0.1*s+2),(s^2+s+1)*(s^2+0.3*s+1)); // syslin('c',Num,Den);
+  fresp=repfreq(G,w);
   mag=abs(fresp);
-  [num,den]=mrfit(w,mag,4);
-  frespfit=freq(num,den,%i*w);
+  Gid=mrfit(w,mag,4);
+  frespfit=repfreq(Gid,w);
   plot2d([w',w'],[mag(:),abs(frespfit(:))])
 
 SEE ALSO

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include <string.h>
 #include <malloc.h>
 
@@ -23,7 +24,7 @@ char *name;
   return name;
 }
 
-char *basename (name)
+char *my_basename (name)
 char *name;
 {
   char *base;

@@ -1,6 +1,7 @@
       subroutine scitoi(x,mx,nx)
 C    scilab to fortran
 
+c     Copyright INRIA
       integer  x(*)
       integer  mx
       integer  nx

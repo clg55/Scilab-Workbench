@@ -9,7 +9,8 @@ function [h]=buttmag(order,omegac,sample)
 //
 //!
 //Author F.D.
- 
+// Copyright INRIA
+
    [n1,n2]=size(sample);
    un=ones(n1,n2);
    h=un./(un+(sample/omegac)**(2*order));

@@ -5,6 +5,7 @@ pdiv - polynomial division
 .SH CALLING SEQUENCE
 .nf
 [R,Q]=pdiv(P1,P2)
+[Q]=pdiv(P1,P2)
 .fi
 .SH PARAMETERS
 .TP 10

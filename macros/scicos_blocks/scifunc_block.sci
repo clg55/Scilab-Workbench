@@ -45,6 +45,7 @@ function [x,y,typ]=scifunc_block(job,arg1,arg2)
 //                        'z' if zero-crossing.
 //          firing      - vector of initial ouput event firing times
 //
+// Copyright INRIA
 x=[];y=[];typ=[];
 select job
 case 'plot' then
@@ -61,22 +62,20 @@ case 'set' then
   model=arg1(3);graphics=arg1(2);
   label=graphics(4)
   while %t do
-    [ok,i,o,ci,co,xx,z,type_,rpar,auto0,lab]=..
-	getvalue('Set scifunc_block parameters',..
+    [ok,i,o,ci,co,xx,z,rpar,auto0,lab]=getvalue(..
+	['Set scifunc_block parameters';'only regular blocks supported'],..
 	  ['input ports sizes';
 	  'output port sizes';
 	  'input event ports sizes';
 	  'output events ports sizes';
 	  'initial continuous state';
 	  'initial discrete state';
-	  'System type (c,d,z or l)';
 	  'System parameters vector';
 	  'initial firing vector (<0 for no firing)'],..
 	  list('vec',-1,'vec',-1,'vec',-1,'vec',-1,'vec',-1,'vec',-1,..
-	  'str',1,'vec',-1,'vec','sum(x4)'),label(1))
+	  'vec',-1,'vec','sum(x4)'),label(1))
     if ~ok then break,end
     label(1)=lab
-    type_=stripblanks(type_)
     xx=xx(:);z=z(:);rpar=rpar(:)
     nrp=prod(size(rpar))
     // create simulator
@@ -85,7 +84,7 @@ case 'set' then
     ci=int(ci(:));nci=size(ci,1);
     co=int(co(:));nco=size(co,1);
     [ok,tt,dep_ut]=genfunc1(label(2),i,o,nci,nco,size(xx,1),size(z,1),..
-	nrp,type_)
+	nrp,'c')
     if ~ok then break,end
     [model,graphics,ok]=check_io(model,graphics,i,o,ci,co)
     if ok then
@@ -95,7 +94,7 @@ case 'set' then
       model(8)=rpar
       if or(model(9)<>tt) then needcompile=4,end
       model(9)=tt
-      model(10)=type_
+
       model(11)=auto
       model(12)=dep_ut
       x(3)=model
@@ -119,7 +118,7 @@ case 'define' then
   model=list(list('scifunc',3),in,out,clkin,clkout,x0,z0,rpar,0,typ,auto,[%t %f],..
       ' ',list());
   label=list([sci2exp(in);sci2exp(out);sci2exp(clkin);sci2exp(clkout);
-	strcat(sci2exp(x0));strcat(sci2exp(z0));typ;
+	strcat(sci2exp(x0));strcat(sci2exp(z0));
 	strcat(sci2exp(rpar));sci2exp(auto)],..
 	    list('y=sin(u)',' ',' ','y=sin(u)',' ',' ',' '))
   gr_i=['xstringb(orig(1),orig(2),''Scifunc'',sz(1),sz(2),''fill'');']

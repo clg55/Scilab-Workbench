@@ -1,4 +1,5 @@
 
+c     Copyright INRIA
       subroutine extlarg(l,ils,nelt,mrhs)
 C     Used in dealing with externals when 
 C     extra arguments are given by a list list(external,arg1,...,argn)

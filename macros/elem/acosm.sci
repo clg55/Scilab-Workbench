@@ -1,6 +1,7 @@
 function t=acosm(x)
 // Matrix wise Arccosine Cosine-inverse
 //!
+// Copyright INRIA
 if type(x)<>1 then error(53),end
 [m,n]=size(x)
 if m<>n then 

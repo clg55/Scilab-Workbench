@@ -1,4 +1,5 @@
       subroutine wspms(nra,nca,ncb,ar,ai,nela,inda,br,bi,mrb,cr,ci,
+c     Copyright INRIA
      $     mrc,ita,itb)
 c**********************************************************
 c multiply sparse matrix stored in a,inda on right by full

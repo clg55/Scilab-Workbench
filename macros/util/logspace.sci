@@ -4,6 +4,7 @@ function y=logspace(d1, d2, n)
 // equally spaced points between 10^d1 and 10^d2.  If d2=%pi
 // then the points are between 10^d1 and pi.
 // logspace(d1, d2, n) generates n points.
+// Copyright INRIA
 [nargout,nargin]=argn(0);
 if nargin == 2
     n = 50;

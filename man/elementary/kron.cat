@@ -1,10 +1,11 @@
 
 kron(3)                        Scilab Function                        kron(3)
 NAME
-  kron - Kronecker product
+  kron - Kronecker product (.*.)
 
 CALLING SEQUENCE
   kron(x,y)
+  x.*.y
 
 DESCRIPTION
   Kronecker tensor product of two matrices x and y.  Same as x.*.y

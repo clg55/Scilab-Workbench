@@ -1,5 +1,6 @@
 function [sl,name]=bloc2ss(syst)
 //
+// Copyright INRIA
 [lhs,rhs]=argn(0)
  
 if type(syst)<>15 then
@@ -24,7 +25,7 @@ for l=2:nsyst
    transfert=sys(2)
    if type(transfert)==10 then transfert=evstr(transfert);end
    tr1=transfert(1);
-   if tr1(1)='r' then transfert=tf2ss(transfert);end
+   if tr1(1)=='r' then transfert=tf2ss(transfert);end
    syst(l)=list('transfert',transfert)
    
    //-compat type(transfert)==15 retained for list/tlist compatibility
@@ -73,7 +74,7 @@ for numero=lboites
     l=l+1
     corresp(numero)=l
     bloc=syst(numero);transfert=bloc(2)
-    if type(transfert)=1 then  //c'est un gain
+    if type(transfert)==1 then  //c'est un gain
       [mok,mik]=size(transfert)
       [msk,msk]=size([])
       if ms>0 then
@@ -109,7 +110,7 @@ for numero=lliens
   debut=fil(3)
   bdebut=debut(1)  //numero de la boite origine du lien ou de l'entree
   pdebut=debut(2:prod(size(debut))) // ports origines
-  if pdebut=[] then // dimension implicite
+  if pdebut==[] then // dimension implicite
      fin=fil(4);pfin=fin(2:prod(size(fin)))
      if pfin<>[] then 
       //meme dimension que le port d'entree du premier bloc connecte
@@ -192,7 +193,7 @@ lsorties=[]
 nsyst=size(syst)
 for k=2:nsyst
   obj=syst(k)
-  if type(obj)=15, if size(obj)>1 then
+  if type(obj)==15, if size(obj)>1 then
   select part(obj(1),1)
      case 't',
          lboites=[lboites,k]
@@ -206,7 +207,7 @@ for k=2:nsyst
                objk=obj(ko)
                if objk(1)<0 then is_sortie=[is_sortie,-objk(1)],end
             end;
-            if is_sortie=[] then lliens=[lliens,k],
+            if is_sortie==[] then lliens=[lliens,k],
                             else lsorties(1,is_sortie)=k
             end;
                       else lentrees(1,-obj2(1))=k,
@@ -217,7 +218,7 @@ for k=2:nsyst
 end;
 if lsorties==[] then error('no output'),end
 if lentrees==[] then error('no input'),end
-if mini(lsorties)=0 then error('undefined input'),end
-if mini(lentrees)=0 then error('undefined output'),end
+if mini(lsorties)==0 then error('undefined input'),end
+if mini(lentrees)==0 then error('undefined output'),end
 
 

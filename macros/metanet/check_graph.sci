@@ -1,4 +1,5 @@
 function check_graph(g)
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 if rhs<>1 then error(39), end
 if type(g)<>16 then

@@ -1,58 +1,157 @@
 SHELL = /bin/sh
 
 SCIDIR=../..
+INTERSCI = $(SCIDIR)/bin/intersci
+
 include ../../Makefile.incl
 
-all:: info
+
+all:: info 
 
 world: info
 
 info:
 	@echo "Type \"make /tmp/pgm.o\" to compile pgm program"
+	@echo "Type \"make objs\" to compile all test programs"
 
-FFLAGS = $(FC_OPTIONS)
+OBJS= /tmp/ex1c.o /tmp/ex2f.o /tmp/ex4f.o /tmp/ex5f.o  /tmp/ex6c.o \
+	/tmp/ex7f.o /tmp/ex8c.o /tmp/ex9f.o /tmp/ex10f.o /tmp/ex11c.o \
+	/tmp/ex12c.o /tmp/ex13c.o  /tmp/ex14c.o /tmp/ex15c.o /tmp/ex16c.o
 
-CFLAGS = $(CC_OPTIONS)
+IOBJS= /tmp/ex1fi.o /tmp/ex2fi.o /tmp/ex3fi.o /tmp/ex4fi.o /tmp/ex5fi.o \
+	/tmp/ex6fi.o /tmp/ex7fi.o /tmp/ex8fi.o /tmp/ex9fi.o \
+	/tmp/ex10fi.o /tmp/ex11fi.o /tmp/ex12fi.o /tmp/ex13fi.o \
+	/tmp/ex14fi.o  /tmp/ex15fi.o /tmp/ex16fi.o
 
-/tmp/intmatusr.o: intmatusr.f
-	$(FC) $(FFLAGS) -c intmatusr.f  -o /tmp/intmatusr.o
+objs	: $(OBJS) $(IOBJS)
 
-/tmp/matusr-f.o: src/matusr-f.f
-	$(FC) $(FFLAGS) -c src/matusr-f.f  -o /tmp/matusr-f.o
 
-/tmp/matusr-c.o: src/matusr-c.c
-	$(CC) $(CFLAGS) -c src/matusr-c.c  -o /tmp/matusr-c.o
+FFLAGS = $(FC_OPTIONS) $(FC_PICFLAGS)
 
-/tmp/intdaxpy.o: intdaxpy.f
-	$(FC) $(FFLAGS) -c intdaxpy.f  -o /tmp/intdaxpy.o
+CFLAGS = $(CC_OPTIONS) $(CC_PICFLAGS)
 
-/tmp/intfoobar.o: intfoobar.f
-	$(FC) $(FFLAGS) -c intfoobar.f  -o /tmp/intfoobar.o
 
-/tmp/foubare2.o: src/foubare2.f
-	$(FC) $(FFLAGS) -c src/foubare2.f  -o /tmp/foubare2.o
+/tmp/ex1fi.o: ex1fi.desc
+	$(INTERSCI) ex1fi ; ./sedprov ex1fi 
+	$(FC) $(FFLAGS) -c ex1fi.f  -o /tmp/ex1fi.o
 
-/tmp/intex1.o: intex1.f
-	$(FC) $(FFLAGS) -c intex1.f  -o /tmp/intex1.o
+/tmp/ex1c.o: ex1c.c
+	$(CC) $(CFLAGS) -c ex1c.c  -o /tmp/ex1c.o
 
-/tmp/fcalc.o: src/fcalc.f
-	$(FC) $(FFLAGS) -c src/fcalc.f  -o /tmp/fcalc.o
+/tmp/ex2fi.o: ex2fi.desc
+	$(INTERSCI) ex2fi ; ./sedprov ex2fi 
+	$(FC) $(FFLAGS) -c ex2fi.f  -o /tmp/ex2fi.o
 
-/tmp/intex2.o: intex2.f
-	$(FC) $(FFLAGS) -c intex2.f  -o /tmp/intex2.o
+/tmp/ex2f.o: ex2f.f
+	$(FC) $(FFLAGS) -c ex2f.f  -o /tmp/ex2f.o
 
-/tmp/fsom.o: src/fsom.f
-	$(FC) $(FFLAGS) -c src/fsom.f  -o /tmp/fsom.o
+/tmp/ex3fi.o: ex3fi.desc
+	$(INTERSCI) ex3fi ; ./sedprov ex3fi 
+	$(FC) $(FFLAGS) -c ex3fi.f  -o /tmp/ex3fi.o
 
-/tmp/intex4.o: intex4.f
-	$(FC) $(FFLAGS) -c intex4.f  -o /tmp/intex4.o
+/tmp/ex4fi.o: ex4fi.desc
+	$(INTERSCI) ex4fi ; ./sedprov ex4fi 
+	$(FC) $(FFLAGS) -c ex4fi.f  -o /tmp/ex4fi.o
 
-/tmp/contr.o: src/contr.f
-	$(FC) $(FFLAGS) -c src/contr.f  -o /tmp/contr.o
+/tmp/ex4f.o: ex4f.f
+	$(FC) $(FFLAGS) -c ex4f.f  -o /tmp/ex4f.o
 
-clean::
-	$(RM) /tmp/intmatusr.o /tmp/matusr-c.o /tmp/matusr-f.o intmatusr.f intmatusr.sce matusr.tmp matusr.fundef /tmp/intdaxpy.o intdaxpy.f intdaxpy.sce /tmp/intfoobar.o intfoobar.f intfoobar.sce /tmp/foubare2.o foobar.f /tmp/intex1.o /tmp/fcalc.o intex1.f intex1.sce /tmp/intex2.o /tmp/fsom.o intex2.f intex2.sce /tmp/intex4.o /tmp/contr.o intex4.f intex4.sce *.fundef *.tmp so_locations *.o
+/tmp/ex5fi.o: ex5fi.desc
+	$(INTERSCI) ex5fi ; ./sedprov ex5fi 
+	$(FC) $(FFLAGS) -c ex5fi.f  -o /tmp/ex5fi.o
+
+/tmp/ex5f.o: ex5f.f
+	$(FC) $(FFLAGS) -c ex5f.f  -o /tmp/ex5f.o
+
+/tmp/ex6fi.o: ex6fi.desc
+	$(INTERSCI) ex6fi ; ./sedprov ex6fi 
+	$(FC) $(FFLAGS) -c ex6fi.f  -o /tmp/ex6fi.o
+
+/tmp/ex6c.o: ex6c.c
+	$(CC) $(CFLAGS) -c ex6c.c  -o /tmp/ex6c.o
+
+/tmp/ex7fi.o: ex7fi.desc
+	$(INTERSCI) ex7fi ; ./sedprov ex7fi 
+	$(FC) $(FFLAGS) -c ex7fi.f  -o /tmp/ex7fi.o
+
+/tmp/ex7f.o: ex7f.f
+	$(FC) $(FFLAGS) -c ex7f.f  -o /tmp/ex7f.o
+
+/tmp/ex8fi.o: ex8fi.desc
+	$(INTERSCI) ex8fi ; ./sedprov ex8fi 
+	$(FC) $(FFLAGS) -c ex8fi.f  -o /tmp/ex8fi.o
+
+/tmp/ex8c.o: ex8c.c
+	$(CC) $(CFLAGS) -c ex8c.c  -o /tmp/ex8c.o
+
+/tmp/ex9fi.o: ex9fi.desc
+	$(INTERSCI) ex9fi ; ./sedprov ex9fi 
+	$(FC) $(FFLAGS) -c ex9fi.f  -o /tmp/ex9fi.o
+
+/tmp/ex9f.o: ex9f.f
+	$(FC) $(FFLAGS) -c ex9f.f  -o /tmp/ex9f.o
+
+/tmp/ex10fi.o: ex10fi.desc
+	$(INTERSCI) ex10fi ; ./sedprov ex10fi 
+	$(FC) $(FFLAGS) -c ex10fi.f  -o /tmp/ex10fi.o
+
+/tmp/ex10f.o: ex10f.f
+	$(FC) $(FFLAGS) -c ex10f.f  -o /tmp/ex10f.o
+
+/tmp/ex11fi.o: ex11fi.desc
+	$(INTERSCI) ex11fi ; ./sedprov ex11fi 
+	$(FC) $(FFLAGS) -c ex11fi.f  -o /tmp/ex11fi.o
+
+/tmp/ex11c.o: ex11c.c
+	$(CC) $(CFLAGS) -c ex11c.c  -o /tmp/ex11c.o
+
+/tmp/ex12fi.o: ex12fi.desc
+	$(INTERSCI) ex12fi ; ./sedprov ex12fi 
+	$(FC) $(FFLAGS) -c ex12fi.f  -o /tmp/ex12fi.o
+
+/tmp/ex12c.o: ex12c.c
+	$(CC) $(CFLAGS) -c ex12c.c  -o /tmp/ex12c.o
+
+/tmp/ex13fi.o: ex13fi.desc
+	$(INTERSCI) ex13fi ; ./sedprov ex13fi 
+	$(FC) $(FFLAGS) -c ex13fi.f  -o /tmp/ex13fi.o
+
+/tmp/ex13c.o: ex13c.c
+	$(CC) $(CFLAGS) -c ex13c.c  -o /tmp/ex13c.o
+
+/tmp/ex14fi.o: ex14fi.desc
+	$(INTERSCI) ex14fi ; ./sedprov ex14fi 
+	$(FC) $(FFLAGS) -c ex14fi.f  -o /tmp/ex14fi.o
+
+/tmp/ex14c.o: ex14c.c
+	$(CC) $(CFLAGS) -c ex14c.c  -o /tmp/ex14c.o
+
+
+/tmp/ex15fi.o: ex15fi.desc
+	$(INTERSCI) ex15fi ; ./sedprov ex15fi 
+	$(FC) $(FFLAGS) -c ex15fi.f  -o /tmp/ex15fi.o
+
+/tmp/ex15c.o: ex15c.c
+	$(CC) $(CFLAGS) -c ex15c.c  -o /tmp/ex15c.o
+
+/tmp/ex16fi.o: ex16fi.desc
+	$(INTERSCI) ex16fi ; ./sedprov ex16fi 
+	$(FC) $(FFLAGS) -c ex16fi.f  -o /tmp/ex16fi.o
+
+/tmp/ex16c.o: ex16c.c
+	$(CC) $(CFLAGS) -c ex16c.c  -o /tmp/ex16c.o
+
+tests	:
+	@echo Running tests 
+	@$(RM) zallfi.desc
+	@cat *.desc > zallfi 
+	@mv zallfi zallfi.desc 
+	@$(INTERSCI) zallfi > /dev/null ; ./sedprov zallfi
+	@$(SCIDIR)/util/scidem $(SCIDIR) zall.sce zallfi.dia	
 
 distclean:: clean
 
-
+clean	::
+	@echo "Cleaning intersci-examples"
+	@$(RM)  ex*fi.f ex*fi.sce ex*fi.tmp zallfi zallfi.desc zallfi.sce zallfi.f zallfi.o zallfi.dia
+	@$(RM)  $(OBJS) $(IOBJS)

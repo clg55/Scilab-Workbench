@@ -2,14 +2,16 @@
 c ================================== ( Inria    ) =============
 c     Graphique
 c =============================================================
+c     Copyright INRIA
       external plot3d,plot3d1,plot2d1,plot2d2,plot2d3,plot2d4
-      external fac3d,fac3d1,champ1,champ,fac3d2
+      external fac3d,fac3d1,champ1,champ,fac3d2,contour2
+      external contourif
 C     fun=7
       include '../stack.h'
       goto (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
      $     21,22,23,24,25,26,27,28,29,30,
      $     31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
-     $     48,49,50,51,52,53,54,55,56,57,58,59,60) fin
+     $     48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63) fin
       return
  1    call scichamp('champ',champ)
       return
@@ -117,7 +119,7 @@ C     fun=7
       return
  53   call scidelw('xdel')
       return
- 54   call scicontour2d('contour2d')
+ 54   call scicontour2d('contour2d',contour2)
       return
  55   call scixg2psofig('xg2ps','Pos'//char(0))
       return
@@ -131,16 +133,22 @@ C     fun=7
       return
  60   call scixstrbi('xstringb')
       return
+ 61   call scigray1plot('Matplot')
+      return
+ 62   call scicontour2d('contour2di',contourif)
+      return
+ 63   call scic2dex('c2dex')
       end
      
       subroutine scichamp(fname,func)
 cc    interface de la macro champ
-cc    <>=champ(fx,fy,arfact,rect,flag)
-cc    <>=champ(fx,fy,[arfact=1.0,rect=[xmin,ymin,xmax,ymax],flag])
+cc    champ(x,y,fx,fy,arfact,rect,flag)
+cc    champ(x,y,fx,fy,[arfact=1.0,rect=[xmin,ymin,xmax,ymax],flag])
       character*(*) fname
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getsmat,getscalar,matsize
+      integer gettype
       integer m1,n1,lr1,m2,n2,lr2,lr3,m4,n4,lr4
       integer topk,lr5,m6,n6,lr6,m7,n7,lr7,nlr7
       double precision rect(4),arfact
@@ -153,8 +161,14 @@ c      implicit undefined (a-z)
       rect(3)=10.0d00
       rect(4)=10.0d00
       if (rhs.le.0) then
-         buf=fname // '(1:10,1:10,rand(10,10),rand(10,10),1.0);$'
+         buf=fname // '(1:10,1:10,rand(10,10),'
+     $        // 'rand(10,10),1.0);$'
          call demo(fname,buf,1)
+         return
+      endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
          return
       endif
       buf='0'//char(0)
@@ -213,6 +227,7 @@ c      implicit undefined (a-z)
          return
       endif
       call sciwin()
+      call scigerase()
       call func(stk(lr1),stk(lr2),stk(lr3),stk(lr4),
      $     m3,n3,strf,rect,arfact)
       call objvide(fname,top)
@@ -226,6 +241,7 @@ cc	<>=contour(x,y,z,nz)
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getrvect,getscalar,getsmat
+      integer gettype
       integer m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,nz,m4,n4,lr4,flag
       integer lr5,lr6,lr7,lr,m,n,lr10,nlr7
       integer topk, iflag(3)
@@ -233,6 +249,11 @@ c      implicit undefined (a-z)
       if (rhs.le.0) then
          buf='  contour(1:5,1:10,rand(5,10),5);$'
          call demo(fname,buf,1)
+         return
+      endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
          return
       endif
       if (.not.checkrhs(fname,4,10)) return
@@ -315,7 +336,6 @@ c      implicit undefined (a-z)
          call error(999)
          return
       endif
-      call sciwin()
       if (m4*n4.eq.1) then
          flag=0
          nz=int(stk(lr4))
@@ -329,19 +349,22 @@ c      implicit undefined (a-z)
          return
       endif
       call sciwin()
+      call scigerase()
       call contour(stk(lr1),stk(lr2),stk(lr3),m3,n3,flag,nz,stk(lr4),
      $     theta,alpha, buf,iflag,ebox,zlev)
       call objvide(fname,top)
       return
       end
 
-      subroutine scicontour2d(fname)
+      subroutine scicontour2d(fname,func)
 cc    interface de la macro contour2d
 cc	<>=contour(x,y,z,nz)
       character*(*) fname
 c      implicit undefined (a-z)
       include '../stack.h'
+      external func 
       logical checkrhs,getrmat,getrvect,getsmat
+      integer gettype
       logical cremat
       integer nax(4)
       double precision rect(4)
@@ -355,6 +378,11 @@ c      implicit undefined (a-z)
       if (rhs.le.0) then
          buf='  contour2d(1:5,1:10,rand(5,10),5);$'
          call demo(fname,buf,1)
+         return
+      endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
          return
       endif
       if (.not.checkrhs(fname,4,9)) return
@@ -465,7 +493,8 @@ C     check style parameter
          return
       endif
       call sciwin()
-      call contour2(stk(lr1),stk(lr2),stk(lr3),m3,n3,flag,nz,stk(lr4),
+      call scigerase()
+      call func(stk(lr1),stk(lr2),stk(lr3),m3,n3,flag,nz,stk(lr4),
      $     istk(il5),strf,buf,rect,nax)
       call objvide(fname,top)
       return
@@ -477,6 +506,7 @@ cc	<>=param3d(x,y,z,[teta,alpha,leg,flag,ebox])
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getsmat,getscalar,matsize,getrvect
+      integer gettype
       integer m1,n1,lr1,m2,n2,lr2,m3,n3,lr3
       integer topk, iflag(3),m,n,lr,lr6,nlr6,lr5,lr4
       double precision ebox(6),alpha,theta
@@ -489,6 +519,11 @@ c      implicit undefined (a-z)
          buf='  t=0:0.1:5*%pi;'
      $   //'  param3d(sin(t),cos(t),t/10,35,45,''X@Y@Z'',[2,4]);$'
          call demo(fname,buf,1)
+         return
+      endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
          return
       endif
       buf='X@Y@Z'//char(0)
@@ -551,11 +586,46 @@ c      implicit undefined (a-z)
          return
       endif
       call sciwin()
+      call scigerase()
       call param3d(stk(lr1),stk(lr2),stk(lr3),m1*n1,theta,alpha,
      $     buf,iflag,ebox)
       call objvide(fname,top)
       return
       end
+
+
+       subroutine scic2dex(fname)
+c      --------------------------
+       character*(*) fname
+       logical checkrhs,checklhs
+       include '../stack.h'
+       logical putlhsvar, createvarfromptr
+       logical createvar
+       double precision l1,l2
+c     
+       nbvars = 0
+       minrhs = 0
+       maxrhs = 0
+       maxlhs = 2
+       rhs=max(rhs,0)
+       if(.not.checkrhs(fname,minrhs,maxrhs)) return
+       if(.not.checklhs(fname,1,maxlhs)) return
+       call getconts(l1,l2,m1,n1)
+       if (m1.eq.0) then 
+          if(.not.createvar(1,'d',m1,n1,l1)) return
+       else
+          if(.not.createvarfromptr(1,'d',m1,n1,l1)) return
+       endif
+       if (m1.eq.0) then 
+          if(.not.createvar(2,'d',m1,n1,l2)) return
+       else
+          if(.not.createvarfromptr(2,'d',m1,n1,l2)) return
+       endif
+       lhsvar(1)=1
+       lhsvar(2)=2
+       if(.not.putlhsvar()) return
+       end
+
 
 
       subroutine sciparam3d1(fname)
@@ -579,6 +649,11 @@ c      implicit undefined (a-z)
          buf='  t=0:0.1:5*%pi;'
      $   //'  param3d1(sin(t),cos(t),t/10,35,45,''X@Y@Z'',[2,4]);$'
          call demo(fname,buf,1)
+         return
+      endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
          return
       endif
       buf='X@Y@Z'//char(0)
@@ -668,6 +743,7 @@ c      implicit undefined (a-z)
          n1=1
       endif
       call sciwin()
+      call scigerase()
       if ( izcol.eq.0) then 
          call param3d1(stk(lr1),stk(lr2),stk(lr3),m1,n1,
      $        izcol,iv,theta,alpha,
@@ -687,11 +763,17 @@ cc	<>=geom3d(x,y,z)
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,checklhs,matsize
+      integer gettype
       integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3
       if (rhs.lt.0) then
          buf='  t=0:0.1:5*%pi,'
      $   //' [x,y]= geom3d(sin(t),cos(t),t/10);$'
          call demo(fname,buf,1)
+         return
+      endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
          return
       endif
       if (.not.checkrhs(fname,3,3)) return
@@ -742,6 +824,12 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
+         return
+      endif
+
       buf='X@Y@Z'//char(0)
       if (.not.checkrhs(fname,3,8)) return
       topk=top
@@ -848,6 +936,7 @@ c
          return
       endif
       call sciwin()
+      call scigerase()
       if ( m1*n1.eq.m3*n3.and.m1*n1.eq.m2*n2.and.m1*n1.ne.1) then 
          if ( izcol.eq.0) then 
             call func1(stk(lr1),stk(lr2),stk(lr3),iv,
@@ -864,8 +953,8 @@ c
       return
       end
 
-cc	<>=plot2d(x,y,style,strf,leg,rect,nax)
-cc	<>=plot2d(x,y,[style,strf,leg,rect,nax])
+c     plot2d(x,y,style,strf,leg,rect,nax)
+c     plot2d(x,y,[style,strf,leg,rect,nax])
       subroutine sciplot2d(fname)
       character*(*) fname
 c      implicit undefined (a-z)
@@ -873,6 +962,7 @@ c      implicit undefined (a-z)
       logical checkrhs,getrmat,getsmat,matsize,getrvect,cremat
       integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,iadr
       integer nax(4),m,n,lr,lc,lr5,nlr5,lr4,nlr4,i,il1
+      integer gettype
       double precision rect(4)
       character*(4) strf
       data nax / 2,10,2,10/
@@ -887,6 +977,13 @@ c      implicit undefined (a-z)
       endif
       buf='X@Y@Z'//char(0)
       strf='061'//char(0)
+
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
+         return
+      endif
+
       if (.not.checkrhs(fname,1,7)) return
       topk=top
       if (rhs.ge.7) then
@@ -943,9 +1040,17 @@ c      implicit undefined (a-z)
          top=top-1
          if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
          if (.not.matsize(fname,topk,top,m2,n2)) return
+         if (m2*n2.eq.0) then 
+            call objvide(fname,top)
+            return
+         endif
       endif
       if (rhs.eq.1) then 
          if (.not.getrmat(fname,topk,top,m2,n2,lr2)) return
+         if (m2*n2.eq.0) then 
+            call objvide(fname,top)
+            return
+         endif
          if (.not.cremat(fname,top+1,0,m2,n2,lr1,lc)) return
          m1=m2
          n1=n2
@@ -978,22 +1083,8 @@ c      implicit undefined (a-z)
          endif
          call entier(m3*n3,stk(lr3),istk(il1))
       endif
-c     check empty matrix arguments 
-      if ( m1*n1.eq.0 )  then 
-         if ( rhs.lt.5 ) then 
-            buf=fname // ' empty vectors '
-            call error(999)
-            return
-         else
-            if (strf(2:2).eq.'2'.or. 
-     $           strf(2:2).eq.'4'.or.strf(2:2).eq.'6') then 
-               buf=fname // ' empty vectors '
-               call error(999)
-               return
-            endif
-         endif
-      endif
       call sciwin()
+      call scigerase()
       call plot2d(stk(lr1),stk(lr2),n1,m1,istk(il1),strf,buf,rect,nax)
       call objvide(fname,top)
       return
@@ -1005,6 +1096,7 @@ cc	<>=plot2d1(str,x,y,style,strf,leg,rect,nax)
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getsmat,getrvect,cremat
+      integer gettype
       integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,iadr
       integer nax(4),m,n,lr,lc,lr5,nlr5,lr4,nlr4,i,il1,nlr
       double precision rect(4)
@@ -1022,6 +1114,13 @@ c      implicit undefined (a-z)
       endif
       buf='X@Y@Z'//char(0)
       strf='061'//char(0)
+
+      if(gettype(top-rhs+2).ne.1) then
+         call putfunnam(fname,top-rhs+2)
+         fun=-1
+         return
+      endif
+
       if (.not.checkrhs(fname,3,8)) return
       topk=top
       if (rhs.ge.8) then
@@ -1079,6 +1178,10 @@ c      implicit undefined (a-z)
          if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
          top=top-1
          if(.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr))return
+         if (m2*n2.eq.0) then 
+            call objvide(fname,top)
+            return
+         endif
          if (nlr.ne.3) then
             buf=fname//' : str has a wrong size, 3 expected'
             call error(999)
@@ -1118,22 +1221,8 @@ C     premier argument
             return
          endif
       endif
-c     check empty matrix arguments 
-      if ( m2*n2.eq.0 )  then 
-         if ( rhs.lt.6 ) then 
-            buf=fname // ' empty vectors '
-            call error(999)
-            return
-         else
-            if (strf(2:2).eq.'2'.or. 
-     $           strf(2:2).eq.'4'.or.strf(2:2).eq.'6') then 
-               buf=fname // ' empty vectors '
-               call error(999)
-               return
-            endif
-         endif
-      endif
       call sciwin()
+      call scigerase()
       call func(str,stk(lr1),stk(lr2),n2,m2,istk(il1),
      $     strf,buf,rect,nax)
       call objvide(fname,top)
@@ -1145,6 +1234,7 @@ c     check empty matrix arguments
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getsmat,getrvect
+      integer gettype
       integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,lr4,nax(4)
       integer i,nlr4,m,n,lr
       double precision rect(4)
@@ -1157,6 +1247,12 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
+         return
+      endif
+
       buf='X@Y@Z'//char(0)
       strf='061'//char(0)
       if (.not.checkrhs(fname,3,6)) return
@@ -1217,7 +1313,81 @@ c      implicit undefined (a-z)
          return
       endif
       call sciwin()
+      call scigerase()
       call xgray(stk(lr1),stk(lr2),stk(lr3),m3,n3,strf,rect,nax)
+      call objvide(fname,top)
+      return
+      end
+
+      subroutine scigray1plot(fname)
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getrmat,getsmat,getrvect
+      integer gettype
+      integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,lr4,nax(4)
+      integer i,nlr4,m,n,lr
+      double precision rect(4)
+      character*(4) strf
+      data nax / 2,10,2,10/
+      data rect / 0.0d00,0.0d00,10.0d00,10.0d00/
+      if (rhs.lt.0) then
+         buf ='m=[1,2;3,4];Matplot(m);$'
+         call demo(fname,buf,1)
+         return
+      endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
+         return
+      endif
+
+      buf='X@Y@Z'//char(0)
+      strf='061'//char(0)
+      if (.not.checkrhs(fname,1,4)) return
+      topk=top
+      if (rhs.ge.4) then
+         if(.not.getrmat(fname,topk,top,m,n,lr))return
+         if (m*n.ne.4) then
+            buf= fname//' : nax has a wrong size, 4 expected'
+            call error(999)
+            return
+         endif
+         call entier(4,stk(lr),nax)
+         do 10 i=1,4
+            nax(i)=max(nax(i),1)
+ 10      continue
+         top=top-1
+      endif
+      if (rhs.ge.3) then
+         if(.not.getrmat(fname,topk,top,m,n,lr))return
+         if (m*n.ne.4) then
+            buf= fname//' : rect has a wrong size, 4 expected'
+            call error(999)
+            return
+         endif
+         call dcopy(4,stk(lr),1,rect,1)
+         top=top-1
+      endif
+      if (rhs.ge.2) then
+         if(.not.getsmat(fname,topk,top,m,n,1,1,lr2,nlr2))return
+         if (nlr2.ne.3) then
+            buf=fname//' : strf has a wrong size, 3 expected'
+            call error(999)
+            return
+         endif
+         call cvstr(nlr2,istk(lr2),strf,1)
+         top=top-1
+      endif
+      if (.not.getrmat(fname,topk,top,m1,n1,lr1)) return
+      if ( m1*n1 .eq.0 )  then 
+         buf=fname // ' empty vectors '
+         call error(999)
+         return
+      endif
+      call sciwin()
+      call scigerase()
+      call xgray1(stk(lr1),m1,n1,strf,rect,nax)
       call objvide(fname,top)
       return
       end
@@ -1282,7 +1452,6 @@ cc    <>=driver(dr_name)
       return
       end
 
-     
       subroutine scixarc(fname,ffname)
       character*(*) fname,ffname
 c      implicit undefined (a-z)
@@ -1694,8 +1863,8 @@ c      implicit undefined (a-z)
      $        i,iw,iflag,v,v,v,x,y,dv,dv)
       else if ( lhs.eq.5 ) then 
          istr=1
-         call dr1('xclick'//char(0),buf,
-     $        i,iflag,istr,v,v,v,x,y,dv,dv)
+         call dr1('xclickany'//char(0),buf,
+     $        i,iw,iflag,v,v,istr,x,y,dv,dv)
       else
          istr=0
          call dr1('xclick'//char(0),'xv'//char(0),
@@ -1884,6 +2053,11 @@ cc    <x1>=xget(str,flag)
       if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
       call  cvstr(nlr,istk(lr),buf,1)
       buf(nlr+1:nlr+1)=char(0)
+C     special case for global variables set 
+      if (buf(1:nlr).eq.'fpf'.or.buf(1:nlr).eq.'auto clear') then 
+         call scixgetg(fname)
+         return
+      endif
 C     special case for colormap : must allocate space 
       if (buf(1:nlr).eq.'colormap') then
          if (.not.cremat(fname,top,0,256,3,lr,lc)) return
@@ -1901,7 +2075,22 @@ C     special case for colormap : must allocate space
       endif
       return
       end
-     
+  
+      subroutine scixgetg(fname)
+C     Global vraibles 
+      character*(*) fname
+c     implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getsmat,cresmat
+      integer topk,m,n,lr,nlr,v,m1,n1,bufl
+      double precision dv 
+      call  xgetg(buf,buf,bufl)
+      if (.not.cresmat(fname,top,1,1,bufl)) return
+      call getsimat(fname,top,top,m1,n1,1,1,lr,nlr)
+      call cvstr(nlr,istk(lr),buf,0)
+      return
+      end
+   
       subroutine scixinit(fname)
       character*(*) fname
 c      implicit undefined (a-z)
@@ -2115,9 +2304,9 @@ c      implicit undefined (a-z)
       logical checkrhs,getsmat,getrmat
       integer topk, lr,nlr,i,m,n,v,lrkp,isdc
 cc    <>=xset(str,x1,x2,x3,x4,x5)
-      integer x(5),xm(5),xn(5),iadr
+      integer x(5),xm(5),xn(5),gettype
       double precision xx(5),dv
-      iadr(l)=l+l-1
+c      iadr(l)=l+l-1
       x(1)=0
       xx(1)=0
       if (rhs.le.0) then
@@ -2127,6 +2316,18 @@ cc    <>=xset(str,x1,x2,x3,x4,x5)
       endif
       if (.not.checkrhs(fname,1,6)) return
       topk=top
+      if (.not.getsmat(fname,topk,top-rhs+1,m,n,1,1,lr,nlr)) return
+      call  cvstr(nlr,istk(lr),buf,1)
+      buf(nlr+1:nlr+1)=char(0)
+C     xsetg with default then continue
+      if(rhs.eq.2.and.gettype(top-rhs+2).ne.1) then
+         call scixsetg(fname,buf)
+         return 
+      endif
+C     xsetg with default then continue 
+      if (rhs.eq.1.and.buf(1:nlr).eq.'default') then 
+         call xsetg(buf,buf) 
+      endif
       do 10 i=5,1,-1
          if (rhs.ge.(i+1)) then
             if(.not.getrmat(fname,topk,top,xm(i),xn(i),lr))return
@@ -2142,9 +2343,6 @@ c               call entier(xm(i)*xn(i),stk(lr),istk(il1))
             top=top-1
          endif
  10   continue
-      if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
-      call  cvstr(nlr,istk(lr),buf,1)
-      buf(nlr+1:nlr+1)=char(0)
 c     initialisation of a window if argument is not xset('window')
 c     with special cases if xset('colormap') or xset('default') 
 c     and window does not exists we want to get into set_default_colormap
@@ -2170,6 +2368,29 @@ c     only onc
          endif
       endif
       if (err.gt.0.or.err1.gt.0) return
+      call objvide(fname,top)
+      return
+      end
+
+     
+      subroutine scixsetg(fname,str)
+c     xset for global values 
+      character*(*) fname,str
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getsmat,getrmat
+      integer topk,lr3,nlr3,lr1,nlr1,l2,nlr2,i,m,n,v
+      double precision dv
+      topk=top
+      if (.not.getsmat(fname,topk,top,m,n,1,1,lr2,nlr2)) return
+      call cvstr(nlr2,istk(lr2),buf,1)
+      buf(nlr2+1:nlr2+1)=char(0)
+      top=top-1
+      if (.not.getsmat(fname,topk,top,m,n,1,1,lr1,nlr1)) return
+      call cvstr(nlr1,istk(lr1),
+     $     buf(nlr2+2:nlr2+nlr1+1),1)
+      buf(nlr2+nlr1+2:nlr2+nlr1+2)=char(0)
+      call xsetg(buf(nlr2+2:nlr2+nlr1+1),buf) 
       call objvide(fname,top)
       return
       end
@@ -2645,6 +2866,7 @@ ccC   fec(x,y,triangles,func,[strf,leg,rect,nax]);
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getsmat,matsize,getrvect
+      integer gettype
       integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,m4,n4
       integer nax(4),m,n,lr,lr5,nlr5,lr4,nlr4
       double precision rect(4)
@@ -2656,6 +2878,12 @@ c      implicit undefined (a-z)
          call demo(fname,buf,1)
          return
       endif
+      if(gettype(top-rhs+1).ne.1) then
+         call putfunnam(fname,top-rhs+1)
+         fun=-1
+         return
+      endif
+
       buf='X@Y@Z'//char(0)
       strf='061'//char(0)
       if (.not.checkrhs(fname,4,8)) return
@@ -2730,6 +2958,7 @@ C        x des noeuds
          return
       endif
       call sciwin()
+      call scigerase()
       call fec(stk(lr1),stk(lr2),stk(lr3),stk(lr4),m1*n1,m3
      $     ,strf,buf,rect,nax)
       call objvide(fname,top)
@@ -2795,9 +3024,8 @@ c      implicit undefined (a-z)
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getscalar,getsmat 
-      integer topk, lr,verb,v,wid,m,n,nlr
+      integer topk, lr,v,wid,m,n,nlr
       double precision dv
-      verb=0
       call sciwin()
       if (.not.checkrhs(fname,1,2)) return
       topk=top
@@ -2826,6 +3054,7 @@ c      implicit undefined (a-z)
       integer verb,na,v
       double precision dv
       topk=top
+      verb=0
 cc    <>=driver(dr_name)
       if (.not.checkrhs(fname,-1,1)) return
       if (rhs.ge.1) then
@@ -3060,10 +3289,18 @@ c      double precision dv
       end
 
 
-
-
-
-
-
-
-
+      subroutine scigerase()
+      include '../stack.h'
+      double precision dv 
+      integer v,win,lstr,verb
+      character*(4) str
+      verb=0
+      call xgetg('auto clear'//char(0),str,lstr)
+      if (str(1:2).eq.'on') then 
+         call dr1('xget'//char(0),'window'//char(0),
+     $        verb,win,na,v,v,v,dv,dv,dv,dv)
+         call dr1('xclear'//char(0),buf,v,v,v,v,v,v,dv,dv,dv,dv)
+         call dr1('xstart'//char(0),buf,win,v,v,v,v,v,dv,dv,dv,dv)
+      endif
+      return 
+      end 

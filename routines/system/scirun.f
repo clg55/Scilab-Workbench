@@ -6,6 +6,7 @@ c     call scirun( bu1)
 c!parameters
 c     bu1 : character string which contain the initial instruction
 c!
+c     Copyright INRIA
       character*(*) bu1
 c
       INCLUDE '../stack.h'

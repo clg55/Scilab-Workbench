@@ -1,3 +1,4 @@
+/* Copyright (C) 1998 Chancelier Jean-Philippe */
 /*
  * jpc_Xloop.c : 
  * (1997) : Jean-Philippe Chancelier 
@@ -13,6 +14,12 @@
 #include "wgnuplib.h"
 #include "wresource.h"
 #include "wcommon.h"
+#include "../machine.h"
+#ifdef WITH_TK
+#include "tcl.h"
+extern void inittk();
+extern void flushTKEvents();
+#endif
 
 /** do I want a scilab or an xscilab (here it means Windows ) */
 
@@ -22,6 +29,10 @@ void SetXsciOn()
 {
   switch_rlgets(1);
   INXscilab=1;
+#ifdef WITH_TK
+  inittk();
+  
+#endif
 }
 
 int C2F(xscion)(int *i)
@@ -40,27 +51,62 @@ extern TW textwin;
 
 extern HWND HelpModeless ; /* the modeless Help Window */
 
-int TextMessage1(void)
+
+void TextMessage1(int ctrlflag)
+{ 
+  MSG msg;
+#ifdef WITH_TK
+  flushTKEvents();
+#endif 
+  while (PeekMessage(&msg, 0, 0, 0, PM_NOREMOVE))
+    {
+#ifdef WITH_TK
+      if (Tcl_DoOneEvent(TCL_DONT_WAIT)!=1)
+	{
+#endif 
+	  PeekMessage(&msg, 0, 0, 0, PM_REMOVE);
+	  if ( ctrlflag == 1) CtrlCHit(&textwin);
+	  /** test if Modeless help exists **/
+	  if ( HelpModeless == 0 || ! IsDialogMessage(HelpModeless,&msg) )
+	    {
+	      TranslateMessage(&msg);
+	      DispatchMessage(&msg);
+	    }
+#ifdef WITH_TK	  
+	}
+#endif 
+    }
+}
+
+/** function used in wtext.c in function TextGetCh  must wait for an event **/
+
+void TextMessage2() 
 {
   MSG msg;
-  while (PeekMessage(&msg, 0, 0, 0, PM_REMOVE))
+#ifdef WITH_TK
+  flushTKEvents();
+#endif 
+  GetMessage(&msg, 0, 0, 0);
+#ifdef WITH_TK
+  if (Tcl_DoOneEvent(TCL_DONT_WAIT)!=1)
     {
-      CtrlCHit(&textwin);
+#endif 
       /** test if Modeless help exists **/
       if ( HelpModeless == 0 || ! IsDialogMessage(HelpModeless,&msg) )
 	{
 	  TranslateMessage(&msg);
 	  DispatchMessage(&msg);
 	}
+#ifdef WITH_TK	  
     }
-  return(0);
+#endif
 }
 
 int C2F(sxevents)()
 {
   if (INXscilab==1) 
     {
-      TextMessage1();
+      TextMessage1(1);
     }
   return(0);
 }
@@ -128,7 +174,14 @@ static CommandRec *commandQueue = NULL;
  * if flag == 1 a \n is added 
  ***************************************/
 
-int StoreCommand(command,flag)
+int StoreCommand(command) 
+     char *command;
+{
+  return(StoreCommand1(command,1));
+}
+
+
+int StoreCommand1(command,flag)
      char *command;
      int flag;
 {

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=GDCP2I,SSI=0
       subroutine gdcp2i(n, itab, m)
 c!purpose
 c       decomposition of an integer n in a base tw0.

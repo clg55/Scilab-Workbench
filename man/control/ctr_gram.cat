@@ -22,7 +22,7 @@ DESCRIPTION
   tem and "c" for continuous time (default case).
 
                     /+inf                             ---+inf
-                    [  At  ' A't                         k      k
+                    [  At  ' A't                      \   k      k
                Gc = | e  BB e   dt               Gc =  > A BB' A'
                     ]                                 /
                    /0                                 ---0

@@ -26,18 +26,35 @@
 
 /* Read raw file data, and convert it to */
 /* the sox internal signed long format. */
+/* Warning : on some dec-alpha long x = LEFT(int y,16) 
+   does not give the proper result (first shift then cast ) 
+   but the result seams to be given by first cast then shift which 
+   is not what we want. Thus we have changed 
+   *buf++ = LEFT(datum,XXX) into 
+   *buf++ = datum =  LEFT(datum,XXX) to force the result we want
+   
+   */
 
+   
 
 rawread(ft, buf, nsamp) 
      ft_t ft;
-     long *buf, nsamp;
+     long nsamp;
+#if defined(__alpha)
+     int *buf;
+#else
+     long *buf;
+#endif
+
 {
+  int count;
 #if defined(__alpha)
   register int datum;
 #else
   register long datum;
 #endif
   int done = 0;
+  count=0;
   switch(ft->info.size) 
     {
     case BYTE: switch(ft->info.style) 
@@ -49,7 +66,7 @@ rawread(ft, buf, nsamp)
 	    if (feof(ft->fp))
 	      return done;
 	    /* scale signed up to long's range */
-	    *buf++ = LEFT(datum, 24);
+	    *buf++ = datum = LEFT(datum, 24);
 	    done++;
 	  }
 	return done;
@@ -62,7 +79,7 @@ rawread(ft, buf, nsamp)
 	    /* Convert to signed */
 	    datum ^= 128;
 	    /* scale signed up to long's range */
-	    *buf++ = LEFT(datum, 24);
+	    *buf++ = datum =  LEFT(datum, 24);
 	    done++;
 	  }
 	return done;
@@ -74,7 +91,7 @@ rawread(ft, buf, nsamp)
 	      return done;
 	    datum = st_ulaw_to_linear(datum);
 	    /* scale signed up to long's range */
-	    *buf++ = LEFT(datum, 16);
+	    *buf++ = datum =  LEFT(datum, 16);
 	    done++;
 	  }
 	return done;
@@ -86,7 +103,7 @@ rawread(ft, buf, nsamp)
 	      return done;
 	    datum = st_Alaw_to_linear(datum);
 	    /* scale signed up to long's range */
-	    *buf++ = LEFT(datum, 16);
+	    *buf++ = datum = LEFT(datum, 16);
 	    done++;
 	  }
 	return done;
@@ -101,7 +118,12 @@ rawread(ft, buf, nsamp)
 	      if (feof(ft->fp))
 		return done;
 	      /* scale signed up to long's range */
-	      *buf++ = LEFT(datum, 16);
+	      *buf++ = datum =  LEFT(datum, 16);
+	      /** if ( count < 5 ) {
+		sciprint("datum %d %d %d \r\n",*(buf-1),sizeof(long),sizeof(int));
+		count++;
+		}
+	      **/
 	      done++;
 	    }
 	  return done;
@@ -114,7 +136,7 @@ rawread(ft, buf, nsamp)
 	      /* Convert to signed */
 	      datum ^= 0x8000;
 	      /* scale signed up to long's range */
-	      *buf++ = LEFT(datum, 16);
+	      *buf++ = datum = LEFT(datum, 16);
 	      done++;
 	    }
 	  return done;
@@ -133,7 +155,7 @@ rawread(ft, buf, nsamp)
 	  datum = rfloat(ft);
 	  if (feof(ft->fp))
 	    return done;
-	  *buf++ = LEFT(datum, 16);
+	  *buf++ = datum =  LEFT(datum, 16);
 	  done++;
 	}
       return done;

@@ -8,7 +8,8 @@ function [s]=sincd(n,flag)
 //       : grid of frequencies
 //!
 //author: G. Le Vey  Date: 1 Febr 1989
- 
+// Copyright INRIA
+
    npt=4*n;
    pas=%pi/npt;
    om=0:pas:%pi;

@@ -15,6 +15,7 @@ function [vel,regionlist,linelist,seedlist,velolist]=velpic(nz,nx,sext)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 //turn off the scilab function 'more'
 
@@ -43,7 +44,7 @@ function [vel,regionlist,linelist,seedlist,velolist]=velpic(nz,nx,sext)
 //seperate matrix into regions defined by lines
 
    linelist=makehorizons(nz,nx,bnames,buttons);
-   if qt='on' then return,end
+   if qt=='on' then return,end
 //determine indices of matrix in each region
 
    write(%io(2),'Searching Regions'),
@@ -62,7 +63,7 @@ function [vel,regionlist,linelist,seedlist,velolist]=velpic(nz,nx,sext)
 //sow a seed in each region
 
    [seedlist]=sow(nz,nx,slide1,bnames,buttons,regionlist,linelist);
-   if qt='on' then return,end
+   if qt=='on' then return,end
    [ssl,isl]=sort(seedlist(3,:));//sort seeds and velocities to regions
    [sr,sc]=size(seedlist);
    velolist=seedlist(4,isl(sc:-1:1));
@@ -79,11 +80,11 @@ function [vel,regionlist,linelist,seedlist,velolist]=velpic(nz,nx,sext)
    for k=1:nor,
       i1=i2+1;i2=i1-1;
       for j=1:nov,
-         if rolist(j)=k then, i2=i2+1; end,
+         if rolist(j)==k then, i2=i2+1; end,
       end,
       rk=regionlist(k);
       rv=(rk(1,:)-ones(rk(1,:)))*nz+rk(2,:);
-      if i1=i2 then,//constant velocity region
+      if i1==i2 then,//constant velocity region
          vel(rv)=velolist(i1:i2)*ones(rv);
       else,//linearly varying velocity region
          vel(rv)=velcalc(rk,seedlist(:,i1:i2),velolist(i1:i2));
@@ -103,7 +104,7 @@ function []=helpme(msn)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
-
+// Copyright INRIA
 hm1=[' ';
 'Begin drawing a line by clicking the left';
 'mouse button across a previously drawn line';
@@ -196,7 +197,7 @@ function [seedlist]=sow(nz,nx,slide,bnames,buttons,regionlist,linelist);
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
-
+// Copyright INRIA
    sl1=slide(1);sl2=slide(2);sl3=slide(3);
    sl4=slide(4);sl5=slide(5);sl6=slide(6);
    seedlist=[];
@@ -220,18 +221,18 @@ function [seedlist]=sow(nz,nx,slide,bnames,buttons,regionlist,linelist);
    nor=size(regionlist);
 
    sflag='on';
-   while sflag='on',
+   while sflag=='on',
       write(%io(2),'Choose Velocity'),
       veloflag='on';
       vel=-1;
-      while veloflag='on',//loop until desired vel is obtained
+      while veloflag=='on',//loop until desired vel is obtained
           [i_i,v1,v2]=xclick();v=[v1;v2];
 
 //check for a button
 
    [br,bc]=size(buttons);
    hflag='on';
-   while hflag='on',
+   while hflag=='on',
       hflag='off';
       for bi=1:br,
          if buttons(bi,1)<v1 then, if v1<buttons(bi,2) then,
@@ -247,11 +248,11 @@ function [seedlist]=sow(nz,nx,slide,bnames,buttons,regionlist,linelist);
                for rk=1:nol,
                   srflag='off';
                   for sk=1:sc,
-                     if seedlist(3,sk)=rk then, srflag='on'; end,
+                     if seedlist(3,sk)==rk then, srflag='on'; end,
                   end,
-                  if srflag='off' then, rflag='on'; end,
+                  if srflag=='off' then, rflag='on'; end,
                end,
-               if rflag='on' then,
+               if rflag=='on' then,
                   write(%io(2),'Not every region has a seed'),
                   write(%io(2),'Choose Velocity'),
                   [i,v1,v2]=xclick();v=[v1;v2];
@@ -261,7 +262,7 @@ function [seedlist]=sow(nz,nx,slide,bnames,buttons,regionlist,linelist);
                   veloflag='off';
                end,
             case 'grill' then,
-               if gopt='on' then, 
+               if gopt=='on' then, 
                   gopt='off';
                else,
                   gopt='on';
@@ -296,7 +297,7 @@ function [seedlist]=sow(nz,nx,slide,bnames,buttons,regionlist,linelist);
       end,
    end,
 
-      if sflag='on' then,//stop hasn't been signalled
+      if sflag=='on' then,//stop hasn't been signalled
 //get velocity
 
          if sl1<=v1 then, if v1<=sl2 then,
@@ -327,15 +328,15 @@ function [seedlist]=sow(nz,nx,slide,bnames,buttons,regionlist,linelist);
 
                rflag='on';
                nr=0;
-               while rflag='on',//look for a region that contains seed
+               while rflag=='on',//look for a region that contains seed
                   nr=nr+1;
                   rk=regionlist(nr);
                   rflag='off';
                   for nl=1:nol,//for this region check all lines
                      [testflag,bav]=testpt(v,rk(:,1),linelist(nl));
-                     if testflag='on' then, rflag='on'; end,
+                     if testflag=='on' then, rflag='on'; end,
                   end,
-                  if rflag='off' then,//this region if no intersections
+                  if rflag=='off' then,//this region if no intersections
                      sregion=nr;   
                   end,
                end,
@@ -366,6 +367,7 @@ function [linelist]=makehorizons(nz,nx,bnames,buttons)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 
 //define outer perimeter as a line
 
@@ -378,16 +380,16 @@ function [linelist]=makehorizons(nz,nx,bnames,buttons)
 
    layer='true';
    yec=[];
-   while layer='true',
+   while layer=='true',
       nol=nol+1;
 
 //Define layer by drawing a line
 
       write(%io(2),'Draw a Line'),
       [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons);
-      if size(line)=[0,0] then,//if returned line is empty then stop
+      if size(line)==[0,0] then,//if returned line is empty then stop
          layer='false'; 
-      else if line=0 then,
+      else if line==0 then,
          nol=nol-1;
       else,
          nol=size(linelist);
@@ -409,6 +411,7 @@ function [buttons,slides]=makeframe(nz,nx,btextlist);
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 
 //setup of frame
 
@@ -443,7 +446,7 @@ function [buttons,slides]=makeframe(nz,nx,btextlist);
    bs=size(btextlist);//number of buttons
    bsi=1/(2*bs);
    buttons=[];
-   if nz=>nx then,//in the right side margin
+   if nz>=nx then,//in the right side margin
       bc=int(bs/(4+bsi))+1;//number of columns
       br=int(bs/(bc+bsi))+1;//number of rows
       bm=2*mrgn/(bc+1);
@@ -481,7 +484,7 @@ function [buttons,slides]=makeframe(nz,nx,btextlist);
 
 //velocity slide
 
-   if nz=>nx then,
+   if nz>=nx then,
       xbmin=nx+mrgn;xbmax=xbmin+2*mrgn;
       ybmin=1;ybmax=(1+nz)/2;
    else,
@@ -508,6 +511,8 @@ function []=makebutton(xbmin,xbmax,ybmin,ybmax,dx,dy,text)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
+
 //make button box
    xstringb(xbmin,ybmin,text,xbmax-xbmin,ybmax-ybmin);
    xrect(xbmin,ybmax,xbmax-xbmin,ybmax-ybmin);
@@ -528,6 +533,7 @@ function []=makeslide(xbmin,xbmax,ybmin,ybmax,dx,dy,text,smin,smax)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 
 //NOTE: The constant wcf is a 'wierd correction factor necessary
 //for the correct positioning of the text in the button.  I don't
@@ -614,6 +620,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 
 //to begin new line the first two clicks of the mouse must
 //intersect an old line or the frame
@@ -627,7 +634,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
 
    [br,bc]=size(buttons);
    hflag='on';
-   while hflag='on',//while the mouse has been clicked in a button
+   while hflag=='on',//while the mouse has been clicked in a button
       hflag='off';
       for bi=1:br,//check all the buttons
          if buttons(bi,1)<x1 then, if x1<buttons(bi,2) then,
@@ -642,7 +649,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
                flag='off';
                yecl=0;
             case 'grill' then,
-               if gopt='on' then, 
+               if gopt=='on' then, 
                   gopt='off';
                else,
                   gopt='on';
@@ -683,7 +690,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
 //start drawing line
 
    yext=[];
-   while testflag='off',   
+   while testflag=='off',   
       plot2d(x1',x2',[-3,-1],"000");//make a start circle
       [i_i,y1,y2]=xclick();
 
@@ -691,7 +698,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
 
    [br,bc]=size(buttons);
    hflag='on';
-   while hflag='on'
+   while hflag=='on'
       hflag='off';
       for bi=1:br,
          if buttons(bi,1)<y1 then, if y1<buttons(bi,2) then,
@@ -706,7 +713,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
                [i_i,y1,y2]=xclick();
                hflag='on';
             case 'grill' then,
-               if gopt='on' then, 
+               if gopt=='on' then, 
                   gopt='off';
                else,
                   gopt='on';
@@ -767,14 +774,14 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
          end,
       end,end,
       end,end,
-      if inflag='off' then,//case where y is not in the frame
+      if inflag=='off' then,//case where y is not in the frame
              xset("alufunction",6);
              plot2d(x1',x2',[-3,-1],"000");//undo start circle
              xset("alufunction",3);
          x1=y1;x2=y2;
              plot2d(x1',x2',[-3,-1],"000");//undo start circle
       end,
-      if testflag='off' then,//case where x-y does not cross a line
+      if testflag=='off' then,//case where x-y does not cross a line
              xset("alufunction",6);
              plot2d(x1',x2',[-3,-1],"000");//undo start circle
              xset("alufunction",3);
@@ -783,7 +790,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
       end,
    end,
 
-   if flag='on' then,
+   if flag=='on' then,
       plot2d([x1;y1],[x2;y2],[1,-1],"000"),
       line=[yext,[x1;x2],[y1;y2]];
       x1=y1;x2=y2;
@@ -791,7 +798,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
 
 //continue line
 
-   while flag='on',
+   while flag=='on',
       flag='off';
       [i_i,y1,y2]=xclick();
 
@@ -799,7 +806,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
    
    [br,bc]=size(buttons);
    hflag='on';
-   while hflag='on'
+   while hflag=='on'
       hflag='off';
       for bi=1:br,
          if buttons(bi,1)<y1 then, if y1<buttons(bi,2) then,
@@ -818,7 +825,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
                yecl=0;
                line=0;
             case 'grill' then,//toggle grill
-               if gopt='on' then, 
+               if gopt=='on' then, 
                   gopt='off';
                else,
                   gopt='on';
@@ -840,7 +847,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
                   [i_i,y1,y2]=xclick();
                   flag='on';
                end,
-               if flag='off' then, yecl=0; line=0; end,
+               if flag=='off' then, yecl=0; line=0; end,
              case 'quit' then
                qt=resume('on')
             end,
@@ -859,7 +866,7 @@ function [line,linelist,yec]=drawline(nz,nx,linelist,yec,bnames,buttons)
          else,
             testflag='off';
          end,
-         if testflag='on' then,
+         if testflag=='on' then,
             write(%io(2),' '),
             write(%io(2),'*********ERROR*********')
             write(%io(2),' Lines are not allowed'),
@@ -934,6 +941,7 @@ function [flag,bav]=testpt(p1,p2,line)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 
 //set up arguments of fortran subprogram m45.f
 
@@ -955,7 +963,7 @@ function [flag,bav]=testpt(p1,p2,line)
                                    [1,1],6,'i');
 
    bav=bav(:,1:noi);
-   if flag=1 then, flag='on'; else, flag='off'; end,
+   if flag==1 then, flag='on'; else, flag='off'; end,
 
 
 function []=redraw(linelist,seedlist,velolist)
@@ -968,6 +976,7 @@ function []=redraw(linelist,seedlist,velolist)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 
    [lhs,rhs]=argn(0);
 
@@ -988,10 +997,10 @@ function []=redraw(linelist,seedlist,velolist)
       lk=linelist(k);
       plot2d(lk(1,:)',lk(2,:)',[1],"000"),
    end,
-   if rhs=2 then,
+   if rhs==2 then,
       plot2d(seedlist(1,:)',seedlist(2,:)',[-3,0],"000"),
    end,
-   if rhs=3 then,
+   if rhs==3 then,
       [vr,vc]=size(velolist);
       toff=.05*maxi([nr,nc])/3;
       for k=1:vc,
@@ -1019,6 +1028,7 @@ function [ind,indexlist]=id_rgn(indexlist,linelist,seed);
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 
    nlist=0*indexlist;
    ic=maxi(size(indexlist));
@@ -1065,8 +1075,9 @@ function []=makegrill(nx,nz,gopt)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 // Change JPC 2 mars 1992
-//   dess;
+
    if gopt <>'on' then,xset("alufunction",6);end
    for k=2:nx-1, plot2d([k;k],[1;nz],[2],"000"), end,
    for k=2:nz-1, plot2d([1;nx],[k;k],[2],"000"), end
@@ -1084,6 +1095,7 @@ function [vi]=velcalc(indexlist,seedlist,velolist)
 //
 //!
 // author: C. Bunks     date: 12-NOV-90
+// Copyright INRIA
 
    [vr,vc]=size(velolist);
    [ir,ic]=size(indexlist);

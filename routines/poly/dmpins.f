@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DMPINS,SSI=0
+c     Copyright INRIA
       subroutine dmpins(mat1,dep1,lig1,col1,mat2,
      & dep2,lig2,col2,matr,depr,ligr,colr)
 c!but

@@ -9,7 +9,8 @@ function [xe]=sskf(y,f,h,q,r,x0)
 //
 // xe  :estimated state
 //!
- 
+// Copyright INRIA
+
 //get steady-state Kalman gain
  
 x=ricc(f',h'/r*h,q,'disc') // steady state err cov

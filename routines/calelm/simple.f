@@ -1,5 +1,6 @@
       subroutine simple(n,d,s)
 c!
+c     Copyright INRIA
       double precision d(*)
       real s(*),rmax,slamch
 c

@@ -3,8 +3,9 @@ function [Sm]=systmat(Sl);
 // in state-space form.
 // Sm = [-sE + A   B;
 //      [    C     D]
-// To get the zeros use determ or detr (for square systems)
+// To get the zeros use det or detr (for square systems)
 //!
+// Copyright INRIA
 ty=Sl(1);
 ty=ty(1);
 if ty=='lss' then

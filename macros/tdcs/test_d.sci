@@ -5,6 +5,7 @@ function [f1,f2]=test_d(ue)
 //du systeme precedent observateur-controleur (voir simulcomp)
 // f2 est la valeur theorique de f1 (voir cours)
 //!
+// Copyright INRIA
 deff('[yy,zdot]=fff(z,vv)',...
     ['u=1-k*z(3:4)';
      'yy=0';

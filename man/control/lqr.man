@@ -61,12 +61,14 @@ The 3-blocks matrix pencils associated with these Riccati equations are:
   z|0   A'   0| - |-Q    I    -S|        s|0   I   0| - |-Q   -A'   -S|
    |0   B2'  0|   | S'   0     R|         |0   0   0|   | S'  -B2'   R|
 .fi
+Caution: It is assumed that matrix R is non singular. In particular,
+the plant must be tall (number of outputs >= number of inputs).
 .SH EXAMPLE
 .nf
 A=rand(2,2);B=rand(2,1);   //two states, one input
 Q=diag([2,5]);R=2;     //Usual notations x'Qx + u'Ru
 Big=sysdiag(Q,R);    //Now we calculate C1 and D12
-w=sqrt(Big);C1=w(:,1:2);D12=w(:,3);   //[C1,D12]'*[C1,D12]=Big
+[w,wp]=fullrf(Big);C1=w(:,1:2);D12=w(:,3);   //[C1,D12]'*[C1,D12]=Big
 P=syslin('c',A,B,C1,D12);    //The plant (continuous-time)
 [K,X]=lqr(P)
 spec(A+B*K)    //check stability

@@ -1,14 +1,17 @@
       program mainsci
+c     Copyright INRIA
       character*40 arg,display
-      character*256 pname 
+      character*256 pname, path
       integer nos,now,idisp,mem
       integer p1,p2
       integer lpname, ldisp
       common /comnos/nos,mem
+      common /starfi/path
       data now,idisp /0,0/
       data lpname,ldisp /256,40/
       nos=0
       mem=0
+      path=' '
       nargs = iargc()
       call fgetarg(0,pname)
       i = 0
@@ -37,6 +40,9 @@
          arg=' '
          call fgetarg(i,arg)
          read(arg,'(i10)') mem
+      elseif (arg.eq.'-f') then
+         i=i+1
+         call fgetarg(i,path)         
       endif
       goto 10
  11   continue

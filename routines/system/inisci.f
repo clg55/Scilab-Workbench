@@ -9,6 +9,7 @@ c     vsizr: initial stack size
 c     ierr : return error flag
 c!   
 c====================================================================
+c     Copyright INRIA
       integer        ierr,ini1,vsizr
       include '../stack.h'
       parameter (nz1=nsiz-1,nz2=nsiz-2)
@@ -87,6 +88,7 @@ c
 
       ierr=0
       mode(2)=0
+      ieee=0
 
 c     initialization call
 c     -------------------
@@ -184,6 +186,8 @@ c     .  -------------
          alfa(i) = alpha(i)
          alfb(i) = alphb(i)
  20   continue
+c     add tab
+      alfb(41)=char(9) 
 c     
 c     .  Stack
 c     .  -----

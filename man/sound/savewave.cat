@@ -4,7 +4,7 @@ NAME
   savewave - save data into a sound <<wav>> file.
 
 CALLING SEQUENCE
-  x=savewave('file-name' [, rate ]);
+  savewave('file-name',x [, rate ]);
 
 PARAMETERS
 
@@ -17,4 +17,4 @@ DESCRIPTION
   file with the sox program.
 
 SEE ALSO
-  loadwave, soundsec, analyze, mapsound
+  loadwave,  analyze, mapsound

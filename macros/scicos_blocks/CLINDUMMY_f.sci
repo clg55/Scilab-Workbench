@@ -1,4 +1,5 @@
 function [x,y,typ]=CLINDUMMY_f(job,arg1,arg2)
+// Copyright INRIA
 x=[];y=[];typ=[]
 select job
 case 'plot' then
@@ -14,7 +15,7 @@ case 'set' then
   x(3)(11)=[] //compatibility
 case 'define' then
   x0=0;
-  model=list('cdummy',[],[],[],[],x0,[],[],[],'c',[],[%f %f],' ',list())
+  model=list('cdummy',[],[],[],[],x0,[],[],[],'c',[],[%f %t],' ',list())
   gr_i=['xstringb(orig(1),orig(2),[''DUMMY'';''CLSS''],sz(1),sz(2),''fill'');']
   x=standard_define([3 2],model,[],gr_i)
 end

@@ -6,15 +6,16 @@ function [x,dim,dima]=spanplus(a,b,tol)
 // The dim first columns of x make a basis for A+B.
 //F.D.
 //!
+// Copyright INRIA
 [na,ma]=size(a);[nb,mb]=size(b);
 if na*ma==0 then [x,dima]=rowcomp(b);dim=dima;x=x';return;end
 if nb*mb==0 then [x,dima]=rowcomp(a);dim=dima;x=x';return;end
 [lhs,rhs]=argn(0);
-if rhs=2 then tol=%eps*na*nb*ma*mb;end
+if rhs==2 then tol=%eps*na*nb*ma*mb;end
 if na<>nb then error('uncompatible dimensions!'),end
 [x,dima]=rowcomp(a);
 b=x*b;x=x'    //update b,x
-if dima = na then dim=dima,return,end;
+if dima == na then dim=dima,return,end;
 low=(dima+1):na;
 blow=b(low,:);
 if norm(blow,1) <= tol*norm(b,1),dim=dima,return,end

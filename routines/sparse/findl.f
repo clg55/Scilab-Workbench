@@ -1,4 +1,5 @@
       integer function findl(l,i,ni)
+c     Copyright INRIA
       integer i(ni)
       ii=0
       if(ni.gt.0) then

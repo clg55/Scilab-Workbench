@@ -4,6 +4,7 @@ c ======================================================================
 c      interface pour l'external add de IMPL
 c ======================================================================
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     

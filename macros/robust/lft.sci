@@ -9,11 +9,12 @@ function [p1,r1]=lft(p,r,p#,r#)
 // lft(p,k) is lft(p,r,k) with r=size of k transpose;
 //!
 //f.d.
+// Copyright INRIA
 if type(p)==1 then p=syslin([],[],[],[],p);end
-p1=p(1);
-if p1(1)='lss' then dom=p(7);else dom=p(4);end
+pof1=p(1);
+if pof1(1)=='lss' then dom=p(7);else dom=p(4);end
 [lhs,rhs]=argn(0);
-if rhs=2 then
+if rhs==2 then
   rhs=3;p#=r;
   r=size(p#');
 end  //rhs=2
@@ -36,8 +37,8 @@ if pssdflag then
     [p1,r1]=lftpssd(p,r,p#,r#);return;
   end
 end
-if rhs=3 then
-  if type(p)=1 then
+if rhs==3 then
+  if type(p)==1 then
     // lft( gain, linear system in ss form)
     [nl,nc]=size(p);
     l1=1:nc-r(1);
@@ -45,7 +46,7 @@ if rhs=3 then
     k1=1:nl-r(2);
     k2=nl-r(2)+1:nl;
     d11=p(l1,k1);d12=p(l1,k2);d21=p(l2,k1);d22=p(l2,k2);
-    if type(p#)=1 then
+    if type(p#)==1 then
       //p# is a gain
       dk=p#,
       id=inv(eye(d22*dk)-d22*dk),
@@ -54,7 +55,7 @@ if rhs=3 then
     else
       // p# is not a gain
       p#1=p#1(1)
-      if p#1(1)='lss' then
+      if p#1(1)=='lss' then
         [ak,bk,ck,dk]=p#(2:5);
         id=inv(eye(d22*dk)-d22*dk),
         aa= ak+bk*id*d22*ck,
@@ -63,16 +64,16 @@ if rhs=3 then
         dd=d11+d12*dk*id*d21;
         p1=syslin(dom,aa,bb,cc,dd)
       end
-      if p#1(1)='r' then
+      if p#1(1)=='r' then
         p1=d11+d12*p#*invr(eye-d22*p#)*d21;
       end
     end
   end   //type(p)=1
-  p1=p(1);
-  if p1(1)='lss' then
+  pof1=p(1);
+  if pof1(1)=='lss' then
     // lft(standard in ss form,linear system in ss form)
     [a,b1,b2,c1,c2,d11,d12,d21,d22]=smga(p,r);
-    if type(p#)=1 then
+    if type(p#)==1 then
       //p# is a gain
       dk=p#,
       id=inv(eye(d22*dk)-d22*dk),
@@ -82,9 +83,9 @@ if rhs=3 then
       dd=d11+d12*dk*id*d21,
       p1=syslin(dom,aa,bb,cc,dd)
     else
-      // p# is not a gain
+// p# is not a gain
       [ak,bk,ck,dk]=p#(2:5);
-      id=inv(eye(d22*dk)-d22*dk),
+      id=inv(eye(d22*dk)-d22*dk);
       aa=[a+b2*dk*id*c2, b2*(ck+dk*id*d22*ck);
           bk*id*c2, ak+bk*id*d22*ck],
       bb=[b1+b2*dk*id*d21;bk*id*d21],
@@ -93,15 +94,15 @@ if rhs=3 then
       p1=syslin(dom,aa,bb,cc,dd)
     end
   end
-  if p1(1)='r' then
+  if pof1(1)=='r' then
     //lft(standard plant in tf form,linear system in tf form)
     [p11,p12,p21,p22]=smga(p,r);
     p1=p11+p12*p#*invr(eye-p22*p#)*p21
-  end  //p(1)='lss'
+  end  //p(1)=='lss'
 end  //rhs=3
-if rhs=4 then
+if rhs==4 then
   
-  if type(p)=1 then
+  if type(p)==1 then
     //lft(gain,standard plant )
     [nl,nc]=size(p);
     l1=1:nc-r(1);
@@ -109,14 +110,14 @@ if rhs=4 then
     k1=1:nl-r(2);
     k2=nl-r(2)+1:nl;
     d11=p(l1,k1);d12=p(l1,k2);d21=p(l2,k1);d22=p(l2,k2);
-    if type(p#)=1 then
+    if type(p#)==1 then
       //p# is a gain
       [nl,nc]=size(p#);
       l1=1:nc-r#(1);
       l2=nc-r#(1)+1:nc;
       k1=1:nl-r#(2);
       k2=nl-r#(2)+1:nl;
-      d11#=p#(l1,k1);d12#=p#(l1,k2);d21#=p#(l2,k1);d22#=p#(l2,k2);
+      d#11=p#(l1,k1);d#12=p#(l1,k2);d#21=p#(l2,k1);d#22=p#(l2,k2);
       
       g=inv(eye-d22*d#11);
       g#=inv(eye-d#11*d22);
@@ -130,7 +131,7 @@ if rhs=4 then
       r1=size(dd22);
     end
     p#1=p#(1);
-    if p#1(1)='lss'
+    if p#1(1)=='lss'
       //p# in state form
       [a#,b#1,b#2,c#1,c#2,d#11,d#12,d#21,d#22]=smga(p#,r#);
       g=inv(eye-d22*d#11);
@@ -152,7 +153,7 @@ if rhs=4 then
       p1=syslin(dom,aa,[bb1,bb2],[cc1;cc2],[dd11,dd12;dd21,dd22]);
       r1=size(dd22);
     end
-    if p#1(1)='r' then
+    if p#1(1)=='r' then
       [j11,j12,j21,j22]=smga(p#,r#);
       
       g=invr(eye-d22*j11);
@@ -169,19 +170,19 @@ if rhs=4 then
       
     end
   end  //type(p)=1
-  p1=p(1);
-  if p1(1)='lss' then
+  pof1=p(1);
+  if pof1(1)=='lss' then
     //lft(standard plant in ss form,standard plant in ss form)
     [a ,b1,b2,c1,c2,d11,d12,d21,d22]=smga(p,r);
     
-    if type(p#)=1 then
+    if type(p#)==1 then
       //p# is a gain
       [nl,nc]=size(p#);
       l1=1:nc-r#(1);
       l2=nc-r#(1)+1:nc;
       k1=1:nl-r#(2);
       k2=nl-r#(2)+1:nl;
-      d11#=p#(l1,k1);d12#=p#(l1,k2);d21#=p#(l2,k1);d22#=p#(l2,k2);
+      d#11=p#(l1,k1);d#12=p#(l1,k2);d#21=p#(l2,k1);d#22=p#(l2,k2);
       
       g=inv(eye-d22*d#11);
       g#=inv(eye-d#11*d22);
@@ -229,11 +230,11 @@ if rhs=4 then
       dd22=d#22+d#21*g*d22*d#12;
       
       p1=syslin(dom,aa,[bb1,bb2],[cc1;cc2],[dd11,dd12;dd21,dd22]);
-      r1=size(dd22);
+      r1=size(dd22);return;
     end // type(p#)=1
-  end  //p(1)='lss'
-  p1=p(1);
-  if p1(1)='r' then
+  end  //p(1)=='lss'
+  pof1=p(1);
+  if pof1(1)=='r' then
     //lft(standard plant in tf form,standard plant in tf form)
     [p11,p12,p21,p22]=smga(p,r);
     [j11,j12,j21,j22]=smga(p#,r#);

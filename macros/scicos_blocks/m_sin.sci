@@ -1,5 +1,6 @@
 function [out1,out2]=m_sin(t,x,z,up,uc,clock,flag,rpar,ipar)
 //if flag>0 then write(0,'m_sin t='+string(t)+' flag ='+string(flag)),end
+// Copyright INRIA
 out1=[];out2=[];
 select flag
 case 1 then

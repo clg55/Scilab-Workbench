@@ -1,4 +1,5 @@
       subroutine lij2sp(m,n,nel,ij,v,ind,nind,iw,ierr)
+c     Copyright INRIA
       integer ij(nel,2),ind(nind),iw(nel),v(nel)
 c
       ierr=0

@@ -1,5 +1,5 @@
 // for the GLoad feature 
-// 
+// Copyright INRIA
 if strindex(gl_name,'.')<>[] then 
   select part(gl_name,k($)+1:length(gl_name));
   case "sci" then getf(gl_name), 

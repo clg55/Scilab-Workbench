@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "men_scilab.h"
 
 #define MAXLISTLINE 30  /* Maximum number of line in a List widget Viewport */

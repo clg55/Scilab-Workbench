@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=KRONC,SSI=0
+c     Copyright INRIA
       subroutine kronc(ar,ai,ia,ma,na,br,bi,ib,mb,nb,pkr,pki,ik)
 c!but
 c ce sous programme genere le produit de kronecker de deux matrices

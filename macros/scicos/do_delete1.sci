@@ -1,19 +1,21 @@
 function [scs_m,DEL,DELL]=do_delete1(scs_m,K,gr)
-//perform deletion of scs_m object whose index are givent in the vector 
+//perform deletion of scs_m object whose index are given in the vector 
 //K and all other relevant objects (link, splits,..)
 // if gr==%t objects are also graphicaly erased.
 //
 // deleted objects are replaced by the value : list('Deleted') not to 
 // change the indexing use do_purge to suppress them and to renumber objects 
 //!
+// Copyright INRIA
 DEL=[] //table of deleted objects
 DELL=[] //table of redefined links
 while K<>[] do
   k=K(1);K(1)=[]
-  o=scs_m(k)
+  o=scs_m(k);
   if find(DEL==k)==[] then typ=o(1);else typ='Deleted',end
   //typ=o(1)
   DEL=[DEL k]
+
   if typ=='Link' then
     [ct,from,to]=o(7:9)
     //  free connected ports
@@ -21,7 +23,7 @@ while K<>[] do
     scs_m(to(1))=mark_prt(scs_m(to(1)),to(2),'in',ct(2),0)
     
     // erase and delete link
-    if gr=%t then drawobj(o),end
+    if gr==%t then drawobj(o),end
     fromblock=scs_m(from(1));
     toblock=scs_m(to(1));
     if fromblock(5)=='SPLIT_f'|fromblock(5)=='CLKSPLIT_f' then
@@ -33,7 +35,7 @@ while K<>[] do
 	if find(connected(2)==DEL)<>[] then // delete split
 	  K=[from(1) K]
 	else
-	  if gr=%t then drawobj(scs_m(from(1))),end // clear  split block
+	  if gr==%t then drawobj(scs_m(from(1))),end // clear  split block
 	  DEL=[DEL  from(1)]       //suppress split block
 	  //create a unique link
 	  o1=scs_m(connected(1));from1=o1(9);
@@ -69,17 +71,17 @@ while K<>[] do
     //ask for connected links deletion
     K=[K connected]
     // erase and delete block
-    if gr=%t then drawobj(scs_m(k)),end
+    if gr==%t then drawobj(scs_m(k)),end
   elseif typ=='Text' then
-    if gr=%t then drawobj(o),end
-  elseif typ='Deleted' then
+    if gr==%t then drawobj(o),end
+  elseif typ=='Deleted' then
   else
     message('This object can''t be deleted')
   end
 end
 
 
-if gr=%t then 
+if gr==%t then 
   if pixmap then xset('wshow'),end,
 end
 for k=DEL,scs_m(k)=list('Deleted'),end

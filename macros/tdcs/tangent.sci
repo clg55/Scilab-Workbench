@@ -16,14 +16,15 @@ function [f,g,newm]=tangent(nl_sys,xe,ue)
 //     du syt\'eme lin\'eaire obtenu. (newm(t,xe,ue)=0)
 //
 //!
+// Copyright INRIA
 [lhs,rhs]=argn(0)
-if rhs=3,deff('[y,xdot]=fff(x,u)',['xdot='+nl_sys+'(0,x,u),y=x']);
+if rhs==3,deff('[y,xdot]=fff(x,u)',['xdot='+nl_sys+'(0,x,u),y=x']);
   else ue=0;deff('[y,xdot]=fff(x,u)',['xdot='+nl_sys+'(0,x),y=x']);
 end
 newm=0;
 [yy,xx]=fff(xe,ue);
 if norm(xx) >= 1.e-4,
-  error(' Votre point n''est pas un point d''equilibre !!');
+  error(' xe is not an equilibrium point!');
   return
 end
 [f,g,h,void]=lin(fff,xe,ue);

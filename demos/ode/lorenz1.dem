@@ -1,7 +1,8 @@
 kp=xget("pixmap");
+// Copyright INRIA
 dr=driver()
 driver('X11')
-if kp=0, xset("pixmap",1);end;
+if kp==0, xset("pixmap",1);end;
 lpat=xget("lastpattern");
 wid=30
 N=2000;
@@ -20,7 +21,7 @@ for i=1:N,
 	'X@Y@Z',[0,0]);
 	xset("wshow");
 end
-if kp=0, xset("pixmap",0);end;
+if kp==0, xset("pixmap",0);end;
 driver(dr)
 xset('default')
 

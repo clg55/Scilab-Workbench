@@ -1,6 +1,7 @@
 function [scs_m,fct]=do_addnew(scs_m)
 //add a new block (defined by its GUI function to a palette
 //!
+// Copyright INRIA
 fct=[]
 [ok,name]=getvalue('Get block GUI function name',..
     ['Name'],list('str',1),emptystr())
@@ -44,16 +45,21 @@ if iserror(-1) then
   fct=[]
   return
 end
-xinfo('Choose block position in the palette window')
+xinfo('Choose block position in the window')
 rep(3)=-1
 blk(2)(2)=20*blk(2)(2);
 [xy,sz]=blk(2)(1:2)
 // clear block
 // draw block shape
+  dr=driver()
+  if dr=='Rec' then driver('X11'),end
+
 xrect(xc,yc+sz(2),sz(1),sz(2))
+if pixmap then xset('wshow'),end
 while rep(3)==-1 , //move loop
   // clear block shape
   xrect(xc,yc+sz(2),sz(1),sz(2))
+  if pixmap then xset('wshow'),end
   // get new position
   rep=xgetmouse(0)
   xc=rep(1);yc=rep(2)
@@ -65,8 +71,11 @@ end
 xinfo(' ')
 // clear  block shape
 xrect(xc,yc+sz(2),sz(1),sz(2))
+if pixmap then xset('wshow'),end
 // update and draw block
 blk(2)(1)=xy
+driver(dr)
+
 drawobj(blk)
 if pixmap then xset('wshow'),end
 

@@ -4,6 +4,7 @@ c ======================================================================
 c     Gestion des macros externals pour la primitive IMPL
 c ======================================================================
 c
+c     Copyright INRIA
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     

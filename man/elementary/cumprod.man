@@ -16,8 +16,7 @@ x
 y
 : vector or matrix (real or complex)
 .SH DESCRIPTION
-For a vector or a matrix \fVx\fR, \fVy=cumprod(x)\fR (or, equivalently,
-\fVy=cumprod(x,'*')\fR) returns in \fVy\fR the cumulative product of all the 
+For a vector or a matrix \fVx\fR, \fVy=cumprod(x)\fR  returns in \fVy\fR the cumulative product of all the 
 entries of \fVx\fR taken columnwise. 
 .LP
 \fVy=cumprod(x,'c')\fR (or, equivalently, \fVy=cumprod(x,2)\fR) returns in 

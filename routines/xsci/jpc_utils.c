@@ -1,5 +1,5 @@
 /*****************************************************************************
- *
+ *  Based on
  *  xdbx - X Window System interface to the dbx debugger
  *
  *  Copyright 1989 The University of Texas at Austin

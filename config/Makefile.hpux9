@@ -1,3 +1,5 @@
+# Copyright INRIA
+
 LDD = ld -x -o $@ /lib/crt0.o
 LDDLF = -lU77 -lm -lcl -lisamstub -lc
 
@@ -9,8 +11,8 @@ bin/scilex: scilex-lib
 	if [ $$x -ne 0 ] ; then \
 		if [ -f $@ ]; then $(RM) $@; fi ;\
 		echo "linking";\
-		$(LDD)  $(DEFAULTS) $(LIBR) $(LD_LDFLAGS) $(XLIBS) \
-			$(TERMCAPLIB) $(LDDLF) ;\
+		$(LDD)  $(DEFAULTS) $(LIBR) $(LD_LDFLAGS) $(TCLTK_LIBS) \
+			$(XLIBS) $(TERMCAPLIB) $(LDDLF);\
 	else \
 		echo bin/scilex is up to date ;\
 	fi

@@ -40,6 +40,6 @@ as a character string. The calling sequence of the routine
 is also imposed. Examples are given in the \fVroutines/default\fR directory 
 (see the \fVREADME\fR file).
 .LP
-External Fortran routines can also be dynamically linked.
+External Fortran routines can also be dynamically linked (see \fVlink\fR)
 .SH SEE ALSO
 ode, optim, impl, dassl, intg, schur, gschur

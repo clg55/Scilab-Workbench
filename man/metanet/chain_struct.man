@@ -4,9 +4,13 @@
 chain_struct - chained structure from adjacency lists of a graph
 .SH CALLING SEQUENCE
 .nf
+[fe,che,fn,chn] = chain_struct(g)
 [fe,che,fn,chn] = chain_struct(lp,la,ls)
 .fi
 .SH PARAMETERS
+.TP 2
+g
+: graph list
 .TP 3
 lp
 : row vector, pointer array of the adjacency lists description of the graph 
@@ -36,8 +40,10 @@ chn
 : row vector of the nodes reached by the edges of \fVche\fR
 .SH DESCRIPTION
 \fVchain_struct\fR computes the row vectors of the edge chained structure 
-description of the graph from the description of the graph given by 
-its adjacency lists.
+description of the graph \fVg\fR.
+It is also possible to give directly \fVchain_struct\fR the adjacency lists of
+the graph. This is more efficient if the adjacency lists are already
+available since \fVchain_struct\fR uses them to make computations.
 
 The vectors \fVfe\fR, \fVche\fR, \fVfn\fR and \fVchn\fR describe the
 chained structure in the following way:
@@ -59,8 +65,7 @@ g=make_graph('foo',1,8,ta,he);
 g('node_x')=[116 231 192 323 354 454 305 155];
 g('node_y')=[118 116 212 219 117 185 334 316];
 show_graph(g);
-[lp,la,ls]=adj_lists(1,g('node_number'),ta,he);
-[fe,che,fn,chn] = chain_struct(lp,la,ls)
+[fe,che,fn,chn] = chain_struct(g)
 .fi
 .SH SEE ALSO
 adj_lists, graph_2_mat

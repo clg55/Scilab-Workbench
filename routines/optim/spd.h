@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "../machine.h"
 
 #define SQR(x) ((x)*(x))

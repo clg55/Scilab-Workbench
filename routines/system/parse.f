@@ -2,6 +2,7 @@
 c     ====================================================================
 c     Scilab parsing function
 c     ====================================================================
+c     Copyright INRIA
       include '../stack.h'
       parameter (nz1=nsiz-1,nz2=nsiz-2)
       logical compil,eptover
@@ -9,11 +10,12 @@ c
       logical iflag
       common /basbrk/ iflag
       integer semi,equal,eol,lparen,rparen,colon,dot
-      integer blank,comma,left,right,less,great,quote,percen
+      integer blank,comma,left,right,less,great,not
+      integer quote,percen
       integer name,num,insert,extrac
 c     
       integer id(nsiz),ans(nsiz)
-      integer pts,psym,excnt,p,r
+      integer pts,psym,excnt,p,r,topk
       integer pcount,strcnt,bcount,qcount,pchar
 c
       integer otimer,ntimer,stimer,ismenu
@@ -23,6 +25,7 @@ c
 c     
       data blank/40/,semi/43/,equal/50/,eol/99/,comma/52/,colon/44/
       data lparen/41/,rparen/42/,left/54/,right/55/,less/59/,great/60/
+      data not/61/
       data quote/53/,percen/56/,dot/51/
       data name/1/,num/0/,insert/2/,extrac/3/
       data ans/672929546,nz1*673720360/
@@ -165,6 +168,11 @@ c-------------------------
 c      fin=0
 c      call funtab(syn,fin,1)
       fin=-5
+c IL y a p avec fin=-5 (on ne trouve pas les macros parce que l'on ne
+c veut pas que les macros sans arg soient vues comme des commandes
+c mais pourquoi pas il suffirait de dire que pour visualiser une macro
+c il faut faire disp()
+      fun=0
       call funs(syn)
       if (fin .gt. 0) then
 c        name est le nom d'une primitive
@@ -236,15 +244,21 @@ c     looking for equal
          endif
       else if(sym.eq.quote) then
 c     .  check if transpose or beginning of a string
-         if(psym.ne.num.and.psym.ne.name.and.psym.ne.rparen.and.
-     $        psym.ne.right.and.psym.ne.dot.and.psym.ne.quote)
-     $        strcnt=1
-         if (bcount.ne.0) then
-            pchar=lin(lpt(3)-2)
-            if(pchar.eq.blank) strcnt=1
+         pchar=lin(lpt(3)-2)
+         if(abs(pchar).eq.blank) then
+            strcnt=1
+         elseif(psym.ne.num.and.psym.ne.name.and.psym.ne.rparen.and.
+     $           psym.ne.right.and.psym.ne.dot.and.psym.ne.quote) then
+            strcnt=1
          endif
-c1         if(.not.(psym.le.blank.or.psym.eq.rparen.or.psym.eq.right
-c1     $        .or.psym.eq.percen.or.psym.eq.quote)) strcnt=1
+
+c         if(psym.ne.num.and.psym.ne.name.and.psym.ne.rparen.and.
+c     $        psym.ne.right.and.psym.ne.dot.and.psym.ne.quote)
+c     $        strcnt=1
+c         if (bcount.ne.0) then
+c            pchar=lin(lpt(3)-2)
+c            if(abs(pchar).eq.blank) strcnt=1
+c         endif
       else if(sym.eq.left) then
          bcount=bcount+1
       else if(sym.eq.right) then
@@ -262,7 +276,8 @@ c         endif
             if(char1.eq.equal) then
                call getsym
             else
-               if(psym.ne.less.or.psym.ne.great)  goto 32
+               if(psym.ne.less.and.psym.ne.great.and.
+     $              psym.ne.not)  goto 32
             endif
          endif
          if(sym.eq.eol .or. sym.eq.comma .or. sym.eq.semi) goto 50
@@ -310,9 +325,21 @@ c     *call* expr
       if (sym .eq. rparen) call getsym
 c     next lines for recursive index
       if(sym.eq.lparen) then
+
          if(excnt.gt.1) then
-            call error(3)
-            return
+c           call error(3)
+c           return
+            if(comp(1).eq.0) then
+c     .     form  list with individual indexes
+               call mkindx(0,excnt)
+               if(err.gt.0) return
+            else
+               if (compil(19,0,excnt,0,0)) then 
+                  if (err.gt.0) return
+               endif
+            endif
+            excnt=1
+
          endif
          excnt=0
          icount=icount+1
@@ -370,11 +397,21 @@ c-----------------------
       sym=name
       call putid(syn,id)
       call putid(id,ans)
+      goto 61
 c     
 c     lhs finished, start rhs
+c----------------------------
  60   if (sym .eq. equal) call getsym
-      if ( eptover(1,psiz))  goto 98
+c      fun=0
+c      if(sym.eq.name) then
+c     check if name is a function
+c         fin=-2
+c         call funs(syn)
+c      endif
+
+ 61   if ( eptover(1,psiz))  goto 98
       call putid(ids(1,pt),id)
+
       pstk(pt) = excnt
       rstk(pt) = 703
 c     *call* expr
@@ -398,7 +435,7 @@ c
 c     store results
 c-------------------
  70   rhs = pstk(pt)
-      if(err1.ne.0) goto 73
+      if(err1.ne.0) goto 74
       if(rhs.eq.0) goto 72
       fin=-3
       call stackg(ids(1,pt))
@@ -412,17 +449,29 @@ c     *call* allops(insert)
  71   lhs=pstk(pt)
  72   call stackp(ids(1,pt),0)
       if (err .gt. 0) goto 98
+c     topk points on the newly saved variable
+      topk=fin
 c     print if required
 c----------------------
-      if(lct(4).lt.0.or.fin.eq.0) goto 73
-      if(sym.ne.semi.and.lct(3).eq.0) then
-         call print(ids(1,pt),fin,wte)
-      else if(sym.eq.semi.and.lct(3).eq.1) then
-         call print(ids(1,pt),fin,wte)
-      endif
+      if(lct(4).lt.0.or.fin.eq.0) goto 74
+      if(.not.((sym.ne.semi.and.lct(3).eq.0).or.
+     &     (sym.eq.semi.and.lct(3).eq.1))) goto 74
+ 73   call print(ids(1,pt),topk,wte)
       if (err .gt. 0) goto 98
+      if(topk.eq.0) goto 74
+c     overloaded display, call a macro
+      if ( eptover(1,psiz))  goto 98
+      rstk(pt)=708
+      pstk(pt)=sym
+      ids(1,pt)=sym
+      if(fun.eq.0) goto 88
+      goto 85
+ 731  continue
+      sym=pstk(pt)
+      pt=pt-1
+      goto 73
 c     
- 73   pt = pt-1
+ 74   pt = pt-1
       lhs = lhs-1
       if (lhs .gt. 0) goto 70
 
@@ -449,7 +498,7 @@ c     catched and continue on error in an execstr instruction
          endif
          if(err2.eq.0) err2=err1
          err1=0
-         imode=abs(errct/10000)
+         imode=abs(errct/100000)
          if(imode-8*int(imode/8).eq.2) iflag=.true.
       endif
       toperr=top
@@ -584,7 +633,7 @@ c
       goto(81,82,83,91,88,90,92,80,85),r
       goto 99
 c     
- 92   goto(17,35,65,71,86,97,94) rstk(pt)-700
+ 92   goto(17,35,65,71,65,97,94,731) rstk(pt)-700
       goto 99
 c     
  93   continue
@@ -628,7 +677,7 @@ c     *call* macro
  98   continue
 c     error recovery
 c-------------------
-      imode=abs(errct)/10000
+      imode=abs(errct)/100000
       imode=imode-8*int(imode/8)
       if(imode.eq.3) then
          fun=99

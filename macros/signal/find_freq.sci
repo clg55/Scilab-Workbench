@@ -12,7 +12,8 @@ function [m]=find_freq(epsilon,A,n)
 //
 //!
 //Author F.D.
- 
+// Copyright INRIA
+
    m1=(epsilon*epsilon)/(A*A-1);
    chi1=%k(1-m1)/%k(m1);
    m=findm(chi1/n);

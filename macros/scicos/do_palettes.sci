@@ -5,11 +5,16 @@ if kpal==0 then return,end
 lastwin=curwin
 winpal=find(windows(:,1)==-kpal) 
 
+// Copyright INRIA
 
 if winpal==[] then  //selected palettes isnt loaded yet
   curwin=get_new_window(windows)
+  if or(curwin==winsid()) then
+    xdel(curwin);xset('window',curwin)
+  end
   windows=[windows;[-kpal curwin]]
   palettes=add_palette(palettes,scicos_pal(kpal,2),kpal)
+//palettes=do_version(palettes,scicos_ver)
 else //selected palettes is already loaded 
   curwin=windows(winpal,2)
 end
@@ -32,12 +37,15 @@ else
   graph=fname+'.pal'
 end
 
-if part(graph,1:4)='SCI/' then 
+if part(graph,1:4)=='SCI/' then 
   graph=getenv('SCI')+'/'+part(graph,5:length(graph))
 end
 
 //Check if the graph file exists
 [u,ierr]=file('open',graph,'old')
+file('close',u)
+options=default_options()
+//[#Color3D,With3D]=set3D(palettes(kpal))
 if ierr<>0 then
   drawobjs(palettes(kpal))
   if pixmap then xset('wshow'),end
@@ -45,7 +53,7 @@ if ierr<>0 then
 else
   xload(graph)
 end
-  
+xinfo('Palette: may be used to copy  blocks or regions')  
 if pixmap then xset('wshow'),end
 xset('window',lastwin)
 

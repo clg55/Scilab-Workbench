@@ -21,6 +21,7 @@ c                         5+5*nq+5*ng+nq*ng+nq**2*(ng+1)
 c     Sortie :
 c     - pd matrice hessienne
 c!
+c     Copyright INRIA
       implicit double precision (a-h,o-y)
       dimension tq(*),pd(nrowpd,*)
       dimension neq(*)

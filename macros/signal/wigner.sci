@@ -11,6 +11,7 @@ function tab=wigner(x,h,deltat,zp)
 //
 //   Initializations
 //
+// Copyright INRIA
 l=prod(size(x));
 n=prod(size(h));
 npr=2*n;

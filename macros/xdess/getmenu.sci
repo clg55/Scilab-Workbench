@@ -8,6 +8,7 @@ function [m,pt,btn]=getmenu(datas,pt)
 // m     : numero du menu designe ou 0
 //!
 // origine S Steer INRIA 1993
+// Copyright INRIA
 [lhs,rhs]=argn(0)
 n=size(datas,1)-3
 if rhs<2 then

@@ -1,3 +1,4 @@
+/* Copyright INRIA */
 #include "list.h"
 #include "graph.h"
 #include "color.h"

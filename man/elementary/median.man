@@ -28,9 +28,9 @@ entry of the column vector \fVy\fR the median of each row of \fVx\fR.
 .SH EXAMPLE
 .nf
 A=[1,2,10;7,7.1,7.01];
-median(a)
-median(a,'r')
-median(a,'c')
+median(A)
+median(A,'r')
+median(A,'c')
 .fi
 .SH SEE ALSO
-sum
+sum, mean

@@ -1,4 +1,5 @@
 C/MEMBR ADD NAME=DMPTLD,SSI=0
+c     Copyright INRIA
       subroutine dmptld(pm1,d1,ld1,pm2,d2,m,n)
 c!but
 c     cette routine determine la matrice polynomiale :

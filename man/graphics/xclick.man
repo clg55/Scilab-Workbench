@@ -5,7 +5,8 @@ xclick - wait for a mouse click
 .SH CALLING SEQUENCE
 .nf
 [c_i,c_x,c_y]=xclick([flag])
-[c_i,c_x,c_y,c_w]=xclick()
+[c_i,c_x,c_y,c_w]=xclick([flag])
+[c_i,c_x,c_y,c_w,c_m]=xclick([flag])
 .fi
 .SH PARAMETERS
 .TP 10
@@ -17,6 +18,9 @@ c_x,c_y
 .TP 
 c_w
 : integer (window number)
+.TP 
+c_m
+: Character string (menu callback)
 .TP
 flag
 : an integer. If present, the click event queue is not cleared when entering xclick
@@ -24,7 +28,7 @@ flag
 if called with 3 lhs arguments waits for a mouse click in the current
 graphic window 
 .LP
-if called with 4 lhs arguments waits for a mouse click in any graphic
+if called with 4 or 5 lhs arguments waits for a mouse click in any graphic
 window 
 .LP
 returned values:
@@ -38,7 +42,11 @@ of the position of the mouse click.
 .TP 
 c_w
 : the window number where the click has occurred
-
+.TP 
+c_m
+: Character string associated with a dynamic menu. If xclick returns
+due to a click on a menu, \fVc_i\fR, \fVc_x\fR, \fVc_y,\fR \fVc_w\fR take
+arbitrary values.
 .SH KNOWN TROUBLES
 This function can return the message 
 \fVCan't grab the pointer\fR if the graphic window is iconified when 

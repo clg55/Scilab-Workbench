@@ -2,6 +2,7 @@ function [flag]=%nochoose(x)
 // Utility function for use with schur
 //     (see %choose)
 //   %nochoose=1 (resp 0) <=> %choose=0 (resp 1)
+// Copyright INRIA
 ls=x(1);flag=1;s=poly(0,'s');
 select ls
    case 1 then
