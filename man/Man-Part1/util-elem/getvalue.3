@@ -20,31 +20,30 @@ typ
 .RS
 .TP
 typi 
-: defines the type of the ith required value
-if may have the following values:
+: defines the type of the ith value, may have the following values:
 .RS
 .TP
-'mat' 
-: stands for matrix of scalars 
+"mat"
+: for constant matrix
 .TP
-'col' 
-: stands for column vector of scalars
+"col"
+: for constant column vector
 .TP
-'row' 
-: stands for row vector of scalars
+"row"
+: for constant row vector
 .TP
-'vec' 
-: stands for  vector of scalars
+"vec"
+: for  constant vector
 .TP
-'str' 
-: stands for string
+"str"
+: for string
 .TP
-'lis' 
-: stands for list
+"lis"
+: for list
 .RE
 .TP
 dimi 
-: defines the size of the ith required value
+: defines the size of the ith value
 it must be a integer or a 2-vector of integer,
 -1 stands for undefined dimension
 .RE
@@ -57,9 +56,9 @@ ok
 : boolean ,%t if ok button pressed, %f if cancel button pressed
 .TP
 xi      
-: contains the ith required value if ok=%t
+: contains the ith value if ok=%t
 .SH DESCRIPTION
-This macro encapsulate \fVx_mdialog\fR function with error checking,
+This function encapsulate \fVx_mdialog\fR function with error checking,
 evaluation of numerical response, ...
 .SH REMARKS
 All valid expressions can be used as answers; for matrices 
@@ -67,9 +66,9 @@ and vectors \fVgetvalues\fR automatically adds [ ] around the given answer
 before numeric evaluation.
 .SH EXAMPLE
 .nf
-labels=['magnitude';'frequency';'phase    '];
-[ok,mag,freq,ph]=getvalue('define sine signal',labels,...
-     list('vec',1,'vec',1,'vec',1),['0.85';'10^2';'%pi/3'])
+labels=["magnitude";"frequency";"phase    "];
+[ok,mag,freq,ph]=getvalue("define sine signal",labels,...
+     list("vec",1,"vec",1,"vec",1),["0.85";"10^2";"%pi/3"])
 .fi
 .SH SEE ALSO
 x_mdialog, x_matrix, x_dialog

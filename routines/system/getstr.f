@@ -1,29 +1,36 @@
+C/MEMBR ADD NAME=GETSTR,SSI=0
       subroutine getstr
 c ====================================================================
 c             interpretation d une chaine de caracteres
 c               et rangement dans la base de donnees
-c ================================== ( Inria    ) =============
+c ====================================================================
       include '../stack.h'
-      integer quote,eol,bl(nsiz),lkp
-      logical compil,cresmat
-      integer iadr,sadr
-      data quote/53/,eol/99/, bl/673720360,673720360/
+      integer quote,eol,bl(nsiz),iadr,sadr
+      logical cresmat
+      data quote/53/,eol/99/, bl/nsiz*673720360/
+c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 c
       if(err1.gt.0) return
       fin=1
-C     maximum number of characters that we can store 
+C     maximum number of characters that we can store
       ilmax=iadr(lstk(bot)-1)
       n = 0
 c
-C     compilation [3 nombre-de-char char1 ,....]
-C     on ne sait pas encore combien il y en a 
-      lkp=comp(1)
-      if (compil(2,3,1,0)) then 
-         comp(1)=lkp
+      if(comp(1).ne.0)then
+c     compilation [3 nombre-de-char char1 ,....]
+c     on ne sait pas encore combien il y en a
+         lkp=comp(1)
+         err=sadr(lkp+2)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         istk(lkp)=3
          ln=lkp+2
          l0=lkp+1
+         comp(1)=lkp
       else
          if(top.eq.0) lstk(1)=1
          if(top+2.ge.bot) then
@@ -60,7 +67,7 @@ c     Begin : reading the string
          call error(31)
          return
       endif
-C     end reading : the string is stored in istk(ln-> ln+(n-1))
+c     end reading : the string is stored in istk(ln-> ln+(n-1))
 c     Storing size info in data Base
       if(comp(1).ne.0) then 
          istk(l0)=n
@@ -70,4 +77,3 @@ c     Storing size info in data Base
       endif
       return
       end
-

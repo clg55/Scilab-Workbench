@@ -19,9 +19,9 @@ c       (link dynamique) peut etre augmentee uniquement dans le sous programme
 c        matlab
 
       integer   csiz,bsiz,isiz,psiz,nsiz,lsiz
-      parameter (csiz=63,bsiz=4096,isiz=500,psiz=128,nsiz=2,lsiz=4096)
+      parameter (csiz=63,bsiz=4096,isiz=500,psiz=256,nsiz=6,lsiz=8192)
       integer   nlgh,vsiz
-      parameter (nlgh=8,vsiz=300000)
+      parameter (nlgh=nsiz*4,vsiz=900000)
       integer   nftn,maxlnk
       parameter (nftn=20,maxlnk=50)
       integer   maxdb,maxbpt

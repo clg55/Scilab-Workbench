@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=LYDSR,SSI=0
       subroutine lydsr(n,a,na,c,ierr)
 c%But
 c

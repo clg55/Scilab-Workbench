@@ -13,7 +13,7 @@ c
       character*4 name
       character*(nlgh) mmname
       character*10 form
-      character*80 ligne
+      character*200 ligne
       integer nclas,adr
       integer comma,left,right,rparen,lparen,equal,eol,mactop
       data comma/52/
@@ -97,7 +97,11 @@ c     check for typed lists
 C     list ( we must deal with recursion ) 
  41   nlist=nlist+1
       if(nlist.le.1) then
-         call cvnamel(id,ligne,1,li1)
+         if(id(1).ne.0) then
+            call cvnamel(id,ligne,1,li1)
+         else
+            li1=li2
+         endif
       else
          li1=li2
       endif
@@ -129,8 +133,8 @@ C     if the argument is rational list we must not treat it as a list
       fl=int(log10(real(kl)))+1
       write(form,103) fl
  103  format('(i',i3,')')
-      if(li1+fl.gt.80) then
-         call error(26)
+      if(li1+fl.gt.200) then
+         call error(109)
          return
       endif
       write(ligne(li1:li1+fl-1),form) kl
@@ -311,13 +315,20 @@ c     ------------macros---- a changer
       il=il+1
 C     cas ou l'object macro est au top ( pas ds une liste )
       if (mactop.eq.1) then 
-c        compiled macro [ display of source code ]
-         if(istk(ilm).eq.13) then 
-            call cvnamel(idstk(1,lk),mmname,1,lname)
-            call bashos('$SCI/bin/minfopr '//mmname(1:lname)
-     $        ,17+lname,ls,ierr)
-            goto 89 
-         endif
+c$$$c        compiled macro [ display of source code ]
+c$$$         if(istk(ilm).eq.13) then 
+c$$$            call cvnamel(idstk(1,lk),mmname,1,lname)
+c$$$            call xscion(iflag)
+c$$$            if(iflag.eq.0) then
+c$$$               buf='$SCI/bin/scilab -macro "'//mmname(1:lname)//'"  '
+c$$$               call bashos(buf,27+lname,ls,ierr)
+c$$$            else
+c$$$               buf='$SCI/bin/scilab -macro "'//mmname(1:lname)//
+c$$$     $              '" | $SCI/bin/xless &   '
+c$$$               call bashos(buf,45+lname,ls,ierr)
+c$$$            endif
+c$$$            goto 89 
+c$$$         endif
 C     we supress the display of the code of a non compiled macro with goto 89
          isncf=1
          if (isncf.eq.1) goto 89

@@ -28,9 +28,9 @@ function [Q,Z,Qd,Zd,numbeps,numbeta]=kroneck(E,A)
 if RHS=1 then
     [E,A]=pen2ea(E);end
 [Q,Z,Ec,Ac,Qd,Zd,numbeps]=quaskro(E,A);
-rows=qd(1)+qd(2)+1:qd(1)+qd(2)+qd(3);
-cols=zd(1)+zd(2)+1:zd(1)+zd(2)+zd(3);
-if rows==[] | cols==[] then return;end;
+rows=Qd(1)+Qd(2)+1:Qd(1)+Qd(2)+Qd(3);
+cols=Zd(1)+Zd(2)+1:Zd(1)+Zd(2)+Zd(3);
+if rows==[] | cols==[] then numbeta=0;return;end;
 Er=Ec(rows,cols);
 Ar=Ac(rows,cols);
 E1=pertrans(Er);

@@ -1,5 +1,5 @@
-//<Pn,Rt,T>=lindquist(n,H,F,G,r0)
-//<Pn,Rt,T>=lindquist(n,H,F,G,r0)
+function [Pn,Rt,T]=lindquist(n,H,F,G,r0)
+//[Pn,Rt,T]=lindquist(n,H,F,G,r0)
 //macro which computes iteratively the minimal solution of the algebraic
 //Riccati equation and gives the matrices Rt and Tt of the filter model,
 //by the lindquist algorithm.
@@ -14,17 +14,17 @@
 //initialization
    [d,m]=size(H);
    gam=G;
-   rt=r0;
+   Rt=r0;
    k=0*ones(m,d);
 //recursion
    for j=1:n,..
-     k=k+gam/rt*gam'*H';
+     k=k+gam/Rt*gam'*H';
      r1=r0-H*k;
      gam=(F-(G-F*k)/r1*H)*gam;
-     rt=rt-gam'*H'/r1*H*gam;
+     Rt=Rt-gam'*H'/r1*H*gam;
    end
-   rt=inv(r0-H*k);
-   tt=(G-F*k)/rt;
+   Rt=inv(r0-H*k);
+   tt=(G-F*k)/Rt;
 //end
 
 

@@ -17,10 +17,12 @@ c
       data eol/99/
 c
       nct=0
+      l2=lpt2
+      if(lin(l2).eq.eol) l2=l2-1
       ifin=lpt6-1
       ii=lpt6
  10   ii=ii-1
-      if(ii.le.lpt2) goto 20
+      if(ii.le.l2) goto 20
       if(lin(ii).eq.eol) then
          nct=nct+1
          ifin=ii-1

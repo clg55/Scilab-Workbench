@@ -142,18 +142,18 @@ end;
 if mini(lsorties)=0 then error('undefined output'),end
 if mini(lentrees)=0 then error('undefined input'),end
 
-function [where]=%connect(bloc,lliens,syst)
-//[where]=%connect(bloc,lliens,syst) recherche parmi les liens de syst
+function [where_x]=%connect(bloc,lliens,syst)
+//[where_x]=%connect(bloc,lliens,syst) recherche parmi les liens de syst
 //dont les numeros sont donnes dans lliens tous ceux qui arrivent sur
 //la sous systeme dont le numero est donne par bloc
-//where est une liste dont chaque element est le vecteur:
+//where_x est une liste dont chaque element est le vecteur:
 //      [numero_de_lien,[numeros_des_ports_d'arrive]]
 //
 //Voir aussi les macros  bloc2exp, blocdext, eval
 //!
 //origine F. Delebecque s. steer inria 1989
 //
-where=list();nw=0
+where_x=list();nw=0
 nliens=prod(size(lliens))
 for l=1:nliens,
          lien=syst(lliens(l));
@@ -163,21 +163,21 @@ for l=1:nliens,
              output=lien(k),
              if bloc=output(1) then whi=[whi,output(2)],end;
          end;
-         if prod(size(whi))>1 then nw=nw+1,where(nw)=whi,end
+         if prod(size(whi))>1 then nw=nw+1,where_x(nw)=whi,end
 end;
 
-function [where]=out1(bloc,lliens,syst)
-//<where>=out1(bloc,lliens,syst)  recherche parmi  les liens  dont les
+function [where_x]=out1(bloc,lliens,syst)
+//<where_x>=out1(bloc,lliens,syst)  recherche parmi  les liens  dont les
 //numeros sont donnes dans lliens ceux qui sont issus du  sous systeme
 //dont le numero est donne par bloc
-//where est la matrice : [ [numero_de_lien;numero_du_port_d'origine] ]
+//where_x est la matrice : [ [numero_de_lien;numero_du_port_d'origine] ]
 //!
 //origine f. delebecque s. steer inria 1989
 //
-where=[];l=0;
+where_x=[];l=0;
 for li=lliens
          lien=syst(li)
          nb=size(lien);l=l+1;
          output=lien(3),
-         if bloc=output(1) then where=[where,[l;output(2)]],end;
+         if bloc=output(1) then where_x=[where_x,[l;output(2)]],end;
 end;

@@ -58,7 +58,7 @@ if used<>'0' then
   k=n3+1;ok=n3>0;delta=' '
   while ok then
    k=k-1
-   delta=sousf(used,nwrk3(k))
+   delta=subf(used,nwrk3(k))
    ok=part(delta,1)<>'-' &k>1
   end
   if part(delta,1)<>'-' then   nwrk(3)=[nwrk3,used];end
@@ -68,7 +68,7 @@ if iused<>'0' then
   k=n6+1;ok=n6>0;delta=' '
   while ok then
    k=k-1
-   delta=sousf(iused,nwrk6(k))
+   delta=subf(iused,nwrk6(k))
    ok=part(delta,1)<>'-' &k>1
   end
   if part(delta,1)<>'-' then   nwrk(6)=[nwrk6,iused];end

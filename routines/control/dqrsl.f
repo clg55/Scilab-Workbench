@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DQRSL,SSI=0
       subroutine dqrsl(x,ldx,n,k,qraux,y,qy,qty,b,rsd,xb,job,info)
       integer ldx,n,k,job,info
       double precision x(ldx,*),qraux(*),y(*),qy(*),qty(*),b(*),rsd(*),

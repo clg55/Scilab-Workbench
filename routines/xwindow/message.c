@@ -9,12 +9,12 @@ int *basstrings,*nstring,*ptrstrings,*ierr;
   *ierr=0;
   ScilabMStr2C(basstrings,nstring,ptrstrings,&strings,ierr);
   if ( *ierr == 1) return;
-  ExposeMessageWindow(strings);
+  ExposeMessageWindow(strings,nstring);
   free(strings);
 }
 
 
-extern Widget toplevel;
+static Widget toplevel;
 extern XtAppContext app_con;
 extern int ok_Flag_sci;
 
@@ -31,12 +31,21 @@ void MessageOk(w,shell,callData)
   ok_Flag_sci = 1;
 }
 
-void ExposeMessageWindow(string)
+void ExposeMessageWindow(string,nstring)
      char *string;
+     int *nstring;
 {
-  Widget message,okbutton,shell;
+  Widget message,okbutton,shell,port;
   Arg args[10];
   int iargs = 0;
+  int width,i,i1,height;
+  XFontStruct *font;
+  static Display *dpy = (Display *) NULL;
+  DisplayInit("",&dpy,&toplevel);
+
+  font = XLoadQueryFont(dpy,XWMENUFONT);
+  height=font->ascent+font->descent;
+
   XtSetArg(args[iargs], XtNx, X + 10); iargs++;
   XtSetArg(args[iargs], XtNy, Y + DIALOGHEIGHT + 10); iargs++;
   XtSetArg(args[iargs], XtNallowShellResize, True); iargs++;
@@ -47,14 +56,38 @@ void ExposeMessageWindow(string)
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, "OK" ); iargs++;
   okbutton=XtCreateManagedWidget("messagecommand",commandWidgetClass,
-
 			message,args,iargs);
-  XtAddCallback(okbutton, XtNcallback,MessageOk , NULL);  
+  XtAddCallback(okbutton, XtNcallback,(XtCallbackProc)MessageOk , NULL); 
+
+  width = 0; i1 = 0;
+  for (i=0;i<strlen(string);i++) {
+      if (string[i] == '\n') {
+	  width = Max(width,XTextWidth(font,&string[i1],i-i1));
+	  i1=i+1;
+      }
+  }
+  width = width + 20;
+
+  height=Min(*nstring+2,30)*(height+1);
+    
+  iargs = 0;
+  XtSetArg(args[iargs], XtNallowVert, TRUE); iargs++;
+  XtSetArg(args[iargs], XtNheight, height); iargs++;
+  XtSetArg(args[iargs], XtNwidth, width); iargs++;
+  XtSetArg(args[iargs], XtNfromHoriz, NULL); iargs++;
+  XtSetArg(args[iargs], XtNfromVert, okbutton); iargs++;
+  XtSetArg(args[iargs], XtNtop, XtChainTop); iargs++;
+  XtSetArg(args[iargs], XtNresizable , TRUE) ; iargs++;
+  port = XtCreateManagedWidget("port",viewportWidgetClass,
+				     message,args,iargs);
+ 
   iargs=0;
+  XtSetArg(args[iargs], XtNfont, font); iargs++;
   XtSetArg(args[iargs], XtNlabel,  string); iargs++; 
-  XtCreateManagedWidget("labelmessage",labelWidgetClass,message,args,
+  XtSetArg(args[iargs], XtNresizable , TRUE) ; iargs++;
+  XtCreateManagedWidget("labelmessage",labelWidgetClass,port,args,
 			iargs);
-  XtMyLoop(shell);
+  XtMyLoop(shell,dpy);
 }
 
 

@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 OBJS=ainvg.o bnorm.o cfode.o  ewset.o fnorm.o intdy.o lsoda.o lsode.o \

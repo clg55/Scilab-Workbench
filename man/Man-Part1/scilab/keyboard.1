@@ -5,6 +5,8 @@ keyboard - keyborad commands
 .SH DESCRIPTION
 The following keyboard commands are available:
 .LP
+\fV ^L \fR (\fVControl-L\fR) \fV : \fR clears the Scilab window
+.LP
 \fV ^D \fR (\fVControl-D\fR) \fV : \fR deletes the current character
 .LP
 \fV ^P \fR (\fVControl-P\fR) \fV : \fR calls back the preceding command
@@ -25,9 +27,11 @@ to the right
 .LP
 \fV !beg \fR \fV : \fR looks for last command line which begins by \fVbeg\fR.
 .LP
-\fV ^C \fR (\fVControl-C\fR) \fV : interrupts Scilab and pause after
-carriage return. (Only macros can be interrupted).
+\fV ^C \fR (\fVControl-C\fR) \fV : \fR interrupts Scilab and pause after
+carriage return. (Only functions can be interrupted).
 Clicking on the stop button enters a \fV ^C \fR.
+.SH SEE ALSO
+pause, read, input
 
 
 

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DSET,SSI=0
       subroutine dset(n,dx,dy,incy)
 c!but
 c     dset affecte un scalaire a tous les elements d'un vecteur

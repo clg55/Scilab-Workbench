@@ -4,6 +4,8 @@
 // (de colonnes) i (j).
 // s2(i,j)=s1
 //!
+if type(i)==4 then i=find(i),end
+if type(j)==4 then j=find(j),end
 [s1,s2]=sysconv(s1,s2)
 [n,d]=s2(2:3)
 [n1,n2]=size(d);

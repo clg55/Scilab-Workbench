@@ -11,7 +11,8 @@ function x=msign(a)
 //!
 [m,n]=size(a)
 if m<>n then error(20,1),end
-if a<>a' then error('Non hermitian matrix'),end
+flag=or(a<>a');
+if flag then error('msign: non hermitian matrix'),end
 [u,s]=schur(a)
-x=diag(sign(real(diag(s))))
-//end
+x=u'*diag(sign(real(diag(s))))*u
+

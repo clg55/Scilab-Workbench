@@ -114,7 +114,7 @@ Scale2D(job,FRect,IRect,scx,scy,xofset,yofset,xm,ym,n,err)
   Alloc(xm,ym,&zm,n,n,0,err);
   if ( *err == 0)
     {
-      fprintf(stderr,"Scale2D : No more Place\n");
+      Scistring("Scale2D : No more Place\n");
       return;
     };
 };
@@ -213,7 +213,7 @@ C2F(echelle2d)(x,y,x1,yy1,n1,n2,rect,dir,lstr)
 	    };
 	}
       else 
-	fprintf(stderr," Wrong dir %s argument in echelle2d\n",dir);
+	SciF1s(" Wrong dir %s argument in echelle2d\r\n",dir);
     };
   for (i=0;i<4;i++) rect[i]=IRect1[i];
 };
@@ -246,7 +246,7 @@ echelle2dl_(x,y,x1,yy1,n1,n2,rect,dir)
 	    };
 	}
       else 
-	fprintf(stderr," Wrong dir %s argument in echelle2d\n",dir);
+	SciF1s(" Wrong dir %s argument in echelle2d\r\n",dir);
     };
   for (i=0;i<4;i++) rect[i]=IRect1[i];
 };
@@ -288,7 +288,7 @@ ellipse2d_(x,x1,n,dir)
 	    };
 	}
       else 
-	fprintf(stderr," Wrong dir %s argument in echelle2d\n",dir);
+	SciF1s(" Wrong dir %s argument in echelle2d\r\n",dir);
     };
 };
 
@@ -325,7 +325,7 @@ rect2d_(x,x1,n,dir)
 	    };
 	}
       else 
-	fprintf(stderr," Wrong dir %s argument in echelle2d\n",dir);
+	SciF1s(" Wrong dir %s argument in echelle2d\r\n",dir);
     };
 };
  

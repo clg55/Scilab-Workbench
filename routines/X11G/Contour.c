@@ -134,7 +134,8 @@ static double m[3][3],tr[2];
 static double FRect[4],scx,scy;
 static double ZC=0.0;
 static double xofset,yofset;
-
+static char   ContNumFormat[100];
+static int    ContNumPrec=2;
 #define TRX(x1,y1,z1) ( m[0][0]*(x1) +m[0][1]*(y1) +m[0][2]*(z1))
 #define TRY(x1,y1,z1) ( m[1][0]*(x1) +m[1][1]*(y1) +m[1][2]*(z1))
 #define TRZ(x1,y1,z1) ( m[2][0]*(x1) +m[2][1]*(y1) +m[2][2]*(z1))
@@ -155,7 +156,7 @@ double y_cont(i)   int i;{return(GY2D(i));}
 /*  lstr : unused ( but used by Fortran )  */
 
 C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
-     int *teta,*alpha;
+     double *teta,*alpha;
      int flag[3];
      char legend[];
      double x[],y[],z[],zz[],bbox[6],*zlev;
@@ -201,33 +202,33 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
     {
        scx2d= 1.00 ;FRect2d[0]=0.0;xofset=0.0;
        scy2d= -1.00 ;FRect2d[3]=0.0;yofset=0.0;
-      /* Contour on a 3D plot */
-      if ( flag[1] !=0)
-	{
-	  if (flag[1]!=1)
-	    {
-	      bbox[0]=x[0];bbox[1]=x[*n1-1];
-	      bbox[2]=y[0];bbox[3]=y[*n2-1];
-	      bbox[4]=zmin;bbox[5]=zmax;
-	    }
-	  SetEch3d(xbox,ybox,zbox,bbox,teta,alpha);
-	  /** Calcule l' Enveloppe Convexe de la boite **/
-	  /** ainsi que les triedres caches ou non **/
-	  Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox);
-	  /** Le triedre cach\'e **/
-	  if (zbox[InsideU[0]] > zbox[InsideD[0]])
-	    {
-	      cache=InsideD[0];
-	      if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideD);
-	    }
-	  else 
-	    {
-	      cache=InsideU[0]-4;
-	      if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideU);
-	    }
-	};
-      GetEch3d1(m,tr,FRect,&scx,&scy);
-    };
+       /* Contour on a 3D plot */
+       if (flag[1]!=1 && flag[1] != 0)
+	 {
+	   bbox[0]=x[0];bbox[1]=x[*n1-1];
+	   bbox[2]=y[0];bbox[3]=y[*n2-1];
+	   bbox[4]=zmin;bbox[5]=zmax;
+	 };
+       if ( flag[1] !=0)
+	 SetEch3d(xbox,ybox,zbox,bbox,teta,alpha);
+       else
+	 SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,0);
+       /** Calcule l' Enveloppe Convexe de la boite **/
+       /** ainsi que les triedres caches ou non **/
+       Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox);
+       /** Le triedre cach\'e **/
+       if (zbox[InsideU[0]] > zbox[InsideD[0]])
+	 {
+	   cache=InsideD[0];
+	   if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideD);
+	 }
+       else 
+	 {
+	   cache=InsideU[0]-4;
+	   if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideU);
+	 }
+       GetEch3d1(m,tr,FRect,&scx,&scy);
+     };
   if (*flagnz==0)
     {
       if (firstentry)
@@ -250,7 +251,7 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
       N[0]= *n1;N[1]= *n2;N[2]= *nz;
       contourI_(func,x,y,z,zz,N,&err);
     };
-  if (flag[0]!=2 && flag[1] != 0 && flag[2] >=3 )
+  if (flag[0]!=2 &&  flag[2] >=3 )
     {
       /** Le triedre que l'on doit voir **/
       if (zbox[InsideU[0]] > zbox[InsideD[0]])
@@ -280,6 +281,7 @@ contourI_(func,x,y,z,zCont,N,err)
 {
   int n1,n2,ncont,i,c,j,k,n5,AllocContour();
   n1=N[0];n2=N[1];ncont=N[2];
+  ChoixFormatE1(ContNumFormat,&ContNumPrec,zCont,N[2]);
   if (AllocContour()==0) return;
   InitValues(x,y,z,n1,n2);
   n5 =  2*(n1)+2*(n2)-3;
@@ -287,7 +289,7 @@ contourI_(func,x,y,z,zCont,N,err)
   Alloc(&xbd_cont,&ybd_cont,&itg_cont,n5,n5,n1*n2,err);
   if ( *err == 0)
     {
-      fprintf(stderr,"contourI_ : No more Place\n");
+      Scistring("contourI_ : No more Place\n");
       return;
     };
   /* just a parametrization of the boundary points */
@@ -393,7 +395,7 @@ look(func,i,j,ib,jb,qq,Cont)
 		y_cont(j));
       break;
       default :
-	fprintf(stderr," Error in case wrong value ");
+	Scistring(" Error in case wrong value ");
       break;
     }
   wflag=1;
@@ -636,13 +638,14 @@ ContourTrace(Cont)
 { int close;
   int flag=0;
   double angle=0.0;
-  char str[10];
+  char str[100];
   /*  Just the lines **/
   C2F(dr)("xlines","void",&cont_size,xcont,ycont,&close,IP0,IP0,0,0);
-  sprintf(str," %5.2f",Cont);
+  sprintf(str,ContNumFormat,ContNumPrec,Cont);
   C2F(dr)("xstring",str, &xcont[cont_size / 2],&ycont[cont_size /2],
       (int *) &angle,&flag,IP0,IP0,0,0);
 };
+
 
 
 

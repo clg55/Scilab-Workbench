@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=EXCHQZ,SSI=0
         subroutine exchqz(nmax,n,a,b,z,l,ls1,ls2,eps,fail)
         integer nmax,n,l,ls1,ls2
         double precision a(nmax,n),b(nmax,n),z(nmax,n),eps

@@ -41,7 +41,7 @@ test()
 	y[i+ XN*j]= (float) sin((j+1)*x[i+XN*j]);
       }
   for ( i=0 ; i < NCURVES ; i++)
-    style[i]=-NCURVES+i;
+    style[i] = -NCURVES+i;
   n1=NCURVES;n2=XN;
   aint[0]=aint[2]=2;aint[1]=aint[3]=10;
     plot2d_(x,y,&n1,&n2,style,"021"," ",brect,aint);

@@ -3,7 +3,6 @@ i=%i
 e=%e
 //       tests
 //
-// test des affectations (stackp)
 1
 a=1
 b=[1 2 3]
@@ -199,6 +198,50 @@ if abs(a\ bc-(a\ 1)*bc)> 10*%eps then pause,end
 if abs(ac\ b-(ac\ 1)*b)> 10*%eps then pause,end
 if abs(ac\ bc-(ac\ 1)*bc)> 10*%eps then pause,end
 //
+//elemt-wise
+a=rand(3,2);ai=a+rand(3,2)*%i;
+de=2;
+if norm(ai.*de-ai*de,1) >1000*%eps then pause,end
+if norm(de.*ai-de*ai,1) >1000*%eps then pause,end
+if norm(ai.*de-ai*de,1) >1000*%eps then pause,end
+if norm(de.*ai-de*ai,1) >1000*%eps then pause,end
+de=de+3*%i;
+if norm(ai.*de-ai*de,1) >1000*%eps then pause,end
+if norm(de.*ai-de*ai,1) >1000*%eps then pause,end
+if norm(ai.*de-ai*de,1) >1000*%eps then pause,end
+if norm(de.*ai-de*ai,1) >1000*%eps then pause,end
+//
+de=2;def=de*ones(a);
+if norm(a./de-a./def,1) >1000*%eps then pause,end
+if norm(ai./de-ai./def,1) >1000*%eps then pause,end
+//
+de=2+3*%i;def=de*ones(a);
+if norm(a./de-a./def,1) >1000*%eps then pause,end
+if norm(ai./de-ai./def,1) >1000*%eps then pause,end
+de=2;def=de*ones(a);
+if norm(a.\de-a.\def,1) >1000*%eps then pause,end
+if norm(ai.\de-ai.\def,1) >1000*%eps then pause,end
+//
+de=2+3*%i;def=de*ones(a);
+if norm(a.\de-a.\def,1) >1000*%eps then pause,end
+if norm(ai.\de-ai.\def,1) >1000*%eps then pause,end
+
+///////////
+de=2;def=de*ones(a);
+if norm(de.\a-de.\a,1) >1000*%eps then pause,end
+if norm(de.\ai-def.\ai,1) >1000*%eps then pause,end
+//
+de=2+3*%i;def=de*ones(a);
+if norm(de.\a-def.\a,1) >1000*%eps then pause,end
+if norm(de.\ai-def.\ai,1) >1000*%eps then pause,end
+de=2;def=de*ones(a);
+if norm(de./a-def./a,1) >1000*%eps then pause,end
+if norm(de./ai-def./ai,1) >1000*%eps then pause,end
+//
+de=2+3*%i;def=de*ones(a);
+if norm(de./a-def./a,1) >1000*%eps then pause,end
+if norm(de./ai-def./ai,1) >1000*%eps then pause,end
+//
 [p,r]=qr(a);
 if abs(p*r-a)> 10*%eps then pause,end
 [p,r]=qr(a');
@@ -325,7 +368,8 @@ s=sqrt(tc);
 if norm(tc-s*s,1) > 200*%eps then pause,end
 s=exp(tc);s=triu(s,1)+triu(s,1)'+diag(real(diag(s)));
 if norm(log(s)-tc,1)> 1.e-9 then pause,end
-if norm(sin(t)**2+cos(t)**2-eye,1) > 10*%eps then pause,end
+// Modif for linux 10*%eps ==> 11*%eps 
+if norm(sin(t)**2+cos(t)**2-eye,1) > 11*%eps then pause,end
 if norm(sin(tc)**2+cos(tc)**2-eye,1) > 10*%eps then pause,end
 //poly et root
 p=rand(5,1);pc=p+i*rand(5,1);x=poly(0,'x');

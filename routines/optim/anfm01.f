@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=ANFM01,SSI=0
       SUBROUTINE ANFM01(Q,IQ,R,IR,X,W,N,M,IND,IO)
 C
 C***********************************************************************

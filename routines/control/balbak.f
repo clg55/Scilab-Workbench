@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=BALBAK,SSI=0
       subroutine balbak(nm,n,low,igh,scale,m,z)
 c
       integer i,j,k,m,n,ii,nm,igh,low
@@ -78,5 +77,4 @@ c
   140 continue
 c
   200 return
-c     :::::::::: last card of balbak ::::::::::
       end

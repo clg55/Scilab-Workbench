@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DQRSM,SSI=0
       subroutine dqrsm(x,ldx,n,p,y,ldy,nc,b,ldb,k,jpvt,qraux,work)
       integer ldx,n,p,ldy,nc,ldb,k,jpvt(*)
       double precision x(ldx,*),y(ldy,*),b(ldb,*),qraux(*),work(*)

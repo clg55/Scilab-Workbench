@@ -1,3 +1,4 @@
+include ../../Path.incl
 #include "../../Imake.incl"
 
 
@@ -11,7 +12,7 @@ AllTarget(info )
 
 info:
 	@echo " The manual document file is Docu.ps.Z "
-	@echo " type : make doc ;"
+	@echo " type : rm Docu.ps.Z ; make doc"
 	@echo " to recreate it from scratch"
 
 doc :Docu.ps.Z
@@ -49,10 +50,10 @@ Tr2texTarget(Chapl.tex,$(MAN2)/man1/?*.1)
 Tr2texTarget(Chapn.tex,$(MAN2)/man2/?*.2)
 
 clean 	::
-	$(RM)  *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg  *.toc
+	$(RM)  *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg  *.toc Docu.ps
 
 distclean:: 
-	$(RM)  *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg *.toc
+	$(RM)  *.aux *.log Chap*.tex *.dvi *.ind *.idx *.ilg *.toc Docu.ps
 
 
 

@@ -8,7 +8,7 @@ it2=prod(size(v))-1
 if it2==0 then
   [stk,nwrk,txt,top]=f_gener(nam,nwrk,[s2(3),s2(3)])
 else
-  error(nam+' d''un argument complexe non traduit')
+  error(nam+' of complex argument is not implemented')
 end
 //end
 

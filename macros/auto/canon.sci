@@ -1,4 +1,4 @@
-function [Ac,Bc,U,ind]=canon(A,B)
+function [ac,bc,u,ind]=canon(a,b)
 //[ac,bc,u,ind]=canon(a,b)  gives the canonical controllable form
 //of the pair (a,b).
 //

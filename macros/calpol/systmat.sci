@@ -5,19 +5,19 @@ function [Sm]=systmat(Sl);
 //      [    C     D]
 // To get the zeros use determ or detr (for square systems)
 //!
-ty=sl(1);
+ty=Sl(1);
 if ty=='lss' then
-if sl(7)=='d' then
-s=poly(0,'z');
+if Sl(7)=='d' then
+     s=poly(0,'z');
 else
-s=poly(0,'s');
+    s=poly(0,'s');
 end
-Sm=[-s*eye+sl(2),sl(3);sl(4),sl(5)];
+Sm=[-s*eye(Sl(2))+Sl(2),Sl(3);Sl(4),Sl(5)];
 return
 end
 if part(ty,1)=='d' then
 s=poly(0,'s');
-Sm=[-s*sl(6)+sl(2),sl(3);sl(4),sl(5)];
+Sm=[-s*Sl(6)+Sl(2),Sl(3);Sl(4),Sl(5)];
 return
 end
 

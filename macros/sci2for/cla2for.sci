@@ -3,6 +3,7 @@
 //!
 typ=clause(1)
 //write(6,'cla2for '+typ(1))
+
 select typ(1)
 case %if then
   ncl=size(clause)

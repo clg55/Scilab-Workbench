@@ -1,6 +1,17 @@
-function [x,f,lagr,info]=linpro(x0,p,c,d,ci,cs,mi,modo,imp)
+function [x,lagr,f]=linpro(p,C,b,ci,cs,mi,x0,imp)
 [lhs,rhs]=argn(0)
-if rhs=8 then imp=0,end,
-n=maxi(size(p))
-[x,f,lagr,info]=quapro(x0,0*ones(n,n),p,c,d,ci,cs,mi,modo,imp)
-
+n=maxi(size(p));Q=0*ones(n,n);
+select rhs
+ case 8 then
+[x,lagr,f]=quapro(Q,p,C,b,ci,cs,mi,x0,imp)
+ case 7 then
+[x,lagr,f]=quapro(Q,p,C,b,ci,cs,mi,x0)
+ case 6
+[x,lagr,f]=quapro(Q,p,C,b,ci,cs,mi)
+ case 5 then
+[x,lagr,f]=quapro(Q,p,C,b,ci,cs)
+ case 3 then
+[x,lagr,f]=quapro(Q,p,C,b)
+ else
+error('Bad call to linpro')
+end

@@ -1,20 +1,20 @@
-//[X1,X2,zero]=ric_descr(H,E)
-//[X1,X2,zero]=ric_descr(H [,E])  Descriptor Riccati solver with
+//[X1,X2,zero]=ric_desc(H,E)
+//[X1,X2,zero]=ric_desc(H [,E])  Descriptor Riccati solver with
 // hamiltonian matrices as inputs.
 //        (see also riccati)
-//In the continuous time case calling sequence is ric_descr(H) (one input).
+//In the continuous time case calling sequence is ric_desc(H) (one input).
 // Riccati equation is: 
 //  (Ec)   A'*X + X*A + X*R*X -Q = 0.
 // Defining the hamiltonian matrix H by:
 // H = [A  R;
 //      Q -A']
-// with [X1,X2,err]=ric_descr(H),solution X is given by X=X1/X2.
+// with [X1,X2,err]=ric_desc(H),solution X is given by X=X1/X2.
 // zero=norm 1 of lhs of (Ec)
 //
 // (solution X is also given by   X=riccati(A,Q,R,'c'))
 //
 //
-//In the discrete-time case calling sequence is ric_descr(H,E) (two inputs).
+//In the discrete-time case calling sequence is ric_desc(H,E) (two inputs).
 // Riccati solution is:
 //   (Ed)  A'*X*A-(A'*X*B*(R+B'*X*B)^-1)*(B'*X*A)+C-X = 0.
 // 
@@ -24,7 +24,7 @@
 //
 //      H=[A, 0*ones(n,n);
 //        -C, eye(n,n)];
-// with [X1,X2,err]=ric_descr(H,E),solution X is given by X=X1/X2.
+// with [X1,X2,err]=ric_desc(H,E),solution X is given by X=X1/X2.
 // zero=norm 1 of lhs of (Ed)
 //   
 //  (solution X is also given by X=riccati(A,G,C,'d')  with G=B/R*B')
@@ -40,7 +40,7 @@ if RHS=1 then
 //     write(%io(2),'Warning : Bad conditioning => balancing');
      [Hb,W1]=balanc(H);
    end
-   if cond(w1) > 1.d+10*norm(H,1) then Hb=H,W1=eye(w1);end
+   if cond(W1) > 1.d+10*norm(H,1) then Hb=H,W1=eye(W1);end
  
    [W2,n]=schur(Hb,'c');Hb=[]
    if n<>n1 then write(%io(2),'Stationary Riccati solver fails!!!!');end
@@ -61,7 +61,7 @@ if RHS=2 then
    X2=UV(1:n,1:n);X1=UV(n+1:2*n,1:n);
 if LHS=3 then
    A=H(1:n1,1:n1);G=E(1:n,n+1:2*n);C=-H(n+1:2*n,1:n);B=real(sqrt(G));R=eye(A);
-   x=x1/x2;zero=A'*X*A-(A'*X*B/(R+B'*X*B))*(B'*X*A)+C-X; 
+   X=X1/X2;zero=A'*X*A-(A'*X*B/(R+B'*X*B))*(B'*X*A)+C-X; 
 end
 end
 if LHS=1 then X=X1/X2;end

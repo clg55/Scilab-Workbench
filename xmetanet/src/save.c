@@ -80,7 +80,8 @@ int Named()
       HiliteNode((node*)p->element);
       p = p->next;
     }
-    MetanetAlert("The highlighted nodes and/or arcs have not been named");
+    sprintf(Description,"The highlighted nodes and/or arcs have not been named");
+    MetanetAlert(Description);
     p = unnamed_arc->first;
     while (p) {
       UnhiliteArc((arc*)p->element);
@@ -98,11 +99,22 @@ int Named()
 
 int SaveGraph()
 {
+  char description[MAXNAM];
+  sprintf(description,"Save graph %s ?",theGraph->name);
+  if (!MetanetYesOrNo(description))
+    return 0;
+  return SaveGraph1();
+}
+
+int SaveGraph1()
+{
   FILE *fo;
   char fname[2 * MAXNAM];
+  char description[MAXNAM];
 
   if (theGraph->arc_number < 1) {
-    MetanetAlert("Graph %s must at least have one arc",theGraph->name);
+    sprintf(Description,"Graph %s must at least have one arc",theGraph->name);
+    MetanetAlert(Description);
     return 0;
   }
   if (theGG.active != 0) {
@@ -114,7 +126,8 @@ int SaveGraph()
   if (!Named()) return 0;
 
   RenumberGraph(theGraph);
-  AddMessage("Graph %s renumbered\n",theGraph->name);
+  sprintf(Description,"Graph %s renumbered\n",theGraph->name);
+  AddMessage(Description);
 
   MakeArraysGraph(theGraph);
   ComputeNameArraysGraph(theGraph);
@@ -124,6 +137,12 @@ int SaveGraph()
   strcat(fname,theGraph->name);
   strcat(fname,".graph");
   fo = fopen(fname,"w");
+  if (fo == NULL) {
+    sprintf(Description,
+	    "Unable to write file in directory %s\nCheck access",datanet);
+    MetanetAlert(Description);
+    return;
+  }
   WriteGraphToGraphFile(fo,theGraph);
   fclose(fo);
 
@@ -132,10 +151,17 @@ int SaveGraph()
   strcat(fname,theGraph->name);
   strcat(fname,".metanet");
   fo = fopen(fname,"w");
+  if (fo == NULL) {
+    sprintf(Description,
+	    "Unable to write file in directory %s\nCheck access",datanet);
+    MetanetAlert(Description);
+    return 0;
+  }
   WriteGraphToMetanetFile(fo,theGraph);
   fclose(fo);
 
-  AddMessage("Graph %s saved\n",theGraph->name);
+  sprintf(Description,"Graph %s saved\n",theGraph->name);
+  AddMessage(Description);
 
   theGG.modified = 0;
   return 1;
@@ -148,26 +174,27 @@ graph *g;
   int i;
   arc *a;
 
-  fprintf(f,"GRAPH TYPE (0 = UNDIRECTED, 1 = DIRECTED) :\n");
-  fprintf(f,"%d\n",g->directed);
+  fprintf(f,"GRAPH TYPE (0 = UNDIRECTED, 1 = DIRECTED), DEFAULTS (NODE DIAMETER, NODE BORDER, ARC WIDTH, HILITED ARC WIDTH, FONTSIZE):\n");
+  fprintf(f,"%d %d %d %d %d %d\n",g->directed,g->nodeDiam,g->nodeBorder,
+	  g->arcWidth,g->arcHiWidth,g->fontSize);
   if (g->directed) {
-    fprintf(f,"NUMBER OF ARCS :\n");
+    fprintf(f,"NUMBER OF ARCS:\n");
     fprintf(f,"%d\n",g->arc_number);
   }
   else {
-    fprintf(f,"NUMBER OF EDGES :\n");
+    fprintf(f,"NUMBER OF EDGES:\n");
     fprintf(f,"%d\n",g->arc_number / 2);
   }
-  fprintf(f,"NUMBER OF NODES :\n");
+  fprintf(f,"NUMBER OF NODES:\n");
   fprintf(f,"%d\n",g->node_number);
   fprintf(f,"****************************************\n");
   if (g->directed) {
-    fprintf(f,"DESCRIPTION OF ARCS :\n");
-    fprintf(f,"ARC NAME, TAIL NODE NAME, HEAD NODE NAME, COLOR\n");
+    fprintf(f,"DESCRIPTION OF ARCS:\n");
+    fprintf(f,"ARC NAME, TAIL NODE NAME, HEAD NODE NAME, COLOR, WIDTH, HIWIDTH, FONTSIZE\n");
   }
   else {
-    fprintf(f,"DESCRIPTION OF EDGES :\n");
-    fprintf(f,"EDGE NAME, NODE NAME, NODE NAME, COLOR\n");
+    fprintf(f,"DESCRIPTION OF EDGES:\n");
+    fprintf(f,"EDGE NAME, NODE NAME, NODE NAME, COLOR, WIDTH, HIWIDTH, FONTSIZE\n");
   }
   fprintf
     (f,"COST, MIN CAP, MAX CAP, LENGTH, Q WEIGHT, Q ORIGIN, WEIGHT\n");
@@ -178,9 +205,9 @@ graph *g;
       WriteArcToGraphFile(f,a);
   }
   fprintf(f,"****************************************\n");
-  fprintf(f,"DESCRIPTION OF NODES :\n");
+  fprintf(f,"DESCRIPTION OF NODES:\n");
   fprintf(f,"NODE NAME, POSSIBLE TYPE (1 = SINK, 2 = SOURCE)\n");
-  fprintf(f,"X, Y, COLOR\n");
+  fprintf(f,"X, Y, COLOR, DIAMETER, BORDER, FONTSIZE\n");
   fprintf(f,"DEMAND\n");
   fprintf(f,"\n");
   for (i = 1; i <= g->node_number; i++) {
@@ -198,7 +225,12 @@ graph *g;
 
   if (f == 0) return;
 
-  fwrite(Version,sizeof(char),4,f);
+  fwrite((char*)&metaFormat,sizeof(int),1,f);
+  fwrite((char*)&(g->nodeDiam),sizeof(int),1,f);
+  fwrite((char*)&(g->nodeBorder),sizeof(int),1,f);
+  fwrite((char*)&(g->arcWidth),sizeof(int),1,f);
+  fwrite((char*)&(g->arcHiWidth),sizeof(int),1,f);
+  fwrite((char*)&(g->fontSize),sizeof(int),1,f);
   fwrite((char*)&(g->directed),sizeof(int),1,f);
   fwrite((char*)&(g->node_number),sizeof(int),1,f);
   fwrite((char*)&(g->arc_number),sizeof(int),1,f);
@@ -234,8 +266,8 @@ void WriteArcToGraphFile(f,a)
 FILE *f;
 arc *a;
 {
-  fprintf(f,"%s %s %s %d\n",a->name,a->tail->name,
-	  a->head->name,a->col);
+  fprintf(f,"%s %s %s %d %d %d %d\n",a->name,a->tail->name,
+	  a->head->name,a->col,a->width,a->hiWidth,a->fontSize);
   fprintf(f,"%e %e %e %e %e %e %e\n",
 	  a->unitary_cost,a->minimum_capacity,a->maximum_capacity,
 	  a->length,a->quadratic_weight,a->quadratic_origin,a->weight);
@@ -254,6 +286,9 @@ arc *a;
   fwrite((char*)&(a->head->number),sizeof(int),1,f);
   fwrite((char*)&(a->tail->number),sizeof(int),1,f);
   fwrite((char*)&(a->col),sizeof(int),1,f);
+  fwrite((char*)&(a->width),sizeof(int),1,f);
+  fwrite((char*)&(a->hiWidth),sizeof(int),1,f);
+  fwrite((char*)&(a->fontSize),sizeof(int),1,f);
   fwrite((char*)&(a->unitary_cost),sizeof(double),1,f);
   fwrite((char*)&(a->minimum_capacity),sizeof(double),1,f);
   fwrite((char*)&(a->maximum_capacity),sizeof(double),1,f);
@@ -289,7 +324,8 @@ node *n;
   if (n->type == PLAIN)
     fprintf(f,"%s\n",n->name);
   else fprintf(f,"%s %d\n",n->name,n->type);
-  fprintf(f,"%d %d %d\n",n->x,n->y,n->col);
+  fprintf(f,"%d %d %d %d %d %d \n",
+	  n->x,n->y,n->col,n->diam,n->border,n->fontSize);
   fprintf(f,"%e\n",n->demand);
 }
 
@@ -363,6 +399,9 @@ node *n;
   fwrite((char*)&(n->x),sizeof(int),1,f);
   fwrite((char*)&(n->y),sizeof(int),1,f);
   fwrite((char*)&(n->col),sizeof(int),1,f);
+  fwrite((char*)&(n->diam),sizeof(int),1,f);
+  fwrite((char*)&(n->border),sizeof(int),1,f);
+  fwrite((char*)&(n->fontSize),sizeof(int),1,f);
 }
 
 int RenameSaveGraph()
@@ -372,7 +411,8 @@ int RenameSaveGraph()
   char name[MAXNAM];
 
   if (theGraph->arc_number < 1) {
-    MetanetAlert("Graph %s must at least have one arc",theGraph->name);
+    sprintf(Description,"Graph %s must at least have one arc",theGraph->name);
+    MetanetAlert(Description);
     return 0;
   }
   if (theGG.active != 0) {
@@ -383,21 +423,22 @@ int RenameSaveGraph()
 
   if (!Named()) return 0;
 
-  MetanetDialog("",name,"New name for old graph %s",theGraph->name);
+  sprintf(Description,"New name for old graph %s",theGraph->name);
+  MetanetDialog("",name,Description);
 
   if (strcmp(name,"") == 0) return 0;
   FindGraphNames();
   if (FindInLarray(name,graphNames)) {
-    MetanetAlert("Graph %s exists\n",name);
+    sprintf(Description,"Graph %s exists\n",name);
+    MetanetAlert(Description);
     return 0;
   }
 
   strcpy(theGraph->name,name);
 
-  
-
   RenumberGraph(theGraph);
-  AddMessage("Graph %s renumbered\n",theGraph->name);
+  sprintf(Description,"Graph %s renumbered\n",theGraph->name);
+  AddMessage(Description);
 
   MakeArraysGraph(theGraph);
   ComputeNameArraysGraph(theGraph);
@@ -407,6 +448,12 @@ int RenameSaveGraph()
   strcat(fname,theGraph->name);
   strcat(fname,".graph");
   fo = fopen(fname,"w");
+  if (fo == NULL) {
+    sprintf(Description,
+	    "Unable to write file in directory %s\nCheck access",datanet);
+    MetanetAlert(Description);
+    return;
+  }
   WriteGraphToGraphFile(fo,theGraph);
   fclose(fo);
 
@@ -415,10 +462,17 @@ int RenameSaveGraph()
   strcat(fname,theGraph->name);
   strcat(fname,".metanet");
   fo = fopen(fname,"w");
+  if (fo == NULL) {
+    sprintf(Description,
+	    "Unable to write file in directory %s\nCheck access",datanet);
+    MetanetAlert(Description);
+    return;
+  }
   WriteGraphToMetanetFile(fo,theGraph);
   fclose(fo);
 
-  AddMessage("Graph %s saved\n",theGraph->name);
+  sprintf(Description,"Graph %s saved\n",theGraph->name);
+  AddMessage(Description);
 
   theGG.modified = 0;
   return 1;

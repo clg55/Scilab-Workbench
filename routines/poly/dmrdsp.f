@@ -1,10 +1,10 @@
       subroutine dmrdsp(mpn,dn,mpd,dd,nl,m,n,var,lvar,maxc,mode,ll,
      1     lunit,cw,iw)
-c!but 
+c     !but 
 c     dmpdsp ecrit une matrice polynomiale (ou un polynome) sous
 c     la forme d'un tableau de polynomes, avec gestion automatique de
 c     l'espace disponible.
-c!listed'appel
+c     !listed'appel
 c     
 c     subroutine dmrdsp(mpn,dn,mpd,dd,nl,m,n,var,lvar,maxc,mode,ll,
 c     1 lunit,cw,iw)
@@ -35,9 +35,9 @@ c     lunit : etiquette logique du support d'edition
 c     cw : chaine de caracteres de travail de longueur au moins ll*2
 c     iw : tableau de travail entier de taille au moins egale a
 c     n*(4+m)+1+dn(n*m+1)+dd(n*m+1)
-c!origine
+c     !origine
 c     s. steer inria 1986
-c!    
+c     !    
 c     
       double precision mpn(*),mpd(*),a
       integer dd(*),dn(*),iw(*),maxc,mode
@@ -53,7 +53,7 @@ c
       write(form(1),130) maxc,maxc-7
       dl=' '
       if(m*n.gt.1) dl='!'
-c
+c     
 c     phase d'analyse: pour chaque coefficient a representer on determine
 c     format avec lequel on va l'editer, on en deduit la longueur
 c     de la representation de chacun des polynomes.
@@ -99,18 +99,23 @@ c     traitement du polynome (l,k)
 c     determination du format devant representer a
                   typ=1
                   if(mode.eq.1) call fmt(a,maxc,typ,n1,n2)
-                  if(typ.eq.2) goto 03
-                  iw(ldefn)=1
-                  fl=maxc
-                  n2=maxc-7
-                  goto 04
- 03               fl=n1
-                  iw(ldefn)=n2+32*n1
+                  if(typ.eq.2) then
+                     fl=n1
+                     iw(ldefn)=n2+32*n1
+                  elseif(typ.lt.0) then
+                     iw(ldefn)=typ
+                     n2=1
+                     fl=3
+                  else
+                     iw(ldefn)=1
+                     fl=maxc
+                     n2=maxc-7
+                  endif
 c     
 c     determination de la longueur de la representation du monome,
 c     cette longueur est a priori fl+2 (' '//sgn//rep(a)//var).
 c     mais peut etre reduite dans des cas particulier
- 04               lghn=lghn+fl+2
+                  lghn=lghn+fl+2
                   if(n2.eq.0) then
                      lghn=lghn-1
                      if(i.ne.1.and.int(a+0.1).eq.1) lghn=lghn-1
@@ -139,18 +144,22 @@ c
 c     determination du format devant representer a
                   typ=1
                   if(mode.eq.1) call fmt(a,maxc,typ,n1,n2)
-                  if(typ.eq.2) goto 06
-                  iw(ldefd)=1
-                  fl=maxc
-                  n2=maxc-7
-                  goto 07
- 06               fl=n1
-                  iw(ldefd)=n2+32*n1
-c     
+                  if(typ.eq.2) then
+                     fl=n1
+                     iw(ldefd)=n2+32*n1
+                  elseif(typ.lt.0) then
+                     iw(ldefd)=typ
+                     n2=1
+                     fl=3
+                  else
+                     iw(ldefd)=1
+                     fl=maxc
+                     n2=maxc-7
+                  endif
 c     determination de la longueur de la representation du monome,
 c     cette longueur est a priori fl+2 (' '//sgn//rep(a)//var).
 c     mais peut etre reduite dans des cas particulier
- 07               lghd=lghd+fl+2
+                  lghd=lghd+fl+2
                   if(n2.eq.0) then
                      lghd=lghd-1
                      if(i.ne.1.and.int(a+0.1).eq.1) lghd=lghd-1
@@ -257,13 +266,18 @@ c
                      nf=1
                      fl=maxc
                      n2=1
-                  else
+                  elseif(ifmt.ge.0) then
                      nf=2
                      n1=ifmt/32
                      n2=ifmt-32*n1
                      fl=n1
                      write(form(nf),120) fl,n2
+                  elseif(ifmt.lt.0) then
+c     Inf/Nan
+                     fl=3
+                     n2=1
                   endif
+
 c     
                   nd=0
                   if(j.gt.2) nd=ifix(log10(0.5+j))+1
@@ -294,7 +308,13 @@ c     gestion des lignes suites
 c     representation du monome
                   cw(l2:l2+1)=' '//sgn
                   l2=l2+1
-                  write(cw(l2+1:l2+fl),form(nf)) a
+                  if(ifmt.ge.0) then
+                     write(cw(l2+1:l2+fl),form(nf)) a
+                  elseif(ifmt.eq.-1) then
+                     cw(l2+1:l2+fl)='Inf'
+                  elseif(ifmt.eq.-2) then
+                     cw(l2+1:l2+fl)='Nan'
+                  endif
                   l2=l2+fl
                   if(n2.eq.0) l2=l2-1
                   if(j.gt.1) then
@@ -391,12 +411,16 @@ c
                      nf=1
                      fl=maxc
                      n2=1
-                  else
+                  elseif(ifmt.ge.0) then
                      nf=2
                      n1=ifmt/32
                      n2=ifmt-32*n1
                      fl=n1
                      write(form(nf),120) fl,n2
+                  elseif(ifmt.lt.0) then
+c     Inf/Nan
+                     fl=3
+                     n2=1
                   endif
 c     
                   nd=0
@@ -426,7 +450,13 @@ c     gestion des lignes suites
 c     representation du monome
                   cw(l2:l2+1)=' '//sgn
                   l2=l2+1
-                  write(cw(l2+1:l2+fl),form(nf)) a
+                  if(ifmt.ge.0) then
+                     write(cw(l2+1:l2+fl),form(nf)) a
+                  elseif(ifmt.eq.-1) then
+                     cw(l2+1:l2+fl)='Inf'
+                  elseif(ifmt.eq.-2) then
+                     cw(l2+1:l2+fl)='Nan'
+                  endif
                   l2=l2+fl
                   if(n2.eq.0) l2=l2-1
                   if(j.gt.1) then

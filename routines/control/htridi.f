@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=HTRIDI,SSI=0
       subroutine htridi(nm,n,ar,ai,d,e,e2,tau)
 c
       integer i,j,k,l,n,ii,nm,jp1

@@ -12,7 +12,7 @@
 // on a unique page with the command Blpr.
 // -if flag =0 the files are created but not printed 
 // -caution : this function will work only if the selected 
-// driver is "Rec"
+// driver is 'Rec'
 //!
 [lhs,rhs]=argn(0);
 [n1,n2]=size(win_num);
@@ -20,18 +20,18 @@ win_num=matrix(win_num,1,n1*n2);
 if rhs<2,filen='/tmp/scilab.ps',flag=1;end
 if rhs<3,flag=1;end
 fname=[' '];
-for i=1:n1*n2,driver("Pos");
+for i=1:n1*n2,driver('Pos');
               fnamel=filen+'.'+string(win_num(i));
               fname=fname+fnamel+' ';
               xinit(fnamel);
               xtape('replay',win_num(i));
-              driver("Pos");
+              driver('Pos');
               xend();
 end
 driver('Rec');
-// Blpr "titre" filename1 filename2 ....  lpr
+// Blpr 'titre' filename1 filename2 ....  lpr
 if flag=1,host('$SCI/bin/Blpr ''  '' '+fname+ ' | lpr');
-          if rhs=1,host("rm -f "+fname);end
+          if rhs=1,host('rm -f '+fname);end
 end
 //end
 

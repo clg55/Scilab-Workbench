@@ -1032,9 +1032,18 @@ I can only do very simple ones. You may need to check what I've done\n");
 				}
 			else
 				outbuf = strapp(outbuf,"\\bs ");
-			}
-		else if (*inbuf == '`' || *inbuf == '\'')
-			;				/* do nothing */
+             	      }
+		else if (*inbuf == '`' )
+		  {
+			outbuf = strapp(outbuf,"\\`");
+                        inbuf++;
+		      }
+
+                else if (*inbuf == '\'')
+		  {
+			outbuf = strapp(outbuf,"\\'");
+                        inbuf++;
+		      }
 		else if (*inbuf == '"')
 			{
 			inbuf++;

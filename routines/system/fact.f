@@ -5,6 +5,7 @@ c     ======================================================================
 c     
       include '../stack.h'
 c     
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
       logical eqid,eptover
       integer semi,eol,blank,r,excnt,lparen,rparen,num,name
       integer id(nsiz),eye(nsiz),bl(nsiz),rand(nsiz),sysvar(nsiz)
@@ -15,9 +16,9 @@ c
       data quote/53/,left/54/,right/55/,cconc/1/,extrac/3/,rconc/4/
       data hat/62/
 c     
-      data bl/673720360,673720360/, eye/672014862,673720360/
-      data rand/219613723,673720360/
-      data sysvar/471997440,672860703/
+      data bl/nsiz*673720360/, eye/672014862,nz1*673720360/
+      data rand/219613723,nz1*673720360/
+      data sysvar/471997440,672860703,nz2*673720360/
 c     
 c     
       r = rstk(pt)
@@ -71,6 +72,7 @@ c
       endif
       if (eptover(0,psiz-3))  return
       pt=pt+1
+      rstk(pt)=0
       pstk(pt)=0
 c     
  21   continue

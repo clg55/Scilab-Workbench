@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=CORTH,SSI=0
       subroutine corth(nm,n,low,igh,ar,ai,ortr,orti)
 c
       integer i,j,m,n,ii,jj,la,mp,nm,igh,kp1,low

@@ -1,10 +1,9 @@
-C/MEMBR ADD NAME=EQID,SSI=0
       logical function eqid(x,y)
 c
 c     check for equality of two names
 c
-      integer nsiz
-      parameter (nsiz=2)
+      include '../stack.h'
+c
       integer x(nsiz),y(nsiz)
 c
       eqid = .false.

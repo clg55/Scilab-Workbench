@@ -17,7 +17,10 @@ select type(str)
     nstr=prod(size(sexp)); %=list();
     for k=1:nstr, %(k)=evstr(sexp(k)),end,
     val=evstr(str(1))
- else error('waiting for: matrix of strings or list'),
+case 1 then
+   val=str
+else 
+   error('waiting for: matrix of strings or list'),
 end
 
 

@@ -4,10 +4,11 @@ lst=modlst(lst)
 count=0;level=0;nwrk=list(0,[],[],0,[],[],0,list(),1,[],[],[],[],[],[])
 forparam()
 //
+
 input=lst(3)
 macrhs=size(vtps)
 vnms=[],for k=1:macrhs,vnms=[vnms;[input(k),input(k)]],end,
- 
+
 na=prod(size(vnms))/2
  
 maclhs=prod(size(lst(2)))
@@ -120,7 +121,7 @@ end
  
 hdr=[' subroutine '+lst(1)+'('+makeargs(v1)+')';
      'c!';
-     'c version automatic translation';
+     'c automatic translation';
      'c';
      'c!     calling sequence';
      'c      ----------------';
@@ -166,7 +167,7 @@ for iv=1:na
         var=var+'(_r,_i)'
       end  
      
-      com='de taille '+nl+','+nc
+      com='of size '+nl+','+nc
     end
     if vartyp(1)='1' then
       argld=[argld;nm]
@@ -179,7 +180,7 @@ for iv=1:na
       hdr=[hdr;com],
     end
   else
-    locals=[locals;'c        '+ vnms(iv,2)+' : taille ('+..
+    locals=[locals;'c        '+ vnms(iv,2)+' : size ('+..
             vartyp(2)+','+vartyp(3)+'), implemented in '+vnms(iv,1)]
   end
 end
@@ -220,7 +221,7 @@ if nwrk(14)<>[] then  dcl=[dcl;' integer '+makeargs(nwrk(14))],end
 dcl=[dcl;'c']
  
 txt=[hdr;dcl;pntrs;crp;' end']
-txt=indentfor(Indentfor(txt))
+txt=indentfor(indentfor(txt))
  
 kk=1
 while kk<>[] then

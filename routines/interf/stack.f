@@ -8,8 +8,8 @@ C      implicit undefined (a-z)
          checkrhs=.true.
       else
          checkrhs=.false.
-         write(buf,*) fname ,' : wrong number of arguments'
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         call error(77)
       endif
       return
       end
@@ -24,8 +24,8 @@ C      implicit undefined (a-z)
          checklhs=.true.
       else
          checklhs=.false.
-         write(buf,*) fname ,' : wrong number of lhs arguments'
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         call error(78)
       endif
       return
       end
@@ -56,10 +56,9 @@ C     test particulier decouvert ds logic.f
       if(istk(il).lt.0) il=adr(istk(il+1),0)
       if(istk(il).ne.1) then
          getmat=.false.
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, expecting a ',
-     $        ' real or complex matrix'
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         call error(201)
       else
          m=istk(il+1)
          n=istk(il+2)
@@ -97,9 +96,9 @@ C      implicit undefined (a-z)
       getvect=getmat(fname,topk,lw,it,m,n,lr,lc)
       if (getvect.eqv..false.) return
       if(m.ne.1.and.n.ne.1) then
-         write(buf,*) 'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, expecting a vector'
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         call error(214)
          getvect=.false.
       else
          getvect=.true.
@@ -118,9 +117,9 @@ C      implicit undefined (a-z)
       getrmat=getmat(fname,topk,lw,it,m,n,lr,lc)
       if (getrmat.eqv..false.) return
       if ( it.ne.0) then
-         write(buf,*) 'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, expecting a real matrix'
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         call error(202)
          getrmat=.false.
       else
          getrmat=.true.
@@ -151,9 +150,9 @@ C      implicit undefined (a-z)
       getrvect=getrmat(fname,topk,lw,m,n,lr)
       if (getrvect.eqv..false.) return
       if(m.ne.1.and.n.ne.1) then
-         write(buf,*) 'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, expecting a real vector'
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         call error(203)
          getrvect=.false.
       else
          getrvect=.true.
@@ -182,9 +181,9 @@ C      implicit undefined (a-z)
       getscalar=getrmat(fname,topk,lw,m,n,lr)
       if (getscalar.eqv..false.) return
       if(m*n.ne.1) then
-         write(buf,*) 'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, expecting a scalar'
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         call error(204)
          getscalar=.false.
       else
          getscalar=.true.
@@ -204,10 +203,11 @@ C      implicit undefined (a-z)
       matsize=getmat(fname,topk,lw,it,m1,n1,lr,lc)
       if (matsize.eqv..false.) return
       if(m.ne.m1.or.n.ne.n1) then
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong matrix size (',m,',',n
-     $        ,') expected '
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         pstk(pt+1)=m
+         pstk(pt+2)=n
+         call error(205)
          matsize=.false.
          return
       endif
@@ -228,10 +228,10 @@ C      implicit undefined (a-z)
       vectsize=getvect(fname,topk,lw,it1,m1,n1,lr,lc)
       if (vectsize.eqv..false.) return
       if(n.ne.m1*n1) then
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' :  wrong vector size, (',n
-     $        ,') expected '
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         pstk(pt+1)=n
+         call error(206)
          vectsize=.false.
          return
       endif
@@ -251,10 +251,11 @@ C      implicit undefined (a-z)
       matbsize=getbmat(fname,topk,lw,m1,n1,lr)
       if (matbsize.eqv..false.) return
       if(m.ne.m1.or.n.ne.n1) then
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong matrix size (',m,',',n
-     $        ,') expected '
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         pstk(pt+1)=m
+         pstk(pt+2)=n
+         call error(205)
          matbsize=.false.
          return
       endif
@@ -286,10 +287,9 @@ C      implicit undefined (a-z)
       integer adr
       il=adr(lstk(lw),0)
       if(istk(il).ne.10) then
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, expecting a matrix'
-     $        , ' of strings'
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         call error(207)
          getsmat=.false.
          return
       endif
@@ -372,6 +372,99 @@ C      implicit undefined (a-z)
  10      continue
          ilast=ilp+m*n
          lstk(lw+1)=adr(ilast+istk(ilast),1)
+         return
+      endif
+      end
+
+
+      logical function cresmat1(fname,lw,m,nchar)
+C     verifie que l'on peut stocker une matrice [m,1]
+C     de chaine de caracteres chaque chaine etant de longueur nchar(i)
+C     a la position lw en renvoyant .true. ou .false.
+C	  suivant la reponse. Si la reponse est .true. on initialise les
+C     dimensions de la matrice et change la valeur de lstk(lw+1)
+C     Entree :
+C       lw : position (entier)
+C       n dimensions
+C       nchar : nombre de caracteres tableau de dimension(n)
+C!
+C      implicit undefined (a-z)
+      character fname*(*)
+      integer lw,m,nchar(m),il,ilp,kij,ilast,nnchar,i
+      integer adr
+      include '../stack.h'
+      if ( lw+1.ge.bot) then
+         call error(18)
+         cresmat1=.false.
+         return
+      endif
+      nnchar=0
+      do 20 i=1,m
+         nnchar=nchar(i)+nnchar
+ 20   continue
+      il=adr(lstk(lw),0)
+      err=adr(il+4+(nnchar+1)*m,1)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         cresmat1=.false.
+         return
+      else
+         cresmat1=.true.
+         istk(il)=10
+         istk(il+1)=m
+         istk(il+2)=1
+         istk(il+3)=0
+         ilp=il+4
+         istk(ilp)=1
+         i=1
+         do 10 kij=ilp+1,ilp+m
+            istk(kij)=istk(kij-1)+nchar(i)
+            i=i+1
+ 10      continue
+         ilast=ilp+m
+         lstk(lw+1)=adr(ilast+istk(ilast),1)
+         return
+      endif
+      end
+
+      logical function cresmat2(fname,lw,nchar,lr)
+C     verifie que l'on peut stocker une matrice [1,1]
+C     de chaine de caracteres  a la position lw en renvoyant .true. ou .false.
+C	  suivant la reponse. Si la reponse est .true.
+C     nchar est le nombre de caracteres que l'on peut stcoker 
+C     Entree :
+C       lw : position (entier)
+C     Sortie :
+C       nchar : nombre de caracteres stockable
+C       lr : pointe sur  a(1,1)=istk(lr)
+C!
+C      implicit undefined (a-z)
+      character fname*(*)
+      integer lw,nchar,il,ilast,lr
+      integer adr
+      include '../stack.h'
+      if ( lw+1.ge.bot) then
+         call error(18)
+         cresmat2=.false.
+         return
+      endif
+      il=adr(lstk(lw),0)
+      err=adr(il+4+(nchar+1),1)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         cresmat2=.false.
+         return
+      else
+         cresmat2=.true.
+         istk(il)=10
+         istk(il+1)=1
+         istk(il+2)=1
+         istk(il+3)=0
+         istk(il+4)=1
+         istk(il+4+1)=istk(il+4)+nchar
+         ilast=il+4+1
+         lstk(lw+1)=adr(ilast+istk(ilast),1)
+         lr=ilast+ istk(ilast-1)
          return
       endif
       end
@@ -696,10 +789,9 @@ C     test particulier decouvert ds logic.f
       if(istk(il).lt.0) il=adr(istk(il+1),0)
       if(istk(il).ne.4) then
          getbmat=.false.
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, '
-     $        ,'expecting a booleen matrix'
-         call error(999)
+         call cvname(ids(1,pt+1),fname,0)
+         err=rhs+(lw-topk)
+         call error(208)
       else
          m=istk(il+1)
          n=istk(il+2)
@@ -838,22 +930,41 @@ C     ---> a utilier a l'interieur de dbx pour debuguer
 C      implicit undefined (a-z)
       integer adr
       include '../stack.h'
-      integer il,lw,i,m,n,typ
+      integer il,lw,i,m,n,typ,l
+      character*7 t(5)
       if (lw.eq.0) return
       il =adr(lstk(lw),0)
       if(istk(il).lt.0) il=adr(istk(il+1),0)
       m  =istk(il+1)
       n  =istk(il+2)
-      write(06,*) '-----------------stack-info-----------------'
-      write(06,*) 'lw=',lw,'-[istk]-> il','lw+1 -[istk]-> ',
-     $     adr(lstk(lw+1),0)
-      write(06,*) 'istk(',il,':..) ->[',(istk(il+i),i=0,3),'....]'
+      call basout(io,wte,
+     +     '-----------------stack-info-----------------')
+      call basout(io,wte,' ')
+      write(t(1),'(i7)') lw
+      write(t(2),'(i7)') adr(lstk(lw+1),0)
+      call basout(io,wte,
+     +     'lw='//t(1)//'-[istk]-> il lw+1 -[istk]-> '//t(2))
+      write(t(1),'(i7)') il
+      write(t(2),'(i7)') istk(il)
+      write(t(3),'(i7)') istk(il+1)
+      write(t(4),'(i7)') istk(il+2)
+      write(t(5),'(i7)') istk(il+3)
+
+      call basout(io,wte,
+     +     'istk('//t(1)//':..) ->['//t(2)//t(3)//t(4)//t(5)//'....]')
       if (typ.eq.1) then
-      write(06,*) '    {',(stk(adr(il+4,1)-1+i),i=1,min(m*n,3)),'}'
+         l=adr(il+4,1)
+         nn=min(m*n,3)
+         write(buf,'(3e15.8,2x)') (stk(l+i),i=0,nn-1)
+         call basout(io,wte,'    {'//buf(1:17*nn)//'}')
       else
-      write(06,*) '    {',(istk(il+4-1+i),i=1,min(m*n,3)),'}'
-      write(06,*) '-----------------stack-info-----------------'
+         l=il+4
+         nn=min(m*n,3)
+         write(buf,'(3i15,2x)') (istk(l+i),i=0,nn-1)
+         call basout(io,wte,'    {'//buf(1:17*nn)//'}')
       endif
+      call basout(io,wte,
+     +     '-----------------stack-info-----------------')
       return
       end
 
@@ -875,9 +986,9 @@ C      implicit undefined (a-z)
       il=adr(lstk(lw),0)
       itype=istk(il)
       if(itype.ne.1.and.itype.ne.2.and.itype.ne.10) then
-C         call basout(io,wte,'Fonction '//fname)
          err=rhs+(lw-topk)
-         call error(44)
+         call cvname(ids(1,pt+1),fname,0)
+         call error(209)
          allmat=.false.
          return
       endif
@@ -925,11 +1036,9 @@ C      implicit undefined (a-z)
       if(istk(il).lt.0) il=adr(istk(il+1),0)
       itype=istk(il)
       if(itype.ne.15) then
-C         call basout(io,wte,'Fonction '//fname)
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, '
-     $        ,'expecting a list'
-         call error(999)
+         err=rhs+(lw-topk)
+         call cvname(ids(1,pt+1),fname,0)
+         call error(210)
          getilist=.false.
          return
       endif
@@ -990,9 +1099,9 @@ C      implicit undefined (a-z)
          name = ' '
          if (getexternal.neqv..false.) call cvstr(nlr,istk(lr),name,1)
       else
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, expecting an external '
-         call error(999)
+         err=rhs+(lw-topk)
+         call cvname(ids(1,pt+1),fname,0)
+         call error(211)
          getexternal=.false.
          return
       endif
@@ -1026,10 +1135,9 @@ C      implicit undefined (a-z)
 C     test particulier decouvert ds logic.f
       if(istk(il).ne.2) then
          getpoly=.false.
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, expecting a ',
-     $        ' polynomial matrix'
-         call error(999)
+         err=rhs+(lw-topk)
+         call cvname(ids(1,pt+1),fname,0)
+         call error(212)
       else
          m=istk(il+1)
          n=istk(il+2)
@@ -1109,10 +1217,9 @@ C     test particulier decouvert ds logic.f
       if(istk(il).lt.0) il=adr(istk(il+1),0)
       if(istk(il).ne.4) then
          getwimat=.false.
-         write(buf,*)'Argument ',rhs+(lw-topk), ' of ', fname ,
-     $        ' : wrong type argument, '
-     $        ,'expecting a working integer matrix'
-         call error(999)
+         err=rhs+(lw-topk)
+         call cvname(ids(1,pt+1),fname,0)
+         call error(213)
       else
          m=istk(il+1)
          n=istk(il+2)

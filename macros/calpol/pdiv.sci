@@ -6,7 +6,7 @@ function [R,Q]=pdiv(P1,P2)
 [lhs,rhs]=argn(0);
 [n,m]=size(P1);
 [n1,m1]=size(P2);
-r=[],q=[]
+R=[],Q=[]
 if n1==1 & m1==1 then
  for l=1:n,
     for k=1:m,

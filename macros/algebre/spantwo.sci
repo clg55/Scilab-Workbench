@@ -22,7 +22,7 @@ function [Xp,dima,dimb,dim]=spantwo(A,B)
 //Slcan=ss2ss(Sl,inv(Xp));             
 //F.D.
 [X1,dim,dima]=spanplus(A,B);Xp=X1';
-B1B2B3=Xp*b;B1B2B3=B1B2B3(1:dim,:);
+B1B2B3=Xp*B;B1B2B3=B1B2B3(1:dim,:);
 [W,dimb]=rowcomp(B1B2B3);W=W(dim:-1:1,:);W21=W(dima+1:dim,1:dima);
 Q=[eye(dima,dima),zeros(dima,dim-dima);
    -W21*inv(W(1:dima,1:dima)),eye(dim-dima,dim-dima)];

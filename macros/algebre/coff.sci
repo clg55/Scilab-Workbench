@@ -1,4 +1,4 @@
-function [N,d]=coff(M,var)
+function [n,d]=coff(m,var)
 //[N,d]=coff(M [,var]) computes (s*eye-M)^-1 
 // N = numerator polynomial matrix 
 // d = common denominator
@@ -17,7 +17,7 @@ for k=1:n1,for l=1:n1,
   n(k,l)=-(poly(m,var)-d)/mlk;
   m(l,k)=m(l,k)-mlk
 end;end
-if norm(imag(M),1)==0 then N=real(N);d=real(d);end
+if norm(imag(m),1)==0 then n=real(n);d=real(d);end
 
 
 

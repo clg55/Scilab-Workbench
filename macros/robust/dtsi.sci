@@ -60,7 +60,7 @@ function [ga,gs,gi]=dtsi(g,tol)
       //---------------------------
       [a,b,c,d]=g(2:5),gi=d,
       [n1,n2,t]=size(g),
-      [a,u0]=balanc(A);b=u0\b;c=c*u0;
+      [a,u0]=balanc(a);b=u0\b;c=c*u0;
       [u,n]=schur(a,'cont'),
       a=u'*a*u,
       if n=t then ga=0,
@@ -69,7 +69,7 @@ function [ga,gs,gi]=dtsi(g,tol)
       if n=0 then gs=0,
              ga=g,return,
       end,
-//      [ab,w,bs]=bdiag(A);
+//      [ab,w,bs]=bdiag(a);
       a1=a(1:n,1:n),a4=a(n+1:t,n+1:t),x=a(1:n,n+1:t),
       z=sylv(a1,-a4,-x,'cont'),
       w=[eye(n,n),z;0*ones(t-n,n),eye(t-n,t-n)],

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DGBSL,SSI=0
       subroutine dgbsl(abd,lda,n,ml,mu,ipvt,b,job)
       integer lda,n,ml,mu,ipvt(*),job
       double precision abd(lda,*),b(*)

@@ -85,7 +85,7 @@ if (strlen(xf) >= 2 && xf[1]=='l' && strlen(strflag) >= 2 && strflag[1] != '0')
 	aint[0]=1;aint[1]=nint(xmax-xmin);
       }
     else 
-      fprintf(stderr," Can't use Log on X-axis xmin is negative \n");
+      Scistring(" Can't use Log on X-axis xmin is negative \n");
   };
 if (strlen(xf) >=3  && xf[2]=='l' && strlen(strflag) >= 2 && strflag[1] != '0')
   {
@@ -96,7 +96,7 @@ if (strlen(xf) >=3  && xf[2]=='l' && strlen(strflag) >= 2 && strflag[1] != '0')
 	aint[2]=1;aint[3]=nint(ymax-ymin);
       }
     else 
-      fprintf(stderr," Can't use Log on y-axis ymin is negative \n");
+      Scistring(" Can't use Log on y-axis ymin is negative \n");
   };
 
 /** Scaling **/

@@ -1,5 +1,5 @@
-//<K>=%K(m)
-//<K>=%K(m)
+//<K>=%k(m)
+//<K>=%k(m)
 //Calculates Jacobi's complete elliptic integral
 //of the first kind:
 //  K = integral from 0 to 1 of

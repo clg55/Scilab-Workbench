@@ -7,7 +7,8 @@ c     niveau 1.
 c!
       integer istk(ni),cmplxt
 c     
-      parameter (nsiz=2)
+
+      parameter (nsiz=6)
       integer op
 c     
       if(ni.eq.0) then

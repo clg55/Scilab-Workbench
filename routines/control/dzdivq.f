@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DZDIVQ,SSI=0
       subroutine dzdivq(ichoix,nv,tv,nq,tq)
 c!but
 c     calcule ici les quotient et reste de la division

@@ -1,6 +1,6 @@
-#define BEGIN 0
-#define STUDY 1
-#define MODIFY 2
+#define BEGIN 1
+#define STUDY 2
+#define MODIFY 3
 
 extern void DisplayMenu();
 extern void ModifyGraph();

@@ -193,10 +193,9 @@ int Fsepare(fmt,dec,l,xmin,xmax,xpas)
     return(0);
   sprintf(buf1,fmt,dec,xmin);
   while ( x < xmax ) 
-    { char *s;
-      x += xpas;
+    { x += xpas;
       strcpy(buf2,buf1);
-      s=sprintf(buf1,fmt,dec,x);
+      sprintf(buf1,fmt,dec,x);
       *l = ((strlen(buf1) >= *l) ? strlen(buf1) : *l) ;
       if ( strcmp(buf1,buf2) == 0) return(0);
     };
@@ -204,4 +203,85 @@ int Fsepare(fmt,dec,l,xmin,xmax,xpas)
 }
 ;
 
+/*--------------------------------------------
+  Meme Chose que ChoixFormatE mais quand les nombres sont donnes
+  par un vecteur xx[0],...xx[N-1];
+------------------------------------------------*/
 
+ChoixFormatE1(fmt,desres,xx,nx)
+     char fmt[];
+     int *desres,nx;
+     double xx[];
+{
+  char buf[100];
+  int des,len;
+  /* format f minimal  */
+  for ( des = 0 ; des < 5 ; des++)
+    {
+      if (Fsepare1("%.*f",des,&len,xx,nx)) break;
+    };
+  if ( des < 5 && len <= 6)
+    {
+      strcpy(fmt,"%.*f"); 
+      *desres= des;
+    }
+  else 
+    {
+      for ( des = 0 ; des < 5 ; des++)
+	{
+	  sprintf(buf,".%de",des);
+	  if (Fsepare1("%.*e",des,&len,xx,nx)) break;
+	};
+      strcpy(fmt,"%.*e"); 
+      *desres= des;
+    }
+  FormatPrec1(fmt,desres,xx,nx);
+}
+
+FormatPrec1(fmt,desres,xx,nx)
+     char fmt[];
+     int *desres,nx;
+     double xx[];
+{
+  char buf1[100],buf2[100];
+  double xpas;
+  int i=0;
+  while ( i < nx-1 && *desres  < 10 )
+    {
+      double x1,x2;
+      sprintf(buf1,fmt,*desres,xx[i]);
+      sprintf(buf2,fmt,*desres,xx[i+1]);
+      sscanf(buf1,"%lf",&x1);
+      sscanf(buf2,"%lf",&x2);
+      xpas = xx[i+1]-xx[i];
+      if ( xpas != 0.0)
+	{
+	  if (Abs((x2-x1 - xpas) /xpas) >= 0.1)  *desres += 1;
+	  if (Abs((x1-xx[i])/xpas) >= 0.1) *desres +=1;
+	};
+      i++;
+    };
+};
+
+int Fsepare1(fmt,dec,l,xx,nx)
+     char fmt[];
+     int  dec,*l,nx;
+     double xx[];
+{
+  char buf1[100],buf2[100];
+  int i=0;
+  *l = 0;
+  /**  Take care of : sprintf(buf1,"%.*f",0,1.d230) which overflow in buf1 **/
+  /**  we don't use %.*f format if numbers are two big **/
+  if (strcmp("%.*f",fmt)==0 && (Abs(xx[nx-1])> 1.e+10 || Abs(xx[0]) > 1.e+10))
+    return(0);
+  sprintf(buf1,fmt,dec,xx[0]);
+  for ( i=1 ; i < nx ; i++)
+    { strcpy(buf2,buf1);
+      sprintf(buf1,fmt,dec,xx[i]);
+      *l = ((strlen(buf1) >= *l) ? strlen(buf1) : *l) ;
+      if ( strcmp(buf1,buf2) == 0) return(0);
+    };
+  return(1);
+}
+;

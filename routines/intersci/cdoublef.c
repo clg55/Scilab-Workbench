@@ -12,7 +12,9 @@ double *ip[];
 double *op;
 {
   int i;
-  for (i = 0; i < *n; i++)
-    op[i]=(*ip)[i];
-  free((char *)(*ip));
+  if ( *n >0 ) {
+      for (i = 0; i < *n; i++)
+	  op[i]=(*ip)[i];
+      free((char *)(*ip));
+  }
 }

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=NEWEST,SSI=0
       subroutine newest(type, uu, vv)
 c compute new estimates of quadratic coefficients
 c using the scalars computed in calcsc.

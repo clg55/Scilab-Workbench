@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=CORTR,SSI=0
       subroutine cortr(nm,n,low,igh,hr,hi,ortr,orti,zr,zi)
 c!purpose
 c     cortr accumulate the  unitary similarities performed by corth

@@ -204,6 +204,6 @@ if ( loc != 0)
   }
 else
   {
-    fprintf(stderr,"Legends : No more Place to store Legends\n");
+    Scistring("Legends : No more Place to store Legends\n");
   }
 };

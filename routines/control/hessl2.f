@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=HESSL2,SSI=0
       subroutine hessl2(nq,tq,hessl,hessd)
 c!but
 c     Elle etablit la valeur de la Hessl2ne, derivee

@@ -1,4 +1,4 @@
-function [Ws,Fs1]=rowshuffle(Fs,alfa)
+function [Ws,Fs1]=rowshuff(Fs,alfa)
 // Shuffle algorithm: Given the pencil Fs=s*E-A, returns Ws=W(s) 
 // (square polynomial matrix) such that:
 // Fs1 = s*E1-A1 = W(s)*(s*E-A) is a pencil with non singular E1 matrix.
@@ -15,12 +15,12 @@ end
 //     E is non singular: --> exit
 if rcond(E) >= 1.d-5 then W=eye(E);Fs1=Fs;return;end
 //     E is singular:
-s=poly(0,'s');tol=1.d-10*(norm(e,1)+norm(a,1));
+s=poly(0,'s');tol=1.d-10*(norm(E,1)+norm(A,1));
 [n,n]=size(E);Ws=eye(n,n);
 //     
 rk=0;i=0;
 while rk  < n
-   if i=n then error('rowshuffle: singular pencil!');w=[];end
+   if i=n then error('rowshuffle: singular pencil!');W=[];end
   [W,rk]=rowcomp(E);
    if rk==n then return;end
    W1=W(1:rk,:);W2=W(rk+1:n,:);

@@ -8,6 +8,7 @@
  extern int  cleararea_xfig_();
  extern int  clearwindow_xfig_();
  extern int  waitforclick_xfig_();
+ extern int  xgetmouse_xfig_();
  extern int  xend_xfig_();
  extern int  drawfilledarc_xfig_();
  extern int  viderbuff_xfig_();

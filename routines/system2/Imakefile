@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 OBJS=  	fmttyp.o getfun.o\
@@ -7,7 +8,7 @@ OBJS=  	fmttyp.o getfun.o\
 	cvwm.o cvdm.o atome.o iseye.o\
 	alloc.o back.o\
 	matz.o matc.o matzs.o\
-	expsum.o termf.o bsurf.o transl.o warn.o \
+	expsum.o termf.o bsurf.o transl.o \
 	dldsp.o istrue.o isnum.o namstr.o basnms.o cmplxt.o \
 	intstr.o extlarg.o bcol.o bsolv.o bjsolv.o 
 

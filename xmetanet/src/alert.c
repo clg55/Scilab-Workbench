@@ -9,8 +9,6 @@
 #include "metawin.h"
 #include "graphics.h"
 
-#define STRLEN 1000
-
 static int okFlag;
 static int yesOrNo;
 
@@ -23,8 +21,8 @@ caddr_t callData;
   okFlag = 1;
 }
 
-void MetanetAlert(format,a1,a2,a3,a4,a5,a6,a7)
-char *format;
+void MetanetAlert(description)
+char *description;
 {
   XEvent event;
   Widget Alert;
@@ -34,9 +32,6 @@ char *format;
   XtCallbackRec callbacks[2];
   XWindowAttributes war;
   int h,w;
-  char description[STRLEN];
-
-  sprintf(description,format,a1,a2,a3,a4,a5,a6,a7);
 
   callbacks[1].callback = NULL;
   callbacks[1].closure = NULL;
@@ -60,7 +55,7 @@ char *format;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
   XtCreateManagedWidget("labelAlert",labelWidgetClass,Alert,args,iargs);
 
-  callbacks[0].callback = AlertOk;
+  callbacks[0].callback = (XtCallbackProc)AlertOk;
   callbacks[0].closure = (caddr_t)shell;
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, "ok" ); iargs++;
@@ -99,8 +94,8 @@ caddr_t callData;
   okFlag = 1;
 }
 
-int MetanetYesOrNo(format,a1,a2,a3,a4,a5,a6,a7)
-char *format;
+int MetanetYesOrNo(description)
+char *description;
 {
   XEvent event;
   Widget Alert;
@@ -108,10 +103,8 @@ char *format;
   int iargs = 0;
   Widget shell;
   XtCallbackRec callbacks[2];
-  char description[STRLEN];
   int h,w;
   XWindowAttributes war;
-  sprintf(description,format,a1,a2,a3,a4,a5,a6,a7);
 
   callbacks[1].callback = NULL;
   callbacks[1].closure = NULL;
@@ -135,7 +128,7 @@ char *format;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
   XtCreateManagedWidget("labelAlert",labelWidgetClass,Alert,args,iargs);
 
-  callbacks[0].callback = AlertYes;
+  callbacks[0].callback = (XtCallbackProc)AlertYes;
   callbacks[0].closure = (caddr_t)shell;
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, "yes" ); iargs++;
@@ -143,7 +136,7 @@ char *format;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
   XtCreateManagedWidget("yescommand",commandWidgetClass,Alert,args,iargs);
 
-  callbacks[0].callback = AlertNo;
+  callbacks[0].callback = (XtCallbackProc)AlertNo;
   callbacks[0].closure = (caddr_t)shell;
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, "no" ); iargs++;

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DCLMAT,SSI=0
       subroutine dclmat(ia, n, a, b, ib, w, c, ndng)
 c
 c%purpose

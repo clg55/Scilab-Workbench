@@ -108,8 +108,8 @@ xdot= 10*x*(1-x/K)- peche(t)*x
 //!
 [lhs,rhs]=argn(0);
 if rhs=2,u=0,end
-xdot(1) = ppr*x(1)*(1-x(1)/ppk) - ppa*x(1)*x(2) - u*x(1);
-xdot(2) = -ppm*x(2)             + ppb*x(1)*x(2) - u*x(2);
+xdot(1) = p_ppr*x(1)*(1-x(1)/p_ppk) - p_ppa*x(1)*x(2) - u*x(1);
+xdot(2) = -p_ppm*x(2)             + p_ppb*x(1)*x(2) - u*x(2);
 //end
 
 //[xe]=equilpp(ue)
@@ -119,15 +119,15 @@ xdot(2) = -ppm*x(2)             + ppb*x(1)*x(2) - u*x(2);
 //  ue=0 par defaut
 //!
 [lhs,rhs]=argn(0);if rhs=0,ue=0,end
-xe(1) =  (ppm+ue)/ppb;
-xe(2) =  (ppr*(1-xe(1)/ppk)-ue)/ppa;
+xe(1) =  (p_ppm+ue)/p_ppb;
+xe(2) =  (p_ppr*(1-xe(1)/p_ppk)-ue)/p_ppa;
 //end
 
 //[xdot]=lincom(t,x,k)
 // systeme lineaire commande par
 // feedback lineaire d'etat (u=-k*x)
 //!
-xdot= a*x +b*(-k*x);
+xdot= lic_a*x +lic_b*(-k*x);
 //end
 
 

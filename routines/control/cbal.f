@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=CBAL,SSI=0
       subroutine cbal(nm,n,ar,ai,low,igh,scale)
 c
       integer i,j,k,l,m,n,jj,nm,igh,low,iexc

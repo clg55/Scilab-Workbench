@@ -1,3 +1,4 @@
+
 /*
 ** testfrac.c
 **
@@ -8,7 +9,7 @@
 #include "scilab_d.h"
 
 
-extern Widget toplevel;
+static Widget toplevel;
 extern XtAppContext app_con;
 
 #define SCROLLBAR_LENGTH 125
@@ -186,7 +187,7 @@ create_testfrac_choice(w,description,min,max)
   XtSetArg(args[iargs], XtNfromHoriz ,slider) ; iargs++;
   XtSetArg(args[iargs], XtNlabel, "Ok" ); iargs++;
   wid=XtCreateManagedWidget("okbutton",commandWidgetClass,w,args,iargs);
-  XtAddCallback(wid, XtNcallback,mDialogOk , NULL );  
+  XtAddCallback(wid, XtNcallback,(XtCallbackProc)mDialogOk , NULL );  
 }
 
 void
@@ -217,7 +218,9 @@ void mbar1(description,min,max)
     int iargs = 0,i,ierr,mxdesc,mxini,siz;
     Widget shell,wid,form,box,label;
     Widget *w;
+    static Display *dpy = (Display *) NULL;
     char dialName[8],boxName[8];
+    DisplayInit("",&dpy,&toplevel);
     XtSetArg(args[iargs], XtNx, X + 10); iargs++ ;
     XtSetArg(args[iargs], XtNy, Y +10); iargs++;
     shell = XtCreatePopupShell("dialogshell",transientShellWidgetClass,toplevel,
@@ -227,5 +230,5 @@ void mbar1(description,min,max)
     form = XtCreateManagedWidget("message",formWidgetClass,shell,args,iargs);
     create_testfrac_choice(form,description,min,max);
     XtPopup(shell,XtGrabExclusive);
-    XtMyLoop(shell);
+    XtMyLoop(shell,dpy);
 }

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=RESID,SSI=0
       subroutine resid(neq, t, y, s, r, ires)
       double precision r, s, t, y
       dimension y(3), s(3), r(3)

@@ -2,7 +2,7 @@
 // 1- coff inversion 
  s=poly(0,'s'); a=[1 2 3;4 5 6;7 8 9];
  [num,den]=coff(a,'s');h1=num/den;h2=(s*eye-a)**(-1);
- e=h1-h2;if NORM(coeff(e(2)))>5000*%eps then pause,end
+ e=h1-h2;if norm(coeff(e(2)))>5000*%eps then pause,end
 // 2-test de tf2ss et ss2tf
  n=[1+s   2+3*s+4*s**2        5; 0        1-s             s];
  d=[1+3*s   5-s**3           s+1;1+s     1+s+s**2      3*s-1];
@@ -10,7 +10,7 @@
  h=syslin('c',n./d);
  [n,d]=simp(n,d);if h<>list('r',n,d,'c') then pause,end
  sl=tf2ss(h); e=h-ss2tf(sl);
- if NORM(coeff(e(2)))>1000*%eps then pause,end
+ if norm(coeff(e(2)))>1000*%eps then pause,end
  
  
 //
@@ -52,7 +52,7 @@ if norm(coeff(hh(2))) > 1.e-5 then pause,end
 hh=c*real(num)*b/real(den) + 0*ones(2,3);
 hh=hh-h;
 if norm(coeff(hh(2))) > 1.e-5 then pause,end
-slh=tf2ss(h)
+slh=tf2ss(hm)       //was tf2ss(h)
 //
 u=eye(3,60);
 xbasc();

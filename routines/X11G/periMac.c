@@ -201,7 +201,7 @@ getwindowpos_(verbose, x, narg)
   x[0] = CWindow->portRect.left;
   x[1] = CWindow->portRect.top;
   if (*verbose == 1)
-    fprintf(stderr, "\n CWindow position :%d,%d", x[0], x[1]);
+    SciF2d( "\n CWindow position :%d,%d\r\n", x[0], x[1]);
 };
 
 /** to set the window upper-left point position on the screen **/
@@ -222,7 +222,7 @@ getwindowdim_(verbose, x, narg)
   x[0] = (CWindow->portRect).right - (CWindow->portRect).left - SBARWIDTH;
   x[1] = (CWindow->portRect).bottom - (CWindow->portRect).top - SBARWIDTH;
   if (*verbose == 1)
-    fprintf(stderr, "\n CWindow dim :%d,%d", x[0], x[1]);
+    SciF2d( "\n CWindow dim :%d,%d\r\n", x[0], x[1]);
 };
 
 /** To change the window size  **/
@@ -241,7 +241,7 @@ setcurwin_(intnum)
 {
   Window GetWindowNumber_();
   CWindow = GetWindowNumber_(*intnum);
-  fprintf(stderr, "OK inside setcurwin\n");
+  Scistring( "OK inside setcurwin\n");
   MissileXgc.CurWindow = *intnum;
   if (CWindow == (Window) NULL)
   {
@@ -260,7 +260,7 @@ getcurwin_(verbose, intnum, narg)
   *narg = 1;
   *intnum = MissileXgc.CurWindow;
   if (*verbose == 1)
-    fprintf(stderr, "\nCurrent Graphic Window :%d", *intnum);
+    SciF1d( "\nCurrent Graphic Window :%d", *intnum);
 };
 
 /** Set a clip zone (rectangle ) **/
@@ -295,13 +295,13 @@ getclip_(verbose, x, narg)
     *narg = 1;
   if (*verbose == 1)
     if (MissileXgc.ClipRegionSet == 1)
-      fprintf(stderr, "\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d",
+      SciF4d("\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d\r\n",
 	      MissileXgc.CurClipRegion[0],
 	      MissileXgc.CurClipRegion[1],
 	      MissileXgc.CurClipRegion[2],
 	      MissileXgc.CurClipRegion[3]);
     else
-      fprintf(stderr, "\nNo Clip Region");
+      Scistring( "\nNo Clip Region");
 };
 
 /*----------------------------------------------------------
@@ -330,9 +330,9 @@ getabsourel_(verbose, num, narg)
   *num = MissileXgc.CurVectorStyle;
   if (*verbose == 1)
     if (MissileXgc.CurVectorStyle == CoordModeOrigin)
-      fprintf(stderr, "\nTrace Absolu");
+      Scistring( "\nTrace Absolu");
     else
-      fprintf(stderr, "\nTrace Relatif");
+      Scistring( "\nTrace Relatif");
 };
 
 /** The alu function for drawing : Works only with X11 **/
@@ -403,9 +403,9 @@ idfromname(name1, num)
       *num = AluStruc_[i].id;
   if (*num == -1)
   {
-    fprintf(stderr, "\n Use the following keys (integer in scilab");
+    Scistring( "\n Use the following keys (integer in scilab");
     for (i = 0; i < 16; i++)
-      fprintf(stderr, "\nkey %s   -> %s", AluStruc_[i].name,
+      SciF2s("\nkey %s   -> %s\r\n", AluStruc_[i].name,
 	      AluStruc_[i].info);
   };
 };
@@ -419,7 +419,7 @@ getalufunction_(verbose, value, narg)
   *value = MissileXgc.CurDrawFunction;
   if (*verbose == 1)
   {
-    fprintf(stderr, "\nThe Alufunction is %s -> <%s>\n",
+    SciF2s("\nThe Alufunction is %s -> <%s>\r\n",
 	    AluStruc_[*value].name,
 	    AluStruc_[*value].info);
   }
@@ -447,7 +447,7 @@ getthickness_(verbose, value, narg)
   *narg = 1;
   *value = MissileXgc.CurLineWidth;
   if (*verbose == 1)
-    fprintf(stderr, "\nLine Width:%d",
+    SciF1d( "\nLine Width:%d\r\n",
 	    MissileXgc.CurLineWidth);
 };
 
@@ -499,7 +499,7 @@ getpattern_(verbose, num, narg)
   *narg = 1;
   *num = MissileXgc.CurPattern;
   if (*verbose == 1)
-    fprintf(stderr, "\n Pattern : %d",
+    SciF1d( "\n Pattern : %d\r\n",
 	    MissileXgc.CurPattern);
 };
 
@@ -510,7 +510,7 @@ getwhite_(verbose, num, narg)
 {
   *num = MissileXgc.IDWhitePattern;
   if (*verbose == 1)
-    fprintf(stderr, "\n Id of White Pattern %d :", *num);
+    SciF1d( "\n Id of White Pattern %d \r\n", *num);
   *narg = 1;
 };
 /*--------------------------------------
@@ -573,7 +573,7 @@ getdash_(verbose, value, narg)
   if (*value == 0)
   {
     if (*verbose == 1)
-      fprintf(stderr, "\nLine style = Line Solid");
+      Scistring( "\nLine style = Line Solid");
   } else
   {
     value[1] = 4;
@@ -582,10 +582,10 @@ getdash_(verbose, value, narg)
       value[i + 2] = DashTab[*value - 1][i];
     if (*verbose == 1)
     {
-      fprintf(stderr, "\nDash Style %d:<", *value);
+      SciF1d( "\nDash Style %d:<", *value);
       for (i = 0; i < value[1]; i++)
-	fprintf(stderr, "%d ", value[i + 2]);
-      fprintf(stderr, ">\n");
+	SciF1d( "%d ", value[i + 2]);
+      Scistring( ">\n");
     }
   }
 };
@@ -601,7 +601,7 @@ empty_(verbose)
   int *verbose;
 {
   if (*verbose == 1)
-    fprintf(stderr, "\n No operation ");
+    Scistring( "\n No operation ");
 };
 
 #define NUMSETFONC 13
@@ -661,7 +661,7 @@ MissileGCGetorSet_(str, flag, verbose, x1, x2, x3, x4, x5)
     if (j == 0)
     {
       if (*verbose == 1)
-	fprintf(stderr, "\nGettting Info on %s", str);
+	SciF1s( "\nGettting Info on %s\r\n", str);
       if (flag == 1)
 	(MissileGCTab_[i].getfonc) (verbose, x1, x2, x3, x4, x5);
       else
@@ -671,12 +671,12 @@ MissileGCGetorSet_(str, flag, verbose, x1, x2, x3, x4, x5)
     {
       if (j <= 0)
       {
-	fprintf(stderr, "\nUnknow X operator <%s>", str);
+	SciF1s( "\nUnknow X operator <%s>\r\n", str);
 	return;
       };
     };
   };
-  fprintf(stderr, "\n Unknow X operator <%s>", str);
+  SciF1s( "\n Unknow X operator <%s>\r\n", str);
 };
 
 /*-------------------------------------------------------
@@ -700,7 +700,6 @@ displaystring_(string, x, y, angle, flag)
 {
   if (Abs(*angle) <= 0.1)
   {
-    /* fprintf(stderr,"string at %d,%d %s\n",*x,*y,string); */
     MoveTo(*x, *y);
     CtoPstr(string);
     DrawString(string);
@@ -708,11 +707,10 @@ displaystring_(string, x, y, angle, flag)
     if (*flag == 1)
     {
       int rect[4];
-      fprintf(stderr, " je rajoute un rect \n");
+      Scistring( " je rajoute un rect \n");
       boundingbox_(string, x, y, rect);
       rect[0] = rect[0] - 4;
       rect[2] = rect[2] + 6;
-      fprintf(stderr, " je rajoute un %s,%d,%d,%d,%d \n", string, rect[0], rect[1], rect[2], rect[3]);
       drawrectangle_(string, rect, rect + 1, rect + 2, rect + 3);
     };
   } else
@@ -1106,7 +1104,7 @@ MacFillLines(vx, vy, n, closeflag)
 {
   PolyHandle Pol;
   int i;
-  /* fprintf(stderr," inside fill poly \n"); */
+  /* Scistring(" inside fill poly \n"); */
   Pol = OpenPoly();
   MoveTo(vx[0], vy[0]);
   for (i = 0; i < n; i++)
@@ -1174,7 +1172,7 @@ AddNewWindow_(listptr, wind, num)
   {
     *listptr = (MWindowList *) malloc(sizeof(MWindowList));
     if (listptr == 0)
-      fprintf(stderr, "AddNewWindow_ :  No More Place ");
+      Scistring( "AddNewWindow_ :  No More Place ");
     else
     {
       (*listptr)->win = wind;
@@ -1224,7 +1222,7 @@ static RES the_res;
 set_c(i)
      int i;
 {
-  fprintf(stderr,"Color not implemented yet\n");
+  Scistring("Color not implemented yet\n");
 } ;
 
 
@@ -1431,7 +1429,7 @@ int xsetfont_(fontid, fontsize)
   i = Min(FONTNUMBER - 1, Max(*fontid, 0));
   fsiz = Min(FONTMAXSIZE - 1, Max(*fontsize, 0));
   if (FontInfoTab_[i].ok != 1)
-    fprintf(stderr, "\n Sorry This Font is Not available ");
+    Scistring( "\n Sorry This Font is Not available ");
   else
   {
 
@@ -1515,7 +1513,7 @@ loadfamily_(name, j)
     if (FontsList_[*j][i] == 0)
     {
       fprintf(stderr, "\n Unknown font : %s", name1);
-      fprintf(stderr, "\n I'll use font: times ");
+      Scistring( "\n I'll use font: times ");
       FontsList_[*j][i] = 20;
     };
   };

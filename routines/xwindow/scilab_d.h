@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <malloc.h>
-
-
 #include <X11/Xatom.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
@@ -22,9 +20,6 @@
 #include <X11/Xaw/TextP.h>
 #include <X11/Xaw/Scrollbar.h>
 
-
-
-
 /* used only for message and dialog boxes */
 #define DIALOGHEIGHT 30
 
@@ -34,10 +29,8 @@
 
 #define INTERHEIGHT 100
 
-#define DRAWFONT "-adobe-times-bold-r-normal--8-80-75-75-p-47-iso8859-1"
+#define XWMENUFONT "*-fixed-medium-r-*-*-13-*-*-*-*-*-iso8859-*"
 #define MaxWin 10
-
 
 #define Min(x,y)	(((x)<(y))?(x):(y))
 #define Max(x,y)	(((x)>(y))?(x):(y))
-

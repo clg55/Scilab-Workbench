@@ -20,11 +20,11 @@ function [svm] = svplot(Sl,w)
 //!
 [nargout,nargin]=argn(0);
 //
-[A,B,C,D]=abcd(Sl);
-// Reduce A to Hessenberg form
+[a,b,c,d]=abcd(Sl);
+// Reduce a to Hessenberg form
 [q,a] = hess(a); b = q'*b; c = c*q;
 // Compute the singular values of the frequency response
-select sl(7)
+select Sl(7)
 case []
    warning('svplot: time domain not defined-->assumed continuous');
 if nargin == 1

@@ -7,7 +7,7 @@ nam='cond'
 s2=stk(top)
 v=s2(1)
 it2=prod(size(v))-1
-if it2<>0 then  error(nam+' d''un argument complexe non traduit'),end
+if it2<>0 then  error(nam+' complex --> not implemented'),end
 
 [s2,nwrk,t0]=typconv(s2,nwrk,'1')
 n=s2(4);m=s2(5)
@@ -18,7 +18,7 @@ else
   n1='min('+addf(n,'1')+','+m+')'
   n2='min('+n+','+m+')'
 end
-[errn,nwrk]=adderr(nwrk,'echec du calcul du conditionnement')
+[errn,nwrk]=adderr(nwrk,'Computation of conditioning fails')
 [s,nwrk,t1]=getwrk(nwrk,'1','1',n1)
 [e,nwrk,t2]=getwrk(nwrk,'1','1',m)
 [wrk,nwrk,t3]=getwrk(nwrk,'1','1',n)

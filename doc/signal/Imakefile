@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 TEXFILES= bibli.tex chap0.tex chap1.tex chap2.tex chap3.tex chap4.tex chap5.tex \
@@ -11,7 +12,7 @@ info 	:
 	@echo 
 	@echo "  To remake it from scratch, you need" 
 	@echo "  scilab, latex and makeindex type :"
-	@echo "     xmkmf ; make Makefiles ; make doc "
+	@echo "     rm Toolbox.ps.Z ; xmkmf ; make Makefiles ; make doc "
 
 doc	:  subs Toolbox.ps.Z
 
@@ -24,7 +25,7 @@ Toolbox.ps.Z: subs  $(TEXFILES)
 	compress Toolbox.ps
 
 clean	::
-	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc
+	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc Toolbox.ps
 
 distclean:: clean 
 

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DGEFA,SSI=0
       subroutine dgefa(a,lda,n,ipvt,info)
       integer lda,n,ipvt(*),info
       double precision a(lda,*)

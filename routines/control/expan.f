@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=EXPAN,SSI=0
        subroutine expan(a,la,b,lb,c,nmax)
 c! but
 c calcul des nmax premiers coefficients de la longue division de

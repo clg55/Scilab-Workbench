@@ -50,16 +50,16 @@ while ilst<nlst then
              if v(1)==expk(3)&v(2)==expk(4)&v(3)==expk(5) then
                out=opk(2)
              else
-               error('La variable d''entree :'+vnms(k3,2)+..
-                             ' a changee de type ou de dimensions')
+               error('input variable :'+vnms(k3,2)+..
+                             ' changed type or dimensions')
              end
           else
              if v(1)=='?'|v(1)==expk(3) then
                out=opk(2)
                vtps(k3)=list(expk(3),expk(4),expk(5),it)
              else
-               txt=[txt;'C ATTENTION La variable locale :'+vnms(k3,2)+..
-                                                     ' a changee de type']
+               txt=[txt;'C WARNING local variable  :'+vnms(k3,2)+..
+                                                     ' changed its type!']
              end
           end
         end
@@ -71,7 +71,7 @@ while ilst<nlst then
              select expk(3)
              case '0' then call=' call icopy('
              case '1' then call=' call dcopy('
-             else error('cod2for:type non implante')
+             else error('cod2for:this type is not implemented')
              end
              mn=mulf(expk(4),expk(5))
              txt=[txt;call+makeargs([mn,expk(1),'1',out,'1'])+')']

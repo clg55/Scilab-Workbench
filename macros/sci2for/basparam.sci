@@ -6,7 +6,7 @@
 quote=''''
 logics=['==','<','>','<=','>=','<>']
 //
-//       symbole type_du_resultat parenthesage_des_operandes
+//       symbol type_result parenthes_od_operands
 ops     =['+','2','  ';
          '-','2',' r';
          '*','1','  ';
@@ -32,7 +32,10 @@ ops     =['+','2','  ';
          '[]','0','  ';
          'ins','0','  ';
          'ext','0','  ';
-         quote,'0','  '];
+         quote,'0','  '
+         '|','2',' ';
+         '&','1',' '
+         '~','2',' r'];
 [logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then]=...
 resume(logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then)
  

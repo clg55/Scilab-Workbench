@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=SYDSR,SSI=0
       subroutine sydsr(n,m,a,na,b,nb,c,nc,ierr)
 c%But
 c

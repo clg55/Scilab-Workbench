@@ -8,6 +8,7 @@
  extern int cleararea_();
  extern int clearwindow_();
  extern int xclick_();
+ extern int xgetmouse_();
  extern int xend_();
  extern int fillarc_();
  extern int viderbuff_();

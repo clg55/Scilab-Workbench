@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 OBJS=	ajour.o bfgsd.o calbx.o calmaj.o ffinf1.o fmulb1.o fmuls1.o fpq2.o \

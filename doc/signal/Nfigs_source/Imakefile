@@ -1,3 +1,4 @@
+/**/include ../../../Path.incl
 #include "../../../Imake.incl"
 
 CHAP1= flts.1.tex flts.2.tex plot.1.tex plot.2.tex plot.3.tex  plot.4.tex

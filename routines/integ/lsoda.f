@@ -1313,7 +1313,7 @@ c-----------------------------------------------------------------------
 c correction L Loth 91
 c      if (istate .eq. 2) jstart = -2
 
-      if (istate .eq. 2.and.jtsart.ne.-1) jstart = -2
+      if (istate .eq. 2.and.jstart.ne.-1) jstart = -2
 c-----------------------------------------------------------------------
 c block e.
 c the next block is normally executed for all calls and contains

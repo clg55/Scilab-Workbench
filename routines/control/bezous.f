@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=BEZOUS,SSI=0
        subroutine bezous(a,n,c,w,ierr)
 c!but
 c  ce sous programme calcule le second coefficient de bezout du

@@ -1,3 +1,4 @@
+/**/include ../Path.incl
 #include "../Imake.incl"
 
 #define IHaveSubdirs
@@ -5,7 +6,7 @@
 
 SUBDIRS = bike npend wheel2
 
-AllTarget()
+AllTarget(NullParameter)
 
 NamedMakeSubdirs(demos,$(SUBDIRS))
 DependSubdirs($(SUBDIRS))

@@ -14,7 +14,7 @@ c
 c
       include '../stack.h'
       integer pause
-      character ch*2
+      character ch*3
 c
 c     Version standard
 c     -----------------
@@ -42,6 +42,6 @@ c      endif
 c
 c fin
 c----
-      if (pause .eq. 1) call basin(ierr,rte,ch,'*')
+      if (pause .eq. 1) call basin(ierr,rte,buf,'*')
       return
       end

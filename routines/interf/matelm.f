@@ -8,7 +8,7 @@ c
       INCLUDE '../stack.h'
       double precision s,sr,si,t,x,x1
 c
-      integer id(2)
+      integer id(nsiz)
       integer semi,unifor,normal,seed,magi,frk,top2,hilb
       double precision dsum,pythag,round,urand
       integer iadr,sadr
@@ -31,8 +31,8 @@ c     abs  real imag conj roun ent  size sum  prod diag triu tril
 c      1    2    3    4    5    6    7    8    9    10   11   12
 c     eye  rand ones maxi mini sort kron matr sin  cos  atan exp
 c      13   14   15   16   17   18  19-21 22   23   24   25   26
-c     sqrt log  ** sign
-c      27   28  29  30
+c     sqrt log   ^  sign
+c      27   28   29  30
 c
       if(rstk(pt).eq.905) goto 310
 c
@@ -144,6 +144,7 @@ c     size
       call error(42)
       return
    41 if(istk(il).ne.15) then
+         err=1
          call error(56)
          return
       endif
@@ -604,22 +605,27 @@ c     maxi mini des vecteurs d'une liste
         ji=1
         do 102 j=2,ne
            if(x*(stk(li)-stk(istk(ilw-1+j)+i)).gt.0) then
-                 stk(li)=stk(istk(ilw-1+j)+i)
-                 ji=j
+              stk(li)=stk(istk(ilw-1+j)+i)
+              ji=j
            endif
- 102   continue
+ 102    continue
         stk(istk(ilw+1)+i)=real(ji)
- 103   continue
-       call dcopy(n1+n2 ,stk(ld),1,stk(lstk(top)),1)
-       lstk(top+1)=lstk(top)+n1
-       if(lhs.eq.2) then
-          top=top+1
-          lstk(top+1)=lstk(top)+n2
-       endif
-       goto 999
+ 103  continue
+      call dcopy(n1+n2 ,stk(ld),1,stk(lstk(top)),1)
+      lstk(top+1)=lstk(top)+n1
+      if(lhs.eq.2) then
+         top=top+1
+         lstk(top+1)=lstk(top)+n2
+      endif
+      goto 999
 c
 c sort
-  105 if(it.ne.0) then
+ 105  if(istk(il).ne.1) then
+         err=1
+         call error(53)
+         return
+      endif
+      if(it.ne.0) then
          err=1
          call error(52)
          return
@@ -843,7 +849,7 @@ c     sin
 c
  140  continue
       if(mn.eq.0) goto 999
-      if(m.eq.n.and.n.gt.1) then
+      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
          call cvname(id,'msin    ',0)
          goto 300
       endif
@@ -865,7 +871,7 @@ c     cos
 c
  150  continue
       if(mn.eq.0) goto 999
-      if(m.eq.n.and.n.gt.1) then
+      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
          call cvname(id,'mcos    ',0)
          goto 300
       endif
@@ -892,7 +898,7 @@ c
          call  error(53)
          return
       endif
-      if(m.eq.n.and.n.gt.1) then
+      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
          call cvname(id,'matan   ',0)
          goto 300
       endif
@@ -944,6 +950,10 @@ c     exp
 c
  170  continue
       if(mn.eq.0) goto 999
+      if(istk(il).ne.1) then
+         call cvname(id,'mexp   ',0)
+         goto 300
+      endif
       if(m.eq.n.and.n.gt.1) then
          nn=mn
          if(it.eq.0) then
@@ -998,7 +1008,7 @@ c     sqrt
 c
  180  continue
       if(mn.eq.0) goto 999
-      if(m.eq.n.and.n.gt.1) then
+      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
          call cvname(id,'msqrt   ',0)
          goto 300
       endif
@@ -1039,7 +1049,7 @@ c     log
 c
  190  continue
       if(mn.eq.0) goto 999
-      if(m.eq.n.and.n.gt.1) then
+      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
          call cvname(id,'mlog    ',0)
          goto 300
       endif
@@ -1093,7 +1103,7 @@ c     sign
 c
  210  continue
       if(mn.eq.0) goto 999
-      if(m.eq.n.and.n.gt.1) then
+      if((m.eq.n.and.n.gt.1).or.istk(il).ne.1) then
          call cvname(id,'msign    ',0)
          goto 300
       endif

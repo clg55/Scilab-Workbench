@@ -77,15 +77,19 @@
 extern char GetDriver_();
 static double scx=1,scy=1,FRect[4];
 static double m[3][3],tr[2];
+/* The current bounding box */
+static double bbox1[6]={0.0,1.0,0.0,1.0,0.0,1.0};
 
 
 plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
      double x[],y[],z[],bbox[];
-     int *p,*q,*teta,*alpha;
+     int *p,*q;
+     double *teta,*alpha;
      int flag[];
      char legend[],name[];
      int (*func)();
 {
+  double cost=0.5,sint=0.5,cosa=0.5,sina=0.5;
   static int InsideU[4],InsideD[4];
   int polysize,npoly,whiteid,verbose=0,narg;
   int *polyx,*polyy,*fill;
@@ -97,39 +101,35 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
   if (GetDriver_()=='R') 
     StorePlot3D(name,x,y,z,p,q,teta,alpha,legend,flag,bbox);
   /** if flag[1] ==0 then superpose mode **/
+  if (flag[1]!=1 && flag[1] != 0)
+    {
+      bbox[0]=x[0];bbox[1]=x[*p-1];
+      bbox[2]=y[0];bbox[3]=y[*q-1];
+      zmin=bbox[4]=(double) Mini(z,*p*(*q)); 
+      zmax=bbox[5]=(double) Maxi(z,*p*(*q));
+    }
   if ( flag[1] !=0)
-  {
-      if (flag[1]!=1)
-	{
-	  bbox[0]=x[0];bbox[1]=x[*p-1];
-	  bbox[2]=y[0];bbox[3]=y[*q-1];
-	  zmin=bbox[4]=(double) Mini(z,*p*(*q)); 
-	  zmax=bbox[5]=(double) Maxi(z,*p*(*q));
-	}
     SetEch3d(xbox,ybox,zbox,bbox,teta,alpha);
-    /** Calcule l' Enveloppe Convexe de la boite **/
-    /** ainsi que les triedres caches ou non **/
-    Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox);
-    /** Le triedre cach\'e **/
-    if (zbox[InsideU[0]] > zbox[InsideD[0]])
-      {
-	cache=InsideD[0];
-	if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideD);
-      }
-    else 
-      {
-	cache=InsideU[0]-4;
-	if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideU);
-      }
+  else
+    SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,0);
+  /** Calcule l' Enveloppe Convexe de la boite **/
+  /** ainsi que les triedres caches ou non **/
+  Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox);
+  /** Le triedre cach\'e **/
+  if (zbox[InsideU[0]] > zbox[InsideD[0]])
+    {
+      cache=InsideD[0];
+      if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideD);
     }
   else 
     {
-      GetEch3d();
-    };
+      cache=InsideU[0]-4;
+      if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideU);
+    }
   Alloc(&polyx,&polyy,&fill,5*(*q),5*(*q),(*q),&err);
   if ( err == 0)
     {
-      fprintf(stderr,"plot3dg_ : malloc No more Place\n");
+      Scistring("plot3dg_ : malloc No more Place\n");
       return;
     };
 /** Le plot 3D **/
@@ -178,7 +178,8 @@ plot3dg_(name,func,x,y,z,p,q,teta,alpha,legend,flag,bbox)
 	};
       break;
     }
-  if (flag[1] != 0 && flag[2] >=3 )
+  /* jpc   if (flag[1] != 0 && flag[2] >=3 ) */
+  if ( flag[2] >=3 )
     {
       /** Le triedre que l'on doit voir **/
       if (zbox[InsideU[0]] > zbox[InsideD[0]])
@@ -236,7 +237,8 @@ DPoints(polyx,polyy,fill,whiteid,zmin,zmax,x,y,z,i,j,jj1,p)
 
 C2F(plot3d)(x,y,z,p,q,teta,alpha,legend,flag,bbox,lstr)
      double x[],y[],z[],bbox[];
-     int *p,*q,*teta,*alpha;
+     int *p,*q;
+     double *teta,*alpha;
      int flag[];
      char legend[];
      long int lstr;
@@ -246,7 +248,8 @@ C2F(plot3d)(x,y,z,p,q,teta,alpha,legend,flag,bbox,lstr)
 
 C2F(plot3d1)(x,y,z,p,q,teta,alpha,legend,flag,bbox,lstr)
      double x[],y[],z[],bbox[];
-     int *p,*q,*teta,*alpha;
+     int *p,*q;
+     double *teta,*alpha;
      int flag[];
      char legend[];
      long int lstr;
@@ -258,53 +261,52 @@ C2F(plot3d1)(x,y,z,p,q,teta,alpha,legend,flag,bbox,lstr)
 
 C2F(param3d)(x,y,z,n,teta,alpha,legend,flag,bbox,lstr)
      double x[],y[],z[],bbox[];
-     int *n,*teta,*alpha;
+     int *n;
+     double *teta,*alpha;
      int *flag;
      char legend[];
      long int lstr;
 {
+  double cost=0.5,sint=0.5,cosa=0.5,sina=0.5;
   static int InsideU[4],InsideD[4];
   static double xbox[8],ybox[8],zbox[8];
   int style[1], npoly,j;
   static int cache,err;
   static int *xm,*ym,*zm;
+  int verbose=0,xz[10],narg;
   /** If Record is on **/
   if (GetDriver_()=='R') 
     StoreParam3D("param3d",x,y,z,n,teta,alpha,legend,flag,bbox);
-  style[0]= -1;
-  if ( flag[1] !=0)
+  C2F(dr)("xget","dashes",&verbose,xz,&narg,IP0,IP0,IP0,0,0);
+  style[0]= -xz[0]-1;
+  if (flag[1] != 1 && flag[1] != 0)
     {
-      if (flag[1] != 1)
-	{
-	  bbox[0]=(double) Mini(x,*n);bbox[1]=(double) Maxi(x,*n);
-	  bbox[2]=(double) Mini(y,*n);bbox[3]=(double) Maxi(y,*n);
-	  bbox[4]=(double) Mini(z,*n);bbox[5]=(double) Maxi(z,*n);
-
-	};
-      SetEch3d(xbox,ybox,zbox,bbox,teta,alpha);
-      /** Calcule l' Enveloppe Convexe de la boite **/
-      /** ainsi que les triedres caches ou non **/
-      Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox);
-      /** Le triedre cache **/
-      if (zbox[InsideU[0]] > zbox[InsideD[0]])
-	{
-	  cache=InsideD[0];
-	  if (flag[2] >=2 ) DrawAxis(xbox,ybox,InsideD);
-	}
-      else 
-	{
-	  cache=InsideU[0]-4;
-	  if (flag[2] >=2 ) DrawAxis(xbox,ybox,InsideU);
-	}
+      bbox[0]=(double) Mini(x,*n);bbox[1]=(double) Maxi(x,*n);
+      bbox[2]=(double) Mini(y,*n);bbox[3]=(double) Maxi(y,*n);
+      bbox[4]=(double) Mini(z,*n);bbox[5]=(double) Maxi(z,*n);
+    };
+  if ( flag[1] !=0)
+    SetEch3d(xbox,ybox,zbox,bbox,teta,alpha);
+  else 
+    SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,0);
+  /** Calcule l' Enveloppe Convexe de la boite **/
+  /** ainsi que les triedres caches ou non **/
+  Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox);
+  /** Le triedre cache **/
+  if (zbox[InsideU[0]] > zbox[InsideD[0]])
+    {
+      cache=InsideD[0];
+      if (flag[2] >=2 ) DrawAxis(xbox,ybox,InsideD);
     }
   else 
     {
-      GetEch3d();
-    };
+      cache=InsideU[0]-4;
+      if (flag[2] >=2 ) DrawAxis(xbox,ybox,InsideU);
+    }
   Alloc(&xm,&ym,&zm,(*n),(*n),0,&err);
   if ( err == 0)
     {
-      fprintf(stderr,"Param3d : malloc  No more Place\n");
+      Scistring("Param3d : malloc  No more Place\n");
       return;
     };
   for ( j =0 ; j < (*n) ; j++)	 
@@ -314,7 +316,8 @@ C2F(param3d)(x,y,z,n,teta,alpha,legend,flag,bbox,lstr)
     }
   C2F(dr)("xpolys","v",xm,ym,style,(npoly=1,&npoly),n,
       IP0,0,0);
-  if (flag[1] != 0 && flag[2] >=3 )
+/*  if (flag[1] != 0 && flag[2] >=3 ) */
+  if (flag[2] >=3 ) 
     {
       /** Le triedre que l'on doit voir **/
       if (zbox[InsideU[0]] > zbox[InsideD[0]])
@@ -322,6 +325,7 @@ C2F(param3d)(x,y,z,n,teta,alpha,legend,flag,bbox,lstr)
       else 
 	DrawAxis(xbox,ybox,InsideD);
     };
+  C2F(dr)("xset","dashes",xz,IP0,IP0,IP0,IP0,IP0,0,0);
 };
 
 /*-------------------fonction geom3d  */
@@ -345,11 +349,30 @@ C2F(geom3d)(x,y,z,n)
  Gestion des echelles */
 
 SetEch3d(xbox,ybox,zbox,bbox,teta,alpha)
-     int *teta,*alpha;
+     double *teta,*alpha;
      double xbox[8],ybox[8],zbox[8],bbox[6];
 {
+  SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,1);
+};
+
+GetEch3d()
+{
+  int IRect[4],*xm,*ym,err=0;
+  Scale2D(0,FRect,IRect,&scx,&scy,&tr[0],&tr[1],&xm,&ym,0,&err);
+};
+
+/* si flag vaut 1 : on fixe les scale 
+   sinon on ne fait que prendre en compte les changements d'angles
+   sans changer les echelles 
+   */
+
+SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,flag)
+     double *teta,*alpha;
+     double xbox[8],ybox[8],zbox[8],bbox[6];
+     int flag ;
+{
   double xmmin,ymmax,xmmax,ymmin;
-  int *xm,*ym,err=0,IRect[4];
+  int *xm,*ym,err=0,IRect[4],ib;
   static double cost=0.5,sint=0.5,cosa=0.5,sina=0.5;
   cost=cos((*teta)*M_PI/180.0);
   sint=sin((*teta)*M_PI/180.0);
@@ -361,6 +384,7 @@ SetEch3d(xbox,ybox,zbox,bbox,teta,alpha)
   /** Coordonn\'ees apr\`es transformation g\'eometrique de la **/
   /** boite qui entoure le plot3d                              **/
   /** le plan de projection est defini par x et y              **/
+  for (ib=0;ib<6 ;ib++) bbox1[ib]=bbox[ib];
   xbox[0]=TRX(bbox[0],bbox[2],bbox[4]);
   ybox[0]=TRY(bbox[0],bbox[2],bbox[4]);
   zbox[0]=TRZ(bbox[0],bbox[2],bbox[4]);
@@ -386,21 +410,18 @@ SetEch3d(xbox,ybox,zbox,bbox,teta,alpha)
   ybox[7]=TRY(bbox[1],bbox[2],bbox[5]);
   zbox[7]=TRZ(bbox[1],bbox[2],bbox[5]);
   /** Calcul des echelles en fonction de la taille du dessin **/
-  xmmin=  (double) Mini(xbox,8);xmmax= (double) Maxi(xbox,8);
-  ymmax=  (double) - Mini(ybox,8);
-  ymmin=  (double) - Maxi(ybox,8);
-  FRect[0]=xmmin;FRect[1]= -ymmax;FRect[2]=xmmax;FRect[3]= -ymmin;
-  Scale2D(1,FRect,IRect,&scx,&scy,&tr[0],&tr[1],&xm,&ym,0,&err);
-  /** Soit  un point initial de coordonnees X=(x,y,z)' **/
-  /** on calcule X1=m*X , puis X2=(scx*(x1-FRect[0])+tr[0],
-    scy*(-y1+FRect[3])+tr[1],z1)**/
-  /** et (x2,y2) est dessine a l'ecran **/
-};
-
-GetEch3d()
-{
-  int IRect[4],*xm,*ym,err=0;
-  Scale2D(0,FRect,IRect,&scx,&scy,&tr[0],&tr[1],&xm,&ym,0,&err);
+  if ( flag == 1)
+    {
+      xmmin=  (double) Mini(xbox,8);xmmax= (double) Maxi(xbox,8);
+      ymmax=  (double) - Mini(ybox,8);
+      ymmin=  (double) - Maxi(ybox,8);
+      FRect[0]=xmmin;FRect[1]= -ymmax;FRect[2]=xmmax;FRect[3]= -ymmin;
+      Scale2D(1,FRect,IRect,&scx,&scy,&tr[0],&tr[1],&xm,&ym,0,&err);
+      /** Soit  un point initial de coordonnees X=(x,y,z)' **/
+      /** on calcule X1=m*X , puis X2=(scx*(x1-FRect[0])+tr[0],
+	scy*(-y1+FRect[3])+tr[1],z1)**/
+      /** et (x2,y2) est dessine a l'ecran **/
+    };
 };
 
 GetEch3d1(m1,tr1,FRect1,scx1,scy1)
@@ -413,7 +434,6 @@ GetEch3d1(m1,tr1,FRect1,scx1,scy1)
       m1[i][j]=m[i][j];
   Scale2D(0,FRect1,IRect,scx1,scy1,&tr1[0],&tr1[1],&xm,&ym,0,&err);
 };
-
 
 /*----------------------------------------------------------------
 Trace un triedre : Indices[4] donne les indices des points qui 
@@ -480,7 +500,7 @@ Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox)
     };
   if (ind < 0 || ind > 8) 
     {
-      fprintf(stderr,"xind out of bounds");
+      Scistring("xind out of bounds");
       xind[0]=0;
     };
   UpNext(xind[0],&ind2,&ind3);
@@ -541,7 +561,7 @@ AxesStrings(axflag,ixbox,iybox,xind,legend,bbox)
   loc=(char *) malloc((unsigned) (strlen(legend)+1)*sizeof(char));
   if ( loc == 0)    
     {
-      fprintf(stderr,"AxesString : No more Place to store Legends\n");
+      Scistring("AxesString : No more Place to store Legends\n");
       return;
     };
   strcpy(loc,legend);
@@ -706,7 +726,8 @@ TDAxis(flag,FPval,LPval,nax,FPoint,LPoint,Ticsdir)
   C2F(dr)("xget","wdim",&verbose,xz,&narg, IP0, IP0,IP0,0,0);
   size = xz[0]>=xz[1] ? xz[1]/50.0 : xz[0]/50.0;
   TDdrawaxis_(size,FPval,LPval,nax,FPoint,LPoint,Ticsdir) ;
-  ChoixFormatE(fornum,&desres,FPval,LPval,(LPval-FPval)/nax[1]);
+  ChoixFormatE(fornum,&desres,Min(FPval,LPval),Max(LPval,FPval),
+	       Abs((LPval-FPval))/nax[1]);
   xp= FPval;
   barlength=nint(1.2*size);
   dx= ((double) LPoint[0]-FPoint[0])/((double)nax[1]);
@@ -717,8 +738,8 @@ TDAxis(flag,FPval,LPval,nax,FPoint,LPoint,Ticsdir)
     sqrt((double) Ticsdir[0]*Ticsdir[0]+Ticsdir[1]*Ticsdir[1]);
   for (i=0; i <= nax[1];i++)
     { double angle=0.0;
-      int flag=0;
-      int xx,yy,posi[2],rect[4];
+      int flag1=0;
+      int xx=0,yy=0,posi[2],rect[4];
       char foo[100];/*** JPC : must be cleared properly **/
       double lp;
       lp = xp + i*(LPval-FPval)/((double)nax[1]);
@@ -728,13 +749,13 @@ TDAxis(flag,FPval,LPval,nax,FPoint,LPoint,Ticsdir)
       posi[1]=FPoint[1]+ i*dy + 2*ticsy +rect[3]/2 ;
       switch ( flag)
 	{
-	case 1: posi[0] -=rect[2];
+	case 1: posi[0] -= rect[2];
 	  /** pour separer ;e 1er arg de l'axe des z de l'axe voisin **/
 	  if ( i== nax[1]) posi[1] -= rect[3]/2;
 	  break;
-	case 2: posi[0] -=rect[2];break;
+	case 2: posi[0] -= rect[2];break;
 	};
-      C2F(dr)("xstring",foo,&(posi[0]),&(posi[1]),(int *)&angle,&flag,IP0,IP0,0,0);
+      C2F(dr)("xstring",foo,&(posi[0]),&(posi[1]),(int *)&angle,&flag1,IP0,IP0,0,0);
     };
 }
 
@@ -781,3 +802,52 @@ BBoxToval(x,y,z,ind,bbox)
     case 7:	*x=bbox[1],*y=bbox[2],*z=bbox[5];break;
     };
 };
+
+/*---------------------
+  intercative rotation of a 3d plot 
+----------------------*/
+
+void loc3DRsci(str,xi,yyi,xf,yyf)
+     char *str;
+     int *xi,*yyi,*xf,*yyf;
+{
+  static int i=0;
+  double x=0,y=0,z=0,theta=35.0,alpha=45.0;
+  int p=1,q=1,flag[3];
+  flag[0]=0;flag[1]=1;flag[2]=4;
+  theta=theta+5.0*i;i++;
+  C2F(plot3d)(&x,&y,&z,&p,&q,&theta,&alpha,"X@Y@Z", flag,bbox1,0L);
+};
+
+
+#define XN3D 21
+#define YN3D 21
+#define VX3D 10
+
+static int test3D()
+{
+  double z[XN3D*YN3D],x[XN3D],y[YN3D],bbox[6];
+  int flag[3],p,q;
+  double teta,alpha;
+  int i ,j ;
+  for ( i=0 ; i < XN3D ; i++) x[i]=10*i;
+  for ( j=0 ; j < YN3D ; j++) y[j]=10*j;
+  for ( i=0 ; i < XN3D ; i++)
+    for ( j=0 ; j < YN3D ; j++) z[i+XN3D*j]= (i-VX3D)*(i-VX3D)+(j-VX3D)*(j-VX3D);
+  p= XN3D ; q= YN3D;  teta=alpha=35;
+  flag[0]=2;flag[1]=2,flag[2]=4;
+  p= XN3D ; q= YN3D;  teta=alpha=35;
+  C2F(plot3d)(x,y,z,&p,&q,&teta,&alpha,"X@Y@Z",flag,bbox,0L);
+}
+
+
+I3dRotation() 
+{
+  double x1,yy1,xf,yyf;
+  int i,ibutton;
+  test3D();
+   C2F(dr1)("xclick","one",&ibutton,&x1,&yy1,&xf,&yyf,IP0,0,0);
+  /* A mettre mieux  */
+  /* x2click_("v",&ibutton,&x1,&yy1,&xf,&yyf,loc3DRsci,&i); */
+}
+

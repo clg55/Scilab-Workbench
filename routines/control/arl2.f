@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=ARL2,SSI=0
       subroutine arl2(f,nf,num,tq,dgmin,dgmax,errl2,w,iw,
      $     inf,ierr,ilog)
 c!but

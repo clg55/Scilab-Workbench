@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 
+#include "defs.h"
 #include "metaconst.h"
 #include "list.h"
 #include "graph.h"
@@ -12,14 +13,13 @@ extern void PrintNodeList();
 
 #define max(a,b) ((a) > (b) ? (a) : (b))
 
-#define MAXARCS 21
-
 void CopyArcInGraph();
 void CopyNodeInGraph();
 void DeleteArc();
 void DeleteEdge();
 void DeleteNode();
 void PrintArc();
+void RenumberGraph();
 
 node *NodeAlloc(i)
 int i;
@@ -39,6 +39,9 @@ int i;
   n->x = 0; 
   n->y = 0; 
   n->col = 0; 
+  n->diam = 0;
+  n->border = 0;
+  n->fontSize = 0; 
   n->hilited = 0;
   return n;
 }
@@ -63,6 +66,9 @@ int i;
   a->xmax = a->ymax = a->xa0 = a->ya0 = 0;
   a->xa1 = a->ya1 = a->xa2 = a->ya2 = a->xa3 = a->ya3 = 0;
   a->col = 0;
+  a->width = 0;
+  a->hiWidth = 0;
+  a->fontSize = 0;
   a->hilited = 0;
   return a;
 }
@@ -85,6 +91,11 @@ char *n;
   g->node_number = g->arc_number = 0;
   g->sink_number = g->source_number = 0;
   g->directed = 1;
+  g->nodeDiam = NODEDIAM;
+  g->nodeBorder = NODEW;
+  g->arcWidth = ARCW;
+  g->arcHiWidth = ARCH;
+  g->fontSize = DRAWFONTSIZE;
   return g;
 }
 
@@ -116,6 +127,7 @@ void DeleteObject()
       break;
     }
     theGG.modified = 1;
+    RenumberGraph(theGraph);
   }
 }
 
@@ -126,8 +138,8 @@ graph *g;
   node *n;
 
   n = NodeAlloc(++(g->node_number));
-  n->x = x - nodeDiam / 2;
-  n->y = y - nodeDiam / 2;
+  n->x = x - NodeDiam(n) / 2;
+  n->y = y - NodeDiam(n) / 2;
   AddListElement((ptr)n,g->nodes);
   return n;
 }
@@ -224,8 +236,9 @@ node *t, *h;
     }
   }
   if (empty) {
-    fprintf(stderr,"Too much arcs between two nodes\n");
-    exit(1);
+    sprintf(Description,"Too many arcs between two nodes\n");
+    MetanetAlert(Description);    
+    return ERRTYPE;
   }
   if (i % 2 == 0) return i/2;
   else return -(i + 1)/2;
@@ -236,13 +249,20 @@ node *t, *h;
 graph *g;
 {
   arc *a1, *a2;
+  int c;
 
   /* create 2 arcs 2p+1 and 2p+2 between t and h and returns odd arc */
   a1 = ArcAlloc(++(g->arc_number));
   a1->tail = t; a1->head = h;
   a2 = ArcAlloc(++(g->arc_number));
   a2->tail = h; a2->head = h;
-  a1->g_type = ComputeNewType(t,h);
+  c = ComputeNewType(t,h);
+  if (c == ERRTYPE) {
+    --(g->arc_number); --(g->arc_number);
+    free((char*)a1); free((char*)a2);
+    return 0;
+  }
+  a1->g_type = c;
   SetCoordinatesArc(a1);
   a2->g_type = 0;
   AddListElement((ptr)a1,g->arcs);
@@ -264,11 +284,18 @@ node *t, *h;
 graph *g;
 {
   arc *a;
+  int c;
 
   if (g->directed) {
     a = ArcAlloc(++(g->arc_number));
     a->tail = t; a->head = h;
-    a->g_type = ComputeNewType(t,h);
+    c = ComputeNewType(t,h);
+    if (c == ERRTYPE) {
+      --(g->arc_number);
+      free((char*)a);
+      return 0;
+    }
+    a->g_type = c;
     SetCoordinatesArc(a);
     AddListElement((ptr)a,g->arcs);
     if (t == h) AddListElement((ptr)a,t->loop_arcs);
@@ -471,28 +498,36 @@ int level;
   mylink *p;
   arc *a;
 
-  AddText("Graph %s :\n",g->name);
+  sprintf(Description,"Graph %s :\n",g->name);
+  AddText(Description);
   if (g->directed) {
-    AddText("  Arcs : \n");
+    sprintf(Description,"  Arcs : \n");
+    AddText(Description);
     PrintArcList(g->arcs,level);
   }
   else {
-    AddText("  Edges : \n");
+    sprintf(Description,"  Edges : \n");
+    AddText(Description);
     p = g->arcs->first;
     while (p) {
       a = (arc*)p->element;
       if (a->number % 2 != 0) PrintArc(a,level);
       p = p->next;
     }
-    AddText("\n");
+    sprintf(Description,"\n");
+    AddText(Description);
   }
-  AddText("  Nodes : \n");
+  sprintf(Description,"  Nodes : \n");
+  AddText(Description);
   PrintNodeList(g->nodes,level);
-  AddText("  Sources : \n");
+  sprintf(Description,"  Sources : \n");
+  AddText(Description);
   PrintNodeList(g->sources,level);
-  AddText("  Sinks : \n");
+  sprintf(Description,"  Sinks : \n");
+  AddText(Description);
   PrintNodeList(g->sinks,level);
-  AddText("\n");
+  sprintf(Description,"\n");
+  AddText(Description);
 }
 
 void PrintNode(n, level)
@@ -502,38 +537,53 @@ int level;
   mylink *p;
   arc *a;
 
-  if (level == 0) 
-    AddText("%s ",n->name);
+  if (level == 0) {
+    sprintf(Description,"%s ",n->name); 
+    AddText(Description);
+  }
   else {
-    AddText("Node %s\n",n->name);
-    AddText("  Internal number %d\n",n->number);
+    sprintf(Description,"Node %s\n",n->name);
+    AddText(Description);
+    sprintf(Description,"  Internal number %d\n",n->number);
+    AddText(Description);
     if (theGraph->directed) {
-      AddText("  Connected Arcs : ");
+      sprintf(Description,"  Connected Arcs : ");
+      AddText(Description);
       PrintArcList(n->connected_arcs,0);
-      AddText("  Loop Arcs : ");
+      sprintf(Description,"  Loop Arcs : ");
+      AddText(Description);
       PrintArcList(n->loop_arcs,0);
     }
     else {
-      AddText("  Connected Edges : ");
+      sprintf(Description,"  Connected Edges : ");
+      AddText(Description);
       p = n->connected_arcs->first;
       while (p) {
 	a = (arc*)p->element;
 	if (a->number % 2 != 0) PrintArc(a,0);
 	p = p->next;
       }
-      AddText("\n");
-      AddText("  Loop Edges : ");
+      sprintf(Description,"\n");
+      AddText(Description);
+      sprintf(Description,"  Loop Edges : ");
+      AddText(Description);
       p = n->loop_arcs->first;
       while (p) {
 	a = (arc*)p->element;
 	if (a->number % 2 != 0) PrintArc(a,0);
 	p = p->next;
       }
-      AddText("\n");
+      sprintf(Description,"\n");
+      AddText(Description);
     }
-    if (level >= 2) AddText("  Type : %d\n",n->type);
-    AddText("  X : %d, Y : %d  \n",n->x,n->y);
-    AddText("  Demand : %g  \n",n->demand);  
+    if (level >= 2) {
+      sprintf(Description,"  Type : %d\n",n->type);
+      AddText(Description);
+    }
+    sprintf(Description,"  X : %d, Y : %d  \n",n->x,n->y);
+    AddText(Description);
+    sprintf(Description,"  Demand : %g  \n",n->demand);  
+    AddText(Description);
   }
 }
 
@@ -541,12 +591,15 @@ void PrintModifyNode(n)
 node *n;
 {
   char label[64];
-  char *init[1];
-  char *result[1];
-  char *description[1];
+  char *init[4];
+  char *result[4];
+  char *description[4];
   char str[64];
   int i = 0;
-  float d;
+  float d; int v;
+  int sdiam, sborder, sfontsize;
+  int redraw = 0;
+  mylink *p; arc *a;
 
   sprintf(label,"Node %s\n  Internal number %d\n",n->name,n->number);
   sprintf(str,"%g",n->demand);
@@ -560,14 +613,92 @@ node *n;
     fprintf(stderr,"Running out of memory\n");
     return;
   } 
-  description[i] = "Demand : ";
+  description[i] = "Demand: ";
+  i++;
+
+  if (n->diam == 0) strcpy(str,"default");
+  else sprintf(str,"%d",n->diam);
+  if ((init[i] = 
+       (char*)malloc((unsigned)(strlen(str) + 1)*sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  strcpy(init[i],str);
+  if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  description[i] = "Diameter: ";
+  i++;
+
+  if (n->border == 0) strcpy(str,"default");
+  else sprintf(str,"%d",n->border);
+  if ((init[i] = 
+       (char*)malloc((unsigned)(strlen(str) + 1)*sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  strcpy(init[i],str);
+  if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  description[i] = "Border width: ";
+  i++;
+
+  if (n->fontSize == 0) strcpy(str,"default");
+  else sprintf(str,"%d",n->fontSize);
+  if ((init[i] = 
+       (char*)malloc((unsigned)(strlen(str) + 1)*sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  strcpy(init[i],str);
+  if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  description[i] = "Font size: ";
   i++;
 
   if (MetanetDialogs(i,init,result,description,label)) {
     theGG.modified = 1;
     i = 0;
+
     sscanf(result[i],"%g",&d);
     n->demand = (double)d; i++;
+
+    sdiam = NodeDiam(n);
+    if (!strcmp(result[i],"default")) v = 0;
+    else sscanf(result[i],"%d",&v);
+    n->diam = v; i++;
+    if (n->diam < 0) n->diam = sdiam;
+    if (n->diam != sdiam) redraw = 1;
+
+    sborder = NodeBorder(n);
+    if (!strcmp(result[i],"default")) v = 0;
+    else sscanf(result[i],"%d",&v);
+    n->border = v; i++;
+    if (n->border < 0 || n->border > n->diam/2) n->border = sborder;
+    if (n->border != sborder) redraw = 1;
+
+    sfontsize = NodeFontSize(n);
+    if (!strcmp(result[i],"default")) v = 0;
+    else sscanf(result[i],"%d",&v);
+    n->fontSize = v; i++;
+    if (n->fontSize < 0) n->fontSize = sfontsize;
+    if (n->fontSize != sfontsize) redraw = 1;
+
+    if (redraw) {
+      p = n->connected_arcs->first;
+      while (p) {
+	a = (arc*)p->element;
+	SetCoordinatesArc(a);
+	p = p->next;
+      }
+      ClearDraw();
+      ReDrawGraph(theGraph);
+    }
   }
 }
 
@@ -575,33 +706,55 @@ void PrintArc(a, level)
 arc *a;
 int level;
 {
-  if (level == 0)
-    AddText("%s ",a->name);
+  if (level == 0) {
+    sprintf(Description,"%s ",a->name);
+    AddText(Description);
+  }
   else {
     if (theGraph->directed) {
-      AddText("Arc %s :\n",a->name);
-      AddText("  Internal number %d\n",a->number);
-      AddText("  Tail node %s\n",a->tail->name);
-      AddText("  Head node %s\n",a->head->name);
-      if (level >= 2) AddText("  G_type %d\n",a->g_type);
-    }
-    else {
-      AddText("Edge %s :\n",a->name);
-      AddText("  Internal number %d\n",EdgeNumberOfArc(a,theGraph));
-      AddText("  Tail node %s\n",a->tail->name);
-      AddText("  Head node %s\n",a->head->name);
+      sprintf(Description,"Arc %s :\n",a->name);
+      AddText(Description);
+      sprintf(Description,"  Internal number %d\n",a->number);
+      AddText(Description);
+      sprintf(Description,"  Tail node %s\n",a->tail->name);
+      AddText(Description);
+      sprintf(Description,"  Head node %s\n",a->head->name);
+      AddText(Description);
       if (level >= 2) {
-	AddText("  Arcs internal numbers %d, %d:\n",a->number,a->number + 1);
-	AddText("  G_type %d\n",a->g_type);
+	sprintf(Description,"  G_type %d\n",a->g_type);
+	AddText(Description);
       }
     }
-    AddText("  Unitary Cost : %g  ",a->unitary_cost);
-    AddText("  Minimum Capacity : %g  ",a->minimum_capacity);
-    AddText("  Maximum Capacity : %g\n ",a->maximum_capacity);
-    AddText("  Length : %g ",a->length);
-    AddText("  Quadratic Weight : %g  ",a->quadratic_weight);
-    AddText("  Quadratic Origin : %g\n",a->quadratic_origin);
-    AddText("  Weight : %g\n",a->weight);
+    else {
+      sprintf(Description,"Edge %s :\n",a->name);
+      AddText(Description);
+      sprintf(Description,"  Internal number %d\n",EdgeNumberOfArc(a,theGraph));
+      AddText(Description);
+      sprintf(Description,"  Tail node %s\n",a->tail->name);
+      AddText(Description);
+      sprintf(Description,"  Head node %s\n",a->head->name);
+      AddText(Description);
+      if (level >= 2) {
+	sprintf(Description,"  Arcs internal numbers %d, %d:\n",a->number,a->number + 1);
+	AddText(Description);
+	sprintf(Description,"  G_type %d\n",a->g_type);
+	AddText(Description);
+      }
+    }
+    sprintf(Description,"  Unitary Cost : %g  ",a->unitary_cost);
+    AddText(Description);
+    sprintf(Description,"  Minimum Capacity : %g  ",a->minimum_capacity);
+    AddText(Description);
+    sprintf(Description,"  Maximum Capacity : %g\n ",a->maximum_capacity);
+    AddText(Description);
+    sprintf(Description,"  Length : %g ",a->length);
+    AddText(Description);
+    sprintf(Description,"  Quadratic Weight : %g  ",a->quadratic_weight);
+    AddText(Description);
+    sprintf(Description,"  Quadratic Origin : %g\n",a->quadratic_origin);
+    AddText(Description);
+    sprintf(Description,"  Weight : %g\n",a->weight);
+    AddText(Description);
   }
 }
 
@@ -609,12 +762,14 @@ void PrintModifyArc(a)
 arc *a;
 {
   char label[64];
-  char *init[7];
-  char *result[7];
-  char *description[7];
+  char *init[10];
+  char *result[10];
+  char *description[10];
   char str[64];
   int i = 0;
-  float d;
+  float d; int v;
+  int shiwidth, swidth, sfontsize;
+  int redraw = 0;
 
   if (theGraph->directed) {
     sprintf(label,"Arc %s\n  Internal number %d\n",a->name,a->number);
@@ -634,7 +789,7 @@ arc *a;
     fprintf(stderr,"Running out of memory\n");
     return;
   } 
-  description[i] = "Unitary Cost : ";
+  description[i] = "Unitary Cost: ";
   i++;
   
   sprintf(str,"%g",a->minimum_capacity);
@@ -648,7 +803,7 @@ arc *a;
     fprintf(stderr,"Running out of memory\n");
     return;
   } 
-  description[i] = "Minimum Capacity : ";
+  description[i] = "Minimum Capacity: ";
   i++;
 
   sprintf(str,"%g",a->maximum_capacity);
@@ -662,7 +817,7 @@ arc *a;
     fprintf(stderr,"Running out of memory\n");
     return;
   } 
-  description[i] = "Maximum Capacity : ";
+  description[i] = "Maximum Capacity: ";
   i++;
 
   sprintf(str,"%g",a->length);
@@ -676,7 +831,7 @@ arc *a;
     fprintf(stderr,"Running out of memory\n");
     return;
   } 
-  description[i] = "length : ";
+  description[i] = "Length: ";
   i++;
 
   sprintf(str,"%g",a->quadratic_weight);
@@ -690,7 +845,7 @@ arc *a;
     fprintf(stderr,"Running out of memory\n");
     return;
   } 
-  description[i] = "Quadratic Weight : ";
+  description[i] = "Quadratic Weight: ";
   i++;
 
   sprintf(str,"%g",a->quadratic_origin);
@@ -704,7 +859,7 @@ arc *a;
     fprintf(stderr,"Running out of memory\n");
     return;
   } 
-  description[i] = "Quadratic Origin : ";
+  description[i] = "Quadratic Origin: ";
   i++;
  
   sprintf(str,"%g",a->weight);
@@ -718,29 +873,107 @@ arc *a;
     fprintf(stderr,"Running out of memory\n");
     return;
   } 
-  description[i] = "Weight : ";
-  i++; 
+  description[i] = "Weight: ";
+  i++;
+
+  if (a->width == 0) strcpy(str,"default");
+  else sprintf(str,"%d",a->width);
+  if ((init[i] = 
+       (char*)malloc((unsigned)(strlen(str) + 1)*sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  strcpy(init[i],str);
+  if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  description[i] = "Arc width: ";
+  i++;
+
+  if (a->hiWidth == 0) strcpy(str,"default");
+  else sprintf(str,"%d",a->hiWidth);
+  if ((init[i] = 
+       (char*)malloc((unsigned)(strlen(str) + 1)*sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  strcpy(init[i],str);
+  if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  description[i] = "Highlighted arc width: ";
+  i++;
+
+  if (a->fontSize == 0) strcpy(str,"default");
+  else sprintf(str,"%d",a->fontSize);
+  if ((init[i] = 
+       (char*)malloc((unsigned)(strlen(str) + 1)*sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  strcpy(init[i],str);
+  if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  } 
+  description[i] = "Font size: ";
+  i++;
 
   if (MetanetDialogs(i,init,result,description,label)) {
     theGG.modified = 1;
     i = 0;
+
     sscanf(result[i],"%g",&d);
     a->unitary_cost = (double)d; i++;
+
     sscanf(result[i],"%g",&d);
     a->minimum_capacity = (double)d; i++;
+
     sscanf(result[i],"%g",&d);
     a->maximum_capacity = (double)d; i++;
+
     sscanf(result[i],"%g",&d);
     a->length = (double)d; i++;
+
     sscanf(result[i],"%g",&d);
     a->quadratic_weight = (double)d; i++;
+
     sscanf(result[i],"%g",&d);
     a->quadratic_origin = (double)d; i++;
+
     sscanf(result[i],"%g",&d);
     a->weight = (double)d; i++;
+
+    swidth = ArcWidth(a);
+    if (!strcmp(result[i],"default")) v = 0;
+    else sscanf(result[i],"%d",&v);
+    a->width = v; i++;
+    if (a->width < 0) a->width = swidth;
+    if (a->width != swidth) redraw = 1;
+
+    shiwidth = ArcHiWidth(a);
+    if (!strcmp(result[i],"default")) v = 0;
+    else sscanf(result[i],"%d",&v);
+    a->hiWidth = v; i++;
+    if (a->hiWidth < 0) a->hiWidth = shiwidth;
+    if (a->hiWidth != shiwidth) redraw = 1;
+
+    sfontsize = ArcFontSize(a);
+    if (!strcmp(result[i],"default")) v = 0;
+    else sscanf(result[i],"%d",&v);
+    a->fontSize = v; i++;
+    if (a->fontSize < 0) a->fontSize = sfontsize;
+    if (a->fontSize != sfontsize) redraw = 1;
+
+    if (redraw) {
+      SetCoordinatesArc(a);
+      ClearDraw(); 
+      ReDrawGraph(theGraph);
+    }
   }
 }
-
 void RenumberGraph(g)
 graph *g;
 {
@@ -779,6 +1012,11 @@ graph *oldg;
  g->node_number = oldg->node_number;
  g->arc_number = oldg->arc_number;
  g->sink_number = oldg->sink_number;
+ g->nodeDiam = oldg->nodeDiam;
+ g->nodeBorder = oldg->nodeBorder;
+ g->arcWidth = oldg->arcWidth;
+ g->arcHiWidth = oldg->arcHiWidth;
+ g->fontSize = oldg->fontSize;
  for (i = 1; i <= oldg->arc_number; i++)
    AddListElement((ptr)ArcAlloc(i),g->arcs);
  for (i = 1; i <= oldg->node_number; i++)
@@ -811,6 +1049,9 @@ arc *a2;
   a2->head = GetNode(a1->head->number,g);
   a2->tail = GetNode(a1->tail->number,g);
   a2->col = a1->col;
+  a2->width = a1->width;
+  a2->hiWidth = a1->hiWidth;
+  a2->fontSize = a1->fontSize;
   a2->unitary_cost = a1->unitary_cost;
   a2->minimum_capacity = a1->minimum_capacity;
   a2->maximum_capacity = a1->maximum_capacity;
@@ -867,6 +1108,9 @@ node *n2;
   n2->x = n1->x;
   n2->y = n1->y;
   n2->col = n1->col;
+  n2->diam = n1->diam;
+  n2->border = n1->border;
+  n2->fontSize = n1->fontSize;
 }
 
 graph *MakeUndirected(g)

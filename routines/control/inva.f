@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=INVA,SSI=0
       subroutine inva(nmax,n,a,z,ftest,eps,ndim,fail,ind)
       integer nmax,n,ftest,ndim,ind(n)
       logical fail

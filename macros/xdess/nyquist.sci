@@ -86,8 +86,8 @@ mnx=mini(repf);
 mny=mini(repi);
 mxx=maxi(repf);
 mxy=maxi(repi);
-[mnx,mxx,npx]=graduat(mnx,mxx)
-[mny,mxy,npy]=graduat(mny,mxy)
+[mnx,mxx,npx]=graduate(mnx,mxx)
+[mny,mxy,npy]=graduate(mny,mxy)
 rect=[mnx,mny,mxx,mxy]
 axis=[5 npx 5 npy]
 if mnc==1 then
@@ -117,7 +117,7 @@ end
 kf=1
 for k=1:mn,
     xnumb(repf(k,ks),repi(k,ks),frq(kf,ks),0);
-    xpoly(repf(k,ks),repi(k,ks),"marks",0);
+    xpoly(repf(k,ks),repi(k,ks),'marks',0);
   kf=kf+ilf
 end;
 

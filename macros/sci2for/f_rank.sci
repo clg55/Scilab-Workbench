@@ -7,7 +7,7 @@ nam='rank'
 s2=stk(top-rhs+1)
 v=s2(1)
 it2=prod(size(v))-1
-if it2<>0 then  error(nam+' d''un argument complexe non traduit'),end
+if it2<>0 then  error(nam+' complex : not implemented'),end
 
 [s2,nwrk,t0]=typconv(s2,nwrk,'1')
 n=s2(4);m=s2(5)
@@ -41,7 +41,7 @@ tl2=string(10*lbl);
 
 t1= genif(part(s,1:length(s)-1)+'+'+var+'-1).le.'+tol,' goto '+tl2)
 txt=[txt;t0;
-     ' do '+tl1+' '+var+' = 0'+','+sousf(n2,'1');
+     ' do '+tl1+' '+var+' = 0'+','+subf(n2,'1');
      indentfor(t1);part(tl1+'    ',1:6)+' continue';
      ' '+var+'='+n2;
      part(tl2+'    ',1:6)+' continue']

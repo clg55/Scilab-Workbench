@@ -25,7 +25,7 @@ c
 c     
 c     functions/fin
 c     1       2       3       4       5       6       7       8
-c     poly     roots  degre   coeff   eval    pdiv   simp     sum
+c     poly     roots  degre   coeff   eval    pdiv  simp     sum
 c     
 c     9       10      11      12      13      14     15      16
 c     prod    diag    triu     tril    bezout sfact         varn
@@ -623,14 +623,14 @@ c
             lstk(top)=lr+1
          endif
 c     quotient
-         inc=-1
          if(lhs.eq.1) then
             top=top-1
-            inc=1
          endif
          nq=nn-nd
          ilq=iadr(lstk(top))
          lq=sadr(ilq+10)
+         inc=1 
+         if (l1+nd.lt.lq) inc=-1
          call dcopy(nn-nd+1,stk(l1+nd),inc,stk(lq),inc)
          if(lhs.eq.2.and.nr.lt.0) stk(lr)=0.0d+0
          istk(ilq)=2

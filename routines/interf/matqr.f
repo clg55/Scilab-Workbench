@@ -3,7 +3,7 @@ c ================================== ( Inria    ) =============
 c     evaluate functions involving qr decomposition (least squares)
 c ====================================================================
       include '../stack.h'
-      integer adr
+      integer iadr,sadr
 c
       double precision t,tol,eps,sr,si
       integer quote,vol
@@ -12,6 +12,10 @@ c
 c    fin      -2       -1       1       
 c             a\a2     a/a2     qr     
 c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+
+c
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
          call basout(io,wte,' matqr '//buf(1:4))
@@ -19,7 +23,7 @@ c
 c
       eps=stk(leps)
 c
-      il=adr(lstk(top-rhs+1),0)
+      il=iadr(lstk(top-rhs+1))
       if(istk(il).ne.1) then
          err=rhs
          call error(53)
@@ -28,7 +32,7 @@ c
       m=istk(il+1)
       n=istk(il+2)
       it=istk(il+3)
-      l=adr(il+4,1)
+      l=sadr(il+4)
 c
       goto (14,10,99,40) fin+3
 c
@@ -52,12 +56,12 @@ c on interverti l'ordre de a et a2
       lstk(top+1)=ll+l2-l1
 c transposition  a2
       lw=lstk(top+1)
-      il1=adr(lstk(top),0)
+      il1=iadr(lstk(top))
       m1=istk(il1+1)
       n1=istk(il1+2)
       it1=istk(il1+3)
       mn1=m1*n1
-      l1=adr(il1+4,1)
+      l1=sadr(il1+4)
       if(mn1 .eq. 0.or.istk(il1).eq.0) goto 11
       vol=mn1*(it1+1)
       ll = lw
@@ -78,12 +82,12 @@ c
 c
 c transposition a
    11 continue
-      il1=adr(lstk(top-1),0)
+      il1=iadr(lstk(top-1))
       m1=istk(il1+1)
       n1=istk(il1+2)
       it1=istk(il1+3)
       mn1=m1*n1
-      l1=adr(il1+4,1)
+      l1=sadr(il1+4)
       if(mn1 .eq. 0.or.istk(il1).eq.0) goto 12
       vol=mn1*(it1+1)
       ll = lw
@@ -103,21 +107,21 @@ c
       call dscal(mn1,-1.0d+0,stk(l1+mn1),1)
 c
    12 top=top-1
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       m=istk(il+1)
       n=istk(il+2)
       it=istk(il+3)
-      l=adr(il+4,1)
+      l=sadr(il+4)
       go to 15
 c
 c     rectangular matrix left division a backslash a2
 c
    14 top=top-1
-   15 il2=adr(lstk(top+1),0)
+   15 il2=iadr(lstk(top+1))
       m2=istk(il2+1)
       n2=istk(il2+2)
       it2=istk(il2+3)
-      l2=adr(il2+4,1)
+      l2=sadr(il2+4)
       if (m2*n2 .gt. 1) go to 16
 c     scalar divided by a matrix
         m2 = m
@@ -141,8 +145,8 @@ c
       nn2=max(m,n)*n2
       l3 = l2 + nn2*(it1+1)
       l4 = l3 + n*(it+1)
-      ilb=adr(l4+n*(it+1),0)
-      err = adr(ilb+n,1) - lstk(bot)
+      ilb=iadr(l4+n*(it+1))
+      err = sadr(ilb+n) - lstk(bot)
       if (err .gt. 0) then
          call error(17)
          return
@@ -247,12 +251,12 @@ c     permutations
       lstk(top+1)=l+n*n2*(it1+1)
       rhs=1
       if (fin .eq. -1) then
-                  il1=adr(lstk(top),0)
+                  il1=iadr(lstk(top))
                   m1=istk(il1+1)
                   n1=istk(il1+2)
                   it1=istk(il1+3)
                   mn1=m1*n1
-                  l1=adr(il1+4,1)
+                  l1=sadr(il1+4)
                   if(mn1 .eq. 0.or.istk(il1).eq.0) goto 99
                   vol=mn1*(it1+1)
                   ll = lstk(top+1)
@@ -279,31 +283,50 @@ c     qr
          return
       endif
       if(rhs.eq.2) then
-      il=adr(lstk(top),0)
-      tol=stk(adr(il+4,1))
+      il=iadr(lstk(top))
+      tol=stk(sadr(il+4))
       top=top-1
       endif
 c
-      if(fin.eq.1 .and. lhs.ne.2 .and. lhs.ne.3) then
+      if(fin.eq.1 .and. (lhs.lt.2 .or. lhs.gt.4)) then
          call error(41)
          return
       endif
-      if(err.gt.0) return
 c
       mn=m*n
       mm=m*m
       job=0
+c     implantation des resultats et tableaux de travail
+      ilq=iadr(lstk(top))
       lq=l
-      lr=lq+mm*(it+1)+adr(5,1)-1
-      laux=lr+mn*(it+1)
-      if(lhs.eq.2) goto 42
-      job=1
-      le=laux+adr(5,1)-1
-      nn=n*n
-      laux=le+nn
-   42 lw=laux+n*(it+1)
-      ilb=adr(lw+n*(it+1),0)
-      err=adr(ilb+n,1)-lstk(bot)
+      lstk(top+1)=lq+mm*(it+1)
+c
+      top=top+1
+      ilr=iadr(lstk(top))
+      lr=sadr(ilr+4)
+      lstk(top+1)=lr+mn*(it+1)
+c
+      if(lhs.eq.4) then
+         top=top+1
+         ilrk=iadr(lstk(top))
+         lrk=sadr(ilrk+4)
+         lstk(top+1)=lrk+1
+      endif
+c
+      if(lhs.ge.3) then
+c     on calcule et on stocke e
+         top=top+1
+         nn=n*n
+         job=1
+         ile=iadr(lstk(top))
+         le=sadr(ile+4)
+         lstk(top+1)=le+nn
+      endif
+c
+      laux=lstk(top+1)
+      lw=laux+n*(it+1)
+      ilb=iadr(lw+n*(it+1))
+      err=sadr(ilb+n)-lstk(bot)
       if(err.gt.0) then
          call error(17)
          return
@@ -312,7 +335,7 @@ c
 c     calcul de la dcomposition qr
       call dcopy(mn*(it+1),stk(l),-1,stk(lr),-1)
       do 43 j=1,n
-      istk(ilb+j-1)=0
+         istk(ilb+j-1)=0
    43 continue
       if(it.eq.0) call dqrdc(stk(lr),m,m,n,stk(laux),istk(ilb),
      &                       stk(lw),job)
@@ -333,11 +356,8 @@ c     affectation de q
      2            t,t,t,t,t,t,t,t,10000,info)
       ll=ll+m
    44 continue
-      il=adr(lstk(top),0)
-      istk(il+1)=m
-      istk(il+2)=m
-      lstk(top+1)=lq+mm*(it+1)
-      top=top+1
+      istk(ilq+1)=m
+      istk(ilq+2)=m
       m1=min(m-1,n)
       ll=lr+1
       do 51 j=1,m1
@@ -345,59 +365,51 @@ c     affectation de q
       if(it.eq.1) call dset(m-j,0.0d+0,stk(ll+mn),1)
       ll=ll+m+1
    51 continue
-      il=adr(lstk(top),0)
-      istk(il)=1
-      istk(il+1)=m
-      istk(il+2)=n
-      istk(il+3)=it
-      lstk(top+1)=lr+mn*(it+1)
+      istk(ilr)=1
+      istk(ilr+1)=m
+      istk(ilr+2)=n
+      istk(ilr+3)=it
 c
-c      affectation de e
       if(lhs.eq.2) goto 99
       if(rhs.eq.2) then
-c      #############
-      t=abs(stk(lr))
-      if(it.eq.1) t=t+abs(stk(lr+mn))
-      k=0
-      ls=lr
-      m1=min(m,n)
-      do 450 j=1,m1
-      t=abs(stk(ls))
-      if(it.eq.1) t=t+abs(stk(ls+mn))
-      if(t.le.tol) goto 460
-      k=j
-      ls=ls+m+1
- 450  continue
- 460  if(k.eq.0) then
-         err=1
-         call error(45)
-         return
+c     ############# calcul du rang 
+         t=abs(stk(lr))
+         if(it.eq.1) t=t+abs(stk(lr+mn))
+         k=0
+         ls=lr
+         m1=min(m,n)
+         do 450 j=1,m1
+            t=abs(stk(ls))
+            if(it.eq.1) t=t+abs(stk(ls+mn))
+            if(t.le.tol) goto 460
+            k=j
+            ls=ls+m+1
+ 450     continue
+ 460     if(k.eq.0) then
+            err=1
+            call error(45)
+            return
+         endif
+         istk(ilrk)=1
+         istk(ilrk+1)=1
+         istk(ilrk+2)=1
+         istk(ilrk+3)=0
+         stk(lrk)=dble(k)
       endif
-c      #############
-      top=top+1
-      il=adr(lstk(top),0)
-      istk(il)=1
-      istk(il+1)=1
-      istk(il+2)=1
-      istk(il+3)=0
-      lstk(top+1)=le+1
-      stk(le)=dble(k)
-      return
+c     #############   affectation de e
+      if((lhs.eq.3.and.rhs.eq.1).or.(lhs.eq.4.and.rhs.eq.2)) then
+         call dset(nn,0.0d+0,stk(le),1)
+         ll=le-1
+         do 52 j=1,n
+            stk(ll+istk(ilb+j-1))=1.0d+0
+            ll=ll+n
+ 52      continue
+         istk(ile)=1
+         istk(ile+1)=n
+         istk(ile+2)=n
+         istk(ile+3)=0
       endif
-      top=top+1
-      call dset(nn,0.0d+0,stk(le),1)
-      ll=le-1
-      do 52 j=1,n
-      stk(ll+istk(ilb+j-1))=1.0d+0
-      ll=ll+n
-   52 continue
-      il=adr(lstk(top),0)
-      istk(il)=1
-      istk(il+1)=n
-      istk(il+2)=n
-      istk(il+3)=0
-      lstk(top+1)=le+n*n
       goto 99
-c
-   99 return
+c     
+ 99   return
       end

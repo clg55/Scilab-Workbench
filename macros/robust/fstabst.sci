@@ -14,9 +14,9 @@ function [J]=fstabst(Stplant,r)
 flag='ss';if Stplant(1)='r' then flag='tf';Stplant=tf2ss(Stplant);end
 [LHS,RHS]=argn(0);
     [a,b1,b2,c1,c2,d11,d12,d21,d22]=smga(Stplant,r),
-    rd1=d12'*d12,
+    Rd1=d12'*d12,
     R12=sqrt(Rd1);
-    rd2=d21*d21',
+    Rd2=d21*d21',
     R22=sqrt(Rd2);
     p=r(2),r=r(1);
    //-------------
@@ -27,14 +27,14 @@ flag='ss';if Stplant(1)='r' then flag='tf';Stplant=tf2ss(Stplant);end
     if do2=[] then do2=0,end,
    //gains f and h
    //-------------
-    ar1=a-b2*inv(rd1)*d12'*c1,br1=b2*inv(rd1)*b2',
+    ar1=a-b2*inv(Rd1)*d12'*c1,br1=b2*inv(Rd1)*b2',
     cr1=c1'*do1*do1'*c1,
     xc=riccati(ar1,br1,cr1,'cont'),
-    f=inv(rd1)*(b2'*xc+d12'*c1),
-    ar2=(a-b1*d21'*inv(rd2)*c2)',br2=c2'*inv(rd2)*c2,
+    f=inv(Rd1)*(b2'*xc+d12'*c1),
+    ar2=(a-b1*d21'*inv(Rd2)*c2)',br2=c2'*inv(Rd2)*c2,
     cr2=b1*do2'*do2*b1',
     xo=riccati(ar2,br2,cr2,'cont'),
-    h=(b1*d21'+xo*c2')*inv(rd2),
+    h=(b1*d21'+xo*c2')*inv(Rd2),
    // J:
    //---
     aj=a-b2*f-h*c2+h*d22*f;
@@ -44,5 +44,5 @@ flag='ss';if Stplant(1)='r' then flag='tf';Stplant=tf2ss(Stplant);end
     dj=[0*ones(p,r)            eye(p,p)*inv(R12);
         inv(R22)*eye(r,r)         d22],
 //Normalization to get inner and co-inner factors
-    j=syslin('c',aj,bj,cj,dj),
+    J=syslin('c',aj,bj,cj,dj),
     if flag='tf' then J=ss2tf(J);end

@@ -8,7 +8,7 @@ s2=stk(top-rhs+1)
 
 v=s2(1)
 it2=prod(size(v))-1
-if it2<>0 then  error(nam+' d''un argument complexe non traduit'),end
+if it2<>0 then  error(nam+' complex --> not implemented'),end
 
 [s2,nwrk,t0]=typconv(s2,nwrk,'1')
 n=s2(4);m=s2(5)
@@ -21,7 +21,7 @@ else
 end
 
 if lhs==1 then
-  [errn,nwrk]=adderr(nwrk,'echec du calcul des valeurs singulieres')
+  [errn,nwrk]=adderr(nwrk,'SVD computation fails')
   [out,nwrk,t1]=outname(nwrk,'1','1',n1)
   [e,nwrk,t2]=getwrk(nwrk,'1','1',m)
   [wrk,nwrk,t3]=getwrk(nwrk,'1','1',n)
@@ -32,7 +32,7 @@ if lhs==1 then
   [nwrk]=freewrk(nwrk,wrk)
   [nwrk]=freewrk(nwrk,e)
 elseif lhs==3 then
-  [errn,nwrk]=adderr(nwrk,'echec de la decomposition en valeurs singulieres')
+  [errn,nwrk]=adderr(nwrk,'SVD computation fails')
   [o,nwrk,t1]=outname(nwrk,['1','1','1'],[n,n,m],[n,m,m])
   [d,nwrk,t2]=getwrk(nwrk,'1','1',n1)
   [e,nwrk,t3]=getwrk(nwrk,'1','1',m)
@@ -46,7 +46,7 @@ elseif lhs==3 then
   stk=list(list(o(1),'-1','1',m,m),list(o(2),'-1','1',n,m),..
            list(o(3),'-1','1',n,n))
 else
-  [errn,nwrk]=adderr(nwrk,'echec de la decomposition en valeurs singulieres')
+  [errn,nwrk]=adderr(nwrk,'SVD fails')
   [o,nwrk,t1]=outname(nwrk,['0','1','1','1'],['1',n,n,m],['1',n,m,m])
   [d,nwrk,t2]=getwrk(nwrk,'1','1',n1)
   [e,nwrk,t3]=getwrk(nwrk,'1','1',m)
@@ -71,7 +71,7 @@ else
   t1=[' '+o(1)+'='+var;
       genif(part(d,1:length(d)-1)+'+'+var+'-1).le.'+tol,' goto '+tl2)]
   txt=[txt;t0;
-     ' do '+tl1+' '+var+' = 0'+','+sousf(n2,'1');
+     ' do '+tl1+' '+var+' = 0'+','+subf(n2,'1');
      indentfor(t1);part(tl1+'    ',1:6)+' continue';
      ' '+o(1)+'='+n2;
      part(tl2+'    ',1:6)+' continue']

@@ -1,22 +1,22 @@
-function [K]=ccontrG(P,r,gamma);
+function [K]=ccontrg(PP,r,gamma);
 //***********************************
 //   returns a realization of the central controller for the
 //   general problem using the formulas in Gahinet, 92
-//   Note that gamma must be > gopt (ouput of gamitG)
+//   Note that gamma must be > gopt (ouput of gamitg)
  
-//  P contains the parameters of plant realization (sylin list)
+//  PP contains the parameters of plant realization (sylin list)
 //  b = ( b1 , b2 ) , 	c = ( c1 ) ,    d = ( d11  d12)
 //			    ( c2 )          ( d21  d22)
 //  r(1) and r(2) are the dimensions of d22 (rows x columns)
  
  
 //parameter recovery
-[A,B1,B2,C1,C2,D11,D12,D21,D22]=smga(P,r);
+[a,b1,b2,c1,c2,d11,d12,d21,d22]=smga(PP,r);
  
 //dimensions
-[na,na]=size(A); nh=2*na;
-[p1,m2]=size(D12),
-[p2,m1]=size(D21),
+[na,na]=size(a); nh=2*na;
+[p1,m2]=size(d12),
+[p2,m1]=size(d21),
 gs=gamma**2;
  
 //HAMILTONIAN SETUP
@@ -118,7 +118,7 @@ ak=sz\(vz'*ak*uz)/sz;
  
 //pause,
  
-k=syslin('c',ak,bk,ck,dk);
+K=syslin('c',ak,bk,ck,dk);
  
 function [go,xo]=parrt(a,b,c,rx,cx);
 //

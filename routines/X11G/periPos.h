@@ -8,6 +8,7 @@
  extern int  cleararea_pos_();
  extern int  clearwindow_pos_();
  extern int  xclick_pos_();
+ extern int  xgetmouse_pos_();
  extern int  xend_pos_();
  extern int  fillarc_pos_();
  extern int  fillrectangle_pos_();

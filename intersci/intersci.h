@@ -1,6 +1,6 @@
 /* VERSION et DATE */
-#define VERSION "2.1"
-#define DATE "13 MAY 1993" 
+#define VERSION "2.2"
+#define DATE "MAY 1994" 
 
 /* max dimension for the array: can be modified */
 #define MAXARG 50
@@ -42,6 +42,7 @@
 #define WORK 9
 #define EMPTY 10
 #define ANY 11
+#define VECTOR 12
 
 /* SCILAB optional variable types */
 

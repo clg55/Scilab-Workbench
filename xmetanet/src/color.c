@@ -6,12 +6,21 @@
 char *colorNames[] = {
   "foreground",
   "Black",
+  "Navyblue",
   "Blue",
+  "Skyblue",
+  "Aquamarine",
+  "Forestgreen",
   "Green",
+  "Lightcyan",
   "Cyan",
+  "Orange",
   "Red",
   "Magenta",
+  "Violet",
   "Yellow",
+  "Gold",
+  "Beige",
   "White",
   0
 };

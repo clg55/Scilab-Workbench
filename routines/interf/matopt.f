@@ -95,7 +95,7 @@ c     cas simul=liste
          if(err.gt.0) return
          isim=1
       endif
-c     cas simul=macro basile ou liste
+c     cas simul=macro ou liste
       if(istk(il).eq.11.or.istk(il).eq.13.or.istk(il).eq.15) then
          kopt=top2
          isim=2
@@ -959,7 +959,7 @@ c
          call error(39)
          return
       endif
-      if (lhs .gt. 4 .or. lhs .lt. 2) then
+      if (lhs .gt. 3 .or. lhs .lt. 2) then
          call error(41)
          return
       endif
@@ -1093,6 +1093,11 @@ c
          return
       endif
       modo = stk(sadr(il9+4))
+      if(modo.ne.1.and.modo.ne.2.and.modo.ne.3) then
+         err=9
+         call error(36)
+         return
+      endif
       if (rhs .eq. 10) then
 c     checking variable imp (number 10)
 c     
@@ -1188,20 +1193,27 @@ c     &                  MODO,INFO)
             call msgs(104,0)
          elseif (info .eq. -1) then
             call error(123)
+            return
          elseif (info .eq. -2) then
             call msgs(11,0)
          elseif (info .eq. -3) then
             call error(125)
+            return
          elseif (info .eq. -4) then
             call error(42)
+            return
          elseif (info .eq. -11) then
             call error(126)
+            return
          elseif (info .eq. -12) then
             call error(127)
+            return
          elseif (info .eq. -13) then
             call error(128)
-         elseif (info .eq. -13) then
+            return
+         elseif (info .eq. -14) then
             call error(129)
+            return
          endif
       endif
       
@@ -1266,26 +1278,6 @@ c
          lstk(top+1)=lw-mv
       endif
       
-      if ( lhs .ge. 4) then
-c     Variable de sortie: info
-c     
-         top=top+1
-         ilw=iadr(lw)
-         err=lw+5-lstk(bot)
-         if (err .gt. 0) then
-            call error(17)
-            return
-         endif
-         istk(ilw)=1
-         istk(ilw+1)=1
-         istk(ilw+2)=1
-         istk(ilw+3)=0
-         lw=sadr(ilw+4)
-         stk(lw)=info
-         lw=lw+1
-         lstk(top+1)=lw-mv
-      endif
-c     
 c     Remise en place de la pile
       call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)
       return

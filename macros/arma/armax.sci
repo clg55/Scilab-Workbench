@@ -1,5 +1,5 @@
-//<la,lb,sig,resid>=armax(r,s,y,u,b0f,prf)
-//<la,lb,sig,resid>=armax(r,s,y,u,[b0f,prf])
+//[la,lb,sig,resid]=armax(r,s,y,u,b0f,prf)
+//[la,lb,sig,resid]=armax(r,s,y,u,[b0f,prf])
 // Identification ARX
 // Calcule les coefficients d'un ARX n-dimensionnel
 //   A(z^-1)y= B(z^-1)u + sig*e(t)
@@ -28,14 +28,14 @@
 //         si prf=1, un display est donne (c'est la valeur par defaut)
 // Sortie :
 //     la est la liste list(a,a+eta,a-eta);(eta : ecart type estime)
-//        a=<Id,a1,a2,...,ar> ai(ny,ny)
+//        a=[Id,a1,a2,...,ar] ai(ny,ny)
 //     lb est la liste list(b,b+etb,b-etb);(etb : ecart type estime)
-//        b=<b0,.....,b_s> bi(nu,nu)
+//        b=[b0,.....,b_s] bi(nu,nu)
 //     sig est l'ecart type estime du bruit
-//     et resid=< sig*e(t0),....>; t0=maxi(maxi(r,s)+1,1));
+//     et resid=[ sig*e(t0),....]; t0=maxi(maxi(r,s)+1,1));
 //
 // Exemple :
-//     taper <a,b,sig,resid>=armax(); pour voir un exemple
+//     taper [a,b,sig,resid]=armax(); pour voir un exemple
 //     en dimension 1.
 // Auteur: J-Ph. Chancelier ENPC Cergrene
 //!
@@ -93,8 +93,9 @@ end;
        end
  else la=a;lb=b;end
 //si prf vaut 1 on donne un display
+idar=armac(a,b,eye(ny,ny),ny,nu,sig);
+
 if prf=1;
-   idar=armac(a,b,eye(ny,ny),ny,nu,sig);
    armap(idar);
    if ny=1,
      [nla,nca]=size(la(2));

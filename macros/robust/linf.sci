@@ -5,9 +5,9 @@ function [n]=linf(g,eps,tol)
 //-- g is a syslin system.
 //-- eps is error tolerance on n.
 //-- tol threshold for imaginary axis poles.
-// See also: H_norm
+// See also: h_norm
 //!
-if G(1)='r' then G=tf2ss(G);end
+if g(1)='r' then g=tf2ss(g);end
       if type(g)=1,if norm(g)=0,n=0,return,end,end,
       if g(7)='d' then
          error('system must be continuous')

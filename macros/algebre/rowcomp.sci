@@ -9,13 +9,13 @@ function [w,rk]=rowcomp(A,flag,tol)
 //!
 [ma,na]=size(A)
 [lhs,rhs]=argn(0)
-if a=[] then w=[];rk=0;return;end
-if norm(a,1) < sqrt(%eps)/10 then rk=0,w=eye(ma,ma),return;end
-if rhs =2 then tol=sqrt(%eps)*norm(a,1)*na*ma,end
-if rhs=1 then flag='svd',tol=sqrt(%eps)*norm(a,1)*ma*na;end
+if A=[] then w=[];rk=0;return;end
+if norm(A,1) < sqrt(%eps)/10 then rk=0,w=eye(ma,ma),return;end
+if rhs =2 then tol=sqrt(%eps)*norm(A,1)*na*ma,end
+if rhs=1 then flag='svd',tol=sqrt(%eps)*norm(A,1)*ma*na;end
 select flag
-case 'qr' then [q,r,rk]=qr(a,tol);w=q';
-case 'svd' then [u,s,v,rk]=svd(a,tol);w=u' ;
+case 'qr' then [q,r,rk]=qr(A,tol);w=q';
+case 'svd' then [u,s,v,rk]=svd(A,tol);w=u' ;
 end
 
 

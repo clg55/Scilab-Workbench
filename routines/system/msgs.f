@@ -4,9 +4,8 @@ c     Base de donnee des messages
 c ======================================================================
       include '../stack.h'
       character ch*4,line*140
-      integer p,iadr,sadr
+      integer p,sadr
 c
-      iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 c     
 c     le  message  de numero n correspond a l'etiquette logique 100+n
@@ -16,7 +15,8 @@ c
      &     121,122,123,124,125,126,127,128,129,130,
      &     131,132,133,134,135,136,137,138,139,140,
      &     141,142,143,144,145,146,147,148,149,150,
-     &     151,152,153,154,155,156,157,158,159),n
+     &     151,152,153,154,155,156,157,158,159,160,
+     &     161),n
  101  continue
       call  basout(io,wte,' Warning:')
       call basout(io,wte,'  Non convergence in the QZ algorithm.')
@@ -116,16 +116,16 @@ c---------------------- message de matopt -----------------------------
       goto 9999
  121  continue
       call basout(io,wte,
-     &     'end of optimization (linear search fails)')
+     &     ' end of optimization (linear search fails)')
       goto 9999
 c----------------------------------------------------------------------
 c---------------------- message de  -----------------------------
  122  continue
-      call basout(io,wte,'sfact: uncomplete convergence relative'
+      call basout(io,wte,' sfact: uncomplete convergence relative'
      $     //' precision reached : 10**('//buf(1:4)//')')
       goto 9999
  123  continue
-      call basout(ir,wte,'help file inconsistent...')
+      call basout(ir,wte,' help file inconsistent...')
       goto 9999
  124  continue
       call basout(io,wte,' Macros files location :'//buf(1:ierr))
@@ -134,11 +134,11 @@ c---------------------- message de  -----------------------------
       call basout(io,wte,'    :'//buf(1:ierr))
       goto 9999
  126  continue
-      call basout(io,wte, ' pause mode : enter empty lines...')
+      call basout(io,wte, ' pause mode: enter empty lines to continue.')
       goto 9999
  127  continue
       call basout(io,wte,' breakpoints of  macro :'//
-     &     buf(1:8))
+     &     buf(1:nlgh))
       goto 9999
  128  continue
       call basout(ir,wte,buf(10:12)//' lines in help')
@@ -156,8 +156,11 @@ c---------------------- message de  -----------------------------
 c      call error(-1)
       goto 9999
  132  continue
-      call basout(io,wte,'Stop after row '//buf(10:14)
-     &              //' in macro '//buf(1:8)//':')
+      l=nlgh+1
+ 1321 l=l-1
+      if(buf(l:l).eq.' ') goto 1321
+      call basout(io,wte,'Stop after row '//buf(nlgh+2:nlgh+6)
+     &              //' in macro '//buf(1:l)//' :')
       goto 9999
  133  continue
       goto 9999
@@ -201,7 +204,7 @@ c---------------------- message de comand -----------------------------
  1421 p=p-1
       if(p.eq.0) goto 9999
       if(rstk(p).ne.502) goto 1421
-      k=lpt(1)-15
+      k=lpt(1)-(13+nsiz)
 c     recherche du nom de la macro correspondant a ce niveau
       lk=sadr(lin(k+6))
       if(lk.le.lstk(top+1)) goto 9999
@@ -247,6 +250,16 @@ c     recherche du nom de la macro correspondant a ce niveau
  158  continue
       goto 9999
  159  continue
+      goto 9999
+ 160  continue
+      call basout(io,wte,
+     $     'Warning : loaded file has been created with scilab-1')
+      call basout(io,wte,'          please update it !')
+ 161  continue
+      call cvname(ids(1,pt+1),line(1:nlgh),1)
+      call basout(io,wte,
+     $     'Warning : Impossible to load variable '//line(1:nlgh))
+
       goto 9999
 c     
  9999 continue

@@ -10,7 +10,12 @@ c
       ierr=0
       if(lunit.eq.rte) then
          string=' '
-         call zzledt(string,len(string),lline,status)
+         call xscion(iflag)
+         if (iflag.eq.0) then 
+            call zzledt(string,len(string),lline,status)
+         else
+            call zzledt1(string,len(string),lline,status)
+         endif
          if(status.ne.0) goto 10
          if (lline.eq.0) then
             string(1:1)=' '

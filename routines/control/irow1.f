@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=IROW1,SSI=0
         integer function irow1(i,m)
 c% calling sequence
 c        integer function irow1(i,m)

@@ -1,6 +1,5 @@
-//[stk,nwrk,txt,top]=%imp2for(nwrk)
-// genere le code fortran relatif au calcul d'un vecteur defini implicitement
-// 1:n, gere le cas particulier des vecteurs implicite argument d'un for.
+function [stk,nwrk,txt,top]=%imp2for(nwrk)
+//fortran code for 1:n
 //
 // Voir s'il est possible d'ameliorer dans le cas ou ces vecteurs implicite
 // servent dans la designation d'une sous matrice
@@ -31,9 +30,9 @@ else
 end
  
 if pas(1)=='1' then
-  ln=addf(sousf(fin(1),deb(1)),'1')
+  ln=addf(subf(fin(1),deb(1)),'1')
 else
-  ln=addf('('+sousf(fin(1),deb(1))+')/'+pas(1),'1')
+  ln=addf('('+subf(fin(1),deb(1))+')/'+pas(1),'1')
 end
 //
 if deb(3)=='1'|fin(3)=='1'|pas(3)=='1' then
@@ -50,6 +49,5 @@ else
 end
  
 stk=list(out,'-1',typ,'1',ln)
-//end
 
 

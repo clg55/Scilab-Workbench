@@ -104,7 +104,7 @@ deff('[sd1]=curve(sd,del)',['[lhs,rhs]=argn(0);sd1=[];';
                        'z=locate(-1,1);';
                        'if z=[], return;end';
                        '[x1,k1]=sort(z(1,:));y1=z(2,k1);z=[x1;y1];';
-                       '[n1,n2]=size(z);z=lissage(z(:,n2:-1:1));';
+                       '[n1,n2]=size(z);z=smooth(z(:,n2:-1:1));';
                        'xx=xget('"dashes"');';
                        'sd1=list(''ligne'',z,xx);';
                        'else';

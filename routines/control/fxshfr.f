@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=FXSHFR,SSI=0
       subroutine fxshfr(l2, nz)
 c computes up to  l2  fixed shift k-polynomials,
 c testing for convergence in the linear or quadratic

@@ -1,4 +1,4 @@
-
+include ../../../Path.incl
 #include "../../../Imake.incl"
 
 TR2TEX=../tr2latex/tr2tex 

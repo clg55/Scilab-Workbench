@@ -1,3 +1,4 @@
+/**/include ../../../Path.incl
 #include "../../../Imake.incl"
 
 .SUFFIXES: .gcode  .code .ps .tex   $(SUFFIXES) 

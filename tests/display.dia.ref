@@ -4,7 +4,7 @@
 -->//
  
 -->z=poly(0,'z')
- z         =
+ z  =
  
     z   
  
@@ -18,7 +18,7 @@
      z-0.0243497
      (((1)*z )*z )*z+1
      0]
- num       =
+ num  =
  
 !                                      2            3            4     !
 ! - 0.0243497 + 0.2911572z - 1.2916784z + 2.6887936z - 2.6533333z      !
@@ -39,7 +39,7 @@
 ((((1)*z-1.536926)*z+0.8067352)*z-0.1682810)*z+0.0113508
 ((1)*z )*z
 1]
- den       =
+ den  =
  
 !                                     2           3   4 !
 !   0.0113508 - 0.168281z + 0.8067352z - 1.536926z + z  !
@@ -53,7 +53,7 @@
 !   1                                                   !
  
 -->num',den'
- ans       =
+ ans  =
  
  
          column    1
@@ -72,7 +72,7 @@
  
 !        3      !
 !   1 + z     0 !
- ans       =
+ ans  =
  
  
          column    1
@@ -85,7 +85,7 @@
 !   0.0113508 - 0.168281z + 0.8067352z - 1.536926z + z     z     1  !
  
 -->[num;den]
- ans       =
+ ans  =
  
 !                                      2            3            4     !
 ! - 0.0243497 + 0.2911572z - 1.2916784z + 2.6887936z - 2.6533333z      !
@@ -114,7 +114,7 @@
 !   1                                                                  !
  
 -->[num den]
- ans       =
+ ans  =
  
  
          column    1
@@ -146,7 +146,7 @@
 !   1                                                   !
  
 -->r=num./den
- r         =
+ r  =
  
 !                                      2            3            4     !
 ! - 0.0243497 + 0.2911572z - 1.2916784z + 2.6887936z - 2.6533333z      !
@@ -175,7 +175,7 @@
 !   1                                                                  !
  
 -->r'
- ans       =
+ ans  =
  
  
     column    1
@@ -207,41 +207,41 @@
 -->//
  
 -->digits='abcdefghijklmnopqrstuvwxyz'
- digits    =
+ digits  =
  
  abcdefghijklmnopqrstuvwxyz   
  
 -->numbers='1234567890'
- numbers   =
+ numbers  =
  
  1234567890   
  
 -->majuscules='ABCDEFGHIJKLMNOPQRSTUVWXYZ'
- majuscul  =
+ majuscules  =
  
  ABCDEFGHIJKLMNOPQRSTUVWXYZ   
  
 -->symbols=',./;''[] \ =-!\$%^&*()_+~:""[]| @'
- symbols   =
+ symbols  =
  
  ,./;'[] \ =-!\$%^&*()_+~:"[]| @   
  
 -->[numbers;digits]
- ans       =
+ ans  =
  
 !1234567890                  !
 !                            !
 !abcdefghijklmnopqrstuvwxyz  !
  
 -->[numbers digits;digits numbers]
- ans       =
+ ans  =
  
 !1234567890                  abcdefghijklmnopqrstuvwxyz  !
 !                                                        !
 !abcdefghijklmnopqrstuvwxyz  1234567890                  !
  
 -->[numbers digits+digits+digits]
- ans       =
+ ans  =
  
  
     column    1
@@ -254,7 +254,7 @@
 -->ans';
  
 -->[ans ans]
- ans       =
+ ans  =
  
  
     column    1

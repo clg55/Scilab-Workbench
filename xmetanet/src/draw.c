@@ -10,6 +10,7 @@
 #include "bezier.h"
 #include "color.h"
 #include "graphics.h"
+#include "font.h"
 
 #define NUMBLEN 10
 
@@ -89,6 +90,7 @@ char *str;
   xf = (int)((x+2) * metaScale);
   yf = (int)((y-2) * metaScale);
   SetForeground(theG.gc,theColor);
+  SetFont(theDrawFont);
   XDrawString(theG.dpy,theG.d,theG.gc,xf,yf,str,strlen(str)); 
 }
 
@@ -101,6 +103,7 @@ char *str;
   if (str == 0) return;
   xf = (int)((x+2) * metaScale);
   yf = (int)((y-2) * metaScale);
+  SetFont(theDrawFont);
   XDrawString(theG.dpy,theG.d,theG.gc_clear,xf,yf,str,strlen(str)); 
 }
 
@@ -111,6 +114,7 @@ char *str;
   int fw,fh,xf,yf;
 
   if (str == 0) return;
+  SetFont(theDrawFont);
   xf = (int)((x+2) * metaScale);
   yf = (int)((y-2) * metaScale);
   fw = XTextWidth(theG.drawfont,str,strlen(str));
@@ -129,6 +133,7 @@ char *str;
   int fw,fh,xf,yf;
 
   if (str == 0) return;
+  SetFont(theDrawFont);
   xf = (int)((x+2) * metaScale);
   yf = (int)((y-2) * metaScale);
   fw = XTextWidth(theG.drawfont,str,strlen(str));
@@ -459,6 +464,7 @@ char *str;
   int fw,fh,xf,yf;
 
   if (str == 0) return;
+  SetFont(theDrawFont);
   fw = XTextWidth(theG.drawfont,str,strlen(str));
   fh = theG.drawfont->max_bounds.ascent + theG.drawfont->max_bounds.descent;
   xf = (int)(metaScale*x) + 2 +((int)(metaScale*nodeDiam) - 2 - fw) / 2;
@@ -475,6 +481,7 @@ char *str;
   int fw,fh,xf,yf;
 
   if (str == 0) return;
+  SetFont(theDrawFont);
   fw = XTextWidth(theG.drawfont,str,strlen(str));
   fh = theG.drawfont->max_bounds.ascent + theG.drawfont->max_bounds.descent;
   xf = (int)(metaScale*x) + 2 +((int)(metaScale*nodeDiam) - 2 - fw) / 2;
@@ -490,6 +497,7 @@ char *str;
   int fw,fh,xf,yf;
 
   if (str == 0) return;
+  SetFont(theDrawFont);
   fw = XTextWidth(theG.drawfont,str,strlen(str));
   fh = theG.drawfont->max_bounds.ascent + theG.drawfont->max_bounds.descent;
   xf = (int)(metaScale*x) + 2 +((int)(metaScale*nodeDiam) - 2 - fw) / 2;

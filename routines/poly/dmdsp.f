@@ -49,7 +49,7 @@ c
       l=l+nx
       do 05 i=1,m
       a=abs(x(l+i))
-      if(a.eq.0.0d+0) goto 05
+      if(a.eq.0.0d+0.or.a.gt.d1mach(2)) goto 05
       a1=max(a1,a)
       a2=min(a2,a)
    05 continue
@@ -95,13 +95,17 @@ cc_ex      if(a.lt.eps) a=0.0d+0
 c     determination du format devant representer a
       typ=1
       if(mode.eq.1) call fmt(a,maxc,typ,n1,n2)
-      if(typ.eq.2) goto 12
-      iw(ldef)=1
-      fl=maxc
-      n2=maxc-7
-      goto 13
-   12 fl=n1
-      iw(ldef)=n2+32*n1
+      if(typ.eq.2) then
+         fl=n1
+         iw(ldef)=n2+32*n1
+      elseif(typ.lt.0) then
+         iw(ldef)=typ
+         fl=3
+      else
+         iw(ldef)=1
+         fl=maxc
+         n2=maxc-7
+      endif
 c
 c     determination de la longueur de la representation du monome,
 c          cette longueur est a priori fl+2 (' '//sgn//rep(a)).
@@ -165,22 +169,32 @@ c
       if(a.lt.0.0d+0) sgn='-'
       a=abs(a)
 c
-      if(ifmt.eq.1) then
-                        nf=1
-                        fl=maxc
-                        n2=1
-                    else
-                        nf=2
-                        n1=ifmt/32
-                        n2=ifmt-32*n1
-                        fl=n1
-                        write(form(nf),120) fl,n2
-      endif
-c
-   41 cw(l1:l1+1)=' '//sgn
+      cw(l1:l1+1)=' '//sgn
       l1=l1+2
-      write(cw(l1:l1+fl-1),form(nf)) a
+c
+      if(ifmt.eq.1) then
+         nf=1
+         fl=maxc
+         n2=1
+         write(cw(l1:l1+fl-1),form(nf)) a
+      elseif(ifmt.ge.0) then
+         nf=2
+         n1=ifmt/32
+         n2=ifmt-32*n1
+         fl=n1
+         write(form(nf),120) fl,n2
+         write(cw(l1:l1+fl-1),form(nf)) a
+      elseif(ifmt.eq.-1) then
+c     Inf
+         fl=3
+         cw(l1:l1+fl-1)='Inf'
+      elseif(ifmt.eq.-2) then
+c     Nan
+         fl=3
+         cw(l1:l1+fl-1)='Nan'
+      endif
       l1=l1+fl
+c
 c      if(n2.eq.0) l1=l1-1
       nl1=l0+iw(k)-1
       cw(l1:nl1)=' '

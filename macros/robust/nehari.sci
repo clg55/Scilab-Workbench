@@ -1,4 +1,4 @@
-function [X]=nehari(R,tol)
+function [x]=nehari(r,tol)
 // [x]=nehari(R,tol) returns the Nehari approximant of R.
 // R = linear system in state-space representation (syslin list)
 //- R is strictly proper and - R~ is stable (i.e. R is antistable).

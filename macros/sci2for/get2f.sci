@@ -19,7 +19,7 @@ if vn==[] then
       vnms=[vnms;['%io','%io']]
       vtps(nv)=list('0','1','2',0)
     else
-      error('la variable: ' +nam+' n''est pas definie')
+      error('variable: ' +nam+' undefined!')
     end
   else
     stk(top)=list(nam,'?','0','0','0',0)

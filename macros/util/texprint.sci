@@ -1,6 +1,6 @@
-function [tt]=texprint(A)
-// text = texprint(a) returns the Tex source code of the scilab variable A.
-// A is a matrix (scalar, polynomial, rational) or a linear system
+function [tt]=texprint(a)
+// text = texprint(a) returns the Tex source code of the scilab variable a.
+// a is a matrix (scalar, polynomial, rational) or a linear system
 // (syslin list).
 //!
 //

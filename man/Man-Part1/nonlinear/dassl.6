@@ -4,7 +4,7 @@
 dassl - differential algebraic equation
 .SH  CALLING SEQUENCE
 .nf
-[r [,hd]]=dassl(x0,t0,t1 [,atol,[rtol]],res [,jac],info [,hd])
+[r [,hd]]=dassl(x0,t0,t [,atol,[rtol]],res [,jac],info [,hd])
 .fi
 .SH PARAMETERS
 .TP 10
@@ -12,12 +12,15 @@ x0
 : is either \fVy0\fR (\fVydot0\fR is estimated by \fVdassl\fR with zero as first estimate) or the matrix \fV[y0 ydot0]\fR. 
 \fVg(t,y0,ydot0)\fR must be equal to zero. If you only know an estimate 
 of \fVydot0\fR set \fVinfo(7)=1\fR
-.TP
+.RS
+.TP 10
 y0
 : real column vector  of initial conditions.
 .TP
 ydot0 
-: real column vector of the time derivative of \fVy\fR at \fVt0\fR (may be an estimate).
+: real column vector of the time derivative of \fVy\fR at \fVt0\fR
+(may be an estimate).
+.RE
 .TP
 t0 
 : real number is the initial instant.
@@ -30,10 +33,10 @@ atol,rtol
 If vectors the tolerances are specified for each component of \fVy\fR.
 .TP
 res 
-: external (macro or list or string). Computes the  value of \fVg(t,y,ydot)\fR.
+: external (function or list or string). Computes the  value of \fVg(t,y,ydot)\fR.
 .RS
 .TP 8
-macro
+function
 : Its calling sequence must be \fV[r,ires]=res(t,y,ydot)\fR
 and \fVres\fR must return the residue \fVr=g(t,y,ydot)\fR  and error flag 
 \fVires\fR. \fVires = 0\fR if \fVres\fR succeeds to compute \fVr\fR, \fV=-1\fR 
@@ -45,7 +48,7 @@ list
 .nf
 list(res,x1,x2,...)
 .fi 
-where the calling sequence of the macro \fVres\fR is now
+where the calling sequence of the function \fVres\fR is now
 .nf
 r=res(t,y,ydot,x1,x2,...)
 .fi
@@ -58,13 +61,13 @@ a fortran subroutine (see source code of \fVfresd.f\fR).
 .RE
 .TP
 jac
-: external (macro or list or string). Computes the  value 
+: external (function or list or string). Computes the  value 
 of \fVdg/dy+cj*dg/dydot\fR for a given value of parameter \fVcj\fR
 .RS
 .TP 8
-macro
+function
 : Its calling sequence must be \fVr=jac(t,y,ydot,cj)\fR
-and the \fVjac\fR macro must return
+and the \fVjac\fR function must return
 \fVr=dg(t,y,ydot)/dy+cj*dg(t,y,ydot)/dydot\fR where \fVcj\fR is a real scalar
 .TP
 list
@@ -72,7 +75,7 @@ list
 .nf
 list(jac,x1,x2,...)
 .fi 
-where the calling sequence of the macro \fVjac\fR is now
+where the calling sequence of the function \fVjac\fR is now
 .nf
 r=jac(t,y,ydot,x1,x2,...)
 .fi

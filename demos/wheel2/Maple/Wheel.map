@@ -227,16 +227,16 @@ SSF:=subs(fvar,eval(SS)):
 
 flist:=[subroutinem,`wheel`,[`neq`,`t`,`z`,`zdot`],
            [
+            [ declaref,`implicit double precision`,[`(t)`] ],
             [ parameterf,[`kn=`.kn]],
-            [ declaref,doubleprecision,[`t,z(8),zdot(8),r,j(2),m`]],
+            [ declaref,doubleprecision,[`t,z(8),zdot(8),r,j(3),m`]],
             [ declaref,doubleprecision,[`me3s(kn,kn)`]],
             [ declaref,doubleprecision,[`const(kn,1),w(3*kn),rcond`]],
-            [ declaref,`implicit doubleprecision`,[`(t)`] ],
             [ declaref,integer,[`i,k,neq,ierr`]],
             [ declaref,`data g`,[`/ 9.81/`]],
             [ declaref,`data r`,[`/ 1.0/`] ],
             [ declaref,`data m`,[`/ 1.0/`] ],
-            [ declaref,`data j`,[`/ 0.3,0.4/`] ],
+            [ declaref,`data j`,[`/ 0.3,0.4,1.0/`] ],
             [ matrixm,`me3s`,MM3F ] ,
             [ matrixm,`const`,RR3F ] , 
 	    [ dom , `i ` ,1,`kn `,1,[ equalf,`zdot(i)`,`z(i+kn)`]],
@@ -267,6 +267,7 @@ Gener(`wheel.f`,flist):
 
 ffvar:= {theta= xx[1,i2],phi=xx[2,i2],psi=xx[3,i2],t[1]=xx[4,i2],
 	t[2]=xx[5,i2],t[3]=xx[6,i2],x=xx[7,i2],y=xx[8,i2],
+
 	uf = uf[i1,i2],vf = vf[i1,i2] ,wf= wf[i1,i2] }:
 
 
@@ -279,12 +280,12 @@ ZF:=subs(fffvar,eval(ZF)):
 
 flist:=[subroutinem,`wheelg`,[`n,k,uf,vf,wf,xx`],
            [
+            [ declaref,`implicit double precision`,[`(t)`] ],
             [ declaref,doubleprecision,[`uf(n,k),vf(n,k),wf(n,k)`]],
             [ declaref,doubleprecision,[`uu,vv,ww,r`]],
             [ declaref,integer,[`n,k,i1,i2`]],
-            [ declaref,`data r`,[`/ 1.0/`] ],
             [ declaref,doubleprecision,[`xx(8,k)`]],
-            [ declaref,`implicit doubleprecision`,[`(t)`] ],
+            [ declaref,`data r`,[`/ 1.0/`] ],
 	    [ dom , `i1 ` ,1,`n `,1,[
 		[ dom , `i2 ` ,1,`k `,1,
 			[

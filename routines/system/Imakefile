@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 OBJS= adr.o allops.o  banier.o sascii.o \
@@ -10,14 +11,22 @@ OBJS= adr.o allops.o  banier.o sascii.o \
 	stackp.o terme.o xchar.o  matla0.o \
 	majmin.o apropo.o basmsg.o whatln.o \
 	seteol.o setlnb.o skpins.o msgs.o userlk.o prntid.o \
-	cvname.o cvstr.o prntidn.o compil.o ptover.o ptrback.o
+	cvname.o cvstr.o compil.o ptover.o ptrback.o sevents.o \
+	isbrk.o 
 
 FSRCS= $(OBJS:.o=.f)
 
-COBJS=str2int.o 
+COBJS=
 
 SRCS= $(COBJS:.o=.c)
 
 LibraryTarget($(PATHO)/system.a,$(OBJS) $(COBJS))
 FortranDependTarget()
 DependTarget()
+
+
+IM=../../Imake.incl
+
+ScriptsTarget(banier.f,banier.g,$(IM))
+
+

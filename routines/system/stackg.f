@@ -1,6 +1,20 @@
       subroutine stackg(id)
 c     =============================================================
 c     get variables from storage
+c
+c action realisees selon que la variable existe ou non :
+c
+c fin=0  : oui retour de la variable  fin=-1
+c          non fin=0
+c fin=-1 : oui fin=numero de la variable
+c          non fin=0
+c fin=-2 : extraction
+c          oui  retour d'une variable de type indirect fin=-1
+c          non fin=0
+c fin=-3 : recherche dans l'environnement propre au niveau courant
+c          uniquement  (insertion)
+c          oui : retour d'une variable de type indirect fin=-1
+c          non : retour d'une matrice vide fin=-1
 c     =============================================================
 c
       INCLUDE '../stack.h'
@@ -20,23 +34,7 @@ c
 c
       if(err1.gt.0) return
 c
-      if ( compil(4,2,id(1),id(2),fin,rhs)) goto 99
-c     compilation stackg: <2 nom(1:4) fin rhs>
-C     attention id est suppose de taille 2 
-c
-c action realisees selon que la variable existe ou non :
-c
-c fin=0  : oui retour de la variable  fin=-1
-c          non fin=0
-c fin=-1 : oui fin=numero de la variable
-c          non fin=0
-c fin=-2 : extraction
-c          oui  retour d'une variable de type indirect fin=-1
-c          non fin=0
-c fin=-3 : recherche dans l'environnement propre au niveau courant
-c          uniquement  (insertion)
-c          oui : retour d'une variable de type indirect fin=-1
-c          non : retour d'une matrice vide fin=-1
+      if ( compil(2,id,fin,rhs,0)) goto 99
 c
       if(top.eq.0) lstk(1)=1
       if(top+1.ge.bot) then
@@ -45,8 +43,8 @@ c
       endif
 c
       last=isiz-1
-      if(fin.ne.-3.or.macr.eq.0) goto 20
-      k=lpt(1)-15
+      if(fin.ne.-3.or.(macr.eq.0.and.paus.eq.0)) goto 20
+      k=lpt(1)-(13+nsiz)
       last=lin(k+5)-1
 c
 c     recherche parmi les variables
@@ -65,7 +63,7 @@ c
 c
 c     chargement de la variable au sommet de la pile
       top = top+1
-      if (.not.vcopyobj(fname,k,top)) return
+      if (.not.vcopyobj(' ',k,top)) return
       call putid(idstk(1,top),idstk(1,k))
       go to 99
 c

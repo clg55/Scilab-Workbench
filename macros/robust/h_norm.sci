@@ -1,14 +1,13 @@
-//[hinfnorm,frequency]=H_norm(Sl,rerr)
+//[hinfnorm,frequency]=h_norm(Sl,rerr)
 // produces the infinitynorm  of a state-space system 
 // (the maximum over all frequencies of the maximum singular value).
-//%Syntaxe et description des parametres
-//      [hinfnorm [,frequency]]=H_norm(Sl,rerr)
-//      [hinfnorm [,frequency]]=H_norm(Sl)
+//      [hinfnorm [,frequency]]=h_norm(Sl,rerr)
+//      [hinfnorm [,frequency]]=h_norm(Sl)
 //
-//  sl        : the state space system (see syslin)
+//  Sl        : the state space system (see syslin)
 //  Rerr      : max. relative error, default value 1e-8
 //
-//  hinfnorm  : the infinitynorm of sl
+//  hinfnorm  : the infinitynorm of Sl
 //  frequency : frequency at which hinfnorm is achieved
 //  see also: linfn, linf
 //!
@@ -19,7 +18,8 @@
 [lhs,rhs]=argn(0);
 eps=1.d-8;
 flag='ss';if Sl(1)='r' then Sl=tf2ss(Sl);end
-[A,B,C,D]=sl(2:5);
+if Sl(7)=='d' then hinfnorm=dhnorm(Sl);frequency=[];return;end
+[a,b,c,d]=Sl(2:5);
 eiga=spec(a);
 if maxi(real(eiga)) >= -1e-12 then  ...
   write(%io(2),'Warning : system is not stable ! '),end
@@ -48,9 +48,6 @@ for it = 1:15,
   H11 = a-b*Rinv*dtc;
   evH = spec([H11 -gam*b*Rinv*b'; gam*c'*Sinv*c  -H11']);
  
-//  idx1=ceil(abs(real(evh)),1.e-3);
-//  idx2=ceil(-imag(evh(idx1)),0);
-//  idx=idx1(idx2);
   idx = find(abs(real(evH)) < 1e-8 & imag(evH) >= 0);
   imev= imag(evH(idx));
   [imev] = sort(imev);
@@ -77,6 +74,42 @@ write(%io(2),'The system might be all-pass')
 end;
 if exists('ub')=0 then ub=lb;end
 hinfnorm = 0.5 * (ub+lb); frequency = M;
-//end;
+
+function gama=dhnorm(Sl,tol,gamamax)
+//discrete-time case (should be tested!!!)
+disp('warning: discrete-time h_norm is not fully tested!')
+[lhs,rhs]=argn(0);
+if rhs=1 then tol=0.001;gamamax=4000;end
+if rhs=2 then gamamax=1000;end
+gamamin=sqrt(%eps);
+n=0;
+while %T
+gama=(gamamin+gamamax)/2;n=n+1;
+if n>1000 then warning('dhnorm: more than 1000 iterations!');return;end
+ if dhtest(Sl,gama) then
+  gamamax=gama; else gamamin=gama
+ end
+if (gamamax-gamamin)<tol then return;end
+end
+
+function ok=dhtest(Sl,gama)
+//test if discrete hinfinity norm of Sl is < gama
+[A,B,C,D]=Sl(2:5);B=B/sqrt(gama);C=C/sqrt(gama);D=D/gama;
+R=eye-D'*D;
+[n,n]=size(A);Id=eye(n,n);Z=0*Id;
+Ak=A+B*inv(R)*D'*C;
+e=[Id,-B*inv(R)*B';Z,Ak'];
+Aa=[ak,Z;-c'*inv(eye-D*D')*c,Id];
+[w,k]=gschur(Aa,e,'d');
+if k<>n then ok=%f;return;end
+ws=w(:,1:n);
+x12=ws(1:n,:);
+phi12=ws(n+1:2*n,:);
+if rcond(x12) > 1.d-6 then
+X=phi12/x12;
+z=eye-b'*X*B
+ok=mini(real(spec(x))) > 0 & mini(real(spec(z))) > 0
+else
+warning('dhnorm: bad conditioning');ok=%F;end
 
 

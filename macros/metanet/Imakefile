@@ -1,9 +1,10 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 NAME=metalib
 NAM=metanet
 
-MACROS= g_acolor.sci g_acost.sci g_ahead.sci g_alen.sci \
-	g_aranum.sci g_arcnum.sci \
+MACROS= metanet.sci g_acolor.sci g_acost.sci g_ahead.sci g_alen.sci \
+	g_arunum.sci g_arcnum.sci \
 	g_atail.sci g_aweig.sci g_demand.sci g_direct.sci g_edgnum.sci \
 	g_la1.sci g_la2.sci g_lp1.sci g_lp2.sci g_ls1.sci g_ls2.sci \
 	g_maxcap.sci g_mincap.sci g_name.sci g_ncolor.sci g_nodnum.sci \

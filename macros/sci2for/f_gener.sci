@@ -88,7 +88,7 @@ if s2(4)=='1'|s2(5)=='1' then
   else
     t1=' '+out+'('+addf(pto1,var)+')='+nam+'('+in+'('+addf(pti,var)+'))'
   end
-  txt=[txt;' do '+tl1+' '+var+' = 0,'+sousf(mulf(s2(4),s2(5)),'1');
+  txt=[txt;' do '+tl1+' '+var+' = 0,'+subf(mulf(s2(4),s2(5)),'1');
            indentfor(t1);part(tl1+'    ',1:6)+' continue']
 
 else
@@ -113,8 +113,8 @@ else
   else
     t1=t1+nam+'('+iar+')'
   end
-  txt=[txt;' do '+tl1+' '+var1+' = 0,'+sousf(s2(5),'1');
-           indentfor([' do '+tl2+' '+var2+' = 0,'+sousf(s2(4),'1');
+  txt=[txt;' do '+tl1+' '+var1+' = 0,'+subf(s2(5),'1');
+           indentfor([' do '+tl2+' '+var2+' = 0,'+subf(s2(4),'1');
                       indentfor(t1);
                       part(tl2+'    ',1:6)+' continue']);
            part(tl1+'    ',1:6)+' continue'];

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=LROW2,SSI=0
         integer function lrow2(i,m)
 c%calling sequence
 c        integer function lrow2(i,m)

@@ -17,7 +17,8 @@ void DeleteGraph()
 
   FindGraphNames();
   if (graphNames[0] == 0) {
-    MetanetAlert("There is no saved graph");
+    sprintf(Description,"There is no saved graph");
+    MetanetAlert(Description);
     return;
   }
   if (!MetanetChoose("Choose a graph",graphNames,name))
@@ -31,7 +32,8 @@ void DeleteGraph()
   strcat(fmname,name);
   strcat(fmname,".metanet");
 
-  if (!MetanetYesOrNo("Do you really want to delete graph %s",name))
+  sprintf(Description,"Do you really want to delete graph %s",name);
+  if (!MetanetYesOrNo(Description))
     return;
 
   rm = unlink(fmname);
@@ -44,7 +46,8 @@ void DeleteGraph()
     MetanetAlert ("It is not possible to delete file %s.metanet",name);
     return;
   }
-  AddMessage("Graph %s deleted\n",name);
+  sprintf(Description,"Graph %s deleted\n",name);
+  AddMessage(Description);
 }
 
 void CopyGraph()
@@ -56,17 +59,20 @@ void CopyGraph()
 
   FindGraphNames();
   if (graphNames[0] == 0) {
-    MetanetAlert("There is no saved graph");
+    sprintf(Description,"There is no saved graph");
+    MetanetAlert(Description);
     return;
   }
   if (!MetanetChoose("Choose a graph",graphNames,name))
     return;
   
-  MetanetDialog("",newName,"Other name for graph %s : ",name);
+  sprintf(Description,"Other name for graph %s : ",name);
+  MetanetDialog("",newName,Description);
   if (strcmp(newName,"") == 0) return;
 
   if (FindInLarray(newName,graphNames)) {
-    MetanetAlert("Graph %s exists\n",newName);
+    sprintf(Description,"Graph %s exists\n",newName);
+    MetanetAlert(Description);
   }
   else {
     /* copy graph file */
@@ -102,7 +108,8 @@ void CopyGraph()
       system(str);
     }
     
-    AddMessage("Graph %s created\n",newName);
+    sprintf(Description,"Graph %s created\n",newName);
+    AddMessage(Description);
   }
 }
 
@@ -115,16 +122,19 @@ void RenameGraph()
  
   FindGraphNames();
   if (graphNames[0] == 0) {
-    MetanetAlert("There is no saved graph");
+    sprintf(Description,"There is no saved graph");
+    MetanetAlert(Description);
     return;
   }
   if (!MetanetChoose("Choose a graph",graphNames,name))
     return;
   
-  MetanetDialog("",newName,"New name for graph %s : ",name);
+  sprintf(Description,"New name for graph %s : ",name);
+  MetanetDialog("",newName,Description);
   if (strcmp(newName,"") == 0) return;
   if (FindInLarray(newName,graphNames)) {
-    MetanetAlert("Graph %s exists\n",newName);
+    sprintf(Description,"Graph %s exists\n",newName);
+    MetanetAlert(Description);
   }
   else {
     /* rename graph file */
@@ -160,7 +170,9 @@ void RenameGraph()
       system(str);  
     }
     
-    AddMessage("Graph %s created\n",newName);
-    AddMessage("Graph %s deleted\n",name);
+    sprintf(Description,"Graph %s created\n",newName);
+    AddMessage(Description);
+    sprintf(Description,"Graph %s deleted\n",name);
+    AddMessage(Description);
   }
 }

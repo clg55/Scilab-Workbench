@@ -12,6 +12,8 @@ char **ip;
 int *op;
 {
   int i = 0;
-  cvstr_(n,op,*ip,&i,*n);
-  free(*ip);
+  if (*n > 0) {
+      cvstr_(n,op,*ip,&i,*n);
+      free(*ip);
+  }
 }

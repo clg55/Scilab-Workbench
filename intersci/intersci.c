@@ -129,7 +129,7 @@ FILE *f;
     if (words[0][0] == '*') return(1);
     if (line1 == 1) {
       /* SCILAB function description */
-      if (strlen(words[0]) > 8) {
+      if (strlen(words[0]) > 24) {
 	printf("SCILAB function name too long: \"%s\"\n",words[0]);
 	exit(1);
       }
@@ -209,6 +209,7 @@ FILE *f;
 	case ROW:
 	case STRING:
 	case WORK:
+        case VECTOR:
 	  if (nwords != 3) {
 	    printf("bad type specification for variable \"%s\"\n",
 		   words[0]);
@@ -286,6 +287,7 @@ FILE *f;
 	  case POLYNOM:
 	  case ROW:
 	  case STRING:
+          case VECTOR:
 	    sprintf(str,"ne%d",ivar);
 	    AddForName(variables[ivar-1]->el[0],str);
 	    break;
@@ -608,6 +610,8 @@ char *type;
     return(EMPTY);
   else if (strcmp(type,"any") == 0)
     return(ANY);
+  else if (strcmp(type,"vector") == 0)
+    return(VECTOR);
   else {
     printf("the type of variable \"%s\" is unknown\n",type);
     exit(1); return(NULL);
@@ -639,7 +643,7 @@ char* fname;
   fprintf(f,"c\n");
   fprintf(f,"      include '../stack.h'\n");
   fprintf(f,"c\n");
-  fprintf(f,"      integer iadr, sadr, id(2)\n");
+  fprintf(f,"      integer iadr, sadr, id(nsiz)\n");
   fprintf(f,"      iadr(l)=l+l-1\n");
   fprintf(f,"      sadr(l)=(l/2)+1\n");
   fprintf(f,"      rhs = max(0,rhs)\n");
@@ -832,6 +836,22 @@ int i;
     AddForName(var->el[0],str);
     fprintf(f,"        l%d = sadr(il%d+4)\n",i1,i1);
     break;
+  case VECTOR:
+    fprintf(f,"        m%d = istk(il%d+1)*istk(il%d+2)\n",i1,i1,i1);
+    sprintf(str,"m%d",i1);
+    strcpy(str1,variables[var->el[0]-1]->name);
+    if (isdigit(str1[0]) != 0) {
+      /* the dimension of the variable is a constant integer */
+      fprintf(f,"        if (%s .ne. %s) then\n",str,str1);
+      fprintf(f,"          err = %d\n",i1);
+      fprintf(f,"          call error(89)\n");
+      fprintf(f,"          return\n");
+      fprintf(f,"        endif\n");
+    }
+    AddForName(var->el[0],str);
+    fprintf(f,"        l%d = sadr(il%d+4)\n",i1,i1);
+    break;
+
   case POLYNOM:
     fprintf(f,"        if (istk(il%d+1)*istk(il%d+2) .ne. 1) then\n",
 	    i1,i1);
@@ -896,6 +916,7 @@ int type;
   case MATRIX:
   case ROW:
   case SCALAR:
+  case VECTOR:
     return(1);
     break;
   case LIST:
@@ -1134,6 +1155,7 @@ char *call;
     }    
     break;
   case ROW:
+  case VECTOR:
     if (var->for_type == CHAR) {
       printf("incompatibility between the variable type and the FORTRAN type for variable \"%s\"\n",var->name);
       exit(1);
@@ -1196,7 +1218,7 @@ char *call;
 	    barg,barg,farg,farg,barg);
     sprintf(str,"buf(lbuf%s:lbuf%s+n%s-1),",farg,farg,barg);
     strcat(call,str);
-    fprintf(f,"        lbuf = lbuf+n%s\n",barg);
+    fprintf(f,"        lbuf = lbuf+n%s+1\n",barg);
     break;
   case ANY:
     sprintf(str,"istk(il%s),",barg);
@@ -1255,6 +1277,7 @@ char *call;
   case POLYNOM:
   case ROW:
   case WORK:
+  case VECTOR:
     if (variables[var->el[0]-1]->nfor_name == 0) {
       strcpy(str,variables[var->el[0]-1]->name);
       if (isdigit(str[0]) == 0) {
@@ -1550,6 +1573,7 @@ int convert;
     }  
     break;
   case ROW:
+  case VECTOR:
     strcpy(str2,Forname2Int(variables[var->el[0]-1]->for_name[0]));
     fprintf(f,"        err=lw+4+%s-lstk(bot)\n",str2);
     fprintf(f,"        if (err .gt. 0) then\n");
@@ -1735,6 +1759,7 @@ int farg;
     fprintf(f,"        lw=lw+%s*%s\n",str1,str2);
     break;
   case ROW:
+  case VECTOR:
     strcpy(str2,Forname2Int(variables[var->el[0]-1]->for_name[0]));
     fprintf(f,"        err=lw+4+%s-lstk(bot)\n",str2);
     fprintf(f,"        if (err .gt. 0) then\n");
@@ -1881,6 +1906,7 @@ IVAR iivar;
       case COLUMN:
       case ROW:
       case STRING:
+      case VECTOR:
 	if (nwords != 3) {
 	  printf("bad type for variable \"%s\"\n",
 		 words[0]);
@@ -2045,7 +2071,13 @@ int i;
 	    AddForName(var->el[0],str);
 	    fprintf(f,"        l%s = sadr(il%s+4)\n",str1,str1);
 	    break;
-	  
+	  case VECTOR:
+	    fprintf(f,"        m%s =istk(il%s+2)*istk(il%s+2)\n",str1,str1,str1);
+	    sprintf(str,"m%s",str1);
+	    AddForName(var->el[0],str);
+	    fprintf(f,"        l%s = sadr(il%s+4)\n",str1,str1);
+	    break;
+	    
 	  case POLYNOM:
 	    if(TESTLISTELEMENTS) {
 	      fprintf(f,"        if (istk(il%s+1)*istk(il%s+2) .ne. 1) then\n",
@@ -2296,7 +2328,7 @@ int interf;
   fout = fopen(filout,"w");
   for (i = 0; i < nFun; i++) {
     fprintf(fout,"%s",funNames[i]);
-    for (j = 0; j < 9 - strlen(funNames[i]); j++) fprintf(fout," ");
+    for (j = 0; j < 25 - strlen(funNames[i]); j++) fprintf(fout," ");
     fprintf(fout,"%.2d%.2d   3\n",interf,i+1);
   }
   printf("\nfile \"%s\" has been created\n",filout);

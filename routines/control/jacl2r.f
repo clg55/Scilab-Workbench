@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=JACL2R,SSI=0
       subroutine jacl2r(neq,t,q,ml,mu,pd,nrowpd)
 c!but
 c     De meme que la precedente, cette procedure n'est utilisee que

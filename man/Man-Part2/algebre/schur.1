@@ -18,7 +18,7 @@ flag
 : character string (\fV'c'\fR or \fV'd'\fR)
 .TP
 macro
-: an ``external'' macro (this parameter can also be a list or character string)
+: an ``external'' function (this parameter can also be a list or character string)
 .TP
 U
 : orthogonal or unitary square matrix
@@ -58,9 +58,9 @@ lower than 1 (stable "discrete time" eigenspace).
 returns an unitary matrix T which transforms \fVA\fR into schur form. 
 In addition, the \fVdim\fR first columns of \fVT\fR span a basis of the 
 eigenspace of \fVA\fR associated with the eigenvalues which are 
-selected by the macro \fVa_macro\fR.
+selected by the function \fVa_macro\fR.
 .LP
-This macro must be of the following type (here \fVa_macro\fR is "\fVrule\fR"):
+This function must be of the following type (here \fVa_macro\fR is "\fVrule\fR"):
 .nf
 function [flag]=rule(x)
 
@@ -81,7 +81,7 @@ is \fVx(3)\fR.
 On return, flag should be 1 if the real eigenvalue is 
 selected or the pair of eigenvalues is selected and
 0 otherwise.
-.SH Example of macro
+.SH Example of function
 .nf
         function [flag]=disc(x)
         ls =x(1);flag=0;
@@ -90,9 +90,12 @@ selected or the pair of eigenvalues is selected and
            case 2 then if x(3) < ro*ro then flag=1;end
         end
 .fi
-The macro \fVdisc\fR selects the eigenvalues with magnitude lower
+The function \fVdisc\fR selects the eigenvalues with magnitude lower
 than a given scalar \fVro\fR. And for \fVro=1\fR the calling sequence
 \fV[T,dim]=schur(A,'d')\fR and \fV[T,dim]=schur(A,disc)\fR are
 equivalent.
+.LP
+Another useful example is \fV%choose\fR 
+(see function code in \fVSCIDIR/macros/percent\fR)
 .SH SEE ALSO
 gschur, ricc, pbig, psmall

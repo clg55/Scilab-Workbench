@@ -1,5 +1,5 @@
-//<f2>=%ris(i,j,f2,n)
-// %rip(i,j,r,m) insere la matrice de fractions rationnelles r dans la matrice
+function f2=%ris(i,j,f2,n)
+// %ris(i,j,r,m) insere la matrice de fractions rationnelles r dans la matrice
 //de scalaires m pour les indices de lignes (de colonnes) i (j). (m(i,j)=r)
 //!
 [l,c]=size(n),

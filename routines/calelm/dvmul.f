@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DVMUL,SSI=0
       subroutine dvmul(n,dx,incx,dy,incy)
 c!but
 c

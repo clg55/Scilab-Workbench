@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=COEF,SSI=0
       subroutine coef(ierr)
 c!purpose
 c     coef compute the lengh,and the coefficients of the

@@ -1,4 +1,4 @@
-function [nk,W]=Hankelsv(sl,tol)
+function [nk,W]=hankelsv(sl,tol)
 //!
   if sl(1)<>'lss' then error('State-space only :use tf2ss'),end
   if sl(7)='d' then error('Continuous time only'),end

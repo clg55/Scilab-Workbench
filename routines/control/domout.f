@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DOMOUT,SSI=0
       subroutine domout(neq,q,qi,nbout,ti,touti,itol,rtol,atol,itask,
      *     istate,iopt,rwork,lrw,iwork,liw,jacl2,mf,job)
 c!but

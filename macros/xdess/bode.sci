@@ -88,7 +88,7 @@ end;
 [ffr,bds]=xgetech();
 xmn=mini(frq),xmx=maxi(frq),npx=10
 //Magnitude
-[ymn,ymx,npy]=graduat(mini(d),maxi(d))
+[ymn,ymx,npy]=graduate(mini(d),maxi(d))
 rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
 
 xsetech([0,0,1.0,hx*0.95]);
@@ -100,7 +100,7 @@ xtitle('Magnitude ',' Hz','db');
 ymn=floor((mini(phi)-1)/90)*90
 ymx=ceil((maxi(phi)+1)/90)*90
 npy=modulo((ymx-ymn)/90-1,10)+1;
-//[ymn,ymx,npy]=graduat(mini(phi)-1,maxi(phi)+1)
+//[ymn,ymx,npy]=graduate(mini(phi)-1,maxi(phi)+1)
 rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
 xsetech([0,hx,1.0,hx*0.95]);
 plot2d1("oln",frq',phi',-[1,3:mn+1],"011",' ',rect,axis)

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DEFMAT,SSI=0
       subroutine defmat
 c     ---------------------------------
 C     Add an empty matrix on the stack 
@@ -7,10 +6,10 @@ C     ---------------------------------
       include '../stack.h'
       logical compil,cremat
       integer bl(nsiz)
-      data bl/673720360,673720360/
+      data bl/nsiz*673720360/
       if(err1.gt.0) return
 c     compilation  [4]
-      if(compil(0,4)) return 
+      if(compil(4,0,0,0,0)) return 
       if(top.eq.0) lstk(1)=1
       if(top+2 .ge. bot) then
          call error(18)

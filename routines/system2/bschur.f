@@ -10,7 +10,7 @@ c
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     
-      common/ierode/iero
+      common/ierinv/iero
 c     
       double precision al,be,s,p,sflag,x(3)
       integer vol,tops,nordre
@@ -118,7 +118,11 @@ c
 c+    
 c     transfert des variables  de sortie vers fortran
       call btof(sflag,1)
-      bschur=int(sflag)
+      if(sflag.eq.1.0d0) then
+        bschur=1
+      else
+        bschur=-1
+      endif
       if(err.gt.0) goto 9999
 c+    
       niv=niv-1

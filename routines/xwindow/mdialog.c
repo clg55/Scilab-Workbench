@@ -3,6 +3,7 @@
 static char **str;
 
 void C2F(cvstr)();
+
 static void mDialogWindow();
 
 void C2F(xmdial)(label,ptrlab,nlab,value,ptrv,desc,ptrdesc,nv,res,ptrres,ierr)
@@ -45,7 +46,7 @@ void C2F(xmdial)(label,ptrlab,nlab,value,ptrv,desc,ptrdesc,nv,res,ptrres,ierr)
 
 /* X Window Part */
 
-extern Widget toplevel;
+static Widget toplevel;
 extern XtAppContext app_con;
 
 #define X 147
@@ -54,13 +55,12 @@ extern XtAppContext app_con;
 static Widget  *dialoglist;
 extern int ok_Flag_sci;
 
-
 static XtCallbackProc
 mDialogOk(w,nv,callData)
      Widget w;
      caddr_t callData;
      int nv;
-{ int ind,i;
+{ int ind,i,ns;
   Arg args[2];
   int iargs;
   String str1,p;
@@ -68,16 +68,18 @@ mDialogOk(w,nv,callData)
     iargs=0;
     XtSetArg(args[iargs], XtNstring, &str1); iargs++ ;
     XtGetValues(dialoglist[i],args,iargs);
-    p=(char *) malloc((unsigned)strlen(str1)*sizeof(char));
-    if (p == 0) { fprintf(stderr,"Malloc : No more place");return;};
+    ns=strlen(str1);
+    p=(char *) malloc((unsigned)(ns+1)*sizeof(char));
+    if (p == 0) { Scistring("Malloc : No more place");return;};
     strcpy(p,str1);
-    ind = strlen(p) - 1 ;
+    ind = ns - 1 ;
     if (p[ind] == '\n' ) p[ind] = '\0' ;
     str[i]=p;
   }
   free(dialoglist);
   ok_Flag_sci = 1;
 }
+
 static XtCallbackProc 
 mDialogCancel(w,nv,callData)
      Widget w;
@@ -88,18 +90,24 @@ mDialogCancel(w,nv,callData)
   ok_Flag_sci = -1;
 }
 
-static void mDialogWindow(labels,description,valueinit,nv)
+static void 
+mDialogWindow(labels,description,valueinit,nv)
      char ** description;
      char ** valueinit;
      char *labels;
      int *nv;
   {
     Arg args[10];
+    XFontStruct *font;
     int fontwidth=9;
     int iargs = 0,i,ierr,mxdesc,mxini,siz;
     Widget shell,wid,form,box,label;
     Widget *w;
+    static Display *dpy = (Display *) NULL;
     char dialName[9],boxName[9];
+
+    DisplayInit("",&dpy,&toplevel);
+    font = XLoadQueryFont(dpy,XWMENUFONT);
 
     iargs=0;
     XtSetArg(args[iargs], XtNx, X + 10); iargs++ ;
@@ -113,6 +121,7 @@ static void mDialogWindow(labels,description,valueinit,nv)
 
     iargs=0;
     XtSetArg(args[iargs], XtNlabel ,labels) ; iargs++;
+    XtSetArg(args[iargs], XtNfont, font); iargs++;
     box=XtCreateManagedWidget("text",labelWidgetClass,form,args,iargs);
     /* An array of Widgets */
     dialoglist=(Widget *)malloc((unsigned) (*nv)*sizeof(Widget));
@@ -146,6 +155,7 @@ static void mDialogWindow(labels,description,valueinit,nv)
 	XtSetArg(args[iargs], XtNleft ,"left") ; iargs++;
 	XtSetArg(args[iargs], XtNtop ,"top") ; iargs++;
 	XtSetArg(args[iargs], XtNbottom ,"top") ; iargs++;
+	XtSetArg(args[iargs], XtNfont, font); iargs++;
 	label=XtCreateManagedWidget("text",labelWidgetClass,box,args,iargs);
 	
 	iargs=0;
@@ -156,6 +166,7 @@ static void mDialogWindow(labels,description,valueinit,nv)
 	XtSetArg(args[iargs], XtNresize ,"both") ; iargs++;
 	XtSetArg(args[iargs], XtNhorizDistance ,4) ; iargs++;
 	XtSetArg(args[iargs], XtNresizable ,TRUE) ; iargs++;
+	XtSetArg(args[iargs], XtNfont, font); iargs++;
 	dialoglist[i]=XtCreateManagedWidget(dialName,asciiTextWidgetClass,
 					    box,args,iargs);
       }
@@ -166,15 +177,17 @@ static void mDialogWindow(labels,description,valueinit,nv)
     box=XtCreateManagedWidget(boxName,boxWidgetClass,form,args,iargs);
     iargs = 0;
     XtSetArg(args[iargs], XtNlabel, "Ok" ); iargs++;
+    XtSetArg(args[iargs], XtNfont, font); iargs++;
     wid=XtCreateManagedWidget("okbutton",commandWidgetClass,
 			      box,args,iargs);
     XtAddCallback(wid, XtNcallback,(XtCallbackProc)mDialogOk ,(XtPointer) *nv);  
     iargs = 0;
     XtSetArg(args[iargs], XtNlabel, "Cancel" ); iargs++;
+    XtSetArg(args[iargs], XtNfont, font); iargs++;
     wid=XtCreateManagedWidget("cancelbutton",commandWidgetClass,
 			      box,args,iargs);
     XtAddCallback(wid, XtNcallback,(XtCallbackProc)mDialogCancel ,(XtPointer) *nv);  
-    XtPopup(shell,XtGrabExclusive);
-    XtMyLoop(shell);
-    if (ok_Flag_sci==-1) *nv=0;
+/*    XtPopup(shell,XtGrabExclusive);*/
+    XtMyLoop(shell,dpy);
+    if (ok_Flag_sci == -1) *nv=0;
 }

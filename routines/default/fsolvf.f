@@ -18,7 +18,7 @@ c dynamic link
  1001 it1=it1-1
       if(it1.le.0) goto 2000
       if(tablin(it1).ne.name) goto 1001
-cc    sun unix
+cc     unix
       call dyncall(it1-1,n,x,fvec,iflag)
 cc    fin
       return

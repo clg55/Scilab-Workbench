@@ -9,9 +9,9 @@ function [gm]=fspecg(g)
 [a,b,c,d]=g(2:5),g=[];
 a=-a;
 b=-b;
-H=[-a',c'*c;
+h=[-a',c'*c;
    0*eye(a),a];
-x=ric_descr(H);h=[]
+x=ric_desc(h);h=[]
 gm=syslin('c',-a'+c'*c*x,-c',b'-d'*c*x,d')';
 
 

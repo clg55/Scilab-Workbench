@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DHETR,SSI=0
       subroutine dhetr(na,nb,nc,l,m,n,low,igh,a,b,c,ort)
       double precision a(na,n),b(nb,m),c(nc,n),ort(n)
 c

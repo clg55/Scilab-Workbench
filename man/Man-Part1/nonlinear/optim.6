@@ -11,7 +11,7 @@ optim - non-linear optimization routine
 .SH PARAMETERS
 .TP 10
 costf
-: external, i.e Scilab macro or string (\fVcostf\fR is the cost function: see below its
+: external, i.e Scilab function or string (\fVcostf\fR is the cost function: see below its
 calling sequence (Scilab or Fortran)).
 .TP
 x0 
@@ -84,15 +84,15 @@ Non-linear optimization routine for programs without constraints or with bound c
 .nf
 min costf(x) w.r.t x.
 .fi
-\fVcostf\fR is an "external" i.e macro, or list or Fortran routine (see "external").
+\fVcostf\fR is an "external" i.e function, or list or Fortran routine (see "external").
 This external must return \fVf\fR (\fVcostf(x)\fR) and \fVg\fR (gradient of \fVcostf\fR)
 given \fVx\fR.
 .LP
-If \fVcostf\fR is a macro, the calling sequence for \fVcostf\fR must be:
+If \fVcostf\fR is a function, the calling sequence for \fVcostf\fR must be:
 .nf
 [f,g,ind]=costf(x,ind).
 .fi
-Here, \fVcostf\fR is a macro which returns \fVf\fR, value (real number) of
+Here, \fVcostf\fR is a function which returns \fVf\fR, value (real number) of
 cost function at \fVx\fR, and \fVg\fR, gradient vector of cost function at \fVx\fR.
 The variable \fVind\fR is used by \fVoptim\fR and is described below.
 .LP

@@ -7,6 +7,7 @@ C     implicit undefined (a-z)
 c
 c
       include '../stack.h'
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
 c
 c common unite logique
       integer         nunit,unit(20)
@@ -17,6 +18,9 @@ c common pour la gestion du break
 c common pour le mode de protection des macros
       integer macprt
       common /mprot/ macprt
+c common pour la synchronisation
+      integer isok,ntfy,enabled(100)
+      common /syncro/ isok,ntfy,enabled
 c
       save /stack/,/vstk/,/recu/,/iop/,/com/,/cha1/
       save /units/
@@ -63,12 +67,12 @@ c
      $    '0','0','0','"','{','}','0','0','0','`','0','@',
      $    '0'/
 c
-      data im/673714744,673720360/,exp/673713720,673720360/
-      data pi/672274744,673720360/,bl/673720360,673720360/
-      data eps/471404088,673720360/,io/672666168,673720360/
+      data im/673714744,nz1*673720360/,exp/673713720,nz1*673720360/
+      data pi/672274744,nz1*673720360/,bl/nsiz*673720360/
+      data eps/471404088,nz1*673720360/,io/672666168,nz1*673720360/
       data first/.true./
-      data inf/253170232,673720360/,nan/386537272,673720360/
-      data true/673717560,673720360/,false/673713976,673720360/
+      data inf/253170232,nz1*673720360/,nan/386537272,nz1*673720360/
+      data true/673717560,nz1*673720360/,false/673713976,nz1*673720360/
 c
       data nunit/20/
 c
@@ -96,6 +100,7 @@ c
       nmacs   =   0
       lgptrs(1)=  1
       wmac    =   0
+      call iset(100,0,enabled,1)
 c
 c -----------------------------------
 c initialisation ini1  and buffer

@@ -1,4 +1,4 @@
-//<f2>=%rip(i,j,f2,n)
+function f2=%rip(i,j,f2,n)
 // %rip(i,j,f2,p) insere la matrice de fractions rationnelles f2 dans la
 //matrice de polynomes p pour les indices de lignes (de colonnes) i (j).
 // p(i,j)=f2

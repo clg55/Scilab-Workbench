@@ -25,14 +25,18 @@ Descriptor to state-space transform.
 .LP
 \fVSl=des2ss(A,B,C,D,E)\fR returns 
 a linear system \fVSl\fR equivalent to the descriptor system 
-\fV(E,A,B,C,D)\fR, (index of \fV(E,A)\fR must be at most 1).
+\fV(E,A,B,C,D)\fR.
+.LP
+For index one \fV(E,A)\fR pencil, explicit formula is used and
+for higher index pencils \fVrowshuff\fR is used.
 .LP
 \fVSl=des2ss(Des)\fR with \fVDes=list('des',A,B,C,0,E)\fR returns
 a linear system \fVSl\fR in state-space form with possibly 
 a polynomial \fVD\fR matrix.
 .LP
 Note that now \fVD\fR is set to \fV0\fR here.
-No index restriction here.
+A generalized Leverrier is used.
 .SH SEE ALSO
-des2tf
+des2tf, glever, rowshuff
+
 

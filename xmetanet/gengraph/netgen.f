@@ -680,7 +680,8 @@ C
 C THE GENERATOR REQUIRES A MACHINE WITH AT LEAST 32 BITS OF PRECISION.  
 C THE SEED (ISEED) MUST BE IN THE RANGE (1,(2**31)-1).                  
 C***********************************************************************
-      COMMON /RAN/ MULT,MODUL,I15,I16,JRAN                              
+      COMMON /RAN/ MULT,MODUL,I15,I16,JRAN    
+      COMMON /NEW/ LUIN,LUOUT                                                               
       IF(ISEED.LT.1) then
          write(luout,8006)
  8006    format(' ISEED MUST BE >= 0')

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DQRDC,SSI=0
       subroutine dqrdc(x,ldx,n,p,qraux,jpvt,work,job)
       integer ldx,n,p,job
       integer jpvt(*)

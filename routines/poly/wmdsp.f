@@ -96,13 +96,17 @@ c
 c     determination du format devant representer a
       typ=1
       if(mode.eq.1) call fmt(abs(a),maxc,typ,n1,n2)
-      if(typ.eq.2) goto 03
-      iw(ldef)=1
-      fl=maxc
-      n2=maxc-7
-      goto 05
-   03 fl=n1
-      iw(ldef)=n2+32*n1
+      if(typ.eq.2) then
+         fl=n1
+         iw(ldef)=n2+32*n1
+      elseif(typ.lt.0) then
+         iw(ldef)=typ
+         fl=3
+      else
+         iw(ldef)=1
+         fl=maxc
+         n2=maxc-7
+      endif
 c
 c     determination de la longueur de la representation du coefficient,
 c          cette longueur est a priori fl+2 (' '//sgn//rep(a)).
@@ -119,10 +123,10 @@ c
    20 continue
       s=s+iw(k)
       if(s.gt.ll-2) then
-                        iw(lbloc+nbloc)=k-1
-                        nbloc=nbloc+1
-                        iw(lbloc+nbloc)=n
-                        s=iw(k)
+         iw(lbloc+nbloc)=k-1
+         nbloc=nbloc+1
+         iw(lbloc+nbloc)=n
+         s=iw(k)
       endif
    21 continue
       if(fact.ne.1.0d+0) then
@@ -175,23 +179,34 @@ c
       if(a.lt.0.0d+0) sgn='-'
       a=abs(a)*fact
 c
-      if(ifmt.eq.1) then
-                        nf=1
-                        fl=maxc
-                        n2=1
-                    else
-                        nf=2
-                        n1=ifmt/32
-                        n2=ifmt-32*n1
-                        fl=n1
-                        write(form(nf),120) fl,n2
-      endif
+      a=abs(a)
 c
-c
-   41 cw(l1:l1+1)=' '//sgn
+      cw(l1:l1+1)=' '//sgn
       l1=l1+2
-      write(cw(l1:l1+fl-1),form(nf)) a
+c
+      if(ifmt.eq.1) then
+         nf=1
+         fl=maxc
+         n2=1
+         write(cw(l1:l1+fl-1),form(nf)) a
+      elseif(ifmt.ge.0) then
+         nf=2
+         n1=ifmt/32
+         n2=ifmt-32*n1
+         fl=n1
+         write(form(nf),120) fl,n2
+         write(cw(l1:l1+fl-1),form(nf)) a
+      elseif(ifmt.eq.-1) then
+c     Inf
+         fl=3
+         cw(l1:l1+fl-1)='Inf'
+      elseif(ifmt.eq.-2) then
+c     Nan
+         fl=3
+         cw(l1:l1+fl-1)='Nan'
+      endif
       l1=l1+fl
+
    42 continue
 c
       if(iw(ldef+1).eq.0) goto 43

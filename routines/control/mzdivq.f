@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=MZDIVQ,SSI=0
       subroutine mzdivq(ichoix,nv,tv,nq,tq)
 c!but
 c     cette routine calcule, lorsque l'on connait le quotient et le reste

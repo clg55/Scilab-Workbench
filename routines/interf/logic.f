@@ -40,7 +40,7 @@ c
       mn4=m4*n4
       if(istk(il4).eq.4) then
          l4=il4+3
-      elseif(istk(il4).eq.1) then
+      elseif(istk(il4).le.2) then
          it4=istk(il4+3)
          l4=sadr(il4+4)
       else
@@ -57,7 +57,7 @@ c
       mn3=m3*n3
       if(istk(il3).eq.4) then
          l3=il3+3
-      elseif(istk(il3).eq.1) then
+      elseif(istk(il3).le.2) then
          it3=istk(il3+3)
          l3=sadr(il3+4)
       else
@@ -74,7 +74,7 @@ c
       mn2=m2*n2
       if(istk(il2).eq.4) then
          l2=il2+3
-      elseif(istk(il2).eq.1) then
+      elseif(istk(il2).le.2) then
          it2=istk(il2+3)
          l2=sadr(il2+4)
       else
@@ -285,6 +285,11 @@ c
  79   continue
       if(rhs.gt.2) goto 81
 c     vect(arg)
+      if(istk(il1).eq.4) then
+         fin=-fin
+         top=top0
+         go to 999
+      endif
       if(mn1.eq.0) goto 84
       if(m1.gt.1.and.n1.gt.1.or.it1.ne.0) then
          call error(21)
@@ -330,7 +335,13 @@ c     matrix(arg,arg)
          call error(36)
          return
       endif
+
       if(mn1*mn2.eq.0) goto 84
+      if(istk(il1).eq.4.or.istk(il2).eq.4) then
+         fin=-fin
+         top=top0
+         go to 999
+      endif
       if(it1+it2.ne.0) then
          call error(21)
          return
@@ -397,6 +408,16 @@ c
       nd=n2
       ld=l2
 c     
+      if(istk(il1).eq.4) then
+         fin=-fin
+         top=top0
+         go to 999
+      endif
+      if(istk(il1).ne.1) then
+         call error(21)
+         return
+      endif
+
       if(it1.ne.0) then
          call error(21)
          return
@@ -433,6 +454,16 @@ c     matrix(arg,arg)
       nd=n3
       ld=l3
 c     
+      if(istk(il1).eq.4.or.istk(il2).eq.4) then
+c     indices booleens
+         fin=-fin
+         top=top0
+         go to 999
+      endif
+      if(istk(il1).ne.1.or.istk(il2).ne.1) then
+         call error(21)
+         return
+      endif
       if(it1+it2.ne.0) then
          call error(21)
          return

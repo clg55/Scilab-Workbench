@@ -1,4 +1,4 @@
-function [gopt]=gamitG(G,r,PREC,options)
+function [gopt]=gamitg(g,r,PREC,options)
 //[gopt]=gamitg(G,r,PREC,options);
 //
 //  On input:

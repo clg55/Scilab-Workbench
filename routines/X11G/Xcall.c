@@ -32,6 +32,7 @@
 
 #ifndef THINK_C
 #include "periX11.h"
+#include "periPix.h"
 #else
 #include "periMac.h"
 #endif
@@ -45,6 +46,7 @@ lexicographic order (name)}
 ----------------------------------------------------------------*/
 
 int SetDriver_();
+int GetDriver1_();
 
 typedef  struct  {
   char *name;
@@ -52,6 +54,7 @@ typedef  struct  {
 
 int vide_() {};
 extern int Tape_Replay();
+extern int Tape_ReplayNewAngle();
 extern int CleanPlots();
 
 
@@ -68,6 +71,8 @@ OpTab keytab_x_[] ={
   "xfarc",fillarc_,
   "xfrect",fillrectangle_,
   "xget",MissileGCget_,
+  "xgetdr",GetDriver1_,
+  "xgetmouse",xgetmouse_,
   "xinit",initgraphic_,
   "xlfont",loadfamily_,
   "xlines",drawpolyline_,
@@ -79,6 +84,7 @@ OpTab keytab_x_[] ={
   "xrect",drawrectangle_,
   "xrects",drawrectangles_,
   "xreplay",Tape_Replay,
+  "xreplayna",Tape_ReplayNewAngle,
   "xsegs",drawsegments_,
   "xselect",xselgraphic_,
   "xset",MissileGCset_,
@@ -86,6 +92,42 @@ OpTab keytab_x_[] ={
   "xstart",CleanPlots,
   "xstring",displaystring_,
   "xstringl",boundingbox_,
+  (char *) NULL,vide_};
+
+OpTab keytab_pix_[] ={
+  "xarc",drawarc_pix_,
+  "xarcs", drawarcs_pix_,
+  "xarea",fillpolyline_pix_,
+  "xarrow",drawarrows_pix_,
+  "xaxis",drawaxis_pix_,
+  "xclea", cleararea_pix_,
+  "xclear",clearwindow_pix_,
+  "xclick",xclick_pix_,
+  "xend", xend_pix_,
+  "xfarc",fillarc_pix_,
+  "xfrect",fillrectangle_pix_,
+  "xget",MissileGCget_pix_,
+  "xgetdr",GetDriver1_,
+  "xgetmouse",xgetmouse_pix_,
+  "xinit",initgraphic_pix_,
+  "xlfont",loadfamily_pix_,
+  "xlines",drawpolyline_pix_,
+  "xliness",fillpolylines_pix_,
+  "xmarks",drawpolymark_pix_,
+  "xnum",displaynumbers_pix_,
+  "xpause", xpause_pix_,
+  "xpolys", drawpolylines_pix_,
+  "xrect",drawrectangle_pix_,
+  "xrects",drawrectangles_pix_,
+  "xreplay",Tape_Replay,
+  "xreplayna",Tape_ReplayNewAngle,
+  "xsegs",drawsegments_pix_,
+  "xselect",xselgraphic_pix_,
+  "xset",MissileGCset_pix_,
+  "xsetdr",SetDriver_,
+  "xstart",CleanPlots,
+  "xstring",displaystring_pix_,
+  "xstringl",boundingbox_pix_,
   (char *) NULL,vide_};
 
 OpTab keytab_pos_[] ={
@@ -101,6 +143,8 @@ OpTab keytab_pos_[] ={
   "xfarc",fillarc_pos_,
   "xfrect",fillrectangle_pos_,
   "xget",scilabgcget_pos_,
+  "xgetdr",GetDriver1_,
+  "xgetmouse",xgetmouse_pos_,
   "xinit",initgraphic_pos_,
   "xlfont",loadfamily_pos_,
   "xlines",drawpolyline_pos_,
@@ -112,6 +156,7 @@ OpTab keytab_pos_[] ={
   "xrect",drawrectangle_pos_,
   "xrects",drawrectangles_pos_,
   "xreplay",Tape_Replay,
+  "xreplayna",Tape_ReplayNewAngle,
   "xsegs",drawsegments_pos_,
   "xselect",xselgraphic_pos_,
   "xset",scilabgcset_pos_,
@@ -134,6 +179,8 @@ OpTab keytab_xfig_[] ={
   "xfarc",drawfilledarc_xfig_,
   "xfrect",drawfilledrect_xfig_,
   "xget",scilabgcget_xfig_,
+  "xgetdr",GetDriver1_,
+  "xgetmouse",xgetmouse_xfig_,
   "xinit",initgraphic_xfig_,
   "xlfont",loadfamily_xfig_,
   "xlines",drawpolyline_xfig_,
@@ -145,6 +192,7 @@ OpTab keytab_xfig_[] ={
   "xrect",drawrectangle_xfig_,
   "xrects",drawrectangles_xfig_,
   "xreplay",Tape_Replay,
+  "xreplayna",Tape_ReplayNewAngle,
   "xsegs",drawsegments_xfig_,
   "xselect",xselgraphic_xfig_,
   "xset",scilabgcset_xfig_,
@@ -161,7 +209,6 @@ static char drname_[]= "Rec";
    dr has 2 last extra parametres to deal with the size of
    x0 and x1 */
 
- int  xint_type=0;
 
 C2F(dr)(x0,x1,x2,x3,x4,x5,x6,x7,lx0,lx1)
      char x0[],x1[];
@@ -171,11 +218,6 @@ C2F(dr)(x0,x1,x2,x3,x4,x5,x6,x7,lx0,lx1)
   switch (drname_[0])
     {
     case 'X':
-
-      all_(keytab_x_,x0,x1,x2,x3,x4,x5,x6,x7);
-      break;
-    case 'I':
-      xint_type=1;
       all_(keytab_x_,x0,x1,x2,x3,x4,x5,x6,x7);
       break;
     case 'P'  :
@@ -185,11 +227,13 @@ C2F(dr)(x0,x1,x2,x3,x4,x5,x6,x7,lx0,lx1)
       all_(keytab_xfig_,x0,x1,x2,x3,x4,x5,x6,x7);
       break;
     case 'R'  :
-      xint_type=1;
       all_(keytab_x_,x0,x1,x2,x3,x4,x5,x6,x7);
       break;
+    case 'W'  :
+      all_(keytab_pix_,x0,x1,x2,x3,x4,x5,x6,x7);
+      break;
     default:
-      fprintf(stderr,"\n Wrong driver name");
+      Scistring("\n Wrong driver name");
       break;
     };
 };
@@ -202,9 +246,6 @@ SetDriver_(x0)
     case 'X':
       strcpy(drname_,"X11");
       break;
-    case 'I':
-      strcpy(drname_,"IX11");
-      break;
     case 'P'  :
       strcpy(drname_,"Pos");
       break;
@@ -214,12 +255,21 @@ SetDriver_(x0)
     case 'R'  :
       strcpy(drname_,"Rec");
       break;
+    case 'W'  :
+      strcpy(drname_,"Wdp");
+      break;
     default:
-      fprintf(stderr,"\n Wrong driver name I'll use X11");
+      Scistring("\n Wrong driver name I'll use X11");
       strcpy(drname_,"X11");
       break;
     };  
 };
+
+int GetDriver1_(str)
+     char str[];
+{
+  strcpy(str,drname_);
+}
 
 char GetDriver_() {return(drname_[0]);};
 
@@ -239,19 +289,19 @@ all_(tab,x0,x1,x2,x3,x4,x5,x6,x7)
        else 
 	 { if ( j <= 0)
 	     {
-	       fprintf(stderr,"\nUnknow X operator <%s>",x0);
+	       SciF1s("\nUnknow X operator <%s>\r\n",x0);
 	       return;
 	     }
 	   else i++;
 	 };
      };
-  fprintf(stderr,"\n Unknow X operator <%s>",x0);
+  SciF1s("\n Unknow X operator <%s>\r\n",x0);
 };
 
 C2F(inttest)(x1)
      int *x1;
 {
-  fprintf(stderr,"Value  of x1 = <%d>\n",*x1);
+  SciF1d("Value  of x1 = <%d>\r\n",*x1);
 }
 
 /*----------------------------------END---------------------------*/

@@ -1,4 +1,4 @@
-function [X,dim,dima]=spanplus(A,B,tol)
+function [x,dim,dima]=spanplus(a,b,tol)
 //[X,dim,dima]=spanplus(A,B,tol) computes an orthogonal basis of
 // a+b such that : the first dima columns of x span Range(A)
 // and the following (dim-dima) columns make a basis of a+b

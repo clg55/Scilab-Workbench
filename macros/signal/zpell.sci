@@ -15,7 +15,7 @@
  
    m1=(epsilon*epsilon)/(A*A-1);
    K1=%asn(1,m1);
-   k1t=imag(%asn(1/sqrt(m1),m1));
+   K1t=imag(%asn(1/sqrt(m1),m1));
    m=(omegac/omegar)**2;
    K=%asn(1,m);
    Kt=imag(%asn(1/sqrt(m),m));

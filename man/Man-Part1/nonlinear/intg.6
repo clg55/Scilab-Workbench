@@ -12,7 +12,7 @@ a,b
 : real numbers
 .TP
 f
-: external (macro or list or string)
+: external (function or list or string)
 .TP
 ea, er 
 : real numbers
@@ -29,11 +29,11 @@ err
 \fVintg(a,b,f)\fR evaluates the definite integral  from \fVa\fR to \fVb\fR of \fVf(t)dt\fR.
 \fVf\fR is an external :
 .LP
-If \fVf\fR is macro its definition must be as follows
+If \fVf\fR is function its definition must be as follows
 \fV y = f(t) \fR
 .LP
 If \fVf\fR is a list the list must be as follows:
-\fV list(f,x1,x2,...)\fR where \fVf\fR is a macro with calling
+\fV list(f,x1,x2,...)\fR where \fVf\fR is a function with calling
 sequence \fVf(t,x1,x2,...)\fR.
 .LP
 If \fVf\fR is a string it refers to a the name

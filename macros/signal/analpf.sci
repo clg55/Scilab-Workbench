@@ -1,5 +1,5 @@
-//<hs,pols,zers,gain>=analpf(n,fdesign,rp,omega)
-//<hs,pols,zers,gain>=analpf(n,fdesign,rp,omega)
+function [hs,pols,zers,gain]=analpf(n,fdesign,rp,omega)
+//[hs,pols,zers,gain]=analpf(n,fdesign,rp,omega)
 //Creates analog low-pass filter with cut-off frequency at omega
 //  n       :filter order (pos. integer)
 //  fdesign :filter design method

@@ -10,7 +10,7 @@
 #include "metawin.h"
 #include "graphics.h"
 
-#define STRLEN 100000
+#define STRINGLEN 100000
 #define MAXNAM 80
 
 #define INCX 40
@@ -18,7 +18,7 @@
 
 static int iText = 0;
 static int iStr = 0;
-static char Str[STRLEN];
+static char Str[STRINGLEN];
 
 void TextClose(w,shell,callData)
 Widget w;
@@ -35,10 +35,10 @@ void StartAddText()
   Str[0] = '\0';
 }  
 
-void AddText(format,a1,a2,a3,a4,a5,a6,a7)
-     char *format;
+void AddText(description)
+char *description;
 {
-  sprintf(&Str[iStr],format,a1,a2,a3,a4,a5,a6,a7);
+  sprintf(&Str[iStr],description);
   iStr = strlen(Str);
 }
 
@@ -79,7 +79,7 @@ void EndAddText()
   XtCreateManagedWidget("asciitext",asciiTextWidgetClass,
 				text,args,iargs);
 
-  callbacks[0].callback = TextClose;
+  callbacks[0].callback = (XtCallbackProc)TextClose;
   callbacks[0].closure = (caddr_t)shell;
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, "Close" ); iargs++;

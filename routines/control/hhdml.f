@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=HHDML,SSI=0
       subroutine hhdml(ktrans,nrowa,ncola,ioff,joff,nrowbl,ncolbl,
      1                 x,nx,qraux,a,na,mode,ierr)
 c!purpose

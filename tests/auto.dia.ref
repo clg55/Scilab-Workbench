@@ -7,7 +7,7 @@
  
 --> [num,den]=coff(a,'s');h1=num/den;h2=(s*eye-a)**(-1);
  
---> e=h1-h2;if NORM(coeff(e(2)))>5000*%eps then bugmes();quit;end
+--> e=h1-h2;if norm(coeff(e(2)))>5000*%eps then bugmes();quit;end
  
 -->// 2-test de tf2ss et ss2tf
  
@@ -22,7 +22,7 @@
  
 --> sl=tf2ss(h); e=h-ss2tf(sl);
  
---> if NORM(coeff(e(2)))>1000*%eps then bugmes();quit;end
+--> if norm(coeff(e(2)))>1000*%eps then bugmes();quit;end
  
 --> 
 --> 
@@ -123,8 +123,8 @@ y = | 2.025D-07 -3.7416574 |x
  
 -->if norm(coeff(hh(2))) > 1.e-5 then bugmes();quit;end
  
--->slh=tf2ss(h)
- slh       =
+-->slh=tf2ss(hm)       //was tf2ss(h)
+ slh  =
  
  
        slh(1)   (state-space system:)
@@ -133,18 +133,18 @@ y = | 2.025D-07 -3.7416574 |x
  
        slh(2) = A matrix = 
  
-! - 0.8079891    0.1313020 !
-! - 0.9905649  - 0.7420112 !
+! - 0.8120643    0.0927060 !
+! - 1.4060428  - 0.7379359 !
  
        slh(3) = B matrix = 
  
-!   0.1641001  - 4.923D-08  - 0.3282002 !
-!   0.0724742    0.1349772  - 0.1449483 !
+! - 0.5315308    1.595D-07    1.0630613 !
+! - 0.3558466  - 0.6192179    0.7116929 !
  
        slh(4) = C matrix = 
  
-!   6.09384      0.       !
-! - 0.9815995    2.222595 !
+! - 1.8813586    0.        !
+!   0.3243483  - 0.4844817 !
  
        slh(5) = D matrix = 
  
@@ -241,7 +241,7 @@ y = | 2.025D-07 -3.7416574 |x
 -->//test bode - black et nyquist
  
 --> s=poly(0,'s')
- s         =
+ s  =
  
     s   
  
@@ -250,7 +250,7 @@ y = | 2.025D-07 -3.7416574 |x
 --> n=1+s;d=1+2*s;
  
 --> h=syslin('c',n,d)
- h         =
+ h  =
  
     1 + s    
     -----    
@@ -380,7 +380,7 @@ y = | 2.025D-07 -3.7416574 |x
 -->//test  dscr
  
 -->slc=syslin('c',[0 1;0 0],[0;0],[1,0]);qc=[0 0;0 0.1]
- qc        =
+ qc  =
  
 !   0.    0.  !
 !   0.    0.1 !

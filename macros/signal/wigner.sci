@@ -1,6 +1,4 @@
-//<tab>=wigner(x,h,deltat,zp)
-//<tab>=wigner(x,h,deltat,zp)
-//
+function tab=wigner(x,h,deltat,zp)
 //macro which computes the 'time-frequency' wigner
 //spectrum of a signal.
 //
@@ -13,25 +11,27 @@
 //
 //   Initializations
 //
-   l=prod(size(x));
-   n=prod(size(h));
-   npr=2*n;
-   h=h.*conj(h);tab=[];
+l=prod(size(x));
+n=prod(size(h));
+npr=2*n;
+h=h.*conj(h);tab=[];
 //
 //   Analytical signal computation using Hilbert transform
 //
-   z=x+%i*convol(hilb(127),x);
+[y,y1]=convol(hilb(127),x);
+z=x+%i*y;
 //
 //   Wigner distribution computation
 //
-   t=n;
-   while t<=l-n,
-   z1=h.*z(t:t+n-1).*conj(z(t:-1:t-n+1));
-   z1(zp)=0;
-   w=fft(z1,-1);
-   w=2*(2*real(w)-z(t)*z(t)'*ones(w));tab=[tab;w];
-   t=t+deltat;end;
-   tab=tab(:,1:zp);
+t=n;
+while t<=l-n,
+  z1=h.*z(t:t+n-1).*conj(z(t:-1:t-n+1));
+  z1(zp)=0;
+  w=fft(z1,-1);
+  w=2*(2*real(w)-z(t)*z(t)'*ones(w));tab=[tab;w];
+  t=t+deltat;
+end;
+tab=tab(:,1:zp);
 //end
 
 

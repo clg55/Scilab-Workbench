@@ -1,4 +1,4 @@
-//<s1>=%rmr(s1,s2)
+function s1=%rmr(s1,s2)
 //s1=s1*s2
 //!
 [s1,s2]=sysconv(s1,s2),
@@ -19,8 +19,7 @@ for j=1:m2,
     yij=y*pp(i),
     x=0;
     for k=1:m1,
-      x=x+n1(i,k)*n2(k,j)*pdiv(y,d2(k,j))*pdiv(pp(i),d1(i,k)),
-
+      x=x+n1(i,k)*n2(k,j)*pppdiv(y,d2(k,j))*pppdiv(pp(i),d1(i,k)),
     end,
     num(i,j)=x,den(i,j)=yij,
   end,

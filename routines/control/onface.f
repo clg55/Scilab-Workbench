@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=ONFACE,SSI=0
       subroutine onface(neq,q,nprox,ierr,w)
 c!but
 c     il est question ici de calculer (ou d estimer)

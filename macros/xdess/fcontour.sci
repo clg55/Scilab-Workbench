@@ -1,5 +1,5 @@
-//[]=fcontour_(xr,yr,f,nz,teta,alpha,legend,flag,bbox,zlev)
-//[]=fcontour_(xr,yr,f,nz,[teta,alpha,legend,flag,bbox,zlev])
+function fcontour(xr,yr,f,nz,teta,alpha,legend,flag,bbox,zlev)
+//[]=fcontour(xr,yr,f,nz,[teta,alpha,legend,flag,bbox,zlev])
 // Trace des courbes de niveau de la surface
 // d\'efinie par un external f  ( ex macro [y]=f(x))
 // on calcule d'abord f sur la grille definie par xr.yr
@@ -44,7 +44,7 @@ if rhs<8,flag=[2,2,3],end;
 if rhs<9,bbox=0*ones(1,6),end;
 if rhs<10,zlev=0;end
 if type(f)=11 then comp(f),end;
-Contour(xr,yr,feval(xr,yr,f),nz,teta,alpha,leg,flag,bbox,zlev);
+contour(xr,yr,feval(xr,yr,f),nz,teta,alpha,leg,flag,bbox,zlev);
 //end
 
 

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=COMQR3,SSI=0
       subroutine comqr3(nm,n,low,igh,hr,hi,wr,wi,zr,zi,ierr,job)
 c
       integer i,j,l,n,en,ll,nm,igh,ip1,

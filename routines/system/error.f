@@ -1,22 +1,19 @@
       subroutine error(n)
 c ====================================================================
-c
 c     gestion des erreurs
-c
 c ====================================================================
 c
       include '../stack.h'
 
-      integer iadr,sadr
+      integer sadr
 
 c
-      character mg*9,blh*1,bel*1,line*140
+      character mg*9,blh*1,bel*1,line*340
       integer errtyp,n,ll,r,eol
       logical first
       data mg /' !--error'/,blh/' '/,bel/' '/
       data eol/99/
 c
-      iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 c
 c     set bel to ctrl-g if possible
@@ -72,6 +69,12 @@ c
      + 121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,
      + 136,137,138,139,140,141,142,143
      + ),n
+
+      goto (
+     +     200,201,202,203,204,205,206,207,208,209,
+     +     210,211,212,213,214,215,216,217,218,219,
+     +     220,221,222,223,224,225,226,227,228,229),n-199
+
       goto 998
 c
     1 call basout(io,lunit,'incorrect multiple assignation')
@@ -150,7 +153,7 @@ c      errtyp=1
      &     'bad call to primitive :'//line(1:nl))
       go to 999
    26 call basout(io,lunit,
-     &     'too complex for scilab! (memory size exceeded)')
+     &     'too complex recursion! (recursion tables are full))')
       errtyp=1
       pt=min(pt,psiz)
       go to 999
@@ -342,7 +345,7 @@ c
       goto 999
    71 call basout(io,lunit,'this variable is not valid in fort')
       goto 999
- 72   call cvname(ids(1,pt),buf,1)
+   72 call cvname(ids(1,pt),buf,1)
       call basout(io,lunit,
      +     buf(1:nlgh)//'is not valid in this context')
       goto 999
@@ -353,10 +356,19 @@ c
    75 call basout(io,lunit,'Too high degree (max 100)')
       goto 999
    76 continue
+      write(buf(1:3),'(i3)') err
+      call basout(io,lunit,'for x=val with type(val)='//buf(1:3)//
+     $     ' is not implemented in Scilab')
       goto 999
    77 continue
+      call cvname(ids(1,pt+1),buf,1)
+      call basout(io,lunit,
+     +     buf(1:nlgh)//' : wrong number of rhs arguments')
       go to 999
    78 continue
+      call cvname(ids(1,pt+1),buf,1)
+      call basout(io,lunit,
+     +     buf(1:nlgh)//' : wrong number of lhs arguments')
       go to 999
    79 continue
       go to 999
@@ -365,12 +377,35 @@ c
      +    ' incorrect function (argument n:'//buf(1:3)//')')
       go to 999
    81 continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +        ' : wrong type argument, expecting a '//
+     +        ' real or complex matrix')
+
       go to 999
    82 continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +        ' : wrong type argument, expecting a real matrix')
       goto 999
    83 continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +        ' : wrong type argument, expecting a real vector')
       goto 999
    84 continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +        ' : wrong type argument, expecting a scalar')
+
       goto 999
    85 call basout(io,lunit,'host does not answer...')
       goto 999
@@ -514,8 +549,11 @@ c
      $     //buf(1:3)//')')
       goto 999
  108  continue
+      call basout(io,lunit,'too complex for scilab, may be a too long'
+     $     //'instruction')
       goto 999
  109  continue
+      call basout(io,lunit,'too large, can''t be displayed')
       goto 999
  110  call cvname(ids(1,pt+1),line(1:nlgh),1)
       nl=lnblnk(line(1:nlgh))
@@ -531,8 +569,10 @@ c
      $     'Cannot allocate more memory')
       goto 999
  113  continue
+      call basout(io,lunit,'too large string')
       goto 999
  114  continue
+      call basout(io,lunit,'too many linked routines')
       goto 999
  115  continue
       goto 999
@@ -554,7 +594,7 @@ c
       call basout(io,lunit,' logical unit number should be '//
      $     '  larger than '//buf(1:3))
       goto 999
- 123  call basout(io,lunit,' fonction not lower bounded')
+ 123  call basout(io,lunit,' fonction not bounded from below')
       goto 999
  124  continue
       goto 999
@@ -562,12 +602,16 @@ c
      $     'too high distance between two consecutive iterations')
       goto 999
  126  continue
+      call basout(io,wte,'Inconsistent constraints')
       goto 999
  127  continue
+      call basout(io,wte,'no feasible solution')
       goto 999
  128  continue
+      call basout(io,wte,'degenerate starting point')
       goto 999
  129  continue
+      call basout(io,wte,'no feasible point has been found')
       goto 999
  130  continue
       call basout(io,wte,
@@ -613,6 +657,149 @@ c
  143  call basout(io,lunit,
      +   'optim : df0 must be positive !')
       goto 999
+ 200  continue
+      goto 999
+ 201  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +        ' : wrong type argument,')
+      call basout(io,lunit,' expecting a real or complex matrix')
+      go to 999
+ 202  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +        ' : wrong type argument,')
+      call basout(io,lunit,' expecting a real matrix')
+      goto 999
+ 203  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +        ' : wrong type argument,')
+      call basout(io,lunit,' expecting a real vector')
+      goto 999
+ 204  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +        ' : wrong type argument,')
+      call basout(io,lunit,' expecting a scalar')
+      goto 999
+ 205  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      i1=4+nlgh
+      write(buf(i1:i1+6),'(i3,'','',i3)') pstk(pt+1),pstk(pt+2)
+
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     ' : wrong matrix size ('//buf(i1:i1+6)//') expected ')
+      goto 999
+ 206  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      i1=4+nlgh
+      write(buf(i1:i1+3),'(i3)') pstk(pt+1)
+
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     ' : wrong vector size ('//buf(i1:i1+2)//') expected ')
+      goto 999
+ 207  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     ' : wrong type argument, expecting a matrix of strings')
+      goto 999
+ 208  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     ' : wrong type argument, expecting a booleen matrix')
+
+      goto 999
+ 209  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     ' : wrong type argument, expecting a matrix')
+      goto 999
+ 210  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     ' : wrong type argument, expecting a list')
+      goto 999
+ 211  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     ' : wrong type argument, expecting an external')
+      goto 999
+ 212  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     ' : wrong type argument, expecting a polynomial matrix')
+      goto 999
+ 213  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +     ' : wrong type argument, expecting a working'//
+     +     ' integer matrix')
+      goto 999
+ 214  continue
+      write(buf(1:3),'(i3)') err
+      call cvname(ids(1,pt+1),buf(4:4+nlgh),1)
+      call basout(io,lunit,
+     +     'Argument '//buf(1:3)//' of '//buf(4:3+nlgh)//
+     +        ' : wrong type argument,')
+      call basout(io,lunit,' expecting a  vector')
+      goto 999
+ 215  continue
+      goto 999
+ 216  continue
+      goto 999
+ 217  continue
+      goto 999
+ 218  continue
+      goto 999
+ 219  continue
+      goto 999
+ 220  continue
+      goto 999
+ 221  continue
+      goto 999
+ 222  continue
+      goto 999
+ 223  continue
+      goto 999
+ 224  continue
+      goto 999
+ 225  continue
+      goto 999
+ 226  continue
+      goto 999
+ 227  continue
+      goto 999
+ 228  continue
+      goto 999
+ 229  continue
+      goto 999
 
 
 c
@@ -648,7 +835,7 @@ c depilement de l'environnement
       goto 1001
 c
 c     on depile une macro
- 1002 k=lpt(1)-15
+ 1002 k=lpt(1)-(13+nsiz)
       lpt(1)=lin(k+1)
       lpt(2)=lin(k+2)
       lpt(6)=k
@@ -674,8 +861,8 @@ c
          else
             buf='line '
             m=6
+            call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
          endif
-         call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
          write(buf(m+1:m+5),'(i4)') lct(8)-nlc
          m=m+4
          buf(m+1:m+18)=' of macro     '
@@ -689,7 +876,7 @@ c
       buf(m+1:m+14)=' called by :'
       m=m+14
       call basout(io,lunit,buf(1:m))
-      lct(8)=lin(k+14)
+      lct(8)=lin(k+12+nsiz)
 c
       call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
       m=ifin-l1+1
@@ -709,7 +896,7 @@ c
 c     on depile un exec ou une pause
  1004 if(rio.ne.rte) then
 c     exec
-         k=lpt(1)-15
+         k=lpt(1)-(13+nsiz)
          lpt(1)=lin(k+1)
          lpt(2)=lin(k+4)
          lpt(6)=k
@@ -727,7 +914,7 @@ c
          buf(m+1:m+29)=' of exec file called by :'
          m=m+29
          call basout(io,lunit,buf(1:m))
-         lct(8)=lin(k+14)
+         lct(8)=lin(k+12+nsiz)
 c
          call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
          m=ifin-l1+1
@@ -749,7 +936,7 @@ c     pause
       endif
 c
  1010 continue
-      call basout(io,lunit,' ')
+      if(imess.eq.0) call basout(io,lunit,' ')
 c
       return
       end

@@ -4,12 +4,12 @@
 riccati - Riccati equation
 .SH CALLING SEQUENCE
 .nf
-[X1,[X2]]=riccati(A,B,C,dom,[typ]
+[X1,[X2]]=riccati(A,B,C,dom,[typ])
 .fi
 .SH PARAMETERS
-.TP 16
+.TP 12
 A,B,C
-: real matrices nxn, b and  c symetric.
+: real matrices nxn, \fVB\fR and  \fVC\fR symetric.
 .TP 
 dom 
 : \fV'c'\fR or \fV'd'\fR for the time domain (continuous or discrete)
@@ -18,7 +18,7 @@ typ
 : string : \fV'eigen'\fR for block diagonalization or \fVschur'\fR for 
 Schur method.
 .SH DESCRIPTION
-Riccati solver \fVx=x1/x2\fR solves:
+Riccati solver \fVX=X1/X2\fR solves:
 .nf
 A'*X+X*A-X*B*X+C=0 
 .fi
@@ -29,5 +29,5 @@ in continuous time case, or:
  with \fVB=B1/B2*B1'\fR in the discrete time case.
 If called with \fVLHS=1\fR (one output argument) \fVriccati\fR returns \fVX\fR.
 .SH SEE ALSO
-ric_descr
+ric_desc
 

@@ -1,7 +1,7 @@
 .TH mac2for 1 "April 1993" "Scilab Group" "Scilab Function"
 .so man1/sci.an
 .SH NAME
-mac2for - macro to fortran routine conversion
+mac2for - function to fortran routine conversion
 .SH CALLING SEQUENCE
 .nf
 [txt]=mac2for(lst,vtps)
@@ -18,10 +18,10 @@ txt
 : string (fortran code)
 .SH DESCRIPTION
 \fVlst\fR is the output of Scilab's primitive \fVmacr2lst\fR
-which converts a compiled macro into a list which codes the internal representation of
-the macro. Thus, \fVmac2for\fR is usually invoked as:
+which converts a compiled function into a list which codes the internal representation of
+the function. Thus, \fVmac2for\fR is usually invoked as:
 .nf
-txt=mac2for(macr2lst(macro),vtps).
+txt=mac2for(macr2lst(function),vtps).
 .fi
 The elements of the list \fVvtps\fR give the type and dimensions 
 of variables of the calling sequence :
@@ -62,6 +62,6 @@ the following keyword :
  iw*  iiw*      
  ilbN   (N integer)          
 .fi
-may not appear in the macro code.
+may not appear in the function code.
 .SH SEE ALSO
-macro
+function

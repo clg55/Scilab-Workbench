@@ -45,8 +45,8 @@ for i=3:np
  if part(p(i),1)<>'-' then
    select p(i)
      case '0',
-     case '1' then tt=tt+OK+z+'^{'+string(i-1)+'}',ok='+'
-     else    tt=tt+OK+p(i)+' '+z+'^{'+string(i-1)+'}',ok='+'
+     case '1' then tt=tt+ok+z+'^{'+string(i-1)+'}',ok='+'
+     else    tt=tt+ok+p(i)+' '+z+'^{'+string(i-1)+'}',ok='+'
    end
  else
    ok='+'

@@ -41,7 +41,6 @@ test2()
 
 test3()
 {
-  void ExposeChooseWindow();
   static String description = "texte test2";
   static String strings[] = {
     "first list entry",
@@ -56,7 +55,6 @@ test3()
 
 test4()
 {
-  void ExposeMessageWindow();
   static String description = "Message\nSur\nPluieurs lignes";
   ExposeMessageWindow(description);
   ExposeMessageWindow(description);

@@ -68,6 +68,7 @@ int displaystring_1();
 int boundingbox_1();
 int drawarrows_1();
 int xset_1();
+int xgetmouse_1();
 
 extern int C2F(dr)();
 
@@ -84,6 +85,8 @@ OpTab keytab_1[] ={
   "xfarc",fillarc_1,
   "xfrect",fillrectangle_1,
   "xget",C2F(dr),
+  "xgetdr",C2F(dr),
+  "xgetmouse",xgetmouse_1,
   "xinit",C2F(dr),
   "xlfont",C2F(dr),
   "xlines",drawpolyline_1,
@@ -124,13 +127,13 @@ C2F(dr1)(x0,x1,x2,x3,x4,x5,x6,x7,lx0,lx1)
        else 
 	 { if ( j <= 0)
 	     {
-	       fprintf(stderr,"\nUnknow X operator <%s>",x0);
+	       SciF1s("\nUnknow X operator <%s>\r\n",x0);
 	       return;
 	     }
 	   else i++;
 	 };
      };
-  fprintf(stderr,"\n Unknow X operator <%s>",x0);
+  SciF1s("\n Unknow X operator <%s>\r\n",x0);
 };
 
 static int Ivide=0;
@@ -233,7 +236,7 @@ drawaxis_1(fname,str,alpha,nsteps,size,initpoint,x7,x8,lx0,lx1)
      int *alpha,*nsteps,*initpoint;
      double *size;
 {
-  fprintf(stderr,"Pas encore fait\n");
+  Scistring("To be done ...\n");
 };
 
 cleararea_1(fname,str,x,y,w,h,x7,x8,lx0,lx1)
@@ -251,6 +254,16 @@ cleararea_1(fname,str,x,y,w,h,x7,x8,lx0,lx1)
 };
 
 xclick_1(fname,str,ibutton,x,y,x5,x6,x7,lx0,lx1)
+     int lx0,lx1,*x5,*x6,*x7;
+     char str[],fname[];
+     int *ibutton;
+     double *x,*y ;
+{ 
+  int x1,y1,n=1,rect[4];
+  C2F(dr)(fname,str,ibutton,&x1,&y1,x5,x6,x7,lx0,lx1);
+  C2F(echelle2d)(x,y,&x1,&y1,&n,&n,rect,"i2f",3L);
+};
+xgetmouse_1(fname,str,ibutton,x,y,x5,x6,x7,lx0,lx1)
      int lx0,lx1,*x5,*x6,*x7;
      char str[],fname[];
      int *ibutton;
@@ -340,9 +353,6 @@ drawpolymark_1(fname,str,n, vx, vy,x6,x7,x8,lx0,lx1)
 	STOREXCALL1(fname,str,n,1,'i',vx,(*n),'f',vy,(*n),'f',
 		&Ivide,1,'i',&Ivide,1,'i',&Ivide,1,'i');
   C2F(dr)(fname,str,n,xm,ym,x6,x7,x8,lx0,lx1);
-/*  fprintf(stderr,"Point en %f,%f",vx[0],vy[0]);
-  fprintf(stderr,"%s n=%d Point en %d,%d",fname,*n,xm[0],ym[0]);
-  */
 
 }
 
@@ -472,7 +482,7 @@ Myalloc(xm,ym,n,err)
       
       if ( xm1 == 0 || ym1 == 0 )
 	{
-	  fprintf(stderr,"malloc : No more Place\n");
+	  Scistring("malloc : No more Place\n");
 	  *err=1;
 	}
     };
@@ -497,7 +507,7 @@ Myalloc1(xm,n,err)
       
       if ( xm1 == 0  )
 	{
-	  fprintf(stderr,"malloc : No more Place\n");
+	  Scistring("malloc : No more Place\n");
 	  *err=1;
 	}
     };

@@ -10,6 +10,7 @@ c     attention skpins modifie la valeur de lpt en particulier lpt(4)
 c     et lpt(6)
 c     
       include '../stack.h'
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
 c     
       integer for(nsiz),while(nsiz),iff(nsiz),else(nsiz),ennd(nsiz)
       integer cas(nsiz),sel(nsiz),elsif(nsiz)
@@ -21,11 +22,13 @@ c
       data rparen/42/,right/55/,quote/53/,percen/56/
       data eol/99/,blank/40/
       data name/1/
-      data else/236721422,673720360/
-      data ennd/671946510,673720360/, for/672864271,673720360/
-      data iff/673713938,673720360/,elsif/236721422,673713938/
-      data while/353505568,673720334/
-      data cas/236718604,673720360/, sel/236260892,673717516/
+      data else/236721422,nz1*673720360/
+      data ennd/671946510,nz1*673720360/, for/672864271,nz1*673720360/
+      data iff/673713938,nz1*673720360/
+      data elsif/236721422,673713938,nz2*673720360/
+      data while/353505568,673720334,nz2*673720360/
+      data cas/236718604,nz1*673720360/
+      data sel/236260892,673717516,nz2*673720360/
 c     
       l4=lpt(4)
       
@@ -74,7 +77,7 @@ c
          elseif (sym.eq.quote) then
             qcount=0
  11         qcount=qcount+1
-            if(char1.ne.quote) goto 12
+            if(abs(char1).ne.quote) goto 12
             call getsym
             goto 11
  12         continue

@@ -4,7 +4,7 @@
 dt_ility - detectability test
 .SH CALLING SEQUENCE
 .nf
-[n [,U [,Sld] ]]=dt_ility(Sl [,tol])
+[k, [n [,U [,Sld ] ] ]]=dt_ility(Sl [,tol])
 .fi
 .SH PARAMETERS
 .TP 10
@@ -12,7 +12,10 @@ Sl
 : linear system (\fVsyslin\fR list)
 .TP 10
 n
-: dimension of detectable subspace
+: dimension of unobservable subspace
+.TP
+k
+: dimension of unstable, unobservable subspace (\fV k<=n \fR).
 .TP
 U
 : orthogonal matrix
@@ -24,12 +27,23 @@ tol
 : threshold for controllability test.
 .SH DESCRIPTION
 Detectability test for \fVsl\fR, a linear system in state-space
-representation.
-\fVU\fR is a basis whose \fVn\fR first columns span the
-detectable subspace of \fVsl\fR.
+representation. 
+\fVU\fR is a basis whose \fVk\fR first columns span the
+unstable, unobservable subspace of \fVSl\fR (intersection
+of unobservable subspace of \fV(A,C)\fR and unstable subspace
+of \fVA\fR). Detectability means \fVk=0\fR.
 .LP
-\fVsld = (U'*A*U,U'*B,C*U,D)\fR displays the detectable part 
-of \fVsl=(A,B,C,D)\fR.
+\fVSld = (U'*A*U,U'*B,C*U,D)\fR displays the "detectable part"
+of \fVSl=(A,B,C,D)\fR, i.e.
+.nf
+         [*,*,*]
+U'*A*U = [0,*,*]
+         [0,0,*]
+ 
+C*U = [0,0,*]
+.fi
+with \fV(A33,C3)\fR observable (dimension \fVnx-n\fR), \fVA22\fR stable 
+(dimension \fVn-k\fR) and \fVA11\fR unstable (dimension \fVk\fR).
 .SH SEE ALSO
-contr, st_ility
+contr, st_ility, unobs
 

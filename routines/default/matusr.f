@@ -1,8 +1,13 @@
       subroutine matusr
-c ====================================================================
-c     evaluate user functions
-c ================================== ( Inria    ) =============
+c
       include '../stack.h'
 c
- 9999 return
+c      integer iadr, sadr
+c      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+      rhs = max(0,rhs)
+c
+c
       end
+c
+

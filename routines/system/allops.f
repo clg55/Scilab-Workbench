@@ -17,7 +17,7 @@ c
 c
       if(err1.gt.0) return
 c     compilation allops :<5 fin rhs lhs>
-      if ( compil(3,5,fin,rhs,lhs)) then
+      if ( compil(5,fin,rhs,lhs,0)) then
          if (err.gt.0) return
          fun=0
          return
@@ -55,7 +55,8 @@ c
  70   call misops
       goto 80
 c
- 80   if(fun.ne.0) then 
+ 80   if(err.gt.0) return
+      if(fun.ne.0) then 
 c        ------appel d'un matfn necessaire pour achever l'evaluation
          if (ptover(1,psiz)) return
          rstk(pt)=402

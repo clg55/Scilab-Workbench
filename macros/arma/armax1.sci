@@ -16,6 +16,7 @@
 //         0, et signifie qu'il faut identifier b0. Si on lui
 //         donne la valeur 1, alors b0 est suppose valoir zero et
 //         n'est pas identifie.
+//	   
 // Sortie
 //     a est le vecteur <1,a1,...,a_r>
 //     b est le vecteur <b0,......,b_s>
@@ -38,11 +39,10 @@
 //!
 [lhs,rhs]=argn(0)
 if rhs<=5,b0f=0;end
+if s=-1,b0f=0;end // Seams not natural, but makes things wiork 
 [n1,n2]=size(y)
 //
 t0=maxi(maxi(r,s+1),1)+1;
-pause;
- 
 if r<>0;XTM1=y((t0-1):-1:(t0-r));else XTM1=[];end
 if s<>-1;UTM1=u(t0-b0f:-1:(t0-s));else UTM1=[];end
 if q<>0;ETM1=0*ones(1,q);else ETM1=[];end

@@ -1,276 +1,163 @@
-function [D,G,mu]=musolve(M,KK,T,params)
+function [mu,D,G]=musolve(M,K,T,params)
 // musolve - Structured Singular value problem
-//%Syntax
-//  [mu [,D [,G]] ]=musolve(M,KK,T [,params])
+//  [mu [,D [,G]] ]=musolve(M,K,T [,params])
 //
 //     M  -  n by n matrix for which the upper bound of SSV is to be computed.
 //     K  -  m by 1 vector contains the block structure. K(i), i=1:m, is the
 //           size of each block, and sum(K) should be equal to n.
-//     T  -  m by 1 vector indicates the type of each block. For i=1:m,
-//           T(i)=1 indicates the corresponding block is a repeated scalar
-//                  real block
-//           T(i)=2 indicates the corresponding block is a full complex block.
-//           T(i)=3 indicates the corresponding block is a repeated complex
-//                  scalar block.
-//     PARAMS =[printflg #iter rtol utol ptol #psteps #dsteps]
-//           if PARAMS has less than 7 elements the right most ones are set
+//     T  -  m by 1 vector indicates the type of each block. 
+//        T(i)=1 <=>  the ith perturbation block is repeated real 
+//               -->  D(i) and G(i) blocks are full complex
+//        T(i)=2 <=>  the ith perturbation block is repeated complex 
+//               -->  D(i) block is full complex, G(i) = 0
+//        T(i)=3 <=>  the ith  perturbation block is full complex 
+//               -->  D(i) is repeated real, G(i)=0
+//     params =[printflg #iter rtol utol ptol #psteps #dsteps]
+//           if params has less than 7 elements the right most ones are set
 //           to their default values:
 //            printflg = 0      : print flag, 0 - nothing is printed 
-//            #iter    = 50     : # of iterations allowed
+//            #iter    = 20     : # of iterations allowed
 //            rtol     = 1.d-6  : required relative accuracy. 
 //            utol     = 1.d-10 : tolerance for unfeasability
 //            ptol     = 1.d-12 : tolerance for projection
 //            #pstep   = 5      : # of primal dichotomy steps
-//            #dstep   = 0      : # of dual Newton steps, 0 - default dual step
-//     D  - hermitian n by n matrix
-//     G  - hermitian n by n matrix
+//            #dstep   = 5      : # of dual Newton steps
+//     D  - block diagonal positive hermitian n by n matrix
+//     G  - block diagonal hermitian n by n matrix
 //%Description
 // Minimize mu such that  D and G matrices exist which verify :
 //    M'*D*M +%i*(G*M - M'*G) -mu^2*D<=0
 //    D>=0
+// REFS: Fan, Tits, Doyle IEEE AC Jan 91 
+//      Young, Newlin,Doyle CDC 91 pp 1251-1256
 //!
-// Origin R. Nikhoukah, S Steer Inria 1992
-
 [lhs,rhs]=argn(0)
-params_d=[1 50 1.d-6 1.d-10 1.d-12 5 0]
+params_d=[-1 20 1.d-6 1.d-10 1.d-12 5 5 0 0]
+withqr=%f;
 if rhs==3 then
   params=params_d
 else
   np=prod(size(params))
-  for k=np+1:7
-     params(k)=params_d(k)
+  for ki=np+1:7
+     params(ki)=params_d(ki)
   end
 end
 [n,n1]=size(M)
 if n1<>n then error(20,1),end
-nblc=prod(size(KK))
+nblc=prod(size(K))
 if nblc<>prod(size(T)) then
-    error('the bloc structure and type vector must have the same size')
+    error('the block structure and type vector must have the same size')
 end
-if sum(KK)<>n then
-    error('sum of bloc size must equal de dimension of M')
+if sum(K)<>n then
+    error('sum of block size must equal dimension of M')
 end
 
-Mr=real(M)
-Mi=imag(M)
-
-A=[]
-b=[]
-Q=[]
-p=[]
-x=[]
-t1=find(t==1)
-realcase=(norm(Mi,'inf')==0)&(t1==[])
-if realcase then
-// REAL CASE 
-//form a basis of D 
-  ptr=1
-  xptr=1
-  for ib=1:nblc
-    blsiz=KK(ib)
-    if T(ib)==1|T(ib)==3 then
-      for l=ptr:ptr+blsiz-1
-        for k=ptr:l
-          Dr=0*ones(n,n);
-          Dr(k,l)=1
-          Dr(l,k)=1
-          A=[A compress(Dr)]
-          Q=[Q compress(Mr'*Dr*Mr)]
-        end
-      end
-    elseif T(ib)==2 then
-      Dr=0*ones(n,n);
-      Dr(ptr:ptr+blsiz-1,ptr:ptr+blsiz-1)=eye(blsiz,blsiz)
-      A=[A compress(Dr)]
-      Q=[Q compress(Mr'*Dr*Mr)]
-    else 
-      error('blocs types must be 1 2 or 3')
-    end  
-    ptr=ptr+blsiz
-  end
-  qg=[]
+realcase=(and(imag(M)==0))&(and(T==3)|and(K==1))
+if realcase then // REAL CASE 
+  deff('[Q]=func(X)','Q=X')
+  A=strucbas(K,T,func,'r')
+  deff('[Q]=func(X)','Q=M''*X*M')
+  Q=strucbas(K,T,func,'r')
   msiz=n
-else
-// COMPLEX CASE
-//form a basis of D 
-  MM=[Mr -Mi;Mi Mr]
-  MMh=[Mr' Mi';-Mi' Mr']
-  ptr=1
-  xptr=1
-  for ib=1:nblc
-    blsiz=KK(ib)
-    if T(ib)==1|T(ib)==3 then
-      for l=ptr:ptr+blsiz-1
-        for k=ptr:l
-          Dr=0*ones(n,n);
-          Dr(k,l)=1
-          Dr(l,k)=1
-          if l<>k then 
-             Di=0*ones(n,n)
-             Di(l,k)=1;Di(k,l)=-1,
-             A=[A compress(eye(2,2).*.Dr) compress([0 -1;1 0].*.Di)]
-             Q=[Q compress(MMh*(eye(2,2).*.Dr)*MM),..
-                  compress(MMh*([0 -1;1 0].*.Di)*MM)]
-          else
-             A=[A compress(eye(2,2).*.Dr)]
-             Q=[Q compress(MMh*(eye(2,2).*.Dr)*MM)]
-          end
-        end
-      end
-    elseif T(ib)==2 then
-      Dr=0*ones(n,n);
-      Dr(ptr:ptr+blsiz-1,ptr:ptr+blsiz-1)=eye(blsiz,blsiz)
-      A=[A compress(eye(2,2).*.Dr)]
-      Q=[Q compress(MMh*(eye(2,2).*.Dr)*MM)]
-    else 
-      error('blocs types must be 1 2 or 3')
-    end  
-    ptr=ptr+blsiz
-  end
-  // form basis for G
-  jMM=[-Mi -Mr;Mr -Mi]
-  jMMh=[Mi' -Mr'; Mr' Mi']
-  ptr=1
-  Qg=[]
-  for ib=1:nblc
-    blsiz=KK(ib)
-    if T(ib)==1
-      for l=ptr:ptr-1+blsiz
-        for k=ptr:l
-          Gr=0*ones(n,n);
-          Gr(k,l)=1
-          Gr(l,k)=1
-          if l<>k then 
-            Gi=0*ones(n,n)
-            Gi(l,k)=1;Gi(k,l)=-1, 
-            Qg=[Qg compress((eye(2,2).*.Gr)*jMM-jMMh*(eye(2,2).*.Gr))',..
-                 compress(([0 -1;1 0].*.Gi)*jMM-jMMh*([0 -1;1 0].*.Gi))']
-          else
-            Qg=[Qg compress((eye(2,2).*.Gr)*jMM-jMMh*(eye(2,2).*.Gr))']
-          end
-        end
-      end
-      ptr=ptr+blsiz
-    end
-  end
-  msiz=2*n
-end
-//compress column of Qg  to obtain full rank
-[nQg,mQg]=size(Qg)
-if nQg<>0 then
-  [u,rk]=colcomp(Qg)
-  Qg=Qg*u;Qg=Qg(:,mQg-rk+1:mQg);nQ=prod(size(Qg))
-  Q=[Q matrix(Qg,1,nQ)]
-  A=[A 0*ones(1,nQ)]
-  nxq=nQ/(msiz*(msiz+1)/2)
-end
-//
-b=-0.0001*compress(eye(msiz,msiz))
-p=0*b
-//tmax=sum(m.*m')
-tmax=(maxi(svd(m))**2)*(1+.1)
-nx=prod(size(A))/(msiz*(msiz+1)/2)
+else  // COMPLEX CASE
+  T1=T;k1=find(T1==2);T1(k1)=ones(k1)';
+  deff('[Q]=func(X)','Q=X')
+  A=strucbas(K,T1,func,'c')
+  deff('[Q]=func(X)','Q=M''*X*M')
+  Qd=strucbas(K,T1,func,'c')
 
+  T1=T;zers=find(T1==2|T1==3);T1(zers)=0*zers'
+// 5 means full complex blocks of G have zero diagonal
+// replace 5 by 1 below for full complex blocks with
+// non zero diagonal
+// k1=find(T1==1);T1(k1)=5*ones(k1)';
+  k1=find(T1==1);T1(k1)=1*ones(k1)';
+  deff('[Q]=func(X)','Q=X')
+  Ag=strucbas(K,T1,func,'c')
+  deff('[Y]=func(X)','Y=%i*(X*M - M''*X)')
+  Qg=strucbas(K,T1,func,'c')
+  msiz=2*n
+  [na1,ma1]=size(A)
+  Q=[Qd;Qg]
+  A=[A;0*Qg]
+end
+
+tmax=(maxi(svd(M))^2)*(1+.1)
 // Solve the problem
 
-[x,mu,info]=nemirov(A,b,Q,p,msiz,0,list(tmax,0*ones(1,nx)),params)
-mu=sqrt(mu)
+[na2,ma]=size(A);
+if withqr then
+[U,aq,rk,e]=qr([A,Q],1.d-10);aq=aq*e';e=[]
+A=aq(1:rk,1:ma);Q=aq(1:rk,ma+1:2*ma);aq=[];
+else
+  rk=na2
+end
 
+b=A(1,:);
+p=Q(1,:);
+A(1,:)=[];
+Q(1,:)=[];
+[na,ma]=size(A);
+nx=(na*ma)/(msiz*(msiz+1)/2)
+
+[x1,mu2,info]=nemirov(matrix(A',1,na*ma),b,matrix(Q',1,na*ma),..
+               p,msiz,0,list(tmax,[0*ones(1,nx)]),params)
+//disp(spec(uncompress(x1'*a+b,'s')),'spec(ax+b)=')
+//disp(spec(uncompress(-mu2*(x1'*a+b)+(x1'*q+p),'s')),'spec(t*(ax+b)-(qx+p))=')
 if info(1)<0 then
+warning('projective method fails!');
+  disp(info,'info = ')
   D=[];G=[]
   return
 end
-if nQg<>0 then
-  //Choose a particular solution and transform back
-  xg=[0*ones(mQg-rk,1);x(nx-nxq+1:nx)]
-  x=[x(1:nx-nxq); u*xg]
-end
-// Reconstruct D  matrix
-ptr=1
-xptr=1
-Dr=0*ones(n,n);Di=0*ones(n,n);
-if realcase then
-  for ib=1:nblc
-    blsiz=KK(ib)
-    if T(ib)==1|T(ib)==3 then
-      for l=ptr:ptr+blsiz-1
-        for k=ptr:l
-          Dr(k,l)=x(xptr);Dr(l,k)=x(xptr);
-          xptr=xptr+1
-        end
-      end
-    elseif T(ib)==2 then
-      Dr(ptr:ptr+blsiz-1,ptr:ptr+blsiz-1)=eye(blsiz,blsiz)*x(xptr)
-      xptr=xptr+1
-    end  
-    ptr=ptr+blsiz
-  end
-else
-  for ib=1:nblc
-    blsiz=KK(ib)
-    if T(ib)==1|T(ib)==3 then
-      for l=ptr:ptr+blsiz-1
-        for k=ptr:l
-          if l<>k then 
-             Dr(k,l)=x(xptr);Dr(l,k)=x(xptr);
-             Di(l,k)=x(xptr+1);Di(k,l)=-x(xptr+1),
-             xptr=xptr+2
-          else
-             Dr(k,l)=x(xptr);Dr(l,k)=x(xptr);
-             xptr=xptr+1
-          end
-        end
-      end
-    elseif T(ib)==2 then
-      Dr(ptr:ptr+blsiz-1,ptr:ptr+blsiz-1)=eye(blsiz,blsiz)*x(xptr)
-      xptr=xptr+1
-    end  
-    ptr=ptr+blsiz
-  end
-end
-// Reconstruct G  matrix
 
-ptr=1
-Gr=0*ones(n,n);Gi=0*ones(n,n);
-for ib=1:nblc
-  blsiz=KK(ib)
-  if T(ib)==1
-    for l=ptr:ptr-1+blsiz
-      for k=ptr:l
-        if l<>k then 
-          Gr(l,k)=x(xptr);Gr(k,l)=x(xptr);
-          Gi(l,k)=x(xptr+1);Gi(k,l)=-x(xptr+1)
-          xptr=xptr+2
-        else
-          Gr(k,l)=x(xptr)
-          xptr=xptr+1
-        end
-      end
-    end
-    ptr=ptr+blsiz
+X=[1,x1'];
+A=[b;A];Q=[p;Q];
+
+//disp(spec(uncompress(-mu2*(x*a)+(x*q),'s')),'spec(t*(ax)-(qx))=')
+
+if withqr then 
+  A=U*[A;0*ones(na2-na,ma)],
+  X=[X,0*ones(1,na2-na)]*U';
+end
+
+mu=sqrt(mu2)
+
+// Reconstruct D  matrix
+if realcase then
+  D=uncompress(X*A,'s');
+  G=0*D;
+else
+  D=uncompress(X(1:na1)*A(1:na1,:),'s');
+  D=D(1:n,1:n)-%i*D(n+1:2*n,1:n);
+  if Qg==[] then
+    G=0*ones(n,n)
+  else
+    G=uncompress(X(na1+1:na2)*Ag,'s');
+    G=G(1:n,1:n)-%i*G(n+1:2*n,1:n);
   end
 end
-D=Dr+%i*Di
-G=Gr+%i*Gi
-//end
+//disp(spec(m'*d*m),'spec(m''*d*m)=')
+//disp(spec(m'*d*m+%i*(g*m-m'*g)-mu^2*d),'spec(m''*d*m+%i*(g*m-m''*g)-mu^2*d)=')
+//disp(spec(d),'spec(d)=')
+
 
 function AA=compress(A)
-//Si A est une matrice carree symetrique AA est le vecteur
+//For A square and symmetric AA is vector:
 // [A(1,1),A(2,1),A(2,2),...,A(q,1),...A(q,q),...]
 //!
-if norm(a-a','fro')>1.d-5 then
+if norm(A-A','fro')>1.d-5 then
   error('non symmetric matrix')
 end
-[m,n]=size(a)
+[m,n]=size(A)
 AA=[]
 for l=1:m,AA=[AA A(l,1:l)],end
-//end
+
 
 function A=uncompress(AA,mod)
-//Reconstruit la matrice carree symetrique ou antisymetrique A 
-//a partir du  vecteur AA:
-// mode : 's' : la matrice A est symetrique
-//        'a' : la matrice A est anti-symetrique
+//Rebuilds  A square symmetric or antsymmetric from AA
+// mode : 's' : symmetric
+//        'a' : skew-symmetric
 // [A(1,1),A(2,1),A(2,2),...,A(q,1),...A(q,q),...]
 //!
 nn=prod(size(AA))
@@ -283,4 +170,131 @@ for l=1:m
   ptr=ptr+l
 end
 A=A+s*tril(A,-1)'
-//end
+
+
+function [Q]=strucbas(K,T,func,typ)
+//strucbas - form a decomposition of linear mapping 
+//           over a block-structured basis
+//Syntax
+//  [Q]=strucbas(K,T,func,typ)
+//Parameters
+// K :vector of block sizes
+// T  : types of blocks
+//      T(i)==1 : ith block of X full complex
+//      T(i)==3 : ith block of X is a*eye (repeated real)
+//      T(i)==4 : ith block of X is full real
+//      T(i)==0 : ith block of X is a zero block 
+//      T(i)==5 : ith block of X  complex with a zero diagonal
+// func : macro which defines the linear mapping y=func(x)
+// typ: 'r'  if X is real
+//      'c'  if X is complex
+//
+//Remark
+// Q is a matrix, each row of which is the compressed form of func(E)
+//   where E is a basis entry
+//   in the complex case Q(l,:) contains the compressed form of
+//   [real(I) imag(I);-imag(i)' real(i)] where I=func(E)
+//
+// to display the uncompressed form use:
+//  [m,n]=size(q);for i=1:m,uncompress(q(i,:),'s'),end
+//!
+ptr=1
+n=sum(K)
+Q=[]
+if typ=='r' then
+for ib=1:prod(size(T))
+  blsiz=K(ib)
+  sel=ptr:ptr+blsiz-1
+  if T(ib)==4|(T(ib)==1&K(ib)==1) then 
+    for l=sel
+      for ki=ptr:l
+        X=0*ones(n,n);
+        X(ki,l)=1
+        X(l,ki)=1
+        Q=[Q;compress(func(X))]
+      end
+    end
+  elseif T(ib)==3 then
+    X=0*ones(n,n);
+    X(sel,sel)=eye(blsiz,blsiz)
+    Q=[Q;compress(func(X))]
+  elseif T(ib)==0 then
+  else
+    error('block type  must be 0 3 4')
+  end  
+  ptr=ptr+blsiz
+end
+else  //complex	
+for ib=1:prod(size(T))
+  blsiz=K(ib)
+  sel=ptr:ptr+blsiz-1
+  if T(ib)==1 then
+    for l=sel
+      for ki=ptr:l
+        X=0*ones(n,n);
+        X(ki,l)=1
+        X(l,ki)=1
+        R=func(X)
+        Q=[Q;compress([real(R) imag(R);-imag(R') real(R)])]
+      end
+    end
+    for l=sel
+      for ki=ptr:l-1
+        X=0*ones(n,n);
+        X(ki,l)=%i
+        X(l,ki)=-%i
+        R=func(X)
+//disp('I',R);pause
+        Q=[Q;compress([real(R) imag(R);-imag(R') real(R)])]
+      end
+    end
+  elseif T(ib)==3 then
+    X=0*ones(n,n);
+    X(sel,sel)=eye(blsiz,blsiz)
+    R=func(X)
+//pause
+    Q=[Q;compress([real(R) imag(R);-imag(R') real(R)])]
+  elseif T(ib)==4 then
+    for l=sel
+      for ki=ptr:l
+        X=0*ones(n,n);
+        X(ki,l)=1
+        X(l,ki)=1
+        R=func(X)
+        Q=[Q;compress([real(R) imag(R);-imag(R') real(R)])]
+      end
+    end
+  elseif T(ib)==5 then
+    for l=sel
+      for ki=ptr:l-1
+        X=0*ones(n,n);
+        X(ki,l)=1
+        X(l,ki)=1
+        R=func(X)
+        Q=[Q;compress([real(R) imag(R);-imag(R') real(R)])]
+      end
+    end
+    for l=sel
+      for ki=ptr:l-1
+        X=0*ones(n,n);
+        X(ki,l)=%i
+        X(l,ki)=-%i
+        R=func(X)
+//disp('I',R);pause
+        Q=[Q;compress([real(R) imag(R);-imag(R') real(R)])]
+      end
+    end
+  elseif T(ib)==0 then
+  else
+    error('block type  must be 0 1 2 3')
+  end  
+
+  ptr=ptr+blsiz
+end
+end
+
+function x=decomp(a)
+x=uncompress(a,'s')
+[m,n]=size(x)
+m=m/2
+x=x(1:m,1:m)-%i*x(m+1:2*m,1:m)

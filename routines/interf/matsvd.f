@@ -88,7 +88,7 @@ c
    11 call dsvdc(stk(l),m,m,n,stk(ld),stk(l1),t,1,t,1,stk(l2),0,ierr)
    12 continue
 c 
-      if (ierr.gt.1) call warn(3,ierr)
+      if (ierr.gt.1) call msgs(3,ierr)
 
       s = stk(ld)
       ld = ld + min(m,n) - 1
@@ -189,7 +189,7 @@ c
    41 continue
       call dsvdc(stk(l),m,m,n,stk(ld),stk(l1),t,1,t,1,stk(l2),0,ierr)
 c
-   42 if (ierr.gt.1) call warn(3,ierr)
+   42 if (ierr.gt.1) call msgs(3,ierr)
 
       s = stk(ld)
       go to 49
@@ -246,7 +246,7 @@ c
      2 stk(lv+n*n),n,stk(l2),stk(l2+m),job,ierr)
 c     set matrix of singular values
 c
-      if (ierr.gt.1) call warn(3,ierr)
+      if (ierr.gt.1) call msgs(3,ierr)
 c
       if(rhs.eq.1) tol=dble(max(m,n))*eps*stk(lsv)
       rang=0
@@ -310,7 +310,7 @@ c
      1 stk(ld),stk(ld+m1),stk(l1),stk(l1+n),t,t,1,t,t,1,
      2 stk(l2),stk(l2+m),0,ierr)
 c
-      if (ierr.gt.1) call warn(3,ierr)
+      if (ierr.gt.1) call msgs(3,ierr)
 
       k = min(m,n)
       call dcopy(k,stk(ld),1,stk(l),1)
@@ -354,7 +354,7 @@ c
      2 stk(lu),stk(lu+m*m),m,stk(lv),stk(lv+n*n),n,
      3 stk(l2),stk(l2+m),job,ierr)
 c
-      if (ierr.gt.1) call warn(3,ierr)
+      if (ierr.gt.1) call msgs(3,ierr)
 
       if (tol .lt. 0.0d+0) tol = dble(max(m,n))*eps*stk(ld)
       mn = min(m,n)
@@ -451,7 +451,7 @@ c     set matrix of singular values
         if (i.eq.j) stk(ll) = stk(ls)
    84 continue
 c
-      if (ierr.gt.1) call warn(3,ierr)
+      if (ierr.gt.1) call msgs(3,ierr)
 c
 c     set headers for lhs
       istk(il+1)=m

@@ -85,7 +85,7 @@ end;
 
 xmn=mini(frq),xmx=maxi(frq),npx=10
 //Magnitude
-[ymn,ymx,npy]=graduat(mini(d),maxi(d))
+[ymn,ymx,npy]=graduate(mini(d),maxi(d))
 rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
 
 if ilf==0 then

@@ -1,4 +1,4 @@
-function [X,dim]=im_inv(A,B,tol)
+function [x,dim]=im_inv(a,b,tol)
 //[X,dim]=im_inv(A,B [,tol]) computes (A^-1)(B) i.e vectors whose
 // image through A are in range(B).
 // The dim first columns de X span (A^-1) (B)

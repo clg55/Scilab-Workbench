@@ -15,6 +15,9 @@ c
       integer top2,tope,topf
       character*6 namef
       common/cschur/namef
+      integer         iero
+      common /ierinv/ iero
+
 c
       sadr(l)=(l/2)+1
       iadr(l)=l+l-1
@@ -247,6 +250,10 @@ c     creation d'une structure pour l'external
          lstk(top+1)=lstk(top)+3
          call inva(n,n,stk(l),stk(lv),bschur,eps,ndim,
      1        fail,stk(lw))
+         if(iero.ne.0) then
+            err=1
+            return
+         endif
          top=top-3
       endif
       if (fail) then
@@ -441,6 +448,7 @@ c
 c equilibrage (balanc)
 c
  310  continue
+      if(rhs.eq.2) goto 320
       if(lhs.ne.2) then
          call error(41)
          return
@@ -488,6 +496,97 @@ c     equilibrage
       lstk(top+1)=lv+nn
       goto 999
 c
+ 320  continue
+c faisceau
+      if(lhs.ne.4) then
+         call error(41)
+         return
+      endif
+      if(rhs.ne.2) then
+         call error(42)
+         return
+      endif
+      il=iadr(lstk(top))
+      m=istk(il+1)
+      n=istk(il+2)
+      l=sadr(il+4)
+      il1=iadr(lstk(top-1))
+      m1=istk(il1+1)
+      n1=istk(il1+2)
+      l1=sadr(il1+4)
+
+c     test if square
+      if(m.ne.n) then
+         err=2
+         call error(20)
+         return
+      endif
+      if(m1.ne.n1) then
+         err=1
+         call error(20)
+         return
+      endif
+c test of dimensions
+      if(n.ne.n1.or.m.ne.m1) then
+      buf='balanc:-->parameters with uncompatible dimensions!'
+      call error(9999)
+      endif
+      nn=n*n
+      if(nn*n1*m1.eq.0) then
+         call error(89)
+         return
+      endif
+c     equilibrage
+      low=1
+      igh=n
+      ilv1=iadr(l+nn)
+      lv1=sadr(ilv1+4)
+      ilv2=iadr(lv1+nn)
+      lv2=sadr(ilv2+4)
+      lcs=lv2+nn
+      lcp=lcs+n
+      lw=lcp+n
+      err=lw+6*n-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      call reduc2(n,n,stk(l1),n,stk(l),low,igh,stk(lcs),stk(lw))
+      call scaleg(n,n,stk(l1),n,stk(l),low,igh,
+     &                stk(lcs),stk(lcp),stk(lw))
+      do 321 i=low-1,igh-1
+        stk(lcs+i)=2.0d0**int(stk(lcs+i))
+        stk(lw+i)=2.0d0**int(stk(lw+i))
+ 321  continue
+      call dset(nn,0.0d+0,stk(lv2),1)
+      call dset(n,1.0d+0,stk(lv2),n+1)
+      call balbak(n,n,low,igh,stk(lcs),n,stk(lv2))
+      call dset(nn,0.0d+0,stk(lv1),1)
+      call dset(n,1.0d+0,stk(lv1),n+1)
+      call balbak(n,n,low,igh,stk(lw),n,stk(lv1))
+      if(n.gt.1) then
+         do 323 i=1,n-1
+            do 322 j=i+1,n
+               sr=stk(lv1+(i-1)+(j-1)*n)
+               stk(lv1+(i-1)+(j-1)*n)=stk(lv1+(j-1)+(i-1)*n)
+               stk(lv1+(j-1)+(i-1)*n)=sr
+ 322        continue
+ 323     continue
+      endif
+      istk(ilv1)=1
+      istk(ilv1+1)=n
+      istk(ilv1+2)=n
+      istk(ilv1+3)=0
+      top=top+1
+      lstk(top+1)=lv1+nn
+      istk(ilv2)=1
+      istk(ilv2+1)=n
+      istk(ilv2+2)=n
+      istk(ilv2+3)=0
+      top=top+1
+      lstk(top+1)=lv2+nn      
+      goto 999
+
  999  return
  900  call error(43)
       return

@@ -4,9 +4,9 @@
 fort - fortran call
 .SH CALLING SEQUENCE
 .nf 
-[y1,...,yk]=fort('ident',x1,px1,'tx1',...,xn,pxn,'txn',
-                 'out',[ny1,my1],py1,'ty1',...,[nyl,myl],pyl,'tyl')
-[y1,....,yk]=fort('ident',x1,...,xn) 
+[y1,...,yk]=fort("ident",x1,px1,"tx1",...,xn,pxn,"txn",
+                 "out",[ny1,my1],py1,"ty1",...,[nyl,myl],pyl,"tyl")
+[y1,....,yk]=fort("ident",x1,...,xn) 
 .fi
 .SH PARAMETERS
 .TP 10
@@ -20,7 +20,7 @@ pxi, pyi
 : integers
 .TP
 txi, tyi
-: character string \fV'd'\fR, \fV'r'\fR or \fV'i'\fR
+: character string \fV"d"\fR, \fV"r"\fR or \fV"i"\fR
 .SH DESCRIPTION
 Interactive call of Fortran (or C) routine from Scilab.
 \fVident\fR is the name of the subroutine called.
@@ -35,7 +35,7 @@ tx1,...,txn
 are their fortran types (\fV"r","i", "d",\fR  for real, integer, double precision)
 (strings are treated as integers).
 .TP 
-\'out\'
+"out"
 is a keyword used to separate input variables from output variables.
 .TP
 [ny1, my1]
@@ -44,7 +44,7 @@ are the size (# of rows and columns) of output variables and
 py1, ...
 are the positions of output variables (possibly equal to \fVpxi\fR ).
 .TP
-\'ty1\', ...
+"ty1", ...
 are the fortran types of output variables.
 The  k  first output variables are put in \fVy1,..., yk\fR.
 .LP
@@ -52,7 +52,7 @@ The  k  first output variables are put in \fVy1,..., yk\fR.
 (i.e. \fVpyi=pxj\fR ) one can pass only its position \fVpyi\fR .
 The size and type of \fVyi\fR are the same as those of \fVxi\fR .
 .LP
-In the case of short syntax , \fV[y1,....,yk]=fort('ident',x1,...,xn)\fR,
+In the case of short syntax , \fV[y1,....,yk]=fort("ident",x1,...,xn)\fR,
 the \fVtxi, nyj, myj \fR and \fVtyj\fR are then given in the routine \fVinterf\fR  (see the source code in 
 the directory \fVSCIDIR/default\fR).
 .SH EXAMPLE
@@ -62,11 +62,11 @@ the directory \fVSCIDIR/default\fR).
       end
 .fi
 .nf
-      link('foo.o','foo')
+      link("foo.o","foo")
       a=13;b=10;
-      c=fort('foo',a,1,'r',b,2,'r','out',[1,1],3,'r')
+      c=fort("foo",a,1,"r",b,2,"r","out",[1,1],3,"r")
 .fi
-returns the scalar (1x1 matrix) \fVc=2*a+b\fR with \fVa=13\fR and \fV b=10\fR .
+returns the scalar (1x1 matrix) \fVc=2*a+b\fR with \fVa=13\fR and \fV b=10\fR.
 \fVa\fR (resp.\fV b,c\fR ) is the first (resp. 2nd, 3rd) argument passed to \fVfoo\fR .
 .SH SEE ALSO
 link, c_link, interf.f in SCIDIR/routines/default

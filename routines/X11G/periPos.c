@@ -131,13 +131,18 @@ xclick_pos_(str,ibutton,xx1,yy1)
   int *ibutton,*xx1,*yy1 ;
 { };
 
+xgetmouse_pos_(str,ibutton,xx1,yy1)
+     char str[];
+  int *ibutton,*xx1,*yy1 ;
+{ };
+
 /** Clear a rectangle **/
 
 cleararea_pos_(str,x,y,w,h)
      char str[];
      int *x,*y,*w,*h;
 {
-  fprintf(stderr,"Attention clearzone n'est pas traduit en Postscript\n");
+  Scistring("Attention clearzone n'est pas traduit en Postscript\n");
   fprintf(file,"%%A Faire %d %d %d %d clearzone",*x,*y,*w,*h);
 };
 
@@ -154,7 +159,7 @@ getwindowpos_pos_(verbose,x,narg)
   *narg = 2;
   x[0]= x[1]=0;
   if (*verbose == 1) 
-    fprintf(stderr,"\n CWindow position :%d,%d",x[0],x[1]);
+    SciF2d("\n CWindow position :%d,%d\r\n",x[0],x[1]);
  };
 
 /** to set the window upper-left point position (Void) **/
@@ -178,7 +183,7 @@ getwindowdim_pos_(verbose,x,narg)
   x[0]= 600*prec_fact;
   x[1]= 424*prec_fact;
   if (*verbose == 1) 
-    fprintf(stderr,"\n CWindow dim :%d,%d",x[0],x[1]);
+    SciF2d("\n CWindow dim :%d,%d\r\n",x[0],x[1]);
 }; 
 
 /** To change the window dimensions : do Nothing in Postscript  **/
@@ -203,7 +208,7 @@ getcurwin_pos_(verbose,intnum,narg)
   *narg =1 ;
   *intnum = ScilabGC_pos_.CurWindow ;
   if (*verbose == 1) 
-    fprintf(stderr,"\nJust one graphic page at a time ");
+    Scistring("\nJust one graphic page at a time ");
 };
 
 /** Set a clip zone (rectangle ) **/
@@ -236,13 +241,13 @@ getclip_pos_(verbose,x,narg)
   else *narg = 1;
   if (*verbose == 1)
   if (ScilabGC_pos_.ClipRegionSet == 1)
-    fprintf(stderr,"\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d",
+    SciF4d("\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d\r\n",
 	      ScilabGC_pos_.CurClipRegion[0],
 	      ScilabGC_pos_.CurClipRegion[1],
 	      ScilabGC_pos_.CurClipRegion[2],
 	      ScilabGC_pos_.CurClipRegion[3]);
   else 
-    fprintf(stderr,"\nNo Clip Region");
+    Scistring("\nNo Clip Region");
 };
 
 /*----------------------------------------------------------
@@ -270,9 +275,9 @@ getabsourel_pos_(verbose,num,narg)
     *num = ScilabGC_pos_.CurVectorStyle  ;
     if (*verbose == 1) 
   if (ScilabGC_pos_.CurVectorStyle == CoordModeOrigin)
-    fprintf(stderr,"\nTrace Absolu");
+    Scistring("\nTrace Absolu");
   else 
-    fprintf(stderr,"\nTrace Relatif");
+    Scistring("\nTrace Relatif");
   };
 
 
@@ -325,9 +330,9 @@ idfromname_pos_(name1,num)
      *num=AluStruc_pos_[i].id;
  if (*num == -1 ) 
    {
-     fprintf(stderr,"\n Use the following keys :");
+     Scistring("\n Use the following keys :");
      for ( i=0 ; i < 16 ; i++)
-       fprintf(stderr,"\nkey %s -> %s",AluStruc_pos_[i].name,
+       SciF2s("\nkey %s -> %s\r\n",AluStruc_pos_[i].name,
 	       AluStruc_pos_[i].info);
    };
 };
@@ -339,7 +344,7 @@ getalufunction_pos_(verbose,value,narg)
   *narg =1 ;
   *value = ScilabGC_pos_.CurDrawFunction ;
    if (*verbose ==1 ) 
-     { fprintf(stderr,"\nThe Alufunction is %s -> <%s>\n",
+     { SciF2s("\nThe Alufunction is %s -> <%s>\r\n",
 	       AluStruc_pos_[*value].name,
 	       AluStruc_pos_[*value].info);}
  };
@@ -362,7 +367,7 @@ getthickness_pos_(verbose,value,narg)
   *narg =1 ;
   *value = ScilabGC_pos_.CurLineWidth ;
   if (*verbose ==1 ) 
-    fprintf(stderr,"\nLine Width:%d",
+    SciF1d("\nLine Width:%d\r\n",
 	    ScilabGC_pos_.CurLineWidth ) ;
 };
      
@@ -398,7 +403,7 @@ getpattern_pos_(verbose,num,narg)
   *narg=1;
   *num = ScilabGC_pos_.CurPattern ;
   if (*verbose == 1) 
-      fprintf(stderr,"\n Pattern : %d",
+      SciF1d("\n Pattern : %d\r\n",
 	  ScilabGC_pos_.CurPattern);
 };
 
@@ -410,7 +415,7 @@ getwhite_pos_(verbose,num,narg)
 {
   *num = ScilabGC_pos_.IDWhitePattern ;
   if (*verbose==1) 
-    fprintf(stderr,"\n Id of White Pattern %d :",*num);
+    SciF1d("\n Id of White Pattern %d\r\n",*num);
   *narg=1;
 };
 
@@ -429,10 +434,16 @@ setdash_pos_(value)
 {
   static int maxdash = 6, l2=4,l3 ;
   l3 = Min(maxdash-1,*value-1);
-  ScilabGC_pos_.CurDashStyle= l3 + 1 ;
-  if ( use_color ==1) set_c_pos_(*value-1);
+  if ( use_color ==1) 
+    {
+      ScilabGC_pos_.CurDashStyle= *value;
+      set_c_pos_(*value);
+    }
   else 
-    setdashstyle_pos_(value,DashTab_pos[Max(0,l3)],&l2);
+    {
+      ScilabGC_pos_.CurDashStyle= l3 + 1 ;
+      setdashstyle_pos_(value,DashTab_pos[Max(0,l3)],&l2);
+    };
 }
 
 /** To change The Pos-default dash style **/
@@ -461,8 +472,13 @@ getdash_pos_(verbose,value,narg)
 {int i ;
  *value=ScilabGC_pos_.CurDashStyle;
  *narg =1 ;
+ if ( use_color ==1) 
+   {
+     if (*verbose == 1) SciF1d("Color %d",*value);
+     return;
+   };
  if ( *value == 0) 
-   { if (*verbose == 1) fprintf(stderr,"\nLine style = Line Solid");}
+   { if (*verbose == 1) Scistring("\nLine style = Line Solid");}
  else 
    {
      value[1]=4;
@@ -470,10 +486,10 @@ getdash_pos_(verbose,value,narg)
      for ( i =0 ; i < value[1]; i++) value[i+2]=DashTab_pos[*value-1][i];
      if (*verbose ==1 ) 
        {
-	 fprintf(stderr,"\nDash Style %d:<",*value);
+	 SciF1d("\nDash Style %d:<",*value);
 	 for ( i =0 ; i < value[1]; i++)
-	   fprintf(stderr,"%d ",value[i+2]);
-	 fprintf(stderr,">\n");
+	   SciF1d("%d ",value[i+2]);
+	 Scistring(">\n");
        }
    }
 };
@@ -489,7 +505,13 @@ extern TabC tabc[NUMCOLORS];
 usecolor_pos_(num)
      int *num;
 {
-  use_color= *num; 
+  if ( use_color != *num)
+    {
+      int i=0;
+      use_color= *num;
+      setdash_pos_(&i);
+      setpattern_pos_(&i);
+    };
   if ( use_color == 1) 
     {
       fprintf(file,"\n/Setgray {/i exch def ColorR i get ColorG i get ColorB i get setrgbcolor } def ");
@@ -535,7 +557,7 @@ int InitScilabGC_pos_();
 empty_pos_(verbose)
      int *verbose;
 {
-  if ( *verbose ==1 ) fprintf(stderr,"\n No operation ");
+  if ( *verbose ==1 ) Scistring("\n No operation ");
 };
 
 #define NUMSETFONC 14
@@ -589,7 +611,7 @@ ScilabGCGetorSet_pos_(str,flag,verbose,x1,x2,x3,x4,x5)
        j = strcmp(str,ScilabGCTab_pos_[i].name);
        if ( j == 0 ) 
 	 { if (*verbose == 1)
-	     fprintf(stderr,"\nGettting Info on %s",str);
+	     SciF1s("\nGettting Info on %s\r\n",str);
 	   if (flag == 1)
 	     (ScilabGCTab_pos_[i].getfonc)(verbose,x1,x2,x3,x4,x5);
 	   else 
@@ -598,12 +620,12 @@ ScilabGCGetorSet_pos_(str,flag,verbose,x1,x2,x3,x4,x5)
        else 
 	 { if ( j <= 0)
 	     {
-	       fprintf(stderr,"\nUnknow Postscript operator <%s>",str);
+	       SciF1s("\nUnknow Postscript operator <%s>\r\n",str);
 	       return;
 	     };
 	 };
      };
-  fprintf(stderr,"\n Unknow Postscript operator <%s>",str);
+  SciF1s("\n Unknow Postscript operator <%s>\r\n",str);
 };
 
 /*-----------------------------------------------------------
@@ -897,18 +919,19 @@ drawpolymark_pos_(str,n, vx, vy)
 
 initgraphic_pos_(string)
      char string[];
-{ char string1[50];
+{ 
+  char string1[256];
   static int EntryCounter = 0;
   int fnum;
   if (EntryCounter >= 1) xendgraphic_pos_();
-  strcpy(string1,string);
+  strncpy(string1,string,256);
   /* Not so useful   
      sprintf(string2,"%d",EntryCounter);
      strcat(string1,string2); */
   file=fopen(string1,"w");
   if (file == 0) 
     {
-      fprintf(stderr,"Can't open file %s, I'll use stdout\n",string1);
+      SciF1s("Can't open file %s, I'll use stdout\r\n",string1);
       file =stdout;
     };
   if (EntryCounter == 0)
@@ -1142,7 +1165,7 @@ xsetfont_pos_(fontid,fontsize)
   i = Min(FONTNUMBER-1,Max(*fontid,0));
   fsiz = Min(FONTMAXSIZE-1,Max(*fontsize,0));
   if ( FontInfoTab_pos_[i].ok !=1 )
-    fprintf(stderr,"\n Sorry This Font is Not available ");
+    Scistring("\n Sorry This Font is Not available ");
   else 
    {
      ScilabGC_pos_.CurHardFont = i;
@@ -1163,10 +1186,10 @@ xgetfont_pos_(verbose,font,nargs)
   font[1] =ScilabGC_pos_.CurHardFontSize ;
   if (*verbose == 1) 
     {
-      fprintf(stderr,"\nFontId : %d --> %s at size %s pts",
-	      ScilabGC_pos_.CurHardFont ,
-	      FontInfoTab_pos_[ScilabGC_pos_.CurHardFont].fname,
-	      size_pos_[ScilabGC_pos_.CurHardFontSize]);
+      SciF1d("\nFontId : %d ",	      ScilabGC_pos_.CurHardFont );
+      SciF2s("--> %s at size %s pts\r\n",
+	     FontInfoTab_pos_[ScilabGC_pos_.CurHardFont].fname,
+	     size_pos_[ScilabGC_pos_.CurHardFontSize]);
     };
 };
 
@@ -1192,7 +1215,7 @@ xgetmark_pos_(verbose,symb,narg)
   symb[0] = ScilabGC_pos_.CurHardSymb ;
   symb[1] = ScilabGC_pos_.CurHardSymbSize ;
   if (*verbose == 1) 
-  fprintf(stderr,"\nMark : %d at size %d pts",
+  SciF2d("\nMark : %d at size %d pts\r\n",
 	  ScilabGC_pos_.CurHardSymb,
 	  isize_pos_[ScilabGC_pos_.CurHardSymbSize]);
 };
@@ -1233,7 +1256,7 @@ loadfamily_pos_(name,j)
       FontsList_pos_[*j][i] = PosQueryFont_(name);
     };
   if  (FontsList_pos_[*j][0] == 0 )
-	  fprintf(stderr,"\n unknown font family : %s ",name);
+	  SciF1s("\n unknown font family : %s \r\n",name);
   else 
     {FontInfoTab_pos_[*j].ok = 1;
      strcpy(FontInfoTab_pos_[*j].fname,name) ;}

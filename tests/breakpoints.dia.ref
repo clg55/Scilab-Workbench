@@ -77,101 +77,101 @@ MACRO NOT COMPILED
 lig()
 ligne 2
 ligne 8
-Stop after row     8 in macro lig     :
+Stop after row     8 in macro lig :
  
 end,shlig(8)   ,
  
 -1->resume
 ligne 9
 ligne 11
-Stop after row    11 in macro lig     :
+Stop after row    11 in macro lig :
  
   k;shlig(11)  ,
  
 -1->resume
 ligne 11
-Stop after row    11 in macro lig     :
+Stop after row    11 in macro lig :
  
   k;shlig(11)  ,
  
 -1->resume
 ligne 11
-Stop after row    11 in macro lig     :
+Stop after row    11 in macro lig :
  
   k;shlig(11)  ,
  
 -1->resume
 ligne 12
-Stop after row    12 in macro lig     :
+Stop after row    12 in macro lig :
  
 end,shlig(12)  ,
  
 -1->resume
 ligne 17
-Stop after row    17 in macro lig     :
+Stop after row    17 in macro lig :
  
 end,shlig(17)  ,
  
 -1->resume
 ligne 18
 ligne 23
-Stop after row    23 in macro lig     :
+Stop after row    23 in macro lig :
  
   shlig(23)   ,
  
 -1->resume
 ligne 28
-Stop after row    28 in macro lig     :
+Stop after row    28 in macro lig :
  
 end,shlig(28) ,
  
 -1->resume
 ligne 29
 ligne 38
-Stop after row    38 in macro lig     :
+Stop after row    38 in macro lig :
  
   shlig(38)  ,
  
 -1->resume
 ligne 39
-Stop after row    39 in macro lig     :
+Stop after row    39 in macro lig :
  
 end,shlig(39),
  
 -1->resume
 ligne 40
-Stop after row    40 in macro lig     :
+Stop after row    40 in macro lig :
  
 shlig(40)    ,
  
 -1->resume
 ligne 43
-Stop after row    43 in macro lig     :
+Stop after row    43 in macro lig :
  
 i=i+1,shlig(43) ,
  
 -1->resume
 ligne 43
-Stop after row    43 in macro lig     :
+Stop after row    43 in macro lig :
  
 i=i+1,shlig(43) ,
  
 -1->resume
 ligne 43
-Stop after row    43 in macro lig     :
+Stop after row    43 in macro lig :
  
 i=i+1,shlig(43) ,
  
 -1->resume
 ligne 44
-Stop after row    44 in macro lig     :
+Stop after row    44 in macro lig :
  
 end,shlig(44) ,
  
 -1->resume
 ligne 47
 ligne 48
-Stop after row    48 in macro lig     :
+Stop after row    48 in macro lig :
  
 end,shlig(48) ,
  
@@ -185,86 +185,86 @@ COMPILED MACRO
 lig()
 ligne 2
 ligne 8
-Stop after row     8 in macro lig     :
+Stop after row     8 in macro lig :
  
  
 -1->resume
 ligne 9
 ligne 11
-Stop after row    11 in macro lig     :
+Stop after row    11 in macro lig :
  
  
 -1->resume
 ligne 11
-Stop after row    11 in macro lig     :
+Stop after row    11 in macro lig :
  
  
 -1->resume
 ligne 11
-Stop after row    11 in macro lig     :
+Stop after row    11 in macro lig :
  
  
 -1->resume
 ligne 12
-Stop after row    12 in macro lig     :
+Stop after row    12 in macro lig :
  
  
 -1->resume
 ligne 17
-Stop after row    17 in macro lig     :
+Stop after row    17 in macro lig :
  
  
 -1->resume
 ligne 18
 ligne 23
-Stop after row    23 in macro lig     :
+Stop after row    23 in macro lig :
  
  
 -1->resume
 ligne 28
-Stop after row    28 in macro lig     :
+Stop after row    28 in macro lig :
  
  
 -1->resume
 ligne 29
 ligne 38
-Stop after row    38 in macro lig     :
+Stop after row    38 in macro lig :
  
  
 -1->resume
 ligne 39
-Stop after row    39 in macro lig     :
+Stop after row    39 in macro lig :
  
  
 -1->resume
 ligne 40
-Stop after row    40 in macro lig     :
+Stop after row    40 in macro lig :
  
  
 -1->resume
 ligne 43
-Stop after row    43 in macro lig     :
+Stop after row    43 in macro lig :
  
  
 -1->resume
 ligne 43
-Stop after row    43 in macro lig     :
+Stop after row    43 in macro lig :
  
  
 -1->resume
 ligne 43
-Stop after row    43 in macro lig     :
+Stop after row    43 in macro lig :
  
  
 -1->resume
 ligne 44
-Stop after row    44 in macro lig     :
+Stop after row    44 in macro lig :
  
  
 -1->resume
 ligne 47
 ligne 48
-Stop after row    48 in macro lig     :
+Stop after row    48 in macro lig :
  
  
 -1->resume

@@ -1,5 +1,5 @@
-function [Y,rk,ac]=colcompr(A);
-//[Y,rk,ac]=colcompr(A);
+function [Y,rk,Ac]=colcompr(A);
+//[Y,rk,Ac]=colcompr(A);
 //column compression of polynomial matrix A
 //(left compression)
 //Y = right unimodular base

@@ -1,13 +1,13 @@
-//<H,F,G>=phc(hk,d,r)
-//<H,F,G>=phc(hk,d,r)
-//macro which computes the matrices H, F, G by the principal hankel
+function [h,f,g]=phc(hk,d,r)
+//[h,f,g]=phc(hk,d,r)
+//macro which computes the matrices h, f, g by the principal hankel
 //component approximation method, from the hankel matrix built
 //from the covariance sequence of a stochastic process.
 //   hk  : hankel matrix
 //   d   : dimension of the observation
 //   r   : desired dimension of the state vector
 //       : for the approximated model
-//   H,F,G  : relevant matrices of the state-space model
+//   h,f,g  : relevant matrices of the state-space model
 //!
 //author G. Le Vey  Date: 16 Febr. 1989
  

@@ -1,3 +1,4 @@
+
 /*------------------------------BEGIN--------------------------------------
 %    Missile 
 %    XWindow and Postscript library for 2D and 3D plotting 
@@ -41,12 +42,12 @@
 #include <X11/cursorfont.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
+
 #include <X11/Shell.h>
 
 #include "Math.h"
 #include "periX11.h"
-
-#define VERSION "Scilab-1.1"
+#include "version.h"
 
 #define MESSAGE4 "Can't allocate point vector"
 #define MESSAGE5 "Can't re-allocate point vector" 
@@ -55,15 +56,12 @@
 /** Global variables to deal with X11 **/
 
 static GC gc;
-static Cursor arrowcursor,normalcursor;
+static Cursor arrowcursor,normalcursor,crosscursor;
 static Window CWindow=(Window) NULL ,root=(Window) NULL;
+static Window CBGWindow=(Window) NULL ;
 static Display *dpy = (Display *) NULL;
 static int use_color=0;
-
-/** flag to decide between X11 and IX11 (scilab or xscilab ) */
-extern int  xint_type;
-
-
+static unsigned long foreground, background;
 
 /** Structure to keep the graphic state  **/
 struct BCG 
@@ -97,24 +95,8 @@ Window Find_ScilabGraphic_Window();
 
 xselgraphic_() 
 { 
-  Window BGWindow=(Window) NULL;
-  if (CWindow == (Window ) NULL) initgraphic_("");
-  if (xint_type == 1)
-    {
-      BGWindow=Find_ScilabGraphic_Window(MissileXgc.CurWindow);
-      if (BGWindow != (Window) NULL) 
-	{
-	  XRaiseWindow(dpy,BGWindow);
-	}
-      else 
-	{
-	  if (CWindow != (Window) NULL ) XRaiseWindow(dpy,CWindow);
-	};
-    }
-  else
-    {
-      if (CWindow != (Window) NULL ) XRaiseWindow(dpy,CWindow);
-    };
+  if (CBGWindow == (Window ) NULL) initgraphic_("");
+  XRaiseWindow(dpy,CBGWindow);
   XFlush(dpy);
 };
 
@@ -145,19 +127,28 @@ xpause_(str,sec_time)
      char str[];
      int *sec_time;
 { 
+#ifdef hpux
+#include <unistd.h>
+#endif
   unsigned useconds;
   useconds=(unsigned) *sec_time;
   if (useconds != 0)  
 #ifdef sun
-    usleep(useconds);
+      usleep(useconds);
+#else
+#ifdef hpux
+  sleep(useconds/1000000);
 #else
     return;
 #endif
+#endif
+
 };
 
 /****************************************************************
-\encadre{ Wait for mouse click in graphic window 
-   send back mouse location  (x1,y1)  and button number  
+ Wait for mouse click in graphic window 
+   send back mouse
+ location  (x1,y1)  and button number  
    0,1,2}
    There's just a pb if the window is iconified when we try to click 
    in this case we return i= -1
@@ -168,39 +159,67 @@ xclick_(str,ibutton,x1,yy1)
      char str[];
      int *ibutton,*x1,*yy1 ;
 {
-  int status;
-  Cursor cursor;
   XEvent event;
   Bool flag1=True;
   int buttons = 0;
-  cursor = XCreateFontCursor(dpy, XC_crosshair);
+  /* Recenter_GW_(); */
   /*  remove the previous click events on the queue */
-  while (flag1) flag1= XCheckWindowEvent(dpy,CWindow, ButtonPressMask,&event);
-  /* Grab the pointer using target cursor, letting it room all over */
-  status = XGrabPointer(dpy, CWindow, False,
-			ButtonPressMask|ButtonReleaseMask, GrabModeSync,
-			GrabModeAsync, CWindow, cursor, CurrentTime);
-  if (status != GrabSuccess) {
-    fprintf(stderr,"Can't grab the mouse.\n");
-    *ibutton= -1;
-    return;}
+  while (flag1) 
+    flag1= XCheckWindowEvent(dpy,CWindow,KeyPressMask| ButtonPressMask,&event);
+  XDefineCursor(dpy, CWindow ,crosscursor);
   while (buttons == 0) {
-    /* allow one more event */
-    XAllowEvents(dpy, SyncPointer, CurrentTime);
-    XWindowEvent(dpy, CWindow, ButtonPressMask|ButtonReleaseMask, &event);
-    switch (event.type) {
-    case ButtonPress:
-      *x1=event.xbutton.x;
-      *yy1=event.xbutton.y;
-      *ibutton=event.xbutton.button-1;
-      buttons++;
-      break;
-    }
+    XNextEvent (dpy, &event);
+    if ( event.xany.window == CWindow && event.type ==  ButtonPress ) 
+      {
+	*x1=event.xbutton.x;
+	*yy1=event.xbutton.y;
+	*ibutton=event.xbutton.button-1;
+	buttons++;
+	break;
+      }
+    else 
+      {
+	XtDispatchEvent(&event);
+      };
   };
-  cursor = XCreateFontCursor (dpy, XC_X_cursor);
-  XUngrabPointer(dpy, CurrentTime);      /* Done with pointer */
+  XDefineCursor(dpy, CWindow ,arrowcursor);
   XSync (dpy, 0);
 }
+
+
+xgetmouse_(str,ibutton,x1,y1)
+     char str[];
+     int *ibutton,*x1,*y1 ;
+{
+  XEvent event;
+  Bool flag1=True;
+  int buttons = 0;
+  XDefineCursor(dpy, CWindow ,crosscursor);
+  while (flag1) 
+    flag1= XCheckWindowEvent(dpy,CWindow,
+		  KeyPressMask| ButtonPressMask | PointerMotionMask,&event);
+  while (buttons == 0) {
+    XNextEvent (dpy, &event); 
+    if ( event.xany.window == CWindow && event.type ==  ButtonPress ) 
+	  {
+	      *x1=event.xbutton.x;
+	      *y1=event.xbutton.y;
+	      *ibutton=event.xbutton.button-1;
+	      buttons++;
+	  }
+    else if ( event.xany.window == CWindow && event.type ==  MotionNotify ) 
+      {
+	*x1=event.xbutton.x;
+	*y1=event.xbutton.y;
+	*ibutton = -1;
+	buttons++;
+      }
+    else      XtDispatchEvent(&event);
+  };
+  XDefineCursor(dpy, CWindow ,arrowcursor);
+  XSync (dpy, 0);
+}
+
 
 /*------------------------------------------------
   \encadre{Clear a rectangle }
@@ -215,6 +234,27 @@ cleararea_(str,x,y,w,h)
 };
 
 /*---------------------------------------------------------------------
+\section{moves graphic window for it to be inside the root window}
+------------------------------------------------------------------------*/
+
+Recenter_GW_()
+{
+  int ul[2],x,y;
+  Window CHR;
+  XWindowAttributes war,war1;
+  XGetWindowAttributes(dpy,CBGWindow,&war); 
+  XTranslateCoordinates(dpy,CBGWindow,root,war.x,war.y,&(ul[0]),&(ul[1]),&CHR);
+  XGetWindowAttributes(dpy,root,&war1);
+  x=Max(ul[0],0);y=Max(ul[1],0);
+  if ( ul[0]+war.width > war1.width )
+      x=Max(0, war1.width-war.width);
+  if ( ul[1]+war.height > war1.height)
+      y=Max(0, war1.height -war.height);
+  if ( x != ul[0] || y != ul[1])
+    XMoveWindow(dpy,CBGWindow,x,y);
+};
+
+/*---------------------------------------------------------------------
 \section{Function for graphic context modification}
 ------------------------------------------------------------------------*/
 
@@ -224,12 +264,12 @@ getwindowpos_(verbose,x,narg)
      int *verbose,*x,*narg;
 {
   XWindowAttributes war;
+  Window CHR;
   *narg = 2;
-  XGetWindowAttributes(dpy,CWindow,&war); 
-  x[0]= war.x;
-  x[1]= war.y;
+  XGetWindowAttributes(dpy,CBGWindow,&war); 
+  XTranslateCoordinates(dpy,CBGWindow,root,war.x,war.y,&(x[0]),&(x[1]),&CHR);
   if (*verbose == 1) 
-    fprintf(stderr,"\n CWindow position :%d,%d",x[0],x[1]);
+    SciF2d("\n CWindow position :%d,%d\r\n",x[0],x[1]);
 };
 
 /** to set the window upper-left point position on the screen **/
@@ -237,18 +277,8 @@ getwindowpos_(verbose,x,narg)
 setwindowpos_(x,y)
      int *x,*y;
 {
-  Window BGWindow=(Window) NULL;
-  if (xint_type == 1)
-    {
-      BGWindow=Find_ScilabGraphic_Window(MissileXgc.CurWindow);
-      if (BGWindow != (Window) NULL) 
-	XMoveWindow(dpy,BGWindow,*x,*y);
-      else
-	XMoveWindow(dpy,CWindow,*x,*y);
-    }
-  else
-    XMoveWindow(dpy,CWindow,*x,*y);
-  XFlush(dpy);
+  if (CBGWindow == (Window) NULL) initgraphic_("");
+  XMoveWindow(dpy,CBGWindow,*x,*y);
 };
 
 /** To get the window size **/
@@ -262,7 +292,7 @@ getwindowdim_(verbose,x,narg)
   x[0]= war.width;
   x[1]= war.height;
   if (*verbose == 1) 
-    fprintf(stderr,"\n CWindow dim :%d,%d",x[0],x[1]);
+    SciF2d("\n CWindow dim :%d,%d\r\n",x[0],x[1]);
 }; 
 
 /** To change the window size  **/
@@ -270,17 +300,8 @@ getwindowdim_(verbose,x,narg)
 setwindowdim_(x,y)
      int *x,*y;
 {
-  Window BGWindow=(Window) NULL;
-  if (xint_type == 1)
-    {
-      BGWindow=Find_ScilabGraphic_Window(MissileXgc.CurWindow);
-      if (BGWindow != (Window) NULL) 
-	XResizeWindow(dpy,BGWindow,Max(*x,400),Max(*y,300));
-      else
-	XResizeWindow(dpy,CWindow,Max(*x,400),Max(*y,300));
-    }
-  else
-    XResizeWindow(dpy,CWindow,Max(*x,400),Max(*y,300));
+  if (CBGWindow != (Window) NULL) 
+	XResizeWindow(dpy,CBGWindow,Max(*x,400),Max(*y,300));
   XFlush(dpy);
 };
 
@@ -290,7 +311,9 @@ setcurwin_(intnum)
      int *intnum;
 { 
   Window GetWindowNumber_();
+  Window GetBGWindowNumber_();
   CWindow = GetWindowNumber_(*intnum);
+  CBGWindow = GetBGWindowNumber_(*intnum);
   MissileXgc.CurWindow = *intnum;
   if (CWindow == (Window ) NULL)
     {
@@ -308,7 +331,7 @@ getcurwin_(verbose,intnum,narg)
   *narg =1 ;
   *intnum = MissileXgc.CurWindow ;
   if (*verbose == 1) 
-    fprintf(stderr,"\nCurrent Graphic Window :%d",*intnum);
+    SciF1d("\nCurrent Graphic Window :%d\r\n",*intnum);
 };
 
 /** Set a clip zone (rectangle ) **/
@@ -348,13 +371,13 @@ getclip_(verbose,x,narg)
   else *narg = 1;
   if (*verbose == 1)
     if (MissileXgc.ClipRegionSet == 1)
-      fprintf(stderr,"\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d",
+      SciF4d("\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d\r\n",
 	      MissileXgc.CurClipRegion[0],
 	      MissileXgc.CurClipRegion[1],
 	      MissileXgc.CurClipRegion[2],
 	      MissileXgc.CurClipRegion[3]);
     else 
-      fprintf(stderr,"\nNo Clip Region");
+      Scistring("\nNo Clip Region");
 };
 
 /*----------------------------------------------------------
@@ -383,9 +406,9 @@ getabsourel_(verbose,num,narg)
   *num = MissileXgc.CurVectorStyle  ;
   if (*verbose == 1) 
     if (MissileXgc.CurVectorStyle == CoordModeOrigin)
-      fprintf(stderr,"\nTrace Absolu");
+      Scistring("\nTrace Absolu");
     else 
-      fprintf(stderr,"\nTrace Relatif");
+      Scistring("\nTrace Relatif");
 };
 
 /** The alu function for drawing : Works only with X11 **/
@@ -426,10 +449,6 @@ struct alinfo {
   "GXorInverted" ,GXorInverted," NOT src OR dst ",
   "GXnand" ,GXnand," NOT src OR NOT dst ",
   "GXset" ,GXset," 1 "};
-
-
-static unsigned long foreground, background;
-
 
 setalufunction1_(num)
      int *num;
@@ -473,9 +492,9 @@ idfromname(name1,num)
      *num=AluStruc_[i].id;
  if (*num == -1 ) 
    {
-     fprintf(stderr,"\n Use the following keys (integer in scilab");
+     Scistring("\n Use the following keys (integer in scilab");
      for ( i=0 ; i < 16 ; i++)
-       fprintf(stderr,"\nkey %s   -> %s",AluStruc_[i].name,
+       SciF2s("\nkey %s   -> %s\r\n",AluStruc_[i].name,
 	       AluStruc_[i].info);
    };
 };
@@ -488,7 +507,8 @@ getalufunction_(verbose,value,narg)
   *narg =1 ;
   *value = MissileXgc.CurDrawFunction ;
   if (*verbose ==1 ) 
-    { fprintf(stderr,"\nThe Alufunction is %s -> <%s>\n",
+    { 
+      SciF2s("\nThe Alufunction is %s -> <%s>\r\n",
 	      AluStruc_[*value].name,
 	      AluStruc_[*value].info);}
 };
@@ -515,8 +535,7 @@ getthickness_(verbose,value,narg)
   *narg =1 ;
   *value = MissileXgc.CurLineWidth ;
   if (*verbose ==1 ) 
-    fprintf(stderr,"\nLine Width:%d",
-	    MissileXgc.CurLineWidth ) ;
+    SciF1d("\nLine Width:%d\r\n",  MissileXgc.CurLineWidth ) ;
 };
 
 /** To set grey level for filing areas **/
@@ -577,7 +596,7 @@ getpattern_(verbose,num,narg)
   *narg=1;
   *num = MissileXgc.CurPattern ;
   if (*verbose == 1) 
-    fprintf(stderr,"\n Pattern : %d",
+    SciF1d("\n Pattern : %d\r\n",
 	    MissileXgc.CurPattern);
 };
 
@@ -588,7 +607,7 @@ getwhite_(verbose,num,narg)
 {
   *num = MissileXgc.IDWhitePattern ;
   if (*verbose == 1) 
-    fprintf(stderr,"\n Id of White Pattern %d :",*num);
+    SciF1d("\n Id of White Pattern %d\r\n",*num);
   *narg=1;
 };
 
@@ -612,10 +631,17 @@ setdash_(value)
 {
   static int maxdash = 6, l2=4,l3 ;
   l3 = Min(maxdash-1,*value-1);
-  MissileXgc.CurDashStyle= l3 + 1 ;
-  if ( use_color ==1) set_c(*value-1);
+  if ( use_color ==1) 
+    {
+      MissileXgc.CurDashStyle= *value;
+      set_c(*value);
+    }
   else
-    setdashstyle_(value,DashTab[Max(0,l3)],&l2);
+    {
+      setdashstyle_(value,DashTab[Max(0,l3)],&l2);
+      MissileXgc.CurDashStyle= l3 + 1 ;
+    };
+
 };
 
 /** To change The X11-default dash style **/
@@ -644,8 +670,13 @@ getdash_(verbose,value,narg)
 {int i ;
  *value=MissileXgc.CurDashStyle;
  *narg =1 ;
+ if ( use_color ==1) 
+   {
+     if (*verbose == 1) SciF1d("Color %d",*value);
+     return;
+   };
  if ( *value == 0) 
-   { if (*verbose == 1) fprintf(stderr,"\nLine style = Line Solid");}
+   { if (*verbose == 1) Scistring("\nLine style = Line Solid");}
  else 
    {
      value[1]=4;
@@ -653,10 +684,10 @@ getdash_(verbose,value,narg)
      for ( i =0 ; i < value[1]; i++) value[i+2]=DashTab[*value-1][i];
      if (*verbose ==1 ) 
        {
-	 fprintf(stderr,"\nDash Style %d:<",*value);
+	 SciF1d("\nDash Style %d:<",*value);
 	 for ( i =0 ; i < value[1]; i++)
-	   fprintf(stderr,"%d ",value[i+2]);
-	 fprintf(stderr,">\n");
+	   SciF1d("%d ",value[i+2]);
+	 Scistring(">\n");
        }
    }
 };
@@ -665,7 +696,13 @@ getdash_(verbose,value,narg)
 usecolor_(num)
      int *num;
 {
-  use_color= *num;
+  if ( use_color != *num)
+    {
+      int i=0;
+      use_color= *num;
+      setdash_(&i);
+      setpattern_(&i);
+    };
 };
 
 /*-----------------------------------------------------------
@@ -678,7 +715,7 @@ int InitMissileXgc();
 empty_(verbose)
      int *verbose;
 {
-  if ( *verbose == 1 ) fprintf(stderr,"\n No operation ");
+  if ( *verbose == 1 ) Scistring("\n No operation ");
 };
 
 #define NUMSETFONC 14
@@ -730,7 +767,7 @@ MissileGCGetorSet_(str,flag,verbose,x1,x2,x3,x4,x5)
       j = strcmp(str,MissileGCTab_[i].name);
       if ( j == 0 ) 
 	{ if (*verbose == 1)
-	    fprintf(stderr,"\nGettting Info on %s",str);
+	    SciF1s("\nGettting Info on %s\r\n",str);
 	  if (flag == 1)
 	    (MissileGCTab_[i].getfonc)(verbose,x1,x2,x3,x4,x5);
 	  else 
@@ -739,12 +776,12 @@ MissileGCGetorSet_(str,flag,verbose,x1,x2,x3,x4,x5)
       else 
 	{ if ( j <= 0)
 	    {
-	      fprintf(stderr,"\nUnknow X operator <%s>",str);
+	      SciF1s("\nUnknow X operator <%s>\r\n",str);
 	      return;
 	    };
 	};
     };
-  fprintf(stderr,"\n Unknow X operator <%s>",str);
+  SciF1s("\n Unknow X operator <%s>\r\n",str);
 };
 
 /*-------------------------------------------------------
@@ -1166,7 +1203,7 @@ drawpolymark_(str,n, vx, vy)
  \encadre{List of Window id}
 -----------------------------------------*/
 
-typedef  struct  {Window  win ;
+typedef  struct  {Window  win,bgwin ;
 		  int     winId;
 		  struct WindowList *next;
 		} WindowList  ;
@@ -1175,33 +1212,41 @@ int windowcount ;
 
 WindowList *The_List_ ;
 
-AddNewWindowToList_(wind,num)
-     Window wind;
+AddNewWindowToList_(wind,bgwind,num)
+     Window wind,bgwind;
      int num;
-{AddNewWindow_(&The_List_,wind,num);};
+{AddNewWindow_(&The_List_,wind,bgwind,num);};
 
-AddNewWindow_(listptr,wind,num)
+AddNewWindow_(listptr,wind,bgwind,num)
      WindowList **listptr;
-     Window     wind;
+     Window     wind,bgwind;
      int num ;
 { 
   if ( num == 0 || *listptr == (WindowList *) NULL)
     {*listptr = (WindowList *) malloc ( sizeof ( WindowList ));
      if ( listptr == 0) 
-       fprintf(stderr,"AddNewWindow_ No More Place ");
+       Scistring("AddNewWindow_ No More Place ");
      else 
        { (*listptr)->win=wind;
+	 (*listptr)->bgwin=bgwind;
 	 (*listptr)->winId = num;
          (*listptr)->next = (struct WindowList *) NULL ;}
    }
   else
-    AddNewWindow_((WindowList **) &((*listptr)->next),wind,num);
+    AddNewWindow_((WindowList **) &((*listptr)->next),wind,bgwind,num);
 };
 
 Window GetWindowNumber_(i)
      int i ;
 { Window GetWin_();
   return( GetWin_(The_List_,Max(0,i)));
+};
+
+
+Window GetBGWindowNumber_(i)
+     int i ;
+{ Window GetBGWin_();
+  return( GetBGWin_(The_List_,Max(0,i)));
 };
 
 Window GetWin_(listptr,i)
@@ -1218,6 +1263,20 @@ Window GetWin_(listptr,i)
     };
 };
 
+Window GetBGWin_(listptr,i)
+     WindowList *listptr;
+     int i; 
+{
+  if (listptr == (WindowList  *) NULL)
+    return((Window ) NULL);
+  else 
+    { if ((listptr->winId) == i)
+	return( listptr->bgwin);
+    else 
+      return((Window )GetBGWin_((WindowList *) listptr->next,i));
+    };
+};
+
 /*--------------------------------------------------------------
   \encadre{Routine for initialisation : string is a display name }
 --------------------------------------------------------------*/
@@ -1230,8 +1289,8 @@ X_error_handler(d, err_ev)
     char            err_msg[MAXERRMSGLEN];
 
     XGetErrorText(dpy, (int) (err_ev->error_code), err_msg, MAXERRMSGLEN - 1);
-    (void) fprintf(stderr,
-           "Scilab : X error trapped - error message follows:\n%s\n", err_msg);
+    (void) SciF1s(
+           "Scilab : X error trapped - error message follows:\n%s\r\n", err_msg);
 }
 
 
@@ -1250,111 +1309,40 @@ set_c(i)
 } ;
 
 
+/** Initialyze the dpy connection and creates graphic windows **/
+
+
 initgraphic_(string)
      char string[];
-{
-  if ( xint_type == 1) 
-    initgraphicI_(string,1);
-  else 
-    initgraphicI_(string,0);
-}
-
-initgraphicI_(string,ii)
-     char string[];
-     int ii;
 { 
   static int EntryCounter = 0;
   GC XCreateGC();
-  char winname[11];
   static int  screen,depth;
   static XEvent event;
-  static Visual visual;
-  static XSetWindowAttributes attributes;
   static XGCValues gcvalues;
+  static Widget toplevel = (Widget) NULL;
   if (EntryCounter == 0)
     {
-      /** This is done only at te first entry */
-      DisplayInit(string,&dpy,&foreground,&background);
+      /** This is done only at the first entry */
+      DisplayInit(string,&dpy,&toplevel);
       if (AllocVectorStorage_()==0) return(0);
       screen =DefaultScreen(dpy);
       root = XRootWindow (dpy, screen); 
       depth = XDefaultDepth (dpy, screen);
-      CreatePatterns_(background,foreground);
       LoadFonts();
+      crosscursor = XCreateFontCursor(dpy, XC_crosshair);
       arrowcursor  = XCreateFontCursor (dpy, 0x2e);
       normalcursor = XCreateFontCursor (dpy, XC_X_cursor);
-      visual.visualid = CopyFromParent;
-      attributes.background_pixel = background;
-      attributes.border_pixel = foreground;
-      attributes.cursor = arrowcursor;
-      attributes.backing_store = Always;
-      attributes.bit_gravity = NorthWestGravity;
-      attributes.event_mask = ExposureMask | KeyPressMask | ButtonPressMask |
-	SubstructureNotifyMask;
       windowcount = 0;
     };
-  sprintf(winname,"BG%d",EntryCounter);
-  if (ii==0)
-    {   Atom	 wmDeleteWindow;
-      /** Explicit creation of a graphic window **/
-      CWindow =
-	 XCreateWindow(dpy, RootWindow(dpy, screen),
-		       20*EntryCounter+20, 20*EntryCounter+20,
-		       600 , 424 , 1, depth , CopyFromParent, &visual,
-		       CWBitGravity | CWEventMask | CWBackPixel |
-		       CWBorderPixel | CWBackingStore 
-		       | CWCursor , &attributes);
-       AddNewWindowToList_(CWindow,EntryCounter);
-       XChangeProperty(dpy, CWindow, XA_WM_NAME, XA_STRING, 8, 
-		       PropModeReplace, winname, 5);
-      /* On ignore les delete envoyes par le Window Manager */
-      wmDeleteWindow = XInternAtom(dpy,"WM_DELETE_WINDOW", False);
-      XSetWMProtocols(dpy,CWindow, &wmDeleteWindow, 1);
-       XMapWindow(dpy ,CWindow);
-       while (1) {
-	 XNextEvent(dpy, &event);
-	 if (event.type == Expose) 
-	   break;
-       }
-     }
-  else
+  CreatePopupWindow(toplevel,&CWindow,&CBGWindow,&foreground,&background);
+  /* SciF2d("[fg,bg]=%d,%d\r\n",foreground,background); */
+  if (EntryCounter == 0)
     {
-      /** Try to find an existing graphic window Managed by xscilab **/
-      CWindow = Find_BG_Window(EntryCounter);
-      if (CWindow == 0)
-	{
-	  Window local;
-	  local = Find_X_Scilab();
-	  if (local !=0)
-	    {
-	      int i;
-      	      /* XScilab exists : I send a message */ 
-	      /* fprintf(stderr,"Message To Scilab\n"); */
-	      SendScilab(local,EntryCounter);
-	      XSync(dpy,0);
-	      /* I try again to find a graphic window */
-	      /* while xcsilab is creating one */
-	      /* there's certainly a better way to do this */
-	      /* I just make a ``for'' while waiting */
-	      for (i=0;(CWindow =Find_BG_Window(EntryCounter))==0 && i<2000
-		          ;i++);
-	      if (CWindow == 0)
-		{
-		  fprintf(stderr,"\nI can't find an Xscilab graphic window\n");
-		  initgraphicI_(string,0);
-		  return(0);
-		};
-	    }
-	  else
-	    {
-	      initgraphicI_(string,0);
-	      return(0);
-	    };
-	};
-      AddNewWindowToList_(CWindow,EntryCounter);
-      MissileXgc.CurWindow =EntryCounter;
-    }
-  MissileXgc.CurWindow = EntryCounter;
+      CreatePatterns_(background,foreground);
+    };
+  AddNewWindowToList_(CWindow,CBGWindow,EntryCounter);
+  MissileXgc.CurWindow =EntryCounter;
   if (EntryCounter == 0)
     {
       /* GC Set: for drawing */
@@ -1368,7 +1356,7 @@ initgraphicI_(string,ii)
       XSetErrorHandler(X_error_handler);
       XSetIOErrorHandler((XIOErrorHandler) X_error_handler);
    }; 
-  EntryCounter= EntryCounter+1;
+  EntryCounter++;
   XSync(dpy,0);
   return(0);
 };
@@ -1518,7 +1506,7 @@ CheckWin(w)
 {
   Window root_ret;
   int x, y;
-  unsigned width= -1, height= -1, bw, depth;
+  unsigned width= -1, height= -1, bw, idepth;
   int (*curh)();
   curh=XSetErrorHandler((XErrorHandler) Ignore_Err);
   if ( setjmp(my_env)) 
@@ -1529,7 +1517,7 @@ CheckWin(w)
     }
   else
     {
-      XGetGeometry (dpy, w, &root_ret, &x, &y, &width, &height, &bw, &depth);
+      XGetGeometry (dpy, w, &root_ret, &x, &y, &width, &height, &bw, &idepth);
       XSync (dpy, 0);
       XSetErrorHandler((XErrorHandler) curh);
       return(1);};
@@ -1714,8 +1702,8 @@ int xsetfont_(fontid,fontsize)
 	}
       else 
 	{
-	  fprintf(stderr," The Font Id %d is not affected \n",i);
-	  fprintf(stderr," use xlfont to set it \n");
+	  SciF1d(" The Font Id %d is not affected \r\n",i);
+	  Scistring(" use xlfont to set it \n");
 	  return;
 	}
     };
@@ -1736,10 +1724,10 @@ int xgetfont_(verbose,font,nargs)
   font[1] =MissileXgc.FontSize ;
   if (*verbose == 1) 
     {
-      fprintf(stderr,"\nFontId : %d --> %s at size %s pts",
-	      MissileXgc.FontId ,
-	      FontInfoTab_[MissileXgc.FontId].fname,
-	      size_[MissileXgc.FontSize]);
+      SciF1d("\nFontId : %d ",	      MissileXgc.FontId );
+      SciF2s("--> %s at size %s pts\r\n",
+	     FontInfoTab_[MissileXgc.FontId].fname,
+	     size_[MissileXgc.FontSize]);
     };
 };
 
@@ -1761,8 +1749,10 @@ xgetmark_(verbose,symb,narg)
   symb[0] = MissileXgc.CurHardSymb ;
   symb[1] = MissileXgc.CurHardSymbSize ;
   if (*verbose == 1) 
-    fprintf(stderr,"\nMark : %d at size %s pts",MissileXgc.CurHardSymb,
-	    size_[MissileXgc.CurHardSymbSize]);
+    {
+      SciF1d("\nMark : %d ",MissileXgc.CurHardSymb);
+      SciF1s("at size %s pts\r\n", size_[MissileXgc.CurHardSymbSize]);
+    };
 };
 
 /** Load in X11 a font at size  08 10 12 14 18 24 **/
@@ -1809,13 +1799,13 @@ loadfamily_(name,j)
 	  if  (FontsList_[*j][i]== NULL)
 	    { 
 	      flag=0;
-	      fprintf(stderr,"\n Unknown font : %s",name1);
-	      fprintf(stderr,"\n I'll use font: fixed ");
+	      SciF1s("\n Unknown font : %s",name1);
+	      Scistring("\n I'll use font: fixed ");
 	      FontsList_[*j][i]=XLoadQueryFont(dpy,"fixed");
 	      if  (FontsList_[*j][i]== NULL)
 		{
-		  fprintf(stderr,"\n Unknown font : %s","fixed");
-		  fprintf(stderr,"\n Please call an X Wizard !");
+		  SciF1s("\n Unknown font : %s\r\n","fixed");
+		  Scistring("Please call an X Wizard !");
 		};
 	    };
 	};
@@ -1841,13 +1831,13 @@ loadfamily_n_(name,j)
       if  (FontsList_[*j][i]== NULL)
 	{ 
 	  flag=0;
-	  fprintf(stderr,"\n Unknown font : %s",name1);
-	  fprintf(stderr,"\n I'll use font: fixed ");
+	  SciF1s("\n Unknown font : %s",name1);
+	  Scistring("\n I'll use font: fixed ");
 	  FontsList_[*j][i]=XLoadQueryFont(dpy,"fixed");
 	  if  (FontsList_[*j][i]== NULL)
 	    {
-	      fprintf(stderr,"\n Unknown font : %s","fixed");
-	      fprintf(stderr,"\n Please call an X Wizard !");
+	      SciF1s("\n Unknown font : %s\r\n","fixed");
+	      Scistring("  Please call an X Wizard !");
 	    };
 	};
     };
@@ -2016,25 +2006,25 @@ int analyze_points_(n, vx, vy,onemore)
     (unsigned)ytop-ybot);
 #endif
   while (1) 
-    { 
+    { int j;
       iib=first_in(n,ideb,vx,vy);
-      if (iib==-1) { 
+      if (iib == -1) { 
 #ifdef DEBUG
-	fprintf(stderr,"[%d,end=%d] polyline out\n",ideb,n);
+	SciF2d("[%d,end=%d] polyline out\r\n",ideb,n);
 	/* all points are out but segments can cross the box */
-	for (j=ideb+1; j < n; j++) My2draw(j,vx,vy);
 #endif 
+	for (j=ideb+1; j < n; j++) My2draw(j,vx,vy);
 	break;}
       iif=first_out(n,iib,vx,vy);
-      if (iif==-1) {
+      if (iif == -1) {
 #ifdef DEBUG
-	fprintf(stderr,"[%d,end=%d] is in\n",iib,n);
+	SciF2d("[%d,end=%d] is in\r\n",iib,n);
 #endif 
 	MyDraw(iib,n-1,vx,vy);
 	break;
       };
 #ifdef DEBUG
-      fprintf(stderr,"Analysed : [%d,%d]\n",iib,iif);
+      SciF2d("Analysed : [%d,%d]\r\n",iib,iif);
 #endif 
       MyDraw(iib,iif,vx,vy);
       ideb=iif;
@@ -2065,12 +2055,13 @@ MyDraw(iib,iif,vx,vy)
   };
 };
 
-My2Draw(j,vx,vy)
+My2draw(j,vx,vy)
      int j,vx[],vy[];
 {
+  /** The segment is out but can cross the box **/
   int vxn[2],vyn[2],flag,npts=2;
   clip_line(vx[j-1],vy[j-1],vx[j],vy[j],&vxn[0],&vyn[0],&vxn[1],&vyn[1],&flag);
-  if (store_points_(npts,vxn,vyn,0));
+  if (flag == 3 && store_points_(npts,vxn,vyn,0));
   {
     XDrawLines (dpy, CWindow, gc, ReturnPoints_(),npts,
 		MissileXgc.CurVectorStyle);
@@ -2099,7 +2090,7 @@ int first_in(n,ideb,vx,vy)
       if (vx[i]>= xleft && vx[i] <= xright  && vy[i] >= ybot && vy[i] <= ytop)
 	{
 #ifdef DEBUG
-	  fprintf(stderr,"first in %d->%d=(%d,%d)\n",ideb,i,vx[i],vy[i]);
+	  SciF4d("first in %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
 #endif
 	  return(i);
 	};
@@ -2123,7 +2114,7 @@ int first_out(n,ideb,vx,vy)
       if ( vx[i]< xleft || vx[i]> xright  || vy[i] < ybot || vy[i] > ytop) 
 	{
 #ifdef DEBUG
-	  fprintf(stderr,"first out %d->%d=(%d,%d)\n",ideb,i,vx[i],vy[i]);
+	  SciF4d("first out %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
 #endif
 	  return(i);
 	};
@@ -2170,7 +2161,8 @@ int clip_line(x1, yy1, x2, y2, x1n, yy1n, x2n, y2n, flag)
     pos1 = clip_point(x1, yy1);
     pos2 = clip_point(x2, y2);
     if (pos1 || pos2) {
-	if (pos1 & pos2) { *flag=0;return;}	  /* segment is totally out. */
+	if (pos1 & pos2) { *flag=0;return;}	  
+	/* segment is totally out. */
 
 	/* Here part of the segment MAy be inside. test the intersection
 	 * of this segment with the 4 boundaries for hopefully 2 intersections
@@ -2247,4 +2239,8 @@ int clip_line(x1, yy1, x2, y2, x1n, yy1n, x2n, y2n, flag)
 	  };
       };
   };
+
+
+
+
 

@@ -44,6 +44,13 @@ for discrete time plant.
 The (instantaneous) cost function is \fV[x' u'] bigQ [x;u]\fR.
 .LP
 The covariance of \fV[w1;w2]\fR is \fVE[w1;w2] [w1',w2'] = bigR\fR 
+.LP
+If \fV[B1;D21]\fR is a factor of \fVbigQ\fR, \fV[C1,D12]\fR
+is a factor of \fVbigR\fR and \fV[A,B2,C2,D22]\fR is
+a realization of P22, then \fVP\fR is a realization of
+\fV[A,[B1,B2],[C1,-C2],[0,D12;D21,D22]\fR.
+The (negative) feedback computed by \fVlqg\fR stabilizes \fVP22\fR.
+
 .SH EXAMPLE
 .nf
 ny=2;nu=3;nx=4;
@@ -52,6 +59,7 @@ bigQ=rand(nx+nu,nx+nu);bigQ=bigQ*bigQ';
 bigR=rand(nx+ny,nx+ny);bigR=BigR*bigR';
 [P,r]=lqg2stan(P22,bigQ,bigR);K=lqg(P,r);  //K=LQG-controller
 spec(H_cl(P,r,K))      //Closed loop should be stable
+lqg2stan(1/(s+2),eye(2,2),eye(2,2))
 .fi
 .SH SEE ALSO
 lqg, lqr, lqe, obscont, h_inf, augment, fstabst

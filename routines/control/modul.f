@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=MODUL,SSI=0
       subroutine modul(neq,zeror,zeroi,zmod)
 c!but
 c     ce sous programme calcule le vecteur des modules d'un vecteur

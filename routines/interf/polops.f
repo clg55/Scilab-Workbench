@@ -12,7 +12,7 @@ c
       integer quote,equal,less,great,insert,extrac
 c
       double precision sr,si,e1,st
-      integer vol,var1(4),var2(4),volr,rhs1,top0,op,iadr,sadr
+      integer vol,var1(4),var2(4),volr,rhs1,top0,op,iadr,sadr,topin
 c
       data plus/45/,minus/46/,star/47/,dstar/58/,slash/48/
       data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
@@ -30,6 +30,7 @@ c
       fun=0
       if(op.eq.dstar) goto 70
 c
+      topin=top
       top0=top+1-rhs
       lw=lstk(top+1)
       rhs1=rhs
@@ -133,7 +134,18 @@ c
       vol=istk(id2+mn2)-1
       call dscal(vol*(it2+1),-1.0d+0,stk(l2r),1)
 c
-   21 if(m1.gt.0) goto 25
+   21 continue
+      if (mn1.eq.0) then
+         vol=(istk(il2+8+mn2)-1)*(it2+1)
+         call icopy(9+mn2,istk(il2),1,istk(il1),1)
+         l1=sadr(il1+9+mn2)
+         call dcopy(vol,stk(l2r),1,stk(l1),1)
+         lstk(top+1)=l1+vol
+         goto 999
+      elseif(mn2.eq.0) then
+         goto 999
+      endif
+      if(m1.gt.0) goto 25
 c a1 est de dimensions indefinies
       istk(il1+1)=m2
       istk(il1+2)=n2
@@ -203,6 +215,20 @@ c a2 est de dimensions indefinies
    27 continue
       goto 31
    30 if(m1.ne.m2.or.n1.ne.n2) then
+         if(m1.eq.1.and.n1.eq.1) then
+         fin=-fin
+         top=topin
+         return
+c         buf='scalar + polynomial matrix --> use ones'
+c         call error(9999)
+         endif
+         if(m2.eq.1.and.n2.eq.1) then
+         fin=-fin
+         top=topin
+         return
+c         buf='polynomial matrix + scalar --> use ones'
+c         call error(9999)
+         endif
          call error(8)
          return
       endif
@@ -310,7 +336,7 @@ c
       id3=iadr(l3r)
       l3r=sadr(id3+m3*n3+1)
       l3i=l3r+vol
-      err=l3i*it3*vol-lstk(bot)
+      err=l3i+it3*vol-lstk(bot)
       if(err.gt.0) then
          call error(17)
          return
@@ -564,7 +590,15 @@ c insert
 c     a(vl,vc)=m  a(v)=u
 c
 c     a(vl,vc)=m  a(v)=u
-  120 rhs=rhs1-2
+  120 continue
+      ili=iadr(lstk(top0-2+rhs1))
+      if (istk(ili+1)*istk(ili+2).eq.0) then
+         rhs=rhs1
+         top=top0-1+rhs1
+         fin=-fin
+         return
+      endif
+      rhs=rhs1-2
       nrow=-1
 c
       top=top-1
@@ -573,6 +607,12 @@ c
          return
       endif
       ilcol=iadr(lstk(top))
+      if(istk(ilcol).eq.4) then
+         rhs=rhs1
+         top=top0-1+rhs1
+         fin=-fin
+         return
+      endif
       if(istk(ilcol).ne.1) then
          call error(21)
          return
@@ -602,6 +642,12 @@ c
       if(rhs.eq.1) goto 125
       top=top-1
       ilrow=iadr(lstk(top))
+      if(istk(ilrow).eq.4) then
+         rhs=rhs1
+         top=top0-1+rhs1
+         fin=-fin
+         return
+      endif
       if(istk(ilrow).ne.1) then
          call error(21)
          return
@@ -702,6 +748,15 @@ c
 c
 c extraction
   130 rhs=rhs1-1
+      if(rhs.eq.2) il2=iadr(lstk(top-1))
+      if(istk(il1).eq.4.or.(rhs.eq.2.and.istk(il2).eq.4)) then
+         rhs=rhs1
+         top=topin
+         fin=-fin
+         top=top0
+         go to 999
+      endif
+
       mr=-1
       nrow=-1
 c

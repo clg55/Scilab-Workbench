@@ -24,7 +24,7 @@ function [Q]=bstap(sl)
   sig=x(r+1:n,r+1:n),
   bb=-inv(s**2*eye-sig*sig)*(sig*b2+s*c2'*dd),
   aa=-(a22+b2*bb')',cc=c2*sig+dd*b2',
-  q=syslin('c',aa,bb,cc,dd),
+  Q=syslin('c',aa,bb,cc,dd),
 
 
 

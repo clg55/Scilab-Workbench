@@ -1,6 +1,6 @@
-void AddMessage(format,a1,a2,a3,a4,a5,a6,a7)
-char *format;
+void AddMessage(description)
+char *description;
 {
-  printf(format,a1,a2,a3,a4,a5,a6,a7);
-  printf("\n");
+/*  printf(description);
+  printf("\n");*/
 }

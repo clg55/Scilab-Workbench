@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=CERR,SSI=0
       subroutine cerr(a,w,ia,n,ndng,m,maxc)
 c!purpose
 c     cerr evaluate the error introduced by pade

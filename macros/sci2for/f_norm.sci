@@ -63,7 +63,7 @@ else
   end
   txt=[txt;t1;
        t+' = 0.0d0';
-       ' do '+tl1+' '+var+' = 0'+','+sousf(mulf(s2(4),s2(5),'1'));
+       ' do '+tl1+' '+var+' = 0'+','+subf(mulf(s2(4),s2(5),'1'));
        indentfor(t2);
        part(tl1+'    ',1:6)+' continue']
   stk=list('('+t+')**(1/'+p+')','0','1','1','1')

@@ -1,14 +1,23 @@
-#define NUMCOLORS 9
+#define NUMCOLORS 18
 
 #define FOREGROUND 0
-#define BLACK      1
-#define BLUE       2
-#define GREEN      3
-#define CYAN       4
-#define RED        5 
-#define MAGENTA    6
-#define YELLOW     7
-#define WHITE      8
+#define BLACK 1
+#define NAVYBLUE 2
+#define BLUE 3
+#define SKYBLUE 4
+#define AQUAMARINE 5
+#define FORESTGREEN 6
+#define GREEN 7
+#define LIGHTCYAN 8
+#define CYAN 9
+#define ORANGE 10
+#define RED 11
+#define MAGENTA 12
+#define VIOLET 13
+#define YELLOW 14
+#define GOLD 15
+#define BEIGE 16
+#define WHITE 17
 
 extern char* colorNames[];
 

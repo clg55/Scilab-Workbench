@@ -1,3 +1,5 @@
+
+
 /***********************************************************************
  * zzledt.c - last line editing routine
  *
@@ -37,12 +39,13 @@
 #define B42UNIX
 #define TERMCAP
 #endif
+#ifdef  __alpha
+#define B42UNIX
+#endif
 
 #include <stdio.h>
 #include <ctype.h>
 #include "../machine.h"
-#define MAX(a, b) (a > b ? a : b)
-
 
 #ifdef B42UNIX
 
@@ -64,6 +67,10 @@ static struct tchars arg1;
 
 static struct termio save_term;
 static struct termio arg;
+#endif
+
+#ifndef MAX
+#define MAX(a, b) (a > b ? a : b)
 #endif
 
 #define EXCL                  0x0021
@@ -102,7 +109,7 @@ static struct termio arg;
 
 static int cbreak_crmod = 1;/* crmod on */
 static int getonce = 1;     /* initialise flag */
-static int fd;              /* file number for standard in */
+static int fd=0;              /* file number for standard in */
 
 #define N_SEQS       6      /* number of special sequences */
 #define MAX_SEQ_LEN  10     /* max chars in special termcap seqs */
@@ -155,7 +162,8 @@ static void strip_blank();
 static int  lines_equal();
 static int  translate();
 static int  search_line_backward(),search_line_forward();
-
+void  set_echo_mode(),set_is_reading();
+int   get_echo_mode();
 /***********************************************************************
  * line editor
  **********************************************************************/
@@ -184,6 +192,8 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
       init_io();
       init_flag = FALSE;
    }
+
+   set_is_reading(TRUE);
 
                             /* if not an interactive terminal */
    if(!tty) {
@@ -412,11 +422,13 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
 	      }
 	      break;
 	    }
-                            /* if this line differs from last line */
-            if(lines_equal(wk_buf, 1) == FALSE) {
-                            /* put in save buffer */
-               save_line(wk_buf);
-            }
+	    if(get_echo_mode()==1)   {
+		/* if this line differs from last line */
+		if(lines_equal(wk_buf, 1) == FALSE) {
+		    /* put in save buffer */
+		    save_line(wk_buf);
+		}
+	    }
             goto exit;
 
 	  case SEARCH_BACKWARD:
@@ -494,57 +506,72 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
 	   }
          }
          while(character_count--) {
-            if(insert_flag) {
-                            /* insert mode, move rest of line right and
-                             * add character at cursor */
-               move_right(&wk_buf[cursor], WK_BUF_SIZE - cursor);
-                            /* bump max cursor but not over buffer
-			     * size */
-               cursor_max = (++cursor_max > WK_BUF_SIZE)
-					      ?WK_BUF_SIZE : cursor_max;
-			    /* if cursor at end of line, backspace so
-			     * that new character overwrites last one */
-	       if(cursor == WK_BUF_SIZE) {
-		  cursor--;
-		  backspace(1);
-	       }
-               wk_buf[cursor] = keystroke;
-               display_string(&wk_buf[cursor]);
-               cursor++;
-               backspace(cursor_max - cursor);
+	     if(get_echo_mode()==0) {
+		 wk_buf[cursor] = keystroke;
+		 cursor++;
+	     }
+	     else {
+		 if(insert_flag) {
+		     /* insert mode, move rest of line right and
+		      * add character at cursor */
+		     move_right(&wk_buf[cursor], WK_BUF_SIZE - cursor);
+		     /* bump max cursor but not over buffer
+		      * size */
+		     cursor_max = (++cursor_max > WK_BUF_SIZE)
+			 ?WK_BUF_SIZE : cursor_max;
+		     /* if cursor at end of line, backspace so
+		      * that new character overwrites last one */
+		     if(cursor == WK_BUF_SIZE) {
+			 cursor--;
+			 backspace(1);
+		     }
+		     wk_buf[cursor] = keystroke;
+		     display_string(&wk_buf[cursor]);
+		     cursor++;
+		     backspace(cursor_max - cursor);
                
-            } 
-            else {
-                            /* overstrike mode */
-	       if(cursor == WK_BUF_SIZE) {
-		  cursor--;
-		  backspace(1);
-	       }
-               wk_buf[cursor] = keystroke;
-               putchar(keystroke);
-               if(cursor < WK_BUF_SIZE - 1) {
-                  cursor++;
-                  cursor_max = MAX(cursor_max, cursor);
-               }
-               else {
-                  backspace(1);
-               }
-            }
+		 } 
+		 else {
+		     /* overstrike mode */
+		     if(cursor == WK_BUF_SIZE) {
+			 cursor--;
+			 backspace(1);
+		     }
+		     wk_buf[cursor] = keystroke;
+		     putchar(keystroke);
+		     if(cursor < WK_BUF_SIZE - 1) {
+			 cursor++;
+			 cursor_max = MAX(cursor_max, cursor);
+		     }
+		     else {
+			 backspace(1);
+		     }
+		 }
+	     }
          }
-      }
+     }
+  }
+
+ exit:
+   /* copy to return buffer */
+   if(get_echo_mode()==0)  
+	   {
+	       *len_line=cursor;
+	       strncpy(buffer,wk_buf,*buf_size);
+	       set_echo_mode(TRUE);
+	       wk_buf[0] = NUL;
+	   }
+   else {
+       strcpy(buffer, wk_buf);
+       *len_line = strlen(wk_buf);
+       putchar('\n');
    }
-
-exit:
-                            /* copy to return buffer */
-   strcpy(buffer, wk_buf);
-   *len_line = strlen(wk_buf);
-
 #ifdef KEYPAD
    set_crmod();
    disable_keypad_mode();
 #endif
-   putchar('\n');
    *eof = FALSE;
+   set_is_reading(FALSE);
    return;
 
 }
@@ -769,7 +796,7 @@ gchar_no_echo()
    extern int ioctl();
                             /* get next character, gotten in cbreak mode
                              * so no wait for <cr> */
-   i = getchar();
+   i = Xorgetchar();
                             /* if more than one character */
    if(i == ESC) {
       /* translate control code sequences to codes over 100 hex */
@@ -792,7 +819,7 @@ set_cbreak()
 
 #ifdef B42UNIX
    arg.sg_flags |= CBREAK;
-   arg.sg_flags &= ~ECHO;
+   arg.sg_flags &= ~ECHO; 
    arg.sg_flags &= ~CRMOD;
    ioctl(fd, TIOCSETN, &arg);
 #endif
@@ -817,6 +844,7 @@ set_cbreak()
  **********************************************************************/
 static void
 set_crmod()
+
 /**********************************************************************/
 {
    extern int ioctl();
@@ -832,7 +860,6 @@ set_crmod()
 #ifdef ATTUNIX
    ioctl(fd, TCSETAW, &save_term);
 #endif
-
    cbreak_crmod = 1;
 
    return;
@@ -870,7 +897,7 @@ int ichar;
       }
                             /* if any sequence not finished yet */
       if(not_done) {
-            ichar = getchar();
+            ichar = Xorgetchar();
       }
       else {
                             /* hopefully at first character */
@@ -898,6 +925,7 @@ init_io()
    extern int ioctl();
 
                             /* check standard for interactive */
+   fd=fileno(stdin);
    tty = isatty(fileno(stdin));
    if (tty == 0) return;
 

@@ -23,6 +23,9 @@ frq
 db,phi
 : row vectors or matrices (modulus, phase)
 .TP 10
+repf
+: row vectors or matrices (complex frequency response)
+.TP 10
 step
 : real
 .TP 10
@@ -31,22 +34,30 @@ comments
 .SH DESCRIPTION
 Black's diagram (Nichols'chart) for a linear system \fVsl\fR.
 \fVsl\fR can be a continuous-time or discrete-time SIMO system (see \fVsyslin\fR).
-In case of multi-output the outputs are plotted with different symbols.
+In case of multi-output the outputs are plotted with different
+symbols.
+
 .LP
 The frequencies are given by the bounds \fVfmin,fmax\fR (in Hz) or by a row-vector
 (or a matrix for multi-output) \fVfrq\fR.
+
 .LP
 \fVstep\fR is the ( logarithmic ) discretization step. (see \fVcalfrq\fR for the
 choice of default value).
+
 .LP
 \fVcomments \fR is a vector of character strings (captions).
+
 .LP
 \fVdb,phi\fR are the matrices of modulus (in Db) and phases (in degrees). 
 (One row for each response).
+
 .LP
 \fVrepf \fR matrix of complex numbers. One row for each response.
+
 .LP
 To plot the grid of iso-gain and iso-phase of \fVy/(1+y)\fR use \fVchart()\fR.
+
 .LP
 Default values for \fVfmin\fR and \fVfmax\fR are
 \fV1.d-3\fR, \fV1.d+3\fR if \fVsl\fR is continuous-time

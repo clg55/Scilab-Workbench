@@ -12,10 +12,10 @@ case 2 then
   if s2(4)=='1'&s2(5)=='1'&s1(4)=='1'&s1(5)=='1'then
     stk=list('min('+s1(1)+','+s2(1)+')','0',s2(3),'1','1')
   else
-    warning('mini a 2 arguments matriciels non implante')
+    warning('mini with 2 matrix args: not implemented')
   end
 else
-  warning('mini a plus de 2 arguments  non implante')
+  warning('mini with more tha 2 args: not implemented')
 end
 //end
 

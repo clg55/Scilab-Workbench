@@ -87,6 +87,14 @@ function [xxu,yyu,zzu]=wheelgf(n,t,xu,yu,zu,xx)
 	xx,6,'d','sort',3,4,5);
 //end
 
+function [y]=test_wheel(n,t,x)
+//
+y=x
+[y]=fort('wheel',n,1,'i',t,2,'d',x,3,'d',y,4,'d','sort',4);
+//end
+
+
+
 
 function [xxu,yyu,zzu]=wheelgs(n,t,xu,yu,zu,xx)
 // slower version without dynamic link 

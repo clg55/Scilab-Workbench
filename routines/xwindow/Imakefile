@@ -1,6 +1,8 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
-OBJS= inix.o dialog.o message.o choose.o mdialog.o string.o testfrac.o
+OBJS=   dialog.o message.o choose.o mdialog.o string.o testfrac.o \
+	matdialog.o idialog.o
 
 SRCS=$(OBJS:.o=.c)
 

@@ -9,14 +9,17 @@ c     ======================================================================
       integer semi,equal,eol,blank,comma,less,great,name
       integer r,r1
       logical eqid,istrue,ok,first,eptover
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
       data semi/43/,equal/50/,eol/99/,blank/40/
       data comma/52/,less/59/,great/60/,name/1/
-      data do/673716237,673720360/, else/236721422,673720360/
-      data ennd/671946510,673720360/, for/672864271,673720360/
-      data iff/673713938,673720360/, retu/505220635,673720360/
-      data thenn/386797853,673720360/, while/353505568,673720334/
-      data cas/236718604,673720360/, sel/236260892,673717516/
-      data elsif/236721422,673713938/
+      data do/673716237,nz1*673720360/, else/236721422,nz1*673720360/
+      data ennd/671946510,nz1*673720360/, for/672864271,nz1*673720360/
+      data iff/673713938,nz1*673720360/, retu/505220635,nz1*673720360/
+      data thenn/386797853,nz1*673720360/
+      data while/353505568,673720334,nz2*673720360/
+      data cas/236718604,nz1*673720360/
+      data sel/236260892,673717516,nz2*673720360/
+      data elsif/236721422,673713938,nz2*673720360/
 c     
       r = -fin-10
       fin = 0
@@ -107,7 +110,7 @@ c     fin for
       return
 c     
 c     while  if  select/case or if/elseif
-c     
+c   
  30   if ( eptover(1,psiz)) return
       call putid(ids(1,pt),syn)
       pstk(pt) = lpt(4)-1

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=JACL2,SSI=0
       subroutine jacl2(neq,t,q,ml,mu,pd,nrowpd)
 c!but
 c     jacl2 cree la matrice  jacobienne necessaire a Lsoda,

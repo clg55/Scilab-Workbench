@@ -1,5 +1,5 @@
 
-#if defined(sun) || defined(mips)
+#if defined(sun) || defined(mips) ||  defined(__alpha) || defined(linux)
 #if defined(__GNUC__) && defined(__STDC__)
 #define C2F(name) name##_
 #define F2C(name) name##_
@@ -14,9 +14,10 @@
 
 #define nint(x) ((int) floor(x)) 
 
-#ifdef sparc 
+#if defined(sparc ) || defined(__alpha)
 #undef nint
 #endif
+
 
 #define exp10(x) pow((double) 10.0,x)
 #ifdef sparc

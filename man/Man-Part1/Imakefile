@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 MW=$(SCIDIR)/man/scripts/makewhatis-dec 
@@ -16,6 +17,14 @@ MW=$(SCIDIR)/man/scripts/makewhatis-hp
 
 #if defined(AIXArchitecture)
 MW=$(SCIDIR)/man/scripts/makewhatis-aix
+#endif
+
+#if defined(AlphaArchitecture)
+MW=$(SCIDIR)/man/scripts/makewhatis-alpha
+#endif
+
+#if defined(LinuxArchitecture)
+MW=echo
 #endif
 
 AllTarget(whatis)

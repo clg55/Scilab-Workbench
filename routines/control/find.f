@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=FIND,SSI=0
       integer function find(lsize,alpha,beta,s,p)
       integer lsize
       double precision alpha,beta,s,p

@@ -11,14 +11,15 @@ function [Bfs,Bis,chis]=glever(E,A,s)
 // F.D. (1988)
 //!
 [LHS,RHS]=argn(0);
- 
-if RHS=2 then s=poly(0,'s'),else s=poly(0,s);end
+if RHS==1 then [E,A]=pen2ea(E),s=poly(0,'s');end 
+if RHS==2 then s=poly(0,'s'),end;
+if RHS==3 then s=poly(0,s);end
 [Si,Pi,Di,index]=penlaur(E,A);
 k=round(sum(diag(Si*E)));
 
 a0=1;
 B=Si;
-SiAsi=Si*A*Si;
+SiASi=Si*A*Si;
 chis=a0+0*s;
 Bfs=Si+0*s*Si;
  

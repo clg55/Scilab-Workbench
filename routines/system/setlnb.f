@@ -6,7 +6,7 @@ c     =======================================================
       logical ilog,compil
       if(err1.gt.0) return
       call whatln(lpt(1),lpt(2),lpt(6),nct,idebut,ifin)
-      ilog=compil(1,16,lct(8)-nct,0,0,0)
+      ilog=compil(16,lct(8)-nct,0,0,0)
       return
       end
 

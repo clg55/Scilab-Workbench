@@ -9,8 +9,6 @@
 #include "metawin.h"
 #include "graphics.h"
 
-#define STRLEN 1000
-
 static int okFlag;
 static char str[256];
 static Widget dialog;
@@ -25,20 +23,17 @@ caddr_t callData;
   okFlag = 1;
 }
 
-int MetanetDialog(valueinit,result,format,a1,a2,a3,a4,a5,a6,a7)
-char *valueinit, *result, *format;
+int MetanetDialog(valueinit,result,description)
+char *valueinit, *result, *description;
 {
   XEvent event;
   Arg args[10];
   int iargs = 0;
   Widget shell, box;
   XtCallbackRec callbacks[2];
-  char description[STRLEN];
   XWindowAttributes war;
   int h,w;
   
-  sprintf(description,format,a1,a2,a3,a4,a5,a6,a7);
-
   callbacks[1].callback = NULL;
   callbacks[1].closure = NULL;
 
@@ -60,7 +55,7 @@ char *valueinit, *result, *format;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
   dialog = XtCreateManagedWidget("dialog",dialogWidgetClass,box,args,iargs);
 
-  callbacks[0].callback = DialogOk;
+  callbacks[0].callback = (XtCallbackProc)DialogOk;
   callbacks[0].closure = (caddr_t)shell;
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, "ok" ); iargs++;

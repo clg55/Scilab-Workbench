@@ -82,7 +82,7 @@ char *valueinit[], *result[], *description[], *label;
 				      box,args,iargs);
   }
 
-  callbacks[0].callback = DialogsOk;
+  callbacks[0].callback = (XtCallbackProc)DialogsOk;
   callbacks[0].closure = (caddr_t)shell;
 
   iargs = 0;

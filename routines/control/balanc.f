@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=BALANC,SSI=0
       subroutine balanc(nm,n,a,low,igh,scale)
 c
       integer i,j,k,l,m,n,jj,nm,igh,low,iexc

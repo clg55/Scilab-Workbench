@@ -11,6 +11,8 @@ c
       logical logops,ok,iflag,istrue,ptover,cremat,getsimat,cresmat,
      $     vcopyobj,ilog
       integer p,lr,nlr,lcc
+      logical sevents
+      external sevents
       common /basbrk/ iflag
       data equal/50/,less/54/,great/55/
 c     
@@ -33,16 +35,16 @@ c
 c     debut d'une macro compilee
  01   continue
       toperr=top
-      k=lpt(1)-15
+      k=lpt(1)-(13+nsiz)
       lc=lin(k+7)
 c     
  10   if(err.gt.0) return
-      if(err1.ne.0) then
-        if(err2.eq.0) err2=err1
-        err1=0
-        imode=abs(errct/10000)
-        if(imode-4*int(imode/4).eq.2) iflag=.true.
-      endif
+c$$$      if(err1.ne.0) then
+c$$$        if(err2.eq.0) err2=err1
+c$$$        err1=0
+c$$$        imode=abs(errct/10000)
+c$$$        if(imode-4*int(imode/4).eq.2) iflag=.true.
+c$$$      endif
       if(iflag) then
          iflag=.false.
          goto 91
@@ -172,6 +174,10 @@ c
       call nextj(istk(l0-nsiz),pstk(pt))
       if(pstk(pt).ne.0) then
          lct(8)=ids(2,pt)
+         if(sevents()) then
+            fun=99
+            return
+         endif 
          goto 10
       endif
 c     fin for
@@ -303,6 +309,10 @@ c
          ids(1,pt)=l0
          ids(2,pt)=nc
          rstk(pt)=616
+         if(sevents()) then
+            fun=99
+            return
+         endif 
          goto 10
       else
          if(istk(pstk(pt)).eq.9) goto 62
@@ -341,6 +351,10 @@ c     *call* macro
       goto 70
 c     
  70   continue
+      if(sevents()) then
+         fun=99
+         return
+      endif 
       r=rstk(pt)-610
       goto(74,71,72,73,73,73) ,r
       goto 10
@@ -399,6 +413,10 @@ c     pause
       pstk(pt)=rio
       rio=rte
       fin=2
+      if(lct(4).le.-10) then
+         fin=-1
+         lct(4)=-lct(4)-11 
+      endif
       ids(1,pt)=lc
       ids(2,pt)=top
       rstk(pt)=604
@@ -409,6 +427,7 @@ c     *call* macro
       top=ids(2,pt)
       rio=pstk(pt)
       pt=pt-1
+      call stsync(1)
       goto 70
 c     
 c     break
@@ -442,7 +461,7 @@ c     abort
  101  pt=pt-1
       if(pt.eq.0) goto 102
       if(int(rstk(pt)/100).eq.5) then
-         k = lpt(1) - 15
+         k = lpt(1) - (13+nsiz)
          lpt(1) = lin(k+1)
          lpt(2) = lin(k+2)
          lpt(3) = lin(k+3)
@@ -460,13 +479,24 @@ c     abort
       return
 c
  105  continue
+
 c     eol
+c     la gestion de la recuperation des erreurs devrait plutot se trouver
+c     a la fin de l'instruction (mais il n'y a pas actuellement d'indicateur
+c     de fin d'instruction dans les macros
+      if(err1.ne.0) then
+        if(err2.eq.0) err2=err1
+        err1=0
+        imode=abs(errct/10000)
+        if(imode-4*int(imode/4).eq.2) iflag=.true.
+      endif
+
 c     gestion des points d'arrets dynamiques
       if(wmac.ne.0) then
          do 106 ibpt=lgptrs(wmac),lgptrs(wmac+1)-1
             if(lct(8).eq.bptlg(ibpt)) then
-               call cvname(macnms(1,wmac),buf(1:8),1)
-               write(buf(10:15),'(i5)') lct(8)
+               call cvname(macnms(1,wmac),buf(1:nlgh),1)
+               write(buf(nlgh+2:nlgh+7),'(i5)') lct(8)
                call msgs(32,0)
                iflag=.true.
                goto 107
@@ -477,6 +507,11 @@ c     gestion des points d'arrets dynamiques
 c
       lct(8)=lct(8)+1
       lc=lc+1
+      if(sevents()) then
+         fun=99
+         return
+      endif 
+      
       goto 10
 c     
 c     set line number. Au debut de chaque expression liee a un then et a 

@@ -1,6 +1,6 @@
 function [A,B,C,D]=abcd(sl)
 // Retrieves [A,B,C,D] matrices from linear system sl
-if type(Sl)<>15 then
+if type(sl)<>15 then
   error('abcd: invalid input')
   return;
 end

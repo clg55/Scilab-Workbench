@@ -1,3 +1,4 @@
+include ../../../Path.incl
 #include "../../../Imake.incl"
 
 # Use makefile.msc if you are compiling with MS-DOS

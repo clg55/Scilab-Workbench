@@ -9,10 +9,10 @@ if s2(4)<>s2(5)|(s2(4)=='1'&s2(5)=='1') then
   if it2==0 then
     [stk,nwrk,txt,top]=f_gener(nam,nwrk)
   else
-     error(nam+' d''un argument complexe non traduit')
+     error(nam+' complex : not implemented')
   end
 else
-  error(nam+'d''une matrice carre non traduit')
+  error(nam+' not square matrix')
 end
 //end
 

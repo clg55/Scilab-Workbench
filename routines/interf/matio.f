@@ -18,6 +18,9 @@ c
       logical opened
       integer iadr,sadr
       character bu1*(bsiz),bu2*(bsiz)
+c
+      logical sciv1,first
+      common /compat/ sciv1,first
 c     
       save opened,lunit,job,icomp
 c     
@@ -40,32 +43,22 @@ c
       if(rstk(pt).eq.903) goto 24
       if(rstk(pt).eq.904) goto 57
 c     
-      if(rhs.le.0 .and. fin.ne.10) then
-         call error(39)
-         return
-      endif
-c     
 c     functions/fin
 c     
 c     load read  getf exec lib   diary save write print mac  deff rat
 c     1    2     3    4     5     6    7     8     9    10   11   12
-c     file hosts readb writb execstr
-c     13   14    15    16     17
+c     file hosts readb writb execstr  disp  getpid getenv
+c     13   14    15    16     17      18     19     20
 c     
-      if(rhs.le.0) then
-         call error(39)
-         return
-      endif
-      lw=lstk(top+1)
-      il=iadr(lstk(top))
 c     
- 15   il=iadr(lstk(top))
       goto ( 35,120, 55, 20,130, 27, 30, 60, 25, 160,
-     +     50, 45,140,170,190,180,23),fin
+     +     50, 45,140,170,190,180,23,200,205,210,170),fin
 c     
 c     exec
  20   continue
-      if(rhs.gt.2) then
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
+      if(rhs.gt.2.or.rhs.lt.1) then
          call error(42)
          return
       endif
@@ -132,6 +125,16 @@ c     *call*  macro
 c     
 c     execstr
  23   continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
+      if(rhs.ne.1) then
+         call error(39)
+         return
+      endif
+      if(lhs.gt.1) then
+         call error(41)
+         return
+      endif
       if(istk(il).ne.10) then 
          err=1
          call error(55)
@@ -167,6 +170,8 @@ c     *call*  macro
 c     
 c     print
  25   continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.le.1) then
          call error(42)
          return
@@ -225,6 +230,8 @@ c
 c     
 c     diary
  27   continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.gt.1) then
          call error(42)
          return
@@ -278,6 +285,8 @@ c     save
 c     ----
 c     
  30   continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.lt.1) then
          call error(42)
          return
@@ -337,6 +346,8 @@ c
 c     
 c     load
  35   continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.lt.1) then
          call error(42)
          return
@@ -377,6 +388,9 @@ c     opening file
          return
       endif
 c     
+      sciv1=.false.
+      first=.true.
+
       if(rhs.gt.1) goto 40
  36   job = lstk(bot) - lstk(top)
       id(1)=blank
@@ -406,18 +420,7 @@ c
          endif
          lc=il+5+istk(il+1)*istk(il+2)
          nc=min(nlgh,istk(il+5)-1)
-         do 41 i=1,nlgh
-            id(i)=blank
- 41      continue
-         do 42 i=1,nc
-            id(i)=abs(istk(lc-1+i))
- 42      continue
-         h(1)=0
-         h(2)=0
-         do 43 i=1,nlgh/2
-            h(1)=256*h(1)+id(nlgh/2+1-i)
-            h(2)=256*h(2)+id(nlgh+1-i)
- 43      continue
+         call namstr(h,istk(lc),nc,0)
          call savlod(lunit,h,job,top)
          if(istk(il).eq.0) goto 39
          call stackp(h,1)
@@ -428,6 +431,8 @@ c
 c     
 c     rat
  45   continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.ne.1) then
          call error(42)
          return
@@ -486,6 +491,8 @@ c
 c     
 c     deff
  50   continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.ne.2) then
          call error(42)
          return
@@ -505,6 +512,8 @@ c     deff
 c     
 c     getf
  55   continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.gt.2) then
          call error(42)
          return
@@ -599,6 +608,8 @@ c     write formatte
 c     --------------
 c     
  60   continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.gt.4.or.rhs.lt.2) then
          call error(42)
          return
@@ -774,8 +785,8 @@ c     ecriture des chaines de caracteres
             if(lunit.ne.wte) then
 c     fichier format libre
                if(fin.gt.0) then
-                  do 73 i1=1,m,80
-                     i2=min(m,i1+79)
+                  do 73 i1=1,m,lch
+                     i2=min(m,i1+lch-1)
                      m1=i2-i1+1
                      call cvstr(m1,istk(lm),chaine(1:m1),1)
                      write(lunit,*,err=139) chaine(1:m1)
@@ -832,6 +843,8 @@ c     read formatte
 c--------------
 c     
  120  continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.gt.5.or.rhs.lt.3) then
          call error(39)
          return
@@ -1108,7 +1121,10 @@ c     nombre de ligne a lire precise
 
 c     
 c     lib
- 130  if(rhs.ne.1) then
+ 130  continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
+      if(rhs.ne.1) then
          call error(42)
          return
       endif
@@ -1169,8 +1185,11 @@ c     tri dans l'ordre alphabetique
       il=iln
       il1=il
       do 133 i=1,m
-         ic=mod(istk(il),256)
-         if(ic.eq.percen) ic=mod(istk(il)-ic,256*256)/256
+         call namstr(istk(il),id,nn,1)
+         ic=id(1)
+         if(ic.eq.percen) then
+            ic=abs(id(2))
+         endif
          ic=ic-9
          istk(ilc+ic)=istk(ilc+ic)+1
          istk(il1)=ic
@@ -1203,6 +1222,8 @@ c
 c     filemgr
 c     
  140  continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(lhs.ne.1) then
          call error(41)
          return
@@ -1342,6 +1363,8 @@ c
 c     host  (appel du system hote)
 c     
  170  continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(rhs.ne.1) then
          call error(42)
          return
@@ -1384,6 +1407,8 @@ c     write binaire
 c     -------------
 c     
  180  continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(lhs.gt.1) then
          call error(41)
          return
@@ -1460,6 +1485,8 @@ c     read binaire
 c     ------------
 c     
  190  continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
       if(lhs.ne.1) then
          call error(42)
          return
@@ -1599,7 +1626,107 @@ c
       lstk(top+1)=l+m*n
       if(.not.opened) call clunit(-lunit,buf,mode)
       goto 999
+c
+c     disp
+c     ----
+ 200  continue
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
+      if(rhs.lt.1) then
+         call error(42)
+         return
+      endif
+      if(lhs.gt.1) then
+         call error(41)
+         return
+      endif
+      id(1)=0
+      do 201 i=1,rhs
+         call print(id,top)
+         top=top-1
+ 201  continue
+      top=top+1
+      il=iadr(lstk(top))
+      istk(il)=0
+      lstk(top+1)=lstk(top)+1
+
+      go to 999
+
 c     
+c     getpid get process id 
+ 205  continue
+      if(lhs.ne.1) then
+         call error(42)
+         return
+      endif
+      if(rhs.ge.1) then
+         call error(39)
+         return
+      endif
+      top=top+1
+      il=iadr(lstk(top))
+      l=sadr(il+4)
+      err=l+1-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      istk(il)=1
+      istk(il+1)=1
+      istk(il+2)=1
+      istk(il+3)=0
+      call getpidc(idp)
+      stk(l)=idp
+      lstk(top+1)=l+1
+      goto 999
+c
+c     getenv
+
+ 210  continue
+      if(rhs.ne.1) then
+         call error(42)
+         return
+      endif
+      if(lhs.gt.1) then
+         call error(41)
+         return
+      endif
+      lw=lstk(top+1)
+      il=iadr(lstk(top))
+
+      if(istk(il).ne.10) then
+         err=1
+         call error(55)
+         return
+      endif
+      if(istk(il+1)*istk(il+2).ne.1) then
+         err=1
+         call error(89)
+         return
+      endif
+      ilf=il+6
+      lc=istk(il+5)-istk(il+4)
+      if (lc.gt.0) call cvstr(lc,istk(ilf),buf,1)
+      call getenvc(ierr,buf(1:lc)//char(0),buf)
+      if(ierr.ne.0) then
+         buf='Undefined environment variable'
+         call error(999)
+         return
+      endif
+      ls=0
+ 211  ls=ls+1
+      if(buf(ls:ls).ne.char(0).and.ls.lt.bsiz) goto 211
+      ls=ls-1
+      if(ls.gt.0) then
+         call cvstr(ls,istk(ilf),buf,0)
+         istk(il+5)=istk(il+4)+ls
+         lstk(top+1)=sadr(il+6+ls)
+      else
+         istk(il)=0
+         lstk(top+1)=lstk(top)+1
+      endif
+      goto 999
+
 
 c     --------------
 c     erreur lecture

@@ -6,6 +6,10 @@ typedef int node_type;
 #define SOURCE 2
 
 #define LOOP 1000
+#define HIDDEN -9999
+
+#define MAXARCS 21
+#define ERRTYPE -9999
 
 #define MAXNAM 80
 
@@ -18,6 +22,9 @@ typedef struct nodedef {
   node_type type;
   int x, y;
   int col;
+  int diam;
+  int border;
+  int fontSize;
   int hilited;
 } node, *nodeptr;
 
@@ -44,6 +51,9 @@ typedef struct arcdef {
   int x0, y0, x1, y1, x2, y2, x3, y3, xmax, ymax, xa0, ya0,
   xa1, ya1, xa2, ya2, xa3, ya3;
   int col;
+  int width;
+  int hiWidth;
+  int fontSize;
   int hilited;
 } arc, *arcptr;
  
@@ -71,6 +81,11 @@ typedef struct graphdef {
   node **nodeArray;
   char **nameEdgeArray;
   char **nameNodeArray;
+  int nodeDiam;
+  int nodeBorder;
+  int arcWidth;
+  int arcHiWidth;
+  int fontSize;
 } graph;
 
 extern void DestroyGraph();
@@ -103,3 +118,11 @@ typedef struct GG {
 
 extern GG theGG;
 extern graph *theGraph;
+
+#define NodeDiam(n) ((n->diam) ? (n->diam) : (theGraph->nodeDiam))
+#define NodeBorder(n) ((n->border) ? (n->border) : (theGraph->nodeBorder))
+#define NodeFontSize(n) ((n->fontSize) ? (n->fontSize) : (theGraph->fontSize))
+
+#define ArcWidth(a) ((a->width) ? (a->width) : (theGraph->arcWidth))
+#define ArcHiWidth(a) ((a->hiWidth) ? (a->hiWidth) : (theGraph->arcHiWidth))
+#define ArcFontSize(n) ((a->fontSize) ? (a->fontSize) : (theGraph->fontSize))

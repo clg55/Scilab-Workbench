@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DSVDC,SSI=0
       subroutine dsvdc(x,ldx,n,p,s,e,u,ldu,v,ldv,work,job,info)
       integer ldx,n,p,ldu,ldv,job,info
       double precision x(ldx,*),s(*),e(*),u(ldu,*),v(ldv,*),work(*)

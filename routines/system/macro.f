@@ -5,13 +5,12 @@ c
       double precision val
       integer equal,eol
       logical eqid,ptover
-      integer blank,r,ival(2),ptr,top1,count,iadr,sadr
+      integer blank,r,ival(2),ptr,top1,count,iadr
       equivalence (ival(1),val)
       data blank/40/,equal/50/,eol/99/
       
 c
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
 c
       r=rstk(pt)
       if (ddt .eq. 4) then
@@ -39,12 +38,12 @@ c
          l=ilk+5+istk(ilk+1)*istk(ilk+2)
          last=isiz-4
          if(macr.ne.0.or.paus.ne.0) then
-            k=lpt(1)-15
+            k=lpt(1)-(13+nsiz)
             last=lin(k+5)
          endif
       else
-         if(nmacs.ge.0) then
-            wmac=0
+         wmac=0
+         if(nmacs.gt.0) then
             do 15 im=1,nmacs
                if(eqid(ids(1,pt),macnms(1,im))) then
                   wmac=im
@@ -84,8 +83,8 @@ c     set input variable name
       endif
 c     save line pointers
       k = lpt(6)
-      if(k+15.gt.lsiz) then
-         call error(26)
+      if(k+13+nsiz.gt.lsiz) then
+         call error(108)
          return
       endif
       lin(k+1) = lpt(1)
@@ -100,10 +99,9 @@ c     save line pointers
       lin(k+9) = ival(2)
       lin(k+10)=char1
       lin(k+11)=sym
-      lin(k+12)=syn(1)
-      lin(k+13)=syn(2)
-      lin(k+14)=lct(8)
-      lpt(1) = k + 15
+      call putid(lin(k+12),syn)
+      lin(k+12+nsiz)=lct(8)
+      lpt(1) = k + 13+nsiz
 c     
       if ( ptover(1,psiz-1)) return
       ids(1,pt) = rhs
@@ -151,13 +149,12 @@ c
 c     fin de l'execution d'une macro
 c-----------------------------------
 c     restaure  pointers
-      k = lpt(1) - 15
+      k = lpt(1) - (13+nsiz)
       ilk=lin(k+6)
       char1=lin(k+10)
       sym=lin(k+11)
-      syn(1)=lin(k+12)
-      syn(2)=lin(k+13)
-      lct(8)=lin(k+14)
+      call putid(syn,lin(k+12))
+      lct(8)=lin(k+12+nsiz)
 c     
       lhsr=lhs
 c     
@@ -212,7 +209,7 @@ c     dans les macros compilees
             do 44 i=1,lhsr
                call stackp(istk(lc),0)
                if(err.gt.0) return
-               lc=lc+3
+               lc=lc+nsiz+1
  44         continue
          else
 c     dans les macros non compilees
@@ -264,7 +261,7 @@ c
 c     exec
  50   continue
       k = lpt(6)
-      if(k+15.gt.lsiz) then
+      if(k+13+nsiz.gt.lsiz) then
          call error(26)
          return
       endif
@@ -273,7 +270,7 @@ c     exec
       lin(k+3) = lpt(3)
       lin(k+4) = lpt(4)
       lin(k+5) = isiz-4
-      if(macr.ge.1) lin(k+5)=lin(lpt(1)-10)
+      if(macr.ge.1) lin(k+5)=lin(lpt(1)-(8+nsiz))
       if(rio.eq.rte) lin(k+5)=bot
 c     les deux lignes precedentes sont necessaires pour que stackp connaisse
 c     l'environnement de la macro courante
@@ -283,8 +280,9 @@ c     la ligne precedente permet de distinguer si c'est une macro (<>0) ou un
 c     exec (=0) qui est au top level d'execution
       lin(k+10)=char1
       lin(k+11)=sym
-      lin(k+14)=lct(8)
-      lpt(1) = k + 15
+      lin(k+12+nsiz)=lct(8)
+      lpt(1) = k + (13+nsiz)
+      if(lct(4).le.-10) fin=-lct(4)-11
       lct(4) = fin
       if(rio.eq.rte) paus=paus+1
       sym = eol
@@ -298,7 +296,7 @@ c     *call parse*
       go to 99
 c     
 c     fin exec
- 60   k = lpt(1) - 15
+ 60   k = lpt(1) - (13+nsiz)
       lpt(1) = lin(k+1)
       lpt(2) = lin(k+2)
       lpt(3) = lin(k+3)
@@ -307,13 +305,15 @@ c     fin exec
       lpt(6) = k
       char1=lin(k+10)
       sym=lin(k+11)
-      lct(8)=lin(k+14)
+      lct(8)=lin(k+12+nsiz)
       if(rio.eq.rte.and.paus.gt.0) then
          bot=lin(k+5)
          paus=paus-1
+         call stsync(1)
       endif
       wmac=pstk(pt)
       pt=pt-1
+
       go to 99
 c     
  99   continue

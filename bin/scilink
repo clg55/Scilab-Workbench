@@ -9,13 +9,13 @@
 # Ex : scilink C/interf.o C/evol.o 
 # will create a new scilex with routines/default/interf.o replaced by 
 #      C/interf.o
-
-SCI="/usr/wolfgang2/scilab"
+SCI=$1
 export SCI
+shift
 LOCALPOS=`pwd`
 cd $SCI
 make bin/scilex -n > /tmp/SciLink$$
-tail -2 /tmp/SciLink$$ > /tmp/SciLink$$1
+tail -5r /tmp/SciLink$$  | tail -2r > /tmp/SciLink$$1
 sed -e "s+routines/default+\$SD+g"  -e "s+libs+\$SL+g" /tmp/SciLink$$1 > /tmp/SciLink$$2
 for i in $*
 do
@@ -25,19 +25,17 @@ do
   mv /tmp/SciLink$$3 /tmp/SciLink$$2
 done
 echo "#!/bin/sh" > /tmp/SciLink$$3
-echo "SCI=/usr/wolfgang2/scilab" >>  /tmp/SciLink$$3
+echo  SCI=$SCI >>  /tmp/SciLink$$3
 echo "SD=\$SCI/routines/default" >>  /tmp/SciLink$$3
 echo "SL=\$SCI/libs" >>  /tmp/SciLink$$3
 echo "LOCAL=\"$*\"" >>  /tmp/SciLink$$3
-sed -e "s+\$SL+ \$LOCAL \$SL+" -e "s+bin/scilex+scilex+" /tmp/SciLink$$2 >> /tmp/SciLink$$3
+sed -e "s+\$SL+ \$LOCAL \$SL+" -e "s+bin/scilex+scilex+g" /tmp/SciLink$$2 >> /tmp/SciLink$$3
 cd $LOCALPOS
 mv /tmp/SciLink$$3 Script
 chmod +x Script 
 echo "Linking a new Scilab with " $*
 ./Script 
-echo "I've created : scilex and xscilab which uses that scilex"
-sed -e "s+\$SCI/bin/scilex+`pwd`/scilex+" $SCI/bin/xscilab > xscilab 
-chmod +x xscilab 
+echo "I've created : scilex and scilab which uses that scilex"
+sed -e "s+\$SCI/bin/scilex+`pwd`/scilex+g" $SCI/bin/scilab > scilab 
+chmod +x scilab 
 rm -f /tmp/SciLink*
-
-

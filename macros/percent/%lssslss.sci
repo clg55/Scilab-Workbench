@@ -1,4 +1,4 @@
-//[s]=%lssslss(s1,s2)
+function [s]=%lssslss(s1,s2)
 //s=%lssslss(s1,s2) ou s=s1-s2
 // s1 : representation d'etat d'un systeme lineaire
 // s2 : representation d'etat d'un systeme lineaire
@@ -11,6 +11,6 @@
 [n1,n1]=size(a1);[n2,n2]=size(a2);
 a1=[a1,0*ones(n1,n2);0*ones(n2,n1),a2];
 s=list('lss',a1,[b1;-b2],[c1 c2],d1-d2,[x1;x2],dom1)
-//end
+
 
 

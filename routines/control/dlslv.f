@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DLSLV,SSI=0
       subroutine dlslv(a,na,n,b,nb,m,w,rcond,ierr,job)
 c!but
 c      ce sous programme effectue:

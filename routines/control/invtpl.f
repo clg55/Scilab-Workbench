@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=INVTPL,SSI=0
       subroutine invtpl(t,n,m,tm1,ierr)
 c ce sous programme calcule les coefficients de l'inverse d'une matrice
 c de toeplitz triangulaire bande

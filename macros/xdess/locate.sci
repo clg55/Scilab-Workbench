@@ -21,26 +21,26 @@ if rhs<=1,flag=0;end
 if rhs=0;n=-1;end
 
 deff('[]=clearmode(flag)',['modek=xget(''alufunction'')';
-            'xset(''alufunction'',6)';
-            'if flag=1,xpoly(x(1,:),x(2,:),''marks'',0);end';
-            'xset(''alufunction'',modek);';
-            'xset(''mark'',xxx(1),xxx(2))']);
-  
+    'xset(''alufunction'',6)';
+    'if flag=1,xpoly(x(1,:),x(2,:),''marks'',0);end';
+    'xset(''alufunction'',modek);';
+    'xset(''mark'',xxx(1),xxx(2))']);
+
 x=[];
-xxx=xget("mark");
-xset("mark",2,xxx(2));
+xxx=xget('mark');
+xset('mark',2,xxx(2));
 if n >= 0 then 
-               for i=1:n,[i,x1,y1]=xclick();
-                         if flag=1,xpoly(x1,y1,"marks",0);end
-                         x=[x,[x1;y1]];end
-          else while %t, [i,x1,y1]=xclick(), 
-                         if i=0 ,clearmode(flag),return
-                         else if flag=1,xpoly(x1,y1,"marks",0);end
-                                x=[x,[x1;y1]];
-                         end
-               end
-          end
+  for i=1:n,[i,x1,y1]=xclick();
+    if flag=1,xpoly(x1,y1,'marks',0);end
+    x=[x,[x1;y1]];end
+  else while %t, [i,x1,y1]=xclick(), 
+    if i=0 ,clearmode(flag),return
+    else if flag=1,xpoly(x1,y1,'marks',0);end
+    x=[x,[x1;y1]];
+  end
+end
+end
 clearmode(flag);
-//end
+
 
 

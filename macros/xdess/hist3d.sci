@@ -1,6 +1,6 @@
 function []=hist3d(f,labels,view)
 // hist3d() ---> example
-defaults=list(['x','y','z'],[0,%pi/4,%pi/3,xget("white"),2,0.25])
+defaults=list(['x','y','z'],[0,%pi/4,%pi/3,xget('white'),2,0.25])
 smod=0;first=1-smod;
 //gestion de la liste d'appel
 [lhs,rhs]=argn(0),
@@ -14,7 +14,7 @@ case 2 then,
   select type(labels)
     case 10 then view=defaults(2);enable_r=1
     case 1 then view=labels;[labels]=defaults(1);enable_r=0
-    else error('param3d(f,[,legends] [,view])')
+    else error('hist3d(f,[,legends] [,view])')
   end
 end,
 //tests de coherence
@@ -107,7 +107,7 @@ xsel=[1 2 2 1];ysel=[1 1 2 2];
 //boucle de localisation
 //----------------------
 btn=1;
-while 0=0,
+while %t,
   //enveloppe convexe
   all=[1;1].*.([xe(xsel)' ye(ysel)']*[ct cp*st;-st cp*ct]);
   all(:,2)=all(:,2)+sp*[mxf*ones(4,1);mnf*ones(4,1)]
@@ -121,7 +121,7 @@ while 0=0,
   yb=[ymin,ymax]
    if first=1 then
     //definition  de la fenetre
-    plot2d(0,0,0,"010"," ",[xb(1),yb(1),xb(2),yb(2)])
+    plot2d(0,0,0,'010',' ',[xb(1),yb(1),xb(2),yb(2)])
     first=0
   end
   //
@@ -140,7 +140,7 @@ while 0=0,
   if all(i1,2)>all(ir,2) then
      i1=modulo(ir+2,4)+1,
      il=modulo(i1+2,4)+1
-     ib=modulo(Ir,4)+1
+     ib=modulo(ir,4)+1
   else
      i1=modulo(ir,4)+1,
      il=modulo(i1,4)+1
@@ -189,9 +189,9 @@ while 0=0,
       ff(2:2:nc2)=f(l0,:)
  
       zer=find([1 1 1 1]*abs(matrix(ff(ind1)',4,nind/4))<%eps);zer=zer';
-      pat=2*xget("white")+2-view(4);
+      pat=2*xget('white')+2-view(4);
       coul=pat*ones(nind/4,1)
-      pat=2*xget("white")+2-view(5);
+      pat=2*xget('white')+2-view(5);
       coul(zer)=pat*ones(zer)
       xfpolys(matrix(xx(ind1),4,nind/4),..
               matrix(yy(ind1),4,nind/4),coul);
@@ -200,7 +200,7 @@ while 0=0,
       ff(1:2:nc2)=ff(2:2:nc2)
     end,
     //
-    if smod=0 then
+    if smod==0 then
     //trace du triedre visible et des legendes
     xsegs(vis(:,1),vis(:,2));
     for il=1:3

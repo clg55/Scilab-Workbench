@@ -124,7 +124,6 @@ if q>0 then
      for i=1:q,xsegs([i1,x1(i)+i1],[i2,y1(i)+i2]),end,
    end
 // if mini(k)<0 then
-//     dess(55)=3;
 //     for i=1:q,xsegs([i1,x2(i)+i1],[i2,y2(i)+i2]),end,
 // end
 end;

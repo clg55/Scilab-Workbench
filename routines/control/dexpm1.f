@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DEXPM1,SSI=0
       subroutine dexpm1(ia,n,a,ea,iea,w,iw,ierr)
 c
 c!purpose

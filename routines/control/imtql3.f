@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=IMTQL3,SSI=0
       subroutine imtql3(nm,n,d,e,z,ierr,job)
 c
       integer i,j,k,l,m,n,ii,nm,mml,ierr

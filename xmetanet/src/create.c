@@ -6,267 +6,122 @@
 #include "graph.h"
 #include "metio.h"
 
-void CreateGraph(b,bsize)
+#include "libCom.h"
+
+extern double atof();
+
+void CreateGraph(b)
 char *b;
-int bsize;
 {
-  char *name;
-  int lname,lnname,laname;
+  char str[MAXNAM];
   int directed,m,n,ma,mm,*la1,*lp1,*ls1,*la2,*lp2,*ls2,*he,*ta;
   int *ntype,*xnode,*ynode,*ncolor,*acolor; double *demand;
   double *length,*cost,*mincap,*maxcap,*qweight,*qorig,*weight;
-  int dsize,ip,isize,iscoord,s,vint;
+  int dsize,isize,iscoord,s;
   FILE* f;
   char fname[2 * MAXNAM];
   int i;
-  char *nnames,*anames;
+  char *name;
   char **nameEdgeArray,**nameNodeArray;
 
   isize = sizeof(int);
   dsize = sizeof(double);
-  ip = 0;
 
-  s = isize;
-  bcopy(b,(char*)&vint,s);
-  lname = vint;
-  ip += s;
+  strcpy(str,strtok(b,STRINGSEP));
 
-  s = lname + 1;
-  if ((name = (char*)malloc((unsigned)s)) == NULL) {
+  if ((name = (char *)malloc((unsigned)strlen(str) + 1)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return;
   }
-  bcopy(b+ip,name,s);
-  ip += s;
+  strcpy(name,str);
 
   FindGraphNames();
   if (FindInLarray(name,graphNames)) {
-    MetanetAlert("Graph %s already exists",name);
+    sprintf(Description,"Graph %s already exists",name);
+    MetanetAlert(Description);
     return;
   }
 
-  s = isize;
-  bcopy(b+ip,(char*)&vint,s);
-  directed = vint;
-  ip += s;
+  directed = atoi(strtok(NULL,STRINGSEP));
 
-  s = isize;
-  bcopy(b+ip,(char*)&vint,s);
-  m = vint;
-  ip += s;
+  m = atoi(strtok(NULL,STRINGSEP));
 
-  s = isize;
-  bcopy(b+ip,(char*)&vint,s);
-  n = vint;
-  ip += s;
+  n = atoi(strtok(NULL,STRINGSEP));
 
-  s = isize;
-  bcopy(b+ip,(char*)&vint,s);
-  ma = vint;
-  ip += s;
+  ma = atoi(strtok(NULL,STRINGSEP));
 
-  s = isize;
-  bcopy(b+ip,(char*)&vint,s);
-  mm = vint;
-  ip += s;
+  mm = atoi(strtok(NULL,STRINGSEP));
 
   s = isize * m;
-  if ((la1 = (int *)malloc((unsigned)s)) == NULL) {
+  if ((la1 = (int *)malloc(s)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return;
   }
-  bcopy(b+ip,(char*)la1,s);
-  ip += s;
-  
+  for (i = 0; i < m; i++) {
+    la1[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
   s = isize * (n + 1);
-  if ((lp1 = (int *)malloc((unsigned)s)) == NULL) {
+  if ((lp1 = (int *)malloc(s)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return;
   }
-  bcopy(b+ip,(char*)lp1,s);
-  ip += s;
-  
+  for (i = 0; i < n + 1; i++) {
+    lp1[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
   s = isize * m;
-  if ((ls1 = (int *)malloc((unsigned)s)) == NULL) {
+  if ((ls1 = (int *)malloc(s)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return;
   }
-  bcopy(b+ip,(char*)ls1,s);
-  ip += s;
-  
+  for (i = 0; i < m; i++) {
+    ls1[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
   s = isize * mm;
-  if ((la2 = (int *)malloc((unsigned)s)) == NULL) {
+  if ((la2 = (int *)malloc(s)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return;
   }
-  bcopy(b+ip,(char*)la2,s);
-  ip += s;
-  
+  for (i = 0; i < mm; i++) {
+    la2[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
   s = isize * (n + 1);
-  if ((lp2 = (int *)malloc((unsigned)s)) == NULL) {
+  if ((lp2 = (int *)malloc(s)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return;
   }
-  bcopy(b+ip,(char*)lp2,s);
-  ip += s;
-  
+   for (i = 0; i < n + 1; i++) {
+    lp2[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
   s = isize * mm;
-  if ((ls2 = (int *)malloc((unsigned)s)) == NULL) {
+  if ((ls2 = (int *)malloc(s)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return;
   }
-  bcopy(b+ip,(char*)ls2,s);
-  ip += s;
+   for (i = 0; i < mm; i++) {
+    ls2[i] = atoi(strtok(NULL,STRINGSEP));
+  }
 
   s = isize * ma;
-  if ((he = (int *)malloc((unsigned)s)) == NULL) {
+  if ((he = (int *)malloc(s)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return;
   }
-  bcopy(b+ip,(char*)he,s);
-  ip += s;
+   for (i = 0; i < ma; i++) {
+    he[i] = atoi(strtok(NULL,STRINGSEP));
+  }
 
   s = isize * ma;
-  if ((ta = (int *)malloc((unsigned)s)) == NULL) {
+  if ((ta = (int *)malloc(s)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return;
   }
-  bcopy(b+ip,(char*)ta,s);
-  ip += s;
-
-  s = isize;
-  bcopy(b+ip,(char*)&vint,s);
-  lnname = vint;
-  ip += s;
-
-  s = lnname;
-  if ((nnames = (char *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,nnames,s);
-  ip += s;
-
-  s = isize * n;
-  if ((ntype = (int *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)ntype,s);
-  ip += s;
-
-  s = isize * n;
-  if ((xnode = (int *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)xnode,s);
-  ip += s;
-
-  s = isize * n;
-  if ((ynode = (int *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)ynode,s);
-  ip += s;
-
-  s = isize * n;
-  if ((ncolor = (int *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)ncolor,s);
-  ip += s;
-
-  s = dsize * n;
-  if ((demand = (double *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)demand,s);
-  ip += s;
-
-  s = isize;
-  bcopy(b+ip,(char*)&vint,s);
-  laname = vint;
-  ip += s;
-
-  s = laname;
-  if ((anames = (char *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,anames,s);
-  ip += s;
-
-  s = isize * ma;
-  if ((acolor = (int *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)acolor,s);
-  ip += s;
-
-  s = dsize * ma;
-  if ((length = (double *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)length,s);
-  ip += s;
-
-  s = dsize * ma;
-  if ((cost = (double *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)cost,s);
-  ip += s;
-
-  s = dsize * ma;
-  if ((mincap = (double *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)mincap,s);
-  ip += s;
-
-  s = dsize * ma;
-  if ((maxcap = (double *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)maxcap,s);
-  ip += s;
-
-  s = dsize * ma;
-  if ((qweight = (double *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)qweight,s);
-  ip += s;
-
-  s = dsize * ma;
-  if ((qorig = (double *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)qorig,s);
-  ip += s;
-
-  s = dsize * ma;
-  if ((weight = (double *)malloc((unsigned)s)) == NULL) {
-    fprintf(stderr,"Running out of memory\n");
-    return;
-  }
-  bcopy(b+ip,(char*)weight,s);
-  ip += s;
-
-  if (ip != bsize) {
-    MetanetAlert("Internal error: bad graph size");
-    return;
+   for (i = 0; i < ma; i++) {
+    ta[i] = atoi(strtok(NULL,STRINGSEP));
   }
 
   if ((nameNodeArray = 
@@ -275,8 +130,58 @@ int bsize;
     return;
   }
   for (i = 1; i <= n; i++) {
-    nameNodeArray[i] = nnames;
-    while (*nnames++ != '\0') {}
+    strcpy(str,strtok(NULL,STRINGSEP));
+    if ((nameNodeArray[i] = (char *)malloc((unsigned)strlen(str) + 1)) 
+	== NULL) {
+      fprintf(stderr,"Running out of memory\n");
+    return;
+    }
+    strcpy(nameNodeArray[i],str);
+  }
+
+  s = isize * n;
+  if ((ntype = (int *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < n; i++) {
+    ntype[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
+  s = isize * n;
+  if ((xnode = (int *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < n; i++) {
+    xnode[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
+  s = isize * n;
+  if ((ynode = (int *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < n; i++) {
+    ynode[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
+  s = isize * n;
+  if ((ncolor = (int *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < n; i++) {
+    ncolor[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
+  s = dsize * n;
+  if ((demand = (double *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < n; i++) {
+    demand[i] = atof(strtok(NULL,STRINGSEP));
   }
 
   if ((nameEdgeArray = 
@@ -285,8 +190,85 @@ int bsize;
     return;
   }
   for (i = 1; i <= ma; i++) {
-    nameEdgeArray[i] = anames;
-    while (*anames++ != '\0') {}
+    strcpy(str,strtok(NULL,STRINGSEP));
+    if ((nameEdgeArray[i] = (char *)malloc((unsigned)strlen(str) + 1)) 
+	== NULL) {
+      fprintf(stderr,"Running out of memory\n");
+    return;
+    }
+    strcpy(nameEdgeArray[i],str);
+  }
+  
+  s = isize * ma;
+  if ((acolor = (int *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < ma; i++) {
+    acolor[i] = atoi(strtok(NULL,STRINGSEP));
+  }
+
+  s = dsize * ma;
+  if ((length = (double *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < ma; i++) {
+    length[i] = atof(strtok(NULL,STRINGSEP));
+  }
+
+  s = dsize * ma;
+  if ((cost = (double *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < ma; i++) {
+    cost[i] = atof(strtok(NULL,STRINGSEP));
+  }
+
+  s = dsize * ma;
+  if ((mincap = (double *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < ma; i++) {
+    mincap[i] = atof(strtok(NULL,STRINGSEP));
+  }
+
+  s = dsize * ma;
+  if ((maxcap = (double *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < ma; i++) {
+    maxcap[i] = atof(strtok(NULL,STRINGSEP));
+  }
+
+  s = dsize * ma;
+  if ((qweight = (double *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < ma; i++) {
+    qweight[i] = atof(strtok(NULL,STRINGSEP));
+  }
+
+  s = dsize * ma;
+  if ((qorig = (double *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < ma; i++) {
+    qorig[i] = atof(strtok(NULL,STRINGSEP));
+  }
+
+  s = dsize * ma;
+  if ((weight = (double *)malloc(s)) == NULL) {
+    fprintf(stderr,"Running out of memory\n");
+    return;
+  }
+   for (i = 0; i < ma; i++) {
+    weight[i] = atof(strtok(NULL,STRINGSEP));
   }
 
   strcpy(fname,datanet);
@@ -294,8 +276,14 @@ int bsize;
   strcat(fname,name);
   strcat(fname,".graph");
   f = fopen(fname,"w");
+  if (f == NULL) {
+    sprintf(Description,
+	    "Unable to write file in directory %s\nCheck access",datanet);
+    MetanetAlert(Description);
+    return;
+  }
 
-  fprintf(f,"GRAPH TYPE (0 = UNDIRECTED, 1 = DIRECTED) :\n");
+  fprintf(f,"GRAPH TYPE (0 = UNDIRECTED, 1 = DIRECTED), DEFAULTS (NODE DIAMETER, NODE BORDER, ARC WIDTH, HILITED ARC WIDTH, FONTSIZE):\n");
   fprintf(f,"%d\n",directed);
   if (directed) {
     fprintf(f,"NUMBER OF ARCS :\n");
@@ -310,11 +298,11 @@ int bsize;
   fprintf(f,"****************************************\n");
   if (directed) {
     fprintf(f,"DESCRIPTION OF ARCS :\n");
-    fprintf(f,"ARC NAME, TAIL NODE NAME, HEAD NODE NAME, COLOR\n");
+    fprintf(f,"ARC NAME, TAIL NODE NAME, HEAD NODE NAME, COLOR, WIDTH, HIWIDTH, FONTSIZE\n");
   }
   else {
     fprintf(f,"DESCRIPTION OF EDGES :\n");
-    fprintf(f,"EDGE NAME, NODE NAME, NODE NAME, COLOR\n");
+    fprintf(f,"EDGE NAME, NODE NAME, NODE NAME, COLOR, WIDTH, HIWIDTH, FONTSIZE\n");
   }
   fprintf
     (f,"COST, MIN CAP, MAX CAP, LENGTH, Q WEIGHT, Q ORIGIN, WEIGHT\n");
@@ -329,7 +317,7 @@ int bsize;
   fprintf(f,"****************************************\n");
   fprintf(f,"DESCRIPTION OF NODES :\n");
   fprintf(f,"NODE NAME, POSSIBLE TYPE (1 = SINK, 2 = SOURCE)\n");
-  fprintf(f,"X, Y, COLOR\n");
+  fprintf(f,"X, Y, COLOR, DIAMETER, BORDER, FONTSIZE\n");
   fprintf(f,"DEMAND\n");
   fprintf(f,"\n");
   iscoord = 0;
@@ -352,7 +340,8 @@ int bsize;
 
   fclose(f);
   
-  AddMessage("Graph %s saved\n",name);
+  sprintf(Description,"Graph %s saved\n",name);
+  AddMessage(Description);
 
   free((char*)name); free((char*)la1); free((char*)lp1); free((char*)ls1); 
   free((char*)la2); free((char*)lp2); free((char*)ls2); free((char*)he); 

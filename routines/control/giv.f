@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=GIV,SSI=0
       subroutine giv(sa,sb,sc,ss)
       double precision sa,sb,sc,ss
 c!purpose

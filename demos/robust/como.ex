@@ -13,7 +13,7 @@ r=[1 1];
 
 H(:,2)=H(:,2)*(s+1);
 
-[sk,mu]=H_inf(H,r,0,1,20);
+[sk,mu]=h_inf(H,r,0,1,20);
 
 //transform back
 
@@ -30,7 +30,7 @@ H=[(1+sqrt(2)*s+s**2)/(s*s) 1/(s*s);
 
 r=[1 1];
 
-//[sk,mu]=H_inf(H,r,0,1,20);
+//[sk,mu]=h_inf(H,r,0,1,20);
 
 //compare (185) in como notes
 
@@ -47,7 +47,7 @@ r=[1 1];
 // divide 2nd column of h by (s+2) for properness
 H(:,2)=H(:,2)/(s+2);
 
-//[sk,mu]=H_inf(H,r,0,1,30);
+//[sk,mu]=h_inf(H,r,0,1,30);
 
 // Remove parasitic root introduced above :
 //vv=roots(sk(2))   //vv(2) = -2 approximately 
@@ -67,13 +67,13 @@ H=[(s+1)/s 1/s;
 
 r=[1 1];
 
-//[sk,mu]=H_inf(H,r,0,1,20);
+//[sk,mu]=h_inf(H,r,0,1,20);
 
 //sk=clean(sk,0,0.00001);
 
 //compare (228)
 
-[sk,mu]=H_inf(H,r,0,10,20);
+[sk,mu]=h_inf(H,r,0,10,20);
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -85,7 +85,7 @@ H=[(s*s+sqrt(2)*s+1)/(s*s) 1/(s*s);
 
 r=[1 1];
 
-//[sk,mu]=H_inf(H,r,0,10,20);
+//[sk,mu]=h_inf(H,r,0,10,20);
 
 //compare (422) which is misprinted !
 
@@ -101,7 +101,7 @@ H=[-(1+s/4)/(1+2*s) (s+1)/(s-2) 0 1/(s-2) 0;
 
 r=[2 2];
 
-//[Sk,mu]=H_inf(H,r,0,1,30);
+//[Sk,mu]=h_inf(H,r,0,1,30);
 
 //compare (33) in Matlab report 
 
@@ -115,7 +115,7 @@ G=[(1+s*sqrt(2)+s*s)/(s*s) 1/(s*s);
 
 r=[1,1]
 
-//[sk,mu]=H_inf(G,r,0,1,20)
+//[sk,mu]=h_inf(G,r,0,1,20)
 
 //compare (25) in Matlab report
 
@@ -130,7 +130,7 @@ G=[(1+2*s+2*s*s+s**3)/(s**3) 1/(s**3);
   (1+2*s+2*s*s+s**3)/(s**3) 1/(s**3)]
 
 r=[1 1];
-//[sk,mu]=H_inf(G,r,0,1,20)
+//[sk,mu]=h_inf(G,r,0,1,20)
 
 //compare (27) in Matlab report
 
@@ -149,7 +149,7 @@ k=((s-2)*(s-3))/((s+2)*(s+3))
 
 G(1,:)=k*G(1,:)
 
-[sk,mu]=H_inf(G,r,0,5,20)
+[sk,mu]=h_inf(G,r,0,5,20)
 
 //compare (42) in Matlab report
 
@@ -177,7 +177,7 @@ G(1:2,:)=H*G(1:2,:);
 
 //Stabilizability and detectability assumptions are now verified
 
-[sk,mu]=H_inf(G,r,0,1,30);
+[sk,mu]=h_inf(G,r,0,1,30);
 
 // the parasitic (?) root -83.60 (Kwakernaak) or -84.53 (Francis) is not
 // in the poles of sk :
@@ -196,7 +196,7 @@ G=[(s+1)/s 0 1/s 0;
 
 r=[2 2]
 
-[sk,mu]=H_inf(G,r,0,1,30);
+[sk,mu]=h_inf(G,r,0,1,30);
 
 sk=clean(sk,1.d-6)
 
@@ -224,7 +224,7 @@ r=[1 1];
 
 p=syslin('c',a,b,c,d);
 
-//[sk,mu]=H_inf(P,r,0,10,20);
+//[sk,mu]=h_inf(P,r,0,10,20);
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -302,7 +302,7 @@ Dp=[D1,-D*Dt;
 
 P=syslin('c',Ap,Bp,Cp,Dp);
 
-[sk,mu]=H_inf(P,r,0,1,30);
+[sk,mu]=h_inf(P,r,0,1,30);
 
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -341,10 +341,10 @@ P12=Pss(1:2,2);P21=Pss(3,1);P22=Pss(3,2);
 sl=p21;
 sm=[s*eye-sl(2),sl(3);sl(4),-sl(5)];
 detr(sm)       //Poles of G --> Transmission zeros of P21
-[sk,mu]=H_inf(P,r,0,1,20);   //Fails
+[sk,mu]=h_inf(P,r,0,1,20);   //Fails
 
 Ptmp=P;fil=(1+s*s)/(1+s)/(1+s);Ptmp(:,2)=Ptmp(:,2)*fil;
-[sk,mu]=H_inf(Ptmp,r,0,1,10);    //---> sk=0 mu=1 OK
+[sk,mu]=h_inf(Ptmp,r,0,1,10);    //---> sk=0 mu=1 OK
 
 // Random example...
 
@@ -385,10 +385,10 @@ D=[D11,D12;D21,D22];
 
 P=syslin('c',A,B,C,D);
 
-[K,mu]=H_inf(P,r,0,10,20);
+[K,mu]=h_inf(P,r,0,10,20);
 
 //    Difficult example gamma between 1.6 and 1.8
-// H_inf finds 1.671244...  and
+// h_inf finds 1.671244...  and
 // K=[(9.7574+0.2790*s)/(0.023419+s), 0.1346]
 // with P1=minreal(P) (state dimension 5 instead of 8 for P)
 // get same gamma but a controller of order (4,3)
@@ -413,7 +413,7 @@ A=W(1:8,1:8);B=W(1:8,9:14);C=W(9:13,1:8);D=W(9:13,9:14);
 P=syslin('c',A,B,C,D);
 r=[2,1];
 
-[K,mu]=H_inf(P,r,0,1,40);
+[K,mu]=h_inf(P,r,0,1,40);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -447,7 +447,7 @@ Gss=syslin('c',AGss,BGss,CGss,DGss);
 r=[1,1];
 [a,b1,b2,c1,c2,d11,d12,d21,d22]=smga(Gss,r);
 
-[K,mu]=H_inf(Gss,r,0,100,20);
+[K,mu]=h_inf(Gss,r,0,100,20);
 
 ////////////SERE
 s=poly(0,'s')

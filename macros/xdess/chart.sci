@@ -48,17 +48,18 @@ end;
 //
 //phase
 
-eps=100*%eps
+eps=100*%eps;
 for teta=angl,
-  if teta<-%pi/2 then
+  if teta < -%pi/2 then
     last=teta-eps,
   else
     last=teta+eps,
   end;
   w=[-170*ratio:0.03:last last]'
   n=prod(size(w));
-  k=sin(teta)/cos(teta)
-  module=real(20*log((sin(w)-k*cos(w))/k)/l10)
+  k=sin(teta)/cos(teta)//
+  //module=real(20*log((sin(w)-k*cos(w))/k)/l10)
+  module=real(20*log((sin(w)/k-cos(w)))/l10)
   w=w/ratio
   plot2d([w,-360*ones(w)-w(n:-1:1)],[module,module(n:-1:1)],[-1,-1],"000");
 end;

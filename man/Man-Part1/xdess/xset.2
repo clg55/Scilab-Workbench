@@ -103,7 +103,6 @@ used by the postscript driver.
 .TP
 xset("wpos",x,y);
 : fixes the position of the upper left point of the graphic window.
-Known trouble : it doesn't work under xscilab.
 .TP
 xset("window",window-number)
 Set the current window to the window \fVwindow-number\fR and creates the window if 
@@ -113,6 +112,12 @@ xset("use color",flag)
 if flag=1 then xset("pattern",.) or xset("dashes",.) will be used so
 as to change the default Color for drawing or for filling patterns. 
 If flag=0 then we switch back to the gray and dashes mode.
+.TP 
+xset("wshow")
+: see the function \fVdriver\fR.
+.TP
+xset("wwpc")
+: see the function \fVdriver\fR.
 .SH SEE ALSO
 X11 documentation
 .SH AUTHOR

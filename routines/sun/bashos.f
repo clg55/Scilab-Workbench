@@ -2,10 +2,9 @@
 c
 c ================================== ( Inria    ) =============
 c
+      include '../stack.h'
       integer    ierr,n,nout
       character  ligne*(*)
-c
-      character*256 cmd
 c
       nout=0
       ierr=0
@@ -15,7 +14,7 @@ c
 
       if (ln.le.0) goto 100
       if(ligne(1:ln).eq.' ') goto 100
-      cmd = ligne(1:ln)//char(0)
-      call systemc( cmd(1:ln) )
+      buf=ligne(1:ln)// char(0)
+      call systemc(buf)
   100 continue
       end

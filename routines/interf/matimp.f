@@ -500,7 +500,7 @@ cc    dassl
 c     
  100  continue
 c     
-c     BASILE function : dassl
+c     SCILAB function : dassl
 c     --------------------------
 c     [y0 [,hotdata]]=dassl(y0,t0,t1 [,atol,rtol],res [,jac],info..
 c     [,hotdata])
@@ -755,7 +755,7 @@ c
             call error(53)
             return
          endif
-         m9 = istk(il9+1)*istk(il9+2)
+         n9 = istk(il9+1)*istk(il9+2)
          lhot = sadr(il9+4)
       elseif(rhs.ne.8-iskip) then
          call error(39)
@@ -796,8 +796,8 @@ C     for the banded finite-difference-generated JACOBIAN case
             call error(89)
             return
          endif
-         lrwork=l9
-         liwork=l9+lrw
+         lrwork=lhot
+         liwork=lhot+lrw
          call entier(liw,stk(liwork),istk(iadr(liwork)))
       endif
       err=lw-lstk(bot)

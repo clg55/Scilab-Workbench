@@ -28,7 +28,6 @@
 #include "Math.h"
 #include "../machine.h"
 
-
 extern char GetDriver_();
 /*------------------------------------------------------------
  - z is a (n1,n2) matrix 
@@ -53,19 +52,18 @@ C2F(xgray)(x,y,z,n1,n2)
   aaint[0]=aaint[2]=2;aaint[1]=aaint[3]=10;
   xmin=x[0];ymin= -y[*n2-1],xmax=x[*n1-1],ymax= -y[0];
   FRect[0]=xmin;FRect[1]= -ymax;FRect[2]=xmax;FRect[3]= -ymin;
-  Scale2D(1,FRect,IRect,&scx,&scy,&xofset,&yofset,&xm,&ym,0,&err);
+  Scale2D(1,FRect,IRect,&scx,&scy,&xofset,&yofset,&xm,&ym,Max((*n1),(*n2)),&err);
   if ( err == 0) return;
   aplot_(IRect,(xmin=FRect[0],&xmin),(ymin=FRect[1],&ymin),
 	 (xmax=FRect[2],&xmax),(ymax=FRect[3],&ymax),
 	 &(aaint[0]),&(aaint[2]),"nn"); 
   /** Drawing the curves **/
-  C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
-      ,IP0,IP0,0,0);
+  C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3],IP0,IP0,0,0);
   for ( j =0 ; j < (*n1) ; j++)	 
-    x[j]= scx*(x[j]-FRect[0])  +xofset;
+    xm[j]= scx*(x[j]-FRect[0])  +xofset;
   for ( j =0 ; j < (*n2) ; j++)	 
-    y[j]= scy*(-y[j]+FRect[3]) +yofset;
-  GraySquare_(x,y,z,*n1,*n2);
+    ym[j]= scy*(-y[j]+FRect[3]) +yofset;
+  GraySquare_(xm,ym,z,*n1,*n2);
   x1=yy1= -1;w1=h1=200000;
   C2F(dr)("xset","clipping",&x1,&yy1,&w1,&h1,IP0,IP0,0,0);
   C2F(dr)("xrect","v",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
@@ -79,7 +77,8 @@ C2F(xgray)(x,y,z,n1,n2)
 -------------------------------------------------------*/
 
 GraySquare_(x,y,z,n1,n2)
-	double x[],y[],z[];
+     int x[],y[];
+     double z[];
      int n1,n2;
 {
   double zmoy,zmax,zmin,zmaxmin;
@@ -95,10 +94,10 @@ GraySquare_(x,y,z,n1,n2)
   for (i = 0 ; i < (n1)-1; i++)
   for (j=0 ; j < (n2)-1 ; j++)
     {
-      xcont[0]=(int)x[i];ycont[0]=(int)y[j];
-      xcont[1]=(int)x[i+1];ycont[1]=(int)y[j];
-      xcont[2]=(int)x[i+1];ycont[2]=(int)y[j+1];
-      xcont[3]=(int)x[i];ycont[3]=(int)y[j+1];
+      xcont[0]=x[i];ycont[0]=y[j];
+      xcont[1]=x[i+1];ycont[1]=y[j];
+      xcont[2]=x[i+1];ycont[2]=y[j+1];
+      xcont[3]=x[i];ycont[3]=y[j+1];
       zmoy=1/4.0*(z[i+n1*j]+z[i+n1*(j+1)]+z[i+1+n1*j]+z[i+1+n1*(j+1)]);
       fill[0]=nint(whiteid*(zmoy-zmin)/(zmaxmin));
       C2F(dr)("xliness","str",xcont,ycont,fill,(ncont=1,&ncont),&cont_size,

@@ -14,7 +14,7 @@ ndeg=maxi(degree(h));
          return
          end
       [Bfs,Bis,chis]=glever(E,A,varn(h));
-      f=bfs/chis - bis;
+      f=Bfs/chis - Bis;
       return;
     end;
 f=eye(n,n);

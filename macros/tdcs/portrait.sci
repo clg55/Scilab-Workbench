@@ -1,82 +1,60 @@
-//[]=portrait(fch,odem,xdim,npts,farrow,pinit)
-//[]=portrait(f,odem,[xdim,npts,farrow,pinit])
-//
-// permet de tracer le portrait de phase du syst\`eme dynamique
-// dx/dt=f(t,x,[u]) ( u est un param\`etre contant )
-// dans le cadre xdim=[xmin,ymin,xmax,ymax]
-// Arguments:
-//    f : le  champ du syst\`eme dynamique
-//       est soit un nom de macro qui calcule la valeur du champ en un point x
-//	     [y]=f(t,x,[u])
-//       soit un object de type liste list(f1,u1) ou f1 est une macro de type
-//        [y]=f1(t,x,u) et u1 est la valeur que l'on veut donner a u
-//       soit une chaine de caract\`ere si le champ de vecteur
-//       est donne par un programme fortran (voir  ode)
-//
-// Dans la forme d'appel par d\'efaut : portrait(fch) les valeurs
-// du cadre  et les pas d'int\'egration sont demand\'es interactivement.
-//
-// Param\`etres optionnels :
-//
-// odem= is the type argument of ode it can be one
-//       of the following character strings
-//                'default' 
-//                'adams'
-//                'stiff'
-//                'rgk'
-//                'discrete'
-//                'roots'
-// npts=[nombre-de-points,pas] ->  sert \`a donner le nombre de points et
-//          le pas pour l'int\'egration num\'erique.
-//
-// xdim=[xmin,ymin,xmax,ymax] -> sert \`a donner le cadre du dessin
-//
-// farrow vaut 't' ou 'f' ( 'f' par defaut ) :
-//  s'il vaut 't' on rajoute des fl\`eches le long des trajectoires
-//
-// enfin on peut donner les points de d\'epart des int\'egrations num\'eriques
-// dans un vecteur : ils ne seront alors pas demand\'ees interactivement
-// pinit -> sert \`a donner des points de d\'epart pour l'int\'egration
-//          ex: pinit = [x0(1), x1(1); x0(2), x1(2)].
-//!
+function []=portrait(fch,odem,xdim,npts,farrow,pinit)
+// phase portrait 
 xselect();
 ncnl=lines();
 lines(0);
 //addtitle(fch);
 [lhs,rhs]=argn(0);
-// appel minimal
+// minimal calling sequence 
 if rhs<=1,odem='default';end
-//Version interactive
+// Interactive version 
 if rhs <= 2,
-  xdim=x_mdialog('Graphic boundaries',...
+  if ~isdef('p_xdim');p_xdim=['-1';'-1';'1';'1'];end
+  p_xdim=x_mdialog('Graphic boundaries',...
             ['xmin';'ymin';'xmax';'ymax'],...
-            ['0';'0';'1';'1']);
-  xdim=evstr(xdim);xdim=xdim';
+            p_xdim);
+  xdim=evstr(p_xdim');
   // Test sur le cadre
   if xdim(3) <= xdim(1),
-  write(%io(2),'Erreur:  xmin ] xmax '),lines(ncnl(1));return,end
+  write(%io(2),'Error:  xmin < xmax '),lines(ncnl(1));return,end
   if xdim(4) <= xdim(2),
-  write(%io(2),'Erreur:  ymin ] ymax '),lines(ncnl(1));return,end
+  write(%io(2),'Error:  ymin < ymax '),lines(ncnl(1));return,end
+end
+res=x_choose(['yes';'no'],'Do you also want to draw the vector field')
+if res==1;
+  if ~isdef('p_nxx');p_nxx=['10';'10'];end;
+  p_nxx=x_mdialog('Number of grid points',...
+            ['Nx';'Ny'],p_nxx);
+  nxx=evstr(p_nxx);
+  nx=maxi(nxx(1),2)
+  ny=maxi(nxx(2),2)
+  nx=(0:(nx-1))/(nx-1)
+  ny=(0:(ny-1))/(ny-1)
+  nx=xdim(1)*(ones(nx)-nx)+xdim(3)*nx;
+  ny=xdim(2)*(ones(ny)-ny)+xdim(4)*ny;
+  fchamp(fch,0,nx,ny);
 end
 plot2d([xdim(1);xdim(1);xdim(3)],[xdim(2);xdim(4);xdim(4)])
 if rhs<=3,
-  npts=x_mdialog('Requested points and step ',...
-            ['n points';'step'],...
-            ['100';'0.1']);
-  npts=evstr(npts);npts=npts';
+  if ~isdef('p_npts');p_npts=['100';'0.1'];end;
+  p_npts=x_mdialog('Requested points and step ',...
+            ['n points';'step'],p_npts);
+  npts=evstr(p_npts');
 end
 ylast=(1/2)*[xdim(3)+xdim(1),xdim(4)+xdim(2)]';
 if rhs<=4,farrow='f';end;
 if rhs<=5
-// Boucle sur les points de depart
+// Loop on Initial points 
   go_on=1
   while go_on=1,
        ftest=1;
        while ftest=1,
 	  n=x_choose(['New initial point';'Continue ode';'Quit'],"Choose ");
 	  n=n-1;
-          if n=-1,go_on=0;lines(ncnl(1));return;end
-          if n=2,go_on=0;lines(ncnl(1));return;end
+          if n=-1,go_on=0;lines(ncnl(1));
+		[p_xdim,p_npts,p_nxx]=resume(p_xdim,p_npts,p_nxx);return;end
+          if n=2,go_on=0;lines(ncnl(1));
+		[p_xdim,p_npts,p_nxx]=resume(p_xdim,p_npts,p_nxx);return;end
 	  if n=0,[i,x,y]=xclick(); x0=[x,y];end;
           if n=1,x0=ylast';end;
           ftest=desorb(odem,x0',npts,fch,farrow,xdim);
@@ -84,18 +62,16 @@ if rhs<=5
        end
   end
 else
-// Version sans poser de question
+// No question mode 
 res=desorb(odem,pinit,npts,fch,farrow,xdim);
 if res=1,write(%io(2),'Points hors du cadre elimines ');end;
 end
 lines(ncnl(1));
+[p_xdim,p_npts,p_nxx]=resume(p_xdim,p_npts,p_nxx);
 //end
 
-
-//[]=addtitle(fch)
-//[]=addtitle(fch)
-// Ajoute des titres pour les portraits de phase des syt\`emes
-// dynamiques des travaux dirig\'es.
+function []=addtitle(fch)
+// Adds know titles 
 //!
 if type(fch)<>11& type(fch)<>13 then return;end;
 if fch=linear,xtitle("Systeme lineaire"," "," ",0);end
@@ -112,17 +88,8 @@ if fch='lcomp',xtitle("Modele de competition linearise observe-comtrole ",...
     "population 1 ","population2 ",0);end
 //end
 
-
-
-//[res]=desorb(odem,x0,n1,fch,farrow,xdim);
-//[res]=desorb(odem,x0,n1,fch,farrow,xdim);
-// Calcule des orbites pour des points de
-// depart donn\'es dans x0 et les dessine
-// v\'erifie que les points de d\'epart sont a l'int\'erieur du
-// cadre. Si l'un des points est a l'exterieur la valeur renvoy\'ee
-// est 1
-// renvoit aussi une valeur dans xlast ( le dernier point de la derniere
-//  trajectoire)
+function [res]=desorb(odem,x0,n1,fch,farrow,xdim);
+// Used by portrait 
 //!
 res=0
 [nn1,n2]=size(x0);
@@ -134,7 +101,7 @@ for i=1:n2,
     if x0(2,i) > xdim(4), ftest=0;end
     if x0(2,i) < xdim(2), ftest=0;end
     if ftest=0;res=1,ylast=x0,else
-       write(%io(2),'Calculs en cours')
+       write(%io(2),'Calling ode')
        if odem='default' then 
         y=ode([x0(1,i);x0(2,i)],0,n1(2)*(0:n1(1)),fch);
        else

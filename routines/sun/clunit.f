@@ -193,7 +193,8 @@ c
 c nom du fichier
 c --------------
 c
-               call cluni0( name, nomfic, k)
+               call cluni0( name, nomfic, k,ierr)
+               if( ierr.ne.0) goto 30
 c
 c open avec status different de scratch sans preciser de droit
 c ------------------------------------------------------------

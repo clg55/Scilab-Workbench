@@ -20,7 +20,7 @@ if typ='1'&s(3)='0' then
     tl1=string(10*lbl);
     var='ilb'+tl1;
     t1=' '+out+'('+addf(pto1,var)+')=dble('+in+'('+addf(pti,var)+'))'
-    txt=[txt;' do '+tl1+' '+var+' = 0,'+sousf(mulf(s(4),s(5)),'1');
+    txt=[txt;' do '+tl1+' '+var+' = 0,'+subf(mulf(s(4),s(5)),'1');
            indentfor(t1);part(tl1+'    ',1:6)+' continue']
 
   end
@@ -42,7 +42,7 @@ elseif typ='0'&s(3)='1' then
     tl1=string(10*lbl);
     var='ilb'+tl1;
     t1=' '+out+'('+addf(pto1,var)+')=int('+in+'('+addf(pti,var)+'))'
-    txt=[txt;' do '+tl1+' '+var+' = 0,'+sousf(mulf(s(4),s(5)),'1');
+    txt=[txt;' do '+tl1+' '+var+' = 0,'+subf(mulf(s(4),s(5)),'1');
            indentfor(t1);part(tl1+'    ',1:6)+' continue']
 
   end

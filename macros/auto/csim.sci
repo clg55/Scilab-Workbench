@@ -51,7 +51,8 @@ select type(u)
     if part(u,1)='i' then
            imp=1;
            if norm(d,1)<>0 then
-               error('direct feedthrough (d) <> 0'),
+               warning('direct feedthrough (d) <> 0;set to zero');
+               d=0*d;
            end;
     end;
     deff('[y]=u(t)',text);comp(u);

@@ -18,6 +18,7 @@ GG theGG;
 char *graphNames[MAXGRAPHS];
 graph *theGraph;
 char datanet[2*MAXNAM];
+char TmpDir[2*MAXNAM];
 double metaScale;
 
 void InitMetanet(name)
@@ -25,18 +26,22 @@ char *name;
 {
   char *env;
 
-  env = getenv("DATANET");
-  if (env == NULL) {
-    env = getenv("SCI");
+  if (strcmp(datanet,"") == 0) {
+    env = getenv("DATANET");
     if (env == NULL) {
-      MetanetAlert("Environment variable SCI or DATANET must be defined\n");
-      exit(1);
+      env = getenv("SCI");
+      if (env == NULL) {
+	sprintf(Description,"Environment variable SCI or DATANET must be defined\n");
+	MetanetAlert(Description);
+	exit(1);
+      }
+      else sprintf(datanet,"%s/xmetanet/data",env);
     }
-    else sprintf(datanet,"%s/xmetanet/data",env);
+    else strcpy(datanet,env);
   }
-  else strcpy(datanet,env);
   if (opendir(datanet) == NULL) {
-    MetanetAlert("Data directory \"%s\" does not exist\nVerify environment variable SCI or DATANET",datanet);
+    sprintf(Description,"Data directory \"%s\" does not exist\nCheck environment variable SCI or DATANET",datanet);
+    MetanetAlert(Description);
     exit(1);
   }
   

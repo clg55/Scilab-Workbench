@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DFRMG,SSI=0
       subroutine dfrmg(job,na,nb,nc,l,m,n,a,b,c,freqr,freqi,
      +                 gr,gi,rcond,w,ipvt)
       integer na,nb,nc,l,m,n,ipvt(n)

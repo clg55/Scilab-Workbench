@@ -449,7 +449,7 @@ c
          endif         
          if(err.gt.0) return
          if(istate.lt.0) then
-            call warn(4)
+            call msgs(4,ierr)
             nn=k-1
             goto 500
          endif

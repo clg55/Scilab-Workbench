@@ -21,22 +21,22 @@ function [Inn,X,Gbar]=rowinout(G)
 // X is lxl and X (-s) X(s) = Identity (all-pass property).
 //
 flag='ss';if G(1)='r' then flag='tf';G=tf2ss(G);end
-       [rows,cols]=size(G);
-       [A,B,C,D]=abcd(G);
-       sqD=inv(sqrt(D'*D));
-       //----------------
-       [w,rt]=rowcomp(d);
-       Dorto=w(rt+1:rows,:)';
-       // Inner factor:
-       //-------------
-       [F,Xc]=lqr(G);
-       Af=A+B*F;Cf=C+D*F;
-       Inn=syslin('c',Af,[B*sqD,-pinv(Xc)*C'*Dorto],Cf,[D*sqD,Dorto]);
-       X=invsysli(Inn);
-       //----------------------------
-       // Outer factor:
-       Gbar=invsysli(syslin('c',Af,B*sqD,F,sqD));
-if flag='tf' then Inner=ss2tf(Inner);Gbar=ss2tf(Gbar);X=ss2tf(X);end;
+[rows,cols]=size(G);
+[A,B,C,D]=abcd(G);
+sqD=inv(sqrt(D'*D));
+//----------------
+[w,rt]=rowcomp(D);
+Dorto=w(rt+1:rows,:)';
+// Inner factor:
+//-------------
+[F,Xc]=lqr(G);
+Af=A+B*F;Cf=C+D*F;
+Inn=syslin('c',Af,[B*sqD,-pinv(Xc)*C'*Dorto],Cf,[D*sqD,Dorto]);
+X=invsyslin(Inn);
+//----------------------------
+// Outer factor:
+Gbar=invsyslin(syslin('c',Af,B*sqD,F,sqD));
+if flag='tf' then Inner=ss2tf(Inner);Gbar=ss2tf(Gbar);X=ss2tf(X);end
 
 
 

@@ -1,8 +1,9 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 NAME=optlib
 NAM=optim
 
-MACROS= linpro.sci karmarkar.sci       
+MACROS= linpro.sci quapro.sci karmarkar.sci       
 
 
 OBJ=$(MACROS:.sci=.bin)

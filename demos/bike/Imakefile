@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 #if defined(SparcArchitecture)
@@ -17,36 +18,26 @@ simul	:	$(OBJS)
 
 control :	$(OBJC)
 
+/** Warning : don't put white spaces before source names  in the following rules **/
 
-/tmp/constr.o : constr.f
-	$(FC) $(FFLAGS) $(FPL) -c constr.f -o /tmp/constr.o
+ObjectDemo(/tmp/constr.o,constr.f,$(FPL))
 
-/tmp/gjx.o : gjx.f
-	$(FC) $(FFLAGS) $(FPL) -c gjx.f -o /tmp/gjx.o
+ObjectDemo(/tmp/gjx.o,gjx.f,$(FPL))
 
-/tmp/h.o : h.f
-	$(FC) $(FFLAGS) $(FPL) -c h.f -o /tmp/h.o
+ObjectDemo(/tmp/h.o,h.f,$(FPL))
 
-/tmp/ii.o : ii.f
-	$(FC) $(FFLAGS) $(FPL) -c ii.f -o /tmp/ii.o
+ObjectDemo(/tmp/ii.o,ii.f,$(FPL))
 
+ObjectDemo(/tmp/vecfin.o,vecfin.f,$(FPL))
 
-/tmp/vecfin.o : vecfin.f
-	$(FC) $(FFLAGS) $(FPL) -c vecfin.f -o /tmp/vecfin.o
+ObjectDemo(/tmp/hamu.o,hamu.f,$(FPL))
 
-/tmp/hamu.o : hamu.f
-	$(FC) $(FFLAGS) $(FPL) -c hamu.f -o /tmp/hamu.o
+ObjectDemo(/tmp/emat.o,emat.f,$(FPL))
 
-/tmp/emat.o : emat.f
-	$(FC) $(FFLAGS) $(FPL) -c emat.f -o /tmp/emat.o
+ObjectDemo(/tmp/fvec.o,fvec.f,$(FPL))
 
-/tmp/fvec.o : fvec.f
-	$(FC) $(FFLAGS) $(FPL) -c fvec.f -o /tmp/fvec.o
+ObjectDemo(/tmp/c.o,c.f,$(FPL))
 
-/tmp/c.o : c.f
-	$(FC) $(FFLAGS) $(FPL) -c c.f -o /tmp/c.o
-
-/tmp/psi.o : psi.f
-	$(FC) $(FFLAGS) $(FPL) -c psi.f -o /tmp/psi.o
+ObjectDemo(/tmp/psi.o,psi.f,$(FPL))
 
 

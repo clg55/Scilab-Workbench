@@ -1,4 +1,4 @@
-function [A,U]=hermit(A)
+function [a,u]=hermit(a)
 //[A,U]=hermit(A)
 //Hermite form: U is an unimodular matrix such that A*U is
 //triangular. The output value of A is A*U.

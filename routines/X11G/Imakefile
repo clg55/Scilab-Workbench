@@ -1,21 +1,23 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 OBJS = periX11.o periPos.o periFig.o Xcall.o Xcall1.o\
 	Contour.o Plo3d.o Math.o Axes.o Champ.o Plo2d.o \
 	Plo2d1.o Plo2d2.o Plo2d3.o Plo2d4.o Plo2dEch.o Rec.o Gray.o \
-	Alloc.o Color.o
+	Alloc.o FeC.o SGraph.o SGraphPix.o Xloop.o xwidgets.o periPix.o \
+	asynchron.o
 
 SRCS=$(OBJS:.o=.c)
 
 LibraryTarget($(PATHO)/X11G.a,$(OBJS))
 DependTarget()
 
+IM=../../Imake.incl
 
-#define IHaveSubdirs
-#define PassCDebugFlags 'CDEBUGFLAGS=$(CDEBUGFLAGS)'
+ScriptsTarget(version.h,version.g,$(IM))
 
-SUBDIRS = XGraphic-test
+periX11.o: version.h
 
-NamedMakeSubdirs(test,$(SUBDIRS))
-DependSubdirs($(SUBDIRS))
-DistCleanSubdirs($(SUBDIRS))
+
+
+

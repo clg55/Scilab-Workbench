@@ -41,14 +41,14 @@ void AutomaticName ()
     UndirectedAutomaticName();
     return;
   }
-  if (MetanetYesOrNo
-      ("Do you REALLY want to use internal numbers for nodes and arcs names ?")) {
-    if (MetanetYesOrNo
-	("Possibly old existing names will be DEFINITIVELY lost. Ok ?")) {
-
+  sprintf(Description,"Do you REALLY want to use internal numbers for nodes and arcs names ?");
+  if (MetanetYesOrNo(Description)) {
+    sprintf(Description,"Possibly old existing names will be DEFINITIVELY lost. Ok ?");
+    if (MetanetYesOrNo(Description)) {
       RenumberGraph(theGraph);
-      AddMessage("Graph %s renumbered\n",theGraph->name);
-
+      sprintf(Description,"Graph %s renumbered\n",theGraph->name);
+      AddMessage(Description);
+	  
       MakeArraysGraph(theGraph);
 
       p = theGraph->arcs->first;
@@ -88,11 +88,12 @@ void UndirectedAutomaticName ()
   arc *a; node *n;
   char str[MAXNAM];
 
-  if (MetanetYesOrNo
-      ("Do you REALLY want to use internal numbers for nodes and arcs names ?")) {
+  sprintf(Description,"Do you REALLY want to use internal numbers for nodes and arcs names ?");
+  if (MetanetYesOrNo(Description)) {
 
     RenumberGraph(theGraph);
-    AddMessage("Graph %s renumbered\n",theGraph->name);
+    sprintf(Description,"Graph %s renumbered\n",theGraph->name);
+    AddMessage(Description);
 
     MakeArraysGraph(theGraph);
 
@@ -137,15 +138,18 @@ arc *a;
   char *p;
   int n;
 
-  MetanetDialog("",str,"New name for highlighted arc %s",
-		a->name);
+  sprintf(Description,"New name for highlighted arc %s",a->name);
+  if (a->name == 0) MetanetDialog("",str,Description);
+  else MetanetDialog(a->name,str,Description);
   p = str;
   while (*p != '\0') {
     if (*p++ == ' ') {
-      MetanetAlert("New arc name must not contain white space");
+      sprintf(Description,"New arc name must not contain white space");
+      MetanetAlert(Description);
       return;
     }
   }
+  if (a->name != 0 && !strcmp(a->name,str)) return;
   ChangeArcName(a,str);
 }
 
@@ -171,8 +175,9 @@ char *str;
     if (indic == 1) {
       /* str is already the name of another arc */
       HiliteArc(aa);
-      MetanetAlert
-	("%s is already the name of another highlighted arc",str);
+      sprintf(Description,"%s is already the name of another highlighted arc",
+	      str);
+      MetanetAlert(Description);
       UnhiliteArc(aa);
     }
     else {
@@ -230,15 +235,18 @@ node *nod;
   char *p;
   int n;
   
-  MetanetDialog("",str,
-		"New name for highlighted node %s",nod->name);
+  sprintf(Description,"New name for highlighted node %s",nod->name);
+  if (nod->name == 0) MetanetDialog("",str,Description);
+  else MetanetDialog(nod->name,str,Description);
   p = str;
   while (*p != '\0') {
     if (*p++ == ' ') {
-      MetanetAlert("New node name must not contain white space");
+      sprintf(Description,"New node name must not contain white space");
+      MetanetAlert(Description);
       return;
     }
   }
+  if (nod->name != 0 && !strcmp(nod->name,str)) return;
   ChangeNodeName(nod,str);
 }
 
@@ -263,7 +271,9 @@ char *str;
   if (indic == 1) {
     /* n is already the name of another node */
     HiliteNode(nn);
-    MetanetAlert("%s is already the name of another highlighted node",str);
+    sprintf(Description,"%s is already the name of another highlighted node",
+	    str);
+    MetanetAlert(Description);
     UnhiliteNode(nn);
   }
   else {

@@ -631,7 +631,7 @@ as illustrated in Figure~\ref{f3.2}.
 %
 \begin{figure}[tb]
 \center{
-\begin{picture}(200,300)
+\begin{picture}(200,300)(0,-60)
 
 \put(180,270){\framebox(0,0){\tt s1*s2}}
 \put(9,270){\circle{2}}
@@ -660,7 +660,7 @@ as illustrated in Figure~\ref{f3.2}.
 \put(125,220){\vector(1,0){15}}
 \put(141,220){\circle{2}}
 
-\put(180,140){\framebox(0,0){\tt [s1,s2]}}
+\put(180,140){\framebox(0,0){\tt [s1 , s2]}}
 \put(49,160){\circle{2}}
 \put(49,120){\circle{2}}
 \put(50,120){\vector(1,0){20}}
@@ -676,7 +676,7 @@ as illustrated in Figure~\ref{f3.2}.
 \put(125,140){\vector(1,0){15}}
 \put(141,140){\circle{2}}
 
-\put(180,50){\framebox(0,0){\tt [s1;s2]}}
+\put(180,50){\framebox(0,0){\tt [s1 ; s2]}}
 \put(49,50){\circle{2}}
 \put(50,50){\line(1,0){20}}
 \put(70,50){\circle*{2}}
@@ -690,16 +690,30 @@ as illustrated in Figure~\ref{f3.2}.
 \put(141,30){\circle{2}}
 \put(141,70){\circle{2}}
 
+\put(180,-40){\framebox(0,0){\tt s1 /. s2}}
+\put(69,-20){\circle{2}}
+%\put(50,-40){\line(1,0){20}}
+%\put(70,-40){\circle*{2}}
+\put(70,-60){\line(0,1){40}}
+\put(70,-60){\line(1,0){20}}
+\put(70,-20){\vector(1,0){20}}
+\put(90,-70){\framebox(30,20){$s_2$}}
+\put(90,-30){\framebox(30,20){$s_1$}}
+\put(140,-60){\vector(-1,0){20}}
+\put(120,-20){\line(1,0){20}}
+%\put(141,-60){\circle{2}}
+\put(141,-20){\circle{2}}
+\put(140,-60){\line(0,1){40}}
 \end{picture}
 }
 \caption{Inter-Connection of Linear Systems}
 \label{f3.2}
 \end{figure}
 %
-For each of the four possible inter-connections of two systems
+For each of the possible inter-connections of two systems
 {\tt s1} and {\tt s2} the command which makes the inter-connection
 is shown to the right of the corresponding block diagram in
-Figure~\ref{f3.2}. Feedback interconnection is performed by
+Figure~\ref{f3.2}. Note that feedback interconnection is performed by
 \verb!s1/.s2!. 
 
 	The representation of linear systems can be in state-space

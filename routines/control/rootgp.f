@@ -1,23 +1,24 @@
 C/MEMBR ADD NAME=ROOTGP,SSI=0
-      subroutine rootgp(ngp,gp,nbeta,beta)
+      subroutine rootgp(ngp,gpp,nbeta,beta,ierr,w)
 c
 c
-c     Entree : - gp. est le tableau contenant les coeff du polynome
-c              gp(z) et dont le degre est ngp.
+c     Entree : - gpp. est le tableau contenant les coeff du polynome
+c              gpp(z) et dont le degre est ngp.
 c              - ngp. est le degre de gp(z).
 c
 c     Sortie : - beta. est le tableau contenant les racines du
-c              polynome gp(z) reelles comprises entre -2 et 2.
+c              polynome gpp(z) reelles comprises entre -2 et 2.
 c              - nbeta. est le nombre de ces racines.
 c
 c!
       implicit double precision (a-h,o-z)
-      dimension gp(0:*),beta(0:*),pol(100),zeror(100),zeroi(100)
+      dimension gpp(0:*),beta(0:*),pol(100),zeror(100),zeroi(100)
       logical fail
-      common /arl2c/ info,ierr
+      integer ierr
+      common /arl2c/ info,i1
 c
       do 101 j=0,ngp
-         pol(ngp+1-j)=gp(j)
+         pol(ngp+1-j)=gpp(j)
  101  continue
       call rpoly(pol,ngp,zeror,zeroi,fail)
       nbeta=0

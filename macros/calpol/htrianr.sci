@@ -1,4 +1,4 @@
-function [A,U,rk]=htrianr(a)
+function [A,U,rk]=htrianr(A)
 //[A,U,rk]=htrianr(a)
 //triangularization of polynomial matrix A.  A is [m,n], m<=n.
 //U=right unimodular basis
@@ -7,28 +7,28 @@ function [A,U,rk]=htrianr(a)
 //Warning: there is an elimination of neglectable terms
 //!
 A=clean(A); 
-[m,n]=size(a);u=eye(n,n);
+[m,n]=size(A);U=eye(n,n);
 l1=n+1;
 for l=m:-1:maxi((m-n),1)
  l1=l1-1
  if l1<>0 then
   Al=A(l,1:l1);
   if norm(coeff(Al),1) > 1.d-10 then
-    [pg,ul]=hrmt(Al);
+    [pg,Ul]=hrmt(Al);
     Ul=clean(Ul,1.d-10);
-    a(l,1:l1)=[0*ones(1,l1-1) pg];
-    u(:,1:l1)=u(:,1:l1)*ul;
+    A(l,1:l1)=[0*ones(1,l1-1) pg];
+    U(:,1:l1)=U(:,1:l1)*Ul;
          if l>1 then
-          a(1:l-1,1:l1)=a(1:l-1,1:l1)*ul;
+          A(1:l-1,1:l1)=A(1:l-1,1:l1)*Ul;
          end
   end
  end
 end
 U=clean(U,1.d-10);
-k0=0;k1=0;tol=norm(coeff(a),1);
+k0=0;k1=0;tol=norm(coeff(A),1);
 v=[];w=[];
 for k=1:n
-   if maxi(abs(coeff(a(:,k)))) <= sqrt(%eps)*tol then
+   if maxi(abs(coeff(A(:,k)))) <= sqrt(%eps)*tol then
       k0=k0+1;v=[v,k];                           else
       k1=k1+1,w=[w,k];
    end

@@ -7,13 +7,12 @@ if d0=0 then
    error('infinite gain at zero frequency'),
 end;
 ar0=abs(coeff(n,0)/d0)^2
-//recherche des "pulsations" telles que la derivee
-//du module soit nulle
+//look for  omega such that derivative of magn. is zero
 niw=horner(n,%i*poly(0,'w'));
 diw=horner(d,%i*poly(0,'w'))
 niw=real(niw*conj(niw));diw=real(diw*conj(diw));
-modul_d=derivee(niw/diw);w=roots(modul_d(2));
-//recherche des racines reelles positives ...
+modul_d=derivat(niw/diw);w=roots(modul_d(2));
+//roots >0 
 eps=1.e-7
 fr=[];g=[];for i=w',
         if abs(imag(i))<eps then

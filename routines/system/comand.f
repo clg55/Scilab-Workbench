@@ -10,20 +10,23 @@ c
 c     
       integer     cmdl
       parameter ( cmdl=22 )
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
 c     
       integer cmd(nsiz,cmdl),a,d,e,z,lrecl,blank,name
       integer id(nsiz),ennd(nsiz),sel(nsiz),while(nsiz),for(nsiz)
       integer iff(nsiz)
       integer semi,comma,eol,percen,lparen,count
       logical eqid
-      integer iadr,sadr
+      integer iadr
 c     
       data a/10/,d/13/,e/14/,z/35/
       data eol/99/,semi/43/,comma/52/,lparen/41/
       data blank/40/,name/1/,percen/56/
-      data ennd/671946510,673720360/,sel/236260892,673717516/
-      data while/353505568,673720334/,iff/673713938,673720360/
-      data for/672864271,673720360/
+      data ennd/671946510,nz1*673720360/
+      data sel/236260892,673717516,nz2*673720360/
+      data while/353505568,673720334,nz2*673720360/
+      data iff/673713938,nz1*673720360/
+      data for/672864271,nz1*673720360/
 c     ------command names--------
 c     if        else      for
 c     while     end       select
@@ -35,25 +38,39 @@ c               then      do
 c     apropos   abort     break
 c     elseif
 c     
-      data cmd/
-     $    673713938,673720360, 236721422,673720360, 672864271,673720360,
-     $    353505568,673720334, 671946510,673720360, 236260892,673717516,
-     $    236718604,673720360, 487726618,673720360, 487727374,673720360,
-     $    505220635,673715995, 420810257,673720360, 487199008,673720360,
-     $    672665888,673720360, 
-     $    471730713,673720334, 168695052,673720347, 505155099,673713686,
-     $                         386797853,673720360, 673716237,673720360,
-     $    404429066,672929817, 454560522,673720349, 168696587,673720340,
-     $    236721422,673713938/
+      data ((cmd(i,j),i=1,nsiz),j= 1,10)/
+     $     673713938,nz1*673720360,           
+     $     236721422,nz1*673720360, 
+     $     672864271,nz1*673720360,
+     $     353505568,673720334,nz2*673720360,
+     $     671946510,nz1*673720360, 
+     $     236260892,673717516,nz2*673720360, 
+     $     236718604,nz1*673720360, 
+     $     487726618,nz1*673720360, 
+     $     487727374,nz1*673720360,
+     $     505220635,673715995,nz2*673720360/
+      data ((cmd(i,j),i=1,nsiz),j= 11,20)/
+     $     420810257,nz1*673720360, 
+     $     487199008,nz1*673720360,
+     $     672665888,nz1*673720360, 
+     $     471730713,673720334,nz2*673720360, 
+     $     168695052,673720347,nz2*673720360, 
+     $     505155099,673713686,nz2*673720360,
+     $     386797853,nz1*673720360, 
+     $     673716237,nz1*673720360,
+     $     404429066,672929817,nz2*673720360, 
+     $     454560522,673720349,nz2*673720360/
+      data ((cmd(i,j),i=1,nsiz),j= 21,22)/
+     $     168696587,673720340,nz2*673720360,
+     $     236721422,673713938,nz2*673720360/
 c     
       data lrecl/80/
 c
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
 c     
       if (ddt.eq.4) then
          call cvname(id,buf,1)
-         call basout(io,wte,' comand   : '//buf(1:8))
+         call basout(io,wte,' comand   : '//buf(1:nlgh))
       endif
 c     
       fun = 0
@@ -85,7 +102,7 @@ c
          if(err.gt.0) return
       endif
 c     compilation de pause:<12>
-      if ( compil(0,12)) return 
+      if ( compil(12,0,0,0,0)) return 
       fin=3 
       goto 999
 c     
@@ -105,7 +122,7 @@ c
       endif
       bot=bbot
       if(macr.eq.0.and.paus.eq.0) goto 998
-      k=lpt(1) - 15
+      k=lpt(1) - (13+nsiz)
       bot=lin(k+5)
       go to 998
 c     
@@ -170,9 +187,9 @@ c     return/resume avec rhs et sans lhs --> fonction et non commande
          goto 999
       endif
 c     compilation return:<99>
-      if (compil(0,99) ) return 
+      if (compil(99,0,0,0,0) ) return 
  46   continue
-      k=lpt(1)-15
+      k=lpt(1)-(13+nsiz)
       if(pt.eq.0.or.k.le.0) goto 998
       pt=pt+1
  47   pt=pt-1
@@ -193,14 +210,14 @@ c     -------------
 c     
  50   continue
 c     compilation quit:<17>
-      if (compil(0,17)) return 
+      if (compil(17,0,0,0,0)) return 
       if(paus.ne.0) then
 c     quit dans une pause
          paus=paus-1
          pt=pt+1
  51      pt=pt-1
          if(rstk(pt).ne.503) goto 51
-         k=lpt(1)-15
+         k=lpt(1)-(13+nsiz)
          lpt(1)=lin(k+1)
          lpt(2)=lin(k+4)
          lpt(6)=k
@@ -209,7 +226,7 @@ c     quit dans une pause
          rio=pstk(pt)
          if(rstk(pt).eq.701) pt=pt-1
          goto 46
-       else
+      else
 c     quit (sortie)
          fun=99
       endif
@@ -275,13 +292,13 @@ c     abort
 c     -----
 c     
  120  continue
-      if (compil(0,14)) return
+      if (compil(14,0,0,0,0)) return
 c     compilation abort:<14>
       pt=pt+1
  121  pt=pt-1
       if(pt.eq.0) goto 122
       if(int(rstk(pt)/100).eq.5) then
-         k = lpt(1) - 15
+         k = lpt(1) - (13+nsiz)
          lpt(1) = lin(k+1)
          lpt(2) = lin(k+2)
          lpt(3) = lin(k+3)
@@ -312,14 +329,14 @@ c
 c     break
 c------
  130  continue
-      if (compil(0,13)) return 
+      if (compil(13,0,0,0,0)) return 
 c     compilation de break:<13>
       count=0
       pt=pt+1
  131  pt=pt-1
       if(pt.eq.0) then
          pt=1
-         call putid(cmd(1,21),ids(1,pt))
+         call putid(ids(1,pt),cmd(1,21))
          call error(72)
          return
       endif
@@ -335,7 +352,7 @@ c     break dans un for
 c     break dans un while
          pt=pt-1
       elseif(int(rstk(pt)/100).eq.5) then
-         call putid(cmd(1,21),ids(1,pt))
+         call putid(ids(1,pt),cmd(1,21))
          call error(72)
          return
       else

@@ -114,7 +114,7 @@ $\Psi$lab functions is also available.
 
 \section{Sample Session}
 
-$\Psi$lab is called by typing {\tt xscilab} (or {\tt scilab}).
+$\Psi$lab is called by typing {\tt scilab} (or {\tt scilab}).
 These shell scripts  (in the directory {\tt SCIDIR/bin}) run $\Psi$lab 
 in an X-window environment or in a pure Unix-environment respectively.
 
@@ -124,7 +124,7 @@ and running the introduction demo.
 	To give the user an idea of some of the capabilities of $\Psi$lab
 we give the following sample session in $\Psi$lab.\\
 \bigskip
-{\tt xscilab}
+{\tt scilab}
 \begin{verbatim}
 
      ===========
@@ -487,7 +487,7 @@ Saves the environment in a file named {\tt mufile}.
 \noindent.\dotfill.
 \begin{verbatim}
 
--->unix('more myfile')
+-->unix_x('more myfile')
 \end{verbatim}
 Request to the host system to perform a system command.
 
@@ -509,7 +509,7 @@ variable {\tt q} is unknown.
 
 -->write('foo.f',foo);
 
--->unix('make foo.o') 
+-->unix_s('make foo.o') 
 
 -->link('foo.o','foo')  
 
@@ -651,13 +651,12 @@ clicking in ``demos''.}
 The manual is given in Latex format. The \LaTeX code is produced by a 
 translation of the Unix format $\Psi$lab manual (see the subdirectory
 {\tt Man-General}).
-To get information about an item enter {\tt help item} in $\Psi$lab.
-(See also the {\tt xscihelp} script file in the directory {\tt SCIDIR/bin} 
-which invokes {\tt xman}.)}
+To get information about an item enter {\tt help item} in $\Psi$lab
+or use the help window facility obtained with help button.
+To get functions corresponding to a key word enter {\tt apropos
+key-word}
+or use apropos filed of the help window facility.
 
-%\item{{\tt fep} is a directory which contains fep: ``front-end-preprocessor''.
-%This facility allows to use an Emacs-like editor when running $\Psi$lab,
-%for example previous commands can be re-called using \^  P ({\tt CONTROL P}).}
 
 \item{{\tt routines} is a directory with contains the source code of all
 the numerical routines. The subdirectory {\tt default} contains the
@@ -691,5 +690,5 @@ print.
 \label{install}
 $\Psi$lab is given in source code format, with a collection
 of {\tt Imakefile} to compile and install it.
-The file {\tt Imake.incl} should be adapted to your machine \index{install}.  .
-
+The files {\tt Imake.incl , Path.incl} should be adapted to your machine \index{install}.  .
+See the README file in main Scilab directory.

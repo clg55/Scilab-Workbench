@@ -56,11 +56,11 @@ c
       go to 60
 c
 c       BUG:       NO PATH TO HERE !!!!!
-      vdq = v2*v3
-      vsn = v4 - vdq/v4
+cccp      vdq = v2*v3
+cccp      vsn = v4 - vdq/v4
 c			
-      a = 1.0d+0/(v3-v2)
-      vsn = vsn*a
+cccp      a = 1.0d+0/(v3-v2)
+cccp      vsn = vsn*a
 c
  200  vd = sqrt(vdq)
       a = a*vd

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DEGL2,SSI=0
       subroutine degl2(neq,imina,iminb,iminc,ta,tb,tc,
      &     iback,ntback,tback,mxsol,w,iw,ierr)
 c!but

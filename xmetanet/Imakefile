@@ -1,3 +1,4 @@
+/**/include ../Path.incl
 #include "../Imake.incl"
 
 #define IHaveSubdirs
@@ -5,9 +6,7 @@
 
 SUBDIRS = gengraph src
 
-MakeSubdirs($(SUBDIRS))
+MakeSubdirs($(SUBDIRS) data)
 DependSubdirs($(SUBDIRS))
 DistCleanSubdirs($(SUBDIRS))
-
-distclean::
-	$(RM) data//**/*.metanet
+DistCleanSubdirs(data)

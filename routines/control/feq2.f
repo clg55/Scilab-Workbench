@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=FEQ2,SSI=0
       subroutine feq2(nq,t,tq,tqdot)
 c!but
 c     Cette subroutine a ete implemente pour les besoins

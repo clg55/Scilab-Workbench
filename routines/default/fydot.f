@@ -44,12 +44,12 @@ c+
       return
       endif
 c+
-c dynamic link
+c      dynamic link
       it1=nlink+1
  1001 it1=it1-1
       if(it1.le.0) goto 2000
       if(tablin(it1).ne.name) goto 1001
-cc sun unix
+cc unix
       call dyncall(it1-1,n,t,y,ydot) 
 cc fin
       return

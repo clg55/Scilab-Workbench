@@ -1,6 +1,4 @@
-//[]=forparam()
-//
-//!
+function forparam()
 %else='else',%end='end';%elseif='elseif';%if='if';%for='for';
 %select='select';%while='while';%case='case';%then='then'
 quote=''''
@@ -42,6 +40,6 @@ ops     =['+',   'a';
 [logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then]=...
 resume(logics,ops,quote,%else,%end,%elseif,%if,%for,%select,%while,%case,%then)
  
-//end
+
 
 

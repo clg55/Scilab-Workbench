@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=CALSCA,SSI=0
       subroutine calsca(ns,ts,tr,y0)
 c!but
 c     Calcule le produit scalaire entre une fonction de Hardi donnee

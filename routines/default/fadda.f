@@ -1,16 +1,14 @@
-C/MEMBR ADD NAME=FADDA,SSI=0
       subroutine fadda(ny,t,y,ml,mu,p,nrowp)
 c!
 c interface pour les systemes implicites.
 c
-c le common /cadd/ contient le nom du programme a appeler tel qu il
-c est donne dans la commande scilab impl.
-c la routine appelee doit faire p=p+a, ou a=a(t,y) matrice ny par ny
-c telle que a(t,y)*ydot=g(t,y)
+c  common /cadd/ name of routine to be called by impl
+c  this routine makes p=p+a, where a=a(t,y) is a ny x ny matrix
+c  and  a(t,y)*ydot=g(t,y)
 c!
-c parametres d'entree t,y,p
-c parametres de sortie p
-c nrowp=leading dimension de p
+c inputs t,y,p
+c outputs p
+c nrowp=leading dimension of p
 c!
       include '../stack.h'
 
@@ -27,22 +25,21 @@ c
       iero=0
       call majmin(6,name,nam1)
 c
-c pour interfacer d'autres simulateurs modifier les lignes entre c+
-c qui suivent en fonction du nom de la ou des routines a appeler.
+c below insert your routine
 c+
       if(nam1.eq.'aplusp') then
         call aplusp(ny,t,y,ml,mu,p,nrowp)
         return
       endif
 c+
-c sous programmes lies dynamiquement.
+c dynamic link
       it1=nlink+1
  1001 it1=it1-1
       if(it1.le.0) goto 2000
       if(tablin(it1).ne.name) goto 1001
-cc sun unix
+cc unix
       call dyncall(it1-1,ny,t,y,ml,mu,p,nrowp)
-cc fin
+cc end
       return
 c
  2000 iero=1

@@ -1,4 +1,4 @@
-      subroutine mname(op,id)
+       subroutine mname(op,id)
 c     =======================================================
 c     searches a macro name for coded operations
 c     =======================================================
@@ -23,8 +23,8 @@ c   o  n
 c  caracteres  polynomes macros files   scalaires  listes(non typees)
 c      c           p       m      f         s         l
 c
-c  padic
-c   pp
+c  padic booleen
+c   pp     b
 c
 c  listes(typees): 3 premiers caracteres du premiers champ
 c    ou moins si la chaine est plus courte que 3 caracteres
@@ -32,13 +32,13 @@ c
       rhs1=rhs
       if (op.eq.3) rhs1=1
       if (op.eq.2) rhs1=2
-      name(1)=56
+      name(1)=percen
       k=2
       nb=1
 c
       top1=top-rhs1
    10 top1=top1+1
-      goto(11,12,18,99,99,99,99,99,99,13,14,14,99,15,16),gettype(top1)
+      goto(11,12,18,19,99,99,99,99,99,13,14,14,99,15,16),gettype(top1)
       goto 99
 c     --------------matrices scalaires
    11 name(k)=28
@@ -63,23 +63,33 @@ c     --------------files
 c     --------------listes
    16 continue
       ilog=getilist("mname",top,top1,n,1,ili)
-      call mvptr(top+1,ili)
-      if ( gettype(top+1).ne.10) then 
+      if(n.eq.0) then
+c     liste vide
          name(k)=21
          k=k+1
       else
-         ilog= getsmat("mname",top+1,top+1,ms,ns,1,1,lr,nlr)
-         do 17 i=1,min(3,nlr)
-            name(k)=abs(istk(lr+i-1))
+         call mvptr(top+1,ili)
+         if ( gettype(top+1).ne.10) then 
+            name(k)=21
             k=k+1
- 17      continue
+         else
+            ilog= getsmat("mname",top+1,top+1,ms,ns,1,1,lr,nlr)
+            do 17 i=1,min(3,nlr)
+               name(k)=istk(lr+i-1)
+               k=k+1
+ 17         continue
+         endif
+         call ptrback(top+1)
       endif
-      call ptrback(top+1)
       goto 21
 c     --------------padic
    18 name(k)=25
       name(k+1)=25
       k=k+2
+      goto 21
+c     --------------booleen
+ 19   name(k)=11
+      k=k+1
       goto 21
 c     --------------
    21 if(nb.eq.2) goto 24
@@ -92,17 +102,7 @@ c     --------------
       nb=2
       if(rhs1.eq.2) goto 10
 c
-   24 if(k.gt.nlgh) goto 30
-      name(k)=blank
-      k=k+1
-      goto 24
-c
-   30 id(1)=0
-      id(2)=0
-      do 31 i=1,nlgh/2
-      id(1)=256*id(1)+name(nlgh/2+1-i)
-      id(2)=256*id(2)+name(nlgh+1-i)
-   31 continue
+   24 call namstr(id,name,k-1,0)
 c      write(06,*) 'mname operation'
 c      call prntid(id,1)
       return

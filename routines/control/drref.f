@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DRREF,SSI=0
       subroutine drref(a,lda,m,n,eps)
 c!but
 c     drref calcule la forme echelon d'une matrice

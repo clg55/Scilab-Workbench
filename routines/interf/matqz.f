@@ -7,6 +7,9 @@ c
       character*6 namef
       common/cschur/namef
       external fschur,bschur
+      integer         iero
+      common /ierinv/ iero
+
 c
 c    fin    1       2     3        4
 c          gschur  gspec  ereduc   fstair
@@ -440,6 +443,10 @@ c     creation d'une structure pour l'external
          lstk(top+1)=lstk(top)+3
          call dsubsp(na,na,stk(la),stk(le),stk(lz),bschur
      x        ,eps,ndim,fail,istk(ilw))
+         if(iero.ne.0) then
+            err=1
+            return
+         endif
       endif
       if(fail) then
          call error(24)

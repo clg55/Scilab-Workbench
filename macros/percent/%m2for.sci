@@ -1,5 +1,5 @@
-//[stk,nwrk,txt,top]=%m2for(nwrk)
-// genere le code fortran associe aux multiplications 
+function [stk,nwrk,txt,top]=%m2for(nwrk)
+// multiplications 
 //!
  
 s2=stk(top);s1=stk(top-1);
@@ -32,7 +32,7 @@ if m1=='1'&n1=='1'&m2=='1'&n2=='1' then // cas scalaire
   case 3 then
      if te1='2' then s1(1)='('+s1(1)+')',s1(2)='('+s1(2)+')',   end
      if te2='2' then s2(1)='('+s2(1)+')',s2(2)='('+s2(2)+')',   end
-     stk=list([sousf(mulf(s1(1),s2(1)),mulf(s1(2),s2(2))),..
+     stk=list([subf(mulf(s1(1),s2(1)),mulf(s1(2),s2(2))),..
                addf(mulf(s1(1),s2(2)),mulf(s1(2),s2(1))) ],'1',t2,m1,n1)
   end
   txt=[txt1;txt]
@@ -192,6 +192,5 @@ end
   txt=[txt1;txt]
   top=top-1
   return
-//end
 
 

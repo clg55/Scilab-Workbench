@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=HTRIBK,SSI=0
       subroutine htribk(nm,n,ar,ai,tau,m,zr,zi)
 c
       integer i,j,k,l,m,n,nm

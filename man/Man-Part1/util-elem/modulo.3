@@ -1,7 +1,7 @@
 .TH modulo 1 "April 1993" "Scilab Group" "Scilab Function"
 .so man1/sci.an
 .SH NAME
-modulo - arithmetic residue modulo m
+modulo - arithmetic remainder modulo m
 .SH CALLING SEQUENCE
 .nf
 i=modulo(n,m)
@@ -12,4 +12,6 @@ integers
 .SH DESCRIPTION
 computes \fVi= n (modulo m)\fR i.e. remainder
 of \fVn\fR divided by \fVm\fR (\fVn\fR and \fVm\fR integers).
+.LP
+.Vb i= n - m .* int (n ./ m)
 

@@ -16,34 +16,56 @@ void FindNode()
 {
   char strn[MAXNAM];
   int n;
-  node *nod;
+  mylink *p; node *nod, *nod1;
 
   if (theGraph->node_number == 0) return;
   
   if (intDisplay) {
-    MetanetDialog("",strn,"%s","Node internal number");
+    sprintf(Description,"%s","Node internal number");
+    MetanetDialog("",strn,Description);
     n = atoi(strn);
     if (n <= 0 || n > theGraph->node_number) {
-      MetanetAlert("%d is not an internal node number",n);
+      sprintf(Description,"%d is not an internal node number",n);
+      MetanetAlert(Description);
       return;
     }
-    nod = GetNode(n,theGraph);
+    p = theGraph->nodes->first;
+    nod = 0;
+    while (p) {
+      if (((node*)(p->element))->number == n) {
+	nod = (node*)(p->element);
+	break;
+      }
+      p = p->next;
+    }
     if (nod == 0) {
-      MetanetAlert("%s is not an internal node number",strn);
+      sprintf(Description,"%s is not an internal node number",strn);
+      MetanetAlert(Description);
       return;
     }
   }
   else {
-    MetanetDialog("",strn,"%s","Node name");      
-    nod = GetNamedNode(strn,theGraph);
+    sprintf(Description,"%s","Node name");      
+    MetanetDialog("",strn,Description);
+    p = theGraph->nodes->first;
+    nod = 0;
+    while (p) {
+      nod1 = (node*)(p->element);
+      if (nod1->name != 0 && !strcmp(nod1->name,strn)) {
+	nod = nod1;
+	break;
+      }
+      p = p->next;
+    }
     if (nod == 0) {
-      MetanetAlert("%s is not a node name",strn);
+      sprintf(Description,"%s is not a node name",strn);
+      MetanetAlert(Description);
       return;
     }
   }
  
   if (!NodeVisible(nod))
-    CenterDraw(nod->x + nodeDiam/2,nod->y + nodeDiam/2);
+    CenterDraw(nod->x + NodeDiam(nod)/2,nod->y + NodeDiam(nod)/2);
   
   ReDrawGraph(theGraph);
   HiliteNode(nod);
@@ -59,9 +81,9 @@ node *n;
   GetDrawGeometry(&dx,&dy,&w,&h);
 
   if ((int)(metaScale*n->x) >= dx &&
-      (int)(metaScale*(n->x + nodeDiam)) <= dx + w &&
+      (int)(metaScale*(n->x + NodeDiam(n))) <= dx + w &&
       (int)(metaScale*n->y) >= dy && 
-      (int)(metaScale*(n->y + nodeDiam)) <= dy + h)
+      (int)(metaScale*(n->y + NodeDiam(n))) <= dy + h)
     return 1;
   else return 0;
 }
@@ -70,33 +92,59 @@ void FindArc()
 {
   char strn[MAXNAM];
   int n;
-  arc *a;
+  mylink *p; arc *a,*a1;
 
   if (theGraph->arc_number == 0) return;
  
   if (intDisplay) {
-    MetanetDialog("",strn,"%s","Arc internal number");
+    sprintf(Description,"%s","Arc internal number");
+    MetanetDialog("",strn,Description);
     n = atoi(strn);
     if (n <= 0 || n > theGraph->arc_number) {
-      MetanetAlert("%d is not an internal arc number",n);
+      sprintf(Description,"%d is not an internal arc number",n);
+      MetanetAlert(Description);
       return;
     }
-    a = GetArc(n,theGraph);
+    p = theGraph->arcs->first;
+    a = 0;
+    while (p) {
+      a1 = (arc*)(p->element);
+      if (theGraph->directed || (a1->number % 2 != 0)) {
+	if (a1->number == n) {
+	  a = a1;
+	  break;
+	}
+      }
+      p = p->next;
+    }
     if (a == 0) {
-      MetanetAlert("%s is not an internal arc number",strn);
+      sprintf(Description,"%s is not an internal arc number",strn);
+      MetanetAlert(Description);
       return;
     }
   }
   else {
-    MetanetDialog("",strn,"%s","Arc name");      
-    a = GetNamedArc(strn,theGraph);
+    sprintf(Description,"%s","Arc name");      
+    MetanetDialog("",strn,Description);
+    p = theGraph->arcs->first;
+    a = 0;
+    while (p) {
+      a1 = (arc*)(p->element);
+      if (theGraph->directed || (a1->number % 2 != 0)) {
+	if (a1->name != 0 && !strcmp(a1->name,strn)) {
+	  a = a1;
+	  break;
+	}
+      }
+      p = p->next;
+    }
     if (a == 0) {
-      MetanetAlert("%s is not an arc name",strn);
+      sprintf(Description,"%s is not an arc name",strn);
+      MetanetAlert(Description);
       return;
     }
   }
    
-
   if (!ArcVisible(a))
     CenterDraw(a->xmax,a->ymax);
 

@@ -4,17 +4,19 @@ c     compilation des structures de controle
 c     ======================================================================
       include '../stack.h'
 c
-      logical eqid,compil,ilog
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
+      logical eqid
       integer while(nsiz),else(nsiz),r,cas(nsiz),sel(nsiz),elsif(nsiz)
       integer eol
-      integer iadr,sadr
+      integer sadr
 
-      data else/236721422,673720360/, while/353505568,673720334/
-      data cas/236718604,673720360/, sel/236260892,673717516/
-      data elsif/236721422,673713938/
+      data else/236721422,nz1*673720360/
+      data while/353505568,673720334,nz2*673720360/
+      data cas/236718604,nz1*673720360/
+      data sel/236260892,673717516,nz2*673720360/
+      data elsif/236721422,673713938,nz2*673720360/
       data eol/99/
 c
-      iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 c     
       l=comp(1)
@@ -33,18 +35,34 @@ c for : <7 l.boucle boucle.ops l.ops varn(1:nsiz) for.ops>
 c
 c debut for
    01 continue
-      ilog=compil(1,7,comp(2))
-      comp(2)=comp(1)
+      err=sadr(l+1)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
+      istk(l)=7
+      l0=l+2
+      istk(l0-1)=comp(2)
+      comp(2)=l0
+      comp(1)=l+2
       return
-   02 continue
+   02 err=sadr(l+nsiz+2)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
       l0=comp(2)
       comp(2)=istk(l0-1)
       istk(l0-1)=l-l0
-      ilog=compil(nsiz,comp(2),ids(1,pt),ids(2,pt))
-      comp(2)=l
+       l0=l
+      call putid(istk(l+1),ids(1,pt))
+      l=l+nsiz+1
+      istk(l0)=comp(2)
+      comp(2)=l0
+      comp(1)=l
       return
 c fin for
- 03   l0=comp(2)
+   03 l0=comp(2)
       comp(2)=istk(l0)
       istk(l0)=l-(l0+nsiz+1)
       call setlnb
@@ -55,9 +73,24 @@ c if    : <9 0 l.exprs l.then l.else exprs.ops then.ops else.ops>
 c le "0" est present pour conserver la compatibilite avec la version precedente
 c
 c debut d'un if ou while
- 04   nn=4
-      ilog=compil(nn,l,comp(2),0,0,l+1)
-      comp(2)=l+4
+ 04   err=sadr(l+2)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         if(err.gt.0) return
+      endif
+      istk(l)=l
+      istk(l+1)=comp(2)
+      lc=l+2
+      istk(lc)=0
+      comp(2)=l+3
+      comp(1)=l+4
+c
+      l=comp(1)
+      l0=comp(2)
+      istk(l)=l0-2
+      istk(l0)=l-(l0+1)
+      comp(2)=l
+      comp(1)=l+1
       return
 c fin des expressions du if ou des elseif
    05 l0=comp(2)
@@ -117,8 +150,17 @@ c select case
       goto 99
 c
 c debut selec (premiere expression)
-   11 ilog=compil(3,l,comp(2),0,0)
+   11 err=sadr(l+2)-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         if(err.gt.0) return
+      endif
+      istk(l)=l
+      istk(l+1)=comp(2)
+      lc=l+2
+      istk(lc)=0
       comp(2)=l+3
+      comp(1)=l+4
       return
 c
 c fin premiere expression

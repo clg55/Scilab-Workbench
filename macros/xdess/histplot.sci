@@ -27,10 +27,10 @@ end;
 //
   q=prod(size(n))
   if q=1 then 
-     min=mini(data)
-     max=maxi(data)
+     dmin=mini(data)
+     dmax=maxi(data)
      x=(0:n)';
-     x=(1/n)*( max*x + min*(n*ones(x)-x));
+     x=(1/n)*( dmax*x + dmin*(n*ones(x)-x));
    else
      x=matrix(n,q,1)
    end,

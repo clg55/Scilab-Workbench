@@ -8,11 +8,11 @@ function [Stmp,Ws]=colregul(Sl,alfa,beta);
 [LHS,RHS]=argn(0);
 if RHS=1 then alfa=0;beta=0;end
 flag=0;
-if sl(1)='r' then
+if Sl(1)='r' then
  flag=1;Sl=tf2ss(Sl);end
 s=poly(0,'s');
 D=Sl(5);
-n=size(D);n1=n(1);n2=n(2);[nx,nx]=size(Sl(2));
+n=size(D);n1=n(1);n2=n(2);
 Ws=syslin([],[],[],[],eye(n2,n2));
 Stmp=Sl;
 m=maxi(degree(D));
@@ -28,14 +28,15 @@ while m>0
   D=clean(Stmp(5));
   m=maxi(degree(D));
 end
-stmp(5)=coeff(Stmp(5),0);
+Stmp(5)=coeff(Stmp(5),0);
 
 [W,r]=colcomp(Stmp(5));
 if r==n1 then 
-  Ws=Ws*w;Stmp=Stmp*w;
-  if flag=1 then Ws=ss2tf(Ws);Stmp=ss2tf(stmp);end
+  Ws=Ws*W;Stmp=Stmp*W;
+  if flag=1 then Ws=ss2tf(Ws);Stmp=ss2tf(Stmp);end
   return;
 end
+[nx,nx]=size(Stmp(2));
 //      moving zeros @ infinity to zeros @ beta
 i=0;
 while r < n2,
@@ -48,11 +49,11 @@ i=i+1;
   Wstmp=syslin([],[],[],[],Wstmp);
   Ws=Ws*Wstmp;
   Stmp=Stmp*Wstmp;
-  Stmp(5)=coeff(stmp(5),0);
+  Stmp(5)=coeff(Stmp(5),0);
   rold=r;
-  [W,r]=colcomp(stmp(5));
+  [W,r]=colcomp(Stmp(5));
 //  if r==rold&r<>0 then break;end
   if i>=nx then break;end
 end
 if flag=1 then
- Ws=ss2tf(Ws);Stmp=ss2tf(stmp);end
+ Ws=ss2tf(Ws);Stmp=ss2tf(Stmp);end

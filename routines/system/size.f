@@ -4,10 +4,9 @@ c
       common/adre/lbot,ie,is,ipal,nbarg,ll(30)
 c
 c
-      integer iadr,sadr
+      integer iadr
 c
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
 c
       iiadr=iadr(ll(i))
       nl=istk(iiadr-3)

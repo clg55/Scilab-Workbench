@@ -1,6 +1,8 @@
+ ' (1)			- transpose of matrix
  , (1)			- comma
  < (1)			- lower
-"Scilab object : external" (1)	- external macro or routine
+"Scilab object : external" (1)	- external function or routine
+"Scilab object : function" (1)	- Scilab procedure
 "Scilab object : macro" (1) - Scilab procedure
 "Scilab object : rationals" (1) - rational in Scilab
 "Scilab object: boolean"  (1)	- boolean variables and operators & | ~
@@ -9,29 +11,20 @@
 "Scilab object: sparse matrix" (G)  - sparse matrix definition
 "Scilab object: syslin" (1) - linear system definition
 "Scilab object:string" (1)  - character strings
+"Scilab object:string" (1)  - character strings
 % (1)			- percent
-%K (1)			- Jacobi's complete elliptic integral
 %asn (1)		- elliptic integral
+%K (1)			- Jacobi's complete elliptic integral
 %sn (1)			- Jacobi 's elliptic function
 ( ) (1)			- left and right parenthesis
 * (1)			- multiplication 
 +     (1)		-      addition
-- (1)			- the minus operation
++     (1)		-      addition
+.TH - 1 "April 1993" "Scilab Group" "Scilab Function"	- - the minus operation
 / (1)			- right division 
 : (1)			- colon operator
 ; (1)			-  ending expression and row separator
 = (1)			- equal sign
-Cheb2mag (1)		- response of type 2 Chebyshev filter
-Graphic (2)		- Graphic library for Scilab 
-H_inf_st (1)		- static H_infinity problem 
-H_norm (1)		- H-infinity norm
-Macglov (1)		- Mac Farlane Glover problem
-Signal (1)		- Signal manual description
-[ (1)			- left bracket
-[ ] (1)			- left and right brackets
-\' (1)			- transpose of matrix
-\\ (1)			- left matrix division
-^ (1)			- exponentiation
 abcd (1)		- state-space matrices
 abs (G)			-  absolute value, magnitude
 acos (1)		- cosine inverse
@@ -42,7 +35,7 @@ analpf (1)		- create analog low-pass filter
 and (1)			- logical and
 ans (1)			- answer
 apropos (1)		- searches keywords in Scilab help 
-argn (1)		- number of arguments in a macro call
+argn (1)		- number of arguments in a function call
 arhnk (1)		- Hankel norm approximant
 arl2 (G)		- L2 approximation
 asin (1)		-  sine inverse
@@ -59,7 +52,6 @@ bode (1)		- Bode plot
 break (1)		- keyword to interrupt loops
 bstap (1)		- hankel approximant
 buttmag (1)		-  response of Butterworth filter
-c_link (1)		- check dynamic link
 calfrq (1)		- frequency response discretization
 canon (1)		- canonical controllable form
 casc (1)		-  cascade realization of filter from coefficients
@@ -69,6 +61,7 @@ ceil (1)		- rounding up
 champ (2)		- draw a 2d vector field 
 chart (1)		- Nichols chart
 cheb1mag (1)		-  response of Chebyshev type 1 filter
+Cheb2mag (1)		- response of type 2 Chebyshev filter
 chepol (1)		- Chebychev polynomial
 clean (1)		- cleans a polynomial or rational matrix
 cleanp (1)		- cleans a polynomial matrix
@@ -77,21 +70,23 @@ clearfun (1)		- remove primitive.
 cls2dls (1)		- bilinear transform
 cmb_lin (1)		- symbolic linear combination
 cmndred (1)		- common denominator form
+code2str (1)		- returns character string associated with scilab integer codes.
 coeff (1)		- coefficients of matrix polynomial
 coffg (8)		- inverse of polynomial matrix
 colcompr (8)		- column compression of polynomial matrix
 colinout (1)		- inner-outer factorization
-colnew (G)		- boundary value problems for  ordinary differential equations
+colnew (G)		- boundary value problems for ODE
 colregul (1)		- removing poles and zeros at infinity
 comments (1)		- comments
-comp (1)		-  macro compilation
+comp (1)		-  function compilation
 conj (1)		-  conjugate
-cont_frm (1)		- transfer to controllable state-space
-cont_mat (1)		- controllability matrix
 contour (2)		- level curves of surface
 contr (G)		- controllability, controllable subspace
 contrss (1)		- controllable part
+cont_frm (1)		- transfer to controllable state-space
+cont_mat (1)		- controllability matrix
 convol (1)		- convolution (overlap add method)
+convstr (1)		- case conversion
 convstr (1)		- case conversion
 copfac (1)		- right coprime factorization
 corr (G)		- correlation, covariance
@@ -103,30 +98,34 @@ csim (1)		- simulation (time response) of linear system
 cspect (1)		- spectral estimation (periodogram method)
 ctr_gram (1)		- controllability gramian
 czt (1)			- chirp z-transform algorithm
+c_link (1)		- check dynamic link
 dassl (G)		- differential algebraic equation
 dcf (1)			- double coprime factorization
 debug (1)		- debugging level
-deff (1)		- on-line definition of macro
+deff (1)		- on-line definition of function
 degree (1)		- degree of polynomial matrix
 delbpt (1)		- delete breakpoint
 delip (1)		- elliptic integral
+demos (G)		-  guide for scilab demos
 denom (8)		- denominator
-derivee (8)		- rational matrix derivative
+derivat (8)		- rational matrix derivative
 des2ss (1)		- descriptor to state-space
 des2tf (1)		- descriptor to transfer function conversion
 determ (8)		- determinant of polynomial matrix
 detr (1)		- polynomial determinant
 dft (1)			- discrete fourier transform
+dhnorm(1)		- discrete H-infinity norm
 diag (1)		- diagonal including or extracting 
 diary (1)		- diary of session
 diophant (8)		- diophantine (Bezout) equation
+disp (1)		- displays variables 
 dispbpt (1)		- display breakpoints
 driver (2)		- select a driver for plotting
 dscr (1)		-  discretization of linear system
 dsimul (1)		- discrete time response
-dt_ility (1)		- detectability test
 dtsi (1)		- stable anti-stable decomposition
-edit (G)		-  macro editing
+dt_ility (1)		- detectability test
+edit (G)		-  function editing
 ell1mag (1)		- magnitude of elliptic filter
 else (1)		- keyword in if-then-else
 elseif (1)		- keyword in if-then-else
@@ -141,14 +140,19 @@ errcatch (1)		- error trapping
 errclear (1)		- error clearing
 error (1)		- error messages 
 eval (1)		- evaluation of a matrix of strings
-eval3d (2)		- values of a macro on a grid
+eval3d (2)		- values of a function on a grid
+eval3dp (2)		- computes facets of a 3D parametrized surface
 evans (1)		- Evans root locus
 evstr (1)		- evaluation of expressions
-exec (1)		- file execution
+exec (1)		- script file execution
 execstr (1)		- command execution by evaluation of strings
 exists (1)		- checks variable  existence
 exit (1)		-  Scilab quit
 eye (1)			- identity matrix
+fac3d (2)		- complex 3D surface plotting
+fac3di (2)		- 3D complex surface plotting with interactive view selection
+factors (8)		- numeric real factorization
+factors (8)		- numeric real factorization
 faurre (1)		- filter
 fchamp (2)		- draw a 2d vector field 
 fcontour (2)		- level curves
@@ -160,11 +164,13 @@ fgrayplot (2)		- 2D plot with gray levels
 file (1)		- file management
 filter (1)		- modelling filter
 find (1)		- selection of indices
-find_freq (1)		- parameter compatibility for elliptic filter design
 findm (1)		- for elliptic filter design
+find_freq (1)		- parameter compatibility for elliptic filter design
+fix (1)			- rounding towards zero
 floor (1)		- rounding down
 flts (1)		- time response (discrete time, sampled system)
 for (1)			- language keyword for loops
+format (1)		- printing format
 format (1)		- printing format
 fort (1)		- fortran call
 fort (1)		- fortran call
@@ -179,29 +185,32 @@ frmag (1)		- magnitude of FIR and IIR filters
 fsfirlin (1)		- design of FIR, linear phase filters
 fsolve (G)		- find a zero of a system of n nonlinear functions
 fspecg (1)		- stable factorization
-fstabst (1)		- Youla's parameterization
+fstabst (1)		- Youla's parametrization
 funptr (G)		- coding of  primitives ( wizard stuff )
 fwiir (1)		- IIR filters in cascade realization
-g_margin (1)		- gain margin
 gainplot (1)		- magnitude plot
 gamitg (5)		- H-infinity gamma iterations
 gcare (1)		- control Riccati equation
 gcd (8)			- gcd calculation
 geom3d (2)		-  projection from 3D on 2D
-getf (1)		- loading of macro
+getenv (G)		- get the value of an environnement variable
+getf (1)		- loading of function
+getpid (G)		- get scilab process identificator
+getvalue (1)		- xwindow dialog for data acquisition 
 getvalue (1)		- xwindow dialog for data acquisition 
 gfare (1)		- filter Riccati equation
-gr_menu (2)		- simple interactive graphic editor
-graduat (2)		- pretty axis graduations
+graduate (2)		- pretty axis graduations
+Graphic (2)		- Graphic library for Scilab 
 grayplot (2)		- 2D plot of a surface using gray levels
 group (1)		- group delay for digital filter
+gr_menu (2)		- simple interactive graphic editor
 gtild (1)		- tilde operation
+g_margin (1)		- gain margin
 h2norm (1)		- H2 norm
-h_cl (5)		- closed loop matrix
-h_inf (1)		- H-infinity (central) controller
 halt (3)		- stop execution
 hank (1)		- hankel matrix
 hankelsv (1)		- Hankel singular values
+havewindow (3)		- return scilab window mode
 help (1)		- on-line help command
 hermit (8)		- Hermite form
 hilb (1)		- Hilbert transform
@@ -211,13 +220,19 @@ horner (1)		- polynomial/rational evaluation
 host (G)		- unix call
 hrmt (1)		- gcd of polynomials
 htrianr (8)		- triangularization of polynomial matrix
+h_cl (5)		- closed loop matrix
+h_inf (1)		- H-infinity (central) controller
+H_inf_st (1)		- static H_infinity problem 
+H_norm (1)		- H-infinity norm
 if then else (1)	- conditional execution
 iir (1)			- iir digital filter
-iirlp (1)		- Lp IIR filter optimization
 iirlp (1)		- group delay Lp IIR filter optimization
+iirlp (1)		- Lp IIR filter optimization
 imag (G)		- imaginary part
 impl (G)		- differential algebraic equation
 imrep2ss (1)		- impulse response to state-space conversion
+input (1)		- prompt for user input
+input (1)		- prompt for user input
 int (1)			- integer part
 intc (1)		- Cauchy integral
 intdec (1)		- Changes  sampling rate of a signal
@@ -267,43 +282,49 @@ lqg2stan (1)		- LQG to standard problem
 lqg_ltr (1)		- LQG with loop transform recovery
 lqr (1)			- LQ compensator (full state)
 ltitr (G)		- discrete time response (state space)
-m_circle (1)		- M-circle plot
+mac2for (1)		- function to fortran routine conversion
 mac2for (1)		- macro to fortran routine conversion
-macr2lst (1)		- macro to list conversion
+Macglov (1)		- Mac Farlane Glover problem
+macr2lst (1)		- function to list conversion
+macrovar (1)		- variables of function
 manedit (G)		-  editing a manual item
 markp2ss (1)		- Markov parameters to state-space
 matrix (1)		- vector to matrix conversion
+max (G)			- maximum
 maxi (G)		- maximum
 mese (1)		- maximum entropy spectral estimation
 mfft (1)		- multi-dimensional fft
 milk_drop (2)		-  test for plot3d 
+min (1)			- minimum 
 mini (1)		- minimum 
 minreal (1)		- minimal balanced realization
 minss (1)		- minimal realization
 mode (1)		- select a mode in exec file
-modulo (1)		- arithmetic residue modulo m
+modulo (1)		- arithmetic remainder modulo m
 mulf (1)		-  symbolic multiplication
 musolve (1)		- structured singular value, mu, ssv
+m_circle (1)		- M-circle plot
 nehari (1)		- Nehari approximant
-nemirov - Nemirovskii (1)   - Nesterov's program
+nemirov (1)		- Nemirovskii - Nesterov's program
 newfun (1)		- add a name in the table of functions
 norm (1)		- matrix norms
 null (1)		- delete an element in a list
 numer (1)		- numerator
 nyquist (1)		- nyquist plot
-obs_gram (1)		- observability grammian
 obscont (1)		- observer based controller
-obsv_mat (1)		- observability matrix
 obsvss (1)		- observable part
+obsv_mat (1)		- observability matrix
+obs_gram (1)		- observability grammian
 ode (G)			- ordinary differential equation solver
 ones (1)		- matrix made of ones
 optim (G)		- non-linear optimization routine
 or | (1)		- logical or
-p_margin (1)		- phase margin
 param3d (2)		- parametric curves in 3-D
+param3di (2)		- parametric curves in 3-D with interactive view selection
 parrot (1)		- Parrot's problem
 part (1)		- extraction of strings
-pause (1)		- pause mode
+pause (1)		- pause mode, invoke keyboard
+pdiv (1)		- polynomial division
 pdiv (1)		- polynomial division
 pen2ea (G)		- pencil to E,A conversion
 pertrans (G)		- pertranspose
@@ -318,21 +339,29 @@ plot2d3 (2)		- multiple plot of functions
 plot2d4 (2)		- multiple plot of functions
 plot3d (2)		- surface plotting
 plot3d1 (2)		- gray level plotting of a surface 
+plot3di (2)		- surface plotting with interactive view selection
+plot3di1 (2)		- gray level plotting of a surface with interactive view selection
 plzr (1)		- pole-zero plot
 pol2des (1)		- polynomial matrix to descriptor form
 pol2str (1)		- polynomial matrix to string conversion
 pol2tex (3)		- convert polynomial  to TeX format
 polfact (1)		- minimal factors 
 poly (1)		- polynomial definition
+poly (1)		- polynomial definition
 ppol (G)		- pole placement
 predef (1)		- variable protection
 print (1)		- prints variables in a file 
+printf,fprintf,sprintf (1)  - Emulator of C language printf functions
+printf,fprintf,sprintf (1)  - Emulator of C language printf functions
+printf,fprintf,sprintf (1)  - Emulator of C language printf functions
 prod (G)		- product
 projsl (1)		- linear system projection
 pspect (1)		- cross-spectral estimate between 2 series
-quapro (1)		- quadratic programming
+p_margin (1)		- phase margin
+quapro (1)		- linear quadratic programming solver
 quit (1)		- decrease the pause level or exit
 rand (1)		- random number generator
+rdivf (1)		- right symbolic division
 rdivf (1)		- right symbolic division
 read (1)		- matrices read
 readb (1)		- binary read 
@@ -342,12 +371,13 @@ remez (G)		- Remez's algorithm
 remezb (1)		- Minimax approximation of magnitude response
 repfreq (1)		- frequency response
 residu (G)		- residue 
+resume (1)		- return or resume 
 return (1)		- return or resume 
-ric_desc (1)		- Riccati equation
+ricc (G)		- Riccati equation 
 ricc (G)		- Riccati equation 
 riccati (1)		- Riccati equation
+ric_desc (1)		- Riccati equation
 roots (G)		- roots of polynomials
-rosen (1)		- impulse to transfer
 rotate (2)		- geometric rotation of a set of points	 
 round (G)		- rounding
 routh_t (1)		- Routh's table
@@ -358,13 +388,20 @@ rpem (1)		- RPEM estimation
 rtitr (G)		- discrete time response (transfer matrix)
 save (1)		- saving variables
 scaling (2)		- affine transform of a set of points  
+scanf, fscanf, sscanf (1)   - Converts formatted input
+scanf, fscanf, sscanf (1)   - Converts formatted input
+scanf, fscanf, sscanf (1)   - Converts formatted input
+sci2exp (G)		- converts  variable to an expression
 sci2map (1)		- Scilab to Maple
+scilab	(1)		- Major unix script to execute Scilab and miscellaneous tools
 scilink (1)		- Unix script to relink Scilab
 secto3d (2)		- 3D surfaces conversion
 select (1)		- select keyword 
 sensi (5)		- sensitivity functions
 setbpt (1)		- setting breakpoints 
 sfact (G)		- discrete spectral factorization
+sign (1)		- sign function
+Signal (1)		- Signal manual description
 simp (G)		- rational simplification
 sin (G)			-  sine function
 sinc (1)		-  samples of sinc function
@@ -378,6 +415,7 @@ solve (1)		- symbolic linear system solver
 sort (1)		- decreasing order sorting
 specfact (1)		- spectral factor
 splin (G)		- spline function
+splin (G)		- spline function
 sqrt (1)		- square root
 square (2)		- sets scales for isometric graphics
 srfaur (1)		- square-root algorithm
@@ -388,10 +426,13 @@ ss2tf (1)		- conversion from state-space to transfer function
 sskf (1)		- steady-state Kalman filter
 ssprint (1)		- pretty print for linear system
 ssrand (1)		- random system generator
-st_ility (1)		- stabilizability test
 startup (1)		- startup file 
+str2code (1)		- return scilab integer codes associated with a character string
 strcat (3)		- catenate character strings
 string (1)		- conversion to string
+string (1)		- conversion to string
+st_ility (1)		- stabilizability test
+subf (3)		-  symbolic subtraction
 subf (3)		-  symbolic subtraction
 sum (1)			- sum  of vector/matrix entries
 svplot (1)		- singular-value sigma-plot
@@ -405,6 +446,7 @@ tanh (1)		- hyperbolic tangent
 texprint (3)		- TeX output of Scilab object
 tf2des (1)		- transfer function to descriptor
 tf2ss (1)		- transfer to state-space
+timer (3)		- cpu time
 time_id (1)		- SISO identification
 titlepage  (2)		- display a matrix of strings 
 toeplitz (1)		- toeplitz matrix
@@ -418,12 +460,19 @@ trzeros (1)		- transmission zeros and normal rank
 type (1)		- variable type
 typeof (G)		-  object type
 unix (1)		- shell (sh) command execution
+unix_g (1)		- shell (sh) command execution, output redirected to a variable
+unix_s (1)		- shell (sh) command execution, no output
+unix_w (1)		- shell (sh) command execution, output redirected to scilab window
+unix_x (1)		- shell (sh) command execution, output redirected to a window
 unobs (G)		- unobservable subspace
 user (1)		- interfacing a fortran routine
 varn (1)		- symbolic variable of a polynomial
 wfir (1)		- linear-phase FIR filters
 what (1)		- list the Scilab primitives
-whereis (1)		- name of library containing a macro
+where (1)		- display current instruction calling tree
+where (1)		- get current instruction calling tree
+where (1)		- get current instruction calling tree
+whereis (1)		- name of library containing a function
 while (1)		- while keyword 
 who (1)			- listing of variables
 wiener (1)		-  Wiener estimate
@@ -431,11 +480,6 @@ wigner (1)		- 'time-frequency' wigner spectrum
 window (1)		- symmetric window
 writb (1)		- binary write
 write (1)		-  write in a formatted file
-x_choose (1)		- interactive Xwindow choice
-x_dialog (1)		- Xwindow dialog
-x_matrix (1)		- Xwindow editing of matrix 
-x_mdialog (1)		- Xwindow dialog
-x_message (1)		- X window message
 xarc (2)		- draws a part of an ellipsis 
 xarcs (2)		- drawing a set of ellipsis
 xarrows (2)		- draw a set of arrows
@@ -455,8 +499,7 @@ xfpolys (2)		- fill a set of polygons of the same size
 xfrect (2)		- fill a rectangle 
 xget (2)		- gets current values of the graphic context
 xgetech (2)		- get the current graphic 2d scale
-xgrid (2)		- add a grid on a graphic
-xgrid (2)		- add a grid on a graphic
+xgetmouse ()		- get current position of the mouse
 xgrid (2)		- add a grid on a graphic
 xinit (2)		- initialization of a graphic driver
 xlfont (2)		- load a font in the graphic context
@@ -477,10 +520,22 @@ xstringb (2)		- draw a matrix of strings
 xstringl (2)		- display of matrix of strings
 xtape (2)		-  set up the record process of graphics
 xtitle (2)		- add titles on a graphic window
+x_choose (1)		- interactive Xwindow choice
+x_dialog (1)		- Xwindow dialog
+x_matrix (1)		- Xwindow editing of matrix 
+x_mdialog (1)		- Xwindow dialog
+x_message (1)		- X window message
+zeropen (1)		- zero pencil
 zeros (1)		- matrix made of zeros
 zgrid (1)		- zgrid plot
 zpbutt (1)		- Butterworth analog filter
 zpch1 (1)		- Chebyshev analog filter
 zpch2 (1)		- Chebyshev analog filter
 zpell (1)		- lowpass elliptic filter
+[ (1)			- left bracket
+[ ] (1)			- left and right brackets
+\' (1)			- transpose of matrix
+\\ (1)			- left matrix division
+^  (1)			- power operation 
+^ (1)			- exponentiation
 ~ (1)			- logical not

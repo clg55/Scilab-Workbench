@@ -1,10 +1,7 @@
       subroutine getlin(job)
 c ====================================================================
-c
 c     get a new line
-c
 c ====================================================================
-c
 c
       include '../stack.h'
 c
@@ -43,7 +40,7 @@ c     delimiteurs de ligne (eol)
       if(job.lt.0) goto 12
       if(r.eq.503) goto 11
       if(macr.gt.0.and.fin.ne.2) then
-         k=lpt(1)-15
+         k=lpt(1)-(13+nsiz)
          il=lin(k+7)
 c        test pour determiner si c'est la macro ou un exec qui appele getlin
          if(il.gt.0) goto 80
@@ -115,12 +112,14 @@ c il n'y a pas de ligne suite ou alors il y a une erreur de syntaxe
          lin(l) = k
          if(maj) lin(l)=-k
          if (l.lt.lsiz) l = l+1
-         if (l.eq.lsiz) then
-            call msgs(36,l)
+         if (l.ge.lsiz) then
+            call error(108)
+            return
          endif
    40 continue
 c
-   45 lin(l) = eol
+   45 continue
+      lin(l) = eol
       lin(l+1)=blank
       lpt(6) = l
       lpt(4) = l1
@@ -146,14 +145,19 @@ c     rio=rte
 c
 c
    70 continue
-      if (n.le.2) then
-         call bashos(buf(3:3),0,lc,ierr)
-      else
-         call bashos(buf(3:n),n-2,lc,ierr)
+      if (n.gt.2) then
+         call xscion(iflag)
+         if(iflag.eq.1) then
+            call cvstr(n-2+10,lin(l),'unix_x('''//buf(3:n)//''');',job)
+         else
+            call cvstr(n-2+10,lin(l),'unix_w('''//buf(3:n)//''');',job)
+         endif
+         l=l+n-2+10
+         call basout(io,wte,' ')
       endif
       goto 45
 c
-   80 k=lpt(1)-15
+   80 k=lpt(1)-(13+nsiz)
       il=lin(k+7)
    81 if(istk(il).eq.eol) goto 82
       lin(l)=istk(il)

@@ -11,6 +11,7 @@
 #include "menus.h"
 #include "metio.h"
 #include "graphics.h"
+#include "font.h"
 
 extern void ClearArcArrow();
 extern void ClearArcName();
@@ -34,6 +35,7 @@ extern void DrawXorPlainNode();
 extern void DrawXorSinkArrow();
 extern void DrawXorSourceArrow();
 extern void DrawXorStraightArc();
+extern XFontStruct *FontSelect();
 extern void GetDrawGeometry();
 extern void HiliteArcArrow();
 extern void HiliteArcName();
@@ -120,13 +122,19 @@ int x,y;
   int w, h;
   mylink *p;
   arc *ca, *a;
+  node *n;
   w = drawWidth;
   h = drawHeight;
-  if (x > w - (int)(metaScale*nodeDiam)/2) x = w - (int)(metaScale*nodeDiam)/2;
-  if (x < (int)(metaScale*nodeDiam)/2) x = (int)(metaScale*nodeDiam)/2;
-  if (y > h - (int)(metaScale*nodeDiam)/2) y = h - (int)(metaScale*nodeDiam)/2;
-  if (y < (int)(metaScale*nodeDiam)/2) y = (int)(metaScale*nodeDiam)/2;
+  if (x > w - (int)(metaScale*NodeDiam(theGG.moving))/2) 
+    x = w - (int)(metaScale*NodeDiam(theGG.moving))/2;
+  if (x < (int)(metaScale*NodeDiam(theGG.moving))/2) 
+    x = (int)(metaScale*NodeDiam(theGG.moving))/2;
+  if (y > h - (int)(metaScale*NodeDiam(theGG.moving))/2) 
+    y = h - (int)(metaScale*NodeDiam(theGG.moving))/2;
+  if (y < (int)(metaScale*NodeDiam(theGG.moving))/2) 
+    y = (int)(metaScale*NodeDiam(theGG.moving))/2;
   MoveNode(x,y,theGG.moving);
+  DrawNode(theGG.moving);
   p = theGG.moving->connected_arcs->first;
   while (p) {
     ca = (arc*)(p->element);
@@ -134,11 +142,7 @@ int x,y;
       /* the graph is directed or the graph is undirected and arc number
 	 is odd */
       a = (arc*)(p->element);
-      EraseMovingArc(a);
       SetCoordinatesArc(a);
-      DrawArc(a);
-      DrawNode(a->tail);
-      DrawNode(a->head);
     }
     p = p->next;
   }
@@ -149,15 +153,13 @@ int x,y;
       /* the graph is directed or the graph is undirected and arc number
 	 is odd */
       a = (arc*)(p->element);
-      EraseMovingArc(a);
       SetCoordinatesArc(a);
-      DrawArc(a);
-      DrawNode(a->tail);
-      DrawNode(a->head);
     }
     p = p->next;
   }
   theGG.moving = 0;
+  ClearDraw();
+  ReDrawGraph(theGraph);
 }  
 
 void WhenRelease(x,y)
@@ -231,12 +233,14 @@ int x,y;
     /* there is a moving node : move it */
     w = drawWidth;
     h = drawHeight;
-    if (x > w - (int)(metaScale*nodeDiam)/2) x = w - 
-      (int)(metaScale*nodeDiam)/2;
-    if (x < (int)(metaScale*nodeDiam)/2) x = (int)(metaScale*nodeDiam)/2;
-    if (y > h - (int)(metaScale*nodeDiam)/2) y = h - 
-      (int)(metaScale*nodeDiam)/2;
-    if (y < (int)(metaScale*nodeDiam)/2) y = (int)(metaScale*nodeDiam)/2;
+    if (x > w - (int)(metaScale*NodeDiam(theGG.moving))/2) 
+      x = w - (int)(metaScale*NodeDiam(theGG.moving))/2;
+    if (x < (int)(metaScale*NodeDiam(theGG.moving))/2) 
+      x = (int)(metaScale*NodeDiam(theGG.moving))/2;
+    if (y > h - (int)(metaScale*NodeDiam(theGG.moving))/2) 
+      y = h - (int)(metaScale*NodeDiam(theGG.moving))/2;
+    if (y < (int)(metaScale*NodeDiam(theGG.moving))/2) 
+      y = (int)(metaScale*NodeDiam(theGG.moving))/2;
     MoveNode(x,y,theGG.moving);
   }
 }
@@ -253,8 +257,8 @@ graph *g;
   node *ta, *he, *n;
   GetDrawGeometry(&dx,&dy,&w,&h);
   dxw = dx + w; dyh = dy + h;
-  dx1 = dx - (int)(metaScale*nodeDiam);
-  dy1 = dy - (int)(metaScale*nodeDiam);
+  dx1 = dx - (int)(metaScale*g->nodeDiam);
+  dy1 = dy - (int)(metaScale*g->nodeDiam);
   p = g->arcs->first;
   while (p) {
     a = (arc*)(p->element);
@@ -294,8 +298,8 @@ graph *g;
   node *ta, *he, *n;
   GetDrawGeometry(&dx,&dy,&w,&h);
   dxw = dx + w; dyh = dy + h;
-  dx1 = dx - (int)(metaScale*nodeDiam);
-  dy1 = dy - (int)(metaScale*nodeDiam);
+  dx1 = dx - (int)(metaScale*g->nodeDiam);
+  dy1 = dy - (int)(metaScale*g->nodeDiam);
   p = g->arcs->first;
   while (p) {
     a = (arc*)(p->element);
@@ -343,45 +347,51 @@ graph *g;
 
 /* ARC */
 
-int PointerInSegment(x, y, x00, y00, x11, y11)
-int x, y, x00, y00, x11, y11;
-{
-  int prec = 3 * metaScale;
-  int x0, y0, x1, y1;
-  double delta, c, v;
-  x0 = (int)(metaScale*x00);
-  y0 = (int)(metaScale*y00);
-  x1 = (int)(metaScale*x11);
-  y1 = (int)(metaScale*y11);
-  /* precision of prec for (x,y) in segment (x0,y0)  (x1,y1) */
-  delta = prec *
-    sqrt((double)((x1 - x0)*(x1 - x0) + (y1 - y0)*(y1 - y0)));
-  c = x0 * y1 - x1 * y0;
-  v = x * (y1 - y0) - y * (x1 - x0);
-  /* (x,y) is at most at distance delta near the segment */
-  if((c - delta < v) && (v < c + delta)) {
-    /* (x,y) is in the rectangle with the segment as diagonal */
-    if (x0 == x1 || ((min(x0,x1) <= x) && (x <= max(x0,x1))))
-      if (y0 == y1 || ((min(y0,y1) <= y) && (y <= max(y0,y1))))
-	return 1;
-  }
-  return 0;
-} 
-
 int PointerInArcArrow(x, y, a)
 int x, y;
 arc *a;
 {
-  int prec = 5;
-  double l;
-  int xx0, yy0, xx1, yy1;
-  l = sqrt((double)((a->x1 - a->x0)*(a->x1 - a->x0) + 
+  XPoint points[5];
+  double d, xn, yn, xx, yy;
+  int width, length;
+  int i = 0;
+
+  if (a->x0 == HIDDEN) return 0;
+  d = sqrt((double)((a->x1 - a->x0)*(a->x1 - a->x0) + 
 		    (a->y1 - a->y0)*(a->y1 - a->y0)));
-  xx0 = a->xmax - (int)(prec * (a->x1 - a->x0) / l);
-  yy0 = a->ymax - (int)(prec * (a->y1 - a->y0) / l);
-  xx1 = a->xmax + (int)(prec * (a->x1 - a->x0) / l);
-  yy1 = a->ymax + (int)(prec * (a->y1 - a->y0) / l);
-  return PointerInSegment(x,y,xx0,yy0,xx1,yy1);
+  xn = (a->y0 - a->y1) / d;
+  yn = (a->x1 - a->x0) / d;
+  xx = yn;
+  yy = - xn;
+
+  if (a->hilited) {
+    width =  ArcHiWidth(a) + arrowWidth;
+    length = ArcHiWidth(a) + arrowLength;    
+  } else {
+    width =  ArcWidth(a) + arrowWidth;
+    length = ArcWidth(a) + arrowLength;
+  }
+  /* A0 */
+  points[i].x = (short)((a->xmax + (int)(width * xn))*metaScale);
+  points[i].y = (short)((a->ymax + (int)(width * yn))*metaScale);
+  i++;
+  /* A1 */
+  points[i].x = (short)((a->xmax + (int)(length * xx))*metaScale);
+  points[i].y = (short)((a->ymax + (int)(length * yy))*metaScale);
+  i++;
+  /* A2 */
+  points[i].x = (short)((a->xmax - (int)(width * xn))*metaScale);
+  points[i].y = (short)((a->ymax - (int)(width * yn))*metaScale);
+  i++;
+  /* symmetric of A1 */
+  points[i].x = (short)((a->xmax - (int)(length * xx))*metaScale);
+  points[i].y = (short)((a->ymax - (int)(length * yy))*metaScale);
+  i++;
+  /* A0 */
+  points[i].x = points[0].x;
+  points[i].y = points[0].y;
+  i++;
+  return XPointInRegion(XPolygonRegion(points,i,EvenOddRule),x,y);
 }
 
 int PointerInArc(x, y, object)
@@ -422,6 +432,7 @@ arc *a;
     UnhiliteArc(a);
     theGG.active = 0;
     theGG.active_type = 0;
+    isHilite = 1;
   }
   else {
     /* otherwise the old active object is unhilited and this arc is
@@ -461,39 +472,47 @@ arc *a;
 {
   int direction, x00, y00, x11, y11, r;
   double l, co, si;
-  double ry, dbx2, dby2, dbx3, dby3, dxmax, dymax;
-  double i0, inc;
+  double dbx2, dby2, dbx3, dby3, dxmax, dymax;
+  double inc0, inc;
 
   direction = (a->head->number > a->tail->number) ? a->g_type : - a->g_type;
   /* (x00,y00) and (x11,y11) are the center of the head and tail nodes */
-  x00 = a->tail->x + nodeDiam / 2;
-  y00 = a->tail->y + nodeDiam / 2;
-  x11 = a->head->x + nodeDiam / 2;
-  y11 = a->head->y + nodeDiam / 2;
+  x00 = a->tail->x + NodeDiam(a->tail) / 2;
+  y00 = a->tail->y + NodeDiam(a->tail) / 2;
+  x11 = a->head->x + NodeDiam(a->head) / 2;
+  y11 = a->head->y + NodeDiam(a->head) / 2;
   /* (x0,y0) and (x1,y1) are the ends of the segment used to draw
      this arc */
   if (a->g_type >= LOOP) {
-    a->x0 = x00 + nodeDiam / 2;
+    a->x0 = x00 + NodeDiam(a->tail) / 2;
     a->y0 = y00;
     a->x1 = x00;
-    a->y1 = y00 - nodeDiam / 2;
+    a->y1 = y00 - NodeDiam(a->head) / 2;
 
-    i0 = nodeDiam;
-    inc = (a->g_type - LOOP) * nodeDiam / 2;
-    a->x2 = x00 + (i0 + inc) * 1.414;
+    inc0 = (4 * bezierDy / 3 + 1.3 * (ArcWidth(a) - 1)) + 
+      NodeDiam(a->tail) / 2;
+    inc = (a->g_type - LOOP) * 
+      (4 * bezierDy / 3 + 1.3 * (ArcWidth(a) - 1));
+    a->x2 = a->x0 + (int)((inc0 + inc) * 1.414);
     a->y2 = a->y0;
     a->x3 = a->x1;
-    a->y3 = y00 - (i0 + inc) * 1.414;
-    a->xmax = x00 + nodeDiam / 8 + 3 * (i0 + inc) / 1.414 / 4;
-    a->ymax = y00 - (nodeDiam / 8 + 3 * (i0 + inc) / 1.414 / 4);
+    a->y3 = a->y1 - (int)((inc0 + inc) * 1.414);
+    a->xmax = (a->x0 + 4 * a->x1 + 3 * a->x2) / 8;
+    a->ymax = (4 * a->y0 + a->y1 + 3 * a->y3) / 8;
   }
   else {
     l = sqrt((double)((x11 - x00)*(x11 - x00) + (y11 - y00)*(y11 - y00)));
+    /* arc is hidden: nodes too near */
+    if (l <= (NodeDiam(a->tail) + NodeDiam(a->head))/2) {
+      a->x0 = HIDDEN;
+      return;
+    }
     co = (x11 - x00) / l;
     si = (y00 - y11) / l;
-    r = nodeDiam / 2;
+    r = NodeDiam(a->tail) / 2; 
     a->x0 = x00 + (int)(r * co);
     a->y0 = y00 - (int)(r * si);
+    r = NodeDiam(a->head) / 2; 
     a->x1 = x11 - (int)(r * co);
     a->y1 = y11 + (int)(r * si);
     if (direction == 0) {
@@ -503,13 +522,12 @@ arc *a;
     else {
       l = sqrt((double)((a->x1 - a->x0)*(a->x1 - a->x0) + 
 			(a->y1 - a->y0)*(a->y1 - a->y0)));
-      ry = (4 * bezierDy * abs(direction)) / (3 * l);
       dbx2 = l * bezierRx;
-      dby2 = l * ry * signum(direction);
+      dby2 = direction * (4 * bezierDy / 3 + 1.2 * (ArcWidth(a) - 1));
       dbx3 = l * (1 - bezierRx);
       dby3 = dby2;
       dxmax = l / 2;
-      dymax = 0.75 * l * ry * signum(direction);
+      dymax = 3 * dby2 / 4;
       a->x2 = a->x0 + (int)(dbx2 * co - dby2 * si);
       a->y2 = a->y0 - (int)(dbx2 * si + dby2 * co);
       a->x3 = a->x0 + (int)(dbx3 * co - dby3 * si);
@@ -525,7 +543,11 @@ void DrawArc(a)
 arc *a;
 {
   char str[MAXNAM];
+  if (a->x0 == HIDDEN) return;
   theColor = Colors[a->col];
+  arcW = ArcWidth(a);
+  arcH = ArcHiWidth(a);
+  theDrawFont = FontSelect(ArcFontSize(a));
   if (a->hilited == 1) HiliteArc(a);
   else {
     if (a->g_type == 0)
@@ -538,7 +560,7 @@ arc *a;
       DrawDoubleArcArrow(a->xa0,a->ya0,a->xa1,a->ya1,a->xa2,a->ya2,a->xa3,
 			 a->ya3);
     if (intDisplay) sprintf(str,"%d",EdgeNumberOfArc(a,theGraph));
-    else {if (a->name == 0) str[0] = 0; else strcpy(str,a->name);}
+    else {if (a->name == 0) str[0] = '\0'; else strcpy(str,a->name);}
     if (arcNameDisplay) DrawArcName(a->xmax,a->ymax,str);
   }
 }
@@ -546,6 +568,10 @@ arc *a;
 void DrawMovingArc(a)
 arc *a;
 {
+  if (a->x0 == HIDDEN) return;
+  arcW = ArcWidth(a);
+  arcH = ArcHiWidth(a);
+  theDrawFont = FontSelect(ArcFontSize(a));
   if (a->g_type == 0)
     DrawXorStraightArc(a->x0,a->y0,a->x1,a->y1);
   else
@@ -556,6 +582,10 @@ void EraseArc(a)
 arc *a;
 {
   char str[MAXNAM];
+  if (a->x0 == HIDDEN) return;
+  arcW = ArcWidth(a);
+  arcH = ArcHiWidth(a);
+  theDrawFont = FontSelect(ArcFontSize(a));
   if (a->g_type == 0)
     ClearStraightArc(a->x0,a->y0,a->x1,a->y1);
   else
@@ -566,13 +596,17 @@ arc *a;
     ClearDoubleArcArrow(a->xa0,a->ya0,a->xa1,a->ya1,a->xa2,a->ya2,a->xa3,
 			a->ya3);
   if (intDisplay) sprintf(str,"%d",EdgeNumberOfArc(a,theGraph));  
-  else {if (a->name == 0) str[0] = 0; else strcpy(str,a->name);}
+  else {if (a->name == 0) str[0] = '\0'; else strcpy(str,a->name);}
   if (arcNameDisplay) ClearArcName(a->xmax,a->ymax,str);
 }
 
 void EraseMovingArc(a)
 arc *a;
-{
+{ 
+  if (a->x0 == HIDDEN) return;
+  arcW = ArcWidth(a);
+  arcH = ArcHiWidth(a);
+  theDrawFont = FontSelect(ArcFontSize(a));
   if (a->g_type == 0)
     DrawXorStraightArc(a->x0,a->y0,a->x1,a->y1);
   else
@@ -583,9 +617,13 @@ void HiliteArc(a)
 arc *a;
 {
   char str[MAXNAM];
+  if (a->x0 == HIDDEN) return;
   EraseArc(a);
   a->hilited = 1;
   theColor = Colors[a->col];
+  arcW = ArcWidth(a);
+  arcH = ArcHiWidth(a);
+  theDrawFont = FontSelect(ArcFontSize(a));
   if (a->g_type == 0)
     HiliteStraightArc(a->x0,a->y0,a->x1,a->y1);
   else
@@ -596,7 +634,7 @@ arc *a;
     HiliteDoubleArcArrow(a->xa0,a->ya0,a->xa1,a->ya1,a->xa2,a->ya2,a->xa3,
 			 a->ya3);
   if (intDisplay) sprintf(str,"%d",EdgeNumberOfArc(a,theGraph));    
-  else {if (a->name == 0) str[0] = 0; else strcpy(str,a->name);}
+  else {if (a->name == 0) str[0] = '\0'; else strcpy(str,a->name);}
   if (arcNameDisplay) HiliteArcName(a->xmax,a->ymax,str);
   DrawNode(a->tail);
   DrawNode(a->head);
@@ -606,10 +644,14 @@ void UnhiliteArc(a)
 arc *a;
 {  
   char str[MAXNAM];
+  if (a->x0 == HIDDEN) return;
+  arcW = ArcWidth(a);
+  arcH = ArcHiWidth(a);
+  theDrawFont = FontSelect(ArcFontSize(a));
   a->hilited = 0;
   if (intDisplay) sprintf(str,"%d",EdgeNumberOfArc(a,theGraph));
-  else {if (a->name == 0) str[0] = 0; else strcpy(str,a->name);}
-if (arcNameDisplay) UnhiliteArcName(a->xmax,a->ymax,str);
+  else {if (a->name == 0) str[0] = '\0'; else strcpy(str,a->name);}
+  if (arcNameDisplay) UnhiliteArcName(a->xmax,a->ymax,str);
   if (a->g_type == 0)
     UnhiliteStraightArc(a->x0,a->y0,a->x1,a->y1);
   else
@@ -638,9 +680,9 @@ ptr *object;
   p = theGraph->nodes->first;
   while(p) {
     n = (node*)(p->element);
-    x0 = (int)(metaScale*(n->x + nodeDiam / 2));
-    y0 = (int)(metaScale*(n->y + nodeDiam / 2));
-    r = (int)(metaScale * nodeDiam / 2);
+    x0 = (int)(metaScale*(n->x + NodeDiam(n) / 2));
+    y0 = (int)(metaScale*(n->y + NodeDiam(n) / 2));
+    r = (int)(metaScale * NodeDiam(n) / 2);
     if ((x - x0)*(x - x0) + (y - y0)*(y - y0) < r * r) {
       *object = p->element;
       return 1;
@@ -676,6 +718,7 @@ node *n;
     UnhiliteNode(n);
     theGG.active = 0;
     theGG.active_type = 0;
+    isHilite = 1;
   }
   else {
     /* otherwise there is  already an active node : unhilite it */
@@ -684,6 +727,11 @@ node *n;
       /* we are in modify menu : draw a new arc from the old active node
 	 to this node and there is no longer an active object */
       a = AddArc((node*)(theGG.active),n,theGraph);
+      if (a == 0) {
+	theGG.active = 0;
+	theGG.active_type = 0;
+	return;
+      }
       DrawArc(a);
       DrawNode(a->tail);
       DrawNode(a->head);
@@ -710,8 +758,8 @@ node *n;
   arc *a;
 
   EraseMovingNode(n);
-  n->x = (int)((double)(nx - (int)(metaScale*nodeDiam) / 2)/metaScale);
-  n->y = (int)((double)(ny - (int)(metaScale*nodeDiam) / 2)/metaScale);
+  n->x = (int)((double)(nx - (int)(metaScale*NodeDiam(n)) / 2)/metaScale);
+  n->y = (int)((double)(ny - (int)(metaScale*NodeDiam(n)) / 2)/metaScale);
   /* move arcs */
   p = n->connected_arcs->first;
   while (p) {
@@ -746,10 +794,13 @@ node *n;
 {
   char str[MAXNAM];
   theColor = Colors[n->col];
+  nodeDiam = NodeDiam(n);
+  nodeW = NodeBorder(n);
+  theDrawFont = FontSelect(NodeFontSize(n));
   if (n->hilited == 1) HiliteNode(n);
   else {
     if (intDisplay) sprintf(str,"%d",n->number);
-    else {if (n->name == 0) str[0] = 0; else strcpy(str,n->name);}
+    else {if (n->name == 0) str[0] = '\0'; else strcpy(str,n->name);}
     switch (n->type) {
     case PLAIN:
       DrawPlainNode(n->x,n->y,str);
@@ -769,6 +820,9 @@ node *n;
 void DrawMovingNode(n)
 node *n;
 {
+  nodeDiam = NodeDiam(n);
+  nodeW = NodeBorder(n);
+  theDrawFont = FontSelect(NodeFontSize(n));
   switch (n->type) {
   case PLAIN:
     DrawXorPlainNode(n->x,n->y);
@@ -788,8 +842,11 @@ void EraseNode(n)
 node *n;
 {
   char str[MAXNAM];
+  nodeDiam = NodeDiam(n);
+  nodeW = NodeBorder(n);
+  theDrawFont = FontSelect(NodeFontSize(n));
   if (intDisplay) sprintf(str,"%d",n->number);
-  else {if (n->name == 0) str[0] = 0; else strcpy(str,n->name);}
+  else {if (n->name == 0) str[0] = '\0'; else strcpy(str,n->name);}
   switch (n->type) {
   case PLAIN:
     ClearPlainNode(n->x,n->y,str);
@@ -808,6 +865,9 @@ node *n;
 void EraseMovingNode(n)
 node *n;
 {
+  nodeDiam = NodeDiam(n);
+  nodeW = NodeBorder(n);
+  theDrawFont = FontSelect(NodeFontSize(n));
   switch (n->type) {
   case PLAIN:
     DrawXorPlainNode(n->x,n->y);
@@ -828,9 +888,12 @@ node *n;
 {
   char str[MAXNAM];  
   theColor = Colors[n->col];
+  nodeDiam = NodeDiam(n);
+  nodeW = NodeBorder(n);
+  theDrawFont = FontSelect(NodeFontSize(n));
   n->hilited = 1;
   if (intDisplay) sprintf(str,"%d",n->number);
-  else {if (n->name == 0) str[0] = 0; else strcpy(str,n->name);}
+  else {if (n->name == 0) str[0] = '\0'; else strcpy(str,n->name);}
   switch (n->type) {
   case PLAIN:
     HilitePlainNode(n->x,n->y,str);
@@ -850,9 +913,12 @@ void UnhiliteNode(n)
 node *n;
 {
   char str[MAXNAM];
+  nodeDiam = NodeDiam(n);
+  nodeW = NodeBorder(n);
+  theDrawFont = FontSelect(NodeFontSize(n));
   n->hilited = 0;
   if (intDisplay) sprintf(str,"%d",n->number);
-  else {if (n->name == 0) str[0] = 0; else strcpy(str,n->name);}
+  else {if (n->name == 0) str[0] = '\0'; else strcpy(str,n->name);}
   switch (n->type) {
   case PLAIN:
     UnhilitePlainNode(n->x,n->y,str);
@@ -875,6 +941,7 @@ void CreateLoop()
   if (theGG.active != 0 && theGG.active_type == NODE) {
     n = (node*)theGG.active;
     a = AddArc(n,n,theGraph);
+    if (a == 0) return;
     DrawArc(a);
     DrawNode(a->tail);
     DrawNode(a->head);
@@ -966,16 +1033,20 @@ void RemoveSourceSink()
   }
 }
 
-void Graphics()
+void Graphics(menu)
+int menu;
 {
   char *label = "Graphic attributes";
-  char *init[1];
-  char *result[1];
-  char *description[1];
+  char *init[5];
+  char *result[5];
+  char *description[5];
   char str[64];
-  float d;
+  float d; int v;
   double smetaScale;
+  int snodeDiam, snodeW, sarcW, sarcH;
+  mylink *p;
   int i = 0;
+  int redraw = 0;
 
   sprintf(str,"%g",metaScale);
   if ((init[i] = 
@@ -988,18 +1059,118 @@ void Graphics()
     fprintf(stderr,"Running out of memory\n");
     return;
   } 
-  description[i] = "Scale : ";
+  description[i] = "Scale: ";
   i++;
+
+  if (menu == MODIFY) {
+    sprintf(str,"%d",theGraph->nodeDiam);
+    if ((init[i] = 
+	 (char*)malloc((unsigned)(strlen(str) + 1) * sizeof(char))) == NULL) {
+      fprintf(stderr,"Running out of memory\n");
+      return;
+    } 
+    strcpy(init[i],str);
+    if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+      fprintf(stderr,"Running out of memory\n");
+      return;
+    } 
+    description[i] = "Default node diameter: ";
+    i++;
+
+    sprintf(str,"%d",theGraph->nodeBorder);
+    if ((init[i] = 
+	 (char*)malloc((unsigned)(strlen(str) + 1) * sizeof(char))) == NULL) {
+      fprintf(stderr,"Running out of memory\n");
+      return;
+    } 
+    strcpy(init[i],str);
+    if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+      fprintf(stderr,"Running out of memory\n");
+      return;
+    } 
+    description[i] = "Default border node width: ";
+    i++;
+
+    sprintf(str,"%d",theGraph->arcWidth);
+    if ((init[i] = 
+	 (char*)malloc((unsigned)(strlen(str) + 1) * sizeof(char))) == NULL) {
+      fprintf(stderr,"Running out of memory\n");
+      return;
+    } 
+    strcpy(init[i],str);
+    if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+      fprintf(stderr,"Running out of memory\n");
+      return;
+    } 
+    description[i] = "Default arc width: ";
+    i++;
+
+    sprintf(str,"%d",theGraph->arcHiWidth);
+    if ((init[i] = 
+	 (char*)malloc((unsigned)(strlen(str) + 1) * sizeof(char))) == NULL) {
+      fprintf(stderr,"Running out of memory\n");
+      return;
+    } 
+    strcpy(init[i],str);
+    if ((result[i] = (char*)malloc((unsigned)64 * sizeof(char))) == NULL) {
+      fprintf(stderr,"Running out of memory\n");
+      return;
+    } 
+    description[i] = "Default highlighted arc width: ";
+    i++;
+  }
 
   if (MetanetDialogs(i,init,result,description,label)) {
     i = 0;
+
     smetaScale = metaScale;
     sscanf(result[i],"%g",&d);
     metaScale = (double)d; i++;
-    if (metaScale < 0) metaScale = smetaScale;
-    ClearDraw();
+    if (metaScale <= 0) metaScale = smetaScale;
+    if (metaScale != smetaScale) redraw = 1;
+
+    if (menu == MODIFY) {
+      snodeDiam = theGraph->nodeDiam;
+      sscanf(result[i],"%d",&v);
+      theGraph->nodeDiam = v; i++;
+      if (theGraph->nodeDiam <= 0) theGraph->nodeDiam = snodeDiam;
+      if (theGraph->nodeDiam != snodeDiam) theGG.modified = 1;
+
+      snodeW = theGraph->nodeBorder;
+      sscanf(result[i],"%d",&v);
+      theGraph->nodeBorder = v; i++;
+      if (theGraph->nodeBorder <= 0 || 
+	  theGraph->nodeBorder > theGraph->nodeDiam/2) 
+	theGraph->nodeBorder = snodeW;
+      if (theGraph->nodeBorder != snodeW) theGG.modified = 1;
+
+      sarcW = theGraph->arcWidth;
+      sscanf(result[i],"%d",&v);
+      theGraph->arcWidth = v; i++;
+      if (theGraph->arcWidth <= 0) theGraph->arcWidth = sarcW;
+      if (theGraph->arcWidth != sarcW) theGG.modified = 1;
+
+      sarcH = theGraph->arcHiWidth;
+      sscanf(result[i],"%d",&v);
+      theGraph->arcHiWidth = v; i++;
+      if (theGraph->arcHiWidth <= 0) theGraph->arcHiWidth = sarcH;
+      if (theGraph->arcHiWidth != sarcH) theGG.modified = 1;
+
+      if (theGG.modified) {
+	p = theGraph->arcs->first;
+	while (p) {
+	  SetCoordinatesArc((arc*)p->element);
+	  p = p->next;
+	}
+	redraw = 1;
+      }
+    }
+  
+    if (redraw) {
+      ClearDraw();
+      ReDrawGraph(theGraph);
+    }
   }
-  ReDrawGraph(theGraph);
 }
 
 void UnhiliteActive()

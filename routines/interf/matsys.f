@@ -6,6 +6,7 @@ c
 c     ====================================================================
 c
       include '../stack.h'
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
 c     
       common /mprot/ macprt
 c
@@ -27,11 +28,13 @@ c
       common /inter/ name
       common /adre/ lbot,ie,is,ipal,nbarg,ll(30)
       common /ibfu/ ibuf(200)
+c
       dimension sstk(2*vsiz)
       equivalence (sstk(1),stk(1))
 c     
       integer resume(nsiz),sel(nsiz)
-      data resume/505155099,673713686/,sel/236260892,673717516/
+      data resume/505155099,673713686,nz2*673720360/
+      data sel/236260892,673717516,nz2*673720360/
       data eol/99/,blank/40/,plus/45/,minus/46/,semi/43/
       data comma/52/,dot/51/
       data left/54/,right/55/,rparen/42/,lparen/41/,equal/50/
@@ -49,29 +52,26 @@ c     resu form  link   exists errcatch errclear iserror predef
 c     11   12    13     14      15       16       17      18
 c     newfun clearfun  funptr  macr2lst setbpt delbpt dispbpt
 c     19      20       21       22       23     24      25
-c     mprotect whereis
-c     26         27
+c     mprotect whereis where   timer havewindow
+c     26         27    28      29       30
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
          call basout(io,wte,' matsys '//buf(1:4))
       endif
 c     
       if(rstk(pt).eq.901) goto 71
-      if(fin.eq. 4 .or. fin.eq.11 .or.
-     +     fin.eq.12 .or. fin.eq.13 .or. fin.eq.18) goto 01
-      if(fin.eq.25) goto 370
-      if(rhs.le.0) then
+
+      if(rhs.gt.0) il=iadr(lstk(top))
+      goto (10,999,999,55,60,70,80,120,130,140,150,160,190,180,
+     +     200,210,220,230,240,250,250,300,320,320,370,380,390,
+     +     400,410,420,450),fin
+c     
+c     debug
+ 10   if(rhs.le.0) then
          call error(39)
          return
       endif
- 01   continue
-      if(rhs.gt.0) il=iadr(lstk(top))
-      goto (10,999,999,55,60,70,80,120,130,140,150,160,190,180,
-     +     200,210,220,230,240,250,250,300,320,320,370,380,390
-     +),fin
-c     
-c     debug
- 10   l=sadr(il+4)
+      l=sadr(il+4)
       ddt = int(stk(l))
       write(buf(1:4),'(i4)') ddt
       call basout(io,wte,' debug '//buf(1:4))
@@ -127,7 +127,11 @@ c     retour des valeurs
       goto 999
 c     
 c     argn
- 60   top=top-1
+ 60   if(rhs.eq.1)  top=top-1
+      if (rhs .gt. 1) then
+         call error(39)
+         return
+      endif
       if(macr.eq.0) goto 999
       if(top+lhs+1.ge.bot) then
          call error(18)
@@ -211,6 +215,10 @@ c
 c     
 c     fort
  80   continue
+      if (rhs .eq. 0) then
+         call error(39)
+         return
+      endif
       flag=.false.
       is=0
       namax=30
@@ -469,7 +477,15 @@ c     mode
       goto 999
 c     
 c     type
- 130  il=iadr(lstk(top))
+ 130  if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+      il=iadr(lstk(top))
       k=istk(il)
       istk(il)=1
       istk(il+1)=1
@@ -484,6 +500,10 @@ c     error
  140  continue
       if(rhs.gt.2) then
          call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
          return
       endif
       il=iadr(lstk(top+1-rhs))
@@ -572,7 +592,7 @@ c     resume dans une pause
      &        .or.(sym.ne.semi.and.sym.ne.comma.and.sym.ne.eol)) 
      &         goto 156
          pt=pt-3
-         k=lpt(1)-15
+         k=lpt(1)-(13+nsiz)
          bot=lin(k+5)
          mrhs=rhs
          rhs=0
@@ -669,16 +689,7 @@ c     exists
       endif
       n=istk(il+5)-1
       l=il+6
-      if(n.ge.nlgh) goto 182
-      do 181 i=n+1,nlgh
-         istk(l-1+i)=blank
- 181  continue
- 182  id(1)=0
-      id(2)=0
-      do 183 i=1,nlgh/2
-         id(1)=256*id(1)+istk(l+nlgh/2-i)
-         id(2)=256*id(2)+istk(l+nlgh-i)
- 183  continue
+      call namstr(id,istk(l),n,0)
       fin=-1
       call stackg(id)
       if (fin.gt.0) fin=1
@@ -727,8 +738,7 @@ c     nom du sous programme a lier
          call error(36)
          return
       endif
-      buf=' '
-      call cvstr(n,istk(ild),nmsub(2:8),1)
+      call cvstr(n,istk(ild),nmsub(2:n+1),1)
       nmsub(1:1)='_'
       nmsub(n+2:n+2)='_'
       ln=n+2
@@ -747,11 +757,15 @@ c     nom des fichiers
       do 193 i1=1,nbl
          n1=istk(il+4+i1)-istk(il+3+i1)
          if(n1.gt.bsiz) then
-            call error(26)
+            call error(113)
             return
          endif
          call cvstr(n1,istk(l),buf(1:n1),1)
-         call cluni0( buf(1:n1), linkfl(llink:), n)
+         call cluni0( buf(1:n1), linkfl(llink:), n,ierr)
+         if(ierr.ne.0) then
+            call error(48)
+            return
+         endif
          linkfl(llink+n:llink+n)=' '
          llink=llink+n+1
          l=l+n1
@@ -765,7 +779,7 @@ c
          if(tablin(nlink).eq.nmsub(2:ln-1))   nlink=nlink-1
       endif
       if(nlink.ge.maxlnk) then
-         call error(26)
+         call error(114)
          return
       endif
 c     
@@ -852,6 +866,14 @@ c     errcatch
 c     
 c     errclear
  210  continue
+      if (rhs .gt. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
       err2=0
       top=top+1-rhs
       il=iadr(lstk(top))
@@ -906,6 +928,10 @@ c
 c     predef
 c     
  230  continue
+      if (rhs .gt. 1) then
+         call error(39)
+         return
+      endif
       if(lhs.ne.1) then
          call error(41)
          return
@@ -983,17 +1009,7 @@ c
       endif
       n=istk(il+5)-1
       l=il+6
-      if(n.lt.nlgh) then
-         do 241 i=n+1,nlgh
-            istk(l-1+i)=blank
- 241     continue
-      endif
-      id(1)=0
-      id(2)=0
-      do 242 i=1,nlgh/2
-         id(1)=256*id(1)+istk(l+nlgh/2-i)
-         id(2)=256*id(2)+istk(l+nlgh-i)
- 242  continue
+      call namstr(id,istk(l),n,0)
 c     
       call funtab(id,fptr,3)
       if(err.gt.0) return
@@ -1023,17 +1039,7 @@ c
       endif
       n=istk(il+5)-1
       l=il+6
-      if(n.lt.nlgh) then
-         do 251 i=n+1,nlgh
-            istk(l-1+i)=blank
- 251     continue
-      endif
-      id(1)=0
-      id(2)=0
-      do 252 i=1,nlgh/2
-         id(1)=256*id(1)+istk(l+nlgh/2-i)
-         id(2)=256*id(2)+istk(l+nlgh-i)
- 252  continue
+      call namstr(id,istk(l),n,0)
       if(fin.eq.20) then
 c
 c     clearfun
@@ -1062,6 +1068,14 @@ c
 c     translate
 c
  300  continue
+      if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
       lw=lstk(top+1)
       illist=iadr(lw)
       call transl(top,illist,nlist)
@@ -1074,6 +1088,10 @@ c
 c     setbpt delbpt
 c
  320  continue
+      if (rhs .lt. 0) then
+         call error(39)
+         return
+      endif
       if(rhs.eq.2) then
          il=iadr(lstk(top))
          if(istk(il).ne.1) then
@@ -1107,17 +1125,7 @@ c
       endif
       n=istk(il+5)-1
       l=il+6
-      if(n.lt.nlgh) then
-         do 321 i=n+1,nlgh
-            istk(l-1+i)=blank
- 321     continue
-      endif
-      id(1)=0
-      id(2)=0
-      do 322 i=1,nlgh/2
-         id(1)=256*id(1)+istk(l+nlgh/2-i)
-         id(2)=256*id(2)+istk(l+nlgh-i)
- 322  continue
+      call namstr(id,istk(l),n,0)
       if(fin.eq.24) goto 350
 c
       if(rhs.eq.1) lnb=1
@@ -1218,7 +1226,7 @@ c
 
       if(nmacs.gt.0) then
          do 375 kk=1,nmacs
-            call cvname(macnms(1,kk),buf(1:8),1)
+            call cvname(macnms(1,kk),buf(1:nlgh),1)
             call msgs(27,0)
             do 373 kl=lgptrs(kk),lgptrs(kk+1)-1
                write(buf(1:10),'(5x,i5)') bptlg(kl)
@@ -1235,6 +1243,14 @@ c
 c
 c     mprotect
  380  continue
+      if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
       if(istk(il).ne.10) then
          err=1
          call error(55)
@@ -1270,17 +1286,7 @@ c     whereis
          endif
          n=istk(il+5)-1
          l=il+6
-         if(n.lt.nlgh) then
-            do 391 i=n+1,nlgh
-               istk(l-1+i)=blank
- 391        continue
-         endif
-         id(1)=0
-         id(2)=0
-         do 392 i=1,nlgh/2
-            id(1)=256*id(1)+istk(l+nlgh/2-i)
-            id(2)=256*id(2)+istk(l+nlgh-i)
- 392     continue
+         call namstr(id,istk(l),n,0)
       else
          err=1
          call error(44)
@@ -1301,25 +1307,73 @@ c     whereis
          istk(il+2)=1
          istk(il+3)=0
          istk(il+4)=1
-         istk(il+5)=9
-         l=il+5
-         lstk(top+1)=sadr(il+14)
+         l=il+6
          call putid(id,idstk(1,fun))
          fun=0
-         id1=id(1)
-         id2=id(2)
-         do 293 i=1,nlgh/2
-            k=id1/256
-            istk(l+i)=id1-256*k
-            id1=k
- 293     continue
-         do 294 i=nlgh/2+1,nlgh
-            k=id2/256
-            istk(l+i)=id2-256*k
-            id2=k
- 294     continue
+         call namstr(id,istk(l),n,1)
+         istk(il+5)=n+1
+         lstk(top+1)=sadr(l+n)
       endif
+      return
+c     where
+ 400  continue
+      call where
+      return
+ 410  continue
+c     timer
+      call scitimer('timer')
+      return
+ 420  continue
+c     notify
+      if(rhs.ne.1) then
+         call error(39)
+         return
+      endif
+      if(lhs.gt.1) then
+         call error(41)
+         return
+      endif
+      il=iadr(lstk(top))
+      l=sadr(il+4)
+      ntfy=stk(l)
+      call stntfy(ntfy)
+      istk(il)=0
+      return
+c
+ 450  continue
+c     havewindow
+      call xscion(iflag)
+      top=top+1
+      il=iadr(lstk(top))
+      istk(il)=4
+      istk(il+1)=1
+      istk(il+2)=1
+      istk(il+3)=iflag
+      lstk(top+1)=sadr(il+4)
       return
 c
  999  return
       end
+     
+      subroutine scitimer(fname)
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs
+      if (.not.checkrhs(fname,-1,-1)) return
+      call  timer()
+      call  objvide(fname,top)
+      return
+      end
+
+
+      subroutine scilines(nl,nc)
+      include '../stack.h'
+      integer nl,nc
+c     set  number of lines and columns 
+      lct(5)=nc 
+      lct(2) = max(0,nl)
+      return
+      end
+
+

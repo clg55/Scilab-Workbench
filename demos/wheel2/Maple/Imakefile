@@ -12,9 +12,11 @@ DependTarget()
 
 distclean:: clean
 
-/tmp/wheel.o : wheel.f 
-	$(FC) $(FFLAGS) $(FPL) -c wheel.f -o /tmp/wheel.o
 
-/tmp/wheelg.o : wheelg.f 
-	$(FC) $(FFLAGS) $(FPL) -c wheelg.f -o /tmp/wheelg.o
+ObjectDemo(/tmp/wheel.o,wheel.f ,$(FPL))
+ObjectDemo(/tmp/wheelg.o,wheelg.f,$(FPL))
+
+
+
+
 

@@ -22,20 +22,21 @@ c     Serge Steer INRIA
 c!
       double precision a,a1,ent,dec,round,d1mach
       integer typ,n1,n2,maxc
-      logical v
+      logical v,t1,t2
 c
 c     test des NaN
       v=.false.
-      if (.not.(a.le.1)) then
-         if(.not.(a.ge.1)) then
-            v=.true.
-         endif
+      t1=(a.le.1)
+      t2=(a.ge.1)
+      if ((.not.t1).and.(.not.t2)) then
+         v=.true.
       endif
 
-      if(v.or.a.gt.d1mach(2)) then
-         typ=2
-         n1=4
-         n2=0
+      if(v) then
+         typ=-2
+         return
+      elseif(a.gt.d1mach(2)) then
+         typ=-1
          return
       endif
       if(maxc-3.le.0) goto 30
@@ -46,7 +47,7 @@ c     test des NaN
       ndgt=int(log10(ent))+1
       if(ndgt.lt.0) ndgt=maxc
       if(ndgt.le.maxc-2) goto 10
-      if(maxc-7.le.0) goto 30
+      if(maxc-7.lt.0) goto 30
       typ=1
       n1=maxc
       n2=maxc-7
@@ -81,7 +82,7 @@ c
       n1=maxc-3
       n2=min(maxc-7,ndgt-m)
       if(n1.ge.n2) goto 26
-   25 if(maxc-7.le.0) goto 26
+   25 if(maxc-7.lt.0) goto 26
       typ=1
       n1=maxc
       n2=maxc-7

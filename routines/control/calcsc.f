@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=CALCSC,SSI=0
       subroutine calcsc(type)
 c this routine calculates scalar quantities used to
 c compute the next k polynomial and new estimates of

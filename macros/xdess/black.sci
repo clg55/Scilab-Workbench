@@ -114,8 +114,8 @@ else
   strf='111'
 end;
 rect=[-360;mini(d);0;maxi(d)]
-[xmn,xmx,npx]=graduat(-360,0)
-[ymn,ymx,npy]=graduat(mini(d),maxi(d))
+[xmn,xmx,npx]=graduate(-360,0)
+[ymn,ymx,npy]=graduate(mini(d),maxi(d))
 rect=[xmn,ymn,xmx,ymx]
 leg=strcat(comments,'@')
 
@@ -145,7 +145,7 @@ end
 kf=1
 for k=1:mn,
     xnumb(phi(k,ks),d(k,ks),frq(kf,ks),0);
-    xpoly(phi(k,ks),d(k,ks),"marks",0);
+    xpoly(phi(k,ks),d(k,ks),'marks',0);
   kf=kf+ilf
 end;
 xclip();

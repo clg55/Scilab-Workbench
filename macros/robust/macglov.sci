@@ -1,5 +1,5 @@
-function [P,r]=Macglov(Sl)
-//[P,r]=Macglov(Sl)
+function [P,r]=macglov(Sl)
+//[P,r]=macglov(Sl)
 //Standard plant for the Glover-McFarlane problem:
 // for this problem mu_optimal = 1-hankel_norm([N,M])
 // with [N,M]=LCF(Sl) (Normalized coprime factorization)
@@ -7,10 +7,10 @@ function [P,r]=Macglov(Sl)
 //!
 //FD.
 flag=0;
-if Sl(1)='r' then sl=tf2ss(sl),flag=1;end
+if Sl(1)='r' then Sl=tf2ss(Sl),flag=1;end
 [A,B,C,D]=Sl(2:5);[n,nb]=size(B);[nc,n]=size(C);
 r=size(D);
-[Z,H]=GFARE(Sl);
+[Z,H]=gfare(Sl);
 R1=eye+D*D';
 R12=sqrt(R1);
 Ap=A;

@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 OBJS_C = cchar.o ccharf.o cdouble.o cdoublef.o cerro.o cint.o cintf.o cout.o

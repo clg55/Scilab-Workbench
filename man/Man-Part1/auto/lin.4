@@ -10,7 +10,7 @@ lin - linearization
 .SH PARAMETERS
 .TP 10
 sim
-: macro
+: function
 .TP
 x0, u0
 : vectors of compatible dimensions
@@ -24,12 +24,12 @@ sl
 linearization of the non-linear system \fV[y,xdot]=sim(x,u)\fR
 around \fVx0,u0\fR.
 .LP
-\fVsim\fR is a macro which computes \fVy\fR and \fVxdot\fR.
+\fVsim\fR is a function which computes \fVy\fR and \fVxdot\fR.
 .LP
 The output is a linear system (\fVsyslin\fR list) \fVsl\fR or the 
 four matrices \fV(A,B,C,D)\fR
 .SH EXAMPLE
-Let ftz be the macro passed to ode e.g.
+Let ftz be the function passed to ode e.g.
 .nf
 [zd]=ftz(t,z,u)
 .fi
@@ -37,7 +37,7 @@ and let us assume \fVy=x\fR.
 .LP
 \fV[z]=ode(x0,t0,tf,list(ftz,u)\fR compute \fVx(tf)\fR.
 .LP
-Let \fVsimula\fR be the following macro:
+Let \fVsimula\fR be the following function:
 .nf
 deff('[y,xd]=simula(x,u)','xd=ftz(tf,x,u); y=x;');
 .fi
@@ -47,4 +47,4 @@ The tangent linear system \fVsl\fR can be obtained by:
 sl = syslin('c',A,B,C,D,x0)
 .fi
 .SH SEE ALSO
-external, derivee
+external, derivat

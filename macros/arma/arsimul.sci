@@ -1,7 +1,7 @@
-//<z>=arsimul(a,b,d,sig,u,up,yp,ep)
-//<z>=arsimul(a,b,d,sig,u,[up,yp,ep])
+function z=arsimul(a,b,d,sig,u,up,yp,ep)
+//z=arsimul(a,b,d,sig,u,[up,yp,ep])
 //            ou
-//<z>=arsimul(ar,u,[up,yp,ep])
+//z=arsimul(ar,u,[up,yp,ep])
 // Simule un ARMAX multidimensionnel
 // Le modele est donne par :
 //   A(z^-1) z(k)= B(z^-1)u(k) + D(z^-1)*sig*e(k)
@@ -36,10 +36,13 @@
 //
 [lhs,rhs]=argn(0)
 if type(a)=15,
-   if rhs=2,z=arsimul(ar(2),ar(3),ar(4),ar(7),b);return;end
-   if rhs=3,z=arsimul(ar(2),ar(3),ar(4),ar(7),b,d);return;end
-   if rhs=4,z=arsimul(ar(2),ar(3),ar(4),ar(7),b,d,sig);return;end
-   if rhs=5,z=arsimul(ar(2),ar(3),ar(4),ar(7),b,d,sig,u);return;end
+   if rhs=2,z=arsimul(a(2),a(3),a(4),a(7),b);return;end
+   if rhs=3,z=arsimul(a(2),a(3),a(4),a(7),b,d);return;end
+   if rhs=4,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig);return;end
+   if rhs=5,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u);return;end
+   if rhs=6,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u,up);return;end
+   if rhs=7,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u,up,yp);return;end
+   if rhs=8,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig,u,up,yp,ep);return;end
 end
 z=0;
 [lhs,rhs]=argn(0)
@@ -58,16 +61,17 @@ for j=2:nn,a_fff= [ a_fff ; a1(:,1+(j-1)*al:j*al)];end
 a2=[diag(1*ones(1,nn-1),1).*.eye(al)];
 a_fff=[a_fff,a2(:,al+1:nn*al)];
 //----b_fff
-B1=[ b(:,mmu+1:bc), 0*ones(al,mmu*(nn-bdeg+1))];
+b1=[ b(:,mmu+1:bc), 0*ones(al,mmu*(nn-bdeg+1))];
 b_fff=b1(:,1:mmu);
 for j=2:nn,b_fff= [ b_fff ; b1(:,1+(j-1)*mmu:j*mmu)];end
 //----d_fff
-D1=[ d(:,al+1:dc), 0*ones(al,al*(nn-ddeg+1))];
+d1=[ d(:,al+1:dc), 0*ones(al,al*(nn-ddeg+1))];
 d_fff=d1(:,1:al)
 for j=2:nn,d_fff= [ d_fff ; d1(:,1+(j-1)*al:j*al)];end
-d_fff=d_fff+a_fff(:,1);
+d_fff=d_fff+a_fff(:,1)
 //
 deff('[xdot]=fff(t,x)',['xdot=a_fff*x+b_fff*u(:,t)+d_fff*br(:,t)']);
+comp(fff);
 // simulation de e(n) le bruit
 rand('normal');
 br=sig*rand(al,Nu);
@@ -81,7 +85,7 @@ else
    up_s=size(up)
    if up_s(1)<>mmu|up_s(2)<>(bdeg-1) then
     write(%io(2)," up=[u(0),u(-1),..,] doit etre de dimension ("...
-    +strin(mmu)+','+string(bdeg-1));
+    +string(mmu)+','+string(bdeg-1));
     return;end
 end
 if rhs <=6,
@@ -90,7 +94,7 @@ else
   yp_s=size(yp);
   if yp_s(1)<>al|yp_s(2)<>(adeg-1) then 
     write(%io(2)," yp=[y(0),y(-1),..,] doit etre de dimension ("...
-    +strin(al)+','+string(adeg-1));
+    +string(al)+','+string(adeg-1));
     return;end
 end
 if rhs <=7,
@@ -99,21 +103,20 @@ else
   ep_s=size(ep);
   if ep_s(1)<>al|ep_s(2)<>(ddeg-1) then
     write(%io(2)," ep=[e(0),e(-1),..,] doit etre de dimension ("...
-    +strin(al)+','+string(ddeg-1));
+    +string(al)+','+string(ddeg-1));
     return;end
 end;
 yinit=[ yp, 0*ones(al,al*(nn-adeg+1))];
 uinit=[up, 0*ones(al,mmu*(nn-bdeg+1))];
 yinit=matrix(yinit,nn*al,1);
 uinit=matrix(uinit,nn*mmu,1);
-Y1=a1*yinit+b1*uinit;
-for i=1:nn-1, a1=[ -a1(:,al+1:nn*al), 0*ones(al,al)];
+y1=a1*yinit+b1*uinit;
+for i=1:nn-1, a1=[a1(:,al+1:nn*al), 0*ones(al,al)];
            b1=[ b1(:,mmu+1:nn*mmu), 0*ones(al,mmu)];
            y1=[y1;a1*yinit+b1*uinit];
 end;
 // Simulation par ode et calcul de la sortie
 // z = premiere composante ``bloc'' de Y
-
 if size(a_fff)=[0,1];
    z=b(1:al,1:mmu)*u(:,:)+d(1:al,1:al)*br(:,:);
 else

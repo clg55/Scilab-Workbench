@@ -4,9 +4,13 @@
 penlaur - Laurent coefficients of matrix pencil
 .SH CALLING SEQUENCE
 .nf
+[Si,Pi,Di,order]=penlaur(Fs)
 [Si,Pi,Di,order]=penlaur(E,A)
 .fi
 .SH PARAMETERS
+.TP 12
+Fs
+: a regular pencil \fVs*E-A\fR
 .TP 12
 E, A
 : two real square matrices
@@ -25,7 +29,7 @@ infinity.
 .LP
 \fVorder\fR = order of the singularity (index-1).
 .LP
-The matrix \fVs*E-A\fR should be invertible.
+The matrix pencil \fVFs=s*E-A\fR should be invertible.
 .LP
 For a index-zero pencil, \fVPi, Di,...\fR are zero and \fVSi=inv(E)\fR.
 .LP

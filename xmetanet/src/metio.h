@@ -1,3 +1,6 @@
+#define STRLEN 1000
+char Description[STRLEN];
+
 extern void AddMessage();
 extern void AddText();
 extern void MetanetAlert();

@@ -7,18 +7,16 @@ mode(1)
 //                    -----------------------------
 //
 
-// definition des constantes
+// constants
 // -------------------------
    tr=186.d-6; gb=6000; g1=0.55; tau=6.d-4; g2=0.02; g4=26;
     r=3      ; l=6.d-3; ga=100 ; kr=17.d-3; j=1.d-7; c=0.05;
    g5=0.07   ; g=0.27;
 //
-// definition de la variable polynomiale p
-// ---------------------------------------
    s=poly(0,'s');
    halt()
 //
-// systeme 1  -]  feedback le plus interne
+// systeme 1  ->  feedback le plus interne
 // ---------
    h1=(1/(r+l*s)*ga*g)/.r
    halt()
@@ -46,7 +44,7 @@ mode(1)
 // comparaison avec le resultat donne
 // ----------------------------------
    hc=(2*ga/(1+g*ga)*kr*gb*g*(g1*tau*s+g2)) ...
-      /(j*l*tau*s**4/(1+g*ga)+j*r*tau*s**3+  ...
+      /(j*l*tau*s^4/(1+g*ga)+j*r*tau*s^3+  ...
        tau*s*s*(ga/(1+g*ga)*g4*g5*kr*g+l*c/(1+g*ga))+r*c*tau*s);
    hc=syslin('c',hc);
    h/hc
@@ -67,8 +65,7 @@ mode(1)
    [a,b,c,d]=sst(2:5);
    halt()
 //
-// le system boucle est de dimenion infinie. On se ramene a la
-// dimension finie en placant devant le retard un bloqueur
+// On place devant le retard un bloqueur
 // d'ordre 0 et de periode td
 // -------------------------------------------------------
    td = tr/10;
@@ -98,7 +95,7 @@ mode(1)
    [tetae,x]=ddls_sim(ad,bd,c,tr,td,e);
    xbasc();
    plot2d1("onn",(1:400)'*td,[e;tetae]');
-   xtitle(['echelon de 100mrd';'reponse']);
+   xtitle(['step  100mrd';'response']);
    halt()
 //
 // appel pour une entree sinusoidale 10mrd 100hz
@@ -107,7 +104,7 @@ mode(1)
    [tetas1,x]=ddls_sim(ad,bd,c,tr,td,s1);
    xbasc();
    plot2d1("onn",(1:600)'*td,[s1;tetas1]');
-   xtitle(['entree sinusoidale 10mrd 100hz';'reponse']);
+   xtitle(['sinusoidale input 10mrd 100hz';'response']);
    halt()
 //
 // appel pour une entree sinusoidale 3mrd 300hz
@@ -116,6 +113,6 @@ mode(1)
    [tetas2,x]=ddls_sim(ad,bd,c,tr,td,s2);
    xbasc();
    plot2d1("onn",(1:600)'*td,[s2;tetas2]');
-   xtitle(['entree sinusoidale 3mrd 300hz';'reponse']);
+   xtitle(['sinus input 3mrd 300hz';'response']);
 
 //

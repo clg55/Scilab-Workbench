@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=FOUT,SSI=0
       integer function fout(lsize,alpha,beta,s,p)
       integer lsize
       double precision alpha,beta,s,p

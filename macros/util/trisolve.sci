@@ -1,10 +1,10 @@
-function <b,sexp>=trisolve(a,b,sexp)
+function [b,sexp]=trisolve(a,b,sexp)
 //[x [,sexp]] = trisolve(A,b [,sexp])  symbolically solves A*x =b 
 // when A and b are matrices of character strings, A being assumed to be
 // upper triangular.  
 //sexp : vector of common subexpressions in A, b and x.
 //!
-//origine F. Delebecque S. Steer INRIA 1989
+//origine F. D. S. Steer INRIA 1989
 //
 [lhs,rhs]=argn(0)
 [n0,m]=size(b)
@@ -25,7 +25,7 @@ for n=n0:-1:1
     pivot=a(n,n)
     for k=1:m,
        ns=ns+1
-       Sexp(ns)=ldivf(PIVOT,b(n,k))
+       sexp(ns)=ldivf(pivot,b(n,k))
        b(n,k)='%('+string(ns)+')';
     end
     if n=1 then return,end

@@ -1,4 +1,4 @@
-function [r]=horner(P,x)
+function [r]=horner(p,x)
 // horner(P,x) evaluates the polynomial or rational matrix P = P(s) 
 // when the variable s of the polynomial is replaced by x
 // x can be a scalar or polynomial or rational matrix.

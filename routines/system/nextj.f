@@ -13,16 +13,16 @@ c
       logical getmat,cremat,smatj,lmatj,getsmat,getilist,getpoly,pmatj
 c
 c
-      integer iadr,sadr
+      integer iadr
       data semi/43/
 c
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
 c
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') j
-         call cvname(id,buf(5:12),1)
-         call basout(io,wte,' nextj j:'//buf(1:4)//' var:'//buf(5:12))
+         call cvname(id,buf(5:4+nsiz*4),1)
+         call basout(io,wte,' nextj j:'//buf(1:4)//' var:'//
+     $        buf(5:4+nsiz*4))
       endif
 c
       j = j + 1
@@ -30,9 +30,8 @@ c
       top = top + 1
       vt=ogettype(top-1)
       goto (10,20,2,2,2,2,2,2,2,30,2,2,2,2,40) vt
- 2    write(buf,*) 'for x=val with type(val)=',vt, 
-     $     ' is not implemented in Scilab'
-      call error(998)
+ 2    err=vt
+      call error(76)
       return
 c---  matrices scalaires 
  10   if (.not.getmat("nextj",top-1,top-1,it,m,n,lr,lc)) return

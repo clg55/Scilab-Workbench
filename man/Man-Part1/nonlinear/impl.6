@@ -18,7 +18,7 @@ t
 : real row vector
 .TP 15
 res,adda,jac 
-: externals (macro or list or string)
+: externals (function or list or string)
 .TP
 type 
 : string \fV'adams'\fR or \fV'stiff'\fR
@@ -43,13 +43,13 @@ res
 : External
 .RS
 .TP
-a macro
+a function
 its syntax must be r=res(t,y,ydot)
 and \fVres\fR must return r=g(t,y)-A(t,y)*ydot
 .TP
 a list 
 it must be : list(res,x1,x2,...)
-where the syntax of the macro \fVres\fR is now
+where the syntax of the function \fVres\fR is now
 .nf
 r=res(t,y,ydot,x1,x2,...)
 .fi
@@ -66,13 +66,13 @@ adda
 : External
 .RS
 .TP
-a macro
+a function
 its syntax must be r=adda(t,y,p)
 and \fVadda\fR must return  \fVr=A(t,y)+p\fR
 .TP
 a list 
 it must be : list(adda,x1,x2,...)
-where the syntax of the macro \fVadda\fR is now 
+where the syntax of the function \fVadda\fR is now 
 .nf
 r=adda(t,y,x1,x2,...)
 .fi
@@ -88,13 +88,13 @@ jac
 : External
 .RS
 .TP
-a macro
+a function
 its syntax must be j=jac(t,y,ydot)
 and \fVadda\fR must return  the jacobian of \fVr=g(t,y)-A(t,y)*ydot\fR
 .TP
 a list 
 it must be : list(jac,x1,x2,...)
-where the syntax of the macro \fVjac\fR is now 
+where the syntax of the function \fVjac\fR is now 
 .nf
 r=jac(t,y,ydot,x1,x2,...)
 .fi

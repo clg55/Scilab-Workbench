@@ -66,26 +66,26 @@ StoreXcall1(fname,string,x1,n1,c1,x2,n2,c2,x3,n3,c3,x4,n4,c4,x5,n5,c5,x6,n6,c6)
   struct xcall1_rec *lplot;
   if (debug)
     {
-      fprintf(stdout,"Inside StoreXcall1 [%s],[%s]\n",fname,string);
+      fprintf(stderr,"Inside StoreXcall1 [%s],[%s]\n",fname,string);
       if ( (x1) != (char *) 0){
-	fprintf(stdout,"Argument-1, taille %d type %c\n",n1,c1);
+	fprintf(stderr,"Argument-1, taille %d type %c\n",n1,c1);
 	if ( (x2) != (char *) 0){
-	  fprintf(stdout,"Argument-2, taille %d type %c\n",n2,c2);
+	  fprintf(stderr,"Argument-2, taille %d type %c\n",n2,c2);
 	  if ( (x3) != (char *) 0){
-	    fprintf(stdout,"Argument-3, taille %d type %c\n",n3,c3);
+	    fprintf(stderr,"Argument-3, taille %d type %c\n",n3,c3);
 	    if ( (x4) != (char *) 0){
-	      fprintf(stdout,"Argument-4, taille %d type %c\n",n4,c4);
+	      fprintf(stderr,"Argument-4, taille %d type %c\n",n4,c4);
 	      if ( (x5) != (char *) 0){
-		fprintf(stdout,"Argument-5, taille %d type %c\n",n5,c5);
+		fprintf(stderr,"Argument-5, taille %d type %c\n",n5,c5);
 		if ( (x6) != (char *) 0){
-		  fprintf(stdout,"Argument-6, taille %d type %c\n",n6,c6);
+		  fprintf(stderr,"Argument-6, taille %d type %c\n",n6,c6);
 		};
 	      };
 	    };
 	  };
 	};
       };
-      fprintf(stdout,"That's over\n");
+      fprintf(stderr,"That's over\n");
     };
   lplot= ((struct xcall1_rec *) malloc((unsigned) sizeof(struct xcall1_rec)));
   if (lplot != NULL)
@@ -116,7 +116,7 @@ StoreXcall1(fname,string,x1,n1,c1,x2,n2,c2,x3,n3,c3,x4,n4,c4,x5,n5,c5,x6,n6,c6)
 	  Store("xcall1",(char *) lplot);
 	  return;};
     };
-  fprintf(stderr,"\nStore Plot : No more place \n");
+  Scistring("\nStore Plot : No more place \n");
 };
 
 int CopyVectG(pstr,str,n,type)
@@ -165,7 +165,7 @@ StoreEch(name,WRect,FRect)
 	  Store("scale",(char *) lplot);
 	  return;};
     };
-  fprintf(stderr,"\n Store Plot : No more place \n");
+  Scistring("\n Store Plot : No more place \n");
 };
 
   
@@ -217,7 +217,7 @@ StorePlot(name,xf,x,y,n1,n2,style,strflag,legend,brect,aint)
 	  Store("plot2d",(char *) lplot);
 	  return;};
     };
-  fprintf(stderr,"\n Store Plot : No more place \n");
+  Scistring("\n Store Plot : No more place \n");
 };
 
 
@@ -227,7 +227,8 @@ StorePlot(name,xf,x,y,n1,n2,style,strflag,legend,brect,aint)
 
 struct param3d_rec {char *name;
 		   double *x,*y,*z,*bbox;
-		   int   n,teta,alpha,*flag;
+		   int   n,*flag;
+		    double teta,alpha;
 		   char  *legend;
 		 } ;
 /* Store the plot in the plot list 
@@ -236,7 +237,8 @@ struct param3d_rec {char *name;
 StoreParam3D(name,x,y,z,n,teta,alpha,legend,flag,bbox)
      char name[];
      double x[],y[],z[],bbox[];
-     int *n,*teta,*alpha;
+     int *n;
+     double *teta,*alpha;
      int flag[];
      char legend[];
 {
@@ -261,7 +263,7 @@ StoreParam3D(name,x,y,z,n,teta,alpha,legend,flag,bbox)
 	  Store(name,(char *) lplot);
 	  return;};
     };
-  fprintf(stderr,"\n Store Plot : No more place \n");
+  Scistring("\n Store Plot : No more place \n");
 };
 
 
@@ -271,7 +273,8 @@ StoreParam3D(name,x,y,z,n,teta,alpha,legend,flag,bbox)
 
 struct plot3d_rec {char *name;
 		   double *x,*y,*z,*bbox;
-		   int   p,q,teta,alpha,*flag;
+		   int   p,q,*flag;
+		   double teta,alpha;
 		   char  *legend;
 		 } ;
 /* Store the plot in the plot list 
@@ -280,7 +283,8 @@ struct plot3d_rec {char *name;
 StorePlot3D(name,x,y,z,p,q,teta,alpha,legend,flag,bbox)
      char name[];
      double x[],y[],z[],bbox[];
-     int *p,*q,*teta,*alpha;
+     int *p,*q;
+     double *teta,*alpha;
      int flag[];
      char legend[];
 {
@@ -306,7 +310,7 @@ StorePlot3D(name,x,y,z,p,q,teta,alpha,legend,flag,bbox)
 	  Store(name,(char *) lplot);
 	  return;};
     };
-  fprintf(stderr,"\n Store Plot : No more place \n");
+  Scistring("\n Store Plot : No more place \n");
 };
 
 
@@ -315,10 +319,11 @@ StorePlot3D(name,x,y,z,p,q,teta,alpha,legend,flag,bbox)
 ---------------------------------------------------------------------------*/
 
 struct contour_rec {char *name;
-		   double *x,*y,*z,*zz,zlev;
-		   int   n1,n2,nz,flagnz;
-		   double *bbox;
-		   int   teta,alpha,*flag;
+		    double *x,*y,*z,*zz,zlev;
+		    int   n1,n2,nz,flagnz;
+		    double *bbox;
+		    double teta,alpha;
+		    int *flag;
 		   char  *legend;
 		 } ;
 /* Store the plot in the plot list 
@@ -327,7 +332,8 @@ struct contour_rec {char *name;
 StoreContour(name,x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev)
      char name[];
      double x[],y[],z[],zz[],bbox[6],*zlev;
-     int *n1,*n2,*nz,*flagnz,*teta,*alpha;
+     int *n1,*n2,*nz,*flagnz;
+     double *teta,*alpha;
      int flag[3];
      char legend[];
 {
@@ -361,7 +367,7 @@ StoreContour(name,x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev)
 	  Store(name,(char *) lplot);
 	  return;};
     };
-  fprintf(stderr,"\n Store Plot : No more place \n");
+  Scistring("\n Store Plot : No more place \n");
 };
 
 
@@ -398,7 +404,7 @@ StoreGray(name,x,y,z,n1,n2)
 	  Store(name,(char *) lplot);
 	  return;};
     };
-  fprintf(stderr,"\n Store Plot : No more place \n");
+  Scistring("\n Store Plot : No more place \n");
 };
 
 
@@ -436,7 +442,7 @@ StoreChamp(name,fx,fy,n1,n2,strflag,vrect,arfact)
 	  Store("champ",(char *) lplot);
 	  return;};
     };
-  fprintf(stderr,"\n Store Plot : No more place \n");
+  Scistring("\n Store Plot : No more place \n");
 };
 
 /*---------------------------------------------------------------------
@@ -651,35 +657,171 @@ CleanPlot(type,plot)
        else 
 	 { if ( j <= 0)
 	     {
-	       fprintf(stderr,"Unknow Plot type <%s>\n",type);
+	       SciF1s("Unknow Plot type <%s>\r\n",type);
 	       return;
 	     }
 	   else i++;
 	 };
      };
-  fprintf(stderr,"Unknow Plot type <%s>\n",type);
+  SciF1s("Unknow Plot type <%s>\r\n",type);
+};
+
+
+/*-------------------------------------------------------------------------
+\encadre{Change les angles alpha theta }
+---------------------------------------------------------------------------*/
+
+NAPlots(unused,winnumber,theta,alpha)
+     char *unused;
+     int *winnumber;
+     double *theta,*alpha;
+{
+  struct listplot *list,*list1;     
+#ifdef lint 
+  *unused;
+#endif
+  list=first;
+  while (list)
+    {
+      if (list->window == *winnumber && list->theplot != NULL) 
+	    NAPlot(list->type,list->theplot,theta,alpha);
+      list =list->ptrplot;
+    };
+};
+
+NA3D(plot,theta,alpha)
+     char *plot;
+     double *theta,*alpha;
+{
+  struct plot3d_rec *theplot;
+  theplot=(struct plot3d_rec *) plot;
+  theplot->teta=*theta;
+  theplot->alpha=*alpha;
+};
+
+NAContour(plot,theta,alpha)
+     char *plot;
+     double *theta,*alpha;
+{
+  struct contour_rec *theplot;
+  theplot=(struct contour_rec *) plot;
+  theplot->teta=*theta;
+  theplot->alpha=*alpha;
+};
+
+NAGray(plot,theta,alpha)
+     char *plot;
+     double *theta,*alpha;
+{
+};
+
+NAParam3D(plot,theta,alpha)
+     char *plot;
+     double *theta,*alpha;
+{
+  struct param3d_rec *theplot;
+  theplot=(struct param3d_rec *) plot;
+  theplot->teta=*theta;
+  theplot->alpha=*alpha;
+};
+
+NA2D(plot,theta,alpha)
+     char *plot;
+     double *theta,*alpha;
+{};
+
+NAEch(plot,theta,alpha)
+     char *plot;
+     double *theta,*alpha;
+{};
+
+
+NAX1(plot,theta,alpha)
+     char *plot;
+     double *theta,*alpha;
+{};
+
+NAChamp(plot,theta,alpha)
+     char *plot;
+     double *theta,*alpha;
+{};
+
+typedef  struct  {
+  char *name;
+  int  (*NA)();} NATable;
+
+static NATable NACTable[] ={
+    "champ",NAChamp,
+    "contour",NAContour,
+    "gray",NAGray,
+    "param3d",NAParam3D,
+    "plot2d",NA2D,
+    "plot3d",NA3D,
+    "plot3d1",NA3D,
+    "scale",NAEch,
+    "xcall1",NAX1,
+    (char *)NULL,NULL};
+
+NAPlot(type,plot,alpha,theta)
+     char type[];
+     char *plot;
+     double *alpha,*theta;
+{
+  int i=0;
+  while ( NACTable[i].name != (char *) NULL)
+     {
+       int j;
+       j = strcmp(type,NACTable[i].name);
+       if ( j == 0 ) 
+	 { 
+	   (*(NACTable[i].NA))(plot,alpha,theta);
+	   return;}
+       else 
+	 { if ( j <= 0)
+	     {
+	       SciF1s("Unknow Plot type <%s>\r\n",type);
+	       return;
+	     }
+	   else i++;
+	 };
+     };
+  SciF1s("Unknow Plot type <%s>\r\n",type);
 };
 
 
 /*---------------------------------------------------------------------
-\encadre{Redessine \`a nouveau les dessin stock\'es}
+\encadre{Redessine \`a nouveau les dessin stock\'es en changeant les theta alpha 
+   des plots 3d}
 ---------------------------------------------------------------------------*/
 extern char GetDriver_();
+
+Tape_ReplayNewAngle(unused,winnumber,theta,alpha)
+     char *unused;
+     int *winnumber;
+     double *theta,*alpha;
+{ 
+  NAPlots(unused,winnumber,theta,alpha);
+  Tape_Replay(first,winnumber);
+};
+
+/*---------------------------------------------------------------------
+\encadre{Redessine \`a nouveau les dessin stock\'es}
+---------------------------------------------------------------------------*/
+
 
 Tape_Replay(unused,winnumber)
      char *unused;
      int *winnumber;
 { 
   char c,name[4];
-
-  if ( (c=GetDriver_())=='R')
-    { 
-      C2F(dr)("xsetdr","X11"
-	, IP0, IP0,IP0,IP0,IP0,IP0,0,0);
+  GetDriver1_(name);
+  if (first != NULL)
+    {
+      if ( (c=GetDriver_())=='R' )
+	  C2F(dr)("xsetdr","X11",IP0,IP0,IP0,IP0,IP0,IP0,0,0);
+      Tape_Replay1(first,*winnumber);
+      C2F(dr)("xsetdr",name, IP0, IP0,IP0,IP0,IP0,IP0,0,0);
     };
-  if (first != NULL )  Tape_Replay1(first,*winnumber);
-  name[0]=c;
-  C2F(dr)("xsetdr",name, IP0, IP0,IP0,IP0,IP0,IP0,0,0);
 };
 
 Tape_Replay1(list,winnumber)
@@ -700,6 +842,7 @@ Replay3D(theplot)
 	  &pl3d->alpha,pl3d->legend,pl3d->flag,pl3d->bbox,0L);
 }
 
+
 ReplayContour(theplot)
      char *theplot;
 {
@@ -719,6 +862,7 @@ ReplayGray(theplot)
   C2F(xgray)(pl3d->x,pl3d->y,pl3d->z,&pl3d->n1,&pl3d->n2);
 }
 
+
 ReplayParam3D(theplot)
      char *theplot;
 {
@@ -728,6 +872,8 @@ ReplayParam3D(theplot)
 	  &pl3d->alpha,pl3d->legend,pl3d->flag,pl3d->bbox,0L);
 }
 
+
+
 Replay3D1(theplot)
      char *theplot;
 {
@@ -736,6 +882,7 @@ Replay3D1(theplot)
   C2F(plot3d1)(pl3d->x,pl3d->y,pl3d->z,&pl3d->p,&pl3d->q,&pl3d->teta,
 	  &pl3d->alpha,pl3d->legend,pl3d->flag,pl3d->bbox,0L);
 }
+
 
 typedef  struct  {
   char *name;
@@ -750,6 +897,7 @@ OpTab plottab[] ={
   "plot2d3",C2F(plot2d3),
   "plot2d4",C2F(plot2d4),
   (char *) NULL,fnvide_};
+
 
 Replay2D(theplot)
      char *theplot;
@@ -771,13 +919,13 @@ Replay2D(theplot)
        else 
 	 { if ( j <= 0)
 	     {
-	       fprintf(stderr,"\nUnknow operator <%s>",pl2d->name);
+	       SciF1s("\nUnknow operator <%s>\r\n",pl2d->name);
 	       return;
 	     }
 	   else i++;
 	 };
      };
-      fprintf(stderr,"\n Unknow  operator <%s>",pl2d->name);
+      SciF1s("\n Unknow  operator <%s>\r\n",pl2d->name);
 };
 
 ReplayEch(theplot)
@@ -788,7 +936,6 @@ ReplayEch(theplot)
   C2F(setscale2d)(plch->Wrect,plch->Frect);
 };
 
-
 ReplayChamp(theplot)
      char *theplot;
 {
@@ -797,7 +944,6 @@ ReplayChamp(theplot)
   C2F(champ)(plch->fx,plch->fy,&(plch->n1),&(plch->n2),
 	   plch->strflag,plch->vrect,&(plch->arfact),0L);
 };
-
 
 
 ReplayX1(theplot)
@@ -810,9 +956,11 @@ ReplayX1(theplot)
        (int *) plch->x6,0,0);
 };
 
+
 typedef  struct  {
   char *name;
-  int  (*replay)();} ReplayTable;
+  int  (*replay)();
+} ReplayTable;
 
 static ReplayTable RTable[] ={
     "champ",ReplayChamp,
@@ -842,14 +990,15 @@ GReplay(type,plot)
        else 
 	 { if ( j <= 0)
 	     {
-	       fprintf(stderr,"\nUnknow Plot type <%s>",type);
+	       SciF1s("\nUnknow Plot type <%s>\r\n",type);
 	       return;
 	     }
 	   else i++;
 	 };
      };
-  fprintf(stderr,"\n Unknow Plot type <%s>",type);
+  SciF1s("\n Unknow Plot type <%s>\r\n",type);
 };
+
 
 /*---------------------------------------------------------------------
 \encadre{Stocke un dessin dans la pile}
@@ -866,7 +1015,7 @@ Store(type,plot)
 	  {
 	    if (CopyVectC(&(first->type),type,((int)strlen(type))+1)==0)
 	      { first=NULL;
-		fprintf(stderr,"Store : No more Place \n");
+		Scistring("Store : No more Place \n");
 		return;}
 	    first->theplot=plot;
 	    first->window=curwin();
@@ -874,7 +1023,7 @@ Store(type,plot)
 	    first->previous=NULL;
 	  }
 	else
-	  fprintf(stderr,"Store : malloc No more Place");
+	  Scistring("Store : malloc No more Place");
       }
   else 
     {
@@ -888,7 +1037,7 @@ Store(type,plot)
 	{
 	  if (CopyVectC(&(list->ptrplot->type),type,((int)strlen(type))+1)==0)
 	    { list=NULL;
-	      fprintf(stderr,"Store : No more Place \n");
+	      Scistring("Store : No more Place \n");
 	      return;}
 	  list->ptrplot->theplot=plot;
 	  list->ptrplot->previous=list;
@@ -896,7 +1045,7 @@ Store(type,plot)
 	  list->ptrplot->ptrplot=NULL;
 	}
       else 
-	fprintf(stderr,"Store No more Place\n");
+	Scistring("Store No more Place\n");
     };
 } ;
 

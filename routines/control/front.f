@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=FRONT,SSI=0
       subroutine front(neq,q,nbout,w)
 c!but
 c     cette routine calcule le nombre de racines  du polynome q(z) qui

@@ -414,7 +414,7 @@
 
 /* Begin machine constants. */
 
-#ifdef notdef  /* __STDC__ */
+#ifdef notdef /* __STDC__ */
 /*
  * This code is currently deleted because most ANSI standard C compilers
  * do not provide the standard header files yet.
@@ -446,6 +446,7 @@
 #   define  LARGEST_LONG_INTEGER    2147483646
 #endif
 
+
 /* hp9000 machine constants */
 #ifdef hpux
 /* These values are correct for hp9000/300.  Should be correct for others. */
@@ -475,6 +476,26 @@
 #   define  LARGEST_SHORT_INTEGER   32766
 #   define  LARGEST_LONG_INTEGER    2147483646
 #endif
+/* DEC alpha machine constant*/
+#ifdef __alpha 
+#   include <limits.h>
+#   include <float.h>
+#   define  MACHINE_RESOLUTION      DBL_EPSILON
+#   define  LARGEST_REAL            DBL_MAX
+#   define  SMALLEST_REAL           DBL_MIN
+#   define  LARGEST_SHORT_INTEGER   SHRT_MAX
+#   define  LARGEST_LONG_INTEGER    LONG_MAX
+#endif
+#ifdef linux
+#   include <limits.h>
+#   include <float.h>
+#   define  MACHINE_RESOLUTION      DBL_EPSILON
+#   define  LARGEST_REAL            DBL_MAX
+#   define  SMALLEST_REAL           DBL_MIN
+#   define  LARGEST_SHORT_INTEGER   SHRT_MAX
+#   define  LARGEST_LONG_INTEGER    LONG_MAX
+#endif
+
 #endif /* NOT defined(__STDC__) */
 
 

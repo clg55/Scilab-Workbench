@@ -33,12 +33,12 @@ if rcond(E) > 1.d-4 then
           Z=inv(E);
           Ak=A+B2*K*Z+W*(S*K*Z+Q)/gama/gama+H*C2;Bk=H;Ck=-K*Z;
           Sk=syslin('d',Ak,Bk,Ck);
-          stint=and(abs(spec(H_cl(P,size(C2*B2),sk))) < ones(2*nx,1))
+          stint=and(abs(spec(h_cl(P,size(C2*B2),sk))) < ones(2*nx,1))
 //Sk1=lqg(P,size(c2*B2));
 else
           Ak=A*E+B2*K+W*(S*K+Q*E)/gama/gama+H*C2*E;Bk=H;Ck=-K;
           Sk=des2ss(Ak,Bk,Ck,0*Ck*Bk,E);
-          stint=and(abs(spec(H_cl(P,size(C2*B2),sk))) < ones(2*nx,1))
+          stint=and(abs(spec(h_cl(P,size(C2*B2),sk))) < ones(2*nx,1))
 end
 end
 // ----------------->       Continuous time case
@@ -51,7 +51,7 @@ if ~ok then write(%io(2),'fail');return;end
 Z=inv(eye-Y*X/gama/gama);;
 Ak=A+B2*K*Z+Y*(S*K*Z+Q)/gama/gama+H*C2;Bk=H;Ck=-K*Z;
 Sk=syslin('c',Ak,Bk,Ck);
-stint=and(real(spec(H_cl(P,size(C2*B2),sk))) < zeros(2*nx,1))
+stint=and(real(spec(h_cl(P,size(C2*B2),sk))) < zeros(2*nx,1))
 //Sk1=lqg(P,size(c2*B2));
 end
 write(%io(2),'ok')

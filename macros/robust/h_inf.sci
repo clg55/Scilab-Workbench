@@ -1,4 +1,4 @@
-function [Sk,rk,mu]=H_inf(P,r,mumin,mumax,nmax)
+function [Sk,rk,mu]=h_inf(P,r,mumin,mumax,nmax)
 // H-infinity optimal control for the continuous-time plant P
 // P is the plant (linear system)given in state-space form or in transfer form,
 // e.g. P=syslin('c',A,B,C,D) with A,B,C,D = scalar matrices
@@ -7,13 +7,13 @@ function [Sk,rk,mu]=H_inf(P,r,mumin,mumax,nmax)
 // mumin,mumax = bounds on mu with mu=1/gama^2; (mumin=0  usually)
 // nmax = maximum number of iterations in the gama-iteration.
 // Two possible calling sequences:
-// [Sk,mu]=H_inf(P,r,mumin,mumax,nmax) returns mu and the central controller 
+// [Sk,mu]=h_inf(P,r,mumin,mumax,nmax) returns mu and the central controller 
 // Sk in the same representation as P. (All calculations being done in state
 // space).
-// [Sk,rk,mu]=H_inf(P,r,mumin,mumax,nmax) returns mu 
+// [Sk,rk,mu]=h_inf(P,r,mumin,mumax,nmax) returns mu 
 //            and the parametrization of all stabilizing controllers:
 //  a stabilizing controller K is obtained by K=Fl(Sk,r,PHI) where
-//  PHI is a linear system with dimensions r' and satisfy H_norm(PHI) < gama. 
+//  PHI is a linear system with dimensions r' and satisfy h_norm(PHI) < gama. 
 //  rk (=r) is the size of the Sk22 block and mu = 1/gama^2 after nmax 
 //  iterations.
 // Author: F.D. Inria (1990) adapted from Safonov-Limebeer.
@@ -23,20 +23,20 @@ function [Sk,rk,mu]=H_inf(P,r,mumin,mumax,nmax)
 // mu_inf upper bound on mu = gama^-2
 //P2 = normalized P.
 //
-[P2,mu_inf,Uci,Yci,D22]=H_init(P,r)
+[P2,mu_inf,Uci,Yci,D22]=h_init(P,r)
 if mu_inf < mumax then 
     write(%io(2),mu_inf,'(3x,''romax too big: max romax= '',f10.5)');end
 mumax=mini(mu_inf,mumax)
 //
 //    Gama-iteration P6 = transformed P2 with D11 removed
-[P6,Finf,mu,Uc#i,Yc#i]=H_iter(P2,r,mumin,mumax,nmax)
+[P6,Finf,mu,Uc#i,Yc#i]=h_iter(P2,r,mumin,mumax,nmax)
 if mu=0 then 
 write(%io(2),[mumin,mumax],'(1x,''no feasible ro in bounds: '',2(f10.5,2x))');
-rk=[];sk=[];
+rk=[];Sk=[];
 return,end
 //
 //    Optimal controller for P6
-[Sk,polesH,polesJ]=H_contr(P6,r,1/mu,Uc#i,Yc#i);
+[Sk,polesH,polesJ]=h_contr(P6,r,1/mu,Uc#i,Yc#i);
 [E,Ak,Bk1,Bk2,Ck1,Ck2,Dk11,Dk12,Dk21,Dk22]=Sk(:);
 //    Add the optimal controller at infinity
  if norm(Finf,1) <> 0 then Dk11=Dk11+Finf;end
@@ -61,7 +61,7 @@ if LHS==3 then rk=r;
 end
 
 
-function [P2,mu_inf,Uci,Yci,D22]=H_init(P,r)
+function [P2,mu_inf,Uci,Yci,D22]=h_init(P,r)
 //******************************
 // Initialization of the standard plant
 // P = standard plant; r=size of P22 (1X2 vector)
@@ -93,8 +93,8 @@ if ns=na then write(%io(2),'P22 is stabilizable');end
 
 [nd,Ud,Sd]=dt_ility(P22,1.d-10)
 
-if nd <> na then write(%io(2),'Warning: P22 not detectable');end
-if nd=na then write(%io(2),'P22 is detectable');end
+if nd <> 0 then write(%io(2),'Warning: P22 not detectable');end
+if nd=0 then write(%io(2),'P22 is detectable');end
 
 // rank P21=[A,B2,C1,D12] = m2 ?
      P12=syslin('c',A,B2,C1,D12);
@@ -164,12 +164,12 @@ P2=syslin('c',A,[B1,B2],[C1;C2],[D11,D12;D21,0*D22]);
 //P2 = standard plant with D22=0 and D12,D21 normalized;
 
 
-function [P6ad,Finfad,muad,Uc#iad,Yc#iad]=H_iter(P2,r,mumin,mumax,nmax)
+function [P6ad,Finfad,muad,Uc#iad,Yc#iad]=h_iter(P2,r,mumin,mumax,nmax)
 niter=0;muad=0;P6ad=[]; Finfad=[];Uc#iad=[];Yc#iad=[];
 while niter < nmax
   niter=niter+1;
   mu=(mumin+mumax)/2;
-  [P6,Finf,tv,Uc#i,Yc#i]=H_test(P2,r,mu)
+  [P6,Finf,tv,Uc#i,Yc#i]=h_test(P2,r,mu)
   
   test=maxi(tv)
 
@@ -182,7 +182,7 @@ while niter < nmax
 end  //while
 
 
-function [P6,Kinf,tv,Uc#i,Yc#i]=H_test(P2,r,mu)
+function [P6,Kinf,tv,Uc#i,Yc#i]=h_test(P2,r,mu)
 //****************************
 //To test if mu is feasable for the plant P2 :
 //mu is feasible for P2 iff the three components of
@@ -319,7 +319,7 @@ dx=mini(abs(real(spec(H))));
        indic=1;test=1;
        end
  if indic =0 then
-   [X1,X2,errx]=ric_descr(H);
+   [X1,X2,errx]=ric_desc(H);
      if errx > 1.d-4 then
        write(%io(2),'Riccati solution inaccurate ');
        write(%io(2),errx);
@@ -345,7 +345,7 @@ dx=mini(abs(real(spec(H))));
 //   pause;
        end
      if indic=0 then
-       [Y1,Y2,erry]=ric_descr(J);
+       [Y1,Y2,erry]=ric_desc(J);
         if erry > 1.d-4 then 
           write(%io(2),'Riccati solution inaccurate ');
           write(%io(2),erry);
@@ -394,7 +394,7 @@ end;
      P6=syslin('c',A,[B1,B2],[C1;C2],[D11,D12;D21,D22])
 
 
-function [Sk,polesH,polesJ]=H_contr(P,r,mu,U2i,Y2i)
+function [Sk,polesH,polesJ]=h_contr(P,r,mu,U2i,Y2i)
 // ****************************
 // Computation of the optimal controller Sk for a standard
 // plant which satisfies the assumption D11=0
@@ -441,7 +441,7 @@ function [Sk,polesH,polesJ]=H_contr(P,r,mu,U2i,Y2i)
 if dx < 1.d-6 then
  write(%io(2),'An eigenvalue of H (controller) is close to Imaginary axis !');
 end
-   [X1,X2,errx]=ric_descr(H);
+   [X1,X2,errx]=ric_desc(H);
 if errx > 1.d-4 then 
    write(%io(2),'Riccati solution inaccurate ');
    write(%io(2),errx);
@@ -459,7 +459,7 @@ end
 if dy < 1.d-6 then
    write(%io(2),'An eigenvalue of J (observer) is close to Imaginary axis !');
 end
-  [Y1,Y2,erry]=ric_descr(J);
+  [Y1,Y2,erry]=ric_desc(J);
 if erry > 1.d-4 then 
    write(%io(2),'Riccati solution inaccurate ');
    write(%io(2),erry);
@@ -478,8 +478,8 @@ end
 
   Dk11=0*Ck1*Bk1;
   Dk22=0*Ck2*Bk2;
-  Dk12=eye(ck1*bk2);
-  Dk21=eye(ck2*bk1);
+  Dk12=eye(Ck1*Bk2);
+  Dk21=eye(Ck2*Bk1);
 
 //Scaling back
 

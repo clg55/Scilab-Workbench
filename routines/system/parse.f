@@ -3,11 +3,13 @@ c     ====================================================================
 c     Scilab parsing function
 c     ====================================================================
       include '../stack.h'
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
       logical compil,eptover
+      logical sevents
+      external sevents
 c     
       logical iflag
       common /basbrk/ iflag
-      
       integer semi,equal,eol,lparen,rparen,colon
       integer blank,comma,left,right,less,great,quote,percen
       integer name,insert
@@ -15,17 +17,16 @@ c
       integer id(nsiz),ans(nsiz),ennd(nsiz),else(nsiz),retu(nsiz)
       integer pts,psym,excnt,p,r
       integer pcount,strcnt,bcount,qcount
-      integer iadr,sadr
 c     
       data blank/40/,semi/43/,equal/50/,eol/99/,comma/52/,colon/44/
       data lparen/41/,rparen/42/,left/54/,right/55/,less/59/,great/60/
       data quote/53/,percen/56/
       data name/1/,insert/2/
-      data else/236721422,673720360/, ennd/671946510,673720360/
-      data retu/505220635,673720360/, ans/672929546,673720360/
+      data else/236721422,nz1*673720360/, ennd/671946510,nz1*673720360/
+      data retu/505220635,nz1*673720360/, ans/672929546,nz1*673720360/
 c     
-      iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
+      save job
+
 c
  01   r = 0
       if(pt.gt.0) r=rstk(pt)
@@ -61,15 +62,22 @@ c
 c     
 c     acquisition d'un nouvelle ligne
 c-------------------------------------
- 12   if (mod(lct(4)/2,2).eq.1) then
-         call prompt(lct(4)/4)
-         lct(1)=0
-         if(paus.eq.0.and.rio.eq.rte) then
-            if(pt.ne.0) call msgs(30,0)
-            if(top.ne.0) call msgs(31,0)
+ 12   continue
+      if(lct(4).le.-10) then 
+         lct(4)=-lct(4)-11      
+      else
+         if (mod(lct(4)/2,2).eq.1) then
+            call prompt(lct(4)/4)
+            lct(1)=0
+            if(paus.eq.0.and.rio.eq.rte) then
+               if(pt.ne.0) call msgs(30,0)
+               if(top.ne.0) call msgs(31,0)
+            endif
          endif
       endif
- 13   call getlin(job)
+ 13   continue
+      call stsync(1)
+      call getlin(job)
       if(fin .eq. -1) then
 c     gestion des lignes suite dans le cas "de l'appel par fortran"
          fun=99
@@ -81,6 +89,11 @@ c
 c     debut d'un nouveau statement , clause , expr ou command
 c------------------------------------------------------------
  15   continue
+      if(sevents()) then
+         fun=99
+         return
+      endif 
+
       r = 0
       if(pt.gt.0) r=rstk(pt)
       if(ddt.eq.4) then
@@ -91,24 +104,29 @@ c------------------------------------------------------------
       endif
 c     
       excnt = 0
-      if(iflag) then 
+      if(.not.iflag) goto 18
+
 c     gestion des pauses
- 16      if ( eptover(1,psiz))  goto 98
-         pstk(pt)=rio
-         ids(2,pt)=top
-         rio=rte
-         rstk(pt)=701
-         iflag=.false.
-         fin=2
-c        *call* macro
-         goto 88
-c        fin des pauses
- 17      rio=pstk(pt)
-         top=ids(2,pt)
-         pt=pt-1
-         goto 15
+ 16   if ( eptover(1,psiz))  goto 98
+      pstk(pt)=rio
+      ids(2,pt)=top
+      rio=rte
+      rstk(pt)=701
+      iflag=.false.
+      fin=2
+      if(lct(4).le.-10) then
+         fin=-1
+         lct(4)=-lct(4)-11 
       endif
-      lhs = 1
+c     *call* macro
+      goto 88
+c     fin des pauses
+ 17   rio=pstk(pt)
+      top=ids(2,pt)
+      pt=pt-1
+      goto 15
+
+ 18   lhs = 1
       call putid(id,ans)
 c     
       call getsym
@@ -186,7 +204,7 @@ c     looking for equal
          if(sym.eq.quote) then
             qcount=0
  311        qcount=qcount+1
-            if(char1.ne.quote) goto 312
+            if(abs(char1).ne.quote) goto 312
             call getsym
             goto 311
  312        continue
@@ -196,6 +214,10 @@ c     looking for equal
          pcount=pcount+1
       else if(sym.eq.rparen) then
          pcount=pcount-1
+         if(pcount.lt.0) then
+            call error(2)
+            goto 98
+         endif
       else if(sym.eq.quote) then
          if(.not.(psym.le.blank.or.psym.eq.rparen.or.psym.eq.right
      $        .or.psym.eq.percen.or.psym.eq.quote)) strcnt=1
@@ -203,7 +225,15 @@ c     looking for equal
          bcount=bcount+1
       else if(sym.eq.right) then
          bcount=bcount-1
-      else if(pcount.eq.0.and.bcount.eq.0)then
+         if(bcount.lt.0) then
+            call error(2)
+            goto 98
+         endif
+      else if(pcount.eq.0) then
+         if(bcount.ne.0) then
+            call error(2)
+            goto 98
+         endif
          if(sym.eq.equal) then
             if(char1.eq.equal) then
                call getsym
@@ -267,7 +297,10 @@ c-----------------
       call putid(ids(1,pt),id)
       goto 41
  42   call getsym
-      if (sym .eq. equal) goto 60
+      if (sym .eq. equal) then
+         if(char1.eq.equal) goto 43
+         goto 60
+      endif
  43   lpt(4) = lpt(5)
       pt = pts
       lhs = 1
@@ -364,8 +397,8 @@ c     gestion des points d'arrets dynamiques
          
          do 76 ibpt=lgptrs(wmac),lgptrs(wmac+1)-1
             if(lct(8)-nlc.eq.bptlg(ibpt)) then
-               call cvname(macnms(1,wmac),buf(1:8),1)
-               write(buf(10:15),'(i5)') lct(8)-nlc
+               call cvname(macnms(1,wmac),buf(1:nlgh),1)
+               write(buf(nlgh+2:nlgh+7),'(i5)') lct(8)-nlc
                call msgs(32,0)
                call cvstr(ifin-l1+1,lin(l1),buf,1)
                call basout(io,wte,buf(1:ifin-l1+1))
@@ -387,11 +420,6 @@ c     fin d'une instruction dans une clause
             if (err .gt. 0) goto 98
          endif
       endif
-c     if(macr.eq.0.and.rio.eq.rte) then
-cc    simulation d'un end (en mode conversationnel)
-c     fin=-10
-c     goto 80
-c     endif
       if(lpt(4).eq.lpt(6))  then
          call getlin(1)
       else
@@ -441,7 +469,7 @@ c
          goto 86
       endif
 c     compilation matfns: <100*fun rhs lhs fin>
-      if (compil(3,100*fun,rhs,lhs,fin)) then 
+      if (compil(100*fun,rhs,lhs,fin,0)) then 
          if (err.gt.0) goto 98 
          goto 86
       else
@@ -516,6 +544,8 @@ c     erreur dans une pause
 c     
  99   call error(22)
       goto 01
+c
+
       end
 
 

@@ -1,5 +1,5 @@
 C/MEMBR ADD NAME=CLUNI0,SSI=0
-      subroutine cluni0( name, nams, ln)
+      subroutine cluni0( name, nams, ln,ierr)
 c
 c ====================================================================
 c scilab . librairie vax
@@ -217,6 +217,7 @@ c
       data nomlog / 'SCI' , 'SCI' , 'HOME' , 'HOME' , 'HOME' /
       data sep    / '/' /
 c
+      ierr=0
       if ( lpas ) goto 05
 c
 c premier passage : recuperation des nom logiques
@@ -241,7 +242,8 @@ c
          if ( lnomlo(i).le. 0  ) goto 03
          buff=' '
 c         call getenv( nomlog(i)(1:lnomlo(i)), buff)
-         call getenvc( nomlog(i)(1:lnomlo(i))//char(0), buff)
+         call getenvc(ierr,nomlog(i)(1:lnomlo(i))//char(0), buff)
+         if(ierr.ne.0) return
          do 01 l1=80,1,-1
             if ( buff(l1:l1).eq.' ' .or. buff(l1:l1).eq.nul ) goto 01
             goto 02

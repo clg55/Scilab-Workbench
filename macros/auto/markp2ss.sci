@@ -18,7 +18,7 @@ for k=2:n;
     p=markpar(:,k1:nmax);p(nout,nmax)=0;
     H(l1,:)=p;
 end;
-[u,s,v,deg]=svd(h);
+[u,s,v,deg]=svd(H);
 obs=u(:,1:deg);con=s*v(1:deg,:)';
 obstild=obs(nout+1:n*nout,:);obstild(n*nout,deg)=0;
-sl=syslin('c',obs'*obstild,con(1:deg,1:nin),obs(1:nout,:))
+Sl=syslin('c',obs'*obstild,con(1:deg,1:nin),obs(1:nout,:))

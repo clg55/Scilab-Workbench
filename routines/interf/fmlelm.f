@@ -97,8 +97,13 @@ c
          if(istk(it2).eq.0) goto 1004
          nt2=istk(ilptr2+i2)-istk(ilptr2-1+i2)
          if(istk(it2+1).eq.0.and.n2.eq.2) then
-            il1=il1+n1
-            goto 1010
+            if (istk(it1).ne.0) then
+               il1=il1+n1
+               goto 1010
+            else
+               ilw=il1
+               goto 1008
+            endif
          endif
          if(isnum(istk(it2+1),nt2-1,inum2)) then
             if(istk(it2).eq.minus) inum2=-inum2
@@ -136,7 +141,7 @@ c
          endif
  1007 continue
 c
-      if(inum.ne.0) then
+ 1008 if(inum.ne.0) then
          if(inum.lt.0) then
             istk(ilw)=minus
             ilw=ilw+1

@@ -67,13 +67,13 @@ UpdateCWindow()
   if ( theWindow != NULL) 
   	{
   	  	GrafPtr savePort;
-  	  	fprintf(stderr,"UpdateCWindow In \n");
+  	  	Scistring("UpdateCWindow In \n");
   		GetPort(&savePort);
   		SetPort(theWindow);
   		EraseRect(&theWindow->portRect);
   		DrawGrowIcon(theWindow);
   		SetPort(savePort);
-  		fprintf(stderr,"UpdateCWindow Out \n");
+  		Scistring("UpdateCWindow Out \n");
   	}
 };
 
@@ -187,7 +187,7 @@ DrawContents(WindowPtr win)
     {
       WindowPtr loc;
       int verbose = 0, win1, narg;
-      	fprintf(stderr,"Tape redraw of %d\n",i);
+      	SciF1d("Tape redraw of %d\r\n",i);
     
       C2F(dr)("xget", "window", &verbose, &win1, &narg
 	  ,(int *) 0, (int *) 0, (int *) 0, 0, 0);
@@ -265,7 +265,7 @@ void myWwinWait(win, msg)
   ((WindowPeek) win)->refCon = oldRefCon;
   /* cursPop(); */
   EndUpdate(win);
-  fprintf(stderr, " j'envoie un message \n");
+  Scistring( " j'envoie un message \n");
 }
 
 AddText(x, y, s)	/* Just put a string on screen */
@@ -305,10 +305,10 @@ int MainEvent(int waitforevent)
 		  /* case inGoAway: if (ours(whichWindow)) if (TrackGoAway(
 		   * whichWindow, myEvent.where) ) DoFile(fmClose); break; */
 		case inMenuBar:
-		  fprintf(stderr,"in menu bar \n");
+		  Scistring("in menu bar \n");
 		  AdjustMenus();
 		  HandleMenu(MenuSelect(myEvent.where));
-		  fprintf(stderr,"out menu bar \n");
+		  Scistring("out menu bar \n");
 		  break;
 		case inSysWindow:
 		  SystemClick(&myEvent, whichWindow);
@@ -316,15 +316,15 @@ int MainEvent(int waitforevent)
 		case inDrag:
 		  if (ours(whichWindow))
 		    {
-		      fprintf(stderr, " Trying to drag The Window\n");
-		      fprintf(stderr, " OK Going on \n");
+		      Scistring( " Trying to drag The Window\n");
+		      Scistring( " OK Going on \n");
 		       DragWindow(whichWindow, myEvent.where, &dragRect);
 		    }
 		  break;
 		case inGrow:
 		  if (ours(whichWindow))
 		    {
-		    	fprintf(stderr, " Enlarging a Graphic Window\n");
+		    	Scistring( " Enlarging a Graphic Window\n");
 		    	MyGrowWindow(whichWindow, myEvent.where);
 		    		}
 		  break;
@@ -332,7 +332,7 @@ int MainEvent(int waitforevent)
 		  if (whichWindow != FrontWindow())
 		    SelectWindow(whichWindow);
 		  else if (ours(whichWindow))
-		    fprintf(stderr, " Docontent on  a Graphic Window\n");
+		    Scistring( " Docontent on  a Graphic Window\n");
 		    /* DoContent(whichWindow, &myEvent);*/
 		    done = 1;
 		  break;
@@ -371,13 +371,13 @@ int MainEvent(int waitforevent)
 	    case updateEvt:
 	      if (ours(whichWindow = (WindowPtr) myEvent.message))
 		{
-		  fprintf(stderr, " Trying to Update \n");
+		  Scistring( " Trying to Update \n");
 		  UpdateWindow(whichWindow);
 		  done = 1;
 		}
 	      break;
 	    default:
-	      fprintf(stderr, " defaut : Nothing done \n");
+	      Scistring( " defaut : Nothing done \n");
 	      break;
 	      ;
 	    }				/* end of case myEvent.what */

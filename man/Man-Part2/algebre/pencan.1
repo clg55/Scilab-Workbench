@@ -4,9 +4,13 @@
 pencan - canonical form of matrix pencil
 .SH CALLING SEQUENCE
 .nf
+[Q,M,i1]=pencan(Fs)
 [Q,M,i1]=pencan(E,A)
 .fi
 .SH PARAMETERS
+.TP 8
+Fs
+: a regular pencil \fVs*E-A\fR
 .TP 8
 E,A
 : two real square matrices
@@ -17,7 +21,7 @@ Q,M
 i1
 : integer
 .SH DESCRIPTION
-Given the regular pencil \fVs*E-A\fR, \fVpencan\fR returns matrices \fVQ\fR 
+Given the regular pencil \fVFs=s*E-A\fR, \fVpencan\fR returns matrices \fVQ\fR 
 and \fVM\fR
 such than \fVM*(s*E-A)*Q\fR is in "canonical" form.
 .LP

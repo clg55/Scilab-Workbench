@@ -10,20 +10,21 @@ string(x)
 .SH PARAMETERS
 .TP
 x
-: real matrix or macro
+: real matrix or function
 .SH DESCRIPTION
 converts a matrix into a matrix of strings.
 .LP
-If \fVx\fR is a macro  \fV[out,in,text]=string(x)\fR  returns
+If \fVx\fR is a function  \fV[out,in,text]=string(x)\fR  returns
 three vectors strings : \fVout\fR is the vector of output variables,
 \fVin\fR is the vector of input variables, and \fVtext\fR is
-the (column) vector of the source code of the macro.
+the (column) vector of the source code of the function.
 .LP
 If  \fVx\fR is a \fVlib\fR variable, text is a character string column
 vector. The first element contains the path of library file and the 
-other the name of macros it defines.
+other the name of functions it defines.
 .LP
-Character strings are defined as \fV'string'\fR (between quotes);
+Character strings are defined as \fV'string'\fR (between quotes) or
+\fV"string"\fR (between doublequotes);
 matrices of strings are defined as usual constant matrices.
 .LP
 Concatenation of strings is made by the \fV+\fR operation.

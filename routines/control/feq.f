@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=FEQ,SSI=0
       subroutine feq(nq,t,tq,tqdot)
 c!but
 c      Etablir la valeur de l'oppose du gradient au point q

@@ -75,7 +75,7 @@
  
 //get the derivative of h(z)
  
-         hzd=derivee(h);
+         hzd=derivat(h);
  
 //get the group delay of h(z)
  

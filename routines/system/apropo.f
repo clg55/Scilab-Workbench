@@ -27,8 +27,14 @@ C     argument is a string
             endif
          endif
       endif
-      write(buf,*) '$SCI/bin/scihelp -k "',h(1:nstr),'"'
-      call bashos(buf,22+nstr,ls,ierr)
+      call xscion(iflag)
+      if(iflag.eq.0) then
+         buf='$SCI/bin/scilab -k "'//h(1:nstr)//'"    '
+         call bashos(buf,23+nstr,ls,ierr)
+      else
+         buf='$SCI/bin/scilab -k "'//h(1:nstr)//'" | $SCI/bin/xless & '
+         call bashos(buf,40+nstr,ls,ierr)
+      endif
       if(ierr.ne.0) then
          call error(85)
          return

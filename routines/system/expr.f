@@ -3,13 +3,14 @@ c
 c     analyseur d'expressions
 c     
       INCLUDE '../stack.h'
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
 c     
       integer op,r,blank,sign,plus,minus,name,colon,eye(nsiz),ou,et
       integer equal,less,great,not,eol
       logical eptover
       data colon/44/,blank/40/,plus/45/,minus/46/,ou/57/,et/58/
       data equal/50/,less/59/,great/60/,not/61/
-      data eye/672014862,673720360/,name/1/,eol/99/
+      data eye/672014862,nz1*673720360/,name/1/,eol/99/
 c     
       if (ddt .eq. 4) then
          write(buf(1:8),'(2i4)') pt,rstk(pt)
@@ -227,7 +228,8 @@ c
       if(mod(pstk(pt),256).ne.0) goto 101
       if(sym.ne.et.and.sym.ne.ou) goto 103
       call getsym
-      if(sym.ge.ou.or.sym.eq.equal) goto 70
+C modif SS
+C      if(sym.ge.ou.or.sym.eq.equal) goto 70
       if ( eptover(0,psiz-1)) return
  101  pt=pt+1
       rstk(pt)=112

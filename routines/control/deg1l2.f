@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DEG1L2,SSI=0
       subroutine deg1l2(imin,ta,mxsol,w,iw,ierr)
 c!but
 c     Determiner la totalite des polynome de degre 1.

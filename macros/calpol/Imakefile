@@ -1,9 +1,10 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 NAME= polylib
 NAM= calpol
 
 MACROS= cmndred.sci coffg.sci colcompr.sci \
-	denom.sci derivee.sci determ.sci detr.sci \
+	denom.sci derivat.sci determ.sci detr.sci \
 	diophant.sci gcd.sci hermit.sci horner.sci \
 	hrmt.sci htrianr.sci invr.sci lcm.sci \
 	numer.sci pdiv.sci pol2des.sci \

@@ -1,5 +1,5 @@
 //[xy]=scaling(xy,factor,orig)
-//                               xy=xy*factor+orig
+//  xy=xy*factor+orig
 //
 // xy     : matrix with 2 rows
 // factor : factor

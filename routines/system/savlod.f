@@ -3,10 +3,14 @@ c ====================================================================
 c     Binary save and load of Scilab Objects 
 c ====================================================================
       include '../stack.h'
+      integer blank
+      parameter (blank=40)
       logical eqid
-      integer lunit,id(nsiz),job,h(nsiz),blank
+      logical sciv1,first
+      common /compat/ sciv1,first
+      integer lunit,id(nsiz),job,h(nsiz)
       integer iadr,sadr
-      data blank/40/
+      integer nsiz1
 c
 c     lunit = logical unit number
 c     id = name, format 4a1
@@ -27,20 +31,27 @@ c     save
       return
 c
 c     load
-   20 il=iadr(lstk(nvar))
+   20 continue
+      nsiz1=nsiz
+      if(sciv1) then
+         nsiz1=2
+         call iset(nsiz-nsiz1,673720360,h(nsiz1+1),1)
+      endif
+      il=iadr(lstk(nvar))
       if(id(1).eq.blank) goto 25
 c
-   21 read(lunit,end=31,err=32) h,n
-      if(eqid(h,id)) goto 26
-c   23 read(lunit,end=30,err=32) (k,i=1,n)
-   23 read(lunit,end=30,err=32)
+   21 read(lunit,end=31,err=35) (h(i),i=1,nsiz1),n
+   22 if(eqid(h,id)) goto 26
+      read(lunit,end=30,err=32)
       goto 21
 c
-   25 read(lunit,end=30,err=32) id,n
+   25 read(lunit,end=30,err=36)  (h(i),i=1,nsiz1),n
    26 if(n-iadr(job).gt.0) call error(17)
       if(err.gt.0) goto 30
       read(lunit,end=30,err=32) (istk(il+i-1),i=1,n)
       lstk(nvar+1)=sadr(il+n)
+      call putid(id,h)
+      first=.false.
       return
 c
 c     end of file
@@ -55,5 +66,35 @@ c la variable recherchee n'existe pas
 c le fichier n'a pas la bonne structure
    32 call error(49)
       goto 30
-c
+
+c Les lignes ci-dessous ont ete ajoutee pour assurrer la
+c compatibilite avec les fichier crees par la version 1
+   35 if(.not.sciv1.and.first) then
+         rewind(lunit)
+         nsiz1=2
+         call iset(nsiz-nsiz1,673720360,h(nsiz1+1),1)
+         call msgs(60,0)
+         sciv1=.true.
+         goto 21
+      elseif(.not.first) then
+         call  putid(ids(1,pt+1),id)
+         call msgs(61,0)
+         goto 30
+      else
+         goto 32
+      endif
+   36 if(.not.sciv1.and.first) then
+         rewind(lunit)
+         nsiz1=2
+         call iset(nsiz-nsiz1,673720360,h(nsiz1+1),1)
+         call msgs(60,0)
+         sciv1=.true.
+         goto 25
+      elseif(.not.first) then
+         call  putid(ids(1,pt+1),h)
+         call msgs(61,0)
+         goto 30
+      else
+         goto 32
+      endif
       end

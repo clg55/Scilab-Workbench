@@ -1,10 +1,9 @@
-//<f>=%rap(f,m)
-// %rap(f,m) calcule la somme d'une matrice de fractions rationnelles f et
-//d'une matrice de  polynomes p
+function [f]=%rap(f,m)
+// %rap(f,m) <=> f=f+p
 //!
-num=f(2)+m.*f(3)
+if prod(size(m))==1 then num=f(2)+m*f(3)
+     else num=f(2)+m.*f(3);end
 [num,den]=simp(num,f(3))
 f(2)=num;f(3)=den
-//end
 
 

@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 PROGRAM1 = $(SCIDIR)/bin/make-graph-file
@@ -10,7 +11,7 @@ PROGRAM2 = $(SCIDIR)/bin/mesh
 OBJS2 = carete.o getran.o mesh.o mshpts.o seed.o
 SRCS2 = carete.f getran.f mesh.f mshpts.f seed.f
 AllTarget($(PROGRAM2))
-FortranProgramTarget($(PROGRAM2),$(OBJS2),,,)
+FortranProgramTarget($(PROGRAM2),$(OBJS2),,,,)
 
 PROGRAM3= $(SCIDIR)/bin/netgen2graph
 OBJS3 = netgen2graph.o
@@ -28,7 +29,7 @@ PROGRAM5 = $(SCIDIR)/bin/netgen
 OBJS5 = netgen.o
 SRCS5 = netgen.c
 AllTarget($(PROGRAM5))
-FortranProgramTarget($(PROGRAM5),$(OBJS5),,,-lm)
+FortranProgramTarget($(PROGRAM5),$(OBJS5),,,,-lm)
 
 SRCS = $(SRCS1) $(SRCS3) $(SRCS4)
 FSRCS = $(SRCS2) $(SRC5)

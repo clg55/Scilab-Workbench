@@ -197,6 +197,14 @@ c insertion
 c
 c     a(vl,vc)=m  a(v)=u
   120 continue
+      ili=iadr(lstk(top0-1))
+      if (istk(ili+1)*istk(ili+2).eq.0) then
+         top=top0
+         rhs=rhs1
+         fin=-fin
+         return
+      endif
+
       if(istk(il1).ne.istk(il2)) then
           if(istk(il2).ne.1.or.m2*n2.ne.0) goto 10
       endif
@@ -209,6 +217,13 @@ c
          return
       endif
       ilcol=iadr(lstk(top))
+      if(istk(ilcol).eq.4) then
+         rhs=rhs1
+         top=top0
+         fin=-fin
+         return
+      endif
+
       if(istk(ilcol).ne.1) then
          call error(21)
          return
@@ -238,6 +253,13 @@ c
       if(rhs.eq.1) goto 125
       top=top-1
       ilrow=iadr(lstk(top))
+      if(istk(ilrow).eq.4) then
+         rhs=rhs1
+         top=top0
+         fin=-fin
+         return
+      endif
+
       if(istk(ilrow).ne.1) then
          call error(21)
          return
@@ -310,6 +332,13 @@ c
 c
       top=top-1
       ilcol=iadr(lstk(top))
+      if(istk(ilcol).eq.4) then
+         rhs=rhs1
+         top=top0
+         fin=-fin
+         return
+      endif
+
       if(istk(ilcol).ne.1) then
          call error(21)
          return
@@ -354,6 +383,13 @@ c vect(arg)
 c
   140 top=top-1
       ilrow=iadr(lstk(top))
+      if(istk(ilrow).eq.4) then
+         rhs=rhs1
+         top=top0
+         fin=-fin
+         return
+      endif
+
       if(istk(ilrow).ne.1) then
          call error(21)
          return

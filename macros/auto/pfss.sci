@@ -10,9 +10,9 @@ function [elts]=pfss(S,cord)
 //!
 flag=0;
 [LHS,RHS]=argn(0);
-if s(1)=='r' then flag=1;s=tf2ss(s);end
-if type(s)<>15 then error(91,1),end
-[t,f,g,h,dd,dom]=s([1:5,7]);
+if S(1)=='r' then flag=1;S=tf2ss(S);end
+if type(S)<>15 then error(91,1),end
+[t,f,g,h,dd,dom]=S([1:5,7]);
 if t<>'lss' then error(91,1),end;
 [n,n]=size(f);
 [f,x,bs]=bdiag(f);h=h*x;g=x\g;

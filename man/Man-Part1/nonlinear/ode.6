@@ -21,7 +21,7 @@ t
 : real (row) vector. 
 .TP
 f  
-: Scilab "external" i.e. macro or character string or list.
+: Scilab "external" i.e. function or character string or list.
 .TP
 type 
 : one of the following character string:
@@ -32,7 +32,7 @@ rtol,atol
 as \fVy\fR.
 .TP
 jac 
-: external i.e. macro or character string or list.
+: external i.e. function or character string or list.
 .TP
 w,iw 
 : real vectors.
@@ -41,7 +41,7 @@ ng
 : integer.
 .TP
 g 
-: external i.e. macro or character string or list.
+: external i.e. function or character string or list.
 .SH DESCRIPTION
 \fB1.Simple call\fR
 .LP
@@ -55,17 +55,17 @@ differential equations
 .LP
 \fVy\fR is the vector \fVy=[y(t(1)),y(t(2)),...]\fR.
 .LP
-The input \fVf\fR to \fVode\fR is an external i.e. a macro with
+The input \fVf\fR to \fVode\fR is an external i.e. a function with
 specified syntax or the name a fortran subroutine (character
 string) with specified  calling sequence or a list.
 .LP
-If \fVf\fR is a macro, its syntax must be as follows:
+If \fVf\fR is a function, its syntax must be as follows:
 .nf
 ydot = f(t,y)
 .fi
 Where \fVt\fR is a real scalar and \fVy\fR a real vector or matrix.
 .LP
-This macro evaluates dy/dt as a function of the scalar
+This function evaluates dy/dt as a function of the scalar
 \fVt\fR and the real vector or matrix \fVy\fR (f is the RHS of the
 differential equation dy/dt=f(t,y)).
 .LP
@@ -82,7 +82,7 @@ structure:
 .nf
 lst=list(f,u1,u2,...un)
 .fi
-where \fVf\fR is a macro with syntax:
+where \fVf\fR is a function with syntax:
 .nf
 ydot = f(t,y,u1,u2,...,un)
 .fi
@@ -92,7 +92,7 @@ This command allows to integrate the differential system
 .nf
 dy/dt=f(t,y,u1,u2,...,un)
 .fi
-the \fVui\fR's can be any Scilab object e.g. vectors or matrices or macros...
+the \fVui\fR's can be any Scilab object e.g. vectors or matrices or functions...
 .TP 10
 type 
 : is the character string which indicates the method used by the integration routine:
@@ -118,10 +118,10 @@ set to this constant value. Default values for \fVatol\fR and \fVrtol\fR
 are respectively \fVrtol=1.d-5\fR and \fVatol=1.d-7\fR.
 .TP
 jac
-: is a macro or character string or list which returns the Jacobian
+: is a function or character string or list which returns the Jacobian
 of the RHS function.
 .LP
-If \fVjac\fR is macro the syntax should be as follows:
+If \fVjac\fR is function the syntax should be as follows:
 .nf
 J=jac(t,y)
 .fi
@@ -149,10 +149,10 @@ of the differential equation \fVdy/dt=f(t,y)\fR until the state
 .nf
 g(t,y)=0.
 .fi
-Here \fVg\fR can be a macro or a list or character string (which
+Here \fVg\fR can be a function or a list or character string (which
 refers to the name of a Fortran subroutine). \fVg\fR should give
 the equation of the surface.
-If \fVg\fR is a macro its syntax must be surface = \fVg(t,y)\fR
+If \fVg\fR is a function its syntax must be surface = \fVg(t,y)\fR
 and it returns a vector of size \fVng\fR which corresponds to 
 the \fVng\fR constraints. Conventions concerning Fortran routine
 are found in \fVfsurf.f\fR. Conventions concerning \fVg\fR as a list
@@ -171,7 +171,7 @@ computes recursively  \fVy(k+1)=f(k,y(k)\fR)  from an initial state
 
 \fB5.Other calling sequence\fR
 .LP  
-y=ode('discrete',y1,1,2n,macro);y=[y1,y]
+y=ode('discrete',y1,1,2n,function);y=[y1,y]
 y evaluates to y=[y1,y2,....,y_n];
 .SH EXAMPLES
 .TP
@@ -204,7 +204,7 @@ X=ode(eye(A),0,t,ric)
 [3]
 Simulation of dx/dt = A x(t) + B u(t) with u(t)=sin(omega*t),
 x0=[1;0] ; solution x(t) desired at t=0.1, 0.2, 0.5 ,1.
-Here the \fVA\fR matrix and the \fVu\fR macro are passed to the RHS 
+Here the \fVA\fR matrix and the \fVu\fR function are passed to the RHS 
 function in a list. \fVB\fR and \fVomega\fR are passed through the 
 environment.
 .nf

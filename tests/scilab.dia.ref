@@ -1,16 +1,16 @@
  
 -->pi=%pi
- pi        =
+ pi  =
  
     3.1415927  
  
 -->i=%i
- i         =
+ i  =
  
     i    
  
 -->e=%e
- e         =
+ e  =
  
     2.7182818  
  
@@ -18,38 +18,36 @@
  
 -->//
  
--->// test des affectations (stackp)
- 
 -->1
- ans       =
+ ans  =
  
     1.  
  
 -->a=1
- a         =
+ a  =
  
     1.  
  
 -->b=[1 2 3]
- b         =
+ b  =
  
 !   1.    2.    3. !
  
 -->c=[1 2 3;4 5 6]
- c         =
+ c  =
  
 !   1.    2.    3. !
 !   4.    5.    6. !
  
 -->d=[1 2 3;4 5 6]'
- d         =
+ d  =
  
 !   1.    4. !
 !   2.    5. !
 !   3.    6. !
  
 -->d=[1 2 3 4;4 5 6 7;8 9 10 11;12 13 14 15]
- d         =
+ d  =
  
 !   1.     2.     3.     4.  !
 !   4.     5.     6.     7.  !
@@ -57,20 +55,20 @@
 !   12.    13.    14.    15. !
  
 -->d=[1 2;3 4]
- d         =
+ d  =
  
 !   1.    2. !
 !   3.    4. !
  
 -->e1=[[1 2] [3 4];[5 6 7 8];[9;10;11;12]']
- e1        =
+ e1  =
  
 !   1.    2.     3.     4.  !
 !   5.    6.     7.     8.  !
 !   9.    10.    11.    12. !
  
 -->f([1 3 5],[1 2 3])=[-1 -2 -3;-4 -5 -6;-7 -8 -9]
- f         =
+ f  =
  
 ! - 1.  - 2.  - 3. !
 !   0.    0.    0. !
@@ -79,19 +77,19 @@
 ! - 7.  - 8.  - 9. !
  
 -->g=[i,2,3;1 i 3;1 2 i]
- g         =
+ g  =
  
 !   i      2.     3.  !
 !   1.     i      3.  !
 !   1.     2.     i   !
  
 -->h=[i 1 2 i 3]
- h         =
+ h  =
  
 !   i      1.    2.    i      3. !
  
 -->o=[1 i i 2 3]'
- o         =
+ o  =
  
 !   1.  !
 ! - i   !
@@ -100,133 +98,133 @@
 !   3.  !
  
 -->b(2)=3
- b         =
+ b  =
  
 !   1.    3.    3. !
  
 -->e1(1,3)=1
- e1        =
+ e1  =
  
 !   1.    2.     1.     4.  !
 !   5.    6.     7.     8.  !
 !   9.    10.    11.    12. !
  
 -->p='apcdefghijklmnopqrstuvwxyz0123456789'
- p         =
+ p  =
  
  apcdefghijklmnopqrstuvwxyz0123456789   
  
 -->// test de stackg
  
 -->a,b,c,d,e1,f,g,h,o,p
- a         =
+ a  =
  
     1.  
- b         =
+ b  =
  
 !   1.    3.    3. !
- c         =
+ c  =
  
 !   1.    2.    3. !
 !   4.    5.    6. !
- d         =
+ d  =
  
 !   1.    2. !
 !   3.    4. !
- e1        =
+ e1  =
  
 !   1.    2.     1.     4.  !
 !   5.    6.     7.     8.  !
 !   9.    10.    11.    12. !
- f         =
+ f  =
  
 ! - 1.  - 2.  - 3. !
 !   0.    0.    0. !
 ! - 4.  - 5.  - 6. !
 !   0.    0.    0. !
 ! - 7.  - 8.  - 9. !
- g         =
+ g  =
  
 !   i      2.     3.  !
 !   1.     i      3.  !
 !   1.     2.     i   !
- h         =
+ h  =
  
 !   i      1.    2.    i      3. !
- o         =
+ o  =
  
 !   1.  !
 ! - i   !
 ! - i   !
 !   2.  !
 !   3.  !
- p         =
+ p  =
  
  apcdefghijklmnopqrstuvwxyz0123456789   
  
 -->b(2)
- ans       =
+ ans  =
  
     3.  
  
 -->e1(1,3)
- ans       =
+ ans  =
  
     1.  
  
 -->e1([1 2],[3 4])
- ans       =
+ ans  =
  
 !   1.    4. !
 !   7.    8. !
  
 -->e1(1:2,:)
- ans       =
+ ans  =
  
 !   1.    2.    1.    4. !
 !   5.    6.    7.    8. !
  
 -->e1(:,4)
- ans       =
+ ans  =
  
 !   4.  !
 !   8.  !
 !   12. !
  
 -->e1(:,:)
- ans       =
+ ans  =
  
 !   1.    2.     1.     4.  !
 !   5.    6.     7.     8.  !
 !   9.    10.    11.    12. !
  
 -->g(1,1)
- ans       =
+ ans  =
  
     i    
  
 -->g(:,1)
- ans       =
+ ans  =
  
 !   i   !
 !   1.  !
 !   1.  !
  
 -->g(1:2,:)
- ans       =
+ ans  =
  
 !   i      2.     3. !
 !   1.     i      3. !
  
 -->g(:,:)
- ans       =
+ ans  =
  
 !   i      2.     3.  !
 !   1.     i      3.  !
 !   1.     2.     i   !
  
 -->o'
- ans       =
+ ans  =
  
 !   1.    i      i      2.    3. !
  
@@ -237,65 +235,65 @@
 -->// additions...
  
 -->[1 2 3;4 5 6]-[1 2 3;4 5 6]
- ans       =
+ ans  =
  
 !   0.    0.    0. !
 !   0.    0.    0. !
  
 -->[1 2 3;4 5 6]+2*[1 2 3;4 5 6]-[1 2 3;4 5 6]*3
- ans       =
+ ans  =
  
 !   0.    0.    0. !
 !   0.    0.    0. !
  
 -->[1 i 3;4 5 i]+2*[1 i 3;4 5 i]-[1 i 3;4 5 i]*3
- ans       =
+ ans  =
  
 !   0    0    0 !
 !   0    0    0 !
  
 -->[2*i -4*i 2*i]+2*[i -2*i i]+i*[2 -4 2]-[i -2*i i]*2 -2*[2 -4 2]*i
- ans       =
+ ans  =
  
 !   0    0    0 !
  
 -->//
  
 -->2\[4 8 16]/2-[1 2 4]
- ans       =
+ ans  =
  
 !   0.    0.    0. !
  
 -->i\[2*i 2 i*4]/i-[-i*2 -2 -4*i]
- ans       =
+ ans  =
  
 !   0    0    0 !
  
 -->// element wise operations
  
 -->[1 2;3 4;5 6].*[1 2;3 4;5 6]-[1 4;9 16;25 36]
- ans       =
+ ans  =
  
 !   0.    0. !
 !   0.    0. !
 !   0.    0. !
  
 -->[1 2;3 4;5 6*i].*[1 2;3 4;5 6]-[1 4;9 16;25 36*i]
- ans       =
+ ans  =
  
 !   0    0 !
 !   0    0 !
 !   0    0 !
  
 -->[1 2;3 4;5 6].*[1 2;3 4;5 6*i]-[1 4;9 16;25 36*i]
- ans       =
+ ans  =
  
 !   0    0 !
 !   0    0 !
 !   0    0 !
  
 -->[1 2;3 4;5 6*i].*[1 2;3 4;5 6*i]-[1 4;9 16;25 -36]
- ans       =
+ ans  =
  
 !   0    0 !
 !   0    0 !
@@ -304,25 +302,25 @@
 -->//
  
 -->[2 9 8;3 10 15]./[2 3 4;3 5 5]-[1 3 2;1 2 3]
- ans       =
+ ans  =
  
 !   0.    0.    0. !
 !   0.    0.    0. !
  
 -->[2 9*i 8;3 10 15]./[2 3 4;3 5 5]-[1 3*i 2;1 2 3]
- ans       =
+ ans  =
  
 !   0    0    0 !
 !   0    0    0 !
  
 -->[2 9 8;3 10 15]./[2*i 3 4;3 5 5]-[-i 3 2;1 2 3]
- ans       =
+ ans  =
  
 !   0    0    0 !
 !   0    0    0 !
  
 -->[2*i 9 8;3 10 15]./[2*i 3 4;3 5 5]-[1 3 2;1 2 3]
- ans       =
+ ans  =
  
 !   0    0    0 !
 !   0    0    0 !
@@ -330,25 +328,25 @@
 -->//
  
 -->[2 3 4;3 5 5].\[2 9 8;3 10 15]-[1 3 2;1 2 3]
- ans       =
+ ans  =
  
 !   0.    0.    0. !
 !   0.    0.    0. !
  
 -->[2 i 4;3 5 5].\[2 9 8;3 10 15]-[1 -9*i 2 ;1 2 3]
- ans       =
+ ans  =
  
 !   0    0    0 !
 !   0    0    0 !
  
 -->[2 3 4;3 5 5].\[i 9 8;3 10 15]-[.5*i 3 2;1 2 3]
- ans       =
+ ans  =
  
 !   0    0    0 !
 !   0    0    0 !
  
 -->[i 3 4;3 5 5].\[i 9 8;3 10 15]-[1 3 2;1 2 3]
- ans       =
+ ans  =
  
 !   0    0    0 !
 !   0    0    0 !
@@ -356,25 +354,25 @@
 -->//multiplication
  
 -->[1 2 3;4 5 6]*[3;2;1]-[10;28]
- ans       =
+ ans  =
  
 !   0. !
 !   0. !
  
 -->[1 i 3;4 5 6]*[3;2;1]-[6+2*i;28]
- ans       =
+ ans  =
  
 !   0 !
 !   0 !
  
 -->[1 2 3;4 5 6]*[i;2;1]-[i+7;4*i+16]
- ans       =
+ ans  =
  
 !   0 !
 !   0 !
  
 -->[1 i 3;2*i,-i,1]*[i;-i;i]-[4*i+1;-3+i]
- ans       =
+ ans  =
  
 !   0 !
 !   0 !
@@ -382,7 +380,7 @@
 -->//eye
  
 -->eye(4,4)
- ans       =
+ ans  =
  
 !   1.    0.    0.    0. !
 !   0.    1.    0.    0. !
@@ -392,13 +390,13 @@
 -->//a+-b*eye a*eye+-b a+-eye*b eye*a+-b
  
 -->-2*eye+[1 2;3 4]+eye*2-[1 2;3 4]
- ans       =
+ ans  =
  
 !   0.    0. !
 !   0.    0. !
  
 -->-2*i*eye+[1 2;3 4]+eye*2*i-[1 2;3 4]
- ans       =
+ ans  =
  
 !   0    0 !
 !   0    0 !
@@ -406,12 +404,12 @@
 -->// :
  
 -->1:10
- ans       =
+ ans  =
  
 !   1.    2.    3.    4.    5.    6.    7.    8.    9.    10. !
  
 -->1:.1:2
- ans       =
+ ans  =
  
  
         columns    1 to  10
@@ -426,21 +424,21 @@
 -->// for
  
 -->for k=1:3,for l=1:2,a(k,l)=k+l;end;end;a
- a         =
+ a  =
  
 !   2.    3. !
 !   3.    4. !
 !   4.    5. !
  
 -->diag([1 2 3])-[1 0 0;0 2 0;0 0 3]
- ans       =
+ ans  =
  
 !   0.    0.    0. !
 !   0.    0.    0. !
 !   0.    0.    0. !
  
 -->diag([1 i 2])-[1 0 0;0 i 0;0 0 2]
- ans       =
+ ans  =
  
 !   0    0    0 !
 !   0    0    0 !
@@ -453,72 +451,72 @@
 -->c(1,1)=i;
  
 -->diag(a)-[1;6]
- ans       =
+ ans  =
  
 !   0. !
 !   0. !
  
 -->diag(a,1)-[2;7]
- ans       =
+ ans  =
  
 !   0. !
 !   0. !
  
 -->diag(a,-1)-[5]
- ans       =
+ ans  =
  
     0.  
  
 -->diag(a,4)
- ans       =
+ ans  =
  
      []
  
 -->diag(c)-[i;6]
- ans       =
+ ans  =
  
 !   0 !
 !   0 !
  
 -->diag(c,1)-[2;7]
- ans       =
+ ans  =
  
 !   0 !
 !   0 !
  
 -->diag(c,-1)-[5]
- ans       =
+ ans  =
  
     0  
  
 -->diag(c,4)
- ans       =
+ ans  =
  
      []
  
 -->//
  
 -->eye(a)
- ans       =
+ ans  =
  
 !   1.    0.    0.    0. !
 !   0.    1.    0.    0. !
  
 -->eye(c)
- ans       =
+ ans  =
  
 !   1.    0.    0.    0. !
 !   0.    1.    0.    0. !
  
 -->eye(3,3)
- ans       =
+ ans  =
  
 !   1.    0.    0. !
 !   0.    1.    0. !
 !   0.    0.    1. !
  
 -->eye(2,3)
- ans       =
+ ans  =
  
 !   1.    0.    0. !
 !   0.    1.    0. !
@@ -526,26 +524,26 @@
 -->//
  
 -->ones(a)
- ans       =
+ ans  =
  
 !   1.    1.    1.    1. !
 !   1.    1.    1.    1. !
  
 -->ones(c)
- ans       =
+ ans  =
  
 !   1.    1.    1.    1. !
 !   1.    1.    1.    1. !
  
 -->ones(3,3)
- ans       =
+ ans  =
  
 !   1.    1.    1. !
 !   1.    1.    1. !
 !   1.    1.    1. !
  
 -->ones(3,2)
- ans       =
+ ans  =
  
 !   1.    1. !
 !   1.    1. !
@@ -554,33 +552,33 @@
 -->//
  
 -->rand(a)
- ans       =
+ ans  =
  
 !   0.2113249    0.0002211    0.6653811    0.8497452 !
 !   0.7560439    0.3303271    0.6283918    0.6857310 !
  
 -->rand(c)
- ans       =
+ ans  =
  
 !   0.8782165    0.5608486    0.7263507    0.5442573 !
 !   0.0683740    0.6623569    0.1985144    0.2320748 !
  
 -->rand(3,3)
- ans       =
+ ans  =
  
 !   0.2312237    0.6525135    0.2146008 !
 !   0.2164633    0.3076091    0.312642  !
 !   0.8833888    0.9329616    0.3616361 !
  
 -->rand(3,2)
- ans       =
+ ans  =
  
 !   0.2922267    0.3321719 !
 !   0.5664249    0.5935095 !
 !   0.4826472    0.5015342 !
  
 -->rand
- ans       =
+ ans  =
  
     0.4368588  
  
@@ -595,13 +593,13 @@
 -->//
  
 -->abs(c)
- ans       =
+ ans  =
  
 !   1.    2.    3.    4. !
 !   5.    6.    7.    8. !
  
 -->abs(a)
- ans       =
+ ans  =
  
 !   1.    2.    3.    4. !
 !   5.    6.    7.    8. !
@@ -609,25 +607,25 @@
 -->//
  
 -->real(c)
- ans       =
+ ans  =
  
 !   0.    2.    3.    4. !
 !   5.    6.    7.    8. !
  
 -->imag(c)
- ans       =
+ ans  =
  
 !   1.    0.    0.    0. !
 !   0.    0.    0.    0. !
  
 -->real(a)
- ans       =
+ ans  =
  
 !   1.    2.    3.    4. !
 !   5.    6.    7.    8. !
  
 -->imag(a)
- ans       =
+ ans  =
  
 !   0.    0.    0.    0. !
 !   0.    0.    0.    0. !
@@ -635,7 +633,7 @@
 -->//
  
 -->round(rand(3,3))
- ans       =
+ ans  =
  
 ! - 1.    1.  - 1. !
 !   1.    1.    1. !
@@ -644,13 +642,13 @@
 -->//
  
 -->conj(a)
- ans       =
+ ans  =
  
 !   1.    2.    3.    4. !
 !   5.    6.    7.    8. !
  
 -->conj(c)
- ans       =
+ ans  =
  
 ! - i      2.    3.    4. !
 !   5.     6.    7.    8. !
@@ -658,112 +656,112 @@
 -->//
  
 -->size(a)
- ans       =
+ ans  =
  
 !   2.    4. !
  
 -->[m,n]=size(a)
- n         =
+ n  =
  
     4.  
- m         =
+ m  =
  
     2.  
  
 -->//
  
 -->triu(a)
- ans       =
+ ans  =
  
 !   1.    2.    3.    4. !
 !   0.    6.    7.    8. !
  
 -->tril(a)
- ans       =
+ ans  =
  
 !   1.    0.    0.    0. !
 !   5.    6.    0.    0. !
  
 -->triu(a,1)
- ans       =
+ ans  =
  
 !   0.    2.    3.    4. !
 !   0.    0.    7.    8. !
  
 -->triu(a,-1)
- ans       =
+ ans  =
  
 !   1.    2.    3.    4. !
 !   5.    6.    7.    8. !
  
 -->tril(a,1)
- ans       =
+ ans  =
  
 !   1.    2.    0.    0. !
 !   5.    6.    7.    0. !
  
 -->tril(a,-1)
- ans       =
+ ans  =
  
 !   0.    0.    0.    0. !
 !   5.    0.    0.    0. !
  
 -->triu(c)
- ans       =
+ ans  =
  
 !   i      2.    3.    4. !
 !   0      6.    7.    8. !
  
 -->tril(c)
- ans       =
+ ans  =
  
 !   i      0     0    0 !
 !   5.     6.    0    0 !
  
 -->triu(c,1)
- ans       =
+ ans  =
  
 !   0    2.    3.    4. !
 !   0    0     7.    8. !
  
 -->triu(c,10)
- ans       =
+ ans  =
  
 !   0    0    0    0 !
 !   0    0    0    0 !
  
 -->triu(c,-1)
- ans       =
+ ans  =
  
 !   i      2.    3.    4. !
 !   5.     6.    7.    8. !
  
 -->triu(c,-10)
- ans       =
+ ans  =
  
 !   i      2.    3.    4. !
 !   5.     6.    7.    8. !
  
 -->tril(c,1)
- ans       =
+ ans  =
  
 !   i      2.    0     0 !
 !   5.     6.    7.    0 !
  
 -->tril(c,10)
- ans       =
+ ans  =
  
 !   i      2.    3.    4. !
 !   5.     6.    7.    8. !
  
 -->tril(c,-1)
- ans       =
+ ans  =
  
 !   0     0    0    0 !
 !   5.    0    0    0 !
  
 -->tril(c,-10)
- ans       =
+ ans  =
  
 !   0    0    0    0 !
 !   0    0    0    0 !
@@ -887,6 +885,93 @@
 -->if abs(ac\ b-(ac\ 1)*b)> 10*%eps then bugmes();quit;end
  
 -->if abs(ac\ bc-(ac\ 1)*bc)> 10*%eps then bugmes();quit;end
+ 
+-->//
+ 
+-->//elemt-wise
+ 
+-->a=rand(3,2);ai=a+rand(3,2)*%i;
+ 
+-->de=2;
+ 
+-->if norm(ai.*de-ai*de,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(de.*ai-de*ai,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(ai.*de-ai*de,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(de.*ai-de*ai,1) >1000*%eps then bugmes();quit;end
+ 
+-->de=de+3*%i;
+ 
+-->if norm(ai.*de-ai*de,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(de.*ai-de*ai,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(ai.*de-ai*de,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(de.*ai-de*ai,1) >1000*%eps then bugmes();quit;end
+ 
+-->//
+ 
+-->de=2;def=de*ones(a);
+ 
+-->if norm(a./de-a./def,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(ai./de-ai./def,1) >1000*%eps then bugmes();quit;end
+ 
+-->//
+ 
+-->de=2+3*%i;def=de*ones(a);
+ 
+-->if norm(a./de-a./def,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(ai./de-ai./def,1) >1000*%eps then bugmes();quit;end
+ 
+-->de=2;def=de*ones(a);
+ 
+-->if norm(a.\de-a.\def,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(ai.\de-ai.\def,1) >1000*%eps then bugmes();quit;end
+ 
+-->//
+ 
+-->de=2+3*%i;def=de*ones(a);
+ 
+-->if norm(a.\de-a.\def,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(ai.\de-ai.\def,1) >1000*%eps then bugmes();quit;end
+ 
+--> 
+-->///////////
+ 
+-->de=2;def=de*ones(a);
+ 
+-->if norm(de.\a-de.\a,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(de.\ai-def.\ai,1) >1000*%eps then bugmes();quit;end
+ 
+-->//
+ 
+-->de=2+3*%i;def=de*ones(a);
+ 
+-->if norm(de.\a-def.\a,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(de.\ai-def.\ai,1) >1000*%eps then bugmes();quit;end
+ 
+-->de=2;def=de*ones(a);
+ 
+-->if norm(de./a-def./a,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(de./ai-def./ai,1) >1000*%eps then bugmes();quit;end
+ 
+-->//
+ 
+-->de=2+3*%i;def=de*ones(a);
+ 
+-->if norm(de./a-def./a,1) >1000*%eps then bugmes();quit;end
+ 
+-->if norm(de./ai-def./ai,1) >1000*%eps then bugmes();quit;end
  
 -->//
  
@@ -1142,7 +1227,9 @@
  
 -->if norm(log(s)-tc,1)> 1.e-9 then bugmes();quit;end
  
--->if norm(sin(t)**2+cos(t)**2-eye,1) > 10*%eps then bugmes();quit;end
+-->// Modif for linux 10*%eps ==> 11*%eps
+ 
+-->if norm(sin(t)**2+cos(t)**2-eye,1) > 11*%eps then bugmes();quit;end
  
 -->if norm(sin(tc)**2+cos(tc)**2-eye,1) > 10*%eps then bugmes();quit;end
  

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=LQ,SSI=0
       subroutine lq(nq,tq,tlq,tvq)
 c!but
 c     cette routine calcule a  partir de g(z) et q(z) le

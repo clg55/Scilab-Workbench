@@ -10,7 +10,7 @@ if rhs=1 then
 end;
 if prod(size(n))<>1 then error(95,1),end
 x=[];
-q1=derivee(n/d);s=roots(q1(2));
+q1=derivat(n/d);s=roots(q1(2));
 //
 for a=s',if abs(imag(a))<=10*%eps then x=[x;a],end,end
 if x=[] then;return,end

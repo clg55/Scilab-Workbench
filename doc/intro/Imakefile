@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 
 TEXFILES= basicprimitives.tex chap0.tex chap1.tex datatypes.tex graphics.tex intersci.tex intro.tex programming.tex 
@@ -10,7 +11,7 @@ info 	:
 	@echo 
 	@echo "  To remake it from scratch, you need" 
 	@echo "  scilab, latex and makeindex type :"
-	@echo "     xmkmf ; make Makefiles ; make doc "
+	@echo "     rm intro.ps.Z ; xmkmf ; make Makefiles ; make doc "
 
 doc	:  subs intro.ps.Z
 
@@ -23,7 +24,7 @@ intro.ps.Z: subs  $(TEXFILES)
 	compress intro.ps
 
 clean	::
-	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc
+	$(RM) *.aux *.log  *.dvi *.ind *.idx *.ilg *.lof *.lot *.toc intro.ps
 
 distclean:: clean 
 

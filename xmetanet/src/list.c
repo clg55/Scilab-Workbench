@@ -103,7 +103,8 @@ int level;
   mylink *p;
 
   if (!l->first) {
-    AddText("nil\n");
+    sprintf(Description,"nil\n");
+    AddText(Description);
     return;
   }
   p = l->first;
@@ -111,7 +112,8 @@ int level;
     PrintArc((arc*)p->element,level);
     p = p->next;
   }
-  AddText("\n");
+  sprintf(Description,"\n");
+  AddText(Description);
 }
 
 void PrintNodeList(l,level)
@@ -121,7 +123,8 @@ int level;
   mylink *p;
 
   if (!l->first) {
-    AddText("nil\n");
+    sprintf(Description,"nil\n");
+    AddText(Description);
     return;
   }
   p = l->first;
@@ -129,5 +132,6 @@ int level;
     PrintNode((node*)p->element,level);
     p = p->next;
   }
-  AddText("\n");
+  sprintf(Description,"\n");
+  AddText(Description);
 }

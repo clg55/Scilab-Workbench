@@ -17,12 +17,12 @@ if s2(4)<>s2(5)|(s2(4)=='1'&s2(5)=='1') then
   if it2==0 then
     [stk,nwrk,txt,top]=f_gener(nam,nwrk)
   else
-     error(nam+' d''un argument complexe non traduit')
+     error(nam+' complex is not implemented')
   end
 else
   [s2,nwrk,t0]=typconv(s2,nwrk,'1')
   n=s2(4)
-  [errn,nwrk]=adderr(nwrk,'echec du calcul d''exponentielle matricielle')
+  [errn,nwrk]=adderr(nwrk,'exp fails!')
   [out,nwrk,t1]=outname(nwrk,'1',n,n,s2(1))
   [wrk,nwrk,t2]=getwrk(nwrk,'1',mulf(n,addf(mulf('4',n),'5')),'1')
   [iwrk,nwrk,t3]=getwrk(nwrk,'0',mulf('2',n),'1')

@@ -1,9 +1,9 @@
       integer function fschur(lsize,alpha,beta,s,p)
 c!purpose
-c      interface pour les external fortran ou C de la fonction  schur
+c      interface for external fortran or C --> schur function
 c!
       include '../stack.h'
-      integer lsize,folhp,find
+      integer lsize,folhp,find,ii
       double precision alpha,beta,s,p
 c
       character*6   namef,name1
@@ -12,8 +12,7 @@ c
       fschur=0
       call majmin(6,namef,name1)
 c
-c pour interfacer d'autre fonctions, modifier les lignes qui suivent en
-c fonction du nom de la ou des routines a appeler
+c insert your code here
 c+
       if(name1.eq.'c'.or.name1.eq.'cont') then
         fschur=folhp(lsize,alpha,beta,s,p)
@@ -24,16 +23,20 @@ c+
         return
       endif
 c+
-c sous programmes lies dynamiquement.
+c dynamically called routines
       it1=nlink+1
  1001 it1=it1-1
       if(it1.le.0) goto 2000
       if(tablin(it1).ne.namef) goto 1001
 cc sun unix
-      call dyncall(it1-1,lsize,alpha,beta,s,p)
-cc fin
+c  to call subroutine foo(lsize,alpha,beta,s,p,ii)
+c  ii=1 --> good eigenvalue
+c  ii=-1 --> bad eigenvalue
+      call dyncall(it1-1,lsize,alpha,beta,s,p,ii)
+      fschur=ii
+cc end
       return
-c erreur sur le nom du sous programme
+c error
 c
  2000 buf=namef
       call error(50)

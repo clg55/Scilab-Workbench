@@ -16,7 +16,9 @@ c
 c
       include '../stack.h'
 c     
-      character*20 form,strg
+      integer nops,nlogic
+      parameter (nops=30,nlogic=6)
+      character*40 form,strg
       double precision x
       integer op,ix(2),fptr
       equivalence (x,ix(1))
@@ -24,30 +26,26 @@ c
       common /basbrk/ iflag
 c
 
-      integer id(2),iadr,sadr,cmplxt,pt0
+      integer id(nsiz),iadr,sadr,cmplxt,pt0
 c
       integer for(3),while(5),iff(2),else(4),ennd(3)
       integer do(2),thenn(4),retu(6),cas(4),sel(6)
-      integer ops(27),nops,logic(6),nlogic
+      integer ops(nops),logic(nlogic)
       data do/13,24/, else/14,21,28,14/
       data ennd/14,23,13/, for/15,24,27/
       data iff/18,15/, retu/27,14,29,30,27,23/
       data thenn/29,17,14,23/, while/32,17,18,21,14/
       data cas/12,10,28,14/, sel/28,14,21,14,12,29/
-c
-      data nops/27/
 c                            +  -  * .*  *. .*.  / ./  /. ./.  
       data (ops(i),i=1,10) /45,46,47,98,200,149,48,99,201,150/
 c                            \ .\   \. .\. ** =  <  >  <=  >=  <>
-      data (ops(i),i=11,21)/49,100,202,151,58,50,54,55,104,105,109/
-c                             : [,] ins ext  '  [;]
-      data (ops(i),i=22,27) /44,01, 02 ,03 ,53, 04/
-c
-      data nlogic/6/
-c                   =  <  >  <=  >=  <>
-      data logic /50,54,55,104,105,109/
+      data (ops(i),i=11,21)/49,100,202,151,58,50,59,60,109,110,119/
+c                             : [,] ins ext  '  [;]  |  &   ~
+      data (ops(i),i=22,nops) /44,01, 02 ,03 ,53, 04, 57, 58, 61/
 c
 
+c                   =  <    >  <=   >=   <>
+      data logic /50,  54 ,55, 104, 105, 109/
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -82,8 +80,8 @@ c     on scrute une premiere fois l'ensemble de la macro pour determiner
 c     sa complexite
 c
       lc = lc +1
-      lc = lc + 2*istk(lc) + 1
-      lc = lc + 2*istk(lc) + 1
+      lc = lc + nsiz*istk(lc) + 1
+      lc = lc + nsiz*istk(lc) + 1
       long = istk(lc)
       lc = lc+1
       icount=cmplxt(istk(lc),long) 
@@ -247,11 +245,11 @@ c     nom de la variable
       istk(il+6)=istk(il+5)+ni
       l=l+ni
 c     rhs
-      call intstr(istk(lc+3),istk(l),ni,1)
+      call intstr(istk(lc+nsiz+1),istk(l),ni,1)
       istk(il+7)=istk(il+6)+ni
       l=l+ni
 c     fin
-      call intstr(istk(lc+4),istk(l),ni,1)
+      call intstr(istk(lc+nsiz+2),istk(l),ni,1)
       istk(il+8)=istk(il+7)+ni
       l=l+ni
 c

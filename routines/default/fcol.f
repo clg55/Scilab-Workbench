@@ -17,7 +17,7 @@ c+
        return
       endif
 c+
-c sous programmes lies dynamiquement.
+c dynamic link
       it1=nlink+1
  1001 it1=it1-1
       if(it1.le.0) goto 2000
@@ -52,12 +52,12 @@ c+
        return
       endif
 c+
-c sous programmes lies dynamiquement.
+c dynamic link
       it1=nlink+1
  1001 it1=it1-1
       if(it1.le.0) goto 2000
       if(tablin(it1).ne.egsub) goto 1001
-cc sun unix
+cc unix
       call dyncall(it1-1,i,z,g)
 cc fin
       return
@@ -87,12 +87,12 @@ c+
        return
       endif
 c+
-c sous programmes lies dynamiquement.
+c dynamic link
       it1=nlink+1
  1001 it1=it1-1
       if(it1.le.0) goto 2000
       if(tablin(it1).ne.edfsub) goto 1001
-cc sun unix
+cc unix
       call dyncall(it1-1,x,z,df)
 cc fin
       return
@@ -122,12 +122,12 @@ c+
        return
       endif
 c+
-c sous programmes lies dynamiquement.
+c 
       it1=nlink+1
  1001 it1=it1-1
       if(it1.le.0) goto 2000
       if(tablin(it1).ne.efsub) goto 1001
-cc sun unix
+cc  unix
       call dyncall(it1-1,x,z,f)
 cc fin
       return
@@ -157,7 +157,7 @@ c+
        return
       endif
 c+
-c sous programmes lies dynamiquement.
+c 
       it1=nlink+1
  1001 it1=it1-1
       if(it1.le.0) goto 2000

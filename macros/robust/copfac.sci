@@ -1,4 +1,4 @@
-function [n,m,xt,yt]=copfac(G,polf,polc,tol)
+function [n,m,xt,yt]=copfac(g,polf,polc,tol)
 //[n,m,xt,yt]=copfac(G,[polf,polc,[tol]]) returns a right coprime 
 //factorization of g :
 // g = n*m^-1 where n and m are stable, proper and right coprime.

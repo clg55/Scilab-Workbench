@@ -4,7 +4,7 @@ c     put variables into storage
 c     ======================================================================
 c
       INCLUDE '../stack.h'
-      integer iadr,sadr
+      integer iadr
       common /mprot/ macprt
       integer id(nsiz)
 c
@@ -14,7 +14,6 @@ c
       data semi/43/,insert/2/
 c
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
 c
       if (ddt .eq. 4) then
          call cvname(id,buf,1)
@@ -22,9 +21,8 @@ c
       endif
 c
       if(err1.gt.0) return
-c     Attention nsiz est suppose valoir 2 
 c     compilation  stackp: <1,nom(1:4)>
-      if (compil(2,1,id(1),id(2))) then 
+      if (compil(1,id,0,0,0)) then 
          fin=0
          return
       endif
@@ -55,7 +53,7 @@ c     does variable already exist
 c
       last=isiz
       if(macr.eq.0.and.paus.eq.0) goto 04
-      k=lpt(1) - 15
+      k=lpt(1) - (13+nsiz)
       last=lin(k+5)
    04 continue
 c

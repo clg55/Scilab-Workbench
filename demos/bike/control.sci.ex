@@ -1,9 +1,9 @@
 // -----------------MAIN  CONTROL SCILAB PROGRAM--------------------
 path=SCI+'/demos/bike'
-exec(path+'/init.control.sci');
-getf(path+'/fort2.bas','c');
-exec(path+'/data.sci');
-exec(path+'/datopt.sci');
+exec(path+'macros/'+'/init.control.sci');
+getf(path+'macros/'+'/fort2.bas','c');
+exec(path+'macros/'+'/data.sci');
+exec(path+'macros/'+'/datopt.sci');
 
 // datopt.bas should provide:
 // paramopt, 

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=NEXTK,SSI=0
       subroutine nextk(type)
 c computes the next k polynomials using scalars
 c computed in calcsc

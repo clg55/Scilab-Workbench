@@ -1,3 +1,4 @@
+/**/include ../../Path.incl
 #include "../../Imake.incl"
 NAME=utillib
 NAM=util
@@ -12,7 +13,10 @@ MACROS= sysconv.sci readc_.sci lin.sci \
 	x_matrix.sci sparse.sci typeof.sci isdef.sci zeros.sci edit.sci \
 	g_ones.sci g_rand.sci g_eye.sci mlog.sci msin.sci mcos.sci msign.sci \
 	msqrt.sci mpow.sci g_size.sci colnew.sci g_inv.sci g_det.sci \
-	getvalue.sci usermenu.sci
+	getvalue.sci usermenu.sci macrovar.sci input.sci sci2exp.sci \
+	demos.sci whereami.sci 	str2code.sci code2str.sci\
+	printf.sci fprintf.sci sprintf.sci scanf.sci fscanf.sci sscanf.sci \
+	xdialog.sci unix_g.sci unix_s.sci unix_x.sci unix_w.sci
 
 
 OBJ=$(MACROS:.sci=.bin)

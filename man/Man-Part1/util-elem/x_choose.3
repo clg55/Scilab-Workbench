@@ -6,9 +6,19 @@ x_choose - interactive Xwindow choice
 .nf
 [num]=x_choose(items,title) 
 .fi
+.SH PARAMETERS
+.TP
+items 
+: column vector of string,  items to choose
+.TP
+title
+: column vector of string, comment for the dialog
+.TP
+num 
+: integer, choosen item number or 0 if dialog resumed with "Cancel" button
 .SH DESCRIPTION
 Returns in \fVnum\fR the number of the chosen item.
 .SH EXAMPLE
 .nf
-n=x_choose(['item1';'item2';'item3'],'title')
+n=x_choose(['item1';'item2';'item3'],['that is a comment';'for the dialog']))
 .fi

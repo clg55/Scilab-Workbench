@@ -10,7 +10,7 @@ function [x1,x2]=riccati(a,b,c,dom,typ)
 // -- dom = 'c' or 'd' for the time domain (continuous or discrete)
 // -- typ = 'eigen' --->block diagonalization
 //    typ = 'schur' --->schur method
-// See also ric_descr
+// See also ric_desc
 //!
       [lhs,rhs]=argn(0),
       if rhs=4 then typ='eigen',end,

@@ -68,6 +68,7 @@ c
       mn2=m2*n2
 c
       if (m2 .ne. n2) then
+         err=rhs
          call error(20)
          return
       endif
@@ -177,11 +178,13 @@ c     matrix left division a backslash a2
       mn2=m2*n2
 c
       if (m .ne. n) then
+         err=rhs
          call error(20)
          return
       endif
       if (mn2 .eq. 1) go to 26
       if (mn2.le.0) then
+         err=rhs
          call error(45)
          return
       endif
@@ -247,6 +250,7 @@ c
       nn=n*n
 
  31   if (m .ne. n) then
+         err=rhs
          call error(20)
          return
       endif
@@ -301,6 +305,7 @@ c
       nn=n*n
 
       if (m .ne. n) then
+         err=1
          call error(20)
          return
       endif
@@ -351,7 +356,7 @@ c cas de la matrice vide
       istk(il+1)=1
       istk(il+2)=1
       lstk(top+1)=l+it+1
-      stk(l)=0.0d+0
+      stk(l)=1.0d+0
       if (it.eq.1) stk(l+1)=0.0d+0
       go to 99
 c
@@ -372,10 +377,12 @@ c
       nn=n*n
 
       if (m .ne. n) then
+         err=rhs
          call error(20)
          return
       endif
       if(mn.le.0) then
+         err=rhs
          call error(45)
          return
       endif
@@ -422,6 +429,7 @@ c
       nn=n*n
 
       if (m .ne. n) then
+         err=rhs
          call error(20)
          return
       endif
@@ -516,6 +524,7 @@ c     cholesky
       nn=n*n
 
       if (m .ne. n) then
+         err=rhs
          call error(20)
          return
       endif

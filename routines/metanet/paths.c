@@ -4,6 +4,8 @@
 
 extern void cerro();
 
+static char str[80];
+
 /* NodesToPath converts a vector with node numbers into a path:
    NODES = [Nn,...,N2,N1] =>
    PATH = [A1,A2,...,An-1] with Ai = (Ni,Ni+1)
@@ -44,11 +46,13 @@ int **p;
   int *nodes;
   int k,nn;
   if (*i < 0 || *i > *n) {
-    cerro("Bad internal node number %d",*i);
+    sprintf(str,"Bad internal node number %d",*i);
+    cerro(str);
     return;
   }
   if (*j < 0 || *j > *n) {
-    cerro("Bad internal node number %d",*j);
+    sprintf(str,"Bad internal node number %d",*j);
+    cerro(str);
     return;
   }
   if ((nodes = (int *)malloc((*m + 1) * sizeof(int))) == NULL) {
@@ -97,12 +101,14 @@ int **p;
   for (i = 1; i <= *psize; i++) {
     n1 = nodes[i-1];
     if ((i == 1) && (n1 < 0 || n1 > *n)) {
-      cerro("Bad internal node number %d",n1);
+      sprintf(str,"Bad internal node number %d",n1);
+      cerro(str);
       return;
     }
     n2 = nodes[i];
     if (n2 < 0 || n2 > *n) {
-      cerro("Bad internal node number %d",n2);
+      sprintf(str,"Bad internal node number %d",n2);
+      cerro(str);
       return;
     }
     a = 0;
@@ -140,7 +146,8 @@ int **nodes;
     if (*direct == 1) a = p[i-1];
     else a = 2 * p[i-1];
     if (a < 0 || a > *m) {
-      cerro("Bad internal arc number %d",a);
+      sprintf(str,"Bad internal arc number %d",a);
+      cerro(str);
       return;
     }
     n1 = 0; n2 = 0;

@@ -53,7 +53,7 @@ for i=1:m
   sing=[sing;%sel(roots(denh(i)),fmin,fmax,dom,tol)]
   zers=[zers;%sel(roots(numh(i)),fmin,fmax,dom,tol)]
 end
-pp=Sort([sing' zers']);npp=prod(size(pp));
+pp=sort([sing' zers']);npp=prod(size(pp));
 if npp>0 then
   pp=pp(npp:-1:1)
   f1=fmin;xt=[]
@@ -113,7 +113,7 @@ while i<nfrq
       pasmin=f*0.000001
       if (e>k&pas/2>pasmin) then
         pas=pas/2;f=mini(f0+pas,fmax)
-      elseif e<k/2 Then
+      elseif e<k/2 then
         pas=2*pas
         frq=[frq,f]
         f0=f;f=mini(f0+pas,fmax),

@@ -9,11 +9,10 @@ c
       integer       ini1
 c
       INCLUDE '../stack.h'
-      integer iadr,sadr
+      integer iadr
       integer init
 c
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
 c
       init=ini1
       call basmsg(init)

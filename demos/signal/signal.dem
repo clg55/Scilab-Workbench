@@ -1,9 +1,9 @@
 //function signal()
 mode(0)
 xbasc();
-getf(sci+'/demos/signal/spect.dem');
-getf(sci+'/demos/signal/remezfilt.dem');
-demoList=['Spectral Estimation ';
+getf('SCI/demos/signal/spect.dem');
+getf('SCI/demos/signal/remezfilt.dem');
+demolist=['Spectral Estimation ';
           'IIR filter design ';
           'Minimax FIR filter design'];
 while %t then

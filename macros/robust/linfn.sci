@@ -72,7 +72,7 @@ end
  
 //recover realization
 //*******************
-[a,b,c,d]=g(2:5);
+[a,b,c,d]=G(2:5);
  
  
 //SCALING

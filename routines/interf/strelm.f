@@ -8,7 +8,7 @@ c
       INCLUDE '../stack.h'
 c
       logical lgq
-      integer blank,eol,vol,ch
+      integer blank,eol,vol
 c
       integer iadr,sadr
       data    blank/40/,eol/99/,nclas/29/
@@ -109,7 +109,7 @@ c
          call error(53)
          return
       endif
-      if(istk(ilv+1).ne.1.and.istk(ilv+2).ne.1) then
+      if(istk(ilv+1).gt.1.and.istk(ilv+2).gt.1) then
          err=rhs
          call error(89)
          return
@@ -120,6 +120,12 @@ c
          return
       endif
       nv=istk(ilv+1)*istk(ilv+2)
+      if(nv.eq.0) then
+         call iset(mn1+1,1,istk(id1),1)
+         top=top-1
+         lstk(top+1)=sadr(l1)
+         goto 999
+      endif
       lv=sadr(ilv+4)
       do 21 k=0,nv-1
          if(int(stk(lv+k)).le.0) then
@@ -221,27 +227,8 @@ c     generation du vecteur des variables de sorties/puis d'entree
             l=ilp+n
             if (n.eq.0) goto 35
             do 34 j=1,n
-               id1=istk(il)
-               id2=istk(il+1)
-               do 31 ii=1,nlgh/2
-                  k=id1/256
-                  ch=id1-256*k
-                  id1=k
-                  istk(l+ii)=ch
- 31            continue
-               do 32 ii=nlgh/2+1,nlgh
-                  k=id2/256
-                  ch=id2-256*k
-                  id2=k
-                  istk(l+ii)=ch
- 32            continue
-c     
-               l=l+nlgh
- 33            if(istk(l).eq.blank) then
-                  l=l-1
-                  goto 33
-               endif
-c
+               call namstr(istk(il),istk(l+1),nn,1)
+               l=l+nn
                istk(ilp+j)=l+1-(ilp+n)
                il=il+nsiz
  34         continue

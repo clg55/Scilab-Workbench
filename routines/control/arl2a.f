@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=ARL2A,SSI=0
       subroutine arl2a(f,nf,ta,mxsol,imina,nall,inf,ierr,ilog,w,iw)
 c!but
 c     Cette procedure a pour but de rechercher le plus

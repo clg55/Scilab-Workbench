@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=FINTG,SSI=0
       double precision function fintg(x)
 c!
 c  CALLING SEQUENCE: subroutine XXXXXX(x,f)
@@ -6,7 +5,7 @@ c!
       include '../stack.h'
 
 C      implicit undefined (a-z)
-      double precision x,pi
+      double precision x,pi,y
 c
       integer it1
 c
@@ -35,7 +34,8 @@ c
       if(it1.le.0) goto 2000
       if(tablin(it1).ne.name) goto 1001
 cc sun unix
-      call dyncall(it1-1,x,fintg)
+      call dyncall(it1-1,x,y)
+      fintg=y
 cc fin
       return
 c

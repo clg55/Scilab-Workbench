@@ -2,7 +2,7 @@
 .TH colnew G "June 1993" "Scilab Group" "Scilab Function"
 .so man1/sci.an
 .SH NAME
-colnew - boundary value problems for  ordinary differential equations
+colnew - boundary value problems for ODE
 .SH CALLING SEQUENCE
 .nf
    [z]=colnew(points,ncomp,m,aleft,aright,zeta,ipar,ltol,tol,fixpnt,...
@@ -254,7 +254,7 @@ are to be included in every mesh.
 .TP 
 externals 
 The function \fVfsub,dfsub,gsub,dgsub,guess\fR are Scilab externals
-i.e. macros (see syntax below) or the name of a fortran subroutine (character
+i.e. functions (see syntax below) or the name of a fortran subroutine (character
 string) with specified calling sequence or a list.
 An external as a  character string refers to the name of a Fortran
 subroutine. The Fortran coded function interface to colnew are
@@ -410,6 +410,7 @@ the orders mi of the differential equations satisfy
 .FI
 .LA $1 \le m(i)\le 4$.
 .SH EXAMPLE 
+See the directory \fVdemos/colnew\fR for a demo file 
 .nf
 function [z,z1]=col1()
 fixpnt=0

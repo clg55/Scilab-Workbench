@@ -3,6 +3,7 @@
 #include "list.h"
 #include "graph.h"
 #include "metio.h"
+#include "libCom.h"
 
 extern graph *MakeUndirected();
 
@@ -15,6 +16,8 @@ static int *ta;
 /* Compute adjacency description for directed or undirected graph,
    depending upon FORDIR parameter
 */
+
+#define mystrcat(s1,s2) istr=0;while(s2[istr]!='\0'){s1[ig++]=s2[istr++];}s1[ig++]=CHARSEP;
 
 int ComputeAdjacencyDescription(fordir,g)
 int fordir;
@@ -169,14 +172,12 @@ graph *g;
 int ComputeScilabGraph(glist)
 char **glist;
 {
-  int dsize,gsize,i,isize,mem,s;
+  int salloc,gsize,i,mem,nitem,s;
   int m,n,ma,mm;
   int lname,lnname,laname;
-  char *g;
-  char name[MAXNAM];
-
-  isize = sizeof(int);
-  dsize = sizeof(double);
+  char str[MAXNAM]; int istr;
+  char *g; 
+  int ig = 0;
 
   lname = strlen(theGraph->name);
   m = theGraph->arc_number;
@@ -184,189 +185,182 @@ char **glist;
   if (theGraph->directed) ma = m; else ma = m / 2;
   mm = 2 * ma;
 
-  mem = lname + 1;
-  mem +=  isize * (7 + (2 * m) + (2 * (n + 1)) + (2 * mm) + (3 * ma) +
+  nitem = 1; mem = lname + 1; 
+  nitem += 7 + (2 * m) + (2 * (n + 1)) + (2 * mm) + (3 * ma) + (4 * n);
+  mem +=  ISIZE * (7 + (2 * m) + (2 * (n + 1)) + (2 * mm) + (3 * ma) +
 		   (4 * n));
-  mem += dsize * (n + (7 * ma));
+  nitem += n + (7 * ma);
+  mem += DSIZE * (n + (7 * ma));
 
   lnname = 0;
   for (i = 1; i <= n; i++) {
     lnname += strlen(theGraph->nameNodeArray[i]) + 1;
   }
+  nitem += n;
   mem += lnname;
 
   laname = 0;
   for (i = 1; i <= ma; i++) {
     laname += strlen(theGraph->nameEdgeArray[i]) + 1;
   }
+  nitem += ma;
   mem += laname;
   
-  if ((g = (char *)malloc((unsigned)mem)) == NULL) {
+  salloc = mem + nitem;
+  if ((g = (char *)malloc((unsigned)salloc)) == NULL) {
     fprintf(stderr,"Running out of memory\n");
     return(0);
   }
 
-  gsize = 0;
+  mystrcat(g,theGraph->name);
 
-  s = lname + 1;
-  bcopy(theGraph->name,g+gsize,s);
-  gsize += s;
+  sprintf(str,"%d",theGraph->directed);
+  mystrcat(g,str);
 
-  s = isize;
-  bcopy((char *)&theGraph->directed,g+gsize,s);
-  gsize += s;
+  sprintf(str,"%d",m);
+  mystrcat(g,str);
 
-  s = isize;
-  bcopy((char *)&m,g+gsize,s);
-  gsize += s;
+  sprintf(str,"%d",n);
+  mystrcat(g,str);
 
-  s = isize;
-  bcopy((char *)&n,g+gsize,s);
-  gsize += s;
+  sprintf(str,"%d",ma);
+  mystrcat(g,str);
 
-  s = isize;
-  bcopy((char *)&ma,g+gsize,s);
-  gsize += s;
+  sprintf(str,"%d",mm);
+  mystrcat(g,str);
 
-  s = isize;
-  bcopy((char *)&mm,g+gsize,s);
-  gsize += s;
+  ComputeAdjacencyDescription(1,theGraph);
 
-  m = ComputeAdjacencyDescription(1,theGraph);
+  for (i = 0; i < m; i++) {
+    sprintf(str,"%d",la[i]);
+    mystrcat(g,str);
+  }
 
-  s = isize * m;
-  bcopy((char *)la,g+gsize,s);
-  gsize += s;
+  for (i = 0; i < n + 1; i++) {
+    sprintf(str,"%d",lp[i]);
+    mystrcat(g,str);
+  }
 
-  s = isize * (n + 1);
-  bcopy((char *)lp,g+gsize,s);
-  gsize += s;
+  for (i = 0; i < m; i++) {
+    sprintf(str,"%d",ls[i]);
+    mystrcat(g,str);
+  }
 
-  s = isize * m;
-  bcopy((char *)ls,g+gsize,s);
-  gsize += s;
+  ComputeAdjacencyDescription(0,theGraph);
 
-  mm = ComputeAdjacencyDescription(0,theGraph);
+  for (i = 0; i < mm; i++) {
+    sprintf(str,"%d",la[i]);
+    mystrcat(g,str);
+  }
 
-  s = isize * mm;
-  bcopy((char *)la,g+gsize,s);
-  gsize += s;
+  for (i = 0; i < n+1; i++) {
+    sprintf(str,"%d",lp[i]);
+    mystrcat(g,str);
+  }
 
-  s = isize * (n + 1);
-  bcopy((char *)lp,g+gsize,s);
-  gsize += s;
+  for (i = 0; i < mm; i++) {
+    sprintf(str,"%d",ls[i]);
+    mystrcat(g,str);
+  }
 
-  s = isize * mm;
-  bcopy((char *)ls,g+gsize,s);
-  gsize += s;
+  ComputeEdgeDescription(theGraph);
 
-  ma = ComputeEdgeDescription(theGraph);
+  for (i = 0; i < ma; i++) {
+    sprintf(str,"%d",he[i]);
+    mystrcat(g,str);
+  }
 
-  s = isize * ma;
-  bcopy((char *)he,g+gsize,s);
-  gsize += s;
-
-  s = isize * ma;
-  bcopy((char *)ta,g+gsize,s);
-  gsize += s;
-
-  s = isize;
-  bcopy((char *)&lnname,g+gsize,s);
-  gsize += s;
-
-  for (i = 1; i <= n; i++) {
-    strcpy(name,theGraph->nameNodeArray[i]);
-    lname = strlen(name) + 1;
-    bcopy(name,g+gsize,lname);
-    gsize += lname;
+  for (i = 0; i < ma; i++) {
+    sprintf(str,"%d",ta[i]);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= n; i++) {
-    bcopy((char *)&theGraph->nodeArray[i]->type,g+gsize,isize);
-    gsize += isize;
+    mystrcat(g,theGraph->nameNodeArray[i]);
   }
 
   for (i = 1; i <= n; i++) {
-    bcopy((char *)&theGraph->nodeArray[i]->x,g+gsize,isize);
-    gsize += isize;
+    sprintf(str,"%d",theGraph->nodeArray[i]->type);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= n; i++) {
-    bcopy((char *)&theGraph->nodeArray[i]->y,g+gsize,isize);
-    gsize += isize;
+    sprintf(str,"%d",theGraph->nodeArray[i]->x);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= n; i++) {
-    bcopy((char *)&theGraph->nodeArray[i]->col,g+gsize,isize);
-    gsize += isize;
+    sprintf(str,"%d",theGraph->nodeArray[i]->y);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= n; i++) {
-    bcopy((char *)&theGraph->nodeArray[i]->demand,g+gsize,dsize);
-    gsize += dsize;
+    sprintf(str,"%d",theGraph->nodeArray[i]->col);
+    mystrcat(g,str);
   }
 
-  s = isize;
-  bcopy((char *)&laname,g+gsize,s);
-  gsize += s;
+  for (i = 1; i <= n; i++) {
+    sprintf(str,"%e",theGraph->nodeArray[i]->demand);
+    mystrcat(g,str);
+  }
 
   for (i = 1; i <= ma; i++) {
-    strcpy(name,theGraph->nameEdgeArray[i]);
-    lname = strlen(name) + 1;
-    bcopy(name,g+gsize,lname);
-    gsize += lname;
+    mystrcat(g,theGraph->nameEdgeArray[i]);
   }
   
   for (i = 1; i <= m; i++) {
     if (!theGraph->directed && (i % 2 == 0)) continue;
-    bcopy((char *)&theGraph->arcArray[i]->col,g+gsize,isize);
-    gsize += isize;
+    sprintf(str,"%d",theGraph->arcArray[i]->col);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= m; i++) {
     if (!theGraph->directed && (i % 2 == 0)) continue;
-    bcopy((char *)&theGraph->arcArray[i]->length,g+gsize,dsize);
-    gsize += dsize;
+    sprintf(str,"%e",theGraph->arcArray[i]->length);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= m; i++) {
     if (!theGraph->directed && (i % 2 == 0)) continue;
-    bcopy((char *)&theGraph->arcArray[i]->unitary_cost,g+gsize,dsize);
-    gsize += dsize;
+    sprintf(str,"%e",theGraph->arcArray[i]->unitary_cost);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= m; i++) {
     if (!theGraph->directed && (i % 2 == 0)) continue;
-    bcopy((char *)&theGraph->arcArray[i]->minimum_capacity,g+gsize,dsize);
-    gsize += dsize;
+    sprintf(str,"%e",theGraph->arcArray[i]->minimum_capacity);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= m; i++) {
     if (!theGraph->directed && (i % 2 == 0)) continue;
-    bcopy((char *)&theGraph->arcArray[i]->maximum_capacity,g+gsize,dsize);
-    gsize += dsize;
+    sprintf(str,"%e",theGraph->arcArray[i]->maximum_capacity);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= m; i++) {
     if (!theGraph->directed && (i % 2 == 0)) continue;
-    bcopy((char *)&theGraph->arcArray[i]->quadratic_weight,g+gsize,dsize);
-    gsize += dsize;
+    sprintf(str,"%e",theGraph->arcArray[i]->quadratic_weight);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= m; i++) {
     if (!theGraph->directed && (i % 2 == 0)) continue;
-    bcopy((char *)&theGraph->arcArray[i]->quadratic_origin,g+gsize,dsize);
-    gsize += dsize;
+    sprintf(str,"%e",theGraph->arcArray[i]->quadratic_origin);
+    mystrcat(g,str);
   }
 
   for (i = 1; i <= m; i++) {
     if (!theGraph->directed && (i % 2 == 0)) continue;
-    bcopy((char *)&theGraph->arcArray[i]->weight,g+gsize,dsize);
-    gsize += dsize;
+    sprintf(str,"%e",theGraph->arcArray[i]->weight);
+    mystrcat(g,str);
   }
 
-  if (gsize != mem) {
-    MetanetAlert("Internal error: bad graph size");
+  g[ig] = '\0';
+  gsize = ig;
+
+  if (gsize > salloc) {
+    
     return 0;
   }
 

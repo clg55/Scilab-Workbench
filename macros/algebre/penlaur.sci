@@ -7,6 +7,8 @@ function [Si,Pi,Di,order]=penlaur(E,A)
 // F.D. (1988,1990) (Experimental version: troubles when bad conditioning of
 // (so*E-A)...)
 //!
+[LHS,RHS]=argn(0);
+if RHS==1 then [E,A]=pen2ea(E);end
 rand('normal')
 tests=rand(1,10);
 conditions=0*tests;k=1;
@@ -23,6 +25,3 @@ Pi=Pe*Sa*J;
 Di=Pi*E*Pi;
 if order=0 then Di=0*Di;end
 //[S,P,D,index]=projspec(Di*E);
-
-
-

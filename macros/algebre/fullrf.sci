@@ -9,7 +9,7 @@ function [Q,M,rk]=fullrf(A,tol)
 [lhs,rhs]=argn(0)
 na1=norm(A,1);
 if rhs==1 then tol=sqrt(%eps);end
-if na1 < 1.d-10 then q=[];m=[];rk=0;return;end
+if na1 < 1.d-10 then Q=[];M=[];rk=0;return;end
 tol1=tol*na1;
 [U,s,V,rk]=svd(A,tol1);
 sq=sqrt(s);

@@ -10,12 +10,11 @@ function [Q,M,i1]=pencan(E,A)
 //See glever,  penlaur
 //F.D.
 //!
+[LHS,RHS]=argn(0);
+if RHS==1 then [E,A]=pen2ea(E);end
 [Si,Pi,Di,index]=penlaur(E,A);
 [Q1,M1]=fullrf(Si);
 [Q2,M2]=fullrf(Pi);
 [i1,i2]=size(M1);
 M=[M1;M2];
 Q=[Q1,Q2];
-
-
-

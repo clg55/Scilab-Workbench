@@ -9,16 +9,16 @@ case 15 then
     x=invr(a);return
   end
   if a(1)='lss' then
-  D=a(5);
-  [m,n]=size(D);
-polyn=(type(D)==2);constant=(type(D)==1);
-if constant then rcd=rcond(D);minsv=mini(svd(D));s=poly(0,'s');end
-if polyn then rcd=0;minsv=10000;s=poly(0,varn(D));end
+  d=a(5);
+  [m,n]=size(d);
+polyn=(type(d)==2);constant=(type(d)==1);
+if constant&(m==n) then minsv=mini(svd(d));rcd=rcond(d);s=poly(0,'s');end
+if polyn then rcd=0;minsv=10000;s=poly(0,varn(d));end
    if m==n then 
         if rcd > 1.d-6 then
                x=invsysli(a)
                        else
-        H=systmat(A);
+        h=systmat(a);
         rand('normal');
         valfa=rand(1,10)/100;
         www=[];for k=1:10
@@ -34,9 +34,9 @@ if polyn then rcd=0;minsv=10000;s=poly(0,varn(D));end
         if minsv > 1.d-6 then
                x=invsysli(a)
                        else
-        [stmp,ws]=rowregul(A,0,0);
+        [stmp,ws]=rowregul(a,0,0);
               if mini(svd(stmp(5))) > 1.d-6 then
-        x=invsysli(stmp)*Ws
+        x=invsysli(stmp)*ws
                                          else
         error('not full rank! --> error ')
               end
@@ -49,9 +49,9 @@ if polyn then rcd=0;minsv=10000;s=poly(0,varn(D));end
         if minsv > 1.d-6 then
                x=invsysli(a)
                        else
-        [stmp,ws]=rowregul(A,0,0);
+        [stmp,ws]=rowregul(a,0,0);
               if mini(svd(stmp(5))) > 1.d-6 then
-        x=invsyslin(stmp)*Ws
+        x=invsyslin(stmp)*ws
                                          else
         error('not full rank! --> error ')
               end

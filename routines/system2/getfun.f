@@ -140,6 +140,7 @@ c     premiere ligne
       l=l+1
       goto 17
  24   lin(l)=k
+      if(maj) lin(l)=-k
       l=l+1
       if(l.gt.lsiz) then
         ierr=3

@@ -15,8 +15,10 @@
 #include "graph.h"
 #include "graphics.h"
 #include "menus.h"
+#include "font.h"
 
 extern void AutomaticName();
+extern void ChooseFont();
 extern void ColorObject();
 extern void CopyGraph();
 extern void CreateLoop();
@@ -26,6 +28,7 @@ extern void DeleteGraph();
 extern void DeleteObject();
 extern void FindArc();
 extern void FindNode();
+extern XFontStruct *FontSelect();
 extern void Graphics();
 extern void LoadComputeGraph();
 extern void LoadGraph();
@@ -36,6 +39,7 @@ extern void RemoveSourceSink();
 extern void RenameGraph ();
 extern void RenameSaveGraph();
 extern void SaveGraph();
+extern void SetTitle();
 
 #define MAXMENUS 20
 
@@ -77,6 +81,7 @@ static String modifyMenu[] = {
   "Color Object",
   "Automatic Name",
   "Graphics",
+  "Fonts",
   "Preferences"
   };
 
@@ -189,7 +194,7 @@ caddr_t callData;
     CopyGraph();
     break;
   case STUDY:
-    Graphics();
+    Graphics(STUDY);
     break;
   case MODIFY:
     FindArc();
@@ -337,7 +342,23 @@ caddr_t callData;
   case STUDY:
     break;
   case MODIFY:
-    Graphics();
+    Graphics(MODIFY);
+    break;
+  }
+}
+
+void DoMenu16(widget,clientData,callData)
+Widget widget;
+caddr_t clientData;
+caddr_t callData;
+{
+  switch (menuId) {
+  case BEGIN:
+    break;
+  case STUDY:
+    break;
+  case MODIFY:
+    ChooseFont();
     break;
   }
 }
@@ -455,7 +476,7 @@ void DisplayBeginMenu()
 
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu1;
+  callbacks[0].callback = (XtCallbackProc)DoMenu1;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -466,7 +487,7 @@ void DisplayBeginMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu2;
+  callbacks[0].callback = (XtCallbackProc)DoMenu2;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -476,7 +497,7 @@ void DisplayBeginMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu3;
+  callbacks[0].callback = (XtCallbackProc)DoMenu3;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -486,7 +507,7 @@ void DisplayBeginMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu4;
+  callbacks[0].callback = (XtCallbackProc)DoMenu4;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -496,7 +517,7 @@ void DisplayBeginMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu5;
+  callbacks[0].callback = (XtCallbackProc)DoMenu5;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -506,7 +527,7 @@ void DisplayBeginMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu6;
+  callbacks[0].callback = (XtCallbackProc)DoMenu6;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -516,7 +537,7 @@ void DisplayBeginMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu7;
+  callbacks[0].callback = (XtCallbackProc)DoMenu7;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -525,6 +546,7 @@ void DisplayBeginMenu()
 
   nMenu = i;
   menuId = BEGIN;
+  SetTitle(BEGIN);
 }
 
 void DisplayStudyMenu()
@@ -534,6 +556,7 @@ void DisplayStudyMenu()
   XtCallbackRec callbacks[2];
   int i;
   Widget entry, menuPref;
+  char str[160];
 
   callbacks[1].callback = NULL;
   callbacks[1].closure = NULL;
@@ -544,7 +567,7 @@ void DisplayStudyMenu()
 
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu1;
+  callbacks[0].callback = (XtCallbackProc)DoMenu1;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -555,7 +578,7 @@ void DisplayStudyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu2;
+  callbacks[0].callback = (XtCallbackProc)DoMenu2;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -565,7 +588,7 @@ void DisplayStudyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu3;
+  callbacks[0].callback = (XtCallbackProc)DoMenu3;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -575,7 +598,7 @@ void DisplayStudyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu4;
+  callbacks[0].callback = (XtCallbackProc)DoMenu4;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -585,7 +608,7 @@ void DisplayStudyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu5;
+  callbacks[0].callback = (XtCallbackProc)DoMenu5;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -595,7 +618,7 @@ void DisplayStudyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu6;
+  callbacks[0].callback = (XtCallbackProc)DoMenu6;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -650,6 +673,7 @@ void DisplayStudyMenu()
 
   nMenu = i;
   menuId = STUDY;
+  SetTitle(STUDY);
 }
 
 void DisplayModifyMenu()
@@ -669,7 +693,7 @@ void DisplayModifyMenu()
 
   iargs = 0;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu1;
+  callbacks[0].callback = (XtCallbackProc)DoMenu1;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -680,7 +704,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu2;
+  callbacks[0].callback = (XtCallbackProc)DoMenu2;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -690,7 +714,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu3;
+  callbacks[0].callback = (XtCallbackProc)DoMenu3;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -700,7 +724,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu4;
+  callbacks[0].callback = (XtCallbackProc)DoMenu4;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -710,7 +734,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu5;
+  callbacks[0].callback = (XtCallbackProc)DoMenu5;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -720,7 +744,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu6;
+  callbacks[0].callback = (XtCallbackProc)DoMenu6;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -730,7 +754,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu7;
+  callbacks[0].callback = (XtCallbackProc)DoMenu7;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -740,7 +764,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu8;
+  callbacks[0].callback = (XtCallbackProc)DoMenu8;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -750,7 +774,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu9;
+  callbacks[0].callback = (XtCallbackProc)DoMenu9;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -760,7 +784,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu10;
+  callbacks[0].callback = (XtCallbackProc)DoMenu10;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -770,7 +794,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu11;
+  callbacks[0].callback = (XtCallbackProc)DoMenu11;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -779,17 +803,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu12;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu13;
+  callbacks[0].callback = (XtCallbackProc)DoMenu12;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -799,7 +813,7 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu14;
+  callbacks[0].callback = (XtCallbackProc)DoMenu13;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -809,7 +823,27 @@ void DisplayModifyMenu()
   iargs = 0;
   XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
   XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = DoMenu15;
+  callbacks[0].callback = (XtCallbackProc)DoMenu14;
+  callbacks[0].closure = NULL;
+  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
+				 args,iargs);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
+  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
+  callbacks[0].callback = (XtCallbackProc)DoMenu15;
+  callbacks[0].closure = NULL;
+  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
+				 args,iargs);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
+  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
+  callbacks[0].callback = (XtCallbackProc)DoMenu16;
   callbacks[0].closure = NULL;
   XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
@@ -880,5 +914,36 @@ int i;
     DisplayModifyMenu();
     break;
   }
+
   menuId = i;
+}
+
+void ChooseFont()
+{
+  char size[MAXNAM];
+  char init[MAXNAM];
+  char str[MAXNAM];
+  int s;
+  XFontStruct *fontstruct;
+  
+  sprintf(init,"%d",theGraph->fontSize);
+  MetanetDialog(init,size,"Default font size: ");
+  s = atoi(size);
+
+  if ((fontstruct = FontSelect(s)) == NULL) {
+    sprintf(str,"Unknown font size %d\nUse only 8, 10, 12 14, 18 or 24",s);
+    MetanetAlert(str);
+    return;
+  }
+
+  if (theGraph->fontSize != s) {
+    theGraph->fontSize = s;
+
+    SetFont(fontstruct);
+
+    theGG.modified = 1;
+
+    ClearDraw();
+    ReDrawGraph(theGraph);
+  }
 }

@@ -2,19 +2,19 @@
 c
       include '../stack.h'
 c
-      integer iadr, sadr, id(2)
+      integer iadr, sadr, id(nsiz)
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
       rhs = max(0,rhs)
 c
       if (fin .eq. 1) then
 c 
-c SCILAB function : connect
+c SCILAB function : inimet
 c --------------------------
         lbuf = 1
         lw = lstk(top+1)
         l0 = lstk(top+1-rhs)
-        if (rhs .ne. 2) then
+        if (rhs .ne. 1) then
           call error(39)
           return
         endif
@@ -22,7 +22,7 @@ c --------------------------
           call error(41)
           return
         endif
-c       checking variable mac (number 1)
+c       checking variable datanet (number 1)
 c       
         il1 = iadr(lstk(top-rhs+1))
         if (istk(il1) .ne. 10) then
@@ -37,89 +37,6 @@ c
         endif
         n1 = istk(il1+5)-1
         l1 = il1+6
-c       checking variable p (number 2)
-c       
-        il2 = iadr(lstk(top-rhs+2))
-        if (istk(il2) .ne. 1) then
-          err = 2
-          call error(53)
-          return
-        endif
-        if (istk(il2+1)*istk(il2+2) .ne. 1) then
-          err = 2
-          call error(89)
-          return
-        endif
-        l2 = sadr(il2+4)
-c     
-c       cross variable size checking
-c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
-        lbuf1 = lbuf
-        call cvstr(n1,istk(l1),buf(lbuf1:lbuf1+n1-1),1)
-        lbuf = lbuf+n1
-        call entier(1,stk(l2),istk(iadr(l2)))
-        lw4=lw
-        lw=lw+1
-        err=lw-lstk(bot)
-        if (err .gt. 0) then
-          call error(17)
-          return
-        endif
-c
-        call inisoc(buf(lbuf1:lbuf1+n1-1),n1,istk(iadr(l2)),stk(lw4))
-        if (err .gt. 0) return
-c
-        top=top-rhs
-        lw0=lw
-        mv=lw0-l0
-c     
-        if(lhs .ge. 1) then
-c     
-c       output variable: sock
-c     
-        top=top+1
-        ilw=iadr(lw)
-        err=lw+5-lstk(bot)
-        if (err .gt. 0) then
-          call error(17)
-          return
-        endif
-        istk(ilw)=1
-        istk(ilw+1)=1
-        istk(ilw+2)=1
-        istk(ilw+3)=0
-        lw=sadr(ilw+4)
-        call int2db(1,stk(lw4),1,stk(lw),1)
-        lw=lw+1
-        lstk(top+1)=lw-mv
-        endif
-c     
-c       putting in order the stack
-c     
-        call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)
-        return
-      endif
-c
-      if (fin .eq. 2) then
-c 
-c SCILAB function : metanet
-c --------------------------
-        lw = lstk(top+1)
-        l0 = lstk(top+1-rhs)
-        if (rhs .ne. 0) then
-          call error(39)
-          return
-        endif
-        if (lhs .gt. 1) then
-          call error(41)
-          return
-        endif
 c     
 c       cross variable size checking
 c     
@@ -131,13 +48,16 @@ c       cross equal output variable checking
 c       not implemented yet
         lw1=lw
         lw=lw+1
+        lbuf2 = lbuf
+        call cvstr(n1,istk(l1),buf(lbuf2:lbuf2+n1-1),1)
+        lbuf = lbuf+n1+1
         err=lw-lstk(bot)
         if (err .gt. 0) then
           call error(17)
           return
         endif
 c
-        call inimet(stk(lw1))
+        call inimet(stk(lw1),buf(lbuf2:lbuf2+n1-1),n1)
         if (err .gt. 0) return
 c
         top=top-rhs
@@ -146,7 +66,7 @@ c
 c     
         if(lhs .ge. 1) then
 c     
-c       output variable: sock
+c       output variable: window
 c     
         top=top+1
         ilw=iadr(lw)
@@ -171,9 +91,9 @@ c
         return
       endif
 c
-      if (fin .eq. 3) then
+      if (fin .eq. 2) then
 c 
-c SCILAB function : screen
+c SCILAB function : netwindow
 c --------------------------
         lw = lstk(top+1)
         l0 = lstk(top+1-rhs)
@@ -185,7 +105,7 @@ c --------------------------
           call error(41)
           return
         endif
-c       checking variable sock (number 1)
+c       checking variable window (number 1)
 c       
         il1 = iadr(lstk(top-rhs+1))
         if (istk(il1) .ne. 1) then
@@ -215,7 +135,7 @@ c       not implemented yet
           return
         endif
 c
-        call screen(istk(iadr(l1)))
+        call netwindow(istk(iadr(l1)))
         if (err .gt. 0) return
 c
         top=top-rhs
@@ -226,6 +146,71 @@ c       no output variable
         il=iadr(l0)
         istk(il)=0
         lstk(top+1)=l0+1
+        return
+      endif
+c
+      if (fin .eq. 3) then
+c 
+c SCILAB function : netwindows
+c --------------------------
+        lw = lstk(top+1)
+        l0 = lstk(top+1-rhs)
+        if (rhs .ne. 0) then
+          call error(39)
+          return
+        endif
+        if (lhs .gt. 1) then
+          call error(41)
+          return
+        endif
+c     
+c       cross variable size checking
+c     
+c     
+c       cross formal parameter checking
+c       not implemented yet
+c     
+c       cross equal output variable checking
+c       not implemented yet
+        lw1=lw
+        lw=lw+1
+        err=lw-lstk(bot)
+        if (err .gt. 0) then
+          call error(17)
+          return
+        endif
+c
+        call netwindows(stk(lw1),ne1)
+        if (err .gt. 0) return
+c
+        top=top-rhs
+        lw0=lw
+        mv=lw0-l0
+c     
+        if(lhs .ge. 1) then
+c     
+c       output variable: scrs
+c     
+        top=top+1
+        ilw=iadr(lw)
+        err=lw+4+ne1-lstk(bot)
+        if (err .gt. 0) then
+          call error(17)
+          return
+        endif
+        istk(ilw)=1
+        istk(ilw+1)=1
+        istk(ilw+2)=ne1
+        istk(ilw+3)=0
+        lw=sadr(ilw+4)
+        call cintf(ne1,stk(lw1),stk(lw))
+        lw=lw+ne1
+        lstk(top+1)=lw-mv
+        endif
+c     
+c       putting in order the stack
+c     
+        call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)
         return
       endif
 c
@@ -302,7 +287,7 @@ c       not implemented yet
         call entier(1,stk(l2),istk(iadr(l2)))
         lbuf2 = lbuf
         call cvstr(n1,istk(l1),buf(lbuf2:lbuf2+n1-1),1)
-        lbuf = lbuf+n1
+        lbuf = lbuf+n1+1
         lw4=lw
         lw=lw+1
         lw5=lw
@@ -1024,7 +1009,7 @@ c       cross equal output variable checking
 c       not implemented yet
         lbuf1 = lbuf
         call cvstr(n2,istk(l2),buf(lbuf1:lbuf1+n2-1),1)
-        lbuf = lbuf+n2
+        lbuf = lbuf+n2+1
         call entier(1,stk(l1e2),istk(iadr(l1e2)))
         call entier(1,stk(l1e3),istk(iadr(l1e3)))
         call entier(1,stk(l1e4),istk(iadr(l1e4)))

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=SYBAD,SSI=0
         subroutine sybad(n,m,a,na,b,nb,c,nc,u,v,eps,wrk,mode,ierr)
 c
 c

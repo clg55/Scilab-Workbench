@@ -3,7 +3,9 @@ c!but
 c     traduit un nom de variable codee scilab en une variable scilab de
 c     type chaine 
 c!    
-      integer ids(2,nc),istk(*),nc,ni
+      integer nsiz
+      parameter (nsiz=6)
+      integer ids(nsiz,nc),istk(*),nc,ni
 c
       il=1
       l=il+5+nc

@@ -43,10 +43,9 @@ C2F(plot2d4)(xf,x,y,n1,n2,style,strflag,legend,brect,aint,l1,l2,l3)
 static double xmax=10.0,xmin=0.0,ymin= -10.0,ymax=0.0;
 double FRect[4],scx,scy,xofset,yofset;
 int IRect[4],IRect1[4],err=0,*xm,*ym,i,j,job=1,nn2;
-
 double arsize1=5.0,arsize2=5.0;
 int arsize;
-int verbose=0,xz[1],narg;
+int verbose=0,xz[10],narg;
 /* Storing values if using the Record driver */
 if (GetDriver_()=='R') 
 StorePlot("plot2d4",xf,x,y,n1,n2,style,strflag,legend,brect,aint);
@@ -85,7 +84,7 @@ if (strlen(xf) >= 2 && xf[1]=='l' && strlen(strflag) >= 2 && strflag[1] != '0')
 	aint[0]=1;aint[1]=nint(xmax-xmin);
       }
     else 
-      fprintf(stderr," Can't use Log on X-axis xmin is negative \n");
+      Scistring(" Can't use Log on X-axis xmin is negative \n");
   };
 if (strlen(xf) >=3  && xf[2]=='l' && strlen(strflag) >= 2 && strflag[1] != '0')
   {
@@ -96,7 +95,7 @@ if (strlen(xf) >=3  && xf[2]=='l' && strlen(strflag) >= 2 && strflag[1] != '0')
 	aint[2]=1;aint[3]=nint(ymax-ymin);
       }
     else 
-      fprintf(stderr," Can't use Log on y-axis ymin is negative \n");
+      Scistring(" Can't use Log on y-axis ymin is negative \n");
   };
 /** Scaling **/
 /* FRect gives the plotting boundaries xmin,ymin,xmax,ymax */
@@ -223,8 +222,7 @@ C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
 		     ,IP0,IP0,0,0);
 nn2=2*(*n2)-1;
 /** to get the default dash **/
-C2F(dr)("xget","dashes",&verbose,xz,&narg
-    , IP0, IP0,IP0,0,0);
+C2F(dr)("xget","dashes",&verbose,xz,&narg,IP0,IP0,IP0,0,0);
 arsize1= IRect[2]/70.0;
 arsize2= IRect[3]/70.0;
 arsize=  (arsize1 < arsize2) ? nint(10*arsize1) : nint(10*arsize2) ;
@@ -238,8 +236,7 @@ for ( j = 0 ; j < (*n1) ; j++)
     C2F(dr)("xarrow","v",&xm[2*(*n2)*j],&ym[2*(*n2)*j],&nn2,&arsize
 	, IP0, IP0,0,0);
   };
-C2F(dr)("xset","dashes",xz
-    , IP0, IP0,IP0,IP0,IP0,0,0);
+C2F(dr)("xset","dashes",xz,IP0, IP0,IP0,IP0,IP0,0,0);
 IRect1[0]=IRect1[1]= -1;IRect1[2]=IRect1[3]=200000;
 C2F(dr)("xset","clipping",&IRect1[0],&IRect1[1],&IRect1[2],&IRect1[3],
 	IP0,IP0,0,0);

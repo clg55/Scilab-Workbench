@@ -144,7 +144,7 @@ getwindowdim_xfig_(verbose,x,narg)
   x[0]= 600*prec_fact;
   x[1]= 424*prec_fact;
   if (*verbose == 1) 
-    fprintf(stderr,"\n CWindow dim :%d,%d",x[0],x[1]);
+    SciF2d("\n CWindow dim :%d,%d\r\n",x[0],x[1]);
 }; 
 
 /** To change the window dimensions : do Nothing in Postscript  **/
@@ -162,7 +162,7 @@ getwindowpos_xfig_(verbose,x,narg)
   *narg = 2;
   x[0]= x[1]=0;
   if (*verbose == 1) 
-    fprintf(stderr,"\n CWindow position :%d,%d",x[0],x[1]);
+    SciF2d("\n CWindow position :%d,%d\r\n",x[0],x[1]);
  };
 
 /** to set the window upper-left point position (Void) **/
@@ -187,6 +187,10 @@ waitforclick_xfig_(str,ibutton,xx1,yy1)
   int *ibutton,*xx1,*yy1 ;
 { };
 
+xgetmouse_xfig_(str,ibutton,xx1,yy1)
+     char str[];
+  int *ibutton,*xx1,*yy1 ;
+{ };
 
 /** Clear a rectangle **/
 
@@ -215,7 +219,7 @@ getcurwin_xfig_(verbose,intnum,narg)
   *narg =1 ;
   *intnum = ScilabGC_xfig_.CurWindow ;
   if (*verbose == 1) 
-    fprintf(stderr,"\nJust one graphic page at a time ");
+    Scistring("\nJust one graphic page at a time ");
 };
 
 /** Set a clip zone (rectangle ) **/
@@ -248,13 +252,13 @@ getclip_xfig_(verbose,x,narg)
   else *narg = 1;
   if (*verbose == 1)
   if (ScilabGC_xfig_.ClipRegionSet == 1)
-    fprintf(stderr,"\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d",
+    SciF4d("\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d\r\n",
 	      ScilabGC_xfig_.CurClipRegion[0],
 	      ScilabGC_xfig_.CurClipRegion[1],
 	      ScilabGC_xfig_.CurClipRegion[2],
 	      ScilabGC_xfig_.CurClipRegion[3]);
   else 
-    fprintf(stderr,"\nNo Clip Region");
+    Scistring("\nNo Clip Region");
 };
 
 /*----------------------------------------------------------
@@ -282,9 +286,9 @@ getabsourel_xfig_(verbose,num,narg)
     *num = ScilabGC_xfig_.CurVectorStyle  ;
     if (*verbose == 1) 
   if (ScilabGC_xfig_.CurVectorStyle == CoordModeOrigin)
-    fprintf(stderr,"\nTrace Absolu");
+    Scistring("\nTrace Absolu");
   else 
-    fprintf(stderr,"\nTrace Relatif");
+    Scistring("\nTrace Relatif");
   };
 
 
@@ -337,10 +341,12 @@ idfromname_xfig_(name1,num)
      *num=AluStruc_xfig_[i].id;
  if (*num == -1 ) 
    {
-     fprintf(stderr,"\n Use the following keys :");
+     Scistring("\n Use the following keys :");
      for ( i=0 ; i < 16 ; i++)
-       fprintf(stderr,"\nkey %s -> %s",AluStruc_xfig_[i].name,
-	       AluStruc_xfig_[i].info);
+       {
+	 SciF1s("\nkey %s ",AluStruc_xfig_[i].name);
+	 SciF1s("-> %s\r\n",AluStruc_xfig_[i].info);
+       };
    };
 };
 /** To get the value of the alufunction **/
@@ -351,10 +357,11 @@ getalufunction_xfig_(verbose,value,narg)
   *narg =1 ;
   *value = ScilabGC_xfig_.CurDrawFunction ;
    if (*verbose ==1 ) 
-     { fprintf(stderr,"\nThe Alufunction is %s -> <%s>\n",
-	       AluStruc_xfig_[*value].name,
-	       AluStruc_xfig_[*value].info);}
- };
+     { 
+       SciF1s("\nThe Alufunction is %s",AluStruc_xfig_[*value].name);
+       SciF1s("-> <%s>\r\n", AluStruc_xfig_[*value].info);
+     };
+};
 
 /** to set the thickness of lines :min is 1 is a possible value **/
 /** give the thinest line **/
@@ -363,7 +370,7 @@ setthickness_xfig_(value)
   int *value ;
 { 
   ScilabGC_xfig_.CurLineWidth =Max(1, *value);
-  fprintf(file,"# %d Thickness\n",Max(1,*value));
+  fprintf(file,"# %d Thickness\r\n",Max(1,*value));
 };
 
 /** to get the thicknes value **/
@@ -374,8 +381,7 @@ getthickness_xfig_(verbose,value,narg)
   *narg =1 ;
   *value = ScilabGC_xfig_.CurLineWidth ;
   if (*verbose ==1 ) 
-    fprintf(stderr,"\nLine Width:%d",
-	    ScilabGC_xfig_.CurLineWidth ) ;
+    SciF1d("\nLine Width:%d\r\n", ScilabGC_xfig_.CurLineWidth ) ;
 };
      
 
@@ -392,7 +398,7 @@ setpattern_xfig_(num)
 { int i ; 
   i= Max(0,Min(*num,GREYNUMBER-1));
   if ( use_color ==1) set_c_xfig_(i);
-  else  ScilabGC_xfig_.CurPattern = i;
+  ScilabGC_xfig_.CurPattern = i;
   if (i ==0)
     fprintf(file,"# fillsolid\n");
   else 
@@ -407,8 +413,7 @@ getpattern_xfig_(verbose,num,narg)
   *narg=1;
   *num = ScilabGC_xfig_.CurPattern ;
   if (*verbose == 1) 
-      fprintf(stderr,"\n Pattern : %d",
-	  ScilabGC_xfig_.CurPattern);
+      SciF1d("\n Pattern : %d\r\n",ScilabGC_xfig_.CurPattern);
 };
 
 /** To set the current font id of font and size **/
@@ -419,7 +424,7 @@ xsetfont_xfig_(fontid,fontsize)
   i = Min(FONTNUMBER-1,Max(*fontid,0));
   fsiz = Min(FONTMAXSIZE-1,Max(*fontsize,0));
   if ( FontInfoTab_xfig_[i].ok !=1 )
-    fprintf(stderr,"\n Sorry This Font is Not available ");
+    Scistring("\n Sorry This Font is Not available\n");
   else 
    {
      ScilabGC_xfig_.CurHardFont = i;
@@ -440,10 +445,10 @@ xgetfont_xfig_(verbose,font,nargs)
   font[1] =ScilabGC_xfig_.CurHardFontSize ;
   if (*verbose == 1) 
     {
-      fprintf(stderr,"\nFontId : %d --> %s at size %s pts",
-	      ScilabGC_xfig_.CurHardFont ,
-	      FontInfoTab_xfig_[ScilabGC_xfig_.CurHardFont].fname,
-	      size_xfig_[ScilabGC_xfig_.CurHardFontSize]);
+      SciF1d("\nFontId : %d ",ScilabGC_xfig_.CurHardFont );
+      SciF1s("--> %s at size",
+	     FontInfoTab_xfig_[ScilabGC_xfig_.CurHardFont].fname);
+      SciF1s("%s pts\r\n",size_xfig_[ScilabGC_xfig_.CurHardFontSize]);
     };
 };
 
@@ -462,11 +467,15 @@ setdash_xfig_(value)
 {
   static int maxdash = 6, l2=4,l3 ;
   l3 = Min(maxdash-1,*value-1);
-  if ( use_color ==1) set_c_xfig_(l3);
+  if ( use_color ==1) 
+    {
+      set_c_xfig_(*value);
+      ScilabGC_xfig_.CurDashStyle= *value;
+    }
   else
     {
-      ScilabGC_xfig_.CurDashStyle= l3 + 1 ;
       setdashstyle_fig_(value,DashTab_fig[Max(0,l3)],&l2);
+      ScilabGC_xfig_.CurDashStyle= l3 + 1 ;
     };
 }
 
@@ -496,8 +505,13 @@ getdash_xfig_(verbose,value,narg)
 {int i ;
  *value=ScilabGC_xfig_.CurDashStyle;
  *narg =1 ;
+ if ( use_color ==1) 
+   {
+     if (*verbose == 1) SciF1d("Color %d",*value);
+     return;
+   };
  if ( *value == 0) 
-   { if (*verbose == 1) fprintf(stderr,"\nLine style = Line Solid");}
+   { if (*verbose == 1) Scistring("\nLine style = Line Solid");}
  else 
    {
      value[1]=4;
@@ -505,10 +519,10 @@ getdash_xfig_(verbose,value,narg)
      for ( i =0 ; i < value[1]; i++) value[i+2]=DashTab_fig[*value-1][i];
      if (*verbose ==1 ) 
        {
-	 fprintf(stderr,"\nDash Style %d:<",*value);
+	 SciF1d("\nDash Style %d:<",*value);
 	 for ( i =0 ; i < value[1]; i++)
-	   fprintf(stderr,"%d ",value[i+2]);
-	 fprintf(stderr,">\n");
+	   SciF1d("%d ",value[i+2]);
+	 Scistring(">\n");
        }
    }
 };
@@ -535,9 +549,11 @@ getcursymbol_xfig_(verbose,symb,narg)
   symb[0] = ScilabGC_xfig_.CurHardSymb ;
   symb[1] = ScilabGC_xfig_.CurHardSymbSize ;
   if (*verbose == 1) 
-  fprintf(stderr,"\nMark : %d at size %s pts",
-	  ScilabGC_xfig_.CurHardSymb,
+  {
+    SciF1d("\nMark : %d",ScilabGC_xfig_.CurHardSymb);
+    SciF1s("at size %s pts\r\n",
 	  size_xfig_[ScilabGC_xfig_.CurHardSymbSize]);
+  };
 };
 
 /** To get the id of the white pattern **/
@@ -547,7 +563,7 @@ getwhite_xfig_(verbose,num,narg)
 {
   *num = ScilabGC_xfig_.IDWhitePattern ;
   if (*verbose==1) 
-    fprintf(stderr,"\n Id of White Pattern %d :",*num);
+    SciF1d("\n Id of White Pattern %d \r\n",*num);
   *narg=1;
 };
 
@@ -557,7 +573,13 @@ getwhite_xfig_(verbose,num,narg)
 usecolor_xfig_(num)
      int *num;
 {
-  use_color= *num; 
+  if ( use_color != *num)
+    {
+      int i=0;
+      use_color= *num;
+      setdash_xfig_(&i);
+      setpattern_xfig_(&i);
+    };
 };
 
 set_c_xfig_(i)
@@ -580,7 +602,7 @@ int InitScilabGC_xfig_();
 empty_xfig_(verbose)
      int *verbose;
 {
-  if ( *verbose ==1 ) fprintf(stderr,"\n No operation ");
+  if ( *verbose ==1 ) Scistring("\n No operation ");
 };
 
 #define NUMSETFONC 14
@@ -631,7 +653,7 @@ ScilabGCGetorSet_xfig_(str,flag,verbose,x1,x2,x3,x4,x5)
        j = strcmp(str,ScilabGCTab_xfig_[i].name);
        if ( j == 0 ) 
 	 { if (*verbose == 1)
-	     fprintf(stderr,"\nGettting Info on %s",str);
+	     SciF1s("\nGettting Info on %s\r\n",str);
 	   if (flag == 1)
 	     (ScilabGCTab_xfig_[i].getfonc)(verbose,x1,x2,x3,x4,x5);
 	   else 
@@ -640,12 +662,12 @@ ScilabGCGetorSet_xfig_(str,flag,verbose,x1,x2,x3,x4,x5)
        else 
 	 { if ( j <= 0)
 	     {
-	       fprintf(stderr,"\nUnknow Postscript operator <%s>",str);
+	       SciF1s("\nUnknow Postscript operator <%s>\r\n",str);
 	       return;
 	     };
 	 };
      };
-  fprintf(stderr,"\n Unknow Postscript operator <%s>",str);
+  SciF1s("\n Unknow Postscript operator <%s>\r\n",str);
 };
 
 /*-----------------------------------------------------------
@@ -668,13 +690,13 @@ displaystring_xfig_(string,x,y,angle,flag)
 {     int rect[4] ;
       boundingbox_xfig_(string,x,y,rect);
       if (string[0]== '$') 
-	fprintf(file,"4 0 %d %d %d 0 0 %5.2f 2 %d %d %d %d %s\1\n",
+	fprintf(file,"4 0 %d %d 0 %d 0 %5.2f 2 %d %d %d %d %s\1\n",
 		0,
 		isize_xfig_[ScilabGC_xfig_.CurHardFontSize]*prec_fact,
 		ScilabGC_xfig_.CurColor,
 		(M_PI/180.0)*(*angle),rect[3],rect[2],*x,*y,string);
       else 
-	fprintf(file,"4 0 %d %d %d 0 0 %5.2f 4 %d %d %d %d %s\1\n",
+	fprintf(file,"4 0 %d %d 0 %d 0 %5.2f 4 %d %d %d %d %s\1\n",
 	     xfig_font[ScilabGC_xfig_.CurHardFont],
 	     isize_xfig_[ScilabGC_xfig_.CurHardFontSize]*prec_fact,
 		ScilabGC_xfig_.CurColor,
@@ -973,7 +995,7 @@ initgraphic_xfig_(string)
   file=fopen(string1,"w");
   if (file == 0) 
     {
-      fprintf(stderr,"Can't open file %s, I'll use stdout\n",string1);
+      SciF1s("Can't open file %s, I'll use stdout\r\n",string1);
       file =stdout;
     };
   if (EntryCounter == 0)
@@ -1053,7 +1075,7 @@ loadfamily_xfig_(name,j)
       FontsList_xfig_[*j][i] = FigQueryFont_(name);
     };
   if  (FontsList_xfig_[*j][0] == 0 )
-	  fprintf(stderr,"\n unknown font family : %s ",name);
+	  SciF1s("\n unknown font family : %s\r\n",name);
   else 
     {FontInfoTab_xfig_[*j].ok = 1;
      strcpy(FontInfoTab_xfig_[*j].fname,name) ;}
@@ -1303,7 +1325,7 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
       fprintf(file,"# Object : %d %s -<%d>- \n",0,string,fvect[0]);
       for ( i =0 ; i < sizev ; i++)
 	{
-	  fprintf(file,"4 0 %d %d %d 0 0 %5.2f 4 %d %d %d %d %c\1\n",
+	  fprintf(file,"4 0 %d %d 0 %d 0 %5.2f 4 %d %d %d %d %c\1\n",
 		  32,
 		  isize_xfig_[ScilabGC_xfig_.CurHardSymbSize]*prec_fact,
 		  ScilabGC_xfig_.CurColor,
@@ -1313,7 +1335,7 @@ WriteGeneric_xfig_(string,nobj,sizeobj,vx,vy,sizev,flag,fvect)
 	}
     }
   else
-    fprintf(stderr,"Can't translate %s\n",string);
+    SciF1s("Can't translate %s\r\n",string);
 };
 
 

@@ -85,7 +85,7 @@ HandleMenu (mSelect)
 		switch (menuItem)
 		  {
 		  case	quitItem:
-		    fprintf(stderr," exit seelected \n");
+		    Scistring(" exit seelected \n");
 			ExitToShell();
 			break;
 		  }

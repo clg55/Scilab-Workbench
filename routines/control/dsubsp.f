@@ -45,6 +45,10 @@ c!author Paul van Dooren
 c
       integer l,ls,ls1,ls2,l1,ll,num,is,l2i,l2k,i,k,ii,istep,ifirst
       double precision s,p,d,alpha,beta
+      integer         iero
+      common /ierinv/ iero
+      iero=0
+
       fail=.true.
       ndim=0
       num=0
@@ -67,10 +71,12 @@ c  here a 2x2  block is checked *
         s=(a(l,l)*b(l1,l1)+a(l1,l1)*b(l,l)-a(l1,l)*b(l,l1))/d
         p=(a(l,l)*a(l1,l1)-a(l,l1)*a(l1,l))/d
         is=ftest(ls,alpha,beta,s,p)
+        if(iero.gt.0) return
         go to 30
 c  here a 1x1  block is checked *
  20     ls=1
         is=ftest(ls,a(l,l),b(l,l),s,p)
+        if(iero.gt.0) return
  30     num=num+1
         if(is.eq.1) ndim=ndim+ls
  40     ind(num)=ls*is

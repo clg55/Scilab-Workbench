@@ -3,16 +3,18 @@ c     ====================================================================
 c     scan function and macros list
 c     ====================================================================
       include '../stack.h'
-      integer id(nsiz),id1(nsiz)
+      integer id(nsiz),id1(nsiz),istr(nlgh)
 c
+      logical sciv1
+      common /compat/ sciv1
+
       logical eqid,loaded
       integer srhs,percen,blank,fptr,mode(2)
-      integer iadr,sadr
+      integer iadr
       
       data nclas/29/,percen/56/,blank/40/
 c
       iadr(l)=l+l-1
-      sadr(l)=(l/2)+1
 c     
 c     recherche dans les bibliotheques seulement
       if(fin.eq.-3) goto 35
@@ -55,8 +57,9 @@ c     recherche dans les bibliotheques de macro
       lbibn=il+2
       il=lbibn+nbibn
       ilp=il+1
-      ip=mod(id(1),256)
-      if(ip.eq.percen) ip=mod(id(1)-ip,256*256)/256
+      call namstr(id,istr,nn,1)
+      ip=abs(istr(1))
+      if(ip.eq.percen) ip=abs(istr(2))
       ip=ip-9
       if(ip.gt.nclas) goto 36
       n=istk(ilp+ip)-istk(ilp+ip-1)
@@ -96,6 +99,8 @@ c     chargement
       endif
 c
       loaded=.false.
+c     next line for version 1 compatibility
+      sciv1=.false.
  49   top=top+1
       job=lstk(bot)-lstk(top)
 c     on recupere toutes les variables du fichier

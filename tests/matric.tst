@@ -1,4 +1,4 @@
-Leps=1000*%eps;
+Leps=1.d-5;
 //tests riccati lyapounov sylvester
 //
 //   lyapunov

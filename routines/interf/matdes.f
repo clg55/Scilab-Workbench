@@ -7,7 +7,7 @@ C     fun=7
       include '../stack.h'
       goto (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
      $     21,22,23,24,25,26,27,28,29,30,
-     $     31,32,33,34,35,36,37,38,39,40,41,42,43) fin
+     $     31,32,33,34,35,36,37,38,39,40,41,42,43,44,45) fin
       return
  1    call scichamp('champ')
       return
@@ -95,6 +95,10 @@ C     fun=7
       return
  43   call scigeom3d('geom3d')
       return
+ 44   call scifec('scifec')
+      return
+ 45   call  scixgetmouse('xgetmouse')
+      return
       end
      
      
@@ -168,8 +172,8 @@ c      implicit undefined (a-z)
       logical checkrhs,getrmat,getrvect,getscalar,getsmat
       integer m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,nz,m4,n4,lr4,flag
       integer lr5,lr6,lr7,lr,m,n,lr10,nlr7
-      integer topk, iflag(3),alpha,theta
-      double precision ebox(6),zlev
+      integer topk, iflag(3)
+      double precision ebox(6),zlev,alpha,theta
       if (rhs.le.0) then
          buf='  contour(1:5,1:10,rand(5,10),5);$'
          call demo(fname,buf,1)
@@ -180,8 +184,8 @@ c      implicit undefined (a-z)
       iflag(1)=2
       iflag(2)=2
       iflag(3)=3
-      alpha=35
-      theta=45
+      alpha=35.0
+      theta=45.0
       buf='X@Y@Z'//char(0)
       if (rhs.ge.10) then
          if(.not.getscalar(fname,topk,top,lr10))return
@@ -223,12 +227,12 @@ c      implicit undefined (a-z)
       endif
       if (rhs.ge.6) then
          if(.not.getscalar(fname,topk,top,lr6))return
-         alpha=int(stk(lr6))
+         alpha=stk(lr6)
          top=top-1
       endif
       if (rhs.ge.5) then
          if(.not.getscalar(fname,topk,top,lr5))return
-         theta=int(stk(lr5))
+         theta=stk(lr5)
          top=top-1
       endif
       if(.not.getrmat(fname,topk,top,m4,n4,lr4))return
@@ -276,13 +280,13 @@ c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getsmat,getscalar,matsize,getrvect
       integer m1,n1,lr1,m2,n2,lr2,m3,n3,lr3
-      integer topk, iflag(3),alpha,theta,m,n,lr,lr6,nlr6,lr5,lr4
-      double precision ebox(6)
+      integer topk, iflag(3),m,n,lr,lr6,nlr6,lr5,lr4
+      double precision ebox(6),alpha,theta
       iflag(1)=1
       iflag(2)=2
       iflag(3)=4
-      alpha=35
-      theta=45
+      alpha=35.0
+      theta=45.0
       if (rhs.lt.0) then
          buf='  t=0:0.1:5*%pi;'
      $   //'  param3d(sin(t),cos(t),t/10,35,45,''X@Y@Z'',[2,4]);$'
@@ -326,12 +330,12 @@ c      implicit undefined (a-z)
       endif
       if (rhs.ge.5) then
          if(.not.getscalar(fname,topk,top,lr5))return
-         alpha=int(stk(lr5))
+         alpha=(stk(lr5))
          top=top-1
       endif
       if (rhs.ge.4) then
          if(.not.getscalar(fname,topk,top,lr4))return
-         theta=int(stk(lr4))
+         theta=(stk(lr4))
          top=top-1
       endif
       if (rhs.ge.3) then
@@ -389,14 +393,14 @@ c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getrmat,getsmat,getscalar,getrvect
       integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3
-      integer iflag(3),alpha,theta,m,n,lr,lr6,nlr6,lr5,lr4
-      double precision ebox(6)
+      integer iflag(3),m,n,lr,lr6,nlr6,lr5,lr4
+      double precision ebox(6),alpha,theta
       external func
       iflag(1)=2
       iflag(2)=2
       iflag(3)=4
-      alpha=35
-      theta=45
+      alpha=35.0
+      theta=45.0
       if (rhs.lt.0) then
          buf='t=-%pi:0.3:%pi;'// fname//
      $       '(t,t,sin(t)''*cos(t),35,45,'//
@@ -442,12 +446,12 @@ c      implicit undefined (a-z)
       endif
       if (rhs.ge.5) then
          if(.not.getscalar(fname,topk,top,lr5))return
-         alpha=int(stk(lr5))
+         alpha=stk(lr5)
          top=top-1
       endif
       if (rhs.ge.4) then
          if(.not.getscalar(fname,topk,top,lr4))return
-         theta=int(stk(lr4))
+         theta=stk(lr4)
          top=top-1
       endif
       if (rhs.ge.3) then
@@ -768,8 +772,8 @@ C     au cas particulier ou rhs.lt.0.
          if (buf(i:i).eq.'$') goto 20
          nchar=nchar+1
  10   continue
-      write(06,*) 'internal Bug missing a $ in a string transmited',
-     $        'to demo'
+      call basout(i,wte,'internal Bug missing a $ in a '//
+     $   'string transmited to demo')
       return
  20   if (.not.cresmat(fname,top,1,1,nchar)) return
       call getsimat(fname,top,top,1,1,1,1,lr,nlr)
@@ -777,10 +781,10 @@ C     au cas particulier ou rhs.lt.0.
       rhs=1
       fun=5
       fin=17
-      if (flag.eq.1)  write(06,*) ' Demo of ' ,fname
-      write(06,*) '  ', chaine(1:nchar)
-c     call matio
-c     call objvide(fname,top)
+      buf= " Demo of "//fname 
+      if (flag.eq.1)  call basout(io,wte,buf(1:9+len(fname)))
+c?      buf= " Demo of "//fname 
+c?      call basout(io,wte,buf(1:9+len(fname)))
       return
       end
 
@@ -789,20 +793,27 @@ C     OK
       character*(*) fname
 c      implicit undefined (a-z)
       include '../stack.h'
-      logical checkrhs,getsmat
-      integer topk,m,n,lr,nlr,v
+      logical checkrhs,getsmat,cresmat
+      integer topk,m,n,lr,nlr,v,drl
+      drl=3
 cc    <>=driver(dr_name)
-      if (.not.checkrhs(fname,1,1)) return
-      topk=top
-      if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
-      call  cvstr(nlr,istk(lr),buf,1)
-      buf(nlr+1:nlr+1)=char(0)
-      call  dr1('xsetdr'//char(0),buf,v,v,v,v,v,v)
-      call  objvide(fname,top)
+      if (.not.checkrhs(fname,-1,1)) return
+      if ( rhs.le.0) then 
+         call  dr1('xgetdr'//char(0),buf,v,v,v,v,v,v)
+         top = top+1
+         if (.not.cresmat(fname,top,1,1,drl)) return
+         call getsimat(fname,top,top,1,1,1,1,lr,nlr)
+         call cvstr(drl,istk(lr),buf,0)
+      else
+         topk=top
+         if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
+         call  cvstr(nlr,istk(lr),buf,1)
+         buf(nlr+1:nlr+1)=char(0)
+         call  dr1('xsetdr'//char(0),buf,v,v,v,v,v,v)
+         call  objvide(fname,top)
+      endif
       return
       end
-
-
 
      
       subroutine scixarc(fname,ffname)
@@ -960,12 +971,13 @@ c      implicit undefined (a-z)
          call error (999)
          return
       endif
-      call entier(2,stk(lr2),istk(iadr(lr2)))
+      il2=iadr(lr2)
+      call entier(2,stk(lr2),istk(il2))
       top=top-1
       if (.not.getscalar(fname,topk,top,lr1)) return
       alpha=int(stk(lr1))
       call  dr1('xaxis'//char(0),'v'//char(0),alpha,
-     $     stk(lr2),stk(lr3),istk(il4),v,v)
+     $     istk(il2),stk(lr3),istk(il4),v,v)
       call  objvide(fname,top)
       return
       end
@@ -1088,7 +1100,6 @@ c      implicit undefined (a-z)
       return
       end
      
-     
       subroutine scixclick(fname)
       character*(*) fname
 c      implicit undefined (a-z)
@@ -1101,7 +1112,7 @@ c      implicit undefined (a-z)
       call dr1('xclick'//char(0),'xv'//char(0),i,x,y,v,v,v)
       if (top.eq.0.or.rhs.lt.0)  top=top+1
       if (top.eq.1) lstk(top)=1
-      if (.not.checklhs(fname,3,3)) return
+      if (.not.checklhs(fname,1,3)) return
       topk=top
       if (lhs.eq.1) then
          if (.not.cremat(fname,top,0,1,3,lr,lc)) return
@@ -1401,9 +1412,7 @@ c      implicit undefined (a-z)
       if (rhs.eq.2) then
          if (.not.cremat(fname,top+2,0,1,n2,lr3,lc3)) return
          call  dr1('xget'//char(0),'white'//char(0),verb,iwp,na,v,v,v)
-c        ????????il3???????????
          il3=adr(lr3,0)
-c        ?????JPC: PLEASE CHECK!!!!!!!!
          do 10 i=1,n2
             istk(il3+i-1)= -1
  10      continue
@@ -1580,9 +1589,18 @@ cc    <rect>=xstringl(x,y,str)
 c      implicit undefined (a-z)
       include '../stack.h'
       logical checkrhs,getscalar,getsmat
-      integer topk, lr,nlr,m,n,num,v
-      if (.not.checkrhs(fname,2,2)) return
+      double precision alpha,theta
+      integer topk, lr,nlr,m,n,num,v,lr4,lr3
+      if (.not.checkrhs(fname,2,4)) return
       topk=top
+      if (rhs.eq.4) then
+         if(.not.getscalar(fname,topk,top,lr4))return
+         alpha=stk(lr4)
+         top=top-1
+         if(.not.getscalar(fname,topk,top,lr3))return
+         theta=stk(lr3)
+         top=top-1
+      endif
       if (.not.getscalar(fname,topk,top,lr)) return
       num=int(stk(lr))
       top=top-1
@@ -1593,6 +1611,9 @@ c      implicit undefined (a-z)
          call dr('xstart'//char(0),'v'//char(0),num,v,v,v,v,v)
       elseif (buf(1:nlr).eq.'replay') then
          call dr('xreplay'//char(0),'v'//char(0),num,v,v,v,v,v)
+      elseif (buf(1:nlr).eq.'replayna') then
+         call dr('xreplayna'//char(0),'v'//char(0),num,alpha,theta,
+     $        v,v,v)
       elseif (buf(1:nlr).eq.'on') then  
          call  dr1('xsetdr'//char(0),'Rec'//char(0),v,v,v,v,v,v)
       else
@@ -1675,5 +1696,121 @@ c      implicit undefined (a-z)
       return
       end
      
+     
+
+ccC   fec(x,y,triangles,func,strf,leg,rect,nax);
+ccC   fec(x,y,triangles,func,[strf,leg,rect,nax]);
+      subroutine scifec(fname)
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getrmat,getsmat,matsize,getrvect
+      integer topk, m1,n1,lr1,m2,n2,lr2,m3,n3,lr3,m4,n4
+      integer nax(4),m,n,lr,lr5,nlr5,lr4,nlr4
+      double precision rect(4)
+      character*(4) strf
+      nax(1)=2
+      nax(2)=10
+      nax(3)=2
+      nax(4)=10
+      rect(1)=0.0d00
+      rect(2)=0.0d00
+      rect(3)=10.0d00
+      rect(4)=10.0d00
+      if (rhs.lt.0) then
+         buf='  x=0:0.1:2*%pi,'
+     $        //'  plot2d([x;x;x]'',[sin(x);sin(2*x);sin(3*x)]'''
+     $        //',[-1,-2,3],''111'',''L1@L2@L3'',[0,-2,2*%pi,2]);$'
+         call demo(fname,buf,1)
+         return
+      endif
+      buf='X@Y@Z'//char(0)
+      strf='021'//char(0)
+      if (.not.checkrhs(fname,4,8)) return
+      topk=top
+      if (rhs.ge.8) then
+         if(.not.getrmat(fname,topk,top,m,n,lr))return
+         if (m*n.ne.4) then
+            buf= fname//' : nax has a wrong size, 4 expected'
+            call error(999)
+            return
+         endif
+         call entier(4,stk(lr),nax)
+         top=top-1
+      endif
+      if (rhs.ge.7) then
+         if(.not.getrmat(fname,topk,top,m,n,lr))return
+         if (m*n.ne.4) then
+            buf= fname//' : rect has a wrong size, 4 expected'
+            call error(999)
+            return
+         endif
+         call dcopy(4,stk(lr),1,rect,1)
+         top=top-1
+      endif
+      if (rhs.ge.6) then
+         if(.not.getsmat(fname,topk,top,m,n,1,1,lr5,nlr5))return
+         if (nlr5.eq.0) then
+            buf=fname//' : legend is an empty string'
+            call error(999)
+            return
+         endif
+         call cvstr(nlr5,istk(lr5),buf,1)
+         buf(nlr5+1:nlr5+1)=char(0)
+         top=top-1
+      endif
+      if (rhs.ge.5) then
+         if(.not.getsmat(fname,topk,top,m,n,1,1,lr4,nlr4))return
+         if (nlr4.ne.3) then
+            buf=fname//' : strf has a wrong size, 3 expected'
+            call error(999)
+            return
+         endif
+         call cvstr(nlr4,istk(lr4),strf,1)
+         top=top-1
+      endif
+      if (rhs.ge.4) then
+C        valeur de la fonction sur les Noeuds 
+         if (.not.getrvect(fname,topk,top,m4,n4,lr4)) return
+         top=top-1
+C        matrice des triangles 
+         if (.not.getrmat(fname,topk,top,m3,n3,lr3)) return
+         top=top-1
+C        y des noeuds 
+         if (.not.getrvect(fname,topk,top,m2,n2,lr2)) return
+         if (.not.matsize(fname,topk,top,m4,n4)) return
+         top=top-1
+C        x des noeuds 
+         if (.not.getrvect(fname,topk,top,m1,n1,lr1)) return
+         if (.not.matsize(fname,topk,top,m2,n2)) return
+      endif
+      call sciwin()
+      call fec(stk(lr1),stk(lr2),stk(lr3),stk(lr4),m1*n1,m3
+     $     ,strf,buf,rect,nax)
+      call objvide(fname,top)
+      return
+      end
+
+      subroutine scixgetmouse(fname)
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical cremat,checklhs
+      integer topk, lr,lc,v
+      double precision  x,y
+      integer i
+      call sciwin()
+      call dr1('xgetmouse'//char(0),'xv'//char(0),i,x,y,v,v,v)
+      if (top.eq.0.or.rhs.lt.0)  top=top+1
+      if (top.eq.1) lstk(top)=1
+      if (.not.checklhs(fname,1,1)) return
+      topk=top
+      if (.not.cremat(fname,top,0,1,3,lr,lc)) return
+      stk(lr)=x
+      stk(lr+1)=y
+      stk(lr+2)=i
+      return
+      end
+
      
 
