@@ -58,12 +58,6 @@ void SciLink(iflag,rhs,ilib,files,en_names,strf)
       *ilib=-4;
       return;
     }
-  if ( files[1] != (char *) 0 )
-    {
-      sciprint("Std link Error: files must be of size 1 \r\n");
-      *ilib=-5;
-      return;
-    }
   if ( NEpoints != 0 && strcmp(en_names[0],EP[NEpoints-1].name) == 0) 
     {
       ii= NEpoints-1;
@@ -83,7 +77,7 @@ void SciLink(iflag,rhs,ilib,files,en_names,strf)
     Underscores(1,en_names[0],enamebuf);
   else 
     Underscores(0,en_names[0],enamebuf);
-  F2C(dynload)(&ii,enamebuf,files[0],&err);
+  F2C(dynload)(&ii,enamebuf,files,&err);
   if ( err == 0 ) 
     {
       strncpy(EP[ii].name,en_names[0],MAXNAME);
@@ -96,8 +90,9 @@ void SciLink(iflag,rhs,ilib,files,en_names,strf)
   else
     {
       if ( NEpoints != 0) NEpoints--;
+      *ilib=-2;
       return;
-      *ilib=-1;
+      
     }
 }
 
@@ -123,7 +118,7 @@ void C2F(isciulink)(i)
 
 
 
-F2C(dynload)(ii,ename1,loaded_files,err)
+int F2C(dynload)(ii,ename1,loaded_files,err)
      char ename1[], loaded_files[];
      int *ii;
      int *err;
@@ -207,7 +202,10 @@ F2C(dynload)(ii,ename1,loaded_files,err)
     {
         int pid, status, wpid, i;
         char *s;
-
+	int argc;
+	/**  FILESKP mus be NUMFILES LONG */
+#define NUMFILES 20
+#define FILESKP 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
         static char *argv[] = {
 #ifndef _IBMR2
 
@@ -241,12 +239,12 @@ F2C(dynload)(ii,ename1,loaded_files,err)
 #ifndef ARGTOPT
 #define ARGTOPT 6
 #endif
-	    LD, LDARG1, "-x", AARG TOPT, 0, "-o", 0, "-e", 0, 0, 0, 0
+	    LD, LDARG1, "-x", AARG TOPT, 0, "-o", 0, "-e", 0, FILESKP
 #ifndef TAILARG
 #define TAILARG 11
 #endif /* TAILARG */
 #else /* _IBMR2 */
-	    "/bin/ld", 0 /* -bI:prog.exp */,"-K","-o", 0, "-e", 0, 0, 0, 0
+	    "/bin/ld", 0 /* -bI:prog.exp */,"-K","-o", 0, "-e", 0, FILESKP
 #define TAILARG 7
 #endif /* _IBMR2 */
         };
@@ -270,29 +268,21 @@ F2C(dynload)(ii,ename1,loaded_files,err)
 #endif /* _IBMR2 */
         argv[TAILARG - 3] = tmp_file;
         argv[TAILARG - 1] = ename1;
-        for (i = TAILARG, s = loaded_files; i < 99; ++i) {
-                argv[i] = s;
-                if (s = index(s, ' ')) {
-                        *s = 0;
-                        while (*++s == ' ');
-                } else
-                        break;
-                if (*s == 0)
-                        break;
-        }
+	argc=TAILARG;
+#define MAXARGV (TAILARG+NUMFILES-1)
+
+	argc = SetArgv(argv,loaded_files,argc,MAXARGV,err);
+	if ( *err == 1 ) return(-1);
 #ifdef hppa
-	argv[++i] = "/lib/dyncall.o";
+	argv[argc] = "/lib/dyncall.o";
+	argc++;
 #endif /* hppa */
-        if (libs) for (i = i+1, s = libs; i < 99; ++i) {
-                argv[i] = s;
-                if (s = index(s, ' ')) {
-                        *s = 0;
-                        while (*++s == ' ');
-                } else
-                        break;
-                if (*s == 0)
-                        break;
+	if (libs) 
+	  {
+	    argc = SetArgv1(argv,libs,argc,MAXARGV,err);
+	    if ( *err == 1 ) return(-1);
         }
+	argv[argc] = (char *) 0;
         if ((pid = vfork()) == 0) {
                 execv(argv[0], argv);
                 _exit(1);
@@ -537,3 +527,60 @@ int l;
   strncpy (s,__data_start[0], l);
 }
 #endif
+
+
+  
+/******************************************************
+ * Utility function 
+ * files is a null terminated array of char pointers 
+ * files[i] is broken into pieces ( separated by ' ') 
+ * and positions are stored in argv starting at position 
+ * first 
+ *******************************************************/
+
+int SetArgv(argv,files,first,max,err)
+     char *argv[];
+     char *files[];
+     int first,max,*err;
+{
+  int i=0,j=first;
+  *err=0;
+  while ( files[i] != (char *) NULL) 
+    {
+      j= SetArgv1(argv,files[i],j,max,err);
+      if (*err == 1) return(j);
+      i++;
+    }
+  return(j);
+}
+
+int SetArgv1(argv,files,first,max,err)
+     char *argv[];
+     char *files;
+     int first,max,*err;
+{
+  int j=first;
+  char *loc = files;
+  while ( *loc == ' ' && *loc != '\0'  ) loc++;
+  while ( *loc != '\0' )
+    {
+      argv[j] = loc; j++;
+      if ( j == max ) 
+	{
+	  sciprint("Link too many files \r\n");
+	  *err=1;
+	  break;
+	}
+      if ( ( loc  = strchr(loc, ' ')) != (char *) 0) 
+	{ 
+	  *loc = 0;	loc++;
+	  while ( *loc == ' ' && *loc != '\0'  ) loc++;
+	}
+      else
+	{
+	  break;
+	}
+    }
+  return(j);
+}
+  

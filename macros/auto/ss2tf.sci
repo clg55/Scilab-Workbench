@@ -108,6 +108,8 @@ case 'p' then
       den(l,1:n)=ones(1,n);
     end
   end
-if lhs==3 then h=sl(5);return;end
- h=syslin(domaine,num./den+sl(5));
+  if lhs==3 then h=sl(5);return;end
+ w=num./den+sl(5);
+ if type(w)==1 then h=w;return;end   //degenerate case
+ h=syslin(domaine,w);
 end

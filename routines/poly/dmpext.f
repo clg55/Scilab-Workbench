@@ -40,6 +40,7 @@ c!
       double precision mp(*),mp1(*)
       integer d(*),m,n,row(*),nr,col(*),nc,d1(*),job,ierr
 c
+      ierr=0
       if(nr*nc.eq.0) return
       if(m.le.0.or.n.le.0) return
       if(nr.lt.0) goto 40

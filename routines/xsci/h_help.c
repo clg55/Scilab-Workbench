@@ -35,6 +35,8 @@ static void     helpCallback();
 static void     helpCallback1();
 static void     helpDoneAction();
 static void     queryAproposAction();
+static void MyXawListChange();
+static int NewString();
 
 /*
  * Data defined here 
@@ -116,7 +118,7 @@ initHelpWidgets()
   helpList = XtCreateManagedWidget("helpList", listWidgetClass,
 				   helpViewport, (ArgList) 0, (Cardinal) 0);
 
-  XawListChange(helpList, helpTopicInfo, nTopicInfo, 0, True);
+  MyXawListChange(helpList, helpTopicInfo, nTopicInfo, 0, True);
   XtAddCallback(helpList, XtNcallback, helpCallback, (XtPointer) NULL);
   helpViewport1 = XtCreateManagedWidget("helpViewport1", viewportWidgetClass,
 					form, (ArgList) 0, (Cardinal) 0);
@@ -165,7 +167,68 @@ void changeHelpList(i)
 {
   setHelpTopicInfo(i);
   if (nTopicInfo > 0)
-    XawListChange(helpList, helpTopicInfo, nTopicInfo, 0, True);
+    MyXawListChange(helpList, helpTopicInfo, nTopicInfo, 0, True);
+}
+
+/** Changes Widget List with a copy of help **/
+
+static void MyXawListChange(w,help,ntopic,f1,f2)
+     Widget w;
+     char **help;
+     int ntopic,f1,f2;
+{
+  static char **help_c=(char **)0,**help_c1;
+  static int ntopic_c=0;
+  if ( CopyListForWidget(&help_c1,help,ntopic,f1,f2) == 1) return;
+  if ( help_c != ( char **) 0) FreeWidgetList( help_c,ntopic_c);
+  help_c = help_c1;
+  ntopic_c = ntopic;
+  XawListChange(w,help_c,ntopic,f1,f2);
+}
+
+int CopyListForWidget( help_c,help,ntopic)
+     char ***help_c,**help;
+     int ntopic;
+{
+  int k;
+  *help_c = (char **) MALLOC((ntopic + 1) * sizeof(char *));
+  if ( *help_c == NULL) {
+    sciprint("Not enough memory to allocate help tables\r\n");
+    return(1);
+  }
+  for ( k = 0 ; k < ntopic ; k++)
+    if ( NewString(&(*help_c)[k],help[k]) == 1) 
+      {
+	int j;
+	for ( j = 0 ; j < k ; j++ ) FREE((*help_c)[j]);
+	sciprint("Not enough memory to allocate help tables\r\n");
+	return(1);
+      }
+  (*help_c)[ntopic]= (char *) 0;
+  return(0);
+}
+
+
+static int NewString(hstr,line)
+     char **hstr, *line;
+{
+  *hstr = (char *) MALLOC((strlen(line) + 1) * (sizeof(char)));
+  if ( (*hstr) == NULL)
+    {
+      sciprint("Not enough memory to allocate help tables\r\n");
+      return(1);
+    }
+  strcpy(*hstr, line);
+  return(0);
+}
+
+int FreeWidgetList( help_c,ntopic)
+     char **help_c;
+     int ntopic;
+{
+  int k;
+  for ( k = 0 ; k < ntopic ; k++ ) FREE(help_c[k]);
+  FREE(help_c);
 }
 
 /************************************************
@@ -212,7 +275,7 @@ static void SciApropos(str)
       return;
     }
   help_info("","","");
-  XawListChange(helpList, AP.HelpTopic, AP.nTopic, 0, True);
+  MyXawListChange(helpList, AP.HelpTopic, AP.nTopic, 0, True);
 }
 
 

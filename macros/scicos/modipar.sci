@@ -17,7 +17,13 @@ nb=prod(size(rpptr))-1
 
 for k=newparameters
   if prod(size(k))==1 then //parameter of a simple block
-    [statek,dstatek,rpark,ipark]=scs_m(k)(3)(6:9);
+    [fun,statek,dstatek,rpark,ipark]=scs_m(k)(3)([1 6:9]);
+    if type(fun)==15 then
+      if fun(2)==3 then 
+        rpark=var2vec(rpark),
+        dstatek=var2vec(dstatek),
+      end
+    end
     kc=cor(k) //index of modified block in compiled structure
   else //parameter of a super block
     kc=get_tree_elt(cor,k); //index of the modified sub_block in compiled structure
@@ -25,7 +31,10 @@ for k=newparameters
     o=scs_m(get_subobj_path(k))
     [fun,statek,dstatek,rpark,ipark]=o(3)([1 6:9])
     if type(fun)==15 then
-      if fun(2)==3 then rpark=var2vec(rpark),end
+      if fun(2)==3 then 
+        rpark=var2vec(rpark),
+        dstatek=var2vec(dstatek),
+      end
     end
   end
   //Change continuuous state

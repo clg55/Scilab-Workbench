@@ -387,13 +387,14 @@ c     sum
          call error(42)
          return
       endif
+      if(lhs.ne.1) then
+         call error(41)
+         return
+      endif
       sel=0
       if(rhs.eq.2) then
          top=top-1
-         if(lhs.ne.1) then
-            call error(41)
-            return
-         endif
+
 c     row or column op
          il=iadr(lstk(top+1))
          if(istk(il).eq.1) then
@@ -463,6 +464,16 @@ c     row or column op
       n=istk(il0+2)
       it=istk(il0+3)
       mn=m*n
+      l1=sadr(il0+4)
+      if(mn.eq.0) then
+         istk(il0)=1
+         istk(il0+1)=1
+         istk(il0+2)=1
+         istk(il0+3)=0
+         stk(l1)=0.0d0
+         lstk(top+1)=l1+1
+         goto 999
+      endif
       if(sel.eq.0) then
 c     op(a) <=> op(a,'*')
          istk(il0)=1
@@ -473,8 +484,8 @@ c     op(a) <=> op(a,'*')
          stk(l1)=dsum(mn,stk(l1),1)
          if(it.eq.1) stk(l1+1)=dsum(mn,stk(l1+mn),1)
          lstk(top+1)=l1+(it+1)
-      elseif(sel.eq.1) then
-c     op(a,'r')  <=>  op(a,1)
+      elseif(sel.eq.2) then
+c     op(a,'c')  <=>  op(a,2)
          istk(il0)=1
          istk(il0+1)=m
          istk(il0+2)=1
@@ -489,8 +500,8 @@ c     op(a,'r')  <=>  op(a,1)
  451        continue
          endif
          lstk(top+1)=l1+m*(it+1)
-      elseif(sel.eq.2) then
-c     op(a,'c')   <=>  op(a,2)
+      elseif(sel.eq.1) then
+c     op(a,'r')   <=>  op(a,1)
          istk(il0)=1
          istk(il0+1)=1
          istk(il0+2)=n
@@ -514,13 +525,14 @@ c     cumsum
          call error(42)
          return
       endif
+      if(lhs.ne.1) then
+         call error(41)
+         return
+      endif
       sel=0
       if(rhs.eq.2) then
          top=top-1
-         if(lhs.ne.1) then
-            call error(41)
-            return
-         endif
+
 c     row or column op
          il=iadr(lstk(top+1))
          if(istk(il).eq.1) then
@@ -569,6 +581,9 @@ c     row or column op
       n=istk(il0+2)
       it=istk(il0+3)
       mn=m*n
+      if(mn.eq.0) then
+         goto 999
+      endif
       if(sel.eq.0) then
 c     op(a) <=> op(a,'*')
          istk(il0)=1
@@ -624,13 +639,13 @@ c     cumprod
          call error(42)
          return
       endif
+      if(lhs.ne.1) then
+         call error(41)
+         return
+      endif
       sel=0
       if(rhs.eq.2) then
          top=top-1
-         if(lhs.ne.1) then
-            call error(41)
-            return
-         endif
 c     row or column op
          il=iadr(lstk(top+1))
          if(istk(il).eq.1) then
@@ -679,6 +694,9 @@ c     row or column op
       n=istk(il0+2)
       it=istk(il0+3)
       mn=m*n
+      if(mn.eq.0) then
+         goto 999
+      endif
       if(sel.eq.0) then
 c     op(a) <=> op(a,'*')
          istk(il0)=1
@@ -736,13 +754,13 @@ c     prod
          call error(42)
          return
       endif
+      if(lhs.ne.1) then
+         call error(41)
+         return
+      endif
       sel=0
       if(rhs.eq.2) then
          top=top-1
-         if(lhs.ne.1) then
-            call error(41)
-            return
-         endif
 c     row or column op
          il=iadr(lstk(top+1))
          if(istk(il).eq.1) then
@@ -809,6 +827,17 @@ c     row or column op
       n=istk(il0+2)
       it=istk(il0+3)
       mn=m*n
+      l1=sadr(il0+4)
+      if(mn.eq.0) then
+         istk(il0)=1
+         istk(il0+1)=1
+         istk(il0+2)=1
+         istk(il0+3)=0
+         stk(l1)=1.0d0
+         lstk(top+1)=l1+1
+         goto 999
+      endif
+
       if(sel.eq.0) then
 c     op(a) <=> op(a,'*')
          istk(il0)=1
@@ -823,8 +852,8 @@ c     op(a) <=> op(a,'*')
          stk(l1+1)=stk(l1+mn)
          endif
          lstk(top+1)=l1+(it+1)
-      elseif(sel.eq.1) then
-c     op(a,'r')  <=>  op(a,1)
+      elseif(sel.eq.2) then
+c     op(a,'c')  <=>  op(a,2)
          istk(il0)=1
          istk(il0+1)=m
          istk(il0+2)=1
@@ -842,8 +871,8 @@ c     op(a,'r')  <=>  op(a,1)
          call dcopy(m,stk(l1+mn),1,stk(l1+m),1)
          endif
          lstk(top+1)=l1+m*(it+1)
-      elseif(sel.eq.2) then
-c     op(a,'c')   <=>  op(a,2)
+      elseif(sel.eq.1) then
+c     op(a,'r')   <=>  op(a,1)
          istk(il0)=1
          istk(il0+1)=1
          istk(il0+2)=n

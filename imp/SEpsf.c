@@ -164,10 +164,12 @@ int ScilabPsToEps(orientation,filein,fileout)
     rep=Sed(1,filein,fo,"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
 	"[0.5 5 div 0 0 0.5 5 div neg  0 3120 5 div] concat",
 	(char*) 0,(char *)0,(char*) 0,(char *)0);
-  else
-    rep=Sed(1,filein,fo,"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
+  else {
+      fprintf(fo,"1.3 1.3  scale \n");
+      rep=Sed(1,filein,fo,"[0.5 10 div 0 0 0.5 10 div neg  0 2120 10 div] concat",
 	"90 rotate 10 640 neg translate [0.5 5 div 0 0 0.5 5 div neg  0 3120 5 div] concat",
 	(char*) 0,(char *)0,(char*) 0,(char *)0);
+  }
   fclose(fo);
 
   if ( rep >= 1 ) 
@@ -236,7 +238,7 @@ static int Sed(flag,file,fileo,strin1,strout1,strin2,strout2,strin3,strout3)
 	   if ( flag == 1 ) 
 	     {
 	       if ( strncmp(buff,"%!PS-Adobe-2.0 EPSF-2.0",
-			    strlen("%!PS-Adobe-2.0 EPSF-2.0"))== 0)
+		    strlen("%!PS-Adobe-2.0 EPSF-2.0"))== 0)
 		 {
 		   fclose(fd);
 		   return(1);

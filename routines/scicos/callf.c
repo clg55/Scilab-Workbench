@@ -94,6 +94,7 @@ double *t,*xd,*x,*z,*rpar,*outtb,*tvec;
     else if (i<=ntabsim)
 	loc=*(tabsim[i-1].fonc);
     else {
+	i=i-(ntabsim+1);
 	GetDynFunc(i,&loc);
 	if ( loc == (voidf) 0)
 		{

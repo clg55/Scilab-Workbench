@@ -9,6 +9,7 @@ c     ipar(4:11) = line type for ith curve
 c
 c     ipar(12:13) : window position
 c     ipar(14:15) : window dimension
+c     ipar(16) : acceptance of inherited events
 c
 c     rpar(1)=dt
 c     rpar(2)=ymin
@@ -27,6 +28,7 @@ c
       double precision dv
       double precision frect(4)
 c      character*(4) logf
+      logical herited
       common /dbcos/ idb
       data frect / 0.00d0,0.00d0,1.00d0,1.00d0/
       data cur/0/,verb/0/
@@ -36,8 +38,19 @@ c
          write(6,'(''Scope t='',e10.3,'' flag='',i1,''window='',i3)') t
      $        ,flag,ipar(1) 
       endif
+
+      if(nipar.lt.16) then
+c     compatibility
+         herited=.true.
+         iwp=1+nipar-4
+         iwd=1+nipar-2
+      else
+         herited=ipar(16).ne.0
+         iwp=1+nipar-5
+         iwd=1+nipar-3
+      endif
 c     
-      if(flag.eq.2) then
+      if((flag.eq.1.and.nevprt.gt.0).or.(flag.le.2.and.herited)) then
          dt=rpar(1)
          ymin=rpar(2)
          ymax=rpar(3)
@@ -82,8 +95,10 @@ c     plot 1:K points of the buffer
      &        0,0,v,dv,dv,dv,dv)
          if(K.gt.0) then
             do 10 i=1,nu
-               call dr1('xpolys'//char(0),'v'//char(0),v,v,ipar(3+i),
-     &              1,K,v,z(2),z(2+N+(i-1)*N),dv,dv)
+               if(ipar(3+i).ge.0.or.flag.eq.1) then
+                  call dr1('xpolys'//char(0),'v'//char(0),v,v,
+     &                 ipar(3+i),1,K,v,z(2),z(2+N+(i-1)*N),dv,dv)
+               endif
  10         continue
          endif
 c     shift buffer left
@@ -139,12 +154,11 @@ c
             call dr1('xset'//char(0),'window'//char(0),wid,v,v,v,v,v,
      $           dv,dv,dv,dv)
          endif
-         iwp=1+nipar-4
+
          if(ipar(iwp).ge.0) then
             call dr1('xset'//char(0),'wpos'//char(0),ipar(iwp),
      $           ipar(iwp+1),v,v,v,v,dv,dv,dv,dv)
          endif
-         iwd=1+nipar-2
          if(ipar(iwd).ge.0) then
             call dr1('xset'//char(0),'wdim'//char(0),ipar(iwd),
      $           ipar(iwd+1),v,v,v,v,dv,dv,dv,dv)

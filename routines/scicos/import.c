@@ -96,7 +96,7 @@ integer *evtspt,*nevts,*pointi,*oord,*zord,*funptr,*funtyp;
     scicos_imp.outptr=outptr;
     scicos_imp.outlnk=outlnk;
     scicos_imp.lnkptr=lnkptr;
-    scicos_imp.nlnkptr=*lnkptr;
+    scicos_imp.nlnkptr=*nlnkptr;
 
     scicos_imp.rpar=rpar;
     scicos_imp.rpptr=rpptr;

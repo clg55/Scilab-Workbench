@@ -35,18 +35,20 @@ end;
      x=matrix(n,q,1)
    end,
    n=prod(size(x));
-   deff('[y]=f_hist(k)',['y=prod(size(find(data>x(k)&data<=x(k+1))))';
-			'y=y/(p*(x(k+1)-x(k)));']);
+   x1=x;x1(1)=x1(1)-1
+   deff('[y]=f_hist(k)',['y=prod(size(find(data>x1(k)&data<=x1(k+1))))';
+       'y=y/(p*(x(k+1)-x(k)));']);
+                    
    y=feval((1:n-1)',f_hist);
    y=[y;y(n-1)];
    nx=maxi(min(15,prod(size(x))-1),1);
    if rhs <= 5 then 
-     rect=[mini(x),mini(y),maxi(x),maxi(y)];
-     if rect(2)=rect(4) then rect(2)=0.0;rect(4)=1.1; end
-     if q=1 then 
-  	rect(1)= rect(1)-abs(x(2)-x(1));rect(3)=rect(3)+abs(x(2)-x(1));nx=nx+2;
-     end
-   end
+     rect=[mini(x),0,maxi(x),maxi(y)];
+     if rect(2)==rect(4) then rect(2)=0.0;rect(4)=1.1; end
+//     if q==1 then 
+//  	rect(1)= rect(1)-abs(x(2)-x(1));rect(3)=rect(3)+abs(x(2)-x(1));nx=nx+2;
+//     end
+end
   select rhs
    case 7 then plot2d2("gnn",x,y,style,strf,leg,rect,nax);
                plot2d3("gnn",x,y,style,"000");
@@ -56,9 +58,9 @@ end;
                plot2d3("gnn",x,y,style,"000");
    case 4 then plot2d2("gnn",x,y,style,strf,' ',rect,[1,nx,2,10]);
                plot2d3("gnn",x,y,style,"000");
-   case 3 then plot2d2("gnn",x,y,style,"011",' ',rect,[1,nx,2,10]);
+   case 3 then plot2d2("gnn",x,y,style,"051",' ',rect,[1,nx,2,10]);
                plot2d3("gnn",x,y,style,"000");
-   case 2 then plot2d2("gnn",x,y,[1],"011",' ',rect,[1,nx,2,10]);
+   case 2 then plot2d2("gnn",x,y,[1],"051",' ',rect,[1,nx,2,10]);
                plot2d3("gnn",x,y,[1,-1],"000");
   end
 

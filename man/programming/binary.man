@@ -4,7 +4,7 @@
 binary - binary file management
 .SH CALLING SEQUENCE
 .nf
-[fd,err]=mopen('file-name' [, mode ])
+[fd,err]=mopen('file-name' [, mode,  swap ])
 [err]=mclose()
 [x]=mget([n,type,fd])       // default values n=1,type='l',fd=-1
 [err]=mput(x [,type,fd])    // default values type='l',fd=-1
@@ -15,7 +15,7 @@ str=mgetstr([n,fd])         // default values n=1, fd=-1
 .SH PARAMETERS
 .TP 10
 mode,type 
-: string 
+: strings.
 .TP 10
 n,err,fd
 : scalar 
@@ -31,8 +31,11 @@ The \fVtype\fR parameter can be one of the following :
 "l","s","ul","us","d","f","c","uc"
 : for reading or writing respectively a long, a short, an unsigned long, an unsigned 
 short, a double, a float, a char and an unsigned char. The bytes which are 
-read are eventually swapped (by checking little-endian status ). So the code
-is eventually machine independent ?
+read are automatically swapped if necessary (by checking little-endian status ) in 
+order to produce machine independent binary files. 
+.LP 
+The automatic swap of bytes can be cancelled by adding a third ( with value zero ) argument to the \fVmopen\fR
+function  ( \fVmopen(file,"wb",0)\fR).
 .TP
 "ull","uls","ubl","ubs"
 : for reading or writing respectively unsigned little-endian long or
@@ -43,6 +46,10 @@ The \fVfd\fR parameter returned by the function \fVmopen\fR is used as
 a file descriptor (it's a positive integer). When specifying the
 \fVfd\fR parameter, the value \fV-1\fR refers to the default file 
 ( i.e the last opened file).
+
+.LP 
+The \fVmode\fR parameter can be \fV"rb"\fR for read binary or \fV"wb"\fR for write 
+binary.
 .SH EXAMPLE 
 .nf 
 filen = 'test.bin'

@@ -441,15 +441,15 @@ extern void DebugGW(char *fmt, ...)
  ***********************************************/
 
 typedef struct but {
-  int x,y,ibutton;
+  int win,x,y,ibutton;
 } But;
 
-#define MaxCB 10
+#define MaxCB 50
 static But ClickBuf[MaxCB];
 static int lastc = 0;
 
-int PushClickQueue(x,y,ibut) 
-     int x,y,ibut;
+int PushClickQueue(win,x,y,ibut) 
+     int win,x,y,ibut;
 {
   if ( lastc == MaxCB ) 
     {
@@ -458,12 +458,14 @@ int PushClickQueue(x,y,ibut)
 	{
 	  ClickBuf[i-1]=ClickBuf[i];
 	}
+      ClickBuf[lastc-1].win = win;
       ClickBuf[lastc-1].x = x;
       ClickBuf[lastc-1].y = y;
       ClickBuf[lastc-1].ibutton = ibut;
     }
   else 
     {
+      ClickBuf[lastc].win = win;
       ClickBuf[lastc].x = x;
       ClickBuf[lastc].y = y;
       ClickBuf[lastc].ibutton = ibut;
@@ -472,27 +474,61 @@ int PushClickQueue(x,y,ibut)
   return(0);
 }
 
-int CheckClickQueue(x,y,ibut) 
-     integer *x,*y,*ibut;
+int CheckClickQueue(win,x,y,ibut) 
+     integer *win,*x,*y,*ibut;
 {
-  if ( lastc > 0 ) 
+  int i;
+  for ( i = 0 ; i < lastc ; i++ )
     {
-      /** sciprint("Il y a %d click en stock \n",lastc); **/
-      *x= ClickBuf[lastc-1].x ;
-      *y= ClickBuf[lastc-1].y ;
-      *ibut=ClickBuf[lastc-1].ibutton; 
+      int j ;
+      if ( ClickBuf[i].win == *win || *win == -1 ) 
+    {
+	  *win = ClickBuf[i].win;
+	  *x= ClickBuf[i].x ;
+	  *y= ClickBuf[i].y ;
+	  *ibut=ClickBuf[i].ibutton; 
+	  for ( j = i+1 ; j < lastc ; j++ ) 
+	    {
+	      ClickBuf[j-1].win = ClickBuf[j].win ;
+	      ClickBuf[j-1].x   = ClickBuf[j].x ;
+	      ClickBuf[j-1].y =  ClickBuf[j].y ;
+	      ClickBuf[j-1].ibutton = ClickBuf[j].ibutton ;
+	    }
       lastc--;
       return(1);
     }
-  else 
+    }
     return(0);
 }
 
-int ClearClickQueue()
+int ClearClickQueue(win)
+     int win;
 {
+  int i;
+  if ( win == -1 ) 
+{
+      lastc = 0;
+      return;
+    }
+  for ( i = 0 ; i < lastc ; i++ )
+    {
+      int j ;
+      if ( ClickBuf[i].win == win  ) 
+	{
+	  for ( j = i+1 ; j < lastc ; j++ ) 
+	    {
+	      ClickBuf[j-1].win = ClickBuf[j].win ;
+	      ClickBuf[j-1].x   = ClickBuf[j].x ;
+	      ClickBuf[j-1].y =  ClickBuf[j].y ;
+	      ClickBuf[j-1].ibutton = ClickBuf[j].ibutton ;
+	    }
+	  lastc--;
+	}
+    }
   lastc=0;
   return(0);
 }
+
 
 
 /****************************************************
@@ -560,15 +596,15 @@ WndGraphProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	  }
       return 0;
     case WM_LBUTTONDOWN:
-      PushClickQueue((int) LOWORD(lParam),HIWORD(lParam),0) ;
+      PushClickQueue(ScilabGC->CurWindow,(int) LOWORD(lParam),HIWORD(lParam),0) ;
       wininfo("mouse %d %d,%d",lastc,(int) LOWORD(lParam),HIWORD(lParam));
       return(0);
     case WM_MBUTTONDOWN:
-      PushClickQueue((int) LOWORD(lParam),HIWORD(lParam),1) ;
+      PushClickQueue(ScilabGC->CurWindow,(int) LOWORD(lParam),HIWORD(lParam),1) ;
       wininfo("mouse %d,%d",(int) LOWORD(lParam),HIWORD(lParam));
       return(0);
     case WM_RBUTTONDOWN:
-      PushClickQueue((int) LOWORD(lParam),HIWORD(lParam),2) ;
+      PushClickQueue(ScilabGC->CurWindow,(int) LOWORD(lParam),HIWORD(lParam),2) ;
       wininfo("mouse %d,%d",(int) LOWORD(lParam),HIWORD(lParam));
       return(0);
     case WM_CREATE:

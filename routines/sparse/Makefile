@@ -19,7 +19,8 @@ OBJSF = dperm.o iperm.o dspdsp.o wspdsp.o  dspasp.o dspssp.o \
 	lsposp.o lspasp.o lspxsp.o\
 	dful2sp.o wful2sp.o lful2sp.o dspful.o wspful.o lspful.o \
 	dij2sp.o wij2sp.o lij2sp.o dspmax.o dspmin.o \
-	dspmat.o wspmat.o lspmat.o sp2col.o spsort.o spord.o wperm.o
+	dspmat.o wspmat.o lspmat.o sp2col.o spsort.o spord.o wperm.o \
+	spcho1.o spcho2.o sparspak.o
 
 OBJS = $(OBJSC) $(OBJSF)
 

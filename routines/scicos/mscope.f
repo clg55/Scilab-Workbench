@@ -8,7 +8,7 @@ c     ipar(4:5) : window position
 c     ipar(6:7) : window dimension
 c     ipar(8:7+ipar(2)) = input port sizes
 c     ipar(8+ipar(2):7+ipar(2)+nu) = line type for ith curve
-
+c     ipar(8+ipar(2)+nu) = acceptance of inherited events
 
 c     rpar(1)=dt
 c     rpar(2)=periode
@@ -29,6 +29,7 @@ c
       double precision dv
       double precision frect(4)
       character*(4) logf
+      logical herited
       common /dbcos/ idb
       data cur/0/,verb/0/
 
@@ -43,9 +44,14 @@ c
       N=ipar(3)
       per=rpar(2)
       dt=rpar(1)
-
-      if(flag.eq.2) then
-
+      if(nipar.lt.8+ipar(2)+nu) then
+c     compatibility
+         herited=.true.
+      else
+         herited=ipar(8+ipar(2)+nu).ne.0
+      endif
+c
+      if((flag.eq.1.and.nevprt.gt.0).or.(flag.le.2.and.herited)) then
          K=int(z(1))
          if(K.gt.0) then
             n1=int(z(1+K)/per)
@@ -231,8 +237,8 @@ c     loop on input ports
             call  setscale2d(frect,rect,'nn'//char(0))
 c     loop on input port elements
             do 30 i=1,ipar(7+kwid)
-               call dr1('xpolys'//char(0),'v'//char(0),v,v,ipar(ilt+it),
-     &              1,K-1,v,z(2),z(2+N+it*N),dv,dv)
+               call dr1('xpolys'//char(0),'v'//char(0),v,v,ipar(ilt
+     $              +it),1,K-1,v,z(2),z(2+N+it*N),dv,dv)
                it=it+1
  30         continue
  35      continue

@@ -23,11 +23,13 @@ extern void C2F(setfbutn)  _PARAMS((char *name,int *rep));
   extern void changeHelpList  _PARAMS((int i));  
   extern void setHelpShellState  _PARAMS((int state));  
   extern char *getWidgetString  _PARAMS((Widget widget));  
+
 /*  "jpc_SGraph-n.c.X1"*/
 
-  extern int PushClickQueue _PARAMS((int ,int y,int ibut));
-  extern int CheckClickQueue  _PARAMS((integer *x, integer *y, integer *ibut));  
-  extern int ClearClickQueue  _PARAMS((void));  
+  extern int PushClickQueue _PARAMS((int,int ,int y,int ibut));
+  extern int CheckClickQueue  _PARAMS((integer *,integer *x, integer *y, integer *ibut));  
+  extern int ClearClickQueue  _PARAMS((integer));  
+
   extern int C2F (deletewin) _PARAMS((integer *number));  
   extern void SGDeleteWindow  _PARAMS((Widget w, XEvent *event, String *params, Cardinal *num_params));  
   extern void CreatePopupWindow  _PARAMS((integer WinNum, Widget button, Window *CWindow, Window *SciGWindow, Pixel *fg, Pixel *bg, Widget *infowidget));  

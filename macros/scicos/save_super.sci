@@ -4,9 +4,6 @@ function save_super(scs_m)
 x1=scs_m(1);nam=x1(2);
 nin=0;nout=0;clkin=0;clkout=0;
 
-
-
-
 in=[];out=[];clkin=[];clkout=[];
 for k=2:size(scs_m)
   o=scs_m(k)
@@ -21,6 +18,10 @@ for k=2:size(scs_m)
       clkin=[clkin;model(5)]
     case 'CLKOUT_f' then
       clkout=[clkout;model(4)];
+    case 'CLKINV_f' then
+      clkin=[clkin;model(5)]
+    case 'CLKOUTV_f' then
+      clkout=[clkout;model(4)];  
     end
   end
 end

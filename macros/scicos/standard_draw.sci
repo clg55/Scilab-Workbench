@@ -1,7 +1,11 @@
-function standard_draw(o)
+function standard_draw(o,frame)
 //
 xf=60
 yf=40
+[lhs,rhs]=argn(0)
+if rhs==1 then
+  frame=%t
+end
 
 
 nin=size(o(3)(2),1);
@@ -17,32 +21,33 @@ pat=xget('pattern')
 xset('pattern',1)
  
 With3D=%t
+if frame then
+  if With3D then
+    //3D aspect
+    e=4
+    xset('thickness',2);
+    xpoly([orig(1);orig(1)+sz(1);orig(1)+sz(1)],..
+        [orig(2)+sz(2);orig(2)+sz(2);orig(2)],'lines')
 
-if With3D then
-  //3D aspect
-  e=5
-  xset('thickness',2);
-  xpoly([orig(1);orig(1)+sz(1);orig(1)+sz(1)],..
-      [orig(2)+sz(2);orig(2)+sz(2);orig(2)],'lines')
 
-
-  xset('thickness',1)
-  eps=0.3
-  xx=[orig(1)-e , orig(1)-e
-      orig(1)-e , orig(1)+sz(1)-e
-      orig(1)   , orig(1)+sz(1)+eps
-      orig(1)   , orig(1)]
-  yy=[orig(2)-e         , orig(2)-e
-      orig(2)+sz(2)-e   , orig(2)-e
-      orig(2)+sz(2)+eps , orig(2)
-      orig(2)           , orig(2)]
-  xset('pattern',1)
-  xfpolys(xx,yy,[9,2])
-  xset('thickness',2);
-else
-  e=0
-  xset('thickness',2);
-  xrect(orig(1),orig(2)+sz(2),sz(1),sz(2))
+    xset('thickness',1)
+    eps=0.3
+    xx=[orig(1)-e , orig(1)-e
+        orig(1)-e , orig(1)+sz(1)-e
+        orig(1)   , orig(1)+sz(1)+eps
+        orig(1)   , orig(1)]
+    yy=[orig(2)-e         , orig(2)-e
+        orig(2)+sz(2)-e   , orig(2)-e
+        orig(2)+sz(2)+eps , orig(2)
+        orig(2)           , orig(2)]
+    xset('pattern',1)
+    xfpolys(xx,yy,[9,2])
+    xset('thickness',2);
+  else
+    e=0
+    xset('thickness',2);
+    xrect(orig(1),orig(2)+sz(2),sz(1),sz(2))
+  end
 end
 // draw input/output ports
 //------------------------

@@ -13,10 +13,8 @@ if type(i)==10 then
 end
 if type(i)==4 then i=find(i),end
 if type(j)==4 then j=find(j),end
-
-if size(i,'*')==0| size(j,'*')==0 then f1=[],return,end
 [a,b,c,d,x0,dom]=f(2:7)
 f1=tlist(['lss','A','B','C','D','X0','dt'],a,b(:,j),c(i,:),d(i,j),x0,dom)
-
+if f1('D')==[] then f1=[],end
 
 

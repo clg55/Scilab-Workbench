@@ -443,7 +443,7 @@ int setHelpTopicInfo(n)
 	}
       nTopicInfo++;
     }
-  helpTopicInfo[nTopicInfo]='\0';
+  helpTopicInfo[nTopicInfo]= (char *) 0;
   fclose(fg);
   return(0);
 }
@@ -514,12 +514,17 @@ int SetAproposTopics(str)
 		}
 	      AP.Where[AP.nTopic] = n;
 	      AP.nTopic++;
-	      if ( AP.nTopic > APROPOSMAX)
+	      if ( AP.nTopic >= APROPOSMAX-1)
+		{
+		  sciprint("Too many answers for topic %s \r\n",str);
+  		  sciprint("I will ignore the last ones \r\n");
 		break;
 	    }
 	}
+	}
       fclose(fg);
     }
+  AP.HelpTopic[AP.nTopic] = NULL;
   return(0);
 }
 

@@ -8,7 +8,7 @@ select flag(1)
  else error(97,1),
 end;
 //
-if h(4)<>'c' then error(93,1),end
+//if h(4)<>'c' then error(93,1),end
 [n,d]=h(2:3);
 if type(n)=1 then n=poly(n,varn(d),'c'),end
 // get w for which imaginary part is zero
@@ -22,9 +22,7 @@ for i=w',
   end,
 end;
 
-
 if ws=[] then gm=%inf,fr=[],return,end
-
 
 //
 mingain=real(freq(n,d,%i*ws))

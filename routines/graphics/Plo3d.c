@@ -346,7 +346,7 @@ static void C2F(fac3dg)(name, iflag, x, y, z, cvect, p, q, teta, alpha, legend, 
 	  fill[0]=  flag[0];
 	  if ( *p >= 2 && ((polyx[1]-polyx[0])*(polyy[2]-polyy[0])-
 			   (polyy[1]-polyy[0])*(polyx[2]-polyx[0])) <  0) 
-	    fill[0] = fg1;
+	    fill[0] = (flag[0] > 0 ) ? fg1 : -fg1 ;
 	  else if ( iflag == 1) 
 	    {
 	      /* color according to z-level */
@@ -355,11 +355,13 @@ static void C2F(fac3dg)(name, iflag, x, y, z, cvect, p, q, teta, alpha, legend, 
 	      for ( k= 0 ; k < *p ; k++) 
 		zl+= z[(*p)*locindex[i]+k];
 	      fill[0]=inint((whiteid-1)*((zl/(*p))-zmin)/(zmax-zmin))+1;
+	      if ( flag[0] < 0 ) fill[0]=-fill[0];
 	    }
 	  else if ( iflag == 2) 
 	    {
 	      /* colors are given by cvect */
 	      fill[0]= cvect[locindex[i]];
+	      if ( flag[0] < 0 ) fill[0]=-fill[0];
 	    }
 	  C2F(dr)("xliness","str",polyx,polyy,fill,&npoly,&polysize ,PI0,PD0,PD0,PD0,PD0,0L,0L);
 	}
@@ -420,11 +422,14 @@ int DPoints1(polyx, polyy, fill, whiteid, zmin, zmax, x, y, z, i, j, jj1, p,dc,f
   if ( finite(yy1)==0)return(0);
   if (((polyx[1+5*jj1]-polyx[0+5*jj1])*(polyy[2+5*jj1]-polyy[0+5*jj1])-
        (polyy[1+5*jj1]-polyy[0+5*jj1])*(polyx[2+5*jj1]-polyx[0+5*jj1])) <  0)
-    fill[jj1]= fg;
+    fill[jj1]= (dc < 0 ) ? -fg : fg ;
   else
+    {
     fill[jj1]=inint((whiteid-1)*((1/4.0*( z[i+(*p)*j]+ z[i+1+(*p)*j]+
 				     z[i+(*p)*(j+1)]+ z[i+1+(*p)*(j+1)])-zmin)
 			     /(zmax-zmin)))+1;
+      if ( dc < 0 ) fill[jj1]= -fill[jj1];
+    }
   return(1);
   
 }
@@ -1330,7 +1335,7 @@ void I3dRotation()
     }
   else 
     {
-      integer ibutton,in,iwait=0;
+      integer ibutton,in,iwait=0,istr=0;
       integer verbose=0,ww,narg;
       double x0,yy0,x,y,xl,yl,bbox[4];
 #ifdef WIN32
@@ -1341,7 +1346,7 @@ void I3dRotation()
       C2F(SetDriver)("X11",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
 #endif
       if ( pixmode == 0 ) C2F(dr1)("xset","alufunction",(in=6,&in),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-      C2F(dr1)("xclick","one",&ibutton,&iwait,PI0,PI0,PI0,PI0,&x0,&yy0,PD0,PD0,0L,0L);
+      C2F(dr1)("xclick","one",&ibutton,&iwait,&istr,PI0,PI0,PI0,&x0,&yy0,PD0,PD0,0L,0L);
       C2F(dr1)("xclear","v",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
       theta=Cscale.theta ;
       alpha=Cscale.alpha ;

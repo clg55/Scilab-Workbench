@@ -18,10 +18,11 @@ DESCRIPTION
   For A, a real  vector or matrix, maxi(A) is the largest element A.
   [m,k]=maxi(A) gives in addition the index of the maximum.
 
-  m=maxi(A1,A2,...,An) returns a vector m of size size(m)=size(A1) such that
+  m=maxi(A1,A2,...,An), where all the Aj are matrices of the same
+  sizes,returns a vector or a matrix m of size size(m)=size(A1) such that
   m(i)= max( Aj(i)), j=1,...,n. [m,k]=maxi(A1,A2,...,An) gives in addition
-  the vector k. for a fixed i, k(i) is the number of the first Aj(i) achiev-
-  ing the maximum.
+  the vector or matrix k. for a fixed i, k(i) is the number of the first
+  Aj(i) achieving the maximum.
 
   [m,k]=maxi(list(A1,...,An)) is an equivalent syntax of
   [m,k]=maxi(A1,A2,...,An)

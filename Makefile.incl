@@ -1,7 +1,7 @@
 # Generated automatically from Makefile.incl.in by configure.
 RM = rm -f
 AR = ar cq
-FILES_TO_CLEAN = *.CKP *.ln *.BAK *.bak core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut .*~ *.trace so_locations
+FILES_TO_CLEAN = *.CKP *.ln *.BAK *.bak core errs ,* *~ *.a .emacs_* tags TAGS make.log MakeOut .*~ *.trace so_locations *.orig
 
 all::
 

@@ -10,7 +10,10 @@ c     -->c=a+2*b
       logical creadmat
 
 c     If 'a' exists reads it else return
-      if(.not.creadmat('a',m,n,a)) return
+      if(.not.creadmat('a',m,n,a)) then
+         write(6,*) 'ext5', m,n,a(1),a(2),a(3)
+      return
+      endif
 c     ***************************
 
 c  same as

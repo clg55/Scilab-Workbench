@@ -15,36 +15,15 @@ or notice.ps (postscript file). You may email to Scilab@inria.fr.
 
 ******************************************************************************
 
-In the following, all the paths are relative to the Scilab directory 
-(scilab-2.3 directory).
+In the following, all the paths are relative to the Scilab directory. 
 
 I - TO INSTALL SCILAB
 *********************
 
  A - IF YOU HAVE A COMPILED VERSION
  ----------------------------------
-   You need at least to install a set of tools from cygwin.
-   Simply copy the file usertools.exe from the subdirectory cygwin 
-   and execute it (usertools.exe is a copy of the cygwin distribution:
-	   `ftp://ftp.cygnus.com/pub/gnu-win32/latest')  
-   but you can also install the full cygwin release: do the same 
-	as above with the file cdk.exe from the same subdirectory.
-
-   If you just install usertools.exe, then the command make will miss and 
-	therefore you shall have to do a small job by hand:
-	
-	edit the following ascii files:
-	bin/scilab bin/Blatexpr bin/Blatexpr2 bin/Blatexprs
-	bin/Blpr bin/BEpsf 
-	and replace the string /Softs/scilab-2.3 by the name 
-	of the directory in which you have installed Scilab.
-
-   If you install cdk.exe then simply do, in Scilab directory:
-	make			  
-	  
-   Remark: cdk.exe brings much more functionalities than usertools.exe 
-	(gcc compiler for example) but is much bigger. If 
-	you just want to run Scilab binary version, usertools.exe is enough.
+   Read the "README.txt" file which you can find at the same place where
+   you got the binary version.
 
  B - IF YOU HAVE A SOURCE VERSION
  --------------------------------
@@ -52,10 +31,11 @@ I - TO INSTALL SCILAB
    This distribution has been tested with the Gnu compiler gcwin32 
    release b18 and the f2c Fortran compiler.
 
-   1 -  you need to install the complete set of tools from cygwin:
-	   simply copy the file cdk.exe from the subdirectory cygwin 
-	   and execute it (cdk.exe is a copy of the cygwin distribution:
-	   `ftp://ftp.cygnus.com/pub/gnu-win32/latest')  
+   1 -  You need to install the complete set of tools from cygwin.
+        Get the file cdk.exe from the cygwin distribution:
+	   `ftp://ftp.cygnus.com/pub/gnu-win32/latest').
+        We provide a copy of this file on our ftp server:
+         `ftp://ftp.inria.fr/INRIA/Scilab/Windows/cygwin/cdk.exe'.   
 
    2 -  You need to install 
 	a Fortran compiler (f2c for example).
@@ -65,8 +45,8 @@ I - TO INSTALL SCILAB
         and the cvtres converter. 
 	You can find source files for f2c and cvtres on the net.
 
-	In the subdirectory src-required, we provide a binary version
-	of all the above required stuff in file tools.zip.
+	We provide a binary version of all the above required stuff in:
+       `ftp://ftp.inria.fr/INRIA/Scilab/Windows/utilities\tools.zip'.
 
    3 -	You need to edit the file Function.h in the cygwin b17 or b18 
 	distribution and comment out the prototype for the function 

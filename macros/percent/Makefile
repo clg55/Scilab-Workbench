@@ -60,6 +60,7 @@ MACROS = %ce.sci %cic.sci %cnl.sci %col.sci \
 	%sqp.sci %pds.sci %prs.sci %slp.sci\
 	%spe.sci %sisp.sci %spasp.sci %spssp.sci %sdsp.sci %spqs.sci %spdsp.sci\
 	%spqsp.sci %spds.sci %sqsp.sci\
-	%choose.sci %nochoose.sci %sgs.sci %shs.sci
+	%choose.sci %nochoose.sci %sgs.sci %shs.sci %bgs.sci %bhs.sci %sgb.sci\
+	%shb.sci
 
 include ../Make.lib

@@ -58,7 +58,7 @@ static void CNAME(ColSort,char)(a,ind,flag,n,p,dir)
     {
       sciqsort((char *) (a+n*j),(char *) (ind+n*j),flag, n, 
 	       sizeof(char *),sizeof(int), 
-	       (dir == 'c' ) ? CNAME(compareC,char) : CNAME(compareD,char),
+	       (dir == 'i' ) ? CNAME(compareC,char) : CNAME(compareD,char),
 	       CNAME(swapcode,char),swapcodeind);
     }
 }
@@ -88,7 +88,7 @@ static void CNAME(RowSort,char)(a,ind,flag,n,p,dir)
     {
       sciqsort((char *) (a+i),(char *) (ind+i),flag, p, 
 	       n*sizeof(char *),n*sizeof(int), 
-	       (dir == 'c' ) ? CNAME(compareC,char):CNAME(compareD,char),
+	       (dir == 'i' ) ? CNAME(compareC,char):CNAME(compareD,char),
 	       CNAME(swapcode,char),swapcodeind);
     }
 }
@@ -112,7 +112,7 @@ static void CNAME(GlobalSort,char)(a,ind,flag,n,p,dir)
     }
   sciqsort((char *) (a),(char *) (ind),flag, n*p, 
 	   sizeof(char *),sizeof(int), 
-	   (dir == 'c' ) ? CNAME(compareC,char):CNAME(compareD,char),
+	   (dir == 'i' ) ? CNAME(compareC,char):CNAME(compareD,char),
 	   CNAME(swapcode,char),swapcodeind);
 }
 
@@ -166,12 +166,12 @@ static int CNAME(LexiRowswapcode,char)(parmi, parmj, n)
   int i = n,j;
   register char **pi = (char **) (parmi); 		
   register char **pj = (char **) (parmj); 
-  if ( n!= 1) printf(" swapcode avec n != 1\n");
+  /** if ( n!= 1) printf(" swapcode avec n != 1\n"); **/
   do { 
     for ( j = 0 ; j < CNAME(lexicols,char) ; j++) 
       {
 	register char *t = *(pi +CNAME(lexirows,char)*j);		
-	*(pi + CNAME(lexirows,char)*j) = *(pj+CNAME(lexirows,char)*j);				
+	*(pi + CNAME(lexirows,char)*j) = *(pj+CNAME(lexirows,char)*j);
 	*(pj + CNAME(lexirows,char)*j) = t;	
       }
     pi++;
@@ -195,7 +195,7 @@ static void CNAME(LexiRow,char)(a,ind,flag,n,p,dir)
     }
   sciqsort((char *) (a),(char *) (ind),flag, n, 
 	   sizeof(char*),sizeof(int), 
-	   (dir == 'c' ) ? CNAME(LexiRowcompareC,char):CNAME(LexiRowcompareD,char),
+	   (dir == 'i' ) ? CNAME(LexiRowcompareC,char):CNAME(LexiRowcompareD,char),
 	   CNAME(LexiRowswapcode,char),swapcodeind);
 }
 
@@ -232,18 +232,19 @@ static  int CNAME(LexiColcompareD,char)(i,j)
   return (0);
 }
 
+
 static int CNAME(LexiColswapcode,char)(parmi, parmj, n) 
-     char *parmi,*parmj;
+     char **parmi,**parmj;
      int n;
 { 		
   int i = n,ir;
-  register char *pi = (char *) (parmi); 		
-  register char *pj = (char *) (parmj); 
-  if ( n!= 1) printf(" swapcode avec n != 1\n");
+  register char **pi = (char **) (parmi); 		
+  register char **pj = (char **) (parmj); 
+  /* if ( n!= 1) printf(" swapcode avec n != 1\n"); */
   do { 
     for ( ir = 0 ; ir < CNAME(lexirows,char) ; ir++) 
       {
-	register char t = *(pi +ir);		
+	register char *t = *(pi +ir);		
 	*(pi +ir) = *(pj+ir);				
 	*(pj +ir) = t;	
       }
@@ -269,7 +270,7 @@ static void CNAME(LexiCol,char)(a,ind,flag,n,p,dir)
     }
   sciqsort((char *) (a),(char *) (ind),flag, p, 
 	   n*sizeof(char*),sizeof(int), 
-	   (dir == 'c' ) ? CNAME(LexiColcompareC,char):CNAME(LexiColcompareD,char),
+	   (dir == 'i' ) ? CNAME(LexiColcompareC,char):CNAME(LexiColcompareD,char),
 	   CNAME(LexiColswapcode,char),
 	   swapcodeind);
 }

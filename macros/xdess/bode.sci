@@ -90,25 +90,27 @@ end;
 [ffr,bds]=xgetech();
 //magnitude
 xsetech([0,0,1.0,hx*0.95]);
-plot2d1("oln",frq',d',[1,3:mn+1],"061")
-xgrid();
+plot2d1("oln",frq',d',[1:mn],"061")
+xgrid(4);
 xtitle('Magnitude ',' Hz','db');
 
 //phase
 xsetech([0,hx,1.0,hx*0.95]);
-plot2d1("oln",frq',phi',[1,3:mn+1],"061")
-xgrid();
+// We change the phase 
+plot2d1("oln",frq',phi',[1:mn],"061")
+xgrid(4);
 xtitle('Phase ',' Hz','degrees');
 if mnc>0 then
   xsetech([0,2*hx,1.0,0.1],[0 0 1 1]);
   dash=xget('dashes')
-  y0=0.7;dy=-1/3
+  y0=0.7;dy=-1/2
   x0=0;dx=1/2
   count=0
   for k=1:mnc
-    xset('dashes',k-1)
+    xset('dashes',k)
     xsegs([x0;x0+0.08],[y0;y0])
-    xstring(x0+0.1,y0,comments(k))
+    rect=xstringl(x0+0.1,y0,comments(k))
+    xstring(x0+0.1,y0-rect(4)/3,comments(k))
     count=count+1
     y0=y0+dy
     if count==3 then x0=x0+dx;y0=0.7,end

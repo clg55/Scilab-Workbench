@@ -25,6 +25,7 @@ c      double precision tmp(100)
 c     
       if(idb.eq.1) then
          write(6,'(''readf t='',e10.3,'' flag='',i1)') t ,flag
+         write(6,'(''      nevprt='',i2)') nevprt
       endif
 c
       if(flag.eq.1) then
@@ -32,30 +33,34 @@ c
          k=int(z(1))
          ievt=ipar(3)
          kmax=int(z(2))
-         lunit=int(z(3))
 c     output
          call dcopy(ny,z(3+n*ievt+k),n,y,1)
+         if(nevprt.gt.0) then
+c     discrete state
+            n=ipar(4)
+            k=int(z(1))
+            ievt=ipar(3)
+            kmax=int(z(2))
+            lunit=int(z(3))
+            if(k+1.gt.kmax.and.kmax.eq.n) then
+c     .     read a new buffer
+               no=(nz-3)/N
+               call bfrdr(lunit,ipar,z(4),no,kmax,ierr)
+               if(ierr.ne.0) goto 110
+               z(1)=1.0d0
+               z(2)=kmax
+            elseif(k.lt.kmax) then
+               z(1)=z(1)+1.0d0
+            endif
+         endif
+      elseif(flag.eq.3) then
+         n=ipar(4)
+         k=int(z(1))
+         kmax=int(z(2))
          if(k.eq.kmax.and.kmax.lt.n) then
             tvec(1)=t-1.0d0
          else
             tvec(1)=z(3+k)
-         endif
-      elseif(flag.eq.2) then
-c     discrete state
-         n=ipar(4)
-         k=int(z(1))
-         ievt=ipar(3)
-         kmax=int(z(2))
-         lunit=int(z(3))
-         if(k+1.gt.kmax.and.kmax.eq.n) then
-c     .     read a new buffer
-            no=(nz-3)/N
-            call bfrdr(lunit,ipar,z(4),no,kmax,ierr)
-            if(ierr.ne.0) goto 110
-            z(1)=1.0d0
-            z(2)=kmax
-         elseif(k.lt.kmax) then
-            z(1)=z(1)+1.0d0
          endif
       elseif(flag.eq.4) then
 c     file opening

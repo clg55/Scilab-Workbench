@@ -5,8 +5,9 @@ sum - sum (row sum, column sum) of vector/matrix entries
 .SH CALLING SEQUENCE
 .nf
 y=sum(x)
-y=sum(x,'r')
-y=sum(x,'c')
+y=sum(x,'r') or y=sum(x,2)
+
+y=sum(x,'c') or y=sum(x,1)
 .fi
 .SH PARAMETERS
 .TP 10
@@ -19,10 +20,13 @@ y
 For a vector or a matrix \fVx\fR, \fVy=sum(x)\fR (or, equivalently,
 \fVy=sum(x,'*')\fR) returns in the scalar \fVy\fR the sum of all the entries
 of \fVx\fR.
-\fVy=sum(x,'r')\fR (or, equivalently, \fVy=sum(x,1)\fR) returns in each 
+.LP
+\fVy=sum(x,'r')\fR (or, equivalently, \fVy=sum(x,2)\fR) is the rowwise sum. It returns in each 
 entry of the column vector \fVy\fR the sum of each row of \fVx\fR.
-\fVy=sum(x,'c')\fR returns in each entry of the row vector 
-\fVy\fR the sum of each column of \fVx\fR.
+.LP
+
+\fVy=sum(x,'c')\fR (or, equivalently, \fVy=sum(x,1)\fR) is the columnwise sum. It returns in each entry of the row vector 
+\fVy\fR the sum of each column  of \fVx\fR.
 .SH EXAMPLE
 .nf
 A=[1,2;3,4];

@@ -12,10 +12,11 @@ case 'getorigin' then
 case 'set' then
   x=arg1;
   graphics=arg1(2);label=graphics(4)
+  if size(label)<10 then label(10)='0',end // compatibility
   model=arg1(3);
   state=model(2)
   while %t do
-    [ok,in,clrs,win,wpos,wdim,ymin,ymax,per,N,label]=getvalue(..
+    [ok,in,clrs,win,wpos,wdim,ymin,ymax,per,N,heritance,label]=getvalue(..
 	'Set Scope parameters',..
 	[
 	'Input ports sizes';
@@ -26,10 +27,11 @@ case 'set' then
 	'Ymin vector';
 	'Ymax vector';
 	'Refresh period';
-	'Buffer size'],..
+	'Buffer size';
+        'Accept herited events 0/1'],..
 	 list('vec',-1,'vec',-1,'vec',1,'vec',-1,'vec',-1,..
-	 'vec','size(x1,''*'')','vec','size(x1,''*'')','vec',1,'vec',1),..
-	 label)
+	 'vec','size(x1,''*'')','vec','size(x1,''*'')','vec',1,..
+         'vec',1,'vec',1),label)
     if ~ok then break,end //user cancel modification
     mess=[]
     if size(in,'*')<=0 then
@@ -68,6 +70,10 @@ case 'set' then
       mess=[mess;'Ymax must be greater than Ymin';' ']
       ok=%f
     end
+    if ~or(heritance==[0 1]) then
+      mess=[mess;'Accept herited events must be 0 or 1';' ']
+      ok=%f
+    end
     if ~ok then
       message(['Some specified values are inconsistent:';
 	         ' ';mess])
@@ -80,12 +86,13 @@ case 'set' then
 	yy=[ymin(:)';ymax(:)']
 	rpar=[0;per;yy(:)]
 	clrs=clrs(1:sum(in))
-	ipar=[win;size(in,'*');N;wpos(:);wdim(:);in(:);clrs(:)]
+	ipar=[win;size(in,'*');N;wpos(:);wdim(:);in(:);clrs(:);heritance]
 	if prod(size(state))<>(sum(in)+1)*N+1 then 
 	  state=-eye((sum(in)+1)*N+1,1),
 	end
 	model(7)=state;model(8)=rpar;model(9)=ipar
 	model(11)=[] //compatibility
+        model(12)=[%t %f] //compatibility
 	graphics(4)=label;
 	x(2)=graphics;x(3)=model
 	break
@@ -99,13 +106,13 @@ case 'define' then
   wpos=[-1;-1]
   clrs=[1;3;5;7;9;11;13;15];
   N=2;
-  ipar=[win;size(in,'*');N;wpos(:);wdim(:);in(:);clrs(1:sum(in))]
+  ipar=[win;size(in,'*');N;wpos(:);wdim(:);in(:);clrs(1:sum(in));0]
   ymin=[-1;-5];ymax=[1;5];per=30;
   yy=[ymin(:)';ymax(:)']
   rpar=[0;per;yy(:)]
   state=-eye((sum(in)+1)*N+1,1)
   model=list('mscope',[1;1],[],1,[],[],state,rpar,ipar,'c',..
-      [],[%f %t],' ',list())
+      [],[%t %f],' ',list())
   label=[strcat(string(in),' ');
          strcat(string(clrs),' ');
 	 string(win);
@@ -114,7 +121,8 @@ case 'define' then
 	 strcat(string(ymin),' ');
 	 strcat(string(ymax),' ');
 	 string(per);
-	 string(N)];
+	 string(N);
+         string(0)];
    gr_i='xstringb(orig(1),orig(2),''MScope'',sz(1),sz(2),''fill'')'
    x=standard_define([2 2],model,label,gr_i)
 end

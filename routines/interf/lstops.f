@@ -51,6 +51,10 @@ c extraction
          fin=-fin
          return
       endif
+      if(rhs.le.0) then
+         call error(39)
+         return
+      endif
 
 c     arg2(arg1)
 c     get arg2

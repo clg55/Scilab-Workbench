@@ -9,12 +9,12 @@ c
       integer iadr,sadr
 c     
       double precision sr,si,e1,powr,powi
-      integer star,dstar,slash,bslash,dot,colon
+      integer star,dstar,slash,bslash,dot,colon,quote
       integer less,great,equal
       integer insert,extrac
       integer top0
       data star/47/,dstar/62/,slash/48/
-      data bslash/49/,dot/51/,colon/44/
+      data bslash/49/,dot/51/,colon/44/,quote/53/
       data less/59/,great/60/,equal/50/
       data insert/2/,extrac/3/
 c     
@@ -132,6 +132,7 @@ c           :  +  -  * /  \  =          '
       goto(06,07,08,10,20,25,130,05,05,60) op+1-colon
 c     
  05   if(op.eq.dstar) goto 30
+      if(op.eq.quote+dot) goto 60
       if(op.ge.3*dot+star) goto 200
       if(op.ge.2*dot+star) goto 120
       if(op.ge.less+equal) goto 130
@@ -903,6 +904,9 @@ c     transposition
       call icopy(n1+nel1,istk(irc),1,istk(irc1),1)
       l1=sadr(irc1+n1+nel1)
       call dcopy(nel1*(it1+1),stk(lat),1,stk(l1),1)
+      if(it1.eq.1.and.op.ne.quote+dot) then
+         call dscal(nel1,-1.0d0,stk(l1+nel1),1)
+      endif
       lstk(top+1)=l1+nel1*(it1+1)
       goto 999
 c     
@@ -1814,7 +1818,8 @@ c     comparaisons
             return
          endif
       endif
-      if(mn1.ne.1.and.mn2.ne.1) then
+      if((mn2.eq.0.or.mn1.eq.0).or.
+     &     (mn1.ne.1.and.mn2.ne.1)) then
          if(n1.ne.n2.or.m1.ne.m2) then
             if(op.eq.equal.or.op.eq.less+great) then
                istk(il1)=4

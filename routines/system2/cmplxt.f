@@ -81,6 +81,14 @@ c     pause,break,abort,eol
             lc=lc+2
             icount=icount-1
             goto 10
+         elseif(op.eq.18) then 
+            lc=lc+1+nsiz
+            icount=icount-1
+            goto 10
+         elseif(op.eq.19) then 
+            lc=lc+3
+            icount=icount-1
+            goto 10
          elseif(op.ge.100) then
 c     matfns
             lc=lc+4

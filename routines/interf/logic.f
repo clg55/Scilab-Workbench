@@ -138,14 +138,9 @@ c     ou/et logique
       n1=abs(n1)
       m2=abs(m2)
       n2=abs(n2)
-      if(istk(il2).ne.4) then
-         err=2
-         call error(44)
-         return
-      endif
-      if(istk(il1).ne.4) then
-         err=1
-         call error(44)
+      if(istk(il2).ne.4.or.istk(il1).ne.4) then
+         fin=-fin
+         top=top0
          return
       endif
       if(mn1.eq.1.and.mn2.gt.1) then

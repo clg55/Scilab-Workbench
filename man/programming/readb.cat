@@ -14,7 +14,8 @@ PARAMETERS
             know the numbers of rows, so all the file is read
 
   rec       : vector of positive integers. the selected records for direct
-            access
+            access.  This vector size must be equal to the number of rows of
+            desired x.
 
 DESCRIPTION
   binary read of the matrix x in the file file-name.

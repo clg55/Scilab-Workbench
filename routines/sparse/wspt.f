@@ -60,7 +60,7 @@ c  always point to the next element to be entered in row i of at.
           jpt = iat(j+1)
           indat(jpt + s) = i
           atr(jpt) = ar(jp)
-          ati(jpt) = -ai(jp)
+          ati(jpt) = ai(jp)
           iat(j+1) = jpt + 1
    50   continue
    60 continue

@@ -77,7 +77,7 @@ load - load saved variable
 lsslist - Scilab linear state space t function definition
 macro - Scilab procedure and Scilab object
 matrices - Scilab object, matrices in Scilab
-matrix - vector to matrix conversion
+matrix - reshape a vector or a matrix to a different size matrix
 max - maximum
 maxi - maximum
 min - minimum 
@@ -102,7 +102,7 @@ print - prints variables  in a file
 printf - Emulator of C language printf function
 printf_conversion - printf, sprintf, fprintf conversion specifications
 quit - decrease the pause level or exit
-quote (') - transposition operator, string deleimiter
+quote (') - transposition operator, string delimiter
 rand - random number generator
 rat - Floating point rational approximation 
 rational - Scilab objects, rational in Scilab

@@ -358,6 +358,12 @@ sparse : Sparse 1.3 by Kenneth S. Kundert, Alberto Sangiovanni-Vincentelli and
 	 singular matrices (J.P.Chancelier).
 	 Some operations are taken from TOMS 408 and 601.
 	lu.c (INRIA/ENPC)
+	sparse Cholesky factorization codes are taken is from sparspak,
+        Authors:        Joseph W.H. Liu 
+        and
+                        Esmond G. Ng and Barry W. Peyton
+	from
+        Mathematical Sciences Section, Oak Ridge National Laboratory
 sun    : system specific Scilab routines (INRIA/ENPC). 
          link.c ,link*.c : dynamic linking of programs for differents 
          architectures (Erlich,Chancelier,INRIA) link_linux.c was initiated 

@@ -43,11 +43,12 @@ function [X,dims,J,Y,k,Z]=cainv(Sl,alfa,beta)
 [LHS,RHS]=argn(0);
 if RHS==1 then alfa=-1;beta=-1;end
 if RHS==2 then beta=-1;end
-[X,nr,nvg,nv,noc,nos,F,U,k,Z]=abinv(Sl',beta,alfa);
+[X,ddims,F,U,k,Z]=abinv(Sl',beta,alfa);
+nr=ddims(1);nvg=ddims(2);nv=ddims(3);noc=ddims(4);nos=ddims(5);
 [nx,nx]=size(X);dimS=nx-nv;dimSg=nx-nvg;dimN=nx-nr;nu1=nx-noc;nd1=nx-nos;
 n6=nx-nd1+1:nx;n5=nx-nu1+1:nx-nd1;
 n4=nx-dimS+1:nx-nu1;n3=nx-dimSg+1:nx-dimS;n2=nx-dimN+1:nx-dimSg;n1=1:nx-dimN;
-nr=1:nr;nzs=nr+1:nr+nvg;nzi=nvg+1:nv;
+//nr=1:nr;nzs=nr+1:nr+nvg;nzi=nvg+1:nv;
 X=[X(:,n6),X(:,n5),X(:,n4),X(:,n3),X(:,n2),X(:,n1)];
 J=F';Z=Z';Y=U';Y=[Y(k+1:$,:);Y(1:k,:)];
 dims=[nd1,nu1,dimS,dimSg,dimN];

@@ -51,14 +51,20 @@ c
 c   ****************
 c      if(n.eq.-1) goto 999
 c   ****************
-      call cvstr(m,lin(l1),line,1)
-      call basout(io,lunit,line(1:max(m,1)))
+      if(m.gt.0.and.err1.eq.0.and.err2.eq.0) then
+         call cvstr(m,lin(l1),line,1)
+         call basout(io,lunit,line(1:max(m,1)))
+      endif
  1000 line=' '
-      line(m1+1:m1+9)=mg
-      write(line(m1+11:m1+15),'(i5)') n
-      line(m1+16:m1+16)=bel
-      call basout(io,lunit,line(1:m1+16))
-      if(hio.gt.0) call basout(io,hio,line(1:m1+15))
+      if(err1.eq.0.and.err2.eq.0) then
+         line(m1+1:m1+9)=mg
+         write(line(m1+11:m1+15),'(i5)') n
+         line(m1+16:m1+16)=bel
+         call basout(io,lunit,line(1:m1+16))
+         if(hio.gt.0) call basout(io,hio,line(1:m1+15))
+      else
+         goto 999
+      endif
 c
       goto (
      +   1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15,
@@ -956,14 +962,22 @@ c     .       erreur dans comp
       if((num.eq.n.or.num.lt.0).and.imode.ne.0.and.imode.ne.3) then
 c     error recovery mode
          p=pt+1
-c        . looking if error has occured in execstr
+c        . looking if error has occured in execstr deff getf or comp
  1006    p=p-1
-         if(p.eq.0) goto 1007
+         if(p.le.errpt) goto 1007
          if(rstk(p).eq.903) then
-c     .     yes error has occured in execstr
+c     .     error has occured in execstr
             errtyp=0
             pt=p+1
-         else
+         elseif(rstk(p).eq.901) then
+c     .     error has occured in deff or getf
+            errtyp=0
+            pt=p+1
+            goto 1006
+         elseif(rstk(p).eq.904) then
+c     .     error has occured in comp
+            errtyp=0
+            pt=p+1
             goto 1006
          endif
  1007    if(errtyp.eq.0) then
@@ -978,10 +992,12 @@ c     .     recoverable error
             goto 1510
          else
             comp(1)=0
+            comp(3)=0
             err=n
          endif
       else
          comp(1)=0
+         comp(3)=0
          err=n
       endif
 c

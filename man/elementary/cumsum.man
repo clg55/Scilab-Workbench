@@ -5,8 +5,8 @@ cumsum - cumulative sum
 .SH CALLING SEQUENCE
 .nf
 y=cumsum(x)
-y=cumsum(x,'r')
-y=cumsum(x,'c')
+y=cumsum(x,'r') or y=cumsum(x,1)
+y=cumsum(x,'c') or y=cumsum(x,2)
 .fi
 .SH PARAMETERS
 .TP 10
@@ -17,12 +17,14 @@ y
 : vector or matrix (real or complex)
 .SH DESCRIPTION
 For a vector or a matrix \fVx\fR, \fVy=cumsum(x)\fR (or, equivalently,
-\fVy=sum(x,'*')\fR) returns in \fVy\fR the cumulative sum of all the entries
+\fVy=cumsum(x,'*')\fR) returns in \fVy\fR the cumulative sum of all the entries
 of \fVx\fR taken columnwise. 
-\fVy=cumsum(x,'r')\fR (or, equivalently, \fVy=cumsum(x,1)\fR) returns in 
-\fVy\fR the cumulative sum of the rows of \fVx\fR.
-\fVy=cumsum(x,'c')\fR returns in \fVy\fR the cumulative sum of the 
-columns of \fVx\fR.
+.LP
+\fVy=cumsum(x,'c')\fR (or, equivalently, \fVy=cumsum(x,2)\fR) returns in 
+\fVy\fR the cumulative sum of the columns of \fVx\fR: \fV y(i,:)=cumsum(x(i,:))\fR
+.LP
+\fVy=cumsum(x,'r')\fR (or, equivalently, \fVy=cumsum(x,1)\fR) returns
+in \fVy\fR the cumulative sum of the rows of \fVx\fR: \fV y(:,i)=cumsum(x(:,i))\fR
 .SH EXAMPLE
 .nf
 A=[1,2;3,4];

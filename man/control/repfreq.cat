@@ -1,5 +1,7 @@
 
-repfreq(1)                     Scilab Function                     repfreq(1)
+repfreq(1)                         Scilab                          repfreq(1)
+Group                                                                   Group
+Scilab                                                                 Scilab
 NAME
   repfreq - frequency response
 
@@ -25,16 +27,20 @@ PARAMETERS
 
 DESCRIPTION
   repfreq returns the frequency response calculation of a linear system. If
-  sys(s) is the transfer function of Sys, repf(k) equal sys(s) evaluated at
-  s= %i*frq(k)*2*%pi.  db(k) is the magnitude of rep(k) expressed in dB i.e.
-  db(k)=20*log(abs(rep(k)))/log(10) and phi(k) is the phase of rep(k)
+  sys(s) is the transfer function of Sys, repf(k) equals sys(s) evaluated at
+  s= %i*frq(k)*2*%pi for continuous time systems and at exp(2*%i*%pi*frq(k))
+  for discrete time systems.
+
+  db(k) is the magnitude of repf(k) expressed in dB i.e.
+  db(k)=20*log(abs(repf(k)))/log(10) and phi(k) is the phase of repf(k)
   expressed in degrees.
 
-  If fmin,fmax,step are input parameters the response is calculated for the
+  If fmin,fmax,step are input parameters, the response is calculated for the
   vector of frequencies frq given by:
   frq=[exp(log(10)*((log(fmin)/log(10)):step:(log(fmax)/log(10)))) step];
 
-  The output parameter frq is calculated by frq=calfrq(sys,fmin,fmax).
+  If step is not given, the output parameter frq is calculated by
+  frq=calfrq(sys,fmin,fmax).
 
 EXAMPLE
   A=diag([-1,-2]);B=[1;1];C=[1,1];

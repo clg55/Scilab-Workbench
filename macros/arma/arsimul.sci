@@ -12,17 +12,17 @@ function z=arsimul(a,b,d,sig,u,up,yp,ep)
 // z and e in R^n,  u in R^m
 //
 // Inputs :
-//   a matrix <Id,a1,...,a_r>     dimension (n,(r+1)*n)
-//   b matrix <b0,......,b_s>     dimension (n,(s+1)*m)
-//   d matrix <Id,d_1,......,d_t> dimension (n,(t+1)*n)
+//   a matrix [Id,a1,...,a_r]     dimension (n,(r+1)*n)
+//   b matrix [b0,......,b_s]     dimension (n,(s+1)*m)
+//   d matrix [Id,d_1,......,d_t] dimension (n,(t+1)*n)
 //   u matrix (m,N), 
 //         u(:,j)=u_j
 //   sig matrix (n,n), e_{k} gaussian r.v
 //
 //   up, yp :  optionial args: past values
-//      up=< u_0,u_{-1},...,u_{s-1}>;
-//      yp=< y_0,y_{-1},...,y_{r-1}>;
-//      ep=< e_0,e_{-1},...,e_{r-1}>;
+//      up=[ u_0,u_{-1},...,u_{s-1}];
+//      yp=[ y_0,y_{-1},...,y_{r-1}];
+//      ep=[ e_0,e_{-1},...,e_{r-1}];
 //      default=)
 // Output :
 //      y(1),....,y(N)
@@ -49,10 +49,12 @@ adeg=int(ac/al);
 [mmu,Nu]=size(u);
 bdeg=int(bc/mmu);
 ddeg=int(dc/dl);
-// la dimension de la representation d'etat a retenir
+// we build a state space representation.
 nn=maxi([adeg,bdeg,ddeg])-1;
 // Construction d'une representation d'etat
-// Y_{n+1}= a_fff*Y_{n}  +b_fff*u_n +d_fff* e(n)
+// Y_{n+1}= a_fff*Z_{n}  +b_fff*u_n +d_fff* e(n) 
+// Z_{n+1}= Y_{n+1} + b0_fff *u_{n+1} + d0_fff*e_{n+1}
+//
 a1=[ -a(:,al+1:ac), 0*ones(al,al*(nn-adeg+1))];
 a_fff=a1(:,1:al);
 for j=2:nn,a_fff= [ a_fff ; a1(:,1+(j-1)*al:j*al)];end
@@ -68,9 +70,10 @@ d_fff=d1(:,1:al)
 for j=2:nn,d_fff= [ d_fff ; d1(:,1+(j-1)*al:j*al)];end
 d_fff=d_fff+a_fff(:,1)
 //
-deff('[xdot]=fff(t,x)',['xdot=a_fff*x+b_fff*u(:,t)+d_fff*br(:,t)']);
-
-// simulation de e(n) le bruit
+deff('[xdot]=fff(t,x)',['xdot1=a_fff*x(nn+1:$)+b_fff*u(:,t)+d_fff*br(:,t)';
+	   'xdot2=xdot1+b(1:al,1:mmu)*u(:,t+1)+d(1:al,1:al)*br(:,t+1);';
+	   'xdot=[xdot1;xdot2];']);
+// Noise simulation.
 rand('normal');
 br=sig*rand(al,Nu);
 // Calcul des Conditions initiales pour le systeme en Y_n
@@ -113,13 +116,14 @@ for i=1:nn-1, a1=[a1(:,al+1:nn*al), 0*ones(al,al)];
            b1=[ b1(:,mmu+1:nn*mmu), 0*ones(al,mmu)];
            y1=[y1;a1*yinit+b1*uinit];
 end;
+y1=[y1;y1+ b(1:al,1:mmu)*u(:,1)+d(1:al,1:al)*br(:,1)];
 // Simulation par ode et calcul de la sortie
 // z = premiere composante ``bloc'' de Y
 if size(a_fff)=[0,1];
    z=b(1:al,1:mmu)*u(:,:)+d(1:al,1:al)*br(:,:);
 else
    z=ode('discret',y1,1,2:Nu,fff);z=[y1,z];
-   z=z(1:al,:)+b(1:al,1:mmu)*u(:,:)+d(1:al,1:al)*br(:,:);
+   z=z(1:al,:) ;
 end
 
 

@@ -19,7 +19,7 @@ OBJSF = allops.o  banier.o sascii.o \
 	seteol.o setlnb.o skpins.o msgs.o prntid.o \
 	cvname.o cvstr.o compil.o ptover.o ptrback.o \
 	isbrk.o scilab.o sciquit.o bexec.o scilines.o \
-	mrknmd.o mkindx.o mklist.o
+	mrknmd.o mkindx.o mklist.o cmdstr.o
 
 include ../../Makefile.incl
 
@@ -39,10 +39,10 @@ allops.o: ../stack.h
 apropo.o: ../stack.h
 bexec.o: ../stack.h
 clause.o: ../stack.h
+cmdstr.o: ../stack.h
 comand.o: ../stack.h
 compcl.o: ../stack.h
 compil.o: ../stack.h
-cvname.o: ../stack.h
 cvname.o: ../stack.h
 cvstr.o: ../stack.h
 defmat.o: ../stack.h
@@ -59,27 +59,21 @@ getsym.o: ../stack.h
 getval.o: ../stack.h
 helpmg.o: ../stack.h
 inisci.o: ../stack.h
-inisci.o: ../stack.h
-inisci.o: ../stack.h
 logops.o: ../stack.h
 macro.o: ../stack.h
-matla0.o: ../stack.h ../callinter.h
+matla0.o: ../stack.h ../machine.h
 mkindx.o: ../stack.h
 mklist.o: ../stack.h
 mname.o: ../stack.h
 mrknmd.o: ../stack.h
 msgs.o: ../stack.h
+msize.o: ../stack.h
 nextj.o: ../stack.h
 parse.o: ../stack.h
 print.o: ../stack.h
-print.o: ../stack.h
-print.o: ../stack.h
-print.o: ../stack.h
 prntid.o: ../stack.h
 prompt.o: ../stack.h
-tover.o: ../stack.h
 ptover.o: ../stack.h
-ptrback.o: ../stack.h
 ptrback.o: ../stack.h
 putid.o: ../stack.h
 run.o: ../stack.h
@@ -87,15 +81,13 @@ sascii.o: ../stack.h
 savlod.o: ../stack.h
 scilines.o: ../stack.h
 sciquit.o: ../stack.h
-scirun.o: ../stack.h ../callinter.h
+scirun.o: ../stack.h ../machine.h
 seteol.o: ../stack.h
 setlnb.o: ../stack.h
-size.o: ../stack.h
 skpins.o: ../stack.h
 stackg.o: ../stack.h
 stackp.o: ../stack.h
 terme.o: ../stack.h
-userlk.o: ../stack.h
 whatln.o: ../stack.h
 xchar.o: ../stack.h
 

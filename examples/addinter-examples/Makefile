@@ -49,6 +49,16 @@ test : $(OBJSF) $(OBJSC)
 /tmp/Testf.o: Testf.f
 	$(FC) $(FFLAGS) -c Testf.f  -o /tmp/Testf.o
 
+/tmp/OptTestf.o: OptTestf.f
+	$(FC) $(FFLAGS) -c OptTestf.f  -o /tmp/OptTestf.o
+
+/tmp/OptTestc.o: OptTestc.c
+	$(CC) $(CFLAGS) -c OptTestc.c  -o /tmp/OptTestc.o
+
+/tmp/opttest.o: src/opttest.c
+	$(CC) $(CFLAGS) -c src/opttest.c  -o /tmp/opttest.o 
+
+
 /tmp/testfc.o: src/testfc.c
 	$(CC) $(CFLAGS) -c src/testfc.c  -o /tmp/testfc.o
 

@@ -27,16 +27,16 @@ PARAMETERS
                  is 1
 
 DESCRIPTION
-  param3d() is used to obtain a graphic of a parametric curve in R3, and can
-  also be used to see a set of points in R3
+  param3d is used to obtain a graphic of a parametric curve in R3.  Enter the
+  command param3d() to see a demo.
 
-  Enter the command param3d() to see a demo.
+  Look at param3d1 for multi R3 parametric curves and R3 point drawing.
 
 EXAMPLE
   t=0:0.1:5*%pi;
   param3d(sin(t),cos(t),t/10,35,45,"X@Y@Z",[2,3])
   xbasc();
-  xset("dashes",-3)
+  xset("dashes",3)
   param3d(rand(1,100),rand(1,100),rand(1,100),35,45,"X@Y@Z",[2,3])
 
 SEE ALSO

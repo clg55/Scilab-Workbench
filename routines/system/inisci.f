@@ -253,6 +253,8 @@ c     --------------
 c
 c     compilation flag
       comp(1) =   0
+      comp(2) =   0
+      comp(3) =   0
 c     error indicators
       err     =   0
       errct   =   -1

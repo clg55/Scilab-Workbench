@@ -6,7 +6,7 @@
 
 #define csiz 63  
 #define bsiz 4096  
-#define isiz 500  
+#define isiz 1024
 #define psiz 256  
 #define nsiz 6  
 #define lsiz 8192 
@@ -15,7 +15,7 @@
 #define interscisize 30
 
 struct {
-    double stk[vsiz];
+    double Stk[vsiz];
 } C2F(stack);
 
 
@@ -40,7 +40,7 @@ struct {
 } C2F(errgst);
 
 struct {
-    int sym, syn[nsiz], char1, fin, fun, lhs, rhs, ran[2], comp[2];
+    int sym, syn[nsiz], char1, fin, fun, lhs, rhs, ran[2], comp[3];
 } C2F(com);
 
 
@@ -88,10 +88,10 @@ extern int C2F(createvarfromptr) _PARAMS((integer *,char *, integer *, integer *
 #define Fin C2F(com).fin
 #define Rhs C2F(com).rhs
 #define Lhs C2F(com).lhs
-#define stk(x)  ( C2F(stack).stk + x-1 )
-#define istk(x) (((int *) C2F(stack).stk) + x-1 )
-#define sstk(x) (((float *) C2F(stack).stk) + x-1 )
-#define cstk(x) (((char *) C2F(stack).stk) + x-1 )
+#define stk(x)  ( C2F(stack).Stk + x-1 )
+#define istk(x) (((int *) C2F(stack).Stk) + x-1 )
+#define sstk(x) (((float *) C2F(stack).Stk) + x-1 )
+#define cstk(x) (((char *) C2F(stack).Stk) + x-1 )
 
 #define CheckRhs(minrhs,maxrhs)  \
   if (! ( Rhs >= minrhs && Rhs <= maxrhs)) { \

@@ -21,13 +21,17 @@ CFLAGS = $(CC_OPTIONS)
 
 include ../Make.lib
 
-
-colnew-int.o: ../stack.h
+bva.o: ../stack.h
+comm.o: ../stack.h
+coselm.o: ../stack.h
+coselm.o: ../stack.h
 dasrti.o: ../stack.h
 datatf.o: ../stack.h
+feval.o: ../stack.h
 fmlelm.o: ../stack.h
 indxg.o: ../stack.h
 intcos.o: ../stack.h
+intg.o: ../stack.h
 logelm.o: ../stack.h
 logic.o: ../stack.h
 lspops.o: ../stack.h
@@ -36,6 +40,7 @@ lstops.o: ../stack.h
 matdes.o: ../stack.h
 matdsc.o: ../stack.h
 matdsr.o: ../stack.h
+matelm.o: ../stack.h
 matelm.o: ../stack.h
 matimp.o: ../stack.h
 matio.o: ../stack.h
@@ -58,11 +63,10 @@ polops.o: ../stack.h
 sigelm.o: ../stack.h
 spelm.o: ../stack.h
 spops.o: ../stack.h
-stack-more.o: ../stack.h
+stack.o: ../stack.h
 stack.o: ../stack.h
 strelm.o: ../stack.h
 strops.o: ../stack.h
 where.o: ../stack.h
 xawelm.o: ../stack.h
-ctest.o: ../machine.h
-coselm.o: ../stack.h
+

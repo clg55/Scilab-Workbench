@@ -735,7 +735,7 @@ integer ReallocContour(n)
     }
   return(1);
 }
-static first = 0 ;
+static int first = 0 ;
 
 integer AllocContour()
 {

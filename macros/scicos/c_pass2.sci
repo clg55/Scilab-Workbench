@@ -89,7 +89,6 @@ nblk=nb+ndcblk;
     typl,typ_r,typ_c,funs,funtyp,initexe,labels,ok]=extract_info(bllst,..
     connectmat,clkconnect)
 
-
 if ~ok then 
   cpr=list()
   return,
@@ -187,7 +186,6 @@ end
 
 ordclk=[]
 ordptr2=ordptr1
-
 for o=1:clkptr(nblk+1)-1
   p_ut=dep_ut
   p_ut(execlk(ordptr1(o):ordptr1(o+1)-1,1),:)=..
@@ -211,7 +209,10 @@ for o=1:clkptr(nblk+1)-1
   tt=find(wec(r(:,1))<>0)
   r(tt,2)=wec(r(tt,1))'
   if r<>[] then
-    r(outptr(r(:,1)+1)-outptr(r(:,1))==0,:)=[]
+    sel=outptr(r(:,1)+1)-outptr(r(:,1))==0 //block without output
+    sel=sel&(~p_ut(r(:,1),1)) //block without u dependancy
+    r(sel,:)=[] 
+//    r(outptr(r(:,1)+1)-outptr(r(:,1))==0,:)=[]
   end
   if r<>[] then
     r((funtyp(r(:,1))>99),:)=[]
@@ -638,9 +639,14 @@ for i=1:length(bllst)
   xc0=[xc0;ll(6)(:)]
   xptr=[xptr;xptr($)+size(ll(6),'*')]
   
-  xd0=[xd0;ll(7)(:)]
-  zptr=[zptr;zptr($)+size(ll(7),'*')]
   
+  if funtyp(i,1)==3 then //sciblocks
+    xd0k=var2vec(ll(7))
+  else
+    xd0k=ll(7)(:)
+  end
+  xd0=[xd0;xd0k]
+  zptr=[zptr;zptr($)+size(xd0k,'*')]
   //  
   if funtyp(i,1)==3 then //sciblocks
     rpark=var2vec(ll(8))
@@ -741,8 +747,8 @@ outoin=[];outoinptr=1
 for i=1:nblk
   k=outptr(i):outptr(i+1)-1
   ii=[]
-  for j=outlnk(k)
-    ii=[ii;find(inplnk==j)]
+  for j=outlnk(k)'
+    ii=[ii,find(inplnk==j)]
   end
   outoini=[];jj=0
   for j=ii
@@ -771,9 +777,9 @@ end
 
 function [ord,ok]=tree2(vec,outoin,outoinptr,dep_ut)
 //compute blocks execution tree
-ok=%t
-wec=zeros(vec)
-nb=size(wec,'*')
+ok=%t;
+wec=zeros(vec);
+nb=size(wec,'*');
 for j=1:nb+2
   fini=%t
   for i=1:nb

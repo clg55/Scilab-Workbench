@@ -19,6 +19,7 @@ MACROS = acos.sci acosm.sci acosh.sci acoshm.sci asin.sci asinm.sci \
 	intl.sci intc.sci integrate.sci \
 	calerf.sci erf.sci erfc.sci erfcx.sci \
 	speye.sci spzeros.sci sprand.sci \
-	intsplin.sci inttrap.sci GLoad.sci
+	intsplin.sci inttrap.sci GLoad.sci \
+	isinf.sci isnan.sci
 
 include ../Make.lib

@@ -5,8 +5,8 @@ NAME
 
 CALLING SEQUENCE
   y=cumsum(x)
-  y=cumsum(x,'r')
-  y=cumsum(x,'c')
+  y=cumsum(x,'r') or y=cumsum(x,1)
+  y=cumsum(x,'c') or y=cumsum(x,2)
 
 PARAMETERS
 
@@ -15,11 +15,14 @@ PARAMETERS
   y         : vector or matrix (real or complex)
 
 DESCRIPTION
-  For a vector or a matrix x, y=cumsum(x) (or, equivalently, y=sum(x,'*'))
+  For a vector or a matrix x, y=cumsum(x) (or, equivalently, y=cumsum(x,'*'))
   returns in y the cumulative sum of all the entries of x taken columnwise.
+
+  y=cumsum(x,'c') (or, equivalently, y=cumsum(x,2)) returns in y the cumula-
+  tive sum of the columns of x:  y(i,:)=cumsum(x(i,:))
+
   y=cumsum(x,'r') (or, equivalently, y=cumsum(x,1)) returns in y the cumula-
-  tive sum of the rows of x.  y=cumsum(x,'c') returns in y the cumulative sum
-  of the columns of x.
+  tive sum of the rows of x:  y(:,i)=cumsum(x(:,i))
 
 EXAMPLE
   A=[1,2;3,4];

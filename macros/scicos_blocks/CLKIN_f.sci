@@ -4,17 +4,20 @@ select job
 case 'plot' then
   graphics=arg1(2); [orig,sz,orient]=graphics(1:3)
   model=arg1(3);prt=model(9)
-  if orient then
-    x=[orig(1);orig(1);orig(1)+sz(1);orig(1)]
-    y=[orig(2);orig(2)+sz(2);orig(2)+sz(2)/2;orig(2)]
-  else
-    x=[orig(1);orig(1)+sz(1);orig(1)+sz(1);orig(1)]
-    y=[orig(2)+sz(2)/2;orig(2)+sz(2);orig(2);orig(2)+sz(2)/2]
-  end
   pat=xget('pattern');xset('pattern',default_color(-1))
-  xfpoly(x,y,1)
+  thick=xget('thickness');xset('thickness',2)
+  if orient then
+    x=orig(1)+sz(1)*[-1/6;-1/6;1/1.5;1;1/1.5]
+    y=orig(2)+sz(2)*[0;1;1; 1/2;0]
+    xstring(orig(1),orig(2)+sz(2)/12,string(prt))
+  else
+    x=orig(1)+sz(1)*[0;1/3;7/6;7/6;1/3]
+    y=orig(2)+sz(2)*[1/2;1;1;0;0]
+    xstring(orig(1)+sz(1)/3,orig(2)+sz(2)/12,string(prt))
+  end
+  xpoly(x,y,'lines',1)
+  xset('thickness',thick)
   xset('pattern',pat)
-  xstring(orig(1),orig(2)-sz(2)/2,string(prt))
 case 'getinputs' then
   x=[];y=[];typ=[]
 case 'getoutputs' then

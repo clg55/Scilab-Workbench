@@ -61,6 +61,7 @@ case 'set' then
       model(2)=nin
       model(7)=state;model(9)=ipar
       model(11)=[] //compatibility
+      model(12)=[%t %f] //compatibility
       graphics(4)=label;
       x(2)=graphics;x(3)=model
       break
@@ -75,7 +76,7 @@ case 'define' then
   rpar=[]
   ipar=[length(fname);length(fmt);0;N;str2code(fname);str2code(fmt)]
   state=[-1;lunit;zeros((nin+1)*N,1)]
-  model=list('writef',in,[],1,[],[],state,rpar,ipar,'d',[],[%f %f],' ',list())
+  model=list('writef',in,[],1,[],[],state,rpar,ipar,'d',[],[%t %f],' ',list())
   label=[sci2exp(in);
 	fname;
 	fmt;

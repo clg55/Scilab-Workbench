@@ -20,7 +20,7 @@ if rhs>=1 then // macroname is given
       w=SCI+'/'+part(w,5:length(w))
     end
     //if file is not writable create a copy in TMPDIR
-    rep=unix_g("if [ -w '+w+macroname+'.sci '+' ]; then  echo ok ;fi")
+    rep=unix_g("if [ -w '+w+macroname+'.sci '+' ]; then echo ok ;else echo nok; fi")
     if part(rep,1:2)=='ok' then
       fname=w+macroname+'.sci'
     else

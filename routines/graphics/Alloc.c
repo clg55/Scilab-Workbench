@@ -10,7 +10,7 @@
 
 static unsigned nx,ny,nz;
 static integer *xm1,*ym1,*zm1;
-static xfirstentry=1,yfirstentry=1,zfirstentry=1;
+static int xfirstentry=1,yfirstentry=1,zfirstentry=1;
 #define NBPOINTS 256 
 
 integer ReAllocVectorX(xm, n)
@@ -138,7 +138,7 @@ void Alloc(xm, ym, zm, xn, yn, zn, err)
 
 static unsigned nzd;
 static double *zm1d;
-static dzfirstentry=1;
+static int dzfirstentry=1;
 
 integer ReAllocVectorZD(zm, n)
      double **zm;

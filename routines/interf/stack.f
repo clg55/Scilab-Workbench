@@ -30,6 +30,44 @@ C      implicit undefined (a-z)
       return
       end
 
+      logical function isoptlw(topk,lw,name) 
+C     returns the status of the variable at lw position 
+C     if its an optional variable f(x=...)
+C     returns .true. and name in name 
+C     ---------------------------------------
+      integer topk,lw
+      character name*(*)
+      include '../stack.h'
+      isoptlw=.false.
+      if ( infstk(lw).eq.1) isoptlw=.true.
+      call cvname(idstk(1,rhs+lw-topk),name,1)
+      return
+      end
+
+      logical function isopt(k,name) 
+C     same as isoptlw but checks the k-th argument 
+C     this function only works if top is not changed 
+C     ---------------------------------------
+      integer k
+      character name*(*)
+      include '../stack.h'
+      logical isoptlw
+      isopt = isoptlw(top,k+top-rhs,name)
+      return
+      end
+
+      integer function numopt()
+c     returns the number of optional variables 
+c     of type xx=val 
+c     top must have a correct value when using this function 
+      include '../stack.h'
+      numopt=0
+      do 10 k=1,rhs
+         numopt = numopt + infstk(k+top-rhs)
+ 10   continue
+      return
+      end
+
       logical  function getmat(fname,topk,lw,it,m,n,lr,lc)
 C     renvoit .true. si l'argument en lw est une matrice
 C             sinon appelle error et renvoit .false.
@@ -2619,9 +2657,9 @@ c
 c
       it=0
       createvar=.false.
-      nbvars=nbvars+1
+      nbvars=max(lw,nbvars)
       lw1=lw+top-rhs
-      if((lw.ne.nbvars).or.(lw.le.rhs)) then
+      if((lw.lt.0)) then
          buf='bad call to createvar! (1rst argument)'
          call error(9999)
          return
@@ -2755,10 +2793,10 @@ c
        iadr(l)=l+l-1
        cadr(l)=l+l+l+l-3
 c
-      nbvars=nbvars+1
+      nbvars=max(nbvars,number)
       getrhsvar=.false.
       lw=number+top-rhs
-      if((number.ne.nbvars).or.(number.gt.rhs)) then
+      if(number.gt.rhs) then
          buf='bad call to getrhsvar! (1rst argument)'
          call error(9999)
          return
@@ -2830,7 +2868,7 @@ c     from pointer ptr
       createvarfromptr=.true.
       end
 
-      logical function scifunction(k,ptr,mlhs,mrhs)
+      logical function scifunction(number,ptr,mlhs,mrhs)
 c     execute scilab function with mrhs input args and mlhs output
 c     variables
 c     input args are supposed to be stored in the top of the stack
@@ -2852,7 +2890,7 @@ C     macro execution
 C
       scifunction=.false.
       intop=top
-      top=top-rhs+k+mrhs-1
+      top=top-rhs+number+mrhs-1
       pt = pt + 1
       if (pt .gt. psiz) then
         goto 9999
@@ -2876,7 +2914,7 @@ C
 C+
       top=intop
       do 1333 i=1,mlhs
-         lw=top-rhs+k+i-1
+         lw=top-rhs+number+i-1
          il=iadr(lstk(lw))
          if(istk(il).eq.1) then
          nbrows(lw)=istk(il+1)
@@ -2901,10 +2939,14 @@ C+
       scifunction=.true.
       return
  9999 continue
+      top=intop
       scifunction=.false.
       niv=niv-1
       iero=1
       return
       end
+
+
+
 
 

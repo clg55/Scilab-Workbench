@@ -137,10 +137,10 @@ void test_message()
 }
 
 void test_click() {
-  integer i,iw=0;
+  integer i,iw=0,istr=0;
   double x,y;
   check_win();
-  C2F(dr1)("xclick","void",&i,&iw,PI0,PI0,PI0, PI0,&x,&y,PD0,PD0,0L,0L);
+  C2F(dr1)("xclick","void",&i,&iw,&istr,PI0,PI0, PI0,&x,&y,PD0,PD0,0L,0L);
   sprintf(buf,"-->[%d,%f,%f]",i,x,y);
   Xputstring(buf,strlen(buf));
 }
@@ -175,11 +175,11 @@ void test_xgc() {
 }
 
 void test_help() {
-  Sci_Help("ode");
+  Sci_Help("cos");
 }
 
 void test_apropos() {
-  Sci_Apropos("ode");
+  Sci_Apropos("cos");
 }
 
 

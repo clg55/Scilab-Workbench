@@ -12,10 +12,11 @@ case 'getorigin' then
 case 'set' then
   x=arg1;
   graphics=arg1(2);label=graphics(4)
+  if size(label)<9 then label(9)='0',end // compatibility
   model=arg1(3);
   state=model(2)
   while %t do
-    [ok,clrs,win,wpos,wdim,ymin,ymax,per,N,label]=getvalue(..
+    [ok,clrs,win,wpos,wdim,ymin,ymax,per,N,heritance,label]=getvalue(..
 	'Set Scope parameters',..
 	[
 	'Color (>0) or mark (<0) vector (8 entries)';
@@ -25,9 +26,10 @@ case 'set' then
 	'Ymin';
 	'Ymax';
 	'Refresh period';
-	'Buffer size'],..
+	'Buffer size'
+        'Accept herited events 0/1'],..
 	 list('vec',8,'vec',1,'vec',-1,'vec',-1,'vec',1,..
-	 'vec',1,'vec',1,'vec',1),..
+	 'vec',1,'vec',1,'vec',1,'vec',1),..
 	 label)
     if ~ok then break,end //user cancel modification
     mess=[]
@@ -55,6 +57,10 @@ case 'set' then
       mess=[mess;'Ymax must be greater than Ymin';' ']
       ok=%f
     end
+    if ~or(heritance==[0 1]) then
+      mess=[mess;'Accept herited events must be 0 or 1';' ']
+      ok=%f
+    end
     if ~ok then
       message(['Some specified values are inconsistent:';
 	         ' ';mess])
@@ -63,10 +69,11 @@ case 'set' then
       if wpos==[] then wpos=[-1;-1];end
       if wdim==[] then wdim=[-1;-1];end
       rpar=[0;ymin;ymax;per]
-      ipar=[win;1;N;clrs(:);wpos(:);wdim(:)]
+      ipar=[win;1;N;clrs(:);wpos(:);wdim(:);heritance]
       if prod(size(state))<>(8+1)*N+1 then state=-eye((8+1)*N+1,1),end
       model(7)=state;model(8)=rpar;model(9)=ipar
       model(11)=[] //compatibility
+      model(12)=[%t %f] //compatibility
       graphics(4)=label;
       x(2)=graphics;x(3)=model
       break
@@ -78,12 +85,12 @@ case 'define' then
   wpos=[-1;-1]
   clrs=[1;3;5;7;9;11;13;15];
   N=2;
-  ipar=[win;1;N;clrs;wpos;wdim]
+  ipar=[win;1;N;clrs;wpos;wdim;0]
   ymin=-15;ymax=+15;per=30;
   rpar=[0;ymin;ymax;per]
   state=-eye((8+1)*N+1,1)
   model=list(list('scope',1),-1,[],1,[],[],state,rpar,ipar,'c',..
-      [],[%f %t],' ',list())
+      [],[%t %f],' ',list())
   label=[strcat(string(clrs),' ');
 	string(win);
 	sci2exp([]);
@@ -91,7 +98,8 @@ case 'define' then
 	string(ymin);
 	string(ymax);
 	string(per);
-	string(N)];
+	string(N);
+        string(0)];
   gr_i=['thick=xget(''thickness'');xset(''thickness'',2);';
     'xrect(orig(1)+sz(1)/10,orig(2)+(1-1/10)*sz(2),sz(1)*8/10,sz(2)*8/10);';
     'xx=[orig(1)+sz(1)/5,orig(1)+sz(1)/5;';

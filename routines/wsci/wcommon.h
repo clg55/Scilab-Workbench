@@ -205,9 +205,9 @@ extern void CopyClip(struct BCG *ScilabGC);
 extern int CopyPrint(struct BCG *ScilabGC);
 extern void WriteGraphIni(struct BCG *ScilabGC);
 extern void ReadGraphIni(struct BCG *ScilabGC);
-extern int PushClickQueue(int x,int y,int ibut);
-extern int CheckClickQueue(integer *x,integer* y,integer *ibut);
-extern int ClearClickQueue(void);
+extern int PushClickQueue(int win,int x,int y,int ibut);
+extern int CheckClickQueue(int *win,integer *x,integer* y,integer *ibut);
+extern int ClearClickQueue(int win);
 
 /** ../graphics* **/
 

@@ -120,7 +120,7 @@ c
 
 c
       goto (60,120,130,65) op
-      if (op .eq. quote) goto 110
+      if (op .eq. quote.or.op .eq. quote+dot) goto 110
       if (rhs .eq. 1 .and. op .eq. minus) goto 101
       if (op .eq. plus .or. op .eq. minus) go to 20
       if (op .eq. star.or. op.eq.star+dot) go to 40
@@ -708,7 +708,9 @@ c transposition
   110 continue
       vol=istk(id1+mn1)-1
       if(abs(m1).eq.1.or.abs(n1).eq.1) then
-         if(it1.eq.1) call dscal(vol,-1.0d0,stk(l1i),1)
+         if(it1.eq.1.and.op.ne.quote+dot) then
+            call dscal(vol,-1.0d0,stk(l1i),1)
+         endif
          istk(il1+1)=n1
          istk(il1+2)=m1
          goto 999
@@ -731,6 +733,9 @@ c transposition
       istk(il1+2)=m1
       call icopy(mn1+1,istk(id2),1,istk(id1),1)
       call dcopy(vol*(it1+1),stk(l2r),1,stk(l1r),1)
+      if (it1.eq.1.and.op.ne.quote+dot) then
+         call dscal(vol,-1.0d0,stk(l1r+vol),1)
+      endif
       goto 999
 c
 c

@@ -1252,6 +1252,52 @@ void C2F(boundingboxXfig)(string, x, y, rect, v5, v6, v7, dx1, dx2, dx3, dx4)
  rect[3]= (int)(bsizeXfig_[font[1]][3]*((double) prec_fact));
 }
 
+/** 
+  Bounding box for marks : we have used xfig to get the  bounding boxes
+  ie the correct w and h ( rect[2],rect[3]) 
+**/
+
+
+int symb_xw[FONTMAXSIZE][SYMBOLNUMBER]={
+  {15,75,60,90,90,90,90,90,90,90},
+  {30,75,75,105,75,105,105,105,75,105},
+  {15,75,75,135,90,135,135,135,105,135},
+  {30,105,105,135,105,165,150,165,120,150},
+  {30,120,135,195,135,210,195,195,135,195},
+  {45,150,150,255,195,270,255,270,195,255}
+};
+
+int symb_yh[FONTMAXSIZE][SYMBOLNUMBER]={
+  {30,75,75,90,90,90,90,90,90,90},
+  {30,90,90,120,105,105,105,105,105,105},
+  {45,105,105,150,90,110,120,135,110,135},
+  {45,120,120,150,105,165,135,160,125,150},
+  {60,150,150,210,135,195,165,195,165,195},
+  {90,180,195,270,180,270,230,270,195,270}
+};
+
+
+/** To get the bounding rectangle of a symbol 
+  in fact just rect[3] is really used 
+  **/
+
+
+void C2F(boundingboxXfigM)(string, x, y, rect, v5, v6, v7, dx1, dx2, dx3, dx4)
+     char *string;
+     integer *x,*y,*rect,*v5,*v6,*v7;
+     double *dx1,*dx2,*dx3,*dx4;
+{
+  integer verbose,nargs,font[2];
+  verbose=0;
+  C2F(xgetfontXfig)(&verbose,font,&nargs,vdouble);
+  rect[0]= (int)(*x+bsizeXfig_[font[1]][0]*((double) prec_fact));
+  rect[1]= (int)(*y+bsizeXfig_[font[1]][1]*((double) prec_fact));
+  rect[2]= (int)(symb_xw[ScilabGCXfig.CurHardSymbSize][ScilabGCXfig.CurHardSymb]);
+  rect[3]= (int)(symb_yh[ScilabGCXfig.CurHardSymbSize][ScilabGCXfig.CurHardSymb]);
+}
+
+
+
 /** Draw a single line in current style **/
 /** Unused in fact **/ 
 
@@ -2286,11 +2332,12 @@ void C2F(WriteGenericXfig)(string, nobj, sizeobj, vx, vy, sizev, flag, fvect)
       integer rect[4],x=0,y=0;
       C2F(getdashXfig)(&verbose,Dvalue1,&Dnarg,vdouble);
       set_dash_or_color(Dvalue1[0],&l_style,&style_val,&pen_color);
-      C2F(boundingboxXfig)("x",&x,&y,rect,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+      C2F(boundingboxXfigM)("x",&x,&y,rect,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
       FPRINTF((file,"# Object : %d %s -<%d>- \n", (int)0,string, (int)fvect[0]));
       for ( i =0 ; i < sizev ; i++)
 	{
-	  FPRINTF((file,"4 0 %d 0 0 %d %d %5.2f %d %5.2f %5.2f %d %d \\%o\\001\n",
+	  /** polymarks are x-center justified sub-type =1  **/
+	  FPRINTF((file,"4 1 %d 0 0 %d %d %5.2f %d %5.2f %5.2f %d %d \\%o\\001\n",
 		  pen_color,
 		  32, /* Postscript font */
 		  (int)isizeXfig_[ScilabGCXfig.FontSize], /**prec_fact,*/
@@ -2299,9 +2346,10 @@ void C2F(WriteGenericXfig)(string, nobj, sizeobj, vx, vy, sizev, flag, fvect)
 		  (double) rect[3],
 		  (double) rect[2],
 		  (int)vx[i],
-		  (int)vy[i],
+		  (int)vy[i] + rect[3]/2,
 		  Char2Int( symb_listXfig_[ScilabGCXfig.CurHardSymb])
 		  ));
+
 	}
     }
   else

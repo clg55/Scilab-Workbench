@@ -16,7 +16,8 @@ m, n
 numbers of rows, so all the file is read
 .TP
 rec
-: vector of positive integers. the selected records for direct access
+: vector of positive integers. the selected records for direct access.
+This vector size must be equal to the number of rows of desired \fVx\fR.
 .SH DESCRIPTION
 binary read of the matrix \fVx\fR in the file \fVfile-name\fR.
 .LP

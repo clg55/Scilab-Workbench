@@ -5,8 +5,9 @@ NAME
 
 CALLING SEQUENCE
   y=sum(x)
-  y=sum(x,'r')
-  y=sum(x,'c')
+  y=sum(x,'r') or y=sum(x,2)
+
+  y=sum(x,'c') or y=sum(x,1)
 
 PARAMETERS
 
@@ -16,10 +17,13 @@ PARAMETERS
 
 DESCRIPTION
   For a vector or a matrix x, y=sum(x) (or, equivalently, y=sum(x,'*'))
-  returns in the scalar y the sum of all the entries of x.  y=sum(x,'r') (or,
-  equivalently, y=sum(x,1)) returns in each entry of the column vector y the
-  sum of each row of x.  y=sum(x,'c') returns in each entry of the row vector
-  y the sum of each column of x.
+  returns in the scalar y the sum of all the entries of x.
+
+  y=sum(x,'r') (or, equivalently, y=sum(x,2)) is the rowwise sum. It returns
+  in each entry of the column vector y the sum of each row of x.
+
+  y=sum(x,'c') (or, equivalently, y=sum(x,1)) is the columnwise sum. It
+  returns in each entry of the row vector y the sum of each column  of x.
 
 EXAMPLE
   A=[1,2;3,4];

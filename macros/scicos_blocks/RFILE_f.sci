@@ -60,7 +60,7 @@ case 'set' then
 	if ievt==0 then
 	  model(11)=[]
 	else
-	  model(11)=-1
+	  model(11)=0
 	end
 	ipar=[length(fname1);
 	    length(fmt1);

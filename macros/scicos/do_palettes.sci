@@ -37,11 +37,8 @@ if part(graph,1:4)='SCI/' then
 end
 
 //Check if the graph file exists
-errcatch(240,'continue','nomessage')
-u=file('open',graph,'old')
-errcatch(-1)
-if iserror(240)==1 then
-  errclear(240)
+[u,ierr]=file('open',graph,'old')
+if ierr<>0 then
   drawobjs(palettes(kpal))
   if pixmap then xset('wshow'),end
   xsave(graph)

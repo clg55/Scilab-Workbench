@@ -54,4 +54,4 @@ periPos.o: periPos.h Math.h color.h
 periX11.o: Math.h periX11.h version.h color.h
 printdlg.o: ../machine.h
 xwidgets.o: Math.h
-gsort.o: Math.h gsort-int.h gsort-double.h
+gsort.o: Math.h gsort-int.h gsort-double.h gsort-string.h 

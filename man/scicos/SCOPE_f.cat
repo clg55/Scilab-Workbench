@@ -41,8 +41,16 @@ DIALOGUE PARAMETERS
                       input data. The drawing is only done after each Buffer
                       size call to the block.
 
+  Accept herited events
+                      : if 0 SCOPE_f draws a new point only when an event
+                      occurs on its event input port. if 1 SCOPE_f draws a
+                      new point when an event occurs on its event input port
+                      and when it's regular input changes due to an event on
+                      an other upstrem block (herited events).
+
 REMARKS
   Output window number, Output window size, Output window position are only
   taken into account at the initialisation time of the simulation.
+
 SEE ALSO
   SCOPXY_f, EVENTSCOPE_f, ANIMXY_f

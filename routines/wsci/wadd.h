@@ -4,7 +4,9 @@
 #define GNUC_MISS
 
 #ifdef __GNUC__
+/**** XXXX  was necessary with b17 
 typedef  METAFILEPICT *LPMETAFILEPICT;
+***/ 
 #define  SelectFont(hdc, hfont)  ((HFONT)SelectObject((hdc), (HGDIOBJ)(HFONT)(hfont)))
 /* tmPitchAndFamily flags */
 #define TMPF_FIXED_PITCH    0x01
@@ -12,7 +14,9 @@ typedef  METAFILEPICT *LPMETAFILEPICT;
 #define TMPF_DEVICE             0x08
 #define TMPF_TRUETYPE       0x04
 typedef LOGPEN *LPLOGPEN;
+/**** XXXX  was necessary with b17 
 typedef DRAWITEMSTRUCT *LPDRAWITEMSTRUCT;
+*******/
 #define HFILE_ERROR ((HFILE)-1)
 #define     GetStockFont(i)      ((HFONT)GetStockObject(i))
 #define     DeletePen(hpen)      DeleteObject((HGDIOBJ)(HPEN)(hpen))

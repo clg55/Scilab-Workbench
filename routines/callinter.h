@@ -22,10 +22,11 @@ c
          call error(18)
          goto 60
       endif
+      goto 91
 c     
  90   if(err.gt.0) goto 9999
       if (top-lhs+1.gt.0) call iset(lhs,0,infstk(top-lhs+1),1)
-      k=fun
+ 91   k=fun
       fun=0
       if(k.eq.krec) then
         call error(22)

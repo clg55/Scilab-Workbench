@@ -6,22 +6,23 @@ c     =======================================================
       integer gettype
       logical ilog,getilist,getsmat
 c
-      parameter (nops=27)
+      parameter (nops=28)
       integer op,id(nsiz),name(nlgh),blank,percen
       integer ops(nops),code(nops),top1,rhs1,codop
       integer compat
       data compat/1/
       data blank/40/,percen/56/
       data ops /53,45,46,47,48,49,62, 1, 2, 3,4,98,99,100,200,201,202,
-     &          44,149,150,151,50,119,57,58,113,61/
+     &          44,149,150,151,50,119,57,58,113,61,104/
       data code/29,10,28,22,27,21,25,12,18,14,15,33,13,26,20, 34, 35, 
-     &          11,30, 31, 32, 24, 23, 16, 17,19,37/
+     &          11,30, 31, 32, 24, 23, 16, 17,19,37,-53/
 c
 c  '  +  -  *  /  \  **  []  ()  .*  ./  .\  .*.  ./.  .\.   :  *.  /. \.
 c  t  a  s  m  r  l  p   c,f e,i  x   d    q   k    y    z   b  u   v  w
 c
-c  ==  <>  | &  .^  ~
-c   o  n   g h   j  #
+c  ==  <>  | &  .^  ~ .'
+c   o  n   g h   j  # T
+c
 c  caracteres  polynomes macros files   scalaires  listes(non typees)
 c      c           p       m      f         s         l
 c

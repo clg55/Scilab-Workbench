@@ -20,17 +20,19 @@ res	double
 
 out	sequence	res 
 **********************
-mopen	file  [status rb]
+mopen	file  [status rb] [swap 1]
 file 	string	n
 status	string  k
 res	scalar
 fd	scalar
+swap	scalar
 
-mopen	fd file status res err 
+mopen	fd file status swap res err 
 file	char
 status  char 
 res	double
 fd	int 
+swap 	int 
 
 out	sequence	fd res
 ***********************

@@ -19,11 +19,13 @@ PARAMETERS
 DESCRIPTION
   resolve the Yule-Walker equations
 
-        |r(0)   r(1)   ... r(N-1)|| a(1) | |sigma2|
-        |r(1)   r(0)   ... r(N-2)|| a(2) | |  0   |
-        |  :      :    ...    :  ||   :  |=|  0   |
-        |  :      :    ...    :  ||   :  | |  0   |
-        |r(N-1) r(N-2) ...  r(0) ||a(N-1)| |  0   |
+        |R(0)   R(1)   ... R(N-1)|| ar(1) | |sigma2|
+        |R(1)   R(0)   ... R(N-2)|| ar(2) | |  0   |
+        |  :      :    ...    :  ||   :   |=|  0   |
+        |  :      :    ...    :  ||   :   | |  0   |
+        |R(N-1) R(N-2) ...  R(0) ||ar(N-1)| |  0   |
+  where
+         R(i)=r(i-1)
   using Levinson's algorithm.
 
 AUTHOR

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=IMPEXT,SSI=0
       subroutine impext(mp,d,m,n,row,nr,col,nc,mp1,d1,job,ierr)
 c!but
 c     impext extrait une sous matrice definie par un choix de lignes
@@ -42,6 +41,7 @@ c!
       integer mp(*),mp1(*)
       integer d(*),m,n,row(*),nr,col(*),nc,d1(*),job,ierr
 c
+      ierr=0
       if(nr*nc.eq.0) return
       if(m.le.0.or.n.le.0) return
       if(nr.lt.0) goto 40
@@ -50,12 +50,12 @@ c
 c un choix de lignes et un choix de colonnes
 c
 c verifications de la validite des vecteurs row et col
-      do 10 j=1,nc
-      if(col(j).le.0.or.col(j).gt.n) goto 100
-   10 continue
-      do 11 i=1,nr
-      if(row(i).le.0.or.row(i).gt.m) goto 100
-   11 continue
+c      do 10 j=1,nc
+c      if(col(j).le.0.or.col(j).gt.n) goto 100
+c   10 continue
+c      do 11 i=1,nr
+c      if(row(i).le.0.or.row(i).gt.m) goto 100
+c   11 continue
 c
       if(job.eq.1)  goto 25
 c calcul de la matrice deplacement de la matrice polynomiale resultat
@@ -79,9 +79,9 @@ c
 c
    40 if(nc.lt.0) goto 60
 c toutes les lignes et un choix de colonnes (nr<0)
-      do 41 j=1,nc
-      if(col(j).le.0.or.col(j).gt.n) goto 100
-   41 continue
+c      do 41 j=1,nc
+c      if(col(j).le.0.or.col(j).gt.n) goto 100
+c   41 continue
       if(job.eq.1) goto 45
       id1=1
       d1(id1)=1
@@ -102,9 +102,9 @@ c toutes les lignes et un choix de colonnes (nr<0)
 c
    50 continue
 c toutes les colonnnes et un choix de lignes
-      do 51 i=1,nr
-      if(row(i).le.0.or.row(i).gt.m) goto 100
-   51 continue
+c      do 51 i=1,nr
+c      if(row(i).le.0.or.row(i).gt.m) goto 100
+c   51 continue
       if(job.eq.1) goto 55
       id1=1
       d1(1)=1
@@ -136,6 +136,6 @@ c toutes les lignes et toutes les colonnes
       if(job.eq.0) return
    65 call icopy(d(m*n+1)-1,mp,1,mp1,1)
       return
-  100 ierr=1
-      return
+c  100 ierr=1
+c      return
       end

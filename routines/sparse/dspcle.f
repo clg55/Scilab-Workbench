@@ -6,7 +6,7 @@ c!
       double precision a(*),r(*),abstol,reltol
       double precision amax,aa
 c
-      amax=0
+      amax=0.0d0
       do 10 i=1,nela
          amax=max(amax,abs(a(i)))
  10   continue
@@ -34,5 +34,6 @@ c
             r(nelr)=a(k)
          endif
  40   continue
+      if(i.lt.ma) call iset(ma-i,0,indr(i+1),1)
       end
 

@@ -80,7 +80,7 @@ void WinExit(void);
 extern void C2F(getwins)(integer *,integer *,integer*);
 static void AllGraphWinDelete();
 static int startupf = 0; /** 0 if we execute startup else 1 **/
-
+static int nointeractive = 0;
 
 static void CheckMemory(LPSTR str)
 {
@@ -317,6 +317,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 	nowin=1;
       else if ( strcmp(_argv[argcount],"-ns")==0) 
 	startupf = 1;
+      else if ( strcmp(_argv[argcount],"-nwni")==0) 
+	{
+	  nowin=1; nointeractive=1;
+	}
     }
 #ifndef __DLL__
   /** when we don't use a dll version of the graphic library 
@@ -386,6 +390,8 @@ int main()
 /** test if we are using a file or not **/
 
 #define isterm(f) (f==stdin || f==stdout || f==stderr)
+
+int InteractiveMode() { return nointeractive;} 
 
 int
 MyPutCh(int ch)

@@ -30,4 +30,4 @@ EXAMPLE
   rank([1,0;0,1.d-80])
 
 SEE ALSO
-  svd, qr, rowcomp, colcomp
+  svd, qr, rowcomp, colcomp, lu

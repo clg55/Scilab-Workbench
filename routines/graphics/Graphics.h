@@ -322,6 +322,8 @@ extern void Tape_ReplayNewScale  _PARAMS((char *unused, integer *winnumber, inte
  extern void displaystringa_1  _PARAMS((char *, char *, integer *ipos, integer *, integer *, integer *, integer *, integer *, double *, double *, double *, double *, integer , integer )); 
  extern void boundingbox_1  _PARAMS((char *, char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *rect, double *, integer, integer )); 
 
+void xstringb_1  _PARAMS((char *, char *, integer *, integer *, integer *, integer *, integer *, integer *, double *, double *, double *rect, double *, integer, integer ));
+
 	/* periFig.c */
 
 extern void C2F(getcursymbolXfig)  _PARAMS((integer *, integer *, integer *, double *)); 

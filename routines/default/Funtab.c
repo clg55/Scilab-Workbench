@@ -7,8 +7,6 @@
 #endif
 
 #include "../machine.h"
-extern int C2F(cvname) _PARAMS((integer *id, char *str, integer *job,
-				long int str_len));
 
 /** size of name code in scilab int id[NAMECODE] */
 
@@ -32,11 +30,18 @@ static int	 myhcreate();
 /* static void	 myhdestroy(); */
 static int 	 myhsearch();
 static int Eqid();
+static void  Init() ;
+static int backsearch();
+
+#ifdef TEST 
+static  int C2F(cvname) _PARAMS((integer *id, char *str, integer *job,long int str_len));
+
 static int EnterStr();
 static void DeleteStr();
 static int FindStr();
-static void  Init() ;
-static int backsearch();
+#endif 
+
+
 /**********************
  * Scilab functions 
  **********************/
@@ -105,10 +110,16 @@ int C2F(funtab)(id,fptr,job)
   return(0);
 }
 
+#ifdef TEST /********************* test part ***/
+
+main()
+{
+  test_hash();
+}
 
 int test_hash()
 {
-  int j=0,code,level;
+  int j=0,code,level,k;
   Init();
   j=0;
   while ( SciFuncs[j].name != (char *) 0 )
@@ -123,51 +134,71 @@ int test_hash()
 	}
       j++;
     }
-  printf("Je fais des delete ");
-  j=0;
-  while ( SciFuncs[j].name != (char *) 0 && j < 3 )
+  for ( k = 1; k < 2 ; k++) 
     {
-      DeleteStr(SciFuncs[j].name,&code,&level);
-      j++;
-    }
-  j=0;
-  while ( SciFuncs[j].name != (char *) 0 && j < 3  )
-    {
-      if ( FindStr(SciFuncs[j].name,&code,&level) == FAILED)
+      printf("Je fais des delete \n");
+      j=0;
+      while ( SciFuncs[j].name != (char *) 0 && j < 20 )
 	{
-	  printf(" %s not found \n",SciFuncs[j].name);
+	  DeleteStr(SciFuncs[j].name,&code,&level);
+	  j++;
 	}
-      else
+      j=0;
+      printf("Je test \n");
+      while ( SciFuncs[j].name != (char *) 0 && j < 20  )
 	{
-	  printf(" %s found %d \n",SciFuncs[j].name,code);
+	  if ( FindStr(SciFuncs[j].name,&code,&level) == FAILED)
+	    {
+	      printf(" %s not found \n",SciFuncs[j].name);
+	    }
+	  else
+	    {
+	      printf(" %s found %d \n",SciFuncs[j].name,code);
+	    }
+	  j++;
 	}
-      j++;
-    }
-  printf("Je remet les fonctions ");
-  j=0;
-  while ( SciFuncs[j].name != (char *) 0 && j < 3 )
-    {
-      EnterStr(SciFuncs[j].name,&SciFuncs[j].code,&SciFuncs[j].level);
-      j++;
-    }
-  j=0;
-  while ( SciFuncs[j].name != (char *) 0 && j < 3  )
-    {
-      if ( FindStr(SciFuncs[j].name,&code,&level) == FAILED)
+      printf("Je remet les fonctions \n");
+      j=0;
+      while ( SciFuncs[j].name != (char *) 0 && j < 20 )
 	{
-	  printf(" %s not found \n",SciFuncs[j].name);
+	  EnterStr(SciFuncs[j].name,&SciFuncs[j].code,&SciFuncs[j].level);
+	  j++;
 	}
-      else
+      j=0;
+      while ( SciFuncs[j].name != (char *) 0 && j < 20  )
 	{
-	  printf(" %s found %d \n",SciFuncs[j].name,code);
+	  if ( FindStr(SciFuncs[j].name,&code,&level) == FAILED)
+	    {
+	      printf(" %s not found \n",SciFuncs[j].name);
+	    }
+	  else
+	    {
+	      printf(" %s found %d \n",SciFuncs[j].name,code);
+	    }
+	  j++;
 	}
-      j++;
     }
   return(0);
 }
 
+C2F(cvname)(id,str,n1,n2)
+     int id[NAMECODE];
+     char str[];
+     int *n1;
+     long int n2;
+{
+  int i,j;
+  for ( i = 0; i < NAMECODE ; i++) 
+    {
+      id[i]=0;
+      for ( j = 0; j < 4 && j+4*i < n2 ; j++) 
+	id[i] = 256*id[i] + str[j+4*i];
+    }
+}
 
 
+#endif  /********************* end of test part ***/
+  
 static int EnterStr(str,data,level)
      char *str;
      int  *data,*level;
@@ -428,6 +459,7 @@ static int myhsearch(key,data,level, action)
      int key[],*data,*level;
      ACTION action;
 {
+  int k;
     register unsigned hval;
     register unsigned hval2;
     register unsigned count;
@@ -463,20 +495,13 @@ static int myhsearch(key,data,level, action)
 	
 	if (htable[idx].used == hval )
 	  {
-	    if ( key[0] == -1 ) 
-	      {
-		if (action == ENTER) 
-		  { 
-		    htable[idx].entry.data = *data;
-		    return OK;
-		  }
-	      }
 	    if ( Eqid(key, htable[idx].entry.key) == 0) 
 	      {
 		switch (action) 
 		  {
 		  case DELETE :
-		    htable[idx].entry.key[0] = -1;
+		    htable[idx].used = 0;
+		    filled--;
 		    return OK ;
 		    break;
 		  case ENTER :
@@ -506,20 +531,13 @@ static int myhsearch(key,data,level, action)
             /* If entry is found use it. */
             if (htable[idx].used == hval ) 
 	      {
-		if ( key[0] == -1 ) 
-		  {
-		    if (action == ENTER) 
-		      { 
-			htable[idx].entry.data = *data;
-			return OK;
-		      }
-		  }
                 if ( Eqid(key, htable[idx].entry.key) == 0) 
 		  {
 		    switch (action) 
 		      {
 		      case DELETE :
-			htable[idx].entry.key[0] = -1;
+			htable[idx].used = 0;
+			filled--;
 			return OK;
 			break;
 		      case ENTER :

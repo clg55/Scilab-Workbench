@@ -191,7 +191,7 @@ for k=sel
       //a ce bloc
       to=[-ksup -model(9)]
       lk(9)=to;scs_m(connected)=lk
-    elseif o(5)=='CLKIN_f' then
+    elseif o(5)=='CLKIN_f'|o(5)=='CLKINV_f' then
       if ksup==0 then
 	message('Clock Input port must be only used in a Super Block')
 	ok=%f
@@ -209,7 +209,7 @@ for k=sel
       //a ce bloc
       from=[-ksup -model(9)]
       lk(8)=from;scs_m(connected)=lk
-    elseif o(5)=='CLKOUT_f' then
+    elseif o(5)=='CLKOUT_f'|o(5)=='CLKOUTV_f' then
       if ksup==0 then
 	message('Clock Output port must be only used in a Super Block')
 	ok=%f

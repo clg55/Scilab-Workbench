@@ -4,6 +4,7 @@ extern integer C2F(scierr)();
 extern void C2F(itosci)();
 extern void C2F(dtosci)();
 extern void C2F(vvtosci)();
+extern void C2F(scitovv)();
 extern void C2F(skipvars)();
 extern void C2F(scitod)();
 extern void C2F(list2vars)();
@@ -33,7 +34,8 @@ double *inptr[],*outptr[],*t;
     if (C2F(scierr)()!=0) goto err;  
     C2F(dtosci)(x,nx,&one);
     if (C2F(scierr)()!=0) goto err;  
-    C2F(dtosci)(z,nz,&one);
+/*    C2F(dtosci)(z,nz,&one);*/
+    C2F(vvtosci)(z,nz);
     if (C2F(scierr)()!=0) goto err; 
     C2F(vvtosci)(rpar,nrpar); 
 /*    C2F(dtosci)(rpar,nrpar,&one);*/
@@ -61,7 +63,8 @@ double *inptr[],*outptr[],*t;
 	else {
 	    skip=2;
 	    C2F(skipvars)(&skip);
-	    C2F(scitod)(z,nz,&one);
+	    C2F(scitovv)(z,nz);
+	    /*C2F(scitod)(z,nz,&one);*/
 	    C2F(scitod)(x,nx,&one);
 	}
 	if (*nout==0) {
@@ -89,7 +92,8 @@ double *inptr[],*outptr[],*t;
 	else {
 	    skip=2;
 	    C2F(skipvars)(&skip);
-	    C2F(scitod)(z,nz,&one);
+	    C2F(scitovv)(z,nz);
+	    /*C2F(scitod)(z,nz,&one);*/
 	    C2F(scitod)(x,nx,&one);
 	    skip=1;
 	    C2F(skipvars)(&skip);
@@ -105,7 +109,8 @@ double *inptr[],*outptr[],*t;
     case 4 :
 	skip=2;
 	C2F(skipvars)(&skip);
-	C2F(scitod)(z,nz,&one);
+	C2F(scitovv)(z,nz);
+	/*C2F(scitod)(z,nz,&one);*/
 	C2F(scitod)(x,nx,&one);
 	skip=1;
 	C2F(skipvars)(&skip);
@@ -113,7 +118,8 @@ double *inptr[],*outptr[],*t;
     case 5 :
 	skip=2;
 	C2F(skipvars)(&skip);
-	C2F(scitod)(z,nz,&one);
+	C2F(scitovv)(z,nz);
+	/*C2F(scitod)(z,nz,&one);*/
 	C2F(scitod)(x,nx,&one);
         skip=1;
 	C2F(skipvars)(&skip);
@@ -121,7 +127,8 @@ double *inptr[],*outptr[],*t;
     case 6 :
 	skip=2;
 	C2F(skipvars)(&skip);
-	C2F(scitod)(z,nz,&one);
+	C2F(scitovv)(z,nz);
+	/*C2F(scitod)(z,nz,&one);*/
 	C2F(scitod)(x,nx,&one);
 	if (*nout==0) {
 	    skip=1;

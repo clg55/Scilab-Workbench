@@ -1,7 +1,7 @@
 scicos_ver = 'scicos2.3'
 scs_m=list()
-scs_m(1)=list([350,450,0,0],['Non_linear','/usr/local/lib/scilab/macros/scicos/'],[],[],..
-' ')
+scs_m(1)=list([450,450,0,0],..
+['Non_linear','/usr/arte/local/lib/scilab-2.3/macros/scicos/'],[],[],' ')
 scs_m(2)=list('Block',..
          list([39.593909,354.3038],[40,40],%t,['0.1';'1'],0,0,[],[],..
          ['thick=xget(''thickness'');xset(''thickness'',2);';
@@ -101,3 +101,13 @@ scs_m(16)=list('Block',..
           list('dlradp',[1;1],1,1,[],[],[0;0],..
           [0;1;0.2;0.3;0.2;0.3;0.8;0.7;-0.8;-0.7;1;1],[0;2;2],'d',[],[%t,%f],' ',..
           list()),' ','DLRADAPT_f')
+scs_m(17)=list('Block',..
+          list([314.59276,353.16456],[40,40],%t,['[0;1]';'[0;1]'],0,0,[],[],..
+          'xstringb(orig(1),orig(2),''interp'',sz(1),sz(2),''fill'');'),..
+          list('intrpl',1,1,[],[],[],[],[0;1;0;1],[],'c',[],[%t,%f],' ',list()),..
+          ' ','INTRPLBLK_f')
+scs_m(18)=list('Block',..
+          list([307.78781,267.72152],[60,40],%t,['[0;1]';'[0;1]';'[0;1]'],[0;0],..
+          0,[],[],'xstringb(orig(1),orig(2),''interp2'',sz(1),sz(2),''fill'');'),..
+          list(list('intrp2',1),[1;1],1,[],[],[],[],[0;1;0;1;0;1;1;2],[2;2],'c',..
+          [],[%t,%f],' ',list()),' ','INTRP2BLK_f')

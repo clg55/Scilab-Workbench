@@ -103,17 +103,16 @@ c     --------------output variable: res
        return
        end
 c
-c
 c SCILAB function : mopen, fin = 3
        subroutine intsmopen(fname)
 c
        character*(*) fname
-       integer topk,rhsk,topl
-       logical checkrhs,checklhs,getsmat,checkval,cresmat2,cremat,bufsto
-     $ re
        include '../stack.h'
 c
        integer iadr, sadr
+       integer topk,rhsk,topl
+       logical checkrhs,checklhs,getsmat,checkval,cresmat2,cremat,getsca
+     $ lar,bufstore
        iadr(l)=l+l-1
        sadr(l)=(l/2)+1
        rhs = max(0,rhs)
@@ -121,7 +120,7 @@ c
        lbuf = 1
        topk = top 
        rhsk = rhs 
-       if(.not.checkrhs(fname,1,2)) return
+       if(.not.checkrhs(fname,1,3)) return
        if(.not.checklhs(fname,1,2)) return
 c       checking variable file (number 1)
 c       
@@ -138,15 +137,25 @@ c
        endif
        if(.not.getsmat(fname,top,top-rhs+2,m2,n2,1,1,lr2,nlr2)) return
        if(.not.checkval(fname,m2*n2,1)) return
+c       checking variable swap (number 3)
+c       
+       if(rhs .le. 2) then
+        top = top+1
+        rhs = rhs+1
+        if(.not.cremat(fname,top,0,1,1,lr3,lc3)) return
+        stk(lr3)= 1
+       endif
+       if(.not.getscalar(fname,top,top-rhs+3,lr3)) return
 c     
 c       cross variable size checking
 c     
        if(.not.cremat(fname,top+1,0,1,1,lw1,loc1)) return
        if(.not.bufstore(fname,lbuf,lbufi2,lbuff2,lr1,nlr1)) return
        if(.not.bufstore(fname,lbuf,lbufi3,lbuff3,lr2,nlr2)) return
-       if(.not.cremat(fname,top+2,0,1,1,lw4,loc4)) return
-       call mopen(stk(lw1),buf(lbufi2:lbuff2),buf(lbufi3:lbuff3),stk(lw4
-     $ ),err)
+       call entier(1,stk(lr3),istk(iadr(lr3)))
+       if(.not.cremat(fname,top+2,0,1,1,lw5,loc5)) return
+       call mopen(stk(lw1),buf(lbufi2:lbuff2),buf(lbufi3:lbuff3),istk(ia
+     $ dr(lr3)),stk(lw5),err)
        if(err .gt. 0) then 
         buf = fname // ' Internal Error' 
         call error(999)
@@ -167,7 +176,7 @@ c
 c       --------------output variable: res
         top=topl+2
         if(.not.cremat(fname,top,0,1,1,lrs,lcs)) return
-        call dcopy(1*1,stk(lw4),1,stk(lrs),1)
+        call dcopy(1*1,stk(lw5),1,stk(lrs),1)
        endif
 c     Putting in order the stack
        if(lhs .ge. 1) then
@@ -179,6 +188,7 @@ c     Putting in order the stack
        top=topk+lhs
        return
        end
+
 c
 c SCILAB function : mputstr, fin = 4
        subroutine intsmputstr(fname)

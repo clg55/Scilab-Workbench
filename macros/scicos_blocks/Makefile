@@ -9,6 +9,7 @@ NAME = blockslib
 NAM = scicos_blocks
 
 MACROS=SPLIT_f.sci  GAIN_f.sci IN_f.sci CLKIN_f.sci OUT_f.sci CLKOUT_f.sci \
+	CLKOUTV_f.sci  CLKINV_f.sci CLKSOMV_f.sci  GAINBLK_f.sci \
 	QUANT_f.sci CLKSPLIT_f.sci CLKSOM_f.sci EVTDLY_f.sci\
 	SAT_f.sci SOM_f.sci SUPER_f.sci SCOPE_f.sci CLSS_f.sci DLSS_f.sci\
 	CLR_f.sci DLR_f.sci ZCROSS_f.sci m_sin.sci TRASH_f.sci \
@@ -23,6 +24,6 @@ MACROS=SPLIT_f.sci  GAIN_f.sci IN_f.sci CLKIN_f.sci OUT_f.sci CLKOUT_f.sci \
 	CURV_f.sci MIN_f.sci MAX_f.sci DLRADAPT_f.sci ANDLOG_f.sci\
 	MUX_f.sci DEMUX_f.sci DELAYV_f.sci SAMPLEHOLD_f.sci ANDBLK.sci \
 	DOLLAR_f.sci AFFICH_f.sci MSCOPE_f.sci NRMSOM_f.sci ISELECT_f.sci \
-	ESELECT_f.sci BIGSOM_f.sci
+	ESELECT_f.sci BIGSOM_f.sci INTRPLBLK_f.sci INTRP2BLK_f.sci
 
 include ../Make.lib

@@ -1,15 +1,12 @@
-#ifdef __STDC__
-#include <stdlib.h>
-#endif
 
 #include "intersci.h"
 
 
 static char buf[1024];
 
-static int icre=1; /* incremental counter for variable creation */
-static indent = 0; /* incremental counter for code indentation */
-static pass = 0 ;  /* flag for couting pass on code generation */
+static int icre=1;     /* incremental counter for variable creation */
+static int indent = 0; /* incremental counter for code indentation */
+static int pass = 0 ;  /* flag for couting pass on code generation */
 
 
 int main(argc,argv)
@@ -1430,7 +1427,7 @@ void OptvarGetSize(optvar,size,data)
      char *optvar,*size,*data;
 {
   int i,j=0,ok=0;
-  for ( i = 0 ; i < strlen(optvar) ; i++ ) 
+  for ( i = 0 ; i < (int) strlen(optvar) ; i++ ) 
        {
 	 if ( optvar[i] == ')' ) 
 	   { 
@@ -1439,7 +1436,7 @@ void OptvarGetSize(optvar,size,data)
 	 if ( ok ==1 ) size[j++]= optvar[i];
 	 if ( optvar[i] == '(' ) ok =1 ;
        }
-  if ( i < strlen(optvar)) strcpy(data,optvar+i+1);
+  if ( i < (int) strlen(optvar)) strcpy(data,optvar+i+1);
 }
 
 /*
@@ -2924,7 +2921,7 @@ void Fprintf(va_alist) va_dcl
   indent= va_arg(ap, int );
   format = va_arg(ap, char *);
   vsprintf(sbuf,format,ap);
-  for ( i = 0 ; i < strlen(sbuf); i++) 
+  for ( i = 0 ; i < (int) strlen(sbuf); i++) 
     {
       if ( count == 0)  
 	{

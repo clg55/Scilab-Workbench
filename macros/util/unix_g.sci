@@ -1,4 +1,4 @@
-function rep=unix_g(cmd)
+function [rep,stat]=unix_g(cmd)
 //unix_g - shell command execution 
 //%Syntax
 //rep=unix_g(cmd)
@@ -13,6 +13,7 @@ function rep=unix_g(cmd)
 //%See also
 // host unix_x unix_s
 //!
+[lhs,rhs]=argn(0)
 if prod(size(cmd))<>1 then   error(55,1),end
 stat=host('('+cmd+')>'+TMPDIR+'/unix.out 2>'+TMPDIR+'/unix.err;')
 select stat
@@ -20,8 +21,10 @@ case 0 then
   rep=read(TMPDIR+'/unix.out',-1,1,'(a)')
   if size(rep,'*')==0 then rep=[],end
 case -1 then // host failed
-  error(85)
+  disp('host does not answer...')
+  rep=emptystr()
 else
   msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
-  error('unix_g: '+msg(1))
+  disp(msg(1))
+  rep=emptystr()
 end

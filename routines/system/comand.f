@@ -15,13 +15,13 @@ C
       integer cmd(nsiz,cmdl),a,blank,name
       integer id(nsiz),ennd(nsiz),sel(nsiz),while(nsiz),for(nsiz)
       integer iff(nsiz)
-      integer semi,comma,eol,percen,lparen,count
+      integer semi,comma,eol,percen,lparen,count,equal
       logical eqid
       integer iadr
 C     
       data a/10/
-      data eol/99/ semi/43/ comma/52/ lparen/41/
-      data blank/40/ name/1/ percen/56/
+      data eol/99/,semi/43/,comma/52/,lparen/41/,equal/50/
+      data blank/40/,name/1/,percen/56/
       data ennd/671946510,nz1*673720360/
       data sel/236260892,673717516,nz2*673720360/
       data while/353505568,673720334,nz2*673720360/
@@ -67,6 +67,25 @@ C
         if (eqid(id,cmd(1,k))) goto 11
  10   continue
       fin = 0
+      if(char1.eq.lparen.or.char1.eq.equal) return
+      if(char1.eq.comma.or.char1.eq.semi.or.char1.eq.eol) return
+      call funs(id)
+      if(fin.eq.0) then
+         if(comp(1).eq.0) then
+            fin=-4
+            call funs(id)
+            if(fin.eq.0) return
+            call cmdstr
+         else
+            call cmdstr
+            fin=-2
+            call stackg(id)
+            if(err.gt.0) return
+            fun=-1
+         endif
+      else
+         call cmdstr
+      endif
       return
 C     
  11   if (fin .eq. -1) return

@@ -61,8 +61,8 @@ extern void cerro();
 /** jpc_SGraph.c **/
 
 extern void ChangeBandF _PARAMS((int win_num,Pixel fg, Pixel bg));
-extern int CheckClickQueue   _PARAMS((integer *x,integer *y,integer *ibut));
-extern int ClearClickQueue  _PARAMS((void));
+extern int CheckClickQueue   _PARAMS((integer *,integer *x,integer *y,integer *ibut));
+extern int ClearClickQueue  _PARAMS((integer));
 void CreatePopupWindow  _PARAMS((integer WinNum,Widget button,
 				 Window *CWindow,Window *SciGWindow,
 				 Pixel *fg,Pixel *bg,Widget *infowidget));
@@ -88,7 +88,7 @@ unsigned long maxcol;
 static Visual *visual;
 static int wpixel, bpixel;
 
-static void SciClick _PARAMS((integer *ibutton,integer *x1,integer *yy1,integer *iflag,int getmouse,int dyn_men,char *str,integer * lstr));
+void SciClick _PARAMS((integer *ibutton,integer *x1,integer *yy1,integer *iflag,int getmouse,int dyn_men,int getrelease,char *str,integer * lstr));
 
 /* These DEFAULTNUMCOLORS colors come from Xfig */
 
@@ -446,20 +446,18 @@ void C2F(xpause)(str, sec_time, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
 }
 
 /****************************************************************
- Wait for mouse click in graphic window 
-   send back mouse location  (x1,y1)  and button number  
-   0,1,2}
-   There's just a pb if the window is iconified when we try to click 
-   in this case we return i= -1
-****************************************************************/
+ *Wait for mouse click in graphic window 
+ *   send back mouse location  (x1,y1)  and button number  {0,1,2}
+ *   and the window number 
+ ****************************************************************/
 
-void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, v6, v7, dv1, dv2, dv3, dv4)
+void C2F(xclick_any)(str, ibutton, x1, yy1, iwin,iflag, v7, dv1, dv2, dv3, dv4)
      char *str;
      integer *ibutton;
      integer *x1;
      integer *yy1;
      integer *iwin;
-     integer *v6;
+     integer *iflag;
      integer *v7;
      double *dv1;
      double *dv2;
@@ -470,9 +468,8 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, v6, v7, dv1, dv2, dv3, dv4)
   XEvent event;
   Bool flag1;
   int buttons = 0;
-  integer i;
+  integer i,win;
   integer wincount = 0;
-  
   flag1=True;
   while (flag1) {
       CW=GetWindowNumber(wincount);
@@ -483,23 +480,37 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, v6, v7, dv1, dv2, dv3, dv4)
       else
 	  flag1=False;
   }
+
+  /** if we already have something on the queue **/
+  win = -1;
+  if ( *iflag ==1 && CheckClickQueue(&win,x1,yy1,ibutton) == 1) 
+    {
+      *iwin = win ;
+      return;
+    }
+  if ( *iflag ==0 )  ClearClickQueue(-1);
+
   while (buttons == 0) {
       XNextEvent (dpy, &event);
-      if ( event.type ==  ButtonPress ) {
-	  for (i=0;i < wincount;i++) {
+      if ( event.type ==  ButtonPress ) 
+	{
+	  int nowin = 1;
+	  for (i=0;i < wincount;i++) 
+	    {
 	      CW=GetWindowNumber(i);
-	      if ( event.xany.window == CW) {
+	      if ( event.xany.window == CW) 
+		{
 		  *x1=event.xbutton.x;
 		  *yy1=event.xbutton.y;
 		  *ibutton=event.xbutton.button-1;
 		  buttons++;
 		  *iwin=i;
+		  nowin = 0 ;
 		  break;
-	      }
-	      else 
-		  XtDispatchEvent(&event);
-	  }
-      }
+		}
+	    }
+	  if ( nowin==1 )  XtDispatchEvent(&event);
+	}
       else 
 	  XtDispatchEvent(&event);
 
@@ -512,19 +523,26 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, v6, v7, dv1, dv2, dv3, dv4)
 }
 
 
-void C2F(xclick)(str, ibutton, x1, yy1, iflag, v6, v7, dv1, dv2, dv3, dv4)
+void C2F(xclick)(str, ibutton, x1, yy1, iflag,istr, v7, dv1, dv2, dv3, dv4)
      char *str;
-     integer *ibutton,*x1,*yy1,*iflag,*v6,*v7;
+     integer *ibutton,*x1,*yy1,*iflag,*istr,*v7;
      double *dv1;
      double *dv2;
      double *dv3;
      double *dv4;
 {
-  char str1[1024];
-  integer lstr;
-  SciClick(ibutton,x1, yy1,iflag,0,0,str1,&lstr);
-  if (*ibutton == -2) 
-    sciprint("Menu activated %s %d",str1,lstr);
+  integer lstr ;
+  SciClick(ibutton,x1, yy1,iflag,0,0,*istr,str,&lstr);
+  if ( *istr == 1) 
+    {
+      if (*ibutton == -2) 
+	{
+	  sciprint("Menu activated %s %d",str,lstr);
+	  *istr = lstr;
+	}
+      else
+	*istr = 0;
+    }
 }
 
 void C2F(xgetmouse)(str, ibutton, x1, yy1,iflag, v6, v7, dv1, dv2, dv3, dv4)
@@ -535,7 +553,7 @@ void C2F(xgetmouse)(str, ibutton, x1, yy1,iflag, v6, v7, dv1, dv2, dv3, dv4)
      double *dv3;
      double *dv4;
 {
-  SciClick(ibutton,x1, yy1,iflag,1,0,(char *) 0,(integer *)0);
+  SciClick(ibutton,x1, yy1,iflag,1,0,0,(char *) 0,(integer *)0);
 }
 
 /*****************************************
@@ -545,37 +563,37 @@ void C2F(xgetmouse)(str, ibutton, x1, yy1,iflag, v6, v7, dv1, dv2, dv3, dv4)
  * if iflag = 0 : clear previous mouse click 
  * if iflag = 1 : don't 
  * if getmouse = 1 : check also mouse move 
+ * if getrelease=1 : check also mouse release 
  * if dyn_men = 1 ; check also dynamic menus 
  *              ( return the buton code in str )
  *****************************************/
 
-static void SciClick(ibutton,x1,yy1,iflag,getmouse,dyn_men,str,lstr)
+void SciClick(ibutton,x1,yy1,iflag,getmouse,getrelease,dyn_men,str,lstr)
      integer *ibutton,*x1,*yy1, *iflag,*lstr;
-     int getmouse,dyn_men;
+     int getmouse,dyn_men,getrelease;
      char *str;
 {
   XEvent event;
-  integer buttons = 0;
-
-  if ( *iflag ==1 && CheckClickQueue(x1,yy1,ibutton) == 1) return;
-  if ( *iflag==0 )  ClearClickQueue();
-
-  /*  remove the previous click events on the queue 
-      This is not so useful any more since the specified events are treated
-      by EventProc outside xclick_
-      while (flag1) 
-      flag1= XCheckWindowEvent(dpy,ScilabXgc->CWindow,KeyPressMask| 
-                                   ButtonPressMask,&event);
-   */
+  integer buttons = 0,win;
+  if ( ScilabXgc == (struct BCG *) 0 || ScilabXgc->CWindow == (Window) 0)
+    {
+      *ibutton = -100;     return;
+    }
+  win = ScilabXgc->CurWindow;
+  if ( *iflag ==1 && CheckClickQueue(&win,x1,yy1,ibutton) == 1) return;
+  if ( *iflag ==0 )  ClearClickQueue(ScilabXgc->CurWindow);
 
   XDefineCursor(dpy, ScilabXgc->CWindow ,crosscursor);
 
   while (buttons == 0) 
     {
-      XNextEvent (dpy, &event); 
       /** maybe someone decided to destroy scilab Graphic window **/
       if ( ScilabXgc == (struct BCG *) 0 || ScilabXgc->CWindow == (Window) 0)
-	return;
+	{
+	  *ibutton = -100;
+	  return;
+	}
+      XNextEvent (dpy, &event); 
       if ( event.xany.window == ScilabXgc->CWindow 
 	   && event.type ==  ButtonPress ) 
 	{
@@ -583,6 +601,16 @@ static void SciClick(ibutton,x1,yy1,iflag,getmouse,dyn_men,str,lstr)
 	  *yy1=event.xbutton.y;
 	  *ibutton=event.xbutton.button-1;
 	  buttons++;
+	}
+      else if ( getrelease == 1 
+		&&event.xany.window == ScilabXgc->CWindow 
+		&& event.type ==  ButtonRelease ) 
+	{
+	  *x1=event.xbutton.x;
+	  *yy1=event.xbutton.y;
+	  *ibutton = event.xbutton.button-6;
+	  buttons++;
+
 	}
       else if ( getmouse == 1 
 		&&event.xany.window == ScilabXgc->CWindow 
@@ -603,7 +631,8 @@ static void SciClick(ibutton,x1,yy1,iflag,getmouse,dyn_men,str,lstr)
 	  break;
 	}
     }
-  XDefineCursor(dpy, ScilabXgc->CWindow ,arrowcursor);
+  if ( ScilabXgc != (struct BCG *) 0 && ScilabXgc->CWindow != (Window) 0)
+    XDefineCursor(dpy, ScilabXgc->CWindow ,arrowcursor);
   XSync (dpy, 0);
 }
 

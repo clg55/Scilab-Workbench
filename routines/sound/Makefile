@@ -14,6 +14,7 @@ include ../Make.lib
 
 $(OBJSC):	st.h 
 
+soundII.o: ../stack.h
 
 
 

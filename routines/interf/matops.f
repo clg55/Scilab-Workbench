@@ -12,11 +12,11 @@ c
 c     
       double precision sr,si,e1,st,e2,e1r,e1i,e2r,e2i
       double precision dasum
-      integer star,dstar,slash,bslash,dot,colon
+      integer star,dstar,slash,bslash,dot,colon,quote
       integer less,great,equal,et,ou,non
       integer top0
       data star/47/,dstar/62/,slash/48/
-      data bslash/49/,dot/51/,colon/44/
+      data bslash/49/,dot/51/,colon/44/,quote/53/
       data less/59/,great/60/,equal/50/
       data ou/57/,et/58/,non/61/
 c     
@@ -88,6 +88,7 @@ c           :  +  -  * /  \  =          '
       goto(50,07,08,10,20,25,130,06,06,70) op+1-colon
 c     
  06   if(op.eq.dstar) goto 31
+      if(op.eq.quote+dot) goto 70
       if(op.eq.dstar+dot) goto 30
       if(op.ge.3*dot+star) goto 65
       if(op.ge.2*dot+star) goto 120
@@ -946,7 +947,9 @@ c     transposition
  70   if(mn1 .eq. 0.or.istk(il1).eq.0) then
          goto 999
       elseif(abs(m1).eq.1.or.abs(n1).eq.1) then
-         if(it1.eq.1) call dscal(mn1,-1.0d0,stk(l1+mn1),1)
+         if(it1.eq.1.and.op.ne.quote+dot) then
+            call dscal(mn1,-1.0d0,stk(l1+mn1),1)
+         endif
       else
          vol=mn1*(it1+1)
          ll = l1+vol
@@ -959,7 +962,9 @@ c     transposition
          call mtran(stk(ll),m1,stk(l1),n1,m1,n1)
          if(it1.eq.1) then
             call mtran(stk(ll+mn1),m1,stk(l1+mn1),n1,m1,n1)
-            call dscal(mn1,-1.0d+0,stk(l1+mn1),1)
+            if(op.ne.quote+dot) then
+               call dscal(mn1,-1.0d+0,stk(l1+mn1),1)
+            endif
          endif
       endif
       istk(il1+1)=n1

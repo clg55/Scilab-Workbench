@@ -29,10 +29,6 @@ alloc.o: ../stack.h
 back.o: ../stack.h
 badd.o: ../stack.h ../callinter.h
 bcol.o: ../stack.h ../callinter.h
-bcol.o: ../stack.h ../callinter.h
-bcol.o: ../stack.h ../callinter.h
-bcol.o: ../stack.h ../callinter.h
-bcol.o: ../stack.h ../callinter.h
 bfeval.o: ../stack.h ../callinter.h
 bgetx.o: ../stack.h ../callinter.h
 bgety.o: ../stack.h ../callinter.h
@@ -52,6 +48,9 @@ btof.o: ../stack.h
 btofm.o: ../stack.h
 bydot.o: ../stack.h ../callinter.h
 bydot2.o: ../stack.h ../callinter.h
+cmatptr.o: ../stack.h
+creadchain.o: ../stack.h
+creadmat.o: ../stack.h
 extlarg.o: ../stack.h
 ftob.o: ../stack.h
 getfun.o: ../stack.h
@@ -61,4 +60,6 @@ matptr.o: ../stack.h
 matz.o: ../stack.h
 matzs.o: ../stack.h
 namstr.o: ../stack.h
+readchain.o: ../stack.h
+readmat.o: ../stack.h
 tradsl.o: ../stack.h

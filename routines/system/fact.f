@@ -31,7 +31,7 @@ c
 c     
       ir=r/100
       if(ir.ne.3) goto 01
-      goto(25,26,99,29,99,31,45,48,55,61,65,66,41),r-300
+      goto(25,26,99,29,99,31,45,48,55,62,65,66,41),r-300
       goto 99
 c     
  01   if (sym.eq.left) go to 20
@@ -47,7 +47,7 @@ c
  02      pt=pt-1
          r=rstk(pt)
          if(int(r/100).ne.3) goto 02
-         goto(25,26,99,29,99,31,45,48,55,61,65,66),r-300
+         goto(25,26,99,29,99,31,45,48,55,62,65,66),r-300
       endif
       call error(2)
 c      if (err .gt. 0) return
@@ -277,6 +277,7 @@ c     .     form  list with individual indexesx
          else
             if (compil(19,1-rstk(pt),excnt,0,0)) then 
                if (err.gt.0) return
+               excnt=1
             endif
          endif
       endif
@@ -343,20 +344,20 @@ c     *call* matfns
       go to 60
 c     
  60   continue
-c     check for quote (transpose) and ** or ^ (power)
-      if (sym .ne. quote) go to 62
+c     check for ', .'  **,  ^ and .^
+      if (sym .ne. quote) go to 63
       i = lpt(3) - 2
       if (lin(i) .eq. blank) go to 90
-      rhs=1
       fin=quote
+ 61   rhs=1
       if ( eptover(1,psiz-1))  return
       rstk(pt)=310
       icall=4
-c     *call* allops(quote)
+c     *call* allops(quote) or allops(dot+quote)
       return
- 61   pt=pt-1
+ 62   pt=pt-1
       call getsym
- 62   if(sym.eq.hat) then
+ 63   if(sym.eq.hat) then
          op=dstar
       elseif(sym.eq.dot.and.char1.eq.hat) then
          call getsym
@@ -364,6 +365,10 @@ c     *call* allops(quote)
       elseif(sym.eq.star.and.char1.eq.star) then
          call getsym
          op=dstar
+      elseif(sym.eq.dot.and.char1.eq.quote) then
+         call getsym
+         fin=dot+quote
+         goto 61
       else
          goto 90
       endif

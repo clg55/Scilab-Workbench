@@ -50,6 +50,10 @@ c     . insertions
          nt=2
       elseif(fin.eq.3) then
 c     .  extraction
+         if(rhs.eq.1) then
+c     .     a() -->a
+            goto 81
+         endif
          nt=1
       else
          nt=rhs

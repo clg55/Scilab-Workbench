@@ -52,5 +52,15 @@ nf = maxi(size(w)); nsv = mini(size(d)); j = sqrt(-1);
 svm(nsv,nf) = 0;
 for i = 1:nf
     svm(:,i) = svd(c*((exp(j*w(i))*eye-a)\b)+d);
+  end
+else T=Sl('dt');
+if nargin == 1
+   w = logspace(-3,%pi);
 end
+nf = maxi(size(w)); nsv = mini(size(d)); j = sqrt(-1);
+svm(nsv,nf) = 0;
+for i = 1:nf
+    svm(:,i) = svd(c*((exp(j*w(i)*T)*eye-a)\b)+d);
+  end
+  
 end

@@ -55,6 +55,7 @@ printing - printing scilab graphics
 rotate - geometric rotation of a set of points  
 scaling - affine transform of a set of points  
 secto3d - 3D surfaces conversion
+sgrid - s-plane grid lines.
 square - sets scales for isometric graphics
 titlepage - display a matrix of strings 
 winsid - return the list of graphic windows id

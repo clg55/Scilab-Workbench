@@ -31,10 +31,10 @@ PARAMETERS
                  is 1
 
 DESCRIPTION
-  param3d() is used to obtain a graphic of a parametric curve in R3, and can
+  param3d1 is used to obtain a graphic of a parametric curve in R3, and can
   also be used to see a set of points in R3
 
-  Enter the command param3d() to see a demo.
+  Enter the command param3d1() to see a demo.
 
 EXAMPLE
   t=0:0.1:5*%pi; t=t';

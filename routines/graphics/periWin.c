@@ -179,7 +179,7 @@ static void DrawMark(),LoadFonts(), LoadSymbFonts();
 static void C2F(loadfamily_n)();
 static void CreateGraphClass();
 static void XDrawPoints();
-static void SciClick _PARAMS((integer *ibutton,integer *x1,integer *yy1,integer *iflag,int getmouse,int dyn_men,char *str,integer * lstr));
+void SciClick _PARAMS((integer *ibutton,integer *x1,integer *yy1,integer *iflag,int getmouse,int dyn_men,int release,char *str,integer * lstr));
 static BOOL SciPalette(int iNumClr);
 
 /************************************************
@@ -520,9 +520,9 @@ void C2F(xpause)(str, sec_time, v3, v4, v5, v6, v7, dv1, dv2, dv3, dv4)
    in this case we return i= -1
 ****************************************************************/
 
-void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, v6, v7, dv1, dv2, dv3, dv4)
+void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, iflag, v7, dv1, dv2, dv3, dv4)
      char *str;
-     integer *ibutton,*x1,*yy1,*iwin,*v6,*v7;
+     integer *ibutton,*x1,*yy1,*iwin,*iflag,*v7;
      double *dv1;
      double *dv2;
      double *dv3;
@@ -531,7 +531,15 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, v6, v7, dv1, dv2, dv3, dv4)
   WindowList *listptr = The_List;
   Window CW;
   MSG msg;
-  int buttons = 0;
+  int buttons = 0,win;
+
+  win = -1;
+  if ( *iflag ==1 && CheckClickQueue(&win,x1,yy1,ibutton) == 1) 
+    {
+      *iwin = win ;
+      return;
+    }
+  if ( *iflag ==0 )  ClearClickQueue(-1);
 
   while (buttons == 0) {
     int ok =0;
@@ -591,19 +599,26 @@ void C2F(xclick_any)(str, ibutton, x1, yy1, iwin, v6, v7, dv1, dv2, dv3, dv4)
 }
 
 
-void C2F(xclick)(str, ibutton, x1, yy1, iflag, v6, v7, dv1, dv2, dv3, dv4)
+void C2F(xclick)(str, ibutton, x1, yy1, iflag,istr, v7, dv1, dv2, dv3, dv4)
      char *str;
-     integer *ibutton,*x1,*yy1,*iflag,*v6,*v7;
+     integer *ibutton,*x1,*yy1,*iflag,*istr,*v7;
      double *dv1;
      double *dv2;
      double *dv3;
      double *dv4;
 {
-  char str1[1024];
-  integer lstr;
-  SciClick(ibutton,x1, yy1,iflag,0,0,str1,&lstr);
-  if (*ibutton == -2) 
-    sciprint("Menu activated %s %d",str1,lstr);
+  integer lstr ;
+  SciClick(ibutton,x1, yy1,iflag,0,0,*istr,str,&lstr);
+  if ( *istr == 1) 
+    {
+      if (*ibutton == -2) 
+	{
+	  sciprint("Menu activated %s %d",str,lstr);
+	  *istr = lstr;
+	}
+      else
+	*istr = 0;
+    }
 }
 
 void C2F(xgetmouse)(str, ibutton, x1, yy1,iflag, v6, v7, dv1, dv2, dv3, dv4)
@@ -614,7 +629,7 @@ void C2F(xgetmouse)(str, ibutton, x1, yy1,iflag, v6, v7, dv1, dv2, dv3, dv4)
      double *dv3;
      double *dv4;
 {
-  SciClick(ibutton,x1, yy1,iflag,1,0,(char *) 0,(integer *)0);
+  SciClick(ibutton,x1, yy1,iflag,1,0,0,(char *) 0,(integer *)0);
 }
 
 void SciMouseCapture()
@@ -640,16 +655,23 @@ void SciMouseRelease()
  *              ( return the buton code in str )
  *****************************************/
 
-static void SciClick(ibutton,x1,yy1,iflag,getmouse,dyn_men,str,lstr)
+void SciClick(ibutton,x1,yy1,iflag,getmouse,getrelease,dyn_men,str,lstr)
      integer *ibutton,*x1,*yy1, *iflag,*lstr;
-     int getmouse,dyn_men;
+     int getmouse,dyn_men,getrelease;
      char *str;
 {
+  int win;
   MSG msg;
   /** BOOL flag1= TRUE; **/
   integer buttons = 0;
-  if ( *iflag ==1 && CheckClickQueue(x1,yy1,ibutton) == 1) return;
-  if ( *iflag==0 )  ClearClickQueue();
+  if ( ScilabXgc == (struct BCG *) 0 || ScilabXgc->CWindow == (Window) 0)
+    {
+      *ibutton = -100;     return;
+    }
+  win = ScilabXgc->CurWindow;
+  if ( *iflag ==1 && CheckClickQueue(&win,x1,yy1,ibutton) == 1) return;
+  if ( *iflag ==0 )  ClearClickQueue(ScilabXgc->CurWindow);
+
   /** Pas necessaire en fait voir si c'est mieux ou moins bien **/
   if (IsIconic(ScilabXgc->hWndParent)) 
     ShowWindow(ScilabXgc->hWndParent, SW_SHOWNORMAL);
@@ -705,6 +727,30 @@ static void SciClick(ibutton,x1,yy1,iflag,getmouse,dyn_men,str,lstr)
 	      buttons++;
 	      break;
 	    }
+	  else if ( getrelease == 1 &&  msg.message == WM_LBUTTONUP )
+	    {
+	      *x1=LOWORD(msg.lParam);
+	      *yy1= HIWORD(msg.lParam);
+	      *ibutton= -5 ; 
+	      buttons++;
+	      break;
+	    }
+	  else if (getrelease == 1 &&  msg.message == WM_MBUTTONUP )
+	    {
+	      *x1=LOWORD(msg.lParam);
+	      *yy1= HIWORD(msg.lParam);
+	      *ibutton= -4 ;
+	      buttons++;
+	      break;
+	    }
+	  else if ( getrelease == 1 && msg.message == WM_RBUTTONUP )
+	    {
+	      *x1=LOWORD(msg.lParam);
+	      *yy1= HIWORD(msg.lParam);
+	      *ibutton= -3;
+	      buttons++;
+	      break;
+	    }
 	  else
 	    {
 	      TranslateMessage(&msg);
@@ -715,6 +761,13 @@ static void SciClick(ibutton,x1,yy1,iflag,getmouse,dyn_men,str,lstr)
 	{
 	  TranslateMessage(&msg);
 	  DispatchMessage(&msg);
+	}
+      if ( dyn_men == 1 &&  C2F(ismenu)()==1 ) 
+	{
+	  int entry;
+	  C2F(getmen)(str,lstr,&entry);
+	  *ibutton = -2;
+	  break;
 	}
   }
   /** SetCursor(LoadCursor(NULL,IDC_ARROW)); **/

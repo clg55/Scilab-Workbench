@@ -68,7 +68,8 @@ char *argv[];
   }
   
   gethostname(machine_hote,MAXHOSTLEN) ;
-  h=gethostbyname(machine_hote);
+  /* If host is connected to internet, get canonical name */
+  if ((h=gethostbyname(machine_hote))!=NULL)
   strcpy(machine_hote,h->h_name);
 
   if(!strcmp(argv[1], "-local")) {

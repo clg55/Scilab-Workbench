@@ -62,7 +62,7 @@ if na>0 then
     if na==1 then
       t=t+['    ';' + ']+[' ';tb]+[' ';'u   ']
     else
-      blank([na/2,na/2+1])=['    ';' + ']
+      blank([na/2,na/2+1])=['    ';'x + ']
       t=t+blank+tb
       t(na/2+1)=t(na/2+1)+'u   '
     end

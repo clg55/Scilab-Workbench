@@ -12,18 +12,53 @@ corr - correlation, covariance
  ...
 [wk]=corr('updt',xk,[yk],w,xu)
 .fi
+.SH PARAMETERS
+.TP 10
+x
+: a real vector
+.TP
+y
+: a real vector, default value x.
+.TP
+nlags
+: integer, number of correlation coefficients desired.
+.TP
+xmacro
+: a scilab external (see below).
+.TP
+ymacro
+: a scilab external (see below), default value xmacro
+.TP
+n
+: an integer, total size of the sequence (see below).
+.TP
+sect
+: size of sections of the sequence (see below).
+.TP
+xi
+: a real vector
+.TP
+yi
+: a real vector,default value xi.
+.TP
+cov
+: real vector, the correlation coefficients 
+.TP
+mean
+: real number or vector,  the mean of x and if given y
+
 .SH DESCRIPTION
 Computes
 .nf
                 n - m - 1
                  ====
-                 \\
-        cov(m) =  >        (x  - xmean) (y      - ymean)
-                 /           k            m + k
+                 \\                                         1
+        cov(m) =  >        (x  - xmean) (y      - ymean) * ---
+                 /           k            m + k            n-m
                  ====
                  k = 0
 .fi
-.LA $$         cov(m) = \sum_0^{n-m-1} (x_k  - E(x)) (y_k - E(y)) $$
+.LA $$         cov(m) = 1/(n-m) \sum_0^{n-m-1} (x_k  - E(x)) (y_k - E(y)) $$
 for   m=0,..,\fVnlag-1\fR and two vectors \fVx=[x(1),..,x(n)]\fR
  \fVy=[y(1),..,y(n)]\fR
 .LP

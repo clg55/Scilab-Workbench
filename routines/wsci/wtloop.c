@@ -481,11 +481,15 @@ void test_sci()
    SciMenuSelect("test2D3");
 }
 
-void test_mouse(int iflag)
+void test_mouse(int iflag1)
 {
+  char str[128];
   integer ibutton;
   double x0,yy0;
-  C2F(dr1)("xclickany","one",&ibutton,&iflag,PI0,PI0,PI0,PI0,&x0,&yy0,PD0,PD0,0L,0L);
+  int iflag=0,istr=1;
+  /* C2F(dr1)("xclickany","one",&ibutton,&iwin,&iflag,PI0,PI0,PI0,&x0,&yy0,PD0,PD0,0L,0L); */
+
+  C2F(dr1)("xclick",str,&ibutton,&iflag,&istr,PI0,PI0,PI0,&x0,&yy0,PD0,PD0,0L,0L); 
   sciprint("Mouse :but=%d x=%f,y=%f\r\n",ibutton,x0,yy0);
 }
 

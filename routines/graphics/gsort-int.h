@@ -69,7 +69,7 @@ static void CNAME(ColSort,int)(a,ind,flag,n,p,dir)
     {
       sciqsort((char *) (a+n*j),(char *) (ind+n*j),flag, n, 
 	       sizeof(int),sizeof(int), 
-	       (dir == 'c' ) ? CNAME(compareC,int) : CNAME(compareD,int),
+	       (dir == 'i' ) ? CNAME(compareC,int) : CNAME(compareD,int),
 	       CNAME(swapcode,int),swapcodeind);
     }
 }
@@ -99,7 +99,7 @@ static void CNAME(RowSort,int)(a,ind,flag,n,p,dir)
     {
       sciqsort((char *) (a+i),(char *) (ind+i),flag, p, 
 	       n*sizeof(int),n*sizeof(int), 
-	       (dir == 'c' ) ? CNAME(compareC,int):CNAME(compareD,int),
+	       (dir == 'i' ) ? CNAME(compareC,int):CNAME(compareD,int),
 	       CNAME(swapcode,int),swapcodeind);
     }
 }
@@ -123,7 +123,7 @@ static void CNAME(GlobalSort,int)(a,ind,flag,n,p,dir)
     }
   sciqsort((char *) (a),(char *) (ind),flag, n*p, 
 	   sizeof(int),sizeof(int), 
-	   (dir == 'c' ) ? CNAME(compareC,int):CNAME(compareD,int),
+	   (dir == 'i' ) ? CNAME(compareC,int):CNAME(compareD,int),
 	   CNAME(swapcode,int),swapcodeind);
 }
 
@@ -212,7 +212,7 @@ static void CNAME(LexiRow,int)(a,ind,flag,n,p,dir)
     }
   sciqsort((char *) (a),(char *) (ind),flag, n, 
 	   sizeof(int),sizeof(int), 
-	   (dir == 'c' ) ? CNAME(LexiRowcompareC,int):CNAME(LexiRowcompareD,int),
+	   (dir == 'i' ) ? CNAME(LexiRowcompareC,int):CNAME(LexiRowcompareD,int),
 	   CNAME(LexiRowswapcode,int),swapcodeind);
 }
 
@@ -260,7 +260,7 @@ static int CNAME(LexiColswapcode,int)(parmi, parmj, n)
   int i = n,ir;
   register int *pi = (int *) (parmi); 		
   register int *pj = (int *) (parmj); 
-  if ( n!= 1) printf(" swapcode avec n != 1\n");
+  /* if ( n!= 1) printf(" swapcode avec n != 1\n"); */
   do { 
     for ( ir = 0 ; ir < CNAME(lexirows,int) ; ir++) 
       {
@@ -290,7 +290,7 @@ static void CNAME(LexiCol,int)(a,ind,flag,n,p,dir)
     }
   sciqsort((char *) (a),(char *) (ind),flag, p, 
 	   n*sizeof(int),sizeof(int), 
-	   (dir == 'c' ) ? CNAME(LexiColcompareC,int):CNAME(LexiColcompareD,int),
+	   (dir == 'i' ) ? CNAME(LexiColcompareC,int):CNAME(LexiColcompareD,int),
 	   CNAME(LexiColswapcode,int),
 	   swapcodeind);
 }

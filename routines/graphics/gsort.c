@@ -32,9 +32,6 @@ extern void sciqsort();
  * m,n : matrix size 
  * type : the operation ( see the interface ) 
  * iord : 'i' or 'd' : increasind or decreasing sort 
- * 
- * if type[0] == 'r' or 'c' or 'g' we use double 
- * if type[0] == 'l' we use int 
  ******************************************************/
 
 int C2F(gsort)(xI,xD,ind,iflag,m,n,type,iord)
@@ -45,8 +42,8 @@ int C2F(gsort)(xI,xD,ind,iflag,m,n,type,iord)
 {
   switch ( type[0])
     {
-    case 'c' :  CNAME(ColSort,double)(xD,ind,*iflag,*m,*n,iord[0]);break;
-    case 'r' :  CNAME(RowSort,double)(xD,ind,*iflag,*m,*n,iord[0]);break;
+    case 'r' :  CNAME(ColSort,double)(xD,ind,*iflag,*m,*n,iord[0]);break;
+    case 'c' :  CNAME(RowSort,double)(xD,ind,*iflag,*m,*n,iord[0]);break;
     case 'l' :  
       if ( type[1] == 'r' ) 
 	CNAME(LexiRow,int)(xI,ind,*iflag,*m,*n,iord[0]);
@@ -66,11 +63,9 @@ int C2F(gsort)(xI,xD,ind,iflag,m,n,type,iord)
  * m,n : matrix size 
  * type : the operation ( see the interface ) 
  * iord : 'i' or 'd' : increasind or decreasing sort 
- * 
- * if type[0] == 'r' or 'c' or 'g' we use double 
- * if type[0] == 'l' we use int 
  ******************************************************/
 #ifndef TEST 
+
 void C2F(gsorts)(value,ptrv,m,n,res,ptrres,ierr,ind,iflag,type,iord)
      int *value,*ptrv,*m,*n,*res,*ptrres,*ierr;
      int *ind;
@@ -87,8 +82,8 @@ void C2F(gsorts)(value,ptrv,m,n,res,ptrres,ierr,ind,iflag,type,iord)
   if ( *ierr == 1) return;
   switch ( type[0])
     {
-    case 'c' :  CNAME(ColSort,char)(data,ind,*iflag,*m,*n,iord[0]);break;
-    case 'r' :  CNAME(RowSort,char)(data,ind,*iflag,*m,*n,iord[0]);break;
+    case 'r' :  CNAME(ColSort,char)(data,ind,*iflag,*m,*n,iord[0]);break;
+    case 'c' :  CNAME(RowSort,char)(data,ind,*iflag,*m,*n,iord[0]);break;
     case 'l' :  
       if ( type[1] == 'r' ) 
 	CNAME(LexiRow,char)(data,ind,*iflag,*m,*n,iord[0]);

@@ -2,6 +2,8 @@ function wpar=do_setup(wpar)
 // set integration parameters
 tolerances=wpar(3);
 tf=wpar(4)
+if tf==[] then tf=100000,end
+if tolerances==[] then tolerances=[1.d-4,1.d-6,1.d-10,tf+1];end
 atol=tolerances(1);rtol=tolerances(2);ttol=tolerances(3);deltat=tolerances(4)
 while %t do
   [ok,tf,atol,rtol,ttol,deltat]=getvalue('Set parameters',[

@@ -292,7 +292,7 @@ cvax
             endif
          endif
          unit(lunit) = 1
-         rewind lunit
+         if(ista.ne.0) rewind lunit
       endif
 c
       goto 100

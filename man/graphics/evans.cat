@@ -22,8 +22,8 @@ DESCRIPTION
   To obtain the gain at a given point of the locus you can simply execute the
   following instruction : k=-1/real(horner(h,[1,%i]*locate(1))) and click the
   desired point on the root locus. If the coordinates of the selected point
-  are in the real 2 x 1 vector P=locate(1)  this k solves the equation  N(w)
-  + %i*D(w) =0 with w=P(1)+%i*P(2)=[1,%i]*P.
+  are in the real 2 x 1 vector P=locate(1)  this k solves the equation
+  k*N(w) + D(w) =0 with w=P(1)+%i*P(2)=[1,%i]*P.
 
 EXAMPLE
   H=syslin('c',352*poly(-5,'s')/poly([0,0,2000,200,25,1],'s','c'));

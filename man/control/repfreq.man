@@ -30,17 +30,18 @@ repf
 : vector of the complex frequency response
 .SH DESCRIPTION
 \fVrepfreq\fR returns the frequency response calculation of a linear
-system. If sys(s) is the transfer function of \fVSys\fR, \fVrepf(k)\fR 
-equal sys(s) evaluated at s= \fV%i*frq(k)*2*%pi\fR.
-\fVdb(k)\fR is the magnitude of \fVrep(k)\fR expressed in dB i.e.
-\fVdb(k)=20*log(abs(rep(k)))/log(10)\fR and \fVphi(k)\fR is the phase
-of \fVrep(k)\fR expressed in degrees.
+system. If \fVsys(s)\fR is the transfer function of \fVSys\fR, \fVrepf(k)\fR 
+equals \fVsys(s)\fR evaluated at \fVs= %i*frq(k)*2*%pi\fR for continuous time systems and at \fVexp(2*%i*%pi*frq(k))\fR for discrete time systems.
 .LP
-If \fVfmin,fmax,step\fR are input parameters the response is calculated
+\fVdb(k)\fR is the magnitude of \fVrepf(k)\fR expressed in dB i.e.
+\fVdb(k)=20*log(abs(repf(k)))/log(10)\fR and \fVphi(k)\fR is the phase
+of \fVrepf(k)\fR expressed in degrees.
+.LP
+If \fVfmin,fmax,step\fR are input parameters, the response is calculated
 for the vector of frequencies \fVfrq\fR given by:
 \fVfrq=[exp(log(10)*((log(fmin)/log(10)):step:(log(fmax)/log(10)))) step];\fR
 .LP
-The output parameter \fVfrq\fR is calculated by \fVfrq=calfrq(sys,fmin,fmax)\fR.
+If \fVstep\fR is not given, the output parameter \fVfrq\fR is calculated by \fVfrq=calfrq(sys,fmin,fmax)\fR.
 .SH EXAMPLE
 .nf
 A=diag([-1,-2]);B=[1;1];C=[1,1];

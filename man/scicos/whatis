@@ -6,6 +6,7 @@ BIGSOM_f - Scicos addition block
 CLINDUMMY_f - Scicos dummy continuous system with state
 CLKIN_f - Scicos Super Block event input port
 CLKOUT_f - Scicos Super Block event output port
+CLKSOMV_f - Scicos event addition block
 CLKSOM_f - Scicos event addition block
 CLKSPLIT_f - Scicos event split block
 CLOCK_f - Scicos periodic event generator
@@ -24,6 +25,7 @@ EVENTSCOPE_f - Scicos event visualization block
 EVTDLY_f - Scicos event delay block
 EVTGEN_f - Scicos event firing block
 EXPBLK_f - Scicos a^u block
+GAINBLK_f - Scicos gain block
 GAIN_f - Scicos gain block
 GENERAL_f - Scicos general zero crossing detector
 GENERIC_f - Scicos generic interfacing function
@@ -32,6 +34,8 @@ GENSQR_f - Scicos square wave generator
 HALT_f - Scicos Stop block
 IFTHEL_f - Scicos if then else block
 INTEGRAL_f - Scicos simple integrator
+INTRP2BLK_f - Scicos 2D linear interpolation block
+INTRPLBLK_f - Scicos linear interpolation block
 INVBLK_f - Scicos inversion block
 IN_f - Scicos Super Block regular input port
 LOGBLK_f - Scicos logarithm  block

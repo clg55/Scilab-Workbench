@@ -15,7 +15,7 @@ c
       integer id(nsiz),fe,fv,semi
       integer double,reel,ent,sort,errn,orts,rtso,tsor,out
       integer uto,tou
-      integer top2,tops,pt0,count,fptr,bbots
+      integer top2,tops,pt0,count,fptr,bbots,cmode
       double precision x
       logical flag,eqid
       integer offset
@@ -213,9 +213,32 @@ c
       goto 999
 c     
 c     compilation
- 70   if(rhs.ne.1) then
+ 70   if(rhs.ne.1.and.rhs.ne.2) then
          call error(39)
          return
+      endif
+      if(rhs.eq.2) then
+         il=iadr(lstk(top))
+         if(istk(il).ne.1) then
+            err=2
+            call error(53)
+            return
+         endif
+         if(istk(il+1)*istk(il+2).ne.1) then
+            err=2
+            call error(42)
+            return
+         endif
+         cmode=stk(sadr(il+4))
+         if(cmode.ne.0.and.cmode.ne.1) then
+            err=2
+            call error(42)
+            return
+         endif
+         top=top-1
+         rhs=1
+      else
+         cmode=0
       endif
       il=iadr(lstk(top))
       l=il+2
@@ -243,6 +266,7 @@ cx    top=top+1
 cx    lstk(top+1)=lstk(top)
 cx    endif
       comp(1)=iadr(lstk(top+1))
+      comp(3)=cmode
       rstk(pt)=901
       icall=5
 c     *call* parse  macro
@@ -250,6 +274,7 @@ c     *call* parse  macro
  71   l=ids(1,pt)
       pt=pt-1
       if(err1.ne.0) then
+         comp(3)=0
          comp(2)=0
          comp(1)=0
          il=iadr(lstk(top))
@@ -263,6 +288,7 @@ c     *call* parse  macro
       il1=iadr(lstk(top+1))
       n=comp(2)-il1
       comp(2)=0
+      comp(3)=0
       call icopy(n,istk(il1),1,istk(l),1)
       istk(l-1)=n
       lstk(top+1)=sadr(l+n)
@@ -795,6 +821,7 @@ c     errcatch
       endif
       if(rhs.eq.0) then
          errct=0
+         errpt=0
          top=top+1
          il=iadr(lstk(top))
          istk(il)=0
@@ -829,6 +856,11 @@ c     errcatch
  201  continue
       errct=(8*imess+imode)*10000+abs(num)
       if(num.lt.0) errct=-errct
+      p=pt+1
+ 202  p=p-1
+      if(p.eq.0) goto 203
+      if(int(rstk(p)/100).ne.5) goto 202
+ 203  errpt=pt
       top=top+1
       istk(il)=0
       lstk(top+1)=lstk(top)+1

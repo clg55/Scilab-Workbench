@@ -44,7 +44,7 @@ c!
       d2(i2)=l2+n1
    10 continue
    20 continue
-      call dscal(d2(1+m*n)-1,-1.0d+0,pm2i,1)
+c      call dscal(d2(1+m*n)-1,-1.0d+0,pm2i,1)
 c
       return
       end

@@ -3,5 +3,5 @@ function r=%shs(a,b)
 if a==[]|b==[] then 
   r=[]
 else
-  r=(a<>01)&(b<>0)
+  r=(a<>0)&(b<>0)
 end

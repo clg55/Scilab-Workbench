@@ -4,6 +4,7 @@ function []=gainplot(sl,fmin,fmax,pas,comments)
 //---------------------
 pas_def='auto' // default
 //
+noxtitle=%f;
 ilf=0
 flag=type(sl);
 if flag==15 then flag=16;end
@@ -46,6 +47,7 @@ case 16 then  // sl,fmin,fmax [,pas] [,comments]
   end;
 
 case 1 then //frq,db,phi [,comments] ou frq, repf [,comments]
+noxtitle=%t;
   select rhs
   case 2 , //frq,repf
     comments=' '
@@ -96,4 +98,6 @@ else
      	plot2d1("gln",frq',d',[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
 	xgrid()
 end
+if ~noxtitle then
 xtitle(' ','Hz','db');
+end

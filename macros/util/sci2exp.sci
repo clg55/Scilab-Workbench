@@ -110,17 +110,17 @@ function t=mat2exp(a,lmax)
 [lhs,rhs]=argn(0)
 if rhs<2 then lmax=0,end
 if size(a,'*')==0 then t='[]',return,end
-[m,n]=size(a),
+[m,n]=size(a);
 if m<0 then
-  t=mat2exp(a+0)
+  t=mat2exp(a+0);
   if t=='1' then
-    t='eye'
+    t='eye';
   else
-    t='('+t+')*eye'
+    t='('+t+')*eye';
   end
   return
 end
-a=string(a)
+a=string(a);
 dots='.'+'.'
 t=[];
 if n==1 then
@@ -165,13 +165,13 @@ else
     if lmax==0|lx<lmax then
       t=[t;x]
     else
-      ind=strindex(x,';');
+      ind=strindex(x,',');
       k1=1
       l=0
       while %t
 	if lx-l<lmax then t=[t;part(x,l+1:lx)],break,end
 	k2=k1-1+maxi(find(ind(k1:$)<l+lmax))
-	t=[t;part(x,l+1:ind(k2))]
+	t=[t;part(x,l+1:ind(k2))+dots]
 	k1=k2+1
 	l=ind(k2)
       end

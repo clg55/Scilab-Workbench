@@ -1,27 +1,37 @@
       subroutine funs(id)
 c     ====================================================================
-c     scan function and macros list
+c     scan primitive function and scilab code function lists for a given name
 c     ====================================================================
       include '../stack.h'
+      parameter (nz1=nsiz-1,nz2=nsiz-2)
       integer id(nsiz),id1(nsiz),istr(nlgh)
 c
       logical eqid,loaded
-      integer srhs,percen,blank,fptr,mode(2)
+      integer srhs,percen,blank,fptr,mode(2),eye(nsiz)
       integer iadr
-      
+      data eye/672014862,nz1*673720360/
       data nclas/29/,percen/56/,blank/40/
 c
       iadr(l)=l+l-1
 c     
-c     recherche dans les bibliotheques seulement
+c     look only in scilab code function libraries
       if(fin.eq.-3) goto 35
       if(fin.eq.-4) goto 30
 c     
 c     
-c     recherche parmi les fonctions fortran
+c     if special compilation mode skip primitive functions
+      if (comp(3).eq.1) then
+         if(.not.eqid(id,eye)) then
+            fin=0
+            fun=0
+            return
+         endif
+      endif
+c
+c     look for name in primitive functions
       call funtab(id,fptr,1)
       if(fptr.le.0) then
-         if(comp(1).eq.0) goto 30
+         if(comp(1).eq.0.and.fin.ne.-5) goto 30
          fin=0
          fun=0
       else
@@ -30,7 +40,7 @@ c     recherche parmi les fonctions fortran
       endif
       return
 c     
-c     est-ce une macro existant dans la pile?
+c     is a scilab code function already loaded in the variables stack
  30   k=bot-1
  31   k=k+1
       if(k.gt.isiz) goto 35
@@ -41,7 +51,7 @@ c     est-ce une macro existant dans la pile?
       fun=-1
       return
 c     
-c     recherche dans les bibliotheques de macro
+c     look in scilab code function libraries
  35   k=bot-1
  36   k=k+1
       if(k.gt.isiz) then
@@ -78,7 +88,7 @@ c
  40   fun=-2
       fin=l
 c     
-c     chargement
+c     load it in the variables stack
       n=nbibn
       call cvstr(n,istk(lbibn),buf,1)
       call cvname(id,buf(n+1:n+nlgh),1)
@@ -100,7 +110,7 @@ c
       loaded=.false.
  49   top=top+1
       job=lstk(bot)-lstk(top)
-c     on recupere toutes les variables du fichier
+c     get all functions defined in the file
       id1(1)=blank
       call savlod(lunit,id1,job,top)
       if(err.gt.0) goto 51

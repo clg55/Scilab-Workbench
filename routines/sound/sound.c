@@ -47,8 +47,8 @@ FILE *GetFile(fd)
 }
 
 
-void C2F(mopen)(fd,file,status,res,error)
-     int *error;
+void C2F(mopen)(fd,file,status,f_swap,res,error)
+     int *error,*f_swap;
      char *file,*status;
      double *res;
      int *fd;
@@ -56,7 +56,7 @@ void C2F(mopen)(fd,file,status,res,error)
   int	littlendian = 1;
   char	*endptr;
   endptr = (char *) &littlendian;
-  if (!*endptr) swap = 1;
+  if ( (!*endptr) && *f_swap == 1 ) swap = 1;
   sciprint("    Byte Swap status %d \r\n",swap);
   *fd = GetFirst();
   if ( *fd == MAXF )

@@ -11,7 +11,7 @@ c
       include '../stack.h'
 c     
       integer nops
-      parameter (nops=30)
+      parameter (nops=32)
       character*40 strg
       character*40 form
       double precision x
@@ -34,8 +34,8 @@ c                            +  -  * .*  *. .*.  / ./  /. ./.
       data (ops(i),i=1,10) /45,46,47,98,200,149,48,99,201,150/
 c                            \ .\   \. .\. ** =  <  >  <=  >=  <>
       data (ops(i),i=11,21)/49,100,202,151,62,50,59,60,109,110,119/
-c                             : [,] ins ext  '  [;]  |  &   ~
-      data (ops(i),i=22,nops) /44,01, 02 ,03 ,53, 04, 57, 58, 61/
+c                             : [,] ins ext '  [;]  | &   ~  .^  .'
+      data (ops(i),i=22,nops)/44,01, 02 ,03,53,04, 57,58, 61,113,104/
 c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -147,13 +147,14 @@ c     nouvelle 'operation'
       op=istk(lc)
 c     
       if(ddt.lt.-1) write(6,'(i7)') op
-      goto(20,25,40,42,30,41,45,50,50,60,15,90,90,90,90,100) ,op
+      goto(20,25,40,42,30,41,45,50,50,60,15,90,90,90,90,100,
+     &     12,101,102) ,op
 c     
 c     
 c     matfns
       if(op.ge.100)   goto 80
 c     
-      if(op.ne.99) then
+ 12   if(op.ne.99) then
          call error(44)
          return
       endif
@@ -268,6 +269,11 @@ c     type 5
 c     op
       ii=0
  31   ii=ii+1
+      if(ii.gt.nops) then
+         buf='Unmanaged operation'
+         call error(999)
+         return
+      endif
       if(ops(ii).ne.istk(lc+1)) goto 31
       call intstr(ii,istk(l),ni,1)
 c      call intstr(istk(lc+1),istk(l),ni,1)
@@ -617,6 +623,11 @@ c     type 5
 c     op
       ii=0
  52   ii=ii+1
+      if(ii.gt.nops) then
+         buf='Unmanaged operation'
+         call error(999)
+         return
+      endif
       if(ops(ii).ne.istk(lc0+1)) goto 52
       call intstr(ii,istk(l),ni,1)
       istk(il+6)=istk(il+5)+ni
@@ -978,6 +989,65 @@ c
 c     info sur numero de lignes
       lc=lc+2
       goto 10
+c
+ 101  continue
+c     mark named variable
+      il=iadr(lr)
+      istk(il)=10
+      istk(il+1)=1
+      istk(il+2)=2
+      istk(il+3)=0
+      istk(il+4)=1
+      l=il+7
+c     type 18
+      istk(l)=1
+      istk(l)=8
+      istk(il+5)=3
+      l=l+2
+c     nom de la variable
+      call namstr(istk(lc+1),istk(l),ni,1)
+      istk(il+6)=istk(il+5)+ni
+      l=l+ni
+c     
+      l=sadr(l)
+      istk(ilr)=istk(ilr-1)+l-lr
+      lr=l
+      ilr=ilr+1
+c     
+      lc=lc+1+nsiz
+      goto 10
+ 102  continue
+c     mkindx
+      il=iadr(lr)
+      istk(il)=10
+      istk(il+1)=1
+      istk(il+2)=3
+      istk(il+3)=0
+      istk(il+4)=1
+      l=il+9
+c     type 2
+      istk(l)=1
+      istk(l)=9
+      istk(il+5)=3
+      l=l+2
+
+c     n
+      call intstr(istk(lc+1),istk(l),ni,1)
+      istk(il+6)=istk(il+5)+ni
+      l=l+ni
+c     m
+      call intstr(istk(lc+2),istk(l),ni,1)
+      istk(il+8)=istk(il+7)+ni
+      l=l+ni
+c
+      l=sadr(l)
+      istk(ilr)=istk(ilr-1)+l-lr
+      lr=l
+      ilr=ilr+1
+c
+      lc=lc+3
+      goto 10
+
       
   120 format('(f',i2,'.',i2,')')
   130 format('(1pd',i2,'.',i2,')')

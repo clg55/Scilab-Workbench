@@ -158,6 +158,14 @@ c
  40   continue
 c     fin de l'execution d'une macro
 c-----------------------------------
+c     handle errcatch
+      if(errct.ne.0.and.errpt.ge.pt) then
+         errct=0
+         errpt=0
+         err1=0
+         err2=0
+      endif
+
 c     restaure  pointers
       k = lpt(1) - (13+nsiz)
       ilk=lin(k+6)
@@ -307,7 +315,8 @@ c     *call parse*
       go to 99
 c     
 c     fin exec
- 60   k = lpt(1) - (13+nsiz)
+ 60   continue
+      k = lpt(1) - (13+nsiz)
       lpt(1) = lin(k+1)
       lpt(2) = lin(k+2)
       lpt(3) = lin(k+3)

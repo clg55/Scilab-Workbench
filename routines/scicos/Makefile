@@ -14,13 +14,14 @@ BLOCKSF= evtdly.o cstblk.o dband.o \
 	sawtth.o tcslti.o scopxy.o evscpe.o integr.o readf.o affich.o\
 	intpol.o intplt.o minblk.o maxblk.o dlradp.o andlog.o iocopy.o \
 	sum2.o sum3.o delayv.o mux.o demux.o samphold.o dollar.o mscope.o \
-	eselect.o 
+	eselect.o intrp2.o   intrpl.o
 
 BLOCKSC=selector.o sum.o prod.o
 
 OBJSF=sciblk.o  addevt.o scicos.o cosini.o cossim.o cosend.o \
 	simblk.o grblk.o sctree.o skipvars.o scierr.o scifunc.o \
-	list2vars.o dtosci.o itosci.o scitoi.o scitod.o vvtosci.o $(BLOCKSF)
+	list2vars.o dtosci.o itosci.o scitoi.o scitod.o vvtosci.o \
+	scitovv.o $(BLOCKSF)
 
 OBJSC=callf.o import.o sciblk2.o $(BLOCKSC)
 
@@ -48,7 +49,26 @@ distclean::
 
 #--------------dependencies 
 
-callf.o: blocks.h ../machine.h
-sciblk.o : ../stack.h ../callinter.h
+callf.o: blocks.h ../machine.h ../sun/link.h
 scifunc.o : ../stack.h ../callinter.h
 selector.o: ../machine.h
+import.o: ../machine.h
+prod.o: ../machine.h
+sciblk2.o: ../machine.h
+sum.o: ../machine.h
+
+sciblk.o : ../stack.h ../callinter.h
+dtosci.o: ../stack.h
+itosci.o: ../stack.h
+list2vars.o: ../stack.h
+readf.o: ../stack.h
+readf.o: ../stack.h
+sciblk.o: ../stack.h
+scierr.o: ../stack.h
+scifunc.o: ../stack.h ../callinter.h
+scitod.o: ../stack.h
+scitoi.o: ../stack.h
+scitovv.o: ../stack.h
+skipvars.o: ../stack.h
+vvtosci.o: ../stack.h
+writef.o: ../stack.h

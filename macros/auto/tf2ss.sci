@@ -4,7 +4,7 @@ function [sl]=tf2ss(h)
 // h = transfer matrix 
 // sl = linear system in state-space representation (syslin list)
 //!
-if type(h)=2 then 
+if type(h)<=2 then 
   sl=syslin([],[],[],[],h);return;
 end
 [num,den]=h(2:3);

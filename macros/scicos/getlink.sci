@@ -245,15 +245,14 @@ if fromsplit then //link comes from a split
 
     // create split block
   if typo==1 then
-    model=list('lsplit',1,[1;1],[],[],[],[],[],[],'c',%f,[%t %f],' ',list())
-    graphics1=list(d,[1 1],%t,' ',ks,[nx+1;nx+2],[],[])
-    sp=list('Block',graphics1,model,' ','SPLIT_f')
+    sp=SPLIT_f('define')
+    sp(2)(1)=d;sp(2)(5)=ks;sp(2)(6)=[nx+1;nx+2];
+    SPLIT_f('plot',sp)
   else
-    model=list('lsplit',[],[],1,[1;1],[],[],[],[],'d',[%f,%f],[%t %f],' ',list())
-    graphics1=list(d,[1 1],%t,' ',[],[],[ks],[nx+1;nx+2])
-    sp=list('Block',graphics1,model,' ','CLKSPLIT_f')
+    sp=CLKSPLIT_f('define')
+    sp(2)(1)=d;sp(2)(7)=ks;sp(2)(8)=[nx+1;nx+2];
+    CLKSPLIT_f('plot',sp)
   end
-
 
   scs_m(ks)=link1;
   scs_m(nx)=sp

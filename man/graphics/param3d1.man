@@ -31,10 +31,10 @@ ebox
 : a vector of size (1,6) which gives the boundaries of the plot
 \fV[xmin,xmax,ymin,ymax,zmin,zmax]\fR when the value of type is \fV1\fR
 .SH DESCRIPTION 
-\fVparam3d()\fR is used to obtain a graphic of a parametric curve in R3, 
+\fVparam3d1\fR is used to obtain a graphic of a parametric curve in R3, 
 and can also be used to see a set of points in R3
 
-Enter the command \fVparam3d()\fR to see a demo.
+Enter the command \fVparam3d1()\fR to see a demo.
 .SH EXAMPLE 
 .nf
 t=0:0.1:5*%pi; t=t';

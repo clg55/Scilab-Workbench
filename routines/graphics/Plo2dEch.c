@@ -692,7 +692,7 @@ void zoom()
   else 
     {
       /* Using the mouse to get the new rectangle to fix boundaries */
-      integer ibutton,in,iwait=0;
+      integer ibutton,in,iwait=0,istr=0;
       double x0,yy0,x,y,xl,yl,bbox[4];
 #ifdef WIN32
 	  SetWinhdc();
@@ -702,7 +702,7 @@ void zoom()
 
       /** XXXXXX : a regler pour Win32 in = 6 **/
       C2F(dr1)("xset","alufunction",(in=6,&in),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-      C2F(dr1)("xclick","one",&ibutton,&iwait,PI0,PI0,PI0,PI0,&x0,&yy0,PD0,PD0,0L,0L);
+      C2F(dr1)("xclick","one",&ibutton,&iwait,&istr,PI0,PI0,PI0,&x0,&yy0,PD0,PD0,0L,0L);
       x=x0;y=yy0;
       ibutton=-1;
       while ( ibutton == -1 ) 

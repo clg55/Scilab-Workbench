@@ -276,10 +276,11 @@ Message message;
     int compteur=0;
     struct hostent *h;
 
-    /* canonize host name */
-    h = gethostbyname(message.tableau[4]);
+    /* If host is connected to internet, canonize host name */
+    if ((h = gethostbyname(message.tableau[4])) != NULL) {
     liberer(message.tableau[4]);
     message.tableau[4] = dupliquer_chaine(h->h_name);
+    }
 
     /* Meme machine */
     if(!strcmp(message.tableau[4], machine_hote)) {

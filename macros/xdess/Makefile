@@ -17,8 +17,8 @@ MACROS = errbar.sci fchamp.sci fcontour.sci fplot2d.sci fplot3d.sci \
 	titlepage.sci nyquist.sci m_circle.sci bode.sci \
 	chart.sci black.sci plzr.sci gainplot.sci evans.sci \
 	zgrid.sci graduate.sci  \
-	fac3d.sci fac3d1.sci eval3dp.sci plotframe.sci xsetm.sci\
-	edit_curv.sci drawmbar.sci getmenu.sci genfac3d.sci Sgrayplot.sci Sfgrayplot.sci \
-	fcontour2d.sci addcolor.sci
+	fac3d.sci fac3d1.sci eval3dp.sci plotframe.sci xsetm.sci \
+	edit_curv.sci drawmbar.sci getmenu.sci genfac3d.sci Sgrayplot.sci \
+	Sfgrayplot.sci fcontour2d.sci addcolor.sci replot.sci sgrid.sci
 
 include ../Make.lib

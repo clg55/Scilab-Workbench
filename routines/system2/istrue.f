@@ -13,15 +13,17 @@ c
       if(mod.ne.0) top=top-1
       if(istk(il).eq.4) then
          m=istk(il+1)*istk(il+2)
+         if(m.eq.0) goto 20
          do 10 i=1,m
             if(istk(il+2+i).eq.0) goto 20
  10      continue
       elseif(istk(il).eq.6) then
          m=istk(il+1)*istk(il+2)
          nel=istk(il+4)
-         if(nel.ne.m) goto 20
+         if(m.eq.0.or.nel.ne.m) goto 20
       elseif(istk(il).eq.1.and.istk(il+3).eq.0) then
          m=istk(il+1)*istk(il+2)
+         if(m.eq.0) goto 20
          l=sadr(il+4)
          do 11 i=0,m-1
             if(stk(l+i).eq.0.0d+0) goto 20

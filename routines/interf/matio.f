@@ -556,12 +556,23 @@ c     procedure de compilation des macros (copie de ce qui est dans matsys)
       pstk(pt)=fin
       fin=lstk(top)
       comp(1)=iadr(lstk(top+1))
+      comp(3)=0
       rstk(pt)=904
       icall=5
 c     *call* parse  macro
       return
  57   l=ids(1,pt)
       pt=pt-1
+      if(err1.ne.0) then
+         comp(2)=0
+         comp(1)=0
+         il=iadr(lstk(top))
+         istk(il)=0
+         lhs=0
+         err2=err1
+         err1=0
+         return
+      endif
       il=iadr(lstk(top))
       il1=iadr(lstk(top+1))
       n=comp(2)-il1
@@ -1463,6 +1474,7 @@ c
          call error(41)
          return
       endif
+
       if(rhs.eq.3) then
          iacces=top
          ilb=iadr(lstk(iacces))
@@ -1478,6 +1490,7 @@ c
          mode(1)=110
       elseif(rhs.eq.2) then
          mode(1)=100
+         iacces=0
       else
          call error(39)
          return

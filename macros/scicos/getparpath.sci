@@ -9,7 +9,7 @@ function ppath=getparpath(scs_m,bpath,ppath)
 //   ppath : list, each element is a vector giving the path to a block
 //           with non empty rpar or ipar or states
 //!
-excluded=['IN_f','OUT_f','CLKIN_f','CLKOUT_f']
+excluded=['IN_f','OUT_f','CLKIN_f','CLKOUT_f','CLKINV_f','CLKOUTV_f']
 [lhs,rhs]=argn(0)
 if rhs<2 then bpath=[],end
 if rhs<3 then ppath=list(),end

@@ -27,7 +27,7 @@ if mess then
     'palette for further scilab calls you must add following lines';
     'to your ~/.scilab file.';
     'If you agree I''ll do it for you'],txt)
-  write(u,txt,'(a)')
+  if txt<>[] then write(u,txt,'(a)'),end
 end
 file('close',u)
 [u,ierr]=file('open','~/scicos_pal.exe','unknown')

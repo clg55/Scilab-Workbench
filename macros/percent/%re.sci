@@ -15,9 +15,7 @@ end
 if type(i)==4 then i=find(i),end
 if type(j)==4 then j=find(j),end
 
-if type(i)<>1 then i=horner(i,size(f(2),1)),end
-if type(j)<>1 then j=horner(j,size(f(2),2)),end
-if size(i,'*')==0|size(j,'*')==0 then f1=[],return,end
 f1=f;
 [n,d]=f1(2:3)
 f1(2)=n(i,j);f1(3)=d(i,j)
+if f1(3)==[] then f1=[],end

@@ -20,6 +20,10 @@ for k=2:size(scs_m)
       clkin=[clkin;model(5)]
     case 'CLKOUT_f' then
       clkout=[clkout;model(4)];
+    case 'CLKINV_f' then
+      clkin=[clkin;model(5)]
+    case 'CLKOUTV_f' then
+      clkout=[clkout;model(4)];  
     end
   end
 end

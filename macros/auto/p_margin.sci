@@ -9,7 +9,7 @@ select flag(1)
  else error(97,1),
 end;
 //
-if h(4)<>'c' then error(93,1),end
+//if h(4)<>'c' then error(93,1),end
 //
 [n,d]=h(2:3);w=poly(0,'w')
 // 

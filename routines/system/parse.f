@@ -8,13 +8,13 @@ c     ====================================================================
 c     
       logical iflag
       common /basbrk/ iflag
-      integer semi,equal,eol,lparen,rparen,colon
+      integer semi,equal,eol,lparen,rparen,colon,dot
       integer blank,comma,left,right,less,great,quote,percen
-      integer name,insert
+      integer name,num,insert,extrac
 c     
       integer id(nsiz),ans(nsiz)
       integer pts,psym,excnt,p,r
-      integer pcount,strcnt,bcount,qcount
+      integer pcount,strcnt,bcount,qcount,pchar
 c
       integer otimer,ntimer,stimer,ismenu
       external stimer,ismenu
@@ -23,8 +23,8 @@ c
 c     
       data blank/40/,semi/43/,equal/50/,eol/99/,comma/52/,colon/44/
       data lparen/41/,rparen/42/,left/54/,right/55/,less/59/,great/60/
-      data quote/53/,percen/56/
-      data name/1/,insert/2/
+      data quote/53/,percen/56/,dot/51/
+      data name/1/,num/0/,insert/2/,extrac/3/
       data ans/672929546,nz1*673720360/
 c     
       save job
@@ -44,7 +44,7 @@ c
       if(pt.gt.0) goto 86
       if(err.gt.0) goto 98
 
-c     initialisation
+c     initialization
 c-------------------
  05   sym = eol
       job=0
@@ -65,8 +65,8 @@ c
       if(comp(1).eq.0) goto 12
       if(lin(lpt(4)+1).eq.eol) goto 88
 c     
-c     acquisition d'un nouvelle ligne
-c-------------------------------------
+c     get a new line
+c-------------------
  12   continue
       if(lct(4).le.-10) then 
          lct(4)=-lct(4)-11      
@@ -89,14 +89,14 @@ c-------------------------------------
  13   continue
       call getlin(job)
       if(fin .eq. -1) then
-c     gestion des lignes suite dans le cas "de l'appel par fortran"
+c     Continuation line handling when scilab is called as a routine
          fun=99
          return
       endif
       job=0
       err = 0
 c     
-c     debut d'un nouveau statement , clause , expr ou command
+c     Beginning of a new statement, clause expression or command
 c------------------------------------------------------------
  15   continue
       if (inxsci.eq.1) then
@@ -119,7 +119,7 @@ c
       excnt = 0
       if(.not.iflag) goto 18
 
-c     gestion des pauses
+c     Handling of pauses
  16   if ( eptover(1,psiz))  goto 98
       pstk(pt)=rio
       ids(2,pt)=top
@@ -133,7 +133,7 @@ c     gestion des pauses
       endif
 c     *call* macro
       goto 88
-c     fin des pauses
+c     pauses termination
  17   rio=pstk(pt)
       top=ids(2,pt)
       pt=pt-1
@@ -155,14 +155,17 @@ c-------------------------
  20   call comand(syn)
       if (err .gt. 0) goto 98
       if (fun .eq. 99) return
+      if (fun .ne. 0) goto 93
       if (fin .lt. 0) goto 80
       if (fin .eq. 2) goto 88
       if (fin .eq. 3) goto 16
       if (fin .eq. 4) goto 05
       if (fin .gt. 0) goto 75
-      rhs = 0
-      fin=0
-      call funtab(syn,fin,1)
+ 21   rhs = 0
+c      fin=0
+c      call funtab(syn,fin,1)
+      fin=-5
+      call funs(syn)
       if (fin .gt. 0) then
 c        name est le nom d'une primitive
          if(char1.eq.equal) then
@@ -232,8 +235,16 @@ c     looking for equal
             goto 98
          endif
       else if(sym.eq.quote) then
-         if(.not.(psym.le.blank.or.psym.eq.rparen.or.psym.eq.right
-     $        .or.psym.eq.percen.or.psym.eq.quote)) strcnt=1
+c     .  check if transpose or beginning of a string
+         if(psym.ne.num.and.psym.ne.name.and.psym.ne.rparen.and.
+     $        psym.ne.right.and.psym.ne.dot.and.psym.ne.quote)
+     $        strcnt=1
+         if (bcount.ne.0) then
+            pchar=lin(lpt(3)-2)
+            if(pchar.eq.blank) strcnt=1
+         endif
+c1         if(.not.(psym.le.blank.or.psym.eq.rparen.or.psym.eq.right
+c1     $        .or.psym.eq.percen.or.psym.eq.quote)) strcnt=1
       else if(sym.eq.left) then
          bcount=bcount+1
       else if(sym.eq.right) then
@@ -309,7 +320,7 @@ c     next lines for recursive index
       endif
       if(icount.gt.0) then
          if(comp(1).eq.0) then
-c     .     form  list with individual indexesx
+c     .     form  list with individual indexes
             call mkindx(icount+1,excnt)
             if(err.gt.0) return
          else
@@ -369,7 +380,7 @@ c     lhs finished, start rhs
 c     *call* expr
       goto 81
  65   continue
-      if (rstk(pt-lhs).eq.313) then
+      if (rstk(pt-lhs).eq.313) then 
 c     store  new variable as "named" at the top of the stack
          if (sym.eq.rparen .or. sym.eq.comma) then
             call mrknmd()
@@ -397,7 +408,7 @@ c-------------------
       rstk(pt)=704
       fin=insert
 c     *call* allops(insert)
-      goto 93
+      goto 91
  71   lhs=pstk(pt)
  72   call stackp(ids(1,pt),0)
       if (err .gt. 0) goto 98
@@ -486,49 +497,48 @@ c-----------------------
  80   icall=0
       call clause
       if (err .gt. 0) goto 98
-      goto(81,82,83,93,88,92,15,80,85),icall
+      goto(81,82,83,91,88,90,15,80,85),icall
       if (pt .le. 0) goto 15
       r = rstk(pt)/100
-      goto(81,82,83,93,88,92,95,80,85),r
+      goto(81,82,83,91,88,90,92,80,85),r
       goto 99
 c     
  81   icall=0
       call expr
       if (err .gt. 0) goto 98
-      goto(81,82,83,93,88,92,15,80,85),icall
+      goto(81,82,83,91,88,90,15,80,85),icall
       r = rstk(pt)/100
-      goto(81,82,83,93,88,92,95,80,85),r
+      goto(81,82,83,91,88,90,92,80,85),r
       goto 99
 c     
  82   icall=0
       call terme
       if (err .gt. 0) goto 98
-      goto(81,82,83,93,88,92,15,80,85),icall
+      goto(81,82,83,91,88,90,15,80,85),icall
       r = rstk(pt)/100
-      goto(81,82,83,93,88,92,95,80,85),r
+      goto(81,82,83,91,88,90,92,80,85),r
       goto 99
 c     
  83   icall=0
       call fact
       if (err .gt. 0) goto 98
-      goto(81,82,83,93,88,92,15,80,85),icall
+      goto(81,82,83,91,88,90,15,80,85),icall
       r = rstk(pt)/100
-      goto(81,82,83,93,88,92,95,80,85),r
+      goto(81,82,83,91,88,90,92,80,85),r
       goto 99
 c     
  85   icall=0
       if(err1.ne.0) then
          if(int(rstk(pt)/100).eq.9) then
-c added 14/04/97
             if(rstk(pt).eq.901.or.rstk(pt).eq.904) then
 c              *call* matfns
                return
-            endif
-c end addition 14/04/97
-            if(rstk(pt).ne.903) then
+            elseif(rstk(pt).ne.903) then
                pt=pt-1
                goto 86
             endif
+         else
+            goto 86
          endif
       endif
 c     compilation matfns: <100*fun rhs lhs fin>
@@ -540,49 +550,72 @@ c     *call* matfns
          return
       endif
  86   if (err .gt. 0) goto 98
-      goto(81,82,83,93,88,92,15,80,85),icall
+      goto(81,82,83,91,88,90,15,80,85),icall
       r = rstk(pt)/100
-      goto(81,82,83,93,88,92,95,80,85),r
+      goto(81,82,83,91,88,90,92,80,85),r
       goto 99
       
 c     
  88   icall=0
       call macro
       if (err .gt. 0) goto 98
-      goto(81,82,83,93,88,92,10,80,85),icall
+      goto(81,82,83,91,88,90,10,80,85),icall
       r = rstk(pt)/100
-      goto(81,82,83,93,88,92,95,80,85,89),r
+      goto(81,82,83,91,88,90,92,80,85,89),r
       goto 99
  89   fun=99
       return
 c     
- 92   icall=0
+ 90   icall=0
       call  run
       if (err .gt. 0) goto 98
       if (fun .eq. 99) return
-c     le dernier label sert a gerer le retour de abort
-      goto(81,82,83,93,88,92,15,80,85,05),icall
+c     last label is used to handle return from abort
+      goto(81,82,83,91,88,90,15,80,85,05),icall
       r = rstk(pt)/100
-      goto(81,82,83,93,88,92,95,80,85),r
+      goto(81,82,83,91,88,90,92,80,85),r
       goto 99
 c     
- 93   icall=0
+ 91   icall=0
       call allops
       if (err .gt. 0) goto 98
-      goto(81,82,83,93,88,92,15,80,85),icall
+      goto(81,82,83,91,88,90,15,80,85),icall
       r = rstk(pt)/100
-      goto(81,82,83,93,88,92,95,80,85),r
+      goto(81,82,83,91,88,90,92,80,85),r
       goto 99
 c     
- 95   goto(17,35,65,71,86,97) rstk(pt)-700
+ 92   goto(17,35,65,71,86,97,94) rstk(pt)-700
       goto 99
 c     
+ 93   continue
+c     command like function and macro call
+      if ( eptover(1,psiz)) goto 98
+      pstk(pt)=1
+      call putid(ids(1,pt),ans)
+      rstk(pt)=707
+      if (fun .gt. 0)  then
+c        *call* matfns
+         goto 85
+      else
+         if (comp(1).ne.0)  then
+            rhs=rhs+1
+            fin=extrac
+c           *call* allops(extrac)
+            goto 91
+         else
+            fin=lstk(fin)
+c           *call* macro
+            goto 88
+         endif
+      endif
+ 94   goto 71
+c
  96   continue
-c     gestion des evements asynchrones "interpretes"
+c     asynchronous events handling
       call getmen(buf,lb,nentry)
       call bexec(buf(1:lb),lb,ierr)
       if(ierr.ne.0) goto 15
-      pt=pt+1
+      if ( eptover(1,psiz)) goto 98
       pstk(pt)=top
       rstk(pt)=706
 
@@ -593,8 +626,8 @@ c     *call* macro
       goto 15
       
  98   continue
-c     recuperation des erreurs
-c-----------------------------
+c     error recovery
+c-------------------
       imode=abs(errct)/10000
       imode=imode-8*int(imode/8)
       if(imode.eq.3) then
@@ -602,8 +635,7 @@ c-----------------------------
          return
       endif
 c     
-c     erreur lors d'un external  (niv) ou d'une compilation (comp)
-c     erreur lors d'une pause
+c     error in an external (niv), during compilation (comp) or in a pause
       if(pt.ne.0) then
          if(rstk(pt).eq.503.and.rio.eq.rte) then
             comp(1)=0
@@ -615,11 +647,11 @@ c     catched error while compiling
             goto 88
          endif
       endif
-c     erreur dans un external
+c     error in an external
       if(niv.gt.0) then
          return
       else
-c     erreur dans une pause
+c     error in a  pause
          comp(1)=0
          goto 05
       endif

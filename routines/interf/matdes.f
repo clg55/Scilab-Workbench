@@ -9,7 +9,7 @@ C     fun=7
       goto (1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,
      $     21,22,23,24,25,26,27,28,29,30,
      $     31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,
-     $     48,49,50,51,52,53,54,55,56,57,58,59) fin
+     $     48,49,50,51,52,53,54,55,56,57,58,59,60) fin
       return
  1    call scichamp('champ',champ)
       return
@@ -128,6 +128,8 @@ C     fun=7
  58   call sciwinsid('winsid')
       return
  59   call sciparam3d1('param3d1')
+      return
+ 60   call scixstrbi('xstringb')
       return
       end
      
@@ -1676,11 +1678,11 @@ c      implicit undefined (a-z)
       character*(*) fname
 c      implicit undefined (a-z)
       include '../stack.h'
-      logical cremat,checklhs
+      logical cremat,checklhs,cresmat2
       integer topk, lr,lc,v
       double precision  x,y,dv
       integer i
-      if (.not.checklhs(fname,1,4)) return
+      if (.not.checklhs(fname,1,5)) return
       if (rhs.ge.1 ) then 
          iflag = 1
       else
@@ -1689,10 +1691,15 @@ c      implicit undefined (a-z)
       call sciwin()
       if(lhs.eq.4) then
          call dr1('xclickany'//char(0),'xv'//char(0),
-     $        i,iw,v,v,v,v,x,y,dv,dv)
+     $        i,iw,iflag,v,v,v,x,y,dv,dv)
+      else if ( lhs.eq.5 ) then 
+         istr=1
+         call dr1('xclick'//char(0),buf,
+     $        i,iflag,istr,v,v,v,x,y,dv,dv)
       else
+         istr=0
          call dr1('xclick'//char(0),'xv'//char(0),
-     $        i,iflag,v,v,v,v,x,y,dv,dv)
+     $        i,iflag,istr,v,v,v,x,y,dv,dv)
       endif
       if (top.eq.0.or.rhs.lt.0)  top=top+1
 c      if (top.eq.1) lstk(top)=1
@@ -1720,6 +1727,23 @@ c      if (top.eq.1) lstk(top)=1
          if (.not.cremat(fname,top+3,0,1,1,lr,lc)) return
          stk(lr)=dble(iw)
          top=top+3
+      else if (lhs.eq.5) then
+         if (.not.cremat(fname,top,0,1,1,lr,lc)) return
+         stk(lr)=dble(i)
+         if (.not.cremat(fname,top+1,0,1,1,lr,lc)) return
+         stk(lr)=x
+         if (.not.cremat(fname,top+2,0,1,1,lr,lc)) return
+         stk(lr)=y
+         if (.not.cremat(fname,top+3,0,1,1,lr,lc)) return
+         stk(lr)=dble(iw)
+         nlr5= istr
+         if ( istr.eq.0 ) then 
+            nlr5 = 4 
+            buf = 'void'
+         endif
+         if(.not.cresmat2(fname,top+4,nlr5,lr5)) return
+         call cvstr(nlr5,istk(lr5),buf,0)
+         top=top+4
       else
          buf = fname // ' wrong lhs '
          call error(999)
@@ -2260,7 +2284,66 @@ cc    <>=xstring(x,y,str,angle,flag)
       call objvide(fname,top)
       return
       end        
-      
+
+      subroutine scixstrbi(fname)
+      character*(*) fname
+c      implicit undefined (a-z)
+      include '../stack.h'
+      logical checkrhs,getsmat,getscalar
+      integer topk,lr,nlr,v,is
+      double precision x,y,w,h
+cc    <>=xstring(x,y,str,angle,flag)
+      integer m,n,ib,m1,n1,i,j,fill
+      character*(4) opt
+      call sciwin()
+      fill = 0
+      if (.not.checkrhs(fname,5,6)) return
+      topk=top
+      if ( rhs.eq.6 ) then
+         if(.not.getsmat(fname,topk,top,m,n,1,1,lr6,nlr6))return
+         if (nlr6.ne.4) then
+            buf=fname//' : option has a wrong size, 4 expected'
+            call error(999)
+            return
+         endif
+         call cvstr(nlr6,istk(lr6),opt,1)
+         if ( opt.ne.'fill') then 
+            buf=fname//' : option should be : "fill" '
+            call error(999)
+            return
+         endif
+         fill=1
+         top=top-1
+      endif
+      if (.not.getscalar(fname,topk,top,lr)) return
+      h=stk(lr)
+      top=top-1
+      if (.not.getscalar(fname,topk,top,lr)) return
+      w=stk(lr)
+      top=top-1
+      if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
+      ib=1
+      do 10 i=1,m
+         do 20 j=1,n
+            call getsimat(fname,topk,top,m1,n1,i,j,lr,nlr)
+            call  cvstr(nlr,istk(lr),buf(ib:ib+nlr),1)
+            ib=ib+nlr+1
+            buf(ib-1:ib-1)= ' '
+ 20      continue
+         buf(ib-1:ib-1)='\n'
+ 10   continue
+      buf(ib-1:ib-1)= char(0)
+      top=top-1
+      if (.not.getscalar(fname,topk,top,lr)) return
+      y=stk(lr)
+      top=top-1
+      if (.not.getscalar(fname,topk,top,lr)) return
+      x=stk(lr)
+      call dr1('xstringb'//char(0),buf,fill,v,v,v,v,v,x,y,w,h)
+      call objvide(fname,top)
+      return
+      end        
+
       subroutine scixstringl(fname)
       character*(*) fname
 c      implicit undefined (a-z)
@@ -2817,6 +2900,11 @@ cc    [s,v]= gsort(x,[str1,str2]) str1 = 'g','r','c', str2 = 'i' | 'd'
          if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
          call cvstr(1,istk(lr),iord,1)
          iord(2:2)=char(0)
+         if ( iord(1:1).ne.'i'.and.iord(1:1).ne.'d') then 
+            buf = fname // ' : third argument must be "i" or "d"'
+            call error(999)
+            return
+         endif
          top=top-1
       endif
       if (rhs.ge.2) then
@@ -2895,6 +2983,11 @@ cc    [s,v]= gsort(x,[str1,str2]) str1 = 'g','r','c', str2 = 'i' | 'd'
          if (.not.getsmat(fname,topk,top,m,n,1,1,lr,nlr)) return
          call cvstr(1,istk(lr),iord,1)
          iord(2:2)=char(0)
+         if ( iord(1:1).ne.'i'.and.iord(1:1).ne.'d') then 
+            buf = fname // ' : third argument must be "i" or "d"'
+            call error(999)
+            return
+         endif
          top=top-1
       endif
       if (rhs.ge.2) then

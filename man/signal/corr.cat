@@ -12,13 +12,36 @@ CALLING SEQUENCE
    ...
   [wk]=corr('updt',xk,[yk],w,xu)
 
+PARAMETERS
+
+  x         : a real vector
+
+  y         : a real vector, default value x.
+
+  nlags     : integer, number of correlation coefficients desired.
+
+  xmacro    : a scilab external (see below).
+
+  ymacro    : a scilab external (see below), default value xmacro
+
+  n         : an integer, total size of the sequence (see below).
+
+  sect      : size of sections of the sequence (see below).
+
+  xi        : a real vector
+
+  yi        : a real vector,default value xi.
+
+  cov       : real vector, the correlation coefficients
+
+  mean      : real number or vector,  the mean of x and if given y
 DESCRIPTION
   Computes
                   n - m - 1
                    ====
-                   \
-          cov(m) =  >        (x  - xmean) (y      - ymean)
-                   /           k            m + k
+                   \                                         1
+          cov(m) =  >        (x  - xmean) (y      - ymean) * ---
+                   /           k            m + k            n-m
                    ====
                    k = 0
 
@@ -29,7 +52,6 @@ DESCRIPTION
   with corr(y,x,...)
 
   Short sequences:
-
   [cov,mean]=corr(x,[y],nlags) returns the first nlags correlation coeffi-
   cients and mean = mean of x (mean of [x,y] if y is an argument).  The
   sequence x (resp. y) is assumed real, and x and y are of same dimension n.
@@ -48,6 +70,7 @@ DESCRIPTION
        source code of dgetx for an example).  n = total size of the sequence.
        sect = size of sections of the sequence. sect must be a power of 2.
        cov has dimension sect. Calculation is performed by FFT.
+
   "Updating method":
   [w,xu]=corr('updt',x1,[y1],w0)
   [w,xu]=corr('updt',x2,[y2],w,xu)

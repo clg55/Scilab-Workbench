@@ -39,6 +39,13 @@ reaches a multiple of this value.
 Buffer size
 : To improve efficiency it is possible to buffer the input data. The
 drawing is only done after each \fVBuffer size\fR call to the block.
+.TP
+Accept herited events
+: if 0 \fVSCOPE_f\fR draws a new point only when an event occurs on its
+event input port. if 1 \fVSCOPE_f\fR draws a new point when an event occurs
+on its event input port and when it's regular input changes due to
+an event on an other upstrem block (herited events).
+
 .SH REMARKS
 Output window number, Output window size, Output window
 position are only taken into account at the initialisation time of the

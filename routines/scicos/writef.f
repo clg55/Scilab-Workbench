@@ -27,7 +27,7 @@ c
       K=int(z(1))
       lunit=int(z(2))
 c
-      if(flag.eq.2) then
+      if(flag.eq.1.and.nevprt.gt.0) then
 c     add new point to the buffer
          K=K+1
          z(2+K)=t

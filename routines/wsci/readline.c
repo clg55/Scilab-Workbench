@@ -293,7 +293,7 @@ static void backspace()
 #define isterm(f) isatty(fileno(f))
 #else
 /** other windows compiler + mingwin32 **/
-#define isterm(f) (f==stdin || f==stdout || f==stderr)
+#define isterm(f) ((f==stdin && InteractiveMode()==0)|| f==stdout || f==stderr)
 #endif
 
 /***************************************************
@@ -312,7 +312,7 @@ static int NotTTyRead(char *prompt,char *buffer,int buf_size,int *eof)
   if(!tty) 
     {
       /** We are reading a file ==> no prompts : XXXXX to test **/
-      fputs("-[file read]->",stdout); 
+      fputs("-->",stdout); 
       /* read a line into the buffer, but not too* big */
       *eof = (fgets(buffer, buf_size, stdin) == NULL);
       /* remove newline character if there */

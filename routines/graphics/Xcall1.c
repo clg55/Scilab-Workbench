@@ -82,6 +82,7 @@ OpTab keytab_1[] ={
   {"xstart", (func)C2F(dr)},
   {"xstring",displaystring_1},
   {"xstringa",displaystringa_1},
+  {"xstringb",xstringb_1},
   {"xstringl",boundingbox_1},
   {(char *)NULL,(void (*)()) 0}
 };
@@ -418,12 +419,12 @@ void cleararea_1(fname, str, v1, v2, v3, v4, x7, x8, x, y, w, h, lx0, lx1)
   C2F(dr)(fname,str,&x1,&yy1,&w1,&h1,x7,x8,PD0,PD0,PD0,PD0,lx0,lx1);
 }
 
-void xclick_1(fname, str,ibutton,iflag, v2, x5, x6, x7, x, y, dx3, dx4, lx0, lx1)
+void xclick_1(fname, str,ibutton,iflag,istr, x5, x6, x7, x, y, dx3, dx4, lx0, lx1)
      char *fname;
      char *str;
      integer *ibutton;
      integer *iflag;
-     integer *v2;
+     integer *istr;
      integer *x5;
      integer *x6;
      integer *x7;
@@ -435,16 +436,16 @@ void xclick_1(fname, str,ibutton,iflag, v2, x5, x6, x7, x, y, dx3, dx4, lx0, lx1
      integer lx1;
 { 
   integer x1,yy1,n=1,rect[4];
-  C2F(dr)(fname,str,ibutton,&x1,&yy1,iflag,x6,x7,PD0,PD0,dx3,dx4,lx0,lx1);
+  C2F(dr)(fname,str,ibutton,&x1,&yy1,iflag,istr,x7,PD0,PD0,dx3,dx4,lx0,lx1);
   C2F(echelle2d)(x,y,&x1,&yy1,&n,&n,rect,"i2f",3L);
 }
 
-void xclick_any_1(fname, str, ibutton, iwin, v2, x5, x6, x7, x, y, dx3, dx4, lx0, lx1)
+void xclick_any_1(fname, str, ibutton, iwin, iflag, x5, x6, x7, x, y, dx3, dx4, lx0, lx1)
      char *fname;
      char *str;
      integer *ibutton;
      integer *iwin;
-     integer *v2;
+     integer *iflag;
      integer *x5;
      integer *x6;
      integer *x7;
@@ -458,7 +459,7 @@ void xclick_any_1(fname, str, ibutton, iwin, v2, x5, x6, x7, x, y, dx3, dx4, lx0
   integer x1,y1,n=1,rect[4];
   integer verb=0,cur,na;
   C2F(dr)("xget","window",&verb,&cur,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
-  C2F(dr)(fname,str,ibutton,&x1,&y1,iwin,x6,x7,PD0,PD0,PD0,PD0,lx0,lx1);
+  C2F(dr)(fname,str,ibutton,&x1,&y1,iwin,iflag,x7,PD0,PD0,PD0,PD0,lx0,lx1);
   C2F(dr)("xset","window",iwin,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(echelle2d)(x,y,&x1,&y1,&n,&n,rect,"i2f",3L);
   C2F(dr)("xset","window",&cur,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
@@ -879,6 +880,99 @@ void boundingbox_1(fname, string, v1, v2, v3, x6, x7, x8, x, y, rect, dx4, lx0, 
   C2F(echelle2d)(rect,rect+1,rect1,rect1+1,&n,&n,rect2,"i2f",3L);
   C2F(echelle2dl)(rect+2,rect+3,rect1+2,rect1+3,&n,&n,rect2,"i2f");
 }
+
+/** a string in a bounded box : with font size change to fit into 
+  the box **/
+
+#define FONTMAXSIZE 6
+
+void xstringb_1(fname,str,fflag,v2,v3,v4,x7,x8,xd,yd,wd,hd,lx0,lx1)
+     char *fname;
+     char *str;
+     integer *fflag,*v2,*v3,*v4,*x7,*x8;
+     double *xd,*yd,*wd,*hd;
+     integer lx0;
+     integer lx1;
+{
+  integer rect[4], x,y,w,h,wbox,hbox,size,n=1;
+  integer fontid[2],narg,verbose=0;
+  if (GetDriver()=='R') 
+    StoreXcall1(fname,str,fflag,1L,v2,1L,v3,1L,v4,1L,
+		&Ivide,1L,&Ivide,1L,xd,1L,yd,1L,wd,1L,hd,1L);
+  C2F(echelle2d)(xd,yd,&x,&y,&n,&n,rect,"f2i",3L);  
+  C2F(echelle2dl)(wd,hd,&wbox,&hbox,&n,&n,rect,"f2i"); 
+  C2F(sciwin)();
+  C2F(dr)("xget","font",&verbose,fontid,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  size = FONTMAXSIZE;
+  w = wbox +1;
+  if ( *fflag == 1 ) 
+    {
+      while ( (w > wbox || h > hbox) && size >=0  ) 
+	{
+	  size--;
+	  C2F(dr)("xset","font",fontid,&size,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+	  GSciString(0,&x,&y,str,&w,&h);
+	}
+    }
+  else 
+    GSciString(0,&x,&y,str,&w,&h);
+  x = x +  (wbox - w)/2.0;
+  y = y -  (hbox - h)/2.0; 
+  GSciString(1,&x,&y,str,&w,&h);
+  C2F(dr)("xset","font",fontid,fontid+1,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+}
+
+
+/**********************************
+ * StrMat = 'xxxxZxxxxZxxx....' Z = \n 
+ * find the enclosing rectangle for drawing 
+ * the string StrMat 
+ * and the string is Drawn if Dflag ==1 ;
+ **********************************/
+
+GSciString(Dflag,x,y,StrMat,w,h)
+     char *StrMat;
+     integer *x,*y,*w,*h;
+     int Dflag;
+{
+  char *p = StrMat,*p1,*p2,*plast;
+  integer yi=*y;
+  integer wc =0,i=1;
+  char name[4];
+  GetDriver1(name,PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+  p1 = plast = p+ strlen(p);
+  while (1) 
+    {
+      integer logrect[4];
+      double angle=0.0;
+      integer flag=1;
+      p2 =p1 ; *p1 = '\0';
+      while ( p1 != p && *p1 != '\n' ) 
+	p1--;
+      if ( Dflag == 1) 
+	C2F(dr)("xstring",( p1 == p ) ? p1 : p1 +1,
+		x,&yi,PI0,&flag,PI0,PI0,&angle,PD0,PD0,PD0,0L,0L);
+      C2F(dr)("xstringl",
+	      ( p1 == p ) ? p1 : p1 +1,
+	      x,&yi,logrect,PI0,PI0,PI0,
+	      PD0,PD0,PD0,PD0,0L,0L);	
+      if ( p2 != plast) 	*p2 = '\n';
+      wc = Max( wc , logrect[2]);
+      if ( p == p1 ) 
+	{
+	  yi=yi- logrect[3];
+	  break;
+	}	
+      else 
+	{
+	  yi=yi-1.2*logrect[3];
+	}
+    }
+  *w = wc ;
+  *h = *y - yi;
+}
+/** Alloccation **/
+
 
 static void Myalloc(xm, ym, n, err)
      integer **xm;

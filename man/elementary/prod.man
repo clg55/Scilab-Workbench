@@ -5,8 +5,8 @@ prod - product
 .SH CALLING SEQUENCE
 .nf
 y=prod(x)
-y=prod(x,'r')
-y=prod(x,'c')
+y=prod(x,'r') or y=prod(x,1)
+y=prod(x,'c') or y=prod(x,2)
 .fi
 .SH PARAMETERS
 .TP
@@ -19,10 +19,13 @@ y
 For a vector or a matrix \fVx\fR, \fVy=prod(x)\fR (or, equivalently,
 \fVy=prod(x,'*')\fR) returns in the scalar \fVy\fR the prod of all the entries
 of \fVx\fR, , e.g. \fVprod(1:n)\fR is n!
-\fVy=prod(x,'r')\fR (or, equivalently, \fVy=prod(x,1)\fR) returns in each 
-entry of the column vector \fVy\fR the prod of each row of \fVx\fR.
-\fVy=prod(x,'c')\fR returns in each entry of the row vector 
-\fVy\fR the prod of each column of \fVx\fR.
+.LP
+\fVy=prod(x,'c')\fR (or, equivalently, \fVy=prod(x,2)\fR) computes the
+columns elementwise product of  \fVx\fR. \fVy\fR is the column vector: \fVy(i)=prod(x(:,i))\fR. 
+.LP
+\fVy=prod(x,'r')\fR (or, equivalently, \fVy=prod(x,1)\fR)computes the
+rows elementwise product of  \fVx\fR. \fVy\fR is the row vector: \fVy(i)=prod(x(i,:))\fR. 
+
 .LP
 \fVprod\fR is not implemented for sparse matrices.
 .SH EXAMPLE

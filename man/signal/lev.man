@@ -23,20 +23,24 @@ rc
 resolve the Yule-Walker equations
 .IG
 .nf
-      |r(0)   r(1)   ... r(N-1)|| a(1) | |sigma2|
-      |r(1)   r(0)   ... r(N-2)|| a(2) | |  0   |
-      |  :      :    ...    :  ||   :  |=|  0   |
-      |  :      :    ...    :  ||   :  | |  0   |
-      |r(N-1) r(N-2) ...  r(0) ||a(N-1)| |  0   |
+      |R(0)   R(1)   ... R(N-1)|| ar(1) | |sigma2|
+      |R(1)   R(0)   ... R(N-2)|| ar(2) | |  0   |
+      |  :      :    ...    :  ||   :   |=|  0   |
+      |  :      :    ...    :  ||   :   | |  0   |
+      |R(N-1) R(N-2) ...  R(0) ||ar(N-1)| |  0   |
+where
+       R(i)=r(i-1)
+
 .fi
 .FI
-.LA $$ \left( \matrix{ r_0 & r_1 & \ldots & r_{N-1} \cr
-.LA		r_1 & r_0 & \ldots & r_{N-2} \cr
+.LA $$ \left( \matrix{ R_0 & R_1 & \ldots & R_{N-1} \cr
+.LA		R_1 & R_0 & \ldots & R_{N-2} \cr
 .LA		\vdots & \vdots & \ldots & \vdots \cr
-.LA		r_{N-1} & r_{N-2} & \ldots & r_{0} \cr
-.LA	   } \right) \vector{ a_1 \cr a_2 \cr \vdots \cr
-.LA	a_{N-1}}
+.LA		R_{N-1} & R_{N-2} & \ldots & R_{0} \cr
+.LA	   } \right) \vector{ ar_1 \cr ar_2 \cr \vdots \cr
+.LA	ar_{N-1}}
 .LA	= \vector{ \sigma_2 \cr 0 \cr \vdots \cr 0}	$$
+.LA where $R_i=r(i-1)$.
 using Levinson's algorithm.
 .SH AUTHOR
 C. B.

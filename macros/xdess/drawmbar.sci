@@ -22,6 +22,7 @@ thick=xget('thickness');
 if ~colored then 
   xset('thickness',2),
   back=xget('lastpattern')
+  realblack= 1
   butt=back
 else
   cmap=xget('colormap')

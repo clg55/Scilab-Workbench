@@ -36,10 +36,18 @@ case 'set' then
 	  nclkin=nclkin+1
 	  cinp=[cinp modelb(9)]
 	  cin=[cin;modelb(5)]
+ 	case 'CLKINV_f' then
+	  nclkin=nclkin+1
+	  cinp=[cinp modelb(9)]
+	  cin=[cin;modelb(5)]         
 	case 'CLKOUT_f' then
 	  nclkout=nclkout+1
 	  coutp=[coutp modelb(9)]
 	  cout=[cout;modelb(4)]
+	case 'CLKOUTV_f' then
+	  nclkout=nclkout+1
+	  coutp=[coutp modelb(9)]
+	  cout=[cout;modelb(4)]          
 	end
       end
     end

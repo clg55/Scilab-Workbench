@@ -130,6 +130,8 @@ BINDISTFILES = \
 	$(SCIBASE)/imp/NperiPos.ps $(SCIBASE)/macros \
 	$(SCIBASE)/man \
 	$(SCIBASE)/maple $(SCIBASE)/scripts $(SCIBASE)/util \
+	$(SCIBASE)/routines/*.h \
+	$(SCIBASE)/routines/graphics/Math.h $(SCIBASE)/routines/graphics/Graphics.h $(SCIBASE)/routines/sun/link.h \
 	$(SCIBASE)/.binary
 
 tarbindist:

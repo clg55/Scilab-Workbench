@@ -72,7 +72,7 @@ c     conversion ascii ->code
 c on ignore le caractere         
       else
          lj=lj+1
-         line(lj)=k
+         line(lj)=k-1
       endif
    50 continue
       end

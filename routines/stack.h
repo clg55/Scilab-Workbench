@@ -11,7 +11,7 @@ c nlgh  length of variable names
 c csiz  used for character coding
 c*-------------------------------------------------------------------
       integer   csiz,bsiz,isiz,psiz,nsiz,lsiz
-      parameter (csiz=63,bsiz=4096,isiz=500,psiz=256,nsiz=6,lsiz=16384)
+      parameter (csiz=63,bsiz=4096,isiz=1024,psiz=256,nsiz=6,lsiz=16384)
       integer   nlgh,vsiz
       parameter (nlgh=nsiz*4,vsiz=2)
       integer   maxdb,maxbpt
@@ -39,10 +39,10 @@ c
       integer ddt,err,lct(8),lin(lsiz),lpt(6),hio,rio,wio,rte,wte
       common /iop/ ddt,err,lct,lin,lpt,hio,rio,wio,rte,wte
 
-      integer err1,err2,errct,toperr
-      common /errgst/ err1,err2,errct,toperr
+      integer err1,err2,errct,toperr,errpt
+      common /errgst/ err1,err2,errct,toperr,errpt
 
-      integer sym,syn(nsiz),char1,fin,fun,lhs,rhs,ran(2),comp(2)
+      integer sym,syn(nsiz),char1,fin,fun,lhs,rhs,ran(2),comp(3)
       common /com/ sym,syn,char1,fin,fun,lhs,rhs,ran,comp
 
       character alfa(csiz)*1,alfb(csiz)*1,buf*(bsiz)

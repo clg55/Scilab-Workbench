@@ -53,6 +53,8 @@ interpln - linear interpolation
 intsplin - integration of experimental data by spline interpolation
 inttrap - integration of experimental data by trapezoidal interpolation
 isdef - check variable  existence
+isinf -  check for infinite entries
+isnan -  check for Not a Number entries
 kron - Kronecker product
 ldivf - left symbolic division
 linspace - linearly spaced vector
@@ -63,6 +65,7 @@ logspace - logarithmically spaced vector
 macr2lst - function to list conversion
 macrovar - variables of function
 manedit -  editing a manual item
+median - median (row median, column median) of vector/matrix entries
 modulo - arithmetic remainder modulo m
 mulf -  symbolic multiplication
 nnz -  number of non zero entries in a matrix

@@ -9,7 +9,7 @@ svplot - singular-value sigma-plot
 .SH PARAMETERS
 .TP
 sl
-: \fVsyslin\fR list
+: \fVsyslin\fR list (continuous, discrete or sampled system)
 .TP
 w
 : real vector (optional parameter)
@@ -20,14 +20,18 @@ the singular values of its transfer function matrix:
              G(jw) = C(jw*I-A)B^-1+D
 or
              G(exp(jw)) = C(exp(jw)*I-A)B^-1+D
+or
+             G(exp(jwT)) = C(exp(jw*T)*I-A)B^-1+D
 .fi
-evaluated over the frequency range specified by \fVw\fR.
+evaluated over the frequency range specified by \fVw\fR. (T is the sampling
+period, \fVT=sl('dt')\fR for sampled systems).
 .LP
 \fVsl\fR is a \fVsyslin\fR list representing the system
-\fV[A,B,C,D]\fR in state-space form.
+\fV[A,B,C,D]\fR in state-space form. \fVsl\fR can be continous or
+discrete time or sampled system. 
 .LP
 The \fVi\fR-th column of the output matrix \fVSVM\fR contains the singular
-values of \fVG(exp(jw))\fR for the \fVi\fR-th frequency value \fVw(i)\fR.
+values of \fVG\fR for the \fVi\fR-th frequency value \fVw(i)\fR.
 .nf
 SVM = svplot(sl)
 .fi
@@ -42,9 +46,9 @@ SVM = svplot(sl,logspace(-3,%pi)) (discrete)
 .nf
 x=logspace(-3,3);
 y=svplot(ssrand(2,2,4));
-xbasc();plot2d([log(x')/log(10),log(x')/log(10)],20*log(y')/log(10));
-xtitle("Singular values (db)");
-xbasc();gainplot(x,y);
+xbasc();plot2d1("oln",x',20*log(y')/log(10));
+xgrid(12)
+xtitle("Singular values plot","(Rd/sec)", "Db");
 .fi
 .SH AUTHOR
 F.D

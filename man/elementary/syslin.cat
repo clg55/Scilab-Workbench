@@ -68,6 +68,7 @@ EXAMPLES
   A=[0,1;0,0];B=[1;1];C=[1,1];
   S1=syslin('c',A,B,C)   //Linear system definition
   S1("A")    //Display of A-matrix
+  S1("X0"), S1("dt") // Display of X0 and time domain
   s=poly(0,'s');
   D=s;
   S2=syslin('c',A,B,C,D)

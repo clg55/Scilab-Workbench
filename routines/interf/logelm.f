@@ -35,30 +35,31 @@ c
          call error(39)
          return
       endif
+
       il1=iadr(lstk(top))
-      if(istk(il1).eq.6) goto 20
+
       if(istk(il1).eq.1) then
+c     argument is a standard matrix
+         m1=istk(il1+1)
          mn1=istk(il1+1)*istk(il1+2)
-         if(mn1.eq.0) goto 999
          l1=sadr(il1+4)
          l=l1
+         if(mn1.gt.0) then
          do 11 k=0,mn1-1
             if(stk(l1+k).ne.0.0d0) then
                stk(l)=float(k+1)
                l=l+1
             endif
  11      continue
+
          nt=l-l1
-         goto 14
-      elseif(istk(il1).ne.4) then
-         err=1
-         call error(215)
-         return
+         else
+            nt=0
       endif
-c
+      elseif(istk(il1).eq.4) then
+c     argument is a full boolean matrix
       m1=istk(il1+1)
-      n1=istk(il1+2)
-      mn1=m1*n1
+         mn1=istk(il1+1)*istk(il1+2)
       il=max(il1+3+mn1,iadr(lstk(top)+mn1*lhs)+8)
       err=sadr(il+mn1)-lstk(bot)
       if(err.gt.0) then
@@ -79,7 +80,18 @@ c
       else
          nt=0
       endif
- 14   istk(il1+1)=min(1,nt)
+      elseif(istk(il1).eq.6.) then
+c     argument is a sparse boolean matrix
+         goto 20
+      elseif(istk(il1).eq.5) then
+c     argument is a sparse  matrix
+         goto 20
+      else
+         err=1
+         call error(215)
+         return
+      endif
+      istk(il1+1)=min(1,nt)
       istk(il1+2)=nt
       istk(il1+3)=0
       lstk(top+1)=l1+nt
