@@ -1,5 +1,5 @@
 function [la,lb]=lattn(n,p,cov)
-//<la,lb>=lattn(n,p,cov)
+//[la,lb]=lattn(n,p,cov)
 //macro which solves recursively on n (p being fixed)
 //the following system (normal equations), i.e. identifies
 //the AR part(poles) of a vector ARMA(n,p) process

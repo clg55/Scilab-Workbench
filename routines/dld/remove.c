@@ -26,7 +26,7 @@
  */
 void
 dld_remove_defined_symbol (name)
-char *name;
+const char *name;
 {
     register symbol *sp;
     register char *p;
@@ -64,7 +64,7 @@ char *name;
 #else
 	if (sp->defined == (N_TYPE | N_EXT) && sp->value) {
 #endif
-	    free (sp->value);
+	    free ((void *)sp->value);
 	    sp->value = 0;
 	}
 

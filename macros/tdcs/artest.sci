@@ -1,4 +1,4 @@
-//[]=artest(f_l,odem,xdim,npts)
+function []=artest(f_l,odem,xdim,npts)
 //[]=artest(f_l,[odem,xdim,npts])
 // Integration of the lorentz system 
 //!
@@ -10,9 +10,9 @@ if rhs <=0, f_l='arnol';end
 x_message(["Integration of the arnold equation";
           "[20;2;2], is a good initial point"]);
 portr3d(f_l,odem,xdim,npts);
-//end
 
-//[xdot]=arnold(t,x)
+
+function [xdot]=arnold(t,x)
 //[xdot]=arnold(t,x)
 // an example of dynamical system with chaotic behaviour
 // due to arnold.
@@ -20,9 +20,9 @@ portr3d(f_l,odem,xdim,npts);
 xdot(1)= cos(x(2)) + sin(x(3))
 xdot(2)= cos(x(3)) + sin(x(1))
 xdot(3)= cos(x(1)) + sin(x(2))
-//end
 
-//[]=iarf(aa)
+
+function []=iarf(aa)
 //[]=iarf([aa])
 // Initialisation des parametres aa(6) pour l'equation d'arnold
 //      ydot(1)=aa(1)*cos(y(2)) +aa(2)*sin(y(3))
@@ -34,7 +34,7 @@ xdot(3)= cos(x(1)) + sin(x(2))
 [lhs,rhs]=argn(0)
 if rhs=0, aa=ones(1,6);end
 fort('arset',aa,1,'r','sort');
-//end
+
 
 
 

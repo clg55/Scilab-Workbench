@@ -11,5 +11,5 @@ char **ip;
 int *op;
 {
   int i = 0;
-  cvstr_(n,op,*ip,&i,*n);
+  F2C(cvstr)(n,op,*ip,&i,*n);
 }

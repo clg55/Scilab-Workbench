@@ -3,7 +3,7 @@
 //polynomes (operation ./)
 //!
 [p1,p2]=simp(p1,p2);
-f=list('r',p1,p2,[])
+f=tlist('r',p1,p2,[])
 //end
 
 

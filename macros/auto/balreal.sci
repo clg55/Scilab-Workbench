@@ -1,10 +1,11 @@
 function [slb,u]=balreal(a)
 [lhs,rhs]=argn(0)
-   if type(a)<>15 then error(91,1),end
-   if a(1)<>'lss' then error(91,1),end
-   [a,b,c,d,x0,dom]=a(2:7);
-   if dom=[] then error(96,1),end
-   domain='c';
+//-compat type(a)<>15 retained for list/tlist compatibility
+if type(a)<>15&type(a)<>16 then error(91,1),end
+if a(1)<>'lss' then error(91,1),end
+[a,b,c,d,x0,dom]=a(2:7);
+if dom=[] then error(96,1),end
+domain='c';
 if dom<>'c' then domain='d',end
 if lhs>2  then error('balreal: 1 or 2 output arguments: slb [,u]'),end
 wc=lyap(a',-b*b',domain)
@@ -17,7 +18,7 @@ a=r*a*ri;b=r*b;c=c*ri
 a=diag(ll)*a*diag(lli)
 b=diag(ll)*b
 c=c*diag(lli)
-slb=list('lss',a,b,c,d,diag(ll)*r*x0,dom),
+slb=tlist('lss',a,b,c,d,diag(ll)*r*x0,dom),
 if lhs=2 then u=ri*diag(lli),end
 
 

@@ -7,14 +7,13 @@ c     ====================================================================
 c     
       INCLUDE '../stack.h'
 c     
-      integer plus,minus,star,dstar,slash,bslash,dot,colon,concat
-      integer quote,extrac,insert,less,great,equal,et,ou,non
+      integer dot,colon
+      integer less,great,equal,et,ou,non
 c     
       integer iadr,sadr,op,top0
 c     
-      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
-      data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
-      data less/59/,great/60/,equal/50/,extrac/3/,insert/2/
+      data dot/51/,colon/44/
+      data less/59/,great/60/,equal/50/
       data ou/57/,et/58/,non/61/
 c
       iadr(l)=l+l-1
@@ -325,6 +324,10 @@ c
       n = 1
       if (m2 .gt. 1) m = mn1
       if (m2 .eq. 1) n = mn1
+      if (m1.lt.0) then
+         m=mn1
+         n=1
+      endif
       istk(il1)=4
       istk(il1+1)=m
       istk(il1+2)=n
@@ -429,26 +432,78 @@ c
          call error(21)
          return
       endif
-      if (n3.gt.1.or.n2.gt.1) go to 87
+
+      if (n3.gt.1.and.m3.gt.1) then
+c     arg3(arg1)=arg2 with arg3 a matrix
+         m3=n3*m3
+         n3=1
+         md=md*nd
+         nd=1
+         if(n1.lt.0) then
+c     .     arg3(:)=arg2 with arg3 a matrix
+            if (mn2.ne.mk*nk) then
+               call error(21)
+               return
+            endif
+            istk(il1)=4
+            istk(il1+1)=mk
+            istk(il1+2)=nk
+            l1=il1+3
+            call icopy(mn2,istk(l2),1,istk(l1),1)
+            lstk(top+1)=sadr(l1+mn2)
+            return
+         else
+            m=0
+            do 87 i = 1, m1*n1
+               ls=int(stk(l1+i-1))
+               if(ls.le.0) then
+                  call error(21)
+                  return
+               endif
+               m=max(m,ls)
+ 87         continue
+            if (m.gt.m3) then
+               call error(21)
+               return
+            endif
+            mr=mk
+            nr=nk
+            goto 94
+         endif
+      endif
+c
+      if (n3.le.1.and.n2.le.1) then
 c     vecteur colonne
-      m=isign(mn1,m1)
-      if(m.ge.0) goto 90
-      if(mn2.ne.mn3) then
-         call error(15)
-         return
-      endif
-      go to 90
+         m=isign(mn1,m1)
+         if(m.ge.0) goto 90
+         if(mn2.ne.mn3) then
+            call error(15)
+            return
+         endif
+      else
 c     vecteur ligne
- 87   if (m3.gt.1.or.m2.gt.1) then
-         call error(15)
-         return
-      endif
-      n=isign(mn1,m1)
-      l2=l1
-      if(n.ge.0) goto 90
-      if(mn2.ne.mn3) then
-         call error(15)
-         return
+         if (m3.gt.1.or.m2.gt.1) then
+c             matrix(:)=vector
+              if(mn2.ne.mn3) then
+                 call error(15)
+                 return
+              endif
+            istk(il1)=4
+            istk(il1+1)=m3
+            istk(il1+2)=n3
+            l1=il1+3
+            call icopy(mn2,istk(l2),1,istk(l1),1)
+            lstk(top+1)=sadr(l1+mn2)
+            return
+         endif
+         n=isign(mn1,m1)
+         l2=l1
+         
+         if(n.ge.0) goto 90
+         if(mn2.ne.mn3) then
+            call error(15)
+            return
+         endif
       endif
       go to 90
 c     
@@ -509,23 +564,24 @@ c
  92   mr = max(mr,md)
 c     
       nr=nk
-      if (n .lt. 0) go to 94
-      if(n.ne.nd) then
-         call error(15)
-         return
-      endif
-      do 93 i = 0, n-1
-         ls=int(stk(l2+i))
-         if(ls.le.0) then
-            call error(21)
+      if (n .ge. 0) then
+         if(n.ne.nd) then
+            call error(15)
             return
          endif
-         nr=max(nr,ls)
- 93   continue
- 94   nr = max(nr,nd)
+         do 93 i = 0, n-1
+            ls=int(stk(l2+i))
+            if(ls.le.0) then
+               call error(21)
+               return
+            endif
+            nr=max(nr,ls)
+ 93      continue
+      endif
+      nr = max(nr,nd)
 c     
 c     scalar matrix case
-      mnk=mk*nk
+ 94   mnk=mk*nk
       mnd=md*nd
       mnr=mr*nr
       lr=iadr(lw)

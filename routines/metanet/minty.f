@@ -10,6 +10,7 @@
       do 50 i=1,n
          predw (i)=0
          sufval(i)=infr
+         pile(i)=0
  50   continue
       predw(j1)=u0
       sufval(j1)=cumul

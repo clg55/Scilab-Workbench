@@ -1,23 +1,20 @@
-#!/bin/sh
+#!/bin/SCILABGS
 # Warning : some old versions of sh dont allow inline function definitions
 # like do_scilex()... . In this case use a system V sh (sh5)
-# Set the SCI environment variable
-SCI="SCILAB_DIRECTORY"
-MYMANPATH=
-CCOMPILER="Ccompiler"
-FCOMPILER="Fcompiler"
+# Set the SCI environment variable if not already set
+if test "$SCI" = ""; then
+  SCI="SCILAB_DIRECTORY"
+fi
+PRINTERS="lp:LaserHP:SalleBal:LaserLabo|labo:Secretariat:ColorPS"
 #############################################################################
 #                                                                           #
 #                       DO NOT MODIFY BELOW THIS LINE                       #
 #                                                                           #
 #############################################################################
 export SCI
+export PRINTERS
 VERSION="SCILAB_VERSION"
 export VERSION
-SCIMANPATH=$SCI/man/Man-Part1:$SCI/man/Man-Part2
-export SCIMANPATH
-MANPATH=$MYMANPATH:$SCIMANPATH
-export MANPATH
 
 do_scilex()
 {
@@ -25,6 +22,10 @@ do_scilex()
     export PATH
     XAPPLRESDIR=$SCI/X11_defaults
     export XAPPLRESDIR
+    XLESSHELPFILE=$SCI/X11_defaults/xless.help
+    export XLESSHELPFILE
+    NETHELPDIR=$SCI/X11_defaults
+    export NETHELPDIR
     tty -s && stty kill '^U' intr '^C' erase '^H' quit '^\' eof '^D' susp '^Z'
     $SCI/bin/scilex $* 
 }
@@ -35,6 +36,10 @@ do_geci_scilex()
     export PATH
     XAPPLRESDIR=$SCI/X11_defaults
     export XAPPLRESDIR
+    XLESSHELPFILE=$SCI/X11_defaults/xless.help
+    export XLESSHELPFILE
+    NETHELPDIR=$SCI/X11_defaults
+    export NETHELPDIR
     tty -s && stty kill '^U' intr '^C' erase '^H' quit '^\' eof '^D' susp '^Z'
     $SCI/bin/geci -local $SCI/bin/scilex $* 
 }
@@ -42,61 +47,40 @@ do_geci_scilex()
 do_help()
 {
 echo "Usage  :"
-echo     "	scilab [ -ns -nw -display display]"
+echo     "	scilab [-ns -nw -display display]"
 echo     "	scilab -help <key>"
-echo     "	scilab -xhelp [ -display display]"
 echo     "	scilab -k <key>"
 echo     "	scilab -link <objects>"
-echo     "	scilab -macro <macro-name>"
-}
-
-do_xman()
-{
-        x="Xman*manualFontNormal:-misc-fixed-medium-r-normal--*-130-*-*-c-*-iso8859-1"
-        y="Xman*manualFontBold:-adobe-times-bold-r-normal--*-100-*-*-p-*-iso8859-1"
-        z="Xman*manualFontItalic:-adobe-times-medium-i-normal--*-100-*-*-p-*-iso8859-1"
-	xman -xrm $x -xrm $y -xrm $z -bothshown -notopbox $*  &
+echo     "	scilab -function <function-name>"
+echo     "	scilab -print_p file printer"
+echo     "	scilab -print_l file printer"
+echo     "	scilab -save_p file format"
+echo     "	scilab -save_l file format"
 }
 
 do_mank()
 {
-    man -k $* 
+	f1=`grep -i $1 $SCI/man/Man-Part1/whatis 2> /dev/null`
+	f2=`grep -i $1 $SCI/man/Man-Part2/whatis 2> /dev/null`
+	if  test -n "$f1$f2" 
+	then
+		grep -i $1 $SCI/man/Man-Part1/whatis 2> /dev/null
+		grep -i $1 $SCI/man/Man-Part2/whatis 2> /dev/null
+	else
+		echo $1: nothing appropriate
+	fi
 }
-
 
 do_man()
 {
-    man  $* 
-}
-
-do_man_mips()
-{
-	MAN1=$SCI/man/Man-Part1/
-	MAN2=$SCI/man/Man-Part2/
-	if  grep $1 $MAN1/whatis  > /dev/null
+	MAN=$SCI/man
+	f=`ls $MAN/*/cat*/$1.* 2> /dev/null`
+	if  test -n "$f"
 	then 
-		/usr/ucb/man -P $MAN1 $1
-	else 
-		if  grep $1 $MAN2/whatis > /dev/null
-	then 
-		/usr/ucb/man -P $MAN2 $1
-	else 
+		cat $f
+	else
 		echo No manual entry for $1
 	fi 
-	fi 
-}
-
-do_mank_mips()
-{
-    grep $1 $SCI/man/Man-Part1/whatis
-    grep $1  $SCI/man/Man-Part2/whatis
-}
-
-
-do_mank_hp()
-{
-    grep $1 $SCI/man/Man-Part1/whatis
-    grep $1  $SCI/man/Man-Part2/whatis
 }
 
 do_compile()
@@ -135,14 +119,38 @@ do_lib()
 	exit 0
 }
 
+
 do_print() 
 {
-	if [ "P$PRINTER" = "P" ]	
-	then  $SCI/bin/Blpr " " $1  | lpr 
-	else  $SCI/bin/Blpr " " $1  | lpr -P$PRINTER
-	fi
-	rm -f $1 
+	$SCI/bin/BEpsf $1 $2 
+	lpr -P$3 $2.eps
+	rm -f $2 $2.eps
+
 }
+
+do_save() 
+{
+	case $3 in 
+          Postscript)
+		$SCI/bin/BEpsf $1 $2 
+          	 ;;
+          Postscript-Latex)
+		$SCI/bin/Blatexpr $1 1.0 1.0 $2 
+	   	;;
+	  Xfig)
+		case $1 in
+		-portrait)
+			mv $2 $2.fig
+		;;
+		-landscape)
+			sed -e "2s/Portrait/Landscape/" $2 >$2.fig
+			rm -f $2
+		;;
+		esac
+           	;;
+	esac
+}
+
 
 case $# in
     0)
@@ -157,15 +165,11 @@ case $# in
 		do_geci_scilex $*
 		;;
 	     -help)
-		do_man scilab
+		do_man scilab|more
 		;;
-             -link|-macro|-k)
+             -link|-function|-k)
 		do_help
                  ;;
-	     -xhelp)
-                shift
-		do_xman 
-		;;
              *)
 		do_help
                 ;;
@@ -190,16 +194,10 @@ case $# in
 		do_geci_scilex $*
 		;;
             -help)
-		do_man $2
-                ;;
-            -xhelp)
-		do_xman
+		do_man $2|more
                 ;;
             -comp)
 		do_compile $2
-                ;;
-            -print)
-		do_print $2
                 ;;
 	    -k)
 		do_mank $2
@@ -208,7 +206,7 @@ case $# in
                 shift
 		$SCI/bin/scilink $SCI $*
                 ;;
-            -macro)
+            -function)
 		$SCI/bin/minfopr $SCI $2
 		;;
             *)
@@ -221,6 +219,18 @@ case $# in
             -lib)
 		do_lib $2 $3
                 ;;
+            -print_l)
+                do_print -landscape $2 $3
+                ;;
+            -print_p)
+                do_print -portrait $2 $3
+                ;;
+            -save_l)
+                do_save -landscape $2 $3
+                ;;
+            -save_p)
+                do_save -portrait $2 $3
+                ;;
             *)
 		do_help
                 ;;
@@ -232,14 +242,9 @@ case $# in
                 shift
 		$SCI/bin/scilink $SCI $*
                 ;;
-	    -xhelp)
-		shift
-		do_xman $*
-		;;
             *)
 		do_help
                 ;;
         esac
         ;;
 esac
-

@@ -40,8 +40,11 @@ pas_def='auto' //
 //
 //
 ilf=0
-select type(sl)
-case 15 then  // sl,fmin,fmax [,pas] [,comments]
+typ=type(sl)
+//-compat next line added for list/tlist compatibility
+if typ==15 then typ=16,end
+select typ
+case 16 then  // sl,fmin,fmax [,pas] [,comments]
   typ=sl(1)
   if typ<>'lss'&typ<>'r' then
     error(97,1)
@@ -124,7 +127,8 @@ kf=1
 phi1=phi+5*ones(phi);
 xgeti=xget("mark");
 xset("mark",2,xgeti(2));
-xclip(rect(1),rect(4),rect(3)-rect(1),rect(4)-rect(2));
+xset("clipgrf");
+
 
 
 kk=1;p0=[phi(:,kk) d(:,kk)];ks=1;dst=0;

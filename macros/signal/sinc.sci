@@ -1,4 +1,4 @@
-//<x>=sinc(n,fl)
+function [x]=sinc(n,fl)
 //<x>=sinc(n,fl)
 //Calculate n samples of the function sin(2*pi*fl*t)/(pi*t)
 //for t=-n/2:n/2 (i.e. centered around the origin).
@@ -16,6 +16,6 @@
    if ino2=no2 then xn(no2+1)=2*fl; xd(no2+1)=1;end
    x=xn./xd;
  
-//end
+
 
 

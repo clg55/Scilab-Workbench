@@ -142,7 +142,7 @@ char *argv[];
 	    interpreter_message(message_recu);
 	    liberer_message(message_recu);
 	  }
-	  else fprintf(stderr,"Scruteur : <main> format de message incorrect.\n");
+	  else fprintf(stderr,"Scrutation: <main> incorrect message format\n");
 	}}
       /* FIN IF */
       application_scrutee=application_suivante;
@@ -153,14 +153,14 @@ char *argv[];
 
 static void signal_arret_scruteur()
 {
-    Erreur_scruteur("<signal_arret_scruteur> : Arret anormal du scruteur.");
+    Erreur_scruteur("<signal_arret_scruteur> : abnormal scrutation stop.");
 }
 
 
 void Erreur_scruteur(message_erreur)
 char *message_erreur;
 {
-    fprintf(stderr,"Erreur Scruteur : %s\n",message_erreur);
+    fprintf(stderr,"Scrutation error: %s\n",message_erreur);
     detruire_applications_scruteur();
     exit(1);
 }

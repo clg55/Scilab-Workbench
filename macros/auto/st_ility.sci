@@ -3,10 +3,10 @@ function [n,nc,u,sl]=st_ility(sl,tol)
 [lhs,rhs]=argn(0)
 [a,b,c,d,x0,dom]=sl(2:7);
 if dom=[] then 
-       dom='c';warning('st_ility: sl assumed continuous!');
+ dom='c';warning('st_ility: time domain not given => sl assumed continuous!');
 end
 typ='c';if dom<>'c' then typ='d',end
-[na,nb]=size(b);
+[na,na]=size(a);[nw,nb]=size(b);
 // controllable part
 if rhs=1 then [a,b,u,n]=contr(a,b)
          else [a,b,u,n]=contr(a,b,tol)
@@ -30,7 +30,7 @@ if n<>na then
   end;
 end;
 //
-if lhs==4 then sl=list('lss',a,b,c,d,x0,dom),end
+if lhs==4 then sl=tlist('lss',a,b,c,d,x0,dom),end
 
 
 

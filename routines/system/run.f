@@ -6,17 +6,17 @@ c
       include '../stack.h'
 c     
       double precision x
-      integer op,equal,less,great,r,ix(2)
+      integer op,equal,r,ix(2)
       equivalence (x,ix(1))
       logical logops,ok,iflag,istrue,ptover,cremat,cresmat,
-     $     vcopyobj,ilog
+     $     vcopyobj
       integer p,lr,nlr,lcc
       common /basbrk/ iflag
-      integer otimer,ntimer,stimer
-      external stimer
+      integer otimer,ntimer,stimer,ismenu
+      external stimer,ismenu
       save otimer
       data otimer/0/
-      data equal/50/,less/54/,great/55/
+      data equal/50/
 c     
       call xscion(inxsci)
       if (ddt .eq. 4) then
@@ -33,7 +33,7 @@ c
       r=rstk(pt)
       ir=r/100
       if(ir.ne.6) goto 01
-      goto(33,66,82,92,58),r-600
+      goto(33,66,82,92,58,116),r-600
 c     
 c     debut d'une macro compilee
  01   continue
@@ -173,7 +173,12 @@ c
       pstk(pt)=0
       ids(1,pt)=l0
       ids(2,pt)=lct(8)
+      ids(3,pt)=top
  47   lc=l0
+      if(top.ne.ids(3,pt)) then 
+         call error(115)
+         return
+      endif
       call nextj(istk(l0-nsiz),pstk(pt))
       if(pstk(pt).ne.0) then
          lct(8)=ids(2,pt)
@@ -182,6 +187,7 @@ c
             if (ntimer.ne.otimer) then
                call sxevents()
                otimer=ntimer
+               if (ismenu().eq.1) goto 115
             endif
          endif
          goto 10
@@ -320,6 +326,7 @@ c
             if (ntimer.ne.otimer) then
                call sxevents()
                otimer=ntimer
+               if (ismenu().eq.1) goto 115
             endif
          endif
          goto 10
@@ -365,6 +372,7 @@ c
          if (ntimer.ne.otimer) then
             call sxevents()
             otimer=ntimer
+            if (ismenu().eq.1) goto 115
          endif
       endif
       r=rstk(pt)-610
@@ -535,6 +543,30 @@ c     compteur de ligne sans avoir a analyser la suite des codes operatoires
  110  continue
       lct(8)=istk(lc+1)
       lc=lc+2
+      goto 10
+
+c
+c     gestion des evements asynchrones "interpretes"
+c
+ 115  continue
+      call getmen(buf,lb,nentry)
+      call bexec(buf(1:lb),lb,nentry,ierr)
+      if(ierr.ne.0) goto 10
+      pt=pt+1
+      ids(1,pt)=lc
+      ids(2,pt)=l0
+      ids(3,pt)=nc
+      rstk(pt)=606
+      icall=5
+c     *call* macro
+      return
+ 116  lc=ids(1,pt)
+      l0=ids(2,pt)
+      nc=ids(3,pt)
+      top=top-1
+      pt=pt-1
+      r=rstk(pt)-610
+      goto(74,71,72,73,73,73) ,r
       goto 10
 c
 c     quit

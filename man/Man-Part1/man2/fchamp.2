@@ -4,7 +4,7 @@
 fchamp - draw a 2d vector field 
 .SH CALLING SEQUENCE
 .nf
-fchamp(f,t,xr,yr,[arfact,flag])
+fchamp(f,t,xr,yr,[arfact,brect,strf])
 .fi
 .SH PARAMETERS
 .TP 10
@@ -30,38 +30,23 @@ t
 xr,yr
 : two vectors of size (1,n1) (1,n2) which specifies the grid on which the vector field is to be computed.
 .TP 
-arfact
-: an optional argument of type real which gives a scale factor for the display of the arrow heads on the plot (default value is 1.0)
-.TP
-flag
-: string of length 1
-.RS
-.TP
-"0"
-: No axis (default value)
-.TP
-"1"
-: axis using the value of rect
-.TP
-"2"
-: axis and rectangle using previous call.
-.RE
+arfact,brect,strf
+: optional arguments, see \fVchamp\fR.
 .SH DESCRIPTION 
 the \fVfchamp\fR is used to draw a two dimensional vector field described by a a Scilab 
 external.
+
+Enter the command \fVchamp()\fR to see a demo.
 .SH EXAMPLE
-enter the command \fVchamp()\fR to see a demo 
-.LP
-Another example :
 .nf
  deff('[xdot] = derpol(t,x)',['xd1 = x(2)';
            "xd2 = -x(1) + (1 - x(1)**2)*x(2)";
            "xdot = [ xd1 ; xd2 ]"]);
- fchamp(derpol,0,-1:0.1:1,-1:0.1:1);
+ xf= -1:0.1:1;
+ yf= -1:0.1:1;
+ fchamp(derpol,0,xf,yf);
+ xbasc();
+ fchamp(derpol,0,xf,yf,1,[-2,-2,2,2],"011");
 .fi
 .SH AUTHOR
 J.Ph.C.
-
-
-
-

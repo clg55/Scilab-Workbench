@@ -60,8 +60,8 @@ static char RCSid[] =
 #include "spmatrix.h"
 #include "spDefs.h"
 
-
-
+static void SolveComplexMatrix();
+static void SolveComplexTransposedMatrix();
 
 
 /*
@@ -138,7 +138,6 @@ register  RealVector  Intermediate;
 register  RealNumber  Temp;
 register  int  I, *pExtOrder, Size;
 ElementPtr  pPivot;
-void SolveComplexMatrix();
 
 /* Begin `spSolve'. */
     ASSERT( IS_VALID(Matrix) AND IS_FACTORED(Matrix) );
@@ -473,7 +472,7 @@ register  RealVector  Intermediate;
 register  int  I, *pExtOrder, Size;
 ElementPtr  pPivot;
 RealNumber  Temp;
-void SolveComplexTransposedMatrix();
+
 
 /* Begin `spSolveTransposed'. */
     ASSERT( IS_VALID(Matrix) AND IS_FACTORED(Matrix) );

@@ -17,7 +17,9 @@ For \fVV\fR a vector, matrix or list, \fVmax(V)\fR is the largest element
 .LP
 For matrices, \fV[m,k]=max(V)\fR gives in addition
 the index of the maximum.
-.SH EXAMPLE
+
+For example:
+
 .nf
 [m,[k]]=max([V1,V2,...,Vn])
 .fi
@@ -25,13 +27,14 @@ returns the vector m:
 .nf
 m(i)=max([V1(i),....,Vn(1)])
 .fi
-the vector \fVk\fR contains for each \fVm(i)\fR the number of the 
+and the vector \fVk\fR contains for each \fVm(i)\fR the number of the 
 first \fVVj(i)\fR achieving the maximum.
 .nf
 [m [,k]]=max(list(v1,...,vn))
 .fi
 is an equivalent syntax.
-.LP Note that \fVmax\fR and \fVmaxi\fR are equivalent.
+.LP 
+Note that \fVmax\fR and \fVmaxi\fR are equivalent.
 .SH SEE ALSO
 sort, find, mini
 

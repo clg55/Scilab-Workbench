@@ -22,12 +22,9 @@
 
 --------------------------------------------------------------------------*/
 
-#define PI0 (int *) 0
-
 #include <stdio.h>
 #include <math.h>
 #include "Math.h"
-#include "../machine.h"
 
 extern char GetDriver_();
 /*------------------------------------------------------------
@@ -36,39 +33,44 @@ extern char GetDriver_();
  - y is a (1,n2) matrix 
  - x,y,z are stored as one dimensionnal array in C 
 ---------------------------------------------------------------*/
+extern char GetDriver_();
+  
 
-C2F(xgray)(x,y,z,n1,n2)
-     double x[],y[],z[];
-     int *n1,*n2;
+C2F(xgray)(x,y,z,n1,n2,strflag,brect,aaint,l1)
+     double x[],y[],z[],brect[];
+     integer *n1,*n2,aaint[];
+     long int l1;
+     char strflag[];
 {
-  int IRect[4];
-  double xmin,xmax,ymin,ymax;
   double FRect[4],scx,scy,xofset,yofset;
-  static int *xm,*ym,err=0;
-  int j,aaint[4];
-  int x1,yy1,w1,h1;
+  static char logflag[]="nn";
+  integer IRect[4],Xdec[3],Ydec[3];
+  double xx[2],yy[2];
+  static integer *xm,*ym,err=0;
+  integer j,job=1;
+  integer x1,yy1,w1,h1,nn1=1,nn2=2;
   /** If Record is on **/
   if (GetDriver_()=='R') 
-    StoreGray("gray",x,y,z,n1,n2); 
-  aaint[0]=aaint[2]=2;aaint[1]=aaint[3]=10;
-  xmin=x[0];ymin= -y[*n2-1],xmax=x[*n1-1],ymax= -y[0];
-  FRect[0]=xmin;FRect[1]= -ymax;FRect[2]=xmax;FRect[3]= -ymin;
-  Scale2D(1,FRect,IRect,&scx,&scy,&xofset,&yofset,&xm,&ym,Max((*n1),(*n2)),&err);
+    StoreGray("gray",x,y,z,n1,n2,strflag,brect,aaint);
+  xx[0]=Mini(x,*n1);xx[1]=Maxi(x,*n1);
+  yy[0]=Mini(y,*n2);yy[1]=Maxi(y,*n2);
+  /** Boundaries of the frame **/
+  FrameBounds("gnn",xx,yy,&nn1,&nn2,aaint,strflag,brect,FRect,Xdec,Ydec);
+  if ( (int)strlen(strflag) >=2 && strflag[1]=='0') job=0;
+  Scale2D(job,FRect,IRect,aaint,&scx,&scy,&xofset,&yofset,logflag,&xm,&ym,Max((*n1),(*n2)),&err);
   if ( err == 0) return;
-  aplot_(IRect,(xmin=FRect[0],&xmin),(ymin=FRect[1],&ymin),
-	 (xmax=FRect[2],&xmax),(ymax=FRect[3],&ymax),
-	 &(aaint[0]),&(aaint[2]),"nn"); 
+  /** Draw Axis or only rectangle **/
+  AxisDraw(FRect,IRect,Xdec,Ydec,aaint,scx,scy,xofset,yofset,strflag,logflag);
   /** Drawing the curves **/
-  C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3],IP0,IP0,0,0);
+  C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3],PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   for ( j =0 ; j < (*n1) ; j++)	 
     xm[j]= scx*(x[j]-FRect[0])  +xofset;
   for ( j =0 ; j < (*n2) ; j++)	 
     ym[j]= scy*(-y[j]+FRect[3]) +yofset;
   GraySquare_(xm,ym,z,*n1,*n2);
-  x1=yy1= -1;w1=h1=200000;
-  C2F(dr)("xset","clipping",&x1,&yy1,&w1,&h1,IP0,IP0,0,0);
+  C2F(dr)("xset","clipoff",PI0,PI0,PI0,PI0, PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   C2F(dr)("xrect","v",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
-      ,IP0,IP0,0,0);
+      ,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 }
 
 /*-------------------------------------------------------
@@ -78,32 +80,43 @@ C2F(xgray)(x,y,z,n1,n2)
 -------------------------------------------------------*/
 
 GraySquare_(x,y,z,n1,n2)
-     int x[],y[];
+     integer x[],y[];
      double z[];
-     int n1,n2;
+     integer n1,n2;
 {
   double zmoy,zmax,zmin,zmaxmin;
-  int i,j,verbose=0,whiteid,narg,fill[1],ncont,cpat;
-  int xcont[4],ycont[4],cont_size=4;
+  integer i,j,verbose=0,whiteid,narg,fill[1],cpat,xz[2];
   zmin=Mini(z,(n1)*(n2));
   zmax=Maxi(z,(n1)*(n2));
   zmaxmin=zmax-zmin;
   if (zmaxmin <= SMDOUBLE) zmaxmin=SMDOUBLE;
   C2F(dr)("xget","white",&verbose,&whiteid,&narg,
-      IP0,IP0,IP0,0,0);
-  C2F(dr)("xget","pattern",&verbose,&cpat,&narg,PI0,PI0,PI0,0,0);
+      PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  C2F(dr)("xget","pattern",&verbose,&cpat,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  C2F(dr)("xget","wdim",&verbose,xz,&narg, PI0, PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   for (i = 0 ; i < (n1)-1 ; i++)
   for (j = 0 ; j < (n2)-1 ; j++)
     {
-      int w,h;
+      integer w,h;
       zmoy=1/4.0*(z[i+n1*j]+z[i+n1*(j+1)]+z[i+1+n1*j]+z[i+1+n1*(j+1)]);
-      fill[0]=nint(whiteid*(zmoy-zmin)/(zmaxmin));
-      C2F(dr)("xset","pattern",&(fill[0]),PI0,PI0,PI0,PI0,PI0,0,0);
+      fill[0]=inint(whiteid*(zmoy-zmin)/(zmaxmin));
+      C2F(dr)("xset","pattern",&(fill[0]),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
       w=Abs(x[i+1]-x[i]);h=Abs(y[j+1]-y[j]);
-      if ( w != 0 && h != 0) 
-	C2F(dr)("xfrect","v",&x[i],&y[j+1],&w,&h);
+      /* We don't trace rectangle which are totally out **/
+      if ( w != 0 && h != 0 && x[i] < xz[0] && y[j+1] < xz[1] && x[i]+w > 0 && y[j+1]+h > 0 )
+	{
+	  if ( Abs(x[i]) < int16max && Abs(y[j+1]) < int16max && w < uns16max && h < uns16max)
+	    {
+	      /* fprintf(stderr,"Rectangle %d,%d : %d,%d,%d,%d\n",i,j,x[i],y[j+1],w,h); */
+	      C2F(dr)("xfrect","v",&x[i],&y[j+1],&w,&h,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+	    }
+	  else 
+	    {
+	      /* fprintf(stderr,"Rectangle too large \n"); */
+	    }
+	}
     }
-  C2F(dr)("xset","pattern",&cpat,PI0,PI0,PI0,PI0,PI0,0,0);
+  C2F(dr)("xset","pattern",&cpat,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 }
 
 

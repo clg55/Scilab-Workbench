@@ -83,17 +83,9 @@ Consider for example the following $2\times 2$ matrix polynomial $a(z)$,
 generated from the simulation of a two-dimensional process with 
 three poles followed by a levinson\index{levinson} filtering (see section 
 \ref{levin}):
-\verbatok{\Diary spfact1.dia}
+\verbatok{\Diary spfact.dia}
 \end{verbatim}
-We first calculate $a(z)a(1/z)z^2$:
-\verbatok{\Diary spfact2.dia}
-\end{verbatim}
-and obtain a left spectral factor\index{spectral!factor} $d(z)$ of the resulting:
-\verbatok{\Diary spfact3.dia}
-\end{verbatim}
-We may then verify the validity of the result:
-\verbatok{\Diary spfact4.dia}
-\end{verbatim}
+
 \section{Spectral Factorization via state-space models}
 \label{ricca}
 As mentioned in the introduction, the stochastic realization 
@@ -326,14 +318,9 @@ done as follows:
 \verbatok{\Diary simul1.dia}
 \end{verbatim}
 Then the Hankel matrix $\cal{H}_{M,N}$ is built with the
-macro {\tt hank}:
-\verbatok{\MACROSSIGLIB/hank.sci}
-\end{verbatim}
-\index{macro code!hank@{\tt hank}}
-Finally, the macro {\tt phc} gives the desired triple $(H, F, G)$
-\verbatok{\MACROSSIGLIB/phc.sci}
-\end{verbatim}
-\index{macro code!phc@{\tt phc}}
+function {\tt hank}.
+Finally, the $Psi$Lab function  {\tt phc} gives the desired triple $(H, F, G)$.
+
 \subsection{computation of the filter}
 Now, we have obtained the triple $(H, F, G)$ and we shall
 investigate the matrices $T$ and $\tilde{R}$ that have still 
@@ -411,16 +398,14 @@ been implemented, leading to the sought after solution even in the
 precedent defavourable situation\footnote{A mistake was found in the 
 initialization of the algorithm and could not be corrected in time for 
 the present document}. 
-the text of {\tt srfaur} is the following:
-\verbatok{\MACROSSIGLIB/srfaur.sci}
-\end{verbatim}
-\index{macro code!srfaur@ {\tt srfaur}} 
+The $Psi$Lab function {\tt srfaur} implements this sqare-root algorithm.
+
 Finally, the filter and the 
 corresponding estimated output are calculated with the help
 of the model (\ref{e.ricc.16}) by using the macro {\tt ltitr} 
 which simulates linear systems. To summarize, the preceding example 
 has been generated the following way:
-\verbatok{\SRCDiary/simul3.code}
+\verbatok{\Diary simul3.dia}
 \end{verbatim}
 \paragraph{The Lindquist algorithm} \cite{faurre}:
 This algorithm makes use of the fact that 
@@ -450,10 +435,8 @@ Then the expression for $T$ is the following:
 T=(G-FK)(R_0-HK)^{-1}
 \label{e.ricc.38}
 \end{eqnarray}
-an the text of the corresponding {\tt lindquist} macro is:
-\verbatok{\MACROSSIGLIB/lindquist.sci}
-\end{verbatim}
-\index{macro code!lindquist@{\tt lindquist}}
+and {\tt lindquist} is the corresponding $Psi$Lab function.
+
 \section{Levinson filtering}
 \label{levin}
 \index{levinson filters!lattice filters}
@@ -726,13 +709,6 @@ A_0(z)=B_0(z)=I
 %\end{eqnarray}
 %This ends the derivation of the Levinson recursions
 %for the coefficients $A^N_j$ and for the mean-square error $\Sigma_N$.
-\paragraph{The macro {\tt levinson}}
-\label{levmac}
-The text of the macro is the following:
-\verbatok{\MACROSSIGLIB/levin.sci}
-\end{verbatim}
-\verbatok{\MACROSSIGLIB/jmat.sci}
-\end{verbatim}
-\index{macro code!levin@{\tt levin}}
+The corresponding $\Psi$Lab function is {\tt levin}.
 
 %\end{document}

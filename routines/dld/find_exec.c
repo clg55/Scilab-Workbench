@@ -24,22 +24,23 @@
 
 #include <sys/file.h>
 #include <sys/param.h>
-#ifdef SYSV
-#include <string.h>
-#else
 #include <strings.h>
-#endif
 
 #ifdef linux
+#include <stdlib.h>
 #include <sys/stat.h>
 #include <unistd.h>     /* for X_OK define */
+#endif
+
+#ifndef __STDC__
+# define const /**/
 #endif
 
 #define DEFAULT_PATH ".:~/bin::/usr/local/bin:/usr/new:/usr/ucb:/usr/bin:/bin:/usr/hosts"
 
 static char *
 copy_of (s)
-register char *s;
+register const char *s;
 {
     register char *p = (char *) malloc (strlen(s)+1);
 
@@ -60,7 +61,7 @@ register char *s;
 
 char *
 dld_find_executable (file)
-char *file;
+const char *file;
 {
     char *search;
     register char *p;
@@ -104,7 +105,7 @@ char *file;
 	  struct stat stat_temp;
 	  if (stat(name,&stat_temp)) continue;
 	  if (S_IFREG != (S_IFMT & stat_temp.st_mode)) continue;
-#endif linux
+#endif /* linux */
 	  return copy_of (name);
 	  }
     }

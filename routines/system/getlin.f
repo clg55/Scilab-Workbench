@@ -5,12 +5,12 @@ c ====================================================================
 c
       include '../stack.h'
 c
-      integer lrecl,eol,slash,bslash,dot,blank,retu(6),colon,percen
+      integer lrecl,eol,slash,dot,blank,retu(6)
       integer r,quit(4)
       logical maj
 
       data eol/99/,dot/51/,blank/40/, retu/27,14,29,30,27,23/
-      data slash/48/,bslash/49/,lrecl/512/,colon/44/,percen/56/
+      data slash/48/,lrecl/512/
       data quit/26,30,18,29/
 c
       if(ddt.eq.4) then
@@ -51,12 +51,11 @@ c        test pour determiner si c'est la macro ou un exec qui appele getlin
    15 n = n-1
       if(n.le.0) goto 45
       if (buf(n:n) .eq. ' ') go to 15
-      if (mod(lct(4),2) .eq. 1) then
+      if (mod(lct(4),2) .eq. 1.and.rio.ne.rte) then
          call basout(io,wte,buf(1:n))
-      else
-         if(wio.ne.0) call basout(io,wio,buf(1:n))
       endif
       if (rio.eq.rte) then
+         if(wio.ne.0) call basout(io,wio,buf(1:n))
          if (hio.gt.0) call basout(io,hio,buf(1:n))
          lct(1)=1
       endif
@@ -76,7 +75,11 @@ c
          if (k .gt. eol) go to 10
          if (k .eq. eol) go to 45
          if (k .eq. -1) l = l-1
-         if (k .le. 0) go to 40
+         if (k .le. 0) then
+            call basout(io,wte,
+     +           buf(j:j)//' is not a scilab character')
+            go to 40
+         endif
          maj=.false.
  30      k=k-1
 c

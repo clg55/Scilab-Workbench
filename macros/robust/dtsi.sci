@@ -58,7 +58,7 @@ if g(1)='r' then
       end,
     end,
   end,
-  ga=list('r',num1,den1,'c'),gs=list('r',num2,den2,'c'),
+  ga=tlist('r',num1,den1,'c'),gs=tlist('r',num2,den2,'c'),
   gi1=ginfini(ga),gi2=ginfini(gs),
   ga=ga-gi1,gs=gs-gi2,gi=gi1+gi2,return,
 else

@@ -13,15 +13,15 @@ function unix_s(cmd)
 // host unix_g unix_x
 //!
 if prod(size(cmd))<>1 then   error(55,1),end
-host(cmd+' >/dev/null ')
-
-errcatch(48,'continue','nomessage')
-msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
+host('('+cmd+')>/dev/null 2>'+TMPDIR+'/unix.err;echo $?>'+TMPDIR+'/unix.status')
+errcatch(241,'continue','nomessage')
+status=read(TMPDIR+'/unix.status',1,1)
 errcatch(-1);
-if iserror(48)==0 then
-  if prod(size(msg)) >0 then
-    error('sh : '+msg(1))
+if iserror(241)==0 then
+  if status==1 then
+    msg=read(TMPDIR+'/unix.err',-1,1,'(a)')
+    error('unix_s: '+msg(1))
   end
 else
-  errclear(48)
+  errclear(241)
 end

@@ -14,7 +14,7 @@ case 1 then  //sampled system
         if n2~=0&n2<>n1 then error('syslin: invalid column dimension of b matrix');end
         [n3,m3]=size(b);
         if m3~=0&m3<>n1 then error('syslin: invalid row dimension of c matrix');end
-        sl=list('lss',domain,a,b,zeros(b*a),zeros(n1,1),[ ]);
+        sl=tlist('lss',domain,a,b,zeros(b*a),zeros(n1,1),[ ]);
         return
       end
       if rhs==4 then
@@ -27,7 +27,7 @@ case 1 then  //sampled system
         [n4,m4]=size(c);
         if n4<>n3 then error('syslin: invalid column dimension of d matrix');end
         if m4<>m2 then error('syslin: invalid row dimension of d matrix');end
-        sl=list('lss',domain,a,b,c,zeros(n1,1),[]);
+        sl=tlist('lss',domain,a,b,c,zeros(n1,1),[]);
         return
       end
       if rhs==5 then
@@ -43,7 +43,7 @@ case 1 then  //sampled system
         [n5,m5]=size(d);
         if n5<>n1 then error('syslin: invalid x0');end
         if m5<>1 then error('syslin: invalid x0 (column vector)');end
-        sl=list('lss',domain,a,b,c,d,[]);
+        sl=tlist('lss',domain,a,b,c,d,[]);
         return
       end
       error('domain (1rst argument of syslin) must be a scalar')
@@ -110,10 +110,10 @@ case 1 then // (a,b,c,d...)
     end
   end
   //
-  sl=list('lss',a,b,c,d,x0,tp)
+  sl=tlist('lss',a,b,c,d,x0,tp)
 case 2 then //(n,d,...)
   //---------------------
-  if rhs==2 then s=list('lss',[],[],[],a,[],tp);return;end
+  if rhs==2 then s=tlist('lss',[],[],[],a,[],tp);return;end
   if rhs >3 then error('syslin : (domain,n,d )');end
   if type(b)>2 then error('syslin : n and d polynomial matrices');end
   //
@@ -124,7 +124,8 @@ case 2 then //(n,d,...)
   if tp='c' then z='s',end
   //
   if type(a)=2 then a=varn(a,z),end
-  sl=list('r',a,varn(b,z),tp)
+  sl=tlist('r',a,varn(b,z),tp)
+  //-compat next case retained for list -> tlist compatibility
 case 15 then //(n,d,...)
   //---------------------
   if a(1)<>'r' then error(90,1),end
@@ -133,7 +134,16 @@ case 15 then //(n,d,...)
   //
   z='z';
   if tp='c' then z='s',end
-  sl=list('r',varn(a(2),z),varn(a(3),z),tp)
+  sl=tlist('r',varn(a(2),z),varn(a(3),z),tp)
+case 16 then //(n,d,...)
+  //---------------------
+  if a(1)<>'r' then error(90,1),end
+  if rhs >2 then  error('syslin : (domain,h )');end
+  if a(4)<>[] then error('syslin:time domain already defined');end
+  //
+  z='z';
+  if tp='c' then z='s',end
+  sl=tlist('r',varn(a(2),z),varn(a(3),z),tp)  
 else error(44,2)
 end
 

@@ -6,8 +6,11 @@
 #include <X11/Xaw/Command.h>
 #include <X11/Xaw/Label.h>
 
+#include "metaconst.h"
 #include "metawin.h"
 #include "graphics.h"
+
+extern void GetMetanetGeometry();
 
 static int okFlag;
 static int yesOrNo;
@@ -30,17 +33,15 @@ char *description;
   int iargs = 0;
   Widget shell;
   XtCallbackRec callbacks[2];
-  XWindowAttributes war;
-  int h,w;
+  int x,y,w,h;
 
   callbacks[1].callback = NULL;
   callbacks[1].closure = NULL;
   
-  XGetWindowAttributes(theG.dpy,XtWindow(toplevel),&war);
-  h = war.height; w = war.width;
+  GetMetanetGeometry(&x,&y,&w,&h);
 
-  XtSetArg(args[iargs], XtNx, w/2); iargs++;
-  XtSetArg(args[iargs], XtNy, h/2); iargs++;
+  XtSetArg(args[iargs], XtNx, x + incX); iargs++;
+  XtSetArg(args[iargs], XtNy, y + incY); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
   shell = XtCreatePopupShell("Metanet Alert",transientShellWidgetClass,
 			     toplevel,args,iargs);
@@ -103,17 +104,15 @@ char *description;
   int iargs = 0;
   Widget shell;
   XtCallbackRec callbacks[2];
-  int h,w;
-  XWindowAttributes war;
+  int x,y,w,h;
 
   callbacks[1].callback = NULL;
   callbacks[1].closure = NULL;
   
-  XGetWindowAttributes(theG.dpy,XtWindow(toplevel),&war);
-  h = war.height; w = war.width;
+  GetMetanetGeometry(&x,&y,&w,&h);
 
-  XtSetArg(args[iargs], XtNx, w/2); iargs++;
-  XtSetArg(args[iargs], XtNy, h/2); iargs++;
+  XtSetArg(args[iargs], XtNx, x + incX); iargs++;
+  XtSetArg(args[iargs], XtNy, y + incY); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
   shell = XtCreatePopupShell("Metanet Alert",transientShellWidgetClass,
 			     toplevel,args,iargs);

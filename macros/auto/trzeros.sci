@@ -56,5 +56,15 @@ if ld > kd & norm(pinv(D)*D-eye,1)< 1.d-10
  rk=kd;
  if LHS==1 then nt=nt./dt;dt=[];rk=[];end;return;
 end
-warning('Trzeros:non-square system with D non zero and not full')
-nt=[];dt=[];rk=[];
+//warning('Trzeros:non-square system with D non zero and not full')
+//By kronecker form
+s=poly(0,'s');
+syst_matrix=systmat(Sl); //form system matrix
+[Q,Z,Qd,Zd,numbeps,numbeta]=kroneck(syst_matrix);
+ix=Qd(1)+Qd(2)+1:Qd(1)+Qd(2)+Qd(3);
+iy=Zd(1)+Zd(2)+1:Zd(1)+Zd(2)+Zd(3);
+finitepencil=Q(ix,:)*syst_matrix*Z(:,iy);
+[E,A]=pen2ea(finitepencil);
+[nt,dt]=gspec(A,E);rk=[];
+if LHS==1 then nt=nt./dt;dt=[];rk=[];end;
+

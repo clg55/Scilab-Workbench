@@ -2,12 +2,14 @@
 ---------------------------------------------------------------------------*/
 
  extern int  drawarc_xfig_();
+ extern int  fillarcs_xfig_();
  extern int  drawarcs_xfig_();
  extern int  fillarea_xfig_();
  extern int  drawaxis_xfig_();
  extern int  cleararea_xfig_();
  extern int  clearwindow_xfig_();
  extern int  waitforclick_xfig_();
+ extern int  xclick_any_xfig_();
  extern int  xgetmouse_xfig_();
  extern int  xend_xfig_();
  extern int  drawfilledarc_xfig_();

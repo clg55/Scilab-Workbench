@@ -25,10 +25,10 @@ application *application_source;
 char *identificateur_destination;
 {
     if (ldc_rechercher_objet(application_source -> liste_liaisons,identificateur_destination) != NULL)
-	    Erreur_scruteur(concatenation_plusieurs_chaines("<ajouter_liaison> : Liaison deja existante entre ",application_source -> identificateur_appli," et ",identificateur_destination,NULL));
+	    Erreur_scruteur(concatenation_plusieurs_chaines("<ajouter_liaison> :already existing link between ",application_source -> identificateur_appli," and ",identificateur_destination,NULL));
     
     if (ldc_rechercher_objet(liste_applications, identificateur_destination) == NULL)
-	    Erreur_scruteur(concatenation_plusieurs_chaines("<ajouter_liaison> : Destination inexistante : ",identificateur_destination,NULL));
+	    Erreur_scruteur(concatenation_plusieurs_chaines("<ajouter_liaison>: non existant destination: ",identificateur_destination,NULL));
     
     ldc_ajouter_objet(application_source -> liste_liaisons, dupliquer_chaine(identificateur_destination));
 }
@@ -56,8 +56,8 @@ static void supprimer_liaison(appli_a_deconnecter,identificateur_destination)
 application *appli_a_deconnecter;
 char *identificateur_destination;
 {
-    if (ldc_supprimer_objet(appli_a_deconnecter -> liste_liaisons, identificateur_destination) == NULL)
-	    Erreur_scruteur(concatenation_plusieurs_chaines("<supprimer_liaison> : Liaison inexistante entre ",appli_a_deconnecter -> identificateur_appli," et ",identificateur_destination,NULL));
+    if (ldc_supprimer_objet(appli_a_deconnecter -> liste_liaisons, identificateur_destination) == 0)
+	    Erreur_scruteur(concatenation_plusieurs_chaines("<supprimer_liaison>: non existent link between ",appli_a_deconnecter -> identificateur_appli," and ",identificateur_destination,NULL));
 }
 
 void supprimer_liaisons_appli(identificateur)
@@ -84,20 +84,20 @@ Message message;
     char machine_hote[MAXHOSTLEN];
     
     if ((application_source = ldc_rechercher_objet(liste_applications, message.tableau[0])) == NULL)
-	    Erreur_scruteur(concatenation_plusieurs_chaines("<poster_liste_elemnt> : Application inexistante : ",message.tableau[0],NULL));
+	    Erreur_scruteur(concatenation_plusieurs_chaines("<poster_liste_elemnt>: non existent application: ",message.tableau[0],NULL));
     
     liaison = ldc_rechercher_objet(application_source -> liste_liaisons, NULL);
     
     if (liaison == NULL) {
 	if(socket_com == -1) /* GeCI local */
 		envoyer_message_var(ID_XGeCI,MSG_ERREUR_LIAISON_SCRUTEUR,
-				    "Attentionnnnnnnnnn !!!!!!!!! : Cette application n'est pas connectee !",NULL);
+				    "Caution: this application is not connected",NULL);
 	else	/* GeCI distant */    	 
 		envoyer_message_brut_directement(message, socket_com);
     }
     while(liaison != NULL) {
 	if ((application_destinataire = ldc_rechercher_objet(liste_applications, liaison)) == NULL)
-		Erreur_scruteur(concatenation_plusieurs_chaines("<poster_liste_elemnt> : Application inexistante : ", liaison,NULL));
+		Erreur_scruteur(concatenation_plusieurs_chaines("<poster_liste_elemnt>: non existent application: ", liaison,NULL));
 	
 	gethostname(machine_hote,MAXHOSTLEN) ;
 	if(strcmp(application_destinataire->nom_machine, machine_hote)) { /* Autre machine */
@@ -139,12 +139,12 @@ Message message;
 	ajouter_application(message.tableau[3],"INCONNUE",socket_com,socket_com,-2);
 	if ((application_courante = 
 	     ldc_rechercher_objet(liste_applications,message.tableau[3])) == NULL)
-		Erreur_scruteur("<creer_liaison_actmsg> Probleme dans l'enregistrement de l'application");
+		Erreur_scruteur("<creer_liaison_actmsg> problem when recording the application");
     }
     ajouter_liaison(application_courante,message.tableau[4]);
     
     if ((application_courante = ldc_rechercher_objet(liste_applications,message.tableau[4])) == NULL)
-	    Erreur_scruteur(concatenation_plusieurs_chaines("<detruire_liaison> : Application inexistante : ",message.tableau[4],NULL));
+	    Erreur_scruteur(concatenation_plusieurs_chaines("<detruire_liaison>: non existent application: ",message.tableau[4],NULL));
     
     /* Autre machine */
     gethostname(machine_hote,MAXHOSTLEN) ;
@@ -174,17 +174,17 @@ Message message;
     
 
     if ((application_source = ldc_rechercher_objet(liste_applications,message.tableau[3])) == NULL)
-	    Erreur_scruteur(concatenation_plusieurs_chaines("<detruire_liaison> : Application inexistante : ",message.tableau[3],NULL));
+	    Erreur_scruteur(concatenation_plusieurs_chaines("<detruire_liaison>: non existent application: ",message.tableau[3],NULL));
     
     liaison = ldc_rechercher_objet(application_source -> liste_liaisons, NULL);
     
     if (liaison == NULL) 
 	    envoyer_message_var(ID_XGeCI,MSG_ERREUR_LIAISON_SCRUTEUR,
-				"Attentionnnnnnnnnn !!!!!!!!! : Cette application n'est pas connectee !",NULL);
+				"Caution: this application is not connected",NULL);
     
     while(liaison != NULL) {
 	if ((application_destinataire = ldc_rechercher_objet(liste_applications, liaison)) == NULL)
-		Erreur_scruteur(concatenation_plusieurs_chaines("<poster_liste_elemnt> : Application inexistante : ", liaison,NULL));
+		Erreur_scruteur(concatenation_plusieurs_chaines("<poster_liste_elemnt>: non existent application: ", liaison,NULL));
 	
 	gethostname(machine_hote,MAXHOSTLEN) ;
 	if(strcmp(application_destinataire->nom_machine, machine_hote)) { /* Autre machine */

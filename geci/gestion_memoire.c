@@ -54,6 +54,6 @@ void *buffer;
 /** IG ??? **/
 static void erreur_allocation()
 {
-    fprintf(stderr,"<gestion_memoire> : Pas assez de memoire disponible.\n");
+    fprintf(stderr,"No enough memory\n");
     exit(1);
 }

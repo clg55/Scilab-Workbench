@@ -30,7 +30,7 @@ if RHS=1 then
 [Q,Z,Ec,Ac,Qd,Zd,numbeps]=quaskro(E,A);
 rows=Qd(1)+Qd(2)+1:Qd(1)+Qd(2)+Qd(3);
 cols=Zd(1)+Zd(2)+1:Zd(1)+Zd(2)+Zd(3);
-if rows==[] | cols==[] then numbeta=0;return;end;
+if rows==[] | cols==[] then Qd(4)=0;Zd(4)=0;numbeta=0;return;end;
 Er=Ec(rows,cols);
 Ar=Ac(rows,cols);
 E1=pertrans(Er);

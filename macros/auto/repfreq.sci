@@ -3,7 +3,9 @@ pas_def='auto';
 l10=log(10);
 [lhs,rhs]=argn(0)
 //discretization 
-if type(sys)<>15 then  error(97,1),end;
+
+//-compat type(sys)<>15 retained for list/tlist compatibility
+if type(sys)<>15&type(sys)<>16 then  error(97,1),end;
 if sys(1)='r' then dom=sys(4),else dom=sys(7),end
 if dom==[]|dom==0 then error(96,1),end
 if dom=='d' then dom=1;end

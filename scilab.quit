@@ -1,8 +1,10 @@
 // This file contains scilab command to be executed at the end 
 // of a scilab session
 
+unix_s('rm -rf /tmp/'+string(getpid())+'.metanet.*')
+
 if exists('TMPDIR') then
-  unix_s('rm -rf '+TMPDIR)
+  cmd='rm -rf '+TMPDIR
+  host(cmd+' >/dev/null  2>/dev/null')	
   disp('Bye')
 end
-

@@ -5,8 +5,8 @@
 \oddsidemargin=0pt \evensidemargin=0pt \marginparwidth=60pt
 
 \newcommand{\version}{Version 2.1}
-\newcommand{\ISCI}{Inter$\Psi$}
-\newcommand{\SCI}{$\Psi$Lab}
+\newcommand{\ISCI}{InterSci}
+\newcommand{\SCI}{Scilab}
 \newcommand{\T}[1]{{\tt #1}}
 \newcommand{\M}[1]{$<${\em #1}$>$}
 \newcommand{\ie}{\mbox{i.e.}}
@@ -25,18 +25,23 @@
 %%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 %%%%%%%%%%%%%%%%%%%%%%
+All \SCI\ primitive functions are defined in a set of interface
+routines. For each function the interfacing code checks first number of
+rhs and lhs arguments. Then  it get pointers on input arguments in the
+\SCI\ data base and checks their types. After that it calls procedure
+associated with \SCI\ functions, checks returned errors flags and set
+the results in the data base.
+
 \ISCI\ is a program which permits to interface automatically FORTRAN 
 subroutines or C functions to \SCI.
 
 With \ISCI, a user can group all his FORTRAN or C code into a same set,
 called an interface, and use them in \SCI\ as \SCI\ functions. The interfacing
-is made by creating a FORTRAN subroutine which has to be linked to \SCI\ together
+is made by creating a FORTRAN subroutine which has to be linked to
+\SCI\ together 
 with the user code. This complex FORTRAN subroutine is automatically generated
 by \ISCI\ from a description file of the interface.
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\section{Adding a new interface in \SCI}
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %%%%%%%%%%%%%%%%%%%%%
 \section{Using \ISCI}
@@ -47,7 +52,7 @@ process is nearly the same for C functions (see \ref{C}).
 \smallskip
 
 To use \ISCI\ execute the UNIX command:\\
-\T{intercsi }\M{interface name}\T{\ }\M{interface number}\\
+\T{intersci }\M{interface name}\T{\ }\M{interface number}\\
 where \M{interface name}\T{.desc} is the file describing the interface.
 
 Then the files \M{interface name}\T{.f} and \T{fundef.}\M{interface name}
@@ -358,10 +363,49 @@ the macros \T{C2F} and \T{F2C} can be used.
 
 \subsection{Input and output}
 %%%%%%%%%%%
+To write messages in the  \SCI\ main window, user  must call the
+{\tt out} fortran routine or {\tt cout} C procedure with the
+character string of the desired message as input argument.
+
+To open files in fortran, it is highly recommended to  use the \SCI
+routine {\tt   clunit}. If interfaced routine use fortran {\tt open}
+instruction, logical units must in any case be greater than 40.
+\begin{verbatim}
+      call clunit( lunit, file, mode)
+\end{verbatim}
+with:
+\begin{itemize}
+\item {\tt file} the file name character string
+\item {\tt mode} a two integer vector defining the opening mode
+ {\tt mode(2)} defines the record length for a direct access file if
+ positive. 
+ mode.
+{\tt mode(1)} is an integer formed with three digits {\tt f}, {\tt a }
+and {\tt s}
+\begin{itemize}
+\item {\tt f} defines if file is formatted ({\tt 0}) or not ({\tt 1})
+\item {\tt a} defines if file has sequential ({\tt 0}) or direct
+  access ({\tt 1})
+\item {\tt s} defines if file status must be new ({\tt 0}), old ({\tt
+    1}), scratch ({\tt 2}) or unknown ({\tt 3})
+\end{itemize}
+\end{itemize}
+
+Files opened by a call to {\tt   clunit} must be close by 
+\begin{verbatim}
+      call clunit( -lunit, file, mode)
+\end{verbatim}
+In this case the {\tt file} and  {\tt mode} arguments are not
+referenced.
 
 \subsection{Error exit}
 %%%%%%%%%%%
-
+To return an error flag of  an interfaced routine user must call the
+{\tt erro} fortran routine or {\tt cerro} C procedure with the
+character string of the desired message as input argument. This call
+will produce the edition of the message in the \SCI\ main window and
+the error exit of \SCI\ associated function.
+will terminate 
 %%%%%%%%%%%%%%%%%%
 \section{Examples}
 %%%%%%%%%%%%%%%%%%
@@ -490,7 +534,7 @@ tol     scalar
 sys     list    lss
 icontr  scalar
 
-contr   nstate(sys)	nin(sys)     a(sys)  b(sys)  icontr  tol
+contr   nstate(sys)     nin(sys)     a(sys)  b(sys)  icontr  tol
 a(sys)  double
 b(sys)  double
 tol     double
@@ -531,6 +575,31 @@ t       any
 
 The number of the elements is not compulsory in the comment describing the
 elements of the list but is useful.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Adding a new interface in \SCI}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection {Incremental linking of interface}
+On most system it is possible to add a new interface while \SCI\ is
+running using incremental linking facility ({\tt link}). This may be
+done using the \SCI\ function {\tt addinter}. This is the simple way
+to add an interface to \SCI\, but user need to call {\tt addinter}
+each time he start \SCI\. 
+The other methods require user to re-generate an \SCI\
+executable file with {\tt make}.
+
+\subsection {Predefined user interface}
+
+Two unused interface routines ({\tt matusr} and {\tt matus2}) are
+defined and may be used to interface your own functions. Their
+interface numbers {\tt 14} and {\tt 24}. User may redefine them to add
+new functions. 
+
+\subsection {Adding new interface}
+Interfacing routine calls may be found in the 
+{\tt   routines/callinter.h}  file. To add a new interface user need
+to modify this file to add the call and to associate it with a
+particular value of {\tt fun} fortran variable (it's interface numbers).
+
 \newpage
 
 \tableofcontents

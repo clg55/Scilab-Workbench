@@ -29,6 +29,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+#include "../machine.h"
 #include <stdio.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>	/* Get standard string definations. */
@@ -64,7 +65,7 @@ DeleteWindow(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
-  (void) exit(0);
+  C2F(clearexit)(0);
 }
 
 XtActionsRec actionProcs[] = {
@@ -81,9 +82,9 @@ char **argv;
     Widget command;
 
     l_toplevel = XtAppInitialize(&app_con, "Xcommand",
-			       options, XtNumber(options),
-			       &argc, argv, fallback_resources,
-			       NULL, ZERO);
+				 options, XtNumber(options),
+				 &argc, argv, fallback_resources,
+				 (ArgList) 0,(Cardinal) 0);
 
     if (argc != 1)		
 	Syntax(app_con, argv[0]);

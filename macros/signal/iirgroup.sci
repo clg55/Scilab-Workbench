@@ -1,4 +1,4 @@
-//<lt,grad>=iirgroup(p,r,theta,omega,wt,td)
+function [lt,grad]=iirgroup(p,r,theta,omega,wt,td)
 //    p===> critere Lp
 //    r=module des poles et zeros des filtres
 //theta=argument des  "    "   "    "    "
@@ -41,6 +41,6 @@ grtgrp(1:m,:)=-grtgrp(1:m,:);
 t=grp-td;t1=t**(2*p);t1=t1.*wt;lt=sum(t1);
 t1=(t1./a)*2*p;
 grad=[grrgrp*t1' grtgrp*t1'];
-//end
+
 
 

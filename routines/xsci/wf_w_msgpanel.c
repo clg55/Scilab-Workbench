@@ -58,7 +58,7 @@ init_msg(tool,vert_w, ch,filename)
 				      Args, ArgCount);
     /* now the message panel */
     FirstArg(XtNstring, "\0");
-    NextArg(XtNwidth,  350);
+    NextArg(XtNwidth,  400);
     NextArg(XtNfromHoriz, name_panel);
     NextArg(XtNhorizDistance, INTERNAL_BW);
     NextArg(XtNtop, XtChainTop);
@@ -104,7 +104,7 @@ update_cur_filename(newname)
 	XtManageChild(msg_form);
 }
 
-/* VARARGS1 */
+/*VARARGS0*/
 int put_msg(va_alist) va_dcl
 {
     va_list ap;
@@ -123,3 +123,30 @@ clear_message()
     FirstArg(XtNstring, "\0");
     SetValues(msg_panel);
 }
+
+/* pour que des boutons du file menu operations 
+   aient un help automatique */
+
+static void
+file_info_handler(w, client_data, event)
+     Widget	w;				/* unused */
+     caddr_t	client_data;
+     XEvent	*event;
+{
+  if  (event->type == LeaveNotify ) clear_message();
+  else if (event->type == EnterNotify) 
+    put_msg("%s", (char *) client_data);
+} 
+
+void
+FOpAddInfoHandler(widget, message)
+Widget widget;
+char *message;
+{
+  XtAddEventHandler(widget,
+		    (EventMask) (EnterWindowMask|LeaveWindowMask),
+		    False,
+		    (XtEventHandler)file_info_handler,
+		    (caddr_t) message);
+}
+

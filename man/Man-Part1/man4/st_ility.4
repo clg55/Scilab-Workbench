@@ -35,8 +35,11 @@ displays the stabilizable form of \fVSl\fR. Stabilizability means
 U'*A*U = [0,*,*]     U'*B = [0]
          [0,0,*]            [0]
 .fi
-(where \fV (A11,B1) \fR is controllable and \fVA22\fR is stable)
+(where \fV (A11,B1) \fR is controllable and \fVA22\fR is stable).
+"Stable" means real part of eigenvalues negative for a continuous
+linear system, and magnitude of eigenvalues lower than one for a
+discrete-time system (as defined by \fVsyslin\fR).
 .SH SEE ALSO
-dt_ility, contr
+dt_ility, contr, stabil, ssrand
 .SH AUTHOR
 S. Steer INRIA 1988

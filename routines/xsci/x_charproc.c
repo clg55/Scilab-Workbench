@@ -30,7 +30,7 @@
 /* charproc.c */
 
 #include "../machine.h"
-#include "x_ptyx.h"
+#include "x_ptyxP.h"
 #include "x_VTparse.h"
 #include "x_data.h"
 #include "x_error.h"
@@ -52,6 +52,14 @@
 #ifdef aix
 #include <sys/select.h>
 #endif
+
+#include <string.h> /* in case of dmalloc */ 
+#include <malloc.h>  /* in case of dmalloc */ 
+
+#define CTRL_B                0x0002  /* back a character */
+#define CTRL_D                0x0004  /* delete next char */
+#define CTRL_K                0x000b  /* delete to end of line */
+
 
 /** JPC **/
 #ifndef XtRGravity
@@ -82,9 +90,8 @@ static int bcnt = 0;
 #endif
 
 extern Widget toplevel;
-extern void exit();
-extern char *malloc();
-extern char *realloc();
+
+#include <malloc.h>
 
 static void VTallocbuf();
 static void dotext();
@@ -495,6 +502,8 @@ WidgetClass xtermWidgetClass = (WidgetClass) & xtermClassRec;
 
 /* I/O Function for scilab : this function are used when Xscilab is on */
 
+int in_put();
+
 int
 XEvorgetchar()
 {
@@ -511,14 +520,13 @@ void Xputstring(str,n)
   for ( i =0 ; i < n; i++) Xputchar(str[i]);
 }
 
-void C2F(xscisncr)(str,dummy)
+void C2F(xscisncr)(str,n,dummy)
      char *str;
-     long int dummy;
+     integer *n,dummy;
 {
   void Xputchar();
-  int i,n ;
-  n=strlen(str);
-  for ( i =0 ; i < n; i++) {
+  int i;
+  for ( i =0 ; i < *n; i++) {
     Xputchar(str[i]);
   }
 }
@@ -537,7 +545,7 @@ void C2F(xscistring)(str,n,dummy)
 }
 
 #define MORESTR "[More (y or n ) ?] "
-
+/*
 void C2F(xscimore)(n)
      int *n;
 {
@@ -551,6 +559,28 @@ void C2F(xscimore)(n)
       if ( *n == 121 ) { *n=0;break;}
     }
 }
+*/
+void C2F(xscimore)(n)
+     int *n;
+{
+  int n1,i,ln;
+  *n=0;
+  ln=strlen(MORESTR);
+  Xputstring(MORESTR,ln);
+  n1=XEvorgetchar();
+
+  if ( n1 == 110 )  *n=1;
+
+  Xputstring("\r\n",2);
+/*
+   for(i = 0; i < ln; i++) {
+      Xputchar(CTRL_B);
+   }
+  Xputchar(CTRL_K);
+*/
+
+}
+
 
 /* I/O Function for C routines : test for xscion */
 
@@ -558,11 +588,15 @@ void Scisncr(str)
      char *str;
 {
   int i;
+  integer lstr;
   C2F(xscion)(&i);
   if (i == 0) 
     fprintf(stdout,"%s",str);
   else 
-    C2F(xscisncr)(str,0);
+    {
+      lstr=strlen(str);
+      C2F(xscisncr)(str,&lstr,0L);
+    }
 }
 
 void Scistring(str)
@@ -575,85 +609,44 @@ void Scistring(str)
       fprintf(stdout,"%s",str);
   else {
       n=strlen(str);
-      C2F(xscistring)(str,&n);
+      C2F(xscistring)(str,&n,0L);
   }
 }
 
-static char s_buf[512];
 
-void SciF1s(form,str)
-     char *form,*str;
+
+#include <varargs.h>
+
+/* 
+  Fonction de type print(format,args,....) 
+  qui imprime dans la fenetre Scilab
+*/
+
+
+/*VARARGS0*/
+int sciprint(va_alist) va_dcl
 {
   int i;
+  integer lstr;
+  va_list ap;
+  char *format;
+  char s_buf[1024];
+  va_start(ap);
+  format = va_arg(ap, char *);
   C2F(xscion)(&i);
   if (i == 0) 
-    fprintf(stdout,form,str);
+    {
+      (void)  vfprintf(stdout, format, ap );
+    }
   else 
     {
-      (void) sprintf(s_buf,form,str);
-      C2F(xscisncr)(s_buf,0);
+      (void ) vsprintf(s_buf, format, ap );
+      lstr=strlen(s_buf);
+      C2F(xscisncr)(s_buf,&lstr,0L);
     }
+  va_end(ap);
 }
 
-void SciF2s(form,str1,str2)
-     char *form,*str1,*str2;
-{
-  int i;
-  C2F(xscion)(&i);
-  if (i == 0) 
-    fprintf(stdout,form,str1,str2);
-  else 
-    {
-      (void) sprintf(s_buf,form,str1,str2);
-      C2F(xscisncr)(s_buf,0);
-    }
-}
-
-void SciF1d(form,d1)
-     char *form;
-     int d1;
-{
-  int i;
-  C2F(xscion)(&i);
-  if (i == 0) 
-    fprintf(stdout,form,d1);
-  else 
-    {
-      (void) sprintf(s_buf,form,d1);
-      C2F(xscisncr)(s_buf,0);
-    }
-}
-
-
-void SciF2d(form,d1,d2)
-     char *form;
-     int d1,d2;
-{
-  int i;
-  C2F(xscion)(&i);
-  if (i == 0) 
-    fprintf(stdout,form,d1,d2);
-  else 
-    {
-      (void) sprintf(s_buf,form,d1,d2);
-      C2F(xscisncr)(s_buf,0);
-    }
-}
-
-void SciF4d(form,d1,d2,d3,d4)
-     char *form;
-     int d1,d2,d3,d4;
-{
-  int i;
-  C2F(xscion)(&i);
-  if (i == 0) 
-    fprintf(stdout,form,d1,d2,d3,d4);
-  else 
-    {
-      (void) sprintf(s_buf,form,d1,d2,d3,d4);
-      C2F(xscisncr)(s_buf,0);
-    }
-}
 
 
 /* I/O Function */
@@ -1064,7 +1057,7 @@ void Xputchar(c)
       HideCursor();
     for (row = screen->max_row; row >= 0; row--)
     {
-      bzero(screen->buf[2 * row + 1],
+      bzero((char *)screen->buf[2 * row + 1],
 	    col = screen->max_col + 1);
       for (cp = (unsigned char *) screen->buf[2 * row]; col > 0; col--)
 	*cp++ = (unsigned char) 'E';
@@ -1221,9 +1214,7 @@ v_write(f, d, len)
   char *d;
   int len;
 {
-  register TScreen *screen = &term->screen;
-  int riten;
-  int c = len, i;
+  int i;
   if  ( bcnt + len > BUF_SIZE) 
     {
       fprintf(stderr,"In v_write : Data too long to be stored \n");
@@ -1250,21 +1241,20 @@ extern int ctrl_action();
 
 xevents1()
 {
-  int cok1 = cok;
   int bcnt1 = bcnt;
   /* If queue is empty we reinitialize bptr */
   if ( bcnt1 == 0) bptr=buffer ;
   x_events();
   if ( bcnt >= bcnt1 +1 )
     {
-      if (ctrl_action(buffer[bcnt1])==1)
+      if (ctrl_action((int) buffer[bcnt1])==1)
 	{
 	  bcnt = bcnt1;
 	}
     }
 }
 
-
+int
 in_put()
 {
   register TScreen *screen = &term->screen;
@@ -1484,7 +1474,7 @@ static void
  */
 ansi_modes(termw, func)
   XtermWidget termw;
-  int (*func) ();
+  void (*func) ();
 {
   register int i;
 
@@ -1559,8 +1549,8 @@ dpmodes(termw, func)
 	      status == XtGeometryDone)
 	  {
 	    ScreenResize(&termw->screen,
-			 replyWidth,
-			 replyHeight,
+			 (int) replyWidth,
+			 (int) replyHeight,
 			 &termw->flags);
 	  }
 	}
@@ -1760,8 +1750,8 @@ restoremodes(termw)
 	      status == XtGeometryDone)
 	  {
 	    ScreenResize(&termw->screen,
-			 replyWidth,
-			 replyHeight,
+			 (int) replyWidth,
+			 (int) replyHeight,
 			 &termw->flags);
 	  }
 	}
@@ -1954,7 +1944,7 @@ ToAlternate(screen)
     return;
   if (!screen->altbuf)
     screen->altbuf = Allocate(screen->max_row + 1, screen->max_col
-			      + 1, &screen->abuf_address);
+			      + 1,(Char **) &screen->abuf_address);
   SwitchBufs(screen);
   screen->alternate = TRUE;
   update_altscreen();
@@ -2021,7 +2011,6 @@ VTRun(nostartup)
      int nostartup;
 {
   register TScreen *screen = &term->screen;
-  register int i;
   if (!screen->Vshow) set_vt_visibility(TRUE);
   if (screen->allbuf == NULL)  VTallocbuf();
 
@@ -2038,7 +2027,7 @@ VTRun(nostartup)
   screen->cursor_set = OFF;
 }
 
-/*ARGSUSED*/
+
 static void VTExpose(w, event, region)
   Widget w;
   XEvent *event;
@@ -2073,7 +2062,7 @@ static void VTGraphicsOrNoExpose(event)
   }
 }
 
-/*ARGSUSED*/
+
 static void VTNonMaskableEvent(w, closure, event, cont)
   Widget w;	/* unused */
   XtPointer closure;	/* unused */
@@ -2094,7 +2083,7 @@ static void VTResize(w)
   Widget w;
 {
   if (XtIsRealized(w))
-    ScreenResize(&term->screen, term->core.width, term->core.height,
+    ScreenResize(&term->screen,(int)  term->core.width,(int)  term->core.height,
 		 &term->flags);
 }
 
@@ -2136,7 +2125,7 @@ static void VTallocbuf()
   if (screen->scrollWidget)
     nrows += screen->savelines;
   screen->allbuf = Allocate(nrows, screen->max_col + 1,
-			    &screen->sbuf_address);
+			    (Char **) &screen->sbuf_address);
   if (screen->scrollWidget)
     screen->buf = &screen->allbuf[2 * screen->savelines];
   else
@@ -2151,7 +2140,7 @@ static void VTClassInit()
 }
 
 
-/* ARGSUSED */
+
 static void VTInitialize(wrequest, wnew, args, num_args)
   Widget wrequest, wnew;
   ArgList args;
@@ -2256,7 +2245,7 @@ static void VTDestroy(w)
   XtFree(((XtermWidget) w)->screen.selection);
 }
 
-/*ARGSUSED*/
+
 static void VTRealize(w, valuemask, values)
   Widget w;
   XtValueMask *valuemask;
@@ -2279,7 +2268,7 @@ static void VTRealize(w, valuemask, values)
       fprintf(stderr,
 	      "%s:  unable to open font \"%s\", trying \"fixed\"....\n",
 	      xterm_name, term->misc.f_n);
-      (void) LoadNewFont(screen, "fixed", NULL, False, 0);
+      (void) LoadNewFont(screen, "fixed",(char *) 0, False, 0);
       screen->menu_font_names[fontMenu_fontdefault] = "fixed";
     }
   }
@@ -2288,7 +2277,7 @@ static void VTRealize(w, valuemask, values)
   {
     fprintf(stderr, "%s:  unable to locate a suitable font\n",
 	    xterm_name);
-    Exit(1);
+    C2F(clearexit)(1);
   }
   /* making cursor */
   if (!screen->pointer_cursor)
@@ -2841,7 +2830,6 @@ int set_character_class(s)
   return (0);
 }
 
-/* ARGSUSED */
 static void HandleKeymapChange(w, event, params, param_count)
   Widget w;
   XEvent *event;
@@ -2872,13 +2860,13 @@ static void HandleKeymapChange(w, event, params, param_count)
   if (islower(mapClass[0]))
     mapClass[0] = toupper(mapClass[0]);
   XtGetSubresources(w, (XtPointer) & keymap, mapName, mapClass,
-		    key_resources, (Cardinal) 1, NULL, (Cardinal) 0);
+		    key_resources, (Cardinal) 1, (ArgList)0, (Cardinal) 0);
   if (keymap != NULL)
     XtOverrideTranslations(w, keymap);
 }
 
 
-/* ARGSUSED */
+
 static void HandleBell(w, event, params, param_count)
   Widget w;
   XEvent *event;	/* unused */
@@ -2891,7 +2879,7 @@ static void HandleBell(w, event, params, param_count)
 }
 
 
-/* ARGSUSED */
+
 static void HandleVisualBell(w, event, params, param_count)
   Widget w;
   XEvent *event;	/* unused */
@@ -2902,7 +2890,7 @@ static void HandleVisualBell(w, event, params, param_count)
 }
 
 
-/* ARGSUSED */
+
 static void HandleIgnore(w, event, params, param_count)
   Widget w;
   XEvent *event;	/* unused */
@@ -2914,7 +2902,7 @@ static void HandleIgnore(w, event, params, param_count)
 }
 
 
-/* ARGSUSED */
+
 static void
     DoSetSelectedFont(w, client_data, selection, type, value, length, format)
   Widget w;
@@ -2942,7 +2930,7 @@ static void
      * here. */
     if (len > 1000 || strchr(val, '\n'))
       return;
-    if (!LoadNewFont(&term->screen, val, NULL, True, fontMenu_fontsel))
+    if (!LoadNewFont(&term->screen, val,(char *)0, True, fontMenu_fontsel))
       Bell();
   }
 }
@@ -2968,7 +2956,7 @@ void FindFontSelection(atom_name, justprobe)
   if (!a)
   {
     atoms = (AtomPtr *) XtRealloc((char *) atoms,
-				  sizeof(AtomPtr) * (atomCount + 1));
+				  (Cardinal) sizeof(AtomPtr) * (atomCount + 1));
     *(pAtom = &atoms[atomCount++]) = XmuMakeAtom(atom_name);
   }
   target = XmuInternAtom(XtDisplay(term), *pAtom);
@@ -2986,7 +2974,7 @@ void FindFontSelection(atom_name, justprobe)
 }
 
 
-/* ARGSUSED */
+
 void HandleSetFont(w, event, params, param_count)
   Widget w;
   XEvent *event;	/* unused */
@@ -3243,7 +3231,7 @@ update_font_info(screen, doresize)
     DoResizeScreen(term);	/* set to the new natural size */
     if (screen->scrollWidget)
       ResizeScrollBar(screen->scrollWidget, -1, -1,
-		      Height(screen) + screen->border * 2);
+		      (unsigned) Height(screen) + screen->border * 2);
     Redraw();
   }
   set_vt_box(screen);

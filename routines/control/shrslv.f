@@ -1,4 +1,4 @@
-      subroutine shrslv(a,b,c,m,n,na,nb,nc,eps,rmax,fail)
+      subroutine shrslv(a,b,c,m,n,na,nb,nc,eps,cond,rmax,fail)
 c
 c!purpose
 c   shrslv is a fortran iv subroutine to solve the real matrix
@@ -7,7 +7,7 @@ c   and b is in upper real schur form,
 c
 c!calling sequence
 c
-c       subroutine shrslv(a,b,c,m,n,na,nb,nc,eps,rmax,fail)
+c       subroutine shrslv(a,b,c,m,n,na,nb,nc,eps,cond,rmax,fail)
 c   a      a doubly subscripted array containg the matrix a in
 c          lower schur form
 c
@@ -26,8 +26,11 @@ c   nb     the first dimension of the array b
 c
 c   nc     the first dimension of the array c
 c
-c   eps    minimum allowed conditionnement for linear systems
-c          if eps .le. 0 no estimation of conditionnement is done
+c   eps    tolerance on a(k,k)+b(l,l)
+c          if |a(k,k)+b(l,l)|<eps algorithm suppose that |a(k,k)+b(l,l)|=eps
+c
+c   cond    minimum allowed conditionnement for linear systems
+c          if cond .le. 0 no estimation of conditionnement is done
 c
 c   rmax   maximum allowed size of any element of the transformation
 c
@@ -48,10 +51,10 @@ c
 c internal variables
 c
       integer k,km1,dk,kk,l,lm1,dl,ll,i,j,nsys,ipvt(4),info
-      double precision t,p,zero,rcond,eps,const,z,ddot
+      double precision t,p,zero,rcond,cond,const,z,ddot,eps
       dimension t(4,4),p(4),z(4)
       data zero /0.0d+0/
-      if(eps.gt.zero) const = sqrt(sqrt(eps))
+      if(cond.gt.zero) const = sqrt(sqrt(cond))
 c
       info = 0
       fail = .true.
@@ -79,11 +82,16 @@ c
          c(i,j) = c(i,j) - ddot(km1,a(i,1),na,c(1,j),1)
   100    continue
   110 continue
-  120 if (dl.eq.2) go to 160
+  120 continue
+c      write(6,'(''dl='',i1,'' dk='',i1)') dl,dk
+      if (dl.eq.2) go to 160
       if (dk.eq.2) go to 130
       t(1,1) = a(k,k) + b(l,l)
-      if (t(1,1).eq.zero) return
+c      write(6,'(e10.3,3x,e10.3)') t(1,1),c(k,l)
+      if (abs(t(1,1)).lt.eps) t(1,1)=sign(eps,t(1,1))
       c(k,l) = c(k,l)/t(1,1)
+c      write(6,'(''c='',e10.3,'' rmax='',e10.3)') c(k,l),rmax
+
       if (abs(c(k,l)).ge.rmax) return
       go to 220
   130 t(1,1) = a(k,k) + b(l,l)
@@ -92,8 +100,10 @@ c
       t(2,2) = a(kk,kk) + b(l,l)
       p(1) = c(k,l)
       p(2) = c(kk,l)
+c      write(6,'(e10.3,3x,e10.3,3x,e10.3)') t(1,1),t(1,2),p(1)
+c      write(6,'(e10.3,3x,e10.3,3x,e10.3)') t(2,1),t(2,2),p(2)
       nsys = 2
-      if (eps.gt.zero) go to 140
+      if (cond.gt.zero) go to 140
       call dgefa(t, 4, nsys, ipvt, info)
       if (info.gt.0) return
       go to 150
@@ -102,6 +112,8 @@ c
       if (rcond.lt.const) return
   150 continue
       call dgesl(t, 4, nsys, ipvt, p, 0)
+c      write(6,'(''c='',e10.3,'' rmax='',e10.3)') c(k,l),rmax
+c      write(6,'(''c='',e10.3,'' rmax='',e10.3)') c(kk,l),rmax
       c(k,l) = p(1)
       if (abs(c(k,l)).ge.rmax) return
       c(kk,l) = p(2)
@@ -114,8 +126,10 @@ c
       t(2,2) = a(k,k) + b(ll,ll)
       p(1) = c(k,l)
       p(2) = c(k,ll)
+c      write(6,'(e10.3,3x,e10.3,3x,e10.3)') t(1,1),t(1,2),p(1)
+c      write(6,'(e10.3,3x,e10.3,3x,e10.3)') t(2,1),t(2,2),p(2)
       nsys = 2
-      if (eps.gt.zero) go to 170
+      if (cond.gt.zero) go to 170
       call dgefa(t, 4, nsys, ipvt, info)
       if (info.gt.0) return
       go to 180
@@ -124,6 +138,8 @@ c
       if (rcond.lt.const) return
   180 continue
       call dgesl(t, 4, nsys, ipvt, p, 0)
+c      write(6,'(''c='',e10.3,'' rmax='',e10.3)') c(k,l),rmax
+c      write(6,'(''c='',e10.3,'' rmax='',e10.3)') c(kk,l),rmax
       c(k,l) = p(1)
       if (abs(c(k,l)).ge.rmax) return
       c(k,ll) = p(2)
@@ -149,8 +165,11 @@ c
       p(2) = c(kk,l)
       p(3) = c(k,ll)
       p(4) = c(kk,ll)
+      do 191 j=1,4
+c      write(6,'(5(e10.3,3x))') (t(j,i),i=1,4),p(j)
+ 191  continue
       nsys = 4
-      if (eps.gt.zero) go to 200
+      if (cond.gt.zero) go to 200
       call dgefa(t, 4, nsys, ipvt, info)
       if (info.gt.0) return
       go to 210
@@ -159,6 +178,10 @@ c
       if (rcond.lt.const) return
   210 continue
       call dgesl(t, 4, nsys, ipvt, p, 0)
+c      write(6,'(''c='',e10.3,'' rmax='',e10.3)') c(k,l),rmax
+c      write(6,'(''c='',e10.3,'' rmax='',e10.3)') c(kk,l),rmax
+c      write(6,'(''c='',e10.3,'' rmax='',e10.3)') c(k,ll),rmax
+c      write(6,'(''c='',e10.3,'' rmax='',e10.3)') c(kk,ll),rmax
       c(k,l) = p(1)
       if (abs(c(k,l)).ge.rmax) return
       c(kk,l) = p(2)

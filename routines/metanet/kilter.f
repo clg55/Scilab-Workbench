@@ -1,5 +1,5 @@
       subroutine kilter(b,c,ex,gamma,la2,lp2,ma,
-     &     mm,n,or,phimi,pile,piv,predw,sufval,type)
+     &     mm,n,or,phimi,pile,piv,predw,sufval,type,flag)
       implicit integer (a-z)
       dimension lp2(*),la2(mm)
       dimension or(ma),ex(ma),b(ma),c(ma)
@@ -7,6 +7,8 @@
       dimension phimi(ma),type(ma),predw(n),pile(n)
       doubleprecision infr,gammar,teta,eps,eps1,eps2,zero
       n1=n+1
+      flag=1
+      icon=0
       zero=0.00001
       infr=10.d6
       do 10 u=1,ma
@@ -68,12 +70,14 @@
  350  continue
       call minty(coderr,ex,gamma,i1,infr,j1,la2,lp2,ma,
      &     mm,n,or,pile,piv,predw,sufval,type,u0)
+      icon=icon+1
       if (coderr .eq. 1) then
          call erro('internal dimension error')
          return
       endif
-      if (coderr .eq. 2) then
-         call erro('no feasible solution')
+      if (coderr .eq. 2 .or. icon .gt. ma+1) then
+         call out('no feasible solution')
+         flag=0
          return
       endif
       if(predw(i1).le.zero) goto 100

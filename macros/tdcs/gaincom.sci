@@ -1,4 +1,4 @@
-//[]=gaincom(pole,ue)
+function []=gaincom(pole,ue)
 //[]=gaincom(pole,[ue])
 // calcul de la matrice k de gain pour
 // la commande du mod\`ele de competition
@@ -10,6 +10,6 @@ if rhs=1,ue=1,end
 [f,g,h]=lincomp(ue);
 k=ppol(f,g,pole)
 [f,g,h,k]=resume(f,g,h,k)
-//end
+
 
 

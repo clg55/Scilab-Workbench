@@ -1,5 +1,5 @@
-//<xm,fr>=frmag(num,den,npts)
-//<xm,fr>=frmag(num[,den],npts)
+function [xm,fr]=frmag(num,den,npts)
+//[xm,fr]=frmag(num[,den],npts)
 //Calculates the magnitude of the frequency respones of
 //FIR and IIR filters.  The filter description can be
 //one or two vectors of coefficients, one or two polynomials,
@@ -25,7 +25,9 @@
    fr=(0:.5/(npts-1):.5);
    dfr=exp(2*%i*%pi*fr);
    if rhs=2 then,
-      if type(num)=15 then,
+     
+     //-compat type(num)==15 retained for list/tlist compatibility
+      if type(num)==15|type(num)==16 then,
          xm=abs(freq(num(2),num(3),dfr));
       else if type(num)=2 then,
          xm=abs(freq(num,poly(1,'z','c'),dfr));

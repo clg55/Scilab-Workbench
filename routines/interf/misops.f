@@ -5,11 +5,8 @@ c     =============================================================
       include '../stack.h'
 c     
       integer top0,iadr,sadr,op,rhs1
-      integer quote,equal,less,great,insert,extrac,ou,et,non
-      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
-      data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
+      integer equal,less,great,insert,extrac
       data equal/50/,less/59/,great/60/,insert/2/,extrac/3/
-      data ou/57/,et/58/,non/61/
 c     
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1

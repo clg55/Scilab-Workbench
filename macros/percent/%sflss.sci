@@ -8,7 +8,7 @@
 //
 [a2,b2,c2,d2,x2,dom2]=s2(2:7)
 [n2,m2]=size(c2);[p1,m1]=size(d1)
-s=list('lss',a2,b2,[0*ones(p1,m2);c2],[d1;d2],x2,dom2)
+s=tlist('lss',a2,b2,[0*ones(p1,m2);c2],[d1;d2],x2,dom2)
 //end
 
 

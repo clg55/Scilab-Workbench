@@ -1,5 +1,5 @@
-function [S]=ss2des(Sl)
-// Returns S=list('d',A,B,C,0,E) for Sl a state-space
+function S=ss2des(Sl)
+// Returns S=list('des',A,B,C,0,E) for Sl a state-space
 // system with Ds polynomial.
 Ds=Sl(5);
 if type(Ds)==1 then
@@ -15,4 +15,4 @@ A=[eye(N),0*ones(n1,n2);0*ones(n2,n1),A2];
 C=[C1,C2];
 B=[B1;B2];
 D=0*C*B;
-S=list('d',A,B,C,D,E);
+S=list('des',A,B,C,D,E);

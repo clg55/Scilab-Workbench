@@ -3,18 +3,18 @@ c     ======================================================================
 c     gestion des structures de controle
 c     ======================================================================
       include '../stack.h'
-      integer for(nsiz),while(nsiz),iff(nsiz),else(nsiz),ennd(nsiz)
-      integer do(nsiz),thenn(nsiz),retu(nsiz),cas(nsiz),sel(nsiz)
+      integer while(nsiz),iff(nsiz),else(nsiz),ennd(nsiz)
+      integer do(nsiz),thenn(nsiz),cas(nsiz),sel(nsiz)
       integer elsif(nsiz)
-      integer semi,equal,eol,blank,comma,less,great,name
+      integer semi,equal,eol,blank,comma,name
       integer r,r1
       logical eqid,istrue,ok,first,eptover
       parameter (nz1=nsiz-1,nz2=nsiz-2)
       data semi/43/,equal/50/,eol/99/,blank/40/
-      data comma/52/,less/59/,great/60/,name/1/
+      data comma/52/,name/1/
       data do/673716237,nz1*673720360/, else/236721422,nz1*673720360/
-      data ennd/671946510,nz1*673720360/, for/672864271,nz1*673720360/
-      data iff/673713938,nz1*673720360/, retu/505220635,nz1*673720360/
+      data ennd/671946510,nz1*673720360/
+      data iff/673713938,nz1*673720360/
       data thenn/386797853,nz1*673720360/
       data while/353505568,673720334,nz2*673720360/
       data cas/236718604,nz1*673720360/
@@ -73,6 +73,7 @@ c     *call* expr
       if(err.gt.0) return
       toperr=top
       pstk(pt-1) = 0
+      ids(1,pt-1)=top
       if (eqid(syn,do).or.sym.eq.comma.or.sym.eq.semi) then
          sym = semi
          pstk(pt) = lpt(4) - 1
@@ -88,7 +89,11 @@ c     sont chargee (pb des matrices sur plusieurs lignes)
       call skpins(1)
       if(err.gt.0) return
       first=.true.
- 10   call nextj(ids(1,pt),pstk(pt-1))
+ 10   if(top.ne.ids(1,pt-1)) then 
+         call error(115)
+         return
+      endif
+      call nextj(ids(1,pt),pstk(pt-1))
       if(err.gt.0) return
       if(pstk(pt-1).eq.0) goto  20
       first=.false.

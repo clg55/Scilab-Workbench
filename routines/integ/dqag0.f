@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DQAG0,SSI=0
       subroutine dqag0(f, a, b, epsabs, epsrel, result, abserr,work,
      * lwork, iwork, liwork, ifail)
 c

@@ -108,7 +108,7 @@ c     p*x-p2
       call ddif(n2+1,p2,1,w(iw),1)
       erri=erri+ddot(n2+1,w(iw),1,w(iw),1)
 
-c      if(ddt.le.-1) write(6,*) np,errd,erri
+c       write(6,*) np,errd,erri
 c     
       if(max(erri,errd).lt.errr) then
          errr=max(erri,errd)

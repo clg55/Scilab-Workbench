@@ -1,5 +1,3 @@
-
-C/MEMBR ADD NAME=DQAGS,SSI=0
       subroutine dqags(f, a, b, epsabs, epsrel, alist, blist,elist,
      * rlist, limit, iord, liord, result, abserr, ier)
 c

@@ -1,5 +1,5 @@
 C/MEMBR ADD NAME=WSHRSL,SSI=0
-      subroutine wshrsl(ar,ai,br,bi,cr,ci,m,n,na,nb,nc,rmax,fail)
+      subroutine wshrsl(ar,ai,br,bi,cr,ci,m,n,na,nb,nc,eps,rmax,fail)
 c
 c!purpose
 c   wshrsl is a fortran iv subroutine to solve the complex matrix
@@ -8,7 +8,7 @@ c   and b is in upper triangular form,
 c
 c!calling sequence
 c
-c      subroutine wshrsl(ar,ai,br,bi,cr,ci,m,n,na,nb,nc,rmax,fail)
+c      subroutine wshrsl(ar,ai,br,bi,cr,ci,m,n,na,nb,nc,eps,rmax,fail)
 c   ar,ai  a doubly subscripted array containg the matrix a in
 c          lower triangular form
 c
@@ -27,6 +27,9 @@ c   nb     the first dimension of the array b
 c
 c   nc     the first dimension of the array c
 c
+c   eps    tolerance on a(k,k)+b(l,l)
+c          if |a(k,k)+b(l,l)|<eps algorithm suppose that |a(k,k)+b(l,l)|=eps
+c
 c   rmax   maximum allowed size of any element of the transformation
 c
 c   fail   indicates if wshrsl failed
@@ -39,14 +42,13 @@ c     Steer Serge  I.N.R.I.A from shrslv (Bartels and Steward)
 c!
 c
       integer m, n, na, nb, nc
-      double precision ar,ai, br,bi, cr,ci, rmax
+      double precision ar,ai, br,bi, cr,ci, eps,rmax
       dimension ar(na,m),ai(na,m),br(nb,n),bi(nb,n),cr(nc,n),ci(nc,n)
       logical fail
 c internal variables
 c
       integer k,km1,l,lm1,i
-      double precision t,tr,ti,zero,ddot
-      data zero /0.0d+0/
+      double precision t,tr,ti,ddot
 c
       fail = .true.
 c
@@ -71,9 +73,12 @@ c
    50 tr = ar(k,k) + br(l,l)
       ti = ai(k,k) + bi(l,l)
       t=tr*tr+ti*ti
-      if(t.eq.zero) return
-      tr=tr/t
-      ti=ti/t
+      if(t.lt.eps*eps) then
+         tr=1.0d0/eps
+      else
+         tr=tr/t
+         ti=ti/t
+      endif
 c
       t=cr(k,l)*tr+ci(k,l)*ti
       ci(k,l)=-cr(k,l)*ti+ci(k,l)*tr

@@ -514,7 +514,7 @@ deff('[ok]=cplist(l1,l2)',['ok=1;'
                  'for k=1:size(l1),'
                     'if l1(k)<>l2(k) then ok=0,return,end;'
                  'end'])
-deff('[r]=horner(p,x)',['if type(p)=15 then';
+deff('[r]=horner(p,x)',['if type(p)==15|type(p)==16 then';
                            'r=horner(p(2),x)./horner(p(3),x),';
                            'return,';
                         'end;';
@@ -527,31 +527,31 @@ deff('[f]=%prp(p1,p2)',['[l,c]=size(p2);';
                         'if l*c <>1 then f=p1*invr(p2),return,end;';
                         '[l,c]=size(p1);';
                         '[p1 p2]=simp(p1,p2*ones(l,c));';
-                        'f=list(''r'',p1,p2,[]);'])
+                        'f=tlist(''r'',p1,p2,[]);'])
  
  
  
 horn=horner;
 h=1/s;
-if cplist(h,list('r',1,s,[]))=0 then pause,end
+if cplist(h,tlist('r',1,s,[]))=0 then pause,end
 h1=(z-1)/(z+1);
 hrn=horner(h,h1);
-if cplist(hrn , list('r',z+1,z-1,[]))=0 then pause,end
+if cplist(hrn , tlist('r',z+1,z-1,[]))=0 then pause,end
 //
 comp(horner)
 hrn=horner(h,h1);
-if cplist(hrn , list('r',z+1,z-1,[]))=0 then pause,end
+if cplist(hrn , tlist('r',z+1,z-1,[]))=0 then pause,end
 //
 comp(%prp);
 h=1/s;
-if cplist(h,list('r',1,s,[]))=0 then pause,end
+if cplist(h,tlist('r',1,s,[]))=0 then pause,end
 h1=(z-1)/(z+1);
 hrn=horn(h,h1);
-if cplist(hrn , list('r',z+1,z-1,[]))=0 then pause,end
+if cplist(hrn , tlist('r',z+1,z-1,[]))=0 then pause,end
 //
 comp(horn)
 hrn=horn(h,h1);
-if cplist(hrn , list('r',z+1,z-1,[]))=0 then pause,end
+if cplist(hrn , tlist('r',z+1,z-1,[]))=0 then pause,end
 //
 //
 //

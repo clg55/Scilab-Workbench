@@ -1,4 +1,4 @@
-//<sm,cwp>=cspect(nlags,ntp,wtype,x,y,wpar)
+function [sm,cwp]=cspect(nlags,ntp,wtype,x,y,wpar)
 //<sm,cwp>=cspect(nlags,ntp,wtype,x,y,wpar)
 //Spectral estimation using the modified periodogram method.
 //Cross-spectral estimate of x and y is calculated when both
@@ -84,7 +84,6 @@
  
    wree=[wre 0*ones(1,ntp-2*nlags+1)];
    sm=abs(fft(wree,-1));
- 
-//end
+
 
 

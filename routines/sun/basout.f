@@ -18,13 +18,15 @@ c              nombre maxi de ligne atteint,gestion du more
                if (iflag.eq.0) then 
 c                 scilab n'a pas de  fenetre propre
                   write(wte, '('' more ?'',$)')
-                  read(rte,'(a1,$)') ch
+                  ch=' '
+                  read(rte,'(a1)') ch 
                   if(ch.ne.' ') ich=1
                else
 c                 scilab a une  fenetre  en propre
                   call xscimore(ich)
                endif
                if(ich.eq.1) then
+                  if (iflag.eq.0) write(wte,'(a)')
                   lct(1)=-1
                   io=-1
                   return
@@ -49,7 +51,6 @@ c        sortie sur fichier
       subroutine basou1(lunit,string)
 c     gestion des sorties sur le "standard output" de scilab.
 c     la ligne editee n'est pas suivie de retour a la ligne
-c
       include '../stack.h'
       character*(*) string
       if (lunit.eq.wte) then 
@@ -58,8 +59,7 @@ c
             write(lunit,'(a,$)') string
             if(lunit.eq.wte.and.wio.ne.0) write(wio,'(a,$)') string
          else
-            buf = string//char(0)
-            call xscisncr(buf)
+            call xscisncr(string,len(string))
             if(wio.ne.0) write(wio,'(a,$)') string
          endif
       else

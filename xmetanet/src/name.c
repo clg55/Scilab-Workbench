@@ -1,9 +1,14 @@
+#include <X11/Intrinsic.h>
 #include <malloc.h>
 
 #include "metaconst.h"
 #include "list.h"
 #include "graph.h"
 #include "metio.h"
+#include "graphics.h"
+
+extern void UnhiliteArc();
+extern void UnhiliteNode();
 
 void AutomaticName();
 void ChangeArcName();
@@ -11,23 +16,20 @@ void ChangeNodeName();
 void NameArc();
 void NameNode();
 void AutomaticName();
-void UndirectedAutomaticName();
 
 void NameObject()
 {
-  if (theGG.active != 0) {
-    switch (theGG.active_type) {
-    case ARC:
-      NameArc((arc*)theGG.active);
-      break;
-    case NODE:
-      NameNode((node*)theGG.active);
-      break;
-    }
-    UnhiliteActive();
-    theGG.active = 0;
-    theGG.active_type = 0;
-    theGG.modified = 1;  
+  arc *a;
+  node *n;
+  if (theGG.n_hilited_nodes == 0 && theGG.n_hilited_arcs == 1) {
+    a = (arc*)theGG.hilited_arcs->first->element;
+    NameArc(a);
+    theGG.modified = 1;
+  }
+  else if (theGG.n_hilited_nodes == 1 && theGG.n_hilited_arcs == 0) {
+    n = (node*)theGG.hilited_nodes->first->element;
+    NameNode(n);
+    theGG.modified = 1;
   }
 }
 
@@ -37,10 +39,6 @@ void AutomaticName ()
   arc *a; node *n;
   char str[MAXNAM];
 
-  if (!theGraph->directed) {
-    UndirectedAutomaticName();
-    return;
-  }
   sprintf(Description,"Do you REALLY want to use internal numbers for nodes and arcs names ?");
   if (MetanetYesOrNo(Description)) {
     sprintf(Description,"Possibly old existing names will be DEFINITIVELY lost. Ok ?");
@@ -75,59 +73,9 @@ void AutomaticName ()
 	strcpy(n->name,str);
 	p = p->next;
       }
-      ComputeNameArraysGraph(theGraph);
       DrawGraph(theGraph);
       theGG.modified = 1; 
     }
-  }
-}
-
-void UndirectedAutomaticName ()
-{
-  mylink *p;
-  arc *a; node *n;
-  char str[MAXNAM];
-
-  sprintf(Description,"Do you REALLY want to use internal numbers for nodes and arcs names ?");
-  if (MetanetYesOrNo(Description)) {
-
-    RenumberGraph(theGraph);
-    sprintf(Description,"Graph %s renumbered\n",theGraph->name);
-    AddMessage(Description);
-
-    MakeArraysGraph(theGraph);
-
-    p = theGraph->arcs->first;
-    while (p) {
-      a = (arc*)p->element;
-      if (a->number % 2 == 0)
-      sprintf(str,"%d",a->number / 2);
-      else {
-	sprintf(str,"%d",(a->number + 1) / 2);
-      }
-      if ((a->name = 
-	   (char*)malloc((unsigned)(strlen(str)+1)*sizeof(char))) == NULL) {
-	fprintf(stderr,"Running out of memory\n");
-	return;
-      }
-      strcpy(a->name,str);
-      p = p->next;
-    }
-    p = theGraph->nodes->first;
-    while (p) {
-      n = (node*)p->element;
-      sprintf(str,"%d",n->number);
-      if ((n->name = 
-	   (char*)malloc((unsigned)(strlen(str)+1)*sizeof(char))) == NULL) {
-	fprintf(stderr,"Running out of memory\n");
-	return;
-      }
-      strcpy(n->name,str);
-      p = p->next;
-    }
-    ComputeNameArraysGraph(theGraph);
-    DrawGraph(theGraph);
-    theGG.modified = 1;  
   }
 }
 
@@ -136,11 +84,10 @@ arc *a;
 {
   char str[MAXNAM];
   char *p;
-  int n;
 
   sprintf(Description,"New name for highlighted arc %s",a->name);
-  if (a->name == 0) MetanetDialog("",str,Description);
-  else MetanetDialog(a->name,str,Description);
+  if (a->name == 0) {if (!MetanetDialog("",str,Description)) return;}
+  else {if (!MetanetDialog(a->name,str,Description)) return;}
   p = str;
   while (*p != '\0') {
     if (*p++ == ' ') {
@@ -150,81 +97,48 @@ arc *a;
     }
   }
   if (a->name != 0 && !strcmp(a->name,str)) return;
+  if (arcNameDisplay) {
+    UnhiliteArc(a);
+    EraseArc(a);
+  }
   ChangeArcName(a,str);
+  if (arcNameDisplay) HiliteArc(a);
 }
 
 void ChangeArcName(a,str)
 arc *a;
 char *str;
 {
-  mylink *p,*q;
-  int i,indic;
-  arc *aa,*a2;
+  mylink *p;
+  int indic;
+  arc *aa;
 
   indic = 0;
-  if (theGraph->directed) {
-    p = theGraph->arcs->first;
-    while (p) {
-      aa = (arc*)p->element;
-      if (aa->name != 0 && strcmp(aa->name,str) == 0) {
-	indic = 1;
-	break;
-      }
-      p = p->next;
+  p = theGraph->arcs->first;
+  while (p) {
+    aa = (arc*)p->element;
+    if (aa->name != 0 && strcmp(aa->name,str) == 0) {
+      indic = 1;
+      break;
     }
-    if (indic == 1) {
-      /* str is already the name of another arc */
-      HiliteArc(aa);
-      sprintf(Description,"%s is already the name of another highlighted arc",
-	      str);
-      MetanetAlert(Description);
-      UnhiliteArc(aa);
-    }
-    else {
-      free(a->name);
-      if ((a->name = 
-	   (char*)malloc((unsigned)(strlen(str)+1)*sizeof(char))) == NULL) {
-	fprintf(stderr,"Running out of memory\n");
-	return;
-      }
-      strcpy(a->name,str);
-    }
+    p = p->next;
+  }
+  if (indic == 1) {
+    /* str is already the name of another arc */
+    HiliteArc(aa);
+    sprintf(Description,"%s is already the name of another highlighted arc",
+	    str);
+    MetanetAlert(Description);
+    UnhiliteArc(aa);
   }
   else {
-    p = theGraph->arcs->first;
-    while (p) {
-      aa = (arc*)p->element;
-      if (aa->name != 0 && strcmp(aa->name,str) == 0) {
-	indic = 1;
-	break;
-      }
-      p = p->next;
+    free(a->name);
+    if ((a->name = 
+	 (char*)malloc((unsigned)(strlen(str)+1)*sizeof(char))) == NULL) {
+      fprintf(stderr,"Running out of memory\n");
+      return;
     }
-    if (indic == 1) {
-      /* n is already the name of another arc */
-      HiliteArc(aa);
-      MetanetAlert
-	("%s is already the name of another highlighted arc",str);
-      UnhiliteArc(aa);
-    }
-    else {
-      free(a->name);
-      if ((a->name = 
-	   (char*)malloc((unsigned)(strlen(str)+1)*sizeof(char))) == NULL) {
-	fprintf(stderr,"Running out of memory\n");
-	return;
-      }
-      strcpy(a->name,str);
-      q = theGraph->arcs->first;
-      while (q) {
-	a2 = (arc*)q->element;
-	if (a2->number == a->number + 1) {
-	  a2->name = a->name;
-	  break;
-	}
-	q = q->next;
-      }      
-    }
+    strcpy(a->name,str);
   }
 }
 
@@ -233,11 +147,10 @@ node *nod;
 {
   char str[MAXNAM];
   char *p;
-  int n;
   
   sprintf(Description,"New name for highlighted node %s",nod->name);
-  if (nod->name == 0) MetanetDialog("",str,Description);
-  else MetanetDialog(nod->name,str,Description);
+  if (nod->name == 0) {if (!MetanetDialog("",str,Description)) return;}
+  else {if (!MetanetDialog(nod->name,str,Description)) return;}
   p = str;
   while (*p != '\0') {
     if (*p++ == ' ') {
@@ -247,7 +160,12 @@ node *nod;
     }
   }
   if (nod->name != 0 && !strcmp(nod->name,str)) return;
+  if (nodeNameDisplay) {
+    UnhiliteNode(nod);
+    EraseNode(nod);
+  }
   ChangeNodeName(nod,str);
+  if (nodeNameDisplay) HiliteNode(nod);
 }
 
 void ChangeNodeName(n,str)
@@ -255,9 +173,10 @@ node *n;
 char *str;
 {
   mylink *p;
-  int i,indic;
+  int indic;
   node *nn;
   indic = 0;
+
   p = theGraph->nodes->first;
   while (p) {
     nn = (node*)p->element;
@@ -283,6 +202,8 @@ char *str;
       fprintf(stderr,"Running out of memory\n");
       return;
    }
+
     strcpy(n->name,str);
+    DrawNode(n);
   }
 }

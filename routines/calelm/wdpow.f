@@ -26,32 +26,32 @@ c
       ierr=0
 c
       if(dble(int(dpow)).ne.dpow) goto 01
-c puissance entieres
+c     puissance entieres
       call wipow(n,vr,vi,iv,int(dpow),ierr)
       return
-c
-   01 continue
-c puissance reelles
+c     
+ 01   continue
+c     puissance reelles
       ii=1
       do 20 i=1,n
-        if(abs(vr(ii))+abs(vi(ii)).ne.0.0d+0) then
-                 call wlog(vr(ii),vi(ii),sr,si)
-                 sr=exp(sr*dpow)
-                 si=si*dpow
-                 vr(ii)=sr*cos(si)
-                 vi(ii)=sr*sin(si)
-                 ii=ii+iv
-                                             else
-                 if(dpow.gt.0.0d+0) then
-                    vr(ii)=0.0d+0
-                    vi(ii)=0.0d+0
-                    ii=ii+iv
-                                   else
-                    ierr=2
-                 endif
-                 return
-        endif
-   20 continue
-c
+         if(abs(vr(ii))+abs(vi(ii)).ne.0.0d+0) then
+            call wlog(vr(ii),vi(ii),sr,si)
+            sr=exp(sr*dpow)
+            si=si*dpow
+            vr(ii)=sr*cos(si)
+            vi(ii)=sr*sin(si)
+            ii=ii+iv
+         else
+            if(dpow.gt.0.0d+0) then
+               vr(ii)=0.0d+0
+               vi(ii)=0.0d+0
+               ii=ii+iv
+            else
+               ierr=2
+            endif
+            return
+         endif
+ 20   continue
+c     
       return
       end

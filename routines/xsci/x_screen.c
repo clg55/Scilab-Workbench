@@ -27,23 +27,9 @@
 
 /* screen.c */
 
-#include "x_ptyx.h"
+#include "x_ptyxP.h"
 #include "x_error.h"
 #include "x_data.h"
-
-#include <stdio.h>
-#include <signal.h>
-#ifdef SVR4
-#include <termios.h>
-#else
-#include <sys/ioctl.h>
-#endif
-
-#ifdef att
-#include <sys/termio.h>
-#include <sys/stream.h>	/* get typedef used in ptem.h */
-#include <sys/ptem.h>
-#endif
 
 extern Char *calloc(), *malloc(), *realloc();
 extern void free();
@@ -83,11 +69,10 @@ ScrnBuf Allocate(nrow, ncol, addr)
  *  (Return value only necessary with SouthWestGravity.)
  */
 
-static
-    Reallocate(sbuf, sbufaddr, nrow, ncol, oldrow, oldcol)
-  ScrnBuf *sbuf;
-  Char **sbufaddr;
-  int nrow, ncol, oldrow, oldcol;
+static Reallocate(sbuf, sbufaddr, nrow, ncol, oldrow, oldcol)
+     ScrnBuf *sbuf;
+     Char **sbufaddr;
+     int nrow, ncol, oldrow, oldcol;
 {
   register ScrnBuf base;
   register Char *tmp;
@@ -493,15 +478,6 @@ ScreenResize(screen, width, height, flags)
   int rows, cols;
   int border = 2 * screen->border;
   int move_down_by;
-#ifdef sun
-#ifdef TIOCSSIZE
-  struct ttysize ts;
-#endif				/* TIOCSSIZE */
-#else				/* sun */
-#ifdef TIOCSWINSZ
-  struct winsize ws;
-#endif				/* TIOCSWINSZ */
-#endif				/* sun */
   Window tw = TextWindow(screen);
 
   /* clear the right and bottom internal border because of NorthWest gravity
@@ -590,44 +566,9 @@ ScreenResize(screen, width, height, flags)
   screen->fullVwin.fullheight = height;
   screen->fullVwin.fullwidth = width;
   ResizeSelection(screen, rows, cols);
-#ifdef sun
-#ifdef TIOCSSIZE
-  /* Set tty's idea of window size */
-  ts.ts_lines = rows;
-  ts.ts_cols = cols;
-  ioctl(screen->respond, TIOCSSIZE, &ts);
-#ifdef SIGWINCH
-  if (screen->pid > 1)
-  {
-    int pgrp;
-
-    if (ioctl(screen->respond, TIOCGPGRP, &pgrp) != -1)
-      kill_process_group(pgrp, SIGWINCH);
-  }
-#endif				/* SIGWINCH */
-#endif				/* TIOCSSIZE */
-#else				/* sun */
-#ifdef TIOCSWINSZ
-  /* Set tty's idea of window size */
-  ws.ws_row = rows;
-  ws.ws_col = cols;
-  ws.ws_xpixel = width;
-  ws.ws_ypixel = height;
-  ioctl(screen->respond, TIOCSWINSZ, (char *) &ws);
-#ifdef notdef			/* change to SIGWINCH if this doesn't work
-				 * for you */
-  if (screen->pid > 1)
-  {
-    int pgrp;
-
-    if (ioctl(screen->respond, TIOCGPGRP, &pgrp) != -1)
-      kill_process_group(pgrp, SIGWINCH);
-  }
-#endif				/* SIGWINCH */
-#endif				/* TIOCSWINSZ */
-#endif				/* sun */
   /* JPC :_> says to Scilab that size has changed" */
-  Size2Scilab(rows, cols);
+  /* rows -1 for scilab because of the more prompt */
+  Size2Scilab(rows -1 , cols);
   return (0);
 }
 
@@ -639,17 +580,15 @@ ScreenResize(screen, width, height, flags)
 Size2Scilab(rows, cols)
   int rows, cols;
 {
-  char strsend1[sizeof(SCITRW) + 1];
+  /**  Changement : on appelle cette fonction des la premiere entree 
+    et l'initialisation de inisci a ete suprimee 
   static int firstentry = 0;
-  /** Ignore the first call **/
   if (firstentry == 0)
   {
     firstentry++;
     return;
   }
-  /** Old version 
-    sprintf(strsend1, SCITRW, rows, cols);
-    write_scilab(strsend1); **/
+  **/ 
   C2F(scilines)(&rows,&cols);
 }
 

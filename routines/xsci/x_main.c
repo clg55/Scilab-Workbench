@@ -28,7 +28,7 @@ SOFTWARE.
 /* main.c */
 #include "version.h"
 #include "../machine.h"
-#include "x_ptyx.h"
+#include "x_ptyxP.h"
 #include "x_data.h"
 #include "x_error.h"
 #include "x_menu.h"
@@ -247,7 +247,7 @@ extern void do_kill();
 /*
  * DeleteWindow(): Action proc to implement ICCCM delete_window.
  */
-/* ARGSUSED */
+
 void
 DeleteWindow(w, event, params, num_params)
     Widget w;
@@ -255,10 +255,10 @@ DeleteWindow(w, event, params, num_params)
     String *params;
     Cardinal *num_params;
 {
-  do_kill(w);
+  do_kill(w,(caddr_t) 0, (caddr_t) 0);
 }
 
-/* ARGSUSED */
+
 void
 KeyboardMapping(w, event, params, num_params)
     Widget w;
@@ -273,8 +273,11 @@ KeyboardMapping(w, event, params, num_params)
     }
 }
 
+extern void  SGDeleteWindow();
+
 XtActionsRec actionProcs[] = {
     "DeleteWindow", DeleteWindow,
+    "SGDeleteWindow", SGDeleteWindow,
     "KeyboardMapping", KeyboardMapping,
 };
 
@@ -311,8 +314,8 @@ strip_blank(source)
    }
 }
 
-C2F(mainsci) (pname,nos,now,idisp,display,dummy1,dummy2)
-     int *nos,*now,*idisp;
+C2F(winsci) (pname,nos,idisp,display,dummy1,dummy2)
+     int *nos,*idisp;
      long int dummy1,dummy2;
      char display[];
      char pname[];
@@ -328,13 +331,9 @@ C2F(mainsci) (pname,nos,now,idisp,display,dummy1,dummy2)
     }
   if ( *nos == 1) 
       argv[argc++]="-ns";
-  if ( *now == 1) 
-      argv[argc++]="-nw";
-  if ( *now == 1) 
-    {
-      C2F(scilab)(nos);
-      exit(0);
-    }
+
+  argv[argc++]="-name";
+  argv[argc++]="Scilab";
   main_sci(argc,argv);
 }
 
@@ -347,7 +346,7 @@ C2F(mainsci) (pname,nos,now,idisp,display,dummy1,dummy2)
 
 #define ADDTOPLEVEL(NAME) \
 	toplevel = XtCreateManagedWidget(NAME,formWidgetClass, \
-					 realToplevel,NULL,0);
+					 realToplevel,(ArgList)0 ,(Cardinal)0);
 
 initColors()
 {
@@ -400,36 +399,37 @@ main_sci(argc, argv)
   int nostartup=0;
   XtermWidget CreateSubWindows();
   register TScreen *screen;
-  register int i, pty;
-  int Xsocket, mode;
+  register int  pty;
+  int Xsocket;
   int xerror(), xioerror();
   ProgramName = argv[0];
   /* Init the Toolkit. */
   realToplevel = toplevel = XtAppInitialize (&app_con, "Xscilab", 
-			      optionDescList, XtNumber(optionDescList), 
-			      &argc, argv, fallback_resources, NULL, 0);
+					     optionDescList, XtNumber(optionDescList), 
+					     &argc, argv, fallback_resources, 
+					     (ArgList) 0,(Cardinal) 0);					     
   XtGetApplicationResources(toplevel, (XtPointer) &resource,
 			    application_resources,
-			    XtNumber(application_resources), NULL, 0);
+			    XtNumber(application_resources), 
+			    (ArgList) 0,(Cardinal) 0);
 
   XtAppAddActions(app_con, actionProcs, XtNumber(actionProcs));
   initColors();
   SetXsciOn();
   xterm_name = resource.xterm_name;
   if (strcmp(xterm_name, "-") == 0) xterm_name = "xterm";
-  XtSetValues (toplevel, ourTopLevelShellArgs,  number_ourTopLevelShellArgs);
+  XtSetValues (toplevel, ourTopLevelShellArgs,(Cardinal)  number_ourTopLevelShellArgs);
   /* Parse the rest of the command line */
   for (argc--, argv++ ; argc > 0 ; argc--, argv++) 
     {
       if(**argv != '-') Syntax (*argv);
       switch(argv[0][1]) {
       case 'h':
-	Help ();
+	Help ();      break;
 	/* NOTREACHED */
       default:
 	Syntax (*argv);
       }
-      break;
     }
   XawSimpleMenuAddGlobalActions (app_con);
   XtRegisterGrabAction (HandlePopupMenu, True,
@@ -479,7 +479,6 @@ main_sci(argc, argv)
   VTInit1(realToplevel);
   Xsocket = ConnectionNumber(screen->display);
   pty = screen->respond;
-  mode = 1;
   pty_mask = 1 << pty;
   X_mask = 1 << Xsocket;
   Select_mask = pty_mask | X_mask;
@@ -493,9 +492,21 @@ main_sci(argc, argv)
   }
 }
 
-Exit(n)
-	int n;
+#ifdef sun 
+#include <sys/ieeefp.h>
+clear_ieee_warnings()
 {
+  char *mode, **out, *in;
+  ieee_flags("clearall","exeption","all", &out);
+}
+#endif 
+
+C2F(clearexit)(n)
+     integer n;
+{
+#ifdef sun 
+  clear_ieee_warnings();
+#endif
   exit(n);
 }
 

@@ -1,4 +1,4 @@
-//<h>=buttmag(order,omegac,sample)
+function [h]=buttmag(order,omegac,sample)
 //<h>=buttmag(order,omegac,sample)
 //Squared Magnitude response of a Butterworth filter
 //omegac = cutoff frequency ; sample = sample of frequencies
@@ -12,8 +12,7 @@
  
    [n1,n2]=size(sample);
    un=ones(n1,n2);
-   h=un./(un+(sample/omegac)**order);
- 
-//end
+   h=un./(un+(sample/omegac)**(2*order));
+
 
 

@@ -27,13 +27,13 @@ c+
        fintg=x*sin(30.0d+0*x)/sqrt(1.0d+0-(x/(2.0d+0*pi))**2)
        return
       endif
+c     if(nam1.eq.myfunc') then
+c     fintg=myfunc(x)
+c     endif
 c+
-c 
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(name,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.name) goto 1001
-cc sun unix
       call dyncall(it1-1,x,y)
       fintg=y
 cc fin
@@ -44,3 +44,11 @@ c
       call error(50)
       return
       end
+
+c      subroutine foo(x,tt)
+c test example (see SCIDIR/tests/intg.tst)
+c      double precision x,pi,tt
+c      pi=3.1415926524897932
+c      tt=x*sin(30*x)/sqrt(1.0d0-((x/(2*pi))**2))
+c      return
+c      end

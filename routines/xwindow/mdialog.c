@@ -1,17 +1,18 @@
 #include "scilab_d.h"
-#include "../machine.h"
+
+extern void ShellFormCreate();
+
 static char **str;
-
-void C2F(cvstr)();
-
 static void mDialogWindow();
+
+/* Interface with Scilab */
 
 void C2F(xmdial)(label,ptrlab,nlab,value,ptrv,desc,ptrdesc,nv,res,ptrres,ierr)
      int *label,*ptrlab,*nlab,*value,*ptrv,*desc,*ptrdesc,*nv,*res,*ptrres,*ierr;
 {
-  int i,ni,nr,maxchars,nv1;
+  int i,nr,nv1,ni;
   char **description,**valueinit,*labels;
-  maxchars= *ierr;/** Il faudrait utiliser maxchars **/
+  /** int  maxchars= *ierr; Il faudrait utiliser maxchars **/
   *ierr=0;
   /* conversion of scilab characters into strings */
   ScilabMStr2C(label,nlab,ptrlab,&labels,ierr);
@@ -20,12 +21,13 @@ void C2F(xmdial)(label,ptrlab,nlab,value,ptrv,desc,ptrdesc,nv,res,ptrres,ierr)
   if ( *ierr == 1) return;
   ScilabMStr2CM(value,nv,ptrv,&valueinit,ierr);
   if ( *ierr == 1) return;
-  str=(char **) malloc((unsigned) (*nv+1)*sizeof(char *));
+  str=(char **) MALLOC( (*nv+1)*sizeof(char *));
+  if ( str == ( char **) 0)  {      *ierr = 1; return;}
   nv1= *nv;
   mDialogWindow(labels,description,valueinit,nv);
-  free((char*)labels);
-  for (i=0;i< nv1;i++) free((char*)valueinit[i]); free((char*)valueinit);
-  for (i=0;i< nv1;i++) free((char*)description[i]); free((char*)description);
+  FREE(labels);
+  for (i=0;i< nv1;i++) FREE(valueinit[i]); FREE(valueinit);
+  for (i=0;i< nv1;i++) FREE(description[i]); FREE(description);
   if (*nv!=0)
     {
       int job=0;
@@ -35,21 +37,15 @@ void C2F(xmdial)(label,ptrlab,nlab,value,ptrv,desc,ptrdesc,nv,res,ptrres,ierr)
 	ni=strlen(str[i-1]);
 	ptrres[nr+1]=ptrres[nr]+ni;
 	nr=nr+1;
-	F2C(cvstr)(&ni,res,str[i-1],&job,ni);
+	F2C(cvstr)(&ni,res,str[i-1],&job,(long int) 0);
 	res+=ni;
-	free((char*)str[i-1]);
+	FREE(str[i-1]);
       }
-      free((char*)str);
+      FREE(str);
     }
 }
 
 /* X Window Part */
-
-static Widget toplevel;
-extern XtAppContext app_con;
-
-#define X 147
-#define Y 33
 
 static Widget  *dialoglist;
 extern int ok_Flag_sci;
@@ -61,21 +57,21 @@ mDialogOk(w,nv,callData)
      int nv;
 { int ind,i,ns;
   Arg args[2];
-  int iargs;
+  Cardinal iargs;
   String str1,p;
   for (i=0;i<nv;i++) {
     iargs=0;
     XtSetArg(args[iargs], XtNstring, &str1); iargs++ ;
     XtGetValues(dialoglist[i],args,iargs);
     ns=strlen(str1);
-    p=(char *) malloc((unsigned)(ns+1)*sizeof(char));
+    p=(char *) MALLOC((ns+1)*sizeof(char));
     if (p == 0) { Scistring("Malloc : No more place");return;}
     strcpy(p,str1);
     ind = ns - 1 ;
     if (p[ind] == '\n' ) p[ind] = '\0' ;
     str[i]=p;
   }
-  free(dialoglist);
+  FREE(dialoglist);
   ok_Flag_sci = 1;
 }
 
@@ -91,81 +87,102 @@ mDialogCancel(w,nv,callData)
 
 static void 
 mDialogWindow(labels,description,valueinit,nv)
-     char ** description;
-     char ** valueinit;
-/*     char **buttonname;*/
+     char **description, **valueinit;
      char *labels;
      int *nv;
-  {
-    Arg args[10];
-    XFontStruct     *temp_font;
-    int iargs = 0,i,ierr,mxdesc,mxini,siz,width;
-    Widget shell,wid,form,box,label;
-    Widget *w;
-    static Display *dpy = (Display *) NULL;
-    DisplayInit("",&dpy,&toplevel);
+{
+  Arg args[10];
+  Cardinal iargs = 0;
+  Dimension maxh1,maxw1,maxw2,maxh2,w1,w2,h1,h2;
+  int i,mxdesc,mxini,siz;
+  Widget shell,label,kform; 
+  Widget lviewport, dviewport,dform1,dform,ok,cancel,cform;
+  static Display *dpy = (Display *) NULL;
 
-    iargs=0;
-    shell = XtCreatePopupShell("mdialogShell",transientShellWidgetClass,
-			       toplevel,args,iargs);
-    form = XtCreateManagedWidget("mdForm",formWidgetClass,shell,args,iargs);
+  /* Top shell with a form inside */
 
-    iargs=0;
-    XtSetArg(args[iargs], XtNlabel ,labels) ; iargs++;
-    box=XtCreateManagedWidget("mdgLabel",labelWidgetClass,form,args,iargs);
-    /* An array of Widgets */
-    iargs=0;
-    XtSetArg(args[0],XtNfont, &temp_font);  iargs++;
-    XtGetValues(box, args, iargs);
-    width =Max(char_width(temp_font),1);
-    dialoglist=(Widget *)malloc((unsigned) (*nv)*sizeof(Widget));
-    if ( dialoglist == (Widget *) NULL) 
-      {
-	Scistring("Malloc : No more place");
-	/** Warning : ierr is not realy used up to now **/
-	ierr=1; return;
-      }
-    mxdesc=5;
-    mxini=5;
-    for (i=0 ; i<*nv ; i++) 
-      {
-	siz=strlen(description[i]);mxdesc=Max(siz,mxdesc);
-	siz=strlen(valueinit[i]);  mxini=Max(siz,mxini);
-      }
-    for (i=0 ; i<*nv ; i++) 
+  ShellFormCreate("mdialogShell",&shell,&dform,&dpy);
+
+  /* Create a Viewport+Label and resize it */
+
+  ViewpLabelCreate(dform,&label,&lviewport,labels);
+
+  iargs=0;
+  dviewport = XtCreateManagedWidget("dViewport",viewportWidgetClass,
+				      dform, args, iargs);
+  iargs=0;
+  dform1 = XtCreateManagedWidget("form",formWidgetClass,
+				      dviewport, args, iargs);
+
+  /* Allocate an array of Widgets */
+  dialoglist=(Widget *)MALLOC( (*nv)*sizeof(Widget));
+  if ( dialoglist == (Widget *) NULL) 
+    {
+      Scistring("Malloc : No more place");
+      /** Warning : ierr is not realy used up to now 	ierr=1; **/
+      return;
+    }
+  
+  /* Compute common sizes for ascii and labels  */
+
+  mxdesc=5;
+  mxini=5;
+  for (i=0 ; i<*nv ; i++) 
+    {
+      siz=strlen(description[i]);mxdesc=Max(siz,mxdesc);
+      siz=strlen(valueinit[i]);  mxini=Max(siz,mxini);
+    }
+  mxini=Min(mxini+10,60);
+
+  /* Widgets creation */
+  kform = (Widget)0;
+  for (i=0 ; i<*nv ; i++) 
       {
 	iargs=0;
-	XtSetArg(args[iargs], XtNfromVert , box) ; iargs++;
-	box=XtCreateManagedWidget("mdlForm",formWidgetClass,form,args,iargs);
+	XtSetArg(args[iargs], XtNfromVert,kform);iargs++;
+	kform=XtCreateManagedWidget("kForm",formWidgetClass,dform1,
+				      args,iargs);
 	iargs=0;
-	XtSetArg(args[iargs], XtNlabel ,description[i]) ; iargs++;
-	XtSetArg(args[iargs], XtNwidth ,(mxdesc+1)*width) ; iargs++;
-	label=XtCreateManagedWidget("mdlLabel",labelWidgetClass,box,args,iargs);
+	label=XtCreateManagedWidget("kLabel",labelWidgetClass,kform,
+				    args,iargs);
 	iargs=0;
 	XtSetArg(args[iargs], XtNfromHoriz ,label) ; iargs++;
-	XtSetArg(args[iargs], XtNwidth ,(mxini+4)*width) ; iargs++;
-	XtSetArg(args[iargs], XtNstring ,valueinit[i]) ; iargs++;
-	dialoglist[i]=XtCreateManagedWidget("mdlAscii",asciiTextWidgetClass,
-					    box,args,iargs);
+	dialoglist[i]=XtCreateManagedWidget("kAscii",asciiTextWidgetClass,
+					    kform,args,iargs);
+	if (i==0) 
+	  {
+	    /* chaque label sera mis a (w1,h1) 
+	       et chaque ascii sera mis a (w2,h2) 
+	       on regarde aussi la taille global prise par 
+	       un label+un ascii de 60 caracteres pour limiter ensuite 
+	       la fenetre globale
+	       */
+	    LabelSize(label,mxdesc+1,1,&w1,&h1);
+	    AsciiSize(dialoglist[0],mxini,1,&w2,&h2);
+	    h1=Max(h1,h2);
+	    LabelSize(label,60,1,&maxw1,&maxh1);
+	    AsciiSize(dialoglist[0],60,1,&maxw2,&maxh2);
+	    maxw1=Max(maxw1,maxw2);
+	    maxh1=Max(maxh1,maxh2);
+	  }
+	SetLabel(label,description[i],w1,h1);
+	SetAscii(dialoglist[i],valueinit[i],w2,h1);
       }
-    iargs=0;
-    XtSetArg(args[iargs], XtNfromVert , box) ; iargs++;
-    box=XtCreateManagedWidget("lForm",formWidgetClass,form,args,iargs);
-    iargs = 0;
-/*    XtSetArg(args[iargs], XtNlabel, buttonname[0] ); iargs++;*/
-    wid=XtCreateManagedWidget("okCommand",commandWidgetClass,box,args,iargs);
-    XtAddCallback(wid, XtNcallback,(XtCallbackProc)mDialogOk ,(XtPointer) *nv);  
-    iargs = 0;
-/*    XtSetArg(args[iargs], XtNlabel, buttonname[1] ); iargs++;*/
-    wid=XtCreateManagedWidget("cancelCommand",commandWidgetClass,
-			      box,args,iargs);
-    XtAddCallback(wid, XtNcallback,(XtCallbackProc)mDialogCancel ,(XtPointer) *nv);  
-    /*    XtPopup(shell,XtGrabExclusive);*/
-    XtMyLoop(shell,dpy);
-    if (ok_Flag_sci == -1) *nv=0;
+
+  /* Buttons */
+  iargs=0;
+  cform = XtCreateManagedWidget("cform",formWidgetClass,dform,args,iargs);
+  
+  ButtonCreate(cform,&ok,(XtCallbackProc)mDialogOk,(XtPointer) *nv,"Ok","ok");
+  ButtonCreate(cform,&cancel,(XtCallbackProc)mDialogCancel,(XtPointer) *nv,"Cancel","cancel");
+
+  XtMyLoop(shell,dpy);
+  if (ok_Flag_sci == -1) *nv=0;
 }
 
-testmDialogWindow()
+/* A test function */
+
+TestmDialogWindow()
 {
   int nv;
   static String labels = "LaBel";
@@ -181,6 +198,7 @@ testmDialogWindow()
     NULL
     };
   nv=4;
-  str=(char **) malloc((unsigned) (nv+1)*sizeof(char *));
+  str=(char **) MALLOC( (nv+1)*sizeof(char *));
   mDialogWindow(labels,description,valueinit,&nv);
 }
+

@@ -54,7 +54,9 @@
  215        continue
             i=pred(jc)
             if(i.eq.0) then
-               call erro('there is no tree')
+               do 1234,ii=1,n
+                  pred(ii)=0
+ 1234          continue
                return
             endif
             if(i.eq.i0)goto 240

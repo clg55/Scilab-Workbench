@@ -32,6 +32,7 @@ case 6 then
     ebox=[xmn xmx ymn ymx zmn zmx] 
 case 7 then
   ebox=[xmn xmx ymn ymx zmn zmx] 
+case 8 then
 else error('plot3di(x,y,z [,T,A [,leg [,flags [,ebox]]]])')
 end
 flags(2)=1;

@@ -1,15 +1,17 @@
-function [x]=solve(a,b)
+function x=solve(a,b)
 // x=solve(A,b) solves A*x = b when A is an upper triagular matrix
 // made of character strings.
 //!
 //origin F Delebecque S. Steer INRIA 1987
 //
 [na,ma]=size(a),[mb,nb]=size(b)
-pivot=a(na,na);if pivot<>'1' then
-      for k=1:nb,
-       x(1,k)='('+pivot+')\('+b(na,k)+')',end
-                 else
-       x=b(na,:)
+pivot=a(na,na);
+if pivot<>'1' then
+  for k=1:nb,
+    x(1,k)=ldivf(pivot,b(na,k))
+  end
+else
+  x=b(na,:)
 end
 // update
 if na>1 then

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=FSURF,SSI=0
       subroutine fsurf(ny, t, y, ng, gout) 
 c!
 c interface de calcul d'un second membre pour la commande scilab ode.
@@ -6,7 +5,6 @@ c la subroutine apellee evalue ydot=f(t,y).
 c n est la taile du systeme
 c!
       include '../stack.h'
-      integer n
       double precision t,y(ny),gout(ng)
 c
       integer it1
@@ -22,13 +20,10 @@ c
 c+
 
 c+
-c sous programmes lies dynamiquement.
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(name,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.name) goto 1001
-cc sun unix
-      call dyncall(it1-1,n,t,y,ydot) 
+      call dyncall(it1-1,ny,t,y,ng,gout) 
 cc fin
       return
 c

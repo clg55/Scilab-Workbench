@@ -1,4 +1,6 @@
 mode(-1);
+predef(0);clear
+stacksize(1000000);
 //return
 t=[' '
 ' '
@@ -24,31 +26,33 @@ load('SCI/macros/signal/lib')
 load('SCI/macros/tdcs/lib')
 load('SCI/macros/util/lib')
 load('SCI/macros/xdess/lib')
+load('SCI/macros/scicos/lib')
 //
 SCI=getenv('SCI')
 TMPDIR='/tmp/.scilab_'+string(getpid())
-%T=%t
-%F=%f
+%T=%t;%F=%f;
 host('umask 000;if test ! -d '+TMPDIR+'; then mkdir '+TMPDIR+'; fi ')
 predef()
 //
 // calling user initialization
 //=============================
 //
-errcatch(48,'continue','nomessage');
+errcatch(240,'continue','nomessage');
 startup=file('open','home/.scilab','old','formatted');
-if iserror(48)=0 then
-   errcatch(48,'kill'); errclear(48);
+if iserror(240)=0 then
+   errcatch(240,'kill'); errclear(240);
    exec(startup,-1);file('close',startup);clear startup
 else
-   errcatch(48,'kill'); errclear(48);
+   errcatch(240,'kill'); errclear(240);
 end;
-errcatch(48,'continue','nomessage');
-startup=file('open','.scilab','old','formatted');
-if iserror(48)=0 then
-   errcatch(48,'kill'); errclear(48);
-   exec(startup,-1);file('close',startup);clear startup
-else
-   errcatch(48,'kill'); errclear(48);
-end;
+if unix_g('cd;pwd')<>unix_g('pwd') then
+  errcatch(240,'continue','nomessage');
+  startup=file('open','.scilab','old','formatted');
+  if iserror(240)=0 then
+     errcatch(240,'kill'); errclear(240);
+     exec(startup,-1);file('close',startup);clear startup
+  else
+     errcatch(240,'kill'); errclear(240);
+  end;
+end
 

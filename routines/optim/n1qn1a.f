@@ -218,6 +218,7 @@ c               ici, tout est termine
 c               interpolation cubique
   270 stepbd=step
       c=gmin+dgb-3.0d+0*(fb-fmin)/step
+      if(c.eq.0.0d+0) goto 250
       cc=abs(c)-gmin*(dgb/abs(c))
       cc=sqrt(abs(c))*sqrt(max(0.0d+0,cc))
       c=(c-gmin+cc)/(dgb-gmin+cc+cc)

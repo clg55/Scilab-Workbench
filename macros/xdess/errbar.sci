@@ -25,8 +25,7 @@ xselect();
 y1=matrix(y-em,1,n1*n2);
 x1=matrix(x,1,n1*n2);
 y2=matrix(y+ep,1,n1*n2);
-[frect,f1rect]=xgetech();
-xclip(f1rect(1),f1rect(4),f1rect(3),abs(f1rect(4)-f1rect(2)));
+xset("clipgrf");
 xsegs([x1;x1],[y1;y2]);
 xclip();
 //end

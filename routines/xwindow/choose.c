@@ -1,16 +1,65 @@
 #include "scilab_d.h"
-#include "../machine.h"
 
 #define NOCHOOSE 0
 #define CHOOSE 1
 #define CANCEL 2
-#define X 147
-#define Y 33
 
-static  Widget toplevel;
-extern XtAppContext app_con;
+extern void ShellFormCreate();
 extern int ok_Flag_sci;
-static int numChoix ;
+extern  void C2F(cvstr)();
+
+void    ExposeChooseWindow();
+static  int numChoix ;
+static  void CancelChoose();
+static  void DoChoose();
+
+/* Interface with a Scilab ``structure'' */
+
+void C2F(xchoose)(desc,ptrdesc,nd,basstrings,nstring,ptrstrings,btn,ptrbtn,nb,nrep,ierr)
+     int *desc,*ptrdesc,*nd,*basstrings,*nstring,*ptrstrings,*btn,*nb,*ptrbtn,*nrep,*ierr;
+{ 
+
+  int i;
+  char **strings, *description,**buttonname;
+  *ierr=0;
+  ScilabMStr2C(desc,nd,ptrdesc,&description,ierr);
+  if ( *ierr == 1) return;
+  ScilabMStr2CM(btn,nb,ptrbtn,&buttonname,ierr);
+  if ( *ierr == 1) return;
+  ScilabMStr2CM(basstrings,nstring,ptrstrings,&strings,ierr);
+  ExposeChooseWindow(strings,nstring,description,buttonname);
+  for (i=0 ; i < *nstring ; i++ ) FREE(strings[i]);
+  FREE(strings); 
+  FREE(description);
+  for (i=0 ; i < *nb ; i++ )FREE(buttonname[i]);
+  FREE(buttonname);
+  if ( ok_Flag_sci == CHOOSE) 
+    *nrep=(1+numChoix);
+  else *nrep=0;
+}
+
+/* test function */
+
+TestChoose()
+{
+  static String description1 = "Choose \ntest";
+  static String strings[] = {
+	"first list entry",
+	"second list entry",
+	"third list entry",
+	"fourth list entry",
+	NULL
+    };
+  static String buttonname[] = {
+        "Label1",
+	"Label2",
+	NULL
+    };
+  static nstrings=4;
+  ExposeChooseWindow(strings,&nstrings,description1,buttonname);
+}
+
+/* The cancel command callback */
 
 static void CancelChoose(w,shell,callData)
      Widget w;
@@ -18,6 +67,8 @@ static void CancelChoose(w,shell,callData)
 {
   ok_Flag_sci = CANCEL;
 }
+
+/* The choose command callback */
 
 static void DoChoose(widget,shell,callData)
      Widget widget;
@@ -30,58 +81,39 @@ static void DoChoose(widget,shell,callData)
 }
 
 
-
-void  ExposeChooseWindow(strings,description,buttonname)
+void  ExposeChooseWindow(strings,ns,description,buttonname)
      char **strings;
      char *description;
      char **buttonname;
+     int *ns;
 {
-    Widget chooseform,wid,list,shell,chooseviewport,chooselabel;
-    Arg args[10];
-    int iargs = 0;
-    int width,i,temp_height;
-    XFontStruct *temp_font;
-    static Display *dpy = (Display *) NULL;
+  Widget choosepanned,wid,list,shell,chooseviewport,chooselabel,labelviewport,cform;
+  Arg args[10];
+  Cardinal iargs = 0;
+  static Display *dpy = (Display *) NULL;
 
-    DisplayInit("",&dpy,&toplevel);
-    shell = XtCreatePopupShell("chooseShell",transientShellWidgetClass,toplevel, args,iargs);
-    chooseform = XtCreateManagedWidget("chooseForm",formWidgetClass,shell,(Arg *) NULL,(int)ZERO);
-    iargs = 0;
-    XtSetArg(args[iargs], XtNlabel, description); iargs++;
-    chooselabel = XtCreateManagedWidget("chooseLabel",labelWidgetClass,chooseform,args,iargs);
-    iargs = 0;
-    chooseviewport = XtCreateManagedWidget("chooseViewport",viewportWidgetClass,chooseform,args,iargs);
-    iargs = 0;
-    XtSetArg(args[iargs], XtNlist, strings); iargs++;
-    list=XtCreateManagedWidget("chooseList",listWidgetClass,chooseviewport,args,iargs);
-    XtAddCallback(list, XtNcallback,(XtCallbackProc)DoChoose , NULL);  
-    iargs = 0;
-    XtSetArg(args[iargs], XtNlabel, buttonname[0]); iargs++;
-    wid=XtCreateManagedWidget("cancelCommand",commandWidgetClass,chooseform,args,iargs);
-    XtAddCallback(wid, XtNcallback,(XtCallbackProc)CancelChoose , NULL);  
-    XtMyLoop(shell,dpy);
-}
+  ShellFormCreate("chooseShell",&shell,&choosepanned,&dpy);
+  
+  /* Create a Viewport+Label and resize it */
 
-void C2F(xchoose)(desc,ptrdesc,nd,basstrings,nstring,ptrstrings,btn,ptrbtn,nb,nrep,ierr)
-     int *desc,*ptrdesc,*nd,*basstrings,*nstring,*ptrstrings,*btn,*nb,*ptrbtn,*nrep,*ierr;
-{ 
-  void C2F(cvstr)(), ExposeChooseWindow();
-  int i;
-  char **strings, *description,**buttonname;
-  *ierr=0;
-  ScilabMStr2C(desc,nd,ptrdesc,&description,ierr);
-  if ( *ierr == 1) return;
-  ScilabMStr2CM(btn,nb,ptrbtn,&buttonname,ierr);
-  if ( *ierr == 1) return;
-  ScilabMStr2CM(basstrings,nstring,ptrstrings,&strings,ierr);
-  ExposeChooseWindow(strings,description,buttonname);
-  for (i=0 ; i < *nstring ; i++ ) free((char*)strings[i]);
-  free((char*)strings); 
-  free(description);
-  for (i=0 ; i < *nb ; i++ )free((char*)buttonname[i]);
-  free(buttonname);
-  if ( ok_Flag_sci == CHOOSE) 
-    *nrep=(1+numChoix);
-  else *nrep=0;
+  ViewpLabelCreate(choosepanned,&chooselabel,&labelviewport,description);
+
+  /* Create a Viewport+List and resize it */
+  
+  ViewpListCreate(choosepanned,&list,&chooseviewport,strings,*ns);
+
+  XtAddCallback(list, XtNcallback,(XtCallbackProc)DoChoose ,(XtPointer) NULL); 
+
+  /* Create a button */
+
+  iargs=0;
+  cform = XtCreateManagedWidget("cform",formWidgetClass,choosepanned,args,iargs);
+
+  ButtonCreate(cform,&wid,(XtCallbackProc) CancelChoose,(XtPointer) NULL,
+	       buttonname[0],"cancel");
+
+  /* X11 Loop */
+
+  XtMyLoop(shell,dpy);
 }
 

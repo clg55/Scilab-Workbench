@@ -29,7 +29,7 @@ button.c	Handles button events in the terminal emulator.
 				J. Gettys.
 */
 
-#include "x_ptyx.h"		/* Xlib headers included here. */
+#include "x_ptyxP.h"		/* Xlib headers included here. */
 #include <X11/Xatom.h>
 #include <stdio.h>
 
@@ -40,7 +40,8 @@ button.c	Handles button events in the terminal emulator.
 #include "x_error.h"
 #include "x_menu.h"
 
-extern char *malloc();
+#include <string.h> /* in case of dbmalloc */
+#include <malloc.h> 
 
 
 #define KeyState(x) (((x) & (ShiftMask|ControlMask)) + (((x) & Mod1Mask) ? 2 : 0))
@@ -131,7 +132,7 @@ XEvent* event;
 
 	if (KeyModifiers == 0) {
 	    if (event->type == ButtonPress)
-		EditorButton(event);
+		EditorButton((XButtonEvent *)event);
 	    return True;
 	}
 	return False;
@@ -139,7 +140,7 @@ XEvent* event;
       case 2: /* DEC vt200 compatible */
 
 	if (KeyModifiers == 0 || KeyModifiers == ControlMask) {
-	    EditorButton(event);
+	    EditorButton((XButtonEvent *)event);
 	    return True;
 	}
 	return False;
@@ -148,11 +149,11 @@ XEvent* event;
 	if (  event->type == ButtonPress &&
 	      KeyModifiers == 0 &&
 	      event->xbutton.button == Button1 ) {
-	    TrackDown(event);
+	    TrackDown((XButtonEvent*) event);
 	    return True;
 	}
 	if (KeyModifiers == 0 || KeyModifiers == ControlMask) {
-	    EditorButton(event);
+	    EditorButton((XButtonEvent *)event);
 	    return True;
 	}
 	/* fall through */
@@ -268,8 +269,8 @@ Cardinal num_params;
 	Atom type = XA_STRING;
 	char *line = XFetchBuffer(screen->display, &inbytes, cutbuffer);
 	nbytes = (unsigned long) inbytes;
-	if (nbytes > 0)
-	    SelectionReceived(w, NULL, &selection, &type, (XtPointer)line,
+	if (nbytes >= (unsigned long)  1)
+	    SelectionReceived(w,(XtPointer) NULL, &selection, &type, (XtPointer)line,
 			      &nbytes, &fmt8);
 	else if (num_params > 1)
 	    _GetSelection(w, time, params+1, num_params-1);
@@ -1081,7 +1082,7 @@ SaltTextAway(crow, ccol, row, col, params, num_params)
 	/* now get some memory to save it in */
 
 	if (screen->selection_size <= j) {
-	    if((line = malloc((unsigned) j + 1)) == (char *)NULL)
+	    if((line = (char *)  malloc((unsigned) j + 1)) == (char *)NULL)
 		SysError(ERROR_BMALLOC2);
 	    XtFree(screen->selection);
 	    screen->selection = line;
@@ -1128,18 +1129,18 @@ int *format;
 	Atom* std_targets;
 	unsigned long std_length;
 	XmuConvertStandardSelection(
-		    w, xterm->screen.selection_time, selection,
+		    w,(Time) xterm->screen.selection_time, selection,
 		    target, type, (caddr_t*)&std_targets, &std_length, format
 		   );
 	*length = std_length + 5;
-	*value = (XtPointer)XtMalloc(sizeof(Atom)*(*length));
+	*value = (XtPointer)XtMalloc((unsigned) sizeof(Atom)*(*length));
 	targetP = *(Atom**)value;
 	*targetP++ = XA_STRING;
 	*targetP++ = XA_TEXT(d);
 	*targetP++ = XA_COMPOUND_TEXT(d);
 	*targetP++ = XA_LENGTH(d);
 	*targetP++ = XA_LIST_LENGTH(d);
-	bcopy((char*)std_targets, (char*)targetP, sizeof(Atom)*std_length);
+	bcopy((char*)std_targets, (char*)targetP,(int) sizeof(Atom)*std_length);
 	XtFree((char*)std_targets);
 	*type = XA_ATOM;
 	*format = 32;
@@ -1184,7 +1185,7 @@ int *format;
 	*format = 32;
 	return True;
     }
-    if (XmuConvertStandardSelection(w, xterm->screen.selection_time, selection,
+    if (XmuConvertStandardSelection(w,(Time) xterm->screen.selection_time, selection,
 				    target, type,
 				    (caddr_t *)value, length, format))
 	return True;
@@ -1258,7 +1259,7 @@ static /* void */ _OwnSelection(termw, selections, count)
 
     if (count > termw->screen.sel_atoms_size) {
 	XtFree((char*)atoms);
-	atoms = (Atom*)XtMalloc(count*sizeof(Atom));
+	atoms = (Atom*)XtMalloc((unsigned) count*sizeof(Atom));
 	termw->screen.selection_atoms = atoms;
 	termw->screen.sel_atoms_size = count;
     }
@@ -1288,7 +1289,7 @@ static /* void */ _OwnSelection(termw, selections, count)
 	else if (!replyToEmacs) {
 	    have_selection |=
 		XtOwnSelection( (Widget)termw, atoms[i],
-			    termw->screen.selection_time,
+			    (Time) termw->screen.selection_time,
 			    ConvertSelection, LoseSelection, SelectionDone );
 	}
     }
@@ -1321,7 +1322,7 @@ DisownSelection(termw)
 	}
 	if (cutbuffer < 0)
 	    XtDisownSelection( (Widget)termw, atoms[i],
-			       termw->screen.selection_time );
+			      (Time) termw->screen.selection_time );
     }
     termw->screen.selection_count = 0;
     termw->screen.startHRow = termw->screen.startHCol = 0;

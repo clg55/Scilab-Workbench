@@ -4,7 +4,7 @@
 //!
 if prod(size(f(2)))<>1 then f=m*invr(f),return,end
 [l,c]=size(m);
-f=simp(list('r',m*f(3),ones(l,c)*f(2),f(4)))
+f=simp(tlist('r',m*f(3),ones(l,c)*f(2),f(4)))
 //end
 
 

@@ -1,5 +1,5 @@
 mode(-1)
-getf('SCI/demos/graphics/xdemo.bas');
+getf('SCI/demos/graphics/xdemo-1.dem');
 oldln=lines()
 lines(0)
 deff('[]=demoex(num)',['select num,';

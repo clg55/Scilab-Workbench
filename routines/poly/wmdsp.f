@@ -143,18 +143,7 @@ c
       do 70 ib=1,nbloc
       k2=iw(lbloc+ib)
       if(nbloc.ne.1) then
-         if(k1.eq.k2) then
-            write(cw(1:4),'(i4)') k1
-            call basout(io,lunit,' ')
-            call basout(io,lunit,'         column '//cw(1:4))
-         else
-            write(cw(1:8),'(2i4)') k1,k2
-            call basout(io,lunit,' ')
-            call basout(io,lunit,'        columns '//cw(1:4)//
-     &                        ' to'//cw(5:8))
-            call basout(io,lunit,' ')
-         endif
-         call basout(io,lunit,' ')
+         call blktit(lunit,k1,k2,io)
          if (io.eq.-1) goto 99
       endif
 c

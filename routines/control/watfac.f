@@ -1,15 +1,14 @@
-C/MEMBR ADD NAME=WATFAC,SSI=0
-      subroutine watfac(neq,q,nface,newrap,w)
+      subroutine watfac(nq,tq,nface,newrap,w)
 c!but
 c     Cette procedure est charge de determiner quelle est
 c     la face franchie par la trajectoire du gradient.
 c!liste d'appel
-c     subroutine watfac(neq,q,nface,newrap,w)
-c     dimension q(0:neq),w(3*neq+1)
+c     subroutine watfac(nq,tq,nface,newrap,w)
+c     dimension tq(0:nq),w(3*nq+1)
 c
 c     Entrees :
-c     - neq. est toujours le degre du polynome q(z)
-c     - q. est le tableau des coefficients de ce polynome.
+c     - nq. est toujours le degre du polynome q(z)
+c     - tq. est le tableau des coefficients de ce polynome.
 c
 c     Sortie  :
 c     - nface contient l indice de la face que le chemin
@@ -20,24 +19,24 @@ c     - newrap est un parametre indiquant s'il est necessaire
 c       ou pas d'effectuer un nouveau un rapprochement.
 c
 c     Tableaux de travail
-c     - w : 3*neq+1
+c     - w : 3*nq+1
 c!
       implicit double precision (a-h,o-z)
-      dimension q(0:*),w(*)
+      dimension tq(nq+1),w(*)
       logical fail
 c
       lpol=1
-      lzr=lpol+neq+1
-      lzi=lzr+neq
+      lzr=lpol+nq+1
+      lzi=lzr+nq
       lzmod=lpol
-      lfree=lzi+neq
+      lfree=lzi+nq
 c
-      call dcopy(neq+1,q,1,w(lpol),-1)
-      call rpoly(w(lpol),neq,w(lzr),w(lzi),fail)
-      call modul(neq,w(lzr),w(lzi),w(lzmod))
+      call dcopy(nq+1,tq,1,w(lpol),-1)
+      call rpoly(w(lpol),nq,w(lzr),w(lzi),fail)
+      call modul(nq,w(lzr),w(lzi),w(lzmod))
 c
       nmod1=0
-      do 110 j=1,neq
+      do 110 j=1,nq
          if (w(lzmod-1+j).ge.1.0d+0) then
             nmod1=nmod1+1
             if(nmod1.eq.1) indi=j

@@ -15,7 +15,18 @@
 #include <X11/Xaw/AsciiText.h>
 #include <X11/Xaw/Command.h>
 #include <X11/Xaw/Cardinals.h>
+#include <malloc.h>
 
+#ifdef lint5
+#include <sys/stdtypes.h>
+#define MALLOC(x) malloc(((size_t) x))
+#define FREE(x) if (x  != NULL) free((void *) x);
+#define REALLOC(x,y) realloc((void *) x,(size_t) y)
+#else
+#define MALLOC(x) malloc(((unsigned) x))
+#define FREE(x) if (x  != NULL) free((char *) x);
+#define REALLOC(x,y) realloc((char *) x,(unsigned) y)
+#endif
 
 extern Widget toplevel;
 extern Atom wm_delete_window;
@@ -166,7 +177,6 @@ initHelpActions(appContext)
 void
 initHelpPanel()
 {
-    int i;
 }
 
 void
@@ -190,35 +200,35 @@ initHelpWidgets()
     char buf[64];
     Arg args[1];
     helpShell = XtCreatePopupShell("helpShell",topLevelShellWidgetClass,
-				   toplevel,NULL,0);
+				   toplevel,(ArgList) 0,(Cardinal) 0);
     form = XtCreateManagedWidget("helpForm",formWidgetClass,
-				 helpShell,NULL,0);
+				 helpShell,(ArgList) 0,(Cardinal) 0);
     helpLabel = XtCreateManagedWidget("helpLabel",labelWidgetClass,
-				      form,NULL,0);
+				      form,(ArgList) 0,(Cardinal) 0);
     sprintf(buf,"This is help for %s",VERSION);
     if (helpLabel != NULL && buf != NULL) {
 	XtSetArg(args[0],XtNlabel,buf);
 	XtSetValues(helpLabel,args,1);
       };
     helpViewport = XtCreateManagedWidget("helpViewport",viewportWidgetClass,
-					 form,NULL,0);
+					 form,(ArgList) 0,(Cardinal) 0);
     helpList = XtCreateManagedWidget("helpList",listWidgetClass,
-				     helpViewport,NULL,0);
-    XawListChange(helpList,helpTopicInfo1,XtNumber(helpTopicInfo1),0,True);
-    XtAddCallback(helpList,XtNcallback,helpCallback,NULL);
+				     helpViewport,(ArgList) 0,(Cardinal) 0);
+    XawListChange(helpList,helpTopicInfo1,(int)XtNumber(helpTopicInfo1),0,True);
+    XtAddCallback(helpList,XtNcallback,helpCallback,(XtPointer)NULL);
     helpViewport1 = XtCreateManagedWidget("helpViewport1",viewportWidgetClass,
-					 form,NULL,0);
+					 form,(ArgList) 0,(Cardinal) 0);
     helpList1 = XtCreateManagedWidget("helpList1",listWidgetClass,
-				     helpViewport1,NULL,0);
-    XawListChange(helpList1,helpInfo,XtNumber(helpInfo),0,True);
-    XtAddCallback(helpList1,XtNcallback,helpCallback1,NULL);
+				     helpViewport1,(ArgList) 0,(Cardinal) 0);
+    XawListChange(helpList1,helpInfo,(int)XtNumber(helpInfo),0,True);
+    XtAddCallback(helpList1,XtNcallback,helpCallback1,(XtPointer)NULL);
     (void)XtCreateManagedWidget("helpDoneButton",commandWidgetClass,
-				form,NULL,0);
+				form,(ArgList) 0,(Cardinal) 0);
     helpScrollbar = XtNameToWidget(helpViewport,"vertical");
     (void)XtCreateManagedWidget("aproposLabel",labelWidgetClass,
-                                form,NULL,0);
+                                form,(ArgList) 0,(Cardinal) 0);
     aproposText = XtCreateManagedWidget("aproposText",asciiTextWidgetClass,
-                                         form,NULL,0);
+                                         form,(ArgList) 0,(Cardinal) 0);
     XtRealizeWidget(helpShell);
     (void)XSetWMProtocols(XtDisplay(helpShell),XtWindow(helpShell), &wm_delete_window,1);
 }
@@ -228,14 +238,14 @@ initHelpWidgets()
 #define TopicSearch(listtop,listref,topicstr) \
 	    if ( strstr(listtop[j],topicstr) != 0) \
 	      { \
-		helpTopicApropos[ii]=(char *) malloc( (sizeof(char))*(strlen(listtop[j])+1)); \
+		helpTopicApropos[ii]=(char *) MALLOC( sizeof(char)*(strlen(listtop[j])+1)); \
 		if ( helpTopicApropos[ii] == ( char *) 0) \
 		  { \
 		    Scistring("\n Can't create apropos : No more Memory "); \
 		    return; \
 		  } \
 		strcpy(helpTopicApropos[ii],listtop[j]); \
-		helpStringsApropos[ii] =(char *) malloc( (sizeof(char))*(strlen(listref[j])+1));\
+		helpStringsApropos[ii] =(char *) MALLOC( sizeof(char)*(strlen(listref[j])+1));\
 		if ( helpStringsApropos[ii] == ( char *) 0) \
 		  { \
 		    Scistring("\n Can't create apropos : No more Memory ");\
@@ -261,29 +271,29 @@ changeHelpList(i)
   switch (i) 
     {
     case 1 :
-      XawListChange(helpList,helpTopicInfo1, XtNumber(helpTopicInfo1),0,True);break;
+      XawListChange(helpList,helpTopicInfo1, (int) XtNumber(helpTopicInfo1),0,True);break;
     case 2 :
-      XawListChange(helpList,helpTopicInfo2, XtNumber(helpTopicInfo2),0,True);break;
+      XawListChange(helpList,helpTopicInfo2, (int) XtNumber(helpTopicInfo2),0,True);break;
     case 3 :
-      XawListChange(helpList,helpTopicInfo3, XtNumber(helpTopicInfo3),0,True);break;
+      XawListChange(helpList,helpTopicInfo3, (int) XtNumber(helpTopicInfo3),0,True);break;
     case 4 :
-      XawListChange(helpList,helpTopicInfo4, XtNumber(helpTopicInfo4),0,True);break;
+      XawListChange(helpList,helpTopicInfo4, (int) XtNumber(helpTopicInfo4),0,True);break;
     case 5 :
-      XawListChange(helpList,helpTopicInfo5, XtNumber(helpTopicInfo5),0,True);break;
+      XawListChange(helpList,helpTopicInfo5, (int) XtNumber(helpTopicInfo5),0,True);break;
     case 6 :
-      XawListChange(helpList,helpTopicInfo6, XtNumber(helpTopicInfo6),0,True);break;
+      XawListChange(helpList,helpTopicInfo6, (int) XtNumber(helpTopicInfo6),0,True);break;
     case 7 :
-      XawListChange(helpList,helpTopicInfo7, XtNumber(helpTopicInfo7),0,True);break;
+      XawListChange(helpList,helpTopicInfo7, (int) XtNumber(helpTopicInfo7),0,True);break;
     case 8 :
-      XawListChange(helpList,helpTopicInfo8, XtNumber(helpTopicInfo8),0,True);break;
+      XawListChange(helpList,helpTopicInfo8, (int) XtNumber(helpTopicInfo8),0,True);break;
     case 9 :
-      XawListChange(helpList,helpTopicInfo9, XtNumber(helpTopicInfo9),0,True);break;
+      XawListChange(helpList,helpTopicInfo9, (int) XtNumber(helpTopicInfo9),0,True);break;
     case 10 :
-      XawListChange(helpList,helpTopicInfo10, XtNumber(helpTopicInfo10),0,True);break;
+      XawListChange(helpList,helpTopicInfo10, (int) XtNumber(helpTopicInfo10),0,True);break;
     case 11 :
-      XawListChange(helpList,helpTopicInfo11, XtNumber(helpTopicInfo11),0,True);break;
+      XawListChange(helpList,helpTopicInfo11, (int) XtNumber(helpTopicInfo11),0,True);break;
     case 12 :
-      XawListChange(helpList,helpTopicInfo12, XtNumber(helpTopicInfo12),0,True);break;
+      XawListChange(helpList,helpTopicInfo12, (int) XtNumber(helpTopicInfo12),0,True);break;
     }
 }
 
@@ -308,7 +318,6 @@ int state;
 
 #define SCIMAN(x) sprintf(buf,"$SCI/bin/scilab -help %s 2> /dev/null | $SCI/bin/xless  2> /dev/null &",x[topic]); break;
 
-/*ARGSUSED*/
 static void
 helpCallback(w,client_data,call_data)
 Widget w;
@@ -340,14 +349,13 @@ XtPointer call_data;    /* returnStruct */
 }
 
 
-/*ARGSUSED*/
+
 static void
 helpCallback1(w,client_data,call_data)
 Widget w;
 XtPointer client_data;  /* not used */
 XtPointer call_data;    /* returnStruct */
 {
-  char buf[256];
   int topic = ((XawListReturnStruct*)call_data)->list_index;
   changeHelpList(topic+1);
 }
@@ -362,7 +370,7 @@ XtPointer call_data;    /* returnStruct */
 					String *params; \
 					Cardinal *num_params;
 
-/*ARGSUSED*/
+
 static
 ACTION_PROC(helpDoneAction)
 {
@@ -404,14 +412,14 @@ SciApropos(str)
 {
   int j=0,ii=0;
   if ( helpTopicApropos ==  (char **) 0)
-    helpTopicApropos = (char **) malloc( (sizeof(char *))*APROPOSMAX);
+    helpTopicApropos = (char **) MALLOC( sizeof(char *)*APROPOSMAX);
   if ( helpTopicApropos ==  (char **) 0)
     {
       Scistring("\n Can't create apropos : No more Memory ");
       return;
     }
   if ( helpStringsApropos ==  (char **) 0)
-    helpStringsApropos = (char **) malloc( (sizeof(char *))*APROPOSMAX);
+    helpStringsApropos = (char **) MALLOC (sizeof(char *)*APROPOSMAX);
   if ( helpStringsApropos ==  (char **) 0)
     {
       Scistring("\n Can't create apropos : No more Memory ");
@@ -431,7 +439,7 @@ SciApropos(str)
   TopicSearchW(helpTopicInfo12,helpStrings12,str) ;
   if ( ii == 0) 
     {
-      Scistring("\nNo Info on this topic ");
+      sciprint("No Info on topic %s\r\n",str);
       return;
     }
   XawListChange(helpList,helpTopicApropos,ii,0,True);

@@ -29,7 +29,7 @@ ab=[];for v=d,[y,xd]=sim(x0+v(1:n),u0+v(n+1:mpn)),
 [p,w]=size(y);
 ab=ab/d;a=ab(1:n,1:n);b=ab(1:n,n+1:mpn)
 c=ab(n+1:n+p,1:n);d=ab(n+1:n+p,n+1:mpn)
-if lhs=1 then a=list('lss',a,b,c,d,x0,'c'),end
+if lhs=1 then a=tlist('lss',a,b,c,d,x0,'c'),end
 
 
 

@@ -23,7 +23,7 @@
 /*  given a function name, return the location of that function (in core) */
 unsigned long
 dld_get_func (name)
-char name[];
+const char name[];
 {
     register symbol *sp;
     register char *p;

@@ -6,7 +6,7 @@
 // origine s. steer inria 1987
 //
 [a,b,c,d,x,dom]=s(2:7)
-s=list('lss',a',c',b',d',x,dom)
+s=tlist('lss',a',c',b',d',x,dom)
 //end
 
 

@@ -9,7 +9,9 @@ function [s1]=cls2dls(s,t,fp)
 // fp prevarping frequency in hertz
 //!
 [lhs,rhs]=argn(0)
-if type(s)<>15 then error(91,1),end
+
+//-compat type(s)<>15 retained for list/tlist compatibility
+if type(s)<>15&type(s)<>16 then error(91,1),end
  
 if s(1)<>'lss' then error(91,1),end
 if s(7)<>'c' then
@@ -25,7 +27,7 @@ b=(ad+eye)/a*s(3);
 d=s(5)+s(4)/a*s(3)
  
  
-s1=list('lss',ad,b,s(4),d,s(6),'c')
+s1=tlist('lss',ad,b,s(4),d,s(6),'c')
 
 
 

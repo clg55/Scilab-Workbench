@@ -639,7 +639,7 @@ if p1([1;3]) <> p1([1 3]) then pause,end
 if p2([2 4]) <> [p22 p24] then pause,end
 if p2([2;4]) <> p2([2 4]) then pause,end
 if p1(:) <> p1 then pause,end
-if p2(:) <> p2 then pause,end
+if p2(:) <> p2' then pause,end
 if p3(1) <> p1(1) then pause,end
 if p3(8) <> p2(4) then pause,end
 if p3(3) <> p1(3) then pause,end
@@ -668,7 +668,7 @@ if norm(coeff(p1([1;3])- p1([1 3]) ))>10*%eps then pause,end
 if norm(coeff(p2([2 4])- [p22 p24] ))>10*%eps then pause,end
 if norm(coeff(p2([2;4])- p2([2 4]) ))>10*%eps then pause,end
 if norm(coeff(p1(:)- p1 ))>10*%eps then pause,end
-if norm(coeff(p2(:)- p2 ))>10*%eps then pause,end
+if norm(coeff(p2(:)- conj(p2)' ))>10*%eps then pause,end
 if norm(coeff(p3(1)- p1(1) ))>10*%eps then pause,end
 if norm(coeff(p3(8)- p2(4) ))>10*%eps then pause,end
 if norm(coeff(p3(3)- p1(3) ))>10*%eps then pause,end

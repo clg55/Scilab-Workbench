@@ -1,7 +1,7 @@
 C/MEMBR ADD NAME=XERRWV,SSI=0
       subroutine xerrwv (msg, nmes, nerr, iert, ni, i1, i2, nr, r1, r2)
-      integer nmes, nerr, iert, ni, i1, i2, nr,
-     1   i, lun, lunit, mesflg, nch
+      integer nmes, nerr, iert, ni, i1, i2, nr,lun, lunit, mesflg, nch
+
       double precision r1, r2
       character*(*) msg
 c-----------------------------------------------------------------------

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DMDSP,SSI=0
       subroutine dmdsp(x,nx,m,n,maxc,mode,ll,lunit,cw,iw)
 c!but
 c     dmdsp ecrit une matrice  (ou un scalaire) sous
@@ -31,7 +30,6 @@ c!
       character cw*(*),sgn*1,dl*1
       character*10 form(2)
 c
-c      eps=10.0d+0**(-maxc+3)
       eps=dlamch('p')
       cw=' '
       write(form(1),130) maxc,maxc-7
@@ -118,10 +116,10 @@ c
    15 continue
       s=s+iw(k)
       if(s.gt.ll-2) then
-                        iw(lbloc+nbloc)=k-1
-                        nbloc=nbloc+1
-                        iw(lbloc+nbloc)=n
-                        s=iw(k)
+         iw(lbloc+nbloc)=k-1
+         nbloc=nbloc+1
+         iw(lbloc+nbloc)=n
+         s=iw(k)
       endif
 c
    20 continue
@@ -137,22 +135,11 @@ c       est constituee puis imprimee.
 c
       k1=1
       do 70 ib=1,nbloc
-      k2=iw(lbloc+ib)
-      if(nbloc.ne.1) then
-         if(k1.eq.k2) then
-            write(cw(1:4),'(i4)') k1
-            call basout(io,lunit,' ')
-            call basout(io,lunit,'         column '//cw(1:4))
-         else
-            write(cw(1:8),'(2i4)') k1,k2
-            call basout(io,lunit,' ')
-            call basout(io,lunit,'        columns '//cw(1:4)//
-     &                        ' to'//cw(5:8))
-            call basout(io,lunit,' ')
+         k2=iw(lbloc+ib)
+         if(nbloc.ne.1) then
+            call blktit(lunit,k1,k2,io)
+            if (io.eq.-1) goto 99
          endif
-         call basout(io,lunit,' ')
-         if (io.eq.-1) goto 99
-      endif
 c
       cw(1:1)=dl
       do 60 l=1,m

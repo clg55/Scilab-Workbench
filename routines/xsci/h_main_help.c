@@ -190,7 +190,8 @@ char **argv;
     /* Some systems want (Cardinal*), others want (int*) for argcp. */
     realToplevel = toplevel =
 	XtAppInitialize(&appContext,"Xscilab",NULL,ZERO,
-			(Cardinal *)argcp,argv,fallbackResources,NULL,ZERO);
+			(Cardinal *)argcp,argv,fallbackResources,
+			(ArgList) 0,(Cardinal) 0);
     /*
      * Set graphics globals
      */
@@ -205,7 +206,8 @@ char **argv;
      * Get non-widget resources
      */
     XtGetApplicationResources(realToplevel,(XtPointer)&appResources,
-			      resources,XtNumber(resources),NULL,ZERO);
+			      resources,XtNumber(resources),
+			      (ArgList) 0,(Cardinal) 0);
     /*
      * Catch iconify/deiconify so we can do children also
      */

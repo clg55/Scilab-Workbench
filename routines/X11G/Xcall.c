@@ -27,13 +27,15 @@
 \section{General routine for calling the X11 or Postscript Driver}
 ---------------------------------------------------------------------------*/
 #include <string.h>
+#include <malloc.h> /* in case od dbmalloc use */
 #include <stdio.h>
-#include "../machine.h"
+
 
 #ifndef THINK_C
+#include "Math.h"
 #include "periX11.h"
-#include "periPix.h"
 #else
+#include "machine.h"
 #include "periMac.h"
 #endif
 
@@ -52,9 +54,15 @@ typedef  struct  {
   char *name;
   int  (*fonc)();} OpTab ;
 
-int vide_() {}
+int vide_(v1,v2,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4)
+     char *v1;
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
+{}
+
 extern int Tape_Replay();
 extern int Tape_ReplayNewAngle();
+extern int Tape_ReplayNewScale();
 extern int CleanPlots();
 
 
@@ -67,12 +75,15 @@ OpTab keytab_x_[] ={
   "xclea", cleararea_,
   "xclear",clearwindow_,
   "xclick",xclick_,
+  "xclickany",xclick_any_,
   "xend", xend_,
   "xfarc",fillarc_,
+  "xfarcs", fillarcs_,
   "xfrect",fillrectangle_,
   "xget",MissileGCget_,
   "xgetdr",GetDriver1_,
   "xgetmouse",xgetmouse_,
+  "xinfo",xinfo_,
   "xinit",initgraphic_,
   "xlfont",loadfamily_,
   "xlines",drawpolyline_,
@@ -85,6 +96,7 @@ OpTab keytab_x_[] ={
   "xrects",drawrectangles_,
   "xreplay",Tape_Replay,
   "xreplayna",Tape_ReplayNewAngle,
+  "xreplaysc",Tape_ReplayNewScale,
   "xsegs",drawsegments_,
   "xselect",xselgraphic_,
   "xset",MissileGCset_,
@@ -92,42 +104,6 @@ OpTab keytab_x_[] ={
   "xstart",CleanPlots,
   "xstring",displaystring_,
   "xstringl",boundingbox_,
-  (char *) NULL,vide_};
-
-OpTab keytab_pix_[] ={
-  "xarc",drawarc_pix_,
-  "xarcs", drawarcs_pix_,
-  "xarea",fillpolyline_pix_,
-  "xarrow",drawarrows_pix_,
-  "xaxis",drawaxis_pix_,
-  "xclea", cleararea_pix_,
-  "xclear",clearwindow_pix_,
-  "xclick",xclick_pix_,
-  "xend", xend_pix_,
-  "xfarc",fillarc_pix_,
-  "xfrect",fillrectangle_pix_,
-  "xget",MissileGCget_pix_,
-  "xgetdr",GetDriver1_,
-  "xgetmouse",xgetmouse_pix_,
-  "xinit",initgraphic_pix_,
-  "xlfont",loadfamily_pix_,
-  "xlines",drawpolyline_pix_,
-  "xliness",fillpolylines_pix_,
-  "xmarks",drawpolymark_pix_,
-  "xnum",displaynumbers_pix_,
-  "xpause", xpause_pix_,
-  "xpolys", drawpolylines_pix_,
-  "xrect",drawrectangle_pix_,
-  "xrects",drawrectangles_pix_,
-  "xreplay",Tape_Replay,
-  "xreplayna",Tape_ReplayNewAngle,
-  "xsegs",drawsegments_pix_,
-  "xselect",xselgraphic_pix_,
-  "xset",MissileGCset_pix_,
-  "xsetdr",SetDriver_,
-  "xstart",CleanPlots,
-  "xstring",displaystring_pix_,
-  "xstringl",boundingbox_pix_,
   (char *) NULL,vide_};
 
 OpTab keytab_pos_[] ={
@@ -139,12 +115,15 @@ OpTab keytab_pos_[] ={
   "xclea", cleararea_pos_,
   "xclear",clearwindow_pos_,
   "xclick",xclick_pos_,
+  "xclickany",xclick_any_pos_,
   "xend", xend_pos_,
   "xfarc",fillarc_pos_,
+  "xfarcs",fillarcs_pos_,
   "xfrect",fillrectangle_pos_,
   "xget",scilabgcget_pos_,
   "xgetdr",GetDriver1_,
   "xgetmouse",xgetmouse_pos_,
+  "xinfo",vide_,
   "xinit",initgraphic_pos_,
   "xlfont",loadfamily_pos_,
   "xlines",drawpolyline_pos_,
@@ -157,6 +136,7 @@ OpTab keytab_pos_[] ={
   "xrects",drawrectangles_pos_,
   "xreplay",Tape_Replay,
   "xreplayna",Tape_ReplayNewAngle,
+  "xreplaysc",Tape_ReplayNewScale,
   "xsegs",drawsegments_pos_,
   "xselect",xselgraphic_pos_,
   "xset",scilabgcset_pos_,
@@ -175,12 +155,15 @@ OpTab keytab_xfig_[] ={
   "xclea", cleararea_xfig_,
   "xclear",clearwindow_xfig_,
   "xclick",waitforclick_xfig_,
+  "xclickany",xclick_any_xfig_,
   "xend", xend_xfig_,
   "xfarc",drawfilledarc_xfig_,
+  "xfarcs", fillarcs_xfig_,
   "xfrect",drawfilledrect_xfig_,
   "xget",scilabgcget_xfig_,
   "xgetdr",GetDriver1_,
   "xgetmouse",xgetmouse_xfig_,
+  "xinfo",vide_,
   "xinit",initgraphic_xfig_,
   "xlfont",loadfamily_xfig_,
   "xlines",drawpolyline_xfig_,
@@ -193,6 +176,7 @@ OpTab keytab_xfig_[] ={
   "xrects",drawrectangles_xfig_,
   "xreplay",Tape_Replay,
   "xreplayna",Tape_ReplayNewAngle,
+  "xreplaysc",Tape_ReplayNewScale,
   "xsegs",drawsegments_xfig_,
   "xselect",xselgraphic_xfig_,
   "xset",scilabgcset_xfig_,
@@ -210,27 +194,25 @@ static char drname_[]= "Rec";
    x0 and x1 */
 
 
-C2F(dr)(x0,x1,x2,x3,x4,x5,x6,x7,lx0,lx1)
+C2F(dr)(x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4,lx0,lx1)
      char x0[],x1[];
-     int *x2,*x3,*x4,*x5,*x6,*x7;
-     int lx0,lx1;
+     integer *x2,*x3,*x4,*x5,*x6,*x7;
+     integer lx0,lx1;
+     double *dx1,*dx2,*dx3,*dx4;
 { 
   switch (drname_[0])
     {
     case 'X':
-      all_(keytab_x_,x0,x1,x2,x3,x4,x5,x6,x7);
+      all_(keytab_x_,x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
       break;
     case 'P'  :
-      all_(keytab_pos_,x0,x1,x2,x3,x4,x5,x6,x7);
+      all_(keytab_pos_,x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
       break;
     case 'F'  :
-      all_(keytab_xfig_,x0,x1,x2,x3,x4,x5,x6,x7);
+      all_(keytab_xfig_,x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
       break;
     case 'R'  :
-      all_(keytab_x_,x0,x1,x2,x3,x4,x5,x6,x7);
-      break;
-    case 'W'  :
-      all_(keytab_pix_,x0,x1,x2,x3,x4,x5,x6,x7);
+      all_(keytab_x_,x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
       break;
     default:
       Scistring("\n Wrong driver name");
@@ -238,8 +220,10 @@ C2F(dr)(x0,x1,x2,x3,x4,x5,x6,x7,lx0,lx1)
     }
 }
 
-SetDriver_(x0)
+SetDriver_(x0,v2,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4)
      char x0[];
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
 {
   switch (x0[0])
     {
@@ -256,7 +240,10 @@ SetDriver_(x0)
       strcpy(drname_,"Rec");
       break;
     case 'W'  :
-      strcpy(drname_,"Wdp");
+      Scistring("\n Driver Wdp doesn't exists any more ");
+      Scistring("   use xset('pixmap',0 or 1 ) to enable or disable ");
+      Scistring("   a Wdp window ");
+      strcpy(drname_,"Rec");
       break;
     default:
       Scistring("\n Wrong driver name I'll use X11");
@@ -265,17 +252,142 @@ SetDriver_(x0)
     }  
 }
 
-int GetDriver1_(str)
+int GetDriver1_(str,v2,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
 {
   strcpy(str,drname_);
 }
 
 char GetDriver_() {return(drname_[0]);}
 
-all_(tab,x0,x1,x2,x3,x4,x5,x6,x7)
-   char x0[],x1[];
-   int *x2,*x3,*x4,*x5,*x6,*x7;
+#ifdef lint 
+
+test_all_(tab,x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4)
+     char x0[],x1[];
+     integer *x2,*x3,*x4,*x5,*x6,*x7;
+     double *dx1,*dx2,*dx3,*dx4;
+     OpTab tab[];
+{
+  drawarc_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillarcs_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawarcs_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillpolyline_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawarrows_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawaxis_(x1,x2,x3, x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  cleararea_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  clearwindow_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xclick_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xend_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillarc_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillrectangle_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  MissileGCget_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  GetDriver1_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xgetmouse_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xinfo_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  initgraphic_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  loadfamily_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawpolyline_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillpolylines_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawpolymark_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  displaynumbers_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xpause_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawpolylines_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawrectangle_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawrectangles_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_Replay(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_ReplayNewAngle(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_ReplayNewScale(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawsegments_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xselgraphic_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  MissileGCset_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  SetDriver_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  CleanPlots(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  displaystring_(x1,x2,x3, x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  boundingbox_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+
+  drawarc_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillarcs_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawarcs_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillpolyline_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawarrows_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawaxis_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  cleararea_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  clearwindow_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xclick_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xend_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillarc_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillrectangle_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  scilabgcget_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  GetDriver1_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xgetmouse_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  vide_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  initgraphic_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  loadfamily_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawpolyline_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillpolylines_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawpolymark_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  displaynumbers_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xpause_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawpolylines_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawrectangle_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawrectangles_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_Replay(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_ReplayNewAngle(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_ReplayNewScale(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawsegments_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xselgraphic_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  scilabgcset_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  SetDriver_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  CleanPlots(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  displaystring_pos_(x1,x2,x3, x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  boundingbox_pos_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+
+  drawarc_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillarcs_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawarcs_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  fillarea_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawarrows_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawaxis_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  cleararea_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  clearwindow_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  waitforclick_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xend_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawfilledarc_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawfilledrect_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  scilabgcget_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  GetDriver1_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xgetmouse_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  vide_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  initgraphic_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  loadfamily_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawpolyline_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawpolylines_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawpolymark_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  displaynumbers_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xpause_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  morlpolylines_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawrectangle_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawrectangles_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_Replay(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_ReplayNewAngle(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  Tape_ReplayNewScale(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  drawsegments_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  xselgraphic_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  scilabgcset_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  SetDriver_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  CleanPlots(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  displaystring_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+  boundingbox_xfig_(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
+}
+
+#endif 
+
+all_(tab,x0,x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4)
+     char x0[],x1[];
+     integer *x2,*x3,*x4,*x5,*x6,*x7;
+     double *dx1,*dx2,*dx3,*dx4;
      OpTab tab[];
 { int i=0;
   while ( tab[i].name != (char *) NULL)
@@ -284,24 +396,24 @@ all_(tab,x0,x1,x2,x3,x4,x5,x6,x7)
        j = strcmp(x0,tab[i].name);
        if ( j == 0 ) 
 	 { 
-	   (*(tab[i].fonc))(x1,x2,x3,x4,x5,x6,x7);
+	   (*(tab[i].fonc))(x1,x2,x3,x4,x5,x6,x7,dx1,dx2,dx3,dx4);
 	   return;}
        else 
 	 { if ( j <= 0)
 	     {
-	       SciF1s("\nUnknow X operator <%s>\r\n",x0);
+	       sciprint("\nUnknow X operator <%s>\r\n",x0);
 	       return;
 	     }
 	   else i++;
 	 }
      }
-  SciF1s("\n Unknow X operator <%s>\r\n",x0);
+  sciprint("\n Unknow X operator <%s>\r\n",x0);
 }
 
 C2F(inttest)(x1)
      int *x1;
 {
-  SciF1d("Value  of x1 = <%d>\r\n",*x1);
+  sciprint("Value  of x1 = <%d>\r\n",*x1);
 }
 
 /*----------------------------------END---------------------------*/

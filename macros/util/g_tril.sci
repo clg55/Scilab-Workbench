@@ -24,9 +24,16 @@ case 6 then
   m=sz(1);n=sz(2)
   l=find(ij(:,1)>=(ij(:,2)-k))
   d=sparse(ij(l,:),v(l),[m,n])
+  
+//-compat next case retained for list/tlist compatibility
 case 15 then
   if a(1)=='r' then
     d=a;
-    d=list(a(1),tril(a(2),k),tril(a(3),k),a(4))
+    d=tlist('r',tril(a(2),k),tril(a(3),k),a(4))
+  end
+case 16 then
+  if a(1)=='r' then
+    d=a;
+    d=tlist('r',tril(a(2),k),tril(a(3),k),a(4))
   end
 end

@@ -51,8 +51,8 @@ char *argv[];
   sprintf(entete,"%s/imp/NperiPos.ps",env);
   fd=fopen(entete,"r");
   if (fd != 0)
-    { char c;
-      while ( (c=getc(fd)) != EOF)  putc(c,stdout);
+    { int c;
+      while ( (c=getc(fd)) != EOF)  putc((char) c,stdout);
       fclose(fd);
     }
   else 

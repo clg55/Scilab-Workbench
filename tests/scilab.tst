@@ -365,7 +365,7 @@ if norm(t-s*s,1) > 200*%eps then pause,end
 s=log(t);
 if norm(t-exp(s)) > 200*%eps then pause,end
 s=sqrt(tc);
-if norm(tc-s*s,1) > 210*%eps then pause,end
+if norm(tc-s*s,1) > 220*%eps then pause,end
 s=exp(tc);s=triu(s,1)+triu(s,1)'+diag(real(diag(s)));
 if norm(log(s)-tc,1)> 1.e-9 then pause,end
 if norm(sin(t)**2+cos(t)**2-eye,1) > 22*%eps then pause,end

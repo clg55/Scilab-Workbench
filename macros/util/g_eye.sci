@@ -9,12 +9,20 @@ case 2 then
 case 5 then 
   [m,n]=size(a)
   x=sparse([],[],[m,n])
+  
+//-compat next case retained for list/tlist compatibility
 case 15 then
   if a(1)=='r' then
     x=eye(a(2));
   elseif a(1)='lss' then
     x=eye(a(5))
   end
+case 16 then
+  if a(1)=='r' then
+    x=eye(a(2));
+  elseif a(1)='lss' then
+    x=eye(a(5))
+  end  
 case 10 then
   [m,n]=size(a)
   x=eye(m,n)

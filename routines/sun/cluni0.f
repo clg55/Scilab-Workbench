@@ -243,11 +243,12 @@ c
          buff=' '
 c         call getenv( nomlog(i)(1:lnomlo(i)), buff)
          call getenvc(ierr,nomlog(i)(1:lnomlo(i))//char(0), buff)
-         if(ierr.ne.0) return
-         do 01 l1=80,1,-1
-            if ( buff(l1:l1).eq.' ' .or. buff(l1:l1).eq.nul ) goto 01
-            goto 02
- 01      continue
+         if(ierr.eq.0) then
+            do 01 l1=80,1,-1
+               if ( buff(l1:l1).eq.' ' .or. buff(l1:l1).eq.nul ) goto 01
+               goto 02
+ 01         continue
+         endif
          l1 = 0
  02      continue
          lchain(i) = l1

@@ -4,7 +4,7 @@
 //Cette macro correspond a l'operation  r.*p
 //!
 num=f1(2).*f2
-f=list('r',num,f1(3),f1(4))
+f=tlist('r',num,f1(3),f1(4))
 //end
 
 

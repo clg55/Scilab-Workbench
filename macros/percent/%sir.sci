@@ -2,6 +2,22 @@ function s2=%sir(i,j,s1,s2)
 // %sir(i,j,M,r)  <=> r(i,j)=M
 //!
 //s2(i,j)=s1
+//
+if type(i)==10 then  // s2('num'),s2('den'),sl('dt')
+  [lhs,rhs]=argn(0)
+  if rhs<>3 then  error(21),end
+  nams=['num','den','dt']
+  kf=find(i==nams)
+  if kf==[] then error(21),end
+  s2=s1;kf=kf+1
+  if size(s2(kf))<>size(j) then 
+    if kf<>4|prod(size(j))>1 then
+    warning('inserted element '+i+' has inconsistent dimension')
+    end
+  end
+  s2(kf)=j
+  return
+end
 if s1==[] then  // insertion d'une matrice vide
   row=%f
   col=%f
@@ -32,12 +48,12 @@ if s1==[] then  // insertion d'une matrice vide
     s2=s2(i1,:)
   end
 else
-  [t,n,d]=s2(1:3),[ld,cd]=size(d),l=maxi(i),c=maxi(j)
+  [n,d]=s2(2:3),[ld,cd]=size(d),l=maxi(i),c=maxi(j)
   if l>ld then d(ld+1:l,:)=ones(l-ld,cd),ld=l,end
   if c>cd then d(:,cd+1:c)=ones(ld,c-cd),end
   n(i,j)=s1,[l,c]=size(s1),d(i,j)=ones(l,c)
-  s2=list(t,n,d,s2(4))
+  s2=tlist('r',n,d,s2(4))
 end
-//end
+
 
 

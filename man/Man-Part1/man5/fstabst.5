@@ -45,11 +45,11 @@ and \fVT21\fR is co-inner.
 ny=2;nu=3;nx=4;
 P22=ssrand(ny,nu,nx);
 bigQ=rand(nx+nu,nx+nu);bigQ=bigQ*bigQ';
-bigR=rand(nx+ny,nx+ny);bigR=BigR*bigR';
+bigR=rand(nx+ny,nx+ny);bigR=bigR*bigR';
 [P,r]=lqg2stan(P22,bigQ,bigR);
 J=fstabst(P,r);
 Q=ssrand(nu,ny,1);Q(2)=-1;  //Stable Q
-A=H_cl(P,r,Q); spec(A)
+A=h_cl(P,r,Q); spec(A)
 .fi
 .SH SEE ALSO
 obscont, lft, lqg, lqg2stan

@@ -1,4 +1,4 @@
-//[sm,fr]=mese(x,npts);
+function [sm,fr]=mese(x,npts);
 //<sm,fr]=mese(x [,npts]);
 //Calculate the maximum entropy spectral estimate of x
 //  x    :Input sampled data sequence
@@ -30,7 +30,6 @@
    ak=[1;ar];
    [sf,fr]=frmag(ak,npts);
    sm=sigma2*ones(sf)./(sf.*conj(sf));
- 
-//end
+
 
 

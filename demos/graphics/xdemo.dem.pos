@@ -1,6 +1,5 @@
-
 mode(-1)
-getf('SCI/demos/graphics/xdemo.bas');
+getf('SCI/demos/graphics/xdemo-1.dem');
 
 deff('[]=xdemo(info,str)','execstr(str)');
 
@@ -18,18 +17,12 @@ demolist=[
 'X11 Graphics 3','xdemo3()';
 'X11 Graphics 4','xdemo4()']
 
-
-    driver("Rec");
+driver("Rec");
+for i=1:4,
     xset("window",0)
-    demoex(1)
-    xset("window",1);
-    demoex(2)
-    xbasimp([0,1],'xtest'+string(1),1);
-    xbasc([0,1]);
-    xset("window",0)
-    demoex(3)
-    xset("window",1);
-    demoex(3)
-    xbasimp([0,1],'xtest'+string(2),1);
-    xbasc([0,1]);
+    demoex(i)
+    xbasimp([0],'xtest'+string(i),1);
+    xs2fig([0],'xtest'+string(i)+'.fig');
+    xbasc(0);
+end
 

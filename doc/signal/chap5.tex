@@ -2,7 +2,7 @@
 \section{Estimation of Power Spectra}
 \index{spectral estimation}
 
-	Normally, the power spectrum of a deterministic,
+	The power spectrum of a deterministic,
 finite length, discrete-time signal, $x(n)$, is defined to
 be the magnitude squared of the signal's Fourier transform
 %
@@ -42,10 +42,8 @@ S_{xy}(\omega)&=&\sum_{m=-\infty}^{\infty}R_{xy}(m)e^{-j\omega m}.
 \end{eqnarray}
 %
 
-	In practice the correlation functions of random signals
-are not available.  Consequently, use of 
-(\ref{e.sp.5}) and (\ref{e.sp.6}) to calculate the power spectra
-would require estimates of the correlation functions.
+The formulas (\ref{e.sp.5}) and (\ref{e.sp.6})  require estimates of 
+the correlation functions.
 Possible candidates for the estimates of the auto and cross
 correlation functions of finite length random signals
 (i.e., $x(n)\ne0$ and $y(n)\ne0$ for $n=0,1,\ldots,N-1$) are
@@ -146,11 +144,11 @@ of the $k^{th}$ segment of data.
 	Normally, the $K$ segments of data are taken so that there
 is a regular pattern of overlap in the successive segments.  That is,
 the $k^{th}$ and $(k+1)^{th}$ segments overlap by $D$ points.
-Figure~\ref{f.spect.1} illustrates three consecutive
+Figure~\ref{f.spect1} illustrates three consecutive
 overlapping segments of a data sequence.
 %
-\input{\Figdir spect.1.tex}
-\dessin{{\tt exec('spect.1.code')} Overlapping Data}{f.spect.1}
+\input{\Figdir spect1.tex}
+\dessin{{\tt exec('spect1.code')} Overlapping Data}{f.spect1}
 %
 It can be shown that an overlap of fifty percent in the data segments
 results in an approximately fifty percent reduction in the variance
@@ -164,78 +162,10 @@ the variance of the spectral estimate.  The variance decreases proportionally
 to the number of independent segments.  Of course, with a limited
 quantity of data the number of data segments must also be limited.
 
-\subsection{How to use the {\tt pspect} macro}
-\index{macro syntax!pspect@{\tt pspect}}
-\index{periodogram method!macro syntax}
+	The function {\tt pspect} calculates an estimate of
+the power spectrum using the modified periodogram method.
 
-	The {\tt pspect} macro calculates an estimate of
-the power spectrum using the modified periodogram method.  The
-syntax of the {\tt pspect} macro is as follows
-\begin{verbatim}
---> [sm,cwp]=pspect(sec_step,sec_leng,wtype,x[,y][,wpar])
-\end{verbatim}
-where {\tt x} is the input data sequence from which the power spectrum
-is to be estimated and {\tt y} is an optional input data sequence of the
-same length as {\tt x} which is to be used in the case where a cross-power
-spectrum is to be estimated.  There are two ways that the data {\tt x}
-(and/or {\tt y}) can be passed to the macro.  The first method is to directly
-pass the data to the macro in the form of a vector. In this case {\tt x}
-(and/or {\tt y}) is a vector which already exists in the $\Psi$Lab environment.
-The second method is to create another $\Psi$Lab macro which creates or obtains
-the data (perhaps by reading the data out of a file on magnetic tape, etc.).
-In this case, the value of {\tt x} (and/or {\tt y}) 
-is a scalar which represents
-the length of data to be used.  Here, the user must provide the macro(s)
-{\tt getx} (and/or {\tt gety}) which is of the form
-\begin{verbatim}
-//[xv]=getx(xlen,xstr)
-   .
-   .
-   .
-//end
-\end{verbatim}
-where {\tt xlen} is the length of data vector requested and {\tt xstr} is the
-starting point of the data vector requested.
-
-	The inputs {\tt sec\_leng} and {\tt sec\_step}
-are the lengths of the sections used for each data segment and the 
-number of data points between the start of consecutive data segments,
-respectively.  The input {\tt wtype} indicates the type of window 
-to be used on the data.  The values for {\tt wtype} can be
-{\tt 're'}, {\tt 'tr'}, {\tt 'hm'}, {\tt 'hn'}, {\tt 'kr'}, and {\tt 'ch'}
-which represent, respectively, the rectangular, triangular, Hamming,
-Hanning, Kaiser, and Chebyshev windows.  The input {\tt wpar} is
-an optional window parameter used only in the case of Kaiser and
-Chebyshev windows.  In the case of the Kaiser window {\tt wpar} is
-a positive scalar value which indicates the amount of relative roll-off 
-(in the frequency domain)
-of the stop-band of the window with respect to the pass-band.  
-For more on how to choose the value of the Kaiser window parameter
-see \cite{rabiner}.
-In the case of the Chebyshev window
-{\tt wpar} is a two-vector for which the first element gives the
-width of the main lobe of the window in the frequency domain and the 
-second element gives the amount of roll-off in the stop-band
-of the filter.  
-The first parameter can take on legitimate values in the range $(0,.5]$,
-the second parameter can take on legitimate values in the range $(0,1)$.
-For the Chebyshev window one must choose one parameter
-or the other for the window specification.  The other parameter is 
-calculated automatically.  The parameter which is to be automatically
-calculated is indicated by the user by placing a negative value in the position
-of this parameter.  For example, if the user specifies the main lobe
-width of the Chebyshev window to be .05, then {\tt wpar=[.05 -1]} is
-a legitimate specification.  On the other hand, if the user specifies
-the roll-off of the Chebyshev window to be .01, then {\tt wpar=[-1 .01]}
-is a legitimate specification.  The user should always examine the returned
-value of the unspecified Chebyshev window parameter, {\tt cwp}, to verify that
-the value is reasonable.  For example, a window of length 50 with roll-off
-of .001 yields a main-lobe width of .9882674.  Clearly, it is not possible
-to obtain a reasonable Chebyshev window of length 50 and with roll-off
-.001.  Finally, the output {\tt sm} is the estimated power spectrum
-which has length {\tt sec\_leng}.
-
-\subsection{Example Using the {\tt pspect} Macro}
+\subsection{Example Using the {\tt pspect} function}
 \index{periodogram method!example}
 
 	In this section, we demonstrate the use of the {\tt pspect}
@@ -243,18 +173,19 @@ macro.  The data used is generated by passing zero-mean white noise
 of unit variance through a low-pass filter.  Consequently, the spectrum
 of the data should be the magnitude square of the filter frequency
 response.  The low-pass filter is an FIR filter of length 33 generated
-using the {\tt eqfir} macro.  
+using the function {\tt eqfir} .  
 
 	The data was generated using the following $\Psi$Lab commands,
-\verbatok{\Diary pspect.1.dia}
+\verbatok{\Diary pspect1.dia}
 \end{verbatim}
 As can be seen, a total of 1024 data points are available for the
 estimation of the spectrum.  The logarithm of the magnitude squared
-of the filter frequency response is shown in Figure~\ref{f.spect.2}.
+of the filter frequency response is shown in Figure~\ref{f.spect2}.
 %
-\input{\Figdir spect.2.tex}
-\dessin{{\tt exec('spect.2\_4.code')} Log Magnitude Squared of Filter}{f.spect.2}
+\input{\Figdir spect2.tex}
+\dessin{{\tt exec('spect2\_4.code')} Log Magnitude Squared of Filter}{f.spect2}
 %
+
 
 	The data obtained above are used to estimate the power spectrum
 in the following way
@@ -262,11 +193,11 @@ in the following way
 -->[sm]=pspect(100,200,'tr',y);
 \end{verbatim}
 The log-magnitude of the power spectrum ({\tt sm}) is plotted in
-Figure~\ref{f.spect.3}.  It should be pointed 
+Figure~\ref{f.spect3}.  It should be pointed 
 out here that the value of the section lengths was chosen to be
 200 in this example to obtain additional resolution in the 
 plot of the Fourier transform of the estimated power spectrum in
-Figure~\ref{f.spect.3}.  However, there is very acceptable
+Figure~\ref{f.spect3}.  However, there is very acceptable
 behavior of the spectral estimate when the section length is
 on the order of twice the filter length.  This is due to the
 fact that one does not expect correlations in the data that are 
@@ -275,27 +206,16 @@ the filter length.  Normally, the section lengths are chosen to
 reflect the {\em a priori} knowledge of the correlation length in
 the data.
 %
-\input{\Figdir spect.3.tex}
-\dessin{{\tt exec('spect.2\_4.code')} Estimate of Spectrum}{f.spect.3}
+\input{\Figdir spect3.tex}
+\dessin{{\tt exec('spect2\_4.code')} Estimate of Spectrum}{f.spect3}
 %
 As can be seen the estimated spectrum matches the theoretical spectrum
-(Figure~\ref{f.spect.2}) very well.  In particular, 
+(Figure~\ref{f.spect2}) very well.  In particular, 
 the peaks of the spectrum in both the pass
 and stop bands matches well with those of the filter magnitude response.
 Furthermore, the normalization of the estimate is accurate with respect
 to the filter response.
 
-\subsection{The {\tt pspect} Macro Code}
-\index{macro code!pspect@{\tt pspect}}
-\index{periodogram method!macro code}
-
-	The {\tt pspect} macro code is as follows:
-\verbatok{\MACROSSIGLIB/pspect.sci}
-\end{verbatim}
-The windows used in the modified periodogram method algorithm
-are constructed using the {\tt window} macro detailed below.
-\verbatok{\MACROSSIGLIB/window.sci}
-\end{verbatim}
 
 \section{The Correlation Method}
 \index{spectral estimation!correlation method}
@@ -310,7 +230,7 @@ autocorrelation function as in (\ref{e.sp.7}) from
 overlapping sub-segments of the data, and then averaging
 these estimates to obtain the modified estimate.
 
-	Consequently, referring again to Figure~\ref{f.spect.1},
+	Consequently, referring again to Figure~\ref{f.spect1},
 for each length $N$ sub-segment of the data $x_k(n)$ the estimate
 of $2M$ points of the autocorrelation function is calculated by
 %
@@ -344,83 +264,10 @@ is useful for any application requiring correlations or cross-correlations.
 Documentation on this primitive can be found in the introductory
 manual for $\Psi$Lab.
 
-\subsection{How to Use the {\tt cspect} macro}
-\index{macro syntax!cspect@{\tt cspect}}
-\index{correlation method!macro syntax}
-
-	The {\tt cspect} macro calculates an estimate of
+The function {\tt cspect} calculates an estimate of
 the power spectrum using the correlation method for spectral estimation.
-The syntax of the {\tt cspect} macro is as follows
-\begin{verbatim}
---> [sm,cwp]=cspect(nlags,ntp,wtype,x[,y][,wpar])
-\end{verbatim}
-where {\tt x} is the input data sequence from which the power spectrum
-is to be estimated and {\tt y} is an optional input data sequence of the
-same length as {\tt x} which is to be used in the case where a cross-power
-spectrum is to be estimated.  There are two ways that the data {\tt x}
-(and/or {\tt y}) can be passed to the macro.  The first method is to directly
-pass the data to the macro in the form of a vector. In this case {\tt x}
-(and/or {\tt y}) is a vector which already exists in the $\Psi$Lab environment.
-The second method is to create another $\Psi$Lab macro which creates or obtains
-the data (perhaps by reading the data out of a file on magnetic tape, etc.).
-In this case, the value of {\tt x} (and/or {\tt y}) 
-is a scalar which represents
-the length of data to be used.  Here, the user must provide the macro(s)
-{\tt getx} (and/or {\tt gety}) which is of the form
-\begin{verbatim}
-//[xv]=getx(xlen,xstr)
-   .
-   .
-   .
-//end
-\end{verbatim}
-where {\tt xlen} is the length of data vector requested and {\tt xstr} is the
-starting point of the data vector requested.  In the case where the user
-decides to use the external functions {\tt getx} (and/or {\tt gety})
-the value of {\tt nlags} is obliged to be a power of 2.  That is,
-$\mtt{nlags}=2^k$ where $k$ is a positive integer.
 
-	The input {\tt nlags} 
-is the number of correlation lags to be estimated before the Fourier transform
-is performed to obtain the spectral estimate.  The input {\tt ntp}
-indicates number of points in the frequency domain at which the estimate
-is to be calculated.
-The input {\tt wtype} indicates the type of window 
-to be used on the data.  The values for {\tt wtype} can be
-{\tt 're'}, {\tt 'tr'}, {\tt 'hm'}, {\tt 'hn'}, {\tt 'kr'}, and {\tt 'ch'}
-which represent, respectively, the rectangular, triangular, Hamming,
-Hanning, Kaiser, and Chebyshev windows.  The input {\tt wpar} is
-an optional window parameter used only in the case of Kaiser and
-Chebyshev windows.  In the case of the Kaiser window {\tt wpar} is
-a positive scalar value which indicates the amount of relative roll-off 
-(in the frequency domain)
-of the stop-band of the window with respect to the pass-band.  
-For more on how to choose the value of the Kaiser window parameter
-see \cite{rabiner}.
-In the case of the Chebyshev window
-{\tt wpar} is a two-vector for which the first element gives the
-width of the main lobe of the window in the frequency domain and the 
-second element gives the amount of roll-off in the stop-band
-of the filter.  
-The first parameter can take on legitimate values in the range $(0,.5]$,
-the second parameter can take on legitimate values in the range $(0,1)$.
-For the Chebyshev window one must choose one parameter
-or the other for the window specification.  The other parameter is 
-calculated automatically.  The parameter which is to be automatically
-calculated is indicated by the user by placing a negative value in the position
-of this parameter.  For example, if the user specifies the main lobe
-width of the Chebyshev window to be .05, then {\tt wpar=[.05 -1]} is
-a legitimate specification.  On the other hand, if the user specifies
-the roll-off of the Chebyshev window to be .01, then {\tt wpar=[-1 .01]}
-is a legitimate specification.  The user should always examine the returned
-value of the unspecified Chebyshev window parameter, {\tt cwp}, to verify that
-the value is reasonable.  For example, a window of length 50 with roll-off
-of .001 yields a main-lobe width of .9882674.  Clearly, it is not possible
-to obtain a reasonable Chebyshev window of length 50 and with roll-off
-.001.  Finally, the output {\tt sm} is the estimated power spectrum
-which has length {\tt sec\_leng}.
-
-\subsection{Example Using the {\tt cspect} Macro}
+\subsection{Example Using the function {\tt cspect}}
 \index{correlation method!example}
 
 	Here, for comparison purposes, the same example as used in
@@ -433,7 +280,7 @@ in the following way
 -->[sm]=cspect(100,200,'tr',y);
 \end{verbatim}
 The log-magnitude of the power spectrum ({\tt sm}) is plotted in
-Figure~\ref{f.spect.4}.  
+Figure~\ref{f.spect4}.  
 
 It should be pointed 
 out here that the value of the 
@@ -441,13 +288,13 @@ the number of lags (100) and the number of transform points (200)
 were chosen to match the previous example where the {\tt pspect}
 macro was used.
 A plot of the estimated power spectrum is illustrated in
-Figure~\ref{f.spect.4}.
+Figure~\ref{f.spect4}.
 %
-\input{\Figdir spect.4.tex}
-\dessin{{\tt exec('spect.2\_4.code')} Estimate of Spectrum}{f.spect.4}
+\input{\Figdir spect4.tex}
+\dessin{{\tt exec('spect2\_4.code')} Estimate of Spectrum}{f.spect4}
 %
 As can be seen the estimated spectrum also matches the theoretical spectrum
-(Figure~\ref{f.spect.2} very well.  There are some differences,
+(Figure~\ref{f.spect2} very well.  There are some differences,
 however, between the estimates obtained using the two different macros.
 The primary difference to keep in mind is the difference in how the windows
 are used for the two different techniques.  In the correlation
@@ -463,16 +310,6 @@ relevant questions concerning which technique may be the best in any
 one application.  For more information on how to choose between the
 techniques the user is referred to \cite{rabiner} and the relevant references
 found within.
-
-\subsection{The {\tt cspect} Macro Code}
-\index{macro code!cspect@{\tt cspect}}
-\index{correlation method!macro code}
-
-	The {\tt cspect} macro code is as follows
-\verbatok{\MACROSSIGLIB/cspect.sci}
-\end{verbatim}
-The code for the {\tt window} macro used in the {\tt cspect}
-macro can be found in the section on the {\tt pspect} macro code.
 
 
 \section{The Maximum Entropy Method}
@@ -739,15 +576,15 @@ and $n=0,1,...,10$.  Figure~\ref{f33.1} shows the input data sequence, x(n).
 Figures~\ref{f3.2} and \ref{f3.3} show the maximum entropy and magnitude
 squared estimates of the power spectrum, respectively.
 %
-\input{\Figdir mem.1.tex}
-\dessin{{\tt exec('mem.1\_3.code')} Input Data Sequence, $x(n)$}{f33.1}
+\input{\Figdir mem1.tex}
+\dessin{{\tt exec('mem1\_3.code')} Input Data Sequence, $x(n)$}{f33.1}
 %
 %
-\input{\Figdir mem.2.tex}
-\dessin{{\tt exec('mem.1\_3.code')} Maximum Entropy Spectral Estimate of $x(n)$}{f3.2}
+\input{\Figdir mem2.tex}
+\dessin{{\tt exec('mem1\_3.code')} Maximum Entropy Spectral Estimate of $x(n)$}{f3.2}
 %
-\input{\Figdir mem.3.tex}
-\dessin{{\tt exec('mem.1\_3.code')} Squared Magnitude of the Fourier Transform of $x(n)$}{f3.3}
+\input{\Figdir mem3.tex}
+\dessin{{\tt exec('mem1\_3.code')} Squared Magnitude of the Fourier Transform of $x(n)$}{f3.3}
 %
 As can be seen, the MESE resolves two peaks according to the 
 two sinusoidal frequences in $x(n)$.  The squared magnitude of
@@ -757,22 +594,5 @@ power spectrum estimate in Figure~\ref{f3.3} shows spurious sidelobes
 which have nothing to do with the data.
 
 
-\subsection{Macro Code}
-\index{maximum entropy method!macro code}
-\index{macro code!mese@{\tt mese}}
-
-\verbatok{\MACROSSIGLIB/mese.sci}
-\end{verbatim}
-
-%\index{macro code!acf@{\tt acf}}
-%\verbatok{\MACROSSIGLIB/acf.sci}
-%\end{verbatim}
-
-\index{macro code!lev@{\tt lev}}
-\verbatok{\MACROSSIGLIB/lev.sci}
-\end{verbatim}
-
-\verbatok{\MACROSSIGLIB/frmag.sci}
-\end{verbatim}
 
 %\end{document}

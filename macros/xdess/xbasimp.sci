@@ -27,10 +27,10 @@ for i=1:n,
   driver('Pos');xinit(fnamel);xtape('replay',win_num(i));driver('Pos');xend();
 end
 driver('Rec');
-// Blpr 'titre' filename1 filename2 ....  lpr
-//if flag=1,host('$SCI/bin/Blpr ''  '' '+fname+ ' | lpr');
-//  if rhs=1,host('rm -f '+fname);end
-// end
+//Blpr 'titre' filename1 filename2 ....  lpr
+if flag=1,host('$SCI/bin/Blpr ''  '' '+fname+ ' | lpr');end
+if rhs=1,host('rm -f '+fname);end
+
 
 
 

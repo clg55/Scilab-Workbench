@@ -3,7 +3,7 @@
 //matrice de fractions rationnelles f par une matrice de scalaires s.
 //Cett macro correspond a l'operation  s./f
 //!
-f=list('r',f(2)./s,f(3),f(4)),
+f=tlist('r',f(2)./s,f(3),f(4)),
 //end
 
 

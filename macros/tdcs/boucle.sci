@@ -1,34 +1,4 @@
-//[]=boucle(fch,abruit,xdim,npts,farrow)
-//[]=boucle(fch,[abruit,xdim,npts,farrow])
-// Donne le portrait de phase et des trajectoires du syst\`eme
-// dynamique fch suppose etre un systeme dynamique observe-controle
-// avec sortie bruit\'ee  de dimension d'etat 4 ( x:2 , xchap:2)
-// zdot=fch(t,z) dans le cadre xdim=[xmin,ymin,ymax,ymax]
-//
-// Dans la forme d'appel par d\'efaut : boucle(fch) les valeurs
-// du cadre  et les pas d'int\'egration sont demand\'es interactivement.
-// La macro boucle  va chercher dans l'environnement
-// global les valeurs de (xe,ue) le point d'equilibre
-//   f,g,h les matrices du systeme linearise
-//   l et k  les deux matrices de gain
-// Arguments:
-// fch  : nom du systeme a integrer.
-//       si c'est une chaine de caract\`ere, on peut lui donner les valeurs
-//       'bcomp' : pour mod\`ele de competition non-lineaire
-//               observe-commande
-//       'lcomp' : pour mod\`ele linearise observe-comande
-//       sinon on peut lui donner le nom d'une macro que l'on aura cree
-//       avec la commande obs_cont
-//
-// abruit : amplitude du bruit rajoute sur les observations
-//
-// npts=[nombre-de-points,pas] ->  sert \`a donner le nombre de points et
-//          le pas pour l'int\'egration num\'erique.
-//
-// xdim=[xmin,ymin,xmax,ymax] -> sert \`a donner le cadre du dessin
-// farrow vaur 't' ou 'f' : s'il vaut 't' on rajoute des fleches
-//  le long des trajectoires
-//!
+function []=boucle(fch,abruit,xdim,npts,farrow)
 [lhs,rhs]=argn(0);
 // appel minimal
 if rhs<=4,farrow='f';end;
@@ -62,7 +32,7 @@ xset("window",0);xselect();xclear();
   while goon=1,
        ftest=1;
        while ftest=1,
-          addtitle(fch);
+//          addtitle(fch);
           plot2d([xdim(1);xdim(1);xdim(3)],[xdim(2);xdim(4);xdim(4)])
           plot2d([xe(1)],[xe(2)],[2,4],"111",...
               "Point d''equilibre pour ue='+string(ue),xdim);
@@ -70,17 +40,15 @@ xset("window",0);xselect();xclear();
           write(%io(2),' -] Bouton de droite pour quiter ');
           write(%io(2),' -] Bouton du milieu ou de gauche ');
           write(%io(2),'      pour indiquer x0 ');
-          [n,x,y]=xclick()
+          [n,xx0,yy0]=xclick()
           if n=2,goon=0;return;end
-          [xx0,yy0,recc]=xchange(x,y,'i2f');
           x0=[xx0,yy0];
           write(%io(2),'Utilisez la souris : ');
           write(%io(2),' -] Bouton de droite pour quiter ');
           write(%io(2),' -] Bouton du milieu ou de gauche ');
           write(%io(2),'      pour indiquer xchap0 (observateur) ');
-          [n,x,y]=xclick()
+          [n,xx0,yy0]=xclick()
           if n=2,goon=0;return;end
-          [xx0,yy0,recc]=xchange(x,y,'i2f');
           xchap0=[xx0,yy0];
           if type(fch)=10,
              ftest=desorb1([x0,xchap0]',npts,fch,farrow,xdim);
@@ -91,10 +59,9 @@ xset("window",0);xselect();xclear();
           if ftest=1;write(%io(2),'conditions initiales hors du cadre'),end
        end
   end
-//end
 
 
-//[res]=desorb1(x0,n1,fch,farrow,xdim);
+function [res]=desorb1(x0,n1,fch,farrow,xdim);
 //[res]=desorb1(x0,n1,fch,farrow,xdim);
 //!
 res=0
@@ -116,6 +83,6 @@ xset("window",0);xclear();
 //portrait de phase
 plot2d(xxx([1,3],:)',xxx([2,4],:)',[-1,-2],"111","(x1,x2)@observateur ",...
 xdim);
-//end
+
 
 

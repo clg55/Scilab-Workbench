@@ -9,12 +9,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <malloc.h>
+
 #include "../comm/libCalCom.h"
 #include "../comm/libCom.h"
 
-extern void SendMsg();
 extern void GetMsg();
-extern void LoadGraph();
 
 extern void cerro();
 extern void cout();
@@ -28,21 +28,26 @@ int nNetwindows = 0;
 
 static char str[MAXNAM];
 
-void C2F(inimet)(scr,datanet,ldatanet)
+void C2F(inimet)(scr,path,lpath)
 int *scr;
-char *datanet;
-int *ldatanet;
+char *path;
+int *lpath;
 {
   char windowname[MAXNAM];
   char command[2 * MAXNAM];
   char warg[MAXNAM];
   char* env;
   char server[MAXHOSTLEN];
+  char dir[1024];
 
-  datanet[*ldatanet] = '\0';
+  path[*lpath] = '\0';
+
+  strcpy(dir,path);
+  if (!strcmp(path," ")) getwd(dir);
 
   gethostname(server,MAXHOSTLEN);
   
+  GetMsg();
   nNetwindows++;
 
    if (nNetwindows > MAXNETWINDOW) {
@@ -71,31 +76,17 @@ int *ldatanet;
   else sprintf(command,"%s",env);
 
   sprintf(warg,"%d",nNetwindows);
-  if (strcmp(datanet," ") == 0) {
-     envoyer_message_parametres_var(ID_GeCI,
-				   MSG_LANCER_APPLI,
-				   windowname,
-				   server,
-				   command,
-				   "-w",
-				   warg,
-				   "__ID_PIPES__",
-				   NULL);
-   
-  }
-  else {
-    envoyer_message_parametres_var(ID_GeCI,
-				   MSG_LANCER_APPLI,
-				   windowname,
-				   server,
-				   command,
-				   "-w",
-				   warg,
-				   "-data",
-				   datanet,
-				   "__ID_PIPES__",
-				   NULL);
-  }
+
+  envoyer_message_parametres_var(ID_GeCI,
+				 MSG_LANCER_APPLI,
+				 windowname,
+				 server,
+				 command,
+				 "-w",
+				 warg,
+				 path,
+				 "__ID_PIPES__",
+				 NULL);
 
   if (theNetwindow != 0) {
     envoyer_message_parametres_var(ID_GeCI,
@@ -106,7 +97,6 @@ int *ldatanet;
 				   MSG_DETRUIRE_LIAISON, 
 				   Netwindows[theNetwindow - 1],
 				   identificateur_appli(),NULL);
-
   }
 
   theNetwindow = nNetwindows;
@@ -121,7 +111,6 @@ int *ldatanet;
 				 identificateur_appli(),NULL);
 
   *scr = theNetwindow;
-  sleep(1);
 }
 
 /* checkNetconnect and checkTheNetwindow must be called before using XMetanet
@@ -191,15 +180,20 @@ int *s;
 				 identificateur_appli(),NULL);
 }
 
-void C2F(netwindows)(vs,nvs)
+void C2F(netwindows)(vs,nvs,cv)
 int **vs;
 int *nvs;
+int *cv;
 {
   char fname[MAXNAM];
   int i,j;
   int s[MAXNETWINDOW];
 
-  if (checkNetconnect() == 0) return;
+  GetMsg();
+
+  *nvs = 0;
+  *cv = 0;
+  if (nNetwindows == 0) return;
 
   j = 0;
   for (i = 1; i <= nNetwindows; i++ ) {
@@ -217,6 +211,7 @@ int *nvs;
   for (i = 0; i < *nvs; i++){
     (*vs)[i] = s[i];
   }
+  *cv = theNetwindow;
 }
 
 void CloseNetwindow(s)

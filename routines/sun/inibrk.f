@@ -15,7 +15,7 @@ c      call sunieee
 
       subroutine sunieee
 C     jpc temporairement
-      external my_handler, my_ignore
+c      external my_handler, my_ignore
 c      is=signal( 8,sigbas,-1)
 c      i=ieee_handler("set","underflow",my_ignore)
 c      i=ieee_handler("set","inexat",my_ignore)

@@ -4,32 +4,36 @@
 maxi - maximum
 .SH CALLING SEQUENCE
 .nf
-[m [,k]]=maxi(V)
+[m [,k]]=maxi(A)
+[m [,k]]=maxi(A1,A2,...,An)
+[m [,k]]=maxi(list(A1,A2,...,An))
 .fi
 .SH PARAMETERS
 .TP 10
-V 
-: real vector or matrix or list.
+A
+: real vector or matrix.
+.TP 10
+A1,...,An
+: a set of real vectors or matrices, all of the same size.
 .SH DESCRIPTION
-For \fVV\fR a vector, matrix or list, \fVmaxi(V)\fR is the largest element 
-\fVV\fR.
-.LP
-For matrices, \fV[m,k]=maxi(V)\fR gives in addition
-the index of the maximum.
+For \fVA\fR, a real  vector or matrix, \fVmaxi(A)\fR 
+is the largest element 
+\fVA\fR. \fV[m,k]=maxi(A)\fR gives in addition the index of the maximum.
+
+\fVm=maxi(A1,A2,...,An)\fR returns a vector m of size \fVsize(m)=size(A1)\fR
+such that \fVm(i)= max( Aj(i)), j=1,...,n\fR. \fV[m,k]=maxi(A1,A2,...,An)\fR 
+gives in addition the vector \fVk\fR. for a fixed \fVi\fR,
+\fVk(i)\fR is the number of the first \fVAj(i)\fR achieving the maximum.
+
+\fV[m,k]=maxi(list(A1,...,An))\fR is an equivalent syntax of 
+\fV[m,k]=maxi(A1,A2,...,An)\fR
 .SH EXAMPLE
 .nf
-[m,[k]]=maxi([V1,V2,...,Vn])
+[m,n]=maxi([1,3,1])
+[m,n]=maxi([3,1,1],[1,3,1],[1,1,3])
+[m,n]=maxi(list([3,1,1],[1,3,1],[1,1,3]))
+[m,n]=maxi(list(1,3,1))
 .fi
-returns the vector m:
-.nf
-m(i)=maxi([V1(i),....,Vn(1)])
-.fi
-the vector \fVk\fR contains for each \fVm(i)\fR the number of the 
-first \fVVj(i)\fR achieving the maximum.
-.nf
-[m [,k]]=maxi(list(v1,...,vn))
-.fi
-is an equivalent syntax.
 .SH SEE ALSO
 sort, find, mini
 

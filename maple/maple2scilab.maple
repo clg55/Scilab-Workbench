@@ -34,8 +34,16 @@ make_fortran:=proc(filename,routinename,maplematrix,arguments)
 #in the list ``arguments''.
 #The subroutine is put into a file named filename (character string).
 #
+global optimized:
 local flist,matr,listarg,m,k:
-read ``.libname.`/macrofor.m`:
+#Maple V Release 2
+if interface(version)=`SCG2`	 then 
+  read ``.libname.`/macrofor.m`:
+#Maple V Release 3
+elif not(assigned(macrofor)) and 
+   substring(interface(version),18..18) =`3` then
+   with(share):readshare(macrofor,numerics):
+fi:
 init_genfor():
 matr:=convert(maplematrix,matrix):
 listarg:=[]:

@@ -25,6 +25,6 @@ function [Pn,Rt,T]=lindquist(n,H,F,G,r0)
    end
    Rt=inv(r0-H*k);
    tt=(G-F*k)/Rt;
-//end
+
 
 

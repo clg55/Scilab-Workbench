@@ -1,7 +1,6 @@
-//[f]=%pmr(p,f)
-// %pmr(p,f)  calcule le produit  de la matrice de polynomes  p par la
-//matrice de fractions rationnelles f.
-//Cette macro correspond a l'operation  p*f
+function [f]=%pmr(p,f)
+// r=%pmr(p,f)  <=> r= p*f with p=polynomial matrix
+// and f= rational
 //!
 [n2,d2]=f(2:3);
 [l1,m1]=size(p);[l2,m2]=size(n2)
@@ -14,7 +13,7 @@ if mini([l1*m1,l2*m2])=1 then
   f(3)=den,
   return,
 end;
-if m1<>l2 then return,end
+if m1<>l2 then error(10),end
 //
 for j=1:m2,
    y=lcm(d2(:,j))
@@ -28,6 +27,6 @@ for j=1:m2,
 end,
 [num,den]=simp(num,den)
 f(2)=num,f(3)=den;
-//end
+
 
 

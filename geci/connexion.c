@@ -29,14 +29,14 @@ char *machine;
     /* Creation de la socket de type SOCK_STREAM (mode connecte), dans le
        domaine INternet (AF_INET) */
     if ((desc=socket(AF_INET,SOCK_STREAM,0)) == -1){
-	fprintf(stderr,"creation de la socket impossible\n");
+	fprintf(stderr,"Impossible to create socket\n");
 	return -1;
     }
      
     /* Recherche de l'adresse Internet du serveur a partir du nom de la 
        machine */
     if ((hp=gethostbyname(machine))==NULL){
-	fprintf(stderr,"site inconnu\n");
+	fprintf(stderr,"Unknown host address\n");
 	return -1;
     }
   
@@ -47,7 +47,7 @@ char *machine;
     
      /* Demande de connexion au demon */
     if (connect(desc,(struct sockaddr *)&nom,sizeof(nom))== -1){
-      fprintf(stderr,"erreur de connection\n");
+      fprintf(stderr,"Connexion error\n");
       return -1;
     }
 

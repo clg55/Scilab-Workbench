@@ -26,8 +26,9 @@
  *  defining it is forced to be loaded.  (c.f. "ld -u" option)
  *  It has no effect on non-library routines (plain object files).
  */
+int
 dld_create_reference (name)
-char *name;
+const char *name;
 {
     register char *p = 0;
     struct nlist dummy_nlist;	    /* simulate a nlist entry so that

@@ -1,7 +1,7 @@
-.TH frep2tf 1 "April 1993" "Scilab Group" "Scilab Function"
+.TH frep2tf 4 "April 1993" "Scilab Group" "Scilab Function"
 .so man1/sci.an 
 .SH NAME
-frep2tf - frequency response to  transfer function
+frep2tf - transfer function realization of a frequency response
 .SH CALLING SEQUENCE
 .nf
 [h [,err]]=frep2tf(frq,repf,dg) 
@@ -25,6 +25,8 @@ err
 .SH DESCRIPTION
 Frequency response to  transfer function conversion. The order of \fVh\fR
 is a priori given in \fVdg\fR which must be provided.
+.SH SEE ALSO
+imrep2ss, arl2, time_id , armax
 
 
 

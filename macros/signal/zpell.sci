@@ -1,4 +1,4 @@
-//[ze,po,gain]=zpell(epsilon,A,omegac,omegar)
+function [ze,po,gain]=zpell(epsilon,A,omegac,omegar)
 //[ze,po,gain]=zpell(epsilon,A,omegac,omegar)
 //Poles and zeros of prototype lowpass elliptic filter
 //gain is the gain of the filter

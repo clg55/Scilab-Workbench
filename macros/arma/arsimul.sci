@@ -35,7 +35,8 @@ function z=arsimul(a,b,d,sig,u,up,yp,ep)
 //!
 //
 [lhs,rhs]=argn(0)
-if type(a)=15,
+//-compat type(a)==15 retain for list/tlist compatibility
+if type(a)==15|type(a)==16,
    if rhs=2,z=arsimul(a(2),a(3),a(4),a(7),b);return;end
    if rhs=3,z=arsimul(a(2),a(3),a(4),a(7),b,d);return;end
    if rhs=4,z=arsimul(a(2),a(3),a(4),a(7),b,d,sig);return;end
@@ -84,7 +85,7 @@ if rhs <=5,
 else
    up_s=size(up)
    if up_s(1)<>mmu|up_s(2)<>(bdeg-1) then
-    write(%io(2)," up=[u(0),u(-1),..,] doit etre de dimension ("...
+    write(%io(2)," up=[u(0),u(-1),..,] must be of dimension ("...
     +string(mmu)+','+string(bdeg-1));
     return;end
 end
@@ -93,7 +94,7 @@ if rhs <=6,
 else
   yp_s=size(yp);
   if yp_s(1)<>al|yp_s(2)<>(adeg-1) then 
-    write(%io(2)," yp=[y(0),y(-1),..,] doit etre de dimension ("...
+    write(%io(2)," yp=[y(0),y(-1),..,] must be of dimension ("...
     +string(al)+','+string(adeg-1));
     return;end
 end
@@ -102,7 +103,7 @@ if rhs <=7,
 else
   ep_s=size(ep);
   if ep_s(1)<>al|ep_s(2)<>(ddeg-1) then
-    write(%io(2)," ep=[e(0),e(-1),..,] doit etre de dimension ("...
+    write(%io(2)," ep=[e(0),e(-1),..,] must be of dimension ("...
     +string(al)+','+string(ddeg-1));
     return;end
 end;

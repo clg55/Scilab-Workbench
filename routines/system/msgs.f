@@ -17,7 +17,7 @@ c
      &     141,142,143,144,145,146,147,148,149,150,
      &     151,152,153,154,155,156,157,158,159,160,
      &     161,162,163,164,165,166,167,168,169,170,
-     &     171,172,173),n 
+     &     171,172,173,174,175,176,177,178,179,180),n 
 
  101  continue
       call  basout(io,wte,' Warning:')
@@ -130,7 +130,7 @@ c---------------------- message de  -----------------------------
       call basout(ir,wte,' help file inconsistent...')
       goto 9999
  124  continue
-      call basout(io,wte,' Macros files location :'//buf(1:ierr))
+      call basout(io,wte,' Functions files location :'//buf(1:ierr))
       goto 9999
  125  continue
       call basout(io,wte,'    :'//buf(1:ierr))
@@ -139,7 +139,7 @@ c---------------------- message de  -----------------------------
       call basout(io,wte, ' pause mode: enter empty lines to continue.')
       goto 9999
  127  continue
-      call basout(io,wte,' breakpoints of  macro :'//
+      call basout(io,wte,' breakpoints of  function :'//
      &     buf(1:nlgh))
       goto 9999
  128  continue
@@ -162,7 +162,7 @@ c      call error(-1)
  1321 l=l-1
       if(buf(l:l).eq.' ') goto 1321
       call basout(io,wte,'Stop after row '//buf(nlgh+2:nlgh+6)
-     &              //' in macro '//buf(1:l)//' :')
+     &              //' in function '//buf(1:l)//' :')
       goto 9999
  133  continue
       goto 9999
@@ -200,7 +200,7 @@ c---------------------- message de comand -----------------------------
       goto 9999
  142  continue
       call cvname(ids(1,pt+1),line(1:nlgh),1)
-      call basout(io,wte,'Warning :redefining macro: '
+      call basout(io,wte,'Warning :redefining function: '
      +     //line(1:nlgh))
       p=pt+1
  1421 p=p-1
@@ -215,7 +215,7 @@ c     recherche du nom de la macro correspondant a ce niveau
       if(km.gt.isiz)goto 9999
       if(lstk(km).ne.lk) goto 1422
       call cvname(idstk(1,km),line(1:nlgh),1)
-      call basout(io,wte,'         inside macro: '//line(1:nlgh))
+      call basout(io,wte,'         inside function: '//line(1:nlgh))
       goto 9999
  143  continue
       call basout(io,wte,
@@ -233,13 +233,24 @@ c     recherche du nom de la macro correspondant a ce niveau
       goto 9999
  149  continue
       goto 9999
+c----------------------------------------------------------------------
+c---------------------- message for arl2 -----------------------------    
  150  continue
+      call basout(io,wte,'arl2: Loop on two orders detected')
+      call basout(io,wte,'   previous order computed solution returned')
       goto 9999
  151  continue
+      call basout(io,wte,'arl2: Impossible to reach required order')
+      call basout(io,wte,'   previous order computed solution returned')
       goto 9999
  152  continue
+      call basout(io,wte,'arl2: Failure when looking for the inters'//
+     &     'ection with domains boundaries')
+      call basout(io,wte,'   previous order computed solution returned')
       goto 9999
  153  continue
+      call basout(io,wte,'arl2: Too many solutions found')
+      call basout(io,wte,'   previous order computed solution returned')
       goto 9999
  154  continue
       goto 9999
@@ -256,6 +267,10 @@ c     recherche du nom de la macro correspondant a ce niveau
  160  continue
       call basout(io,wte,
      $     'Warning : loaded file has been created with scilab-1')
+      call basout(io,wte,
+     $     '          or you are trying to load a file saved on ') 
+      call basout(io,wte,
+     $     '           a different architecture')
       call basout(io,wte,'          please update it !')
  161  continue
       call cvname(ids(1,pt+1),line(1:nlgh),1)
@@ -264,6 +279,10 @@ c     recherche du nom de la macro correspondant a ce niveau
 
       goto 9999
  162  continue
+      call basout(io,wte,
+     $     'Warning : use of standard list to define typed structures')
+      call basout(io,wte,
+     $     '          is obsolete. Use tlist')
       goto 9999
  163  continue
       goto 9999
@@ -279,7 +298,8 @@ c     recherche du nom de la macro correspondant a ce niveau
       goto 9999
  169  continue
       goto 9999
-c     Message for ODE....
+c----------------------------------------------------------------------
+c---------------------- message for ODE -----------------------------    
  170  continue
       call basout(io,wte,
      &      'at time :'//buf(1:10)//
@@ -289,9 +309,37 @@ c     Message for ODE....
       call basout(io,wte,'stepsize not significant in rkqc.')
       goto 9999
  172  continue
+      call basout(io,wte,' Warning: variable %ODEOPTIONS not found')
       goto 9999
  173  continue
+      call basout(io,wte,' Warning: integration up to tcrit')
       goto 9999
+ 174  continue
+      call basout(io,wte,' Warning: integration not completed!
+     $    check tolerance parameters or step size')
+      goto 9999
+ 175  continue
+      call basout(io,wte,' Warning: Jacobian external is given, but ')
+      call basout(io,wte,' not used!,  see %ODEOPTIONS(6)')
+      goto 9999
+ 176  continue
+      call basout(io,wte,' Warning: No Jacobian external given but ')
+      call basout(io,wte,' one is required by %ODEOPTIONS(6) value!')
+      goto 9999
+ 177  continue
+      call basout(io,wte,' itask=2,3 or 5: At most one value of t ')
+      call basout(io,wte,' is allowed, the last element of t is used')
+      goto 9999
+ 178  continue
+      call basout(io,wte,' Warning: odedc forces itask=4 and handles')
+      call basout(io,wte,' tcrit')
+      goto 9999
+ 179  continue
+      goto 9999
+ 180  continue
+      goto 9999
+
+
 c     
  9999 continue
       call basout(io,wte,' ')

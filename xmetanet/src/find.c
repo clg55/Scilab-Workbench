@@ -8,6 +8,7 @@
 
 extern void CenterDraw();
 extern void GetDrawGeometry();
+extern void UnhiliteAll();
 
 int ArcVisible();
 int NodeVisible();
@@ -22,7 +23,7 @@ void FindNode()
   
   if (intDisplay) {
     sprintf(Description,"%s","Node internal number");
-    MetanetDialog("",strn,Description);
+    if (!MetanetDialog("",strn,Description)) return;
     n = atoi(strn);
     if (n <= 0 || n > theGraph->node_number) {
       sprintf(Description,"%d is not an internal node number",n);
@@ -46,7 +47,7 @@ void FindNode()
   }
   else {
     sprintf(Description,"%s","Node name");      
-    MetanetDialog("",strn,Description);
+    if (!MetanetDialog("",strn,Description)) return;
     p = theGraph->nodes->first;
     nod = 0;
     while (p) {
@@ -67,10 +68,8 @@ void FindNode()
   if (!NodeVisible(nod))
     CenterDraw(nod->x + NodeDiam(nod)/2,nod->y + NodeDiam(nod)/2);
   
-  ReDrawGraph(theGraph);
+  UnhiliteAll();
   HiliteNode(nod);
-  theGG.active = (ptr)nod;
-  theGG.active_type = NODE;
 }
 
 int NodeVisible(n)
@@ -98,7 +97,7 @@ void FindArc()
  
   if (intDisplay) {
     sprintf(Description,"%s","Arc internal number");
-    MetanetDialog("",strn,Description);
+    if (!MetanetDialog("",strn,Description)) return;
     n = atoi(strn);
     if (n <= 0 || n > theGraph->arc_number) {
       sprintf(Description,"%d is not an internal arc number",n);
@@ -109,11 +108,9 @@ void FindArc()
     a = 0;
     while (p) {
       a1 = (arc*)(p->element);
-      if (theGraph->directed || (a1->number % 2 != 0)) {
-	if (a1->number == n) {
-	  a = a1;
-	  break;
-	}
+      if (a1->number == n) {
+	a = a1;
+	break;
       }
       p = p->next;
     }
@@ -125,16 +122,14 @@ void FindArc()
   }
   else {
     sprintf(Description,"%s","Arc name");      
-    MetanetDialog("",strn,Description);
+    if (!MetanetDialog("",strn,Description)) return;
     p = theGraph->arcs->first;
     a = 0;
     while (p) {
       a1 = (arc*)(p->element);
-      if (theGraph->directed || (a1->number % 2 != 0)) {
-	if (a1->name != 0 && !strcmp(a1->name,strn)) {
-	  a = a1;
-	  break;
-	}
+      if (a1->name != 0 && !strcmp(a1->name,strn)) {
+	a = a1;
+	break;
       }
       p = p->next;
     }
@@ -148,10 +143,8 @@ void FindArc()
   if (!ArcVisible(a))
     CenterDraw(a->xmax,a->ymax);
 
-  ReDrawGraph(theGraph);
+  UnhiliteAll();
   HiliteArc(a);
-  theGG.active = (ptr)a;
-  theGG.active_type = ARC;
 }
 
 int ArcVisible(a)

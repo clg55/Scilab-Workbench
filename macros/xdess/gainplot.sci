@@ -6,8 +6,10 @@ pas_def='auto' // default
 //
 xbasc()
 ilf=0
-select type(sl)
-case 15 then  // sl,fmin,fmax [,pas] [,comments]
+flag=type(sl);
+if flag==15 then flag=16;end
+select flag
+case 16 then  // sl,fmin,fmax [,pas] [,comments]
   typ=sl(1)
   if typ<>'lss'&typ<>'r' then
     error(97,1)
@@ -89,11 +91,10 @@ xmn=mini(frq),xmx=maxi(frq),npx=10
 rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
 
 if ilf==0 then
-     plot2d1("oln",frq',d',-[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
-//plot2d1("oln",frq',d',-[1,3:mn+1],"011",' ',rect,axis);
-xgrid([1,npy],-2,'ln')
+     	plot2d1("oln",frq',d',-[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
+	xgrid()
 else
-     plot2d1("gln",frq',d',-[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
-xgrid([1,npy],-2,'ln')
+     	plot2d1("gln",frq',d',-[1,3:mn+1],strf,strcat(comments,'@'),rect,axis);
+	xgrid()
 end
 xtitle(' ','Hz','db');

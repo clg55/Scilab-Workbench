@@ -52,5 +52,5 @@ if flags(1) then
 // -- trace du quadrillage
   ix=axisdata(2)
   iy=axisdata(4)
-  xgrid([ix,iy],-2)
+  xgrid();
 end

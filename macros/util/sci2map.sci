@@ -61,7 +61,7 @@ if type(a) <= 10 then
       t__(1)=nom+' := array(1.'+'.'+string(ma)+',1.'+'.'+string(na)+');',
    end,
   else
-   if type(a)=15 then ma=size(a), end,
+   if type(a)==15|type(a)==16 then ma=size(a), end,
 end,
 //
 //type
@@ -88,14 +88,26 @@ select type(a)
 //
  case 15 then //listes
    select a(1)
-     case 'r' then //matrice de fractions rationnelles
-          num_=a(2),den_=a(3),
-          t__=[t__ ; frac2map(nom,num_,den_)],
-     case 'lss' then // systeme d'etat : passage des matrices
-          t_ind__=[2:size(a)-1],
-          t__=list2map(nom,a,t_ind__),
-     else //autre cas
-          t__=list2map(nom,a,[1:size(a)]),
+   //-compat next 2 cases retained for list/tlist compatibility
+   case 'r' then //matrice de fractions rationnelles
+     num_=a(2),den_=a(3),
+     t__=[t__ ; frac2map(nom,num_,den_)],
+   case 'lss' then // systeme d'etat : passage des matrices
+     t_ind__=[2:size(a)-1],
+     t__=list2map(nom,a,t_ind__),
+   else //autre cas
+     t__=list2map(nom,a,[1:size(a)]),
+   end
+ case 16 then //listes
+   select a(1)
+   case 'r' then //matrice de fractions rationnelles
+     num_=a(2),den_=a(3),
+     t__=[t__ ; frac2map(nom,num_,den_)],
+   case 'lss' then // systeme d'etat : passage des matrices
+     t_ind__=[2:size(a)-1],
+     t__=list2map(nom,a,t_ind__),
+   else //autre cas
+     t__=list2map(nom,a,[1:size(a)]),
    end
 //
 end //select

@@ -1,7 +1,7 @@
-//<z>=narsimul(a,b,d,sig,u,up,yp,ep)
-//<z>=narsimul(a,b,d,sig,u,[up,yp,ep])
+function z=narsimul(a,b,d,sig,u,up,yp,ep)
+//z=narsimul(a,b,d,sig,u,[up,yp,ep])
 //            ou
-//<z>=narsimul(ar,u,[up,yp,ep])
+//z=narsimul(ar,u,[up,yp,ep])
 // Simule un ARMAX multidimensionnel
 // Le modele est donne par :
 //   A(z^-1) z(k)= B(z^-1)u(k) + D(z^-1)*sig*e(k)
@@ -35,7 +35,8 @@
 //
 //!
 [lhs,rhs]=argn(0)
-if type(a)=15,
+//-compat type(a)==15 retain for list/tlist compatibility
+if type(a)==15|type(a)==16,
    if rhs=2,z=narsimul(ar(2),ar(3),ar(4),ar(7),b);return;end
    if rhs=3,z=narsimul(ar(2),ar(3),ar(4),ar(7),b,d);return;end
    if rhs=4,z=narsimul(ar(2),ar(3),ar(4),ar(7),b,d,sig);return;end
@@ -68,7 +69,7 @@ if rhs <=5,
    up=0*ones(mmu,(bdeg-1));
 else
    if size(up)<>[mmu,(bdeg-1)],
-    write(%io(2)," up=[u(0),u(-1),..,] doit etre de dimension ("...
+    write(%io(2)," up=[u(0),u(-1),..,] must be of dimension ("...
     +strin(mmu)+','+string(bdeg-1));
     return;end
 end
@@ -76,7 +77,7 @@ if rhs <=6,
    yp=0*ones(al,(adeg-1));
 else
   if size(yp)<>[al,(adeg-1)]
-    write(%io(2)," yp=[y(0),y(-1),..,] doit etre de dimension ("...
+    write(%io(2)," yp=[y(0),y(-1),..,] must be of dimension ("...
     +strin(al)+','+string(adeg-1));
     return;end
 end
@@ -84,7 +85,7 @@ if rhs <=7,
    ep=0*ones(al,(ddeg-1));
 else
   if size(ep)<>[al,(ddeg-1)]
-    write(%io(2)," ep=[e(0),e(-1),..,] doit etre de dimension ("...
+    write(%io(2)," ep=[e(0),e(-1),..,] must be of dimension ("...
     +strin(al)+','+string(ddeg-1));
     return;end
 end;

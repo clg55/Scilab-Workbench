@@ -8,7 +8,7 @@ y=xx(:,2)
 y1=matrix(y,2,prod(size(y))/2); 
 x1=matrix(x,2,prod(size(x))/2); 
 rect=[mini(x1),mini(y1),maxi(x1),maxi(y1)];
-plot2d(1,1,[-1],"011"," ",rect)
+plot2d(1,1,[-1],"031"," ",rect)
 xsegs(x1,y1);
 
 function []=amdbaR(File_name)
@@ -29,59 +29,59 @@ file('close',unit)
 function []=meshvisu(rect)
 // Mesh visualisation 
 [lhs,rhs]=argn(0);
-if rhs=0;rect=[mini(noeul(:,2)),mini(noeul(:,3)),maxi(noeul(:,2)),maxi(noeul(:,3))];end
-plot2d(1,1,[-1],"011"," ",rect)
-xset("clipping",rect(1),rect(4),rect(3)-rect(1),rect(4)-rect(2));
+if rhs<=0;rect=[mini(noeul(:,2)),mini(noeul(:,3)),maxi(noeul(:,2)),maxi(noeul(:,3))];end
+if rhs<=1;iso='1'
+plot2d(1,1,[-1],"031"," ",rect)
+xset("clipgrf");
 x=noeul(trianl(:,2:4),2)
 x=matrix(x,triang,3);
 y=noeul(trianl(:,2:4),3)
 y=matrix(y,triang,3);
 x=[x,x(:,1)]';y=[y,y(:,1)]'
 xpolys(x,y);
-xset("default");
+xset("clipoff");
+
 
 function []=nvisu(rect)
 // Visualisation des noeuds 
 [lhs,rhs]=argn(0);
 if rhs=0;rect=[mini(noeul(:,2)),mini(noeul(:,3)),maxi(noeul(:,2)),maxi(noeul(:,3))];end
-plot2d(1,1,[-1],"011"," ",rect)
-xset("clipping",rect(1),rect(4),rect(3)-rect(1),rect(4)-rect(2));
+plot2d(1,1,[-1],"031"," ",rect)
+xset("clipgrf");
 bords=noeul(find(noeul(:,4)>0),:);
 [no,ign]=size(bords)
 for i=1:no
 	xstring(bords(i,2),bords(i,3),string(bords(i,4)));
 end
+xset("clipoff");
 
-function []=emc2V(rect,sca)
+function []=emc2V(i,j,k,sca,FN,rect)
 // Visualise un champ de vitesse 
 // la taille des vecteur est constante
 // mais on change la couleur suivant l'intensite du champ
+// Les vecteurs sont lus dans les colonnes i et j du fichier 
+// du fichier FN qui continet k colonnes 
 [lhs,rhs]=argn(0);
-if rhs<=0;rect=[mini(noeul(:,2)),mini(noeul(:,3)),...
-	maxi(noeul(:,2)),maxi(noeul(:,3))];end
-if rhs<=1;sca=sqrt((rect(4)-rect(2))^2+(rect(3)-rect(1))^2)/sqrt(triang);
-	sca=0.5/sca;end
-plot2d(1,1,[-1],"011"," ",rect);
-xset("clipping",rect(1),rect(4),rect(3)-rect(1),rect(4)-rect(2));
-unit=file('open','SOL_NS','old')
-resu=read(unit,noeuds,4);
-resu=resu(:,2:3);
+plot2d(1,1,[-1],"031"," ",rect);
+xset("clipgrf");
+unit=file('open','MESH.VAL','old')
+resu=read(unit,noeuds,k);
+resu=resu(:,[i,j]);
 nm=[]
 for i=1:noeuds;	nm1=norm(resu(i,:),2);nm=[nm,nm1];
 	if nm1<>0,resu(i,:)=resu(i,:)/nm1;end
 end
 nmax=maxi(nm);if nmax<>0; nm=nm/nmax;end
-for i=1:noeuds;xset("dashes",16-16*nm(i));
-	xsegs([noeul(i,2)-(1/sca)*resu(i,1);...
-	noeul(i,2)+(1/sca)*resu(i,1)],...
-	   [noeul(i,3)-(1/sca)*resu(i,2);noeul(i,3)+(1/sca)*resu(i,2)]);
-end
+xsegs([noeul(:,2)-(1/sca)*resu(:,1),noeul(:,2)+(1/sca)*resu(:,1)]',...
+      [noeul(:,3)-(1/sca)*resu(:,2),noeul(:,3)+(1/sca)*resu(:,2)]',...
+	16*ones(nm)-16*nm);
 file('close',unit);
+xset("clipoff");
 
 function []=emc2C(i,j,FN,rect)
 // iso contour de la fonction lineaire sur les 
 // triangles du maillage on lit les valeurs de la fonction 
-// aux neouds du maillage sur la ieme colonne 
+// aux noeuds du maillage sur la ieme colonne 
 // du fichier file qui en contient j 
 [lhs,rhs]=argn(0);
 unit=file('open',FN,'old')
@@ -89,8 +89,9 @@ resu=read(unit,-1,j);
 resu=resu(:,i);
 file('close',unit)
 if rhs<=3;rect=[mini(noeul(:,2)),mini(noeul(:,3)),maxi(noeul(:,2)),maxi(noeul(:,3))];end
-if rhs <=3;fec(noeul(:,2),noeul(:,3),trianl,resu);
-else fec(noeul(:,2),noeul(:,3),trianl,resu,"111"," ",rect);end
+fec(noeul(:,2),noeul(:,3),trianl,resu,"131"," ",rect);
+
+
 
 
 

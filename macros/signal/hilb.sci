@@ -1,4 +1,4 @@
-//<xh>=hilb(n,wtype,par)
+function [xh]=hilb(n,wtype,par)
 //<xh>=hilb(n[,wtype][,par])
 //returns the first n points of the
 //Hilbert transform centered around the origin.
@@ -34,7 +34,6 @@
  
    [win_l,cwp]=window(wtype,n,par);
    xh=xh.*win_l;
- 
-//end
+
 
 

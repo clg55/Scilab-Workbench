@@ -6,7 +6,7 @@ For instance %rar stands for 'rational'-'add'-'rational':
 r=r1+r2 with r1 and r2 two rationals returns a rational r.
 The calculation of r is made by the macro %rar.
 (A rational is a list of the following type:
-r=list('r',n,d) where n and d are two poynomials (possibly
+r=tlist('r',n,d) where n and d are two poynomials (possibly
 polynomial matrices)).
 
 Code of macro name is as follows:
@@ -26,8 +26,8 @@ q: elementwise left division
 
 prefixes, postfixes
 
-r:    list('r',num,den) ---> transfer num/den or syslin list.
-lss:  list('lss,A,B,C,D,...) ---> state-space (syslin list)
+r:    tlist('r',num,den) ---> transfer num/den or syslin list.
+lss:  tlist('lss,A,B,C,D,...) ---> state-space (syslin list)
 s:    scalar
 p:    polynomial
 

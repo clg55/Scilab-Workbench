@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=R4TX,SSI=0
       subroutine r4tx(nthpo, cr0, cr1, cr2, cr3, ci0, ci1, ci2, ci3)
 c!
 c subroutine:  r4tx

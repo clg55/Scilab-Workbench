@@ -1,8 +1,11 @@
-//[s]=%lssilss(i,j,s1,s2)
+function s=%lssilss(i,j,s1,s2)
 //%lssilss(i,j,s1,s2) <=>  s2(i,j)=s1
 //!
 // origine s. steer inria 1992
 //
+if type(i)==10|type(j)==10 then 
+  error(21)
+end
 [s1 s2]=sysconv(s1,s2)
 [m1,p1]=size(s1(5));[m2,p2]=size(s2(5));
 
@@ -25,6 +28,6 @@ jj1=0*ones(p1,p2);jj1(:,p2-p1+1:p2)=eye(p1,p1)
 jj1=jj1(:,[find(jj==0),j])
 s=s+ii1*s1*jj1
 s=minss(s)
-//end
+
 
 

@@ -8,7 +8,7 @@ c
       parameter (nz1=nsiz-1,nz2=nsiz-2)
       logical eqid,eptover
       integer semi,eol,blank,r,excnt,lparen,rparen,num,name
-      integer id(nsiz),eye(nsiz),bl(nsiz),rand(nsiz),sysvar(nsiz)
+      integer id(nsiz),eye(nsiz),rand(nsiz)
       integer star,dstar,comma,quote,cconc,extrac,rconc
       integer left,right,hat
       data star/47/,dstar/62/,semi/43/,eol/99/,blank/40/
@@ -16,9 +16,8 @@ c
       data quote/53/,left/54/,right/55/,cconc/1/,extrac/3/,rconc/4/
       data hat/62/
 c     
-      data bl/nsiz*673720360/, eye/672014862,nz1*673720360/
+      data eye/672014862,nz1*673720360/
       data rand/219613723,nz1*673720360/
-      data sysvar/471997440,672860703,nz2*673720360/
 c     
 c     
       r = rstk(pt)
@@ -182,9 +181,8 @@ c
 c     
  42   call getsym
 c     
-cx    la ligne suivante a ete ajoutee pour prendre en compte
-cx    les fonctions sans parametre d'entre
       if(sym.eq.rparen) then
+c     .  function has no input parameters
          excnt=-1
          goto 46
       endif
@@ -264,13 +262,6 @@ c     *call* matfns
       go to 60
 c     
  60   continue
-c     check for multi-extraction
-c     if(sym.eq.lparen) then
-c     call putid(id,sysvar)
-c     excnt=0
-c     call stackp(id)
-c     goto 41
-c     endif
 c     check for quote (transpose) and ** or ^ (power)
       if (sym .ne. quote) go to 62
       i = lpt(3) - 2

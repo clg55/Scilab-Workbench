@@ -1,4 +1,4 @@
-#include "../machine.h"
+
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -15,6 +15,8 @@
 #ifdef aix
 #include <sys/select.h>
 #endif
+
+#include "Math.h"
 
 #define NUMCOLORS 17
 
@@ -122,17 +124,17 @@ DisplayInit(string,dpy,toplevel)
     {
       toplevel1 = *toplevel;
       dpy1 = *dpy;
-      XtGetApplicationResources(toplevel1, &the_res, app_resources,
-			    XtNumber(app_resources), NULL, 0);
+      XtGetApplicationResources(toplevel1, (XtPointer) &the_res, app_resources,
+			    XtNumber(app_resources), (ArgList) NULL,(Cardinal) 0);
     }
   else
     {
-      int Xsocket,pty=0,fd ;
+      int Xsocket,fd ;
       *toplevel=toplevel1=XtAppInitialize (&app_con,"Xscilab",optionDescList,
 				       0,&argc, (String *)argv,
-				       bgfallback_resources, NULL, 0);
-      XtGetApplicationResources(toplevel1, &the_res, app_resources,
-			    XtNumber(app_resources), NULL, 0);
+				       bgfallback_resources,(ArgList) NULL,(Cardinal) 0);
+      XtGetApplicationResources(toplevel1,(XtPointer) &the_res, app_resources,
+			    XtNumber(app_resources),  (ArgList) NULL,(Cardinal) 0);
       the_dpy = *dpy=dpy1=XtDisplay(toplevel1);
       BasicScilab = 0;
       Xsocket = ConnectionNumber(dpy1);
@@ -166,7 +168,7 @@ xutl_(dpy)
      Display *dpy;
 {
   Screen   *scr;      
-  int  status,i;
+  int  i;
   XColor xcolor;
   scr = DefaultScreenOfDisplay(dpy);
   for (i=0 ; i < NUMCOLORS ; i++)
@@ -194,7 +196,6 @@ xutl_(dpy)
 
 int Xorgetchar()
 {
-  int bcnt,ii;
   register int i;
   static struct timeval select_timeout;
   if ( BasicScilab) return(getchar());

@@ -1,4 +1,4 @@
-//[y]=recur(x0,var,k,n)
+function [y]=recur(x0,var,k,n)
 //[y]=recur(x0,var,k,n)
 // equation recurrente bilineaire
 // x(i+1)=-x(i)*(k + sqrt(var)*br(i))
@@ -18,6 +18,6 @@ xclear();
 plot2d((1:n)',x',[-1],"111"," suite x(n)",[0,-10,n,10]);
 y=log(abs(k*ones(br)+sqrt(var)*br));
 y=sum(y)/n;
-//end
+
 
 

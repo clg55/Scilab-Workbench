@@ -41,9 +41,8 @@ matrix \fVQ'*inv(U)\fR column compresses \fVA\fR.
 a=rand(5,2)*rand(2,5);A=sparse(a);
 [ptr,rk]=lufact(A);[P,L,U,Q]=luget(ptr);
 full(L), P*L*U*Q-A
-spclean(P*L*U*Q-A)
+clean(P*L*U*Q-A)
 ludel(ptr)
 .fi
 .SH SEE ALSO
 sparse, lusolve, luget, spclean
-

@@ -16,10 +16,9 @@ Used to add vertical error bars on a 2D plot.
 \fVem(i,j)\fR and \fVep(i,j)\fR stands for the error interval on the value y(i,j)
 .LP
 \fV[y(i,j)-em(i,j),y(i,j)+ep(i,j)]\fR 
+
+Enter the command \fVerrbar()\fR to see a demo.
 .SH EXAMPLE
-enter the command \fVerrbar()\fR to see a demo 
-.LP
-Another simple example :
 .nf
 x=0:0.1:2*%pi;
 y=[sin(x);cos(x)]';x=[x;x]';plot2d(x,y);
@@ -27,5 +26,3 @@ errbar(x,y,0.05*ones(x),0.03*ones(x));
 .fi
 .SH AUTHOR
 J.Ph.C..
-
-

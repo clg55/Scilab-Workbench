@@ -2,7 +2,10 @@ function [frq,bnds]=calfrq(h,fmin,fmax)
 //!
 k=0.005 //distance relative mini entre deux pt dans le plan de nyquist
 tol=0.001 //tolerance pour test des imaginaires purs
-if type(h)<>15 then 
+
+//-compat type(h)<>15 retained for list/tlist compatibility
+
+if type(h)<>15&type(h)<>16 then 
   error('first arg. to calfrq : waiting for syslin list'),
 end
 if h(1)<>'lss'&h(1)<>'r' then 
@@ -39,7 +42,7 @@ deff('[f]=%sel(r,fmin,fmax,dom,tol)',['f=[],';
   'end']);comp(%sel)
 
 //
-denh=h(3);s=poly(0,varn(denh));numh=h(2)
+denh=h(3);numh=h(2)
 l10=log(10)'
 
 if dom='c' then
@@ -151,4 +154,4 @@ while i<nfrq
 end
 frq(prod(size(frq)))=fmax
 frq=frq/c
-//end
+

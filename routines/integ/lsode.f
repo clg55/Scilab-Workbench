@@ -1255,7 +1255,7 @@ c-----------------------------------------------------------------------
       call xerrwv(
      1 '     such that t + h = t at next step',
      1   60, 101, 1, 0, 0, 0, 0, 0.0d+0, 0.0d+0)
-      call xerrwv('      (h = pas).  integration continues',
+      call xerrwv('      (h = step).  integration continues',
      1   50, 101, 1, 0, 0, 0, 2, tn, h)
       if (nhnil .lt. mxhnil) go to 290
       call xerrwv('lsode--  preceding message given i1 times',
@@ -1470,14 +1470,14 @@ c-----------------------------------------------------------------------
      1 'lsode-- necessary size for iwork (i1) larger than liw (i2)',
      1   60, 18, 1, 2, leniw, liw, 0, 0.0d+0, 0.0d+0)
       go to 700
- 619  call xerrwv('lsode--  rtol(i1) est r1 .lt. 0.0        ',
+ 619  call xerrwv('lsode--  rtol(i1) is r1 .lt. 0.0        ',
      1   40, 19, 1, 1, i, 0, 1, rtoli, 0.0d+0)
       go to 700
- 620  call xerrwv('lsode--  atol(i1) est r1 .lt. 0.0        ',
+ 620  call xerrwv('lsode--  atol(i1) is r1 .lt. 0.0        ',
      1   40, 20, 1, 1, i, 0, 1, atoli, 0.0d+0)
       go to 700
  621  ewti = rwork(lewt+i-1)
-      call xerrwv('lsode--  ewt(i1) (=r1) est .le. 0.0         ',
+      call xerrwv('lsode--  ewt(i1) (=r1) is .le. 0.0         ',
      1   40, 21, 1, 1, i, 0, 1, ewti, 0.0d+0)
       go to 700
  622  call xerrwv(
@@ -1493,7 +1493,7 @@ c-----------------------------------------------------------------------
      1   60, 24, 1, 0, 0, 0, 2, tcrit, tn)
       go to 700
  625  call xerrwv(
-     1  'lsode--  itask = 4 or 5 and tcrit (=r1)  .gt.  tout (=r2)',
+     1  'lsode--  itask = 4 or 5 and tcrit (=r1)  .lt.  tout (=r2)',
      1   60, 25, 1, 0, 0, 0, 2, tcrit, tout)
       go to 700
  626  call xerrwv('lsode-- initial precision required',

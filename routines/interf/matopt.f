@@ -10,9 +10,7 @@ c
       common /optim/ nomsub
       integer       nizs,nrzs,ndzs
       common /nird/ nizs,nrzs,ndzs
-      external foptim , boptim , fuclid
-      integer ipin(10),setpar
-      double precision rpin(8)
+      external foptim,boptim,fuclid,ctonb,ctcab
       integer coin,coar,coti,cotd,cosi,cosd,nfac
 c     
       double precision tol
@@ -589,14 +587,14 @@ c     affectation de indopt
          if(epsg1.ge.epsg) indopt=1
          go to 300
       endif
-c     
-c     optimiseur n1qn2
+
+c     algorithme n1qn3
       if(icontr.eq.1.and.ialg.eq.2) then
 c     calcul de epsrel
          zng=0.0d+0
-         do 130 i=0,nx-1
+         do 230 i=0,nx-1
             zng=zng + stk(lg+i)**2
- 130     continue
+ 230     continue
          zng=sqrt(zng)
          if (zng.gt.0.0d+0) epsg=epsg/zng
 c     calcul du scalaire dxmin
@@ -604,14 +602,14 @@ c     calcul du scalaire dxmin
          if (iepsx.eq.0) then
             dxmin=stk(lepsx)
             if (nx.gt.1) then
-               do 135 i=1,nx-1
+               do 235 i=1,nx-1
                   dxmin=min(dxmin,stk(lepsx+i))
- 135           continue
+ 235           continue
             endif
          endif
 c     tableaux de travail (mmx=nombre de mises a jour)
-         if (immx.eq.0) mmx=6
-         ntv=3*nx + mmx*(2*nx + 1)
+         if (immx.eq.0) mmx=10
+         ntv=4*nx + mmx*(2*nx + 1)
          ltv=ldisp
          ldisp=ltv + ntv
          err=ldisp - lstk(bot)
@@ -622,12 +620,18 @@ c     tableaux de travail (mmx=nombre de mises a jour)
          lstk(top+1)=ldisp
 c     
          if(isim.eq.1) then
-            call n1qn2(foptim,fuclid,nx,stk(lx),stk(lf),stk(lg),
-     $           dxmin,df0,epsg,imp,io,mode,itmax,napm,
+            indsim=4
+            call foptim(indsim,nx,stk(lx),stk(lf),stk(lg),
+     &           istk(lizs),fstk(lrzs),stk(ldzs))
+            call n1qn3(foptim,fuclid,ctonb,ctcab,nx,stk(lx),stk(lf),
+     $           stk(lg),dxmin,df0,epsg,imp,io,mode,itmax,napm,
      &           stk(Ltv),Ntv,istk(lizs),fstk(lrzs),stk(ldzs) )
          else
-            call n1qn2(boptim,fuclid,nx,stk(lx),stk(lf),stk(lg),
-     &           dxmin,df0,epsg,imp,io,mode,itmax,napm,
+            indsim=4
+            call boptim(indsim,nx,stk(lx),stk(lf),stk(lg),
+     &           istk(lizs),fstk(lrzs),stk(ldzs))
+            call n1qn3(boptim,fuclid,ctonb,ctcab,nx,stk(lx),stk(lf),
+     &           stk(lg),dxmin,df0,epsg,imp,io,mode,itmax,napm,
      &           stk(ltv),ntv,istk(lizs),fstk(lrzs),stk(ldzs) )
          endif
          if (err.gt.0) return
@@ -649,7 +653,7 @@ c     optimiseur n1fc1 (non smooth)
          nitv=2*mmx + 2
          itv1=5*nx + (nx+4)*mmx
          itv2=(mmx+9)*mmx + 8
-         err=lg + iepsx*nx + nitv/2 +1 +itv1 +itv2 -lstk(bot)
+         err=ldisp + iepsx*nx + nitv/2 +1 +itv1 +itv2 -lstk(bot)
          if (err.gt.0) then
             call error(17)
             return
@@ -659,6 +663,7 @@ c     optimiseur n1fc1 (non smooth)
             do 115 i=1,nx
                stk(lepsx+i - 1)=zero
  115        continue
+            ldisp=lepsx+nx
          endif
          litv=iadr(ldisp)
          ltv1=sadr(litv+nitv)

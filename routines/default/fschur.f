@@ -23,15 +23,9 @@ c+
         return
       endif
 c+
-c dynamically called routines
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(namef,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.namef) goto 1001
-cc sun unix
-c  to call subroutine foo(lsize,alpha,beta,s,p,ii)
-c  ii=1 --> good eigenvalue
-c  ii=-1 --> bad eigenvalue
       call dyncall(it1-1,lsize,alpha,beta,s,p,ii)
       fschur=ii
 cc end

@@ -27,7 +27,7 @@
 
 /* cursor.c */
 
-#include "x_ptyx.h"		/* also gets Xlib.h */
+#include "x_ptyxP.h"		/* also gets Xlib.h */
 
 static void _CheckSelection(screen)
 register TScreen *screen;
@@ -211,15 +211,15 @@ register TScreen *screen;
 /*
  * Save Cursor and Attributes
  */
-CursorSave(term, sc)
-register XtermWidget term;
-register SavedCursor *sc;
+CursorSave(term1, sc)
+     register XtermWidget term1;
+     register SavedCursor *sc;
 {
-	register TScreen *screen = &term->screen;
+	register TScreen *screen = &term1->screen;
 
 	sc->row = screen->cur_row;
 	sc->col = screen->cur_col;
-	sc->flags = term->flags;
+	sc->flags = term1->flags;
 	sc->curgl = screen->curgl;
 	sc->curgr = screen->curgr;
 	bcopy(screen->gsets, sc->gsets, sizeof(screen->gsets));
@@ -228,17 +228,17 @@ register SavedCursor *sc;
 /*
  * Restore Cursor and Attributes
  */
-CursorRestore(term, sc)
-register XtermWidget term;
+CursorRestore(term1, sc)
+register XtermWidget term1;
 register SavedCursor *sc;
 {
-	register TScreen *screen = &term->screen;
+  register TScreen *screen = &term1->screen;
 
-	bcopy(sc->gsets, screen->gsets, sizeof(screen->gsets));
-	screen->curgl = sc->curgl;
-	screen->curgr = sc->curgr;
-	term->flags &= ~(BOLD|INVERSE|UNDERLINE|ORIGIN);
-	term->flags |= sc->flags & (BOLD|INVERSE|UNDERLINE|ORIGIN);
-	CursorSet (screen, (term->flags & ORIGIN) ? sc->row - screen->top_marg
-			   : sc->row, sc->col, term->flags);
+  bcopy(sc->gsets, screen->gsets, sizeof(screen->gsets));
+  screen->curgl = sc->curgl;
+  screen->curgr = sc->curgr;
+  term1->flags &= ~(BOLD|INVERSE|UNDERLINE|ORIGIN);
+  term1->flags |= sc->flags & (BOLD|INVERSE|UNDERLINE|ORIGIN);
+  CursorSet (screen, (term1->flags & ORIGIN) ? sc->row - screen->top_marg
+	     : sc->row, sc->col, term1->flags);
 }

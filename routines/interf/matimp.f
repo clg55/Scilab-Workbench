@@ -12,7 +12,6 @@ c
       common/cres/namres
       common/cjac/namjac
       integer iadr,sadr
-
 c
       double precision atol,rtol,t0,t1,tj,tf,tf1
       integer top2,tope,hsize
@@ -20,12 +19,11 @@ c
       external bresid,badd,bj2
       external fres,fadda,fj2
       integer adams,raide
-      
       integer info(15)
       logical hotstart
       double precision tout,tstop,maxstep,stepin
-      character*6 namer,namej
-      common /dassln/ namer,namej
+      character*6 namer,namej,names
+      common /dassln/ namer,namej,names
       external bresd,bjacd
       common/ierode/iero
 c     
@@ -34,18 +32,16 @@ c
 c     
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
-      
-      
 c     
-c     impl     dassl
-c     1         2
+c     impl     dassl     dasrt
+c     1         2          3
 c     
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
          call basout(io,wte,' matimp '//buf(1:4))
       endif
 c     
-      goto(10,100) fin
+      goto(10,100,1000) fin
 c     
  10   if(rhs.lt.6) then
          call error(39)
@@ -628,7 +624,7 @@ c
       il6=iadr(lstk(kres))
       if (istk(il6) .eq. 10) then
          if (istk(il6+1)*istk(il6+2) .ne. 1) then
-            err = 6
+            err = 6-iskip
             call error(89)
             return
          endif
@@ -651,7 +647,7 @@ c
          info(5)=1
          if (istk(il7) .eq. 10) then
             if (istk(il7+1)*istk(il7+2) .ne. 1) then
-               err = 7
+               err = 7-iskip
                call error(89)
                return
             endif
@@ -666,7 +662,7 @@ c     checking variable info (number 8)
 c     
       il8 = iadr(lstk(top-rhs+8-iskip))
       if (istk(il8) .ne. 15) then
-         err = 8
+         err = 8-iskip
          call error(56)
          return
       endif
@@ -780,7 +776,7 @@ C     for the full (dense) JACOBIAN case
       elseif(info(5).eq.1) then
 C     for the banded user-defined JACOBIAN case
          lrw=40+(maxord+4)*neq+(2*ml+mu+1)*neq
-      elseif(info(5).eq.1) then
+      elseif(info(5).eq.0) then
 C     for the banded finite-difference-generated JACOBIAN case
          lrw = 40+(maxord+4)*neq+(2*ml+mu+1)*neq+2*(neq/(ml+mu+1)+1)
       endif
@@ -897,7 +893,7 @@ C     stepping past TOUT. Y,ydot are obtained by interpolation.
 C     A large amount of work has been expended (About 500 steps)
             call msgstxt('to many steps necessary to reached next '//
      &           'required time discretization point')
-            call msgstxt('Precise discretisation of time vector t '//
+            call msgstxt('Change discretisation of time vector t '//
      &           'or decrease accuracy')
             stk(lyri)=t0
             goto 125
@@ -929,8 +925,8 @@ C     The corrector could not converge.
             goto 125
          elseif(idid.eq.-8) then
 C     The matrix of partial derivatives is singular.
-            buf='The matrix of partial derivatives is singular'//
-     &           'Some of your equations may be redundant'
+            buf='Singular partial derivatives matrix'//
+     &           ' (may be redundant equations)'
             call error(9986)
             return
          elseif(idid.eq.-9) then
@@ -941,7 +937,7 @@ c     test failures in this step.
             goto 125
          elseif(idid.eq.-10) then
             call msgstxt('external ''res'' return many times'//
-     &           'with ires=-1')
+     &           ' with ires=-1')
             goto 125
          elseif(idid.eq.-11) then
 C     IRES equal to -2 was encountered  and control is being returned to the
@@ -1003,6 +999,11 @@ c     Remise en place de la pile
  150  call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)
       return
       
+ 1000 continue
+      call dasrti
+      return      
 c     
       
       end
+
+

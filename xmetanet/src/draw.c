@@ -20,17 +20,19 @@ void MakeDraw()
   int iargs = 0;
   static char translations[] =
     "<Expose>: ActionWhenExpose()\n\
-    <BtnDown>: ActionWhenPress()\n\
-    <BtnUp>: ActionWhenRelease()\n\
-    <BtnMotion>: ActionWhenDownMove()\n\
+    <Btn1Down>: ActionWhenPress1()\n\
+    <Btn3Down>: ActionWhenPress3()\n\
+    <Btn3Up>: ActionWhenRelease3()\n\
+    <Btn3Motion>: ActionWhenDownMove3()\n\
     <Leave>: ActionWhenLeave()";
   XtTranslations compiled_translation_table;
   Widget viewchild;
+  XWindowAttributes war;
 
   XtSetArg(args[iargs], XtNfromHoriz, NULL); iargs++;
   XtSetArg(args[iargs], XtNfromVert, metanetMenu); iargs++;
   XtSetArg(args[iargs], XtNwidth, metaWidth); iargs++;
-  XtSetArg(args[iargs], XtNheight, viewHeight); iargs++;
+  XtSetArg(args[iargs], XtNheight, metaHeight); iargs++;
   XtSetArg(args[iargs], XtNallowHoriz, TRUE); iargs++;
   XtSetArg(args[iargs], XtNallowVert, TRUE); iargs++;
   XtSetArg(args[iargs], XtNforceBars, TRUE); iargs++;
@@ -69,14 +71,7 @@ void ClearDraw()
 
 #define SetForeground(gc,color) XSetForeground(theG.dpy,gc,color)
 
-void SetWidth(gc,width)
-GC gc;
-int width;
-{
-  XGCValues gcv;
-  gcv.line_width = width;
-  XChangeGC(theG.dpy,gc,GCLineWidth,&gcv);
-}
+#define SetWidth(gc,width) XSetLineAttributes(theG.dpy,gc,width,LineSolid,CapButt,JoinMiter)
 
 /* ARC */
 
@@ -165,12 +160,66 @@ void DrawXorStraightArc(x0,y0,x1,y1)
 int x0, y0, x1, y1;
 {
   SetWidth(theG.gc_xor,arcW);
+  SetForeground(theG.gc_xor,theColor ^ theG.bg);
   XDrawLine(theG.dpy,theG.d,theG.gc_xor,(int)(x0*metaScale),
 	    (int)(y0*metaScale),
 	    (int)(x1*metaScale),(int)(y1*metaScale));
 }
 
 void DrawCurvedArc(x0,y0,x2,y2,x3,y3,x1,y1)
+short x0, y0, x2, y2, x3, y3, x1, y1;
+{
+  XPoint points[4];
+  int i = 0;
+  points[i].x = (short)(x0*metaScale); points[i].y = (short)(y0*metaScale);
+  i++;
+  points[i].x = (short)(x2*metaScale); points[i].y = (short)(y2*metaScale);
+  i++;
+  points[i].x = (short)(x3*metaScale); points[i].y = (short)(y3*metaScale);
+  i++;
+  points[i].x = (short)(x1*metaScale); points[i].y = (short)(y1*metaScale);
+  i++;
+  SetWidth(theG.gc,arcW);
+  SetForeground(theG.gc,theColor);
+  XDrawLines(theG.dpy,theG.d,theG.gc,points,i,CoordModeOrigin);
+}
+
+void ClearCurvedArc(x0,y0,x2,y2,x3,y3,x1,y1)
+short x0, y0, x2, y2, x3, y3, x1, y1;
+{
+  XPoint points[4];
+  int i = 0;
+  points[i].x = (short)(x0*metaScale); points[i].y = (short)(y0*metaScale);
+  i++;
+  points[i].x = (short)(x2*metaScale); points[i].y = (short)(y2*metaScale);
+  i++;
+  points[i].x = (short)(x3*metaScale); points[i].y = (short)(y3*metaScale);
+  i++;
+  points[i].x = (short)(x1*metaScale); points[i].y = (short)(y1*metaScale);
+  i++;
+  SetWidth(theG.gc_clear,arcW);
+  XDrawLines(theG.dpy,theG.d,theG.gc_clear,points,i,CoordModeOrigin);
+}
+
+void DrawXorCurvedArc(x0,y0,x2,y2,x3,y3,x1,y1)
+short x0, y0, x2, y2, x3, y3, x1, y1;
+{
+  XPoint points[4];
+  int i = 0;
+  points[i].x = (short)(x0*metaScale); points[i].y = (short)(y0*metaScale);
+  i++;
+  points[i].x = (short)(x2*metaScale); points[i].y = (short)(y2*metaScale);
+  i++;
+  points[i].x = (short)(x3*metaScale); points[i].y = (short)(y3*metaScale);
+  i++;
+  points[i].x = (short)(x1*metaScale); points[i].y = (short)(y1*metaScale);
+  i++;
+  SetWidth(theG.gc_xor,arcW);
+  SetForeground(theG.gc_xor,theColor ^ theG.bg);
+  XDrawLines(theG.dpy,theG.d,theG.gc_xor,points,i,CoordModeOrigin);
+}
+
+void DrawLoopArc(x0,y0,x2,y2,x3,y3,x1,y1)
 short x0, y0, x2, y2, x3, y3, x1, y1;
 {
   xBezier points[1];
@@ -187,7 +236,7 @@ short x0, y0, x2, y2, x3, y3, x1, y1;
   DrawBezier(theG.dpy,theG.d,theG.gc,points,1);
 }
 
-void ClearCurvedArc(x0,y0,x2,y2,x3,y3,x1,y1)
+void ClearLoopArc(x0,y0,x2,y2,x3,y3,x1,y1)
 short x0, y0, x2, y2, x3, y3, x1, y1;
 {
   xBezier points[1];
@@ -203,7 +252,7 @@ short x0, y0, x2, y2, x3, y3, x1, y1;
   DrawBezier(theG.dpy,theG.d,theG.gc_clear,points,1);
 }
 
-void DrawXorCurvedArc(x0,y0,x2,y2,x3,y3,x1,y1)
+void DrawXorLoopArc(x0,y0,x2,y2,x3,y3,x1,y1)
 short x0, y0, x2, y2, x3, y3, x1, y1;
 {
   xBezier points[1];
@@ -216,6 +265,7 @@ short x0, y0, x2, y2, x3, y3, x1, y1;
   points[0].x3 = (short)(x1*metaScale);
   points[0].y3 = (short)(y1*metaScale);
   SetWidth(theG.gc_xor,arcW);
+  SetForeground(theG.gc_xor,theColor ^ theG.bg);
   DrawBezier(theG.dpy,theG.d,theG.gc_xor,points,1);
 }
 
@@ -229,26 +279,6 @@ short xa0, ya0, xa1, ya1, xa2, ya2;
   points[i].x = (short)(xa1*metaScale); points[i].y = (short)(ya1*metaScale);
   i++;
   points[i].x = (short)(xa2*metaScale); points[i].y = (short)(ya2*metaScale);
-  i++;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-  i++;
-  SetWidth(theG.gc,arcW);
-  SetForeground(theG.gc,theColor);
-  XDrawLines(theG.dpy,theG.d,theG.gc,points,i,CoordModeOrigin);
-}
-
-void DrawDoubleArcArrow(xa0,ya0,xa1,ya1,xa2,ya2,xa3,ya3)
-short xa0, ya0, xa1, ya1, xa2, ya2, xa3, ya3;
-{
-  XPoint points[5];
-  int i = 0;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-  i++;
-  points[i].x = (short)(xa1*metaScale); points[i].y = (short)(ya1*metaScale);
-  i++;
-  points[i].x = (short)(xa2*metaScale); points[i].y = (short)(ya2*metaScale);
-  i++;
-  points[i].x = (short)(xa3*metaScale); points[i].y = (short)(ya3*metaScale);
   i++;
   points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
   i++;
@@ -274,25 +304,6 @@ short xa0, ya0, xa1, ya1, xa2, ya2;
   XDrawLines(theG.dpy,theG.d,theG.gc_clear,points,i,CoordModeOrigin);
 }
 
-void ClearDoubleArcArrow(xa0,ya0,xa1,ya1,xa2,ya2,xa3,ya3)
-short xa0, ya0, xa1, ya1, xa2, ya2, xa3, ya3;
-{
-  XPoint points[5];
-  int i = 0;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-  i++;
-  points[i].x = (short)(xa1*metaScale); points[i].y = (short)(ya1*metaScale);
-  i++;
-  points[i].x = (short)(xa2*metaScale); points[i].y = (short)(ya2*metaScale);
-  i++;
-  points[i].x = (short)(xa3*metaScale); points[i].y = (short)(ya3*metaScale);
-  i++;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-  i++;
-  SetWidth(theG.gc_clear,arcW);
-  XDrawLines(theG.dpy,theG.d,theG.gc_clear,points,i,CoordModeOrigin);
-}
-
 void DrawXorArcArrow(xa0,ya0,xa1,ya1,xa2,ya2)
 short xa0, ya0, xa1, ya1, xa2, ya2;
 {
@@ -307,25 +318,7 @@ short xa0, ya0, xa1, ya1, xa2, ya2;
   points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
   i++;
   SetWidth(theG.gc_xor,arcW);
-  XDrawLines(theG.dpy,theG.d,theG.gc_xor,points,i,CoordModeOrigin);
-}
-
-void DrawXorDoubleArcArrow(xa0,ya0,xa1,ya1,xa2,ya2,xa3,ya3)
-short xa0, ya0, xa1, ya1, xa2, ya2, xa3, ya3;
-{
-  XPoint points[5];
-  int i = 0;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-  i++;
-  points[i].x = (short)(xa1*metaScale); points[i].y = (short)(ya1*metaScale);
-  i++;
-  points[i].x = (short)(xa2*metaScale); points[i].y = (short)(ya2*metaScale);
-  i++;
-  points[i].x = (short)(xa3*metaScale); points[i].y = (short)(ya3*metaScale);
-  i++;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-  i++;
-  SetWidth(theG.gc_xor,arcW);
+  SetForeground(theG.gc_xor,theColor ^ theG.bg);
   XDrawLines(theG.dpy,theG.d,theG.gc_xor,points,i,CoordModeOrigin);
 }
 
@@ -347,8 +340,42 @@ int x0, y0, x1, y1;
 	    (int)(x1*metaScale),(int)(y1*metaScale));
 }
 
-
 void HiliteCurvedArc(x0,y0,x2,y2,x3,y3,x1,y1)
+short x0, y0, x2, y2, x3, y3, x1, y1;
+{
+  XPoint points[4];
+  int i = 0;
+  points[i].x = (short)(x0*metaScale); points[i].y = (short)(y0*metaScale);
+  i++;
+  points[i].x = (short)(x2*metaScale); points[i].y = (short)(y2*metaScale);
+  i++;
+  points[i].x = (short)(x3*metaScale); points[i].y = (short)(y3*metaScale);
+  i++;
+  points[i].x = (short)(x1*metaScale); points[i].y = (short)(y1*metaScale);
+  i++;
+  SetWidth(theG.gc,arcH);
+  SetForeground(theG.gc,theColor);
+  XDrawLines(theG.dpy,theG.d,theG.gc,points,i,CoordModeOrigin);
+}
+
+void UnhiliteCurvedArc(x0,y0,x2,y2,x3,y3,x1,y1)
+short x0, y0, x2, y2, x3, y3, x1, y1;
+{
+  XPoint points[4];
+  int i = 0;
+  points[i].x = (short)(x0*metaScale); points[i].y = (short)(y0*metaScale);
+  i++;
+  points[i].x = (short)(x2*metaScale); points[i].y = (short)(y2*metaScale);
+  i++;
+  points[i].x = (short)(x3*metaScale); points[i].y = (short)(y3*metaScale);
+  i++;
+  points[i].x = (short)(x1*metaScale); points[i].y = (short)(y1*metaScale);
+  i++;
+  SetWidth(theG.gc_clear,arcH);
+  XDrawLines(theG.dpy,theG.d,theG.gc_clear,points,i,CoordModeOrigin);
+}
+
+void HiliteLoopArc(x0,y0,x2,y2,x3,y3,x1,y1)
 short x0, y0, x2, y2, x3, y3, x1, y1;
 {
   xBezier points[1];
@@ -365,7 +392,7 @@ short x0, y0, x2, y2, x3, y3, x1, y1;
   DrawBezier(theG.dpy,theG.d,theG.gc,points,1);
 }
 
-void UnhiliteCurvedArc(x0,y0,x2,y2,x3,y3,x1,y1)
+void UnhiliteLoopArc(x0,y0,x2,y2,x3,y3,x1,y1)
 short x0, y0, x2, y2, x3, y3, x1, y1;
 {
   xBezier points[1];
@@ -399,26 +426,6 @@ short xa0, ya0, xa1, ya1, xa2, ya2;
   XDrawLines(theG.dpy,theG.d,theG.gc,points,i,CoordModeOrigin);
 }
 
-void HiliteDoubleArcArrow(xa0,ya0,xa1,ya1,xa2,ya2,xa3,ya3)
-short xa0, ya0, xa1, ya1, xa2, ya2, xa3, ya3;
-{
-    XPoint points[5];
-  int i = 0;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-    i++;
-  points[i].x = (short)(xa1*metaScale); points[i].y = (short)(ya1*metaScale);
-    i++;
-  points[i].x = (short)(xa2*metaScale); points[i].y = (short)(ya2*metaScale);
-    i++;
-  points[i].x = (short)(xa3*metaScale); points[i].y = (short)(ya3*metaScale);
-    i++;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-    i++;
-  SetWidth(theG.gc,arcH);
-  SetForeground(theG.gc,theColor);
-  XDrawLines(theG.dpy,theG.d,theG.gc,points,i,CoordModeOrigin);
-}
-
 void UnhiliteArcArrow(xa0,ya0,xa1,ya1,xa2,ya2)
 short xa0, ya0, xa1, ya1, xa2, ya2;
 {
@@ -429,25 +436,6 @@ short xa0, ya0, xa1, ya1, xa2, ya2;
   points[i].x = (short)(xa1*metaScale); points[i].y = (short)(ya1*metaScale);
   i++;
   points[i].x = (short)(xa2*metaScale); points[i].y = (short)(ya2*metaScale);
-  i++;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-  i++;
-  SetWidth(theG.gc_clear,arcH);
-  XDrawLines(theG.dpy,theG.d,theG.gc_clear,points,i,CoordModeOrigin);
-}
-
-void UnhiliteDoubleArcArrow(xa0,ya0,xa1,ya1,xa2,ya2,xa3,ya3)
-short xa0, ya0, xa1, ya1, xa2, ya2, xa3, ya3;
-{
-  XPoint points[5];
-  int i = 0;
-  points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
-  i++;
-  points[i].x = (short)(xa1*metaScale); points[i].y = (short)(ya1*metaScale);
-  i++;
-  points[i].x = (short)(xa2*metaScale); points[i].y = (short)(ya2*metaScale);
-  i++;
-  points[i].x = (short)(xa3*metaScale); points[i].y = (short)(ya3*metaScale);
   i++;
   points[i].x = (short)(xa0*metaScale); points[i].y = (short)(ya0*metaScale);
   i++;
@@ -527,9 +515,8 @@ char *str;
 		 fw+2,fh);  
 }
 
-void DrawPlainNode(x,y,str)
+void DrawPlainNode(x,y)
 int x, y;
-char *str;
 {
   XFillArc(theG.dpy,theG.d,theG.gc_clear,(int)(x*metaScale),(int)(y*metaScale),
 	   (int)(nodeDiam*metaScale),(int)(nodeDiam*metaScale),0,360 * 64);
@@ -537,25 +524,23 @@ char *str;
   SetForeground(theG.gc,theColor);
   XDrawArc(theG.dpy,theG.d,theG.gc,(int)(x*metaScale),(int)(y*metaScale),
 	   (int)(nodeDiam*metaScale),(int)(nodeDiam*metaScale),0,360 * 64);
-  if (nodeNameDisplay) DrawNodeName(x,y,str);
 }
 
-void ClearPlainNode(x,y,str)
+void ClearPlainNode(x,y)
 int x, y;
-char *str;
 {
   XFillArc(theG.dpy,theG.d,theG.gc_clear,(int)(x*metaScale),(int)(y*metaScale),
 	   (int)(nodeDiam*metaScale),(int)(nodeDiam*metaScale),0,360 * 64);
   SetWidth(theG.gc_clear,nodeW);
   XDrawArc(theG.dpy,theG.d,theG.gc_clear,(int)(x*metaScale),(int)(y*metaScale),
 	   (int)(nodeDiam*metaScale),(int)(nodeDiam*metaScale),0,360 * 64);
-  if (nodeNameDisplay) ClearNodeName(x,y,str);
 }
 
 void DrawXorPlainNode(x,y)
 int x, y;
 {
   SetWidth(theG.gc_xor,nodeW);
+  SetForeground(theG.gc_xor,theColor ^ theG.bg);
   XDrawArc(theG.dpy,theG.d,theG.gc_xor,(int)(x*metaScale),(int)(y*metaScale),
 	   (int)(nodeDiam*metaScale),(int)(nodeDiam*metaScale),0,360 * 64);
 }
@@ -665,6 +650,7 @@ short x, y, w, h, l;
   points[i].y = (short)((y - w)*metaScale); i++;
   points[i].x = (short)(x*metaScale); points[i].y = (short)(y*metaScale); i++;
   SetWidth(theG.gc_xor,nodeW);
+  SetForeground(theG.gc_xor,theColor ^ theG.bg);
   XDrawLines(theG.dpy,theG.d,theG.gc_xor,points,i,CoordModeOrigin);
 }
 
@@ -710,24 +696,20 @@ int x, y;
 	     nodeDiam, 2 * nodeDiam, nodeDiam / 3);
 }
 
-void HilitePlainNode(x,y,str)
+void HilitePlainNode(x,y)
 int x, y;
-char *str;
 {
   SetForeground(theG.gc,theColor);
   XFillArc(theG.dpy,theG.d,theG.gc,(int)(x*metaScale),(int)(y*metaScale),
 	   (int)(nodeDiam*metaScale),(int)(nodeDiam*metaScale),0,360 * 64);
-  if (nodeNameDisplay) HiliteNodeName(x,y,str);
 }
 
-void UnhilitePlainNode(x,y,str)
+void UnhilitePlainNode(x,y)
 int x, y;
-char *str;
 {
-  if (nodeNameDisplay) UnhiliteNodeName(x,y,str);
   XFillArc(theG.dpy,theG.d,theG.gc_clear,(int)(x*metaScale),(int)(y*metaScale),
 	   (int)(nodeDiam*metaScale),(int)(nodeDiam*metaScale),0,360 * 64);
-  DrawPlainNode(x,y,str);
+  DrawPlainNode(x,y);
 }
 
 void HiliteSArrow(x,y,w,h,l)

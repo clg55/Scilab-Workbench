@@ -1,4 +1,4 @@
-//<h2>=cheb2mag(n,omegar,A,sample)
+function [h2]=cheb2mag(n,omegar,A,sample)
 //<h2>=cheb2mag(n,omegar,A,sample)
 //Square magnitude response of a type 1 Chebyshev filter
 //omegar = stopband edge
@@ -18,7 +18,5 @@
    Tn=chepol(n,'x');             //n-th Chebyshev polynomial
    frd=freq(Tn,1,omegar*un./sample);   //frd=Tn(omegar/sample)
    h2=un./(un+(A*A-1)*un./real(frd.*frd))
- 
-//end
 
 

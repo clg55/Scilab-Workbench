@@ -12,9 +12,10 @@ if odem = 'discrete'; style_d=x_choose(['trait continu','points'],['option de de
 	style_d=maxi(style_d-2,-1);end
 if rhs <= 2,
   if ~isdef('p_xdim');p_xdim=['-1';'-1';'1';'1'];end
-  p_xdim=x_mdialog('Graphic boundaries',...
+  rep=x_mdialog('Graphic boundaries',...
             ['xmin';'ymin';'xmax';'ymax'],...
             p_xdim);
+  if rep<>[] ;p_xdim=rep;end
   xdim=evstr(p_xdim');
   // Test sur le cadre
   if xdim(3) <= xdim(1),
@@ -25,8 +26,9 @@ end
 res=x_choose(['yes';'no'],'Do you also want to draw the vector field')
 if res==1;
   if ~isdef('p_nxx');p_nxx=['10';'10'];end;
-  p_nxx=x_mdialog('Number of grid points',...
+  rep=x_mdialog('Number of grid points',...
             ['Nx';'Ny'],p_nxx);
+  if rep<>[] then p_nxx=rep ;end
   nxx=evstr(p_nxx);
   nx=maxi(nxx(1),2)
   ny=maxi(nxx(2),2)
@@ -41,8 +43,9 @@ end
 plot2d([xdim(1);xdim(1);xdim(3)],[xdim(2);xdim(4);xdim(4)])
 if rhs<=3,
   if ~isdef('p_npts');p_npts=['100';'0.1'];end;
-  p_npts=x_mdialog('Requested points and step ',...
+  rep=x_mdialog('Requested points and step ',...
             ['n points';'step'],p_npts);
+  if rep <> [] then p_npts=rep;end
   npts=evstr(p_npts');
 end
 ylast=(1/2)*[xdim(3)+xdim(1),xdim(4)+xdim(2)]';
@@ -72,7 +75,7 @@ if res=1,write(%io(2),'Points hors du cadre elimines ');end;
 end
 lines(ncnl(1));
 [p_xdim,p_npts,p_nxx]=resume(p_xdim,p_npts,p_nxx);
-//end
+
 
 function []=addtitle(fch)
 // Adds know titles 
@@ -90,13 +93,14 @@ if fch='bcomp',xtitle("Modele de competition observe-comtrole ",...
     "population 1 ","population2 ",0);end
 if fch='lcomp',xtitle("Modele de competition linearise observe-comtrole ",...
     "population 1 ","population2 ",0);end
-//end
+
 
 function [res]=desorb(odem,x0,n1,fch,farrow,xdim);
 // Used by portrait 
 //!
 res=0
 [nn1,n2]=size(x0);
+style=-1;
 if odem='discrete', style=style_d;end
 for i=1:n2,
     ftest=1;
@@ -137,6 +141,6 @@ for i=1:n2,
     end
 end
 [ylast]=resume(ylast)
-//end
+
 
 

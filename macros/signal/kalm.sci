@@ -1,5 +1,5 @@
-//<x1,p1,x,p>=kalm(y,x0,p0,f,g,h,q,r)
-//<x1,p1,x,p>=kalm(y,x0,p0,f,g,h,q,r)
+function [x1,p1,x,p]=kalm(y,x0,p0,f,g,h,q,r)
+//[x1,p1,x,p]=kalm(y,x0,p0,f,g,h,q,r)
 //macro which gives the Kalman update and error variance
 //Input to the macro is:
 // f,g,h  :current system matrices
@@ -21,7 +21,5 @@
    p1=f*p*f'+g*q*g';
    x=x0+k*(y-h*x0);
    x1=f*x;
- 
-//end
 
 

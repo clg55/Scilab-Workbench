@@ -16,7 +16,7 @@ if rhs=3 then
   s=exp([-a,m;0*a a']*dt),
   r=f*s(1:n1,n1+1:n1+n1),
 end;
-f=list('lss',f,g,c,d,x0,dt)
+f=tlist('lss',f,g,c,d,x0,dt)
 
 
 

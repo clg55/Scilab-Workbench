@@ -2,12 +2,14 @@
 ---------------------------------------------------------------------------*/
 
  extern int  drawarc_pos_();
+ extern int  fillarcs_pos_();
  extern int  drawarcs_pos_();
  extern int  fillpolyline_pos_();
  extern int  drawaxis_pos_();
  extern int  cleararea_pos_();
  extern int  clearwindow_pos_();
  extern int  xclick_pos_();
+ extern int  xclick_any_pos_();
  extern int  xgetmouse_pos_();
  extern int  xend_pos_();
  extern int  fillarc_pos_();

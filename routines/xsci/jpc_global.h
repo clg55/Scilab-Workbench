@@ -149,7 +149,6 @@ extern void		MakeDirList();		/* maintain list of dirs */
 
 /* utils.c */
 
-extern XawTextPosition	TextGetLastPos();	/* get last pos of text */
 extern int 		TextPositionToLine();	/* convert line # to text pos */
 extern int		LineToStop_no();	/* convert line # to stop # */
 extern void 		DisableWindowResize();  /* do not allow window resize */
@@ -200,13 +199,3 @@ extern Stops    stops[];		/* stop widget and mapped info */
 extern Bomb	bomb;			/* bomb widget and mapped info */
 extern Cardinal nstops;			/* number of stops */
 
-/*****
-#ifdef GDB
-extern void 		display_info_handler();
-extern void 		break_handler();
-extern void 		info_dir_handler();
-extern void 		directory_handler();
-extern void 		info_line_handler();
-extern void 		info_break_handler();
-#endif
-****/

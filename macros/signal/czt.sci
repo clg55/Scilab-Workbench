@@ -1,5 +1,5 @@
-//<czx>=czt(x,m,w,phi,a,theta)
-//<czx>=czt(x,m,w,phi,a,theta)
+function [czx]=czt(x,m,w,phi,a,theta)
+//czx=czt(x,m,w,phi,a,theta)
 //chirp z-transform algorithm which calcultes the
 //z-transform on a spiral in the z-plane at the points
 //[a*exp(j*theta)][w**kexp(j*k*phi)] for k=0,1,...,m-1.
@@ -46,7 +46,6 @@
 //preserve m points and divide by h(n)
  
    czx=hcg(1:m)./h(nm:nm+m-1);
- 
-//end
+
 
 

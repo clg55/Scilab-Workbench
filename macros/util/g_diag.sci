@@ -65,9 +65,16 @@ case 6 then
       d=sparse([ij(:,1),ij(:,1)+k],v,[nn,nn])
     end
   end
+  
+//-compat next case retained for list/tlist compatibility
 case 15 then
   if a(1)=='r' then
     d=a;
-    d=list(a(1),diag(a(2),k),diag(a(3),k),a(4))
+    d=tlist('r',diag(a(2),k),diag(a(3),k),a(4))
   end
+case 16 then
+  if a(1)=='r' then
+    d=a;
+    d=tlist('r',diag(a(2),k),diag(a(3),k),a(4))
+  end  
 end

@@ -1,4 +1,4 @@
-function [val]=evstr(str)
+function val=evstr(str)
 select type(str)
  case 10 then
     [m,n]=size(str),

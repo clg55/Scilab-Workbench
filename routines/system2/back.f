@@ -1,13 +1,17 @@
       subroutine back(no)
       include '../stack.h'
-      integer adr
+      integer iadr,sadr
       dimension sstk(2*vsiz)
       equivalence (sstk(1),stk(1))
 c
       common/adre/lbot,ie,is,ipal,nbarg,ll(30)
       common/ibfu/ibuf(200)
 c
-      il=adr(lstk(top),0)
+c     
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(top))
       istk(il)=1
       is1=3*ie+1
       do 1 k=1,30
@@ -15,7 +19,7 @@ c
       if(ibuf(is1).eq.no) goto 2
       is1=is1+3
  1    continue
- 100  buf='variable de sortie non trouvee'
+ 100  buf='output variable not found'
       call error(999)
       return
   2   continue
@@ -27,14 +31,14 @@ c
       istk(il+2)=n
       istk(il+3)=0
       ivol=m*n
-      l=adr(il+4,1)
-      lll=adr(ll(no),0)
+      l=sadr(il+4)
+      lll=iadr(ll(no))
       if(itf.eq.0) return
 c
       if(itf.eq.27) goto 10
       if(itf.eq.18) goto 30
       if(itf.ne.13) then
-      buf='variable fortran de type incorrect'
+      buf='invalid (fortran) variable'
       call error(999)
       return
       endif
@@ -43,9 +47,9 @@ c
       goto 200
 c
   10  continue
-      if((lll+ivol-1).ge.adr(l+ivol-1,0)) goto 15
-      if(lll.le.adr(l,0)) goto 20
-      iboum=adr(lll-adr(l,0),1)
+      if((lll+ivol-1).ge.iadr(l+ivol-1)) goto 15
+      if(lll.le.iadr(l)) goto 20
+      iboum=sadr(lll-iadr(l))
       imont=2*iboum-2
       ides=ivol-imont
       do 11 k=1,imont
@@ -67,9 +71,9 @@ c
       goto 200
 c
    30  continue
-      if((lll+ivol-1).ge.adr(l+ivol-1,0)) goto 35
-      if(lll.le.adr(l,0)) goto 40
-      iboum=adr(lll-adr(l,0),1)
+      if((lll+ivol-1).ge.iadr(l+ivol-1)) goto 35
+      if(lll.le.iadr(l)) goto 40
+      iboum=sadr(lll-iadr(l))
       imont=2*iboum-2
       ides=ivol-imont
       do 31 k=1,imont

@@ -1632,7 +1632,7 @@ c-----------------------------------------------------------------------
      1   60, 24, 1, 0, 0, 0, 2, tcrit, tn)
       go to 700
  625  call xerrwv(
-     1  'lsoda--  itask = 4 or 5 and tcrit (=r1)  .gt.  tout (=r2)',
+     1  'lsoda--  itask = 4 or 5 and tcrit (=r1)  .lt.  tout (=r2)',
      1   60, 25, 1, 0, 0, 0, 2, tcrit, tout)
       go to 700
  626  call xerrwv('lsoda-- precision asked ',

@@ -36,7 +36,7 @@ C           argument is a string
       else
          buf='$SCI/bin/scilab -help "'//h(1:nstr)//
      $        '" | $SCI/bin/xless &   '
-         call bashos(buf,44+nstr,ls,ierr)
+         call bashos(buf,53+nstr,ls,ierr)
       endif
       if(ierr.ne.0) then
          call error(85)

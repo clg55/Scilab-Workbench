@@ -27,7 +27,7 @@
 
 /* input.c */
 
-#include "x_ptyx.h"		/* gets Xt headers, too */
+#include "x_ptyxP.h"		/* gets Xt headers, too */
 #include <X11/keysym.h>
 #include <X11/DECkeysym.h>
 #include <X11/Xutil.h>
@@ -145,10 +145,10 @@ Input (keyboard, screen, event, eightbit)
 		reply.a_type = CSI;
 		reply.a_nparam = 1;
 		if (sunFunctionKeys) {
-		    reply.a_param[0] = sunfuncvalue (keysym);
+		    reply.a_param[0] = sunfuncvalue ((int) keysym);
 		    reply.a_final = 'z';
 		} else {
-		    reply.a_param[0] = funcvalue (keysym);
+		    reply.a_param[0] = funcvalue ((int) keysym);
 		    reply.a_final = '~';
 		}
 		if (reply.a_param[0] > 0)

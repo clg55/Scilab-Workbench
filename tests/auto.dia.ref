@@ -18,11 +18,11 @@
  
  h=syslin('c',n./d);
  
- [n,d]=simp(n,d);if h<>list('r',n,d,'c') then bugmes();quit;end
+ [n,d]=simp(n,d);if h<>tlist('r',n,d,'c') then bugmes();quit;end
  
  sl=tf2ss(h); e=h-ss2tf(sl);
  
- if norm(coeff(e(2)))>1000*%eps then bugmes();quit;end
+ if norm(coeff(e(2)))>100000*%eps then bugmes();quit;end
  
  
  
@@ -49,7 +49,7 @@
  
 sl=syslin('c',a,b,c);
  
-if sl<>list('lss',a,b,c,0*ones(2,3),0*ones(5,1),'c') then bugmes();quit;end
+if sl<>tlist('lss',a,b,c,0*ones(2,3),0*ones(5,1),'c') then bugmes();quit;end
  
 //
  
@@ -133,18 +133,18 @@ slh=tf2ss(hm)       //was tf2ss(h)
  
        slh(2) = A matrix = 
  
-! - 0.8120643    0.0927060 !
-! - 1.4060428  - 0.7379359 !
+! - 0.8120643    0.3708242 !
+! - 0.3515107  - 0.7379359 !
  
        slh(3) = B matrix = 
  
-! - 0.5315308    1.595D-07    1.0630613 !
-! - 0.3558466  - 0.6192179    0.7116929 !
+! - 1.3958683    4.188D-07    2.7917359 !
+! - 0.2336248  - 0.4065365    0.4672493 !
  
        slh(4) = C matrix = 
  
-! - 1.8813586    0.        !
-!   0.3243483  - 0.4844817 !
+! - 0.7164       0.        !
+!   0.1235081  - 0.7379406 !
  
        slh(5) = D matrix = 
  

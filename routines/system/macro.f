@@ -3,11 +3,11 @@ c
       include '../stack.h'
 c     
       double precision val
-      integer equal,eol
+      integer eol
       logical eqid,ptover
       integer blank,r,ival(2),ptr,top1,count,iadr
       equivalence (ival(1),val)
-      data blank/40/,equal/50/,eol/99/
+      data blank/40/,eol/99/
       
 c
       iadr(l)=l+l-1
@@ -157,7 +157,6 @@ c     restaure  pointers
       char1=lin(k+10)
       sym=lin(k+11)
       call putid(syn,lin(k+12))
-      lct(8)=lin(k+12+nsiz)
 c     
       lhsr=lhs
 c     
@@ -251,6 +250,7 @@ c
          lstk(top+1)=lstk(top)+1
       endif
  48   pt=pt-1
+      lct(8)=lin(k+12+nsiz)
       lpt(1)=lin(k+1)
       lpt(2)=lin(k+2)
       lpt(3)=lin(k+3)
@@ -259,6 +259,7 @@ c
       ival(1)=lin(k+8)
       ival(2)=lin(k+9)
       stk(lstk(isiz))=val
+
       return
 c     
 c     exec

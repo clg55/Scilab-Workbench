@@ -33,7 +33,7 @@ where mu_td is given by
 .nf
 [xdot]=compet(t,x [,u])
 .fi
-a competition model. \fVx(1),x(2)\fR represemt two populations which 
+a competition model. \fVx(1),x(2)\fR stands for two populations which 
 grows on a same resource. \fV1/u\fR is the level of that resource (
 1 is the default value).
 .nf 
@@ -47,9 +47,9 @@ level of the resource ue ( default value is 1)
 .IP "The macro \fV[f,g,h,linsy]=lincomp([ue])\fR"
 gives the linearisation of the competition model ( with output y=x)
 around the equilibrium point xe=equilcom(ue).
-This macro returns [f,g,h] the three matrices of the linearized system.
+This macro returns [f,g,h] the three matrices of the linearised system.
 and linsy which is a Scilab macro [ydot]=linsy(t,x) which computes the 
-dynamics of the linearized system
+dynamics of the linearised system
 .SH CYCLlIM
 .nf
 [xdot]=cycllim(t,x)
@@ -89,8 +89,8 @@ x(2)
 the predator ( that we want to preserve ) 
 .TP
 u
-mortality rate du to insecticide which 
-destroys both pray and predator
+mortality rate due to insecticide which 
+destroys both prey and predator
 ( default value u=0)
 .nf
 xdot(1) = ppr*x(1)*(1-x(1)/ppk) - ppa*x(1)*x(2) - u*x(1);

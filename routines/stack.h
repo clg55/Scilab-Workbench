@@ -1,27 +1,21 @@
 
 c*------------------------------------------------------------------
-c csiz  definit la taille des deux tables alf(a b) de codage des caracteres
-c bsiz  definit la taille de la chaine buuf (buffer interne de scilab)
-c       peut etre augmentee uniquement dans le sous programme matlab
-c isiz  definit le nombre maximal de variables scilab pouvant etre crees
-c psiz  definit la taille des tableaux lies a la recursion
-c lsiz  definit la taille du vecteur contenant la ligne d'instruction en
-c       cours d'analyse
-c vsiz  definit la taille de la "pile" des variables
-c       peut etre augmentee uniquement dans le sous programme matlab
-c nlgh  definit le nombre maximum de caracteres pris en compte pour les noms
-c       de variables
-c nftn  nombre de  caracteres maximum autorises pour un nom de sous programme
-c       (link dynamique) peut etre augmentee uniquement dans le sous programme
-c       matlab
-c maxlnk nombre de  caracteres maximum autorises pour un nom de sous programme
-c       (link dynamique) peut etre augmentee uniquement dans le sous programme
-c        matlab
-
+c vsiz  size of internal scilab stack 
+c
+c bsiz  size of internal chain buf 
+c
+c isiz  maximum number of scilab variables
+c psiz  defines recursion size
+c lsiz  dim. of vector containing the command line
+c nlgh  length of variable names
+c nftn   used for dynamic link
+c maxlnk used for dynamic link
+c csiz  used for character coding
+c*-------------------------------------------------------------------
       integer   csiz,bsiz,isiz,psiz,nsiz,lsiz
       parameter (csiz=63,bsiz=4096,isiz=500,psiz=256,nsiz=6,lsiz=8192)
       integer   nlgh,vsiz
-      parameter (nlgh=nsiz*4,vsiz=2000000)
+      parameter (nlgh=nsiz*4,vsiz=2)
       integer   nftn,maxlnk
       parameter (nftn=20,maxlnk=50)
       integer   maxdb,maxbpt
@@ -63,3 +57,4 @@ c
 
 
 c*------------------------------------------------------------------
+

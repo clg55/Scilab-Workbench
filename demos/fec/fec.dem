@@ -3,8 +3,8 @@ oldln=lines()
 lines(0)
 deff('[]=demoex(num)','exec(''SCI/demos/''+demolist(num,2))')
 demolist=[
-'Graphics : Fec ','fec/fec.ex1';
-'Graphics : Fec ','fec/fec.ex2'];
+'Graphics : Fec 1','fec/fec.ex1';
+'Graphics : Fec 2','fec/fec.ex2'];
 
 while %t then
   num=x_choose(demolist(:,1),'Click to choose a demo');
@@ -15,5 +15,3 @@ while %t then
      demoex(num)
   end,
 end
-//end
-

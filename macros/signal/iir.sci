@@ -1,5 +1,5 @@
-//<hz>=iir(n,ftype,fdesign,frq,delta)
-//<hz>=iir(n,ftype,fdesign,frq,delta)
+function hz=iir(n,ftype,fdesign,frq,delta)
+// hz=iir(n,ftype,fdesign,frq,delta)
 //macro which designs an iir digital filter
 //using analog filter designs.
 //the arguments of the filter are:

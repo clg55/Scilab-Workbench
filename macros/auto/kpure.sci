@@ -3,7 +3,9 @@ function [y]=kpure(n,d)
 y=[],
 [lhs,rhs]=argn(0)
 if rhs=1 then
-   if type(n)<>15 then error(92,1),end;
+  
+  //-compat type(n)<>15 retained for list/tlist compatibility
+   if type(n)<>15&type(n)<>16 then error(92,1),end;
    if n(1)<>'r' then  error(90,1),end;
    if prod(size(n(2)))>1 then error(95,1),end
    r=routh_t(n,poly(0,'k')),

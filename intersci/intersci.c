@@ -67,6 +67,7 @@ char *file;
   FILE *fin, *fout;
   char filout[MAXNAM];
   char filin[MAXNAM];
+  int i;
   sprintf(filin,"%s.desc",file);
   fin = fopen(filin,"r");
   if (fin == 0) {
@@ -78,8 +79,6 @@ char *file;
   strcat(filout,".f");
   fout = fopen(filout,"w");
 
-  WriteHeader(fout,file);
-
   nFun = 0;
   while(ReadFunction(fin)) {
     nFun++;
@@ -89,12 +88,30 @@ char *file;
     }
     WriteFunctionCode(fout);
   }
-
-  fprintf(fout,"      end\n");
-
+  WriteMain(fout,file);
   printf("FORTRAN file \"%s\" has been created\n",filout);
   fclose(fout);
   fclose(fin);
+}
+
+WriteMain(fout,file)
+     FILE *fout;
+     char* file;
+{
+  int i;
+  fprintf(fout,"\nc  interface function ");
+  fprintf(fout,"\nc   ********************\n ");
+  WriteHeader(fout," ",file);
+  fprintf(fout,"      goto (");
+  for (i = 1; i < nFun ; i++) {
+    fprintf(fout,"%d,",i);
+    if ( i% 10 == 0 ) fprintf(fout,"\n     $  ");
+  }
+  fprintf(fout,"%d) fin \n       return\n",nFun);
+  for (i = 0; i < nFun; i++) {
+    fprintf(fout,"%d      call ints%s\n      return\n",i+1,funNames[i]);
+  }
+  fprintf(fout,"       end\n");
 }
 
 void Copyright()
@@ -133,8 +150,9 @@ FILE *f;
 	printf("SCILAB function name too long: \"%s\"\n",words[0]);
 	exit(1);
       }
-      basfun->name = malloc((unsigned)(strlen(words[0])+1));
+      basfun->name = (char *)malloc((unsigned)(strlen(words[0])+1));
       strcpy(basfun->name,words[0]);
+      printf("**************************\n");
       printf("processing SCILAB function \"%s\"\n",words[0]);
       funNames[nFun] = basfun->name;
       i = nwords - 1;
@@ -161,7 +179,7 @@ FILE *f;
 	  basfun->in[i] = ivar;
 	  variables[ivar-1]->opt_type = NAME;
 	  variables[ivar-1]->opt_name =
-	    malloc((unsigned)(strlen(optwords[1])+1));
+	    (char *)malloc((unsigned)(strlen(optwords[1])+1));
 	  strcpy(variables[ivar-1]->opt_name,optwords[1]);
 	}
 	else if (words[i+1][0] == '[') {
@@ -179,7 +197,7 @@ FILE *f;
 	  basfun->in[i] = ivar;
 	  variables[ivar-1]->opt_type = VALUE;
 	  variables[ivar-1]->opt_name =
-	    malloc((unsigned)(strlen(optwords[1])+1));
+	    (char *)malloc((unsigned)(strlen(optwords[1])+1));
 	  strcpy(variables[ivar-1]->opt_name,optwords[1]);
 	}
 	else basfun->in[i] = GetVar(words[i+1],1);
@@ -218,6 +236,7 @@ FILE *f;
 	  variables[i]->el[0] = GetVar(words[2],1);
 	  break;
 	case LIST:
+	case TLIST:
 	  if (nwords != 3) {
 	    printf("bad type specification for variable \"%s\"\n",
 		   words[0]);
@@ -227,6 +246,7 @@ FILE *f;
 	  break;
 	case POLYNOM:
 	case MATRIX:
+	case STRINGMAT:
 	  if (nwords != 4) {
 	    printf("bad type specification for variable \"%s\"\n",
 		   words[0]);
@@ -249,7 +269,7 @@ FILE *f;
       }
     } else if (fline1 == 1) {
       /* FORTRAN subroutine description */
-      forsub->name = malloc((unsigned)(strlen(words[0])+1));
+      forsub->name = (char *)malloc((unsigned)(strlen(words[0])+1));
       strcpy(forsub->name,words[0]);
       i = nwords - 1;
       if (i > MAXARG) {
@@ -292,6 +312,7 @@ FILE *f;
 	    AddForName(variables[ivar-1]->el[0],str);
 	    break;
 	  case MATRIX:
+	  case STRINGMAT:
 	    sprintf(str,"me%d",ivar);
 	    AddForName(variables[ivar-1]->el[0],str);
 	    sprintf(str,"ne%d",ivar);
@@ -300,7 +321,7 @@ FILE *f;
 	  default:
 	    printf("FORTRAN argument \"%s\" with external type \"%s\"\n",
 		   variables[ivar-1]->name,words[1]);
-	    printf("  cannot have a variable type of \"LIST\"\n");
+	    printf("  cannot have a variable type of \"LIST\" \"TLIST\"\n");
 	    printf("  or \"WORK\"\n");
 	    exit(1);
 	    break;
@@ -321,6 +342,7 @@ FILE *f;
       variables[i]->type = type;
       switch (type) {
       case LIST:
+      case TLIST:
       case SEQUENCE:
 	l = nwords - 2;
 	if (l > MAXEL) {
@@ -336,7 +358,7 @@ FILE *f;
 	break;
       default:
 	printf("output variable \"out\" of SCILAB function\n");
-	printf("  must have type \"LIST\", \"SEQUENCE\" or\n");
+	printf("  must have type \"LIST\", \"TLIST\", \"SEQUENCE\" or\n");
 	printf("  \"EMPTY\"\n");
 	exit(1);
 	break;
@@ -381,7 +403,7 @@ char *s, *words[];
       else if (*s == '}') {
 	w[i++] = '\n';
 	w[i] = '\0';
-	words[nwords] = malloc((unsigned)(i+1));
+	words[nwords] = (char *)malloc((unsigned)(i+1));
 	strcpy(words[nwords],w);
 	nwords++;
 	inopt1 = 0;
@@ -397,7 +419,7 @@ char *s, *words[];
       else if (*s == ']') {
 	w[i++] = '\n';
 	w[i] = '\0';
-	words[nwords] = malloc((unsigned)(i+1));
+	words[nwords] = (char *)malloc((unsigned)(i+1));
 	strcpy(words[nwords],w);
 	nwords++;
 	inopt2 = 0;
@@ -408,7 +430,7 @@ char *s, *words[];
       w[i++] = *s++;
       if (*s == ' ' || *s == '\t' || *s == '\n') {
 	w[i] = '\0';
-	words[nwords] = malloc((unsigned)(i+1));
+	words[nwords] = (char *)malloc((unsigned)(i+1));
 	strcpy(words[nwords],w);
 	nwords++;
 	inword = 0;
@@ -442,7 +464,7 @@ char *s, *words[];
       w[i++] = *s++;
       if (*s == ' ' || *s == '\t' || *s == '\n') {
 	w[i] = '\0';
-	words[nwords] = malloc((unsigned)(i+1));
+	words[nwords] = (char *)malloc((unsigned)(i+1));
 	strcpy(words[nwords],w);
 	nwords++;
 	inword = 0;
@@ -492,7 +514,7 @@ int p;
     printf("Running out of memory\n");
     exit(1);
   }
-  var->name = malloc((unsigned)(strlen(name) + 1));
+  var->name = (char *)malloc((unsigned)(strlen(name) + 1));
   strcpy(var->name,name);
   var->type = 0;
   var->length = 0;
@@ -528,7 +550,6 @@ char *name;
   }
   printf("variable \"%s\" must exist\n",name);
   exit(1);
-  return(NULL);
 }
 
 /* return the variable number of variable "out"
@@ -553,7 +574,7 @@ char *name;
     printf("Running out of memory\n");
     exit(1);
   }
-  var->name = malloc((unsigned)(strlen(name) + 1));
+  var->name = (char *)malloc((unsigned)(strlen(name) + 1));
   strcpy(var->name,name);
   var->type = 0;
   var->length = 0;
@@ -581,7 +602,6 @@ IVAR GetExistOutVar()
   }
   printf("variable \"out\" must exist\n");
   exit(1);
-  return(NULL);
 }
 
 /* convert string to integer variable type */
@@ -592,6 +612,8 @@ char *type;
     return(COLUMN);
   else if (strcmp(type,"list") == 0) 
     return(LIST);
+  else if (strcmp(type,"tlist") == 0) 
+    return(TLIST);
   else if (strcmp(type,"matrix") == 0)
     return(MATRIX);
   else if (strcmp(type,"polynom") == 0)
@@ -612,9 +634,11 @@ char *type;
     return(ANY);
   else if (strcmp(type,"vector") == 0)
     return(VECTOR);
+  else if (strcmp(type,"stringmat") == 0)
+    return(STRINGMAT);
   else {
     printf("the type of variable \"%s\" is unknown\n",type);
-    exit(1); return(NULL);
+    exit(1);
   }
 }
 
@@ -632,18 +656,20 @@ char *type;
     return(DOUBLE);
   else if (strcmp(type,"real") == 0)
     return(REAL);
+  else if (strcmp(type,"Cstringv") == 0)
+    return(CSTRINGV);
   else return(EXTERNAL);
 }
 
-void WriteHeader(f,fname)
+void WriteHeader(f,fname0,fname)
 FILE *f;
-char* fname;
+char* fname,*fname0;
 {
-  fprintf(f,"      subroutine %s\n",fname);
+  fprintf(f,"      subroutine %s%s\n",fname0,fname);
   fprintf(f,"c\n");
   fprintf(f,"      include '../stack.h'\n");
   fprintf(f,"c\n");
-  fprintf(f,"      integer iadr, sadr, id(nsiz)\n");
+  fprintf(f,"      integer iadr, sadr\n");
   fprintf(f,"      iadr(l)=l+l-1\n");
   fprintf(f,"      sadr(l)=(l/2)+1\n");
   fprintf(f,"      rhs = max(0,rhs)\n");
@@ -659,11 +685,9 @@ FILE* f;
   printf("  generating  code for SCILAB function\"%s\"\n",
 	 basfun->name);
   printf("    and FORTRAN subroutine\"%s\"\n",forsub->name);
-
-  fprintf(f,"      if (fin .eq. %d) then\n",nFun);
-  fprintf(f,"c \n");
+  fprintf(f,"c fin = %d \n",nFun);
   fprintf(f,"c SCILAB function : %s\n",basfun->name);
-  fprintf(f,"c --------------------------\n");
+  WriteHeader(f,"ints",basfun->name);
 
   /* possibly init for string flag */
   for (i = 0; i < forsub->narg; i++) {
@@ -689,7 +713,8 @@ FILE* f;
 
   /* lhs argument number checking */
   ivar = basfun->out;
-  if ((variables[ivar-1]->length == 0) || (variables[ivar-1]->type == LIST))
+  if ((variables[ivar-1]->length == 0) || (variables[ivar-1]->type == LIST)
+      || (variables[ivar-1]->type == TLIST))
     fprintf(f,"        if (lhs .ne. 1) then\n");
   else fprintf(f,"        if (lhs .gt. %d) then\n",variables[ivar-1]->length);
   fprintf(f,"          call error(41)\n");
@@ -701,7 +726,7 @@ FILE* f;
     {
       WriteArgCheck(f,i);
 
-      if (variables[i]->type == LIST) 
+      if ((variables[i]->type == LIST) || (variables[i]->type == TLIST))
       /* SCILAB list analizis*/
 	WriteListAnalysis(f,i);
     }
@@ -781,6 +806,7 @@ int i;
     fprintf(f,"        l%d = sadr(il%d+4)\n",i1,i1);
     break;
   case MATRIX:
+  case STRINGMAT:
     /* square matrix */
     if (var->el[0] == var->el[1]) {
       fprintf(f,"        if (istk(il%d+1) .ne. istk(il%d+2)) then\n",
@@ -918,22 +944,19 @@ int type;
   case SCALAR:
   case VECTOR:
     return(1);
-    break;
   case LIST:
     return(15);
-    break;
+  case TLIST:
+    return(16);
   case POLYNOM:
     return(2);
-    break;
   case STRING:
+  case STRINGMAT:
     return(10);
-    break;
   default:
     printf("unknown variable type\n");
     exit(1);
-    break;
   }
-  return(NULL);
 }
 
 void AddForName(ivar,name)
@@ -949,7 +972,7 @@ char* name;
     printf("  augment constant \"MAXARG\" and recompile intersci\n");
     exit(1);
   }
-  var->for_name[l] = malloc((unsigned)(strlen(name) + 1));
+  var->for_name[l] = (char *)malloc((unsigned)(strlen(name) + 1));
   strcpy(var->for_name[l],name);
   var->nfor_name = l + 1;
 }
@@ -962,7 +985,7 @@ char* name;
   int l;
   var = variables[ivar-1];
   l = var->nfor_name;
-  var->for_name[0] = malloc((unsigned)(strlen(name) + 1));
+  var->for_name[0] = (char *)malloc((unsigned)(strlen(name) + 1));
   strcpy(var->for_name[0],name);
   /* useful ??? */
   if (l == 0) var->nfor_name = 1;
@@ -1034,7 +1057,7 @@ FILE *f;
 	}
       }
       if (ind == 0) {
-	printf("list \"%s\" must be an argument of SCILAB function\n",
+	printf("list or tlist \"%s\" must be an argument of SCILAB function\n",
 	       variables[ivar-1]->list_name);
 	exit(1);
       }
@@ -1080,7 +1103,7 @@ char *call;
   char str[MAXNAM];
   switch (var->type) {
   case COLUMN:
-    if (var->for_type == CHAR) {
+    if (var->for_type == CHAR || var->for_type == CSTRINGV) {
       printf("incompatibility between the variable type and the FORTRAN type for variable \"%s\"\n",var->name);
       exit(1);
     }
@@ -1105,7 +1128,7 @@ char *call;
     }
     break;
   case MATRIX:
-    if (var->for_type == CHAR) {
+    if (var->for_type == CHAR || var->for_type == CSTRINGV) {
       printf("incompatibility between the variable type and the FORTRAN type for variable \"%s\"\n",var->name);
       exit(1);
     }
@@ -1131,7 +1154,7 @@ char *call;
     }    
     break;
   case POLYNOM:
-    if (var->for_type == CHAR) {
+    if (var->for_type == CHAR || var->for_type == CSTRINGV) {
       printf("incompatibility between the variable type and the FORTRAN type for variable \"%s\"\n",var->name);
       exit(1);
     }
@@ -1156,7 +1179,7 @@ char *call;
     break;
   case ROW:
   case VECTOR:
-    if (var->for_type == CHAR) {
+    if (var->for_type == CHAR || var->for_type == CSTRINGV) {
       printf("incompatibility between the variable type and the FORTRAN type for variable \"%s\"\n",var->name);
       exit(1);
     }
@@ -1180,7 +1203,7 @@ char *call;
     }    
     break;
   case SCALAR:
-    if (var->for_type == CHAR) {
+    if (var->for_type == CHAR || var->for_type == CSTRINGV) {
       printf("incompatibility between the variable type and the FORTRAN type for variable \"%s\"\n",var->name);
       exit(1);
     }
@@ -1203,9 +1226,28 @@ char *call;
       break;      
     }    
     break;
+  case STRINGMAT:
+    if (var->for_type != CSTRINGV) {
+      printf("incompatibility between the variable type and the FORTRAN type for variable \"%s\"\n",var->name);
+      exit(1);
+    }
+    fprintf(f,"        lw%s=lw\n",farg);
+    fprintf(f,"        lw=lw+1\n");
+    fprintf(f,"        call stringc(istk(il%s),stk(lw%s),ierr)\n",
+	    barg,farg);
+    sprintf(str,"stk(lw%s),",farg);
+    strcat(call,str);
+    fprintf(f,"        if (ierr.ne.0) then\n");
+    fprintf(f,"          buf='not enough memory'\n");
+    fprintf(f,"          call error(1000)\n");
+    fprintf(f,"          return\n");
+    fprintf(f,"        endif\n");
+    break;
   case LIST:
+  case TLIST:
   case SEQUENCE:
-    printf("a FORTRAN argument cannot have a variable type of \"LIST\" or \"SEQUENCE\"\n");
+    printf("a FORTRAN argument cannot have a variable type of \"LIST\"\n");
+    printf("  \"TLIST\" or \"SEQUENCE\"\n");
     exit(1);
     break;
   case STRING:
@@ -1237,6 +1279,7 @@ char *call;
   char str[MAXNAM];
   char str1[MAXNAM];
   char sdim[MAXNAM];
+  int ind,j;
   switch (var->type) {
   case 0:
     /* FORTRAN argument is the dimension of an output variable with
@@ -1267,12 +1310,14 @@ char *call;
       strcat(call,str);
       break;
     case CHAR:
-      printf("a dimension variable cannot have FORTRAN type \"CHAR\"\n");
+    case CSTRINGV:
+      printf("a dimension variable cannot have FORTRAN type \"%s\"\n",
+	     var->for_type);
       exit(1);
       break;
     }
     break;
-    /* working or output argument (always double reservation !) */
+    /* working or output argument (always double reservation!) */
   case COLUMN:
   case POLYNOM:
   case ROW:
@@ -1281,9 +1326,23 @@ char *call;
     if (variables[var->el[0]-1]->nfor_name == 0) {
       strcpy(str,variables[var->el[0]-1]->name);
       if (isdigit(str[0]) == 0) {
-	printf("dimension variable \"%s\" is not defined\n",
-	       variables[var->el[0]-1]->name);
-	exit(1);
+	ind = 0;
+	for (j = 0; j < basfun->nin; j++) {
+	  if (strcmp(variables[var->el[0]-1]->name,
+		     variables[basfun->in[j]-1]->name) == 0) {
+	    /* dimension of FORTRAN argument is a SCILAB argument */
+	    sprintf(sdim,"nn%d",farg);
+	    fprintf(f,"        %s=stk(l%d)\n",sdim,j+1);
+	    AddForName(var->el[0],sdim);
+	    ind = 1;
+	    break;
+	  }
+	}
+	if (ind == 0) {
+	  printf("dimension variable \"%s\" is not defined\n",
+		 variables[var->el[0]-1]->name);
+	  exit(1);
+	}
       } else {
 	sprintf(sdim,"nn%d",farg);
 	fprintf(f,"        %s=%s\n",sdim,str);
@@ -1301,9 +1360,23 @@ char *call;
      if (variables[var->el[0]-1]->nfor_name == 0) {
       strcpy(str,variables[var->el[0]-1]->name);
       if (isdigit(str[0]) == 0) {
-	printf("dimension variable \"%s\" is not defined\n",
-	       variables[var->el[0]-1]->name);
-	exit(1);
+	ind = 0;
+	for (j = 0; j < basfun->nin; j++) {
+	  if (strcmp(variables[var->el[0]-1]->name,
+		     variables[basfun->in[j]-1]->name) == 0) {
+	    /* dimension of FORTRAN argument is a SCILAB argument */
+	    sprintf(sdim,"nn%d",farg);
+	    fprintf(f,"        %s=stk(l%d)\n",sdim,j+1);
+	    AddForName(var->el[0],sdim);
+	    ind = 1;
+	    break;
+	  }
+	}
+	if (ind == 0) {
+	  printf("dimension variable \"%s\" is not defined\n",
+		 variables[var->el[0]-1]->name);
+	  exit(1);
+	}
       } else {
 	sprintf(sdim,"nn%d",farg);
 	fprintf(f,"        %s=%s\n",sdim,str);
@@ -1313,9 +1386,23 @@ char *call;
    if (variables[var->el[1]-1]->nfor_name == 0) {
       strcpy(str,variables[var->el[1]-1]->name);
       if (isdigit(str[0]) == 0) {
-	printf("dimension variable \"%s\" is not defined\n",
-	       variables[var->el[1]-1]->name);
-	exit(1);
+	ind = 0;
+	for (j = 0; j < basfun->nin; j++) {
+	  if (strcmp(variables[var->el[1]-1]->name,
+		     variables[basfun->in[j]-1]->name) == 0) {
+	    /* dimension of FORTRAN argument is a SCILAB argument */
+	    sprintf(sdim,"mm%d",farg);
+	    fprintf(f,"        %s=stk(l%d)\n",sdim,j+1);
+	    AddForName(var->el[1],sdim);
+	    ind = 1;
+	    break;
+	  }
+	}
+	if (ind == 0) {
+	  printf("dimension variable \"%s\" is not defined\n",
+		 variables[var->el[1]-1]->name);
+	  exit(1);
+	}
       } else {
 	sprintf(sdim,"mm%d",farg);
 	fprintf(f,"        %s=%s\n",sdim,str);
@@ -1332,6 +1419,64 @@ char *call;
     sprintf(str,"stk(lw%d),",farg);
     strcat(call,str);
     break;
+  case STRINGMAT:
+     if (variables[var->el[0]-1]->nfor_name == 0) {
+      strcpy(str,variables[var->el[0]-1]->name);
+      if (isdigit(str[0]) == 0) {
+	ind = 0;
+	for (j = 0; j < basfun->nin; j++) {
+	  if (strcmp(variables[var->el[0]-1]->name,
+		     variables[basfun->in[j]-1]->name) == 0) {
+	    /* dimension of FORTRAN argument is a SCILAB argument */
+	    sprintf(sdim,"nn%d",farg);
+	    fprintf(f,"        %s=stk(l%d)\n",sdim,j+1);
+	    AddForName(var->el[0],sdim);
+	    ind = 1;
+	    break;
+	  }
+	}
+	if (ind == 0) {
+	  printf("dimension variable \"%s\" is not defined\n",
+		 variables[var->el[0]-1]->name);
+	  exit(1);
+	}
+      } else {
+	sprintf(sdim,"nn%d",farg);
+	fprintf(f,"        %s=%s\n",sdim,str);
+	AddForName(var->el[0],sdim);
+      }
+    }  
+   if (variables[var->el[1]-1]->nfor_name == 0) {
+      strcpy(str,variables[var->el[1]-1]->name);
+      if (isdigit(str[0]) == 0) {
+	ind = 0;
+	for (j = 0; j < basfun->nin; j++) {
+	  if (strcmp(variables[var->el[1]-1]->name,
+		     variables[basfun->in[j]-1]->name) == 0) {
+	    /* dimension of FORTRAN argument is a SCILAB argument */
+	    sprintf(sdim,"mm%d",farg);
+	    fprintf(f,"        %s=stk(l%d)\n",sdim,j+1);
+	    AddForName(var->el[1],sdim);
+	    ind = 1;
+	    break;
+	  }
+	}
+	if (ind == 0) {
+	  printf("dimension variable \"%s\" is not defined\n",
+		 variables[var->el[1]-1]->name);
+	  exit(1);
+	}
+      } else {
+	sprintf(sdim,"mm%d",farg);
+	fprintf(f,"        %s=%s\n",sdim,str);
+	AddForName(var->el[1],sdim);
+      }
+    }
+    fprintf(f,"        lw%d=lw\n",farg);
+    fprintf(f,"        lw=lw+1\n");
+    sprintf(str,"stk(lw%d),",farg);
+    strcat(call,str);
+    break;
   case SCALAR:
     fprintf(f,"        lw%d=lw\n",farg);
     fprintf(f,"        lw=lw+1\n");
@@ -1342,9 +1487,23 @@ char *call;
     if (variables[var->el[0]-1]->nfor_name == 0) {
       strcpy(str,variables[var->el[0]-1]->name);
       if (isdigit(str[0]) == 0) {
-	printf("dimension variable \"%s\" is not defined\n",
-	       variables[var->el[0]-1]->name);
-	exit(1);
+	ind = 0;
+	for (j = 0; j < basfun->nin; j++) {
+	  if (strcmp(variables[var->el[0]-1]->name,
+		     variables[basfun->in[j]-1]->name) == 0) {
+	    /* dimension of FORTRAN argument is a SCILAB argument */
+	    sprintf(sdim,"nn%d",farg);
+	    fprintf(f,"        %s=stk(l%d)\n",sdim,j+1);
+	    AddForName(var->el[0],sdim);
+	    ind = 1;
+	    break;
+	  }
+	}
+	if (ind == 0) {
+	  printf("dimension variable \"%s\" is not defined\n",
+		 variables[var->el[0]-1]->name);
+	  exit(1);
+	}
       } else {
 	sprintf(sdim,"nn%d",farg);
 	fprintf(f,"        %s=%s\n",sdim,str);
@@ -1366,10 +1525,11 @@ char *call;
     }
     break;
   case LIST:
+  case TLIST:
   case SEQUENCE:
   case ANY:
     printf("work or output FORTRAN argument cannot have\n");
-    printf("  type \"ANY\", \"LIST\" or \"SEQUENCE\"\n");
+    printf("  type \"ANY\", \"LIST\", \"TLIST\" or \"SEQUENCE\"\n");
     exit(1);
     break;
   }
@@ -1443,8 +1603,33 @@ FILE *f;
     fprintf(f,"c     Putting in order the stack\n");
     fprintf(f,"        call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)\n");
     fprintf(f,"        return\n");
-    fprintf(f,"      endif\n");
-    fprintf(f,"c\n"); 
+    break;
+  case TLIST:/* CHECK TLIST */
+    fprintf(f,"c       Creation of output tlist\n");
+    fprintf(f,"        top=top+1\n");
+    fprintf(f,"        il=iadr(lw)\n");
+    fprintf(f,"        istk(il)=16\n");
+    fprintf(f,"        istk(il+1)=%d\n",vout->length);
+    fprintf(f,"        istk(il+2)=1\n");
+    fprintf(f,"        lw=sadr(il+%d)\n",(vout->length)+3);
+    fprintf(f,"        lwtop=lw\n");
+
+    /* loop on output variables */
+    for (i = 0; i < vout->length; i++) {
+      ivar = vout->el[i];
+      var = variables[ivar-1];
+      fprintf(f,"c     \n");        
+      fprintf(f,"c       Element : %s\n",var->name);
+      WriteVariable(f,var,ivar);
+      fprintf(f,"c     \n");        
+      fprintf(f,"        istk(il+%d)=lw-lwtop+1\n",i+3);
+    }
+    fprintf(f,"c     \n");        
+    fprintf(f,"        lstk(top+1)=lw-mv\n");
+    fprintf(f,"c     \n");        
+    fprintf(f,"c     Putting in order the stack\n");
+    fprintf(f,"        call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)\n");
+    fprintf(f,"        return\n");
     break;
   case SEQUENCE:
     /* loop on output variables */
@@ -1466,8 +1651,6 @@ FILE *f;
     fprintf(f,"c     \n");        
     fprintf(f,"        call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)\n");
     fprintf(f,"        return\n");
-    fprintf(f,"      endif\n");
-    fprintf(f,"c\n");    
     break;
   case EMPTY:
     fprintf(f,"c       no output variable\n");
@@ -1476,10 +1659,11 @@ FILE *f;
     fprintf(f,"        istk(il)=0\n");
     fprintf(f,"        lstk(top+1)=l0+1\n");
     fprintf(f,"        return\n");
-    fprintf(f,"      endif\n");
-    fprintf(f,"c\n"); 
     break;
   }
+  fprintf(f,"      end\n");
+  fprintf(f,"c\n"); 
+
 }
 
 void WriteVariableOutput(f,var,barg,farg,convert)
@@ -1510,7 +1694,11 @@ int convert;
     if (barg == 0) {
       fprintf(f,"        istk(ilw)=1\n");
       fprintf(f,"        istk(ilw+1)=%s\n",str1);		    
-      fprintf(f,"        istk(ilw+2)=1\n");
+      fprintf(f,"        if (%s.eq.0) then\n",str1);
+      fprintf(f,"          istk(ilw+2)=0\n");
+      fprintf(f,"        else\n");
+      fprintf(f,"          istk(ilw+2)=1\n");
+      fprintf(f,"        endif\n");
       fprintf(f,"        istk(ilw+3)=0\n");
     } else {
       fprintf(f,"        call icopy(4,istk(il%d),1,istk(ilw),1)\n",barg);
@@ -1545,8 +1733,13 @@ int convert;
     fprintf(f,"        endif\n");
     if (barg == 0) {
       fprintf(f,"        istk(ilw)=1\n");
-      fprintf(f,"        istk(ilw+1)=%s\n",str1);
-      fprintf(f,"        istk(ilw+2)=%s\n",str2);
+      fprintf(f,"        if (%s*%s.eq.0) then\n",str1,str2);
+      fprintf(f,"          istk(ilw+1)=0\n");
+      fprintf(f,"          istk(ilw+2)=0\n");
+      fprintf(f,"        else\n");
+      fprintf(f,"          istk(ilw+1)=%s\n",str1);
+      fprintf(f,"          istk(ilw+2)=%s\n",str2);
+      fprintf(f,"        endif\n");
       fprintf(f,"        istk(ilw+3)=0\n");
     } else {
       fprintf(f,"        call icopy(4,istk(il%d),1,istk(ilw),1)\n",barg);
@@ -1582,7 +1775,11 @@ int convert;
     fprintf(f,"        endif\n");	  
     if (barg == 0) {
       fprintf(f,"        istk(ilw)=1\n");
-      fprintf(f,"        istk(ilw+1)=1\n");
+      fprintf(f,"        if (%s.eq.0) then\n",str2);
+      fprintf(f,"          istk(ilw+1)=0\n");
+      fprintf(f,"        else\n");
+      fprintf(f,"          istk(ilw+1)=1\n");
+      fprintf(f,"        endif\n");
       fprintf(f,"        istk(ilw+2)=%s\n",str2);
       fprintf(f,"        istk(ilw+3)=0\n");
     } else {
@@ -1701,13 +1898,29 @@ int convert;
 	    str1,farg,farg,str1);
     fprintf(f,"        lw=lw+sadr(ilw+%s)\n",str1);
     break;
+  case STRINGMAT:
+    strcpy(str1,Forname2Int(variables[var->el[0]-1]->for_name[0]));
+    strcpy(str2,Forname2Int(variables[var->el[1]-1]->for_name[0]));
+    sprintf(str,"lw%d",farg);
+    fprintf(f,"        call cstringf(stk(%s),istk(ilw),%s,%s,\n",
+	    str,str1,str2);
+    fprintf(f,"     &    lstk(bot)-sadr(ilw),ierr)\n");
+    fprintf(f,"        if (ierr .gt. 0) then\n");
+    fprintf(f,"          buf='not enough memory'\n");
+    fprintf(f,"          call error(1000)\n");
+    fprintf(f,"          return\n");
+    fprintf(f,"        endif\n");
+    sprintf(str,"istk(ilw+4+%s*%s)-1",str1,str2);
+    fprintf(f,"        lw=sadr(ilw+5+%s*%s+%s)\n",str1,str2,str);
+    break;
   case WORK:
   case LIST:
+  case TLIST:
   case SEQUENCE:
   case ANY:
     printf("output variable \"%s\" cannot have type\n",
 	   var->name);
-    printf("  \"WORK\", \"LIST\", \"SEQUENCE\" or \"ANY\"\n");
+    printf("  \"WORK\", \"LIST\", \"TLIST\", \"SEQUENCE\" or \"ANY\"\n");
     exit(1);
     break;
   }
@@ -1732,7 +1945,11 @@ int farg;
     fprintf(f,"        endif\n");
     fprintf(f,"        istk(ilw)=1\n");
     fprintf(f,"        istk(ilw+1)=%s\n",str1);		    
-    fprintf(f,"        istk(ilw+2)=1\n");
+    fprintf(f,"        if (%s.eq.0) then\n",str1);
+    fprintf(f,"          istk(ilw+2)=0\n");
+    fprintf(f,"        else\n");
+    fprintf(f,"          istk(ilw+2)=1\n");
+    fprintf(f,"        endif\n");
     fprintf(f,"        istk(ilw+3)=0\n");
     sprintf(str,"lw%d",farg);
     fprintf(f,"        lw=sadr(ilw+4)\n");
@@ -1749,8 +1966,13 @@ int farg;
     fprintf(f,"          return\n");
     fprintf(f,"        endif\n");
     fprintf(f,"        istk(ilw)=1\n");
-    fprintf(f,"        istk(ilw+1)=%s\n",str1);
-    fprintf(f,"        istk(ilw+2)=%s\n",str2);
+    fprintf(f,"        if (%s*%s.eq.0) then\n",str1,str2);
+    fprintf(f,"          istk(ilw+1)=0\n");
+    fprintf(f,"          istk(ilw+2)=0\n");
+    fprintf(f,"        else\n");
+    fprintf(f,"          istk(ilw+1)=%s\n",str1);
+    fprintf(f,"          istk(ilw+2)=%s\n",str2);
+    fprintf(f,"        endif\n");
     fprintf(f,"        istk(ilw+3)=0\n");
     sprintf(str,"lw%d",farg);
     fprintf(f,"        lw=sadr(ilw+4)\n");
@@ -1767,7 +1989,11 @@ int farg;
     fprintf(f,"          return\n");
     fprintf(f,"        endif\n");
     fprintf(f,"        istk(ilw)=1\n");
-    fprintf(f,"        istk(ilw+1)=1\n");
+    fprintf(f,"        if (%s.eq.0) then\n",str2);
+    fprintf(f,"          istk(ilw+1)=0\n");
+    fprintf(f,"        else\n");
+    fprintf(f,"          istk(ilw+1)=1\n");
+    fprintf(f,"        endif\n");
     fprintf(f,"        istk(ilw+2)=%s\n",str2);
     fprintf(f,"        istk(ilw+3)=0\n");
     sprintf(str,"lw%d",farg);
@@ -1832,6 +2058,20 @@ int farg;
 	    var->fexternal,str1,str);
     fprintf(f,"        lw=sadr(ilw+6+%s)\n",str1);
     break;
+  case STRINGMAT:
+    strcpy(str1,Forname2Int(variables[var->el[0]-1]->for_name[0]));
+    strcpy(str2,Forname2Int(variables[var->el[1]-1]->for_name[0]));
+    sprintf(str,"lw%d",farg);
+    fprintf(f,"        call %s(stk(%s),istk(ilw),%s,%s,\n",
+	    var->fexternal,str,str1,str2);
+    fprintf(f,"     &    lstk(bot)-sadr(ilw),ierr)\n");
+    fprintf(f,"        if (ierr .gt. 0) then\n");
+    fprintf(f,"          buf='not enough memory'\n");
+    fprintf(f,"          call error(1000)\n");
+    fprintf(f,"          return\n");
+    fprintf(f,"        endif\n");
+    sprintf(str,"istk(ilw+4+%s*%s)-1",str1,str2);
+    fprintf(f,"        lw=sadr(ilw+5+%s*%s+%s)\n",str1,str2,str);
     break;
   }
 }
@@ -1848,11 +2088,11 @@ IVAR ivar;
   sprintf(filin,"%s.list",listname);
   fin = fopen(filin,"r");
   if (fin == 0) {
-    printf("description file for list \"%s\" does not exist\n",
+    printf("description file for list or tlist \"%s\" does not exist\n",
 	   filin);
     exit(1);
   }
-  printf("reading description file for list \"%s\"\n",
+  printf("reading description file for list or tlist \"%s\"\n",
 	 listname);
 
   nel = 0;
@@ -1894,7 +2134,7 @@ IVAR iivar;
       }
       type = GetBasType(words[1]);
       variables[i]->type = type;
-      variables[i]->list_name = malloc((unsigned)(strlen(varlistname)+1));
+      variables[i]->list_name = (char *)malloc((unsigned)(strlen(varlistname)+1));
       strcpy(variables[i]->list_name,varlistname);
       variables[i]->list_el = nel+1;
       sprintf(str,"stk(l%de%d)",iivar+1,nel+1);
@@ -1921,6 +2161,7 @@ IVAR iivar;
 	break;
       case POLYNOM:
       case MATRIX:
+      case STRINGMAT:
 	if (nwords != 4) {
 	  printf("bad type for variable \"%s\"\n",
 		 words[0]);
@@ -1943,29 +2184,29 @@ IVAR iivar;
 	printf("variable \"%s\" cannot have type \"WORK\"\n",
 	       words[0]);
 	exit(1);
-	break;
       case SEQUENCE:
 	printf("variable \"%s\" cannot have type \"SEQUENCE\"\n",
 	       words[0]);
 	exit(1);
-	break;
       case EMPTY:
 	printf("variable \"%s\" cannot have type \"EMPTY\"\n",
 		 words[0]);
 	exit(1);
-	break;
       case LIST:
 	printf("variable \"%s\" cannot have type \"LIST\"\n",
 	       words[0]);
 	exit(1);
-	break;
+      case TLIST:
+	printf("variable \"%s\" cannot have type \"TLIST\"\n",
+	       words[0]);
+	exit(1);
       }
       break;
     default:
       /* end of description */
       if (s[0] == '*') return(1);
       else {
-	printf("bad description file for list \"%s\"\n",
+	printf("bad description file for list or tlist \"%s\"\n",
 	       varlistname);
 	exit(1);
       }
@@ -2058,6 +2299,26 @@ int i;
 	    AddForName(var->el[1],str);
 	    fprintf(f,"        l%s = sadr(il%s+4)\n",str1,str1);
 	    break;
+	  case STRINGMAT:
+	    if(TESTLISTELEMENTS) {
+	      /* square matrix */
+	      if (var->el[0] == var->el[1]) {
+		fprintf(f,"        if (istk(il%s+1) .ne. istk(il%s+2)) then\n",
+			str1,str1);
+		fprintf(f,"          err = %d\n",i1);
+		fprintf(f,"          call error(20)\n");
+		fprintf(f,"          return\n");
+		fprintf(f,"        endif\n");
+	      }
+	    }
+	    fprintf(f,"        n%s = istk(il%s+1)\n",str1,str1);
+	    fprintf(f,"        m%s = istk(il%s+2)\n",str1,str1);
+	    sprintf(str,"n%s",str1);
+	    AddForName(var->el[0],str);
+	    sprintf(str,"m%s",str1);
+	    AddForName(var->el[1],str);
+	    fprintf(f,"        l%s = il%s\n",str1,str1);
+	    break;
 	  case ROW:
 	    if(TESTLISTELEMENTS) {
 	      fprintf(f,"        if (istk(il%s+1) .ne. 1) then\n",str1);
@@ -2072,7 +2333,7 @@ int i;
 	    fprintf(f,"        l%s = sadr(il%s+4)\n",str1,str1);
 	    break;
 	  case VECTOR:
-	    fprintf(f,"        m%s =istk(il%s+2)*istk(il%s+2)\n",str1,str1,str1);
+	    fprintf(f,"        m%s =istk(il%s+1)*istk(il%s+2)\n",str1,str1,str1);
 	    sprintf(str,"m%s",str1);
 	    AddForName(var->el[0],str);
 	    fprintf(f,"        l%s = sadr(il%s+4)\n",str1,str1);
@@ -2155,7 +2416,7 @@ IVAR ivar;
     if (barg != 0) {
       printf("output variable with external type \"%s\" \n",
 	     var->name);
-      printf("  cannot be an input argument of SCILAB fucntion\n");
+      printf("  cannot be an input argument of SCILAB function\n");
       exit(1);
     }
     if (var->equal != 0) {

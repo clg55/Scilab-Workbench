@@ -1,4 +1,3 @@
+#define VERSION "Scilab-2.2"
 
-#define VERSION "Scilab-2.1"
-
-#define DEFAULT_MES "Scilab-2.1 (10 February 1995); Scilab Group (Inria, Enpc)"
+#define DEFAULT_MES "Scilab-2.2 (29 February 1996); Scilab Group (Inria, Enpc)"

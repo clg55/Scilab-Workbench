@@ -17,7 +17,9 @@ function [h,name]=bloc2exp(syst,sexp)
 //origine F. Delebecque S. Steer inria   1989
 //
 [lhs,rhs]=argn(0)
-if type(syst)<>15 then
+
+//-compat type(syst)<>15 retained for list/tlist compatibility
+if type(syst)<>15&type(syst)<>16 then
   error('argument must be a list describing the blocks')
 end;
 if syst(1)<>'blocd' then
@@ -59,7 +61,9 @@ if lhs=2 then name=list(name(nt+1:mt)',name(nt-nio(2)+1:nt)'),end,
 function [ab,nio,name]=construct(syst)
 //!
 [lhs,rhs]=argn(0)
-if type(syst)<>15 then
+
+//-compat type(syst)<>15 retained for list/tlist compatibility
+if type(syst)<>15&type(syst)<>16 then
   error('input must be a list for block-diagramm representation')
 end;
 if syst(1)<>'blocd' then
@@ -117,7 +121,7 @@ lsorties=[]
 nsyst=size(syst)
 for k=2:nsyst
   obj=syst(k)
-  if type(obj)=15, if size(obj)>1 then
+  if type(obj)==15, if size(obj)>1 then
   select obj(1)
      case 'transfer',
          lboites=[lboites,k]

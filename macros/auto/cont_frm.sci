@@ -24,7 +24,7 @@ if nd<>0 then
  a=[];b=[];c=[]
 end;
   [n,n]=size(a)
-  sl=list('lss',a,b,c,d,0*ones(n,1),[])
+  sl=tlist('lss',a,b,c,d,0*ones(n,1),[])
 
 
 

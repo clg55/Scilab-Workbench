@@ -2,12 +2,14 @@
 ---------------------------------------------------------------------------*/
 
  extern int drawarc_();
+ extern int fillarcs_();
  extern int drawarcs_();
  extern int fillpolyline_();
  extern int drawaxis_();
  extern int cleararea_();
  extern int clearwindow_();
  extern int xclick_();
+ extern int xgetmouse_();
  extern int xend_();
  extern int fillarc_();
  extern int viderbuff_();
@@ -30,7 +32,7 @@
  extern int boundingbox_();
  extern int drawarrows_();
  extern int loadfamily_();
-
+ extern int xinfo_();
 /*---------------------END------------------------------*/
 
 

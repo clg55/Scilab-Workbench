@@ -36,7 +36,6 @@ c
 c
       if ( compil(2,id,fin,rhs,0)) goto 99
 c
-      if(top.eq.0) lstk(1)=1
       if(top+1.ge.bot) then
          call error(18)
          if(err.gt.0) return
@@ -56,8 +55,12 @@ c     recherche parmi les variables
    22 lk = lstk(k)
       ilk=iadr(lk)
 c
-      if(fin.eq.-2.or.fin.eq.-3) then
+      if(fin.eq.-2) then
+c     extraction
          if(istk(ilk).eq.11.or.istk(ilk).eq.13) goto 79
+         goto 30
+      elseif(fin.eq.-3) then
+c     insertion
          goto 30
       endif
 c
@@ -74,7 +77,7 @@ c adressage indirect
       istk(il)=-istk(ilk)
       istk(il+1)=lk
       istk(il+2)=k
-      lstk(top+1)=lstk(top)+sadr(il+3)
+      lstk(top+1)=sadr(il+3)
       goto 99
 c
    79 fin=lk

@@ -5,9 +5,6 @@ c     ====================================================================
       include '../stack.h'
       integer id(nsiz),id1(nsiz),istr(nlgh)
 c
-      logical sciv1,first
-      common /compat/ sciv1,first
-
       logical eqid,loaded
       integer srhs,percen,blank,fptr,mode(2)
       integer iadr
@@ -18,6 +15,7 @@ c
 c     
 c     recherche dans les bibliotheques seulement
       if(fin.eq.-3) goto 35
+      if(fin.eq.-4) goto 30
 c     
 c     
 c     recherche parmi les fonctions fortran
@@ -94,13 +92,12 @@ c     chargement
       mode(2)= 0
       call clunit(lunit,buf(1:n),mode)
       if(err.gt.0) then
-         call error(48)
+         buf(n+1:)=' '
+         call error(241)
          return
       endif
 c
       loaded=.false.
-c     next line for version 1 compatibility
-      sciv1=.false.
  49   top=top+1
       job=lstk(bot)-lstk(top)
 c     on recupere toutes les variables du fichier

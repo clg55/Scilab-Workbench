@@ -25,8 +25,8 @@
  * SOFTWARE.
  */
 
-#include "x_ptyx.h"	/* X headers included here. */
-
+#include "x_ptyxP.h"	/* X headers included here. */
+#include "../machine.h"
 #include <X11/Xos.h>
 #include <stdio.h>
 #include <signal.h>
@@ -336,7 +336,7 @@ Bell()
      * has finished */
     Widget w = (Widget) term;
     XChangeProperty(XtDisplay(w), XtWindow(w),
-		    XA_NOTICE, XA_NOTICE, 8, PropModeAppend, NULL, 0);
+		    XA_NOTICE, XA_NOTICE, 8, PropModeAppend,(unsigned char*) NULL, 0);
     screen->bellInProgress = TRUE;
   }
 }
@@ -454,7 +454,7 @@ do_osc(func)
       break;
 
     case 50:
-      SetVTFont(fontMenu_fontescape, True, buf, NULL);
+      SetVTFont(fontMenu_fontescape, True, buf, (char *)0);
       break;
 
       /* One could write code to send back the display and host names, but
@@ -545,9 +545,9 @@ Cleanup(code)
   screen = &term->screen;
   if (screen->pid > 1)
   {
-    (void) kill_process_group(screen->pid, SIGHUP);
+    (void) kill_process_group((int) screen->pid, SIGHUP);
   }
-  Exit(code);
+  C2F(clearexit)(code);
 }
 
 
@@ -578,7 +578,7 @@ xerror(d, ev)
 {
   fprintf(stderr, "%s:  warning, error event receieved:\n", xterm_name);
   (void) XmuPrintDefaultErrorMessage(d, ev, stderr);
-  Exit(ERROR_XERROR);
+  C2F(clearexit)(ERROR_XERROR);
 }
 
 /*ARGSUSED*/
@@ -587,10 +587,10 @@ xioerror(dpy)
 {
   (void)
     fprintf(stderr,
-	 "%s:  fatal IO error %d (%s) or KillClient on X server \"%s\"\r\n",
+	    "%s:  fatal IO error %d (%s) or KillClient on X server \"%s\"\r\n",
 	    xterm_name, errno, SysErrorMsg(errno),
 	    DisplayString(dpy));
-  Exit(ERROR_XIOERROR);
+  C2F(clearexit)(ERROR_XIOERROR);
 }
 
 static void withdraw_window(dpy, w, scr)
@@ -598,7 +598,7 @@ static void withdraw_window(dpy, w, scr)
   Window w;
   int scr;
 {
-  (void) XmuUpdateMapHints(dpy, w, NULL);
+  (void) XmuUpdateMapHints(dpy, w, (XSizeHints *)0);
   XWithdrawWindow(dpy, w, scr);
   return;
 }

@@ -27,7 +27,7 @@
 
 /* util.c */
 
-#include "x_ptyx.h"
+#include "x_ptyxP.h"
 #include "x_data.h"
 #include "x_error.h"
 #include "x_menu.h"
@@ -536,8 +536,8 @@ DeleteChar (screen, n)
 		     screen->reverseGC,
 		     screen->border + screen->scrollbar
 		       + Width(screen) - n*FontWidth(screen),
-		     CursorY (screen, screen->cur_row), n * FontWidth(screen),
-		     FontHeight(screen));
+		     CursorY (screen, screen->cur_row),(unsigned) n * FontWidth(screen),
+		     (unsigned) FontHeight(screen));
 	    }
 	}
 	/* adjust screen->buf */
@@ -565,7 +565,7 @@ register TScreen *screen;
 			XClearArea(screen->display, TextWindow(screen),
 			 screen->border + screen->scrollbar, top *
 			 FontHeight(screen) + screen->border,
-			 Width(screen), height * FontHeight(screen), FALSE);
+			 (unsigned)Width(screen), (unsigned)height * FontHeight(screen), FALSE);
 
 		if(screen->cur_row - screen->topline <= screen->max_row)
 			ClearLeft(screen);
@@ -589,7 +589,7 @@ register TScreen *screen;
 			XClearArea(screen->display, TextWindow(screen),
 			 screen->border + screen->scrollbar, top *
 			 FontHeight(screen) + screen->border,
-			 Width(screen), (screen->max_row - top + 1) *
+			 (unsigned) Width(screen),(unsigned) (screen->max_row - top + 1) *
 			 FontHeight(screen), FALSE);
 	}
 	ClearBufRows(screen, screen->cur_row + 1, screen->max_row);
@@ -612,13 +612,13 @@ register TScreen *screen;
 		  screen->reverseGC,
 		 CursorX(screen, screen->cur_col),
 		 CursorY(screen, screen->cur_row),
-		 Width(screen) - screen->cur_col * FontWidth(screen),
-		 FontHeight(screen));
+		 (unsigned) Width(screen) - screen->cur_col * FontWidth(screen),
+		 (unsigned)FontHeight(screen));
 	    }
 	}
-	bzero(screen->buf [2 * screen->cur_row] + screen->cur_col,
+	bzero((char*) ( screen->buf [2 * screen->cur_row] + screen->cur_col),
 	       (screen->max_col - screen->cur_col + 1));
-	bzero(screen->buf [2 * screen->cur_row + 1] + screen->cur_col,
+	bzero((char *) (screen->buf [2 * screen->cur_row + 1] + screen->cur_col),
 	       (screen->max_col - screen->cur_col + 1));
 	/* with the right part cleared, we can't be wrapping */
 	screen->buf [2 * screen->cur_row + 1] [0] &= ~LINEWRAPPED;
@@ -644,8 +644,8 @@ ClearLeft (screen)
 		     screen->reverseGC,
 		     screen->border + screen->scrollbar,
 		      CursorY (screen, screen->cur_row),
-		     (screen->cur_col + 1) * FontWidth(screen),
-		     FontHeight(screen));
+		     (unsigned)(screen->cur_col + 1) * FontWidth(screen),
+		     (unsigned)FontHeight(screen));
 	    }
 	}
 	
@@ -676,11 +676,11 @@ register TScreen *screen;
 		     screen->reverseGC,
 		     screen->border + screen->scrollbar,
 		      CursorY (screen, screen->cur_row),
-		     Width(screen), FontHeight(screen));
+		     (unsigned) Width(screen), (unsigned) FontHeight(screen));
 	    }
 	}
-	bzero (screen->buf [2 * screen->cur_row], (screen->max_col + 1));
-	bzero (screen->buf [2 * screen->cur_row + 1], (screen->max_col + 1));
+	bzero ((char *) (screen->buf [2 * screen->cur_row]), (screen->max_col + 1));
+	bzero ((char *) (screen->buf [2 * screen->cur_row + 1]), (screen->max_col + 1));
 }
 
 ClearScreen(screen)
@@ -700,7 +700,7 @@ register TScreen *screen;
 			XClearArea(screen->display, TextWindow(screen),
 			 screen->border + screen->scrollbar, 
 			 top * FontHeight(screen) + screen->border,	
-		 	 Width(screen), (screen->max_row - top + 1) *
+		 	 (unsigned) Width(screen), (unsigned)(screen->max_row - top + 1) *
 			 FontHeight(screen), FALSE);
 	}
 	ClearBufRows (screen, 0, screen->max_row);
@@ -788,7 +788,7 @@ horizontal_copy_area(screen, firstchar, nchars, amount)
     int src_y = CursorY(screen, screen->cur_row);
 
     copy_area(screen, src_x, src_y,
-	      (unsigned)nchars*FontWidth(screen), FontHeight(screen),
+	      (unsigned)nchars*FontWidth(screen),(unsigned) FontHeight(screen),
 	      src_x + amount*FontWidth(screen), src_y);
 }
 
@@ -807,7 +807,7 @@ vertical_copy_area(screen, firstline, nlines, amount)
 	int src_y = firstline * FontHeight(screen) + screen->border;
 
 	copy_area(screen, src_x, src_y,
-		  (unsigned)Width(screen), nlines*FontHeight(screen),
+		  (unsigned)Width(screen),(unsigned) nlines*FontHeight(screen),
 		  src_x, src_y - amount*FontHeight(screen));
     }
 }
@@ -879,7 +879,7 @@ HandleExposure (screen, event)
 handle_translated_exposure (screen, rect_x, rect_y, rect_width, rect_height)
     register TScreen *screen;
     register int rect_x, rect_y;
-    register unsigned int rect_width, rect_height;
+    register int rect_width, rect_height;
 {
 	register int toprow, leftcol, nrows, ncols;
 	extern Bool waiting_for_initial_map;

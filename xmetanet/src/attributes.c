@@ -3,43 +3,36 @@
 #include "menus.h"
 
 extern void EndAddText();
+extern void PrintGraph();
 extern void PrintModifyArc();
 extern void PrintModifyNode();
 extern void StartAddText();
-extern void UnhiliteActive();
 
-void ObjectAttributes()
+void ObjectCharacteristics()
 {
-  if (theGG.active != 0) {
-    if (menuId != MODIFY) {
-      StartAddText();
-      switch (theGG.active_type) {
-      case ARC:
-	PrintArc((arc*)theGG.active,1);
-	break;
-      case NODE:
-	PrintNode((node*)theGG.active,1);
-	break;
-      }
-      EndAddText();
-    }
-    else {
-      switch (theGG.active_type) {
-      case ARC:
-	PrintModifyArc((arc*)theGG.active);
-	break;
-      case NODE:
-	PrintModifyNode((node*)theGG.active);
-	break;
-      }
-      UnhiliteActive();
-      theGG.active = 0;
-      theGG.active_type = 0;
-    }
+  if (theGG.n_hilited_nodes == 1 && theGG.n_hilited_arcs == 0) {
+    StartAddText();
+    PrintNode((node*)theGG.hilited_nodes->first->element,1);
+    EndAddText();
+  }
+  else if (theGG.n_hilited_nodes == 0 && theGG.n_hilited_arcs == 1) {
+    StartAddText();
+    PrintArc((arc*)theGG.hilited_arcs->first->element,1);
+    EndAddText();    
   }
   else {
     StartAddText();
     PrintGraph(theGraph,0);
     EndAddText();
+  }
+}
+
+void ObjectAttributes()
+{
+  if (theGG.n_hilited_nodes == 1 && theGG.n_hilited_arcs == 0) {
+    PrintModifyNode((node*)theGG.hilited_nodes->first->element);
+  }
+  else if (theGG.n_hilited_nodes == 0 && theGG.n_hilited_arcs == 1) {
+    PrintModifyArc((arc*)theGG.hilited_arcs->first->element);
   }
 }

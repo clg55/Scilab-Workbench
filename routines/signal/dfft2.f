@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DFFT2,SSI=0
       subroutine dfft2(a,b,nseg,n,nspn,isn,ierr,iw,lw)
 c!
 c fft avec tableau de travail iw

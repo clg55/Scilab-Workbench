@@ -6,7 +6,7 @@
 if l*c <>1 then f=p1*invr(p2),return,end
 [l,c]=size(p1)
 [p1 p2]=simp(p1,p2*ones(l,c))
-f=list('r',p1,p2,[])
+f=tlist('r',p1,p2,[])
 //end
 
 

@@ -20,9 +20,9 @@
 
 #include "defs.h"
 
-
+int
 dld_unlink_by_symbol (name, force)
-char *name;
+const char *name;
 int force;
 {
     register symbol *sp;

@@ -1,6 +1,7 @@
-#include "../machine.h"
+#include <string.h>
+#include <malloc.h>
 
-#define NULL 0
+#include "../machine.h"
 
 void C2F(eulerc)(alpho,la2,lp2,ls2,ma,mm,n,phiw,sigma,sigmadim)
 int *alpho,*la2,*lp2,*ls2,*ma,*mm,*n,*phiw,**sigma,*sigmadim;

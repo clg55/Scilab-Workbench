@@ -3,7 +3,7 @@ C/MEMBR ADD NAME=IMPINS,SSI=0
      & dep2,lig2,col2,matr,depr,ligr,colr)
 c!but
 c
-c     Cette subroutine fait l'insertion (ampliation?) d'une matrice
+c     Cette subroutine fait l'insertion  d'une matrice
 c     de polynomes mat2 dans une autre mat1 d'apres deux vecteurs.
 c     On suppose donnees depr, ligr et colr.
 c     Le resultat viendra dans une troisieme matrice.

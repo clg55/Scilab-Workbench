@@ -1,4 +1,3 @@
-#include "../machine.h"
 #include "scilab_d.h"
 
 /*
@@ -17,9 +16,9 @@ ScilabStr2C(n,Scistring,strh,ierr)
      
 {
   int job=1;
-  *strh =(char *) malloc((unsigned) (*n)+1);
+  *strh =(char *) MALLOC( (*n)+1);
   if ((*strh) == NULL)    {*ierr=1;     return;}
-  F2C(cvstr)(n,Scistring,*strh,&job,*n);
+  F2C(cvstr)(n,Scistring,*strh,&job,(long int)*n);
   (*strh)[*n]='\0';
 }
 
@@ -42,7 +41,7 @@ ScilabMStr2CM(Scistring,nstring,ptrstrings,strh,ierr)
 {
   char **strings,*p;
   int li,ni,*SciS,i;
-  strings=(char **) malloc((unsigned) ((*nstring)+1)*sizeof(char *));
+  strings=(char **) MALLOC( ((*nstring)+1)*sizeof(char *));
   if (strings==NULL) {*ierr=1; return;}
   li=1;
   SciS= Scistring;
@@ -73,10 +72,10 @@ ScilabMStr2C(desc,nd,ptrdesc,strh,ierr)
      int *desc,*nd,*ptrdesc,*ierr;
      char **strh;
 {
-  int ln,li=1,ni,di=0,*SciS,job=1,i;
+  int ln,li=1,di=0,*SciS,job=1,i,ni;
   char *description,*p;
   ln=ptrdesc[*nd]+*nd+1;
-  description=(char *) malloc((unsigned) ln*sizeof(char));
+  description=(char *) MALLOC( ln*sizeof(char));
   if (description==NULL) {*ierr=1; return;}
   SciS= desc;
   for (i=1 ; i<*nd+1 ; i++) 
@@ -84,7 +83,7 @@ ScilabMStr2C(desc,nd,ptrdesc,strh,ierr)
       p= &(description[di]);
       ni=ptrdesc[i]-li;
       di += ni+1;
-      F2C(cvstr)(&ni,SciS,p,&job,ni);
+      F2C(cvstr)(&ni,SciS,p,&job,(long int)0);
       SciS += ni;
       p[ni]= '\n';
       li=ptrdesc[i];
@@ -104,7 +103,7 @@ ScilabC2MStr2(res,nr,ptrres,str,ierr,maxchars,maxlines)
      int *res,*ptrres,*nr,*ierr,maxchars,maxlines;
      char *str;
 {
-  int job=0,li=0,ni= -1,n,i;
+  int job=0,li=0,n,i,ni;
   *nr=0;
   ptrres[0]=1;
   n=strlen(str);
@@ -117,7 +116,7 @@ ScilabC2MStr2(res,nr,ptrres,str,ierr,maxchars,maxlines)
 	    {
 	      ni=i-li;
 	      ptrres[*nr+1]=ptrres[*nr]+ni;
-	      F2C(cvstr)(&ni,res,&str[li],&job,ni);
+	      F2C(cvstr)(&ni,res,&str[li],&job,(long int)0);
 	      res+=ni;
 	      li += ni+1;
 	      ni= -1;

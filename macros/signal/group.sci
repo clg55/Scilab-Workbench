@@ -1,4 +1,4 @@
-//<tg,fr>=group(npts,a1i,a2i,b1i,b2i)
+function [tg,fr]=group(npts,a1i,a2i,b1i,b2i)
 //Calculate the group delay of a digital filter
 //with transfer function h(z).
 //The filter specification can be in coefficient form,
@@ -51,14 +51,15 @@
          hs=maxi(size(h));
          z=poly(0,'z');
          h=poly(h,'z','c');
-         h=tild(h)*(1/z**(hs-1));
-         ht=15;
+         h=gtild(h)*(1/z**(hs-1));
+         ht=16;
       end,
  
-//if ht=15 then h is a rational polynomial
+//if ht=16 then h is a rational polynomial
 //(perhaps in cascade form)
  
-      if ht=15 then
+      //-compat ht==15 retained for list/tlist compatibility
+      if ht==15|ht==16 then
          z=varn(h(3));
          hcs=maxi(size(h(2)));
       end,
@@ -69,7 +70,7 @@
  
 //if ht=2 then h is a regular polynomial
  
-         if ht=2 then
+         if ht==2 then
             z=varn(h);
          end,
  
@@ -130,9 +131,4 @@
       tg=ones(a1i)*tgi;
  
 //done with cascade calculation of group delay
- 
-   end,
- 
-//end
-
-
+end

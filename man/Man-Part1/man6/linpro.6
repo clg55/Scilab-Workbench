@@ -12,7 +12,7 @@ linpro - linear programming solver
 .SH PARAMETERS
 .TP 10
 p 
-: real (column) vector (dimension \fV1 x n\fR)
+: real (column) vector (dimension \fV n\fR)
 .TP
 C 
 : real matrix (dimension \fV (mi + md) x n\fR)
@@ -22,7 +22,7 @@ b
 : RHS vector (dimension \fV1 x (mi + md)\fR)
 .TP
 ci 
-: (column) vector of lower-bounds (dimension \fV1 x n\fR).
+: (column) vector of lower-bounds (dimension \fV n\fR).
 If there are no lower bound constraints, put \fVci = []\fR.
 If some components of \fVx\fR are bounded from below,
 set the other (unconstrained) values of \fVci\fR to a very 
@@ -41,7 +41,7 @@ If \fVx0='v'\fR the calculated initial feasible point is a vertex.
 If \fVx0='g'\fR the calculated initial feasible point is arbitrary.
 .TP
 imp 
-: verbose option (optional parameter)
+: verbose option (optional parameter)  (Try \fVimp=7,8,...\fR)
 .TP
 x 
 : optimal solution found.

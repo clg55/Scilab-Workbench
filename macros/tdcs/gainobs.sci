@@ -1,4 +1,4 @@
-//[]=gainobs(pole,ue)
+function []=gainobs(pole,ue)
 //[]=gainobs(pole,[ue])
 // calcul de la matrice l de gain pour
 // l'observateur du modele de competition
@@ -11,6 +11,5 @@ if rhs=1,ue=1,end
 l=ppol(f',h',pole)
 l=l'
 [f,g,h,l]=resume(f,g,h,l)
-//end
 
 

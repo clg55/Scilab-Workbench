@@ -17,9 +17,13 @@ if abs(f-1+norm(x-xopt) ) > Leps then bugmes();quit;end
  
 //
  
-// DIVIDE BY ZERO
  
-// [F,X,G]=OPTIM('GENROS',X0,'ND','IN');F-1+NORM(X-XOPT)
+[f,x,g]=optim('genros',x0,'nd','in');
+optim stops:  maximum number of calls to f is reached
+ 
+ 
+if abs(f-1+norm(x-xopt) ) > Leps then bugmes();quit;end
+ 
  
 [f,x,g]=optim('genros',x0,'qn',1,'in');
  norm of projected gradient lower than   0.0000000D+00
@@ -35,9 +39,12 @@ if abs(f-1+norm(x-xopt) ) > Leps then bugmes();quit;end
  
 //
  
-// DIVIDE BY ZERO
+[f,x,g]=optim('genros',x0,'nd',1,50,'in');
+ optimization stops because too small variations for x
  
-// [F,X,G]=OPTIM('GENROS',X0,'ND',1,50,'IN');F-1+NORM(X-XOPT)
+ 
+if abs(f-1+norm(x-xopt) ) > Leps then bugmes();quit;end
+ 
  
 [f,x1,g]  =optim('genros',x0,   'ar',100,6,'in');
 optim stops: maximum number of iterations is reached
@@ -204,9 +211,12 @@ comp(rose);
  
 //
  
-// DIVIDE BY ZERO
+[f,x,g]=optim(rose,x0,'nd','ar',50);
+optim stops:  maximum number of calls to f is reached
  
-// [F,X,G]=OPTIM(ROSE,X0,'ND','AR',25);F+NORM(X-XOPT)
+ 
+if abs(f+norm(x-xopt)) > Leps then bugmes();quit;end
+ 
  
 [f,x,g]=optim(rose,'b',bi,bs,x0,'qn','ar',25);
  end of optimization (linear search fails)
@@ -272,4 +282,43 @@ comp(sipn);
  
  
 if norm(x-[0.5 0.5]) + norm(g) > 0.1 then bugmes();quit;end
+ 
+//********************************************************************
+ 
+deff('[f,g,ind]=ndsim(x,ind)', 'y=a*x-b;f=norm(y,2)^2;g=2*a''*y')
+ 
+a=rand(2,2);b=eye(a);
+ 
+[f,x,g]=optim(ndsim,eye(2,2));
+ norm of projected gradient lower than   9.4021785D-17
+ 
+ 
+if norm(x-inv(a))>Leps then bugmes();quit;end
+ 
+ 
+deff('[f,g,ind]=ndsim(x,ind)', 'y=a*x-b;f=sum(abs(y));g=a''*sign(y)')
+Warning :redefining function: ndsim                   
+ 
+ 
+a=rand(2,2);b=[1;0];ai=inv(a);
+ 
+[f,x,g]=optim(ndsim,[1;0],'nd');
+ end of optimization
+ 
+ 
+if norm(x-ai(:,1))>Leps then bugmes();quit;end
+ 
+ 
+//deff('[f,g,ind]=ndsim(x,ind)', [
+ 
+//'y=a*x-b;f=max(abs(y)),sel=abs(y)==f'
+ 
+//'g=a(sel,:)''*sign(y(sel))'])
+ 
+//a=rand(2,2);b=[1;0];ai=inv(a);
+ 
+//[f,x,g]=optim(ndsim,[1;0],'nd');
+ 
+//if norm(x-ai(:,1))>Leps then bugmes();quit;end
+ 
  

@@ -1,6 +1,6 @@
 a =[1,2,3];b =[1,2,3;4,5,6];c =[10,11;12,13];
 //
-//short call: fortran instructions to be inserted in interf
+//short call: fortran instructions to be inserted in interf.f
 //      if(nom.eq.'bidon1') then
 //      ia =size(1,nla ,nca )
 //      ib =size(2,nlb ,nlc )
@@ -30,7 +30,7 @@ cs-2*c
 ds-(2*c+[1,3;2,4])
 //
 //
-//Test no 2 : insert the following in interf:
+//Test no 2 : insert the following in interf.f:
 //      if(nom.eq.'bidon2') then
 //      call bidon(x1,x2,x3,x4,x5,x6,x7,x8,x9)
 //      return
@@ -43,7 +43,7 @@ ds-(2*c+[1,3;2,4])
 md=mc;nd=nc;
 [as,bs,cs,ds]=fort('bidon2',a,1,'i',ia,2,'i',b,3,'r',ib,4,'i',...
                             c,5,'d',ic,6,'i',...
-                   'sort',[ma,na],1,'i',[mb,nb],3,'r',[mc,nc],5,'d',...
+                   'out',[ma,na],1,'i',[mb,nb],3,'r',[mc,nc],5,'d',...
                           [md,nd],7,'d',[mc,nc],8,'d',[1,1],9,'i');
 as-2*a
 bs-2*b
@@ -52,13 +52,13 @@ ds-(2*c+[1,3;2,4])
 //other valid form
 [as,bs,cs,ds]=fort('bidon2',a,1,'i',ia,2,'i',b,3,'r',ib,4,'i',...
                             c,5,'d',ic,6,'i',...
-                   'sort',1,3,5,...
+                   'out',1,3,5,...
                           [md,nd],7,'d',[mc,nc],8,'d',[1,1],9,'i');
 as-2*a
 bs-2*b
 cs-2*c
 ds-(2*c+[1,3;2,4])
-//Test no 3 : insert in interf
+//Test no 3 : insert in interf.f
 //
 //      if(nom.eq.'bidon3') then
 //      ia=size(1,nla,nca)
@@ -77,7 +77,7 @@ ds-(2*c+[1,3;2,4])
 //
 // Call from scilab:
 [as,bs,cs,ds]=fort('bidon3',a,1,'i',b,2,'r',c,3,'d',...
-                   'sort',1,2,3,4);
+                   'out',1,2,3,4);
 as-2*a
 bs-2*b
 cs-2*c

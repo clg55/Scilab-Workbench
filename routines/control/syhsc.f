@@ -1,166 +1,163 @@
-      subroutine syhsc(n,m,a,na,b,mb,c,z,eps,wrk1,nwrk1,
-     +                 wrk2,nwrk2,iwrk,niwrk,ierr)
-c
-c! calling sequence
-c        subroutine syhsc(n,m,a,na,b,mb,c,z,wrk1,nwrk1,wrk2,nwrk2,
-c     +                   iwrk,niwrk,ierr)
-c
-c        integer n,m,na,mb,nwrk1,nwrk2,niwrk,ierr
-c        integer iwrk(niwrk)
-c        double precision a(na,n),b(mb,m),c(na,m)
-c        double precision z(mb,m),wrk1(nwrk1),wrk2(nwrk2)
-c
-c arguments in
-c
-c        n       integer
-c                -order of the matrix  a.
-c
-c        m       integer
-c                -order of the matrix  b.
-c
-c        a       double precision(n,n)
-c                -the coefficient matrix  a  of the equation.
-c                n.b.  a  is overwritten by this routine.
-c
-c        na      integer
-c                -the declared first dimension of  a and c .
-c
-c        b       double precision(m,m)
-c                -the coefficient matrix  b  of the equation.
-c                n.b.  b  is overwritten by this routine.
-c
-c        mb      integer
-c                -the declared first dimension of  b .
-c
-c        c       double precision(n,m)
-c                -the coefficient matrix  c  of the equation.
-c                n.b.  c  is overwritten by this routine.
-c
-c        nwrk1   integer
-c                -the length of the internal vector  wrk1
-c                nwrk1  must be at least  2*n**2  +  7*n
-c
-c        nwrk2   integer
-c                -the length of the internal vector  wrk2
-c                nwrk2  must be at least  max(n,m)
-c
-c        niwrk   integer
-c                -the length of the internal vector  iwrk
-c                niwrk  must be at least  4*n
-c
-c arguments out
-c
-c        c       double precision(n,m)
-c                -on return, the solution matrix, x  is contained in c
-c
-c        z       double precision(m,m)
-c                -on return, z  contains the orthogonal matrix used
-c                to transform  transpose(b) to real upper schur form.
-c
-c        ierr    integer
-c                -error indicator
-c
-c                ierr = 0        successful return
-c
-c                ierr in (1,m   ierr-th eigenvalue of  b  has not been
-c                                determined after 30 iterations.
-c
-c                ierr > m   a singular matrix was encountered whilst
-c                           solving for the (ierr-m)th column of  x
-c
-c!working space
-c
-c        wrk1    double precision(nwrk1)
-c                -where  nwrk1 .ge. 2*n**2 + 7*n
-c
-c        wrk2    double precision(nwrk2)
-c                -where  nwrk2 .ge. max(n,m)
-c
-c        iwrk    integer(niwrk)
-c                -where  niwrk .ge. 4*n
-c
-c!purpose
-c
-c        to solve the continuous-time sylvester equation
-c                ax + xb = c
-c
-c!method
-c
-c        a  is transformed to upper hessenberg form, and the transpose
-c        of  b is transformed to real upper schur form using orthogonal
-c        transformations. the matrix  c  is also multiplied by these
-c        transformation matrices, and the solution of this transformed
-c        system is computed. this solution is then multiplied by the
-c        transformation matrices in order to obtain the solution to
-c        the original problem.
-c
-c!reference
-c
-c        g.golub, s.nash, and c.f.vanloan," a hessenberg-schur method
-c        for the problem  ax + xb = c ",ieee trans. auto. control,
-c        vol. ac-24, no. 6, pp. 909-912 (1979).
-c
-c!auxiliary routines
-c
-c       orthes,ortran (eispack)
-c       hqror2,transf,nsolve,hesolv,backsb,n2solv,h2solv,backs2
-c       irow1,irow2,lrow2
-c
-c!origin:
-c
-c                g.golub,s.nash,c.van loan, dept.comp.sci.,stanford
-c                university,california                january 1982
-c
-c!
-c********************************************************************
-c
-        integer n,m,na,mb,nwrk1,nwrk2,niwrk,ierr
-        integer iwrk(niwrk)
+      subroutine syhsc(n,m,a,na,b,mb,c,z,eps,wrk1,nwrk1,wrk2,nwrk2,iwrk,
+     &                 niwrk,ierr)
+C
+C! calling sequence
+C        subroutine syhsc(n,m,a,na,b,mb,c,z,wrk1,nwrk1,wrk2,nwrk2,
+C     +                   iwrk,niwrk,ierr)
+C
+C        integer n,m,na,mb,nwrk1,nwrk2,niwrk,ierr
+C        integer iwrk(niwrk)
+C        double precision a(na,n),b(mb,m),c(na,m)
+C        double precision z(mb,m),wrk1(nwrk1),wrk2(nwrk2)
+C
+C arguments in
+C
+C        n       integer
+C                -order of the matrix  a.
+C
+C        m       integer
+C                -order of the matrix  b.
+C
+C        a       double precision(n,n)
+C                -the coefficient matrix  a  of the equation.
+C                n.b.  a  is overwritten by this routine.
+C
+C        na      integer
+C                -the declared first dimension of  a and c .
+C
+C        b       double precision(m,m)
+C                -the coefficient matrix  b  of the equation.
+C                n.b.  b  is overwritten by this routine.
+C
+C        mb      integer
+C                -the declared first dimension of  b .
+C
+C        c       double precision(n,m)
+C                -the coefficient matrix  c  of the equation.
+C                n.b.  c  is overwritten by this routine.
+C
+C        nwrk1   integer
+C                -the length of the internal vector  wrk1
+C                nwrk1  must be at least  2*n**2  +  7*n
+C
+C        nwrk2   integer
+C                -the length of the internal vector  wrk2
+C                nwrk2  must be at least  max(n,m)
+C
+C        niwrk   integer
+C                -the length of the internal vector  iwrk
+C                niwrk  must be at least  4*n
+C
+C arguments out
+C
+C        c       double precision(n,m)
+C                -on return, the solution matrix, x  is contained in c
+C
+C        z       double precision(m,m)
+C                -on return, z  contains the orthogonal matrix used
+C                to transform  transpose(b) to real upper schur form.
+C
+C        ierr    integer
+C                -error indicator
+C
+C                ierr = 0        successful return
+C
+C                ierr in (1,m   ierr-th eigenvalue of  b  has not been
+C                                determined after 30 iterations.
+C
+C                ierr > m   a singular matrix was encountered whilst
+C                           solving for the (ierr-m)th column of  x
+C
+C!working space
+C
+C        wrk1    double precision(nwrk1)
+C                -where  nwrk1 .ge. 2*n**2 + 7*n
+C
+C        wrk2    double precision(nwrk2)
+C                -where  nwrk2 .ge. max(n,m)
+C
+C        iwrk    integer(niwrk)
+C                -where  niwrk .ge. 4*n
+C
+C!purpose
+C
+C        to solve the continuous-time sylvester equation
+C                ax + xb = c
+C
+C!method
+C
+C        a  is transformed to upper hessenberg form, and the transpose
+C        of  b is transformed to real upper schur form using orthogonal
+C        transformations. the matrix  c  is also multiplied by these
+C        transformation matrices, and the solution of this transformed
+C        system is computed. this solution is then multiplied by the
+C        transformation matrices in order to obtain the solution to
+C        the original problem.
+C
+C!reference
+C
+C        g.golub, s.nash, and c.f.vanloan," a hessenberg-schur method
+C        for the problem  ax + xb = c ",ieee trans. auto. control,
+C        vol. ac-24, no. 6, pp. 909-912 (1979).
+C
+C!auxiliary routines
+C
+C       orthes,ortran (eispack)
+C       hqror2,transf,nsolve,hesolv,backsb,n2solv,h2solv,backs2
+C       irow1,irow2,lrow2
+C
+C!origin:
+C
+C                g.golub,s.nash,c.van loan, dept.comp.sci.,stanford
+C                university,california                january 1982
+C
+C!
+C********************************************************************
+C
+      integer n,m,na,mb,nwrk1,nwrk2,niwrk,ierr
+      integer iwrk(niwrk)
       double precision a(na,n),b(mb,m),c(na,m),z(mb,m)
       double precision wrk1(nwrk1),wrk2(nwrk2)
-c
-c
-      double precision eps,t,swop,reps
-
-        do 5 i = 1,m
-                do 5 j = i,m
-                        swop = b(i,j)
-                        b(i,j) = b(j,i)
-                        b(j,i) = swop
- 5      continue
-c
+C
+C
+      double precision eps,t(1),swop,reps
+      do 5 i = 1,m
+        do 5 j = i,m
+          swop = b(i,j)
+          b(i,j) = b(j,i)
+          b(j,i) = swop
+ 5    continue
+C
       call orthes(mb,m,1,m,b,wrk2)
       call ortran(mb,m,1,m,b,wrk2,z)
-       call hqror2(mb,m,1,m,b,t,t,z,ierr,11)
-c
-        call orthes(na,n,1,n,a,wrk2)
-c
-        call transf(a,wrk2,1,c,z,0,n,m,na,mb,wrk1,nwrk1)
-c
-        reps = eps*m*m*n*n
-        ind = m - 1
-        if(ind.eq.0) go to 40
-10      if(abs(b(ind+1,ind)).le.reps) go to 20
-c
-        call n2solv(a,b,c,wrk1,nwrk1,mb,m,na,n,ind,iwrk,niwrk,
-     +              reps,ierr)
-c
-        if(ierr.ne.0) return
-        go to 30
-c
-20      call nsolve(a,b,c,wrk1,nwrk1,mb,m,na,n,ind,iwrk,niwrk,
-     +              reps,ierr)
-c
-        if(ierr.ne.0) return
-30      if (ind.gt.0) go to 10
-c
-40      if(ind.eq.0)call nsolve(a,b,c,wrk1,nwrk1,mb,m,na,n,ind,
-     +                              iwrk,niwrk,reps,ierr)
-c
-        call transf(a,wrk2,0,c,z,1,n,m,na,mb,wrk1,nwrk1)
-c
-        return
-        end
+      call hqror2(mb,m,1,m,b,t,t,z,ierr,11)
+C
+      call orthes(na,n,1,n,a,wrk2)
+C
+      call transf(a,wrk2,1,c,z,0,n,m,na,mb,wrk1,nwrk1)
+C
+      reps = eps * m * m * n * n
+      ind = m - 1
+      if (ind .eq. 0) goto 40
+ 10   if (abs(b(ind+1,ind)) .le. reps) goto 20
+C
+      call n2solv(a,b,c,wrk1,nwrk1,mb,m,na,n,ind,iwrk,niwrk,reps,ierr)
+C
+      if (ierr .ne. 0) return
+      goto 30
+C
+ 20   call nsolve(a,b,c,wrk1,nwrk1,mb,m,na,n,ind,iwrk,niwrk,reps,ierr)
+C
+      if (ierr .ne. 0) return
+ 30   if (ind .gt. 0) goto 10
+C
+ 40   if (ind .eq. 0)
+     &  call nsolve(a,b,c,wrk1,nwrk1,mb,m,na,n,ind,iwrk,niwrk,reps,ierr)
+C
+      call transf(a,wrk2,0,c,z,1,n,m,na,mb,wrk1,nwrk1)
+C
+      return
+      end
 
         subroutine transf(a,ort,it1,c,v,it2,m,n,mdim,ndim,d,nwrk1)
 c!

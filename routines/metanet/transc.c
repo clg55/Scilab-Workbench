@@ -1,6 +1,7 @@
-#include "../machine.h"
+#include <string.h>
+#include <malloc.h>
 
-#define NULL 0
+#include "../machine.h"
 
 void C2F(transc)(lp1,lpft,ls1,lsft,m,lsftdim,lpftdim,n)
 int *lp1,**lpft,*ls1,**lsft,*m,*lsftdim,*lpftdim,*n;

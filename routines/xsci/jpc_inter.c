@@ -4,7 +4,7 @@
 #include <strings.h>
 #endif
 #include <stdio.h>
-#include "x_ptyx.h"
+#include "x_ptyxP.h"
 #include "x_data.h"
 #include "../machine.h"
 /* 

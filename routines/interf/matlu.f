@@ -9,7 +9,6 @@ c
 c
       double precision dtr(2),dti(2),eps,sr,si,rcond,t
 c
-      logical luf,lus,hot,fresh,tsmu
       integer iadr,sadr
 c     
       iadr(l)=l+l-1
@@ -18,8 +17,8 @@ c
 c
 c
 c     fonction / fin
-c -2   -1    1    2     3    4   5    6    7     8        9     10
-c  \    /   inv  det  rcond  lu      chol  rref lufact lusolve ludel
+c -2   -1    1    2     3    4   5    6    7     
+c  \    /   inv  det  rcond  lu      chol  rref 
 c
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
@@ -36,7 +35,7 @@ c
       eps=stk(leps)
 c
 
-      go to (20,10,99,30,40,50,60,99,80,85,86,86,86),fin+3
+      go to (20,10,99,30,40,50,60,99,80,85),fin+3
 c
  10   continue
 c     matrix right division, a/a2
@@ -562,268 +561,6 @@ c     rref
       if(it.eq.0) call drref(stk(l),m,m,n,eps)
       go to 99
 c
-c
-c     lufact et lusolve
- 86   continue
-
-      eps=stk(leps)
-      hot=.false.
-      fresh=.false.
-      tsmu=.false.
-      luf=fin.eq.8
-      lus=fin.eq.9
-      rhs = max(0,rhs)
-c
-      if (fin .eq. 8) then
-c 
-c SCILAB function : lufact1
-c --------------------------
-        lw = lstk(top+1)
-        l0 = lstk(top+1-rhs)
-        if (rhs .ne. 3) then
-          call error(39)
-          return
-        endif
-        if (lhs .gt. 1) then
-          call error(41)
-          return
-        endif
-c       checking variable val (number 1)
-c       
-        il1 = iadr(lstk(top-rhs+1))
-        if (istk(il1) .ne. 1) then
-          err = 1
-          call error(53)
-          return
-        endif
-        if ((istk(il1+2) .ne. 1).and. (istk(il1+1).ne.1)) then
-          err = 1
-          call error(89)
-          return
-        endif
-        n1 = istk(il1+1)
-        l1 = sadr(il1+4)
-c       checking variable rc (number 2)
-c       
-        il2 = iadr(lstk(top-rhs+2))
-        if (istk(il2) .ne. 1) then
-          err = 2
-          call error(53)
-          return
-        endif
-        n2 = istk(il2+1)
-        m2 = istk(il2+2)
-        if (m2 .ne. 2) then
-          err = 2
-          call error(89)
-          return
-        endif
-        l2 = sadr(il2+4)
-c       checking variable n (number 3)
-c       
-        il3 = iadr(lstk(top-rhs+3))
-        if (istk(il3) .ne. 1) then
-          err = 3
-          call error(53)
-          return
-        endif
-        if (istk(il3+1)*istk(il3+2) .ne. 1) then
-          err = 3
-          call error(89)
-          return
-        endif
-        l3 = sadr(il3+4)
-c     
-c       cross variable size checking
-c     
-        call entier(n2*m2,stk(l2),istk(iadr(l2)))
-        call entier(1,stk(l3),istk(iadr(l3)))
-        lw5=lw
-        lw=lw+1
-        err=lw-lstk(bot)
-        if (err .gt. 0) then
-          call error(17)
-          return
-        endif
-c
-        call lufact1(stk(l1),istk(iadr(l2)),istk(iadr(l3)),n1,stk(lw5))
-        if (err .gt. 0) return
-c
-        top=top-rhs
-        lw0=lw
-        mv=lw0-l0
-c     
-        if(lhs .ge. 1) then
-c     
-c       output variable: fmat
-c     
-        top=top+1
-        ilw=iadr(lw)
-        err=lw+5-lstk(bot)
-        if (err .gt. 0) then
-          call error(17)
-          return
-        endif
-        istk(ilw)=1
-        istk(ilw+1)=1
-        istk(ilw+2)=1
-        istk(ilw+3)=0
-        lw=sadr(ilw+4)
-        call int2db(1,stk(lw5),1,stk(lw),1)
-        lw=lw+1
-        lstk(top+1)=lw-mv
-        endif
-c     
-c       putting in order the stack
-c     
-        call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)
-        return
-      endif
-c
-      if (fin .eq. 9) then
-c 
-c SCILAB function : lusolve1
-c --------------------------
-        lw = lstk(top+1)
-        l0 = lstk(top+1-rhs)
-        if (rhs .ne. 2) then
-          call error(39)
-          return
-        endif
-        if (lhs .gt. 1) then
-          call error(41)
-          return
-        endif
-c       checking variable fmat (number 1)
-c       
-        il1 = iadr(lstk(top-rhs+1))
-        if (istk(il1) .ne. 1) then
-          err = 1
-          call error(53)
-          return
-        endif
-        if (istk(il1+1)*istk(il1+2) .ne. 1) then
-          err = 1
-          call error(89)
-          return
-        endif
-        l1 = sadr(il1+4)
-c       checking variable b (number 2)
-c       
-        il2 = iadr(lstk(top-rhs+2))
-        if (istk(il2) .ne. 1) then
-          err = 2
-          call error(53)
-          return
-        endif
-        if (istk(il2+2) .ne. 1) then
-          err = 2
-          call error(89)
-          return
-        endif
-        n2 = istk(il2+1)
-        l2 = sadr(il2+4)
-c     
-c       cross variable size checking
-c     
-c     
-c       cross formal parameter checking
-c       not implemented yet
-c     
-c       cross equal output variable checking
-c       not implemented yet
-        call entier(1,stk(l1),istk(iadr(l1)))
-        lw3=lw
-        lw=lw+n2
-        err=lw-lstk(bot)
-        if (err .gt. 0) then
-          call error(17)
-          return
-        endif
-c
-        call lusolve1(istk(iadr(l1)),stk(l2),stk(lw3))
-        if (err .gt. 0) return
-c
-        top=top-rhs
-        lw0=lw
-        mv=lw0-l0
-c     
-        if(lhs .ge. 1) then
-c     
-c       output variable: x
-c     
-        top=top+1
-        ilw=iadr(lw)
-        err=lw+4+n2-lstk(bot)
-        if (err .gt. 0) then
-          call error(17)
-          return
-        endif
-        istk(ilw)=1
-        istk(ilw+1)=n2
-        istk(ilw+2)=1
-        istk(ilw+3)=0
-        lw=sadr(ilw+4)
-        call dcopy(n2,stk(lw3),1,stk(lw),1)
-        lw=lw+n2
-        lstk(top+1)=lw-mv
-        endif
-c     
-c       putting in order the stack
-c     
-        call dcopy(lw-lw0,stk(lw0),1,stk(l0),1)
-        return
-      endif
-c
-      if (fin .eq. 10) then
-c 
-c SCILAB function : ludel1
-c --------------------------
-        lw = lstk(top+1)
-        l0 = lstk(top+1-rhs)
-        if (rhs .ne. 1) then
-          call error(39)
-          return
-        endif
-        if (lhs .ne. 1) then
-          call error(41)
-          return
-        endif
-c       checking variable fmat (number 1)
-c       
-        il1 = iadr(lstk(top-rhs+1))
-        if (istk(il1) .ne. 1) then
-          err = 1
-          call error(53)
-          return
-        endif
-        if (istk(il1+1)*istk(il1+2) .ne. 1) then
-          err = 1
-          call error(89)
-          return
-        endif
-        l1 = sadr(il1+4)
-c     
-        call entier(1,stk(l1),istk(iadr(l1)))
-        err=lw-lstk(bot)
-        if (err .gt. 0) then
-          call error(17)
-          return
-        endif
-c
-        call ludel1(istk(iadr(l1)))
-        if (err .gt. 0) return
-c
-        top=top-rhs
-        lw0=lw
-        mv=lw0-l0
-c       no output variable
-        top=top+1
-        il=iadr(l0)
-        istk(il)=0
-        lstk(top+1)=l0+1
-        return
-      endif
 c
 c  fonctions matricielles gerees par l'appel a une macro
 c

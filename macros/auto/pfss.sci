@@ -1,4 +1,4 @@
-function [elts]=pfss(S,cord)
+function elts=pfss(S,cord)
 //Syntax : elts=pfss(S)
 //Partial fraction decomposition of the linear system S (in state-space form):
 // elts is the list of linear systems which add up to S
@@ -11,7 +11,9 @@ function [elts]=pfss(S,cord)
 flag=0;
 [LHS,RHS]=argn(0);
 if S(1)=='r' then flag=1;S=tf2ss(S);end
-if type(S)<>15 then error(91,1),end
+
+//-compat type(S)<>15 retained for list/tlist compatibility
+if type(S)<>15&type(S)<>16 then error(91,1),end
 [t,f,g,h,dd,dom]=S([1:5,7]);
 if t<>'lss' then error(91,1),end;
 [n,n]=size(f);

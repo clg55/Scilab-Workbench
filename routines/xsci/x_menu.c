@@ -13,7 +13,7 @@ suitability of this software for any purpose.  It is provided "as is"
 without express or implied warranty.
 */
 
-#include "x_ptyx.h"
+#include "x_ptyxP.h"
 #include "x_data.h"
 #include "x_menu.h"
 #include <X11/StringDefs.h>
@@ -102,7 +102,7 @@ static unsigned char check_bits[] = {
  * public interfaces
  */
 
-/* ARGSUSED */
+
 static Bool domenu (w, event, params, param_count)
     Widget w;
     XEvent *event;              /* unused */
@@ -153,14 +153,14 @@ static Bool domenu (w, event, params, param_count)
 	if (!screen->fontMenu) {
 	    screen->fontMenu = create_menu (term, toplevel, "fontMenu",
 					    fontMenuEntries,
-					    NMENUFONTS);  
+					    (Cardinal ) NMENUFONTS);  
 	    set_menu_font (True);
 	    set_sensitivity (screen->fontMenu,
 			     fontMenuEntries[fontMenu_fontescape].widget,
 			     (screen->menu_font_names[fontMenu_fontescape]
 			      ? TRUE : FALSE));
 	}
-	FindFontSelection (NULL, True);
+	FindFontSelection ((char *) 0, True);
 	set_sensitivity (screen->fontMenu,
 			 fontMenuEntries[fontMenu_fontsel].widget,
 			 (screen->menu_font_names[fontMenu_fontsel]
@@ -209,27 +209,27 @@ void HandlePopupMenu (w, event, params, param_count)
  */
 
 static Widget create_menu (xtw, toplevelw, name, entries, nentries)
-    XtermWidget xtw;
-    Widget toplevelw;
-    char *name;
-    struct _MenuEntry *entries;
-    int nentries;
+     XtermWidget xtw;
+     Widget toplevelw;
+     char *name;
+     struct _MenuEntry *entries;
+     Cardinal  nentries;
 {
-    Widget m;
-    TScreen *screen = &xtw->screen;
-    static XtCallbackRec cb[2] = { { NULL, NULL }, { NULL, NULL }};
-    static Arg arg = { XtNcallback, (XtArgVal) cb };
-
-    if (screen->menu_item_bitmap == None) {
+  Widget m;
+  TScreen *screen = &xtw->screen;
+  static XtCallbackRec cb[2] = { { NULL, NULL }, { NULL, NULL }};
+  static Arg arg = { XtNcallback, (XtArgVal) cb };
+  
+  if (screen->menu_item_bitmap == None) {
 	screen->menu_item_bitmap =
 	  XCreateBitmapFromData (XtDisplay(xtw),
 				 RootWindowOfScreen(XtScreen(xtw)),
 				 (char *)check_bits, check_width, check_height);
     }
 
-    m = XtCreatePopupShell (name, simpleMenuWidgetClass, toplevelw, NULL, 0);
+  m = XtCreatePopupShell (name, simpleMenuWidgetClass, toplevelw, (ArgList) 0,(Cardinal) 0);
 
-    for (; nentries > 0; nentries--, entries++) {
+    for (; nentries >= (Cardinal) 1; nentries--, entries++) {
 	cb[0].callback = (XtCallbackProc) entries->function;
 	cb[0].closure = (caddr_t) entries->name;
 	entries->widget = XtCreateManagedWidget (entries->name, 
@@ -243,14 +243,13 @@ static Widget create_menu (xtw, toplevelw, name, entries, nentries)
     return m;
 }
 
-/* ARGSUSED */
+
 static void handle_send_signal (gw, sig)
     Widget gw;
     int sig;
 {
     register TScreen *screen = &term->screen;
-
-    if (screen->pid > 1) kill_process_group (screen->pid, sig);
+    if (screen->pid > 1) kill_process_group ((int) screen->pid, sig);
 }
 
 
@@ -274,7 +273,7 @@ static void do_redraw (gw, closure, data)
 }
 
 
-/* ARGSUSED */
+
 void do_kill (gw, closure, data)
     Widget gw;
     caddr_t closure, data;
@@ -437,7 +436,7 @@ static void do_marginbell (gw, closure, data)
 }
 
 
-/* ARGSUSED */
+
 static void do_altscreen (gw, closure, data)
     Widget gw;
     caddr_t closure, data;
@@ -487,7 +486,7 @@ static void do_vtfont (gw, closure, data)
 
     for (i = 0; i < NMENUFONTS; i++) {
 	if (strcmp (entryname, fontMenuEntries[i].name) == 0) {
-	    SetVTFont (i, True, NULL, NULL);
+	    SetVTFont (i, True, (char *) NULL,(char *)  NULL);
 	    return;
 	}
     }
@@ -550,21 +549,21 @@ void HandleSetVisualBell(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_visualbell, (int) term->screen.visualbell,
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 
-/* ARGSUSED */
+
 void HandleRedraw(w, event, params, param_count)
     Widget w;
     XEvent *event;
     String *params;
     Cardinal *param_count;
 {
-    do_redraw(w, NULL, NULL);
+    do_redraw(w,(caddr_t) NULL,(caddr_t) NULL);
 }
 
-/* ARGSUSED */
+
 void HandleSendSignal(w, event, params, param_count)
     Widget w;
     XEvent *event;		/* unused */
@@ -607,14 +606,14 @@ void HandleSendSignal(w, event, params, param_count)
     Bell();
 }
 
-/* ARGSUSED */
+
 void HandleQuit(w, event, params, param_count)
     Widget w;
     XEvent *event;
     String *params;
     Cardinal *param_count;
 {
-    do_quit(w, NULL, NULL);
+    do_quit(w,(caddr_t) NULL,(caddr_t) NULL);
 }
 
 void HandleScrollbar(w, event, params, param_count)
@@ -624,7 +623,7 @@ void HandleScrollbar(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_scrollbar, (int) term->screen.scrollbar,
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleJumpscroll(w, event, params, param_count)
@@ -634,7 +633,7 @@ void HandleJumpscroll(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_jumpscroll, (int) term->screen.jumpscroll,
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleReverseVideo(w, event, params, param_count)
@@ -644,7 +643,7 @@ void HandleReverseVideo(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_reversevideo, (int) (term->flags & REVERSE_VIDEO),
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleAutoWrap(w, event, params, param_count)
@@ -654,7 +653,7 @@ void HandleAutoWrap(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_autowrap, (int) (term->flags & WRAPAROUND),
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleReverseWrap(w, event, params, param_count)
@@ -664,7 +663,7 @@ void HandleReverseWrap(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_reversewrap, (int) (term->flags & REVERSEWRAP),
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleAutoLineFeed(w, event, params, param_count)
@@ -674,7 +673,7 @@ void HandleAutoLineFeed(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_autolinefeed, (int) (term->flags & LINEFEED),
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleAppCursor(w, event, params, param_count)
@@ -684,7 +683,7 @@ void HandleAppCursor(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_appcursor, (int) (term->keyboard.flags & CURSOR_APL),
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleAppKeypad(w, event, params, param_count)
@@ -694,7 +693,7 @@ void HandleAppKeypad(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_appkeypad, (int) (term->keyboard.flags & KYPD_APL),
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleScrollKey(w, event, params, param_count)
@@ -704,7 +703,7 @@ void HandleScrollKey(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_scrollkey, (int) term->screen.scrollkey,
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleScrollTtyOutput(w, event, params, param_count)
@@ -714,7 +713,7 @@ void HandleScrollTtyOutput(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_scrollttyoutput, (int) term->screen.scrollttyoutput,
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleAllow132(w, event, params, param_count)
@@ -724,7 +723,7 @@ void HandleAllow132(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_allow132, (int) term->screen.c132,
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleCursesEmul(w, event, params, param_count)
@@ -734,7 +733,7 @@ void HandleCursesEmul(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_cursesemul, (int) term->screen.curses,
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleMarginBell(w, event, params, param_count)
@@ -744,7 +743,7 @@ void HandleMarginBell(w, event, params, param_count)
     Cardinal *param_count;
 {
     handle_toggle (do_marginbell, (int) term->screen.marginbell,
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
 void HandleAltScreen(w, event, params, param_count)
@@ -755,36 +754,36 @@ void HandleAltScreen(w, event, params, param_count)
 {
     /* eventually want to see if sensitive or not */
     handle_toggle (do_altscreen, (int) term->screen.alternate,
-		   params, *param_count, w, NULL, NULL);
+		   params, *param_count, w, (caddr_t) NULL, (caddr_t) NULL);
 }
 
-/* ARGSUSED */
+
 void HandleSoftReset(w, event, params, param_count)
     Widget w;
     XEvent *event;
     String *params;
     Cardinal *param_count;
 {
-    do_softreset(w, NULL, NULL);
+    do_softreset(w,(caddr_t) NULL,(caddr_t) NULL);
 }
 
-/* ARGSUSED */
+
 void HandleHardReset(w, event, params, param_count)
     Widget w;
     XEvent *event;
     String *params;
     Cardinal *param_count;
 {
-    do_hardreset(w, NULL, NULL);
+    do_hardreset(w,(caddr_t) NULL,(caddr_t) NULL);
 }
 
-/* ARGSUSED */
+
 void HandleClearSavedLines(w, event, params, param_count)
     Widget w;
     XEvent *event;
     String *params;
     Cardinal *param_count;
 {
-    do_clearsavedlines(w, NULL, NULL);
+    do_clearsavedlines(w,(caddr_t) NULL, (caddr_t) NULL);
 }
 

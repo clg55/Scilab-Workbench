@@ -7,12 +7,11 @@ c
 c     
       integer iadr,sadr
 c     
-      integer plus,minus,star,dstar,slash,bslash,dot,colon,concat
-      integer quote,extrac,insert,less,great,equal,ou,et,non
+      integer star,dstar,dot,colon
+      integer less,great,equal,ou,et,non
       integer top0
-      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
-      data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
-      data extrac/3/,insert/2/,less/59/,great/60/,equal/50/
+      data star/47/,dstar/62/,dot/51/,colon/44/
+      data less/59/,great/60/,equal/50/
       data ou/57/,et/58/,non/61/
 c     
       iadr(l)=l+l-1
@@ -329,13 +328,22 @@ c     un des vecteurs d'indice est vide
       endif
 c     
       if(istk(il1+1).lt.0) then
-         if(n2.eq.1.or.m2.eq.1) then
+c         vect(:)
+         if(n2.eq.1) then
             call icopy(5+m2+nel2,istk(il2),1,istk(il1),1)
             l1=sadr(il1+5+m2+nel2)
             lstk(top+1)=l1
          else
-            call error(43)
-            return
+            istk(il1)=6
+            istk(il1+1)=m2*n2
+            istk(il1+2)=1
+            istk(il1+3)=0
+            istk(il1+4)=nel2
+            irc1=il1+5
+            call sp2col(m2,n2,istk(irc2),nel2,istk(irc1))
+            l1=sadr(il1+5+m2*n2+nel2)
+            call iset(nel2,1,istk(irc1+m2*n2+1),1)
+            lstk(top+1)=l1
          endif
          return
       endif

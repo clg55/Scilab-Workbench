@@ -1,4 +1,4 @@
-//<xs,ps,xf,pf>=wiener(y,x0,p0,f,g,h,q,r)
+function [xs,ps,xf,pf]=wiener(y,x0,p0,f,g,h,q,r)
 //<xs,ps,xf,pf>=wiener(y,x0,p0,f,g,h,q,r)
 //macro which gives the Wiener estimate using
 //the forward-backward kalman filter formulation
@@ -70,8 +70,4 @@
       p2=pf(:,ind_nk)+ak*(p2-pf1(:,ind_nk1))*ak';
       xs=[x2 xs];
       ps=[p2 ps];
-   end,
- 
-//end
-
-
+    end

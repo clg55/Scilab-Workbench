@@ -1,11 +1,10 @@
-C/MEMBR ADD NAME=PROMPT,SSI=0
       subroutine prompt(pause)
 c
 c ====================================================================
 c scilab . librairie system
 c ====================================================================
 c
-c     issue matlab prompt with optional pause
+c     issue prompt with optional pause
 c
 c ====================================================================
 c

@@ -1,6 +1,7 @@
-#include "../machine.h"
+#include <string.h>
+#include <malloc.h>
 
-#define NULL 0
+#include "../machine.h"
 
 void C2F(l2adj)(lp,ls,n1,n,m,a)
 int *lp,*ls,*n1,*n,*m,**a;

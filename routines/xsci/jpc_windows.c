@@ -41,9 +41,12 @@
  *    UpdateLineLabel() :	Update line label.
  *    UpdateMessageWindow() :	Update message window.
  */
+
 #include "x_ptyx.h"
 #include "x_data.h"
 #include "jpc_global.h"
+
+extern Widget realToplevel;
 
 Widget	fileWindow,			/* parent of fileLabel and lineLabel */
 	messageWindow,			/* window for displaying messages */
@@ -137,34 +140,85 @@ void DefaultMessageWindow()
 
 extern WidgetClass xtermWidgetClass;
 
-#include "x_xbas.icon.X"
-Pixmap  xbas_icon;
-
 XtermWidget CreateSubWindows(parent)
 Widget parent;
 {
+  Arg 	args[1];
+  Cardinal n=0;
   XtermWidget CreateTermWindow();
   Widget	vpane;	 /* outer widget containing various subwindows */
-  Arg 	args[MAXARGS];
-  Cardinal 	n;
-  n = 0;
-  xbas_icon = XCreateBitmapFromData(XtDisplay(parent), 
-				    RootWindow(XtDisplay(parent),
-					       DefaultScreen(XtDisplay(parent))),
-				   xbas_bits, xbas_width, xbas_height);
-  XtSetArg(args[n], XtNiconPixmap, xbas_icon); n++;
-  XtSetValues(parent, args, n);
-  n=0;
-/** mis en ressources  jpc 23 nov 94
-  XtSetArg(args[n], XtNwidth, (XtArgVal) 650);        		n++;  
-  XtSetArg(args[n], XtNheight, (XtArgVal) 500);        		n++;
-**/
+  set_scilab_icon(parent);
   vpane = XtCreateManagedWidget("vpane", panedWidgetClass, parent, args, n);
   AddAcceptMessage(parent);
   CreateMessageWindow(vpane);
   CreateCommandPanel(vpane);
   return(CreateTermWindow(vpane));
 } 
+
+/******************
+ * icon 
+ *****************/
+
+/** #define USE_XPM_ICON **/
+
+#ifdef USE_XPM_ICON
+#include <X11/xpm.h>
+#endif /* USE_XPM_ICON */
+
+#include "x_xbas.icon.X" 
+
+Pixmap	sci_icon;
+
+set_scilab_icon(parent)
+     Widget parent;
+{
+  int colored_sci =1;
+  Arg 	args[MAXARGS];
+  Cardinal 	n;
+#ifdef USE_XPM_ICON
+  /* use the XPM color icon for color display */
+  /* see xmain parent(toplevel) != realtoplevel on colorDisplay or Gray levels */
+  if ( realToplevel != parent ) {
+    XpmAttributes    xsci_icon_attr;
+    Pixmap		dum;
+    Window		iconWindow;
+    int		status;
+    /*  make a window for the icon */
+    iconWindow = XCreateSimpleWindow(XtDisplay(realToplevel), DefaultRootWindow(XtDisplay(realToplevel)),
+				     0, 0, 1, 1, 0,
+				     BlackPixelOfScreen(XtScreen(realToplevel)),
+				     BlackPixelOfScreen(XtScreen(realToplevel)));
+    xsci_icon_attr.valuemask = XpmReturnPixels ;
+    /* flag whether or not to free colors when quitting xsci */
+    xsci_icon_attr.npixels = 0;
+    status = XpmCreatePixmapFromData(XtDisplay(realToplevel), iconWindow,
+				     xpm_sci_icon, &sci_icon, &dum, &xsci_icon_attr);
+    /* if all else fails, use standard monochrome bitmap for icon */
+    if (status == XpmSuccess) {
+      XResizeWindow(XtDisplay(realToplevel), iconWindow,
+		    xsci_icon_attr.width,
+		    xsci_icon_attr.height);
+      XSetWindowBackgroundPixmap(XtDisplay(realToplevel), iconWindow, sci_icon);
+      XtVaSetValues(realToplevel, XtNiconWindow, iconWindow, NULL);
+    } else {
+      sci_icon = XCreateBitmapFromData(XtDisplay(realToplevel),RootWindow(XtDisplay(realToplevel),
+								    DefaultScreen(XtDisplay(realToplevel))),
+				       (char *) sci_bits, sci_width, sci_height);
+    }
+  } else {
+#endif /* USE_XPM_ICON */
+    sci_icon = XCreateBitmapFromData(XtDisplay(realToplevel), RootWindow(XtDisplay(realToplevel),
+					       DefaultScreen(XtDisplay(realToplevel))),
+
+				     (char *) sci_bits, sci_width, sci_height);
+#ifdef USE_XPM_ICON
+  }
+#endif /* USE_XPM_ICON */
+  n = 0;
+  XtSetArg(args[n], XtNiconPixmap, sci_icon); n++;
+  XtSetValues(realToplevel, args, n);
+}
+
 
 /** we want Xscilab to accept messages : NewGraphWindowMessageAtom **/
 
@@ -192,26 +246,26 @@ AddAcceptMessage(parent)
      Widget parent;
 {
   WidgetUseMessage=parent ;
-  XtAddEventHandler(parent,ClientMessage, True, (XtEventHandler) UseMessage,NULL);  
+  XtAddEventHandler(parent,ClientMessage, True, (XtEventHandler) UseMessage,(XtPointer) 0);  
 }
 
 ReAcceptMessage()
 {
-  XtAddEventHandler(WidgetUseMessage,ClientMessage, True, (XtEventHandler) UseMessage,NULL);  
+  XtAddEventHandler(WidgetUseMessage,ClientMessage, True, (XtEventHandler) UseMessage,(XtPointer) 0);  
 }
 
 XtermWidget CreateTermWindow(parent)
 Widget parent;
 {
-  XtermWidget term;
+  XtermWidget term1;
   Arg 	args[MAXARGS];
   Cardinal 	n=0;
   /** 
     mis en ressources : jpc 1994
     XtSetArg(args[n], XtNmin, (XtArgVal) 200);n++;
     **/
-  term = (XtermWidget) XtCreateManagedWidget("Vtsci", xtermWidgetClass, parent, args,n);
-  return(term);
+  term1 = (XtermWidget) XtCreateManagedWidget("Vtsci", xtermWidgetClass, parent, args,n);
+  return(term1);
 }
 
 /*
@@ -235,9 +289,8 @@ Cardinal line;
     Arg 	args[MAXARGS];
     Cardinal 	n;
     char 	string[10];
-
     n = 0;
-    if (line > 0)
+    if (line > n)
     	sprintf(string, "%d", line);
     else
 	strcpy(string, "");

@@ -10,9 +10,6 @@
          return
       endif
       infe=32700
-      do 10 i=1,ma
-         phima(i)=0
- 10   continue
       valflo=0
  100  continue
       do 110 i=1,n

@@ -48,6 +48,7 @@ matrix is returned as a sparse matrix.
 .LP
 This function is useful to solve a system of linear equations
 where the unknown variables are matrices.
+
 .SH EXAMPLE
 .nf
 // Lyapunov equation solver (one unknown variable, one constraint)
@@ -56,16 +57,14 @@ A=rand(3,3);Q=rand(3,3);Q=Q+Q';D=list(A,Q);dimX=[3,3];
 [Aly,bly]=aff2ab(lyapunov,dimX,D);
 [Xl,kerA]=linsolve(Aly,bly); Xv=vec2list(Xl,dimX); lyapunov(Xv,D)
 Xm=Xv(:); A'*Xm+Xm*A-Q
-.fi
-.nf
+
 // Lyapunov equation solver with redundant constraint X=X'
 // (one variable, two constraints) D is global variable
 deff('Y=ly2(X,D)','[A,Q]=D(:);Xm=X(:); Y=list(A''*Xm+Xm*A-Q,Xm''-Xm)')
 A=rand(3,3);Q=rand(3,3);Q=Q+Q';D=list(A,Q);dimX=[3,3];
 [Aly,bly]=aff2ab(ly2,dimX,D);
 [Xl,kerA]=linsolve(Aly,bly); Xv=vec2list(Xl,dimX); ly2(Xv,D)
-.fi
-.nf
+
 // Francis equations
 // Find matrices X1 and X2 such that:
 // A1*X1 - X1*A2 + B*X2 -A3 = 0
@@ -79,8 +78,7 @@ dimX=[[m1,n2];[m3,m2]];
 [Af,bf]=aff2ab(bruce,dimX,D);
 [Xf,KerAf]=linsolve(Af,bf);Xsol=vec2list(Xf,dimX)
 bruce(Xsol,D)
-.fi
-.nf
+
 // Find all X which commute with A
 deff('y=f(X,D)','y=list(D(:)*X(:)-X(:)*D(:))')
 A=rand(3,3);dimX=[3,3];[Af,bf]=aff2ab(f,dimX,list(A));

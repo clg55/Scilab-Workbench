@@ -46,7 +46,7 @@ c        we must solve  M z =const
         call dlslv(me3s,kn,kn,Const,kn,1,w, rcond,ierr,1)
         if (ierr.ne.0) then
           write(6,2000) 
- 2000     format('Matrice mal conditionnee')
+ 2000     format('Ill conditioned matrix!')
         endif
 c         
         do 1001, i =1,kn ,1

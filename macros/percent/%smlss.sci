@@ -9,6 +9,6 @@ if prod(size(s2))==1 then
 end
 d=d1*d2;
 [a2;d1*c2];
-s=list('lss',a2,b2,d1*c2,d,x2,dom2)
+s=tlist('lss',a2,b2,d1*c2,d,x2,dom2)
 //end
 

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DWPOW,SSI=0
       subroutine dwpow(n,vr,vi,iv,powr,powi,ierr)
 c!but
 c     eleve les elements d'un vecteur reel a une puissance complexe
@@ -25,36 +24,35 @@ c Serge Steer INRIA 1989
 c!
       integer n,iv,ierr
       double precision vr(*),vi(*),powr,powi,sr,si
-c
+c     
       ierr=0
-c
+c     
       if(powi.ne.0.0d+0) goto 01
-c puissance reelle
-      call ddpow(n,vr,iv,powr,ierr)
-      call dset(n,0.0d+0,vi,iv)
+c     puissance reelle
+      call ddpow(n,vr,vi,iv,powr,ierr,iscmpl)
       return
-c
-   01 continue
-c puissance complexes
+c     
+ 01   continue
+c     puissance complexes
       ii=1
       do 20 i=1,n
-        if(vr(ii).ne.0.0d+0) then
-                 sr=vr(ii)**powr
-                 si=log(vr(ii))*powi
-                 vr(ii)=sr*cos(si)
-                 vi(ii)=sr*sin(si)
-                 ii=ii+iv
-                            else
-                 if(powr.gt.0.0d+0) then
-                                 vr(ii)=0.0d+0
-                                 vi(ii)=0.0d+0
-                                 ii=ii+iv
-                                   else
-                                 ierr=2
-                                 return
-                 endif
-        endif
-   20 continue
-c
+         if(vr(ii).ne.0.0d+0) then
+            sr=vr(ii)**powr
+            si=log(vr(ii))*powi
+            vr(ii)=sr*cos(si)
+            vi(ii)=sr*sin(si)
+            ii=ii+iv
+         else
+            if(powr.gt.0.0d+0) then
+               vr(ii)=0.0d+0
+               vi(ii)=0.0d+0
+               ii=ii+iv
+            else
+               ierr=2
+               return
+            endif
+         endif
+ 20   continue
+c     
       return
       end

@@ -4,5 +4,5 @@
 // p : matrice de polynome
 //!
 //origine S Steer INRAI 1992
-sr=s/list('lss',[],[],[],p,[],[])
+sr=s/tlist('lss',[],[],[],p,[],[])
 //end

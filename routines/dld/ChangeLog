@@ -1,3 +1,90 @@
+Tue, 11 Jul 95 07:51:13 CDT cdteel@esy.com (Carlton Teel)
+
+	* dld support for Convex C-Series using Convex's optimizing C (cc)
+	compiler with IEEE floating point representation.  Note that it
+	is not built with gcc!  Using Convex's C compiler allows for 
+	vectorization and parallelization of code that gcc does not support.
+
+	* sources are included and depend on _CONVEX_SOURCE be set (which
+	is automatically done by Convex cc.
+
+	* Although the sources pass all the test suites, it's not guaranteed
+	to be bug free.  To maintain coherency, please send bugs to 
+	isom@convex.com along with a test case.  Note that a modified version
+	of 3.2.3 has been in operation since the fall of 1993 without problems.
+
+	* Due to the way Convex handles relocation information (see Compiler
+	Utilities Guide for details), sharing of objects may be minimal.  For
+	best results, unloading is encouraged.
+
+	* Dynamic loading of objects with initialized common is not supported.
+
+Thu May 18 20:09:02 1995  Aubrey Jaffer  (jaffer@jacal)
+
+	* README: bumped version number: 3.2.7.
+
+	* error.c (dld_perror): Now prints out multiply defined symbol's
+	name with DLD_EMULTDEFS.
+
+	* dld.c (_dld_enter_global_ref): Sets dld_errname to multiply
+	defined symbol's name before calling fatal.
+
+	From: chen@adi.com (Franklin Chen)
+	* added const declarations where appropriate in source and
+	dld.texi.
+
+Sun Mar 19 02:12:11 1995  Aubrey Jaffer  (jaffer@jacal)
+
+	* dld.texinfo (C++ support): rewrote.
+	* dld.texinfo: Changed to use deftypfun.
+
+Wed Feb 15 23:24:17 1995  Aubrey Jaffer  (jaffer@jacal)
+
+	From: hiller@tu-harburg.d400.de (Dr. Thomas Hiller)
+	* gxxload.cc (dyn_load dyn_unload): These C++ functions
+	load/unload the library and perform calls to the global
+	constructors and destructors.
+
+Thu Feb  9 22:38:27 1995  Aubrey Jaffer  (jaffer@jacal)
+
+	* README: bumped version number: 3.2.6.
+
+	From: gt5462a@prism.gatech.edu (Brian Kral)
+	* type cleanup.
+
+	From: Hiller@tu-harburg.d400.de (Dr. Thomas Hiller)
+	* dld.c (search_library): Didn't recognize archives in Linux
+	with libc 4.6.27, gcc 2.6.2, and binutils 2.5.2.6.  Made
+	conditional (to look for "__.SYMDEF/" instead of "__.SYMDEF")
+	more stringent: now just for Linux gcc version <= 2.5.
+	* dld.h: conditional prototypes for __STDC__.
+
+Sat Jan 28 22:20:59 1995  Aubrey Jaffer  (jaffer@jacal)
+
+	* README: bumped version number: 3.2.5.
+
+Wed, 25 Jan 95 23:18 EST jeffrey@thompson.itm.org
+
+	* dld.c (Invalidate): I had to work a little to get dld 3.2.4 to
+	compile on linux. gcc version 2.5.8 was complaining in dld.c that
+	invalidate() was a macro. Since it was a static function, I
+	changed invalidate() to Invalidate() and the complaint went away.
+
+	I also added the typecasts to dld.c to stop the only warnings in
+	the whole compilation.
+
+	Also another little change, was adding a line to the test/Makefile
+	to use /usr/lib/libc.a instead of /usr/lib/libgcc.a.
+
+Wed, 18 Jan 1995 11:30:41 -0800 (PST) Mark Lakata <lakata@sseos.lbl.gov>
+
+	* test/Makefile (CFLAGS): At least on the Suns, the main program
+	must be linked statically, e.g. "gcc -static ...".  Now all the
+	examples work, except for add2.c, which doesn't compile.
+	  gcc -c -g -O6 -I.. -static add2.c
+	  add2.c:1: ansidecl.h: No such file or directory
+	  add2.c:2: gnu-stabs.h: No such file or directory
+
 Sat Feb  5 00:41:01 1994  Aubrey Jaffer  (jaffer@jacal)
 
 	From: "Cesare Mastroianni" <cece@dist.dist.unige.it>
@@ -8,6 +95,12 @@ Thu Feb  3 01:46:16 1994  Aubrey Jaffer  (jaffer@jacal)
 	* find_exec.c (dld_find_executable): added stat check for linux so
 	that it doesn't think directories with the same name as the
 	program are executable.
+
+pegelow@moorea.uni-muenster.de (Ulrich Pegelow),
+Fritz.heinrichmeyer@fernuni-hagen.de (Johann Friedrich Heinrichmeyer),
+jon@mast.QueensU.CA (Jon Davis), and jaffer@ai.mit.edu (Aubrye Jaffer).
+
+	* ported DLD to Linux.  Version 3.2.4.
 
 Thu May 30 00:15:31 1991  W. Wilson Ho  (how at sundrops)
 

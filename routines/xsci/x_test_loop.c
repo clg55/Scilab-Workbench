@@ -1,11 +1,23 @@
+
 #include "../machine.h"
 #include <stdio.h>
+
+#define PI0 (integer *) 0
+#define PD0 (double *)  0
+
+extern int demo_menu_activate;
+
+#include <string.h> /* in case of dmalloc */ 
+#include <malloc.h>
+
 
 main(argc, argv)
      int argc;
      char **argv;
 {
   int i,nowindow=0,nostartup=0;
+  char *p;
+  demo_menu_activate=1;
   for (i=argc-1 ; i >=0  ; i-- )
     {
       if ( strcmp(argv[i],"-ns")==0) nostartup=1;
@@ -15,83 +27,161 @@ main(argc, argv)
     C2F(scilab)(&nostartup);
   else
     main_sci(argc,argv);
+  return(0);
 };
 
-#define PROMPT "[loop test (quit,plot,click)]-->"
+C2F(dsort)() {};
+C2F(fbutn)() {};
 
-/* version with Xterm */
+#define PROMPT "[loop test]-->"
+
+typedef  struct  {
+  char *name;
+  int  (*fonc)(); } TestOpTab ;
+
+static int vide_() {}
+     
+static char buf[1000];
+
+
+test_plot()
+{
+  integer win=0;
+  check_win();
+  plot();
+  C2F(xsaveplots)(&win);
+  C2F(xloadplots)(&win);
+}
+
+test_menu()
+{
+  integer win_num=0,ne=3,ierr=0;
+  static char * entries[]={
+    "Un ","Deux","Trois",NULL};
+  AddMenu(&win_num,"test button",entries,&ne,&ierr);
+}
+
+test_quit() {
+  C2F(clearexit)(0);
+};
+
+test_loop() {
+  while (1) {
+    C2F(xevents)();
+  };
+} 
+
+test_message() 
+{
+  TestMatrixDialogWindow();
+  TestChoose();
+  TestMessage();
+  TestDialog() ;
+  TestmDialogWindow();
+  TestChoice();
+}
+
+test_click() {
+  integer i;
+  double x,y;
+  check_win();
+  C2F(dr1)("xclick","void",&i,PI0,PI0,PI0,PI0, PI0,&x,&y,PD0,PD0,0L,0L);
+  sprintf(buf,"-->[%d,%f,%f]",i,x,y);
+  Xputstring(buf,strlen(buf));
+}
+
+test_events() 
+{
+  int i;
+  for ( i=0 ; i < 1000; i++) 
+    {
+      unsigned usec=20;
+      xevents1();
+#ifdef sun
+      usleep(usec);
+#endif
+    };
+  Scistring("Quittting enevent loop");
+};
+
+test_xinfo() 
+{
+  xinfo_("Xinfo Tester",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+};
+
+
+test_xgc() {
+  integer num=0;
+  /** need ../xgc dir to work **/
+  /** xgc(); **/
+  DeleteWindowToList_(num);
+}
+
+static TestOpTab testTab[] ={
+  "add menu",test_menu,
+  "click", test_click,
+  "events",test_events,
+  "loop",test_loop,
+  "menus",test_message,
+  "plot",test_plot,
+  "quit",test_quit,
+  "xgc",test_xgc,
+  "xinfo",test_xinfo,
+  (char *) NULL,vide_
+  };
+
+LTest(x0) 
+     char * x0;
+{
+  int i=0;
+  while ( testTab[i].name != (char *) NULL)
+     {
+       int j;
+       j = strcmp(x0,testTab[i].name);
+       if ( j == 0 ) 
+	 { 
+	   (*(testTab[i].fonc))();
+	   return;}
+       else 
+	 { 
+	   if ( j <= 0)
+	     {
+	       sciprint("\nUnknow X operator <%s>\r\n",x0);
+	       break;
+	     }
+	   else i++;
+	 }
+     }
+  sciprint("\n Unknow X operator <%s>\r\n",x0);
+  i=0;
+  sciprint("%s","List of known operators \r\n");
+  while ( testTab[i].name != (char *) NULL)
+    {
+      sciprint("\t%s\r\n",testTab[i].name);
+      i++;
+    }
+}
 
 F2C(scilab)(nostartup)
      int *nostartup;
 {
   int siz=1000,len_line,eof,i;
-  static char buf[1000];
   C2F(xscion)(&i);
   if ( i == 1) 
     for ( ; ; ) {
       Xputstring(PROMPT,strlen(PROMPT));
-      zzledt1_(buf,&siz,&len_line,&eof);
+      C2F(zzledt1)(buf,&siz,&len_line,&eof,0L);
       Xputstring(buf,len_line);
       Xputstring("\r\n",2);
-      if ( strcmp(buf,"plot")==0)
-	{ 
-	  check_win();
-	  plot();
-	} 
-      else if ( strcmp(buf,"quit")==0) break; 
-      else if ( strcmp(buf,"looptest")==0)
-	{ 
-	  while (1) {
-	    C2F(xevents)();
-	  };
-	} 
-      else if ( strcmp(buf,"message")==0)
-	{ 
-	  int j=1;
-	  ExposeMessageWindow("1\npipo\npoo\nfoo",&j);
-	} 
-      else if ( strcmp(buf,"click")==0) 
-	{int i,x,y;
-	 check_win();
-	 xclick_("pipo",&i,&x,&y);
-	 sprintf(buf,"-->[%d,%d,%d]",i,x,y);
-	 Xputstring(buf,strlen(buf));
-       }
-      else if ( strcmp(buf,"eventloop")==0) 
-	{
-	  int i;
-	  for ( i=0 ; i < 1000; i++) 
-	    {
-	      unsigned usec=20;
-	      xevents1();
-	      usleep(usec);
-	    };
-	  Scistring("Quittting enevent loop");
-       };
+      LTest(buf);
     }
   else 
     for ( ; ; ) {
       fprintf(stdout,PROMPT);
-      zzledt_(buf,&siz,&len_line,&eof);
+      C2F(zzledt)(buf,&siz,&len_line,&eof,0L);
       fprintf(stdout,buf);
       fprintf(stdout,"\r\n");
-      if ( strcmp(buf,"plot")==0)
-	{ 
-	  check_win();
-	  plot();
-	} 
-      else if ( strcmp(buf,"quit")==0) break; 
-      else if ( strcmp(buf,"looptest")==0)
-	{ 
-	  while (1) C2F(xevents)();
-	} 
-      else if ( strcmp(buf,"click")==0) 
-	{int i,x,y;
-	 check_win();
-	 xclick_("pipo",&i,&x,&y);
-	 sprintf(buf,"-->[%d,%d,%d]",i,x,y);
-	 fprintf(stdout,buf);
-       };
+      LTest(buf) ;
     };
 };
 
@@ -102,13 +192,12 @@ C2F(sigbas)(i)
   fprintf(stderr,"CTRL_C activated \n");
 };
 
-#define IP0 (int *) 0
 
 check_win()
 {
-  int verb=0,win,na,v;
-  C2F(dr1)("xget","window",&verb,&win,&na,v,v,v,0,0);
-  C2F(dr1)("xset","window",&win,IP0,IP0,IP0,IP0,IP0,0,0);
+  integer verb=0,win,na;
+  C2F(dr1)("xget","window",&verb,&win,&na,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  C2F(dr1)("xset","window",&win,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 };
 
 
@@ -116,41 +205,35 @@ int C2F(scilines)(nl,nc)
      int *nl, *nc;
 {};
 
-int C2F(sciquit)(nl,nc)
-     int *nl, *nc;
-{return(1);}
+int C2F(sciquit)()
+{
+  return(1);
+}
      
 #include <math.h>
-
-#define PI0 (int *) 0
-#define DR1(x0,x1,x2,x3,x4,x5,x6,x7,lx0,lx1)  \
-  C2F(dr1)(x0,x1,(int *)(x2),(int *)(x3),(int *) (x4),(int *) (x5),(int *) (x6),(int *) (x7),lx0,lx1)
-
 
 #define XN2DD 2
 #define NCURVES2DD  1
 
 plot()
 {
-  int sec=10,v=0;
-  int style[NCURVES2DD],aint[4],n1,n2;
-  double x[NCURVES2DD*XN2DD],y[NCURVES2DD*XN2DD],brect[4],Wrect[4],Frect[4];
-  int i,j,num,k;
+  long int style[NCURVES2DD],aaint[4],n1,n2;
+  double x[NCURVES2DD*XN2DD],y[NCURVES2DD*XN2DD],brect[4];
+  int i,j;
   for ( j =0 ; j < NCURVES2DD ; j++)
     {
       i=0;
-      x[i+ XN2DD*j]= ((double) i)/10.0;
-      y[i+ XN2DD*j]= -9.75;
+      x[i+ XN2DD*j]= ((double) i+1)/10.0;
+      y[i+ XN2DD*j]= 1.234;
       i=1;
-      x[i+ XN2DD*j]= ((double) i)/10.0;
-      y[i+ XN2DD*j]= 1.10;
+      x[i+ XN2DD*j]= ((double) i+2)/10.0;
+      y[i+ XN2DD*j]= 2,64;
       }
   for ( i=0 ; i < NCURVES2DD ; i++)
     style[i]= -NCURVES2DD+i;
   n1=NCURVES2DD;n2=XN2DD;
-  aint[0]=aint[2]=2;aint[1]=aint[3]=10;
-  num=0;
-  C2F(plot2d)(x,y,&n1,&n2,style,"021"," ",brect,aint,0L,0L);
+  aaint[0]=aaint[2]=2;aaint[1]=aaint[3]=10;
+  C2F(plot2d)(x,y,&n1,&n2,style,"021"," ",brect,aaint,0L,0L);
 };
 
 
@@ -166,4 +249,11 @@ char *str;
   fprintf(stdout,"%s",str);
 }
 
-void cvstr_(){};
+
+void C2F(cvstr)(n,line,str,job,lstr)
+     int *n,*line;
+     char str[];
+     int  *job;
+     long int lstr;
+{};
+

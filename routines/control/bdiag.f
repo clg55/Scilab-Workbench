@@ -89,7 +89,8 @@ c
       dimension a(lda,n),x(lda,n),xi(lda,n),er(n),ei(n),bs(n)
       logical fail,fails
 c
-      double precision c,cav,d,e1,e2,rav,temp,zero,one,mone,ddot
+      double precision c,cav,d,e1,e2,rav,temp,zero,one,mone,ddot,eps
+      double precision dlamch
       integer da11,da22,i,j,k,km1,km2,l11,l22,l22m1,nk,ino
       integer low,igh
       data zero, one, mone /0.0d+0,1.0d+0,-1.0d+0/
@@ -98,6 +99,19 @@ c
       fail = .false.
       fails= .true.
       ino  =  -1
+c
+c     compute eps the l1 norm of the a matrix
+c
+      eps=0.0d0
+      do 11 j=1,n
+         temp=0.0d0
+         do 10 i=1,n
+            temp=temp+abs(a(i,j))
+ 10      continue
+         eps=max(eps,temp)
+ 11   continue
+      eps=dlamch('p')*eps
+
 c
 c     convert a to upper hessenberg form.
 c
@@ -142,7 +156,9 @@ c
       if (l22.ne.l11) go to 60
       da11 = 1
       if(l11 .eq. n) go to 51
-      if(a(l11+1,l11) .ne. zero) da11 = 2
+      if(abs(a(l11+1,l11)) .gt.eps ) then
+         da11 = 2
+      endif
    51 continue
       l22 = l11 + da11
       l22m1 = l22 - 1
@@ -167,7 +183,7 @@ c
       k = l22
       l = l22 + 1
       if(l22 .eq. n) go to 71
-      if(a(l22+1,l22) .ne. zero) l = l22 + 2
+      if(abs(a(l22+1,l22)) .gt. eps) l = l22 + 2
    71 continue
    80 continue
       if (l.gt.n) go to 100
@@ -178,7 +194,7 @@ c
    90 continue
       l = l + 1
       if(l.gt.n) go to 100
-      if (a(l,l-1).ne.zero) l=l+1
+      if (abs(a(l,l-1)).gt.eps) l=l+1
       go to 80
   100 continue
 c
@@ -187,7 +203,7 @@ c           loop to move the eigenvalue just located
 c           into first position of block a22.
 c
       if (k.eq.n) goto 105
-      if (a(k+1,k).ne.zero) go to 150
+      if (abs(a(k+1,k)).gt.eps) go to 150
 c
 c             the block we're moving to add to a11 is a 1 x 1
 c
@@ -195,7 +211,7 @@ c
   110 continue
       if (k.eq.l22) go to 230
       km1 = k - 1
-      if (a(km1,k-2).eq.zero) go to 140
+      if (abs(a(km1,k-2)).lt.eps) go to 140
 c
 c             we're swapping the closest block with a 2 x 2
 c
@@ -248,7 +264,7 @@ c
   160 continue
       if (k.eq.l22) go to 230
       km1 = k - 1
-      if (a(km1,k-2).eq.zero) goto 190
+      if (abs(a(km1,k-2)).lt.eps) goto 190
 c
 c             we're swapping the closest block with a 2 x 2 block.
 c
@@ -351,7 +367,7 @@ c
 c       solve -a11*p + p*a22 = a12.
 c
       call shrslv(a(l11,l11), a(l22,l22), a(l11,l22), da11,
-     * da22, lda, lda, lda, epsshr,rmax, fails)
+     * da22, lda, lda, lda, eps,epsshr,rmax, fails)
       if (.not.fails) go to 290
 c
 c       change a11 back to upper quasi-triangular.
@@ -380,6 +396,7 @@ c
       if (l22.gt.n) go to 300
       call dad(a, lda, l11, l22m1, l11, n, one, 0)
       call dad(a, lda, l11, l22m1, l11, l22m1, mone, 1)
+
 c
 c     store block size in array bs.
 c

@@ -32,7 +32,6 @@ c     on ne sait pas encore combien il y en a
          l0=lkp+1
          comp(1)=lkp
       else
-         if(top.eq.0) lstk(1)=1
          if(top+2.ge.bot) then
             call error(18)
             return

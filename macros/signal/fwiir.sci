@@ -1,5 +1,5 @@
-//<maxer,gain,trfun>=fwiir(nbit1,nbit2,w,x,y,weight,nsect)
-//<maxer,gain,trfun>=fwiir(nbit1,nbit2,w,x,y,weight,nsect)
+function [maxer,gain,trfun]=fwiir(nbit1,nbit2,w,x,y,weight,nsect)
+//[maxer,gain,trfun]=fwiir(nbit1,nbit2,w,x,y,weight,nsect)
 //
 //macro for the optimum design of IIR filters in cascade realization,
 //with prescribed number of bits.
@@ -39,6 +39,3 @@ trfun=work(1:ny);
 er=work(ny+1:2*ny);
 gain=work(2*ny+1);
 maxer=work(2*ny+2)
-//end
-
-

@@ -1,7 +1,5 @@
-
-k_dr=driver();
-driver("Wdp");
-if flag1=1;xset("use color",1);end
+kp=xget("pixmap");
+if kp=0, xset("pixmap",1);end;
 np=10;
 t=0:0.1:np*%pi;
 param3d((t/(np*%pi)*%pi).*sin(t),(t/(np*%pi)*%pi).*cos(t),...
@@ -11,6 +9,7 @@ for i=45:1:(135),xset("wwpc");
 		t/(np*%pi),35,i,'X@Y@Z',[0,4]);
  	xset("wshow");
 end
-driver(k_dr);
+if kp=0, xset("pixmap",0);end;
+
 
 

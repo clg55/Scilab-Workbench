@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=CLUNIT,SSI=0
       subroutine clunit( lunit, name, mode)
 c ====================================================================
 c
@@ -31,18 +30,18 @@ c
 c reference externe : cluni0
 c           fortran : len
 c
-c ================================== ( produit   ) =============
+c ====================================================================
 c
       include '../stack.h'
       integer       lunit,mode(*)
       character*(*) name
 c
-      integer        nunit,unit(20)
+      integer        nunit,unit(50)
       common /units/ nunit,unit
 c
       integer       iacc,ifor,ista,k,rec
       character*11  for,sta
-      character*80  nomfic
+      character*800  nomfic
 c
       if ( lunit.eq.rte .or. lunit.eq.wte ) then
 c
@@ -141,35 +140,35 @@ c
             if ( iacc.ne.0 ) then
 cstandard
                open( lunit, form=for, status=sta, access='direct',
-     1                      recl=rec, err=30)
+     1                      recl=rec, err=31)
 cstandard
 cvax
 c              open( lunit, form=for, status=sta, access='direct',
 c    1                      readonly,
-c    2                      recl=rec, err=30)
+c    2                      recl=rec, err=31)
 cvax
 capollo . fichier binaire
 c           elseif ( ifor.ne.0 ) then
 c              if(rec.le.0) rec = 250 000
 c              open( lunit, form=for, status=sta, access='sequential',
-c    1                      recl=rec, err=30)
+c    1                      recl=rec, err=31)
 capollo
 cvax . fichier formatte
 c           elseif ( ifor.eq.0 ) then
 c              open( lunit, form=for, status=sta, access='sequential',
 c    1                      carriagecontrol='list',
 c    2                      readonly,
-c    3                      err=30)
+c    3                      err=31)
 cvax
             else
 cstandard
                open( lunit, form=for, status=sta, access='sequential',
-     1                      err=30)
+     1                      err=31)
 cstandard
 cvax
 c              open( lunit, form=for, status=sta, access='sequential',
 c    1                      readonly,
-c    2                      err=30)
+c    2                      err=31)
 cvax
             endif
 c
@@ -231,37 +230,37 @@ c
 cstandard
                   open( lunit, file=nomfic(1:k), form=for,
      1                         access='direct' , status=sta,
-     2                         recl=rec, err=30)
+     2                         recl=rec, err=31)
 cstandard
 cvax
 c                 open( lunit, file=nomfic(1:k), form=for,
 c    1                         access='direct' , status=sta,
 c    2                         readonly,
-c    3                         recl=rec, err=30)
+c    3                         recl=rec, err=31)
 cvax
 capollo . fichier binaire
 c              elseif ( ifor.ne.0 ) then
 c                 if(rec.le.0) rec = 250 000
 c                 open( lunit, file=nomfic(1:k), form=for,
 c    1                         access='sequential', status=sta,
-c    2                         recl=rec, err=30)
+c    2                         recl=rec, err=31)
 capollo
 cvax . fichier formatte
 c              elseif ( ifor.eq.0 ) then
 c                 open( lunit, file=nomfic(1:k), form=for,
 c    1                         carriagecontrol='list',
 c    2                         readonly,
-c    3                         access='sequential' ,status=sta, err=30)
+c    3                         access='sequential' ,status=sta, err=31)
 cvax
                else
 cstandard
                   open( lunit, file=nomfic(1:k), form=for,
-     1                         access='sequential' ,status=sta, err=30)
+     1                         access='sequential' ,status=sta, err=31)
 cstandard
 cvax
 c                 open( lunit, file=nomfic(1:k), form=for,
 c    1                         readonly,
-c    2                         access='sequential' ,status=sta, err=30)
+c    2                         access='sequential' ,status=sta, err=31)
 cvax
                endif
 c
@@ -304,7 +303,10 @@ c error open
 c ----------
 c
    30 continue
-      err = 48
+      err = 240
+      goto 100
+   31 continue
+      err = 241
       goto 100
 c
    40 continue

@@ -39,6 +39,13 @@ To get a diagonal form (if it exists) choose a large value for
 \fVrmax\fR (\fVrmax=1/%eps\fR for example). 
 Generically (for real random A) the blocks are (1x1) and (2x2) and \fVX\fR 
 is the matrix of eigenvectors.
+.SH EXAMPLE
+.nf
+//Real case: 1x1 and 2x2 blocks
+a=rand(5,5);[ab,x,bs]=bdiag(a);ab
+//Complex case: complex 1x1 blocks
+[ab,x,bs]=bdiag(a+%i*0);ab
+.fi
 .SH SEE ALSO
 schur, sylv.
 

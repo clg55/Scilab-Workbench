@@ -204,6 +204,8 @@ text = ['if n>0 then x=1'
 deff('[x]=b(a)','x=a,prod([1 1])')
  
 deff('[x,y]=t5(n)',text)
+Warning :redefining function: t5                      
+ 
  
 [u,v]=t5(5);
  
@@ -284,6 +286,8 @@ if exists('tt')=1 then bugmes();quit;end
 comp(b)
  
 deff('[x,y]=t5(n)',text)
+Warning :redefining function: t5                      
+ 
  
 [u,v]=t5(5);
  
@@ -362,10 +366,14 @@ if exists('tt')=1 then bugmes();quit;end
 //more complex
  
 deff('[x]=b(a)','if a=1 then x=1,else x=a,prod([1 1]),end')
+Warning :redefining function: b                       
+ 
  
 //
  
 deff('[x,y]=t5(n)',text)
+Warning :redefining function: t5                      
+ 
  
 [u,v]=t5(5);
  
@@ -446,6 +454,8 @@ if exists('tt')=1 then bugmes();quit;end
 comp(b)
  
 deff('[x,y]=t5(n)',text)
+Warning :redefining function: t5                      
+ 
  
 [u,v]=t5(5);
  
@@ -558,7 +568,7 @@ a=2;
 //appel le plus imple
  
 y=ode(0,0,1:2,simul)
- y         =
+ y  =
  
 !   2.    4. !
  
@@ -569,7 +579,7 @@ if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
 comp(simul)
  
 y=ode(0,0,1:2,simul)
- y         =
+ y  =
  
 !   2.    4. !
  
@@ -578,9 +588,11 @@ if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
 //appel avec passage d'arguments supplementaires
  
 deff('[ydot]=simul(t,y,a)','ydot=a')
+Warning :redefining function: simul                   
+ 
  
 y=ode(0,0,1:2,list(simul,a))
- y         =
+ y  =
  
 !   2.    4. !
  
@@ -591,7 +603,7 @@ if norm(y-[a 2*a]) >1000*%eps then bugmes();quit;end
 comp(simul)
  
 y=ode(0,0,1:2,list(simul,a))
- y         =
+ y  =
  
 !   2.    4. !
  
@@ -613,6 +625,8 @@ text=['for k=1:n,'
 deff('[x]=calcul(n)',text)
  
 deff('[ydot]=simul(t,y,a)','ydot=a')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -637,6 +651,8 @@ x=calcul(3);
 if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 deff('[ydot]=simul(t,y,a)','ydot=a')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -649,6 +665,8 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
 text(2)='y=ode(a*(k-1),k-1,k,list(simul,a)),';
  
 deff('[x]=calcul(n)',text)
+Warning :redefining function: calcul                  
+ 
  
 deff('[ydot]=simul(t,y,a)','ydot=a')
  
@@ -675,6 +693,8 @@ x=calcul(3);
 if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 deff('[ydot]=simul(t,y,a)','ydot=a')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -685,15 +705,21 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
 //resume in external
  
 deff('[ydot]=simul(t,y,a)','ydot=a,tt=resume([tt,t])')
+Warning :redefining function: simul                   
+ 
  
 tt=[]
- tt        =
+ tt  =
  
      []
  
 deff('[x]=calcul(n)',text)
+Warning :redefining function: calcul                  
+ 
  
 deff('[ydot]=simul(t,y,a)','ydot=a')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -718,6 +744,8 @@ x=calcul(3);
 if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 deff('[ydot]=simul(t,y,a)','ydot=a')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -732,6 +760,8 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
 //
  
 deff('[x]=b(a)','if a=1 then x=a,prod([1 1]),else x=a,prod([1 1]),end')
+Warning :redefining function: b                       
+ 
  
 text=['for k=1:n,'
      'y=ode(a*(k-1),k-1,k,simul),'
@@ -741,8 +771,12 @@ text=['for k=1:n,'
 //
  
 deff('[x]=calcul(n)',text)
+Warning :redefining function: calcul                  
+ 
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -767,6 +801,8 @@ x=calcul(3);
 if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -779,6 +815,8 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
 text(2)='y=ode(a*(k-1),k-1,k,list(simul,a)),';
  
 deff('[x]=calcul(n)',text)
+Warning :redefining function: calcul                  
+ 
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
@@ -805,6 +843,8 @@ x=calcul(3);
 if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -815,15 +855,21 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
 //
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a),tt=resume([tt,t])')
+Warning :redefining function: simul                   
+ 
  
 tt=[]
- tt        =
+ tt  =
  
      []
  
 deff('[x]=calcul(n)',text)
+Warning :redefining function: calcul                  
+ 
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -848,6 +894,8 @@ x=calcul(3);
 if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -865,6 +913,8 @@ text=['for k=1:n,'
 //
  
 deff('[x]=calcul(n)',text)
+Warning :redefining function: calcul                  
+ 
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
@@ -891,6 +941,8 @@ x=calcul(3);
 if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -903,6 +955,8 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
 text(2)='y=ode(a*(k-1),k-1,k,list(simul,a)),';
  
 deff('[x]=calcul(n)',text)
+Warning :redefining function: calcul                  
+ 
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
  
@@ -929,6 +983,8 @@ x=calcul(3);
 if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -939,15 +995,21 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
 //
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a),tt=resume([tt,t])')
+Warning :redefining function: simul                   
+ 
  
 tt=[]
- tt        =
+ tt  =
  
      []
  
 deff('[x]=calcul(n)',text)
+Warning :redefining function: calcul                  
+ 
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -972,6 +1034,8 @@ x=calcul(3);
 if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
  
 deff('[ydot]=simul(t,y,a)','ydot=b(a)')
+Warning :redefining function: simul                   
+ 
  
 x=[];
  
@@ -988,7 +1052,7 @@ if norm(x-a*[1 2 3])>1000*%eps then bugmes();quit;end
 text=['deff(''[x]=b(a)'',''if a=1 then x=1,else x=a,prod([1 1]),end''),'
       'comp(b),'
       'x=b(n),']
- text      =
+ text  =
  
 !deff('[x]=b(a)','if a=1 then x=1,else x=a,prod([1 1]),end'),  !
 !                                                              !
@@ -1020,7 +1084,7 @@ deff('[ok]=cplist(l1,l2)',['ok=1;'
                     'if l1(k)<>l2(k) then ok=0,return,end;'
                  'end'])
  
-deff('[r]=horner(p,x)',['if type(p)=15 then';
+deff('[r]=horner(p,x)',['if type(p)==15|type(p)==16 then';
                            'r=horner(p(2),x)./horner(p(3),x),';
                            'return,';
                         'end;';
@@ -1029,15 +1093,15 @@ deff('[r]=horner(p,x)',['if type(p)=15 then';
                         'for k=1:d,';
                           'r=r*x+coeff(p,d-k)*eye;';
                         'end;'])
-Warning :redefining macro: horner  
+Warning :redefining function: horner                  
  
  
 deff('[f]=%prp(p1,p2)',['[l,c]=size(p2);';
                         'if l*c <>1 then f=p1*invr(p2),return,end;';
                         '[l,c]=size(p1);';
                         '[p1 p2]=simp(p1,p2*ones(l,c));';
-                        'f=list(''r'',p1,p2,[]);'])
-Warning :redefining macro: %prp    
+                        'f=tlist(''r'',p1,p2,[]);'])
+Warning :redefining function: %prp                    
  
  
  
@@ -1047,13 +1111,13 @@ horn=horner;
  
 h=1/s;
  
-if cplist(h,list('r',1,s,[]))=0 then bugmes();quit;end
+if cplist(h,tlist('r',1,s,[]))=0 then bugmes();quit;end
  
 h1=(z-1)/(z+1);
  
 hrn=horner(h,h1);
  
-if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(hrn , tlist('r',z+1,z-1,[]))=0 then bugmes();quit;end
  
 //
  
@@ -1061,7 +1125,7 @@ comp(horner)
  
 hrn=horner(h,h1);
  
-if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(hrn , tlist('r',z+1,z-1,[]))=0 then bugmes();quit;end
  
 //
  
@@ -1069,13 +1133,13 @@ comp(%prp);
  
 h=1/s;
  
-if cplist(h,list('r',1,s,[]))=0 then bugmes();quit;end
+if cplist(h,tlist('r',1,s,[]))=0 then bugmes();quit;end
  
 h1=(z-1)/(z+1);
  
 hrn=horn(h,h1);
  
-if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(hrn , tlist('r',z+1,z-1,[]))=0 then bugmes();quit;end
  
 //
  
@@ -1083,7 +1147,7 @@ comp(horn)
  
 hrn=horn(h,h1);
  
-if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
+if cplist(hrn , tlist('r',z+1,z-1,[]))=0 then bugmes();quit;end
  
 //
  
@@ -1092,12 +1156,12 @@ if cplist(hrn , list('r',z+1,z-1,[]))=0 then bugmes();quit;end
 //
  
 text=['aa=1,if a=2 then aa=b(a),end']
- text      =
+ text  =
  
  aa=1,if a=2 then aa=b(a),end   
  
 fic=file('open','test_macro_exec','unknown')
- fic       =
+ fic  =
  
     3.  
  
@@ -1106,19 +1170,21 @@ write(fic,text)
 file('close',fic)
  
 deff('[x]=b(a)','x=a,prod([1 1])')
+Warning :redefining function: b                       
+ 
  
  
 y=t9(2)
  
-aa=1,if a=2 then aa=b(a),end
- aa        =
+ aa=1,if a=2 then aa=b(a),end
+ aa  =
  
     1.  
- aa        =
+ aa  =
  
     2.  
  
- y         =
+ y  =
  
     2.  
  
@@ -1130,15 +1196,15 @@ comp(t9)
  
 y=t9(2)
  
-aa=1,if a=2 then aa=b(a),end
- aa        =
+ aa=1,if a=2 then aa=b(a),end
+ aa  =
  
     1.  
- aa        =
+ aa  =
  
     2.  
  
- y         =
+ y  =
  
     2.  
  
@@ -1148,18 +1214,20 @@ if y<>2 then bugmes();quit;end
  
 comp(b)
  
+Warning :redefining function: t9                      
+ 
  
 y=t9(2)
  
-aa=1,if a=2 then aa=b(a),end
- aa        =
+ aa=1,if a=2 then aa=b(a),end
+ aa  =
  
     1.  
- aa        =
+ aa  =
  
     2.  
  
- y         =
+ y  =
  
     2.  
  
@@ -1169,15 +1237,15 @@ comp(t9)
  
 y=t9(2)
  
-aa=1,if a=2 then aa=b(a),end
- aa        =
+ aa=1,if a=2 then aa=b(a),end
+ aa  =
  
     1.  
- aa        =
+ aa  =
  
     2.  
  
- y         =
+ y  =
  
     2.  
  

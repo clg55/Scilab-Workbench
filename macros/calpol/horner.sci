@@ -1,4 +1,4 @@
-function [r]=horner(p,x)
+function r=horner(p,x)
 // horner(P,x) evaluates the polynomial or rational matrix P = P(s) 
 // when the variable s of the polynomial is replaced by x
 // x can be a scalar or polynomial or rational matrix.
@@ -10,7 +10,9 @@ function [r]=horner(p,x)
 // See also: freq, repfreq.
 //!
 //
-if type(p)=15 then r=horner(p(2),x)./horner(p(3),x),return,end
+
+//-compat type(p)==15 retained for list/tlist compatibility
+if type(p)==15|type(p)==16 then r=horner(p(2),x)./horner(p(3),x),return,end
 [m,n]=size(p)
 r=[]
 for l=1:m

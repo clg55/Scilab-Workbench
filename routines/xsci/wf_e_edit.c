@@ -19,6 +19,9 @@
 #include "wf_w_drawprim.h"
 #include "wf_w_util.h"
 
+#include <string.h> /* in case of dmalloc */ 
+#include <malloc.h>  /* in case of dmalloc */ 
+
 DeclareArgs(1);
 int
 panel_set_value(widg, val)
@@ -29,7 +32,7 @@ panel_set_value(widg, val)
     /* I don't know why this doesn't work? */
     /* NextArg(XtNinsertPosition, strlen(val)); */
     SetValues(widg);
-    XawTextSetInsertionPoint(widg, strlen(val));
+    XawTextSetInsertionPoint(widg, (XawTextPosition) strlen(val));
 }
 
 char           *

@@ -1,153 +1,176 @@
-      subroutine domout(neq,q,qi,nbout,ti,touti,itol,rtol,atol,itask,
-     *     istate,iopt,rwork,lrw,iwork,liw,jacl2,mf,job)
-c!but
-c     Etant sortie du domaine d'integration au cours
-c     de l'execution de la routine Optm2, il s'agit ici de
-c     gerer ou d'effectuer l'ensemble des taches necessaires
-c     a l'obtention du point de la face par lequel la
-c     'recherche' est passee.
-c!liste d'appel
-c     subroutine domout(neq,q,qi,nbout,ti,touti,itol,rtol,atol,itask,
-c    *     istate,iopt,rwork,lrw,iwork,liw,jacl2,mf,job)
+      subroutine domout(neq,q,qi,nbout,ti,touti,itol,rtol,atol,itask
+     $     ,istate,iopt,w,lrw,iw,liw,jacl2,mf,job)
+C!but
+C     Etant sortie du domaine d'integration au cours
+C     de l'execution de la routine Optm2, il s'agit ici de
+C     gerer ou d'effectuer l'ensemble des taches necessaires
+C     a l'obtention du point de la face par lequel la
+C     'recherche' est passee.
+C!liste d'appel
+C     subroutine domout(neq,q,qi,nbout,ti,touti,itol,rtol,atol,itask,
+C    *     istate,iopt,w,lrw,iw,liw,jacl2,mf,job)
+C
+C     double precision  atol(neq(1)+1),rtol(neq(1)+1),q(neq(1)+1),
+C    *                  qi(neq(1)+1)
+C     double precision w(*),iw(*)
+C
+C     Entree :
+c     - neq. tableau entier de taille 3+(nq+1)*(nq+2)
+c         neq(1)=nq est le degre effectif du polynome q
+c         neq(2)=ng est le nombre de coefficient de fourier
+c         neq(3)=dgmax degre maximum pour q (l'adresse des coeff de 
+c               fourier dans tq est neq(3)+2
+c         neq(4:(nq+1)*(nq+2)) tableau de travail entier
+c     - tq. tableau reel de taille au moins
+c               7+dgmax+5*nq+6*ng+nq*ng+nq**2*(ng+1)
+c         tq(1:nq+1) est le tableau des coefficients du polynome q.
+c         tq(dgmax+2:dgmax+ng+2) est le tableau des coefficients
+c                      de fourier
+c         tq(dgmax+ng+3:) est un tableau de travail de taille au moins
+c                         5+5*nq+5*ng+nq*ng+nq**2*(ng+1)
 c
-c     double precision  atol(0:neq),rtol(0:neq),q(0:neq),qi(0:neq)
-c     double precision rwork(neq**2+19*neq+20),iwork(20+neq)
-c
-c     Entree :
-c     - Il y a deja toutes les variables et tableaux de
-c        variables necessaires a l'execution de la routine Lsode
-c     - qi. est le dernier point obtenu de la trajectoire
-c        qui soit a l'interieur du domaine.
-c     - q. est celui precedemment calcule, qui se situe a
-c       l'exterieur.
-c
-c     Sortie :
-c     - q. est cense etre le point correspondant a l'inter-
-c        section entre la face et la trajectoire.
-c     - job. est un parametre indiquant si le franchissement
-c            est verifie.
-c            si job=-1 pb de detection arret requis
-c
-c     Tableaux de travail
-c     - rwork : neq**2+25*neq+23
-c     - iwork : 20+neq
-c!
+C     - toutes les variables et tableaux de variables necessaires a 
+C               l'execution de la routine Lsode
+C     - qi. est le dernier point obtenu de la trajectoire
+C        qui soit a l'interieur du domaine.
+C     - q(1:nq+1). est celui precedemment calcule, qui se situe a
+C       l'exterieur.
+C
+C     Sortie :
+C     - q(1:nq+1). est cense etre le point correspondant a l'inter-
+C        section entre la face et la trajectoire.
+C     - job. est un parametre indiquant si le franchissement
+C            est verifie.
+C            si job=-1 pb de detection arret requis
+C
+C     Tableaux de travail
+C     - w : 24+22*nq+ng+nq**2
+C     - iw : 20+nq
+C!
       implicit double precision (a-h,o-z)
-      dimension  atol(0:neq),rtol(0:neq),rwork(*),iwork(*),
-     *     q(0:neq),qi(0:neq)
-      external feq,jacl2
-      common/comall/nall
-      common /sortie/nwf,info,ll
+      dimension atol(*), rtol(*), w(*), iw(*), q(*),
+     &          qi(*), xx(1)
+
+      integer neq(*)
+      external feq, jacl2
+      common /sortie/ io,info,ll
+C
+      nq=neq(1)
+      ng=neq(2)
+      nqmax=neq(3)
 c
-      lrwork=1
-      lqex=lrwork+neq**2+9*neq+22
-      lw=lqex+neq+1
-      lfree=lw+15*neq
+      lq=1
+      ltg=lq+nqmax+1
 c
-      tout=touti
-      nboute=0
+      lrw=nq**2 + 9*nq + 22
+      liw=20+nq
 c
-c     --- Etape d'approche de la frontiere ----------------------------
-c
- 300  kmax= int(log((tout-ti)/0.006250d+0)/log(2.0d+0))
-      k0=1
-c
-      if(info.gt.1) call outl2(40,neq,kmax,x,x,x,x)
-c
-c
- 314  do 380 k=k0,kmax
-c
-         tpas= (tout-ti)/2.0d+0
-c
-         if (nbout.gt.0) then
-            istate=1
-            call dcopy(neq+1,qi,1,q,1)
-            t=ti
-            tout=ti + tpas
-         else
-            call dcopy(neq+1,q,1,qi,1)
-            ti=t
-            tout=ti + tpas
-         endif
-c
- 340     if(info.gt.1) call outl2(41,neq,neq,q,x,t,tout)
-c
-         call lsode(feq,neq,q,t,tout,itol,rtol,atol,itask,
-     *        istate,iopt,rwork,lrw,iwork,liw,jacl2,mf)
-         if(info.gt.1) call outl2(42,neq,neq,q,x,t,tout)
-c
-         if (istate.eq.-1.and.t.ne.tout) then
-            if(info.gt.1) call outl2(43,neq,neq,x,x,x,x)
-            istate=2
-            goto 340
-         endif
-c
-         call front(neq,q,nbout,rwork(lw))
-         if(info.gt.1) call outl2(44,neq,nbout,x,x,x,x)
-c
-         if (nbout.gt.0) then
-            nboute=nbout
-            call dcopy(neq+1,q,1,rwork(lqex),1)
-         endif
-c
-         if (istate.lt.0) then
-            if(info.gt.1) call outl2(45,neq,istate,x,x,x,x)
-            job=-1
-            return
-         endif
-c
-         if (k.eq.kmax.and.nboute.eq.0.and.tout.ne.touti) then
-            tout=touti
-            goto 340
-         endif
-c
+
+      lrwork = 1
+      lw     = lrwork + nq**2 + 9*nq + 22
+      lqex   = lw+12*nq+ng+1
+      free   = lqex + nq + 1
+
+C
+      tout = touti
+      nboute = 0
+C
+C     --- Etape d'approche de la frontiere ----------------------------
+C
+      kmax = int(log((tout-ti)/0.006250d+0)/log(2.0d+0))
+      k0 = 1
+      if (info .gt. 1) call outl2(40,nq,kmax,xx,xx,x,x)
+ 314  do 380 k = k0,kmax
+        tpas = (tout-ti) / 2.0d+0
+        if (nbout .gt. 0) then
+          istate = 1
+          call dcopy(nq+1,qi,1,q,1)
+          t = ti
+          tout = ti + tpas
+        else
+          call dcopy(nq+1,q,1,qi,1)
+          ti = t
+          tout = ti + tpas
+        endif
+ 340    if (info .gt. 1) call outl2(41,nq,nq,q,xx,t,tout)
+        tsave=t
+        call lsode(feq,neq,q,t,tout,itol,rtol,atol,itask,istate,iopt,
+     &             w(lrwork),lrw,iw,liw,jacl2,mf)
+        if (info .gt. 1) call outl2(42,nq,nq,q,xx,t,tout)
+        if (istate.eq.-1 .and. t.ne.tout) then
+          if (info .gt. 1) call outl2(43,nq,nq,xx,xx,x,x)
+           if (t.le.tsave) then
+              job=-1
+              return
+           endif
+          istate = 2
+          goto 340
+        endif
+        call front(nq,q,nbout,w(lw))
+        if (info .gt. 1) call outl2(44,nq,nbout,xx,xx,x,x)
+        if (nbout .gt. 0) then
+          nboute = nbout
+          call dcopy(nq+1,q,1,w(lqex),1)
+        endif
+        if (istate .lt. 0) then
+          if (info .gt. 1) call outl2(45,nq,istate,xx,xx,x,x)
+          job = -1
+          return
+        endif
+        if (k.eq.kmax .and. nboute.eq.0 .and. tout.ne.touti) then
+          tout = touti
+          goto 340
+        endif
  380  continue
 c
-c     ---------------------------
-c
-      if (nboute.eq.0) then
-         job=0
-         return
-      else if (nboute.gt.2) then
-         newrap=1
-         goto 390
+      if (nboute .eq. 0) then
+        job = 0
+        return
+      elseif (nboute .gt. 2) then
+        newrap = 1
+        nqsav = nq
+        goto 390
       endif
-c
-      call watfac(neq,rwork(lqex),nface,newrap,rwork(lw))
-      if (newrap.eq.1) goto 390
-c
-      neqsav=neq
-      call onface(neq,q,nface,ierr,rwork(lw))
-      if(ierr.ne.0) then
-         job=-1
-         return
+C
+      call watfac(nq,w(lqex),nface,newrap,w(lw))
+      if (newrap .eq. 1) goto 390
+C
+      nqsav = nq
+      call onface(nq,q,q(ltg),ng,nface,ierr,w(lw))
+      if (ierr .ne. 0) then
+        job = -1
+        return
       endif
-      yi=phi(qi,neqsav)
-      yf=phi(q,neq)
-c
-      eps390=1.0d-08
-      if (yi.lt.(yf-eps390)) then
-         newrap=1
-         goto 390
+      yi = phi(qi,nqsav,q(ltg),ng,w(lw))
+      yf = phi(q,nq,q(ltg),ng,w(lw))
+C
+      eps390 = 1.0d-08
+      if (yi .lt. (yf-eps390)) then
+        newrap = 1
+        goto 390
       endif
-c
-      if(info.gt.1) call outl2(46,neq,nface,q,x,yi,yf)
-c
-      newrap=0
-c
- 390  if (newrap.eq.1) then
-         neq=neqsav
-         k0=kmax
-         kmax=kmax+1
-         nbout=1
-         tout=ti + 2*tpas
-         if(info.gt.1) call outl2(47,neq,neq,x,qi,x,x)
-         goto 314
+C
+      if (info .gt. 1) call outl2(46,nq,nface,q,xx,yi,yf)
+C
+      newrap = 0
+C
+ 390  if (newrap .eq. 1) then
+        nq = nqsav
+        k0 = kmax
+        kmax = kmax + 1
+        nbout = 1
+        if(ti + 2*tpas.le.ti) then
+           job=-1
+           return
+        endif
+        tout = ti + 2*tpas
+        if (info .gt. 1) call outl2(47,nq,nq,xx,qi,x,x)
+        goto 314
       endif
-c
-      job=1
-c
- 399  if(info.gt.1) call outl2(48,neq,neq,x,x,x,x)
+C
+      neq(1)=nq
+      job = 1
       return
-c
+C
       end
+

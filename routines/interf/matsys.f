@@ -11,14 +11,14 @@ c
       common /mprot/ macprt
 c
       
-      integer eol,blank,plus,minus,p,iadr,sadr
-      integer comma,dot,left,right,rparen,lparen,equal
+      integer eol,blank,comma,p,iadr,sadr
       integer id(nsiz),fe,fv,semi
-      integer double,reel,ent,extern,sort,errn,orts,rtso,tsor,out
+      integer double,reel,ent,sort,errn,orts,rtso,tsor,out
       integer uto,tou
       integer top2,tops,pt0,count,fptr,bbots
       double precision x
       logical flag,eqid
+      integer offset
 c     
       character*1  typfor
       character*40 nmsub
@@ -35,11 +35,11 @@ c
       integer resume(nsiz),sel(nsiz)
       data resume/505155099,673713686,nz2*673720360/
       data sel/236260892,673717516,nz2*673720360/
-      data eol/99/,blank/40/,plus/45/,minus/46/,semi/43/
-      data comma/52/,dot/51/
-      data left/54/,right/55/,rparen/42/,lparen/41/,equal/50/
+      data eol/99/,blank/40/,semi/43/
+      data comma/52/
+
       data fe/14/,fv/31/
-      data double/13/,reel/27/,ent/18/,extern/14/,sort/28/,nclas/29/
+      data double/13/,reel/27/,ent/18/,sort/28/
       data orts/24/,rtso/27/,tsor/29/,out/24/,uto/30/,tou/29/
 c     
       iadr(l)=l+l-1
@@ -52,8 +52,8 @@ c     resu form  link   exists errcatch errclear iserror predef
 c     11   12    13     14      15       16       17      18
 c     newfun clearfun  funptr  macr2lst setbpt delbpt dispbpt
 c     19      20       21       22       23     24      25
-c     mprotect whereis where   timer havewindow
-c     26         27    28      29       30
+c     mprotect whereis where   timer havewindow memory
+c     26         27    28      29       30       31
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
          call basout(io,wte,' matsys '//buf(1:4))
@@ -64,7 +64,7 @@ c
       if(rhs.gt.0) il=iadr(lstk(top))
       goto (10,999,999,55,60,70,80,120,130,140,150,160,190,180,
      +     200,210,220,230,240,250,250,300,320,320,370,380,390,
-     +     400,410,420,450),fin
+     +     400,410,420,450,500),fin
 c     
 c     debug
  10   if(rhs.le.0) then
@@ -783,7 +783,8 @@ c     nom des fichiers
          call cvstr(n1,istk(l),buf(1:n1),1)
          call cluni0( buf(1:n1), linkfl(llink:), n,ierr)
          if(ierr.ne.0) then
-            call error(48)
+            buf(n1+1:)=' '
+            call error(241)
             return
          endif
          linkfl(llink+n:llink+n)=' '
@@ -796,7 +797,7 @@ c     nom des fichiers
       lstk(top+1)=sadr(il+1)
 c     
       if(nlink.ne.0) then
-         if(tablin(nlink).eq.nmsub(2:ln-1))   nlink=nlink-1
+         if(tablin(nlink).eq.nmsub(1:ln))   nlink=nlink-1
       endif
       if(nlink.ge.maxlnk) then
          call error(114)
@@ -1085,7 +1086,7 @@ c
       endif
       goto 999
 c
-c     translate
+c     macrovar 
 c
  300  continue
       if (rhs .ne. 1) then
@@ -1098,7 +1099,7 @@ c
       endif
       lw=lstk(top+1)
       illist=iadr(lw)
-      call transl(top,illist,nlist)
+      call tradsl(top,illist,nlist)
       if(err.gt.0) return
       il=iadr(lstk(top))
       call icopy(nlist,istk(illist),1,istk(il),1)
@@ -1255,7 +1256,6 @@ c
  375     continue
       endif
       top=top+1
-      if(top.eq.1) lstk(top)=1
       il=iadr(lstk(top))
       istk(il)=0
       lstk(top+1)=sadr(il+3)
@@ -1393,6 +1393,75 @@ c     havewindow
       lstk(top+1)=sadr(il+4)
       return
 c
+ 500  continue
+c     stacksize
+      if (rhs .gt. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+      if (rhs.ne.1) then
+         top=top+1
+         il=iadr(lstk(top))
+         istk(il)=1
+         istk(il+1)=1
+         istk(il+2)=2
+         istk(il+3)=0
+         l=sadr(il+4)
+         stk(l)=lstk(isiz)-lstk(1)
+         stk(l+1)=lstk(isiz)-lstk(bot)+1
+         lstk(top+1)=l+2
+         return
+      endif
+      if(istk(il).ne.1) then
+         err=1
+         call error(53)
+         return
+      endif
+      if(istk(il+1)*istk(il+2).ne.1) then
+         err=1
+         call error(60)
+         return
+      endif
+      top=top-1
+      if (top.ne.0) then
+         buf='memory cannot be used in this context'
+         call error(1502)
+         return
+      endif
+      mem=stk(sadr(il+4))
+      memold=lstk(isiz)-lstk(1)
+      if (mem.eq.memold) goto 502
+      l=lstk(isiz)-lstk(bot)
+      if (mem.lt.l) then
+         buf='Required memory to small for defined data'
+         call error(1503)
+         return
+      endif
+      call scimem(mem+1,offset)
+      if(offset.eq.0) then
+         call error(112)
+         return
+      endif
+      offset=offset+1
+      call dcopy(l,stk(lstk(bot)),1,stk(offset+mem-l),1)
+      kd=offset-lstk(1)+mem-memold
+      do 501 k=bot,isiz
+         lstk(k)=lstk(k)+kd
+ 501  continue 
+      call freemem()
+      lstk(1)=offset
+      leps=sadr(iadr(lstk(isiz-5)) +4)
+
+ 502  continue
+      top=top+1
+      il=iadr(lstk(top))
+      istk(il)=0
+      lstk(top+1)=lstk(top)+1
+      
  999  return
       end
      
@@ -1405,5 +1474,3 @@ c     set  number of lines and columns
       lct(2) = max(0,nl)
       return
       end
-
-

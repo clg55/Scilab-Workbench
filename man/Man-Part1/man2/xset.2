@@ -4,7 +4,8 @@
 xset - set values of the graphic context
 .SH CALLING SEQUENCE
 .nf
-[]=xset(choice-name,x1,x2,x3,x4,x5)
+xset(choice-name,x1,x2,x3,x4,x5)
+xset()
 .fi
 .SH PARAMETERS
 .TP 10
@@ -71,20 +72,20 @@ The logical function used is set by \fVx1\fR. The default value is 3.
 .TP
 xset("clipping",x,y,w,h) 
 :  set the clipping
-zone to the rectange (x,y,w,h) (Upper-Left point Width Height).
+zone to the rectangle (x,y,w,h) (Upper-Left point Width Height).
 This function uses the current scale
 .TP
 xset("default")
 : reset the graphic context to default values
 .TP
 xset("dashes",i)
-: set the dashstyle to style i (0 for solid line)
+: set the dash style to style i (0 for solid line)
 .TP
 xset("font",fontid,fontsize)
 : to fix the current font and its current size.
 .TP
 xset("line mode",type);
-This function is used to fix the line drawing mode. Absolute mode is fixed withtype=1 an relative mode with type=0. (Warning : the mode type=0 is buged )
+This function is used to fix the line drawing mode. Absolute mode is fixed withtype=1 an relative mode with type=0. (Warning : the mode type=0 is bugged )
 .TP
 xset("mark",markid,marksize)
 : is used to set the current mark and current mark size.
@@ -106,12 +107,25 @@ xset("wpos",x,y);
 .TP
 xset("window",window-number)
 Set the current window to the window \fVwindow-number\fR and creates the window if 
-it dosn't exists.
+it doesn't exists.
 .TP
 xset("use color",flag)
 if flag=1 then xset("pattern",.) or xset("dashes",.) will be used so
 as to change the default Color for drawing or for filling patterns. 
 If flag=0 then we switch back to the gray and dashes mode.
+.TP
+xset("pixmap",flag)
+.RS
+.TP
+if
+flag=0 the graphics are directly displayed on the screen
+.TP
+if 
+flag=1 the graphics are done on a Pixmap and are send to the
+graphic window with the command  \fVxset("wshow")\fR. The Pixmap is
+cleared with the  command \fVxset("wwpc")\fR or with the usual command
+xbasc().
+.RE
 .TP 
 xset("wshow")
 : see the function \fVdriver\fR.
@@ -119,7 +133,9 @@ xset("wshow")
 xset("wwpc")
 : see the function \fVdriver\fR.
 .SH DESCRIPTION
-\fVxset\fR is used to set values of the graphic context.
+\fVxset\fR is used to set values of the graphic context. When called 
+no arguments, a choice menu is created showing the current values and 
+changes can be performed through toggle buttons 
 .SH SEE ALSO
 X11 documentation
 .SH AUTHOR

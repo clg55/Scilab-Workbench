@@ -1,43 +1,37 @@
-      subroutine lq(nq,tq,tlq,tvq)
+      subroutine lq(nq,tq,tr,tg,ng)
 c!but
 c     cette routine calcule a  partir de g(z) et q(z) le
-c       polynome Lq(z) defini comme le reste , tilde , de la division
-c       par q(z) du produit g(z) par le tilde de q(z) .
+c     polynome Lq(z) defini comme le reste , tilde , de la division
+c     par q(z) du produit g(z) par le tilde de q(z) .
 c!liste d'appel
 c     Entree :
 c        tg . tableau des coefficients de la fonction g .
 c        ng . degre du polynome g
 c        tq . tableau des coefficients du polynome q
 c        nq . degre du polynome q
-c
 c     Sortie :
-c        tlq . tableau du polynome Lq de dimension au plus nq-1
-c        tvq . tableau du polynome quotient vq de la division par
-c           q du polynome gqti .
+c        tr . tableau [tlq,tvq]
+c             tlq =tr(1:nq) coefficients du polynome Lq 
+c             tvq =tr(nq+1:nq+ng+1) coefficients du quotient vq de la 
+c                    division par q du polynome gqti .
 c!
-      parameter (npara=20,ncoeff=601)
+
       implicit double precision (a-h,o-z)
-      dimension tq(0:*),tlq(0:*),tvq(0:ng)
+      dimension tq(nq+1),tr(nq+ng+1),tg(ng+1)
 c
-      dimension tqti(0:npara),tgqti(0:ncoeff+npara),trq(0:npara)
-      common/foncg/tg(0:ncoeff)/degreg/ng
+c     calcul de tg*tq~
+      call tild (nq,tq,tr)
+      call dpmul1(tg,ng,tr,nq,tr)
 c
-      call tild (nq,tq,tqti)
-      call dpmul1(tg,ng,tqti,nq,tgqti)
-      ngq=ng+nq
-      call dpodiv(tgqti,tq,ngq,nq)
-c     call divpol (ngq,tgqti,nq,tq)
+c     division euclidienne de tg*tq~ par tq
+      call dpodiv(tr,tq,ng+nq,nq)
 c
-      do 20 j=nq-1,0,-1
-         trq(j)=tgqti(j)
- 20   continue
+c     calcul du tilde du reste  sur place
+      do 10 j=1,int(nq/2)
+         temp=tr(j)
+         tr(j)=tr(nq+1-j)
+         tr(nq+1-j)=temp
+ 10   continue
 c
-      do 30 j=ng+nq,nq,-1
-         tvq(j-nq)=tgqti(j)
- 30   continue
-c
-      nrq=nq-1
-      call tild (nrq,trq,tlq)
-c
-      return
+      return 
       end

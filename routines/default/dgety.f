@@ -1,8 +1,6 @@
-C/MEMBR ADD NAME=DGETY,SSI=0
       subroutine dgety(y, incr, istart)
 c!
-c sous programme d'interface entre la fonction corr et un sous
-c programme definissant les y
+c user interface for corr function
 c!
 c reference externe : dyncall
 c!
@@ -20,16 +18,18 @@ c
 c
       iero=0
 c
-c pour interfacer d'autres simulateurs modifier les lignes (entre c+ )
-c qui suivent en fonction du nom de la ou des routines a appeler.
+c
+c INSERT CALL TO YOUR OWN ROUTINE HERE 
+c The routine myownx is an example: it is called when the
+c string 'myowny' is given as a parameter 
+c in the calling sequence of scilab's corr built-in
+c function 
 c+
+c       call myowny(x, incr, istart)
 c+
 c sous programmes lies dynamiquement.
-      it1=nlink+1
- 1001 it1=it1-1
+      call tlink(namey,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.namey) goto 1001
-cc sun unix
       call dyncall(it1-1,y,incr,istart)
 cc fin
       return

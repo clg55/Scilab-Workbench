@@ -1,14 +1,16 @@
-function [r]=routh_t(h,k)
-//[r]=routh_t(h,k) computes routh table of denominator of the
+function r=routh_t(h,k)
+//r=routh_t(h,k) computes routh table of denominator of the
 //system described by transfer matrix SISO continue h with the
 //feedback by the gain k
 //If  k=poly(0,'k') we will have a polynomial matrix with dummy variable 
 //k, formal expression of the Routh table.
-//[r]=routh_t(d) computes Routh table of h.
+//r=routh_t(d) computes Routh table of h.
 //!
 [lhs,rhs]=argn(0)
 if rhs=2 then
-   if type(h)<>15 then
+  
+  //-compat type(h)<>15 retained for list/tlist compatibility
+   if type(h)<>15&type(h)<>16 then
      error('first argument must be rational')
    end;
    if h(1)<>'r' then

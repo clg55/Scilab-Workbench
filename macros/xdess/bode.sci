@@ -5,18 +5,21 @@ function []=bode(sl,fmin,fmax,pas,comments)
 pas_def='auto' // default
 xbasc()
 ilf=0
-select type(sl)
-case 15 then  // sl,fmin,fmax [,pas] [,comments]
+typ=type(sl)
+//-compat next line added for list/tlist compatibility
+if typ==15 then typ=16,end
+select typ
+case 16 then  // sl,fmin,fmax [,pas] [,comments]
   typ=sl(1)
   if typ<>'lss'&typ<>'r' then
     error(97,1)
   end
-if typ=='lss' then
-if sl(7)==[] then error('Undefined time domain (sl(7))');end
-end
-if typ=='r' then
-if sl(4)==[] then error('Undefined time domain (sl(4))');end
-end
+  if typ=='lss' then
+    if sl(7)==[] then error('Undefined time domain (sl(7))');end
+  end
+  if typ=='r' then
+    if sl(4)==[] then error('Undefined time domain (sl(4))');end
+  end
   select rhs
   case 1 then //sl
    comments=' '
@@ -93,7 +96,7 @@ rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
 
 xsetech([0,0,1.0,hx*0.95]);
 plot2d1("oln",frq',d',-[1,3:mn+1],"011",' ',rect,axis);
-xgrid([1,npy],-2,'ln')
+xgrid();
 xtitle('Magnitude ',' Hz','db');
 
 //phase
@@ -104,7 +107,7 @@ npy=modulo((ymx-ymn)/90-1,10)+1;
 rect=[xmn,ymn,xmx,ymx];axis=[10,npx,10,npy]
 xsetech([0,hx,1.0,hx*0.95]);
 plot2d1("oln",frq',phi',-[1,3:mn+1],"011",' ',rect,axis)
-xgrid([1,npy],-2,'ln')
+xgrid();
 xtitle('Phase ',' Hz','degrees');
 if mnc>0 then
   xsetech([0,2*hx,1.0,0.1],[0 0 1 1]);

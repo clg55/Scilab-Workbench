@@ -39,9 +39,9 @@
 #define Args		_fooArgList
 #define ArgCountMax	_fooArgCountMax
 
-#define DeclareArgs(n)	Arg Args[n]; int ArgCountMax = n; int ArgCount
+#define DeclareArgs(n)	Arg Args[n];Cardinal ArgCountMax = n; Cardinal ArgCount
 
-#define DeclareStaticArgs(n)  static Arg Args[n]; static int ArgCountMax = n; static int ArgCount
+#define DeclareStaticArgs(n)  static Arg Args[n]; static Cardinal ArgCountMax = n; static Cardinal ArgCount
 
 #define FirstArg(name, val) \
 	{ XtSetArg(Args[0], (name), (val)); ArgCount=1;}

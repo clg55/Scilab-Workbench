@@ -64,6 +64,11 @@ F2C(dynload)(ii,ename1,loaded_files,err)
    extern char *sys_errlist[];
    extern errno;
 
+#ifdef DEBUG
+  sciprint("ename1 [%s]\r\n",ename1);
+  sprintf(str,"lastlink %d, entry=%d\n",lastlink,*ii);Scistring(str);
+#endif
+
    libs=getenv("SYSLIBS");
 
    strcpy(prog,"");

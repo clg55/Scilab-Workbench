@@ -44,7 +44,7 @@ c puissance complexes
                  vi(ii)=sr*sin(si)
                  ii=ii+iv
                                              else
-                 ierr=2
+                 ierr=0
                  return
         endif
    20 continue

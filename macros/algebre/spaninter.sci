@@ -11,6 +11,8 @@ function [x,dim]=spaninter(a,b,tol)
 //!
 [lhs,rhs]=argn(0);
 [na,ma]=size(a);[nb,mb]=size(b);
+if ma*na==0 then dim=0;x=eye(nb,nb);return;end
+if mb*nb==0 then dim=0;x=eye(na,na);return;end
 if rhs=2 then tol=sqrt(%eps);end
 if na <> nb then error('Uncompatible dimensions'),end
 if mb > ma then [x,dim]=spaninter(b,a,tol),return,end

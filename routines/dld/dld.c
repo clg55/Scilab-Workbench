@@ -1,7 +1,7 @@
 /* dld -- dynamic link/unlink editor for C
    Copyright (C) 1990 by W. Wilson Ho.
 
-   Version 3.2.3
+   Version 3.2.7
    The author can be reached electronically by how@cs.ucdavis.edu or
    through physical mail at:
 
@@ -268,6 +268,7 @@ static int input_desc = 0;
 
 /* global variables to return the error code to the caller */
 int dld_errno;
+char *dld_errname;
 
 /* true if the executable flags are up-to-date */
 char _dld_exec_flags_valid;
@@ -286,10 +287,11 @@ register int errno;
 
 /* Like malloc but get fatal error if memory is exhausted.  */
 
+int
 _dld_malloc (size)
 int size;
 {
-    register int result = malloc (size);
+    register int result = (int) malloc (size);
     if (!result)
 	fatal (DLD_ENOMEMORY);
     return result;
@@ -301,7 +303,9 @@ int size;
 
 static char *
 concat (s1, s2, s3)
-char *s1, *s2, *s3;
+const char *s1;
+const char *s2;
+const char *s3;
 {
     register int len1 = strlen (s1), len2 = strlen (s2), len3 = strlen (s3);
     register char *result = (char *) _dld_malloc (len1 + len2 + len3 + 1);
@@ -317,7 +321,7 @@ char *s1, *s2, *s3;
 
 /* Add a new entry to the file chain if it is not already there.
    Return 0 if no actual insertion is needed, otherwise, return 1. */
-static
+static int
 insert_entry (head, entry)
 struct file_chain **head;
 register struct file_entry *entry;
@@ -378,6 +382,8 @@ register struct file_entry *entry;
     }
 
     fatal (DLD_ENOFILE);
+
+    return(1);  /* To supress warning message */
 } /* file_open */
 
 /* Medium-level input routines for rel files.  */
@@ -386,6 +392,10 @@ register struct file_entry *entry;
    DESC is the descriptor on which the file is open.
    ENTRY is the file's entry.  */
 
+/* For Convex C-Series, the header information is scattered about in the
+ * filehdr, scnhdr, and opthdr.  Hence, these must be processed and read
+ * so that the exec structure is properly handled */
+ 
 static void
 read_header (desc, entry)
 int desc;
@@ -395,9 +405,98 @@ register struct file_entry *entry;
     struct exec *loc = &entry->header;
 
     lseek (desc, entry->starting_offset, 0);
+ 
+#ifdef _CONVEX_SOURCE
+    /* This is a big-time kluge to fit SOFF into BSDOFF */
+    {
+       register int i, nscns;
+       struct scnhdr   *shptr;
+       struct opthdr   oh;
+       struct filehdr  fh;
+ 
+       /* Read filehdr */
+#if 0
+       lseek( desc, 0, SEEK_SET );
+#endif
+       len = read (desc, &fh, sizeof( struct filehdr ) );
+       if ( len != sizeof ( struct filehdr ) )
+           fatal (DLD_EBADHEADER);
+ 
+       /* Read opthdr */
+
+       len = read (desc, &oh, sizeof( struct opthdr ) );
+       if ( len != sizeof ( struct opthdr ) )
+           fatal (DLD_EBADHEADER);
+                
+       /* Make everyone happy! */
+
+       loc->a_magic = fh.h_magic;
+       loc->a_entry = oh.o_entry;
+       loc->a_syms = (oh.o_nsyms) * sizeof( struct nlist );
+       loc->a_trsize = 0;
+       loc->a_drsize = 0;
+       loc->a_tdrsize = 0;
+       loc->cnx_symoff = oh.o_symptr;
+       loc->cnx_stroff = fh.h_strptr;
+       entry->string_size = fh.h_strsiz;
+ 
+       nscns = fh.h_nscns;
+ 
+       /* Read section header(s) */
+ 
+       /* Position file pointer at first section */
+       lseek( desc, (entry->starting_offset) + (unsigned int) fh.h_scnptr, SEEK_SET);
+ 
+       /* Read all the section headers */
+       len = nscns * sizeof( struct scnhdr );
+       shptr = (struct scnhdr *)_dld_malloc( len );
+       if ( len != read (desc, shptr, len ) )
+       {
+           free (shptr);
+           fatal (DLD_EBADHEADER);
+       }
+ 
+       while( nscns-- > 0 )
+       {
+           switch( shptr->s_flags )
+           {
+               case S_TEXT:
+                  loc->a_text = shptr->s_size;
+                  loc->cnx_txtoff = shptr->s_scnptr;
+                  loc->a_trsize += shptr->s_nrel * sizeof( struct relocation_info );
+                  break;
+               case S_DATA:
+                  loc->a_data = shptr->s_size;
+                  loc->cnx_datoff = shptr->s_scnptr;
+                  loc->a_drsize += shptr->s_nrel * sizeof( struct relocation_info );
+                  break;
+               case S_TDATA:
+                  loc->a_tdata = shptr->s_size;
+                  loc->cnx_tdatoff = shptr->s_scnptr;
+                  loc->a_tdrsize += shptr->s_nrel * sizeof( struct relocation_info );
+                  break;
+               case S_BSS:
+                  loc->a_bss = shptr->s_size;
+                  break;
+               case S_TBSS:
+                  loc->a_tbss = shptr->s_size;
+                  break;
+               default:
+                  break;
+           }
+
+           shptr++;
+       } /* endwhile( nscns-- > 0 ) */
+    } /* end convex block */
+
+#else
+
     len = read (desc, loc, sizeof (struct exec));
     if (len != sizeof (struct exec))
 	fatal (DLD_EBADHEADER);
+
+#endif	/* _CONVEX_SOURCE */
+
     if (N_BADMAG (*loc))
 	fatal (DLD_EBADMAGIC);
 
@@ -450,6 +549,8 @@ int desc;
     if (!entry->header_read_flag)
 	read_header (desc, entry);
 
+    /* Get symbol table */
+
     if (entry->header.a_syms <= 0)
 	fatal (DLD_ENOSYMBOLS);
 
@@ -463,6 +564,12 @@ int desc;
 	fatal (DLD_ENOSYMBOLS);
     }
 
+    /* Get size of string table */
+ 
+#ifdef _CONVEX_SOURCE
+    /* Already done in read_header, so why bother with it here? */
+#else
+ 
     lseek (desc, N_STROFF (entry->header) + entry->starting_offset, 0);
     if (sizeof str_size != read (desc, &str_size, sizeof str_size)) {
 	free (entry->symbols);
@@ -471,7 +578,10 @@ int desc;
     }
 
     entry->string_size = str_size;
-} /* read_entry_symboles */
+
+#endif /* _CONVEX_SOURCE */
+
+} /* read_entry_symbols */
 
 
 /* Read the string table of file ENTRY into core.
@@ -504,6 +614,7 @@ int desc;
    RELOC_SIZE is its length in bytes.
    If everything is ok, return the number of external relocation entry.
    Otherwise, return -1. */
+int
 reloc_info_ok (data_size, reloc_info, reloc_size, sym_size)
 register int data_size;
 register struct relocation_info *reloc_info;
@@ -526,6 +637,10 @@ register int sym_size;
 		return -1;
 	} else if (symbolnum != N_TEXT && symbolnum != (N_TEXT | N_EXT) &&
 		   symbolnum != N_DATA && symbolnum != (N_DATA | N_EXT) &&
+#ifdef _CONVEX_SOURCE
+                   symbolnum != N_TDATA && symbolnum != (N_TDATA | N_EXT) &&
+                   symbolnum != N_TBSS && symbolnum != (N_TBSS | N_EXT) &&
+#endif /*_CONVEX_SOURCE */
 		   symbolnum != N_BSS  && symbolnum != (N_BSS | N_EXT))
 	    return -1;
 
@@ -541,9 +656,9 @@ register int sym_size;
 
 static int
 hash_string (key)
-char *key;
+const char *key;
 {
-    register char *cp;
+    register const char *cp;
     register int k;
 
     cp = key;
@@ -560,7 +675,7 @@ char *key;
 
 symbol *
 _dld_getsym (key)
-char *key;
+const char *key;
 {
     register int hashval;
     register symbol *bp;
@@ -595,7 +710,7 @@ char *key;
 
 symbol *
 _dld_getsym_soft (key)
-char *key;
+const char *key;
 {
     register int hashval;
     register symbol *bp;
@@ -643,7 +758,7 @@ void
 _dld_enter_global_ref (entry, nlist_p, name)
 struct file_entry *entry;
 register struct nlist *nlist_p;
-char *name;
+const char *name;
 {
     register symbol *sp = _dld_getsym (name);
     register int type = nlist_p->n_type;
@@ -666,13 +781,15 @@ char *name;
     if (type != (N_UNDF | N_EXT)) {
 	/* definition of a symbol */
 
-	if (olddef)
+	if (olddef) {
+	    dld_errname = sp->name;
 	    fatal (DLD_EMULTDEFS);
+	}
 	else {
 	    sp->defined = type;
 	    sp->value = common ? (long) _dld_malloc (nlist_p->n_value) :
 		nlist_p->n_value;
-	    if (common) bzero (sp->value, nlist_p->n_value);
+	    if (common) bzero ((void *)sp->value, nlist_p->n_value);
 	    sp->defined_by = entry;
 	}
 
@@ -811,7 +928,7 @@ cleanup_symtab ()
 #else
 		if (sp->defined == (N_TYPE | N_EXT) && sp->value)
 #endif
-		    free (sp->value);
+		    free ((void *)sp->value);
 		if (sp->referenced_by == 0) {
 		    free (sp->name);
 		    del_link_list_elt (_dld_symtab[i], prev_sp, sp, link);
@@ -832,7 +949,7 @@ cleanup_symtab ()
 #else
 		if (sp->defined == (N_TYPE | N_EXT) && sp->value)
 #endif
-		    free (sp->value);
+		    free ((void *)sp->value);
 		del_link_list_elt (_dld_symtab[i], prev_sp, sp, link);
 		continue;
 	    }
@@ -875,14 +992,18 @@ struct file_entry *entry;
 
     /* Search via __.SYMDEF if that exists, else linearly.  */
 
+    /* There used to be a large, complicated #if dependent on gcc
+       version number here.  But instead, lets just have all linuxes
+       try both the usual and mutant linux spellings. */
+
+    if (strcmp (name, "__.SYMDEF")
 #ifdef linux
-    if (!strcmp (name, "__.SYMDEF/"))
-#else
-    if (!strcmp (name, "__.SYMDEF"))
+	&& strcmp (name, "__.SYMDEF/")
 #endif
-	symdef_library (desc, entry, member_length);
-    else
+	)
 	linear_library (desc, entry);
+    else
+	symdef_library (desc, entry, member_length);
 
     free (name);
 } /* search_library */
@@ -1190,11 +1311,17 @@ register struct file_entry *entry;
     register struct nlist *end
 	= entry->symbols + entry->header.a_syms / sizeof (struct nlist);
     register int text_relocation, data_relocation, bss_relocation;
-
+ 
+#ifdef _CONVEX_SOURCE
+    text_relocation = entry->text_start_address;
+    data_relocation = entry->data_start_address;
+    bss_relocation = entry->bss_start_address;
+#else
     text_relocation = entry->text_start_address;
     data_relocation = entry->data_start_address - entry->header.a_text;
     bss_relocation = entry->bss_start_address - entry->header.a_text -
 	entry->header.a_data;
+#endif /* _CONVEX_SOURCE */
 
     for (p = entry->symbols; p < end; p++) {
 	/* If this belongs to a section,
@@ -1241,9 +1368,16 @@ int reloc_size;
 	= reloc_info + reloc_size / sizeof (struct relocation_info);
 
     int text_relocation = entry->text_start_address;
+#ifdef _CONVEX_SOURCE
+    int data_relocation = entry->data_start_address;
+    int tdata_relocation = entry->tdata_start_address;
+    int bss_relocation = entry->bss_start_address;
+    int tbss_relocation = entry->tbss_start_address;
+#else
     int data_relocation = entry->data_start_address - entry->header.a_text;
     int bss_relocation
 	= entry->bss_start_address - entry->header.a_text - entry->header.a_data;
+#endif /* _CONVEX_SOURCE */
 
     for (; p < end; p++) {
 	register int relocation = 0;
@@ -1289,6 +1423,29 @@ int reloc_size;
 		   of the file.  */
 		relocation = bss_relocation;
 		break;
+
+#ifdef _CONVEX_SOURCE
+            case N_TDATA:
+            case N_TDATA|N_EXT:
+                relocation = tdata_relocation;
+                break;
+ 
+            case N_TBSS:
+            case N_TBSS|N_EXT:
+                relocation = tbss_relocation;
+                break;
+ 
+#if 0
+            case N_COMM:
+            case N_COMM|N_EXT:
+            case N_TCDATA:
+            case N_TCDATA|N_EXT:
+            case N_TCBSS:
+            case N_TCBSS|N_EXT:
+                break;
+#endif /* These may need to be considered at some point */
+ 
+#endif /* _CONVEX_SOURCE */
 
 	    case N_ABS:
 	    case N_ABS | N_EXT:
@@ -1358,6 +1515,9 @@ int reloc_size;
    Update entry->header.a_{trsize,drsize} to reflect the new relocation
    table size (in bytes).
 */
+
+#ifndef _CONVEX_SOURCE
+
 static void
 relocate_local_refs (desc, entry)
 int desc;
@@ -1446,6 +1606,141 @@ struct file_entry *entry;
     }
 
 } /* relocate_local_refs */
+#endif /* not _CONVEX_SOURCE */
+ 
+#ifdef _CONVEX_SOURCE
+static void
+relocate_local_refs (desc, entry)
+int desc;
+struct file_entry *entry;
+{
+    int text_offset;
+ 
+    /* number of relocation info that describes an external references. */
+ 
+    int tr_entry_count = 0, dr_entry_count = 0, tdr_entry_count = 0;    
+    int nscns, size;
+    struct exec *loc = &entry->header;
+    struct filehdr  fh;
+    struct scnhdr   *shptr, *shstart, *shend;
+    struct relocation_info *reloc_buf;
+ 
+    if (!entry->header_read_flag)
+        read_header (desc, entry);
+ 
+    /****************
+     * Read filehdr *
+     ****************/
+    lseek( desc, (entry->starting_offset), SEEK_SET );
+    if ( read( desc, &fh, sizeof( struct filehdr ) ) != sizeof ( struct filehdr ) ) 
+        fatal (DLD_EBADHEADER);
+ 
+    /* Position file pointer at first section */
+ 
+    size = fh.h_nscns * sizeof( struct scnhdr );
+    shstart = (struct scnhdr *) _dld_malloc( size );
+    shend = shstart + fh.h_nscns;
+ 
+    /* Read the section headers */
+ 
+    lseek( desc, (entry->starting_offset) + (unsigned int) fh.h_scnptr, SEEK_SET);
+    if ( size != read (desc, shstart, size) )
+        fatal (DLD_EBADHEADER);
+                
+    /* Loop through the section headers, picking up relocation info along
+     * the way.  This is due to difference in SOFF and BSDOFF */
+ 
+    for( shptr=shstart; shptr < shend; shptr++ )
+    {
+       if( shptr->s_nrel <= 0 ) 
+          continue;
+       size = shptr->s_nrel * sizeof( struct relocation_info );
+       reloc_buf = (struct relocation_info *) _dld_malloc( size );
+       lseek( desc, (entry->starting_offset) + 
+            (unsigned int) (shptr->s_relptr), SEEK_SET );
+ 
+       /* Read the section header */
+ 
+       if ( size != read(desc,reloc_buf,size))
+       {
+          free( reloc_buf ); free( shstart ); 
+          fatal( DLD_EBADRELOC );
+       }
+ 
+       switch( shptr->s_flags )
+       {
+          case S_TEXT:
+          {
+             if ((tr_entry_count = reloc_info_ok(loc->a_text, 
+                 reloc_buf, loc->a_trsize, loc->a_syms) ) == -1)
+             {
+                free( reloc_buf ); free( shstart );
+                fatal( DLD_EBADRELOC );
+             }
+ 
+             entry->text_reloc = (struct dld_reloc_info *)
+                     _dld_malloc (tr_entry_count * sizeof (struct dld_reloc_info));
+             do_local_relocation (entry->text_start_address,
+                     entry->text_start_address, reloc_buf, 
+                     entry->text_reloc, loc->a_trsize, entry);
+             free( reloc_buf );
+             break;
+          } /* end case S_TEXT */
+ 
+          case S_DATA:
+          {
+             if ((dr_entry_count = reloc_info_ok(loc->a_data, 
+                 reloc_buf, loc->a_drsize, loc->a_syms) ) == -1)
+             {
+                free( reloc_buf ); free( shstart );
+                fatal( DLD_EBADRELOC );
+             }
+ 
+             entry->data_reloc = (struct dld_reloc_info *)
+                     _dld_malloc( dr_entry_count * sizeof(struct dld_reloc_info));
+             do_local_relocation (entry->data_start_address,
+                     entry->data_start_address, reloc_buf, 
+                     entry->data_reloc, loc->a_drsize, entry);
+             free( reloc_buf );
+             break;
+          } /* end case S_DATA */
+ 
+          case S_TDATA:
+          {
+             if ((tdr_entry_count = reloc_info_ok(loc->a_tdata, 
+                 reloc_buf, loc->a_tdrsize, loc->a_syms) ) == -1)
+             {
+                free( reloc_buf ); free( shstart );
+                fatal( DLD_EBADRELOC );
+             }
+ 
+             entry->tdata_reloc = (struct dld_reloc_info *)
+                     _dld_malloc (tdr_entry_count * sizeof (struct dld_reloc_info));
+             do_local_relocation (entry->tdata_start_address,
+                     entry->tdata_start_address, reloc_buf, 
+                     entry->tdata_reloc, loc->a_tdrsize, entry);
+             free( reloc_buf );
+             break;
+          } /* end case S_TDATA */
+ 
+          default:
+             break;
+       } /* end switch ( shptr->s_flags ) */
+    } /* end for(shptr<shend) */
+        
+    entry->header.a_trsize = tr_entry_count * sizeof (struct dld_reloc_info);
+    entry->header.a_drsize = dr_entry_count * sizeof (struct dld_reloc_info);
+    entry->header.a_tdrsize = tdr_entry_count * sizeof (struct dld_reloc_info);
+ 
+    /* Free the nlist array */
+ 
+    if (entry->symbols) {
+       free (entry->symbols);
+       entry->symbols = 0;
+    }
+    
+} /* relocate_local_refs */
+#endif /* _CONVEX_SOURCE */
 
 
 /* Relocate ENTRY's text or data section contents.
@@ -1569,7 +1864,7 @@ int reverse;
 /* given a file name, create an appropriate file_entry for it */
 static struct file_entry *
 make_entry (filename)
-char *filename;
+const char *filename;
 {
     register struct file_entry *entry =
 	(struct file_entry *) _dld_malloc (sizeof (struct file_entry));
@@ -1636,6 +1931,117 @@ read_text_and_data (desc, entry)
 int desc;
 register struct file_entry *entry;
 {
+#ifdef _CONVEX_SOURCE
+    int size, len, pagesize, npages;
+    int align_text, align_data, align_tdata, align_bss, align_tbss;
+    struct exec *loc = &entry->header;
+ 
+    if ( loc->a_text & 0x07 )
+       align_text = loc->a_text + (8 - (loc->a_text & 0x07));
+    else 
+       align_text = loc->a_text;
+ 
+    if ( loc->a_data & 0x07 )
+       align_data = loc->a_data + (8 - (loc->a_data & 0x07));
+    else 
+       align_data = loc->a_data;
+ 
+    if ( loc->a_tdata & 0x07 )
+       align_tdata = loc->a_tdata + (8 - (loc->a_tdata & 0x07));
+    else 
+       align_tdata = loc->a_tdata;
+ 
+    if ( loc->a_bss & 0x07 )
+       align_bss = loc->a_bss + (8 - (loc->a_bss & 0x07));
+    else
+       align_bss = loc->a_bss;
+ 
+    if ( loc->a_tbss & 0x07 )
+       align_tbss = loc->a_tbss + (8 - (loc->a_tbss & 0x07));
+    else 
+       align_tbss = loc->a_tbss;
+ 
+    size = align_text + align_data + align_tdata + align_bss + align_tbss;
+ 
+    /* Pass mmap a value that is a multiple of pagesize */
+ 
+    pagesize = getpagesize();
+    npages = size / pagesize;
+    if ( size > ( npages * pagesize ) ) npages++;
+    len = npages * pagesize;
+ 
+    entry->text_start_address = (int)mmap( (caddr_t)NULL, &len, 
+            PROT_READ|PROT_WRITE|PROT_EXEC, MAP_ANON , NOFD, (off_t)0 );
+ 
+    if ( (int)(entry->text_start_address) == -1)
+       fatal (DLD_ENOMEMORY);
+ 
+    if (size - align_text > 0) {
+       entry->data_start_address = entry->text_start_address + align_text;
+       entry->tdata_start_address = entry->data_start_address + align_data;
+       entry->bss_start_address = entry->tdata_start_address + align_tdata;
+       entry->tbss_start_address = entry->bss_start_address + align_bss;
+    } else {
+       entry->data_start_address = entry->bss_start_address = 0;
+       entry->tdata_start_address = entry->tbss_start_address = 0;
+    }
+ 
+    /* Read text and data sections into core.
+     * Note that the bss segment does not actually take up space in the
+     * object file, so its size must be subtracted from SIZE
+     */
+    
+    /* Read text */
+ 
+    lseek (desc, entry->starting_offset + N_TXTOFF(entry->header), 0);
+    if (loc->a_text != read (desc, (void *) entry->text_start_address, loc->a_text)) 
+    {
+       munmap( entry->text_start_address , size );
+       entry->text_start_address = entry->data_start_address =
+                                   entry->bss_start_address = 0;
+       entry->tdata_start_address = entry->tbss_start_address = 0;
+       fatal (DLD_ENODATA);
+    }
+        
+    /* Read data */
+ 
+    if ( loc->a_data > 0 )
+    {
+       lseek (desc, entry->starting_offset + loc->cnx_datoff, 0);
+       if (loc->a_data != read (desc, (void *) entry->data_start_address, loc->a_data))
+       {
+          munmap( entry->text_start_address , size );
+          entry->text_start_address = entry->data_start_address =
+                                      entry->bss_start_address = 0;
+          entry->tdata_start_address = entry->tbss_start_address = 0;
+          fatal (DLD_ENODATA);
+       }
+    }
+        
+    /* Read tdata */
+ 
+    if ( loc->a_tdata > 0 )
+    {
+       lseek (desc, entry->starting_offset + loc->cnx_tdatoff, 0);
+       if (loc->a_tdata != read (desc, (void *) entry->tdata_start_address, loc->a_tdata))
+       {
+          munmap( entry->text_start_address , size );
+          entry->text_start_address = entry->data_start_address =
+                                      entry->bss_start_address = 0;
+          entry->tdata_start_address = entry->tbss_start_address = 0;
+          fatal (DLD_ENODATA);
+       }
+    }
+ 
+    /* zero the bss segment */
+ 
+    if (loc->a_bss)
+       bzero ((void *) entry->bss_start_address, loc->a_bss);
+    if (loc->a_tbss)
+       bzero ((void *) entry->tbss_start_address, loc->a_tbss);
+ 
+#else
+ 
     register size = entry->header.a_text + entry->header.a_data +
 	entry->header.a_bss;
 
@@ -1654,8 +2060,8 @@ register struct file_entry *entry;
 
     lseek (desc, entry->starting_offset + N_TXTOFF(entry->header), 0);
     size -= entry->header.a_bss;
-    if (size != read (desc, entry->text_start_address, size)) {
-	free (entry->text_start_address);
+    if (size != read (desc, (char *)entry->text_start_address, size)) {
+	free ((void *)entry->text_start_address);
 	entry->text_start_address = entry->data_start_address =
 	    entry->bss_start_address = 0;
 	fatal (DLD_ENODATA);
@@ -1664,6 +2070,8 @@ register struct file_entry *entry;
     /* zero the bss segment */
     if (entry->header.a_bss)
 	bzero ((void *) entry->bss_start_address, entry->header.a_bss);
+
+#endif /* _CONVEX_SOURCE */
 } /* read_text_and_data */
 
 
@@ -1735,8 +2143,7 @@ register struct file_entry *entry;
  * reset the executable_flag of the given entry, and then recursively
  * propagate this to all modules that reference symbols in this entry.
  */
-static void
-invalidate (entry)
+static void Invalidate (entry)
 struct file_entry *entry;
 {
     register struct file_chain *p;
@@ -1748,7 +2155,7 @@ struct file_entry *entry;
 
     for (p = entry->refs_by; p; p = p->next)
 	if (p->entry->executable_flag)
-	    invalidate (p->entry);
+	    Invalidate (p->entry);
 } /* invalidate */
 
 /*
@@ -1778,11 +2185,11 @@ find_all_executable_modules ()
 	    register struct file_entry *q = p->subfiles;
 	    while (q) {
 		if (!q->all_symbols_resolved_flag && q->refs_by)
-		    invalidate (q);
+		    Invalidate (q);
 		q = q->chain;
 	    }
 	} else if (!p->all_symbols_resolved_flag && p->refs_by)
-	    invalidate (p);
+	    Invalidate (p);
     }
     _dld_exec_flags_valid = 1;
 } /* find_all_executable_modules */
@@ -1892,8 +2299,55 @@ register struct file_entry *entry;
     if (entry->text_reloc) free (entry->text_reloc);
 
     if (entry->data_reloc) free (entry->data_reloc);
+#if _CONVEX_SOURCE
+    {
+       register int size;
+       struct exec *loc = &entry->header;
+ 
+       if ( loc->a_text & 0x07 )
+          size = loc->a_text + (8 - (loc->a_text & 0x07));
+       else 
+          size = loc->a_text;
+ 
+       if ( loc->a_data & 0x07 )
+          size += loc->a_data + (8 - (loc->a_data & 0x07));
+       else 
+          size += loc->a_data;
+ 
+       if ( loc->a_tdata & 0x07 )
+          size += loc->a_tdata + (8 - (loc->a_tdata & 0x07));
+       else 
+          size += loc->a_tdata;
+ 
+       if ( loc->a_bss & 0x07 )
+          size += loc->a_bss + (8 - (loc->a_bss & 0x07));
+       else 
+          size += loc->a_bss;
+ 
+       if ( loc->a_tbss & 0x07 )
+          size += loc->a_tbss + (8 - (loc->a_tbss & 0x07));
+       else 
+          size += loc->a_tbss;
+ 
+       if ( entry->text_start_address && (size > 0 )) 
+          munmap ( entry->text_start_address, size );
+    }
+ 
+    /* Clean up after ourselves... */
+ 
+    entry->local_sym_name = 0;
+    entry->filename = 0;
+    entry->symbols = 0;
+    entry->strings = 0;
+    entry->text_reloc = 0;
+    entry->data_reloc = 0;
+    entry->text_start_address = 0;
+ 
+#else
 
-    if (entry->text_start_address) free (entry->text_start_address);
+    if (entry->text_start_address) free ((void *)entry->text_start_address);
+ 
+#endif /* _CONVEX_SOURCE */
 
     {
 	register struct file_entry *next = entry->chain;
@@ -1971,8 +2425,9 @@ struct file_entry *entry;
     return entry;
 } /* do_unlink */
 
+int
 dld_init (myname)
-char *myname;
+const char *myname;
 {
     int desc;
 
@@ -2032,9 +2487,9 @@ char *myname;
     return 0;
 } /* dld_init */
 
-
+int
 dld_link (object_file)
-char *object_file;
+const char *object_file;
 {
     register int desc;
     struct file_entry *old_latest_entry = _dld_latest_entry;
@@ -2087,7 +2542,7 @@ char *object_file;
 /* return the location of the given symbol without prepending a '_'. */
 unsigned long
 dld_get_bare_symbol (name)
-char *name;
+const char *name;
 {
     register symbol *sp;
 
@@ -2153,8 +2608,9 @@ int force;
 /*
  * return true if the named function can be safely exeucted.
  */
+int
 dld_function_executable_p (name)
-char name[];
+const char name[];
 {
     register symbol *sp;
     register char *p;

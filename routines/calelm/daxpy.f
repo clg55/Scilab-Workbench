@@ -1,39 +1,19 @@
-C/MEMBR ADD NAME=DAXPY,SSI=0
       subroutine daxpy(n,da,dx,incx,dy,incy)
-c!but
 c
-c     etant donne une constante a, un vecteur dx et un vecteur
-c     dy, cette subroutine fait:
-c                    dy = dy + a * dx
-c     quand les deux increments sont egaux a un, cette
-c     subroutine emploie des boucles "epanouis". dans le cas ou
-c     les increments sont negatifs, cette subroutine prend
-c     les composantes en ordre inverse.
-c
-c!liste d'appel
-c
-c     subroutine daxpy(n,da,dx,incx,dy,incy)
-c
-c     a: double precision.
-c
-c     dy, dx: vecteurs double precision.
-c
-c     incx, incy: increments entre deux composantes succesives
-c     des vecteurs.
-c
-c!auteur
-c
+c     constant times a vector plus a vector.
+c     uses unrolled loops for increments equal to one.
 c     jack dongarra, linpack, 3/11/78.
-c!
+c     modified 12/3/93, array(1) declarations changed to array(*)
 c
       double precision dx(*),dy(*),da
-      integer i,incx,incy,ix,iy,n
+      integer i,incx,incy,ix,iy,m,mp1,n
 c
       if(n.le.0)return
-      if (da .eq. 0.0d+0) return
+      if (da .eq. 0.0d0) return
       if(incx.eq.1.and.incy.eq.1)go to 20
 c
-c code for unequal increments or equal increments not equal to 1
+c        code for unequal increments or equal increments
+c          not equal to 1
 c
       ix = 1
       iy = 1
@@ -46,11 +26,23 @@ c
    10 continue
       return
 c
-c code for both increments equal to 1
+c        code for both increments equal to 1
 c
-   20 continue
-      do 30 i = 1,n
+c
+c        clean-up loop
+c
+   20 m = mod(n,4)
+      if( m .eq. 0 ) go to 40
+      do 30 i = 1,m
         dy(i) = dy(i) + da*dx(i)
    30 continue
-c
+      if( n .lt. 4 ) return
+   40 mp1 = m + 1
+      do 50 i = mp1,n,4
+        dy(i) = dy(i) + da*dx(i)
+        dy(i + 1) = dy(i + 1) + da*dx(i + 1)
+        dy(i + 2) = dy(i + 2) + da*dx(i + 2)
+        dy(i + 3) = dy(i + 3) + da*dx(i + 3)
+   50 continue
+      return
       end

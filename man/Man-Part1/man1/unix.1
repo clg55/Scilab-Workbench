@@ -7,10 +7,9 @@ unix - shell (sh) command execution
 unix(command-name)
 .fi
 .SH DESCRIPTION
-sends a string \fVcommand-name\fR to Unix for execution by the sh
-shell. standard output and standard errors of the shell command are
-written in the calling shell
-
+Sends a string \fVcommand-name\fR to Unix for execution by the sh
+shell. Standard output and standard errors of the shell command are
+written in the calling shell.
 .SH EXAMPLE
 .nf
 unix("ls $SCI/demos");
@@ -19,4 +18,4 @@ deff('wd=pwd()','unix(''pwd>/tmp/path'');wd=read(''/tmp/path'',1,1,''(a)'')')
 wd=pwd()
 .fi
 .SH SEE ALSO
-edit, manedit, unix_g, unix_s, unix_x
+edit, manedit, unix_g, unix_s, unix_w, unix_x

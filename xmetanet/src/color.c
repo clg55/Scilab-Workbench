@@ -22,6 +22,7 @@ char *colorNames[] = {
   "Gold",
   "Beige",
   "White",
+  "background",
   0
 };
 
@@ -36,9 +37,6 @@ arc *a;
     return;
   a->col = FindInLarray(color,colorNames) - 1;
   theColor = Colors[a->col];
-  UnhiliteArc(a);
-  theGG.active = 0;
-  theGG.active_type = 0;
   DrawArc(a);
 }
 
@@ -50,23 +48,17 @@ node *n;
     return;
   n->col = FindInLarray(color,colorNames) - 1;
   theColor = Colors[n->col];
-  UnhiliteNode(n);
-  theGG.active = 0;
-  theGG.active_type = 0;
   DrawNode(n);
 }
 
 void ColorObject()
 {
-  if (theGG.active != 0) {
-    switch (theGG.active_type) {
-    case ARC:
-      ColorArc((arc*)theGG.active);
-      break;
-    case NODE:
-      ColorNode((node*)theGG.active);
-      break;
-    }
+  if (theGG.n_hilited_nodes == 0 && theGG.n_hilited_arcs == 1) {
+    ColorArc((arc*)theGG.hilited_arcs->first->element);
+    theGG.modified = 1;
+  }
+  else if (theGG.n_hilited_nodes == 1 && theGG.n_hilited_arcs == 0) {
+    ColorNode((node*)theGG.hilited_nodes->first->element);
     theGG.modified = 1;
   }
 }

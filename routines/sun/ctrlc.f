@@ -1,7 +1,7 @@
       subroutine ctrlc
 c ================================== ( Inria    ) =============
 c
-      external sigbas
+c      external sigbas
 c      integer  is
 c
 c vax/vms

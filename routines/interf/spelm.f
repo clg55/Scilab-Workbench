@@ -3,6 +3,7 @@ c
       include '../stack.h'
 c     
       double precision abstol,reltol,tv,ptr,hand
+      integer top0
       integer iadr, sadr
       logical fact
 
@@ -15,6 +16,7 @@ c
       endif
 
       rhs = max(0,rhs)
+      top0=top+1-rhs
 c     
       if(fin.eq.1) then
          lw = lstk(top+1)
@@ -105,6 +107,20 @@ c     [m,n] given
             l=sadr(il+4)
             m=stk(l)
             n=stk(l+1)
+            if(m.lt.0.or.n.lt.0) then
+               call error(60)
+               return
+            endif
+            if (m*n.eq.0) then
+               top=top0
+               il=iadr(lstk(top))
+               istk(il)=1
+               istk(il+1)=0
+               istk(il+2)=0
+               istk(il+3)=0
+               lstk(top+1)=sadr(il+4)+1
+               return
+            endif
             top=top-1
             lw=lstk(top+1)
          endif

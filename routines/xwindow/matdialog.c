@@ -1,17 +1,18 @@
 #include "scilab_d.h"
-#include "../machine.h"
-static char **str;
 
-void C2F(cvstr)();
+extern void ShellFormCreate();
+extern void C2F(cvstr)();
+
+static char **str;
 static void MatrixDialogWindow();
 
 void C2F(xmatdg)(label,ptrlab,nlab,value,ptrv,descv,ptrdescv,desch,ptrdesch,nl,nc,res,ptrres,ierr)
      int *label,*ptrlab,*nlab,*value,*ptrv,*descv,*ptrdescv,*desch,*ptrdesch,*nl,*nc,*res,*ptrres,*ierr;
 {
 
-  int i,ni,nr,maxchars,nv,nl1,nc1;
+  int i,ni,nr,nv,nl1,nc1;
   char **descriptionh, **descriptionv,**valueinit,*labels;
-  maxchars= *ierr;/** Il faudrait utiliser maxchars **/
+  /** int maxchars= *ierr; Il faudrait utiliser maxchars **/
   *ierr=0;
   nv = *nl*(*nc);
   /* conversion of scilab characters into strings */
@@ -23,14 +24,15 @@ void C2F(xmatdg)(label,ptrlab,nlab,value,ptrv,descv,ptrdescv,desch,ptrdesch,nl,n
   if ( *ierr == 1) return;
   ScilabMStr2CM(value,&nv,ptrv,&valueinit,ierr);
   if ( *ierr == 1) return;
-  str=(char **) malloc((unsigned) (nv+1)*sizeof(char *));
+  str=(char **) MALLOC( (nv+1)*sizeof(char *));
+  if (str == (char **) 0) { Scistring("Malloc : No more place");*ierr=1;return;}
   nl1 = *nl;
   nc1 = *nc;
   MatrixDialogWindow(labels,descriptionv,descriptionh,valueinit,nl,nc);
-  free((char*)labels);
-  for (i=0;i< nl1*nc1;i++) free((char*)valueinit[i]); free((char*)valueinit);
-  for (i=0;i< nl1;i++) free((char*)descriptionv[i]); free((char*)descriptionv);
-  for (i=0;i< nc1;i++) free((char*)descriptionh[i]); free((char*)descriptionh);
+  FREE(labels);
+  for (i=0;i< nl1*nc1;i++) FREE(valueinit[i]); FREE(valueinit);
+  for (i=0;i< nl1;i++) FREE(descriptionv[i]); FREE(descriptionv);
+  for (i=0;i< nc1;i++) FREE(descriptionh[i]); FREE(descriptionh);
   if (*nl!=0)
     {
       int job=0;
@@ -40,25 +42,44 @@ void C2F(xmatdg)(label,ptrlab,nlab,value,ptrv,descv,ptrdescv,desch,ptrdesch,nl,n
 	ni=strlen(str[i-1]);
 	ptrres[nr+1]=ptrres[nr]+ni;
 	nr=nr+1;
-	F2C(cvstr)(&ni,res,str[i-1],&job,ni);
+	F2C(cvstr)(&ni,res,str[i-1],&job,(long int)0);
 	res+=ni;
-	free((char*)str[i-1]);
+	FREE(str[i-1]);
       }
-      free((char*)str);
+      FREE(str);
     }
 }
 
+
+/* A test function */
+
+TestMatrixDialogWindow()
+{
+  int nl=3,nc=2;
+  static String labels = "LaBel";
+  static String descriptionv[] = {
+    "row 1","row 2","row 3",
+    NULL
+    };
+  static String descriptionh[] = {
+    "col 1","col 2",
+    NULL
+    };
+  static String valueinit[] = {
+    "1","2","3","4","5","6",
+    NULL
+    };
+  str=(char **) MALLOC( (nl*nc+1)*sizeof(char *));
+  if (str == (char **) 0) { Scistring("Malloc : No more place");return;}
+  MatrixDialogWindow(labels,descriptionv,descriptionh,valueinit,&nl,&nc);
+}
+
+
+
 /* X Window Part */
 
-static Widget toplevel;
-extern XtAppContext app_con;
-
-#define X 147
-#define Y 33
-
-static Widget  *dialoglist;
+static Widget  *dialoglist,*labellistH, *labellistV;
 extern int ok_Flag_sci;
-
 
 static XtCallbackProc
 matDialogOk(w,nv,callData)
@@ -67,26 +88,28 @@ matDialogOk(w,nv,callData)
      int nv;
 { int ind,i,ns;
   Arg args[2];
-  int iargs;
+  Cardinal iargs;
   String str1,p;
   for (i=0;i<nv;i++) {
     iargs=0;
     XtSetArg(args[iargs], XtNstring, &str1); iargs++ ;
     XtGetValues(dialoglist[i],args,iargs);
     ns=strlen(str1);
-    p=(char *) malloc((unsigned)(ns+1)*sizeof(char));
+    p=(char *) MALLOC((ns+1)*sizeof(char));
     if (p == 0) { Scistring("Malloc : No more place");return;}
     strcpy(p,str1);
     ind = ns - 1 ;
     if (p[ind] == '\n' ) p[ind] = '\0' ;
     str[i]=p;
   }
-  free(dialoglist);
+  FREE( dialoglist);
+  FREE( labellistH);
+  FREE( labellistV);
   ok_Flag_sci = 1;
 }
+
 static XtCallbackProc 
 matDialogCancel(w,nv,callData)
-
      Widget w;
      caddr_t callData;
      int  nv;
@@ -95,154 +118,130 @@ matDialogCancel(w,nv,callData)
   ok_Flag_sci = -1;
 }
 
-static void MatrixDialogWindow(labels,descriptionv,descriptionh,valueinit,nl,nc)
+#define MAXLINES 16
+#define MAXWIDTH 900
+
+static void 
+MatrixDialogWindow(labels,descriptionv,descriptionh,valueinit,nl,nc)
      char **descriptionv,**descriptionh;
      char ** valueinit;
      char *labels;
      int *nl,*nc;
   {
+    Dimension j_width,j_height;
     Arg args[12];
-    XFontStruct *font;
-    int fontwidth=9;
-    int iargs = 0,i,j,ierr,mxdesc,smxini,mxini[500],siz;
-    Widget shell,wid,form,box,label,label2;
-    Widget *w;
-    char dialName[9],boxName[9];
-    int nv;
+    Cardinal iargs=0;
+    Dimension laij_width,laij_height;
+    /* A revoir ce 500 inutile JPC */
+    int i,j,mxdesc,smxini,mxini[500],siz, nv ;
+    Widget shell,dform,label,rowi,ij,ij0,ok,cancel,lviewport,dviewport,form1,cform;
     static Display *dpy = (Display *) NULL;
-
-    DisplayInit("",&dpy,&toplevel);
-    font = XLoadQueryFont(dpy,XWMENUFONT);
-
     nv = *nl*(*nc);
 
-    iargs=0;
-    XtSetArg(args[iargs], XtNx, X + 10); iargs++ ;
-    XtSetArg(args[iargs], XtNy, Y + DIALOGHEIGHT +10); iargs++;
-    XtSetArg(args[iargs], XtNallowShellResize, True); iargs++;
-    XtSetArg(args[iargs], XtNvertDistance ,1) ; iargs++;
-    shell = XtCreatePopupShell("dialogshell",transientShellWidgetClass,
-			       toplevel,args,iargs);
-    iargs = 0;
-    XtSetArg(args[iargs], XtNresizable , TRUE) ; iargs++;
-    form = XtCreateManagedWidget("message",formWidgetClass,shell,args,iargs);
+    ShellFormCreate("mtdialogShell",&shell,&dform,&dpy);
+
+    /* Create a Viewport+Label and resize it */
+    
+    ViewpLabelCreate(dform,&label,&lviewport,labels);
 
     iargs=0;
-    XtSetArg(args[iargs], XtNlabel ,labels) ; iargs++;
-    XtSetArg(args[iargs], XtNfont, font); iargs++;
-    box=XtCreateManagedWidget("text",labelWidgetClass,form,args,iargs);
-    /* An array of Widgets */
-    dialoglist=(Widget *)malloc((unsigned) (nv)*sizeof(Widget));
-    if ( dialoglist == (Widget *) NULL) 
+    dviewport = XtCreateManagedWidget("dViewport",viewportWidgetClass,
+				      dform, args, iargs);
+    iargs=0;
+    form1 = XtCreateManagedWidget("form",formWidgetClass,
+					  dviewport , args, iargs);
+
+    /* Allocate an array of Widgets */
+    dialoglist=(Widget *)MALLOC( (nv)*sizeof(Widget));
+    labellistH=(Widget *)MALLOC( (*nc)*sizeof(Widget));
+    labellistV=(Widget *)MALLOC( (*nl)*sizeof(Widget));
+    if ( dialoglist == (Widget *) 0 || labellistH == (Widget *) 0 || labellistV == (Widget *) 0) 
       {
-	/** Warning : ierr is not realy used up to now **/
-	ierr=1; return;
-      }
+	/** Warning : ierr is not realy used up to now 
+	  ierr=1; **/
+	return;
+      } 
+
+    /* maximum sizes */
 
     mxdesc=0;
-    for (i=0 ; i<*nl ; i++) 
+    for (i=0 ; i<*nl ; i++)
       {
-	siz=strlen(descriptionv[i]);mxdesc=Max(siz,mxdesc);
+        siz=strlen(descriptionv[i]);mxdesc=Max(siz,mxdesc);
       }
     smxini=0;
     for (j=0 ; j<*nc ; j++)
       {
-	siz=strlen(descriptionh[j]);
-	mxini[j]=siz;
-	for (i=0 ; i<*nl ; i++) 
-	  {
-	    siz=strlen(valueinit[i+j*(*nl)]);  mxini[j]=Max(siz,mxini[j]);
-	  }
-	smxini=smxini+mxini[j];
+        siz=strlen(descriptionh[j]);
+        mxini[j]=siz;
+        for (i=0 ; i<*nl ; i++)
+          {
+            siz=strlen(valueinit[i+j*(*nl)]);  mxini[j]=Max(siz,mxini[j]);
+          }
+        smxini=smxini+mxini[j];
       }
+
+    /* The first row : a set of labels */
+
     iargs=0;
-    XtSetArg(args[iargs], XtNborderWidth ,0) ; iargs++;
-    XtSetArg(args[iargs], XtNresizable ,TRUE) ; iargs++;
-    XtSetArg(args[iargs], XtNorientation , "horizontal") ; iargs++;
-    XtSetArg(args[iargs], XtNfromVert , box) ; iargs++;
-    XtSetArg(args[iargs], XtNvertDistance ,1) ; iargs++;
-/*    XtSetArg(args[iargs], XtNwidth ,(mxdesc+smxini+5)*fontwidth) ; iargs++;*/
-    box=XtCreateManagedWidget(" ",formWidgetClass,form,args,iargs);
+    rowi=XtCreateManagedWidget("rowi",formWidgetClass,form1,args,iargs);
     iargs=0;
-    XtSetArg(args[iargs], XtNlabel ," ") ; iargs++;
-    XtSetArg(args[iargs], XtNborderWidth ,0) ; iargs++;
-    XtSetArg(args[iargs], XtNwidth ,(mxdesc+1)*fontwidth) ; iargs++;
-    XtSetArg(args[iargs], XtNright ,"left") ; iargs++;
-    XtSetArg(args[iargs], XtNleft ,"left") ; iargs++;
-    XtSetArg(args[iargs], XtNtop ,"top") ; iargs++;
-    XtSetArg(args[iargs], XtNbottom ,"top") ; iargs++;
-    label=XtCreateManagedWidget("text",labelWidgetClass,box,args,iargs);
-    label2=label;
+    XtSetArg(args[iargs], XtNborderWidth,(Dimension) 0) ; iargs++;
+    ij0=ij=XtCreateManagedWidget("label",labelWidgetClass,rowi,args,iargs);
+
     for (j=0 ; j<*nc ; j++)
       {
 	iargs=0;
-	XtSetArg(args[iargs], XtNfromHoriz ,label2) ; iargs++;
-	XtSetArg(args[iargs], XtNlabel ,descriptionh[j]) ; iargs++;
-	XtSetArg(args[iargs], XtNborderWidth ,0) ; iargs++;
-	XtSetArg(args[iargs], XtNwidth ,(mxini[j]+4)*fontwidth) ; iargs++;
-	XtSetArg(args[iargs], XtNresize ,"both") ; iargs++;
-	XtSetArg(args[iargs], XtNhorizDistance ,4) ; iargs++;
-	XtSetArg(args[iargs], XtNresizable ,TRUE) ; iargs++;
-	XtSetArg(args[iargs], XtNfont, font); iargs++;
-	label2=XtCreateManagedWidget("text",labelWidgetClass,box,args,iargs);
+	XtSetArg(args[iargs], XtNfromHoriz,ij);iargs++;
+	ij=labellistH[j]=XtCreateManagedWidget("label",labelWidgetClass,rowi,args,iargs);
       }
-    
+
+    /* The other rows */
+
     for (i=0 ; i<*nl ; i++) 
       {
-	sprintf(dialName,"dialog%d",i);
-	sprintf(boxName,"box%d",i);
 	iargs=0;
-	XtSetArg(args[iargs], XtNborderWidth ,0) ; iargs++;
-	XtSetArg(args[iargs], XtNresizable ,TRUE) ; iargs++;
-	XtSetArg(args[iargs], XtNorientation , "horizontal") ; iargs++;
-	XtSetArg(args[iargs], XtNfromVert , box) ; iargs++;
-	XtSetArg(args[iargs], XtNvertDistance ,1) ; iargs++;
-	box=XtCreateManagedWidget(boxName,formWidgetClass,form,args,iargs);
+	XtSetArg(args[iargs], XtNfromVert , rowi) ; iargs++;
+	rowi=XtCreateManagedWidget("rowi",formWidgetClass,form1,args,iargs);
 	iargs=0;
-	XtSetArg(args[iargs], XtNlabel ,descriptionv[i]) ; iargs++;
-	XtSetArg(args[iargs], XtNborderWidth ,0) ; iargs++;
-	XtSetArg(args[iargs], XtNwidth ,(mxdesc+1)*fontwidth) ; iargs++;
-	XtSetArg(args[iargs], XtNright ,"left") ; iargs++;
-	XtSetArg(args[iargs], XtNleft ,"left") ; iargs++;
-	XtSetArg(args[iargs], XtNtop ,"top") ; iargs++;
-	XtSetArg(args[iargs], XtNbottom ,"top") ; iargs++;
-	XtSetArg(args[iargs], XtNfont, font); iargs++;
-	label=XtCreateManagedWidget("text",labelWidgetClass,box,args,iargs);
-	label2=label;
+	ij=labellistV[i]=XtCreateManagedWidget("label",labelWidgetClass,rowi,args,iargs);
 	for (j=0 ; j<*nc ; j++)
 	  {
 	    iargs=0;
-	    XtSetArg(args[iargs], XtNfromHoriz ,label2) ; iargs++;
-	    XtSetArg(args[iargs], XtNstring ,valueinit[j*(*nl)+i]) ; iargs++;
-	    XtSetArg(args[iargs], XtNwidth ,(mxini[j]+4)*fontwidth) ; iargs++;
-	    XtSetArg(args[iargs], XtNeditType ,XawtextEdit) ; iargs++;
-	    XtSetArg(args[iargs], XtNresize ,"both") ; iargs++;
-	    XtSetArg(args[iargs], XtNhorizDistance ,4) ; iargs++;
-	    XtSetArg(args[iargs], XtNresizable ,TRUE) ; iargs++;
-	    XtSetArg(args[iargs], XtNfont, font); iargs++;
-	    label2=XtCreateManagedWidget(dialName,
-					asciiTextWidgetClass,box,args,iargs);
-	    dialoglist[j*(*nl)+i]=label2;
+	    XtSetArg(args[iargs], XtNfromHoriz ,ij) ; iargs++;
+	    ij=XtCreateManagedWidget("ascii",asciiTextWidgetClass, rowi,args,iargs);
+	    dialoglist[j*(*nl)+i]=ij;
 	  }
       }
+   
+    /* resize `matrix' widget and fix init values */
+
+    LabelSize(ij0,mxdesc+1,1,&laij_width,&laij_height);
+    
+    for (j=0 ; j<*nc ; j++)
+      {
+	AsciiSize(dialoglist[0],mxini[j],1,&j_width,&j_height);
+	j_width=Max(j_width,laij_width);
+	j_height=Max(j_height,laij_height);
+	SetLabel(labellistH[j],descriptionh[j],j_width,j_height);
+	for (i=0 ; i<*nl ; i++) 
+	  SetAscii(dialoglist[j*(*nl)+i],valueinit[j*(*nl)+i],j_width,j_height);
+      }
+    SetLabel(ij0," ",laij_width,j_height);
+    for (i=0 ; i<*nl ; i++) 
+      SetLabel(labellistV[i],descriptionv[i],laij_width,j_height);
+
+    /* The buttons */
+    
     iargs=0;
-    XtSetArg(args[iargs], XtNborderWidth ,0) ; iargs++;
-    XtSetArg(args[iargs], XtNorientation , "horizontal") ; iargs++;
-    XtSetArg(args[iargs], XtNfromVert , box) ; iargs++;
-    box=XtCreateManagedWidget(boxName,boxWidgetClass,form,args,iargs);
-    iargs = 0;
-    XtSetArg(args[iargs], XtNlabel, "Ok" ); iargs++;
-    XtSetArg(args[iargs], XtNfont, font); iargs++;
-    wid=XtCreateManagedWidget("okbutton",commandWidgetClass,
-			      box,args,iargs);
-    XtAddCallback(wid, XtNcallback,(XtCallbackProc)matDialogOk ,(XtPointer) nv);  
-    iargs = 0;
-    XtSetArg(args[iargs], XtNlabel, "Cancel" ); iargs++;
-    XtSetArg(args[iargs], XtNfont, font); iargs++;
-    wid=XtCreateManagedWidget("cancelbutton",commandWidgetClass,
-			      box,args,iargs);
-    XtAddCallback(wid, XtNcallback,(XtCallbackProc)matDialogCancel ,(XtPointer) nv);  
-/*    XtPopup(shell,XtGrabExclusive);*/
+    cform = XtCreateManagedWidget("cform",formWidgetClass,dform,args,iargs);
+
+    ButtonCreate(cform,&ok,(XtCallbackProc)matDialogOk,(XtPointer) nv,
+		 "Ok","ok");
+    ButtonCreate(cform,&cancel,(XtCallbackProc)matDialogCancel,(XtPointer) nv,
+		 "Cancel","cancel");
+
     XtMyLoop(shell,dpy);
     if (ok_Flag_sci == -1) *nl=0;
 }
+

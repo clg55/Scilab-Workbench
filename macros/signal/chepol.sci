@@ -1,4 +1,4 @@
-//<Tn>=chepol(n,var)
+function [Tn]=chepol(n,var)
 //<Tn>=chepol(n,var)
 //Recursive implementation of Chebychev polynomial
 //  n   :Polynomial order
@@ -22,6 +22,5 @@
       Tn=2*poly(0,var)*chepol(n-1,var)-chepol(n-2,var),
    end,
  
-//end
 
 

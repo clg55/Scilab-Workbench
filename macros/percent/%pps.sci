@@ -24,7 +24,7 @@ else
     den=sum(diag(p*num))/n
     //
     [num,den]=simp(num,den*ones(m,n))
-    f=list('r',num,den,[])
+    f=tlist('r',num,den,[])
     if s=-1 then return,end
     f1=f;
     for k=2:-s,f=f*f1;end

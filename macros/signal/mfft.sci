@@ -1,4 +1,4 @@
-//<xk>=mfft(x,flag,dim)
+function [xk]=mfft(x,flag,dim)
 //<xk>=mfft(x,flag,dim)
 //macro which calculates the fft for a multi-dimensional signal
 // x    :x(i,j,k,...) input signal in the form of a row vector
@@ -33,7 +33,6 @@
    for k=1:maxi(size(dim)),
       xk=fft(xk,flag,dim(k),prod(dims(1:k)));
    end,
- 
-//end
+
 
 

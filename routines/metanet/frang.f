@@ -1,6 +1,6 @@
-      subroutine frang(i0,lp1,ls1,m,n,pile,rang)
+      subroutine frang(i0,lp1,ls1,m,n,pile,rang1,rang)
       implicit integer (a-z)
-      dimension lp1(*),ls1(m),rang(n),pile(n)
+      dimension lp1(*),ls1(m),rang(n),pile(n),rang1(n)
       i0=0
       do 10 i=1,n
          rang(i)=0
@@ -45,33 +45,35 @@
       oldtop=newtop
       goto 100
  300  continue
-      do 310 i=1,n
-         if(rang(i).ge.0) goto 310
-         i0=i
-         goto 315
+      do 309 i=1,n
+         rang1(i)=rang(i)
+ 309  continue
+      do 310 i0=1,n
+         if(rang1(i0).ge.0) goto 310
+ 315     continue
+         do 320 i=1,n
+            pile(i)=0
+            rang(i)=0
+ 320     continue
+         top=0
+         bottom=0
+         i=i0
+ 335     continue
+         if(lp1(i).eq.lp1(i+1))goto 345
+         do 340 ll=lp1(i),lp1(i+1)-1
+            j=ls1(ll)
+            if(rang(j).gt.0)goto 340
+            rang(j)=i
+            top=top+1
+            pile(top)=j
+ 340     continue
+         if(rang(i0).ne.0)goto 350
+ 345     continue
+         bottom=bottom + 1
+         if (bottom.gt.top) goto 310
+         i=pile(bottom)
+         goto 335
  310  continue
- 315  continue
-      do 320 i=1,n
-         pile(i)=0
-         rang(i)=0
- 320  continue
-      top=0
-      bottom=0
-      i=i0
- 335  continue
-      if(lp1(i).eq.lp1(i+1))goto 345
-      do 340 ll=lp1(i),lp1(i+1)-1
-         j=ls1(ll)
-         if(rang(j).gt.0)goto 340
-         rang(j)=i
-         top=top+1
-         pile(top)=j
- 340  continue
-      if(rang(i0).ne.0)goto 350
- 345  continue
-      bottom=bottom + 1
-      i=pile(bottom)
-      goto 335
  350  continue
  999  return
       end

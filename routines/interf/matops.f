@@ -10,13 +10,13 @@ c
       integer vol,iadr,sadr
 c     
       double precision sr,si,e1,st,e2,powr,powi,e1r,e1i,e2r,e2i
-      integer plus,minus,star,dstar,slash,bslash,dot,colon,concat
-      integer quote,extrac,insert,less,great,equal,ou,et,non
+      integer star,dstar,slash,bslash,dot,colon
+      integer less,great,equal
       integer top0
-      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
-      data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
-      data extrac/3/,insert/2/,less/59/,great/60/,equal/50/
-      data ou/57/,et/58/,non/61/
+      data star/47/,dstar/62/,slash/48/
+      data bslash/49/,dot/51/,colon/44/
+      data less/59/,great/60/,equal/50/
+
 c     
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -293,11 +293,10 @@ c     division a droite
       si=0.0d+0
       if(it2.eq.1) si=stk(l2+1)
  22   e1=max(abs(sr),abs(si))
-c     prov  NON!!!!!!!  1/1.d20 --> 0 !
-c      if(e1.eq.(1.d0+e1)) then
-c      sr=0.d0
-c      goto 14
-c      endif
+      if(e1.ge.dlamch('o')) then
+      sr=0.d0
+      goto 14
+      endif
 c
       if(e1.eq.0.0d+0) then
          call error(27)
@@ -335,21 +334,23 @@ c     division a gauche
       goto 22
 c     
 c     puissance
- 30   if (mn2 .ne. 1) then
+ 30   continue
+      if (mn2 .ne. 1) then
          call error(30)
          return
       endif
       if(m1.eq.n1.and.m1*n1.gt.1) goto 31
-      err=l1+mn1*(itr+1)-lstk(bot)
+c     element wise
+      err=l1+mn1*2-lstk(bot)
       if(err.gt.0) then
          call error(17)
          return
       endif
-c     element wise
+
       if(it2.eq.0) then
          powr=stk(l2)
          if(it1.eq.0) then
-            call ddpow(mn1,stk(l1),1,powr,err)
+            call ddpow(mn1,stk(l1),stk(l1+mn1),1,powr,err,itr)
          else
             call wdpow(mn1,stk(l1),stk(l1+mn1),1,
      &           powr,err)
@@ -1137,6 +1138,10 @@ c
       n = 1
       if (m2 .gt. 1) m = mn1
       if (m2 .eq. 1) n = mn1
+      if (m1.lt.0) then
+         m=mn1
+         n=1
+      endif
       istk(il1)=1
       istk(il1+1)=m
       istk(il1+2)=n
@@ -1217,7 +1222,7 @@ c     a(vl,vc)=m arg4(arg1,arg2)=arg3 ou  a(v)=u (arg3(arg1)=arg2)
       n=-1
       goto (86,88),rhs-2
 c     
-c     arg3(arg1)=arg2
+c     narg3(arg1)=arg2
 c     
  86   mk=m3
       nk=n3
@@ -1231,6 +1236,49 @@ c
       if(it1.ne.0) then
          call error(21)
          return
+      endif
+c
+      if (n3.gt.1.and.m3.gt.1) then
+c     arg3(arg1)=arg2 with arg3 a matrix
+         if(n2.gt.1.and.m2.gt.1) then
+            call error(15)
+            return
+         endif
+         m3=n3*m3
+         n3=1
+         md=md*nd
+         nd=1
+         if(n1.lt.0) then
+c     .     arg3(:)=arg2 with arg3 a matrix
+            if (mn2.ne.mk*nk) then
+               call error(21)
+               return
+            endif
+            istk(il1)=1
+            istk(il1+1)=mk
+            istk(il1+2)=nk
+            istk(il1+3)=it2
+            call dcopy((it2+1)*mn2,stk(l2),1,stk(l1),1)
+            lstk(top+1)=l1+mn2*(it2+1)
+            return
+         else
+            m=0
+            do 87 i = 1, m1*n1
+               ls=int(stk(l1+i-1))
+               if(ls.le.0) then
+                  call error(21)
+                  return
+               endif
+               m=max(m,ls)
+ 87         continue
+            if (m.gt.m3) then
+               call error(21)
+               return
+            endif
+            mr=mk
+            nr=nk
+            goto 94
+         endif
       endif
 c
       if (n3.le.1.and.n2.le.1) then
@@ -1318,7 +1366,7 @@ c
       else
          mr = max(mr,md)
       endif
-      mr = max(mr,md)
+cSS96      mr = max(mr,md) ( v=1,v([1 1]=[3 4] --> [4 0])
 c     
       nr=nk
       if (n .ge. 0) then 
@@ -1337,10 +1385,10 @@ c
       else
          nr = max(nr,nd)
       endif
-      nr = max(nr,nd)
+cSS96      nr = max(nr,nd) ( v=1,v([1 1]=[3 4] --> [4 0])
 c     
 c     scalar matrix case
-      mnk=mk*nk
+ 94   mnk=mk*nk
       mnd=md*nd
       mnr=mr*nr
       itr=max(itk,itd)

@@ -9,7 +9,3 @@ installation on your machine.
 
 2- to run test on a specific item, invoke Scilab in this directory
    and  type "exec('<item>.tst')" at Scilab prompt.
-
-3- The file "demos.tst" tests all the demos (this test is in part  
-   interactive; you need to type "resume", carriage return, "y", ...).
-   On IBM RS6000, demos using dynamic link may not work.

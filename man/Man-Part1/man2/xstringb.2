@@ -17,14 +17,14 @@ str
 option
 : string
 .SH DESCRIPTION
-plots the matrix of strings \fVstr\fR centered inside the rectangle \fVrect=[x,y,w,h]\fR
+plots the matrix of strings \fVstr\fR centred inside the rectangle \fVrect=[x,y,w,h]\fR
 (Down left point , width ,height)  in the current graphic scale.
 If \fVoption\fR is given with the value \fV"fill"\fR the character size is computed
 so as to fill as much as possible of the rectangle.
-.SH EXAMPLE
-enter the command \fVxstringb()\fR
-to see a demo 
 
+Enter the command \fVxstringb()\fR to see a demo.
+
+.SH EXAMPLE
 .nf
 mat=['Scilab','is';'not','Basile'];
 plot2d(0,0,[-1,1],'010',' ',[0,0,1,1]);
@@ -42,6 +42,3 @@ xstringb(r(1),r(2),mat,r(3),r(4),'fill');
 xtitle,titlepage, xstring, xstringl
 .SH AUTHOR
 J.Ph.C.
-
-
-

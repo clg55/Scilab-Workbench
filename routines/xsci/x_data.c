@@ -25,7 +25,7 @@
  * SOFTWARE.
  */
 
-#include "x_ptyx.h"		/* gets Xt stuff, too */
+#include "x_ptyxP.h"		/* gets Xt stuff, too */
 #include "x_data.h"
 
 #ifdef DEBUG

@@ -15,3 +15,4 @@ P22=syslin(dom,A,B2,C2,D22);
 K=obscont(P22,Kc,Kf);
 
 
+

@@ -9,6 +9,8 @@ This is Xless
 
    Copyright 1989 Massachusetts Institute of Technology
 
+   Customized by Scilab Group to be included in Scilab .
+
 FEATURES:
  - Display either the file(s) specified on the command line or
    input from standard input, supplied by a pipe.
@@ -19,27 +21,3 @@ FEATURES:
  - Reload the current file.
  - Change file in the current window.
  - Print the current file.
-
-INSTALLATION:
- Check the Imakefile to see if you need to add or change any DEFINES,
- then do the usual 'xmkmf', etc.
-
-CAVEAT:
- The color resources are stored in the global app-defaults directory in
- a file named 'XLess-color'.  If you have a color display and are running at
- least X11R5, you may want to add a line like this to your personal
- resources file:
-
-	#ifdef COLOR
-	*customization: -color
-	#endif
-
- Versions of X earlier than X11R5 don't support the `customization' resource.
- If you're on one of those, you'll have to include the color resources in your
- personal resources file.
-
-Send bugs, impressions, suggestions to:
-
-			dglo@cs.berkeley.edu
-
-Enjoy!

@@ -1,4 +1,4 @@
-//<x1,p1>=srkf(y,x0,p0,f,h,q,r)
+function [x1,p1]=srkf(y,x0,p0,f,h,q,r)
 //square root kalman filter algorithm
 //Input to the macro is:
 // f,h    :current system matrices
@@ -28,7 +28,6 @@
  
    epsilon=y-h*x0;
    x1=f*x0+k*(re**(-1))*epsilon;
- 
-//end
+
 
 

@@ -80,5 +80,3 @@ int *in,*out;
   init_messages(tb_messages,*in,*out);
   isGeci = 1;
 }
-
-

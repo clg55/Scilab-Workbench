@@ -73,6 +73,12 @@ static char RCSid[] =
 #include "spDefs.h"
 
 
+static CountTwins();
+static SwapCols();
+static void ScaleComplexMatrix();
+static void ComplexMatrixMultiply();
+static void ComplexTransposedMatrixMultiply();
+static RealNumber ComplexCondition();
 
 
 
@@ -369,7 +375,7 @@ MatrixPtr  Matrix = (MatrixPtr)eMatrix;
 register ElementPtr  pElement;
 register int  I, lSize, *pExtOrder;
 RealNumber  ScaleFactor;
-void ScaleComplexMatrix();
+
 
 /* Begin `spScale'. */
     ASSERT( IS_VALID(Matrix) AND NOT Matrix->Factored );
@@ -587,7 +593,6 @@ register  RealVector  Vector;
 register  RealNumber  Sum;
 register  int  I, *pExtOrder;
 MatrixPtr  Matrix = (MatrixPtr)eMatrix;
-extern void ComplexMatrixMultiply();
 
 /* Begin `spMultiply'. */
     ASSERT( IS_SPARSE( Matrix ) AND NOT Matrix->Factored );
@@ -779,7 +784,7 @@ register  RealVector  Vector;
 register  RealNumber  Sum;
 register  int  I, *pExtOrder;
 MatrixPtr  Matrix = (MatrixPtr)eMatrix;
-extern void ComplexTransposedMatrixMultiply();
+
 
 /* Begin `spMultTransposed'. */
     ASSERT( IS_SPARSE( Matrix ) AND NOT Matrix->Factored );
@@ -1452,7 +1457,7 @@ register int I, K, Row;
 ElementPtr pPivot;
 int Size;
 RealNumber E, Em, Wp, Wm, ASp, ASm, ASw, ASy, ASv, ASz, MaxY, ScaleFactor;
-RealNumber Linpack, OLeary, InvNormOfInverse, ComplexCondition();
+RealNumber Linpack, OLeary, InvNormOfInverse;
 #define SLACK   1e4
 
 /* Begin `spCondition'. */

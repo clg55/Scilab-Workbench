@@ -1,4 +1,4 @@
-function x_message(comment)
+function rep=x_message(comment,btns)
 // message - dialogue affichant un message
 //%Syntaxe
 // message(comment)
@@ -15,9 +15,22 @@ function x_message(comment)
 //%exemple
 //  message(['Identification du systeme';'methode des moindres carres'])
 //!
+rep=[]
+[lhs,rhs]=argn(0)
 comment=matrix(comment,prod(size(comment)),1)
+if rhs==1 then
+  write(%IO(2),[comment;' ';'Ok ?';' '])
+else
+  if size(btns,'*')==1
+    write(%IO(2),[comment;' ';'Ok ?';' '])
+  else
+    write(%IO(2),[comment;' ';btns(:);' '])
+    str=readline()	
+    rep=find(str==btns)
+  end
+end
 
-write(%IO(2),[comment;' ';'Ok ?';' '])
+
 //str=read(%IO(1),1,1,'(a)')
 
 
@@ -50,10 +63,10 @@ if rhs==1 then default=' ',end
 comment=matrix(comment,prod(size(comment)),1)
 default=default(1) // for lmitool
 write(%IO(2),[comment;'reponse par defaut :'+default;' '])
-str=read(%IO(1),1,1,'(a)')
+str=readline()	
 if str==' ' then str=default,end
 write(%IO(2),'o[k]/c[ancel]')
-rep=read(%IO(1),1,1,'(a)')
+rep=readline()	
 if part(rep,1)=='c' then str=[],end
 
 
@@ -98,14 +111,16 @@ if rhs==2 then valuesini(n)=' ',end
 
   write(%IO(2),description)
   n=prod(size(labels))
+//  disp('ici');pause
   for k=1:n
     write(%IO(2), labels(k) +' valeur par defaut :'+valuesini(k))
-    str(k)=read(%IO(1),1,1,'(a)')
+    str(k,1)=readline()
     if str(k)==' ' then str(k)=valuesini(k),end
   end
   write(%IO(2),'o[k]/c[ancel]')
-  rep=read(%IO(1),1,1,'(a)')
+  rep=readline()
   if part(rep,1)=='c' then str=[],end
+//  disp('la');pause
 
 function num=x_choose(tochoose,comment,button)
 // choose - dialogue de selection
@@ -146,7 +161,7 @@ write(%IO(2),[comment;' ';mat2tab(tochoose)])
 num=-1
 while num<0|num>n  then
   write(%IO(2),'Donnez le numero de votre choix')
-  num=read(%IO(1),1,1)
+  num=evstr(readline())
 end
 
 
@@ -203,8 +218,41 @@ for l=1:m
 end 
 
 
+function [btn,xc,yc,win]=xclick();
+str=readline()
+rep=evstr('['+str+']')
+btn=rep(1)
+xc=rep(2)
+yc=rep(3)
+if size(rep,'*')==4 then win=rep(4),end
 
-
-
+function str=readline()
+rep=read(%IO(1),1,1,'(a)')
+comm='/'+'/'
+n=length(rep);n0=n
+with=%f
+while n>1 do
+  if part(rep,n-1:n)==comm then
+    n=n-2
+    with=%t
+    break
+  end
+  n=n-1
+end
+if with then
+  com=part(rep,n+2:n0)
+  if n==0 then 
+    str=emptystr()
+  else
+    str=part(rep,1:n)
+  end
+else
+  str=rep
+  com=emptystr()
+end
+str=stripblanks(str)
+bl='=';txt=com+':'+str;txt=part(bl,ones(1,60-length(txt)))+txt
+write(%io(2),[' ';txt;' '])
+    
 
 

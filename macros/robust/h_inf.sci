@@ -373,22 +373,22 @@ w3=find(be3==0);be3(w3)=%eps*ones(be3(w3));
 end
 
 //pause;
-write(%io(2),1/sqrt(mu),'(10x,'' Try gama = '',f18.10)');
+//write(%io(2),1/sqrt(mu),'(10x,'' Try gama = '',f18.10)');
 [answer,no]=maxi(tv);
 //if exists('tv')=1 then write(%io(2),[tv,maxi(tv)],'(4f15.10)');end
 if exists('tv')=1 then 
    if answer>0 then 
                if no=1 then
- write(%io(2),answer,'(10x,''Too small (Hx) ,test = '',e15.10)');
+ write(%io(2),[1/sqrt(mu),answer],'('' gama = '',f18.10,'' Unfeasible (Hx hamiltonian)  test = '',e15.5)');
                        end
                if no=2 then
- write(%io(2),answer,'(10x,''Too small (Hy) ,test = '',e15.10)');
+ write(%io(2),[1/sqrt(mu),answer],'('' gama = '',f18.10,'' Unfeasible (Hy hamiltonian)  test = '',e15.5)');
                        end
                if no=3 then
- write(%io(2),answer,'(10x,''Too small (spectral radius) ,test = '',e15.10)');
+ write(%io(2),[1/sqrt(mu),answer],'('' gama = '',f18.10,'' Unfeasible (spectral radius) test = '',e15.5)');
                        end
-               else 
-               write(%io(2),answer,'(10x,''OK , test = '',f15.10)');
+		     else 
+ write(%io(2),[1/sqrt(mu),answer],'('' gama = '',f18.10,''              OK              test = '',e15.5)');
     end;
 end;
      P6=syslin('c',A,[B1,B2],[C1;C2],[D11,D12;D21,D22])

@@ -7,7 +7,6 @@ c
       parameter (nz1=nsiz-1,nz2=nsiz-2)
       logical eqid
       integer while(nsiz),else(nsiz),r,cas(nsiz),sel(nsiz),elsif(nsiz)
-      integer eol
       integer sadr
 
       data else/236721422,nz1*673720360/
@@ -15,7 +14,6 @@ c
       data cas/236718604,nz1*673720360/
       data sel/236260892,673717516,nz2*673720360/
       data elsif/236721422,673713938,nz2*673720360/
-      data eol/99/
 c
       sadr(l)=(l/2)+1
 c     

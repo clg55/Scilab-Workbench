@@ -1,5 +1,5 @@
-//<cells,fact,zzeros,zpoles>=eqiir(ftype,approx,om,deltap,deltas)
-//<cells,fact,zzeros,zpoles>=eqiir(ftype,approx,om,deltap,deltas)
+function [cells,fact,zzeros,zpoles]=eqiir(ftype,approx,om,deltap,deltas)
+//[cells,fact,zzeros,zpoles]=eqiir(ftype,approx,om,deltap,deltas)
 //Design of iir filter :interface with eqiir (syredi)
 // ftype  :filter type ('lp','hp','sb','bp')
 // approx :design approximation ('butt','cheb1','cheb2','ellip')
@@ -64,9 +64,8 @@
       nf=col(1:3);
       nd=col(4:6);
       [n1,d1]=simp(poly(nf,'z','c'),poly(nd,'z','c'));
-      cells=[cells,list('r',n1,d1,[])];
+      cells=[cells,tlist('r',n1,d1,[])];
    end
- 
-//end
+
 
 

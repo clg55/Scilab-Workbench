@@ -9,6 +9,7 @@ function [p1,r1]=lft(p,r,p#,r#)
 // lft(p,k) is lft(p,r,k) with r=size of k transpose;
 //!
 //f.d.
+if type(p)==1 then p=syslin([],[],[],[],p);end
 if p(1)='lss' then dom=p(7);else dom=p(4);end
 [lhs,rhs]=argn(0);
 if rhs=2 then
@@ -57,7 +58,7 @@ if rhs=3 then
         aa= ak+bk*id*d22*ck,
         bb=bk*id*d21,
         cc=d12*(ck+dk*id*d22*ck),
-        dd=d11+d12*dk*id*d21,
+        dd=d11+d12*dk*id*d21;
         p1=syslin(dom,aa,bb,cc,dd)
       end
       if p#(1)='r' then

@@ -1,4 +1,4 @@
-//[]=obsric(q1,q2,r)
+function []=obsric(q1,q2,r)
 //[]=obsric(q1,q2,r)
 // p est la solution de l'equation de riccati stationnaire
 // f*p+p*f'+ q*eye(2)-(1/r)*p*h'*h*p=0
@@ -10,6 +10,6 @@
 [p]=ricc(f',(1/r)*h'*h,[q1,0;0,q2],'cont');
 l= (1/r) *p*h'
 [l]=resume(l);
-//end
+
 
 

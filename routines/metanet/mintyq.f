@@ -7,7 +7,7 @@
       dimension type(ma),predw(n),pile(n)
       doubleprecision sufval(n),gamma1,gamma2,delta,eps
       doubleprecision sf,piv(n),waqc(ma),phir(ma),cumul,infr
-      dimension phibar(ma)
+      doubleprecision phibar(ma)
       coderf=0
       cumul=0.
       do 50 i=1,n

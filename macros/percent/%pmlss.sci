@@ -7,5 +7,5 @@
 //!
 // origine s. steer inria 1992
 //
-s=list('lss',[],[],[],d2,[],[])*s1
+s=tlist('lss',[],[],[],d2,[],[])*s1
 //end

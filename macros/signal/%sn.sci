@@ -1,4 +1,4 @@
-//<y>=%sn(x,m)
+function [y]=%sn(x,m)
 //Jacobi 's elliptic function with parameter m
 //which computes the inverse of the elliptic
 //integral for the parameter m.
@@ -25,7 +25,6 @@
    c1=cos(a1);
    d1=sqrt(ones(n1,n2)-m1*s1.*s1);
    y=(s.*d1+%i*c.*d.*s1.*c1)./(c1.*c1+m*s.*s.*s1.*s1);
- 
-//end
+
 
 

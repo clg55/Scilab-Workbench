@@ -1,6 +1,0 @@
-exec('flts.1.code',-1);
-//filtering with flts : 'flts.2.code'
-xinit('flts.2.ps')
-   yhz=flts(x,hz);
-   plot(yhz),
-   xend(),

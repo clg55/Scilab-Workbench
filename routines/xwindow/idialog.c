@@ -1,10 +1,10 @@
 #include "scilab_d.h"
-#include "../machine.h"
+
+#define DIALOGHEIGHT 30
 
 static char *str;
 static int lstr=0;
 static Widget toplevel;
-extern XtAppContext app_con;
 extern int ok_Flag_sci;
 
 static void 
@@ -27,7 +27,7 @@ IDialogWindow(description,valueinit)
      char description[],valueinit[];
   {
     Arg args[10];
-    int iargs = 0;
+    Cardinal iargs = 0;
     Widget shell,dialog;
     static Display *dpy = (Display *) NULL;
     DisplayInit("",&dpy,&toplevel);

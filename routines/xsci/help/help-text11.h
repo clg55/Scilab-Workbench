@@ -13,4 +13,3 @@
 "  odedi   - test of ode  ",
 "  prbs_a   - pseudo random binary sequences generation  ",
 "  reglin   - Linear regression  ",
-"  vp   - ?  ",

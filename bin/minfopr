@@ -8,9 +8,9 @@
 SCI=$1
 export SCI
 shift
-echo Compiled macro
+echo Compiled function
 ll=`echo $1 | wc -c`
-# the macro name given by Scilab can be shorter than it's real name in man
+# the function name given by Scilab can be shorter than it's real name in man
 # because Scilab names are truncated up to 24 chars.
 if [ $ll -lt 25 ] ; then 
 	x=`ls -r $SCI/man/*/man*/$1.[0-9ln] 2>/dev/null `
@@ -28,4 +28,3 @@ if [ $x ]; then
 	$SCI/bin/scilab -help $y 2> /dev/null | awk ' /NAME/, /DESCRIPTION/ '  | grep -v DESCRIPTION
 	fi 
 fi
-

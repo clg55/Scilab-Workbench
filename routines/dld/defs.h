@@ -18,25 +18,85 @@
    Free Software Foundation; either version 1, or (at your option) any
    later version. */
 
+#ifdef _CONVEX_SOURCE
+ 
+/* replaces <a.out.h> */
+#include <convex/filehdr.h>
+#include <convex/scnhdr.h>
+#include <convex/opthdr.h>
+#include <convex/reloc.h>
+ 
+/* Extracted, modified from convex <a.out.h> */
+ 
+/*
+ * Unfortunately, this is not in <convex/filehdr.h>, use for now, with
+ * conversion from filehdr, scnhdr, opthdr to occur at header read time
+ */
+struct exec
+{
+    long            a_magic;              /* magic number */
+    unsigned long   a_text;               /* size of text segment */
+    unsigned long   a_data;               /* size of initialized data */
+    unsigned long   a_bss;                /* size of uninitialized data */
+    unsigned long   a_syms;               /* size of symbol table */
+    unsigned long   a_entry;              /* entry point */
+    unsigned long   a_trsize;             /* size of text relocation */
+    unsigned long   a_drsize;             /* size of data relocation */
+    unsigned long   a_talign;             /* text external alignment */
+    unsigned long   a_dalign;             /* data external alignment */
+    unsigned long   a_balign;             /* bss external allignment */
+    unsigned long   a_torigin;            /* origin of text segment  */
+ 
+    /* Begin mods for SOFF support */
+ 
+    unsigned long       cnx_strsiz;
+    unsigned long long  cnx_txtoff;       /* offset to text */
+    unsigned long long  cnx_symoff;       /* offset to symbols */
+    unsigned long long  cnx_stroff;       /* offset to strings */
+    unsigned long long  cnx_datoff;       /* offset to data */
+    unsigned long long  cnx_tdatoff;      /* offset to tdata */
+    unsigned long       a_tdata;          /* size of initialized thread data */
+    unsigned long       a_tbss;           /* size of uninitialized " " */
+    unsigned long       a_tdrsize;        /* size of thread data relocation */
+};
+ 
+#define N_BADMAG(x) \
+  (((x).a_magic) != SOFF_MAGIC && ((x).a_magic) != USER_SOFF_MAGIC \
+&& ((x).a_magic) != CORE_SOFF_MAGIC && ((x).a_magic) != CHKPNT_SOFF_MAGIC )
+ 
+#define N_TXTOFF(x) ( (x).cnx_txtoff )           /* OK for CNX */
+#define N_SYMOFF(x) ( (x).cnx_symoff )           /* OK for CNX */
+#define N_STROFF(x) ( (x).cnx_stroff )           /* OK for CNX */
+ 
+#include  <sys/types.h>
+#include  <sys/mman.h>
+ 
+#else
 
 #include <a.out.h>
+
+#endif /* _CONVEX_SOURCE */
+
 #include <ar.h>
 #include <stdio.h>
 #include <sys/types.h>
-#ifdef SYSV
-#include <string.h>
-#else
 #include <strings.h>
-#endif
 #include <sys/stat.h>
 #include <sys/file.h>
 #include <sys/param.h>
 #include <setjmp.h>
 #include "dld.h"
+
 #ifdef linux
 #include <stdlib.h>    /* added for linux */
+#include <unistd.h>
 #define N_COMM 16
 #endif
+
+#ifdef _CONVEX_SOURCE
+#include <nlist.h>
+#endif	/* _CONVEX_SOURCE */
+ 
 
 /* Each input file, and each library member ("subfile") being loaded,
    has a `file_entry' structure for it.
@@ -97,6 +157,11 @@ struct file_entry {
     /* Start of this file's data relocation information. */
     struct dld_reloc_info *data_reloc;
 
+#ifdef _CONVEX_SOURCE
+    /* Start of this file's thread data relocation information. */
+    struct dld_reloc_info *tdata_reloc;
+#endif /* _CONVEX_SOURCE */
+ 
     /* Relation of this file's segments to the output buffer */
 
     /* Start of this file's text seg in the output file core image.  */
@@ -105,6 +170,13 @@ struct file_entry {
     int data_start_address;
     /* Start of this file's bss seg in the output file core image.  */
     int bss_start_address;
+ 
+#ifdef _CONVEX_SOURCE
+    /* Start of this file's thread bss seg in output file core image */
+    int tbss_start_address;
+    /* Start of this file's thread data seg in output file core image */
+    int tdata_start_address;
+#endif /* _CONVEX_SOURCE */
 
     /* For library members only */
 

@@ -12,10 +12,17 @@ mp,c
 : string matrices
 .TP 10
 v
-: integer vector of indices
+: integer vector.
 .SH DESCRIPTION
-returns the matrix of character strings
-of \fVmp\fR made of characters in the \fVv\fR vector.
+Let \fVs[k]\fR stands for the \fVk\fR character of string \fVs\fR ( 
+or the empty character if \fVk >length(s)\fR).
+
+\fVpart\fR returns \fVc\fR, a matrix of character strings, such that 
+\fVc(i,j)\fR is the string \fV"s[v(1)]...s[v(n)]"\fR ( \fVs=mp(i,j)\fR ).
+.SH EXAMPLE
+.nf
+c=part(['a','abc','abcd'],[1,1,2])
+.fi 
 .SH SEE ALSO
-string
+string,length
 

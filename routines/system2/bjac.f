@@ -1,10 +1,5 @@
       subroutine bjac(ny,t,y,ml,mu,jac,nrowj)
 c
-c ======================================================================
-c     gestion des macros externals pour le calcul du jacobien 
-c     (primitive IMPL)
-c ======================================================================
-c
       INCLUDE '../stack.h'
       integer iadr,sadr
 c     
@@ -17,16 +12,6 @@ c
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
 c     
-c     nordre est le numero d'ordre de cet external dans la structure
-c     de donnee,
-c     mlhs (mrhs) est le nombre de parametres de sortie (entree)
-c     du simulateur 
-c     
-      if (ddt .eq. 4) then
-         write(buf(1:12),'(3i4)') top,r,sym
-         call basout(io,wte,' bjac    top:'//buf(1:4))
-      endif
-c
       iero=0
       mrhs=2
 c     
@@ -45,20 +30,19 @@ c     cas d'un simulateur en fortran
 c     
 c     transfert des arguments d'entree minimaux du simulateur
 c     la valeur de ces arguments vient du contexte fortran (liste d'appel)
-c     la structure vient du contexte 
 c+    
       call ftob(t,1,istk(il+1))
       call ftob(y,ny,istk(il+2))
 c+    
 c     
-      if(istk(ils).eq.15) goto 10
+      
 c     
 c     recuperation de l'adresse du simulateur
       fin=lstk(tops)
 c     
-      goto 40
+      if(istk(ils).eq.15) then
 c     cas ou le simulateur est decrit par une liste
- 10   nelt=istk(ils+1)
+      nelt=istk(ils+1)
       l=sadr(ils+3+nelt)
       ils=ils+2
 c     
@@ -88,6 +72,7 @@ c
          lstk(top+1)=lstk(top)+istk(ils+i+1)-istk(ils+i)
  11   continue
       mrhs=mrhs+nelt
+      endif
  40   continue
 c     
 c     execution de la macro definissant le simulateur
@@ -115,7 +100,13 @@ c
       pt=pt-1
 c+    
 c     transfert des variables  de sortie vers fortran
-      call btof(jac,ny*ny)
+      if(ml.gt.0.or.mu.gt.0) then
+         mm=ml+mu+1
+         call btofm(jac,nrowj,mm,ny)
+         else
+         nnn=ny*ny
+         call btof(jac,nnn)
+      endif
       if(err.gt.0) goto 9999
 c+    
       niv=niv-1

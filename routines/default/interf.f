@@ -149,11 +149,11 @@ c or in brief form :
 c
 c [a,b,c,d]=fort(...
 c      'bidon2',x,1,'i',ix,2,'i',y,3,'d',iy,4,'i',z,5,'d',iz,6,'i',...
-c      'out',1,3,5,<mz,nz>,7,'d',<1,1>,8,'i')
+c      'out',1,3,5,[mz,nz],7,'d',[1,1],8,'i')
 c
       if(nam1.eq.'bidon2') then
-       call bidon(x1,x2,x3,x4,x5,x6,x7,x8,x6)
-       return
+         call bidon(x1,x2,x3,x4,x5,x6,x7,x8,x6)
+         return
       endif
 c
 c -------------------------------------
@@ -184,17 +184,17 @@ c                   *  JPC TDINFO
 c                   *******************************
 C        competing
       if (nam1.eq.'icomp') then
-c        call icomp(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12)
+        call icomp(x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12)
         return
       endif
 C         lorentz
       if (nam1.eq.'loset') then
-c        call loset(x1,x2,x3)
+        call loset(x1,x2,x3)
         return
       endif
 C        arnold
       if (nam1.eq.'arset') then
-c        call arset(x1)
+        call arset(x1)
         return
       endif
       if (nam1.eq.'int') then
@@ -225,11 +225,9 @@ c ----------------------------------
 c  dynamic link
 c ----------------------------------
 c
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(name,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.name) goto 1001
-cc sun unix
       call dyncall(it1-1, x1, x2, x3, x4, x5, x6, x7, x8, x9,x10,
      +                   x11,x12,x13,x14,x15,x16,x17,x18,x19,x20,
      +                   x21,x22,x23,x24,x25,x26,x27,x28,x29,x30)

@@ -20,7 +20,9 @@ if type(sl)==1|type(sl)==2 then
   h=sl
   return
 end
-if type(sl)<>15|sl(1)<>'lss' then
+
+//-compat type(sl)<>15 retained for list/tlist compatibility
+if (type(sl)<>15&type(sl)<>16)|sl(1)<>'lss' then
   error('First argument must be in state-space form')
 end
 if sl(3)=[] then h=sl(5);num=sl(5);den=eye(sl(5));return;end
@@ -80,7 +82,7 @@ end;
 if lhs==3 then h=sl(5),num=sl(4)*m*diag(v)*(x\sl(3));return;end
 m=sl(4)*m*diag(v)*(x \ sl(3))+sl(5)*den;
 [m1,n1]=size(m);[m,den]=simp(m,den*ones(m1,n1))
-h=list('r',m,den,domaine)
+h=tlist('r',m,den,domaine)
 case 'p' then
   den=real(poly(sl(2),var))
   na=degree(den)

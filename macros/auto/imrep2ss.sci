@@ -13,6 +13,6 @@ if rhs=1 then [u,h,v,deg]=svd(h);else [u,h,v]=svd(h);end
 obs=u(:,1:deg);con=h*v(1:deg,:)';
 //shift
 obstild=obs(no+1:n*no,:);obstild(n*no,deg)=0;
-sl=list('lss',obs'*obstild,con(1:deg,1),obs(1:no,:),...
+sl=tlist('lss',obs'*obstild,con(1:deg,1),obs(1:no,:),...
               0*ones(no,1),0*ones(deg,1),'d')
 

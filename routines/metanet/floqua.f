@@ -1,14 +1,15 @@
       subroutine floqua(b,bprim,c,cprim,eps,ex,la2,lp2,ma,
      &     mm,n,or,phibar,phir,pile,piv,
-     &     predw,sufval,type,waqc)
+     &     predw,sufval,type,waqc,flag)
       implicit integer (a-z)
       dimension lp2(*),la2(mm),or(ma),ex(ma)
       dimension b(ma),c(ma),bprim(ma),cprim(ma)
       dimension predw(n),type(ma),pile(n)
       doubleprecision piv(n),sufval(n),ref,waqc(ma),phir(ma),delta,eps
-      dimension phibar(ma)
+      doubleprecision phibar(ma)
       precis=nint((log(eps)/log(2.))+.5)
       cmax=0
+      flag=1
       do 50 u=1,ma
          if(iabs(b(u)).gt.cmax)cmax=iabs(b(u))
          if(iabs(c(u)).gt.cmax)cmax=iabs(c(u))
@@ -43,7 +44,8 @@
          return
       endif
       if (coderr .eq. 2) then
-         call erro('no feasible solution')
+         call out('no feasible solution')
+         flag=0
          return
       endif
       if(p.eq.precis) return

@@ -49,8 +49,8 @@ If \fV[B1;D21]\fR is a factor of \fVbigQ\fR, \fV[C1,D12]\fR
 is a factor of \fVbigR\fR and \fV[A,B2,C2,D22]\fR is
 a realization of P22, then \fVP\fR is a realization of
 \fV[A,[B1,B2],[C1,-C2],[0,D12;D21,D22]\fR.
-The (negative) feedback computed by \fVlqg\fR stabilizes \fVP22\fR.
-
+The (negative) feedback computed by \fVlqg\fR stabilizes \fVP22\fR,
+i.e. the poles of \fVcl=P22/.K\fR are stable.
 .SH EXAMPLE
 .nf
 ny=2;nu=3;nx=4;
@@ -59,9 +59,11 @@ bigQ=rand(nx+nu,nx+nu);bigQ=bigQ*bigQ';
 bigR=rand(nx+ny,nx+ny);bigR=bigR*bigR';
 [P,r]=lqg2stan(P22,bigQ,bigR);K=lqg(P,r);  //K=LQG-controller
 spec(h_cl(P,r,K))      //Closed loop should be stable
+//Same as Cl=P22/.K; spec(Cl(2))
+s=poly(0,'s')
 lqg2stan(1/(s+2),eye(2,2),eye(2,2))
 .fi
 .SH SEE ALSO
-lqg, lqr, lqe, obscont, h_inf, augment, fstabst
+lqg, lqr, lqe, obscont, h_inf, augment, fstabst, feedback
 .SH AUTHOR
 F.D.

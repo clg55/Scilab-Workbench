@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WEXPM1,SSI=0
       subroutine wexpm1(n,ar,ai,ia,ear,eai,iea,w,iw,ierr)
 c
 c!purpose

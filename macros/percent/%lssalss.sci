@@ -9,7 +9,7 @@ function [s]=%lssalss(s1,s2)
 [a2,b2,c2,d2,x2]=s2(2:6)
 [n1,n1]=size(a1);[n2,n2]=size(a2);
 a1=[a1,0*ones(n1,n2);0*ones(n2,n1),a2];
-s=list('lss',a1,[b1;b2],[c1,c2],d1+d2,[x1;x2],dom1)
+s=tlist('lss',a1,[b1;b2],[c1,c2],d1+d2,[x1;x2],dom1)
 
 
 

@@ -41,8 +41,6 @@
 #define CHARSEP '\n'
 #define STRINGSEP "\n"
 
-#define ACK       "ACK"
-#define CREATE    "CREATE"
 #define LOAD      "LOAD"
 #define LOAD1     "LOAD1"
 #define SHOWNS    "SHOWNS"

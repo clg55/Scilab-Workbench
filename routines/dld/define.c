@@ -25,13 +25,14 @@
  *
  *  SIZE is the number of bytes required.
  */
+int
 dld_define_sym (name, size)
-char *name;
+const char *name;
 unsigned int size;
 {
     register char *p = 0;
     struct nlist dummy_nlist;	    /* simulate a nlist entry so that
-				       _dld_entery_global_ref can be used. */
+				       _dld_entry_global_ref can be used. */
     register int old_undefined_sym_count;
 
     if (name == 0 || size == 0)

@@ -23,7 +23,7 @@ rg=m;while d(rg)<sqrt(%eps) then rg=rg-1,end
 if rg<>m then error('estimated maximum degree : '+string(int(rg/2))),end
 //solution
 x=real(a(1:m,1:m)\a(1:m,m+1))
-h=list('r',poly(x(1:dg),'s','c'),...
+h=tlist('r',poly(x(1:dg),'s','c'),...
            poly([x((dg+1):m);1],'s','c'),'c')
 err=sqrt(err)
 

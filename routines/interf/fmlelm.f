@@ -7,16 +7,24 @@ c
       include '../stack.h'
       logical iseye,isnum
       integer lparen,rparen,star,plus,minus,blanc,slash,bslash,symb
-      integer adr
+      integer iadr,sadr
       data lparen/41/,rparen/42/,star/47/,plus/45/,minus/46/,blanc/40/
       data slash/48/  ,bslash/49/
 c     
 c     fonctions/fin
 c     addf       mulf  ldivf  rdivf
-c     
+c 
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c    
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
          call basout(io,wte,' fmlelm '//buf(1:4))
+      endif
+      if(rhs.ne.2) then
+         call error(39)
+         return
       endif
       
       goto(1001,1001,2000,2001,2002) fin
@@ -27,17 +35,17 @@ c
  1001 continue
       isg=1
       if(fin.eq.2) isg=-1
-      ilptr1=adr(lstk(top+1),0)+1
+      ilptr1=iadr(lstk(top+1))+1
 c     le "+1" est du a expsum qui peut renvoyer une chaine 1 carac plus long 
 c     que la chaine donnee
-      il1=adr(lstk(top-1),0)
+      il1=iadr(lstk(top-1))
       il=il1
       if(istk(il1).ne.10) then
          err=1
          call error(55)
          return
       endif
-      il2=adr(lstk(top),0)
+      il2=iadr(lstk(top))
       if(istk(il2).ne.10) then
          err=2
          call error(55)
@@ -53,7 +61,7 @@ c
       n1=istk(il1+5)-1
       il1=il1+6
       il0=il1
-      maxnp=adr(lstk(bot),0)-ilptr1
+      maxnp=iadr(lstk(bot))-ilptr1
       call expsum(1,istk(il1),n1,istk(ilptr1),np1,maxnp,err)
       if(err.gt.0) then
          call error(17)
@@ -69,7 +77,7 @@ c
       n2=istk(il2+5)-1
       il2=il2+6
       top=top-1
-      maxnp=adr(lstk(bot),0)-ilptr2
+      maxnp=iadr(lstk(bot))-ilptr2
       call expsum(isg,istk(il2),n2,istk(ilptr2),np2,maxnp,err)
       if(err.gt.0) then
          call error(17)
@@ -167,7 +175,7 @@ c
          il1=il1-1
       endif
       istk(il+5)=n1+1
-      lstk(top+1)=adr(il1+1,1)
+      lstk(top+1)=sadr(il1+1)
       goto 9999
 c     
 c     multiplication et divisions formelle
@@ -177,7 +185,7 @@ c     multiplication et divisions formelle
       goto 2005
  2002 symb=slash
       goto 2005
- 2005 il1=adr(lstk(top-1),0)
+ 2005 il1=iadr(lstk(top-1))
       il=il1
       if(istk(il1).ne.10) then
          err=1
@@ -195,7 +203,7 @@ c     multiplication et divisions formelle
       call atome(istk(il1),n1,it1,is1)
       if(symb.ne.bslash) call termf(istk(il1),n1,it1)
 c     
-      il2=adr(lstk(top),0)
+      il2=iadr(lstk(top))
       if(istk(il2).ne.10) then
          err=2
          call error(55)
@@ -212,6 +220,8 @@ c
 c     
       call atome(istk(il2),n2,it2,is2)
       if(symb.ne.slash) call termf(istk(il2),n2,it2)
+      if (it2.ne.0) call factf(istk(il2),n2,it2)
+
 c     
       goto (2010,2020,2030,2040) it1+2*it2+1
 c     
@@ -239,7 +249,7 @@ c     2 expressions
       istk(il1)=rparen
       il1=il1+1
       istk(il+5)=il1-il0+1
-      lstk(top+1)=adr(il1,1)
+      lstk(top+1)=sadr(il1)
       goto 9999
  2020 continue
 c     un atome et une expression
@@ -280,7 +290,7 @@ c     n1=n1-1
          n1=n1+1
       endif
       istk(il+5)=1+n1
-      lstk(top+1)=adr(il1+n1,1)
+      lstk(top+1)=sadr(il1+n1)
       goto 9999
 c     expr et atome
  2030 continue
@@ -292,14 +302,14 @@ c     expr et atome
          endif
          istk(il1)=0
          istk(il+5)=2
-         lstk(top+1)=adr(il1+1,1)
+         lstk(top+1)=sadr(il1+1)
          goto 9999
       endif
       if(symb.ne.bslash.and.is2.ge.0
      &     .and.((n2-idec.eq.1.and.istk(il2+idec).eq.1)
      &     .or.(n2-idec.eq.3.and.iseye(istk(il2+idec))))) then
          istk(il+5)=n1+1
-         lstk(top+1)=adr(il1+n1,1)
+         lstk(top+1)=sadr(il1+n1)
          goto 9999
       endif
       idec=0
@@ -327,7 +337,7 @@ c     expr et atome
       call icopy(n2,istk(il2),1,istk(il1),1)
       il1=il1+n2
  2031 istk(il+5)=il1-il0+1
-      lstk(top+1)=adr(il1,1)
+      lstk(top+1)=sadr(il1)
       goto 9999
 c     atome et atome
  2040 continue
@@ -348,7 +358,7 @@ c     atome et atome
          endif
          istk(il1)=0
          istk(il+5)=2
-         lstk(top+1)=adr(il1+1,1)
+         lstk(top+1)=sadr(il1+1)
          goto 9999
       endif
       if(symb.eq.star) then
@@ -360,7 +370,7 @@ c     atome et atome
             call intstr(inum,istk(il1),ni,0)
             il1=il1+ni
             istk(il+5)=ni+1
-            lstk(top+1)=adr(il1,1)
+            lstk(top+1)=sadr(il1)
             goto 9999
          endif
       endif
@@ -377,7 +387,7 @@ c     atome et atome
          call icopy(n2-abs(is2),istk(il2+abs(is2)),1,istk(il1),1)
          il1=il1+n2-abs(is2)
          istk(il+5)=il1-il0+1
-         lstk(top+1)=adr(il1+1,1)
+         lstk(top+1)=sadr(il1+1)
          goto 9999
       endif
       idec1=0
@@ -411,7 +421,7 @@ c     atome et atome
       call icopy(n2,istk(il2),1,istk(il1),1)
       il1=il1+n2
  2041 istk(il+5)=il1-il0+1
-      lstk(top+1)=adr(il1,1)
+      lstk(top+1)=sadr(il1)
       goto 9999
 c     
  9999 return

@@ -1,10 +1,15 @@
 #!/bin/sh
-SCI=/u/cergrene/1/scilab-2.0/scilab-2.0/
-export SCI 
+SCI=`pwd`/../../../
+GETNAME=/usr/lbin/getNAME
+
+if test ! -f $GETNAME; then
+  echo "program $GETNAME not found, help headers not made"
+  exit 1
+fi
 
 do_whatis()
 {
- /usr/lib/getNAME $1 | \
+ $GETNAME $1 | \
 sed  	-e 's/\\-/-/' \
 	-e 's/\\\*-/-/' \
 	-e 's/ VAX-11//' \

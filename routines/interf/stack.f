@@ -42,7 +42,7 @@ C       [it,m,n] caracteristiques de la matrice
 C       lr : pointe sur la partie reelle ( si la matrice est a
 C              a(1,1)=stk(lr)
 C            si l'on veut acceder a des entiers
-C			   a(1,1)=istk(adr(lr,0))
+C			   a(1,1)=istk(iadr(lr))
 C       lc : pointe sur la partie imaginaire si elle existe sinon sur zero
 C
 C      implicit undefined (a-z)
@@ -50,10 +50,14 @@ C      implicit undefined (a-z)
       character fname*(*)
       integer il
       include '../stack.h'
-      integer adr
-      il=adr(lstk(lw),0)
+      integer iadr,sadr
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
 C     test particulier decouvert ds logic.f
-      if(istk(il).lt.0) il=adr(istk(il+1),0)
+      if(istk(il).lt.0) il=iadr(istk(il+1))
       if(istk(il).ne.1) then
          getmat=.false.
          call cvname(ids(1,pt+1),fname,0)
@@ -63,7 +67,7 @@ C     test particulier decouvert ds logic.f
          m=istk(il+1)
          n=istk(il+2)
          it=istk(il+3)
-         lr=adr(il+4,1)
+         lr=sadr(il+4)
          if (it.eq.1) then
             lc=lr+m*n
          endif
@@ -84,7 +88,7 @@ C       [it,m,n] caracteristiques de la matrice
 C       lr : pointe sur la partie reelle ( si la matrice est a
 C              a(1,1)=stk(lr)
 C            si l'on veut acceder a des entiers
-C			   a(1,1)=istk(adr(lr,0))
+C			   a(1,1)=istk(iadr(lr))
 C       lc : pointe sur la partie imaginaire si besoin est
 C
 C      implicit undefined (a-z)
@@ -140,7 +144,7 @@ C       [it,m,n] caracteristiques de la matrice
 C       lr : pointe sur la partie reelle ( si la matrice est a
 C              a(1,1)=stk(lr)
 C            si l'on veut acceder a des entiers
-C			   a(1,1)=istk(adr(lr,0))
+C			   a(1,1)=istk(iadr(lr))
 C      implicit undefined (a-z)
       integer topk,lw,lr
       character fname*(*)
@@ -284,8 +288,12 @@ C      implicit undefined (a-z)
       integer il
       character fname*(*)
       include '../stack.h'
-      integer adr
-      il=adr(lstk(lw),0)
+      integer iadr
+c
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
       if(istk(il).ne.10) then
          call cvname(ids(1,pt+1),fname,0)
          err=rhs+(lw-topk)
@@ -318,8 +326,11 @@ C      implicit undefined (a-z)
       integer topk,lw,m,n,i,j,lr,nlr
       integer il,k
       character fname*(*)
-      integer adr
-      il=adr(lstk(lw),0)
+      integer iadr
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
       m=istk(il+1)
       n=istk(il+2)
       k=(i-1)+(j-1)*m
@@ -346,15 +357,19 @@ C!
 C      implicit undefined (a-z)
       character fname*(*)
       integer lw,m,n,nchar,il,ilp,kij,ilast
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
       if ( lw+1.ge.bot) then
          call error(18)
          cresmat=.false.
          return
       endif
-      il=adr(lstk(lw),0)
-      err=adr(il+4+(nchar+1)*m*n,1)-lstk(bot)
+      il=iadr(lstk(lw))
+      err=sadr(il+4+(nchar+1)*m*n)-lstk(bot)
       if(err.gt.0) then
          call error(17)
          cresmat=.false.
@@ -371,7 +386,7 @@ C      implicit undefined (a-z)
             istk(kij)=istk(kij-1)+nchar
  10      continue
          ilast=ilp+m*n
-         lstk(lw+1)=adr(ilast+istk(ilast),1)
+         lstk(lw+1)=sadr(ilast+istk(ilast))
          return
       endif
       end
@@ -391,8 +406,13 @@ C!
 C      implicit undefined (a-z)
       character fname*(*)
       integer lw,m,nchar(m),il,ilp,kij,ilast,nnchar,i
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+
       if ( lw+1.ge.bot) then
          call error(18)
          cresmat1=.false.
@@ -402,8 +422,8 @@ C      implicit undefined (a-z)
       do 20 i=1,m
          nnchar=nchar(i)+nnchar
  20   continue
-      il=adr(lstk(lw),0)
-      err=adr(il+4+(nnchar+1)*m,1)-lstk(bot)
+      il=iadr(lstk(lw))
+      err=sadr(il+4+(nnchar+1)*m)-lstk(bot)
       if(err.gt.0) then
          call error(17)
          cresmat1=.false.
@@ -422,7 +442,7 @@ C      implicit undefined (a-z)
             i=i+1
  10      continue
          ilast=ilp+m
-         lstk(lw+1)=adr(ilast+istk(ilast),1)
+         lstk(lw+1)=sadr(ilast+istk(ilast))
          return
       endif
       end
@@ -441,15 +461,19 @@ C!
 C      implicit undefined (a-z)
       character fname*(*)
       integer lw,nchar,il,ilast,lr
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
       if ( lw+1.ge.bot) then
          call error(18)
          cresmat2=.false.
          return
       endif
-      il=adr(lstk(lw),0)
-      err=adr(il+4+(nchar+1),1)-lstk(bot)
+      il=iadr(lstk(lw))
+      err=sadr(il+4+(nchar+1))-lstk(bot)
       if(err.gt.0) then
          call error(17)
          cresmat2=.false.
@@ -463,7 +487,7 @@ C      implicit undefined (a-z)
          istk(il+4)=1
          istk(il+4+1)=istk(il+4)+nchar
          ilast=il+4+1
-         lstk(lw+1)=adr(ilast+istk(ilast),1)
+         lstk(lw+1)=sadr(ilast+istk(ilast))
          lr=ilast+ istk(ilast-1)
          return
       endif
@@ -479,9 +503,14 @@ C       j  : colonne a extraire
 C!
 C      implicit undefined (a-z)
       character fname*(*)
-      integer lw,j,m,n,adr,lr,nlj,il1,il2,il2p,incj,nj,i,lj
+      integer lw,j,m,n,lr,nlj,il1,il2,il2p,incj,nj,i,lj
+      integer iadr,sadr
       logical getsmat 
       include '../stack.h'
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
       smatj=.false.
       if ( lw+1.ge.bot) then
          call error(18)
@@ -489,13 +518,13 @@ C      implicit undefined (a-z)
       endif
       if (.not.getsmat(fname,lw-1,lw-1,m,n,1,1,lr,nlj)) return
       if ( j.gt.n) return 
-      il1=adr(lstk(lw-1),0)
-      il2=adr(lstk(lw),0)
+      il1=iadr(lstk(lw-1))
+      il2=iadr(lstk(lw))
 C     nombre de caracteres de la jieme colonne 
       incj=(j-1)*m
       nj=istk(il1+4+incj+m)-istk(il1+4+incj)
 C     test de place 
-      err=adr(il2+4+m+nj+1,1)-lstk(bot)
+      err=sadr(il2+4+m+nj+1)-lstk(bot)
       if(err.gt.0) then
          call error(17)
          smatj=.false.
@@ -513,7 +542,7 @@ C     test de place
  14   continue
       lj=istk(il1+4+incj)+ il1+4+m*n 
       call icopy(nj,istk(lj),1,istk(il2+4+m+1),1)
-      lstk(lw+1)=adr(il2+4+m+nj+1,1)
+      lstk(lw+1)=sadr(il2+4+m+nj+1)
       smatj=.true.
       return
       end
@@ -531,8 +560,12 @@ C      implicit undefined (a-z)
       logical getilist
       character fname*(*)
       integer lw,j,n,il,ilj,slj
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
       lmatj=.false.
       if ( lw+1.ge.bot) then
          call error(18)
@@ -541,8 +574,8 @@ C      implicit undefined (a-z)
       if (.not.getilist(fname,lw-1,lw-1,n,j,ilj)) return 
       if ( j.gt.n) return 
 C     a ameliorer 
-      il=adr(lstk(lw-1),0)
-      slj=adr(il+3+n,1)+istk(il+2+(j-1))-1
+      il=iadr(lstk(lw-1))
+      slj=sadr(il+3+n)+istk(il+2+(j-1))-1
       n=istk(il+2+j)-istk(il+2+(j-1))
       err=lstk(lw)+n-lstk(bot)
       if(err.gt.0) return
@@ -564,8 +597,12 @@ C      implicit undefined (a-z)
       logical getpoly
       character fname*(*),name*4
       integer lw,j,n,il,it,m,namel,lr,lc
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
       pmatj=.false.
       if ( lw+1.ge.bot) then
          call error(18)
@@ -575,14 +612,14 @@ C      implicit undefined (a-z)
      $     return
       if ( j.gt.n) return 
 C     a ameliorer
-      il= adr(lstk(lw-1),0)
+      il= iadr(lstk(lw-1))
       incj=(j-1)*m
-      il2 = adr(lstk(lw),0)
-      l2 = adr(il2 + 4,1)
+      il2 = iadr(lstk(lw))
+      l2 = sadr(il2 + 4)
       m2=max(m,1)
-      l=adr(il+9+m*n,1)
+      l=sadr(il+9+m*n)
       n=istk(il+8+m*n)
-      l2=adr(il2+9+m2,1)
+      l2=sadr(il2+9+m2)
       n2=istk(il+8+incj+m)-istk(il+8+incj)
       err=l2+n2*(it+1)-lstk(bot)
       if(err.gt.0) then 
@@ -617,11 +654,15 @@ C     lstk(tlw+1) est modifie si necessaire
 C      implicit undefined (a-z)
       character fname*(*)
       integer flw,tlw,dflw,fflw,dtlw
-      integer adr
+      integer iadr
       include '../stack.h'
-      dflw=adr(lstk(flw),0)
-      fflw=adr(lstk(flw+1),0)
-      dtlw=adr(lstk(tlw),0)
+c
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
+      dflw=iadr(lstk(flw))
+      fflw=iadr(lstk(flw+1))
+      dtlw=iadr(lstk(tlw))
       call icopy(fflw-dflw,istk(dflw),1,istk(dtlw),1)
       lstk(tlw+1)=lstk(tlw) + lstk(flw+1)-lstk(flw)
       return
@@ -646,9 +687,10 @@ C
 C      implicit undefined (a-z)
       integer lw,m,i,j,nlr,il,k
       character fname*(*)
-      integer adr
+      integer iadr
       include '../stack.h'
-      il=adr(lstk(lw),0)
+      iadr(l)=l+l-1
+      il=iadr(lstk(lw))
       m=istk(il+1)
       k=(i-1)+(j-1)*m
       istk(il+4+k+1)=istk(il+4+k)+nlr
@@ -661,15 +703,19 @@ C     on recupere de la place si top etait complexe
 C     pas de verifications
 C     utiliser getmat avant d'appeler realmat
 C      implicit undefined (a-z)
-      integer adr
+      integer iadr,sadr
       integer il,m,n
       include '../stack.h'
-      il=adr(lstk(top),0)
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(top))
       if (istk(il+3).eq.0) return
       m=istk(il+1)
       n=istk(il+2)
       istk(il+3)=0
-      lstk(top+1)=adr(il+4,1)+m*n
+      lstk(top+1)=sadr(il+4)+m*n
       return
       end
 
@@ -686,7 +732,7 @@ C       lr : pointe sur la partie reelle ( si la matrice est a
 C              a(1,1)=stk(lr)
 C            si l'on veut acceder a des entiers
 
-C			   a(1,1)=istk(adr(lr,0))
+C			   a(1,1)=istk(iadr(lr))
 C       lc : pointe sur la partie imaginaire si besoin est
 C     Effet de Bords :
 C      Si on peut creer une matrice en lw on
@@ -700,15 +746,19 @@ C      implicit undefined (a-z)
       character fname*(*)
       integer lw,it,m,n,lr,lc
       integer il
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
       if ( lw+1.ge.bot) then
          call error(18)
          cremat=.false.
          return
       endif
-      il=adr(lstk(lw),0)
-      err=adr(il+4,1)+m*n-lstk(bot)
+      il=iadr(lstk(lw))
+      err=sadr(il+4)+m*n-lstk(bot)
       if(err.gt.0) then
          call error(17)
          cremat=.false.
@@ -719,9 +769,9 @@ C      implicit undefined (a-z)
          istk(il+1)=m
          istk(il+2)=n
          istk(il+3)=it
-         lr=adr(il+4,1)
+         lr=sadr(il+4)
          lc=lr+m*n
-         lstk(lw+1)=adr(il+4,1)+m*n*(it+1)
+         lstk(lw+1)=sadr(il+4)+m*n*(it+1)
          return
       endif
       end
@@ -782,11 +832,15 @@ C      implicit undefined (a-z)
       character fname*(*)
       integer topk,lw,m,n,lr
       integer il
-      integer adr
+      integer iadr
       include '../stack.h'
-      il=adr(lstk(lw),0)
+c
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
 C     test particulier decouvert ds logic.f
-      if(istk(il).lt.0) il=adr(istk(il+1),0)
+      if(istk(il).lt.0) il=iadr(istk(il+1))
       if(istk(il).ne.4) then
          getbmat=.false.
          call cvname(ids(1,pt+1),fname,0)
@@ -820,10 +874,14 @@ C      implicit undefined (a-z)
       character fname*(*)
       integer lw,m,n,lr
       integer il
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
-      il=adr(lstk(lw),0)
-      err=il+3+m*n - adr(lstk(bot),0)
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
+      err=il+3+m*n - iadr(lstk(bot))
       if(err.gt.0) then
          call error(17)
          crebmat=.false.
@@ -834,7 +892,7 @@ C      implicit undefined (a-z)
          istk(il+1)=m
          istk(il+2)=n
          lr=il+3
-         lstk(lw+1)=adr(il+3+m*n+2,1)
+         lstk(lw+1)=sadr(il+3+m*n+2)
          return
       endif
       end
@@ -905,10 +963,14 @@ C      implicit undefined (a-z)
 C     renvoit le type de  lw
 C      implicit undefined (a-z)
       integer lw
-      integer adr
+      integer iadr
       include '../stack.h'
-      il=adr(lstk(lw),0)
-      if(istk(il).lt.0) il=adr(istk(il+1),0)
+c
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
+      if(istk(il).lt.0) il=iadr(istk(il+1))
       gettype=istk(il)
       return
       end
@@ -917,9 +979,13 @@ C      implicit undefined (a-z)
 C     renvoit le type de  lw
 C      implicit undefined (a-z)
       integer lw
-      integer adr
+      integer iadr
       include '../stack.h'
-      ogettype=(istk(adr(lstk(lw),0)))
+c
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
+      ogettype=istk(iadr(lstk(lw)))
       return
       end
 
@@ -928,20 +994,24 @@ C     imprime le contenu de la pile en lw en mode entier ou
 C	  double precision suivant typ
 C     ---> a utilier a l'interieur de dbx pour debuguer
 C      implicit undefined (a-z)
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
       integer il,lw,i,m,n,typ,l
       character*7 t(5)
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
       if (lw.eq.0) return
-      il =adr(lstk(lw),0)
-      if(istk(il).lt.0) il=adr(istk(il+1),0)
+      il =iadr(lstk(lw))
+      if(istk(il).lt.0) il=iadr(istk(il+1))
       m  =istk(il+1)
       n  =istk(il+2)
       call basout(io,wte,
      +     '-----------------stack-info-----------------')
       call basout(io,wte,' ')
       write(t(1),'(i7)') lw
-      write(t(2),'(i7)') adr(lstk(lw+1),0)
+      write(t(2),'(i7)') iadr(lstk(lw+1))
       call basout(io,wte,
      +     'lw='//t(1)//'-[istk]-> il lw+1 -[istk]-> '//t(2))
       write(t(1),'(i7)') il
@@ -953,7 +1023,7 @@ C      implicit undefined (a-z)
       call basout(io,wte,
      +     'istk('//t(1)//':..) ->['//t(2)//t(3)//t(4)//t(5)//'....]')
       if (typ.eq.1) then
-         l=adr(il+4,1)
+         l=sadr(il+4)
          nn=min(m*n,3)
          write(buf,'(3e15.8,2x)') (stk(l+i),i=0,nn-1)
          call basout(io,wte,'    {'//buf(1:17*nn)//'}')
@@ -980,10 +1050,14 @@ C     m : nombre de ligne, n:nombre de colonnes
 C      implicit undefined (a-z)
       character fname*(*)
       integer topk,lw,m,n
-      integer adr
+      integer iadr
       include '../stack.h'
       integer il,itype
-      il=adr(lstk(lw),0)
+c
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
       itype=istk(il)
       if(itype.ne.1.and.itype.ne.2.and.itype.ne.10) then
          err=rhs+(lw-topk)
@@ -1004,10 +1078,14 @@ C     sans se preocuper du contenu
 C      implicit undefined (a-z)
       character fname*(*)
       integer lw,m,n
-      integer adr
+      integer iadr
       include '../stack.h'
       integer il
-      il=adr(lstk(lw),0)
+c
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
       istk(il+1)=m
       istk(il+2)=n
       return
@@ -1023,19 +1101,23 @@ C      lw : position ds la pile
 C      i  : element demande
 C     Sortie :
 C      n  : nombre d'elements ds la liste
-C      ili : le ieme element commence en istk(adr(ili,0))
+C      ili : le ieme element commence en istk(iadr(ili))
 C     ==> pour recuperer un argument il suffit 
 C     de faire un lk=lstk(top);lstk(top)=ili; getmat(...,top,...);stk(top)=lk
 C      implicit undefined (a-z)
       character fname*(*)
       integer topk,lw,n,i,ili
-      integer adr
+      integer iadr,sadr
       integer il,itype
       include '../stack.h'
-      il=adr(lstk(lw),0)
-      if(istk(il).lt.0) il=adr(istk(il+1),0)
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
+      if(istk(il).lt.0) il=iadr(istk(il+1))
       itype=istk(il)
-      if(itype.ne.15) then
+      if(itype.ne.15.and.itype.ne.16) then
          err=rhs+(lw-topk)
          call cvname(ids(1,pt+1),fname,0)
          call error(210)
@@ -1044,7 +1126,7 @@ C      implicit undefined (a-z)
       endif
       n=istk(il+1)
       if ( i.le.n) then
-         ili=adr(il+3+n,1) + istk(il+2+(i-1))-1
+         ili=sadr(il+3+n) + istk(il+2+(i-1))-1
       else
          ili=0
       endif
@@ -1060,11 +1142,14 @@ C     n'a pas d'arguments (ou il faut faire top=top+1)
 C      implicit undefined (a-z)
       character fname*(*)
       integer lw
-      integer adr
+      integer iadr
       include '../stack.h'
+c
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
       if (lw.eq.0.or.rhs.lt.0)  lw=lw+1
-      if (lw.eq.1) lstk(lw)=1
-      istk(adr(lstk(lw),0))=0
+      istk(iadr(lstk(lw)))=0
       lstk(lw+1)=lstk(lw)+2
       return
       end
@@ -1130,8 +1215,12 @@ C      implicit undefined (a-z)
       character fname*(*)
       character*4 name 
       include '../stack.h'
-      integer adr
-      il=adr(lstk(lw),0)
+      integer iadr,sadr
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
 C     test particulier decouvert ds logic.f
       if(istk(il).ne.2) then
          getpoly=.false.
@@ -1152,7 +1241,7 @@ C     test particulier decouvert ds logic.f
             endif
          endif
          ilp=il+8
-         lr=adr(ilp+m*n+1,1)-1
+         lr=sadr(ilp+m*n+1)-1
          lc=lr +istk(ilp+m*n)-1
          getpoly=.true.
       endif
@@ -1180,10 +1269,14 @@ C      implicit undefined (a-z)
       character fname*(*)
       integer lw,m,n,lr
       integer il
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
-      il=adr(lstk(lw),0)
-      err=il+3+m*n - adr(lstk(bot),0)
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
+      err=il+3+m*n - iadr(lstk(bot))
       if(err.gt.0) then
          call error(17)
          crewimat=.false.
@@ -1194,7 +1287,7 @@ C      implicit undefined (a-z)
          istk(il+1)=m
          istk(il+2)=n
          lr=il+3
-         lstk(lw+1)=adr(il+3+m*n+2,1)
+         lstk(lw+1)=sadr(il+3+m*n+2)
          return
       endif
       end
@@ -1213,11 +1306,15 @@ C      implicit undefined (a-z)
       character fname*(*)
       integer topk,lw,m,n,lr
       integer il
-      integer adr
+      integer iadr,sadr
       include '../stack.h'
-      il=adr(lstk(lw),0)
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(lw))
 C     test particulier decouvert ds logic.f
-      if(istk(il).lt.0) il=adr(istk(il+1),0)
+      if(istk(il).lt.0) il=iadr(istk(il+1))
       if(istk(il).ne.4) then
          getwimat=.false.
          err=rhs+(lw-topk)

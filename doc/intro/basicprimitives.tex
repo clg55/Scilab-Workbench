@@ -1,64 +1,63 @@
 \chapter{Basic Primitives}
 \label{ch5}
-This chapter briefly describes some basic primitives of $\Psi$lab.
-More precise information is given in the manual 
+This chapter briefly describes some basic primitives of Scilab.
+More detailed information is given in the manual 
 (see the directory {\tt SCIDIR/man/LaTex-doc}).
 \section{The Environment and Input/Output}
 	In this chapter we describe the most important aspects
-of the environment of $\Psi$lab, how to automatically
-perform certain operations when entering $\Psi$lab,
+of the environment of Scilab: how to automatically
+perform certain operations when entering Scilab,
 and how to read and write data
-to and from the $\Psi$lab environment.
+from and to the Scilab environment.
 
 \subsection{The Environment}
 \label{s5.1}
 \index{environment}
 
-	At the moment that the user calls $\Psi$lab the environment
-of $\Psi$lab is loaded with a certain number of variables and primitives.
+ Scilab is loaded with a number of variables and primitives.
 The command {\tt who}\index{who@{\tt who}} lists the variables 
-which are currently available in $\Psi$lab.  
+which are available.  
 
 The {\tt who} command also indicates how many elements and variables
 are available for use.  The user can obtain on-line help on any of 
-the functions listed by what by typing {\tt help}\index{help@{\tt help}}.
+the functions listed by typing {\tt help <function-name>}\index{help@{\tt help}}.
 
-	Variables can be saved in a external binary
-file by using {\tt save}\index{save@{\tt save}}.  
+	Variables can be saved in an external binary
+file using {\tt save}\index{save@{\tt save}}.  
 Similarly, variables previously saved can be
-reloaded into $\Psi$lab using {\tt load}\index{load@{\tt load}}.
+reloaded into Scilab using {\tt load}\index{load@{\tt load}}.
 
-Notice that after the command {\tt clear}\index{clear@{\tt clear}} 
-that the variables {\tt x} and
+Note that after the command {\tt clear x y}\index{clear@{\tt clear}} 
+ the variables {\tt x} and
 {\tt y} no longer exist in the environment.  
 The command {\tt save} without any variable arguments saves the entire 
-$\Psi$lab environment.  Similarly,
+Scilab environment.  Similarly,
 the command {\tt clear} used
 without any arguments clears all of the variables, functions, and libraries
 in the environment.
 
-	Functions which exist in files can be loaded by using 
-{\tt getf}\index{getf@{\tt getf}}.  
+	Functions which exist in files can be seen by using {\tt disp}
+and loaded by using {\tt getf}\index{getf@{\tt getf}}.  
 
 Libraries of functions are loaded
 using {\tt lib}\index{lib@{\tt lib}}\index{libraries}.  
 
-The list of functions available in the library can be had by using {\tt disp}.
+The list of functions available in the library can be obtained by using {\tt disp}.
 
 \subsection{Startup Commands by the User}
 \label{s5.2}
 \index{startup by user}
 \index{starup.sci@{\tt startup.sci}}
 
-	When $\Psi$lab is called the user can automatically load
+	When Scilab is called the user can automatically load
 into the environment functions, libraries, variables, and perform
-commands using the the file {\tt .scilab} in the home directory.  
-This is particularly useful when the user wants to run $\Psi$lab programs
+commands using the the file {\tt .scilab} in his home directory.  
+This is particularly useful when the user wants to run Scilab programs
 in the background (such as in batch mode).  Another useful aspect
-of the {\tt .scilab} file is when the certain functions or libraries
+of the {\tt .scilab} file is when some functions or libraries
 are often used.  In this case the command {\tt getf} can be used
 in the {\tt .scilab} file to automatically load the desired 
-functions and libraries whenever $\Psi$lab is invoked.
+functions and libraries whenever Scilab is invoked.
 
 \subsection{Input and Output}
 \label{s5.3}
@@ -67,7 +66,7 @@ functions and libraries whenever $\Psi$lab is invoked.
 
 	Although the commands {\tt save} and {\tt load} are
 convenient, one has much more control over the transfer of
-data between files and $\Psi$lab by using the commands 
+data between files and Scilab by using the commands 
 {\tt read}\index{read@{\tt read}}
 and {\tt write}\index{write@{\tt write}}.  
 These two commands work similarly to the
@@ -91,60 +90,61 @@ two commands is as follows.
 !   1.           2.    3.1415927 !
 !   2.7182818    3.    4.        !
 \end{verbatim}
-Notice that the {\tt read} specifies the number of rows and columns
+Notice that {\tt read} specifies the number of rows and columns
 of the matrix {\tt x}.
 Complicated formats can be specified. 
 
 \section{Help}
 On-line help is available either by clicking on the {\tt help}
 button or by entering {\tt help item} (where {\tt item} is usually the 
-name of a macro or primitive). The help facility is based on the 
+name of a function or primitive). The help facility is based on the 
 Unix {\tt xman} command. {\tt apropos item} looks for {\tt item} 
 in the {\tt whatis} file. This facility is equivalent to the Unix 
 {\tt whatis} command. To add a new item in the manual is easy: just
 look at the {\tt SCIDIR/man} subdirectories.
-The $\Psi$lab \LaTeX  manual is automatically obtained from the
+The Scilab \LaTeX~  manual is automatically obtained from the
 manual items by a {\tt Makefile}. 
 See the directory {\tt SCIDIR/man/Latex-doc}. Note that the command
 {\tt manedit} opens an help file with an editor (default editor
 is {\tt emacs}).
 
 
-\section{Non-Linear Calculation}
+\section{Nonlinear Calculation}
 \label{ch6}
 \index{non-linear calculation}
 
-	$\Psi$lab has several powerful non-linear primitives for simulation
+	Scilab has several powerful non-linear primitives for simulation
 or optimization.
 \index{simulation}
 \index{optimization}
 \subsection{Externals}
 \index{external}
-An "external" is a function or Fortran routine which is used as an argument
+An ``external'' is a function or Fortran routine which is used as an argument
 of some high-level primitives (such as {\tt ode}, {\tt optim}...).
 The calling sequence of the external (function or routine) is imposed by
 the high-level primitive which sets the arguments of the external.
 For example the external function {\tt costfunc} is an argument of 
 the {\tt optim} primitive. Its calling sequence must be: 
 {\tt [f,g,ind]=costfunc(x,ind)} as imposed by the {\tt optim} primitive.
-The following non-linear primitives in $\Psi$lab need externals: 
-{\tt ode}, {\tt optim}, {\tt impl}, {\tt dassl}, {\tt intg}, {\tt fsolve}
+The following non-linear primitives in Scilab need externals: 
+{\tt ode}, {\tt optim}, {\tt impl}, {\tt dassl}, {\tt intg}, {\tt fsolve}.
 For problems where computation time is important, it is recommended
 to code the externals as Fortran subroutines. Examples of such
 subroutines are given in the directory {\tt SCIDIR/routines/default}.
-When such a subroutine is written it must be linked to $\Psi$lab.
+When such a subroutine is written it must be linked to Scilab.
 This link operation can be ``dynamic'' (see {\tt link}). It is
-also possible to introduce the code in a specific interface (see e.g.
-{\tt fydot.f} in {\tt SCIDIR/routines/default} and rebuild a new $\Psi$lab
+also possible to introduce the code in a more permanent manner by 
+inserting it in a specific interface (see e.g.
+{\tt fydot.f} in {\tt SCIDIR/routines/default} and rebuild a new Scilab
 by a {\tt make}.
 
-\subsection{Non-Linear primitives}
+\subsection{Nonlinear Primitives}
 The main simulation primitives
-in $\Psi$lab allow integrating a broad range of non-linear system functions of
+in Scilab allow integrating a broad range of non-linear system functions of
 both explicit and implicit nature. It is also possible to integrate
 a system of differential equations with a stopping time: 
 integration is performed until the trajectory reaches a given surface.
-In the following we illustrate the basic {\tt ode} syntax by example.
+In the following we illustrate the basic {\tt ode} syntax for example.
 
 	The example illustrates the basic usage of {\tt ode}.
 Here we simulate the motion of a double pendulum.  
@@ -180,7 +180,7 @@ g
 \end{equation}
 where $g$ is the acceleration due to gravity, $m=m_1+m_2$, and 
 $\theta=\theta_1+\theta_2$.
-The following $\Psi$lab session simulates the movement
+The following Scilab session simulates the movement
 of the pendulum for $1.5$ seconds where $g=9.8m/s$,
 $r_1=r_2=1m$, and $m1=m2=1kg$.  The initial conditions are
 $\theta_1=\pi/2$, $\theta_2=\pi/2$, $\dot{\theta}_1=0$, and 
@@ -203,11 +203,11 @@ $\dot{\theta}_2=0$.
 --> pp(z)
 \end{verbatim}
 The result of the above session is plotted in Figure~\ref{f6.1}.
-Note that {\tt ode} takes four arguments: a vector initial condition
+Note that {\tt ode} takes four arguments: an initial condition vector
 {\tt z0}, the initial time {\tt t0}, a vector of times {\tt t}
 for which the integrated values {\tt z} are desired, and the function
-name {\tt dpend} which exists in the environment of $\Psi$lab and which
-calculates the value of the derivative {\tt zd} give the time {\tt t} 
+ {\tt dpend} which exists in the environment of Scilab and which
+calculates the value of the derivative {\tt zd} given the time {\tt t} 
 and the value of {\tt z} at this time.
 
 \input{\Figdir d6-1.tex}
@@ -242,8 +242,8 @@ function []=pp(z)
 
 \end{verbatim}
 
-	The $\Psi$lab ``external'' function which calculates the derivative
-(in this example {\tt dpend}) must have a certain format.
+	The Scilab ``external'' function which calculates the derivative
+( {\tt dpend} in this example) must have a certain format.
 This format is as follows
 \begin{verbatim}
 function [xdot]=f(time,x)
@@ -259,20 +259,20 @@ as {\tt x}.  For differential equations of order greater than one
 state augmentation is used. 
 
 The optimization primitive 
-{\tt optim}\index{optim@{\tt optim}} in $\Psi$lab
+{\tt optim}\index{optim@{\tt optim}} in Scilab
 is capable finding locally optimum solutions to a wide range
 of non-linear problems.  In the following we illustrate 
 the basic {\tt optim} syntax by example. 
 
 	The example used to illustrate the use of {\tt optim} is
-the classic ray-tracing problem of a plane wave traveling from
+the classic ray-tracing problem of a plane wave travelling from
 one material to another.  Here we pose the problem slightly differently.
 Imagine a lifeguard on a beach and a person calling for help 
 in the water.  The lifeguard's speed on land is different from
 his speed in water and, consequently, he would like to choose the
 point along the border between beach and water which minimizes
 the travel time to the calling person.  This problem can be analytically
-resolved when the border between beach and water is a straight
+solved when the border between beach and water is a straight
 line.  The problem may not be analytically resolvable when the function
 of the border is more complicated than a straight line.
 
@@ -280,7 +280,7 @@ of the border is more complicated than a straight line.
 is at the origin of a Cartesian coordinate system, that the person
 to be saved is at the coordinates $(x,y)$, and that the border
 between the beach and the water can be described by the function
-$d(x)$ we have that the lifeguard's time of travel is
+$d(x)$, the lifeguard's time of travel is
 \begin{equation}
 T(p)=\frac{\sqrt{p^2+d^2(p)}}{v_b}+\frac{\sqrt{(x-p)^2+(y-d(p))^2}}{v_w}
 \label{e6.2}
@@ -289,7 +289,7 @@ where $p$ is the $x$-axis coordinate of the point along the border through
 which the lifeguard passes and
 where $v_s$ and $v_w$ are the respective 
 speeds of the lifeguard on the beach and in the water.
-Here we assume that the $x$ coordinate give by $p$ uniquely defines
+Here we assume that the $x$ coordinate given by $p$ uniquely defines
 a point on the border between the beach and the water.
 
 	We know that a locally optimum solution must make 
@@ -301,7 +301,7 @@ a function of the derivative of $d$
 \label{e6.3}
 \end{equation}
 where $d_p$ is the partial of $d$ with respect to $p$.  The following
-$\Psi$lab functions make the calculations in (\ref{e6.2}) and (\ref{e6.3}).
+Scilab functions make the calculations in (\ref{e6.2}) and (\ref{e6.3}).
 \begin{verbatim}
 function [t,t_p,ind]=swim(p,ind)
    [d,d_p]=dpfun(p);
@@ -316,7 +316,7 @@ function [d,d_p]=dpfun(p);
    d_p=-log(1.55)*exp(log(1.55)*p);
 \end{verbatim}
 where the functions $d$ and $d_p$ are calculated by the function {\tt dpfun}.
-These two functions are used in the following $\Psi$lab session by the
+These two functions are used in the following Scilab session by the
 primitive {\tt optim} to find the optimum point $p$.
 \begin{verbatim}
  
@@ -343,7 +343,7 @@ primitive {\tt optim} to find the optimum point $p$.
 \end{verbatim}
 Here it can be seen that the primitive {\tt optim} takes two 
 arguments and returns three values.  The first argument is the
-name of the $\Psi$lab function which calculates the value of time (the cost)
+name of the Scilab function which calculates the value of time (the cost)
 and the derivative of the time with respect to the value of $p$.
 The second argument is a first guess for the value of $p$.
 The returned values are, respectively, the optimal cost {\tt ts}
@@ -353,7 +353,7 @@ finally, the value of the gradient at this point which is in
 
 	The optimal path for the lifeguard is illustrated in
 Figure~\ref{f6.2}.  The curved line represents the shape of the
-shoreline and the dotted line represents the lifeguards optimal
+shoreline and the dotted line represents the lifeguard's optimal
 path.
 %
 \input{\Figdir d6-2.tex}
@@ -366,29 +366,30 @@ path.
 \index{interfacing fortran}
 \index{C}
 
- $\Psi$lab in a Unix environment can be easily interfaced with Fortran 
+ Scilab can be easily interfaced with Fortran 
 or C subroutines. 
 The simplest way is using the dynamic link primitive 
 {\tt link}\index{link@{\tt link}} and the subroutine
 call primitive {\tt fort}\index{fort@{\tt fort}}. Details are
-given in the $\Psi$lab manual.
+given in the Scilab manual.
 
-Fortran subprograms can also be linked to $\Psi$lab by using an external 
+Fortran subprograms can also be linked to Scilab by using an external 
 Fortran program call {\tt interf}\index{interf@{\tt interf}}. See
 the program {\tt interf.f} in the directory {\tt SCIDIR/default} where
 examples are given.
 
 These facilities are particularly useful
 for simulation and optimization of non-linear problems or for
-introducing programs automatically generated by MAPLE.  There are
+introducing programs automatically generated by the computer algebra
+system Maple.  There are
 two steps for interfacing dynamically a subroutine written 
-in fortran with $\Psi$lab. 
+in Fortran with Scilab. 
 These two steps are demonstrated in what follows.
 
-	To link a fortran subroutine with $\Psi$lab it is first necessary
+	To link a fortran subroutine with Scilab it is first necessary
 to have a file which contains the executable object file of the subroutine.
 We introduce the Fortran subroutine {\tt fibb} which calculates the
-$n^{th}$ Fibbonacci number, $f_n$ (i.e., the sequence $0,1,1,2,3,5,8,\ldots$
+$n^{th}$ Fibbonacci number $f_n$ (i.e. the sequence $0,1,1,2,3,5,8,\ldots$
 where $f_n=f_{n-1}+f_{n-2}$).
 \begin{verbatim}
       subroutine fibb(fn,n)
@@ -403,14 +404,13 @@ where $f_n=f_{n-1}+f_{n-2}$).
       else
          fn=n-1
       endif
-      return
       end
 \end{verbatim}
 Assuming that the object file for {\tt fibb} is available in the
-file {\tt fibb.o} the following $\Psi$lab session shows how to use
-the subroutine from $\Psi$lab.
+file {\tt fibb.o} the following Scilab session shows how to use
+the subroutine from Scilab.
 \begin{verbatim}
--->unix(" make fibb.o");
+-->unix("make fibb.o");
  
 -->link('fibb.o','fibb')
  
@@ -429,17 +429,17 @@ the subroutine from $\Psi$lab.
  
     5.  
 \end{verbatim}
-The primitive {\tt link} normally takes two arguments where the
+The primitive {\tt link} usually takes two arguments where the
 first argument is the name of the object file and the second argument
 is the name of the subroutine call.  Note that the primitive \verb!c_link!
 may be used to know  all the previously linked subroutines.  
 The use of {\tt fort} to call the subroutine {\tt fibb}
 is a bit complicated.  The arguments are divided into four groups.
-The first argument in {\tt 'fibb'} is the name of the subroutine called.
+The first argument {\tt 'fibb'} is the name of the called subroutine.
 The argument {\tt 'out'} divides the remaining arguments into two 
 groups.  The group of arguments between {\tt 'fibb'} and {\tt 'out'}
 is the list of input arguments, their positions in the call to {\tt fibb},
-and their data type.  The group of arguments to the right of {\tt 'out}
+and their data type.  The group of arguments to the right of {\tt 'out'}
 are the dimensions of the output variables, their positions in the call
 to {\tt fibb}, and their data type.
 The possible data types are real, integer, and double precision which
@@ -448,34 +448,35 @@ are indicated, respectively, by the strings {\tt 'r'}, {\tt 'i'}, and
 {\tt n} at position $2$ and {\tt fn} at positon $1$ which explains
 the above call values.  The vector {\tt [1,1]} indicates that the output
 {\tt fn} is a $1\times 1$ matrix.
-The routines which are linked to $\Psi$lab can also access internal 
-$\Psi$lab variables (see the routine {\tt matz.f}
+The routines which are linked to Scilab can also access internal 
+Scilab variables (see the routine {\tt matz.f}
 in the directory {\tt SCIDIR/routines/system2}).
-\section{X-window dialog}
-It may be convenient to open a specific X-window window for entering
+
+\section{XWindow Dialog}
+It may be convenient to open a specific XWindow window for entering
 interactively parameters inside a function or for a demo.
 This facility is possible thanks to e.g. the functions \verb!x_dialog!,
 \verb!x_choose!, \verb!x_mdialog!, \verb!x_matrix! and \verb!x_message!.
 The demos which can be executed by clicking on the {\tt demo} button
 provide simple examples of the use of these functions.
 
-\section{Maple interface}
+\section{Maple Interface}
 The Maple procedure {\tt maple2scilab} allows to numerically evaluate
-any Maple expression in $\Psi$lab.
+any Maple expression in Scilab.
 On input this procedure takes a Maple matrix made of symbolic
 expressions. When {\tt maple2scilab} is invoked in Maple,
 a Fortran program is automatically generated by Maple 
-(via {\tt Macrofort}) together with a $\Psi$lab function which 
+(via {\tt Macrofort} package in Maple) together with a Scilab function which 
 allows to (dynamically) call this subroutine.
 The parameters of the function are the Maple symbols and thus the Maple
-matrix can be evaluated numerically in $\Psi$lab. The use of Fortran
+matrix can be evaluated numerically in Scilab. The use of Fortran
 is for speed purposes since the formal Maple expression can be
 extremely complicated.
 
 \section{System Interconnection}
 	The purpose of this section is to illustrate some
-of the more sophisticated aspects of $\Psi$lab by way of an example.
-The example shows how $\Psi$lab can be used to symbolically represent
+of the more sophisticated aspects of Scilab by the way of an example.
+The example shows how Scilab can be used to symbolically represent
 the inter-connection of multiple systems which in turn can 
 then be used to numerically evaluate the performance of the
 inter-connected systems.  The symbolic representation of the
@@ -487,7 +488,7 @@ and the evaluation of the resulting system is done with
 	The example illustrates the symbolic inter-connection of the 
 systems shown in Figure~\ref{fa.1}\index{linear systems!inter-connection of}.  
 %
-%\begin{figure}
+\begin{figure}
 \begin{center}
 \begin{picture}(360,204)
 
@@ -529,9 +530,9 @@ systems shown in Figure~\ref{fa.1}\index{linear systems!inter-connection of}.
 
 \end{picture}
 \end{center}
-%\caption{Inter-Connected Systems}
+\caption{Inter-Connected Systems}
 \label{fa.1}
-%\end{figure}
+\end{figure}
 %
 Figure~\ref{fa.1} illustrates the classic regulator problem\index{regulator}
 where the block labeled {\tt Proc} is to be controlled
@@ -539,21 +540,21 @@ using feedback from the {\tt Sensor} block and {\tt Reg} block.
 The {\tt Reg} block compares the output from the {\tt Model}
 block to the output from the {\tt Sensor} block to decide how to
 regulate the {\tt Proc} block.  There is also a feed-forward
-block which filters the input signal, {\tt U} to the {\tt Proc}
+block which filters the input signal {\tt U} to the {\tt Proc}
 block.  The outputs of the system are {\tt Y} and {\tt UP}.
 
 	The system illustrated in Figure~\ref{fa.1} can
-be represented in $\Psi$lab by using the function {\tt bloc2exp}.
-The use of {\tt bloc2exp} is illustrated in the following $\Psi$lab
+be represented in Scilab by using the function {\tt bloc2exp}.
+The use of {\tt bloc2exp} is illustrated in the following Scilab
 session.
-There a two kinds of objects: 'transfer' and 'links'. The example
+There a two kinds of objects: ``transfer'' and ``links''. The example
 considered here admits 5 transfers and 7 links.
 First the transfer are defined in a symbolic manner. Then links
-are defined and an 'interconnected system' is defined as
+are defined and an ``interconnected system'' is defined as
 a specific list. The function {\tt bloc2exp} evaluates symbolically
 the global transfer and {\tt evstr} evaluates numerically
 the global transfer function once the systems are given ``values'', i.e.
-are defined as $\Psi$lab linear systems.
+are defined as Scilab linear systems.
 %
 \begin{verbatim}
  
@@ -609,23 +610,23 @@ are defined as $\Psi$lab linear systems.
 \end{verbatim}
 %
 Note that the argument to {\tt bloc2exp} is a list of lists.  The 
-first element of the list {\tt syst} is actually the character chain
+first element of the list {\tt syst} is (actually) the character string
 {\tt 'blocd'} which indicates that the list represents a block-diagram
 inter-connection of systems.  Each list entry in the list {\tt syst}
 represents a block or an inter-connection in Figure~\ref{fa.1}.
 The form of a list which represents a block begins with a character
-chain {\tt 'transfer'} followed by a matrix of character chains
-which give the symbolic name of the block.  If the block is multi-input
-multi-output the matrix of character chains must be represented as
-is illustrated for the block {\tt Reg}.  
+string {\tt 'transfer'} followed by a matrix of character strings
+which gives the symbolic name of the block.  If the block is multi-input
+multi-output the matrix of character strings must be represented as
+is illustrated by the block {\tt Reg}.  
 
 	The inter-connections between blocks is also represented by lists.  
-The first element of the list is the character chain {\tt 'link'}.
+The first element of the list is the character string {\tt 'link'}.
 The second element of the inter-connection is its symbolic name.
 The third element of the inter-connection is the input to the connection.
 The remaining elements are all the outputs of the connection.
 Each input and output to an inter-connection is a vector which
-contains as its first element the block number (i.e., the {\tt model}
+contains as its first element the block number (for instance the {\tt model}
 block is assigned the number $2$).  The second element of the vector
 is the port number for the block (for the case of multi-input multi-output
 blocks).  If an inter-connection is not attached to anything the value
@@ -636,8 +637,8 @@ labeled {\tt 'input'} or is omitted.
 which give the unassigned inputs and outputs of the system and
 the symbolic transfer function of the system given by {\tt sysf}.
 The symbolic names in {\tt sysf} can be associated to polynomials
-and evaluated using the function {\tt evstr}.  This illustrated in the
-following $\Psi$lab session.
+and evaluated using the function {\tt evstr}.  This is illustrated in the
+following Scilab session.
 %
 \begin{verbatim}
  
@@ -665,10 +666,10 @@ following $\Psi$lab session.
 
 \end{verbatim}
 %
-The resulting polynomial transfer function relates the input
+The resulting polynomial transfer function links the input
 of the block system to the two outputs.  Note that the output
 of {\tt evstr} is the rational polynomial matrix {\tt sys}
-whereas the output of {\tt bloc2exp} is a matrix of character chains.
+whereas the output of {\tt bloc2exp} is a matrix of character strings.
 
 The symbolic evaluation which is given here is not very efficient
 with large interconnected systems. The function {\tt bloc2ss}
@@ -680,14 +681,15 @@ is not done by the user. Each system must be given a value before
 bloc2ss is called. All the calculations are made in state-space
 representation even if the linear systems are given in transfer form.
 
-\section{Converting $\Psi$lab functions to Fortran routines}
+\section{Converting Scilab Functions to Fortran Routines}
 
-$\Psi$lab provides a compiler to transform some $\Psi$lab functions
+Scilab provides a compiler (under development) to transform some Scilab 
+functions
 into Fortran subroutines. The routines which are thus obtained
 make use of the routines which are in the Fortran libraries.
 All the basic matrix operations are available.
 
-Let us consider the following $\Psi$lab function:
+Let us consider the following Scilab function:
 \begin{verbatim}
 
 function [x]=macr(a,b,n)
@@ -713,12 +715,12 @@ x=[a b;-b' a']
 
 \end{verbatim}
 
-It is translated into Fortran by the function {\tt mac2for}.
+which can be translated into Fortran by using the function {\tt mac2for}.
 Each input parameter of the subroutine is described by a list
-which contains its type and its dimensions. Here, we have 3
+which contains its type and its dimensions. Here, we have three
 input variables {\tt a,b,c} which are, say, {\tt integer,
-double precision, double precision} and of dimensions
-{\tt (m,m), (m,m), (1,1)}: this information is gathered
+double precision, double precision} with dimensions
+{\tt (m,m), (m,m), (1,1)}. This information is gathered
 in the following list:
 \begin{verbatim}
 l=list();
@@ -731,7 +733,8 @@ The call to {\tt mac2for} is made as follows:
 comp(macr);
 mac2for(macr2lst(macr),l)
 \end{verbatim}
-The output of this command is a stand-alone Fortran subroutine.
+The output of this command is a string containing a stand-alone Fortran 
+subroutine.
 \begin{verbatim}
        subroutine macr(a,b,n,x,m,work,iwork)
 c!
@@ -753,5 +756,5 @@ c
 
 
 \end{verbatim}
-This routine can be linked to $\Psi$lab and interactively called.
+This routine can be linked to Scilab and interactively called.
 

@@ -1,4 +1,4 @@
-//[f,g,newm]=tangent(nl_sys,xe,ue)
+function [f,g,newm]=tangent(nl_sys,xe,ue)
 //[f,g,newm]=tangent(ff,xe,[ue])
 // lin\'earise autour du point d'\'equilibre (xe,ue)
 // le champ du syst\`eme dynamique d\'efinit par xdot=ff(t,x,[u])
@@ -34,6 +34,6 @@ deff('[xdot]=newm(t,x,u)',['[lhs,rhs]=argn(0);if rhs <=2,u=0;end;',...
    ')*(x(2)-('+xestr(2)+'))+('+gstr(1)+')*(u-('+uestr+'))',...
    'xdot(2)='+fstr(2,1)+'*(x(1)-('+xestr(1)+'))+('+fstr(2,2)+...
    ')*(x(2)-('+xestr(2)+'))+('+gstr(2)+')*(u-('+uestr+'))']);
-//end
+
 
 

@@ -94,7 +94,11 @@ c
       if (k .gt. eol) go to 10
       if (k .eq. eol) go to 11
       if (k .eq. -1) l = l-1
-      if (k .le. 0) go to 23
+      if (k .le. 0) then
+         call basout(io,wte,
+     +        buf(j:j)//' is not a scilab character')
+         go to 23
+      endif
       maj=.false.
 c     
  21   k = k-1

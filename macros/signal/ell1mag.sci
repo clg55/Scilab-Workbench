@@ -1,4 +1,4 @@
-//<v>=ell1mag(eps,m1,z)
+function [v]=ell1mag(eps,m1,z)
 //<v>=ell1mag(eps,m1,z)
 //Function used for squared magnitude of an elliptic filter
 //Usually m1=eps*eps/(a*a-1);
@@ -13,6 +13,5 @@
    un=ones(z);
    v=real(un./(un+eps*eps*s.*s))
  
-//end
 
 

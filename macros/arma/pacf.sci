@@ -1,11 +1,11 @@
-function [phi]=pacf(x,n,min,max)
-// function pacf(x,n,[min,max])
+function [phi]=pacf(x,n,Min,Max)
+// function pacf(x,n,[Min,Max])
 // Partial Autocorrelation function for one-dimensional process
 //
 [lhs,rhs]=argn(0)
 if rhs <= 1 ; n=prod(size(x))/4;end
-if rhs <= 2 ; min=-1.0;end
-if rhs <= 3 ; max=1.0;end
+if rhs <= 2 ; Min=-1.0;end
+if rhs <= 3 ; Max=1.0;end
 [cov,mean]=corr(x,n+1);
 ac=cov'/cov(1);
 xtitle('Partial Autocorrelation Function ');
@@ -22,7 +22,7 @@ phi=0*ones(n,1)
 phi(1)=ac(2)
 psi=phi(1);
 for k=2:n;phi(k)=ac(k+1)- ac(k:-1:2)'*psi;psi=[psi;phi(k)];end
-plot2d3("onn",(1:n)',phi,[-1],"011"," ",[0,min,n,max]);
+plot2d3("onn",(1:n)',phi,[-1],"011"," ",[0,Min,n,Max]);
 stde=2*sqrt(1/prod(size(x)));
 plot2d( [0,0,0;n,n,n],[0,stde,-stde;0,stde,-stde],[-1,-2,-2],"000")
 

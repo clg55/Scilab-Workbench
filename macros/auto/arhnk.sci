@@ -23,7 +23,7 @@ if ordre>n1 then
 end;
 if ordre=n1 then
   a=a(1:n1,1:n1);b=b(1:n1,:);c=c(:,1:n1);
-  if lhs=1 then a=list('lss',a,b,c,d,0*ones(n1,1),'c'),end
+  if lhs=1 then a=tlist('lss',a,b,c,d,0*ones(n1,1),'c'),end
   return,
 end;
 sigma=wc(ordre+1,ordre+1)
@@ -54,7 +54,7 @@ if m<n then
   c=c(:,1:m)
 end;
 //
-slm=list('lss',a,b,c,d,0*ones(m,1),'c');
+slm=tlist('lss',a,b,c,d,0*ones(m,1),'c');
 
 
 

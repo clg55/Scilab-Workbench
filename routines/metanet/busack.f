@@ -1,5 +1,5 @@
       subroutine busack(c,ex,gamma,is,it,la2,lp2,ma,
-     &     markb,mm,n,or,p,phimim,piv,v,valflo)
+     &     markb,mm,n,or,p,phimim,piv,v,valflo,flag)
       implicit integer (a-z)
       dimension lp2(*),la2(mm),or(ma),ex(ma)
       dimension c(ma)
@@ -11,6 +11,7 @@
          call erro('bad internal node number')
          return
       endif
+      flag=1
       coderr=0
       valflo=0
       errtol=1.0d-6
@@ -123,7 +124,8 @@
       if (coderr .eq. 0) then
          return
       else if (coderr .eq. 1) then
-         call out('imposed cost too big')
+         call out('constrained flow too big')
+         flag=0
          return
       else if (coderr .eq. 2) then
          call erro('negative maximum capacities')

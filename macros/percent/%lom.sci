@@ -1,8 +1,7 @@
-//[r]=%lom(l1,l2)
-//%lom(l1,l2) correspond a l'operation logique l1==l2 avec l1 une liste
-//et l2 une macro
+function [r]=%lom(l1,l2)
+//%lom(l1,l2) <-> logical operation l1==l2, l1 list and l2 macro(function)
 //!
 r=%f
-//end
+
 
 

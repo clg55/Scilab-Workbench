@@ -26,6 +26,7 @@ for k=1:ng
     elseif exists(getted(k))==0 then
       globals=[globals;getted(k)]
     else
+      w=null()
       w=evstr(getted(k))
       if type(w)==11|type(w)==13 then
         called=[called;getted(k)]

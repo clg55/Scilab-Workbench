@@ -1,4 +1,4 @@
-#include "../machine.h"
+
 #include <stdio.h>
 #include <ctype.h>
 #include <sys/types.h>
@@ -12,7 +12,14 @@
 #include <archives.h>
 #endif
 
+#ifdef linux 
+#include <unistd.h>
+#include <sys/wait.h>
+#endif 
+
+#ifndef linux
 #include <sys/mode.h>
+#endif 
 
 #ifdef __alpha
 #include <c_asm.h>
@@ -65,9 +72,12 @@ F2C(dynload)(ii,ename1,loaded_files,err)
 #ifdef sun
         "/usr/ucb/ld", "-r", "-o", 0, 0
 #else
+#ifdef linux
+         "/usr/bin/ld", "-shared", "-o", 0, 0  
+#else
         "/bin/ld", "-shared", "-o", 0, 0  
 #endif
-
+#endif
 #define TAILARG 4
 	    };
         argv[3] = tmp_file;

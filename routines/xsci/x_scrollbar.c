@@ -25,10 +25,11 @@
  * SOFTWARE.
  */
 
-#include "x_ptyx.h"		/* gets Xt headers, too */
+#include "x_ptyxP.h"		/* gets Xt headers, too */
 
 #include <stdio.h>
 #include <ctype.h>
+#include <malloc.h>
 #include <X11/Xatom.h>
 
 #include <X11/StringDefs.h>
@@ -150,7 +151,7 @@ static void ResizeScreen(xw, min_width, min_height )
 
 	if (geomreqresult == XtGeometryAlmost) {
 	     geomreqresult = XtMakeResizeRequest ((Widget)xw, repWidth,
-						  repHeight, NULL, NULL);
+						  repHeight, (Dimension *) NULL,(Dimension*) NULL);
 	}
 
 #ifndef nothack
@@ -188,8 +189,8 @@ static Widget CreateScrollBar(xw, x, y, height)
 
 	scrollWidget = XtCreateWidget("scrollbar", scrollbarWidgetClass, 
 	  (Widget)xw, argList, XtNumber(argList));
-        XtAddCallback (scrollWidget, XtNscrollProc, ScrollTextUpDownBy, 0);
-        XtAddCallback (scrollWidget, XtNjumpProc, ScrollTextTo, 0);
+        XtAddCallback (scrollWidget, XtNscrollProc, ScrollTextUpDownBy,(XtPointer) 0);
+        XtAddCallback (scrollWidget, XtNjumpProc, ScrollTextTo, (XtPointer)0);
 	return (scrollWidget);
 }
 
@@ -205,7 +206,7 @@ ScrollBarReverseVideo(scrollWidget)
 	register Widget scrollWidget;
 {
 	Arg args[4];
-	int nargs = XtNumber(args);
+	Cardinal nargs = XtNumber(args);
 	unsigned long bg, fg, bdr;
 	Pixmap bdpix;
 
@@ -308,7 +309,6 @@ ScrollBarOn (xw, init, doalloc)
 	register TScreen *screen = &xw->screen;
 	register int border = 2 * screen->border;
 	register int i;
-	Char *realloc(), *calloc();
 
 	if(screen->scrollbar)
 		return;
@@ -345,14 +345,14 @@ ScrollBarOn (xw, init, doalloc)
 	    bcopy ((char *)screen->allbuf, (char *)screen->buf,
 		   2 * (screen->max_row + 2) * sizeof (char *));
 	    for(i = 2 * screen->savelines - 1 ; i >= 0 ; i--)
-	      if((screen->allbuf[i] =
+	      if((screen->allbuf[i] = (Char *) 
 		  calloc((unsigned) screen->max_col + 1, sizeof(char))) ==
 		 NULL)
 		Error (ERROR_SBRALLOC2);
 	}
 
 	ResizeScrollBar (screen->scrollWidget, -1, -1, 
-			 Height (screen) + border);
+			(unsigned) Height (screen) + border);
 	RealizeScrollBar (screen->scrollWidget, screen);
 	screen->scrollbar = screen->scrollWidget->core.width +
 	     screen->scrollWidget->core.border_width;
@@ -515,5 +515,11 @@ void HandleScrollBack (gw, event, params, nparams)
 			-params_to_pixels (screen, params, (int) *nparams));
     return;
 }
+
+
+
+
+
+
 
 

@@ -1,9 +1,8 @@
-C/MEMBR ADD NAME=DFFTMX,SSI=0
-      subroutine dfftmx(a, b, ntot, n, nspan, isn, m, kt, at, ck, bt,
+      subroutine dfftmx(a, b, ntot, n, nspan, isn, m, kt, wt, ck, bt,
      *    sk, np, nfac)
 c
       implicit double precision(a-h,o-z)
-      dimension a(*), b(*), at(*), ck(*), bt(*), sk(*), np(*), nfac(*)
+      dimension a(*), b(*), wt(*), ck(*), bt(*), sk(*), np(*), nfac(*)
 c
       inc = abs(isn)
       nt = inc*ntot
@@ -184,7 +183,8 @@ c
       if (kk.le.nt) go to 150
  170  kk = kk - nt + jc
       if (kk.le.mm) go to 130
-      if (kk.lt.kspan) go to 200
+c      MODIF HERE  (WAS .lt.)
+      if (kk.le.kspan) go to 200
       kk = kk - kspan + inc
       if (kk.le.jc) go to 120
       if (kspan.eq.jc) go to 350
@@ -283,12 +283,12 @@ c
       k1 = k1 + kspan
  260  k2 = k2 - kspan
       j = j + 1
-      at(j) = a(k1) + a(k2)
-      ak = at(j) + ak
+      wt(j) = a(k1) + a(k2)
+      ak = wt(j) + ak
       bt(j) = b(k1) + b(k2)
       bk = bt(j) + bk
       j = j + 1
-      at(j) = a(k1) - a(k2)
+      wt(j) = a(k1) - a(k2)
       bt(j) = b(k1) - b(k2)
       k1 = k1 + kspan
       if (k1.lt.k2) go to 260
@@ -306,10 +306,10 @@ c
       bj = 0.0d+0
       k = 1
  280  k = k + 1
-      ak = at(k)*ck(jj) + ak
+      ak = wt(k)*ck(jj) + ak
       bk = bt(k)*ck(jj) + bk
       k = k + 1
-      aj = at(k)*sk(jj) + aj
+      aj = wt(k)*sk(jj) + aj
       bj = bt(k)*sk(jj) + bj
       jj = jj + j
       if (jj.gt.jf) jj = jj - jf
@@ -334,7 +334,8 @@ c
       s1 = sd
       mm = min(kspan,klim)
       go to 320
- 310  c2 = c1 - (cd*c1+sd*s1)
+ 310  continue
+      c2 = c1 - (cd*c1+sd*s1)
       s1 = s1 + (sd*c1-cd*s1)
 c
 c the following three statements compensate for truncation
@@ -359,7 +360,10 @@ c
       if (kk.le.kspnn) go to 330
       kk = kk - kspnn + jc
       if (kk.le.mm) go to 310
-      if (kk.lt.kspan) go to 340
+c             MODIFICATION OF ORIGINAL CODE:
+      if (kk.le.kspan) go to 340
+c         SINGLETON's CODE was:
+c     if (kk.lt.kspan) go to 340
       kk = kk - kspan + jc + inc
       if (kk.le.jc+jc) go to 300
       go to 40
@@ -502,7 +506,7 @@ c
       k1 = kk + kspan
       k2 = 0
  530  k2 = k2 + 1
-      at(k2) = a(k1)
+      wt(k2) = a(k1)
       bt(k2) = b(k1)
       k1 = k1 - inc
       if (k1.ne.kk) go to 530
@@ -519,7 +523,7 @@ c
       k1 = kk + kspan
       k2 = 0
  560  k2 = k2 + 1
-      a(k1) = at(k2)
+      a(k1) = wt(k2)
       b(k1) = bt(k2)
       k1 = k1 - inc
       if (k1.ne.kk) go to 560

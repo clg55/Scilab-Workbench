@@ -1,7 +1,7 @@
-.TH time_id 1 "April 1993" "Scilab Group" "Scilab Function"
+.TH time_id 4 "April 1993" "Scilab Group" "Scilab Function"
 .so man1/sci.an 
 .SH NAME
-time_id - SISO identification
+time_id - SISO least square identification
 .SH CALLING SEQUENCE
 .nf
 [H [,err]]=time_id(n,u,y)
@@ -38,4 +38,6 @@ the \fVnpt\fR first coefficients of impulse response of \fVH\fR
 .SH DESCRIPTION
 identification of discrete time response (least square). 
 .SH AUTHOR
-S. S.
+Serge Steer INRIA
+.SH SEE ALSO
+imrep2ss , arl2 , armax, frep2tf

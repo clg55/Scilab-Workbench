@@ -2,11 +2,11 @@
 \label{ch4}
 \index{programming}
 
-	One of the most useful features of $\Psi$lab is its ability
+	One of the most useful features of Scilab is its ability
 to create and use functions.  This allows the development of specialized
-programs which can be integrated into the $\Psi$lab package in a simple and
-modular way through the use of libraries.  In this chapter we 
-treat the following subjects.
+programs which can be integrated into the Scilab package in a simple and
+modular way through, for example, the use of libraries.  In this chapter we 
+treat the following subjects:
 \begin{itemize}
 	\item Programming Tools
 	\item Defining and Using Functions
@@ -17,15 +17,15 @@ Creation of libraries is discussed in a later chapter.
 
 \section{Programming Tools}
 
-	$\Psi$lab supports a full list of programming tools
-including looping, conditional branching, case selection,
+	Scilab supports a full list of programming tools
+including loops, conditionals, case selection,
 and creation of new environments.  Most programming tasks
 should be accomplished in the environment of a function.
 Here we explain what programming tools are available.
 
 \subsection{Comparison Operators}\index{programming!comparison operators}
-There exists five methods for making comparisons between the
-values of data objects in $\Psi$lab. These comparisons are listed
+There exist five methods for making comparisons between the
+values of data objects in Scilab. These comparisons are listed
 in the following table.
 
 \begin{center}
@@ -41,15 +41,15 @@ in the following table.
 \end{center}
 
 These comparison operators are used for evaluation
-of conditionals and for looping.
+of conditionals.
 
 \subsection{Loops}\index{programming!loops}
-Two types of looping exist in $\Psi$lab: the 
+Two types of loops exist in Scilab: the 
 {\tt for}\index{for@{\tt for}} loop
 and the 
 {\tt while}\index{while@{\tt while}} loop.  The {\tt for} loop
-steps through a vector of indices each time performing the
-commands delimited by and {\tt end}.  
+steps through a vector of indices performing each time the
+commands delimited by {\tt end}.  
 \begin{verbatim}
  
 --> x=1;for k=1:4,x=x*k,end
@@ -103,9 +103,21 @@ until a condition is satisfied.
 
 \end{verbatim}
 
+ A {\tt for} or {\tt while} loop can be ended by the command {\tt break} :
+\begin{verbatim}
+
+-->a=0;for i=1:5:100,a=a+1;if i > 10  then  break,end; end
+ 
+-->a
+ a  =
+ 
+    3.  
+
+\end{verbatim}
+
 \subsection{Conditionals}\index{programming!conditionals}
-Two types of conditionals exist in $\Psi$lab: the 
-{\tt if}-{\tt then}-{\tt else}-{\tt elseif}\index{if-then-else@{\tt if-then-else}}
+Two types of conditionals exist in Scilab: the 
+{\tt if}-{\tt then}-{\tt else}\index{if-then-else@{\tt if-then-else}}
 conditional and the 
 {\tt select}-{\tt case}\index{select-case@{\tt select}-{\tt case}} 
 conditional.  The 
@@ -158,17 +170,17 @@ instructions following the first case which equals the initial expression.
 It is possible to include an {\tt else} statement for the condition
 where none of the cases are satisfied.
 
-\section{Defining and Using Macros (functions)}
+\section{Defining and Using Functions}
 \label{s4.2}
 \index{programming!macros}
 \index{macros}
 \index{macros!definition}
 
 	It is possible to define a function directly in
-the $\Psi$lab environment, however, the most convenient mode
+the Scilab environment, however, the most convenient way
 is to create a file containing the function
 with a text editor.  In this section we describe the
-structure of a function and several $\Psi$lab commands which are
+structure of a function and several Scilab commands which are
 used almost exclusively in a function environment.
 
 \subsection{Function Structure}
@@ -179,8 +191,8 @@ function [y1,...,yn]=foo(x1,...,xm)
    .
    .
 \end{verbatim}
-where {\tt foo} is the function name, the {\tt xi} are the m input arguments
-to the function,  the {\tt yj} are the n output arguments from the function, and
+where {\tt foo} is the function name, the {\tt xi} are the $m$ input arguments
+of the function,  the {\tt yj} are the $n$ output arguments from the function, and
 the three vertical dots represent the list of instructions performed by
 the function.  An example of a function
 which calculates $k!$ is as follows\index{macros!{\tt getf}}\index{getf@{\tt getf}}
@@ -196,7 +208,7 @@ function [x]=fact(k)
   end,
 \end{verbatim}
 If this function is contained in a file called {\tt fact.sci} the function
-is loaded into the $\Psi$lab environment and is used as follows.
+is ``loaded'' into the Scilab environment and is used as follows.
 \begin{verbatim}
 --> exists('fact')
  ans       =
@@ -217,33 +229,145 @@ is loaded into the $\Psi$lab environment and is used as follows.
  
 --> comp(fact)
 \end{verbatim}
-In the above $\Psi$lab session the commands 
-{\tt exists}\index{macros!{\tt exists}}\index{exists@{\tt exists}} indicates that
-{\tt fact} is not in the environment (by the $0$ response).  The
+In the above Scilab session, the command 
+{\tt exists}\index{macros!{\tt exists}}\index{exists@{\tt exists}} 
+indicates that
+{\tt fact} is not in the environment (by the $0$ answer to {\tt exist}).  The
 function is loaded into the environment using {\tt getf} and now {\tt exists}
-indicates that the function is there (the $1$ response).  The example 
-calculates $5!$. Finally, the function
-is compiled using {\tt comp} for faster execution.
+indicates that the function is there (the $1$ answer).  The example 
+calculates $5!$. Finally, the function is compiled using {\tt comp}
+for faster execution. Note that compiling {\tt fact} can be realized directly
+by the command {\tt getf('../macros/fact.sci','c')}.
+
+\subsection{Loading Functions}
+Functions are usually defined in files. A file which contains a function
+must obey the following format
+\begin{verbatim}
+function [y1,...,yn]=foo(x1,...,xm)
+   .
+   .
+   .
+\end{verbatim}
+where {\tt foo} is the function name. The {\tt xi}'s  are the input 
+parameters and the the {\tt yj}'s  are the  output parameters, and
+the three vertical dots represent the list of instructions performed by
+the function.  Inputs and ouputs parameters can be {\it any} Scilab object
+(including functions themeselves).
+
+Functions are Scilab objects and should not be considered as files. To
+be used in Scilab, functions defined in files  {\em must} be loaded by 
+the command {\tt getf(filename,'c')}. If the file {\tt filename} contains the
+function {\tt foo}, the function {\tt foo} can be executed only if
+it has been previously loaded by the command {\tt getf(filename,'c')} 
+(where {\tt 'c'} is optional).
+A file may contain several functions. Functions can also be defined ``on line''
+by the command {\tt deff}. This is useful if one wants to define
+a function as the output parameter of a other function. 
+
+Collections of functions can be organized as libraries (see {\tt lib}
+command). Standard Scilab librairies (linear algebra, control,...) 
+are defined in the subdirectories of {\tt SCIDIR/macros/}.
+
+\subsection{Global and Local Variables}
+If a variable in a function is not defined (and is not among the input
+parameters) then it takes the value of a variable having the same name in the
+calling environment. This variable however remains local in the sense that
+modifying it within the function does not alter the variable in the calling
+environment unless {\tt resume} is used (see below). Functions
+can be invoked with less input or output parameters. Here is an example:
+\begin{verbatim}
+function [y1,y2]=f(x1,x2)
+y1=x1+x2
+y2=x1-x2
+
+\end{verbatim}
+\begin{verbatim}
+-->[y1,y2]=f(1,1)
+ y2  =
+    0.  
+ y1  =
+    2.  
+
+-->f(1,1)
+ ans  =
+    2.
+
+-->f(1)
+y1=x1+x2;
+        !--error     4 
+undefined variable : x2                      
+at line       2 of function f
+
+-->x2=1;
+
+-->[y1,y2]=f(1)
+ y2  =
+    0.  
+ y1  =
+    2.  
+ 
+-->f(1)
+ ans  =
+ 
+    2. 
+
+\end{verbatim}
+
+Note that it is not possible to call a function if one of the
+parameter of the calling sequence is not defined:
+
+\begin{verbatim}
+function [y]=f(x1,x2)
+if x1<0 then y=x1, else y=x2;end
+
+\end{verbatim}
+\begin{verbatim}
+
+-->f(-1)
+ ans  =
+ 
+  - 1.  
+ 
+-->f(-1,x2)
+       !--error     4 
+undefined variable : x2  
+
+-->f(1)
+ undefined variable : x2                      
+at line       2 of function    f     called by :  
+f(1)
+
+-->x2=3;f(1)
+
+-->f(1)
+ ans  =
+ 
+    3
+                    
+\end{verbatim}
+
+
 
 \subsection{Special Function Commands}
-$\Psi$lab has several special commands which are used almost exclusively
+Scilab has several special commands which are used almost exclusively
 in functions.  These are the commands 
-{\tt argn}\index{argn@{\tt argn}}, 
-{\tt error}\index{error@{\tt error}}, 
-{\tt warning}\index{warning@{\tt warning}}, 
-{\tt pause}\index{pause@{\tt pause}},
-{\tt break}\index{break@{\tt braek}}, and
-{\tt return}\index{return@{\tt return}}.  
-The command {\tt argn} yields the number of input
-and output arguments for the function.  The command {\tt error}
-is used to suspend the operation of a function, to print an error message,
-and to return to the
+
+\begin{itemize}
+	\item {\tt argn}\index{argn@{\tt argn}}: returns the number of input
+and output arguments for the function
+	\item {\tt error}\index{error@{\tt error}}: used to suspend the 
+operation of a function, to print an error message, and to return to the
 previous level of environment when an error is detected.  
-The command {\tt pause} temporarily suspends the operation of a function.
-The {\tt resume} or {\tt return} command is used to return to 
-the calling environment and to pass local
-variables from the function environment to the calling environment. 
-The following example loads a function called {\tt foo} into $\Psi$lab which 
+	\item {\tt warning}\index{warning@{\tt warning}}, 
+	\item {\tt pause}\index{pause@{\tt pause}}: temporarily suspends the 
+operation of a function.
+	\item {\tt break}\index{break@{\tt break}}: forces the end of a loop 
+	\item {\tt return}\index{return@{\tt return}} or {\tt resume} : used 
+to return to the calling environment and to pass local
+variables from the function environment to the calling environment.  
+\end{itemize}
+
+The following example loads a function called {\tt foo} into Scilab which 
 illustrates these commands.
 \begin{verbatim}
  
@@ -277,16 +401,16 @@ at line       4 of function    foo      called by :
 \end{verbatim}
 In the example we load {\tt foo.sci} and display the contents of the
 function.  The first call to {\tt foo} passes an argument which cannot
-be used in the calculation of the function.  The function discontinues operation
-and indicates the nature of the error to the user.  The second call
+be used in the calculation of the function.  The function discontinues
+operation and indicates the nature of the error to the user.  The second call
 to the function suspends operation after the calculation of {\tt slope}.
 Here the user can examine values calculated inside of the function,
-perform plots, and, in fact perform any operations desired which are
-allowed by $\Psi$lab.  The {\tt -1->} prompt indicates that the current
+perform plots, and, in fact perform any operations 
+allowed in Scilab.  The {\tt -1->} prompt indicates that the current
 environment created by the {\tt pause} command is the environment 
 of the function and not that of the calling environment.  Control is 
 returned to the function by the command {\tt return}.  Operation of the
-function can be discontinued by the command {\tt quit} or {\tt abort}.
+function can be stopped by the command {\tt quit} or {\tt abort}.
 Finally the function terminates its calculation returning the
 value of {\tt z}.  Also available in the environment is the variable
 {\tt s} which is a local variable from the function which is passed to
@@ -297,17 +421,17 @@ the global environment.
 \index{operations!for new data types}
 
 	It is possible to transparently define fundamental operations 
-for new data types in $\Psi$lab.
+for new data types in Scilab.
 That is, the user can give a sense to multiplication, division, addition, etc.
-on any two data types which exist in $\Psi$lab.  As an example, two linear
+on any two data types which exist in Scilab.  As an example, two linear
 systems (represented by lists)
 can be added together to represent their parallel inter-connection
 or can be multiplied together to represent their series inter-connection.
-$\Psi$lab performs these user defined operations by searching for functions
+Scilab performs these user defined operations by searching for functions
 (written by the user) which follow a special naming convention described
 below.
 
-	The naming convention $\Psi$lab uses to recognize operators 
+	The naming convention Scilab uses to recognize operators 
 defined by the user is determined by the following conventions.  The name
 of the user defined function is composed of four (or possibly three)
 fields.  The first field is always the symbol {\tt \%}.  
@@ -384,17 +508,17 @@ SYMBOL & VARIABLE TYPE
 
 \verb!l! & list (untyped)  \\ \hline
 
-\verb!c! & character chain   \\ \hline
+\verb!c! & character string   \\ \hline
 
-\verb!m! & macro (function) \\ \hline
+\verb!m! & function \\ \hline
 
 \verb!xxx! & list (typed)  \\ \hline 
 \end{tabular}
 \end{center}
 
 A typed list is one in which the first
-entry of the list is a character chain where the first
-three characters of the chain are represented by the 
+entry of the list is a character string where the first
+three characters of the string are represented by the 
 {\tt xxx} in the above table.  For example a list
 representing a linear system has the form 
 {\tt list('lss',a,b,c,d,x0,'c')} and, thus, the {\tt xxx}
@@ -415,8 +539,8 @@ s=list('lss',[A1,B1C2;0*B1C2' ,A2],...
        [B1*D2;B2],[C1,D1*C2],D1*D2,[x1;x2],dom1),
 \end{verbatim}
 An example of the use of this function after having loaded it into
-$\Psi$lab (using for example {\tt getf} or inserting it in a library) 
-is illustrated in the following $\Psi$lab session
+Scilab (using for example {\tt getf} or inserting it in a library) 
+is illustrated in the following Scilab session
 \begin{verbatim}
  
 -->A1=[1 2;3 4];B1=[1;1];C1=[0 1;1 0];
@@ -442,7 +566,7 @@ x = | 0  1 |x + | 2  1 |u
  
 y = | 1  1 |x + | 1  1 |u   
  
--->s12=s1*s2;   //This is equivalent to s12=\%lssmlss(s1,s2)
+-->s12=s1*s2;   //This is equivalent to s12=%lssmlss(s1,s2)
  
 -->ssprint(s12)
  
@@ -456,7 +580,7 @@ y = | 1  0  0  0 |x
 \end{verbatim}
 Notice that the use of {\tt \%lssmss} is totally transparent in
 that the multiplication of the two lists {\tt s1} and {\tt s2}
-is performed using the usual multiplication operator, {\tt *}.
+is performed using the usual multiplication operator {\tt *}.
 
 The directory {\tt SCIDIR/macros/percent} contains all the functions
 (a very large number...) which perform operations on linear systems
@@ -464,13 +588,16 @@ and transfer matrices. Conversions are automatically performed.
 For example the code for the function {\tt \%lssmlss} is there (note
 that it is much more complicated that the code given here!).
 \section{Debbuging}
-The simplest way to debug a $\Psi$lab function is to introduce
+The simplest way to debug a Scilab function is to introduce
 a {\tt pause} command in the function.
-When executed the function stops at this point and prompts {\tt -1->}.
-The user can then display all the current variables present in $\Psi$lab,
+When executed the function stops at this point and prompts {\tt -1->} which 
+indicates a different ``level''; another {\tt pause} gives {\tt -2->} ...
+At the level 1 the Scilab commands are analog to a different session but
+the user can display all the current variables present in Scilab,
 which are inside or outside the function i.e. local in the function
 or belonging to the calling environment. The execution of the function
-is resumed by the command {\tt return} or {\tt resume}.
+is resumed by the command {\tt return} or {\tt resume} (the variables used
+at the upper level are cleaned).
 The execution of the function can be interrupted by {\tt abort}.
 %and the current loop is terminated by {\tt break}.
 
@@ -479,3 +606,5 @@ It is also possible to insert breakpoints in functions. See the commands
 Finally, note that it is also possible to trap errors during the 
 execution of a function: 
 see the commands {\tt errclear} and {\tt errcatch}.
+Finally the experts in  Scilab  can use the 
+function {\tt debug(i)} where i=0,..,4 denotes a debugging level.

@@ -8,13 +8,12 @@ c
       integer iadr,sadr
 c     
       double precision sr,si,e1,powr,powi
-      integer plus,minus,star,dstar,slash,bslash,dot,colon,concat
-      integer quote,extrac,insert,less,great,equal,ou,et,non
+      integer star,dstar,slash,bslash,dot,colon
+      integerless,great,equal
       integer top0
-      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
-      data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
-      data extrac/3/,insert/2/,less/59/,great/60/,equal/50/
-      data ou/57/,et/58/,non/61/
+      data star/47/,dstar/62/,slash/48/
+      data bslash/49/,dot/51/,colon/44/
+      data less/59/,great/60/,equal/50/
 c     
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -122,7 +121,7 @@ c
       fun = 0
 c     
 c     cconc  extrac insert rconc
-      goto(75  ,  85  ,  80   ,78) op
+      goto(75  ,  85  ,  79   ,78) op
 c     
 c           :  +  -  * /  \  =          '
       goto(06,07,08,10,20,25,130,05,05,70) op+1-colon
@@ -430,7 +429,7 @@ c     a*cst
          else
             istk(il1+3)=0
             istk(il1+4)=0
-            call iset(abs(m1),0,stk(il1+5),1)
+            call iset(abs(m1),0,istk(il1+5),1)
             lstk(top+1)=sadr(il1+5+abs(m1))+1
          endif
          return
@@ -468,8 +467,12 @@ c     cst*a
             istk(il1+2)=n2
             istk(il1+3)=0
             istk(il1+4)=0
-            call iset(abs(m2),0,stk(il1+5),1)
-            lstk(top+1)=sadr(il1+5+abs(m2))+1
+c           call iset(iabs(m2),0,stk(il1+5),1)
+c           lstk(top+1)=sadr(il1+5+abs(m2))+1
+c            FD modif 
+            nnnb=1+abs(m2)
+            call iset(nnnb,0,istk(il1+5),1)
+            lstk(top+1)=sadr(il1+5+nnnb)
          endif
          return
       endif
@@ -526,7 +529,9 @@ c     la matrice est complexe, le scalaire est reel
       goto 999
  17   continue
 c     la matrice et le scalaire sont complexes
-      call wscal(nel1,sr,si,stk(l1),stk(l1+mn1),1)
+c     Bug fixed by Ramine
+c      call wscal(nel1,sr,si,stk(l1),stk(l1+mn1),1)
+      call wscal(nel1,sr,si,stk(l1),stk(l1+nel1),1)
       goto 999
 c     
 c     division a droite
@@ -581,10 +586,15 @@ c     puissance
       endif
       if(m1.eq.n1.and.m1*n1.gt.1) goto 31
 c     element wise
+      err=l1+nel1*2-lstk(bot)
+      if(err.gt.0) then
+         call error(17)
+         return
+      endif
       if(it2.eq.0) then
          powr=stk(l2)
          if(it1.eq.0) then
-            call ddpow(nel1,stk(l1),1,powr,err)
+            call ddpow(nel1,stk(l1),stk(l1+nel1),1,powr,err,itr)
          else
             call wdpow(nel1,stk(l1),stk(l1+nel1),1,powr,err)
          endif
@@ -708,6 +718,7 @@ c     check dimensions
          endif
       endif
       if(nel1.eq.0.or.nel2.eq.0) then
+         istk(il1)=5
          istk(il1+3)=0
          istk(il1+4)=0
          call iset(m1,0,istk(il1+5),1)
@@ -952,13 +963,13 @@ c     concatenation [a;b]
 c     
 c     extraction
 c     
- 80   continue
+ 79   continue
 c     extraction
 c     
       if(rhs.gt.2) goto 82
 c     vect(arg)
       if(mn1.eq.0) then
-c     un des vecteurs d'indice est vide
+c     vect([])
          istk(il1)=1
          istk(il1+1)=0
          istk(il1+2)=0
@@ -966,23 +977,40 @@ c     un des vecteurs d'indice est vide
          goto 999
       endif
       if(m1.gt.1.and.n1.gt.1.or.it1.ne.0) then
+c     index is not a real vector
          call error(21)
          return
       endif
       if(m2.lt.0) then
+c     vect is a*eye
          call error(14)
          return
       endif
 c     
       if(istk(il1+1).lt.0) then
-         if(n2.eq.1.or.m2.eq.1) then
+c         vect(:)
+         if(n2.eq.1) then
             call icopy(5+m2+nel2,istk(il2),1,istk(il1),1)
             l1=sadr(il1+5+m2+nel2)
             call dcopy(nel2*(it2+1),stk(l2),1,stk(l1),1)
             lstk(top+1)=l1+nel2*(it2+1)
          else
-            call error(43)
-            return
+            istk(il1)=5
+            istk(il1+1)=m2*n2
+            istk(il1+2)=1
+            istk(il1+3)=it2
+            istk(il1+4)=nel2
+            irc1=il1+5
+            call sp2col(m2,n2,istk(irc2),nel2,istk(irc1))
+            l1=sadr(il1+5+m2*n2+nel2)
+            do 80 j=0,nel2-1
+              stk(l1+j)=stk(l2+istk(irc1+m2*n2+j)-1) 
+              if(it2.ne.0) then
+                 stk(l1+nel2+j)=stk(l2+nel2+istk(irc1+m2*n2+j)-1)
+              endif
+              istk(irc1+m2*n2+j)=1
+ 80         continue
+            lstk(top+1)=l1+nel2*(it2+1)
          endif
          return
       endif

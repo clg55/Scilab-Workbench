@@ -1,7 +1,6 @@
-//<s>=%lssls(s1,s2)
-//
+function s=%lssls(s1,s2)
 //!
-s=s1*inv(s2)
-//end
+s=inv(s1)*s2
+
 
 

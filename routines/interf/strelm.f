@@ -22,11 +22,11 @@ c
       endif
 c
 c     functions/fin
-c     1       2       3       4       5       6       7       8
-c   length    part   string  convstr  emptystr
+c     1       2       3       4       5           6       7       8
+c   length    part   string  convstr  emptystr str2code code2str
 c
 c
-      goto (10,20,25,50,60) fin
+      goto (10,20,25,50,60,70,80) fin
 c
 c     length
 c
@@ -36,50 +36,46 @@ c
       endif
       il1=iadr(lstk(top+1-rhs))
       itype=istk(il1)
-          if(itype.eq.1.or.itype.eq.2.or.itype.eq.4) then
-c      length( )=prod(size( )) for matrices (+ polynomial and boolean)
-          l=sadr(il1+4)
-          stk(l)=dble(istk(il1+1)*istk(il1+2))
-          istk(il1)=1
-          istk(il1+1)=1
-          istk(il1+2)=1
-          istk(il1+3)=0
-          lstk(top+1)=l+1
-          return
-          endif
-          if(itype.eq.15) then
-c      length(list)=size(list)
-          l=sadr(il1+4)
-          stk(l)=dble(istk(il1+1))
-          istk(il1)=1
-          istk(il1+1)=1
-          istk(il1+2)=1
-          istk(il1+3)=0
-          lstk(top+1)=l+1
-          return
-          endif
-      if(istk(il1).ne.10) then
+      if(itype.eq.1.or.itype.eq.2.or.itype.eq.4) then
+c     length( )=prod(size( )) for matrices (+ polynomial and boolean)
+         l=sadr(il1+4)
+         stk(l)=dble(istk(il1+1)*istk(il1+2))
+         istk(il1)=1
+         istk(il1+1)=1
+         istk(il1+2)=1
+         istk(il1+3)=0
+         lstk(top+1)=l+1
+      elseif(itype.eq.15.or.itype.eq.16) then
+c     length(list)=size(list)
+         l=sadr(il1+4)
+         stk(l)=dble(istk(il1+1))
+         istk(il1)=1
+         istk(il1+1)=1
+         istk(il1+2)=1
+         istk(il1+3)=0
+         lstk(top+1)=l+1
+      elseif(itype.eq.10) then
+         m1=istk(il1+1)
+         n1=istk(il1+2)
+         mn1=m1*n1
+         id1=il1+4
+         l1=sadr(id1+mn1+1)
+         vol=istk(id1+mn1)-1
+         lw=lstk(top+1)
+c
+         l=sadr(il1+4)
+         do 11 k=1,mn1
+            stk(l1-1+k)=dble(istk(id1+k)-istk(id1+k-1))
+ 11      continue
+         call dcopy(mn1,stk(l1),1,stk(l),1)
+         lstk(top+1)=l+mn1
+         istk(il1)=1
+         istk(il1+3)=0
+      else
          err=1
          call error(55)
          return
       endif
-c
-      m1=istk(il1+1)
-      n1=istk(il1+2)
-      mn1=m1*n1
-      id1=il1+4
-      l1=id1+mn1+1
-      vol=istk(id1+mn1)-1
-      lw=lstk(top+1)
-c
-      l=sadr(il1+4)
-      do 11 k=1,mn1
-      stk(l1-1+k)=dble(istk(id1+k)-istk(id1+k-1))
-   11 continue
-      call dcopy(mn1,stk(l1),1,stk(l),1)
-   12 lstk(top+1)=l+mn1
-      istk(il1)=1
-      istk(il1+3)=0
       goto 999
 c
 c part
@@ -181,6 +177,7 @@ c     -------------------------------------
          endif
          m=istk(il+1)
          n=istk(il+2)
+         if(m*n.eq.0) goto 999
          it=istk(il+3)
          l=sadr(il+4)
          err=sadr(lw+m*n*(2*lct(7)+4))-lstk(bot)
@@ -213,6 +210,9 @@ c
          endif
 c     generation du vecteur des variables de sorties/puis d'entree
          il=il+1
+c     Ligne suivante ajoutee : c'etait un bug, mais pourquoi ca marchait
+c     parfois avant ? ? ?
+         lw=lstk(top+1)
          do 37 i=1,2
             n=istk(il)
             il=il+1
@@ -317,7 +317,7 @@ c     librairies
             call error(39)
             return
          endif
-         ilr=iadr(lw)
+         ilr=lw
          il0=il
          n1=istk(il+1)
          l1=il+2
@@ -499,6 +499,80 @@ c
       istk(il+3)=0
       call iset(m*n+1,1,istk(il+4),1)
       lstk(top+1)=sadr(il+6+m*n)
-c
+      goto 999 
+c     
+c     str2code
+ 70   if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+c     checking variable str (number 1)
+c       
+      il1 = iadr(lstk(top-rhs+1))
+      if (istk(il1) .ne. 10) then
+         err = 1
+         call error(55)
+         return
+      endif
+      if (istk(il1+1)*istk(il1+2) .ne. 1) then
+         err = 1
+         call error(89)
+         return
+      endif
+      n1 = istk(il1+5)-1
+      l1 = il1+6
+      call icopy(n1,istk(l1),1,istk(l1-2),1)
+      l1=sadr(il1+4)
+      call int2db(n1,istk(il1+4),-1,stk(l1),-1)
+      istk(il1)=1
+      istk(il1+1)=n1
+      istk(il1+2)=1
+      istk(il1+3)=0
+      lstk(top+1)=l1+n1
+      goto 999
+c     
+
+c     
+c     code2str
+ 80   if (rhs .ne. 1) then
+         call error(39)
+         return
+      endif
+      if (lhs .ne. 1) then
+         call error(41)
+         return
+      endif
+c     checking variable str (number 1)
+c       
+      il1 = iadr(lstk(top-rhs+1))
+      if (istk(il1) .ne. 1) then
+         err = 1
+         call error(53)
+         return
+      endif
+      if (istk(il1+3) .ne. 0) then
+         err = 1
+         call error(52)
+         return
+      endif
+      n1 = istk(il1+1)*istk(il1+2)
+      l1 = sadr(il1+4)
+      call dcopy(n1,stk(l1),-1,stk(l1+2),-1)
+      istk(il1+4)=1
+      istk(il1+5)=n1+1
+      do 71 i=1,n1
+         istk(il1+5+i)=stk(l1+1+i)
+ 71   continue
+      istk(il1)=10
+      istk(il1+1)=1
+      istk(il1+2)=1
+      istk(il1+3)=0
+      lstk(top+1)=sadr(il1+6+n1)
+      goto 999
+c     
   999 return
       end

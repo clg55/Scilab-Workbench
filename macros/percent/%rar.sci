@@ -15,7 +15,7 @@ for l=1:n1,
   end,
 end,
 [num1,den1]=simp(num1,den1),
-f=list('r',num1,den1,s1(4)),
+f=tlist('r',num1,den1,s1(4)),
 
 
 

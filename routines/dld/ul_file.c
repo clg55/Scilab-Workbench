@@ -23,7 +23,7 @@
 static struct file_entry *
 search_files (entry, name)
 register struct file_entry *entry;
-register char *name;
+register const char *name;
 {
     while (entry) {
 	if (entry->library_flag) {
@@ -44,14 +44,14 @@ register char *name;
     return 0;
 } /* search_files */
 
-
+int
 dld_unlink_by_file (name, force)
-char *name;
+const char *name;
 int force;
 {
     register struct file_entry *entry;
 
-    if (entry = search_files (_dld_latest_entry, name)) {
+    if ((entry = search_files (_dld_latest_entry, name))) {
 	_dld_unlink_entry (entry, force);
 	return 0;
     }

@@ -87,12 +87,12 @@ p is the difference between maximum degree of numerator and
 maximum degree of denominator
 .SH EXAMPLE
 .nf
-Sl=syslin('d',1,1,1);u=1:10;
-y=flts(u,sl); [y1,x1]=flts(u(1:5),Sl);y2=flts(u(6:10),sl,x1);
+sl=syslin('d',1,1,1);u=1:10;
+y=flts(u,sl); [y1,x1]=flts(u(1:5),sl);y2=flts(u(6:10),sl,x1);
 y-[y1,y2]
 
 //With polynomial D:
-z=poly(0,'z');Sl=syslin('d',1,1,1,1+z+z^2);p=2;
+z=poly(0,'z');sl=syslin('d',1,1,1,1+z+z^2);p=2;
 y=flts(u,sl);[y1,x1]=flts(u(1:5),sl);
 y2=flts(u(5-p+1:10),sl,x1);  // (update)
 y-[y1,y2]

@@ -1,4 +1,3 @@
-
 /*------------------------------BEGIN--------------------------------------
 %    Missile 
 %    XWindow and Postscript library for 2D and 3D plotting 
@@ -27,14 +26,11 @@
  \def\encadre#1{\paragraph{}\fbox{\begin{minipage}[t]{15cm}#1 \end{minipage}}}
  \section{X11 Driver}
 ----------------------------------------------------------------------------*/
+
+
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
-#ifdef THINK_C
-#include <stdlib.h>
-#else
-#include <malloc.h>
-#endif
 
 #include <X11/Xlib.h>
 #include <X11/Xatom.h>
@@ -42,12 +38,17 @@
 #include <X11/cursorfont.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
-
 #include <X11/Shell.h>
 
+#ifdef THINK_C
+#include <stdlib.h>
+#else
+#include <malloc.h>
+#endif
 #include "Math.h"
 #include "periX11.h"
 #include "version.h"
+
 
 #define MESSAGE4 "Can't allocate point vector"
 #define MESSAGE5 "Can't re-allocate point vector" 
@@ -56,36 +57,114 @@
 /** Global variables to deal with X11 **/
 
 static GC gc;
+static int screencolor = 0 ; /* default screen color or not : see initgraphic_ */
 static Cursor arrowcursor,normalcursor,crosscursor;
-static Window CWindow=(Window) NULL ,root=(Window) NULL;
+
+static Drawable Cdrawable = (Drawable) NULL;
+static Widget CinfoW = (Widget ) NULL ;
+static Window CWindow =(Window) NULL ,root=(Window) NULL;
 static Window CBGWindow=(Window) NULL ;
+static int CurWindow = 0;
 static Display *dpy = (Display *) NULL;
-static int use_color=0;
 static unsigned long foreground, background;
+static int ResetScilabXgc ();
+
+#define NUMCOLORS 17
+
+typedef struct res {
+    Pixel color[NUMCOLORS];
+} RES, *RESPTR;
+
+extern RES the_res;
 
 /** Structure to keep the graphic state  **/
 struct BCG 
 { 
-  int FontSize ;
-  int FontId ;
-  XID FontXID;
-  int CurHardSymb;
-  int CurHardSymbSize;
-  int CurLineWidth;
-  int CurPattern;
-  int IDWhitePattern;
-  int CurWindow;
-  int CurVectorStyle;
-  int CurDrawFunction;
-  int ClipRegionSet;
-  int CurClipRegion[4];
-  int CurDashStyle;
-  char CurNumberDispFormat[20];
+   int FontSize ;
+   int FontId ;
+   XID FontXID;
+   int CurHardSymb;
+   int CurHardSymbSize;
+   int CurLineWidth;
+   int CurPattern;
+   int CurColor;
+   int CurPixmapStatus;
+   int IDWhitePattern;
+   int CurVectorStyle;
+   int CurDrawFunction;
+   int ClipRegionSet;
+   int CurClipRegion[4];
+   int CurDashStyle;
+   char CurNumberDispFormat[20];
+   int CurColorStatus;
 }  MissileXgc ;
+
+struct BCG *ScilabXgc = (struct BCG *) 0;
 
 Window Find_X_Scilab();
 Window Find_BG_Window();
 Window Find_ScilabGraphic_Window();
+
+Drawable GetPixmapNumber_();
+Window GetWindowNumber_();
+Window GetBGWindowNumber_();
+Widget GetInfoNumber_();
+
+
+static  int LoadFonts();
+static  int LoadSymbFonts();
+
+/** Pixmap routines **/
+
+static int depth;
+
+pixmapclear_(v1,v2,v3,v4)
+     integer *v1,*v2,*v3,*v4;
+{
+  XWindowAttributes war;
+  XSetForeground(dpy,gc,background);
+  XGetWindowAttributes(dpy,CWindow,&war); 
+  XFillRectangle(dpy, Cdrawable, gc, 0, 0, (unsigned)war.width,(unsigned)war.height);
+  XSetForeground(dpy,gc,foreground);
+}
+
+show_(v1,v2,v3,v4)
+     integer *v1,*v2,*v3,*v4;
+{
+   XClearWindow(dpy,CWindow);
+   XFlush(dpy);
+}
+
+
+/** ResiZe the pixmap associated to CWindow and store it back in the window List **/
+
+CPixmapResize(x,y)
+     int x,y;
+{
+  XFreePixmap(dpy,(Pixmap) Cdrawable);
+  Cdrawable = (Drawable) XCreatePixmap(dpy, root,Max(x,400),Max(y,300),depth);
+  SetPixmapNumber_(Cdrawable,(integer)CurWindow);
+  XSetForeground(dpy,gc,background);
+  XFillRectangle(dpy, Cdrawable, gc, 0, 0,(unsigned)Max(x,400),(unsigned)Max(y,300));
+  XSetForeground(dpy,gc,foreground);
+  XSetWindowBackgroundPixmap(dpy, CWindow, (Pixmap) Cdrawable);
+}
+
+/* Resize the Pixmap according to window size change 
+   But only if there's a pixmap 
+   */
+
+CPixmapResize1()
+{
+  XWindowAttributes war;
+  if (Cdrawable != (Drawable) CWindow ) 
+    {
+      XGetWindowAttributes(dpy,CWindow,&war); 
+      CPixmapResize(war.width,war.height);
+    }
+}
+
+
 /*-----------------------------------------------------
 \encadre{General routines}
 -----------------------------------------------------*/
@@ -93,9 +172,15 @@ Window Find_ScilabGraphic_Window();
 /** To select (raise on the screen )the current graphic Window  **/
 /** If there's no graphic window then select creates one **/
 
-xselgraphic_() 
+xselgraphic_(v1,v2,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4) 
+     char *v1;
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
+
 { 
-  if (CBGWindow == (Window ) NULL) initgraphic_("");
+  if (CBGWindow == (Window ) NULL) 
+    initgraphic_("",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+  XMapWindow(dpy,CBGWindow);
   XRaiseWindow(dpy,CBGWindow);
   XFlush(dpy);
 }
@@ -106,15 +191,22 @@ xendgraphic_()
 {
 } 
 
-xend_()
+xend_(v1,v2,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4)
+     char *v1;
+     integer  *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
 {
   /** Must destroy everything  **/
 }
 
 /** Clear the current graphic window     **/
 
-clearwindow_() 
+clearwindow_(v1,v2,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4) 
+     char *v1;
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
 {
+  if (Cdrawable != (Drawable) CWindow ) pixmapclear_(PI0,PI0,PI0,PI0);
   XClearWindow(dpy, CWindow);
   XFlush(dpy);
 }
@@ -127,9 +219,10 @@ clearwindow_()
 #define usleep(x) x
 #endif 
 
-xpause_(str,sec_time)
+xpause_(str,sec_time,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *sec_time;
+     integer *sec_time,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
 { 
 #ifdef hpux
 #include <unistd.h>
@@ -151,23 +244,27 @@ xpause_(str,sec_time)
 
 /****************************************************************
  Wait for mouse click in graphic window 
-   send back mouse
- location  (x1,y1)  and button number  
+   send back mouse location  (x1,y1)  and button number  
    0,1,2}
    There's just a pb if the window is iconified when we try to click 
    in this case we return i= -1
 ****************************************************************/
 
 
-xclick_(str,ibutton,x1,yy1)
+xclick_(str,ibutton,x1,yy1,v5,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *ibutton,*x1,*yy1 ;
+     integer *ibutton,*x1,*yy1,*v5,*v6,*v7 ;
+     double *dv1,*dv2,*dv3,*dv4;
 {
   XEvent event;
   Bool flag1=True;
-  int buttons = 0;
+  integer buttons = 0;
   /* Recenter_GW_(); */
   /*  remove the previous click events on the queue */
+  /*  This is not so useful any more since the specified events are treated
+      by EventProc outside xclick_
+      */
+
   while (flag1) 
     flag1= XCheckWindowEvent(dpy,CWindow,KeyPressMask| ButtonPressMask,&event);
   XDefineCursor(dpy, CWindow ,crosscursor);
@@ -191,30 +288,126 @@ xclick_(str,ibutton,x1,yy1)
 }
 
 
-xgetmouse_(str,ibutton,x1,y1)
+xclick_any_(str,ibutton,x1,yy1,iwin,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *ibutton,*x1,*y1 ;
+     integer *iwin,*ibutton,*x1,*yy1,*v6,*v7 ;
+     double *dv1,*dv2,*dv3,*dv4;
+{
+  Window CW;
+  XEvent event;
+  Bool flag1;
+  int buttons = 0;
+  integer i;
+  integer wincount = 0;
+  
+  flag1=True;
+  while (flag1) {
+      CW=GetWindowNumber_(wincount);
+      if (CW!=(Window ) NULL) {
+	  wincount++;
+	  XDefineCursor(dpy, CW ,crosscursor);
+      }
+      else
+	  flag1=False;
+  }
+  while (buttons == 0) {
+      XNextEvent (dpy, &event);
+      if ( event.type ==  ButtonPress ) {
+	  for (i=0;i < wincount;i++) {
+	      CW=GetWindowNumber_(i);
+	      if ( event.xany.window == CW) {
+		  *x1=event.xbutton.x;
+		  *yy1=event.xbutton.y;
+		  *ibutton=event.xbutton.button-1;
+		  buttons++;
+		  *iwin=i;
+		  break;
+	      }
+	      else 
+		  XtDispatchEvent(&event);
+	  }
+      }
+      else 
+	  XtDispatchEvent(&event);
+
+  }
+  for (i=0;i < wincount;i++) {
+      CW=GetWindowNumber_(i);
+      XDefineCursor(dpy, CW ,arrowcursor);
+  }
+  XSync (dpy, 0);
+}
+
+/* version test qui gere les press et release */
+
+xgetmouse_test(str,ibutton,x1,yy1,v5,v6,v7,dv1,dv2,dv3,dv4)
+     char str[];
+     integer *ibutton,*x1,*yy1 ,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
+{
+  XEvent event;
+  integer buttons = 0;
+  /** The EventProc Handler un SGraph.c keep the queue empty 
+  Bool flag1=True;
+  while (flag1) 
+    flag1= XCheckWindowEvent(dpy,CWindow,
+			     ButtonReleaseMask| ButtonPressMask | PointerMotionMask,&event);
+  **/
+  XDefineCursor(dpy, CWindow ,crosscursor);
+  while (buttons == 0) {
+    XNextEvent (dpy, &event); 
+    if ( event.xany.window == CWindow && event.type ==  ButtonPress ) 
+      {
+	*x1=event.xbutton.x;
+	*yy1=event.xbutton.y;
+	*ibutton= (event.xbutton.button-1);
+	buttons++;
+      }
+    else if ( event.xany.window == CWindow && event.type ==  MotionNotify ) 
+      {
+	*x1=event.xbutton.x;
+	*yy1=event.xbutton.y;
+	*ibutton = -1;
+	buttons++;
+      }
+    else if ( event.xany.window == CWindow && event.type ==  ButtonRelease ) 
+      {
+	*x1=event.xbutton.x;
+	*yy1=event.xbutton.y;
+	*ibutton = (event.xbutton.button-1)+3;
+	buttons++;
+      }
+    else      XtDispatchEvent(&event);
+  }
+  XDefineCursor(dpy, CWindow ,arrowcursor);
+  XSync (dpy, 0);
+}
+
+xgetmouse_(str,ibutton,x1,yy1,v5,v6,v7,dv1,dv2,dv3,dv4)
+     char str[];
+     integer *ibutton,*x1,*yy1 ,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
 {
   XEvent event;
   Bool flag1=True;
-  int buttons = 0;
+  integer buttons = 0;
   XDefineCursor(dpy, CWindow ,crosscursor);
+  /** KeyPressMask| ButtonPressMask | ButtonRelease | not so useful **/
   while (flag1) 
-    flag1= XCheckWindowEvent(dpy,CWindow,
-		  KeyPressMask| ButtonPressMask | PointerMotionMask,&event);
+    flag1= XCheckWindowEvent(dpy,CWindow, PointerMotionMask,&event);
   while (buttons == 0) {
     XNextEvent (dpy, &event); 
     if ( event.xany.window == CWindow && event.type ==  ButtonPress ) 
 	  {
 	      *x1=event.xbutton.x;
-	      *y1=event.xbutton.y;
+	      *yy1=event.xbutton.y;
 	      *ibutton=event.xbutton.button-1;
 	      buttons++;
 	  }
     else if ( event.xany.window == CWindow && event.type ==  MotionNotify ) 
       {
 	*x1=event.xbutton.x;
-	*y1=event.xbutton.y;
+	*yy1=event.xbutton.y;
 	*ibutton = -1;
 	buttons++;
       }
@@ -229,11 +422,12 @@ xgetmouse_(str,ibutton,x1,y1)
   \encadre{Clear a rectangle }
 -------------------------------------------------*/
 
-cleararea_(str,x,y,w,h)
+cleararea_(str,x,y,w,h,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *x,*y,*w,*h;
+     integer *x,*y,*w,*h,*v6,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
 {
-  XClearArea(dpy,CWindow,*x,*y,*w,*h,True);
+  XClearArea(dpy,Cdrawable,(int)*x,(int) *y,(unsigned) *w,(unsigned) *h,False);
   XFlush(dpy);
 }
 
@@ -265,121 +459,166 @@ Recenter_GW_()
 /** to get the window upper-left point coordinates on the screen  **/
 
 getwindowpos_(verbose,x,narg)
-     int *verbose,*x,*narg;
+     integer *verbose,*x,*narg;
 {
+  int xx[2];
   XWindowAttributes war;
   Window CHR;
   *narg = 2;
   XGetWindowAttributes(dpy,CBGWindow,&war); 
-  XTranslateCoordinates(dpy,CBGWindow,root,war.x,war.y,&(x[0]),&(x[1]),&CHR);
+  XTranslateCoordinates(dpy,CBGWindow,root,war.x,war.y,&(xx[0]),&(xx[1]),&CHR);
+  x[0]=xx[0];x[1]=xx[1];
   if (*verbose == 1) 
-    SciF2d("\n CWindow position :%d,%d\r\n",x[0],x[1]);
+    sciprint("\n CWindow position :%d,%d\r\n",xx[0],xx[1]);
 }
 
 /** to set the window upper-left point position on the screen **/
 
-setwindowpos_(x,y)
-     int *x,*y;
+setwindowpos_(x,y,v3,v4)
+     integer *x,*y,*v3,*v4;
 {
-  if (CBGWindow == (Window) NULL) initgraphic_("");
-  XMoveWindow(dpy,CBGWindow,*x,*y);
+  if (CBGWindow == (Window) NULL) 
+    initgraphic_("",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+  XMoveWindow(dpy,CBGWindow,(int) *x,(int) *y);
 }
 
 /** To get the window size **/
+static int CWindowWidth=600;
+static int CWindowHeight=400;
 
 getwindowdim_(verbose,x,narg)
-     int *verbose,*x,*narg;
+     integer *verbose,*x,*narg;
 {     
+  /* we directly trteun the current values which are fixed by setcurwin 
   XWindowAttributes war;
   *narg = 2;
   XGetWindowAttributes(dpy,CWindow,&war); 
   x[0]= war.width;
   x[1]= war.height;
+  */
+  *narg = 2;
+  x[0]= CWindowWidth;
+  x[1]= CWindowHeight;
   if (*verbose == 1) 
-    SciF2d("\n CWindow dim :%d,%d\r\n",x[0],x[1]);
+    sciprint("\n CWindow dim :%d,%d\r\n",(int) x[0],(int) x[1]);
 } 
 
 /** To change the window size  **/
 
-setwindowdim_(x,y)
-     int *x,*y;
+setwindowdim_(x,y,v3,v4)
+     integer *x,*y,*v3,*v4;
 {
   if (CBGWindow != (Window) NULL) 
-	XResizeWindow(dpy,CBGWindow,Max(*x,400),Max(*y,300));
+    {
+      CWindowWidth = Max((int) *x,400);
+      CWindowHeight =Max((int) *y,300);
+      XResizeWindow(dpy,CBGWindow,CWindowWidth, CWindowHeight);
+      if (Cdrawable != (Drawable) CWindow ) CPixmapResize(CWindowWidth, CWindowHeight);
+    }
   XFlush(dpy);
 }
 
 /** To select a graphic Window  **/
+/* Attention :  on ne fait rien si c'est deja la fenetre courante */
 
-setcurwin_(intnum)
-     int *intnum;
+setcurwin_(intnum,v2,v3,v4)
+     integer *intnum;
+     integer *v2,*v3,*v4;
 { 
-  Window GetWindowNumber_();
-  Window GetBGWindowNumber_();
-  CWindow = GetWindowNumber_(*intnum);
-  CBGWindow = GetBGWindowNumber_(*intnum);
-  MissileXgc.CurWindow = *intnum;
+  if ( CurWindow != *intnum || CWindow == (Window) NULL )
+    {
+      MenuFixCurrentWin(*intnum);
+      CWindow = GetWindowNumber_(*intnum);
+      if ( CWindow != (Window) NULL) 
+	{
+	  CBGWindow = GetBGWindowNumber_(*intnum);
+	  Cdrawable = GetPixmapNumber_(*intnum); 
+	  CinfoW =  GetInfoNumber_(*intnum);
+	  /* getting back the window graphic context */
+	  GetWindowXgcNumber_(*intnum);
+	  /* update the Xwindow gc  */
+	  ResetScilabXgc ();
+	  CurWindow = *intnum;
+	  if (Cdrawable != (Drawable) CWindow ) ScilabXgc->CurPixmapStatus = 1;
+	}
+    }
   if (CWindow == (Window ) NULL)
     {
-      int i;
-      for (i=0;i <= *intnum;i++)
-	    if ( GetWindowNumber_(*intnum)== (Window) NULL) initgraphic_("");
+      integer i;
+      initgraphic_("",intnum,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
     }
+  if (CWindow != (Window) NULL)
+    {
+      XWindowAttributes war;
+      XGetWindowAttributes(dpy,CWindow,&war); 
+      CWindowWidth = war.width;
+      CWindowHeight = war.height;
+    }
+  GetScaleWindowNumber_( *intnum);
 }
 
 /** Get the id number of the Current Graphic Window **/
 
 getcurwin_(verbose,intnum,narg)
-     int *verbose,*intnum,*narg;
+     integer *verbose,*intnum,*narg;
 {
   *narg =1 ;
-  *intnum = MissileXgc.CurWindow ;
+  *intnum = CurWindow ;
   if (*verbose == 1) 
-    SciF1d("\nCurrent Graphic Window :%d\r\n",*intnum);
+    sciprint("\nCurrent Graphic Window :%d\r\n",(int) *intnum);
 }
 
 /** Set a clip zone (rectangle ) **/
 
 setclip_(x,y,w,h)
-     int *x,*y,*w,*h;
+     integer *x,*y,*w,*h;
 {
-  int verbose=0,wd[2],narg;
+  integer verbose=0,wd[2],narg;
   XRectangle rects[1];
-  MissileXgc.ClipRegionSet = 1;
+  ScilabXgc->ClipRegionSet = 1;
   getwindowdim_(&verbose,wd,&narg);
   rects[0].x= *x;
   rects[0].y= *y;
   rects[0].width= *w;
   rects[0].height= *h;
-  MissileXgc.CurClipRegion[0]= rects[0].x;
-  MissileXgc.CurClipRegion[1]= rects[0].y;
-  MissileXgc.CurClipRegion[2]= rects[0].width;
-  MissileXgc.CurClipRegion[3]= rects[0].height;
+  ScilabXgc->CurClipRegion[0]= rects[0].x;
+  ScilabXgc->CurClipRegion[1]= rects[0].y;
+  ScilabXgc->CurClipRegion[2]= rects[0].width;
+  ScilabXgc->CurClipRegion[3]= rects[0].height;
   XSetClipRectangles(dpy,gc,0,0,rects,1,Unsorted);
+}
+
+/** unset clip zone **/
+
+unsetclip_(v1,v2,v3,v4)
+     integer *v1,*v2,*v3,*v4;
+{
+  ScilabXgc->ClipRegionSet = 0;
+  XSetClipMask(dpy,gc,None);
 }
 
 /** Get the boundaries of the current clip zone **/
 
 getclip_(verbose,x,narg)
-     int *verbose,*x,*narg;
+     integer *verbose,*x,*narg;
 {
-  x[0] = MissileXgc.ClipRegionSet;
+  x[0] = ScilabXgc->ClipRegionSet;
   if ( x[0] == 1)
     {
       *narg = 5;
-      x[1] =MissileXgc.CurClipRegion[0];
-      x[2] =MissileXgc.CurClipRegion[1];
-      x[3] =MissileXgc.CurClipRegion[2];
-      x[4] =MissileXgc.CurClipRegion[3];
+      x[1] =ScilabXgc->CurClipRegion[0];
+      x[2] =ScilabXgc->CurClipRegion[1];
+      x[3] =ScilabXgc->CurClipRegion[2];
+      x[4] =ScilabXgc->CurClipRegion[3];
     }
   else *narg = 1;
   if (*verbose == 1)
-    if (MissileXgc.ClipRegionSet == 1)
-      SciF4d("\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d\r\n",
-	      MissileXgc.CurClipRegion[0],
-	      MissileXgc.CurClipRegion[1],
-	      MissileXgc.CurClipRegion[2],
-	      MissileXgc.CurClipRegion[3]);
+    if (ScilabXgc->ClipRegionSet == 1)
+      sciprint("\nThere's a Clip Region :x:%d,y:%d,w:%d,h:%d\r\n",
+	      ScilabXgc->CurClipRegion[0],
+	      ScilabXgc->CurClipRegion[1],
+	      ScilabXgc->CurClipRegion[2],
+	      ScilabXgc->CurClipRegion[3]);
     else 
       Scistring("\nNo Clip Region");
 }
@@ -392,24 +631,24 @@ getclip_(verbose,x,narg)
 ------------------------------------------------------------*/
 /** to set absolute or relative mode **/
 
-setabsourel_(num)
-     int *num;
+setabsourel_(num,v2,v3,v4)
+     integer *num,*v2,*v3,*v4;
 {
   if (*num == 0 )
-    MissileXgc.CurVectorStyle =  CoordModeOrigin;
+    ScilabXgc->CurVectorStyle =  CoordModeOrigin;
   else 
-    MissileXgc.CurVectorStyle =  CoordModePrevious ;
+    ScilabXgc->CurVectorStyle =  CoordModePrevious ;
 }
 
 /** to get information on absolute or relative mode **/
 
 getabsourel_(verbose,num,narg)
-     int *verbose,*num,*narg;
+     integer *verbose,*num,*narg;
 {
   *narg = 1;
-  *num = MissileXgc.CurVectorStyle  ;
+  *num = ScilabXgc->CurVectorStyle  ;
   if (*verbose == 1) 
-    if (MissileXgc.CurVectorStyle == CoordModeOrigin)
+    if (ScilabXgc->CurVectorStyle == CoordModeOrigin)
       Scistring("\nTrace Absolu");
     else 
       Scistring("\nTrace Relatif");
@@ -417,22 +656,9 @@ getabsourel_(verbose,num,narg)
 
 /** The alu function for drawing : Works only with X11 **/
 /** Not in Postscript **/
-
-setalufunction_(string)
-     char string[];
-{     
-  int value;
-  XGCValues gcvalues;
-  idfromname(string,&value);
-  if ( value != -1)
-    {MissileXgc.CurDrawFunction = value;
-     gcvalues.function = value;
-     XChangeGC(dpy, gc, GCFunction, &gcvalues);
-   }
-}
 /** All the possibilities : Read The X11 manual to get more informations **/
 
-struct alinfo { 
+static struct alinfo { 
   char *name;
   char id;
   char *info;} AluStruc_[] =
@@ -454,15 +680,47 @@ struct alinfo {
   "GXnand" ,GXnand," NOT src OR NOT dst ",
   "GXset" ,GXset," 1 "};
 
-setalufunction1_(num)
-     int *num;
+
+static idfromname(name1,num)
+     char name1[];
+     integer *num;
+{int i;
+ *num = -1;
+ for ( i =0 ; i < 16;i++)
+   if (strcmp(AluStruc_[i].name,name1)== 0) 
+     *num=AluStruc_[i].id;
+ if (*num == -1 ) 
+   {
+     Scistring("\n Use the following keys (integer in scilab");
+     for ( i=0 ; i < 16 ; i++)
+       sciprint("\nkey %s   -> %s\r\n",AluStruc_[i].name,
+	       AluStruc_[i].info);
+   }
+}
+
+setalufunction_(string)
+     char string[];
 {     
-  int value;
+  integer value;
+  XGCValues gcvalues;
+  idfromname(string,&value);
+  if ( value != -1)
+    {ScilabXgc->CurDrawFunction = value;
+     gcvalues.function = value;
+     XChangeGC(dpy, gc, GCFunction, &gcvalues);
+   }
+}
+
+
+setalufunction1_(num,v2,v3,v4)
+     integer *num,*v2,*v3,*v4;
+{     
+  integer value;
   XGCValues gcvalues;
   value=AluStruc_[Min(16,Max(0,*num))].id;
   if ( value != -1)
     {
-      MissileXgc.CurDrawFunction = value;
+      ScilabXgc->CurDrawFunction = value;
       /* XChangeGC(dpy, gc, GCFunction, &gcvalues); */
       /** Using diff gc **/
       switch (value) 
@@ -477,42 +735,24 @@ setalufunction1_(num)
 	  gcvalues.background = background;
 	  gcvalues.function = GXxor;break;
 	default :
-	  gcvalues.function = value;
 	  gcvalues.foreground = foreground;
 	  gcvalues.background = background;
+	  gcvalues.function = value;
 	  break;
-      }
-      XChangeGC(dpy,gc,(GCForeground | GCBackground | GCFunction),&gcvalues);
+	}
+      XChangeGC(dpy,gc,(GCFunction|GCForeground|GCBackground), &gcvalues);
     }
 }
 
-idfromname(name1,num)
-     char name1[];
-     int *num;
-{int i;
- *num = -1;
- for ( i =0 ; i < 16;i++)
-   if (strcmp(AluStruc_[i].name,name1)== 0) 
-     *num=AluStruc_[i].id;
- if (*num == -1 ) 
-   {
-     Scistring("\n Use the following keys (integer in scilab");
-     for ( i=0 ; i < 16 ; i++)
-       SciF2s("\nkey %s   -> %s\r\n",AluStruc_[i].name,
-	       AluStruc_[i].info);
-   }
-}
-
-/** To get the value of the alufunction **/
 
 getalufunction_(verbose,value,narg)
-     int *verbose , *value ,*narg;
+     integer *verbose , *value ,*narg;
 { 
   *narg =1 ;
-  *value = MissileXgc.CurDrawFunction ;
+  *value = ScilabXgc->CurDrawFunction ;
   if (*verbose ==1 ) 
     { 
-      SciF2s("\nThe Alufunction is %s -> <%s>\r\n",
+      sciprint("\nThe Alufunction is %s -> <%s>\r\n",
 	      AluStruc_[*value].name,
 	      AluStruc_[*value].info);}
 }
@@ -523,23 +763,23 @@ getalufunction_(verbose,value,narg)
 /** with diferent algorithms ) **/
 /** defaut value is 1 **/
 
-setthickness_(value)
-     int *value ;
+setthickness_(value,v2,v3,v4)
+     integer *value ,*v2,*v3,*v4;
 { 
   XGCValues gcvalues;
-  MissileXgc.CurLineWidth =Max(0, *value);
+  ScilabXgc->CurLineWidth =Max(0, *value);
   gcvalues.line_width = Max(0, *value);
   XChangeGC(dpy, gc, GCLineWidth, &gcvalues); }
 
 /** to get the thickness value **/
 
 getthickness_(verbose,value,narg)
-     int *verbose,*value,*narg;
+     integer *verbose,*value,*narg;
 {
   *narg =1 ;
-  *value = MissileXgc.CurLineWidth ;
+  *value = ScilabXgc->CurLineWidth ;
   if (*verbose ==1 ) 
-    SciF1d("\nLine Width:%d\r\n",  MissileXgc.CurLineWidth ) ;
+    sciprint("\nLine Width:%d\r\n", ScilabXgc->CurLineWidth ) ;
 }
 
 /** To set grey level for filing areas **/
@@ -570,48 +810,67 @@ static char grey0[GREYNUMBER][8]={
 
 CreatePatterns_(whitepixel,blackpixel)
      unsigned long whitepixel,blackpixel;
-{ int i ;
+{ integer i ;
   for ( i=0 ; i < GREYNUMBER ; i++)
     Tabpix_[i] =XCreatePixmapFromBitmapData(dpy, root,grey0[i] ,8,8,whitepixel
 		     ,blackpixel,XDefaultDepth (dpy,DefaultScreen(dpy)));
 }
 
 
-setpattern_(num)
-     int *num;
-{ int i ; 
-  i= Max(0,Min(*num,GREYNUMBER-1));
-  MissileXgc.CurPattern = i;
-  if ( use_color ==1) set_c(i);
-  else {
-    XSetTile (dpy, gc, Tabpix_[i]); 
-    if (i ==0)
-      XSetFillStyle(dpy,gc,FillSolid);
-    else 
-      XSetFillStyle(dpy,gc,FillTiled);
-  }
+setpattern_(num,v2,v3,v4)
+     integer *num,*v2,*v3,*v4;
+{ integer i ; 
+
+  if ( ScilabXgc->CurColorStatus == 1 ) 
+    {
+      i= Max(0,Min(*num,NUMCOLORS-1));
+      ScilabXgc->CurColor = i ;
+      set_c(i);
+    }
+  else 
+    {
+      i= Max(0,Min(*num,GREYNUMBER-1));
+      ScilabXgc->CurPattern = i;
+      XSetTile (dpy, gc, Tabpix_[i]); 
+      if (i ==0)
+	XSetFillStyle(dpy,gc,FillSolid);
+      else 
+	XSetFillStyle(dpy,gc,FillTiled);
+    }
 }
 
 /** To get the id of the current pattern  **/
 
 getpattern_(verbose,num,narg)
-     int *num,*verbose,*narg;
+     integer *num,*verbose,*narg;
 { 
   *narg=1;
-  *num = MissileXgc.CurPattern ;
+  if ( ScilabXgc->CurColorStatus == 1 ) 
+    *num = ScilabXgc->CurColor ;
+  else 
+    *num = ScilabXgc->CurPattern ;
   if (*verbose == 1) 
-    SciF1d("\n Pattern : %d\r\n",
-	    MissileXgc.CurPattern);
+    sciprint("\n Pattern : %d\r\n",ScilabXgc->CurPattern);
 }
 
 /** To get the id of the white pattern **/
 
 getwhite_(verbose,num,narg)
-     int *num,*verbose,*narg;
+     integer *num,*verbose,*narg;
 {
-  *num = MissileXgc.IDWhitePattern ;
-  if (*verbose == 1) 
-    SciF1d("\n Id of White Pattern %d\r\n",*num);
+  if ( ScilabXgc->CurColorStatus == 1 ) 
+    {
+      *num = ScilabXgc->IDWhitePattern ;
+      if (*verbose == 1) 
+	sciprint("\n Id of Last Color %d\r\n",(int)*num);
+    }
+      
+  else 
+    {
+      *num = ScilabXgc->IDWhitePattern ;
+      if (*verbose == 1) 
+	sciprint("\n Id of White Pattern %d\r\n",(int)*num);
+    }
   *narg=1;
 }
 
@@ -626,24 +885,27 @@ getwhite_(verbose,num,narg)
 /**  if *value == 0 -> Solid line   **/
 /**  else Dashed Line **/
 
-static int DashTab[6][4] = {
+static integer DashTab[6][4] = {
   {2,5,2,5}, {5,2,5,2},  {5,3,2,3}, {8,3,2,3},
   {11,3,2,3}, {11,3,5,3}};
 
-setdash_(value)
-     int *value;
+setdash_(value,v2,v3,v4)
+     integer *value,*v2,*v3,*v4;
 {
-  static int maxdash = 6, l2=4,l3 ;
-  l3 = Min(maxdash-1,*value-1);
-  if ( use_color ==1) 
+  static integer maxdash = 6, l2=4,l3 ;
+
+  if ( ScilabXgc->CurColorStatus ==1) 
     {
-      MissileXgc.CurDashStyle= *value;
-      set_c(*value);
+      int i;
+      i= Max(0,Min(*value,NUMCOLORS-1));
+      ScilabXgc->CurColor = i;
+      set_c(i);
     }
   else
     {
+      l3 = Min(maxdash-1,*value-1);
       setdashstyle_(value,DashTab[Max(0,l3)],&l2);
-      MissileXgc.CurDashStyle= l3 + 1 ;
+      ScilabXgc->CurDashStyle= l3 + 1 ;
     }
 
 }
@@ -654,31 +916,32 @@ setdash_(value)
 /** xx[3]={5,3,7} and *n == 3 means :  5white 3 void 7 white \ldots **/
 
 setdashstyle_(value,xx,n)
-     int *value,xx[],*n;
+     integer *value,xx[],*n;
 {
   int dashok= LineOnOffDash ;
   if ( *value == 0) dashok = LineSolid;
   else 
     {
-      int i; char buffdash[18];
+      integer i; char buffdash[18];
       for ( i =0 ; i < *n ; i++) buffdash[i]=xx[i];
-      XSetDashes(dpy,gc,0,buffdash,*n);
+      XSetDashes(dpy,gc,0,buffdash,(int)*n);
     }
-  XSetLineAttributes(dpy,gc,MissileXgc.CurLineWidth,dashok,CapButt,JoinMiter);
+  XSetLineAttributes(dpy,gc,(unsigned) ScilabXgc->CurLineWidth,dashok,CapButt,JoinMiter);
 }
 
 /** to get the current dash-style **/
 
 getdash_(verbose,value,narg)
-     int *verbose,*value,*narg;
+     integer *verbose,*value,*narg;
 {int i ;
- *value=MissileXgc.CurDashStyle;
  *narg =1 ;
- if ( use_color ==1) 
+ if ( ScilabXgc->CurColorStatus ==1) 
    {
-     if (*verbose == 1) SciF1d("Color %d",*value);
+     *value =ScilabXgc->CurColor;
+     if (*verbose == 1) sciprint("Color %d",(int)*value);
      return;
    }
+ *value =ScilabXgc->CurDashStyle;
  if ( *value == 0) 
    { if (*verbose == 1) Scistring("\nLine style = Line Solid");}
  else 
@@ -688,25 +951,111 @@ getdash_(verbose,value,narg)
      for ( i =0 ; i < value[1]; i++) value[i+2]=DashTab[*value-1][i];
      if (*verbose ==1 ) 
        {
-	 SciF1d("\nDash Style %d:<",*value);
+	 sciprint("\nDash Style %d:<",(int)*value);
 	 for ( i =0 ; i < value[1]; i++)
-	   SciF1d("%d ",value[i+2]);
+	   sciprint("%d ",(int)value[i+2]);
 	 Scistring(">\n");
        }
    }
 }
 
+/* basculement eventuel de couleur a n&b */
 
-usecolor_(num)
-     int *num;
+usecolor_(num,v1,v2,v3)
+     integer *num,*v1,*v2,*v3;
 {
-  if ( use_color != *num)
+  int i;
+  i=  Min(Max(*num,0),1);
+  if ( ScilabXgc->CurColorStatus != i) 
     {
-      int i=0;
-      use_color= *num;
-      setdash_(&i);
-      setpattern_(&i);
+      if (ScilabXgc->CurColorStatus == 1) 
+	{
+	  /* je passe de Couleur a n&b */
+	  /* remise des couleurs a vide */
+	  ScilabXgc->CurColorStatus = 1;
+	  setpattern_((i=0,&i),PI0,PI0,PI0);
+	  /* passage en n&b */
+	  ScilabXgc->CurColorStatus = 0;
+	  i= ScilabXgc->CurPattern;
+	  setpattern_(&i,PI0,PI0,PI0);
+	  i= ScilabXgc->CurDashStyle;
+	  setdash_(&i,PI0,PI0,PI0);
+	}
+      else 
+	{
+	  /* je passe en couleur */
+	  /* remise a zero des patterns et dash */
+	  /* remise des couleurs a vide */
+	  ScilabXgc->CurColorStatus = 0;
+	  setpattern_((i=0,&i),PI0,PI0,PI0);
+	  setdash_((i=0,&i),PI0,PI0,PI0);
+	  /* passage en couleur  */
+	  ScilabXgc->CurColorStatus = 1;
+	  i= ScilabXgc->CurColor;
+	  setpattern_(&i,PI0,PI0,PI0);
+	}
     }
+}
+
+getusecolor_(verbose,num,narg)
+     integer *num,*verbose,*narg;
+{
+  *num = ScilabXgc->CurColorStatus;
+  if (*verbose == 1) 
+    sciprint("\n Use color %d\r\n",(int)*num);
+  *narg=1;
+}
+
+/** Change the status of a Graphic Window **/
+/** adding or removing a Background Pixmap to it **/
+
+setpixmapOn_(num,v2,v3,v4)
+     integer *num,*v2,*v3,*v4;
+{
+  integer num1= Min(Max(*num,0),1);
+  if ( ScilabXgc->CurPixmapStatus == num1 ) return;
+  if ( num1 == 1 )
+    {
+      /** I had a Background Pixmap to the window **/
+      XWindowAttributes war;
+      xinfo_("Animation mode is on,( xset('pixmap',0) to leave)",
+	     PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+
+      XGetWindowAttributes(dpy,CWindow,&war); 	
+      Cdrawable = (Drawable) XCreatePixmap(dpy, root, war.width,war.height, depth);
+      if ( Cdrawable == (Drawable) 0) 
+	{
+	  Cdrawable = (Drawable) CWindow;
+	  sciprint("No more space to create Pixmaps\r\n");
+	}
+      else 
+	{
+	  ScilabXgc->CurPixmapStatus = 1;
+	  XSetForeground(dpy,gc,background);
+	  XFillRectangle(dpy, Cdrawable, gc, 0, 0,(unsigned) war.width,(unsigned)war.height);
+	  XSetForeground(dpy,gc,foreground);
+	  XSetWindowBackgroundPixmap(dpy, CWindow, (Pixmap) Cdrawable);
+	}
+    }
+  if ( num1 == 0 )
+    {
+      xinfo_(" ",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+      /** I remove the Background Pixmap to the window **/
+      XFreePixmap(dpy, (Pixmap) Cdrawable);
+      XSetWindowBackground(dpy, CWindow,background);
+      Cdrawable = (Drawable) CWindow;
+      ScilabXgc->CurPixmapStatus = 0;
+    }
+  ScilabXgc->CurPixmapStatus = num1 ;
+  SetPixmapNumber_(Cdrawable,(integer)CurWindow);
+}
+
+getpixmapOn_(verbose,value,narg)
+     integer *verbose,*value,*narg;
+{
+  *value=ScilabXgc->CurPixmapStatus;
+  *narg =1 ;
+  if (*verbose == 1) sciprint("Color %d",(int)*value);
 }
 
 /*-----------------------------------------------------------
@@ -714,78 +1063,125 @@ usecolor_(num)
   routines } 
 -------------------------------------------------------------*/
 
-int InitMissileXgc();
+static int InitMissileXgc();
 
-empty_(verbose)
-     int *verbose;
+
+sempty_(verbose,v2,v3,v4)
+     integer *verbose,*v2,*v3,*v4;
 {
-  if ( *verbose == 1 ) Scistring("\n No operation ");
+  if ( *verbose ==1 ) Scistring("\n No operation ");
 }
 
-#define NUMSETFONC 14
+gempty_(verbose,v2,v3)
+     integer *verbose,*v2,*v3;
+{
+  if ( *verbose ==1 ) Scistring("\n No operation ");
+}
+
+#define NUMSETFONC 18
 
 /** Table in lexicographic order **/
 int xsetfont_(),xgetfont_(),xsetmark_(),xgetmark_();
 
-struct bgc { char *name ;
-	     int  (*setfonc )() ;
-	     int  (*getfonc )() ;}
+static struct bgc { char *name ;
+	     int (*setfonc )() ;
+	     int (*getfonc )() ;}
+
 MissileGCTab_[] = {
   "alufunction",setalufunction1_,getalufunction_,
+  "clipoff",unsetclip_,getclip_,
   "clipping",setclip_,getclip_,
   "dashes",setdash_,getdash_,
-  "default",InitMissileXgc, empty_,
+  "default",InitMissileXgc, gempty_,
   "font",xsetfont_,xgetfont_,
   "line mode",setabsourel_,getabsourel_,
   "mark",xsetmark_,xgetmark_,
   "pattern",setpattern_,getpattern_,
+  "pixmap",setpixmapOn_,getpixmapOn_,
   "thickness",setthickness_,getthickness_,
-  "use color",usecolor_,empty_,
+  "use color",usecolor_,getusecolor_,
   "wdim",setwindowdim_,getwindowdim_,
-  "white",empty_,getwhite_,
+  "white",sempty_,getwhite_,
   "window",setcurwin_,getcurwin_,
-  "wpos",setwindowpos_,getwindowpos_
+  "wpos",setwindowpos_,getwindowpos_,
+  "wshow",show_,gempty_,
+  "wwpc",pixmapclear_,gempty_
   };
 
-MissileGCget_(str,verbose,x1,x2,x3,x4,x5)
-     char str[];
-     int *verbose,*x1,*x2,*x3,*x4,*x5;
-     
-{ MissileGCGetorSet_(str,1,verbose,x1,x2,x3,x4,x5);}
+#ifdef lint 
 
-MissileGCset_(str,x1,x2,x3,x4,x5)
+/* pour forcer lint a verifier ca */
+
+static 
+test(str,flag,verbose,x1,x2,x3,x4,x5)
      char str[];
-     int *x1,*x2,*x3,*x4,*x5;
-{int verbose=0 ;
- MissileGCGetorSet_(str,0,&verbose,x1,x2,x3,x4,x5);
+     integer flag ;
+     integer  *verbose,*x1,*x2,*x3,*x4,*x5;
+{ 
+setalufunction1_(x1,x2,x3,x4);getalufunction_(verbose,x1,x2);
+setclip_(x1,x2,x3,x4);getclip_(verbose,x1,x2);
+unsetclip_(x1,x2,x3,x4);getclip_(verbose,x1,x2);
+setdash_(x1,x2,x3,x4);getdash_(verbose,x1,x2);
+InitMissileXgc(x1,x2,x3,x4); gempty_(verbose,x1,x2);
+xsetfont_(x1,x2,x3,x4);xgetfont_(verbose,x1,x2);
+setabsourel_(x1,x2,x3,x4);getabsourel_(verbose,x1,x2);
+xsetmark_(x1,x2,x3,x4);xgetmark_(verbose,x1,x2);
+setpattern_(x1,x2,x3,x4);getpattern_(verbose,x1,x2);
+setpixmapOn_(x1,x2,x3,x4);getpixmapOn_(verbose,x1,x2);
+setthickness_(x1,x2,x3,x4);getthickness_(verbose,x1,x2);
+usecolor_(x1,x2,x3,x4);gempty_(verbose,x1,x2);
+setwindowdim_(x1,x2,x3,x4);getwindowdim_(verbose,x1,x2);
+sempty_(x1,x2,x3,x4);getwhite_(verbose,x1,x2);
+setcurwin_(x1,x2,x3,x4);getcurwin_(verbose,x1,x2);
+setwindowpos_(x1,x2,x3,x4);getwindowpos_(verbose,x1,x2);
+show_(x1,x2,x3,x4);gempty_(verbose,x1,x2);
+pixmapclear_(x1,x2,x3,x4);gempty(verbose,x1,x2);
+
+}
+
+#endif 
+
+MissileGCget_(str,verbose,x1,x2,x3,x4,x5,dv1,dv2,dv3,dv4)
+     char str[];
+     integer *verbose,*x1,*x2,*x3,*x4,*x5;
+     double *dv1,*dv2,*dv3,*dv4;
+{ MissileGCGetorSet_(str,1L,verbose,x1,x2,x3,x4,x5);}
+
+MissileGCset_(str,x1,x2,x3,x4,x5,x6,dv1,dv2,dv3,dv4)
+     char str[];
+     integer *x1,*x2,*x3,*x4,*x5,*x6;
+     double *dv1,*dv2,*dv3,*dv4;
+{
+  integer verbose=0 ;
+  MissileGCGetorSet_(str,0L,&verbose,x1,x2,x3,x4,x5);
 }
 
 MissileGCGetorSet_(str,flag,verbose,x1,x2,x3,x4,x5)
      char str[];
-     int flag ;
-     int  *verbose,*x1,*x2,*x3,*x4,*x5;
-{ int i ;
+     integer flag ;
+     integer  *verbose,*x1,*x2,*x3,*x4,*x5;
+{ integer i ;
   for (i=0; i < NUMSETFONC ; i++)
     {
-      int j;
+      integer j;
       j = strcmp(str,MissileGCTab_[i].name);
       if ( j == 0 ) 
 	{ if (*verbose == 1)
-	    SciF1s("\nGettting Info on %s\r\n",str);
+	    sciprint("\nGettting Info on %s\r\n",str);
 	  if (flag == 1)
-	    (MissileGCTab_[i].getfonc)(verbose,x1,x2,x3,x4,x5);
+	    (MissileGCTab_[i].getfonc)(verbose,x1,x2);
 	  else 
-	    (MissileGCTab_[i].setfonc)(x1,x2,x3,x4,x5);
+	    (MissileGCTab_[i].setfonc)(x1,x2,x3,x4);
 	  return;}
       else 
 	{ if ( j <= 0)
 	    {
-	      SciF1s("\nUnknow X operator <%s>\r\n",str);
+	      sciprint("\nUnknow X operator <%s>\r\n",str);
 	      return;
 	    }
 	}
     }
-  SciF1s("\n Unknow X operator <%s>\r\n",str);
+  sciprint("\n Unknow X operator <%s>\r\n",str);
 }
 
 /*-------------------------------------------------------
@@ -802,19 +1198,22 @@ MissileGCGetorSet_(str,flag,verbose,x1,x2,x3,x4,x5)
   around the string}.
 -----------------------------------------------------*/
 
-displaystring_(string,x,y,angle,flag)
-     int *x,*y ,*flag;
+displaystring_(string,x,y,v1,flag,v6,v7,angle,dv2,dv3,dv4)
+     integer *x,*y ,*flag;
      double *angle;
      char string[] ;
+     integer *v1,*v6,*v7;
+     double *dv2,*dv3,*dv4;
 { 
   if ( Abs(*angle) <= 0.1) 
     {
-      XDrawString(dpy, CWindow, gc,*x,*y,string,strlen(string));
+      XDrawString(dpy, Cdrawable, gc,(int) *x,(int) *y,string,strlen(string));
       if ( *flag == 1) 
-	{int rect[4];
-	 boundingbox_(string,x,y,rect);
-	 rect[0]=rect[0]-4;rect[2]=rect[2]+6;
-	 drawrectangle_(string,rect,rect+1,rect+2,rect+3);
+	{
+	  integer rect[4];
+	  boundingbox_(string,x,y,rect,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+	  rect[0]=rect[0]-4;rect[2]=rect[2]+6;
+	  drawrectangle_(string,rect,rect+1,rect+2,rect+3,PI0,PI0,PD0,PD0,PD0,PD0);
        }
     }
   else 
@@ -824,11 +1223,12 @@ displaystring_(string,x,y,angle,flag)
 }
 
 DispStringAngle_(x0,yy0,string,angle)
-     int *x0,*yy0;
+     integer *x0,*yy0;
      double *angle;
      char string[];
 {
-  int x,y,i,rect[4];
+  int i;
+  integer x,y, rect[4];
   double sina ,cosa,l;
   char str1[2];
   str1[1]='\0';
@@ -839,15 +1239,15 @@ DispStringAngle_(x0,yy0,string,angle)
   for ( i = 0 ; i < (int)strlen(string); i++)
     { 
       str1[0]=string[i];
-      XDrawString(dpy,CWindow,gc, x,y ,str1,1);
-      boundingbox_(str1,&x,&y,rect);
+      XDrawString(dpy,Cdrawable,gc,(int) x,(int) y ,str1,1);
+      boundingbox_(str1,&x,&y,rect,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
       /** drawrectangle_(string,rect,rect+1,rect+2,rect+3); **/
       if ( cosa <= 0.0 && i < (int)strlen(string)-1)
 	{ char str2[2];
 	  /** si le cosinus est negatif le deplacement est a calculer **/
 	  /** sur la boite du caractere suivant **/
 	  str2[1]='\0';str2[0]=string[i+1];
-	  boundingbox_(str2,&x,&y,rect);
+	  boundingbox_(str2,&x,&y,rect,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
 	}
       if ( Abs(cosa) >= 1.e-8 )
 	{
@@ -865,12 +1265,14 @@ DispStringAngle_(x0,yy0,string,angle)
 
 /** To get the bounding rectangle of a string **/
 
-boundingbox_(string,x,y,rect)
-     int *x,*y,*rect;
+boundingbox_(string,x,y,rect,v5,v6,v7,dv1,dv2,dv3,dv4)
+     integer *x,*y,*rect,*v5,*v6,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
      char string[];
-{ int dir,asc,dsc;
+{ 
+  int dir,asc,dsc;
   XCharStruct charret;
-  XQueryTextExtents(dpy,MissileXgc.FontXID,
+  XQueryTextExtents(dpy,ScilabXgc->FontXID,
 		    string,strlen(string),&dir,&asc,&dsc,&charret);
   rect[0]= *x ;
   rect[1]= *y-asc;
@@ -883,9 +1285,9 @@ subsection{ Segments and Arrows }
 -------------------------------------------------*/
 
 drawline_(x1,yy1,x2,y2)
-     int *x1, *x2, *yy1, *y2 ;
+     integer *x1, *x2, *yy1, *y2 ;
 {
-  XDrawLine(dpy, CWindow, gc, *x1, *yy1, *x2, *y2); 
+  XDrawLine(dpy, Cdrawable, gc,(int) *x1,(int) *yy1,(int) *x2,(int) *y2); 
   XFlush(dpy);
 }
 
@@ -894,17 +1296,26 @@ drawline_(x1,yy1,x2,y2)
 /** for i=0 step 2 **/
 /** n is the size of vx and vy **/
 
-drawsegments_(str,vx,vy,n)
+drawsegments_(str,vx,vy,n,style,iflag,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *n,vx[],vy[];
+     integer *n,vx[],vy[],*style,*iflag,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
 {
-  int i ;
+  integer verbose=0,Dnarg,Dvalue[10],NDvalue;
+  integer i ;
+  getdash_(&verbose,Dvalue,&Dnarg);
   for (i=0 ; i < *n/2 ; i++)
     {
-      XDrawLine(dpy,CWindow,gc,vx[2*i],vy[2*i],vx[2*i+1],vy[2*i+1]);
+      if ( (int) *iflag == 1) 
+	NDvalue = style[i];
+      else 
+	NDvalue=(*style < 0) ? (integer) ScilabXgc->CurDashStyle : *style;
+      setdash_(&NDvalue,PI0,PI0,PI0);
+      XDrawLine(dpy,Cdrawable,gc, (int) vx[2*i],(int) vy[2*i],(int) vx[2*i+1],(int) vy[2*i+1]) ;
       XFlush(dpy);
     }
   XFlush(dpy);
+  setdash_( Dvalue,PI0,PI0,PI0);
 }
 
 /** Draw a set of arrows **/
@@ -913,35 +1324,48 @@ drawsegments_(str,vx,vy,n)
 /** n is the size of vx and vy **/
 /** as is 10*arsize (arsize) the size of the arrow head in pixels **/
 
-drawarrows_(str,vx,vy,n,as)
+drawarrows_(str,vx,vy,n,as,style,iflag,dv1,dv2,dv3,dv4)
      char str[];
-     int *as;
-     int *n,vx[],vy[];
+     integer *as;
+     integer *n,vx[],vy[],*style,*iflag;
+     double *dv1,*dv2,*dv3,*dv4;
 { 
+  integer verbose=0,Dnarg,Dvalue[10],NDvalue,i,cpat;
   double cos20=cos(20.0*M_PI/180.0);
   double sin20=sin(20.0*M_PI/180.0);
-  int polyx[4],polyy[4],fillvect[1];
-  int i ;
+  integer polyx[4],polyy[4],fillvect[1];
+  getdash_(&verbose,Dvalue,&Dnarg);
+  getpattern_(&verbose,&cpat,&Dnarg);
   for (i=0 ; i < *n/2 ; i++)
     { 
       double dx,dy,norm;
-      XDrawLine(dpy,CWindow,gc,vx[2*i],vy[2*i],vx[2*i+1],vy[2*i+1]);
+      if ( (int) *iflag == 1) 
+	NDvalue = style[i];
+      else 
+	NDvalue=(*style < 0) ? (integer) ScilabXgc->CurDashStyle : *style;
+      setdash_(&NDvalue,PI0,PI0,PI0);
+      setpattern_(&NDvalue,PI0,PI0,PI0);
+      XDrawLine(dpy,Cdrawable,gc,(int) vx[2*i],(int)vy[2*i],
+		(int)vx[2*i+1],(int)vy[2*i+1]);
       dx=( vx[2*i+1]-vx[2*i]);
       dy=( vy[2*i+1]-vy[2*i]);
       norm = sqrt(dx*dx+dy*dy);
       if ( Abs(norm) >  SMDOUBLE ) 
-	{ int nn=1,p=3;
+	{ integer nn=1,p=3;
 	  dx=(*as/10.0)*dx/norm;dy=(*as/10.0)*dy/norm;
 	  polyx[0]= polyx[3]=vx[2*i+1]+dx*cos20;
-	  polyx[1]= nint(polyx[0]  - cos20*dx -sin20*dy );
-	  polyx[2]= nint(polyx[0]  - cos20*dx + sin20*dy);
+	  polyx[1]= inint(polyx[0]  - cos20*dx -sin20*dy );
+	  polyx[2]= inint(polyx[0]  - cos20*dx + sin20*dy);
 	  polyy[0]= polyy[3]=vy[2*i+1]+dy*cos20;
-	  polyy[1]= nint(polyy[0] + sin20*dx -cos20*dy) ;
-	  polyy[2]= nint(polyy[0] - sin20*dx - cos20*dy) ;
-	  fillpolylines_("v",polyx,polyy,(fillvect[0]=0,fillvect),&nn,&p);
+	  polyy[1]= inint(polyy[0] + sin20*dx -cos20*dy) ;
+	  polyy[2]= inint(polyy[0] - sin20*dx - cos20*dy) ;
+	  fillpolylines_("v",polyx,polyy,(fillvect[0]=(integer) ScilabXgc->CurPattern ,fillvect),
+			 &nn,&p,PI0,PD0,PD0,PD0,PD0);
 	  }
     }
-      XFlush(dpy);
+  setdash_( Dvalue,PI0,PI0,PI0);
+  setpattern_(&(cpat),PI0,PI0,PI0);
+  XFlush(dpy);
 }
 
 /*----------------------
@@ -958,43 +1382,47 @@ drawarrows_(str,vx,vy,n,as)
 /** if fillvect[i] is > whitepattern  then only draw the rectangle i **/
 /** The drawing style is the current drawing style **/
 
-drawrectangles_(str,vects,fillvect,n)
+drawrectangles_(str,vects,fillvect,n,v5,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *vects,*fillvect,*n;
+     integer *vects,*fillvect,*n,*v5,*v6,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
 {
-  int i,cpat,verbose=0,num;
+  integer i,cpat,verbose=0,num;
   getpattern_(&verbose,&cpat,&num);
   for (i=0 ; i< *n ; i++)
     {
-      if (fillvect[i] > MissileXgc.IDWhitePattern )
+      if (fillvect[i] > ScilabXgc->IDWhitePattern )
 	{
-	  drawrectangle_(str,vects+4*i,vects+4*i+1,vects+4*i+2,vects+4*i+3);
+	  drawrectangle_(str,vects+4*i,vects+4*i+1,vects+4*i+2,vects+4*i+3
+			 ,PI0,PI0,PD0,PD0,PD0,PD0);
 	}
       else
 	{
-	  setpattern_(&(fillvect[i]));
-	  fillrectangle_(str,vects+4*i,vects+4*i+1,vects+4*i+2,vects+4*i+3);
+	  setpattern_(&(fillvect[i]),PI0,PI0,PI0);
+	  fillrectangle_(str,vects+4*i,vects+4*i+1,vects+4*i+2,vects+4*i+3,PI0,PI0,PD0,PD0,PD0,PD0);
 	}
     }
-  setpattern_(&(cpat));
+  setpattern_(&(cpat),PI0,PI0,PI0);
 }
 
 /** Draw one rectangle with current line style **/
 
-drawrectangle_(str,x,y,width,height)
+drawrectangle_(str,x,y,width,height,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int  *x, *y, *width, *height;
+     integer  *x, *y, *width, *height,*v6,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
 { 
-  XDrawRectangle(dpy, CWindow, gc, *x, *y, (unsigned)*width,(unsigned)*height);
+  XDrawRectangle(dpy, Cdrawable, gc, *x, *y, (unsigned)*width,(unsigned)*height);
   XFlush(dpy); }
 
 /** fill one rectangle, with current pattern **/
 
-fillrectangle_(str,x,y,width,height)
+fillrectangle_(str,x,y,width,height,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int  *x, *y, *width, *height;
+     integer  *x, *y, *width, *height,*v6,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
 { 
-  XFillRectangle(dpy, CWindow, gc, *x, *y, *width, *height); 
+  XFillRectangle(dpy, Cdrawable, gc,(int) *x,(int) *y,(unsigned) *width,(unsigned) *height); 
   XFlush(dpy);
 }
 
@@ -1012,48 +1440,80 @@ fillrectangle_(str,x,y,width,height)
 /** if fillvect[i] is > whitepattern  then only draw the ellipsis i **/
 /** The drawing style is the current drawing style **/
 
-drawarcs_(str,vects,fillvect,n)
+fillarcs_(str,vects,fillvect,n,v5,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *vects,*fillvect,*n;
+     integer *vects,*fillvect,*n,*v5,*v6,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
 {
-  int i,cpat,verb,num;
+  integer i,cpat,verb,num;
   verb=0;
   getpattern_(&verb,&cpat,&num);
   for (i=0 ; i< *n ; i++)
     {
-      if (fillvect[i] > MissileXgc.IDWhitePattern )
-	{setpattern_(&(cpat));
-	 drawarc_(str,vects+6*i,vects+6*i+1,
-		  vects+6*i+2,vects+6*i+3,
-		  vects+6*i+4,vects+6*i+5);}
+      if (fillvect[i] > ScilabXgc->IDWhitePattern )
+	{
+	  setpattern_(&(cpat),PI0,PI0,PI0);
+	  drawarc_(str,vects+6*i,vects+6*i+1,
+		   vects+6*i+2,vects+6*i+3,
+		   vects+6*i+4,vects+6*i+5,PD0,PD0,PD0,PD0);
+	}
       else
 	{
-	  setpattern_(&(fillvect[i]));
+	  setpattern_(&(fillvect[i]),PI0,PI0,PI0);
 	  fillarc_(str,vects+6*i,vects+6*i+1,
-			 vects+6*i+2,vects+6*i+3,
-			 vects+6*i+4,vects+6*i+5);
+		   vects+6*i+2,vects+6*i+3,
+		   vects+6*i+4,vects+6*i+5,PD0,PD0,PD0,PD0);
 	}
     }
-  setpattern_(&(cpat));
+  setpattern_(&(cpat),PI0,PI0,PI0);
+}
+
+
+/** Draw a set of ellipsis or part of ellipsis **/
+/** Each is defined by 6-parameters, **/
+/** ellipsis i is specified by $vect[6*i+k]_{k=0,5}= x,y,width,height,angle1,angle2$ **/
+/** <x,y,width,height> is the bounding box **/
+/** angle1,angle2 specifies the portion of the ellipsis **/
+/** caution : angle=degreangle*64          **/
+
+drawarcs_(str,vects,style,n,v5,v6,v7,dv1,dv2,dv3,dv4)
+     char str[];
+     integer *vects,*style,*n,*v5,*v6,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
+{
+  integer verbose=0,Dnarg,Dvalue[10],NDvalue,i;
+  /* store the current values */
+  getdash_(&verbose,Dvalue,&Dnarg);
+  for (i=0 ; i< *n ; i++)
+    {
+      NDvalue = style[i];
+      setdash_(&NDvalue,PI0,PI0,PI0);
+      drawarc_(str,vects+6*i,vects+6*i+1,
+	       vects+6*i+2,vects+6*i+3,
+	       vects+6*i+4,vects+6*i+5,PD0,PD0,PD0,PD0);
+    }
+  setdash_( Dvalue,PI0,PI0,PI0);
 }
 
 /** Draw a single ellipsis or part of it **/
 
-drawarc_(str,x,y,width,height,angle1,angle2)
+drawarc_(str,x,y,width,height,angle1,angle2,dv1,dv2,dv3,dv4)
+     double *dv1,*dv2,*dv3,*dv4;
      char str[];
-     int *angle1,*angle2, *x, *y, *width, *height;
+     integer *angle1,*angle2, *x, *y, *width, *height;
 { 
-  XDrawArc(dpy, CWindow, gc, *x, *y,(unsigned)*width,
+  XDrawArc(dpy, Cdrawable, gc, *x, *y,(unsigned)*width,
 	   (unsigned)*height,*angle1, *angle2);
   XFlush(dpy); }
 
 /** Fill a single elipsis or part of it with current pattern **/
 
-fillarc_(str,x,y,width,height,angle1,angle2)
+fillarc_(str,x,y,width,height,angle1,angle2,dv1,dv2,dv3,dv4)
      char str[];
-     int *angle1,*angle2, *x, *y, *width, *height;
+     double *dv1,*dv2,*dv3,*dv4;
+     integer *angle1,*angle2, *x, *y, *width, *height;
 { 
-  XFillArc(dpy, CWindow, gc, *x, *y, *width, *height, *angle1, *angle2);    
+  XFillArc(dpy, Cdrawable, gc, *x, *y, *width, *height, *angle1, *angle2);    
   XFlush(dpy);}
 
 /*--------------------------------------------------------------
@@ -1065,10 +1525,11 @@ fillarc_(str,x,y,width,height,angle1,angle2)
 /** drawvect[i] >= 0 use a mark for polyline i **/
 /** drawvect[i] < 0 use a line style for polyline i **/
 
-drawpolylines_(str,vectsx,vectsy,drawvect,n,p)
+drawpolylines_(str,vectsx,vectsy,drawvect,n,p,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *vectsx,*vectsy,*drawvect,*n,*p;
-{ int verbose=0 ,symb[2],Mnarg,Dnarg,Dvalue[10],NDvalue,i,close;
+     integer *vectsx,*vectsy,*drawvect,*n,*p,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
+{ integer verbose=0 ,symb[2],Mnarg,Dnarg,Dvalue[10],NDvalue,i,close;
   /* store the current values */
   xgetmark_(&verbose,symb,&Mnarg);
   getdash_(&verbose,Dvalue,&Dnarg);
@@ -1076,20 +1537,21 @@ drawpolylines_(str,vectsx,vectsy,drawvect,n,p)
     {
       if (drawvect[i] >= 0)
 	{ /** we use the markid : drawvect[i] **/
-	  xsetmark_(drawvect+i,symb+1);
-	  drawpolymark_(str,p,vectsx+(*p)*i,vectsy+(*p)*i);
+	  xsetmark_(drawvect+i,symb+1,PI0,PI0);
+	  drawpolymark_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
 	}
       else
 	{/** we use the line-style number abs(drawvect[i])  **/
 	  NDvalue = - drawvect[i] -1 ;
-	  setdash_(&NDvalue);
+	  setdash_(&NDvalue,PI0,PI0,PI0);
 	  close = 0;
-	  drawpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,&close);
+	  drawpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,&close,
+			PI0,PI0,PD0,PD0,PD0,PD0);
 	}
     }
   /** back to default values **/
-  setdash_( Dvalue);
-  xsetmark_(symb,symb+1);
+  setdash_( Dvalue,PI0,PI0,PI0);
+  xsetmark_(symb,symb+1,PI0,PI0);
 }
 
 /** fill a set of polygons each of which is defined by 
@@ -1103,76 +1565,83 @@ drawpolylines_(str,vectsx,vectsy,drawvect,n,p)
      for fillvect[i]== whiteid-pattern +2
 **/
 
-fillpolylines_(str,vectsx,vectsy,fillvect,n,p)
+fillpolylines_(str,vectsx,vectsy,fillvect,n,p,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *vectsx,*vectsy,*fillvect,*n,*p;
+     integer *vectsx,*vectsy,*fillvect,*n,*p,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
 {
-  int i,cpat,verbose=0,num,close=1,pattern;
+  integer i,cpat,verbose=0,num,close=1,pattern;
   getpattern_(&verbose,&cpat,&num);
   for (i=0 ; i< *n ; i++)
     {
-      if (fillvect[i] >= MissileXgc.IDWhitePattern +2)
+      if (fillvect[i] >= ScilabXgc->IDWhitePattern +2)
 	{ /** on peint puis on fait un contour ferme **/
-	  pattern= -fillvect[i]+2*MissileXgc.IDWhitePattern +2;
-	  setpattern_(&pattern);
-	  fillpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,(close=1,&close));
-	  setpattern_(&(cpat));
-	  drawpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,(close=1,&close));
+	  pattern= -fillvect[i]+2*ScilabXgc->IDWhitePattern +2;
+	  setpattern_(&pattern,PI0,PI0,PI0);
+	  fillpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,(close=1,&close),
+			PI0,PI0,PD0,PD0,PD0,PD0);
+	  setpattern_(&(cpat),PI0,PI0,PI0);
+	  drawpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,(close=1,&close)
+			,PI0,PI0,PD0,PD0,PD0,PD0);
 	}
       else
 	{
-	  if (fillvect[i] == MissileXgc.IDWhitePattern + 1)
-	      drawpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,(close=0,&close));
+	  if (fillvect[i] == ScilabXgc->IDWhitePattern + 1)
+	      drawpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,(close=0,&close)
+			    ,PI0,PI0,PD0,PD0,PD0,PD0);
 	  else 
 	    {
-	      setpattern_(&(fillvect[i]));
-	      fillpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,(close=0,&close));
+	      setpattern_(&(fillvect[i]),PI0,PI0,PI0);
+	      fillpolyline_(str,p,vectsx+(*p)*i,vectsy+(*p)*i,(close=0,&close)
+			    ,PI0,PI0,PD0,PD0,PD0,PD0);
 	    }
 	}
     }
-  setpattern_(&(cpat));
+  setpattern_(&(cpat),PI0,PI0,PI0);
 }
 
 /** Only draw one polygon  with current line style **/
 /** according to *closeflag : it's a polyline or a polygon **/
 /** n is the number of points of the polyline */
 
-drawpolyline_(str,n, vx, vy,closeflag)
+drawpolyline_(str,n, vx, vy,closeflag,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *n,*closeflag;
-     int vx[], vy[];
-{ int n1;
+     integer *n,*closeflag;
+     integer vx[], vy[], *v6, *v7;
+     double *dv1,*dv2,*dv3,*dv4;
+{ 
+  integer n1;
   XPoint *ReturnPoints_();
   if (*closeflag == 1) n1 = *n+1;else n1= *n;
   if (n1 >= 2) 
     {
-      analyze_points_(*n, vx, vy,*closeflag);
-      /* Old code replaced by a routine with clipping
+      analyze_points_(*n, vx, vy,*closeflag); 
+      /* Old code replaced by a routine with clipping 
 	 if (store_points_(*n, vx, vy,*closeflag))
 	{
-	  XDrawLines (dpy, CWindow, gc, ReturnPoints_(), n1,
-		      MissileXgc.CurVectorStyle);
+	  XDrawLines (dpy, Cdrawable, gc, ReturnPoints_(), (int) n1,
+		      ScilabXgc->CurVectorStyle);
 	  XFlush(dpy);
-	}
+	} */
       XFlush(dpy);
-      */
     }
 }
 
 /** Fill the polygon or polyline **/
 /** according to *closeflag : the given vector is a polyline or a polygon **/
 
-fillpolyline_(str,n, vx, vy,closeflag)
+fillpolyline_(str,n, vx, vy,closeflag,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *n,*closeflag;
-     int vx[], vy[];
+     integer *n,*closeflag;
+     integer vx[], vy[],*v6,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
 {
-  int n1;
+  integer n1;
   XPoint *ReturnPoints_();
   if (*closeflag == 1) n1 = *n+1;else n1= *n;
   if (store_points_(*n, vx, vy,*closeflag)){
-    XFillPolygon (dpy, CWindow, gc, ReturnPoints_(), n1,
-		  Complex, MissileXgc.CurVectorStyle);
+    XFillPolygon (dpy, Cdrawable, gc, ReturnPoints_(), n1,
+		  Complex, ScilabXgc->CurVectorStyle);
   }
   XFlush(dpy);
 }
@@ -1180,26 +1649,28 @@ fillpolyline_(str,n, vx, vy,closeflag)
 /** Draw the current mark centred at points defined **/
 /** by vx and vy (vx[i],vy[i]) **/
 
-drawpolymark_(str,n, vx, vy)
+drawpolymark_(str,n, vx, vy,v5,v6,v7,dv1,dv2,dv3,dv4)
      char str[];
-     int *n ; 
-     int vx[], vy[];
+     integer *n ; 
+     integer vx[], vy[],*v5,*v6,*v7;
+	double *dv1,*dv2,*dv3,*dv4;
 {
   XPoint *ReturnPoints_();
-  if ( MissileXgc.CurHardSymb == 0 )
-    {if (store_points_(*n, vx, vy,0))		
-       XDrawPoints (dpy, CWindow, gc, ReturnPoints_(), *n,CoordModeOrigin);
+  if ( ScilabXgc->CurHardSymb == 0 )
+    {if (store_points_(*n, vx, vy,0L))		
+       XDrawPoints (dpy, Cdrawable, gc, ReturnPoints_(), *n,CoordModeOrigin);
      XFlush(dpy);
    }
   else 
     { 
-      int i,keepid,keepsize;
+      integer i,keepid,keepsize,hds;
       i=1;
-      keepid =  MissileXgc.FontId;
-      keepsize= MissileXgc.FontSize;
-      xsetfont_(&i,&(MissileXgc.CurHardSymbSize));
+      keepid =  ScilabXgc->FontId;
+      keepsize= ScilabXgc->FontSize;
+      hds= ScilabXgc->CurHardSymbSize;
+      xsetfont_(&i,&hds,PI0,PI0);
       for ( i=0; i< *n ;i++) DrawMark_(vx+i,vy+i);
-      xsetfont_(&keepid,&keepsize);
+      xsetfont_(&keepid,&keepsize,PI0,PI0);
     }
 }
 
@@ -1208,54 +1679,148 @@ drawpolymark_(str,n, vx, vy)
 -----------------------------------------*/
 
 typedef  struct  {Window  win,bgwin ;
-		  int     winId;
+		  Drawable  pixm;
+		  integer    winId;
+		  Widget info;
 		  struct WindowList *next;
+		  struct BCG winxgc;
 		} WindowList  ;
 
-int windowcount ;
+static WindowList *The_List_  = (WindowList *) NULL;
 
-WindowList *The_List_ ;
+/* add a window + the cuurent graphic context the cuurent bgwindow pixm etc...
+   in the list of graphic windows 
+*/
 
-AddNewWindowToList_(wind,bgwind,num)
+
+AddNewWindowToList_(wind,bgwind,pixm,info,num)
      Window wind,bgwind;
-     int num;
-{AddNewWindow_(&The_List_,wind,bgwind,num);}
+     Drawable pixm;
+     Widget info;
+     integer num;
+{
+  AddNewWindow_(&The_List_,wind,bgwind,pixm,info,num);
+}
 
-AddNewWindow_(listptr,wind,bgwind,num)
+AddNewWindow_(listptr,wind,bgwind,pixm,info,num)
      WindowList **listptr;
      Window     wind,bgwind;
-     int num ;
+     Widget info;
+     Drawable pixm;
+     integer num ;
 { 
-  if ( num == 0 || *listptr == (WindowList *) NULL)
-    {*listptr = (WindowList *) malloc ( sizeof ( WindowList ));
+  if ( *listptr == (WindowList *) NULL)
+    {*listptr = (WindowList *) MALLOC (sizeof(WindowList ));
      if ( listptr == 0) 
        Scistring("AddNewWindow_ No More Place ");
      else 
-       { (*listptr)->win=wind;
+       { int i;
+	 (*listptr)->win=wind;
 	 (*listptr)->bgwin=bgwind;
+	 (*listptr)->pixm=pixm;
+	 (*listptr)->info=info;
 	 (*listptr)->winId = num;
-         (*listptr)->next = (struct WindowList *) NULL ;}
+	 ScilabXgc= &((*listptr)->winxgc);
+	 /* contexte graphique */
+         (*listptr)->next = (struct WindowList *) NULL ;
+       }
    }
   else
-    AddNewWindow_((WindowList **) &((*listptr)->next),wind,bgwind,num);
+    AddNewWindow_((WindowList **) &((*listptr)->next),wind,bgwind,pixm,info,num);
+}
+
+
+
+/** destruction d'une fenetre **/
+
+DeleteSGWin(intnum)
+     integer intnum;
+{ 
+  if ( CurWindow == intnum )
+    {
+      CWindow = (Window) NULL;
+      CBGWindow = (Window) NULL;
+      Cdrawable =  (Drawable) NULL;
+      CinfoW =  (Widget ) NULL ;
+      ScilabXgc = &(MissileXgc);
+      CurWindow = 0;
+    }
+  DeleteWindowToList_(intnum);
+  /** 
+    WARNING : A Finir  
+    [1] Detruire physiquement la fenetre 
+        C'est fait dans la fonction suiante 
+	reste le Pixmap a detruire si besoin 
+    [2] DeleteScaleWindowNumber_(intnum); 
+    **/
+}
+
+/** detruit la fenetre num dans la liste des fenetres */
+
+DeleteWindowToList_(num)
+     integer num;
+{
+  WindowList *L1,*L2;
+  L1 = The_List_;
+  L2 = The_List_;
+  while ( L1 != (WindowList *) NULL)
+    {
+      if ( L1->winId == num )
+	{
+	  Widget popup =  XtWindowToWidget(dpy,L1->bgwin);
+	  XtDestroyWidget(popup);
+	  /** fenetre a detruire trouvee **/
+	  if ( L1 != L2 )
+	    {
+	      /** Ce n'est pas la premiere fenetre de la liste **/
+	      L2->next= L1->next ;
+	      FREE(L1);
+	      return ;
+	    }
+	  else 
+	    {
+	      /** C'est la premiere fenetre de la liste **/
+	      The_List_ = (WindowList *) L1->next ;
+	      FREE(L1);
+	      return;
+	    }
+	}
+      else 
+	{
+	  L2 = L1;
+	  L1 = (WindowList *) L1->next;
+	}
+    }
 }
 
 Window GetWindowNumber_(i)
-     int i ;
+     integer i ;
 { Window GetWin_();
   return( GetWin_(The_List_,Max(0,i)));
 }
 
+GetWindowXgcNumber_(i)
+     integer i ;
+{ 
+  return( GetWinXgc_(The_List_,Max(0,i)));
+}
+
 
 Window GetBGWindowNumber_(i)
-     int i ;
+     integer i ;
 { Window GetBGWin_();
   return( GetBGWin_(The_List_,Max(0,i)));
 }
 
+Widget GetInfoNumber_(i)
+     integer i ;
+{ Widget GetInfo_();
+  return( GetInfo_(The_List_,Max(0,i)));
+}
+
 Window GetWin_(listptr,i)
      WindowList *listptr;
-     int i; 
+     integer i; 
 {
   if (listptr == (WindowList  *) NULL)
     return((Window ) NULL);
@@ -1267,9 +1832,26 @@ Window GetWin_(listptr,i)
     }
 }
 
+GetWinXgc_(listptr,i)
+     WindowList *listptr;
+     integer i; 
+{
+  if (listptr == (WindowList  *) NULL)
+    return(0);
+  else 
+    { 
+      if ((listptr->winId) == i)
+	{
+	  ScilabXgc = &(listptr->winxgc);
+	 }
+      else 
+	return(GetWinXgc_((WindowList *) listptr->next,i));
+    }
+}
+
 Window GetBGWin_(listptr,i)
      WindowList *listptr;
-     int i; 
+     integer i; 
 {
   if (listptr == (WindowList  *) NULL)
     return((Window ) NULL);
@@ -1281,50 +1863,121 @@ Window GetBGWin_(listptr,i)
     }
 }
 
+
+Widget GetInfo_(listptr,i)
+     WindowList *listptr;
+     integer i; 
+{
+  if (listptr == (WindowList  *) NULL)
+    return((Widget ) NULL);
+  else 
+    { if ((listptr->winId) == i)
+	return( listptr->info);
+    else 
+      return((Widget )GetInfo_((WindowList *) listptr->next,i));
+    }
+}
+
+
+Drawable GetPixmapNumber_(i)
+     integer i ;
+{ Drawable GetPix_();
+  return( GetPix_(The_List_,Max(0,i)));
+}
+
+Drawable GetPix_(listptr,i)
+     WindowList *listptr;
+     integer i; 
+{
+  if (listptr == (WindowList  *) NULL)
+    return((Drawable ) NULL);
+  else 
+    { if ((listptr->winId) == i)
+	return( listptr->pixm);
+    else 
+      return((Drawable )GetPix_((WindowList *) listptr->next,i));
+    }
+}
+
+SetPixmapNumber_(pixm,i)
+     Drawable pixm;
+     integer i ;
+{ 
+   SetPix_(The_List_,pixm,Max(0L,i));
+}
+
+SetPix_(listptr,pixm,i)
+     WindowList *listptr;
+     integer i; 
+     Drawable pixm;
+{
+  if (listptr == (WindowList  *) NULL)
+    {
+      Scistring("Can't store created pixmap in window list \n");
+    }
+  else 
+    { 
+      if ((listptr->winId) == i)
+	listptr->pixm = pixm;
+      else 
+	SetPix_((WindowList *) listptr->next,pixm,i);
+    }
+}
+
 /*--------------------------------------------------------------
   \encadre{Routine for initialisation : string is a display name }
 --------------------------------------------------------------*/
 #define MAXERRMSGLEN 512
 
-X_error_handler(d, err_ev)
+static int X_error_handler(d, err_ev)
     Display        *d;
     XErrorEvent    *err_ev;
 {
     char            err_msg[MAXERRMSGLEN];
 
     XGetErrorText(dpy, (int) (err_ev->error_code), err_msg, MAXERRMSGLEN - 1);
-    (void) SciF1s(
-           "Scilab : X error trapped - error message follows:\n%s\r\n", err_msg);
+    (void) sciprint(
+           "Scilab : X error trapped - error message follows:\r\n%s\r\n", err_msg);
 }
 
 
-#define NUMCOLORS 17
-
-typedef struct res {
-    Pixel color[NUMCOLORS];
-} RES, *RESPTR;
-
-extern RES the_res;
 
 set_c(i)
-     int i;
+     integer i;
 {
-  XSetForeground(dpy, gc, the_res.color[Max(Min(i,NUMCOLORS-1),0)] );  
+  if ( ScilabXgc->CurDrawFunction != GXclear ) 
+    {
+        if ( ScilabXgc->CurDrawFunction != GXxor ) 
+	  XSetForeground(dpy, gc,(unsigned long) the_res.color[Max(Min(i,NUMCOLORS-1),0)] );
+	else 
+	  XSetForeground(dpy, gc,(unsigned long) the_res.color[Max(Min(i,NUMCOLORS-1),0)]
+			 ^ background);
+      }
 }
 
 
 /** Initialyze the dpy connection and creates graphic windows **/
+/** If v2 is not a nul pointer *v2 is the window number to create **/
+/** EntryCounter is used to check for first Entry + to now an available number **/
 
-
-initgraphic_(string)
+initgraphic_(string,v2,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4)
      char string[];
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
 { 
-  static int EntryCounter = 0;
+  Visual *visual;
+  static integer EntryCounter = 0;
+  integer WinNum;
   GC XCreateGC();
-  static int  screen,depth;
-  static XEvent event;
+  static int  screen;
+  Screen *Xscreen;
   static XGCValues gcvalues;
   static Widget toplevel = (Widget) NULL;
+  static Widget infowidget = (Widget) NULL;
+  if ( v2 != (integer *) NULL && *v2 != -1 )
+    WinNum= *v2;
+  else
+    WinNum= EntryCounter;
   if (EntryCounter == 0)
     {
       /** This is done only at the first entry */
@@ -1337,16 +1990,41 @@ initgraphic_(string)
       crosscursor = XCreateFontCursor(dpy, XC_crosshair);
       arrowcursor  = XCreateFontCursor (dpy, (char)0x2e);
       normalcursor = XCreateFontCursor (dpy, XC_X_cursor);
-      windowcount = 0;
+      /* Try to figure out color status */
+      if ((visual=XDefaultVisual(dpy,screen)) != NULL) 
+	{
+	  if (visual->map_entries > 2) 
+	    {
+	      switch (visual->class) 
+		{
+		case StaticColor:
+		case PseudoColor:
+		case TrueColor:
+		case DirectColor:
+		  screencolor = 1;
+		  break;
+		case StaticGray:
+		case GrayScale:
+		  screencolor = 0;
+		  break;
+		default:
+		  screencolor = 1;
+		}
+	    }
+	}
     }
-  CreatePopupWindow(toplevel,&CWindow,&CBGWindow,&foreground,&background);
-  /* SciF2d("[fg,bg]=%d,%d\r\n",foreground,background); */
+  CreatePopupWindow(WinNum,toplevel,&CWindow,&CBGWindow,&foreground,&background,&infowidget);
   if (EntryCounter == 0)
     {
       CreatePatterns_(background,foreground);
     }
-  AddNewWindowToList_(CWindow,CBGWindow,EntryCounter);
-  MissileXgc.CurWindow =EntryCounter;
+  /** Default value is without Pixmap **/
+  Cdrawable = (Drawable) CWindow;
+  CinfoW = infowidget;
+  CurWindow =WinNum;
+  /* Rajoute la fenetre dans la liste et le contexte graphique de la fenetre devient le contexte
+     graphique courant */
+  AddNewWindowToList_(CWindow,CBGWindow,Cdrawable,CinfoW,WinNum);
   if (EntryCounter == 0)
     {
       /* GC Set: for drawing */
@@ -1356,13 +2034,44 @@ initgraphic_(string)
       gcvalues.line_width = 1;
       gc = XCreateGC(dpy, CWindow, GCFunction | GCForeground 
 		     | GCBackground | GCLineWidth, &gcvalues);
-      InitMissileXgc();
       XSetErrorHandler(X_error_handler);
       XSetIOErrorHandler((XIOErrorHandler) X_error_handler);
    } 
+  InitMissileXgc(PI0,PI0,PI0,PI0);
+  EntryCounter=Max(EntryCounter,WinNum);
   EntryCounter++;
   XSync(dpy,0);
   return(0);
+}
+
+/* ecrit un message dans le label du widget CinfoW */
+
+xinfo_(message,v2,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4)
+     char *message;
+     integer *v2,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
+{
+  Arg args[1];
+  if ( CinfoW != (Widget) NULL)
+    {
+      Cardinal n = 0;
+      XtSetArg(args[n], XtNlabel, message);n++;
+      XtSetValues(CinfoW, args, n);
+    }
+}
+
+/* meme chose mais appel r'eduit pou appel a partir de C */
+
+wininfo(message)
+     char *message;
+{
+  Arg args[1];
+  if ( CinfoW != (Widget) NULL)
+    {
+      Cardinal n = 0;
+      XtSetArg(args[n], XtNlabel, message);n++;
+      XtSetValues(CinfoW, args, n);
+    }
 }
 
 
@@ -1375,7 +2084,7 @@ Atom		NewGraphWindowMessageAtom;
 
 SendScilab(local,winnum)
      Window local;
-     int winnum;
+     integer winnum;
 {
     XClientMessageEvent ev;
     ev.type = ClientMessage;
@@ -1394,6 +2103,7 @@ SendScilab(local,winnum)
 #define DbugInfo0(x) /* fprintf(stderr,x) */
 #define DbugInfo1(x,y)  /* fprintf(stderr,x,y) */
 #define DbugInfo3(x,y,z,t)  /* fprintf(stderr,x,y,z,t) */
+static int CheckWin();
 
 Window Window_With_Name( top, name,j,ResList0,ResList1,ResList2)
      Window top;
@@ -1403,7 +2113,7 @@ Window Window_With_Name( top, name,j,ResList0,ResList1,ResList2)
   Status status;
   Window *children,root1,parent1,w=0;
   unsigned int nchildren=0;
-  int i; 
+  integer i; 
   char *window_name;
   if ( CheckWin(top)==0) return((Window) 0);
   status=XQueryTree(dpy, top, &root1, &parent1, &children, &nchildren);
@@ -1464,7 +2174,7 @@ Window Find_X_Scilab()
 #define STR0 "ScilabGraphic%d"
 
 Window Find_ScilabGraphic_Window(i)
-     int i;
+     integer i;
 {
   Window w;
   char wname[sizeof(STR0)+4];
@@ -1478,7 +2188,7 @@ Window Find_ScilabGraphic_Window(i)
 #define STR1 "BG%d"
 
 Window Find_BG_Window(i)
-     int i;
+     integer i;
 {
   char wname[sizeof(STR1)+4];
   Window w;
@@ -1495,7 +2205,7 @@ Window Find_BG_Window(i)
    */
 #include <setjmp.h>
 
-static int val;
+static integer val;
 static jmp_buf my_env;
 
 Ignore_Err(d, err_ev)
@@ -1504,7 +2214,7 @@ Ignore_Err(d, err_ev)
 {DbugInfo0("Ignoring Error");
  longjmp(my_env,1);}
 
-int 
+static int 
 CheckWin(w)
      Window w;
 {
@@ -1532,26 +2242,104 @@ CheckWin(w)
   \encadre{Initialisation of the graphic context. Used also 
   to come back to the default graphic state}
 ---------------------------------------------------------*/
-
-InitMissileXgc ()
-{ int i,j,k[2] ;
-  MissileXgc.IDWhitePattern = GREYNUMBER-1;
-  MissileXgc.CurLineWidth=0 ;
+static int
+InitMissileXgc (v1,v2,v3,v4)
+     integer *v1,*v2,*v3,*v4;
+{ 
+  integer i,j;
+  ScilabXgc->IDWhitePattern = GREYNUMBER-1;
+  ScilabXgc->CurLineWidth=0 ;
   i=1;
-  setthickness_(&i);
-  setalufunction1_((i=3,&i));
+  setthickness_(&i,PI0,PI0,PI0);
+  setalufunction1_((i=3,&i),PI0,PI0,PI0);
   /** retirer le clipping **/
   i=j= -1;
-  k[0]=5000,k[1]=5000;
-  setclip_(&i,&j,k,k+1);
-  MissileXgc.ClipRegionSet= 0;
-  setdash_((i=0,&i));
-  xsetfont_((i=2,&i),(j=1,&j));
-  xsetmark_((i=0,&i),(j=0,&j));
+  unsetclip_(PI0,PI0,PI0,PI0);
+  ScilabXgc->ClipRegionSet= 0;
+  xsetfont_((i=2,&i),(j=1,&j),PI0,PI0);
+  xsetmark_((i=0,&i),(j=0,&j),PI0,PI0);
+  ScilabXgc->CurPixmapStatus =0 ;
+  setpixmapOn_((i=0,&i),PI0,PI0,PI0);
   /** trac\'e absolu **/
-  MissileXgc.CurVectorStyle = CoordModeOrigin ;
-  setpattern_((i=0,&i));
-  strcpy(MissileXgc.CurNumberDispFormat,"%-5.2g");
+  i= CoordModeOrigin ;
+  setabsourel_(&i,PI0,PI0,PI0);
+  /* initialisation des pattern dash par defaut en n&b */
+  ScilabXgc->CurColorStatus =0;
+  setpattern_((i=0,&i),PI0,PI0,PI0);
+  setdash_((i=0,&i),PI0,PI0,PI0);
+  /* initialisation de la couleur par defaut */ 
+  ScilabXgc->CurColorStatus = 1 ;
+  setpattern_((i=0,&i),PI0,PI0,PI0);
+  /* Choix du mode par defaut (decide dans initgraphic_ */
+  usecolor_((i=screencolor,&i) ,PI0,PI0,PI0);
+  strcpy(ScilabXgc->CurNumberDispFormat,"%-5.2g");
+}
+
+/* renvoit le screencolor courant */
+
+getcolordef(screenc)
+     integer * screenc;
+{
+  *screenc= screencolor;
+}
+
+
+/* Utilise le ScilabXgc courant pour reinitialiser le gc XWindow */
+/* cela est utilis'e quand on change de fenetre graphique        */
+
+static int
+ResetScilabXgc ()
+{ 
+  integer i,j;
+  i= ScilabXgc->FontId;
+  j= ScilabXgc->FontSize;
+  xsetfont_(&i,&j,PI0,PI0);
+  
+  i= ScilabXgc->CurHardSymb;
+  j= ScilabXgc->CurHardSymbSize;
+  xsetmark_(&i,&j,PI0,PI0);
+  
+  i= ScilabXgc->CurLineWidth;
+  setthickness_(&i,PI0,PI0,PI0);
+  
+  i= ScilabXgc->CurVectorStyle;
+  setabsourel_(&i,PI0,PI0,PI0);
+  
+  i= ScilabXgc->CurDrawFunction;
+  setalufunction1_(&i,PI0,PI0,PI0);
+  
+  if (ScilabXgc->ClipRegionSet == 1) 
+    setclip_( &(ScilabXgc->CurClipRegion[0]),
+	     &(ScilabXgc->CurClipRegion[1]),
+	     &(ScilabXgc->CurClipRegion[2]),
+	     &(ScilabXgc->CurClipRegion[3]));
+  else
+    unsetclip_(PI0,PI0,PI0,PI0);
+
+  if (ScilabXgc->CurColorStatus == 0) 
+    {
+      /* remise des couleurs a vide */
+      ScilabXgc->CurColorStatus = 1;
+      setpattern_((i=0,&i),PI0,PI0,PI0);
+      /* passage en n&b */
+      ScilabXgc->CurColorStatus = 0;
+      i= ScilabXgc->CurPattern;
+      setpattern_(&i,PI0,PI0,PI0);
+      i= ScilabXgc->CurDashStyle;
+      setdash_(&i,PI0,PI0,PI0);
+    }
+  else 
+    {
+      /* remise a zero des patterns et dash */
+      /* remise des couleurs a vide */
+      ScilabXgc->CurColorStatus = 0;
+      setpattern_((i=0,&i),PI0,PI0,PI0);
+      setdash_((i=0,&i),PI0,PI0,PI0);
+      /* passage en couleur  */
+      ScilabXgc->CurColorStatus = 1;
+      i= ScilabXgc->CurColor;
+      setpattern_(&i,PI0,PI0,PI0);
+    }
 }
 
 /*------------------------------------------------------
@@ -1575,11 +2363,12 @@ InitMissileXgc ()
   
 -------------------------------------------------------------*/
 
-drawaxis_(str,alpha,nsteps,size,initpoint)
+drawaxis_(str,alpha,nsteps,v2,initpoint,v6,v7,size,dx2,dx3,dx4)
+     double *dx2,*dx3,*dx4;
      char str[];
-     int *alpha,*nsteps,*initpoint;
+     integer *alpha,*nsteps,*initpoint,*v2,*v6,*v7;
      double *size;
-{ int i;
+{ integer i;
   double xi,yi,xf,yf;
   double cosal,sinal;
   cosal= cos( (double)M_PI * (*alpha)/180.0);
@@ -1589,19 +2378,19 @@ drawaxis_(str,alpha,nsteps,size,initpoint)
       yi = initpoint[1]+i*size[0]*sinal;
       xf = xi - ( size[1]*sinal);
       yf = yi + ( size[1]*cosal);
-      XDrawLine(dpy,CWindow,gc,nint(xi),nint(yi),nint(xf),nint(yf));
+      XDrawLine(dpy,Cdrawable,gc,inint(xi),inint(yi),inint(xf),inint(yf));
     }
   for (i=0; i <= nsteps[1]; i++)
     { xi = initpoint[0]+i*nsteps[0]*size[0]*cosal;
       yi = initpoint[1]+i*nsteps[0]*size[0]*sinal;
       xf = xi - ( size[1]*size[2]*sinal);
       yf = yi + ( size[1]*size[2]*cosal);
-      XDrawLine(dpy,CWindow,gc,nint(xi),nint(yi),nint(xf),nint(yf));
+      XDrawLine(dpy,Cdrawable,gc,inint(xi),inint(yi),inint(xf),inint(yf));
     }
   xi = initpoint[0]; yi= initpoint[1];
   xf = initpoint[0]+ nsteps[0]*nsteps[1]*size[0]*cosal;
   yf = initpoint[1]+ nsteps[0]*nsteps[1]*size[0]*sinal;
-  XDrawLine(dpy,CWindow,gc,nint(xi),nint(yi),nint(xf),nint(yf));
+  XDrawLine(dpy,Cdrawable,gc,inint(xi),inint(yi),inint(xf),inint(yf));
   XFlush(dpy);
 }
 
@@ -1611,28 +2400,29 @@ drawaxis_(str,alpha,nsteps,size,initpoint)
   add a box around the string, only if slope =0}
 -----------------------------------------------------*/
 
-displaynumbers_(str,x,y,z,alpha,n,flag)     
+displaynumbers_(str,x,y,v1,v2,n,flag,z,alpha,dx3,dx4)
+     double *dx3,*dx4;
      char str[];
-     int x[],y[],*n,*flag;
+     integer x[],y[],*n,*flag,*v1,*v2;
      double z[],alpha[];
-{ int i ;
+{ integer i ;
   char buf[20];
   for (i=0 ; i< *n ; i++)
-    { sprintf(buf,MissileXgc.CurNumberDispFormat,z[i]);
-      displaystring_(buf,&(x[i]),&(y[i]),&(alpha[i]),flag) ;
+    { sprintf(buf,ScilabXgc->CurNumberDispFormat,z[i]);
+      displaystring_(buf,&(x[i]),&(y[i]),PI0,flag,PI0,PI0,&(alpha[i]),PD0,PD0,PD0) ;
     }
   XFlush(dpy);
 }
 
 bitmap_(string,w,h)
      char string[];
-     int w,h;
+     integer w,h;
 {
   static XImage *setimage;
   setimage = XCreateImage (dpy, XDefaultVisual (dpy, DefaultScreen(dpy)),
 			       1, XYBitmap, 0, string,w,h, 8, 0);	
   setimage->data = string;
-  XPutImage (dpy, CWindow, gc, setimage, 0, 0, 10,10,w,h);
+  XPutImage (dpy, Cdrawable, gc, setimage, 0, 0, 10,10,w,h);
   XDestroyImage(setimage);
 }
 /*---------------------------------------------------------------------
@@ -1658,7 +2448,7 @@ static XFontStruct *FontsList_[FONTNUMBER][FONTMAXSIZE];
 */
 
 
-struct FontInfo { int ok;
+struct FontInfo { integer ok;
 		  char fname[100];
 		} FontInfoTab_[FONTNUMBER];
 
@@ -1672,15 +2462,6 @@ typedef  struct  {
   char *name;
   }  FontAlias;
 
-FontAlias fonttab_o[] ={
-  "CourR", "-adobe-courier-medium-r-normal--%s-*-75-75-m-*-iso8859-1",
-  "Symb", "-adobe-symbol-medium-r-normal--%s-*-75-75-p-*-adobe-fontspecific",
-  "TimR", "-adobe-times-medium-r-normal--%s-*-75-75-p-*-iso8859-1",
-  "TimI", "-adobe-times-medium-i-normal--%s-*-75-75-p-*-iso8859-1",
-  "TimB", "-adobe-times-bold-r-normal--%s-*-75-75-p-*-iso8859-1",
-  "TimBI", "-adobe-times-bold-i-normal--%s-*-75-75-p-*-iso8859-1",
-  (char *) NULL,( char *) NULL};
-
 /** ce qui suit marche sur 75dpi ou 100dpi **/
 
 FontAlias fonttab[] ={
@@ -1693,27 +2474,28 @@ FontAlias fonttab[] ={
   (char *) NULL,( char *) NULL};
 
 
-int xsetfont_(fontid,fontsize)
-     int *fontid , *fontsize ;
-{ int i,fsiz;
+int xsetfont_(fontid,fontsize,v3,v4)
+     integer *fontid , *fontsize ,*v3,*v4;
+{ 
+  integer i,fsiz;
   i = Min(FONTNUMBER-1,Max(*fontid,0));
   fsiz = Min(FONTMAXSIZE-1,Max(*fontsize,0));
   if ( FontInfoTab_[i].ok !=1 )
     { 
       if (i != 6 )
 	{
-	  loadfamily_(fonttab[i].alias,&i);
+	  loadfamily_(fonttab[i].alias,&i,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
 	}
       else 
 	{
-	  SciF1d(" The Font Id %d is not affected \r\n",i);
+	  sciprint(" The Font Id %d is not affected \r\n",(int)i);
 	  Scistring(" use xlfont to set it \n");
 	  return;
 	}
     }
-  MissileXgc.FontId = i;
-  MissileXgc.FontSize = fsiz;
-  MissileXgc.FontXID=FontsList_[i][fsiz]->fid;
+  ScilabXgc->FontId = i;
+  ScilabXgc->FontSize = fsiz;
+  ScilabXgc->FontXID=FontsList_[i][fsiz]->fid;
   XSetFont(dpy,gc,FontsList_[i][fsiz]->fid);
   XFlush(dpy);
 }
@@ -1721,41 +2503,40 @@ int xsetfont_(fontid,fontsize)
 /** To get the  id and size of the current font **/
 
 int xgetfont_(verbose,font,nargs)
-     int *verbose,*font,*nargs;
+     integer *verbose,*font,*nargs;
 {
   *nargs=2;
-  font[0]= MissileXgc.FontId ;
-  font[1] =MissileXgc.FontSize ;
+  font[0]= ScilabXgc->FontId ;
+  font[1] =ScilabXgc->FontSize ;
   if (*verbose == 1) 
     {
-      SciF1d("\nFontId : %d ",	      MissileXgc.FontId );
-      SciF2s("--> %s at size %s pts\r\n",
-	     FontInfoTab_[MissileXgc.FontId].fname,
-	     size_[MissileXgc.FontSize]);
+      sciprint("\nFontId : %d ", ScilabXgc->FontId );
+      sciprint("--> %s at size %s pts\r\n",
+	     FontInfoTab_[ScilabXgc->FontId].fname,
+	     size_[ScilabXgc->FontSize]);
     }
 }
 
 /** To set the current mark **/
-xsetmark_(number,size)
-     int *number ;
-     int *size   ;
+xsetmark_(number,size,v3,v4)
+     integer *number,*size ,*v3,*v4;
 { 
-  MissileXgc.CurHardSymb = Max(Min(SYMBOLNUMBER-1,*number),0);
-  MissileXgc.CurHardSymbSize = Max(Min(FONTMAXSIZE-1,*size),0);
+  ScilabXgc->CurHardSymb = Max(Min(SYMBOLNUMBER-1,*number),0);
+  ScilabXgc->CurHardSymbSize = Max(Min(FONTMAXSIZE-1,*size),0);
   ;}
 
 /** To get the current mark id **/
 
 xgetmark_(verbose,symb,narg)
-     int *verbose,*symb,*narg;
+     integer *verbose,*symb,*narg;
 {
   *narg =2 ;
-  symb[0] = MissileXgc.CurHardSymb ;
-  symb[1] = MissileXgc.CurHardSymbSize ;
+  symb[0] = ScilabXgc->CurHardSymb ;
+  symb[1] = ScilabXgc->CurHardSymbSize ;
   if (*verbose == 1) 
     {
-      SciF1d("\nMark : %d ",MissileXgc.CurHardSymb);
-      SciF1s("at size %s pts\r\n", size_[MissileXgc.CurHardSymbSize]);
+      sciprint("\nMark : %d ",ScilabXgc->CurHardSymb);
+      sciprint("at size %s pts\r\n", size_[ScilabXgc->CurHardSymbSize]);
     }
 }
 
@@ -1771,10 +2552,11 @@ xgetmark_(verbose,symb,narg)
   to X11 
 **/
 
-loadfamily_(name,j)
+loadfamily_(name,j,v3,v4,v5,v6,v7,dv1,dv2,dv3,dv4)
      char *name;
-     int *j;
-{ int i,flag=1 ;
+     integer *j,*v3,*v4,*v5,*v6,*v7;
+     double *dv1,*dv2,*dv3,*dv4;
+{ integer i,flag=1 ;
   /** generic name with % **/
   if ( strchr(name,'%') != (char *) NULL)
     {
@@ -1803,12 +2585,12 @@ loadfamily_(name,j)
 	  if  (FontsList_[*j][i]== NULL)
 	    { 
 	      flag=0;
-	      SciF1s("\n Unknown font : %s",name1);
+	      sciprint("\n Unknown font : %s",name1);
 	      Scistring("\n I'll use font: fixed ");
 	      FontsList_[*j][i]=XLoadQueryFont(dpy,"fixed");
 	      if  (FontsList_[*j][i]== NULL)
 		{
-		  SciF1s("\n Unknown font : %s\r\n","fixed");
+		  sciprint("\n Unknown font : %s\r\n","fixed");
 		  Scistring("Please call an X Wizard !");
 		}
 	    }
@@ -1825,9 +2607,10 @@ static char *size_n_[] = { "8" ,"10","12","14","18","24"};
 
 loadfamily_n_(name,j)
      char *name;
-     int *j;
-{ char name1[200];
-  int i,flag=1 ;
+     integer *j;
+{ 
+  char name1[200];
+  integer i,flag=1 ;
   for ( i = 0; i < FONTMAXSIZE ; i++)
     {
       sprintf(name1,name,size_n_[i]);
@@ -1835,12 +2618,12 @@ loadfamily_n_(name,j)
       if  (FontsList_[*j][i]== NULL)
 	{ 
 	  flag=0;
-	  SciF1s("\n Unknown font : %s",name1);
+	  sciprint("\n Unknown font : %s",name1);
 	  Scistring("\n I'll use font: fixed ");
 	  FontsList_[*j][i]=XLoadQueryFont(dpy,"fixed");
 	  if  (FontsList_[*j][i]== NULL)
 	    {
-	      SciF1s("\n Unknown font : %s\r\n","fixed");
+	      sciprint("\n Unknown font : %s\r\n","fixed");
 	      Scistring("  Please call an X Wizard !");
 	    }
 	}
@@ -1853,17 +2636,18 @@ loadfamily_n_(name,j)
 }
 
 
+static int
 LoadFonts()
 {
-  int fnum;
-  loadfamily_("CourR",(fnum=0,&fnum)); 
+  integer fnum;
+  loadfamily_("CourR",(fnum=0,&fnum),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0); 
   LoadSymbFonts();
-  loadfamily_("TimR",(fnum=2,&fnum));
+  loadfamily_("TimR",(fnum=2,&fnum),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
 /*  On charge ces fonts a la demande et non pas a l'initialisation 
     sinon le temps de calcul est trop long
-  loadfamily_("TimI",(fnum=3,&fnum));
-  loadfamily_("TimB",(fnum=4,&fnum));
-  loadfamily_("TimBI",(fnum=5,&fnum)); 
+  loadfamily_("TimI",(fnum=3,&fnum),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+  loadfamily_("TimB",(fnum=4,&fnum),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
+  loadfamily_("TimBI",(fnum=5,&fnum),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0); 
   See xsetfont
 */
 }
@@ -1871,8 +2655,8 @@ LoadFonts()
 /** We use the Symbol font  for mark plotting **/
 /** so we want to be able to center a Symbol character at a specified point **/
 
-typedef  struct { int xoffset[SYMBOLNUMBER];
-		  int yoffset[SYMBOLNUMBER];} Offset ;
+typedef  struct { integer xoffset[SYMBOLNUMBER];
+		  integer yoffset[SYMBOLNUMBER];} Offset ;
 
 static Offset ListOffset_[FONTMAXSIZE];
 static char Marks[] = {
@@ -1880,11 +2664,14 @@ static char Marks[] = {
   (char)0x2e,(char)0x2b,(char)0xb4,(char)0xc5,(char)0xa8,
   (char)0xe0,(char)0x44,(char)0xd1,(char)0xa7,(char)0x4f};
 
+static int 
 LoadSymbFonts()
-{ XCharStruct xcs;
-  int i,j,k ;
+{ 
+  XCharStruct xcs;
+  integer j,k ;
+  integer i;
   /** Symbol Font is loaded under Id : 1 **/
-  loadfamily_("Symb",(i=1,&i));
+  loadfamily_("Symb",(i=1,&i),PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0);
 
   /* We compute the char offset for several chars of the symbol font
      in order to be able to center them on a specific point 
@@ -1916,21 +2703,21 @@ LoadSymbFonts()
 
 int CurSymbXOffset_()
 {
-  return(-(ListOffset_[MissileXgc.CurHardSymbSize].xoffset)
-	 [MissileXgc.CurHardSymb]);
+  return(-(ListOffset_[ScilabXgc->CurHardSymbSize].xoffset)
+	 [ScilabXgc->CurHardSymb]);
 }
 int CurSymbYOffset_()
 {
-  return((ListOffset_[MissileXgc.CurHardSymbSize].yoffset)
-	 [MissileXgc.CurHardSymb]);
+  return((ListOffset_[ScilabXgc->CurHardSymbSize].yoffset)
+	 [ScilabXgc->CurHardSymb]);
 }
 
 DrawMark_(x,y)
-     int *x,*y ;
+     integer *x,*y ;
 { 
   char str[1];
-  str[0]=Marks[MissileXgc.CurHardSymb];
-  XDrawString(dpy,CWindow,gc,*x+CurSymbXOffset_(),*y+CurSymbYOffset_(),str,1);
+  str[0]=Marks[ScilabXgc->CurHardSymb];
+  XDrawString(dpy,Cdrawable,gc,(int) *x+CurSymbXOffset_(),(int)*y+CurSymbYOffset_(),str,1);
   XFlush(dpy);
 }
 
@@ -1943,17 +2730,29 @@ static unsigned nbpoints;
 #define NBPOINTS 256 
 
 int store_points_(n, vx, vy,onemore)
-     int n,onemore;
-     int vx[], vy[];
+     integer n,onemore;
+     integer vx[], vy[];
 { 
-  int i,n1;
+  integer i,n1;
   if ( onemore == 1) n1=n+1;
   else n1=n;
   if (ReallocVector_(n1) == 1)
     {
       for (i = 0; i < n; i++){
-	points[i].x =(short) *vx++;
-	points[i].y =(short) *vy++;
+#ifdef DEBUG
+	if ( Abs(vx[i]) > int16max )
+	  {
+	    fprintf(stderr,"Warning store_point oustide of 16bits x=%d\n",
+		    (int) vx[i]);
+	  }
+	if ( Abs(vy[i]) > int16max )
+	  {
+	    fprintf(stderr,"Warning store_point oustide of 16bits x=%d\n",
+		    (int) vy[i]);
+	  }
+#endif
+	points[i].x =(short) vx[i];
+	points[i].y =(short) vy[i];
       }
       if (onemore == 1) {
 	points[n].x=(short) points[0].x;
@@ -1965,11 +2764,11 @@ int store_points_(n, vx, vy,onemore)
 }
 
 int ReallocVector_(n)
-     int n  ;
+     integer n  ;
 {
   while (n > nbpoints){
     nbpoints = 2 * nbpoints ;
-    points = (XPoint *) realloc ((char *)points,
+    points = (XPoint *) REALLOC(points,(unsigned)
 				 nbpoints * sizeof (XPoint));
     if (points == 0) 
       { perror(MESSAGE5);
@@ -1982,169 +2781,39 @@ int ReallocVector_(n)
 int AllocVectorStorage_()
 {
   nbpoints = NBPOINTS;
-  points = (XPoint *) malloc (nbpoints * sizeof (XPoint)); 
+  points = (XPoint *) MALLOC( nbpoints * sizeof (XPoint)); 
   if ( points == 0) { perror(MESSAGE4);return(0);}
   else return(1);
 }
 
 XPoint *ReturnPoints_() { return(points); }
 
-/*------------------------END--------------------*/
-
-static int xleft,xright,ybot,ytop;
+/**  Clipping functions **/
 
 /* My own clipping routines  
   XDrawlines with clipping on the current graphic window 
   to ovoid trouble on some X servers **/
 
-int analyze_points_(n, vx, vy,onemore)
-     int n,onemore;
-     int vx[], vy[];
-{ 
-  int iib,iif,ideb=0,verbose=0,wd[2],narg,vxl[2],vyl[2];
-  getwindowdim_(&verbose,wd,&narg);
-  xleft=0;xright=wd[0]; ybot=0;ytop=wd[1];
-#ifdef DEBUG
-    xleft=100;xright=300;
-    ybot=100;ytop=300;
-    XDrawRectangle(dpy, CWindow, gc,xleft,ybot,(unsigned)xright-xleft,
-    (unsigned)ytop-ybot);
-#endif
-  while (1) 
-    { int j;
-      iib=first_in(n,ideb,vx,vy);
-      if (iib == -1) { 
-#ifdef DEBUG
-	SciF2d("[%d,end=%d] polyline out\r\n",ideb,n);
-	/* all points are out but segments can cross the box */
-#endif 
-	for (j=ideb+1; j < n; j++) My2draw(j,vx,vy);
-	break;}
-      iif=first_out(n,iib,vx,vy);
-      if (iif == -1) {
-#ifdef DEBUG
-	SciF2d("[%d,end=%d] is in\r\n",iib,n);
-#endif 
-	MyDraw(iib,n-1,vx,vy);
-	break;
-      }
-#ifdef DEBUG
-      SciF2d("Analysed : [%d,%d]\r\n",iib,iif);
-#endif 
-      MyDraw(iib,iif,vx,vy);
-      ideb=iif;
-    }
-  if (onemore == 1) {
-    vxl[0]=vx[n-1];vxl[1]=vx[0];vyl[0]=vy[n-1];vyl[1]=vy[0];
-    analyze_points_(2,vxl,vyl,0);
-  }
-}
-
-MyDraw(iib,iif,vx,vy)
-     int iib,iif,vx[],vy[];
-{
-  int x1n,y1n,x11n,y11n,x2n,y2n,flag2,flag1;
-  int npts;
-  npts= ( iib > 0) ? iif-iib+2  : iif-iib+1;
-  if ( iib > 0) 
-    {
-      clip_line(vx[iib-1],vy[iib-1],vx[iib],vy[iib],&x1n,&y1n,&x2n,&y2n,&flag1);
-    }
-  clip_line(vx[iif-1],vy[iif-1],vx[iif],vy[iif],&x11n,&y11n,&x2n,&y2n,&flag2);
-  if (store_points_(npts, &vx[Max(0,iib-1)], &vy[Max(0,iib-1)],0));
-  {
-    if (iib > 0 && (flag1==1||flag1==3)) change_points(0,x1n,y1n);
-    if (flag2==2 || flag2==3) change_points(npts-1,x2n,y2n);
-    XDrawLines (dpy, CWindow, gc, ReturnPoints_(),npts,
-		MissileXgc.CurVectorStyle);
-  }
-}
-
-My2draw(j,vx,vy)
-     int j,vx[],vy[];
-{
-  /** The segment is out but can cross the box **/
-  int vxn[2],vyn[2],flag,npts=2;
-  clip_line(vx[j-1],vy[j-1],vx[j],vy[j],&vxn[0],&vyn[0],&vxn[1],&vyn[1],&flag);
-  if (flag == 3 && store_points_(npts,vxn,vyn,0))
-  {
-    XDrawLines (dpy, CWindow, gc, ReturnPoints_(),npts,
-		MissileXgc.CurVectorStyle);
-  }
-}
-
-change_points(i,x,y)
-     int i,x,y;
-{
-  points[i].x=(short)x;   points[i].y=(short)y;
-}
-
-/* 
- *  returns the first (vx[.],vy[.]) point inside 
- *  xleft,xright,ybot,ytop bbox. begining at index ideb
- *  or zero if the whole polyline is out 
- */
-
-int first_in(n,ideb,vx,vy)
-     int n,ideb;
-     int vx[], vy[];
-{
-  int i;
-  for (i=ideb  ; i < n ; i++)
-    {
-      if (vx[i]>= xleft && vx[i] <= xright  && vy[i] >= ybot && vy[i] <= ytop)
-	{
-#ifdef DEBUG
-	  SciF4d("first in %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
-#endif
-	  return(i);
-	}
-    }
-  return(-1);
-}
-
-/* 
- *  returns the first (vx[.],vy[.]) point outside
- *  xleft,xright,ybot,ytop bbox.
- *  or zero if the whole polyline is out 
- */
-
-int first_out(n,ideb,vx,vy)
-     int n,ideb;
-     int vx[], vy[];
-{
-  int i;
-  for (i=ideb  ; i < n ; i++)
-    {
-      if ( vx[i]< xleft || vx[i]> xright  || vy[i] < ybot || vy[i] > ytop) 
-	{
-#ifdef DEBUG
-	  SciF4d("first out %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
-#endif
-	  return(i);
-	}
-    }
-  return(-1);
-}
+static integer xleft,xright,ybot,ytop;
 
 /* Test a single point to be within the xleft,xright,ybot,ytop bbox.
  * Sets the returned integers 4 l.s.b. as follows:
  * bit 0 if to the left of xleft.
  * bit 1 if to the right of xright.
- * bit 2 if above of ytop.
- * bit 3 if below of ybot.
+ * bit 2 if below of ybot.
+ * bit 3 if above of ytop.
  * 0 is returned if inside.
  */
+
 static int clip_point(x, y)
-int x, y;
+integer x, y;
 {
-    int ret_val = 0;
+    integer ret_val = 0;
 
     if (x < xleft) ret_val |= (char)0x01;
-    if (x > xright) ret_val |= (char)0x02;
+    else if (x > xright) ret_val |= (char)0x02;
     if (y < ybot) ret_val |= (char)0x04;
-    if (y > ytop) ret_val |= (char)0x08;
-
+    else if (y > ytop) ret_val |= (char)0x08;
     return ret_val;
 }
 
@@ -2158,10 +2827,21 @@ int x, y;
 	4  : segment in 
  */
 
-int clip_line(x1, yy1, x2, y2, x1n, yy1n, x2n, y2n, flag)
-     int x1, yy1, x2, y2, *flag, *x1n, *yy1n, *x2n, *y2n;
+
+int set_clip_box(xxleft,xxright,yybot,yytop)
+     integer xxleft,xxright,yybot,yytop;
 {
-    int x, y, dx, dy, x_intr[2], y_intr[2], count, pos1, pos2;
+  xleft=xxleft;
+  xright=xxright;
+  ybot=yybot;
+  ytop=yytop;
+}
+
+int
+clip_line(x1, yy1, x2, y2, x1n, yy1n, x2n, y2n, flag)
+     integer x1, yy1, x2, y2, *flag, *x1n, *yy1n, *x2n, *y2n;
+{
+    integer x, y, dx, dy, x_intr[2], y_intr[2], count, pos1, pos2;
     *x1n=x1;*yy1n=yy1;*x2n=x2;*y2n=y2;*flag=4;
     pos1 = clip_point(x1, yy1);
     pos2 = clip_point(x2, y2);
@@ -2216,9 +2896,9 @@ int clip_line(x1, yy1, x2, y2, x1n, yy1n, x2n, y2n, flag)
 		*x2n = x_intr[1];
 		*y2n = y_intr[1];
 		*flag=3;return;
-	    }
+	      }
 	    else if (pos1) {       /* Only x1/yy1 was out - update only it */
-		if (dx * (x2 - x_intr[0]) + dy * (y2 - y_intr[0]) > 0) {
+		if (dx * (x2 - x_intr[0]) + dy * (y2 - y_intr[0]) >= 0) {
 		    *x1n = x_intr[0];
 		    *yy1n = y_intr[0];
 		    *flag=1;return;
@@ -2230,7 +2910,7 @@ int clip_line(x1, yy1, x2, y2, x1n, yy1n, x2n, y2n, flag)
 		}
 	    }
 	    else {	         /* Only x2/y2 was out - update only it */
-		if (dx * (x_intr[0] - x1) + dy * (y_intr[0] - x1) > 0) {
+		if (dx * (x_intr[0] - x1) + dy * (y_intr[0] - yy1) >= 0) {
 		    *x2n = x_intr[0];
 		    *y2n = y_intr[0];
 		    *flag=2;return;
@@ -2242,9 +2922,183 @@ int clip_line(x1, yy1, x2, y2, x1n, yy1n, x2n, y2n, flag)
 		}
 	      }
 	  }
+	else 
+	  {
+	    /* count != 0 */
+	    *flag=0;return;
+	  }
       }
   }
 
+static void change_points(i,x,y)
+     integer i,x,y;
+{
+  points[i].x=(short)x;   points[i].y=(short)y;
+}
+
+
+static integer MyDraw(iib,iif,vx,vy)
+     integer iib,iif,vx[],vy[];
+{
+  integer x1n,y1n,x11n,y11n,x2n,y2n,flag2=0,flag1=0;
+  integer npts;
+  npts= ( iib > 0) ? iif-iib+2  : iif-iib+1;
+  if ( iib > 0) 
+    {
+      clip_line(vx[iib-1],vy[iib-1],vx[iib],vy[iib],&x1n,&y1n,&x2n,&y2n,&flag1);
+    }
+  clip_line(vx[iif-1],vy[iif-1],vx[iif],vy[iif],&x11n,&y11n,&x2n,&y2n,&flag2);
+  if (store_points_(npts, &vx[Max(0,iib-1)], &vy[Max(0,iib-1)],0L));
+  {
+    if (iib > 0 && (flag1==1||flag1==3)) change_points(0L,x1n,y1n);
+    if (flag2==2 || flag2==3) change_points(npts-1,x2n,y2n);
+    XDrawLines (dpy, Cdrawable, gc, ReturnPoints_(),(int) npts,
+		ScilabXgc->CurVectorStyle);
+  }
+}
+
+
+static integer My2draw(j,vx,vy)
+     integer j,vx[],vy[];
+{
+  /** The segment is out but can cross the box **/
+  integer vxn[2],vyn[2],flag;
+  long npts=2;
+  clip_line(vx[j-1],vy[j-1],vx[j],vy[j],&vxn[0],&vyn[0],&vxn[1],&vyn[1],&flag);
+  if (flag == 3 && store_points_(npts,vxn,vyn,0L))
+  {
+#ifdef DEBUG
+	  sciprint("segment out mais intersecte en (%d,%d),(%d,%d)\r\n",
+		   vxn[0],vyn[0],vxn[1],vyn[1]);
+#endif 
+    XDrawLines (dpy, Cdrawable, gc, ReturnPoints_(),(int)npts,
+		ScilabXgc->CurVectorStyle);
+  }
+}
+
+
+/* 
+ *  returns the first (vx[.],vy[.]) point inside 
+ *  xleft,xright,ybot,ytop bbox. begining at index ideb
+ *  or zero if the whole polyline is out 
+ */
+
+static integer first_in(n,ideb,vx,vy)
+     integer n,ideb;
+     integer vx[], vy[];
+{
+  integer i;
+  for (i=ideb  ; i < n ; i++)
+    {
+      if (vx[i]>= xleft && vx[i] <= xright  && vy[i] >= ybot && vy[i] <= ytop)
+	{
+#ifdef DEBUG
+	  sciprint("first in %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
+#endif
+	  return(i);
+	}
+    }
+  return(-1);
+}
+
+/* 
+ *  returns the first (vx[.],vy[.]) point outside
+ *  xleft,xright,ybot,ytop bbox.
+ *  or zero if the whole polyline is out 
+ */
+
+static integer first_out(n,ideb,vx,vy)
+     integer n,ideb;
+     integer vx[], vy[];
+{
+  integer i;
+  for (i=ideb  ; i < n ; i++)
+    {
+      if ( vx[i]< xleft || vx[i]> xright  || vy[i] < ybot || vy[i] > ytop) 
+	{
+#ifdef DEBUG
+	  sciprint("first out %d->%d=(%d,%d)\r\n",ideb,i,vx[i],vy[i]);
+#endif
+	  return(i);
+	}
+    }
+  return(-1);
+}
+
+
+int analyze_points_(n, vx, vy,onemore)
+     integer n,onemore;
+     integer vx[], vy[];
+{ 
+  integer iib,iif,ideb=0,vxl[2],vyl[2];
+  integer verbose=0,wd[2],narg;
+  getwindowdim_(&verbose,wd,&narg);
+  xleft=0;xright=wd[0]; ybot=0;ytop=wd[1];
+#ifdef DEBUG1
+    xleft=100;xright=300;
+    ybot=100;ytop=300;
+    XDrawRectangle(dpy, Cdrawable, gc,xleft,ybot,(unsigned)xright-xleft,
+    (unsigned)ytop-ybot);
+#endif
+#ifdef DEBUG 
+  sciprint("inside analyze\r\n");
+#endif
+  while (1) 
+    { integer j;
+      iib=first_in(n,ideb,vx,vy);
+      if (iib == -1) 
+	{ 
+#ifdef DEBUG
+	  sciprint("[%d,end=%d] polyline out\r\n",(int)ideb,(int)n);
+	  /* all points are out but segments can cross the box */
+#endif 
+	  for (j=ideb+1; j < n; j++) My2draw(j,vx,vy);
+	  break;
+	}
+      else 
+      if ( iib - ideb > 1) 
+	{
+	  /* un partie du polygine est totalement out de ideb a iib -1 */
+	  /* mais peu couper la zone */
+	  for (j=ideb+1; j < iib; j++) My2draw(j,vx,vy);
+	};
+      iif=first_out(n,iib,vx,vy);
+      if (iif == -1) {
+	/* special case the polyligne is totaly inside */
+	if (iib == 0) 
+	  {
+	    if (store_points_(n,vx,vy,onemore));
+	    {
+	      XDrawLines (dpy, Cdrawable, gc, ReturnPoints_(),(int) n,
+			  ScilabXgc->CurVectorStyle);
+	      return;
+	    }	    
+	  }
+	else 
+	  MyDraw(iib,n-1,vx,vy);
+	break;
+      }
+#ifdef DEBUG
+      sciprint("Analysed : [%d,%d]\r\n",(int)iib,(int)iif);
+#endif 
+      MyDraw(iib,iif,vx,vy);
+      ideb=iif;
+    }
+  if (onemore == 1) {
+    /* The polyligne is closed we consider the closing segment */
+    integer x1n,y1n,x2n,y2n,flag1=0;
+    vxl[0]=vx[n-1];vxl[1]=vx[0];vyl[0]=vy[n-1];vyl[1]=vy[0];
+    clip_line(vxl[0],vyl[0],vxl[1],vyl[1],&x1n,&y1n,&x2n,&y2n,&flag1);
+    if ( flag1==0) return ;
+    if ( store_points_(2L,vxl,vyl,0L))
+      {
+	if (flag1==1||flag1==3) change_points(0L,x1n,y1n);
+	if (flag1==2||flag1==3) change_points(1L,x2n,y2n);
+	XDrawLines (dpy, Cdrawable, gc, ReturnPoints_(),2,
+		    ScilabXgc->CurVectorStyle);	
+      }
+  }
+}
 
 
 

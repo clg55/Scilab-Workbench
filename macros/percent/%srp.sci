@@ -3,7 +3,7 @@ function [f]=%srp(m,p)
 //!
 if prod(size(p)) <> 1 then f=m*invr(p),return,end
 [l,c]=size(m)
-f=simp(list('r',m,p*ones(l,c),[]))
+f=simp(tlist('r',m,p*ones(l,c),[]))
 
 
 

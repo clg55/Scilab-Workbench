@@ -31,9 +31,13 @@ c     dcopy (blas)
 c     abs (fortran)
 c!
       double precision a(na,n),b(*),w(*),rcond,dt(2)
-      integer adr
+      integer sadr
 c
-      k1=1+adr(n,1)
+c     
+c      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      k1=1+sadr(n)
       ierr=0
       if(job.lt.0) goto 20
 c factorisation lu

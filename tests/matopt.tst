@@ -5,15 +5,18 @@ if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 [f,x,g]=optim('genros',x0,'gc','in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 //
-// DIVIDE BY ZERO
-// [F,X,G]=OPTIM('GENROS',X0,'ND','IN');F-1+NORM(X-XOPT)
+
+[f,x,g]=optim('genros',x0,'nd','in');
+if abs(f-1+norm(x-xopt) ) > Leps then pause,end
+
 [f,x,g]=optim('genros',x0,'qn',1,'in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 [f,x,g]=optim('genros',x0,'gc',1,50,'in');
 if abs(f-1+norm(x-xopt) ) > Leps then pause,end
 //
-// DIVIDE BY ZERO
-// [F,X,G]=OPTIM('GENROS',X0,'ND',1,50,'IN');F-1+NORM(X-XOPT)
+[f,x,g]=optim('genros',x0,'nd',1,50,'in');
+if abs(f-1+norm(x-xopt) ) > Leps then pause,end
+
 [f,x1,g]  =optim('genros',x0,   'ar',100,6,'in');
 [f,x,g,to]=optim('genros',x0,   'ar',100,3,'in');
 [f,x,g,to]=optim('genros',x ,to,'ar',100,3,'in');
@@ -74,8 +77,9 @@ comp(rose);
 //[f,x,g]=optim(rose,x0,tr,'ar',50);if abs(f+norm(x-xopt)) > Leps then pause,end
 [f,x,g]=optim(rose,x0,'gc','ar',50);if abs(f+norm(x-xopt)) > Leps then pause,end
 //
-// DIVIDE BY ZERO
-// [F,X,G]=OPTIM(ROSE,X0,'ND','AR',25);F+NORM(X-XOPT)
+[f,x,g]=optim(rose,x0,'nd','ar',50);
+if abs(f+norm(x-xopt)) > Leps then pause,end
+
 [f,x,g]=optim(rose,'b',bi,bs,x0,'qn','ar',25);
 if abs(f+norm(x-xopt)) > Leps then pause,end
 [f,x,g]=optim(rose,'b',bi,bs,x0,'gc','ar',50);
@@ -109,3 +113,21 @@ comp(sipn);
 [f,x,g]=optim(list(sipn,sip2,ne,nc,cpen),...
               'b',bi,bs,[1 1],'ar',20,20,1.e-15);
 if norm(x-[0.5 0.5]) + norm(g) > 0.1 then pause,end
+//********************************************************************
+deff('[f,g,ind]=ndsim(x,ind)', 'y=a*x-b;f=norm(y,2)^2;g=2*a''*y')
+a=rand(2,2);b=eye(a);
+[f,x,g]=optim(ndsim,eye(2,2));
+if norm(x-inv(a))>Leps then pause,end
+
+deff('[f,g,ind]=ndsim(x,ind)', 'y=a*x-b;f=sum(abs(y));g=a''*sign(y)')
+a=rand(2,2);b=[1;0];ai=inv(a);
+[f,x,g]=optim(ndsim,[1;0],'nd');
+if norm(x-ai(:,1))>Leps then pause,end
+
+//deff('[f,g,ind]=ndsim(x,ind)', [
+//'y=a*x-b;f=max(abs(y)),sel=abs(y)==f'
+//'g=a(sel,:)''*sign(y(sel))'])
+//a=rand(2,2);b=[1;0];ai=inv(a);
+//[f,x,g]=optim(ndsim,[1;0],'nd');
+//if norm(x-ai(:,1))>Leps then pause,end
+

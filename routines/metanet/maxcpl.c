@@ -1,6 +1,7 @@
-#include "../machine.h"
+#include <string.h>
+#include <malloc.h>
 
-#define NULL 0
+#include "../machine.h"
 
 void C2F(maxcpl)(c,ex,la2,lp2,ma,mm,n,or,x,z)
 int *ex,*la2,*lp2,*ma,*mm,*n,*or,*x;

@@ -3,7 +3,7 @@ c ================================== ( Inria    ) =============
 c       equations de lyapounov,sylvester et riccati
 c ====================================================================
       include '../stack.h'
-      integer adr
+      integer iadr,sadr
 c
       double precision eps,rcond
       integer cont,disc
@@ -11,6 +11,10 @@ c
 c
 c    fin    1       2       3
 c         lyap    sylv     ricc
+c
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
 c
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
@@ -20,7 +24,19 @@ c
       eps=stk(leps)
       lz=lstk(top+1)
 c
-      ilcd=adr(lstk(top),0)
+      if(fin.eq.1) then
+         if(rhs.ne.3) then
+            call error(39)
+            return
+         endif
+      endif
+      if(fin.eq.2.or.fin.eq.3) then
+         if(rhs.ne.4) then
+            call error(39)
+            return
+         endif
+      endif
+      ilcd=iadr(lstk(top))
       if(istk(ilcd).ne.10) then
          err=rhs
          call error(55)
@@ -35,7 +51,7 @@ c
 c
 c     second membre
       top=top-1
-      ic=adr(lstk(top),0)
+      ic=iadr(lstk(top))
       if(istk(ic).ne.1) then
          err=rhs-1
          call error(53)
@@ -49,17 +65,13 @@ c     second membre
       mc=istk(ic+1)
       nc=istk(ic+2)
       nnc=nc*mc
-      lc=adr(ic+4,1)
+      lc=sadr(ic+4)
       top=top-1
 c
       err=0
       goto(10,20,30) fin
 c lyapounov
   10  continue
-      if(rhs.ne.3) then
-         call error(42)
-         return
-      endif
 c
       if(mc.ne.nc) then
          err=2
@@ -68,7 +80,7 @@ c
       endif
 c
 c    dynamique
-      ia=adr(lstk(top),0)
+      ia=iadr(lstk(top))
       if(istk(ia).ne.1) then
          err=1
          call error(53)
@@ -82,7 +94,7 @@ c    dynamique
       ma=istk(ia+1)
       na=istk(ia+2)
       nna=na*ma
-      la=adr(ia+4,1)
+      la=sadr(ia+4)
       if(ma.ne.na) then
          call error(20)
          return
@@ -113,13 +125,8 @@ c
   20  continue
 c    sylvester a*x+x*b=c
 c
-      if(rhs.ne.4) then
-         call error(42)
-         return
-      endif
-c
 c    matrice b
-      ib=adr(lstk(top),0)
+      ib=iadr(lstk(top))
       if(istk(ib).ne.1) then
          err=2
          call error(53)
@@ -138,11 +145,11 @@ c    matrice b
          return
       endif
       nnb=nb*mb
-      lb=adr(ib+4,1)
+      lb=sadr(ib+4)
 c
 c       matrice a
       top=top-1
-      ia=adr(lstk(top),0)
+      ia=iadr(lstk(top))
       if(istk(ia).ne.1) then
          err=1
          call error(53)
@@ -162,7 +169,7 @@ c       matrice a
       endif
       nna=ma*na
       ita=istk(ia+3)
-      la=adr(ia+4,1)
+      la=sadr(ia+4)
 c
       if(na.ne.mc.or.nc.ne.mb) then
          call error(60)
@@ -216,15 +223,11 @@ c
 c    riccati
 c
   30  continue
-      if(rhs.ne.4) then
-         call error(42)
-         return
-      endif
 c
 c    a'*x+x*a-x*b*x+c=0
 c
 c         matrice b
-      ib=adr(lstk(top),0)
+      ib=iadr(lstk(top))
       if(istk(ib).ne.1) then
          err=2
          call error(53)
@@ -243,10 +246,10 @@ c         matrice b
          return
       endif
       nnb=mb*nb
-      lb=adr(ib+4,1)
+      lb=sadr(ib+4)
 c
       top=top-1
-      ia=adr(lstk(top),0)
+      ia=iadr(lstk(top))
       if(istk(ia).ne.1) then
          err=1
          call error(53)
@@ -266,7 +269,7 @@ c
       endif
       nna=na*ma
       nn=na+na
-      la =adr(ia+4,1)
+      la =sadr(ia+4)
 c
       if(ma.ne.mb) then
          call error(42)

@@ -1,3 +1,4 @@
+
 /* This file is part of xdir, an X-based directory browser.
  *
  *	Created: 13 Aug 88
@@ -49,6 +50,8 @@
 #include <sys/dir.h>
 #endif
 
+#include <malloc.h>
+
 /* Static variables */
 
 DeclareStaticArgs(10);
@@ -73,8 +76,9 @@ extern Widget	exp_selfile, file_selfile, exp_dir, file_dir, exp_flist,
 
 /* Functions */
 
-void		DoChangeDir(),
-		SetDir(),
+void		DoChangeDir();
+
+void		SetDir(),
 		Rescan(),
 		CallbackRescan();
 
@@ -101,8 +105,9 @@ FileSelected(w, client_data, ret_val)
 	/* I don't know why this doesn't work? */
 	/* NextArg(XtNinsertPosition, strlen(CurrentSelectionName));*/
 	SetValues(file_selfile);
-	XawTextSetInsertionPoint(file_selfile, strlen(CurrentSelectionName));
+	XawTextSetInsertionPoint(file_selfile, (XawTextPosition) strlen(CurrentSelectionName));
 }
+
 
 /* Function:	DirSelected() is called when the user selects a directory.
  *
@@ -178,11 +183,12 @@ SetDir(widget, event, params, num_params)
     DoChangeDir(cur_dir);
 }
 
+
 /* make the full path from ~/partialpath */
 parseuserpath(path,longpath)
 char *path,*longpath;
 {
-    char	  *home,*p;
+    char *p;
     struct passwd *who;
 
     /* this user's home */
@@ -377,7 +383,7 @@ create_dirinfo(parent, below, ret_beside, ret_below,
     NextArg(XtNheight, 25);
     w = XtCreateManagedWidget("rescan", commandWidgetClass, parent,
 			      Args, ArgCount);
-    XtAddCallback(w, XtNcallback, CallbackRescan, NULL);
+    XtAddCallback(w, XtNcallback, CallbackRescan, (XtPointer) NULL);
 
     /* install accelerators so they can be used from each window */
     XtInstallAccelerators(*flist_w, parent);
@@ -402,9 +408,9 @@ SPComp(s1, s2)
 }
 
 Boolean
-MakeFileList(dir_name, mask, dir_list, file_list)
+MakeFileList(dir_name, mask, dir_list1, file_list1)
     char	   *dir_name;
-    char	   *mask, ***dir_list, ***file_list;
+    char	   *mask, ***dir_list1, ***file_list1;
 {
     DIR		   *dirp;
     DIRSTRUCT	  *dp;
@@ -420,10 +426,10 @@ MakeFileList(dir_name, mask, dir_list, file_list)
     dirp = opendir(dir_name);
     if (dirp == NULL) {
 	reset_wf_cursor();
-	*file_list = filelist;
-	*file_list[0]="";
-	*dir_list = dirlist;
-	*dir_list[0]="..";
+	*file_list1 = filelist;
+	*file_list1[0]="";
+	*dir_list1 = dirlist;
+	*dir_list1[0]="..";
 	return False;
     }
     /* process any events to ensure cursor is set to wait_wf_cursor */
@@ -471,8 +477,8 @@ MakeFileList(dir_name, mask, dir_list, file_list)
 	qsort((char *)filelist, cur_file - filelist, sizeof(char *), (int(*)())SPComp);
     if (cur_directory != dirlist)
 	qsort((char *)dirlist, cur_directory - dirlist, sizeof(char *), (int(*)())SPComp);
-    *file_list = filelist;
-    *dir_list = dirlist;
+    *file_list1 = filelist;
+    *dir_list1 = dirlist;
     reset_wf_cursor();
     closedir(dirp);
     return True;
@@ -497,26 +503,21 @@ ParentDir(w, event, params, num_params)
 /* Function:	DoChangeDir() actually changes the directory and changes
  *		the list widget values to the new listing.
  * Arguments:	dir:	Pathname of new directory.
- * Returns:	Nothing.
+ * Returns:	void
  * Notes:
  *	NULL for dir means to rebuild the file list for the current directory
  *	(as in an update to the directory or change in filename filter).
  */
 
-void
+void 
 DoChangeDir(dir)
     char	   *dir;
 {
-    char	  **file_list;
-    char	  **dir_list;
     char	   *p;
-    Arg		    args[10];
-    Cardinal	    arg_cnt;
     char	    ndir[PATH_MAX], tmpdir[PATH_MAX];
-
-    
     strcpy(ndir, cur_dir);
-    if (dir != NULL && dir[0] != '/') { /* relative path, prepend current dir */
+    if (dir != NULL && dir[0] != '/') 
+      { /* relative path, prepend current dir */
 	if (dir[strlen(dir) - 1] == '/')
 	    dir[strlen(dir) - 1] = '\0';
 	if (!strcmp(dir, "..")) {	/* Parent directory. */
@@ -532,14 +533,19 @@ DoChangeDir(dir)
 		strcat(ndir, "/");
 	    strcat(ndir, dir);
 	}
-    }
+      }
+    else 
+      {
+	/* absolute path */
+	if ( dir != NULL) strcpy(ndir,dir);
+      }
     strcpy(tmpdir, cur_dir);
     strcpy(cur_dir, ndir);
     if (change_directory(cur_dir) != 0 ) {
 	file_msg("Can't change to directory %s", cur_dir);
 	strcpy(cur_dir, tmpdir);
-    } else if (MakeFileList(ndir, dirmask, &dirlist, &filelist) == False) {
-	file_msg("Unable to list directory %s", ndir);
+    } else if (MakeFileList(cur_dir, dirmask, &dirlist, &filelist) == False) {
+	file_msg("Unable to list directory %s", cur_dir);
 	strcpy(cur_dir, tmpdir);
     }
 
@@ -548,7 +554,7 @@ DoChangeDir(dir)
     /* NextArg(XtNinsertPosition, strlen(cur_dir));*/
     /* update the current directory and file/dir list widgets */
     SetValues(file_dir);
-    XawTextSetInsertionPoint(file_dir, strlen(cur_dir));
+    XawTextSetInsertionPoint(file_dir,(XawTextPosition) strlen(cur_dir));
     NewList(file_flist,filelist);
     NewList(file_dlist,dirlist);
     CurrentSelectionName[0] = '\0';

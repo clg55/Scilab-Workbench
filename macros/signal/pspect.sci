@@ -1,4 +1,4 @@
-//<sm,cwp>=pspect(sec_step,sec_leng,wtype,x,y,wpar)
+function [sm,cwp]=pspect(sec_step,sec_leng,wtype,x,y,wpar)
 //<sm,cwp>=pspect(sec_step,sec_leng,wtype,x,y,wpar)
 //Cross-spectral estimate between x and y if both are given
 //and auto-spectral estimate of x otherwise.

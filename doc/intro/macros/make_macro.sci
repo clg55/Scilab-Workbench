@@ -1,4 +1,4 @@
-function [newmacro]=makemacro(p)
+function [newfunction]=makefunction(p)
    n=size(p);
    num=mulf(makestr(p(1)),'1');
    for k=2:n,
@@ -6,7 +6,7 @@ function [newmacro]=makemacro(p)
       num=addf(num,new);
    end,
    text='p='+num;
-   deff('<p>=newmacro(t)',text),
+   deff('<p>=newfunction(t)',text),
 
 
 function [str]=makestr(p)

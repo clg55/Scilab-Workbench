@@ -6,12 +6,14 @@
 #include "metio.h"
 #include "libCom.h"
 
+extern void UnhiliteAll();
+
 void ShowPath(p,sup)
 char *p;
 int sup;
 {
   arc *a;
-  int ia,j;
+  int ia;
   char *s;
 
   if (menuId == BEGIN) {
@@ -19,17 +21,19 @@ int sup;
     MetanetAlert(Description);
     return;
   }
-  if (!sup) ReDrawGraph(theGraph);
+  if (!sup) UnhiliteAll();
   s = strtok(p,STRINGSEP);
   while(s != NULL) {
     sscanf(s,"%d",&ia);
-    a = GetArc(EdgeToArcNumber(ia,theGraph),theGraph);
+    a = GetArc(ia,theGraph);
     if (a == 0) {
       sprintf(Description,"%d is not an internal arc number",ia);
       MetanetAlert(Description);
       return;
     }
-    if (!a->hilited) HiliteArc(a);
+    if (!a->hilited) {
+      HiliteArc(a);
+    }
     s = strtok(NULL,STRINGSEP);
   }
 }
@@ -39,7 +43,7 @@ char *ns;
 int sup;
 {
   node *n;
-  int in,j;
+  int in;
   char *s;
 
   if (menuId == BEGIN) {
@@ -47,7 +51,7 @@ int sup;
     MetanetAlert(Description);
     return;
   }
-   if (!sup) ReDrawGraph(theGraph);
+  if (!sup) UnhiliteAll();
   s = strtok(ns,STRINGSEP);
   while(s != NULL) {
     sscanf(s,"%d",&in);
@@ -57,7 +61,9 @@ int sup;
       MetanetAlert(Description);
       return;
     }
-    if (!n->hilited) HiliteNode(n);
+    if (!n->hilited) {
+      HiliteNode(n);
+    }
     s = strtok(NULL,STRINGSEP);
   }
 }

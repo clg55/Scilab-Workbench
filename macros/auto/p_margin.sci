@@ -1,5 +1,7 @@
 function [phm,fr]=p_margin(h)
-if type(h)<>15 then error(97,1),end
+
+//-compat type(h)<>15 retained for list/tlist compatibility
+if type(h)<>15&type(h)<>16 then error(97,1),end
 select h(1)
  case 'r' then ,
  case 'lss' then h=ss2tf(h)

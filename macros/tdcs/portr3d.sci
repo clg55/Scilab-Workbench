@@ -1,41 +1,7 @@
-//[]=portr3d(fch,odem,xdim,npts,pinit)
+function []=portr3d(fch,odem,xdim,npts,pinit)
 //[]=portr3d(f,odem,[xdim,npts,pinit])
-//
-// permet de tracer le portrait de phase du syst\`eme dynamique
-// dx/dt=f(t,x,[u]) ( u est un param\`etre contant )
-// dans le cadre xdim=[xmin,xmax,ymin,ymax,zmin,zmax]
-// Arguments:
-//    f : le  champ du syst\`eme dynamique
-//       est soit un nom de macro qui calcule la valeur du champ en un point x
-//	     [y]=f(t,x,[u])
-//       soit un object de type liste list(f1,u1) ou f1 est une macro de type
-//        [y]=f1(t,x,u) et u1 est la valeur que l'on veut donner a u
-//       soit une chaine de caract\`ere si le champ de vecteur
-//       est donne par un programme fortran (voir  ode)
-//
-// Dans la forme d'appel par d\'efaut : portrait(fch) les valeurs
-// du cadre  et les pas d'int\'egration sont demand\'es interactivement.
-//
-// Param\`etres optionnels :
-//
-// odem= is the type argument of ode it can be one
-//       of the following character strings
-//                'default' 
-//                'adams'
-//                'stiff'
-//                'rgk'
-//                'discrete'
-//                'roots'
-// npts=[nombre-de-points,pas] ->  sert \`a donner le nombre de points et
-//          le pas pour l'int\'egration num\'erique.
-//
-// xdim=[xmin,xmax,ymin,ymax,zmin,zmax]  -> sert \`a donner le cadre du dessin
-//
-// enfin on peut donner les points de d\'epart des int\'egrations num\'eriques
-// dans un vecteur : ils ne seront alors pas demand\'ees interactivement
-// pinit -> sert \`a donner des points de d\'epart pour l'int\'egration
-//          ex: pinit = [x0(1), x1(1); x0(2), x1(2);x0(3), x1(3)].
-//!
+if ~isdef('p3d_xdim');p3d_xdim=['0';'1';'0';'1';'0';'1'];end
+if ~isdef('p3d_npts');p3d_npts=['100';'0.1'];end
 ncnl=lines();
 lines(0);
 xselect();
@@ -44,10 +10,11 @@ xselect();
 if rhs<=1,odem='default';end
 //Version interactive
 if rhs <= 2,
-  xdim=x_mdialog('Graphic boundaries',...
+  rep=x_mdialog('Graphic boundaries',...
             ['xmin';'xmax';'ymin';'ymax';'zmin';'zmax'],...
-            ['0';'1';'0';'1';'0';'1']);
-  xdim=evstr(xdim);xdim=xdim';
+	    p3d_xdim);
+  if rep<>[] ;p3d_xdim=rep;end
+  xdim=evstr(p3d_xdim);xdim=xdim';
   // Test sur le cadre
   if xdim(2) <= xdim(1),
   write(%io(2),'Erreur:  xmin < xmax '),lines(ncnl(1));return,end
@@ -57,12 +24,17 @@ if rhs <= 2,
   write(%io(2),'Erreur:  zmin < zmax '),lines(ncnl(1));return,end
 end
 if rhs<=3,
-  npts=x_mdialog('Requested points and step ',...
+
+  rep=x_mdialog('Requested points and step ',...
             ['n points';'step'],...
-            ['100';'0.1']);
-  npts=evstr(npts);npts=npts';
+            p3d_npts);
+  if rep<>[] then p3d_npts=rep;end
+  npts=evstr(p3d_npts);npts=npts';
 end
+if isdef('p3d_ylast') then ylast=p3d_ylast;
+else
 ylast=(1/2)*[xdim(2)+xdim(1),xdim(4)+xdim(3),xdim(6)+xdim(5)]';
+end
 if rhs<=4
 // Boucle sur les points de depart
   go_on=1
@@ -71,12 +43,15 @@ if rhs<=4
        while ftest=1,
 	  n=x_choose(['New initial point';'Continue ode';'Quit'],"Choose ");
 	  n=n-1;
-          if n=-1,go_on=0;lines(ncnl(1));return;end
-          if n=2,go_on=0;lines(ncnl(1));return;end
-          if n=0;x0=x_mdialog(['Initial value inside the boundaries ';...
+          if n=-1,go_on=0;lines(ncnl(1));
+		[p3d_xdim,p3d_npts]=resume(p3d_xdim,p3d_npts);return;end
+          if n=2,go_on=0;lines(ncnl(1));
+		[p3d_xdim,p3d_npts]=resume(p3d_xdim,p3d_npts);return;end
+          if n=0;x0=[string(ylast(1));string(ylast(2));string(ylast(3))];
+		rep=x_mdialog(['Initial value inside the boundaries ';...
                                '['+ strcat(string(xdim)," ")+']'],...
-                              ['x0';'y0';'z0'],...
-                     [string(ylast(1));string(ylast(2));string(ylast(3))]);
+                              ['x0';'y0';'z0'],x0);
+		     if rep<>[] then x0=rep;end
                      x0=evstr(x0);end
           if n=1,x0=ylast;end
           ftest=desorb3d(odem,x0,npts,fch,xdim);
@@ -89,10 +64,11 @@ res=desorb3d(odem,pinit,npts,fch,xdim);
 if res=1,write(%io(2),'Points hors du cadre elimines ');end;
 end
 lines(ncnl(1));
-//end
+[p3d_xdim,p3d_npts]=resume(p3d_xdim,p3d_npts);
 
 
-//[res]=desorb3d(odem,x0,n1,fch,xdim);
+
+function [res]=desorb3d(odem,x0,n1,fch,xdim);
 //[res]=desorb3d(odem,x0,n1,fch,xdim);
 // Calcule des orbites pour des points de
 // depart donn\'es dans x0 et les dessine
@@ -149,6 +125,6 @@ for i=1:n2,
     end
 end
 [ylast]=resume(ylast)
-//end
+
 
 

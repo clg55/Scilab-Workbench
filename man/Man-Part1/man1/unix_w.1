@@ -14,15 +14,14 @@ cmd
 rep
 : a column vector of character strings
 .SH DESCRIPTION
-sends a string \fVcmd\fR to Unix for execution by the sh
-shell. , the standard output  is redirected  to scilab window
-unix execution errors are trapped.
+Sends a string \fVcmd\fR to Unix for execution by the sh shell. The standard 
+output is redirected to scilab window.
+Unix execution errors are trapped; *NOTE* that only the last shell command
+error is reported when a list of command separated by ";" is sent: this is
+not recommanded.
 .SH EXAMPLE
 .nf
 unix_w("ls $SCI/demos");
-deff('wd=pwd()','wd=unix_w(''pwd'')')
-wd=pwd()
 .fi
 .SH SEE ALSO
-edit, manedit, unix_s, unix_x, unix
-
+edit, manedit, unix_g, unix_s, unix_x, unix

@@ -33,7 +33,8 @@ To construct a diagonal linear system, use \fVsysdiag\fR.
 Note that \fVeye(A).*A\fR returns a diagonal matrix made with the
 diagonal entries of \fVA\fR. This is valid for any matrix (constant,
 polynomial, rational, state-space linear system,...).
-.SH EXAMPLE
+
+For example
 .nf
 diag(-m:m) +  diag(ones(2*m,1),1) +diag(ones(2*m,1),-1)
 .fi

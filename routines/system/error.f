@@ -8,11 +8,10 @@ c
       integer sadr
 
 c
-      character mg*9,blh*1,bel*1,line*340
-      integer errtyp,n,ll,r,eol,p
+      character mg*9,bel*1,line*340
+      integer errtyp,n,ll,r,p
       logical first
-      data mg /' !--error'/,blh/' '/,bel/' '/
-      data eol/99/
+      data mg /' !--error'/,bel/' '/
 c
       sadr(l)=(l/2)+1
 c
@@ -31,11 +30,15 @@ c     set bel to ctrl-g if possible
       errtyp=0
 c
       ll=lct(5)
+c     de-activate output control
+      lct1=lct(1)
+      lct(1)=0
+c
       lunit = wte
       m1=lpt(2)-lpt(1)
       if(m1.lt.1) m1=1
 c
-      if(imess.ne.0) goto 999
+      if((num.lt.0.or.num.eq.n).and.imess.ne.0) goto 999
 c
       if(macr.eq.0.and.rio.eq.rte) goto 1000
       call whatln(lpt(1),lpt(2),lpt(6),nlc,l1,ifin)
@@ -74,7 +77,8 @@ c
      +     200,201,202,203,204,205,206,207,208,209,
      +     210,211,212,213,214,215,216,217,218,219,
      +     220,221,222,223,224,225,226,227,228,229,
-     +     230,231,232,233,234,235,236,237,238,239),n-199
+     +     230,231,232,233,234,235,236,237,238,239,
+     +     240,241,242,243,244,245,246,247,248,249),n-199
 
       goto 998
 c
@@ -108,7 +112,7 @@ c
    13 call basout(io,lunit,'redefining permanent variable')
       go to 999
    14 call basout(io,lunit,
-     &        'eye variable  undefined in context')
+     &        'eye variable undefined in this context')
       go to 999
    15 call basout(io,lunit,'submatrix incorrectly defined')
       go to 999
@@ -116,11 +120,13 @@ c
       errtyp=1
       go to 999
    17 lb = lstk(isiz) - lstk(bot) + 1
-      lt = err + lstk(bot)
-      call basout(io,lunit,'memory size exceeded!')
-      write(buf(1:27),'(3i9)') lb,lt,lstk(isiz)
-      call basout(io,lunit,' '//buf(1:9)//' variables'//buf(10:18)//
-     &            ' intermediate ones'//buf(19:27)//' are available')
+      lt = err + lstk(bot)-lstk(1)
+      call basout(io,lunit,'stack size exceeded!'//
+     &     ' (Use stacksize function to increase it)')
+      write(buf(1:27),'(3i9)') lb,lt,lstk(isiz)-lstk(1)+1
+      call basout(io,lunit,'Memory used for variables :'//buf(1:9))
+      call basout(io,lunit,'Intermediate memory needed:'//buf(10:18))
+      call basout(io,lunit,'Total  memory available   :'//buf(19:27))
       go to 999
    18 call basout(io,lunit,'too many names!')
       go to 999
@@ -138,10 +144,7 @@ c
       go to 999
    21 call basout(io,lunit,'invalid index')
       go to 999
-   22 call basout(io,lunit,' recursion problems.Sorry....')
-c      call basout(io,lunit,'Veuillez nous transmettre le contexte '//
-c     &            'ayant genere l''erreur. Merci')
-c      errtyp=1
+   22 call basout(io,lunit,' recursion problems. Sorry....')
       go to 999
    23 call basout(io,lunit,
      &     ' 1-, 2- or infinity- norm for numerical matrix only')
@@ -160,7 +163,7 @@ c      errtyp=1
       go to 999
    27 call basout(io,lunit,'division by zero...')
       go to 999
-   28 call basout(io,lunit,'empty macro...')
+   28 call basout(io,lunit,'empty function...')
       go to 999
    29 call basout(io,lunit,'matrix is not positive definite')
       go to 999
@@ -190,7 +193,7 @@ c      errtyp=1
      +   'first argument is incorrect')
       endif
       go to 999
-   37 call basout(io,lunit,'incorrect macro ')
+   37 call basout(io,lunit,'incorrect function ')
       go to 999
    38 call basout(io,lunit,'file name incorrect')
       go to 999
@@ -224,16 +227,8 @@ c
    47 call basout(io,lunit,' end or else is missing...')
       errtyp=1
       goto 999
-   48 l1=0
-      do 481 i=1,bsiz
-      if(buf(i:i).eq.' ') goto 481
-      l1=l1+1
-      buf(l1:l1)=buf(i:i)
-  481 continue
-      call basout(io,lunit,
-     &     'cannot access this file : '//buf(1:l1))
+   48 continue
       goto 999
-c
    49 call basout(io,lunit,'incorrect file or format')
       goto 999
    50 call basout(io,lunit,'subroutine not found : '//buf(1:32))
@@ -253,10 +248,10 @@ c
    53 if(err.ne.1) then
          write(buf(1:3),'(i3)') err
          call basout(io,lunit,buf(1:3)//
-     +        'th argument type must be scalar')
+     +   'th input is invalid (waiting for real or complex matrix) ')
       else
          call basout(io,lunit,
-     +        'argument type must be  scalar')
+     +    'invalid input (waiting for real or complex matrix) ')
       endif
       goto 999
    54 if(err.ne.1) then
@@ -292,10 +287,10 @@ c
    58 continue
       if(rhs.eq.0) then
              call basout(io,lunit,
-     &       'macro has no input argument...')
+     &       'function has no input argument...')
                    else
               call basout(io,lunit,
-     &       'incorrect number of arguments in macro call...')
+     &       'incorrect number of arguments in function call...')
               call basout(io,lunit,'arguments are :')
               call prntid(istk(pstk(pt)),rhs,wte)
       endif
@@ -303,10 +298,10 @@ c
    59 continue
       if(lhs.eq.0) then
          call basout(io,lunit,
-     &        'macro has no output')
+     &        'function has no output')
       else
          call basout(io,lunit,
-     &        'incorrect # of outputs in the macro')
+     &        'incorrect # of outputs in the function')
          call basout(io,lunit,'arguments are :')
          call prntid(istk(pstk(pt)),lhs,wte)
       endif
@@ -532,7 +527,7 @@ c
  102  call cvname(ids(1,pt+1),line(1:nlgh),1)
       nl=lnblnk(line(1:nlgh))
       nb=lnblnk(buf)
-      call basout(io,lunit,'variable or macro '//line(1:nl)//
+      call basout(io,lunit,'variable or function '//line(1:nl)//
      +     ' is not in file '//buf(1:nb))
       goto 999
  103  call basout(io,lunit,' variable '//buf(1:nlgh) //
@@ -558,12 +553,12 @@ c
       goto 999
  110  call cvname(ids(1,pt+1),line(1:nlgh),1)
       nl=lnblnk(line(1:nlgh))
-      call basout(io,lunit,line(1:nl)//' was a macro when'//
+      call basout(io,lunit,line(1:nl)//' was a function when'//
      +     ' compiled but is now a primitive!')
       goto 999
  111  call cvname(ids(1,pt+1),line(1:nlgh),1)
       nl=lnblnk(line(1:nlgh))
-      call basout(io,lunit,'trying to re-define  macro '
+      call basout(io,lunit,'trying to re-define  function '
      +     //line(1:nl))
       goto 999
  112  call basout(io,lunit,
@@ -576,6 +571,13 @@ c
       call basout(io,lunit,'too many linked routines')
       goto 999
  115  continue
+      call basout(io,lunit,'Stack problem detected within a loop')
+      call basout(io,lunit,
+     $     ' a primitive function has been called with wrong number')
+      call basout(io,lunit,
+     $     ' of lhs arguments. No lhs test made for thisfunction; ')
+      call basout(io,lunit,
+     $     ' please report this bug')
       goto 999
  116  continue
       goto 999
@@ -863,7 +865,34 @@ C     errors from semidef
       goto 999
  239  continue
       goto 999
-
+ 240  continue
+      l1=lnblnk(buf)
+      call basout(io,lunit,
+     &     'File '//buf(1:l1)//' already exists or '//
+     &     'directory write access denied ')
+      goto 999
+ 241  continue
+      l1=lnblnk(buf)
+      call basout(io,lunit,
+     &     'File '//buf(1:l1)//' does not exist or '//
+     &     'read access denied ')
+      goto 999
+ 242  continue
+      goto 999
+ 243  continue
+      goto 999
+ 244  continue
+      goto 999
+ 245  continue
+      goto 999
+ 246  continue
+      goto 999
+ 247  continue
+      goto 999
+ 248  continue
+      goto 999
+ 249  continue
+      goto 999
 
 c
 c
@@ -907,13 +936,13 @@ c depilement de l'environnement
       goto(1502,1502,1504) r-500
       goto 1501
 c
-c     on depile une macro
+c     on depile une function
  1502 k=lpt(1)-(13+nsiz)
       lpt(1)=lin(k+1)
       lpt(2)=lin(k+2)
       lpt(6)=k
 c
-c     recherche du nom de la macro correspondant a ce niveau
+c     recherche du nom de la function correspondant a ce niveau
       lk=sadr(lin(k+6))
       if(lk.le.lstk(top+1)) then
          km=0
@@ -938,7 +967,7 @@ c
          endif
          write(buf(m+1:m+5),'(i4)') lct(8)-nlc
          m=m+4
-         buf(m+1:m+18)=' of macro     '
+         buf(m+1:m+18)=' of function     '
          m=m+13
          if (km.le.isiz) call cvname(idstk(1,km),buf(m+1:m+nlgh),1)
          m=m+nlgh
@@ -1010,6 +1039,9 @@ c     pause
 c
  1510 continue
       if(imess.eq.0) call basout(io,lunit,' ')
+c
+c     re-activate output control
+      lct(1)=lct1
 c
       return
       end

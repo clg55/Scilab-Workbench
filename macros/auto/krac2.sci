@@ -1,7 +1,9 @@
 function [kp,kn,rp,rn]=krac2(n,d)
 [lhs,rhs]=argn(0)
 if rhs=1 then
-   if type(n)<>15 then error(97,1),end;
+  
+  //-compat type(n)<>15 retained for list/tlist compatibility
+   if type(n)<>15&type(n)<>16 then error(97,1),end;
    select n(1)
      case 'r' then [n,d]=n(2:3)
      case 'lss' then n=ss2tf(n);[n,d]=n(2:3)

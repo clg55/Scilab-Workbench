@@ -1,5 +1,7 @@
-function [st]=statgain(sl)
-if type(sl)<>15 then error(97,1),end
+function st=statgain(sl)
+
+//-compat type(sl)<>15 retained for list/tlist compatibility
+if type(sl)<>15&type(sl)<>16 then error(97,1),end
 select sl(1)
  case 'lss'
    dom=sl(7);

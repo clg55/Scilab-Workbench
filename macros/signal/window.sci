@@ -1,5 +1,5 @@
-//<win_l,cwp>=window(wtype,n,par)
-//<win_l,cwp>=window(wtype,n,par)
+function [win_l,cwp]=window(wtype,n,par)
+//[win_l,cwp]=window(wtype,n,par)
 //macro which calculates symmetric window
 // wtype :window type (re,tr,hn,hm,kr,ch)
 // n     :window length

@@ -10,10 +10,12 @@ whereami()
 Displays calling tree to instruction which contain whereami(). May be
 uses within pause levels.
 .SH EXAMPLE
+.nf
 deff('y=test(a)',['y=sin(a)+1';
                   'y=t1(y)';
                   'y=y+1'])
 deff('y=t1(y)',['y=y^2';'whereami()'])
 test(1)
+.fi
 .SH SEE ALSO
 where, pause

@@ -1,35 +1,8 @@
+#ifndef _Xterm_h
+#define _Xterm_h
 
-/*
- *	$XConsortium: ptyx.h,v 1.60 91/06/24 20:45:02 gildea Exp $
- */
 
-/*
- * Copyright 1987 by Digital Equipment Corporation, Maynard, Massachusetts.
- *
- *                         All Rights Reserved
- *
- * Permission to use, copy, modify, and distribute this software and its
- * documentation for any purpose and without fee is hereby granted,
- * provided that the above copyright notice appear in all copies and that
- * both that copyright notice and this permission notice appear in
- * supporting documentation, and that the name of Digital Equipment
- * Corporation not be used in advertising or publicity pertaining to
- * distribution of the software without specific, written prior permission.
- *
- *
- * DIGITAL DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE, INCLUDING
- * ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL
- * DIGITAL BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES OR
- * ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
- * WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION,
- * ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS
- * SOFTWARE.
- */
-
-/* ptyx.h */
-/* @(#)ptyx.h	X10/6.6	11/10/86 */
-
-#include <X11/IntrinsicP.h>
+#include <X11/Intrinsic.h>
 #include <X11/Xmu/Misc.h>	/* For Max() and Min(). */
 
 #ifdef XtRGravity /** then I use X11R5 **/
@@ -127,12 +100,12 @@ typedef struct {
 } BitmapBits;
 
 #define	SAVELINES		64      /* default # lines to save      */
-#define SCROLLLINES 1			/* default # lines to scroll    */
+#define SCROLLLINES              1	/* default # lines to scroll    */
 
 typedef struct {
-/* These parameters apply to both windows */
-	Display		*display;	/* X display for screen		*/
-	int		respond;	/* socket for responses
+  /* These parameters apply to both windows */
+        Display		*display;	/* X display for screen		*/
+        int		respond;	/* socket for responses
 					   (position report, etc.)	*/
 	long		pid;		/* pid of process on far side   */
 	int		uid;		/* user id of actual person	*/
@@ -242,7 +215,6 @@ typedef struct {
 	int		cur_Y;		/* current y			*/
 	int		margin;		/* 0 -> margin 1, 1 -> margin 2	*/
 	int		pen;		/* current Tektronix pen 0=up, 1=dn */
-	char		*TekGIN;	/* nonzero if Tektronix GIN mode*/
 	int		multiClickTime;	 /* time between multiclick selects */
 	int		bellSuppressTime; /* msecs after Bell before another allowed */
 	Boolean		bellInProgress; /* still ringing/flashing prev bell? */
@@ -276,7 +248,7 @@ typedef struct {
 
 typedef struct
 {
-	unsigned	flags;
+  unsigned	flags;
 } TKeyboard;
 
 typedef struct _Misc {
@@ -296,13 +268,6 @@ typedef struct _Misc {
     Boolean appkeypadDefault;
 } Misc;
 
-typedef struct {int foo;} XtermClassPart;
-
-typedef struct _XtermClassRec {
-    CoreClassPart  core_class;
-    XtermClassPart xterm_class;
-} XtermClassRec;
-
 
 /* define masks for flags */
 #define CAPS_LOCK	0x01
@@ -315,16 +280,6 @@ typedef struct _XtermClassRec {
 #define TAB_ARRAY_SIZE	10	/* number of ints to provide MAX_TABS bits */
 
 typedef unsigned Tabs [TAB_ARRAY_SIZE];
-
-typedef struct _XtermWidgetRec {
-    CorePart	core;
-    TKeyboard	keyboard;	/* terminal keyboard		*/
-    TScreen	screen;		/* terminal screen		*/
-    unsigned	flags;		/* mode flags			*/
-    unsigned	initflags;	/* initial mode flags		*/
-    Tabs	tabs;		/* tabstops of the terminal	*/
-    Misc	misc;		/* miscellaneous parameters	*/
-} XtermWidgetRec, *XtermWidget;
 
 
 /*
@@ -404,3 +359,8 @@ extern int kill_process_group();
 #define bzero(b,len) memset(b, 0, (size_t)(len))
 #define bcmp(b1,b2,len) memcmp(b1, b2, (size_t)(len))
 #endif
+
+typedef struct _XtermWidgetRec *XtermWidget;
+typedef struct _XtermClassRec  *XtermWidgetClass;
+
+#endif /* _Xterm_h */

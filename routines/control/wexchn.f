@@ -44,9 +44,9 @@ c
 c
 c     internal variables.
 c
-      double precision pr,pi,qr,qi,r,sr,si,tr,ti,one,zero
+      double precision pr,pi,qr,qi,r,sr,si,tr,ti,zero
       integer i, j, l1
-      data one, zero /1.0d+0,0.0d+0/
+      data zero /0.0d+0/
       l1 = l + 1
 c
       fail = .false.

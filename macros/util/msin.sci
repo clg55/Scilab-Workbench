@@ -7,9 +7,9 @@ function x=msin(a)
 //   x   : square hermitian matrix
 //%DESCRIPTION
 //This macro is called by the function sin to compute square matrix sine
-[m,n]=size(a)
-if m<>n then error(20,1),end
-if a<>a' then error('Non hermitian matrix'),end
-[u,s]=schur(a)
-x=u*diag(sin(diag(s)))*u'
+if norm(imag(a),1)==0 then
+x=imag(exp(%i*a))
+else
+x=-0.5*%i*(exp(%i*a)-exp(-%i*a));
+end
 

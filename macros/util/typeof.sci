@@ -10,11 +10,12 @@ case 11 then tf='macro';
 case 13 then tf='macro';
 case 14 then tf='library';
 case 128 then tf='pointer';
-case 15 then
+case 15 then tf='list'
+case 16 then
     select object(1)
         case 'r' then tf='rational';
         case 'lss' then tf='state-space'
-        case 'sp' then tf='list'
-                  else tf='list';
+        case 'sp' then tf='tlist'
+                  else tf='tlist';
     end
 end

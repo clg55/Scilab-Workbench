@@ -1,5 +1,5 @@
-//<la,sig,lb>=levin(n,cov)
-//<la,sig,lb>=levin(n,cov)
+function [la,sig,lb]=levin(n,cov)
+//[la,sig,lb]=levin(n,cov)
 //macro which solves recursively on n
 //the following Toeplitz system (normal equations)
 //

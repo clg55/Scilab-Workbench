@@ -10,6 +10,15 @@ c
       il=1
       l=il+5+nc
 c     header d'une variable de type chaine
+
+      if(nc.eq.0) then 
+         istk(il)=1
+         istk(il+1)=0
+         istk(il+2)=0
+         istk(il+3)=0
+         ni=4
+         return
+      endif
       istk(il)=10
       istk(il+1)=1
       istk(il+2)=nc

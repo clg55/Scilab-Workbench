@@ -139,7 +139,7 @@ Message message;
     recherche_appli_destination = ldc_rechercher_objet(liste_applications,message.tableau[1]);
     
     if (recherche_appli_destination == NULL)
-	    Erreur_scruteur(concatener_deux_chaines("<rechercher_application> : mauvais parametres : ",message.tableau[1]));
+	    Erreur_scruteur(concatener_deux_chaines("<rechercher_application>: bad parameters: ",message.tableau[1]));
     
     longueur_trame=strlen(trame)+1;
     
@@ -211,5 +211,5 @@ long taille;
 void erreur_message_actmsg(message)
 Message message;
 {
-    Erreur_scruteur(concatener_deux_chaines("<erreur message> : Mauvais format de message : ",message.tableau[2]));
+    Erreur_scruteur(concatener_deux_chaines("<erreur message>: bad message format: ",message.tableau[2]));
 }

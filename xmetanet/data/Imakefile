@@ -1,5 +1,0 @@
-
-all::
-
-distclean::
-	$(RM) *.metanet

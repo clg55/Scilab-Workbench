@@ -1,4 +1,4 @@
-//<cout,grad,ind>=iirlp(x,ind,p,flag,lambda,omega,ad,wa,td,wt)
+function [cout,grad,ind]=iirlp(x,ind,p,flag,lambda,omega,ad,wa,td,wt)
 //
 //optimisation de filtres IIR avec critere Lp pour l'amplitude
 //                                      et/ou le retard de groupe
@@ -37,6 +37,6 @@ select flag
 cout=lambda*la+(1-lambda)*lt;
 grad=lambda*ga+(1-lambda)*gt;
 end;
-//end;
+
 
 

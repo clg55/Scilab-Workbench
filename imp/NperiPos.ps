@@ -32,10 +32,24 @@ $pictdict begin
 	x w add y h add lineto
 	x y h add lineto
 	glev WhiteLev le {closepath glev Setgray eofill}
-	{ 0 Setgray closepath stroke} ifelse 
+	% sinon on utilise le ``gris'' courant
+	{  closepath stroke} ifelse 
 } def 
 
-
+%--------------------------------------------
+% [x y width height] clearzone
+%--------------------------------------------
+/clearzone
+        {/Ar exch def
+        /x Ar 0 get def /y Ar 1 get def
+        /w Ar 2 get def /h Ar 3 get def
+        newpath
+        x y moveto
+        x w add y lineto
+        x w add y h add lineto
+        x y h add lineto
+	closepath WhiteLev Setgray eofill
+} def
 
 %------------------------------------------------------
 % trace de polygones rempli ou de polylignes 
@@ -59,9 +73,9 @@ $pictdict begin
 		%(peint avec un niveau de gris en blanc)
 	    closepath WhiteLev 2 mul 2 add glev sub Setgray 
 		  gsave eofill grestore 
-	    0 Setgray stroke}
+	    stroke}
 	   {%polygone simple eventuellement ferme
-	    0 Setgray closeflag {closepath} if stroke} 
+	    closeflag {closepath} if stroke} 
 	ifelse }
 	ifelse 
 } def 
@@ -121,7 +135,7 @@ $pictdict begin
 	sin20 dx1  mul cos20 dy1 mul sub depy add lineto 
 	cos20 neg dx1 mul sin20 dy1 mul add  depx add
 	sin20 neg dx1 mul cos20 dy1 mul sub depy add lineto closepath 
-	0 setgray fill
+	fill
 	} {} ifelse 
   } def
 
@@ -132,7 +146,7 @@ $pictdict begin
 % devrait tracer une ellipse a modifier donc 
 %------------------------------------------------------
 
-/drawarc
+/fillarc
 	{/glev exch def /Ar exch def
 	/cx Ar 0 get Ar 2 get 2 div add def 
 	/cy Ar 1 get Ar 3 get 2 div add def 
@@ -151,7 +165,23 @@ $pictdict begin
 	glev Setgray eofill}
 	{newpath
 	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
-	closepath 0 Setgray stroke} ifelse 
+	closepath  stroke} ifelse 
+	Cmsave1 setmatrix } def 
+
+/drawarc
+	{/glev exch def /Ar exch def
+	/cx Ar 0 get Ar 2 get 2 div add def 
+	/cy Ar 1 get Ar 3 get 2 div add def 
+	/hom Ar 3 get Ar 2 get div def 
+	/Cmsave1 matrix def Cmsave1 currentmatrix pop
+	%-- on change de transformation pour faire homothetie en (x,y) 
+	cx cy [1 0 0 hom 0 0 ] transform
+	/t1 exch neg cy add def 
+	/t2 exch neg cx add def 
+	[1 0 0 hom t2 t1 ] concat 
+	newpath
+	cx cy Ar 2 get 2 div Ar 5 get 64 div neg Ar 4 get 64 div neg arc
+	closepath glev Setgray stroke
 	Cmsave1 setmatrix } def 
 
 %------------------------------------------------------
@@ -268,7 +298,7 @@ $pictdict begin
 
 /CtmRestore { Cmsave setmatrix } def 
 
-/Thickness { 2 div /th exch def th 0 le {/th 0.1 def} if th setlinewidth} def 
+/Thickness { /th exch def th 0 le {/th 0.1 def} if th setlinewidth} def 
 
 /WhiteLev 15 def
 

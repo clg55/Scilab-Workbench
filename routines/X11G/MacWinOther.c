@@ -1,5 +1,5 @@
 
-#include "../machine.h"
+#include "machine.h"
 #include <QuickDraw.h>
 #include <MacTypes.h>
 #include <WindowMgr.h>
@@ -25,6 +25,7 @@
 #else
 #include <strings.h>
 #endif
+
 
 #include <stdio.h>
 #define XINIT    10	/* set default window location */
@@ -187,15 +188,15 @@ DrawContents(WindowPtr win)
     {
       WindowPtr loc;
       int verbose = 0, win1, narg;
-      	SciF1d("Tape redraw of %d\r\n",i);
+      	sciprint("Tape redraw of %d\r\n",i);
     
       C2F(dr)("xget", "window", &verbose, &win1, &narg
 	  ,(int *) 0, (int *) 0, (int *) 0, 0, 0);
       winnumber = i;
       /* fait planter */
-      /* C2F(dr)("xset","window",&i,IP0,IP0,IP0,IP0,IP0,0,0);*/
+      /* C2F(dr)("xset","window",&i,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);*/
       Tape_Replay("v", &winnumber);
-      /*C2F(dr)("xset","window",&win1,IP0,IP0,IP0,IP0,IP0,0,0);*/
+      /*C2F(dr)("xset","window",&win1,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);*/
     }
 }
 

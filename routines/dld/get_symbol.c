@@ -24,7 +24,7 @@
 /* given a symbol name, return the location of that symbol (in core) */
 unsigned long
 dld_get_symbol (name)
-char name[];
+const char name[];
 {
     register char *p;
     register unsigned long value;

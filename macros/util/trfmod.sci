@@ -1,16 +1,21 @@
-function [h]=trfmod(h,job)
+function h=trfmod(h,job)
 // hm=trfmod(h [,job])
 // To visualize the pole-zero structure of a SISO transfer function h 
 //     job='p' : visualization of polynomials (default)
 //     job='f' : visualization of natural frequencies and damping
 //
 //!
-if type(h)==15&h(1)=='r' then
+
+
+typ=type(h)
+//-compat next row added for list/tlist compatibility
+if typ==15 then typ=16,end
+if typ==16&h(1)=='r' then
   if size(h(2))<>[1 1] then
     error(' SISO plant only')
   end
   flag='r'
-elseif type(h)==15&h(1)=='lss' then
+elseif typ==16&h(1)=='lss' then
   if size(h(5))<>[1 1] then
     error('SISO plant only')
   end
@@ -27,7 +32,7 @@ elseif type(h)==15&h(1)=='lss' then
   b=t*h(3)
   al(:,i)=ai+b
   num=-(real(poly(al,'s'))-den)*ci
-  h=list('r',num,den,h(7))+h(5);
+  h=tlist('r',num,den,h(7))+h(5);
 else
   error('waiting for a transfer function as argument ')
 end

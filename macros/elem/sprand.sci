@@ -8,7 +8,7 @@ end
 if part(typ,1)<>'u'&part(typ,1)<>'n' then
   error('typ argument of sparand must be ''uniform'' or ''normal''')
 end 
-
+if m*n==0 then a=[],end
 density=maxi(mini(density,1),0)
 // compute the index of non zeros entries
 if density==0 then a=sparse([],[],[m,n]),return,end
@@ -23,6 +23,7 @@ nel1=prod(size(ij))
 if nel1<=1 then a=sparse([],[],[m,n]),return,end
 k=find(ij>m*n)
 if k<>[] then nel1=k(1)-1,end
+if nel1<=1 then a=sparse([],[],[m,n]),return,end
 ij=matrix(ij(2:nel1),nel1-1,1)
 j=int((ij-1)/m)
 i=ij-j*m

@@ -11,11 +11,11 @@ C     buf : buffer pour imprimer
 c*------------------------------------------------------------------
       include '../stack.h'
       double precision syv,s
-      integer blank,z,dot,d,e,plus,minus,name,num,sign,chcnt,eol,achar1
+      integer blank,dot,d,e,plus,minus,name,num,sign,chcnt,eol,achar1
       integer star,slash,bslash,ss,percen
       integer io
       integer namecd(nlgh)
-      data blank/40/,z/35/,dot/51/,d/13/,e/14/,eol/99/,plus/45/
+      data blank/40/,dot/51/,d/13/,e/14/,eol/99/,plus/45/
       data minus/46/,name/1/,num/0/,star/47/,slash/48/,bslash/49/
       data percen/56/
       fin=1

@@ -1,138 +1,20 @@
 #include "scilab_d.h"
-#include "../machine.h"
+  
+  extern void ShellFormCreate();
+extern void C2F(cvstr)();
+extern int ok_Flag_sci; 
+void DialogWindow();
 
-static char *str;
-static Widget toplevel;
-extern XtAppContext app_con;
-int ok_Flag_sci= 0;
-
-static void 
-DialogOk(w, client_data, call_data) 
-     Widget w;
-     XtPointer client_data, call_data;	
-{ 
-  Arg args[1];
-  Widget dialog = (Widget) client_data;
-  int ind ;
-  char *lstr;
-  XtSetArg(args[0], XtNstring, &lstr);
-  XtGetValues( dialog, args, 1);
-  str=(char *) malloc((unsigned) (strlen(lstr)+1)*(sizeof(char)));
-  if (str != 0)
-     {
-       strcpy(str,lstr);
-       ind = strlen(str) - 1 ;
-       if (str[ind] == '\n') str[ind] = '\0' ;
-     }
-  else 
-    Scistring("Malloc : No more place");
-  ok_Flag_sci= 1;
-}
-
-static XtCallbackProc 
-DialogCancel(w,client_data,callData)
-     Widget w;
-     XtPointer client_data, callData;	
-{ 
-  ok_Flag_sci = -1;
-}
-
-void 
-DialogWindow(description,valueinit,nd,nv,buttonname)
-     char * description;
-     char * valueinit;
-     char **buttonname;
-     int * nv;
-     int * nd;
-  {
-    Arg args[10];
-    int iargs = 0;
-    XFontStruct     *temp_font;
-    int width,i,height,n,ni,li,max_width;
-    Widget shell,dialog,dialogform,port,label,okbutton,wid,box;
-    static Display *dpy = (Display *) NULL;
-
-    DisplayInit("",&dpy,&toplevel);
-
-    shell = XtCreatePopupShell("dialogShell",
-			       transientShellWidgetClass,toplevel,
-			       args,iargs);
-
-    iargs = 0;
-    dialogform = XtCreateManagedWidget("dialogForm",formWidgetClass,
-				      shell,args,iargs);
-    iargs=0;
-    XtSetArg(args[iargs], XtNlabel,  description); iargs++; 
-    label=XtCreateManagedWidget("dialogLabel",labelWidgetClass,dialogform,args,
-			  iargs);
-    iargs=0;
-    XtSetArg(args[0],XtNfont, &temp_font);  iargs++;
-    XtGetValues(label, args, iargs);
-    height=Min(*nv+1,30)*(char_height(temp_font) + 2);
-    /* width of valueinit */
-    width=0 ;
-    max_width=1;
-    for (i = 0 ; i < (int)strlen(valueinit);i++)
-      {
-	width++;
-	if ( valueinit[i]=='\n' || i == strlen(valueinit)  -1)
-	  {
-	    max_width= (max_width > width ) ?  max_width : width;
-	    width=0;
-	  }
-      }
-    width=(max_width+2)*Max(char_width(temp_font),1);
-    iargs = 0;
-    XtSetArg(args[iargs], XtNheight, height);               iargs++;
-    XtSetArg(args[iargs], XtNwidth, width);   iargs++;
-    XtSetArg(args[iargs], XtNstring, valueinit);            iargs++;
-    dialog = XtCreateManagedWidget("dialogAscii",asciiTextWidgetClass,
-				       dialogform, args, iargs);
-
-    iargs=0;
-    box=XtCreateManagedWidget("dialogCommand",formWidgetClass,dialogform,args,iargs);
-    iargs = 0;
-    XtSetArg(args[iargs], XtNlabel, buttonname[0] ); iargs++;
-    okbutton=XtCreateManagedWidget("okCommand",commandWidgetClass,
-				   box,args,iargs);
-    XtAddCallback(okbutton, XtNcallback,(XtCallbackProc)DialogOk ,
-		  (XtPointer) dialog); 
-    iargs = 0;
-    XtSetArg(args[iargs], XtNlabel, buttonname[1] ); iargs++;
-    wid=XtCreateManagedWidget("cancelCommand",commandWidgetClass,
-			      box,args,iargs);
-    XtAddCallback(wid, XtNcallback,(XtCallbackProc)DialogCancel ,NULL);  
-
-    XtMyLoop(shell,dpy);
-    if (ok_Flag_sci == -1) *nv=0;
-}
-
-XtMyLoop(w,dpy)
-     Widget w;
-     Display *dpy;
-{
-  Atom	 wmDeleteWindow;
-  XEvent event;
-  ok_Flag_sci= 0;
-  /*  XtPopup(w,XtGrabExclusive);*/
-  XtPopup(w,XtGrabNone); 
-  /* On ignore les delete envoyes par le Window Manager */
-  wmDeleteWindow = XInternAtom(XtDisplay(w),"WM_DELETE_WINDOW", False);
-  XSetWMProtocols(XtDisplay(w),XtWindow(w), &wmDeleteWindow, 1);
-  for (;;) {
-    XtAppNextEvent(app_con,&event);
-    XtDispatchEvent(&event);
-    if (ok_Flag_sci != 0) break;
-  }
-  XtDestroyWidget(w);  
-  XFlush(dpy);
-  XSync(dpy,0);
-}
-
-void C2F(xdialg)(value,ptrv,nv,desc,ptrdesc,nd,btn,ptrbtn,nb,res,ptrres,nr,ierr)
+static char *str = (char *) 0;
+     static XtCallbackProc DialogOk();
+     static XtCallbackProc DialogCancel();
+     
+     
+     /* interface with scilab */
+     
+     void C2F(xdialg)(value,ptrv,nv,desc,ptrdesc,nd,btn,ptrbtn,nb,res,ptrres,nr,ierr)
      int *value,*ptrv,*nv,*desc,*ptrdesc,*nd,*btn,*nb,*ptrbtn,*res,*ptrres,*nr,*ierr;
 {
-  void C2F(cvstr)(),DialogWindow();
   int maxlines,maxchars,i;
   char  *description,*valueinit,**buttonname;
   maxlines= *nr;
@@ -145,33 +27,114 @@ void C2F(xdialg)(value,ptrv,nv,desc,ptrdesc,nd,btn,ptrbtn,nb,res,ptrres,nr,ierr)
   ScilabMStr2CM(btn,nb,ptrbtn,&buttonname,ierr);
   if ( *ierr == 1) return;
   DialogWindow(description,valueinit,nd,nv,buttonname);
-  free(description);
-  free(valueinit);
-  for (i=0 ; i < *nb ; i++ )free((char*)buttonname[i]);
-  free(buttonname);
+  FREE(description);
+  FREE(valueinit);
+  for (i=0 ; i < *nb ; i++ )FREE(buttonname[i]);
+  FREE( buttonname);
   if (*nv==0)
-      *nr=0;
+    *nr=0;
   else {
-      ScilabC2MStr2(res,nr,ptrres,str,ierr,maxchars,maxlines);
-      free(str);/** allocated in DialogOK **/
+    ScilabC2MStr2(res,nr,ptrres,str,ierr,maxchars,maxlines);
+    FREE(str);/** allocated in DialogOK **/
+  }
+}
+/* to open a dialog in a procedure */
+void xdialg1(description,valueinit,buttonname,value,ok)
+     char *description,*valueinit,**buttonname,*value;
+     int *ok;
+{
+  int nd=0,nv;
+  nv=1;
+  DialogWindow(description,valueinit,&nd,&nv,buttonname);
+  if (nv==0)
+    *ok=0;
+  else {
+    *ok=1;
+    strcpy(value,str);
+    FREE(str);/** allocated in DialogOK **/
   }
 }
 
-/* 
-   Pour forcer les taille max : ca ne marche pas a la creation 
-   si le popup est trop grand c'est donc inutile car on peut specifier 
-   ce qui suit en resources
+/* test function */
 
- */
-
-ForceMaxSize(w)
-Widget w;
+TestDialog() 
 {
-    XSizeHints	size_hints;
-    size_hints.min_width  =20;
-    size_hints.max_width = 800;
-    size_hints.min_height =50;
-    size_hints.max_height =800;
-    size_hints.flags =  PMinSize | PMaxSize;
-    XSetWMNormalHints(XtDisplay(w),XtWindow(w), &size_hints);
-  } 
+  int i=0;
+  static String description = "Dialog test";
+  static String init ="Initial\nvalue";
+  static String buttonname[] = {
+    "LabelOK",
+    "LabelCancel",
+    NULL
+    };
+  DialogWindow(description,init,&i,&i,buttonname);
+}
+
+/* The dialog command callback */
+
+static XtCallbackProc 
+  DialogOk(w, client_data, call_data) 
+Widget w;
+XtPointer client_data, call_data;	
+{ 
+  Arg args[1];
+  Cardinal iargs=0;
+  Widget dialog = (Widget) client_data;
+  char *lstr;
+  iargs=0;
+  XtSetArg(args[iargs], XtNstring, &lstr);iargs++;
+  XtGetValues( dialog, args, iargs);
+  str=(char *) MALLOC( (strlen(lstr)+1)*(sizeof(char)));
+  if (str != 0)
+    { int ind ;
+      strcpy(str,lstr);
+      ind = strlen(str) - 1 ;
+      if (str[ind] == '\n') str[ind] = '\0' ;
+    }
+  else 
+    Scistring("Malloc : No more place");
+  ok_Flag_sci= 1;
+}
+
+/* The cancel command callback */
+
+static XtCallbackProc 
+  DialogCancel(w,client_data,callData)
+Widget w;
+XtPointer client_data, callData;	
+{ 
+  ok_Flag_sci = -1;
+}
+
+void 
+  DialogWindow(description,valueinit,nd,nv,buttonname)
+char *description, *valueinit, **buttonname;
+int *nv, *nd;
+{
+  Arg args[10];
+  Cardinal iargs = 0;
+  Widget shell,dialog,dialogpanned,label,okbutton,wid,labelviewport,cform;
+  static Display *dpy = (Display *) NULL;
+  
+  ShellFormCreate("dialogShell",&shell,&dialogpanned,&dpy);
+  
+  /* Create a Viewport+Label and resize it */
+  
+  ViewpLabelCreate(dialogpanned,&label,&labelviewport,description);
+  
+  iargs=0;
+  XtSetArg(args[iargs], XtNstring ,valueinit) ; iargs++;
+  dialog = XtCreateManagedWidget("ascii",asciiTextWidgetClass,dialogpanned, args, iargs);
+  
+  iargs=0;
+  cform = XtCreateManagedWidget("cform",formWidgetClass,dialogpanned,args,iargs);
+  
+  ButtonCreate(cform,&okbutton,(XtCallbackProc)DialogOk,
+	       (XtPointer) dialog,buttonname[0],"ok");
+  ButtonCreate(cform,&wid,(XtCallbackProc)DialogCancel,
+	       (XtPointer) NULL,buttonname[1],"cancel");
+  
+  XtMyLoop(shell,dpy);
+  if (ok_Flag_sci == -1) *nv=0;
+}
+

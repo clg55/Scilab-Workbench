@@ -1,4 +1,4 @@
-//[macr]=obs_cont(sysn)
+function [macr]=obs_cont(sysn)
 //[macr]=obs_cont(sysn)
 //
 //cette macro renvoit le systeme observe-commande
@@ -27,6 +27,6 @@ deff('[zdot]=macr(t,z,abr,pas,n)',...
      'xdot='+sysn+'(t,z(1:2),u)';
      'xdot1=f*(z(3:4)-xe) +g*(u-ue)-l*(h*z(3:4)-y)';
      'zdot=[xdot;xdot1]';]);
-//end
+
 
 

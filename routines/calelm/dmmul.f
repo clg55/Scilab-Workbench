@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=DMMUL,SSI=0
       subroutine dmmul(a,na,b,nb,c,nc,l,m,n)
 c!but
 c     ce sous programme effectue le produit matriciel:

@@ -24,6 +24,9 @@ char     cur_filename[FSIZE];
 #include "wf_w_util.h"
 #include "wf_w_setup.h"
 
+#include <malloc.h>
+
+extern void Rescan();
 extern Boolean	file_msg_is_popped;
 extern Widget	file_msg_popup;
 Boolean	warnexist=True;
@@ -40,16 +43,18 @@ String		text_translations =
 DeclareStaticArgs(12);
 
 static Widget	cfile_lab, cfile_text;
-static Widget	cancel, exec,load,getf,getfc,linkf;
+static Widget	cancel,ok, exec,load,getf,getfc,linkf;
 static Widget	file_w;
 static Position xposn, yposn;
 static String	file_name_translations =
 	"<Key>Return: exec()\n";
+
 static void	file_panel_cancel();
-void		do_exec(), do_load(),do_getf(),do_getfc(),do_linkf();
+void		do_ok(),do_exec(), do_load(),do_getf(),do_getfc(),do_linkf();
 static XtActionsRec	file_name_actions[] =
 {
     {"exec", (XtActionProc) do_exec},
+    {"ok", (XtActionProc) do_ok},
 };
 static String	file_translations =
 	"<Message>WM_PROTOCOLS: DismissFile()\n";
@@ -57,6 +62,7 @@ static XtActionsRec	file_actions[] =
 {
     {"DismissFile", (XtActionProc) file_panel_cancel},
     {"cancel", (XtActionProc) file_panel_cancel},
+    {"ok", (XtActionProc) do_ok},
     {"exec", (XtActionProc) do_exec},
     {"load", (XtActionProc) do_load},
     {"linkf", (XtActionProc) do_linkf},
@@ -128,6 +134,128 @@ do_exec(w, ev)
 	}
     } else {
 	(void) exec_file("",cur_filename);
+    }
+}
+
+
+/***********************************
+ * Used with the primitive C2F(xgetfile)
+ ***********************************/
+
+int
+ok_file(dir,file)
+     char           *file;
+     char *dir;
+{
+  write_getfile(dir,file);
+  return(0);
+}
+
+ok_end()
+{
+  /* Accelerators to their default values */
+  XtOverrideTranslations(file_selfile,
+			 XtParseTranslationTable(file_name_translations));
+  XtOverrideTranslations(file_flist,
+			 XtParseTranslationTable(file_name_translations));
+  XtSetSensitive(ok,False);
+  XtSetSensitive(exec, True);
+  XtSetSensitive(load, True);
+  XtSetSensitive(getf, True);
+  XtSetSensitive(getfc, True);
+  XtSetSensitive(linkf, True);
+}
+
+static String	file_name_translations1 =
+	"<Key>Return: ok()\n";
+
+ok_prep(filemask,dirname,flag,err)
+     char *filemask;
+     char *dirname;
+     int flag,*err;
+{
+  char newdir[PATH_MAX];
+  /* Change Accelerators to ok */
+  XtOverrideTranslations(file_selfile,
+			 XtParseTranslationTable(file_name_translations1));
+  XtOverrideTranslations(file_flist,
+			 XtParseTranslationTable(file_name_translations1));
+  FirstArg(XtNstring, filemask);
+  SetValues(file_mask);
+  /** callingRescan because of file_mask change **/
+  Rescan((Widget) 0, (XEvent*) 0, (String*) 0, (Cardinal*) 0);
+  if ( flag == 1 && ((int) strlen(dirname)) >= 1 )
+    {
+      /* We also want to change dir */
+      char longdir[PATH_MAX];
+      if (dirname[0]=='~')
+	{
+	  parseuserpath(dirname,longdir);
+	  strcpy(newdir, longdir);
+	}
+      else if ( strncmp(dirname,"SCI",3) == 0) 
+	{
+	  parsescipath(dirname,longdir);
+	  strcpy(newdir, longdir);
+	}
+      else 
+	{
+	  strcpy(newdir,dirname);
+	}
+      if ( DoChangeDir(newdir) == 1) { *err=1; return;} 
+    }
+  XtSetSensitive(ok,True);
+  XtSetSensitive(exec, False);
+  XtSetSensitive(load, False);
+  XtSetSensitive(getf, False);
+  XtSetSensitive(getfc, False);
+  XtSetSensitive(linkf, False);
+}
+
+/* make the full path from SCI/partialpath */
+
+parsescipath(path,longpath)
+  char *path,*longpath;
+{
+  char *p;
+  strcpy(longpath,getenv("SCI"));
+  if (strlen(path)==3)		/* nothing after the SCI, we have the full path */
+    return;
+  strcat(longpath,&path[3]);	/* append the rest of the path */
+  return;
+}
+
+void
+do_ok(w, ev)
+    Widget	    w;
+    XButtonEvent   *ev;
+{
+    char	   *fval, *dval;
+
+    if (file_popup) {
+	FirstArg(XtNstring, &dval);
+	GetValues(file_dir);
+	FirstArg(XtNstring, &fval);
+	GetValues(file_selfile);	
+	/* check the ascii widget for a filename */
+	if (emptyname(fval))
+	  fval = cur_filename;	
+	/* "Filename" widget empty, use current filename */
+
+	if (emptyname_msg(fval, "OK"))
+	    return;
+
+	if (change_directory(dval) == 0) {
+	    if (ok_file(dval,fval) == 0) {
+		FirstArg(XtNlabel, fval);
+		SetValues(cfile_text);		/* set the current filename */
+		if (fval != cur_filename)
+			update_cur_filename(fval);	/* and update cur_filename */
+		file_panel_dismiss();
+	    }
+	}
+    } else {
+	(void) ok_file("",cur_filename);
     }
 }
 
@@ -380,10 +508,11 @@ file_panel_cancel(w, ev)
     Widget	    w;
     XButtonEvent   *ev;
 {
-    file_panel_dismiss();
+  cancel_getfile();/* for getfile.c */
+  file_panel_dismiss();
 }
 
-void Rescan();
+
 
 popup_file_panel(w)
     Widget	    w;
@@ -411,7 +540,7 @@ create_file_panel(w)
 	Widget		   w;
 {
   int ch;
-	Widget		   file, dir, beside, below;
+	Widget		   file, beside, below;
         XFontStruct     *temp_font;
 	static int	   actions_added=0;
 	file_w = w;
@@ -427,7 +556,7 @@ create_file_panel(w)
 			   XtParseTranslationTable(file_translations));
 
 	file_panel = XtCreateManagedWidget("file_panel", formWidgetClass,
-					   file_popup, NULL, ZERO);
+					   file_popup, (Arg *) NULL, (Cardinal) 0);
 
 	FirstArg(XtNlabel, " Current Filename:");
 	NextArg(XtNvertDistance, 15);
@@ -496,9 +625,24 @@ create_file_panel(w)
 				       file_panel, Args, ArgCount);
 	XtAddEventHandler(cancel, ButtonReleaseMask, (Boolean) 0,
 			  (XtEventHandler)file_panel_cancel, (XtPointer) NULL);
+        FOpAddInfoHandler(cancel,"Cancel file operation");
+
+	FirstArg(XtNlabel, "Ok");
+	NextArg(XtNsensitive, False);
+	NextArg(XtNfromHoriz, cancel);
+	NextArg(XtNfromVert, below);
+	NextArg(XtNvertDistance, 15);
+	NextArg(XtNhorizDistance, 25);
+	NextArg(XtNheight, 25);
+	NextArg(XtNborderWidth, INTERNAL_BW);
+	ok = XtCreateManagedWidget("Ok", commandWidgetClass,
+				     file_panel, Args, ArgCount);
+	XtAddEventHandler(ok, ButtonReleaseMask, (Boolean) 0,
+			  (XtEventHandler)do_ok, (XtPointer) NULL);
+        FOpAddInfoHandler(ok,"send file name to Scilab");
 
 	FirstArg(XtNlabel, "Load");
-	NextArg(XtNfromHoriz, cancel);
+	NextArg(XtNfromHoriz, ok);
 	NextArg(XtNfromVert, below);
 	NextArg(XtNvertDistance, 15);
 	NextArg(XtNhorizDistance, 25);
@@ -508,6 +652,7 @@ create_file_panel(w)
 				     file_panel, Args, ArgCount);
 	XtAddEventHandler(load, ButtonReleaseMask, (Boolean) 0,
 			  (XtEventHandler)do_load, (XtPointer) NULL);
+        FOpAddInfoHandler(load,"Load a scilab file (created by save)");
 
 	FirstArg(XtNlabel, "Getf");
 	NextArg(XtNfromHoriz, load);
@@ -520,7 +665,7 @@ create_file_panel(w)
 				     file_panel, Args, ArgCount);
 	XtAddEventHandler(getf, ButtonReleaseMask, (Boolean) 0,
 			  (XtEventHandler)do_getf, (XtPointer) NULL);
-
+        FOpAddInfoHandler(getf,"Load scilab functions");
 	FirstArg(XtNlabel, "Getfc");
 	NextArg(XtNfromHoriz, getf);
 	NextArg(XtNfromVert, below);
@@ -532,7 +677,7 @@ create_file_panel(w)
 				     file_panel, Args, ArgCount);
 	XtAddEventHandler(getfc, ButtonReleaseMask, (Boolean) 0,
 			  (XtEventHandler)do_getfc, (XtPointer) NULL);
-
+        FOpAddInfoHandler(getfc,"Load and compile scilab functions");
 	FirstArg(XtNlabel, "Link");
 	NextArg(XtNfromHoriz, getfc);
 	NextArg(XtNfromVert, below);
@@ -544,7 +689,7 @@ create_file_panel(w)
 				     file_panel, Args, ArgCount);
 	XtAddEventHandler(linkf, ButtonReleaseMask, (Boolean) 0,
 			  (XtEventHandler)do_linkf, (XtPointer) NULL);
-
+        FOpAddInfoHandler(linkf,"Dynamic link of object file");
 	FirstArg(XtNlabel, "Exec");
 	NextArg(XtNborderWidth, INTERNAL_BW);
 	NextArg(XtNfromHoriz, linkf);
@@ -556,8 +701,13 @@ create_file_panel(w)
 				     file_panel, Args, ArgCount);
 	XtAddEventHandler(exec, ButtonReleaseMask, (Boolean) 0,
 			  (XtEventHandler)do_exec, (XtPointer) NULL);
-
+        FOpAddInfoHandler(exec,"Execute the content of file (scilab code)");
 	init_msg(file_panel,exec,ch," ");
 	XtInstallAccelerators(file_panel, cancel);
 	XtInstallAccelerators(file_panel, exec);
 }
+
+ 
+
+
+

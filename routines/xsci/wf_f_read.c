@@ -68,8 +68,8 @@ file_msg(format, arg1)
     FirstArg(XtNeditType, XawtextEdit);
     SetValues(file_msg_win);
     /* insert the new message after the end */
-    (void) XawTextReplace(file_msg_win,file_msg_length,file_msg_length,&block);
-    (void) XawTextSetInsertionPoint(file_msg_win,file_msg_length);
+    (void) XawTextReplace(file_msg_win,(XawTextPosition) file_msg_length, (XawTextPosition)file_msg_length,&block);
+    (void) XawTextSetInsertionPoint(file_msg_win,(XawTextPosition)file_msg_length);
 
     /* make read-only again */
     FirstArg(XtNeditType, XawtextRead);
@@ -99,7 +99,7 @@ clear_file_message(w, ev)
     SetValues(file_msg_win);
 
     /* replace all messages with one blank */
-    replcode = XawTextReplace(file_msg_win,0,file_msg_length,&block);
+    replcode = XawTextReplace(file_msg_win,(XawTextPosition)0,(XawTextPosition)file_msg_length,&block);
     if (replcode == XawPositionError)
 	fprintf(stderr,"XawTextReplace XawPositionError\n");
     else if (replcode == XawEditError)
@@ -153,7 +153,7 @@ popup_file_msg()
 	XtAppAddActions(app_con, file_msg_actions, XtNumber(file_msg_actions));
 
 	file_msg_panel = XtCreateManagedWidget("file_msg_panel", formWidgetClass,
-					   file_msg_popup, NULL, ZERO);
+					   file_msg_popup,(ArgList) 0,(Cardinal)0);
 	FirstArg(XtNwidth, 500);
 	NextArg(XtNheight, 200);
 	NextArg(XtNeditType, XawtextRead);

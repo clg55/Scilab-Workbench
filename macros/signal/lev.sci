@@ -1,4 +1,4 @@
-//[ar,sigma2,rc]=lev(r)
+function [ar,sigma2,rc]=lev(r)
 //[ar,sigma2,rc]=lev(r)
 //Resolve the Yule-Walker equations:
 //

@@ -7,6 +7,7 @@
 #include <X11/Xaw/MenuButton.h>
 #include <X11/Xaw/SimpleMenu.h>
 #include <X11/Xaw/SmeBSB.h>
+#include <X11/Xaw/SmeLine.h>
 #include <X11/bitmaps/xlogo11>
 
 #include "metaconst.h"
@@ -16,362 +17,112 @@
 #include "graphics.h"
 #include "menus.h"
 #include "font.h"
+#include "metio.h"
 
 extern void AutomaticName();
-extern void ChooseFont();
+extern void ChangeDirectory();
+extern void ChooseDefaults();
 extern void ColorObject();
-extern void CopyGraph();
 extern void CreateLoop();
 extern void CreateSink();
 extern void CreateSource();
-extern void DeleteGraph();
 extern void DeleteObject();
+extern void DisplayBeginHelp();
+extern void DisplayModifyHelp();
+extern void DisplayStudyHelp();
 extern void FindArc();
 extern void FindNode();
 extern XFontStruct *FontSelect();
-extern void Graphics();
-extern void LoadComputeGraph();
-extern void LoadGraph();
+extern int LoadGraph();
+extern void MetanetQuit();
 extern void NewGraph();
 extern void NameObject();
-extern void ObjectAttributes();
+extern void ObjectCharacteristics();
 extern void RemoveSourceSink();
-extern void RenameGraph ();
 extern void RenameSaveGraph();
 extern void SaveGraph();
 extern void SetTitle();
 
-#define MAXMENUS 20
+void Graphics();
+
+static Widget metanetMenuFiles, FilesMenu;
+static Widget NewEntry, LoadEntry, DirectoryEntry, SaveEntry, SaveAsEntry;
+static Widget QuitEntry;
+
+static Widget metanetMenuGraph, GraphMenu;
+static Widget CharacteristicsEntry, FindArcEntry, FindNodeEntry; 
+static Widget GraphicsEntry, ModifyGraphEntry;
+static Widget PreferenceInternalEntry, PreferenceNodeNamesEntry;
+static Widget PreferenceArcNamesEntry;
+
+static Widget metanetMenuModify, ModifyMenu;
+static Widget AttributesEntry, DeleteObjectEntry;
+static Widget NameObjectEntry, CreateLoopEntry, CreateSinkEntry;
+static Widget CreateSourceEntry, RemoveSinkSourceEntry, ColorObjectEntry;
+static Widget AutomaticNameEntry, ChooseDefaultsEntry, ModifyQuitEntry;
+
+static Widget metanetCommandRedraw;
+
+static Widget metanetCommandHelp;
 
 static Pixmap mark;
 
-static String beginMenu[] = {
-  "Quit",
-  "Load Graph",
-  "Load and Compute Graph",
-  "New Graph",
-  "Delete Graph",
-  "Copy Graph",
-  "Rename Graph"
-  };
-
-static String studyMenu[] = {
-  "Quit",
-  "Object Attributes",
-  "Find Node",
-  "Find Arc",
-  "Modify Graph",
-  "Graphics",
-  "Preferences"
-  };
-
-static String modifyMenu[] = {
-  "Quit",
-  "Delete Object",
-  "Name Object",
-  "Object Attributes",
-  "Find Node",
-  "Find Arc",
-  "Create Loop",
-  "Create Source",
-  "Create Sink",
-  "Remove Source/Sink",
-  "Save Graph",
-  "Rename and Save Graph",
-  "Color Object",
-  "Automatic Name",
-  "Graphics",
-  "Fonts",
-  "Preferences"
-  };
-
-static int nMenu;
-
-static Widget m[MAXMENUS];
-
-void MetanetQuit()
+void FilesSelect(w, number, garbage)
+Widget w;
+XtPointer number, garbage;
 {
-  XtDestroyWidget(toplevel);
-}
-
-void DoMenu1(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    MetanetQuit();
-    break;
-  case STUDY:
-    StudyQuit();
-    break;
-  case MODIFY:
-    ModifyQuit();
-    break;
-  }
-}
-
-void DoMenu2(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    LoadGraph();
-    break;
-  case STUDY:
-    ObjectAttributes();
-    break;
-  case MODIFY:
-    DeleteObject();
-    break;
-  }
-}
-
-void DoMenu3(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    LoadComputeGraph();
-    break;
-  case STUDY:
-    FindNode();
-    break;
-  case MODIFY:
-    NameObject();
-    break;
-  }
-}
-
-void DoMenu4(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
+  int num = (int)number;
+  switch (num) {
+  case 0:
     NewGraph();
     break;
-  case STUDY:
-    FindArc();
+  case 1:
+    LoadGraph();
     break;
-  case MODIFY:
-    ObjectAttributes();
+  case 2:
+    ChangeDirectory();
     break;
-  }
-}
-
-void DoMenu5(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    DeleteGraph();
-    break;
-  case STUDY:
-    ModifyGraph();
-    break;
-  case MODIFY:
-    FindNode();
-    break;
-  }
-}
-
-void DoMenu6(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    CopyGraph();
-    break;
-  case STUDY:
-    Graphics(STUDY);
-    break;
-  case MODIFY:
-    FindArc();
-    break;
-  }
-}
-
-void DoMenu7(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    RenameGraph();
-    break;
-  case STUDY:
-    break;
-  case MODIFY:
-    CreateLoop();
-    break;
-  }
-}
-
-void DoMenu8(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    break;
-  case STUDY:
-    break;
-  case MODIFY:
-    CreateSource();
-    break;
-  }
-}
-
-void DoMenu9(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    break;
-  case STUDY:
-    break;
-  case MODIFY:
-    CreateSink();
-    break;
-  }
-}
-
-void DoMenu10(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    break;
-  case STUDY:
-    break;
-  case MODIFY:
-    RemoveSourceSink();
-    break;
-  }
-}
-
-void DoMenu11(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    break;
-  case STUDY:
-    break;
-  case MODIFY: 
+  case 3:
     SaveGraph();
     break;
-  }
-}
-
-void DoMenu12(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
+  case 4:
+    RenameSaveGraph();
     break;
-  case STUDY:
-    break;
-  case MODIFY:
-   RenameSaveGraph();
+  case 5:
+    if (menuId == MODIFY) {
+      sprintf(Description,"Quit Modify Mode first");
+      MetanetAlert(Description);
+    }
+    else MetanetQuit();
     break;
   }
 }
 
-void DoMenu13(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    break;
-  case STUDY:
-    break;
-  case MODIFY:
-    ColorObject();
-    break;
-  }
-}
-
-void DoMenu14(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    break;
-  case STUDY:
-    break;
-  case MODIFY:
-    AutomaticName();
-    break;
-  }
-}
-
-void DoMenu15(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    break;
-  case STUDY:
-    break;
-  case MODIFY:
-    Graphics(MODIFY);
-    break;
-  }
-}
-
-void DoMenu16(widget,clientData,callData)
-Widget widget;
-caddr_t clientData;
-caddr_t callData;
-{
-  switch (menuId) {
-  case BEGIN:
-    break;
-  case STUDY:
-    break;
-  case MODIFY:
-    ChooseFont();
-    break;
-  }
-}
-
-void PreferenceSelect(w, number, garbage)
+void GraphSelect(w, number, garbage)
 Widget w;
 XtPointer number, garbage;
 {
   Arg arglist[1];
   Cardinal num_args = 0;
   int num = (int)number;
+
   switch (num) {
-  case 0: 
+  case 0:
+    ObjectCharacteristics();
+    break;
+  case 1:
+    FindArc();
+    break;
+  case 2:
+    FindNode();
+    break;
+  case 3:
+    Graphics();
+    break;
+  case 4:
+    ModifyGraph();
+    break;
+  case 5: 
     if (intDisplay) {
       XtSetArg(arglist[num_args], XtNleftBitmap, None);
       intDisplay = 0;
@@ -385,7 +136,7 @@ XtPointer number, garbage;
     ClearDraw();
     DrawGraph(theGraph);
     break;
-  case 1:
+  case 6:
     if (arcNameDisplay) {
       XtSetArg(arglist[num_args], XtNleftBitmap, None);
       arcNameDisplay = 0;
@@ -399,7 +150,7 @@ XtPointer number, garbage;
     ClearDraw();
     DrawGraph(theGraph);
     break;
-  case 2:
+  case 7:
     if (nodeNameDisplay) {
       XtSetArg(arglist[num_args], XtNleftBitmap, None);
       nodeNameDisplay = 0;
@@ -416,12 +167,84 @@ XtPointer number, garbage;
   }
 }
 
+void ModifySelect(w, number, garbage)
+Widget w;
+XtPointer number, garbage;
+{
+  int num = (int)number;
+  switch (num) {
+  case 0:
+    ObjectAttributes();
+    break;
+  case 1:
+    DeleteObject();
+    break;
+  case 2:
+    NameObject();
+    break;
+  case 3:
+    ColorObject();
+    break;
+  case 4:
+    CreateLoop();
+    break;
+  case 5:
+    CreateSink();
+    break;
+  case 6:
+    CreateSource();
+    break;
+  case 7:
+    RemoveSourceSink();
+    break;
+  case 8:
+    AutomaticName();
+    break;
+  case 9:
+    ChooseDefaults();
+    break;
+  case 10:
+    ModifyQuit();
+    break;
+  }
+}
+
+void MenuRedraw(w,shell,callData)
+Widget w;
+caddr_t shell;
+caddr_t callData;
+{
+  ClearDraw();
+  DrawGraph(theGraph);
+}
+
+void MenuHelp(w,shell,callData)
+Widget w;
+caddr_t shell;
+caddr_t callData;
+{
+  switch (menuId) {
+  case BEGIN:
+    DisplayBeginHelp();
+    break;
+  case STUDY:
+    DisplayStudyHelp();
+    break;
+  case MODIFY:
+    DisplayModifyHelp();
+    break;
+  }
+}
+
 void CreateMenus()
 {
   Arg args[20];
   int iargs;
-
+  Widget menuFiles, menuGraph, menuModify;
   XtCallbackRec callbacks[2];
+
+  callbacks[1].callback = NULL;
+  callbacks[1].closure = NULL;
 
   /* Create the bitmap for marking selected items */
 
@@ -430,474 +253,421 @@ void CreateMenus()
 			       (char *)xlogo11_bits,
 			       xlogo11_width, xlogo11_height);
 
-  callbacks[1].callback = NULL;
-  callbacks[1].closure = NULL;
-
   iargs = 0;
   XtSetArg(args[iargs], XtNdefaultDistance, 0); iargs++;
   XtSetArg(args[iargs], XtNwidth, metaWidth); iargs++;
   XtSetArg(args[iargs], XtNhSpace, 0); iargs++;
   XtSetArg(args[iargs], XtNvSpace, 0); iargs++;
   XtSetArg(args[iargs], XtNbottom, XtChainTop); iargs++;
-  XtSetArg(args[iargs], XtNright, XtChainRight); iargs++;
-
+  XtSetArg(args[iargs], XtNright, XtChainLeft); iargs++;
+  XtSetArg(args[iargs], XtNorientation, XtorientHorizontal); iargs++;
   metanetMenu = XtCreateManagedWidget("menu",boxWidgetClass,frame,
 				      args,iargs);
-  iargs = 0;
-  XtSetArg(args[iargs], XtNwidth, metaWidth); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "toto"); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[0] = XtCreateManagedWidget((String)NULL,labelWidgetClass,metanetMenu,
-				 args,iargs);
+
+  /* Files Menu */
 
   iargs = 0;
-  XtSetArg(args[iargs], XtNwidth, metaWidth); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "toto"); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "Files"); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[1] = XtCreateManagedWidget((String)NULL,labelWidgetClass,metanetMenu,
-				 args,iargs);
+  XtSetArg(args[iargs], XtNmenuName, "menuFiles"); iargs++;
+  metanetMenuFiles = XtCreateManagedWidget((String)NULL,menuButtonWidgetClass,
+					   metanetMenu,args,iargs);
+  menuFiles = XtCreatePopupShell("menuFiles", simpleMenuWidgetClass,
+				  metanetMenuFiles, NULL, 0);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "New"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  NewEntry = XtCreateManagedWidget((String)NULL,
+				    smeBSBObjectClass,
+				    menuFiles, args, iargs);
+  XtAddCallback(NewEntry, XtNcallback, FilesSelect, (XtPointer) 0);  
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Load"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  LoadEntry = XtCreateManagedWidget((String)NULL,
+				    smeBSBObjectClass,
+				    menuFiles, args, iargs);
+  XtAddCallback(LoadEntry, XtNcallback, FilesSelect, (XtPointer) 1);  
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Directory"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  DirectoryEntry = XtCreateManagedWidget((String)NULL,
+					 smeBSBObjectClass,
+					 menuFiles, args, iargs);
+  XtAddCallback(DirectoryEntry, XtNcallback, FilesSelect, (XtPointer) 2);  
+
+  iargs = 0;
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuFiles, args, iargs);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Save"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  SaveEntry = XtCreateManagedWidget((String)NULL,
+				    smeBSBObjectClass,
+				    menuFiles, args, iargs);
+  XtAddCallback(SaveEntry, XtNcallback, FilesSelect, (XtPointer) 3);  
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Save As"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  SaveAsEntry = XtCreateManagedWidget((String)NULL,
+				      smeBSBObjectClass,
+				      menuFiles, args, iargs);
+  XtAddCallback(SaveAsEntry, XtNcallback, FilesSelect, (XtPointer) 4);  
+
+  iargs = 0;
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuFiles, args, iargs);
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Quit"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  QuitEntry = XtCreateManagedWidget((String)NULL,
+				    smeBSBObjectClass,
+				    menuFiles, args, iargs);
+  XtAddCallback(QuitEntry, XtNcallback, FilesSelect, (XtPointer) 5);  
+
+  /* Graph Menu */
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Graph"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNmenuName, "menuGraph"); iargs++;
+  metanetMenuGraph = XtCreateManagedWidget((String)NULL,menuButtonWidgetClass,
+					   metanetMenu,args,iargs);
+  menuGraph = XtCreatePopupShell("menuGraph", simpleMenuWidgetClass,
+				 metanetMenuGraph, NULL, 0);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Characteristics"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  CharacteristicsEntry = XtCreateManagedWidget((String)NULL,
+					  smeBSBObjectClass,
+					  menuGraph, args, iargs);
+  XtAddCallback(CharacteristicsEntry, XtNcallback, GraphSelect, 
+		(XtPointer) 0);  
+
+  iargs = 0;
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuGraph, args, iargs);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Find Arc"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  FindArcEntry = XtCreateManagedWidget((String)NULL,
+					  smeBSBObjectClass,
+					  menuGraph, args, iargs);
+  XtAddCallback(FindArcEntry, XtNcallback, GraphSelect, (XtPointer) 1);  
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Find Node"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  FindNodeEntry = XtCreateManagedWidget((String)NULL,
+					  smeBSBObjectClass,
+					  menuGraph, args, iargs);
+  XtAddCallback(FindNodeEntry, XtNcallback, GraphSelect, (XtPointer) 2); 
+
+  iargs = 0;
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuGraph, args, iargs);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Graphics"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  GraphicsEntry = XtCreateManagedWidget((String)NULL,
+					  smeBSBObjectClass,
+					  menuGraph, args, iargs);
+  XtAddCallback(GraphicsEntry, XtNcallback, GraphSelect, (XtPointer) 3); 
+ 
+  iargs = 0;
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuGraph, args, iargs);
   
-  nMenu = 2;
-}
-
-void DisplayBeginMenu()
-{
-  Arg args[20];
-  int iargs;
-  XtCallbackRec callbacks[2];
-  int i;
-
-  callbacks[1].callback = NULL;
-  callbacks[1].closure = NULL;
-
-  for (i = 0; i < nMenu; i++) XtDestroyWidget(m[i]);
-
-  i = 0;
+  XtSetArg(args[iargs], XtNlabel, "Modify Graph"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  ModifyGraphEntry = XtCreateManagedWidget((String)NULL,
+					   smeBSBObjectClass,
+					   menuGraph, args, iargs);
+  XtAddCallback(ModifyGraphEntry, XtNcallback, GraphSelect, (XtPointer) 4); 
 
   iargs = 0;
-  XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu1;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  XtSetArg(args[iargs], XtNfromHoriz, NULL); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuGraph, args, iargs);
 
   iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu2;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "Use internal numbers as names"); 
+  iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+  if (intDisplay) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceInternalEntry = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceInternalEntry, XtNcallback, GraphSelect, 
+		(XtPointer) 5); 
 
   iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu3;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "Display arc names"); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+  if (arcNameDisplay) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceArcNamesEntry = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceArcNamesEntry, XtNcallback, GraphSelect, 
+		(XtPointer) 6); 
 
   iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu4;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "Display node names"); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+  if (nodeNameDisplay) {
+    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
+  }
+  PreferenceNodeNamesEntry = 
+    XtCreateManagedWidget((String)NULL, smeBSBObjectClass,
+			  menuGraph, args, iargs);
+  XtAddCallback(PreferenceNodeNamesEntry, XtNcallback, GraphSelect, 
+		(XtPointer) 7); 
+ 
+  /* Modify Menu */
 
   iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu5;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "Modify"); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+  XtSetArg(args[iargs], XtNmenuName, "menuModify"); iargs++;
+  
+  metanetMenuModify = XtCreateManagedWidget((String)NULL,
+					    menuButtonWidgetClass,
+					    metanetMenu,args,iargs);
+  menuModify = XtCreatePopupShell("menuModify", simpleMenuWidgetClass,
+				  metanetMenuModify, NULL, 0);
 
   iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu6;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "Attributes"); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+  AttributesEntry = XtCreateManagedWidget((String)NULL,
+					  smeBSBObjectClass,
+					  menuModify, args, iargs);
+  XtAddCallback(AttributesEntry, XtNcallback, ModifySelect, (XtPointer) 0);  
 
   iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, beginMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu7;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  XtSetArg(args[iargs], XtNlabel, "Delete"); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+  DeleteObjectEntry = XtCreateManagedWidget((String)NULL,
+					    smeBSBObjectClass,
+					    menuModify, args, iargs);
+  XtAddCallback(DeleteObjectEntry, XtNcallback, ModifySelect, (XtPointer) 1);
 
-  nMenu = i;
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Name"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  NameObjectEntry = XtCreateManagedWidget((String)NULL,
+					  smeBSBObjectClass,
+					  menuModify, args, iargs);
+  XtAddCallback(NameObjectEntry, XtNcallback, ModifySelect, (XtPointer) 2);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Color"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  ColorObjectEntry = XtCreateManagedWidget((String)NULL,
+					   smeBSBObjectClass,
+					   menuModify, args, iargs);
+  XtAddCallback(ColorObjectEntry, XtNcallback, ModifySelect, (XtPointer) 3);
+
+  iargs = 0;
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuModify, args, iargs);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Create Loop"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  CreateLoopEntry = XtCreateManagedWidget((String)NULL,
+					  smeBSBObjectClass,
+					  menuModify, args, iargs);
+  XtAddCallback(CreateLoopEntry, XtNcallback, ModifySelect, (XtPointer) 4);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Create Sink"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  CreateSinkEntry = XtCreateManagedWidget((String)NULL,
+					  smeBSBObjectClass,
+					  menuModify, args, iargs);
+  XtAddCallback(CreateSinkEntry, XtNcallback, ModifySelect, (XtPointer) 5);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Create Source"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  CreateSourceEntry = XtCreateManagedWidget((String)NULL,
+					    smeBSBObjectClass,
+					    menuModify, args, iargs);
+  XtAddCallback(CreateSourceEntry, XtNcallback, ModifySelect, (XtPointer) 6);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Remove Sink/Source"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  RemoveSinkSourceEntry = XtCreateManagedWidget((String)NULL,
+						smeBSBObjectClass,
+						menuModify, args, iargs);
+  XtAddCallback(RemoveSinkSourceEntry, XtNcallback, ModifySelect, 
+		(XtPointer) 7);
+
+  iargs = 0;
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuModify, args, iargs); 
+ 
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Automatic Name"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  AutomaticNameEntry = XtCreateManagedWidget((String)NULL,
+					     smeBSBObjectClass,
+					     menuModify, args, iargs);
+  XtAddCallback(AutomaticNameEntry, XtNcallback, ModifySelect, 
+		(XtPointer) 8);
+
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Default Values"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  ChooseDefaultsEntry = XtCreateManagedWidget((String)NULL,
+					   smeBSBObjectClass,
+					   menuModify, args, iargs);
+  XtAddCallback(ChooseDefaultsEntry, XtNcallback, ModifySelect, 
+		(XtPointer) 9);
+  
+  iargs = 0;
+  XtCreateManagedWidget((String)NULL, smeLineObjectClass,
+			menuModify, args, iargs); 
+ 
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Quit Modify Mode"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  ModifyQuitEntry = XtCreateManagedWidget((String)NULL,
+					  smeBSBObjectClass,
+					  menuModify, args, iargs);
+  XtAddCallback(ModifyQuitEntry, XtNcallback, ModifySelect, 
+		(XtPointer) 10);
+ 
+  /* Redraw command */
+
+  callbacks[0].callback = (XtCallbackProc)MenuRedraw;
+  callbacks[0].closure = (caddr_t)NULL;
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Redraw"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  
+  metanetCommandRedraw = XtCreateManagedWidget((String)NULL,
+					       commandWidgetClass,
+					       metanetMenu,args,iargs);
+
+  /* Help command */
+
+  callbacks[0].callback = (XtCallbackProc)MenuHelp;
+  callbacks[0].closure = (caddr_t)NULL;
+  iargs = 0;
+  XtSetArg(args[iargs], XtNlabel, "Help"); iargs++;
+  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
+  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
+  
+  metanetCommandHelp = XtCreateManagedWidget((String)NULL,
+					       commandWidgetClass,
+					       metanetMenu,args,iargs);
+
   menuId = BEGIN;
   SetTitle(BEGIN);
 }
 
+void DisplayBeginMenu()
+{
+   Arg arglist[1];
+   Cardinal num_args;
+
+   num_args = 0;
+   XtSetArg(arglist[num_args], XtNsensitive, True); num_args++;
+
+   XtSetValues(NewEntry, arglist, num_args);
+   XtSetValues(LoadEntry, arglist, num_args);
+
+   XtSetValues(metanetCommandHelp, arglist, num_args);
+
+   num_args = 0;
+   XtSetArg(arglist[num_args], XtNsensitive, False); num_args++;
+
+   XtSetValues(SaveEntry, arglist, num_args);
+   XtSetValues(SaveAsEntry, arglist, num_args);
+
+   XtSetValues(metanetMenuGraph, arglist, num_args);
+
+   XtSetValues(metanetMenuModify, arglist, num_args);
+
+   XtSetValues(metanetCommandRedraw, arglist, num_args);
+  
+   SetTitle(BEGIN);
+   menuId = BEGIN;
+}
+
 void DisplayStudyMenu()
 {
-  Arg args[20];
-  int iargs;
-  XtCallbackRec callbacks[2];
-  int i;
-  Widget entry, menuPref;
-  char str[160];
+   Arg arglist[1];
+   Cardinal num_args;
 
-  callbacks[1].callback = NULL;
-  callbacks[1].closure = NULL;
+   num_args = 0;
+   XtSetArg(arglist[num_args], XtNsensitive, True); num_args++;
 
-  for (i = 0; i < nMenu; i++) XtDestroyWidget(m[i]);
+   XtSetValues(NewEntry, arglist, num_args);
+   XtSetValues(LoadEntry, arglist, num_args);
+   XtSetValues(SaveAsEntry, arglist, num_args);
 
-  i = 0;
+   XtSetValues(metanetMenuGraph, arglist, num_args);
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu1;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  XtSetArg(args[iargs], XtNfromHoriz, NULL); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+   XtSetValues(ModifyGraphEntry, arglist, num_args);
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu2;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+   XtSetValues(metanetCommandRedraw, arglist, num_args);
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu3;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+   num_args = 0;
+   XtSetArg(arglist[num_args], XtNsensitive, False); num_args++;  
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu4;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+   XtSetValues(SaveEntry, arglist, num_args);
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu5;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+   XtSetValues(metanetMenuModify, arglist, num_args);
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu6;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, studyMenu[i++]); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  XtSetArg(args[iargs], XtNmenuName, "menuPref"); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,menuButtonWidgetClass,
-				 metanetMenu,args,iargs);
-  menuPref = XtCreatePopupShell("menuPref", simpleMenuWidgetClass, m[i-1], 
-			      NULL, 0);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "Display internal numbers as names"); 
-  iargs++;
-  if (intDisplay) {
-    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
-  }
-  entry = XtCreateManagedWidget((String)NULL,
-				smeBSBObjectClass,
-				menuPref, args, iargs);
-  XtAddCallback(entry, XtNcallback, PreferenceSelect, (XtPointer) 0);  
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "Display arc names"); 
-  iargs++;
-  if (arcNameDisplay) {
-    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
-  }
-  entry = XtCreateManagedWidget((String)NULL,
-				smeBSBObjectClass,
-				menuPref, args, iargs);
-  XtAddCallback(entry, XtNcallback, PreferenceSelect, (XtPointer) 1);   
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "Display node names"); 
-  iargs++;
-  if (nodeNameDisplay) {
-    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
-  }
-  entry = XtCreateManagedWidget((String)NULL,
-				smeBSBObjectClass,
-				menuPref, args, iargs);
-  XtAddCallback(entry, XtNcallback, PreferenceSelect, (XtPointer) 2);  
-
-  nMenu = i;
-  menuId = STUDY;
-  SetTitle(STUDY);
+   SetTitle(STUDY);
+   menuId = STUDY;
 }
 
 void DisplayModifyMenu()
 {
-  Arg args[20];
-  int iargs;
-  XtCallbackRec callbacks[2];
-  int i;
-  Widget entry, menuPref;
+   Arg arglist[1];
+   Cardinal num_args;
 
-  callbacks[1].callback = NULL;
-  callbacks[1].closure = NULL;
+   num_args = 0;
+   XtSetArg(arglist[num_args], XtNsensitive, True); num_args++;
 
-  for (i = 0; i < nMenu; i++) XtDestroyWidget(m[i]);
+   XtSetValues(SaveEntry, arglist, num_args);
 
-  i = 0;
+   XtSetValues(metanetMenuGraph, arglist, num_args);
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu1;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  XtSetArg(args[iargs], XtNfromHoriz, NULL); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+   XtSetValues(metanetMenuModify, arglist, num_args);
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu2;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+   XtSetValues(metanetCommandRedraw, arglist, num_args);
+   
+   num_args = 0;
+   XtSetArg(arglist[num_args], XtNsensitive, False); num_args++;
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu3;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+   XtSetValues(NewEntry, arglist, num_args);
+   XtSetValues(LoadEntry, arglist, num_args);
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu4;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
+   XtSetValues(ModifyGraphEntry, arglist, num_args); 
 
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu5;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu6;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu7;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu8;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu9;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu10;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu11;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu12;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu13;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu14;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu15;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  callbacks[0].callback = (XtCallbackProc)DoMenu16;
-  callbacks[0].closure = NULL;
-  XtSetArg(args[iargs], XtNcallback, callbacks); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,commandWidgetClass,metanetMenu,
-				 args,iargs);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNfromHoriz, m[i-1]); iargs++;
-  XtSetArg(args[iargs], XtNlabel, modifyMenu[i++]); iargs++;
-  XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
-  XtSetArg(args[iargs], XtNmenuName, "menuPref"); iargs++;
-  m[i-1] = XtCreateManagedWidget((String)NULL,menuButtonWidgetClass,
-				 metanetMenu,args,iargs);
-  menuPref = XtCreatePopupShell("menuPref", simpleMenuWidgetClass, m[i-1], 
-			      NULL, 0);
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "Display internal numbers as names"); 
-  iargs++;
-  if (intDisplay) {
-    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
-  }
-  entry = XtCreateManagedWidget((String)NULL,
-				smeBSBObjectClass,
-				menuPref, args, iargs);
-  XtAddCallback(entry, XtNcallback, PreferenceSelect, (XtPointer) 0);  
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "Display arc names"); 
-  iargs++;
-  if (arcNameDisplay) {
-    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
-  }
-  entry = XtCreateManagedWidget((String)NULL,
-				smeBSBObjectClass,
-				menuPref, args, iargs);
-  XtAddCallback(entry, XtNcallback, PreferenceSelect, (XtPointer) 1);   
-
-  iargs = 0;
-  XtSetArg(args[iargs], XtNleftMargin, 16); iargs++;
-  XtSetArg(args[iargs], XtNlabel, "Display node names"); 
-  iargs++;
-  if (nodeNameDisplay) {
-    XtSetArg(args[iargs], XtNleftBitmap, mark); iargs++;
-  }
-  entry = XtCreateManagedWidget((String)NULL,
-				smeBSBObjectClass,
-				menuPref, args, iargs);
-  XtAddCallback(entry, XtNcallback, PreferenceSelect, (XtPointer) 2);  
-
-  nMenu = i;
-  menuId = MODIFY;
+   SetTitle(MODIFY);
+   menuId = MODIFY;
 }
 
 void DisplayMenu(i)
@@ -918,32 +688,22 @@ int i;
   menuId = i;
 }
 
-void ChooseFont()
+void Graphics()
 {
-  char size[MAXNAM];
+  char result[MAXNAM];
   char init[MAXNAM];
-  char str[MAXNAM];
-  int s;
-  XFontStruct *fontstruct;
-  
-  sprintf(init,"%d",theGraph->fontSize);
-  MetanetDialog(init,size,"Default font size: ");
-  s = atoi(size);
+  double smetaScale;
+  float d;
 
-  if ((fontstruct = FontSelect(s)) == NULL) {
-    sprintf(str,"Unknown font size %d\nUse only 8, 10, 12 14, 18 or 24",s);
-    MetanetAlert(str);
-    return;
-  }
+  sprintf(init,"%g",metaScale);
+  if (!MetanetDialog(init,result,"Scale: ")) return;
 
-  if (theGraph->fontSize != s) {
-    theGraph->fontSize = s;
-
-    SetFont(fontstruct);
-
-    theGG.modified = 1;
-
+  smetaScale = metaScale;
+  if (sscanf(result,"%g",&d) > 0)
+    metaScale = (double)d;
+  if (metaScale <= 0) metaScale = smetaScale;
+  if (metaScale != smetaScale) {
     ClearDraw();
-    ReDrawGraph(theGraph);
+    DrawGraph(theGraph);
   }
 }

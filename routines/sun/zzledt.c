@@ -1,5 +1,3 @@
-
-
 /***********************************************************************
  * zzledt.c - last line editing routine
  *
@@ -108,7 +106,6 @@ static struct termio arg;
 #define SV_BUF_SIZE 5000
 
 static int cbreak_crmod = 1;/* crmod on */
-static int getonce = 1;     /* initialise flag */
 static int fd=0;              /* file number for standard in */
 
 #define N_SEQS       6      /* number of special sequences */
@@ -180,13 +177,10 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
    int line_number;
    int cursor_max = 0;
    int cursor = 0;
-   int search_backward = 0;
    int yank_len,i;
-   
    int keystroke;
    int character_count;
    char wk_buf[WK_BUF_SIZE + 1];
-   char *current_line;
 
    if(init_flag) {
       init_io();
@@ -1009,7 +1003,7 @@ search_line_backward(source)
 /**********************************************************************/
 char *source;
 {
-   int  line_index,ok,length,i;
+   int  line_index,ok,length;
    char *p,*p1;
    
    length=strlen(source)-1;
@@ -1046,7 +1040,7 @@ search_line_forward(source)
 /**********************************************************************/
 char *source;
 {
-   int  line_index,ok,length,i;
+   int  line_index,ok,length;
    char *p,*p1;
    
    length=strlen(source)-1;

@@ -27,7 +27,7 @@
 
 /* tabs.c */
 
-#include "x_ptyx.h"
+#include "x_ptyxP.h"
 
 /*
  * This file presumes 32bits/word.  This is somewhat of a crock, and should

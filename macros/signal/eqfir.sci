@@ -1,4 +1,4 @@
-//<hn>=eqfir(nf,bedge,des,wate)
+function [hn]=eqfir(nf,bedge,des,wate)
 //<hn>=eqfir(nf,bedge,des,wate)
 //Minimax approximation of multi-band, linear phase, FIR filter
 //  nf    :Number of output filter points desired
@@ -68,7 +68,6 @@
       hn(nc)=an(1);
       hn(nc+1:2*nc-1)=hn(nc-1:-1:1);
    end,
- 
-//end
+
 
 

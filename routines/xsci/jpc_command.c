@@ -34,6 +34,7 @@
  */
 
 #include "../machine.h" 
+#include "h_help.h" 
 #include <signal.h>
 #include <ctype.h>
 #include <sys/wait.h>
@@ -41,21 +42,25 @@
 #include <X11/cursorfont.h>
 #define	 REVERSE	0
 #define	 FORWARD	1
+#define PI0 (integer *) 0
+#define PD0 (double *) 0
 
+
+
+static void CreateFormWithButtons();
+
+char GetDriver_();
 
 Boolean		PopupMode = False;
-static Widget	AddButton();
-static Widget	button[30];
-static CommandRec *commandQueue = NULL;
+
 extern int get_is_reading();
 #ifdef BSD
 static char	savedCommand[LINESIZ] = ""; 
 #endif
 
+Widget commandWindow;
 
-/* ARGSUSED */
-/*  Execute the command specifed in client_data
- */
+/*  Execute the command specifed in client_data  */
 
 static void DoIt (w, command, call_data)
     Widget w;
@@ -69,46 +74,37 @@ static void DoIt (w, command, call_data)
 
 extern void do_kill();
 
-/* ARGSUSED */
 static void Do_Kill (w, command, call_data)
     Widget w;
     XtPointer command;
     XtPointer call_data;
 {
   C2F(sciquit)();
-  exit(1);
+  C2F(clearexit)(1);
 }
 
-/* ARGSUSED */
 static void Do_Stop (w, command, call_data)
     Widget w;
     XtPointer command;
     XtPointer call_data;
 {
-/*    if (!get_is_reading())
-	    {
-		int j = SIGINT;
-		C2F(sigbas)(&j);
-	    }
-    else*/
-    int j = SIGINT;
-    C2F(sigbas)(&j);
-    if (get_is_reading())
-	write_scilab("\n");
-    
+  int j = SIGINT;
+  C2F(sigbas)(&j);
+  if (get_is_reading()) write_scilab("\n");
 }
 
 extern void   popupHelpPanel();
-/* ARGSUSED */
+
 static void Do_Help (w, command, call_data)
     Widget w;
     XtPointer command;
     XtPointer call_data;
 {
   static int status=0;
-  if ( status == 0) {
-    initHelpActions(app_con); status=1;
-  };
+  if ( status == 0) 
+    {
+      initHelpActions(app_con); status=1;
+    };
   popupHelpPanel();
   /* status=system("$SCI/bin/scilab -xhelp"); */
 }
@@ -120,33 +116,36 @@ void FileG1(w, closure, call_data)
     XtPointer closure;
     caddr_t call_data;
 {
-  popup_file_panel(w);
+  popup_file_panel( (Widget)closure);
  }
 
 static Widget AddButton(parent, name, function, client_data)
-Widget parent;
-char *name;
-void (*function) ();
-XtPointer client_data;		/* callback registered data */
+     Widget parent;
+     char *name;
+     void (*function) ();
+     XtPointer client_data;		/* callback registered data */
 {
-    Widget 	button;
-    Arg 	args[MAXARGS];
-    Cardinal 	n;
-    n = 0;
-    /** mis en resource : jpc  23 juin 1994 **/
-    /* XtSetArg(args[n], XtNresize, (XtArgVal) True); n++; */
-    /* XtSetArg(args[n], XtNwidth, strlen(name)*11); n++; */
-    /*
-#ifdef XtNcursorname
-    XtSetArg(args[n], XtNcursorName, "left_ptr"); n++;
-#else
-    / * for X11R4 * /
-    XtSetArg(args[n], XtNcursor, XCreateFontCursor(XtDisplay(parent),XC_left_ptr)); n++;
-#endif
-*/
-    button = XtCreateManagedWidget(name, commandWidgetClass, parent, args, n);
-    XtAddCallback(button, XtNcallback, function, client_data);
-    return (button);
+  Widget 	lbut;
+  Arg 	args[MAXARGS];
+  Cardinal 	n=0;
+  lbut = XtCreateManagedWidget(name, commandWidgetClass, parent, args, n);
+  XtAddCallback(lbut, XtNcallback, function, client_data);
+  return (lbut);
+}
+
+
+static Widget AddInMenu(parent, name, function, client_data)
+     Widget parent;
+     char *name;
+     void (*function) ();
+     XtPointer client_data;		/* callback registered data */
+{
+  Widget 	lbut;
+  Arg 	args[MAXARGS];
+  Cardinal 	iargs=0;
+  lbut = XtCreateManagedWidget(name,smeBSBObjectClass,parent, args, iargs);
+  XtAddCallback(lbut, XtNcallback, function, client_data);
+  return (lbut);
 }
 
 /**************************************************************************
@@ -160,7 +159,7 @@ info_handler(w, client_data, event)
      XEvent	*event;
 {
   if      (event->type == LeaveNotify ) DefaultMessageWindow();
-  else if (event->type == EnterNotify) UpdateMessageWindow(client_data);
+  else if (event->type == EnterNotify) UpdateMessageWindow("%s", (char *) client_data);
 } 
 
 static void
@@ -175,37 +174,61 @@ char *message;
 		    (caddr_t) message);
 }
 
-static void CreateButtons (parent)
-Widget parent;
+
+static Widget menubut0= 0;
+
+/* on en a besoin ds getfile.c */
+
+getMenuBut0(w) 
+     Widget *w;
 {
-  int i=0;
-  button[i++] = AddButton (parent, "Resume", DoIt, "resume\n");
-  AddInfoHandler(button[i-1],"Continue Scilab execution after pause or stop");
-  button[i++] = AddButton (parent, "Abort", DoIt, "abort\n");
-  AddInfoHandler(button[i-1],"Abort Scilab execution after pause or stop");
-  button[i++] = AddButton (parent, "Restart", DoIt, 
-			   "clear;exec('SCI/scilab.star');\n");
-  AddInfoHandler(button[i-1],"Clear everything");
-  button[i++] = AddButton (parent, "Stop", Do_Stop, " ");
-  AddInfoHandler(button[i-1],"Stop execution");
-  button[i++] = AddButton (parent, "File Operations", FileG1, (char *) 0);
-  AddInfoHandler(button[i-1],"Getf, Exec, Load and Save operations");
-  button[i++] = AddButton (parent, "Demos", DoIt,
+  *w = menubut0;
+}
+
+static void CreateButtons (parent)
+     Widget parent;
+{
+  Widget menu0,menubut,menuentry;
+  Widget menu1,menubut1;
+  Cardinal iargs=0;
+  Arg args[1];
+
+  iargs=0;
+  XtSetArg(args[iargs], XtNmenuName, "MenuS"); iargs++;
+  menubut0= XtCreateManagedWidget("ButMenuS",menuButtonWidgetClass,parent,args,iargs);
+  AddInfoHandler(menubut0,"File Operations/Quit/Kill"); 
+  menu0 = XtCreatePopupShell("MenuS", simpleMenuWidgetClass,menubut0,(Arg *) 0,(Cardinal)0);
+  menuentry = AddInMenu (menu0, "File", FileG1, (XtPointer) menubut0 );
+  /* AddInfoHandler(menuentry,"Getf, Exec, Load and Save operations"); */
+  menuentry = AddInMenu(menu0, "Kill", Do_Kill, " ");
+  /* AddInfoHandler(menuentry,"Kill Scilab"); */
+  menuentry = AddInMenu(menu0, "Quit", DoIt, "quit\n");
+  /* AddInfoHandler(menuentry,"Quit Scilab"); */
+
+
+  iargs=0;
+  XtSetArg(args[iargs], XtNmenuName, "MenuC"); iargs++;
+  menubut1= XtCreateManagedWidget("ButMenuC",menuButtonWidgetClass,parent,args,iargs);
+  AddInfoHandler(menubut1,"Abort/Stop/Resume/Restart");
+  menu1 = XtCreatePopupShell("MenuC", simpleMenuWidgetClass,menubut1,(Arg *) 0,(Cardinal)0);
+  menuentry = AddInMenu(menu1, "Resume", DoIt, "resume\n");
+  /* AddInfoHandler(menuentry,"Continue Scilab execution after pause or stop"); */
+  menuentry = AddInMenu(menu1, "Abort", DoIt, "abort\n");
+  /* AddInfoHandler(menuentry,"Abort Scilab execution after pause or stop"); */
+  menuentry = AddInMenu(menu1, "Restart", DoIt, 
+			   "abort;\n exec('SCI/scilab.star');\n");
+  /*  AddInfoHandler(menuentry,"Clear everything"); */
+  menuentry = AddInMenu(menu1, "Stop", Do_Stop, " ");
+  /* AddInfoHandler(menuentry,"Stop execution"); */
+
+  menuentry = AddButton (parent, "Demos", DoIt,
 			   ";exec(\"SCI/demos/alldems.dem\");\n");
-  AddInfoHandler(button[i-1],"Exec demos");
-  button[i++] = AddButton (parent, "Quit", DoIt, "quit\n");
-  AddInfoHandler(button[i-1],"Quit Scilab");
-  button[i++] = AddButton (parent, "Kill", Do_Kill, " ");
-  AddInfoHandler(button[i-1],"Kill Scilab");
-  button[i++] = AddButton (parent, "Help", Do_Help," ");
-  AddInfoHandler(button[i-1],"Open Help Window");
-  button[i++] = AddButton (parent, "Metanet", DoIt, "metanet();\n");
-  AddInfoHandler(button[i-1],"Exec Metanet");
+  AddInfoHandler(menuentry,"Exec demos");
 
-  button[i++] = AddButton (parent, "Your Menu", DoIt, "usermenu();\n");
-  AddInfoHandler(button[i-1],"User defined Menu");
-  button[i++] = NULL;
+  CreateFormWithButtons(parent);
 
+  menuentry = AddButton (parent, "Help", Do_Help," ");
+  AddInfoHandler(menuentry,"Open Help Window");
 }
 
 
@@ -220,8 +243,25 @@ Widget parent;
  *	Returns: none
  */
 
-/* ARGSUSED */
-static int lab_count = 0;
+
+static integer lab_count = 0;
+static char gwin_name[100];
+static Widget GWinButMenu = (Widget) 0;
+
+MenuFixCurrentWin(ivalue)
+     int ivalue;
+{
+  int  i;
+  C2F(xscion)(&i);
+  if (i==1)
+    {
+      Arg arg[1];
+      lab_count = ivalue;
+      sprintf( gwin_name, "Graphic Window %d ", (int) lab_count );
+      XtSetArg( arg[0], XtNlabel, gwin_name );
+      XtSetValues(GWinButMenu, arg, ONE );
+    }
+}
 
 static void 
 Countp(widget, closure, callData)
@@ -229,63 +269,58 @@ Widget widget;
 XtPointer closure, callData;
 {
    Arg arg[1];
-   char text[10];
-   sprintf( text, " %d ", ++lab_count );
-   XtSetArg( arg[0], XtNlabel, text );
+   sprintf( gwin_name, "Graphic Window %d ", (int) ++lab_count );
+   XtSetArg( arg[0], XtNlabel, gwin_name );
    XtSetValues( (Widget)closure, arg, ONE );
 }
 
-/* ARGSUSED */
 static void 
 Countm(widget, closure, callData)
 Widget widget;
 XtPointer closure, callData;
 {
    Arg arg[1];
-   char text[10];
    lab_count = (lab_count == 0) ? 0 : lab_count-1;
-   sprintf( text, " %d ", lab_count);
-   XtSetArg( arg[0], XtNlabel, text );
+   sprintf( gwin_name, "Graphic Window %d ", (int) lab_count);
+   XtSetArg( arg[0], XtNlabel, gwin_name );
    XtSetValues( (Widget)closure, arg, ONE );
 }
 
 
-#define IP0 (int *) 0
-
 static void 
 SendCountSet(widget, closure, callData)
-Widget widget;
-XtPointer closure, callData;
+     Widget widget;
+     XtPointer closure, callData;
 {
   char c ;
   if ((c=GetDriver_())=='R' || c == 'X' || c == 'W')
     {
-      /* C2F(dr)("xsetdr","Rec",IP0,IP0,IP0,IP0,IP0,IP0,0,0); */
-      C2F(dr)("xset","window",&lab_count,IP0,IP0,IP0,IP0,IP0,0,0);
+      C2F(dr)("xset","window",&lab_count,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     };
 }
 
 
 static void 
 SendCountRaise(widget, closure, callData)
-Widget widget;
-XtPointer closure, callData;
+     Widget widget;
+     XtPointer closure, callData;
 {
   char c ;
   if ((c=GetDriver_())=='R' || c == 'X' || c == 'W')
     {
-      /* C2F(dr)("xsetdr","Rec",IP0,IP0,IP0,IP0,IP0,IP0,0,0);*/
-      C2F(dr)("xset","window",&lab_count,IP0,IP0,IP0,IP0,IP0,0,0);
-      C2F(dr)("xselect","v",IP0,IP0,IP0,IP0,IP0,IP0,0,0);
+      /* C2F(dr)("xsetdr","Rec",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);*/
+      C2F(dr)("xset","window",&lab_count,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+      C2F(dr)("xselect","v",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     };
 }
 
 static void 
-SendCountHide(widget, closure, callData)
-Widget widget;
-XtPointer closure, callData;
+SendCountDelete(widget, closure, callData)
+     Widget widget;
+     XtPointer closure, callData;
 {
-
+  /** fprintf(stderr,"Destruction de la fenetre %d\n",lab_count); **/
+  DeleteSGWin(lab_count);
 }
 
 /*
@@ -294,27 +329,41 @@ XtPointer closure, callData;
  * Creates a Form widget for the Graphic Window Management 
  */
 
+
 static void
 CreateFormWithButtons(parent)
 Widget parent;
 {
-  Widget form, label, button,button1,button2,button3;
-  int n=0;
-  Arg args[1];
-  form = XtCreateManagedWidget("GwinForm", formWidgetClass, parent,
-			       NULL, ZERO );
-  button1 = XtCreateManagedWidget("SetwinCommand",commandWidgetClass,form,args,n);
-  AddInfoHandler(button1,"Set the selected graphic window as the current window and create it if necessary");
-  button2 = XtCreateManagedWidget("RaisewinCommand",commandWidgetClass,form,args,n);
-  AddInfoHandler(button2,"Raise the selected graphic window and create it if necessary");
-  label = XtCreateManagedWidget("WinLabel",labelWidgetClass,form,args,n); 
-  XtAddCallback( button1, XtNcallback, SendCountSet, (XtPointer) label );
-  XtAddCallback( button2, XtNcallback, SendCountRaise, (XtPointer) label );
-  button = XtCreateManagedWidget("PlusCommand",commandWidgetClass,form,args,n);
-  XtAddCallback( button, XtNcallback, Countp, (XtPointer) label );
-  button = XtCreateManagedWidget("MinusCommand", commandWidgetClass, form,args,n);
-  XtAddCallback( button, XtNcallback, Countm, (XtPointer) label );
+  Widget form,menu,menuentry1,menuentry2,menuentry3,buttonm,buttonp;
+  Cardinal iargs=0;
+  Arg args[2];
+  iargs = 0;
+  XtSetArg(args[iargs], XtNmenuName, "MenuGW"); iargs++;
+  XtSetArg(args[iargs], XtNlabel,"Graphic Window  0 "); iargs++;
+  GWinButMenu= XtCreateManagedWidget("ButMenuGW",menuButtonWidgetClass,parent,args,iargs);
+  iargs=0;
+  menu = XtCreatePopupShell("MenuGW", simpleMenuWidgetClass,GWinButMenu,(Arg *) 0,(Cardinal)0);
+  menuentry1 = XtCreateManagedWidget("Setwin",smeBSBObjectClass,menu, args, iargs);
+  menuentry2 = XtCreateManagedWidget("Raisewin", smeBSBObjectClass, menu, args, iargs);
+  menuentry3 = XtCreateManagedWidget("Deletewin", smeBSBObjectClass,menu, args, iargs);
+
+  XtAddCallback( menuentry1, XtNcallback, SendCountSet, (XtPointer) GWinButMenu );
+  XtAddCallback( menuentry2, XtNcallback, SendCountRaise, (XtPointer) GWinButMenu );
+  XtAddCallback( menuentry3, XtNcallback, SendCountDelete, (XtPointer) GWinButMenu );
+
+  buttonp = XtCreateManagedWidget("Plus", smeBSBObjectClass,menu,args,iargs);
+  XtAddCallback( buttonp, XtNcallback, Countp, (XtPointer) GWinButMenu );
+  buttonm = XtCreateManagedWidget("Minus", smeBSBObjectClass,menu,args,iargs);
+  XtAddCallback( buttonm, XtNcallback, Countm, (XtPointer) GWinButMenu );
+
+  AddInfoHandler(GWinButMenu,"Graphic window raise/create/delete");
+  /*
+  AddInfoHandler(buttonp,"Increase the number of the window for graphic menu");
+  AddInfoHandler(buttonm,"Decrease the number of the window for graphic menu");
+  */
 }
+
+
 
 /**************************************************************************
  * The command panel
@@ -323,12 +372,12 @@ Widget parent;
 void CreateCommandPanel(parent)
 Widget parent;
 {
-  Widget commandWindow;
+/* supression ici 
+  Widget commandWindow;*/
   Cardinal n=0;
   commandWindow = XtCreateManagedWidget("commandWindow", formWidgetClass, 
-					parent,(Arg *) NULL, n);
+					parent,(Arg *) NULL,(Cardinal) n);
   CreateButtons(commandWindow);
-  CreateFormWithButtons(parent);
 }
 
 

@@ -1,4 +1,4 @@
-//[]=bifish(f_ch)
+function []=bifish(f_ch)
 //[]=bifish([f_ch])
 // Biffurcation on the fish model 
 // f_ch can be one of fish fishr fishr2
@@ -24,22 +24,21 @@ for b = [14.5:0.1:16],
  plot2d(y(1,npts)',y(2,npts)',[0,1],"111"," ",25*[0,0,4,4]);
  xtitle(string(b),' ',' ');
 end
-//end
 
-//[xkp1]=fish(k,xk,b,s)
+
+function [xkp1]=fish(k,xk,b,s)
 y=b*exp(-0.1*(xk(1)+xk(2))) 
 xkp1=[ y 2*y ; s 0.0]*xk
-//end
 
-//[xkp1]=fishr(k,xk,b,s)
+function [xkp1]=fishr(k,xk,b,s)
 y=b*exp(-0.1*(xk(1)+xk(2))) 
 xkp1=[ y 2*y ; s*(1+0.1*(rand-0.5)) 0.0]*xk
-//end
 
-//[xkp1]=fishr2(k,xk,b,s)
+
+function [xkp1]=fishr2(k,xk,b,s)
 z=exp(-0.1*(xk(1)+xk(2))) 
 xkp1=[ b*z**(1+0.1*(rand-0.5)) 2*b*z**(1+0.1*(rand-0.5)) ; s 0.0]*xk
-//end
+
 
 
 

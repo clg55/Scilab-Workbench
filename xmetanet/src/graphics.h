@@ -8,7 +8,8 @@ typedef struct graphics {
   GC gc_xor;
   XFontStruct *drawfont;
   XFontStruct *metafont;
-  Widget shell; 
+  XFontStruct *helpfont;
+  Widget shell;
 } G;
 
 extern G theG;

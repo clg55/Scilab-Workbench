@@ -1,7 +1,7 @@
-
-k_dr=driver();
-driver("Wdp");
-if flag1=1;xset("use color",1);end
+kp=xget("pixmap");
+dr=driver()
+driver('X11')
+if kp=0, xset("pixmap",1);end;
 
 y=ode(1.e-8*[1;1;1],0,0:0.003:50,'loren'); 
 [n1,n2]=size(y)	;
@@ -26,6 +26,6 @@ for i=45:5:80,xset("wwpc");
 	xset("wshow");
 end
 xset("dashes",ds(1));
-driver(k_dr);
-
+if kp=0, xset("pixmap",0);end;
+driver(dr)
 

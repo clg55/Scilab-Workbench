@@ -28,3 +28,5 @@ XLess*mf.text.baseTranslations: #override\n\
 	<Key>J:		scroll-one-line-up()\n\
 	<Key>E:		scroll-one-line-up()\n\
 	<Key>q:		quit()\n
+
+XLess.frame.height: 600

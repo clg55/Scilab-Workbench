@@ -9,15 +9,16 @@ lu - LU factors of Gaussian elimination
 .SH PARAMETERS
 .TP
 A 
-: a real or complex square matrix
+: real or complex square matrix (n x n)
 .TP 8
 L,U
-: two real or complex matrices
+: two real or complex matrices  (n x n)
 .SH DESCRIPTION
 .Vb [L,U]= lu(A)
-produces two matrices \fVL\fR and \fVU\fR with \fVL\fR lower triangular
-and \fVU\fR upper triangular such that \fVA*E = L*U\fR  for a column 
-permutation matrix E.
+produces two matrices \fVL\fR and \fVU\fR such that \fVA = L*U\fR
+with \fVU\fR upper triangular and \fVE*L\fR  lower triangular for 
+a permutation matrix E. If \fVA\fR has rank \fVk\fR, rows \fVk+1\fR
+to \fVn\fR of \fVU\fR are zero.
 .SH Remark
 \fVE\fR is not returned by LU: as such this primitive is not 
 interesting (old stuff)

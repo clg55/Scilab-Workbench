@@ -1,4 +1,4 @@
-//[zers,pols,gain]=zpch2(n,A,omegar)
+function [zers,pols,gain]=zpch2(n,A,omegar)
 //[zers,pols,gain]=zpch2(n,A,omegar)
 //Poles and zeros of a type 2 Chebyshev analog filter
 //gain is the gain of the filter
@@ -30,7 +30,6 @@
    normal=alpha.*alpha+beta.*beta;
    pols=omegar*(alpha-%i*beta)./normal;
    gain=real(prod(pols)/prod(zers));
- 
-//end
+
 
 

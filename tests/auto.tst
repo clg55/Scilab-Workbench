@@ -8,9 +8,9 @@
  d=[1+3*s   5-s**3           s+1;1+s     1+s+s**2      3*s-1];
  
  h=syslin('c',n./d);
- [n,d]=simp(n,d);if h<>list('r',n,d,'c') then pause,end
+ [n,d]=simp(n,d);if h<>tlist('r',n,d,'c') then pause,end
  sl=tf2ss(h); e=h-ss2tf(sl);
- if norm(coeff(e(2)))>1000*%eps then pause,end
+ if norm(coeff(e(2)))>100000*%eps then pause,end
  
  
 //
@@ -30,7 +30,7 @@
        0 , 0 , 0];
  
 sl=syslin('c',a,b,c);
-if sl<>list('lss',a,b,c,0*ones(2,3),0*ones(5,1),'c') then pause,end
+if sl<>tlist('lss',a,b,c,0*ones(2,3),0*ones(5,1),'c') then pause,end
 //
 eps=sqrt(%eps);
 if contr(a,b,eps)<>4 then pause,end

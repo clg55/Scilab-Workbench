@@ -2,11 +2,12 @@
      &     or,phibar,phir,pile,piv,predw,sufval,type,waqc)
       implicit integer (a-z)
       dimension lp2(*),la2(mm),or(ma),ex(ma)
-      dimension b(ma),c(ma),phibar(ma),type(ma)
+      dimension b(ma),c(ma),type(ma)
       dimension pile(n),predw(n)
       doubleprecision piv(n),sufval(n),waqc(ma)
       doubleprecision infr,delta,phir(ma),gamma1,gamma2,teta
-      doubleprecision ep,eps,eps1,eps2,zero,ref,min
+      doubleprecision ep,eps,eps1,eps2,zero,ref,min,phibar(ma)
+      icon=0
       zero=0.00001
       infr=10.d6
  100  continue
@@ -59,6 +60,11 @@
       call mintyq(b,c,coderf,delta,ex,i1,infr,j1,la2,lp2,ma,
      &     mm,n,or,phibar,phir,pile,piv,predw,
      &     sufval,type,u0,waqc)
+      icon=icon+1
+      if(icon .gt. ma+1) then
+         coderf=2
+         return
+      endif
       if(coderf.ne.0) return
       if(predw(i1).le.zero) go to 100
       eps1 = infr

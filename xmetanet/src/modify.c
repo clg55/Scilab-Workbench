@@ -5,52 +5,41 @@
 #include "metio.h"
 
 extern void ClearDraw();
-extern int SaveGraph1();
-extern void UnhiliteActive();
+extern int SaveGraph();
+extern void UnhiliteAll();
 
-static graph *oldGraph;
+graph *oldGraph;
 
 void ModifyGraph()
 {
   oldGraph = DuplicateGraph(theGraph);
-  if (theGG.active != 0) {
-    UnhiliteActive();
-    theGG.active = 0;
-    theGG.active_type = 0;
+  if (theGG.n_hilited_arcs != 0 || theGG.n_hilited_nodes != 0) {
+    UnhiliteAll();
   }
   DisplayMenu(MODIFY);
-  ClearDraw();
-  DrawGraph(theGraph);
 }
 
 void ModifyQuit()
 {
   if (theGG.modified) {
-      sprintf(Description,"Graph %s has been modified. Do you want to save it first?",theGraph->name);
+    sprintf(Description,"Graph \"%s\" has been modified and not saved.\nQuit Modify Mode anyway?",
+	    theGraph->name);
     if (MetanetYesOrNo(Description)) {
-      if (SaveGraph1()) {
+      if (theGG.n_hilited_arcs != 0 || theGG.n_hilited_nodes != 0) {
+	UnhiliteAll();
+      }
+      theGraph = oldGraph;
+      theGG.modified = 0;
+      if (theGraph->node_number == 0) {
+	DisplayMenu(BEGIN);
+	ClearDraw();
+      } else {
 	DisplayMenu(STUDY);
 	ClearDraw(); 
 	DrawGraph(theGraph);
       }
-      return;
-    } else {
-      sprintf(Description,"Graph %s has been modified and has not been saved.\n Do you really want to quit ?",theGraph->name);
-      if (MetanetYesOrNo(Description)) {
-	theGraph = oldGraph;
-	theGG.modified = 0;
-	if (theGraph->node_number == 0) {
-	  DisplayMenu(BEGIN);
-	  ClearDraw();
-	} else {
-	  DisplayMenu(STUDY);
-	  ClearDraw(); 
-	  DrawGraph(theGraph);
-	}
-      } else return;
     }
-    }
-  else {
-    DisplayMenu(STUDY);
+    else return;
   }
+  else DisplayMenu(STUDY);
 }

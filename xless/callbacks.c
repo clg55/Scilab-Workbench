@@ -277,7 +277,7 @@ XtPointer callData;
   char *line, *l;
 #endif
 
-  if (wi->file == NULL) {
+  if (wi->file == NULL||strcmp(wi->file,"stdin")==0) {
 
     /* create a temporary file */
     printfile = tmpnam(0);

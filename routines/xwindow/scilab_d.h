@@ -1,6 +1,6 @@
 #include <stdio.h>
-#include <string.h>
-#include <malloc.h>
+#include "../machine.h"
+
 #include <X11/Xatom.h>
 #include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
@@ -16,28 +16,34 @@
 #include <X11/Xaw/Form.h>
 #include <X11/Xaw/List.h>
 #include <X11/cursorfont.h>
-#include <X11/IntrinsicP.h>
-#include <X11/Xaw/TextP.h>
 #include <X11/Xaw/Scrollbar.h>
 
+#include <string.h>
+#include <malloc.h>
+
 /* used only for message and dialog boxes */
-#define DIALOGHEIGHT 30
-
-#define VIEWHEIGHT 600
-#define DRAWHEIGHT 3000
-#define DRAWWIDTH 3000  
-
-#define INTERHEIGHT 100
-
-#define XWMENUFONT "*-fixed-medium-r-*-*-13-*-*-*-*-*-iso8859-*"
-#define MaxWin 10
 
 #define Min(x,y)	(((x)<(y))?(x):(y))
 #define Max(x,y)	(((x)>(y))?(x):(y))
 
-#define         char_height(font) \
-                ((font)->max_bounds.ascent + (font)->max_bounds.descent)
+#define char_height(font) ((font)->max_bounds.ascent+(font)->max_bounds.descent)
 
-#define         char_width(font) ((font)->max_bounds.width)
+#define char_width(font) ((font)->max_bounds.width)
+
+#define PI0 (integer *) 0
+#define PD0 (double *) 0
+
+#ifdef lint5
+#include <sys/stdtypes.h>
+#define MALLOC(x) malloc(((size_t) x))
+#define FREE(x) if (x  != NULL) free((void *) x);
+#else
+#define MALLOC(x) malloc(((unsigned) x))
+#define FREE(x) if (x  != NULL) free((char *) x);
+#endif
+
+
+
+
 
 

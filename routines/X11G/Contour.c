@@ -22,7 +22,7 @@
 
 --------------------------------------------------------------------------*/
 
-
+#include <string.h> /* in case of dbmalloc use */
 #include <stdio.h>
 #ifdef THINK_C
 #include <stdlib.h>
@@ -30,10 +30,8 @@
 #include <malloc.h>
 #endif
 
-
 #include <math.h>
 #include "Math.h"
-#include "../machine.h"
 
 extern char GetDriver_();
 /*-----------------------------------------------------------------------
@@ -48,18 +46,18 @@ Could be changed in #define to increase speed
 ------------------------*/
 
 static double *GX,*GY,*GZ;
-static int Gn1,Gn2;
+static integer Gn1,Gn2;
 
 InitValues(x,y,z,n1,n2)
      double x[],y[],z[];
-     int n1,n2;
+     integer n1,n2;
 {
   Gn1=n1;  Gn2=n2;  GX = x;  GY = y;  GZ = z;
 }
 
-/*--------return the  value of f for a point on the grid-----*/
+/*--------return the  value of f for a pointeger on the grid-----*/
 double phi_cont(i,j)
-     int i,j;
+     integer i,j;
 {
   return(GZ[i+Gn1*j]);
   }
@@ -76,30 +74,31 @@ double f_intercept(zCont,fi,xi,fj,xj)
 
 /* check for boundary points */
 
- int  bdyp( i,j)
-	int i,j;
+ integer  bdyp( i,j)
+	integer i,j;
 {
   return (  j == 0 || i == 0 || j == Gn2-1 || i == Gn1-1 );
 }
 
 /* store or get flag values */
 
-static  int *itg_cont, *xbd_cont,*ybd_cont;
+static  integer *itg_cont, *xbd_cont,*ybd_cont;
 
-int get_itg_cont(i,j)
-     int i,j;
+integer get_itg_cont(i,j)
+     integer i,j;
 {
   return( itg_cont[i+Gn1*j]);
 }
 
+
 inc_itg_cont(i,j,val)
-     int i,j,val ;
+     integer i,j,val ;
 {
   itg_cont[i+Gn1*j] += val;
 }
 
 
-int not_same_sign(val1,val2)
+integer not_same_sign(val1,val2)
      double val1,val2;
 {
   /** 0.0 est consid\'er\'e comme positif **/
@@ -111,8 +110,8 @@ int not_same_sign(val1,val2)
       if ( val2 >= 0.0) return(1) ; else return(0);}
 }
 
-int oddp(i)
-     int i;
+integer oddp(i)
+     integer i;
 { if ( i == 1 || i ==3 ) return(1); else return(0);}
 
 /*------------------------------------------------------------
@@ -135,42 +134,43 @@ static double FRect[4],scx,scy;
 static double ZC=0.0;
 static double xofset,yofset;
 static char   ContNumFormat[100];
-static int    ContNumPrec=2;
+static integer    ContNumPrec=2;
 #define TRX(x1,y1,z1) ( m[0][0]*(x1) +m[0][1]*(y1) +m[0][2]*(z1))
 #define TRY(x1,y1,z1) ( m[1][0]*(x1) +m[1][1]*(y1) +m[1][2]*(z1))
 #define TRZ(x1,y1,z1) ( m[2][0]*(x1) +m[2][1]*(y1) +m[2][2]*(z1))
-#define GEOX(x1,y1,z1) nint( scx*(TRX(x1,y1,z1)-FRect[0])  +tr[0]);
-#define GEOY(x1,y1,z1) nint( scy*(-TRY(x1,y1,z1)+FRect[3]) +tr[1]);
+#define GEOX(x1,y1,z1) inint( scx*(TRX(x1,y1,z1)-FRect[0])  +tr[0]);
+#define GEOY(x1,y1,z1) inint( scy*(-TRY(x1,y1,z1)+FRect[3]) +tr[1]);
 
-#define GXX(x1) nint( scx*(x1-FRect[0])  +tr[0]);
-#define GYY(y1) nint( scy*(-y1+FRect[3]) +tr[1]);
+#define GXX(x1) inint( scx*(x1-FRect[0])  +tr[0]);
+#define GYY(y1) inint( scy*(-y1+FRect[3]) +tr[1]);
 
 static double FRect2d[4],scx2d,scy2d;
 #define GX2D(j) ( scx2d*(GX[j]-FRect2d[0])  +xofset)
 #define GY2D(j) ( scy2d*(-GY[j]+FRect2d[3]) +yofset)
-/*---------return the x-value of a grid point --------*/
-double x_cont(i)  int i;{  return(GX2D(i));}
-/*---------return the y-value of a grid point --------*/
-double y_cont(i)   int i;{return(GY2D(i));}
+/*---------return the x-value of a grid pointeger --------*/
+double x_cont(i)  integer i;{  return(GX2D(i));}
+/*---------return the y-value of a grid pointeger --------*/
+double y_cont(i)   integer i;{return(GY2D(i));}
 
 /*  lstr : unused ( but used by Fortran )  */
 
 C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
      double *teta,*alpha;
-     int flag[3];
+     integer flag[3];
      char legend[];
      double x[],y[],z[],zz[],bbox[6],*zlev;
-     int *n1,*n2,*nz,*flagnz;
-     long int lstr;
+     integer *n1,*n2,*nz,*flagnz;
+     integer lstr;
 {
-  int InsideU[4],InsideD[4],cache;
-  int (*func)(), ContStore(),ContStore1(),ContStore2();
-  int IRect[4];
+  static char logflag[]="nn";
+  integer InsideU[4],InsideD[4],cache;
+  void (*func)(), ContStore(),ContStore1(),ContStore2();
+  integer IRect[4];
   static double *zconst;
-  static int firstentry=1;
+  static integer firstentry=1;
   double zmin,zmax,xmin,xmax,ymin,ymax;
-  int *xm,*ym,err=0;
-  int N[3],i,aaint[4];
+  integer *xm,*ym,err=0;
+  integer N[3],i,aaint[4];
   double xbox[8],ybox[8],zbox[8];
   /** If Record is on **/
   if (GetDriver_()=='R') 
@@ -190,13 +190,13 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
       aaint[0]=aaint[2]=2;aaint[1]=aaint[3]=10;
       xmin=x[0];ymin= -y[*n2-1],xmax=x[*n1-1],ymax= -y[0];
       FRect2d[0]=xmin;FRect2d[1]= -ymax;FRect2d[2]=xmax;FRect2d[3]= -ymin;
-      Scale2D(1,FRect2d,IRect,&scx2d,&scy2d,&xofset,&yofset,&xm,&ym,0,&err);
+      Scale2D(1L,FRect2d,IRect,aaint,&scx2d,&scy2d,&xofset,&yofset,logflag,&xm,&ym,0L,&err);
       if ( err == 0) return;
       aplot_(IRect,(xmin=FRect2d[0],&xmin),(ymin=FRect2d[1],&ymin),
 	     (xmax=FRect2d[2],&xmax),(ymax=FRect2d[3],&ymax),
 	     &(aaint[0]),&(aaint[2]),"nn"); 
       C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
-	  ,IP0,IP0,0,0);
+	  ,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     }
   else
     {
@@ -212,20 +212,20 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
        if ( flag[1] !=0)
 	 SetEch3d(xbox,ybox,zbox,bbox,teta,alpha);
        else
-	 SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,0);
+	 SetEch3d1(xbox,ybox,zbox,bbox,teta,alpha,0L);
        /** Calcule l' Enveloppe Convexe de la boite **/
        /** ainsi que les triedres caches ou non **/
        Convex(xbox,ybox,InsideU,InsideD,legend,flag,bbox);
        /** Le triedre cach\'e **/
        if (zbox[InsideU[0]] > zbox[InsideD[0]])
 	 {
-	   cache=InsideD[0];
-	   if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideD);
+	   /* cache=InsideD[0]; */
+	   if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideD,1L);
 	 }
        else 
 	 {
-	   cache=InsideU[0]-4;
-	   if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideU);
+	   /* cache=InsideU[0]-4; */
+	   if (flag[2] >=2 )DrawAxis(xbox,ybox,InsideU,1L);
 	 }
        GetEch3d1(m,tr,FRect,&scx,&scy);
      }
@@ -233,13 +233,13 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
     {
       if (firstentry)
 	{
-	  zconst=(double *) malloc ((unsigned ) (*nz)* sizeof(double));
+	  zconst=(double *) MALLOC( (*nz)* sizeof(double));
 	  firstentry=0;
 	}
       else 
 	{
-	  zconst =(double *) realloc((char *)zconst,
-				     ((unsigned) (*nz)*sizeof(double)));
+	  zconst =(double *) REALLOC(zconst,
+				     ( (*nz)*sizeof(double)));
 	}
       for ( i =0 ; i < *nz ; i++)
 	zconst[i]=zmin + i*(zmax-zmin)/(*nz);
@@ -255,13 +255,12 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
     {
       /** Le triedre que l'on doit voir **/
       if (zbox[InsideU[0]] > zbox[InsideD[0]])
-	DrawAxis(xbox,ybox,InsideU);
+	DrawAxis(xbox,ybox,InsideU,0L);
       else 
-	DrawAxis(xbox,ybox,InsideD);
+	DrawAxis(xbox,ybox,InsideD,0L);
     }
-  IRect[0]=IRect[1]= -1;IRect[2]=IRect[3]=200000;
-  C2F(dr)("xset","clipping",&IRect[0],&IRect[1],&IRect[2],&IRect[3]
-    ,IP0,IP0,0,0);
+  C2F(dr)("xset","clipoff",PI0,PI0,PI0,PI0, PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+
 }
 
 /*-------------------------------------------------------
@@ -276,10 +275,12 @@ C2F(contour)(x,y,z,n1,n2,flagnz,nz,zz,teta,alpha,legend,flag,bbox,zlev,lstr)
 
 contourI_(func,x,y,z,zCont,N,err)
      double x[],y[],z[],zCont[];
-     int N[],*err;
-     int (*func)();
+     integer N[];
+     integer *err;
+     void (*func)();
 {
-  int n1,n2,ncont,i,c,j,k,n5,AllocContour();
+  integer n1,n2,ncont,i,c,j,k,n5;
+  integer AllocContour();
   n1=N[0];n2=N[1];ncont=N[2];
   ChoixFormatE1(ContNumFormat,&ContNumPrec,zCont,N[2]);
   if (AllocContour()==0) return;
@@ -321,38 +322,38 @@ contourI_(func,x,y,z,zCont,N,err)
 	 itg_cont[i+n1*j]=0 ;
      /** all the boundary segments **/
      for ( k = 1 ; k < n5 ; k++)
-       { int ib,jb;
+       { integer ib,jb;
 	 i = xbd_cont[k] ; j = ybd_cont[k];
 	 ib = xbd_cont[k-1] ; jb= ybd_cont[k-1];
 	 if  (not_same_sign (phi_cont(i,j)-zCont[c] , 
 			     phi_cont(ib,jb)-zCont[c]))
-	   look(func,i,j,ib,jb,1,zCont[c]);
+	   look(func,i,j,ib,jb,1L,zCont[c]);
        }
      /** inside segments **/
      for ( i = 1 ; i < n1-1; i++)
        for ( j = 1 ; j < n2-1 ; j++)
 	 if  (not_same_sign ( phi_cont(i,j)-zCont[c] , 
 			    phi_cont(i, j-1)-zCont[c]))
-	   look(func,i,j,i,j-1,2,zCont[c]);
+	   look(func,i,j,i,j-1,2L,zCont[c]);
      
    }
 }
 
 /*--------------------------------------------------------------------
   the level curve is crossing the segment (i,j) (ib,jb)
-  look store the level curve point and try to find the next segment to look at
+  look store the level curve pointeger and try to find the next segment to look at
   Cont: value of f along the contour 
   ncont: number of contour 
   c: indice of the contour Cont 
 ---------------------------------------------------------------------*/
 
 look(func,i,j,ib,jb,qq,Cont)
-     int i,j,ib,jb,qq;
+     integer i,j,ib,jb,qq;
      double  Cont ;
-     int (*func)();
+     void (*func)();
 {
-  int ffnd();
-  int ip,jp,im,jm,zds,ent,flag,wflag;
+  integer ffnd();
+  integer ip,jp,im,jm,zds,ent,flag,wflag;
   jp= j+1; ip= i+1; jm=j-1;im=i-1;
   /*  on regarde comment est le segment de depart */
   if  ( jb == jm)  flag = 1; 
@@ -366,7 +367,7 @@ look(func,i,j,ib,jb,qq,Cont)
     case  1 :
       if  (get_itg_cont(i,jm) > 1) return;
       ent=1 ; /* le segment est vertical vers le bas */
-      /* on stocke le point d'intersection */
+      /* on stocke le pointeger d'intersection */
       (*func)(0,Cont, x_cont(i), 
 		f_intercept(Cont,phi_cont(i,jm),
 			    y_cont(jm),phi_cont(i,j),y_cont(j)));
@@ -374,7 +375,7 @@ look(func,i,j,ib,jb,qq,Cont)
     case 2 : 
       if  (get_itg_cont(im,j) == 1 || get_itg_cont(im,j)==3 ) return;
       ent=2 ; /* le segment est horizontal gauche */
-      /* on stocke le point d'intersection */
+      /* on stocke le pointeger d'intersection */
       (*func)( 0,Cont,
 		f_intercept(Cont,phi_cont(im,j),
 			    x_cont(im),phi_cont(i,j),x_cont(i)), y_cont(j));
@@ -382,14 +383,14 @@ look(func,i,j,ib,jb,qq,Cont)
     case 3 :
       if  (get_itg_cont(i,j) > 1 ) return;
       ent=3 ; /* le segment est vertical haut */
-      /* on stocke le point d'intersection */
+      /* on stocke le pointeger d'intersection */
       (*func)(0,Cont,x_cont(i), f_intercept(Cont,phi_cont(i,j),
 					 y_cont(j),phi_cont(i,jp),y_cont(jp)));
       break ;
     case 4 :
       if  (get_itg_cont(i,j) == 1 || get_itg_cont(i,j)==3 ) return;
       ent=4 ; /* le segment est horizontal droit */
-      /* on stocke le point d'intersection */
+      /* on stocke le pointeger d'intersection */
       (*func)(0,Cont,f_intercept(Cont,phi_cont(i,j),
 			      x_cont(i),phi_cont(ip,j),x_cont(ip)),
 		y_cont(j));
@@ -404,7 +405,7 @@ look(func,i,j,ib,jb,qq,Cont)
       jp= j+1; ip= i+1; jm=j-1;im=i-1;
       switch  ( ent) 
 	{case 1 :
-	  inc_itg_cont(i,jm,2);
+	  inc_itg_cont(i,jm,2L);
 	  ent = ffnd(func,i,ip,ip,i,j,j,jm,jm,ent,qq,Cont,&zds);
 	  /* on calcule le nouveau point, ent donne la 
 	     direction du segment a explorer */
@@ -415,7 +416,7 @@ look(func,i,j,ib,jb,qq,Cont)
 	    }
 	  break ;
 	case 2  :
-	  inc_itg_cont(im,j,1);
+	  inc_itg_cont(im,j,1L);
 	  ent = ffnd(func,i,i,im,im,j,jm,jm,j,ent,qq,Cont,&zds);
 	  switch ( ent)
 	    { case 2 : j = jm ;break ;
@@ -423,7 +424,7 @@ look(func,i,j,ib,jb,qq,Cont)
 	    }
 	  break ;
 	case 3 :
-	  inc_itg_cont(i,j,2);
+	  inc_itg_cont(i,j,2L);
 	  ent = ffnd(func,i,im,im,i,j,j,jp,jp,ent,qq,Cont,&zds);
 	  switch ( ent)
 	    { case 3 : i=im; break ;
@@ -431,7 +432,7 @@ look(func,i,j,ib,jb,qq,Cont)
 	    }
 	  break ;
 	case 4 :
-	  inc_itg_cont(i,j,1);
+	  inc_itg_cont(i,j,1L);
 	  ent = ffnd(func,i,i,ip,ip,j,jp,jp,j,ent,qq,Cont,&zds);
 	  switch ( ent)
 	    {case 4 :j=jp;break ;
@@ -444,15 +445,15 @@ look(func,i,j,ib,jb,qq,Cont)
 	{
 	  switch ( ent) 
 	    {
-	    case 1 : inc_itg_cont(i,(j-1),2); break ; 
-	    case 2 : inc_itg_cont(i-1,j,1);  break ; 
-	    case 3 : inc_itg_cont(i,j,2); break ; 
-	    case 4 : inc_itg_cont(i,j,1); break ; 
+	    case 1 : inc_itg_cont(i,(j-1),2L); break ; 
+	    case 2 : inc_itg_cont(i-1,j,1L);  break ; 
+	    case 3 : inc_itg_cont(i,j,2L); break ; 
+	    case 4 : inc_itg_cont(i,j,1L); break ; 
 	    }
 	  /* il faut sortir du while */
 	  wflag = 0 ;
 	  }
-      /**  le point de depart etait a l'interieur du domaine **/
+      /**  le pointeger de depart etait a l'interieur du domaine **/
       if ( qq == 2) 
 	{
 	  switch ( ent) 
@@ -470,31 +471,31 @@ look(func,i,j,ib,jb,qq,Cont)
 
 /*-----------------------------------------------------------------------
    ffnd : cette fonction  recoit en entree quatre points 
-       on sait que la courbe de niveau passe entre le point 1 et le quatre 
+       on sait que la courbe de niveau passe entre le pointeger 1 et le quatre 
        on cherche a savoir ou elle resort, 
        et on fixe une nouvelle valeur de ent aui indiquera le segment suivant a explorer 
 -----------------------------------------------------------------------*/
 
-int ffnd (func, i1,i2,i3,i4,jj1,jj2,jj3,jj4,ent,qq,Cont,zds)
-     int  i1,i2,i3,i4,jj1,jj2,jj3,jj4,ent,qq, *zds;
+integer ffnd (func, i1,i2,i3,i4,jj1,jj2,jj3,jj4,ent,qq,Cont,zds)
+     integer  i1,i2,i3,i4,jj1,jj2,jj3,jj4,ent,qq, *zds;
      double Cont ;
-     int (*func)();
+     void (*func)();
 {
   double phi1,phi2,phi3,phi4,xav,yav,phiav;
-  int revflag,i;
+  integer revflag,i;
   phi1=phi_cont(i1,jj1)-Cont;
   phi2=phi_cont(i2,jj2)-Cont;
   phi3=phi_cont(i3,jj3)-Cont;
   phi4=phi_cont(i4,jj4)-Cont;
   revflag = 0;
   *zds = 0;
-  /* le point au centre du rectangle */
+  /* le pointeger au centre du rectangle */
   xav = ( x_cont(i1)+ x_cont(i3))/2.0 ; 
   yav = ( y_cont(jj1)+ y_cont(jj3))/2.0 ; 
   phiav = ( phi1+phi2+phi3+phi4) / 4.0;
   if (  not_same_sign( phiav,phi4)) 
     {
-      int l1, k1; 
+      integer l1, k1; 
       double phi;
       revflag = 1 ; 
       l1= i4; k1= jj4;
@@ -504,13 +505,13 @@ int ffnd (func, i1,i2,i3,i4,jj1,jj2,jj3,jj4,ent,qq,Cont,zds)
       phi = phi1; phi1 = phi4; phi4= phi;
       phi = phi3; phi3 = phi2; phi2= phi;
     }
-  /* on stocke un nouveau point  */
+  /* on stocke un nouveau pointeger  */
   (*func)(1,Cont,f_intercept(0.0,phi1,x_cont(i1),phiav,xav),
 	    f_intercept(0.0,phi1,y_cont(jj1),phiav,yav));
   /* on parcourt les segments du rectangle pour voir sur quelle face
      on sort **/
   for  ( i = 0 ;  ; i++)
-    { int l1,k1;
+    { integer l1,k1;
       double phi;
       if ( not_same_sign ( phi1,phi2))   /** sortir du for **/ break ; 
       if  ( phiav != 0.0 ) 
@@ -534,20 +535,20 @@ int ffnd (func, i1,i2,i3,i4,jj1,jj2,jj3,jj4,ent,qq,Cont,zds)
 Storing and tracing level curves 
 ----------------------------------------------------------------*/
 
-int *xcont,*ycont;
+integer *xcont,*ycont;
 unsigned ContMaxPoints;
 #define NBPOINTS 256;
 
-int ReallocContour(n)
-     int n  ;
+integer ReallocContour(n)
+     integer n  ;
 {
   while (n > ContMaxPoints)
     {
       ContMaxPoints += NBPOINTS;
-      xcont = (int *) realloc ((char *) xcont,(unsigned)
-				  ContMaxPoints * sizeof (int));
-      ycont = (int *) realloc ((char *) ycont,(unsigned)
-				  ContMaxPoints * sizeof (int));
+      xcont = (integer *) REALLOC( xcont,
+				  ContMaxPoints * sizeof (integer));
+      ycont = (integer *) REALLOC( ycont,
+				  ContMaxPoints * sizeof (integer));
       if (ycont == 0 || xcont == 0 ) 
 	{ perror("ReallocContour : No more place \n:" );
 	  return (0);
@@ -557,13 +558,13 @@ int ReallocContour(n)
 }
 static first = 0 ;
 
-int AllocContour()
+integer AllocContour()
 {
   if (first == 0)
     {
       ContMaxPoints = NBPOINTS;
-      xcont = (int *) malloc (ContMaxPoints * sizeof (int)); 
-      ycont = (int *) malloc (ContMaxPoints * sizeof (int)); 
+      xcont = (integer *) MALLOC(ContMaxPoints * sizeof (int)); 
+      ycont = (integer *) MALLOC(ContMaxPoints * sizeof (int)); 
       if ( ycont == 0 || xcont == 0 )
 	{ perror("AllocContour : No more place\n");return(0);}
       else 
@@ -575,12 +576,12 @@ int AllocContour()
   return(1);
 }
 
-static cont_size ;
+static integer cont_size ;
 
 /* Calcul d'un contour ds une geometrie 3d */
-
+void
 ContStore(ival,Cont,xncont,yncont)
-     int ival;
+     integer ival;
      double xncont,yncont;
      double Cont;
 {
@@ -594,9 +595,9 @@ ContStore(ival,Cont,xncont,yncont)
 }
 
 /* Calcul d'un contour ds une geometrie 3d projete sur une hauteur ZC */
-
+void
 ContStore1(ival,Cont,xncont,yncont)
-     int ival;
+     integer ival;
      double xncont,yncont;
      double Cont;
 {
@@ -612,9 +613,9 @@ ContStore1(ival,Cont,xncont,yncont)
     }
 }
 /* Calcul d'un contour ds une geometrie 2d */
-
+void
 ContStore2(ival,Cont,xncont,yncont)
-     int ival;
+     integer ival;
      double xncont,yncont;
      double Cont;
 {
@@ -625,8 +626,8 @@ ContStore2(ival,Cont,xncont,yncont)
   if ( ival == 0) cont_size =0 ;
   if ( cont_size <  ContMaxPoints || ReallocContour(cont_size+1))
     {
-      xcont[cont_size]=nint(xncont);
-      ycont[cont_size++]=nint(yncont);
+      xcont[cont_size]=inint(xncont);
+      ycont[cont_size++]=inint(yncont);
     }
 }
 
@@ -635,15 +636,15 @@ ContStore2(ival,Cont,xncont,yncont)
 
 ContourTrace(Cont)
      double Cont;
-{ int close;
-  int flag=0;
+{ integer close;
+  integer flag=0;
   double angle=0.0;
   char str[100];
   /*  Just the lines **/
-  C2F(dr)("xlines","void",&cont_size,xcont,ycont,&close,IP0,IP0,0,0);
+  C2F(dr)("xlines","void",&cont_size,xcont,ycont,&close,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
   sprintf(str,ContNumFormat,ContNumPrec,Cont);
   C2F(dr)("xstring",str, &xcont[cont_size / 2],&ycont[cont_size /2],
-      (int *) &angle,&flag,IP0,IP0,0,0);
+      PI0,&flag,PI0,PI0, &angle,PD0,PD0,PD0,0L,0L);
 }
 
 

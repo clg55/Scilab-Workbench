@@ -174,13 +174,17 @@ computes recursively  \fVy(k+1)=f(k,y(k)\fR)  from an initial state
 \fVy(k0)\fR and returns  \fVy(k)\fR for \fVk\fR in \fVkvect\fR.
 \fVkvect(1)\fR must be greater or equal to \fVk0\fR.
 .LP
-for example
+Optional parameters can be given by a global variable. For this
+enter \fVodeoptions()\fR.
+.LP
+Below are a few examples.
 .nf
 y=ode('discrete',y1,1,1:n,function);
 y=ode('discrete',y1,1,3:2:9,function);
 .fi
 in the second example \fVy\fR evaluates to y=[y3,y5,y7,y9];
-.SH EXAMPLES
+
+For example
 .TP
 [1]
 Computation of exp(A) with A=[1,1;0,2];
@@ -238,5 +242,6 @@ y0=[1;0;0]; t0=0; t=[0.4,4]
 ode('stiff',y0,t0,t,'fex','jex')
 .fi
 .SH SEE ALSO
-impl, ltitr, rtitr, exp, csim, external.
+odeoptions, impl, ltitr, rtitr, exp, csim, external, directory SCIDIR/default
+
 

@@ -21,12 +21,11 @@
     Phone : 43.04.40.98 poste : 3327 
 
 --------------------------------------------------------------------------*/
-
 #include <math.h>
 #include <string.h>
+#include <malloc.h> /* in case od dbmalloc use */
 #include <stdio.h>
 #include "Math.h"
-#include "../machine.h"
 
 /*--------------------------------------------------------------
 //  to draw 
@@ -40,43 +39,44 @@
 
 aplot_(Box,xmin,ymin,xmax,ymax,xnax,ynax,logflag)
      double *xmin,*ymin,*xmax,*ymax;
-     int xnax[],ynax[],Box[];
+     integer xnax[],ynax[],Box[];
      char logflag[2];
 {
   double size[3];
-  int LDPoint[2];
+  integer LDPoint[2];
   { 
-    C2F(dr)("xrect","v",&Box[0],&Box[1],&Box[2],&Box[3], IP0,IP0,0,0);
-    /** left-down point of the frame box **/
+    C2F(dr)("xrect","v",&Box[0],&Box[1],&Box[2],&Box[3], PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+    /** left-down pointeger of the frame box **/
     LDPoint[0]=Box[0];LDPoint[1]=Box[1]+Box[3];
   }
   size[1]=Box[3]/100.0;size[2]=2.0;
   size[0]= ((double ) Box[2])/((double) xnax[0]*xnax[1]);
-  Axis(size,0,*xmin,*xmax,xnax,LDPoint,logflag[0]);
+  Axis(size,0L,*xmin,*xmax,xnax,LDPoint,logflag[0]);
   size[1]= -Box[2]/150.0;size[2]=2.0;
   size[0]=((double) Box[3])/ ((double) ynax[0]*ynax[1]);
-  Axis(size,-90,*ymin,*ymax,ynax,LDPoint,logflag[1]);
+  Axis(size,-90L,*ymin,*ymax,ynax,LDPoint,logflag[1]);
 }
 
 Axis(size,axdir,min,max,nax,LDPoint,logflag)
      double size[],min,max;
-     int axdir,nax[2],LDPoint[2];
+     integer axdir,nax[2],LDPoint[2];
      char logflag;
 {
   char fornum[100];
-  int flag=0,xx=0,yy=0,posi[2],rect[4],smallerfont;
-  int desres,i,barlength,logrect[4],fontid,fontsiz,narg,verbose=0;
+  integer flag=0,xx=0,yy=0,posi[2],rect[4],smallersize;
+  integer desres,i,barlength,logrect[4];
+  integer fontid[2],narg,verbose=0;
   double xp;
-  C2F(dr)("xaxis","void",&axdir,nax,(int *) size,LDPoint, IP0,IP0,0,0);
+  C2F(dr)("xaxis","void",&axdir,nax,PI0,LDPoint, PI0,PI0,size,PD0,PD0,PD0,0L,0L);
   ChoixFormatE(fornum,&desres,min,max,(max-min)/nax[1]);
   xp= min;
-  barlength=nint(1.2*(size[1]*size[2]));
+  barlength=inint(1.2*(size[1]*size[2]));
   if (logflag == 'l' )
     {
-      C2F(dr)("xstringl","10",&xx,&yy,logrect,IP0,IP0,IP0,0,0);	
-      C2F(dr)("xget","font",&verbose,&fontid,&fontsiz,&narg,IP0,IP0,0,0);
-      smallerfont=fontsiz-2;
-      C2F(dr)("xset","font",&fontid,&smallerfont,IP0,IP0,IP0,IP0,0,0);
+      C2F(dr)("xstringl","10",&xx,&yy,logrect,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);	
+      C2F(dr)("xget","font",&verbose,fontid,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+      smallersize=fontid[1]-2;
+      C2F(dr)("xset","font",fontid,&smallersize,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
     }
   for (i=0; i <= nax[1];i++)
     { double angle=0.0;
@@ -84,7 +84,7 @@ Axis(size,axdir,min,max,nax,LDPoint,logflag)
       double lp;
       lp = xp + i*(max-min)/((double)nax[1]);
       sprintf(foo,fornum,desres,lp);
-      C2F(dr)("xstringl",foo,&xx,&yy,rect,IP0,IP0,IP0,0,0);
+      C2F(dr)("xstringl",foo,&xx,&yy,rect,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
       if ( axdir == 0 ) 
 	{
 	  posi[0]=LDPoint[0]+ i*nax[0]*size[0]-rect[2]/2;
@@ -95,17 +95,17 @@ Axis(size,axdir,min,max,nax,LDPoint,logflag)
 	  posi[0]=LDPoint[0] - rect[2] +barlength;
 	  posi[1]=LDPoint[1] - i*nax[0]*size[0] + rect[3]/4;
 	}
-      C2F(dr)("xstring",foo,&(posi[0]),&(posi[1]),(int *)&angle,&flag,IP0,IP0,0,0);
+      C2F(dr)("xstring",foo,&(posi[0]),&(posi[1]),PI0,&flag,PI0,PI0,&angle,PD0,PD0,PD0,0L,0L);
       if ( logflag == 'l' )
 	{
-	  C2F(dr)("xset","font",&fontid,&fontsiz,IP0,IP0,IP0,IP0,0,0);
+	  C2F(dr)("xset","font",fontid,fontid+1,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 	  C2F(dr)("xstring","10",(posi[0] -= logrect[2],&posi[0]),
 		  (posi[1] += logrect[3],&posi[1]),
-		  (int *)&angle,&flag,IP0,IP0,0,0);
-	  C2F(dr)("xset","font",&fontid,&smallerfont,IP0,IP0,IP0,IP0,0,0);
+		  PI0,&flag,PI0,PI0,&angle,PD0,PD0,PD0,0L,0L);
+	  C2F(dr)("xset","font",fontid,&smallersize,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 	}
     }
-  if ( logflag == 'l' ) C2F(dr)("xset","font",&fontid,&fontsiz,IP0,IP0,IP0,IP0,0,0);
+  if ( logflag == 'l' ) C2F(dr)("xset","font",fontid,fontid+1,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
 }
 
 
@@ -113,15 +113,19 @@ Axis(size,axdir,min,max,nax,LDPoint,logflag)
   choix d'un format qui Fsepare les points 
   renvoit un format et un nombre qui est le nombre de d\'ecimales 
   associ\'ees au format 
+  C'est le format que l'on va utiliser pour ecrire des nombres 
+  le long des axes mais le nombre ecrit peut differer de 10% en valeurs 
+  relative (cela depend du 0.1 plus bas ) 
+  ce qui est peut etre trop gros ? 
 ------------------------------------------------*/
 
 ChoixFormatE(fmt,desres,xmin,xmax,xpas)
      char fmt[];
-     int *desres;
+     integer *desres;
      double xmin,xmax,xpas;
 {
   char buf[100];
-  int des,len;
+  integer des,len;
   /* format f minimal  */
   for ( des = 0 ; des < 5 ; des++)
     {
@@ -145,16 +149,18 @@ ChoixFormatE(fmt,desres,xmin,xmax,xpas)
   FormatPrec(fmt,desres,xmin,xmax,xpas);
 }
 
-/* regarde si le format qui separe les points est suffisant au niveau precision
-   */
+/* 
+ *  regarde si le format qui separe les points est suffisant au niveau precision
+ *  si non l'augmente.
+ */
 
 FormatPrec(fmt,desres,xmin,xmax,xpas)
      char fmt[];
-     int *desres;
+     integer *desres;
      double xmin,xmax,xpas;
 {
   char buf1[100],buf2[100];
-  int i=0;
+  integer i=0;
   while ( xmin+((double)i)*xpas < xmax && *desres  < 10 )
     {
       double x1,x2,yy1;
@@ -164,7 +170,7 @@ FormatPrec(fmt,desres,xmin,xmax,xpas)
       sscanf(buf1,"%lf",&x1);
       sscanf(buf2,"%lf",&x2);
       if (  Abs((x2-x1 -xpas) /xpas) >= 0.1)  *desres += 1;
-      if (  Abs((x1- yy1)/xpas) >= 0.1) *desres +=1;
+      if (  Abs((x1- yy1)/xpas) >= 0.01) *desres +=1;
       i++;
     }
 }
@@ -181,7 +187,7 @@ FormatPrec(fmt,desres,xmin,xmax,xpas)
 
 int Fsepare(fmt,dec,l,xmin,xmax,xpas)
      char fmt[];
-     int  dec,*l;
+     integer  dec,*l;
      double xmin,xmax,xpas;
 {
   double x=xmin;
@@ -210,11 +216,11 @@ int Fsepare(fmt,dec,l,xmin,xmax,xpas)
 
 ChoixFormatE1(fmt,desres,xx,nx)
      char fmt[];
-     int *desres,nx;
+     integer *desres,nx;
      double xx[];
 {
   char buf[100];
-  int des,len;
+  integer des,len;
   /* format f minimal  */
   for ( des = 0 ; des < 5 ; des++)
     {
@@ -240,12 +246,12 @@ ChoixFormatE1(fmt,desres,xx,nx)
 
 FormatPrec1(fmt,desres,xx,nx)
      char fmt[];
-     int *desres,nx;
+     integer *desres,nx;
      double xx[];
 {
   char buf1[100],buf2[100];
   double xpas;
-  int i=0;
+  integer i=0;
   while ( i < nx-1 && *desres  < 10 )
     {
       double x1,x2;
@@ -265,11 +271,11 @@ FormatPrec1(fmt,desres,xx,nx)
 
 int Fsepare1(fmt,dec,l,xx,nx)
      char fmt[];
-     int  dec,*l,nx;
+     integer  dec,*l,nx;
      double xx[];
 {
   char buf1[100],buf2[100];
-  int i=0;
+  integer i=0;
   *l = 0;
   /**  Take care of : sprintf(buf1,"%.*f",0,1.d230) which overflow in buf1 **/
   /**  we don't use %.*f format if numbers are two big **/

@@ -3,16 +3,16 @@ function x=mcos(a)
 //%CALLING SEQUENCE
 //   x=mcos(a)
 //%PARAMETERS
-//   a   : square hermitian matrix
+//   a   : square hermitian or diagonalizable matrix
 //   x   : square hermitian matrix
 //%DESCRIPTION
 //This macro is called by the function cos to compute square matrix cosine
 //!
-[m,n]=size(a)
-if m<>n then error(20,1),end
-if a<>a' then error('Non hermitian matrix'),end
-r=and(imag(a)==0)
-[u,s]=schur(a)
-x=u*diag(cos(diag(s)))*u'
-if r then x=real(x),end
+if norm(imag(a),1)==0 then
+x=real(exp(%i*a))
+else
+x=0.5*(exp(%i*a)+exp(-%i*a));
+end
+
+
 

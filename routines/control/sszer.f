@@ -1,278 +1,278 @@
-        subroutine sszer(n,m,p,a,na,b,c,nc,d,eps,zeror,zeroi,nu,irank,
-     1        af,naf,bf,mplusn,wrka,wrk1,nwrk1,wrk2,nwrk2,ierr)
-c
-c! calling sequence
-c
-c        subroutine sszer(n,m,p,a,na,b,c,nc,d,zeror,zeroi,nu,irank,
-c     1       af,naf,bf,mplusn,wrka,wrk1,nwrk1,wrk2,nwrk2,ierr)
-c
-c        integer n,m,p,na,nc,nu,irank,nabf,mplusn,nwrk1,nwrk2,ierr
-c
-c        double precision a(na,n),b(na,m),c(nc,n),d(nc,m),wrka(na,n)
-c        double precision af(naf,mplusn),bf(naf,mplusn)
-c        double precision wrk1(nwrk1),wrk2(nwrk2)
-c        double precision zeror(n),zeroi(n)
-c
-c arguments in
-c
-c        n       integer
-c                -the number of state variables in the system
-c
-c        m       integer
-c                -the number of inputs to the system
-c
-c        p       integer
-c                -the number of outputs from the system
-c
-c        a       double precision (n,n)
-c                -the state dynamics matrix of the system
-c
-c        na      integer
-c                -the declared first dimension of matrices a and b
-c
-c        b       double precision (n,m)
-c                -the  input/state  matrix of the system
-c
-c        c       double precision (p,n)
-c                -the  state/output  matrix of the system
-c
-c        nc      integer
-c                -the declared first dimension of matrices  c and d
-c
-c        d       double precision (p,m)
-c                -the  input/output  matrix of the system
-c
-c        naf     integer
-c                -the declared first dimension of matrices  af and bf
-c                 naf must be at least  n + p
-c
-c        mplusn  integer
-c                -the second dimension of  af and bf.  mplusn  must be
-c                at least  m + n .
-c
-c        nwrk1   integer
-c                -the length of work vector wrk1.
-c                nwrk1  must be at least  max(m,p)
-c
-c        nwrk2   integer
-c                -the length of work vector  wrk2.
-c                nwrk2  must be at least  max(n,m,p)+1
-c
-c arguments out
-c
-c        nu      integer
-c                -the number of (finite) invariant zeros
-c
-c        irank   integer
-c                -the normal rank of the transfer function
-c
-c        zeror   double precision (n)
-c        zeroi   double precision (n)
-c                -the real  and imaginary parts of the zeros
-c
-c        af      double precision ( n+p , m+n )
-c        bf      double precision ( n+p , m+n )
-c                -the coefficient matrices of the reduced pencil
-c
-c        ierr    integer
-c                -error indicator
-c
-c                ierr = 0        successful return
-c
-c                ierr = 1        incorrect dimensions of matrices
-c
-c                ierr = 2        attempt to divide by zero
-c
-c                ierr = i > 2    ierr value i-2 from qitz (eispack)
-c
-c!working space
-c
-c        wrka    double precision (na,n)
-c
-c        wrk1    double precision (nwrk1)
-c
-c        wrk2    double precision (nwrk2)
-c
-c!purpose
-c
-c        to compute the invariant zeros of a linear multivariable
-c        system given in state space form.
-c
-c!method
-c
-c        this routine extracts from the system matrix of a state-space
-c        system  a,b,c,d  a regular pencil   lambda * bf  -  af
-c        which has the invariant zeros of the system as generalized
-c        eigenvalues.
-c
-c!reference
-c
-c        emami-naeini, a. and van dooren, p.
-c        'computation of zeros of linear multivariable systems'
-c        report na-80-03, computer science department, stanford univ.
-c
-c!originator
-c
-c                a.emami-naeini, computer science department,
-c                stanford university.
-c
-        integer n,m,p,na,nc,nu,irank,naf,mplusn,nwrk1,nwrk2,ierr
-c
+      subroutine sszer(n,m,p,a,na,b,c,nc,d,eps,zeror,zeroi,nu,irank,af,
+     &                 naf,bf,mplusn,wrka,wrk1,nwrk1,wrk2,nwrk2,ierr)
+C
+C! calling sequence
+C
+C        subroutine sszer(n,m,p,a,na,b,c,nc,d,zeror,zeroi,nu,irank,
+C     1       af,naf,bf,mplusn,wrka,wrk1,nwrk1,wrk2,nwrk2,ierr)
+C
+C        integer n,m,p,na,nc,nu,irank,nabf,mplusn,nwrk1,nwrk2,ierr
+C
+C        double precision a(na,n),b(na,m),c(nc,n),d(nc,m),wrka(na,n)
+C        double precision af(naf,mplusn),bf(naf,mplusn)
+C        double precision wrk1(nwrk1),wrk2(nwrk2)
+C        double precision zeror(n),zeroi(n)
+C
+C arguments in
+C
+C        n       integer
+C                -the number of state variables in the system
+C
+C        m       integer
+C                -the number of inputs to the system
+C
+C        p       integer
+C                -the number of outputs from the system
+C
+C        a       double precision (n,n)
+C                -the state dynamics matrix of the system
+C
+C        na      integer
+C                -the declared first dimension of matrices a and b
+C
+C        b       double precision (n,m)
+C                -the  input/state  matrix of the system
+C
+C        c       double precision (p,n)
+C                -the  state/output  matrix of the system
+C
+C        nc      integer
+C                -the declared first dimension of matrices  c and d
+C
+C        d       double precision (p,m)
+C                -the  input/output  matrix of the system
+C
+C        naf     integer
+C                -the declared first dimension of matrices  af and bf
+C                 naf must be at least  n + p
+C
+C        mplusn  integer
+C                -the second dimension of  af and bf.  mplusn  must be
+C                at least  m + n .
+C
+C        nwrk1   integer
+C                -the length of work vector wrk1.
+C                nwrk1  must be at least  max(m,p)
+C
+C        nwrk2   integer
+C                -the length of work vector  wrk2.
+C                nwrk2  must be at least  max(n,m,p)+1
+C
+C arguments out
+C
+C        nu      integer
+C                -the number of (finite) invariant zeros
+C
+C        irank   integer
+C                -the normal rank of the transfer function
+C
+C        zeror   double precision (n)
+C        zeroi   double precision (n)
+C                -the real  and imaginary parts of the zeros
+C
+C        af      double precision ( n+p , m+n )
+C        bf      double precision ( n+p , m+n )
+C                -the coefficient matrices of the reduced pencil
+C
+C        ierr    integer
+C                -error indicator
+C
+C                ierr = 0        successful return
+C
+C                ierr = 1        incorrect dimensions of matrices
+C
+C                ierr = 2        attempt to divide by zero
+C
+C                ierr = i > 2    ierr value i-2 from qitz (eispack)
+C
+C!working space
+C
+C        wrka    double precision (na,n)
+C
+C        wrk1    double precision (nwrk1)
+C
+C        wrk2    double precision (nwrk2)
+C
+C!purpose
+C
+C        to compute the invariant zeros of a linear multivariable
+C        system given in state space form.
+C
+C!method
+C
+C        this routine extracts from the system matrix of a state-space
+C        system  a,b,c,d  a regular pencil   lambda * bf  -  af
+C        which has the invariant zeros of the system as generalized
+C        eigenvalues.
+C
+C!reference
+C
+C        emami-naeini, a. and van dooren, p.
+C        'computation of zeros of linear multivariable systems'
+C        report na-80-03, computer science department, stanford univ.
+C
+C!originator
+C
+C                a.emami-naeini, computer science department,
+C                stanford university.
+C
+      integer n,m,p,na,nc,nu,irank,naf,mplusn,nwrk1,nwrk2,ierr
+C
       double precision a(na,n),b(na,m),c(nc,n),d(nc,m)
       double precision wrka(na,n),zeror(n),zeroi(n)
-      double precision af(naf,mplusn),bf(naf,mplusn),wrk1(nwrk1)
-     1    ,wrk2(nwrk2)
-      double precision eps,sum,heps,xxx
-c
-c       local variables:
-c
-        logical zero,matq,matz
-c
-        integer mm,nn,pp,mu,iro,isigma,numu,mnu,numu1,mnu1,i,j,j1
-        integer mj,ni,nu1
-c
+      double precision af(naf,mplusn),bf(naf,mplusn),wrk1(nwrk1),
+     &                 wrk2(nwrk2)
+      double precision eps,sum,heps,xxx(1,1)
+C
+C       local variables:
+C
+      logical zero,matq,matz
+C
+      integer mm,nn,pp,mu,iro,isigma,numu,mnu,numu1,mnu1,i,j,j1
+      integer mj,ni,nu1
+C
       double precision s
-        ierr = 1
-        if (na .lt. n) return
-        if (nc .lt. p) return
-        if (naf .lt. n+p) return
-        if (nwrk1.lt. m) return
-        if (nwrk1.lt. p) return
-        if (nwrk2.lt. n) return
-        if (nwrk2.lt. m) return
-        if (nwrk2.lt. p) return
-        if (mplusn .lt. m+n) return
-        ierr = 0
-c       construct the compound matrix (b      a) of dimension
-c                                     (d      c)
-c       (n + p) * (m + n)
-c
-        sum = 0.0d+0
-        do 30 i = 1,n
-           do 10 j = 1,m
-              bf(i,j) = b(i,j)
-              sum = sum + (b(i,j) * b(i,j) )
-  10          continue
-           do 30 j = 1,n
-              mj = m + j
-              bf(i,mj) = a(i,j)
-              sum = sum + (a(i,j) * a(i,j) )
-  30          continue
-c
-        do 60 i = 1,p
-           ni = n + i
-           do 40 j = 1,m
-              bf(ni,j) = d(i,j)
-              sum = sum + (d(i,j) * d(i,j) )
-  40          continue
-           do 60 j = 1,n
-              mj = m + j
-              bf(ni,mj) = c(i,j)
-              sum = sum + (c(i,j) * c(i,j) )
-  60          continue
-c
-        heps = eps * sqrt(sum)
-c
-c       reduce this system to one with the same invariant zeros and with
-c       d full row rank mu (the normal rank of the original system)
-c
-        iro = p
-        isigma = 0
-c
-        call reduce(bf,naf,mplusn,m,n,p,heps,iro,isigma,mu,nu,
-     1              wrk1,nwrk1,wrk2,nwrk2)
-c
-        irank = mu
-        if (nu .eq. 0) return
-c
-c       pertranspose the system
-c
-        numu = nu + mu
-        mnu = m + nu
-        numu1 = numu + 1
-        mnu1 = mnu + 1
-        do 70 i = 1,numu
-           ni = numu1 - i
-           do 70 j = 1,mnu
-              mj = mnu1 - j
-              af(mj,ni) = bf(i,j)
-  70          continue
-c
-        mm = m
-        nn = n
-        pp = p
-        if (mu .eq. mm) go to 80
-        pp = mm
-        nn = nu
-        mm = mu
-c
-c       reduce the system to one with the same invariant zeros and with
-c       d square and of full rank
-c
-        iro = pp - mm
-        isigma = mm
-c
-        call reduce(af,naf,mplusn,mm,nn,pp,heps,iro,isigma,mu,nu,
-     1              wrk1,nwrk1,wrk2,nwrk2)
-c
-        if (nu .eq. 0) return
-        mnu = mm + nu
-  80    continue
-        do 100 i = 1,nu
-           ni = mm + i
-           do 90 j = 1,mnu
-              bf(i,j) = 0.0d+0
-  90          continue
-           bf(i,ni) = 1.0d+0
- 100       continue
-c
-        if (irank .eq. 0) return
-        nu1 = nu + 1
-        numu = nu + mu
-        j1 = mm
-        do 120 i = 1,mm
-           j1 = j1 - 1
-           do 110 j = 1,nu1
-              mj = j1 + j
-              wrk2(j) = af(numu,mj)
- 110          continue
-c
-           call house(wrk2,nu1,nu1,heps,zero,s)
-           call tr2(af,naf,mplusn,wrk2,s,1,numu,j1,nu1)
-           call tr2(bf,naf,mplusn,wrk2,s,1,nu,j1,nu1)
-c
-           numu = numu - 1
- 120       continue
-         matz = .false.
-         matq = .false.
-cc
-          call qhesz(naf,nu,af,bf,matq,xxx,matz,wrka)
-          call qitz(naf,nu,af,bf,eps,matq,xxx,matz,wrka,ierr)
-         if (ierr .ne. 0) go to 150
-cc
-       call qvalz(naf,nu,af,bf,eps,zeror,zeroi,wrk2,matq,xxx,matz,wrka)
-cc
-c         do 130 i = 1,nu
-c            if (wrk2(i) .eq. 0.0d+0) go to 140
-c            zeror(i) = zeror(i)/wrk2(i)
-c            zeroi(i) = zeroi(i)/wrk2(i)
-c  130       continue
-cc
-cc       successful completion
-cc
-         ierr = 0
-         return
-cc
-cc       attempt to divide by zero
-cc
-c  140    ierr = 2
-c         return
-cc
-cc       failure in subroutine qzit
-cc
-  150    ierr = ierr + 2
-        return
-        end
+      ierr = 1
+      if (na .lt. n) return
+      if (nc .lt. p) return
+      if (naf .lt. n+p) return
+      if (nwrk1 .lt. m) return
+      if (nwrk1 .lt. p) return
+      if (nwrk2 .lt. n) return
+      if (nwrk2 .lt. m) return
+      if (nwrk2 .lt. p) return
+      if (mplusn .lt. m+n) return
+      ierr = 0
+C       construct the compound matrix (b      a) of dimension
+C                                     (d      c)
+C       (n + p) * (m + n)
+C
+      sum = 0.0d+0
+      do 30 i = 1,n
+        do 10 j = 1,m
+          bf(i,j) = b(i,j)
+          sum = sum + (b(i,j)*b(i,j))
+ 10     continue
+        do 30 j = 1,n
+          mj = m + j
+          bf(i,mj) = a(i,j)
+          sum = sum + (a(i,j)*a(i,j))
+ 30   continue
+C
+      do 60 i = 1,p
+        ni = n + i
+        do 40 j = 1,m
+          bf(ni,j) = d(i,j)
+          sum = sum + (d(i,j)*d(i,j))
+ 40     continue
+        do 60 j = 1,n
+          mj = m + j
+          bf(ni,mj) = c(i,j)
+          sum = sum + (c(i,j)*c(i,j))
+ 60   continue
+C
+      heps = eps * sqrt(sum)
+C
+C       reduce this system to one with the same invariant zeros and with
+C       d full row rank mu (the normal rank of the original system)
+C
+      iro = p
+      isigma = 0
+C
+      call reduce(bf,naf,mplusn,m,n,p,heps,iro,isigma,mu,nu,wrk1,nwrk1,
+     &            wrk2,nwrk2)
+C
+      irank = mu
+      if (nu .eq. 0) return
+C
+C       pertranspose the system
+C
+      numu = nu + mu
+      mnu = m + nu
+      numu1 = numu + 1
+      mnu1 = mnu + 1
+      do 70 i = 1,numu
+        ni = numu1 - i
+        do 70 j = 1,mnu
+          mj = mnu1 - j
+          af(mj,ni) = bf(i,j)
+ 70   continue
+C
+      mm = m
+      nn = n
+      pp = p
+      if (mu .eq. mm) goto 80
+      pp = mm
+      nn = nu
+      mm = mu
+C
+C       reduce the system to one with the same invariant zeros and with
+C       d square and of full rank
+C
+      iro = pp - mm
+      isigma = mm
+C
+      call reduce(af,naf,mplusn,mm,nn,pp,heps,iro,isigma,mu,nu,wrk1,
+     &            nwrk1,wrk2,nwrk2)
+C
+      if (nu .eq. 0) return
+      mnu = mm + nu
+ 80   continue
+      do 100 i = 1,nu
+        ni = mm + i
+        do 90 j = 1,mnu
+          bf(i,j) = 0.0d+0
+ 90     continue
+        bf(i,ni) = 1.0d+0
+ 100  continue
+C
+      if (irank .eq. 0) return
+      nu1 = nu + 1
+      numu = nu + mu
+      j1 = mm
+      do 120 i = 1,mm
+        j1 = j1 - 1
+        do 110 j = 1,nu1
+          mj = j1 + j
+          wrk2(j) = af(numu,mj)
+ 110    continue
+C
+        call house(wrk2,nu1,nu1,heps,zero,s)
+        call tr2(af,naf,mplusn,wrk2,s,1,numu,j1,nu1)
+        call tr2(bf,naf,mplusn,wrk2,s,1,nu,j1,nu1)
+C
+        numu = numu - 1
+ 120  continue
+      matz = .false.
+      matq = .false.
+Cc
+      call qhesz(naf,nu,af,bf,matq,xxx,matz,wrka)
+      call qitz(naf,nu,af,bf,eps,matq,xxx,matz,wrka,ierr)
+      if (ierr .ne. 0) goto 150
+Cc
+      call qvalz(naf,nu,af,bf,eps,zeror,zeroi,wrk2,matq,xxx,matz,wrka)
+Cc
+C         do 130 i = 1,nu
+C            if (wrk2(i) .eq. 0.0d+0) go to 140
+C            zeror(i) = zeror(i)/wrk2(i)
+C            zeroi(i) = zeroi(i)/wrk2(i)
+C  130       continue
+Cc
+Cc       successful completion
+Cc
+      ierr = 0
+      return
+Cc
+Cc       attempt to divide by zero
+Cc
+C  140    ierr = 2
+C         return
+Cc
+Cc       failure in subroutine qzit
+Cc
+ 150  ierr = ierr + 2
+      return
+      end
         subroutine reduce(abf,naf,mplusn,m,n,p,heps,iro,isigma,mu,nu,
      1                    wrk1,nwrk1,wrk2,nwrk2)
 c%calling sequence

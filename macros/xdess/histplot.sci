@@ -1,9 +1,9 @@
-//[]=histplot(n,data,style,strf,leg,rect,nax)
-//[]=histplot(n,data,[style,strf,leg,rect,nax])
+function histplot(n,data,style,strf,leg,rect,nax)
+// histplot(n,data,[style,strf,leg,rect,nax])
 // dessine l'histogramme des elements de data repartis en n classes
 // equidistantes de valeurs,
 //
-//[]=histplot(xi,data,[style,strf,leg,rect,nax])
+// histplot(xi,data,[style,strf,leg,rect,nax])
 // genere l'histogramme des elements de data repartis dans les classes
 // definies par les intervalles ]xi(k) xi(k+1)] .
 // xi est suppose strictement  croissant

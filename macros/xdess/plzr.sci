@@ -1,7 +1,9 @@
-function []=plzr(a,b,c,d)
+function plzr(a,b,c,d)
 //
 [lhs,rhs]=argn(0)
-if type(a)=15 then
+
+//-compat type(a)==15 retained for list/tlist compatibility
+if type(a)==15|type(a)==16 then
   if rhs<>1 then error(39),end
   select a(1)
     case 'lss' then [a,b,c,d]=a(2:5)

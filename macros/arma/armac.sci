@@ -10,11 +10,11 @@
 //
 //!
 [na,la]=size(a);
-if na<>ny,write(%io(2),"a(:,1) doit etre de dimension "+string(ny));end
+if na<>ny,write(%io(2),"a(:,1) must be of dimension "+string(ny));end
 [nb,lb]=size(b);
-if nb<>ny,write(%io(2),"b(:,1) doit etre de dimension "+string(ny));end
+if nb<>ny,write(%io(2),"b(:,1) must be of dimension "+string(ny));end
 [nd,ld]=size(d);
-if nd<>ny,write(%io(2),"d(:,1) doit etre de dimension "+string(ny));end
+if nd<>ny,write(%io(2),"d(:,1) must be of dimension "+string(ny));end
 ar=list('ar',a,b,d,ny,nu,sig)
 //end
 

@@ -1,6 +1,6 @@
       subroutine relax(na,n,startn,endn,c,u,dfct,
-     $     rc,label,prdcsr,fou,nxtou,fin,nxtin,save,scan,mark,
-     $     tfstou,tnxtou,tfstin,tnxtin,ddpos,ddneg,x,tcost)
+     $rc,label,prdcsr,fou,nxtou,fin,nxtin,save,scan,mark,
+     $tfstou,tnxtou,tfstin,tnxtin,ddpos,ddneg,x,tcost,flag)
       IMPLICIT INTEGER (A-Z)
       INTEGER C(na),X(na),U(na),RC(na),Dfct(n)
       INTEGER STARTN(na),ENDN(na)
@@ -11,6 +11,7 @@
       DIMENSION DDPOS(na),DDNEG(na)
       DOUBLEPRECISION TCOST
       logical repeat
+      flag=1
       LARGE=20000000
       REPEAT=.FALSE.
       CALL INIDAT(STARTN,ENDN,Label,Prdcsr,
@@ -23,13 +24,13 @@ C     ***** Set initial dual prices to zero *****
       CALL RELAXT(startn,endn,u,x,rc,dfct,
      $     label,prdcsr,fou,nxtou,fin,nxtin,save,scan,mark,
      $     N,NA,LARGE,REPEAT,
-     $     TFSTOU,TNXTOU,TFSTIN,TNXTIN,DDPOS,DDNEG)
+     $     TFSTOU,TNXTOU,TFSTIN,TNXTIN,DDPOS,DDNEG,flag)
 C     ***** Display previous optimal cost *****
       IF (REPEAT) WRITE(6,1000)TCOST
 1000  FORMAT(' ','PREVIOUS OPTIMAL COST=',F14.2)
-      TCOST=0.0d0
+      TCOST=DFLOAT(0)
       DO 330 I=1,NA
-330     TCOST=TCOST+DBLE(X(I)*C(I))
+330     TCOST=TCOST+DFLOAT(X(I)*C(I))
       END
 C
 C     ****************************************************
@@ -157,7 +158,7 @@ C
       SUBROUTINE RELAXT(startn,endn,u,x,rc,dfct,
      $     label,PRDCSR,FOU,NXTOU,FIN,NXTIN,SAVE,SCAN,MARK,
      $     N,NA,LARGE,REPEAT,
-     $     TFSTOU,TNXTOU,TFSTIN,TNXTIN,DDPOS,DDNEG)
+     $     TFSTOU,TNXTOU,TFSTIN,TNXTIN,DDPOS,DDNEG,flag)
       IMPLICIT INTEGER (A-Z)
       character sortie*100
       LOGICAL REPEAT,FEASBL,QUIT,SWITCH,POSIT,PCHANGE
@@ -1371,6 +1372,7 @@ C
 C     ******* problem is found to be infeasible *********************
 400   call out(' PROBLEM IS FOUND TO BE INFEASIBLE.')
       FEASBL = .FALSE.
+      flag=0
       RETURN
       END
 

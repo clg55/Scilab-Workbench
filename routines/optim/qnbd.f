@@ -96,7 +96,7 @@ c
       double precision dzs(*)
       dimension binf(n),bsup(n),x(n),g(n),epsx(n)
       dimension trav(ntrav),itrav(nitrav),izs(*)
-      external simul,proj
+      external simul
 c
       if(imp.ge.1)write(io,1010)
 1010  format(' *********** qnbd ****************')

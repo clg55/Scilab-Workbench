@@ -1,4 +1,4 @@
-\documentstyle[11pt,makeidx]{report}
+\documentstyle[11pt,makeidx,verbatok]{report}
              \textheight=660pt 
              \textwidth=15cm
              \topmargin=-27pt 
@@ -6,24 +6,9 @@
              \evensidemargin=0.7cm
              \marginparwidth=60pt
 
-%chap0 Title page, Acknowledgements, Table of Contents, Table of Figures
-%chap1 Introduction
-%chap2 Data Types
-%chap4 Programming
-%appendix Useful Macros
-%index Index
-\def\Figdir{figures/}
 \def\Scilab{$\Psi$lab}
-%\includeonly{chap0}
-%\includeonly{chap1}
-%\includeonly{datatypes}
-%\includeonly{programming}
-%\includeonly{basicprimitives}
-%\includeonly{graphics}
-%\includeonly{index}
-
-\def\verbatok#1{\expandafter \begin{verbatim}
-\input{#1}}
+\def\Figdir{figures/}
+\def\Diary{diary/}
 
 \newcount\quadcount
 \def\Nquad#1{\quadcount=0
@@ -39,8 +24,11 @@
 \include{programming}
 \include{basicprimitives}
 \include{graphics}
-\include{intersci}
 \include{maple2scilab}
+\include{demosession}
+
+\listoffigures
+%\listoftables
 
 \printindex
 

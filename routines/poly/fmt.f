@@ -44,7 +44,7 @@ c     test des NaN
       a1=mod(a,10.0d+0)
       ent=a-a1+int(a1)
       dec=a-ent
-      ndgt=int(log10(ent))+1
+      ndgt=int(log10(ent+0.4))+1
       if(ndgt.lt.0) ndgt=maxc
       if(ndgt.le.maxc-2) goto 10
       if(maxc-7.lt.0) goto 30

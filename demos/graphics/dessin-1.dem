@@ -3,7 +3,7 @@ str_l=list();
 str_l(1)=['t=(0:0.1:6*%pi);';
       'plot2d(t'',sin(t)'');'
       'xtitle(''plot2d and xgrid '',''t'',''sin(t)'');';
-      'halt();xgrid([10,10],2);'];
+      'halt();xgrid();'];
 
 str_l(2)=['plot2d1(''enl'',1,(1:10:10000)'');';
       'xtitle(''plot2d1 log scale'',''t'',''y  log scale'');'];
@@ -157,37 +157,9 @@ str_l(29)=['xset('"font"',2,0);xsetech([0,0,0.5,0.5]);plot3d();';
 	'xsetech([0,0,1,1]);';
 	'xset('"default"');'];
 
-str_l(30)=['xyz=[''x=r*cos(alp).*cos(tet)+orig(1)*ones(tet)'';';
-           '     ''y=r*cos(alp).*sin(tet)+orig(2)*ones(tet)'';';
-           '     ''z=r*sin(alp)+orig(3)*ones(tet)''];';
-                 'deff(''[x,y,z]=sph(alp,tet)'',xyz);';
-           'r=1;orig=[0 0 0];';
-           '[x1,y1,z1]=eval3dp(sph,[-%pi:0.2:%pi %pi],[0:0.2:%pi %pi]);';
-           'r=1/2;orig=[-1.5 0 0];';
-           '[x2,y2,z2]=eval3dp(sph,[-%pi:0.2:%pi %pi],[0:0.2:%pi %pi]);';
-           '[n1,m1]=size(x1);[n2,m2]=size(x2);';
-           'flags=list([2*ones(1,m1) 4*ones(1,m2)],1,4);';
-           'fac3d([x1 x2],[y1 y2],[z1 z2],35,45,''X@Y@Z'',flags);'];
+str_l(30)=['fac3d();'];
 
-str_l(31)=['x=0:0.2:2*%pi;';
-           'z=sin(x'')*cos(x);';
-           'z(1:10,1:10)=ones(10,10);';
-           'x_message([''Click and drag to change view point'';';
-           '           ''Click right to exit'']);'
-           'plot3di(x,x,z,35,45,''X@Y@Z'',[3,2,4]);'];
-str_l(32)=['xyz=[''x=r*cos(alp).*cos(tet)+orig(1)*ones(tet)'';';
-           '     ''y=r*cos(alp).*sin(tet)+orig(2)*ones(tet)'';';
-           '     ''z=r*sin(alp)+orig(3)*ones(tet)''];';
-                 'deff(''[x,y,z]=sph(alp,tet)'',xyz);';
-           'r=1;orig=[0 0 0];';
-           '[x1,y1,z1]=eval3dp(sph,[-%pi:0.2:%pi %pi],[0:0.2:%pi %pi]);';
-           'r=1/2;orig=[-1.5 0 0];';
-           '[x2,y2,z2]=eval3dp(sph,[-%pi:0.2:%pi %pi],[0:0.2:%pi %pi]);';
-           '[n1,m1]=size(x1);[n2,m2]=size(x2);';
-           'flags=list([2*ones(1,m1) 4*ones(1,m2)],1,4);';
-           'x_message([''Click and drag to change view point'';';
-           '           ''Click right to exit'']);'
-           'fac3di([x1 x2],[y1 y2],[z1 z2],35,45,''X@Y@Z'',flags);'];
+str_l(31)=['fac3d1();'];
 
 info_l=['plot2d';
         'plot2d1';     
@@ -219,7 +191,6 @@ info_l=['plot2d';
         'plot3d+gr_menu';
         'plots+xsetech';
         'fac3d';
-        'plot3di';
-        'fac3di'];
+	'fac3d1'];
 
 

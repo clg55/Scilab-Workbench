@@ -5,7 +5,11 @@ c ======================================================================
       include '../stack.h'
       integer ogettype, vt,vt1,id(nsiz),r
       logical compil,ptover
+      integer iadr,sadr
 c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+
       r=0
       if(pt.gt.0) r=rstk(pt)
 c
@@ -39,7 +43,7 @@ c
          if(vt1.gt.vt) vt=vt1
  03   continue
 c
-      goto (10,20,05,30,70,35,05,05,05,40,60,05,60,60,50) ,vt
+      goto (10,20,05,30,70,35,05,05,05,40,60,05,60,60,50,50) ,vt
  05   call error(43)
       return
  10   call matops
@@ -70,28 +74,17 @@ c        *call* matfns
       return
       endif
       if(fin.gt.0) return
-c     ---------------recherche d'une operation macro programme
+c     ---------------recherche d'une macro associee a une operation macro 
+c                    programme
       fin=-fin
       call mname(fin,id)
-      if(id(1).eq.36) then
-         call error(16)
-         return
-      endif
-      fin=0
-      call funs(id)
-      if(fun.eq.0) then
-         call error(43)
-         return
-      endif
-      if(fun.eq.-2) then 
-         fin=-1
-         call stackg(id)
-      endif
+      if(err.gt.0) return
 c     ---------------appel de la macro
       fin=lstk(fin)
       if (ptover(1,psiz)) return
       call putid(ids(1,pt),syn(1))
-      lhs=1
+c next line suppressed to allow multiple extraction
+c      lhs=1
       rstk(pt)=401
       icall=5
 c     *call* macro

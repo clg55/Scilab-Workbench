@@ -11,18 +11,16 @@ c=====================================
 c
       iero=0
       call majmin(6,edgsub,nam1)
+c     INSERT YOUR OWN ROUTINE HERE:
 c+
       if(nam1.eq.'dg') then
        call dg1(i,z,dg)
        return
       endif
 c+
-c dynamic link
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(edgsub,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.edgsub) goto 1001
-cc sun unix
       call dyncall(it1-1,i,z,dg)
 cc fin
       return
@@ -46,18 +44,16 @@ c=====================================
 c
       iero=0
       call majmin(6,egsub,nam1)
+c     INSERT YOUR OWN ROUTINE HERE:
 c+
       if(nam1.eq.'g') then
        call g1(i,z,g)
        return
       endif
 c+
-c dynamic link
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(egsub,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.egsub) goto 1001
-cc unix
       call dyncall(it1-1,i,z,g)
 cc fin
       return
@@ -81,18 +77,16 @@ c=====================================
 c
       iero=0
       call majmin(6,edfsub,nam1)
+c INSERT YOUR OWN ROUTINE HERE
 c+
       if(nam1.eq.'df') then
-       call df1(x,z,df)
+       call df11(x,z,df)
        return
       endif
 c+
-c dynamic link
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(edfsub,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.edfsub) goto 1001
-cc unix
       call dyncall(it1-1,x,z,df)
 cc fin
       return
@@ -116,18 +110,16 @@ c=====================================
 c
       iero=0
       call majmin(6,efsub,nam1)
+c INSERT YOUR ROUTINE HERE:
 c+
       if(nam1.eq.'f') then
-       call f1(x,z,f)
+       call f11(x,z,f)
        return
       endif
 c+
-c 
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(efsub,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.efsub) goto 1001
-cc  unix
       call dyncall(it1-1,x,z,f)
 cc fin
       return
@@ -151,19 +143,19 @@ c=====================================
 c
       iero=0
       call majmin(6,eguess,nam1)
+c INSERT YOUR OWN ROUTINE HERE:
 c+
       if(nam1.eq.'gu') then
        call solutn(x,z,dmval)
        return
       endif
 c+
-c 
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(eguess,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.eguess) goto 1001
       call dyncall(it1-1,x,z,dmval)
       return
+c
  2000 iero=1
       buf=eguess
       call error(50)
@@ -174,8 +166,8 @@ c................................................................
       subroutine solutn (x, z, dmval)
       implicit double precision  (a-h,o-z)
       dimension z(4) , dmval(2)
-      double precision eps, dmu, eps4mu, gamma, xt
-      data eps/.01d0/, dmu/.01d0/, eps4mu/1.0/, gamma/1.1d0/, xt/1/
+      double precision gamma, xt
+      data gamma/1.1d0/, xt/1/
       xt = dsqrt(2.d0*(gamma-1.d0)/gamma)
       cons = gamma * x * (1.d0-.5d0*x*x)
       dcons = gamma * (1.d0 - 1.5d0*x*x)
@@ -196,7 +188,7 @@ c................................................................
       return
       end
 c................................................................
-      subroutine f1 (x, z, f)
+      subroutine f11 (x, z, f)
       implicit double precision  (a-h,o-z)
       dimension z(4), f(2)
       double precision eps, dmu, eps4mu, gamma, xt
@@ -209,7 +201,7 @@ c................................................................
       return
       end
 c................................................................
-      subroutine df1 (x, z, df)
+      subroutine df11 (x, z, df)
       implicit double precision  (a-h,o-z)
       dimension z(4), df(2,4)
       double precision eps, dmu, eps4mu, gamma, xt

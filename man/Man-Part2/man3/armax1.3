@@ -2,7 +2,7 @@
 .so man1/sci.an
 .SH NAME
 armax1 - armax identification
-.SH CALING SEQUENCE
+.SH CALLING SEQUENCE
 .nf
 [a,b,d,sig,resid]=armax1(r,s,q,y,u,[b0f])
 .fi 
@@ -15,7 +15,7 @@ u
 : input signal 
 .TP
 r,s,q
-: autoregression orders with r >=0, s >=-1.
+: auto regression orders with r >=0, s >=-1.
 .TP
 b0f 
 : optional parameter. Its default value is 0 and it means that the coefficient b0 must be identified. if bof=1 the b0 is supposed to be zero and is not identified
@@ -51,7 +51,7 @@ and
 
 a sequential version of the AR estimation where e(t-i) is replaced 
 by an estimated value is used (RLLS). With q=0 this method is exactly
-a sequentiel version of armax
+a sequential version of armax
 .SH AUTHOR 
 J.-Ph.C
 

@@ -2,7 +2,7 @@
 c!but
 c
 c     Cette subroutine donne les dimensions (lignes, colonnes) de
-c     la  matrice  qui resulte de l'insertion (ampliation?) d'une
+c     la  matrice  qui resulte de l'insertion  d'une
 c     matrice  de polynomes mat2 (ou strings) dans une autre mat1
 c     d'apres deux vecteurs donnes.
 c

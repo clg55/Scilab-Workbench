@@ -2,9 +2,8 @@
 mode(0);
 xbasc();
 path='SCI/demos/bike/';
-x_message(['Click OK to load data ';'please be patient']);
 
-x=read(path+'data/'+'x1.dat',46,368,"(e24.18)");
+x=read(path+'data/'+'x1.dat',46,368,"(e10.4)");
 
 getf(path+'macros/'+'velo1.sci','c');
 getf(path+'macros/'+'velo2.sci','c');

@@ -11,18 +11,24 @@ function t=sci2exp(a,nom)
 //  sci2exp(a,'aa')
 //!
 [lhs,rhs]=argn(0)
-lmax=70;dots='..';
+lmax=90;dots='..';
 select type(a)
 case 1 then
   t=mat2exp(a)
 case 2 then
   t=pol2exp(a)
+case 4 then
+  t=log2exp(a)
 case 10 then
   t=str2exp(a)
 case 15 then
   t=list2exp(a)
+case 16 then
+  t=tlist2exp(a)
+case 11 then
+  t=func2exp(a)
 else
-  error('Non implante')
+  error('Variable translation of type '+string(type(a))+' Non implemented')
 end,
 if rhs==2 then
   t(1)=nom+' = '+t(1)
@@ -89,6 +95,7 @@ for i=1:m
       kk=kk+1
     end
   end
+  if i<m then x(kk)=x(kk)+';',end
   t=[t;x]
 end,
 if m*n>1 then
@@ -104,7 +111,7 @@ while part(var,lvar)=' ' then lvar=lvar-1,end
 var=part(var,1:lvar)
 kk=1;t=[];
 for i=1:m
-  x=' '
+  x=emptystr(1)
   for j=1:n,
     v=a(i,j);d=degree(v);
     v=coeff(v);
@@ -155,9 +162,15 @@ for i=1:m
       if ny>1 then x(kk+1:kk+ny-1)=y(2:ny),end
       kk=kk+ny-1
     else
-      x(kk)=x(kk)+','+dots;
-      x(kk+1:kk+ny)=y
-      kk=kk+ny
+      if length(x(kk))==0 then
+	//added by Andre Hentz (andre@lcmi.ufsc.br) 10-Oct-95
+	x(kk:kk+ny-1) = y;
+	kk=kk+ny-1;
+      else
+	x(kk)=x(kk)+','+dots;
+	x(kk+1:kk+ny)=y
+	kk=kk+ny
+      end
     end
   end
   t=[t;x]
@@ -169,7 +182,7 @@ if m*n>1 then
 end
 
 function t=list2exp(l)
-dots='.'+'.';lmax=70
+dots='.'+'.';lmax=90
 t='list('
 n=length(l)
 for k=1:n
@@ -178,6 +191,34 @@ for k=1:n
   [nt,mt]=size(t)
   if type(lk)==15 then
     t1=list2exp(lk)
+  elseif type(lk)==16 then 
+    t1=tlist2exp(lk)
+  else
+    t1=sci2exp(lk)
+  end
+  if prod(size(t1))==1&maxi(length(t1))+length(t(nt))<lmax then
+    t(nt)=t(nt)+sep+t1
+  else
+    t(nt)=t(nt)+sep+dots
+    t=[t;t1]
+  end
+  lk=null()
+end
+[nt,mt]=size(t)
+t(nt)=t(nt)+')'
+
+function t=tlist2exp(l)
+dots='.'+'.';lmax=90
+t='tlist('
+n=length(l)
+for k=1:n
+  lk=l(k)
+  sep=',',if k==1 then sep=emptystr(),end
+  [nt,mt]=size(t)
+  if type(lk)==15 then
+    t1=list2exp(lk)
+  elseif type(lk)==16 then
+    t1=tlist2exp(lk)
   else
     t1=sci2exp(lk)
   end
@@ -190,3 +231,57 @@ for k=1:n
 end
 [nt,mt]=size(t)
 t(nt)=t(nt)+')'
+
+function t=log2exp(a)
+[m,n]=size(a),
+a1=matrix(a,m*n,1)
+F='%f'
+T='%t'
+a=F(ones(m*n,1))
+k=find(a1);
+if k<>[] then
+  a(k)=T(ones(size(k,'*'),1));
+end
+a=matrix(a,m,n);
+dots='.'+'.'
+t=[];
+for i=1:m
+  x=emptystr()
+  kk=1
+  for j=1:n,
+    y=a(i,j);
+    l=1;
+    if length(x(kk))+length(y)<lmax then
+      if j=1 then
+        x=y
+      else
+        x(kk)=x(kk)+' , '+y,
+      end
+    else
+      x(kk)=x(kk)+','+dots;
+      x(kk+1)=y
+      kk=kk+1
+    end
+  end
+  t=[t;x]
+end,
+if m*n>1 then
+  t(1)='['+t(1)
+  [nt,mt]=size(t)
+  t(nt)=t(nt)+']'
+end
+
+function t=func2exp(a)
+[out,in,text]=string(a)
+text=str2exp(text)
+lmax=90
+nt=size(text,'*')
+if nt==1 then
+  t='deff(''['+strcat(out,',')+']=mac('+strcat(in,',')+')'','+text+')'
+else
+  text(nt)=text(nt)+')'
+  semi=';'
+  text(1:nt-1)=text(1:nt-1)+semi(ones(1:nt-1))
+  t=['deff(''['+strcat(out,',')+']=mac('+strcat(in,',')+')'','+text(1)
+    text(2:nt)]
+end

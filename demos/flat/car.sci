@@ -107,7 +107,7 @@ xmaxi = maxi(state(:,1))+1.5*bigL ;
 ymini = mini(state(:,2))-1.5*bigL ;
 ymaxi = maxi(state(:,2))+1.5*bigL ;
 
-xsetech([0,0,1,1],[xmini,ymini,xmaxi,ymaxi]);
+//xsetech([0,0,1,1],[xmini,ymini,xmaxi,ymaxi]);
 isoview(xmini,xmaxi,ymini,ymaxi)
 
 // starting configuration
@@ -125,8 +125,20 @@ for i=1:n,
   ptcr( state(i,:)) ; ptcr( state(i,:)) ;
 end ;
 xset('alufunction',3);...
-//%%%%%%%% END OF SCRIPT-FILE mvcr %%%%%%%%%%%%%%%
+// animated version with the pixmap driver 
+// pixb=xget("pixmap");
+// xset("pixmap",1)
+// for i=1:n,xset("wwpc");
+//	ptcr([x1,y1,theta1,phi1]) ;
+//	ptcr([x2,y2,theta2,phi2]) ;
+//	ptcr([x0,y0,0,0]) ;
+//	xpoly(state(:,1),state(:,2),'lines') ;
+//	 ptcr( state(i,:)) ;
+//	xset("wshow");	
+//      end ;
+//xset("pixmap",pixb);
 
+//%%%%%%%% END OF SCRIPT-FILE mvcr %%%%%%%%%%%%%%%
 
 function []=mvcr2T(x,y,theta1,theta2,theta3,phi)
 xbasc();
@@ -322,6 +334,7 @@ for j=1:n
   ptcr2T(state_1(j,:));ptcr2T(state_1(j,:));
 end ;
 xset('alufunction',3);
+
 ////%%%%%%%%%%%% END OF SCRIPT-FILE mvcr2T %%%%%%%%%%%%%
 
 function []=dbcr()

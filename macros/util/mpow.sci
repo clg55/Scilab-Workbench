@@ -3,7 +3,7 @@ function x=mpow(a,p)
 //%CALLING SEQUENCE
 //   X=mpow(A)
 //%PARAMETERS
-//   A   : square hermitian matrix
+//   A   : square hermitian or diagonalizable matrix
 //   X   : square hermitian matrix
 //%DESCRIPTION
 //This macro is called by the operation ^ to compute A^p
@@ -16,7 +16,9 @@ if ~flag then
   r=and(imag(a)==0)
   [u,s]=schur(a);
   w=diag(s);
-  x=u*diag(exp(p*log(w)))*u';
+  zw=find(w==0);
+  w(zw)=%eps*ones(zw)';w1=log(w);w1(zw)=-%inf*ones(zw)';
+  x=u*diag(exp(p*w1))*u';
   if r then
     if s>=0&imag(p)==0 then
       x=real(x)
@@ -25,12 +27,15 @@ if ~flag then
 end
 if flag then
  //General matrix
+r=and(imag(a)==0)
 a=a+0*%i;   //Set complex
-  r=and(imag(a)==0)
-[s,u,bs]=bdiag(a);w=diag(s);
+[s,u,bs]=bdiag(a);
   if maxi(bs)>1 then
     error('mpow: unable to diagonalize!');return
   end
-  x=u*exp(p*diag(log(w)))*inv(u);
+  w=diag(s);
+    zw=find(w==0);
+  w(zw)=%eps*ones(zw)';w1=log(w);w1(zw)=-%inf*ones(zw)';
+  x=u*exp(p*diag(w1))*inv(u);
 end
 

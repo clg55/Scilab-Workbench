@@ -5,7 +5,7 @@ c =============================================================
       include '../stack.h'
 c
       common /tg02bd/ knot
-      integer lr(4),per,adr
+      integer lr(4),per,iadr,sadr
       double precision vals(4)
       logical period
       data per/25/
@@ -13,6 +13,10 @@ c
 c
 c     fonction  spline inte
 c                 1     2
+c
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
 c
       if (ddt .eq. 4) then
          write(buf(1:4),'(i4)') fin
@@ -32,7 +36,7 @@ c
       endif
       period=.false.
       if(rhs.eq.3) then
-        il=adr(lstk(top),0)
+        il=iadr(lstk(top))
         if(istk(il).ne.10) then
            err=rhs
            call error(55)
@@ -46,7 +50,7 @@ c
         if(abs(istk(il+6)).eq.per) period=.true.
         top=top-1
       endif
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       if(istk(il).ne.1) then
          err=2
          call error(53)
@@ -58,9 +62,9 @@ c
        return
       endif
       nf=istk(il+1)*istk(il+2)
-      lf=adr(il+4,1)
+      lf=sadr(il+4)
       top=top-1
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       if(istk(il).ne.1) then
          err=1
          call error(53)
@@ -73,7 +77,7 @@ c
       endif
       nx=istk(il+1)*istk(il+2)
       n=min(nf,nx)
-      lx=adr(il+4,1)
+      lx=sadr(il+4)
 c
       ld=lf+n
       lw=ld+n
@@ -113,7 +117,7 @@ c
          return
       endif
       lw=lstk(top+1)
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       if(istk(il).ne.1) then
          err=4
          call error(53)
@@ -125,9 +129,9 @@ c
          return
       endif
       n=istk(il+1)*istk(il+2)
-      ld=adr(il+4,1)
+      ld=sadr(il+4)
       top=top-1
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       if(istk(il).ne.1) then
          err=3
          call error(53)
@@ -139,9 +143,9 @@ c
          return
       endif
       n=istk(il+1)*istk(il+2)
-      lf=adr(il+4,1)
+      lf=sadr(il+4)
       top=top-1
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       if(istk(il).ne.1) then
          err=2
          call error(53)
@@ -153,9 +157,9 @@ c
          return
       endif
       n=istk(il+1)*istk(il+2)
-      lx=adr(il+4,1)
+      lx=sadr(il+4)
       top=top-1
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       if(istk(il).ne.1) then
          err=1
          call error(53)
@@ -169,7 +173,7 @@ c
       m0=istk(il+1)
       n0=istk(il+2)
       mn0=m0*n0
-      lx0=adr(il+4,1)
+      lx0=sadr(il+4)
       lr(1)=lx0
       if(lhs.ge.2) then
             err=lw+(lhs-1)*mn0-lstk(bot)
@@ -193,12 +197,12 @@ c
       if(lhs.eq.1) goto 99
       do 24 k=2,lhs
       top=top+1
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       istk(il)=1
       istk(il+1)=n0
       istk(il+2)=m0
       istk(il+3)=0
-      l=adr(il+4,1)
+      l=sadr(il+4)
       call dcopy(mn0,stk(lr(k)),1,stk(l),1)
       lstk(top+1)=l+mn0
    24 continue

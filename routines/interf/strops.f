@@ -7,13 +7,11 @@ c ====================================================================
 c
       include '../stack.h'
 c
-      integer plus,minus,star,dstar,slash,bslash,dot,colon,concat
-      integer quote,equal,less,great,insert,extrac,ou,et,non
+      integer plus,quote,equal,less,great,insert,extrac
       integer top0,iadr,sadr,op,vol,volr,rhs1
-      data plus/45/,minus/46/,star/47/,dstar/62/,slash/48/
-      data bslash/49/,dot/51/,colon/44/,concat/1/,quote/53/
+      logical iscolon
+      data plus/45/,quote/53/
       data equal/50/,less/59/,great/60/,insert/2/,extrac/3/
-      data ou/57/,et/58/,non/61/
 c     
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -251,72 +249,153 @@ c
         ncol=-1
       endif
 c
-      if(rhs.eq.1) goto 125
-      top=top-1
-      ilrow=iadr(lstk(top))
-      if(istk(ilrow).eq.4) then
-         rhs=rhs1
-         top=top0
-         fin=-fin
-         return
-      endif
-
-      if(istk(ilrow).ne.1) then
-         call error(21)
-         return
-      endif
-      if(istk(ilrow+3).ne.0) then
-         call error(21)
-         return
-      endif
-      if(istk(ilrow+1).gt.1.and.istk(ilrow+2).gt.1) then
-         call error(21)
-         return
-      endif
-      nrow=isign(istk(ilrow+1)*istk(ilrow+2),istk(ilrow+1))
-      lrow=sadr(ilrow+4)
-      if(nrow.lt.0) goto 124
-      do 123 i=1,nrow
-      istk(ilrow-1+i)=int(stk(lrow-1+i))
-  123 continue
-  124 continue
-c
-  125 call dimin(m2,n2,istk(ilrow),nrow,istk(ilcol),ncol,m1,n1,
+      if(rhs.eq.1) then
+c     arg3(arg1)=arg2
+         if (m2.gt.1.and.n2.gt.1) then
+c     .  arg3 is a matrix
+            call dimin(m2*n2,1,istk(ilcol),ncol,istk(ilrow),-1,m1*n1,1,
      &           mr,nr,err)
-      if(err.gt.0) then
-         call error(21)
-         return
+            if(err.gt.0.or.mr.gt.m2*n2) then
+               call error(21)
+               return
+            endif
+
+            idr=iadr(l3r)
+            lr=idr+m2*n2+1
+            err=sadr(lr)-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            call mpinsp(istk(id2),m2*n2,1,istk(ilcol),ncol,istk(ilrow),
+     &           -1,istk(id1),m1*n1,1,istk(idr),m2*n2,1,err)
+ 
+            if(err.gt.0) then
+               call error(15)
+               return
+            endif
+            volr=istk(idr)
+            err=sadr(lr+volr)-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            call impins(istk(l2r),istk(id2),m2*n2,1, istk(l1r),
+     &          istk(id1),m1*n1,1,istk(lr),istk(idr),m2*n2,1)
+            il1=iadr(lstk(top))
+            istk(il1)=10
+            istk(il1+1)=m2
+            istk(il1+2)=n2
+            istk(il1+3)=it1
+            volr=istk(idr+m2*n2)
+            call icopy(m2*n2+1+volr,istk(idr),1,istk(il1+4),1)
+            lstk(top+1)=sadr(il1+5+m2*n2+volr)
+         else
+            call dimin(m2,n2,istk(ilrow),nrow,istk(ilcol),ncol,m1,n1,
+     &           mr,nr,err)
+            if(err.gt.0) then
+               call error(21)
+               return
+            endif
+            idr=iadr(l3r)
+            lr=idr+mr*nr+1
+            err=sadr(lr)-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            call mpinsp(istk(id2),m2,n2,istk(ilrow),nrow,istk(ilcol),
+     &           ncol,istk(id1),m1,n1,istk(idr),mr,nr,err)
+            if(err.gt.0) then
+               call error(15)
+               return
+            endif
+            volr=istk(idr)
+            err=sadr(lr+volr)-lstk(bot)
+            if(err.gt.0) then
+               call error(17)
+               return
+            endif
+            call impins(istk(l2r),istk(id2),m2,n2,
+     &           istk(l1r),istk(id1),m1,n1,istk(lr),istk(idr),mr,nr)
+c     
+            il1=iadr(lstk(top))
+            istk(il1)=10
+            istk(il1+1)=mr
+            istk(il1+2)=nr
+            istk(il1+3)=it1
+            volr=istk(idr+mr*nr)
+            call icopy(mr*nr+1+volr,istk(idr),1,istk(il1+4),1)
+            lstk(top+1)=sadr(il1+5+mr*nr+volr)
+         endif
+      else
+c     arg4(arg1,arg2)=arg3
+            top=top-1
+         ilrow=iadr(lstk(top))
+         if(istk(ilrow).eq.4) then
+            rhs=rhs1
+            top=top0
+            fin=-fin
+            return
+         endif
+
+         if(istk(ilrow).ne.1) then
+            call error(21)
+            return
+         endif
+         if(istk(ilrow+3).ne.0) then
+            call error(21)
+            return
+         endif
+         if(istk(ilrow+1).gt.1.and.istk(ilrow+2).gt.1) then
+            call error(21)
+            return
+         endif
+         nrow=isign(istk(ilrow+1)*istk(ilrow+2),istk(ilrow+1))
+         lrow=sadr(ilrow+4)
+         if(nrow.lt.0) goto 124
+         do 123 i=1,nrow
+            istk(ilrow-1+i)=int(stk(lrow-1+i))
+ 123     continue
+ 124     continue
+c     
+ 125     call dimin(m2,n2,istk(ilrow),nrow,istk(ilcol),ncol,m1,n1,
+     &        mr,nr,err)
+         if(err.gt.0) then
+            call error(21)
+            return
+         endif
+         idr=iadr(l3r)
+         lr=idr+mr*nr+1
+         err=sadr(lr)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         call mpinsp(istk(id2),m2,n2,istk(ilrow),nrow,istk(ilcol),ncol,
+     &        istk(id1),m1,n1,istk(idr),mr,nr,err)
+         if(err.gt.0) then
+            call error(15)
+            return
+         endif
+         volr=istk(idr)
+         err=sadr(lr+volr)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         call impins(istk(l2r),istk(id2),m2,n2,
+     &        istk(l1r),istk(id1),m1,n1,istk(lr),istk(idr),mr,nr)
+c     
+         il1=iadr(lstk(top))
+         istk(il1)=10
+         istk(il1+1)=mr
+         istk(il1+2)=nr
+         istk(il1+3)=it1
+         volr=istk(idr+mr*nr)
+         call icopy(mr*nr+1+volr,istk(idr),1,istk(il1+4),1)
+         lstk(top+1)=sadr(il1+5+mr*nr+volr)
       endif
-      idr=iadr(l3r)
-      lr=idr+mr*nr+1
-      err=sadr(lr)-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-      call mpinsp(istk(id2),m2,n2,istk(ilrow),nrow,istk(ilcol),ncol,
-     &            istk(id1),m1,n1,istk(idr),mr,nr,err)
-      if(err.gt.0) then
-         call error(15)
-         return
-      endif
-      volr=istk(idr)
-      err=sadr(lr+volr)-lstk(bot)
-      if(err.gt.0) then
-         call error(17)
-         return
-      endif
-      call impins(istk(l2r),istk(id2),m2,n2,
-     &            istk(l1r),istk(id1),m1,n1,istk(lr),istk(idr),mr,nr)
-c
-  129 il1=iadr(lstk(top))
-      istk(il1)=10
-      istk(il1+1)=mr
-      istk(il1+2)=nr
-      istk(il1+3)=it1
-      volr=istk(idr+mr*nr)
-      call icopy(mr*nr+1+volr,istk(idr),1,istk(il1+4),1)
-      lstk(top+1)=sadr(il1+5+mr*nr+volr)
       goto 999
 c
 c
@@ -362,60 +441,67 @@ c
   131 continue
   132 continue
 c
-      if(rhs.ne.1) goto 140
-c
-c vect(arg)
-      if(nr.lt.0) nr=mn1
-      mr=1
-      if(n1.ne.1) goto 133
-      mr=nr
-      nr=1
-      nrow=ncol
-      ilrow=ilcol
-      ncol=-1
-      goto 145
-  133 if(m1.eq.1) goto 135
-      n1=mn1
-      m1=1
-  135 continue
-      nrow=-1
-      ilrow=ilcol
-      goto 145
-c
-  140 top=top-1
-      ilrow=iadr(lstk(top))
-      if(istk(ilrow).eq.4) then
-         rhs=rhs1
-         top=top0
-         fin=-fin
-         return
-      endif
+      if(rhs.eq.1) then
+         iscolon=ncol.lt.0
+c     vect(arg)
+         if(n1.eq.1) then
+c     vect is a column vector
+            mr=nr
+            nr=1
+            nrow=ncol
+            ilrow=ilcol
+            ncol=-1
+         else
+c     vect is a row vector
+            mr=1
+            if(m1.ne.1) then
+               n1=mn1
+               m1=1
+            endif
+            nrow=-1
+            ilrow=ilcol
+         endif
+         if(iscolon) then
+c     vect(:)
+            mr=m1*n1
+            nr=1
+         endif
+      else
+         top=top-1
+         ilrow=iadr(lstk(top))
+         if(istk(ilrow).eq.4) then
+            rhs=rhs1
+            top=top0
+            fin=-fin
+            return
+         endif
 
-      if(istk(ilrow).ne.1) then
-         call error(21)
-         return
-      endif
-      if(istk(ilrow+3).ne.0) then
-         call error(21)
-         return
-      endif
-      if(istk(ilrow+1).gt.1.and.istk(ilrow+2).gt.1) then
-         call error(21)
-         return
-      endif
-      nrow=isign(istk(ilrow+1)*istk(ilrow+2),istk(ilrow+1))
-      mr=nrow
-      lrow=sadr(ilrow+4)
-      if(nrow.eq.0) goto 146
-      if(nrow.lt.0) goto 142
-      do 141 i=1,nrow
-      istk(ilrow-1+i)=int(stk(lrow-1+i))
-  141 continue
-  142 continue
-c
+         if(istk(ilrow).ne.1) then
+            call error(21)
+            return
+         endif
+         if(istk(ilrow+3).ne.0) then
+            call error(21)
+            return
+         endif
+         if(istk(ilrow+1).gt.1.and.istk(ilrow+2).gt.1) then
+            call error(21)
+            return
+         endif
+         nrow=isign(istk(ilrow+1)*istk(ilrow+2),istk(ilrow+1))
+         mr=nrow
+         lrow=sadr(ilrow+4)
+         if(nrow.eq.0) goto 146
+         if(nrow.lt.0) goto 142
+         do 141 i=1,nrow
+            istk(ilrow-1+i)=int(stk(lrow-1+i))
+ 141     continue
+ 142     continue
+c     
 c     matrix(arg,arg)
-      if(mr.lt.0) mr=m1
-      if(nr.lt.0) nr=n1
+         if(mr.lt.0) mr=m1
+         if(nr.lt.0) nr=n1
+      endif
 c
   145 mnr=mr*nr
       idr=iadr(lw)

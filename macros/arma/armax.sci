@@ -44,7 +44,7 @@ if rhs=0,write(%io(2),"/ / y_t = 0.2*u_{t-1}+0.01*e(t)");
         write(%io(2)," rand(''normal''); u=rand(1,1000);");
         write(%io(2)," y=arsimul([1],[0,0.2],1,0.01,u);");
         write(%io(2)," [a,b,sig,resid]=armax(0,1,y,u)");
-        write(%io(2),"/ / on devrait trouver a=1,b=[0,0.2]''");
+        write(%io(2),"/ / we must find a=1,b=[0,0.2]''");
         rand('normal'),u=rand(1,1000);
         y=arsimul([1],[0,0.2],1,0.01,u);
         [la,lb,sig,resid]=armax(0,1,y,u,1);
@@ -58,7 +58,7 @@ if rhs<=4,b0f=0;end
 // zz(:,j)=[ y(t-1),...,y(t-r),u(t),...,u(t-s)]', avec  t=t0-1+j
 // on peut calcule zz a partir de t=t0;
  t0=maxi(maxi(r,s)+1,1);
- if r=0;if s=-1;write(%io(2),"Il n''y a rien a identifier si r=0 et s=-1");
+ if r=0;if s=-1;write(%io(2),"if  r=0 and s=-1 there''s nothing to identify");
  return
  end;end
  z=[];
@@ -69,7 +69,7 @@ if rhs<=4,b0f=0;end
 // Test de rang
  [nzl,nzc]=size(zz);
  k=rank(zz);
-if k<>nzl;write(%io(2),"Warning: z.z'' est singuliere a la precision donnee");
+if k<>nzl;write(%io(2),"Warning: z.z'' is numerically singular");
 end;
  pv=pinv(zz);
  coef=(pv*zy)';
@@ -108,5 +108,3 @@ if prf=1;
    end
 end
 //end
-
-

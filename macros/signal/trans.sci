@@ -1,4 +1,4 @@
-//[hzt]=trans(pd,zd,gd,tr_type,frq)
+function [hzt]=trans(pd,zd,gd,tr_type,frq)
 //hzt=trans(pd,zd,gd,tr_type,frq)
 //macro for transforming standardized low-pass filter into
 //one of the following filters:
@@ -43,4 +43,3 @@
    [pt,zt,gt]=bilt(pd,zd,gd,num,den);
    hzt=gt*real(poly(zt,'z'))./real(poly(pt,'z'));
 
-//end

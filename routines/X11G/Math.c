@@ -21,10 +21,11 @@
     Phone : 43.04.40.98 poste : 3327 
 
 --------------------------------------------------------------------------*/
-
+#include "Math.h"
 
 double Mini(vect,n)
-     double vect[];int n;
+     double vect[];
+     integer n;
 {
   int i;
   double vmin;
@@ -36,7 +37,8 @@ double Mini(vect,n)
 
 
 double Maxi(vect,n)
-     double vect[];int n;
+     double vect[];
+     integer n;
 {
   int i;
   double maxi;

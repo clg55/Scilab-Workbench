@@ -49,18 +49,22 @@ change_directory(path)
 	*cur_dir = '\0';
 	return (0);
     }
+    /**** pour que le changement de directory soit non effectif 
     if (chdir(path) == -1) {
 	put_msg("Can't go to directory %s, : %s", path, sys_errlist[errno]);
-	return (1);
-    }
-    if (get_directory(cur_dir)) /* get cwd */
+	return (1); 
+    } ****/
+    return(0);
+    /** 
+      if (get_directory(cur_dir))
 	return (0);
     else
 	return (1);
+	**/
 }
+
 int 
-get_directory(direct)
-    char	   *direct;
+get_directory()
 {
 #if defined(SYSV) || defined(SVR4)
     extern char	   *getcwd();
@@ -71,13 +75,13 @@ get_directory(direct)
 #endif
 
 #if defined(SYSV) || defined(SVR4)
-    if (getcwd(direct, 1024) == NULL) {	/* get current working dir */
+    if (getcwd(cur_dir, 1024) == NULL) {	/* get current working dir */
 	put_msg("Can't get current directory");
 #else
-    if (getwd(direct) == NULL) {/* get current working dir */
-	put_msg("%s", direct);	/* err msg is in directory */
+    if (getwd(cur_dir) == NULL) {/* get current working dir */
+	put_msg("%s", cur_dir);	/* err msg is in directory */
 #endif
-	*direct = '\0';
+	*cur_dir = '\0';
 	return 0;
     }
     return 1;

@@ -5,7 +5,11 @@ function [tt]=texprint(a)
 //!
 //
 debut='\begin{array}{l}';fin='\end{array}'
-select type(a)
+typ=type(a)
+
+//-compat next row added for list/tlist compatibility
+if typ==15 then typ=16,end
+select typ
 case 1 then  //scalars
   [m,n]=size(a)
   if m*n<>1 then tt='{\pmatrix{',else tt='{{',end
@@ -48,7 +52,7 @@ case 10 then //strings
      end
      tt=part(tt,1:length(tt)-4)+'}}'
  
-case 15 then //listes
+case 16 then //transfer and linear systems
   select a(1)
     case 'r' then //rationals
      num=a(2);a=a(3)

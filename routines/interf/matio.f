@@ -19,9 +19,6 @@ c
       integer iadr,sadr
       character bu1*(bsiz),bu2*(bsiz)
 c
-      logical sciv1,first
-      common /compat/ sciv1,first
-c     
       save opened,lunit,job,icomp
 c     
       data blank/40/,semi/43/,percen/56/
@@ -72,30 +69,8 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=-1
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
 c     
       flag = 3
       if (sym .eq. semi) flag = 0
@@ -186,30 +161,8 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=0
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
 c     
       l = lct(2)
       if(lunit.ne.wte) then
@@ -243,30 +196,9 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=0
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
+
 c     
       if(wio.ne.0) call clunit(-wio,buf,0)
       if(lunit.eq.0) goto 29
@@ -299,30 +231,8 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=100
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
 c     
       if(rhs.ge.2) then
          k=top2
@@ -360,34 +270,9 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=-101
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
 c     
-      sciv1=.false.
-      first=.true.
-
       if(rhs.gt.1) goto 40
  36   job = lstk(bot) - lstk(top)
       id(1)=blank
@@ -440,19 +325,30 @@ c     rat
       endif
 
       l=sadr(il+4)
-      eps=stk(leps)
+      eps=1.d-6
       if (rhs .eq. 1) go to 46
       top=top-1
       eps=stk(l)
-      il=iadr(lstk(top))
- 46   l=sadr(il+4)
+ 46   il=iadr(lstk(top))
+      if(istk(il).ne.1) then
+         err=1
+         call error(52)
+         return
+      endif
+      l=sadr(il+4)
       m=istk(il+1)
       n=istk(il+2)
       it=istk(il+3)
+      if(it.ne.0) then
+         err=1
+         call error(52)
+         return
+      endif
       mn=m*n*(it+1)
+      
       l2 = l
 c     
-      if(lhs.eq.1) goto 47
+      if(lhs.eq.1) goto 48
       if(top+2.ge.bot) then
          call error(18)
          return
@@ -471,7 +367,12 @@ c
       istk(il+3)=it
       lstk(top+1)=l2+mn
 c     
- 47   do 48 i=1,mn
+      xxx=0.0d0
+      do 47 i1=0,mn-1
+         xxx=max(xxx,abs(stk(l+i1)))
+ 47   continue
+      if(xxx.gt.0.0d0) eps=eps*xxx
+ 48   do 49 i=1,mn
          i1=i-1
          xxx=stk(l+i1)
          call rat(abs(xxx),eps,ns,nt,err)
@@ -483,7 +384,7 @@ c
          stk(l+i1) = dble(ns)
          stk(l2+i1) = dble(nt)
          if (lhs .eq. 1) stk(l+i1) = dble(ns)/dble(nt)
- 48   continue
+ 49   continue
       go to 999
 c     
 c     deff
@@ -524,30 +425,8 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=-1
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
 c     
       if(rhs.gt.1) then
          icomp=1
@@ -623,30 +502,8 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=0
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
 c     
 
       nc=0
@@ -699,26 +556,38 @@ c     analyse des numero d'enregistrement
          call error(52)
          return
       endif
-      if(fin.lt.0.and.ftyp.ne.1) then
+      if(fin.lt.0.and.ftyp.ne.1.and.ftyp.ne.2) then
          call error(49)
          return
       endif
       m=istk(il+1)
       n=istk(il+2)
       l=sadr(il+4)
+      if(ftyp.eq.2) then
+         call entier(m*n,stk(l),istk(iadr(l)))
+         l=iadr(l)
+      endif
 c---- ecriture de flottants
       if(iacces.eq.0) then
 c     acces sequentiel
          if(lunit.ne.wte) then
             do 63 i=1,m
                li=l+i-1
-               if(fin.gt.0) write(lunit,*,err=139)
-     1              (stk(li+(j-1)*m),j=1,n)
-               if(fin.le.0) write(lunit,buf(1:nc),err=139)
-     1              (stk(li+(j-1)*m),j=1,n)
+               if(fin.gt.0) then
+                  write(lunit,*,err=139)
+     1                 (stk(li+(j-1)*m),j=1,n)
+               else
+                  if(ftyp.eq.1) then
+                     write(lunit,buf(1:nc),err=139)
+     1                    (stk(li+(j-1)*m),j=1,n)
+                  else
+                     write(lunit,buf(1:nc),err=139)
+     1                    (istk(li+(j-1)*m),j=1,n)
+                  endif
+               endif
  63         continue
          else
-            do 66 i=1,m
+            do 68 i=1,m
                li=l+i-1
                if(fin.gt.0) then
                   buf=' '
@@ -733,14 +602,19 @@ c     acces sequentiel
  64               continue
                else
                   ib=nc+1
-                  write(buf(ib:),buf(1:nc),err=139)
-     &                 (stk(li+j*m),j=0,n-1)
+                  if(ftyp.eq.1) then
+                     write(buf(ib:),buf(1:nc),err=139)
+     &                    (stk(li+j*m),j=0,n-1)
+                  else
+                     write(buf(ib:),buf(1:nc),err=139)
+     &                    (istk(li+j*m),j=0,n-1)
+                  endif
                   lb1=bsiz+1
- 65               lb1=lb1-1
-                  if(lb1.ge.ib+1.and.buf(lb1:lb1).eq.' ') goto 65
+ 66               lb1=lb1-1
+                  if(lb1.ge.ib+1.and.buf(lb1:lb1).eq.' ') goto 66
                   call basout(io,wte,buf(ib:lb1))
                endif
- 66         continue
+ 68         continue
          endif
 c     
       else
@@ -749,11 +623,16 @@ c     acces direct
             call error(42)
             return
          endif
-         do 67 i=1,m
+         do 69 i=1,m
             li=l+i-1
-            write(lunit,buf(1:nc),rec=istk(ilb+i-1),
-     1           err=139)  (stk(li+(j-1)*m),j=1,n)
- 67      continue
+            if(ftyp.eq.1) then
+               write(lunit,buf(1:nc),rec=istk(ilb+i-1),
+     1              err=139)  (stk(li+(j-1)*m),j=1,n)
+            else
+               write(lunit,buf(1:nc),rec=istk(ilb+i-1),
+     1              err=139)  (istk(li+(j-1)*m),j=1,n)
+            endif
+ 69      continue
       endif
       goto 78
 c     
@@ -859,30 +738,8 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=-1
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
 c     
       iacces=0
       if(rhs.eq.3) goto 121
@@ -1233,6 +1090,11 @@ c     action
          err=1
          call error(55)
          return
+      endif      
+      if(istk(il+1)*istk(il+2).ne.1) then
+         err=1
+         call error(36)
+         return
       endif
       l=il+5+istk(il+1)*istk(il+2)
       itype=abs(istk(l))
@@ -1248,6 +1110,11 @@ c     path
       if(istk(il).ne.10) then
          err=2
          call error(55)
+         return
+      endif
+      if(istk(il+1)*istk(il+2).ne.1) then
+         err=2
+         call error(36)
          return
       endif
       l=il+5+istk(il+1)*istk(il+2)
@@ -1419,30 +1286,8 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=100
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
 c     
       if(lunit.eq.wte) then
          call error(49)
@@ -1501,30 +1346,8 @@ c     opening file
       il=iadr(lstk(top))
       mode(1)=-101
       mode(2)=0
-      if (istk(il).eq.1) then
-         lunit = int(stk(sadr(il+4)))
-         if(lunit .lt. 0) then
-            err=1
-            call error(36)
-            return
-         endif
-         opened=.true.
-      elseif(istk(il).eq.10) then
-         mn=istk(il+5)-1
-         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
-         lunit = 0
-         call clunit(lunit,buf(1:mn),mode)
-         if(err.gt.0) then
-            buf(mn+1:)=' '
-            call error(err)
-            return
-         endif
-         opened=.false.
-      else
-         err=1
-         call error(55)
-         return
-      endif
+      call v2unit(top,mode,lunit,opened,ierr)
+      if(ierr.gt.0) return
 c     
       if(lunit.eq.wte) then
          call error(49)
@@ -1742,3 +1565,52 @@ c
  999  return
       end
 
+      subroutine v2unit(k,mode,lunit,opened,ierr)
+c     given variable #k (scalar or string) and mode 
+c     v2unit return a  logical unit attached to corresponding file
+
+      INCLUDE '../stack.h'
+c
+      logical opened
+      integer iadr,sadr
+c     
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      ierr=0
+      il=iadr(lstk(k))
+      if (istk(il).eq.1) then
+         lunit = int(stk(sadr(il+4)))
+         if (istk(il+1)*istk(il+2).ne.1.or.istk(il+3).ne.0.or.
+     $        lunit .lt. 0) then
+            err=1
+            ierr=1
+            call error(36)
+            return
+         endif
+         opened=.true.
+      elseif(istk(il).eq.10) then
+         if(istk(il+1)*istk(il+2).ne.1) then
+            err=1
+            ierr=1
+            call error(36)
+            return
+         endif
+         mn=istk(il+5)-1
+         call cvstr(mn,istk(il+5+istk(il+1)*istk(il+2)),buf,1)
+         lunit = 0
+         call clunit(lunit,buf(1:mn),mode)
+         if(err.gt.0) then
+            ierr=1
+            buf(mn+1:)=' '
+            call error(err)
+            return
+         endif
+         opened=.false.
+      else
+         err=1
+         ierr=1
+         call error(36)
+         return
+      endif
+      end

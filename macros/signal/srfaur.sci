@@ -1,4 +1,4 @@
-//<p,s,t,l,rt,tt>=srfaur(h,f,g,r0,n,p,s,t,l)
+function [p,s,t,l,rt,tt]=srfaur(h,f,g,r0,n,p,s,t,l)
 //<p,s,t,l,rt,tt>=srfaur(h,f,g,r0,n,p,s,t,l)
 //square-root algorithm for the algebraic Riccati equation.
 //

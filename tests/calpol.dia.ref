@@ -18,52 +18,52 @@ num=1;den=1+s;
  
 eps=5000*%eps;
  
-if cmpr(num/den,list('r',num,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(num/den,tlist('r',num,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(den\num,list('r',num,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(den\num,tlist('r',num,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(num./den,list('r',num,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(num./den,tlist('r',num,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(den.\num,list('r',num,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(den.\num,tlist('r',num,den,[]),eps)<>1 then bugmes();quit;end
  
 num=1.5+s**3;
  
-if cmpr(num/den,list('r',num,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(num/den,tlist('r',num,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(den\num,list('r',num,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(den\num,tlist('r',num,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(num./den,list('r',num,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(num./den,tlist('r',num,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(den.\num,list('r',num,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(den.\num,tlist('r',num,den,[]),eps)<>1 then bugmes();quit;end
  
 //
  
 h1=num/den;x=1.5;
  
-if cmpr(h1+x,list('r',num+x*den,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(h1+x,tlist('r',num+x*den,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(x+h1,list('r',num+x*den,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(x+h1,tlist('r',num+x*den,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(h1-x,list('r',num-x*den,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(h1-x,tlist('r',num-x*den,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(x-h1,list('r',-num+x*den,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(x-h1,tlist('r',-num+x*den,den,[]),eps)<>1 then bugmes();quit;end
  
  
 x=1.5+3*s;
  
-if cmpr(h1+x,list('r',num+x*den,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(h1+x,tlist('r',num+x*den,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(x+h1,list('r',num+x*den,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(x+h1,tlist('r',num+x*den,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(h1-x,list('r',num-x*den,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(h1-x,tlist('r',num-x*den,den,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(x-h1,list('r',-num+x*den,den,[]),eps)<>1 then bugmes();quit;end
+if cmpr(x-h1,tlist('r',-num+x*den,den,[]),eps)<>1 then bugmes();quit;end
  
 y=s**3;h2=x/y;
  
-if cmpr(h1+h2,list('r',num*y+x*den,den*y,[]),eps)<>1 then bugmes();quit;end
+if cmpr(h1+h2,tlist('r',num*y+x*den,den*y,[]),eps)<>1 then bugmes();quit;end
  
-if cmpr(h1-h2,list('r',num*y-x*den,den*y,[]),eps)<>1 then bugmes();quit;end
+if cmpr(h1-h2,tlist('r',num*y-x*den,den*y,[]),eps)<>1 then bugmes();quit;end
  
 //
  
@@ -73,81 +73,81 @@ if cmpr(h1-h2,list('r',num*y-x*den,den*y,[]),eps)<>1 then bugmes();quit;end
  
 h1=num/den;x=1.5;
  
-if cmpr([h1,x],list('r',[num,x],[den,1],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1,x],tlist('r',[num,x],[den,1],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x,h1],list('r',[x,num],[1,den],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x,h1],tlist('r',[x,num],[1,den],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([h1;x],list('r',[num;x],[den;1],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1;x],tlist('r',[num;x],[den;1],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x;h1],list('r',[x;num],[1;den],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x;h1],tlist('r',[x;num],[1;den],[]),eps)<>1 then bugmes();quit;end
  
 x=1.5+3*s;
  
-if cmpr([h1,x],list('r',[num,x],[den,1],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1,x],tlist('r',[num,x],[den,1],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x,h1],list('r',[x,num],[1,den],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x,h1],tlist('r',[x,num],[1,den],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([h1;x],list('r',[num;x],[den;1],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1;x],tlist('r',[num;x],[den;1],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x;h1],list('r',[x;num],[1;den],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x;h1],tlist('r',[x;num],[1;den],[]),eps)<>1 then bugmes();quit;end
  
 y=-0.5+s**3;h2=x/y;
  
-if cmpr([h1,h2],list('r',[num,x],[den,y],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1,h2],tlist('r',[num,x],[den,y],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([h1;h2],list('r',[num;x],[den;y],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1;h2],tlist('r',[num;x],[den;y],[]),eps)<>1 then bugmes();quit;end
  
 h1=[num/den,den/num];x=[0.3 1.5];
  
-if cmpr([h1,x],list('r',[h1(2),x],[h1(3),ones(x)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1,x],tlist('r',[h1(2),x],[h1(3),ones(x)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x,h1],list('r',[x,h1(2)],[ones(x),h1(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x,h1],tlist('r',[x,h1(2)],[ones(x),h1(3)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([h1;x],list('r',[h1(2);x],[h1(3);ones(x)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1;x],tlist('r',[h1(2);x],[h1(3);ones(x)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x;h1],list('r',[x;h1(2)],[ones(x);h1(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x;h1],tlist('r',[x;h1(2)],[ones(x);h1(3)],[]),eps)<>1 then bugmes();quit;end
  
 h1=[num/den;den/num];x=[0.3;-1.5];
  
-if cmpr([h1,x],list('r',[h1(2),x],[h1(3),ones(x)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1,x],tlist('r',[h1(2),x],[h1(3),ones(x)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x,h1],list('r',[x,h1(2)],[ones(x),h1(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x,h1],tlist('r',[x,h1(2)],[ones(x),h1(3)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([h1;x],list('r',[h1(2);x],[h1(3);ones(x)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1;x],tlist('r',[h1(2);x],[h1(3);ones(x)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x;h1],list('r',[x;h1(2)],[ones(x);h1(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x;h1],tlist('r',[x;h1(2)],[ones(x);h1(3)],[]),eps)<>1 then bugmes();quit;end
  
 x=[1.5+3*s;-1+s**3];
  
-if cmpr([h1,x],list('r',[h1(2),x],[h1(3),ones(x)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1,x],tlist('r',[h1(2),x],[h1(3),ones(x)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x,h1],list('r',[x,h1(2)],[ones(x),h1(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x,h1],tlist('r',[x,h1(2)],[ones(x),h1(3)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([h1;x],list('r',[h1(2);x],[h1(3);ones(x)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1;x],tlist('r',[h1(2);x],[h1(3);ones(x)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x;h1],list('r',[x;h1(2)],[ones(x);h1(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x;h1],tlist('r',[x;h1(2)],[ones(x);h1(3)],[]),eps)<>1 then bugmes();quit;end
  
 h1=[num/den,den/num];x=[1.5+3*s,-1+s**2];
  
-if cmpr([h1,x],list('r',[h1(2),x],[h1(3),ones(x)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1,x],tlist('r',[h1(2),x],[h1(3),ones(x)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x,h1],list('r',[x,h1(2)],[ones(x),h1(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x,h1],tlist('r',[x,h1(2)],[ones(x),h1(3)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([h1;x],list('r',[h1(2);x],[h1(3);ones(x)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1;x],tlist('r',[h1(2);x],[h1(3);ones(x)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([x;h1],list('r',[x;h1(2)],[ones(x);h1(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([x;h1],tlist('r',[x;h1(2)],[ones(x);h1(3)],[]),eps)<>1 then bugmes();quit;end
  
 h1=[num/den;den/num];y=-0.5+s**3;h2=[num/y;y*y/(y+1)];
  
-if cmpr([h1,h2],list('r',[h1(2),h2(2)],[h1(3),h2(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1,h2],tlist('r',[h1(2),h2(2)],[h1(3),h2(3)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([h1;h2],list('r',[h1(2);h2(2)],[h1(3);h2(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1;h2],tlist('r',[h1(2);h2(2)],[h1(3);h2(3)],[]),eps)<>1 then bugmes();quit;end
  
 h1=[num/den,den/num];y=-0.5+s**3;h2=[num/y,y*y/(y+1)];
  
-if cmpr([h1,h2],list('r',[h1(2),h2(2)],[h1(3),h2(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1,h2],tlist('r',[h1(2),h2(2)],[h1(3),h2(3)],[]),eps)<>1 then bugmes();quit;end
  
-if cmpr([h1;h2],list('r',[h1(2);h2(2)],[h1(3);h2(3)],[]),eps)<>1 then bugmes();quit;end
+if cmpr([h1;h2],tlist('r',[h1(2);h2(2)],[h1(3);h2(3)],[]),eps)<>1 then bugmes();quit;end
  
 //
  

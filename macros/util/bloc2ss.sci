@@ -1,4 +1,4 @@
-//[sl,name]=bloc2ss(syst)
+function [sl,name]=bloc2ss(syst)
 //
 [lhs,rhs]=argn(0)
  
@@ -24,7 +24,9 @@ for l=2:nsyst
    if type(transfert)==10 then transfert=evstr(transfert);end
    if transfert(1)='r' then transfert=tf2ss(transfert);end
    syst(l)=list('transfert',transfert)
-   if type(transfert)==15 then
+   
+   //-compat type(transfert)==15 retained for list/tlist compatibility
+   if type(transfert)==15|type(transfert)==16 then
       d=transfert(7)
       if d<>[] then
         if dom==[] then
@@ -174,7 +176,7 @@ end
 if or(size(d')<>size(k)) then
   error('invalid data')
 end
-sl=list('lss',a,b,c,d,0*ones(ms,1),[])/.(-k)
+sl=tlist('lss',a,b,c,d,0*ones(ms,1),[])/.(-k)
 sl=sl(out,in)
 sl(7)=dom
 //end

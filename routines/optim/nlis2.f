@@ -1,7 +1,7 @@
       subroutine nlis2 (simul,prosca,n,xn,fn,fpn,t,tmin,tmax,d,d2,g,gd,
      1 amd,amf,imp,io,logic,nap,napmax,x,tol,a,tps,tnc,gg,izs,rzs,dzs)
-c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
-c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c subroutine effectuant une recherche lineaire sur 0 tmax
 c partant du point xn dans la direction d.
 c sous l'hypothese d'hemiderivabilite, donne
@@ -16,7 +16,7 @@ c        2          pas semiserieux-nul
 c        3          pas nul, enrichissement du faiseau
 c        4          nap > napmax
 c        5          retour a l'utilisateur
-c        6          non hemi-derivable (au-dela de tmin)
+c        6          non hemi-derivable (au-dela de dx)
 c        < 0        contrainte implicite active
 c
 c        imp
@@ -26,63 +26,44 @@ c                   >3 informations pour chaque essai de t
 c            ----------------------------------------
 c fait appel aux subroutines:
 c -------simul(indic,n,x,f,g,izs,rzs,dzs)
-c--------prosca(n,x,y,ps,izs,rzs,dzs)
+c -------prosca(n,u,v,ps,izs,rzs,dzs)
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
 c cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
       implicit double precision (a-h,o-z)
       external simul,prosca
       dimension xn(n),d(n),g(n),x(n),izs(*),dzs(*),gg(n),gd(n)
       real rzs(*)
- 1000 format (/4x,9h nlis2   ,4x,4hfpn=,d10.3,4h d2=,d9.2,
-     1 7h  tmin=,d9.2,6h tmax=,d9.2)
- 1001 format (/4x,6h nlis2,10x,17htmin force a tmax)
- 1002 format (4x,6h nlis2,36x,1hi,d10.3,2d11.3)
- 1003 format (4x,6h nlis2,d13.3,2d11.3,2h i)
- 1004 format (4x,6h nlis2,36x,1hi,d10.3,7h indic=,i3)
- 1006 format (4x,6h nlis2,3x,20hcontrainte implicite,i4,7h active)
- 1007 format (/4x,6h nlis2,3x,12hfin sur tmin)
- 1010 format (/4x,6h nlis2,3x,i5,22h simulations atteintes)
- 1011 format (/4x,6h nlis2,3x,31harret demande par l'utilisateur)
+      dimension d3(1),d4(1),i5(1)
 c
 c     initialisations
 c
       tesf=amf*fpn
       tesd=amd*fpn
-      td=0.0d+0
-      tg=0.0d+0
+      td=0.d0
+      tg=0.d0
       fg=fn
       fpg=fpn
-      ta=0.0d+0
+      ta=0.d0
       fa=fn
       fpa=fpn
       indica=1
       logic=0
-      tx=0.0d+0
-      cx=0.0d+0
-      fx=fn
-      gx=fpn
-      step=t
-      sthalf=0.1
-      penlty=0.0d+0
 c          elimination d'un t initial ridiculement petit
       if (t.gt.tmin) go to 20
       t=tmin
       if (t.le.tmax) go to 20
-      if (imp.gt.0) write (io,1001)
+      if (imp.gt.0) call n1fc1o(io,35,i1,i2,i3,i4,i5,d1,d2,d3,d4)
       tmin=tmax
-   20 if (fn+t*fpn.lt.fn+0.90d+0*t*fpn) go to 30
-      t=2.0d+0*t
+   20 if (fn+t*fpn.lt.fn+0.9d0*t*fpn) go to 30
+      t=2.d0*t
       go to 20
 c
    30 if(t.lt.tmax) go to 40
       t=tmax
       logic=1
-   40 if (imp.ge.4) write (io,1000) fpn,d2,tmin,tmax
+   40 if (imp.ge.4) call n1fc1o(io,36,i1,i2,i3,i4,i5,fpn,d2,tmin,tmax)
       do 50 i=1,n
    50 x(i)=xn(i)+t*d(i)
-      inout=0
-      call fpq2 (inout,tx,cx,fx,gx,step,sthalf,penlty,iyflag,
-     1 ty,cy,fy,gy,t,cz,fz,gz,ggg,hh,s)
 c
 c                           boucle
 c
@@ -90,8 +71,8 @@ c
       if(nap.le.napmax) go to 150
 c                sortie par maximum de simulations
       logic=4
-      if(imp.ge.4) write(io,1010) nap
-      if (tg.eq.0.0d+0) go to 999
+      if(imp.ge.4) call n1fc1o(io,37,nap,i2,i3,i4,i5,d1,d2,d3,d4)
+      if (tg.eq.0.d0) go to 999
       fn=fg
       do 120 i=1,n
       g(i)=gg(i)
@@ -106,7 +87,7 @@ c                arret demande par l'utilisateur
       fn=f
       do 170 i=1,n
   170 xn(i)=x(i)
-      if(imp.ge.4) write(io,1011)
+      if(imp.ge.4)call n1fc1o(io,38,i1,i2,i3,i4,i5,d1,d2,d3,d4)
       go to 999
 c
 c                les tests elementaires sont faits, on y va
@@ -116,17 +97,16 @@ c
       td=t
       indicd=indic
       logic=0
-      if (imp.ge.4) write(io,1004) t,indic
-      t=tg+0.10d+0*(td-tg)
+      if (imp.ge.4) call n1fc1o(io,39,indic,i2,i3,i4,i5,t,d2,d3,d4)
+      t=tg+0.1d0*(td-tg)
       go to 905
 c
 c                calcul de la derivee directionnelle h'(t)
-c
-  210 call prosca (n,d,g,fp,izs,rzs,dzs)
+  210 call prosca(n,g,d,fp,izs,rzs,dzs)
 c
 c         test de descente (premiere inegalite pour un pas serieux)
       ffn=f-fn
-      if(ffn.le.t*tesf) go to 300
+      if(ffn.lt.t*tesf) go to 300
       td=t
       fd=f
       fpd=fp
@@ -134,11 +114,8 @@ c         test de descente (premiere inegalite pour un pas serieux)
   230 gd(i)=g(i)
       indicd=indic
       logic=0
-      cz=ffn-t*tesf
-      fz=f
-      gz=fp
-      if(imp.ge.4) write(io,1002) t,ffn,fp
-      if(tg.ne.0.0d+0) go to 500
+      if(imp.ge.4) call n1fc1o(io,40,i1,i2,i3,i4,i5,t,ffn,fp,d4)
+      if(tg.ne.0.) go to 500
 c                tests pour un pas nul (si tg=0)
       if(fpd.lt.tesd) go to 500
       tps=(fn-f)+td*fpd
@@ -149,7 +126,7 @@ c                tests pour un pas nul (si tg=0)
       go to 999
 c
 c                    descente
-  300 if(imp.ge.4) write(io,1003) t,ffn,fp
+  300 if(imp.ge.4) call n1fc1o(io,41,i1,i2,i3,i4,i5,t,ffn,fp,d4)
 c
 c         test de derivee (deuxieme inegalite pour un pas serieux)
       if(fp.lt.tesd) go to 320
@@ -177,14 +154,14 @@ c                on a une descente
       fpg=fp
       do 360 i=1,n
   360 gg(i)=g(i)
-      cz=0.0d+0
-      fz=f
-      gz=fp
 c
-      if(td.ne.0.0d+0) go to 500
+      if(td.ne.0.d0) go to 500
 c                extrapolation
-      call fpq2 (inout,tx,cx,fx,gx,step,sthalf,penlty,
-     1 iyflag,ty,cy,fy,gy,t,cz,fz,gz,ggg,hh,s)
+      ta=t
+      t=9.d0*tg
+      z=fpn+3.d0*fp-4.d0*ffn/tg
+      if(z.gt.0.d0) t=dmin1(t,tg*dmax1(1.d0,-fp/z))
+      t=tg+t
       if(t.lt.tmax) go to 900
       logic=1
       t=tmax
@@ -192,9 +169,54 @@ c                extrapolation
 c
 c                interpolation
 c
-  500 continue
-      call fpq2 (inout,tx,cx,fx,gx,step,sthalf,penlty,
-     1 iyflag,ty,cy,fy,gy,t,cz,fz,gz,ggg,hh,s)
+  500 if(indica.gt.0 .and. indicd.gt.0) go to 510
+      ta=t
+      t=0.9d0*tg+0.1d0*td
+      go to 900
+  510 test=0.1d0*(td-tg)
+c                approximation cubique
+      ps=fp+fpa-3.d0*(fa-f)/(ta-t)
+      z1=ps*ps-fp*fpa
+      if (z1.ge.0.d0) go to 520
+      if (fp.lt.0.d0) tc=td
+      if (fp.ge.0.d0) tc=tg
+      go to 600
+  520 z1=dsqrt(z1)
+      if (t-ta.lt.0.d0) z1=-z1
+      sign=(t-ta)/dabs(t-ta)
+      if ((ps+fp)*sign.gt.0.d0) go to 550
+      den=2.d0*ps+fp+fpa
+      anum=z1-fp-ps
+      if (dabs((t-ta)*anum).ge.(td-tg)*dabs(den)) go to 530
+      tc=t+anum*(ta-t)/den
+      go to 600
+  530 tc=td
+      go to 600
+  550 tc=t+fp*(ta-t)/(ps+fp+z1)
+  600 mc=0
+      if (tc.lt.tg) mc=-1
+      if (tc.gt.td) mc=1
+      tc=max(tc,tg+test)
+      tc=min(tc,td-test)
+c                approximation polyhedrique
+      ps=fpd-fpg
+      if (ps.ne.0.d0) go to 620
+      tp=0.5d0*(td+tg)
+      go to 650
+  620 tp=((fg-fpg*tg)-(fd-fpd*td))/ps
+  650 mp=0
+      if (tp.lt.tg) mp=-1
+      if (tp.gt.td) mp=1
+      tp=max(tp,tg+test)
+      tp=min(tp,td-test)
+c                nouveau t par approximation cp complete securisee
+      ta=t
+      if (mc.eq.0  .and.  mp.eq.0) t=dmin1(tc,tp)
+      if (mc.eq.0  .and.  mp.ne.0) t=tc
+      if (mc.ne.0  .and.  mp.eq.0) t=tp
+      if (mc.eq.1  .and.  mp.eq.1) t=td-test
+      if (mc.eq.-1 .and. mp.eq.-1) t=tg+test
+      if (mc*mp.eq.-1) t=0.5d0*(tg+td)
 c
 c                 fin de boucle
 c
@@ -202,9 +224,9 @@ c
       fpa=fp
   905 indica=indic
 c                 peut-on faire logic=2 ?
-      if (td.eq.0.0d+0) go to 920
+      if (td.eq.0.d0) go to 920
       if (indicd.lt.0) go to 920
-      if (td-tg.gt.10.0d+0*tmin) go to 920
+      if (td-tg.gt.10.d0*tmin) go to 920
       if (fpd.lt.tesd) go to 920
       tps=(fg-fd)+(td-tg)*fpd
       tnc=d2*(td-tg)*(td-tg)
@@ -222,24 +244,23 @@ c               sortie par pas semiserieux-nul
 c
 c                test d'arret sur la proximite de tg et td
 c
-  920 if (td.eq.0.0d+0) go to 990
+  920 if (td.eq.0.d0) go to 990
       if (td-tg.le.tmin) go to 950
-      if (abs(ty-tx).le.tmin) go to 950
       do 930 i=1,n
       z=xn(i)+t*d(i)
       if (z.ne.x(i) .and. z.ne.xn(i)) go to 990
   930 continue
-c                arret sur tmin ou de secours
+c                arret sur dx ou de secours
   950 logic=6
       if (indicd.lt.0) logic=indicd
-      if (tg.eq.0.0d+0) go to 970
+      if (tg.eq.0.d0) go to 970
       fn=fg
       do 960 i=1,n
       xn(i)=xn(i)+tg*d(i)
   960 g(i)=gg(i)
   970 if (imp.le.0) go to 999
-      if (logic.lt.0) write(io,1006) logic
-      if (logic.eq.6) write(io,1007)
+      if (logic.lt.0) call n1fc1o(io,42,logic,i2,i3,i4,i5,d1,d2,d3,d4)
+      if (logic.eq.6) call n1fc1o(io,42,i1,i2,i3,i4,i5,d1,d2,d3,d4)
       go to 999
 c
 c                recopiage de x et boucle

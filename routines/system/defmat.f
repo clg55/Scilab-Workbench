@@ -10,7 +10,6 @@ C     ---------------------------------
       if(err1.gt.0) return
 c     compilation  [4]
       if(compil(4,0,0,0,0)) return 
-      if(top.eq.0) lstk(1)=1
       if(top+2 .ge. bot) then
          call error(18)
          return

@@ -1,4 +1,4 @@
-#include "../machine.h"
+#include "machine.h"
 #include <stdio.h>
 extern	WindowPtr CWindow;
 static int width=0;
@@ -49,15 +49,16 @@ Handle menu;
 		DisableItem(menu, item);
 }
 
-#define PI0 (int *) 0
+#define PI0 (integer *) 0
+#define PD0 (double *) 0
+
 CleanWinTape()
 {
-     int verbose=0,ww=0,narg;
-      C2F(dr)("xget","window",&verbose,&ww,&narg,PI0,PI0,PI0,0,0); 
-      C2F(dr)("xset","window",&ww,PI0,PI0,PI0,PI0,PI0,0,0);
-      C2F(dr)("xclear","v",PI0,PI0,PI0,PI0,PI0,PI0,0,0);
-      C2F(dr)("xstart","v",&ww,PI0,PI0,PI0,PI0,PI0,0,0);
-
+  integer verbose=0,ww=0,narg;
+  C2F(dr)("xget","window",&verbose,&ww,&narg,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L); 
+  C2F(dr)("xset","window",&ww,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  C2F(dr)("xclear","v",PI0,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
+  C2F(dr)("xstart","v",&ww,PI0,PI0,PI0,PI0,PI0,PD0,PD0,PD0,PD0,0L,0L);
  }
 
 

@@ -20,7 +20,7 @@
 
 #include "defs.h"
 
-static char *errlst[] = {
+static const char *errlst[] = {
     "Error 0",
     "cannot open file",			/* 1 DLD_ENOFILE */
     "bad magic number",			/* 2 DLD_EBADMAGIC */
@@ -47,13 +47,15 @@ char dld_str_error[ 256 ];
    dld_errno to the stderr. */
 void
 dld_perror (str)
-char *str;
+const char *str;
 {
     if (str)
 	fprintf (stderr, "%s: ", str);
 
     if (dld_errno < 1 || dld_errno > sizeof (errlst)/sizeof (char *))
 	fprintf (stderr, "Unknown error.\n");
+    else if (DLD_EMULTDEFS==dld_errno)
+      fprintf (stderr, "%s: %s\n", errlst[dld_errno], dld_errname);
     else fprintf (stderr, "%s.\n", errlst[dld_errno]);
 } /* dld_perror */
 
@@ -67,4 +69,3 @@ int code;
     else strcpy (dld_str_error, errlst[code]);
     return (dld_str_error);
 } /* dld_perror */
-

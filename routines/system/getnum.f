@@ -13,7 +13,6 @@ c----------------------------------------------
       x=stk(lstk(isiz))
       if (compil(6,ix,0,0,0)) return
 c     compilation getnum :<6 num>
-      if(top.eq.0) lstk(1)=1
       if (top+2 .ge. bot) then
          call error(18)
          return

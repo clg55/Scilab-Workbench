@@ -8,10 +8,8 @@
 
 In this chapter, some optimization techniques are investigated for the design 
 of IIR as well as FIR filters. Those techniques are particuliarly usefull 
-when non standard responses are desired. Although we did not investigate 
-all the possibilities of optimization as applied to filter design, the 
-following macros could be a starting point and give some guidelines 
-for future developments in this area with $\Psi$Lab. 
+when non standard responses are desired.
+
 %\include{lpiir}
 
 \label{optimized IIR filters}
@@ -114,21 +112,13 @@ the relevant documentation \cite{delebecque} for a detailed explanation
 of its use.
 The {\tt optim} function needs some 
 input parameters, the main of which being what is called a {\em simulator}: 
-it may be given as a $\Psi$lab macro and its purpose is to give the cost function\index{cost function} 
+it may be given as a $\Psi$lab function and its purpose is to give the cost function\index{cost function} 
 of the relevant problem as well as its gradient relative to the 
 specified parameters. For the minimum ${\Bbb L}_p$ design problem, the 
 simulator is named {\tt iirlp} and makes use of two other macros: 
 {\tt iirmag} and {\tt iirgroup}; it 
-gives $E(\phi)$ together with its gradient relative to $\phi$:
-\verbatok{\MACROSSIGLIB/iirlp.sci}
-\end{verbatim}
-\index{macro code!iirlp@{\tt iirlp}}
-\verbatok{\MACROSSIGLIB/iirmod.sci}
-\end{verbatim}
-\index{macro code!iirmod@{\tt iirmod}}
-\verbatok{\MACROSSIGLIB/iirgroup.sci}
-\end{verbatim}
-\index{macro code!iirgroup@{\tt iirgroup}}
+gives $E(\phi)$ together with its gradient relative to $\phi$.
+
 The following example will give an idea of what can be achieved 
 with this optimization\index{optimization} technique: we are given a low-pass elliptic filter 
 with normalized cut-off frequency 0.25, transition\index{transition} 
@@ -225,7 +215,7 @@ could have been best approximated with the same number of parameters.
 %%%%%%%%%%%
 \input{\Figdir optiir5.tex}
 \dessin{{\tt exec('optiir.5.code')} Log-magnitude response. $\omega \in [0,0.45]$}{f.minlp.5}
-%%%%%%%%%%
+%%%%%%%%%%d
 
 %\include{optfir}
 
@@ -327,33 +317,24 @@ problem -and the associated macro- may be stated as to find the filter
 with minimum ripple in 
 the passbands for a given attenuation in the stopbands.
 \index{simplex method}
-In the following, only the standard filter types (lowpass, 
-highpass, bandpass, bandstop) will be treated although any other frequency 
-response can be approximated with this method. The rest of this section 
-is mainly concerned with the text of the $\Psi$Lab macros that make the 
-necessary calculations, ending with some illustrative examples.
+In the following, only an example of the standard lowpass filter type
+is treated although any other frequency 
+response can be approximated with this method. 
 
-\paragraph{The {\tt optfir} macro}:\\ 
-%\verbatok{\MACROSSIGLIB/optfir.sci}
-%\end{verbatim}
-\index{macro code!optfir@{\tt optfir}}
-%\verbatok{\MACROSSIGLIB/bound.sci}
-%\end{verbatim}
-\index{macro code!bound@{\tt bound}}
 \paragraph{Example 1}: figure \ref{optfir.fig1} 
  shows the frequency response 
 of a lowpass type 1 filter with the following specifications: $n$=64;
 cut-off frequency, $f_c$=.15; $\epsilon=0.01$; three samples in the transition.
 %%%%%%%%%%%
 \input{\Figdir optfir1.tex}
-\dessin{{\tt exec('optfir.1.code')} Linear programming design. 64-point lowpass FIR filter}{optfir.fig1}
+\dessin{{\tt exec('optfir1.code')} Linear programming design. 64-point lowpass FIR filter}{optfir.fig1}
 %%%%%%%%%%
-\paragraph{Example 2}: figure \ref{optfir.fig2} shows the frequency 
-response magnitude of a 128-point bandpass filter with cut-off frequencies 
+Figure \ref{optfir.fig2} shows the log magnitude squared of the initial filter 
+defined by the rectangular window and the optimized filter. 
 $0.28$ and $0.30$ $\epsilon=0.001$ and three samples in each transition.
 %%%%%%%%%%%
 \input{\Figdir optfir2.tex}
-\dessin{{\tt exec('optfir.2.code')} Linear programming design. 128-point bandpass FIR filter}{optfir.fig2}
+\dessin{{\tt exec('optfir2.code')} Linear programming design. }{optfir.fig2}
 %%%%%%%%%%
 
  

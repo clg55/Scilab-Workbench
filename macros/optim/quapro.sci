@@ -7,6 +7,7 @@ function [x,lagr,f]=quapro(Q,p,C,b,ci,cs,mi,x0,imp)
 if rhs==9 then
 //quapro(Q,p,C,b,ci,cs,mi,x0,imp)
 //define modo,x0 for qpqpqp
+   modo=3;
    if x0='v' then modo=1;x0=0;end
    if x0='g' then modo=2;x0=0;end
    [x,f,lagr]=qpqpqp(x0,Q,p,C',b,ci,cs,mi,modo,imp)

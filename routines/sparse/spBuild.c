@@ -73,6 +73,9 @@ static char RCSid[] =
 
 
 
+static void Translate();
+static EnlargeMatrix();
+static ExpandTranslationArrays();
 
 
 
@@ -193,7 +196,7 @@ int  Row, Col;
 MatrixPtr  Matrix = (MatrixPtr)eMatrix;
 RealNumber  *pElement;
 ElementPtr spcFindElementInCol();
-void  Translate();
+
 
 /* Begin `spGetElement'. */
     ASSERT( IS_SPARSE( Matrix ) AND Row >= 0 AND Col >= 0 );

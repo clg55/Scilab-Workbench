@@ -2,11 +2,15 @@
 c    scilab to fortran
 c
       include '../stack.h'
-      integer adr
+      integer iadr,sadr
       integer hsize
       double precision x
       dimension x(*)
-      il=adr(lstk(top),0)
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      il=iadr(lstk(top))
       if(istk(il).ne.1) goto 10
       hsize=4
       n=istk(il+1)*istk(il+2)*(istk(il+3)+1)
@@ -14,7 +18,7 @@ c
          call error(98)
          return
       endif
-      lx=adr(il+hsize,1)
+      lx=sadr(il+hsize)
       call dcopy(nx,stk(lx),1,x,1)
       top=top-1
       return

@@ -25,7 +25,7 @@
 #endif
 
 #define	MAXLEN	65535		/* maximum length of document */
-#define	MAXWORD	250		/* maximum word length */
+#define	MAXWORD	2500		/* maximum word length */
 #define	MAXLINE	500		/* maximum line length */
 #define	MAXDEF	200		/* maximum number of defines */
 

@@ -49,6 +49,10 @@ Origine: Michael Fan (Andre Tits)
  Origine: S Steer INRIA 1988
 */
 
+/** for debug info **/
+/** #define DEBUG  **/
+
+
 #if defined(__STDC__)
 void C2F(dynstr)(int *isfor,int *i,char fname[],int *lf,char spname[],int *ls,int *err)
 #else
@@ -64,25 +68,26 @@ int *isfor,*i;char fname[];int *lf;char spname[];int *ls;int *err;
   spname[*ls]='\0';
   Underscores(*isfor,spname,enamebuf);
   ename1=enamebuf;
-
   C2F(dynload)(i,ename1,fname,err) ;
   return;
 }
-
-/* On sun 4.1.3 you can use the std_link.c code or linux_link.c code
- * if you prefer linux_link.c uncomment next line and comment all the 
- * following
-*/
-/*#include "linux_link.c"*/
 
 #if (defined(sun) && defined(SYSV)) || defined(__alpha) || defined(sgi)
 #include "SYSV_link.c"
 #else
 #if defined(sun) ||  defined(mips) || defined(_IBMR2) || defined(hppa)
+#ifdef SUNOSDLD 
+#include "linux_link.c"
+#else 
 #include "std_link.c"
+#endif /* end of SUNOSDLD */
 #else
 #if defined(linux)
+#ifdef __ELF__
+#include "SYSV_link.c"
+#else
 #include "linux_link.c"
+#endif 
 #else
 C2F(dynload)() {cerro("Dynamic link not implemented");}
 C2F(dyncall)() {cerro("Dynamic link not implemented");}
@@ -90,15 +95,19 @@ C2F(dyncall)() {cerro("Dynamic link not implemented");}
 #endif 
 #endif 
 
+#ifdef WLU
+#ifndef DLDLINK 
+#define WLU1 /* dld will add the leading _ itself */
+#endif 
+#endif 
 
 Underscores(isfor,ename,ename1)
 char ename[],ename1[];
 int isfor;
     {
    int k1,i;
-
    k1=0;
-#ifdef WLU
+#ifdef WLU1
    ename1[0]='_';
    k1=1;
 #endif

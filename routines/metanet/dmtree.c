@@ -1,6 +1,7 @@
-#include "../machine.h"
+#include <string.h>
+#include <malloc.h>
 
-#define NULL 0
+#include "../machine.h"
 
 void C2F(dmtree)(i0,la1,lp1,ls1,m,n,pred,w)
 int *i0,*la1,*lp1,*ls1,*m,*n,*pred,*w;

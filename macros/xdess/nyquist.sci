@@ -6,8 +6,11 @@ pas_def='auto' //valeur du pas par defaut
 //---------------------
 xbasc()
 ilf=0
-select type(sl)
-case 15 then  // sl,fmin,fmax [,pas] [,comments]
+typ=type(sl)
+//-compat next line added for list/tlist compatibility
+if typ==15 then typ=16,end
+select typ
+case 16 then  // sl,fmin,fmax [,pas] [,comments]
   typ=sl(1)
   if typ<>'lss'&typ<>'r' then
     error(97,1)
@@ -95,10 +98,10 @@ if mnc==1 then
 else
  plot2d(repf',repi',-(1:mn),"111",strcat(comments,'@'),rect,axis);
 end
-xgrid([npx,npy],-(mn+1))
+xgrid();
 xgeti=xget("mark");
 xset("mark",2,xgeti(2));
-xclip(rect(1),rect(4),rect(3)-rect(1),rect(4)-rect(2));
+xset("clipgrf");
 kk=1;p0=[repf(:,kk) repi(:,kk)];ks=1;d=0;
 dx=rect(3)-rect(1)
 dy=rect(4)-rect(2)

@@ -1,3 +1,6 @@
+Metanet.drawWidth: 1000
+Metanet.drawHeight: 1000
+
 #ifdef  COLOR
 
 Metanet*Command.background:yellow

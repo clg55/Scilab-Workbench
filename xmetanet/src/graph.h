@@ -16,6 +16,7 @@ typedef int node_type;
 typedef struct nodedef {
   int number;
   char *name;
+  char *label;
   list *connected_arcs;
   list *loop_arcs;
   double demand;
@@ -31,13 +32,16 @@ typedef struct nodedef {
 extern void DrawNode();
 extern void EraseNode();
 extern void HiliteNode();
+extern void HiliteNode1();
 extern node *NodeAlloc();
 extern void PrintNode();
 extern void UnhiliteNode();
+extern void UnhiliteNode1();
 
 typedef struct arcdef {
   int number;
   char *name;
+  char *label;
   node *head;
   node *tail;
   double unitary_cost;
@@ -49,7 +53,8 @@ typedef struct arcdef {
   double weight;
   int g_type;
   int x0, y0, x1, y1, x2, y2, x3, y3, xmax, ymax, xa0, ya0,
-  xa1, ya1, xa2, ya2, xa3, ya3;
+  xa1, ya1, xa2, ya2;
+  double si, co;
   int col;
   int width;
   int hiWidth;
@@ -61,13 +66,14 @@ extern arc *ArcAlloc();
 extern void DrawArc();
 extern void EraseArc();
 extern void HiliteArc();
+extern void HiliteArc1();
 extern void PrintArc();
 extern void SetCoordinatesArc();
 extern void UnhiliteArc();
+extern void UnhiliteArc1();
 
 typedef struct graphdef {
   char name[MAXNAM];
-  struct graphdef *un_graph;
   int directed;
   int node_number;
   int arc_number;
@@ -79,8 +85,6 @@ typedef struct graphdef {
   list *nodes; /* in decreasing order of node numbers */
   arc **arcArray;
   node **nodeArray;
-  char **nameEdgeArray;
-  char **nameNodeArray;
   int nodeDiam;
   int nodeBorder;
   int arcWidth;
@@ -92,26 +96,19 @@ extern void DestroyGraph();
 extern void DrawGraph();
 extern graph *DuplicateGraph();
 extern graph *GraphAlloc();
-extern void ReDrawGraph();
 
 extern arc *AddArc();
 extern node *AddNode();
 extern arc *GetArc();
 extern node *GetNode();
-extern arc *GetNamedArc();
-extern node *GetNamedNode();
-
-extern int ArcToEdgeNumber();
-extern int EdgeNumber();
-extern int EdgeNumberOfArc();
-extern int EdgeToArcNumber();
 
 extern void MakeArraysGraph();
-extern void ComputeNameArraysGraph();
 
 typedef struct GG {
-  type_id active_type;
-  ptr active;
+  int n_hilited_arcs;
+  int n_hilited_nodes;
+  list *hilited_arcs;
+  list *hilited_nodes;
   node *moving;
   int modified;
 } GG;

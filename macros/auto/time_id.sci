@@ -24,6 +24,6 @@ coef=m\y(2:npt);
 //
 num=poly(coef(2*n:-1:n+1),'z','c');
 den=poly([coef(n:-1:1);1],'z','c');
-h=list('r',num,den,'d')
+h=tlist('r',num,den,'d')
 
 

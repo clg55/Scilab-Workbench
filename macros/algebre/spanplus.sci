@@ -7,6 +7,8 @@ function [x,dim,dima]=spanplus(a,b,tol)
 //F.D.
 //!
 [na,ma]=size(a);[nb,mb]=size(b);
+if na*ma==0 then [x,dima]=rowcomp(b);dim=dima;x=x';return;end
+if nb*mb==0 then [x,dima]=rowcomp(a);dim=dima;x=x';return;end
 [lhs,rhs]=argn(0);
 if rhs=2 then tol=%eps*na*nb*ma*mb;end
 if na<>nb then error('uncompatible dimensions!'),end

@@ -1,5 +1,5 @@
-//<x>=ffilt(ft,n,fl,fh)
-//<x>=ffilt(ft,n,fl,fh)
+function [x]=ffilt(ft,n,fl,fh)
+//x=ffilt(ft,n,fl,fh)
 //Get n coefficients of a an FIR low-pass,
 //high-pass, band-pass, or stop-band filter
 //  ft :Filter type where ft can take the values
@@ -62,6 +62,6 @@ if ft='sb' then
    x(no2+1)=1+x(no2+1);
 end
  
-//end
+
 
 

@@ -19,3 +19,6 @@ x0      column  nstate
 7 time domain
 t       any
 ******************************
+8 names
+names	string	4
+******************************

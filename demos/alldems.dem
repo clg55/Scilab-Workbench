@@ -15,6 +15,7 @@ demolist=[
 'Wheel simulation ','wheel2/wheel.dem';
 'Bike Simulation (1)','bike/bike.dem';
 'Bike Simulation (2)','bike/bike2.dem';
+'Bike Picture','bike/pub.dem';
 'Signal Processing','signal/signal.dem';
 'Dialog (Xwindow)','dialog/dialog.dem';
 'Fortran translator','transl/demotrad.dem';
@@ -22,10 +23,14 @@ demolist=[
 'Arma','arma/arma.dem';
 'Tracking','tracking/track.dem';
 'Robust control','robust/rob.dem';
-'LMITOOL','lmitool/lmi.dem'];
+'LMITOOL','lmitool/lmi.dem';
+'METANET','metanet/meta.dem';
+'Control examples','control/cont.dem'
+'Scicos','scicos/scicos.dem'];
 
 while %t then
-  num=x_choose(demolist(:,1),'Click to choose a demo');
+  num=x_choose(demolist(:,1),['Click to choose a demo';
+'(see also in SCIDIR/demos/...)']);
   if num=0 then 
      lines(oldln(1))
      return
@@ -33,5 +38,3 @@ while %t then
      demoex(num)
   end,
 end
-//end
-

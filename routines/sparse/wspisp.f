@@ -235,10 +235,10 @@ c     *               b(l,jj) element if non zero
                   endif
  42            continue
             endif
-            ja=ja+na
+c     bug fixed by Ramine
+c            ja=ja+na
+            ja=ja+nal
  45      continue
          nelr=jr-1
       endif
       end
-
-

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=WBDIAG,SSI=0
       subroutine wbdiag(lda,n,ar,ai,rmax,er,ei,bs,xr,xi,
      * yr,yi,scale,job,fail)
 c
@@ -48,7 +47,7 @@ c  *bs       a singly subscripted integer array that contains block
 c            structure information.  if there is a block of order
 c            k starting at a(l,l) in the output matrix a, then
 c            bs(l) contains the positive integer k, bs(l+1) contains
-c            -(k-1), bs(la+2) = -(k-2), ..., bs(l+k-1) = -1.
+c            -(k-1), bs(l+2) = -(k-2), ..., bs(l+k-1) = -1.
 c            thus a positive integer in the l-th entry of bs
 c            indicates a new block of order bs(l) starting at a(l,l).
 c
@@ -91,13 +90,28 @@ c
       dimension yr(lda,n),yi(lda,n),er(n),ei(n),bs(n)
       logical fail,fails
 c
-      double precision c,cav,d,rav,temp,zero,one,mone,ddot
+      double precision c,cav,d,rav,temp,zero,one,mone,ddot,eps
+      double precision dlamch
       integer da11,da22,i,j,k,km1,l11,l22,l22m1,err
       integer low,igh
+c      character*100 cw
+c      integer iw(200)
       data zero, one, mone /0.0d+0,1.0d+0,-1.0d+0/
 c
 c
       fail = .true.
+c
+c     compute l1 norm of a
+c     
+      eps=0.0d0
+      do 11 j=1,n
+         temp=0.0d0
+         do 10 i=1,n
+            temp=temp+abs(ar(i,j))+abs(ai(i,j))
+ 10      continue
+         eps=max(eps,temp)
+ 11   continue
+      eps=dlamch('p')*eps
 c
 c     convert a to upper hessenberg form.
 c
@@ -131,6 +145,7 @@ c
 c
       l11 = 1
    40 continue
+c      call wmdsp(ar,ai,n,n,n,10,1,80,6,cw,iw)
       if (l11.gt.n) go to 350
       l22 = l11
 c
@@ -219,6 +234,9 @@ c
 c       convert a11 to lower quasi-triangular and multiply it by -1 and
 c       a12 appropriately (for solving -a11*p+p*a22=a12).
 c
+c      write(6,'(''da11='',i2,''da22='',i2)') da11,da22
+c      write(6,'(''a'')')
+c      call wmdsp(ar,ai,n,n,n,10,1,80,6,cw,iw)
       call dad(ar, lda, l11, l22m1, l11, n, one, 0)
       call dad(ar, lda, l11, l22m1, l11, l22m1, mone, 1)
       call dad(ai, lda, l11, l22m1, l11, n, one, 0)
@@ -227,7 +245,7 @@ c
 c       solve -a11*p + p*a22 = a12.
 c
       call wshrsl(ar(l11,l11),ai(l11,l11), ar(l22,l22),ai(l22,l22),
-     1 ar(l11,l22),ai(l11,l22),da11,da22,lda,lda,lda,rmax,fails)
+     1 ar(l11,l22),ai(l11,l22),da11,da22,lda,lda,lda,eps,rmax,fails)
       if (.not.fails) go to 290
 c
 c       change a11 back to upper quasi-triangular.
@@ -236,6 +254,8 @@ c
       call dad(ar, lda, l11, l22m1, l11, l22m1, mone, 0)
       call dad(ai, lda, l11, l22m1, l11, l22m1, one, 1)
       call dad(ai, lda, l11, l22m1, l11, l22m1, mone, 0)
+c      write(6,'(''failed a'')')
+c      call wmdsp(ar,ai,n,n,n,10,1,80,6,cw,iw)
 c
 c       was unable to solve for p - try again
 c
@@ -262,8 +282,11 @@ c
       call dad(ar, lda, l11, l22m1, l11, l22m1, mone, 1)
       call dad(ai, lda, l11, l22m1, l11, n, one, 0)
       call dad(ai, lda, l11, l22m1, l11, l22m1, mone, 1)
+c      write(6,'(''not failed a'')')
+c      call wmdsp(ar,ai,n,n,n,10,1,80,6,cw,iw)
 c
-c     store block size in array bs.
+c
+c     store block size in array da11s.
 c
   300 bs(l11) = da11
       j = da11 - 1
@@ -393,3 +416,4 @@ c
       fail = .true.
       return
       end
+      

@@ -24,7 +24,7 @@ c     lunit : etiquette logique du support d'edition
 c     cw : chaine de caracteres de travail de longueur au moins ll
 c!
       double precision x(*),a,a1,a2,fact,eps,dlamch
-      integer maxc,mode,fl,s,typ
+      integer maxc,mode,fl,typ
       integer ind(*)
       character cw*(*),sgn*1,dl*1
       character*10 form(2)

@@ -1,10 +1,10 @@
 \documentstyle[11pt,makeidx]{book}
-             \textheight=660pt 
-             \textwidth=15cm
-             \topmargin=-27pt 
-             \oddsidemargin=0.7cm
-             \evensidemargin=0.7cm
-             \marginparwidth=60pt
+\textheight=660pt \textwidth=470pt
+\topmargin=-27pt
+\oddsidemargin=0pt 
+\evensidemargin=0pt 
+\marginparwidth=60pt            
+
 \input{amssym.def}
 \input{amssym}
  
@@ -15,7 +15,6 @@
 \def\Figdir{Nfigs_source/}
 \def\Diary{Nsource_diary/}
 \def\MACROSSIGLIB{../../macros/signal/}
-\def\SRCDiary{Nsource_diary/}
 
 \newcount\quadcount
 \def\Nquad#1{\quadcount=0
@@ -26,6 +25,7 @@
 \begin{document}
 
 \include{chap0}
+
 \pagenumbering{arabic}
 \include{chap1}	%{Description of the Basic Tools}
 \include{chap2}	%{Time and Frequency Representation of Signals}
@@ -38,6 +38,8 @@
 \include{chap9}	%{Time-Frequency representations of signals}
 
 \include{bibli}
+
+\listoffigures
 
 \printindex 
 

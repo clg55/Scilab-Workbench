@@ -1,4 +1,4 @@
-function [Q,Z,Ec,Ac,Qd,Zd,numbeps]=quaskro(E,A)
+function [Q,Z,Ec,Ac,Qd,Zd,numbeps]=quaskro(E,A,tol)
 // quasi- Kronecker form: s*Ec - Ac = Q*(sE-A)*Z
 //
 //             | sE(eps)-A(eps) |        X       |      X     |
@@ -16,12 +16,17 @@ function [Q,Z,Ec,Ac,Qd,Zd,numbeps]=quaskro(E,A)
 // interface  from Slicot-fstair (F.D.) 
 // T. Beelen's routines
 //!
+[LHS,RHS]=argn(0);
+if RHS==1 then [E,A]=pen2ea(E);tol=1.d-10;end
+if RHS==2 then
+  if type(E)=2 then [E,A]=pen2ea(E);end  //quaskro(pencil,tol)
+  if type(E)=1 then tol=1.d-10;end   //quaskro(E,A);
+end
 [na,ma]=size(A);
-[m,n]=size(E);
 Q=eye(na,na);Z=eye(ma,ma);
-[E,Q,Z,stair,rk]=ereduc(E,10*%eps*norm(E))
+[E,Q,Z,stair,rk]=ereduc(E,1000*%eps+tol*norm(E))
 A=Q*A*Z;
-tol=100*%eps*maxi([norm(A,'fro'),norm(E,'fro')])+10*%eps;
+tol=tol*maxi([norm(A,'fro'),norm(E,'fro')])+10*tol;
 [Ac,Ec,Q,Z,nlbcks,muk,nuk,muk0,nuk0,mnei]=fstair(A,E,Q,Z,stair,rk,tol)
 numbeps=muk0(1:nlbcks)-nuk0(1:nlbcks);
 Qd=[mnei(1),mnei(3),na-mnei(1)-mnei(3)];

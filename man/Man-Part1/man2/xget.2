@@ -5,6 +5,7 @@ xget - gets current values of the graphic context
 .SH CALLING SEQUENCE
 .nf
 [x1]=xget(str [,flag])
+xget()
 .fi
 .SH PARAMETERS
 .TP 10
@@ -15,7 +16,9 @@ flag
 : optional. Set to 1 gives a verbose mode
 .SH DESCRIPTION
 this function is used to get values from the graphic context
-on the topic specified by the string \fVstr\fR. 
+on the topic specified by the string \fVstr\fR. When called 
+no arguments, a choice menu is created showing the current values and 
+changes can be performed through toggle buttons 
 .TP
 number=xget("alufunction")
 : used to get the logical function number used for drawing.
@@ -75,7 +78,7 @@ rect=xget("clipping")
 zone rectangle rect=[x,y,w,h] (Upper-Left point Width Height).
 .TP
 dash=xget("dashes")
-: get the dashstyle dash=[dash_number,v]
+: get the dash style dash=[dash_number,v]
   v contains the definition of the dash
 .TP
 font=xget("font")
@@ -108,7 +111,7 @@ Get the current window to the window \fVwin\fR
 .TP
 flag=xget("use color")
 if flag=1 then xset("pattern",.) or xset("dashes",.) will be used so
-as to change the default Color for drawing or for filling patterns. 
+as to change the default color for drawing or for filling patterns. 
 If flag=0 then we switch back to the gray and dashes mode.
 .SH SEE ALSO
 X11 documentation

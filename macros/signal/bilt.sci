@@ -1,5 +1,5 @@
-//<npl,nzr,ngn>=bilt(pl,zr,gn,num,den)
-//<npl,nzr,ngn>=bilt(pl,zr,gn,num,den)
+function [npl,nzr,ngn]=bilt(pl,zr,gn,num,den)
+//[npl,nzr,ngn]=bilt(pl,zr,gn,num,den)
 //macro for calculating the gain poles and zeros
 //which result from a bilinear transform or from
 //a biquadratic transform.  Used by the macros iir
@@ -63,6 +63,6 @@
       error('error bilt --- wrong order tranform')
    end,
    end,
-//end
+
 
 

@@ -1,34 +1,20 @@
-C/MEMBR ADD NAME=DDOT,SSI=0
       double precision function ddot(n,dx,incx,dy,incy)
-c!but
 c
-c     cette fonction calcule le produit scalaire de deux
-c     vecteurs double precision. dans le cas ou l'increment est
-c     negatif les composantes sont prises en ordre inverse.
-c
-c!liste d'appel
-c
-c      double precision function ddot(n,dx,incx,dy,incy)
-c
-c     n: entier, taille des vecteurs.
-c
-c     dx, dy: vecteurs double precision.
-c
-c     incx, incy: increments entre les composantes des vecteurs.
-c
-c!auteur
+c     forms the dot product of two vectors.
+c     uses unrolled loops for increments equal to one.
 c     jack dongarra, linpack, 3/11/78.
-c!
+c     modified 12/3/93, array(1) declarations changed to array(*)
 c
       double precision dx(*),dy(*),dtemp
-      integer i,incx,incy,ix,iy,n
+      integer i,incx,incy,ix,iy,m,mp1,n
 c
-      ddot = 0.0d+0
-      dtemp = 0.0d+0
+      ddot = 0.0d0
+      dtemp = 0.0d0
       if(n.le.0)return
       if(incx.eq.1.and.incy.eq.1)go to 20
 c
-c code for unequal increments or equal increments not equal to 1
+c        code for unequal increments or equal increments
+c          not equal to 1
 c
       ix = 1
       iy = 1
@@ -42,12 +28,22 @@ c
       ddot = dtemp
       return
 c
-c code for both increments equal to 1
+c        code for both increments equal to 1
 c
-   20 continue
-      do 30 i = 1,n
+c
+c        clean-up loop
+c
+   20 m = mod(n,5)
+      if( m .eq. 0 ) go to 40
+      do 30 i = 1,m
         dtemp = dtemp + dx(i)*dy(i)
    30 continue
-      ddot = dtemp
-c
+      if( n .lt. 5 ) go to 60
+   40 mp1 = m + 1
+      do 50 i = mp1,n,5
+        dtemp = dtemp + dx(i)*dy(i) + dx(i + 1)*dy(i + 1) +
+     *   dx(i + 2)*dy(i + 2) + dx(i + 3)*dy(i + 3) + dx(i + 4)*dy(i + 4)
+   50 continue
+   60 ddot = dtemp
+      return
       end

@@ -7,19 +7,19 @@ c     ====================================================================
 c     
       common / ptkeep / lwk
       integer itype,itypel,gettype
-      integer fl,mode,rat,blank,m,n,it,lr,lc,nlr,lkeep,topk,lname
-      logical getmat,ilog,getpoly,typer,clsave
+      integer fl,mode,m,n,it,lr,lc,nlr,lkeep,topk,lname
+      logical getmat,ilog,getpoly,typer,clsave,getsimat
       logical crewimat ,islss,getilist,getbmat
       character*4 name
 c$$$      character*(nlgh) mmname
       character*10 form
       character*200 ligne
-      integer nclas,adr
+      integer nclas
       integer comma,left,right,rparen,lparen,equal,eol,mactop
       integer iadr, sadr
       data comma/52/
       data left/54/,right/55/,rparen/42/,lparen/41/,equal/50/
-      data rat/27/,blank/40/,eol/99/,nclas/29/
+      data eol/99/,nclas/29/
 c     
       iadr(l)=l+l-1
       sadr(l)=(l/2)+1
@@ -42,7 +42,7 @@ C     topk : free stack zone for working areas
       mactop=0
       if (abs(itype).eq.11.or.abs(itype).eq.13) mactop=1
 c     
- 05   goto (20,10,06,70,25,26,06,06,06,30,80,06,80,90,40),abs(itype)
+ 05   goto (20,10,06,70,25,26,06,06,06,30,80,06,80,90,40,40),abs(itype)
  06   call msgs(33,lunit)
       goto 45
 c     
@@ -109,7 +109,7 @@ c     -------sparse boolean matrices
      $        lineln,lunit,buf)
       goto 45 
 c     -------matrices of string 
- 30   call getsimat("print",lk,lk,m,n,1,1,lr,nlr)
+ 30   ilog=getsimat("print",lk,lk,m,n,1,1,lr,nlr)
 C     working area 
       if (.not.crewimat("print",topk,1,n,lw)) return
       call strdsp(istk(lr),istk(lr-m*n-1),m,n,lineln,lunit,istk(lw),buf)
@@ -152,13 +152,14 @@ c ne retourne pas la premiere valeur sauvee mais la seconde..... et pourtant ca 
       lstk(lk)=ilk
       itype=gettype(lk)
 C     if the argument is rational list we must not treat it as a list 
-      if (itype.eq.15) then 
+      if (itype.eq.15.or.itype.eq.16) then 
+c-compat the itype.eq.15 is retained for compatibility
          call listtype(lk,itypel)
          if (itypel.ne.1) then 
             if (.not.clsave(topk,illist,kl,li1,nl)) goto 99
          endif
       endif
-      fl=int(log10(real(kl)))+1
+      fl=int(log10(real(kl+0.1)))+1
       write(form,103) fl
  103  format('(i',i3,')')
       if(li1+fl.gt.200) then
@@ -298,9 +299,9 @@ c     -----------boolean matrix
 c     
 c     ------------macros---- a changer 
  80   continue
-      il=adr(lstk(lk),0)
+      il=iadr(lstk(lk))
       l=istk(il+1)
-      if(istk(il).lt.0) il=adr(lstk(l),0)
+      if(istk(il).lt.0) il=iadr(lstk(l))
       ilm=il
       l=1
       is1=left
@@ -381,7 +382,7 @@ C     we supress the display of the code of a non compiled macro with goto 89
       goto 45
 c     ------------library-- a changer aussi 
 C     [14,n,codagedupath(n),nombre-de-nom,nclas+1 cases,suite des noms]
- 90   illib=adr(lstk(lk),0)
+ 90   illib=iadr(lstk(lk))
       n=istk(illib+1)
       illib=illib+2
       call cvstr(n,istk(illib),buf,1)

@@ -60,7 +60,6 @@
 #define WK_BUF_SIZE 520
 #define SV_BUF_SIZE 5000
 
-static int fd=0;              /* file number for standard in */
 
 #define N_SEQS       6      /* number of special sequences */
 #define MAX_SEQ_LEN  10     /* max chars in special termcap seqs */
@@ -85,7 +84,6 @@ static char *sv_buf_point = sv_buf;
 static char tosearch[SV_BUF_SIZE] = "";/* place to store search string */
 static int last_line = 1;
 static int insert_flag = 1;
-static int init_flag = TRUE;
 static int cur_line_number = 0;
 static void move_right(), move_left(), display_string();
 static void get_line(), save_line(), backspace(), erase_nchar();
@@ -114,13 +112,11 @@ long int dummy1;                /* added by FORTRAN to give buffer length */
    int line_number;
    int cursor_max = 0;
    int cursor = 0;
-   int search_backward = 0;
    int yank_len,i;
    
    int keystroke;
    int character_count;
    char wk_buf[WK_BUF_SIZE + 1];
-   char *current_line;
    /*    printf("SCI>");*/
                             /* empty work buffer */
    set_is_reading(TRUE);
@@ -784,7 +780,7 @@ search_line_backward(source)
 /**********************************************************************/
 char *source;
 {
-   int  line_index,ok,length,i;
+   int  line_index,ok,length;
    char *p,*p1;
    
    length=strlen(source)-1;
@@ -821,7 +817,7 @@ search_line_forward(source)
 /**********************************************************************/
 char *source;
 {
-   int  line_index,ok,length,i;
+   int  line_index,ok,length;
    char *p,*p1;
    
    length=strlen(source)-1;

@@ -1,39 +1,18 @@
-C/MEMBR ADD NAME=DSCAL,SSI=0
       subroutine  dscal(n,da,dx,incx)
 c
-c!but
-c
-c     etant donne un vecteur double precision dx de taille n et
-c     une constante double precision da, calcule dx=a*dx. dans
-c     le cas ou l'increment est egal a 1 cette subroutine fait
-c     des boucles "epanouis".
-c
-c!liste d'appel
-c
-c     subroutine  dscal(n,da,dx,incx)
-c
-c     n: entier, taille de dx.
-c
-c     da: constante double precision.
-c
-c     dx: vecteur double precision.
-c
-c     incx: entier, increment entre deux composantes du
-c     vecteur dx.
-c
-c!auteur
-c
+c     scales a vector by a constant.
+c     uses unrolled loops for increment equal to one.
 c     jack dongarra, linpack, 3/11/78.
-c
-c!
+c     modified 3/93 to return if incx .le. 0.
+c     modified 12/3/93, array(1) declarations changed to array(*)
 c
       double precision da,dx(*)
-      integer i,incx,n,nincx
+      integer i,incx,m,mp1,n,nincx
 c
-      if(n.le.0)return
+      if( n.le.0 .or. incx.le.0 )return
       if(incx.eq.1)go to 20
 c
-c code for increment not equal to 1
+c        code for increment not equal to 1
 c
       nincx = n*incx
       do 10 i = 1,nincx,incx
@@ -41,11 +20,24 @@ c
    10 continue
       return
 c
-c code for increment equal to 1
+c        code for increment equal to 1
 c
-   20 continue
-      do 30 i = 1,n
+c
+c        clean-up loop
+c
+   20 m = mod(n,5)
+      if( m .eq. 0 ) go to 40
+      do 30 i = 1,m
         dx(i) = da*dx(i)
    30 continue
-c
+      if( n .lt. 5 ) return
+   40 mp1 = m + 1
+      do 50 i = mp1,n,5
+        dx(i) = da*dx(i)
+        dx(i + 1) = da*dx(i + 1)
+        dx(i + 2) = da*dx(i + 2)
+        dx(i + 3) = da*dx(i + 3)
+        dx(i + 4) = da*dx(i + 4)
+   50 continue
+      return
       end

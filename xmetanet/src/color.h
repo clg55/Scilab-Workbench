@@ -1,4 +1,4 @@
-#define NUMCOLORS 18
+#define NUMCOLORS 19
 
 #define FOREGROUND 0
 #define BLACK 1
@@ -18,6 +18,7 @@
 #define GOLD 15
 #define BEIGE 16
 #define WHITE 17
+#define BACKGROUND 18
 
 extern char* colorNames[];
 
@@ -25,3 +26,4 @@ extern unsigned long Colors[NUMCOLORS];
 
 extern unsigned long theColor;
 
+#define CheckColor(c) ((c<0||c>=NUMCOLORS) ? 0 : c)

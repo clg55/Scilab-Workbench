@@ -1,4 +1,4 @@
-function [f]=invr(h)
+function f=invr(h)
 //if h is a scalar, polynomial or rational fonction matrix, invr
 //computes h**(-1).
 //!
@@ -27,8 +27,10 @@ f=eye(n,n);
    if degree(d)=0 then d=coeff(d),end,
    f=f/d;
    return;
-end
-if type(h)==15 then
+ end
+ 
+//-compat type(h)==15 retained for list/tlist compatibility
+if type(h)==15|type(h)==16 then
    if h(1)<> 'r' then error(44),end
    [m,n]=size(h(2));
    if m<>n then error(20),end

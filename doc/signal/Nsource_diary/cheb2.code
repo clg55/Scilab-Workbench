@@ -1,4 +1,4 @@
-//exec('cheb2.ex')
+//exec('cheb2.code')
 n=10;
 omegar=6;
 A=1/0.2;

@@ -1,5 +1,5 @@
 calc	str
-str 	string	10
+str 	string	l
 a	scalar
 
 fcalc	str	a

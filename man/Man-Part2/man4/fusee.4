@@ -1,32 +1,32 @@
 .TH fusee 1 "April 1993" "Scilab Group" "Scilab Function"
 .so man1/sci.an
 .SH NAME
-fusee - a set of macro for a fusee problem 
+fusee - a set of Scilab macro for a landing rocket problem 
 .SH FUSEE
 .nf
 [xdot]=fusee(t,x)
 .fi
-Dynamical motion equation for the fusee
+Dynamical motion equation for the rocket 
 .SH FINIT
 .nf
 finit()
 .fi
-Initializes parameters for alunisage problem 
+Initialises the following parameters for rocket landing.
 .TP
 k     
-: acceleration de poussee de la fusee
+: The acceleration of the rocket engines
 .TP
 gamma 
-: acceleration de la pesanteur sur la lune
+: The moon gravity acceleration.
 .TP
 umax  
-: debit maximum d'ejection des gaz
+: the gaz ejection flow out.
 .TP
 mcap  
-: masse de la capsule
+: the mass of the space capsule.
 .TP
 cpen  
-: penalisation dans la fonction cout de l'etat final
+: penalisation in the cost function of the final state.
 .LP
 .SH FUSEEGRAD
 .nf
@@ -34,77 +34,73 @@ cpen
 .fi
 .TP
 niter
-: nombre d'iteration de gradient a faire a partir
-de ukp1 solution initiale de taille 135
+: number of gradient iteration steps.
+.TP
+ukp1
+: initial control value ( vector of sie 135 )
 .TP
 pasg  
-: le pas de gradient choisit
-la valeur renvoyee est la derniere loi de commande obtenue.
-l'optimum s'obtient avec ubang(135,50)
-(optimum du pb non penalise)
-.LP
-Gradiant iterations for the fusee problem 
-.SH FUSEEP
+: the gradient step value.
 .SH DESCRIPTION
+Iterate a gradient method and returns the computed control.
+.SH FUSEEP
 .nf
 [pdot]=fuseep(t,p)
 .fi
-adjoint equation for the fusee problem 
+.SH DESCRIPTION
+adjoint equation for the landing rocket problem.
 .SH POUSSE
 .nf
 [ut]=pousse(t)
 .fi
-la loi de commande u(t) constante par morceaux
-construite sur la loi de comande discrete uk
+return the value of a piece wise constant control 
+build on the discrete control \fVuk\fR
 .SH UBANG
 .nf
 [uk]=ubang(tf,tcom)
 .fi
-genere une loi bang-bang qui vaut 0 de 0 a tcom
-et 1 de tcom a tf
+returns a bang-bang control, 0 form time 0 to tcom 
+and 1 form tcom to tf.
 .SH FCOUT
 .nf
 [c,xk,pk,ukp1]=fcout(tf,uk,pasg)
 .fi
-pour une loi de commande uk
-Calcule la fonction cout que l'on cherche a minimiser
+.SH DESCRITION
+optimise the following cost function by gradient iterations.
+.nf
 c = -m(tf) + C*( h(tf)**2 + v(tf)**2)
-(on veut minimiser la consommation et atteindre la
-cible h=0 avec une vitess nulle obtenue par penalisation)
-la trajectoire associee
-Calcule aussi une nouvelle loi de commande par une methode
-de gradient
+.fi
 .SH SFUSEE
 .nf
 []=sfusee(tau,h0,v0,m0,Tf)
 .fi
-calcule la trajectoire de la fusee soumise a
-une commande bang-bang
-tau est la date de commutation
+.SH DESCRIPTION 
+computes the rocket trajectory when a bang-bang control is used 
+\fVtau\fR is the commutation time.
 .TP
 h0 
-: la hauteur initiale
+: The initial position (high)
 .TP
 v0 
-: la vitesse initiale ( negative si chute)
+: The initial speed ( negative if the rocket is landing )
 .TP
 m0 
-: la masse initiale ( carburant + capsule)
+: The total initial mass ( capsule and fuel).
 .TP
 Tf 
-: l'horizon d'integration
+: Time horizon.
 .LP
 .SH EQUAD
 .SH DESCRIPTION
 .nf
 [xk,pk]=equad(tf,uk)
 .fi
-pour une loi de commande u(t)  stockee dans uk, calcule
-la trajectoire xk associee et l'etat adjoint pk
+Computes the state and adjoint state of the rocket system for a given 
+control \fVur\fR.
 .SH TRAJ
 .nf
 [xt]=traj(t)
 .fi
-approximation constante par morceaux de l'evolution de la masse
-construite sur xk : trajectoire discrete.
+returns a piece wise value of the mass evolution.
+
 

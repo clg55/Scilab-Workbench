@@ -1,5 +1,5 @@
-//<wft,wfm,fr>=wfir(ftype,forder,cfreq,wtype,fpar)
-//<wft,wfm,fr>=wfir(ftype,forder,cfreq,wtype,fpar)
+function [wft,wfm,fr]=wfir(ftype,forder,cfreq,wtype,fpar)
+//[wft,wfm,fr]=wfir(ftype,forder,cfreq,wtype,fpar)
 //Macro which makes linear-phase, FIR low-pass, band-pass,
 //high-pass, and stop-band filters
 //using the windowing technique.
@@ -18,89 +18,113 @@
 //  fr     :Frequency grid
 //!
 //author: C. Bunks  date: 12 March 1988
- 
+wft=[];wfm=[];fr=[]
 //check arguments of macro call
  
-   [lhs,rhs]=argn(0);
+[lhs,rhs]=argn(0);
  
 //if macro called with no arguments query user for values
  
-   if rhs<=0 then,
+if rhs<=0 then,
  
-//Query user for filter type and filter length
- 
-write(%io(2),'Input type of filter to be designed (lp, hp, bp, sb):')
-ftype=read(%io(1),1,1,'(a2)')
-write(%io(2),'Input filter length (n=pos. integer):')
-forder=read(%io(1),1,1);
- 
-//Select filter type and Query user for cut-off frequencies
- 
-flag=0;
-select ftype
-case 'lp' then
-   write(%io(2),'Input cut-off frequency (0.[frequ[.5):')
-   fl=read(%io(1),1,1);
-   fh=0;
-case 'hp' then
-   write(%io(2),'Input cut-off frequency (0.[fcut[.5):')
-   fl=read(%io(1),1,1);
-   fh=0;
-   flag=1;
-case 'bp' then
-   write(%io(2),'Input low freqency cut-off (0.[flow[.5):')
-   fl=read(%io(1),1,1)
-   write(%io(2),'Input high freqency cut-off (0.[flow[fhi[.5):')
-   fh=read(%io(1),1,1)
-case 'sb' then
-   write(%io(2),'Input low freqency cut-off (0.[flow[.5):')
-   fl=read(%io(1),1,1)
-   write(%io(2),'Input high freqency cut-off (0.[flow[fhi[.5):')
-   fh=read(%io(1),1,1)
-   flag=1;
-else
-   error('Unknown filter type --- program termination'),
-end
- 
-if flag=1 then
-   if forder-2*int(forder/2)=0 then
-      write(%io(2),'*****************************************');
-      write(%io(2),'Even length hp and sb filters not allowed');
-      write(%io(2),'---Filter order is being incremented by 1');
-      write(%io(2),'*****************************************');
+  //Query user for filter type and filter length
+  nc=x_choose(['low pass';
+               'high pass';
+	       'band pass';
+	       'stop band'],'Choose type of filter to be designed')
+  //Select filter type and Query user for cut-off frequencies
+  flag=0;
+  select nc
+  case 1 then //low pass
+    [ok,fl,forder]=getvalue('Input filter characteristics',..
+                    ['cut-off frequency (0.<frequ<.5):';
+		     'filter length'],..
+		    list('vec',1,'vec',1),[' ';' '])
+    ftype='lp'
+    fh=0;
+  case 2 then //high pass
+    [ok,fl,forder]=getvalue('Input filter characteristics',..
+                    ['cut-off frequency (0.<frequ<.5):';
+		     'filter length (odd value)'],..
+		    list('vec',1,'vec',1),[' ';' '])
+    fh=0;
+    flag=1;
+    ftype='hp'
+  case 3 then //band pass
+    [ok,fl,fh,forder]=getvalue('Input filter characteristics',..
+                    ['low cut-off frequency (0.<flow<.5):';
+		     'high cut-off frequency (0.<flow<fhi<.5):';
+		     'filter length'],..
+		    list('vec',1,'vec',1,'vec',1),[' ';' ';' '])
+    ftype='bp'	
+  case 4 then //stop band
+    [ok,fl,fh,forder]=getvalue('Input filter characteristics',..
+                    ['low cut-off frequency (0.<flow<.5):';
+		     'high cut-off frequency (0.<flow<fhi<.5):';
+		     'filter length (odd value)'],..
+		    list('vec',1,'vec',1,'vec',1),[' ';' ';' '])
+    flag=1;
+    ftype='sb'	
+  else
+    return
+  end
+  
+  if flag==1 then
+    if forder-2*int(forder/2)==0 then
+      x_message(['Even length high pass and stop band filters not allowed';
+	 '---Filter order is being incremented by 1'])
       forder=forder+1;
     end
-end
+  end
  
-//Query user for window type and window parameters
- 
-write(%io(2),'Input window type (re,tr,hm,kr,ch):')
-wtype=read(%io(1),1,1,'(a2)');
-if wtype='kr' then,
-   write(%io(2),'Input beta value of kaiser window (beta]0):');
-   fpar(1)=read(%io(1),1,1);
-   fpar(2)=0;
-else if wtype='ch' then,
-   write(%io(2),'The Chebyshev window length is:'),
-   write(%io(2),forder),
-   write(%io(2),'Input two values the first giving the maximum'),
-   write(%io(2),'value of the window side-lobe height the second giving'),
-   write(%io(2),'the width of the window main lobe.  These two vaules'),
-   write(%io(2),'indicate which of the two Chebyshev window'),
-   write(%io(2),'parameters is to be calculated automatically.'),
-   write(%io(2),'The parameter to be calculated automatically is indicated'),
-   write(%io(2),'by a negative value.  The other parameter takes a value'),
-   write(%io(2),'in its appropriate range (i.e., 0[dp or 0[df[.5)'),
-   fpar=read(%io(1),1,2),
+  //Query user for window type and window parameters
+  nc=x_choose(['Kaiser';
+             'Chebyshev';
+	     'Rectangular';
+	     'Triangular';
+	     'Hamming' ],'Input window type')
+  select nc
+  case 1 then
+    wtype='kr'
+    [ok,beta]=getvalue('Input window characteristics',..
+                     ['beta>0'],list('vec',1),' ')
+    fpar(1)=beta
+    fpar(2)=0;
+  case 2 then
+    wtype='ch' 
+    [ok,name,value]=getvalue(['Input window characteristics:';
+             ' ';
+	     'dp (dp>0)   : the maximum value of the window side-lobe height';
+	     'df (0<df<.5): the width of the window main lobe'
+	     ' ';
+	     'only one of this two values is to be defined,'
+	     'the other one is automaticaly deduced'],..
+	     ['name of specified value';
+	     'value'],list('str',-1,'vec',1),['dp','0.3'])
+    if part(name,1:2)=='dp' then
+      fpar=[value,-1]
+    elseif part(name,1:2)=='df' then
+      fpar=[-1,value]
+    else
+      x_message('Incorrect parameter name entered')
+      return
+    end
+  case 3 then
+    wtype='re'
+    fpar=[0 0];
+  case 4 then
+    wtype='tr'
+    fpar=[0 0];
+  case  5 then
+    wtype='hm'
+    fpar=[0 0];
+  else
+    return
+  end
 else
-   fpar=[0 0];
+  fl=cfreq(1);
+  fh=cfreq(2);
 end,
-end,
- 
-   else,
-      fl=cfreq(1);
-      fh=cfreq(2);
-   end,
  
 //Calculate window coefficients
  

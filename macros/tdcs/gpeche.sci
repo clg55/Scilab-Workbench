@@ -1,4 +1,4 @@
-//[xk,ukp1]=gpeche(uk,pasg)
+function [xk,ukp1]=gpeche(uk,pasg)
 // pour une loi de commande uk
 // calcule la trajectoire associee xk
 // imprime le valeur du cout
@@ -18,22 +18,20 @@ grad =   xk-c*ones(xk) - pk.*xk
 //gradient projete su [0,umax]
 umax=10;
 ukp1=maxi(mini(uk- pasg*grad,umax*ones(1,npts)),0*ones(1,npts));
-//end
 
-//[ut]=peche(t)
+function [ut]=peche(t)
 //[ut]=peche(t)
 // la loi de commande u(t) constante par morceaux
 // construite sur la loi de comande discrete uk
 //!
 [n1,n2]=size(uk);
 ut=uk(mini(maxi(ent(t*npts),1),n2));
-//end
 
-//[pdot]=pechep(t,p)
+function [pdot]=pechep(t,p)
 //[pdot]=pechep(t,p)
 //equation adjointe
 //!
 pdot=-p*(10*( 1 -2*traj(t)/K) - peche(t)) - peche(t)
-//end
+
 
 

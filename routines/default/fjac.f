@@ -1,7 +1,7 @@
-C/MEMBR ADD NAME=FJAC,SSI=0
       subroutine fjac (neq, t, y, ml, mu, pd, nrpd)
 c!
-c  interface de calcul du jacobien pour la fonction scilab ode
+c  user interface for scilab built-in function ode
+c  jacobian evaluation
 c!
       include '../stack.h'
 
@@ -18,27 +18,41 @@ c
       iero=0
       call majmin(6,name,nam1)
 c
-c exemple d appel correspondant a l'intruction scilab
-c     ode(y0,t0,t1,f,'jex') .
-c pour interfacer d'autres simulateurs modifier les lignes entre c+
-c qui suivent en fonction du nom de la ou des routines a appeler.
+c INSERT CALL TO YOUR OWN ROUTINE HERE 
+c The routine jex is an example: it is called when the
+c string 'jex' is given as a parameter 
+c in the calling sequence of scilab's ode built-in
+c function 
 c+
       if(nam1.eq.'jex') then
        call jex(neq,t,y,ml,mu,pd,nrpd)
        return
       endif
 c+
-c sous programmes lies dynamiquement.
-      it1=nlink+1
- 1001 it1=it1-1
+c     dynamic link
+      call tlink(name,0,it1)
       if(it1.le.0) goto 2000
-      if(tablin(it1).ne.name) goto 1001
-cc sun unix
       call dyncall(it1-1,neq,t,y,ml,mu,pd,nrpd)
 cc fin
       return
 c
  2000 iero=1
       buf=name
+      return
+      end
+
+      subroutine jex (neq, t, y, ml, mu, pd, nrpd)
+      double precision pd, t, y
+      dimension y(3), pd(nrpd,3)
+c     jacobian routine jex
+c     scilab ode
+c     ode([1;0;0],0,[0.4,4],'fex','jex')
+      pd(1,1) = -.040d+0
+      pd(1,2) = 1.0d+4*y(3)
+      pd(1,3) = 1.0d+4*y(2)
+      pd(2,1) = .040d+0
+      pd(2,3) = -pd(1,3)
+      pd(3,2) = 6.0d+7*y(2)
+      pd(2,2) = -pd(1,2) - pd(3,2)
       return
       end

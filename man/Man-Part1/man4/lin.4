@@ -28,20 +28,20 @@ around \fVx0,u0\fR.
 .LP
 The output is a linear system (\fVsyslin\fR list) \fVsl\fR or the 
 four matrices \fV(A,B,C,D)\fR
-.SH EXAMPLE
-Let ftz be the function passed to ode e.g.
+
+For example, if \fVftz\fR is the function passed to ode e.g.
 .nf
 [zd]=ftz(t,z,u)
 .fi
-and let us assume \fVy=x\fR.
+and if we assume that \fVy=x\fR
 .LP
 \fV[z]=ode(x0,t0,tf,list(ftz,u)\fR compute \fVx(tf)\fR.
 .LP
-Let \fVsimula\fR be the following function:
+If \fVsimula\fR is the following function:
 .nf
 deff('[y,xd]=simula(x,u)','xd=ftz(tf,x,u); y=x;');
 .fi
-The tangent linear system \fVsl\fR can be obtained by:
+the tangent linear system \fVsl\fR can be obtained by:
 .nf
 [A,B,C,D]=lin(simula,z,u)
 sl = syslin('c',A,B,C,D,x0)

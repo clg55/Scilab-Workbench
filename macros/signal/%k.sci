@@ -1,5 +1,5 @@
-//<K>=%k(m)
-//<K>=%k(m)
+function [K]=%k(m)
+//K=%k(m)
 //Calculates Jacobi's complete elliptic integral
 //of the first kind:
 //  K = integral from 0 to 1 of
@@ -28,7 +28,5 @@
       c=cn;
    end,
    K=%pi*un./(2*a);
- 
-//end
 
 

@@ -123,11 +123,9 @@ PW(n,\nu_l)&=&2\sum_{k=-N+1}^{N-1}e^{-i2k\pi(l/N)}|h_N(k)|^2x(n+k)x^{*}(n-k) \\
 &=&2(2Re\{\sum_{k=0}^{N-1}e^{-i2k\pi(l/N)}|h_N(k)|^2x(n+k)x^{*}(n-k)\}-|x(n)|^2) \nonumber
 \label{e.wigner.12}
 \end{eqnarray}
-and this expression may be easily computed via the FFT, as one can verify 
-with the following macro. 
-\paragraph{The {\tt wigner} macro}: \index{macro code!wigner@{\tt wigner}}
-\verbatok{\MACROSSIGLIB/wigner.sci}
-\end{verbatim}
+and this expression may be easily computed via the FFT with the $\Psi$lab 
+function {\tt wigner}.
+
 \paragraph{Example 1}: The following example is taken from \cite{flandrin}: the signal is a finite 
 duration sinusoid modulated by a parabola:
 \[
@@ -142,23 +140,21 @@ unit step function, $h_N$ is the $64$-point rectangular window; the time
 and frequency increments are respectively equal to $12$ and $\pi/128$; $M$ 
 has been set to one (unsmoothed estimator). The signal generation and wigner 
 spectrum computation are then as follows:
-\verbatok{\Diary spfact1.dia}
+\verbatok{\Diary spfact.dia}
 \end{verbatim}
 %%%%%%%%%%%
-%\input{\Figdir wigner1.tex}
-%\dessin{{\tt exec('wigner.1.code')} Wigner analysis. Sinusoid modulated by a parabola}{wigner.fig1}
+\input{\Figdir wigner1.tex}
+\dessin{{\tt exec('wigner1.code')} Wigner analysis. Sinusoid modulated by a parabola}{wigner.fig1}
 %%%%%%%%%%
-The plotting of the wigner spectrum requires a $3D$ plotter or a grey level 
-representation. In the present simple example, successive lines 
-plotting allows the (tedious!) validation of the results.
-\paragraph{Example 2}: For the purpose of easy visualization, this example 
-presents the case of a linearly sweeped frequency sinusoid: the frequency 
-is swept from $50$ $Hz$ to $55$ $Hz$ with a sampling frequency $200$ $Hz$: 
-see figure \ref{wigner.fig2}. 
+
+%\paragraph{Example 2}: For the purpose of easy visualization, this example 
+%presents the case of a linearly sweeped frequency sinusoid: the frequency 
+%is swept from $50$ $Hz$ to $55$ $Hz$ with a sampling frequency $200$ $Hz$: 
+%see figure \ref{wigner.fig2}. 
 %The results of a Wigner analysis appear on figure\ref{wigner.fig3}.
 %%%%%%%%%%%
 %\input{\Figdir wigner2.tex}
-%\dessin{{\tt exec('wigner.2.code')} Wigner analysis. Linear FM signal}{wigner.fig2}
+%\dessin{{\tt exec('wigner2.code')} Wigner analysis. Linear FM signal}{wigner.fi%g2}
 %%%%%%%%%%
 
 %\end{document}

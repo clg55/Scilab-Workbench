@@ -9,7 +9,7 @@
 \begin{eqnarray}
 x_{k+1}&=&F_kx_k+G_kw_k\nonumber\\
 y_k&=&H_kx_k+v_k
-\label{e.kf.1}
+\label{e.kf1}
 \end{eqnarray}
 %
 where
@@ -18,7 +18,7 @@ where
 w_k&\sim&N(0,Q_k)\nonumber\\
 v_k&\sim&N(0,R_k)\nonumber\\
 x_0&\sim&N(m_0,\Pi_0)\nonumber\\
-\label{e.kf.1a}
+\label{e.kf1a}
 \end{eqnarray}
 %
 and $x_0$, $\{w_k\}$, and $\{v_k\}$ are independent random vectors.
@@ -45,9 +45,9 @@ a description of the Kalman filter, an extremely practical
 recursive method for calculating the conditional mean and covariance.
 Several different implementations of the Kalman filter are discussed
 here:  The steady-state Kalman filter which can be used when
-the system matrices in (\ref{e.kf.1}) and (\ref{e.kf.2}) are non-time varying, 
+the system matrices in (\ref{e.kf1}) and (\ref{e.kf2}) are non-time varying, 
 the non-stationary Kalman filter for use when the system matrices in
-(\ref{e.kf.1}) and (\ref{e.kf.2}) 
+(\ref{e.kf1}) and (\ref{e.kf2}) 
 are time-varying, and, finally, the square-root
 Kalman filter which is used (for time-varying and non-time-varying
 system matrices) when greater numerical accuracy is required.
@@ -69,7 +69,7 @@ z=\left[\begin{array}{c}x\\y\end{array}\right]
   \left[\begin{array}{cc}\Lambda_{x}&\Lambda_{xy}\\
   \Lambda_{yx}&\Lambda_{y}\end{array}
    \right]\right)
-\label{e.kf.2}
+\label{e.kf2}
 \end{equation}
 %
 where $m_x$ denotes the mean of $x$, $\Lambda_{xy}$ denotes the 
@@ -82,7 +82,7 @@ the conditional distribution of $x$ given $y$, $p(x|y)$, is
 %
 \begin{equation}
 p(x|y)=N(m_{x|y},\Lambda_{x|y})
-\label{e.kf.3}
+\label{e.kf3}
 \end{equation}
 %
 where $m_{x|y}$ denotes the conditional mean and $\Lambda_{x|y}$
@@ -92,11 +92,11 @@ calculated by
 \begin{eqnarray}
 m_{x|y}=m_x+\Lambda_{xy}\Lambda_y^{-1}(y-m_y)\nonumber\\
 \Lambda_{x|y}=\Lambda_x-\Lambda_{xy}\Lambda_y^{-1}\Lambda_{yx}.
-\label{e.kf.4}
+\label{e.kf4}
 \end{eqnarray}
 %
 (It is useful to note the $x$ and $y$ are not necessarily of
-the same dimension).  Equation (\ref{e.kf.4}) is very important 
+the same dimension).  Equation (\ref{e.kf4}) is very important 
 in our development of the Kalman filter equations.
 
 	With regard to the problem posed in the introduction
@@ -104,15 +104,15 @@ to this section, the minimum mean square error is
 calculated in a straight forward manner.  One stacks the
 individual observation vectors into a single vector, $Y_k$, and then,
 since $x_k$ and $Y_k$ are jointly Gaussian , one applies 
-(\ref{e.kf.4}) to obtain the conditional mean and covariance
+(\ref{e.kf4}) to obtain the conditional mean and covariance
 of $x_k$ given $Y_k$.  The problem with this approach is that for 
 increasing $k$ the vector $Y_k$ is of increasing dimension, and 
 consequently, the matrix inverse and multiplication operations in 
-(\ref{e.kf.4}) become increasingly burdensome.
+(\ref{e.kf4}) become increasingly burdensome.
 
 	The next few sections are devoted to showing how
-the linear system of (\ref{e.kf.1}) and the special properties
-of (\ref{e.kf.4}) can be used to obtain a recursive update to the
+the linear system of (\ref{e.kf1}) and the special properties
+of (\ref{e.kf4}) can be used to obtain a recursive update to the
 estimation of $x_k$.  That is, given the best estimate of $x_k$
 based on the observations $Y_k$ (we denote this estimate by 
 $\hat{x}_{k|k}$) and a new observation $y_{k+1}$, it is shown
@@ -134,10 +134,10 @@ output which can be represented by
 %
 \begin{equation}
 y=Hx+v.
-\label{e.kf.5}
+\label{e.kf5}
 \end{equation}
 %
-Since (\ref{e.kf.5}) is a linear combination of independent
+Since (\ref{e.kf5}) is a linear combination of independent
 Gaussian random vectors, $y$ is also a Gaussian random
 vector.  The mean and covariance of $y$ are calculated
 as follows,
@@ -146,7 +146,7 @@ as follows,
 m_y&=&E\{y\}\nonumber\\
    &=&E\{Hx+v\}\nonumber\\
    &=&Hm_x    
-\label{e.kf.6}
+\label{e.kf6}
 \end{eqnarray}
 %
 and
@@ -155,7 +155,7 @@ and
 \Lambda_y&=&E\{(y-m_y)(y-m_y)^T\}\nonumber\\
    &=&E\{[H(x-m_x)+v][H(x-m_x)+v]^T\}\nonumber\\
    &=&H\Lambda_xH^T+R.
-\label{e.kf.7}
+\label{e.kf7}
 \end{eqnarray}
 %
 Consequently, the minimum mean square error estimate of $y$
@@ -178,29 +178,29 @@ This is represented by
                           \Lambda_{zx}&\Lambda_{zy}&\Lambda_{z}
 \end{array}
    \right]\right).
-\label{e.kf.8}
+\label{e.kf8}
 \end{equation}
 %
-From (\ref{e.kf.4}) the minimum mean square error estimate of 
+From (\ref{e.kf4}) the minimum mean square error estimate of 
 $x$ given observation of $y$ is 
 %
 \begin{equation}
 \hat{x}(y)=m_x+\Lambda_{xy}\Lambda_y^{-1}(y-m_y)
-\label{e.kf.9}
+\label{e.kf9}
 \end{equation}
 %
 and the associated error covariance is
 %
 \begin{equation}
 P_x(y)=\Lambda_x-\Lambda_{xy}\Lambda_y^{-1}\Lambda_{yx}.
-\label{e.kf.10}
+\label{e.kf10}
 \end{equation}
 %
 It is valuable to note here that
 %
 \begin{equation}
 E\{\hat{x}(y)\}=m_x.
-\label{e.kf.11}
+\label{e.kf11}
 \end{equation}
 %
 If $z$ is also observed, then the minimum mean squared error estimate 
@@ -213,7 +213,7 @@ of $x$ given $y$ and $z$ is
                        \Lambda_{zy} & \Lambda_{z}\end{array}\right]^{-1}
 \left[\begin{array}{c}
 y-m_y\\z-m_z\end{array}\right]
-\label{e.kf.12}
+\label{e.kf12}
 \end{equation}
 %
 with error covariance
@@ -225,26 +225,26 @@ P_x(y,z)=\Lambda_x-[\begin{array}{cc}
                        \Lambda_{zy} & \Lambda_{z}\end{array}\right]^{-1}
 \left[\begin{array}{c}
 \Lambda_{yx}\\\Lambda_{zx}\end{array}\right].
-\label{e.kf.13}
+\label{e.kf13}
 \end{equation}
 %
 Now note that if $y$ and $z$ were independent that
-$\Lambda_{yz}$ would be zero and then (\ref{e.kf.12}) could be written
+$\Lambda_{yz}$ would be zero and then (\ref{e.kf12}) could be written
 as
 %
 \begin{eqnarray}
 \hat{x}(y,z)&=&m_x+\Lambda_{xy}\Lambda_y^{-1}(y-m_y)+\Lambda_{xz}
 \Lambda_z^{-1}(z-m_z)\nonumber\\
 &=&\hat{x}(y)+\Lambda_{xz}\Lambda_z^{-1}(z-m_z).
-\label{e.kf.14}
+\label{e.kf14}
 \end{eqnarray}
 %
 
-	The result in (\ref{e.kf.14}) is a recursive method for calculating
-$\hat{x}(y,z)$ given $\hat{x}(y)$ and $z$.  The problem is that (\ref{e.kf.14})
+	The result in (\ref{e.kf14}) is a recursive method for calculating
+$\hat{x}(y,z)$ given $\hat{x}(y)$ and $z$.  The problem is that (\ref{e.kf14})
 depends on $y$ and $z$ being independent random vectors.
 Fortunately, by a change of variables, one can always change the
-estimation procedure in (\ref{e.kf.12}) into that in (\ref{e.kf.14}).
+estimation procedure in (\ref{e.kf12}) into that in (\ref{e.kf14}).
 This is accomplished as follows.  Let $\nu$ be a random vector
 defined by
 %
@@ -252,18 +252,18 @@ defined by
 \nu&=&z-\hat{z}(y)\nonumber\\
    &=&z-[m_z+\Lambda_{zy}\Lambda_y^{-1}(y-m_y)]\nonumber\\
    &=&(z-m_z)-\Lambda_{zy}\Lambda_y^{-1}(y-m_y)
-\label{e.kf.15}
+\label{e.kf15}
 \end{eqnarray}
 %
 where $\hat{z}(y)$ is the minimum mean square estimate of $z$
-given observation of $y$ (obtained by using (\ref{e.kf.4})).
+given observation of $y$ (obtained by using (\ref{e.kf4})).
 
 	The new random vector, $\nu$, has several interesting
 properties.  First, because
 %
 \begin{equation}
 m_{\nu}=E\{(z-m_z)-\Lambda_{zy}\Lambda_y^{-1}(y-m_y)\}=0
-\label{e.kf.16}
+\label{e.kf16}
 \end{equation}
 %
 $\nu$ is a zero-mean random variable.  Also, since
@@ -274,7 +274,7 @@ $\nu$ is a zero-mean random variable.  Also, since
             -\Lambda_{zy}\Lambda_y^{-1}(y-m_y)(y-m_y)^T\}\nonumber\\
    &=&\Lambda_{zy}-\Lambda_{zy}\Lambda_y^{-1}\Lambda_y\nonumber\\
    &=&0
-\label{e.kf.17}
+\label{e.kf17}
 \end{eqnarray}
 %
 and
@@ -284,7 +284,7 @@ and
             E\{\nu(m_x+\Lambda_{xy}\Lambda_y^{-1}(y-m_y)-m_x)^T\}\nonumber\\
    &=&E\{\nu(y-m_y)^T\Lambda_y^{-1}\Lambda_{yx}\}\nonumber\\
    &=&0
-\label{e.kf.18}
+\label{e.kf18}
 \end{eqnarray}
 %
 it follows that $\nu$ is independent of both $y$ and $\hat{x}(y)$
@@ -292,7 +292,7 @@ These properties
 are very useful for developing the Kalman filter equations of the 
 next section.
 
-	Now (\ref{e.kf.14}) can be rewritten so that
+	Now (\ref{e.kf14}) can be rewritten so that
 %
 \begin{eqnarray}
 \hat{x}(y,z)&=&\hat{x}(y,\nu)\nonumber\\
@@ -305,15 +305,15 @@ y-m_y\\\nu\end{array}\right]\nonumber\\
            &=&m_x+\Lambda_{xy}\Lambda_y^{-1}(y-m_y)+\Lambda_{x\nu}
                \Lambda_{\nu}^{-1}\nu\nonumber\\
            &=&\hat{x}(y)+\Lambda_{x\nu}\Lambda_{\nu}^{-1}\nu
-\label{e.kf.19}
+\label{e.kf19}
 \end{eqnarray}
 %
-where, from (\ref{e.kf.15}) we obtain
+where, from (\ref{e.kf15}) we obtain
 %
 \begin{eqnarray}
 \Lambda_{x\nu}&=&E\{(x-m_x)(z-m_z-\Lambda_{zy}\Lambda_y^{-1}(y-m_y))^T\}\nonumber\\
        &=&\Lambda_{xz}-\Lambda_{xy}\Lambda_y^{-1}\Lambda_{yz}
-\label{e.kf.20}
+\label{e.kf20}
 \end{eqnarray}
 %
 and
@@ -321,14 +321,14 @@ and
 \begin{eqnarray}
 \Lambda_{\nu}&=&E\{(z-m_z-\Lambda_{zy}\Lambda_y^{-1}(y-m_y))(z-m_z-\Lambda_{zy}\Lambda_y^{-1}(y-m_y))^T\}\nonumber\\
        &=&\Lambda_{z}-\Lambda_{zy}\Lambda_y^{-1}\Lambda_{yz}.
-\label{e.kf.21}
+\label{e.kf21}
 \end{eqnarray}
 %
 (Note that the equality of $\hat{x}(y,z)$ and $\hat{x}(y,\nu)$ is due to the
 fact that no information is lost in making the change of
-variables in (\ref{e.kf.15}).  We are simply adding a constant vector
+variables in (\ref{e.kf15}).  We are simply adding a constant vector
 to $z$ which renders $\nu$ and $y$ independent of each other).
-The error covariance, $P_x(y,\nu)$, associated with (\ref{e.kf.19}) is
+The error covariance, $P_x(y,\nu)$, associated with (\ref{e.kf19}) is
 %
 \begin{eqnarray}
 P_x(y,\nu)&=&
@@ -341,7 +341,7 @@ P_x(y,\nu)&=&
            &=&\Lambda_x-\Lambda_{xy}\Lambda_y^{-1}\Lambda_{yx}-\Lambda_{x\nu}
                \Lambda_{\nu}^{-1}\Lambda_{\nu x}\nonumber\\
            &=&P_x(y)-\Lambda_{x\nu}\Lambda_{\nu}^{-1}\Lambda_{\nu x}.
-\label{e.kf.22}
+\label{e.kf22}
 \end{eqnarray}
 %
 \subsection{The Kalman Filter Equations}
@@ -358,31 +358,31 @@ $\hat{x}_{k|l}$.
 
 	Now, the estimate $\hat{x}_{k|k}$ can be obtained
 from the estimate $\hat{x}_{k|k-1}$ and the new observation $y_k$
-in the following manner.  From (\ref{e.kf.19}) and (\ref{e.kf.22})
+in the following manner.  From (\ref{e.kf19}) and (\ref{e.kf22})
 we have
 %
 \begin{eqnarray}
 \hat{x}_{k|k}&=&\hat{x}_{k|k-1}+\Lambda_{x_k\nu_k}\Lambda_{\nu_k}^{-1}\nu_k\nonumber\\
 P_{k|k}&=&P_{k|k-1}-\Lambda_{x_k\nu_k}\Lambda_{\nu_k}^{-1}\Lambda_{\nu_k x_k}
-\label{e.kf.23}
+\label{e.kf23}
 \end{eqnarray}
 %
-where from (\ref{e.kf.1}), (\ref{e.kf.6}), and (\ref{e.kf.7})
+where from (\ref{e.kf1}), (\ref{e.kf6}), and (\ref{e.kf7})
 %
 \begin{equation}
 \nu_k=y_k-H_k\hat{x}_{k|k-1}.
-\label{e.kf.24}
+\label{e.kf24}
 \end{equation}
 %
 The covariance
-matrices in (\ref{e.kf.23}) may be calculated by
+matrices in (\ref{e.kf23}) may be calculated by
 %
 \begin{eqnarray}
 \Lambda_{\nu_k}&=&E\{\nu_k\nu_k^T\}\nonumber\\
                &=&E\{(y_k-H_k\hat{x}_{k|k-1})(y_k-H_k\hat{x}_{k|k-1})^T\}\nonumber\\
                &=&E\{[H_k(x_k-\hat{x}_{k|k-1})+v_k][H_k(x_k-\hat{x}_{k|k-1})+v_k]^T\}\nonumber\\
                &=&H_kP_{k|k-1}H_k^T+R_k
-\label{e.kf.25}
+\label{e.kf25}
 \end{eqnarray}
 %
 (where the final equality follows from the fact that $v_k$ and
@@ -395,17 +395,17 @@ $x_k$ are independent random vectors), and
                &=&E\{(x_k-\hat{x}_{k|k-1})(y_k-H_k\hat{x}_{k|k-1})^T\}\nonumber\\
                &=&E\{(x_k-\hat{x}_{k|k-1})(x_k-\hat{x}_{k|k-1})^TH_k^T\}\nonumber\\
                &=&P_{k|k-1}H_k^T
-\label{e.kf.26}
+\label{e.kf26}
 \end{eqnarray}
 %
-(where the second equality follows from (\ref{e.kf.12}) and
-(\ref{e.kf.18})).  Substituting (\ref{e.kf.24}),
-(\ref{e.kf.25}), and (\ref{e.kf.26}) into (\ref{e.kf.23}) yields
+(where the second equality follows from (\ref{e.kf12}) and
+(\ref{e.kf18})).  Substituting (\ref{e.kf24}),
+(\ref{e.kf25}), and (\ref{e.kf26}) into (\ref{e.kf23}) yields
 %
 \begin{eqnarray}
 \hat{x}_{k|k}&=&\hat{x}_{k|k-1}+K_k(y_k-H_k\hat{x}_{k|k-1})\nonumber\\
 P_{k|k}&=&P_{k|k-1}-K_kH_kP_{k|k-1}
-\label{e.kf.27}
+\label{e.kf27}
 \end{eqnarray}
 %
 where $K_k=P_{k|k-1}H_k^T[H_kP_{k|k-1}H_k^T+R_k]^{-1}$ is called the 
@@ -414,22 +414,22 @@ the first section of this chapter assumes that $R_k>0$ it follows that
 $K_k$ always exists.  However, when $R_k$ is not strictly
 positive definite there may be problems performing
 the matrix inverse necessary to calculate $K_k$).
-Using (\ref{e.kf.6}) and (\ref{e.kf.7}) in conjunction with (\ref{e.kf.1})
+Using (\ref{e.kf6}) and (\ref{e.kf7}) in conjunction with (\ref{e.kf1})
 gives the two auxiliary equations
 %
 \begin{eqnarray}
 \hat{x}_{k+1|k}&=&F_k\hat{x}_{k|k}\nonumber\\
 P_{k+1|k}&=&F_kP_{k|k}F_k^T+G_kQ_kG_k^T.
-\label{e.kf.28}
+\label{e.kf28}
 \end{eqnarray}
 %
-Combining the equations in (\ref{e.kf.27}) and (\ref{e.kf.28}) yields 
+Combining the equations in (\ref{e.kf27}) and (\ref{e.kf28}) yields 
 one set of recursive equations
 %
 \begin{eqnarray}
 \hat{x}_{k+1|k}&=&F_k\hat{x}_{k|k-1}+F_kK_k(y_k-H_k\hat{x}_{k|k-1})\nonumber\\
 P_{k+1|k}&=&F_kP_{k|k-1}F_k^T-F_kK_kH_kP_{k|k-1}F_k^T+G_kQ_kG_k^T.
-\label{e.kf.29}
+\label{e.kf29}
 \end{eqnarray}
 %
 The only remaining detail is to identify the initial conditions
@@ -439,14 +439,14 @@ statistics of $x_0$
 \begin{eqnarray}
 \hat{x}_{0|-1}&=&m_0\nonumber\\
 P_{0|-1}&=&\Pi_0.
-\label{e.kf.30}
+\label{e.kf30}
 \end{eqnarray}
 %
 \subsection{Asymptotic Properties of the Kalman Filter}
 \index{Kalman filter!asymptotic properties}
 
 	Depending on the problem formulation posed
-in (\ref{e.kf.1}) there are situations where the Kalman filter
+in (\ref{e.kf1}) there are situations where the Kalman filter
 does not perform well.  That is to say, that for
 certain formulations, the Kalman filter could provide
 state estimates which diverge from the actual evolution
@@ -459,20 +459,20 @@ model formulation so that it
 is better posed for the estimation problem.
 The following results concerning the effectiveness of
 the Kalman filter are only valid for time invariant
-formulations of the model in (\ref{e.kf.1}).  That is to say
+formulations of the model in (\ref{e.kf1}).  That is to say
 that $F_k=F$, $G_k=G$, $H_k=H$, $Q_k=Q$, and $R_k=R$ for all $k$.
 
 	We state the following properties of the
 asymptotic behavior of the Kalman filter without
 proof.  The desirable asymptotic properties of the Kalman
 filter depend on the controllability and observability of
-the system model in (\ref{e.kf.1}).  A necessary
-and sufficient condition for the system in (\ref{e.kf.1}) to be
+the system model in (\ref{e.kf1}).  A necessary
+and sufficient condition for the system in (\ref{e.kf1}) to be
 controllable is that
 %
 \begin{equation}
 rank[\begin{array}{cccc}G&FG&\cdots&F^{N-1}G\end{array}]=N
-\label{e.kf.31}
+\label{e.kf31}
 \end{equation}
 %
 (recall that $F$ is an $N\times N$ matrix).  A necessary and
@@ -480,28 +480,28 @@ sufficient condition that the system be observable is that
 %
 \begin{equation}
 rank\left[\begin{array}{c}H\\HF\\\vdots\\HF^{N-1}\end{array}\right]=N
-\label{e.kf.32}
+\label{e.kf32}
 \end{equation}
 %
-Now if the system in (\ref{e.kf.1}) is both controllable and observable
+Now if the system in (\ref{e.kf1}) is both controllable and observable
 then
 %
 \begin{equation}
 \lim_{k\rightarrow\infty}P_{k|k-1}=P<\infty
-\label{e.kf.33}
+\label{e.kf33}
 \end{equation}
 %
 and if $Q>0$ then
 %
 \begin{equation}
 P>0.
-\label{e.kf.34}
+\label{e.kf34}
 \end{equation}
 %
 
 	These results state that the error covariance matrix,
 $P_{k|k-1}$, converges to a finite, positive definite constant matrix
-when the system in (\ref{e.kf.1}) is controllable and observable.
+when the system in (\ref{e.kf1}) is controllable and observable.
 Consequently, the error in the estimate $\hat{x}_{k|k-1}$ is bounded
 as $k\rightarrow\infty$ since $P<\infty$.  Furthermore, because $P>0$
 the Kalman filter gain is also positive definite.  Consequently, the new
@@ -518,9 +518,9 @@ the transient behavior of the filter has died away.
 
 	To use the steady-state
 Kalman gain to implement the Kalman filter algorithm there exists,
-in $\Psi$Lab, a macro and a primitive which when 
+in $\Psi$Lab, a function and a primitive which when 
 used in tandem yield the estimated state.
-The macro is {\tt optgain} and the primitive is {\tt ltitr}.  The macro
+The function is {\tt optgain} and the primitive is {\tt ltitr}.  The function
 {\tt optgain} calculates the steady-state error covariance matrix
 and the steady-state Kalman gain given the system matrices and the
 noise covariance matrices.  The primitive {\tt ltitr} generates
@@ -531,21 +531,21 @@ $y_k$ and the system dynamics are
 %
 \begin{equation}
 \hat{x}_{k|k}=(I-KH)F\hat{x}_{k-1|k-1}+Ky_k
-\label{e.kf.34a}
+\label{e.kf34a}
 \end{equation}
 %
 
 	The following section describes how to use {\tt sskf} the steady-state 
-Kalman filter macro.  This is followed by an example using {\tt sskf}.
+Kalman filter function.  This is followed by an example using {\tt sskf}.
 The following section describes the use of {\tt kalm} the time-varying
-version of the Kalman filter macro.  Finally, several sections follow
+version of the Kalman filter function.  Finally, several sections follow
 describing the square-root Kalman filter algorithm and how to use the
-associated macro {\tt srkf}.
+associated function {\tt srkf}.
 
 \subsection{How to Use the Macro {\tt sskf}}
 \index{steady state Kalman filter}
-\index{macro syntax!sskf@{\tt sskf}}
-\index{Kalman filter!steady state!macro syntax}
+\index{function syntax!sskf@{\tt sskf}}
+\index{Kalman filter!steady state!function syntax}
 
 	The syntax of the {\tt sskf} is as follows
 \begin{verbatim}
@@ -619,27 +619,21 @@ E\{(x_0-m_0)(x_0-m_0)^T\}&=&\left[\begin{array}{cc}
 Observations from the above system were generated synthetically
 using the primitive {\tt ltitr}.
 The results of the steady-state Kalman filter estimates 
-are shown in Figure~\ref{f.kf.0}
+are shown in Figure~\ref{f.kf0}
 %
-\input{\Figdir kf.1.tex}
-\dessin{{\tt exec('kf.1.code')} Steady-State Kalman Filter Tracking}{f.kf.0}
+\input{\Figdir kf1.tex}
+\dessin{{\tt exec('kf1.code')} Steady-State Kalman Filter Tracking}{f.kf0}
 %
 where the dotted line marked by stars indicates
 the actual state path and the solid line marked
 by circles marks the estimated state path.
 
-%\subsection{The {\tt sskf} Macro Code}
-%\index{macro code!sskf@{\tt sskf}}
-%\index{Kalman filter!steady state!macro code}
 
-%\verbatok{\MACROSSIGLIB/sskf.sci}
-%\end{verbatim}
+\subsection{How to Use the Function {\tt kalm}}
+\index{Kalman filter!function syntax}
+\index{function syntax!kalm@{\tt kalm}}
 
-\subsection{How to Use the Macro {\tt kalm}}
-\index{Kalman filter!macro syntax}
-\index{macro syntax!kalm@{\tt kalm}}
-
-	The macro {\tt kalm} takes as input the system description
+	The function {\tt kalm} takes as input the system description
 matrices, the statistics of the noise processes, the prior estimate of 
 the state and error covariance matrix, and the new observation.  The
 outputs are the new estimates of the state and error covariance
@@ -658,7 +652,7 @@ observations up to time $t=0$, respectively, and {\tt x} and {\tt p}
 are the new state and error covariance estimates at time $t=0$ given
 observations up to time $t=0$, respectively.
 
-\subsection{Examples Using the {\tt kalm} Macro}
+\subsection{Examples Using the {\tt kalm} Function}
 \index{Kalman filter!examples}
 
 	Three examples are illustrated in this section.  All three
@@ -708,10 +702,10 @@ Observations from the above system were generated synthetically
 using the system formulation and values from a random number generator
 for the dynamics and observations noise.  These observations were then
 used as input to the Kalman filter.  The result of ten observations is
-illustrated in Figure~\ref{f.kf.1}.
+illustrated in Figure~\ref{f.kf1}.
 %
-\input{\Figdir kf.2.tex}
-\dessin{{\tt exec('kf.2.code')} Kalman Filter Tracking}{f.kf.1}
+\input{\Figdir kf2.tex}
+\dessin{{\tt exec('kf2.code')} Kalman Filter Tracking}{f.kf1}
 %
 The figure shows the actual state path and the Kalman estimate of
 the state path as a dotted and solid line, respectively.
@@ -722,7 +716,7 @@ the actual state path and their borders represent two standard deviations
 of estimation error calculated from the error covariance matrices.
 The values of the standard deviations
 for the above example are displayed below:
-\verbatok{\Diary kf.3.dia}
+\verbatok{\Diary kf3.dia}
 \end{verbatim}
 Each row of the above vector represents the standard deviations of the
 state vector error covariance matrix where the first row is the standard
@@ -750,7 +744,7 @@ x_{k+1}=\left[\begin{array}{cc}
 the system would be uncontrollable.  Re-running the Kalman filter
 with this re-formulation yields the following sequence of standard 
 deviations:
-\verbatok{\Diary kf.4.dia}
+\verbatok{\Diary kf4.dia}
 \end{verbatim}
 As can be seen, the second state variable has a standard deviation which
 is not converging to a positive value.  In fact the value of this 
@@ -777,7 +771,7 @@ y_k=\left[\begin{array}{cc}
 %
 Under these conditions the system is not observable.  The 
 evolution of the standard deviation for this example is:
-\verbatok{\Diary kf.5.dia}
+\verbatok{\Diary kf5.dia}
 \end{verbatim}
 Here the standard deviation of the first state variable is growing
 without bound.  This is due to two things.  First, the system is
@@ -789,18 +783,11 @@ the standard deviation of this state, in the limit,  is unbounded.
 	The $\Psi$Lab code used to generate the examples in this section
 is displayed below.  The code for the steady-state Kalman filter example
 is as follows:
-\verbatok{\Figdir kf.1.code}
+\verbatok{\Figdir kf1.dia}
 \end{verbatim}
 The code used to generate the non-steady-state Kalman filter example
 is:
-\verbatok{\Figdir kf.2.code}
-\end{verbatim}
-
-\subsection{The {\tt kalm} Macro Code}
-\index{macro code!kalm@{\tt kalm}}
-\index{Kalman filter!macro code}
-
-\verbatok{\MACROSSIGLIB/kalm.sci}
+\verbatok{\Figdir kf2.dia}
 \end{verbatim}
 
 \section{The Square Root Kalman Filter}
@@ -810,7 +797,7 @@ is:
 	The Kalman filter is known to have certain numerical 
 instabilities \cite{Bier}.  For example, since the update
 of the error covariance matrix involves taking differences
-of matrices (see(\ref{e.kf.27})) it is possible that machine
+of matrices (see(\ref{e.kf27})) it is possible that machine
 discretization error could result in a non positive semi-definite
 error covariance.  Such an event could lead 
 to severe divergence of the Kalman filter because this could
@@ -839,22 +826,22 @@ filter algorithm base on using
 Householder transformations is detailed below.
 
 	Restating the model for the dynamics and
-observations of the process in (\ref{e.kf.1}), we have that
+observations of the process in (\ref{e.kf1}), we have that
 %
 \begin{eqnarray}
 y_k&=&H_kx_k+v_k\nonumber\\
 x_{k+1}&=&F_kx_k+w_k
-\label{e.kf.41}
+\label{e.kf41}
 \end{eqnarray}
 %
 where $w_k$ and $v_k$ are independent zero-mean Gaussian
 vectors of covariance $Q_k$ and $R_k$, respectively.
-The model in (\ref{e.kf.41}) is modified so that
+The model in (\ref{e.kf41}) is modified so that
 $w_k=G_k\mu_k$ and $v_k=L_k\mu_k$ where $\mu_k$ is
 a zero-mean Gaussian random vector with 
 unit covariance matrix (i.e., $E\{\mu_k\mu_k^T\}=I$).  Since $w_k$ and
 $v_k$are independent $G_kL_k^T=L_kG_k^T=0.$
-Now, the model in (\ref{e.kf.41}) can be expressed as
+Now, the model in (\ref{e.kf41}) can be expressed as
 %
 \begin{equation}
 \left[\begin{array}{c}y_k\\x_{k+1}\end{array}\right]
@@ -862,19 +849,19 @@ Now, the model in (\ref{e.kf.41}) can be expressed as
   \left[\begin{array}{cc}H_k&L_k\\
                          F_k&G_k\end{array}\right]
            \left[\begin{array}{c}x_k\\\mu_k\end{array}\right].
-\label{e.kf.42}
+\label{e.kf42}
 \end{equation}
 %
-Also, we recall from (\ref{e.kf.6}) and (\ref{e.kf.7}) that
+Also, we recall from (\ref{e.kf6}) and (\ref{e.kf7}) that
 %
 \begin{equation}
 \left[\begin{array}{c}\hat{y}_{k|k-1}\\\hat{x}_{k+1|k-1}\end{array}\right]
 =
            \left[\begin{array}{c}H_k\\F_k\end{array}\right]\hat{x}_{k|k-1}.
-\label{e.kf.43}
+\label{e.kf43}
 \end{equation}
 %
-Substracting (\ref{e.kf.43}) from (\ref{e.kf.42}) yields
+Substracting (\ref{e.kf43}) from (\ref{e.kf42}) yields
 %
 \begin{equation}
 \left[\begin{array}{c}\nu_k\\\epsilon_{k+1|k-1}\end{array}\right]
@@ -882,7 +869,7 @@ Substracting (\ref{e.kf.43}) from (\ref{e.kf.42}) yields
   \left[\begin{array}{cc}H_kP_{k|k-1}^{1/2}&L_k\\
                          F_kP_{k|k-1}^{1/2}&G_k\end{array}\right]
 \left[\begin{array}{c}P_{k|k-1}^{-1/2}\epsilon_{k|k-1}\\\mu_k\end{array}\right]
-\label{e.kf.44}
+\label{e.kf44}
 \end{equation}
 %
 where $\nu_k=y_k-H\hat{x}_{k|k-1}$, $\epsilon_{k+1|k-1}=x_{k+1}-\hat{x}_
@@ -900,7 +887,7 @@ such that $T_kT_k^T=I$ and such that
 =
   \left[\begin{array}{cc}A_k&0\\
                          B_k&C_k\end{array}\right].
-\label{e.kf.45}
+\label{e.kf45}
 \end{equation}
 %
 (The matrix $T_k$ can always be constructed as a combination
@@ -908,7 +895,7 @@ of Householder transformations.  The Householder
 transformation and the construction of $T_k$ are detailed
 in the next section).
 
-	Using $T_k$, (\ref{e.kf.44}) can be rewritten so that
+	Using $T_k$, (\ref{e.kf44}) can be rewritten so that
 %
 \begin{eqnarray}
 \left[\begin{array}{c}\nu_k\\\epsilon_{k+1|k-1}\end{array}\right]
@@ -920,19 +907,19 @@ in the next section).
 &=&
   \left[\begin{array}{cc}A_k&0\\
                          B_k&C_k\end{array}\right]\eta_k
-\label{e.kf.46}
+\label{e.kf46}
 \end{eqnarray}
 %
 where $\eta_k$ is a zero-mean Gaussian random vector with unit
 covariance.  We can now derive the
-significance of (\ref{e.kf.46}) by calculating the
+significance of (\ref{e.kf46}) by calculating the
 conditional mean and conditional covariance of $\epsilon_{k+1|k-1}$
-given $\nu_k$.  Using (\ref{e.kf.4}) we obtain
+given $\nu_k$.  Using (\ref{e.kf4}) we obtain
 %
 \begin{eqnarray}
 E\{\epsilon_{k+1|k-1}|\nu_k\}&=&E\{x_{k+1}-\hat{x}_{k+1|k-1}|\nu_k\}\nonumber\\
 &=&\Lambda_{\epsilon_{k+1|k-1}\nu_k}\Lambda_{\nu_k}^{-1}\nu_k
-\label{e.kf.47}
+\label{e.kf47}
 \end{eqnarray}
 %
 and
@@ -940,34 +927,34 @@ and
 \begin{eqnarray}
 \lefteqn{E\{[\epsilon_{k+1|k-1}-E\{\epsilon_{k+1|k-1}\}][\epsilon_{k+1|k-1}-E\{\epsilon_{k+1|k-1}\}]^T|\nu_k\}=}\nonumber\\
 &&\Lambda_{\epsilon_{k+1|k-1}}-\Lambda_{\epsilon_{k+1|k-1}\nu_k}\Lambda_{\nu_k}^{-1}\Lambda_{\epsilon_{k+1|k-1}\nu_k}
-\label{e.kf.48}
+\label{e.kf48}
 \end{eqnarray}
 %
-Calculating the covariances in (\ref{e.kf.47}) and (\ref{e.kf.48}) we
-obtain (using (\ref{e.kf.46}))
+Calculating the covariances in (\ref{e.kf47}) and (\ref{e.kf48}) we
+obtain (using (\ref{e.kf46}))
 %
 \begin{eqnarray}
 \Lambda_{\epsilon_{k+1|k-1}\nu_k}&=&B_kA_k^T\nonumber\\
 \Lambda_{\nu_k}&=&A_kA_k^T\nonumber\\
 \Lambda_{\epsilon_{k+1|k-1}}&=&B_kB_k^T+C_kC_k^T.
-\label{e.kf.49}
+\label{e.kf49}
 \end{eqnarray}
 %
-It can be seen that (\ref{e.kf.47}) yields the Kalman filter equations.
-Consequently, using (\ref{e.kf.49}) we obtain the Kalman
+It can be seen that (\ref{e.kf47}) yields the Kalman filter equations.
+Consequently, using (\ref{e.kf49}) we obtain the Kalman
 gain, $K_k$, and the updated square root of the error covariance,
 $P_{k+1|k}^{1/2}$, as
 %
 \begin{eqnarray}
 K_k&=&B_kA_k^{-1}\nonumber\\
 P_{k+1|k}^{1/2}&=&C_k.
-\label{e.kf.50}
+\label{e.kf50}
 \end{eqnarray}
 %
 
 	The square root Kalman filter algorithm
 works as follows.  Given $\hat{x}_{k|k-1}$, $P_{k|k-1}^{1/2}$, and
-$y_k$ we first form the matrix on the left hand side of (\ref{e.kf.45}).
+$y_k$ we first form the matrix on the left hand side of (\ref{e.kf45}).
 The  matrices $G_k$ and $L_k$ are obtained by performing
 a Cholesky decomposition of $Q_k$ and $R_k$ (that is $Q_k=G_kG_k^T$
 and $R_k=L_kL_k^T$ where $G_k$ and $L_k$ are upper triangular).
@@ -977,7 +964,7 @@ and $C_k$.  Then, the updates are calculated by
 \begin{eqnarray}
 \hat{x}_{k+1|k}&=&F_k\hat{x}_{k|k-1}+B_kA_k^{-1}(y_k-H_k\hat{x}_{k|k-1})\nonumber\\
 P_{k+1|k}^{1/2}&=&C_k.
-\label{e.kf.51}
+\label{e.kf51}
 \end{eqnarray}
 %
 All that remains is specification of the Householder transformation
@@ -991,10 +978,10 @@ define the $N\times N$ matrix, $T_{\beta}$, such that
 %
 \begin{equation}
 T_{\beta}=I-\frac{2}{\beta^T\beta}\beta\beta^T.
-\label{e.kf.50a}
+\label{e.kf50a}
 \end{equation}
 %
-The matrices defined by (\ref{e.kf.50}) are called Householder 
+The matrices defined by (\ref{e.kf50}) are called Householder 
 transformations (see \cite{Stewart}).
 The $T_{\beta}$ have the following properties
 %
@@ -1002,7 +989,7 @@ The $T_{\beta}$ have the following properties
 T_{\beta}&=&T_{\beta}^T\nonumber\\
 T_{\beta}T_{\beta}^T&=&I\nonumber\\
 T_{\beta}T_{\beta}&=&I.
-\label{e.kf.51a}
+\label{e.kf51a}
 \end{eqnarray}
 %
 Furthermore, the matrix $T_{\beta}$ has a geometric interpretation.
@@ -1027,7 +1014,7 @@ T_{\beta_1}a_1=\tilde{a}_1=
                           \vdots\\
                           0
                       \end{array}\right]
-\label{e.kf.52}
+\label{e.kf52}
 \end{equation}
 %
 (i.e., we find the $\beta_1$ such that when $a_1$ is reflected
@@ -1041,7 +1028,7 @@ as above).  The choice for $\beta_1$ which accomplishes this goal is
                           \vdots\\
                           a_{1N}
                       \end{array}\right]
-\label{e.kf.53}
+\label{e.kf53}
 \end{equation}
 %
 where $a_{1k}$ is the $k^{th}$ element of the $N$-vector $a_1$.
@@ -1051,10 +1038,10 @@ used now to transform the matrix $A$,
 %
 \begin{equation}
 T_{\beta_1}A=[\tilde{a}_1,\tilde{a}_2,\cdots,\tilde{a}_M]
-\label{e.kf.54}
+\label{e.kf54}
 \end{equation}
 %
-where $\tilde{a}_1$ is as in (\ref{e.kf.52}) and the 
+where $\tilde{a}_1$ is as in (\ref{e.kf52}) and the 
 remaining columns of $A$ are transformed to $\tilde{a}_k=T_{\beta_1}a_k$.
 
 	Now we construct a second Householder transformation,
@@ -1069,7 +1056,7 @@ T_{\beta_2}\tilde{a}_2=\tilde{\tilde{a}}_2=
                           \vdots\\
                           0
                       \end{array}\right]
-\label{e.kf.55}
+\label{e.kf55}
 \end{equation}
 %
 That is, the first element of $\tilde{a}_2$ is left unchanged,
@@ -1085,7 +1072,7 @@ accomplishes this is
                           \vdots\\
                           \tilde{a}_{2N}
                       \end{array}\right].
-\label{e.kf.56}
+\label{e.kf56}
 \end{equation}
 %
 Calculating $T_{\beta_2}T_{\beta_1}A$ yields
@@ -1095,11 +1082,11 @@ T_{\beta_2}T_{\beta_1}A=[\tilde{a}_1,\tilde{\tilde{a}}_2,
                                      \tilde{\tilde{a}}_3,
                                      \cdots,
                                      \tilde{\tilde{a}}_M]
-\label{e.kf.57}
+\label{e.kf57}
 \end{equation}
 %
-where $\tilde{a}_1$ is still as in (\ref{e.kf.52}) and $\tilde{\tilde{a}}_2$
-is as in (\ref{e.kf.55}).  Continuing recursively in this way we can
+where $\tilde{a}_1$ is still as in (\ref{e.kf52}) and $\tilde{\tilde{a}}_2$
+is as in (\ref{e.kf55}).  Continuing recursively in this way we can
 upper triangularize the $A$ matrix.
 
 	The $\Psi$Lab primitive {\tt qr} performs a triangularization of
@@ -1108,10 +1095,10 @@ the $r$ part of the qr-decomposition which yields the
 desired triangularized matrix.
 
 \subsection{How to Use the Macro {\tt srkf}}
-\index{Kalman filter!square root!macro syntax}
-\index{macro syntax!srkf@{\tt srkf}}
+\index{Kalman filter!square root!function syntax}
+\index{function syntax!srkf@{\tt srkf}}
 
-	The macro {\tt srkf} takes as input the system description
+	The function {\tt srkf} takes as input the system description
 matrices, the statistics of the noise processes, the prior estimate of 
 the state and error covariance matrix, and the new observation.  The
 outputs are the new estimates of the state and error covariance
@@ -1125,13 +1112,6 @@ the dynamics and observation matrices, respectively, and {\tt q}
 and {\tt r} are the noise covariance matrices for the dynamics and
 observations equations, respectively.  The outputs {\tt x1} and {\tt p1}
 are the new state and error covariance estimates, respectively.
-
-\subsection{The {\tt srkf} Macro Code}
-\index{macro code!srkf@{\tt srkf}}
-\index{Kalman filter!square root!macro code}
-
-\verbatok{\MACROSSIGLIB/srkf.sci}
-\end{verbatim}
 
 \section{The Wiener Filter}
 \index{Wiener filter}
@@ -1148,7 +1128,7 @@ as a linear operator on $y(t)$ as
 %
 \begin{equation}
 \hat{x}(t)=\int_{a}^{b}H(t,s)y(s)ds
-\label{e.wf.1}
+\label{e.wf1}
 \end{equation}
 %
 where $\hat{x}(t)$ denotes the least mean squared estimate and
@@ -1157,18 +1137,18 @@ and $s$ (i.e., $[H(t,s)]_{ij}=h_{ij}(t,s)$ and $\hat{x}_i(t)=\int_{a}^{b}
 \sum_{j=1}^{M}h_{ij}(t,s)y_j(s)ds$).
 
 	By the principle of orthogonality the error 
-in the estimate in (\ref{e.wf.1}), $x(t)-\hat{x}(t)$, must
+in the estimate in (\ref{e.wf1}), $x(t)-\hat{x}(t)$, must
 be orthogonal to $y(u)$ for $t,u\in[a,b]$.  Thus,
 %
 \begin{equation}
 0=E\{(x(t)-\hat{x}(t))y^T(u)\}=R_{xy}(t,u)-\int_{a}^{b}H(t,s)R_{yy}(s,u)ds.
-\label{e.wf.2}
+\label{e.wf2}
 \end{equation}
 %
-Solving the matrix integral equation in (\ref{e.wf.2}) for $H(t,s)$ yields
-the optimal estimator for $x(t)$ when used in (\ref{e.wf.1}).
-A general solution of (\ref{e.wf.2}) is not possible, however,
-for some very important special cases (\ref{e.wf.2}) is 
+Solving the matrix integral equation in (\ref{e.wf2}) for $H(t,s)$ yields
+the optimal estimator for $x(t)$ when used in (\ref{e.wf1}).
+A general solution of (\ref{e.wf2}) is not possible, however,
+for some very important special cases (\ref{e.wf2}) is 
 resolvable.  For example, if the covariance functions $R_{xy}$
 and $R_{yy}$ are wide sense
 stationary and with rational spectral densities then
@@ -1179,7 +1159,7 @@ for a special formulation of the relationship
 between $x(t)$ and $y(t)$ (albeit, a relationship for which
 many engineering problems of interest can be formulated) and,
 consequently, permits a solution to the problem posed by 
-(\ref{e.wf.1}) and (\ref{e.wf.2}).  This special formulation
+(\ref{e.wf1}) and (\ref{e.wf2}).  This special formulation
 consists of a state space difference equation identical to that
 used in the development of the Kalman filter.  This realization
 has some advantages in that it allows finite interval estimation
@@ -1201,7 +1181,7 @@ the equations
 \begin{eqnarray}
 x_{k+1}&=&F_kx_k+G_ku_k\nonumber\\
 y_k&=&H_kx_k+v_k
-\label{e.wf.3}
+\label{e.wf3}
 \end{eqnarray}
 %
 where $x_0$, $u_k$, and $v_k$ are independent and Gaussian
@@ -1211,23 +1191,23 @@ random vectors with statistics
 u_k&\sim&N(0,Q_k)\nonumber\\
 v_k&\sim&N(0,R_k)\nonumber\\
 x_0&\sim&N(m_0,\Pi_0)\nonumber\\
-\label{e.wf.4}
+\label{e.wf4}
 \end{eqnarray}
 %
 
-	From the formulation in (\ref{e.wf.3}) and (\ref{e.wf.4})
+	From the formulation in (\ref{e.wf3}) and (\ref{e.wf4})
 one can determine the covariance functions $R_{xy}$ and $R_{yy}$
 and, thus, it is reasonable to try and solve a discrete version of
-(\ref{e.wf.2}) to obtain the optimal filter.
+(\ref{e.wf2}) to obtain the optimal filter.
 However, there are certain aspects of the 
 dynamics and observations models which permit
 a solution to the problem posed in the previous
 section without explicitly solving for
-the filter designated by (\ref{e.wf.2}).
+the filter designated by (\ref{e.wf2}).
 
-	The solution to the discrete version of (\ref{e.wf.1})
+	The solution to the discrete version of (\ref{e.wf1})
 based on the modelization of the underlying processes
-given by (\ref{e.wf.3}) and (\ref{e.wf.4}) can be achieved by
+given by (\ref{e.wf3}) and (\ref{e.wf4}) can be achieved by
 several different Kalman filter formulations.  The particular
 approach used here is known as the Rauch-Tung-Striebel
 \index{Rauch-Tung-Striebel two filter smoother}
@@ -1261,7 +1241,7 @@ defined by
 %
 \begin{equation}
 J(u,v)=u^TQ^{-1}u+v^TR^{-1}v
-\label{e.wf.5}
+\label{e.wf5}
 \end{equation}
 %
 where 
@@ -1288,17 +1268,17 @@ R_0&0&\cdots&0\\
 0&R_1&\cdots&0\\
 \vdots&\vdots&&\vdots\\
 0&0&\cdots&R_N\end{array}\right]
-\label{e.wf.5a}
+\label{e.wf5a}
 \end{eqnarray}
 %
 and where $m_0$ and $\Pi_0$ are the {\em a priori} statistics of $x_0$.
-The functional in (\ref{e.wf.5})
+The functional in (\ref{e.wf5})
 is minimized subject to the constraints
 %
 \begin{eqnarray}
 Sx&=&Gu\nonumber\\
 y&=&Hx+v
-\label{e.wf.6}
+\label{e.wf6}
 \end{eqnarray}
 %
 where 
@@ -1329,20 +1309,20 @@ H_0&0&\cdots&0\\
 0&G_1&\cdots&0\\
 \vdots&\vdots&&\vdots\\
 0&0&\cdots&H_N\end{array}\right].
-\label{e.wf.6a}
+\label{e.wf6a}
 \end{eqnarray}
 %
 
-	Minimizing (\ref{e.wf.5}) subject to the system constraints
-in (\ref{e.wf.6}) yields the estimate 
+	Minimizing (\ref{e.wf5}) subject to the system constraints
+in (\ref{e.wf6}) yields the estimate 
 $\hat{x}^T=[\hat{x}_{0|N}^T,\hat{x}_{1|N}^T,\ldots,\hat{x}_{N|N}^T]^T$.
 The optimization can be accomplished using the Lagrange
 multiplier technique where a new functional
-$\tilde{J}$ is formed from (\ref{e.wf.5}) and (\ref{e.wf.6})
+$\tilde{J}$ is formed from (\ref{e.wf5}) and (\ref{e.wf6})
 %
 \begin{equation}
 \tilde{J}(u,v)=J(u,v)+\lambda^T(Sx-Gu)
-\label{e.wf.7}
+\label{e.wf7}
 \end{equation}
 %
 where $\lambda$, an unknown vector of the same dimension as $x$,
@@ -1362,12 +1342,12 @@ so-called Hamiltonian (see \cite{Kailath2})
 \left[\begin{array}{c}
          0\\
          H^TR^{-1}y\end{array}\right].
-\label{e.wf.8}
+\label{e.wf8}
 \end{equation}
 %
 
-	Solution of (\ref{e.wf.8}) yields $\hat{x}_{k|N}$ for 
-$k=0,1,\ldots,N$.  It can be seen that (\ref{e.wf.8}) is a
+	Solution of (\ref{e.wf8}) yields $\hat{x}_{k|N}$ for 
+$k=0,1,\ldots,N$.  It can be seen that (\ref{e.wf8}) is a
 sparse block matrix.  In fact, after a re-ordering of the terms
 in the vectors, the resulting matrix is tri-block-diagonal.
 Solving this tri-block-diagonal system by using Gaussian
@@ -1401,7 +1381,7 @@ upper diagonal yields the following equations in matrix form
          0\\
          \vdots\\
          \psi_N\end{array}\right]
-\label{e.wf.8a}
+\label{e.wf8a}
 \end{equation}
 %
 where $\Theta_k=H_k^TR_k^{-1}H_k$, $\Gamma_k=-G_kQ_kG_k^T$, and
@@ -1412,7 +1392,7 @@ equation
 %
 \begin{equation}
 \hat{x}_0=\Pi_0\hat{\lambda}_0+m_0
-\label{e.wf.8.b}
+\label{e.wf8.b}
 \end{equation}
 %
 which when $\hat{\lambda}_0=0$ yields the usual Kalman filter initial 
@@ -1421,7 +1401,7 @@ Gaussian elimination is
 %
 \begin{equation}
 \hat{x}_0=(H_0^TR_0^{-1}H_0+\Pi_0^{-1})^{-1}(F_0^T\hat{\lambda}_1+H_0R_0{-1}y_0+\Pi_0^{-1}m_0)
-\label{e.wf.8.c}
+\label{e.wf8.c}
 \end{equation}
 %
 which, when $\hat{\lambda}_1=0$ and after some algebra,
@@ -1434,7 +1414,7 @@ Continuing in this way  the Gaussian elimination yields the $2N$ equations
 \begin{eqnarray}
 \hat{x}_{k|k}&=&\hat{x}_{k|k-1}+P_{k|k-1}H_k^T(H_kP_{k|k-1}H_k^T+R_k)^{-1}(y_k-H_k\hat{x}_{k|k-1})\nonumber\\
 \hat{x}_{k+1|k}&=&F_k\hat{x}_{k|k}
-\label{e.wf.9}
+\label{e.wf9}
 \end{eqnarray}
 %
 where
@@ -1442,16 +1422,16 @@ where
 \begin{eqnarray}
 P_{k|k}&=&P_{k|k-1}-P_{k|k-1}H_k^T(H_kP_{k|k-1}H_k^T+R_k)^{-1}H_kP_{k|k-1}\nonumber\\
 P_{k+1|k}&=&F_kP_{k|k}F_k^T+G_kQ_kG_k^T.
-\label{e.wf.10}
+\label{e.wf10}
 \end{eqnarray}
 %
-After eliminating the lower diagonal of the matrix in (\ref{e.wf.8a})
+After eliminating the lower diagonal of the matrix in (\ref{e.wf8a})
 the upper diagonal is eliminated in the same way, however, now the 
 $\hat{\lambda}_k$ are not set to zero which results in the equations
 %
 \begin{equation}
 \hat{x}_{k|N}=\hat{x}_{k|k}+A_k[\hat{x}_{k+1|N}-\hat{x}_{k+1|k}]
-\label{e.wf.11}
+\label{e.wf11}
 \end{equation}
 %
 where
@@ -1459,19 +1439,19 @@ where
 \begin{eqnarray}
 P_{k|N}&=&P_{k|k}+A_k[P_{k+1|N}-P_{k|k-1}]A_k^T\nonumber\\
 A_k&=&P_{k|k}F_k^TP_{k|k-1}^{-1}
-\label{e.wf.12}
+\label{e.wf12}
 \end{eqnarray}
 %
 and where the $\hat{\lambda}_k$ have been identified as the $\hat{x}_{k|N}$.
-It can be seen that equations (\ref{e.wf.9}) and (\ref{e.wf.10}) specify
-the standard Kalman filter.  Equations (\ref{e.wf.11}) and (\ref{e.wf.12})
+It can be seen that equations (\ref{e.wf9}) and (\ref{e.wf10}) specify
+the standard Kalman filter.  Equations (\ref{e.wf11}) and (\ref{e.wf12})
 yield the Rauch-Tung-Striebel smoother.
 
-\subsection{How to Use the Macro {\tt wiener}}
-\index{macro syntax!wiener@{\tt wiener}}
-\index{Wiener filter!macro syntax}
+\subsection{How to Use the Function {\tt wiener}}
+\index{function syntax!wiener@{\tt wiener}}
+\index{Wiener filter!function syntax}
 
-	The syntax for the macro {\tt wiener} is as follows
+	The syntax for the function {\tt wiener} is as follows
 \begin{verbatim}
 -->[xs,ps,xf,pf]=wf(y,x0,p0,f,g,h,q,r)
 \end{verbatim}
@@ -1495,10 +1475,10 @@ of the input matrices.
 \subsection{Example}
 \index{Wiener filter!example}
 
-	In this section, the {\tt wiener} macro is demonstrated on
+	In this section, the {\tt wiener} function is demonstrated on
 a two-dimensional problem.  The input to the filter is synthetic
 data obtained using the same system dynamics given to the {\tt wiener}
-macro.  The system used in the example is as follows.
+function.  The system used in the example is as follows.
 %
 \begin{eqnarray}
 x_{k+1}&=&\left[\begin{array}{cc}
@@ -1535,8 +1515,8 @@ E\{(x_0-m_0)(x_0-m_0)^T\}&=&\left[\begin{array}{cc}
 \end{eqnarray}
 %
 
-	Figure~\ref{f.wf.1} shows the results of using the {\tt wiener}
-macro on the synthetic data generated by the model above.  Here
+	Figure~\ref{f.wf1} shows the results of using the {\tt wiener}
+function on the synthetic data generated by the model above.  Here
 the dotted line indicates the actual state values generated by the
 system.  The circles on the dotted line serve to mark the actual state
 locations.  The solid line marked by circles indicates the Kalman filter
@@ -1554,21 +1534,15 @@ estimate works its way back to the initial state value, the estimate
 becomes greatly improved, as is to be expected since these states
 are now estimated based on all of the observed data.
 %
-\input{\Figdir wf.1.tex}
-\dessin{{\tt exec('wf.1.code')} Wiener Smoothing Filter}{f.wf.1}
+\input{\Figdir wf1.tex}
+\dessin{{\tt exec('wf1.code')} Wiener Smoothing Filter}{f.wf1}
 %
 
 	The $\Psi$Lab code which generated the example in this section
 is as follows.
-\verbatok{\Figdir wf.1.code}
+\verbatok{\Diary Swf1.dia}
 \end{verbatim}
 
-\subsection{The {\tt wiener} Macro Code}
-\index{macro code!wiener@{\tt wiener}}
-\index{Wiener filter!macro code}
-
-\verbatok{\MACROSSIGLIB/wiener.sci}
-\end{verbatim}
 
 %\section{Stochastic realization}
 %\subsection{Spectral Factorization}

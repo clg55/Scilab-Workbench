@@ -11,7 +11,15 @@ select type(n)
     if rhs=2 then kmax=0,end
   case 2  then
     if rhs=2 then kmax=0,end
+  //-compat next case retained for list/tlist compatibility
   case 15 then
+     if rhs=2 then kmax=d,else kmax=0,end
+     select n(1)
+        case 'r' then [n,d]=n(2:3)
+        case 'lss' then n=ss2tf(n);[n,d]=n(2:3)
+        else error('transfer or state-space only')
+	end
+  case 16 then
      if rhs=2 then kmax=d,else kmax=0,end
      select n(1)
         case 'r' then [n,d]=n(2:3)
@@ -100,7 +108,7 @@ plot2d(real(racines(:,1)),imag(racines(:,1)),[2,5],"111",...
      'open-loop poles',rect)
 // trace des branches asymptotiques
 plot2d(0,0,[-1,2],"100",'asymptotic directions');
-xclip(rect(1),rect(4),rect(3)-rect(1),rect(4)-rect(2));
+xset("clipgrf");
 m=degree(n);q=md-m
 if q>0 then
    la=0:q-1;

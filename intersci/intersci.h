@@ -6,7 +6,7 @@
 #define MAXARG 50
 #define MAXCALL 2000
 #define MAXEL 50
-#define MAXLINE 500
+#define MAXLINE 1000
 #define MAXNAM 80
 #define MAXVAR 200
 /* flag for generation of type and element dimension checking for lists: 
@@ -21,6 +21,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
+#include <malloc.h>
 
 /* FORTRAN variable types */ 
 #define CHAR 1
@@ -28,28 +29,29 @@
 #define DOUBLE 3
 #define REAL 4
 #define EXTERNAL 5
+#define CSTRINGV 6
 
 /* SCILAB variable types */
 
 #define COLUMN 1
 #define LIST 2
-#define MATRIX 3
-#define POLYNOM 4
-#define ROW 5
-#define SCALAR 6
-#define SEQUENCE 7
-#define STRING 8
-#define WORK 9
-#define EMPTY 10
-#define ANY 11
-#define VECTOR 12
+#define TLIST 3
+#define MATRIX 4
+#define POLYNOM 5
+#define ROW 6
+#define SCALAR 7
+#define SEQUENCE 8
+#define STRING 9
+#define WORK 10
+#define EMPTY 11
+#define ANY 12
+#define VECTOR 13
+#define STRINGMAT 14
 
 /* SCILAB optional variable types */
 
 #define NAME 1 /* {var default-name} */
 #define VALUE 2 /* {var default-value} */
-
-char *malloc();
 
 typedef int IVAR; /* variable number */
 

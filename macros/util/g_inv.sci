@@ -1,7 +1,11 @@
 function x=g_inv(a)
 // only to be called by function inv
 //!
-select type(a)
+typ=type(a)
+
+//-compat next row added for list/tlist compatibility
+if typ==15 then typ=16,end
+select typ
 case 2 then 
   x=invr(a);return
 case 5 then //sparse matrix
@@ -16,7 +20,7 @@ case 5 then //sparse matrix
   end
   ludel(hand);
   return
-case 15 then
+case 16 then
   if a(1)=='r' then
     x=invr(a);return
   end
@@ -27,7 +31,11 @@ case 15 then
     if constant&(m==n) then 
       minsv=mini(svd(d));rcd=rcond(d);s=poly(0,'s');
     end
-    if polyn then rcd=0;minsv=10000;s=poly(0,varn(d));end
+    if constant&(m<>n) then 
+      minsv=mini(svd(d));s=poly(0,'s');
+    end
+
+    if polyn then rcd=0;minsv=0;s=poly(0,varn(d));end
     if m==n then 
       if rcd > 1.d-6 then
         x=invsyslin(a)

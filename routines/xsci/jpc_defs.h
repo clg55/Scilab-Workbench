@@ -66,7 +66,7 @@
 #include <stdio.h>
 #include <sys/param.h>
 #include <X11/Xos.h>
-#include <X11/IntrinsicP.h>
+#include <X11/Intrinsic.h>
 #include <X11/StringDefs.h>
 #include <X11/Xaw/Cardinals.h>
 #include <X11/Xatom.h>
@@ -78,8 +78,8 @@
 #include <X11/Xaw/SimpleMenu.h>
 #include <X11/Xaw/SmeBSB.h>
 #include <X11/Xaw/AsciiText.h>
-#include <X11/Xaw/TextP.h>
 #include <X11/Xaw/TextSrc.h>
+#include <X11/Xaw/Text.h>
 #include <X11/Xaw/Box.h>
 #include <X11/Xaw/Dialog.h>
 #include <X11/Xaw/List.h>

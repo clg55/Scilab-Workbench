@@ -1,5 +1,5 @@
 function[m,den]=nlev(a,z,rmax)
-//<num,den>=nlev(a,z [,rmax])  calcule (z*eye-a)**(-1) par une version
+//[num,den]=nlev(a,z [,rmax])  calcule (z*eye-a)**(-1) par une version
 //modifiee de l'algorithme de leverrier numeriquement plus stable.
 //
 //z     chaine de caracteres donnant le nom de la variable formelle

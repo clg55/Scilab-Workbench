@@ -10,6 +10,8 @@ select rhs
 [x,lagr,f]=quapro(Q,p,C,b,ci,cs,mi)
  case 5 then
 [x,lagr,f]=quapro(Q,p,C,b,ci,cs)
+ case 4 then
+[x,lagr,f]=quapro(Q,p,C,b,ci)
  case 3 then
 [x,lagr,f]=quapro(Q,p,C,b)
  else

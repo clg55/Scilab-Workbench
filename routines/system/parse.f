@@ -5,8 +5,6 @@ c     ====================================================================
       include '../stack.h'
       parameter (nz1=nsiz-1,nz2=nsiz-2)
       logical compil,eptover
-      logical sevents
-      external sevents
 c     
       logical iflag
       common /basbrk/ iflag
@@ -14,12 +12,12 @@ c
       integer blank,comma,left,right,less,great,quote,percen
       integer name,insert
 c     
-      integer id(nsiz),ans(nsiz),ennd(nsiz),else(nsiz),retu(nsiz)
+      integer id(nsiz),ans(nsiz)
       integer pts,psym,excnt,p,r
       integer pcount,strcnt,bcount,qcount
 c
-      integer otimer,ntimer,stimer
-      external stimer
+      integer otimer,ntimer,stimer,ismenu
+      external stimer,ismenu
       save otimer
       data otimer/0/
 c     
@@ -27,8 +25,7 @@ c
       data lparen/41/,rparen/42/,left/54/,right/55/,less/59/,great/60/
       data quote/53/,percen/56/
       data name/1/,insert/2/
-      data else/236721422,nz1*673720360/, ennd/671946510,nz1*673720360/
-      data retu/505220635,nz1*673720360/, ans/672929546,nz1*673720360/
+      data ans/672929546,nz1*673720360/
 c     
       save job
 
@@ -108,6 +105,7 @@ c------------------------------------------------------------
          if (ntimer.ne.otimer) then
             call sxevents()
             otimer=ntimer
+            if(ismenu().eq.1) goto 96
          endif
       endif
       r = 0
@@ -527,9 +525,23 @@ c
       goto(81,82,83,93,88,92,95,80,85),r
       goto 99
 c     
- 95   goto(17,35,65,71,86) rstk(pt)-700
+ 95   goto(17,35,65,71,86,97) rstk(pt)-700
       goto 99
 c     
+ 96   continue
+c     gestion des evements asynchrones "interpretes"
+      call getmen(buf,lb,nentry)
+      pt=pt+1
+      pstk(pt)=top
+      call bexec(buf(1:lb),lb,nentry,ierr)
+      if(ierr.ne.0) goto 15
+      rstk(pt)=706
+
+c     *call* macro
+      goto 88
+ 97   top=pstk(pt)
+      pt=pt-1
+      goto 15
       
  98   continue
 c     recuperation des erreurs

@@ -171,13 +171,13 @@ M*A*Q
 write(%io(2),'pause command...');
 write(%io(2),'TO CONTINUE...');
 write(%io(2),'ENTER ''resume (or return) or click on resume!!''');
-pause;
+//pause;
 
 //           CALLING EXTERNAL ROUTINE
 foo=['      subroutine foo(a,b,c)';
      '      c=a+b';
      '      end'  ];
-unix_s('\rm foo.f')
+unix_s('rm -f foo.f')
 write('foo.f',foo);
 unix_s('make foo.o')     //Compiling...(needs fortran compiler)
 //..................WARNING.......................

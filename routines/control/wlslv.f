@@ -31,9 +31,13 @@ c     abs (fortran)
 c!
       double precision ar(na,n),ai(na,n),br(*),bi(*),w(*)
       double precision rcond,dtr(2),dti(2)
-      integer adr
+      integer sadr
 c
-      k1=1+adr(n,1)
+c     
+c      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      k1=1+sadr(n)
       ierr=0
       if(job.lt.0) goto 20
 c factorisation lu

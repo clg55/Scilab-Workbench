@@ -1,5 +1,5 @@
-//<>=xbasc(win_num)
-//<>=xbasc([win_num])
+function xbasc(win_num)
+//xbasc([win_num])
 // Clear the graphic window win_num and erase the recorded graphics of
 // window win_num
 // if win_num is omited, it's the current graphic window

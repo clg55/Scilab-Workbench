@@ -16,6 +16,8 @@ deff('[x]=tata(y)',['x=-y'
                  'write(6,''enter return'')'
                  'pause'
                  'x=+20'])
+Warning :redefining function: tata                    
+ 
  
 xx=tata(0);
 enter return
@@ -25,6 +27,8 @@ return
 if 20-xx<>0 then bugmes();quit;end
  
 deff('[x]=tata(y)','x=-y,write(6,''type x=resume(0)''),pause')
+Warning :redefining function: tata                    
+ 
  
 xx=tata(40);
 type x=resume(0)
@@ -37,7 +41,7 @@ clear x
  
 text=['after quit '
       'undefined variable x']
- text      =
+ text  =
  
 !after quit            !
 !                      !

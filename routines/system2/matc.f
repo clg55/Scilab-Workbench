@@ -1,44 +1,39 @@
       subroutine matc(chai,lda,m,n,name,job)
 c!but
-c     matc lit ou ecrit une matrice de chaine de caractere dans
-c     la stack de scilab
+c     this routine reads or writes a matrix of strings in scilab's
+c     stack
 c
-c!liste d'appel
+c!calling sequence
 c
 c     integer       lda,m,n,job
 c     character*(*) chai,name
 c
-c     chai     :tableau de taille n*lda contenant a l'appel
-c               ou au retour la matrice de chaine de caractere
-c     lda     : nombre de ligne du tableau chai dans le programme
-c               appellant
-c     name    : chaine de caractere designant le nom de la
-c               variable dans l'environnement scilab
-c               (tronquee a 8 carateres)
-c     job     : job= 0 passage scilab  -> fortran d'une matrice reelle
-c               job= 1 passage fortran -> scilab  d'une matrice reelle
-c               job=10 passage scilab  -> fortran d'une matrice complexe
-c               job=11 passage fortran -> scilab  d'une matrice complexe
+c     chai     :array of size n*lda containing the matrix
+c     lda     : number of rows of chai in the calling routine
 c
-c    attention en lecture(i.e.sens scilab->fortran)  m et n
-c    sont definis par matc.On doit appeler matc sous la forme
-c    call matc(ch,lda,m,n,name,0) et non sous la forme
-c    call matc(ch,lda,10,10,name,0) dans le cas ou ch est une
-c    matrice 10 lignes 10 colonnes.
+c     name    : character string = name of scilab variable
+c     job     : job= 0 scilab  -> fortran
+c               job= 1 fortran -> scilab  
 c
-c!sous programmes appeles
-c     adr  cvname cvstr error putid stackg stackp (scilab)
-c     len  max    min                             (fortran)
-c!
+c    CAUTION: if job=1  m and n are defined by matc. 
+c    must call matc as follows
+c    call matc(ch,lda,m,n,name,0) 
+c and NOT as:
+c    call matc(ch,lda,10,10,name,0) if e.g. ch is a 
+c    10 by 10 matrix of character string.
+c
       integer lda,m,n,job
       character*(*) chai(lda,*),name
       character*8 h
       include '../stack.h'
-      integer adr
+      integer iadr,sadr
 c
       integer i,j,k,k1,m1,n1
-      integer il,it,blank,l,l4,lec,nc,srhs,id(nsiz)
-      data blank/40/
+      integer il,it,l,l4,lec,nc,srhs,id(nsiz)
+c
+c
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
 c
       it=0
       if(job.ge.10) it=1
@@ -62,7 +57,7 @@ c
       if(fin.eq.0) call putid(ids(1,pt+1),id)
       if(fin.eq.0) call error(4)
       if(err.gt.0) return
-      il=adr(lstk(fin),0)
+      il=iadr(lstk(fin))
       if(istk(il).ne.10) call error(44)
       if(err.gt.0) return
 c
@@ -90,11 +85,10 @@ c ecriture : fortran -> scilab
 c --------
 c
    10 continue
-      if(top.eq.0) lstk(1)=1
       if(top+2.ge.bot) call error(18)
       if(err.gt.0) return
       top=top+1
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
 c
       m1=max(0,min(lda,m))
       n1=max(0,n)
@@ -119,7 +113,7 @@ c
    12   continue
    13 continue
 c
-      lstk(top+1)=adr(l+(nc+1)*m1*n1,1)
+      lstk(top+1)=sadr(l+(nc+1)*m1*n1)
       l4=lct(4)
       lct(4)=-1
       call stackp(id,0)

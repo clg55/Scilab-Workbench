@@ -1,22 +1,40 @@
 function x=mlog(a)
-//   mlog - logarithm
+//   mlog - log(A)
 //%CALLING SEQUENCE
-//   x=mlog(a)
+//   X=mlog(A)
 //%PARAMETERS
-//   a   : square hermitian matrix
-//   x   : square hermitian matrix
+//   A   : square hermitian or diagonalizable matrix
+//   X   : square matrix
 //%DESCRIPTION
-//This macro is called by the function log to compute square matrix
-//neperian logarithm. 
+//computes X=mlog(A), matrix log of A
 //!
 [m,n]=size(a)
 if m<>n then error(20,1),end
-if a<>a' then error('Non hermitian matrix'),end
-r=and(imag(a)==0)
-[u,s]=schur(a)
-x=u*diag(log(diag(s)))*u'
-if r then
-  if s>0 then
-    x=real(x)
-   end
+flag=or(a<>a')
+if ~flag then 
+//Hermitian matrix
+  r=and(imag(a)==0)
+  [u,s]=schur(a);  w=diag(s); 
+  zw=find(w==0);
+  w(zw)=%eps*ones(zw);w1=log(w);w1(zw)=-%inf*ones(zw);
+  x=u*diag(w1)*u';
+  if r then
+    if and(s>=0) then
+      x=real(x)
+    end
+  end
 end
+if flag then
+ //General matrix
+r=and(imag(a)==0)
+a=a+0*%i;   //Set complex
+[s,u,bs]=bdiag(a);
+  if maxi(bs)>1 then
+    error('mlog: unable to diagonalize!');return
+  end
+  w=diag(s);
+  zw=find(w==0);
+  w(zw)=%eps*ones(zw);w1=log(w);w1(zw)=-%inf*ones(zw);
+  x=(u*diag(w1))*inv(u);
+end
+

@@ -3,7 +3,7 @@ c     extrait l'arbre d'appel de l'instruction courante
 c     cette routine est issue de la fin du sous programme error
       include '../stack.h'
       integer iadr,sadr
-      integer p,lpts(6),lcts,r
+      integer p,lpts(6),lcts,r,vol
       logical first
 
       iadr(l)=l+l-1
@@ -148,7 +148,34 @@ c     create return variables
       ill=il0
       ll=sadr(ill+4)
       ilm=iadr(ll+nn)
-      ilw=ilm+4+nn+1+ll+1
+      if(nn.eq.0) then
+         err=sadr(ill+8)-lstk(bot)
+         if(err.gt.0) then
+            call error(17)
+            return
+         endif
+         istk(ill)=1
+         istk(ill+1)=0
+         istk(ill+2)=0
+         istk(ill+3)=0
+         lstk(top+1)=ll
+         top=top+1
+         istk(ilm)=1
+         istk(ilm+1)=0
+         istk(ilm+2)=0
+         istk(ilm+3)=0
+         lstk(top+1)=sadr(ilm+4)
+         return
+      endif
+c     compute total size of names strings
+      vol=0
+      il1=il0
+      do 05 i=1,nn
+         vol=vol+istk(il1+1)
+         il1=il1+2
+ 05   continue  
+c     check memory
+      ilw=ilm+4+nn+1+vol
       err=sadr(ilw+il-il0)-lstk(bot)
       if(err.gt.0) then
          call error(17)
@@ -169,19 +196,17 @@ c
 c
       il=ilw
       ln=1
-      if(nn.gt.0) then
-         do 10 i=1,nn
-            stk(ll-1+i)=istk(il)
-            n=istk(il+1)
-            istk(ilm+4+i)=ln+n
-            il=il+2
-            if(n.gt.0) then
-               call icopy(n,istk(il),1,istk(ilm+4+nn+ln),1)
-               il=il+n
-            endif
-            ln=ln+n
- 10      continue
-      endif
+      do 10 i=1,nn
+         stk(ll-1+i)=istk(il)
+         n=istk(il+1)
+         istk(ilm+4+i)=ln+n
+         il=il+2
+         if(n.gt.0) then
+            call icopy(n,istk(il),1,istk(ilm+4+nn+ln),1)
+            il=il+n
+         endif
+         ln=ln+n
+ 10   continue
       lstk(top+1)=ll+nn
       top=top+1
       lstk(top+1)=sadr(ilm+4+nn+ln)

@@ -50,10 +50,11 @@ c
  20   ierr=2
       return
       end
+
       subroutine s2val(str,v,iv,n,maxv,ierr)
-c!but
-c     emulation d'une lecture "list-directed" de fortran sur une
-c     chaine de caractere
+c!purpose
+c     internal "list-directed" read mode is not standard fortran. 
+c     This routine emulates :read(str,*) (v(1,i),i=1,n)
 c!
       double precision v(iv,maxv),vv
       character*(*) str
@@ -68,6 +69,7 @@ c
       n=0
       i=0
  10   i=i+1
+c     loop on decriptors
       if(i.gt.ls) goto 20
       si=str(i:i)
       if(si.eq.'/'.or.si.eq.',') then
@@ -81,6 +83,7 @@ c
          endif
       endif
       if(si.ne.' '.and.si.ne.'/'.and.si.ne.',') then
+c     conversion of a descriptor to a (repeated) value
          call nextv(str(i:),vv,nv,ir,ierr)
          if(ierr.ne.0) return
          if(n+nv.gt.maxv) nv=maxv-n
@@ -101,90 +104,184 @@ c
       end
 
       subroutine nextv(str,v,nv,ir,ierr)
+c     acquisition d'un nombre flottant decrit par une chaine
+c     de caracteres de la forme
+c      [nn*][+|-][mmmmm][.][ddd][e|E|d|D[+|-]eee]
       character*(*) str
-      character*1 si
-      double precision v,v1,v2,v3,d
-      logical expn,fact,dec
+      character*1 next
+      double precision v
+
+      integer c(4)
+      integer sgn,expsgn
 
       ls=len(str)
-      v=0.0d0
-      v1=0.0d0
-      v2=0.0d0
-      v3=0.0d0
-      d=10.0d0
-      expn=.false.
-      fact=.false.
-      dec=.false.
+      c(1)=0
+      c(2)=0
+      c(3)=0
+      c(4)=0
+      sgn=1
+      nv=1
+
+      i=1
+      ic=0
+      if(str(i:i).eq.'-') then
+         sgn=-1
+         i=i+1
+      elseif(str(i:i).eq.'+') then
+         sgn=1
+         i=i+1
+      else
+         sgn=1
+      endif
+
+ 10   if(i.gt.ls) goto 20
+      call s2int(str(i:),nlz,iv,ir,ierr)
+      if(ierr.ne.0) iv=0
+      i1=i-1+ir
+      if(i1.le.ls) then
+         next=str(i1:i1)
+         if (next.eq.'e'.or.next.eq.'E'.or.
+     $        next.eq.'d'.or.next.eq.'D') next='e'
+         if (next.eq.','.or.next.eq.'/') next=' '
+      else
+         next=' '
+      endif
+      if(next.eq.'*') then
+         if(ic.eq.0.and.iv.gt.0.and.sgn.gt.0) then
+c     number of values
+            nv=iv
+            ic=1
+c     mantissa sign
+            if(str(i1+1:i1+1).eq.'-') then
+               sgn=-1
+               i1=i1+1
+            elseif(str(i1+1:i1+1).eq.'+') then
+               sgn=1
+               i1=i1+1
+            else
+               sgn=1
+            endif
+         else
+            goto 100
+         endif
+      elseif(next.eq.'.') then
+c     end of mantissa's interger part
+         if(ic.le.1) then
+            c(1)=iv
+            ic=2
+         else
+            goto 100
+         endif
+      elseif(next.eq.'e') then
+c     end of mantissa
+         if(ic.eq.3.or.ic.eq.2) then
+            c(2)=iv
+            c(3)=i1-i
+         elseif(ic.le.1) then
+            c(1)=iv
+         else
+            goto 100
+         endif
+         ic=4 
+         if(i1+1.gt.ls) goto 100
+         if(str(i1+1:i1+1).eq.'-') then
+            expsgn=-1
+            i1=i1+1
+         elseif(str(i1+1:i1+1).eq.'+') then
+            expsgn=1
+            i1=i1+1
+         else
+            expsgn=1
+         endif
+      elseif(next.eq.' ') then
+c     end of number definition
+         if(ic.eq.4) then
+            c(4)=iv
+         elseif(ic.eq.3.or.ic.eq.2) then
+            c(2)=iv
+            c(3)=i1-i
+         elseif(ic.le.1) then
+            c(1)=iv
+         else
+            goto 100
+         endif
+         goto 20
+      else
+         goto 100
+      endif
+      i=i1+1
+      goto 10
       
+ 20   continue
+      ir=i1
+      v=sgn*(c(1)+c(2)*10.0d0**(-c(3)))*10.0d0**(expsgn*c(4))
+      return
+ 100  ierr=2
+      return
+      end
+      subroutine s2int(str,nlz,v,ir,ierr)
+c if the first characters of str contain representation of a integer >0
+c     s2int returns 
+c        in v the integer value, 
+c        in nlz the number of leading zeros
+c        in ir the first unsued character in str
+c else
+c     s2int returns ierr=1 and v=0 and nlz=0
+c 
+      character*(*) str
+      character*1 si
+      integer ls,nlz,v,ir,ierr
+      logical first
+c
+      ierr=0
+      ls=len(str)
+      
+c
       i=0
+      v=0
+      nlz=0
+      first=.true.
  10   i=i+1
       if(i.gt.ls) goto 20
       si=str(i:i)
       if(si.eq.'0') then
-         v=d*v
-      elseif(si.eq.'1') then
-         v=d*v+1.0d0
-      elseif(si.eq.'2') then
-         v=d*v+2.0d0
-      elseif(si.eq.'3') then
-         v=d*v+3.0d0
-      elseif(si.eq.'4') then
-         v=d*v+4.0d0
-      elseif(si.eq.'5') then
-         v=d*v+5.0d0
-      elseif(si.eq.'6') then
-         v=d*v+6.0d0
-      elseif(si.eq.'7') then
-         v=d*v+7.0d0
-      elseif(si.eq.'8') then
-         v=d*v+8.0d0
-      elseif(si.eq.'9') then
-         v=d*v+9.0d0
-      elseif(si.eq.'d'.or.si.eq.'D'.or.
-     $        si.eq.'e'.or.si.eq.'E') then
-         if(expn.or.fact) then 
-            ierr=2
-            return
+         if(first) then
+            nlz=nlz+1
+         else
+            v=10*v
          endif
-         expn=.true.
-         v1=v
-         v=0.0d0
-      elseif(si.eq.'*') then
-         if(expn.or.fact) then 
-            ierr=2
-            return
-         endif
-         fact=.true.
-         v2=v
-         v=0.0d0
-      elseif(si.eq.'.') then
-         if(expn.or.dec) then 
-            ierr=2
-            return
-         endif
-         dec=.true.
-         v3=v
-         v=0.0d0
-      elseif(si.eq.' '.or.si.eq.','.or.si.eq.'/') then
-         goto 20
       else
-         ierr=2
-         return
+         first=.false.
+         if(si.eq.'1') then
+            v=10*v+1
+         elseif(si.eq.'2') then
+            v=10*v+2
+         elseif(si.eq.'3') then
+            v=10*v+3
+         elseif(si.eq.'4') then
+            v=10*v+4
+         elseif(si.eq.'5') then
+            v=10*v+5
+         elseif(si.eq.'6') then
+            v=10*v+6
+         elseif(si.eq.'7') then
+            v=10*v+7
+         elseif(si.eq.'8') then
+            v=10*v+8
+         elseif(si.eq.'9') then
+            v=10*v+9
+         else
+            if(i.eq.1) then
+               ierr=1
+               v=0
+               nlz=0
+            endif
+            ir=i
+            return
+         endif
       endif
       goto 10
- 20   nv=1
+ 20   continue
       ir=i
-      if(fact) nv=int(v2)
-      if(dec) then
-         if(v.eq.0.0d0) then
-            v=v3
-         else
-            nd=int(log(v)/log(10.0d0))+1
-            v=v3+v*10.0d0**(-nd)
-         endif
-      endif
-      if(expn) v=v1*10.0d0**int(v)
-
-
+      return
       end
-

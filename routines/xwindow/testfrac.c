@@ -1,4 +1,4 @@
-
+  
 /*
 ** testfrac.c
 **
@@ -7,7 +7,6 @@
 */
 
 #include "scilab_d.h"
-
 
 static Widget toplevel;
 extern XtAppContext app_con;
@@ -19,7 +18,6 @@ extern XtAppContext app_con;
 static Widget label;		/* the label */
 static Widget slider;		/* the scrollbar */
 static Widget percent;	/* label with chosen percentage */
-
 static float fraction;		/* what percent has been chosen */
 static int   oldpercent = -1;	/* so we only update when the slider has
 				   been moved */
@@ -31,7 +29,6 @@ static int   oldpercent = -1;	/* so we only update when the slider has
 ** information about where the scrollbar is.
 */
 
-/*ARGSUSED*/
 static void
 slider_jump(w, data, position)
      Widget w;
@@ -41,15 +38,15 @@ slider_jump(w, data, position)
   static Arg percentargs[] = {
     {XtNlabel,   (XtArgVal) NULL}
   };
-  float oldpercent;		/* where the scrollbar is */
+  float loldpercent;		/* where the scrollbar is */
   float newpercent;		/* normalized scrollbar */
   char snewpercent[3];		/* string representation of scrollbar */
-  oldpercent = *(float *) position;
+  loldpercent = *(float *) position;
   /* We want the scrollbar to be at 100% when the right edge of the slider
   ** hits the end of the scrollbar, not the left edge.  When the right edge
   ** is at 1.0, the left edge is at 1.0 - SLIDER_LENGTH.  Normalize
   ** accordingly.  */
-  newpercent = oldpercent / (1.0 - SLIDER_LENGTH);
+  newpercent = loldpercent / (1.0 - SLIDER_LENGTH);
   /* If the slider's partially out of the scrollbar, move it back in. */
   if (newpercent > 1.0) {
     newpercent = 1.0;
@@ -69,7 +66,7 @@ slider_jump(w, data, position)
 ** generally with the left or right button.  Right now it just ignores it.
 */
 
-/*ARGSUSED*/
+
 static void
 slider_scroll(w, data, position)
      Widget w;
@@ -77,7 +74,7 @@ slider_scroll(w, data, position)
      caddr_t position;
 {}
 
-/*ARGSUSED*/
+
 static void
 update(w,event,params,num_params)
      Widget w;
@@ -87,7 +84,6 @@ update(w,event,params,num_params)
 {
   char buf[80];
   int newpercent;
-
   newpercent = (int)(fraction * 100.0);
   if (newpercent != oldpercent) {
     sprintf(buf, "percent %d\n", (int)(fraction * 100.0));
@@ -102,7 +98,6 @@ static void mDialogOk(w,nv,callData)
      caddr_t callData;
      caddr_t nv;
 { 
-  int ind,i;
   ok_Flag_sci = -1;
 }
 
@@ -125,7 +120,7 @@ create_testfrac_choice(w,description,min,max)
      Widget w;
 {
   Arg args[10];
-  int iargs = 0;
+  Cardinal iargs = 0;
   Widget wid ;
 
   static XtCallbackRec jumpcallbacks[] = {
@@ -169,7 +164,7 @@ create_testfrac_choice(w,description,min,max)
   ** can see it */
   jumpcallbacks[0].closure = (caddr_t) &fraction;
   label = XtCreateManagedWidget(description,labelWidgetClass,w,
-				labelargs,XtNumber(labelargs));
+				labelargs, XtNumber(labelargs));
   percentargs[2].value = (XtArgVal) label;
   percent = XtCreateManagedWidget("100",labelWidgetClass,w,
 				  percentargs,XtNumber(percentargs));
@@ -187,12 +182,11 @@ create_testfrac_choice(w,description,min,max)
   XtSetArg(args[iargs], XtNfromHoriz ,slider) ; iargs++;
   XtSetArg(args[iargs], XtNlabel, "Ok" ); iargs++;
   wid=XtCreateManagedWidget("okbutton",commandWidgetClass,w,args,iargs);
-  XtAddCallback(wid, XtNcallback,(XtCallbackProc)mDialogOk , NULL );  
+  XtAddCallback(wid, XtNcallback,(XtCallbackProc)mDialogOk ,(XtPointer) NULL );  
 }
 
-void
-  update_slider(newpercent)
-int newpercent;
+void  update_slider(newpercent)
+     int newpercent;
 {
   fraction = (float) newpercent / 100.0;
   XawScrollbarSetThumb(slider, fraction / (1.0-SLIDER_LENGTH), SLIDER_LENGTH);
@@ -214,12 +208,9 @@ void mbar1(description,min,max)
      float *min,*max;
   {
     Arg args[10];
-    int fontwidth=9;
-    int iargs = 0,i,ierr,mxdesc,mxini,siz;
-    Widget shell,wid,form,box,label;
-    Widget *w;
+    Cardinal iargs = 0;
+    Widget shell,form;
     static Display *dpy = (Display *) NULL;
-    char dialName[8],boxName[8];
     DisplayInit("",&dpy,&toplevel);
     XtSetArg(args[iargs], XtNx, X + 10); iargs++ ;
     XtSetArg(args[iargs], XtNy, Y +10); iargs++;
@@ -227,8 +218,10 @@ void mbar1(description,min,max)
 			       args,iargs);
     iargs = 0;
     XtSetArg(args[iargs], XtNresizable , TRUE) ; iargs++;
+
     form = XtCreateManagedWidget("message",formWidgetClass,shell,args,iargs);
+
     create_testfrac_choice(form,description,min,max);
-    XtPopup(shell,XtGrabExclusive);
+
     XtMyLoop(shell,dpy);
 }

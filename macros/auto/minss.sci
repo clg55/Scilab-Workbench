@@ -22,6 +22,6 @@ else
 end
 u=u2(:,1:no)
 a=u'*a*u;b=u'*b;c=c*u
-if lhs=1 then Slmin=list('lss',a,b,c,d,u'*x0,dom),end
+if lhs=1 then Slmin=tlist('lss',a,b,c,d,u'*x0,dom),end
 //Would be nice to return U=U1*U2
 

@@ -1,4 +1,3 @@
-C/MEMBR ADD NAME=R8TX,SSI=0
       subroutine r8tx(nxtlt, nthpo, lengt, cr0, cr1, cr2, cr3, cr4,
      &    cr5, cr6, cr7, ci0, ci1, ci2, ci3, ci4, ci5, ci6, ci7)
 c!

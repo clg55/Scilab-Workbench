@@ -2,7 +2,20 @@ function [a,b,c]=minreal(a,b,c,domaine,tol)
 //
 [lhs,rhs]=argn(0)
 select type(a)
+  
+  //-compat next case retained for list/tlist compatibility
    case 15
+       if a(1)<>'lss' then error(91,1),end
+       if lhs<>1 then error('output: sle'),end;
+       select rhs
+         case 1 then istol=0
+         case 2 then istol=1,tol=b,
+         else error('2 inputs to minreal: sl [,tol]'),
+       end;
+       [a,b,c,d,x0,dom]=a(2:7);
+       if dom=[] then error(96,1),end
+       domaine='c';if dom<>'c' then domaine='d',end
+    case 16
        if a(1)<>'lss' then error(91,1),end
        if lhs<>1 then error('output: sle'),end;
        select rhs
@@ -33,7 +46,7 @@ end;
 n1=n(1);
 ri=inv(r);r=r(1:n1,:);ri=ri(:,1:n1)
 a=r*a*ri;b=r*b;c=c*ri
-if lhs=1 then a=list('lss',a,b,c,d,r*x0,dom),end
+if lhs=1 then a=tlist('lss',a,b,c,d,r*x0,dom),end
 
 
 

@@ -1,185 +1,185 @@
-        subroutine lybsc(n,a,na,c,x,u,eps,wrk,mode,ierr)
-        integer n,na,mode,ierr
+      subroutine lybsc(n,a,na,c,x,u,eps,wrk,mode,ierr)
+      integer n,na,mode,ierr
       double precision a(na,n),c(na,n),x(na,n),u(na,n),wrk(n)
-      double precision t,eps
-c
-c! calling sequence
-c        subroutine lybsc(n,a,na,c,x,u,wrk,mode,ierr)
-c
-c        integer n,na,mode,ierr
-c        double precision a(na,n),c(na,n),x(na,n),u(na,n),wrk(n)
-c
-c arguments in
-c
-c
-c       n        integer
-c                -the dimension of a
-c
-c       a        double precision(n,n)
-c                -coefficient matrix of the equation
-c                *** n.b. in this routine  a  is overwritten with
-c                its transformed upper triangular form (see comments)
-c
-c       c        double precision(n,n)
-c                -coefficient matrix of the equation
-c
-c       na       integer
-c                -the declared first dimension of a,c,x and u
-c
-c       mode     integer
-c                - mode = 0  if  a  has not already been reduced to
-c                                upper triangular form
-c                - mode = 1  if  a  has been reduced to triangular form
-c                                by (e.g) a previous call to lybsc
-c
-c arguments out
-c
-c       a        double precision(n,n)
-c                -on exit, a  contains the transformed upper triangular
-c                form of a
-c
-c       x        double precision(n,n)
-c                -the solution matrix
-c
-c       u        double precision(n,n)
-c                - u  contains the orthogonal matrix which was used
-c                to reduce  a  to upper triangular form
-c
-c       ierr     integer
-c                -error indicator
-c
-c                ierr = 0     successful return
-c
-c                ierr = 1     a  has a degenerate pair of eigenvalues
-c
-c                ierr = 2     a  cannot be reduced to triangular form
-c
-c working space
-c
-c        wrk     double precision(n)
-c
-c!purpose
-c
-c        to solve the double precision matrix equation
-c
-c               trans(a)*x + x*a = c
-c
-c        where  c  is symmetric, and  trans(a)  denotes
-c        the transpose of  a .
-c
-c!method
-c
-c        this routine is a modification of the subroutine  atxxac,
-c        written and discussed by  r.h.bartels & g.w.stewart.
-c
-c!reference
-c
-c         r.h. bartels & g.w. stewart
-c            "solution of the matrix equation  a'x + xb = c  ",
-c            commun. a.c.m., vol 15, 1972, pp. 820-826 .
-c
-c!auxiliary routines
-c
-c       orthes,ortran (eispack)
-c       sgefa,sgesl   (linpack)
-c       lycsr  (slice)
-c
-c!origin: adapted from
-c
-c                control systems research group, dept eecs, kingston
-c                polytechnic, penrhyn rd.,kingston-upon-thames, england.
-c
-c!
-c******************************************************************
-c       local variables:
-c
-        integer i,j,k
-        double precision dprec
-c
-        if (mode .eq. 1) go to 10
+      double precision eps
+C
+C! calling sequence
+C        subroutine lybsc(n,a,na,c,x,u,wrk,mode,ierr)
+C
+C        integer n,na,mode,ierr
+C        double precision a(na,n),c(na,n),x(na,n),u(na,n),wrk(n)
+C
+C arguments in
+C
+C
+C       n        integer
+C                -the dimension of a
+C
+C       a        double precision(n,n)
+C                -coefficient matrix of the equation
+C                *** n.b. in this routine  a  is overwritten with
+C                its transformed upper triangular form (see comments)
+C
+C       c        double precision(n,n)
+C                -coefficient matrix of the equation
+C
+C       na       integer
+C                -the declared first dimension of a,c,x and u
+C
+C       mode     integer
+C                - mode = 0  if  a  has not already been reduced to
+C                                upper triangular form
+C                - mode = 1  if  a  has been reduced to triangular form
+C                                by (e.g) a previous call to lybsc
+C
+C arguments out
+C
+C       a        double precision(n,n)
+C                -on exit, a  contains the transformed upper triangular
+C                form of a
+C
+C       x        double precision(n,n)
+C                -the solution matrix
+C
+C       u        double precision(n,n)
+C                - u  contains the orthogonal matrix which was used
+C                to reduce  a  to upper triangular form
+C
+C       ierr     integer
+C                -error indicator
+C
+C                ierr = 0     successful return
+C
+C                ierr = 1     a  has a degenerate pair of eigenvalues
+C
+C                ierr = 2     a  cannot be reduced to triangular form
+C
+C working space
+C
+C        wrk     double precision(n)
+C
+C!purpose
+C
+C        to solve the double precision matrix equation
+C
+C               trans(a)*x + x*a = c
+C
+C        where  c  is symmetric, and  trans(a)  denotes
+C        the transpose of  a .
+C
+C!method
+C
+C        this routine is a modification of the subroutine  atxxac,
+C        written and discussed by  r.h.bartels & g.w.stewart.
+C
+C!reference
+C
+C         r.h. bartels & g.w. stewart
+C            "solution of the matrix equation  a'x + xb = c  ",
+C            commun. a.c.m., vol 15, 1972, pp. 820-826 .
+C
+C!auxiliary routines
+C
+C       orthes,ortran (eispack)
+C       sgefa,sgesl   (linpack)
+C       lycsr  (slice)
+C
+C!origin: adapted from
+C
+C                control systems research group, dept eecs, kingston
+C                polytechnic, penrhyn rd.,kingston-upon-thames, england.
+C
+C!
+C******************************************************************
+C       local variables:
+C
+      integer i,j,k
+      double precision dprec,tt(1)
+C
+      if (mode .eq. 1) goto 10
       call orthes(na,n,1,n,a,wrk)
       call ortran(na,n,1,n,a,wrk,u)
-      call hqror2(na,n,1,n,a,t,t,u,ierr,11)
-                if (ierr .ne. 0) go to 140
-  10    continue
-        do 20 i = 1, n
-                do 15 j = 1,n
-                        x(i,j)=c(i,j)
-  15            continue
-                x(i,i) = x(i,i) * 0.50d+0
-  20    continue
-c
-        do 40 i = 1, n
-                do 30 j = 1, n
-                        dprec = 0.0d+0
-                        do 25 k = i, n
-                                dprec = dprec + x(i,k) * u(k,j)
-  25                    continue
-                        wrk(j) = dprec
-  30            continue
-                do 40 j = 1, n
-                        x(i,j) = wrk(j)
-  40    continue
-        do 60 j = 1, n
-                do 50 i = 1, n
-                        dprec = 0.0d+0
-                        do 45 k = 1, n
-                                dprec = dprec + u(k,i) * x(k,j)
-  45                    continue
-                        wrk(i) = dprec
-  50            continue
-                do 60 i = 1, n
-                        x(i,j) = wrk(i)
-  60  continue
-c
-      do 70 i = 1, n
-              do 70 j = i, n
-                      x(i,j) = x(i,j) + x(j,i)
-                      x(j,i) = x(i,j)
-  70  continue
-c
-c     call shrslv (c,a,x,n,n,na,na,na,0.0d+0,1.0d+20,fail)
+      call hqror2(na,n,1,n,a,tt,tt,u,ierr,11)
+      if (ierr .ne. 0) goto 140
+ 10   continue
+      do 20 i = 1,n
+        do 15 j = 1,n
+          x(i,j) = c(i,j)
+ 15     continue
+        x(i,i) = x(i,i) * 0.50d+0
+ 20   continue
+C
+      do 40 i = 1,n
+        do 30 j = 1,n
+          dprec = 0.0d+0
+          do 25 k = i,n
+            dprec = dprec + x(i,k)*u(k,j)
+ 25       continue
+          wrk(j) = dprec
+ 30     continue
+        do 40 j = 1,n
+          x(i,j) = wrk(j)
+ 40   continue
+      do 60 j = 1,n
+        do 50 i = 1,n
+          dprec = 0.0d+0
+          do 45 k = 1,n
+            dprec = dprec + u(k,i)*x(k,j)
+ 45       continue
+          wrk(i) = dprec
+ 50     continue
+        do 60 i = 1,n
+          x(i,j) = wrk(i)
+ 60   continue
+C
+      do 70 i = 1,n
+        do 70 j = i,n
+          x(i,j) = x(i,j) + x(j,i)
+          x(j,i) = x(i,j)
+ 70   continue
+C
+C     call shrslv (c,a,x,n,n,na,na,na,0.0d+0,1.0d+20,fail)
       call lycsr(n,a,na,x,ierr)
       if (ierr .ne. 0) return
-c
-      do 80 i = 1, n
-              x(i,i) = x(i,i) * 0.50d+0
-  80    continue
-c
-        do 100 i = 1,n
-                do 90 j = 1,n
-                        dprec = 0.0d+0
-                        do 85 k = i,n
-                                dprec = dprec + x(i,k) * u(j,k)
-  85                    continue
-                        wrk(j) = dprec
-  90            continue
-                do 100 j = 1,n
-                        x(i,j) = wrk(j)
- 100    continue
-c
-        do 120 j = 1,n
-                do 110 i = 1,n
-                        dprec = 0.0d+0
-                        do 105 k = 1,n
-                                dprec = dprec + u(i,k) * x(k,j)
- 105                    continue
-                        wrk(i) = dprec
- 110            continue
-                do 120 i = 1,n
-                        x(i,j) = wrk(i)
- 120    continue
-c
-        do 130 i = 1, n
-              do 130 j = i, n
-                      x(i,j) = x(i,j) + x(j,i)
-                      x(j,i) = x(i,j)
- 130    continue
-c
-        go to 150
- 140    ierr = 2
- 150    return
-        end
+C
+      do 80 i = 1,n
+        x(i,i) = x(i,i) * 0.50d+0
+ 80   continue
+C
+      do 100 i = 1,n
+        do 90 j = 1,n
+          dprec = 0.0d+0
+          do 85 k = i,n
+            dprec = dprec + x(i,k)*u(j,k)
+ 85       continue
+          wrk(j) = dprec
+ 90     continue
+        do 100 j = 1,n
+          x(i,j) = wrk(j)
+ 100  continue
+C
+      do 120 j = 1,n
+        do 110 i = 1,n
+          dprec = 0.0d+0
+          do 105 k = 1,n
+            dprec = dprec + u(i,k)*x(k,j)
+ 105      continue
+          wrk(i) = dprec
+ 110    continue
+        do 120 i = 1,n
+          x(i,j) = wrk(i)
+ 120  continue
+C
+      do 130 i = 1,n
+        do 130 j = i,n
+          x(i,j) = x(i,j) + x(j,i)
+          x(j,i) = x(i,j)
+ 130  continue
+C
+      goto 150
+ 140  ierr = 2
+ 150  return
+      end
       subroutine lycsr(n,a,na,c,ierr)
 c%calling sequence
 c      subroutine lycsr(n,a,na,c,ierr)

@@ -3,7 +3,7 @@
 //de scalaire par une matrice de polynomes.
 //Cette macro correspond a l'operation p.\m
 //!
-f=list('r',p2,p1,[])
+f=tlist('r',p2,p1,[])
 //end
 
 

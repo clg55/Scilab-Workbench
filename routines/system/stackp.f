@@ -10,8 +10,7 @@ c
 c
       logical eqid,new,compil
       integer macmod
-      integer semi,insert,v,vk,vt,pntr
-      data semi/43/,insert/2/
+      integer v,vk,vt,pntr
 c
       iadr(l)=l+l-1
 c
@@ -46,7 +45,6 @@ c     cas des variables modifiees sur place (insertion)
 
       
       new=.true.
-c
 c
 c     does variable already exist
       vtk=0
@@ -93,11 +91,11 @@ c
 c     preserve macros
       if(vtk.eq.13.or.vtk.eq.11) then
          if(vt.ne.0.and.macmod.eq.0) then
-            fin=-3
-            call funs(id)
-            fun=0
-            if(err.gt.0) return
-            if(fin.gt.0) then
+c            fin=-3
+c            call funs(id)
+c            fun=0
+c            if(err.gt.0) return
+c            if(fin.gt.0) then
                if(vt.ne.vtk) goto 19
 c     les macros sont elle identiques ?
                if(istk(ilk).ne.istk(il)) goto 19
@@ -128,7 +126,7 @@ c     ce n'est pas la meme macro
                   call msgs(42,vt)
                endif
  20            continue
-            endif
+c            endif
          endif
       endif
 c

@@ -1,5 +1,5 @@
-//<y>=intdec(x,lom)
-//<y>=intdec(x,lom)
+function [y]=intdec(x,lom)
+//y=intdec(x,lom)
 //Changes the sampling rate of a 1D or 2D signal by the rates in lom
 //  x      :Input sampled signal
 //  lom    :For a 1D signal this is a scalar which gives the rate change
@@ -100,6 +100,5 @@
       y=real(fft(xlf,1));
       y=prod(lom)*y;
  
-   end,
- 
-//end
+    end
+

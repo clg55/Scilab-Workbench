@@ -1,36 +1,24 @@
       subroutine sigelm
 c ================================== ( Inria    ) =============
-c     traitement de base des signaux
-c ====================================================================
+c     basic signal processing routines
       include '../stack.h'
-      integer adr
 c
       double precision adelp,adels,fact,zzi(16),zzr(16),zpi(16),zpr(16)
-      double precision alpha,beta
-      double precision yyy
-      double precision u,y,eps,eps1,v
+      double precision alpha,beta,yyy,u,y,eps,eps1,v
       double precision kappa,lambda,mu,nu
-      character*6 namex
-      character*6 namey
-      integer pb,ph,ba,cb,bp,bt,tc,el
-      integer re,tr,hm,hg,hn,ka,ch
-      integer ordre
-      integer lw,lt,li,lr,lo,lf,lg
-c     double precision xmean,ymean,fs,xbuf1,xbuf2
-c     integer taille,produit,j
+      integer ordre,lw,lt,li,lr,lo,lf,lg
       integer i,top2,tope
       integer iadr,sadr
 c
       logical vect,macro,fort,arma
-      external dgetx,dgety
       integer fini,update
+c
+      external dgetx,dgety
       external bgetx,bgety
+      character*6 namex,namey
       common/cmps/mx,my
       common/pse2/namex,namey
-      data pb/2841/,ph/4377/,ba/2571/,cb/2828/
-      data bp/6411/,bt/7435/,tc/3101/,el/5390/
-      data re/3611/,tr/6941/,hm/5649/,hg/4113/,hn/5905/,
-     1     ka/2580/,ch/4364/
+c
       data fini/15/,update/30/
 c
 c functions
@@ -65,10 +53,11 @@ c
          call error(39)
          return
       endif
+      ierr=0
       vect=.false.
       lbot=lstk(bot)
       top2=top-rhs+1
-      il=adr(lstk(top2),0)
+      il=iadr(lstk(top2))
       if(istk(il).ne.1) then
          err=1
          call error(53)
@@ -78,15 +67,15 @@ c
       n=istk(il+2)
       mn=m*n
       it=istk(il+3)
-      lr=adr(il+4,1)
+      lr=sadr(il+4)
       vect=m.eq.1.or.n.eq.1
-      il1=adr(lstk(top2+1),0)
+      il1=iadr(lstk(top2+1))
       if(istk(il1).ne.1) then
          err=2
          call error(53)
          return
       endif
-      l1=adr(il1+4,1)
+      l1=sadr(il1+4)
       isn=nint(stk(l1))
       if(isn.ne.1.and.isn.ne.-1) then
          err=2
@@ -95,17 +84,13 @@ c
       endif
       if(rhs.eq.4) goto 22
 c
-c fft a deux arguments
+c fft 
 c
       if(rhs.ne.2) then
          call error(39)
          return
       endif
       li=lr+mn
-      if(it.eq.0) then
-         call dset(mn,0.0d+0,stk(li),1)
-         istk(il+3)=1
-      endif
       libre=li+mn
       lw=lbot-libre-1
       err=libre-lstk(bot)
@@ -113,11 +98,30 @@ c
          call error(17)
          return
       endif
-      if(.not.vect) goto 23
-      if(2**(int(log(real(m))/log(2.0d+0)+1)+1).eq.m) then
-         call fft842(isn,mn,stk(lr),stk(li),err)
+      if(mn.eq.1) then
+         top=top-1
+         return
       endif
+      if(it.eq.0) then
+         call dset(mn,0.0d+0,stk(li),1)
+         istk(il+3)=1
+      endif
+      if(.not.vect) goto 23
+      mn2=2**int(log(dble(mn)+0.5d0)/log(2.0d+0))
+      if(mn2.eq.mn) then
+         if(mn.le.2**15) then
+         call fft842(isn,mn,stk(lr),stk(li),err)
+         if(err.gt.0) then
+            buf='error in fft842'
+            call error(9999)
+            return
+         endif
+         else
+         call dfft2(stk(lr),stk(li),1,mn,1,isn,ierr,stk(libre),lw)
+         endif
+      else
       call dfft2(stk(lr),stk(li),1,mn,1,isn,ierr,stk(libre),lw)
+      endif
       goto 24
  23   continue
       call dfft2(stk(lr),stk(li),n,m,1,isn,ierr,stk(libre),lw)
@@ -125,7 +129,7 @@ c
       call dfft2(stk(lr),stk(li),1,n,m,isn,ierr,stk(libre),lw)
  24   continue
       if(ierr.lt.0) then
-         buf='probleme dans fft par manque de place memoire'
+         buf='fft fails by lack of memory'
          call error(999)
          return
       endif
@@ -134,12 +138,12 @@ c
       return
  22   continue
 c     rhs=4
-      ilinc=adr(lstk(top),0)
-      linc=adr(ilinc+4,1)
+      ilinc=iadr(lstk(top))
+      linc=sadr(ilinc+4)
       nspn=int(stk(linc))
       top=top-1
-      iln=adr(lstk(top),0)
-      ln=adr(iln+4,1)
+      iln=iadr(lstk(top))
+      ln=sadr(iln+4)
       n=int(stk(ln))
       li=lr+mn
       err=li-lstk(bot)
@@ -173,15 +177,15 @@ c
 c     calcul de correlations
       tope=top
       top2=top-rhs+1
-      il1=adr(lstk(top2),0)
+      il1=iadr(lstk(top2))
       if(istk(il1).eq.10) then
          ich=il1+5+istk(il1+1)*istk(il1+2)
          ich=istk(ich)
          if(ich.eq.fini) goto 41
          if(ich.eq.update) goto 42
       endif
-      il=adr(lstk(top),0)
-      l=adr(il+4,1)
+      il=iadr(lstk(top))
+      l=sadr(il+4)
       lag=int(stk(l))
       lcxy=lstk(top+1)
       lrxy=lcxy+lag
@@ -193,12 +197,12 @@ c     calcul de correlations
       endif
       if(rhs.eq.3) then
          top=top-1
-         ily=adr(lstk(top),0)
-         ly=adr(ily+4,1)
+         ily=iadr(lstk(top))
+         ly=sadr(ily+4)
          ny=istk(ily+1)*istk(ily+2)
          top=top-1
-         ilx=adr(lstk(top),0)
-         lx=adr(ilx+4,1)
+         ilx=iadr(lstk(top))
+         lx=sadr(ilx+4)
          nx=istk(ilx+1)*istk(ilx+2)
          if(nx.ne.ny) then
             call error(60)
@@ -207,15 +211,15 @@ c     calcul de correlations
       endif
       if(rhs.eq.2) then
          top=top-1
-         ily=adr(lstk(top),0)
-         ly=adr(ily+4,1)
+         ily=iadr(lstk(top))
+         ly=sadr(ily+4)
          ilx=ily
          lx=ly
          nx=istk(ily+1)*istk(ily+2)
       endif
       call tscccf(stk(lx),stk(ly),nx,stk(lcxy),stk(lrxy),lag,ierr)
       if(ierr.eq.-1) then
-         buf='trop de coefficients sont demandes'
+         buf='too many coefficients are required'
          call error(999)
          return
       endif
@@ -226,12 +230,12 @@ c     calcul de correlations
       lstk(top+1)=lx+lag
       if(lhs.eq.2) then
          ly=lstk(top+1)
-         ily=adr(ly,0)
+         ily=iadr(ly)
          istk(ily)=1
          istk(ily+1)=1
          istk(ily+2)=rhs-1
          istk(ily+3)=0
-         ly=adr(ily+4,1)
+         ly=sadr(ily+4)
          call dcopy(rhs-1,stk(lrxy),1,stk(ly),1)
          top=top+1
          lstk(top+1)=ly+lag
@@ -246,10 +250,10 @@ c     methode de la fft
          return
       endif
 c     calcul de lag
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       m=istk(il+1)
       n=istk(il+2)
-      l=adr(il+4,1)
+      l=sadr(il+4)
       lag=int(stk(l))
       mm=2*lag
       if(rhs.eq.4.and.m*n.ne.1) then
@@ -258,7 +262,7 @@ c     calcul de lag
          return
       endif
 c     calcul de n
-      il=adr(lstk(top-1),0)
+      il=iadr(lstk(top-1))
       m=istk(il+1)
       n=istk(il+2)
       kntop=top-1
@@ -267,13 +271,13 @@ c     calcul de n
          call error(89)
          return
       endif
-      l=adr(il+4,1)
+      l=sadr(il+4)
       n=int(stk(l))
 c     pointeurs sur x (et y eventuellement)
       top2=top2+1
       kgxtop=top2
 c 2ieme arg
-      ilx=adr(lstk(top2),0)
+      ilx=iadr(lstk(top2))
       macro=istk(ilx).eq.11.or.istk(ilx).eq.13
       fort=istk(ilx).eq.10
       if(fort) then
@@ -287,7 +291,7 @@ c 2ieme arg
       if(rhs.eq.5) then
          top2=top2+1
          kgytop=top2
-         ily=adr(lstk(top2),0)
+         ily=iadr(lstk(top2))
          if(fort) then
             if(istk(ily).ne.10) then
                err=3
@@ -303,13 +307,13 @@ c 2ieme arg
       endif
 c     calculs des adresses des tableaux de travail
       lxa=lstk(top+1)
-      ilw1=adr(lxa,0)
+      ilw1=iadr(lxa)
       lxa=lxa+10
       lxr=lxa+mm
       lxi=lxr+mm
       lzr=lxi+mm
-      lzi=lzr+adr(mm,1)
-      lzfin=lzi+adr(mm,1)
+      lzi=lzr+sadr(mm)
+      lzfin=lzi+sadr(mm)
       err=lzfin-lstk(bot)
       if(err.gt.0) then
          call error(17)
@@ -321,7 +325,7 @@ c     calculs des adresses des tableaux de travail
          call cmpse2(mm,n,mode,dgetx,dgety,stk(lxa),stk(lxr),
      1        stk(lxi),stk(lzr),stk(lzi),ierr)
          if(ierr.gt.0) then
-            buf='appel a fft : puissance de 2 non respectee'
+            buf='fft call : needs power of two!'
             call error(999)
             return
          endif
@@ -341,7 +345,7 @@ c
          call cmpse2(mm,n,mode,bgetx,bgety,stk(lxa),stk(lxr),
      1        stk(lxi),stk(lzr),stk(lzi),ierr)
          if(ierr.gt.0) then
-            buf='appel a fft : puissance de 2 non respectee'
+            buf='fft call : needs a power of 2'
             call error(999)
             return
          endif
@@ -352,17 +356,17 @@ c
       istk(il+1)=1
       istk(il+2)=lag
       istk(il+3)=0
-      l=adr(il+4,1)
+      l=sadr(il+4)
       call dcopy(lag,stk(lxa),1,stk(l),1)
       lstk(top+1)=l+lag
       if(lhs.eq.1) return
       top=top+1
-      il=adr(lstk(top),0)
+      il=iadr(lstk(top))
       istk(il)=1
       istk(il+1)=1
       istk(il+2)=rhs-3
       istk(il+3)=0
-      l=adr(il+4,1)
+      l=sadr(il+4)
       call dcopy(rhs-3,stk(lxr),1,stk(l),1)
       lstk(top+1)=l+2
       return
@@ -373,12 +377,12 @@ c
 c     correlations par updates
 c     pointeurs sur x et y eventuellement
       top2=top2+1
-      ilx=adr(lstk(top2),0)
+      ilx=iadr(lstk(top2))
       mx=istk(ilx+1)
       nx=istk(ilx+2)
       itx=istk(ilx+3)
       mnx=mx*nx
-      lx=adr(ilx+4,1)
+      lx=sadr(ilx+4)
       if(itx.ne.0) then
          err=2
          call error(52)
@@ -386,21 +390,21 @@ c     pointeurs sur x et y eventuellement
       endif
 c     cross corr si on passe y
       top2=top2+1
-      ily=adr(lstk(top2),0)
+      ily=iadr(lstk(top2))
       ny=istk(ily+1)
       my=istk(ily+2)
       mny=ny*my
       if(mny.eq.mnx) then
          mode=1
-         ly=adr(ily+4,1)
+         ly=sadr(ily+4)
       endif
 c     calcul de mfft
       if(mode.eq.1) top2=top2+1
-      il=adr(lstk(top2),0)
+      il=iadr(lstk(top2))
       mz=istk(il+1)
       nz=istk(il+2)
       it=istk(il+3)
-      lzr=adr(il+4,1)
+      lzr=sadr(il+4)
       mfft=mz*nz
       lzi=lzr+mfft
       if (it.eq.0) then
@@ -413,12 +417,12 @@ c     calculs des adresses des tableaux de travail
       lxr=lzi+mfft
       if(ichaud.eq.1) then
          top2=top2+1
-         il=adr(lstk(top2),0)
+         il=iadr(lstk(top2))
          mx0=istk(il+1)
          nx0=istk(il+2)
          mnx0=mx0*nx0
          nbx=mnx0
-         lx0=adr(il+4,1)
+         lx0=sadr(il+4)
       endif
       if(ichaud.eq.1) then
          call dcopy(mnx0,stk(lx0),1,stk(lxr),1)
@@ -440,7 +444,7 @@ c     calculs des adresses des tableaux de travail
      1        stk(lzr),stk(lzi),ierr,ichaud,nbx)
       endif
       if(ierr.gt.0) then
-         buf='appel a fft : puissance de 2 non respectee'
+         buf='fft call: needs a power of 2'
          call error(999)
          return
       endif
@@ -451,7 +455,7 @@ c     calculs des adresses des tableaux de travail
          istk(il+1)=mz
          istk(il+2)=nz
          istk(il+3)=1
-         l=adr(il+4,1)
+         l=sadr(il+4)
          call dcopy(mfft,stk(lzr),1,stk(l),1)
          call dcopy(mfft,stk(lzi),1,stk(l+mfft),1)
          lstk(top+1)=l+mfft*2
@@ -464,11 +468,11 @@ c     calculs des adresses des tableaux de travail
          istk(ilw+1)=mz
          istk(ilw+2)=nz
          istk(ilw+3)=1
-         lw=adr(ilw+4,1)
+         lw=sadr(ilw+4)
          lstk(top+1)=lw+2*mfft
          top=top+1
-         ilxu=adr(lstk(top),0)
-         lxu=adr(ilxu+4,1)
+         ilxu=iadr(lstk(top))
+         lxu=sadr(ilxu+4)
          call dcopy(nbx,stk(lx+mnx-nbx),1,stk(lxr),1)
          call dcopy(mfft,stk(lzr),1,stk(lw),1)
          call dcopy(mfft,stk(lzi),1,stk(lw+mfft),1)
@@ -484,7 +488,7 @@ c
  50   continue
       arma=.false.
       top2=top-rhs+1
-      il=adr(lstk(top2),0)
+      il=iadr(lstk(top2))
       if(istk(il).ne.15) then
          err=1
          call error(56)
@@ -497,23 +501,23 @@ c
       endif
       il7=il+7
       ilt=il7+istk(il+2)
-      lt=adr(ilt+4,1)
+      lt=sadr(ilt+4)
       lp=lt+istk(il+3)-istk(il+2)
-      ilp=adr(lp,1)-4
+      ilp=sadr(lp)-4
       ll=lp+istk(il+4)-istk(il+3)
-      ill=adr(ll,1)-4
+      ill=sadr(ll)-4
       lphi=ll+istk(il+5)-istk(il+4)
-      ilphi=adr(lphi,1)-4
+      ilphi=sadr(lphi)-4
       lpsi=lphi+istk(il+6)-istk(il+5)
-      ilpsi=adr(ilphi,1)-4
+      ilpsi=sadr(ilphi)-4
       top2=top2+1
-      ilu=adr(lstk(top2),0)
+      ilu=iadr(lstk(top2))
       mnu=istk(ilu+1)*istk(ilu+2)
       if(mnu.le.1)  arma=.true.
-      lu=adr(ilu+4,1)
+      lu=sadr(ilu+4)
       top2=top2+1
-      ily=adr(lstk(top2),0)
-      ly=adr(ily+4,1)
+      ily=iadr(lstk(top2))
+      ly=sadr(ily+4)
       mny=istk(ily+1)*istk(ily+2)
       if(mnu.ne.mny) then
          call error(60)
@@ -533,8 +537,8 @@ c
          goto 55
       endif
       top2=top2+1
-      illam=adr(lstk(top2),0)
-      llam=adr(illam+4,1)
+      illam=iadr(lstk(top2))
+      llam=sadr(illam+4)
       if(top2.eq.top) then
          lk=lstk(top+1)
          stk(lk)=0.00d+0
@@ -545,20 +549,20 @@ c
          goto 55
       endif
       top2=top2+1
-      ilk=adr(lstk(top2),0)
-      lk=adr(ilk+4,1)
+      ilk=iadr(lstk(top2))
+      lk=sadr(ilk+4)
       if(top2.eq.top) then
          lc=lk+3
          stk(lc)=1000.0d+0
          goto 55
       endif
       top2=top2+1
-      ilc=adr(lstk(top2),0)
-      lc=adr(ilc+4,1)
-      ilk=adr(lstk(top2-1),0)
-      lk=adr(ilk+4,1)
-      illam=adr(lstk(top2-2),0)
-      llam=adr(illam+4,1)
+      ilc=iadr(lstk(top2))
+      lc=sadr(ilc+4)
+      ilk=iadr(lstk(top2-1))
+      lk=sadr(ilk+4)
+      illam=iadr(lstk(top2-2))
+      llam=sadr(illam+4)
  55   continue
       mnt=istk(ilt+1)*istk(ilt+2)
       ordre=mnt/3
@@ -606,6 +610,10 @@ c
  60   continue
 c
 c     amell: calculation of the jacobi's elliptic function am(u,k)
+      if(rhs.ne.2) then
+         call error(39)
+         return
+      endif
 c
       il=iadr(lstk(top))
       itv=istk(il)

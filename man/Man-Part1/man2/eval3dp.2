@@ -23,15 +23,13 @@ x,y,z
 : 4x(n*n) matrices
 
 .SH DESCRIPTION
-computes a set of facets for a 3d parametrized surface
+Computes a set of facets for a 3d parametrized surface
 .SH EXAMPLE
-.fi
+.nf
   deff('[x,y,z]=scp(p1,p2)',['x=p1.*sin(p1).*cos(p2)';
                              'y=p1.*cos(p1).*cos(p2)';
                              'z=p1.*sin(p2)'])
-  [x,y,z]=eval3dp(scp,0:0.3:2*%pi,-%pi:0.3:%pi)
-.nf
+  [x,y,z]=eval3dp(scp,0:0.3:2*%pi,-%pi:0.3:%pi);
+.fi
 .SH SEE ALSO
 eval3dp plot3d
-
-

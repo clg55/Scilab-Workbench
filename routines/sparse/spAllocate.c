@@ -72,7 +72,9 @@ static char RCSid[] =
 #include "spmatrix.h"
 #include "spDefs.h"
 
-
+static InitializeElementBlocks();
+static RecordAllocation();
+static AllocateBlockOfAllocationList();
 
 
 

@@ -1,4 +1,4 @@
-//[f1,f2]=test_d(ue)
+function [f1,f2]=test_d(ue)
 //[f1,f2]=test_d(ue)
 // f1 est la dynamique linearisee
 //autour du point d'equilibre donne par equilcom(ue)
@@ -15,6 +15,6 @@ deff('[yy,zdot]=fff(z,vv)',...
 xe=equilcom(ue)
 [f1,g1,h1,k1]=lin(fff,[xe;0;0],0),
 f2=[ f, -g*k; l*h,f-l*h-g*k],
-//end
+
 
 

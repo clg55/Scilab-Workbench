@@ -45,7 +45,7 @@ int flag_communication;
 
     if (flag_communication)    {
 	if (pipe(pipe_vers_appli) || pipe(pipe_vers_scruteur))
-		Erreur_scruteur("<executer_application> : Creation d'un pipe impossible.");
+		Erreur_scruteur("<executer_application>: pipe creation impossible");
 	
 /*	flags=fcntl(pipe_vers_appli[0],F_GETFL,0);
 	fcntl(pipe_vers_appli[0],F_SETFL,O_NDELAY | flags);*/
@@ -92,7 +92,7 @@ int flag_communication;
 		execvp(argv[0],argv);
 	
 	perror(NULL);
-	Erreur_scruteur(concatener_deux_chaines("<executer_application> : Impossible d'executer ",argv[0]));
+	Erreur_scruteur(concatener_deux_chaines("<executer_application>: impossible to execute ",argv[0]));
     }
     
     if (id != -1)  { /* GeCI */
@@ -134,7 +134,7 @@ Message message;
 	    envoyer_message_var(ID_XGeCI,MSG_ERREUR_LIAISON_SCRUTEUR,
 				"Attentionnnnnnnnnn !!!!!!!! : Probleme de connexion \nLe demon (calicod) est il lance sur cette machine ? ",NULL);
 	    envoyer_message_var(ID_XGeCI,MSG_FIN_APPLI,message.tableau[3],NULL);
-	    /*Erreur_scruteur("<executer_application_a_distance> : Pas de demon sur la machine indiquee.");*/
+	    /*Erreur_scruteur("<executer_application_a_distance>: no demon on host");*/
 	    return ;
 	}
 	
@@ -189,8 +189,12 @@ int pid;
 void supprimer_application(identificateur)
 char *identificateur;
 {
-    ldc_supprimer_objet(liste_applications,identificateur);
-    supprimer_liaisons_appli(identificateur);
+  /* BUG car identificateur est parfois(?) libere dans ldc_supprimer_objet ! 
+   QUick and dirty fix.  CLG 27 Jul 95 */
+  char toto[256];
+  strcpy(toto,identificateur);
+  ldc_supprimer_objet(liste_applications,identificateur);
+  supprimer_liaisons_appli(toto);
 }
 
 static void desallouer_application(objet)
@@ -329,7 +333,7 @@ Message message;
     recherche_appli_a_detruire = ldc_rechercher_objet(liste_applications,message.tableau[3]);
     
     if (recherche_appli_a_detruire == NULL)
-	    Erreur_scruteur(concatener_deux_chaines("<quitter_appli_actmsg> : mauvais parametres : ",message.tableau[3]));
+	    Erreur_scruteur(concatener_deux_chaines("<quitter_appli_actmsg>: bad parameters : ",message.tableau[3]));
     
     /* Meme machine */
     if(!strcmp(recherche_appli_a_detruire -> nom_machine, machine_hote))  {

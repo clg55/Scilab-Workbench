@@ -17,7 +17,8 @@ Sl
 .SH DESCRIPTION
 The feedback operation is denoted by \fV /. \fR (slashdot).
 This command returns \fVSl=Sl1*(I+Sl2*Sl1)^-1\fR, i.e the (negative) 
-feedback of \fVSl1\fR and \fVSl2\fR.
+feedback of \fVSl1\fR and \fVSl2\fR. \fVSl\fR is the transfer
+\fV v -> y \fR for \fV y = Sl1 u \fR, \fVu = v - Sl2 y\fR.
 .LP
 The result is the same as \fVSl=LFT([0,I;I,-Sl2],Sl1)\fR.
 .LP
@@ -34,9 +35,12 @@ BigS=sysdiag(S1,S2); F=[zeros(2,2),eye(2,2);-eye(2,2),zeros(2,2)];
 Bigclosed=BigS/.F;
 W1=Bigclosed(1:2,1:2);   //W1=W (in state-space).
 ss2tf(W1)
+//Inverting
+ss2tf(S1*inv(eye+S2*S1))
 .fi
 .SH SEE ALSO 
-lft, sysdiag, augment
+lft, sysdiag, augment, obscont
+
 
 
 

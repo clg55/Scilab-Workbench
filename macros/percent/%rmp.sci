@@ -1,7 +1,6 @@
-//<f1>=%rmp(f1,n2)
-// %rmp(f1,n2)  calcule le produit de la  matrice de fractions ration-
-//nelles f1 par la matrice de polynomes n2
-//Cette macro correspond a l'operation  f1*n2
+function [f1]=%rmp(f1,n2)
+// r=%rmp(f1,n2)  <=> r=f1*n2
+// f1=rational n2=polynomial
 //!
 [n1,d1]=f1(2:3),
 [l1,m1]=size(n1);[l2,m2]=size(n2),
@@ -22,6 +21,6 @@ else,
 end,
 [num,den]=simp(num,den),
 f1(2)=num;f1(3)=den;
-//end
+
 
 

@@ -43,13 +43,8 @@
  */
 
 #include "jpc_global.h"
-
-XawTextPosition TextGetLastPos(w)
-    Widget w;
-{
-    TextWidget ctx = (TextWidget) w;
-    return (ctx->text.lastPos);
-}
+#include <string.h> /* in case of dmalloc */ 
+#include <malloc.h>  /* in case of dmalloc */ 
 
 void DisableWindowResize(w)
 Widget w;
@@ -61,7 +56,7 @@ Widget w;
     n = 0;
     XtSetArg(args[n], XtNheight, &height);                       n++;
     XtGetValues(w, args, n);
-    XawPanedSetMinMax(w, height, height);
+    XawPanedSetMinMax(w,(int) height, (int) height);
     XawPanedAllowResize(w, False);
 }
 
@@ -79,11 +74,11 @@ char *s1, *s2;
 {
     if (s2) {
         if (s1 == NULL) {
-            s1 = XtMalloc((strlen(s2)+1)*sizeof(char));
+            s1 = XtMalloc((Cardinal) (strlen(s2)+1)*sizeof(char));
             strcpy(s1, s2);
         }
         else {
-            s1 = XtRealloc(s1, strlen(s1)+strlen(s2)+2);
+            s1 = XtRealloc(s1, (Cardinal) strlen(s1)+strlen(s2)+2);
             strcat(s1, s2);
         }
     }

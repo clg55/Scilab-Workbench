@@ -1,4 +1,4 @@
-//[io,s]=syssize(sys)
+function [io,s]=syssize(sys)
 //Old stuff
 //  io=syssize(sys)
 //  [io,ns]=syssize(sys)
@@ -12,6 +12,8 @@ select type(sys)
 case 1 then
   io=size(sys)
   s=[]
+  
+//-compat next case retained for list/tlist compatibility
 case 15 then
   select sys(1)
   case 'lss' then
@@ -23,9 +25,20 @@ case 15 then
     if lhs=2 then  sys=tf2ss(sys);[s,s]=sys(2),end
    else error(97,1)
    end;
+case 16 then
+  select sys(1)
+  case 'lss' then
+    io=size(sys(5)),
+    [s,s]=size(sys(2))
+   case 'r' then
+    io=size(sys(3))
+    [lhs,rhs]=argn(0);
+    if lhs=2 then  sys=tf2ss(sys);[s,s]=sys(2),end
+   else error(97,1)
+   end;   
 else
   error(97,1),
 end
-//end
+
 
 

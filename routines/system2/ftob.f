@@ -1,13 +1,16 @@
       subroutine ftob(x,nx,topx)
       include '../stack.h'
-      integer adr
+      integer iadr,sadr
 c
 c     fortran to scilab
       integer topx,hsize
       double precision x
       dimension x(*)
 c
-      ilx=adr(lstk(topx),0)
+      iadr(l)=l+l-1
+      sadr(l)=(l/2)+1
+c
+      ilx=iadr(lstk(topx))
       hsize=4
       if(istk(ilx).eq.2) hsize=9+istk(ilx+1)*istk(ilx+2)
       if(top.ge.bot) then
@@ -15,14 +18,14 @@ c
          return
       endif
       top=top+1
-      il=adr(lstk(top),0)
-      err=lstk(top)+adr(hsize,1)+nx-lstk(bot)
+      il=iadr(lstk(top))
+      err=lstk(top)+sadr(hsize)+nx-lstk(bot)
       if(err.gt.0) then
          call error(17)
          return
       endif
       call icopy(hsize,istk(ilx),1,istk(il),1)
-      l=adr(il+hsize,1)
+      l=sadr(il+hsize)
       call dcopy(nx,x,1,stk(l),1)
       lstk(top+1)=l+nx
       return

@@ -87,7 +87,7 @@ xdot=[x(2);
 
 
 function [y,xdot]=pendu(x,u)
-//<y,xdot>=pendu(x,u) input (u) - output (y) function of the pendulum
+//[y,xdot]=pendu(x,u) input (u) - output (y) function of the pendulum
 //!
 g=9.81;
 qm=mb/(mb+mc)

@@ -1,5 +1,5 @@
 exec('SCI/tests/scilab.tst')      //OK
-exec('SCI/tests/macro.tst');     //bug
+exec('SCI/tests/macro.tst');     //OK
 exec('SCI/tests/matnew.tst');    //OK
 exec('SCI/tests/matode.tst');    //OK
 exec('SCI/tests/matopt.tst');    //OK

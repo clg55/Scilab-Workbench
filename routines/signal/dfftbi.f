@@ -107,9 +107,14 @@ c
  110  maxf = m - kt
       maxf = nfac(maxf)
       if (kt.gt.0) maxf = max(nfac(kt),maxf)
+c    MAJOR MODIFICATION
+      do 9999 kkk=1,m
+      maxf=max(maxf,nfac(kkk))
+ 9999 continue
 c      j = istkgt(maxf*4,3)
       nitems=maxf*4
-      itype=3
+c     following line modified FD & MG
+      itype=4
 c xxxxxxxxxxxxxxxxxxxxxxxxxxx
       istkgt = (lnow*isize(2)-1)/isize(itype) + 2
       i = ((istkgt-1+nitems)*isize(itype)-1)/isize(2) + 3
@@ -149,8 +154,9 @@ c
  1400 continue
       k=istkgt
 c     la carte suivante est a supprimer si simple precision
+c     next instruction commented by FD&MG (simulog residue?)
 c    ********************************************
-      k=2*k-1
+c      k=2*k-1
 c    *********************************************
       call dfftmx(a, b, ntot, nf, nspan, isn, m, kt, rstak(j),
      *    rstak(jj), rstak(j2), rstak(j3), istak(k), nfac)

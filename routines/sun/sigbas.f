@@ -9,10 +9,13 @@ c traitement de l'erreur fortran ou du break
 c
       integer  n
       include '../stack.h'
-      integer adr
       logical         iflag
       common /basbrk/ iflag
       integer  ilk,k,l,lunit,nc
+c     
+      iadr(l)=l+l-1
+c      sadr(l)=(l/2)+1
+c
       if(ddt.eq.4) then
          write(buf(1:5),'(i5)') n
          call basout(io,wte,'signal :'//buf(1:5))
@@ -54,7 +57,7 @@ c
       if (k .lt. bot) k = isiz
    32 continue
       l=k
-      ilk=adr(lstk(k),0)
+      ilk=iadr(lstk(k))
       if(istk(ilk).lt.0) l=istk(ilk+1)
       call savlod(lunit,idstk(1,k),0,l)
       k = k-1

@@ -24,7 +24,14 @@ is performed element-wise.
 \fVH1=simp(H)\fR is also valid (each entry of \fVH\fR is 
 simplified in \fVH1\fR).
 .LP
-Caution: no threshold is given i.e. \fVsimp\fR cannot forces a simplification.
+Caution: 
+.LP
+-no threshold is given i.e. \fVsimp\fR cannot forces a
+simplification.
+.LP
+-For linear dynamic systems which include integrator(s) simplification
+changes the static gain. (\fVH(0)\fR for continuuous systems or \fVH(1)\fR for
+discrete systems)
 .SH SEE ALSO
 roots, trfmod, poly, clean
 

@@ -12,7 +12,7 @@ if rhs>2 then error('1 or 2 inputs to contrss : sl [,tol]')
 [nc,u]=contr(a,b,tol)
 u=u(:,1:nc)
 a=u'*a*u;b=u'*b;c=c*u
-slc=list('lss',a,b,c,d,u'*x0,dom)
+slc=tlist('lss',a,b,c,d,u'*x0,dom)
 
 
 

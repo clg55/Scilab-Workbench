@@ -148,4 +148,4 @@ x_message('non linear simulation')
  xsetech(xxr);
  xset("font",xxf(1),xxf(2));
  xbasc();
-
+ xset("wdim",610,455);

@@ -71,6 +71,26 @@ static char RCSid[] =
 #include "spDefs.h"
 
 
+static FactorComplexMatrix();
+static CreateInternalVectors();
+static CountMarkowitz();
+static MarkowitzProducts();
+static ElementPtr SearchForPivot();
+static ElementPtr  SearchForSingleton();
+static ElementPtr  QuicklySearchDiagonal();
+static ElementPtr  SearchDiagonal();
+static ElementPtr  SearchEntireMatrix();
+static RealNumber FindLargestInCol();
+static RealNumber  FindBiggestInColExclude();
+static ExchangeRowsAndCols();
+static ExchangeColElements();
+static ExchangeRowElements();
+static RealRowColElimination();
+static ComplexRowColElimination();
+static UpdateMarkowitzNumbers();
+static ElementPtr CreateFillin();
+static MatrixIsSingular();
+static ZeroPivot();
 
 
 
@@ -179,8 +199,7 @@ BOOLEAN DiagPivoting;
 MatrixPtr  Matrix = (MatrixPtr)eMatrix;
 ElementPtr  pPivot;
 int  Step, Size, ReorderingRequired;
-ElementPtr SearchForPivot();
-RealNumber LargestInCol, FindLargestInCol();
+RealNumber LargestInCol;
 
 /* Begin `spOrderAndFactor'. */
     ASSERT( IS_VALID(Matrix) AND NOT Matrix->Factored);
@@ -1030,10 +1049,6 @@ MatrixPtr Matrix;
 int Step, DiagPivoting;
 {
 register ElementPtr  ChosenPivot;
-ElementPtr  SearchForSingleton();
-ElementPtr  QuicklySearchDiagonal();
-ElementPtr  SearchDiagonal();
-ElementPtr  SearchEntireMatrix();
 
 /* Begin `SearchForPivot'. */
 
@@ -2718,7 +2733,7 @@ register  ElementPtr  pPivot;
 register  ElementPtr  pSub;
 register  int  Row;
 register  ElementPtr  pLower, pUpper;
-extern ElementPtr  CreateFillin();
+
 
 /* Begin `RealRowColElimination'. */
 
@@ -2808,7 +2823,6 @@ register  ElementPtr  pPivot;
 register  ElementPtr  pSub;
 register  int  Row;
 register  ElementPtr  pLower, pUpper;
-ElementPtr  CreateFillin();
 
 /* Begin `ComplexRowColElimination'. */
 

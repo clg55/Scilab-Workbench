@@ -7,8 +7,11 @@
 #include <X11/Xaw/Viewport.h>
 #include <X11/Xaw/Form.h>
 
+#include "metaconst.h"
 #include "metawin.h"
 #include "graphics.h"
+
+extern void GetMetanetGeometry();
 
 static int okFlag;
 static char str[256];
@@ -18,8 +21,6 @@ static char str[256];
 #define NOCHOOSE 0
 #define CHOOSE 1
 #define CANCEL 2
-#define CHOOSEY 40
-#define CHOOSEHEIGHT 800
 
 void CancelChoose(w,shell,callData)
 Widget w;
@@ -53,17 +54,16 @@ char *result;
   int iargs = 0;
   XtCallbackRec callbacks[2];
   Widget shell;
-  XWindowAttributes war;
   int i,width;
+  int x,y,w,h;
 
   callbacks[1].callback = NULL;
   callbacks[1].closure = NULL;
-  
-  XGetWindowAttributes(theG.dpy,XtWindow(toplevel),&war);
-  width = war.width;
 
-  XtSetArg(args[iargs], XtNx, width/2); iargs++;
-  XtSetArg(args[iargs], XtNy, CHOOSEY); iargs++;
+  GetMetanetGeometry(&x,&y,&w,&h);
+  
+  XtSetArg(args[iargs], XtNx, x + incX); iargs++;
+  XtSetArg(args[iargs], XtNy, y + incY); iargs++;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
   shell = XtCreatePopupShell("Metanet Choose",
 			     transientShellWidgetClass,toplevel,args,iargs);
@@ -97,7 +97,8 @@ char *result;
 
   width = 0; i = 0;
   while(strings[i] != NULL) {
-    width = max(width,XTextWidth(theG.metafont,strings[i],strlen(strings[i])));
+    width = max(width,
+		XTextWidth(theG.metafont,strings[i],strlen(strings[i])));
     i++;
   }
   width = width + 25;
@@ -105,8 +106,8 @@ char *result;
   iargs = 0;
   XtSetArg(args[iargs], XtNfont, theG.metafont); iargs++;
   XtSetArg(args[iargs], XtNallowVert, TRUE); iargs++;
-  XtSetArg(args[iargs], XtNheight, CHOOSEHEIGHT); iargs++;
   XtSetArg(args[iargs], XtNwidth, width); iargs++;
+  XtSetArg(args[iargs], XtNheight, metaHeight/2); iargs++;
   XtSetArg(args[iargs], XtNfromHoriz, NULL); iargs++;
   XtSetArg(args[iargs], XtNfromVert, chooselabel); iargs++;
   XtSetArg(args[iargs], XtNtop, XtChainTop); iargs++;

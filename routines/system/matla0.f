@@ -1,4 +1,4 @@
-      subroutine matla0( ini1, bu1)
+      subroutine matla0( ini1,bu1)
 c
 c ====================================================================
 c     main routine
@@ -13,10 +13,6 @@ c
       integer init
 c
       iadr(l)=l+l-1
-c
-      init=ini1
-      call basmsg(init)
-      if (init .lt. 0) return
 c
 c ------------------------------
 c appel au parseur d instruction

@@ -1,4 +1,4 @@
-//<pols,gain>=zpch1(n,epsilon,omegac)
+function [pols,gain]=zpch1(n,epsilon,omegac)
 //Poles of a Type 1 Chebyshev analog filter
 //The transfer function is given by :
 //H(s)=gain/poly(pols,'s')
@@ -21,8 +21,7 @@
    gain=real(prod(pols));
    if n=2*int(n/2) then,
       gain=gain/sqrt(1+epsilon**2);
-   end,
- 
-//end
+   end
+
 
 

@@ -5,5 +5,5 @@
 // s : representation d'etat d'un systeme lineaire
 //!
 //origine S Steer INRIA 1992
-sr=s/.list('lss',[],[],[],p,[],[])
+sr=s/.tlist('lss',[],[],[],p,[],[])
 //end

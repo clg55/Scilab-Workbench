@@ -1,4 +1,4 @@
-//<pols,gain>=zpbutt(n,omegac)
+function [pols,gain]=zpbutt(n,omegac)
 //<pols,gain>=zpbutt(n,omegac)
 //Computes the poles of a Butterworth analog
 //filter of order n and cutoff frequency omegac
@@ -15,7 +15,6 @@
    angles=ones(1,n)*(%pi/2+%pi/(2*n))+(0:n-1)*%pi/n;
    pols=omegac*exp(%i*angles);
    gain=(-omegac)**n;
- 
-//end
+
 
 

@@ -7,7 +7,7 @@
 [n,m]=size(s2(2))
 if n<>m then error(43),end
 if n*m=1 then
-  s1=%rmr(s1,list('r',s2(3),s2(2),s2(4)) ),
+  s1=%rmr(s1,tlist('r',s2(3),s2(2),s2(4)) ),
 else
  p=s2(2)
  s2=s2(3)

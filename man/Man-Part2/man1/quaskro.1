@@ -6,6 +6,8 @@ quaskro - quasi-Kronecker form
 .nf
 [Q,Z,Qd,Zd,numbeps,numbeta]=quaskro(F)
 [Q,Z,Qd,Zd,numbeps,numbeta]=quaskro(E,A)
+[Q,Z,Qd,Zd,numbeps,numbeta]=quaskro(F,tol)
+[Q,Z,Qd,Zd,numbeps,numbeta]=quaskro(E,A,tol)
 .fi
 .SH PARAMETERS
 .TP
@@ -14,6 +16,9 @@ F
 .TP
 E,A
 : two real matrices of same dimensions
+.TP
+tol
+: a real number (tolerance, default value=1.d-10)
 .TP 10
 Q,Z
 :

@@ -1,11 +1,9 @@
-      subroutine calsca(ns,ts,tr,y0)
+      subroutine calsca(ns,ts,tr,y0,tg,ng)
 c!but
 c     Calcule le produit scalaire entre une fonction de Hardi donnee
 c     par ses coefficients de fourrier et une fonction rationnelle r/s
 c!liste d'appel
 c     subroutine calsca(ns,ts,tr,y0)
-c     common/foncg/tg(0:ncoeff)/degreg/ng
-c
 c     Entrees :
 c     ng. est le plus grand indice (compte negativement) des
 c         coefficients de fourrier de la fonction de Hardi u
@@ -18,10 +16,8 @@ c
 c     sortie  : y0. contient la valeur du produit scalaire recherche.
 c!
       implicit double precision (a-h,o-z)
-      integer  ncoeff
-      parameter (ncoeff=601)
       dimension ts(0:ns),tr(0:ns),x(0:40)
-      common/foncg/tg(0:ncoeff)/degreg/ng
+      dimension tg(0:ng)
 c
       nu=ng+1
       do 20 i=0,ns-1
