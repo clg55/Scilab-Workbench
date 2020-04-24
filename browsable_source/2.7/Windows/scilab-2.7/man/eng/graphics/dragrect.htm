@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>dragrect</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>dragrect -  Drag rectangle(s) with mouse  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[final_rect,btn]=dragrect(initial_rect)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+
+  <li><tt><b>initial_rect  </b></tt>
+    : 4 4xn matrix containing the initial rectangles definition. Each column contains [x_left; y_top; width; height]. If only one rectangle is present the initial_rect may also be a vector. 
+  </li>
+
+  <li><tt><b>final_rect  </b></tt>
+    :a rectangle defined by [x_left, y_top, width, height] 
+  </li>
+
+  <li><tt><b>btn  </b></tt>
+    :an integer, the number of the mouse button clicked
+  </li>
+
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>dragrect</b></tt> drags one or more rectangles anywhere on the screen. The 4xn
+    matrix rect defines the rectangles. Each column of <tt><b>initial_rect</b></tt>
+    must contain the initial rectangle position as [left;top;width;height]
+    values. When a button is clicked <tt><b>dragrect</b></tt> returns the final
+    rectangles definition  in <tt><b>final_Rect</b></tt>.
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+xsetech(frect=[0,0,100,100])
+r=dragrect([10;10;30;10])
+xrect(r)
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="xrect.htm"><tt><b>xrect</b></tt></a>&nbsp;&nbsp;<a href="xrects.htm"><tt><b>xrects</b></tt></a>&nbsp;&nbsp;<a href="xclick.htm"><tt><b>xclick</b></tt></a>&nbsp;&nbsp;<a href="xgetmouse.htm"><tt><b>xgetmouse</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

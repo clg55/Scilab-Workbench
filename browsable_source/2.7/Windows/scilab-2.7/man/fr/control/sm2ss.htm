@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>sm2ss</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>sm2ss -  system matrix to state-space  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[Sl]=sm2ss(Sm);  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>Sm  </b></tt>
+    : polynomial matrix (pencil system matrix)
+  </li>
+  <li><tt><b>Sl  </b></tt>
+    : linear system (<tt><b>syslin</b></tt> list)
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Utility function: converts the system matrix:
+  </p>
+  <pre>
+ Sm = [-sI + A   B;
+      [    C     D]
+   </pre>
+  <p>
+    to linear system in state-space representation (<tt><b>syslin</b></tt>) list.
+  </p>
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="ss2des.htm"><tt><b>ss2des</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

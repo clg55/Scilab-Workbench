@@ -1,0 +1,58 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xgetmouse</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>xgetmouse -  récupère les évenements et la position courante de la souris  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>rep=xgetmouse([flag], [sel])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+
+  <li><tt><b>flag  </b></tt>
+    : entier. S'il est présent, la queue d'évènements des clics de la souris n'est pas vidée préalablement.
+  </li>
+
+  <li><tt><b>sel  </b></tt>
+    : vecteur booleen <tt><b>[getmotion, getrelease]</b></tt>. La valeur par
+  défaut est  <tt><b>[%t, %f]</b></tt>
+  </li>
+
+  <li><tt><b>rep  </b></tt>
+    : vecteur de taille 3, [x,y,ibutton].
+  </li>
+
+
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Si le pointeur est dans la fenêtre graphique courante, <tt><b>xgetmouse</b></tt> renvoie
+    dans <tt><b>rep</b></tt> sa position (x,y) et la valeur <tt><b>ibutton</b></tt>.
+  </p>
+  <p>
+    <tt><b>ibutton</b></tt> indique le type d'évenement :
+  </p>
+ 
+
+  <li><b>- si ibutton = -1 un déplacement de la   souris a été détecté</b> (si <tt><b>getmotion</b></tt> a été affecté à %thas been set to %t) .
+  </li>
+
+
+  <li><b>- si ibutton = -5, -4 ou -2 un des 3   boutons a été relaché</b> (si <tt><b>getrelease</b></tt> a été affecté à %t).
+  </li>
+
+  <li><b>- si ibutton = 0, 1 ou 2, l'un des      trois boutons a été pressé</b> 
+  </li>
+ 
+Si le curseur n'est pas
+     positionné dans la fenêtre graphique courante,
+     <tt><b>xgetmouse</b></tt> se met en état d'attente.  Attention
+     : <tt><b>xgetmouse</b></tt> renvoie son résultat de façon synchrone
+     avec les mouvements du curseur, i.e. s'il n'y a aucun
+     mouvement du curseur <tt><b>xgetmouse</b></tt> attend.
+
+ 
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+xselect(); xbasc(); xsetech([0 0 1 1],[0 0 100 100])
+xset("alufunction",6)
+xtitle(" On dessine un rectangle ")
+[b,x0,y0]=xclick(); rep=[x0,y0,-1]; x=x0; y=y0;
+xrect(x0,y0,x-x0,y-y0)
+while rep(3)==-1 then
+    rep=xgetmouse(0)
+    xrect(x0,y0,x-x0,y0-y)
+    x=rep(1); y=rep(2);
+    xrect(x0,y0,x-x0,y0-y)
+end
+xset("alufunction",3)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="locate.htm"><tt><b>locate</b></tt></a>&nbsp;&nbsp;<a href="xclick.htm"><tt><b>xclick</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>S. Steer  </ul></p></body></html>

@@ -1,0 +1,27 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>definedfields</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>definedfields -  return index of list's defined fields </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>k=definedfields(l)    </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul> 
+
+  <li><tt><b>l </b></tt>
+    : a list , tlist or mlist variable.
+  </li>
+
+  <li><tt><b>k </b></tt>
+    : a vector of index.
+  </li>
+
+
+  </ul></ul><H3><font color="blue">Description</font></H3><dl>
+   If <tt><b>l</b></tt> is a  <tt><b>list</b></tt>  <tt><b>tlist</b></tt>
+    <tt><b>mlist</b></tt>  <tt><b>k=definedfields(l)</b></tt> returns in
+    <tt><b>k</b></tt> the indices of the defined list fields. This
+    function is useful because indexing undefined fields produces an
+    error.
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+l=list(1);l(3)=5 
+k=definedfields(l)
+
+t=tlist('x');t(5)=4
+definedfields(t)
+
+m=mlist(['m','a','b']);m.b='sdfgfgd' 
+definedfields(m)  
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="list.htm"><tt><b>list </b></tt></a>&nbsp;&nbsp;<a href="tlist.htm"><tt><b>tlist </b></tt></a>&nbsp;&nbsp;<a href="mlist.htm"><tt><b>mlist </b></tt></a>&nbsp;&nbsp;<a href="insertion.htm"><tt><b>insertion</b></tt></a>&nbsp;&nbsp;<a href="extraction.htm"><tt><b>extraction</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

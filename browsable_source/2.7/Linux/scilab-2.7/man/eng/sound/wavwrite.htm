@@ -1,0 +1,35 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>wavwrite</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>wavwrite -  writes .wav sound file  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>wavwrite(y,wavfile)  </tt></dd><dd><tt>wavwrite(y,Fs,wavfile)  </tt></dd><dd><tt>wavwrite(y,Fs,bits,wavfile)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>y  </b></tt>
+    : real vector or matrix with entries in [-1,1].
+  </li>
+  <li><tt><b>wavfile  </b></tt>
+    : string (The .wav extension is appended if no extension is given)
+  </li>
+  <li><tt><b>Fs  </b></tt>
+    : integer, frequency sampling in Hz.
+  </li>
+  <li><tt><b>bits  </b></tt>
+    : integer, number of bits in the encoding.
+  </li>
+  <li><tt><b>method  </b></tt>
+    : string , <tt><b>'mu'</b></tt> (default) or <tt><b>'linear'</b></tt>, encoding method.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Utility function to save <tt><b>.wav</b></tt> sound file.
+    <tt><b>wavwrite(y,wavfile)</b></tt> writes a sound file specified by the
+    string wavfile.  The data should be arranged with one channel
+    per column.  Amplitude values outside the range [-1,+1] are
+    ignored.
+    Supports multi-channel data for 8-bit mu-law, and 8- and 16-bit linear formats.
+  </p>
+  <p>
+    <tt><b>wavwrite(y,Fs,wavfile)</b></tt> specifies in <tt><b>Fs</b></tt> the sample rate of the data
+    in Hertz.
+  </p>
+  <p>
+    <tt><b>wavwrite(y,Fs,bits,wavfile)</b></tt> selects the number of bits in
+    the encoder.  Allowable settings are bits=8 and bits=16.
+     
+  </p>
+  </dl><H3><font color="blue">See Also</font></H3><p><ul><a href="auread.htm"><tt><b>auread</b></tt></a>&nbsp;&nbsp;<a href="wavread.htm"><tt><b>wavread</b></tt></a>&nbsp;&nbsp;<a href="savewave.htm"><tt><b>savewave</b></tt></a>&nbsp;&nbsp;<a href="analyze.htm"><tt><b>analyze</b></tt></a>&nbsp;&nbsp;<a href="mapsound.htm"><tt><b>mapsound</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

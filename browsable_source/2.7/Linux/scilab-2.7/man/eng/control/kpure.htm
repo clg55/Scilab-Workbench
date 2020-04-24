@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>kpure</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>kpure -  continuous SISO system limit feedback gain  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>g=kpure(sys)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>sys  </b></tt>
+    : SISO linear system (syslin)
+  </li>
+  <li><tt><b>g  </b></tt>
+    : constant
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>kpure(sys)</b></tt> computes the gains <tt><b>g</b></tt> such that the system
+    <tt><b>sys</b></tt> feedback by g (<tt><b>sys/.g</b></tt>) has  poles on imaginary axis.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+s=poly(0,'s');
+h=syslin('c',(s-1)/(1+5*s+s^2+s^3))
+xbasc();evans(h)
+g=kpure(h)
+hf=h/.g(1)
+roots(denom(hf))
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="../graphics/evans.htm"><tt><b>evans</b></tt></a>&nbsp;&nbsp;<a href="krac2.htm"><tt><b>krac2</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

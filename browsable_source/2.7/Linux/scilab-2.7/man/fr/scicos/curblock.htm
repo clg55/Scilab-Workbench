@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>curblock</title></head><body bgcolor="FFFFFF"><CENTER>Scicos function  </CENTER><p><b>curblock -  get current block index in a Scicos simulation function  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>k=curblock()  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>k  </b></tt>
+    : integer, index of the block corresponding to the Scilab simulation function where this function is called.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    During simulation it may be interesting to get the index of the current
+    block to trace execution, to get its label, to animate the block icon
+    according to simulation...
+  </p>
+  <p>
+    For block with a computational function written in Scilab, Scilab
+    primitive function <tt><b>curblock()</b></tt>  allows to get the index of the
+    current block in the compiled data structure.
+  </p>
+  <p>
+    To obtain path to the block in the Scicos main structure user may uses
+    the <tt><b>corinv</b></tt> table (see scicos_cpr).
+  </p>
+  <p>
+    For block with a computational function written in C user may uses the
+    C function  <tt><b>k=C2F(getcurblock)()</b></tt>. Where <tt><b>C2F</b></tt> is the C
+    compilation macro defined in <tt><b>&lt;SCIDIR&gt;/routines/machine.h</b></tt>
+  </p>
+  <p>
+    For block with a computational function written in Fortran user may uses the
+    integer  function  <tt><b>k=getcurblock()</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="getblocklabel.htm"><tt><b>getblocklabel</b></tt></a>&nbsp;&nbsp;<a href="getscicosvars.htm"><tt><b>getscicosvars</b></tt></a>&nbsp;&nbsp;<a href="setscicosvars.htm"><tt><b>setscicosvars</b></tt></a>&nbsp;&nbsp;<a href="scicos_cpr.htm"><tt><b>scicos_cpr</b></tt></a>&nbsp;&nbsp;<a href="scicos_main.htm"><tt><b>scicos_main</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

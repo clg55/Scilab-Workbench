@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xfarcs</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>xfarcs -  remplit des secteurs angulaires d'ellipses  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>xfarcs(arcs,[style])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>arcs  </b></tt>
+    : matrice de taille (6,n) décrivant les ellipses.
+  </li>
+  <li><tt><b>style  </b></tt>
+    : vecteur ligne de taille n donnant les couleurs à utiliser
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>xarcs</b></tt> remplit des secteurs angulaires d'un ensemble d'ellipses décrites par <tt><b>arcs</b></tt> : 
+    <tt><b>arcs=[x y w h a1 a2;x y w h a1 a2;...]'</b></tt> où chaque ellipse est définie 
+    par les 6 paramètres <tt><b>(x,y,w,h,a1,a2)</b></tt> (voir <tt><b>xarc</b></tt>).
+  </p>
+  <p>
+    <tt><b>style(i)</b></tt> donne la couleur utilisée pour remplir l'ellipse <tt><b>i</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+plot2d(0,0,-1,"031"," ",[-1,-1,1,1])
+arcs=[-1.0 0.0 0.5; // abscisse du coin superieur gauche
+       1.0 0.0 0.5; // ordonnée du coin superieur gauche
+       0.5 1.0 0.5; // longueur
+       0.5 0.5 1.0; // hauteur
+       0.0 0.0 0.0; // angle 1
+       180*64 360*64 90*64]; // angle 2
+xfarcs(arcs,[1,2,3])
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="xarc.htm"><tt><b>xarc</b></tt></a>&nbsp;&nbsp;<a href="xfarc.htm"><tt><b>xfarc</b></tt></a>&nbsp;&nbsp;<a href="xfarc.htm"><tt><b>xfarc</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>J.Ph.C.  </ul></p></body></html>

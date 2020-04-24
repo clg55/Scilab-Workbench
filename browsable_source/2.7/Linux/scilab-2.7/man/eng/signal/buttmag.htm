@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>buttmag</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>buttmag -   response of Butterworth filter  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[h]=buttmag(order,omegac,sample)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>order  </b></tt>
+    : integer : filter order
+  </li>
+  <li><tt><b>omegac  </b></tt>
+    : real : cut-off frequency in Hertz
+  </li>
+  <li><tt><b>sample  </b></tt>
+    : vector of frequency where <tt><b>buttmag</b></tt> is evaluated
+  </li>
+  <li><tt><b>h  </b></tt>
+    : Butterworth filter values at sample points
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    squared magnitude response of a Butterworth filter
+    <tt><b>omegac</b></tt> = cutoff frequency ; <tt><b>sample</b></tt> = sample of frequencies
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+//squared magnitude response of Butterworth filter
+h=buttmag(13,300,1:1000);
+mag=20*log(h)'/log(10);
+plot2d((1:1000)',mag,[2],"011"," ",[0,-180,1000,20])
+ </pre></ul><H3><font color="blue">Author</font></H3><p><ul>F. D.  </ul></p></body></html>

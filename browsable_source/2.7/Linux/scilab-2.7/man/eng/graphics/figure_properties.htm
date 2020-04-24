@@ -1,0 +1,222 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>figure_properties</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Data type </CENTER><p><b>figure_properties -  description of the
+   graphics figure entity properties </b></p><H3><font color="blue">Description</font></H3><dl>
+  The figure entity is the top level of the graphics entities
+  hierarchy. This entity contain a number of properties designed to control 
+  many aspects of displaying Scilab graphics objects.
+  These properties fall into two categories. Properties that contain information 
+  about figure itself and others related to set default values for the children creation.
+
+
+  <li><b>Figure properties: </b>
+  
+     <li><b>figure_style: </b>
+     The value of this field difines the figure style, it
+      should be <tt><b>"old"</b></tt> or <tt><b>"new"</b></tt>.  The
+      <tt><b>"new"</b></tt> value sets the entity based style. The
+      <tt><b>"old"</b></tt> value represents the old Scilab graphic mode. In
+      this case <tt><b>figure_style</b></tt> is the only defined property.
+     </li>
+
+     <li><b>figure_position: </b>
+     This field contains the position in pixel of the  graphic
+     window  on the screen. The size is the vector 
+     <tt><b>[x,y]</b></tt>. The point <tt><b>[0,0]</b></tt> if the
+     upper-left corner of the screen.
+     </li>
+
+     <li><b>figure_size: </b>
+     This property controls the size in pixel of the screen's graphics
+     window. The size is the vector <tt><b>[width,height] </b></tt>.
+     </li>
+    
+     <li><b>axes_size: </b>
+     Used to Specifies  the size in pixel of the virtual graphics
+     window. The size is the vector <tt><b>[width,height] </b></tt>.
+     The  virtual graphic window should be bigger than the part really
+     visible on the screen.
+     </li>
+
+     <li><b>auto_resize: </b>
+     This property determines if graphics window is resized.
+     If the value is <tt><b>"on"</b></tt> then the <tt><b>axes_size</b></tt> 
+     property is equaled to the <tt><b>figure_size</b></tt> and the axes 
+     children are zoomed accordingly. If the value is <tt><b>"off"</b></tt> that indicate 
+     that <tt><b>axes_size</b></tt> cannot be resized when <tt><b>figure_size</b></tt>
+     is changed.
+     </li>
+
+     <li><b>figure_name: </b>
+     This field contains the name of the figure. This name  is a
+     character string displayed at the top of the graphics_window.
+     </li>
+
+     <li><b>figure_id: </b>
+     This field contains the identifier of the figure. This  is a
+     integer number which is prefexed to the figure_window, set at 
+     figure creation and cannot be changed after .
+     </li>
+
+     <li><b>color_map: </b>
+     Property which defines the colormap used by this figure. The
+     colormap is a <tt><b>m</b></tt> by <tt><b>3</b></tt> matrix.
+     <tt><b>m</b></tt> is the number of colors. Color number i is given
+     as a 3-uple <tt><b>R</b></tt>, <tt><b>G</b></tt>, <tt><b>B</b></tt> corresponding
+     respectively to red, green and blue intensity between 0 and 1
+     </li>
+
+     <li><b>background: </b>
+     This property controls the figure window background color. IT takes as value
+     an index relative to the current colormap. 
+     </li>
+
+  
+     <li><b>pixel_drawing_mode: </b>
+     This field defines the bitwise operation used to draw the pixel
+     on the screen. The default mode is <tt><b>copy</b></tt> what is to
+     say the pixel is drawn as required. More generally the bitwise
+     operation is performed between the color of the source pixel and
+     the color of the pixel already present on the screen. 
+     operations are :    
+    <tt><b>"clear"</b></tt>, 
+    <tt><b>"and"</b></tt>, 
+    <tt><b>"andReverse"</b></tt> , 
+    <tt><b>"copy"</b></tt>,  src
+    <tt><b>"andInverted"</b></tt> , 
+    <tt><b>"noop"</b></tt> , 
+    <tt><b>"xor"</b></tt> , 
+    <tt><b>"or"</b></tt> , 
+    <tt><b>"nor"</b></tt> , 
+    <tt><b>"equiv"</b></tt> , 
+    <tt><b>"invert"</b></tt> , 
+    <tt><b>"orReverse"</b></tt> , 
+    <tt><b>"copyInverted"</b></tt> , 
+    <tt><b>"orInverted"</b></tt> , 
+    <tt><b>"nand"</b></tt> , 
+    <tt><b>"set"</b></tt> , 
+
+     </li>
+
+     <li><b>children: </b>
+     This handles represent 
+     the vector of the figure's children . Note that all figure children are of type <tt><b>"Axes"</b></tt>
+     </li>
+
+   
+
+   <li><b>Children s default values: </b>
+     
+
+     <li><b>auto_scale: </b>
+     This field contains the default <tt><b>auto_scale</b></tt> property value
+     for axes creation. It's value should
+     be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt> 
+     </li>
+
+     <li><b>auto_clear: </b>
+     This field contains the default <tt><b>auto_clear</b></tt> property value
+     for axes creation. It's value should
+     be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt> 
+     </li>
+
+     <li><b>visible: </b>
+      This field contains the default <tt><b>visible</b></tt> property value
+     for axes creation. It's value should
+     be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt> 
+     </li>
+
+     <li><b>line_style: </b>
+      This field contains the default <tt><b>line_style</b></tt> property
+       value for Segs, Arcs, Rectangle and Polyline objects.
+       <tt><b>line_style</b></tt> selects the type of line to be
+       used to draw lines . It's value should be an integer in [0 9].
+       0 stands for solid the other value stands for a selection of
+       dashes.
+     </li>
+
+     <li><b>thickness: </b>
+       This field contains the default <tt><b>thickness</b></tt> property
+       value for all objects using line drawing. It's value should
+       be a non negative integer.
+     </li>
+
+      <li><b>fill_mode: </b>
+      This field contains the default <tt><b>fill_mode</b></tt> property
+       value for  Rectangle, Arcs and Polyline objects.
+       It's value should be <tt><b>"on" </b></tt> or
+       <tt><b>"off"</b></tt>. if the value is "on" the object is filled
+       with  the color given by it's "foreground" property value.
+     </li>
+
+     <li><b>mark_mode: </b>
+      This field contains the default <tt><b>mark_mode</b></tt> property
+       value for Segs Rectangle and Polyline objects. It's value should
+       be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt>.
+     </li>
+
+     <li><b>mark_style: </b>
+      This field contains the default <tt><b>mark_style</b></tt> property
+       value for Segs Rectangle and Polyline
+       objects. <tt><b>mark_style</b></tt> selects the type of mark to be
+       displayed. It's value should be an integer in [0 9].
+     </li>
+
+     <li><b>mark_size: </b>
+      This field contains the default <tt><b>mark_size</b></tt> property
+       value for Segs Rectangle and Polyline objects. 
+       <tt><b>mark_style</b></tt> selects the font size of mark to be
+       displayed. It's value should be an integer in [0 9].
+     </li>
+
+     <li><b>foreground: </b>
+      This field contains the default <tt><b>foreground</b></tt> property
+      value for all objects.  It's value should be a color index
+      (relative to the current colormap).
+     </li>
+
+     <li><b>clip_state: </b>
+      This field contains the default <tt><b>clip_state</b></tt> property
+      value for all objects.  It's value should be :
+      
+         <li><b></b> 
+         <tt><b>"off"</b></tt> under this state all objects created are not clipped
+         </li>
+
+         <li><b></b> 
+         <tt><b>"cliprf"</b></tt> this means that all objects created after
+         that are clipped outside the Axes rectangle.
+         </li>
+
+        <li><b></b> 
+         <tt><b>"on"</b></tt> objects created are clipped outside the rectangle given 
+	 by the determinate property clip_box.
+         </li>
+      
+     </li>
+
+     <li><b>clip_box: </b>
+      This field contains the default <tt><b>clip_box</b></tt> property
+      value for all objects.  Its value should be an empty matrix if
+      clip_state is <tt><b>"off"</b></tt>. If not objects are clipped to 
+      the bounding box <tt><b>[x,y,w,h]</b></tt> (upper-left point, width, height) 
+     </li>
+     <li><b>rotation_style: </b>
+      This field is related to the "3D Rot" button. It takes  <tt><b>unary</b></tt> 
+      as value (default) in the aim to rotate only selected 3D plot.
+      In the other case its value ca be <tt><b>multiple</b></tt> all 3D plots are rotated.
+     </li>
+
+  
+</li>
+</li>
+
+
+
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+   set("figure_style","new") //create a figure
+   f=get("current_figure") //get the handle of the newly created figure
+   f.figure_position
+   f.figure_size=[200,200]
+   f.background=2
+
+
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="set.htm"><tt><b>set</b></tt></a>&nbsp;&nbsp;<a href="get.htm"><tt><b>get</b></tt></a>&nbsp;&nbsp;<a href="delete.htm"><tt><b>delete</b></tt></a>&nbsp;&nbsp;<a href="axes_properties.htm"><tt><b>axes_properties</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Author</font></H3><p><ul>Djalel ABDEMOUCHE  </ul></p></body></html>

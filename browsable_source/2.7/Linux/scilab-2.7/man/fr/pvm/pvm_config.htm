@@ -1,0 +1,45 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>pvm_config</title></head><body bgcolor="FFFFFF"><CENTER>Scilab function  </CENTER><p><b>pvm_config -  sends a message  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>res =  pvm_config()  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>res, list of 7 elements such that:  </b></tt>
+     res(1):  integer returning the number of hosts (pvmds) in the virtual machine.
+  </li>
+  <p>
+     res(2):  integer returning the number of different data formats being used.
+  </p>
+  <p>
+     res(3):  integer returning pvmd task ID for host.
+  </p>
+  <p>
+     res(4):  character string returning name of host.
+  </p>
+  <p>
+     res(5):  character string returning architecture name of host
+  </p>
+  <p>
+     res(6):  integer returning relative speed of host. Default value is 1000.
+  </p>
+  <p>
+     res(7):  integer status code returned by the routine. 
+  </p>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>pvm_config</b></tt> returns information about
+    the present virtual machine. The information returned is
+    similar to that available from the console command
+  </p>
+  <p>
+    The <tt><b>pvm_config</b></tt> function returns information about the entire
+    virtual machine in one call.
+  </p>
+  <p>
+    If pvm_config is successful,
+  </p>
+  <p>
+    will be 0.
+    If some error occurs then
+  </p>
+  <p>
+    will be &lt; 0.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+res = pvm_config()
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="pvm_tasks.htm"><tt><b>pvm_tasks</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,50 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xclick</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>xclick -  attend un appui sur un bouton de la souris  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[c_i,c_x,c_y,c_w,c_m]=xclick([flag])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>c_i  </b></tt>
+    : entier, numéro de bouton
+  </li>
+  <li><tt><b>c_x,c_y  </b></tt>
+    : scalaire réel, position du pointeur de la souris
+  </li>
+  <li><tt><b>c_w  </b></tt>
+    : entier, numéro de fenêtre.
+  </li>
+  <li><tt><b>c_m  </b></tt>
+    : chaîne de caractères, callback de menu
+  </li>
+  <li><tt><b>flag  </b></tt>
+    : entier. S'il est présent, la queue d'évènements des clics de souris n'est pas vidée préalablement. 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>xclick</b></tt> attend l'appui sur un bouton de la souris.
+  </p>
+  <p>
+    Appelée avec 3 arguments en sortie, cette fonction attend qu'un bouton de la souris soit pressé avec le pointeur dans la fenêtre graphique courante.
+  </p>
+  <p>
+    Avec 4 ou 5 arguments en sortie, l'appui sur un bouton de la souris est attendu dans toutes les fenêtres graphiques.
+  </p>
+  <p>
+    Les valeurs renvoyées par xclick sont décrites ci-dessous :
+  </p>
+ 
+
+  <li><b>c_i</b> 
+    : un entier donnant le numéro du bouton pressé 0, 1 ou 2 (gauche, milieu, droite) ou -1 en cas de problème avec xclick.
+  </li>
+
+  <li><b>c_x,c_y</b> 
+    : les coordonnées de la position du curseur au moment du clic, à l'échelle graphique courante. 
+  </li>
+
+  <li><b>c_w</b> 
+    : le numéro de la fenêtre ou le clic s'est produit.
+  </li>
+
+  <li><b>c_m</b> 
+    : chaîne de caractères associée à un menu dynamique. Si xclick se termine à cause d'un clic sur l'article d'un menu, <tt><b>c_i</b></tt>, <tt><b>c_x</b></tt>, <tt><b>c_y,</b></tt> et <tt><b>c_w</b></tt> prennent des valeurs arbitraires
+  </li>
+ 
+  </dl><H3><font color="blue">PROBLÈMES CONNUS</font></H3><ul><p>
+    <tt><b>xclick</b></tt> peut renvoyer le message  "Can't grab the pointer" si la fenêtre graphique courante est iconifiée au moment de l'appel.
+  </p></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="locate.htm"><tt><b>locate</b></tt></a>&nbsp;&nbsp;<a href="xgetmouse.htm"><tt><b>xgetmouse</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>J.Ph.C.  </ul></p></body></html>

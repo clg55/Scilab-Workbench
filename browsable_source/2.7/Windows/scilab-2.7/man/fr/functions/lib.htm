@@ -1,0 +1,77 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>lib</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>lib -  library definition  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>xlib = lib('lib-dir')  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><p>
+    lib-dir: character string
+  </p></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>lib-dir</b></tt> is a character string defining a directory that contains
+    compiled Scilab function (<tt><b>.bin</b></tt>) files.  In addition to these
+    files <tt><b>lib-dir</b></tt> must have a file called <tt><b>names</b></tt>, that contains
+    the names of the functions defined in <tt><b>lib-dir</b></tt>.  On success, all
+    functions in <tt><b>lib-dir</b></tt> are available from within Scilab.  They are
+    loaded on demand when called for the first time.
+  </p>
+  <p>
+    Binary files can be created from within Scilab with the command
+    <tt><b>save</b></tt>.
+  </p>
+  <p>
+    Scilab's standard libraries are defined using <tt><b>lib</b></tt> on the
+    <tt><b>SCIDIR/macros/*</b></tt> subdirectories.
+  </p>
+  <p>
+    As an example, given the following definitions
+  </p>
+  <pre>
+    deff('z = myplus(x, y)', 'z = x + y')
+    deff('z = yourplus(x, y)', 'x = x - y')
+    lib_dir = '/home/joeuser/myscidir'
+   </pre>
+  <p>
+    <tt><b>myplus</b></tt> and <tt><b>yourplus</b></tt> are compiled into <tt><b>lib_dir</b></tt> with
+    the commands
+  </p>
+  <pre>
+    save(lib_dir + '/myplus.bin', myplus)
+    save(lib_dir + '/yourplus.bin', yourplus)
+   </pre>
+  <p>
+    A library can now be created from the two <tt><b>.bin</b></tt> files with the
+    command
+  </p>
+  <pre>
+        xlib = lib(lib_path + '/')
+   </pre>
+  <p>
+    <tt><b>xlib</b></tt> is a Scilab variable of type "library".  A library variable
+    usually is saved for later loading, either on-line or from the
+    user-specific startup file (<tt><b>$HOME/.scilab</b></tt>).
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">RESTRICTIONS</font></H3><ul><p>
+    Scilab tacitly assumes that file <tt><b>foo.bin</b></tt> defines only a single function named <tt><b>foo</b></tt>. 
+  </p></ul><H3><font color="blue">Exemples</font></H3><ul><pre>
+//define some variables
+function z = myplus(x, y), z = x + y,endfunction
+function z = yourplus(x, y), x = x - y,endfunction
+A=1:10;
+
+//creation des fichiers *.bin dans le repertoire libdir
+libdir=TMPDIR
+save(libdir + '/myplus.bin', myplus);
+save(libdir + '/yourplus.bin', yourplus);
+save(libdir + '/A.bin', A);
+
+//creation du fichier name
+mputl(['myplus';'yourplus';'A'],TMPDIR+'/names');
+
+//creation de la bibliotheque contenant  myplus et yourplus
+xlib = lib(libdir+'/')
+
+//effacement des variables
+clear myplus yourplus A
+
+//chargement automatique a l'execution
+myplus(1,2)
+
+A
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="genlib.htm"><tt><b>genlib</b></tt></a>&nbsp;&nbsp;<a href="../fileio/save.htm"><tt><b>save</b></tt></a>&nbsp;&nbsp;<a href="deff.htm"><tt><b>deff</b></tt></a>&nbsp;&nbsp;<a href="getf.htm"><tt><b>getf</b></tt></a>&nbsp;&nbsp;<a href="../programming/whereis.htm"><tt><b>whereis</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

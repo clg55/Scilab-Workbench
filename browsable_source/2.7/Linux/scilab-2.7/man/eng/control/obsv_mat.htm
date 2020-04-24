@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>obsv_mat</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>obsv_mat -  observability matrix  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[O]=obsv_mat(A,C)  </tt></dd><dd><tt>[O]=obsv_mat(sl)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>A,C,O  </b></tt>
+    : real matrices
+  </li>
+  <li><tt><b>sl  </b></tt>
+    : <tt><b>syslin</b></tt> list
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>obsv_mat</b></tt> returns the observability matrix:
+  </p>
+  <pre>
+O=[C; CA; CA^2;...; CA^(n-1) ]
+   </pre>
+  </dl><H3><font color="blue">See Also</font></H3><p><ul><a href="contrss.htm"><tt><b>contrss</b></tt></a>&nbsp;&nbsp;<a href="obsvss.htm"><tt><b>obsvss</b></tt></a>&nbsp;&nbsp;<a href="obs_gram.htm"><tt><b>obs_gram</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,31 @@
+<UL><LI><OBJECT type="text/sitemap">
+<param name="Name" value="Scilab documentation">
+</OBJECT>
+<UL>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="programming\whatis.htm"><param name="Name" value="Programmation"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="graphics\whatis.htm"><param name="Name" value="Librairie graphique"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="elementary\whatis.htm"><param name="Name" value="Fonctions élémentaires"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="fileio\whatis.htm"><param name="Name" value="Entrées-sorties"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="functions\whatis.htm"><param name="Name" value="Manipulation des fonctions et des librairies"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="strings\whatis.htm"><param name="Name" value="Manipulations de chaînes de caractères"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="gui\whatis.htm"><param name="Name" value="Dialogues"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="utilities\whatis.htm"><param name="Name" value="Utilitaires"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="linear\whatis.htm"><param name="Name" value="Algèbre linéaire"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="polynomials\whatis.htm"><param name="Name" value="Calculs sur les polynômes"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="control\whatis.htm"><param name="Name" value="Contrôle et théorie des systèmes"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="robust\whatis.htm"><param name="Name" value="Contrôle robuste"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="nonlinear\whatis.htm"><param name="Name" value="Optimisation et simulation"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="signal\whatis.htm"><param name="Name" value="Traitement du signal"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="arma\whatis.htm"><param name="Name" value="Modélisation et simulation ARMA"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="metanet\whatis.htm"><param name="Name" value="Metanet : graphes et réseaux"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="scicos\whatis.htm"><param name="Name" value="Scicos : éditeur et simulateur de blocs diagrammes"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="sound\whatis.htm"><param name="Name" value="Manipulation de fichiers sons"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="translation\whatis.htm"><param name="Name" value="Génération de code, traduction de données"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="pvm\whatis.htm"><param name="Name" value="Calcul parallèle avec PVM"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="tdcs\whatis.htm"><param name="Name" value="TdCs"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="tksci\whatis.htm"><param name="Name" value="Interface TCL/Tk"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="statistics\whatis.htm"><param name="Name" value="Statistiques"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="dcd\whatis.htm"><param name="Name" value="Fonctions de distributions statistiques"></OBJECT>
+<LI><OBJECT type="text/sitemap"><param name="Local" value="identification\whatis.htm"><param name="Name" value="Identification"></OBJECT>
+</UL>
+</UL>

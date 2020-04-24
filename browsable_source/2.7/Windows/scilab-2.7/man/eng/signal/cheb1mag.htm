@@ -1,0 +1,36 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>cheb1mag</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>cheb1mag -   response of Chebyshev type 1 filter  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[h2]=cheb1mag(n,omegac,epsilon,sample)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>n  </b></tt>
+    : integer : filter order
+  </li>
+  <li><tt><b>omegac  </b></tt>
+    : real : cut-off frequency
+  </li>
+  <li><tt><b>epsilon  </b></tt>
+    : real : ripple in pass band
+  </li>
+  <li><tt><b>sample  </b></tt>
+    : vector of frequencies where <tt><b>cheb1mag</b></tt> is evaluated
+  </li>
+  <li><tt><b>h2  </b></tt>
+    : Chebyshev I filter values at sample points
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Square magnitude response of a type 1 Chebyshev filter.
+  </p>
+  <p>
+    <tt><b>omegac</b></tt>=passband edge.
+  </p>
+  <p>
+    <tt><b>epsilon</b></tt>: such that <tt><b>1/(1+epsilon^2)</b></tt>=passband ripple.
+  </p>
+  <p>
+    <tt><b>sample</b></tt>: vector of frequencies where the square magnitude
+    is desired.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+//Chebyshev; ripple in the passband
+n=13;epsilon=0.2;omegac=3;sample=0:0.05:10;
+h=cheb1mag(n,omegac,epsilon,sample);
+plot(sample,h,'frequencies','magnitude')
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="buttmag.htm"><tt><b>buttmag</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

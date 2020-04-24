@@ -1,0 +1,30 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>ccontrg</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>ccontrg -  central H-infinity controller  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[K]=ccontrg(P,r,gamma);  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>P  </b></tt>
+    : <tt><b>syslin</b></tt> list (linear system in state-space representation)
+  </li>
+  <li><tt><b>r  </b></tt>
+    : 1x2 row vector, dimension of the 2,2 part of <tt><b>P</b></tt>
+  </li>
+  <li><tt><b>gamma  </b></tt>
+    : real number
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    returns a realization <tt><b>K</b></tt> of the central controller for the
+    general standard problem in state-space form.
+  </p>
+  <p>
+    Note that gamma must be &gt; gopt (ouput of <tt><b>gamitg</b></tt>)
+  </p>
+  <p>
+    P contains the parameters of plant realization <tt><b>(A,B,C,D)</b></tt>
+    (<tt><b>syslin</b></tt> list) with 
+  </p>
+  <pre>
+B = ( B1 , B2 ) ,        C= ( C1 ) ,    D = ( D11  D12)
+                            ( C2 )          ( D21  D22)
+   </pre>
+  <p>
+    <tt><b>r(1)</b></tt> and <tt><b>r(2)</b></tt> are the dimensions of <tt><b>D22</b></tt> (rows x columns)
+  </p>
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="gamitg.htm"><tt><b>gamitg</b></tt></a>&nbsp;&nbsp;<a href="h_inf.htm"><tt><b>h_inf</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>P. Gahinet (INRIA);   </ul></p></body></html>

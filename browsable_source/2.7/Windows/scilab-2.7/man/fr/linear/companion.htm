@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>companion</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>companion -  matrice compagnon  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>A=companion(p)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>p  </b></tt>
+    : polynôme ou vecteur de polynômes
+  </li>
+  <li><tt><b>A  </b></tt>
+    : matrice carrée
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Renvoie une matrice <tt><b>A</b></tt> dont le polynôme caractéristique est
+    <tt><b>p</b></tt> si <tt><b>p</b></tt> est unitaire (le coefficient de plus haut degré est égal à un). Si <tt><b>p</b></tt> n'est pas unitaire
+    le polynôme caractéristique de <tt><b>A</b></tt> est égal à
+    <tt><b>p/c</b></tt> où <tt><b>c</b></tt> est le coefficient de plus haut degré de <tt><b>p</b></tt>.
+  </p>
+  <p>
+    Si <tt><b>p</b></tt> est un vecteur de polynômes unitaires, <tt><b>A</b></tt> est bloc-diagonale,
+    et le polynôme caractéristique du i-ème bloc est égal à <tt><b>p(i)</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+s=poly(0,'s');
+p=poly([1,2,3,4,1],'s','c')
+det(s*eye()-companion(p))
+roots(p)
+spec(companion(p))
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="spec.htm"><tt><b>spec</b></tt></a>&nbsp;&nbsp;<a href="../programming/poly.htm"><tt><b>poly</b></tt></a>&nbsp;&nbsp;<a href="randpencil.htm"><tt><b>randpencil</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>F.D.  </ul></p></body></html>

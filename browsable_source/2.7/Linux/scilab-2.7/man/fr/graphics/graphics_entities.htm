@@ -1,0 +1,205 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>graphics_entities</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Data type </CENTER><p><b>graphics_entities -  description of the
+  graphics entities data structures </b></p><H3><font color="blue">Description</font></H3><dl>
+  Scilab graphics is based on two differents modes. In the <tt><b>"old"</b></tt> 
+  mode, the graphics functions are stored to enable redisplay, zoom and
+  rotations. Comparrement at the <tt><b>"new"</b></tt> mode, each graphics 
+  window and the drawing it contains are represented by hierchical entities. 
+  The hierachy to level is the Figure. Each Figure defines at least one
+  children of type Axes. Each Axes entity contains a set of leaf
+  entities which are the basic graphics objects like Polylines,
+  Rectangles, Arcs, Segs,... It can also contain an Agregation type 
+  which are recursive sets of entities. The main interest of the new
+  graphic mode is to make property change easier. This new graphics'mode
+  provides a set of high-level graphing routines 
+  (see <a href="set.htm"><tt><b>set</b></tt></a>,  <a href="get.htm"><tt><b>get</b></tt></a>) used to control objects' properties
+  such us data, coordinates and scaling, color and appearences without requiring 
+  to replay the initial graphics commands. 
+  <p></p>
+  Graphics entities are associated to Scilab variables of type
+  <tt><b>handle</b></tt>. The handle is a unique identifier which is associated
+  to each instance of a created graphical entity. Using this handle, 
+  it will be possible to reach entities' properties through "set" and "get" routines.
+  The handles are also used to manipulate graphics objects, to move them, 
+  to make copies or delete them.
+  <p></p>
+  To set the current graphics window mode we can use these following instructions: 
+  <tt><b>set("figure_style","new") </b></tt> to have a graphics window under the "new" mode or  
+  <tt><b>set("figure_style","old ")</b></tt> for the "old" mode. 
+  <p></p>
+  The instructions
+  <tt><b>set("old_style","off")</b></tt> and
+  <tt><b>set("old_style","on")</b></tt> are used to set the
+  default mode to be used when a new graphics window is created. 
+  <p></p>
+  The new graphics mode is a beta version. So the "old" mode is set as
+  default.
+  <p></p>
+  <p></p>
+  <li><b>Figure: </b>
+   The figure entity is the top level of the graphics entities
+  hierarchy. This entity defines the parameters for the figure itself
+  as well as the parameters' default values for the children
+  creation. The figure children are the Axes entities. 
+  <p></p>
+  See <a href="figure_properties.htm"><tt><b>figure_properties</b></tt></a> for details.
+  <p></p>
+  The handle on the current figure may be got using <tt><b>get("current_figure")</b></tt>.
+
+  </li>
+  <li><b>Axes</b>
+  The Axes entity is the second level of the graphics entities
+  hierarchy. This entity defines the parameters for the change of
+  coordinates and the axes drawing
+  as well as the  parameters' default values for the children creation. 
+  <p></p>
+ See <a href="axes_properties.htm"><tt><b>axes_properties</b></tt></a> for details.
+ <p></p>
+  The handle on the current Axes may be got using <tt><b>get("current_axes")</b></tt>.
+  </li>
+
+  <li><b>Agregation</b>
+ The agregation entity is just a vector of children and with a single
+ property (visibility property). It is used to glue a set of entities together. 
+ <p></p>
+   See <a href="glue.htm"><tt><b>glue</b></tt></a> and <a href="agregation_properties.htm"><tt><b>agregation_properties</b></tt></a> functions.
+  </li>  
+
+  <li><b>Axis</b>
+  The Axis entity is a leaf of the graphics entities
+  hierarchy. This entity defines the parameters for axis scaling and appearance. 
+  <p></p>
+  See <a href="axis_properties.htm"><tt><b>axis_properties</b></tt></a> for details.
+  </li>
+
+  <li><b>Polyline</b>
+  The polyline entity is a leaf of the graphics entities
+  hierarchy. It defines polylines and polylines extensions drawing
+  properties.  
+  <p></p>
+  See <a href="polyline_properties.htm"><tt><b>polyline_properties</b></tt></a> for details.
+ </li>
+
+  <li><b>Patch</b>
+  The Patch entity is a leaf of the graphics entities
+  hierarchy. It defines filled polylines and its drawing
+  properties.  
+  <p></p>
+  See <a href="patch_properties.htm"><tt><b>patch_properties</b></tt></a> for details.
+  </li>
+
+ <li><b>Arc</b>
+  The Arc entity is a leaf of the graphics entities
+  hierarchy. This entity defines the parameters for ellipses and part
+  of ellipses. 
+  <p></p>
+  See <a href="arc_properties.htm"><tt><b>arc_properties</b></tt></a> for details.
+  </li> 
+
+  <li><b>Rectangle</b>
+  The Rectangle entity is a leaf of the graphics entities
+  hierarchy. This entity defines the parameters for rectangles and
+  filled rectangles.  
+  <p></p>
+  See <a href="rectangle_properties.htm"><tt><b>rectangle_properties</b></tt></a> for details.
+ </li>
+
+  <li><b>Surface</b>
+  The Surface entity is a leaf of the graphics entities
+  hierarchy. It has sub types Fac3d  Plot3d . This entity is still under developpement
+  and will problably evolve a lot.
+   <p></p> 
+  See <a href="surface_properties.htm"><tt><b>surface_properties</b></tt></a> for details.
+  </li>
+
+  <li><b>Param3d</b>
+  The Param3d entity is a leaf of the graphics entities
+  hierarchy. It is a Surface sub type . This entity is still under developpement
+  and will problably evolve a lot.  
+  <p></p> 
+  See <a href="param3d_properties.htm"><tt><b>param3d_properties</b></tt></a> for details.
+  </li>
+
+  <li><b>Fec</b>
+  The Fec entity is a leaf of the graphics entities hierarchy. It
+  represents 2D finite elements plots . 
+  <p></p>  
+  See <a href="fec_properties.htm"><tt><b>fec_properties</b></tt></a> for details.
+  </li>
+
+  <li><b>Grayplot</b>
+  The Grayplot entity is a leaf of the graphics entities hierarchy. It
+  represents 2D plots of surface using colors and images.  
+  <p></p> 
+  See <a href="grayplot_properties.htm"><tt><b>grayplot_properties</b></tt></a> for details.
+  </li>
+
+  <li><b>Segs</b>
+  The Segs entity is a leaf of the graphics entities
+  hierarchy. This entity defines the parameters for a set of colored
+  segments or colored arrows. 
+  <p></p>  
+  See <a href="segs_properties.htm"><tt><b>segs_properties</b></tt></a> for details.
+ </li>
+
+  <li><b>Champ</b>
+   The Champ entity is a leaf of the graphics entities
+  hierarchy. This entity defines the parameters for a 2D vector field.
+  <p></p>  
+  See <a href="champ_properties.htm"><tt><b>champ_properties</b></tt></a> for details.
+  </li>
+
+
+  <li><b>Text</b>
+  The Text entity is a leaf of the graphics entities
+  hierarchy. This entity defines the parameters for string drawing. 
+  <p></p>  
+  See <a href="text_properties.htm"><tt><b>text_properties</b></tt></a> for details.
+  </li>
+
+  <li><b>Title</b>
+  The Title entity is a leaf of the graphics entities
+  hierarchy. This entity defines the parameters for a title drawn 
+  on a graphics window. 
+  <p></p>  
+  See <a href="title_properties.htm"><tt><b>title_properties</b></tt></a> for details.
+  </li>
+
+  <li><b>Legend</b>
+  The Legend entity is a leaf of the graphics entities
+  hierarchy. This entity defines the parameters for legends drawn
+  below <tt><b>plot2dx</b></tt> graphs. This entity requires further
+  developments.   
+  <p></p>  
+  See <a href="legend_properties.htm"><tt><b>legend_properties</b></tt></a> for details.
+  </li>
+
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+
+  //Play this example line per line
+
+  set("figure_style","new") //create a figure in entity mode
+
+  //get the handle on the Figure entity and display its properties
+  f=get("current_figure") 
+  a=f.children // the handle on the Axes child
+  x=(1:10)';  plot2d(x,[x.^2 x.^1.5])
+  e=a.children //Agregation of 2 polylines
+
+  p1=e.children(1) //the last drawn polyline properties
+  p1.foreground=5  // change the polyline color
+  e.children.thickness=5 // change the thickness of the two polylines
+
+  delete(e.children(2))
+
+  move(e.children,[0,30]) //translate the polyline
+
+  a.axes_bounds=[0 0 0.5 0.5]; 
+
+  subplot(222) //create a new Axes entity
+  plot(1:10);
+  a1=f.children(1); //get its handle
+  copy(e.children,a1); //copy the polyline of the first plot in the new Axes
+  a1.data_bounds=[1 0 10 100]; //change the Axes bounds  
+
+
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="set.htm"><tt><b>set</b></tt></a>&nbsp;&nbsp;<a href="get.htm"><tt><b>get</b></tt></a>&nbsp;&nbsp;<a href="move.htm"><tt><b>move</b></tt></a>&nbsp;&nbsp;<a href="draw.htm"><tt><b>draw</b></tt></a>&nbsp;&nbsp;<a href="delete.htm"><tt><b>delete</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

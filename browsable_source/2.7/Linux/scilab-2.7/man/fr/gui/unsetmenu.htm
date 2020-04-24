@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>unsetmenu</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>unsetmenu -  interactive button or menu or submenu de-activation  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>unsetmenu(button,[nsub])   </tt></dd><dd><tt>unsetmenu(gwin,button,[nsub])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>button  </b></tt>
+    : a character string. The button name
+  </li>
+  <li><tt><b>gwin  </b></tt>
+    : integer. The number of graphic window where the button is installed
+  </li>
+  <li><tt><b>nsub  </b></tt>
+    : integer. The number of submenu to de-activate (if any). If button has no sub-menu, <tt><b>nsub</b></tt> is ignored  
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    The function allows the user to desactivate  buttons or menus created by
+    <tt><b>addmenu</b></tt> in the main or graphics windows command panels.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+//addmenu('foo')
+//unsetmenu('foo')
+//unsetmenu('File',2)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="delmenu.htm"><tt><b>delmenu</b></tt></a>&nbsp;&nbsp;<a href="setmenu.htm"><tt><b>setmenu</b></tt></a>&nbsp;&nbsp;<a href="addmenu.htm"><tt><b>addmenu</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

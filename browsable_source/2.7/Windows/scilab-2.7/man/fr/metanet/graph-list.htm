@@ -1,0 +1,604 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>graph-list</title></head><body bgcolor="FFFFFF"><CENTER>Scilab type  </CENTER><p><b>graph-list -  description d'un graphe (sous forme de liste)  </b></p><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Un graphe dans Scilab est représenté par une liste typée.
+  </p>
+  <p>
+    Voir ci-dessous la description complète de cette liste.
+    Chaque élément est décrit par une ou plusieurs lignes.
+    La première ligne donne
+    le nom de l'élément et sa définition. Des informations supplémentaires, 
+    telles que les valeurs par défaut des éléments pouvant en avoir une, sont 
+    données sur les autres lignes.
+    En fait, seul les 5 premiers éléments doivent avoir une valeur, les 
+    autres pouvant être définis comme un vecteur vide <tt><b>[]</b></tt>, la valeur par 
+    défaut étant utilisée par les fonctions ou la fenêtre de Metanet.
+    Par exemple, il est possible de définir un graphe par :
+  </p>
+  <pre>
+g=make_graph('min',1,1,[1],[1]);
+   </pre>
+  <p>
+    qui est le graphe le plus simple que l'on puisse créer avec Metanet (il est orienté, 
+    possède un sommet et une boucle sur ce sommet).
+  </p>
+  <p>
+    Le nom des élément dans la liste est très important car il est utilisé 
+    pour y accéder. Par exemple si <tt><b>g</b></tt> est un graphe, pour obtenir le nom du graphe, 
+    il suffit de taper :
+  </p>
+  <pre>
+g('name')
+   </pre>
+  <p>
+    ou 
+  </p>
+  <pre>
+g.name
+   </pre>
+  <p>
+    et pour changer le nom du graphe en <tt><b>'toto'</b></tt> :
+  </p>
+  <pre>
+g('name')='toto'; 
+   </pre>
+  <p>
+    ou 
+  </p>
+  <pre>
+g.name='toto';
+   </pre>
+  <p>
+  </p>
+  <p>
+    On peut obtenir le nombre d'arêtes et le nombre d'arcs du graphe
+    avec <tt><b>edge_number(g)</b></tt> et <tt><b>arc_number(g)</b></tt> (ces noms ne sont pas 
+    ceux des éléments de la liste). Pour raisons de compatibilité <tt><b>node_number(g)</b></tt> 
+    peut être utilisé à la place de <tt><b>g('node_number')</b></tt> ou <tt><b>g.node_number</b></tt>.
+  </p>
+  <p>
+    Un graphe peut être syntaxiquement correct mais ne pas représenter un 
+    graphe valide.
+    Utiliser la fonction <tt><b>check_graph</b></tt> pour le vérifier.
+    De plus, les noms des sommets doivent être différents. En fait, cela ne donne pas d'erreur dans Scilab, mais un comportement étrange peut en résulter dans la
+    fenêtre Metanet. Ceci n'est pas vérifié par <tt><b>check_graph</b></tt> 
+    car cela prendrait trop de temps. Cela est seulement vérifié lors de sa visualisation, sauvegarde ou chargement.
+  </p>
+  <p>
+  </p>
+  <p>
+    Les éléments d'un graphe sont les suivants :
+  </p>
+  <p>
+  </p>
+ 
+
+  <li><b>name :</b> 
+    - le nom du graphe
+  </li>
+ 
+
+  <li><b>-</b> 
+    c'est une chaîne de caractères (longueur &lt; 80)
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>oriented :</b> 
+    - flag donnant le type du graphe
+  </li>
+ 
+
+  <li><b>-</b> 
+    il est égal à 1 (graphe orienté) ou égal à 0 (graphe non-orienté)
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_number :</b> 
+    - nombre de sommets 
+  </li>
+
+  <li><b>tail :</b> 
+    - vecteur ligne des numéros des sommets origines
+  </li>
+
+  <li><b>head :</b> 
+    - vecteur ligne des numéros des sommets extrémités 
+  </li>
+
+  <li><b>node_name :</b> 
+    - vecteur ligne des noms des sommets
+  </li>
+ 
+
+  <li><b>-</b> 
+    les noms des sommets doivent être différents 
+  </li>
+
+  <li><b>-</b> 
+    par défaut les noms des sommets sont égaux à leurs numéros
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_type :</b> 
+    - vecteur ligne des types des sommets
+  </li>
+ 
+
+  <li><b>-</b> 
+    le type est un entier entre 0 et 2, 0 par défaut (sommet normal) :
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 = sommet normal
+  </li>
+
+  <li><b>-</b> 
+    1 = puits
+  </li>
+
+  <li><b>-</b> 
+    2 = source
+  </li>
+ 
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_x :</b> 
+    - vecteur ligne des coordonnées x des sommets
+  </li>
+ 
+
+  <li><b>-</b> 
+    valeur par défaut calculée
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_y :</b> 
+    - vecteur ligne des coordonnées y des sommets
+  </li>
+ 
+
+  <li><b>-</b> 
+    valeur par défaut calculée
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_color :</b> 
+    - vecteur ligne des couleurs des sommets
+  </li>
+ 
+
+  <li><b>-</b> 
+    La couleur est un entier entre 0 et 16, 0 par défaut :
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 = couleur de premier plan par défaut
+  </li>
+
+  <li><b>-</b> 
+    1 = navyblue
+  </li>
+
+  <li><b>-</b> 
+    2 = blue
+  </li>
+
+  <li><b>-</b> 
+    3 = skyblue
+  </li>
+
+  <li><b>-</b> 
+    4 = aquamarine
+  </li>
+
+  <li><b>-</b> 
+    5 = forestgreen
+  </li>
+
+  <li><b>-</b> 
+    6 = green
+  </li>
+
+  <li><b>-</b> 
+    7 = lightcyan
+  </li>
+
+  <li><b>-</b> 
+    8 = cyan
+  </li>
+
+  <li><b>-</b> 
+    9 = orange
+  </li>
+
+  <li><b>-</b> 
+    10 = red
+  </li>
+
+  <li><b>-</b> 
+    11 = magenta
+  </li>
+
+  <li><b>-</b> 
+    12 = violet
+  </li>
+
+  <li><b>-</b> 
+    13 = yellow
+  </li>
+
+  <li><b>-</b> 
+    14 = gold
+  </li>
+
+  <li><b>-</b> 
+    15 = beige
+  </li>
+
+  <li><b>-</b> 
+    16 = background
+  </li>
+ 
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_diam :</b> 
+    - vecteur ligne des diamètres des sommets en pixels
+  </li>
+ 
+
+  <li><b>-</b> 
+    un sommet est dessiné sous forme d'un cercle
+  </li>
+
+  <li><b>-</b> 
+    par défaut, valeur de l'élément <tt><b>default_node_diam</b></tt>
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_border :</b> 
+    - vecteur ligne de l'épaisseur des bords des sommets
+  </li>
+ 
+
+  <li><b>-</b> 
+    un sommet est dessiné sous forme d'un cercle
+  </li>
+
+  <li><b>-</b> 
+    par défaut, valeur de l'élément  <tt><b>default_node_border</b></tt>
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_font_size :</b> 
+    - vecteur ligne de la taille de la police utilisée pour afficher le nom du sommet
+  </li>
+ 
+
+  <li><b>-</b> 
+    8, 10, 12, 14, 18 ou 24, au choix
+  </li>
+
+  <li><b>-</b> 
+    par défaut, valeur de l'élément  <tt><b>default_font_size</b></tt>
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_demand :</b> 
+    - vecteur ligne des demandes des sommets
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_name :</b> 
+    - vecteur ligne des noms d'arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    il est souhaitable que les noms des arêtes soient différents, mais c'est n'est pas  obligatoire 
+  </li>
+
+  <li><b>-</b> 
+    par défaut les noms des arêtes sont leur numéros
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_color:</b> 
+    - vecteur ligne des couleurs des arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    la couleur est un entier entre 0 et 16 (voir <tt><b>node_color</b></tt>)
+  </li>
+
+  <li><b>-</b> 
+    0 = couleur de premier plan (par défaut)
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_width:</b> 
+    - vecteur ligne des épaisseurs des arêtes en pixels
+  </li>
+ 
+
+  <li><b>-</b> 
+    par défaut, valeur de l'élément <tt><b>default_edge_width</b></tt>
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_hi_width :</b> 
+    - vecteur ligne des épaisseurs des arêtes mises en évidence (en pixels)
+  </li>
+ 
+
+  <li><b>-</b> 
+    par défaut, valeur de l'élément <tt><b>default_edge_hi_width</b></tt>
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_font_size:</b> 
+    -  vecteur ligne de la taille de la police utilisée pour afficher le nom  des arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    8, 10, 12, 14, 18 ou 24
+  </li>
+
+  <li><b>-</b> 
+    par défaut, valeur de l'élément <tt><b>default_font_size</b></tt>
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_length :</b> 
+    - vecteur ligne des longueurs des arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_cost :</b> 
+    - vecteur ligne des coûts des arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_min_cap :</b> 
+    - vecteur ligne des capacités minimum des arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_max_cap :</b> 
+    - vecteur ligne des capacités maximum des arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_q_weight :</b> 
+    - vecteur ligne des poids quadratiques des arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_q_orig :</b> 
+    - vecteur ligne des origines quadratiques des arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>edge_weight :</b> 
+    - vecteur ligne des poids des arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    0 par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>default_node_diam :</b> 
+    - diamètre par défaut des sommets du graphe
+  </li>
+ 
+
+  <li><b>-</b> 
+    20 pixels par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>default_node_border :</b> 
+    - épaisseur du bord des sommets
+  </li>
+ 
+
+  <li><b>-</b> 
+    2 pixels par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>default_edge_width :</b> 
+    - épaisseur par défaut des arêtes du graphe
+  </li>
+ 
+
+  <li><b>-</b> 
+    1 pixel par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>default_edge_hi_width :</b> 
+    - taille par défaut des arêtes mises en évidence (en pixels)
+  </li>
+ 
+
+  <li><b>-</b> 
+    3 pixels par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>default_font_size :</b> 
+    - taille par défaut de la police utilisée pour afficher le nom des sommets  et arêtes
+  </li>
+ 
+
+  <li><b>-</b> 
+    12 par défaut
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li><b>node_label :</b> 
+    - vecteur ligne des noms des sommets 
+  </li>
+
+  <li><b>edge_label :</b> 
+    - vecteur ligne des noms des arêtes
+  </li>
+ 
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+g=load_graph(SCI+'/demos/metanet/mesh100');
+g('node_color')=int(rand(1:g('node_number'))*16);
+g('edge_color')=int(rand(1:edge_number(g))*16);
+show_graph(g)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="arc_number.htm"><tt><b>arc_number</b></tt></a>&nbsp;&nbsp;<a href="check_graph.htm"><tt><b>check_graph</b></tt></a>&nbsp;&nbsp;<a href="edge_number.htm"><tt><b>edge_number</b></tt></a>&nbsp;&nbsp;<a href="glist.htm"><tt><b>glist</b></tt></a>&nbsp;&nbsp;<a href="make_graph.htm"><tt><b>make_graph</b></tt></a>&nbsp;&nbsp;<a href="node_number.htm"><tt><b>node_number</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

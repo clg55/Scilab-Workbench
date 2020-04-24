@@ -1,0 +1,41 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>feval</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>feval -  évaluation multiple d'une fonction  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[z]=feval(x,y,f)  </tt></dd><dd><tt>[z]=feval(x,f)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>x,y  </b></tt>
+    : deux vecteurs
+  </li>
+  <li><tt><b>f  </b></tt>
+    : fonction, ou chaîne de caractères pour les appels Fortran ou C
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Evaluation multiple d'une fonction pour un ou deux arguments de type vecteur.
+  </p>
+ 
+
+  <li><b>z=feval(x,f)</b> 
+    renvoie le vecteur <tt><b>z</b></tt> défini par
+  </li>
+
+  <li><b>z=feval(x,y,f)</b> 
+    renvoie lka matrice 
+  </li>
+  <p>
+  </p>
+  <p>
+  </p>
+  <p>
+    <tt><b>f</b></tt> est un "external" (fonction ou routine Fortran ou C) acceptant un ou deux arguments d'entrée supposés réels.
+    Le résultat renvoyé par <tt><b>f</b></tt> peut par contre être réel ou complexe. 
+    Dans le cas d'un appel Fortran ou C, la fonction <tt><b> 'f' </b></tt> doit être définie dans la fonction <tt><b>ffevalf</b></tt> (voir dans le dossier <tt><b>SCIDIR/routines/default</b></tt>)
+  </p>
+ 
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+deff('[z]=f(x,y)','z=x^2+y^2');
+feval(1:10,1:5,f)
+deff('[z]=f(x,y)','z=x+%i*y');
+feval(1:10,1:5,f)
+feval(1:10,1:5,'parab')   // voir le fichier ffeval.f
+feval(1:10,'parab')
+// Pour le lien dynamique (voir l'exemple ftest dans ffeval.f)
+// on peut utiliser la commande "link" (les paramètres dépendent de la machine):
+// unix('make ftest.o');link('ftest.o','ftest); feval(1:10,1:5,'ftest') 
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="evstr.htm"><tt><b>evstr</b></tt></a>&nbsp;&nbsp;<a href="../polynomials/horner.htm"><tt><b>horner</b></tt></a>&nbsp;&nbsp;<a href="execstr.htm"><tt><b>execstr</b></tt></a>&nbsp;&nbsp;<a href="external.htm"><tt><b>external</b></tt></a>&nbsp;&nbsp;<a href="../utilities/link.htm"><tt><b>link</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

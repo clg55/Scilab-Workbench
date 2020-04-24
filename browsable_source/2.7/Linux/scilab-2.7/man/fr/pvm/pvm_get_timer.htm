@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>pvm_get_timer</title></head><body bgcolor="FFFFFF"><CENTER>Scilab function  </CENTER><p><b>pvm_get_timer -  Gets the  system's notion  of  the current time.  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[time] = pvm_get_timer()  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>time  </b></tt>
+    : scalar
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>pvm_get_timer</b></tt> returns the  time elapsed since  the last  call of
+    pvm_get_timer or   the  last  call  of  pvm_set_timer.  The  time   is
+    expressed in elapsed microseconds.  The resolution of the system clock
+    is  hardware  dependent; the  time may  be  updated continuously or in
+    clock ticks.
+  </p>
+  <p>
+    will be &gt; 0.
+    If some error occurs then
+  </p>
+  <p>
+    will be -1.
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+B = rand(100,100);
+A = rand(100,100);
+pvm_set_timer();C=A*B;t=pvm_get_timer()
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="pvm_set_timer.htm"><tt><b>pvm_set_timer</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

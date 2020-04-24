@@ -1,0 +1,41 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>mgetl</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>mgetl -  read lines from an ascii file  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>txt=mgetl(file_desc [,m])   </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>file_desc  </b></tt>
+    :a character string giving the file name or a logical unit returned by mopen
+  </li>
+  <li><tt><b>m  </b></tt>
+    : an integer scalar. Default value is -1.
+  </li>
+  <li><tt><b>txt  </b></tt>
+    : a column vector of string
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>mgetl</b></tt> function allows to read a lines from an ascii file. 
+  </p>
+  <p>
+    If <tt><b>m</b></tt> is
+    omitted or is <tt><b>-1</b></tt> all lines till end of file occurs are read.
+  </p>
+  <p>
+    If <tt><b>m</b></tt> is given <tt><b>mgetl</b></tt> tries to read exactly m lines, if an
+    end of file occurs before <tt><b>m</b></tt> lines are read an error is
+    issued. This option is useful to sequentialy read part of a file
+    as follow
+  </p>
+  <p>
+  </p>
+  <p>
+    <tt><b>mgetl</b></tt> allows to read files coming from Unix, Windows, or Mac
+    operating systems.
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+mgetl('SCI/scilab.star',5)
+
+mgetl SCI/macros/elem/erf.sci
+
+fd=mopen('SCI/scilab.star','r')
+mgetl(fd,10)
+mclose(fd)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="mputl.htm"><tt><b>mputl</b></tt></a>&nbsp;&nbsp;<a href="mclose.htm"><tt><b>mclose</b></tt></a>&nbsp;&nbsp;<a href="mfscanf.htm"><tt><b>mfscanf</b></tt></a>&nbsp;&nbsp;<a href="mget.htm"><tt><b>mget</b></tt></a>&nbsp;&nbsp;<a href="mgetstr.htm"><tt><b>mgetstr</b></tt></a>&nbsp;&nbsp;<a href="mopen.htm"><tt><b>mopen</b></tt></a>&nbsp;&nbsp;<a href="read.htm"><tt><b>read</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>S. Steer  </ul></p></body></html>

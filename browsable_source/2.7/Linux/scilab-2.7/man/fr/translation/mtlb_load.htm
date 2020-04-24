@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>mtlb_load</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>mtlb_load -  load variables from file with matlab4 format.  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>mtlb_load fname  </tt></dd><dd><tt>mtlb_load xxx.yyy  </tt></dd><dd><tt>mtlb_load fname -ascii  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>fname  </b></tt>
+    : a file name
+  </li>
+  <li><tt><b>xxx.yyy  </b></tt>
+    : a file name with extension 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    mtlb_load   load variables on file with matlab4 formats.
+  </p>
+ 
+
+  <li><b>mtlb_load fname</b> 
+    loads in scilab all variables stored in file binary <tt><b>fname.mat</b></tt> .
+  </li>
+
+  <li><b>mtlb_load fname -ascii</b> 
+    loads in scilab  variable stored in ascii file <tt><b>fname</b></tt>,  which must contain a rectangular array of numeric data, arranged in m lines with n values in each line.  The result is an m-by-n matrix named <tt><b>fname</b></tt> .
+  </li>
+
+  <li><b>mtlb_load xxx.yyy</b> 
+    reads the ascii file <tt><b>xxx.yyy</b></tt>, which must contain a rectangular array of numeric data, arranged in m lines with n values in each line.  The result is an m-by-n matrix named <tt><b>xxx</b></tt>.
+  </li>
+
+  <li><b>"stdio" value for  fname doesnt redirect load from standard input.</b> 
+  </li>
+ 
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="mtlb_save.htm"><tt><b>mtlb_save</b></tt></a>&nbsp;&nbsp;<a href="../fileio/save.htm"><tt><b>save</b></tt></a>&nbsp;&nbsp;<a href="../fileio/load.htm"><tt><b>load</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

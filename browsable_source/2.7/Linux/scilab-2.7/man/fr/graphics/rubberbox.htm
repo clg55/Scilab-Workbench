@@ -1,0 +1,34 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>rubberbox</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>rubberbox -  Rubberband box for rectangle selection</b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[final_rect,btn]=rubberbox(initial_rect)  </tt></dd><dd><tt>[final_rect,btn]=rubberbox()  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+
+  <li><tt><b>initial_rect  </b></tt>
+    : vector with two or four entries. With four entries it gives the
+  initial rectangle  defined by [x_left, y_top, width, height], with
+  two entries width and height are supposed to be 0.
+  coordinates of the upper-left corner of 
+  </li>
+
+  <li><tt><b>final_rect  </b></tt>
+    :a rectangle defined by [x_left, y_top, width, height] 
+  </li>
+
+  <li><tt><b>btn  </b></tt>
+    :an integer, the number of the mouse button clicked
+  </li>
+
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>rubberbox(initial_rect)</b></tt>  tracks a rubberband box in
+    the current graphic window, following the mouse. When a button is clicked <tt><b>rubberbox</b></tt> returns the final
+    rectangles definition  in <tt><b>final_Rect</b></tt>. If the argument
+    <tt><b>initial_rect</b></tt> user has to click to fix the initial
+    corner position.
+
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+xsetech(frect=[0,0,100,100])
+[x,y]=xclick();r=rubberbox([x;y;30;10])
+xrect(r)
+r=rubberbox()
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="xrect.htm"><tt><b>xrect</b></tt></a>&nbsp;&nbsp;<a href="xrects.htm"><tt><b>xrects</b></tt></a>&nbsp;&nbsp;<a href="xclick.htm"><tt><b>xclick</b></tt></a>&nbsp;&nbsp;<a href="xgetmouse.htm"><tt><b>xgetmouse</b></tt></a>&nbsp;&nbsp;<a href="dragrect.htm"><tt><b>dragrect</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>cont_frm</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>cont_frm -  transfer to controllable state-space  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[sl]=cont_frm(NUM,den)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>NUM  </b></tt>
+    : polynomial matrix
+  </li>
+  <li><tt><b>den  </b></tt>
+    : polynomial
+  </li>
+  <li><tt><b>sl  </b></tt>
+    : <tt><b>syslin</b></tt> list, <tt><b>sl=[A,B,C,D]</b></tt>.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    controllable state-space form of the transfer <tt><b>NUM/den</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+s=poly(0,'s');NUM=[1+s,s];den=s^2-5*s+1;
+sl=cont_frm(NUM,den); 
+slss=ss2tf(sl);       //Compare with NUM/den
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="tf2ss.htm"><tt><b>tf2ss</b></tt></a>&nbsp;&nbsp;<a href="canon.htm"><tt><b>canon</b></tt></a>&nbsp;&nbsp;<a href="contr.htm"><tt><b>contr</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

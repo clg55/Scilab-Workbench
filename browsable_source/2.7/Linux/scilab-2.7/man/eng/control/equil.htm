@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>equil</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>equil -  balancing of pair of symmetric matrices  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>T=equil(P,Q)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>P, Q  </b></tt>
+    : two positive definite symmetric matrices
+  </li>
+  <li><tt><b>T  </b></tt>
+    : nonsingular matrix
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>equil</b></tt> returns <tt><b>t</b></tt> such that:
+  </p>
+  <p>
+    <tt><b>T*P*T'</b></tt> and  <tt><b>inv(T)'*Q*inv(T)</b></tt>  are both equal to a same 
+    diagonal and positive matrix.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+P=rand(4,4);P=P*P';
+Q=rand(4,4);Q=Q*Q';
+T=equil(P,Q)
+clean(T*P*T')
+clean(inv(T)'*Q*inv(T))
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="equil1.htm"><tt><b>equil1</b></tt></a>&nbsp;&nbsp;<a href="../linear/balanc.htm"><tt><b>balanc</b></tt></a>&nbsp;&nbsp;<a href="ctr_gram.htm"><tt><b>ctr_gram</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>help</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>help -  commande d'aide en ligne  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>help &lt;mot-clé&gt;  </tt></dd></dl><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    A chaque mot-clé documenté correspond un fichier HTML généralement
+    appelé <tt><b>mot-clé.html</b></tt>. Ce fichier HTML vient de la traduction d'un
+    fichier XML correspondant. Ces fichiers sont organisés dans des
+    répertoires (ou chapitres). Chaque répertoire contient des fichiers
+    <tt><b>*.html</b></tt> et un fichier <tt><b>whatis.html</b></tt> contenant une ligne pour chaque
+    mot-clé documenté dans le chapitre correspondant. Chaque ligne doit
+    avoir le format : 
+  </p>
+  <pre>
+&lt;BR&gt;&lt;A HREF="mot-clé.html"&gt;mot-clé&lt;/A&gt; - description rapide
+   </pre>
+  <p>
+  </p>
+  <p>
+    La liste des chapitres de l'aide est contenue dans la variable Scilab
+    <tt><b>%helps</b></tt>. <tt><b>%helps</b></tt> est une matrice de chaînes de caractères à
+    deux colonnes. Chaque ligne est formée comme ceci 
+  </p>
+  <pre>
+répertoire_du_chapitre    titre_du_chapitre
+   </pre>
+  <p>
+    La valeur par défaut de <tt><b>%helps</b></tt> est initialisée dans le fichier
+    <tt><b>SCI+"scilab.star"</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="apropos.htm"><tt><b>apropos</b></tt></a>&nbsp;&nbsp;<a href="man.htm"><tt><b>man</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

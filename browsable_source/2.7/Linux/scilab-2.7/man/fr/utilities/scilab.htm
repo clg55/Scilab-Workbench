@@ -1,0 +1,55 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>scilab </title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>scilab  -  script principal d'exécution de Scilab et de divers outils  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>scilab [-ns -nw -display display -f file -args arguments]  </tt></dd><dd><tt>scilab -help [ &lt;key&gt; ]  </tt></dd><dd><tt>scilab -k &lt;key&gt;  </tt></dd><dd><tt>scilab -xk &lt;key&gt;  </tt></dd><dd><tt>scilab -link &lt;objects&gt;  </tt></dd></dl><H3><font color="blue">Description</font></H3><dl>
+ 
+
+  <li><b>scilab [-ns -nw -display display -f path -args arguments]</b> 
+    : exécution de Scilab
+  </li>
+ 
+
+  <li><b>-ns</b> 
+    : si cette option est présente le script de démarrage <tt><b>SCI/scilab.star</b></tt> n'est pas exécuté.
+  </li>
+
+  <li><b>-nw</b> 
+    : si cette option est présente Scilab n'est pas exécuté dans une fenêtre spécifique mais sur la ligne de commande.  
+  </li>
+
+  <li><b>-f file</b> 
+    : si cette option est présente le script <tt><b>file</b></tt> est exécuté en premier dans Scilab. 
+  </li>
+
+  <li><b>-args arguments</b> 
+    : si cette option est présente des arguments sont passés à Scilab. Ils peuvent être récupérés par la fonction <tt><b>sciargs</b></tt>. Les arguments multiples doivent être passés dans chaîne de caractères les contenant, séparés par des espaces  <tt><b>scilab -args 'foo1 foo2'</b></tt>
+  </li>
+ 
+
+  <li><b>scilab -help &lt;mot-clé&gt;</b> 
+    : affiche le help sur &lt;mot-clé&gt; (produit le même résultat que <tt><b>help &lt;mot-clé&gt;</b></tt> exécuté dans Scilab). Exemple:
+  </li>
+  <pre>
+scilab -help plot3d
+   </pre>
+
+  <li><b>scilab -k &lt;mot-clé&gt;</b> 
+    : donne la liste des fonctions Scilab contenant &lt;mot-clé&gt; dans leur description (produit le même résultat que <tt><b>apropos &lt;mot-clé&gt;</b></tt> exécuté dans Scilab) 
+  </li>
+
+  <li><b>scilab -xk &lt;mot-clé&gt;</b> 
+    : donne dans une fenêtre graphique la liste des fonctions Scilab contenant &lt;mot-clé&gt; dans leur description (produit le même résultat que <tt><b>apropos &lt;mot-clé&gt;</b></tt> exécuté dans Scilab) 
+  </li>
+
+  <li><b>scilab -link &lt;objects&gt;</b> 
+    : est utilisé pour générer un <tt><b>scilex</b></tt> local (exécutable de Scilab) lié avec les fichiers additionnels donnés dans <tt><b>&lt;objects&gt;</b></tt>.  Si, dans la liste des fichiers objets, certains noms sont connus dans  <tt><b>SCIDIR/routines/default</b></tt>, les fichiers objets par utilisés par défaut par <tt><b>scilex</b></tt> sont omis et remplacés par les fichiers précisés.  Cette commande produit aussi un script <tt><b>xscilab</b></tt>, qui lance l'exécution du nouveau <tt><b>scilex</b></tt>.
+  </li>
+  <p>
+    Par exemple :
+  </p>
+  <pre>
+scilab -link  C/interf.o C/evol.o C/bib.a
+   </pre>
+  <p>
+    crée un nouveau <tt><b>scilex</b></tt> dans le quel le fichier <tt><b>interf.o</b></tt> par défaut 
+    sera remplacé par <tt><b>C/interf.o</b></tt>.
+  </p>
+ 
+  </dl></body></html>

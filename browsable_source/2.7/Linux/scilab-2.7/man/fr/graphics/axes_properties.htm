@@ -1,0 +1,267 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>axes_properties</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Data type </CENTER><p><b>axes_properties -  description of the
+   axes entity properties </b></p><H3><font color="blue">Description</font></H3><dl>
+  The Axes entity is the second level of the graphics entities
+  hierarchy. This entity defines the parameters allowing the change of
+  coordinates and the axes drawing as well as the  parameters's default 
+  values for the children creation.
+
+
+
+  <li><b>Axes properties</b>
+  
+  
+     <li><b>visible: </b>
+      This field contains the  <tt><b>visible</b></tt> property value
+     for axes . It's value should
+     be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt>  . By default, 
+     axes is visible <tt><b>"on"
+     </b></tt> in case all "visible" chidren are displayed on the screen, If
+     <tt><b>"off"</b></tt> the axes and all its chidren are not drawn.
+     </li>
+
+     <li><b>axes_visible: </b>
+      This property specifies whether the axes are drawn or not. It's value should
+      be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt>. The scaling data and if
+      required the grids are drawn if the value is <tt><b>"on"</b></tt> 
+     </li>
+
+     <li><b>box: </b>
+     This property specifies whether to enclose the axes in a box.
+      Take as value <tt><b>"off" </b></tt> is to not display the box. 
+      The default is <tt><b>"on" </b></tt>.
+     </li> 
+
+     <li><b>grid: </b>
+      This field controls a grid drawning and the its color. if the
+      values is <tt><b>-1</b></tt> grids are not drawn, else the grids are
+      drawn using the color given indexed by the grid value.
+     </li>
+
+     <li><b>log_flags: </b>
+      Property defines is linear or logarithmic scaling axes. 
+      The field value is a 2 character string, each of them can take the
+      value <tt><b>n</b></tt> for linear  (normal) or <tt><b>l</b></tt>
+      for logarithmic scales for the respective X and Y axis.
+     </li>
+
+     <li><b>x_location: </b>
+      Specify the location of the x-axis. The possible
+      values are:
+      
+         <li><b></b>
+         <tt><b>"bottom"</b></tt>. In this case the x axis is drawn at
+         the bottom of the axes rectangle.
+         </li>
+         <li><b></b>
+         <tt><b>"top"</b></tt>. In this case the x axis is drawn at
+         the top of the axes rectangle.
+         </li>
+         <li><b></b>
+         <tt><b>"middle"</b></tt> . In this case the x axis is drawn at
+         the position nearest to the 0 y coordinates.
+         </li>
+     
+     </li>
+
+     <li><b>y_location: </b>
+      Specify the location of the y-axis. The possible
+      values are:
+      
+         <li><b></b>
+         <tt><b>"left"</b></tt>. In this case the y axis is drawn at
+         the left of the axes rectangle.
+         </li>
+         <li><b></b>
+         <tt><b>"right"</b></tt>. In this case the y axis is drawn at
+         the right of the axes rectangle.
+         </li>
+         <li><b></b>
+         <tt><b>"middle"</b></tt>. In this case the y axis is drawn at
+         the position nearest to the 0 x coordinates.
+         </li>
+     
+     </li>
+
+     <li><b>tics_color: </b>
+      The value of this properties is index of the color used to draw axis'lines and tics.
+     </li>
+
+     <li><b>labels_font_color: </b>
+      This property determines the color of the tics labels.
+     </li>
+     <li><b>labels_font_size: </b>
+      An integer specifying the font size used to draw the tics labels.
+     </li>
+
+    <li><b>sub_tics: </b>
+      This field sets the number of tics to draw between two main
+      tics. The field value is the vector <tt><b>[nx,ny]</b></tt> where
+      <tt><b>nx</b></tt> is the number of sub tics for the x-axis and
+      <tt><b>ny</b></tt> respecting to the y-axis. 
+     </li>
+
+     <li><b>tight_limits: </b>
+      If this property value is <tt><b>"on"</b></tt>  axes adapt to
+      fit exactly with the minima and maxima values of the data_bounds.
+      <p></p>
+      If this field value is <tt><b>"off"</b></tt> a  axes may enlarge
+      boundary such as to produce pretty tics labels.
+     </li>
+
+     <li><b>data_bounds: </b>
+      This field contains the boundary values for the x and y
+      coordinates. It is the vector <tt><b>[xmin,xmax,ymin,ymax]</b></tt>
+     </li>
+
+     <li><b>axes_bounds: </b>
+      A vector <tt><b>[x_left,y_up,width,height]</b></tt> specifying 
+      the portion of figure used by this axes. Where
+      <tt><b>x_left</b></tt>, <tt><b>y_up</b></tt>, <tt><b>width</b></tt> and
+      <tt><b>height</b></tt> are numbers in [0 1] give respectively the 
+      position of the upper-left corner and the dimension of the axes.
+     </li>
+
+     <li><b>children: </b> 
+      A vector containing the handles of all graphics objects children of the axes 
+      These graphics objects are of type  <tt><b>"Agregation"</b></tt>,
+      <tt><b>"Rectangle"</b></tt>, <tt><b>"Polyline"</b></tt>, <tt><b>"Patch"</b></tt>,
+     <tt><b>"Segs"</b></tt>, <tt><b>"Arc"</b></tt>, <tt><b>"Grayplot"</b></tt>,..
+     </li>    
+
+     <li><b>parent: </b> 
+      This field contains the handle of the parent figure.
+     </li>
+
+
+
+  
+  <li><b>Properties for high level functions</b>
+   The <tt><b>plot2dx</b></tt> <tt><b>grayplot</b></tt> <tt><b>matplot</b></tt>
+   functions use the following properties to decide how to merge
+   consecutive plots if this is not stated by the <tt><b>frameflag</b></tt> calling argument.
+   <p></p>
+   The result of the merge is decided through these two following properties:
+   
+  
+  
+     <li><b>auto_clear: </b>
+     This property allows a new plot to erase the current axes and its children 
+     if value is equal to <tt><b>"on"</b></tt>. The plot creates a new axes entity. 
+     If the value is <tt><b>"off"</b></tt> it will be added to current axes according 
+     to <tt><b>"auto_scale"</b></tt> property.
+     </li>
+
+     <li><b>auto_scale: </b>
+      A property to uptate a data boundary. If value is <tt><b>"on"</b></tt> a new plot 
+      will adapt the current axes properties to fit with  previous an current plots.
+      <p></p>
+      If its  value is <tt><b>"off"</b></tt> the new plot will be drawing under the current 
+      axes properties.
+     </li>
+
+ 
+   
+
+  <li><b>Children s default values: </b>
+     
+
+
+     <li><b>line_style: </b>
+      This field contains the default <tt><b>line_style</b></tt> property
+       value for Segs, Arcs, Rectangle and Polyline objects.
+       <tt><b>line_style</b></tt> selects the type of line to be
+       used to draw lines . It's value should be an integer in [0 9].
+       0 stands for solid the other value stands for a selection of
+       dashes.
+     </li>
+
+     <li><b>thickness: </b>
+       This field contains the default <tt><b>thickness</b></tt> property
+       value for all objects using line drawing. It's value should
+       be positive integer.
+     </li>
+
+      <li><b>fill_mode: </b>
+      This field contains the default state of <tt><b>fill_mode</b></tt> property
+       for  Rectangle, Arcs and Polyline objects.
+       It's value should be <tt><b>"on" </b></tt> or
+       <tt><b>"off"</b></tt>. if it is "on" the object is filled
+       with  the color given by it's "foreground" property value.
+     </li>
+
+     <li><b>mark_mode: </b>
+      This field contains the default <tt><b>mark_mode</b></tt> property
+       value for Segs Rectangle and Polyline objects. It's value should
+       be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt>.
+     </li>
+
+     <li><b>mark_style: </b>
+      This field contains the default <tt><b>mark_style</b></tt> property
+       value for Segs Rectangle and Polyline
+       objects. <tt><b>mark_style</b></tt> selects the type of mark to be
+       displayed. It's value should be an integer in [0 9] which
+       stands for: dot, plus, cross, star, diamond fill, diamond,
+       triangle up, triangle down, trefle and circle.
+     </li>
+
+     <li><b>mark_size: </b>
+      This field contains the default <tt><b>mark_size</b></tt> property
+       value for Segs Rectangle and Polyline objects. 
+       <tt><b>mark_size</b></tt> selects the font size of mark to be
+       displayed. It's value should be an integer in  [0 5]
+       whith stands for 8pt, 10pt, 12pt, 14pt, 18pt and 24pt.
+     </li>
+
+     <li><b>foreground: </b>
+      This field contains the default <tt><b>foreground</b></tt> property
+      value for all objects.  It's value should be a color index
+      (relative to the current color_map).
+     </li>
+
+     <li><b>clip_state: </b>
+      This field contains the default <tt><b>clip_state</b></tt> property
+      value for all objects.  It's value should be :
+      
+         <li><b></b> 
+         <tt><b>"off"</b></tt> this means that all  objects created after
+         that are not clipped (default value).
+         </li>
+
+         <li><b></b> 
+         <tt><b>"cliprf"</b></tt> this means that all  objects created after
+         that are clipped outside the Axes boundaries.
+         </li>
+
+        <li><b></b> 
+         <tt><b>"on"</b></tt> this means that all  objects created after
+         that are clipped outside the rectangle given by property clip_box.
+         </li>
+      
+     </li>
+
+     <li><b>clip_box: </b>
+      This field contains the default <tt><b>clip_box</b></tt> property
+      value for all objects.  Its value should be an empty matrix if
+      clip_state is "off". Other case the clipping is given by 
+       the vector <tt><b>[x,y,w,h]</b></tt> (upper-left point width height).
+     </li>
+  
+  </li>
+  </li>
+  </li>
+
+
+  
+
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+   set("figure_style","new") //create a figure
+   a=get("current_axes")//get the handle of the newly created axes
+   a.axes_visible="on"; // makes the axes visible
+   a.tics_textsize=3; //set the tics label font size
+   a.x_location="top"; //set the x axis position
+   a.data_bounds=[-100,100;-2,2]; //set the boundary values for the x and y coordinates.
+   a.sub_tics=[5,0];
+   a.labels_font_color=5;
+   a.grid=2;
+   a.box="off";
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="set.htm"><tt><b>set</b></tt></a>&nbsp;&nbsp;<a href="get.htm"><tt><b>get</b></tt></a>&nbsp;&nbsp;<a href="delete.htm"><tt><b>delete</b></tt></a>&nbsp;&nbsp;<a href="graphics_entities.htm"><tt><b>graphics_entities</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>Djalel ABDEMOUCHE  </ul></p></body></html>

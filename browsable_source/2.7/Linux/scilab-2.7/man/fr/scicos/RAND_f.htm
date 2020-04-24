@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>RAND_f</title></head><body bgcolor="FFFFFF"><CENTER>Scicos Block  </CENTER><p><b>RAND_f -  Scicos random wave generator  </b></p><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    This block is a random wave generator: each output component takes piecewise
+    constant random values. Every time an event is received on the 
+    input event port, the outputs take  new independent random values.
+  </p>
+  <p>
+    output port size is given by the size of <tt><b>A</b></tt> and <tt><b>B</b></tt> vectors
+  </p>
+  </dl><H3><font color="blue">DIALOGUE PARAMETERS</font></H3><ul><li><b><font color="maroon">flag</font></b>
+: 0 or 1. 0 for uniform distribution on <tt><b>[A,A+B</b></tt>] and 1 for normal distribution <tt><b>N(A,B*B)</b></tt>.
+
+  </li><li><b><font color="maroon">A</font></b>
+: scalar
+
+  </li><li><b><font color="maroon">B</font></b>
+: scalar
+
+  </li></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="GENSIN_f.htm"><tt><b>GENSIN_f</b></tt></a>&nbsp;&nbsp;<a href="SAWTOOTH_f.htm"><tt><b>SAWTOOTH_f</b></tt></a>&nbsp;&nbsp;<a href="GENSQR_f.htm"><tt><b>GENSQR_f</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

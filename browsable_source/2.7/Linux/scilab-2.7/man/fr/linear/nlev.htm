@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>nlev</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>nlev -  Algorithme de Leverrier   </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[num,den]=nlev(A,z [,rmax])    </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>A  </b></tt>
+    : matrice réelle carrée
+  </li>
+  <li><tt><b>z  </b></tt>
+    : chaîne de caractères
+  </li>
+  <li><tt><b>rmax  </b></tt>
+    : paramètre optionnel (voir <tt><b>bdiag</b></tt>) 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    calcule 
+  </p>
+  <p>
+    par bloc diagonalisation de A suivie de l'algorithme de Leverrier sur chaque bloc.
+  </p>
+  </dl><H3><font color="blue">REMARQUE</font></H3><ul><p>
+    Cet algorithme est plus efficace que l'algorithme de Leverrier seul, mais il n'est toujours pas parfait !
+  </p></ul><H3><font color="blue">Exemples</font></H3><ul><pre>
+A=rand(3,3);x=poly(0,'x');
+[NUM,den]=nlev(A,'x')
+clean(den-poly(A,'x'))
+clean(NUM/den-inv(x*eye()-A))
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="coff.htm"><tt><b>coff</b></tt></a>&nbsp;&nbsp;<a href="../polynomials/coffg.htm"><tt><b>coffg</b></tt></a>&nbsp;&nbsp;<a href="glever.htm"><tt><b>glever</b></tt></a>&nbsp;&nbsp;<a href="../control/ss2tf.htm"><tt><b>ss2tf</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>F. D., S. S.;   </ul></p></body></html>

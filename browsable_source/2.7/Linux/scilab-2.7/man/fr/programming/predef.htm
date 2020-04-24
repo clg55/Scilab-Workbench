@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>predef</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>predef -  protection de variables  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>n=predef()  </tt></dd><dd><tt>oldnew=predef(n)  </tt></dd><dd><tt>oldnew=predef('all')  </tt></dd><dd><tt>oldnew=predef('clear')  </tt></dd></dl><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Function utilitaire permettant de déclarer comme "protégées" les variables "les plus anciennes". Les variables protégées ne peuvent pas être effacées. Elles ne sont pas non plus sauvées par la commande <tt><b>'save'</b></tt>. Les variables "les plus anciennes" sont celles qui apparaissent avec la commande <tt><b>who('get')</b></tt>.
+  </p>
+  <p>
+    <tt><b>predef()</b></tt> renvoie le nombre de variables protégées.
+  </p>
+  <p>
+    <tt><b>predef('a[ll]')</b></tt> protège toutes les variables et renvoie l'ancien et le nouveau nombre de variables protégées.
+  </p>
+  <p>
+    <tt><b>predef('c[lear]')</b></tt> enlève la protection de toutes les variables sauf les 7 définies dernièrement. Renvoie l'ancien et le nouveau nombre de variables protégées.
+  </p>
+  <p>
+    <tt><b>predef(n)</b></tt> protège les <tt><b>max(n,7)</b></tt> variables définies dernièrement. Renvoie l'ancien et le nouveau nombre de variables protégées.
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">REMARQUE</font></H3><ul><p>
+    Le nombre de variables protégées est défini dans le fichier de démarrage <tt><b>SCIDIR/scilab.star</b></tt>.  L'utilisateur a la possibilité de définir ses propres variables protégées dans le fichier de démarrage <tt><b>home/.scilab</b></tt> 
+  </p></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="clear.htm"><tt><b>clear</b></tt></a>&nbsp;&nbsp;<a href="../fileio/save.htm"><tt><b>save</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

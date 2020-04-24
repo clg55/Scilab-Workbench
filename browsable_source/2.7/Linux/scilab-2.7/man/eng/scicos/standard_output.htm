@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>standard_output</title></head><body bgcolor="FFFFFF"><CENTER>Scicos function  </CENTER><p><b>standard_output -  get Scicos block output port positions  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[x,y,typ]=standard_output(o)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>o  </b></tt>
+    : Scicos block data structure (see scicos_block)
+  </li>
+  <li><tt><b>x  </b></tt>
+    : vector of x coordinates of the block regular and event output ports
+  </li>
+  <li><tt><b>y  </b></tt>
+    : vector of y coordinates of the block regular and event output ports
+  </li>
+  <li><tt><b>typ  </b></tt>
+    : vector of output ports types (+1 : regular port; -1:event port) 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>standard_output</b></tt> is the Scilab function used to get
+    standard blocks output port position and types in interfacing
+    functions. 
+  </p>
+  <p>
+    Port positions are computed, each time they are required, as a
+    function of block dimensions.
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">See Also</font></H3><p><ul><a href="scicos_block.htm"><tt><b>scicos_block</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

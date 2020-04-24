@@ -1,0 +1,14 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>asinhm</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>asinhm -  matrix hyperbolic inverse sine  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>t=asinhm(x)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>x,t  </b></tt>
+    : real or complex square matrix
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    asinhm is the matrix hyperbolic  inverse sine  of the matrix x.
+    Uses the formula <tt><b>t=logm(x+sqrtm(x*x+eye()))</b></tt>.
+    Results may be not reliable for non-symmetric matrix.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+A=[1,2;2,3]
+sinhm(asinhm(A))
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="asinh.htm"><tt><b>asinh</b></tt></a>&nbsp;&nbsp;<a href="logm.htm"><tt><b>logm</b></tt></a>&nbsp;&nbsp;<a href="sqrtm.htm"><tt><b>sqrtm</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

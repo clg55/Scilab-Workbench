@@ -1,0 +1,37 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>pvm_halt</title></head><body bgcolor="FFFFFF"><CENTER>Scilab function  </CENTER><p><b>pvm_halt -  stops the PVM daemon  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[info] = pvm_halt()  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>info  </b></tt>
+    : integer, status code returned by the routine. Values less than zero indicate an error. 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>pvm_halt</b></tt> kills all PVM tasks, all the remote daemons, and the
+    local daemon.  If the master pvmd is killed manually it should be
+    sent a SIGTERM signal to allow it to kill the remote pvmds and clean
+    up various files.
+     
+    The pvmd can be killed in a manner that  leaves the file /tmp/pvmd.uid
+    behind on one  or more  hosts.   Uid  is  the  numeric  user ID  (from
+    /etc/passwd) of  the user.  This  will prevent PVM  from restarting on
+    that host.  Deletion of this file will fix this problem:
+     
+             rm `( grep $user /etc/passwd || ypmatch $user passwd )
+                  | awk -F: '{print "/tmp/pvmd."$3; exit}'`
+  </p>
+  <p>
+    For example:
+  </p>
+  <pre>
+--&gt;pvm_halt()
+ ans  =
+ 
+    0.  
+ 
+--&gt;pvm_halt()
+ ans  =
+ 
+  - 14.  
+   </pre>
+  <p>
+    Error -14 means: pvm_halt(): Can't contact local daemon
+  </p>
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="pvm_start.htm"><tt><b>pvm_start</b></tt></a>&nbsp;&nbsp;<a href="pvm_addhosts.htm"><tt><b>pvm_addhosts</b></tt></a>&nbsp;&nbsp;<a href="pvm_config.htm"><tt><b>pvm_config</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

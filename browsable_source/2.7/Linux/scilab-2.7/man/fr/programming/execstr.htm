@@ -1,0 +1,46 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>execstr</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>execstr -  exécution d'instructions Scilab contenues dans des chaînes de caractères  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>execstr(instr)  </tt></dd><dd><tt>ierr=execstr(instr,'errcatch' [,msg])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>instr  </b></tt>
+    : vecteur de chaînes de caractères
+  </li>
+  <li><tt><b>ierr  </b></tt>
+    : entier, 0 ou numéro de l'erreur
+  </li>
+  <li><tt><b>msg  </b></tt>
+    : chaîne de caractères (<tt><b>'m'</b></tt> ou <tt><b>'n'</b></tt>). La valeur par défaut est <tt><b>'n'</b></tt>.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Exécute les instructions Scilab données dans l'argument <tt><b>instr</b></tt>.
+  </p>
+  <p>
+    Si 'errcatch' n'est pas présent dans les arguments, les erreurs sont contrôlées comme d'habitude.
+  </p>
+  <p>
+    Si 'errcatch' est présent dans les arguments, et qu'une erreur est rencontrée lors de l'évaluation d'un élément de <tt><b>instr</b></tt>, <tt><b>execstr</b></tt>
+    ne produit aucun message d'erreur, mais stoppe l'exécution des instructions stockées dans <tt><b>instr</b></tt> (au point où l'erreur s'est produite), et renvoie dans
+    <tt><b>ierr</b></tt> le numéro de l'erreur. Dans ce cas l'affichage du message d'erreur est contrôlé par l'option <tt><b>msg</b></tt> :
+  </p>
+ 
+
+  <li><b>"m"</b> 
+    : le message d'erreur est affiché et enregistré
+  </li>
+
+  <li><b>"n"</b> 
+    : le message d'erreur n'est pas affiché mais il est enregistré (voir <tt><b>lasterror</b></tt>). Il s'agit du comportement par défaut. 
+  </li>
+ 
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+execstr('a=1') // affecte a=1.
+execstr('1+1') // ne fait rien de particulier (alors que evstr('1+1') renvoie 2)
+
+execstr(['if %t then';
+         '  a=1';
+         '  b=a+1';
+         'else'
+         ' b=0'
+         'end'])
+
+execstr('a=zzzzzzz','errcatch')
+execstr('a=zzzzzzz','errcatch','m')
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="evstr.htm"><tt><b>evstr</b></tt></a>&nbsp;&nbsp;<a href="lasterror.htm"><tt><b>lasterror</b></tt></a>&nbsp;&nbsp;<a href="error.htm"><tt><b>error</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

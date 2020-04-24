@@ -1,0 +1,38 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>graypolarplot</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>graypolarplot -  représentation 2D en coordonnées polaires et en pseudo-couleurs d'une surface   </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>graypolarplot(theta,rho,z,[strf,rect])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>rho  </b></tt>
+    : vecteur de taille n1, valeurs du rayon 
+  </li>
+  <li><tt><b>theta  </b></tt>
+    : vecteur de taille n2, valeurs de l'angle
+  </li>
+  <li><tt><b>z  </b></tt>
+    : matrice réelle de taille (n1,n2). <tt><b>z(i,j)</b></tt> est la hauteur de la surface au  point (rho(i),theta(j)). 
+  </li>
+  <li><tt><b>strf  </b></tt>
+    : est une chaîne de caractères de longueur 3 <tt><b>"xyz"</b></tt>. Voir <tt><b>plot2d</b></tt>
+  </li>
+ <ul>
+  <li><tt><b>leg  </b></tt>
+    :  une chaîne de caractères. Elle est utilisée quand le caractère x de l'argument <tt><b>strf</b></tt> vaut 1. <tt><b>leg</b></tt> a la forme <tt><b>"leg1@leg2@...."</b></tt> où <tt><b>leg1</b></tt>, <tt><b>leg2</b></tt>, ... sont respectivement  la légende de la première courbe, de la deuxième, etc.  La valeur par défaut est <tt><b>" "</b></tt>.
+  </li>
+  <li><tt><b>rect  </b></tt>
+    :  Cet argument est utilisé quand le caractère y de l'argument <tt><b>strf</b></tt> vaut 1, 3 ou 5. C'est un vecteur ligne de taille 4 donnant les bornes du cadre :  <tt><b>rect=[xmin,ymin,xmax,ymax]</b></tt>.
+  </li>
+ </ul>
+  <p>
+    
+  </p>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Représentation 2D en pseudo-couleurs d'une surface <tt><b>z</b></tt> où le plan est repéré en coordonnées polaires, sur une grille définie par <tt><b>rho</b></tt> et <tt><b>theta</b></tt>. Chaque rectangle sur la grille est rempli avec une couleur dépendant de la moyenne des valeurs de <tt><b>z</b></tt> aux coins du rectangle.
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+
+  rho=1:0.1:4;theta=(0:0.02:1)*2*%pi;
+  z=30+round(theta'*(1+rho^2));
+  xset('colormap',hotcolormap(128))
+  xset('background',xget('white'))
+  xbasc();graypolarplot(theta,rho,z)
+ </pre></ul></body></html>

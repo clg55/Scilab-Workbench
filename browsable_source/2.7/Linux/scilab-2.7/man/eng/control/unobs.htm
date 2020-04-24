@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>unobs</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>unobs -  unobservable subspace  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[n,[U]]=unobs(A,C,[tol])   </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>A, C  </b></tt>
+    : real matrices 
+  </li>
+  <li><tt><b>tol  </b></tt>
+    : tolerance used when evaluating ranks (QR factorizations).
+  </li>
+  <li><tt><b>n  </b></tt>
+    : dimension of unobservable subspace.
+  </li>
+  <li><tt><b>U  </b></tt>
+    : orthogonal change of basis which puts <tt><b>(A,B)</b></tt> in canonical form.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>[n,[U]]=unobs(A,C,[tol])</b></tt> gives the unobservable form of an <tt><b>(A,C)</b></tt> 
+    pair.
+    The <tt><b>n</b></tt> first columns of <tt><b>U</b></tt> make a basis for the unobservable
+    subspace.
+  </p>
+  <p>
+    The <tt><b>(2,1)</b></tt> block (made of last <tt><b>nx-n</b></tt> rows and <tt><b>n</b></tt> first 
+    columns) of <tt><b>U'*A*U</b></tt> is zero and and the <tt><b>n</b></tt> first columns 
+    of <tt><b>C*U</b></tt> are zero.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+A=diag([1,2,3]);C=[1,0,0];
+unobs(A,C)
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="contr.htm"><tt><b>contr</b></tt></a>&nbsp;&nbsp;<a href="contrss.htm"><tt><b>contrss</b></tt></a>&nbsp;&nbsp;<a href="canon.htm"><tt><b>canon</b></tt></a>&nbsp;&nbsp;<a href="cont_mat.htm"><tt><b>cont_mat</b></tt></a>&nbsp;&nbsp;<a href="../linear/spantwo.htm"><tt><b>spantwo</b></tt></a>&nbsp;&nbsp;<a href="dt_ility.htm"><tt><b>dt_ility</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

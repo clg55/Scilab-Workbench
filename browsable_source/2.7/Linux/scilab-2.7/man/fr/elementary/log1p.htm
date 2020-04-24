@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>log1p</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>log1p -  computes with accuracy the natural logarithm of its argument added by one  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>y=log1p(x)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>x  </b></tt>
+    : real scalar, vector or matrix
+  </li>
+  <li><tt><b>y  </b></tt>
+    : real scalar, vector or matrix
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>logp1(x)</b></tt> is the "element-wise" log(1+x) function. <tt><b>y(i,j)=log(1 + x(i,j))</b></tt>.
+    This function, defined for x &gt; -1, must be used if we want to compute log(1+x) with
+    accuracy for |x| &lt;&lt; 1.
+  </p>
+  </dl><H3><font color="blue">EXAMPLES</font></H3><ul><pre>
+format("e",24)
+log(1.001)
+log1p(0.001)
+log(1 + 1.e-7)
+log1p(1.e-7)
+log(1 + 1.e-20)
+log1p(1.e-20)
+format("v") //reset default format
+   </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="log.htm"><tt><b>log</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>B.P.;   </ul></p></body></html>

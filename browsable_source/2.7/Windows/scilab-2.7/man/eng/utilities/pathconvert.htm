@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>pathconvert</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>pathconvert -  pathnames convertion between posix and windows.  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>paths=pathconvert(paths [,flagtrail [,flagexpand [,type]]])  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>paths  </b></tt>
+    : a string matrix giving a set of pathnames 
+  </li>
+  <li><tt><b>flagtrail,flagexpand  </b></tt>
+    : boolean optional parameters (default value depends on  the MSDOS variable). 
+  </li>
+  <li><tt><b>type  </b></tt>
+    : a string <tt><b>'u'</b></tt> or <tt><b>'w'</b></tt>. 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>pathconvert</b></tt> can be used to convert a set of pathnames
+    (given by a string matrix <tt><b>paths</b></tt>) from windows native 
+    filename to posix-style pathnames and back. The target style 
+    is given by the optional string <tt><b>type</b></tt> which can be 
+    <tt><b>'u'</b></tt> for Unix or <tt><b>'w'</b></tt> for Windows. The default 
+    style is set according to the value of <tt><b>MSDOS</b></tt>. 
+    If <tt><b>MSDOS</b></tt> is true (resp. false ) then default type is <tt><b>'w'</b></tt>
+    (resp.  <tt><b>'u'</b></tt>). 
+  </p>
+  <p>
+    Windows pathnames starting with <tt><b>name:</b></tt> are converted to 
+    pathnames starting with <tt><b>/cygdrive/name/</b></tt> using the cygwin 
+    convention. 
+  </p>
+  <p>
+    <tt><b>flagtrail</b></tt> is an optional boolean parameter. When its value 
+    is true a trailing separator (<tt><b>'\'</b></tt> or <tt><b>'/'</b></tt>) is added 
+    at the end of the path. 
+  </p>
+  <p>
+    <tt><b>flagexpand</b></tt> is an optional boolean parameter. When its value 
+    is true leading strings like  <tt><b>HOME</b></tt>, <tt><b>SCI</b></tt> or <tt><b>~</b></tt> are 
+    expanded using environment variables. 
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+pathconvert('SCI/macros\util/foo.sci',%f,%f,'u')
+pathconvert('SCI/macros\util/foo.sci',%f,%f,'w')
+pathconvert('SCI/macros/util/foo.sci',%f,%t,'w')
+pathconvert('HOME/macros/util/foo.sci',%t,%t,'w')
+pathconvert('c:/tmp',%f,%t,'u')
+pathconvert('/cygdrive/c/tmp',%f,%f,'w')
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="basename.htm"><tt><b>basename</b></tt></a>&nbsp;&nbsp;<a href="listfiles.htm"><tt><b>listfiles</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

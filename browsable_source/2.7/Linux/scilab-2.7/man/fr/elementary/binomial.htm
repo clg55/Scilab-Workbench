@@ -1,0 +1,38 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>binomial</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>binomial -  binomial distribution probabilities </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>pr=binomial(p,n)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>pr  </b></tt>
+    : row vector with n+1 components 
+  </li>
+  <li><tt><b>p  </b></tt>
+    : real number in [0,1] 
+  </li>
+  <li><tt><b>n  </b></tt>
+    : an integer &gt;= 1
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  
+  <p>
+    <tt><b>pr=binomial(p,n)</b></tt> returns the binomial probability vector, i.e. 
+    <tt><b>pr(k+1)</b></tt> is the probability of <tt><b>k</b></tt> success in <tt><b>n</b></tt> independent 
+    Bernouilli trials with probability of success <tt><b>p</b></tt>. In other words :
+    pr(k+1) = probability(X=k) , with X a random variable following the B(n,p) 
+    distribution, and numerically :
+  </p>
+  <pre>
+            / n \  k      n-k       / n \       n!
+ pr(k+1) =  |   | p  (1-p)    with  |   |  = ---------
+            \ k /                   \ k /    k! (n-k)!
+   </pre>
+  
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+// first example
+n=10;p=0.3; xbasc(); plot2d3(0:n,binomial(p,n));
+
+// second example 
+n=50;p=0.4;
+mea=n*p; sigma=sqrt(n*p*(1-p));
+x=( (0:n)-mea )/sigma;
+xbasc()
+plot2d(x, sigma*binomial(p,n));
+deff('y=Gauss(x)','y=1/sqrt(2*%pi)*exp(-(x.^2)/2)')
+plot2d(x, Gauss(x), style=2);
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="../dcd/cdfbin.htm"><tt><b>cdfbin</b></tt></a>&nbsp;&nbsp;<a href="../dcd/grand.htm"><tt><b>grand</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xlfont</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>xlfont -  load a font in the graphics context or query loaded font  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>xlfont(font-name,font-id)  </tt></dd><dd><tt>fonts=xlfont()  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>font-name  </b></tt>
+    : string, name of the font family.
+  </li>
+  <li><tt><b>font-id  </b></tt>
+    : integer between 0 and 6.
+  </li>
+  <li><tt><b>fonts  </b></tt>
+    : a column vector of currently loaded font names.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Without any argument, <tt><b>xlfont()</b></tt> returns the list of
+    currently loaded fonts.
+  </p>
+  <p>
+    With arguments, <tt><b>xlfont</b></tt> is used to load a new font at different sizes 
+    in the graphics context. The font must be available with size 8,
+    10, 12, 14, 18 and 24.
+  </p>
+  <p>
+    Default fonts are "Courier Roman" (0), "Symbol" (1), "Times Roman" (2), "Times
+    Italic" (3), "Times Bold" (4) and "Times Bold Italic" (5).
+  </p>
+  <p>
+    font-name can be of 2 types:
+  </p>
+ 
+
+  <li><b>-</b> 
+    if it contains the character "%", it is supposed to be an  X11 font name with %s in the size field of the name, for example <tt><b>"-b&amp;h-lucidabright-demibold-r-normal--%s-*-75-75-p-*-iso8859-1"</b></tt>
+  </li>
+
+  <li><b>-</b> 
+    if it does not contain the character "%", it is supposed  to be an alias name and the fonts aliased by <tt><b>font-name08,...,font-name24</b></tt> are loaded.
+  </li>
+
+  <li><b>font-id</b> 
+    : give the id <tt><b>font-id</b></tt> to the loaded font <tt><b>font-name</b></tt>.
+  </li>
+ 
+  </dl><H3><font color="blue">See Also</font></H3><p><ul><a href="xset.htm"><tt><b>xset</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Author</font></H3><p><ul>J.Ph.C.  </ul></p></body></html>

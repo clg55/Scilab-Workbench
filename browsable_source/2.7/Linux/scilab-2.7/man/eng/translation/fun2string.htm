@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>fun2string</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>fun2string -  generates ascii definition of a scilab function  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>txt=fun2string(fun,name)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>fun  </b></tt>
+    : a function type variable
+  </li>
+  <li><tt><b>name  </b></tt>
+    : a character string, the generated function name
+  </li>
+  <li><tt><b>txt  </b></tt>
+    : a column vector of strings, the text giving the scilab instructions
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Given a loaded Scilab function pseudo-code fun2string allow to
+    re-generate the the code. Note that as comments are not retained in
+    loaded functions the comments cannot be regenerated. The generated
+    code is indented and beautified.  
+  </p>
+  <p>
+    The mechanism is similar, but simpler than the mfile2sci one. It may
+    be adapted for syntax translations.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+txt=fun2string(asinh,'foo');
+write(%io(2),txt,'(a)')
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="../functions/getf.htm"><tt><b>getf</b></tt></a>&nbsp;&nbsp;<a href="../functions/edit.htm"><tt><b>edit</b></tt></a>&nbsp;&nbsp;<a href="../functions/macrovar.htm"><tt><b>macrovar</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

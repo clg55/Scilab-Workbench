@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>RFILE_f</title></head><body bgcolor="FFFFFF"><CENTER>Scicos Block  </CENTER><p><b>RFILE_f -  Scicos "read from file" block  </b></p><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    This block allows user to read  datas in a file, in formatted or binary
+    mode. <tt><b>Output record selection</b></tt> and <tt><b>Time record Selection</b></tt>
+    allows the user to select data among file records.
+  </p>
+  <p>
+    Each call to the block advance one record in the file. 
+  </p>
+  </dl><H3><font color="blue">DIALOGUE PARAMETERS</font></H3><ul><li><b><font color="maroon">Time record Selection</font></b>
+: an empty matrix or a positive integer. If an integer <tt><b>i</b></tt> is given the  <tt><b>i</b></tt>th element of the read record is assumed to be the date of the output event. If empty no output event exists.
+
+  </li><li><b><font color="maroon">Output record selection</font></b>
+: a vector of positive integer. <tt><b>[k1,..,kn]</b></tt>,The <tt><b>ki</b></tt>th element of  the read record gives the value of <tt><b>i</b></tt>th output.
+
+  </li><li><b><font color="maroon">Input file name</font></b>
+: a character string defining the path of the file 
+
+  </li><li><b><font color="maroon">Input Format</font></b>
+: a character string defining the Fortran format to use or nothing for an unformatted (binary) write. If given, the format must began by a left parenthesis and end by a right  parenthesis. example: (e10.3).
+
+  </li><li><b><font color="maroon">Buffer size</font></b>
+: To improve efficiency it is possible to buffer the input data. read on the file is only done after each <tt><b>Buffer size</b></tt> call to the block.
+
+  </li><li><b><font color="maroon">size of output</font></b>
+: a scalar. This fixes the number of "value" read.
+
+  </li></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="WFILE_f.htm"><tt><b>WFILE_f</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

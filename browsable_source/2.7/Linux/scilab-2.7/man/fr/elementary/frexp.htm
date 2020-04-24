@@ -1,0 +1,21 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>frexp</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>frexp -  calcule la représentation en base 2 (mantisse et exposant) d'un nombre flottant.  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[f,e]=frexp(x)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>x  </b></tt>
+    : matrice ou vecteur réel
+  </li>
+  <li><tt><b>f  </b></tt>
+    : matrice ou vecteur réel, habituellement dans l'intervalle 0.5 &lt;= abs(f) &lt; 1.
+  </li>
+  <li><tt><b>e  </b></tt>
+    : matrice ou vecteur d'entiers satisfaisant l'équation: x = f.*2.^e
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+  </p>
+  <p>
+    Cette fonction correspond à la fonction ANSI C frexp(). Chaque 0 dans <tt><b>x</b></tt> produit <tt><b>f=0</b></tt> et <tt><b>e=0</b></tt>.
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+[f,e]=frexp([1,%pi,-3,%eps])
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="log.htm"><tt><b>log</b></tt></a>&nbsp;&nbsp;<a href="../programming/hat.htm"><tt><b>hat</b></tt></a>&nbsp;&nbsp;<a href="../programming/ieee.htm"><tt><b>ieee</b></tt></a>&nbsp;&nbsp;<a href="log2.htm"><tt><b>log2</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

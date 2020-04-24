@@ -1,0 +1,24 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>hilb</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>hilb -  Hilbert transform  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[xh]=hilb(n[,wtype][,par])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>n  </b></tt>
+    : odd integer : number of points in filter
+  </li>
+  <li><tt><b>wtype  </b></tt>
+    : string : window type <tt><b>('re','tr','hn','hm','kr','ch')</b></tt> (default <tt><b>='re'</b></tt>)
+  </li>
+  <li><tt><b>par  </b></tt>
+    : window parameter for <tt><b>wtype='kr' or 'ch'</b></tt> default <tt><b>par=[0 0]</b></tt> see the function window for more help
+  </li>
+  <li><tt><b>xh  </b></tt>
+    : Hilbert transform
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    returns the first n points of the
+    Hilbert transform centred around the origin.
+  </p>
+  <p>
+    That is, <tt><b>xh=(2/(n*pi))*(sin(n*pi/2))^2</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+plot(hilb(51))
+ </pre></ul><H3><font color="blue">Auteur</font></H3><p><ul>C. B.  </ul></p></body></html>

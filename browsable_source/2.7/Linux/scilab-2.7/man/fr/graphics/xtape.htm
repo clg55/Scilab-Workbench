@@ -1,0 +1,32 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xtape</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>xtape -  détermine le processus d'enregistrement des graphiques  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>xtape(str,[num,rect])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>str  </b></tt>
+    : chaîne de caractères, "on", "clear", "replay" ou "replaysc".
+  </li>
+  <li><tt><b>num  </b></tt>
+    : entier.
+  </li>
+  <li><tt><b>rect  </b></tt>
+    : vecteur ligne de taille 4.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>xtape</b></tt> est utilisée pour déterminer le processus d'enregistrement des graphiques :
+  </p>
+  <p>
+    xtape("on") 
+    sélectionne le pilote "Rec" qui enregistre toutes les opérations
+    graphiques.
+  </p>
+  <p>
+    xtape("clear",num) 
+    efface la fenêtre graphique <tt><b>num</b></tt> ainsi que les graphiques enregistrés.
+  </p>
+  <p>
+    xtape("replay",num) 
+    ré-exécute les ordres graphiques enregistrés
+    dans la fenêtre <tt><b>num</b></tt>.
+  </p>
+  <p>
+    xtape("replaysc",num,rect) redessine le contenu de la fenêtre graphique <tt><b>num</b></tt> en utilisant <tt><b>rect=[xmin,ymin,xmax,ymax]</b></tt> comme bornes.
+  </p>
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="driver.htm"><tt><b>driver</b></tt></a>&nbsp;&nbsp;<a href="replot.htm"><tt><b>replot</b></tt></a>&nbsp;&nbsp;<a href="xbasc.htm"><tt><b>xbasc</b></tt></a>&nbsp;&nbsp;<a href="xbasr.htm"><tt><b>xbasr</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>J.Ph.C.  </ul></p></body></html>

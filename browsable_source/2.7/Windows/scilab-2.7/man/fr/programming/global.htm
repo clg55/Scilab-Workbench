@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>global </title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>global  -  définition de variables globales  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>global('nam1',...,'namn')  </tt></dd><dd><tt>global nam1 ... namn  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>nam1,..., namn  </b></tt>
+    : noms valides de variables 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Habituellement, chaque fonction Scilab a ses propres variables locales et peut accéder "en lecture uniquement" à toutes les variables de l'environnement principal et des fonctions appelantes. Le mot-clé <tt><b>global</b></tt> permet de partager certaines variables en lecture/écriture entre des fonctions.
+    Toute affectation à ces variables est propagée à toutes les autres fonctions ayant déclaré cette variable globale (avec le mot-clé <tt><b>global</b></tt>).
+  </p>
+  <p>
+    Si la variable n'existe pas au moment où elle est déclarée globale avec le mot-clé <tt><b>global</b></tt>, elle est initialisée avec une matrice vide [].
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+// 1 : l'environnement appelant et une fonction partagent une variable
+global a
+a=1
+deff('y=f1(x)','global a,a=x^2,y=a^2')
+f1(2)
+a
+// 2 : trois fonctions partagent des variables
+deff('initdata()','global A C ;A=10,C=30')
+deff('letsgo()','global A C ;disp(A) ;C=70')
+deff('letsgo1()','global C ;disp(C)')
+initdata()
+letsgo()
+letsgo1()
+
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="who.htm"><tt><b>who</b></tt></a>&nbsp;&nbsp;<a href="isglobal.htm"><tt><b>isglobal</b></tt></a>&nbsp;&nbsp;<a href="clearglobal.htm"><tt><b>clearglobal</b></tt></a>&nbsp;&nbsp;<a href="gstacksize.htm"><tt><b>gstacksize</b></tt></a>&nbsp;&nbsp;<a href="resume.htm"><tt><b>resume</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

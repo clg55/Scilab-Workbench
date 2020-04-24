@@ -1,0 +1,45 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>setscicosvars</title></head><body bgcolor="FFFFFF"><CENTER>Scicos function  </CENTER><p><b>setscicosvars -  set Scicos data structure while running  </b></p><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>name  </b></tt>
+    : a character string, the name of the required structure
+  </li>
+  <li><tt><b>v  </b></tt>
+    : vector of the new structure value
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    This function may be used in a Scilab block to set value of some
+    particular global data while running. It allows to write diagram
+    supervisor blocks.
+  </p>
+  <p>
+    for example  the instructions  
+  </p>
+  <pre>
+x=getscicosvars('x');
+xptr=getscicosvars('xptr');
+x(xptr(k):xptr(k+1)-1)=xk
+setscicosvars('x',x)
+   </pre>
+  <p>
+    Changes the continuous state of the <tt><b>k</b></tt> block to <tt><b>xk</b></tt>.
+  </p>
+  <p>
+  </p>
+  <p>
+  </p>
+  <p>
+  </p>
+  <p>
+    See <tt><b>scicos_cpr</b></tt> for more detail on these data structures.
+  </p>
+  <p>
+    For C or fortran computational function the C procedure
+    <tt><b>C2F(setscicosvars)</b></tt> may used. See
+    <tt><b>routines/scicos/import.c</b></tt> file for more details.
+  </p>
+  <p>
+    Warning: The use of this function requires a deep knowledge on how
+    scicosim works, it must be used very carefully. Unpredicted parameters,
+    state, link values changes  may produce erroneous simulations.
+  </p>
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="getscicosvars.htm"><tt><b>getscicosvars</b></tt></a>&nbsp;&nbsp;<a href="scicosim.htm"><tt><b>scicosim</b></tt></a>&nbsp;&nbsp;<a href="curblock.htm"><tt><b>curblock</b></tt></a>&nbsp;&nbsp;<a href="scicos_cpr.htm"><tt><b>scicos_cpr</b></tt></a>&nbsp;&nbsp;<a href="getblocklabel.htm"><tt><b>getblocklabel</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

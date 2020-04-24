@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>minus (-)</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>minus (-) -   substraction operator, sign changes  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>X-Y  </tt></dd><dd><tt>-Y  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>X  </b></tt>
+    : scalar or vector or matrix of numbers, polynomials or rationals. It may also be a <tt><b>syslin</b></tt> list
+  </li>
+  <li><tt><b>Y  </b></tt>
+    : scalar or vector or matrix of numbers, polynomials or rationals. It may also be a <tt><b>syslin</b></tt> list
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Substraction
+  </p>
+  <p>
+    For numeric operands substraction as its usual meaning.
+    If one of the operands is a matrix and the other one a scalar the
+    the operation is performed element-wise. if <tt><b>Y==[] X</b></tt>  is returned;
+    if <tt><b>X==[] -Y</b></tt>  is returned.
+  </p>
+  <p>
+    Substraction may also be defined for other data types through
+    "soft-coded" operations.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+[1,2]-1
+[]-2
+
+%s-2
+1/%s-2
+"cat"+"enate"
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="addf.htm"><tt><b>addf</b></tt></a>&nbsp;&nbsp;<a href="../programming/mtlb_mode.htm"><tt><b>mtlb_mode</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

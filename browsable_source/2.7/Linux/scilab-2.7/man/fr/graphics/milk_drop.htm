@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>milk_drop</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>milk_drop -  représentation d'une goutte de lait  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>z=milk_drop(x,y)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>x,y  </b></tt>
+    : deux vecteurs lignes de taille n1 et n2.
+  </li>
+  <li><tt><b>z  </b></tt>
+    : matrice de taille (n1,n2).
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>milk_drop</b></tt> est une fonction représentant la surface d'une goutte de lait
+    tombant dans du lait. Elle peut être utilisée pour tester les fonctions <tt><b>eval3d</b></tt> et <tt><b>plot3d</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+x=-2:0.1:2; y=x;
+z=eval3d(milk_drop,x,y);
+plot3d(x,y,z)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="eval3d.htm"><tt><b>eval3d</b></tt></a>&nbsp;&nbsp;<a href="plot3d.htm"><tt><b>plot3d</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>Steer S.  </ul></p></body></html>

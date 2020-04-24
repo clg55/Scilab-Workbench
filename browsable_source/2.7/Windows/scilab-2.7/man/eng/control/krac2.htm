@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>krac2</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>krac2 -  continuous SISO system limit feedback gain  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>g=krac2(sys)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>sys  </b></tt>
+    : SISO linear system (syslin)
+  </li>
+  <li><tt><b>g  </b></tt>
+    : constant
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>krac2(sys)</b></tt> computes the gains <tt><b>g</b></tt> such that the system
+    <tt><b>sys</b></tt> fedback by g (<tt><b>sys/.g</b></tt>) has  2 real equal poles.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+h=syslin('c',352*poly(-5,'s')/poly([0,0,2000,200,25,1],'s','c'));
+xbasc();evans(h,100)
+g=krac2(h)
+hf1=h/.g(1);roots(denom(hf1))
+hf2=h/.g(2);roots(denom(hf2))
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="../graphics/evans.htm"><tt><b>evans</b></tt></a>&nbsp;&nbsp;<a href="kpure.htm"><tt><b>kpure</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

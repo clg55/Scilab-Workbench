@@ -1,0 +1,48 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>scicos_graphics</title></head><body bgcolor="FFFFFF"><CENTER>Scicos data structure  </CENTER><p><b>scicos_graphics -  Scicos block graphics data structure  </b></p><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Scicos block graphics data structure contains all information relative
+    to graphical display of the block and to user dialogue. Fields may be
+    fixed by block definition or set as a result of user dialogue or
+    connections.
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">DEFINITION</font></H3><ul><pre>
+graphics=mlist(['graphics','orig','sz','flip','exprs','pin',..
+    'pout','pein','peout','gr_i','id'],orig,sz,..
+  flip,exprs,pin,pout,pein,peout,gr_i,id)
+
+   </pre><li><b><font color="maroon">graphics: Scilab mlist, Scicos graphics data structure defined by the</font></b>
+formal name 'graphics' and containing the following fields: 
+
+  </li></ul><H3><font color="blue">FIELDS</font></H3><ul><li><b><font color="maroon">orig</font></b>
+: 2 x 1 vector, the coordinate of down-left point of the block shape.
+
+  </li><li><b><font color="maroon">sz</font></b>
+: vector <tt><b>[w,h]</b></tt>, where <tt><b>w</b></tt> is the width and <tt><b>h</b></tt> the height of the block shape.
+
+  </li><li><b><font color="maroon">flip</font></b>
+: boolean, the block orientation. if true the input ports are on the left of the box and output ports are on the right. if false  the input ports are on the right of the box and output ports are on the left.  
+
+  </li><li><b><font color="maroon">exprs</font></b>
+: column vector of strings,  contains expressions answered by the user at block set time.
+
+  </li><li><b><font color="maroon">pin</font></b>
+: column vector of integers. If <tt><b>pin(k)&lt;&gt;0</b></tt> then <tt><b>k</b></tt>th input port is connected to the block numbered <tt><b>pin(k)</b></tt>, else the port is unconnected. If no input port exist <tt><b>pin==[]</b></tt>.
+
+  </li><li><b><font color="maroon">pout</font></b>
+: column vector of integers.  If <tt><b>pout(k)&lt;&gt;0</b></tt> then <tt><b>k</b></tt>th output port is connected to the block numbered <tt><b>pout(k)</b></tt>, else the port is unconnected. If no output port exist <tt><b>pout==[]</b></tt>.
+
+  </li><li><b><font color="maroon">pein</font></b>
+: column vector of ones. If <tt><b>pein(k)&lt;&gt;0</b></tt> then  <tt><b>k</b></tt>th event input port is connected to the block numbered <tt><b>pein(k)</b></tt>, else the port is unconnected. If no event input port exist <tt><b>pein==[]</b></tt>.
+
+  </li><li><b><font color="maroon">peout</font></b>
+: column vector of integers.  If <tt><b>peout(k)&lt;&gt;0</b></tt> then <tt><b>k</b></tt>th event output port is connected to the block numbered <tt><b>peout(k)</b></tt>, else the port is unconnected. If no event output port exist <tt><b>peout==[]</b></tt>.
+
+  </li><li><b><font color="maroon">gr_i</font></b>
+: column vector of strings,  contains Scilab instructions used to customize the block graphical aspect. This field may be set with <tt><b>"Icon"</b></tt> sub_menu.
+
+  </li><li><b><font color="maroon">id</font></b>
+: Character string used for identification (if any)
+
+  </li></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="scicos_model.htm"><tt><b>scicos_model</b></tt></a>&nbsp;&nbsp;<a href="scicos_diagram.htm"><tt><b>scicos_diagram</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

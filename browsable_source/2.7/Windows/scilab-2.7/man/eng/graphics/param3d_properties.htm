@@ -1,0 +1,119 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>param3d_properties</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Data type </CENTER><p><b>param3d_properties -  description of the
+   3D curves entities properties </b></p><H3><font color="blue">Description</font></H3><dl>
+  The Param3d entity is a leaf of the graphics entities
+  hierarchy.  This entity is still under developpement
+  and will problably evolve a lot. In particular we intend to extend
+  the Axes data structure to 3D and split the Axes properties and
+  Param3d drawing properties similarily to the 2D case.
+
+
+  
+   <li><b>visible: </b>
+    This field contains the  <tt><b>visible</b></tt> property value
+   for the entity . It should
+   be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt>  . By default, 
+   the curves are visibles, the value's property is  <tt><b>"on"
+   </b></tt>. If <tt><b>"off"</b></tt> the curves are not drawn on the screen.
+   </li>
+
+
+   <li><b>data: </b>
+    This field contains the coordinates of the 3d curves. it is the
+    matrix <tt><b>[X,Y,Z]</b></tt> such as  <tt><b>X(:,i)</b></tt>,
+    <tt><b>Y(:,i)</b></tt>, <tt><b>Z(:,i)</b></tt> contain the 3D
+    coordinates of the <tt><b>i</b></tt>'th curve.
+   </li>
+
+   <li><b>data_bounds: </b>
+    This field contains the boundary values for the x, y and z
+    coordinates. It is the matrix <tt><b>[xmin,xmax;ymin,ymax;zmin,zmax]</b></tt>.
+   </li>
+
+   <li><b>flags: </b>
+    A real vector of size three <tt><b>flag=[type,box,unused]</b></tt>.  
+    <p></p>
+    <tt><b>type</b></tt>is an integer (scaling) where:
+      
+       <li><b></b>
+        if type=0  the plot is made using the current 3D scaling (set
+        by a previous call to <tt><b>param3d</b></tt>,<tt><b>plot3d</b></tt>
+        <tt><b>plot3d</b></tt> 
+	</li> 
+        
+	<li><b></b>
+        type=1 :rescales automatically 3d boxes with extreme
+        aspect ratios, the boundaries are specified by the value of
+        the property  <tt><b>data_bounds</b></tt>. 
+        </li> 
+        
+	<li><b></b>
+         type=2 :rescales automatically 3d boxes with extreme
+        aspect ratios, the boundaries are computed using the given
+        data. 
+        </li> 
+        
+	<li><b></b>
+         type=3 :3d isometric with box bounds given by the property <tt><b>data_bounds</b></tt>. 
+	 </li> 
+	
+	<li><b></b>
+        type=4 :3d isometric bounds  derived from the data.
+	</li> 
+	
+	<li><b></b>
+	type=5 :3d expanded isometric bounds  with box bounds given
+        by the property <tt><b>data_bounds</b></tt>. 
+	</li>
+     
+     
+     </li>
+
+     <li><b>thickness: </b>
+       This field contains the default  <tt><b>thickness</b></tt> value 
+       of the lines used to draw the axes and the curves. It should
+       be a positive integer.
+     </li>
+
+     <li><b>foreground: </b>
+      This field contains the color index used to draw the axes and
+       the curves.  Its value should be a color index (relative to
+       the current colormap).
+     </li>
+
+     <li><b>rotation_angles: </b>
+      This field is the vector <tt><b>[theta,alpha]</b></tt>. These two
+      values give  the spherical coordinates of the observation points (in degree).  
+     </li>
+
+ 
+
+     <li><b>surface_color: </b>
+     This property contains the vector of color indices used to draw each
+      curve.
+     </li> 
+
+     <li><b>parent: </b> 
+      This property contains the handle of the parent. The parent of the 3D curves
+      entity should be of the type <tt><b>"Axes"</b></tt> .
+     </li>
+  
+
+
+  
+
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>   
+
+   set("figure_style","new") //create a figure
+   a=get("current_axes");//get the handle of the newly created axes
+   t=[0:0.1:5*%pi]';
+   param3d1([sin(t),sin(2*t)],[cos(t),cos(2*t)],[t/10,sin(t)])
+ 
+   h=a.children //get the handle of the param3d entity
+   h.rotation_angles=[65,75];
+   h.surface_color=[3 5];
+   h.flag=[1,2,3];
+   h.data_bounds=[-1,-1,-1;1,1,2]; //boundaries given by data_bounds
+   h.flag=[2 5 0];
+   h.thickness = 2;
+  
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="set.htm"><tt><b>set</b></tt></a>&nbsp;&nbsp;<a href="get.htm"><tt><b>get</b></tt></a>&nbsp;&nbsp;<a href="delete.htm"><tt><b>delete</b></tt></a>&nbsp;&nbsp;<a href="param3d.htm"><tt><b>param3d</b></tt></a>&nbsp;&nbsp;<a href="param3d1.htm"><tt><b>param3d1</b></tt></a>&nbsp;&nbsp;<a href="graphics_entities.htm"><tt><b>graphics_entities</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Author</font></H3><p><ul>Djalel ABDEMOUCHE  </ul></p></body></html>

@@ -1,0 +1,29 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>prod</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>prod -  product  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>y=prod(x)  </tt></dd><dd><tt>y=prod(x,'r') or y=prod(x,1)  </tt></dd><dd><tt>y=prod(x,'c') or y=prod(x,2)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>x  </b></tt>
+    : real or complex vector or matrix
+  </li>
+  <li><tt><b>y  </b></tt>
+    : real or complex scalar or matrix
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    For a vector or a matrix <tt><b>x</b></tt>, <tt><b>y=prod(x)</b></tt>  returns in the scalar <tt><b>y</b></tt> the prod of all the entries
+    of <tt><b>x</b></tt>, , e.g. <tt><b>prod(1:n)</b></tt> is n!
+  </p>
+  <p>
+    <tt><b>y=prod(x,'r')</b></tt> (or, equivalently, <tt><b>y=prod(x,1)</b></tt>)computes the
+    rows elementwise product of  <tt><b>x</b></tt>. <tt><b>y</b></tt> is the row vector: <tt><b>y(i)=prod(x(i,:))</b></tt>. 
+  </p>
+  <p>
+    <tt><b>y=prod(x,'c')</b></tt> (or, equivalently, <tt><b>y=prod(x,2)</b></tt>) computes the
+    columns elementwise product of  <tt><b>x</b></tt>. <tt><b>y</b></tt> is the column vector: <tt><b>y(i)=prod(x(:,i))</b></tt>. 
+  </p>
+  <p>
+    <tt><b>prod</b></tt> is not implemented for sparse matrices.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+A=[1,2;0,100];
+prod(A)
+prod(A,'c')
+prod(A,'r')
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="sum.htm"><tt><b>sum</b></tt></a>&nbsp;&nbsp;<a href="cumprod.htm"><tt><b>cumprod</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

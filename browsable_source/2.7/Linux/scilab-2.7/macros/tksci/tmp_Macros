@@ -1,0 +1,4 @@
+mode(0);
+getf('tk_getfile.sci'),save('tk_getfile.bin'),clear ;
+getf('tk_getdir.sci'),save('tk_getdir.bin'),clear ;
+exit;

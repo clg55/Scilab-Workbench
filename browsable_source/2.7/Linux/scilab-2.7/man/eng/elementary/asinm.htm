@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>asinm</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>asinm -  matrix wise sine inverse  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>t=asinm(x)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>x  </b></tt>
+    : real or complex square matrix
+  </li>
+  <li><tt><b>t  </b></tt>
+    : real or complex square matrix
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+     <tt><b>t</b></tt> are sine inverse of the <tt><b>x</b></tt> matrix. Diagonalization
+    method is used. For non symmetric matrices result may be inaccurate.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+A=[1,2;3,4]
+sinm(asinm(A))
+asinm(A)+%i*logm(%i*A+sqrtm(eye()-A*A))
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="asin.htm"><tt><b>asin</b></tt></a>&nbsp;&nbsp;<a href="sinm.htm"><tt><b>sinm</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

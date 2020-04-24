@@ -1,0 +1,48 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>GENERIC_f</title></head><body bgcolor="FFFFFF"><CENTER>Scicos Block  </CENTER><p><b>GENERIC_f -  Scicos generic interfacing function  </b></p><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    This block can realize any type of block. The computational function
+    must already be defined in Scilab, Fortran or C code.
+  </p>
+  </dl><H3><font color="blue">DIALOGUE PARAMETERS</font></H3><ul><li><b><font color="maroon">simulation function</font></b>
+: a character string, the name of the computational  function
+
+  </li><li><b><font color="maroon">function type</font></b>
+: a non negative integer, the type of the computational  function
+
+  </li><li><b><font color="maroon">input port sizes</font></b>
+: a vector of integers, size of regular input ports.
+
+  </li><li><b><font color="maroon">output port sizes</font></b>
+: a vector of integers, size of regular output ports.
+
+  </li><li><b><font color="maroon">input event port sizes</font></b>
+: a vector of ones, size of event input ports. The size of the vector gives the number of event input ports.
+
+  </li><li><b><font color="maroon">output event port sizes</font></b>
+: a vector of ones, size of event output ports. The size of the vector gives the number of of event output ports.
+
+  </li><li><b><font color="maroon">Initial continuous state</font></b>
+: a column vector.
+
+  </li><li><b><font color="maroon">Initial discrete state</font></b>
+: a column vector.
+
+  </li><li><b><font color="maroon">System type</font></b>
+: a string: c,d, z or l (CBB, DBB, zero crossing or synchro).
+
+  </li><li><b><font color="maroon">Real parameter vector</font></b>
+: column vector. Any parameters used in the block can be defined here as a column vector.
+
+  </li><li><b><font color="maroon">Integer parameter vector</font></b>
+: column vector. Any integer parameters used in the block can be defined here as a column vector.
+
+  </li><li><b><font color="maroon">initial firing</font></b>
+: vector. Size of this vector corresponds to the number of event outputs. The value of the i-th entry specifies the time of the preprogrammed event firing on the i-th output event port. If less than zero, no event is preprogrammed.
+
+  </li><li><b><font color="maroon">direct feedthrough</font></b>
+: character "y" or "n", specifies if block has a direct input to output feedthrough.
+
+  </li><li><b><font color="maroon">Time dependance</font></b>
+: character "y" or "n", specifies if block output depends explicitly on time.
+
+  </li></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="scifunc_block.htm"><tt><b>scifunc_block</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

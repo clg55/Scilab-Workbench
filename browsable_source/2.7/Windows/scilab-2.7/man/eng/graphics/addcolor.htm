@@ -1,0 +1,23 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>addcolor</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>addcolor -  add new colors to the current colormap  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>new=addcolor(c)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>new  </b></tt>
+    : ids of the colors defined in c in the new color table.
+  </li>
+  <li><tt><b>c  </b></tt>
+    : matrix with 3 columns, RGB color definition.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>addcolor</b></tt> adds new colors given in the <tt><b>c</b></tt> argument to the
+    current colormap. <tt><b>c</b></tt> must be a matrix with 3 columns 
+    <tt><b>[R G B]</b></tt> <tt><b>R</b></tt> is red component, <tt><b>G</b></tt> is green component,
+    <tt><b>B</b></tt> is blue component). Each entry in <tt><b>c</b></tt> must be a non
+    negative number less or equal to 1.
+  </p>
+  <p>
+    The ids of the new colors are returned into <tt><b>new</b></tt>.
+  </p>
+  <p>
+    If a color defined in <tt><b>c</b></tt> is already present in the current colormap
+    it is not added.
+  </p>
+  </dl><H3><font color="blue">See Also</font></H3><p><ul><a href="colormap.htm"><tt><b>colormap</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

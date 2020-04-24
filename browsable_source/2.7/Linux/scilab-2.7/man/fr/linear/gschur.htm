@@ -1,0 +1,56 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>gschur</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>gschur -  generalized Schur form (obsolete).  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[As,Es]=gschur(A,E)  </tt></dd><dd><tt>[As,Es,Q,Z]=gschur(A,E)  </tt></dd><dd><tt>[As,Es,Z,dim] = gschur(A,E,flag)   </tt></dd><dd><tt>[As,Es,Z,dim]= gschur(A,E,extern)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    This function is obsolete and is now included in the <tt><b>schur</b></tt>
+    function. In most cases the <tt><b>gschur</b></tt> function will still work as
+    before, but it will be removed in the future release.
+  </p>
+  <p>
+  </p>
+  <p>
+    The first three syntaxes can be replaced by
+  </p>
+  <pre>
+[As,Es]=schur(A,E)
+[As,Es,Q,Z]=schur(A,E);Q=Q' //NOTE THE TRANPOSITION HERE
+[As,Es,Z,dim] = schur(A,E,flag) 
+   </pre>
+  <p>
+    The last syntax requires little more adaptations:
+  </p>
+ 
+
+  <li><b>if</b> 
+    extern is a scilab function  the new calling sequence should be <tt><b>[As,Es,Z,dim]= schur(A,E,Nextern)</b></tt> with Nextern defined as follow: 
+  </li>
+  <pre>
+function t=Nextern(R)
+if R(2)==0 then
+  t=extern([1,R(1),R(3)])==1
+else
+  c=(R(1)+%i*R(2))/R(3)
+  t=extern([2,real(c+c'),real(c*c')])==1
+end
+endfunction
+   </pre>
+
+  <li><b>if</b> 
+    extern is the name of an external function coded in Fortran or C the new calling sequence should be <tt><b>[As,Es,Z,dim]= schur(A,E,'nextern')</b></tt> with nextern defined as follow:
+  </li>
+  <pre>
+      logical function nextern(ar,ai,beta)
+      double precision ar,ai,beta
+      integer r,extern
+      if (ai.eq.0.0d0) then
+        r=extern(1,ar,beta,0.0d0,0.0d0)
+      else
+        r=extern(2,0.0d0,0.0d0,2.0d0*ar,ar*ar+ai*ai)
+      endif
+      nextern=r.eq.1
+      end
+   </pre>
+  <p>
+  </p>
+  <p>
+  </p>
+ 
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="../programming/external.htm"><tt><b>external</b></tt></a>&nbsp;&nbsp;<a href="schur.htm"><tt><b>schur</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

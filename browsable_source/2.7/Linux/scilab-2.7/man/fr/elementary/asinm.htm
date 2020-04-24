@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>asinm</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>asinm -  sinus matriciel inverse  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>t=asinm(x)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>x  </b></tt>
+    : matrice carrée complexe ou réelle
+  </li>
+  <li><tt><b>t  </b></tt>
+    : matrice carrée complexe ou réelle
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+     <tt><b>t</b></tt> est le sinus matriciel inverse de la matrice <tt><b>x</b></tt>. La méthode de diagonalisation est utilisée. Pour les matrices non symétriques le résultat peut être peu fiable.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+A=[1,2;3,4]
+sinm(asinm(A))
+asinm(A)+%i*logm(%i*A+sqrtm(eye()-A*A))
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="asin.htm"><tt><b>asin</b></tt></a>&nbsp;&nbsp;<a href="sinm.htm"><tt><b>sinm</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

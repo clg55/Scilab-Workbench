@@ -1,0 +1,36 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>portrait</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>portrait -  2 dimensional phase portrait.  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[]=portrait(f,[odem,xdim,npts,pinit])  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>f  </b></tt>
+    : a Scilab external which gives the field of the dynamical system. Hence  it can be a macro name which computes the field at time t and point x [y]=f(t,x,[u]) or a list list(f1,u1) where f1 is a macro of type [y]=f1(t,x,u) or a character string. The macro can be used to simulate a continuous or discrete system and in case  of discrete system the second parameter must be set to 'discrete'
+  </li>
+  <li><tt><b>.I rest  </b></tt>
+    : The other parameters are optional. If omitted they will be asked interactively
+  </li>
+ <ul>
+  <li><tt><b>odem  </b></tt>
+    : gives the integration method to use. The value "default" can be used,  otherwise see ode for a complete set of possibilities
+  </li>
+  <li><tt><b>npts  </b></tt>
+    :  a vector of size (2,10) [number-of-points,step] gives the step for integration  and the number of requested points. The solution will be calculated and drawn  for time=0:step:(step*[number-of-points])
+  </li>
+  <li><tt><b>xdim  </b></tt>
+    : [xmin,xmax,ymin,ymax,zmin,zmax] the boundaries of the graphic frame.
+  </li>
+  <li><tt><b>pinit  </b></tt>
+    : initial values for integration. A set of initial points can be given in a matrix
+  </li>
+  <pre>
+      pinit = [x0(1), x1(1),...., xn(1)
+               x0(2), x1(2),...., xn(2)
+               x0(3), x1(3),...., xn(3)].
+   </pre>
+ </ul>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Interactive integration and display of a 2 dimensional phase portrait
+    of a dynamical system  dx/dt=f(t,x,[u]) (where u is an optional parameter )
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+a=rand(2,2)
+deff('[ydot]=l_s(t,y)','ydot=a*y')
+portrait(l_s)
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="../nonlinear/ode.htm"><tt><b>ode</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>edit</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>edit -   function editing  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>newname=edit(functionname [, editor])  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>functionname  </b></tt>
+    : character string
+  </li>
+  <li><tt><b>editor  </b></tt>
+    : character string
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    If functionname is the name of a defined scilab function 
+    <tt><b>edit(functionname ,[editor])</b></tt> try to open the associated file
+     <tt><b>functionname.sci</b></tt>. If this file can't be modified <tt><b>edit</b></tt>
+    first create a copy of this file in the TMPDIR directory.
+  </p>
+  <p>
+  </p>
+  <p>
+    If functionname is the name of a undefined scilab function <tt><b>edit</b></tt>
+    create a functionname.sci file in the TMPDIR directory.
+  </p>
+  <p>
+  </p>
+  <p>
+    When leaving the editor the modified or defined function is loaded
+    into Scilab under the name <tt><b>newname</b></tt>.
+  </p>
+  <p>
+  </p>
+  <p>
+    The editor character string can be used to specify your favourite text
+    editor.
+  </p>
+  <p>
+  </p>
+  <p>
+    Default editor is Emacs. This function should be customized according
+    to your needs.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+//newedit=edit('edit')  //opens editor with text of this function
+//myfunction=edit('myfunction')  //opens editor for a new function
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="../fileio/manedit.htm"><tt><b>manedit</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,4 @@
+mode(0);
+getf('load_graph.sci'),save('load_graph.bin'),clear ;
+getf('save_graph.sci'),save('save_graph.bin'),clear ;
+exit;

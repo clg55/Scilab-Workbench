@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>scaling</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>scaling -  transformation affine d'un ensemble de points  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>xy1=scaling(xy,factor,[orig])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>xy1  </b></tt>
+    : matrice de taille (2,.).
+  </li>
+  <li><tt><b>xy  </b></tt>
+    : matrice de taille (2,.).
+  </li>
+  <li><tt><b>factor  </b></tt>
+    : réel, coefficient de la transformation linéaire
+  </li>
+  <li><tt><b>orig  </b></tt>
+    : vecteur de décalage; [0;0] par défaut.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>scaling</b></tt> applique une transformation affine sur les points définis par
+    les coordonnées <tt><b>xy</b></tt> :
+  </p>
+  <p>
+    <tt><b>xy1(:,i) = factor * xy(:,i) + orig</b></tt>.
+  </p>
+  </dl></body></html>

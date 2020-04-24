@@ -1,0 +1,18 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>gcd</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>gcd -  gcd calculation  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[pgcd,U]=gcd(p)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>p  </b></tt>
+    : polynomial row vector <tt><b>p=[p1,..,pn]</b></tt>
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    computes the gcd  of components of <tt><b>p</b></tt> and a unimodular 
+    matrix (with polynomial inverse) <tt><b>U</b></tt>, with minimal degree such that
+  </p>
+  <p>
+    <tt><b>p*U=[0 ... 0 pgcd]</b></tt>
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+s=poly(0,'s');
+p=[s,s*(s+1)^2,2*s^2+s^3];
+[pgcd,u]=gcd(p);
+p*u
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="bezout.htm"><tt><b>bezout</b></tt></a>&nbsp;&nbsp;<a href="lcm.htm"><tt><b>lcm</b></tt></a>&nbsp;&nbsp;<a href="hermit.htm"><tt><b>hermit</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

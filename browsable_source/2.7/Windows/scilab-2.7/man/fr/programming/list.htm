@@ -1,0 +1,31 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>list</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>list -  Objet Scilab, Définition d'une liste  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>list(a1,....an)    </tt></dd></dl><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Crée une <tt><b>liste</b></tt> avec les éléments <tt><b>ai</b></tt> qui sont des objets Scilab 
+    arbitraires (<tt><b>matrice, liste, ...</b></tt>). Le type des objets de type liste (renvoyé par la fonction <tt><b>type</b></tt>) est égal à 15.
+  </p>
+  <p>
+    <tt><b>list()</b></tt> est une liste vide (0 élément).
+  </p>
+  <p>
+    Opérations sur les listes :
+  </p>
+ 
+  <p>
+     extraction
+    : <tt><b>[x,y,z...]=l(v)</b></tt> où <tt><b>v</b></tt> est un vecteur d'indices; 
+    <tt><b>[x,y,z]=l(:)</b></tt> extrait tous les éléments.
+  </p>
+  <p>
+      insertion
+    : <tt><b>l(i)=a</b></tt>
+  </p>
+  <p>
+     suppression
+    : <tt><b>l(i)=null()</b></tt> supprime le i-ème élément de la liste <tt><b>l</b></tt>.
+  </p>
+ 
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+x=list(1,2,3);
+x(4)=10;
+x(10)='a'
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="null.htm"><tt><b>null</b></tt></a>&nbsp;&nbsp;<a href="tlist.htm"><tt><b>tlist</b></tt></a>&nbsp;&nbsp;<a href="insertion.htm"><tt><b>insertion</b></tt></a>&nbsp;&nbsp;<a href="extraction.htm"><tt><b>extraction</b></tt></a>&nbsp;&nbsp;<a href="../elementary/size.htm"><tt><b>size</b></tt></a>&nbsp;&nbsp;<a href="../strings/length.htm"><tt><b>length</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

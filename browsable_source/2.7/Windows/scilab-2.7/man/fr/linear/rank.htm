@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>rank</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>rank -  rang  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[i]=rank(X)  </tt></dd><dd><tt>[i]=rank(X,tol)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>X  </b></tt>
+    : matrice réelle ou complexe
+  </li>
+  <li><tt><b>tol  </b></tt>
+    : nombre réel positif
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    calcule le rang "numérique" de <tt><b>X</b></tt> c'est à dire le nombre de ses valeurs singulières supérieures à <tt><b>norm(size(X),'inf') * norm(X) * %eps</b></tt>.
+  </p>
+  <p>
+    <tt><b>rank(X,tol)</b></tt> est le nombre de valeurs singulières de <tt><b>X</b></tt> supérieures à <tt><b>tol</b></tt>.
+  </p>
+  </dl><H3><font color="blue">REMARQUE</font></H3><ul><p>
+    Notez que la valeur par défaut de <tt><b>tol</b></tt> est proportionnelle à <tt><b>norm(X)</b></tt>. Par exemple 
+  </p><p>
+    <tt><b>rank([1.d-80,0;0,1.d-80])</b></tt> vaut 2 !.
+  </p></ul><H3><font color="blue">Exemples</font></H3><ul><pre>
+rank([1.d-80,0;0,1.d-80])
+rank([1,0;0,1.d-80])
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="svd.htm"><tt><b>svd</b></tt></a>&nbsp;&nbsp;<a href="qr.htm"><tt><b>qr</b></tt></a>&nbsp;&nbsp;<a href="rowcomp.htm"><tt><b>rowcomp</b></tt></a>&nbsp;&nbsp;<a href="colcomp.htm"><tt><b>colcomp</b></tt></a>&nbsp;&nbsp;<a href="lu.htm"><tt><b>lu</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

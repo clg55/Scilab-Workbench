@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>speye</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>speye -   sparse identity matrix  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>Isp=speye(nrows,ncols)  </tt></dd><dd><tt>Isp=speye(A)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>nrows  </b></tt>
+    : integer (number of rows)
+  </li>
+  <li><tt><b>ncols  </b></tt>
+    : integer (number os columns)
+  </li>
+  <li><tt><b>A  </b></tt>
+    : sparse matrix
+  </li>
+  <li><tt><b>sp  </b></tt>
+    : sparse identity matrix
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>Isp=speye(nrows,ncols)</b></tt> returns a sparse identity matrix <tt><b>Isp</b></tt> 
+    with <tt><b>nrows</b></tt> rows, <tt><b>ncols</b></tt> columns. (Non square identity matrix
+    have a maximal number of ones along the main diagonal).
+  </p>
+  <p>
+    <tt><b>Isp=speye(A)</b></tt> returns a sparse identity matrix with same
+    dimensions as <tt><b>A</b></tt>. If <tt><b>[m,n]=size(A)</b></tt>, <tt><b>speye(m,n)</b></tt> and
+    <tt><b>speye(A)</b></tt> are equivalent. In particular <tt><b>speye(3)</b></tt> is not
+    equivalent to <tt><b>speye(3,3)</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+eye(3,3)-full(speye(3,3))
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="sparse.htm"><tt><b>sparse</b></tt></a>&nbsp;&nbsp;<a href="full.htm"><tt><b>full</b></tt></a>&nbsp;&nbsp;<a href="eye.htm"><tt><b>eye</b></tt></a>&nbsp;&nbsp;<a href="spzeros.htm"><tt><b>spzeros</b></tt></a>&nbsp;&nbsp;<a href="spones.htm"><tt><b>spones</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

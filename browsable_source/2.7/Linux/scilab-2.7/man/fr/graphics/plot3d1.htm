@@ -1,0 +1,36 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>plot3d1</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>plot3d1 -  représentation en couleurs d'une surface en 3D  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>plot3d1(x,y,z,[theta,alpha,leg,flag,ebox])  </tt></dd><dd><tt>plot3d1(xf,yf,zf,[theta,alpha,leg,flag,ebox])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><p>
+    Voir <tt><b>plot3d</b></tt> pour une description complète. Il y a juste une petite différence, uniquement le signe de <tt><b>flag(1)=mode</b></tt> est utilisé : s'il est négatif la grille n'est pas dessinée. 
+  </p></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>plot3d</b></tt> dessine une surface <tt><b>z=f(x,y)</b></tt>
+    dont la couleur en un point dépend de la hauteur.
+  </p>
+  <p>
+    Taper <tt><b>plot3d1()</b></tt> pour voir une démonstration de la fonction.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+// simple surface z=f(x,y)
+t=[0:0.3:2*%pi]'; z=sin(t)*cos(t');
+plot3d1(t,t,z)
+// même surface en utilisant genfac3d au préalable
+[xx,yy,zz]=genfac3d(t,t,z);
+xbasc()
+plot3d1(xx,yy,zz)
+// surfaces multiples
+xbasc()
+plot3d1([xx xx],[yy yy],[zz 4+zz])
+// changement du point de vue et des légendes
+xbasc()
+plot3d1(1:10,1:20,10*rand(10,20),35,45,"X@Y@Z",[2,2,3])
+// changement du point de vue et des légendes
+xbasc()
+plot3d1(1:10,1:20,10*rand(10,20),35,45,"X@Y@Z",[-2,2,3])
+// une sphère
+deff("[x,y,z]=sph(alp,tet)",["x=r*cos(alp).*cos(tet)+orig(1)*ones(tet)";..
+  "y=r*cos(alp).*sin(tet)+orig(2)*ones(tet)";..
+  "z=r*sin(alp)+orig(3)*ones(tet)"]);
+r=1; orig=[0 0 0];
+[xx,yy,zz]=eval3dp(sph,linspace(-%pi/2,%pi/2,40),linspace(0,%pi*2,20));
+xbasc()
+plot3d1(xx,yy,zz)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="plot3d.htm"><tt><b>plot3d</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>J.Ph.C.  </ul></p></body></html>

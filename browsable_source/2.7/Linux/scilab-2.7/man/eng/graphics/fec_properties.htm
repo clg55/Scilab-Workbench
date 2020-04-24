@@ -1,0 +1,49 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>fec_properties</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Data type </CENTER><p><b>fec_properties -  description of the
+   fec entities properties </b></p><H3><font color="blue">Description</font></H3><dl>
+
+  The Fec entity is a leaf of the graphics entities hierarchy. It
+  represents 2D finite elements plots  (see
+  <tt><b>fec</b></tt>, <tt><b>Sgrayplot</b></tt>).
+  
+   <li><b>visible: </b>
+    This field contains the  <tt><b>visible</b></tt> property value
+   for the entity . It should
+   be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt>  . By default, 
+   the plot is visible, the value's property is  <tt><b>"on"
+   </b></tt>. If <tt><b>"off"</b></tt> the plot is not drawn on the screen.
+   </li>
+
+
+   <li><b>data: </b>
+    This is a three column matrix <tt><b>[x,y,f]</b></tt>, where <tt><b>x(i)</b></tt>
+    and <tt><b>y(i)</b></tt> are the coordinates of the  <tt><b>i</b></tt>'th
+    node. <tt><b>f(i)</b></tt> is the value associated to the node <tt><b>i</b></tt>.
+   </li>
+
+   <li><b>triangles: </b>
+    This is a five column matrix
+    <tt><b>[tn,n1,n2,n3,flag]</b></tt>. <tt><b>tn(j)</b></tt> is the
+    triangle number. <tt><b>n1(j)</b></tt>, <tt><b>n2(j)</b></tt> and
+    <tt><b>n3(j)</b></tt> are the index of the nodes which constitute
+    the triangle.
+     
+    (<tt><b>flag(j)</b></tt> is not used).
+   </li> 
+
+   <li><b>parent: </b> 
+      This property contains the handle of the parent. The parent of the fec
+      entity should be of the type <tt><b>"Axes"</b></tt> or <tt><b>"Agregation"</b></tt>.
+     </li>
+
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+
+   set("figure_style","new"); //create a figure
+
+   x=-10:10; y=-10:10;m =rand(21,21);
+   Sgrayplot(x,y,m);
+   a=get("current_axes");
+   f=a.children.children(2)
+   f.data(:,3)=(1:size(f.data,1))';
+   a.parent.color_map=hotcolormap(64);
+
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="set.htm"><tt><b>set</b></tt></a>&nbsp;&nbsp;<a href="get.htm"><tt><b>get</b></tt></a>&nbsp;&nbsp;<a href="delete.htm"><tt><b>delete</b></tt></a>&nbsp;&nbsp;<a href="fec.htm"><tt><b>fec</b></tt></a>&nbsp;&nbsp;<a href="Sgrayplot.htm"><tt><b>Sgrayplot</b></tt></a>&nbsp;&nbsp;<a href="graphics_entities.htm"><tt><b>graphics_entities</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Author</font></H3><p><ul>Djalel ABDEMOUCHE  </ul></p></body></html>

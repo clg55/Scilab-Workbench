@@ -1,0 +1,206 @@
+SHELL = /bin/sh
+
+binary:
+	@if test -f .binary; then \
+		echo "Humm... this is a binary version"; \
+		config/findpath; \
+		(cd scripts; make); \
+                (cd maple; make); \
+		echo "Installation done"; \
+	else \
+		echo "***************************************"; \
+		echo "Humm... this is a source version."; \
+		echo "Please read the README_Unix file first."; \
+		echo "***************************************"; \
+	fi
+
+#SCIDIR=.
+include Path.incl
+include Makefile.incl
+
+all:: bin/scilex  
+
+# Add the object files that are used to compile Scilex
+include Makefile.OBJ
+
+include config/Makefile.linux
+
+distclean::
+	$(RM) bin/scilex
+
+SUBDIRS = scripts maple macros imp intersci  \
+	tests tcl  examples
+
+scilex-lib::
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+	cd routines; echo "making all in routines..."; \
+		$(MAKE) $(MFLAGS) all;
+
+scilex-lib::
+	@cd pvm3; echo "making all in pvm3..."; $(MAKE) $(MFLAGS) "CC=$(CC)";
+
+all::
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+	for i in $(SUBDIRS) ;\
+	do \
+		(cd $$i ; echo "making all in $$i..."; \
+			$(MAKE) $(MFLAGS) all); \
+	done
+
+distclean::
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+	for i in routines $(SUBDIRS) man;\
+	do \
+		(cd $$i ; echo "making distclean in $$i..."; \
+			$(MAKE) $(MFLAGS)  distclean); \
+	done
+
+distclean::
+	@cd pvm3; echo "making distclean in pvm3..."; \
+	$(MAKE) $(MFLAGS) super_distclean;
+
+clean::
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+	for i in routines $(SUBDIRS) man;\
+	do \
+		(cd $$i ; echo "making clean in $$i..."; \
+			$(MAKE) $(MFLAGS)  clean); \
+	done
+
+man::
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+	for i in man;\
+	do \
+		(cd $$i ; echo "making man in $$i..."; \
+			$(MAKE) $(MFLAGS) man); \
+	done
+
+
+manclean:	
+	@case '${MFLAGS}' in *[ik]*) set +e;; esac; \
+	for i in man;\
+	do \
+		(cd $$i ; echo "making manclean in $$i..."; \
+			$(MAKE) $(MFLAGS) manclean); \
+	done
+
+tests:
+	@echo "Type \"make tests\" in $(SCIDIR)/tests directory "
+	@echo "  to test the  distribution"
+
+distclean::
+	$(RM) config.cache config.log config.status .binary foo.f foo.o \
+	conftest conftest.c so_locations
+
+# SCIBASE for scilab binaries generation
+SCIBASE = scilab-2.7
+
+PVMBINDISTFILES = \
+	$(SCIBASE)/pvm3/Readme \
+	$(SCIBASE)/pvm3/lib/pvm \
+	$(SCIBASE)/pvm3/lib/pvmd \
+	$(SCIBASE)/pvm3/lib/pvmtmparch \
+	$(SCIBASE)/pvm3/lib/pvmgetarch \
+	$(SCIBASE)/pvm3/lib/LINUX/pvmd3 \
+	$(SCIBASE)/pvm3/lib/LINUX/pvmgs \
+	$(SCIBASE)/pvm3/lib/LINUX/pvm \
+	$(SCIBASE)/pvm3/bin/LINUX/*
+
+BINDISTFILES = \
+	$(SCIBASE)/.binary \
+	$(SCIBASE)/.pvmd.conf \
+	$(SCIBASE)/ACKNOWLEDGEMENTS \
+	$(SCIBASE)/CHANGES \
+	$(SCIBASE)/Makefile \
+        $(SCIBASE)/Makefile.OBJ \
+	$(SCIBASE)/Makefile.incl \
+	$(SCIBASE)/Makemex \
+        $(SCIBASE)/Path.incl \
+	$(SCIBASE)/README_Unix \
+	$(SCIBASE)/Version.incl \
+	$(SCIBASE)/configure \
+	$(SCIBASE)/libtool \
+	$(SCIBASE)/license.txt \
+	$(SCIBASE)/licence.txt \
+	$(SCIBASE)/scilab.quit \
+	$(SCIBASE)/scilab.star \
+	$(SCIBASE)/X11_defaults \
+	$(SCIBASE)/bin \
+	$(SCIBASE)/config \
+	$(SCIBASE)/contrib \
+	$(SCIBASE)/demos \
+	$(SCIBASE)/examples \
+	$(SCIBASE)/imp/NperiPos.ps \
+	$(SCIBASE)/imp/giffonts \
+	$(SCIBASE)/macros \
+	$(SCIBASE)/man/eng/*.htm \
+	$(SCIBASE)/man/eng/*/*.htm \
+	$(SCIBASE)/man/fr/*/*.htm \
+	$(SCIBASE)/man/fr/*.htm \
+	$(SCIBASE)/man/*.dtd \
+	$(SCIBASE)/man/*/*.xsl \
+	$(SCIBASE)/maple \
+	$(SCIBASE)/routines/*.h \
+	$(SCIBASE)/routines/Make.lib \
+	$(SCIBASE)/routines/default/FCreate \
+	$(SCIBASE)/routines/default/Flist \
+	$(SCIBASE)/routines/default/README \
+	$(SCIBASE)/routines/default/fundef \
+	$(SCIBASE)/routines/default/*.c \
+	$(SCIBASE)/routines/default/*.f \
+	$(SCIBASE)/routines/default/*.h \
+	$(SCIBASE)/routines/graphics/Math.h \
+	$(SCIBASE)/routines/graphics/Graphics.h \
+	$(SCIBASE)/routines/graphics/Entities.h \
+	$(SCIBASE)/routines/interf/*.h \
+	$(SCIBASE)/routines/intersci/sparse.h \
+	$(SCIBASE)/routines/menusX/*.h \
+	$(SCIBASE)/routines/scicos/scicos.h \
+	$(SCIBASE)/routines/sun/*.h \
+	$(SCIBASE)/routines/xsci/*.h \
+	$(SCIBASE)/scripts \
+	$(SCIBASE)/tcl \
+	$(SCIBASE)/tests \
+	$(SCIBASE)/util
+
+tarbindist:
+	touch .binary
+	strip bin/scilex
+	cd tests; make distclean
+	cd examples; make distclean
+	cd .. ; tar cvf $(SCIBASE)/$(SCIBASE)-bin.tar $(BINDISTFILES) $(PVMBINDISTFILES)
+	$(RM) .binary
+
+LIBPREFIX = /usr/lib
+
+install:
+	@if test `pwd` != ${LIBPREFIX}/$(SCIBASE); then \
+		touch .binary; \
+		strip $(SCIDIR)/bin/scilex; \
+		(cd tests; make distclean); \
+		(cd examples; make distclean); \
+		(cd .. ; tar cf - $(BINDISTFILES) $(PVMBINDISTFILES) $(PVMBINDISTFILES1) | (cd ${LIBPREFIX}; tar xf -)); \
+		(cd ${LIBPREFIX}/$(SCIBASE); make); \
+		$(RM) .binary; \
+	fi
+	$(RM) /usr/bin/scilab
+	ln -fs ${LIBPREFIX}/$(SCIBASE)/bin/scilab /usr/bin/scilab
+	$(RM) /usr/bin/intersci
+	ln -fs ${LIBPREFIX}/$(SCIBASE)/bin/intersci /usr/bin/intersci
+	$(RM) /usr/bin/intersci-n
+	ln -fs ${LIBPREFIX}/$(SCIBASE)/bin/intersci-n /usr/bin/intersci-n
+
+
+uninstall:
+	$(RM) -r ${LIBPREFIX}/$(SCIBASE)
+	$(RM) /usr/bin/scilab
+	$(RM) /usr/bin/intersci
+	$(RM) /usr/bin/intersci-n
+
+
+cvsclean::
+	@$(RM) -f -r geci xless wless xmetanet routines/comm routines/libcomm
+	@cd man; $(RM) -f -r arma comm control dcd elementary fileio functions graphics gui identification linear metanet nonlinear polynomials programming pvm robust scicos signal sound strings tdcs time-date tksci translation utilities
+
+setversion : 
+	echo "SCIVERSION=scilab-CVS-`date --iso`" > Version.incl

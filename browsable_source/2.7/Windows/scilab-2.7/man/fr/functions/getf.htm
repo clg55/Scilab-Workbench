@@ -1,0 +1,54 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>getf</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>getf -  chargement de fonctions à partir d'un fichier  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>getf(file-name [,opt])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>filename  </b></tt>
+    : chaîne de caractères
+  </li>
+  <li><tt><b>opt  </b></tt>
+    : chaîne de caractères optionnelle
+  </li>
+ <ul>
+  <li><tt><b>"c"  </b></tt>
+    : les fonctions sont "compilées" pour accélérer leur exécution (par défaut)
+  </li>
+  <li><tt><b>"n"  </b></tt>
+    : les fonctions ne sont pas "compilées"
+  </li>
+  <li><tt><b>"p"  </b></tt>
+    : les fonctions sont "compilées" et préparées pour les statistiques d'appel (voir <tt><b>profile</b></tt>)
+  </li>
+ </ul>
+  <p>
+    
+  </p>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Charge une ou plusieurs fonctions (voir <tt><b>functions</b></tt>) définies dans le fichier <tt><b>'file-name'</b></tt>.
+    La chaîne de caractères <tt><b>opt='n'</b></tt> signifie que les fonctions ne sont pas compilées (pré-interprétées) au chargement. Cela peut être utile en phase de mise au point (voir <tt><b>comp</b></tt>). Par défaut les fonctions sont compilées (i.e. <tt><b>opt='c'</b></tt> est utilisée).
+  </p>
+  <p>
+    Dans le fichier chaque fonction doit commencer par une ligne de la forme :
+  </p>
+  <pre>
+function [y1,...,yn]=foo(x1,...,xm)
+   </pre>
+  <p>
+    suivie par une suite d'instructions Scilab.
+  </p>
+  <p>
+    La "ligne de définition" donne la syntaxe d'appel complète de la fonction.
+    Les <tt><b>yi</b></tt> sont les variables de sortie, calculées à partir des
+    variables d'entrée <tt><b>xi</b></tt> et des variables existantes dans le contexte appelant lorsque la
+    fonction est exécutée. On peut utiliser éventuellement un sous-ensemble de ces variables d'entrée et de sortie.
+  </p>
+  <p>
+    Il est possible d'écrire plusieurs fonctions dans un seul fichier. Une fonction est alors terminée par le mot-clé <tt><b>endfunction</b></tt> ou par la ligne de déclaration de la fonction suivante (ancienne convention) ou par la fin du fichier.
+  </p>
+  <p>
+  </p>
+ <p>
+    <tt><b>getf</b></tt> est une ancienne manière de charger les fonctions. Si chaque fonction est terminée par <tt><b>endfunction</b></tt>, les fonctions peuvent être chargées avec la commande <tt><b>exec</b></tt> au lieu de <tt><b>getf</b></tt>. Dans ce cas l'option par défaut <tt><b>opt</b></tt> est utilisée.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+getf('SCI/macros/xdess/plot.sci')
+
+getf SCI/macros/xdess/plot.sci
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="functions.htm"><tt><b>functions</b></tt></a>&nbsp;&nbsp;<a href="function.htm"><tt><b>function</b></tt></a>&nbsp;&nbsp;<a href="genlib.htm"><tt><b>genlib</b></tt></a>&nbsp;&nbsp;<a href="getd.htm"><tt><b>getd</b></tt></a>&nbsp;&nbsp;<a href="../programming/exec.htm"><tt><b>exec</b></tt></a>&nbsp;&nbsp;<a href="edit.htm"><tt><b>edit</b></tt></a>&nbsp;&nbsp;<a href="comp.htm"><tt><b>comp</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

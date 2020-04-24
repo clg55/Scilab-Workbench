@@ -1,0 +1,54 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>save</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>save -  saving variables in binary files  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>save(filename [,x1,x2,...,xn])  </tt></dd><dd><tt>save(fd [,x1,x2,...,xn])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>filename  </b></tt>
+    : character string containing the path of the file
+  </li>
+  <li><tt><b>fd  </b></tt>
+    : a file descriptor given by a call to mopen
+  </li>
+  <li><tt><b>xi  </b></tt>
+    : arbitrary Scilab variable(s) 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    The <tt><b>save</b></tt> command can be used to save Scilab current variables 
+     in a binary file. The file can be given either by its paths or
+    by its descriptor previously given by <tt><b>mopen</b></tt>.
+  </p>
+  <p>
+    <tt><b>save(filename)</b></tt> saves all current variables in the file defined
+    by  <tt><b>filename</b></tt>.
+  </p>
+  <p>
+    <tt><b>save(fd)</b></tt> saves all current variables in the file defined
+    by  the descriptor <tt><b>fd</b></tt>.
+  </p>
+  <p>
+    <tt><b>save(filename,x,y)</b></tt> or <tt><b>save(fd,x,y)</b></tt> saves only named
+    variables <tt><b>x</b></tt> and <tt><b>y</b></tt>.
+  </p>
+  <p>
+    Saved  variables can be reloaded by the <tt><b>load</b></tt> command.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+a=eye(2,2);b=ones(a);
+save('val.dat',a,b);
+clear a
+clear b
+load('val.dat','a','b');
+
+// sequential save into a file
+fd=mopen('TMPDIR/foo','wb')
+for k=1:4, x=k^2;save(fd,x,k),end
+mclose(fd)
+fd=mopen('TMPDIR/foo','rb')
+for i=1:4, load(fd,'x','k');x,k,end
+mclose(fd)
+
+// appending variables to an old save file
+fd=mopen('TMPDIR/foo','r+')
+mseek(0,fd,'end') 
+lst=list(1,2,3)
+save(fd,lst)
+mclose(fd)
+
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="load.htm"><tt><b>load</b></tt></a>&nbsp;&nbsp;<a href="mopen.htm"><tt><b>mopen</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

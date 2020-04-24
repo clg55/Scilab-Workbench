@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>EVENTSCOPE_f</title></head><body bgcolor="FFFFFF"><CENTER>Scicos Block  </CENTER><p><b>EVENTSCOPE_f -  Scicos event visualization block  </b></p><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    This block realizes the visualization of  the input event signals.
+  </p>
+  </dl><H3><font color="blue">DIALOGUE PARAMETERS</font></H3><ul><li><b><font color="maroon">Number of event inputs</font></b>
+: an integer giving the number of event input ports colors : a vector of integers. The i-th element is the color number (&gt;=0) or dash type (&lt;0) used to draw the evolution of the i-th  input port signal. See <tt><b>xset</b></tt> for color (dash type) definitions.
+
+  </li><li><b><font color="maroon">Output window number</font></b>
+: The number of graphic window used for the display. It is often good to use high values to avoid conflict with palettes and Super Block windows. If you have more than one scope, make sure they don't have the same window numbers (unless superposition of the curves is desired). Output window position : a 2 vector specifying the coordinates of the upper left corner of the graphic window. Answer [] for default window position.
+
+  </li><li><b><font color="maroon">Output window size</font></b>
+: a 2 vector specifying the width and height  of  the graphic window. Answer [] for default window dimensions.
+
+  </li><li><b><font color="maroon">Refresh period</font></b>
+: Maximum value on the X-axis (time). The plot is redrawn when time reaches a multiple of this value.
+
+  </li></ul><H3><font color="blue">REMARKS</font></H3><ul><p>
+    Output window number, Output window size, Output window position are only taken into account at the initialisation time of the simulation. 
+  </p></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="SCOPXY_f.htm"><tt><b>SCOPXY_f</b></tt></a>&nbsp;&nbsp;<a href="SCOPE_f.htm"><tt><b>SCOPE_f</b></tt></a>&nbsp;&nbsp;<a href="ANIMXY_f.htm"><tt><b>ANIMXY_f</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

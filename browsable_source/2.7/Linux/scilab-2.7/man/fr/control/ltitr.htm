@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>ltitr</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>ltitr -  discrete time response (state space)  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[X]=ltitr(A,B,U,[x0])   </tt></dd><dd><tt>[xf,X]=ltitr(A,B,U,[x0])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>A,B  </b></tt>
+    : real  matrices of appropriate dimensions
+  </li>
+  <li><tt><b>U,X  </b></tt>
+    : real  matrices 
+  </li>
+  <li><tt><b>x0,xf  </b></tt>
+    : real vectors (default value=0 for <tt><b>x0</b></tt>))         
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    calculates the time response of the discrete time system
+  </p>
+  <pre>
+         x[t+1] = Ax[t] + Bu[t].
+   </pre>
+  <p>
+    The inputs <tt><b>ui</b></tt>'s are the columns of the <tt><b>U</b></tt> matrix
+  </p>
+  <pre>
+        U=[u0,u1,...,un];
+   </pre>
+  <p>
+    <tt><b>x0</b></tt> is the vector of initial state (default value : 0) ;
+  </p>
+  <p>
+    <tt><b>X</b></tt> is the matrix of outputs (same number of columns as <tt><b>U</b></tt>).
+  </p>
+  <pre>
+        X=[x0,x1,x2,...,xn] 
+   </pre>
+  <p>
+    <tt><b>xf</b></tt> is the vector of final state <tt><b>xf=X[n+1]</b></tt>
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+A=eye(2,2);B=[1;1];
+x0=[-1;-2];
+u=[1,2,3,4,5];
+x=ltitr(A,B,u,x0)
+x1=A*x0+B*u(1)
+x2=A*x1+B*u(2)
+x3=A*x2+B*u(3) //....
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="rtitr.htm"><tt><b>rtitr</b></tt></a>&nbsp;&nbsp;<a href="flts.htm"><tt><b>flts</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>
