@@ -1,0 +1,76 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>cdfbet -  cumulative distribution function Beta distribution   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[P,Q]=cdfbet("PQ",X,Y,A,B)  </dd>
+      <dd>[X,Y]=cdfbet("XY",A,B,P,Q)  </dd>
+      <dd>[A]=cdfbet("A",B,P,Q,X,Y)  </dd>
+      <dd>[B]=cdfbet("B",P,Q,X,Y,A)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>P,Q,X,Y,A,B  </b>
+          </tt>
+    : five real vectors of the same size.
+  </li>
+  <li>
+          <tt>
+            <b>P,Q (Q=1-P)  </b>
+          </tt>
+    : The integral from 0 to X of the beta distribution (Input range: [0, 1].)
+  </li>
+  <li>
+          <tt>
+            <b>Q  </b>
+          </tt>
+    : 1-P
+  </li>
+  <li>
+          <tt>
+            <b>X,Y (Y=1-X)  </b>
+          </tt>
+    : Upper limit of integration of beta density (Input range: [0,1],  Search range: [0,1]) A,B : The two parameters of the beta density (input range: (0, +infinity), Search range: [1D-300,1D300] ) 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Calculates any one parameter of the beta distribution given
+    values for the others (The beta density is proportional to 
+    <tt>
+          <b>t^(A-1) * (1-t)^(B-1)</b>
+        </tt>.
+  </p>
+  <p>
+    Cumulative distribution function  (P)  is calculated directly by
+    code associated with the following reference.
+  </p>
+  <p>
+    DiDinato, A. R. and Morris,  A.   H.  Algorithm 708: Significant
+    Digit Computation of the Incomplete  Beta  Function Ratios.  ACM
+    Trans. Math.  Softw. 18 (1993), 360-373.
+  </p>
+  <p>
+    Computation of other parameters involve a seach for a value that
+    produces  the desired  value  of P.   The search relies  on  the
+    monotinicity of P with the other parameter.
+  </p>
+  <p>
+    From DCDFLIB: Library of Fortran Routines for Cumulative Distribution
+    Functions, Inverses, and Other Parameters (February, 1994)
+    Barry W. Brown, James Lovato and Kathy Russell. The University of
+    Texas.
+  </p>
+  </ul>
+  </body>
+</html>

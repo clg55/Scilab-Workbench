@@ -1,0 +1,48 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>recur -  a bilinear recurrent equation   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[y]=recur(x0,var,k,n)  </dd>
+      <dd>[integr]=logr(k,var)  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    computes solutions of a bilinear recurrent equation 
+  </p>
+  <pre>
+x(i+1)=-x(i)*(k + sqrt(var)*br(i))
+   </pre>
+  <p>
+    with initial value <tt>
+          <b>x0</b>
+        </tt> and driven by a white noise 
+    of variance <tt>
+          <b>var</b>
+        </tt>.
+  </p>
+  <p>
+    Trajectories are drawn and the empirical Lyapunov exponent 
+    is returned 
+    ( <tt>
+          <b>x(i)</b>
+        </tt> is not to much different from <tt>
+          <b>exp(y*i)</b>
+        </tt> )
+  </p>
+  <p>
+    A theoretical computation of the Lyapunov exponent 
+    is given by 
+  </p>
+  <pre>
+[integr]=logr(k,var)
+   </pre>
+  </ul>
+  </body>
+</html>

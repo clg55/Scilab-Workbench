@@ -1,0 +1,673 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab type  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>graph-list -  description of graph list  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    A graph in Scilab is represented by a Scilab typed list. 
+    We call it a graph list.
+  </p>
+  <p>
+    You will find below the complete description of the list.
+    Each element is described by one or more lines.
+    The first line gives
+    the name of the element and its definition. Additional informations, such as
+    the default for elements that can have one, are given in the other lines.
+    Indeed, only the 5 first elements must have a value in the list, all the 
+    others can be given the empty vector <tt>
+          <b>[]</b>
+        </tt> as a value, and then the default 
+    is used when it is needed by functions or by the Metanet window.
+    For instance, you can define a graph list by
+  </p>
+  <pre>
+g=make_graph('min',1,1,[1],[1]);
+   </pre>
+  <p>
+    which is the simplest graph you can create in Metanet (it is directed, has 
+    one node and one loop arc on this node).
+  </p>
+  <p>
+    The name of the element in the list is very important because it is used to 
+    access the elements of the list. For instance, if <tt>
+          <b>g</b>
+        </tt> is a graph list, 
+    to get the name of the graph, you only have to do:
+  </p>
+  <pre>
+g('name')
+   </pre>
+  <p>
+    or
+  </p>
+  <pre>
+g.name
+   </pre>
+  <p>
+    and if you want to change the name of the graph to <tt>
+          <b>'toto'</b>
+        </tt>, 
+    you have to do: 
+  </p>
+  <pre>
+g('name')='toto';
+   </pre>
+  <p>
+    or
+  </p>
+  <pre>
+g.name='toto';
+   </pre>
+  <p>
+    Moreover, you can get the number of edges and the number of arcs of the graph
+    by using <tt>
+          <b>edge_number(g)</b>
+        </tt> and <tt>
+          <b>arc_number(g)</b>
+        </tt> (these names do not
+    correspond to elements of the list). For compatibility, <tt>
+          <b>node_number(g)</b>
+        </tt> 
+    can also be used instead of <tt>
+          <b>g('node_number')</b>
+        </tt> or <tt>
+          <b>g.node_number</b>
+        </tt>.
+  </p>
+  <p>
+    A graph list can be syntactically correct but not represent a good graph. 
+    You can use the function <tt>
+          <b>check_graph</b>
+        </tt> to check it.
+    Moreover it is a good idea to give nodes different names. In fact, this
+    does not give errors in Scilab, but strange behaviour can appear when using 
+    the 
+    Metanet window. This is not checked by <tt>
+          <b>check_graph</b>
+        </tt> 
+    because it is time consuming. It is only checked when loading, saving
+    or showing a graph.
+  </p>
+  <p>
+    The elements of a graph list are given below:
+  </p>
+  <p>
+  </p>
+ 
+
+  <li>name: 
+    - the name of the graph
+  </li>
+ 
+
+  <li>- 
+    it is a string with a maximum of 80 characters
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>directed: 
+    - flag giving the type of the graph
+  </li>
+ 
+
+  <li>- 
+    it is equal to 1 (graph directed) or equal to 0 (graph undirected)
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_number: 
+    - number of nodes 
+  </li>
+
+  <li>tail: 
+    - row vector of the tail node numbers 
+  </li>
+
+  <li>head: 
+    - row vector of the head node numbers 
+  </li>
+
+  <li>node_name: 
+    - row vector of node names
+  </li>
+ 
+
+  <li>- 
+    the names of the nodes must be different
+  </li>
+
+  <li>- 
+    default is the node numbers as node names
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_type: 
+    - row vector of the node types
+  </li>
+ 
+
+  <li>- 
+    the type is an integer from 0 to 2, default is 0 (plain node):
+  </li>
+ 
+
+  <li>- 
+    0 = plain node
+  </li>
+
+  <li>- 
+    1 = sink node
+  </li>
+
+  <li>- 
+    2 = source node
+  </li>
+ 
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_x: 
+    - row vector of the x coordinate of the nodes
+  </li>
+ 
+
+  <li>- 
+    default is computed
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_y: 
+    - row vector of the y coordinate of the nodes
+  </li>
+ 
+
+  <li>- 
+    default is computed
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_color: 
+    - row vector of the node colors
+  </li>
+ 
+
+  <li>- 
+    the color is an integer from 0 to 16, default is 0 (default foreground):
+  </li>
+ 
+
+  <li>- 
+    0 = default foreground
+  </li>
+
+  <li>- 
+    1 = navyblue
+  </li>
+
+  <li>- 
+    2 = blue
+  </li>
+
+  <li>- 
+    3 = skyblue
+  </li>
+
+  <li>- 
+    4 = aquamarine
+  </li>
+
+  <li>- 
+    5 = forestgreen
+  </li>
+
+  <li>- 
+    6 = green
+  </li>
+
+  <li>- 
+    7 = lightcyan
+  </li>
+
+  <li>- 
+    8 = cyan
+  </li>
+
+  <li>- 
+    9 = orange
+  </li>
+
+  <li>- 
+    10 = red
+  </li>
+
+  <li>- 
+    11 = magenta
+  </li>
+
+  <li>- 
+    12 = violet
+  </li>
+
+  <li>- 
+    13 = yellow
+  </li>
+
+  <li>- 
+    14 = gold
+  </li>
+
+  <li>- 
+    15 = beige
+  </li>
+
+  <li>- 
+    16 = background
+  </li>
+ 
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_diam: 
+    - row vector of the size of the node diameters in pixels
+  </li>
+ 
+
+  <li>- 
+    a node is drawn as a circle
+  </li>
+
+  <li>- 
+    default is the value of element 
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_border: 
+    - row vector of the size of the node borders in pixels
+  </li>
+ 
+
+  <li>- 
+    a node is drawn as a circle
+  </li>
+
+  <li>- 
+    default is the value of element 
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_font_size: 
+    - row vector of the size of the font used to draw the name of the node
+  </li>
+ 
+
+  <li>- 
+    you can choose 8, 10, 12, 14, 18 or 24
+  </li>
+
+  <li>- 
+    default is the value of element 
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_demand: 
+    - row vector of the node demands
+  </li>
+ 
+
+  <li>- 
+    default is 0
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_name: 
+    - row vector of the edge names
+  </li>
+ 
+
+  <li>- 
+    it is better that the names of the edges are different, but this is not an error
+  </li>
+
+  <li>- 
+    default is the edge numbers as edge names
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_color: 
+    - row vector of the edge colors
+  </li>
+ 
+
+  <li>- 
+    the color is an integer from 0 to 16 (see )
+  </li>
+
+  <li>- 
+    default is 0 (default foreground)
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_width: 
+    - row vector of the size of the edge widths in pixels
+  </li>
+ 
+
+  <li>- 
+    default is the value of element 
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_hi_width: 
+    - row vector of the size of the highlighted edge widths in pixels
+  </li>
+ 
+
+  <li>- 
+    default is the value of element 
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_font_size: 
+    - row vector of the size of the fonts used to draw the name of the edge
+  </li>
+ 
+
+  <li>- 
+    you can choose 8, 10, 12, 14, 18 or 24
+  </li>
+
+  <li>- 
+    default is the value of element 
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_length: 
+    - row vector of the edge lengths
+  </li>
+ 
+
+  <li>- 
+    default is 0
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_cost: 
+    - row vector of the edge costs
+  </li>
+ 
+
+  <li>- 
+    default is 0
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_min_cap: 
+    - row vector of the edge minimum capacities
+  </li>
+ 
+
+  <li>- 
+    default is 0
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_max_cap: 
+    - row vector of the edge maximum capacities
+  </li>
+ 
+
+  <li>- 
+    default is 0
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_q_weight: 
+    - row vector of the edge quadratic weights
+  </li>
+ 
+
+  <li>- 
+    default is 0
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_q_orig: 
+    - row vector of the edge quadratic origins
+  </li>
+ 
+
+  <li>- 
+    default is 0
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>edge_weight: 
+    - row vector of the edge weights
+  </li>
+ 
+
+  <li>- 
+    default is 0
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>default_node_diam: 
+    - default size of the node diameters of the graph
+  </li>
+ 
+
+  <li>- 
+    default is 20 pixels
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>default_node_border: 
+    - default size of the node borders of the graph
+  </li>
+ 
+
+  <li>- 
+    default is 2 pixels
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>default_edge_width: 
+    - default size of the edge widths of the graph
+  </li>
+ 
+
+  <li>- 
+    default is 1 pixel
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>default_edge_hi_width: 
+    - default size of the highlighted edge widths of the graph
+  </li>
+ 
+
+  <li>- 
+    default is 3 pixels
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>default_font_size: 
+    - default size of the font used to draw the names of nodes and edges
+  </li>
+ 
+
+  <li>- 
+    default is 12
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>node_label: 
+    - row vector of node labels 
+  </li>
+
+  <li>edge_label: 
+    - row vector of edge labels
+  </li>
+ 
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+g=load_graph(SCI+'/demos/metanet/mesh100');
+g('node_color')=int(rand(1:g('node_number'))*16);
+g('edge_color')=int(rand(1:edge_number(g))*16);
+show_graph(g)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="arc_number.html">
+          <tt>
+            <b>arc_number</b>
+          </tt>
+        </a>
+        <a href="check_graph.html">
+          <tt>
+            <b>check_graph</b>
+          </tt>
+        </a>
+        <a href="edge_number.html">
+          <tt>
+            <b>edge_number</b>
+          </tt>
+        </a>
+        <a href="glist.html">
+          <tt>
+            <b>glist</b>
+          </tt>
+        </a>
+        <a href="make_graph.html">
+          <tt>
+            <b>make_graph</b>
+          </tt>
+        </a>
+        <a href="node_number.html">
+          <tt>
+            <b>node_number</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

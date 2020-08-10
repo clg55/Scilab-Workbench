@@ -1,0 +1,96 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>gspec -  eigenvalues of matrix pencil  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[al,be]=gspec(A,E)  </dd>
+      <dd>[al,be,Z]=gspec(A,E)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A, E  </b>
+          </tt>
+    : real square matrices
+  </li>
+  <li>
+          <tt>
+            <b>al, be  </b>
+          </tt>
+    : real vectors
+  </li>
+  <li>
+          <tt>
+            <b>Z  </b>
+          </tt>
+    : real square non-singular matrix
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns the spectrum of the matrix pencil
+    s E - A, i.e. the roots of the polynomial matrix s E - A.
+    The eigenvalues are given by <tt>
+          <b>al./be</b>
+        </tt> and if <tt>
+          <b>be(i) = 0</b>
+        </tt> the ith
+    eigenvalue is at infinity. (For <tt>
+          <b>E = eye(A), al./be</b>
+        </tt> is <tt>
+          <b>spec(A)</b>
+        </tt>).
+  </p>
+  <p>
+    returns in addition the matrix <tt>
+          <b>Z</b>
+        </tt> of generalized
+    right eigenvectors of the pencil.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=rand(3,3);
+[al,be,Z] = gspec(A,eye(A));al./be
+clean(inv(Z)*A*Z)  //displaying the eigenvalues (generic matrix)
+A=A+%i*rand(A);E=rand(A);
+roots(det(%s*E-A))   //complex case
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="gschur.html">
+          <tt>
+            <b>gschur</b>
+          </tt>
+        </a>
+        <a href="balanc.html">
+          <tt>
+            <b>balanc</b>
+          </tt>
+        </a>
+        <a href="gspec.html">
+          <tt>
+            <b>spec</b>
+          </tt>
+        </a>
+        <a href="kroneck.html">
+          <tt>
+            <b>kroneck</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

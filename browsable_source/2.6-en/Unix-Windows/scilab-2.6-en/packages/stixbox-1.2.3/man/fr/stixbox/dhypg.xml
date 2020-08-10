@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>dhypg  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="dhypg"> The hypergeometric probability function  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>p = dhypg(k,n,K,N)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>n,K,N  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : nonnegative integers such that n&lt;= N, K&lt;= N   
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>k  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : integer 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>p  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : probability Prob(X=k) where X is an hypergeometric random variable with parameters n,K,N. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    The hypergeometric probability function 
+  </P>
+ 
+
+  <DESCRIPTION_ITEM  label='-'> 
+    N is the total number of elements of the population
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='-'> 
+    n is the number of elements which are randomly extracted
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='-'> 
+    K is the number of elements of the population which have the studied property   
+  </DESCRIPTION_ITEM>
+ 
+  </DESCRIPTION>
+</MAN>

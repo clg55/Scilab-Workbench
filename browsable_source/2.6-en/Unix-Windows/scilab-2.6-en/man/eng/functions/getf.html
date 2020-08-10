@@ -1,0 +1,170 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>getf -  defining a function from a file  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>getf(file-name [,opt])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>filename  </b>
+          </tt>
+    : Scilab string.
+  </li>
+  <li>
+          <tt>
+            <b>opt  </b>
+          </tt>
+    : optional character string 
+  </li>
+ <ul>
+  <li>
+            <tt>
+              <b>"c"  </b>
+            </tt>
+    : loaded functions are "compiled" to be more efficient (default)
+  </li>
+  <li>
+            <tt>
+              <b>"n"  </b>
+            </tt>
+    : loaded functions are not "compiled"
+  </li>
+  <li>
+            <tt>
+              <b>"p"  </b>
+            </tt>
+    : loaded functions are  "compiled" and prepared for profiling (see profile)
+  </li>
+ </ul>
+  <p>
+    
+  </p>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    loads one or several functions (see <tt>
+          <b>functions</b>
+        </tt>) defined in the file <tt>
+          <b>'file-name'</b>
+        </tt>.
+    The string <tt>
+          <b>opt='n'</b>
+        </tt> means that the functions are not  
+    compiled (pre-interpreted) when loaded. This can be useful for some 
+    debugging purpose (see <tt>
+          <b>comp</b>
+        </tt>). By default, functions are compiled
+    when loaded (i.e. <tt>
+          <b>opt='c'</b>
+        </tt> is used).
+  </p>
+  <p>
+    In the  file  a function must begin by a "syntax definition" line as follows:
+  </p>
+  <pre>
+function [y1,...,yn]=foo(x1,...,xm)
+   </pre>
+  <p>
+    followed by a sequence of scilab instructions.
+  </p>
+  <p>
+    The "syntax definition" line gives the "full" calling syntax of this
+    function. The <tt>
+          <b>yi</b>
+        </tt> are output variables calculated as functions of
+    input variables <tt>
+          <b>xi</b>
+        </tt> and variables existing in Scilab when the
+    function is executed. Shorter input or output argument list may be
+    used.
+  </p>
+  <p>
+    Many functions may be written in the same file. A function is
+    terminated by an <tt>
+          <b>endfunction</b>
+        </tt> keyword. For compatibility with
+    previous versions a function may also be terminated by  the following
+    <tt>
+          <b>function</b>
+        </tt> keyword or the <tt>
+          <b>EOF</b>
+        </tt> mark.
+  </p>
+  </ul>
+    <H3>REMARK</H3>
+    <ul>
+      <p>
+    <tt>
+          <b>getf</b>
+        </tt> is an old way for loading functions into scilab from a file, If functions in a file are terminated by an <tt>
+          <b>endfunction</b>
+        </tt> keyword, the file maybe loaded using the <tt>
+          <b>exec</b>
+        </tt> function instead of <tt>
+          <b>getf</b>
+        </tt>. In this case default option <tt>
+          <b>opt</b>
+        </tt> is used.
+  </p>
+    </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+getf('SCI/macros/xdess/plot.sci')
+
+getf SCI/macros/xdess/plot.sci
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../graphics/alufunctions.html">
+          <tt>
+            <b>functions</b>
+          </tt>
+        </a>
+        <a href="functions.html">
+          <tt>
+            <b>function</b>
+          </tt>
+        </a>
+        <a href="genlib.html">
+          <tt>
+            <b>genlib</b>
+          </tt>
+        </a>
+        <a href="../programming/getdate.html">
+          <tt>
+            <b>getd</b>
+          </tt>
+        </a>
+        <a href="../programming/execstr.html">
+          <tt>
+            <b>exec</b>
+          </tt>
+        </a>
+        <a href="../graphics/edit_curv.html">
+          <tt>
+            <b>edit</b>
+          </tt>
+        </a>
+        <a href="comp.html">
+          <tt>
+            <b>comp</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

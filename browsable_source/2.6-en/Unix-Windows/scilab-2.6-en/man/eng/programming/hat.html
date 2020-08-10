@@ -1,0 +1,70 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>hat (^) -  exponentiation  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>A^b  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Exponentiation of matrices or vectors by a constant vector.
+  </p>
+  <p>
+    If <tt>
+          <b>A</b>
+        </tt> is a vector or a rectangular matrix the exponentiation is done
+    element-wise, with the usual meaning.
+  </p>
+  <p>
+    For square <tt>
+          <b>A</b>
+        </tt> matrices the exponentiation is done in the matrix sense.
+  </p>
+  <p>
+    For boolean, polynomial and rational matrices, the exponent must be an
+    integer
+  </p>
+  <p>
+    Remark that <tt>
+          <b>123.^b</b>
+        </tt> is interpreted as <tt>
+          <b>(123).^b</b>
+        </tt>. In such
+    cases dot is part of the operator, not of the number.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+2^4
+[1 2;2 4]^(1+%i)
+s=poly(0,"s");
+[1 2 s]^4
+[s 1;1  s]^(-1)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/bloc2exp.html">
+          <tt>
+            <b>exp</b>
+          </tt>
+        </a>
+        <a href="inv_coeff.html">
+          <tt>
+            <b>inv</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

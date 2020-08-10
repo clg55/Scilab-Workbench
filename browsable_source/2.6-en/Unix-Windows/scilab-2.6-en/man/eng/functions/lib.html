@@ -1,0 +1,139 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>lib -  library definition  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>xlib = lib('lib-dir')  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <p>
+    lib-dir: character string
+  </p>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>lib-dir</b>
+        </tt> is a character string defining a directory that contains
+    compiled Scilab function (<tt>
+          <b>.bin</b>
+        </tt>) files.  In addition to these
+    files <tt>
+          <b>lib-dir</b>
+        </tt> must have a file called <tt>
+          <b>names</b>
+        </tt>, that contains
+    the names of the functions defined in <tt>
+          <b>lib-dir</b>
+        </tt>.  On success, all
+    functions in <tt>
+          <b>lib-dir</b>
+        </tt> are available from within Scilab.  They are
+    loaded on demand when called for the first time.
+  </p>
+  <p>
+    Binary files can be created from within Scilab with the command
+    <tt>
+          <b>save</b>
+        </tt>.
+  </p>
+  <p>
+    Scilab's standard libraries are defined using <tt>
+          <b>lib</b>
+        </tt> on the
+    <tt>
+          <b>SCIDIR/macros/*</b>
+        </tt> subdirectories.
+  </p>
+  <p>
+    As an example, given the following definitions
+  </p>
+  <pre>
+    deff('z = myplus(x, y)', 'z = x + y')
+    deff('z = yourplus(x, y)', 'x = x - y')
+    lib_dir = '/home/joeuser/myscidir'
+   </pre>
+  <p>
+    <tt>
+          <b>myplus</b>
+        </tt> and <tt>
+          <b>yourplus</b>
+        </tt> are compiled into <tt>
+          <b>lib_dir</b>
+        </tt> with
+    the commands
+  </p>
+  <pre>
+    save(lib_dir + '/myplus.bin', myplus)
+    save(lib_dir + '/yourplus.bin', yourplus)
+   </pre>
+  <p>
+    A library can now be created from the two <tt>
+          <b>.bin</b>
+        </tt> files with the
+    command
+  </p>
+  <pre>
+        xlib = lib(lib_path + '/')
+   </pre>
+  <p>
+    <tt>
+          <b>xlib</b>
+        </tt> is a Scilab variable of type "library".  A library variable
+    usually is saved for later loading, either on-line or from the
+    user-specific startup file (<tt>
+          <b>$HOME/.scilab</b>
+        </tt>).
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>RESTRICTIONS</H3>
+    <ul>
+      <p>
+    Scilab tacitly assumes that file <tt>
+          <b>foo.bin</b>
+        </tt> defines only a single function named <tt>
+          <b>foo</b>
+        </tt>. 
+  </p>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="genlib.html">
+          <tt>
+            <b>genlib</b>
+          </tt>
+        </a>
+        <a href="../graphics/xsave.html">
+          <tt>
+            <b>save</b>
+          </tt>
+        </a>
+        <a href="deff.html">
+          <tt>
+            <b>deff</b>
+          </tt>
+        </a>
+        <a href="../programming/getfield.html">
+          <tt>
+            <b>getf</b>
+          </tt>
+        </a>
+        <a href="../programming/whereis.html">
+          <tt>
+            <b>whereis</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

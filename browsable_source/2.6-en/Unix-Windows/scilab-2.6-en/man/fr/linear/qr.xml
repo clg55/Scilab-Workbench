@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>qr  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>April 1993  </DATE>
+  <SHORT_DESCRIPTION name="qr"> factorisation QR  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>[Q,R]=qr(X)  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>[Q,R,E]=qr(X)  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>[Q,R,rk,E]=qr(X [,tol])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>X  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrice réelle ou complexe
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>tol  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : nombre réel positif
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Q  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrice carrée unitaire
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>R  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrice de même dimensions que <VERB>X</VERB>
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>E  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrice de permutation
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>rk  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : entier (rang de <VERB>X*E</VERB>)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    renvoie une matrice triangulaire supérieure <VERB>R</VERB> de même dimensions que <VERB>X</VERB> et une matrice carrée unitaire <VERB>Q</VERB> telles que
+    <VERB>X = Q*R</VERB>.
+  </P>
+  <P>
+    renvoie une matrice de permutations (de colonnes) <VERB>E</VERB>,
+    une matrice triangulaire supérieure <VERB>R</VERB> dont les éléments diagonaux sont classés par ordre décroissant et une matrice unitaire <VERB>Q</VERB> telles que <VERB>X*E = Q*R</VERB>.
+  </P>
+  <P>
+    renvoie de plus <VERB>rk</VERB> = rang estimé de <VERB>X</VERB>. Plus précisément, 
+    <VERB>rk</VERB> est le nombre d&apos;éléments diagonaux de <VERB>R</VERB> supérieurs à <VERB>tol</VERB>.
+  </P>
+  <P>
+    renvoie <VERB>rk</VERB> = rang estimé de <VERB>X</VERB>. Ici, <VERB>rk</VERB> est le nombre d&apos;éléments diagonaux de <VERB>R</VERB> supérieurs à <VERB>R(1,1)*%eps*max(size(R)</VERB>.
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+A=rand(5,2)*rand(2,5);
+[Q,R,rk,E] = qr(A,1.d-10);
+norm(Q'*A-R)
+svd([A,Q(:,1:rk)])    // Im(A) = Im(Q(:,1:rk))
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>rank</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>svd</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>rowcomp</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>colcomp</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

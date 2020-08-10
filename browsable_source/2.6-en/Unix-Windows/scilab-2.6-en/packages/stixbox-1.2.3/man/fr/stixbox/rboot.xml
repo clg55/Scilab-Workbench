@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>rboot  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="rboot"> Simulate a bootstrap resample from a sample  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM> Z = rboot(X [,B])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>X  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrix or vector 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>B  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : integer.  
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Simulate a bootstrap resample from a sample.
+    Give a resample of the same size as X, which is assumed
+    to have one independent realisation in every row. 
+  </P>
+  <P>
+    rboot(X,B) gives B columns of resamples. This form works  only for X
+    one-dimensional, i.e X column vector. 
+  </P>
+  <P>
+  </P>
+  </DESCRIPTION>
+</MAN>

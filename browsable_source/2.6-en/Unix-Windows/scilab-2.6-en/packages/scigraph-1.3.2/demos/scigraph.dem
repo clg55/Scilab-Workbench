@@ -1,0 +1,25 @@
+mode(-1)
+DIR=get_file_path('scigraph.dem');
+// Copyright Enpc 
+getf(DIR+'/metro.sci');
+getf(DIR+'/demo1.sci');
+oldln=lines();
+lines(0)
+deff('[]=demoex(num)',['select num,';
+     'case 1 then  scigraph_dem1()';
+     'case 2 then  metro()';
+     'end']);
+
+demolist=['Scigraph: demo 1';'Scigraph: Paris tube';]
+
+while %t then
+  num=x_choose(demolist(:,1),'Choose a demo');
+  if num==0 then 
+     lines(oldln(1))
+     return
+  else
+     demoex(num)
+  end,
+end
+
+

@@ -1,0 +1,90 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>unix_g -  shell (sh) command execution, output redirected to a variable  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>rep=unix_g(cmd)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>cmd  </b>
+          </tt>
+    : a character string
+  </li>
+  <li>
+          <tt>
+            <b>rep  </b>
+          </tt>
+    : a column vector of character strings
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Sends a string <tt>
+          <b>cmd</b>
+        </tt> to Unix for execution by the sh
+    shell. The standard output is redirected to scilab variable <tt>
+          <b>rep</b>
+        </tt>.
+    Unix execution errors are trapped; *NOTE* that only the last shell command
+    error is reported when a list of command separated by ";" is sent: this is
+    not recommended.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+if MSDOS then unix_g('dir '+WSCI+'\demos');
+else unix_g("ls $SCI/demos"); end
+deff('wd=pwd()','if MSDOS then wd=unix_g(''cd'');..
+                 else wd=unix_g(''pwd''); end')
+wd=pwd()
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../graphics/edit_curv.html">
+          <tt>
+            <b>edit</b>
+          </tt>
+        </a>
+        <a href="../fileio/manedit.html">
+          <tt>
+            <b>manedit</b>
+          </tt>
+        </a>
+        <a href="unix_s.html">
+          <tt>
+            <b>unix_s</b>
+          </tt>
+        </a>
+        <a href="unix_w.html">
+          <tt>
+            <b>unix_w</b>
+          </tt>
+        </a>
+        <a href="unix_x.html">
+          <tt>
+            <b>unix_x</b>
+          </tt>
+        </a>
+        <a href="unix_g.html">
+          <tt>
+            <b>unix</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

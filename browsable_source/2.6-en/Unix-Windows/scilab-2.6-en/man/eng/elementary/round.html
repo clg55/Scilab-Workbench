@@ -1,0 +1,70 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>round -  rounding  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=round(x)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : real or complex matrix
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : integer or complex (with integer real and imag) matrix
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>round(x)</b>
+        </tt> rounds the elements of <tt>
+          <b>x</b>
+        </tt> to the nearest integers.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+round([1.9 -2.5])-[2,-3]
+round(1.6+2.1*%i)-(2+2*%i)
+round(-%inf)
+x=rand()*10^20;round(x)-x
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/intppty.html">
+          <tt>
+            <b>int</b>
+          </tt>
+        </a>
+        <a href="floor.html">
+          <tt>
+            <b>floor</b>
+          </tt>
+        </a>
+        <a href="ceil.html">
+          <tt>
+            <b>ceil</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

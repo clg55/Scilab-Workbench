@@ -1,0 +1,81 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>polar -  polar form  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[Ro,Theta]=polar(A)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : real or complex square matrix
+  </li>
+  <li>
+          <tt>
+            <b>Ro,  </b>
+          </tt>
+    : real matrix
+  </li>
+  <li>
+          <tt>
+            <b>Theta,  </b>
+          </tt>
+    : real or complex matrix
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns the polar form of <tt>
+          <b>A</b>
+        </tt> i.e.:
+  </p>
+  <p>
+    <tt>
+          <b>A=Ro*expm(%i*Theta)</b>
+        </tt> <tt>
+          <b>Ro</b>
+        </tt> symmetric &gt;=0 and <tt>
+          <b>Theta</b>
+        </tt> hermitian &gt;=0.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=rand(5,5);
+[Ro,Theta]=polar(A);
+norm(A-Ro*expm(%i*Theta),1)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="expm.html">
+          <tt>
+            <b>expm</b>
+          </tt>
+        </a>
+        <a href="svd.html">
+          <tt>
+            <b>svd</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>F. D.; ;   </ul>
+    </p>
+  </body>
+</html>

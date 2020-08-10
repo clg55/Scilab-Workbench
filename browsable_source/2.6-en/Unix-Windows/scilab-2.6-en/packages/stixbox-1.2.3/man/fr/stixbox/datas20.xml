@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>datas20  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="datas20"> paper datas  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM> x=datas20()  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <DESCRIPTION>
+  <VERBATIM><![CDATA[
+Source: "White paper Recycling", MIT Technology Review, August-
+  September, 1992
+
+Pris:  J. Milton, J. Arnold (1995), "Introduction to Probability
+   and statistics", p 379, McGraw-Hill international editions
+
+Description: Quantite de papiers jetes (en centaines de livres) par an
+               par  des salaries de banques (lignes 1 a 32) ou par des
+               salaries travaillant dans les autres secteurs (lignes 33 
+               a 62).
+   ]]></VERBATIM>
+  <P>
+  </P>
+  <P>
+  </P>
+  </DESCRIPTION>
+</MAN>

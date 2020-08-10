@@ -1,0 +1,73 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>dhnorm -  discrete H-infinity norm  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>hinfnorm=dhnorm(sl,[tol],[normax])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : the state space system (<tt>
+            <b>syslin</b>
+          </tt> list) (discrete-time)
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : tolerance in bisection step, default value <tt>
+            <b>0.01</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>normax  </b>
+          </tt>
+    : upper bound for the norm , default value is <tt>
+            <b>1000</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>hinfnorm  </b>
+          </tt>
+    : the discrete infinity norm of <tt>
+            <b>Sl</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    produces the discrete-time infinity norm  of a state-space system 
+    (the maximum over all frequencies on the unit circle of the maximum singular value).
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="h_norm.html">
+          <tt>
+            <b>h_norm</b>
+          </tt>
+        </a>
+        <a href="linfn.html">
+          <tt>
+            <b>linfn</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

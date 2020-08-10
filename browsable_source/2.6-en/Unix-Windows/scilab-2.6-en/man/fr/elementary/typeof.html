@@ -1,0 +1,120 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>typeof -   type d'un objet  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[t]=typeof(obj)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>obj  </b>
+          </tt>
+    : objet Scilab
+  </li>
+  <li>
+          <tt>
+            <b>t  </b>
+          </tt>
+    : string
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>t=typeof(obj)</b>
+        </tt> renvoie une des chaînes de caractères :
+  </p>
+ 
+
+  <li>"constant" 
+    si l'objet est une matrice réelle ou complexe
+  </li>
+
+  <li>"polynomial" 
+    si l'objet est une matrice de polynômes
+  </li>
+
+  <li>"function" 
+    si l'objet est une fonction
+  </li>
+
+  <li>"string" 
+    si l'objet est une matrice de chaînes de caractères
+  </li>
+
+  <li>"boolean" 
+    si l'objet est une matrice booléenne
+  </li>
+
+  <li>"list" 
+    si l'objet est une liste
+  </li>
+
+  <li>"rational" 
+    si l'objet est une matrice de fractions rationnelles
+  </li>
+
+  <li>"state-space" 
+    si l'objet est un système dynamique linéaire (voir )
+  </li>
+
+  <li>"sparse" 
+    si l'objet est une matrice creuse
+  </li>
+
+  <li>"boolean sparse" 
+    si l'objet est une matrice booléenne creuse
+  </li>
+ 
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+typeof(1)
+typeof(poly(0,'x'))
+typeof(1/poly(0,'x'))
+typeof(%t)
+w=sprand(100,100,0.001);
+typeof(w)
+typeof(w==w)
+deff('y=f(x)','y=2*x');
+typeof(f)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../programming/inttype.html">
+          <tt>
+            <b>type</b>
+          </tt>
+        </a>
+        <a href="../strings/strings.html">
+          <tt>
+            <b>strings</b>
+          </tt>
+        </a>
+        <a href="syslin.html">
+          <tt>
+            <b>syslin</b>
+          </tt>
+        </a>
+        <a href="../programming/poly.html">
+          <tt>
+            <b>poly</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

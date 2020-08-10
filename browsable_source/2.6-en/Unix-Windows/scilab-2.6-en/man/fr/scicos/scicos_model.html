@@ -1,0 +1,245 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos data structure  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>scicos_model -  Scicos block functionality  data structure  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>model=list(sim,in,out,evtin,evtout,state,dstate,..  </dd>
+      <dd>      rpar,ipar,blocktype,firing,dep_ut,label,import,ID)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>sim  </b>
+          </tt>
+    : list(fun,typ) or fun. In the latest case typ is supposed to be 0.
+  </li>
+ <ul>
+  <li>
+            <tt>
+              <b>fun  </b>
+            </tt>
+    : character string, the name of the block simulation function (a  linked C or Fortran procedure  or a Scilab function).
+  </li>
+  <li>
+            <tt>
+              <b>typ  </b>
+            </tt>
+    : integer, calling sequence type of simulation function (see documentation for more precision).
+  </li>
+ </ul>
+  <li>
+          <tt>
+            <b>in  </b>
+          </tt>
+    : column vector of integers, input port sizes indexed from top to bottom of the block. If no input port exist <tt>
+            <b>in==[]</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>out  </b>
+          </tt>
+    : column vector of integers, output port sizes indexed from top to bottom of the block. If no output port exist <tt>
+            <b>in==[]</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>evtin  </b>
+          </tt>
+    : column vector of ones, the size of <tt>
+            <b>evtin</b>
+          </tt> gives the number of event input ports. If no event input port exists <tt>
+            <b>evtin</b>
+          </tt> must be equal to <tt>
+            <b>[]</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>evtout  </b>
+          </tt>
+    : column vector of ones, the size of <tt>
+            <b>evtout</b>
+          </tt> gives the number of event output ports. If no event output port exists <tt>
+            <b>evtout</b>
+          </tt> must be equal to <tt>
+            <b>[]</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>state  </b>
+          </tt>
+    : column vector, the initial continuous state of the block. Must be <tt>
+            <b>[]</b>
+          </tt> if no continuous state.
+  </li>
+  <li>
+          <tt>
+            <b>dstate  </b>
+          </tt>
+    : column vector, the initial discrete state of the block. Must be <tt>
+            <b>[]</b>
+          </tt> if no discrete state.
+  </li>
+  <li>
+          <tt>
+            <b>rpar  </b>
+          </tt>
+    : column vector, the vector of floating point block parameters. Must be <tt>
+            <b>[]</b>
+          </tt> if no floating point parameters.
+  </li>
+  <li>
+          <tt>
+            <b>ipar  </b>
+          </tt>
+    : column vector, the vector of integer  block parameters. Must be <tt>
+            <b>[]</b>
+          </tt> if no integer parameters.
+  </li>
+  <li>
+          <tt>
+            <b>blocktype  </b>
+          </tt>
+    : a character with possible values:
+  </li>
+ <ul>
+  <li>
+            <tt>
+              <b>:  </b>
+            </tt>
+    'c'  block output depend continuously of the time.
+  </li>
+  <li>
+            <tt>
+              <b>:  </b>
+            </tt>
+    'd' block output changes only on input events.
+  </li>
+  <li>
+            <tt>
+              <b>:  </b>
+            </tt>
+    'z' zero crossing block
+  </li>
+  <li>
+            <tt>
+              <b>:  </b>
+            </tt>
+    'l' logical block
+  </li>
+ </ul>
+  <li>
+          <tt>
+            <b>firing  </b>
+          </tt>
+    : a vector whose size is equal to the size of <tt>
+            <b>evtout</b>
+          </tt>&gt; It contains output initial event dates (Events generated before any input event arises). Negative values stands for no initial event on the corresponding port.
+  </li>
+  <li>
+          <tt>
+            <b>dep_ut  </b>
+          </tt>
+    : 1x 2 vector of boolean <tt>
+            <b>[dep_u, dep_t]</b>
+          </tt>, <tt>
+            <b>dep_u</b>
+          </tt> must be true if output depends continuously of the input, <tt>
+            <b>dep_t</b>
+          </tt> must be true if output depends continuously of the time.
+  </li>
+  <li>
+          <tt>
+            <b>label  </b>
+          </tt>
+    : a character string, used as a label
+  </li>
+  <li>
+          <tt>
+            <b>import  </b>
+          </tt>
+    : Unused.
+  </li>
+  <li>
+          <tt>
+            <b>ID  </b>
+          </tt>
+    : a character string, used as an identifier.  
+  </li>
+  <li>
+          <tt>
+            <b>model  </b>
+          </tt>
+    : Scilab list, Scicos block model data structure.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Scicos block model data structure contains all information relative
+    to the simulation functionality of the block. Fields may be
+    fixed by block definition or set. 
+  </p>
+  <p>
+    If block is a super block, the fields
+    <tt>
+          <b>state</b>
+        </tt>,<tt>
+          <b>dstate</b>
+        </tt>,<tt>
+          <b>ipar</b>
+        </tt>,<tt>
+          <b>blocktype</b>
+        </tt>,<tt>
+          <b>firing</b>
+        </tt>,
+    <tt>
+          <b>dep_ut</b>
+        </tt>, are unused. 
+  </p>
+  <p>
+    The <tt>
+          <b>rpar</b>
+        </tt> field contains a
+    data structure similar to the <tt>
+          <b>scicos_main</b>
+        </tt> data structure.
+  </p>
+  <p>
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="scicosim.html">
+          <tt>
+            <b>scicos</b>
+          </tt>
+        </a>
+        <a href="scicos_model.html">
+          <tt>
+            <b>scicos_model</b>
+          </tt>
+        </a>
+        <a href="scicos_main.html">
+          <tt>
+            <b>scicos_main</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

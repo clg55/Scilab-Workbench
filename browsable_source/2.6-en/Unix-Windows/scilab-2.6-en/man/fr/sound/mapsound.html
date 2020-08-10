@@ -1,0 +1,49 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>mapsound -  Plots a sound map   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>mapsound (w,dt,fmin,fmax,simpl,rate)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <p>
+    dt,fmin,fmax,simpl,rate: : scalars. default values dt=0.1,fmin=100,fmax=1500,simpl=1,rate=22050;
+  </p>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Plots a sound map for a sound. It does FFT at time increments dt.
+    <tt>
+          <b>rate</b>
+        </tt> is the sampling rate. <tt>
+          <b>simpl</b>
+        </tt> points are collected for
+    speed reasons. <tt>
+          <b>fmin</b>
+        </tt> and <tt>
+          <b>fmax</b>
+        </tt> are used for graphic
+    boundaries.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+// At first we create 0.5 seconds of sound parameters.
+t=soundsec(0.5);
+// Then we generate the sound.
+s=sin(440*t)+sin(220*t)/2+sin(880*t)/2;
+[nr,nc]=size(t);
+s(nc/2:nc)=sin(330*t(nc/2:nc));
+mapsound(s);
+ </pre>
+    </ul>
+  </body>
+</html>

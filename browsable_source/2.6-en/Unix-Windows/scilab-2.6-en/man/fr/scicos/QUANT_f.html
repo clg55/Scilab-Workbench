@@ -1,0 +1,102 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos Block  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>QUANT_f -  Scicos Quantization block  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This block outputs the quantization of the input according to a choice
+    of methods
+  </p>
+  <p>
+    for <tt>
+          <b>Round</b>
+        </tt> method 
+  </p>
+  <p>
+    <tt>
+          <b>y(i)=Step*(int(u(i)/Step+0.5)-0.5)</b>
+        </tt> if <tt>
+          <b>u(i)&lt;0</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>y(i)=Step*(int(u(i)/Step-0.5)+0.5)</b>
+        </tt>. if <tt>
+          <b>u(i)&gt;=0</b>
+        </tt>.
+  </p>
+  <p>
+  </p>
+  <p>
+    For truncation method
+  </p>
+  <p>
+    <tt>
+          <b>y(i)=Step*(int(u(i)/Step+0.5))</b>
+        </tt> if <tt>
+          <b>u(i)&lt;0</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>y(i)=Step*(int(u(i)/Step-0.5))</b>
+        </tt> if <tt>
+          <b>u(i)&gt;=0</b>
+        </tt>.
+  </p>
+  <p>
+  </p>
+  <p>
+    For floor method
+  </p>
+  <p>
+    <tt>
+          <b>y(i)=Step*(int(u(i)/Step+0.5))</b>
+        </tt> .
+  </p>
+  <p>
+  </p>
+  <p>
+    For ceil method
+  </p>
+  <p>
+    <tt>
+          <b>y(i)=Step*(int(u(i)/Step-0.5))</b>
+        </tt> .
+  </p>
+  </ul>
+    <H3>DIALOGUE PARAMETERS</H3>
+    <ul>
+      <li>Step
+: scalar, Quantization step
+
+  </li>
+      <li>Quantization method
+: scalar with possible values 1,2,3 or 4
+
+  </li>
+      <li>1
+: Round method
+
+  </li>
+      <li>2
+: Truncation method
+
+  </li>
+      <li>3
+: Floor method
+
+  </li>
+      <li>4
+: Ceil method
+
+  </li>
+    </ul>
+  </body>
+</html>

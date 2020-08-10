@@ -1,0 +1,58 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>cosm -   cosinus matriciel  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>t=cosm(x)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,t  </b>
+          </tt>
+    : matrice réelle ou complexe
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>cosm(x)</b>
+        </tt> est le cosinus matriciel de la matrice x. 
+    <tt>
+          <b>t=0.5*(expm(%i*x)+expm(-%i*x))</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=[1,2;3,4]
+cosm(A)-0.5*(expm(%i*A)+expm(-%i*A))
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="acos.html">
+          <tt>
+            <b>cos</b>
+          </tt>
+        </a>
+        <a href="../linear/expm.html">
+          <tt>
+            <b>expm</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

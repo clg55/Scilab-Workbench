@@ -1,0 +1,101 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>and (&amp;) -  logical and  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>b=and(A),  b=and(A,'*')  </dd>
+      <dd>b=and(A,'r'), b=and(A,1)  </dd>
+      <dd>b=and(A,'c'), b=and(A,2)  </dd>
+      <dd>A&amp;B  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>and(A)</b>
+        </tt> is the logical AND of elements of 
+    the boolean matrix <tt>
+          <b>A</b>
+        </tt>. <tt>
+          <b>and(A)</b>
+        </tt> returns <tt>
+          <b>%T</b>
+        </tt> ("true")  iff 
+    all entries of <tt>
+          <b>A</b>
+        </tt> are <tt>
+          <b>%T</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>y=and(A,'r')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=and(A,1)</b>
+        </tt>) is the rowwise and. It returns in each 
+    entry of the row vector <tt>
+          <b>y</b>
+        </tt> the and of the rows of <tt>
+          <b>x</b>
+        </tt> (The and is performed on the 
+    row index : <tt>
+          <b>y(j)= and(A(i,j),i=1,m)</b>
+        </tt>).
+  </p>
+  <p>
+    <tt>
+          <b>y=and(A,'c')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=and(A,2)</b>
+        </tt>) is the columnwise and. It returns 
+    in each entry of the column vector <tt>
+          <b>y</b>
+        </tt> the and of the columns of <tt>
+          <b>x</b>
+        </tt> 
+    (The and is performed on the column index:  <tt>
+          <b>y(i)= and(A(i,j),j=1,n)</b>
+        </tt>)).
+  </p>
+  <p>
+  </p>
+  <p>
+    <tt>
+          <b>A&amp;B</b>
+        </tt>  gives the element-wise logical <tt>
+          <b>and</b>
+        </tt> of the booleans matrices
+     <tt>
+          <b>A</b>
+        </tt> and  <tt>
+          <b>B</b>
+        </tt> .<tt>
+          <b>A</b>
+        </tt> and  <tt>
+          <b>B</b>
+        </tt> must be matrices with the same
+     dimensions or one from them must be a single boolean.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="not.html">
+          <tt>
+            <b>not</b>
+          </tt>
+        </a>
+        <a href="../programming/error.html">
+          <tt>
+            <b>or</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

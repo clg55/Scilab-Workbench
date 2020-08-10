@@ -1,0 +1,97 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>xgetmouse -  récupère la position courante du pointeur de la souris  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>rep=xgetmouse([flag])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>rep  </b>
+          </tt>
+    : vecteur de taille 3, [x,y,ibutton].
+  </li>
+  <li>
+          <tt>
+            <b>flag  </b>
+          </tt>
+    : entier. S'il est présent, la queue d'évènements des clics de la souris n'est pas vidée préalablement.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Si le pointeur est dans la fenêtre graphique courante, <tt>
+          <b>xgetmouse</b>
+        </tt> renvoie
+    dans <tt>
+          <b>rep</b>
+        </tt> sa position (x,y) et la valeur <tt>
+          <b>ibutton</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>ibutton</b>
+        </tt> indique l'état du bouton :
+  </p>
+ 
+
+  <li>- si ibutton = -1 aucun bouton n'a été pressé 
+  </li>
+
+  <li>- si ibutton = -5, -4 ou -2 un des 3 boutons a été relaché 
+  </li>
+
+  <li>- si ibutton = 0, 1 ou 2, l'un des trois boutons a été pressé 
+     Si le curseur n'est pas positionné dans la fenêtre graphique courante,  se met en état d'attente.  Attention :  renvoie son résultat de façon synchrone avec les mouvements du curseur, i.e. s'il n'y a aucun mouvement du curseur  attend. 
+  </li>
+ 
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+xselect(); xbasc(); xsetech([0 0 1 1],[0 0 100 100])
+xset("alufunction",6)
+xtitle(" On dessine un rectangle ")
+[b,x0,y0]=xclick(); rep=[x0,y0,-1]; x=x0; y=y0;
+xrect(x0,y0,x-x0,y-y0)
+while rep(3)==-1 then
+    rep=xgetmouse(0)
+    xrect(x0,y0,x-x0,y0-y)
+    x=rep(1); y=rep(2);
+    xrect(x0,y0,x-x0,y0-y)
+end
+xset("alufunction",3)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="locate.html">
+          <tt>
+            <b>locate</b>
+          </tt>
+        </a>
+        <a href="xclick.html">
+          <tt>
+            <b>xclick</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>S. Steer  </ul>
+    </p>
+  </body>
+</html>

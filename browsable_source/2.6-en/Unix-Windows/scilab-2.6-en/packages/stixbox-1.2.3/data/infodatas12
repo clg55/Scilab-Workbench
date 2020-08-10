@@ -1,0 +1,15 @@
+x_message(['******************cables*****************************************';
+'';
+' source:  Rao (1973), ""Linear Statistical Inference and its applications"",';
+'   (2nd Edition), Wiley.';
+'';
+'Pris:   J Bickel, A. Doksum (1977), ""Mathematical Statistics"", ';
+'  Holden Day.';
+'';
+'Dimension:  9*12 observations ';
+'';
+'Description: force de tension moins 340 des fils contenus dans 9';
+'               cables (lignes 1 a 9) fabriques pour un reseau a haute';
+'               tension. Chaque cable est constitue de 12 fils (colonnes';
+'   1 a 12).']);
+

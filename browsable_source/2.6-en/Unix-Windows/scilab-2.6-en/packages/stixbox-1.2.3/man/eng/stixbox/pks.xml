@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>pks  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="pks"> Kolmogorov Smirnov distribution function  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>p = pks(x)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>x  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  vector or matrix
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>p  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  Prob( KS &lt; x )
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Kolmogorov Smirnov distribution function
+  </P>
+  <P>
+    Adapted from Press, Teukolsky, Vetterling and Flannery, Numerical
+    Recipes in C p620. 
+  </P>
+  <P>
+  </P>
+  </DESCRIPTION>
+</MAN>

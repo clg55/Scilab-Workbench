@@ -1,0 +1,114 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>auread -  load .au sound file  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=auread(aufile)  </dd>
+      <dd>y=auread(aufile,ext)  </dd>
+      <dd>[y,Fs,bits]=auread(aufile)  </dd>
+      <dd>[y,Fs,bits]=auread(aufile,ext)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>aufile  </b>
+          </tt>
+    : string (The .au extension is appended if no extension is given)
+  </li>
+  <li>
+          <tt>
+            <b>Fs  </b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>: integer, frequency sampling in Hz.  </b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>ext  </b>
+          </tt>
+    : string (<tt>
+            <b>'size'</b>
+          </tt> or <tt>
+            <b>'snd'</b>
+          </tt>) or integer (to read n samples) or 1 x 2 integer vector [n1,n2] (to read from n1 to n2).
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Utility function to read <tt>
+          <b>.au</b>
+        </tt> sound file.
+    <tt>
+          <b>auread(aufile)</b>
+        </tt> loads a sound file specified by the string aufile,
+    returning the sampled data in y. Amplitude values are in the range
+    [-1,+1].
+  </p>
+  <p>
+    Supports multi-channel data in the following formats:
+    8-bit mu-law, 8-, 16-, and 32-bit linear, and floating point.
+  </p>
+  <p>
+    <tt>
+          <b>[y,Fs,bits]=auread(aufile)</b>
+        </tt> returns the sample rate (Fs) in Hertz
+    and the number of bits per sample used to encode the data in the file.
+  </p>
+  <p>
+    <tt>
+          <b>auread(aufile,n)</b>
+        </tt> returns the first n samples from each channel.
+  </p>
+  <p>
+    <tt>
+          <b>auread(aufile,[n1,n2])</b>
+        </tt> returns samples n1 to n2.
+  </p>
+  <p>
+    <tt>
+          <b>auread(aufile,'size')</b>
+        </tt> returns the size of the audio data contained
+    in the file in place of the actual audio data, returning the
+    vector as [samples channels].
+  </p>
+  <p>
+    <tt>
+          <b>auread(aufile,'snd')</b>
+        </tt> returns information about the sample and data
+    as a tlist.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="savewave.html">
+          <tt>
+            <b>savewave</b>
+          </tt>
+        </a>
+        <a href="analyze.html">
+          <tt>
+            <b>analyze</b>
+          </tt>
+        </a>
+        <a href="mapsound.html">
+          <tt>
+            <b>mapsound</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

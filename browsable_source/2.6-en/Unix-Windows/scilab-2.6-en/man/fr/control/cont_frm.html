@@ -1,0 +1,77 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>cont_frm -  transfer to controllable state-space  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[sl]=cont_frm(NUM,den)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>NUM  </b>
+          </tt>
+    : polynomial matrix
+  </li>
+  <li>
+          <tt>
+            <b>den  </b>
+          </tt>
+    : polynomial
+  </li>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> list, <tt>
+            <b>sl=[A,B,C,D]</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    controllable state-space form of the transfer <tt>
+          <b>NUM/den</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');NUM=[1+s,s];den=s^2-5*s+1;
+sl=cont_frm(NUM,den); 
+slss=ss2tf(sl);       //Compare with NUM/den
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="tf2ss.html">
+          <tt>
+            <b>tf2ss</b>
+          </tt>
+        </a>
+        <a href="canon.html">
+          <tt>
+            <b>canon</b>
+          </tt>
+        </a>
+        <a href="contrss.html">
+          <tt>
+            <b>contr</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

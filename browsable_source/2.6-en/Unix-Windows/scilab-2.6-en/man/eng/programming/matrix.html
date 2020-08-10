@@ -1,0 +1,142 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>matrix -  reshape a vector or a matrix to a different size matrix  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=matrix(v,n,m)  </dd>
+      <dd>y=matrix(v,[sizes])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>v  </b>
+          </tt>
+    : a vector, a matrix or an hypermatrix
+  </li>
+  <li>
+          <tt>
+            <b>n,m  </b>
+          </tt>
+    : integers
+  </li>
+  <li>
+          <tt>
+            <b>sizes  </b>
+          </tt>
+    : vector of integers
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : a vector, a matrix or hypermatrix
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    For a vector or a matrix with <tt>
+          <b>n</b>
+        </tt> x <tt>
+          <b>m</b>
+        </tt> entries, the command
+    <tt>
+          <b>y=matrix(v,n,m)</b>
+        </tt> or similarily <tt>
+          <b>y=matrix(v,[n,m])</b>
+        </tt>
+    transforms the <tt>
+          <b>v</b>
+        </tt> vector (or matrix) into an <tt>
+          <b>nxm</b>
+        </tt> matrix by
+    stacking columnwise the entries of <tt>
+          <b>v</b>
+        </tt>.
+  </p>
+  <p>
+    if one of the dimension m or n is equal to -1 it is automatically
+    assigned to the quotient of size(v,'*') by the other dimension,
+  </p>
+  <p>
+  </p>
+  <p>
+    For an hypermatrix such as
+    <tt>
+          <b>prod(size(v))==prod(sizes)</b>
+        </tt>, the command <tt>
+          <b>y=matrix(v,sizes)</b>
+        </tt> (or
+    equivalently <tt>
+          <b>y=matrix(v,n1,n2,...nm)</b>
+        </tt>) transforms
+    <tt>
+          <b>v</b>
+        </tt>  into an  matrix or hypermatrix by 
+    stacking "columnwise" (first dimension is varying first) the entries of <tt>
+          <b>v</b>
+        </tt>. <tt>
+          <b>y=matrix(v,sizes)</b>
+        </tt>
+    results in a regular matrix if sizes is a scalar or a 2-vector.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+a=[1 2 3;4 5 6]
+matrix(a,1,6)
+matrix(a,1,-1)
+matrix(a,3,2)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="hypermatrices.html">
+          <tt>
+            <b>matrices</b>
+          </tt>
+        </a>
+        <a href="hypermatrices.html">
+          <tt>
+            <b>hypermatrices</b>
+          </tt>
+        </a>
+        <a href="../elementary/ones.html">
+          <tt>
+            <b>ones</b>
+          </tt>
+        </a>
+        <a href="../elementary/spzeros.html">
+          <tt>
+            <b>zeros</b>
+          </tt>
+        </a>
+        <a href="../elementary/rand.html">
+          <tt>
+            <b>rand</b>
+          </tt>
+        </a>
+        <a href="poly.html">
+          <tt>
+            <b>poly</b>
+          </tt>
+        </a>
+        <a href="empty.html">
+          <tt>
+            <b>empty</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

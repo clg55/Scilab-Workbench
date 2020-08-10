@@ -1,0 +1,106 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>obs_gram -  observability gramian  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>Go=obs_gram(A,C [,dom])  </dd>
+      <dd>Go=obs_gram(sl)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A,C  </b>
+          </tt>
+    : real matrices (of appropriate dimensions)
+  </li>
+  <li>
+          <tt>
+            <b>dom  </b>
+          </tt>
+    : string (<tt>
+            <b>"d'</b>
+          </tt> or <tt>
+            <b>"c"</b>
+          </tt> (default value))
+  </li>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> list
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Observability gramian of the pair <tt>
+          <b>(A,C)</b>
+        </tt> or linear 
+    system <tt>
+          <b>sl</b>
+        </tt> (<tt>
+          <b>syslin</b>
+        </tt> list).
+    <tt>
+          <b>dom</b>
+        </tt> is the domain which can be 
+  </p>
+ 
+
+  <li>"c" 
+    :  continuous system (default)
+  </li>
+
+  <li>"d" 
+    :  discrete system
+  </li>
+ 
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=-diag(1:3);C=rand(2,3);
+Go=obs_gram(A,C,'c');     // &lt;=&gt; w=syslin('c',A,[],C); Go=obs_gram(w);
+norm(Go*A+A'*Go+C'*C,1)
+norm(lyap(A,-C'*C,'c')-Go,1)
+A=A/4; Go=obs_gram(A,C,'d');    //discrete time case
+norm(lyap(A,-C'*C,'d')-Go,1)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="ctr_gram.html">
+          <tt>
+            <b>ctr_gram</b>
+          </tt>
+        </a>
+        <a href="obsvss.html">
+          <tt>
+            <b>obsvss</b>
+          </tt>
+        </a>
+        <a href="obsv_mat.html">
+          <tt>
+            <b>obsv_mat</b>
+          </tt>
+        </a>
+        <a href="../linear/lyap.html">
+          <tt>
+            <b>lyap</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

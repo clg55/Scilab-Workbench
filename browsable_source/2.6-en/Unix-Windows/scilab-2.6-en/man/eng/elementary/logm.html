@@ -1,0 +1,75 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>logm -  square matrix logarithm  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=logm(x)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : square matrix
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+     <tt>
+          <b>logm(x)</b>
+        </tt> is the matrix logarithm of <tt>
+          <b>x</b>
+        </tt>.
+    The result is complex if <tt>
+          <b>x</b>
+        </tt> is not positive or definite positive.
+    If <tt>
+          <b>x</b>
+        </tt> is a  symmetric matrix, then calculation is made by
+    schur form. Otherwise, <tt>
+          <b>x</b>
+        </tt> is assumed diagonalizable. One has
+    <tt>
+          <b>expm(logm(x))=x</b>
+        </tt> 
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=[1,2;3,4];
+logm(A)
+expm(logm(A))
+A1=A*A';
+logm(A1)
+expm(logm(A1))
+A1(1,1)=%i;
+expm(logm(A1))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../linear/expm.html">
+          <tt>
+            <b>expm</b>
+          </tt>
+        </a>
+        <a href="log10.html">
+          <tt>
+            <b>log</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

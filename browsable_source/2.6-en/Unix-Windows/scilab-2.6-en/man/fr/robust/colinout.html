@@ -1,0 +1,100 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>colinout -  inner-outer factorization  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[Inn,X,Gbar]=colinout(G)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>G  </b>
+          </tt>
+    : linear system (<tt>
+            <b>syslin</b>
+          </tt> list) <tt>
+            <b>[A,B,C,D]</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>Inn  </b>
+          </tt>
+    :  inner factor (<tt>
+            <b>syslin</b>
+          </tt> list)
+  </li>
+  <li>
+          <tt>
+            <b>Gbar  </b>
+          </tt>
+    :  outer factor (<tt>
+            <b>syslin</b>
+          </tt> list)
+  </li>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    :  row-compressor of <tt>
+            <b>G</b>
+          </tt> (<tt>
+            <b>syslin</b>
+          </tt> list)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Inner-outer factorization (and column compression) of (lxp) <tt>
+          <b>G =[A,B,C,D]</b>
+        </tt> with l&lt;=p.
+  </p>
+  <p>
+    <tt>
+          <b>G</b>
+        </tt> is assumed to be fat (<tt>
+          <b>l&lt;=p</b>
+        </tt>) without zero on the imaginary axis
+    and with a <tt>
+          <b>D</b>
+        </tt> matrix which is full row rank.
+  </p>
+  <p>
+    <tt>
+          <b>G</b>
+        </tt> must also be stable for having <tt>
+          <b>Gbar</b>
+        </tt> stable.
+  </p>
+  <p>
+    Dual of <tt>
+          <b>rowinout</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/syslin.html">
+          <tt>
+            <b>syslin</b>
+          </tt>
+        </a>
+        <a href="rowinout.html">
+          <tt>
+            <b>rowinout</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

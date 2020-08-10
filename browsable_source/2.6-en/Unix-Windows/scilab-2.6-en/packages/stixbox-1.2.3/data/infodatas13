@@ -1,0 +1,13 @@
+x_message(['*******************service calls***********************';
+'';
+'source: S. Chatterjee, B. Price, (1991) ""Regression analysis by ';
+'  example"" (2nd Edition), Wiley.';
+'';
+'Pris:   source.';
+'';
+'Dimension: 14 observations portant sur  2 variables';
+'';
+'Description:  nombre de composants electriques en panne dans un';
+'               ordinateur (1ere colonne) et duree de la reparation ';
+'               de l''ordinateur en minutes (2eme colonne) '])
+

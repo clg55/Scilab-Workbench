@@ -1,0 +1,68 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>sysdiag -  block diagonal system connection  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>r=sysdiag(a1,a2,...,an)  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Returns the block-diagonal system made with subsystems put in the main
+    diagonal
+  </p>
+ 
+
+  <li>ai 
+    : subsystems (i.e. gains, or linear systems in state-space or transfer form)
+  </li>
+  <p>
+    Used in particular for system interconnections.
+  </p>
+ 
+  </ul>
+    <H3>REMARK</H3>
+    <ul>
+      <p>
+    At most 17 arguments.
+  </p>
+    </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+ s=poly(0,'s')
+ sysdiag(rand(2,2),1/(s+1),[1/(s-1);1/((s-2)*(s-3))])
+ sysdiag(tf2ss(1/s),1/(s+1),[1/(s-1);1/((s-2)*(s-3))])
+
+ s=poly(0,'s')
+ sysdiag(rand(2,2),1/(s+1),[1/(s-1);1/((s-2)*(s-3))])
+ sysdiag(tf2ss(1/s),1/(s+1),[1/(s-1);1/((s-2)*(s-3))])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/brackets.html">
+          <tt>
+            <b>brackets</b>
+          </tt>
+        </a>
+        <a href="../programming/insertion.html">
+          <tt>
+            <b>insertion</b>
+          </tt>
+        </a>
+        <a href="../control/feedback.html">
+          <tt>
+            <b>feedback</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

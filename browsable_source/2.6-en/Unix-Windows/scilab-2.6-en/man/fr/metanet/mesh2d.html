@@ -1,0 +1,194 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>mesh2d -  triangulation de n points dans le plan  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[nutr,A] = mesh2d(x,y,[front])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : vecteur ligne réel
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : vecteur ligne réel
+  </li>
+  <li>
+          <tt>
+            <b>front  </b>
+          </tt>
+    : vecteur ligne entier
+  </li>
+  <li>
+          <tt>
+            <b>nutr  </b>
+          </tt>
+    : matrice d'entiers
+  </li>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : matrice creuse 0-1
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Les vecteurs <tt>
+          <b>x</b>
+        </tt> et <tt>
+          <b>y</b>
+        </tt> sont les coordonnées de n points dans le 
+    plan.
+    <tt>
+          <b>mesh2d</b>
+        </tt> renvoie une matrice <tt>
+          <b>nutr(3,nbt)</b>
+        </tt> des numéros des
+    sommets des <tt>
+          <b>nbt</b>
+        </tt> triangles de la triangulation des points.
+    Elle renvoie aussi une matrice creuse <tt>
+          <b>A</b>
+        </tt> représentant les connections 
+    entre les sommets (<tt>
+          <b>A(i,j)=1</b>
+        </tt> si <tt>
+          <b>(i,j)</b>
+        </tt> est un coté de l'un des 
+    triangles ou <tt>
+          <b>i=j</b>
+        </tt>).
+    Dans le cas de trois 3 paramètres <tt>
+          <b>front</b>
+        </tt> est le vecteur définissant la
+    frontière : il contient les indices des points sur la frontière.
+    La frontière est définie telle que la normale
+     est orientée à l'extérieur. La frontière est donnée par ses composantes
+    connexes : une composante est donnée par <tt>
+          <b>(i1,i2)</b>
+        </tt> tels que 
+    <tt>
+          <b>front(i1)=front(i2)</b>
+        </tt> (la frontière externe est définie dans le sens 
+    trigonométrique. Voir les exemples ci-dessous). 
+  </p>
+  <p>
+    Les cas d'erreurs sont les suivants :
+               err = 0 si aucune erreur.
+               err = 3 si tous les sommets sont alignés.
+  </p>
+  <p>
+    Si la frontière est donnée les autres cas possibles sont :
+               err = 2 des points sont identiques;
+        err = 5 vecteur frontière incorrect;
+               err = 6 croisement de frontière;
+               err = 7 mauvaise orientation de la frontière;
+               err = 10 un point intérieur est sur la frontière;
+               err = 8 limitation de taille;
+               err = 9 croisement de frontière;
+               err = 12 des points sont identiques ou limitation de taille;
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+// PREMIER CAS
+theta=0.025*[1:40]*2.*%pi;
+x=1+cos(theta);
+y=1.+sin(theta);
+theta=0.05*[1:20]*2.*%pi;
+x1=1.3+0.4*cos(theta);
+y1=1.+0.4*sin(theta);
+theta=0.1*[1:10]*2.*%pi;
+x2=0.5+0.2*cos(theta);
+y2=1.+0.2*sin(theta);
+x=[x x1 x2];
+y=[y y1 y2];
+//
+nu=mesh2d(x,y);
+nbt=size(nu,2);
+jj=[nu(1,:)' nu(2,:)';nu(2,:)' nu(3,:)';nu(3,:)' nu(1,:)'];
+as=sparse(jj,ones(size(jj,1),1));
+ast=tril(as+abs(as'-as));
+[jj,v,mn]=spget(ast);
+n=size(x,2);
+g=make_graph('foo',0,n,jj(:,1)',jj(:,2)');
+g('node_x')=300*x;
+g('node_y')=300*y;
+g('default_node_diam')=10;
+show_graph(g)
+// DEUXÈME CAS !!! NECESSITE x,y DU PREMIER CAS
+x3=2.*rand(1:200);
+y3=2.*rand(1:200);
+wai=((x3-1).*(x3-1)+(y3-1).*(y3-1));
+ii=find(wai &gt;= .94);
+x3(ii)=[];y3(ii)=[];
+wai=((x3-0.5).*(x3-0.5)+(y3-1).*(y3-1));
+ii=find(wai &lt;= 0.055);
+x3(ii)=[];y3(ii)=[];
+wai=((x3-1.3).*(x3-1.3)+(y3-1).*(y3-1));
+ii=find(wai &lt;= 0.21);
+x3(ii)=[];y3(ii)=[];
+xnew=[x x3];ynew=[y y3];
+fr1=[[1:40] 1];fr2=[[41:60] 41];fr2=fr2($:-1:1);
+fr3=[[61:70] 61];fr3=fr3($:-1:1);
+front=[fr1 fr2 fr3];
+//
+nu=mesh2d(xnew,ynew,front);
+nbt=size(nu,2);
+jj=[nu(1,:)' nu(2,:)';nu(2,:)' nu(3,:)';nu(3,:)' nu(1,:)'];
+as=sparse(jj,ones(size(jj,1),1));
+ast=tril(as+abs(as'-as));
+[jj,v,mn]=spget(ast);
+n=size(xnew,2);
+g=make_graph('foo',0,n,jj(:,1)',jj(:,2)');
+g('node_x')=300*xnew;
+g('node_y')=300*ynew;
+g('default_node_diam')=10;
+show_graph(g)
+// CAS RÉGULIER !!! NÉCESSITE LES CAS PRÉCÉDENTS pour x,y,front
+xx=0.1*[1:20];
+yy=xx.*.ones(1,20);
+zz= ones(1,20).*.xx;
+x3=yy;y3=zz;
+wai=((x3-1).*(x3-1)+(y3-1).*(y3-1));
+ii=find(wai &gt;= .94);
+x3(ii)=[];y3(ii)=[];
+wai=((x3-0.5).*(x3-0.5)+(y3-1).*(y3-1));
+ii=find(wai &lt;= 0.055);
+x3(ii)=[];y3(ii)=[];
+wai=((x3-1.3).*(x3-1.3)+(y3-1).*(y3-1));
+ii=find(wai &lt;= 0.21);
+x3(ii)=[];y3(ii)=[];
+xnew=[x x3];ynew=[y y3];
+nu=mesh2d(xnew,ynew,front);
+nbt=size(nu,2);
+jj=[nu(1,:)' nu(2,:)';nu(2,:)' nu(3,:)';nu(3,:)' nu(1,:)'];
+as=sparse(jj,ones(size(jj,1),1));
+ast=tril(as+abs(as'-as));
+[jj,v,mn]=spget(ast);
+n=size(xnew,2);
+g=make_graph('foo',0,n,jj(:,1)',jj(:,2)');
+g('node_x')=300*xnew;
+g('node_y')=300*ynew;
+g('default_node_diam')=3;
+show_graph(g)
+ </pre>
+    </ul>
+  </body>
+</html>

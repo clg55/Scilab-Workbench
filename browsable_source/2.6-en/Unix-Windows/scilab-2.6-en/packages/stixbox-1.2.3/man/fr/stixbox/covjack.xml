@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>covjack  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="covjack"> Jackknife estimate of the variance of a parameter estimate  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>C = covjack(X,&apos;T&apos; [,arg1,....,argn])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>X  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrix or vector. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>&apos;T&apos;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : string giving a function name.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>arg1,...,argn  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : extra parameters given to <VERB>T</VERB>. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    The function computes T(X) with one observation removed at a
+    time and uses the result to compute an estimate of the variance of
+    T(X) assuming that X is a representative sample from 
+    the underlying distribution of X. If T is multidimensional then
+    the covariance matrix is estimated. Note that the jackknife
+    method does not work for some functions T that are not smooth
+    enough, the median being one example.
+  </P>
+  </DESCRIPTION>
+  <ITEMIZE label='EXAMPLES'>
+  <VERBATIM><![CDATA[
+X=rand(100,1,'u');
+covjack(X,'mean')
+   ]]></VERBATIM>
+  </ITEMIZE>
+</MAN>

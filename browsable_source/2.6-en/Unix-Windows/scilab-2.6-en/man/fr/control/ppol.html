@@ -1,0 +1,101 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>ppol -  pole placement  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[K]=ppol(A,B,poles)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A,B  </b>
+          </tt>
+    : real matrices of dimensions <tt>
+            <b>nxn</b>
+          </tt> and <tt>
+            <b>nxm</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>poles  </b>
+          </tt>
+    : real or complex vector of dimension <tt>
+            <b>n</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>K  </b>
+          </tt>
+    : real matrix (negative feedback gain)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>K=ppol(A,B,poles)</b>
+        </tt> returns a mxn gain matrix <tt>
+          <b>K</b>
+        </tt> such that
+    the eigenvalues of <tt>
+          <b>A-B*K</b>
+        </tt> are <tt>
+          <b>poles</b>
+        </tt>.
+    The pair <tt>
+          <b>(A,B)</b>
+        </tt> must be controllable. Complex number in <tt>
+          <b>poles</b>
+        </tt> must appear in conjugate pairs.
+  </p>
+  <p>
+    An output-injection gain <tt>
+          <b>F</b>
+        </tt> for <tt>
+          <b>(A,C)</b>
+        </tt> is obtained as follows:
+  </p>
+  <p>
+    <tt>
+          <b>Ft=ppol(A',C',poles);  F=Ft'</b>
+        </tt>
+  </p>
+  <p>
+    The algorithm is by P.H. Petkov.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=rand(3,3);B=rand(3,2);
+F=ppol(A,B,[-1,-2,-3]);
+spec(A-B*F)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="canon.html">
+          <tt>
+            <b>canon</b>
+          </tt>
+        </a>
+        <a href="stabil.html">
+          <tt>
+            <b>stabil</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

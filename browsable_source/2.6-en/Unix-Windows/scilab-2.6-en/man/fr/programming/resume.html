@@ -1,0 +1,94 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>resume -   sortie d'une fonction ou reprise d'exécution, avec récupération de variables locales  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>resume  </dd>
+      <dd>[x1,..,xn]=resume(a1,..,an)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Dans une fonction <tt>
+          <b>resume</b>
+        </tt> termine son exécution et
+    <tt>
+          <b>[..]=resume(..)</b>
+        </tt> renvoie les variables locales
+    <tt>
+          <b>ai</b>
+        </tt> dans l'environnement appelant sous les noms <tt>
+          <b>xi</b>
+        </tt>.
+  </p>
+  <p>
+  </p>
+  <p>
+    En mode de <tt>
+          <b>pause</b>
+        </tt>, cela permet de reprendre l'exécution et
+    <tt>
+          <b>[..]=resume(..)</b>
+        </tt> renvoie les variables locales
+    <tt>
+          <b>ai</b>
+        </tt> dans l'environnement appelant sous les noms <tt>
+          <b>xi</b>
+        </tt>.
+  </p>
+  <p>
+    Utilisé dans l'argument de <tt>
+          <b>execstr</b>
+        </tt> appelé dans une fonction <tt>
+          <b>[..]=resume(..)</b>
+        </tt> termine l'exécution de la fonction et renvoie les variables locales <tt>
+          <b>ai</b>
+        </tt> dans l'environnement appelant sous les noms <tt>
+          <b>xi</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>resume</b>
+        </tt> est équivalent à <tt>
+          <b>return</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="abort.html">
+          <tt>
+            <b>abort</b>
+          </tt>
+        </a>
+        <a href="break.html">
+          <tt>
+            <b>break</b>
+          </tt>
+        </a>
+        <a href="return.html">
+          <tt>
+            <b>return</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

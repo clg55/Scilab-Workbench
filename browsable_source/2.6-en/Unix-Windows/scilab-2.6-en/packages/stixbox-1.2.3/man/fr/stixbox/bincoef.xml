@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>bincoef  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="bincoef"> Binomial coefficients  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>k = bincoef(n,N)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>n,N  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : scalar or matrix with common size, such that <VERB>0&lt;=n&lt;=N</VERB>. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>k  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrix of binomial coefficients
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    computes a matrix of binomial coefficients
+  </P>
+  <VERBATIM><![CDATA[
+    Gamma(N+1)./(Gamma(n+1).*Gamma(N-n+1))
+   ]]></VERBATIM>
+  </DESCRIPTION>
+  <ITEMIZE label='examples'>
+  <VERBATIM><![CDATA[
+-->co=bincoef(0:4,4)     
+-->P=poly(co,'x','coef')
+-->norm(roots(P) + ones(4,1))
+   ]]></VERBATIM>
+  </ITEMIZE>
+</MAN>

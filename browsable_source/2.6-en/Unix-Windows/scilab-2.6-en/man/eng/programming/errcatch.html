@@ -1,0 +1,128 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>errcatch -  error trapping  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>errcatch(n [,'action'] [,'option'])   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>n  </b>
+          </tt>
+    : integer 
+  </li>
+  <li>
+          <tt>
+            <b>action, option  </b>
+          </tt>
+    : strings
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>errcatch</b>
+        </tt> gives an "action" (error-handler)  to be 
+    performed when an error of type <tt>
+          <b>n</b>
+        </tt> occurs.
+    <tt>
+          <b>n</b>
+        </tt> has the following meaning:
+  </p>
+  <p>
+    if <tt>
+          <b>n&gt;0</b>
+        </tt>, <tt>
+          <b>n</b>
+        </tt> is the error number to trap
+  </p>
+  <p>
+    if <tt>
+          <b>n&lt;0</b>
+        </tt>  all errors are to be trapped
+  </p>
+  <p>
+    <tt>
+          <b>action</b>
+        </tt> is one of the following character strings:
+  </p>
+ 
+
+  <li>"pause" 
+    : a pause is executed when trapping the error. This option is useful for debugging purposes. Use  to get informations on the current context.
+  </li>
+
+  <li>"continue" 
+    : next instruction in the function or exec files is executed, current instruction is ignored. It is possible to check if an error has occured using the  function. Do not forget to clear the error using the  function as soon as possible  This option is useful for error recovery. In many cases, usage of  can be replaced by the use of  function.  
+  </li>
+
+  <li>"kill" 
+    : default mode, all intermediate functions are killed, scilab goes back to the level 0 prompt.
+  </li>
+
+  <li>"stop" 
+    : interrupts the current Scilab session (useful when  Scilab is called from an external program).
+  </li>
+ 
+ 
+  <p>
+    <tt>
+          <b>option</b>
+        </tt> is the character string <tt>
+          <b>'nomessage'</b>
+        </tt> for killing
+    error message.
+  </p>
+  <p>
+    To set back default mode, enter <tt>
+          <b>errcatch(-1,"kill")</b>
+        </tt> or similarly
+    <tt>
+          <b>errcatch(-1)</b>
+        </tt>. 
+  </p>
+  <p>
+    Then called in a scilab function the <tt>
+          <b>errcatch</b>
+        </tt> is automatically
+    reset to the default mode when the function returns.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="errclear.html">
+          <tt>
+            <b>errclear</b>
+          </tt>
+        </a>
+        <a href="iserror.html">
+          <tt>
+            <b>iserror</b>
+          </tt>
+        </a>
+        <a href="whereami.html">
+          <tt>
+            <b>whereami</b>
+          </tt>
+        </a>
+        <a href="execstr.html">
+          <tt>
+            <b>execstr</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

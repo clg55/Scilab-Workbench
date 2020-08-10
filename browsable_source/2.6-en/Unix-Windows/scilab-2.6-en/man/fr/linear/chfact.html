@@ -1,0 +1,76 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>chfact -  Factorisation de Cholesky creuse  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>spcho=chfact(A)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : matrice creuse réelle ou complexe
+  </li>
+  <li>
+          <tt>
+            <b>spcho  </b>
+          </tt>
+    : liste contenant les facteurs de Cholesky
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Si <tt>
+          <b>A</b>
+        </tt> est creuse et hermitienne (symétrique dans le cas réel) définie positive, <tt>
+          <b>spcho=chfact(A)</b>
+        </tt> calcule les facteurs de sa factorisation de Cholesky.
+    Cette fonction est basée sur le programme Ng-Peyton (ORNL). Voir le programme Fortran pour une description complète des variables de la liste <tt>
+          <b>spcho</b>
+        </tt>. Cette fonction est à utiliser conjointement avec <tt>
+          <b>chsolve</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="chsolve.html">
+          <tt>
+            <b>chsolve</b>
+          </tt>
+        </a>
+        <a href="../elementary/mtlb_sparse.html">
+          <tt>
+            <b>sparse</b>
+          </tt>
+        </a>
+        <a href="lufact.html">
+          <tt>
+            <b>lufact</b>
+          </tt>
+        </a>
+        <a href="luget.html">
+          <tt>
+            <b>luget</b>
+          </tt>
+        </a>
+        <a href="spchol.html">
+          <tt>
+            <b>spchol</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

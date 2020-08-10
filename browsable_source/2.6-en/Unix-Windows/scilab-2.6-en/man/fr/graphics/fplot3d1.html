@@ -1,0 +1,99 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>fplot3d1 -  représentation d'une surface non-paramétrique définie par une fonction  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>fplot3d1(xr,yr,f,[theta,alpha,leg,flag,ebox])  </dd>
+      <dd>fplot3d1(xr,yr,f,&lt;opt_args&gt;)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>xr  </b>
+          </tt>
+    : vecteur ligne de taille n1.
+  </li>
+  <li>
+          <tt>
+            <b>yr  </b>
+          </tt>
+    : vecteur ligne de taille n2.
+  </li>
+  <li>
+          <tt>
+            <b>f  </b>
+          </tt>
+    : fonction externe du type z=f(x,y).
+  </li>
+  <li>
+          <tt>
+            <b>theta,alpha,leg,flag,ebox  </b>
+          </tt>
+    : voir <tt>
+            <b>plot3d1</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>&lt;opt_args&gt;  </b>
+          </tt>
+    : voir <tt>
+            <b>plot3d</b>
+          </tt>. 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>fplot3d1</b>
+        </tt> dessine la surface non-paramétrique
+    <tt>
+          <b>z=f(x,y)</b>
+        </tt> où f est définie par la fonction externe <tt>
+          <b>f</b>
+        </tt>
+    sur la grille définie par <tt>
+          <b>xr</b>
+        </tt> et <tt>
+          <b>yr</b>
+        </tt>.
+  </p>
+  <p>
+    Taper <tt>
+          <b>fplot3d1()</b>
+        </tt> pour voir une démonstration de la fonction.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+deff('z=f(x,y)','z=x^4-y^4')
+x=-3:0.2:3 ;y=x ;
+xbasc() ;fplot3d1(x,y,f,alpha=5,theta=31)  
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="fplot3d1.html">
+          <tt>
+            <b>plot3d1</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>loddsinv  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="loddsinv"> inverse of log odd  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM> p = loddsinv(z,b)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <DESCRIPTION>
+  <P>
+    Compute the inverse of log odds. The function is equal to
+    1/(1+exp(-u)) with
+  </P>
+ 
+
+  <DESCRIPTION_ITEM  label='u = z'> 
+    if only one input argument is given
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='u = z*b'> 
+    if size(z,2) = length(b)
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='u = z*b(1:n-1) + b(n)'> 
+    if size(z,2) &lt; length(b)
+  </DESCRIPTION_ITEM>
+ 
+  </DESCRIPTION>
+</MAN>

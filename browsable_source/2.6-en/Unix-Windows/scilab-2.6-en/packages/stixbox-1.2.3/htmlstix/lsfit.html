@@ -1,0 +1,35 @@
+<HTML> 
+   <HEAD> 
+         <!-- BASE HREF="" -->      <!-- Please edit this to refer to the directory of this file --->
+     	 <TITLE>Stixbox summary</TITLE>  
+  </HEAD> 
+      <BODY ALINK="#FF00FF" BGCOLOR="#FFFFFF" LINK="#FF0000" TEXT="#000000" VLINK="#800000"> 
+<H2>LSFIT</H2>
+<DL>
+<DT>lsfit
+<DD>
+Fit a multiple regression normal model.<PRE>
+
+     	  [b, Ib, e, s, Is] = lsfit(y,x,C)
+
+         Input :  y dependant variate (column vector)
+                  x regressor variates
+
+                  C confidence level for the confidence intervals
+                    (default0.95).
+
+ 	  Output : b  vector of point estimates, 
+                  Ib confidence intervals, 
+                  s  estimated standard deviation of error
+                     with confidence interval Is,
+                  e  residuals.
+
+         An intercept not included in x is automatically  
+         added as an extra column.
+
+	  See also LINREG and LSSELECT.
+</PRE>
+<P><H2>See Also</H2><UL>
+LINREG and LSSELECT.</UL>
+</BODY>
+</HTML>

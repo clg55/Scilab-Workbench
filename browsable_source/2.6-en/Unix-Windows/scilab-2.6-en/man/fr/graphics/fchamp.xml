@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>fchamp  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>April 1993  </DATE>
+  <SHORT_DESCRIPTION name="fchamp"> champ de vitesse d&apos;une équation différentielle ordinaire (EDO) 2D du premier ordre  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>fchamp(f,t,xr,yr,[arfact,rect,strf])  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>fchamp(x,y,xr,yr,&lt;opt_args&gt;)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>F  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : une fonction externe ou une liste décrivant l&apos;EDO 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>-  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    F peut être l&apos;identificateur d&apos;une fonction <VERB>f</VERB>, du type <VERB>y=f(t,x,[u])</VERB>. <VERB>f</VERB> renvoie  un vecteur colonne <VERB>y</VERB> de taille 2 donnant la valeur de la vitesse au point  <VERB>x</VERB> et au temps <VERB>t</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>-  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    F peut aussi être un objet de type liste, <VERB>list(f,u1)</VERB> où <VERB>f</VERB> est une fonction du type <VERB>y=f(t,x,u)</VERB> et <VERB>u1</VERB> donne la valeur du paramètre <VERB>u</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>t  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : l&apos;instant choisi.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>xr,yr  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : 2 vecteurs lignes de tailles respectives n1 et n2 définissant la grille sur laquelle le champ de vitesse est calculé. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>&lt;opt_args&gt;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : représente une suite d&apos;affectations <VERB>key1=value1, key2=value2</VERB>,... où <VERB>key1</VERB>, <VERB>key2,...</VERB> peuvent prendre les valeurs : arfact, rect, strf (voir ci-dessous).
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>arfact,rect,strf  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Arguments optionnels, voir <VERB>champ</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    <VERB>fchamp</VERB> est utilisée pour représenter le champ de vitesse d&apos;une équation différentielle ordinaire 2D du premier ordre définie par son second membre <VERB>f</VERB>. Noter que si l&apos;EDO est autonome,
+    l&apos;argument <VERB>t</VERB> est inutile, mais doit être fourni quand même.
+  </P>
+  <P>
+    Taper <VERB>fchamp()</VERB> pour voir une démonstration de la fonction.
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+deff("[xdot] = derpol(t,x)",..
+        ["xd1 = x(2)";..
+         "xd2 = -x(1) + (1 - x(1)**2)*x(2)";..
+         "xdot = [ xd1 ; xd2 ]"])
+xf= -1:0.1:1;
+yf= -1:0.1:1;
+fchamp(derpol,0,xf,yf)
+xbasc()
+fchamp(derpol,0,xf,yf,1,[-2,-2,2,2],"011")
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>champ</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>champ1</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+  <AUTHOR>J.Ph.C.  </AUTHOR>
+</MAN>

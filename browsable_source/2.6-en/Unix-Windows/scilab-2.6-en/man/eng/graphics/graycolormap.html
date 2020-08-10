@@ -1,0 +1,71 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>graycolormap -  linear gray colormap  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>cmap=graycolormap(n)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>n  </b>
+          </tt>
+    : integer &gt;= 1, the colormap size.
+  </li>
+  <li>
+          <tt>
+            <b>cmap  </b>
+          </tt>
+    : matrix with 3 columns <tt>
+            <b>[R,G,B]</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>graycolormap</b>
+        </tt> computes a colormap with <tt>
+          <b>n</b>
+        </tt> gray colors
+    varying linearly from black to white.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+xset("colormap",graycolormap(32))
+plot3d1() 
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="colormap.html">
+          <tt>
+            <b>colormap</b>
+          </tt>
+        </a>
+        <a href="hotcolormap.html">
+          <tt>
+            <b>hotcolormap</b>
+          </tt>
+        </a>
+        <a href="xsetech.html">
+          <tt>
+            <b>xset</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

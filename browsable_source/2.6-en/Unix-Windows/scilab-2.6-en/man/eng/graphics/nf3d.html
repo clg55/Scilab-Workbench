@@ -1,0 +1,60 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>nf3d -  rectangular facets to plot3d parameters  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[xx,yy,zz]=nf3d(x,y,z)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y,x,xx,yy,zz  </b>
+          </tt>
+    : 6 real matrices
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Utility function. Used for transforming rectangular facets coded 
+    in three matrices x,y,z to scilab code for facets accepted by plot3d. 
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+//A sphere...
+u = linspace(-%pi/2,%pi/2,40);
+v = linspace(0,2*%pi,20);
+x= cos(u)'*cos(v);
+y= cos(u)'*sin(v);
+z= sin(u)'*ones(v);
+//plot3d2(x,y,z) is equivalent to...
+[xx,yy,zz]=nf3d(x,y,z); plot3d(xx,yy,zz)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="fplot3d.html">
+          <tt>
+            <b>plot3d</b>
+          </tt>
+        </a>
+        <a href="plot3d2.html">
+          <tt>
+            <b>plot3d2</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

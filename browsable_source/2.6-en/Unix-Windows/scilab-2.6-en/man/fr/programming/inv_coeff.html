@@ -1,0 +1,90 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>inv_coeff -  construction d'une matrice polynomiale à partir des coefficients  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[P]=inv_coeff(C,[,d,[name])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>C  </b>
+          </tt>
+    : "grosse" matrice des coefficients
+  </li>
+  <li>
+          <tt>
+            <b>d  </b>
+          </tt>
+    : degré de la matrice polynomiale (paramètre optionnel valant par défaut  <tt>
+            <b>d=-1+size(C,'c')/size(C,'r')</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>name  </b>
+          </tt>
+    : chaîne de caractères (indéterminée du polynôme, <tt>
+            <b>'x'</b>
+          </tt> par défaut).
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>P=inv_coeff(Mp,k)</b>
+        </tt>, quand <tt>
+          <b>k</b>
+        </tt> est compatible avec la taille de <tt>
+          <b>Mp</b>
+        </tt> renvoie une matrice polynomiale de degré k. <tt>
+          <b>C=[C0,C1,...,Ck]</b>
+        </tt> et 
+    <tt>
+          <b>P= C0 + C1*x +... +Ck*x^k</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=int(10*rand(2,6))
+// construction d'une matrice polynomiale de degré 1
+P=inv_coeff(A,1)
+norm(coeff(P)-A)
+// utilisation de la valeur par défaut du degré
+P1=inv_coeff(A)
+norm(coeff(P1)-A)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="poly.html">
+          <tt>
+            <b>poly</b>
+          </tt>
+        </a>
+        <a href="../polynomials/degree.html">
+          <tt>
+            <b>degree</b>
+          </tt>
+        </a>
+        <a href="inv_coeff.html">
+          <tt>
+            <b>coeff</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

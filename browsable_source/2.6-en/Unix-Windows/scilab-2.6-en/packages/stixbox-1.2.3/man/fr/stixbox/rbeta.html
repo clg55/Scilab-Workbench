@@ -1,0 +1,57 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>rbeta -  Random numbers from the beta distribution  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>x = rbeta(n,a,b)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>n  </b>
+          </tt>
+    : positive integer or a vector [lig,col] of 2 positive integers
+  </li>
+  <li>
+          <tt>
+            <b>a,b  </b>
+          </tt>
+    : positive reals , parameters of the beta distribution (a,b  can be scalars or matrix with common size with x).
+  </li>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : n-vector or a n-matrix. 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns random numbers from the beta distribution (inversion method)
+    with parameters a and b. density: 
+  </p>
+  <pre>
+  x.^(a-1).* (1-x).^(b-1)./beta(a,b)1_{0&lt;x&lt;1})
+   </pre>
+  </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../../../../../man/fr/dcd/grand.html">
+          <tt>
+            <b>grand</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

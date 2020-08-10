@@ -1,0 +1,56 @@
+<HTML> 
+   <HEAD> 
+         <!-- BASE HREF="" -->      <!-- Please edit this to refer to the directory of this file --->
+     	 <TITLE>Stixbox summary</TITLE>  
+  </HEAD> 
+      <BODY ALINK="#FF00FF" BGCOLOR="#FFFFFF" LINK="#FF0000" TEXT="#000000" VLINK="#800000"> 
+<H2>LSSELECT</H2>
+<DL>
+<DT>lsselect
+<DD>
+Select a predictor subset for regression<PRE>
+
+     	  [Q, I, B, BB] = lsselect(y,x,crit,how,pmax,level)
+
+	  Selects a good subset of regressors in a multiple linear 
+	  regression model. 
+
+         Input :  y    dependant variate (column vector)
+                  x    regressor variates
+                  crit selection criterion (string):
+	             'HT'   Hypothesis Test (default level = 0.05)
+	             'AIC'  Akaike's Information Criterion 
+	             'BIC'  Bayesian Information Criterion
+	             'CMV'  Cross Model Validation (inner criterion RSS)
+                  how    (string)  choses between :
+                    'AS'   All Subsets
+	             'FI'   Forward Inclusion
+	             'BE'   Backward Elimination
+                  pmax limits the number of included parameters (scalar).
+	           level  ,optional input argument, p-value reference used
+                          for inclusion or deletion.
+
+         Output:  Q criterion as a function of the number of parameters; 
+                    might be interpreted as an estimate of the prediction 
+                    standard deviation. For the method 'HT', Q is instead 
+                    the successive p-values for inclusion or elimination.
+                  I index numbers of the included columns.
+                  B vector of coefficients, ie the suggested model is 
+	             Y = X*B. 
+                  Column p of BB is the best B of parameter size p. 
+
+	  The last column of the prediction matrix x must be an intercept 
+	  column, ie all elements are ones. This column is never excluded 
+	  in the search for a good model. If it is not present it is added.
+
+	  This function is not highly optimized for speed but rather for
+	  flexibility. It would be faster if 'all subsets' were in a 
+	  separate routine and 'forward' and 'backward' were in another
+	  routine, especially for CMV.
+
+         See also LSFIT and LINREG.
+</PRE>
+<P><H2>See Also</H2><UL>
+LSFIT and LINREG.</UL>
+</BODY>
+</HTML>

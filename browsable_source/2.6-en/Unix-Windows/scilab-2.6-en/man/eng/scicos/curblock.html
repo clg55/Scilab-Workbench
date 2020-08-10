@@ -1,0 +1,93 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>curblock -  get current block index in a Scicos simulation function  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>k=curblock()  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>k  </b>
+          </tt>
+    : integer, index of the block corresponding to the Scilab simulation function where this function is called.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    During simulation it may be interesting to get the index of the current
+    block to trace execution, to get its label, to animate the block icon
+    according to simulation...
+  </p>
+  <p>
+    For block with a computational function written in Scilab, Scilab
+    primitive function <tt>
+          <b>curblock()</b>
+        </tt>  allows to get the index of the
+    current block in the compiled data structure.
+  </p>
+  <p>
+    To obtain path to the block in the Scicos main structure user may uses
+    the <tt>
+          <b>corinv</b>
+        </tt> table (see scicos_cpr).
+  </p>
+  <p>
+    For block with a computational function written in C user may uses the
+    C function  <tt>
+          <b>k=C2F(getcurblock)()</b>
+        </tt>. Where <tt>
+          <b>C2F</b>
+        </tt> is the C
+    compilation macro defined in <tt>
+          <b>&lt;SCIDIR&gt;/routines/machine.h</b>
+        </tt>
+  </p>
+  <p>
+    For block with a computational function written in Fortran user may uses the
+    integer  function  <tt>
+          <b>k=getcurblock()</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="getblocklabel.html">
+          <tt>
+            <b>getblocklabel</b>
+          </tt>
+        </a>
+        <a href="getscicosvars.html">
+          <tt>
+            <b>getscicosvars</b>
+          </tt>
+        </a>
+        <a href="setscicosvars.html">
+          <tt>
+            <b>setscicosvars</b>
+          </tt>
+        </a>
+        <a href="scicos_cpr.html">
+          <tt>
+            <b>scicos_cpr</b>
+          </tt>
+        </a>
+        <a href="scicos_main.html">
+          <tt>
+            <b>scicos_main</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

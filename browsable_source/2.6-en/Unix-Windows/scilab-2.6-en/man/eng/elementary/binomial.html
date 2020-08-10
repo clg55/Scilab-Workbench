@@ -1,0 +1,73 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>binomial -  binomial distribution  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>pr=binomial(p,n)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>pr  </b>
+          </tt>
+    : vector, pr(k) = probability (X=k) , with X=B(n,p).
+  </li>
+  <li>
+          <tt>
+            <b>p  </b>
+          </tt>
+    : real number
+  </li>
+  <li>
+          <tt>
+            <b>n  </b>
+          </tt>
+    : integer
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>pr=binomial(p,n)</b>
+        </tt> return a binomial probability vector.
+    pr(k) = probability (X=k) , with X=B(n,p) i.e the
+    probability of k success in n independent trials, (p = proba. of one success).
+    <tt>
+          <b>pr(k) = C(n,k) p^k (1-p)^(n-k)</b>
+        </tt> with 
+    C(n,k)= n!/(k!(n-k)!) = prod(1:n)/(prod(1:k)*prod(1:n-k)).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+n=10;p=0.3;plot2d3(0:n,binomial(p,n));
+n=100;p=0.3;
+mea=n*p;sigma=sqrt(n*p*(1-p));
+x=( (0:n)-mea )/sigma;
+plot2d(x,sigma*binomial(p,n));
+deff('y=Gauss(x)','y=1/sqrt(2*%pi)*exp(-(x.^2)/2)')
+plot2d(x,Gauss(x));
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../dcd/cdfbin.html">
+          <tt>
+            <b>cdfbin</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

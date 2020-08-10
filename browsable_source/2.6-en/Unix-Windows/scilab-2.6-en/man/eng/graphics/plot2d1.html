@@ -1,0 +1,211 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>plot2d1 -  2D plot (logarithmic axes) (obsolete)  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>plot2d1(str,x,y,[style,strf,leg,rect,nax])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>str  </b>
+          </tt>
+    : is a string of length three <tt>
+            <b>"abc"</b>
+          </tt>.
+  </li>
+ <ul>
+  <li>
+            <tt>
+              <b>a  </b>
+            </tt>
+    : can have the following values: <tt>
+              <b>e</b>
+            </tt>, <tt>
+              <b>o</b>
+            </tt>  or <tt>
+              <b>g</b>
+            </tt>.
+  </li>
+ <ul>
+  <li>
+              <tt>
+                <b>e  </b>
+              </tt>
+    : means "empty". Itspecifies the fact that the value of <tt>
+                <b>x</b>
+              </tt> is not used  (the <tt>
+                <b>x</b>
+              </tt> values are supposed to be regularly spaced,  ie 1:&lt;number of rows of <tt>
+                <b>y</b>
+              </tt>&gt;). The user must  anyway give a value for <tt>
+                <b>x</b>
+              </tt>, 1 for instance:  <tt>
+                <b>plot2d1("enn",1,y)</b>
+              </tt>.
+  </li>
+  <li>
+              <tt>
+                <b>o  </b>
+              </tt>
+    : means "one". If there are many curves, they all have the same x-values: <tt>
+                <b>x</b>
+              </tt> is a column vector of size nl and <tt>
+                <b>y</b>
+              </tt> is a matrix of size (nl,nc). For example : <tt>
+                <b>x=[0:0.1:2*%pi]'; plot2d1("onn",x,[sin(x) cos(x)])</b>
+              </tt>.
+  </li>
+  <li>
+              <tt>
+                <b>g  </b>
+              </tt>
+    : means "general". <tt>
+                <b>x</b>
+              </tt> and <tt>
+                <b>y</b>
+              </tt> must have the same size (nl,nc).  Each column of <tt>
+                <b>y</b>
+              </tt> is plotted  with respect to the corresponding column of <tt>
+                <b>x</b>
+              </tt>. <tt>
+                <b>nc</b>
+              </tt> curves are  plotted using <tt>
+                <b>nl</b>
+              </tt> points.
+  </li>
+ </ul>
+  <li>
+            <tt>
+              <b>b, c  </b>
+            </tt>
+    : can have the values <tt>
+              <b>n</b>
+            </tt> (normal) or <tt>
+              <b>l</b>
+            </tt> (logarithmic).
+  </li>
+ <ul>
+  <li>
+              <tt>
+                <b>b=l  </b>
+              </tt>
+    : a logarithmic axis is used on the x-axis
+  </li>
+  <li>
+              <tt>
+                <b>c=l  </b>
+              </tt>
+    : a logarithmic axis is used on the y-axis
+  </li>
+ </ul>
+ </ul>
+  <li>
+          <tt>
+            <b>x,y,[style,strf,leg,rect,nax]  </b>
+          </tt>
+    : these arguments have the same meaning as in the <tt>
+            <b>plot2d</b>
+          </tt> function.
+  </li>
+  <li>
+          <tt>
+            <b>opt_args  </b>
+          </tt>
+    : these arguments have the same meaning as in the <tt>
+            <b>plot2d</b>
+          </tt> function.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This function is obsolete. Use <tt>
+          <b>plot2d</b>
+        </tt> instead.
+  </p>
+  <p>
+    <tt>
+          <b>plot2d1</b>
+        </tt> plots a set of 2D curves.
+    It is the same as <tt>
+          <b>plot2d</b>
+        </tt> but with one more argument 
+    <tt>
+          <b>str</b>
+        </tt>
+    which enables logarithmic axis. Moreover, it allows to specify only one column
+    vector for <tt>
+          <b>x</b>
+        </tt> when it is the same for all the curves.
+  </p>
+  <p>
+    By default, successive plots are superposed. To clear the previous plot, 
+    use <tt>
+          <b>xbasc</b>
+        </tt>.
+  </p>
+  <p>
+    Enter the command <tt>
+          <b>plot2d1()</b>
+        </tt> to see a demo.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+// multiple plot without giving x
+x=[0:0.1:2*%pi]';
+plot2d1("enn",1,[sin(x) sin(2*x) sin(3*x)])
+// multiple plot using only one x
+xbasc()
+plot2d1("onn",x,[sin(x) sin(2*x) sin(3*x)])
+// logarithmic plot
+x=[0.1:0.1:3]'; xbasc()
+plot2d1("oll",x,[exp(x) exp(x^2) exp(x^3)])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="plot2d1.html">
+          <tt>
+            <b>plot2d</b>
+          </tt>
+        </a>
+        <a href="plot2d2.html">
+          <tt>
+            <b>plot2d2</b>
+          </tt>
+        </a>
+        <a href="plot2d3.html">
+          <tt>
+            <b>plot2d3</b>
+          </tt>
+        </a>
+        <a href="plot2d4.html">
+          <tt>
+            <b>plot2d4</b>
+          </tt>
+        </a>
+        <a href="xbasc.html">
+          <tt>
+            <b>xbasc</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

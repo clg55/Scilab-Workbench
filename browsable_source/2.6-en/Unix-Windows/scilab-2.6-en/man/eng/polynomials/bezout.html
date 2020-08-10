@@ -1,0 +1,101 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>bezout -  Bezout equation for polynomials  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[thegcd,U]=bezout(p1,p2)   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>p1, p2  </b>
+          </tt>
+    : two real polynomials
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    computes GCD <tt>
+          <b>thegcd</b>
+        </tt> of <tt>
+          <b>p1</b>
+        </tt> and <tt>
+          <b>p2</b>
+        </tt> and in addition a (2x2) 
+    unimodular matrix <tt>
+          <b>U</b>
+        </tt> such that:
+  </p>
+  <p>
+    <tt>
+          <b>[p1,p2]*U = [thegcd,0]</b>
+        </tt>
+  </p>
+  <p>
+    The lcm of <tt>
+          <b>p1</b>
+        </tt> and <tt>
+          <b>p2</b>
+        </tt> is given by:
+  </p>
+  <p>
+    <tt>
+          <b>p1*U(1,2)</b>
+        </tt> (or <tt>
+          <b>-p2*U(2,2)</b>
+        </tt>)
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=poly(0,'x');
+p1=(x+1)*(x-3)^5;p2=(x-2)*(x-3)^3;
+[thegcd,U]=bezout(p1,p2) 
+det(U)
+clean([p1,p2]*U)
+thelcm=p1*U(1,2)
+lcm([p1,p2])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/poly.html">
+          <tt>
+            <b>poly</b>
+          </tt>
+        </a>
+        <a href="roots.html">
+          <tt>
+            <b>roots</b>
+          </tt>
+        </a>
+        <a href="../graphics/xbasimp.html">
+          <tt>
+            <b>simp</b>
+          </tt>
+        </a>
+        <a href="clean.html">
+          <tt>
+            <b>clean</b>
+          </tt>
+        </a>
+        <a href="lcmdiag.html">
+          <tt>
+            <b>lcm</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

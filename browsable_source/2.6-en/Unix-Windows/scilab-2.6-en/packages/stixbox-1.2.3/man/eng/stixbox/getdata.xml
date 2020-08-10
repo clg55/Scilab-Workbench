@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>getdata  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="getdata"> Famous datasets  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>x = getdata(i [,flag])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>i  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : scalar. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>flag  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : To get rid of the help text supply a second arbirary input argument.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    returns famous datasets. 
+  </P>
+  <VERBATIM><![CDATA[
+  1  Phosphorus Data
+  2  Scottish Hill Race Data
+  3  Salary Survey Data
+  4  Health Club Data
+  5  Brain and Body Weight Data
+  6  Cement Data
+  7  Colon Cancer Data
+  8  Growth Data
+  9  Consumption Function
+  10 Cost-of-Living Data
+  11 Demographic Data
+         12 Cable Data
+  13 Service call
+  14 Phone call
+  15 Turnover Data
+  16 Unemployment Data
+  17 Quality Control
+  18 Graphics cards 
+  19 Data Processing System development
+  20 Paper Data
+  21 Bulb Data
+  22 Memory Chip Data
+  23 French firm Data
+   ]]></VERBATIM>
+  </DESCRIPTION>
+</MAN>

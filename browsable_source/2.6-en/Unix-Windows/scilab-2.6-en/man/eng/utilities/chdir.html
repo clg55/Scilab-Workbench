@@ -1,0 +1,58 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>chdir -  changes Scilab current directory  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>ierr=chdir('path-name')  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>ierr  </b>
+          </tt>
+    : an integer, 1 if <tt>
+            <b>chdir</b>
+          </tt> failed to change directory and <tt>
+            <b>0</b>
+          </tt> elsewhere.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Change the current Scilab directory to <tt>
+          <b>'path-name'</b>
+        </tt>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+chdir(TMPDIR);
+if MSDOS then
+  unix_w("dir");
+else
+  unix_w("ls");
+end
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/pwd.html">
+          <tt>
+            <b>getcwd</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

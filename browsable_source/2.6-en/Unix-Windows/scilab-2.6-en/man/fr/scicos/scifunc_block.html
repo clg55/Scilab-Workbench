@@ -1,0 +1,73 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos Block  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>scifunc_block -  Scicos block defined interactively  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This block can realize any type of Scicos block. The function of the
+    block is defined interactively using dialogue boxes and in Scilab
+    language. During simulation, these instructions are interpreted by
+    Scilab; the simulation of diagrams that include these types of blocks 
+    is slower. For more information see Scicos reference manual.
+  </p>
+  </ul>
+    <H3>DIALOGUE PARAMETERS</H3>
+    <ul>
+      <li>number of inputs
+: a scalar. Number of regular input ports
+
+  </li>
+      <li>number of outputs
+: a scalar. Number of regular output ports
+
+  </li>
+      <li>number of input events
+: a scalar. Number of input event ports
+
+  </li>
+      <li>number of output events
+: a scalar. Number of output event ports
+
+  </li>
+      <li>Initial continuous state
+: a column vector.
+
+  </li>
+      <li>Initial discrete state
+: a column vector.
+
+  </li>
+      <li>System type
+: a string: c or d (CBB or DBB, other types are not supported).
+
+  </li>
+      <li>System parameter
+: column vector. Any parameters used in the block can be defined here a column vector.
+
+  </li>
+      <li>initial firing
+: vector. Size of this vector corresponds to the number of event outputs. The value of the i-th entry specifies the time of the preprogrammed event firing on the i-th output event port. If less than zero, no event is preprogrammed. 
+
+  </li>
+      <li>Instructions
+: other dialogues are opened consecutively where used may input Scilab code associated with the computations needed (block initialization, outputs, continuous and  discrete state, output events date, block ending), 
+
+  </li>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="GENERIC_f.html">
+          <tt>
+            <b>GENERIC_f</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

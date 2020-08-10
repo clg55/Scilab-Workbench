@@ -1,0 +1,107 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>prod -  product  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=prod(x)  </dd>
+      <dd>y=prod(x,'r') or y=prod(x,1)  </dd>
+      <dd>y=prod(x,'c') or y=prod(x,2)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : real or complex vector or matrix
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : real or complex scalar or matrix
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    For a vector or a matrix <tt>
+          <b>x</b>
+        </tt>, <tt>
+          <b>y=prod(x)</b>
+        </tt>  returns in the scalar <tt>
+          <b>y</b>
+        </tt> the prod of all the entries
+    of <tt>
+          <b>x</b>
+        </tt>, , e.g. <tt>
+          <b>prod(1:n)</b>
+        </tt> is n!
+  </p>
+  <p>
+    <tt>
+          <b>y=prod(x,'r')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=prod(x,1)</b>
+        </tt>)computes the
+    rows elementwise product of  <tt>
+          <b>x</b>
+        </tt>. <tt>
+          <b>y</b>
+        </tt> is the row vector: <tt>
+          <b>y(i)=prod(x(i,:))</b>
+        </tt>. 
+  </p>
+  <p>
+    <tt>
+          <b>y=prod(x,'c')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=prod(x,2)</b>
+        </tt>) computes the
+    columns elementwise product of  <tt>
+          <b>x</b>
+        </tt>. <tt>
+          <b>y</b>
+        </tt> is the column vector: <tt>
+          <b>y(i)=prod(x(:,i))</b>
+        </tt>. 
+  </p>
+  <p>
+    <tt>
+          <b>prod</b>
+        </tt> is not implemented for sparse matrices.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=[1,2;0,100];
+prod(A)
+prod(A,'c')
+prod(A,'r')
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="cumsum.html">
+          <tt>
+            <b>sum</b>
+          </tt>
+        </a>
+        <a href="cumprod.html">
+          <tt>
+            <b>cumprod</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

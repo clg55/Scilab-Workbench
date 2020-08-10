@@ -1,0 +1,109 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>plot3d3 -  mesh plot surface defined by rectangular facets  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>plot3d3(X,Y,Z [,vect,theta,alpha,leg,flag,ebox])  </dd>
+      <dd>plot3d3(X,Y,Z, &lt;opt_args&gt;)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>X,Y,Z  </b>
+          </tt>
+    : 3 real matrices
+  </li>
+  <li>
+          <tt>
+            <b>vect  </b>
+          </tt>
+    : real vector
+  </li>
+  <li>
+          <tt>
+            <b>flag  </b>
+          </tt>
+    :  flag=[type,box], type and box have the same meaning as in plot3d.
+  </li>
+  <li>
+          <tt>
+            <b>&lt;opt_args&gt;  </b>
+          </tt>
+    : This represents a sequence of statements <tt>
+            <b>key1=value1, key2=value2</b>
+          </tt>,... where <tt>
+            <b>key1</b>
+          </tt>, <tt>
+            <b>key2,...</b>
+          </tt> can be one of the following: vect,flag (see above), theta, alpha ,leg,ebox (see <tt>
+            <b>plot3d</b>
+          </tt>) 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>plot3d3</b>
+        </tt> performs a mesh plot of a surface defined by rectangular facets.
+    (X,Y,Z) are three matrices which describe a surface.
+    The surface is composed of four sided polygons. 
+  </p>
+  <p>
+    The X-coordinates of a facet are given by X(i,j),X(i+1,j),X(i,j+1),X(i+1,j+1).
+    And similarly Y and Z are Y and Z coordinates.
+  </p>
+  <p>
+    The <tt>
+          <b>vect</b>
+        </tt> vector is used when multiple surfaces are coded 
+    in the same (X,Y,Z) matrices. <tt>
+          <b>vect(j)</b>
+        </tt> gives the line 
+    at which the coding of the jth surface begins. 
+    See <tt>
+          <b>plot3d2</b>
+        </tt> for a full description.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+u = linspace(-%pi/2,%pi/2,40);
+v = linspace(0,2*%pi,20);
+X = cos(u)'*cos(v);
+Y = cos(u)'*sin(v);
+Z = sin(u)'*ones(v);
+plot3d3(X,Y,Z);
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="plot3d2.html">
+          <tt>
+            <b>plot3d2</b>
+          </tt>
+        </a>
+        <a href="fplot3d.html">
+          <tt>
+            <b>plot3d</b>
+          </tt>
+        </a>
+        <a href="param3d1.html">
+          <tt>
+            <b>param3d</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

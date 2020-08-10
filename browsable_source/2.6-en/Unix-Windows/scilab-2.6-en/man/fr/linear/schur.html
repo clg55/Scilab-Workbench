@@ -1,0 +1,240 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>schur -  décomposition de Schur ordonnée  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[U,T] = schur(A)   </dd>
+      <dd>[U,dim]=schur(A,flag)  </dd>
+      <dd>[U,dim]=schur(A,myfunction)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : matrice carrée réelle ou complexe. Pour la forme ordonnée <tt>
+            <b>A</b>
+          </tt> est supposée réelle.
+  </li>
+  <li>
+          <tt>
+            <b>flag  </b>
+          </tt>
+    : chaîne de caractères (<tt>
+            <b>'c'</b>
+          </tt> ou <tt>
+            <b>'d'</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>myfunction  </b>
+          </tt>
+    : l'identificateur d'une fonction (ce paramètre peut aussi être une chaîne de caractères ou une liste)
+  </li>
+  <li>
+          <tt>
+            <b>U  </b>
+          </tt>
+    : matrice unitaire carrée
+  </li>
+  <li>
+          <tt>
+            <b>T  </b>
+          </tt>
+    : matrice carrée réelle ou complexe
+  </li>
+  <li>
+          <tt>
+            <b>dim  </b>
+          </tt>
+    : entier
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Forme de Schur, Forme de Schur ordonnée.
+  </p>
+  </ul>
+    <H3>Forme de Schur usuelle</H3>
+    <ul>
+      <p>
+    produit une matrice de Schur <tt>
+          <b>T</b>
+        </tt> et une matrice unitaire <tt>
+          <b>U</b>
+        </tt> telles que <tt>
+          <b>A = U*T*U'</b>
+        </tt> et <tt>
+          <b>U'*U = eye(U)</b>
+        </tt>. Utilisée sans argument en sortie, schur(<tt>
+          <b>A</b>
+        </tt>) renvoie <tt>
+          <b>T</b>
+        </tt>. Si <tt>
+          <b>A</b>
+        </tt> est complexe, la forme de Schur complexe est renvoyée dans la matrice <tt>
+          <b>T</b>
+        </tt>. la forme de Schur complexe est triangulaire supérieure avec les valeurs propres de <tt>
+          <b>A</b>
+        </tt> sur la diagonale. Si <tt>
+          <b>A</b>
+        </tt> est réelle, la forme de Schur réelle est renvoyée. Dans la forme de Schur réelle les valeurs propres réelles sont sur la diagonale et les valeurs propres complexes sont les valeurs propres des blocs 2 x 2 sur la diagonale.
+  </p>
+    </ul>
+    <H3>Forme stable ordonnée</H3>
+    <ul>
+      <p>
+    renvoie une matrice unitaire <tt>
+          <b>U</b>
+        </tt> transformant <tt>
+          <b>A</b>
+        </tt> en forme de Schur. De plus, les dim premières colonnes de <tt>
+          <b>U</b>
+        </tt> forment une base du sous-espace propre de <tt>
+          <b>A</b>
+        </tt> associé aux valeurs propres ayant une partie réelle négative (sous espace propre stable "en temps continu").
+  </p>
+      <p>
+    renvoie une matrice unitaire <tt>
+          <b>U</b>
+        </tt> transformant <tt>
+          <b>A</b>
+        </tt> en forme de Schur. De plus, les dim premières colonnes de <tt>
+          <b>U</b>
+        </tt> forment une base du sous-espace propre de <tt>
+          <b>A</b>
+        </tt> associé aux valeurs propres de module plus petit que 1 (sous espace propre stable "en temps discret").
+  </p>
+    </ul>
+    <H3>Sous-espace propre généralisé</H3>
+    <ul>
+      <p>
+    renvoie une matrice unitaire <tt>
+          <b>U</b>
+        </tt> transformant <tt>
+          <b>A</b>
+        </tt> en forme de Schur. De plus, les dim premières colonnes de <tt>
+          <b>U</b>
+        </tt> forment une base du sous-espace propre de <tt>
+          <b>A</b>
+        </tt> associé aux valeurs propres sélectionnées par la fonction <tt>
+          <b>myfunction</b>
+        </tt>.
+  </p>
+      <p>
+    Cette fonction doit être construire sur le modèle suivant (si <tt>
+          <b>myfunction</b>
+        </tt> s'appelle "<tt>
+          <b>choix</b>
+        </tt>"):
+  </p>
+      <pre>
+function [flag]=choix(x)
+
+flag=...
+   </pre>
+      <p>
+    <tt>
+          <b>x</b>
+        </tt> est un vecteur à trois composantes caractérisant soit une valeur propre réelle soit une paire de valeurs propres complexes conjuguées.
+  </p>
+      <p>
+    Si <tt>
+          <b>x(1)=1</b>
+        </tt>, il s'agit d'une valeur propre réelle donnée par <tt>
+          <b>x(2)/x(3)</b>
+        </tt>.
+  </p>
+      <p>
+    Si <tt>
+          <b>x(1)=2</b>
+        </tt>, il s'agit d'une paire de valeurs propres complexes conjuguées.  La somme de ses valeurs propres (deux fois la partie réelle) est donnée par <tt>
+          <b>x(2)</b>
+        </tt> et leur produit (carré du module) est donné par <tt>
+          <b>x(3)</b>
+        </tt>.
+  </p>
+      <p>
+    En sortie, flag doit valoir 1 si la ou les valeurs propres sont à retenir, et 0 sinon.
+  </p>
+    </ul>
+    <H3>Exemple de fonction</H3>
+    <ul>
+      <pre>
+        function [flag]=disc(x)
+        ls =x(1);flag=0;
+        select  ls
+           case 1 then if abs(x(2)) &lt; ro*abs(x(3)) then flag=1;end
+           case 2 then if x(3) &lt; ro*ro then flag=1;end
+        end
+   </pre>
+      <p>
+    La fonction <tt>
+          <b>disc</b>
+        </tt> sélectionne les valeurs propres de module inférieur à <tt>
+          <b>ro</b>
+        </tt>. Pour <tt>
+          <b>ro=1</b>
+        </tt> les commandes <tt>
+          <b>[U,dim]=schur(A,'d')</b>
+        </tt> et <tt>
+          <b>[U,dim]=schur(A,disc)</b>
+        </tt> sont donc équivalentes.
+  </p>
+      <p>
+    Un autre exemple utile est <tt>
+          <b>%choose</b>
+        </tt>  (voir le code de la fonction dans <tt>
+          <b>SCIDIR/macros/percent</b>
+        </tt>)
+  </p>
+    </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=diag([-0.9,-2,2,0.9]);X=rand(A);A=inv(X)*A*X;
+[U,d]=schur(A,'c');
+A1=U'*A*U;
+spec(A1(1:d,1:d))      // valeurs propres stables (temps continu)
+[U,d]=schur(A,'c');
+A1=U'*A*U;
+spec(A1(1:d,1:d))      // valeurs propres stables (temps discret)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="gschur.html">
+          <tt>
+            <b>gschur</b>
+          </tt>
+        </a>
+        <a href="../control/ricc.html">
+          <tt>
+            <b>ricc</b>
+          </tt>
+        </a>
+        <a href="pbig.html">
+          <tt>
+            <b>pbig</b>
+          </tt>
+        </a>
+        <a href="psmall.html">
+          <tt>
+            <b>psmall</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

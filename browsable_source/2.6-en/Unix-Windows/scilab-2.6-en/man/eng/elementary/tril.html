@@ -1,0 +1,75 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>tril -  lower triangular part of matrix  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>tril(x [,k])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : matrix (real, complex, polynomial, rational)
+  </li>
+  <li>
+          <tt>
+            <b>k  </b>
+          </tt>
+    : integer (default value 0)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Lower triangle part of a matrix.
+    <tt>
+          <b>tril(x,k)</b>
+        </tt>  is made by entries below the kth diagonal :
+    k&gt;0 (upper diagonal) and   k&lt;0 (diagonals below 
+    the main diagonal).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+tril([s,s;s,1])
+tril([1/s,1/s;1/s,1])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="triu.html">
+          <tt>
+            <b>triu</b>
+          </tt>
+        </a>
+        <a href="ones.html">
+          <tt>
+            <b>ones</b>
+          </tt>
+        </a>
+        <a href="eye.html">
+          <tt>
+            <b>eye</b>
+          </tt>
+        </a>
+        <a href="diag.html">
+          <tt>
+            <b>diag</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

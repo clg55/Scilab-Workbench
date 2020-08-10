@@ -1,0 +1,87 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>macro -  Scilab procedure and Scilab object  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Macros are Scilab procedures ("macro", "function" and "procedure"
+    have the save meaning). Usually, they are defined 
+    in files with an editor and loaded into Scilab by <tt>
+          <b>getf</b>
+        </tt> or through
+    a library. 
+  </p>
+  <p>
+    They can also be defined on-line (see <tt>
+          <b>deff</b>
+        </tt>). 
+    A file which contains a macro must begin as follows:
+  </p>
+  <pre>
+function [y1,...,yn]=foo(x1,...,xm)
+   </pre>
+  <p>
+    The <tt>
+          <b>yi</b>
+        </tt> are output variables calculated as functions of
+    input variables and variables existing in Scilab
+    when the macro is executed.
+    A macro can be compiled for faster execution. Collections
+    of macros can be collected in libraries.
+    Macros which begin with <tt>
+          <b>%</b>
+        </tt> sign (e.g. <tt>
+          <b>%foo</b>
+        </tt>) and whose
+    arguments are lists are used to perform specific 
+    operations: for example, <tt>
+          <b>z=%rmr(x,y)</b>
+        </tt> is equivalent
+    to <tt>
+          <b>z=x*y</b>
+        </tt> when <tt>
+          <b>x</b>
+        </tt> and <tt>
+          <b>z</b>
+        </tt> are rationals 
+    (i.e. <tt>
+          <b>x=list('r',n,d,[])</b>
+        </tt> with <tt>
+          <b>n</b>
+        </tt> and <tt>
+          <b>d</b>
+        </tt> polynomials).
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="deff.html">
+          <tt>
+            <b>deff</b>
+          </tt>
+        </a>
+        <a href="../programming/getfield.html">
+          <tt>
+            <b>getf</b>
+          </tt>
+        </a>
+        <a href="comp.html">
+          <tt>
+            <b>comp</b>
+          </tt>
+        </a>
+        <a href="genlib.html">
+          <tt>
+            <b>lib</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

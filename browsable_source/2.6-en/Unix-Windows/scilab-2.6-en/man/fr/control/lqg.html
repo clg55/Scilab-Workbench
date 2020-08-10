@@ -1,0 +1,117 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>lqg -  LQG compensator  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[K]=lqg(P,r)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>P  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> list (augmented plant) in state-space form
+  </li>
+  <li>
+          <tt>
+            <b>r  </b>
+          </tt>
+    : 1x2 row vector = (number of measurements, number of inputs)  (dimension of  the 2,2 part of <tt>
+            <b>P</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>K  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> list (controller)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>lqg</b>
+        </tt>  computes the linear optimal LQG (H2) controller for the 
+    "augmented" plant <tt>
+          <b>P=syslin('c',A,B,C,D)</b>
+        </tt> (continuous time) or 
+    <tt>
+          <b>P=syslin('d',A,B,C,D)</b>
+        </tt> (discrete time).
+  </p>
+  <p>
+    The function <tt>
+          <b>lqg2stan</b>
+        </tt> returns <tt>
+          <b>P</b>
+        </tt> and <tt>
+          <b>r</b>
+        </tt> given the
+    nominal plant, weighting terms and variances of noises.
+  </p>
+  <p>
+    <tt>
+          <b>K</b>
+        </tt> is given by the following ABCD matrices: 
+    <tt>
+          <b>[A+B*Kc+Kf*C+Kf*D*Kc,-Kf,Kc,0]</b>
+        </tt> where <tt>
+          <b>Kc=lqr(P12)</b>
+        </tt>
+    is the controller gain and <tt>
+          <b>Kf=lqe(P21)</b>
+        </tt> is the filter gain.
+    See example in <tt>
+          <b>lqg2stan</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="lqg2stan.html">
+          <tt>
+            <b>lqg2stan</b>
+          </tt>
+        </a>
+        <a href="lqr.html">
+          <tt>
+            <b>lqr</b>
+          </tt>
+        </a>
+        <a href="lqe.html">
+          <tt>
+            <b>lqe</b>
+          </tt>
+        </a>
+        <a href="../robust/h_inf_st.html">
+          <tt>
+            <b>h_inf</b>
+          </tt>
+        </a>
+        <a href="obscont.html">
+          <tt>
+            <b>obscont</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>F.D.  </ul>
+    </p>
+  </body>
+</html>

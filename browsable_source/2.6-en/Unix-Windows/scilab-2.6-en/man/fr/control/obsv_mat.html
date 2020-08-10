@@ -1,0 +1,65 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>obsv_mat -  observability matrix  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[O]=obsv_mat(A,C)  </dd>
+      <dd>[O]=obsv_mat(sl)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A,C,O  </b>
+          </tt>
+    : real matrices
+  </li>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> list
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>obsv_mat</b>
+        </tt> returns the observability matrix:
+  </p>
+  <pre>
+O=[C; CA; CA^2;...; CA^(n-1) ]
+   </pre>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="contrss.html">
+          <tt>
+            <b>contrss</b>
+          </tt>
+        </a>
+        <a href="obsvss.html">
+          <tt>
+            <b>obsvss</b>
+          </tt>
+        </a>
+        <a href="obs_gram.html">
+          <tt>
+            <b>obs_gram</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

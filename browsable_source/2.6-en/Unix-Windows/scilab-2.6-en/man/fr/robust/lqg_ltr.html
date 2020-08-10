@@ -1,0 +1,91 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>lqg_ltr -  LQG with loop transform recovery  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[kf,kc]=lqg_ltr(sl,mu,ro)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : linear system in state-space form (<tt>
+            <b>syslin</b>
+          </tt> list)
+  </li>
+  <li>
+          <tt>
+            <b>mu,ro  </b>
+          </tt>
+    :  real positive numbers chosen ``small enough''
+  </li>
+  <li>
+          <tt>
+            <b>kf,kc  </b>
+          </tt>
+    : controller and observer Kalman gains.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns the Kalman gains for:
+  </p>
+  <pre>
+           x = a*x + b*u + l*w1   
+  (sl)
+           y = c*x + mu*I*w2
+
+           z = h*x
+   </pre>
+  <p>
+    Cost function:
+  </p>
+  <p>
+      /+oo
+                   |
+          J    = E(| [z(t)'*z(t) + ro^2*u(t)'*u(t)]dt)
+           lqg     |
+                   / 0
+  </p>
+  <p>
+    The lqg/ltr approach looks for <tt>
+          <b>L,mu,H,ro</b>
+        </tt> such that:
+    J(lqg) = J(freq) where
+  </p>
+  <p>
+                  /+oo        *  *           *
+          J    =  | tr[S  W  W  S ] + tr[T  T]dw
+           freq   |
+                  /0
+  </p>
+  <p>
+    and
+  </p>
+  <pre>
+ S = (I + G*K)^(-1)  
+ T = G*K*(I+G*K)^(-1)
+   </pre>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/syslin.html">
+          <tt>
+            <b>syslin</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

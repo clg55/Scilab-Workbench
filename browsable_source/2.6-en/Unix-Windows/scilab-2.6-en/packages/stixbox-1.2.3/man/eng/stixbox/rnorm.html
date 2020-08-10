@@ -1,0 +1,60 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>rnorm -  Normal random numbers  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>X = rnorm( [ n,m,s])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>n  </b>
+          </tt>
+    : positive integer or a 2-vector [lig, col] of positive integers.  this argument is optional its default value is 1. 
+  </li>
+  <li>
+          <tt>
+            <b>m  </b>
+          </tt>
+    : mean, optional scalar with default value 0
+  </li>
+  <li>
+          <tt>
+            <b>s  </b>
+          </tt>
+    : standard deviation, optional scalar with default value 1
+  </li>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : n-vector or n-matrix of normal random numbers with mean m and standard deviation s. 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Returns random deviates from the normal distribution with mean m 
+    and standard deviation s. 
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=rnorm(1000,0,1);
+[y,e]=histo(x);
+   </pre>
+      <p>
+      
+  </p>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,61 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>sincd -  digital sinc function or Direchlet kernel  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[s]=sincd(n,flag)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>n  </b>
+          </tt>
+    : integer
+  </li>
+  <li>
+          <tt>
+            <b>flag  </b>
+          </tt>
+    : if <tt>
+            <b>flag = 1</b>
+          </tt> the function is centred around the origin; if <tt>
+            <b>flag = 2</b>
+          </tt> the function is delayed by <tt>
+            <b>%pi/(2*n)</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>s  </b>
+          </tt>
+    : vector of values of the function on a dense grid of frequencies
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    function which calculates the function <tt>
+          <b>Sin(N*x)/N*Sin(x)</b>
+        </tt>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+plot(sincd(10,1)) 
+ </pre>
+    </ul>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>G. Le V.  </ul>
+    </p>
+  </body>
+</html>

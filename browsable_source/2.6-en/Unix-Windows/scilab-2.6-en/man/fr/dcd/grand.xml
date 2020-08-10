@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>grand  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>Dec 1997  </DATE>
+  <SHORT_DESCRIPTION name="grand"> générateur de nombres aléatoires  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>Y=grand(m,n,&apos;option&apos; [,arg1,..,argn])  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>Y=grand(x,&apos;option&apos; [,arg1,....,argn])  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>Y=grand(&apos;option&apos;)  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>Y=grand(&apos;option&apos;  [,arg1,....,argn])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>grand(&apos;advnst&apos;,K)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Avance l&apos;état du générateur de 2^K valeurs et réinitialise la graine à cette valeur. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;bet&apos;,A,B), Y=grand(x,&apos;bet&apos;,A,B)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant une distribution beta de  paramètres A et B. La densité est définie par  <VERB>x^(a-1) * (1-x)^(b-1) / B(a,b)</VERB> pour <VERB>0 &lt; x &lt; 1</VERB>  Méthode : R. C. H. Cheng  Generating Beta Variables with Nonintegral Shape Parameters  Communications of the ACM, 21:317-322 (1978)  (Algorithmes BB et BC)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;bin&apos;,N,P), Y=grand(x,&apos;bin&apos;,N,P)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant une distribution binomiale dont le nombre d&apos;essais est N et dont la probabilité de l&apos;évènement est P (0.0 &lt;= P &lt;= 1.0).  Méthode :  algorithme BTPE de :  Kachitvichyanukul, V. and Schmeiser, B. W. Binomial Random Variate Generation. Communications of the ACM, 31, 2  (February, 1988) 216. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;chi&apos;,Df), Y=grand(x,&apos;chi&apos;,Df)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant une distribution du chi deux  à DF degrés de liberté.  Utilise la relation entre le chi deux et la distribution gamma.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;def&apos;), Y=grand(x,&apos;def&apos;)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Renvoie des réalisations d&apos;une variable aléatoire uniforme sur ]0,1[ en utilisant le générateur courant
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;exp&apos;,Av), Y=grand(x,&apos;exp&apos;,Av)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant une distribution exponentielle  de moyenne AV.  Pour les détails voir :   Ahrens, J.H. and Dieter, U.  Computer Methods for Sampling From the   Exponential and Normal Distributions.  Comm. ACM, 15,10 (Oct. 1972), 873 - 882. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;f&apos;,Dfn,Dfd), Y=grand(x,&apos;f&apos;,Dfn,Dfd)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant la distribution de Fisher (rapport de variances)  à DFN degrés de liberté au numérateur et DFD degrés de liberté au dénominateur. Méthode : génère directement un rapport de variances de chi deux
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;gam&apos;,Shape,Scale), Y=grand(x,&apos;gam&apos;,Shape,Scale)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant la distribution gamma dont la densité est (Scale**Shape)/Gamma(Shape) * X**(Shape-1) * Exp(-Scale*X) Pour les détails voir :
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>(Cas R &gt;= 1.0)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Ahrens, J.H. and Dieter, U.  Generating Gamma Variates by a   Modified Rejection Technique.   Comm. ACM, 25,1 (Jan. 1982), 47 - 54.  Algorithme GD
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>(Cas 0.0 &lt; R &lt; 1.0)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Ahrens, J.H. and Dieter, U.  Computer Methods for Sampling from Gamma,   Beta, Poisson and Binomial Distributions.   Computing, 12 (1974), 223-246/   Algorithme adapté GS.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>G=grand(&apos;getcgn&apos;)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : renvoie dans G le numéro du générateur aléatoire courant (1..32) 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Sd=grand(&apos;getsd&apos;)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Renvoie la valeur de deux graines entières du générateur aléatoire courant Sd=[sd1,sd2]
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>grand(&apos;initgn&apos;,I)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Réinitialise le générateur courant 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>I = -1  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : l&apos;état prend la valeur de la graine initiale 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>I = 0  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : l&apos;état prend la valeur de la graine précédente
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>I = 1  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : l&apos;état prend la valeur d&apos;une nouvelle graine distante de 2^w valeurs de la dernière graine 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;lgi&apos;),Y=grand(x,&apos;lgi&apos;)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : renvoie des entiers aléatoires suivant une distribution uniforme sur  (1, 2147483562) en utilisant le générateur courant.  
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(M,&apos;mn&apos;,Mean,Cov)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère M réalisations d&apos;une loi multi-normale. Mean est une matrice Nx1 et Cov une matrice NxN définie positive. Y est une matrice NxM. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(n,&apos;markov&apos;,P,x0)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    Génère <VERB>n</VERB> états successifs d&apos;une chaîne de Markov décrite par  la matrice de transition <VERB>P</VERB>. L&apos;état initial est donné par <VERB>x0</VERB>. Si <VERB>x0</VERB> est une matrice de taille <VERB>m=size(x0,&apos;*&apos;)</VERB> alors <VERB>Y</VERB> est une matrice de taille <VERB>m*n</VERB>. <VERB>Y(i,:)</VERB> est le chemin  obtenu à partir de l&apos;état initial <VERB>x0(i)</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(M,&apos;mul&apos;,N,P)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    Génère M réalisations suivant une distribution Multinomiale.  N est le nombre de catégories, P est le vecteur des probabilités. P(i) est la probabilité que l&apos;évènement soit classé dans la catégorie i. Ainsi, P(i) doit être dans [0,1]. P est de taille N-1, la probabilité de la catégorie N est 1-sum(P). Y(:,i) est une observation de la distribution multinomiale. Les Y(:,i) sont positifs et leur somme vaut N. Y est de taille NxM.  Algorithme page 559 de Devroye, Luc. Non-Uniform Random Variate Generation. Springer-Verlag, New York, 1986.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;nbn&apos;,N,P),Y=grand(x,&apos;nbn&apos;,N,P)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant une distribution binomiale négative.  N est le nombre requis d&apos;évènements (N &gt; 0).  P est la probabilité d&apos;un évènement durant un essai de Bernoulli (0.0 &lt; P &lt; 1.0).  Méthode : Algorithme page 480 de Devroye, Luc. Non-Uniform Random Variate Generation. Springer-Verlag, New York, 1986.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;nch&apos;,Df,Xnon), Y=grand(x,&apos;nch&apos;,Df,Xnon)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant une distribution du chi deux non centré  à DF (DF &gt;= 1.0) degrés de liberté et un paramètre de décentrage XNONC  (XNONC &gt;= 0.0).   Utilise le fait qu&apos;un chi deux non centré est la somme d&apos;un chi deux  à DF-1 degrés de liberté plus le carré d&apos;une réalisation suivant une loi normale de moyenne XNON et de variance 1. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;nf&apos;,Dfn,Dfd,Xnon), Y=grand(x,&apos;nf&apos;,Dfn,Dfd,Xnon)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations de la distribution de Fisher  (rapport de variances)  à DFN (doit être &gt;= 1.0) degrés de liberté au numérateur, et DFD (doit être &gt; 0)  degrés de liberté au dénominateur, et un paramètre de décentrage XNONC (doit être &gt;= 0).   Méthode : génération directe du rapport d&apos;une réalisation de chi-deux non centré et d&apos;une réalisation  d&apos;un chi-deux centré. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;nor&apos;,Av,Sd), Y=grand(x,&apos;nor&apos;,Av,Sd)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant une loi normale  de moyenne AV et d&apos;écart-type SD. Pour les détails voir :  Ahrens, J.H. and Dieter, U. Extensions of Forsythe&apos;s Method for Random Sampling from the Normal Distribution. Math. Comput., 27,124 (Oct. 1973), 927 - 937. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Sd=grand(&apos;phr2sd&apos;,&apos;string&apos;)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Utilise une phrase (chaîne de caractères) pour générer deux graines pour le générateur aléatoire RGN. Sd est un vecteur d&apos;entiers de taille 2 <VERB>Sd=[Sd1,Sd2]</VERB>
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;poi&apos;,mu), Y=grand(x,&apos;poi&apos;,mu)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des réalisations suivant une distribution de Poisson de moyenne MU (MU &gt;= 0).   Pour les détails voir :  Ahrens, J.H. and Dieter, U.  Computer Generation of Poisson Deviates   From Modified Normal Distributions.   ACM Trans. Math. Software, 8, 2   (June 1982),163-179 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Mat=grand(M,&apos;prm&apos;,vect)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère M permutation aléatoires du vecteur colonne <VERB>vect</VERB>. Mat est de taille <VERB>(size(vect)xM)</VERB>
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>grand(&apos;setall&apos;,ISEED1,ISEED2)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Donne à la graine du générateur 1 les valeurs ISEED1 et ISEED2. Les graines des autres générateurs sont affectés également, et les états des générateurs prennent la valeur de cette graine. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>grand(&apos;setcgn&apos;,G)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Choisit le générateur courant de numéro G. Toutes les références à un générateur concernent le générateur courant. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>grand(&apos;setsd&apos;,ISEED1,ISEED2)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Donne à la graine du générateur g les valeurs ISEED1 et ISEED2. Les graines et états des autres générateurs sont inchangées.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;uin&apos;,Low,High), Y=grand(x,&apos;uin&apos;,Low,High)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Génère des entiers uniformément distribués entre LOW et HIGH.  Low est la borne inférieure (inclusive). High est la borne supérieure (inclusive). Si (HIGH-LOW) &gt; 2,147,483,561 un message d&apos;erreur est affiché. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Y=grand(m,n,&apos;unf&apos;,Low,High),Y=grand(x,&apos;unf&apos;,Low,High)  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  Génère des entiers uniformément distribués entre LOW et HIGH. Ici les deux bornes sont exclusives.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Interface vers une librairie Fortran de génération de nombres aléatoires.
+    (Barry W. Brown and James Lovato, Department of Biomathematics,
+    the University of Texas, Houston) 
+  </P>
+  <P>
+    Cet ensemble de fonctions contient 32 générateurs de nombres aléatoires.
+    Chaque générateur peut fournir 1,048,576 blocs de nombres, et chaque bloc
+    est de longueur 1,073,741,824.  Chaque générateur peut être positionné au début ou à la fin
+    du bloc courant ou à sa valeur de départ. Les méthodes proviennent de l&apos;article cité ci-dessous :
+  </P>
+  <P>
+    P.  L&apos;Ecuyer and S. Cote.   Implementing a Random  Number Package with
+    Splitting Facilities.  ACM Transactions on Mathematical Software 17:1,
+    pp 98-111.
+  </P>
+  <P>
+    La plupart des utilisateur préfèrera un générateur plus simple (proposé par défaut).
+    On a donc ajouté la notion de générateur courant (initialement numéro 1). Il peut être changé avec &apos;setcgn&apos;
+    et le numéro du générateur courant est obtenue avec &apos;getcgn&apos;.
+  </P>
+  <P>
+    Les deux graines entières peuvent être changées avec &apos;setall&apos; (valeurs par défaut
+    1234567890  et 123456789). Les valeurs des graines sont obtenues avec &apos;getsd&apos;.  Les nombres aléatoires peuvent être obtenus sous forme d&apos;entiers compris entre 1 et un entier très grand en utilisant l&apos;option &apos;lgi&apos; ou comme des nombres à virgule flottante entre 0 et 1 (option &apos;def&apos;).
+  </P>
+  <P>
+  </P>
+  </DESCRIPTION>
+  <ITEMIZE label='CONCEPTS'>
+  <P>
+    Les méthodes utilisées permettent de générer des séquences de très longue période :  2.3 X 10^18. Cette séquence est partitionnée en G (=32) générateurs virtuels. Chaque générateur virtuel contient 2^20 (=1,048,576) blocs de nombres aléatoires. Chaque bloc est de longueur 2^30 (=1,073,741,824).  L&apos;état d&apos;un générateur aléatoire est déterminé par deux entiers appelés graines. Les graines peuvent être initialisées par l&apos;utilisateur. La valeur initiale de la première est comprise entre 1 et 2,147,483,562, celle de la deuxième entre 1 et 2,147,483,398.   À chaque fois qu&apos;un nombre est généré, les valeurs des graines changent. Le générateur &quot;se souvient&quot; de trois valeurs de graines : la valeur d&apos;initialisation, la valeur au début du bloc courant, et la valeur au début du bloc suivant. La graine d&apos;un générateur aléatoire peut être initialisée avec l&apos;une des ces trois valeurs.  Parmi les 32 générateurs virtuels, exactement un sera le générateur courant,  i.e., celui qui sera utilisé pour générer les valeurs &apos;lgi&apos; et &apos;def&apos;. Initialement, le générateur courant est choisit comme étant le numéro 1. Le générateur courant peut être changé en appelant &apos;setcgn&apos;, et le numéro du générateur courant est obtenu avec &apos;getcgn&apos;.
+  </P>
+  </ITEMIZE>
+</MAN>

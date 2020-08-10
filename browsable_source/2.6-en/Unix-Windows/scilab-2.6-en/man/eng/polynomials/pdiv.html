@@ -1,0 +1,88 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>pdiv -  polynomial division  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[R,Q]=pdiv(P1,P2)  </dd>
+      <dd>[Q]=pdiv(P1,P2)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>P1  </b>
+          </tt>
+    : polynomial matrix
+  </li>
+  <li>
+          <tt>
+            <b>P2  </b>
+          </tt>
+    : polynomial or polynomial matrix
+  </li>
+  <li>
+          <tt>
+            <b>R,Q  </b>
+          </tt>
+    : two polynomial matrices
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Element-wise euclidan division of the polynomial matrix <tt>
+          <b>P1</b>
+        </tt>
+    by the polynomial <tt>
+          <b>P2</b>
+        </tt> or by the polynomial matrix <tt>
+          <b>P2</b>
+        </tt>.
+    <tt>
+          <b>Rij</b>
+        </tt> is the matrix of remainders, <tt>
+          <b>Qij</b>
+        </tt> is the matrix
+    of quotients and <tt>
+          <b>P1ij = Qij*P2 + Qij</b>
+        </tt> or <tt>
+          <b>P1ij = Qij*P2ij + Qij</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=poly(0,'x');
+p1=(1+x^2)*(1-x);p2=1-x;
+[r,q]=pdiv(p1,p2)
+p2*q-p1
+p2=1+x;
+[r,q]=pdiv(p1,p2)
+p2*q+r-p1
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/ldivf.html">
+          <tt>
+            <b>ldiv</b>
+          </tt>
+        </a>
+        <a href="gcd.html">
+          <tt>
+            <b>gcd</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

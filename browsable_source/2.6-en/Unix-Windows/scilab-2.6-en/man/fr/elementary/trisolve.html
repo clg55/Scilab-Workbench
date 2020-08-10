@@ -1,0 +1,75 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>trisolve -  solveur symbolique de système linéaire  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[x [,sexp]] = trisolve(A,b [,sexp])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A,b,x  </b>
+          </tt>
+    : matrices (resp. vecteurs) de chaînes de caractères
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Résout <tt>
+          <b>A*x = b</b>
+        </tt> quand <tt>
+          <b>A</b>
+        </tt> est une matrice triangulaire supérieure de chaînes de caractères.
+  </p>
+  <p>
+    <tt>
+          <b>sexp</b>
+        </tt> est un ensemble d'expressions communes dans <tt>
+          <b>A</b>
+        </tt>, <tt>
+          <b>b</b>
+        </tt> et <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=['x','y';'0','z'];b=['0';'1'];
+w=trisolve(A,b)
+x=5;y=2;z=4;
+evstr(w)
+inv(evstr(A))*evstr(b)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="trianfml.html">
+          <tt>
+            <b>trianfml</b>
+          </tt>
+        </a>
+        <a href="solve.html">
+          <tt>
+            <b>solve</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>F.D, S.S  </ul>
+    </p>
+  </body>
+</html>

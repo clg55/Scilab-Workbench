@@ -1,0 +1,116 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>poly -  définition d'un polynôme  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[p]=poly(a,"x", ["flag"])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>a  </b>
+          </tt>
+    : matrice ou nombre réel
+  </li>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : indéterminée du polynôme
+  </li>
+  <li>
+          <tt>
+            <b>"flag"  </b>
+          </tt>
+    : chaîne de caractères ("roots", "coeff"), la valeur par défaut est "roots".
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Si <tt>
+          <b>a</b>
+        </tt> est une matrice, <tt>
+          <b>p</b>
+        </tt> est le polynôme caractéristique de a, c'est à dire
+     <tt>
+          <b>déterminant(x*eye()-a)</b>
+        </tt>, <tt>
+          <b>x</b>
+        </tt> étant l'indéterminée.
+  </p>
+  <p>
+    Si <tt>
+          <b>v</b>
+        </tt> est un vecteur, <tt>
+          <b>poly(v,"x",["roots"])</b>
+        </tt> est le polynôme dont les racines sont égales aux termes de <tt>
+          <b>v</b>
+        </tt> et <tt>
+          <b>"x"</b>
+        </tt> l'indéterminée. Dans ce cas <tt>
+          <b>roots</b>
+        </tt> et <tt>
+          <b>poly</b>
+        </tt> sont des fonctions inverses l'une de l'autre.
+  </p>
+  <p>
+    <tt>
+          <b>poly(v,"x","coeff")</b>
+        </tt> crée le polynôme d'indéterminée <tt>
+          <b>"x"</b>
+        </tt>
+    dont les coefficients sont les termes de <tt>
+          <b>v</b>
+        </tt> (v(1) est le terme constant). Dans ce dernier cas, <tt>
+          <b>poly</b>
+        </tt> et <tt>
+          <b>coeff</b>
+        </tt> sont des fonctions inverses l'une de l'autre.
+  </p>
+  <p>
+    <tt>
+          <b>s=poly(0,"s")</b>
+        </tt> permet de définir des polynômes en utilisant les opérations usuelles (+,-,*,^).
+    <tt>
+          <b>"s"</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,"s");p=1+s+2*s^2;
+A=rand(2,2);poly(A,"x")
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="inv_coeff.html">
+          <tt>
+            <b>coeff</b>
+          </tt>
+        </a>
+        <a href="hypermatrices.html">
+          <tt>
+            <b>matrices</b>
+          </tt>
+        </a>
+        <a href="rational.html">
+          <tt>
+            <b>rational</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

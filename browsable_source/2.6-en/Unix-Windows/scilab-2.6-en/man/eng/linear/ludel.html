@@ -1,0 +1,66 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>ludel -  utility function used with lufact  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>ludel(hand)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>hand  </b>
+          </tt>
+    : handle to sparse lu factors (output of lufact)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This function is used in conjunction with <tt>
+          <b>lufact</b>
+        </tt>. It clears 
+    the internal memory space used to store the result of <tt>
+          <b>lufact</b>
+        </tt>.
+  </p>
+  <p>
+    The sequence of commands <tt>
+          <b>[p,r]=lufact(A);x=lusolve(p,b);ludel(p);</b>
+        </tt>
+    solves the sparse linear system  <tt>
+          <b>A*x = b</b>
+        </tt> and clears <tt>
+          <b>p</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/mtlb_sparse.html">
+          <tt>
+            <b>sparse</b>
+          </tt>
+        </a>
+        <a href="lufact.html">
+          <tt>
+            <b>lufact</b>
+          </tt>
+        </a>
+        <a href="luget.html">
+          <tt>
+            <b>luget</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

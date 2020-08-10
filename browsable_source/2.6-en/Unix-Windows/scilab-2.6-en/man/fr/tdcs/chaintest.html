@@ -1,0 +1,89 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>chaintest -  a three-species food chain model   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>chaintest([f_l,b1,odem,xdim,npts])  </dd>
+      <dd>[xdot]=chain(t,x)  </dd>
+      <dd>[z1]=ch_f1(u)  </dd>
+      <dd>[z2]=ch_f2(u)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>f_l  </b>
+          </tt>
+    : the name of the macro which code the three-species food chain model (default value <tt>
+            <b> chain</b>
+          </tt>).
+  </li>
+  <li>
+          <tt>
+            <b>odem,xdim,npts  </b>
+          </tt>
+    : are optional arguments. Their meaning and syntax can be found in the <tt>
+            <b>portr3d</b>
+          </tt>  help
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    A call to the function <tt>
+          <b>chaintest()</b>
+        </tt> will interactively 
+    display a phase portrait of  a three-species food chain model given by:
+  </p>
+  <pre>
+ ff1= f1(x(1))
+ ff2= f2(x(2))
+
+ xdot1= x(1)*(1-x(1)) - ff1*x(2)
+ xdot2= ff1*x(2) -  ff2*x(3) - 0.4*x(2)
+ xdot3= ff2*x(3) - 0.01*x(3)
+   </pre>
+  <p>
+    and 
+  </p>
+  <pre>
+ f1(u)=5*u/(1+b1*u)
+ f2(u)z2=0.1*u/(1+2*u)
+   </pre>
+  <p>
+    The default value for <tt>
+          <b>b1</b>
+        </tt> is 3.0.
+  </p>
+  <p>
+    The Scilab macros <tt>
+          <b>chain(t,x)</b>
+        </tt>,<tt>
+          <b>f1(u),f2(u)</b>
+        </tt> code the dynamical system
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="portr3d.html">
+          <tt>
+            <b>portr3d</b>
+          </tt>
+        </a>
+        <a href="../programming/mode.html">
+          <tt>
+            <b>ode</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

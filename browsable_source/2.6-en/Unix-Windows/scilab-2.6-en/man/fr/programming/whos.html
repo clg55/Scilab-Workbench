@@ -1,0 +1,84 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>whos -  liste des variables courantes dans un format détaillé  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>whos()  </dd>
+      <dd>whos -type typ  </dd>
+      <dd>whos -name nam  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>typ  </b>
+          </tt>
+    : nom du type des variables sélectionnées (voir <tt>
+            <b>typeof</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>nam  </b>
+          </tt>
+    : premiers caractères des noms des variables recherchées
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>whos()</b>
+        </tt> affiche tous les noms des variables courantes, leurs types et la place mémoire occupée.
+  </p>
+  <p>
+    <tt>
+          <b>whos -type typ</b>
+        </tt> affiche tous les noms des variables courantes de type spécifié dans <tt>
+          <b>typ</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>whos -name nam</b>
+        </tt> affiche tous les noms des variables courantes dont le nom commence par <tt>
+          <b>'nam'</b>
+        </tt>
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+whos()
+
+whos -type boolean
+
+whos -name %
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="whos.html">
+          <tt>
+            <b>who</b>
+          </tt>
+        </a>
+        <a href="../elementary/typeof.html">
+          <tt>
+            <b>typeof</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,99 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>qassign -  résout un problème d'affectation quadratique  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[crit,order] = qassign(c,f,d)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>c  </b>
+          </tt>
+    : matrice réelle
+  </li>
+  <li>
+          <tt>
+            <b>f  </b>
+          </tt>
+    : matrice réelle
+  </li>
+  <li>
+          <tt>
+            <b>d  </b>
+          </tt>
+    : matrice réelle
+  </li>
+  <li>
+          <tt>
+            <b>crit  </b>
+          </tt>
+    : scalaire
+  </li>
+  <li>
+          <tt>
+            <b>order  </b>
+          </tt>
+    : vecteur ligne d'entiers 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>qassign</b>
+        </tt> résout un problème d'affectation quadratique i.e.
+    minimiser le critère global :
+    <tt>
+          <b> crit = e(1)+...+e(n) </b>
+        </tt> 
+    where
+    <tt>
+          <b> e(i) = c(i,l(i))+ fd(i) </b>
+        </tt> 
+    where
+    <tt>
+          <b> fd(i) = f(i,1)*d(l(i),l(1))+...+f(i,n)*d(l(i),l(n)) </b>
+        </tt>
+  </p>
+  <p>
+    <tt>
+          <b>c</b>
+        </tt>, <tt>
+          <b>f</b>
+        </tt> et <tt>
+          <b>d</b>
+        </tt> sont des matrices n x n; leurs termes diagonaux sont nuls. 
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+n=15;
+d=100*rand(15,15);
+d=d-diag(diag(d));
+c=zeros(n,n);f=c;
+f(2:n,1)=ones(1:n-1)';
+[crit,order]=qassign(c,f,d)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="knapsack.html">
+          <tt>
+            <b>knapsack</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

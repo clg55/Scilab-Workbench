@@ -1,0 +1,90 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>chsolve -  sparse Cholesky solver  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>sol=chsolve(spcho,rhs)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>spcho  </b>
+          </tt>
+    : list containing the Cholesky factors in coded form returned by chfact 
+  </li>
+  <li>
+          <tt>
+            <b>rhs, sol  </b>
+          </tt>
+    : full column vectors
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>sol=chsolve(spcho,rhs)</b>
+        </tt> computes the solution of 
+    <tt>
+          <b>sol=A*rhs</b>
+        </tt>, with <tt>
+          <b>A</b>
+        </tt> a symmetric sparse positive definite
+    matrix. This function is based on the Ng-Peyton programs (ORNL). See the
+    Fortran programs for a complete description of the variables in
+    <tt>
+          <b>spcho</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=sprand(20,20,0.1);
+A=A*A'+eye();  
+spcho=chfact(A);
+sol=(1:20)';rhs=A*sol;
+spcho=chfact(A);
+chsolve(spcho,rhs)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="chfact.html">
+          <tt>
+            <b>chfact</b>
+          </tt>
+        </a>
+        <a href="../elementary/mtlb_sparse.html">
+          <tt>
+            <b>sparse</b>
+          </tt>
+        </a>
+        <a href="lufact.html">
+          <tt>
+            <b>lufact</b>
+          </tt>
+        </a>
+        <a href="luget.html">
+          <tt>
+            <b>luget</b>
+          </tt>
+        </a>
+        <a href="spchol.html">
+          <tt>
+            <b>spchol</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>datas8  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="datas8"> Growth Data   </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>x = datas8()  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <DESCRIPTION>
+  <VERBATIM><![CDATA[
+Source:     Rawlings (1988), page 325
+
+Taken From: Rawlings (1988), Applied Regression Analysis, Wadsworth, p. 325
+
+Dimension:  24 observations on 2 variables
+
+Description: The growth data taken on four different independent
+             experimental units at each different ages
+
+Column    Description
+   1     Age in weeks
+   2     Dry weight in grams
+   ]]></VERBATIM>
+  </DESCRIPTION>
+</MAN>

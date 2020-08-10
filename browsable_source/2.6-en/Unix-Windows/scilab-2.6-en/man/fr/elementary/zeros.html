@@ -1,0 +1,97 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>zeros -  matrice nulle  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>y=zeros(m1,m2,...)  </dd>
+      <dd>y=zeros(x)  </dd>
+      <dd>y=zeros()  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : matrices
+  </li>
+  <li>
+          <tt>
+            <b>m1, m2,..  </b>
+          </tt>
+    : entiers
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Renvoie une matrice dont tous les termes sont nuls.
+  </p>
+ 
+
+  <li>zeros(m1,m2) 
+    Renvoie une matrice nulle de taille .
+  </li>
+
+  <li>zeros(m1,m2,..,mn) 
+    : renvoie une matrice nulle de taille .
+  </li>
+
+  <li>zeros(x) 
+    : renvoie une matrice nulle de même taille que .
+  </li>
+
+  <li>zeros(x) 
+    est aussi valide si  est une liste de type  (système dynamique linéaire sous forme d'une fonction de transfert ou d'une représentation d'état).
+  </li>
+  <p>
+    Notez que <tt>
+          <b>zeros(3)</b>
+        </tt> est équivalent à <tt>
+          <b>zeros(a)</b>
+        </tt> avec <tt>
+          <b>a=3</b>
+        </tt> et donc n'est PAS une matrice 3x3 !
+  </p>
+  <p>
+    zeros() est équivalent à zeros(1,1).
+  </p>
+ 
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+zeros(3)
+zeros(3,3)
+zeros(2,3,2)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="eye.html">
+          <tt>
+            <b>eye</b>
+          </tt>
+        </a>
+        <a href="ones.html">
+          <tt>
+            <b>ones</b>
+          </tt>
+        </a>
+        <a href="spzeros.html">
+          <tt>
+            <b>spzeros</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>setbpt -  setting breakpoints   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>setbpt(macro-name [,line-num])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>macro-name  </b>
+          </tt>
+    : string
+  </li>
+  <li>
+          <tt>
+            <b>line-num  </b>
+          </tt>
+    : integer
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>setbpt</b>
+        </tt> interactively inserts a breakpoint in the line number <tt>
+          <b>line-num</b>
+        </tt> 
+    (default value is 1) of the function  <tt>
+          <b>macro-name</b>
+        </tt> 
+  </p>
+  <p>
+    When reaching the breakpoint, Scilab evaluates the specified line 
+    , prints the number of the line and the name of the function. If the 
+    function is not compiled ( see <tt>
+          <b>comp</b>
+        </tt> ) the line is printed on the screen.
+    Then Scilab goes into a <tt>
+          <b>pause</b>
+        </tt> mode in which the user can check 
+    current values. The <tt>
+          <b>pause</b>
+        </tt> is exited with <tt>
+          <b>resume</b>
+        </tt> or <tt>
+          <b>abort</b>
+        </tt>.
+    Redefining the function does not clear the breakpoints, the user must explicitly
+    delete breakpoints using <tt>
+          <b>delbpt</b>
+        </tt>. The maximum number of functions with 
+    breakpoints enabled must be less than 20 and the maximum number of breakpoints
+    is set to 100.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="delbpt.html">
+          <tt>
+            <b>delbpt</b>
+          </tt>
+        </a>
+        <a href="dispbpt.html">
+          <tt>
+            <b>dispbpt</b>
+          </tt>
+        </a>
+        <a href="../programming/pause.html">
+          <tt>
+            <b>pause</b>
+          </tt>
+        </a>
+        <a href="../programming/resume.html">
+          <tt>
+            <b>resume</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

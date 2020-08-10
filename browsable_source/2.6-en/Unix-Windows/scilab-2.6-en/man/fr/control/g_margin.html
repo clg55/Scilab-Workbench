@@ -1,0 +1,76 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>g_margin -  gain margin  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[gm [,fr]]=g_margin(h)   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>h  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> list representing a linear system in  state-space or transfer form
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns <tt>
+          <b>gm</b>
+        </tt>, the gain margin in dB of <tt>
+          <b>h</b>
+        </tt> 
+    (SISO plant) and <tt>
+          <b>fr</b>
+        </tt>, the achieved corresponding frequency in hz.
+    The gain margin is values of the system gain at points where the
+    nyquist plot crosses the negative real axis.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+h=syslin('c',-1+%s,3+2*%s+%s^2)
+[g,fr]=g_margin(h)
+[g,fr]=g_margin(h-10)
+nyquist(h-10)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="p_margin.html">
+          <tt>
+            <b>p_margin</b>
+          </tt>
+        </a>
+        <a href="../graphics/black.html">
+          <tt>
+            <b>black</b>
+          </tt>
+        </a>
+        <a href="../graphics/chart.html">
+          <tt>
+            <b>chart</b>
+          </tt>
+        </a>
+        <a href="../graphics/nyquist.html">
+          <tt>
+            <b>nyquist</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

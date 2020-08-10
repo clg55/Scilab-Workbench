@@ -1,0 +1,82 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>brackets ([,]) -  left and right brackets  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[a11,a12,...;a21,a22,...;...]  </dd>
+      <dd>[s1,s2,...]=func(...)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>a11,a12,...  </b>
+          </tt>
+    : any matrix (real, polynomial, rational,<tt>
+            <b>syslin</b>
+          </tt> list ...) with appropriate dimensions
+  </li>
+  <li>
+          <tt>
+            <b>s1,s2,...  </b>
+          </tt>
+    : any possible variable name
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Left and right brackets are used to note vector and matrix concatenation.
+    These symbols are also used to denote a multiple left-hand-side for a function 
+    call
+  </p>
+  <p>
+    Inside concatenation brackets, blank or comma characters mean 
+    "column concatenation", semicolon and carriage-return mean 
+    "row concatenation".
+  </p>
+  <p>
+    Note : to avoid confusions it is safer to use commas instead of blank to
+    separate columns.
+  </p>
+  <p>
+    Within multiple lhs brackets variable names must be separated by comma.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+[6.9,9.64; sqrt(-1) 0]
+[1 +%i  2 -%i  3]
+[]
+['this is';'a string';'vector']
+s=poly(0,'s');[1/s,2/s]
+[tf2ss(1/s),tf2ss(2/s)]
+
+[u,s]=schur(rand(3,3))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="comma.html">
+          <tt>
+            <b>comma</b>
+          </tt>
+        </a>
+        <a href="semicolon.html">
+          <tt>
+            <b>semicolon</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

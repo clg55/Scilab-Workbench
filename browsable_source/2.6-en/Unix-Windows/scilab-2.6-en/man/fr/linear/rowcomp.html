@@ -1,0 +1,145 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>rowcomp -  compression de lignes, image  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[W,rk]=colcomp(A [,flag] [,tol])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : matrice réelle ou complexe
+  </li>
+  <li>
+          <tt>
+            <b>flag  </b>
+          </tt>
+    : chaîne de caractères
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : nombre réel
+  </li>
+  <li>
+          <tt>
+            <b>W  </b>
+          </tt>
+    : matrice carrée régulière (matrice de changement de base)
+  </li>
+  <li>
+          <tt>
+            <b>rk  </b>
+          </tt>
+    : entier (rang de"<tt>
+            <b>A</b>
+          </tt>)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Compression des colonnes de <tt>
+          <b>A</b>
+        </tt>. <tt>
+          <b>Ac = W*A</b>
+        </tt> est à lignes compressées, c'est à dire
+    <tt>
+          <b>Ac=[Af;0]</b>
+        </tt> et les lignes de <tt>
+          <b>Af</b>
+        </tt> sont linéairement indépendantes.
+  </p>
+  <p>
+    <tt>
+          <b>flag</b>
+        </tt> et <tt>
+          <b>tol</b>
+        </tt> sont des paramètres optionnels : <tt>
+          <b>flag = 'qr'</b>
+        </tt> 
+    ou <tt>
+          <b>'svd'</b>
+        </tt> (<tt>
+          <b>'svd'</b>
+        </tt> par défaut).
+  </p>
+  <p>
+    <tt>
+          <b>tol</b>
+        </tt> = paramètre de tolérance (de l'ordre de <tt>
+          <b>%eps</b>
+        </tt> par défaut).
+  </p>
+  <p>
+    Les <tt>
+          <b>rk</b>
+        </tt> premières colonnes de <tt>
+          <b>W'</b>
+        </tt> forment une base de l'image de <tt>
+          <b>A</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>REMARQUE</H3>
+    <ul>
+      <p>
+    Un vecteur non nul <tt>
+          <b>x</b>
+        </tt> appartient à Im(<tt>
+          <b>A</b>
+        </tt>) si <tt>
+          <b>W*x</b>
+        </tt> est à lignes compressées en accord avec <tt>
+          <b>Ac</b>
+        </tt> c'est à dire que la norme de ses dernières composantes est  nulle (à la précision machine) par rapport à ses rk premières composantes.
+  </p>
+    </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=rand(5,2)*rand(2,4);          // 4 vecteurs colonne dont 2 indépendants
+[X,dim]=rowcomp(A);Xp=X';
+svd([Xp(:,1:dim),A])            // Im(A) = Im(Xp(:,1:dim)
+x=A*rand(4,1);                  // x appartient à Im(A)
+y=X*x  
+norm(y(dim+1:$))/norm(y(1:dim)) // la norme est petite
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="colcomp.html">
+          <tt>
+            <b>colcomp</b>
+          </tt>
+        </a>
+        <a href="fullrfk.html">
+          <tt>
+            <b>fullrf</b>
+          </tt>
+        </a>
+        <a href="fullrfk.html">
+          <tt>
+            <b>fullrfk</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>F. D.; ;   </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,114 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos data structure  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>scicos_link -  Scicos link data structure  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>lnk=list('Link',xx,yy,'drawlink',id,[0,0],ct,from,to)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>"Link"  </b>
+          </tt>
+    : keyword used to define list as a Scicos link representation
+  </li>
+  <li>
+          <tt>
+            <b>xx  </b>
+          </tt>
+    : vector of x coordinates of the link path.
+  </li>
+  <li>
+          <tt>
+            <b>yy  </b>
+          </tt>
+    : vector of y coordinates of the link path.
+  </li>
+  <li>
+          <tt>
+            <b>id  </b>
+          </tt>
+    : Character string, the link id
+  </li>
+  <li>
+          <tt>
+            <b>ct  </b>
+          </tt>
+    : 2 x 1 vector, <tt>
+            <b>[color,typ]</b>
+          </tt> where <tt>
+            <b>color</b>
+          </tt> defines the color used for the link drawing and <tt>
+            <b>typ</b>
+          </tt> defines its type (0 for regular link ,1 for event link).
+  </li>
+  <li>
+          <tt>
+            <b>from  </b>
+          </tt>
+    : 2 x 1 vector, <tt>
+            <b>[block,port]</b>
+          </tt> where <tt>
+            <b>block</b>
+          </tt> is the index of the block at the origin of the link and <tt>
+            <b>port</b>
+          </tt> is the index of the port.
+  </li>
+  <li>
+          <tt>
+            <b>to  </b>
+          </tt>
+    : 2 x 1 vector, <tt>
+            <b>[block,port]</b>
+          </tt> where <tt>
+            <b>block</b>
+          </tt> is the index of the block at the end of the link and <tt>
+            <b>port</b>
+          </tt> is the index of the port.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Scicos editor creates and uses for each link a data structure
+    containing all information relative to the graphic interface and
+    interconnection information. Each of them are stored in the Scicos
+    editor main data structure. Index of these in Scicos
+    editor main data structure is given by the creation order.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="scicosim.html">
+          <tt>
+            <b>scicos</b>
+          </tt>
+        </a>
+        <a href="scicos_main.html">
+          <tt>
+            <b>scicos_main</b>
+          </tt>
+        </a>
+        <a href="scicos_graphics.html">
+          <tt>
+            <b>scicos_graphics</b>
+          </tt>
+        </a>
+        <a href="scicos_model.html">
+          <tt>
+            <b>scicos_model</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

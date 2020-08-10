@@ -1,0 +1,74 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>lyap  -  Equation de Lyapunov  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[X]=lyap(A,C,flag)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A, C  </b>
+          </tt>
+    : matrices réelles, <tt>
+            <b>C</b>
+          </tt> doit être symétrique
+  </li>
+  <li>
+          <tt>
+            <b>flag  </b>
+          </tt>
+    : chaîne de caractères, 'c' ou 'd'
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    résout l'équation matricielle de Lyapunov en temps continu ou discret
+  </p>
+  <pre>
+A'*X + X*A = C       ( flag = 'c' )
+A'*X*A - X = C       ( flag = 'd' )
+Une solution unique existe si A n'a pas de valeur propre sur l'axe imaginaire (flag='c') ou si 1 n'est pas valeur propre de A  (flag='d').
+   </pre>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=rand(4,4);C=rand(A);C=C+C';
+X=lyap(A,C,'c');
+A'*X + X*A -C
+X=lyap(A,C,'d');
+A'*X*A - X -C
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="sylv.html">
+          <tt>
+            <b>sylv</b>
+          </tt>
+        </a>
+        <a href="../control/ctr_gram.html">
+          <tt>
+            <b>ctr_gram</b>
+          </tt>
+        </a>
+        <a href="../control/obs_gram.html">
+          <tt>
+            <b>obs_gram</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>lusolve -  sparse linear system solver  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>lusolve(hand,b)  </dd>
+      <dd>lusolve(A,b)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>b  </b>
+          </tt>
+    : full real matrix
+  </li>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : real square sparse invertible matrix 
+  </li>
+  <li>
+          <tt>
+            <b>hand  </b>
+          </tt>
+    : handle to a previously computed sparse lu factors (output of lufact)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    solves the sparse linear system  <tt>
+          <b>A*x = b</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>[hand,rk]=lufact(A)</b>
+        </tt> is the output of lufact.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+non_zeros=[1,2,3,4];rows_cols=[1,1;2,2;3,3;4,4];
+sp=sparse(rows_cols,non_zeros);
+[h,rk]=lufact(sp);x=lusolve(h,[1;1;1;1]);ludel(h)
+rk,sp*x
+
+
+non_zeros=[1,2,3,4];rows_cols=[1,1;2,2;3,3;4,4];
+sp=sparse(rows_cols,non_zeros);
+x=lusolve(sp,-ones(4,1));
+sp*x
+
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/mtlb_sparse.html">
+          <tt>
+            <b>sparse</b>
+          </tt>
+        </a>
+        <a href="lufact.html">
+          <tt>
+            <b>lufact</b>
+          </tt>
+        </a>
+        <a href="../programming/slash.html">
+          <tt>
+            <b>slash</b>
+          </tt>
+        </a>
+        <a href="../programming/backslash.html">
+          <tt>
+            <b>backslash</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

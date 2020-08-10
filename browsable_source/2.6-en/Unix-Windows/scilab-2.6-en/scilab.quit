@@ -1,0 +1,14 @@
+// This file contains scilab command to be executed at the end 
+// of a scilab session
+// Copyright INRIA
+
+mode(-1);
+
+// Close scipad cleanly
+if (sciargs()<>"-nw")&(sciargs()<>"-nwni") then
+  if funptr("TK_EvalStr")<>0 then
+    if MSDOS then
+      execstr("TK_EvalStr(""scipad eval {exitapp}"")","errcatch","n");
+    end
+  end
+end

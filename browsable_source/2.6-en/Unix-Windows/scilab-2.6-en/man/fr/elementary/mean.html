@@ -1,0 +1,98 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>mean -  moyenne arithmétique des termes d'une matrice  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>y=mean(x)  </dd>
+      <dd>y=mean(x,'r')  </dd>
+      <dd>y=mean(x,'c')  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : vecteur ou matrice réelle 
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : scalaire ou vecteur
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Pour un vecteur ou une matrice <tt>
+          <b>x</b>
+        </tt>, <tt>
+          <b>y=mean(x)</b>
+        </tt> renvoie un scalaire <tt>
+          <b>y</b>
+        </tt> égal à la moyenne arithmétique des termes de <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>y=mean(x,'r')</b>
+        </tt> (ou <tt>
+          <b>y=mean(x,1)</b>
+        </tt>) est la moyenne suivant l'indice de ligne. Chaque composante du vecteur ligne <tt>
+          <b>y</b>
+        </tt> contient la moyenne de chaque colonne de <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>y=mean(x,'c')</b>
+        </tt> (ou <tt>
+          <b>y=mean(x,2)</b>
+        </tt>) est la moyenne selon l'indice de colonne. Chaque composante du vecteur colonne <tt>
+          <b>y</b>
+        </tt> contient la moyenne de chaque ligne de <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=[1,2,10;7,7.1,7.01];
+mean(A)
+mean(A,'r')
+mean(A,'c')
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="cumsum.html">
+          <tt>
+            <b>sum</b>
+          </tt>
+        </a>
+        <a href="median.html">
+          <tt>
+            <b>median</b>
+          </tt>
+        </a>
+        <a href="st_deviation.html">
+          <tt>
+            <b>st_deviation</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

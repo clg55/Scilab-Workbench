@@ -1,0 +1,486 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>optim -  non-linear optimization routine  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[f,xopt]=optim(costf,x0)  </dd>
+      <dd>[f,[xopt,[gradopt,[work]]]]=optim(costf,[contr],x0,['algo'],[df0,[mem]],  </dd>
+      <dd>     [work],[stop],['in'],[imp=iflag])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>costf  </b>
+          </tt>
+    : external, i.e Scilab function or string (<tt>
+            <b>costf</b>
+          </tt> is the cost function: see below its calling sequence (Scilab or Fortran)).
+  </li>
+  <li>
+          <tt>
+            <b>x0  </b>
+          </tt>
+    : real vector (initial value of variable to be minimized).
+  </li>
+  <li>
+          <tt>
+            <b>f  </b>
+          </tt>
+    : value of optimal cost (<tt>
+            <b>f=costf(xopt)</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>xopt  </b>
+          </tt>
+    : best value of <tt>
+            <b>x</b>
+          </tt> found.
+  </li>
+  <li>
+          <tt>
+            <b>contr  </b>
+          </tt>
+    : <tt>
+            <b>'b',binf,bsup</b>
+          </tt>  with <tt>
+            <b>binf</b>
+          </tt> and <tt>
+            <b>bsup</b>
+          </tt> real vectors with same dimension as <tt>
+            <b>x0</b>
+          </tt>. <tt>
+            <b>binf</b>
+          </tt> and <tt>
+            <b>bsup</b>
+          </tt> are lower and upper bounds on <tt>
+            <b>x</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>"algo"  </b>
+          </tt>
+    : <tt>
+            <b>'qn'</b>
+          </tt> or <tt>
+            <b>'gc'</b>
+          </tt> or <tt>
+            <b>'nd'</b>
+          </tt> . This string stands for quasi-Newton (default),  conjugate gradient or non-differentiable respectively.  Note that <tt>
+            <b>'nd'</b>
+          </tt> does not accept bounds on <tt>
+            <b>x</b>
+          </tt> ).
+  </li>
+  <li>
+          <tt>
+            <b>df0  </b>
+          </tt>
+    : real scalar. Guessed decreasing of <tt>
+            <b>f</b>
+          </tt> at first iteration. (<tt>
+            <b>df0=1</b>
+          </tt> is the default value).
+  </li>
+  <li>
+          <tt>
+            <b>mem :  </b>
+          </tt>
+     integer, number of variables used to approximate the  Hessian, (<tt>
+            <b>algo='gc' or 'nd'</b>
+          </tt>). Default value is around 6.
+  </li>
+  <li>
+          <tt>
+            <b>stop  </b>
+          </tt>
+    :  sequence of optional parameters controlling the  convergence of the algorithm. <tt>
+            <b>             stop=  'ar',nap, [iter [,epsg [,epsf [,epsx]]]]</b>
+          </tt>
+  </li>
+ <ul>
+  <li>
+            <tt>
+              <b>"ar"  </b>
+            </tt>
+    : reserved keyword for stopping rule selection defined as follows:
+  </li>
+  <li>
+            <tt>
+              <b>nap  </b>
+            </tt>
+    : maximum number of calls to <tt>
+              <b>costf</b>
+            </tt> allowed.
+  </li>
+  <li>
+            <tt>
+              <b>iter  </b>
+            </tt>
+    : maximum number of iterations allowed.
+  </li>
+  <li>
+            <tt>
+              <b>epsg  </b>
+            </tt>
+    : threshold on gradient norm.
+  </li>
+  <li>
+            <tt>
+              <b>epsf  </b>
+            </tt>
+    : threshold controlling decreasing of <tt>
+              <b>f</b>
+            </tt>
+  </li>
+  <li>
+            <tt>
+              <b>epsx  </b>
+            </tt>
+    : threshold controlling variation of <tt>
+              <b>x</b>
+            </tt>. This vector (possibly matrix) of same size as <tt>
+              <b>x0</b>
+            </tt> can be used to scale <tt>
+              <b>x</b>
+            </tt>.
+  </li>
+ </ul>
+  <li>
+          <tt>
+            <b>"in"  </b>
+          </tt>
+    : reserved  keyword for initialization of parameters used when <tt>
+            <b>costf</b>
+          </tt> in given as a Fortran routine (see below).
+  </li>
+  <li>
+          <tt>
+            <b>"imp=iflag"  </b>
+          </tt>
+    : named argument used to set the trace mode. <tt>
+            <b>iflag=0</b>
+          </tt> nothing (execpt errors) is reported, <tt>
+            <b>iflag=1</b>
+          </tt> initial and final reports, <tt>
+            <b>iflag=2</b>
+          </tt> adds a report per iteration, <tt>
+            <b>iflag&gt;2</b>
+          </tt> add reports on linear search. Warning, most of these reports are written on the Scilab standard output.
+  </li>
+  <li>
+          <tt>
+            <b>gradopt  </b>
+          </tt>
+    :  gradient of <tt>
+            <b>costf</b>
+          </tt> at <tt>
+            <b>xopt</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>work  </b>
+          </tt>
+    : working array for hot restart for quasi-Newton method. This array is automatically initialized by <tt>
+            <b>optim</b>
+          </tt> when <tt>
+            <b>optim</b>
+          </tt> is invoked. It can be used as input parameter to  speed-up the calculations.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Non-linear optimization routine for programs without constraints or with bound constraints: 
+  </p>
+  <pre>
+min costf(x) w.r.t x.
+   </pre>
+  <p>
+    <tt>
+          <b>costf</b>
+        </tt> is an "external" i.e function, or list or Fortran routine (see "external").
+    This external must return <tt>
+          <b>f</b>
+        </tt> (<tt>
+          <b>costf(x)</b>
+        </tt>) and <tt>
+          <b>g</b>
+        </tt> (gradient of <tt>
+          <b>costf</b>
+        </tt>)
+    given <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  <p>
+    If <tt>
+          <b>costf</b>
+        </tt> is a function, the calling sequence for <tt>
+          <b>costf</b>
+        </tt> must be:
+  </p>
+  <pre>
+[f,g,ind]=costf(x,ind).
+   </pre>
+  <p>
+    Here, <tt>
+          <b>costf</b>
+        </tt> is a function which returns <tt>
+          <b>f</b>
+        </tt>, value (real number) of
+    cost function at <tt>
+          <b>x</b>
+        </tt>, and <tt>
+          <b>g</b>
+        </tt>, gradient vector of cost function at <tt>
+          <b>x</b>
+        </tt>.
+    The variable <tt>
+          <b>ind</b>
+        </tt> is used by <tt>
+          <b>optim</b>
+        </tt> and is described below.
+  </p>
+  <p>
+    If <tt>
+          <b>ind=2</b>
+        </tt> (resp. <tt>
+          <b>3, 4</b>
+        </tt>), <tt>
+          <b>costf</b>
+        </tt> must provide <tt>
+          <b>f</b>
+        </tt> (resp. <tt>
+          <b>g, f</b>
+        </tt> and <tt>
+          <b>g</b>
+        </tt>).
+  </p>
+  <p>
+    If <tt>
+          <b>ind=1</b>
+        </tt> nothing is computed (used for display purposes only).
+  </p>
+  <p>
+    On output, <tt>
+          <b>ind&lt;0</b>
+        </tt>  means that <tt>
+          <b>f</b>
+        </tt> cannot be evaluated at <tt>
+          <b>x</b>
+        </tt> and
+    <tt>
+          <b>ind=0</b>
+        </tt> interrupts the optimization.
+  </p>
+  <p>
+    If <tt>
+          <b>costf</b>
+        </tt> is a character string, it refers to the name of a Fortran routine
+    which must be linked to Scilab (see examples in the routines <tt>
+          <b>foptim.f</b>
+        </tt> 
+    and e.g. <tt>
+          <b>genros.f</b>
+        </tt> in the directory SCIDIR/default)
+  </p>
+  <p>
+    Dynamic link of Fortran routine is also possible (help <tt>
+          <b>link</b>
+        </tt>).
+  </p>
+  <p>
+    Here, the generic calling sequence for the Fortran subroutine is: 
+    <tt>
+          <b>function costf(ind,n,x,f,g,ti,tr,td)</b>
+        </tt>
+  </p>
+  <p>
+    <tt>
+          <b>ind</b>
+        </tt> has the same meaning as above if set to <tt>
+          <b>0,1,2</b>
+        </tt> but the 
+    values <tt>
+          <b>ind=10</b>
+        </tt> and <tt>
+          <b>ind=11</b>
+        </tt> are now valid. 
+    These values are used for initializations (see below).
+  </p>
+  <p>
+    <tt>
+          <b>n</b>
+        </tt> is the dimension of <tt>
+          <b>x</b>
+        </tt>, <tt>
+          <b>x</b>
+        </tt> is an <tt>
+          <b>n</b>
+        </tt> vector, 
+    <tt>
+          <b>ti,tr,td</b>
+        </tt> are working arrays.
+  </p>
+  <p>
+    The Fortran function <tt>
+          <b>costf</b>
+        </tt> must return <tt>
+          <b>f</b>
+        </tt> and the vector <tt>
+          <b>g</b>
+        </tt>,
+    given <tt>
+          <b>x, ind, n, ti, tr, td</b>
+        </tt>.
+  </p>
+  <p>
+    If <tt>
+          <b>costf</b>
+        </tt> is given as a Fortran routine, it is possible to initialize
+    parameters or to send Scilab variables to this routine. 
+  </p>
+  <p>
+    This facility is managed by the parameter <tt>
+          <b>'in</b>
+        </tt>.
+  </p>
+  <p>
+    If the string <tt>
+          <b>'in'</b>
+        </tt> is present, initialization is done by Fortran:
+    <tt>
+          <b>optim</b>
+        </tt> makes two calls to the Fortran function <tt>
+          <b>costf</b>
+        </tt>, once with
+    <tt>
+          <b>ind=10</b>
+        </tt> and once with <tt>
+          <b>ind=11</b>
+        </tt>. In this case, for <tt>
+          <b>ind=10</b>
+        </tt>,
+    <tt>
+          <b>costf</b>
+        </tt> must set the dimensions <tt>
+          <b>nti, ntr, ntd</b>
+        </tt> of <tt>
+          <b>ti, tr, td</b>
+        </tt> 
+    in the <tt>
+          <b>common/nird/nti, ntr, ntd</b>
+        </tt> and, for <tt>
+          <b>ind=11</b>
+        </tt>, <tt>
+          <b>costf</b>
+        </tt>
+    must initialize the vectors <tt>
+          <b>ti , tr, td</b>
+        </tt> (integer vector, real vector,
+    double precision vector respectively).
+  </p>
+  <p>
+    In the calling sequence of <tt>
+          <b>optim</b>
+        </tt>, the string <tt>
+          <b>'in'</b>
+        </tt> can be 
+    replaced by <tt>
+          <b>'ti', valti ,'td' , valtd</b>
+        </tt>. Then, the Fortran function
+    <tt>
+          <b>costf(ind, x, f, g, ti, tr, td)</b>
+        </tt> is evaluated with <tt>
+          <b>ti=valti</b>
+        </tt>
+    and <tt>
+          <b>td=valtd</b>
+        </tt> whatever the value of <tt>
+          <b>ind</b>
+        </tt>.
+    Thus, the Scilab variables <tt>
+          <b>valti</b>
+        </tt> and <tt>
+          <b>valtd</b>
+        </tt> (integer vector and
+    real vector) are sent to the Fortran function <tt>
+          <b>costf</b>
+        </tt>.
+  </p>
+  <p>
+    It is also possible to save the content of of the working arrays
+    <tt>
+          <b>ti</b>
+        </tt> and <tt>
+          <b>td</b>
+        </tt>. This is possible by adding the strings 'si' and/or 'sd'
+    at the end of the calling sequence of <tt>
+          <b>optim</b>
+        </tt>.
+    Then, the output variables must be: <tt>
+          <b>[f,[x,[g],[to]]],[ti],[td]]</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+xref=[1;2;3];x0=[1;-1;1]
+deff('[f,g,ind]=cost(x,ind)','f=0.5*norm(x-xref)^2,g=x-xref');
+[f,xopt]=optim(cost,x0)      //Simplest call
+[f,xopt,gopt]=optim(cost,x0,'gc')  // By conjugate gradient
+[f,xopt,gopt]=optim(cost,x0,'nd')  //Seen as non differentiable
+[f,xopt,gopt]=optim(cost,'b',[-1;0;2],[0.5;1;4],x0) //  Bounds on x
+[f,xopt,gopt]=optim(cost,'b',[-1;0;2],[0.5;1;4],x0,'gc') //  Bounds on x
+[f,xopt,gopt]=optim(cost,'b',[-1;0;2],[0.5;1;4],x0,'gc','ar',3)
+// Here, 3 calls to cost are allowed.
+// Now calling the Fortran subroutine "genros" in SCIDIR/default/Ex-optim.f
+// See also the link function for dynamically linking an objective function
+[f,xopt,gopt]=optim('genros',[1;2;3])    //Rosenbrock's function
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/external.html">
+          <tt>
+            <b>external</b>
+          </tt>
+        </a>
+        <a href="quapro.html">
+          <tt>
+            <b>quapro</b>
+          </tt>
+        </a>
+        <a href="../elementary/mps2linpro.html">
+          <tt>
+            <b>linpro</b>
+          </tt>
+        </a>
+        <a href="datafit.html">
+          <tt>
+            <b>datafit</b>
+          </tt>
+        </a>
+        <a href="leastsq.html">
+          <tt>
+            <b>leastsq</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

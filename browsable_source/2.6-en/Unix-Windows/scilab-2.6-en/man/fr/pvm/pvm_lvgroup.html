@@ -1,0 +1,73 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>pvm_lvgroup -  Unenrolls the calling process from a named group.  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[info] = pvm_lvgroup(group)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>group  </b>
+          </tt>
+    : string, group name of an existing group.
+  </li>
+  <li>
+          <tt>
+            <b>info  </b>
+          </tt>
+    : integer, status code returned by the routine.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>pvm_lvgroup</b>
+        </tt> 
+    unenrolls the calling process from
+    the group named
+  </p>
+  <p>
+    If there is an error
+  </p>
+  <p>
+    will be negative.
+  </p>
+  <p>
+    If a process leaves a group by calling either pvm_lvgroup
+    or pvm_exit, and later rejoins the same group, the process
+    may be assigned a new instance number. Old instance
+    numbers are reassigned to processes calling pvm_joingroup.
+  </p>
+  <p>
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+info = pvm_lvgroup( "worker" )
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="pvm_joingroup.html">
+          <tt>
+            <b>pvm_joingroup</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

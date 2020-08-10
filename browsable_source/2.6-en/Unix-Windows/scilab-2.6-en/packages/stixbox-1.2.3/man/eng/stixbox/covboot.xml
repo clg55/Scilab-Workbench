@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>covboot  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="covboot"> Bootstrap estimate of the variance of a parameter estimate  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>C = covboot(X,&apos;T&apos; [,N,arg1,....,argn])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>X  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrix or vector. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>&apos;T&apos;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : string giving a function name.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>N  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : sets the number of resamples (default is 200)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>arg1,...,argn  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : extra parameters given to <VERB>T</VERB>. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Computes the <VERB>T(X)</VERB> (in fact <VERB>T(X,arg1,...,argn)</VERB> many times
+    using resampled data and uses the result to compute an estimate of the
+    variance of <VERB>T(X)</VERB> 
+    assuming that <VERB>X</VERB> is a representative sample from the
+    underlying distribution of <VERB>X</VERB>. If T is multidimensional then the
+    covariance matrix is estimated. An optional third input argument sets
+    the number of resamples, default is 200. 
+  </P>
+  </DESCRIPTION>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>cov</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>covjack</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>ciboot</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

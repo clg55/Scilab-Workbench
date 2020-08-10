@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>spec  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>April 1993  </DATE>
+  <SHORT_DESCRIPTION name="spec"> valeurs propres d&apos;une matrice  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>evals=spec(A)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>A  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrice carrée réelle ou complexe
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>evals  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : vecteur réel ou complexe
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    renvoie dans le vecteur <VERB>evals</VERB> les valeurs propres de <VERB>A</VERB>.
+  </P>
+  <P>
+    Les vecteur propres peuvent être obtenus avec <VERB>bdiag</VERB>.
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+A=diag([1,2,3]);X=rand(3,3);A=inv(X)*A*X;
+spec(A)
+//
+x=poly(0,'x');
+pol=det(x*eye()-A)
+roots(pol)
+//
+[Ab,X,bs]=bdiag(A);
+Ab
+clean(inv(X)*A*X)
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>poly</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>det</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>gspec</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>schur</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>bdiag</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>colcomp</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

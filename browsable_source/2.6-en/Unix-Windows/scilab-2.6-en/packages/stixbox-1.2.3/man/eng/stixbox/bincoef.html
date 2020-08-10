@@ -1,0 +1,50 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>bincoef -  Binomial coefficients  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>k = bincoef(n,N)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>n,N  </b>
+          </tt>
+    : scalar or matrix with common size, such that <tt>
+            <b>0&lt;=n&lt;=N</b>
+          </tt>. 
+  </li>
+  <li>
+          <tt>
+            <b>k  </b>
+          </tt>
+    : matrix of binomial coefficients
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    computes a matrix of binomial coefficients
+  </p>
+  <pre>
+    Gamma(N+1)./(Gamma(n+1).*Gamma(N-n+1))
+   </pre>
+  </ul>
+    <H3>examples</H3>
+    <ul>
+      <pre>
+--&gt;co=bincoef(0:4,4)     
+--&gt;P=poly(co,'x','coef')
+--&gt;norm(roots(P) + ones(4,1))
+   </pre>
+    </ul>
+  </body>
+</html>

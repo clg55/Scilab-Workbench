@@ -1,0 +1,111 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>cumprod -  cumulative product  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=cumprod(x)  </dd>
+      <dd>y=cumprod(x,'r') or y=cumprod(x,1)   </dd>
+      <dd>y=cumprod(x,'c') or y=cumprod(x,2)   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : vector or matrix (real or complex)
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : vector or matrix (real or complex)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    For a vector or a matrix <tt>
+          <b>x</b>
+        </tt>, <tt>
+          <b>y=cumprod(x)</b>
+        </tt>  returns in <tt>
+          <b>y</b>
+        </tt> the cumulative product of all the 
+    entries of <tt>
+          <b>x</b>
+        </tt> taken columnwise. 
+  </p>
+  <p>
+    <tt>
+          <b>y=cumprod(x,'c')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=cumprod(x,2)</b>
+        </tt>) returns in 
+    <tt>
+          <b>y</b>
+        </tt> the cumulative elementwise product of the columns of <tt>
+          <b>x</b>
+        </tt>: <tt>
+          <b> y(i,:)=cumprod(x(i,:))</b>
+        </tt>
+  </p>
+  <p>
+    <tt>
+          <b>y=cumprod(x,'r')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=cumprod(x,2)</b>
+        </tt>)
+    returns in <tt>
+          <b>y</b>
+        </tt> the cumulative elementwise product of the rows of <tt>
+          <b>x</b>
+        </tt>: <tt>
+          <b> y(:,i)=cumprod(x(:,i))</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=[1,2;3,4];
+cumprod(A)
+cumprod(A,'r')
+cumprod(A,'c')
+rand('seed',0);
+a=rand(3,4);
+[m,n]=size(a);
+w=zeros(a);
+w(1,:)=a(1,:);
+for k=2:m;w(k,:)=w(k-1,:).*a(k,:);end;w-cumprod(a,'r')
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="cumsum.html">
+          <tt>
+            <b>cumsum</b>
+          </tt>
+        </a>
+        <a href="cumsum.html">
+          <tt>
+            <b>sum</b>
+          </tt>
+        </a>
+        <a href="cumprod.html">
+          <tt>
+            <b>prod</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,116 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>freq -  frequency response  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[x]=freq(A,B,C [,D],f)  </dd>
+      <dd>[x]=freq(NUM,DEN,f)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A, B, C, D  </b>
+          </tt>
+    :  real matrices of respective dimensions <tt>
+            <b>nxn, nxp, mxn, mxp</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>NUM,DEN  </b>
+          </tt>
+    : polynomial matrices of dimension <tt>
+            <b>mxp</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : real or complex matrix
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>x=freq(A,B,C [,D],f)</b>
+        </tt> returns a real or complex <tt>
+          <b>mxp*t</b>
+        </tt> matrix
+    such that:
+  </p>
+  <p>
+    <tt>
+          <b>x(:,k*p:(k+1)*p)= C*inv(f(k)*eye()-A)*B + D</b>
+        </tt>.
+  </p>
+  <p>
+    Thus, for <tt>
+          <b>f</b>
+        </tt> taking values along the imaginary axis or
+    on the unit circle <tt>
+          <b>x</b>
+        </tt> is the continuous or discrete time 
+    frequency response of <tt>
+          <b>(A,B,C,D)</b>
+        </tt>. 
+  </p>
+  <p>
+  </p>
+  <p>
+    <tt>
+          <b>x=freq(NUM,DEN,f)</b>
+        </tt> returns a real or complex matrix <tt>
+          <b>x</b>
+        </tt> such
+    that columns <tt>
+          <b>k*(p-1)+1</b>
+        </tt> to <tt>
+          <b>k*p</b>
+        </tt> of <tt>
+          <b>x</b>
+        </tt> contain the matrix  
+    <tt>
+          <b>NUM(f(k))./DEN(f(k))</b>
+        </tt>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+sys=(s+1)/(s^3-5*s+4)
+rep=freq(sys("num"),sys("den"),[0,0.9,1.1,2,3,10,20])
+[horner(sys,0),horner(sys,20)]
+//
+Sys=tf2ss(sys);
+[A,B,C,D]=abcd(Sys);
+freq(A,B,C,[0,0.9,1.1,2,3,10,20])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="repfreq.html">
+          <tt>
+            <b>repfreq</b>
+          </tt>
+        </a>
+        <a href="../polynomials/horner.html">
+          <tt>
+            <b>horner</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

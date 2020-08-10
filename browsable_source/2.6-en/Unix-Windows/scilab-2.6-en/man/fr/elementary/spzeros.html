@@ -1,0 +1,109 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>spzeros -   matrice creuse nulle  </ul>
+    </p>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>nrows  </b>
+          </tt>
+    : entier (nombre de lignes)
+  </li>
+  <li>
+          <tt>
+            <b>ncols  </b>
+          </tt>
+    : entier (nombre de colonnes)
+  </li>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : matrice creuse
+  </li>
+  <li>
+          <tt>
+            <b>sp  </b>
+          </tt>
+    : matrice creuse nulle
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>sp=spzeros(nrows,ncols,fill)</b>
+        </tt> renvoie une matrice creuse nulle <tt>
+          <b>sp</b>
+        </tt> 
+    avec <tt>
+          <b>nrows</b>
+        </tt> lignes et <tt>
+          <b>ncols</b>
+        </tt> colonnes (Équivalent à <tt>
+          <b>sparse([],[],[nrow,ncols])</b>
+        </tt>).
+  </p>
+  <p>
+    <tt>
+          <b>sp=spzeros(A)</b>
+        </tt> renvoie une matrice creuse nulle de mêmes dimensions que <tt>
+          <b>A</b>
+        </tt>. Si <tt>
+          <b>[m,n]=size(A)</b>
+        </tt>, les commandes <tt>
+          <b>spzeros(m,n)</b>
+        </tt> et <tt>
+          <b>spzeros(A)</b>
+        </tt> sont équivalentes. En particulier <tt>
+          <b>spzeros(3)</b>
+        </tt> n'est pas équivalent à <tt>
+          <b>spzeros(3,3)</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+sum(spzeros(1000,1000))
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="mtlb_sparse.html">
+          <tt>
+            <b>sparse</b>
+          </tt>
+        </a>
+        <a href="full.html">
+          <tt>
+            <b>full</b>
+          </tt>
+        </a>
+        <a href="eye.html">
+          <tt>
+            <b>eye</b>
+          </tt>
+        </a>
+        <a href="speye.html">
+          <tt>
+            <b>speye</b>
+          </tt>
+        </a>
+        <a href="spones.html">
+          <tt>
+            <b>spones</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

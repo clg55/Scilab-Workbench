@@ -1,0 +1,92 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>and (&amp;) -  et logique  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>b=and(A),  b=and(A,'*')  </dd>
+      <dd>b=and(A,'r'), b=and(A,1)  </dd>
+      <dd>b=and(A,'c'), b=and(A,2)  </dd>
+      <dd>A&amp;B  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>and(A)</b>
+        </tt> donne la conjonction (et) logique des éléments de la matrice booléenne <tt>
+          <b>A</b>
+        </tt>. <tt>
+          <b>and(A)</b>
+        </tt> est vrai (<tt>
+          <b>%t</b>
+        </tt>) si tous les termes de <tt>
+          <b>A</b>
+        </tt> sont <tt>
+          <b>%t</b>
+        </tt>. 
+  </p>
+  <p>
+    <tt>
+          <b>y=and(A,'r')</b>
+        </tt> (et <tt>
+          <b>y=and(A,1)</b>
+        </tt>) donne la conjonction suivant l'indice de ligne. Chaque élément du vecteur ligne <tt>
+          <b>y</b>
+        </tt> contient la conjonction de chaque colonne de <tt>
+          <b>x</b>
+        </tt> (<tt>
+          <b>y(j)= and(A(i,j),i=1,m)</b>
+        </tt>).
+  </p>
+  <p>
+    <tt>
+          <b>y=and(A,'c')</b>
+        </tt> (et <tt>
+          <b>y=and(A,2)</b>
+        </tt>) donne la conjonction suivant l'indice de colonne. Chaque élément du vecteur colonne <tt>
+          <b>y</b>
+        </tt> contient la conjonction de chaque ligne de <tt>
+          <b>x</b>
+        </tt> 
+    (<tt>
+          <b>y(i)= and(A(i,j),j=1,n)</b>
+        </tt>)).
+  </p>
+  <p>
+  </p>
+  <p>
+    <tt>
+          <b>A&amp;B</b>
+        </tt>  renvoie la conjonction logique élément par élément des matrices booléennes <tt>
+          <b>A</b>
+        </tt> et  <tt>
+          <b>B</b>
+        </tt> .<tt>
+          <b>A</b>
+        </tt> et  <tt>
+          <b>B</b>
+        </tt> doivent être des matrices de même dimensions ou l'une d'elle doit être un simple booléen.
+  </p>
+  </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="not.html">
+          <tt>
+            <b>not</b>
+          </tt>
+        </a>
+        <a href="../programming/error.html">
+          <tt>
+            <b>or</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

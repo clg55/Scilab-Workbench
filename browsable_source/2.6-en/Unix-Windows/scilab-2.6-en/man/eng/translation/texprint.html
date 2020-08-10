@@ -1,0 +1,67 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>texprint -  TeX output of Scilab object  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[text]= texprint(a)   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>a  </b>
+          </tt>
+    : Scilab object
+  </li>
+  <li>
+          <tt>
+            <b>text  </b>
+          </tt>
+    : list
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns the Tex source code of the Scilab variable <tt>
+          <b>a</b>
+        </tt>.
+    <tt>
+          <b>a</b>
+        </tt> is a matrix (constant, polynomial, rational) or a linear system
+    (<tt>
+          <b>syslin</b>
+        </tt> list).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+texprint([1/s,s^2])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="pol2tex.html">
+          <tt>
+            <b>pol2tex</b>
+          </tt>
+        </a>
+        <a href="../polynomials/pol2str.html">
+          <tt>
+            <b>pol2str</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

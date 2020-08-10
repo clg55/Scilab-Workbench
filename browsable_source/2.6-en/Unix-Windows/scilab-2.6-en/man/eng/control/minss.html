@@ -1,0 +1,90 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>minss -  minimal realization  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[slc]=minss( sl [,tol])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>sl,slc  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> lists (linear systems in state-space form)
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : real (threshold for rank determination (see <tt>
+            <b>contr</b>
+          </tt>))
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>minss</b>
+        </tt> returns in <tt>
+          <b>slc</b>
+        </tt> a minimal realization of <tt>
+          <b>sl</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+sl=syslin('c',[1 0;0 2],[1;0],[2 1]);
+ssprint(sl);
+ssprint(minss(sl))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="contrss.html">
+          <tt>
+            <b>contr</b>
+          </tt>
+        </a>
+        <a href="minreal.html">
+          <tt>
+            <b>minreal</b>
+          </tt>
+        </a>
+        <a href="arhnk.html">
+          <tt>
+            <b>arhnk</b>
+          </tt>
+        </a>
+        <a href="contrss.html">
+          <tt>
+            <b>contrss</b>
+          </tt>
+        </a>
+        <a href="obsvss.html">
+          <tt>
+            <b>obsvss</b>
+          </tt>
+        </a>
+        <a href="balreal.html">
+          <tt>
+            <b>balreal</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

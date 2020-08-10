@@ -1,0 +1,107 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>format -  format d'affichage des nombres  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>format([type],[long])  </dd>
+      <dd>format()  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>type  </b>
+          </tt>
+    : chaîne de caractères
+  </li>
+  <li>
+          <tt>
+            <b>long  </b>
+          </tt>
+    : entier (nombre maximum de chiffres, 10 par défaut)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Change le format d'affichage courant selon la valeur du paramètre <tt>
+          <b>type</b>
+        </tt>, qui peut prendre une des valeurs suivantes :
+  </p>
+ 
+
+  <li>"v" 
+    : format variable (par défaut)
+  </li>
+
+  <li>"e" 
+    : format avec exposant
+  </li>
+  <p>
+    <tt>
+          <b>long</b>
+        </tt> définit le nombre maximum de chiffres (10 par défaut).
+    <tt>
+          <b>format()</b>
+        </tt> renvoie un vecteur précisant le format courant :
+    la première composante est le type du format (0 pour <tt>
+          <b>'v'</b>
+        </tt> ; 1 pour <tt>
+          <b>'e'</b>
+        </tt> );
+    la deuxième composante est le nombre de chiffres.
+  </p>
+  <p>
+    En mode format variable, les composantes plus petites que %eps
+    fois la composante maximum en valeur absolue étaient affichées "0"
+    dans les versions précédentes de Scilab. Ce n'est plus le cas, la fonction <tt>
+          <b>clean</b>
+        </tt> peut être utilisée pour forcer à zéro les composantes négligeables. 
+  </p>
+ 
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+x=rand(1,5);
+format('v',10);x
+format(20);x
+format('e',10);x
+format(20);x
+
+x=[100 %eps];
+format('e',10);x
+format('v',10);x
+
+format()
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../fileio/write4b.html">
+          <tt>
+            <b>write</b>
+          </tt>
+        </a>
+        <a href="../fileio/dispfiles.html">
+          <tt>
+            <b>disp</b>
+          </tt>
+        </a>
+        <a href="../graphics/printing.html">
+          <tt>
+            <b>print</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

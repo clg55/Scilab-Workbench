@@ -1,0 +1,108 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>exists -  checks variable  existence  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>exists(name [,where])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>name  </b>
+          </tt>
+    : a character string
+  </li>
+  <li>
+          <tt>
+            <b>where  </b>
+          </tt>
+    : an optional character string with default value <tt>
+            <b>'all'</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>exists(name)</b>
+        </tt> returns <tt>
+          <b>1</b>
+        </tt> if the variable named <tt>
+          <b>name</b>
+        </tt>
+    exists and <tt>
+          <b>0</b>
+        </tt> otherwise. 
+  </p>
+  <p>
+    Caveats: a function which uses <tt>
+          <b>exists</b>
+        </tt> may return a result which depends on the environment!
+  </p>
+  <p>
+    <tt>
+          <b>exists(name,'local')</b>
+        </tt> returns <tt>
+          <b>1</b>
+        </tt> if the variable named
+    <tt>
+          <b>name</b>
+        </tt> exists in the local environment of the current function and
+    <tt>
+          <b>0</b>
+        </tt> otherwise.  
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+deff('foo(x)',..
+['disp([exists(''a12''),exists(''a12'',''local'')])'
+ 'disp([exists(''x''),exists(''x'',''local'')])'])
+foo(1)
+a12=[];foo(1)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/isdef.html">
+          <tt>
+            <b>isdef</b>
+          </tt>
+        </a>
+        <a href="whereis.html">
+          <tt>
+            <b>whereis</b>
+          </tt>
+        </a>
+        <a href="inttype.html">
+          <tt>
+            <b>type</b>
+          </tt>
+        </a>
+        <a href="../elementary/typeof.html">
+          <tt>
+            <b>typeof</b>
+          </tt>
+        </a>
+        <a href="../functions/macrovar.html">
+          <tt>
+            <b>macrovar</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

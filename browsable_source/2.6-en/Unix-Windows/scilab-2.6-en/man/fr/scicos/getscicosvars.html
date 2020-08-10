@@ -1,0 +1,101 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>getscicosvars -  get Scicos data structure while running  </ul>
+    </p>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>name  </b>
+          </tt>
+    : a character string, the name of the required structure
+  </li>
+  <li>
+          <tt>
+            <b>v  </b>
+          </tt>
+    : vector of the structure value
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This function may be used in a Scilab block to get value of some
+    particular global data while running. It allows to write diagram
+    monitoring blocks. 
+  </p>
+  <p>
+    for example  the instruction  <tt>
+          <b>disp(getscicosvars('x'))</b>
+        </tt>  displays 
+    the entire continuous state of the diagram.
+  </p>
+  <pre>
+x=getscicosvars('x');
+xptr=getscicosvars('xptr');
+disp(x(xptr(k):xptr(k+1)-1))
+   </pre>
+  <p>
+    displays the continuous state of the <tt>
+          <b>k</b>
+        </tt> block
+  </p>
+  <p>
+  </p>
+  <p>
+  </p>
+  <p>
+  </p>
+  <p>
+    See <tt>
+          <b>scicos_cpr</b>
+        </tt> for more detail on these data structures.
+  </p>
+  <p>
+    For C or fortran computational function the C procedure
+    <tt>
+          <b>C2F(getscicosvars)</b>
+        </tt> may used. See
+    <tt>
+          <b>routines/scicos/import.c</b>
+        </tt> file for more details.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="setscicosvars.html">
+          <tt>
+            <b>setscicosvars</b>
+          </tt>
+        </a>
+        <a href="scicosim.html">
+          <tt>
+            <b>scicosim</b>
+          </tt>
+        </a>
+        <a href="curblock.html">
+          <tt>
+            <b>curblock</b>
+          </tt>
+        </a>
+        <a href="scicos_cpr.html">
+          <tt>
+            <b>scicos_cpr</b>
+          </tt>
+        </a>
+        <a href="getblocklabel.html">
+          <tt>
+            <b>getblocklabel</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

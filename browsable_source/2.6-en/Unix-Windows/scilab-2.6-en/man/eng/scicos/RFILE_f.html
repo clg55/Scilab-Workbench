@@ -1,0 +1,62 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos Block  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>RFILE_f -  Scicos "read from file" block  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This block allows user to read  datas in a file, in formatted or binary
+    mode. <tt>
+          <b>Output record selection</b>
+        </tt> and <tt>
+          <b>Time record Selection</b>
+        </tt>
+    allows the user to select data among file records.
+  </p>
+  <p>
+    Each call to the block advance one record in the file. 
+  </p>
+  </ul>
+    <H3>DIALOGUE PARAMETERS</H3>
+    <ul>
+      <li>Time record Selection
+: an empty matrix or a positive integer. If an integer  is given the  th element of the read record is assumed to be the date of the output event. If empty no output event exists.
+
+  </li>
+      <li>Output record selection
+: a vector of positive integer. ,The th element of  the read record gives the value of th output.
+
+  </li>
+      <li>Input file name
+: a character string defining the path of the file 
+
+  </li>
+      <li>Input Format
+: a character string defining the Fortran format to use or nothing for an unformatted (binary) write. If given, the format must began by a left parenthesis and end by a right  parenthesis. example: (e10.3).
+
+  </li>
+      <li>Buffer size
+: To improve efficiency it is possible to buffer the input data. read on the file is only done after each  call to the block.
+
+  </li>
+      <li>size of output
+: a scalar. This fixes the number of "value" read.
+
+  </li>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="WFILE_f.html">
+          <tt>
+            <b>WFILE_f</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

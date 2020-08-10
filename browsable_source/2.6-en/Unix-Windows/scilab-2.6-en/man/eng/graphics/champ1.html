@@ -1,0 +1,121 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>champ1 -  2D vector field plot with colored arrows  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>champ1(x,y,fx,fy,[arfact,rect,strf])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : two vectors which define the grid.
+  </li>
+  <li>
+          <tt>
+            <b>fx  </b>
+          </tt>
+    : a matrix which describes the x component of the vector field. <tt>
+            <b>fx(i,j)</b>
+          </tt> is the x component of the vector field at point <tt>
+            <b>(x(i),y(j))</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>fy  </b>
+          </tt>
+    : a matrix which describes the y component of the vector field. <tt>
+            <b>fy(i,j)</b>
+          </tt> is the y component of the vector field at point <tt>
+            <b>(x(i),y(j))</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>arfact  </b>
+          </tt>
+    : an optional argument of type real which gives a scale factor for the display of the arrow heads on the plot (default value is 1.0).
+  </li>
+  <li>
+          <tt>
+            <b>rect  </b>
+          </tt>
+    : a vector <tt>
+            <b>rect=[xmin,ymin,xmax,ymax]</b>
+          </tt> which gives the boundaries of the  graphics frame to use.
+  </li>
+  <li>
+          <tt>
+            <b>strf  </b>
+          </tt>
+    : a string of length 3 "xyz" which has the same meaning as the <tt>
+            <b>strf</b>
+          </tt> parameter of <tt>
+            <b>plot2d</b>
+          </tt>. The first character x has no effect with <tt>
+            <b>champ1</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>champ1</b>
+        </tt> draws a 2D vector field with colored arrows. The color of the 
+    arrows depends on the intensity of the field.
+  </p>
+  <p>
+    If you want arrows proportional to the intensity of the field, use <tt>
+          <b>champ</b>
+        </tt>.
+  </p>
+  <p>
+    Enter the command <tt>
+          <b>champ1()</b>
+        </tt> to see a demo.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+xset("use color",1)
+champ1(-5:5,-5:5,rand(11,11),rand(11,11),2,[-10,-10,10,10],"021")
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="champ1.html">
+          <tt>
+            <b>champ</b>
+          </tt>
+        </a>
+        <a href="fchamp.html">
+          <tt>
+            <b>fchamp</b>
+          </tt>
+        </a>
+        <a href="plot2d1.html">
+          <tt>
+            <b>plot2d</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

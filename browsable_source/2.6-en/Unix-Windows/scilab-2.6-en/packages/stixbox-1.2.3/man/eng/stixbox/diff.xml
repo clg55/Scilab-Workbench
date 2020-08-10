@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>diff  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="diff"> Differentiate or difference  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>d = diff(x [,n])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>x  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Differentiate or difference, diff computes differences.
+  </P>
+ 
+
+  <DESCRIPTION_ITEM  label='-'> 
+    for a vector X, is [X(2)-X(1)  X(3)-X(2) ... X(n)-X(n-1)].
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='-'> 
+    for a matrix X, is the matrix of column differences, [X(2:n,:) - X(1:n-1,:)].
+  </DESCRIPTION_ITEM>
+  <P>
+    diff(X,n) is the n-th difference function.
+  </P>
+ 
+  </DESCRIPTION>
+  <ITEMIZE label='EXAMPLES'>
+  <VERBATIM><![CDATA[
+   h = .001; x = 0:h:pi;
+   diff(sin(x.^2))/h // is an approximation to 2*cos(x.^2).*x
+   diff((1:10).^2) // is 3:2:19
+   ]]></VERBATIM>
+  </ITEMIZE>
+</MAN>

@@ -1,0 +1,92 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>ones -  matrice remplie de 1  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>y=ones(m1,m2,...)  </dd>
+      <dd>y=ones(x)  </dd>
+      <dd>y=ones()  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : matrices
+  </li>
+  <li>
+          <tt>
+            <b>m1, m2,..  </b>
+          </tt>
+    : entiers
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Renvoie une matrice dont tous les termes valent 1.
+  </p>
+ 
+
+  <li>ones(m1,m2) 
+    Renvoie une matrice de taille   remplie de 1.
+  </li>
+
+  <li>ones(m1,m2,..,mn) 
+    : renvoie une matrice  remplie de 1.
+  </li>
+
+  <li>ones(x) 
+    : renvoie une matrice remplie de 1 de même taille que .
+  </li>
+
+  <li>ones(x) 
+    est aussi valide si  est une liste de type  (système dynamique linéaire sous forme d'une fonction de transfert ou d'une représentation d'état).
+  </li>
+  <p>
+    Notez que <tt>
+          <b>ones(3)</b>
+        </tt> est équivalent à <tt>
+          <b>ones(a)</b>
+        </tt> avec <tt>
+          <b>a=3</b>
+        </tt> et donc n'est PAS une matrice 3x3 !
+  </p>
+  <p>
+    ones() est équivalent à ones(1,1).
+  </p>
+ 
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+ones(3)
+ones(3,3)
+ones(2,3,2)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="eye.html">
+          <tt>
+            <b>eye</b>
+          </tt>
+        </a>
+        <a href="spzeros.html">
+          <tt>
+            <b>zeros</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,95 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>htrianr -  triangularization of polynomial matrix  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[Ar,U,rk]=htrianr(A)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : polynomial matrix
+  </li>
+  <li>
+          <tt>
+            <b>Ar  </b>
+          </tt>
+    : polynomial matrix
+  </li>
+  <li>
+          <tt>
+            <b>U  </b>
+          </tt>
+    : unimodular polynomial matrix
+  </li>
+  <li>
+          <tt>
+            <b>rk  </b>
+          </tt>
+    : integer, normal rank of <tt>
+            <b>A</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    triangularization of polynomial matrix <tt>
+          <b>A</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>A</b>
+        </tt> is <tt>
+          <b>[m,n]</b>
+        </tt> ,   <tt>
+          <b>m &lt;= n</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>Ar=A*U</b>
+        </tt>
+  </p>
+  <p>
+    Warning: there is an elimination of "small" terms (see function code).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=poly(0,'x');
+M=[x;x^2;2+x^3]*[1,x-2,x^4];
+[Mu,U,rk]=htrianr(M)
+det(U)
+M*U(:,1:2)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="hrmt.html">
+          <tt>
+            <b>hrmt</b>
+          </tt>
+        </a>
+        <a href="colcompr.html">
+          <tt>
+            <b>colcompr</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

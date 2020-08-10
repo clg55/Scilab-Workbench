@@ -1,0 +1,113 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>getdate -  renvoie la date et l'heure  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>dt=getdate()  </dd>
+      <dd>x=getdate('s')  </dd>
+      <dd>dt=getdate(x)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>dt  </b>
+          </tt>
+    : un vecteur entier à 8 composantes (voir plus bas)
+  </li>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : un entier contenant la date en secondes écoulées depuis le 1er Janvier 1970 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+ 
+
+  <li>dt 
+    =getdate() renvoie la date courante au format expliqué ci-dessous :
+  </li>
+ 
+
+  <li>dt(1) 
+    : l'année (entier compris entre 0000 et 9999).
+  </li>
+
+  <li>dt(2) 
+    : le mois (entier compris entre 01 et 12).
+  </li>
+
+  <li>dt(3) 
+    : le numéro de semaine à la norme ISO 8601 (entier compris entre 01 et 53).
+  </li>
+
+  <li>dt(4) 
+    : le jour du calendrier Julien (entier compris entre 000 et 366).
+  </li>
+
+  <li>dt(5) 
+    : le jour de la semaine (entier compris entre 1 (dimanche) et 7)
+  </li>
+
+  <li>dt(6) 
+    : le jour dans le mois (entier compris entre 01 et 31).
+  </li>
+
+  <li>dt(7) 
+    : l'heure du jour (entier compris entre 00 et 23).
+  </li>
+
+  <li>dt(8) 
+    : les minutes (entier compris entre 00 et 59).
+  </li>
+
+  <li>dt(9) 
+    : les secondes (entier compris entre 00 et 59).
+  </li>
+ 
+
+  <li>x = getdate('s'), renvoie un entier contenant le nombre de secondes écoulées depuis le 
+    1/1/1970, 00:00 UTC (unix time convention)
+  </li>
+
+  <li>dt = getdate(x), renvoie dt au format ci-dessus, a partir de x (nombre de secondes depuis le 1/1/1970) 
+  </li>
+ 
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+w=getdate()
+mprintf("Annee:%d,mois:%d,jour:%d",w(1),w(2),w(6));
+
+x=getdate('s')
+getdate(x)
+
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="date.html">
+          <tt>
+            <b>date</b>
+          </tt>
+        </a>
+        <a href="../utilities/timer.html">
+          <tt>
+            <b>timer</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

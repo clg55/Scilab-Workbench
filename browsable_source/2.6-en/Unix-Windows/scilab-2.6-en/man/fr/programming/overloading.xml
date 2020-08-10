@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>overloading  </TITLE>
+  <TYPE>Scilab keyword  </TYPE>
+  <DATE>April 1993  </DATE>
+  <SHORT_DESCRIPTION name="overloading"> surcharge d&apos;opérateurs, de fonctions ou de l&apos;affichage.  </SHORT_DESCRIPTION>
+  <DESCRIPTION>
+  <P>
+    Dans Scilab, l&apos;affichage des variables, ainsi que les fonctions et les opérateurs peuvent être définis pour de nouveaux objets en utilisant des fonctions (programmées en Scilab ou alors des primitives).
+  </P>
+ 
+
+  <DESCRIPTION_ITEM  label='Affichage'> 
+    : l&apos;affichage de nouveaux objets définis par les structures de type <VERB>tlist</VERB>  peut être surchargé (l&apos;affichage par défaut est celui des listes standard). La fonction de surcharge ne doit pas avoir d&apos;argument de sortie et accepter un seul argument d&apos;entrée. Son nom est formé comme ceci : <VERB>%&lt;tlist_type&gt;_p</VERB> où <VERB>%&lt;tlist_type&gt;</VERB> est la chaîne de caractères contenant le nom du type de la structure <VERB>tlist</VERB> (voir <VERB>tlist</VERB>).
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='Opérateurs'> 
+    : chaque opérateur non défini pour des types d&apos;opérandes donnés peut être défini. La fonction de surcharge doit avoir un argument de sortie et un ou deux arguments d&apos;entrée suivant le nombre d&apos;opérandes de l&apos;opérateur choisi. Son nom est formé comme ceci :
+  </DESCRIPTION_ITEM>
+  <P>
+    pour les opérateurs binaires :
+    <VERB>%&lt;type_opérande_gauche&gt;_&lt;code_opérateur&gt;_&lt;type_opérande_droit&gt;</VERB>
+  </P>
+  <P>
+    pour les opérateurs unaires :
+    <VERB>%&lt;type_opérande&gt;_&lt;code_opérateur&gt;</VERB>
+  </P>
+  <P>
+    pour les opérateurs d&apos;extraction et d&apos;insertion (opérateurs n-aires)
+  </P>
+  <P>
+    <VERB>&lt;code_opérateur&gt;</VERB>, <VERB>&lt;type_opérande_gauche&gt;</VERB>,
+    <VERB>&lt;type_opérande_droit&gt;</VERB> sont des chaînes de caractères associées à chaque
+    type de données comme décrit dans le tableau suivant :
+  </P>
+<TABLE>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN>chaîne</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>c</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN>polynôme</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>p</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN>fonction</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>m</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN>constante</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>s</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN>list</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>l</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN>tlist</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>&lt;tlist_type&gt;</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN>booléens</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>b</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN>matrice creuse</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>sp</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN>matrice creuse booléenne</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>spb</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+</TABLE>
+  <P>
+  </P>
+  <P>
+  </P>
+  <P>
+    <VERB>&lt;code_opérateur&gt;</VERB> est un caractère associé à chaque type d&apos;opérateur comme décrit dans ce tableau :
+  </P>
+<TABLE>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> &apos;</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>t</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> +</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>a</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> -</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>s</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> *</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>m</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> /</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>r</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> \ </TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>l</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> ^</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>p</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> .*</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>x</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> ./</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>d</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> .\ </TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>q</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> .*.</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>k</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> ./.</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>y</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> .\. </TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>z</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> :</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>b</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> *.</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>u</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> /.</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>v</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> \. </TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>w</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> [a,b]</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>c</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> [a;b]</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>f</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> () extraction</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>e</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> () insertion</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>i</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> ==</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>o</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> &lt;&gt;</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>n</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> |</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>g</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> &amp;</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>h</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> .^</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>j</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> ~</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>5</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> .&apos;</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>0</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> &lt;</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>1</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> &gt;</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>2</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> &lt;=</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>3</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+<TABLE_NEW_ROW>
+<TABLE_NEW_COLUMN> &gt;=</TABLE_NEW_COLUMN>
+<TABLE_NEW_COLUMN>4</TABLE_NEW_COLUMN>
+</TABLE_NEW_ROW>
+</TABLE>
+  <P>
+  </P>
+  <P>
+  </P>
+  <P>
+    La fonction de surcharge pour la syntaxe d&apos;extraction <VERB>b=a(i1,...,in)</VERB>
+    a la séquence d&apos;appel suivante : <VERB>b=%&lt;type_de_a&gt;_e_(i1,...,in,a)</VERB>
+  </P>
+  <P>
+    et la syntaxe
+    <VERB>[x1,..,xm]=a(i1,...,in)</VERB> a la séquence d&apos;appel suivante : 
+    <VERB>[x1,..,xm]=%&lt;type_de_a&gt;_e_(i1,...,in,a)</VERB>
+  </P>
+  <P>
+    La fonction de surcharge pour la syntaxe d&apos;insertion
+    <VERB>a(i1,...,in)=b</VERB> a la séquence d&apos;appel suivante : 
+    <VERB>a=%&lt;type_de_a&gt;_i_&lt;type_de_b&gt;(i1,...,in,b,a)</VERB>.
+  </P>
+  <P>
+  </P>
+
+  <DESCRIPTION_ITEM  label='Fonctions : certaines primitives peuvent aussi être surchargées pour de nouveaux types d&apos;objets. Quand une telle fonction n&apos;est pas définie pour un type d&apos;objet particulier la fonction'> 
+    <VERB>%&lt;type_d_un_argument&gt;_&lt;nom_de_la_fonction&gt;</VERB> est appelée. L&apos;utilisateur peut ajouter dans cette fonction la définition associée avec le type de données passées en argument d&apos;entrée.
+  </DESCRIPTION_ITEM>
+ 
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+// AFFICHAGE
+deff('[]=%tab_p(l)','disp([['' '';l(3)] [l(2);string(l(4))]])')
+tlist('tab',['a','b'],['x';'y'],rand(2,2))
+
+// OPÉRATEUR
+deff('x=%c_a_s(a,b)','x=a+string(b)')
+'s'+1
+
+// FONCTION
+deff('x=%c_sin(a)','x=''sin(''+a+'')''')
+sin('2*x')
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>tlist</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>disp</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>symbols</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

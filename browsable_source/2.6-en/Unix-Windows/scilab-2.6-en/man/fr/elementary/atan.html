@@ -1,0 +1,72 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>atan -  tangente inverse  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[t]=atan(x)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : vecteur complexe ou réel
+  </li>
+  <li>
+          <tt>
+            <b>t  </b>
+          </tt>
+    : vecteur complexe ou réel
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Les composantes du vecteur <tt>
+          <b>t</b>
+        </tt> sont les arctangentes des composantes correspondantes du vecteur <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>atan(x,y)</b>
+        </tt> est équivalent à <tt>
+          <b>atan(x/y)</b>
+        </tt> mais <tt>
+          <b>y</b>
+        </tt> est autorisé à être nul.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+x=[1,%i,-1,%i]
+phasex=atan(imag(x),real(x))
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="atan.html">
+          <tt>
+            <b>tan</b>
+          </tt>
+        </a>
+        <a href="../programming/ieee.html">
+          <tt>
+            <b>ieee</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

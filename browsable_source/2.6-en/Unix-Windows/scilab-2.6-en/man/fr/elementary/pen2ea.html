@@ -1,0 +1,55 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>pen2ea -  Conversion faisceau vers deux matrices E,A   </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[E,A]=pen2ea(Fs)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>Fs  </b>
+          </tt>
+    : faisceau de matrices <tt>
+            <b>s*E-A</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>E,A  </b>
+          </tt>
+    : deux matrices telles que <tt>
+            <b>Fs=s*E-A</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Fonction utilitaire. Etant donné le faisceau <tt>
+          <b>Fs=s*E-A</b>
+        </tt>,
+    renvoie les matrices <tt>
+          <b>E</b>
+        </tt> et <tt>
+          <b>A</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+E=[1,0];A=[1,2];s=poly(0,'s');
+[E,A]=pen2ea(s*E-A)
+ </pre>
+    </ul>
+  </body>
+</html>

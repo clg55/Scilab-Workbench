@@ -1,0 +1,52 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos Block  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>DELAY_f -  Scicos  delay block  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This block implements as a discretized delay. It is in fact a Scicos
+    super block formed by a shift register and a clock.
+  </p>
+  <p>
+    value of the delay is given by  the discretization time step multiplied by the
+    number of states of the register minus one 
+  </p>
+  </ul>
+    <H3>DIALOGUE PARAMETERS</H3>
+    <ul>
+      <li>Discretization time step
+: positive scalar, delay discretization time step
+
+  </li>
+      <li>Register initial state
+: register initial state vector. Dimension must be greater than  or equal to 2
+
+  </li>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="DELAYV_f.html">
+          <tt>
+            <b>DELAYV_f</b>
+          </tt>
+        </a>
+        <a href="EVTDLY_f.html">
+          <tt>
+            <b>EVTDLY_f</b>
+          </tt>
+        </a>
+        <a href="REGISTER_f.html">
+          <tt>
+            <b>REGISTER_f</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

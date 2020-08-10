@@ -1,0 +1,72 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>gcd -  gcd calculation  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[pgcd,U]=gcd(p)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>p  </b>
+          </tt>
+    : polynomial row vector <tt>
+            <b>p=[p1,..,pn]</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    computes the gcd  of components of <tt>
+          <b>p</b>
+        </tt> and a unimodular 
+    matrix (with polynomial inverse) <tt>
+          <b>U</b>
+        </tt>, with minimal degree such that
+  </p>
+  <p>
+    <tt>
+          <b>p*U=[0 ... 0 pgcd]</b>
+        </tt>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+p=[s,s*(s+1)^2,2*s^2+s^3];
+[pgcd,u]=gcd(p);
+p*u
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="bezout.html">
+          <tt>
+            <b>bezout</b>
+          </tt>
+        </a>
+        <a href="lcmdiag.html">
+          <tt>
+            <b>lcm</b>
+          </tt>
+        </a>
+        <a href="hermit.html">
+          <tt>
+            <b>hermit</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

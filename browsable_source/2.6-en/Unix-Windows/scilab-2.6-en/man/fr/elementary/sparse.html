@@ -1,0 +1,137 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>sparse -   initialisation d'une matrice creuse  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>sp=sparse(X)  </dd>
+      <dd>sp=sparse(ij,v [,mn])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : matrice réelle ou complexe (pleine ou creuse)
+  </li>
+  <li>
+          <tt>
+            <b>ij  </b>
+          </tt>
+    : matrice d'entiers à deux colonnes (indices des termes non-nuls)
+  </li>
+  <li>
+          <tt>
+            <b>mn  </b>
+          </tt>
+    : vecteur d'entiers à deux composantes (nombre de lignes, nombre de colonnes)
+  </li>
+  <li>
+          <tt>
+            <b>sp  </b>
+          </tt>
+    : matrice creuse
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>sparse</b>
+        </tt> est utilisée pour initialiser une matrice creuse. Seuls les termes non-nuls sont stockés.
+  </p>
+  <p>
+    <tt>
+          <b>sp = sparse(X)</b>
+        </tt> convertit une matrice pleine en une matrice creuse en supprimant les éléments nuls (si <tt>
+          <b>X</b>
+        </tt> est déjà stockée comme une matrice creuse, <tt>
+          <b>sp</b>
+        </tt> est égale à <tt>
+          <b>X</b>
+        </tt>).
+  </p>
+  <p>
+    <tt>
+          <b>sp=sparse(ij,v [,mn])</b>
+        </tt> construit une matrice creuse <tt>
+          <b>mn(1)</b>
+        </tt> par <tt>
+          <b>mn(2)</b>
+        </tt> avec <tt>
+          <b>sp(ij(k,1),ij(k,2))=v(k)</b>
+        </tt>. 
+    <tt>
+          <b>ij</b>
+        </tt> et <tt>
+          <b>v</b>
+        </tt> doivent avoir le même nombre de colonnes.
+    Si le paramètre optionnel <tt>
+          <b>mn</b>
+        </tt> n'est pas donné les dimensions de la matrice <tt>
+          <b>sp</b>
+        </tt> sont égales aux valeurs maximales de <tt>
+          <b>ij(:,1)</b>
+        </tt> et de <tt>
+          <b>ij(:,2)</b>
+        </tt>, respectivement.
+  </p>
+  <p>
+    Les opérations (concaténation, addition, etc.) avec les matrices creuses se font avec la même syntaxe que pour les matrices pleines. 
+  </p>
+  <p>
+    Les fonctions élémentaires (<tt>
+          <b>abs,maxi,sum,diag,...</b>
+        </tt>) sont aussi disponibles pour les matrices creuses.
+  </p>
+  <p>
+    Les opérations mixtes (matrice pleine - matrice creuse) sont autorisées. Le résultat est une matrice pleine ou creuse suivant l'opération.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+sp=sparse([1,2;4,5;3,10],[1,2,3])
+size(sp)
+x=rand(2,2);abs(x)-full(abs(sparse(x)))
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="full.html">
+          <tt>
+            <b>full</b>
+          </tt>
+        </a>
+        <a href="spget.html">
+          <tt>
+            <b>spget</b>
+          </tt>
+        </a>
+        <a href="sprand.html">
+          <tt>
+            <b>sprand</b>
+          </tt>
+        </a>
+        <a href="speye.html">
+          <tt>
+            <b>speye</b>
+          </tt>
+        </a>
+        <a href="../linear/lufact.html">
+          <tt>
+            <b>lufact</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

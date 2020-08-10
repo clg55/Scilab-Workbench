@@ -1,0 +1,87 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>derivative -  approximation de dérivées  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>J=derivative(f,x0,h)  </dd>
+      <dd>[J,J2]=derivative(f,x0,h)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>f  </b>
+          </tt>
+    : fonction Scilab <tt>
+            <b>f: R^n --&gt; R^p</b>
+          </tt> 
+  </li>
+  <li>
+          <tt>
+            <b>x0  </b>
+          </tt>
+    : vecteur colonne réel de taille n
+  </li>
+  <li>
+          <tt>
+            <b>h  </b>
+          </tt>
+    : scalaire positif (1.d-7 par défaut)
+  </li>
+  <li>
+          <tt>
+            <b>J  </b>
+          </tt>
+    : matrice réelle p x n (approximation de la Jacobienne) 
+  </li>
+  <li>
+          <tt>
+            <b>J2  </b>
+          </tt>
+    : matrice réelle p x (p*n)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Dérivées approchées de la fonction f: <tt>
+          <b>R^n --&gt; R^p</b>
+        </tt>.
+  </p>
+  <pre>
+f(x) = f(x0) + D1f(x0) *dx + 1/2* D2f(x0) *(dx.*.dx) +...
+J = D1f(x0) ; J2=D2f(x0)
+   </pre>
+  <p>
+    Les dérivées sont approchées par différences finies : f_i(x+h)-f_i(x))/h.
+    Attention : h doit être choisi avec précaution ...
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+deff('y=f(x)','y=[sin(x(1))*cos(x(2));x(1)^2*x(2)^2;1+x(1)*x(2)^2]')
+x0=[1;2];eps=0.001;h=eps*[2;5];
+[J,J2]=derivative(f,x0);
+[f(x0+h)-f(x0)-J*h ,0.5*J2*(h.*.h)]
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../polynomials/derivat.html">
+          <tt>
+            <b>derivat</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

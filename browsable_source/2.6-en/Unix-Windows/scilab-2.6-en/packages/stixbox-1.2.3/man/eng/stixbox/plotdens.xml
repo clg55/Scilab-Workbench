@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>plotdens  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="plotdens"> Draw a nonparametric density estimate  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>plotdens(X)  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>plotdens(X,h,P,K)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>x,y  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : two matrices or vectors.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Draw a nonparametric density estimate.
+    A density estimate is plotted using a kernel density estimate. A
+    longer form plotdens(X,h,P,K) may be used where 
+  </P>
+ 
+
+  <DESCRIPTION_ITEM  label='h'> 
+    : is the kernel bandwidth, 
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='P'> 
+    : is 1 if the density is known to be 0 for negative X,
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='K'> 
+    : is
+  </DESCRIPTION_ITEM>
+ 
+
+  <DESCRIPTION_ITEM  label='1'> 
+    : Gaussian (the default)
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='2'> 
+    : Epanechnikov
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='3'> 
+    : Biweight
+  </DESCRIPTION_ITEM>
+
+  <DESCRIPTION_ITEM  label='4'> 
+    : Triangular
+  </DESCRIPTION_ITEM>
+ 
+  <P>
+    Below the density estimate a jittered plot of the observations is
+    shown.
+  </P>
+ 
+  </DESCRIPTION>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>histo</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

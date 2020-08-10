@@ -1,0 +1,23 @@
+<HTML> 
+   <HEAD> 
+         <!-- BASE HREF="" -->      <!-- Please edit this to refer to the directory of this file --->
+     	 <TITLE>Stixbox summary</TITLE>  
+  </HEAD> 
+      <BODY ALINK="#FF00FF" BGCOLOR="#FFFFFF" LINK="#FF0000" TEXT="#000000" VLINK="#800000"> 
+<H2>RBETA</H2>
+<DL>
+<DT>rbeta
+<DD>
+Random numbers from the beta distribution (inversion method)<PRE>
+
+         x = rbeta(n,a,b)
+	Input	n	positive integer or a vector [lig,col] of 2 
+			positive integers
+		a,b	positive reals 
+	Output	x 	n-vector or a n-matrix of random numbers 
+			chosen from a beta distribution with parameters 
+			a and b (density :
+			x--> x.^(a-1) .* (1-x).^(b-1) ./ beta(a,b)1_{0&lt;x&lt;1}
+</PRE>
+</BODY>
+</HTML>

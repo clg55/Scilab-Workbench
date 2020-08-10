@@ -1,0 +1,95 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>paramfplot2d  -  animated 2D plot, curve defined by a function  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>paramfplot2d(f,x,theta)  </dd>
+      <dd>paramfplot2d(f,x,theta,flag)  </dd>
+      <dd>paramfplot2d(f,x,theta,flagrect)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : real vector.
+  </li>
+  <li>
+          <tt>
+            <b>f  </b>
+          </tt>
+    : function <tt>
+            <b>y=f(x,t)</b>
+          </tt> . f is a Scilab function or a dynamically linked routine (referred to as a string).
+  </li>
+  <li>
+          <tt>
+            <b>theta  </b>
+          </tt>
+    : real vector (set of parameters).
+  </li>
+  <li>
+          <tt>
+            <b>flag  </b>
+          </tt>
+    : string <tt>
+            <b>'no'</b>
+          </tt> or <tt>
+            <b>'yes'</b>
+          </tt>: If "yes" screen is cleared  between two consecutive plots.
+  </li>
+  <li>
+          <tt>
+            <b>rect  </b>
+          </tt>
+    : "rectangle" [xmin, xmax, ymin, ymax] (1 x 4 real vector),
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Animated plot of the function x--&gt;f(x,t) for t=theta(1),theta(2),etc.
+    f can be a either Scilab function or a dynamically linked routine since
+    y=f(x,t) is evaluated as y=feval(x(:),t,f). See feval.
+    f: mapping x,t -&gt; f(x,t) = R^N valued function for x= vector of R^N
+    and t=real number. x is a N-vector of x-values and for each t in theta, f(x,t)=N-vector of y-values.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+deff('y=f(x,t)','y=t*sin(x)')
+x=linspace(0,2*%pi,50);theta=0:0.05:1;
+paramfplot2d(f,x,theta);
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="plot2d1.html">
+          <tt>
+            <b>plot2d</b>
+          </tt>
+        </a>
+        <a href="../programming/feval.html">
+          <tt>
+            <b>feval</b>
+          </tt>
+        </a>
+        <a href="fplot2d.html">
+          <tt>
+            <b>fplot2d</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>schur  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>April 1993  </DATE>
+  <SHORT_DESCRIPTION name="schur"> décomposition de Schur ordonnée  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>[U,T] = schur(A)   </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>[U,dim]=schur(A,flag)  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>[U,dim]=schur(A,myfunction)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>A  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrice carrée réelle ou complexe. Pour la forme ordonnée <VERB>A</VERB> est supposée réelle.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>flag  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : chaîne de caractères (<VERB>&apos;c&apos;</VERB> ou <VERB>&apos;d&apos;</VERB>)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>myfunction  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : l&apos;identificateur d&apos;une fonction (ce paramètre peut aussi être une chaîne de caractères ou une liste)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>U  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrice unitaire carrée
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>T  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : matrice carrée réelle ou complexe
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>dim  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : entier
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Forme de Schur, Forme de Schur ordonnée.
+  </P>
+  </DESCRIPTION>
+  <ITEMIZE label='Forme de Schur usuelle'>
+  <P>
+    produit une matrice de Schur <VERB>T</VERB> et une matrice unitaire <VERB>U</VERB> telles que <VERB>A = U*T*U&apos;</VERB> et <VERB>U&apos;*U = eye(U)</VERB>. Utilisée sans argument en sortie, schur(<VERB>A</VERB>) renvoie <VERB>T</VERB>. Si <VERB>A</VERB> est complexe, la forme de Schur complexe est renvoyée dans la matrice <VERB>T</VERB>. la forme de Schur complexe est triangulaire supérieure avec les valeurs propres de <VERB>A</VERB> sur la diagonale. Si <VERB>A</VERB> est réelle, la forme de Schur réelle est renvoyée. Dans la forme de Schur réelle les valeurs propres réelles sont sur la diagonale et les valeurs propres complexes sont les valeurs propres des blocs 2 x 2 sur la diagonale.
+  </P>
+  </ITEMIZE>
+  <ITEMIZE label='Forme stable ordonnée'>
+  <P>
+    renvoie une matrice unitaire <VERB>U</VERB> transformant <VERB>A</VERB> en forme de Schur. De plus, les dim premières colonnes de <VERB>U</VERB> forment une base du sous-espace propre de <VERB>A</VERB> associé aux valeurs propres ayant une partie réelle négative (sous espace propre stable &quot;en temps continu&quot;).
+  </P>
+  <P>
+    renvoie une matrice unitaire <VERB>U</VERB> transformant <VERB>A</VERB> en forme de Schur. De plus, les dim premières colonnes de <VERB>U</VERB> forment une base du sous-espace propre de <VERB>A</VERB> associé aux valeurs propres de module plus petit que 1 (sous espace propre stable &quot;en temps discret&quot;).
+  </P>
+  </ITEMIZE>
+  <ITEMIZE label='Sous-espace propre généralisé'>
+  <P>
+    renvoie une matrice unitaire <VERB>U</VERB> transformant <VERB>A</VERB> en forme de Schur. De plus, les dim premières colonnes de <VERB>U</VERB> forment une base du sous-espace propre de <VERB>A</VERB> associé aux valeurs propres sélectionnées par la fonction <VERB>myfunction</VERB>.
+  </P>
+  <P>
+    Cette fonction doit être construire sur le modèle suivant (si <VERB>myfunction</VERB> s&apos;appelle &quot;<VERB>choix</VERB>&quot;):
+  </P>
+  <VERBATIM><![CDATA[
+function [flag]=choix(x)
+
+flag=...
+   ]]></VERBATIM>
+  <P>
+    <VERB>x</VERB> est un vecteur à trois composantes caractérisant soit une valeur propre réelle soit une paire de valeurs propres complexes conjuguées.
+  </P>
+  <P>
+    Si <VERB>x(1)=1</VERB>, il s&apos;agit d&apos;une valeur propre réelle donnée par <VERB>x(2)/x(3)</VERB>.
+  </P>
+  <P>
+    Si <VERB>x(1)=2</VERB>, il s&apos;agit d&apos;une paire de valeurs propres complexes conjuguées.  La somme de ses valeurs propres (deux fois la partie réelle) est donnée par <VERB>x(2)</VERB> et leur produit (carré du module) est donné par <VERB>x(3)</VERB>.
+  </P>
+  <P>
+    En sortie, flag doit valoir 1 si la ou les valeurs propres sont à retenir, et 0 sinon.
+  </P>
+  </ITEMIZE>
+  <ITEMIZE label='Exemple de fonction'>
+  <VERBATIM><![CDATA[
+        function [flag]=disc(x)
+        ls =x(1);flag=0;
+        select  ls
+           case 1 then if abs(x(2)) < ro*abs(x(3)) then flag=1;end
+           case 2 then if x(3) < ro*ro then flag=1;end
+        end
+   ]]></VERBATIM>
+  <P>
+    La fonction <VERB>disc</VERB> sélectionne les valeurs propres de module inférieur à <VERB>ro</VERB>. Pour <VERB>ro=1</VERB> les commandes <VERB>[U,dim]=schur(A,&apos;d&apos;)</VERB> et <VERB>[U,dim]=schur(A,disc)</VERB> sont donc équivalentes.
+  </P>
+  <P>
+    Un autre exemple utile est <VERB>%choose</VERB>  (voir le code de la fonction dans <VERB>SCIDIR/macros/percent</VERB>)
+  </P>
+  </ITEMIZE>
+  <EXAMPLE><![CDATA[
+A=diag([-0.9,-2,2,0.9]);X=rand(A);A=inv(X)*A*X;
+[U,d]=schur(A,'c');
+A1=U'*A*U;
+spec(A1(1:d,1:d))      // valeurs propres stables (temps continu)
+[U,d]=schur(A,'c');
+A1=U'*A*U;
+spec(A1(1:d,1:d))      // valeurs propres stables (temps discret)
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>gschur</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>ricc</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>pbig</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>psmall</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

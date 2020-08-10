@@ -1,0 +1,51 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>pbeta -  The beta cumulative distribution function  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>F = pbeta(x,a,b)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : matrix (elements between 0 and 1)
+  </li>
+  <li>
+          <tt>
+            <b>a,b  </b>
+          </tt>
+    : positive reals, parameters of the beta distribution(x,a,b  can be scalar or matrix with common size) 
+  </li>
+  <li>
+          <tt>
+            <b>F  </b>
+          </tt>
+    : matrix 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    for each element of x, F=Prob(X&lt;x) where X is a  
+    random variable with beta density 
+  </p>
+  <pre>
+  x.^(a-1) .* (1-x).^(b-1) ./ beta(a,b)1_{0&lt;x&lt;1}
+   </pre>
+  <p>
+  </p>
+  <p>
+  </p>
+  </ul>
+  </body>
+</html>

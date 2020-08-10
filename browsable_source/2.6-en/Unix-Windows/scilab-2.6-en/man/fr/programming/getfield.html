@@ -1,0 +1,70 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>getfield -   extraction d'un champ d'une liste  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[x,...]=getfield(i,l)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : matrice de tout type
+  </li>
+  <li>
+          <tt>
+            <b>l  </b>
+          </tt>
+    : variable de type list, tlist ou mlist
+  </li>
+  <li>
+          <tt>
+            <b>i  </b>
+          </tt>
+    : indice du champ, voir <tt>
+            <b>extraction</b>
+          </tt> pour plus de détails
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Cette fonction est un équivalent de la syntaxe <tt>
+          <b>[x,...]=l(i)</b>
+        </tt> pour l'extraction de champs avec la seule différence qu'elle s'applique aussi aux objets de type <tt>
+          <b>mlist</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+l=list(1,'qwerw',%s)
+[a,b]=getfield([3 2],l)
+
+a=hypermat([2,2,2],rand(1:2^3));// les hypermatrices sont stockées dans des mlist
+a(1) // le terme a(1,1,1)
+getfield(1,a) // le premier champ de la mlist
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="extraction.html">
+          <tt>
+            <b>extraction</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

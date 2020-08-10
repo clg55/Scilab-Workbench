@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>show_graph  </TITLE>
+  <TYPE>Scilab function  </TYPE>
+  <DATE>September 1995  </DATE>
+  <SHORT_DESCRIPTION name="show_graph"> affiche un graphe  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>nw = show_graph(g[,win,wdim,wpdim])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>g  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : graphe sous forme de liste
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>win  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : scalaire ou chaîne de caractères. Si c'est un nombre, c'est le
+  numéro de la fenêtre graphique à utiliser pour dessiner. Si c'est
+  une chaîne, ça peut être <VERB>"new"</VERB> pour créer une nouvelle
+  fenêtre graphique pour dessiner le graphe ou <VERB>"rep"</VERB> si
+  l'on utilise la fenêtre graphique courante en effaçant le graphe
+  déjà dessiné. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>wdim=[w,h]  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : dimensions internes de la fenêtre graphique, comme dans <VERB>xset("wdim",w,h)</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>wpdim=[w1,h1]  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : dimensions externes de la fenêtre graphique, comme dans <VERB>xset("wpdim",w1,h1)</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    <VERB>show_graph</VERB> affiche le graphe <VERB>g</VERB> dans la
+    fenêtre graphique spécifiée ou la fenêtre graphique courante.
+    S'il n'y a pas de fenêtre graphique courante, elle est créée.
+  </P>
+  <P>
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+ta=[1 1 2 2 2 3 4 5 5 7 8 8 9 10 10 10 11 12 13 13 13 14 15 16 16 17 17];
+he=[2 10 3 5 7 4 2 4 6 8 6 9 7 7 11 15 12 13 9 10 14 11 16 1 17 14 15];
+g=make_graph("foo",1,17,ta,he);
+g("node_x")=[283 163 63 57 164 164 273 271 339 384 504 513 439 623 631 757 642];
+g("node_y")=[59 133 223 318 227 319 221 324 432 141 209 319 428 443 187 151 301];
+show_graph(g,2);
+show_graph(g,1,[500,500],[300,300])
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>scigraph</LINK> </SEE_ALSO_ITEM>
+    <SEE_ALSO_ITEM> <LINK>show_arcs</LINK> </SEE_ALSO_ITEM>
+    <SEE_ALSO_ITEM> <LINK>show_nodes</LINK> </SEE_ALSO_ITEM>
+    <SEE_ALSO_ITEM> <LINK>xset</LINK> </SEE_ALSO_ITEM> 
+  </SEE_ALSO>
+</MAN>

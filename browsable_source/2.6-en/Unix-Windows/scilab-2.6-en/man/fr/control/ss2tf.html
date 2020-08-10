@@ -1,0 +1,102 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>ss2tf -  conversion from state-space to transfer function  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[h]=ss2tf(sl)   </dd>
+      <dd>[Ds,NUM,chi]=ss2tf(sl)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : linear system (<tt>
+            <b>syslin</b>
+          </tt> list)
+  </li>
+  <li>
+          <tt>
+            <b>h  </b>
+          </tt>
+    : transfer matrix 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Called with three outputs <tt>
+          <b>[Ds,NUM,chi]=ss2tf(sl)</b>
+        </tt> returns 
+    the numerator polynomial matrix <tt>
+          <b>NUM</b>
+        </tt>, the characteristic
+    polynomial <tt>
+          <b>chi</b>
+        </tt> and the polynomial part <tt>
+          <b>Ds</b>
+        </tt> separately i.e.:
+  </p>
+  <pre>
+h=NUM/chi + Ds
+   </pre>
+  <p>
+    Method:
+  </p>
+  <p>
+    One uses the characteristic polynomial and 
+    <tt>
+          <b>det(A+Eij)=det(A)+C(i,j)</b>
+        </tt> where <tt>
+          <b>C</b>
+        </tt> is the adjugate 
+    matrix of <tt>
+          <b>A</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+h=[1,1/s;1/(s^2+1),s/(s^2-2)]
+sl=tf2ss(h);
+h=clean(ss2tf(sl))
+[Ds,NUM,chi]=ss2tf(sl)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="tf2ss.html">
+          <tt>
+            <b>tf2ss</b>
+          </tt>
+        </a>
+        <a href="../elementary/syslin.html">
+          <tt>
+            <b>syslin</b>
+          </tt>
+        </a>
+        <a href="../linear/nlev.html">
+          <tt>
+            <b>nlev</b>
+          </tt>
+        </a>
+        <a href="../linear/glever.html">
+          <tt>
+            <b>glever</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

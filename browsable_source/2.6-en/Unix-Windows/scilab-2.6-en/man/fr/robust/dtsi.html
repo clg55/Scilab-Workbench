@@ -1,0 +1,102 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>dtsi -  stable anti-stable decomposition  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[Ga,Gs,Gi]=dtsi(G,[tol])   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>G  </b>
+          </tt>
+    : linear system (<tt>
+            <b>syslin</b>
+          </tt> list)
+  </li>
+  <li>
+          <tt>
+            <b>Ga  </b>
+          </tt>
+    : linear system (<tt>
+            <b>syslin</b>
+          </tt> list) antistable and strictly proper
+  </li>
+  <li>
+          <tt>
+            <b>Gs  </b>
+          </tt>
+    : linear system (<tt>
+            <b>syslin</b>
+          </tt> list) stable and strictly proper
+  </li>
+  <li>
+          <tt>
+            <b>Gi  </b>
+          </tt>
+    : real matrix (or polynomial matrix for improper systems)
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : optional parameter for detecting stables poles. Default value: <tt>
+            <b>100*%eps</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns the stable-antistable decomposition of <tt>
+          <b>G</b>
+        </tt>:
+  </p>
+  <p>
+    <tt>
+          <b>G = Ga + Gs + Gi</b>
+        </tt>,  <tt>
+          <b>(Gi = G(oo))</b>
+        </tt>
+  </p>
+  <p>
+    <tt>
+          <b>G</b>
+        </tt> can be given in state-space form or in transfer form.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/syslin.html">
+          <tt>
+            <b>syslin</b>
+          </tt>
+        </a>
+        <a href="../linear/pbig.html">
+          <tt>
+            <b>pbig</b>
+          </tt>
+        </a>
+        <a href="../linear/psmall.html">
+          <tt>
+            <b>psmall</b>
+          </tt>
+        </a>
+        <a href="../control/pfss.html">
+          <tt>
+            <b>pfss</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

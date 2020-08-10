@@ -1,0 +1,24 @@
+<HTML> 
+   <HEAD> 
+         <!-- BASE HREF="" -->      <!-- Please edit this to refer to the directory of this file --->
+     	 <TITLE>Stixbox summary</TITLE>  
+  </HEAD> 
+      <BODY ALINK="#FF00FF" BGCOLOR="#FFFFFF" LINK="#FF0000" TEXT="#000000" VLINK="#800000"> 
+<H2>RGAMMA</H2>
+<DL>
+<DT>rgamma
+<DD>
+Random numbers from the gamma distribution (inversion method)<PRE>
+
+         x = rgamma(n,a)
+	Input	n	positive integer or a vector [lig,col] of integers
+		a	positive real 
+
+	Output	x	n-vector or a n-matrix of random numbers 
+			chosen from Gamma distribution with parameter a
+ 
+	( the gamma density function with parameter a is :
+	   x --> x.^(a-1)exp(-x)./Gamma(a)1_{x>=0} )
+</PRE>
+</BODY>
+</HTML>

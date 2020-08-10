@@ -1,0 +1,48 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos Block  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>MFCLCK_f -  Scicos basic block for frequency division of event clock  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This block is used in the Super Block MCLOCK. The input event is
+    directed once every n times to output 1 and the rest of the time
+    to output 2. There is a delay of "Basic period" in the transmission
+    of the event. If this period &gt;0 then the second output is initially
+    fired. It is not if this period=0. In the latter case, the input
+    is driven by an event clock and in the former case, feedback can
+    be used.
+  </p>
+  </ul>
+    <H3>DIALOGUE PARAMETERS</H3>
+    <ul>
+      <li>Basic period
+: positive scalar.
+
+  </li>
+      <li>n
+: an integer greater than 1. 
+
+  </li>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="MCLOCK_f.html">
+          <tt>
+            <b>MCLOCK_f</b>
+          </tt>
+        </a>
+        <a href="CLOCK_f.html">
+          <tt>
+            <b>CLOCK_f</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

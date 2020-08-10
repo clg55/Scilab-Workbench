@@ -1,0 +1,93 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>determ -  determinant of polynomial matrix  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>res=determ(W [,k])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>W  </b>
+          </tt>
+    : real square polynomial matrix
+  </li>
+  <li>
+          <tt>
+            <b>k  </b>
+          </tt>
+    : integer (upper bound for the degree of the determinant of W)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns the determinant of a real polynomial matrix 
+    (computation made by FFT).
+  </p>
+  <p>
+    <tt>
+          <b>k</b>
+        </tt> is an integer larger than the actual degree of the determinant
+    of <tt>
+          <b>W</b>
+        </tt>.
+  </p>
+  <p>
+    The default value of <tt>
+          <b>k</b>
+        </tt> is the smallest power of 2 which is larger
+    than <tt>
+          <b>n*maxi(degree(W))</b>
+        </tt>.
+  </p>
+  <p>
+    Method: evaluate the determinant of <tt>
+          <b>W</b>
+        </tt> for the Fourier frequencies
+    and apply inverse FFT to the coefficients of the determinant.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+w=s*rand(10,10);
+determ(w)
+det(coeff(w,1))*s^10
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../linear/det.html">
+          <tt>
+            <b>det</b>
+          </tt>
+        </a>
+        <a href="detr.html">
+          <tt>
+            <b>detr</b>
+          </tt>
+        </a>
+        <a href="coffg.html">
+          <tt>
+            <b>coffg</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>F.D.  </ul>
+    </p>
+  </body>
+</html>

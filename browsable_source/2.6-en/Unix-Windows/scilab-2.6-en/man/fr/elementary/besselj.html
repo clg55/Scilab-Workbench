@@ -1,0 +1,97 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>besselj -   Fonction J de Bessel modifiée de première espèce.  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd> y = besselj(alpha,x)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : vecteur réel à composantes non-négatives
+  </li>
+  <li>
+          <tt>
+            <b>alpha  </b>
+          </tt>
+    : vecteur réel à composantes non-négatives régulièrement espacées d'incrément égal à un <tt>
+            <b>alpha=alpha0+(n1:n2)</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+  </p>
+  <p>
+    <tt>
+          <b>besselj(alpha,x)</b>
+        </tt> Calcule la fonction J de Bessel modifiée de première espèce d'indice réel et non négatif<tt>
+          <b>alpha</b>
+        </tt> et d'argument <tt>
+          <b>x</b>
+        </tt>.  <tt>
+          <b>alpha</b>
+        </tt>  et <tt>
+          <b>x</b>
+        </tt> peuvent être des vecteurs.
+    Cette fonction renvoie une matrice de taille <tt>
+          <b>m</b>
+        </tt>-par-<tt>
+          <b>n</b>
+        </tt> avec <tt>
+          <b>m = size(x,'*')</b>
+        </tt>,
+    <tt>
+          <b>n = size(alpha,'*')</b>
+        </tt> dont la composante <tt>
+          <b>(i,j)</b>
+        </tt> vaut
+    <tt>
+          <b>besselj(alpha(j),x(i))</b>
+        </tt>.
+  </p>
+  <p>
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+besselj(0.5:3,1:4)
+
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="besseli.html">
+          <tt>
+            <b>besseli</b>
+          </tt>
+        </a>
+        <a href="besselk.html">
+          <tt>
+            <b>besselk</b>
+          </tt>
+        </a>
+        <a href="bessely.html">
+          <tt>
+            <b>bessely</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

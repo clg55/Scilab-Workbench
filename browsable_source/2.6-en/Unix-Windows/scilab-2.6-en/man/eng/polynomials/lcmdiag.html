@@ -1,0 +1,97 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>lcmdiag -  least common multiple diagonal factorization  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[N,D]=lcmdiag(H)  </dd>
+      <dd>[N,D]=lcmdiag(H,flag)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>H  </b>
+          </tt>
+    : rational matrix
+  </li>
+  <li>
+          <tt>
+            <b>N  </b>
+          </tt>
+    : polynomial matrix
+  </li>
+  <li>
+          <tt>
+            <b>D  </b>
+          </tt>
+    : diagonal polynomial matrix
+  </li>
+  <li>
+          <tt>
+            <b>flag  </b>
+          </tt>
+    : character string: <tt>
+            <b>'row'</b>
+          </tt> or <tt>
+            <b>'col'</b>
+          </tt> (default)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>[N,D]=lcmdiag(H,'row')</b>
+        </tt> computes a factorization <tt>
+          <b>D*H=N</b>
+        </tt>,
+    i.e.  H=D^(-1)*N  where D is a diagonal matrix with D(k,k)=lcm of 
+    kth row of H('den').
+  </p>
+  <p>
+    <tt>
+          <b>[N,D]=lcmdiag(H)</b>
+        </tt> or <tt>
+          <b>[N,D]=lcmdiag(H,'col)</b>
+        </tt> returns
+    H=N*D^(-1) with diagonal D and D(k,k)=lcm of kth col of H('den')
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+H=[1/s,(s+2)/s/(s+1)^2;1/(s^2*(s+2)),2/(s+2)];
+[N,D]=lcmdiag(H);
+N/D-H
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="lcmdiag.html">
+          <tt>
+            <b>lcm</b>
+          </tt>
+        </a>
+        <a href="gcd.html">
+          <tt>
+            <b>gcd</b>
+          </tt>
+        </a>
+        <a href="bezout.html">
+          <tt>
+            <b>bezout</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

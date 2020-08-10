@@ -1,0 +1,72 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>load_graph -  charge un graphe  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>g = load_graph(name)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>name  </b>
+          </tt>
+    : chaîne de caractères, le chemin du graphe à charger
+  </li>
+  <li>
+          <tt>
+            <b>g  </b>
+          </tt>
+    : graphe (liste)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>name</b>
+        </tt> est le nom d'un fichier contenant la description ASCII 
+    d'un graphe. Un tel fichier doit avoir l'extension <tt>
+          <b>"graph"</b>
+        </tt>.
+    <tt>
+          <b>name</b>
+        </tt> peut être le nom ou le chemin du fichier; si l'extension
+    <tt>
+          <b>"graph"</b>
+        </tt> est omise dans <tt>
+          <b>name</b>
+        </tt>, elle est ajoutée.
+    <tt>
+          <b>load_graph</b>
+        </tt> renvoie le graphe correspondant.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+g=load_graph(SCI+'/demos/metanet/mesh100.graph');
+show_graph(g);
+g=load_graph(SCI+'/demos/metanet/colored');
+show_graph(g,'new');
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="save_graph.html">
+          <tt>
+            <b>save_graph</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

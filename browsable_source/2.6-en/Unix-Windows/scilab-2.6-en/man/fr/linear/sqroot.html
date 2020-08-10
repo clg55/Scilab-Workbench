@@ -1,0 +1,60 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>sqroot -  factorisation hermitienne W*W'  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>sqroot(X)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : matrice complexe ou réelle, symétrique définie non-négative
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    renvoie W telle que <tt>
+          <b>X=W*W'</b>
+        </tt> (en utilisant svd).
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+X=rand(5,2)*rand(2,5);X=X*X';
+W=sqroot(X)
+norm(W*W'-X,1)
+//
+X=rand(5,2)+%i*rand(5,2);X=X*X';
+W=sqroot(X)
+norm(W*W'-X,1)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="chol.html">
+          <tt>
+            <b>chol</b>
+          </tt>
+        </a>
+        <a href="svd.html">
+          <tt>
+            <b>svd</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>intsplin -  integration of experimental data by spline interpolation  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>v = intsplin([x,] s)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : vector of increasing x coordinate data. Default value is <tt>
+            <b>1:size(y,'*')</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>s  </b>
+          </tt>
+    : vector of y coordinate data
+  </li>
+  <li>
+          <tt>
+            <b>v  </b>
+          </tt>
+    : value of the integral
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    computes :
+  </p>
+  <p>
+    Where f is a function described by a set of experimental value:
+  </p>
+  <p>
+    <tt>
+          <b>s(i)=f(x(i))</b>
+        </tt>  and <tt>
+          <b>x0=x(1)</b>
+        </tt>, <tt>
+          <b>x1=x(n)</b>
+        </tt>
+  </p>
+  <p>
+    Between mesh points function is interpolated using spline's.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+t=0:0.1:%pi
+intsplin(t,sin(t))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../nonlinear/intg.html">
+          <tt>
+            <b>intg</b>
+          </tt>
+        </a>
+        <a href="integrate.html">
+          <tt>
+            <b>integrate</b>
+          </tt>
+        </a>
+        <a href="inttrap.html">
+          <tt>
+            <b>inttrap</b>
+          </tt>
+        </a>
+        <a href="intsplin.html">
+          <tt>
+            <b>splin</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

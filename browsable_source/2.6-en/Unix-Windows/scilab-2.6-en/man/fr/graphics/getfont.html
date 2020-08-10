@@ -1,0 +1,71 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>getfont -  boîte de dialogue pour sélectionner une police  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[fId,fSize]=getfont()  </dd>
+      <dd>[fId,fSize]=getfont(str)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>str  </b>
+          </tt>
+    : caractère (par exemple "a")
+  </li>
+  <li>
+          <tt>
+            <b>fId  </b>
+          </tt>
+    : entier, le numéro de la police sélectionnée
+  </li>
+  <li>
+          <tt>
+            <b>fSize  </b>
+          </tt>
+    : entier, la taille de la police sélectionnée
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>getfont</b>
+        </tt> ouvre une fenêtre graphique pour sélectionner une police.
+    Exemple : <tt>
+          <b>[fId,fSize]=getfont()</b>
+        </tt>. <tt>
+          <b>xset("font",fId,fSize)</b>
+        </tt>.
+    <tt>
+          <b>plot2d(0,0,rect=[0 0 10 10],axesflag=0)</b>
+        </tt>;<tt>
+          <b>xstring(5,5,"string")</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="xsetech.html">
+          <tt>
+            <b>xset</b>
+          </tt>
+        </a>
+        <a href="getmark.html">
+          <tt>
+            <b>getmark</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

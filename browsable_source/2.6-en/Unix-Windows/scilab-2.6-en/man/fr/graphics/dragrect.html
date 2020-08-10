@@ -1,0 +1,82 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>dragrect -  déplace un ou plusieurs rectangles avec la souris  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>final_rect=dragrect(initial_rect)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>initial_rect  </b>
+          </tt>
+    : matrice 4xn contenant les définitions initiales des rectangles. Chaque colonne contient [x_gauche; y_haut; largeur; hauteur]. Si un seul rectangle est présent initial_rect peut être un rectangle. 
+  </li>
+  <li>
+          <tt>
+            <b>final_rect  </b>
+          </tt>
+    : un rectangle défini par [x_gauche, y_haut, largeur, hauteur] 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>dragrect</b>
+        </tt> permet de déplacer un ou plusieurs rectangles à l'écran. La matrice 4xn
+    initial_rect définit les rectangles. Chaque colonne de <tt>
+          <b>initial_rect</b>
+        </tt>
+    contient  les définitions initiales des rectangles. Chaque colonne contient [x_gauche; y_haut; largeur; hauteur]. Quand un bouton de la souris est actionné <tt>
+          <b>dragrect</b>
+        </tt> renvoie les rectangles finaux dans <tt>
+          <b>final_Rect</b>
+        </tt>.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+xsetech(frect=[0,0,100,100])
+r=dragrect([10;10;30;10])
+xrect(r)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="xrects.html">
+          <tt>
+            <b>xrect</b>
+          </tt>
+        </a>
+        <a href="xrects.html">
+          <tt>
+            <b>xrects</b>
+          </tt>
+        </a>
+        <a href="xclick.html">
+          <tt>
+            <b>xclick</b>
+          </tt>
+        </a>
+        <a href="xgetmouse.html">
+          <tt>
+            <b>xgetmouse</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

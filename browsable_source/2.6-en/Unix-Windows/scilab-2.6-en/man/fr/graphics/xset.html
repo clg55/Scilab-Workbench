@@ -1,0 +1,213 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>xset -  change des valeurs du contexte graphique  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>xset(choice-name,x1,x2,x3,x4,x5)  </dd>
+      <dd>xset()  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>choice-name  </b>
+          </tt>
+    : chaîne de caractères
+  </li>
+  <li>
+          <tt>
+            <b>x1,...,x5  </b>
+          </tt>
+    : dépend de <tt>
+            <b>choice-name</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>xset</b>
+        </tt> est utilisée pour changer des valeurs du contexte graphique de la fenêtre graphique courante.
+  </p>
+  <p>
+    Quand elle est appelée sans argument, une boîte de dialogue est affichée avec les
+    valeurs courantes et des changements peuvent être effectués à l'aide de boutons.
+  </p>
+  <p>
+    Utiliser <tt>
+          <b>xset()</b>
+        </tt> pour afficher ou changer la couleur courante, le marqueur ou la police.
+  </p>
+  <p>
+  </p>
+ 
+
+  <li>xset("alufunction",number) 
+    : utilisé pour changer l'opérateur logique de dessin  L'opérateur est choisi avec . Les valeurs habituelles sont : 3 pour la copie (par défaut), 6 pour le ou exclusif (pour faire des animations) et 0 pour effacer. Voir  pour plus de détails.
+  </li>
+
+  <li>xset("auto clear","on"|"off") 
+    : Met "on" ou "off" le mode d'effacement automatique des graphiques. Quand le mode est "on", les dessins successifs ne sont pas superposés, i.e. la commande  (effacement de la fenêtre graphique et effacement des graphiques enregistrés) est exécutée avant chaque commande graphique de haut niveau (plot2d par exemple). La valeur par défaut est "off".
+  </li>
+
+  <li>xset("background",color) 
+    : Change la couleur d'arrière plan de la fenêtre graphique courante.
+  </li>
+
+  <li>xset("clipping",x,y,w,h) 
+    : Définit la zone de clipping (la zone de la fenêtre graphique où les dessins peuvent être dessinés) comme le rectangle (x,y,w,h) (point en haut à gauche, largeur, hauteur). Cette fonction utilise l'échelle courante de la fenêtre graphique.
+  </li>
+
+  <li>xset("color",value) 
+    : Définit la couleur par défaut de tracé de ligne, de remplissage, de texte, pour toutes les fonctions de dessin.  est un entier projeté sur l'intervalle [0,whiteid]. 0 est utilisé pour le noir et whiteid pour le blanc. La valeur de whiteid peut être obtenue avec .
+  </li>
+
+  <li>xset("colormap",cmap) 
+    : Définit la table des couleurs à partir d'une matrice m x 3. m est le nombre de couleurs. La couleur numéro i est donnée comme le triplet cmap(i,1), cmap(i,2), cmap(i,3) correspondant respectivement aux intensités de rouge, vert et bleu, comprises entre 0 et 1.
+  </li>
+
+  <li>xset("dashes",i) 
+    : en mode noir et blanc (), choisit le style de pointillé numéro i (0 pour une ligne continue). En mode couleur () cette commande est utilisée pour choisir la couleur du marqueur, des lignes et du texte. Ce mot-clé est obsolète, utiliser  et  à la place.
+  </li>
+
+  <li>xset("default") 
+    : Réinitialise le contexte graphiques aux valeurs par défaut.
+  </li>
+
+  <li>xset("font",fontid,fontsize) : choisit la police courante et sa taille. 
+    Noter que  s'applique aussi à toutes les polices autres que  . 
+  </li>
+
+  <li>xset("font size",fontsize) 
+    : Choisit la taille des polices.
+  </li>
+
+  <li>xset("foreground",color) 
+    : Choisit la couleur de premier plan pour la fenêtre graphique courante.
+  </li>
+
+  <li>xset("fpf",string) 
+    : Change le format des nombres affichés sur les courbes de niveau, où  précise le format comme en langage C (par exemple ). Utiliser   pour revenir au format par défaut.
+  </li>
+
+  <li>xset("hidden3d",colorid) : Choisit la couleur des parties arrières dans la fonction plot3d. 
+     supprime l'affichage des parties arrières des objets 3D. Il s'agit d'une technique dénommée 'culling' et permet d'accélérer le rendu des surfaces fermées.
+  </li>
+
+  <li>xset("line mode",type) 
+    : Cette fonction est utilisée pour changer le mode de dessin des lignes. Mode absolu pour  type=1 et relatif avec type=0. (attention : le mode type=0 est buggé)
+  </li>
+
+  <li>xset("line style",value) 
+    : Choisit le style de ligne (1: continu, &gt;1 pour les pointillés).
+  </li>
+
+  <li>xset("mark",markid,marksize) 
+    : Choisit le marqueur ainsi que sa taille. Utiliser  pour voir les marqueurs. Noter que  s'applique aussi à tous les marqueurs autres que . 
+  </li>
+
+  <li>xset("mark size",marksize) 
+    : Choisit la taille de marqueur 
+  </li>
+
+  <li>xset("pattern",value) 
+    : Choisit le motif pour les fonctions de remplissage.  est un entier projeté sur l'intervalle [0,whiteid]. 0 est utilisé pour le noir et whiteid pour le blanc. La valeur de whiteid peut être obtenue avec . "pattern" est équivalent à "color".
+  </li>
+
+  <li>xset("pixmap",flag) 
+     Si flag=0 les graphiques sont dessinés directement sur l'écran.  Si flag=1 les graphiques sont dessinés sur un pixmap et sont affichés à l'écran avec la commande . Le pixmap est effacé avec la commande . Noter que la commande  efface aussi le pixmap.
+  </li>
+
+  <li>xset("thickness",value) 
+    : Choisit l'épaisseur des lignes en pixels (0 et 1 = épaisseur de 1 pixel).
+  </li>
+
+  <li>xset("use color",flag) 
+     Si flag=1 alors  ou  changent la couleur de dessin ou de remplissage.  Si flag=0 on passe en mode pointillés et noir et blanc.
+  </li>
+
+  <li>xset("viewport",x,y) 
+    : Choisit la position de la fenêtre glissante.
+  </li>
+
+  <li>xset("wdim",width,height) 
+    : Choisit la largeur et la hauteur de la fenêtre graphique courante. Cette option n'est pas prise en compte par le pilote PostScript. 
+  </li>
+
+  <li>xset("wpdim",width,height) 
+    : Choisit (en pixels) la largeur et la hauteur de la fenêtre
+    graphique courante physique (qui peut être différente de la taille réelle en mode wresize=1). Cette option n'est pas prise en compte par le pilote PostScript.
+  </li>
+
+  <li>xset("window",window-number) 
+    : Choisit la fenêtre  comme fenêtre graphique par défaut et crée cette fenêtre si elle n'existe pas.
+  </li>
+
+  <li>xset("wpos",x,y) 
+    : Choisit la position (en pixels) du point en haut à gauche de la fenêtre graphique.
+  </li>
+
+  <li>xset("wresize",flag) 
+     Si flag=1 alors les graphiques sont automatiquement redimensionnés de manière à remplir la fenêtre graphique.
+  </li>
+  <pre>
+xdel();xset("wresize",1);plot2d();xset("wdim",1000,500)
+   </pre>
+  <p>
+  </p>
+  <p>
+    Si flag=0 l'échelle des graphiques est inchangée quand la fenêtre est redimensionnée.
+    Le "panner" en haut à gauche de la fenêtre ou les flèches du clavier peuvent être utilisées pour faire glisser le contenu de la fenêtre. 
+  </p>
+  <pre>
+xdel();plot2d();xset("wresize",0);xset("wdim",1000,500)
+   </pre>
+
+  <li>xset("wshow") 
+    : Voir  ci-dessus.
+  </li>
+
+  <li>xset("wwpc") 
+    : Voir  ci-dessus. 
+  </li>
+ 
+  </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="colormap.html">
+          <tt>
+            <b>colormap</b>
+          </tt>
+        </a>
+        <a href="xgetech.html">
+          <tt>
+            <b>xget</b>
+          </tt>
+        </a>
+        <a href="getcolor.html">
+          <tt>
+            <b>getcolor</b>
+          </tt>
+        </a>
+        <a href="getsymbol.html">
+          <tt>
+            <b>getsymbol</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

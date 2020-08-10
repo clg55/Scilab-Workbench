@@ -1,0 +1,107 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>minreal -  minimal balanced realization  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>slb=minreal(sl [,tol])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>sl,slb  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> lists
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : real (threshold)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>[ae,be,ce]=minreal(a,b,c,domain [,tol]) </b>
+        </tt>
+    returns the balanced realization of linear 
+    system <tt>
+          <b>sl</b>
+        </tt> (<tt>
+          <b>syslin</b>
+        </tt> list). 
+  </p>
+  <p>
+    <tt>
+          <b>sl</b>
+        </tt> is assumed stable.
+  </p>
+  <p>
+    <tt>
+          <b>tol</b>
+        </tt> threshold used in <tt>
+          <b>equil1</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=[-eye(2,2),rand(2,2);zeros(2,2),-2*eye(2,2)];
+B=[rand(2,2);zeros(2,2)];C=rand(2,4);
+sl=syslin('c',A,B,C);
+slb=minreal(sl);
+ss2tf(sl)
+ss2tf(slb)
+ctr_gram(sl)
+clean(ctr_gram(slb))
+clean(obs_gram(slb))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="minss.html">
+          <tt>
+            <b>minss</b>
+          </tt>
+        </a>
+        <a href="balreal.html">
+          <tt>
+            <b>balreal</b>
+          </tt>
+        </a>
+        <a href="arhnk.html">
+          <tt>
+            <b>arhnk</b>
+          </tt>
+        </a>
+        <a href="equil1.html">
+          <tt>
+            <b>equil</b>
+          </tt>
+        </a>
+        <a href="equil1.html">
+          <tt>
+            <b>equil1</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>S. Steer INRIA 1987  </ul>
+    </p>
+  </body>
+</html>

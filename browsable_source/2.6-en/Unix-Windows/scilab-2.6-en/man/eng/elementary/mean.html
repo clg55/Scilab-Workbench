@@ -1,0 +1,103 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>mean -  mean (row mean, column mean) of vector/matrix entries  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=mean(x)  </dd>
+      <dd>y=mean(x,'r')  </dd>
+      <dd>y=mean(x,'c')  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : real vector or matrix 
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : scalar or vector
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    For a vector or a matrix <tt>
+          <b>x</b>
+        </tt>, <tt>
+          <b>y=mean(x)</b>
+        </tt>  returns in the
+    scalar <tt>
+          <b>y</b>
+        </tt> the mean of all the entries of <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>y=mean(x,'r')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=mean(x,1)</b>
+        </tt>) is the rowwise mean. It returns in each 
+    entry of the column vector <tt>
+          <b>y</b>
+        </tt> the mean of each row of <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  <p>
+  </p>
+  <p>
+    <tt>
+          <b>y=mean(x,'c')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=mean(x,2)</b>
+        </tt>) is the columnwise mean. It returns in each entry of the row vector 
+    <tt>
+          <b>y</b>
+        </tt> the mean of each column  of <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=[1,2,10;7,7.1,7.01];
+mean(A)
+mean(A,'r')
+mean(A,'c')
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="cumsum.html">
+          <tt>
+            <b>sum</b>
+          </tt>
+        </a>
+        <a href="median.html">
+          <tt>
+            <b>median</b>
+          </tt>
+        </a>
+        <a href="st_deviation.html">
+          <tt>
+            <b>st_deviation</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

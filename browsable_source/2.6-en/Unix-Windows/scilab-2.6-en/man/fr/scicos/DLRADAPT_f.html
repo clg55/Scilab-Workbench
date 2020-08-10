@@ -1,0 +1,60 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos Block  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>DLRADAPT_f -  Scicos discrete-time linear adaptive system  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This block realizes a SISO linear system represented by its rational
+    transfer function whose numerator and denominator roots are tabulated
+    functions of the second block input. The rational function must be
+    proper.
+  </p>
+  <p>
+    Roots are interpolated linearly between mesh points.
+  </p>
+  </ul>
+    <H3>DIALOGUE PARAMETERS</H3>
+    <ul>
+      <li>Vector of p mesh points
+: a vector which defines  mesh points. Numerator roots : a matrix, each line gives the roots of the numerator at the corresponding mesh point.
+
+  </li>
+      <li>Denominator roots
+: a matrix, each line gives the roots of the denominator at the corresponding mesh point.
+
+  </li>
+      <li>gain
+: a vector, each vector entry gives the transfer gain at the corresponding mesh point.
+
+  </li>
+      <li>past inputs
+: a vector of initial value of past  inputs
+
+  </li>
+      <li>past outputs
+: a vector of initial value of past  outputs
+
+  </li>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="DLSS_f.html">
+          <tt>
+            <b>DLSS_f</b>
+          </tt>
+        </a>
+        <a href="DLR_f.html">
+          <tt>
+            <b>DLR_f</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

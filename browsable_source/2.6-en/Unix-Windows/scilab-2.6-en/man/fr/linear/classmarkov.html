@@ -1,0 +1,101 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>classmarkov -  recurrent and transient classes of Markov matrix  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[perm,rec,tr,indsRec,indsT]=classmarkov(M)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>M  </b>
+          </tt>
+    : real N x N Markov matrix. Sum of entries in each row should add to one.
+  </li>
+  <li>
+          <tt>
+            <b>perm  </b>
+          </tt>
+    : integer permutation vector.
+  </li>
+  <li>
+          <tt>
+            <b>rec, tr  </b>
+          </tt>
+    : integer vector, number (number of states in each recurrent classes, number of transient states).
+  </li>
+  <li>
+          <tt>
+            <b>indsRec,indsT  </b>
+          </tt>
+    : integer vectors. (Indexes of recurrent and transient states).
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Returns a permutation vector <tt>
+          <b>perm</b>
+        </tt> such that
+  </p>
+  <pre>
+M(perm,perm) = [M11 0 0 0 0   0]
+               [0 M22 0 0     0]
+               [0 0 M33       0]
+               [      ...      ]
+               [0 0       Mrr 0]
+               [* *        *  Q]
+   </pre>
+  <p>
+    Each <tt>
+          <b>Mii</b>
+        </tt> is a Markov matrix of dimension <tt>
+          <b>rec(i)  i=1,..,r</b>
+        </tt>.
+    <tt>
+          <b>Q</b>
+        </tt> is sub-Markov matrix of dimension <tt>
+          <b>tr</b>
+        </tt>.
+    States 1 to sum(rec) are recurrent and states from r+1 to n
+    are transient. 
+    One has <tt>
+          <b>perm=[indsRec,indsT]</b>
+        </tt> where indsRec is a  vector of size sum(rec) 
+    and indsT is a vector of size tr.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+//P has two recurrent classes (with 2 and 1 states) 2 transient states
+P=genmarkov([2,1],2,'perm')
+[perm,rec,tr,indsRec,indsT]=classmarkov(P);
+P(perm,perm)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="eigenmarkov.html">
+          <tt>
+            <b>genmarkov</b>
+          </tt>
+        </a>
+        <a href="eigenmarkov.html">
+          <tt>
+            <b>eigenmarkov</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

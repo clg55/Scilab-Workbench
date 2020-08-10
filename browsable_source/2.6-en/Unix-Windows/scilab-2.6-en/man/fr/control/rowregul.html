@@ -1,0 +1,103 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>rowregul -  removing poles and zeros at infinity  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[Stmp,Ws]=rowregul(Sl,alfa,beta)   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>Sl,Stmp  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> lists
+  </li>
+  <li>
+          <tt>
+            <b>alfa,beta  </b>
+          </tt>
+    : real numbers (new pole and zero positions)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    computes a postfilter <tt>
+          <b>Ws</b>
+        </tt> such that <tt>
+          <b>Stmp=Ws*Sl</b>
+        </tt> is proper and 
+    with full rank <tt>
+          <b>D</b>
+        </tt> matrix.
+  </p>
+  <p>
+    Poles at infinity of <tt>
+          <b>Sl</b>
+        </tt> are moved to <tt>
+          <b>alfa</b>
+        </tt>;
+  </p>
+  <p>
+    Zeros at infinity of <tt>
+          <b>Sl</b>
+        </tt> are moved to <tt>
+          <b>beta</b>
+        </tt>;
+  </p>
+  <p>
+    <tt>
+          <b>Sl</b>
+        </tt> is a assumed to be a right invertible linear system (<tt>
+          <b>syslin</b>
+        </tt> list)
+    in state-space representation with possibly a polynomial <tt>
+          <b>D</b>
+        </tt> matrix.
+  </p>
+  <p>
+    This function is the dual of colregul (see function code).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=%s;
+w=[1/s,0;s/(s^3+2),2/s];
+Sl=tf2ss(w);
+[Stmp,Ws]=rowregul(Sl,-1,-2);
+Stmp('D')     // D matrix of Stmp
+clean(ss2tf(Stmp))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="invsyslin.html">
+          <tt>
+            <b>invsyslin</b>
+          </tt>
+        </a>
+        <a href="colregul.html">
+          <tt>
+            <b>colregul</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>F. D. , R. N. ;   </ul>
+    </p>
+  </body>
+</html>

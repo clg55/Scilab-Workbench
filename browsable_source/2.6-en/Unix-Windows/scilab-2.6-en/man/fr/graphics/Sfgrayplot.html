@@ -1,0 +1,79 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>Sfgrayplot -  représentation 2D en pseudo-couleurs lissées d'une surface définie par une fonction  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>Sfgrayplot(x,y,f,[strf,rect,nax])  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>Sfgrayplot</b>
+        </tt> est identique à <tt>
+          <b>fgrayplot</b>
+        </tt> mais le dessin est lissé.
+    La fonction <tt>
+          <b>fec</b>
+        </tt> est utilisée pour cela.
+    La surface est représentée en supposant que la hauteur varie linéairement sur un ensemble de triangles construits à partir de la grille :
+  </p>
+  <pre>
+    ______ 
+    | /| /| 
+    |/_|/_|  
+    | /| /|
+    |/_|/_|
+   </pre>
+  <p>
+  </p>
+  <p>
+    Taper <tt>
+          <b>Sfgrayplot()</b>
+        </tt> pour voir une démonstration de la fonction.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+t=-1:0.1:1;
+deff("[z]=surf(x,y)","z=x**2+y**2")
+Sfgrayplot(t,t,surf,"111",[-2,-2,2,2])
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="fec.html">
+          <tt>
+            <b>fec</b>
+          </tt>
+        </a>
+        <a href="fgrayplot.html">
+          <tt>
+            <b>fgrayplot</b>
+          </tt>
+        </a>
+        <a href="fgrayplot.html">
+          <tt>
+            <b>grayplot</b>
+          </tt>
+        </a>
+        <a href="Sgrayplot.html">
+          <tt>
+            <b>Sgrayplot</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

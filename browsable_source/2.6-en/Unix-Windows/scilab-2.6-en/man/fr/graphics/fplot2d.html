@@ -1,0 +1,105 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>fplot2d  -  dessin 2D d'une courbe définie par une fonction  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>fplot2d(xr,f,[style,strf,leg,rect,nax])  </dd>
+      <dd>fplot2d(xr,f,&lt;opt_args&gt;)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>xr  </b>
+          </tt>
+    : vecteur.
+  </li>
+  <li>
+          <tt>
+            <b>f  </b>
+          </tt>
+    : fonction Scilab du type <tt>
+            <b>y=f(x)</b>
+          </tt> ou routine liée dynamiquement donnée sous forme d'une chaîne de caractères.
+  </li>
+  <li>
+          <tt>
+            <b>style,strf,leg,rect,nax  </b>
+          </tt>
+    : voir <tt>
+            <b>plot2d</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>&lt;opt_args&gt;  </b>
+          </tt>
+    : voir <tt>
+            <b>plot2d</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>fplot2d</b>
+        </tt> dessine une courbe définie par la fonction <tt>
+          <b>f</b>
+        </tt>.
+    La courbe est approchée par interpolation linéaire entre les points
+    <tt>
+          <b>(xr(i),f(xr(i))</b>
+        </tt>. Les valeurs de f(x) sont obtenues par <tt>
+          <b>feval(xr,f)</b>
+        </tt>.
+  </p>
+  <p>
+    Taper <tt>
+          <b>fplot2d()</b>
+        </tt> pour voir une démonstration de la fonction.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+deff("[y]=f(x)","y=sin(x)+cos(x)")
+x=[0:0.1:10]*%pi/10;
+fplot2d(x,f)
+xbasc();
+fplot2d(1:10,'parab')
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="plot2d1.html">
+          <tt>
+            <b>plot2d</b>
+          </tt>
+        </a>
+        <a href="../programming/feval.html">
+          <tt>
+            <b>feval</b>
+          </tt>
+        </a>
+        <a href="paramfplot2d.html">
+          <tt>
+            <b>paramfplot2d</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

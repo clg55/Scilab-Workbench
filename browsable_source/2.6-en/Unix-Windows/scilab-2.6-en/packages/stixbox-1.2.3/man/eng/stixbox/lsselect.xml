@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>lsselect  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="lsselect"> Select a predictor subset for regression  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>[Q, I, B, BB] = lsselect(y,x,crit,how,pmax,level)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>y  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : dependant variate (column vector)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>x  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :    regressor variates
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>crit  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : selection criterion (string):
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>&apos;HT&apos;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :   Hypothesis Test (default level = 0.05)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>&apos;AIC&apos;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  Akaike&apos;s Information Criterion 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>&apos;BIC&apos;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  Bayesian Information Criterion
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>&apos;CMV&apos;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  Cross Model Validation (inner criterion RSS)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>how  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :    (string)  choses between :
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>&apos;AS&apos;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :   All Subsets
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>&apos;FI&apos;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  Forward Inclusion
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>&apos;BE&apos;  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :   Backward Elimination
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>pmax  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : limits the number of included parameters (scalar).
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>level  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : optional input argument, p-value reference used for inclusion or deletion.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>Q  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : criterion as a function of the number of parameters; might be interpreted as an estimate of the prediction standard deviation. For the method &apos;HT&apos;, Q is instead the successive p-values for inclusion or elimination. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>I  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : index numbers of the included columns.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>B  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : vector of coefficients, ie the suggested model is Y = X*B. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>BB  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Column p of BB is the best B of parameter size p. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Selects a good subset of regressors in a multiple linear regression
+    model. 
+  </P>
+  <P>
+    The last column of the prediction matrix x must be an intercept
+    column, ie all elements are ones. This column is never excluded in the
+    search for a good model. If it is not present it is added.
+  </P>
+  <P>
+    This function is not highly optimized for speed but rather for
+    flexibility. It would be faster if &apos;all subsets&apos; were in a  separate
+    routine and &apos;forward&apos; and &apos;backward&apos; were in another routine,
+    especially for CMV. 
+  </P>
+  </DESCRIPTION>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>lsfit</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>linreg</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

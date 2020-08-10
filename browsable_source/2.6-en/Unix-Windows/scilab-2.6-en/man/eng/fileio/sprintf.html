@@ -1,0 +1,149 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>sprintf -  Emulator of C language sprintf function  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>str=sprintf(format,value_1,..,value_n)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>format  </b>
+          </tt>
+    : a Scilab string. Specifies a character string combining literal characters with conversion specifications.
+  </li>
+  <li>
+          <tt>
+            <b>value_i  </b>
+          </tt>
+    : Specifies the data to be converted according to the format parameter.
+  </li>
+  <li>
+          <tt>
+            <b>str  </b>
+          </tt>
+    : column vector of character strings 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    The <tt>
+          <b>sprintf</b>
+        </tt> function converts, formats, and stores its
+    <tt>
+          <b>value</b>
+        </tt> parameters, under control of the <tt>
+          <b>format</b>
+        </tt> parameter.
+  </p>
+  <p>
+    The <tt>
+          <b>format</b>
+        </tt> parameter is a character string that contains two
+    types of objects:
+  </p>
+ 
+
+  <li>Literal characters 
+    : which are copied to the output stream.
+  </li>
+
+  <li>Conversion specifications 
+    : each of which causes zero or more items to be fetched from the  parameter list. see  for details
+  </li>
+  <p>
+  </p>
+  <p>
+    If there are not enough items for <tt>
+          <b>format</b>
+        </tt> in the
+    <tt>
+          <b>value</b>
+        </tt> parameter list, <tt>
+          <b>sprintf</b>
+        </tt> generate an error.
+    If any <tt>
+          <b>value</b>
+        </tt>s remain after the entire <tt>
+          <b>format</b>
+        </tt> has been
+    processed, they are ignored.
+  </p>
+  <p>
+    Note: <tt>
+          <b>sprintf</b>
+        </tt> is obsolete, use <tt>
+          <b>msprintf</b>
+        </tt> instead.
+  </p>
+ 
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+fahr=120
+sprintf('%3d Fahrenheit = %6.1f Celsius',fahr,(5/9)*(fahr-32)) 
+
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../graphics/xstring.html">
+          <tt>
+            <b>string</b>
+          </tt>
+        </a>
+        <a href="../graphics/printing.html">
+          <tt>
+            <b>print</b>
+          </tt>
+        </a>
+        <a href="write4b.html">
+          <tt>
+            <b>write</b>
+          </tt>
+        </a>
+        <a href="../programming/format.html">
+          <tt>
+            <b>format</b>
+          </tt>
+        </a>
+        <a href="dispfiles.html">
+          <tt>
+            <b>disp</b>
+          </tt>
+        </a>
+        <a href="fileinfo.html">
+          <tt>
+            <b>file</b>
+          </tt>
+        </a>
+        <a href="fprintf.html">
+          <tt>
+            <b>printf</b>
+          </tt>
+        </a>
+        <a href="fprintf.html">
+          <tt>
+            <b>fprintf</b>
+          </tt>
+        </a>
+        <a href="mprintf.html">
+          <tt>
+            <b>msprintf</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>sva -  approximation de valeurs singulières  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[U,s,V]=sva(A,k)  </dd>
+      <dd>[U,s,V]=sva(A,tol)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : matrice réelle ou complexe
+  </li>
+  <li>
+          <tt>
+            <b>k  </b>
+          </tt>
+    : entier
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : nombre réel positif
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Approximation de valeurs singulières.
+  </p>
+  <p>
+     avec <tt>
+          <b>k</b>
+        </tt> un entier &gt;=1, renvoie <tt>
+          <b>U,S</b>
+        </tt> et <tt>
+          <b>V</b>
+        </tt> telles que
+    <tt>
+          <b>B=U*S*V'</b>
+        </tt> est la meilleure approximation au sens l_2
+    de <tt>
+          <b>A</b>
+        </tt> avec rang(<tt>
+          <b>B</b>
+        </tt>)=<tt>
+          <b>k</b>
+        </tt>. 
+  </p>
+  <p>
+     où <tt>
+          <b>tol</b>
+        </tt> est un réel positif, renvoie <tt>
+          <b>U,S</b>
+        </tt> et <tt>
+          <b>V</b>
+        </tt> tels que
+    <tt>
+          <b>B=U*S*V'</b>
+        </tt> et la norme l_2 de <tt>
+          <b>A-B</b>
+        </tt> est inférieure à <tt>
+          <b>tol</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=rand(5,4)*rand(4,5);
+[U,s,V]=sva(A,2);
+B=U*s*V';
+svd(A)
+svd(B)
+clean(svd(A-B))
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="svd.html">
+          <tt>
+            <b>svd</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

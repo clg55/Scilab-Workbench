@@ -1,0 +1,81 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>part -  extraction of strings  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[c]=part(mp,v)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>mp,c  </b>
+          </tt>
+    : string matrices
+  </li>
+  <li>
+          <tt>
+            <b>v  </b>
+          </tt>
+    : integer vector.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Let <tt>
+          <b>s[k]</b>
+        </tt> stands for the <tt>
+          <b>k</b>
+        </tt> character of string <tt>
+          <b>s</b>
+        </tt> ( 
+    or the empty character if <tt>
+          <b>k &gt;length(s)</b>
+        </tt>).
+  </p>
+  <p>
+    <tt>
+          <b>part</b>
+        </tt> returns <tt>
+          <b>c</b>
+        </tt>, a matrix of character strings, such that 
+    <tt>
+          <b>c(i,j)</b>
+        </tt> is the string <tt>
+          <b>"s[v(1)]...s[v(n)]"</b>
+        </tt> ( <tt>
+          <b>s=mp(i,j)</b>
+        </tt> ).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+c=part(['a','abc','abcd'],[1,1,2])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../graphics/xstring.html">
+          <tt>
+            <b>string</b>
+          </tt>
+        </a>
+        <a href="length.html">
+          <tt>
+            <b>length</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

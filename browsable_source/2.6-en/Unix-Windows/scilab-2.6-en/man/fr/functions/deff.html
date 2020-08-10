@@ -1,0 +1,130 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>deff -  on-line definition of function  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>deff('[s1,s2,...]=newfunction(e1,e2,....)',text [,opt])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>e1,e2,...,  </b>
+          </tt>
+    : input variables.
+  </li>
+  <li>
+          <tt>
+            <b>s1,s2,...,  </b>
+          </tt>
+    : output variables.
+  </li>
+  <li>
+          <tt>
+            <b>text  </b>
+          </tt>
+    : matrix of character strings
+  </li>
+  <li>
+          <tt>
+            <b>opt  </b>
+          </tt>
+    : optional character string 
+  </li>
+ <ul>
+  <li>
+            <tt>
+              <b>'c'  </b>
+            </tt>
+    : function is "compiled" to be more efficient (default)
+  </li>
+  <li>
+            <tt>
+              <b>'n'  </b>
+            </tt>
+    : function is not "compiled"
+  </li>
+ </ul>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    On-line definition of function (user defined function): the name of the 
+    created function is <tt>
+          <b>newfunction</b>
+        </tt>.
+    <tt>
+          <b>text</b>
+        </tt> is a sequence of instructions usually set as a vector of 
+    character strings.
+  </p>
+  <p>
+    This command can be used inside a function and the new function
+    can be an input or output of any other function.
+  </p>
+  <p>
+    Usually, functions are defined in a file and loaded into Scilab by
+    <tt>
+          <b>getf</b>
+        </tt>
+  </p>
+  <p>
+    Some time, in particular when you want to use define strings within
+    <tt>
+          <b>deff</b>
+        </tt> <tt>
+          <b>text</b>
+        </tt> is rather difficult to write. A more tractable
+    way may be to define your function in a file as usual, to load it into
+    Scilab by <tt>
+          <b>getf</b>
+        </tt> (without <tt>
+          <b>'c'</b>
+        </tt>  option) and use sci2exp to
+    get corresponding <tt>
+          <b>deff</b>
+        </tt> instructions.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+deff('[x]=myplus(y,z)','x=y+z')
+//
+deff('[x]=mymacro(y,z)',['a=3*y+1'; 'x=a*z+y'])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/getfield.html">
+          <tt>
+            <b>getf</b>
+          </tt>
+        </a>
+        <a href="comp.html">
+          <tt>
+            <b>comp</b>
+          </tt>
+        </a>
+        <a href="../programming/execstr.html">
+          <tt>
+            <b>exec</b>
+          </tt>
+        </a>
+        <a href="functions.html">
+          <tt>
+            <b>function</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

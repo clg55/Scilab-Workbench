@@ -1,0 +1,76 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>circuit -  trouve un circuit ou la fonction de rang dans un graphe orienté  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[p,r] = circuit(g)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>g  </b>
+          </tt>
+    : graphe (liste)
+  </li>
+  <li>
+          <tt>
+            <b>p  </b>
+          </tt>
+    : vecteur ligne des numéros des arcs du circuit s'il existe
+  </li>
+  <li>
+          <tt>
+            <b>r  </b>
+          </tt>
+    : vecteur ligne de la fonction de rang s'il n'y a pas de circuit
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>circuit</b>
+        </tt> essaye de trouver un circuit pour le graphe orienté <tt>
+          <b>g</b>
+        </tt>.
+    Elle renvoie, s'il existe, le circuit <tt>
+          <b>p</b>
+        </tt> en temps que vecteur ligne des numéros d'arcs
+    correspondants et renvoie le vecteur vide <tt>
+          <b>[]</b>
+        </tt> sinon.
+    Si le graphe n'a pas de circuit, la fonction de rang est renvoyée dans <tt>
+          <b>r</b>
+        </tt>, 
+    sinon sa valeur est le vecteur vide <tt>
+          <b>[]</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+// graphe avec circuit
+ta=[1 1 2 3 5 4 6 7 7 3 3 8 8 5];
+he=[2 3 5 4 6 6 7 4 3 2 8 1 7 4];
+g=make_graph('foo',1,8,ta,he);
+g('node_x')=[116 231 192 323 354 454 305 155];
+g('node_y')=[ 118 116 212 219 117 185 334 316];
+show_graph(g);
+p=circuit(g)
+show_arcs(p)
+// graphe sans circuit
+g=make_graph('foo',1,4,[1 2 2 3],[2 3 4 4]);
+[p,r]=circuit(g)
+ </pre>
+    </ul>
+  </body>
+</html>

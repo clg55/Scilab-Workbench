@@ -1,0 +1,79 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>scanf  -  Converts formatted input on standard input  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd> [v_1,...v_n]=scanf (format);  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>format  </b>
+          </tt>
+    :Specifies the format conversion.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    The scanf functions get character data on standard input (%io(1)), interpret it according
+    to a format, and returns the converted results.
+  </p>
+  <p>
+    The format parameter contains conversion specifications
+    used to interpret the input.
+  </p>
+  <p>
+    The format parameter can contain
+    white-space characters (blanks, tabs, newline, or formfeed)
+    that, except in the following two cases, read the input up to the
+    next nonwhite-space character. Unless there is a match in the control
+    string, trailing white space (including a newline character) is not
+    read.
+  </p>
+ 
+
+  <li>- 
+    Any character except % (percent sign), which must match the next character of the input stream.
+  </li>
+
+  <li>- 
+    A conversion specification that directs the conversion of the next input field. see  for details. 
+  </li>
+ 
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="fprintf.html">
+          <tt>
+            <b>printf</b>
+          </tt>
+        </a>
+        <a href="read4b.html">
+          <tt>
+            <b>read</b>
+          </tt>
+        </a>
+        <a href="fscanf.html">
+          <tt>
+            <b>fscanf</b>
+          </tt>
+        </a>
+        <a href="mfscanf.html">
+          <tt>
+            <b>sscanf</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

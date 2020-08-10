@@ -1,0 +1,137 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>min -  minimum  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[m [,k]]=min(A)  </dd>
+      <dd>[m [,k]]=min(A,'c') ou [m [,k]]=min(A,'r')  </dd>
+      <dd>[m [,k]]=min(A1,A2,...,An)  </dd>
+      <dd>[m [,k]]=min(list(A1,A2,...,An))  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : vecteur ou matrice réelle.
+  </li>
+  <li>
+          <tt>
+            <b>A1,...,An  </b>
+          </tt>
+    : un ensemble de vecteurs ou de matrices de même taille.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+  </p>
+  <p>
+    Pour <tt>
+          <b>A</b>
+        </tt>, un vecteur ou une matrice réelle, <tt>
+          <b>min(A)</b>
+        </tt> 
+    est son plus petit élément. <tt>
+          <b>[m,k]=min(A)</b>
+        </tt> donne la position du minimum dans
+    <tt>
+          <b>A</b>
+        </tt>. Le deuxième argument peut être la chaîne de caractère <tt>
+          <b>'r'</b>
+        </tt> ou <tt>
+          <b>'c'</b>
+        </tt> : <tt>
+          <b>'r'</b>
+        </tt> permet d'obtenir un vecteur ligne <tt>
+          <b>m</b>
+        </tt> tel que <tt>
+          <b>m(j)</b>
+        </tt> contient le 
+    minimum de la colonne numéro <tt>
+          <b>j</b>
+        </tt> de A (<tt>
+          <b>A(:,j)</b>
+        </tt>), <tt>
+          <b>k(j)</b>
+        </tt> donne le numéro de la ligne qui contient le minimum pour la colonne <tt>
+          <b>j</b>
+        </tt>. <tt>
+          <b>'c'</b>
+        </tt> est utilisé pour l'opération duale sur les lignes de <tt>
+          <b>A</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>m=min(A1,A2,...,An)</b>
+        </tt>, où tous les <tt>
+          <b>Aj</b>
+        </tt> sont des matrices de même taille, renvoie un vecteur ou une matrice <tt>
+          <b>m</b>
+        </tt> de taille <tt>
+          <b>size(m)=size(A1)</b>
+        </tt> telle que <tt>
+          <b>m(i)= min( Aj(i)), j=1,...,n</b>
+        </tt>. <tt>
+          <b>[m,k]=min(A1,A2,...,An)</b>
+        </tt> 
+    donne de plus le vecteur ou la matrice <tt>
+          <b>k</b>
+        </tt>. Pour un <tt>
+          <b>i</b>
+        </tt> donné,
+    <tt>
+          <b>k(i)</b>
+        </tt> est le numéro de la première <tt>
+          <b>Aj(i)</b>
+        </tt> réalisant le minimum.
+  </p>
+  <p>
+    <tt>
+          <b>[m,k]=min(list(A1,...,An))</b>
+        </tt> est une syntaxe équivalente de 
+    <tt>
+          <b>[m,k]=min(A1,A2,...,An)</b>
+        </tt>
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+[m,n]=min([1,3,1])
+[m,n]=min([3,1,1],[1,3,1],[1,1,3])
+[m,n]=min(list([3,1,1],[1,3,1],[1,1,3]))
+[m,n]=min(list(1,3,1))
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="gsort.html">
+          <tt>
+            <b>sort</b>
+          </tt>
+        </a>
+        <a href="../programming/find.html">
+          <tt>
+            <b>find</b>
+          </tt>
+        </a>
+        <a href="maxi.html">
+          <tt>
+            <b>max</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,73 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>double  -  conversion from integer to double precision  representation  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=double(X)  </dd>
+      <dd>y=int16(X)  </dd>
+      <dd>y=int32(X)  </dd>
+      <dd>y=uint8(X)  </dd>
+      <dd>y=uint16(X)  </dd>
+      <dd>y=uint32(X)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : matrix of floats or integers
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : matrix of floats
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    converts  data stored using  one, two or four bytes integers into
+    double precision floating point representation. If <tt>
+          <b>X</b>
+        </tt> entries are already 
+    double precision floats, nothing is done.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=int8([0 12 140])
+double(x)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="int8.html">
+          <tt>
+            <b>int8</b>
+          </tt>
+        </a>
+        <a href="../programming/inttype.html">
+          <tt>
+            <b>inttype</b>
+          </tt>
+        </a>
+        <a href="../programming/inttype.html">
+          <tt>
+            <b>type</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

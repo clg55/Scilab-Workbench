@@ -1,0 +1,97 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>tf2ss -  transfer to state-space  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>sl=tf2ss(h [,tol])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>h  </b>
+          </tt>
+    : rational matrix
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : may be the constant rtol or the 2 vector <tt>
+            <b>[rtol atol]</b>
+          </tt>
+  </li>
+ <ul>
+  <li>
+            <tt>
+              <b>rtol  </b>
+            </tt>
+    :tolerance used when evaluating observability.
+  </li>
+  <li>
+            <tt>
+              <b>atol  </b>
+            </tt>
+    :absolute tolerance used when evaluating observability.
+  </li>
+ </ul>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : linear system (<tt>
+            <b>syslin</b>
+          </tt> list <tt>
+            <b>sl=[A,B,C,D(s)]</b>
+          </tt>)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    transfer to state-space conversion: 
+  </p>
+  <p>
+    <tt>
+          <b>h=C*(s*eye()-A)^-1*B+D(s)</b>
+        </tt>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+H=[2/s,(s+1)/(s^2-5)];
+Sys=tf2ss(H)
+clean(ss2tf(Sys))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="ss2tf.html">
+          <tt>
+            <b>ss2tf</b>
+          </tt>
+        </a>
+        <a href="../robust/tf2des.html">
+          <tt>
+            <b>tf2des</b>
+          </tt>
+        </a>
+        <a href="des2tf.html">
+          <tt>
+            <b>des2tf</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>derivative  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>April 1993  </DATE>
+  <SHORT_DESCRIPTION name="derivative"> approximate derivative  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>J=derivative(f,x0,h)  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>[J,J2]=derivative(f,x0,h)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>f  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Scilab function <VERB>f: R^n --&gt; R^p</VERB> 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>x0  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : real column vector (of dimension n)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>h  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : (small) positive real number (default is 1.d-7)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>J  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : real p x n Jacobian matrix 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>J2  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : real p x (p*n)  matrix
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Approximate derivatives of a function f: <VERB>R^n --&gt; R^p</VERB>.
+  </P>
+  <VERBATIM><![CDATA[
+f(x) = f(x0) + D1f(x0) *dx + 1/2* D2f(x0) *(dx.*.dx) +...
+J = D1f(x0) ; J2=D2f(x0)
+   ]]></VERBATIM>
+  <P>
+    Derivatives are evaluated by finite difference:f_i(x+h)-f_i(x))/h.
+    Caution: h should be carefully chosen...
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+deff('y=f(x)','y=[sin(x(1))*cos(x(2));x(1)^2*x(2)^2;1+x(1)*x(2)^2]')
+x0=[1;2];eps=0.001;h=eps*[2;5];
+[J,J2]=derivative(f,x0);
+[f(x0+h)-f(x0)-J*h ,0.5*J2*(h.*.h)]
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>derivat</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

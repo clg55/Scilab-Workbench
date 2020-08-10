@@ -1,0 +1,76 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>dnorm -  The normal density function  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y = dnorm(x [,m,s])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : real vector or matrix
+  </li>
+  <li>
+          <tt>
+            <b>m  </b>
+          </tt>
+    : mean (default value is <tt>
+            <b>zeros(x)</b>
+          </tt>). <tt>
+            <b>m</b>
+          </tt> is a scalar  or a matrix with the same size as <tt>
+            <b>x</b>
+          </tt>. 
+  </li>
+  <li>
+          <tt>
+            <b>s  </b>
+          </tt>
+    :  standard deviation (default value is <tt>
+            <b>ones(x)</b>
+          </tt>). <tt>
+            <b>s</b>
+          </tt> is a scalar or a matrix with the same size as <tt>
+            <b>x</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    :   normal density function with mean <tt>
+            <b>m</b>
+          </tt> and standard deviation <tt>
+            <b>s</b>
+          </tt>, at the values of x :
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    The normal density function. 
+  </p>
+  <pre>
+ y=exp(-0.5*((x-m)./s)^2)./(sqrt(2*pi).*s)
+   </pre>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x = -5:0.1:5 ;
+y = dnorm(x);
+plot(x,y);
+   </pre>
+    </ul>
+  </body>
+</html>

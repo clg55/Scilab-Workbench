@@ -1,0 +1,102 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>isdef -  check variable  existence  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>isdef(name [,where])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>name  </b>
+          </tt>
+    : a character string
+  </li>
+  <li>
+          <tt>
+            <b>where  </b>
+          </tt>
+    : an optional character string with default value 'all'
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>isdef(name)</b>
+        </tt> returns <tt>
+          <b>%T</b>
+        </tt> if the variable <tt>
+          <b>'var-name'</b>
+        </tt> exists 
+    and <tt>
+          <b>%F</b>
+        </tt> otherwise.
+  </p>
+  <p>
+    <tt>
+          <b>isdef(name,'local')</b>
+        </tt> returns <tt>
+          <b>%T</b>
+        </tt> if the variable <tt>
+          <b>'var-name'</b>
+        </tt> exists 
+    in the
+      local environment of the current function and <tt>
+          <b>%F</b>
+        </tt> otherwise.
+  </p>
+  <p>
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=1;
+isdef('A')
+clear A
+isdef('A')
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/exists.html">
+          <tt>
+            <b>exists</b>
+          </tt>
+        </a>
+        <a href="../programming/whereis.html">
+          <tt>
+            <b>whereis</b>
+          </tt>
+        </a>
+        <a href="../programming/inttype.html">
+          <tt>
+            <b>type</b>
+          </tt>
+        </a>
+        <a href="typeof.html">
+          <tt>
+            <b>typeof</b>
+          </tt>
+        </a>
+        <a href="../programming/clearglobal.html">
+          <tt>
+            <b>clear</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

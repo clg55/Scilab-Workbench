@@ -1,0 +1,82 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>geom3d -  projection 3D vers 2D après une instruction de dessin 3D  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[x,y]=geom3d(x1,y1,z1)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x1,y1,z1  </b>
+          </tt>
+    : vecteur réels de même taille (points 3D).
+  </li>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : vecteurs réels de même taille que <tt>
+            <b>x1</b>
+          </tt>, <tt>
+            <b>y1</b>
+          </tt> et <tt>
+            <b>z1</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Après l'utilisation d'une instruction de dessin 3D du type <tt>
+          <b>plot3d</b>
+        </tt>, <tt>
+          <b>plot3d1</b>
+        </tt>
+    ou <tt>
+          <b>param3d</b>
+        </tt>, <tt>
+          <b>geom3d</b>
+        </tt> permet de faire la correspondance
+    entre un point de l'espace 3D <tt>
+          <b>(x1(i),y1(i),z1(i))</b>
+        </tt>
+    et le point correspondant <tt>
+          <b>(x(i),y(i))</b>
+        </tt> dans le plan projeté 2D.
+    On peut ainsi utiliser les primitives graphiques avec <tt>
+          <b>(x,y)</b>
+        </tt> pour superposer des dessins.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+deff("[z]=surf(x,y)","z=sin(x)*cos(y)")
+t=%pi*(-10:10)/10;
+// dessin 3D de la surface
+fplot3d(t,t,surf,35,45,"X@Y@Z")
+// maintenant (t,t,sin(t).*cos(t)) est une courbe sur la surface
+// pouvant être dessinée avec geom3d et xpoly
+[x,y]=geom3d(t,t,sin(t).*cos(t));
+xpoly(x,y,"lines")
+// ajout d'un commentaire 
+[x,y]=geom3d([0,0],[0,0],[5,0]);
+xsegs(x,y)
+xstring(x(1),y(1),"point (0,0,0)")
+ </pre>
+    </ul>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

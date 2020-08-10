@@ -1,0 +1,98 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>getblocklabel -  get label of a Scicos block at running time  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>label=getblocklabel()  </dd>
+      <dd>label=getblocklabel(k)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>k  </b>
+          </tt>
+    : integer, index of the block. if <tt>
+            <b>k</b>
+          </tt> is omitted <tt>
+            <b>k</b>
+          </tt>is supposed to be equal to   <tt>
+            <b>curblock()</b>
+          </tt>. 
+  </li>
+  <li>
+          <tt>
+            <b>label  </b>
+          </tt>
+    : a character string, The label of <tt>
+            <b>k</b>
+          </tt>th block (see  <tt>
+            <b>Label</b>
+          </tt> button in <tt>
+            <b>Block</b>
+          </tt> menu.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    For display or debug purpose it may be usefull to give label to
+    particular blocks of a diagram. This may be done using Scicos editor 
+    (<tt>
+          <b>Label</b>
+        </tt> button in <tt>
+          <b>Block</b>
+        </tt> menu). During simulation, value of
+    these labels may be obtained in any Scilab block with <tt>
+          <b>getblocklabel</b>
+        </tt>
+    Scilab primitive function. 
+  </p>
+  <p>
+    For C or fortran computational functions, user may use
+     <tt>
+          <b>C2F(getlabel)</b>
+        </tt> to get a block label. See
+    <tt>
+          <b>routines/scicos/import.c</b>
+        </tt> file for more details
+  </p>
+  <p>
+  </p>
+  <p>
+    Block indexes are those relative to the compile structure<tt>
+          <b>cpr</b>
+        </tt>. 
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="curblock.html">
+          <tt>
+            <b>curblock</b>
+          </tt>
+        </a>
+        <a href="getscicosvars.html">
+          <tt>
+            <b>getscicosvars</b>
+          </tt>
+        </a>
+        <a href="setscicosvars.html">
+          <tt>
+            <b>setscicosvars</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

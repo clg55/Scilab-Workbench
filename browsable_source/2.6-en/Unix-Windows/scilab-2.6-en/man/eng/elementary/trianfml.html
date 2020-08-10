@@ -1,0 +1,64 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>trianfml -  symbolic triangularization  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[f [,sexp]]=trianfml(f [,sexp])  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Symbolic triangularization of the  matrix <tt>
+          <b>f</b>
+        </tt> ; triangularization 
+    is performed by elementary row operations;
+    <tt>
+          <b>sexp</b>
+        </tt> is a set of common expressions stored by the algorithm.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=['1','2';'a','b']
+W=trianfml([A,string(eye(2,2))])
+U=W(:,3:4)
+a=5;b=6;
+A=evstr(A)
+U=evstr(U)
+U*A
+evstr(W(:,1:2))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="addf.html">
+          <tt>
+            <b>addf</b>
+          </tt>
+        </a>
+        <a href="mulf.html">
+          <tt>
+            <b>mulf</b>
+          </tt>
+        </a>
+        <a href="solve.html">
+          <tt>
+            <b>solve</b>
+          </tt>
+        </a>
+        <a href="trisolve.html">
+          <tt>
+            <b>trisolve</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

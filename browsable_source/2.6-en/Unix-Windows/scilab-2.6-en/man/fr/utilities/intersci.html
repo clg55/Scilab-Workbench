@@ -1,0 +1,62 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Tool  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>intersci  -  scilab tool to interface C of Fortran functions with scilab  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    All scilab primitive functions are defined in a set of interface
+    routines. For each function the interfacing code checks first number of
+    rhs and lhs arguments. Then  it get pointers on input arguments in the
+    Scilab data base and checks their types. After that it calls procedure
+    associated with Scilab functions, checks returned errors flags and set
+    the results in the data base.
+  </p>
+  <p>
+    <tt>
+          <b>intersci</b>
+        </tt>\ is a program which permits to interface automatically FORTRAN 
+    subroutines or C functions to Scilab
+  </p>
+  <p>
+    With <tt>
+          <b>intersci</b>
+        </tt>, a user can group all his FORTRAN or C code into a same set,
+    called an interface, and use them in Scilab as Scilab functions. The interfacing
+    is made by creating a FORTRAN subroutine which has to be linked to
+    Scilab  together 
+    with the user code. This complex FORTRAN subroutine is automatically generated
+    by <tt>
+          <b>intersci</b>
+        </tt>\ from a description file of the interface.
+  </p>
+  <p>
+    Refer to intersci documentation for more details.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/fort.html">
+          <tt>
+            <b>fort</b>
+          </tt>
+        </a>
+        <a href="../programming/external.html">
+          <tt>
+            <b>external</b>
+          </tt>
+        </a>
+        <a href="../functions/addinter.html">
+          <tt>
+            <b>addinter</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

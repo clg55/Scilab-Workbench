@@ -1,0 +1,97 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>xpoly -  dessine une ligne brisée ou un polygone  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>xpoly(xv,yv [,dtype [,close]])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>xv,yv  </b>
+          </tt>
+    : matrices de même taille (points de la ligne brisée).
+  </li>
+  <li>
+          <tt>
+            <b>dtype  </b>
+          </tt>
+    : chaîne de caractères (style de dessin, valeur par défaut : "lines").
+  </li>
+  <li>
+          <tt>
+            <b>close  </b>
+          </tt>
+    : entier. Si close=1, la ligne brisée est fermée (valeur par défaut : 0).
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>xpoly</b>
+        </tt> dessine une ligne brisée décrite par les vecteurs de coordonnées 
+    <tt>
+          <b>xv</b>
+        </tt> et <tt>
+          <b>yv</b>
+        </tt>. Si <tt>
+          <b>xv</b>
+        </tt> et <tt>
+          <b>yv</b>
+        </tt> sont des matrices elles sont considérées comme des vecteurs (par concaténation de leurs colonnes). Si close=1 un segment supplémentaire est ajouté entre le premier et le dernier point de la ligne brisée.
+    <tt>
+          <b>dtype</b>
+        </tt> peut être égal à <tt>
+          <b>"lines"</b>
+        </tt> pour utiliser le style de ligne courant ou 
+    <tt>
+          <b>"marks"</b>
+        </tt> pour utiliser des marqueurs.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+x=sin(2*%pi*(0:5)/5);
+y=cos(2*%pi*(0:5)/5);
+plot2d(0,0,-1,"010"," ",[-2,-2,2,2])
+xset("dashes",5)
+xpoly(x,y,"lines",1)
+xset("default")
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="xfpolys.html">
+          <tt>
+            <b>xfpoly</b>
+          </tt>
+        </a>
+        <a href="xfpolys.html">
+          <tt>
+            <b>xfpolys</b>
+          </tt>
+        </a>
+        <a href="xpolys.html">
+          <tt>
+            <b>xpolys</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

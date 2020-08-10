@@ -1,0 +1,65 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>clear -  kills variables  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>clear a  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This command kills variables which are not protected.
+    It removes the named variables from the environment.
+    By itself <tt>
+          <b>clear</b>
+        </tt> kills all the variables except the variables
+    protected by <tt>
+          <b>predef</b>
+        </tt>. Thus the two commands <tt>
+          <b>predef(0)</b>
+        </tt> and <tt>
+          <b>clear</b>
+        </tt>
+    remove all the variables. 
+  </p>
+  <p>
+    Normally, protected variables are standard libraries and variables with
+    the percent prefix.
+  </p>
+  <p>
+    Note the particular syntax <tt>
+          <b>clear a</b>
+        </tt> and not <tt>
+          <b>clear(a)</b>
+        </tt>. Note also
+    that <tt>
+          <b>a=[]</b>
+        </tt> does not kill <tt>
+          <b>a</b>
+        </tt> but sets <tt>
+          <b>a</b>
+        </tt> to an empty matrix.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="predef.html">
+          <tt>
+            <b>predef</b>
+          </tt>
+        </a>
+        <a href="whos.html">
+          <tt>
+            <b>who</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

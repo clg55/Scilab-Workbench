@@ -1,0 +1,60 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>pol2tex -  convert polynomial  to TeX format  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[y]=pol2tex(x)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : polynomial 
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : list
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Latex source code for the polynomial  <tt>
+          <b>x</b>
+        </tt>.
+    (For use with <tt>
+          <b>texprint</b>
+        </tt>)
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+p=s^3+2*s-5;
+pol2tex(p)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="texprint.html">
+          <tt>
+            <b>texprint</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

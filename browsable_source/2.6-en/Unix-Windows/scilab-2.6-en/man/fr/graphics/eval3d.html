@@ -1,0 +1,82 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>eval3d -  valeurs d'une fonction sur une grille  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[z]=eval3d(fun,x,[y])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>fun  </b>
+          </tt>
+    : fonction acceptant des arguments vectoriels
+  </li>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : 2 vecteurs de tailles (1,n1) et (1,n2) (par défaut <tt>
+            <b>y=x</b>
+          </tt>).
+  </li>
+  <li>
+          <tt>
+            <b>z  </b>
+          </tt>
+    : matrice de taille (n1,n2).
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Cette fonction renvoie une matrice <tt>
+          <b>z(n1,n2)</b>
+        </tt> où <tt>
+          <b>z(i,j)=fun(x(i),y(j))</b>
+        </tt>. 
+    Si la fonction <tt>
+          <b>fun</b>
+        </tt> n'accepte pas d'arguments vectoriels utiliser
+    la primitive <tt>
+          <b>feval</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+  x=-5:5;y=x;
+  deff('[z]=f(x,y)',['z= x.*y']);
+  z=eval3d(f,x,y);
+  plot3d(x,y,z);
+// 
+  deff('[z]=f(x,y)',['z= x*y']);
+  z=feval(x,y,f);
+  plot3d(x,y,z);
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../programming/feval.html">
+          <tt>
+            <b>feval</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>Steer S.; ; ;   </ul>
+    </p>
+  </body>
+</html>

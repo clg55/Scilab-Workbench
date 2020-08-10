@@ -1,0 +1,78 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>print -  prints variables  in a file   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>print('file-name',x1,[x2,...xn])   </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    prints <tt>
+          <b>xi</b>
+        </tt> on file <tt>
+          <b>'file-name'</b>
+        </tt>
+    with the current format, i.e. the format used by scilab to display
+    the variables. All types of variables may be "<tt>
+          <b>print</b>
+        </tt>"'ed
+  </p>
+  <p>
+    Note : <tt>
+          <b>xi</b>
+        </tt> must be a named variable, with expressions variable
+    name part of the display is unpredictable.
+  </p>
+  <p>
+    <tt>
+          <b>print(%io(2),...)</b>
+        </tt> prints on Scilab's window. this syntax may be
+    used to display variables within a macro.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+a=rand(3,3);p=poly([1,2,3],'s');l=list(1,'asdf',[1 2 3]);
+print(%io(2),a,p,l)
+write(%io(2),a)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="write4b.html">
+          <tt>
+            <b>write</b>
+          </tt>
+        </a>
+        <a href="read4b.html">
+          <tt>
+            <b>read</b>
+          </tt>
+        </a>
+        <a href="../programming/format.html">
+          <tt>
+            <b>format</b>
+          </tt>
+        </a>
+        <a href="fprintf.html">
+          <tt>
+            <b>printf</b>
+          </tt>
+        </a>
+        <a href="dispfiles.html">
+          <tt>
+            <b>disp</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

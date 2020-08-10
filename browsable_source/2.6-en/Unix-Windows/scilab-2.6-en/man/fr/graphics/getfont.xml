@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>getfont  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>April 1993  </DATE>
+  <SHORT_DESCRIPTION name="getfont"> boîte de dialogue pour sélectionner une police  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>[fId,fSize]=getfont()  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>[fId,fSize]=getfont(str)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>str  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : caractère (par exemple &quot;a&quot;)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>fId  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : entier, le numéro de la police sélectionnée
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>fSize  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : entier, la taille de la police sélectionnée
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    <VERB>getfont</VERB> ouvre une fenêtre graphique pour sélectionner une police.
+    Exemple : <VERB>[fId,fSize]=getfont()</VERB>. <VERB>xset(&quot;font&quot;,fId,fSize)</VERB>.
+    <VERB>plot2d(0,0,rect=[0 0 10 10],axesflag=0)</VERB>;<VERB>xstring(5,5,&quot;string&quot;)</VERB>.
+  </P>
+  </DESCRIPTION>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>xset</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>getmark</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

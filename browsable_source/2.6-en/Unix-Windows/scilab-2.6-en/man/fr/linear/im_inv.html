@@ -1,0 +1,143 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>im_inv -  inverse image  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[X,dim]=im_inv(A,B [,tol])  </dd>
+      <dd>[X,dim,Y]=im_inv(A,B, [,tol])   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A,B  </b>
+          </tt>
+    : two real or complex matrices with equal number of columns
+  </li>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : orthogonal or unitary square matrix of order equal to the  number of columns of <tt>
+            <b>A</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>dim  </b>
+          </tt>
+    : integer (dimension of subspace)
+  </li>
+  <li>
+          <tt>
+            <b>Y  </b>
+          </tt>
+    : orthogonal matrix of order equal to the number of rows  of <tt>
+            <b>A</b>
+          </tt> and <tt>
+            <b>B</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    computes 
+  </p>
+  <p>
+    (A^-1)(B)
+  </p>
+  <p>
+     i.e vectors whose image through <tt>
+          <b>A</b>
+        </tt> are in range(<tt>
+          <b>B</b>
+        </tt>)
+  </p>
+  <p>
+    The <tt>
+          <b>dim</b>
+        </tt> first columns of <tt>
+          <b>X</b>
+        </tt> span 
+  </p>
+  <p>
+    (A^-1) (B)
+  </p>
+  <p>
+    <tt>
+          <b>tol</b>
+        </tt> is a threshold used to test if subspace inclusion;
+    default value is <tt>
+          <b>tol = 100*%eps</b>
+        </tt>.
+    If <tt>
+          <b>Y</b>
+        </tt> is returned, then <tt>
+          <b>[Y*A*X,Y*B]</b>
+        </tt> is partitioned as follows:
+  </p>
+  <pre>
+[A11,A12;0,A22],[B1;0]
+   </pre>
+  <p>
+    where <tt>
+          <b>B1</b>
+        </tt> has full row rank (equals <tt>
+          <b>rank(B)</b>
+        </tt>) and <tt>
+          <b>A22</b>
+        </tt> has
+    full column rank and has <tt>
+          <b>dim</b>
+        </tt> columns.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=[rand(2,5);[zeros(3,4),rand(3,1)]];B=[[1,1;1,1];zeros(3,2)];
+W=rand(5,5);A=W*A;B=W*B;
+[X,dim]=im_inv(A,B)
+svd([A*X(:,1:dim),B])   //vectors A*X(:,1:dim) belong to range(B)
+[X,dim,Y]=im_inv(A,B);[Y*A*X,Y*B]
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="rowcomp.html">
+          <tt>
+            <b>rowcomp</b>
+          </tt>
+        </a>
+        <a href="spaninter.html">
+          <tt>
+            <b>spaninter</b>
+          </tt>
+        </a>
+        <a href="spanplus.html">
+          <tt>
+            <b>spanplus</b>
+          </tt>
+        </a>
+        <a href="linsolve.html">
+          <tt>
+            <b>linsolve</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>F. D.; ;   </ul>
+    </p>
+  </body>
+</html>

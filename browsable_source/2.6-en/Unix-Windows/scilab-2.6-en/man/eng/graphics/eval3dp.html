@@ -1,0 +1,95 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>eval3dp -  compute facets of a 3D parametric surface  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[Xf,Yf,Zf]=eval3dp(fun,p1,p2)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>Xf,Yf,Zf  </b>
+          </tt>
+    : matrices of size (4,n-1*m-1). <tt>
+            <b>Xf(:,i)</b>
+          </tt> ,<tt>
+            <b>Yf(:,i)</b>
+          </tt> and <tt>
+            <b>Zf(:,i)</b>
+          </tt>  are respectively the x-axis, y-axis and z-axis coordinates of the 4 points of  the ith four sided facet.
+  </li>
+  <li>
+          <tt>
+            <b>fun  </b>
+          </tt>
+    : a Scilab function. 
+  </li>
+  <li>
+          <tt>
+            <b>p1  </b>
+          </tt>
+    : a vector of size <tt>
+            <b>n</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>p2  </b>
+          </tt>
+    : a vector of size <tt>
+            <b>m</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>eval3dp</b>
+        </tt> computes a four sided facets representation of a 3D parametric surface 
+    defined by the function <tt>
+          <b>fun</b>
+        </tt>. <tt>
+          <b>fun(p1,p2)</b>
+        </tt> computes the 
+    x-axis ,y-axis and z-axis coordinates of the corresponding points on the 
+    surface, as [x(i),y(i),z(i)]=fun(p1(i),p2(i)). This is used for efficiency.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+p1=linspace(0,2*%pi,10);
+p2=linspace(0,2*%pi,10);
+deff("[x,y,z]=scp(p1,p2)",["x=p1.*sin(p1).*cos(p2)";..
+                            "y=p1.*cos(p1).*cos(p2)";..
+                            "z=p1.*sin(p2)"])
+[Xf,Yf,Zf]=eval3dp(scp,p1,p2);
+plot3d(Xf,Yf,Zf)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="genfac3d.html">
+          <tt>
+            <b>genfac3d</b>
+          </tt>
+        </a>
+        <a href="fplot3d.html">
+          <tt>
+            <b>plot3d</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

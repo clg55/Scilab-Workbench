@@ -1,0 +1,85 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>strcat -  catenate character strings  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>txt=strcat(vstr [,strp])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>vstr  </b>
+          </tt>
+    : vector of strings
+  </li>
+  <li>
+          <tt>
+            <b>strp  </b>
+          </tt>
+    : string, default value is the emptystr <tt>
+            <b>""</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>txt  </b>
+          </tt>
+    : string
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+     <tt>
+          <b>txt=strcat(vstr)</b>
+        </tt>
+    catenates character strings : <tt>
+          <b>txt=vstr(1)+...+vstr(n)</b>
+        </tt>
+  </p>
+  <p>
+    <tt>
+          <b>txt=strcat(vstr,strp)</b>
+        </tt> 
+    returns <tt>
+          <b>txt=strs(1)+strp+...+strp+strs(n)</b>
+        </tt>.
+    The plus symbol does the same:
+    <tt>
+          <b>"a"+"b"</b>
+        </tt> is the same as <tt>
+          <b>strcat(["a","b"])</b>
+        </tt>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+strcat(string(1:10),',')
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../graphics/xstring.html">
+          <tt>
+            <b>string</b>
+          </tt>
+        </a>
+        <a href="strings.html">
+          <tt>
+            <b>strings</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

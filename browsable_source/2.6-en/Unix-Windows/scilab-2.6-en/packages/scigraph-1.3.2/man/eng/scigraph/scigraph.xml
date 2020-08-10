@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>metanet  </TITLE>
+  <TYPE>Scilab function  </TYPE>
+  <DATE>September 1995  </DATE>
+  <SHORT_DESCRIPTION name="scigraph"> opens a scilab graphics window with graph menus enabled   </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>scigraph(graph=g,window=[win],wdim=[w,h],wpdim=[w1,h1],gmode=&quot;rep&quot; or &quot;new&quot;)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>graph=g  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  g is a string which give the path of the graph file to be displayed.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>window=win  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  win gives the graphics window number to use. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>wdim=[w,h]  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : graphics window internal dimensions (just as in <VERB>xset(&quot;wdim&quot;,w,h)</VERB>), default is <VERB>[700,700]</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>wpdim=[w1,h1]  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : graphics window external dimensions (just as in <VERB>xset(&quot;wpdim&quot;,w1,h1)</VERB>), default is <VERB>[700,700]</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>gmode=  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : optional string argument. Only useful when the parameter <VERB>window</VERB>  is not supplied. <VERB>&quot;rep&quot;</VERB> means that the current graphics window must be used and its content is to be replaced by the new graph. <VERB>&quot;new&quot;</VERB> means that a new graphics window is to be opened.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    This function is used to open a scilab graphics window with 
+    graph menus enabled. If a graph is supplied, the graph is displayed 
+    in the new window.
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+gname= SCI+"/demos/metanet/mesh100.graph";
+scigraph(window=2,graph=gname,wdim=[500,500],wpdim=[300,300]);
+scigraph(window=3,graph=gname,wdim=[1000,1000],wpdim=[400,400]);
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>show_arcs</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>show_nodes</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>show_graph</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>xset</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

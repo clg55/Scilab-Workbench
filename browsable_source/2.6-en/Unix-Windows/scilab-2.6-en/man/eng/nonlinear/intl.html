@@ -1,0 +1,85 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>intl -  Cauchy integral  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[y]=intl(a,b,z0,r,f)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>z0  </b>
+          </tt>
+    : complex number
+  </li>
+  <li>
+          <tt>
+            <b>a,b  </b>
+          </tt>
+    : two real numbers
+  </li>
+  <li>
+          <tt>
+            <b>r  </b>
+          </tt>
+    : positive real number
+  </li>
+  <li>
+          <tt>
+            <b>f  </b>
+          </tt>
+    : "external" function
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    If <tt>
+          <b>f</b>
+        </tt> is a complex-valued function, <tt>
+          <b>intl(a,b,z0,r,f)</b>
+        </tt> computes
+    the integral of <tt>
+          <b>f(z)dz</b>
+        </tt> along the curve
+    in the complex plane defined by <tt>
+          <b>z0 + r.exp(%i*t)</b>
+        </tt> for
+    <tt>
+          <b>a&lt;=t&lt;=b</b>
+        </tt> .(part of the circle with center <tt>
+          <b>z0</b>
+        </tt> and radius <tt>
+          <b>r</b>
+        </tt>
+    with phase between <tt>
+          <b>a</b>
+        </tt> and <tt>
+          <b>b</b>
+        </tt>)
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="intc.html">
+          <tt>
+            <b>intc</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>F. D.  </ul>
+    </p>
+  </body>
+</html>

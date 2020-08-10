@@ -1,0 +1,54 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>qbeta -  The beta inverse distribution function  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>F = qbeta(p,a,b)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>p  </b>
+          </tt>
+    : probability
+  </li>
+  <li>
+          <tt>
+            <b>a,b  </b>
+          </tt>
+    : positive reals, parameters of the beta distribution (a,b  can be scalars or matrix with common size with p) 
+  </li>
+  <li>
+          <tt>
+            <b>F  </b>
+          </tt>
+    : matrix 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    The beta inverse distribution functio. 
+    for each element of p, F is an inverse of the beta cumulative
+    distribution function with parameter a and b (the beta density is :
+  </p>
+  <pre>
+  x.^(a-1) .* (1-x).^(b-1) ./ beta(a,b)1_{0&lt;x&lt;1})
+   </pre>
+  <p>
+  </p>
+  <p>
+  </p>
+  <p>
+  </p>
+  </ul>
+  </body>
+</html>

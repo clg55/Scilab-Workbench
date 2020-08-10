@@ -1,0 +1,79 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos Block  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>SCOPXY_f -  Scicos visualization block  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This block realizes the visualization of the evolution of the two
+    regular input signals by drawing the second input as a function of
+    the first at instants of events on the event input port.
+  </p>
+  </ul>
+    <H3>DIALOGUE PARAMETERS</H3>
+    <ul>
+      <li>Curve colors
+: an integer. It is the color number (&gt;0) or dash type (&lt;0) used to draw the evolution of the input port signal. See  for color (dash type) definitions.
+
+  </li>
+      <li>Line or mark size
+: an integer. 
+
+  </li>
+      <li>Output window number
+: The number of graphic window used for the display. It is often good to use high values to avoid conflict with palettes and Super Block windows. If you have more than one scope, make sure they don't have the same window numbers (unless superposition of the curves is desired).
+
+  </li>
+      <li>Output window position
+: a 2 vector specifying the coordinates of the upper left corner of the graphic window. Answer [] for default window position.
+
+  </li>
+      <li>Output window size
+: a 2 vector specifying the width and height  of  the graphic window. Answer [] for default window dimensions.
+
+  </li>
+      <li>Xmin, Xmax
+: Minimum and maximum values of the first input; used to set up the X-axis of the plot in the graphics window.
+
+  </li>
+      <li>Ymin, Ymax
+: Minimum and maximum values of the second input; used to set up the  Y-axis of the plot in the graphics window.
+
+  </li>
+      <li>Buffer size
+: To improve efficiency it is possible to buffer the input data. The drawing is only done after each  call to the block.
+
+  </li>
+    </ul>
+    <H3>REMARKS</H3>
+    <ul>
+      <p>
+    Output window number, Output window size, Output window position are only taken into account at the initialisation time of the simulation.  
+  </p>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="EVENTSCOPE_f.html">
+          <tt>
+            <b>SCOPE_f</b>
+          </tt>
+        </a>
+        <a href="EVENTSCOPE_f.html">
+          <tt>
+            <b>EVENTSCOPE_f</b>
+          </tt>
+        </a>
+        <a href="ANIMXY_f.html">
+          <tt>
+            <b>ANIMXY_f</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

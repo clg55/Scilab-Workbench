@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>dnorm  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="dnorm"> The normal density function  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>y = dnorm(x [,m,s])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>x  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : real vector or matrix
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>m  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : mean (default value is <VERB>zeros(x)</VERB>). <VERB>m</VERB> is a scalar  or a matrix with the same size as <VERB>x</VERB>. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>s  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  standard deviation (default value is <VERB>ones(x)</VERB>). <VERB>s</VERB> is a scalar or a matrix with the same size as <VERB>x</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>y  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :   normal density function with mean <VERB>m</VERB> and standard deviation <VERB>s</VERB>, at the values of x :
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    The normal density function. 
+  </P>
+  <VERBATIM><![CDATA[
+ y=exp(-0.5*((x-m)./s)^2)./(sqrt(2*pi).*s)
+   ]]></VERBATIM>
+  </DESCRIPTION>
+  <ITEMIZE label='EXAMPLES'>
+  <VERBATIM><![CDATA[
+x = -5:0.1:5 ;
+y = dnorm(x);
+plot(x,y);
+   ]]></VERBATIM>
+  </ITEMIZE>
+</MAN>

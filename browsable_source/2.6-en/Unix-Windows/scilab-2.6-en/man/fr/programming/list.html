@@ -1,0 +1,107 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>list -  Objet Scilab, Définition d'une liste  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>list(a1,....an)    </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Crée une <tt>
+          <b>liste</b>
+        </tt> avec les éléments <tt>
+          <b>ai</b>
+        </tt> qui sont des objets Scilab 
+    arbitraires (<tt>
+          <b>matrice, liste, ...</b>
+        </tt>). Le type des objets de type liste (renvoyé par la fonction <tt>
+          <b>type</b>
+        </tt>) est égal à 15.
+  </p>
+  <p>
+    <tt>
+          <b>list()</b>
+        </tt> est une liste vide (0 élément).
+  </p>
+  <p>
+    Opérations sur les listes :
+  </p>
+ 
+  <p>
+     extraction
+    : <tt>
+          <b>[x,y,z...]=l(v)</b>
+        </tt> où <tt>
+          <b>v</b>
+        </tt> est un vecteur d'indices; 
+    <tt>
+          <b>[x,y,z]=l(:)</b>
+        </tt> extrait tous les éléments.
+  </p>
+  <p>
+      insertion
+    : <tt>
+          <b>l(i)=a</b>
+        </tt>
+  </p>
+  <p>
+     suppression
+    : <tt>
+          <b>l(i)=null()</b>
+        </tt> supprime le i-ème élément de la liste <tt>
+          <b>l</b>
+        </tt>.
+  </p>
+ 
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+x=list(1,2,3);
+x(4)=10;
+x(10)='a'
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="null.html">
+          <tt>
+            <b>null</b>
+          </tt>
+        </a>
+        <a href="tlist.html">
+          <tt>
+            <b>tlist</b>
+          </tt>
+        </a>
+        <a href="insertion.html">
+          <tt>
+            <b>insertion</b>
+          </tt>
+        </a>
+        <a href="extraction.html">
+          <tt>
+            <b>extraction</b>
+          </tt>
+        </a>
+        <a href="gstacksize.html">
+          <tt>
+            <b>size</b>
+          </tt>
+        </a>
+        <a href="../strings/length.html">
+          <tt>
+            <b>length</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,123 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab keyword  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>function -  définition d'une fonction Scilab  </ul>
+    </p>
+    <p>
+      <ul>endfunction -  fin de la définition d'une fonction Scilab  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <pre>
+function &lt;arguments_sortie&gt;=&lt;nom_de_la_fonction&gt;&lt;arguments_entrée&gt;
+&lt;instructions&gt;
+endfunction
+   </pre>
+  <p>
+    où
+  </p>
+ 
+
+  <li>&lt;nom_de_la_fonction&gt; 
+    est le nom de la fonction
+  </li>
+
+  <li>&lt;arguments_entrée&gt; 
+    est la liste d'arguments d'entrée. Il peut s'agir de :
+  </li>
+ 
+
+  <li>- 
+    une liste de noms de variables séparés par des virgules, entourée de parenthèses, comme  . Le dernier nom de variable peut être  (voir varargin)
+  </li>
+
+  <li>- 
+    la séquence  ou rien du tout, si la fonction n'a pas d'argument d'entrée.
+  </li>
+ 
+
+  <li>&lt;arguments_sortie&gt; 
+    Est la liste d'arguments de sortie. Il peut s'agir de
+  </li>
+ 
+
+  <li>- 
+    une liste de noms de variables séparés par des virgules, entourée de crochets, comme  . Le dernier nom de variable peut être  (voir varargout)
+  </li>
+
+  <li>- 
+    la séquence , si la fonction n'a pas d'argument de sortie. Dans ce cas la syntaxe d'appel peut aussi être : 
+  </li>
+ 
+
+  <li>&lt;instructions&gt; 
+    une suite d'instructions Scilab.  Cette syntaxe peut être utilisée pour définir des fonctions (voir functions) en ligne ou dans un script (voir exec). Pour raisons de compatibilité avec les anciennes versions de Scilab, les fonctions définies dans un script ne contenant que des déclarations de fonctions peuvent être chargées dans Scilab avec la fonction .
+  </li>
+  <p>
+    La séquence <tt>
+          <b>function &lt;arguments_sortie&gt;=&lt;nom_de_la_fonction&gt;&lt;arguments_entrée&gt;</b>
+        </tt>
+    doit apparaître sur une seule ligne. Cette suite peut être suivie d'instructions Scilab si une virgule ou un point-virgule est ajouté à la fin.
+  </p>
+  <p>
+    Les définitions de fonctions peuvent être imbriquées.
+  </p>
+ 
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+// définition en ligne
+function [x,y]=myfct(a,b)
+x=a+b
+y=a-b
+endfunction
+
+[x,y]=myfct(3,2)
+
+// définition sur une seule ligne
+function y=sq(x),y=x^2,endfunction
+
+sq(3)
+
+// définitions imbriquées
+function y=foo(x)
+a=sin(x)
+function y=sq(x), y=x^2,endfunction
+y=sq(a)+1
+endfunction
+
+foo(%pi/3)
+
+
+// définition dans un script
+exec SCI/macros/elem/asin.sci;
+
+
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../graphics/alufunctions.html">
+          <tt>
+            <b>functions</b>
+          </tt>
+        </a>
+        <a href="../programming/execstr.html">
+          <tt>
+            <b>exec</b>
+          </tt>
+        </a>
+        <a href="../programming/getfield.html">
+          <tt>
+            <b>getf</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

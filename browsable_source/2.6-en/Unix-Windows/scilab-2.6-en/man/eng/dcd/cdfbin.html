@@ -1,0 +1,75 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>cdfbin -  cumulative distribution function Binomial distribution   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[P,Q]=cdfbin("PQ",S,Xn,Pr,Ompr)  </dd>
+      <dd>[S]=cdfbin("S",Xn,Pr,Ompr,P,Q)  </dd>
+      <dd>[Xn]=cdfbin("Xn",Pr,Ompr,P,Q,S)  </dd>
+      <dd>[Pr,Ompr]=cdfbin("PrOmpr",P,Q,S,Xn)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>P,Q,S,Xn,Pr,Ompr  </b>
+          </tt>
+    : six real vectors of the same size.
+  </li>
+  <li>
+          <tt>
+            <b>P,Q (Q=1-P)  </b>
+          </tt>
+    : The cumulation from 0 to S of the binomial distribution. (Probablility of S or fewer successes in XN trials each with probability of success PR.) Input range: [0,1].
+  </li>
+  <li>
+          <tt>
+            <b>S  </b>
+          </tt>
+    : The number of successes observed. Input range: [0, XN] Search range: [0, XN]
+  </li>
+  <li>
+          <tt>
+            <b>Xn  </b>
+          </tt>
+    : The number of binomial trials. Input range: (0, +infinity). Search range: [1E-300, 1E300]
+  </li>
+  <li>
+          <tt>
+            <b>Pr,Ompr (Ompr=1-Pr)  </b>
+          </tt>
+    : The probability of success in each binomial trial. Input range: [0,1]. Search range: [0,1]
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Calculates any one parameter of the binomial
+    distribution given values for the others.
+  </p>
+  <p>
+    Formula  26.5.24    of   Abramowitz  and    Stegun,  Handbook   of
+    Mathematical   Functions (1966) is   used  to reduce the  binomial
+    distribution  to  the  cumulative incomplete    beta distribution.
+  </p>
+  <p>
+    Computation of other parameters involve a seach for a value that
+    produces  the desired  value  of P.   The search relies  on  the
+    monotinicity of P with the other parameter.
+  </p>
+  <p>
+    From DCDFLIB: Library of Fortran Routines for Cumulative Distribution
+    Functions, Inverses, and Other Parameters (February, 1994)
+    Barry W. Brown, James Lovato and Kathy Russell. The University of
+    Texas.
+  </p>
+  </ul>
+  </body>
+</html>

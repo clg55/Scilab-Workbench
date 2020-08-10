@@ -1,0 +1,101 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>h_cl -  closed loop matrix  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[Acl]=h_cl(P,r,K)  </dd>
+      <dd>[Acl]=h_cl(P22,K)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>P, P22  </b>
+          </tt>
+    : linear system (<tt>
+            <b>syslin</b>
+          </tt> list), augmented plant or nominal plant respectively
+  </li>
+  <li>
+          <tt>
+            <b>r  </b>
+          </tt>
+    : 1x2 row vector, dimensions of 2,2 part of <tt>
+            <b>P</b>
+          </tt> (<tt>
+            <b>r=[rows,cols]=size(P22)</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>K  </b>
+          </tt>
+    : linear system (<tt>
+            <b>syslin</b>
+          </tt> list), controller
+  </li>
+  <li>
+          <tt>
+            <b>Acl  </b>
+          </tt>
+    : real square matrix
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Given the standard plant <tt>
+          <b>P</b>
+        </tt> (with <tt>
+          <b>r=size(P22)</b>
+        </tt>) and the controller
+    <tt>
+          <b>K</b>
+        </tt>, this function returns the closed loop matrix <tt>
+          <b>Acl</b>
+        </tt>.
+  </p>
+  <p>
+    The poles of <tt>
+          <b>Acl</b>
+        </tt> must be stable for the internal stability 
+    of the closed loop system.
+  </p>
+  <p>
+    <tt>
+          <b>Acl</b>
+        </tt> is the <tt>
+          <b>A</b>
+        </tt>-matrix of the linear system <tt>
+          <b>[I -P22;-K I]^-1</b>
+        </tt> i.e.
+    the <tt>
+          <b>A</b>
+        </tt>-matrix of <tt>
+          <b>lft(P,r,K)</b>
+        </tt>
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="lft.html">
+          <tt>
+            <b>lft</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>F. D.  </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>mean  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>January 1998  </DATE>
+  <SHORT_DESCRIPTION name="mean"> moyenne arithmétique des termes d&apos;une matrice  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>y=mean(x)  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>y=mean(x,&apos;r&apos;)  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>y=mean(x,&apos;c&apos;)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>x  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : vecteur ou matrice réelle 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>y  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : scalaire ou vecteur
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Pour un vecteur ou une matrice <VERB>x</VERB>, <VERB>y=mean(x)</VERB> renvoie un scalaire <VERB>y</VERB> égal à la moyenne arithmétique des termes de <VERB>x</VERB>.
+  </P>
+  <P>
+    <VERB>y=mean(x,&apos;r&apos;)</VERB> (ou <VERB>y=mean(x,1)</VERB>) est la moyenne suivant l&apos;indice de ligne. Chaque composante du vecteur ligne <VERB>y</VERB> contient la moyenne de chaque colonne de <VERB>x</VERB>.
+  </P>
+  <P>
+    <VERB>y=mean(x,&apos;c&apos;)</VERB> (ou <VERB>y=mean(x,2)</VERB>) est la moyenne selon l&apos;indice de colonne. Chaque composante du vecteur colonne <VERB>y</VERB> contient la moyenne de chaque ligne de <VERB>x</VERB>.
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+A=[1,2,10;7,7.1,7.01];
+mean(A)
+mean(A,'r')
+mean(A,'c')
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>sum</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>median</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>st_deviation</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

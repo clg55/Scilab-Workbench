@@ -1,0 +1,124 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>spanplus -  sum of subspaces  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[X,dim,dima]=spanplus(A,B[,tol])   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A, B  </b>
+          </tt>
+    : two real or complex matrices with equal number of rows
+  </li>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : orthogonal or unitary square matrix
+  </li>
+  <li>
+          <tt>
+            <b>dim, dima  </b>
+          </tt>
+    : integers, dimension of subspaces
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : nonnegative real number
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    computes a  basis X such that:
+  </p>
+  <p>
+    the first <tt>
+          <b>dima</b>
+        </tt> columns of <tt>
+          <b>X</b>
+        </tt> span Range(<tt>
+          <b>A</b>
+        </tt>)
+    and the following (<tt>
+          <b>dim-dima</b>
+        </tt>) columns make a basis of <tt>
+          <b>A+B</b>
+        </tt>
+    relative to <tt>
+          <b>A</b>
+        </tt>. 
+  </p>
+  <p>
+    The <tt>
+          <b>dim</b>
+        </tt> first columns of <tt>
+          <b>X</b>
+        </tt> make a basis for <tt>
+          <b>A+B</b>
+        </tt>.
+  </p>
+  <p>
+    One has the following canonical form for <tt>
+          <b>[A,B]</b>
+        </tt>:
+  </p>
+  <pre>
+         [*,*]    (dima rows)
+X'*[A,B]=[0,*]    (dim-dima rows)
+         [0,0]    
+   </pre>
+  <p>
+    <tt>
+          <b>tol</b>
+        </tt> is an optional argument (see function code).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=rand(6,2)*rand(2,5);      // rank(A)=2
+B=[A(:,1),rand(6,2)]*rand(3,3);   //two additional independent vectors
+[X,dim,dimA]=spanplus(A,B);
+dimA
+dim
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="spaninter.html">
+          <tt>
+            <b>spaninter</b>
+          </tt>
+        </a>
+        <a href="im_inv.html">
+          <tt>
+            <b>im_inv</b>
+          </tt>
+        </a>
+        <a href="spantwo.html">
+          <tt>
+            <b>spantwo</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>F. D.; ;   </ul>
+    </p>
+  </body>
+</html>

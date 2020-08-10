@@ -1,0 +1,97 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>uimenu -  Create a menu or a submenu in a figure  </ul>
+    </p>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>o  </b>
+          </tt>
+    parent : integer Handle of menu's parent 
+  </li>
+  <li>
+          <tt>
+            <b>o  </b>
+          </tt>
+    propi : string character name of a property to set up
+  </li>
+  <li>
+          <tt>
+            <b>o  </b>
+          </tt>
+    vali : scilab object value to affect to the corresponding property
+  </li>
+  <li>
+          <tt>
+            <b>o  </b>
+          </tt>
+    h : integer handle of the corresponding menu 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This allows to create menus in a figure. If 'parent' is a figure, then
+    the menu item will be added to the menu bar of the figure.
+    If 'parent' is a menu item , then the new  item will be added to the parent
+    item, allowing to create cascaded submenu.
+    The 'callback' property allows to set up the scilab instruction to call
+    when the item is selected by the user.
+    The 'label' property allows to set up the text appearing for the item.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+f=figure('position', [10 10 300 200]);
+// create a figure
+m=uimenu(f,'label', 'windows');
+// create an item on the menu bar
+m1=uimenu(m,'label', 'operations');
+m2=uimenu(m,'label', 'quit scilab', 'callback', "exit");
+//create two items in the menu "windows"
+m11=uimenu(m1,'label', 'new window', 'callback',"xselect()");
+m12=uimenu(m1,'label', 'clear  window', 'callback',"xbasc()");
+// create a submenu to the item "operations"
+close(f);
+// close the figure
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="figure.html">
+          <tt>
+            <b>figure</b>
+          </tt>
+        </a>
+        <a href="uicontrol.html">
+          <tt>
+            <b>uicontrol</b>
+          </tt>
+        </a>
+        <a href="../programming/setfield.html">
+          <tt>
+            <b>set</b>
+          </tt>
+        </a>
+        <a href="../programming/getdate.html">
+          <tt>
+            <b>get</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>Bertrand Guiheneuf  </ul>
+    </p>
+  </body>
+</html>

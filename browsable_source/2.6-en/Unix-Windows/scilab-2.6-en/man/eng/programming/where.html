@@ -1,0 +1,64 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>where -  get current instruction calling tree  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[linenum,mac]=where()  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>linenum  </b>
+          </tt>
+    : column vector of integer
+  </li>
+  <li>
+          <tt>
+            <b>mac  </b>
+          </tt>
+    : column vector of strings
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns <tt>
+          <b>linenum</b>
+        </tt> and <tt>
+          <b>mac</b>
+        </tt> such as current instruction has been
+    called by the linenum(1) line of function mac(1),
+    mac(1) has been called by the linenum(2) line of function mac(2)
+    and so on
+  </p>
+  <p>
+    mac(i) is in general the name of a function but it may also be
+    "exec" or "execstr" if instruction lies in ans exec file or an execstr
+    instruction 
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="whereami.html">
+          <tt>
+            <b>whereami</b>
+          </tt>
+        </a>
+        <a href="pause.html">
+          <tt>
+            <b>pause</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

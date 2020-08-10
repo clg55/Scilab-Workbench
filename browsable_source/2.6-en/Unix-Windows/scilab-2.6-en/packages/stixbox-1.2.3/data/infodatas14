@@ -1,0 +1,15 @@
+x_message(['*****************Phone call******************************';
+'';
+'Source: Factures de France Telecom';
+'';
+'Pris:          source  ';
+'';
+'Description:  details de 2 factures de telephone pour deux  periodes';
+'               non consecutives de deux mois  (excepte les appels';
+'               locaux).  Sur une ligne est donnee, la date d''un appel ';
+'  (le jour dans la 1ere colonne et le mois dans la 2eme ';
+'  colonne) ainsi que sa duree en secondes (3eme colonne) ';
+'               Les 33 premieres lignes correspondent a des appels dit de';
+'               voisinage et les 31 dernieres lignes sont des appels dit';
+'               nationaux.    ';])
+

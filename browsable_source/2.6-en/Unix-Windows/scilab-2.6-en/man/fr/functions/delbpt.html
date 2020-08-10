@@ -1,0 +1,61 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>delbpt -  delete breakpoint  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>delbpt('macroname' [,linenumb])   </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    deletes the breakpoint at line 
+    <tt>
+          <b>linenumb</b>
+        </tt> in the function <tt>
+          <b>macroname</b>
+        </tt>.
+    If <tt>
+          <b>linenumb</b>
+        </tt> is omitted all the breakpoints in the function are
+    deleted.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+setbpt('foo',1),setbpt('foo',10),delbpt('foo',10),dispbpt()
+delbpt('foo',1)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="setbpt.html">
+          <tt>
+            <b>setbpt</b>
+          </tt>
+        </a>
+        <a href="dispbpt.html">
+          <tt>
+            <b>dispbpt</b>
+          </tt>
+        </a>
+        <a href="../programming/pause.html">
+          <tt>
+            <b>pause</b>
+          </tt>
+        </a>
+        <a href="../programming/resume.html">
+          <tt>
+            <b>resume</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

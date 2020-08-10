@@ -1,0 +1,95 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>gspec -  valeurs propres d'un faisceau de matrices  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[al,be]=gspec(A,E)  </dd>
+      <dd>[al,be,Z]=gspec(A,E)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A, E  </b>
+          </tt>
+    : matrices carrées réelles de mêmes dimensions
+  </li>
+  <li>
+          <tt>
+            <b>al, be  </b>
+          </tt>
+    : vecteurs réels
+  </li>
+  <li>
+          <tt>
+            <b>Z  </b>
+          </tt>
+    : matrice carrée régulière
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Renvoie le spectre du faisceau
+    s E - A, c'est à dire les racines du déterminant de (s E - A).
+    Les valeurs propres sont données par <tt>
+          <b>al./be</b>
+        </tt> et si <tt>
+          <b>be(i) = 0</b>
+        </tt> la i-ème
+    valeur propre est à l'infini. (Pour <tt>
+          <b>E = eye(A), al./be</b>
+        </tt> vaut <tt>
+          <b>spec(A)</b>
+        </tt>).
+  </p>
+  <p>
+    Renvoie de plus la matrice <tt>
+          <b>Z</b>
+        </tt> des vecteurs propres généralisés à droite.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=rand(3,3);
+[al,be,Z] = gspec(A,eye(A));al./be
+clean(inv(Z)*A*Z)  // affichage des valeurs propres (matrice générique)
+A=A+%i*rand(A);E=rand(A);
+roots(det(%s*E-A))   // cas complexe
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="gschur.html">
+          <tt>
+            <b>gschur</b>
+          </tt>
+        </a>
+        <a href="balanc.html">
+          <tt>
+            <b>balanc</b>
+          </tt>
+        </a>
+        <a href="gspec.html">
+          <tt>
+            <b>spec</b>
+          </tt>
+        </a>
+        <a href="kroneck.html">
+          <tt>
+            <b>kroneck</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

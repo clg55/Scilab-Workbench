@@ -1,0 +1,44 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>noisegen -  noise generation   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[]=noisegen(pas,Tmax,sig)  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    generates a Scilab function <tt>
+          <b>[b]=Noise(t)</b>
+        </tt>
+    where <tt>
+          <b>Noise(t)</b>
+        </tt> is a piecewise constant function 
+    ( constant on  <tt>
+          <b>[k*pas,(k+1)*pas]</b>
+        </tt> ). The value on each constant 
+    interval are random values from  i.i.d  Gaussian variables of 
+    standard deviation sig. The function is constant for <tt>
+          <b>t&lt;=0</b>
+        </tt> and 
+    <tt>
+          <b>t&gt;=Tmax</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+noisegen(0.5,30,1.0);
+x=-5:0.01:35;
+y=feval(x,Noise);
+plot(x,y);
+ </pre>
+    </ul>
+  </body>
+</html>

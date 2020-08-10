@@ -1,0 +1,33 @@
+
+	Scigraph is a modified version of metanet
+	which was developped to directly use Scilab graphics 
+	to display and create graphs. 
+	It is provided here as an external contribution 
+	and it should work under Unix and Windows. 
+	Copyright Inria/Enpc 
+
+	Jean-Philippe Chancelier 
+	7Fev 2001 
+
+
+[1] To build the package: (you need a C compiler)
+   
+	1.1 A precompiled version for windows platform 
+	    can be downloaded on Scilab site 
+	    In this case jump to [2]
+    
+	1.2 run builder.sce under scilab (you must be in this 
+	directory when running builder.sce)
+	    or 
+        change the content of Path.incl and run make 
+
+[2] To load the package: 
+
+	run the scilab script loader.sce (from where you want) 
+
+[3] To clean: 
+	type make distclean to clean 
+	( make distclean wil only work after step [1] is performed)
+
+jpc 8 Nov 2000
+

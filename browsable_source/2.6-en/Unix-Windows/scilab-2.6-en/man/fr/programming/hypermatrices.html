@@ -1,0 +1,63 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab data type  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>hypermatrices -  Objet Scilab, matrices à N dimensions  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Le type Hypermatrice permet de manipuler des tableaux multidimensionnels.
+  </p>
+  <p>
+    Ce type d'objet peut être défini par extension des matrices 2D comme ceci :
+  </p>
+  <p>
+    a=[1 2;3 4];a(:,:,2)=rand(2,2)
+  </p>
+  <p>
+    ou directement en utilisant la fonction <tt>
+          <b>hypermat</b>
+        </tt>.
+  </p>
+  <p>
+    Les termes peuvent être réels, complexes, polynômiaux, rationnels, booléens ou de type chaîne de caractères.
+  </p>
+  <p>
+    Les Hypermatrices sont des <tt>
+          <b>mlists</b>
+        </tt> :
+    <tt>
+          <b>mlist(['hm','dims','entries'],sz,v)</b>
+        </tt> où <tt>
+          <b>sz</b>
+        </tt> est le vecteur ligne des dimensions et <tt>
+          <b>v</b>
+        </tt> le vecteur colonne des termes (rangés tel que l'indice le plus à gauche varie en premier).
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+a(1,1,1,1:2)=[1 2]
+a=[1 2;3 4];a(:,:,2)=rand(2,2)
+a(1,1,:)
+[a a]
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="hypermatrices.html">
+          <tt>
+            <b>hypermat</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

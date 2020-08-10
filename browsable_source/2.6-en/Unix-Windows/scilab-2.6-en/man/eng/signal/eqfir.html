@@ -1,0 +1,67 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>eqfir -  minimax approximation of FIR filter  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[hn]=eqfir(nf,bedge,des,wate)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>nf  </b>
+          </tt>
+    : number of output filter points desired
+  </li>
+  <li>
+          <tt>
+            <b>bedge  </b>
+          </tt>
+    : Mx2 matrix giving a pair of edges for each band
+  </li>
+  <li>
+          <tt>
+            <b>des  </b>
+          </tt>
+    : M-vector giving desired magnitude for each band
+  </li>
+  <li>
+          <tt>
+            <b>wate  </b>
+          </tt>
+    : M-vector giving relative weight of error in each band
+  </li>
+  <li>
+          <tt>
+            <b>hn  </b>
+          </tt>
+    : output of linear-phase FIR filter coefficients
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Minimax approximation of multi-band, linear phase, FIR filter
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+hn=eqfir(33,[0 .2;.25 .35;.4 .5],[0 1 0],[1 1 1]);
+[hm,fr]=frmag(hn,256);
+plot(fr,hm),
+ </pre>
+    </ul>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>C. B.  </ul>
+    </p>
+  </body>
+</html>

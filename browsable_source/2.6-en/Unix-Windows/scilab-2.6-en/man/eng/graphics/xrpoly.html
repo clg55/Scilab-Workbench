@@ -1,0 +1,80 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>xrpoly -   draw a regular polygon  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>xrpoly(orig,n,r,[theta])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>orig  </b>
+          </tt>
+    : vector of size 2.
+  </li>
+  <li>
+          <tt>
+            <b>n  </b>
+          </tt>
+    : integer, number of sides.
+  </li>
+  <li>
+          <tt>
+            <b>r  </b>
+          </tt>
+    : real scalar.
+  </li>
+  <li>
+          <tt>
+            <b>theta  </b>
+          </tt>
+    : real, angle in radian; 0 is the default value.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>xrpoly</b>
+        </tt> draws a regular polygon with <tt>
+          <b>n</b>
+        </tt> sides contained in the 
+    circle of diameter 
+    <tt>
+          <b>r</b>
+        </tt> and with the origin of the circle set at point <tt>
+          <b>orig</b>
+        </tt>. 
+    <tt>
+          <b>theta</b>
+        </tt>  specifies a rotation angle in radian. This function uses
+    the current graphics scales. 
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+plot2d(0,0,-1,"012"," ",[0,0,10,10])
+xrpoly([5,5],5,5)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="xrects.html">
+          <tt>
+            <b>xrect</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

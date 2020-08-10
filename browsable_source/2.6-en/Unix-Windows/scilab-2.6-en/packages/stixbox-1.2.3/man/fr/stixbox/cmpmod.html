@@ -1,0 +1,78 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>cmpmod -  Compare linear submodel versus larger one  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[z,p, esub, e] = cmpmod(Y, Xsub, X)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>Y  </b>
+          </tt>
+    : dependant variates vector
+  </li>
+  <li>
+          <tt>
+            <b>Xsub  </b>
+          </tt>
+    : controlled variates "X" matrix for the submodel
+  </li>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : controlled variates "X" matrix for the model
+  </li>
+  <li>
+          <tt>
+            <b>z  </b>
+          </tt>
+    : F-test statistic value
+  </li>
+  <li>
+          <tt>
+            <b>p  </b>
+          </tt>
+    : Prob(F variate &gt; z)
+  </li>
+  <li>
+          <tt>
+            <b>esub  </b>
+          </tt>
+    : residus vector for the submodel
+  </li>
+  <li>
+          <tt>
+            <b>e  </b>
+          </tt>
+    : residus vector for the model
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Compare linear submodel versus larger one. The standard hypothesis
+    F-test of a regular linear model  against a smaller regular one.
+  </p>
+  </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="lsfit.html">
+          <tt>
+            <b>lsfit</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

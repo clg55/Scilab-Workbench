@@ -1,0 +1,41 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>stripblanks -  strips leading and trailing blanks of strings  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>txt=stripblanks(txt)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>txt  </b>
+          </tt>
+    : string or matrix of strings
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    stripblanks strips leading and trailing blanks of strings
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+a='  123   ';
+'!'+a+'!'
+'!'+stripblanks(a)+'!'
+a=['  123   ',' xyz']
+strcat(stripblanks(a))
+ </pre>
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,124 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>gainplot -  magnitude plot  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>gainplot(sl,fmin,fmax [,step] [,comments] )  </dd>
+      <dd>gainplot(frq,db,phi [,comments])  </dd>
+      <dd>gainplot(frq, repf  [,comments])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : list (<tt>
+            <b>syslin</b>
+          </tt> SIMO linear system).
+  </li>
+  <li>
+          <tt>
+            <b>fmin,fmax  </b>
+          </tt>
+    : real scalars (frequency interval).
+  </li>
+  <li>
+          <tt>
+            <b>step  </b>
+          </tt>
+    : real (discretization step (logarithmic scale))
+  </li>
+  <li>
+          <tt>
+            <b>comments  </b>
+          </tt>
+    : string 
+  </li>
+  <li>
+          <tt>
+            <b>frq  </b>
+          </tt>
+    : matrix (row by row frequencies)
+  </li>
+  <li>
+          <tt>
+            <b>db,phi  </b>
+          </tt>
+    : matrices (magnitudes and phases corresponding to <tt>
+            <b>frq</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>repf  </b>
+          </tt>
+    : complex matrix. One row for each frequency response.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Same as Bode but plots only the magnitude.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s')
+h=syslin('c',(s^2+2*0.9*10*s+100)/(s^2+2*0.3*10.1*s+102.01))
+gainplot(h,0.01,100,'(s^2+2*0.9*10*s+100)/(s^2+2*0.3*10.1*s+102.01)')
+xbasc()
+h1=h*syslin('c',(s^2+2*0.1*15.1*s+228.01)/(s^2+2*0.9*15*s+225))
+gainplot([h1;h],0.01,100,['h1';'h'])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="bode.html">
+          <tt>
+            <b>bode</b>
+          </tt>
+        </a>
+        <a href="black.html">
+          <tt>
+            <b>black</b>
+          </tt>
+        </a>
+        <a href="nyquist.html">
+          <tt>
+            <b>nyquist</b>
+          </tt>
+        </a>
+        <a href="../control/freq.html">
+          <tt>
+            <b>freq</b>
+          </tt>
+        </a>
+        <a href="../control/repfreq.html">
+          <tt>
+            <b>repfreq</b>
+          </tt>
+        </a>
+        <a href="../control/g_margin.html">
+          <tt>
+            <b>g_margin</b>
+          </tt>
+        </a>
+        <a href="../control/p_margin.html">
+          <tt>
+            <b>p_margin</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

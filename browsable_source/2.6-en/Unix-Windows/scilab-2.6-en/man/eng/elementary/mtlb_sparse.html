@@ -1,0 +1,86 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>mtlb_sparse -   convert sparse matrix   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>Y=mtlb_sparse(X)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : sparse matrix
+  </li>
+  <li>
+          <tt>
+            <b>Y  </b>
+          </tt>
+    : sparse matrix in Matlab format
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>Y=mtlb_sparse(X)</b>
+        </tt> is used to convert <tt>
+          <b>X</b>
+        </tt>, a Scilab sparse matrix, to 
+    Matlab format. <tt>
+          <b>Y</b>
+        </tt> is the a variable with type 7,
+    i.e. <tt>
+          <b>type(Y)</b>
+        </tt> is equal to 7.
+    This function should be used in mexfiles (a Matlab mexfile containing sparse
+    matrices can be used only if the Scilab sparse matrices are converted
+    to that format). The functions <tt>
+          <b>full</b>
+        </tt> and <tt>
+          <b>spget</b>
+        </tt>  work
+    with this format. 
+  </p>
+  <p>
+     Other operations and functions using this format
+    can be overloaded with Scilab functions using the prefix "%msp". 
+    For instance the function 
+    <tt>
+          <b>%msp_p(x)</b>
+        </tt> (see SCIDIR/macros/percent directory) is used to
+    display such "type 7" objects.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+X=sparse(rand(2,2)); Y=mtlb_sparse(X);
+Y, full(Y), [ij,v,mn]=spget(Y)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="full.html">
+          <tt>
+            <b>full</b>
+          </tt>
+        </a>
+        <a href="spget.html">
+          <tt>
+            <b>spget</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,106 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>printing -  printing scilab graphics   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>Blatexpr xscale yscale filename.ps  </dd>
+      <dd>BEpsf filename.ps   </dd>
+      <dd>Blpr "Title" filename1.ps filename2.ps ... filenamen.ps | lpr   </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    The scilab graphics can be saved with the <tt>
+          <b>xbasimp</b>
+        </tt>
+    command into unix files. The Scilab command :
+  </p>
+  <pre>
+ xbasimp(xx,'des.ps',0)
+   </pre>
+  <p>
+    will save the graphics recorded in the graphic window xx in the 
+    file <tt>
+          <b>des.ps.xx</b>
+        </tt>. This file can't be directly send to a Postscript
+    printer and a set of programs ( in the <tt>
+          <b>bin</b>
+        </tt> Scilab directory ) are 
+    given with Scilab to print it :
+  </p>
+ 
+
+  <li>BEpsf 
+    : The  command will create an Epsf file from your  under the name , this Epsf file can be printed on a Postscript printer or inserted into an other Postscript document.
+  </li>
+
+  <li>Blatexpr 
+    : The   command will create an Epsf file from your 
+  </li>
+  <pre>
+  mv des.ps.xx des.ps
+  Blatexpr 1.0 1.0 des.ps
+   </pre>
+  <p>
+     under the name <tt>
+          <b>des.epsf</b>
+        </tt> and a LaTeX file 
+    <tt>
+          <b>des.tex</b>
+        </tt>. The file <tt>
+          <b>des.tex</b>
+        </tt> can be inserted in a LaTeX 
+    file in order to get the latex figure as follows ( the postscript 
+    file is inserted with the <tt>
+          <b>special</b>
+        </tt> command of LaTeX )
+  </p>
+  <pre>
+ \input des.tex 
+ \dessin{caption}{label}
+   </pre>
+
+  <li>Blpr 
+    : The  command is used to print a set of graphics on a same  sheet of paper. For example to print two graphics on a unique page, one can use :
+  </li>
+  <pre>
+Blpr "Two graphics" file1.ps.0 file2.ps.1 | lpr 
+   </pre>
+
+  <li>Blatexprs 
+    : The  command is used to insert in a single LaTeX figure  a set of Scilab Graphics 
+  </li>
+  <pre>
+Blatexprs res file1.ps.0 file2.ps.1
+   </pre>
+  <p>
+    will create two files <tt>
+          <b>res.ps</b>
+        </tt> and <tt>
+          <b>res.tex</b>
+        </tt>. The file <tt>
+          <b>res.tex</b>
+        </tt>
+    is used as in the <tt>
+          <b>Blatexpr</b>
+        </tt> command in order to get the figure.
+  </p>
+ 
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="xbasimp.html">
+          <tt>
+            <b>xbasimp</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

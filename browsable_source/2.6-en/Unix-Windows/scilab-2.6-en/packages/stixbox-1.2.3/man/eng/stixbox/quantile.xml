@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>quantile  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="quantile"> Empirical quantile (percentile).  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>q = quantile(x,p [,method])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>x  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : vector or matrix of reals
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>p  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : probability (scalar or vector of probabilities numbers)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>q  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    :  matrix. 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>method  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : The empirical quantile is computed by one of three ways determined by a third input argument (with default 1). 
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>1  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Interpolation so that F(X_(k)) == (k-0.5)/n.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>2  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Interpolation so that F(X_(k)) == k/(n+1).
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>3  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : Based on the empirical distribution.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    the empirical quantile of the sample x, a value that is greater than p
+    percent of the values in x. 
+  </P>
+  <P>
+    If input x is a matrix then the quantile is computed for  every
+    column. If p is a vector then q is a matrix, each line contain the
+    quantiles  computed for a value of p. 
+  </P>
+  <P>
+  </P>
+  </DESCRIPTION>
+</MAN>

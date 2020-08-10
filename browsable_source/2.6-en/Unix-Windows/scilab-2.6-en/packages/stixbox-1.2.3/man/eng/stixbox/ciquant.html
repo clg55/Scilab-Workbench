@@ -1,0 +1,63 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>ciquant -  Nonparametric confidence interval for quantile  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>ci = ciquant(x,p,C);  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>C  </b>
+          </tt>
+    :  confidence level for the interval (default 0.95)
+  </li>
+  <li>
+          <tt>
+            <b>p  </b>
+          </tt>
+    :  a probability defining a quantile.
+  </li>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : a sample. if x is a matrix, the procedure is colonwise.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Nonparametric confidence interval for quantile. 
+    The returned value is the interval ci which is of the form 
+  </p>
+  <pre>
+                   [LeftLimit, PointEstimate, RightLimit]'. 
+   </pre>
+  <p>
+    The interval is constructed conservatively in both ends, 
+    that is <tt>
+          <b>P(q&lt;LeftLimit) &lt;= C/2</b>
+        </tt> and similarly for the upper limit.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="quantile.html">
+          <tt>
+            <b>quantile</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

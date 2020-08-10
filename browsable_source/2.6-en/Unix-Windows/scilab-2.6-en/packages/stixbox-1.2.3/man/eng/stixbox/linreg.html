@@ -1,0 +1,55 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>linreg -  Linear or polynomial regression  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>linreg(y,x)  </dd>
+      <dd>[b, Ib, e, s, Is] = linreg(y,x,C,sym,pmax)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : two matrices or vectors.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Linear or polynomial regression. 
+  </p>
+  <p>
+    The output  b  is the point estimate of the parametars in the model
+  </p>
+  <pre>
+  y = b(1)*x + b(2) + error.
+   </pre>
+  <p>
+    The columns of  Ib  are the corresponding confidence intervals. The
+    residuals are in  e. The standard deviation of the residuals is  s.
+  </p>
+  <p>
+    A pointwise confidence band for the expected y-value is plotted, as
+    well as a dashed line which indicates the prediction interval given
+    x. The input  C  is the confidence which is 0.95 by default. C = []
+    gives no plotting of confidence band or prediction band. 
+  </p>
+  <p>
+    Input sym is plotting symbol, with 'o' as default. For polynomial
+    regression give input  pmax  a desired value, the model is then  
+  </p>
+  <pre>
+   y = [x^pmax, ... x^2, x, 1] * b' + error. 
+   </pre>
+  </ul>
+  </body>
+</html>

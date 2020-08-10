@@ -1,0 +1,84 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>unique -  extrait les composantes distinctes d'un vecteur  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[N, [k]]=unique(M)  </dd>
+      <dd>  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>M,N  </b>
+          </tt>
+    : vecteur réel ou vecteur de chaînes de caractères
+  </li>
+  <li>
+          <tt>
+            <b>k  </b>
+          </tt>
+    : vecteur d'entiers
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>unique(M)</b>
+        </tt> renvoie un vecteur contenant les valeurs distinctes contenues dans les termes de <tt>
+          <b>M</b>
+        </tt> classées par ordre croissant.
+  </p>
+  <p>
+    S'il est présent l'argument de sortie <tt>
+          <b>k</b>
+        </tt> contient la position de la première occurrence de chaque valeur distincte dans <tt>
+          <b>M</b>
+        </tt>.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+M=round(2*rand(20,1));
+
+unique(M)
+[N,k]=unique(M)
+
+unique(string(M))
+[N,k]=unique(string(M))
+
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="union.html">
+          <tt>
+            <b>union</b>
+          </tt>
+        </a>
+        <a href="gsort.html">
+          <tt>
+            <b>sort</b>
+          </tt>
+        </a>
+        <a href="lex_sort.html">
+          <tt>
+            <b>lex_sort</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

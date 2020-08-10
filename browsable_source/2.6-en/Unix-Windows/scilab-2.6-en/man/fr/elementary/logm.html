@@ -1,0 +1,74 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>logm -  logarithme matriciel d'une matrice carrée  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>y=logm(x)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : matrice carrée
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>logm(x)</b>
+        </tt> est le logarithme matriciel de <tt>
+          <b>x</b>
+        </tt>.
+    Le résultat est complexe si <tt>
+          <b>x</b>
+        </tt> n'est pas positive ou définie positive.
+    Si <tt>
+          <b>x</b>
+        </tt> est une matrice symétrique, le calcul est fait en utilisant la forme de Schur. Sinon, <tt>
+          <b>x</b>
+        </tt> est supposée diagonalisable. On a 
+    <tt>
+          <b>expm(logm(x))=x</b>
+        </tt> 
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+A=[1,2;3,4];
+logm(A)
+expm(logm(A))
+A1=A*A';
+logm(A1)
+expm(logm(A1))
+A1(1,1)=%i;
+expm(logm(A1))
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../linear/expm.html">
+          <tt>
+            <b>expm</b>
+          </tt>
+        </a>
+        <a href="log10.html">
+          <tt>
+            <b>log</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

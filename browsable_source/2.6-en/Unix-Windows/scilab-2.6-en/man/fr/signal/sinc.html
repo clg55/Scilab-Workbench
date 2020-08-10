@@ -1,0 +1,68 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>sinc -   samples of sinc function  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[x]=sinc(n,fl)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>n  </b>
+          </tt>
+    : number of samples
+  </li>
+  <li>
+          <tt>
+            <b>fl  </b>
+          </tt>
+    : cut-off frequency of the associated low-pass filter in Hertz.
+  </li>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : samples of the sinc function
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Calculate n samples of the function <tt>
+          <b>sin(2*pi*fl*t)/(pi*t)</b>
+        </tt>
+    for <tt>
+          <b>t=-(n-1)/2:(n-1)/2</b>
+        </tt> (i.e. centred around the origin).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+plot(sinc(100,0.1))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="sincd.html">
+          <tt>
+            <b>sincd</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>C. B.;   </ul>
+    </p>
+  </body>
+</html>

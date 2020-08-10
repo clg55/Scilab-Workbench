@@ -1,0 +1,59 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>nf3d -  conversion de facettes pour plot3d  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[xx,yy,zz]=nf3d(x,y,z)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y,x,xx,yy,zz  </b>
+          </tt>
+    : 6 matrices réelles
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Fonction utilitaire utilisée pour convertir des facettes codées dans trois matrices x,y,z (format plot3d2) dans un format accepté par plot3d.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+// une sphère...
+u = linspace(-%pi/2,%pi/2,40);
+v = linspace(0,2*%pi,20);
+x= cos(u)'*cos(v);
+y= cos(u)'*sin(v);
+z= sin(u)'*ones(v);
+// plot3d2(x,y,z) est équivalent à ...
+[xx,yy,zz]=nf3d(x,y,z); plot3d(xx,yy,zz)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="fplot3d.html">
+          <tt>
+            <b>plot3d</b>
+          </tt>
+        </a>
+        <a href="plot3d2.html">
+          <tt>
+            <b>plot3d2</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

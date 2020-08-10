@@ -1,0 +1,160 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>fft -  fast Fourier transform.  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[x]=fft(a,-1)  </dd>
+      <dd>[x]=fft(a,1)  </dd>
+      <dd>x=fft(a,-1,dim,incr)  </dd>
+      <dd>x=fft(a,1,dim,incr)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : real or complex vector. Real or complex matrix (2-dim fft)
+  </li>
+  <li>
+          <tt>
+            <b>a  </b>
+          </tt>
+    : real or complex vector.
+  </li>
+  <li>
+          <tt>
+            <b>dim  </b>
+          </tt>
+    : integer
+  </li>
+  <li>
+          <tt>
+            <b>incr  </b>
+          </tt>
+    : integer
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Short syntax (one or two dimensional fft):
+  </p>
+  <p>
+    gives a direct transform (the <tt>
+          <b>-1</b>
+        </tt> refers to
+    the sign of the exponent..., NOT to "inverse"), that is
+  </p>
+  <p>
+    x(k)=sum over m from 1 to n  of a(m)*exp(-2i*pi*(m-1)*(k-1)/n)
+  </p>
+  <p>
+    for k varying from 1 to n (n=size of vector <tt>
+          <b>a</b>
+        </tt>).
+  </p>
+  <p>
+    performs the inverse transform normalized by <tt>
+          <b>1/n</b>
+        </tt>.
+  </p>
+  <p>
+    (<tt>
+          <b>fft(fft(.,-1),1)</b>
+        </tt> is identity).
+  </p>
+  <p>
+    When the first argument given to <tt>
+          <b>fft</b>
+        </tt> is a matrix
+    a two-dimensional FFT is performed.
+  </p>
+  <p>
+    Long syntax (multidimensional FFT):
+  </p>
+  <p>
+    allows to perform an multidimensional fft.
+  </p>
+  <p>
+    If a is a real or complex vector implicitly indexed by
+    <tt>
+          <b>x1,x2,..,xp</b>
+        </tt> i.e. <tt>
+          <b>a(x1,x2,..,xp)</b>
+        </tt> where <tt>
+          <b>x</b>
+        </tt>1 lies in 
+    <tt>
+          <b>1..dim1,</b>
+        </tt> <tt>
+          <b>x2</b>
+        </tt> in <tt>
+          <b>1.. dim2,...</b>
+        </tt> one gets 
+    a p-dimensional FFT p by calling p times <tt>
+          <b>fft</b>
+        </tt> as follows
+  </p>
+  <pre>
+ a1=fft(a ,-1,dim1,incr1)
+ a2=fft(a1,-1,dim2,incr2) ...
+   </pre>
+  <p>
+    where <tt>
+          <b>dimi</b>
+        </tt> is the dimension of the current variable w.r.t which
+    one is integrating and incri is the increment which separates
+    two successive <tt>
+          <b>xi</b>
+        </tt> elements in <tt>
+          <b>a</b>
+        </tt>.
+  </p>
+  <p>
+    In particular,if <tt>
+          <b>a</b>
+        </tt> is an nxm matrix,
+    <tt>
+          <b>x=fft(a,-1)</b>
+        </tt> is equivalent to the two instructions:
+  </p>
+  <p>
+    <tt>
+          <b>a1=fft(a,-1,m,1)</b>
+        </tt> and <tt>
+          <b>x=fft(a1,-1,n,m)</b>
+        </tt>.
+  </p>
+  <p>
+    if a is an hypermatrix (see hypermat) fft(a,flag) performs the N
+    dimensional fft of a.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+a=[1;2;3];n=size(a,'*');
+norm(1/n*exp(2*%i*%pi*(0:n-1)'.*.(0:n-1)/n)*a -fft(a,1))
+norm(exp(-2*%i*%pi*(0:n-1)'.*.(0:n-1)/n)*a -fft(a,-1))  
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="corr.html">
+          <tt>
+            <b>corr</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

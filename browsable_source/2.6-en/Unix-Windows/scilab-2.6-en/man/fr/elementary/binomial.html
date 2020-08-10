@@ -1,0 +1,73 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>binomial -  distribution binomiale  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>pr=binomial(p,n)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>pr  </b>
+          </tt>
+    : vecteur, pr(k) = probabilité (X=k) , avec X=B(n,p).
+  </li>
+  <li>
+          <tt>
+            <b>p  </b>
+          </tt>
+    : scalaire
+  </li>
+  <li>
+          <tt>
+            <b>n  </b>
+          </tt>
+    : entier
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>pr=binomial(p,n)</b>
+        </tt> renvoie un vecteur de probabilités binomiales.
+    pr(k) = probabilité (X=k), avec X=B(n,p) c'est à dire la
+    probabilité de k succès lors de n essais indépendants, (p = probabilité de succès).
+    <tt>
+          <b>pr(k) = C(n,k) p^k (1-p)^(n-k)</b>
+        </tt> avec 
+    C(n,k)= n!/(k!(n-k)!) = prod(1:n)/(prod(1:k)*prod(1:n-k)).
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+n=10;p=0.3;plot2d3(0:n,binomial(p,n));
+n=100;p=0.3;
+mea=n*p;sigma=sqrt(n*p*(1-p));
+x=( (0:n)-mea )/sigma;
+plot2d(x,sigma*binomial(p,n));
+deff('y=Gauss(x)','y=1/sqrt(2*%pi)*exp(-(x.^2)/2)')
+plot2d(x,Gauss(x));
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../dcd/cdfbin.html">
+          <tt>
+            <b>cdfbin</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

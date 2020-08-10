@@ -1,0 +1,85 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>pause -  mode de pause, attente clavier  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Passage en mode de <tt>
+          <b>pause</b>
+        </tt>;
+    inséré dans le code d'une fonction, <tt>
+          <b>pause</b>
+        </tt> fait une pause dans l'exécution
+    de la fonction : un symbole d'invite de commande est affiché à l'utilisateur indiquant le "niveau" de la <tt>
+          <b>pause</b>
+        </tt> (e.g. <tt>
+          <b>-1-&gt;</b>
+        </tt>). L'utilisateur se trouve dans un environnement dans lequel toutes les variables du niveau correspondant sont accessibles (en particulier les variables locales de la fonction).
+    Pour reprendre l'exécution taper <tt>
+          <b>"return"</b>
+        </tt>.
+  </p>
+  <p>
+    Dans ce mode, <tt>
+          <b>[...]=return(...) </b>
+        </tt>
+    renvoie les variables de l'argument <tt>
+          <b>(...)</b>
+        </tt> dans l'environnement appelant 
+    sous les noms précisés dans <tt>
+          <b> [...]</b>
+        </tt>. Sinon, les variables de l'environnement interrompu sont protégées et non modifiables.
+  </p>
+  <p>
+    L'instruction <tt>
+          <b>pause</b>
+        </tt> est très utile en phase de mise au point ou de déboggage.
+  </p>
+  <p>
+    Il est possible de sortir du mode de pause en mettant fin à l'exécution en tapant <tt>
+          <b>"abort"</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../gui/halt.html">
+          <tt>
+            <b>halt</b>
+          </tt>
+        </a>
+        <a href="return.html">
+          <tt>
+            <b>return</b>
+          </tt>
+        </a>
+        <a href="abort.html">
+          <tt>
+            <b>abort</b>
+          </tt>
+        </a>
+        <a href="quit.html">
+          <tt>
+            <b>quit</b>
+          </tt>
+        </a>
+        <a href="whereami.html">
+          <tt>
+            <b>whereami</b>
+          </tt>
+        </a>
+        <a href="whereami.html">
+          <tt>
+            <b>where</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>datas14  </TITLE>
+  <TYPE>Stixbox Function  </TYPE>
+  <DATE>Nov 2001  </DATE>
+  <SHORT_DESCRIPTION name="datas14"> Phone call data   </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>x=datas14()  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <DESCRIPTION>
+  <VERBATIM><![CDATA[
+Source: Factures de France Telecom
+
+Pris:          source  
+
+Description:  details de 2 factures de telephone pour deux  periodes
+               non consecutives de deux mois  (excepte les appels
+               locaux).  Sur une ligne est donnee, la date d'un appel 
+  (le jour dans la 1ere colonne et le mois dans la 2eme 
+  colonne) ainsi que sa duree en secondes (3eme colonne) 
+               Les 33 premieres lignes correspondent a des appels dit de
+               voisinage et les 31 dernieres lignes sont des appels dit
+               nationaux.    
+   ]]></VERBATIM>
+  </DESCRIPTION>
+</MAN>

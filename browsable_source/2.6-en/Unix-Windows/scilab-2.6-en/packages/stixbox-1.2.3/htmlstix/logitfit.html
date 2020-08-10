@@ -1,0 +1,29 @@
+<HTML> 
+   <HEAD> 
+         <!-- BASE HREF="" -->      <!-- Please edit this to refer to the directory of this file --->
+     	 <TITLE>Stixbox summary</TITLE>  
+  </HEAD> 
+      <BODY ALINK="#FF00FF" BGCOLOR="#FFFFFF" LINK="#FF0000" TEXT="#000000" VLINK="#800000"> 
+<H2>LOGITFIT</H2>
+<DL>
+<DT>logitfit
+<DD>
+Fit a logistic regression model.<PRE>
+
+     	  [b, Ib, Vb] = logitfit(y,X,C)
+
+	  Fit the model log(p/(1-p)) = X*b, where p is the probability 
+	  that y is 1 and not 0. Output b is vector of point estimates,  
+	  Ib is confidence intervals, and Vb is the estimated variance 
+	  matrix of b. Input C is confidence level for the confidence 
+	  intervals, default is 0.95.
+
+         If an intercept is not included in X it is automatically added 
+         as an extra column.
+
+	  See also LODDS and LODDSINV.
+</PRE>
+<P><H2>See Also</H2><UL>
+LODDS and LODDSINV.</UL>
+</BODY>
+</HTML>

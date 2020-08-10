@@ -1,0 +1,299 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>insertion -  insertion/modification dans une matrice ou une liste  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>x(i,j)=a  </dd>
+      <dd>x(i)=a  </dd>
+      <dd>l(i)=a  </dd>
+      <dd>l(k1)...(kn)(i)=a ou l(list(k1,...,kn,i))=a  </dd>
+      <dd>l(k1)...(kn)(i,j)=a ou l(list(k1,...,kn,list(i,j))=a  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : matrice de tout type
+  </li>
+  <li>
+          <tt>
+            <b>l  </b>
+          </tt>
+    : liste
+  </li>
+  <li>
+          <tt>
+            <b>i,j  </b>
+          </tt>
+    : indices
+  </li>
+  <li>
+          <tt>
+            <b>k1,...kn  </b>
+          </tt>
+    : indices à valeurs entières
+  </li>
+  <li>
+          <tt>
+            <b>a  </b>
+          </tt>
+    : nouvelles valeurs des termes
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+ 
+
+  <li>CAS DES MATRICES 
+       et  peuvent être :
+  </li>
+ 
+
+  <li>- 
+    des scalaires, vecteurs ou matrices à éléments positifs. 
+  </li>
+ 
+
+  <li>* 
+    Si  est une matrice de dimensions   renvoie une nouvelle matrice  telle que  pour  variant de 1 à  et  variant de 1 à , les autres composantes initiales de  sont inchangées. 
+  </li>
+  <p>
+    Si <tt>
+          <b>a</b>
+        </tt> est un scalaire <tt>
+          <b>x(i,j)=a</b>
+        </tt> renvoie une nouvelle matrice <tt>
+          <b>x</b>
+        </tt> telle que
+    <tt>
+          <b>x(int(i(l)),int(j(k)))=a </b>
+        </tt> pour  <tt>
+          <b>l</b>
+        </tt> variant de 1 à <tt>
+          <b>size(i,'*')</b>
+        </tt> et <tt>
+          <b>k</b>
+        </tt> variant de 1 à <tt>
+          <b>size(j,'*')</b>
+        </tt>, les autres composantes initiales de <tt>
+          <b>x</b>
+        </tt> sont inchangées. 
+  </p>
+  <p>
+    Si la valeur maximum de <tt>
+          <b>i</b>
+        </tt> ou <tt>
+          <b>j</b>
+        </tt> dépasse la dimension correspondante de <tt>
+          <b>x</b>
+        </tt>, alors <tt>
+          <b>x</b>
+        </tt> est au préalable agrandie aux dimensions adéquates en stockant des zéros pour les matrices standard, des chaînes vides pour les matrices de chaînes de caractères ou la valeur %F pour les matrices booléennes.
+  </p>
+  <p>
+  </p>
+
+  <li>* 
+     détruit les lignes spécifiées par  si  désigne toutes les colonnes de  ou détruit les colonnes spécifiées par  si  désigne toutes les lignes de . Dans tous les autres cas  produit une erreur.
+  </li>
+
+  <li>* 
+     où  est un vecteur renvoie une nouvelle matrice  telle que  pour   variant de 1 à  , les autres composantes initiales de  sont inchangées. 
+  </li>
+  <p>
+    <tt>
+          <b>x(i)=a</b>
+        </tt>  où <tt>
+          <b>a</b>
+        </tt> est un scalaire, renvoie une nouvelle matrice <tt>
+          <b>x</b>
+        </tt>  telle que
+    <tt>
+          <b>x(int(i(l)))=a</b>
+        </tt> pour <tt>
+          <b>l</b>
+        </tt> variant de 1 à <tt>
+          <b>size(i,'*')</b>
+        </tt> ,
+    les autres composantes initiales de <tt>
+          <b>x</b>
+        </tt> sont inchangées. 
+  </p>
+  <p>
+    Si la valeur maximum de <tt>
+          <b>i</b>
+        </tt> dépasse <tt>
+          <b>size(x,1)</b>
+        </tt>, <tt>
+          <b>x</b>
+        </tt> est au préalable agrandie aux dimensions adéquates en stockant des zéros pour les matrices standard, des chaînes vides pour les matrices de chaînes de caractères ou la valeur %F pour les matrices booléennes.
+  </p>
+ 
+
+  <li>Si 
+     est une matrice 1 x 1  peut être un vecteur ligne (resp. colonne) de dimension . La matrice  obtenue est un vecteur ligne (resp. colonne)
+  </li>
+
+  <li>Si 
+     est un vecteur ligne (resp. colonne)  doit être un vecteur ligne (resp. colonne) de dimension 
+  </li>
+
+  <li>Si 
+     est une matrice en général  doit être un vecteur ligne ou colonne de dimension  et la valeur maximum de ne peut dépasser ,
+  </li>
+ 
+
+  <li>* 
+     supprime les termes spécifiés par .
+  </li>
+ 
+  <p>
+    -
+    Le symbole <tt>
+          <b> : </b>
+        </tt> signifiant "tous les éléments". 
+  </p>
+ 
+
+  <li>* 
+     est interprété comme  
+  </li>
+
+  <li>* 
+     est interprété comme  
+  </li>
+
+  <li>* 
+     renvoie dans  la matrice  remise en forme en accord avec les dimensions de x.  doit être égal à
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+
+  <li>- 
+    vecteur de booléens. Si un indice (  ou  ) est un vecteur de booléens, il est interprété comme  ou , respectivement. 
+  </li>
+
+  <li>- 
+    un polynôme. Si un indice (  ou  ) est un vecteur de polynômes ou de polynômes implicites, il est interprété comme  ou , respectivement, où  et  sont les dimensions de  associées.  Même si cette fonctionnalité marche pour tous les polynômes, il est recommandé d'utiliser des polynômes dans   par souci de lisibilité.  
+  </li>
+ 
+
+  <li>CAS DES LISTES (types LIST et TLIST) 
+    S'ils sont présents les  donnent le chemin vers un terme d'une sous-liste de la liste . Ils permettent de faire une insertion récursive directe sans utiliser de variable intermédiaire.   Les instructions  et  sont interprétées comme :                et les instructions et  sont interprétées comme :             
+  </li>
+ 
+
+  <li>i peut être : 
+  </li>
+ 
+
+  <li>- 
+    un scalaire réel positif   ajoute un terme "à gauche" de la liste    affecte  au terme  de la liste . Si ,  est préalablement agrandie et les termes créés sont de type non-défini.    supprime le terme th de la liste.
+  </li>
+
+  <li>- 
+    un polynôme. Si  est un vecteur de polynômes ou de polynômes implicites il est interprété comme  où . Même si cette fonctionnalité marche pour tous les polynômes, il est recommandé d'utiliser des polynômes dans  par souci de lisibilité.  
+  </li>
+ 
+  <p>
+    \un nombre réel positif 
+  </p>
+  <p>
+  </p>
+
+  <li>- 
+    un polynôme, interprété comme  ou  est la taille de la sous-liste correspondante. 
+  </li>
+
+  <li>- une chaîne de caractères associée à un nom d'entrée de sous-liste. 
+  </li>
+ 
+ 
+  </ul>
+    <H3>REMARQUES</H3>
+    <ul>
+      <p>
+    Pour les matrices rationnelles et les systèmes dynamiques linéaires stockés sous forme de représentation d'état, la syntaxe <tt>
+          <b>x(i)</b>
+        </tt> ne doit pas être utilisée pour l'insertion des éléments d'un vecteur, à cause de la confusion possible avec l'insertion des éléments de liste. La syntaxe <tt>
+          <b>x(1,j)</b>
+        </tt> où <tt>
+          <b>x(i,1)</b>
+        </tt> doit être utilisée dans ce cas. 
+  </p>
+    </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+// CAS DES MATRICES
+a=[1 2 3;4 5 6]
+a(1,2)=10
+a([1 1],2)=[-1;-2]
+a(:,1)=[8;5]
+a(1,3:-1:1)=[77 44 99]
+a(1)=%s
+a(6)=%s+1
+a(:)=1:6
+a([%t %f],1)=33
+a(1:2,$-1)=[2;4]
+a($:-1:1,1)=[8;7]
+a($)=123
+//
+x='test'
+x([4 5])=['4','5']
+//
+b=[1/%s,(%s+1)/(%s-1)]
+b(1,1)=0
+b(1,$)=b(1,$)+1
+b(2)=[1 2] // le numérateur
+// CAS des LISTES (types LIST et TLIST)
+l=list(1,'qwerw',%s)
+l(1)='Changed'
+l(0)='Added'
+l(6)=['one more';'added']
+//
+//
+dts=list(1,tlist(['x';'a';'b'],10,[2 3]));
+dts(2)('a')=33
+dts(2)('b')(1,2)=-100
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="find.html">
+          <tt>
+            <b>find</b>
+          </tt>
+        </a>
+        <a href="../polynomials/horner.html">
+          <tt>
+            <b>horner</b>
+          </tt>
+        </a>
+        <a href="parents.html">
+          <tt>
+            <b>parents</b>
+          </tt>
+        </a>
+        <a href="extraction.html">
+          <tt>
+            <b>extraction</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

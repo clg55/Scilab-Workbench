@@ -1,0 +1,93 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>ones -  matrix made of ones  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=ones(m1,m2,...)  </dd>
+      <dd>y=ones(x)  </dd>
+      <dd>y=ones()  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : matrices
+  </li>
+  <li>
+          <tt>
+            <b>m1, m2,..  </b>
+          </tt>
+    : integers
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Returns a matrix made of ones.
+  </p>
+ 
+
+  <li>ones(m1,m2) 
+    returns a  matrix full of ones.
+  </li>
+
+  <li>ones(m1,m2,..,mn) 
+    : creates a  matrix full of ones.
+  </li>
+
+  <li>ones(x) 
+    returns a matrix full of ones with the same size that .
+  </li>
+
+  <li>ones(x) 
+    is also valid for  a  list.
+  </li>
+  <p>
+    Note that <tt>
+          <b>ones(3)</b>
+        </tt> is <tt>
+          <b>ones(a)</b>
+        </tt> with <tt>
+          <b>a=3</b>
+        </tt> i.e it is NOT 
+    a 3x3 matrix!
+  </p>
+  <p>
+    ones() is eqivalent to ones(1,1).
+  </p>
+ 
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+ones(3)
+ones(3,3)
+ones(2,3,2)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="eye.html">
+          <tt>
+            <b>eye</b>
+          </tt>
+        </a>
+        <a href="spzeros.html">
+          <tt>
+            <b>zeros</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,94 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>xpolys -  draw a set of polylines or polygons  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>xpolys(xpols,ypols,[draw])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>xpols,ypols  </b>
+          </tt>
+    : matrices of the same size (p,n) (points of the polylines).
+  </li>
+  <li>
+          <tt>
+            <b>draw  </b>
+          </tt>
+    : vector of size n.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>xpolys</b>
+        </tt> draws a set of polylinse using marks or dashed lines. 
+    The coordinates of each polyline
+    are stored in a column of <tt>
+          <b>xpols</b>
+        </tt> and <tt>
+          <b>ypols</b>
+        </tt>.
+  </p>
+  <p>
+    The style of polyline i is given by <tt>
+          <b>draw(i)</b>
+        </tt>:
+  </p>
+ 
+
+  <li>- 
+    If  is negative, the mark with id  is used to draw polyline i (marks are drawn using the current pattern). Use  to see the meaning of the ids.
+  </li>
+
+  <li>- 
+    If  is strictly positive, the line style (or color) with id   is used to draw polyline i. Use  to see the meaning of the ids.
+  </li>
+ 
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+plot2d(0,0,-1,"012"," ",[0,0,1,1])
+rand("uniform")
+xset("color",3)
+xpolys(rand(3,5),rand(3,5),[-1,-2,0,1,2])
+xset("default")
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="xfpolys.html">
+          <tt>
+            <b>xfpoly</b>
+          </tt>
+        </a>
+        <a href="xfpolys.html">
+          <tt>
+            <b>xfpolys</b>
+          </tt>
+        </a>
+        <a href="xpolys.html">
+          <tt>
+            <b>xpoly</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

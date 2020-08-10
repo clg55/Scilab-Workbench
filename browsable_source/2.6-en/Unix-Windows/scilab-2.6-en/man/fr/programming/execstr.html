@@ -1,0 +1,117 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>execstr -  exécution d'instructions Scilab contenues dans des chaînes de caractères  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>execstr(instr)  </dd>
+      <dd>ierr=execstr(instr,'errcatch' [,msg])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>instr  </b>
+          </tt>
+    : vecteur de chaînes de caractères
+  </li>
+  <li>
+          <tt>
+            <b>ierr  </b>
+          </tt>
+    : entier, 0 ou numéro de l'erreur
+  </li>
+  <li>
+          <tt>
+            <b>msg  </b>
+          </tt>
+    : chaîne de caractères (<tt>
+            <b>'m'</b>
+          </tt> ou <tt>
+            <b>'n'</b>
+          </tt>). La valeur par défaut est <tt>
+            <b>'n'</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Exécute les instructions Scilab données dans l'argument <tt>
+          <b>instr</b>
+        </tt>.
+  </p>
+  <p>
+    Si 'errcatch' n'est pas présent dans les arguments, les erreurs sont contrôlées comme d'habitude.
+  </p>
+  <p>
+    Si 'errcatch' est présent dans les arguments, et qu'une erreur est rencontrée lors de l'évaluation d'un élément de <tt>
+          <b>instr</b>
+        </tt>, <tt>
+          <b>execstr</b>
+        </tt>
+    ne produit aucun message d'erreur, mais stoppe l'exécution des instructions stockées dans <tt>
+          <b>instr</b>
+        </tt> (au point où l'erreur s'est produite), et renvoie dans
+    <tt>
+          <b>ierr</b>
+        </tt> le numéro de l'erreur. Dans ce cas l'affichage du message d'erreur est contrôlé par l'option <tt>
+          <b>msg</b>
+        </tt> :
+  </p>
+ 
+
+  <li>"m" 
+    : le message d'erreur est affiché et enregistré
+  </li>
+
+  <li>"n" 
+    : le message d'erreur n'est pas affiché mais il est enregistré (voir ). Il s'agit du comportement par défaut. 
+  </li>
+ 
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+execstr('a=1') // affecte a=1.
+execstr('1+1') // ne fait rien de particulier (alors que evstr('1+1') renvoie 2)
+
+execstr(['if %t then';
+         '  a=1';
+         '  b=a+1';
+         'else'
+         ' b=0'
+         'end'])
+
+execstr('a=zzzzzzz','errcatch')
+execstr('a=zzzzzzz','errcatch','m')
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="evstr.html">
+          <tt>
+            <b>evstr</b>
+          </tt>
+        </a>
+        <a href="lasterror.html">
+          <tt>
+            <b>lasterror</b>
+          </tt>
+        </a>
+        <a href="error.html">
+          <tt>
+            <b>error</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

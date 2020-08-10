@@ -1,0 +1,91 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>hist3d -  représentation 3D d'un histogramme  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>hist3d(f,[theta,alpha,leg,flag,ebox])  </dd>
+      <dd>hist3d(list(f,x,y),[theta,alpha,leg,flag,ebox])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>f  </b>
+          </tt>
+    : matrice de taille (m,n) définissant l'histogramme <tt>
+            <b>f(i,j)=F(x(i),y(j))</b>
+          </tt>,  où <tt>
+            <b>x</b>
+          </tt> et <tt>
+            <b>y</b>
+          </tt> sont considérés égaux à <tt>
+            <b>0:m</b>
+          </tt> et <tt>
+            <b>0:n</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>list(f,x,y)  </b>
+          </tt>
+    : où f est une matrice de taille (m,n) définissant l'histogramme  <tt>
+            <b>f(i,j)=F(x(i),y(j))</b>
+          </tt>, avec <tt>
+            <b>x</b>
+          </tt> et <tt>
+            <b>y</b>
+          </tt> deux vecteurs de tailles respectives (1,n+1)  et (1,m+1).
+  </li>
+  <li>
+          <tt>
+            <b>theta,alpha,leg,flag,ebox  </b>
+          </tt>
+    : voir <tt>
+            <b>plot3d</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>hist3d</b>
+        </tt> représente un histogramme 2D dans l'espace. Les valeurs sont associées aux intervalles 
+    <tt>
+          <b>[x(i) x(i+1)[ X [y(i) y(i+1)[</b>
+        </tt>.
+  </p>
+  <p>
+    Taper <tt>
+          <b>hist3d()</b>
+        </tt> pour voir une démonstration de la fonction.
+  </p>
+  </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="histplot.html">
+          <tt>
+            <b>histplot</b>
+          </tt>
+        </a>
+        <a href="fplot3d.html">
+          <tt>
+            <b>plot3d</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>Steer S. &amp; JPhilippe C.  </ul>
+    </p>
+  </body>
+</html>

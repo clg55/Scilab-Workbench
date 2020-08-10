@@ -1,0 +1,91 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>lotest -  demo of the Lorenz attractor  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[]=lotest([f_l,odem,xdim,npts,pinit])  </dd>
+      <dd>[y]=lorenz(t,x)  </dd>
+      <dd>[]=ilo(sig,ro,beta)  </dd>
+      <dd>[]=ilof(sig,ro,beta)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>f_l  </b>
+          </tt>
+    : can be <tt>
+            <b>"loren"</b>
+          </tt> or <tt>
+            <b>lorenz</b>
+          </tt>. it is the name of the external for  the Lorenz system. <tt>
+            <b>"loren"</b>
+          </tt> will use a Fortran coded version of the lorenz system and arnold will and <tt>
+            <b>loren</b>
+          </tt> will use a Scilab coded version.<tt>
+            <b>lorentz</b>
+          </tt> is the Scilab macro which code the lorenz system.  This macro is loaded when calling <tt>
+            <b>lotest</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>ilof, ilo  </b>
+          </tt>
+    :are used to fix the parameters of the Fortran and Scilab code version of the  Lorenz system.
+  </li>
+  <li>
+          <tt>
+            <b>odem,xdim,npts  </b>
+          </tt>
+    : are optional arguments. Their meaning and syntax can be found in the portr3d   help
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    A call to the function <tt>
+          <b>lotest()</b>
+        </tt> will interactively 
+    display a phase portrait of  a the following dynamical system
+  </p>
+  <pre>
+ y(1)=sig*(x(2)-x(1));
+ y(2)=ro*x(1) -x(2)-x(1)*x(3);
+ y(3)=-beta*x(3)+x(1)*x(2);
+   </pre>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="portr3d.html">
+          <tt>
+            <b>portr3d</b>
+          </tt>
+        </a>
+        <a href="../programming/mode.html">
+          <tt>
+            <b>ode</b>
+          </tt>
+        </a>
+        <a href="chaintest.html">
+          <tt>
+            <b>chaintest</b>
+          </tt>
+        </a>
+        <a href="lotest.html">
+          <tt>
+            <b>lotest</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

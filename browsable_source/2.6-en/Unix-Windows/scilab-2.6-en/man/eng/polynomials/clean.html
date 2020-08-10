@@ -1,0 +1,71 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>clean -  cleans matrices (round to zero small entries)    </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[B]=clean(A [,epsa [,epsr]])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : a numerical matrix (scalar, polynomial, sparse...) 
+  </li>
+  <li>
+          <tt>
+            <b>epsa,epsr  </b>
+          </tt>
+    : real numbers (default values resp. 1.d-10 and 1.d-10)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This function eliminates (i.e. set to zero) all the coefficients 
+    with absolute value &lt; <tt>
+          <b>epsa</b>
+        </tt> and relative value &lt; <tt>
+          <b>epsr</b>
+        </tt> 
+    (relative means relative w.r.t. 1-norm of coefficients)
+    in a polynomial (possibly matrix polynomial or rational
+    matrix).
+  </p>
+  <p>
+    Default  values are <tt>
+          <b>epsa=1.d-10</b>
+        </tt> and <tt>
+          <b>epsr=1.d-10;</b>
+        </tt>
+  </p>
+  <p>
+    For a constant (non polynomial) matrix <tt>
+          <b>clean(A,epsa)</b>
+        </tt> sets to zero all
+    entries of <tt>
+          <b>A</b>
+        </tt> smaller than <tt>
+          <b>epsa</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=poly(0,'x');
+w=[x,1,2+x;3+x,2-x,x^2;1,2,3+x]/3;
+w*inv(w)
+clean(w*inv(w))
+ </pre>
+    </ul>
+  </body>
+</html>

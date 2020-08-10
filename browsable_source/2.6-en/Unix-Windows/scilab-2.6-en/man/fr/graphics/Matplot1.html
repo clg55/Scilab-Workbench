@@ -1,0 +1,103 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>Matplot1 -  représentation d'une matrice dans le plan en pseudo-couleurs   </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>Matplot1(a,rect)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>a  </b>
+          </tt>
+    : matrice réelle de taille (n1,n2).
+  </li>
+  <li>
+          <tt>
+            <b>rect  </b>
+          </tt>
+    : <tt>
+            <b>[xmin;ymin,xmax,ymax]</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Les termes de la matrice <tt>
+          <b>int(a)</b>
+        </tt> sont utilisés comme indices de couleur dans la table des couleurs courante. <tt>
+          <b>rect</b>
+        </tt> spécifie un rectangle dans l'échelle courante et la matrice est dessinée dans ce rectangle.
+    Chaque terme de la matrice est représenté comme un petit rectangle rempli avec la couleur associée. 
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+//--- premier exemple
+//  on fixe l'échelle courante 
+xsetech(frect=[0,0,10,10])
+xrect(0,10,10,10)
+a=5*ones(11,11); a(2:10,2:10)=4; a(5:7,5:7)=2;
+// première matrice dans le rectangle [1,1,3,3]
+Matplot1(a,[1,1,3,3])
+a=ones(10,10); a= 3*tril(a)+ 2*a; 
+// deuxième matrice dans le rectangle [5,6,7,8]
+Matplot1(a,[5,6,7,8])
+xset('default')
+xbasc()
+//--- deuxième exemple 
+xsetech(frect=[0,0,10,10])
+xrect(0,10,10,10)
+n=100;
+xset('pixmap',1)
+driver('X11');
+for k=-n:n,
+  a=ones(n,n);
+  a= 3*tril(a,k)+ 2*a;
+  a= a + a';
+  k1= 3*(k+100)/200;
+  Matplot1(a,[k1,2,k1+7,9])
+  xset('wshow')
+  xset('wwpc')
+end
+xset('pixmap',0)
+xset('default')
+xbasc()
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="colormap.html">
+          <tt>
+            <b>colormap</b>
+          </tt>
+        </a>
+        <a href="plot2d1.html">
+          <tt>
+            <b>plot2d</b>
+          </tt>
+        </a>
+        <a href="Matplot1.html">
+          <tt>
+            <b>Matplot</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

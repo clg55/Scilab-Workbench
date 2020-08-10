@@ -1,0 +1,97 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>xgetfile -  dialog to get a file path  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>path=xgetfile([title='string'])  </dd>
+      <dd>path=xgetfile(file_mask,[title='string'])  </dd>
+      <dd>path=xgetfile(file_mask,dir,[title='string'])  </dd>
+      <dd>path=xgetfile(file_mask,dir,'string')  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>file_mask  </b>
+          </tt>
+    : a character string which gives the file mask to use for file selection. <tt>
+            <b>file_mask</b>
+          </tt> is written with Unix convention. the default value is '*'.
+  </li>
+  <li>
+          <tt>
+            <b>dir  </b>
+          </tt>
+    : a character string which gives the initial directory used for file search. by default xgetfile uses the previously selected directory.
+  </li>
+  <li>
+          <tt>
+            <b>path  </b>
+          </tt>
+    : is the user selected file path if user answers "Ok" or the " " string if user answers "Cancel"
+  </li>
+  <li>
+          <tt>
+            <b>title='string'  </b>
+          </tt>
+    :Optional arguments which gives the title for the xgetfile window.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Creates a dialog window for file selection
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+xgetfile()
+xgetfile('*.sci','SCI/macros/xdess')
+xgetfile(title='Choose a file name ')
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../gui/x_dialog.html">
+          <tt>
+            <b>x_dialog</b>
+          </tt>
+        </a>
+        <a href="fileinfo.html">
+          <tt>
+            <b>file</b>
+          </tt>
+        </a>
+        <a href="read4b.html">
+          <tt>
+            <b>read</b>
+          </tt>
+        </a>
+        <a href="write4b.html">
+          <tt>
+            <b>write</b>
+          </tt>
+        </a>
+        <a href="../programming/execstr.html">
+          <tt>
+            <b>exec</b>
+          </tt>
+        </a>
+        <a href="../programming/getfield.html">
+          <tt>
+            <b>getf</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

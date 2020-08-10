@@ -1,0 +1,86 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>driver -  select a graphics driver  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>driver(driver_name)  </dd>
+      <dd>current_driver=driver()  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>driver_name  </b>
+          </tt>
+    : string, driver to be selected.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This function is used to select a graphics driver, or with no arguments 
+    to get the current graphics driver name.
+    Most of the time, a user can ignore this function and change the driver
+    by calling high level functions such as <tt>
+          <b>xbasc</b>
+        </tt> or <tt>
+          <b>xbasimp</b>
+        </tt>.
+    The selected driver can be one of the followings:
+  </p>
+ 
+
+  <li>"X11" 
+    : output to the screen of the computer.
+  </li>
+
+  <li>"Pos" 
+    : output into Postscript format.
+  </li>
+
+  <li>"Rec" 
+    : output to the screen of the computer with recording of all the graphics commands. This is the default driver.
+  </li>
+
+  <li>"Fig" 
+    : output into XFig format. Clipping of objects is not provided in XFig.
+  </li>
+
+  <li>"GIF" 
+    : output into Gif format (beta test driver written by Tom Leitner  (http://wiis.tu-graz.ac.at/people/tom.html). Note that line thickness is not handled yet.
+  </li>
+ 
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="xtape.html">
+          <tt>
+            <b>xtape</b>
+          </tt>
+        </a>
+        <a href="xbasc.html">
+          <tt>
+            <b>xbasc</b>
+          </tt>
+        </a>
+        <a href="xbasimp.html">
+          <tt>
+            <b>xbasimp</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

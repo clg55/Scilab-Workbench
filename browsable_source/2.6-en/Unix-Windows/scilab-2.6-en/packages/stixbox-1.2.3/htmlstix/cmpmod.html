@@ -1,0 +1,34 @@
+<HTML> 
+   <HEAD> 
+         <!-- BASE HREF="" -->      <!-- Please edit this to refer to the directory of this file --->
+     	 <TITLE>Stixbox summary</TITLE>  
+  </HEAD> 
+      <BODY ALINK="#FF00FF" BGCOLOR="#FFFFFF" LINK="#FF0000" TEXT="#000000" VLINK="#800000"> 
+<H2>CMPMOD</H2>
+<DL>
+<DT>cmpmod
+<DD>
+Compare linear submodel versus larger one<PRE>
+
+         [z,p, esub, e] = cmpmod(Y, Xsub, X)
+
+	  The standard hypothesis F-test of a regular linear model 
+	  against a smaller regular one.
+
+         Output parameters:
+            z		F-test statistic value
+            p		Prob(F variate > z)
+           esub	residus vector for the submodel
+           e		residus vector for the model
+ 
+	  Input parameters:
+            Y		dependant variates vector
+            Xsub	controlled variates "X" matrix for the submodel
+	     X		controlled variates "X" matrix for the model
+
+	  See also LSFIT 
+</PRE>
+<P><H2>See Also</H2><UL>
+LSFIT </UL>
+</BODY>
+</HTML>

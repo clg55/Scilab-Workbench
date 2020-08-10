@@ -1,0 +1,143 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>graph_2_mat -  matrice d'incidence sommets-arcs ou sommets-sommets d'un graphe  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>a = graph_2_mat(g,mat)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>g  </b>
+          </tt>
+    : graphe (liste)
+  </li>
+  <li>
+          <tt>
+            <b>mat  </b>
+          </tt>
+    : chaîne optionnelle, 'node-arc' ou 'node-node'
+  </li>
+  <li>
+          <tt>
+            <b>a  </b>
+          </tt>
+    : matrice d'incidence (creuse)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>graph_2_mat</b>
+        </tt> calcule la matrice d'incidence sommets-arcs ou sommets-sommets d'un 
+    graphe <tt>
+          <b>g</b>
+        </tt>. 
+  </p>
+  <p>
+    Si l'argument optionnel <tt>
+          <b>mat</b>
+        </tt> est omis ou est égal à la chaîne de caractères 
+    <tt>
+          <b>'node-arc'</b>
+        </tt>, la matrice sommets-arcs est calculée. Si <tt>
+          <b>mat</b>
+        </tt> est la chaîne de caractères
+    <tt>
+          <b>'node-node'</b>
+        </tt>, la matrice sommets-sommets est calculée.
+  </p>
+  <p>
+    Si <tt>
+          <b>n</b>
+        </tt> est le nombre de sommets du graphe et 
+    <tt>
+          <b>m</b>
+        </tt> est le nombre d'arêtes du graphe, la matrice sommets-arcs est une
+    matrice creuse de taille <tt>
+          <b>(n,m)</b>
+        </tt>.
+  </p>
+  <p>
+    Elle est définie comme suit; si le graphe est orienté :
+  </p>
+  <p>
+    <tt>
+          <b>a(i,j) = +1</b>
+        </tt> si le sommet <tt>
+          <b>i</b>
+        </tt> est l'origine de l'arc <tt>
+          <b>j</b>
+        </tt>
+  </p>
+  <p>
+    <tt>
+          <b>a(i,j) = -1</b>
+        </tt> si le sommet <tt>
+          <b>i</b>
+        </tt> est la destination de l'arc <tt>
+          <b>j</b>
+        </tt>
+  </p>
+  <p>
+    Si le graphe est non-orienté :
+  </p>
+  <p>
+    <tt>
+          <b>a(i,j) = 1</b>
+        </tt> si le sommet <tt>
+          <b>i</b>
+        </tt> est l'origine ou la destination de l'arc <tt>
+          <b>j</b>
+        </tt>
+  </p>
+  <p>
+    Si <tt>
+          <b>n</b>
+        </tt> est le nombre de sommets du graphe, la matrice sommets-sommets 
+    est une matrice creuse de taille <tt>
+          <b>(n,n)</b>
+        </tt>.
+  </p>
+  <p>
+    Elle est définie comme suit :
+  </p>
+  <p>
+    <tt>
+          <b>a(i,j) = 1</b>
+        </tt> si il y a un arc du sommet <tt>
+          <b>i</b>
+        </tt> au sommet <tt>
+          <b>j</b>
+        </tt>
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+g=load_graph(SCI+'/demos/metanet/colored');
+a=graph_2_mat(g)
+a=graph_2_mat(g,'node-node')
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="mat_2_graph.html">
+          <tt>
+            <b>mat_2_graph</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

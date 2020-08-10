@@ -1,0 +1,197 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>csim -  simulation (time response) of linear system  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[y [,x]]=csim(u,t,sl,[x0 [,tol]])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>u  </b>
+          </tt>
+    : function, list or string (control)
+  </li>
+  <li>
+          <tt>
+            <b>t  </b>
+          </tt>
+    : real vector specifying times  with, <tt>
+            <b>t(1)</b>
+          </tt> is the initial  time (<tt>
+            <b>x0=x(t(1))</b>
+          </tt>).
+  </li>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : list (<tt>
+            <b>syslin</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : a  matrix such that   <tt>
+            <b>y=[y(t(i)]</b>
+          </tt>, i=1,..,n
+  </li>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : a  matrix such that   <tt>
+            <b>x=[x(t(i)]</b>
+          </tt>, i=1,..,n
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : a 2 vector [atol rtol] defining absolute and relative tolerances for ode solver (see ode)  
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    simulation of the controlled linear system <tt>
+          <b>sl</b>
+        </tt>.
+    <tt>
+          <b>sl</b>
+        </tt> is assumed to be a continuous-time system 
+    represented by a <tt>
+          <b>syslin</b>
+        </tt> list.
+  </p>
+  <p>
+    <tt>
+          <b>u</b>
+        </tt> is the control and <tt>
+          <b>x0</b>
+        </tt> the initial state.
+  </p>
+  <p>
+    <tt>
+          <b>y</b>
+        </tt> is the output and <tt>
+          <b>x</b>
+        </tt> the state.
+  </p>
+  <p>
+    The control can be:
+  </p>
+  <p>
+    1. a function : <tt>
+          <b>[inputs]=u(t)</b>
+        </tt>
+  </p>
+  <p>
+    2. a list : <tt>
+          <b>list(ut,parameter1,....,parametern)</b>
+        </tt> such that:
+    <tt>
+          <b>inputs=ut(t,parameter1,....,parametern)</b>
+        </tt> (<tt>
+          <b>ut</b>
+        </tt> is a function)
+  </p>
+  <p>
+    3. the string <tt>
+          <b>"impuls"</b>
+        </tt> for impulse response calculation
+    (here <tt>
+          <b>sl</b>
+        </tt> is assumed SISO without direct feed through and <tt>
+          <b>x0=0</b>
+        </tt>)
+  </p>
+  <p>
+    4. the string <tt>
+          <b>"step"</b>
+        </tt> for step response calculation 
+    (here <tt>
+          <b>sl</b>
+        </tt> is assumed SISO without direct feed-through and
+    <tt>
+          <b>x0=0</b>
+        </tt>)
+  </p>
+  <p>
+    5. a vector giving the values of u correponding to each t value.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');rand('seed',0);w=ssrand(1,1,3);w('A')=w('A')-2*eye();
+t=0:0.05:5;
+//impulse(w) = step (s * w)
+xbasc(0);xset("window",0);xselect();
+plot2d([t',t'],[(csim('step',t,tf2ss(s)*w))',0*t'])
+xbasc(1);xset("window",1);xselect();
+plot2d([t',t'],[(csim('impulse',t,w))',0*t'])
+//step(w) = impulse (s^-1 * w)
+xbasc(3);xset("window",3);xselect();
+plot2d([t',t'],[(csim('step',t,w))',0*t'])
+xbasc(4);xset("window",4);xselect();
+plot2d([t',t'],[(csim('impulse',t,tf2ss(1/s)*w))',0*t'])
+
+//input defined by a time function
+deff('u=input(t)','u=abs(sin(t))')
+xbasc();plot2d([t',t'],[(csim(input,t,w))',0*t'])
+
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/syslin.html">
+          <tt>
+            <b>syslin</b>
+          </tt>
+        </a>
+        <a href="dsimul.html">
+          <tt>
+            <b>dsimul</b>
+          </tt>
+        </a>
+        <a href="flts.html">
+          <tt>
+            <b>flts</b>
+          </tt>
+        </a>
+        <a href="ltitr.html">
+          <tt>
+            <b>ltitr</b>
+          </tt>
+        </a>
+        <a href="rtitr.html">
+          <tt>
+            <b>rtitr</b>
+          </tt>
+        </a>
+        <a href="../programming/mode.html">
+          <tt>
+            <b>ode</b>
+          </tt>
+        </a>
+        <a href="../nonlinear/impl.html">
+          <tt>
+            <b>impl</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

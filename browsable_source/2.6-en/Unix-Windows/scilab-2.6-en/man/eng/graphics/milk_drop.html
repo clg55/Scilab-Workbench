@@ -1,0 +1,72 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>milk_drop -  milk drop 3D function  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>z=milk_drop(x,y)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : two row vectors of size n1 and n2.
+  </li>
+  <li>
+          <tt>
+            <b>z  </b>
+          </tt>
+    : matrix of size (n1,n2).
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>milk_drop</b>
+        </tt> is a function representing the surface of a milk drop
+    falling down into milk. It
+    can be used to test functions <tt>
+          <b>eval3d</b>
+        </tt> and <tt>
+          <b>plot3d</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=-2:0.1:2; y=x;
+z=eval3d(milk_drop,x,y);
+plot3d(x,y,z)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="eval3dp.html">
+          <tt>
+            <b>eval3d</b>
+          </tt>
+        </a>
+        <a href="fplot3d.html">
+          <tt>
+            <b>plot3d</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>Steer S.  </ul>
+    </p>
+  </body>
+</html>

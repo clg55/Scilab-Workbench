@@ -1,0 +1,98 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>abcd -  state-space matrices  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[A,B,C,D]=abcd(sl)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : linear system (<tt>
+            <b>syslin</b>
+          </tt> list) in state-space or transfer form
+  </li>
+  <li>
+          <tt>
+            <b>A,B,C,D  </b>
+          </tt>
+    : real matrices of appropriate dimensions
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns the <tt>
+          <b>A,B,C,D </b>
+        </tt> matrices from a linear system <tt>
+          <b>Sl</b>
+        </tt>.
+  </p>
+  <p>
+    Utility function. For transfer matrices <tt>
+          <b>Sl</b>
+        </tt> is converted
+    into state-space form by <tt>
+          <b>tf2ss</b>
+        </tt>.
+  </p>
+  <p>
+    The matrices <tt>
+          <b>A,B,C,D</b>
+        </tt> are the elements <tt>
+          <b>2</b>
+        </tt> to <tt>
+          <b>5</b>
+        </tt> of
+    the <tt>
+          <b>syslin</b>
+        </tt> list <tt>
+          <b>Sl</b>
+        </tt>, i.e. <tt>
+          <b>[A,B,C,D] = Sl(2:5)</b>
+        </tt> .
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=diag([1,2,3]);B=[1;1;1];C=[2,2,2];
+sys=syslin('c',A,B,C);
+sys("A")
+sys("C")
+[A1,B1,C1,D1]=abcd(sys);
+A1
+systf=ss2tf(sys);
+[a,b,c,d]=abcd(systf)
+spec(a)
+c*b-C*B
+c*a*b-C*A*B
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/syslin.html">
+          <tt>
+            <b>syslin</b>
+          </tt>
+        </a>
+        <a href="../elementary/ssrand.html">
+          <tt>
+            <b>ssrand</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

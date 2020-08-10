@@ -1,0 +1,80 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>scilab  -  script principal d'exécution de Scilab et de divers outils  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>scilab [-ns -nw -display display -f file -args arguments]  </dd>
+      <dd>scilab -help [ &lt;key&gt; ]  </dd>
+      <dd>scilab -k &lt;key&gt;  </dd>
+      <dd>scilab -xk &lt;key&gt;  </dd>
+      <dd>scilab -link &lt;objects&gt;  </dd>
+    </dl>
+    <H3>DESCRIPTION</H3>
+    <ul>
+ 
+
+  <li>scilab [-ns -nw -display display -f path -args arguments] 
+    : exécution de Scilab
+  </li>
+ 
+
+  <li>-ns 
+    : si cette option est présente le script de démarrage  n'est pas exécuté.
+  </li>
+
+  <li>-nw 
+    : si cette option est présente Scilab n'est pas exécuté dans une fenêtre spécifique mais sur la ligne de commande.  
+  </li>
+
+  <li>-f file 
+    : si cette option est présente le script  est exécuté en premier dans Scilab. 
+  </li>
+
+  <li>-args arguments 
+    : si cette option est présente des arguments sont passés à Scilab. Ils peuvent être récupérés par la fonction . Les arguments multiples doivent être passés dans chaîne de caractères les contenant, séparés par des espaces  
+  </li>
+ 
+
+  <li>scilab -help &lt;mot-clé&gt; 
+    : affiche le help sur &lt;mot-clé&gt; (produit le même résultat que  exécuté dans Scilab). Exemple:
+  </li>
+  <pre>
+scilab -help plot3d
+   </pre>
+
+  <li>scilab -k &lt;mot-clé&gt; 
+    : donne la liste des fonctions Scilab contenant &lt;mot-clé&gt; dans leur description (produit le même résultat que  exécuté dans Scilab) 
+  </li>
+
+  <li>scilab -xk &lt;mot-clé&gt; 
+    : donne dans une fenêtre graphique la liste des fonctions Scilab contenant &lt;mot-clé&gt; dans leur description (produit le même résultat que  exécuté dans Scilab) 
+  </li>
+
+  <li>scilab -link &lt;objects&gt; 
+    : est utilisé pour générer un  local (exécutable de Scilab) lié avec les fichiers additionnels donnés dans .  Si, dans la liste des fichiers objets, certains noms sont connus dans  , les fichiers objets par utilisés par défaut par  sont omis et remplacés par les fichiers précisés.  Cette commande produit aussi un script , qui lance l'exécution du nouveau .
+  </li>
+  <p>
+    Par exemple :
+  </p>
+  <pre>
+scilab -link  C/interf.o C/evol.o C/bib.a
+   </pre>
+  <p>
+    crée un nouveau <tt>
+          <b>scilex</b>
+        </tt> dans le quel le fichier <tt>
+          <b>interf.o</b>
+        </tt> par défaut 
+    sera remplacé par <tt>
+          <b>C/interf.o</b>
+        </tt>.
+  </p>
+ 
+  </ul>
+  </body>
+</html>

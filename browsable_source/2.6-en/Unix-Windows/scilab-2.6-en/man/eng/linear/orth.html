@@ -1,0 +1,89 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>orth -  orthogonal basis  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>Q=orth(A)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : real or complex matrix
+  </li>
+  <li>
+          <tt>
+            <b>Q  </b>
+          </tt>
+    : real or complex matrix
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns <tt>
+          <b>Q</b>
+        </tt>, an orthogonal basis for the span of <tt>
+          <b>A</b>
+        </tt>.
+    Range(<tt>
+          <b>Q</b>
+        </tt>) = Range(<tt>
+          <b>A</b>
+        </tt>) and <tt>
+          <b>Q'*Q=eye</b>
+        </tt>.
+  </p>
+  <p>
+    The number of columns of <tt>
+          <b>Q</b>
+        </tt> is the rank of <tt>
+          <b>A</b>
+        </tt> as determined
+    by the QR algorithm.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=rand(5,3)*rand(3,4);
+[X,dim]=rowcomp(A);X=X';
+svd([orth(A),X(:,1:dim)])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="qr.html">
+          <tt>
+            <b>qr</b>
+          </tt>
+        </a>
+        <a href="rowcomp.html">
+          <tt>
+            <b>rowcomp</b>
+          </tt>
+        </a>
+        <a href="colcomp.html">
+          <tt>
+            <b>colcomp</b>
+          </tt>
+        </a>
+        <a href="range.html">
+          <tt>
+            <b>range</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

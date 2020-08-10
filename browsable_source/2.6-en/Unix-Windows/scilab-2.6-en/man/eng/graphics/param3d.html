@@ -1,0 +1,224 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>param3d -  3D plot of a parametric curve  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>param3d(x,y,z,[theta,alpha,leg,flag,ebox])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y,z  </b>
+          </tt>
+    : three vectors of the same size (points of the parametric curve).
+  </li>
+  <li>
+          <tt>
+            <b>theta,alpha  </b>
+          </tt>
+    : real values giving in degree the  spherical coordinates of the  observation point.
+  </li>
+  <li>
+          <tt>
+            <b>leg  </b>
+          </tt>
+    : string defining the captions for each axis with @ as  a  field  separator, for  example "X@Y@Z".
+  </li>
+  <li>
+          <tt>
+            <b>flag=[type,box]  </b>
+          </tt>
+    : <tt>
+            <b>type</b>
+          </tt> and <tt>
+            <b>box</b>
+          </tt> have the same meaning as in <tt>
+            <b>plot3d</b>
+          </tt>:
+  </li>
+ <ul>
+  <li>
+            <tt>
+              <b>type  </b>
+            </tt>
+    : an integer (scaling).
+  </li>
+ <ul>
+  <li>
+              <tt>
+                <b>type=0  </b>
+              </tt>
+    the plot is made using the current 3D scaling (set by a previous call to <tt>
+                <b>param3d</b>
+              </tt>, <tt>
+                <b>plot3d</b>
+              </tt>, <tt>
+                <b>contour</b>
+              </tt> or <tt>
+                <b>plot3d1</b>
+              </tt>).
+  </li>
+  <li>
+              <tt>
+                <b>type=1  </b>
+              </tt>
+    rescales automatically 3d boxes with extreme aspect ratios, the boundaries are specified by the value of the optional argument <tt>
+                <b>ebox</b>
+              </tt>.
+  </li>
+  <li>
+              <tt>
+                <b>type=2  </b>
+              </tt>
+    rescales automatically 3d boxes with extreme aspect ratios, the boundaries are computed using the given data.
+  </li>
+  <li>
+              <tt>
+                <b>type=3  </b>
+              </tt>
+    3d isometric with box bounds given by optional <tt>
+                <b>ebox</b>
+              </tt>, similarily to <tt>
+                <b>type=1</b>
+              </tt>
+  </li>
+  <li>
+              <tt>
+                <b>type=4  </b>
+              </tt>
+    3d isometric bounds  derived from the data, to similarily<tt>
+                <b>type=2</b>
+              </tt>
+  </li>
+  <li>
+              <tt>
+                <b>type=5  </b>
+              </tt>
+    3d expanded isometric bounds  with box bounds given by optional <tt>
+                <b>ebox</b>
+              </tt>, similarily to <tt>
+                <b>type=1</b>
+              </tt>
+  </li>
+  <li>
+              <tt>
+                <b>type=6  </b>
+              </tt>
+    3d expanded isometric bounds  derived from the data, similarily to <tt>
+                <b>type=2</b>
+              </tt>
+  </li>
+ </ul>
+  <li>
+            <tt>
+              <b>box  </b>
+            </tt>
+    : an integer (frame around the plot).
+  </li>
+ <ul>
+  <li>
+              <tt>
+                <b>box=0  </b>
+              </tt>
+    nothing is drawn around the plot.
+  </li>
+  <li>
+              <tt>
+                <b>box=1  </b>
+              </tt>
+    unimplemented (like box=0).
+  </li>
+  <li>
+              <tt>
+                <b>box=2  </b>
+              </tt>
+    only the axes behind the surface are drawn.
+  </li>
+  <li>
+              <tt>
+                <b>box=3  </b>
+              </tt>
+    a box surrounding the surface is drawn and captions are added.
+  </li>
+  <li>
+              <tt>
+                <b>box=4  </b>
+              </tt>
+    a box surrounding the surface is drawn, captions and axes are added.
+  </li>
+ </ul>
+ </ul>
+  <li>
+          <tt>
+            <b>ebox  </b>
+          </tt>
+    : used when <tt>
+            <b>type</b>
+          </tt> in <tt>
+            <b>flag</b>
+          </tt> is 1. It specifies the boundaries of the plot as the vector <tt>
+            <b>[xmin,xmax,ymin,ymax,zmin,zmax]</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>param3d</b>
+        </tt> is used to plot a 3D curve defined by its coordinates <tt>
+          <b>x</b>
+        </tt>,
+    <tt>
+          <b>y</b>
+        </tt> and <tt>
+          <b>z</b>
+        </tt>.
+  </p>
+  <p>
+    Use <tt>
+          <b>param3d1</b>
+        </tt> to do multiple plots.
+  </p>
+  <p>
+    Enter the command <tt>
+          <b>param3d()</b>
+        </tt> to see a demo.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+t=0:0.1:5*%pi;
+param3d(sin(t),cos(t),t/10,35,45,"X@Y@Z",[2,3])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="param3d1.html">
+          <tt>
+            <b>param3d1</b>
+          </tt>
+        </a>
+        <a href="fplot3d.html">
+          <tt>
+            <b>plot3d</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,76 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>h_norm -  H-infinity norm  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[hinfnorm [,frequency]]=h_norm(sl [,rerr])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>sl  </b>
+          </tt>
+    : the state space system (<tt>
+            <b>syslin</b>
+          </tt> list)
+  </li>
+  <li>
+          <tt>
+            <b>rerr  </b>
+          </tt>
+    : max. relative error, default value <tt>
+            <b>1e-8</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>hinfnorm  </b>
+          </tt>
+    : the infinity norm of <tt>
+            <b>Sl</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>frequency  </b>
+          </tt>
+    : frequency at which maximum is achieved
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    produces the infinity norm  of a state-space system 
+    (the maximum over all frequencies of the maximum singular value).
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="linfn.html">
+          <tt>
+            <b>linfn</b>
+          </tt>
+        </a>
+        <a href="linfn.html">
+          <tt>
+            <b>linf</b>
+          </tt>
+        </a>
+        <a href="../control/svplot.html">
+          <tt>
+            <b>svplot</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

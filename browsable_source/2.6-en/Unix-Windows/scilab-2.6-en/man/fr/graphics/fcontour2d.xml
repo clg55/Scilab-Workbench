@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>fcontour2d  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>April 1993  </DATE>
+  <SHORT_DESCRIPTION name="fcontour2d"> courbes de niveau dans le plan d&apos;une surface définie par une fonction  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>fcontour2d(xr,yr,f,nz,[style,strf,leg,rect,nax])  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>fcontour2d(xr,yr,f,nz,&lt;opt_args&gt;)  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>xr,yr  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : deux vecteurs lignes de taille n1 et n2.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>f  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : une fonction définissant la surface <VERB>z=f(x,y)</VERB>. Elle est tout d&apos;abord calculée sur la grille définie par <VERB>xr,yr</VERB>. Ensuite le contrôle est passé à la fonction <VERB>contour</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>nz  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : valeurs des niveaux ou nombre de niveaux
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>-  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    Si <VERB>nz</VERB> est un entier, sa valeur définit le nombre de courbes de niveaux espacées régulièrement entre zmin et zmax
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>-  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  <P>
+    &lt;opt_args&gt; : voir <VERB>contour2d</VERB>. 
+  </P>
+  <PARAM_ITEM>
+  <PARAM_NAME>[style,strf,leg,rect,nax]  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : voir <VERB>contour2d</VERB>.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    Dessine les courbes de niveau (dans le plan) de la surface <VERB>z=f(x,y)</VERB>. La surface est donnée par la fonction externe
+    <VERB>f</VERB>. Voir <VERB>contour2d</VERB>.
+  </P>
+  <P>
+    Taper <VERB>fcontour2d()</VERB> pour voir une démonstration de la fonction.
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+deff('z=surf(x,y)','z=x^4-y^4')
+x=-3:0.1:3;
+y=x;
+fcontour2d(x,y,surf,10);
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>contour</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>contour2d</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>fcontour</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+  <AUTHOR>J.Ph.C.  </AUTHOR>
+</MAN>

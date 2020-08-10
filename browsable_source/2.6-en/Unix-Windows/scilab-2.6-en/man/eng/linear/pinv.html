@@ -1,0 +1,85 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>pinv -  pseudoinverse  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>pinv(A,[tol])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : real or complex matrix
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : real number
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    produces a matrix <tt>
+          <b>X</b>
+        </tt> of the same  dimensions as <tt>
+          <b>A'</b>
+        </tt> such that:
+  </p>
+  <p>
+    <tt>
+          <b>A*X*A = A, X*A*X = X</b>
+        </tt>  and both
+    <tt>
+          <b>A*X</b>
+        </tt> and <tt>
+          <b>X*A</b>
+        </tt> are Hermitian .
+  </p>
+  <p>
+    The computation is  based  on SVD and  any  singular values 
+    lower than a tolerance are treated   as zero: this  tolerance 
+    is accessed by <tt>
+          <b>X=pinv(A,tol)</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=rand(5,2)*rand(2,4);
+norm(A*pinv(A)*A-A,1)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="rank.html">
+          <tt>
+            <b>rank</b>
+          </tt>
+        </a>
+        <a href="svd.html">
+          <tt>
+            <b>svd</b>
+          </tt>
+        </a>
+        <a href="qr.html">
+          <tt>
+            <b>qr</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

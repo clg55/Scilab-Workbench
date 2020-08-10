@@ -1,0 +1,109 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>copfac -  right coprime factorization  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[N,M,XT,YT]=copfac(G [,polf,polc,tol])   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>G  </b>
+          </tt>
+    : <tt>
+            <b>syslin</b>
+          </tt> list  (continuous-time linear system )
+  </li>
+  <li>
+          <tt>
+            <b>polf, polc  </b>
+          </tt>
+    : respectively the poles of <tt>
+            <b>XT</b>
+          </tt> and <tt>
+            <b>YT</b>
+          </tt> and the poles of <tt>
+            <b>n</b>
+          </tt>  and <tt>
+            <b>M</b>
+          </tt> (default values =-1).
+  </li>
+  <li>
+          <tt>
+            <b>tol  </b>
+          </tt>
+    : real threshold for detecting stable poles (default value <tt>
+            <b>100*%eps</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>N,M,XT,YT  </b>
+          </tt>
+    : linear systems represented by <tt>
+            <b>syslin</b>
+          </tt> lists
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    returns a right coprime factorization of <tt>
+          <b>G</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>G = N*M^-1</b>
+        </tt> where <tt>
+          <b>N</b>
+        </tt> and <tt>
+          <b>M</b>
+        </tt> are stable, proper and right coprime.
+    (i.e. <tt>
+          <b>[N M]</b>
+        </tt> left-invertible with stability)
+  </p>
+  <p>
+    <tt>
+          <b>XT</b>
+        </tt> and <tt>
+          <b>YT</b>
+        </tt> satisfy:
+  </p>
+  <p>
+    <tt>
+          <b>[XT -YT].[M N]' = eye</b>
+        </tt> (Bezout identity)
+  </p>
+  <p>
+    <tt>
+          <b>G</b>
+        </tt> is assumed stabilizable and detectable.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/syslin.html">
+          <tt>
+            <b>syslin</b>
+          </tt>
+        </a>
+        <a href="lcf.html">
+          <tt>
+            <b>lcf</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>polarplot -  représentation de courbes en coordonnées polaires  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>polarplot(theta,rho,[style,strf,leg,rect])  </dd>
+      <dd>polarplot(theta,rho,&lt;opt_args&gt;)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>rho  </b>
+          </tt>
+    : vecteur, valeurs du rayon
+  </li>
+  <li>
+          <tt>
+            <b>theta  </b>
+          </tt>
+    : vecteur de même taille que rho, valeurs de l'angle
+  </li>
+  <li>
+          <tt>
+            <b>&lt;opt_args&gt;  </b>
+          </tt>
+    : une suite d'affectations <tt>
+            <b>key1=value1</b>
+          </tt>, <tt>
+            <b>key2=value2</b>
+          </tt>, ... où key1, key2, ... peuvent prendre les valeurs <tt>
+            <b>style</b>
+          </tt>,<tt>
+            <b>leg</b>
+          </tt>,<tt>
+            <b>rect</b>
+          </tt>,<tt>
+            <b>strf</b>
+          </tt> ou <tt>
+            <b>frameflag</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>style  </b>
+          </tt>
+    : voir <tt>
+            <b>plot2d</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>strf  </b>
+          </tt>
+    : est une chaîne de caractères de longueur 3 <tt>
+            <b>"xyz"</b>
+          </tt>. Par défaut : <tt>
+            <b>"030"</b>
+          </tt>. Voir <tt>
+            <b>plot2d</b>
+          </tt> pour la signification des caractères
+  </li>
+  <li>
+          <tt>
+            <b>leg  </b>
+          </tt>
+    : voir <tt>
+            <b>plot2d</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>rect  </b>
+          </tt>
+    : voir <tt>
+            <b>plot2d</b>
+          </tt>
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    polarplot représente rho en fonction de theta en coordonnées polaires. theta est l'angle en radians entre l'axe des x et le rayon vecteur.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+t= 0:.01:2*%pi;
+xbasc();polarplot(sin(7*t),cos(8*t))
+
+xbasc();polarplot([sin(7*t') sin(6*t')],[cos(8*t') cos(8*t')],[1,2])
+ </pre>
+    </ul>
+  </body>
+</html>

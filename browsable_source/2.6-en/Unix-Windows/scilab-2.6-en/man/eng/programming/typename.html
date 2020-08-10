@@ -1,0 +1,114 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>typename -  associates a name to variable type  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[types [ [,names]]=typename()  </dd>
+      <dd>typename(name,type)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>types  </b>
+          </tt>
+    : integer column vector: the types codes of each defined data types.
+  </li>
+  <li>
+          <tt>
+            <b>names  </b>
+          </tt>
+    : column vector of strings: the names associated to type codes.
+  </li>
+  <li>
+          <tt>
+            <b>type  </b>
+          </tt>
+    : integer: the type code of new data type.
+  </li>
+  <li>
+          <tt>
+            <b>name  </b>
+          </tt>
+    : string: the name associated to the type code
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    The function and operator overloading make use of a formal name
+    associated to data types to form the name of the overloading function
+    (see overloading). The <tt>
+          <b>typename</b>
+        </tt> can be used to handle this
+    formal names for hard coded data types (the <tt>
+          <b>tlist</b>
+        </tt> or <tt>
+          <b>mlist</b>
+        </tt>
+    coded data types formal names are defined in an other way, see <tt>
+          <b>overloading</b>
+        </tt>).
+  </p>
+  <p>
+    Called without right hand side argument, <tt>
+          <b>typename</b>
+        </tt> returns
+    informations on defined data types.
+  </p>
+  <p>
+    Called with right hand side argument, <tt>
+          <b>typename</b>
+        </tt> associates a name
+    to a data type code.
+  </p>
+  <p>
+    <tt>
+          <b>typename('',type)</b>
+        </tt> suppress the data type given by its code
+    <tt>
+          <b>type</b>
+        </tt> out of the table of known data types.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="inttype.html">
+          <tt>
+            <b>type</b>
+          </tt>
+        </a>
+        <a href="../elementary/typeof.html">
+          <tt>
+            <b>typeof</b>
+          </tt>
+        </a>
+        <a href="overloading.html">
+          <tt>
+            <b>overloading</b>
+          </tt>
+        </a>
+        <a href="tlist.html">
+          <tt>
+            <b>tlist</b>
+          </tt>
+        </a>
+        <a href="mlist.html">
+          <tt>
+            <b>mlist</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,98 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>plot -  simple plot   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>plot(x,y,[xcap,ycap,caption])  </dd>
+      <dd>plot(y)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : two vectors with same sizes
+  </li>
+  <li>
+          <tt>
+            <b>xcap,ycap,caption  </b>
+          </tt>
+    : character strings or string matrices 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Plot <tt>
+          <b>y</b>
+        </tt> as function of <tt>
+          <b>x</b>
+        </tt>.
+    <tt>
+          <b>xcap</b>
+        </tt> and <tt>
+          <b>ycap</b>
+        </tt> are captions for x-axis 
+    and y-axis respectively and <tt>
+          <b>caption</b>
+        </tt> is the caption of the plot.
+  </p>
+  <p>
+    Invoked with only one argument, <tt>
+          <b>plot(y)</b>
+        </tt> plots the <tt>
+          <b>y</b>
+        </tt> vector or,
+    if <tt>
+          <b>y</b>
+        </tt> is a matrix, it plots all its row vectors on the same plot. This
+    plot is done with respect to the vector 1:&lt;number of columns of <tt>
+          <b>y</b>
+        </tt>&gt;.
+  </p>
+  <p>
+    <tt>
+          <b>plot</b>
+        </tt> is obsolete. Use <tt>
+          <b>plot2d</b>
+        </tt> instead.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=0:0.1:2*%pi;
+// simple plot
+plot(sin(x))
+// using captions
+xbasc()
+plot(x,sin(x),"sin","time","plot of sinus")
+// plot 2 functions
+xbasc()
+plot([sin(x);cos(x)])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="plot2d1.html">
+          <tt>
+            <b>plot2d</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

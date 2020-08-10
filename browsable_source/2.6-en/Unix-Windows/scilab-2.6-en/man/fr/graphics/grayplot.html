@@ -1,0 +1,120 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>grayplot -  représentation 2D en pseudo-couleurs d'une surface  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>grayplot(x,y,z,[strf,rect,nax])  </dd>
+      <dd>grayplot(x,y,z,&lt;opt_args&gt;)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : vecteurs lignes de taille n1 et n2.
+  </li>
+  <li>
+          <tt>
+            <b>z  </b>
+          </tt>
+    : matrice réelle de taille (n1,n2). <tt>
+            <b>z(i,j)</b>
+          </tt> est la hauteur de la  surface au point (x(i),y(j)).
+  </li>
+  <li>
+          <tt>
+            <b>&lt;opt_args&gt;  </b>
+          </tt>
+    : une séquence d'affectations <tt>
+            <b>key1=value1, key2=value2</b>
+          </tt>,... où <tt>
+            <b>key1</b>
+          </tt>, <tt>
+            <b>key2,...</b>
+          </tt> peuvent prendre les valeurs : rect, nax, strf ou axesflag et frameflag (voir <tt>
+            <b>plot2d</b>
+          </tt>).
+  </li>
+  <li>
+          <tt>
+            <b>strf,rect,nax  </b>
+          </tt>
+    : voir <tt>
+            <b>plot2d</b>
+          </tt>.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>grayplot</b>
+        </tt> dessine une représentation 2D en pseudo-couleurs d'une surface donnée par sa hauteur <tt>
+          <b>z</b>
+        </tt> sur une grille définie par <tt>
+          <b>x</b>
+        </tt> et <tt>
+          <b>y</b>
+        </tt>.
+    Chaque rectangle sur la grille est rempli avec une couleur dépendant de la moyenne des 
+    valeurs de <tt>
+          <b>z</b>
+        </tt> aux coins du rectangle.
+  </p>
+  <p>
+  </p>
+  <p>
+    Taper <tt>
+          <b>grayplot()</b>
+        </tt> pour voir une démonstration de la fonction.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+x=-10:10; y=-10:10;m =rand(21,21);
+grayplot(x,y,m,rect=[-20,-20,20,20])
+t=-%pi:0.1:%pi; m=sin(t)'*cos(t);
+xbasc()
+grayplot(t,t,m)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="fgrayplot.html">
+          <tt>
+            <b>fgrayplot</b>
+          </tt>
+        </a>
+        <a href="plot2d1.html">
+          <tt>
+            <b>plot2d</b>
+          </tt>
+        </a>
+        <a href="Sgrayplot.html">
+          <tt>
+            <b>Sgrayplot</b>
+          </tt>
+        </a>
+        <a href="Sfgrayplot.html">
+          <tt>
+            <b>Sfgrayplot</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,144 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>glever -  inverse of matrix pencil   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[Bfs,Bis,chis]=glever(E,A [,s])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>E, A  </b>
+          </tt>
+    : two real square matrices of same dimensions
+  </li>
+  <li>
+          <tt>
+            <b>s  </b>
+          </tt>
+    : character string (default value '<tt>
+            <b>s</b>
+          </tt>')
+  </li>
+  <li>
+          <tt>
+            <b>Bfs,Bis  </b>
+          </tt>
+    : two polynomial matrices
+  </li>
+  <li>
+          <tt>
+            <b>chis  </b>
+          </tt>
+    : polynomial
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Computation of 
+  </p>
+  <p>
+    (s*E-A)^-1
+  </p>
+  <p>
+     by generalized Leverrier's algorithm for a matrix pencil.
+  </p>
+  <pre>
+(s*E-A)^-1 = (Bfs/chis) - Bis.
+   </pre>
+  <p>
+    <tt>
+          <b>chis</b>
+        </tt> = characteristic polynomial (up to a multiplicative constant).
+  </p>
+  <p>
+    <tt>
+          <b>Bfs</b>
+        </tt>  = numerator polynomial matrix.
+  </p>
+  <p>
+    <tt>
+          <b>Bis</b>
+        </tt>
+    = polynomial matrix ( - expansion of <tt>
+          <b>(s*E-A)^-1</b>
+        </tt> at infinity).
+  </p>
+  <p>
+    Note the - sign before <tt>
+          <b>Bis</b>
+        </tt>.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>Caution</H3>
+    <ul>
+      <p>
+    This function uses <tt>
+          <b>cleanp</b>
+        </tt> to simplify <tt>
+          <b>Bfs,Bis</b>
+        </tt> and <tt>
+          <b>chis</b>
+        </tt>.
+  </p>
+    </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=%s;F=[-1,s,0,0;0,-1,0,0;0,0,s-2,0;0,0,0,s-1];
+[Bfs,Bis,chis]=glever(F)
+inv(F)-((Bfs/chis) - Bis)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="rowshuff.html">
+          <tt>
+            <b>rowshuff</b>
+          </tt>
+        </a>
+        <a href="det.html">
+          <tt>
+            <b>det</b>
+          </tt>
+        </a>
+        <a href="../polynomials/invr.html">
+          <tt>
+            <b>invr</b>
+          </tt>
+        </a>
+        <a href="../polynomials/coffg.html">
+          <tt>
+            <b>coffg</b>
+          </tt>
+        </a>
+        <a href="pencan.html">
+          <tt>
+            <b>pencan</b>
+          </tt>
+        </a>
+        <a href="penlaur.html">
+          <tt>
+            <b>penlaur</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>F. D. (1988)  </ul>
+    </p>
+  </body>
+</html>

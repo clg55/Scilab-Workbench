@@ -1,0 +1,107 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>xfpolys -  fill a set of polygons  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>xfpolys(xpols,ypols,[fill])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>xpols,ypols  </b>
+          </tt>
+    : matrices of the same size (p,n) (points of the polygons).
+  </li>
+  <li>
+          <tt>
+            <b>fill  </b>
+          </tt>
+    : vector of size n.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>xfpolys</b>
+        </tt> fills a set of polygons of the same size defined by 
+    the two matrices <tt>
+          <b>xpols</b>
+        </tt> and <tt>
+          <b>ypols</b>
+        </tt>. 
+    The coordinates of each polygon
+    are stored in a column of <tt>
+          <b>xpols</b>
+        </tt> and <tt>
+          <b>ypols</b>
+        </tt>.
+  </p>
+  <p>
+    The pattern for filling polygon number i is given by <tt>
+          <b>fill(i)</b>
+        </tt>:
+  </p>
+ 
+
+  <li>- 
+    if , the polygon is filled with pattern id .
+  </li>
+
+  <li>- 
+    if , the polygon is drawn with the current dash style (or current color).
+  </li>
+
+  <li>- 
+    if , the polygon is filled with pattern id .  Then its contour is drawn with the current dash (or color) and closed if necessary.
+  </li>
+ 
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+plot2d(0,0,[-1],"012"," ",[0,-10,210,40])
+x1=[0,10,20,30,20,10,0]';
+y1=[15,30,30,15,0,0,15]';
+xpols=[x1 x1 x1 x1]; xpols=xpols+[0,60,120,180].*.ones(x1);
+ypols=[y1 y1 y1 y1];
+// setting the current dash (or line color)
+xset("color",5)
+xfpolys(xpols,ypols,[-1,0,1,2])
+xset("default")
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="xfpolys.html">
+          <tt>
+            <b>xfpoly</b>
+          </tt>
+        </a>
+        <a href="xpolys.html">
+          <tt>
+            <b>xpoly</b>
+          </tt>
+        </a>
+        <a href="xpolys.html">
+          <tt>
+            <b>xpolys</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

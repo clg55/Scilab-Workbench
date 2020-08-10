@@ -1,0 +1,85 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>expm -  square matrix exponential  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>expm(X)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : square matrix with real or complex entries.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+  </p>
+  <p>
+     <tt>
+          <b>X</b>
+        </tt> is a square matrix <tt>
+          <b>expm(X)</b>
+        </tt> is the matrix 
+  </p>
+  <p>
+    expm(X) = I + X + X^2 /2 + ...
+  </p>
+  <p>
+    The computation is performed by first 
+    block-diagonalizing <tt>
+          <b>X</b>
+        </tt> and then applying a Pade approximation 
+    on each block.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+X=[1 2;3 4]
+expm(X)
+logm(expm(X))    
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../elementary/logm.html">
+          <tt>
+            <b>logm</b>
+          </tt>
+        </a>
+        <a href="bdiag.html">
+          <tt>
+            <b>bdiag</b>
+          </tt>
+        </a>
+        <a href="coff.html">
+          <tt>
+            <b>coff</b>
+          </tt>
+        </a>
+        <a href="../elementary/log10.html">
+          <tt>
+            <b>log</b>
+          </tt>
+        </a>
+        <a href="../elementary/bloc2exp.html">
+          <tt>
+            <b>exp</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

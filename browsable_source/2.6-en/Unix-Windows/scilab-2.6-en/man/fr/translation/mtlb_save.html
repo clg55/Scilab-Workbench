@@ -1,0 +1,91 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>mtlb_save -  save variables on file with matlab4 format.  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>mtlb_save fname  </dd>
+      <dd>mtlb_save fname X  </dd>
+      <dd>mtlb_save fname X Y Z   </dd>
+      <dd>mtlb_save fname X Y Z  -ascii  </dd>
+      <dd>mtlb_save fname X Y Z  -ascii -double   </dd>
+      <dd>mtlb_save fname X Y Z  -ascii -double -tabs  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>fname  </b>
+          </tt>
+    : a file name
+  </li>
+  <li>
+          <tt>
+            <b>X Y Z  </b>
+          </tt>
+    : variable names
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    mtlb_save   save variables on file with matlab4 formats.
+  </p>
+ 
+
+  <li>mtlb_save fname saves all the current scilab variables which 
+    have corresponding matlab type to the binary "MAT-file" named . The data may be retrieved with .
+  </li>
+
+  <li>mtlb_save fname X  
+    saves only variable .
+  </li>
+
+  <li>mtlb_save fname X Y Z 
+      saves variables , , and .
+  </li>
+
+  <li>mtlb_save fname X Y Z  -ascii 
+    uses 8-digit ASCII form instead of binary.
+  </li>
+
+  <li>mtlb_save fname X Y Z  -ascii -double 
+    uses 16-digit ASCII form.
+  </li>
+
+  <li>mtlb_save fname X Y Z  -ascii -double -tabs 
+    delimits with tabs.
+  </li>
+
+  <li>"stdio" value for  fname doesnt redirect save to standard output. 
+  </li>
+ 
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="mtlb_load.html">
+          <tt>
+            <b>mtlb_load</b>
+          </tt>
+        </a>
+        <a href="../graphics/xsave.html">
+          <tt>
+            <b>save</b>
+          </tt>
+        </a>
+        <a href="../graphics/xload.html">
+          <tt>
+            <b>load</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

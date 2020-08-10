@@ -1,0 +1,88 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>p_margin -  phase margin  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[phm,fr]=p_margin(h)  </dd>
+      <dd>phm=p_margin(h)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>h  </b>
+          </tt>
+    : SISO linear system (<tt>
+            <b>syslin</b>
+          </tt> list).
+  </li>
+  <li>
+          <tt>
+            <b>phm  </b>
+          </tt>
+    : phase margin (in degree)
+  </li>
+  <li>
+          <tt>
+            <b>fr  </b>
+          </tt>
+    : corresponding frequency (hz)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    The phase margin is the values of the phase at points where the
+    nyquist plot of <tt>
+          <b>h</b>
+        </tt> crosses the unit circle.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+h=syslin('c',-1+%s,3+2*%s+%s^2)
+[p,fr]=p_margin(h)  
+[p,fr]=p_margin(h+0.7)  
+nyquist(h+0.7)
+t=(0:0.1:2*%pi)';plot2d(sin(t),cos(t),-3,'000')
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../graphics/chart.html">
+          <tt>
+            <b>chart</b>
+          </tt>
+        </a>
+        <a href="../graphics/black.html">
+          <tt>
+            <b>black</b>
+          </tt>
+        </a>
+        <a href="g_margin.html">
+          <tt>
+            <b>g_margin</b>
+          </tt>
+        </a>
+        <a href="../graphics/nyquist.html">
+          <tt>
+            <b>nyquist</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>S. S.  </ul>
+    </p>
+  </body>
+</html>

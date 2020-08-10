@@ -1,0 +1,129 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>rand -  random number generator  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>rand(m1,m2,.. [,key])  </dd>
+      <dd>rand(x [, key])  </dd>
+      <dd>rand()  </dd>
+      <dd>  </dd>
+      <dd>rand(key)  </dd>
+      <dd>rand("seed" [,n])  </dd>
+      <dd>rand("info")  </dd>
+      <dd>  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>mi  </b>
+          </tt>
+    : integers
+  </li>
+  <li>
+          <tt>
+            <b>key  </b>
+          </tt>
+    : character string with value in <tt>
+            <b>"uniform"</b>
+          </tt>, <tt>
+            <b>"normal"</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : a matrix. Only its dimensions are taken into account. 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    random matrix generator.
+  </p>
+  <p>
+    Without key argument the syntaxes below produce  random matrices with
+    the current random generator (default is "uniform")
+  </p>
+ 
+
+  <li>rand(m1,m2) 
+    is a random matrix of dimension  by .
+  </li>
+
+  <li>rand(m1,m2,..,mn) 
+    is a random matrix of dimension  by ,.. by .
+  </li>
+
+  <li>rand(a) 
+    is a random matrix of same size as a.  is complex if   is a complex matrix
+  </li>
+
+  <li>rand() : with no arguments gives a scalar whose value changes 
+    each time it is referenced.
+  </li>
+ 
+  <p>
+    If present, the key argument allows to specifie an other random
+    generator.
+  </p>
+
+  <li>rand('uniform') 
+    The current random generator is set to a uniform random number generator. Random numbers are uniformly distributed in the interval (0,1). 
+  </li>
+
+  <li>rand('normal') 
+    The current random generator is set to a Gaussian (with mean 0 and variance 1) random number generator . 
+  </li>
+
+  <li>str=rand('info') 
+    return the type of the default random generator ('uniform' or 'normal')
+  </li>
+ 
+  <p>
+    IT is possible to (re-)initialize the seed of the rand generator:
+  </p>
+
+  <li>rand('seed') 
+    returns the current value of the seed.
+  </li>
+
+  <li>rand('seed',n) 
+    puts the seed to . ( at first call).
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=rand(10,10,'uniform')
+rand('normal')
+rand('info')
+y=rand(x,'normal');
+x=rand(2,2,2)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="ssrand.html">
+          <tt>
+            <b>ssrand</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

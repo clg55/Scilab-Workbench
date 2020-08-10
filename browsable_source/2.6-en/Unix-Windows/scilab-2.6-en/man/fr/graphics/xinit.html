@@ -1,0 +1,74 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>xinit -  initialisation d'un pilote graphique  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>xinit([driver-name])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>driver-name  </b>
+          </tt>
+    : chaîne de caractères.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Initialisation d'un pilote donné.
+  </p>
+  <p>
+    Pour XWindows, 
+    <tt>
+          <b>driver-name</b>
+        </tt> peut être une chaîne de caractères donnant le nom du display
+    et une nouvelle fenêtre graphique est créée. Si l'argument est omis
+    la valeur de la variable d'environnement DISPLAY est utilisée (si elle existe) 
+    sinon la valeur "unix:0.0" est utilisée.
+  </p>
+  <p>
+    Pour les pilotes Postscript, Xfig ou Gif, <tt>
+          <b>driver-name</b>
+        </tt> est le nom d'un fichier où tous les ordres graphiques sont enregistrés.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+driver("Pos")
+xinit("foo.ps")
+plot2d()
+xend()
+driver("X11")
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="xbasimp.html">
+          <tt>
+            <b>xbasimp</b>
+          </tt>
+        </a>
+        <a href="xend.html">
+          <tt>
+            <b>xend</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTEUR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

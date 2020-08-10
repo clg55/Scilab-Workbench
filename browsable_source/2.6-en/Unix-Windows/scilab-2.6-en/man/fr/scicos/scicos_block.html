@@ -1,0 +1,92 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos data structure  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>scicos_block -  Scicos block data structure  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>blk=list('Block',graphics,model,void,gui)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>"Block"  </b>
+          </tt>
+    : keyword used to define list as a Scicos block representation
+  </li>
+  <li>
+          <tt>
+            <b>graphics  </b>
+          </tt>
+    : Scilab list, graphic properties data structure
+  </li>
+  <li>
+          <tt>
+            <b>model  </b>
+          </tt>
+    : Scilab list, system properties data structure.  
+  </li>
+  <li>
+          <tt>
+            <b>void  </b>
+          </tt>
+    : unused, reserved for future use.
+  </li>
+  <li>
+          <tt>
+            <b>gui  </b>
+          </tt>
+    : character string, the name of the graphic user interface function (generally written in Scilab) associated with the block.
+  </li>
+  <li>
+          <tt>
+            <b>blk  </b>
+          </tt>
+    : Scilab list, Scicos block data structure
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Scicos editor creates and uses for each block a data structure
+    containing all information relative to the graphic interface and
+    simulation part of the block. Each of them are stored in the Scicos
+    editor main data structure. Index of these in Scicos
+    editor main data structure is given by the creation order.
+  </p>
+  <p>
+  </p>
+  <p>
+    For Super blocks <tt>
+          <b>model(8)</b>
+        </tt> contains a data structure
+    similar to the <tt>
+          <b>scicos_main</b>
+        </tt> data structure.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="scicos_graphics.html">
+          <tt>
+            <b>scicos_graphics</b>
+          </tt>
+        </a>
+        <a href="scicos_model.html">
+          <tt>
+            <b>scicos_model</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

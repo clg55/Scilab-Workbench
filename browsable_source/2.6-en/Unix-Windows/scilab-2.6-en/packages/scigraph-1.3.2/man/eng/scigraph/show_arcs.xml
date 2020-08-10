@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>eng</LANGUAGE>
+  <TITLE>show_arcs  </TITLE>
+  <TYPE>Scilab function  </TYPE>
+  <DATE>September 1995  </DATE>
+  <SHORT_DESCRIPTION name="show_arcs"> highlights a set of arcs  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>show_arcs(p,[sup])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>p  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : row vector of arc numbers (directed graph) or edge numbers (undirected graph)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>sup  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : string, superposition flag
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    <VERB>show_arcs</VERB> highlights the set of arcs <VERB>p</VERB> of the
+    displayed graph in the current window.
+    If the optional argument <VERB>sup</VERB> is equal to the string <VERB>&quot;sup&quot;</VERB>,
+    the highlighting is superposed on the previous one. 
+  </P>
+  <P>
+    This function can also be called to unhighlight highlighted arcs 
+    by using the call <VERB>show_arcs([])</VERB>. Note also 
+    that when a set of arcs is highlighted, the automatic highlight 
+    during mouse move is not performed. Calling <VERB>show_arcs([])</VERB> 
+    restores the automatic highlight during mouse move.
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+g=load_graph(SCI+"/demos/metanet/mesh100.graph");
+t=min_weight_tree(1,g); 
+show_graph(g,0,[500,500],[500,500]);
+// hilite the tree t 
+show_arcs(t);
+// unhilite 
+show_arcs([]);
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>show_nodes</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>show_names</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

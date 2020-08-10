@@ -1,0 +1,204 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>gschur -  generalized Schur form (matrix pencils).  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[As,Es]=gschur(A,E)  </dd>
+      <dd>[As,Es,Q,Z]=gschur(A,E)  </dd>
+      <dd>[As,Es,Z,dim] = gschur(A,E,flag)   </dd>
+      <dd>[As,Es,Z,dim]= gschur(A,E,extern)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A, E  </b>
+          </tt>
+    : two real square matrices
+  </li>
+  <li>
+          <tt>
+            <b>flag  </b>
+          </tt>
+    : character string (<tt>
+            <b>'c'</b>
+          </tt> or <tt>
+            <b>'d'</b>
+          </tt>)
+  </li>
+  <li>
+          <tt>
+            <b>extern  </b>
+          </tt>
+    : Scilab ``external'' function (usual case). Could be also a list or a character string
+  </li>
+  <li>
+          <tt>
+            <b>As,Es  </b>
+          </tt>
+    : two real square matrices
+  </li>
+  <li>
+          <tt>
+            <b>Q, Z  </b>
+          </tt>
+    : two non-singular real matrices
+  </li>
+  <li>
+          <tt>
+            <b>dim  </b>
+          </tt>
+    : integer (dimension of subspace)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Schur form of matrix pencils (QZ algorithm):
+  </p>
+  <pre>
+[As,Es] = gschur(A,E)
+   </pre>
+  <p>
+    produces a quasi triangular <tt>
+          <b>As</b>
+        </tt> matrix
+    and a triangular <tt>
+          <b>Es</b>
+        </tt> matrix which are the generalized
+    Schur form of the pair <tt>
+          <b>A, E</b>
+        </tt>.
+  </p>
+  <pre>
+[As,Es,Q,Z] = gschur(A,E)
+   </pre>
+  <p>
+    returns in addition two unitary matrices
+    <tt>
+          <b>Q</b>
+        </tt> and <tt>
+          <b>Z</b>
+        </tt> such that <tt>
+          <b>As=Q*A*Z</b>
+        </tt> and <tt>
+          <b>Es=Q*E*Z</b>
+        </tt>. 
+  </p>
+  <p>
+    Ordered stable form:
+  </p>
+  <pre>
+[As,Es,Z,dim] = gschur(A,E,'c')
+   </pre>
+  <p>
+    returns the real generalized
+    Schur form of the pencil <tt>
+          <b>s*E-A</b>
+        </tt>. In addition, the dim first columns 
+    of <tt>
+          <b>Z</b>
+        </tt> span a basis of the right eigenspace  associated with 
+    eigenvalues with negative real parts (stable "continuous
+    time" generalized eigenspace).
+  </p>
+  <pre>
+[As,Es,Z,dim] = gschur(A,E,'d')
+   </pre>
+  <p>
+    returns the real generalized
+    Schur form of the pencil <tt>
+          <b>s*E-A</b>
+        </tt>. In addition, the dim first columns 
+    of <tt>
+          <b>Z</b>
+        </tt> make a basis of the right eigenspace  associated with 
+    eigenvalues with magnitude lower than 1 (stable "discrete
+    time" generalized eigenspace).
+  </p>
+  <p>
+    General subspace:
+  </p>
+  <pre>
+[As,Es,Z,dim] = gschur(A,E,extern)
+   </pre>
+  <p>
+    returns the real generalized Schur form of the pencil <tt>
+          <b>s*E-A</b>
+        </tt>. 
+    In addition, the dim first columns 
+    of <tt>
+          <b>Z</b>
+        </tt> make a basis of the right eigenspace  associated with 
+    eigenvalues of the pencil which are selected according to a
+    rule which is given by the scilab function extern.
+    (See <tt>
+          <b>schur</b>
+        </tt> for definition of this function).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=%s;
+F=[-1,s,0,0;0,-1,0,0;0,0,2+s,0;0,0,0,-2+s];
+roots(det(F))
+[E,A]=pen2ea(F);
+[As,Es,Z,dim] = gschur(A,E,'c')
+// Other example
+a=rand(4,4);b=rand(4,4);[as,bs,qs,zs]=gschur(a,b);
+norm(qs*a*zs-as)
+norm(qs*b*zs-bs )
+clear a;
+a(8,8)=2;a(1,8)=1;a(2,[2,3,4,5])=[0.3,0.2,4,6];a(3,[2,3])=[-0.2,.3];
+a(3,7)=.5;
+a(4,4)=.5;a(4,6)=2;a(5,5)=1;a(6,6)=4;a(6,7)=2.5;a(7,6)=-10;a(7,7)=4;
+b=eye(8,8);b(5,5)=0;
+[al,be]=gspec(a,b);
+[bs,as,q,n]=gschur(b,a,'disc');n-4
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/external.html">
+          <tt>
+            <b>external</b>
+          </tt>
+        </a>
+        <a href="gspec.html">
+          <tt>
+            <b>gspec</b>
+          </tt>
+        </a>
+        <a href="pencan.html">
+          <tt>
+            <b>pencan</b>
+          </tt>
+        </a>
+        <a href="penlaur.html">
+          <tt>
+            <b>penlaur</b>
+          </tt>
+        </a>
+        <a href="../polynomials/coffg.html">
+          <tt>
+            <b>coffg</b>
+          </tt>
+        </a>
+        <a href="kroneck.html">
+          <tt>
+            <b>kroneck</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

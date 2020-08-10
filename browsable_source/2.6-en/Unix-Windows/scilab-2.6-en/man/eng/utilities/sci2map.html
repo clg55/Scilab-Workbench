@@ -1,0 +1,62 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>sci2map -  Scilab to Maple variable conversion  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>txt=sci2map(a,Map-name)   </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>a  </b>
+          </tt>
+    : Scilab object (matrix, polynomial, list, string)
+  </li>
+  <li>
+          <tt>
+            <b>Map-name  </b>
+          </tt>
+    : string (name of the Maple variable)
+  </li>
+  <li>
+          <tt>
+            <b>txt  </b>
+          </tt>
+    : vector of strings containing the corresponding Maple code
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Makes Maple code necessary to send 
+    the Scilab variable <tt>
+          <b>a</b>
+        </tt> to Maple : the name of the variable
+    in Maple is <tt>
+          <b>Map-name</b>
+        </tt>.
+    A Maple procedure <tt>
+          <b>maple2scilab</b>
+        </tt> can be found in <tt>
+          <b>SCIDIR/maple</b>
+        </tt>
+    directory.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+txt=[sci2map([1 2;3 4],'a');
+     sci2map(%s^2+3*%s+4,'p')]
+ </pre>
+    </ul>
+  </body>
+</html>

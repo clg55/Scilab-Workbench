@@ -1,0 +1,179 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>gsort -  decreasing order sorting  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[s, [k]]=gsort(v )  </dd>
+      <dd>[s, [k]]=gsort(v,flag1)  </dd>
+      <dd>[s, [k]]=gsort(v,flag1,flag2)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>v,s  </b>
+          </tt>
+    : real vector/matrix; character string vector/matrix
+  </li>
+  <li>
+          <tt>
+            <b>flag1  </b>
+          </tt>
+    : a string <tt>
+            <b>'r'</b>
+          </tt>, <tt>
+            <b>'c'</b>
+          </tt>,<tt>
+            <b>'g'</b>
+          </tt>,<tt>
+            <b>'lr'</b>
+          </tt> and <tt>
+            <b>'lc'</b>
+          </tt>.
+  </li>
+  <li>
+          <tt>
+            <b>flag2  </b>
+          </tt>
+    : a string <tt>
+            <b>'i'</b>
+          </tt> for increasing and <tt>
+            <b>'d'</b>
+          </tt> for decreasing order. k : vector or matrix of integers
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>gsort</b>
+        </tt> is similar to <tt>
+          <b>sort</b>
+        </tt> with additional properties. 
+    The third argument can be used to chose between increasing or
+    decreasing order. The second argument can be used for lexical orders.
+  </p>
+  <p>
+    <tt>
+          <b>[s,k]=gsort(a,'g')</b>
+        </tt> and <tt>
+          <b>[s,k]=gsort(a,'g','d')</b>
+        </tt> are  the
+    same as <tt>
+          <b>[s,k]=gsort(a)</b>
+        </tt>. They perform a sort of the entries of 
+    matrix <tt>
+          <b>a</b>
+        </tt>, <tt>
+          <b>a</b>
+        </tt> being seen as the stacked vector <tt>
+          <b>a(:)</b>
+        </tt>
+    (columnwise). <tt>
+          <b>[s,k]=gsort(a,'g','i')</b>
+        </tt> performs the same 
+    operation but in increasing order.
+  </p>
+  <p>
+    <tt>
+          <b>[s,k]=gsort(a,'lr')</b>
+        </tt> sort the rows of the matrix <tt>
+          <b>int(a)</b>
+        </tt> 
+    ( if <tt>
+          <b>a</b>
+        </tt> is a real matrix) or <tt>
+          <b>a</b>
+        </tt> (if <tt>
+          <b>a</b>
+        </tt> is a
+    character string matrix)
+    in lexical decreasing order. <tt>
+          <b>s</b>
+        </tt> is obtained by a permutation 
+    of the rows of matrix <tt>
+          <b>int(a)</b>
+        </tt> (or <tt>
+          <b>a</b>
+        </tt>) given by the column vector <tt>
+          <b>k</b>
+        </tt>)
+    in such a way that the rows of <tt>
+          <b>s</b>
+        </tt> verify <tt>
+          <b>s(i,:) &gt; s(j,:)</b>
+        </tt> if
+    <tt>
+          <b>i&lt;j</b>
+        </tt>. <tt>
+          <b>[s,k]=gsort(a,'lr','i')</b>
+        </tt> performs the same operation 
+    for increasing lexical order 
+  </p>
+  <p>
+    <tt>
+          <b>[s,k]=gsort(a,'lc')</b>
+        </tt> sort the columns of the matrix <tt>
+          <b>int(a)</b>
+        </tt> 
+    ( if <tt>
+          <b>a</b>
+        </tt> is a real matrix) or <tt>
+          <b>a</b>
+        </tt> (if <tt>
+          <b>a</b>
+        </tt> is a
+    character string matrix)
+    in lexical decreasing order. <tt>
+          <b>s</b>
+        </tt> is obtained by a permutation 
+    of the columns of matrix <tt>
+          <b>int(a)</b>
+        </tt> (or <tt>
+          <b>a</b>
+        </tt>) given by the row vector <tt>
+          <b>k</b>
+        </tt>)
+    in such a way that the columns of <tt>
+          <b>s</b>
+        </tt> verify <tt>
+          <b>s(:,i) &gt; s(:,j)</b>
+        </tt> if
+    <tt>
+          <b>i&lt;j</b>
+        </tt>. <tt>
+          <b>[s,k]=gsort(a,'lc','i')</b>
+        </tt> performs the same operation 
+    for increasing lexical order 
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+alr=[1,2,2;
+     1,2,1;
+     1,1,2;
+     1,1,1];
+[alr1,k]=gsort(alr,'lr','i')
+[alr1,k]=gsort(alr,'lc','i')
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../programming/find.html">
+          <tt>
+            <b>find</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

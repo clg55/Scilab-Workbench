@@ -1,0 +1,33 @@
+<HTML> 
+   <HEAD> 
+         <!-- BASE HREF="" -->      <!-- Please edit this to refer to the directory of this file --->
+     	 <TITLE>Stixbox summary</TITLE>  
+  </HEAD> 
+      <BODY ALINK="#FF00FF" BGCOLOR="#FFFFFF" LINK="#FF0000" TEXT="#000000" VLINK="#800000"> 
+<H2>QUANTILE</H2>
+<DL>
+<DT>quantile
+<DD>
+Empirical quantile (percentile).<PRE>
+
+         q = quantile(x,p)
+	Input	x	vector or matrix of reals
+		p	probability (scalar or vector of probabilities numbers)
+
+	Output	q 	the empirical quantile of the sample x, a value
+			that is greater than p percent of the values in x
+	  		If input x is a matrix then the quantile is 
+			computed for  every column. 
+			If p is a vector then q is a matrix, each line contain 
+			the quantiles  computed for a value of p
+			 
+	  The empirical quantile is computed by one of three ways
+	  determined by a third input argument (with default 1).
+
+	  1. Interpolation so that F(X_(k)) == (k-0.5)/n.
+	  2. Interpolation so that F(X_(k)) == k/(n+1).
+	  3. Based on the empirical distribution.
+
+</PRE>
+</BODY>
+</HTML>

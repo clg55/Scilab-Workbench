@@ -1,0 +1,96 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>lusolve -  solveur de système linéaire creux  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>lusolve(hand,b)  </dd>
+      <dd>lusolve(A,b)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>b  </b>
+          </tt>
+    : matrice réelle pleine
+  </li>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : matrice réelle carrée creuse inversible
+  </li>
+  <li>
+          <tt>
+            <b>hand  </b>
+          </tt>
+    : pointeur vers des facteurs L,U creux déjà calculés (sortie de lufact)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    résout le système linéaire  <tt>
+          <b>A*x = b</b>
+        </tt>, où <tt>
+          <b>hand</b>
+        </tt> est obtenu par un appel préliminaire à <tt>
+          <b>lufact</b>
+        </tt> :
+  </p>
+  <p>
+    <tt>
+          <b>[hand,rk]=lufact(A)</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+non_zeros=[1,2,3,4];rows_cols=[1,1;2,2;3,3;4,4];
+sp=sparse(rows_cols,non_zeros);
+[h,rk]=lufact(sp);x=lusolve(h,[1;1;1;1]);ludel(h)
+rk,sp*x
+
+
+non_zeros=[1,2,3,4];rows_cols=[1,1;2,2;3,3;4,4];
+sp=sparse(rows_cols,non_zeros);
+x=lusolve(sp,-ones(4,1));
+sp*x
+
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../elementary/mtlb_sparse.html">
+          <tt>
+            <b>sparse</b>
+          </tt>
+        </a>
+        <a href="lufact.html">
+          <tt>
+            <b>lufact</b>
+          </tt>
+        </a>
+        <a href="../programming/slash.html">
+          <tt>
+            <b>slash</b>
+          </tt>
+        </a>
+        <a href="../programming/backslash.html">
+          <tt>
+            <b>backslash</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

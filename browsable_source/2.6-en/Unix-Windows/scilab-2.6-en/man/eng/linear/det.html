@@ -1,0 +1,89 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>det  -  determinant  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>det(X)  </dd>
+      <dd>[e,m]=det(X)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>X  </b>
+          </tt>
+    : real or complex square matrix, polynomial or rational matrix.
+  </li>
+  <li>
+          <tt>
+            <b>m  </b>
+          </tt>
+    : real or complex number, the determinant base 10 mantissae
+  </li>
+  <li>
+          <tt>
+            <b>e  </b>
+          </tt>
+    : integer, the determinant base 10 exponent 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>det(X)</b>
+        </tt> ( <tt>
+          <b>m*10^e</b>
+        </tt> is the determinant of the square matrix <tt>
+          <b>X</b>
+        </tt>.
+  </p>
+  <p>
+    For polynomial matrix <tt>
+          <b>det(X)</b>
+        </tt> is equivalent to <tt>
+          <b>determ(X)</b>
+        </tt>.
+  </p>
+  <p>
+    For rational matrices <tt>
+          <b>det(X)</b>
+        </tt> is equivalent to <tt>
+          <b>detr(X)</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+x=poly(0,'x');
+det([x,1+x;2-x,x^2])
+w=ssrand(2,2,4);roots(det(systmat(w))),trzeros(w)   //zeros of linear system
+A=rand(3,3);
+det(A), prod(spec(A))
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="../polynomials/detr.html">
+          <tt>
+            <b>detr</b>
+          </tt>
+        </a>
+        <a href="../polynomials/determ.html">
+          <tt>
+            <b>determ</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

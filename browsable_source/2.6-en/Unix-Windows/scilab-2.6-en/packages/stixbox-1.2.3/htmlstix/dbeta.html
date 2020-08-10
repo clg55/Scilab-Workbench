@@ -1,0 +1,23 @@
+<HTML> 
+   <HEAD> 
+         <!-- BASE HREF="" -->      <!-- Please edit this to refer to the directory of this file --->
+     	 <TITLE>Stixbox summary</TITLE>  
+  </HEAD> 
+      <BODY ALINK="#FF00FF" BGCOLOR="#FFFFFF" LINK="#FF0000" TEXT="#000000" VLINK="#800000"> 
+<H2>DBETA</H2>
+<DL>
+<DT>dbeta
+<DD>
+The beta density function<PRE>
+
+         f = dbeta(x,a,b)
+	Input	x	real
+		a,b 	positive reals
+		(x,a,b can be matrix with common dimensions)
+
+	Output	f	beta density function with parameters a and b at the
+			values of x :
+			f=x.^(a-1) .* (1-x).^(b-1) ./ beta(a,b)1_{0&lt;x&lt;1}
+</PRE>
+</BODY>
+</HTML>

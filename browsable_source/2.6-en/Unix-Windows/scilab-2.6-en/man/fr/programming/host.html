@@ -1,0 +1,93 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>host -  exécution d'une commande Unix ou DOS  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>stat=host(command-name)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>command-name  </b>
+          </tt>
+    : chaîne de caractères contenant les commandes à exécuter
+  </li>
+  <li>
+          <tt>
+            <b>stat  </b>
+          </tt>
+    : un entier
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Envoie la chaîne <tt>
+          <b>command-name</b>
+        </tt> à l'interpréteur de commande
+    (sh sous Unix, ou command.com sous DOS). La sortie standard et les erreurs sont reportées dans 
+    l'interpréteur de commande.
+  </p>
+  <p>
+    <tt>
+          <b>stat</b>
+        </tt> vaut -1 en sortie si la fonction ne peut pas être appelée (pas assez de mémoire par exemple) ou
+    alors le code de sortie de l'interpréteur de commande.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+host("ls $SCI/demos");
+host("emacs $SCI/demos/wheel2/Makefile");
+deff('wd=getdir()','if MSDOS then host(''cd&gt;''+TMPDIR+''\path'');..
+                 else host(''pwd&gt;''+TMPDIR+''/path'');end..
+      wd=read(TMPDIR+''/path'',1,1,''(a)'')')
+wd=getdir()
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="../graphics/edit_curv.html">
+          <tt>
+            <b>edit</b>
+          </tt>
+        </a>
+        <a href="../fileio/manedit.html">
+          <tt>
+            <b>manedit</b>
+          </tt>
+        </a>
+        <a href="../utilities/unix_g.html">
+          <tt>
+            <b>unix_g</b>
+          </tt>
+        </a>
+        <a href="../utilities/unix_s.html">
+          <tt>
+            <b>unix_s</b>
+          </tt>
+        </a>
+        <a href="../utilities/unix_w.html">
+          <tt>
+            <b>unix_w</b>
+          </tt>
+        </a>
+        <a href="../utilities/unix_x.html">
+          <tt>
+            <b>unix_x</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,85 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>sscanf -  Converts formatted input given by a string  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd> [v_1,...v_n]=sscanf (string,format)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>format  </b>
+          </tt>
+    :Specifies the format conversion. :Specifies the input file name or file number.
+  </li>
+  <li>
+          <tt>
+            <b>string  </b>
+          </tt>
+    :Specifies input to be read.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    The sscanf functions interpret character string  according
+    to a format, and returns the converted results.
+  </p>
+  <p>
+    The format parameter contains conversion specifications
+    used to interpret the input.
+  </p>
+  <p>
+    The format parameter can contain
+    white-space characters (blanks, tabs, newline, or formfeed)
+    that, except in the following two cases, read the input up to the
+    next nonwhite-space character. Unless there is a match in the control
+    string, trailing white space (including a newline character) is not
+    read.
+  </p>
+ 
+
+  <li>- 
+    Any character except % (percent sign), which must match the next character of the input stream.
+  </li>
+
+  <li>- 
+    A conversion specification that directs the conversion of the next input field. see  for details.
+  </li>
+ 
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="fprintf.html">
+          <tt>
+            <b>printf</b>
+          </tt>
+        </a>
+        <a href="read4b.html">
+          <tt>
+            <b>read</b>
+          </tt>
+        </a>
+        <a href="mfscanf.html">
+          <tt>
+            <b>scanf</b>
+          </tt>
+        </a>
+        <a href="fscanf.html">
+          <tt>
+            <b>fscanf</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

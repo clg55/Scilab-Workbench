@@ -1,0 +1,9 @@
+2001-09-26  Jean-Philippe Chancelier  <jpc@cermics.enpc.fr>
+
+	* macros/rnorm.sci: update of rnorm.sci after a change 
+	in the translator. rnorm is now gaussian and no more uniform !
+
+	* macros/pks.sci : hand correction automatic translation was 
+	wrong 
+	
+

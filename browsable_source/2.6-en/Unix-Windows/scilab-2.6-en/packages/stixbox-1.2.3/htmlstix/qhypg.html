@@ -1,0 +1,28 @@
+<HTML> 
+   <HEAD> 
+         <!-- BASE HREF="" -->      <!-- Please edit this to refer to the directory of this file --->
+     	 <TITLE>Stixbox summary</TITLE>  
+  </HEAD> 
+      <BODY ALINK="#FF00FF" BGCOLOR="#FFFFFF" LINK="#FF0000" TEXT="#000000" VLINK="#800000"> 
+<H2>QHYPGEO</H2>
+<DL>
+<DT>qhypg
+<DD>
+The hypergeometric inverse cdf<PRE>
+
+        k = qhypg(p,n,K,N)
+
+	Input	p	probability (scalar, vector or matrix)
+		n,K,N   nonnegative integers such that 
+			n&lt;= N, K&lt;= N and n-k&lt;= N-K	
+			N is the total number of elements of the population
+			n is the number of elements which are randomly
+			  extracted
+			K is the number of elements of the population which 
+			  have the studied property
+
+	Output  k	for each p, k is the smallest integer j so
+			 that P(X &lt;= j) >= p.
+</PRE>
+</BODY>
+</HTML>

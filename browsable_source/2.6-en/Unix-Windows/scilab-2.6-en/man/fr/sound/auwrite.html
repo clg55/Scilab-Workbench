@@ -1,0 +1,123 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>auwrite -  writes .au sound file  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>auwrite(y,aufile)  </dd>
+      <dd>auwrite(y,Fs,aufile)  </dd>
+      <dd>auwrite(y,Fs,bits,aufile)  </dd>
+      <dd>auwrite(y,Fs,bits,method,aufile)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : real vector or matrix with entries in [-1,1].
+  </li>
+  <li>
+          <tt>
+            <b>aufile  </b>
+          </tt>
+    : string (The .au extension is appended if no extension is given)
+  </li>
+  <li>
+          <tt>
+            <b>Fs  </b>
+          </tt>
+    : integer, frequency sampling in Hz.
+  </li>
+  <li>
+          <tt>
+            <b>bits  </b>
+          </tt>
+    : integer, number of bits in the encoding.
+  </li>
+  <li>
+          <tt>
+            <b>method  </b>
+          </tt>
+    : string , <tt>
+            <b>'mu'</b>
+          </tt> (default) or <tt>
+            <b>'linear'</b>
+          </tt>, encoding method.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Utility function to save <tt>
+          <b>.au</b>
+        </tt> sound file.
+    <tt>
+          <b>auwrite(y,aufile)</b>
+        </tt> writes a sound file specified by the
+    string aufile.  The data should be arranged with one channel
+    per column.  Amplitude values outside the range [-1,+1] are
+    ignored.
+    Supports multi-channel data for 8-bit mu-law, and 8- and 16-bit linear formats.
+  </p>
+  <p>
+    <tt>
+          <b>auwrite(y,Fs,aufile)</b>
+        </tt> specifies in <tt>
+          <b>Fs</b>
+        </tt> the sample rate of the data
+    in Hertz.
+  </p>
+  <p>
+    <tt>
+          <b>auwrite(y,Fs,bits,aufile)</b>
+        </tt> selects the number of bits in
+    the encoder.  Allowable settings are bits=8 and bits=16.
+     
+    <tt>
+          <b>auwrite(y,Fs,bits,method,aufile)</b>
+        </tt> allows selection of the
+    encoding method, which can be either 'mu' or 'linear'.
+    Note that mu-law files must be 8-bit. By default, method='mu'.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="auread.html">
+          <tt>
+            <b>auread</b>
+          </tt>
+        </a>
+        <a href="wavread.html">
+          <tt>
+            <b>wavread</b>
+          </tt>
+        </a>
+        <a href="savewave.html">
+          <tt>
+            <b>savewave</b>
+          </tt>
+        </a>
+        <a href="analyze.html">
+          <tt>
+            <b>analyze</b>
+          </tt>
+        </a>
+        <a href="mapsound.html">
+          <tt>
+            <b>mapsound</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

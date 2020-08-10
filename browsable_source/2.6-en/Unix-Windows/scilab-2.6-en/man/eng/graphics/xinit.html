@@ -1,0 +1,75 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>xinit -  initialisation of a graphics driver  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>xinit([driver-name])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>driver-name  </b>
+          </tt>
+    : string.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Initialisation of the given driver.
+  </p>
+  <p>
+    For X Window
+    <tt>
+          <b>driver-name</b>
+        </tt> can be a string which gives the name of a display
+    and a new graphics window is created. If the argument is omitted 
+    the value of the environment variable DISPLAY is used if it exists or 
+    the value "unix:0.0" is used.
+  </p>
+  <p>
+    For the Postscript, Xfig or Gif driver, <tt>
+          <b>driver-name</b>
+        </tt> is a name of 
+    the file where all the graphics operations are recorded.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+driver("Pos")
+xinit("foo.ps")
+plot2d()
+xend()
+driver("X11")
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="xbasimp.html">
+          <tt>
+            <b>xbasimp</b>
+          </tt>
+        </a>
+        <a href="xend.html">
+          <tt>
+            <b>xend</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>J.Ph.C.  </ul>
+    </p>
+  </body>
+</html>

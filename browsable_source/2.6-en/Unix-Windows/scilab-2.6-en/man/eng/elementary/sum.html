@@ -1,0 +1,107 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>sum -  sum (row sum, column sum) of vector/matrix entries  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=sum(x)  </dd>
+      <dd>y=sum(x,'r') or y=sum(x,1)  </dd>
+      <dd>  </dd>
+      <dd>y=sum(x,'c') or y=sum(x,2)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : vector or matrix (real, complex, sparse or polynomial)
+  </li>
+  <li>
+          <tt>
+            <b>y  </b>
+          </tt>
+    : scalar or vector
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    For a vector or a matrix <tt>
+          <b>x</b>
+        </tt>, <tt>
+          <b>y=sum(x)</b>
+        </tt>  returns in the scalar <tt>
+          <b>y</b>
+        </tt> the sum of all the entries
+    of <tt>
+          <b>x</b>
+        </tt>.
+  </p>
+  <p>
+    <tt>
+          <b>y=sum(x,'r')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=sum(x,1)</b>
+        </tt>) is the rowwise sum. It returns in each 
+    entry of the row vector <tt>
+          <b>y</b>
+        </tt> the sum of the rows of <tt>
+          <b>x</b>
+        </tt> (The sum is performed on the 
+    row indice : <tt>
+          <b>y(j)= sum(x(i,j),i=1,m)</b>
+        </tt>).
+  </p>
+  <p>
+    <tt>
+          <b>y=sum(x,'c')</b>
+        </tt> (or, equivalently, <tt>
+          <b>y=sum(x,2)</b>
+        </tt>) is the columnwise sum. It returns 
+    in each entry of the column vector <tt>
+          <b>y</b>
+        </tt> the sum of the columns of <tt>
+          <b>x</b>
+        </tt> 
+    (The sum is performed on the column indice:  <tt>
+          <b>y(i)= sum(x(i,j),j=1,n)</b>
+        </tt>)).
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+A=[1,2;3,4];
+trace(A)-sum(diag(A))
+sum(A,'c')-A*ones(2,1)
+sum(A+%i)
+A=sparse(A);sum(A,'c')-A*ones(2,1)
+s=poly(0,'s');
+M=[s,%i+s;s^2,1];
+sum(M),sum(M,2)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="cumsum.html">
+          <tt>
+            <b>cumsum</b>
+          </tt>
+        </a>
+        <a href="cumprod.html">
+          <tt>
+            <b>prod</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

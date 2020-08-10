@@ -1,0 +1,12 @@
+x_message(['************************ Phosphorus Data **********************************';
+'Source:      Snedecor, G. W. and Cochran, W. G. (1967),Statistical Methods,';
+'             (6 Edition), Iowa State University, Ames, Iowa, p. 384.';
+'Taken From:  Chatterjee and Hadi (1988), p. 82.';
+'Dimension:   18 observations on 3 variables';
+'Description: An investigation of the source from which corn plants obtain';
+'             their phosphorus was carried out. Concentrations of phosphorus';
+'             in parts per millions in each of 18 soils were measured.';
+'Column       Description';
+'  1      Concentrations of inorganic phosphorus in the soil';
+'  2      Concentrations of organic phosphorus in the soil';
+'  3      Phosphorus content of corn grown in the soil at 20 degrees C']);

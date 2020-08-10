@@ -1,0 +1,92 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>comp -   pré-interprétation ou "compilation" de fonctions Scilab  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>comp(function [,opt])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>function  </b>
+          </tt>
+    : une fonction non "compilée" (type 11)
+  </li>
+  <li>
+          <tt>
+            <b>opt  </b>
+          </tt>
+    : un entier valant 0 (par défaut) ou 1. 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    "compile" la fonction <tt>
+          <b>function</b>
+        </tt>.
+    Les fonctions "compilées" et interprétées sont équivalentes mais les
+    fonctions "compilées" sont plus rapides.
+    Les fonctions fournies dans les librairies standard de Scilab sont "compilées".
+  </p>
+  <p>
+    La commande :
+  </p>
+  <p>
+    charge les fonctions du fichier <tt>
+          <b>'filename'</b>
+        </tt> et les "compile".
+  </p>
+  <p>
+    L'option opt==1 est spécifique à des problèmes d'analyse de code (voir macr2lst).
+  </p>
+  </ul>
+    <H3>REMARQUES</H3>
+    <ul>
+      <p>
+    les commandes 
+  </p>
+      <p>
+    ne peuvent pas être "compilées".
+  </p>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="deff.html">
+          <tt>
+            <b>deff</b>
+          </tt>
+        </a>
+        <a href="../programming/getfield.html">
+          <tt>
+            <b>getf</b>
+          </tt>
+        </a>
+        <a href="../programming/whereis.html">
+          <tt>
+            <b>whereis</b>
+          </tt>
+        </a>
+        <a href="macr2lst.html">
+          <tt>
+            <b>macr2lst</b>
+          </tt>
+        </a>
+        <a href="genlib.html">
+          <tt>
+            <b>lib</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

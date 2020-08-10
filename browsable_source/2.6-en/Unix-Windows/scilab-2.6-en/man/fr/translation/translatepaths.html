@@ -1,0 +1,64 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>translatepaths -  translate a set of Matlab M_file directories to scilab   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>translatepaths(dirs_path ,res_path)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>dir_path  </b>
+          </tt>
+    : a character string vector which gives the paths of Matlab M_file directories  to translate
+  </li>
+  <li>
+          <tt>
+            <b>res_path  </b>
+          </tt>
+    : a character string  which gives the path of the directory  where the scilab functions are written to. 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+     <tt>
+          <b>translatepaths</b>
+        </tt>, translate all Matlab M-file contained in a set of directories to
+    Scilab functions. Each function is translated by  <tt>
+          <b>mfile2sci</b>
+        </tt>.
+  </p>
+  <p>
+    Trace of translation informations are stored in a file named  <tt>
+          <b>"log"</b>
+        </tt> in
+    the <tt>
+          <b>res_path</b>
+        </tt> directory
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="mfile2sci.html">
+          <tt>
+            <b>mfile2sci</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+    <H3>AUTHOR</H3>
+    <p>
+      <ul>Serge Steer, INRIA  </ul>
+    </p>
+  </body>
+</html>

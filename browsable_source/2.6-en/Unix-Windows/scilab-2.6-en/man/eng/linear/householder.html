@@ -1,0 +1,90 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>householder -  Householder orthogonal reflexion matrix  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>u=householder(v [,w])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>v  </b>
+          </tt>
+    : real or complex column vector
+  </li>
+  <li>
+          <tt>
+            <b>w  </b>
+          </tt>
+    : real or complex column vector with same size as <tt>
+            <b>v</b>
+          </tt>. Default value is <tt>
+            <b>eye(v)</b>
+          </tt>
+  </li>
+  <li>
+          <tt>
+            <b>u  </b>
+          </tt>
+    : real or complex column vector
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    given 2 column vectors <tt>
+          <b>v</b>
+        </tt>, <tt>
+          <b> w</b>
+        </tt> of same size, <tt>
+          <b>householder(v,w)</b>
+        </tt> returns a unitary 
+    column vector <tt>
+          <b>u</b>
+        </tt>, such that <tt>
+          <b> (eye()-2*u*u')*v</b>
+        </tt> is proportional to <tt>
+          <b>w</b>
+        </tt>.
+    <tt>
+          <b>(eye()-2*u*u')</b>
+        </tt> is the orthogonal Householder reflexion matrix .
+  </p>
+  <p>
+    <tt>
+          <b>w</b>
+        </tt> default value is <tt>
+          <b> eye(v)</b>
+        </tt>. In this case vector <tt>
+          <b> (eye()-2*u*u')*v</b>
+        </tt> is the 
+    vector  <tt>
+          <b> eye(v)*norm(v)</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="qr.html">
+          <tt>
+            <b>qr</b>
+          </tt>
+        </a>
+        <a href="givens.html">
+          <tt>
+            <b>givens</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,142 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>simp -  rational simplification  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[N1,D1]=simp(N,D)  </dd>
+      <dd>H1=simp(H)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>N,D  </b>
+          </tt>
+    : real polynomials or real matrix polynomials
+  </li>
+  <li>
+          <tt>
+            <b>H  </b>
+          </tt>
+    : rational matrix (i.e matrix with entries <tt>
+            <b>n/d</b>
+          </tt> ,<tt>
+            <b>n</b>
+          </tt> and <tt>
+            <b>d</b>
+          </tt> real polynomials) 
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>[n1,d1]=simp(n,d)</b>
+        </tt> calculates two polynomials <tt>
+          <b>n1</b>
+        </tt> and <tt>
+          <b>d1</b>
+        </tt>
+    such that <tt>
+          <b>n1/d1 = n/d</b>
+        </tt>.
+  </p>
+  <p>
+    If <tt>
+          <b>N</b>
+        </tt> and <tt>
+          <b>D</b>
+        </tt> are polynomial matrices the calculation
+    is performed element-wise.
+  </p>
+  <p>
+    <tt>
+          <b>H1=simp(H)</b>
+        </tt> is also valid (each entry of <tt>
+          <b>H</b>
+        </tt> is 
+    simplified in <tt>
+          <b>H1</b>
+        </tt>).
+  </p>
+  <p>
+    Caution: 
+  </p>
+  <p>
+    -no threshold is given i.e. <tt>
+          <b>simp</b>
+        </tt> cannot forces a
+    simplification.
+  </p>
+  <p>
+    -For linear dynamic systems which include integrator(s) simplification
+    changes the static gain. (<tt>
+          <b>H(0)</b>
+        </tt> for continuous systems or <tt>
+          <b>H(1)</b>
+        </tt> for
+    discrete systems)
+  </p>
+  <p>
+    -for complex data, <tt>
+          <b>simp</b>
+        </tt> returns its input(s).
+  </p>
+  <p>
+    -rational simplification is called after nearly each operations on 
+    rationals. It is possible to toggle simplification on or off using
+    <tt>
+          <b>simp_mode</b>
+        </tt> function.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+s=poly(0,'s');
+[n,d]=simp((s+1)*(s+2),(s+1)*(s-2))
+
+simp_mode(%F);hns=s/s
+simp_mode(%T);hns=s/s
+
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="roots.html">
+          <tt>
+            <b>roots</b>
+          </tt>
+        </a>
+        <a href="../elementary/trfmod.html">
+          <tt>
+            <b>trfmod</b>
+          </tt>
+        </a>
+        <a href="../programming/poly.html">
+          <tt>
+            <b>poly</b>
+          </tt>
+        </a>
+        <a href="clean.html">
+          <tt>
+            <b>clean</b>
+          </tt>
+        </a>
+        <a href="simp_mode.html">
+          <tt>
+            <b>simp_mode</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

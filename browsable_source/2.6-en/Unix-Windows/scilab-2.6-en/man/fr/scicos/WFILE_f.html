@@ -1,0 +1,56 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scicos Block  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>WFILE_f -  Scicos "write to file" block  </ul>
+    </p>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This block allows user to save data in a file, in formatted and binary
+    mode.
+    Each call to the block corresponds to a record in the file. Each
+    record has the following form:
+    <tt>
+          <b>[t,V1,...,Vn]</b>
+        </tt> where <tt>
+          <b>t</b>
+        </tt> is the value of time when block is
+    called  and <tt>
+          <b>Vi</b>
+        </tt> is the ith input value
+  </p>
+  </ul>
+    <H3>DIALOGUE PARAMETERS</H3>
+    <ul>
+      <li>input size
+: a scalar. This fixes the input size
+
+  </li>
+      <li>Output file name
+: a character string defining the path of the file 
+
+  </li>
+      <li>Output Format
+: a character string defining the Fortran format to use or nothing for an unformatted (binary) write. If given, the format must began by a left parenthesis and end by a right  parenthesis. example: (e10.3).
+
+  </li>
+      <li>Buffer size
+: To improve efficiency it is possible to buffer the input data. write on the file is only done after each  calls to the block.
+
+  </li>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="RFILE_f.html">
+          <tt>
+            <b>RFILE_f</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

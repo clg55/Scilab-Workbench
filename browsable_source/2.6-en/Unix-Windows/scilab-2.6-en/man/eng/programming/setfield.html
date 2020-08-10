@@ -1,0 +1,72 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>setfield -   list field insertion  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>setfield(i,x,l)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x  </b>
+          </tt>
+    : matrix  of any  possible types
+  </li>
+  <li>
+          <tt>
+            <b>l  </b>
+          </tt>
+    : list, tlist or mlist variable
+  </li>
+  <li>
+          <tt>
+            <b>i  </b>
+          </tt>
+    : field index, see insertion for more details.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    This function is an equivalent of <tt>
+          <b>l(i)=x</b>
+        </tt> syntax for field
+    extraction with the only difference that it also applies to
+    <tt>
+          <b>mlist</b>
+        </tt> objects.
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+l=list(1,'qwerw',%s)
+l(1)='Changed'
+l(0)='Added'
+l(6)=['one more';'added']
+//
+
+a=hypermat([2,2,2],rand(1:2^3));// hypermatrices are coded using mlists
+setfield(3,1:8,a);a // set the field value to 1:8
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="insertion.html">
+          <tt>
+            <b>insertion</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

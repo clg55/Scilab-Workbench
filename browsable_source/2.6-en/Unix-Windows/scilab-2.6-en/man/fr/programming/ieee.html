@@ -1,0 +1,85 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>ieee -  détermine le mode d'exception IEEE pour les calculs  </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>mod=ieee()  </dd>
+      <dd>ieee(mod)  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>mod  </b>
+          </tt>
+    : un entier valant 0,1 ou 2
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>ieee()</b>
+        </tt> renvoie le mode d'exception IEEE courant pour les calculs en virgule flottante.
+  </p>
+ 
+
+  <li>0 
+    : les exceptions produisent une erreur
+  </li>
+
+  <li>1 
+    : les exceptions produisent un warning
+  </li>
+
+  <li>2 
+    :  les exceptions produisent Inf ou Nan
+  </li>
+ 
+  <p>
+  </p>
+  <p>
+    <tt>
+          <b>ieee(mod)</b>
+        </tt> choisit le mode d'exception ieee courant pour les calculs en virgule flottante.
+  </p>
+  <p>
+    La valeur initiale au lancement de Scilab est 0.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>REMARQUES</H3>
+    <ul>
+      <p>
+    Certaines exceptions IEEE générées dans certains algorithmes provenant de librairies ne sont pas prises en compte par les modes <tt>
+          <b>ieee</b>
+        </tt> pour l'instant.
+  </p>
+    </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+ieee(1);1/0
+ieee(2);1/0,log(0)
+ </pre>
+    </ul>
+    <H3>VOIR AUSSI</H3>
+    <p>
+      <ul>
+        <a href="errcatch.html">
+          <tt>
+            <b>errcatch</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

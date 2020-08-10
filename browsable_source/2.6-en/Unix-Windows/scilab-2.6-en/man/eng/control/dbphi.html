@@ -1,0 +1,64 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>dbphi -  frequency response to phase and magnitude representation   </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>[db,phi] =dbphi(repf)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>db,phi  </b>
+          </tt>
+    : vector of gains (db) and phases (degrees)
+  </li>
+  <li>
+          <tt>
+            <b>repf  </b>
+          </tt>
+    : vector of complex frequency response
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>db(k)</b>
+        </tt> is the magnitude of <tt>
+          <b>repf(k)</b>
+        </tt> expressed in dB i.e.
+    <tt>
+          <b>db(k)=20*log(abs(repf(k)))/log(10)</b>
+        </tt> and <tt>
+          <b>phi(k)</b>
+        </tt> is the phase
+    of <tt>
+          <b>repf(k)</b>
+        </tt> expressed in degrees.
+  </p>
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="repfreq.html">
+          <tt>
+            <b>repfreq</b>
+          </tt>
+        </a>
+        <a href="../graphics/bode.html">
+          <tt>
+            <b>bode</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

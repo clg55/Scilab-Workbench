@@ -1,0 +1,101 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>zeros -  matrix made of zeros  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>y=zeros()  </dd>
+      <dd>y=zeros(x)  </dd>
+      <dd>y=zeros(m1,m2,..)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : matrices
+  </li>
+  <li>
+          <tt>
+            <b>m1, m2,..  </b>
+          </tt>
+    : integers
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Creates matrix of zeros  (same as <tt>
+          <b>0*ones</b>
+        </tt>).
+  </p>
+ 
+
+  <li>zeros(m1,m2) 
+    : for an  matrix.
+  </li>
+
+  <li>zeros(m1,m2,..,mn) 
+    : creates a  matrix filled with zeros
+  </li>
+
+  <li>zeros(A) 
+    : for a matrix of same size of .
+  </li>
+
+  <li>zeros(3) 
+    : is  with  i.e it is NOT a 3x3 matrix!
+  </li>
+
+  <li>zeros() 
+    : returns a single zero
+  </li>
+  <p>
+    If <tt>
+          <b>x</b>
+        </tt> is a <tt>
+          <b>syslin</b>
+        </tt> list (linear system in state-space or transfer
+    form), <tt>
+          <b>zeros(x)</b>
+        </tt> is also valid and returns a zero matrix.
+  </p>
+ 
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+zeros(3)
+zeros(3,3)
+zeros(2,3,2)
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="eye.html">
+          <tt>
+            <b>eye</b>
+          </tt>
+        </a>
+        <a href="ones.html">
+          <tt>
+            <b>ones</b>
+          </tt>
+        </a>
+        <a href="spzeros.html">
+          <tt>
+            <b>spzeros</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?> 
+<!DOCTYPE MAN SYSTEM "../../man.dtd">
+<MAN>
+  <LANGUAGE>fr</LANGUAGE>
+  <TITLE>lasterror  </TITLE>
+  <TYPE>Scilab Function  </TYPE>
+  <DATE>April 2000  </DATE>
+  <SHORT_DESCRIPTION name="lasterror"> dernier numéro d&apos;erreur enregistré  </SHORT_DESCRIPTION>
+  <CALLING_SEQUENCE>
+  <CALLING_SEQUENCE_ITEM>str=lasterror( [opt] )  </CALLING_SEQUENCE_ITEM>
+  <CALLING_SEQUENCE_ITEM>[str,n]=lasterror([opt])  </CALLING_SEQUENCE_ITEM>
+  </CALLING_SEQUENCE>
+  <PARAM>
+ <PARAM_INDENT>
+  <PARAM_ITEM>
+  <PARAM_NAME>str  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : vecteur de chaînes de caractères ou chaîne vide. Le dernier message d&apos;erreur enregistré.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>n  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : un entier, 0 ou le numéro de la dernière erreur enregistrée.
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+  <PARAM_ITEM>
+  <PARAM_NAME>opt  </PARAM_NAME>
+  <PARAM_DESCRIPTION>
+    : un booléen, %T si le message d&apos;erreur doit être effacé (%T par défaut)
+  </PARAM_DESCRIPTION> 
+  </PARAM_ITEM>
+ </PARAM_INDENT>
+  </PARAM>
+  <DESCRIPTION>
+  <P>
+    À chaque fois qu&apos;une erreur se produit, le système de gestion d&apos;erreur de Scilab l&apos;enregistre dans une table interne (uniquement la dernière erreur est enregistrée). La fonction <VERB>lasterror</VERB> permet d&apos;obtenir le numéro ainsi que la chaîne de caractères du message associé à la dernière erreur.
+  </P>
+  <P>
+    Cette fonction est utilisée conjointement avec les fonctions <VERB>errcatch</VERB> ou <VERB>execstr</VERB>.
+  </P>
+  <P>
+    Le message et le numéro d&apos;erreur peuvent être conservés pour un appel ultérieur à <VERB>lasterror</VERB> en utilisant la syntaxe <VERB>lasterror(%f)</VERB>.
+  </P>
+  </DESCRIPTION>
+  <EXAMPLE><![CDATA[
+ierr=execstr('a=zzzzzzz','errcatch')
+if ierr>0 then disp(lasterror()),end
+ ]]></EXAMPLE>
+  <SEE_ALSO>
+    <SEE_ALSO_ITEM> <LINK>errcatch</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>execstr</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>error</LINK> </SEE_ALSO_ITEM>     <SEE_ALSO_ITEM> <LINK>errclear</LINK> </SEE_ALSO_ITEM>
+  </SEE_ALSO>
+</MAN>

@@ -1,0 +1,80 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Stixbox Function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>plotdens -  Draw a nonparametric density estimate  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>plotdens(X)  </dd>
+      <dd>plotdens(X,h,P,K)  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>x,y  </b>
+          </tt>
+    : two matrices or vectors.
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Draw a nonparametric density estimate.
+    A density estimate is plotted using a kernel density estimate. A
+    longer form plotdens(X,h,P,K) may be used where 
+  </p>
+ 
+
+  <li>h 
+    : is the kernel bandwidth, 
+  </li>
+
+  <li>P 
+    : is 1 if the density is known to be 0 for negative X,
+  </li>
+
+  <li>K 
+    : is
+  </li>
+ 
+
+  <li>1 
+    : Gaussian (the default)
+  </li>
+
+  <li>2 
+    : Epanechnikov
+  </li>
+
+  <li>3 
+    : Biweight
+  </li>
+
+  <li>4 
+    : Triangular
+  </li>
+ 
+  <p>
+    Below the density estimate a jittered plot of the observations is
+    shown.
+  </p>
+ 
+  </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="histo.html">
+          <tt>
+            <b>histo</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

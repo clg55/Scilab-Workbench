@@ -1,0 +1,102 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab function  </CENTER>
+    <P></P>
+    <H3>NAME </H3>
+    <p>
+      <ul>show_graph -  displays a graph  </ul>
+    </p>
+    <H3>CALLING SEQUENCE</H3>
+    <dl>
+      <dd>nw = show_graph(g[,win,wdim,wpdim])  </dd>
+    </dl>
+    <H3>PARAMETERS</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>g  </b>
+          </tt>
+    : graph list
+  </li>
+  <li>
+          <tt>
+            <b>win  </b>
+          </tt>
+    : scalar or string. If it is a number, it gives the graphics window number to be used for graph drawing. If it is a string it can be  <tt>
+            <b>"new"</b>
+          </tt> to create a new graphics window for graph drawing or  <tt>
+            <b>"rep"</b>
+          </tt> if the current graphics window is to be used and the previous graph is to be cleared. 
+  </li>
+  <li>
+          <tt>
+            <b>wdim=[w,h]  </b>
+          </tt>
+    : graphics window internal dimensions (just as in <tt>
+            <b>xset("wdim",w,h)</b>
+          </tt>).
+  </li>
+  <li>
+          <tt>
+            <b>wpdim=[w1,h1]  </b>
+          </tt>
+    : graphics window external dimensions (just as in <tt>
+            <b>xset("wpdim",w1,h1)</b>
+          </tt>).
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    <tt>
+          <b>show_graph</b>
+        </tt> displays the graph <tt>
+          <b>g</b>
+        </tt> in a specified (or in the
+    current)  graphics window. 
+    If there is no current graphics window, it is created.
+  </p>
+  <p>
+  </p>
+  </ul>
+    <H3>EXAMPLES</H3>
+    <ul>
+      <pre>
+ta=[1 1 2 2 2 3 4 5 5 7 8 8 9 10 10 10 11 12 13 13 13 14 15 16 16 17 17];
+he=[2 10 3 5 7 4 2 4 6 8 6 9 7 7 11 15 12 13 9 10 14 11 16 1 17 14 15];
+g=make_graph("foo",1,17,ta,he);
+g("node_x")=[283 163 63 57 164 164 273 271 339 384 504 513 439 623 631 757 642];
+g("node_y")=[59 133 223 318 227 319 221 324 432 141 209 319 428 443 187 151 301];
+show_graph(g,2);
+show_graph(g,1,[500,500],[300,300])
+ </pre>
+    </ul>
+    <H3>SEE ALSO</H3>
+    <p>
+      <ul>
+        <a href="scigraph.html">
+          <tt>
+            <b>scigraph</b>
+          </tt>
+        </a>
+        <a href="show_arcs.html">
+          <tt>
+            <b>show_arcs</b>
+          </tt>
+        </a>
+        <a href="show_nodes.html">
+          <tt>
+            <b>show_nodes</b>
+          </tt>
+        </a>
+        <a href="../../../../../man/eng/graphics/xsetech.html">
+          <tt>
+            <b>xset</b>
+          </tt>
+        </a>
+      </ul>
+    </p>
+  </body>
+</html>

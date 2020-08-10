@@ -1,0 +1,70 @@
+<html>
+  <body bgcolor="FFFFFF">
+    <CENTER>Scilab Function  </CENTER>
+    <P></P>
+    <H3>NOM </H3>
+    <p>
+      <ul>clean -  nettoie une matrice (arrondi à zéro des termes très petits)    </ul>
+    </p>
+    <H3>SEQUENCE D'APPEL</H3>
+    <dl>
+      <dd>[B]=clean(A [,epsa [,epsr]])  </dd>
+    </dl>
+    <H3>PARAMETRES</H3>
+    <ul>
+      <ul>
+  <li>
+          <tt>
+            <b>A  </b>
+          </tt>
+    : une matrice (scalaire, polynômes, creuse, ...) 
+  </li>
+  <li>
+          <tt>
+            <b>epsa,epsr  </b>
+          </tt>
+    : nombres réels (valeurs par défaut resp. 1.d-10 et 1.d-10)
+  </li>
+ </ul>
+    </ul>
+    <H3>DESCRIPTION</H3>
+    <ul>
+  <p>
+    Cette fonction élimine (force à zéro) les coefficients 
+    de valeur absolue &lt; <tt>
+          <b>epsa</b>
+        </tt> et de valeur relative &lt; <tt>
+          <b>epsr</b>
+        </tt> 
+    (relative par rapport à la  norme 1 des coefficients)
+    dans un polynôme (éventuellement matrice de polynôme ou rationnelle).
+  </p>
+  <p>
+    Les valeurs par défaut sont <tt>
+          <b>epsa=1.d-10</b>
+        </tt> et <tt>
+          <b>epsr=1.d-10</b>
+        </tt>.
+  </p>
+  <p>
+    Pour une matrice constante (non polynomiale) <tt>
+          <b>clean(A,epsa)</b>
+        </tt> force à zéro
+    les termes de <tt>
+          <b>A</b>
+        </tt> plus petits que <tt>
+          <b>epsa</b>
+        </tt>.
+  </p>
+  </ul>
+    <H3>EXEMPLES</H3>
+    <ul>
+      <pre>
+x=poly(0,'x');
+w=[x,1,2+x;3+x,2-x,x^2;1,2,3+x]/3;
+w*inv(w)
+clean(w*inv(w))
+ </pre>
+    </ul>
+  </body>
+</html>
