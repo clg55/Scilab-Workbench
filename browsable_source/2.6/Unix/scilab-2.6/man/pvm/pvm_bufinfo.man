@@ -1,0 +1,41 @@
+.TH pvm_bufinfo 1 "May 1998" "Scilab // Group" "Scilab function"
+.so ../sci.an
+.SH NAME
+pvm_bufinfo - Returns information about a message buffer.
+.SH CALLING SEQUENCE
+.nf
+[bytes, msgtag, tid, info] = pvm_bufinfo(bufid)
+.fi
+.SH PARAMETERS
+.TP 5
+bufid  :   integer, specifying   a  particular  message buffer
+identifier.
+.TP 5
+bytes : integer, size of the message in bytes  (non very useful inside
+scilab).
+.TP 4
+msgtag : integer,  label of the  message.  Useful when the message was
+received with a wildcard msgtag.
+.TP 6
+tid : integer, task ID of the source of the message.
+.TP 6
+info : integer, status code returned by  the routine. Values less than
+zero indicate an error.
+
+.SH DESCRIPTION
+\fVpvm_bufinfo\fR returns information   about  the requested   message
+buffer.  Typically it is  used   to determine  facts  about the   last
+received   message  such  as   its size  or   source.  pvm_bufinfo  is
+especially useful when an application is  able to receive any incoming
+message, and the action taken depends on the source tid and the msgtag
+associated  with the message that comes  in first.   If pvm_bufinfo is
+successful, info will be 0.  If some error  occurs then info will be <
+0.
+
+.SH EXAMPLE
+.nf
+[bytes, msgtag, tid, info] = pvm_info(bufid)
+
+.fi
+.SH SEE ALSO
+pvm_recv

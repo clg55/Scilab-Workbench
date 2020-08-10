@@ -1,0 +1,31 @@
+subplot           Scilab Group           Scilab Function            subplot
+NAME
+   subplot - divide a graphics window into a matrix of sub-windows
+  
+CALLING SEQUENCE
+ subplot(m,n,p)
+ subplot(mnp)
+PARAMETERS
+ m,n,p  : positive integers
+        
+ mnp    : an integer with decimal notation mnp
+        
+DESCRIPTION
+   subplot(m,n,p) or subplot(mnp) breaks the graphics window into an m-by-n
+  matrix of sub-windows and selects the p-th sub-window for drawing  the
+  current plot.  The number of a sub-window into the matrices is counted
+  row by row ie the sub-window corresponding to element (i,j) of the matrix
+  has number (i-1)*m + j.
+  
+EXAMPLE
+ subplot(221)
+ plot2d()
+ subplot(222)
+ plot3d()
+ subplot(2,2,3)
+ param3d()
+ subplot(2,2,4)
+ hist3d()
+SEE ALSO
+   plot2d, plot3d, xstring, xtitle
+  

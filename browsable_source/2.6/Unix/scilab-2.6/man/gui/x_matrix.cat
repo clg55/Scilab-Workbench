@@ -1,0 +1,21 @@
+x_matrix          Scilab Group          Scilab Function            x_matrix
+NAME
+   x_matrix - Xwindow editing of matrix 
+  
+CALLING SEQUENCE
+ [result]=x_matrix(label,matrix-init) 
+PARAMETERS
+ label
+       : character string (name of matrix)
+      
+ matrix-init
+       : real matrix
+      
+DESCRIPTION
+   For reading or editing a matrix .
+  
+EXAMPLE
+ //m=evstr(x_matrix('enter a  3x3 matrix ',rand(3,3)))
+SEE ALSO
+   x_mdialog, x_dialog  
+  

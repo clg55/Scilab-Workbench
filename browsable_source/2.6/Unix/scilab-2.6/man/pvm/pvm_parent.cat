@@ -1,0 +1,23 @@
+pvm_parent        Scilab // Group        Scilab function         pvm_parent
+NAME
+   pvm_parent - returns the tid of the process that spawned the calling
+  process.
+  
+CALLING SEQUENCE
+ tid = pvm_parrent()
+PARAMETERS
+ tid  : integer, the task identifier of the parent of the calling process.
+      
+DESCRIPTION
+   pvm_parent  returns the
+  
+   of the process that spawned the calling process. If the calling process
+  was not created with pvm_spawn, then
+  
+   is set to PvmNoParent=-23 
+  
+EXAMPLE
+ tid = pvm_parent()
+SEE ALSO
+   pvm_spawn
+  

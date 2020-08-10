@@ -1,0 +1,17 @@
+pvm_error         Scilab // Group         Scilab function         pvm_error
+NAME
+   pvm_error - Prints  message  describing  an error  returned by a PVM
+  call. group.
+  
+CALLING SEQUENCE
+ [errmsg] = pvm_error(err)
+PARAMETERS
+ errmsg : string, the error message corresponding to the error code
+        err.  
+       
+DESCRIPTION
+   pvm_error returns the error message corresponding to an PVM error code
+  returned by a PVM call.  
+  
+EXAMPLE
+ [a] = pvm_error(0)

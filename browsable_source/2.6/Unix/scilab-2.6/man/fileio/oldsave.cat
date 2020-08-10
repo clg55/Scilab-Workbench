@@ -1,0 +1,36 @@
+oldsave           Scilab Group           Scilab Function            oldsave
+NAME
+   oldsave - saving variables in 2.4.1 and previous format
+  
+CALLING SEQUENCE
+ oldsave(filename [,x1,x2,...,xn])
+PARAMETERS
+ filename   : character string or a logical unit returned by
+            file('open',...)
+            
+ xi         : arbitrary Scilab variable(s) 
+            
+DESCRIPTION
+   The oldsave function is obsolete and is retained only for compatibility
+  purpose.
+  
+    The oldsave command can be used to save Scilab current variables  in
+  binary form in a file.
+  
+   oldsave(filename) saves all current variables in the file defined by 
+  filename.
+  
+   oldsave(file-name,x,y) saves only named variables x and y.
+  
+   Saved  variables can be reloaded by the load or oldload command.
+  
+EXAMPLES
+ a=eye(2,2);b=ones(a);
+ oldsave('TMPDIR/val.dat',a,b);
+ clear a
+ clear b
+ oldload('TMPDIR/val.dat','a','b');
+ 
+SEE ALSO
+   load, file
+  

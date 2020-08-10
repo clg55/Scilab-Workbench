@@ -1,0 +1,28 @@
+%helps - Variable defining the path of help directories  @%helps
+G_make - call make or nmake  @G_make
+c_link - check dynamic link  @c_link
+chdir - changes Scilab current directory  @chdir
+dec2hex -   hexadecimal representation of integers  @dec2hex
+demos -  guide for scilab demos  @demos
+help - on-line help command  @help
+hex2dec -   converts hexadecimal representation of integers to numbers  @hex2dec
+ilib_build - utility for shared library management  @ilib_build
+ilib_compile - ilib_build utility: executes the makefile produced by ilib_gen_Make  @ilib_compile
+ilib_for_link - utility for shared library management with link  @ilib_for_link
+ilib_gen_Make - utility for ilib_build: produces a makefile for building shared libraries  @ilib_gen_Make
+ilib_gen_gateway  - utility for ilib_build, generates a gateway file.  @ilib_gen_gateway
+ilib_gen_loader  - utility for ilib_build: generates a loader file  @ilib_gen_loader
+intersci  - scilab tool to interface C of Fortran functions with scilab  @intersci
+link - dynamic link  @link
+man -  on line help source file description format  @man
+sci2exp - converts  variable to  expression  @sci2exp
+sci2map - Scilab to Maple variable conversion  @sci2map
+scilab  - Major unix script to execute Scilab and miscellaneous tools  @scilab
+scilink - Unix script to relink Scilab  @scilink
+timer - cpu time  @timer
+ulink - unlink a dynamically linked shared object  @ulink
+unix - shell (sh) command execution  @unix
+unix_g - shell (sh) command execution, output redirected to a variable  @unix_g
+unix_s - shell (sh) command execution, no output  @unix_s
+unix_w - shell (sh) command execution, output redirected to scilab window  @unix_w
+unix_x - shell (sh) command execution, output redirected to a window  @unix_x

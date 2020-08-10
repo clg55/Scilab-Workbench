@@ -1,0 +1,15 @@
+addmenu - interactive button or menu definition  @addmenu
+delmenu - interactive button or menu deletion  @delmenu
+getvalue - xwindow dialog for data acquisition  @getvalue
+halt - stop execution  @halt
+havewindow - return scilab window mode  @havewindow
+keyboard - keyboard commands  @keyboard
+setmenu - interactive button or menu activation  @setmenu
+unsetmenu - interactive button or menu or submenu de-activation  @unsetmenu
+x_choices - interactive Xwindow choices through toggle buttons  @x_choices
+x_choose - interactive Xwindow choice  @x_choose
+x_dialog - Xwindow dialog  @x_dialog
+x_matrix - Xwindow editing of matrix  @x_matrix
+x_mdialog - Xwindow dialog  @x_mdialog
+x_message - X window message  @x_message
+x_message_modeless - X window modeless message  @x_message_modeless

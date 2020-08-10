@@ -1,0 +1,34 @@
+.TH modulo 1 "April 1993" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+modulo - symetric arithmetic remainder modulo m
+pmodulo - positive arithmetic remainder modulo m
+.SH CALLING SEQUENCE
+.nf
+i=modulo(n,m)
+i=pmodulo(n,m)
+.fi
+.SH PARAMETERS
+n,m:
+integers
+.SH DESCRIPTION
+\fVmodulo\fR computes \fVi= n (modulo m)\fR i.e. remainder
+of \fVn\fR divided by \fVm\fR (\fVn\fR and \fVm\fR integers).
+.LP
+
+ i = n - m .* int (n ./ m). Here the answer may be negative if \fVn\fR  or \fVm\fR 
+are negative.
+.LP
+\fVpmodulo\fR computes  \fVi = n - m .* floor (n ./ m)\fR, the answer
+is positive or zero
+
+
+.SH EXAMPLE
+.nf
+n=[1,2,10,15];m=[2,2,3,5];
+modulo(n,m)
+
+modulo(-3,9)
+pmodulo(-3,9)
+.fi
+

@@ -1,0 +1,28 @@
+whos             Scilab Group             Scilab Function              whos
+NAME
+   whos - listing of variables in long form
+  
+CALLING SEQUENCE
+ whos()
+ whos -type typ
+ whos -name nam
+PARAMETERS
+ typ  : name of selected variable type (see typeof)
+      
+ nam  : first characters of selected names
+      
+DESCRIPTION
+   whos() displays all current variable names, types and memory used   whos
+  -type typ  displays all current variables with specified type  whos -name
+  nam  displays all current variables whose names begin with nam 
+  
+EXAMPLE
+ whos()
+ 
+ whos -type boolean
+ 
+ whos -name %
+ 
+SEE ALSO
+   who, typeof
+  

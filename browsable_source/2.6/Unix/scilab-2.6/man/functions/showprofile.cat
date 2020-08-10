@@ -1,0 +1,37 @@
+showprofile        Scilab Group        Scilab Function          showprofile
+NAME
+   showprofile - extracts and displays execution profiles of a Scilab
+  function 
+  
+CALLING SEQUENCE
+ showprofile(fun)
+PARAMETERS
+ fun  : a Scilab function 
+      
+DESCRIPTION
+   To use showprofile the Scilab function must have been prepared for
+  profiling (see getf).  For such function, When such a function is
+  executed the systems counts how many time each line is executed and how
+  may cpu time is spend for each line execution. These data are stored
+  within the function data structure.  The showprofile function outputs
+  profiling results (see \fprofile) with text of the function lines. 
+  Function text is rebuild with fun2string.
+  
+EXAMPLE
+ //define function and prepare it for profiling
+ deff('x=foo(n)',['if n==0 then'
+                  '  x=[]'
+                  'else'
+                  '  x=0'
+                  '  for k=1:n'
+                  '    s=svd(rand(n+10,n+10))'
+                  '    x=x+s(1)'
+                  '  end'
+                  'end'],'p')
+ //call the function
+ foo(30)
+ //get execution profiles
+ showprofile(foo)
+SEE ALSO
+   profile, plotprofile, fun2string
+  

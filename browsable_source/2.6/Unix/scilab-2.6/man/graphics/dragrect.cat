@@ -1,0 +1,28 @@
+dragrect          Scilab Group          Scilab Function            dragrect
+NAME
+   dragrect - Drag rectangle(s) with mouse
+  
+CALLING SEQUENCE
+ final_rect=dragrect(initial_rect)
+PARAMETERS
+ initial_rect  : 4 4xn matrix containing the initial rectangles
+               definition. Each column contains [x_left; y_top; width;
+               height]. If only one rectangle is present the initial_rect
+               may also be a vector. 
+               
+ final_rect    :a rectangle defined by [x_left, y_top, width, height] 
+               
+DESCRIPTION
+   dragrect tracks one or more rectangles anywhere on the screen. The 4xn
+  matrix rect defines the rectangles. Each column of initial_rect must
+  contain the initial rectangle position as [left;top;width;height] values.
+  When a button is clicked dragrect returns the final rectangles definition
+   in final_Rect. 
+  
+EXAMPLE
+ xsetech(frect=[0,0,100,100])
+ r=dragrect([10;10;30;10])
+ xrect(r)
+SEE ALSO
+   xrect, xrects, xclick, xmouse
+  

@@ -1,0 +1,16 @@
+detrX            Scilab Group            Scilab Function              detrX
+NAME
+   detr - polynomial determinant
+  
+CALLING SEQUENCE
+ d=detr(h)
+PARAMETERS
+ h    : polynomial or rational square matrix
+      
+DESCRIPTION
+   returns the determinant d of the polynomial or  rational function matrix
+  h. Based on Leverrier's algorithm.
+  
+SEE ALSO
+   det, determ  
+  

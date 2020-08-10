@@ -1,0 +1,23 @@
+frexp            Scilab Group            Scilab Function              frexp
+NAME
+   frexp - dissect floating-point numbers into base 2 exponent and mantissa
+  
+CALLING SEQUENCE
+ [f,e]=frexp(x)
+PARAMETERS
+ x          : real vector or matrix
+            
+ f          : array of real values, usually in the range 0.5 <= abs(f) <
+            1.
+            
+ e          : array of integers that satisfy the equation: x = f.*2.^e
+            
+DESCRIPTION
+    This function corresponds to the ANSI C function frexp(). Any zeros in x
+  produce f=0 and e=0. 
+  
+EXAMPLE
+ [f,e]=frexp([1,%pi,-3,%eps])
+SEE ALSO
+   log, hat, ieee, log2  
+  

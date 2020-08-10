@@ -1,0 +1,27 @@
+rcond            Scilab Group            Scilab Function              rcond
+NAME
+   rcond -  inverse condition number
+  
+CALLING SEQUENCE
+ rcond(X) 
+PARAMETERS
+ X    : real or complex square matrix
+      
+DESCRIPTION
+   is an estimate for the reciprocal of the condition of X in the 1-norm.
+  
+   If X is well conditioned, rcond(X) is close to 1. If not, rcond(X) is
+  close to 0.
+  
+   sets r to rcond(X) and returns z such that
+  
+   Thus, if rcond is small z is a vector in the kernel.
+  
+EXAMPLE
+ A=diag([1:10]);
+ rcond(A)
+ A(1,1)=0.000001;
+ rcond(A)
+SEE ALSO
+   svd, cond, inv     
+  

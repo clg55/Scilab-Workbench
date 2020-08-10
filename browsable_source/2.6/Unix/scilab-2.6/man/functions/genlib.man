@@ -1,0 +1,37 @@
+.TH genlib 3 "Nov 2000" "Scilab Group" "Scilab Function"
+.so ../sci.an
+
+.SH NAME
+genlib - build library from all functions in given directory
+
+.SH CALLING SEQUENCE
+.nf
+genlib(lib-name [,dir-name])
+.fi
+
+.SH PARAMETERS
+.TP 10
+lib-name:
+Scilab string.  The variable name of the library to (re)create.
+.TP
+dir-name:
+Scilab string.  The name of the directory to look for \fV.bin\fR-files;
+default value is the current directory.
+
+.SH DESCRIPTION
+For each \fV.sci\fR file in \fVdir-name\fR, \fVgenlib\fR executes a
+\fVgetf\fR and saves the functions to the corresponding \fV.bin\fR
+file.  The \fV.sci\fR file must not contain anything but Scilab
+functions.  If a \fV.bin\fR file is newer than the associated
+\fV.sci\fR file, \fVgenlib\fR does not translate and save the file.
+
+When all \fV.sci\fR files have been processed, \fVgenlib\fR creates a
+library variable named \fVlib-name\fR and saves it in the file
+\fVlib\fR in \fVdir-name\fR.
+
+.SH RESTRICTIONS
+Scilab tacitly assumes that file \fVfoo.sci\fR defines only a single
+function named \fVfoo\fR.
+
+.SH SEE ALSO
+getf, save, lib

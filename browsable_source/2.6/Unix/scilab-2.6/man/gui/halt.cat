@@ -1,0 +1,12 @@
+halt             Scilab Group             Scilab Function              halt
+NAME
+   halt - stop execution
+  
+CALLING SEQUENCE
+ halt()
+DESCRIPTION
+   stops execution until something is entered in the keyboard.
+  
+SEE ALSO
+   pause, return, exec   
+  

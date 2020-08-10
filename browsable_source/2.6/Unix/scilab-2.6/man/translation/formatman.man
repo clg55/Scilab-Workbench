@@ -1,0 +1,39 @@
+.TH formatman 3 "january 2001" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+formatman - formats all help files in a directory in ascii, text or html
+.SH CALLING SEQUENCE
+.nf
+formatman(path [,to])
+.fi
+.SH PARAMETERS
+.TP 10
+path
+: character string, giving the path of the directory
+.TP
+to 
+: character string with possible values "ascii", "tex","html"
+.SH DESCRIPTION
+This function, not yet fully checked, formats all help files (*.man)
+of a given directory written in a subset of TROFF (text formatting
+language) to ascii tex or html
+.LP
+Known TROFF directives are .TH, .SH, .TP, .RS, .RE, .LP, .IG,
+ .nf, .fi, .TS, .TE, .ft, .IP
+.LP
+Font handling like
+.nf
+\fV, \fR, \fB, \fP, \fI, \f(CR]
+.fi
+are ignored
+.TP 10
+ascii
+mode generates a .cat file for each .man file and a whatis file
+.TP
+tex 
+mode generates a .tex file for each .man file and a whatis.tex file
+.TP
+html 
+mode generates a .html file for each .man file and a index.html file
+.SH SEE ALSO
+help, man

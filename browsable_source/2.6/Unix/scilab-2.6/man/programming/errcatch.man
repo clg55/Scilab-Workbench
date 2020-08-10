@@ -1,0 +1,62 @@
+.TH errcatch 1 "April 1993" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+errcatch - error trapping
+.SH CALLING SEQUENCE
+.nf
+errcatch(n [,'action'] [,'option']) 
+.fi
+.SH PARAMETERS
+.TP 20
+n
+: integer 
+.TP 20
+action, option 
+: strings
+.SH DESCRIPTION
+\fVerrcatch\fR gives an "action" (error-handler)  to be 
+performed when an error of type \fVn\fR occurs.
+\fVn\fR has the following meaning:
+.PP
+if \fVn>0\fR, \fVn\fR is the error number to trap
+.PP
+if \fVn<0\fR  all errors are to be trapped
+.LP
+\fVaction\fR is one of the following character strings:
+.RS
+.RS
+.TP 12
+"pause"
+: a pause is executed when trapping the error. This option is useful
+for debugging purposes. Use \fVwhereami()\fR to get informations on
+the current context.
+.TP
+"continue"
+: next instruction in the function or exec files is executed, current
+instruction is ignored. It is possible to check if an error has
+occured using the \fViserror\fR function. Do not forget to clear the
+error using the \fVerrclear\fR function as soon as possible
+ This option is useful for error recovery. In many cases, usage of
+\fV errcatch(n,"continue",..)\fR can be replaced by the use of \fVexecstr\fR
+function.  
+.TP
+"kill"
+: default mode, all intermediate functions are killed, scilab goes
+back to the level 0 prompt.
+.TP
+"stop"
+: interrupts the current Scilab session (useful when 
+Scilab is called from an external program).
+.RE
+.RE
+.LP
+\fVoption\fR is the character string \fV'nomessage'\fR for killing
+error message.
+.LP
+To set back default mode, enter \fVerrcatch(-1,"kill")\fR or similarly
+\fVerrcatch(-1)\fR. 
+.LP
+Then called in a scilab function the \fVerrcatch\fR is automatically
+reset to the default mode when the function returns.
+.SH SEE ALSO
+errclear, iserror, whereami, execstr

@@ -1,0 +1,16 @@
+getversion         Scilab Group         Scilab Function          getversion
+NAME
+   getversion - get Scilab version name
+  
+CALLING SEQUENCE
+ version=getversion()
+PARAMETERS
+ version         : a string
+                 
+DESCRIPTION
+   return in version the Scilab version name
+  
+EXAMPLE
+ getversion()
+    
+  

@@ -1,0 +1,36 @@
+.TH xgraduate 2 "November 1993" "Scilab Group" "Scilab Function" 
+.so ../sci.an
+.SH NAME
+xgraduate - axis graduation 
+.SH CALLING SEQUENCE
+.nf
+[xi,xa,np1,np2,kMinr,kMaxr,ar]=xgraduate(xmi,xma)
+.fi
+.SH PARAMETERS 
+.TP 10
+xmi,xma
+: real scalars
+.TP
+xi, xa, kMinr, kMaxr, ar
+:real scalars
+.TP
+np1,np2
+: integer
+.SH DESCRIPTION
+\fVxgraduate\fR returns the axis graduations which are used by the plot
+routines (with pretty print flag enabled). It returns an interval \fV[xi,xa]\fR which contains the
+given interval \fV[xmi,xma]\fR and such that  
+.LP
+\fVxi= kMinr*10^ar\fR, \fVxa=kMaxr*10^ar\fR and the interval can 
+be divided into \fVnp2\fR intervals and each interval is divided in
+\fVnp1\fR sub-intervals.
+.SH EXAMPLE
+.nf
+  [x1,xa,np1,np2,kMinr,kMaxr,ar]=xgraduate(-0.3,0.2)
+.fi
+.SH SEE ALSO
+graduate, plot2d
+.SH AUTHOR
+J.P.C 
+
+

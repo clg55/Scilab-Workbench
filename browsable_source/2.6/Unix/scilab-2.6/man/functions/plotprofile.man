@@ -1,0 +1,47 @@
+.TH plotprofile 1 "july 2000" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+plotprofile - extracts and displays execution profiles of a Scilab function 
+.SH CALLING SEQUENCE
+.nf
+plotprofile(fun)
+.fi
+.SH PARAMETERS
+.TP 4
+fun
+: a Scilab function 
+.SH DESCRIPTION
+To use \fVplotprofile\fR the Scilab function must have been prepared for
+profiling (see getf).
+
+For such functions, When such a function is executed the systems
+counts how many time each line is executed and how may cpu time is
+spend for each line execution. These data are stored within the
+function data structure.  The \fVplotprofile\fR in an interactive
+function which displays this results in a graphic window. When a line
+is clicked text of the function is displayed with the selected line
+hilited.
+
+NOTE: you have to click on the "Exit" item in the graphics windows to
+exit from "plotprofile".
+
+Function text is rebuild with \fVfun2string\fR.
+.SH EXAMPLE
+.nf
+//define function and prepare it for profiling
+deff('x=foo(n)',['if n==0 then'
+                 '  x=[]'
+                 'else'
+                 '  x=0'
+                 '  for k=1:n'
+                 '    s=svd(rand(n+10,n+10))'
+                 '    x=x+s(1)'
+                 '  end'
+                 'end'],'p')
+//call the function
+foo(30)
+//get execution profiles
+plotprofile(foo) // click on Exit to exit
+.fi
+.SH SEE ALSO
+profile, showprofile, fun2string

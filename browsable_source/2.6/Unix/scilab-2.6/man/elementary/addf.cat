@@ -1,0 +1,21 @@
+addf             Scilab Group             Scilab Function              addf
+NAME
+   addf - symbolic addition
+  
+CALLING SEQUENCE
+ addf("a","b")
+PARAMETERS
+ "a","b"    : character strings
+            
+DESCRIPTION
+   addf("a","b") returns the character string "a+b". Trivial simplifications
+  such as addf("0","a") or addf("1",2") are performed.
+  
+EXAMPLE
+ addf('0','1')
+ addf('1','a')
+ addf('1','2')
+ 'a'+'b'
+SEE ALSO
+   mulf, subf, ldivf, rdivf, eval, evstr  
+  

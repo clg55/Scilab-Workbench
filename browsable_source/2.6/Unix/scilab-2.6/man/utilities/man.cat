@@ -1,0 +1,141 @@
+man              Scilab Group              Scilab Format                man
+NAME
+   man -  on line help source file description format
+  
+DESCRIPTION
+   The on line help source files are written in a subset of the old text
+  formatting language groff. The advantage of this language is to allow the
+  most useful formatting, being quite simple. It also allows easy
+  translation in other formatting language like HTML or LaTeX.  Source
+  files (with extension .man) can  be found in the <SCIDIR>/man/*
+  directories. The file name is associated to the keyword (usually a
+  function name) it describes.   Most  groff commands begin by a dot as
+  first character of a line. The first line of each man file must be: 
+  
+  .TH <keyword> 1 "date" "Author" "Category"
+ 
+    The help is then split into a sequence of "sections". Each section
+  begins with the  groff command .SH <section name>. 
+  
+   To give a uniform aspect to the scilab on-line help Scilab   uses the
+  following sections names:
+  
+ NAME              : This section gives the keyword(s) documented in this
+                   file, on keyword per line followed by a minus sign and a
+                   short description of the keyword. Below is the example
+                   of the NAME section extracted from the mfscanf.man file.
+                   
+                   --------------------------------------------
+                   mscanf  - interface to the C scanf function 
+                   mfscanf - interface to the C fscanf function 
+                   msscanf - interface to the C sscanf function 
+                   --------------------------------------------
+ CALLING SEQUENCE  : Here one gives the Scilab syntaxe(s) which can be
+                   used. Below is an example extracted out of the
+                   mfscanf.man file:
+                   
+                   ---------------------------------
+                   .nf
+                   [n,v_1,...v_n]=mfscanf(fd,format)
+                   L=mfscanf(fd,format)
+                  
+                   [n,v_1,...v_n]=mscanf(format)
+                   L=mscanf(format)
+                   
+                   [n,v_1,...v_m]=msscanf(format,str)
+                   L=msscanf(format)
+                   .fi
+                   ---------------------------------
+                  The .nf, .fi pair of commands is used to specify an
+                   unformatted region.
+                   
+ PARAMETERS        : Here is given an indented itemized sequence of the
+                   parameters description  first item  is defined using the
+                    .TP n command, where n is a number of characters. The
+                   following items begin with the command .TP as shown on
+                   the following example extracted out of the file.man
+                   file:
+                   
+                   --------------------------------------------
+                   .TP 10
+                   file-name
+                   : string, file name of the file to be opened
+                   .TP 
+                   status
+                   : string, The status of the file to be opened
+                   .RS
+                   .TP 5
+                   "new" 
+                   : file must not exist new file (default)
+                   .TP
+                   "old" 
+                   : file must already exists.
+                   .RE
+                   .TP 
+                   access
+                   : string, The type of access to the file
+                   --------------------------------------------
+                  The .RS .RE pair of commands are used to nest an
+                   itemized sequence in an other.
+                   
+ DESCRIPTION       : Here one describes the keyword
+                   
+ EXAMPLE           : This section gives some examples of the use of the
+                   keyword. This must be a sequence of Scilab instruction
+                   enclosed in a .nf, .fi pair of commands. 
+                   
+ SEE ALSO          : Here are given a one line sequence of related
+                   keywords separed by a comma followed by a blank as in
+                   the example below. 
+                   
+                  ---------------------------------------------------------------------
+                  mclose, meof, mfprintf, fprintfMat, mfscanf, fscanfMat, mget, mgetstr
+                  ---------------------------------------------------------------------
+ AUTHOR            : Here one gives informations on the author and
+                   references.
+                   
+    The fonts changes are specified in the formatted text by groff commands
+  like 
+  
+  \fV for verbatim
+  \fR for Roman
+   Below is an example extracted out of the mfscanf.man file, the keywords
+  are required to be in verbatim font.
+  
+  ---------------------------------------------------------------------
+  The \fVmfscanf\fR function reads characters from the stream \fVfd\fR.
+  .LP
+  The \fVmscanf\fR function reads characters from Scilab window. 
+  .LP
+  The \fVmsscanf\fR function reads characters from the string \fVstr\fR.
+  ---------------------------------------------------------------------
+   The .LP command is used to define a line break.
+  
+    Some time it is useful to define tables. An example of such table
+  formatting may be found in the file overloading.man:
+  
+  -------------------
+  .TS
+  tab(@);
+  l l.
+  string@c
+  polynomial@p
+  function@m
+  constant@s
+  list@l
+  tlist@<tlist_type>
+  boolean@b
+  sparse@sp
+  boolean sparse@spb
+  .TE
+  -------------------
+   These commands define a two column, left aligned( l l.), table. The
+  column separator (@) is specified here by the tab(@); command.
+  
+FORMATTING MAN FILES
+   These source files may then be used to generate pure ASCII  or LaTeX or
+  HTML formatted files using the Scilab function formatman. 
+  
+SEE ALSO
+   formatman, help
+  

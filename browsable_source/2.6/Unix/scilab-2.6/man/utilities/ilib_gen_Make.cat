@@ -1,0 +1,43 @@
+ilib_gen_Make       Scilab Group       Scilab Function        ilib_gen_Make
+NAME
+   ilib_gen_Make - utility for ilib_build: produces a makefile for building
+  shared libraries
+  
+CALLING SEQUENCE
+ Makename=ilib_gen_Make(name,files,libs,makename [,with_gateway])
+PARAMETERS
+ lib_name   : a character string, the generic name of the library without
+            path and extension.
+            
+ files      : a vector of character string. The names of the C or Fortran
+            files without the extension and the path part.
+            
+ libs       : a vector of character string. additionnal libraries paths or
+            [].
+            
+ makename   : character string. The path of the Makefile file.
+            
+ with_gateway
+             : a boolean. If true a file with name <lib_name>_gateway is added.
+            
+ Makename   : character string. The path of the really generated Makefile
+            file.
+            
+DESCRIPTION
+   Utility function used by ilib_build  This function generates a makefile
+  adapted to the Operating System for building shared libraries to be
+  loaded in Scilab. Proper options and paths are set.
+  
+   Shared libraries can then be used with the link and addinter scilab
+  function for incremental linking.
+  
+   The shared library is build from a set of C or Fortran routines stored in
+  a directory and if required from a set of external libraries.
+  
+   Files are not required to exist, when makefile is generated, but of
+  course are required for executing the makefile.
+  
+SEE ALSO
+   addinter, link, ilib_build, ilib_compile, ilib_gen_gateway,
+  ilib_gen_loader, ilib_for_link
+  

@@ -1,0 +1,27 @@
+.TH get_function_path 1 "May 2000" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+get_function_path  - get source file path of a library function
+.SH CALLING SEQUENCE
+.nf
+path=get_function_path(fun_name)
+.fi
+.SH PARAMETERS
+.TP 10
+fun_name
+: a string, the name of the function
+.TP
+path 
+: a string, the absolute pathname of the function source file (.sci)
+or [].
+.SH DESCRIPTION
+Given the name of a function get_function_path returns the absolute
+pathname of the function source file if the function is defined in a
+Scilab library (see lib) or [] if name does not match any library
+function.
+.SH EXAMPLE
+.nf
+get_function_path('median')
+.fi 
+.SH SEE ALSO
+lib, string

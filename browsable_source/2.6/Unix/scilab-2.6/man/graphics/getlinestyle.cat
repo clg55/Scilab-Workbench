@@ -1,0 +1,17 @@
+getlinestyle        Scilab Group        Scilab Function        getlinestyle
+NAME
+   getlinestyle - dialog to select linestyle
+  
+CALLING SEQUENCE
+ k=getlinestyle()
+PARAMETERS
+ k    : integer, selected linestyle  or [] if the "Cancel" button has been
+      clicked.
+      
+DESCRIPTION
+   getlinestyle opens a graphic window to select a line style. Example:
+  k=getlinestyle() plot2d(1:10,10,style=k).
+  
+SEE ALSO
+   xset
+  

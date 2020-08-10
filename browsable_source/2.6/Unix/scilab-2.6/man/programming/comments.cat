@@ -1,0 +1,9 @@
+comments          Scilab Group          Scilab Function            comments
+NAME
+   comments - comments
+  
+DESCRIPTION
+   Command lines which begin by  //  are not interpreted by Scilab.
+  
+   Comments must not begin with  //end  ! 
+  

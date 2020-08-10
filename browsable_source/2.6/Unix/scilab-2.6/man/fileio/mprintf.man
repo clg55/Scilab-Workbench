@@ -1,0 +1,80 @@
+.TH mprintf 1 "Aug 1999" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+ mfprintf - converts, formats, and writes  data to a file 
+ mprintf - converts, formats, and writes  data to the main scilab window
+ msprintf - converts, formats, and writes  data in a string
+.SH CALLING SEQUENCE
+.nf
+mfprintf(fd,format,a1,...,an);
+mprintf(format,a1,...,an);
+str=msprintf(format,a1,...,an);
+.fi
+.SH PARAMETERS
+.TP 10
+fd : scalar, file descriptor given by \fVmopen\fR (it's a positive
+integer). The value \fV-1\fR refers to the default file ( i.e the last
+opened file).
+.TP 
+format
+: a Scilab string describing  the
+format to use to write  the  remaining  operands. 
+The format operand follows, as close as possible, 
+the C printf format operand syntax. 
+.TP 
+str
+: a character string, string to be scanned.
+.TP
+a1,...,an
+: Specifies the data to be converted and printed according to the format
+parameter.
+.SH DESCRIPTION
+The \fVmprintf\fR, \fVmfprintf\fR, and \fVmsprintf\fR functions are interface for C-coded version of \fVprintf\fR, \fVfprintf\fR and
+\fVsprintf\fR functions.
+.LP
+The \fVmprintf\fR function 
+writes formatted operands to the standard Scilab output
+(i.e the Scilab window). The  argument operands are formatted under control
+of the format operand.
+.LP
+The \fVmfprintf\fR function writes formatted operands to the file
+specified by the file desciptor 
+\fVfd\fR. The  argument operands are formatted under control
+of the format operand.
+.LP
+The \fVmsprintf\fR 
+writes formatted operands in its returned value (a Scilab string).
+The  argument operands are formatted under control
+of the format operand. Note that, in this case, the  escape
+sequences (\fV"\n, \t,.."\fR) are treated as a normal sequence of
+characters.
+.LP
+All these functions may be used to output column vectors of numbers
+and string vectors without an explicit loop on the elements. In that
+case these functions iterates on the rows. The shortest vector gives
+the number of time the format has to be iterated.
+.LP
+An homogeneous sequence of identical type parameters can be
+replaced by a matrix
+
+.SH EXAMPLE
+.nf
+mprintf('At iteration %i, Result is:\nalpha=%f',33,0.535)
+
+msprintf('%5.3f %5.3f',123,0.732)
+msprintf('%5.3f\\n%5.3f',123,0.732)
+
+A=rand(5,2);
+// vectorized forms: the format directive needs 
+// two operand, each column of A is used as an operand. 
+// and the mprintf function is applied on each row of A 
+mprintf('%5.3f\\t%5.3f\\n',A)
+
+colors=['red';'green';'blue';'pink';'black'];
+RGB=[1 0 0;0 1 0;0 0 1;1 0.75 0.75;0 0 0];
+mprintf('%d\\t%s\\t%f\\t%f\\t%f\\n',(1:5)',colors,RGB)
+
+.fi
+.SH SEE ALSO
+mclose, meof, mfprintf, fprintfMat, mfscanf, fscanfMat, mget, mgetstr, mopen, mprintf, mput, mputstr, mscanf, mseek, mtell
+

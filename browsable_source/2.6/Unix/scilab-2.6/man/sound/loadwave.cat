@@ -1,0 +1,19 @@
+loadwave          Scilab Group          Scilab Function            loadwave
+NAME
+   loadwave - load a sound <<wav>> file into scilab 
+  
+CALLING SEQUENCE
+ x=loadwave('file-name');
+ [x,y]=loadwave('file-name');
+PARAMETERS
+ x    : vector 
+      
+ y    : vector
+      
+DESCRIPTION
+   Reads a .wav sound file into Scilab.  If y is given, it is filled with
+  information about the sample. (See the message sent by loadwave).
+  
+SEE ALSO
+   savewave,  analyze, mapsound  
+  

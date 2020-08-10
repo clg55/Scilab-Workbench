@@ -1,0 +1,23 @@
+h_norm            Scilab Group            Scilab Function            h_norm
+NAME
+   dhnorm - discrete H-infinity norm
+  
+CALLING SEQUENCE
+ hinfnorm=dhnorm(sl,[tol],[normax])
+PARAMETERS
+ sl         : the state space system (syslin list) (discrete-time)
+            
+ tol        : tolerance in bisection step, default value 0.01
+            
+ normax     : upper bound for the norm , default value is 1000
+            
+ hinfnorm   : the discrete infinity norm of Sl
+            
+DESCRIPTION
+   produces the discrete-time infinity norm  of a state-space system  (the
+  maximum over all frequencies on the unit circle of the maximum singular
+  value).
+  
+SEE ALSO
+   h_norm, linfn 
+  

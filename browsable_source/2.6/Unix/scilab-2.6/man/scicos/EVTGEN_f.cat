@@ -1,0 +1,16 @@
+EVTGEN_f           Scilab Group           Scicos Block             EVTGEN_f
+NAME
+   EVTGEN_f - Scicos event firing block
+  
+DESCRIPTION
+   One event is generated on the unique output event port if Event time is
+  larger than equal to zero, if not, no event is generated.
+  
+DIALOGUE PARAMETERS
+   
+  
+ Event time      : scalar. date of the initial event
+                 
+SEE ALSO
+   CLOCK_f, EVTDLY_f       
+  

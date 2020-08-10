@@ -1,0 +1,50 @@
+steadycos          Scilab Group          Scicos function          steadycos
+NAME
+   steadycos - Finds an equilibrium state of a system described by a scicos
+  diagram
+  
+CALLING SEQUENCE
+ [X,U,Y,XP]=steadycos(scs_m,X,U,Y,Indx,Indu,Indy [,Indxp [,param ] ])
+PARAMETERS
+ scs_m      : a Scicos data structure
+            
+ X          : column vector. Continuous state. Can be set to [] if zero.
+            
+ U          : column vector. Input. Can be set to [] if zero.
+            
+ Y          : column vector. Output. Can be set to [] if zero.
+            
+ Indx       :vector,  index of entries of X that are not fixed. If all can
+            vary, set to 1:$
+            
+ Indu       : vector, index of entries of U that are not fixed. If all can
+            vary, set to 1:$
+            
+ Indy       :vector,  index of entries of Y that are not fixed. If all can
+            vary, set to 1:$
+            
+ Indxp      :vector, index of entries of XP (derivative of X) that need
+            not be zero. If all can vary, set to 1:$. Default [].
+            
+ param      : list with two elements (default list(1.d-6,0))
+            
+           param(1)
+                           : scalar. Perturbation level for linearization; the following
+                variation is used   del([x;u])_i =
+                param(1)+param(1)*1d-4*abs([x;u])
+                
+           param(2)
+                           : scalar. Time t
+                
+DESCRIPTION
+   Finds an equilibrium state of a general dynamical system described by a
+  scicos diagram.
+  
+SEE ALSO
+  .SH SEE ALSO
+  scicos, scicos_main, lincos
+  
+EXAMPLE
+AUTHOR
+   R. Nikoukhah
+  

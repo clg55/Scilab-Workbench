@@ -1,0 +1,19 @@
+lin2mu            Scilab Group            Scilab Function            lin2mu
+NAME
+   lin2mu - linear signal to mu-law encoding
+  
+CALLING SEQUENCE
+ mu=lin2mu(y)
+PARAMETERS
+ y    : real vector
+      
+ mu   : real vector
+      
+DESCRIPTION
+   Utility fct: converts linear signal to mu-law encoding. mu = lin2mu(y)
+  converts linear audio signal amplitudes in the range  -1 <= y <= 1 to
+  mu-law in the range 0 <= mu <= 255.
+  
+SEE ALSO
+   mu2lin    
+  

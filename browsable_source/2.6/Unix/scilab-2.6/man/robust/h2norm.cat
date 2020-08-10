@@ -1,0 +1,17 @@
+h2norm            Scilab Group            Scilab Function            h2norm
+NAME
+   h2norm - H2 norm
+  
+CALLING SEQUENCE
+ [n]=h2norm(Sl [,tol])
+PARAMETERS
+ Sl   : linear system (syslin list)
+      
+ n    : real scalar
+      
+DESCRIPTION
+   produces the H2 norm  of a linear continuous time system Sl.
+  
+   (For Sl in state-space form h2norm uses the observability gramian and for
+  Sl in transfer form h2norm uses a residue method)   
+  

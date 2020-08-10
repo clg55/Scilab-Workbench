@@ -1,0 +1,37 @@
+auwrite           Scilab Group           Scilab Function            auwrite
+NAME
+   auwrite - writes .au sound file
+  
+CALLING SEQUENCE
+ auwrite(y,aufile)
+ auwrite(y,Fs,aufile)
+ auwrite(y,Fs,bits,aufile)
+ auwrite(y,Fs,bits,method,aufile)
+PARAMETERS
+ y    : real vector or matrix with entries in [-1,1].
+      
+ aufile
+       : string (The .au extension is appended if no extension is given)
+      
+ Fs   : integer, frequency sampling in Hz.
+      
+ bits : integer, number of bits in the encoding.
+      
+ method
+       : string , 'mu' (default) or 'linear', encoding method.
+      
+DESCRIPTION
+   Utility function to save .au sound file. auwrite(y,aufile) writes a sound
+  file specified by the string aufile.  The data should be arranged with
+  one channel per column.  Amplitude values outside the range [-1,+1] are
+  ignored. Supports multi-channel data for 8-bit mu-law, and 8- and 16-bit
+  linear formats.  auwrite(y,Fs,aufile) specifies in Fs the sample rate of
+  the data in Hertz.  auwrite(y,Fs,bits,aufile) selects the number of bits
+  in the encoder.  Allowable settings are bits=8 and bits=16.  
+  auwrite(y,Fs,bits,method,aufile) allows selection of the encoding method,
+  which can be either 'mu' or 'linear'. Note that mu-law files must be
+  8-bit. By default, method='mu'. 
+  
+SEE ALSO
+   auread, wavread, savewave,  analyze, mapsound
+  

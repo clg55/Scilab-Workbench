@@ -1,0 +1,8 @@
+LOOKUP_f           Scilab Group           Scicos Block             LOOKUP_f
+NAME
+   LOOKUP_f - Scicos Lookup table with graphical editor
+  
+DESCRIPTION
+   This block realizes a non-linear function defined using a graphical
+  editor.      
+  

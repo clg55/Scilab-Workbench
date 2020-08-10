@@ -1,0 +1,15 @@
+funptr            Scilab Group            Scilab Function            funptr
+NAME
+   funptr - coding of  primitives ( wizard stuff )
+  
+DESCRIPTION
+   Utility function (for experts only) 
+  
+   returns 
+  
+   where (fun,fin) is the internal coding of the primitive 'name' . fun is
+  the interface number and fin the routine number
+  
+SEE ALSO
+   clearfun, newfun 
+  

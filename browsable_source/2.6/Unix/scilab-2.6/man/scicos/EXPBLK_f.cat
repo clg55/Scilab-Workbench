@@ -1,0 +1,11 @@
+EXPBLK_f           Scilab Group           Scicos Block             EXPBLK_f
+NAME
+   EXPBLK_f - Scicos a^u block
+  
+DIALOGUE PARAMETERS
+ a :  real positive scalar
+      
+DESCRIPTION
+   This block realizes y(i)=a^u(i). The input and output port sizes are
+  determined by the compiler.      
+  

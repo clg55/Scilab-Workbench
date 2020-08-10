@@ -1,0 +1,10 @@
+demos            Scilab Group            Scilab Function              demos
+NAME
+   demos -  guide for scilab demos
+  
+CALLING SEQUENCE
+ demos()
+DESCRIPTION
+   demos() is an interactive guide to execute various scilab demonstrations
+  The source code of each demo is in the directory SCIDIR/demos/...
+  

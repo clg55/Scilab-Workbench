@@ -1,0 +1,34 @@
+.TH strcat 3 "April 1993" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+strcat - catenate character strings
+.SH CALLING SEQUENCE
+.nf
+txt=strcat(vstr [,strp])
+.fi
+.SH PARAMETERS
+.TP 15
+vstr
+: vector of strings
+.TP 
+strp
+: string, default value is the emptystr \fV""\fR
+.TP
+txt
+: string
+.SH DESCRIPTION
+ \fVtxt=strcat(vstr)\fR
+catenates character strings : \fVtxt=vstr(1)+...+vstr(n)\fR
+.LP
+\fVtxt=strcat(vstr,strp)\fR 
+returns \fVtxt=strs(1)+strp+...+strp+strs(n)\fR.
+The plus symbol does the same:
+\fV"a"+"b"\fR is the same as \fVstrcat(["a","b"])\fR
+.SH EXAMPLE
+.nf
+strcat(string(1:10),',')
+.fi
+.SH SEE ALSO
+string, strings
+
+

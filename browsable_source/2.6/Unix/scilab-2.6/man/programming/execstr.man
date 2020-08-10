@@ -1,0 +1,56 @@
+.TH execstr 1 "April 1993" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+execstr - execute Scilab code in strings
+.SH CALLING SEQUENCE
+.nf
+execstr(instr)
+ierr=execstr(instr,'errcatch' [,msg])
+.fi
+.SH PARAMETERS
+.TP 10
+instr 
+: vector of character strings, Scilab instruction to be executed.
+.TP
+ierr
+: integer, 0 or error number.
+.TP
+msg
+: character string with values \fV'm'\fR or \fV'n'\fR.  Default
+value is \fV'n'\fR.
+.SH DESCRIPTION
+Executes the Scilab instructions given in argument \fVinstr\fR.
+.LP
+If the 'errcatch' flag is not present, error handling works as usual.
+.LP
+If the 'errcatch' flag is set, and an error is encountered while
+executing the instructions defined in \fVinstr\fR, \fVexecstr\fR
+issues no error message, but aborts execution of the \fVinstr\fR
+instructions (at the point where the error occurred), and resumes with
+\fVierr\fR equal to the error number.  In this case the display of the
+error message is controlled by the \fVmsg\fR option:
+.TP 10
+"m"
+: error message is displayed and recorded.
+.TP
+"n"
+: no error message is displayed, but the error message is recorded
+(see \fVlasterror\fR).  This is the default.
+
+.SH EXAMPLE
+.nf
+execstr('a=1') // sets a=1.
+execstr('1+1') // does nothing (while evstr('1+1') returns 2)
+
+execstr(['if %t then';
+         '  a=1';
+         '  b=a+1';
+         'else'
+         ' b=0'
+         'end'])
+
+execstr('a=zzzzzzz','errcatch')
+execstr('a=zzzzzzz','errcatch','m')
+.fi 
+.SH SEE ALSO
+evstr, lasterror, error

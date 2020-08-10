@@ -1,0 +1,27 @@
+testmatrix         Scilab Group         Scilab Function          testmatrix
+NAME
+   testmatrix - generate some particular matrices
+  
+CALLING SEQUENCE
+ [y]=testmatrix(name,n)
+PARAMETERS
+ name       : a character string
+            
+ n          : integers, matrix size
+            
+ y          : n x m matrix
+            
+DESCRIPTION
+   Create some particular matrices
+  
+ testmatrix('magi',n)
+                    : returns a magic square of size n .
+                   
+ testmatrix('frk',n)
+                    : returns the Franck matrix :
+                   
+ testmatrix('hilb',n)
+                    : is the inverse of the nxn Hilbert matrix   (Hij= 1/(i+j-1)).
+                   
+       
+  

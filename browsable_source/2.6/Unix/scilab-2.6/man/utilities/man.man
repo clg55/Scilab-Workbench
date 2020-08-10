@@ -1,0 +1,166 @@
+.TH man G "April 1993" "Scilab Group" "Scilab Format"
+.SH NAME
+man -  on line help source file description format
+.SH DESCRIPTION
+The on line help source files are written in
+a subset of the old text formatting language \fVgroff\fR. The
+advantage of this language is to allow the most useful formatting,
+being quite simple. It also allows easy translation in other formatting
+language like HTML or LaTeX.
+
+Source files (with extension .man) can  be found in the <SCIDIR>/man/*
+directories. The file name is associated to the keyword (usually a
+function name) it describes.
+
+
+Most  \fVgroff\fR commands begin by a dot as first character of a
+line. The first line of each man file must be: 
+.nf
+ .TH <keyword> 1 "date" "Author" "Category"
+
+.fi
+
+The help is then split into a sequence of "sections". Each section begins
+with the  \fVgroff\fR command \fV.SH <section name>\fR. 
+.LP
+To give a uniform aspect to
+the scilab on-line help Scilab   uses the following sections names:
+.TP 17
+NAME 
+: This section gives the keyword(s) documented in this file, on
+keyword per line followed by a minus sign and a short description of
+the keyword. Below is the example of the NAME section extracted from the
+mfscanf.man file.
+.nf
+ --------------------------------------------
+ mscanf  - interface to the C scanf function 
+ mfscanf - interface to the C fscanf function 
+ msscanf - interface to the C sscanf function 
+ --------------------------------------------
+.fi
+.TP
+CALLING SEQUENCE
+:
+Here one gives the Scilab syntaxe(s) which can be used. Below is an
+example extracted out of the mfscanf.man file:
+.nf
+ ---------------------------------
+ .nf
+ [n,v_1,...v_n]=mfscanf(fd,format)
+ L=mfscanf(fd,format)
+
+ [n,v_1,...v_n]=mscanf(format)
+ L=mscanf(format)
+ 
+ [n,v_1,...v_m]=msscanf(format,str)
+ L=msscanf(format)
+ .fi
+ ---------------------------------
+.fi
+The \fV.nf\fR, \fV.fi\fR pair of commands is used to specify an unformatted region.
+.TP
+PARAMETERS
+:
+Here is given an indented itemized sequence of the parameters description 
+first item  is defined using the  \fV.TP n\fR command, where \fVn\fR
+is a number of characters. The following items begin with the command
+\fV.TP\fR as shown on the following example extracted out of the
+file.man file:
+.nf
+ --------------------------------------------
+ .TP 10
+ file-name
+ : string, file name of the file to be opened
+ .TP 
+ status
+ : string, The status of the file to be opened
+ .RS
+ .TP 5
+ "new" 
+ : file must not exist new file (default)
+ .TP
+ "old" 
+ : file must already exists.
+ .RE
+ .TP 
+ access
+ : string, The type of access to the file
+ --------------------------------------------
+.fi
+The \fV.RS\fR \fV.RE\fR pair of commands are used to nest an itemized sequence in an other.
+.TP
+DESCRIPTION
+:
+Here one describes the keyword
+.TP
+EXAMPLE
+:
+This section gives some examples of the use of the keyword. This must
+be a sequence of Scilab instruction enclosed in a \fV.nf\fR, \fV.fi\fR
+pair of commands. 
+.TP
+SEE ALSO
+:
+Here are given a one line sequence of related keywords separed by a comma
+followed by a blank as in the example below. 
+.nf
+---------------------------------------------------------------------
+mclose, meof, mfprintf, fprintfMat, mfscanf, fscanfMat, mget, mgetstr
+---------------------------------------------------------------------
+.fi
+.TP
+AUTHOR
+:
+Here one gives informations on the author and references.
+.RE
+
+The fonts changes are specified in the formatted text by groff
+commands like 
+.nf
+ \fV for verbatim
+ \fR for Roman
+.fi
+Below is an example extracted out of the mfscanf.man file, the
+keywords are required to be in verbatim font.
+.nf
+ ---------------------------------------------------------------------
+ The \fVmfscanf\fR function reads characters from the stream \fVfd\fR.
+ .LP
+ The \fVmscanf\fR function reads characters from Scilab window. 
+ .LP
+ The \fVmsscanf\fR function reads characters from the string \fVstr\fR.
+ ---------------------------------------------------------------------
+.fi
+The \fV.LP\fR command is used to define a line break.
+.LP
+
+Some time it is useful to define tables. An example of such table
+formatting may be found in the file \fVoverloading.man\fR:
+.nf
+ -------------------
+ .TS
+ tab(@);
+ l l.
+ string@c
+ polynomial@p
+ function@m
+ constant@s
+ list@l
+ tlist@<tlist_type>
+ boolean@b
+ sparse@sp
+ boolean sparse@spb
+ .TE
+ -------------------
+.fi
+These commands define a two column, left aligned(\fV l l.\fR),
+table. The column separator (\fV@\fR) is specified here by the
+\fVtab(@);\fR command.
+.LP
+.SH FORMATTING MAN FILES
+These source files may then be used to generate pure ASCII 
+or LaTeX or HTML formatted files using the Scilab function
+\fVformatman\fR.
+
+.SH SEE ALSO
+formatman, help

@@ -1,0 +1,12 @@
+analyze - frequency plot of a sound  signal  @analyze
+auread - load .au sound file  @auread
+auwrite - writes .au sound file  @auwrite
+lin2mu - linear signal to mu-law encoding  @lin2mu
+loadwave - load a sound <<wav>> file into scilab  @loadwave
+mapsound - Plots a sound map  @mapsound
+mu2lin - mu-law encoding to linear signal  @mu2lin
+playsnd -  sound player facility  @playsnd
+savewave - save data into a sound <<wav>> file.  @savewave
+sound -  sound player facility  @sound
+wavread - load .wav sound file  @wavread
+wavwrite - writes .wav sound file  @wavwrite

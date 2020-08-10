@@ -1,0 +1,112 @@
+abort - interrupt evaluation.  @abort
+ans - answer  @ans
+apropos - searches keywords in Scilab help  @apropos
+backslash (\\) - left matrix division.  @backslash
+bool2s - convert boolean matrix to a zero one matrix.  @bool2s
+boolean - Scilab Objects, boolean variables and operators & | ~  @boolean
+brackets ([,]) - left and right brackets  @brackets
+break - keyword to interrupt loops  @break
+call - Fortran or C user routines call  @call
+case - keyword used in select  @case
+clear - kills variables  @clear
+clearglobal - kills global variables  @clearglobal
+colon (:) - colon operator  @colon
+comma (,) - column, instruction, argument separator  @comma
+comments - comments  @comments
+date - Current date as date string  @date
+debug - debugging level  @debug
+dot (.) -  symbol  @dot
+else - keyword in if-then-else  @else
+elseif - keyword in if-then-else  @elseif
+empty ([]) - empty matrix  @empty
+end - end keyword  @end
+equal (=) - affectation, comparison equal sign  @equal
+errcatch - error trapping  @errcatch
+errclear - error clearing  @errclear
+error - error messages  @error
+evstr - evaluation of expressions  @evstr
+exec - script file execution  @exec
+execstr - execute Scilab code in strings  @execstr
+exists - checks variable  existence  @exists
+exit -  Ends the current Scilab session  @exit
+external - Scilab Object, external function or routine  @external
+extraction - matrix and list entry extraction  @extraction
+feval - multiple evaluation  @feval
+find - find indices of  boolean vector or matrix true elements  @find
+for - language keyword for loops  @for
+format - number printing and display format  @format
+fort - Fortran or C user routines call  @fort
+funptr - coding of  primitives ( wizard stuff )  @funptr
+getcwd - get Scilab current directory  @pwd
+getdate - get date and time information  @getdate
+getenv - get the value of an environment variable  @getenv
+getfield -  list field extraction  @getfield
+getpid - get Scilab process identificator  @getpid
+getversion - get Scilab version name  @getversion
+global  - Define global variable  @global
+gstacksize - set/get scilab global stack size  @gstacksize
+hat (^) - exponentiation  @hat
+host - shell (sh) command execution  @host
+hypermat - initialize an  N dimensional matrices  @hypermat
+hypermatrices - Scilab object, N dimensional matrices in Scilab  @hypermatrices
+iconvert  - conversion to 1 or 4 byte integer representation  @iconvert
+ieee - set floating point exception mode  @ieee
+if then else - conditional execution  @if
+insertion - matrix and list insertion or modification  @insertion
+intppty - set interface argument passing properties  @intppty
+inttype -  type integers used in integer data types  @inttype
+inv_coeff - build a polynomial matrix from its coefficients  @inv_coeff
+iserror - error test  @iserror
+isglobal -  check if a variable is global  @isglobal
+lasterror - get last recorded error message  @lasterror
+left ([) - left bracket  @left
+less (<) - lower than comparison  @less
+list - Scilab object and list function definition  @list
+lsslist - Scilab linear state space function definition  @lsslist
+lstcat - list concatenation  @lstcat
+matrices - Scilab object, matrices in Scilab  @matrices
+matrix - reshape a vector or a matrix to a different size matrix  @matrix
+mlist - Scilab object, matrix oriented typed list definition.  @mlist
+mode - select a mode in exec file  @mode
+mtlb_mode - switch Matlab like operations  @mtlb_mode
+names - scilab names syntax  @names
+null - delete an element in a list  @null
+overloading - display, functions and operators overloading capabilities  @overloading
+parents ( ) - left and right parenthesis  @parents
+pause - pause mode, invoke keyboard  @pause
+percent (%) - special character  @percent
+plus (+) -  addition operator  @plus
+poly - polynomial definition  @poly
+power - power operation  (^,.^)  @power
+predef - variable protection  @predef
+pwd - print Scilab current directory  @pwd
+quit - decrease the pause level or exit  @quit
+quote (') - transpose operator, string delimiter  @quote
+rational - Scilab objects, rational in Scilab  @rational
+resume - return or resume execution and copy some local variables  @resume
+return - return or resume execution and copy some local variables  @return
+rlist - Scilab rational fraction function definition  @rlist
+sciargs - scilab command line arguments  @sciargs
+select - select keyword  @select
+semi (;) - instruction and row separator  @semi
+semicolumn (;) -  ending expression and row separator  @semicolumn
+setfield -  list field insertion  @setfield
+slash (/) - right division and feed back  @slash
+stacksize - set scilab stack size  @stacksize
+star (*) - multiplication operator  @star
+symbols - scilab operator names  @symbols
+testmatrix - generate some particular matrices  @testmatrix
+then - keyword in if-then-else  @then
+tilda (~) - logical not  @tilda
+tlist - Scilab object and typed list definition.  @tlist
+type - variable type  @type
+typename - associates a name to variable type  @typename
+user - interfacing a fortran routine  @user
+varn - symbolic variable of a polynomial  @varn
+what - list the Scilab primitives  @what
+where - get current instruction calling tree  @where
+whereami - display current instruction calling tree  @whereami
+whereis - name of library containing a function  @whereis
+while - while keyword  @while
+who - listing of variables  @who
+whos - listing of variables in long form  @whos

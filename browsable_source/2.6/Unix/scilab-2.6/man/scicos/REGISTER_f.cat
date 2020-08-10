@@ -1,0 +1,15 @@
+REGISTER_f          Scilab Group          Scicos Block           REGISTER_f
+NAME
+   REGISTER_f - Scicos shift register block
+  
+DESCRIPTION
+   This block realizes a shift register. At every input event, the register
+  is shifted one step.
+  
+DIALOGUE PARAMETERS
+ Initial condition
+       : a column vector. It contains the initial state of the register.
+      
+SEE ALSO
+   DELAY_f, DELAYV_f, EVTDLY_f       
+  

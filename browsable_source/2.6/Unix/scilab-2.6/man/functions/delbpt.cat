@@ -1,0 +1,16 @@
+delbpt            Scilab Group            Scilab Function            delbpt
+NAME
+   delbpt - delete breakpoint
+  
+CALLING SEQUENCE
+ delbpt('macroname' [,linenumb]) 
+DESCRIPTION
+   deletes the breakpoint at line  linenumb in the function macroname. If
+  linenumb is omitted all the breakpoints in the function are deleted.
+  
+EXAMPLE
+ setbpt('foo',1),setbpt('foo',10),delbpt('foo',10),dispbpt()
+ delbpt('foo',1)
+SEE ALSO
+   setbpt, dispbpt, pause, resume 
+  

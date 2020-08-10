@@ -1,0 +1,23 @@
+get_function_path    Scilab Group    Scilab Function      get_function_path
+NAME
+   get_function_path  - get source file path of a library function
+  
+CALLING SEQUENCE
+ path=get_function_path(fun_name)
+PARAMETERS
+ fun_name   : a string, the name of the function
+            
+ path       : a string, the absolute pathname of the function source file
+            (.sci) or [].
+            
+DESCRIPTION
+   Given the name of a function get_function_path returns the absolute
+  pathname of the function source file if the function is defined in a
+  Scilab library (see lib) or [] if name does not match any library
+  function.
+  
+EXAMPLE
+ get_function_path('median')
+SEE ALSO
+   lib, string
+  

@@ -1,0 +1,93 @@
+.TH function 1 "April 1993" "Scilab Group" "Scilab keyword"
+.so ../sci.an
+.SH NAME
+function - opens a function definition
+endfunction - closes a function definition
+.SH SYNTAX
+.nf
+function <lhs_arguments>=<function_name><rhs_arguments>
+<statements>
+endfunction
+.fi
+Where
+.TP 15
+<function_name>
+stands for the name of the function
+.TP
+<rhs_arguments>
+stands for the input argument list. It may be
+.RS
+.TP 
+-
+a comma separated sequence of variable names enclosed in parenthesis, like 
+\fV(x1,...,xm)\fR. Last variable name can be the key word
+\fVvarargin\fR (see varargin)
+.TP
+-
+the sequence \fV()\fR or nothing,if the function has no input
+argument.
+.RE
+.TP
+<lhs_arguments>
+stands for the output argument list. It may be
+.RS
+.TP 
+-
+a comma separated sequence of variable names enclosed in brackets, like 
+\fV[y1,...,yn]\fR. Last variable name can be the key word
+\fVvarargout\fR (see varargout)
+.TP
+-
+the sequence \fV[]\fR ,if the function has no input
+argument. In this case the syntax may also be:  \fVfunction <function_name><rhs_arguments>\fR
+.RE
+.TP
+<statements>
+stands for a set of scilab instructions (statements)
+.SH DESCRIPTION
+This syntax may be used to define function (see functions) inline or
+in a script file (see exec). For compatibility with old Scilab versions,
+functions defined in a script file containing only function
+definitions can be "loaded" into Scilab using the \fVgetf\fR function.
+.LP
+The \fVfunction <lhs_arguments>=<function_name><rhs_arguments>\fR
+sequence cannot be split over several lines. This sequence can be
+followed by statements in the same line if a comma of semi column is
+added at its end.
+.LP
+function definitions can be nested
+.SH EXAMPLE
+.nf
+//inline definition (see function)
+function [x,y]=myfct(a,b)
+x=a+b
+y=a-b
+endfunction
+
+[x,y]=myfct(3,2)
+
+//a one line function definition
+function y=sq(x),y=x^2,endfunction
+
+sq(3)
+
+//nested functions definition
+function y=foo(x)
+a=sin(x)
+function y=sq(x), y=x^2,endfunction
+y=sq(a)+1
+endfunction
+
+foo(%pi/3)
+
+
+// definition in an script file (see exec)
+exec SCI/macros/elem/asin.sci;
+
+
+.fi
+.SH SEE ALSO
+functions,  exec, getf
+
+
+
