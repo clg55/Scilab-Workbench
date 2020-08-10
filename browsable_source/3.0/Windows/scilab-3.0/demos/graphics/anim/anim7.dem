@@ -1,0 +1,4 @@
+mode(-1)
+path=get_absolute_file_path('anim7.dem');
+getf(path+'riemann.sci')
+demo_riemann()

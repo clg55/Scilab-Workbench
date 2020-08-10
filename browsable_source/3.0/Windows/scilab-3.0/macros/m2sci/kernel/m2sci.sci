@@ -1,0 +1,274 @@
+function [scitree,trad,txt,crp]=m2sci(mtlbtree,nam,Recmode,prettyprint)
+// Copyright INRIA
+// Scilab Project - V. Couvert
+// This function translates Matlab interpreted code tree of a function to Scilab
+// Input arguments:
+//  - mtlbtree: tree (returned by macr2tree) representing Matlab function compiled code
+//  - nam: name of Matlb function
+//  - Recmode: boolean flag for recursive conversion if TRUE
+//  - prettyprint: boolean flag for pretty printed output file if TRUE
+// Output arguments:
+//  - scitree: Scilab equivalent for mtlbtree
+//  - trad: code of function sci_<nam>
+//  - txt: Scilab equivalent function code (function declaration and varaibles initialisation)
+//  - crp: Scilab equivalent function code (function body)
+
+[lhs,rhs]=argn(0)
+if rhs==1 then
+  error("m2sci(): wrong number of inputs !")
+end
+if rhs==2 then Recmode=%f,end
+
+lcount=1;
+// Level of clause indentation (used for getting temporary variables and for updating varslist)
+// level(1) = clause level (incremented each time a new clause is found)
+// level(2) = index of clause part (1 for if statements, 2 for first elseif statements...)
+level=[0,0];
+
+// Parameters declaration
+sciparam()
+
+// Scilab variable types
+Double=1;
+Boolean=4; // Boolean type can also be 6
+Sparse=5;
+Int=8;
+Handle=9;
+String=10;
+Cell=17;
+Struct=16;
+Void=0;
+Unknown=-1;
+Complex="Complex"
+Real="Real"
+
+global %graphicswindow
+%graphicswindow=Handle
+
+// Translated function input arguments
+macrhs=size(mtlbtree.inputs) 
+
+global("varslist")
+varslist=list()
+for k=1:macrhs
+  if funptr(mtlbtree.inputs(k).name)<>0 then // Matlab variable name corresponding to a Scilab function name
+    varslist($+1)=M2scivar("%"+mtlbtree.inputs(k).name,mtlbtree.inputs(k).name,Infer())
+    inputs(k)="%"+inputs(k),
+  elseif mtlbtree.inputs(k).name=="varargin" then
+    varslist($+1)=M2scivar("varargin","varargin",Infer(list(Unknown,Unknown),Type(Cell,Unknown)))
+  else
+    varslist($+1)=M2scivar(mtlbtree.inputs(k).name,mtlbtree.inputs(k).name,Infer())
+  end
+end
+
+// Add predefined variables in the defined variables
+varslist($+1)=M2scivar("%i","%i",Infer(list(1,1),Type(Double,Complex)))
+varslist($+1)=M2scivar("%i","%j",Infer(list(1,1),Type(Double,Complex)))
+varslist($+1)=M2scivar("%nan","NaN",Infer(list(1,1),Type(Double,Real)))
+varslist($+1)=M2scivar("%nan","nan",Infer(list(1,1),Type(Double,Real)))
+varslist($+1)=M2scivar("%inf","Inf",Infer(list(1,1),Type(Double,Real)))
+varslist($+1)=M2scivar("%inf","inf",Infer(list(1,1),Type(Double,Real)))
+varslist($+1)=M2scivar("$","end",Infer(list(1,1),Type(Double,Real)))
+varslist($+1)=M2scivar("%pi","pi",Infer(list(1,1),Type(Double,Real)))
+varslist($+1)=M2scivar("%eps","eps",Infer(list(1,1),Type(Double,Real)))
+varslist($+1)=M2scivar("varargout","%varargout",Infer(list(Unknown,Unknown),Type(Cell,Unknown)))
+varslist($+1)=M2scivar("%shortcircuit","%shortcircuit",Infer(list(1,1),Type(Double,Real))) // Used for short circuiting operators
+
+// Translated function output arguments
+maclhs=size(mtlbtree.outputs)
+for k=1:maclhs
+  if funptr(mtlbtree.outputs(k).name)<>0 then
+    varslist($+1)=M2scivar("%"+mtlbtree.outputs(k).name,mtlbtree.outputs(k).name,Infer())
+    outputs(k)="%"+mtlbtree.outputs(k).name
+  end
+end
+
+// Translation
+[scitree,crp]=mtlbtree2sci(mtlbtree,prettyprint)
+
+dcl=[]
+// Add special code
+// If nargin or nargout function is used
+if isdefinedvar("%nargin") | isdefinedvar("%nargout") then
+  dcl=["";"// Number of arguments in function call";"[%nargout,%nargin] = argn(0)"]
+end
+
+// Set flotting point exception mode
+dcl=[dcl;"";"// Display warning for floating point exception";"ieee(1)"]
+
+// Initial value of lhs arguments
+// If they are not initialized by input value, they are initialized with []
+ini=[]
+for k=1:size(mtlbtree.outputs)
+  found=%F
+  for l=1:size(mtlbtree.inputs)
+    if mtlbtree.inputs(l).name==mtlbtree.outputs(k).name then
+      found=%T
+    end
+  end
+  if ~found then
+    if mtlbtree.outputs(k).name<>"varargout" then
+      ini=[ini;mtlbtree.outputs(k).name+"=[];"]
+    else
+      ini=[ini;mtlbtree.outputs(k).name+"=list();"]
+    end
+  end
+end
+if ini<>[] then
+  ini=["";"// Ouput variables initialisation (not found in input variables)";ini]
+end
+
+// Info on macros variables 
+if verbose_mode<0 then
+  write(%io(2),"TESTING M2SCI: creating varslist file...")
+  n=size(varslist)
+  info=[]
+
+  for k=1:n
+    info=[info;"//"+varslist(k).sciname+infer2txt(varslist(k).infer)];
+  end
+  infofilename=res_path+nam+"_varslist.dia.ref";
+  if verbose_mode==-2 then
+    write(%io(2),info)
+  end
+  infofile=mopen(infofilename,"w");
+  mputl(info,infofile);
+  mclose(infofile);
+end
+
+// Add function header
+if ~batch then
+  rhsexpr="("
+  for k=1:macrhs
+    rhsexpr=rhsexpr+varslist(k).sciname
+    if k<macrhs then
+      rhsexpr=rhsexpr+","
+    end
+  end
+  rhsexpr=rhsexpr+")"
+  hdr="function ["
+      for k=1:size(mtlbtree.outputs)
+	hdr=hdr+mtlbtree.outputs(k).name
+	if k<>size(mtlbtree.outputs) then
+	  hdr=hdr+","
+	end
+      end
+      hdr=hdr+"] = "+nam+rhsexpr;
+  txt=[hdr;ini;dcl]
+else
+txt=[ini;dcl]
+end
+
+// Generate associated translation function
+if batch then
+  trad=[
+      "function [tree] = sci_"+fnam+"(tree)"
+      "// Generated by M2SCI"
+      "// Conversion function for Matlab "+fnam
+      "// Input: tree = Matlab funcall tree"
+      "// Ouput: tree = Scilab equivalent for tree"
+      ""
+      "tree=Funcall(""exec"",1,Rhs(tree.name),tree.lhs)"]
+else
+  trad=[
+      "function [tree] = sci_"+nam+"(tree)"
+      "// Copyright INRIA (Generated by M2SCI)"
+      "// Conversion function for Matlab "+nam+"()"
+      "// Input: tree = Matlab funcall tree"
+      "// Ouput: tree = Scilab equivalent for tree"]
+  
+  if maclhs==0 then // Function with no ouputs
+    // Do nothing
+  elseif maclhs==1 then // Function with one output
+    [boolval,index]=isdefinedvar(M2scivar(mtlbtree.outputs(1).name,strsubst(mtlbtree.outputs(1).name,"%",""),Infer()))
+    if boolval then
+      dims=sci2exp(varslist(index).dims)
+      vtype=varslist(index).vtype
+      prop=varslist(index).property
+    else
+      dims="list(Unknown,Unknown)"
+      vtype=Unknown
+      prop=Unknown
+    end
+    
+    select vtype
+    case Double  then vtype="Double"
+    case Boolean  then vtype="Boolean"
+    case String then vtype="String"
+    case Struct then vtype="Struct"
+    case Cell then vtype="Cell"
+    case Unknown then vtype="Unknown"
+    case Sparse then vtype="Sparse"
+    end
+    
+    select prop
+    case -1 then prop="Unknown"
+    end
+    
+    typ="Type("+vtype+","+prop+")"
+    
+    if mtlbtree.outputs($).name<>"varargout" then
+      trad=[trad;"tree.lhs(1).dims="+dims;"tree.lhs(1).type="+typ]
+    else
+      trad=[trad;
+	  "for k=1:lhs"
+	  "  tree.lhs(k).dims=list(Unknown,Unknown)"
+	  "  tree.lhs(k).vtype=Unknown"
+	  "  tree.lhs(k).property=Unknown"
+	  "end"
+	  ]
+    end
+  else  // Function with more than 1 output
+    dims=list();
+    vtype=[];
+    prop=[]
+    for k=1:maclhs
+      [boolval,index]=isdefinedvar(M2scivar(mtlbtree.outputs(k).name,strsubst(mtlbtree.outputs(k).name,"%",""),Infer()))
+      if boolval then
+	dims(k)=varslist(index).dims
+	
+	vtype=[vtype;varslist(index).vtype]
+	
+	prop=[prop;varslist(index).property]
+      else
+	dims(k)=list(Unknown,Unknown)
+	vtype=[vtype;Unknown]
+	prop=[prop;Unknown]
+      end
+    end
+    dims="dims="+sci2exp(dims)
+    vtype="vtype="+sci2exp(vtype)
+    prop="prop="+sci2exp(prop)
+    trad=[trad;
+	"//  dims(i,:) is the ith output argument dimensions vector"
+	dims
+	"//  typ(i) is the ith output argument vtype"
+	vtype
+	"//  prop(i) is the ith output argument property"
+	prop]
+    if mtlbtree.outputs($).name<>"varargout" then
+      trad=[trad;
+	  "for k=1:lhs"
+	  "  tree.lhs(k).dims=dims(k)"
+	  "  tree.lhs(k).vtype=vtype(k)"
+	  "  tree.lhs(k).property=prop(k)"
+	  "end"]
+    else
+      trad=[trad;
+	  "for k=1:min(lstsize(dims),lhs)"
+	  "  tree.lhs(k).dims=dims(k)"
+	  "  tree.lhs(k).vtype=vtype(k)"
+	  "  tree.lhs(k).property=prop(k)"
+	  "end"
+	  "// Inference for varargout"
+	  "for k=min(lstsize(dims),lhs)+1:lhs"
+	  "  tree.lhs(k).dims=list(Unknown,Unknown)"
+	  "  tree.lhs(k).vtype=Unknown"
+	  "  tree.lhs(k).property=Unknown"
+	  "end"
+	  ]
+    end
+  end
+end
+clearglobal varslist
+endfunction

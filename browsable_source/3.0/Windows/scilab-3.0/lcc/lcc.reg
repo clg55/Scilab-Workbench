@@ -1,0 +1,10 @@
+REGEDIT4
+
+
+[HKEY_CURRENT_USER\Software\lcc\lcclnk]
+"cyGrid"="1"
+"xMinPushSpace"="3"
+"yGroupSpace"="6"
+"editX"="32"
+"UnderscoreYOffset"="21"
+"CurrentDir"="D:\\scilab\\lcc\\bin"
