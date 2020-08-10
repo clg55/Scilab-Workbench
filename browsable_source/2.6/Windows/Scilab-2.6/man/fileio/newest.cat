@@ -1,0 +1,25 @@
+newest            Scilab Group            Scilab Function            newest
+NAME
+   newest - returns newest file of a set of files
+  
+CALLING SEQUENCE
+ k=newest(paths)
+ k=newest(path1,path2,...,pathn)
+PARAMETERS
+ k      : the index of the newest file
+        
+ paths  : a character string vector (or list), paths(i) is the pathname of
+        ith file
+        
+ pathi  : a character string, the pathname of ith file
+        
+DESCRIPTION
+   Given a set of pathnames newest returns the index of the newest one. Non
+  existant files are supposed to be the oldest.
+  
+EXAMPLE
+ newest('SCI/macros/xdess/bode.sci','SCI/macros/xdess/bode.bin')
+ newest('SCI/macros/xdess/bode.'+['sci','bin'])
+SEE ALSO
+   fileinfo
+  

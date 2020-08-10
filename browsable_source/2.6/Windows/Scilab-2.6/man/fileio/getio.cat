@@ -1,0 +1,24 @@
+getio            Scilab Group            Scilab Function              getio
+NAME
+   getio - get Scilab input/output logical units
+  
+CALLING SEQUENCE
+ ios=getio()
+PARAMETERS
+ ios : a vector [rio rte wio wte]
+     
+    rio  : current logical unit for reading instructions
+         
+    rte  : logical unit assigned for input in main scilab window
+         
+    wio  : logical unit relative to the diary file if any. wio=0 stands
+         for no diary file opened
+         
+    wte  : logical unit assigned for output in main scilab window
+         
+DESCRIPTION
+   getio returns logical units assigned for main scilab input and output
+  
+SEE ALSO
+   %io, file, exec  
+  

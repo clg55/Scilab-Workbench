@@ -1,0 +1,17 @@
+log2             Scilab Group             Scilab Function              log2
+NAME
+   log2 - base 2 logarithm
+  
+CALLING SEQUENCE
+ y=log2(x)
+PARAMETERS
+ x          : vector or matrix
+            
+DESCRIPTION
+   decimal logarithm.If x is a vector log2(x)=[log2(x1),...,log2(xn)].
+  
+EXAMPLE
+ 2.^log2([1,%i,-1,-%i])
+SEE ALSO
+   log, hat, ieee, log10, frexp  
+  

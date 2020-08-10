@@ -1,0 +1,24 @@
+.TH getfont 2 "April 1993" "Scilab Group" "Scilab Function"
+.SH NAME
+getfont - dialog to select font
+.SH CALLING SEQUENCE
+.nf
+[fId,fSize]=getfont()
+[fId,fSize]=getfont(str)
+.fi
+.SH PARAMETERS
+.TP
+str
+: character (e.g. "a")
+.TP
+fId
+: integer, the number of the selected font
+.TP
+fSize
+: integer, the size of the selected font
+.SH DESCRIPTION
+\fVgetfont\fR opens a graphic window to select a font.
+Example of use: \fV[fId,fSize]=getfont()\fR. \fVxset("font",fId,fSize)\fR.
+\fVplot2d(0,0,rect=[0 0 10 10],axesflag=0)\fR;\fVxstring(5,5,"string")\fR.
+.SH SEE ALSO
+xset, getmark

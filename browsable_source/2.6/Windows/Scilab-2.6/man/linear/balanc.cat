@@ -1,0 +1,39 @@
+balanc            Scilab Group            Scilab Function            balanc
+NAME
+   balanc - matrix or pencil balancing
+  
+CALLING SEQUENCE
+ [Ab,X]=balanc(A)
+ [Eb,Ab,X,Y]=balanc(E,A)
+PARAMETERS
+ A:         a real square matrix
+            
+ X:         a real square invertible matrix
+            
+ E:         a real square matrix (same dimension as A)
+            
+ Y:         a real square invertible matrix.
+            
+DESCRIPTION
+   Balance a square matrix to improve its condition number.
+  
+   finds a similarity transformation X such that
+  
+   has approximately equal row and column norms.
+  
+   For matrix pencils,balancing is done for improving the generalized
+  eigenvalue problem.
+  
+   returns left and right transformations X and Y such that
+  
+REMARK
+   Balancing is made in the functions bdiag and spec.
+  
+EXAMPLE
+ A=[1/2^10,1/2^10;2^10,2^10];
+ [Ab,X]=balanc(A);
+ norm(A(1,:))/norm(A(2,:))
+ norm(Ab(1,:))/norm(Ab(2,:))
+SEE ALSO
+   bdiag
+  

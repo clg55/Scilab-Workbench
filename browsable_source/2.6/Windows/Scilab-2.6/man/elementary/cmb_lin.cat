@@ -1,0 +1,13 @@
+cmb_lin           Scilab Group           Scilab Function            cmb_lin
+NAME
+   cmb_lin - symbolic linear combination
+  
+CALLING SEQUENCE
+ [x]=cmb_lin(alfa,x,beta,y)
+DESCRIPTION
+   Evaluates alfa*x-beta*y.  alfa, beta, x, y are character strings.
+  (low-level routine)
+  
+SEE ALSO
+   mulf, addf
+  

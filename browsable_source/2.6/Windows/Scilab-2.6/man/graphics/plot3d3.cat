@@ -1,0 +1,43 @@
+plot3d3           Scilab Group           Scilab Function            plot3d3
+NAME
+   plot3d3 - mesh plot surface defined by rectangular facets
+  
+DESCRIPTION
+ plot3d3(X,Y,Z [,vect,theta,alpha,leg,flag,ebox])
+ plot3d3(X,Y,Z, <opt_args>)
+PARAMETERS
+ X,Y,Z      : 3 real matrices
+            
+ vect       : real vector
+            
+ flag       :  flag=[type,box], type and box have the same meaning as in
+            plot3d.
+            
+ <opt_args> : This represents a sequence of statements key1=value1,
+            key2=value2,... where key1, key2,... can be one of the
+            following: vect,flag (see above), theta, alpha ,leg,ebox (see
+            plot3d) 
+            
+DESCRIPTION
+   plot3d3 performs a mesh plot of a surface defined by rectangular facets.
+  (X,Y,Z) are three matrices which describe a surface. The surface is
+  composed of four sided polygons. 
+  
+   The X-coordinates of a facet are given by
+  X(i,j),X(i+1,j),X(i,j+1),X(i+1,j+1). And similarly Y and Z are Y and Z
+  coordinates.
+  
+   The vect vector is used when multiple surfaces are coded  in the same
+  (X,Y,Z) matrices. vect(j) gives the line  at which the coding of the jth
+  surface begins.  See plot3d2 for a full description.
+  
+EXAMPLE
+ u = linspace(-%pi/2,%pi/2,40);
+ v = linspace(0,2*%pi,20);
+ X = cos(u)'*cos(v);
+ Y = cos(u)'*sin(v);
+ Z = sin(u)'*ones(v);
+ plot3d3(X,Y,Z);
+SEE ALSO
+   plot3d2, plot3d, param3d  
+  

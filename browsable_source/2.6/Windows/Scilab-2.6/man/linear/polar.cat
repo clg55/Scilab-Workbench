@@ -1,0 +1,27 @@
+polar            Scilab Group            Scilab Function              polar
+NAME
+   polar - polar form
+  
+CALLING SEQUENCE
+ [Ro,Theta]=polar(A)
+PARAMETERS
+ A    : real or complex square matrix
+      
+ Ro, Theta
+       : real matrices
+      
+DESCRIPTION
+   returns the polar form of A i.e.:
+  
+   A=Ro*expm(%i*Theta) Ro symmetric >=0 and Theta hermitian >=0.
+  
+EXAMPLE
+ A=rand(5,5);
+ [Ro,Theta]=polar(A);
+ norm(A-Ro*expm(%i*Theta),1)
+SEE ALSO
+   expm, svd
+  
+AUTHOR
+   F. D.  
+  

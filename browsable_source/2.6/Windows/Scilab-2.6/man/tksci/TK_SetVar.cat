@@ -1,0 +1,34 @@
+TK_SetVar         Fractales Group         Scilab Function         TK_SetVar
+NAME
+   TK_SetVar - Set a tcl/tk variable value
+  
+CALLING SEQUENCE
+ TK_SetVar(varname, value)
+PARAMETERS
+ varname  : string character Contains the name of the tcl/tk variable to
+          set.
+          
+ value    : string character Contains the value to set up in the tcl/tk
+          variable 
+          
+DESCRIPTION
+   This routine allows to set a variable within the tcl/tk interpreter. 
+  When tcl/tk support is enabled in scilab, this routine can be used to set
+  up the value of a tcl/tk variable. This can be useful to change some
+  value in the tcl/tk without having to build a tcl/tk instruction (and use
+  TK_EvalStr).
+  
+EXAMPLE
+ TK_EvalStr('toplevel .tst2');
+ // creates a toplevel TK window. 
+ TK_EvalStr('label .tst2.l -textvariable tvar');
+ // create a static label
+ TK_EvalStr('pack .tst2.l');
+ // pack the label widget. It appears on the screen.
+ TK_SetVar('tvar','This text has been set directly within scilab');
+AUTHOR
+   Bertrand Guiheneuf 
+  
+SEE ALSO
+   ScilabEval, TK_EvalFile, TK_EvalStr, TK_GetVar
+  

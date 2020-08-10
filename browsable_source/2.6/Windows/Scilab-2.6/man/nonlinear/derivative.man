@@ -1,0 +1,46 @@
+.TH derivative 1 "April 1993" "Scilab Group" "Scilab Function"
+.so ../sci.an 
+.SH NAME
+derivative- approximate derivative
+.SH CALLING SEQUENCE
+.nf
+J=derivative(f,x0,h)
+[J,J2]=derivative(f,x0,h)
+.fi
+.SH PARAMETERS
+.TP 10
+f
+: Scilab function \fVf: R^n --> R^p\fR 
+.TP
+x0  
+: real column vector (of dimension n)
+.TP
+h
+: (small) positive real number (default is 1.d-7)
+.TP
+J
+: real p x n Jacobian matrix 
+.TP
+J2 
+: real p x (p*n)  matrix
+.SH DESCRIPTION
+Approximate derivatives of a function f: \fVR^n --> R^p\fR.
+.nf
+f(x) = f(x0) + D1f(x0) *dx + 1/2* D2f(x0) *(dx.*.dx) +...
+J = D1f(x0) ; J2=D2f(x0)
+.fi
+Derivatives are evaluated by finite difference:f_i(x+h)-f_i(x))/h.
+Caution: h should be carefully chosen...
+.SH EXAMPLE
+.nf
+deff('y=f(x)','y=[sin(x(1))*cos(x(2));x(1)^2*x(2)^2;1+x(1)*x(2)^2]')
+x0=[1;2];eps=0.001;h=eps*[2;5];
+[J,J2]=derivative(f,x0);
+[f(x0+h)-f(x0)-J*h ,0.5*J2*(h.*.h)]
+.fi
+.SH SEE ALSO
+mtlb_diff, derivat
+
+
+
+

@@ -1,0 +1,36 @@
+augment - augmented plant  @augment
+bstap - hankel approximant  @bstap
+ccontrg - central H-infinity controller  @ccontrg
+colinout - inner-outer factorization  @colinout
+copfac - right coprime factorization  @copfac
+dcf - double coprime factorization  @dcf
+des2ss - descriptor to state-space  @des2ss
+dhnorm - discrete H-infinity norm  @dhnorm
+dtsi - stable anti-stable decomposition  @dtsi
+fourplan - augmented plant to four plants  @fourplan
+fspecg - stable factorization  @fspecg
+fstabst - Youla's parametrization  @fstabst
+gamitg - H-infinity gamma iterations  @gamitg
+gcare - control Riccati equation  @gcare
+gfare - filter Riccati equation  @gfare
+gtild - tilde operation  @gtild
+h2norm - H2 norm  @h2norm
+h_cl - closed loop matrix  @h_cl
+h_inf - H-infinity (central) controller  @h_inf
+h_inf_st - static H_infinity problem  @h_inf_st
+h_norm - H-infinity norm  @h_norm
+hankelsv - Hankel singular values  @hankelsv
+lcf - normalized coprime factorization  @lcf
+leqr - H-infinity LQ gain (full state)  @leqr
+lft - linear fractional transformation  @lft
+linf - infinity norm  @linf
+linfn - infinity norm  @linfn
+lqg_ltr - LQG with loop transform recovery  @lqg_ltr
+macglov - Mac Farlane Glover problem  @macglov
+nehari - Nehari approximant  @nehari
+parrot - Parrot's problem  @parrot
+ric_desc - Riccati equation  @ric_desc
+riccati - Riccati equation  @riccati
+rowinout - inner-outer factorization  @rowinout
+sensi - sensitivity functions  @sensi
+tf2des - transfer function to descriptor  @tf2des

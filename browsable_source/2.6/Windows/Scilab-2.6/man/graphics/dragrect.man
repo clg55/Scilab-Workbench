@@ -1,0 +1,32 @@
+.TH dragrect 2 "April 2000" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+dragrect - Drag rectangle(s) with mouse
+.SH CALLING SEQUENCE
+.nf
+final_rect=dragrect(initial_rect)
+.fi
+.SH PARAMETERS 
+.TP 13
+initial_rect
+: 4 4xn matrix containing the initial rectangles definition. Each
+column contains [x_left; y_top; width; height]. If only one rectangle
+is present the initial_rect may also be a vector. 
+.TP
+final_rect
+:a rectangle defined by [x_left, y_top, width, height] 
+.SH DESCRIPTION
+\fVdragrect\fR tracks one or more rectangles anywhere on the screen. The 4xn
+matrix rect defines the rectangles. Each column of \fVinitial_rect\fR
+must contain the initial rectangle position as [left;top;width;height]
+values. When a button is clicked \fVdragrect\fR returns the final
+rectangles definition  in \fVfinal_Rect\fR.
+
+.SH EXAMPLE
+.nf
+xsetech(frect=[0,0,100,100])
+r=dragrect([10;10;30;10])
+xrect(r)
+.fi
+.SH SEE ALSO
+xrect, xrects, xclick, xmouse

@@ -1,0 +1,31 @@
+binomial          Scilab Group          Scilab Function            binomial
+NAME
+   binomial - binomial distribution
+  
+CALLING SEQUENCE
+ pr=binomial(p,n)
+PARAMETERS
+ pr   : vector, pr(k) = probability (X=k) , with X=B(n,p).
+      
+ p    : real number
+      
+ n    : integer
+      
+DESCRIPTION
+   pr=binomial(p,n) return a binomial probability vector. pr(k) =
+  probability (X=k) , with X=B(n,p) i.e the probability of k success in n
+  independent trials, (p = proba. of one success). pr(k) = C(n,k) p^k
+  (1-p)^(n-k) with  C(n,k)= n!/(k!(n-k)!) =
+  prod(1:n)/(prod(1:k)*prod(1:n-k)).
+  
+EXAMPLE
+ n=10;p=0.3;plot2d3(0:n,binomial(p,n));
+ n=100;p=0.3;
+ mea=n*p;sigma=sqrt(n*p*(1-p));
+ x=( (0:n)-mea )/sigma;
+ plot2d(x,sigma*binomial(p,n));
+ deff('y=Gauss(x)','y=1/sqrt(2*%pi)*exp(-(x.^2)/2)')
+ plot2d(x,Gauss(x));
+SEE ALSO
+   cdfbin
+  

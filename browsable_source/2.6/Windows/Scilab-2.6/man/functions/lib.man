@@ -1,0 +1,55 @@
+.TH lib 3 "Nov 2000" "Scilab Group" "Scilab Function"
+.so ../sci.an
+
+.SH NAME
+lib - library definition
+
+.SH CALLING SEQUENCE
+.nf
+xlib = lib('lib-dir')
+.fi
+
+.SH PARAMETERS
+lib-dir: character string
+
+.SH DESCRIPTION
+\fVlib-dir\fR is a character string defining a directory that contains
+compiled Scilab function (\fV.bin\fR) files.  In addition to these
+files \fVlib-dir\fR must have a file called \fVnames\fR, that contains
+the names of the functions defined in \fVlib-dir\fR.  On success, all
+functions in \fVlib-dir\fR are available from within Scilab.  They are
+loaded on demand when called for the first time.
+
+Binary files can be created from within Scilab with the command
+\fVsave\fR.
+
+Scilab's standard libraries are defined using \fVlib\fR on the
+\fVSCIDIR/macros/*\fR subdirectories.
+
+As an example, given the following definitions
+.nf
+    deff('z = myplus(x, y)', 'z = x + y')
+    deff('z = yourplus(x, y)', 'x = x - y')
+    lib_dir = '/home/joeuser/myscidir'
+.fi
+\fVmyplus\fR and \fVyourplus\fR are compiled into \fVlib_dir\fR with
+the commands
+.nf
+    save(lib_dir + '/myplus.bin', myplus)
+    save(lib_dir + '/yourplus.bin', yourplus)
+.fi
+A library can now be created from the two \fV.bin\fR files with the
+command
+.nf
+        xlib = lib(lib_path + '/')
+.fi
+\fVxlib\fR is a Scilab variable of type "library".  A library variable
+usually is saved for later loading, either on-line or from the
+user-specific startup file (\fV$HOME/.scilab\fR).
+
+.SH RESTRICTIONS
+Scilab tacitly assumes that file \fVfoo.bin\fR defines only a single
+function named \fVfoo\fR.
+
+.SH SEE ALSO
+genlib, save, deff, getf, whereis

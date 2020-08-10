@@ -1,0 +1,15 @@
+xsetm            Scilab Group            Scilab Function              xsetm
+NAME
+   xsetm - dialog to set values of the graphics context
+  
+CALLING SEQUENCE
+ xsetm()
+DESCRIPTION
+   xsetm() is the same as xset().
+  
+SEE ALSO
+   xset 
+  
+AUTHOR
+   J.Ph.C.
+  

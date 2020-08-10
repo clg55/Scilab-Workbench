@@ -1,0 +1,149 @@
+abs -  absolute value, magnitude  @abs
+acos - element wise cosine inverse  @acos
+acosh - hyperbolic cosine inverse  @acosh
+acoshm - matrix hyperbolic inverse cosine  @acoshm
+acosm - matrix wise cosine inverse  @acosm
+addf - symbolic addition  @addf
+adj2sp - converts adjacency form into  sparse matrix.  @adj2sp
+amell - Jacobi's am function  @amell
+and (&) - logical and  @and
+asin -  sine inverse  @asin
+asinh - hyperbolic sine inverse  @asinh
+asinhm - matrix hyperbolic inverse sine  @asinhm
+asinm - matrix wise sine inverse  @asinm
+atan - tangent inverse  @atan
+atanh - hyperbolic tangent inverse  @atanh
+atanhm - matrix hyperbolic tangent inverse  @atanhm
+atanm - square matrix tangent inverse  @atanm
+besseli -  Modified I sub ALPHA Bessel functions of the first kind.  @besseli
+besselj -  Modified J sub ALPHA Bessel functions of the first kind.  @besselj
+besselk -  Modified K sub ALPHA Bessel functions of the second kind.  @besselk
+bessely -  Modified Y sub ALPHA Bessel functions of the second kind.  @bessely
+binomial - binomial distribution  @binomial
+bloc2exp - block-diagram to symbolic expression  @bloc2exp
+bloc2ss - block-diagram to state-space conversion  @bloc2ss
+calerf -  computes error functions.  @calerf
+ceil - rounding up  @ceil
+cmb_lin - symbolic linear combination  @cmb_lin
+conj -  conjugate  @conj
+cos -  cosine function  @cos
+cosh - hyperbolic cosine  @cosh
+coshm - matrix hyperbolic cosine  @coshm
+cosm -  matrix cosine function  @cosm
+cotg - cotangent  @cotg
+coth - hyperbolic cotangent  @coth
+cothm - matrix hyperbolic cotangent  @cothm
+cumprod - cumulative product  @cumprod
+cumsum - cumulative sum  @cumsum
+delip - elliptic integral  @delip
+diag - diagonal including or extracting  @diag
+dlgamma -  derivative  of gammaln function.  @dlgamma
+double  - conversion from integer to double precision  representation  @double
+erf -  The error function.  @erf
+erfc -  The complementary error function.  @erfc
+erfcx -  scaled complementary error function.  @erfcx
+eval - evaluation of a matrix of strings  @eval
+eye - identity matrix  @eye
+fix - rounding towards zero  @fix
+floor - rounding down  @floor
+frexp - dissect floating-point numbers into base 2 exponent and mantissa  @frexp
+full -  sparse to full matrix conversion  @full
+gamma -  The gamma function.  @gamma
+gammaln -  The logarithm of gamma function.  @gammaln
+gsort - decreasing order sorting  @gsort
+imag - imaginary part  @imag
+int - integer part  @int
+int16 - conversion to 2 bytes integer representation  @int8
+int32 - conversion to 4 bytes integer representation  @int8
+int8  - conversion to one byte integer representation  @int8
+integrate - integration by quadrature  @integrate
+interp - interpolation  @interp
+interpln - linear interpolation  @interpln
+intersect - returns the vector of common values of two vectors  @intersect
+intsplin - integration of experimental data by spline interpolation  @intsplin
+inttrap - integration of experimental data by trapezoidal interpolation  @inttrap
+isdef - check variable  existence  @isdef
+isinf -  check for infinite entries  @isinf
+isnan -  check for "Not a Number" entries  @isnan
+isreal -  check if a variable as real or complex entries  @isreal
+kron - Kronecker product (.*.)  @kron
+ldivf - left symbolic division  @ldivf
+lex_sort - lexicographic matrix rows  sorting  @lex_sort
+linspace - linearly spaced vector  @linspace
+log - natural logarithm  @log
+log10 - logarithm  @log10
+log2 - base 2 logarithm  @log2
+logm - square matrix logarithm  @logm
+logspace - logarithmically spaced vector  @logspace
+max - maximum  @max
+maxi - maximum  @maxi
+mean - mean (row mean, column mean) of vector/matrix entries  @mean
+median - median (row median, column median) of vector/matrix entries  @median
+min - minimum  @min
+mini - minimum  @mini
+minus (-) -  substraction operator, sign changes  @minus
+modulo - symetric arithmetic remainder modulo m  @modulo
+mps2linpro - convert lp problem given in MPS format to linpro format  @mps2linpro
+mtlb_sparse -  convert sparse matrix  @mtlb_sparse
+mulf -  symbolic multiplication  @mulf
+nnz -  number of non zero entries in a matrix  @nnz
+norm - matrix norms  @norm
+not (~) - logical not  @not
+ones - matrix made of ones  @ones
+or | - logical or  @or
+pen2ea - pencil to E,A conversion  @pen2ea
+pertrans - pertranspose  @pertrans
+pmodulo - positive arithmetic remainder modulo m  @modulo
+prod - product  @prod
+rand - random number generator  @rand
+rat - Floating point rational approximation  @rat
+rdivf - right symbolic division  @rdivf
+real - real part  @real
+round - rounding  @round
+sign - sign function  @sign
+signm - matrix sign function  @signm
+sin -  sine function  @sin
+sinh - hyperbolic sine  @sinh
+sinhm - matrix hyperbolic sine  @sinhm
+sinm -  matrix sine function  @sinm
+size - size of objects  @size
+smooth - smoothing by spline functions  @smooth
+solve - symbolic linear system solver  @solve
+sort - decreasing order sorting  @sort
+sp2adj   - converts sparse matrix into adjacency form  @sp2adj
+sparse -  sparse matrix definition  @sparse
+spcompack  - converts a compressed adjacency representation  @spcompack
+speye -  sparse identity matrix  @speye
+spget - retrieves entries of sparse matrix  @spget
+splin - spline function  @splin
+spones -  sparse matrix  @spones
+sprand -  sparse random matrix  @sprand
+spzeros -  sparse zero matrix  @spzeros
+sqrt - square root  @sqrt
+sqrtm - matrix square root  @sqrtm
+squarewave -  generates a square wave with period 2*%pi  @squarewave
+ssprint - pretty print for linear system  @ssprint
+ssrand - random system generator  @ssrand
+st_deviation - standard deviation (row or column-wise) of vector/matrix entries  @st_deviation
+subf -  symbolic subtraction  @subf
+sum - sum (row sum, column sum) of vector/matrix entries  @sum
+sysconv - system conversion  @sysconv
+sysdiag - block diagonal system connection  @sysdiag
+syslin - linear system definition  @syslin
+tan - tangent  @tan
+tanh - hyperbolic tangent  @tanh
+tanhm - matrix hyperbolic tangent  @tanhm
+tanm - matrix tangent  @tanm
+toeplitz - toeplitz matrix  @toeplitz
+trfmod - poles and zeros display  @trfmod
+trianfml - symbolic triangularization  @trianfml
+tril - lower triangular part of matrix  @tril
+trisolve - symbolic linear system solver  @trisolve
+triu - upper triangle  @triu
+typeof -  object type  @typeof
+uint16 - conversion to 2 bytes unsigned integer representation  @int8
+uint32 - conversion to 4 bytes unsigned integer representation  @int8
+uint8  - conversion to one byte unsigned integer representation  @int8
+union - extract union components of a vector  @union
+unique - extract unique components of a vector  @unique
+zeros - matrix made of zeros  @zeros

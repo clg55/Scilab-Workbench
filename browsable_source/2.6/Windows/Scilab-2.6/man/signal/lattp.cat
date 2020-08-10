@@ -1,0 +1,12 @@
+lattp            Scilab Group            Scilab Function              lattp
+NAME
+   lattp - lattp
+  
+CALLING SEQUENCE
+ [la,lb]=lattp(n,p,cov)
+DESCRIPTION
+   see lattn
+  
+AUTHOR
+   G.Levey
+  

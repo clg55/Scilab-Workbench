@@ -1,0 +1,38 @@
+.TH lasterror 1 "April 2000" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+lasterror - get last recorded error message
+.SH CALLING SEQUENCE
+.nf
+str=lasterror( [opt] )
+[str,n]=lasterror([opt])
+.fi
+.SH PARAMETERS
+.TP 10
+str 
+: vector of character strings or an empty matrix. The last
+recorded error message.
+.TP
+n 
+: integer, 0 or the last recorded error number.
+.TP
+opt
+: boolean, if %t recorded message is cleared. Default is %t.
+.SH DESCRIPTION
+Each time an error occur, the Scilab error handler records it in
+internal tables (only the last one is retained). The \fVlasterror\fR
+function allows to get the message and the error number out of these
+tables.
+.LP
+This function is useful while using \fVerrcatch\fR or \fVexecstr\fR.
+.LP
+The recorded error message may be retained for a further call to
+\fVlasterror\fR using \fVlasterror(%f)\fR.
+.SH EXAMPLE
+.nf
+ierr=execstr('a=zzzzzzz','errcatch')
+if ierr>0 then disp(lasterror()),end
+.fi 
+.SH SEE ALSO
+errcatch, execstr, error, errclear
+

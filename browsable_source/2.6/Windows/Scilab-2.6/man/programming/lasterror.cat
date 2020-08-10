@@ -1,0 +1,31 @@
+lasterror          Scilab Group          Scilab Function          lasterror
+NAME
+   lasterror - get last recorded error message
+  
+CALLING SEQUENCE
+ str=lasterror( [opt] )
+ [str,n]=lasterror([opt])
+PARAMETERS
+ str        : vector of character strings or an empty matrix. The last
+            recorded error message.
+            
+ n          : integer, 0 or the last recorded error number.
+            
+ opt        : boolean, if %t recorded message is cleared. Default is %t.
+            
+DESCRIPTION
+   Each time an error occur, the Scilab error handler records it in internal
+  tables (only the last one is retained). The lasterror function allows to
+  get the message and the error number out of these tables.
+  
+   This function is useful while using errcatch or execstr.
+  
+   The recorded error message may be retained for a further call to
+  lasterror using lasterror(%f).
+  
+EXAMPLE
+ ierr=execstr('a=zzzzzzz','errcatch')
+ if ierr>0 then disp(lasterror()),end
+SEE ALSO
+   errcatch, execstr, error, errclear 
+  

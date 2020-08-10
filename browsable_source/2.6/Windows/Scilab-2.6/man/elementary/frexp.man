@@ -1,0 +1,31 @@
+.TH frexp 1 "Jan 2000" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+frexp - dissect floating-point numbers into base 2 exponent and mantissa
+.SH CALLING SEQUENCE
+.nf
+[f,e]=frexp(x)
+.fi
+.SH PARAMETERS
+.TP 10
+x
+: real vector or matrix
+.TP
+f
+: array of real values, usually in the range 0.5 <= abs(f) < 1.
+.TP
+e
+: array of integers that satisfy the equation: x = f.*2.^e
+.SH DESCRIPTION
+
+This function corresponds to the ANSI C function frexp(). Any zeros in \fVx\fR produce
+\fVf=0\fR and \fVe=0\fR.
+
+.SH EXAMPLE
+.nf
+[f,e]=frexp([1,%pi,-3,%eps])
+.fi
+.SH SEE ALSO
+log, hat, ieee, log2
+
+

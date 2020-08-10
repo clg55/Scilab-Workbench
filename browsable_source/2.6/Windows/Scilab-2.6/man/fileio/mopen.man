@@ -1,0 +1,83 @@
+.TH mopen 1 "April 1999" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+mopen - open a file  
+.SH CALLING SEQUENCE
+.nf
+[fd,err]=mopen(file [, mode,  swap ])
+.fi
+.SH PARAMETERS
+.TP 10
+file
+: a character string. The pathname of the file to open.
+.TP
+mode : a character string that controls whether the file is opened
+for reading (r), writing (w), or appending (a) and whether the file is
+opened for updating (+).  The mode can also include a b parameter to
+indicate a binary file.
+.TP
+swap 
+: a scalar. If \fVswap\fR is present and \fVswap=0\fR then automatic
+bytes swap is disabled.
+.TP 
+err
+: a scalar. Error indicator
+.TP
+fd
+: scalar. The \fVfd\fR parameter returned by the function \fVmopen\fR is
+used as a file descriptor (it's a positive integer). 
+
+.SH DESCRIPTION
+\fVmopen\fR may be used to open a file in a way compatible with the C
+\fVfopen\fR procedure. Without swap argument the file is supposed to
+be coded in "little endian IEEE format" and data are swaped if
+necessary to match the IEEE format of the processor. 
+.LP
+The mode parameter controls the access allowed to the stream. The
+parameter can have one of the following values. In this list of
+values, the b character indicates a binary file
+.TP 10
+r or rb
+: Opens the file for reading.
+.TP
+w or wb
+: Creates a new file for writing, or opens and truncates a file to zero
+length. 
+.TP
+a or ab
+: Appends (opens a file for writing at the end of the file, or creates a
+file for writing).
+.TP
+r+ or r+b
+: Opens a file for update (reading and writing).
+.TP
+w+ or w+b
+: Truncates to zero length or creates a file for update. 
+.TP
+a+ or a+b
+:Appends (opens a file for update, writing at the end of the file, or
+creates a file for writing).
+.RE
+When you open a file for update, you can perform both input and output
+operations on the resulting stream. However, an output operation
+cannot be directly followed by an input operation without a
+file-positioning operation (mseek() function). Also, an input
+operation cannot be directly followed by an output operation without
+an intervening file positioning operation, unless the input operation
+encounters the end of the file.
+
+When you open a file for append (that is, when the mode parameter is a
+or a+), it is impossible to overwrite information already in the
+file. You can use the fseek() function to reposition the file pointer
+to any position in the file, but when output is written to the file,
+the current file pointer is ignored.  All output is written at the end
+of the file and the file pointer is repositioned to the end of the
+output.
+
+.LP
+To open files in a way compatible with Fortran like functions use
+function \fVfile\fR.
+.SH SEE ALSO
+mclose, meof, mfprintf, fprintfMat, mfscanf, fscanfMat, mget, mgetstr, mopen, mprintf, mput, mputstr, mscanf, mseek, mtell
+
+

@@ -1,0 +1,49 @@
+.TH pvm_f772sci 1 "May 1998" "Scilab // Group" "Scilab function"
+.so ../sci.an
+.SH NAME
+pvm_sci2f77 - Convert a F77 complex into a complex scalar
+.SH CALLING SEQUENCE
+.nf
+[res] = pvm_f772sci(var)
+.fi
+.SH PARAMETERS
+.TP 5
+var : local scilab variable.  On  return, the  variable will  be
+overwritten with the result  of conversion operation.
+.TP 5
+res
+: if the parameter var is not a variable, the result of the conversion 
+is returned in res. 
+
+.SH DESCRIPTION
+\fVpvm_f772sci\fR   converts all the  complex    of a scilab  variable
+represented  in teh F77  way into in  a  scilab representation. May be
+useful if  an   application  is receiving  data  from  a   non  scilab
+application (directly from a C or F77 program for example).
+
+Note  that  the parameter is passed  by  adress. It  means that if the
+parameter is a  variable, this variable will  be overwritten with  the
+result of conversion operation. On the other case, if the parameter is
+not a variable, the result will be returned in res.
+
+For example:
+.nf
+-->a = [1+%i, 2+2*%i,3+3*%i]
+ a  =
+ 
+!   1. + i      2. + 2.i    3. + 3.i !
+ 
+-->pvm_f772sci(a)
+ 
+-->a
+ a  =
+ 
+!   1. + 2.i    3. + i      2. + 3.i !
+ 
+-->b = pvm_f772sci([1+%i, 2+2*%i,3+3*%i])
+ b  =
+ 
+!   1. + 2.i    3. + i      2. + 3.i !
+.fi
+.SH SEE ALSO
+pvm_sci2f77

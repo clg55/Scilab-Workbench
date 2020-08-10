@@ -1,0 +1,10 @@
+havewindow         Scilab Group         Scilab Function          havewindow
+NAME
+   havewindow - return scilab window mode
+  
+CALLING SEQUENCE
+ havewindow() 
+DESCRIPTION
+   returns %t if scilab has it own window and %f if not, i.e. if scilab has
+  been invoked by "scilab -nw". (nw stands for "no-window".    
+  

@@ -1,0 +1,86 @@
+.TH rand 1 "April 1993" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+rand - random number generator
+.SH CALLING SEQUENCE
+.nf
+rand(m1,m2,.. [,key])
+rand(x [, key])
+rand()
+
+rand(key)
+rand("seed" [,n])
+rand("info")
+
+.fi
+.SH PARAMETERS
+.TP 3
+mi
+: integers
+.TP
+key
+:
+character string with value in \fV"uniform"\fR, \fV"normal"\fR
+.TP
+x
+: a matrix. Only its dimensions are taken into account.
+
+.SH DESCRIPTION
+random matrix generator.
+
+Without key argument the syntaxes below produce  random matrices with
+the current random generator (default is "uniform")
+.TP 20
+rand(m1,m2) 
+is a random matrix of dimension \fVm1\fR by \fVm2\fR.
+.TP
+rand(m1,m2,..,mn) 
+is a random matrix of dimension \fVm1\fR by \fVm2\fR,.. by \fVmn\fR.
+.TP
+rand(a) 
+is a random matrix of same size as a. \fVrand(a)\fR is complex if 
+\fVa\fR is a complex matrix
+.TP
+\fVrand()\fR : with no arguments gives a scalar whose value changes 
+each time it is referenced.
+.RE
+.LP
+If present, the key argument allows to specifie an other random
+generator.
+.TP 20 
+rand('uniform') 
+The current random generator is set to a uniform random number
+generator. Random numbers are uniformly distributed in the interval
+(0,1).
+
+.TP
+rand('normal') 
+The current random generator is set to a Gaussian (with mean 0 and
+variance 1) random number generator . 
+.TP
+str=rand('info')
+return the type of the default random generator ('uniform' or 'normal')
+.RE
+IT is possible to (re-)initialize the seed of the rand generator:
+.TP 20
+rand('seed') 
+returns the current value of the seed.
+.TP
+rand('seed',n)  
+puts the seed to \fVn\fR. (\fVn=0\fR at first call).
+.RE
+
+.SH EXAMPLE
+.nf
+x=rand(10,10,'uniform')
+rand('normal')
+rand('info')
+y=rand(x,'normal');
+x=rand(2,2,2)
+.fi
+.SH SEE ALSO
+ssrand
+
+
+
+

@@ -1,0 +1,12 @@
+CONST_f            Scilab Group            Scicos Block             CONST_f
+NAME
+   CONST_f - Scicos constant value(s) generator
+  
+DIALOGUE PARAMETERS
+ constants       : a real vector. The vector size gives the size of the
+                 output port. The value constants(i) is assigned to the ith
+                 component of the output.
+                 
+DESCRIPTION
+   This block is a constant value(s) generator.    
+  

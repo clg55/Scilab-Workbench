@@ -1,0 +1,28 @@
+.TH nf3d 2 "April 1993" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+nf3d - rectangular facets to plot3d parameters
+.SH DESCRIPTION
+.nf
+[xx,yy,zz]=nf3d(x,y,z)
+.fi
+.SH PARAMETERS
+.TP 10
+x,y,x,xx,yy,zz
+: 6 real matrices
+.SH DESCRIPTION
+Utility function. Used for transforming rectangular facets coded 
+in three matrices x,y,z to scilab code for facets accepted by plot3d. 
+.SH EXAMPLE
+.nf
+//A sphere...
+u = linspace(-%pi/2,%pi/2,40);
+v = linspace(0,2*%pi,20);
+x= cos(u)'*cos(v);
+y= cos(u)'*sin(v);
+z= sin(u)'*ones(v);
+//plot3d2(x,y,z) is equivalent to...
+[xx,yy,zz]=nf3d(x,y,z); plot3d(xx,yy,zz)
+.fi
+.SH SEE ALSO
+plot3d, plot3d2

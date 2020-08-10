@@ -1,0 +1,11 @@
+NEGTOPOS_f          Scilab Group          Scicos Block           NEGTOPOS_f
+NAME
+   NEGTOPOS_f - Scicos negative to positive detector
+  
+DESCRIPTION
+   An output event is generated when the unique input crosses zero with a
+  positive slope.
+  
+SEE ALSO
+   POSTONEG_f, ZCROSS_f, GENERAL_f     
+  

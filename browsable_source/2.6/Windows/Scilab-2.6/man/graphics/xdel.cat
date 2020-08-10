@@ -1,0 +1,13 @@
+xdel             Scilab Group             Scilab Function              xdel
+NAME
+   xdel - delete a graphics window
+  
+CALLING SEQUENCE
+ xdel([win-nums]) 
+DESCRIPTION
+   xdel deletes the graphics windows win-nums or the current graphics window
+  if no argument is given.
+  
+AUTHOR
+   J.Ph.C.
+  

@@ -1,0 +1,29 @@
+fun2string         Scilab Group         Scilab Function          fun2string
+NAME
+   fun2string - generates ascii definition of a scilab function
+  
+CALLING SEQUENCE
+ txt=fun2string(fun,name)
+PARAMETERS
+ fun             : a function type variable
+                 
+ name            : a character string, the generated function name
+                 
+ txt             : a column vector of strings, the text giving the scilab
+                 instructions
+                 
+DESCRIPTION
+   Given a loaded Scilab function pseudo-code fun2string allow to
+  re-generate the the code. Note that as comments are not retained in
+  loaded functions the comments cannot be regenerated. The generated code
+  is indented and beautified.  
+  
+   The mechanism is similar, but simpler than the mfile2sci one. It may be
+  adapted for syntax translations.
+  
+EXAMPLE
+ txt=fun2string(asinh,'foo');
+ write(%io(2),txt,'(a)')
+SEE ALSO
+   getf, edit, macrovar
+  

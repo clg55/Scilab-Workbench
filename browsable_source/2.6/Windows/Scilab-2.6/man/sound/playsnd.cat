@@ -1,0 +1,19 @@
+playsnd           Scilab Group           Scilab Function            playsnd
+NAME
+   playsnd -  sound player facility
+  
+CALLING SEQUENCE
+ []=playsnd(y,fs,bits)
+PARAMETERS
+ y    : real vector
+      
+ fs   : real number, sampling frequency
+      
+ bits : real number, number of bits (usually 8 or 16)
+      
+DESCRIPTION
+   Redirects a linear signal to /dev/audio/.
+  
+SEE ALSO
+   lin2mu    
+  

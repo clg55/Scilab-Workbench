@@ -1,0 +1,41 @@
+TK_EvalStr        Fractales Group        Scilab Function         TK_EvalStr
+NAME
+   TK_EvalStr - Evaluate a string whithin the  tcl/tk interpreter
+  
+CALLING SEQUENCE
+ TK_EvalStr(str)
+PARAMETERS
+ str   : string or vector of strings, contains the tcl/tk instructions 
+       
+DESCRIPTION
+   This routine allows to evaluate tcl/tk  instructions with the tcl/tk
+  interpreter launched with scilab.   When tcl/tk support is enabled in
+  scilab, you can evaluate tcl/tk expression from scilab interpreter. In
+  fact, scilab launches a slave tcl/tk interpreter. The scilab instruction
+  TK_EvalStr() can be used to evaluate expression  without having to write
+  a tcl/tk in a separated file (this is done using  TK_EvalFile). 
+  
+AUTHOR
+   Bertrand Guiheneuf 
+  
+EXAMPLE
+ //with one call
+ TK_EvalStr(['toplevel .foo1'
+    'label .foo1.l -text ""TK married Scilab !!!""'
+    'pack .foo1.l'
+    'button .foo1.b -text close -command {destroy .foo1}'
+    'pack .foo1.b'])
+ 
+ //step by step (debugging)
+ TK_EvalStr('toplevel .foo2');
+ // creates a toplevel TK window. 
+ TK_EvalStr('label .foo2.l -text ""TK married Scilab !!!""');
+ // create a static label
+ TK_EvalStr('pack .foo2.l');
+ // pack the label widget. It appears on the screen.
+ text='button .foo2.b -text close -command {destroy .foo2}';
+ TK_EvalStr(text);
+ TK_EvalStr('pack .foo2.b');
+SEE ALSO
+   ScilabEval, TK_EvalFile, TK_GetVar, TK_Setvar
+  

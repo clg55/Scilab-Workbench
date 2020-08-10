@@ -1,0 +1,29 @@
+.TH newest 1 "July 2000" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+newest - returns newest file of a set of files
+.SH CALLING SEQUENCE
+.nf 
+k=newest(paths)
+k=newest(path1,path2,...,pathn)
+.fi
+.SH PARAMETERS
+.TP 6
+k
+: the index of the newest file
+.TP
+paths
+: a character string vector (or list), paths(i) is the pathname of ith file
+.TP
+pathi
+: a character string, the pathname of ith file
+.SH DESCRIPTION
+Given a set of pathnames newest returns the index of the newest
+one. Non existant files are supposed to be the oldest.
+.SH EXAMPLE
+.nf
+newest('SCI/macros/xdess/bode.sci','SCI/macros/xdess/bode.bin')
+newest('SCI/macros/xdess/bode.'+['sci','bin'])
+.fi
+.SH SEE ALSO
+fileinfo

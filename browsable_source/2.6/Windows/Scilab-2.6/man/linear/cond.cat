@@ -1,0 +1,19 @@
+cond             Scilab Group             Scilab Function              cond
+NAME
+   cond - condition number
+  
+CALLING SEQUENCE
+ cond(X)
+PARAMETERS
+ X    : real or complex square matrix
+      
+DESCRIPTION
+   Condition number in 2-norm.  cond(X) is the  ratio  of  the largest
+  singular value of  X  to the smallest.
+  
+EXAMPLE
+ A=testmatrix('hilb',6);
+ cond(A)
+SEE ALSO
+   rcond, svd  
+  

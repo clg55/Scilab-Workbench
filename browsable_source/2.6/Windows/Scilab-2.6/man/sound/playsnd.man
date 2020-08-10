@@ -1,0 +1,26 @@
+.TH playsnd 1 "April 1993" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+playsnd -  sound player facility
+.SH CALLING SEQUENCE
+.nf
+[]=playsnd(y,fs,bits)
+.fi
+.SH PARAMETERS
+.TP
+y
+: real vector
+.TP
+fs
+: real number, sampling frequency
+.TP
+bits
+: real number, number of bits (usually 8 or 16)
+.SH DESCRIPTION
+Redirects a linear signal to \fV/dev/audio/\fR.
+.SH SEE ALSO
+lin2mu
+
+
+
+

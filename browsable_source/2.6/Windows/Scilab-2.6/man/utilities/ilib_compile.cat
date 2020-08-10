@@ -1,0 +1,30 @@
+ilib_compile        Scilab Group        Scilab Function        ilib_compile
+NAME
+   ilib_compile - ilib_build utility: executes the makefile produced by
+  ilib_gen_Make
+  
+CALLING SEQUENCE
+ libn=ilib_compile(lib_name,makename)
+PARAMETERS
+ lib_name   : : a character string, the generic name of the library
+            without path and extension.
+            
+ makename   : character string. The path of the Makefile file without
+            extension.
+            
+ libn       : character string. The path of the really generated shared
+            library file.
+            
+DESCRIPTION
+   Utility function used by ilib_build
+  
+   This executes the  makefile produced by ilib_gen_Make, compiles the C and
+  fortran files and generates the shared library. 
+  
+   Shared libraries can then be used with the link and addinter scilab
+  function for incremental linking.
+  
+SEE ALSO
+   addinter, link, ilib_build, ilib_gen_Make, ilib_gen_gateway,
+  ilib_gen_loader, ilib_for_link   
+  

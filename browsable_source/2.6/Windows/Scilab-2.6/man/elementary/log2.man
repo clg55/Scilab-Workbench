@@ -1,0 +1,22 @@
+.TH log2 1 "Jan 2000" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+log2 - base 2 logarithm
+.SH CALLING SEQUENCE
+.nf
+y=log2(x)
+.fi
+.SH PARAMETERS
+.TP 10
+x
+: vector or matrix
+.SH DESCRIPTION
+decimal logarithm.If \fVx\fR is a vector \fVlog2(x)=[log2(x1),...,log2(xn)]\fR.
+.SH EXAMPLE
+.nf
+2.^log2([1,%i,-1,-%i])
+.fi
+.SH SEE ALSO
+log, hat, ieee, log10, frexp
+
+

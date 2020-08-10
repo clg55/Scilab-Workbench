@@ -1,0 +1,39 @@
+.TH lines 1 "April 1993" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+lines - rows and columns used for display
+.SH CALLING SEQUENCE
+.nf
+lines([nl [,nc]])
+nlc=lines()
+.fi
+.SH PARAMETERS
+.TP 10
+nl : an integer, the number of lines for vertical paging control. If 0
+no vertical paging control is done.
+.TP
+nc
+: an integer, the number of column of output. Used for formatting
+output 
+.TP
+nlc
+: a 1x2 vector [nl,nc]
+.SH DESCRIPTION
+\fVlines\fR handles Scilab display paging.
+
+\fVlines()\fR returns the vector [# columns, # rows] currently
+used by Scilab for displaying the results.
+.LP
+\fVlines(nl)\fR sets the number of displayed lines (before user is asked
+for more) to \fVnl\fR.
+.LP
+\fVlines(0)\fR disables vertical paging
+.LP
+\fVlines(nl,nc)\fR changes also the size of the output to \fVnc\fR
+columns.
+
+When Scilab is launched without -nw option, the \fVlines\fR parameters
+are automatically set according to the output window size.
+
+.SH SEE ALSO
+disp, print

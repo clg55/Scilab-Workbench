@@ -1,0 +1,107 @@
+
+Xcall.gperf,1023
+#define const 28,610
+static void C2F(42,1143
+typedef void (*func)func55,1411
+typedef void (function)function56,1435
+struct funreplace funreplace58,1466
+xarc,60,1520
+xarcs,61,1593
+xarea,62,1671
+xarrow,63,1765
+xaxis,64,1852
+xclea,65,1930
+xclear,66,2012
+xclick,67,2103
+xclickany,68,2174
+xend,69,2264
+xfarc,70,2325
+xfarcs,71,2399
+xfrect,72,2478
+xget,73,2577
+xgetdr,74,2667
+xgetmouse,75,2724
+xgfont,76,2810
+xinfo,77,2901
+xinit,78,2954
+xlfont,79,3044
+xlines,80,3131
+xliness,81,3226
+xmarks,82,3326
+xname,83,3421
+xnum,84,3481
+xpause,85,3582
+xpolys,86,3653
+xrect,87,3752
+xrects,88,3850
+xreplay,89,3953
+xreplayna,90,4015
+xreplaysc,91,4111
+xreplaysh,92,4207
+xsegs,93,4291
+xselect,94,4385
+xset,95,4477
+xsetdr,96,4567
+xstart,97,4640
+xstring,98,4697
+xstringl,99,4797
+static char DriverName[102,4895
+static int  DriverId 103,4928
+void C2F(105,4955
+void GetDriver1(148,5910
+char GetDriver(156,6093
+int GetDriverId(158,6136
+int C2F(165,6357
+static void C2F(188,6869
+int C2F(205,7269
+
+Xcall1.gperf,1299
+typedef void (f_xcall1)f_xcall114,374
+typedef void (*func)func16,548
+extern int C2F(18,719
+#define const 36,1672
+struct funreplace funreplace39,1691
+xarc,42,1749
+xarcs,43,1766
+xarea,44,1785
+xarrow,45,1808
+xaxis,46,1830
+xclea,47,1849
+xclear,48,1869
+static char FPF[108,3240
+static int Autoclear 109,3268
+void C2F(111,3295
+void C2F(120,3448
+char *getFPF(132,3682
+int C2F(137,3717
+int C2F(164,4190
+void xset_1(195,4761
+void drawarc_1(236,6230
+void fillarcs_1(256,6973
+void drawarcs_1(276,7712
+void fillpolyline_1(295,8438
+void drawarrows_1(315,9172
+void drawaxis_1(358,10436
+void cleararea_1(377,11212
+void xclick_1(395,11900
+void xclick_any_1(409,12452
+void xgetmouse_1(430,13294
+void fillarc_1(446,13846
+void fillrectangle_1(466,14604
+void drawpolyline_1(487,15347
+void fillpolylines_1(508,16093
+void drawpolymark_1(543,17270
+void displaynumbers_1(565,17996
+void drawpolylines_1(585,18710
+void drawrectangle_1(603,19453
+void drawrectangles_1(621,20151
+void drawsegments_1(640,20906
+void displaystring_1(665,21822
+void displaystringa_1(682,22507
+static void xstringb(709,23587
+void boundingbox_1(752,24793
+#define FONTMAXSIZE 772,25611
+void xstringb_1(774,25634
+void GSciString(818,26925
+static void Myalloc(864,28014
+static void Myalloc1(879,28312

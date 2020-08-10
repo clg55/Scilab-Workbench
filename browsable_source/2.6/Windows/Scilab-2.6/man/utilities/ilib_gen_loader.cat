@@ -1,0 +1,21 @@
+ilib_gen_loader      Scilab Group      Scilab Function      ilib_gen_loader
+NAME
+   ilib_gen_loader  - utility for ilib_build: generates a loader file
+  
+CALLING SEQUENCE
+ ilib_gen_loader(name,table)
+PARAMETERS
+ name       : a character string, the generic name of the library without
+            path and extension.
+            
+ table      : 2 column string matrix giving the table of pairs
+            'scilab-name' 'interface name'
+            
+DESCRIPTION
+   Utility function used by ilib_build This function generates a loader
+  file.
+  
+SEE ALSO
+   addinter, link, ilib_build, ilib_compile, ilib_gen_Make, ilib_gen_loader,
+  ilib_for_link
+  

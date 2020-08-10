@@ -1,0 +1,35 @@
+.TH whos 1 "Jan 1997" "Scilab Group" "Scilab Function"
+.so ../sci.an
+.SH NAME
+whos - listing of variables in long form
+.SH CALLING SEQUENCE
+.nf
+whos()
+whos -type typ
+whos -name nam
+.fi
+.SH PARAMETERS
+.TP
+typ 
+: name of selected variable type (see typeof)
+.TP
+nam
+: first characters of selected names
+.SH DESCRIPTION
+\fVwhos()\fR displays all current variable names, types and memory used 
+
+\fVwhos -type typ \fR displays all current variables with specified type
+
+\fVwhos -name nam \fR displays all current variables whose names begin with \fVnam\fR
+
+.SH EXAMPLE
+.nf
+whos()
+
+whos -type boolean
+
+whos -name %
+
+.fi
+.SH SEE ALSO
+who, typeof

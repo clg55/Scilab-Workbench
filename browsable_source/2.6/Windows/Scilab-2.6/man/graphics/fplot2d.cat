@@ -1,0 +1,36 @@
+fplot2d           Scilab Group           Scilab Function            fplot2d
+NAME
+   fplot2d  - 2D plot of a curve defined by a function
+  
+CALLING SEQUENCE
+ fplot2d(xr,f,[style,strf,leg,rect,nax])
+ fplot2d(xr,f,<opt_args>)
+PARAMETERS
+ xr              : vector.
+                 
+ f               : external of type y=f(x) i.e. a scilab function or a
+                 dynamically linked routine referred to as a string.
+                 
+ style,strf,leg,rect,nax
+                  : see plot2d
+                 
+ <opt_args>      : see plot2d
+                 
+DESCRIPTION
+   fplot2d plots a curve defined by the external function f. The curve is
+  approximated by a piecewise linear interpolation using the points 
+  (xr(i),f(xr(i)). The values of f(x) are obtained by feval(xr,f).  Enter
+  the command fplot2d() to see a demo.
+  
+EXAMPLE
+ deff("[y]=f(x)","y=sin(x)+cos(x)")
+ x=[0:0.1:10]*%pi/10;
+ fplot2d(x,f)
+ xbasc();
+ fplot2d(1:10,'parab')
+SEE ALSO
+   plot2d, feval, paramfplot2d
+  
+AUTHOR
+   J.Ph.C.
+  
