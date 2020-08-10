@@ -1,0 +1,44 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>legend_properties</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Data type </CENTER><p><b>legend_properties -  description of the
+   Legend entity properties </b></p><H3><font color="blue">Description</font></H3><dl>
+  The Legend entity is a leaf of the graphics entities
+  hierarchy. This entity defines the parameters for legends drawn 
+  below <tt><b>plot2dx</b></tt> graphs. For each line plotted, 
+  the legend shows a sample of the line type, marker  symbol, and color. 
+
+  
+   <li><b>visible: </b>
+    This field contains the  <tt><b>visible</b></tt> property value
+   for the entity . It should
+   be <tt><b>"on" </b></tt> or <tt><b>"off"</b></tt>  . If <tt><b>"on"
+   </b></tt> the legend is drawn , If
+   <tt><b>"off"</b></tt> the legend is not displayed on the screen.
+   </li>
+
+
+     <li><b>foreground: </b>
+      This field contains the color index used to draw legend.
+        Its value should be a color index (relative to the current colormap)
+     </li>
+
+     <li><b>text: </b>
+    This field is the character string vector which contains the legend.
+   </li>
+
+   <li><b>parent: </b> 
+      This property contains the handle of the parent. The parent of the legend
+      entity should be of the type <tt><b>"Agregation"</b></tt>. This agregation entity 
+      contains also the remainder of the graph's entities.
+     </li>
+
+ 
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>   
+
+  set("figure_style","new") //create a figure
+   plot2d();
+   a=get("current_axes");
+   l=a.children.children(1)
+   l.text="sin(x)@sin(2*x)@sin(3*x)";
+   l.visible="off";
+    
+
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="plot2d.htm"><tt><b>plot2d</b></tt></a>&nbsp;&nbsp;<a href="graphics_entities.htm"><tt><b>graphics_entities</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Author</font></H3><p><ul>Djalel ABDEMOUCHE  </ul></p></body></html>

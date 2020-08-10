@@ -1,0 +1,16 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>sqrtm</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>sqrtm -  racine carrée matricielle  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>y=sqrtm(x)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>x  </b></tt>
+    : matrice carrée réelle ou complexe
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>y=sqrt(x)</b></tt> est la racine carrée matricielle de la matrice <tt><b>x</b></tt> (<tt><b>x=y^2</b></tt>)
+    Le résultat peut être imprécis si <tt><b>x</b></tt> n'est pas symétrique.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+x=[0 1;2 4]
+w=sqrtm(x); 
+norm(w*w-x)
+x(1,2)=%i;
+w=sqrtm(x);norm(w*w-x,1)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="../linear/expm.htm"><tt><b>expm</b></tt></a>&nbsp;&nbsp;<a href="../linear/sqroot.htm"><tt><b>sqroot</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

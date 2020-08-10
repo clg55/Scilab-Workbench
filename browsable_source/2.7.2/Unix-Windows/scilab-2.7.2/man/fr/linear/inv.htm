@@ -1,0 +1,34 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>inv</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>inv -  inverse d'une matrice  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>inv(X)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>X  </b></tt>
+    : matrice carrée réelle, complexe, polynomiale ou rationnelle, liste de type "syslin"
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>inv(X)</b></tt> est l'inverse de la matrice carrée <tt><b>X</b></tt>. Un message de mise en garde est affiché si <tt><b>X</b></tt> est mal équilibrée (termes très petits et termes très grands) ou singulière à la précision machine.
+  </p>
+  <p>
+    Pour les matrices polynomiales ou rationnelles, <tt><b>inv(X)</b></tt> est équivalent à <tt><b>invr(X)</b></tt>.
+  </p>
+  <p>
+    Pour les systèmes dynamiques linéaires sous forme de leur représentation d'état (liste de type <tt><b>syslin</b></tt>), <tt><b>inv(X)</b></tt> est équivalent à <tt><b>invsyslin(X)</b></tt>.
+  </p>
+  </dl><H3><font color="blue">REFERENCES</font></H3><ul><p>
+ La fonction <tt><b>inv</b></tt> pour les matrices de  nombres est basée
+ sur les routines Lapack :
+ DGETRF, DGETRI pour les matrices réelles et  ZGETRF, ZGETRI pour le
+ cas complexe.
+Pour les matrices de polynomes et de fractions rationnelles
+ <tt><b>inv</b></tt>  est basée sur la fonction Scilab  <tt><b>invr</b></tt>.
+  </p></ul><H3><font color="blue">Exemples</font></H3><ul><pre>
+A=rand(3,3);inv(A)*A
+//
+x=poly(0,'x');
+A=[x,1,x;x^2,2,1+x;1,2,3];inv(A)*A
+//
+A=[1/x,2;2+x,2/(1+x)]
+inv(A)*A
+//
+A=ssrand(2,2,3);
+W=inv(A)*A
+clean(ss2tf(W))
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="../programming/slash.htm"><tt><b>slash</b></tt></a>&nbsp;&nbsp;<a href="../programming/backslash.htm"><tt><b>backslash</b></tt></a>&nbsp;&nbsp;<a href="pinv.htm"><tt><b>pinv</b></tt></a>&nbsp;&nbsp;<a href="qr.htm"><tt><b>qr</b></tt></a>&nbsp;&nbsp;<a href="lufact.htm"><tt><b>lufact</b></tt></a>&nbsp;&nbsp;<a href="lusolve.htm"><tt><b>lusolve</b></tt></a>&nbsp;&nbsp;<a href="../polynomials/invr.htm"><tt><b>invr</b></tt></a>&nbsp;&nbsp;<a href="coff.htm"><tt><b>coff</b></tt></a>&nbsp;&nbsp;<a href="../polynomials/coffg.htm"><tt><b>coffg</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

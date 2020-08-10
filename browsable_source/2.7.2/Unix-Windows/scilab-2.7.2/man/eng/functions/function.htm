@@ -1,0 +1,85 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>functionendfunction</title></head><body bgcolor="FFFFFF"><CENTER>Scilab keyword  </CENTER><p><b>function -  opens a function definition  </b></p><p><b>endfunction -  closes a function definition  </b></p><H3><font color="blue">Description</font></H3><dl>
+  <pre>
+function &lt;lhs_arguments&gt;=&lt;function_name&gt;&lt;rhs_arguments&gt;
+&lt;statements&gt;
+endfunction
+   </pre>
+  <p>
+    Where
+  </p>
+ 
+
+  <li><b>&lt;function_name&gt;</b> 
+    stands for the name of the function
+  </li>
+
+  <li><b>&lt;rhs_arguments&gt;</b> 
+    stands for the input argument list. It may be
+  </li>
+ 
+
+  <li><b>-</b> 
+    a comma separated sequence of variable names enclosed in parenthesis, like  <tt><b>(x1,...,xm)</b></tt>. Last variable name can be the key word <tt><b>varargin</b></tt> (see varargin)
+  </li>
+
+  <li><b>-</b> 
+    the sequence <tt><b>()</b></tt> or nothing,if the function has no input argument.
+  </li>
+ 
+
+  <li><b>&lt;lhs_arguments&gt;</b> 
+    stands for the output argument list. It may be
+  </li>
+ 
+
+  <li><b>-</b> 
+    a comma separated sequence of variable names enclosed in brackets, like  <tt><b>[y1,...,yn]</b></tt>. Last variable name can be the key word <tt><b>varargout</b></tt> (see varargout)
+  </li>
+
+  <li><b>-</b> 
+    the sequence <tt><b>[]</b></tt> ,if the function has no input argument. In this case the syntax may also be:  <tt><b>function &lt;function_name&gt;&lt;rhs_arguments&gt;</b></tt>
+  </li>
+ 
+
+  <li><b>&lt;statements&gt;</b> 
+    stands for a set of scilab instructions (statements)  This syntax may be used to define function (see functions) inline or in a script file (see exec). For compatibility with old Scilab versions, functions defined in a script file containing only function definitions can be "loaded" into Scilab using the <tt><b>getf</b></tt> function.
+  </li>
+  <p>
+    The <tt><b>function &lt;lhs_arguments&gt;=&lt;function_name&gt;&lt;rhs_arguments&gt;</b></tt>
+    sequence cannot be split over several lines. This sequence can be
+    followed by statements in the same line if a comma of semi column is
+    added at its end.
+  </p>
+  <p>
+    function definitions can be nested
+  </p>
+ 
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+//inline definition (see function)
+function [x,y]=myfct(a,b)
+x=a+b
+y=a-b
+endfunction
+
+[x,y]=myfct(3,2)
+
+//a one line function definition
+function y=sq(x),y=x^2,endfunction
+
+sq(3)
+
+//nested functions definition
+function y=foo(x)
+a=sin(x)
+function y=sq(x), y=x^2,endfunction
+y=sq(a)+1
+endfunction
+
+foo(%pi/3)
+
+
+// definition in an script file (see exec)
+exec SCI/macros/elem/asin.sci;
+
+
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="functions.htm"><tt><b>functions</b></tt></a>&nbsp;&nbsp;<a href="../programming/exec.htm"><tt><b>exec</b></tt></a>&nbsp;&nbsp;<a href="getf.htm"><tt><b>getf</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

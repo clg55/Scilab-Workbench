@@ -1,0 +1,19 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>pvm_exit</title></head><body bgcolor="FFFFFF"><CENTER>Scilab function  </CENTER><p><b>pvm_exit -  tells the local pvmd that this process is leaving PVM.  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[info] = pvm_exit()  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>info  </b></tt>
+    : integer
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>pvm_exit</b></tt> tells the local pvmd
+    that this process is leaving PVM.
+    This routine does not kill the process, which can continue to
+    perform tasks just like any other serial process.
+  </p>
+  <p>
+    <tt><b>pvm_exit</b></tt> should be called by all PVM processes before
+    they stop or exit for good. It <tt><b>must</b></tt> be called
+    by processes that were not started with <tt><b>pvm_spawn</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+pvm_exit()
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="pvm.htm"><tt><b>pvm</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

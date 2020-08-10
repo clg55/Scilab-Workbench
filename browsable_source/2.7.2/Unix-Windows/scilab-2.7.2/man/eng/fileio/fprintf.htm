@@ -1,0 +1,47 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>fprintf</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>fprintf -  Emulator of C language fprintf function  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>fprintf(file,format,value_1,..,value_n)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>format  </b></tt>
+    : a Scilab string. Specifies a character string combining literal characters with conversion specifications.
+  </li>
+  <li><tt><b>value_i  </b></tt>
+    : Specifies the data to be converted according to the format parameter.
+  </li>
+  <li><tt><b>str  </b></tt>
+    : column vector of character strings
+  </li>
+  <li><tt><b>file  </b></tt>
+    : a Scilab string specifying a file name or a logical unit number (see <tt><b>file</b></tt>)
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    The <tt><b>fprintf</b></tt> function converts, formats, and writes
+    its <tt><b>value</b></tt> parameters, under control of the <tt><b>format</b></tt>
+    parameter, to the file specified by its <tt><b>file</b></tt> parameter.
+  </p>
+  <p>
+    The <tt><b>format</b></tt> parameter is a character string that contains two
+    types of objects:
+  </p>
+ 
+
+  <li><b>Literal characters</b> 
+    : which are copied to the output stream.
+  </li>
+
+  <li><b>Conversion specifications</b> 
+    : each of which causes zero or more items to be fetched from the <tt><b>value</b></tt> parameter list. see <tt><b>printf_conversion</b></tt> for details
+  </li>
+  <p>
+    If any <tt><b>value</b></tt>s remain after the entire <tt><b>format</b></tt> has been
+    processed, they are ignored.
+  </p>
+  <p>
+  </p>
+ 
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+u=file('open','results','unknown') //open the result file
+t=0:0.1:2*%pi;
+for tk=t
+ fprintf(u,'time = %6.3f value = %6.3f',tk,sin(tk)) // write a line
+end
+file('close',u) //close the result file
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="../strings/string.htm"><tt><b>string</b></tt></a>&nbsp;&nbsp;<a href="print.htm"><tt><b>print</b></tt></a>&nbsp;&nbsp;<a href="write.htm"><tt><b>write</b></tt></a>&nbsp;&nbsp;<a href="../programming/format.htm"><tt><b>format</b></tt></a>&nbsp;&nbsp;<a href="disp.htm"><tt><b>disp</b></tt></a>&nbsp;&nbsp;<a href="file.htm"><tt><b>file</b></tt></a>&nbsp;&nbsp;<a href="printf.htm"><tt><b>printf</b></tt></a>&nbsp;&nbsp;<a href="sprintf.htm"><tt><b>sprintf</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>nnz</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>nnz -   nombre de termes non nuls dans une matrice  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>n=nnz(X)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>X  </b></tt>
+    : matrice réelle ou complexe (pleine ou creuse)
+  </li>
+  <li><tt><b>n  </b></tt>
+    : entier, le nombre de termes non nuls
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>nnz</b></tt> compte le nombre de termes non nuls dans une matrice pleine ou creuse.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+sp=sparse([1,2;4,5;3,10],[1,2,3]);
+nnz(sp)
+a=[1 0 0 0 2];
+nnz(a)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="spget.htm"><tt><b>spget</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

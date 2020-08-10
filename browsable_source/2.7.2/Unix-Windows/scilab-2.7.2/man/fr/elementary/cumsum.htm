@@ -1,0 +1,32 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>cumsum</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>cumsum -  somme cumulative.  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>y=cumsum(x)  </tt></dd><dd><tt>y=cumsum(x,'r') ou y=cumsum(x,1)   </tt></dd><dd><tt>y=cumsum(x,'c') ou y=cumsum(x,2)   </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>x  </b></tt>
+    : vecteur ou matrice (réelle ou complexe)
+  </li>
+  <li><tt><b>y  </b></tt>
+    : vecteur ou matrice (réelle ou complexe)
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Pour un vecteur <tt><b>x</b></tt>, <tt><b>y=cumsum(x)</b></tt> renvoie dans <tt><b>y</b></tt> la somme cumulative de tous les éléments de <tt><b>x</b></tt>. Si <tt><b>x</b></tt> est une matrice, elle est considérée comme un vecteur (les colonnes sont mises bout à bout).
+  </p>
+  <p>
+  </p>
+  <p>
+    <tt><b>y=cumsum(x,'c')</b></tt> (ou <tt><b>y=cumsum(x,2)</b></tt>) renvoie dans
+    <tt><b>y</b></tt> la somme cumulative des éléments des lignes de <tt><b>x</b></tt>: <tt><b> y(i,:)=cumsum(x(i,:))</b></tt>
+  </p>
+  <p>
+    <tt><b>y=cumsum(x,'r')</b></tt> (ou <tt><b>y=cumsum(x,2)</b></tt>)
+    renvoie dans <tt><b>y</b></tt> la somme cumulative des colonnes de <tt><b>x</b></tt>: <tt><b> y(:,i)=cumsum(x(:,i))</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+A=[1,2;3,4];
+cumsum(A)
+cumsum(A,'r')
+cumsum(A,'c')
+a=rand(3,4)+%i;
+[m,n]=size(a);
+w=zeros(a);
+w(1,:)=a(1,:);
+for k=2:m;w(k,:)=w(k-1,:)+a(k,:);end;w-cumsum(a,'r')
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="cumprod.htm"><tt><b>cumprod</b></tt></a>&nbsp;&nbsp;<a href="sum.htm"><tt><b>sum</b></tt></a>&nbsp;&nbsp;<a href="prod.htm"><tt><b>prod</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

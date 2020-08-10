@@ -1,0 +1,34 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>fullrf</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>fullrf -  factorisation de rang plein  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[Q,M,rk]=fullrf(A,[tol])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>A  </b></tt>
+    : matrice réelle ou complexe
+  </li>
+  <li><tt><b>tol  </b></tt>
+    : nombre réel (tolérance pour le calcul du rang)
+  </li>
+  <li><tt><b>Q,M  </b></tt>
+    : matrices réelles ou complexes
+  </li>
+  <li><tt><b>rk  </b></tt>
+    : entier (rang de <tt><b>A</b></tt>)
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Cette fonction calcule la factorisation de rang plein de <tt><b>A</b></tt> : <tt><b>fullrf</b></tt> renvoie <tt><b>Q</b></tt> et <tt><b>M</b></tt> telles que <tt><b>A = Q*M</b></tt>
+    avec Im(<tt><b>Q</b></tt>)=Im(<tt><b>A</b></tt>) et ker(<tt><b>M</b></tt>)=ker(<tt><b>A</b></tt>),
+    <tt><b>Q</b></tt> de rang maximal, et les lignes de <tt><b>M</b></tt> sont linéairement indépendantes, 
+    <tt><b>rk</b></tt> = rank(<tt><b>A</b></tt>) = nombre de colonnes de <tt><b>Q</b></tt> =  nombre de lignes de <tt><b>M</b></tt>.
+  </p>
+  <p>
+    <tt><b>tol</b></tt> = paramètre de tolérance (de l'ordre de <tt><b>%eps</b></tt> par défaut).
+    Le rang <tt><b>rk</b></tt> de <tt><b>A</b></tt> est considéré égal au nombre de ses valeurs singulières plus grandes que <tt><b>norm(A)*tol</b></tt>.
+  </p>
+  <p>
+    Si A est symétrique, <tt><b>fullrf</b></tt> renvoie <tt><b>M=Q'</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+A=rand(5,2)*rand(2,5);
+[Q,M]=fullrf(A);
+norm(Q*M-A,1)
+[X,d]=rowcomp(A);Y=X';
+svd([A,Y(:,1:d),Q])        // Im(Q) = Im(A) = Im(Y(:,1:2))
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="svd.htm"><tt><b>svd</b></tt></a>&nbsp;&nbsp;<a href="qr.htm"><tt><b>qr</b></tt></a>&nbsp;&nbsp;<a href="fullrfk.htm"><tt><b>fullrfk</b></tt></a>&nbsp;&nbsp;<a href="rowcomp.htm"><tt><b>rowcomp</b></tt></a>&nbsp;&nbsp;<a href="colcomp.htm"><tt><b>colcomp</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>F.D.  </ul></p></body></html>

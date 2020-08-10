@@ -1,0 +1,68 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>getdate</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>getdate -  get date and time information  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>dt=getdate()  </tt></dd><dd><tt>x=getdate('s')  </tt></dd><dd><tt>dt=getdate(x)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>dt  </b></tt>
+    : an integer vector with 8 entries (see below)
+  </li>
+  <li><tt><b>x  </b></tt>
+    : an integer containing a date coded in second from 1 Jan 1970 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+ 
+
+  <li><b>dt</b> 
+    =getdate() returns the current date in format given below:
+  </li>
+ 
+
+  <li><b>dt(1)</b> 
+    : The year  as a number (with the century) between 0000 and 9999.
+  </li>
+
+  <li><b>dt(2)</b> 
+    : The month of the year as a number between 01 and 12.
+  </li>
+
+  <li><b>dt(3)</b> 
+    : The ISO 8601  week  number  as  a   number between 01 and 53.
+  </li>
+
+  <li><b>dt(4)</b> 
+    : The Julian day of the year  as a number between 001 and 366.
+  </li>
+
+  <li><b>dt(5)</b> 
+    : Specifies the weekday as a decimal number [1,7], with 1 representing Sunday. 
+  </li>
+
+  <li><b>dt(6)</b> 
+    : The day of the month as a number between 01 and 31.
+  </li>
+
+  <li><b>dt(7)</b> 
+    : The hour of the day  as a number between 00 and 23.
+  </li>
+
+  <li><b>dt(8)</b> 
+    : The minute  as a number between 00 and 59.
+  </li>
+
+  <li><b>dt(9)</b> 
+    : The second is output as a number between 00 and 59.
+  </li>
+ 
+
+  <li><b>x =getdate('s'), returns a scalar with the number of seconds since Jan</b> 
+    1, 1970, 00:00 UTC (unix time convention)
+  </li>
+
+  <li><b>dt</b> 
+    =getdate(x) ,format the date given by x (number of seconds since Jan 1, 1970, 00:00 UTC) in format given above:
+  </li>
+ 
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+w=getdate()
+mprintf("Year:%d,Month:%d,Day:%d",w(1),w(2),w(6));
+
+x=getdate('s')
+getdate(x)
+
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="date.htm"><tt><b>date</b></tt></a>&nbsp;&nbsp;<a href="../utilities/timer.htm"><tt><b>timer</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

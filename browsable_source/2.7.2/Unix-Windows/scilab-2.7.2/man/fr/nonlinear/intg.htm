@@ -1,0 +1,49 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>intg</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>intg -  intégration numérique adaptative  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[v,err]=intg(a,b,f [,ea [,er])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>a,b  </b></tt>
+    : nombres réels
+  </li>
+  <li><tt><b>f  </b></tt>
+    : fonction externe (fonction Scilab ou chaîne de caractères ou liste).
+  </li>
+  <li><tt><b>ea, er  </b></tt>
+    : nombres réels
+  </li>
+  <li><tt><b>ea  </b></tt>
+    : erreur absolue désirée (0 par défaut)
+  </li>
+  <li><tt><b>er  </b></tt>
+    : erreur relative (1.d-8 par défaut)
+  </li>
+  <li><tt><b>err  </b></tt>
+    : estimation de l'erreur absolue sur le résultat
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>intg(a,b,f)</b></tt> approche l'intégrale de <tt><b>a</b></tt> à
+    <tt><b>b</b></tt> de <tt><b>f(t)dt</b></tt>.
+    L'évaluation satisfait si possible
+    <tt><b>abs(I-v)&lt;= max(ea,er*abs(I))</b></tt> où I représente la valeur exacte de l'intégrale.
+  </p>
+  <p>
+    <tt><b>f</b></tt> est une fonction externe :
+  </p>
+  <p>
+    Si <tt><b>f</b></tt>  est une fonction Scilab elle doit avoir la liste d'appel :
+    <tt><b> y = f(t) </b></tt>
+  </p>
+  <p>
+    Si <tt><b>f</b></tt> est une liste, cette liste doit avoir la structure suivante :
+    <tt><b> list(f,x1,x2,...)</b></tt> où <tt><b>f</b></tt> est une fonction Scilab avec la liste d'appel :
+    <tt><b>f(t,x1,x2,...)</b></tt>.
+  </p>
+  <p>
+    Si <tt><b>f</b></tt> <tt><b>f</b></tt> est une chaîne de caractères, elle désigne le nom d'une subroutine Fortran
+    ou C (voir le code source de <tt><b>fintg.f</b></tt>)
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+deff('[y]=f(x)','y=x*sin(30*x)/sqrt(1-((x/(2*%pi))^2))')
+exact=-2.5432596188;
+abs(exact-intg(0,2*%pi,f))
+// voir routines/default/Ex-intg.f 
+abs(exact-intg(0,2*%pi,'intgex'))
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="intc.htm"><tt><b>intc</b></tt></a>&nbsp;&nbsp;<a href="intl.htm"><tt><b>intl</b></tt></a>&nbsp;&nbsp;<a href="../elementary/inttrap.htm"><tt><b>inttrap</b></tt></a>&nbsp;&nbsp;<a href="../elementary/intsplin.htm"><tt><b>intsplin</b></tt></a>&nbsp;&nbsp;<a href="ode.htm"><tt><b>ode</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

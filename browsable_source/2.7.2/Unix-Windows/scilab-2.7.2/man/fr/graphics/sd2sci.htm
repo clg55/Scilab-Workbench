@@ -1,0 +1,25 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>sd2sci</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>sd2sci -  conversion des sorties de gr_menu vers des instructions Scilab  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>txt=sd2sci(sd [,sz [,orig]])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>sd  </b></tt>
+    : structure de données renvoyée par gr_menu.
+  </li>
+  <li><tt><b>sz  </b></tt>
+    : vecteur de nombres ou chaînes de caractères avec deux composantes, donnant les facteurs de zoom en x et y.
+  </li>
+  <li><tt><b>orig  </b></tt>
+    : vecteur de nombres ou chaînes de caractères avec deux composantes, donnant un vecteur de translation de l'origine 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Etant donné une liste <tt><b>sd</b></tt> générée par <tt><b>gr_menu</b></tt>
+    <tt><b>sd2sci</b></tt> fabrique un vecteur d'instructions Scilab correspondant au graphique
+    contenu dans sd.
+  </p>
+  <p>
+    Les paramètres optionnels <tt><b>sz</b></tt> et <tt><b>orig</b></tt> permettent de changer l'échelle ou de décaler
+    le graphique initial.
+  </p>
+  <p>
+    Si <tt><b>sz</b></tt> ou <tt><b>orig</b></tt> sont donnés sous forme de chaînes de caractères, les instructions
+    générées les utilisent de façon formelle.
+  </p>
+  </dl><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="gr_menu.htm"><tt><b>gr_menu</b></tt></a>&nbsp;&nbsp;<a href="../programming/execstr.htm"><tt><b>execstr</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>Serge Steer INRIA 1988   </ul></p></body></html>

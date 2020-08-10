@@ -1,0 +1,69 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>histplot</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>histplot -  dessine un histogramme   </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>histplot(npoint,data,[style,strf,leg,rect,nax])  </tt></dd><dd><tt>histplot(npoint,data,&lt;opt_args&gt;)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>npoint  </b></tt>
+    : entier ou vecteur ligne de valeurs croissantes
+  </li>
+  <li><tt><b>data  </b></tt>
+    : vecteur réel
+  </li>
+  <li><tt><b>style,strf,leg,rect,nax  </b></tt>
+    : voir plot2d.
+  </li>
+  <li><tt><b>&lt;opt_args&gt;  </b></tt>
+    : Représente une séquence
+  d'instructions de la forme :<tt><b>key1=value1,
+  key2=value2</b></tt>,... où <tt><b>key1</b></tt>, <tt><b>key2,...</b></tt>
+  peuvent être :
+  </li>
+ <ul>
+  <li><tt><b>normalization  </b></tt>
+    : Si sa valeur est <tt><b>%f</b></tt> les valeurs inscrites le long
+  de l'axe des <tt><b>y</b></tt> sont les nombres d'elements
+  <tt><b>Ni</b></tt> dans chaque
+  intervalle, sinon les valeurs inscrites sont <tt><b>Ni/N/lbi</b></tt> où
+  <tt><b>N</b></tt> est le nombre total d'éléments et <tt><b>lbi</b></tt> la
+  longueur du <tt><b>lbi</b></tt>ème intervalle.
+
+  </li>
+  <li><tt><b>style  </b></tt>
+    : donne le style de chaque courbe (voir plot2d)
+  </li>
+  <li><tt><b>leg  </b></tt>
+    : donne la légende de chaque courbe. Si ce paramètre est spécifié et que <tt><b>strf</b></tt> n'est pas donné alors le caractère <tt><b>x</b></tt> de <tt><b>strf</b></tt> est supposé être <tt><b>1</b></tt> (voir plot2d)
+  </li>
+  <li><tt><b>rect  </b></tt>
+    : définit les bornes du dessin. Si ce paramètre est donné et que ni <tt><b>frameflag</b></tt> ni <tt><b>strf</b></tt> ne sont donnés alors le caractère <tt><b>y</b></tt> de <tt><b>strf</b></tt> est supposé être <tt><b>7</b></tt> (voir plot2d)
+  </li>
+  <li><tt><b>nax  </b></tt>
+    : définition des graduations. Si ce paramètre est donné et que ni <tt><b>axesflag</b></tt> ni <tt><b>strf</b></tt> ne sont donnés alors le caractère <tt><b>z</b></tt> de <tt><b>strf</b></tt> est supposé être <tt><b>1</b></tt>  (voir plot2d)
+  </li>
+  <li><tt><b>logflag  </b></tt>
+    : définit le type d'échelle (linéaire ou logarithmique) des axes (voir plot2d)
+  </li>
+  <li><tt><b>frameflag  </b></tt>
+    : spécifie comment est calculé le cadre du dessin. Cette valeur est un entier entre 0 et 8. Il correspond au caractère <tt><b>y</b></tt> de <tt><b>strf</b></tt> (voir plot2d)
+  </li>
+  <li><tt><b>axesflag  </b></tt>
+    : spécifie le type d'axe dessiné autour du dessin. Cette valeur est un entier entre 0 et 5. Il correspond au caractère <tt><b>z</b></tt> de <tt><b>strf</b></tt> (voir plot2d)
+  </li>
+ </ul>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+ 
+  <li><b>-</b> 
+    Si <tt><b>npoint</b></tt> est un entier, <tt><b>histplot</b></tt> dessine un histograme des valeurs stockées dans <tt><b>data</b></tt> en utilisant <tt><b>npoint</b></tt> classes équiréparties.
+  </li>
+
+  <li><b>-</b> 
+    Si <tt><b>npoint</b></tt> est un vecteur <tt><b>histplot</b></tt> dessine un histograme des valeurs stockées dans <tt><b>data</b></tt> en utilisant les classes <tt><b>]npoint(k),npoint(k+1)]</b></tt>.
+
+  </li>
+ 
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+histplot()
+
+d=rand(1,10000,'normal');
+xbasc();histplot(20,d)
+
+xbasc();histplot(20,d,normalization=%f)
+xbasc();histplot(20,d,leg='rand(1,10000,''normal'')',style=5)
+
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="hist3d.htm"><tt><b>hist3d</b></tt></a>&nbsp;&nbsp;<a href="plot2d.htm"><tt><b>plot2d</b></tt></a>&nbsp;&nbsp;<a href="../elementary/dsearch.htm"><tt><b>dsearch</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

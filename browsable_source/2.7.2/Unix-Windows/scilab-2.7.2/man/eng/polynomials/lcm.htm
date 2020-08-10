@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>lcm</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>lcm -  least common multiple  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[pp,fact]=lcm(p)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>p  </b></tt>
+    : 
+  </li>
+  <li><tt><b>fact  </b></tt>
+    : polynomial vector
+  </li>
+  <li><tt><b>pp  </b></tt>
+    : polynomial
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>pp=lcm(p)</b></tt> computes the lcm <tt><b>pp</b></tt> of polynomial vector <tt><b>p</b></tt>.
+  </p>
+  <p>
+    <tt><b>[pp,fact]=lcm(p)</b></tt> computes in addition the vector <tt><b>fact</b></tt> such that:
+  </p>
+  <p>
+    <tt><b>p.*fact=pp*ones(p)</b></tt>
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+s=poly(0,'s');
+p=[s,s*(s+1)^2,s^2*(s+2)];
+[pp,fact]=lcm(p);
+p.*fact, pp
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="gcd.htm"><tt><b>gcd</b></tt></a>&nbsp;&nbsp;<a href="bezout.htm"><tt><b>bezout</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

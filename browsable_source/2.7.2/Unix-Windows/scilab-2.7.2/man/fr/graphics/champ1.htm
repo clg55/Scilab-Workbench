@@ -1,0 +1,34 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>champ1</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>champ1 -  champ de vecteurs dans le plan avec flèches colorées  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>champ1(x,y,fx,fy,[arfact,rect,strf])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>x,y  </b></tt>
+    : deux vecteurs définissant la grille
+  </li>
+  <li><tt><b>fx  </b></tt>
+    : une matrice décrivant la composante x du champ de vecteurs. <tt><b>fx(i,j)</b></tt> est la composante x du champ de vecteurs au point <tt><b>(x(i),y(j))</b></tt>.
+  </li>
+  <li><tt><b>fy  </b></tt>
+    : une matrice décrivant la composante y du champ de vecteurs. <tt><b>fy(i,j)</b></tt> est la composante y du champ de vecteurs au point <tt><b>(x(i),y(j))</b></tt>.
+  </li>
+  <li><tt><b>arfact  </b></tt>
+    : un argument optionnel de type réel donnant le facteur d'échelle pour l'affichage des flèches (1.0 par défaut).
+  </li>
+  <li><tt><b>rect  </b></tt>
+    : un vecteur <tt><b>rect=[xmin,ymin,xmax,ymax]</b></tt> les limites du dessin
+  </li>
+  <li><tt><b>strf  </b></tt>
+    : une chaîne de caractères de longueur 3 "xyz" ayant la même signification que le paramètre <tt><b>strf</b></tt> de <tt><b>plot2d</b></tt>. Le premier caractère x n'a pas d'effet avec <tt><b>champ1</b></tt>.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>champ1</b></tt> dessine un champ de vecteurs dans le plan avec des flèches colorées. La couleur des flèches 
+    dépend de l'intensité du champ.
+  </p>
+  <p>
+    Si la longueur des flèches doit être proportionnelle à l'intensité du champ, utiliser <tt><b>champ</b></tt>.
+  </p>
+  <p>
+    Taper <tt><b>champ1()</b></tt> pour voir une démonstration de la fonction.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+xset("use color",1)
+champ1(-5:5,-5:5,rand(11,11),rand(11,11),2,[-10,-10,10,10],"021")
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="champ.htm"><tt><b>champ</b></tt></a>&nbsp;&nbsp;<a href="fchamp.htm"><tt><b>fchamp</b></tt></a>&nbsp;&nbsp;<a href="plot2d.htm"><tt><b>plot2d</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>J.Ph.C.  </ul></p></body></html>

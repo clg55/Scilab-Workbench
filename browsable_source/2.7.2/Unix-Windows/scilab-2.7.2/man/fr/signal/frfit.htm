@@ -1,0 +1,32 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>frfit</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>frfit -  frequency response fit  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>sys=frfit(w,fresp,order)  </tt></dd><dd><tt>[num,den]=frfit(w,fresp,order)  </tt></dd><dd><tt>sys=frfit(w,fresp,order,weight)  </tt></dd><dd><tt>[num,den]=frfit(w,fresp,order,weight)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>w  </b></tt>
+    : positive real vector of frequencies (Hz)
+  </li>
+  <li><tt><b>fresp  </b></tt>
+    : complex vector of frequency responses (same size as <tt><b>w</b></tt>)
+  </li>
+  <li><tt><b>order  </b></tt>
+    : integer (required order, degree of <tt><b>den</b></tt>)
+  </li>
+  <li><tt><b>weight  </b></tt>
+    : positive real vector (default value <tt><b>ones(w)</b></tt>).
+  </li>
+  <li><tt><b>num,den  </b></tt>
+    : stable polynomials
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>sys=frfit(w,fresp,order,weight)</b></tt> returns a bi-stable transfer function
+    <tt><b>G(s)=sys=num/den</b></tt>, of of given <tt><b>order</b></tt> such that 
+    its frequency response <tt><b>G(w(i))</b></tt> matches <tt><b>fresp(i)</b></tt>, i.e.
+    <tt><b>freq(num,den,%i*w)</b></tt> should be close to <tt><b>fresp</b></tt>.
+    <tt><b>weight(i)</b></tt> is the weight given to <tt><b>w(i)</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+w=0.01:0.01:2;s=poly(0,'s');
+G=syslin('c',2*(s^2+0.1*s+2), (s^2+s+1)*(s^2+0.3*s+1));
+fresp=repfreq(G,w);
+Gid=frfit(w,fresp,4);
+frespfit=repfreq(Gid,w);
+bode(w,[fresp;frespfit])
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="../control/frep2tf.htm"><tt><b>frep2tf</b></tt></a>&nbsp;&nbsp;<a href="../polynomials/factors.htm"><tt><b>factors</b></tt></a>&nbsp;&nbsp;<a href="cepstrum.htm"><tt><b>cepstrum</b></tt></a>&nbsp;&nbsp;<a href="mrfit.htm"><tt><b>mrfit</b></tt></a>&nbsp;&nbsp;<a href="../control/freq.htm"><tt><b>freq</b></tt></a>&nbsp;&nbsp;<a href="../control/calfrq.htm"><tt><b>calfrq</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,81 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>exec</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>exec -  exécution d'un script (fichier de commandes)  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>exec(path [,mode])  </tt></dd><dd><tt>exec(fun [,mode])  </tt></dd><dd><tt>ierr=exec(path,'errcatch' [,mode])  </tt></dd><dd><tt>ierr=exec(fun,'errcatch' [,mode])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>path  </b></tt>
+    : chaîne de caractères, le chemin du script à exécuter
+  </li>
+  <li><tt><b>mode  </b></tt>
+    : entier, précisant le mode d'exécution (voir plus bas)
+  </li>
+  <li><tt><b>fun  </b></tt>
+    : identificateur d'une fonction scilab
+  </li>
+  <li><tt><b>ierr  </b></tt>
+    : entier, 0 ou numéro d'erreur 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>exec(path [,mode])</b></tt> exécute séquentiellement les instructions Scilab contenues dans le fichier spécifié par <tt><b>path</b></tt> avec le mode d'exécution optionnel <tt><b>mode</b></tt> .
+  </p>
+  <p>
+  </p>
+  <p>
+    Les différentes valeurs de <tt><b>mode</b></tt> sont :
+  </p>
+ 
+  <p>
+     0 
+    : valeur par défaut
+  </p>
+  <p>
+     -1 
+    : rien n'est affiché
+  </p>
+  <p>
+     1 
+    : chaque ligne de commande est affichée
+  </p>
+  <p>
+     2 
+    : l'invite de commande <tt><b>--&gt;</b></tt> est affiché
+  </p>
+  <p>
+     3 
+    : lignes de commandes + invite de commande
+  </p>
+  <p>
+     4 
+    : pause dans l'exécution au début de chaque ligne. L'exécution reprend après un appui sur la touche entrée/return. 
+  </p>
+  <p>
+     7 
+    : pause + invite + affichage : ce mode est utile pour les démonstrations.
+  </p>
+  <p>
+    <tt><b>exec(fun [,mode])</b></tt> exécute la fonction <tt><b>fun</b></tt> comme un script : aucun argument n'est utilisé en entrée ou en sortie, et l'exécution se fait dans l'environnement courant (les variables créées dans la fonction sont conservées après l'exécution). Cette forme est plus efficace, car ainsi les instructions du script peuvent être pré-compilées (voir getf, comp). Cette méthode d'exécution des scripts permet aussi de stocker des scripts comme des fonctions dans des librairies. 
+  </p>
+  <p>
+    Si une erreur se produit pendant l'exécution, si la chaîne de caractères 'errcatch' est présente, <tt><b>exec</b></tt> ne produit pas de message d'erreur, mais stoppe l'exécution du script et renvoie une valeur de <tt><b>ierr</b></tt> égale au numéro de l'erreur. Si la chaîne 'errcatch' n'est pas présente, la gestion habituelle des erreurs est utilisée.
+  </p>
+ 
+  </dl><H3><font color="blue">REMARQUE</font></H3><ul><p>
+    Les scripts peuvent maintenant contenir des définitions de fonctions en ligne (voir fonction). 
+  </p></ul><H3><font color="blue">Exemples</font></H3><ul><pre>
+// création d'un script
+write(TMPDIR+'/myscript','a=1;b=2')
+// on l'exécute
+exec(TMPDIR+'/myscript')
+who
+
+// création d'une function
+deff('y=foo(x)','a=x+1;y=a^2')
+clear a b
+// appel à la fonction
+foo(1)
+// a est une variable créée dans l'environnement de la fonction foo
+// elle est détruite à la sortie de la fonction.
+who 
+
+x=1 // on crée la variable x pour qu'elle soit connue à l'exécution de foo
+exec(foo)
+// a et y ont été créées dans l'environnement courant
+who
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="../functions/getf.htm"><tt><b>getf</b></tt></a>&nbsp;&nbsp;<a href="execstr.htm"><tt><b>execstr</b></tt></a>&nbsp;&nbsp;<a href="evstr.htm"><tt><b>evstr</b></tt></a>&nbsp;&nbsp;<a href="../functions/comp.htm"><tt><b>comp</b></tt></a>&nbsp;&nbsp;<a href="mode.htm"><tt><b>mode</b></tt></a>&nbsp;&nbsp;<a href="../utilities/chdir.htm"><tt><b>chdir</b></tt></a>&nbsp;&nbsp;<a href="pwd.htm"><tt><b>getcwd</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

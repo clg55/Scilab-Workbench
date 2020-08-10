@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>or |</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>or | -  logical or  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>or(A),  or(A,'*')  </tt></dd><dd><tt>or(A,'r'), or(A,1)  </tt></dd><dd><tt>  </tt></dd><dd><tt>or(A,'c'), or(A,2)  </tt></dd><dd><tt>A|B  </tt></dd></dl><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>or(A)</b></tt>  gives the  <tt><b>or</b></tt> of the elements of the  boolean 
+    matrix  <tt><b>A</b></tt>. <tt><b>or(A)</b></tt> is true (<tt><b>%t</b></tt>) iff at least one entry of
+    <tt><b>A</b></tt> is <tt><b>%t</b></tt>. 
+  </p>
+  <p>
+    <tt><b>y=or(A,'r')</b></tt> (or, equivalently, <tt><b>y=or(A,1)</b></tt>) is the rowwise or. It returns in each 
+    entry of the row vector <tt><b>y</b></tt> the or of the rows of <tt><b>x</b></tt> (The or is performed on the 
+    row index : <tt><b>y(j)= or(A(i,j),i=1,m)</b></tt>).
+  </p>
+  <p>
+    <tt><b>y=or(A,'c')</b></tt> (or, equivalently, <tt><b>y=or(A,2)</b></tt>) is the columnwise or. It returns 
+    in each entry of the column vector <tt><b>y</b></tt> the or of the columns of <tt><b>x</b></tt> 
+    (The or is performed on the column index:  <tt><b>y(i)= or(A(i,j),j=1,n)</b></tt>)).
+  </p>
+  <p>
+    <tt><b>A|B</b></tt>  gives the element-wise logical <tt><b>or</b></tt> of the booleans matrices
+     <tt><b>A</b></tt> and  <tt><b>B</b></tt> .<tt><b>A</b></tt> and  <tt><b>B</b></tt> must be matrices with the same
+     dimensions or one from them must be a single boolean.
+  </p>
+  <p>
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+or([%t %t %f])
+[%t %t %f]|[%f %t %t]
+[%t %t %f]|%f
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="and.htm"><tt><b>and</b></tt></a>&nbsp;&nbsp;<a href="not.htm"><tt><b>not</b></tt></a>&nbsp;&nbsp;<a href="../programming/find.htm"><tt><b>find</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

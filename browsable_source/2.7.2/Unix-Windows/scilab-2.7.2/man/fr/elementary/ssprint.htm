@@ -1,0 +1,17 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>ssprint</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>ssprint -  pretty print for linear system  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>ssprint(sl [,out])  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>sl  </b></tt>
+    : list (<tt><b>syslin</b></tt> list)
+  </li>
+  <li><tt><b>out  </b></tt>
+    : output (default value <tt><b>out=%io(2)</b></tt>)
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    pretty print of a linear system in state-space form
+    <tt><b>sl=(A,B,C,D) syslin</b></tt> list.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+ a=[1 1;0 1];b=[0 1;1 0];c=[1,1];d=[3,2];
+ ssprint(syslin('c',a,b,c,d))
+ ssprint(syslin('d',a,b,c,d))
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="../translation/texprint.htm"><tt><b>texprint</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

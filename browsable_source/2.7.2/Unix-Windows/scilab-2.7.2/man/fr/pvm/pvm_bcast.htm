@@ -1,0 +1,54 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>pvm_bcast</title></head><body bgcolor="FFFFFF"><CENTER>Scilab function  </CENTER><p><b>pvm_bcast -  broacasts a message to all members of a group  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[info] = pvm_bcast(group, buff, msgtag)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>group  </b></tt>
+    : string, string group name of an existing group.
+  </li>
+  <li><tt><b>buff  </b></tt>
+    :  data to be send.
+  </li>
+  <li><tt><b>msgtag  </b></tt>
+    : integer,  message tag supplied by the user.
+  </li>
+  <li><tt><b>info  </b></tt>
+    : integer, 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>pvm_bcast</b></tt> broadcasts a message to all the members of
+  </p>
+  <p>
+    In PVM 3.2 and later the broadcast message is not sent back to the sender.
+    Any PVM task can call pvm_bcast(), it need not be a member of the group.
+    The content of the message can be distinguished by
+  </p>
+  <p>
+    If pvm_bcast is successful,
+  </p>
+  <p>
+    will be 0. If some error occurs then
+  </p>
+  <p>
+    will be &lt; 0.
+  </p>
+  <p>
+    pvm_bcast is asynchronous.
+    Computation on the sending processor resumes as soon as the message is
+    safely on its way to the receiving processors.  This is in
+    contrast to synchronous communication, during which computation on
+    the sending processor halts until a matching receive is
+    executed by all the receiving processors.
+  </p>
+  <p>
+    pvm_bcast first determines the tids of the
+    group members by checking a group data base.
+    A multicast is performed to these tids.
+    If the group is changed during a broadcast the change will not
+    be reflected in the broadcast.
+    Multicasting is not supported by most multiprocessor vendors.
+    Typically their native calls only support broadcasting to <tt><b>all</b></tt>
+    the user's processes on a multiprocessor. Because of this omission,
+    pvm_bcast may not be an efficient communication method on
+    some multiprocessors.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+info = pvm_bcast( "worker",[12+%i,4,5;3,4+%i,5],10)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="pvm_joingroup.htm"><tt><b>pvm_joingroup</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

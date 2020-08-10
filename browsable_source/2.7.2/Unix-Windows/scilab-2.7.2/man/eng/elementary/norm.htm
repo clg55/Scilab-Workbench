@@ -1,0 +1,57 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>norm</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>norm -  matrix norms  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[y]=norm(x [,flag])  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>x  </b></tt>
+    : real or complex vector or matrix (full or sparse storage)
+  </li>
+  <li><tt><b>flag  </b></tt>
+    : string (type of norm) (default value =2)
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    For matrices
+  </p>
+ 
+
+  <li><b>norm(x)</b> 
+    : or <tt><b>norm(x,2)</b></tt> is the largest singular value of <tt><b>x</b></tt> (<tt><b>max(svd(x))</b></tt>). 
+  </li>
+
+  <li><b>norm(x,1)</b> 
+    : The l_1 norm <tt><b>x</b></tt> (the largest column sum :  <tt><b>maxi(sum(abs(x),'r'))</b></tt>  ).
+  </li>
+
+  <li><b>norm(x,'inf'),norm(x,%inf)</b> 
+    : The infinity norm of <tt><b>x</b></tt> (the largest row sum :  <tt><b>maxi(sum(abs(x),'c'))</b></tt>  ).
+  </li>
+
+  <li><b>norm(x,'fro')</b> 
+    : Frobenius norm i.e. <tt><b>sqrt(sum(diag(x'*x)))</b></tt>
+  </li>
+ 
+  <p>
+    For vectors
+  </p>
+ 
+
+  <li><b>norm(v,p)</b> 
+    : l_p norm (<tt><b>sum(v(i)^p))^(1/p)</b></tt> .
+  </li>
+
+  <li><b>norm(v)</b> 
+    : <tt><b>=norm(v,2)</b></tt> : l_2 norm
+  </li>
+
+  <li><b>norm(v,'inf')</b> 
+    : <tt><b>max(abs(v(i)))</b></tt>.
+  </li>
+ 
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+A=[1,2,3];
+norm(A,1)
+norm(A,'inf')
+A=[1,2;3,4]
+max(svd(A))-norm(A)
+
+A=sparse([1 0 0 33 -1])
+norm(A)
+
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="../robust/h_norm.htm"><tt><b>h_norm</b></tt></a>&nbsp;&nbsp;<a href="../robust/dhnorm.htm"><tt><b>dhnorm</b></tt></a>&nbsp;&nbsp;<a href="../robust/h2norm.htm"><tt><b>h2norm</b></tt></a>&nbsp;&nbsp;<a href="abs.htm"><tt><b>abs</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

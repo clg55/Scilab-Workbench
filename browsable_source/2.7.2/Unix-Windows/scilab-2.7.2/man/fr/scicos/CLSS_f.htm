@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>CLSS_f</title></head><body bgcolor="FFFFFF"><CENTER>Scicos Block  </CENTER><p><b>CLSS_f -  Scicos continuous-time linear state-space system  </b></p><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    This block realizes a continuous-time linear state-space system.
+  </p>
+  <pre>
+xdot=A*x+B*u
+y   =C*x+D*u
+   </pre>
+  <p>
+    The system is defined by the (A,B,C,D) matrices and the initial
+    state x0. The dimensions must be compatible.
+  </p>
+  </dl><H3><font color="blue">DIALOGUE PARAMETERS</font></H3><ul><li><b><font color="maroon">A</font></b>
+: square matrix. The A matrix
+
+  </li><li><b><font color="maroon">B</font></b>
+: the <tt><b>B</b></tt> matrix, <tt><b>[]</b></tt> if system has no input
+
+  </li><li><b><font color="maroon">C</font></b>
+: the <tt><b>C</b></tt> matrix , <tt><b>[]</b></tt> if system has no output
+
+  </li><li><b><font color="maroon">D</font></b>
+: the <tt><b>D</b></tt> matrix, <tt><b>[]</b></tt> if system has no <tt><b>D</b></tt> term.
+
+  </li><li><b><font color="maroon">x0</font></b>
+: vector. The initial state of the system.
+
+  </li></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="CLR_f.htm"><tt><b>CLR_f</b></tt></a>&nbsp;&nbsp;<a href="INTEGRAL_f.htm"><tt><b>INTEGRAL_f</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

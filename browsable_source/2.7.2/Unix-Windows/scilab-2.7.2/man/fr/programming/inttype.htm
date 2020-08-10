@@ -1,0 +1,42 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>inttype</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>inttype -   type des entiers utilisés dans les types entiers de données.  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[i]=inttype(x)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>x  </b></tt>
+    : matrice d'entiers (voir int8)
+  </li>
+  <li><tt><b>i  </b></tt>
+    : un entier
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    renvoie un entier donnant le type de données stockées dans
+    <tt><b>x</b></tt> avec la convention suivante :
+  </p>
+ 
+  <p>
+     1 
+    :  codage entier à 1 octet
+  </p>
+  <p>
+     2 
+    :  codage entier à 2 octets
+  </p>
+  <p>
+     4 
+    :  codage entier à 4 octets
+  </p>
+  <p>
+     11 
+    :  codage entier non-signé à 1 octet
+  </p>
+  <p>
+     12 
+    :  codage entier non-signé à 2 octets
+  </p>
+  <p>
+     14 
+    :  codage entier non-signé à 4 octets
+  </p>
+ 
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+x=uint16(1:10);
+inttype(x)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="../elementary/int8.htm"><tt><b>int8</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

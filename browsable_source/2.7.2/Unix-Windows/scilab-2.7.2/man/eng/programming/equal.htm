@@ -1,0 +1,62 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>equal (=)</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>equal (=) -  affectation, comparison equal sign  </b></p><H3><font color="blue">Description</font></H3><dl>
+ 
+
+  <li><b>-</b> 
+    Equal sign is used to denote a value affectation to a variable.
+  </li>
+
+  <li><b>-</b> 
+     <tt><b> a == b</b></tt>  denotes equality comparison between  expressions <tt><b> a</b></tt> and <tt><b> b</b></tt>:
+  </li>
+ 
+
+  <li><b>With</b> 
+    matrix objects,
+  </li>
+ 
+
+  <li><b>If</b> 
+    <tt><b> a</b></tt> and <tt><b> b</b></tt> are matrices with same types and identical dimensions, the comparison is performed element by element and the result is a matrix of booleans.
+  </li>
+
+  <li><b>If</b> 
+    <tt><b> a</b></tt> and <tt><b> b</b></tt> are matrices with same types, but <tt><b> a</b></tt> or <tt><b> b</b></tt> is a 1 by 1 matrix the scalar is compared with each element of the matrix. The result is a matrix of booleans. 
+  </li>
+
+  <li><b>In</b> 
+    The others cases the result is the boolean <tt><b> %f</b></tt> 
+  </li>
+ 
+
+  <li><b>With</b> 
+    list objects,
+  </li>
+ 
+
+  <li><b>If</b> 
+    <tt><b> a</b></tt> and <tt><b> b</b></tt> are lists with  identical sizes, the comparison is performed element by element and and recursively. The result is a row vector of booleans.
+  </li>
+
+  <li><b>If</b> 
+    <tt><b> a</b></tt> and <tt><b> b</b></tt> are lists with non equal sizes the result is the boolean <tt><b> %f</b></tt>.
+  </li>
+ 
+
+  <li><b>With</b> 
+    tlist and mlist object. If no overloading function is defined the <tt><b> list</b></tt> comparison method is used.
+  </li>
+
+  <li><b>With</b> 
+    other data types (functions, libraries,...) , the result is <tt><b> %t</b></tt> if the objects are identical and <tt><b> %f</b></tt> in the other case.
+  </li>
+ 
+  <p>
+    Comparison between different data types returns <tt><b> %f</b></tt>.
+  </p>
+ 
+  </dl><H3><font color="blue">EXAMPLES</font></H3><ul><pre>
+a=sin(3.2)
+[u,s]=schur(rand(3,3))
+[1:10]==4
+1~=2
+   </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="less.htm"><tt><b>less</b></tt></a>&nbsp;&nbsp;<a href="boolean.htm"><tt><b>boolean</b></tt></a>&nbsp;&nbsp;<a href="../elementary/isequal.htm"><tt><b>isequal</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

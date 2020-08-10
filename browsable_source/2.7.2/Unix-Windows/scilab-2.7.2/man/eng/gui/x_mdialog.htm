@@ -1,0 +1,43 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>x_mdialog</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>x_mdialog -  Xwindow dialog  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>result=x_mdialog(title,labels,default_inputs_vector)   </tt></dd><dd><tt>result=x_mdialog(title,labelsv,labelsh,default_input_matrix)   </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>title  </b></tt>
+    : column vector of strings, dialog general comment 
+  </li>
+  <li><tt><b>labels  </b></tt>
+    : n column vector of strings, <tt><b>labels(i)</b></tt> is the label of  the ith required value
+  </li>
+  <li><tt><b>default_input_vector  </b></tt>
+    : n  column vector of strings, <tt><b>default_input_vector(i)</b></tt> is the initial value of  the ith required value
+  </li>
+  <li><tt><b>labelsv  </b></tt>
+    : n  vector of strings, <tt><b>labelsv(i)</b></tt> is the label of  the ith line of the required matrix
+  </li>
+  <li><tt><b>labelsh  </b></tt>
+    : m  vector of strings, <tt><b>labelsh(j)</b></tt> is the label of  the jth column of the required matrix
+  </li>
+  <li><tt><b>default_input_matrix  </b></tt>
+    : n x m matrix of strings, <tt><b>default_input_matrix(i,j)</b></tt> is the initial value of the (i,j) element of then required matrix
+  </li>
+  <li><tt><b>result  </b></tt>
+    : n x m matrix of string if returned with "Ok" button or [] if returned with "Cancel" button
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    X-window vector/matrix interactive input function
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+ txt=['magnitude';'frequency';'phase    '];
+ sig=x_mdialog('enter sine signal',txt,['1';'10';'0'])
+ mag=evstr(sig(1))
+ frq=evstr(sig(2))
+ ph=evstr(sig(3))
+
+ rep=x_mdialog(['System Simulation';'with PI regulator'],...
+                      ['P gain';'I gain '],[' ';' '])
+
+
+ n=5;m=4;mat=rand(n,m);
+ row='row';labelv=row(ones(1,n))+string(1:n)
+ col='col';labelh=col(ones(1,m))+string(1:m)
+ new=evstr(x_mdialog('Matrix to edit',labelv,labelh,string(mat)))
+
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="x_dialog.htm"><tt><b>x_dialog</b></tt></a>&nbsp;&nbsp;<a href="x_choose.htm"><tt><b>x_choose</b></tt></a>&nbsp;&nbsp;<a href="x_message.htm"><tt><b>x_message</b></tt></a>&nbsp;&nbsp;<a href="getvalue.htm"><tt><b>getvalue</b></tt></a>&nbsp;&nbsp;<a href="../programming/evstr.htm"><tt><b>evstr</b></tt></a>&nbsp;&nbsp;<a href="../programming/execstr.htm"><tt><b>execstr</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

@@ -1,0 +1,43 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>drawnow</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>drawnow -  
+   draw hidden graphics entities.
+  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>drawnow() </tt></dd><dd><tt>drawnow(h) </tt></dd><dd><tt>drawnow("all") </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+
+  <li><tt><b>h  </b></tt>
+     : a handle, the handle of an axes entity.
+  </li>
+
+  <li><tt><b>"all"  </b></tt>
+    : string keyword (optional).
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+    This function can be used to draw the hidden graphics entities and all its
+    chidren,their Visibility property is set to <tt><b>"on" </b></tt>.
+    The handle given as argument correspond to an axes entity.  
+    Without any argument <tt><b>drawnow</b></tt> draws the
+    current axes and makes all its children visibles. 
+    With the option <tt><b>"all"</b></tt>, the current figure and all its children 
+    graphics entities will be visibles.
+    
+    It can specially be used with the  <tt><b>drawlater</b></tt> function.
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+
+  set("figure_style","new") // select entity based graphics
+  f=get("current_figure") // handle of the current figure
+  
+  drawlater();
+  subplot(221);
+  t=1:10;plot2d(t,t.^2)
+  subplot(222);
+  x=0:1:7;plot2d(x,cos(x),2) 
+  subplot(234);
+  plot2d(t,cos(t),3);
+  subplot(235);
+  plot2d(x,sin(2*x),5); 
+  subplot(236);
+  plot2d(t,tan(2*t));  
+ 
+  drawnow();
+  drawnow(f.children([3 4]));
+  drawnow("all");
+
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="get.htm"><tt><b>get</b></tt></a>&nbsp;&nbsp;<a href="set.htm"><tt><b>set</b></tt></a>&nbsp;&nbsp;<a href="drawlater.htm"><tt><b>drawlater</b></tt></a>&nbsp;&nbsp;<a href="graphics_entities.htm"><tt><b>graphics_entities</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Author</font></H3><p><ul> Djalel ABDEMOUCHE </ul></p></body></html>

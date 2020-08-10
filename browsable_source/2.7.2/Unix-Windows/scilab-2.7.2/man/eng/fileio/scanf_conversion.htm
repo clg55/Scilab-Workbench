@@ -1,0 +1,89 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>scanf_conversion</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>scanf_conversion -  scanf, sscanf, fscanf conversion specifications  </b></p><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Each conversion specification in the format parameter
+    contains the following elements:
+  </p>
+ 
+
+  <li><b>+</b> 
+    The character % (percent sign)
+  </li>
+
+  <li><b>+</b> 
+    The optional assignment suppression character *
+  </li>
+
+  <li><b>+</b> 
+    An optional numeric maximum field width
+  </li>
+
+  <li><b>+</b> 
+    A conversion code
+  </li>
+  <p>
+    The conversion specification has the following syntax:
+  </p>
+  <p>
+    <tt><b>[*][width][size]convcode</b></tt>.
+  </p>
+  <p>
+    The results from the conversion are placed in v_i arguments
+    unless you specify assignment suppression with * (asterisk). Assignment
+    suppression provides a way to describe an input field that is to be
+    skipped. The input field is a string of nonwhite-space characters.
+    It extends to the next inappropriate character or until the field
+    width, if specified, is exhausted.
+  </p>
+  <p>
+    The conversion code indicates how to interpret the input field.
+     You should not specify the v_i parameter for a
+    suppressed field. You can use the following conversion codes:
+  </p>
+
+  <li><b>%</b> 
+    :Accepts a single % (percent sign) input at this point; no assignment is done.
+  </li>
+
+  <li><b>d, i</b> 
+    :Accepts a decimal integer; 
+  </li>
+
+  <li><b>u</b> 
+    :Accepts an unsigned decimal integer; 
+  </li>
+
+  <li><b>o</b> 
+    :Accepts an octal integer;
+  </li>
+
+  <li><b>x</b> 
+    :Accepts a hexadecimal integer; 
+  </li>
+
+  <li><b>e,f,g</b> 
+    :Accepts a floating-point number. The next field is converted accordingly and stored through the corresponding parameter, which should be a pointer to a float. The input format for floating-point numbers is a string of digits, with the following optional characteristics:
+  </li>
+ 
+
+  <li><b>+</b> 
+    It can be a signed value.
+  </li>
+
+  <li><b>+</b> 
+    It can be an exponential value, containing a decimal point followed by an exponent field, which consists of an E or an e followed by an (optionally signed) integer.
+  </li>
+
+  <li><b>+</b> 
+    It can be one of the special values INF, NaN,
+  </li>
+ 
+
+  <li><b>s</b> 
+    :Accepts a string of characters. 
+  </li>
+
+  <li><b>c</b> 
+    :character value is expected. The normal skip over white space is suppressed. 
+  </li>
+ 
+  </dl><H3><font color="blue">See Also</font></H3><p><ul><a href="scanf.htm"><tt><b>scanf</b></tt></a>&nbsp;&nbsp;<a href="scanf.htm"><tt><b>scanf</b></tt></a>&nbsp;&nbsp;<a href="fscanf.htm"><tt><b>fscanf</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

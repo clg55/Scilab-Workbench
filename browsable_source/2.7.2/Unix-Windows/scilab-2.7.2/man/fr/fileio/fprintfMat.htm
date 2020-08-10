@@ -1,0 +1,22 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>fprintfMat</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>fprintfMat -  print a matrix in a file.  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>fprintfMat(fil,M,format)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>fil : a string, path of the file  </b></tt>
+  </li>
+  <li><tt><b>format  </b></tt>
+    : a character string, a C like format.
+  </li>
+  <li><tt><b>M  </b></tt>
+    : A matrix of real numbers.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+  </p>
+  <p>
+    The fprintfMat function prints a matrix in a formated file. Each row
+    of the matrix give a line in the file.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+n=50;
+a=rand(n,n,'u');
+fprintfMat(TMPDIR+'/Mat',a,'%5.2f');
+a1=fscanfMat(TMPDIR+'/Mat');
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="mclose.htm"><tt><b>mclose</b></tt></a>&nbsp;&nbsp;<a href="meof.htm"><tt><b>meof</b></tt></a>&nbsp;&nbsp;<a href="mprintf.htm"><tt><b>mfprintf</b></tt></a>&nbsp;&nbsp;<a href="mfscanf.htm"><tt><b>mfscanf</b></tt></a>&nbsp;&nbsp;<a href="fscanfMat.htm"><tt><b>fscanfMat</b></tt></a>&nbsp;&nbsp;<a href="mget.htm"><tt><b>mget</b></tt></a>&nbsp;&nbsp;<a href="mgetstr.htm"><tt><b>mgetstr</b></tt></a>&nbsp;&nbsp;<a href="mopen.htm"><tt><b>mopen</b></tt></a>&nbsp;&nbsp;<a href="mprintf.htm"><tt><b>mprintf</b></tt></a>&nbsp;&nbsp;<a href="mput.htm"><tt><b>mput</b></tt></a>&nbsp;&nbsp;<a href="mputstr.htm"><tt><b>mputstr</b></tt></a>&nbsp;&nbsp;<a href="mfscanf.htm"><tt><b>mscanf</b></tt></a>&nbsp;&nbsp;<a href="mseek.htm"><tt><b>mseek</b></tt></a>&nbsp;&nbsp;<a href="mtell.htm"><tt><b>mtell</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

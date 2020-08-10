@@ -1,0 +1,15 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>noisegen</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>noisegen -  noise generation   </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>[]=noisegen(pas,Tmax,sig)  </tt></dd></dl><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    generates a Scilab function <tt><b>[b]=Noise(t)</b></tt>
+    where <tt><b>Noise(t)</b></tt> is a piecewise constant function 
+    ( constant on  <tt><b>[k*pas,(k+1)*pas]</b></tt> ). The value on each constant 
+    interval are random values from  i.i.d  Gaussian variables of 
+    standard deviation sig. The function is constant for <tt><b>t&lt;=0</b></tt> and 
+    <tt><b>t&gt;=Tmax</b></tt>.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+noisegen(0.5,30,1.0);
+x=-5:0.01:35;
+y=feval(x,Noise);
+plot(x,y);
+ </pre></ul></body></html>

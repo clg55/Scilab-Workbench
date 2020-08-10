@@ -1,0 +1,28 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>zpch2</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>zpch2 -  Chebyshev analog filter  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[zeros,poles,gain]=zpch2(n,A,omegar)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>n  </b></tt>
+    : integer : filter order
+  </li>
+  <li><tt><b>A  </b></tt>
+    : real : attenuation in stop band (<tt><b>A&gt;1</b></tt>)
+  </li>
+  <li><tt><b>omegar  </b></tt>
+    : real : cut-off frequency in Hertz
+  </li>
+  <li><tt><b>zeros  </b></tt>
+    : resulting filter zeros
+  </li>
+  <li><tt><b>poles  </b></tt>
+    : resulting filter poles
+  </li>
+  <li><tt><b>gain  </b></tt>
+    : Resulting filter gain
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    Poles and zeros of a type 2 Chebyshev analog filter
+    gain is the gain of the filter
+  </p>
+  <pre>
+H(s)=gain*poly(zeros,'s')/poly(poles,'s')
+   </pre>
+  </dl><H3><font color="blue">Auteur</font></H3><p><ul>F.D.  </ul></p></body></html>

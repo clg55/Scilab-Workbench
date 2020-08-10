@@ -1,0 +1,36 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>supernode</title></head><body bgcolor="FFFFFF"><CENTER>Scilab function  </CENTER><p><b>supernode -  replaces a group of nodes with a single node  </b></p><H3><font color="blue">Calling Sequence</font></H3><dl><dd><tt>g1 = supernode(v,g)  </tt></dd></dl><H3><font color="blue">Parameters</font></H3><ul><ul>
+  <li><tt><b>v  </b></tt>
+    : row vector, nodes numbers
+  </li>
+  <li><tt><b>g  </b></tt>
+    : graph list
+  </li>
+  <li><tt><b>g1  </b></tt>
+    : graph list of the new graph 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>supernode</b></tt> returns the graph <tt><b>g1</b></tt> with the nodes with numbers given
+    by the vector <tt><b>v</b></tt> being contracted in a single node. The number of the 
+    supernode is the lowest number in <tt><b>v</b></tt>. The characteristics of the old nodes
+    and edges are preserved. The supernode is located at the mean center of
+    <tt><b>v</b></tt>. Its diameter and border are twice the previous of the replaced node.
+  </p>
+  <p>
+    The demand of the new node, if it exists, is the sum of the demands of the
+    shrunken nodes.
+  </p>
+  </dl><H3><font color="blue">Examples</font></H3><ul><pre>
+ta=[1 1 2 2 2 3 4 5 5 7 8 8 9 10 10 10 10 10 11 12 13 13 13 14 15 16 16 17 17];
+he=[2 10 3 5 7 4 2 4 6 8 6 9 7 7 11 13 13 15 12 13 9 10 14 11 16 1 17 14 15];
+g=make_graph('foo',1,17,ta,he);
+g('node_x')=[283 163 63 57 164 164 273 271 339 384 504 513 439 623 631 757 642];
+g('node_y')=[59 133 223 318 227 319 221 324 432 141 209 319 428 443 187 151 301];
+g('edge_color')=modulo([1:(edge_number(g))],15)+1;
+g('node_diam')=[1:(g('node_number'))]+20;
+show_graph(g);
+v=[7 10 13 9];
+show_nodes(v);
+g1=supernode(v,g);
+show_graph(g1,'new');
+ </pre></ul><H3><font color="blue">See Also</font></H3><p><ul><a href="add_edge.htm"><tt><b>add_edge</b></tt></a>&nbsp;&nbsp;<a href="add_node.htm"><tt><b>add_node</b></tt></a>&nbsp;&nbsp;<a href="delete_arcs.htm"><tt><b>delete_arcs</b></tt></a>&nbsp;&nbsp;<a href="delete_nodes.htm"><tt><b>delete_nodes</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

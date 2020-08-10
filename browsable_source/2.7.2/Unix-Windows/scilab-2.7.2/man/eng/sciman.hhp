@@ -1,0 +1,41 @@
+[OPTIONS]
+Compatibility=1.1
+Compiled file=sciman.chm
+Contents file=sciman.hhc
+Default Window=sciman
+Default topic=index.htm
+Display compile progress=No
+Full-text search=Yes
+Index file=sciman.hhk
+Language=0x409
+Title=Scilab Documentation
+
+[WINDOWS]
+sciman="Scilab Documentation","sciman.hhc","sciman.hhk","index.htm","index.htm",,,,,0x2520,220,0x384e,[84,16,784,504],,,,0,,,0
+
+[FILES]
+programming\*.htm
+graphics\*.htm
+elementary\*.htm
+fileio\*.htm
+functions\*.htm
+strings\*.htm
+gui\*.htm
+utilities\*.htm
+linear\*.htm
+polynomials\*.htm
+control\*.htm
+robust\*.htm
+nonlinear\*.htm
+signal\*.htm
+arma\*.htm
+metanet\*.htm
+scicos\*.htm
+sound\*.htm
+translation\*.htm
+pvm\*.htm
+tdcs\*.htm
+tksci\*.htm
+statistics\*.htm
+dcd\*.htm
+identification\*.htm

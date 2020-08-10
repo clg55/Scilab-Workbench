@@ -1,0 +1,59 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>seteventhandler</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>seteventhandler -  set an event handler for
+  the current graphic window </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>seteventhandler(sfun_name)   </tt></dd><dd><tt>seteventhandler('')   </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>sfun_name</b></tt>
+    : a character string. The name of the Scilab function which is
+  intended to handle the events
+  </li>
+  </ul></ul><H3><font color="blue">Description</font></H3><dl>
+
+    The function allows the user to set a particular event handler for
+    the current graphic window. <tt><b>seteventhandler('') </b></tt>
+    removes the handler.
+
+    The event handler is defined by a Scilab function whose calling
+    sequence must be <tt><b>function sfun_name(win,x,y,ibut)</b></tt>, where
+
+   
+
+    <li><b></b>
+    <tt><b>win</b></tt> represents the number of the window where the
+    event had occured.
+   </li>
+
+    <li><b></b>
+    <tt><b>x,y</b></tt> are the coordinates of the pointer (in pixels), when the event
+    has occured
+    </li>
+    
+    <li><b></b>
+     <tt><b>ibut</b></tt>is the event type:
+     <p></p><tt><b>ibut==0</b></tt> : Left mouse button has been pressed
+     <p></p><tt><b>ibut==-5</b></tt> : Left mouse button has been released
+     <p></p><tt><b>ibut==1</b></tt> : Middle mouse button has been pressed
+     <p></p><tt><b>ibut==-4</b></tt> : Middle mouse button has been released
+     <p></p><tt><b>ibut==2</b></tt> : Right mouse button has been pressed
+     <p></p><tt><b>ibut==-3</b></tt> : Right mouse button has been released
+     <p></p>
+     <p></p><tt><b>ibut==-1</b></tt> : pointer has moved
+     <p></p>
+     <p></p><tt><b>ibut &gt; =32</b></tt> : key with ascii code ascii(ibut) has been pressed
+     <p></p><tt><b>ibut &lt; =-32</b></tt> : key with ascii code ascii(-ibut)
+     has been released
+     <p></p>
+     <p></p><tt><b>ibut==-1000</b></tt> : graphic window has been closed
+    </li>
+  
+    
+
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+   function my_eventhandler(win,x,y,ibut)
+       if ibut==-1 then 
+         [x,y]=xchange(x,y,'i2f')
+         xinfo('Mouse position is ('+string(x)+','+string(y)+')')
+       end
+   endfunction
+   plot2d()
+   seteventhandler('my_eventhandler')
+   //now move the mouse over the graphic window/
+   seteventhandler('') //suppress the event handler
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="addmenu.htm"><tt><b>addmenu</b></tt></a>&nbsp;&nbsp;<a href="../graphics/xgetmouse.htm"><tt><b>xgetmouse</b></tt></a>&nbsp;&nbsp;<a href="../graphics/xclick.htm"><tt><b>xclick</b></tt></a>&nbsp;&nbsp;<a href="../graphics/xchange.htm"><tt><b>xchange</b></tt></a>&nbsp;&nbsp;</ul></p></body></html>

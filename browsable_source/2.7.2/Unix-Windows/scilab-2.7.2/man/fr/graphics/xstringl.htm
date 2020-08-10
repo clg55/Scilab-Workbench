@@ -1,0 +1,26 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>xstringl</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>xstringl -  calcule les dimensions d'une boîte entourant des chaînes de caractères  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>rect=xstringl(x,y,str)  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>rect  </b></tt>
+    : vecteur de 4 scalaires définissant la boîte
+  </li>
+  <li><tt><b>x,y  </b></tt>
+    : scalaires réels, coordonnées du point en bas à gauche des chaînes de caractères.
+  </li>
+  <li><tt><b>str  </b></tt>
+    : matrice de chaînes de caractères.
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    <tt><b>xstringl</b></tt> renvoie dans <tt><b>rect=[x,y,w,h]</b></tt> 
+    (point en haut à gauche, largeur, hauteur)
+    les dimensions d'un rectangle dans l'échelle graphique courante entourant les chaînes de caractères <tt><b>str</b></tt> dessinées à la position <tt><b>x,y</b></tt> (point en bas à gauche).
+  </p>
+  <p>
+    Le résultat est approximatif avec le pilote PostScript.
+  </p>
+  </dl><H3><font color="blue">Exemples</font></H3><ul><pre>
+plot2d([0;1],[0;1],0)
+str=["Scilab" "n''est ";"pas" "Matlab"];
+r=xstringl(0.5,0.5,str)
+xrects([r(1) r(2)+r(4) r(3) r(4)]')
+xstring(r(1),r(2),str)
+ </pre></ul><H3><font color="blue">Voir aussi</font></H3><p><ul><a href="titlepage.htm"><tt><b>titlepage</b></tt></a>&nbsp;&nbsp;<a href="xstring.htm"><tt><b>xstring</b></tt></a>&nbsp;&nbsp;<a href="xstringl.htm"><tt><b>xstringl</b></tt></a>&nbsp;&nbsp;<a href="xtitle.htm"><tt><b>xtitle</b></tt></a>&nbsp;&nbsp;</ul></p><H3><font color="blue">Auteur</font></H3><p><ul>J.Ph.C.  </ul></p></body></html>

@@ -1,0 +1,20 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>fspecg</title></head><body bgcolor="FFFFFF"><CENTER>Scilab Function  </CENTER><p><b>fspecg -  stable factorization  </b></p><H3><font color="blue">Sequence d'appel</font></H3><dl><dd><tt>[gm]=fspecg(g).  </tt></dd></dl><H3><font color="blue">Parametres</font></H3><ul><ul>
+  <li><tt><b>g,gm  </b></tt>
+    : <tt><b>syslin</b></tt> lists (linear systems in state-space representation) 
+  </li>
+ </ul></ul><H3><font color="blue">Description</font></H3><dl>
+  <p>
+    returns <tt><b>gm</b></tt> with <tt><b>gm</b></tt> and <tt><b>gm^-1</b></tt> stable such that:
+  </p>
+  <pre>
+gtild(g)*g = gtild(gm)*gm
+   </pre>
+  <p>
+    <tt><b>g</b></tt> and <tt><b>gm</b></tt> are continuous-time linear systems in state-space form.
+  </p>
+  <p>
+    Imaginary-axis poles are forbidden.
+  </p>
+  <p>
+  </p>
+  </dl></body></html>
