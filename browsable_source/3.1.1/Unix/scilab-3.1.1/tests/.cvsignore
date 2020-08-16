@@ -1,0 +1,13 @@
+*.dia .libs *.lo *.la test.wav test_macro_exec val.dat vals.dat loader.sce
+ libintertest.c Makelib
+
+test3.bin
+Makelib.mak
+test.bin
+test1.bin
+test2.bin
+asave
+foo
+foo.ps
+results
+mymesh100.graph
