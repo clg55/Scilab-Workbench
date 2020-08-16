@@ -1,0 +1,8 @@
+	LIBRARY    libscilab.dll
+
+
+EXPORTS
+
+;
+;elementary_functions
+exch_
