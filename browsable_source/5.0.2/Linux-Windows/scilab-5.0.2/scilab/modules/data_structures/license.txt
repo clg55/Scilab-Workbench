@@ -1,0 +1,5 @@
+INRIA 2006
+
+Exception of 
+DoublyLinkedList.h / DoublyLinkedList.c by Daniel Lacroix 
+release in the public domain
