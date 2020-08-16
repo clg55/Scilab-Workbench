@@ -1,0 +1,12 @@
+	LIBRARY    Libscilab.dll
+
+
+EXPORTS
+
+; core
+ blktit_
+ callFunctionFromGateway
+ vstk_
+ stack_
+ com_
+ BuildWithVS8ExpressF2C

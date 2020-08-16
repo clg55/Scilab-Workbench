@@ -1,0 +1,9 @@
+LIBRARY    LibScilab.dll
+
+
+EXPORTS
+;--------------------------
+; elementary_functions
+;--------------------------
+callFunctionFromGateway
+
