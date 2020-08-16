@@ -1,0 +1,13 @@
+LIBRARY    scicompletion.dll
+
+
+EXPORTS
+completionOnHandleGraphicsProperties
+completionOnFiles
+completionOnVariablesWithoutMacros
+completionOnMacros
+completionOnCommandWords
+completionOnFunctions
+getPartLevel
+getFilePartLevel
+getCommonPart
