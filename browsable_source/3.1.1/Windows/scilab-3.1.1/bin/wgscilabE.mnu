@@ -1,0 +1,58 @@
+; Common Menu file for graphic Scilab windows 
+; From the gnuplot version ( Roger Hadgraft, 26-5-92,Russell Lang, 30 Nov 1992)
+; Jean-Philippe Chancelier 1996 
+; Allan CORNET 2004
+
+[Menu]
+&File
+	&New ...
+		[NEWFIG]
+	Save &Position
+		[UPDINI]	
+	--
+	&Load ...
+		[LOADSCG]xload[EOS]*.scg[EOS]
+	S&ave ...
+		[SAVESCG]xsave[EOS]*.scg[EOS]
+	
+	--	
+	&Export 
+		[SCIPS]
+	[Menu]
+		&Copy to clipboard
+			&EnhMetafile
+				[COPYCLIP]
+			&Metafile + DIB
+				[COPYCLIP1]
+	[EndMenu]
+	--
+	[Menu]
+	&Print
+			&Postscript
+				[SCIPR]
+			&Windows
+				[PRINT]
+	[EndMenu]
+	--
+	Cl&ose 
+		[CLOSE]									
+	
+
+ 
+[EndMenu]
+	
+
+[Menu]
+&Tools
+	&ToolBar	F3
+		[TOOLBARGRAPH]
+	--	
+	&Zoom
+		[ZOOM]
+	&UnZoom
+		[UNZOOM]
+	--	
+	2D/3D &Rotation
+		[ROT3D]
+[EndMenu]
+
