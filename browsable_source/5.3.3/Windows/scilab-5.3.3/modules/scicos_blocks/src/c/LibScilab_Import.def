@@ -1,0 +1,10 @@
+LIBRARY    LibScilab.dll
+
+
+EXPORTS
+;
+; core
+namstr_
+freeArrayOfString
+
+;

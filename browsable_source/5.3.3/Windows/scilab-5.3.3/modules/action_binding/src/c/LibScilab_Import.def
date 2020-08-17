@@ -1,0 +1,15 @@
+LIBRARY    LibScilab.dll
+
+
+EXPORTS
+;core
+com_
+intersci_
+callFunctionFromGateway
+StoreCommand
+StoreCommandWithFlag
+sigbas_
+freeArrayOfString
+checklhs_
+checkrhs_
+putlhsvar_

@@ -1,0 +1,68 @@
+# Japanese translation for scilab
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# This file is distributed under the same license as the scilab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: scilab\n"
+"Report-Msgid-Bugs-To: <localization@lists.scilab.org>\n"
+"POT-Creation-Date: 2011-03-09 11:38+0100\n"
+"PO-Revision-Date: 2011-04-04 22:09+0100\n"
+"Last-Translator: Rui Hirokawa <Unknown>\n"
+"Language-Team: Japanese <z-saito@guitar.ocn.ne.jp>\n"
+"Language: ja\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build Unknown)\n"
+"X-Poedit-Country: Japan\n"
+"X-Poedit-Language: Japanese\n"
+
+#
+# File: sci_gateway/cpp/sci_buildDoc.cpp, line: 171
+#, c-format
+msgid "%s: Could find or create the working directory %s.\n"
+msgstr "%s: 作業ディレクトリ %s を作成するか、見つけます。\n"
+
+#
+# File: sci_gateway/cpp/sci_buildDoc.cpp, line: 177
+#, c-format
+msgid "%s: Error while building documentation: %s.\n"
+msgstr "%s: ドキュメントをビルドしている間のエラー: %s\n"
+
+#, c-format
+msgid "%s: Execution Java stack %s.\n"
+msgstr "%s: Javaスタック %s の実行。\n"
+
+#
+# File: sci_gateway/cpp/sci_buildDocv2.cpp, line: 242
+#, c-format
+msgid "%s: Execution Java stack: %s.\n"
+msgstr ""
+
+#
+# File: macros/help.sci, line: 24
+#, c-format
+msgid "%s: Wrong type for input argument #%d: Single string expected.\n"
+msgstr "%s: 入力引数 #%d で不正な型: 単一文字列を想定します。\n"
+
+#
+# File: sci_gateway/cpp/sci_buildDoc.cpp, line: 247
+# File: sci_gateway/cpp/sci_buildDocv2.cpp, line: 243
+msgid ""
+"If Scilab is started in a chroot, you might want to try to set the two "
+"environment variables: SCI_DISABLE_TK=1 SCI_JAVA_ENABLE_HEADLESS=1\n"
+msgstr ""
+
+#
+# File: sci_gateway/c/gw_helptools.c, line: 38
+#, c-format
+msgid "Scilab '%s' module disabled in -nogui or -nwni mode.\n"
+msgstr "-nogui または -nwni モードで Scilab '%s' モジュールは無効です。\n"
+
+#
+# File: sci_gateway/nogui/nogui.c, line: 20
+#, c-format
+msgid "Scilab '%s' module not installed.\n"
+msgstr "Scilab '%s' モジュールはインストールされていません。\n"

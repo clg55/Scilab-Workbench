@@ -1,0 +1,6 @@
+LIBRARY    scicos_blocks.dll
+
+
+EXPORTS
+;
+affichup_

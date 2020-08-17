@@ -1,0 +1,124 @@
+# Polish translation for scilab
+# Copyright (c) 2010 Rosetta Contributors and Canonical Ltd 2010
+# This file is distributed under the same license as the scilab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2010.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: scilab\n"
+"Report-Msgid-Bugs-To: <localization@lists.scilab.org>\n"
+"POT-Creation-Date: 2011-03-09 11:38+0100\n"
+"PO-Revision-Date: 2011-04-04 22:09+0100\n"
+"Last-Translator: I.Rokach <Unknown>\n"
+"Language-Team: Polish <pl@li.org>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+msgid ""
+"\n"
+"    primal obj.  dual obj.  dual. gap \n"
+msgstr ""
+"\n"
+"    primal obj.  dual obj.  dual. gap \n"
+
+#, c-format
+msgid "%s: Accuracy insufficient to satisfy convergence criterion.\n"
+msgstr "%s: Dokładność niewystarczająca do spełnienia kryterium zbieżności.\n"
+
+#, c-format
+msgid "%s: Argument 3: wrong number of columns %d expected\n"
+msgstr "%s: Argument 3: nieprawidłowa liczba kolumn, oczekiwano %d\n"
+
+#, c-format
+msgid "%s: Cannot allocate more memory.\n"
+msgstr "%s: Nie można przydzielić więcej pamięci.\n"
+
+#, c-format
+msgid "%s: Length of working array is too short.\n"
+msgstr "%s: Zbyt mały rozmiar tablicy roboczej\n"
+
+#, c-format
+msgid "%s: Q is not symmetric positive definite.\n"
+msgstr "%s: Q nie jest symetryczna dodatnio określona.\n"
+
+#, c-format
+msgid "%s: The constraints are inconsistent.\n"
+msgstr "%s: Ograniczenia są niespójne.\n"
+
+#, c-format
+msgid "%s: The minimization problem has no solution.\n"
+msgstr "%s: Zagadnienie minimalizacji nie ma rozwiązania.\n"
+
+#, c-format
+msgid "%s: Too many iterations (more than %d).\n"
+msgstr "%s: Za dużo powtórzeń (więcej niż %d).\n"
+
+#, c-format
+msgid "%s: Wrong size for input argument #%d: number of columns %d expected.\n"
+msgstr ""
+"%s: Nieprawidłowy rozmiar argumentu wejściowego nr %d: oczekiwana liczba "
+"kolumn %d.\n"
+
+#, c-format
+msgid "Error in dgels, info = %d.\n"
+msgstr "Błąd w dgels, info = %d.\n"
+
+#, c-format
+msgid "Error in dspev, info = %d.\n"
+msgstr "Błąd w dspev, info = %d.\n"
+
+#, c-format
+msgid "Error in dspgv, info = %d.\n"
+msgstr "Błąd w dspgv, info = %d.\n"
+
+#, c-format
+msgid "Error in dspst, info = %d.\n"
+msgstr "Błąd w dspst, info = %d.\n"
+
+#, c-format
+msgid "Error in dtrcon, info = %d.\n"
+msgstr "Błąd w dtrcon, info = %d.\n"
+
+msgid "F(x)*Z has a negative eigenvalue.\n"
+msgstr "F(x)*Z ma ujemną wartość własną.\n"
+
+msgid "L must be at least one.\n"
+msgstr "L musi być nie mniej niż jeden.\n"
+
+msgid "Matrices Fi, i=1,...,m are linearly dependent.\n"
+msgstr "Macierze Fi, i=1,...,m są liniowo zależne.\n"
+
+msgid ""
+"The matrices F_i, i=1,...,m are linearly dependent (or the initial points "
+"are very badly conditioned).\n"
+msgstr ""
+"Macierze F_i, i=1,...,m są liniowo zależne (albo początkowe punkty są bardzo "
+"źle uwarunkowane).\n"
+
+#, c-format
+msgid "Work space is too small.  Need at least %d*sizeof(double).\n"
+msgstr ""
+"Roboczy obszar pamięci jest zbyt mały. Musi być co najmniej %d*sizeof"
+"(double).\n"
+
+msgid "Z0 does not satisfy equality conditions for dual feasibility.\n"
+msgstr "Z0 nie spełnia warunków równości dla dwóch możliwości.\n"
+
+msgid "Z0 is not positive definite.\n"
+msgstr "Z0 nie jest dodatnio określony.\n"
+
+#, c-format
+msgid "blck_szs[%d] must be at least one.\n"
+msgstr "blck_szs[%d]  musi być przynajmniej jeden.\n"
+
+msgid "m must be at least one.\n"
+msgstr "m musi być co najmniej jeden.\n"
+
+msgid "nu must be at least 1.0.\n"
+msgstr "nu musi być co najmniej  1.0.\n"
+
+msgid "x0 is not strictly primal feasible.\n"
+msgstr "x0 nie jest możliwie ściśle pierwotne.\n"

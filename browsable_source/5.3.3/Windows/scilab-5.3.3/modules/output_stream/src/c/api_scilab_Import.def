@@ -1,0 +1,14 @@
+	LIBRARY    api_scilab.dll
+
+
+EXPORTS
+pvApiCtx DATA
+createMatrixOfWideString
+printError
+createMatrixOfDouble
+getVarType
+getVarAddressFromPosition
+getVarDimension
+getMatrixOfDouble
+getMatrixOfWideString
+createMatrixOfBoolean

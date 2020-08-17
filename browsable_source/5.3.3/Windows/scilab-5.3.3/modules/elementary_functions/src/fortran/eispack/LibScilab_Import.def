@@ -1,0 +1,10 @@
+	LIBRARY    Libscilab.dll
+
+
+EXPORTS
+;
+;core
+iop_
+returnanan_
+;
+  
