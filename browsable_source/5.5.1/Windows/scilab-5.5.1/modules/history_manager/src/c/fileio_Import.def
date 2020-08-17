@@ -1,0 +1,10 @@
+	LIBRARY    fileio.dll
+
+
+EXPORTS
+;fileio
+expandPathVariable
+mclose_
+mopen_
+mgetl
+;

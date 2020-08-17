@@ -1,0 +1,13 @@
+	LIBRARY    core.dll
+
+
+EXPORTS
+
+; core
+callFunctionFromGateway
+vstk_
+stack_
+com_
+BuildWithVS8ExpressF2C
+MyHeapAlloc
+MyHeapFree

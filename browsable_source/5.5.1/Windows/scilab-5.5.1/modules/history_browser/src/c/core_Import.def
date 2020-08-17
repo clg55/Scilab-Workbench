@@ -1,0 +1,9 @@
+LIBRARY    core.dll
+
+
+EXPORTS
+;
+callFunctionFromGateway
+com_
+getScilabMode
+MyHeapAlloc
