@@ -1,0 +1,14 @@
+LIBRARY    fileio.dll
+
+
+EXPORTS
+removedir
+getshortpathname
+getlongpathname
+FileExistW
+FileExist
+getfile_filename
+get_full_pathW
+isdir
+isDrive
+createdirectory

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="en" xml:id="close">
+    <refnamediv>
+        <refname>close</refname>
+        <refpurpose>closes graphic figures, progressionbars or waitbars</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>
+            close
+            close(H)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection role="parameters">
+        <title>Arguments</title>
+        <variablelist>
+            <varlistentry>
+                <term>H</term>
+                <listitem>
+                    <para>Handle or vector of handles of graphic figures or progression bar
+                        or wait bar. These different types of handles can be mixed in <varname>H</varname>.
+                    </para>
+                    <para>
+                        By default, the current graphic figure is considered.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection role="description">
+        <title>Description</title>
+        <para>Graphic windows based on the Tk technology (such as still used by imshow() in the SIVP
+            external module) may be closed as well by providing their number that is their handle.
+        </para>
+    </refsection>
+    <refsection role="examples">
+        <title>Examples</title>
+        <programlisting role="example"><![CDATA[
+// creates  figure number 1.
+h = scf();
+// put a clever text in figure 1
+uicontrol( h, 'style','text', ...
+              'string','scilab is great', ...
+              'position',[50 70 100 100], ...
+              'fontsize',15);
+// create figure 2
+scf();
+// put a text in figure 2
+uicontrol( 'style','text', ...
+           'string','Really great', 'position',[50 70 100 100], 'fontsize',15);
+
+close();   // close the current graphic window (ie fig. 2)
+close(h);  // close figure 1
+
+// create a progression bar
+wid1=progressionbar("Message");
+// close it
+close(wid1);
+ ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="xdel">xdel</link>
+            </member>
+            <member>
+                <link linkend="delete">delete</link>
+            </member>
+            <member>
+                <link linkend="figure">figure</link>
+            </member>
+            <member>
+                <link linkend="scf">scf</link>
+            </member>
+            <member>
+                <link linkend="gcf">gcf</link>
+            </member>
+        </simplelist>
+    </refsection>
+</refentry>

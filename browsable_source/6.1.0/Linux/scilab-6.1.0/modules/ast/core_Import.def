@@ -1,0 +1,18 @@
+LIBRARY    core.dll
+
+
+EXPORTS
+MyHeapFree
+MyHeapAlloc
+StaticRunner_launch
+StaticRunner_isRunnerAvailable
+StaticRunner_isInterruptibleCommand
+StaticRunner_setCommandOrigin
+StoreConsoleCommand
+StorePrioritaryCommand
+StoreDebuggerCommand
+parseCommand
+checkCommand
+parseFile
+checkFile
+pause

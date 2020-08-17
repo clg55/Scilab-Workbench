@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) ENPC - Jean-Philippe Chancelier
+* Copyright (C) 2017 - Samuel GOUGEON
+  *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1999/xhtml"
+        xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook"
+        xmlns:scilab="http://www.scilab.org" xml:id="xget" xml:lang="ja">
+    <refnamediv>
+        <refname>xget</refname>
+        <refpurpose>
+            グラフィックコンテキストのカレントの値を取得. <emphasis role="bold">この関数は廃止されました.</emphasis>
+        </refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>呼び出し手順</title>
+        <synopsis>
+            value = xget(query)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>説明</title>
+        <warning>
+            <emphasis role="bold">この関数は廃止されました</emphasis>.
+            代わりにScilabグラフィックオブジェクト表現を使用してください
+            (<link linkend="set">set</link>および <link linkend="get">get</link>関数
+            および<link linkend="graphics_entities">graphicsエンティティ</link>を参照).
+        </warning>
+        <para>
+            This function is used to get values from the graphics context on the
+            topic specified by the input string <varname>query</varname>.
+        </para>
+        <variablelist>
+            <varlistentry>
+                <term>value = xget("fpf")</term>
+                <listitem>
+                    <para>
+                        Get as a string the floating point format for number display in contour
+                        functions. Note that <literal>value</literal> is <literal>""</literal> when
+                        the default format is used.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+        <refsect2>
+            <title>Replacements</title>
+        <screen><![CDATA[
+// SCILAB 3 & 4           SCILAB N > 4
+// ------------           ------------
+xget("window")            gcf().figure_id
+xget("figure")            gcf().figure_id
+xget("wpos")              gcf().figure_position
+xget("wdim")              gcf().figure_size
+xget("wpdim")             gcf().figure_size
+xget("viewport")          gcf().viewport
+xget("wresize")           gcf().auto_resize
+xget("auto clear")        gcf().auto_clear
+
+xget("hidden3d")          gca().hiddencolor
+xget("clipgrf")           bool2s(gca().clip_state=="clipgrf")
+xget("clipoff")           bool2s(gca().clip_state=="off")
+xget("clipping")          gca().clip_box
+xget("background")        gca().background
+xget("foreground")        gca().foreground
+xget("pattern")           gca().foreground
+xget("lastpattern")       size(gcf().color_map,1)
+xget("color")             gca().foreground
+xget("white")             color("white")
+xget("font")              [gca().font_style gca().font_size]
+xget("font size")         gca().font_size
+xget("dashes")            gca().line_style
+xget("line mode")         gca().line_mode
+]]></screen>
+        </refsect2>
+    </refsection>
+    <refsection role="see also">
+        <title>参照</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="xset">xset</link>
+            </member>
+            <member>
+                <link linkend="get">get</link>
+            </member>
+            <member>
+                <link linkend="graphics_entities">graphics entities</link>
+            </member>
+            <member>
+                <link linkend="gcf">gcf</link>
+            </member>
+            <member>
+                <link linkend="gdf">gdf</link>
+            </member>
+            <member>
+                <link linkend="gca">gca</link>
+            </member>
+            <member>
+                <link linkend="gda">gda</link>
+            </member>
+            <member>
+                <link linkend="ged">ged</link>
+            </member>
+            <member>
+                <link linkend="getcolor">getcolor</link>
+            </member>
+        </simplelist>
+    </refsection>
+    <refsection>
+        <title>履歴</title>
+        <revhistory>
+            <revision>
+                <revnumber>5.0.1</revnumber>
+                <revremark>
+                    The <literal>"alufunction"</literal> property is obsolete. It is no longer
+                    taken into account for graphical renderings. It is replaced with
+                    <literal>gcf().pixel_drawing_mode</literal>.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>5.4.0</revnumber>
+                <revremark>
+                    The <literal>"alufunction"</literal> is no longer supported..
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>6.0.0</revnumber>
+                <revremark>
+                    Only the <literal>xget("fpf")</literal> syntax is now supported.
+                </revremark>
+            </revision>
+        </revhistory>
+    </refsection>
+</refentry>

@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) 2006-2008 - INRIA
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="en" xml:id="struct">
+    <refnamediv>
+        <refname>struct</refname>
+        <refpurpose>create a struct</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>st = struct(field1, value1, field2, value2, ...)</synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Arguments</title>
+        <variablelist>
+            <varlistentry>
+                <term>field1, field2, ...</term>
+                <listitem>
+                    <para>strings representing the fields names.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>value1, value2, ...</term>
+                <listitem>
+                    <para>
+                        all data type (<literal>double</literal>, <literal>char</literal>, <literal>int</literal>, ...), representing the fields values.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Description</title>
+        <para>
+            This function returns a struct with the fields names
+            <varname>field1</varname>, <varname>field2</varname>, ..., and the fields values
+            corresponding <varname>value1</varname>, <varname>value2</varname>, ...
+        </para>
+        <para>
+            Note that <literal>type(st)</literal> returns <literal>17</literal>, and <literal>typeof(st)</literal> returns <literal>st</literal>.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Examples</title>
+        <programlisting role="example"><![CDATA[
+//create a struct date
+date_st=struct('day',25,'month' ,'DEC','year',2006)
+//change the month
+date_st.month='AUG';
+//change the year
+date_st.year=1973;
+//change the day
+date_st.day=19;
+//add a new field
+date_st.semaine=32
+
+//create a structure test
+test=struct('list1',list('testlist',1,2), 'matrix1', [1 2 3; 4 5 6], 'boolean1', %t);
+//add a polynom
+s=poly(0,'s')
+test.pol1=s;
+//add a state-space
+A=[0,1;0,0]; B=[1;1];C=[1,1];
+test.ss1=syslin('c',A,B,C);
+//Show the list
+test.list1
+getfield(3,test)
+//Show the type
+type(test)
+ ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="cell">cell</link>
+            </member>
+            <member>
+                <link linkend="mlist">mlist</link>
+            </member>
+            <member>
+                <link linkend="tlist">tlist</link>
+            </member>
+            <member>
+                <link linkend="getfield">getfield</link>
+            </member>
+            <member>
+                <link linkend="setfield">setfield</link>
+            </member>
+        </simplelist>
+    </refsection>
+</refentry>
