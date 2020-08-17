@@ -1,0 +1,6 @@
+LIBRARY    windows_tools.dll
+
+
+EXPORTS
+;windows_tools
+SetConsoleState

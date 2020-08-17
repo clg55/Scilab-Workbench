@@ -1,0 +1,12 @@
+LIBRARY    scicos.dll
+
+
+EXPORTS
+
+
+;scicos
+curblk_
+cosdebugcounter_
+scsptr_
+cosdebug_
+getscilabel_

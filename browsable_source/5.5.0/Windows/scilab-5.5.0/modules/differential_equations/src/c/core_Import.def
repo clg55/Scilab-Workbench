@@ -1,0 +1,12 @@
+	LIBRARY    core.dll
+
+
+EXPORTS
+;
+;core
+;
+callFunctionFromGateway
+ierode_
+com_
+MyHeapAlloc
+MyHeapFree

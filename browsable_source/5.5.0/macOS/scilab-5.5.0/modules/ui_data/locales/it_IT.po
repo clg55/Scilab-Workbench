@@ -1,0 +1,370 @@
+# Italian translation for scilab
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the scilab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: scilab\n"
+"Report-Msgid-Bugs-To: <localization@lists.scilab.org>\n"
+"POT-Creation-Date: 2013-04-16 17:44+0100\n"
+"PO-Revision-Date: 2012-01-12 10:02+0000\n"
+"Last-Translator: Guybrush88 <Unknown>\n"
+"Language-Team: Italian <it@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 16967)\n"
+"Language: it\n"
+
+#, c-format
+msgid "Scilab '%s' module disabled in -nogui or -nwni mode.\n"
+msgstr ""
+"Il modulo \"%s\" di Scilab è disabilitato in modalità -nogui o -nwni.\n"
+
+#, c-format
+msgid "%s: Wrong number of input argument(s): %d, %d or %d expected.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Can not read input argument #%d.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Wrong type for input argument #%d: A String expected.\n"
+msgstr ""
+"%s: L'argomento in ingresso #%d è di tipo sbagliato: era attesa una "
+"stringa.\n"
+
+#, c-format
+msgid "%s: Wrong size for input argument #%d: A string expected.\n"
+msgstr ""
+"%s: L'argomento in ingresso #%d ha una dimensione sbagliata: era attesa una "
+"stringa.\n"
+
+#, c-format
+msgid "%s: ans cannot be edited.\n"
+msgstr "%s: ans non può essere modificato.\n"
+
+#, c-format
+msgid "%s: Undefined variable: %s.\n"
+msgstr ""
+
+msgid "Redefining permanent variable.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Wrong type for input argument #%d: Double expected.\n"
+msgstr ""
+"%s: L'argomento in ingresso #%d è di tipo sbagliato: era atteso un doppio.\n"
+
+#, c-format
+msgid ""
+"%s: Java exception arisen:\n"
+"%s\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Type not handle yet"
+msgstr "%s: Tipo non ancora gestito"
+
+msgid "&File"
+msgstr "&File"
+
+msgid "&Close"
+msgstr "&Chiudi"
+
+msgid "&?"
+msgstr "&?"
+
+msgid "&About Scilab..."
+msgstr "&Riguardo Scilab..."
+
+msgid "Name"
+msgstr "Nome:"
+
+msgid "Value"
+msgstr ""
+
+msgid "Type"
+msgstr "Tipo"
+
+msgid "Visibility"
+msgstr "Visibilità"
+
+msgid "Bytes"
+msgstr "Byte"
+
+msgid "User"
+msgstr "Utente"
+
+msgid "Type int value"
+msgstr ""
+
+msgid "Feature not available in this mode..."
+msgstr "Funzione non disponibile in questa modalità..."
+
+msgid "File"
+msgstr "File"
+
+msgid "Close"
+msgstr "Chiudi"
+
+msgid "Delete"
+msgstr ""
+
+msgid "Modify"
+msgstr ""
+
+msgid "Filter"
+msgstr "Filtra"
+
+msgid "Hide Scilab variables"
+msgstr "Nascondi le variabili di Scilab"
+
+msgid "Double"
+msgstr "Double"
+
+msgid "Polynomial"
+msgstr "Polinomio"
+
+msgid "Boolean"
+msgstr "Valore booleano"
+
+msgid "Sparse"
+msgstr "Sparsa"
+
+msgid "Sparse boolean"
+msgstr "Booleano sparso"
+
+msgid "Integer"
+msgstr "Intero"
+
+msgid "Graphic handles"
+msgstr "Gestori grafici"
+
+msgid "String"
+msgstr "Stringa"
+
+msgid "Un-compiled function"
+msgstr "Funzione non compilata"
+
+msgid "Compiled function"
+msgstr "Funzione  compilata"
+
+msgid "Function library"
+msgstr "Libreria di funzioni"
+
+msgid "List"
+msgstr "Lista"
+
+msgid "Tlist"
+msgstr "Tlist"
+
+msgid "Mlist"
+msgstr "Mlist"
+
+msgid "Pointer"
+msgstr "Puntatore"
+
+msgid "Intrinsic function"
+msgstr "Funzione intrinseca"
+
+msgid "Matlab sparse"
+msgstr "Matrice sparsa di Matlab"
+
+msgid "Implicit polynomial"
+msgstr "Polinomio implicito"
+
+msgid "Variable Editor"
+msgstr "Editor delle variabili"
+
+msgid "Variable Browser"
+msgstr "Navigatore delle variabili"
+
+msgid "Global variables can not be edited."
+msgstr "Le variabili globali non possono essere modificate"
+
+msgid "Edition"
+msgstr "Edizione"
+
+msgid "Refresh the variable "
+msgstr "Aggiorna la variabile "
+
+msgid "Scilab Help"
+msgstr ""
+
+msgid "Copy"
+msgstr "Copia"
+
+msgid "Paste"
+msgstr "Incolla"
+
+msgid "Cut"
+msgstr "Taglia"
+
+msgid "Clear"
+msgstr "Pulisci"
+
+msgid "Undo"
+msgstr "Annulla l'ultima azione"
+
+msgid "Redo"
+msgstr "Ripeti l'ultima azione"
+
+msgid "Size columns to fit"
+msgstr "Modifica le colonne per adattarle"
+
+msgid "Copy as Scilab command"
+msgstr "Copia come comando di Scilab"
+
+msgid "Copy as Scilab matrix"
+msgstr "Copia come matrice di Scilab"
+
+msgid "Copy as Scilab matrix with CR"
+msgstr ""
+
+msgid "Short format"
+msgstr "Formato breve"
+
+msgid "ShortE format"
+msgstr ""
+
+msgid "Long format"
+msgstr "Formato esteso"
+
+msgid "LongE format"
+msgstr ""
+
+msgid "Create variable from selection"
+msgstr "Crea una variabile dalla selezione"
+
+msgid "Insert a row"
+msgstr "Inserisci una riga"
+
+msgid "Remove rows"
+msgstr "Rimuovi righe"
+
+msgid "Insert a column"
+msgstr "Inserisci una colonna"
+
+msgid "Remove columns"
+msgstr "Rimuovi colonne"
+
+msgid "Plot the selection"
+msgstr "Traccia la selezione"
+
+msgid "Plot the matrix"
+msgstr "Traccia la matrice"
+
+msgid "Cancel"
+msgstr "Annulla"
+
+msgid "Ok"
+msgstr "Ok"
+
+msgid "Variable name"
+msgstr "Nome variabile"
+
+msgid "Create new variable"
+msgstr "Crea una nuova variabile"
+
+msgid "Duplicate the variable"
+msgstr "Duplica la variabile"
+
+msgid "Export to CSV"
+msgstr ""
+
+msgid "Export the selection to CSV"
+msgstr ""
+
+msgid "Rows number"
+msgstr "Numero di righe"
+
+msgid "Columns number"
+msgstr "Numero di colonne"
+
+msgid "Fill with"
+msgstr "Riempi con"
+
+msgid "File Browser"
+msgstr "Esplorazione file"
+
+msgid "Size"
+msgstr "Grandezza"
+
+msgid "Last modified"
+msgstr "Ultima modifica"
+
+msgid "Directory"
+msgstr "Cartella"
+
+#, c-format
+msgid "%s File"
+msgstr "File %s"
+
+msgid "File/directory filter"
+msgstr "Filtro file/cartelle"
+
+msgid "Enter your working folder"
+msgstr "Inserisci la tua cartella di lavoro"
+
+msgid "Case sensitive"
+msgstr "Distingui le maiuscole"
+
+msgid "Regular expression"
+msgstr "Espressione regolare"
+
+msgid "Select a directory"
+msgstr "Seleziona una cartella"
+
+msgid "Home"
+msgstr "Home"
+
+msgid "Scilab"
+msgstr "Scilab"
+
+#, c-format
+msgid "Cannot edit the file %s"
+msgstr "Non è possibile modificare il file %s"
+
+#, c-format
+msgid "Cannot open the file %s"
+msgstr "Non è possibile aprire il file %s"
+
+msgid "Open with SciNotes"
+msgstr "Apri con SciNotes"
+
+msgid "Execute in Scilab"
+msgstr "Esegui in Scilab"
+
+msgid "Open with Xcos"
+msgstr "Apri con Xcos"
+
+msgid "Load in Scilab"
+msgstr "Carica in Scilab"
+
+msgid "Edit with default application"
+msgstr "Modifica con l'applicazione predefinita"
+
+msgid "Open with default application"
+msgstr "Apri con l'applicazione predefinita"
+
+msgid "Previous directory"
+msgstr ""
+
+msgid "Next directory"
+msgstr ""
+
+msgid "Scilab type:"
+msgstr "Tipo Scilab:"
+
+msgid "Bytes:"
+msgstr ""
+
+msgid "Type not supported for this operation"
+msgstr ""
+
+#, c-format
+msgid "Scilab '%s' module not installed.\n"
+msgstr "Il modulo \"%s\" di Scilab non è installato.\n"
