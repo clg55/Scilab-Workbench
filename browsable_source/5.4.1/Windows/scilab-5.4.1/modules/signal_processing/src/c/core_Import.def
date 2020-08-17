@@ -1,0 +1,11 @@
+LIBRARY    core.dll
+
+
+EXPORTS
+; --------------------------------------- 
+; Libscilab
+; --------------------------------------- 
+callFunctionFromGateway
+com_
+MyHeapAlloc
+MyHeapFree
