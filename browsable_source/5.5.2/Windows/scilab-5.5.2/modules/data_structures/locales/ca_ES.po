@@ -1,0 +1,109 @@
+# Catalan translation for scilab
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# This file is distributed under the same license as the scilab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: scilab\n"
+"Report-Msgid-Bugs-To: <localization@lists.scilab.org>\n"
+"POT-Creation-Date: 2013-04-16 17:44+0100\n"
+"PO-Revision-Date: 2012-04-18 18:56+0000\n"
+"Last-Translator: Marc Coll Carrillo <Unknown>\n"
+"Language-Team: Catalan <ca@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17413)\n"
+"Language: ca\n"
+
+#, c-format
+msgid "%s: Can not read input argument #%d.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: No more memory.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Can not create a mlist with input argument #%d.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Can not create a tlist with input argument #%d.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Wrong number of input arguments: at least %d expected.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Wrong type for input argument #%d: An hypermatrix expected.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Wrong number of input arguments: at most %d expected.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Invalid index #%d in hypermatrix extraction. "
+msgstr ""
+
+#, c-format
+msgid "%s: Invalid index #%d in hypermatrix insertion.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Invalid hypermatrix insertion.\n"
+msgstr ""
+
+msgid "Too many arguments in the stack, edit stack.h and enlarge intersiz.\n"
+msgstr ""
+"Massa arguments a la pila, editeu el stack.h i augmenteu el intersiz.\n"
+
+#, c-format
+msgid ""
+"%s: Wrong values for input argument #%d: Elements must be non-negative "
+"integers.\n"
+msgstr ""
+"%s: valors incorrectes del paràmetre d'entrada #%d: els elements han de ser "
+"enters no negatius.\n"
+
+#, c-format
+msgid "%s: Number of entries does not match product of dimensions"
+msgstr ""
+"%s: el nombre d'entrades no es correspon amb el producte de les dimensions"
+
+#, c-format
+msgid "%s: Wrong number of input arguments: %d expected"
+msgstr "%s: Nombre incorrecte d'arguments d'entrada: Han de ser %d"
+
+#, c-format
+msgid "%s: Wrong number of input argument(s): %d expected.\n"
+msgstr "%s: Nombre incorrecte d'arguments d'entrada: Han de ser %d.\n"
+
+#, c-format
+msgid ""
+"%s: Wrong type for input argument #%d: struct array or tlist or mlist "
+"expected.\n"
+msgstr ""
+
+#, c-format
+msgid "%s: Wrong type for input argument #%d: A string expected.\n"
+msgstr ""
+"%s: L'argument d'entrada #%d és d'un tipus incorrecte: Ha de ser una cadena "
+"de caràcters.\n"
+
+#, c-format
+msgid "%s: Wrong number of input argument(s) : an even number is expected.\n"
+msgstr ""
+"%s: El nombre d'arguments d'entrada és incorrecte: Ha de ser un nombre "
+"senar.\n"
+
+#, c-format
+msgid "%s: 'dims' can not be used as a field name.\n"
+msgstr "%s: No podeu utilitzar 'dims' com a nom d'un camp.\n"
+
+#, c-format
+msgid "%s: field name '%s' defined twice.\n"
+msgstr "%s: Heu definit dos cops el nom de camp '%s'.\n"

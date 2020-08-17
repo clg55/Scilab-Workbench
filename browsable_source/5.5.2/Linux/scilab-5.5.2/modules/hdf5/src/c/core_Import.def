@@ -1,0 +1,14 @@
+LIBRARY    core.dll
+
+
+EXPORTS
+;--------------------------
+; core
+;--------------------------
+callFunctionFromGateway
+com_
+freeArrayOfString
+oGetDoubleComplexFromPointer
+vGetPointerFromDoubleComplex
+MyHeapAlloc
+MyHeapFree

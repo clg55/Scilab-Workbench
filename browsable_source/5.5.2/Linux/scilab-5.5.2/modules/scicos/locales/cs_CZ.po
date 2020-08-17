@@ -1,0 +1,1073 @@
+# Czech translation for scilab
+# Copyright (c) 2011 Rosetta Contributors and Canonical Ltd 2011
+# This file is distributed under the same license as the scilab package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: scilab\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2013-04-16 17:44+0100\n"
+"PO-Revision-Date: 2013-07-15 21:43+0000\n"
+"Last-Translator: Zbyněk Schwarz <Unknown>\n"
+"Language-Team: Czech <cs@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Launchpad (build 17413)\n"
+
+#, c-format
+msgid "%s : lnksz argument must be double or integer.\n"
+msgstr "%s: Argument lnksz musí být celé číslo nebo s dvojitou přesností.\n"
+
+#, c-format
+msgid "%s : lnktyp argument must be double or integer.\n"
+msgstr "%s: Argument lnktyp musí být celé číslo nebo s dvojitou přesností.\n"
+
+#, c-format
+msgid "%s : inconsistent dimension between lnksz and lnktyp.\n"
+msgstr "%s : nekonzistentní rozměr mezi lnksz a lnktyp.\n"
+
+#, c-format
+msgid "%s : bad dimension for lnksz argument.\n"
+msgstr "%s : špatný rozměr pro argument Inksz.\n"
+
+#, c-format
+msgid "%s : bad dimension for lnktyp argument.\n"
+msgstr "%s : špatný rozměr pro argument Inktyp.\n"
+
+#, c-format
+msgid "%s : lnksz and lnktyp argument must have the same length.\n"
+msgstr "%s: Argumenty lnksz a lnktyp musí mít stejnou délku.\n"
+
+#, c-format
+msgid "%s : No more free memory.\n"
+msgstr "%s : Není více volné paměti.\n"
+
+#, c-format
+msgid "%s: Wrong value for input argument #%d: An integer expected.\n"
+msgstr ""
+
+#, c-format
+msgid "%s : First argument must be a scicos_block typed list.\n"
+msgstr "%s : První argument musí být psaný seznam scicos_block.\n"
+
+#, c-format
+msgid "%s : First argument must be a valid scicos_block typed list.\n"
+msgstr "%s : První argument musí být platný psaný seznam scicos_block.\n"
+
+#, c-format
+msgid "%s: Memory allocation error.\n"
+msgstr "%s: Chyba při přidělování paměti.\n"
+
+#, c-format
+msgid "%s : Second argument must be scalar.\n"
+msgstr "%s : Druhý argument musí být skalár.\n"
+
+#, c-format
+msgid "%s : Third argument must be scalar.\n"
+msgstr "%s : Třetí argument musí být skalár.\n"
+
+#, c-format
+msgid "%s: scicosim is not running.\n"
+msgstr "%s: scicosim není spuštěn.\n"
+
+#, c-format
+msgid "%s : First argument must be a string.\n"
+msgstr "%s : První argument musí být řetězec.\n"
+
+#, c-format
+msgid ""
+"%s : First argument must be a matrix or an hypermatrix\n"
+"of real, complex or integer numbers.\n"
+msgstr ""
+"%s : První argument musí být matice nebo hypermatice\n"
+"reálných, komplexních nebo celých čísel.\n"
+
+#, c-format
+msgid "%s : Only hypermatrix with 3 dimensions is allowed.\n"
+msgstr "%s : Pouze hypermatice se 3 rozměry je povolena.\n"
+
+#, c-format
+msgid "%s : Second argument must be a scalar.\n"
+msgstr "%s : Druhý argument musí být skalár.\n"
+
+#, c-format
+msgid "%s : Second argument must be a real.\n"
+msgstr "%s : Druhý argument musí být reálný.\n"
+
+#, c-format
+msgid "%s: 1st and 2nd argument must have equal size\n"
+msgstr "%s: 1. a 2. argument musí mít stejnou velikost\n"
+
+msgid ""
+"\n"
+"getscicosvars : utility function to retrieve\n"
+msgstr ""
+"\n"
+"getscicosvars : užitková funkce k získání\n"
+
+msgid ""
+"                scicos arrays during simulation.\n"
+"\n"
+msgstr ""
+"                pole scicos v průběhu simulace.\n"
+"\n"
+
+msgid ""
+"Usage : [myvar]=getscicosvars([\"str1\";\"str2\";...]);\n"
+"\n"
+msgstr ""
+"Použití : [mojeprom]getscicosvars([\"řet1\";\"řet2\";...]);\n"
+"\n"
+
+msgid "- myvar : an int32 or double matrix or a Tlist.\n"
+msgstr "- myvar : celoč.32 nebo matice s dvojitou přesností nebo Tlist.\n"
+
+msgid "- [\"str1\";\"str2\",...] is a string matrix\n"
+msgstr "- [\"řet1\";\"řet2\",...] je řetězcová matice\n"
+
+msgid "  that must be informed with the following values :\n"
+msgstr "  které musí být informováno pomocí následujících hodnot :\n"
+
+#, c-format
+msgid "%s : No more memory.\n"
+msgstr "%s : Není více paměti.\n"
+
+#, c-format
+msgid "%s : Undefined field in string matrix position : %d.\n"
+msgstr "%s: Neurčené pole v poloze řetězcové matice : %d.\n"
+
+#, c-format
+msgid "%s : Error.\n"
+msgstr "%s : Chyba.\n"
+
+#, c-format
+msgid "%s : First argument must be a Typed list.\n"
+msgstr "%s : První argument musí být Psaný seznam.\n"
+
+#, c-format
+msgid "%s : First argument must be a scicos model.\n"
+msgstr "%s : První argument musí být scicos model.\n"
+
+#, c-format
+msgid "%s : unknown block : %s\n"
+msgstr "%s : neznámý blok : %s\n"
+
+#, c-format
+msgid "%s : type 1 function not allowed for scilab blocks\n"
+msgstr "%s : funkce typu 1 není pro bloky scilab povolena\n"
+
+#, c-format
+msgid "%s : type 2 function not allowed for scilab blocks\n"
+msgstr "%s : funkce typu 2 není pro bloky scilab povolena\n"
+
+#, c-format
+msgid "%s : Undefined Function type\n"
+msgstr "%s : Typ Neurčené Funkce\n"
+
+#, c-format
+msgid "%s : Function not found\n"
+msgstr "%s : Funkce nenalezena\n"
+
+#, c-format
+msgid "%s : Undetermined Size. in(%d)=%d. Please adjust your model.\n"
+msgstr "%s : Neurčená Velikost. in(%d)=%d. Prosím upravte Váš model.\n"
+
+#, c-format
+msgid "%s : Allocation error.\n"
+msgstr "%s : Chyba alokace.\n"
+
+#, c-format
+msgid "%s : Undetermined Size. in2(%d)=%d. Please adjust your model.\n"
+msgstr "%s : Neurčená Velikost. in2(%d)=%d. Prosím upravte Váš model.\n"
+
+#, c-format
+msgid "%s : Undetermined Type. intyp(%d)=%d. Please adjust your model.\n"
+msgstr "%s : Neurčený Typ. intyp(%d)=%d. Prosím upravte Váš model.\n"
+
+#, c-format
+msgid "%s : Undetermined Size. out(%d)=%d. Please adjust your model.\n"
+msgstr "%s : Neurčená Velikost. out(%d)=%d. Prosím upravte Váš model.\n"
+
+#, c-format
+msgid "%s : Undetermined Size. out2(%d)=%d. Please adjust your model.\n"
+msgstr "%s : Neurčená Velikost. in2(%d)=%d. Prosím upravte Váš model.\n"
+
+#, c-format
+msgid "%s : Undetermined Type. outtyp(%d)=%d. Please adjust your model.\n"
+msgstr "%s : Neurčený Typ. outtyp(%d)=%d. Prosím upravte Váš model.\n"
+
+#, c-format
+msgid "%s : oz element of state must be a list.\n"
+msgstr "%s : prvek stavu oz musí být seznam.\n"
+
+#, c-format
+msgid "%s : outtb element of state must be a list.\n"
+msgstr "%s : prvek stavu outtb musí být seznam.\n"
+
+#, c-format
+msgid "%s : Third argument must be a scalar.\n"
+msgstr "%s : Třetí argument musí být skalár.\n"
+
+#, c-format
+msgid "%s : Fourth argument must be a Tlist.\n"
+msgstr "%s : Čtvrtý argument musí být Tlist.\n"
+
+#, c-format
+msgid "%s : Second element of sim must be a list.\n"
+msgstr "%s : Druhý prvek sim musí být seznam.\n"
+
+#, c-format
+msgid "%s : sim.opar must be a list.\n"
+msgstr "%s : sim.opar musí být seznam.\n"
+
+#, c-format
+msgid "%s : Incompatible sim.nb RHS parameter.\n"
+msgstr "%s : Nekompatibilní RHS parametr sim.nb.\n"
+
+#, c-format
+msgid "%s : Sixth argument must have at least four elements.\n"
+msgstr "%s : Šestý argument musí mít maximálně čtyři prvky.\n"
+
+#, c-format
+msgid "%s : Sixth argument must have a maximum of seven elements.\n"
+msgstr "%s : Šestý argument musí mít maximálně sedm prvků.\n"
+
+#, c-format
+msgid "%s : error in cross variable size checking : %d\n"
+msgstr "%s : chyba v kontrole velikosti přes proměnné : %d\n"
+
+#, c-format
+msgid "%s : error\n"
+msgstr "%s : chyba\n"
+
+#, c-format
+msgid ""
+"%s : error. Type %d of double scalar matrix not yet supported for outtb.\n"
+msgstr ""
+"%s : chyba. Typ %d dvojskalárové matice není ještě pro outtb podporován.\n"
+
+#, c-format
+msgid ""
+"%s : error. Type %d of int scalar matrix not yet supported for outtb.\n"
+msgstr ""
+"%s : chyba. Typ %d celočíselné skalárové matice není ještě pro outtb "
+"podporován.\n"
+
+#, c-format
+msgid "%s : error. Type %d not yet supported for outtb.\n"
+msgstr "%s : chyba. Typ %d není ještě pro outtb podporován.\n"
+
+msgid "scheduling problem"
+msgstr "problém plánování"
+
+msgid "input to zero-crossing stuck on zero"
+msgstr "vstup na průchod nulou se zastavil na nule"
+
+msgid "event conflict"
+msgstr "konflikt události"
+
+msgid "algebraic loop detected"
+msgstr "zjištěna algebraická smyčka"
+
+msgid "cannot allocate memory"
+msgstr "nelze přidělit paměť"
+
+#, c-format
+msgid "the block %d has been called with input out of its domain"
+msgstr "blok %d byl zavolán se vstupem mimo jeho doménu"
+
+msgid "singularity in a block"
+msgstr "jedinečnost v bloku"
+
+msgid "block produces an internal error"
+msgstr "blok vytváří vnitřní chybu"
+
+msgid "initial conditions not converging"
+msgstr "počáteční podmínky nekonvergují"
+
+#, c-format
+msgid "cannot allocate memory in block=%d"
+msgstr "nelze přidělit paměť v bloku=%d"
+
+msgid "sliding mode condition, cannot integrate"
+msgstr "podmínka režimu posunu, nelze začlenit"
+
+msgid "Cannot find the initial mode, maybe there is a sliding mode condition"
+msgstr "Nelze najít počáteční režim, možná existuje podmínka režimu posuvu"
+
+msgid ""
+"You have changed a parameter in your model, but the model has been compiled "
+"to use an XML file containing initial values and parameters. So you should "
+"either recompile your Scicos diagram or [re]launch the initialization "
+"interface to regenerate the XML file  with new parameters."
+msgstr ""
+"Změnili jste parametr ve Vašem modelu, ale model byl zkompilován pro použití "
+"XML souboru obsahující počáteční hodnoty a parametry. Takže buď musíte znovu "
+"zkompilovat Váš graf Scicos nebo [znovu]spustit rozhraní zavedení pro "
+"znovuvytvoření XML souboru s novými parametry."
+
+msgid "Undefined data type."
+msgstr "Typ neurčených dat."
+
+msgid ""
+"The number of parameter provided by Scicos blocks is different from what "
+"expected by the code generated by the Modelica compiler. You might have "
+"relaxed a parameter using FIXED property (i.e., fixed=false) in a Modelica "
+"model. This will be corrected in the next version"
+msgstr ""
+"Počet parametrů poskytnutý bloky Scicos je jiný, než to, co je očekáváno "
+"kódem vytvořený kompilátorem Modelica. Možná máte uvolněný parametr použitím "
+"PEVNÉ vlastnosti (tj. , fixed=false) v modelu Modelica. Toto bude opraveno v "
+"příští verzi"
+
+msgid "unknown or erroneous block"
+msgstr "neznámý nebo chybný blok"
+
+#, c-format
+msgid "integration problem istate=%d"
+msgstr "problém začlenění istate=%d"
+
+msgid "scicos unexpected error, please report..."
+msgstr "nečekaná chyba scicos, prosím ohlašte..."
+
+#, c-format
+msgid "%s : First argument must be a structure.\n"
+msgstr "%s : První argument musí být struktura.\n"
+
+#, c-format
+msgid "%s : First argument must be a scicos signal structure.\n"
+msgstr "%s : První argument musí být signální struktura scicos.\n"
+
+#, c-format
+msgid "%s: error %d. Stack is full.\n"
+msgstr "%s: chyba %d. Zásobník je plný.\n"
+
+#, c-format
+msgid "%s: error %d. No more space on the stack for new data.\n"
+msgstr "%s: chyba %d. Není více místa v zásobníku pro nová data,\n"
+
+#, c-format
+msgid "%s: error %d. Undefined error.\n"
+msgstr "%s: chyba %d. Neurčená chyba.\n"
+
+#, c-format
+msgid "%s: error %d. Only int or double object are accepted.\n"
+msgstr ""
+"%s: chyba %d. Jsou přijímány pouze celočíselné objekty nebo s dvojitou "
+"přesností.\n"
+
+#, c-format
+msgid "%s: error %d. Bad double object sub_type.\n"
+msgstr "%s: chyba %d. Špatný objekt sub_type s dvojitou přesností.\n"
+
+#, c-format
+msgid "%s: error %d. Bad int object sub_type.\n"
+msgstr "%s: chyba %d. Špatný celočíselný objekt sub_type.\n"
+
+#, c-format
+msgid "%s: error %d. A type of a scilab object has changed.\n"
+msgstr "%s: chyba %d. Typ objektu scilab se změnil.\n"
+
+msgid "type 1 function not allowed for scilab blocks\n"
+msgstr "funkce typu 1 není povolena v blocích scilab\n"
+
+msgid "type 2 function not allowed for scilab blocks\n"
+msgstr "funkce typu 2 není povolena v blocích scilab\n"
+
+msgid "Undefined Function type\n"
+msgstr "Typ Neurčené Funkce\n"
+
+msgid "Function not found\n"
+msgstr "Funkce nenalezena\n"
+
+#, c-format
+msgid ""
+"\n"
+"SUNDIALS_ERROR: %s() failed - returned NULL pointer\n"
+"\n"
+msgstr ""
+"\n"
+"SUNDIALS_ERROR: %s() selhalo - navrácen nulový ukazatel\n"
+"\n"
+
+#, c-format
+msgid ""
+"\n"
+"SUNDIALS_ERROR: %s() failed with flag = %d\n"
+"\n"
+msgstr ""
+"\n"
+"SUNDIALS_ERROR: %s() selhalo s příznakem = %d\n"
+"\n"
+
+#, c-format
+msgid ""
+"\n"
+"MEMORY_ERROR: %s() failed - returned NULL pointer\n"
+"\n"
+msgstr ""
+"\n"
+"Chyba paměti: %s() selhal - vrácen ukazatel NULL\n"
+"\n"
+
+#, c-format
+msgid "****SUNDIALS.Cvode from: %f to %f hot= %d  \n"
+msgstr "****SUNDIALS.Cvode z: %f až %f hot= %d  \n"
+
+#, c-format
+msgid "****SUNDIALS.Cvode reached: %f\n"
+msgstr "****SUNDIALS.Cvode dosaženo: %f\n"
+
+#, c-format
+msgid ""
+"****SUNDIALS.Cvode: too much work at time=%g (stiff region, change RTOL and "
+"ATOL)\n"
+msgstr ""
+"**** SUNDIALS.Cvode: příliš mnoho práce v čase=%g (ztuhlá oblast, změňte "
+"RTOL a ATOL)\n"
+
+#, c-format
+msgid "root found at t=: %f\n"
+msgstr "kořen nalezen v t=: %f\n"
+
+#, c-format
+msgid "Event: %d activated at t=%f\n"
+msgstr "Událost: %d aktivováno ve t=%f\n"
+
+#, c-format
+msgid "mode of block %d=%d, "
+msgstr "režim bloku %d=%d, "
+
+msgid "**mod**\n"
+msgstr "**mod**\n"
+
+msgid "End of activation\n"
+msgstr "Konec aktivace\n"
+
+msgid "**** SUNDIALS.IDA successfully initialized *****\n"
+msgstr "**** SUNDIALS.IDA úspěšně zavedeno *****\n"
+
+msgid "**** SUNDIALS.IDA failed to initialize ->try again *****\n"
+msgstr "**** SUNDIALS.IDA nelze zavést ->zkuste to znovu *****\n"
+
+#, c-format
+msgid "****daskr from: %f to %f hot= %d  \n"
+msgstr "****daskr z: %f až %f hot= %d  \n"
+
+#, c-format
+msgid "****SUNDIALS.Ida reached: %f\n"
+msgstr "****SUNDIALS.Ida dosaženo: %f\n"
+
+#, c-format
+msgid ""
+"**** SUNDIALS.Ida: too much work at time=%g (stiff region, change RTOL and "
+"ATOL)\n"
+msgstr ""
+"**** SUNDIALS.Ida: příliš mnoho práce v čase=%g (ztuhlá oblast, změňte RTOL "
+"a ATOL)\n"
+
+#, c-format
+msgid "block %d is called "
+msgstr "je volán blok %d "
+
+#, c-format
+msgid "with flag %d "
+msgstr "s příznakem %d "
+
+#, c-format
+msgid "at time %f \n"
+msgstr "v čase %f \n"
+
+msgid "Entering the block \n"
+msgstr "Vstupuji do bloku \n"
+
+#, c-format
+msgid "Leaving block %d \n"
+msgstr "Opouštím blok %d \n"
+
+msgid "Error in the Debug block \n"
+msgstr "Chyba v bloku Ladění \n"
+
+#, c-format
+msgid ""
+"\n"
+"Warning: The computing function #%d returns a NaN/Inf"
+msgstr ""
+"\n"
+"Varování: Výpočetní funkce #%d vrátila NaN/Inf"
+
+#, c-format
+msgid ""
+"\n"
+"Warning: The zero_crossing function #%d returns a NaN/Inf"
+msgstr ""
+"\n"
+"Varování: Funkce #%d překračující nulu vrací NaN/Inf"
+
+#, c-format
+msgid ""
+"\n"
+"Warning: The zero-crossing function #%d returns a NaN"
+msgstr ""
+"\n"
+"Varování: Funkce #%d překračující nulu vrací NaN"
+
+#, c-format
+msgid ""
+"\n"
+"Warning: The residual function #%d returns a NaN"
+msgstr ""
+
+msgid ""
+"\n"
+"Error: Problem in the evaluation of a root function"
+msgstr ""
+
+#, c-format
+msgid ""
+"\n"
+"Warning: The preconditioner evaluation function returns a NaN at index #%d."
+msgstr ""
+
+msgid ""
+"\n"
+"Error: The preconditioner evaluation function failed."
+msgstr ""
+
+msgid ""
+"\n"
+"Error: Failed to factor the preconditioner."
+msgstr ""
+
+#, c-format
+msgid ""
+"\n"
+"Warning: The preconditioner application function returns a NaN at index #%d."
+msgstr ""
+
+#, c-format
+msgid ""
+"\n"
+" Warning: an event is reprogrammed at t=%g by removing another"
+msgstr ""
+"\n"
+" Varování: událost je přeprogramována v t=%g odejmutím jiné"
+
+msgid ""
+"\n"
+"         (already programmed) event. There may be an error in"
+msgstr ""
+"\n"
+"         (již naprogramováná) událost. Chyba může být v"
+
+msgid ""
+"\n"
+"         your model. Please check your model\n"
+msgstr ""
+"\n"
+"         Váš model. Prosím zkontrolujte Váš model\n"
+
+msgid ""
+"\n"
+" error in Jacobian"
+msgstr ""
+"\n"
+" chyba v Jakobiánu"
+
+#, c-format
+msgid "Error: Cannot find file '%s'.\n"
+msgstr "Chyba: Nelze najít soubor '%s'.\n"
+
+#, c-format
+msgid ""
+"\n"
+"Warning: The initialization system #%d returns a NaN/Inf"
+msgstr ""
+"\n"
+"Varování: Zavedení systému #%d vrátilo NaN/Inf"
+
+#, c-format
+msgid ""
+"\n"
+"Warning: The residual function #%d returns a NaN/Inf"
+msgstr ""
+"\n"
+"Varování: Zbylá funkce #%d vrátila NaN/Inf"
+
+msgid ""
+"\n"
+" The residual function returns NAN/Inf. \n"
+" Please verify your model:\n"
+" some functions might be called with illegal inputs."
+msgstr ""
+"\n"
+" Zbylá funkce vrátila NAN/Inf. \n"
+" Prosím prověřte Váš model:\n"
+" některé funkce mohou být volány s neplatnými vstupy."
+
+#, c-format
+msgid "%s: Wrong number of input argument(s): At least %d expected.\n"
+msgstr "%s: Špatný počet vstupního(ch) argumentu(ů): Očekáváno alespoň %d.\n"
+
+#, c-format
+msgid "%s: Wrong type for input argument #%d: A diagram expected.\n"
+msgstr "%s: Špatný typ vstupního argumentu #%d: Očekáván graf.\n"
+
+#, c-format
+msgid "%s: Error during block parameters evaluation.\n"
+msgstr "%s: Chyba při vyhodnocování parametrů bloku.\n"
+
+#, c-format
+msgid "%s: Unable to find diagram inputs\n"
+msgstr "%s: Nelze nalézt vstupy grafu\n"
+
+#, c-format
+msgid "%s: Unable to find diagram outputs\n"
+msgstr "%s: Nelze nalézt výstupy grafu\n"
+
+#, c-format
+msgid "%s: Input ports are not numbered properly.\n"
+msgstr "%s: Vstupní porty nejsou správně očíslovány.\n"
+
+#, c-format
+msgid "%s: Output ports are not numbered properly.\n"
+msgstr "%s: Výstupní porty nejsou správně očíslovány.\n"
+
+#, c-format
+msgid "%s: Diagram does not compile in pass %d.\n"
+msgstr "%s: Graf nelze zkompilovat v průchodu %d.\n"
+
+#, c-format
+msgid "%s: Wrong size for input argument #%d: Empty matrix expected.\n"
+msgstr ""
+"%s: Špatná velikost vstupního argumentu #%d: Očekávána prázdná matice.\n"
+
+#, c-format
+msgid "%s: Wrong size for input argument #%d: %d-by-%d matrix expected.\n"
+msgstr ""
+"%s: Špatná velikost vstupního argumentu #%d: Očekávána matice %d-krát-%d.\n"
+
+#, c-format
+msgid "%s: Wrong number of input arguments. Must be between %d and %d.\n"
+msgstr "%s: Špatný počet vstupních argumentů: Musí být mezi %d a %d.\n"
+
+#, c-format
+msgid "%s: Wrong type for input argument #%d: %s data structure expected.\n"
+msgstr ""
+"%s: Špatný typ vstupního argumentu #%d: očekávána datová struktura %s.\n"
+
+#, c-format
+msgid "%s: Wrong type for input argument #%d: A list expected.\n"
+msgstr "%s: Špatný typ vstupního argumentu #%d: Očekáván seznam.\n"
+
+#, c-format
+msgid "%s: Wrong value for input argument #%d: '%s' expected.\n"
+msgstr "%s: Špatná hodnota vstupního argumentu #%d: Očekáváno '%s'.\n"
+
+#, c-format
+msgid "%s: Wrong type for input argument #%d: String array expected.\n"
+msgstr "%s: Špatný typ vstupního argumentu #%d: Očekáváno pole řetězců.\n"
+
+msgid "Can't convert old diagram (problem in version)"
+msgstr "Nelze převést starý graf (problém s verzí)"
+
+#, c-format
+msgid ""
+"Warning the variable %s does not match any context variable name\n"
+"ignored"
+msgstr ""
+"Varování: Proměnná %s se neshoduje s žádným názvem ignorované\n"
+"proměnné obsahu"
+
+#, c-format
+msgid "%s: Error during block parameters update.\n"
+msgstr "%s: Chyba při aktualizaci parametrů bloku.\n"
+
+msgid ""
+"Diagram has been compiled for implicit solver\n"
+"switching to implicit solver.\n"
+msgstr ""
+"Graf byl zkompilován pro implicitního řešitele\n"
+"přepínám na implicitního řešitele.\n"
+
+msgid ""
+"Diagram has been compiled for explicit solver\n"
+"switching to explicit solver.\n"
+msgstr ""
+"Graf byl zkompilován pro explicitního řešitele\n"
+"přepínám na explicitního řešitele.\n"
+
+msgid "Simulation parameters not set:"
+msgstr "Parametry simulace nejsou nastaveny:"
+
+msgid "Initialization problem:"
+msgstr ""
+
+msgid "Simulation problem: "
+msgstr "Problém simulace: "
+
+msgid "End problem: "
+msgstr "Konečný problém: "
+
+#, c-format
+msgid "%s: Wrong number of input arguments: %d to %d expected.\n"
+msgstr "%s: Špatný počet vstupních argumentů: očekáváno %d až %d.\n"
+
+msgid "Your model contains states defined in standard Scicos blocks.\n"
+msgstr "Váš model obsahuje stavy zadané ve standardních blocích Scicos.\n"
+
+#, c-format
+msgid "Initialisation problem in %s "
+msgstr "Problém zavedení v %s "
+
+#, c-format
+msgid "Initialisation problem in the %s method"
+msgstr "Problém zavedené v metodě %s"
+
+msgid "Initialisation problem in the finish phase"
+msgstr "Problém zavedení v konečné fázi"
+
+msgid "Problem with the block generated from modelica blocks."
+msgstr "Problém s blokem vytvořeným z bloků modelica."
+
+msgid "Block has connected output port<br />with incompatible size:"
+msgstr "Blok má připojen výstupní port<br />s nekompatibilní velikostí:"
+
+#, c-format
+msgid "Output port %s size is: %s"
+msgstr "Velikost výstupního portu %s je: %s"
+
+#, c-format
+msgid "Input port %s size is: %s"
+msgstr "Velikost vstupního portu %s je: %s"
+
+msgid "Block has connected output port<br />with incompatible type."
+msgstr "Blok má připojen výstupní port<br />s nekompatibilním typem."
+
+#, c-format
+msgid "Output port %s type is: %s"
+msgstr "Typ výstupního portu %s je: %s"
+
+#, c-format
+msgid "Input port %s type is: %s"
+msgstr "Typ vstupního portu %s je: %s"
+
+msgid "Block has connected input port<br />with incompatible size:"
+msgstr "Blok má připojen vstupní port<br />s nekompatibilní velikostí:"
+
+msgid "Block has connected input port<br />with incompatible type:"
+msgstr "Blok má připojen vstupní port<br />s nekompatibilním typem:"
+
+#, c-format
+msgid "%s: Error: A scifunc block has not been defined."
+msgstr "%s: Chyba: Blok scifunc nebyl určen."
+
+#, c-format
+msgid " Main Modelica : %s"
+msgstr " Hlavní Modelica : %s"
+
+msgid "No block can be activated"
+msgstr "Nemůže být aktivován žádný blok"
+
+msgid "Problem in port size or type."
+msgstr "Problém s velikostí portu nebo typem"
+
+msgid ""
+"No continuous-time state. Thresholds are ignored; this \n"
+"may be OK if you don't generate external events with them.\n"
+"If you want to reactivate the thresholds, then you need\n"
+"\n"
+"to include a block with continuous-time state in your diagram.\n"
+"   You can for example include DUMMY CLSS block (linear palette)."
+msgstr ""
+
+msgid "Diagram contains implicit blocks, compiling for implicit Solver."
+msgstr ""
+"Graf obsahuje implicitní bloky, sestavování na implicitního řešitele."
+
+msgid "Algebraic loop on events."
+msgstr "Algebraické smyčky při událostech"
+
+msgid "Algebraic loop."
+msgstr "Algebraická smyčka"
+
+msgid "A C or Fortran block is used but not linked.\n"
+msgstr "Je použit blok C nebo Fortran ale není propojen.\n"
+
+#, c-format
+msgid "Number of modes in block #%d cannot be determined."
+msgstr "Počet režimů v bloku #%d nlze zjistit.."
+
+#, c-format
+msgid "Number of zero crossings in block #%d cannot be determined."
+msgstr "Počet průchodů nulou v bloku #%d nelze zjistit."
+
+msgid "Not enough information to find port sizes.\n"
+msgstr "Není dostatek informací k nalezení velikostí portu.\n"
+
+msgid "I cannot find a link with undetermined size.\n"
+msgstr "Nelze najít propojení s neurčenou velikostí.\n"
+
+msgid "One of this block output has negative size.<br />Please check."
+msgstr ""
+"Jeden z výstupu tohoto bloku má zápornou velikost.<br />Prosím zkontrolujte."
+
+msgid "Block input has negative size:"
+msgstr "Vstup bloku má zápornou velikost:"
+
+msgid "Please compile the diagram to report the error."
+msgstr "Zkompilujte, prosím, graf pro nahlášení chyby."
+
+msgid "Unable to report an error into a SuperBlock"
+msgstr "Nelze nahlásit chybu do SuperBloku"
+
+msgid ""
+"<em>Please update the diagram to avoid this warning.</em><br />Block output "
+"port has a non-determined size:"
+msgstr ""
+"<em>Aktualizujte, prosím, Váš graf, abyste zabránili tomuto "
+"varování.</em><br />Výstupní port bloku má neurčenou velikost:"
+
+msgid ""
+"<em>Please update the diagram to avoid this warning.</em><br />Block output "
+"port has a non-determined type:"
+msgstr ""
+"<em>Aktualizujte, prosím, Váš graf, abyste zabránili tomuto "
+"varování.</em><br />Výstupní port bloku má neurčený typ:"
+
+#, c-format
+msgid "Output port %s type."
+msgstr "Typ výstupního portu %s"
+
+#, c-format
+msgid "Input port %s type."
+msgstr "Typ vstupního portu %s"
+
+msgid ""
+"<em>Please update the diagram to avoid this warning.</em><br />Block input "
+"port has a non-determined size:"
+msgstr ""
+"<em>Aktualizujte, prosím, Váš graf, abyste zabránili tomuto "
+"varování.</em><br />Vstupní port bloku má neurčenou velikost:"
+
+msgid ""
+"<em>Please update the diagram to avoid this warning.</em><br />Block input "
+"port has a non-determined type:"
+msgstr ""
+"<em>Aktualizujte, prosím, Váš graf, abyste zabránili tomuto "
+"varování.</em><br />Vstupní port bloku má neurčený typ:"
+
+msgid ""
+"Highlighted block(s) have connected ports \n"
+"with  sizes that cannot be determined by the context.\n"
+"What is the size of this link?"
+msgstr ""
+"Zvýrazněné bloky mají připojené porty \n"
+"s velikostmi, které nemohou být zjištěny pomocí kontextu.\n"
+"Jaká je velikost tohoto propojení?"
+
+#, c-format
+msgid "the dep_ut size of the %s block is not correct.\n"
+msgstr "Velikost dep_ut v bloku %s není správná.\n"
+
+msgid "Not enough information to find port type.\n"
+msgstr "Není dostatek informací k nalezení typu portu.\n"
+
+msgid "Modelica compiler (flat2C)"
+msgstr ""
+
+msgid "The initialization file already exists!"
+msgstr "Soubor zavedení již existuje!"
+
+msgid "Do you want to overwrite it?"
+msgstr "Chcete ho přepsat?"
+
+msgid "No"
+msgstr "Ne"
+
+msgid "Yes"
+msgstr "Ano"
+
+msgid "Modelica blocks are reduced to a block with:"
+msgstr "Bloky Modelica jsou omezeny na blok s:"
+
+#, c-format
+msgid "Number of differential states: %d"
+msgstr "Počet rozdílných stavů: %d"
+
+#, c-format
+msgid "Number of algebraic states: %d"
+msgstr "Počet algebraických stavů: %d"
+
+#, c-format
+msgid "Number of discrete time states  : %d"
+msgstr "Počet stavů diskrétního času : %d"
+
+#, c-format
+msgid "Number of zero-crossing surfaces: %d"
+msgstr "Počet povrchů procházejících nulou: %d"
+
+#, c-format
+msgid "Number of modes  : %d"
+msgstr "Počet režimu : %d"
+
+#, c-format
+msgid "Number of inputs : %d"
+msgstr "Počet vstupů : %d"
+
+#, c-format
+msgid "Number of outputs: %d"
+msgstr "Počet výstupů: %d"
+
+#, c-format
+msgid "Input/output dependency:[%s]"
+msgstr "Vstupní/Výstupní závislost:[%s]"
+
+#, c-format
+msgid "Analytical Jacobian: enabled  (%%Jacobian=%s)"
+msgstr "Analytická Jacobiho matice: povolena (%%matice=%s)"
+
+#, c-format
+msgid "Parameter embedding mode: enabled (%%Modelica_ParEmb=%s)"
+msgstr "Režim vnořování parametru: povolen (%%Modelica_ParEmb=%s)"
+
+#, c-format
+msgid "Generated files path: %s"
+msgstr ""
+
+msgid "Hyper Matrix is not supported"
+msgstr "Hyper matice není podporována"
+
+msgid "Type not recognized"
+msgstr "Nerozpoznaný typ"
+
+msgid "Complex Matrix is not supported"
+msgstr "Komplexní matice není podporována"
+
+msgid "Block is ignored because of undefined input(s)."
+msgstr ""
+
+msgid "Superblock should not contains any Scilab function block."
+msgstr ""
+
+msgid "Generated block cannot be linked with Scilab."
+msgstr ""
+
+msgid "Evaluation problem: value not updated from context."
+msgstr "Problém s vyhodnocením: hodnota není aktualizována z kontextu."
+
+msgid "Evaluation problem: Unknown block"
+msgstr "Problémy vyhodnocení: Neznámý blok"
+
+#, c-format
+msgid ""
+"%s: Error while calling block %s [uid='%s']: invalid parameter (ier=%f, "
+"%%scicos_prob=%%%s).\n"
+msgstr ""
+
+msgid "Cannot load dynamic library: "
+msgstr ""
+
+msgid "Can't include "
+msgstr ""
+
+msgid "This file does not exist"
+msgstr ""
+
+msgid "Modelica compiler"
+msgstr ""
+
+msgid "Sorry: Only C or FORTRAN languages are supported"
+msgstr "Je nám líto: Jsou podporovány pouze jazyky C nebo FORTRAN"
+
+msgid "Sorry file name not defined in "
+msgstr "Je nám líto, jméno souboru není určeno v "
+
+msgid "I/O blocks must be only used in a Super Block"
+msgstr ""
+
+msgid "This Super block input port is not connected."
+msgstr ""
+
+msgid "Input ports are not numbered properly."
+msgstr ""
+
+msgid "Output ports are not numbered properly."
+msgstr ""
+
+msgid "Event input ports are not numbered properly."
+msgstr ""
+
+msgid "Event output ports are not numbered properly."
+msgstr ""
+
+#, c-format
+msgid "%s: Empty diagram"
+msgstr "%s: Prázdné schéma"
+
+#, c-format
+msgid "The variable name %s cannot be used as block parameter: ignored"
+msgstr "Jméno proměnné %s nemůže být použito jako parametr bloku: ignorováno"
+
+msgid "scs_show active..."
+msgstr "scs_show aktivní..."
+
+#, c-format
+msgid "Scilab Graphics of %s"
+msgstr "Scilab Grafika %s"
+
+#, c-format
+msgid "%s: Type %s is not implemented.\n"
+msgstr "%s: Typ %s není zaveden.\n"
+
+#, c-format
+msgid "%s: Wrong size for block parameter '%s': %s expected, getting %s"
+msgstr "%s: Špatná velikost parametru bloku '%s': Očekáváno %s, obdrženo %s"
+
+#, c-format
+msgid "%s: Wrong type for block parameter '%s': %s(%s) expected, getting %s"
+msgstr "%s: Špatný typ parametru bloku '%s': Očekáváno %s(%s), obdrženo %s"
+
+msgid "There are too many Modelica files.\n"
+msgstr "Příliš mnoho souborů Modelica.\n"
+
+msgid "-------Modelica translator error message:-----"
+msgstr "-------Chybová zpráva překladatele Modelica:-----"
+
+msgid "XML to Modelica"
+msgstr ""
+
+#, c-format
+msgid "%s: Wrong number of input arguments: %d expected.\n"
+msgstr "%s: Špatný počet vstupních argumentů: očekáváno %d.\n"
+
+msgid "Xcos block parameter error"
+msgstr "Chyba parametru bloku Xcos"
+
+#, c-format
+msgid ""
+"Answer given for %s \n"
+" has invalid dimension: \n"
+" waiting for dimension %s.\n"
+msgstr ""
+"Předaná odpověď pro %s \n"
+" má nesprávný rozměr: \n"
+" čekám na rozměr %s.\n"
+
+#, c-format
+msgid ""
+"Answer given for %s \n"
+" has incorrect type %s.\n"
+msgstr ""
+"Předaná odpověď pro %s \n"
+" má nesprávný typ %s.\n"
+
+#, c-format
+msgid ""
+"Answer given for %s \n"
+" is incorrect: %s.\n"
+msgstr ""
+"Předaná odpověď pro %s \n"
+" je nesprávná: %s.\n"

@@ -1,0 +1,5 @@
+LIBRARY    linear_algebra.dll
+
+
+EXPORTS
+intspec_
