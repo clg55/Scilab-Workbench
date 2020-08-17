@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) 2008 - INRIA
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="en" xml:id="det">
+    <refnamediv>
+        <refname>det</refname>
+        <refpurpose>determinant</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>det(X)
+            [e,m]=det(X)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Arguments</title>
+        <variablelist>
+            <varlistentry>
+                <term>X</term>
+                <listitem>
+                    <para>real or complex square matrix, polynomial or rational matrix.</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>m</term>
+                <listitem>
+                    <para>real or complex number, the determinant base 10 mantissae</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>e</term>
+                <listitem>
+                    <para>integer, the determinant base 10 exponent</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Description</title>
+        <para>
+            <literal>det(X)</literal> ( <literal>m*10^e</literal> is the determinant of the square matrix <literal>X</literal>.
+        </para>
+        <para>
+            For polynomial matrix <literal>det(X)</literal> is equivalent to <literal>determ(X)</literal>.
+        </para>
+        <para>
+            For rational matrices <literal>det(X)</literal> is equivalent to <literal>detr(X)</literal>.
+        </para>
+        <para>
+            <important>
+                The <literal>det</literal> and <literal>detr</literal> functions don't use the same algorithm.
+                For a rational fraction, <literal>det(X)</literal> is overloaded by <literal>%r_det(X)</literal> which is based on the <literal>determ</literal> function.
+                <literal>detr()</literal> uses the Leverrier method.
+            </important>
+            <warning>
+                Sometimes the <literal>det</literal> and <literal>detr</literal> functions may return different values for rational matrices.
+                In such cases you should set rational simplification mode off by using <code>simp_mode(%f)</code> to get the same result.
+            </warning>
+        </para>
+    </refsection>
+    <refsection>
+        <title>References</title>
+        <para>
+            det computations are based on the Lapack routines
+            DGETRF for  real matrices and  ZGETRF for the complex case.
+        </para>
+        <para>
+            Concerning sparse matrices, the determinant is obtained from LU factorization of umfpack library.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Examples</title>
+        <programlisting role="example"><![CDATA[
+x=poly(0,'x');
+det([x,1+x;2-x,x^2])
+w=ssrand(2,2,4);roots(det(systmat(w))),trzeros(w)   //zeros of linear system
+A=rand(3,3);
+det(A), prod(spec(A))
+ ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="detr">detr</link>
+            </member>
+            <member>
+                <link linkend="determ">determ</link>
+            </member>
+            <member>
+                <link linkend="simp_mode">simp_mode</link>
+            </member>
+        </simplelist>
+    </refsection>
+</refentry>

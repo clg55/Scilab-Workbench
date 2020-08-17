@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) INRIA - Allan CORNET
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="en" xml:id="dos">
+    <refnamediv>
+        <refname>dos</refname>
+        <refpurpose>shell (cmd) command execution (Windows
+            only)
+        </refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>bOK=dos(command-name)
+            bOK=dos(command-name,'-echo')
+            [output,bOK]=dos(command-name)
+            [output,bOK,exitcode]=dos(command-name)
+            [output,bOK]=dos(command-name,'-echo')
+            [output,bOK,exitcode]=dos(command-name,'-echo')
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Description</title>
+        <para>Sends a string command-name to Windows for execution by the cmd shell.
+            Standard output and standard errors of the shell command are written in
+            the calling shell. bOK returns if command has been executed.
+        </para>
+        <para>[output,bOK] = dos(command-name,'-echo') forces the output to the
+            Command Window, even though it is also being assigned into a variable.
+        </para>
+        <para>exitcode value returned by the external process.</para>
+        <para>To open the notepad editor and return control immediately to Scilab
+            dos('start notepad')
+        </para>
+    </refsection>
+    <refsection>
+        <title>Examples</title>
+        <programlisting role="example"><![CDATA[
+[s,w] = dos('dir');
+[s,w] = dos('dir','-echo');
+dos('start notepad')
+dos('taskkill /IM notepad.exe') // Caution, this command will kill all launched notepad's process
+[s, w] = dos('foo')
+[s, w, code] = dos('dir')
+[s, w, code] = dos('foo')
+ ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="unix">unix</link>
+            </member>
+        </simplelist>
+    </refsection>
+</refentry>

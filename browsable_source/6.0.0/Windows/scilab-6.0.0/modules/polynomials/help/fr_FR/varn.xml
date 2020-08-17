@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="fr" xml:id="varn">
+    <refnamediv>
+        <refname>varn</refname>
+        <refpurpose>variable symbolique d'un polynôme ou d'une fraction rationnelle</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Séquence d'appel</title>
+        <synopsis>[symb]=varn(p)
+            [pm]=varn(p,varname)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Paramètres</title>
+        <variablelist>
+            <varlistentry>
+                <term>p  </term>
+                <listitem>
+                    <para>matrice de polynômes ou de fractions rationelles
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>symb  </term>
+                <listitem>
+                    <para>
+                        chaîne de caractères: nom de l'indéterminée des éléments de <literal>p</literal>
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>varname  </term>
+                <listitem>
+                    <para>
+                        chaîne de caractères: nouveau nom à attribuer à la variable des polynômes ou fractions rationnelles de <literal>p</literal>
+                    </para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>pm  </term>
+                <listitem>
+                    <para>
+                        matrice <literal>p</literal> actualisée avec le nouveau nom de variable <literal>varname</literal>
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Description</title>
+        <para>
+            <literal>symb=varn(p)</literal> renvoie dans <literal>symb</literal> l'indéterminée du polynôme <literal>p</literal>
+            (par exemple <literal>varn(poly(0,'x'))</literal> est égal à <literal>'x'</literal>).
+        </para>
+        <para>
+            <literal>varn(p,'s')</literal> renvoie une matrice polynomiale de même taille que <literal>p</literal> mais avec <literal>'s'</literal> comme indéterminée.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Exemples</title>
+        <programlisting role="example"><![CDATA[
+s = poly(0,'s'); p = [s^2+1,s];
+varn(p)
+varn(p,'x')
+
+f = %z / (%z-1); f = [f f^2]
+varn(f)
+varn(f,"x")
+ ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>Voir aussi</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="poly">poly</link>
+            </member>
+            <member>
+                <link linkend="rlist">rlist</link>
+            </member>
+            <member>
+                <link linkend="horner">horner</link>
+            </member>
+        </simplelist>
+    </refsection>
+    <refsection>
+        <title>Historique</title>
+        <revhistory>
+            <revision>
+                <revnumber>5.5.1</revnumber>
+                <revdescription>
+                    <para>Extension aux fractions rationnelles</para>
+                </revdescription>
+            </revision>
+        </revhistory>
+    </refsection>
+</refentry>
