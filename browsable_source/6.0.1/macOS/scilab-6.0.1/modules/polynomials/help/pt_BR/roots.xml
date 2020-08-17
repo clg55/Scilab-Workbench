@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) 2006-2008 - INRIA
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns5="http://www.w3.org/1999/xhtml" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:id="roots" xml:lang="pt">
+    <refnamediv>
+        <refname>roots</refname>
+        <refpurpose>raízes de polinômios</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title> Seqüência de Chamamento </title>
+        <synopsis>[x]=roots(p)
+            [x]=roots(p,'e')
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Parâmetros</title>
+        <variablelist>
+            <varlistentry>
+                <term>p</term>
+                <listitem>
+                    <para>polinômio com coeficientes reais ou complexos ou vetor dos
+                        coeficientes do polinômio em ordem de graus decrescentes (para
+                        compatibilidade com o Matlab).
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Descrição</title>
+        <para>
+            <literal>x=roots(p)</literal> retorna no vetor de complexos
+            <literal>x</literal> as raízes do polinômio <literal>p</literal>. Para
+            polinômios reais de grau&lt;= 100 o algoritmo rápido RPOLY é utilizado. Em
+            outros casos, as raízes são computadas como os autovalores da matriz
+            companheira associada. Use <literal>x=roots(p,'e')</literal> para forçar
+            este algoritmo em qualquer caso.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Exemplos</title>
+        <programlisting role="example"><![CDATA[
+p=poly([0,10,1+%i,1-%i],'x');
+roots(p)
+A=rand(3,3);roots(poly(A,'x'))    // avaliações por polinômios característicos
+spec(A)
+ ]]></programlisting>
+    </refsection>
+    <refsection>
+        <title> Ver Também </title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="poly">poly</link>
+            </member>
+            <member>
+                <link linkend="spec">spec</link>
+            </member>
+            <member>
+                <link linkend="companion">companion</link>
+            </member>
+        </simplelist>
+    </refsection>
+    <refsection>
+        <title>References</title>
+        <para>O algoritmo RPOLY é descrito em "Algorithm 493: Zeros of a Real
+            Polynomial", ACM TOMS Volume 1, edição 2 (Junho 1975), pp. 178-189
+        </para>
+        <para>Jenkins, M. A. e Traub, J. F. (1970), A Three-Stage Algorithm for
+            Real Polynomials Using Quadratic Iteration, SIAM J. Numer. Anal., 7(1970),
+            545-566.
+        </para>
+        <para>Jenkins, M. A. e Traub, J. F. (1970), Principles for Testing
+            Polynomial Zerofinding Programs. ACM TOMS 1, 1 (Março1975), pp.
+            26-34
+        </para>
+    </refsection>
+</refentry>

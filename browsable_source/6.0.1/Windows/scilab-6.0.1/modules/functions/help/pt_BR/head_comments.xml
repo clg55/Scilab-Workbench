@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) ????-2008 - INRIA - Serge STEER <serge.steer@inria.fr>
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1999/xhtml" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:id="head_comments" xml:lang="pt">
+    <refnamediv>
+        <refname>head_comments</refname>
+        <refpurpose>exibe comentários do cabeçalho da função Scilab</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Seqüência de Chamamento</title>
+        <synopsis>head_comments(name)
+            head_comments(name,%paths)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Parâmetros</title>
+        <variablelist>
+            <varlistentry>
+                <term>name</term>
+                <listitem>
+                    <para>string, nome da função</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>%paths</term>
+                <listitem>
+                    <para>vetor de strings, endereços onde se deve procurar o arquivo
+                        sci
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Descrição</title>
+        <para>
+            <code>head_comments(name)</code> exibe comentários do cabeçalho da
+            função (como a ajuda do Matlab). Os comentários são lidos do arquivo sci
+            associado. Se <varname>name</varname> for uma função em uma biblioteca, o
+            endereço do arquivo sci é aquele dado pelo endereço da biblioteca (ver
+            <link linkend="lib">lib</link>). Se <varname>name</varname> for uma função que não
+            está na biblioteca, um arquivo de nome <varname>name</varname><literal>.sci</literal> é
+            procurado nos outros diretórios fornecidos pela variável
+            <varname>%paths</varname>.
+        </para>
+        <warning>
+            AVISO: a maior parte das funções Scilab predefinidas não possui comentários de cabeçalho.
+        </warning>
+    </refsection>
+    <refsection>
+        <title>Exemplos</title>
+        <programlisting role="example"><![CDATA[
+head_comments sinc
+ ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>Ver Também</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="help">help</link>
+            </member>
+            <member>
+                <link linkend="lib">lib</link>
+            </member>
+        </simplelist>
+    </refsection>
+</refentry>

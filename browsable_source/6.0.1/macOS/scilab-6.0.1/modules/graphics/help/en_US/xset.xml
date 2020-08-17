@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) ENPC - Jean-Philippe Chancelier
+ * Copyright (C) 2017 - Samuel GOUGEON
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML"
+        xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org"
+        xml:lang="en" xml:id="xset">
+    <refnamediv>
+        <refname>xset</refname>
+        <refpurpose>
+            set values of the graphics context. <emphasis role="bold">This function is obsolete.</emphasis>
+        </refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>
+            xset(choice_name, x1, x2, x3, x4, x5)
+        </synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Arguments</title>
+        <variablelist>
+            <varlistentry>
+                <term>choice_name</term>
+                <listitem>
+                    <para>string</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>x1, ..., x5</term>
+                <listitem>
+                    <para>
+                        depending on <literal>choice_name</literal>.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Description</title>
+            <warning>
+                This function is obsolete. Use the Scilab graphic objects representation instead:
+                See equivalences here-below.
+            </warning>
+        <variablelist>
+            <varlistentry>
+                <term>xset("fpf", string)</term>
+                <listitem>
+                    <para>
+                        Set the floating point format for number display in
+                        contour functions. <literal>string</literal> is a string
+                        giving the format in C format syntax (for example
+                        <code>string="%.3f"</code>). Use
+                        <code>string=""</code> to switch back to default format.
+                    </para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+        <refsect2>
+            <title>Replacements</title>
+            <para>
+            <literal>xset(..)</literal> returned nothing. Please take care appending a semi-colon
+            after replacement instructions in order to cancel the display of their output.
+            </para>
+        <screen><![CDATA[
+// SCILAB 3 & 4                 SCILAB N>4
+// ------------                 ----------
+xset("default")                 clf("reset")
+
+xset("wpos", [x y])             gcf().figure_position = [x y];
+xset("wpdim", w, h)             gcf().figure_size = [w h];
+xset("wdim", w, h)              gcf().figure_size = [w h];
+xset("wresize", 0|1)  HS        gcf().auto_resize = "off"|"on";
+xset("colormap", CM)            gcf().color_map = CM;
+xset("figure", i)               scf(i);
+xset("window", i)               scf(i);
+xset("viewport", xp,yp)         gcf().viewport = [xp yp];
+
+xset("auto clear","on"|"off")   gca().auto_clear = "on"|"off";
+xset("line mode", 0|1)          gca().line_mode = "off"|"on";
+xset("line style", n)           gca().line_style = n;
+xset("dashes", n)               gca().line_style = n;
+xset("thickness", n)            gca().thickness = n;
+xset("font size", s)            gca().font_size = s;
+xset("font", id, fsize)         set(gca(), "font_style", id, "font_size", fsize);
+xset("mark size", msize)        set(gca(), "mark_size_unit", "tabulated", "mark_size", msize);
+xset("mark", id, msize)         set(gca(), "mark_style", id, "mark_size_unit", "tabulated", "mark_size", msize);
+xset("color", icol)             gca().foreground = icol;
+xset("color", 0)                gca().foreground = -1;
+xset("pattern", icol)           gca().foreground = icol;
+xset("pattern", 0)              gca().foreground = -1;
+xset("foreground", icol)        gca().foreground = icol;
+xset("background", icol)        gca().background = icol;
+xset("hidden3d", icol)          gca().hiddencolor = icol;
+
+xset("clipping", rect)          set(gca(), "clip_box", rect, "clip_state", "on");
+xset("clipgrf")                 gca().clip_state = "clipgrf";
+xset("clipoff")                 gca().clip_state = "off";
+
+xset("alufunction",i)           gcf().pixel_drawing_mode = str(i);
+                                #i   str(i)
+                                --   ------
+                                0 => "clear"
+                                1 => "and"
+                                2 => "andReverse"
+                                3 => "copy"
+                                4 => "andInverted"
+                                5 => "noop"
+                                6 => "xor"
+                                7 => "or"
+                                8 => "nor"
+                                9 => "equiv"
+                                10 => "invert"
+                                11 => "orReverse"
+                                12 => "copyInverted"
+                                13 => "orInverted"
+                                14 => "nand"
+                                15 => "set"
+]]></screen>
+        </refsect2>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="xget">xget</link>
+            </member>
+            <member>
+                <link linkend="set">set</link>
+            </member>
+            <member>
+                <link linkend="graphics_entities">graphics entities</link>
+            </member>
+            <member>
+                <link linkend="gcf">gcf</link>
+            </member>
+            <member>
+                <link linkend="gdf">gdf</link>
+            </member>
+            <member>
+                <link linkend="gca">gca</link>
+            </member>
+            <member>
+                <link linkend="gda">gda</link>
+            </member>
+            <member>
+                <link linkend="ged">ged</link>
+            </member>
+            <member>
+                <link linkend="getcolor">getcolor</link>
+            </member>
+        </simplelist>
+    </refsection>
+    <refsection>
+        <title>History</title>
+        <revhistory>
+            <revision>
+                <revnumber>5.0.1</revnumber>
+                <revremark>
+                    The <literal>.alufunction</literal> property is obsolete. It is no longer
+                    taken into account for graphical renderings. It is replaced with
+                    <literal>gcf().pixel_drawing_mode</literal>.
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>5.4.0</revnumber>
+                <revremark>
+                    The <literal>"alufunction"</literal> is no longer supported..
+                </revremark>
+            </revision>
+            <revision>
+                <revnumber>6.0.0</revnumber>
+                <revremark>
+                    The only <literal>xset("fpf", format)</literal> syntax is now supported.
+                </revremark>
+            </revision>
+        </revhistory>
+    </refsection>
+</refentry>

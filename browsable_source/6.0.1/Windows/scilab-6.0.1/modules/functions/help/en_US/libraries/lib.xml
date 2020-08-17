@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) XXXX-2008 - INRIA
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svg="http://www.w3.org/2000/svg" xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook" xmlns:scilab="http://www.scilab.org" xml:lang="en" xml:id="lib">
+    <refnamediv>
+        <refname>lib</refname>
+        <refpurpose>library definition</refpurpose>
+    </refnamediv>
+    <refsynopsisdiv>
+        <title>Syntax</title>
+        <synopsis>namelib = lib('lib-dir')</synopsis>
+    </refsynopsisdiv>
+    <refsection>
+        <title>Arguments</title>
+        <variablelist>
+            <varlistentry>
+                <term>lib-dir</term>
+                <listitem>
+                    <para>character string</para>
+                </listitem>
+            </varlistentry>
+            <varlistentry>
+                <term>namelib</term>
+                <listitem>
+                    <para>library variable returned by 'lib'.</para>
+                </listitem>
+            </varlistentry>
+        </variablelist>
+    </refsection>
+    <refsection>
+        <title>Description</title>
+        <para>
+            <literal>lib-dir</literal> is a character string defining a directory that contains
+            compiled Scilab function (<literal>.bin</literal>) files.
+        </para>
+        <para>
+            In addition to these files <literal>lib-dir</literal> must have a file called
+            <literal>names</literal>, that contains the names of the functions defined in
+            <literal>lib-dir</literal>.  On success, all functions in <literal>lib-dir</literal> are
+            available from within Scilab.  They are loaded on demand when called
+            for the first time.
+        </para>
+        <para>
+            Binary files can be created from within Scilab with the command
+            <literal>save</literal>.
+            A library variable
+            usually is saved for later loading, either on-line or from the
+            user-specific startup file (see startup).
+        </para>
+        <para>value returned by 'lib' must be insert in a variable 'namelib' to access to macro functions of this library.</para>
+    </refsection>
+    <refsection>
+        <title>Restrictions</title>
+        <para>
+            Scilab tacitly assumes that each xxxx.bin file defines a  variable named <literal>xxxx</literal>.
+        </para>
+    </refsection>
+    <refsection>
+        <title>Examples</title>
+        <programlisting role="example"><![CDATA[
+//define some functions
+function z = myplus(x, y)
+  z = x + y
+endfunction
+
+function z = yourplus(x, y)
+  x = x - y
+endfunction
+
+//create the *.bin files in libdir
+libdir = TMPDIR;
+save(libdir + '/myplus.bin', myplus);
+save(libdir + '/yourplus.bin', yourplus);
+
+//create the name file
+mputl(['myplus';'yourplus'],TMPDIR+'/names');
+
+//build the library containing myplus and yourplus
+mylibfoo = lib(libdir+'/');
+
+//erase the variables
+clear myplus yourplus
+
+//Automatic loading and execution
+myplus(1,2)
+
+//erase the variables
+clear myplus yourplus
+
+mylibfoo
+[n,p] = libraryinfo('mylibfoo')
+
+isdef('myplus')
+clear mylibfoo
+isdef('myplus')
+
+ ]]></programlisting>
+    </refsection>
+    <refsection role="see also">
+        <title>See also</title>
+        <simplelist type="inline">
+            <member>
+                <link linkend="library">library</link>
+            </member>
+            <member>
+                <link linkend="genlib">genlib</link>
+            </member>
+            <member>
+                <link linkend="save">save</link>
+            </member>
+            <member>
+                <link linkend="deff">deff</link>
+            </member>
+            <member>
+                <link linkend="exec">exec</link>
+            </member>
+            <member>
+                <link linkend="whereis">whereis</link>
+            </member>
+            <member>
+                <link linkend="libraryinfo">libraryinfo</link>
+            </member>
+        </simplelist>
+    </refsection>
+</refentry>

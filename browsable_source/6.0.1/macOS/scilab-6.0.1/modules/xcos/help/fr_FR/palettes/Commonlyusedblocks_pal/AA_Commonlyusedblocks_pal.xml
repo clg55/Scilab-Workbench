@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * Scilab ( http://www.scilab.org/ ) - This file is part of Scilab
+ * Copyright (C) INRIA
+ *
+ * Copyright (C) 2012 - 2016 - Scilab Enterprises
+ *
+ * This file is hereby licensed under the terms of the GNU GPL v2.0,
+ * pursuant to article 5.3.4 of the CeCILL v.2.1.
+ * This file was originally licensed under the terms of the CeCILL v2.1,
+ * and continues to be available under such terms.
+ * For more information, see the COPYING file which you should have received
+ * along with this program.
+ *
+ -->
+<refentry xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink"
+          xmlns:svg="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1999/xhtml"
+          xmlns:mml="http://www.w3.org/1998/Math/MathML" xmlns:db="http://docbook.org/ns/docbook"
+          xmlns:scilab="http://www.scilab.org" xml:id="Commonlyusedblocks_pal" xml:lang="fr">
+    <refnamediv>
+        <refname>Commonlyusedblocks_pal</refname>
+        <refpurpose>Palette Blocs couramment utilisés</refpurpose>
+    </refnamediv>
+    <refsection>
+        <title>Aperçu</title>
+        <para>
+            <link linkend="ANDBLK">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="ANDBLK" fileref="../../../../images/palettes/ANDBLK.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="BIGSOM_f">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="BIGSOM_f" fileref="../../../../images/palettes/BIGSOM_f.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="CMSCOPE">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="CMSCOPE" fileref="../../../../images/palettes/CMSCOPE.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="CONST_m">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="CONST_m" fileref="../../../../images/palettes/CONST_m.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="CONVERT">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="CONVERT" fileref="../../../../images/palettes/CONVERT.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="CSCOPXY">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="CSCOPXY" fileref="../../../../images/palettes/CSCOPXY.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="DEMUX">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="DEMUX" fileref="../../../../images/palettes/DEMUX.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="DOLLAR_f">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="DOLLAR_f" fileref="../../../../images/palettes/DOLLAR_f.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="INTEGRAL_f">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="INTEGRAL_f" fileref="../../../../images/palettes/INTEGRAL_f.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="IN_f">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="IN_f" fileref="../../../../images/palettes/IN_f.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="LOGICAL_OP">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="LOGICAL_OP" fileref="../../../../images/palettes/LOGICAL_OP.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="MUX">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="MUX" fileref="../../../../images/palettes/MUX.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="NRMSOM_f">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="NRMSOM_f" fileref="../../../../images/palettes/NRMSOM_f.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="OUT_f">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="OUT_f" fileref="../../../../images/palettes/OUT_f.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="PRODUCT">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="PRODUCT" fileref="../../../../images/palettes/PRODUCT.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="RELATIONALOP">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="RELATIONALOP" fileref="../../../../images/palettes/RELATIONALOP.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="SATURATION">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="SATURATION" fileref="../../../../images/palettes/SATURATION.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="SWITCH2_m">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="SWITCH2_m" fileref="../../../../images/palettes/SWITCH2_m.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+
+            <link linkend="TEXT_f">
+            <inlinemediaobject>
+                <imageobject>
+                    <imagedata linkend="TEXT_f" fileref="../../../../images/palettes/TEXT_f.png"
+                     style="width:100px; padding:10px; border-style:solid; border-width:1px; border-color:#1e90ff;"/>
+                </imageobject>
+            </inlinemediaobject>
+            </link>.
+        </para>
+    </refsection>
+    <refsection id="Module_Commonlyusedblocks_pal">
+        <title>Module</title>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <link linkend="xcos">xcos</link>
+                </para>
+            </listitem>
+        </itemizedlist>
+    </refsection>
+    <refsection id="Description_Commonlyusedblocks_pal">
+        <title>Description</title>
+        <para>Dans la palette Blocs couramment utilisés, vous trouverez les blocs
+            des autres palettes utilisés par la plupart des modèles.
+        </para>
+    </refsection>
+    <refsection id="Blocks_Commonlyusedblocks_pal">
+        <title>Blocks</title>
+        <itemizedlist>
+            <listitem>
+                <para>
+                    <link linkend="ANDBLK">ANDBLK - ET d'activation</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="BIGSOM_f">BIGSOM_f - Somme</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="CMSCOPE">CMSCOPE - Oscilloscope multi-voies</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="CONST_m">CONST_m - Constante</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="CONVERT">CONVERT - Conversion de type de données</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="CSCOPXY">CSCOPXY - Graphe y=f(x) permanent</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="DEMUX">DEMUX - Démultiplexeur</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="DOLLAR_f">DOLLAR_f - Opérateur retard</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="INTEGRAL_f">INTEGRAL_f - Intégration</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="IN_f">IN_f - Port d'entrée</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="LOGICAL_OP">LOGICAL_OP - Opération logique</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="MUX">MUX - Multiplexeur</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="NRMSOM_f">NRMSOM_f - Fusion de données</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="OUT_f">OUT_f - Port de sortie</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="PRODUCT">PRODUCT - Produit</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="RELATIONALOP">RELATIONALOP — Opération relationnelle</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="SATURATION">SATURATION - Saturation</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="SWITCH2_m">SWITCH2_m - Commutateur 2 voies</link>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <link linkend="TEXT_f">TEXT_f - Texte</link>
+                </para>
+            </listitem>
+        </itemizedlist>
+    </refsection>
+</refentry>
