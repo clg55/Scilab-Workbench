@@ -1,0 +1,19 @@
+#
+# windows directories (binaries)
+#
+doublylinkedlist/doublylinkedlist.def
+google_breakpad
+LibScilab.def
+*.vcdef
+f2c
+intl
+libxml2
+matio
+pcre
+umfpack
+zlib
+hdf5
+gl2ps
+Eigen
+*.lib
+Eigen
