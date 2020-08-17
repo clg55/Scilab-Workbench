@@ -1,0 +1,169 @@
+#
+# Linux objects files
+#
+*.loT
+*.lo
+*.la
+*.o
+
+#
+# Linux autotool files
+#
+.deps
+.libs
+Makefile
+
+#
+# Java compilation output dir
+#
+modules/*/build
+modules/jar
+modules/*/jar
+modules/*/test-output
+
+#
+# Documentation generation output files
+#
+.last_*
+.list_*
+
+#
+# Scilab compiled macros
+#
+*.bin
+names
+lib
+
+#
+# backup files
+#
+*~
+*.bak
+
+#
+# windows files
+#
+
+#
+# Innosetup files (Windows)
+#
+ScilabLogo.bmp
+ScilabLogoSmall.bmp
+scilab.ico
+puffin.ico
+/Output
+/isxdl.dll
+/*.iss
+/*.isl
+#
+# VS solution files (windows)
+#
+Scilab.sln_old
+*.aps
+*.lib
+*.exp
+*.vcdef
+*.pdb
+Scilab.suo
+Scilab.ncb
+Release
+Debug
+*.icproj
+*.user
+*.u2d
+*.suo
+*.ncb
+VTune
+
+#
+# F2C files (windows)
+#
+modules/*/src/fortran/*.c
+modules/*/sci_gateway/fortran/*.c
+
+#
+# others files (windows)
+#
+*.db
+*.manifest
+
+#
+# VS 2010 files
+# 
+*.filters
+*.vcxproj
+*.opensdf
+*.sdf
+*.old
+_UpgradeReport_Files/
+UpgradeLog.XML
+Visual-Studio-settings/f2c.props
+Visual-Studio-settings/f2c.targets
+Visual-Studio-settings/f2c.xml
+
+# eclipse temp files
+workspace/
+.checkstyle
+.classpath
+.project
+
+# MacOS files
+.DS_Store
+
+#
+# scilab/ specific files
+#
+/thirdparty
+Makefile.OBJ
+Makefile.incl
+Makemex
+Path.incl
+config.log
+config.status
+libtool
+history.scilab
+lib
+tcllib
+_tmp_project.h
+scilab-bin
+scilab-cli-bin
+tclmajor
+tclminor
+.libs
+mainsci.o
+*.log
+/java
+.metadata
+autom4te.cache
+.deps
+/locale
+scilab-lib.properties
+scilab-lib-doc.properties
+scilab.pc
+pvm3
+*.class
+*.dia
+
+#
+# Subversion directories
+#
+.svn
+
+#
+# pvm configuration file
+#
+.pvmd.conf
+
+# atoms generated files
+.atoms
+contrib/archives
+
+# SWIG generated files which are not used
+modules/types/src/java/org/scilab/modules/types/types.java
+modules/types/src/java/org/scilab/modules/types/typesJNI.java
+modules/types/src/jni/sci_types_wrap.c
+
+# Code coverage generated files
+*.gcov
+*.gcno
+*.gcda

@@ -1,0 +1,10 @@
+	LIBRARY    Libscilab.dll
+
+
+EXPORTS
+; core 
+;
+StoreCommand
+with_module
+getSCIHOME
+;
