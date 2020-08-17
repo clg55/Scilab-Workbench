@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" "http://www.w3.org/TR/REC-html40/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Scilab Help Homepage</title>
+    <style type="text/css" media="all">
+      @import url("scilab_code.css");
+      @import url("xml_code.css");
+      @import url("c_code.css");
+      @import url("style.css");
+    </style>
+  </head>
+  <body>
+    <div class="manualnavbar" align="left">
+      <a href="https://www.scilab.org/" class="ulink">Scilab Homepage</a> |
+      <a href="https://help.scilab.org/" class="ulink">Online Help</a> |
+      <a href="https://wiki.scilab.org/" class="ulink">Wiki</a> |
+      <a href="https://bugzilla.scilab.org/" class="ulink">Bug Tracker</a> |
+      <a href="https://forge.scilab.org/" class="ulink">Forge</a> |
+      <a href="https://lists.scilab.org/" class="ulink">Mailing Lists Archives</a> |
+      <a href="https://atoms.scilab.org/" class="ulink">ATOMS</a> |
+      <a href="https://fileexchange.scilab.org/" class="ulink">File Exchange</a>
+      <hr/>
+    </div>
+    <span class="path"><a href="index.html">Scilab help</a> &gt;&gt; Homepage</span>
+    <br/>
+    <br/>
+    <div class="refsection">
+      <h3 class="title">Welcome to Scilab 6.0.2</h3>
+      <p class="para">
+        Scilab 6.0 is a major new release of Scilab, the open source
+        platform for numerical computation.
+      </p>
+      <p class="para">
+        Here is a tour of the changes between Scilab 6.0.0, 6.0.1 &amp; 6.0.2.
+      </p>
+      <h2 class="title">Feature Improvements</h2>
+      <p class="para">
+        The console &quot;File => Open a file&quot; menu now allows to open *.xcos *.zcos *.scg or lib
+        files with the proper Scilab component, and other files with the proper OS application.
+        All files were opened in Scinotes and could freeze it.
+      </p>
+      <p class="para">
+       &quot;gcd&quot; and &quot;lcm&quot; of integers now always return a positive result.
+      </p>
+      <p class="para">
+        &quot;cat&quot; has been rewritten. It is now fast and can process heavy arrays at high dimensions.
+      </p>
+      <p class="para">
+        Warnings from &quot;fplot3d1&quot; called without an option were removed.
+      </p>
+      <p class="para">
+        &quot;whereis&quot; has been upgraded:
+        <ul>
+          <li>It can now be used for built-in functions.</li>
+          <li>When the same function name is registered in several libraries, &quot;whereis&quot;
+            now returns all of them instead of only the last loaded one.</li>
+          <li>For unregistered user-defined macros, &quot;"script"&quot; is now returned
+            instead of &quot;[]&quot;.</li>
+        </ul>
+      </p>
+      <p class="para">
+        &quot;mgetl&quot; speed has been improved for files with a lot of lines.
+      </p>
+      <p class="para">
+        &quot;ndgrid(x)&quot; now accepts only one input &quot;x&quot;, with by default &quot;y=x&quot;.
+      </p>
+      <p class="para">
+        Some functions have been tagged obsolete and will be removed in Scilab 6.1: &quot;nanmin&quot;,
+        &quot;nanmax&quot;, &quot;xgetech&quot;, &quot;lstsize&quot;, &quot;eval&quot; &amp; &quot;dgettext&quot; &amp; &quot;denom&quot; &amp; &quot;numer&quot;.
+      </p>
+      <h2 class="title">Help pages</h2>
+      <p class="para">
+        Support to &quot;id&quot;, &quot;width&quot;, &quot;height&quot;, &quot;align&quot;
+        and &quot;style&quot; attributes added for the &quot;&lt;imagedata&gt;&quot; tag.
+      </p>
+      <p class="para">
+        Support to &quot;id&quot; attribute added for the &quot;&lt;tr&gt;&quot; tag.
+      </p>
+      <p class="para">
+        Numerous pages have been improved, comprising: &quot;ismatrix&quot;, &quot;xget&quot;, &quot;xset&quot;,
+        &quot;ieee&quot;, &quot;evstr&quot;, &quot;uigetfont&quot;, &quot;uigetdir&quot;, &quot;uigetfile&quot;,
+        &quot;uiputfile&quot;, &quot;cat&quot;, &quot;makecell&quot;, &quot;xstring&quot;, &quot;norm&quot;,
+        &quot;barhomogenize&quot;, &quot;colordef&quot;, &quot;matrix&quot;, &quot;type&quot;, &quot;isinf&quot;,
+        &quot;unique&quot;, &quot;getPreferencesValue&quot;, &quot;gcd&quot;, &quot;isglobal&quot;,
+        &quot;whereis&quot;, &quot;mode&quot; &amp; &quot;%onprompt&quot;.
+      </p>
+      <h2 class="title">Bug fixes</h2>
+      <p class="para">
+        In this version, extra effort has been expended on bug fixing and stabilization.
+        Detailed information about those improvements can be found on the <a href="CHANGES.html">CHANGES</a> file.
+      </p>
+      <h3 class="title">What was new in Scilab 6.0.x</h3>
+      <h2 class="title">New language, new core &amp; new Xcos</h2>
+      <p class="para">
+        This release includes a major rewrite of Scilab's internal
+        core, for better usability and performance: the changes to the
+        visible aspects of the software are limited.
+      </p>
+      <p class="para">
+        The first big internal change is a completely new language
+        parser and interpreter.
+      </p>
+      <p class="para">
+        The language changes are not all backward compatible. You will
+        have to update your scripts/programs/modules, but it will be
+        very simple in pretty much all cases.
+        </p>
+      <p class="para">
+        The second big internal change is the ability to manipulate
+        bigger data sets, without exhausting system resources.
+      </p>
+      <p class="para">
+        Xcos - the graphical tool for dynamic systems modeling and simulation - also uses the
+        new re-written Scilab engine, and is now running in native code, which should provide
+        much better performance as well as support for much bigger models. Xcos can load and
+        run models created with earlier versions of Scilab.
+      </p>
+      <h2 class="title">Utilities for code productivity</h2>
+      <p class="para">This release includes also several features
+        to write better and more efficient Scilab scripts:
+        <ul>
+          <li>A full-featured debugger is now included.</li>
+          <li>A new profiler and coverage tool has been added.</li>
+          <li>A &quot;lint&quot;-like command, slint, has been added,
+          for code static analysis: it detects unclear, risky or
+          suspicious code. It is not documented yet, however.</li>
+        </ul>
+      </p>
+      <h2 class="title">Newsfeed</h2>
+      <p class="para">
+        A new view is available in the visual environment of Scilab: the
+        &quot;Newsfeed&quot;. It provides a continuous feed of news,
+        tips and general communication from the community and from the Scilab Team.
+      </p>
+      <h2 class="title">Licensing changes</h2>
+      <p class="para">
+        Scilab is now released under the terms of the GNU General Public License (GPL) v2.0.
+        Prior to this version, Scilab was licensed under the terms of the CeCILL v2.1 and
+        continues to be available under such terms.
+      </p>
+      <p class="para">
+        In this version, the Intel Math Kernel Library and the FFTW library optimized by Intel
+        Math Kernel Library are included in Scilab. They are subject
+        to the Intel EULA.
+      </p>
+    </div>
+    <hr/>
+    <br/>
+    <div class="refsection">
+      <h3 class="title">Documentations and help</h3>
+      <p class="para">If you are new to Scilab, please use
+      the <a href="https://www.scilab.org/sites/default/files/Scilab_beginners_0.pdf">Scilab
+      beginners tutorial</a>
+      and <a href="https://www.scilab.org/sites/default/files/Xcos_beginners_0.pdf">Xcos
+      beginners tutorial</a> provided by the Scilab Team.</p>
+      <p class="para">The Scilab Team provides also
+      some <a href="https://www.scilab.org/tutorials">documentation
+      and tutorials</a>.</p>
+      <br/>
+    </div>
+    <hr/>
+    <br/>
+    <div class="refsection">
+      <h3 class="title">Other resources</h3>
+      <p class="para"><a href="https://www.scilab.org/" class="ulink">Scilab Homepage</a> - Consult Scilab official website</p>
+      <p class="para"><a href="https://wiki.scilab.org/" class="ulink">Wiki</a> - Consult documentations, tricks, etc.</p>
+      <p class="para"><a href="https://bugzilla.scilab.org/" class="ulink">Bug Tracker</a> - Report bugs and wishes about Scilab</p>
+      <p class="para"><a href="https://forge.scilab.org/" class="ulink">Forge</a> - Browse and publish Scilab modules</p>
+      <p class="para"><a href="https://www.scilab.org/about/community/mailing-lists" class="ulink">Mailing Lists</a> - Communicate and exchange with the community</p>
+      <p class="para"><a href="https://atoms.scilab.org/" class="ulink">ATOMS</a> - Browse Scilab packaged modules</p>
+      <p class="para"><a href="https://fileexchange.scilab.org/" class="ulink">File Exchange</a> - Exchange your scripts, results and files.</p>
+      <br/>
+    </div>
+  </body>
+</html>
