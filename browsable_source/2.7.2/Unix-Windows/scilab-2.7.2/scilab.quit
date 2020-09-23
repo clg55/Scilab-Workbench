@@ -1,4 +1,0 @@
-// This file contains scilab command to be executed at the end 
-// of a scilab session
-// Copyright INRIA
-ge_check_before_quit()
