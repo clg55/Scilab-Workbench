@@ -1,9 +1,0 @@
-	LIBRARY    scilocalization.dll
-
-
-EXPORTS
-	UTFToLocale
-	localeToUTF
-	isOutputInUTF 
-	readNextUTFChar
-	setOutputInUTF
