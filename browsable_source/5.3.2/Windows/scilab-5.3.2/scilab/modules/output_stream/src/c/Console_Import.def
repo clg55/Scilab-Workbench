@@ -1,6 +1,0 @@
-	LIBRARY    sciconsole.dll
-
-
-EXPORTS
-	ConsolePrintf
-	

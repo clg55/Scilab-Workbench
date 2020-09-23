@@ -1,8 +1,0 @@
-cleaner.sce
-loader.sce
-jar/
-*.dll
-*.lib
-*.def
-*.mak
-sci_gateway/c/xcos_toolbox_skeleton_c.c
