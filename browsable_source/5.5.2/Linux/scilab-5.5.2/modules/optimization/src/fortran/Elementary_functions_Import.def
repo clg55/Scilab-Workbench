@@ -1,9 +1,0 @@
-	LIBRARY    elementary_functions.dll
-
-
-EXPORTS
-;
-;elementary_functions
-vfinite_
-unsfdcopy_
-int2db_
