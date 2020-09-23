@@ -1,7 +1,0 @@
-colnew            Scilab Group            Scilab Function            colnew
-NAME
-   colnew - boundary value problems for ODE
-  
-CALLING SEQUENCE
-   This function has been renamed bvode.
-  
